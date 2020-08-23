@@ -275,6 +275,10 @@
 (export gnc:html-document-markup-start)
 (export gnc:html-document-markup-end)
 (export gnc:html-document-render-data)
+(export gnc:html-document-export-string)
+(export gnc:html-document-set-export-string)
+(export gnc:html-document-export-error)
+(export gnc:html-document-set-export-error)
 (export <html-object>)
 (export gnc:html-object?)
 (export gnc:make-html-object-internal)
@@ -731,6 +735,7 @@
 ;; trep-engine.scm
 (export gnc:trep-options-generator)
 (export gnc:trep-renderer)
+(export gnc:lists->csv)
 
 ;; report-register-hooks.scm
 

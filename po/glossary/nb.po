@@ -10,19 +10,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-27 21:58+0100\n"
-"PO-Revision-Date: 2018-02-16 15:32+0100\n"
+"POT-Creation-Date: 2020-08-08 18:07+0200\n"
+"PO-Revision-Date: 2020-08-16 18:02+0200\n"
 "Last-Translator: John Erling Blad <jeblad@gmail.com>\n"
 "Language-Team: Norwegian/Bokmaal <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.3\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgstr ""
+msgstr "Term (Kjære oversetter: Denne fila vil aldri ses av brukeren!)"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -126,7 +126,7 @@ msgstr "handling: Minibank"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr ""
+msgstr "Handling: autoinnskudd"
 
 #. "-"
 msgid "action: buy"
@@ -142,11 +142,11 @@ msgstr "handling: automatisk overførsel"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr ""
+msgstr "handling:fordeling"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr ""
+msgstr "Handling: utbytte"
 
 #. "-"
 msgid "action: fee"
@@ -154,7 +154,7 @@ msgstr "handling: honorar"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr ""
+msgstr "handling: renter"
 
 #. "-"
 msgid "action: loan"
@@ -166,7 +166,7 @@ msgstr "handling: betaling"
 
 #. "Point of sale"
 msgid "action: POS"
-msgstr ""
+msgstr "handling: utsalgssted"
 
 #. "-"
 msgid "action: rebate"
@@ -186,7 +186,7 @@ msgstr "handling: overfør"
 
 #. "-"
 msgid "action: wire"
-msgstr ""
+msgstr "handling: overføring"
 
 #. "-"
 msgid "action: withdraw"
@@ -194,7 +194,7 @@ msgstr "handling: bankuttak"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "aldring"
 
 #. "A sum of money"
 msgid "amount"
@@ -209,14 +209,12 @@ msgid "balance (noun)"
 msgstr "saldo (substantiv)"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "balanser, til"
+msgstr "balanse fremført"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "balanser, til"
+msgstr "fremført balanse"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -244,7 +242,7 @@ msgstr "regningsbetingelser"
 
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
-msgstr ""
+msgstr "Hovedbok"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
@@ -296,11 +294,11 @@ msgstr "varelisting"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr ""
+msgstr "handelsvarealternativ: brøkdel"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr ""
+msgstr "handelsvarealternativ: symbol"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
 msgid "compound interests"
@@ -356,7 +354,7 @@ msgstr "standard"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr ""
+msgstr "innskudd (i avstemmingsdialogen)"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
@@ -608,7 +606,7 @@ msgstr "Resultat & Tap"
 
 #. "-"
 msgid "quick-fill"
-msgstr ""
+msgstr "hurtigutfylling"
 
 #. "-"
 msgid "rebalance, to (a transaction)"
@@ -636,7 +634,7 @@ msgstr "registeroppføring: aksje splitt"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr ""
+msgstr "register: autosplitt grunnbok"
 
 #. "another form of register"
 msgid "register: basic ledger"
@@ -698,7 +696,7 @@ msgstr "Andelsbalanse (register)"
 msgid "shares"
 msgstr "andeler"
 
-#. "(of a price) A place wfrom which sth comes or is obtained"
+#. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
 msgstr "kilde"
 
@@ -720,7 +718,7 @@ msgstr "MVA-kode"
 
 #. "field of an account"
 msgid "tax info"
-msgstr "MVA-informasjon"
+msgstr "skatteinfo"
 
 #. "if you create a new e.g. style sheet, you can start from a template"
 msgid "template"

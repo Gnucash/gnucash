@@ -83,16 +83,7 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
     const char *toks = "+-*/=()_";
     gunichar decimal_point;
     gunichar thousands_sep;
-    const char *c;
-    gunichar uc;
-
-    /* accept the newval string if user action was delete */
-    if (change == NULL)
-    {
-        gnc_basic_cell_set_value_internal (_cell, newval);
-        cell->need_to_parse = TRUE;
-        return;
-    }
+    char *new_newval = g_strdup (newval);
 
     if (cell->print_info.monetary)
         decimal_point = g_utf8_get_char(lc->mon_decimal_point);
@@ -104,21 +95,37 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
     else
         thousands_sep = g_utf8_get_char(lc->thousands_sep);
 
-    c = change;
-    while (*c)
+    for (const char *c = change; c && *c; c = g_utf8_next_char (c))
     {
-        uc = g_utf8_get_char (c);
+        gunichar uc = g_utf8_get_char (c);
         if (!g_unichar_isdigit (uc) &&
-                !g_unichar_isspace (uc) &&
-                !g_unichar_isalpha (uc) &&
-                (decimal_point != uc) &&
-                (thousands_sep != uc) &&
-                (g_utf8_strchr (toks, -1, uc) == NULL))
+            !g_unichar_isspace (uc) &&
+            !g_unichar_isalpha (uc) &&
+            (decimal_point != uc) &&
+            (thousands_sep != uc) &&
+            (g_utf8_strchr (toks, -1, uc) == NULL))
             return;
-        c = g_utf8_next_char (c);
     }
 
-    gnc_basic_cell_set_value_internal (_cell, newval);
+// gnc_basic_cell_set_value_internal doesn't like misplaced thousands separators
+// that can result from deletes, so remove them.
+    for (const char *c = g_utf8_strchr (new_newval, -1, thousands_sep); c;
+         c = g_utf8_strchr (c, -1, thousands_sep))
+    {
+        long len = g_utf8_strlen (new_newval, -1);
+        long pos = g_utf8_pointer_to_offset (new_newval, c);
+        char *start = g_utf8_substring (new_newval, 0, pos);
+        char *end = g_utf8_substring (new_newval, ++pos, len);
+        g_free (new_newval);
+        if (cursor_position && *cursor_position >= pos)
+            --*cursor_position;
+        new_newval = g_strdup_printf ("%s%s", start, end);
+        g_free (start);
+        g_free (end);
+    }
+
+    gnc_basic_cell_set_value_internal (_cell, new_newval);
+    g_free (new_newval);
     *end_selection = *start_selection = *cursor_position;
     cell->need_to_parse = TRUE;
 }

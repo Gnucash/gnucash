@@ -56,13 +56,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:define-html-style-sheet . args)
+  (define allowable-fields (record-type-fields <html-style-sheet-template>))
+  (define (not-a-field? fld) (not (memq fld allowable-fields)))
   (let loop ((args args) (ss (make-ss-template #f #f #f #f)))
     (match args
+      (()
+       (hash-set! *gnc:_style-sheet-templates_*
+                  (gnc:html-style-sheet-template-name ss) ss))
+
+      (((? not-a-field? fld) . _)
+       (gnc:error "gnc:define-html-style-sheet " fld " is not a valid field"))
+
       ((field value . rest)
        ((record-modifier <html-style-sheet-template> field) ss value)
-       (loop rest ss))
-      (_ (hash-set! *gnc:_style-sheet-templates_*
-                    (gnc:html-style-sheet-template-name ss) ss)))))
+       (loop rest ss)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; <html-style-sheet> methods 

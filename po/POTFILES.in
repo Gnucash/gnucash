@@ -16,6 +16,7 @@ bindings/python/app_utils.py
 bindings/python/deprecation.py
 bindings/python/example_scripts/account_analysis.py
 bindings/python/example_scripts/change_tax_code.py
+bindings/python/example_scripts/export_account_totals.py
 bindings/python/example_scripts/gnc_convenience.py
 bindings/python/example_scripts/gncinvoicefkt.py
 bindings/python/example_scripts/gncinvoice_jinja.py

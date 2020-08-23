@@ -380,7 +380,7 @@
   <act:parent type="new">63a1cc17910a125405c1ec2aee831839</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gas</act:name>
+  <act:name>Fuel</act:name>
   <act:id type="new">193f61c6db492e1ab56b2db714e2b574</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -388,7 +388,13 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Gas</act:description>
+  <act:description>Gas, diesel, LPG …</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">Create subaccounts for each used type, if desired.</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">63a1cc17910a125405c1ec2aee831839</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

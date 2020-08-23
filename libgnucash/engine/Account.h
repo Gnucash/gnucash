@@ -360,7 +360,18 @@ void gnc_account_set_balance_dirty (Account *acc);
  *
  *  @param acc Set the flag on this account. */
 void gnc_account_set_sort_dirty (Account *acc);
-
+    
+/** Set the defer balance flag. If defer is true, the account balance
+ * is not automatically computed, which can save a lot of time if
+ * multiple operations have to be done on the same account. If
+ * defer is false, further operations on account will cause the
+ * balance to be recomputed as normal.
+ *
+ *  @param acc Set the flag on this account.
+ *
+ *  @param defer New value for the flag. */
+void gnc_account_set_defer_bal_computation (Account *acc, gboolean defer);
+    
 /** Insert the given split from an account.
  *
  *  @param acc The account to which the split should be added.
@@ -403,6 +414,8 @@ const char * xaccAccountGetNotes (const Account *account);
 const char * xaccAccountGetLastNum (const Account *account);
 /** Get the account's lot order policy */
 GNCPolicy *gnc_account_get_policy (Account *account);
+/** Get the account's flag for deferred balance computation */
+gboolean gnc_account_get_defer_bal_computation (Account *acc);
 
 /** The following recompute the partial balances (stored with the
  *  transaction) and the total balance, for this account
@@ -905,7 +918,7 @@ Account *gnc_account_lookup_by_name (const Account *parent, const char *name);
 Account *gnc_account_lookup_by_full_name (const Account *any_account,
         const gchar *name);
 
-/** The gnc_account_lookup_full_name() subroutine works like
+/** The gnc_account_lookup_by_code() subroutine works like
  *  gnc_account_lookup_by_name, but uses the account code.
  */
 Account *gnc_account_lookup_by_code (const Account *parent,

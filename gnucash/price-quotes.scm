@@ -452,9 +452,8 @@ Run 'gnc-fq-update' as root to install them.")))
 
      ((memq 'need-alphavantage-key fq-results)
       (set! keep-going? #f)
-      (gnc-error-dialog
-       window (format #f (G_ "ERROR: ALPHAVANTAGE_API_KEY must be set for currency and quotes; see ~A")
-                      "https://wiki.gnucash.org/wiki/Online_Quotes#Source_Alphavantage.2C_US")))
+      (show-error (format #f (G_ "ERROR: ALPHAVANTAGE_API_KEY must be set for currency and quotes; see ~A")
+                          "https://wiki.gnucash.org/wiki/Online_Quotes#Source_Alphavantage.2C_US")))
 
      ((memq 'system-error fq-results)
       (set! keep-going? #f)

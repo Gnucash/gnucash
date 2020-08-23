@@ -44,3 +44,11 @@
 (define G_ gnc:gettext)
 (define-syntax-rule (N_ x) x)
 
+;; the following will define _ to call gnc:gettext for guile up to
+;; 2.2. It may be removed in the future when minimum guile is 3.0.
+(cond-expand
+  (guile-3)
+  (guile-2
+   (define-public (_ x)
+     (issue-deprecation-warning "Using _ to call gettext is disallowed in guile-3 and will be removed in the future. Use G_ instead.")
+     (gnc:gettext x))))

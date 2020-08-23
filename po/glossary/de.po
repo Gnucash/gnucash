@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.18\n"
-"POT-Creation-Date: 2020-03-27 21:58+0100\n"
+"POT-Creation-Date: 2020-08-08 18:07+0200\n"
 "PO-Revision-Date: 2019-12-29 22:15+0100\n"
 "Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <gnucash-de@gnucash.org>\n"
@@ -704,7 +704,7 @@ msgstr "Aktiensaldo"
 msgid "shares"
 msgstr "Anteile"
 
-#. "(of a price) A place wfrom which sth comes or is obtained"
+#. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
 msgstr "Quelle"
 

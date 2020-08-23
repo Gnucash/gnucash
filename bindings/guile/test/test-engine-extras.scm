@@ -21,6 +21,7 @@
 
 (use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
+(use-modules (gnucash utilities))
 (use-modules (srfi srfi-1))
 (use-modules (sw_app_utils))
 (use-modules (sw_engine))
@@ -342,12 +343,8 @@
 
 (define (env-create-account-structure-alist env account-structure)
   (let ((accounts (env-create-account-structure env account-structure)))
-    (define (flatten l)
-      (if (null? l) '()
-	  (if (not (pair? l)) (list l)
-	      (append (flatten (car l)) (flatten (cdr l))))))
     (map (lambda (acct) (cons (xaccAccountGetName acct) acct))
-	 (flatten accounts))))
+	 (gnc:list-flatten accounts))))
 
 (define (env-expense-account-structure env)
   (env-create-account-structure

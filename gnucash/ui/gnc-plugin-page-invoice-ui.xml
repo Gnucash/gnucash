@@ -2,41 +2,41 @@
   <menubar>
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
-        <menuitem name="EditEditInvoice"        action="EditEditInvoiceAction"/>
-        <menuitem name="EditDuplicateInvoice"   action="EditDuplicateInvoiceAction"/>
-        <menuitem name="EditPostInvoice"        action="EditPostInvoiceAction"/>
-        <menuitem name="EditUnpostInvoice"      action="EditUnpostInvoiceAction"/>
+        <menuitem name="EditEditInvoice" action="EditEditInvoiceAction"/>
+        <menuitem name="EditDuplicateInvoice" action="EditDuplicateInvoiceAction"/>
+        <menuitem name="EditPostInvoice" action="EditPostInvoiceAction"/>
+        <menuitem name="EditUnpostInvoice" action="EditUnpostInvoiceAction"/>
       </placeholder>
     </menu>
 
     <menu name="View" action="ViewAction">
       <placeholder name="ViewPlaceholder">
         <separator name="ViewSep44"/>
-        <menuitem name="ViewSaveLayout"         action="ViewSaveLayoutAction"/>
-        <menuitem name="ViewResetLayout"        action="ViewResetLayoutAction"/>
+        <menuitem name="ViewSaveLayout" action="ViewSaveLayoutAction"/>
+        <menuitem name="ViewResetLayout" action="ViewResetLayoutAction"/>
         <separator name="ViewSep45"/>
-        <menu name="SortOrder"                  action="SortOrderAction">
-          <menuitem name="SortStandard"         action="SortStandardAction"/>
+        <menu name="SortOrder" action="SortOrderAction">
+          <menuitem name="SortStandard" action="SortStandardAction"/>
           <separator name="ViewSep43"/>
-          <menuitem name="SortDate"             action="SortDateAction"/>
-          <menuitem name="SortDateEntry"        action="SortDateEntryAction"/>
-          <menuitem name="SortQuantity"         action="SortQuantityAction"/>
-          <menuitem name="SortPrice"            action="SortPriceAction"/>
-          <menuitem name="SortDescription"      action="SortDescriptionAction"/>
+          <menuitem name="SortDate" action="SortDateAction"/>
+          <menuitem name="SortDateEntry" action="SortDateEntryAction"/>
+          <menuitem name="SortQuantity" action="SortQuantityAction"/>
+          <menuitem name="SortPrice" action="SortPriceAction"/>
+          <menuitem name="SortDescription" action="SortDescriptionAction"/>
         </menu>
       </placeholder>
     </menu>
 
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder">
-        <menuitem name="RecordEntry"       	action="RecordEntryAction"/>
-        <menuitem name="CancelEntry"       	action="CancelEntryAction"/>
-        <menuitem name="DeleteEntry"       	action="DeleteEntryAction"/>
-        <menuitem name="BlankEntry"        	action="BlankEntryAction"/>
+        <menuitem name="RecordEntry" action="RecordEntryAction"/>
+        <menuitem name="CancelEntry" action="CancelEntryAction"/>
+        <menuitem name="DeleteEntry" action="DeleteEntryAction"/>
+        <menuitem name="BlankEntry" action="BlankEntryAction"/>
         <separator name="ActionsSep4"/>
-        <menuitem name="DuplicateEntry"    	action="DuplicateEntryAction"/>
-        <menuitem name="UpEntry"    	action="EntryUpAction"/>
-        <menuitem name="DownEntry"    	action="EntryDownAction"/>
+        <menuitem name="DuplicateEntry" action="DuplicateEntryAction"/>
+        <menuitem name="UpEntry" action="EntryUpAction"/>
+        <menuitem name="DownEntry" action="EntryDownAction"/>
       </placeholder>
     </menu>
 
@@ -44,18 +44,18 @@
       <menu name="Business" action="BusinessAction">
         <placeholder name="BusinessPlaceholderMiddle">
           <separator name="BusinessSep1"/>
-          <menuitem name="BusinessAssociation"     action="BusinessAssociationAction"/>
-          <menuitem name="BusinessAssociationOpen"     action="BusinessAssociationOpenAction"/>
-          <menuitem name="BusinessAssociationRemove"     action="BusinessAssociationRemoveAction"/>
+          <menuitem name="BusinessAssociation" action="BusinessAssociationAction"/>
+          <menuitem name="BusinessAssociationOpen" action="BusinessAssociationOpenAction"/>
+          <menuitem name="BusinessAssociationRemove" action="BusinessAssociationRemoveAction"/>
           <separator name="BusinessSep2"/>
-          <menuitem name="ToolsProcessPayment"     action="ToolsProcessPaymentAction"/>
+          <menuitem name="ToolsProcessPayment" action="ToolsProcessPaymentAction"/>
         </placeholder>
       </menu>
     </placeholder>
 
     <menu name="Reports" action="ReportsAction">
       <placeholder name="ReportsPlaceholder">
-        <menuitem name="ReportsCompanyReport"   action="ReportsCompanyReportAction"/>
+        <menuitem name="ReportsCompanyReport" action="ReportsCompanyReportAction"/>
       </placeholder>
     </menu>
   </menubar>
@@ -65,34 +65,34 @@
       <toolitem name="ToolbarPrintInvoice" action="FilePrintAction"/>
     </placeholder>
     <placeholder name="DefaultToolbarPlaceholder">
-      <toolitem name="ToolbarNewInvoice"       action="BusinessNewInvoiceAction"/>
-      <toolitem name="ToolbarEditInvoice"       action="EditEditInvoiceAction"/>
-      <toolitem name="ToolbarDuplicateInvoice"  action="EditDuplicateInvoiceAction"/>
+      <toolitem name="ToolbarNewInvoice" action="BusinessNewInvoiceAction"/>
+      <toolitem name="ToolbarEditInvoice" action="EditEditInvoiceAction"/>
+      <toolitem name="ToolbarDuplicateInvoice" action="EditDuplicateInvoiceAction"/>
       <separator name="ToolbarSep65"/>
-      <toolitem name="ToolbarRecordEntry"    	action="RecordEntryAction"/>
-      <toolitem name="ToolbarCancelEntry"    	action="CancelEntryAction"/>
-      <toolitem name="ToolbarDeleteEntry"    	action="DeleteEntryAction"/>
-      <toolitem name="ToolbarDuplicateEntry" 	action="DuplicateEntryAction"/>
-        <toolitem name="ToolbarUpEntry"    	action="EntryUpAction"/>
-        <toolitem name="ToolbarDownEntry"    	action="EntryDownAction"/>
-      <toolitem name="ToolbarBlankEntry"     	action="BlankEntryAction"/>
+      <toolitem name="ToolbarRecordEntry" action="RecordEntryAction"/>
+      <toolitem name="ToolbarCancelEntry" action="CancelEntryAction"/>
+      <toolitem name="ToolbarDeleteEntry" action="DeleteEntryAction"/>
+      <toolitem name="ToolbarDuplicateEntry" action="DuplicateEntryAction"/>
+      <toolitem name="ToolbarUpEntry" action="EntryUpAction"/>
+      <toolitem name="ToolbarDownEntry" action="EntryDownAction"/>
+      <toolitem name="ToolbarBlankEntry" action="BlankEntryAction"/>
       <separator name="ToolbarSep68"/>
-      <toolitem name="ToolbarPostInvoice"       action="EditPostInvoiceAction"/>
-      <toolitem name="ToolbarUnPostInvoice"     action="EditUnpostInvoiceAction"/>
-      <toolitem name="ToolbarProcessPayment"     action="ToolsProcessPaymentAction"/>
+      <toolitem name="ToolbarPostInvoice" action="EditPostInvoiceAction"/>
+      <toolitem name="ToolbarUnPostInvoice" action="EditUnpostInvoiceAction"/>
+      <toolitem name="ToolbarProcessPayment" action="ToolsProcessPaymentAction"/>
     </placeholder>
   </toolbar>
 
-  <popup name="MainPopup"                       action="FakeToplevel">
+  <popup name="MainPopup" action="FakeToplevel">
     <placeholder name="PopupPlaceholder2">
-      <menuitem name="RecordEntry"       		action="RecordEntryAction"/>
-      <menuitem name="CancelEntry"       		action="CancelEntryAction"/>
-      <menuitem name="DeleteEntry"       		action="DeleteEntryAction"/>
+      <menuitem name="RecordEntry" action="RecordEntryAction"/>
+      <menuitem name="CancelEntry" action="CancelEntryAction"/>
+      <menuitem name="DeleteEntry" action="DeleteEntryAction"/>
       <separator name="PopupSep1"/>
-      <menuitem name="DuplicateEntry"    		action="DuplicateEntryAction"/>
-      <menuitem name="UpEntry"    	action="EntryUpAction"/>
-      <menuitem name="DownEntry"  	action="EntryDownAction"/>
-      <menuitem name="BlankEntry"        		action="BlankEntryAction"/>
+      <menuitem name="DuplicateEntry" action="DuplicateEntryAction"/>
+      <menuitem name="UpEntry" action="EntryUpAction"/>
+      <menuitem name="DownEntry" action="EntryDownAction"/>
+      <menuitem name="BlankEntry" action="BlankEntryAction"/>
     </placeholder>
   </popup>
 </ui>

@@ -1,18 +1,20 @@
 # Dutch translation of GNUCash glossary.
 # Copyright (C) 2006 Free Software Foundation, Inc.
 # Bernard Meens <meensb@xs4all.nl>, 2006.
+# Geert Janssens <geert@kobaltwit.be>, 2020
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GNUCasg 1.9.4 svn\n"
-"POT-Creation-Date: 2020-03-27 21:58+0100\n"
-"PO-Revision-Date: 2006-04-16 20:08+0200\n"
-"Last-Translator: Bernard Meens <meensb@xs4all.nl>\n"
+"Project-Id-Version: GnuCash 4.1+\n"
+"POT-Creation-Date: 2020-08-08 18:07+0200\n"
+"PO-Revision-Date: 2020-08-18 17:43+0200\n"
+"Last-Translator: Geert Janssens <geert@kobaltwit.be>\n"
 "Language-Team: NONE\n"
-"Language: Nederlands\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -20,100 +22,95 @@ msgstr "Begrip"
 
 #. "A detailed record of money spent and received"
 msgid "account"
-msgstr "dagboek"
+msgstr "rekening"
 
 #. "An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
 msgid "account code"
-msgstr "dagboekcode"
+msgstr "rekeningcode"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
-msgstr "dagboek hierarchie"
+msgstr "rekening hiërarchie"
 
 #. "-"
 msgid "account name"
-msgstr "naam dagboek"
+msgstr "rekening naam"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
-#, fuzzy
 msgid "account type: Active"
-msgstr "Activa"
+msgstr "rekening type: Activa"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr "Activa"
+msgstr "rekening type: Activa"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "Passiva"
+msgstr "rekening type: Passiva"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "rekening courant"
+msgstr "rekening type: Zichtrekening"
 
 #. "-"
 msgid "account type: currency"
-msgstr "Valuta"
+msgstr "rekening type: Valuta"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr "Eigen kapitaal"
+msgstr "rekening type: Eigen kapitaal"
 
 #. "-"
 msgid "account type: Expense"
-msgstr "Uitgaven"
+msgstr "rekening type: Uitgaven"
 
 #. "-"
 msgid "account type: Income"
-msgstr "Inkomsten"
+msgstr "rekening type: Inkomsten"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr "Passiva"
+msgstr "rekening type: Passiva"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "Geldmarktfonds"
+msgstr "rekening type: Geldmarktfonds"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "Investeringsfonds"
+msgstr "rekening type: Investeringsfonds"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "Activa"
+msgstr "rekening type: Passiva"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "Activa"
+msgstr "rekening type: Winst & Verlies"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr "Spaarrekening"
+msgstr "rekening type: Spaarrekening"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "Aandelen"
+msgstr "rekening type: Aandelen"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "Spaarrekening"
+msgstr "rekening type: Wisselkoers"
 
 #. "-"
 msgid "account: parent account"
-msgstr "Bovenliggend dagboek"
+msgstr "rekening type: Bovenliggend dagboek"
 
 #. "-"
 msgid "account: subaccount"
-msgstr "Onderliggend dagboek"
+msgstr "rekening type: Onderliggend dagboek"
 
 #. "-"
 msgid "account: top level account"
-msgstr "Hoogste dagboek"
+msgstr "rekening type: Hoogste dagboek"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
@@ -121,79 +118,79 @@ msgstr "Actie"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr "Geldautomaat"
+msgstr "actie: Geldautomaat"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr "autoDep"
+msgstr "actie: autoBoeking"
 
 #. "-"
 msgid "action: buy"
-msgstr "koop"
+msgstr "actie: aankoop"
 
 #. "-"
 msgid "action: deposit"
-msgstr "storting"
+msgstr "actie: storting"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr "automatische afschrijving"
+msgstr "actie: automatische afschrijving"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr "dist"
+msgstr "actie: dist"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr "dividend"
+msgstr "actie: dividend"
 
 #. "-"
 msgid "action: fee"
-msgstr "fee"
+msgstr "actie: kost"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr "rente"
+msgstr "actie: rente"
 
 #. "-"
 msgid "action: loan"
-msgstr "lenen"
+msgstr "actie: lening"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr "betaling"
+msgstr "actie: betaling"
 
 #. "Point of sale"
 msgid "action: POS"
-msgstr "betaalautomaat"
+msgstr "actie: kassa"
 
 #. "-"
 msgid "action: rebate"
-msgstr "korting"
+msgstr "actie: korting"
 
 #. "-"
 msgid "action: sell"
-msgstr "verkoop"
+msgstr "actie: verkoop"
 
 #. "-"
 msgid "action: Teller"
-msgstr "kassa"
+msgstr "actie: kassa"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
-msgstr "overboeking"
+msgstr "actie: overboeking"
 
 #. "-"
 msgid "action: wire"
-msgstr "overboeking"
+msgstr "actie: overschrijving"
 
 #. "-"
 msgid "action: withdraw"
-msgstr "opname"
+msgstr "actie: opname"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "historiek"
 
 #. "A sum of money"
 msgid "amount"
@@ -208,14 +205,12 @@ msgid "balance (noun)"
 msgstr "saldo"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "balanceren"
+msgstr "openingsbalans"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "balanceren"
+msgstr "eindbalans"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -231,12 +226,11 @@ msgstr "bank"
 
 #. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
-msgstr "rekening"
+msgstr "inkoopfactuur"
 
 #. "see invoice owner"
-#, fuzzy
 msgid "bill owner"
-msgstr "betalingscondities"
+msgstr "Leverancier (debiteur)"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -252,7 +246,7 @@ msgstr "afsluiten van de boeken"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr "budget"
+msgstr "Budget"
 
 #. "-"
 msgid "business (adjective)"
@@ -303,13 +297,12 @@ msgid "commodity option: Symbol"
 msgstr "symbool"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "interest"
+msgstr "samengestelde interest"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr "credit"
+msgstr "Credit"
 
 #. "-"
 msgid "Credit Card"
@@ -320,9 +313,8 @@ msgid "credit transfer"
 msgstr "overboeking"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
-#, fuzzy
 msgid "credit note"
-msgstr "overboeking"
+msgstr "creditnota"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -330,7 +322,7 @@ msgstr "valuta"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
-msgstr "aangepast"
+msgstr "Aangepast"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -338,7 +330,7 @@ msgstr "database"
 
 #. "A specific numbered day of the month"
 msgid "Date"
-msgstr "datum"
+msgstr "Datum"
 
 #. "DD/MM/YY or MM/DD/YY or something else"
 msgid "date format"
@@ -366,12 +358,11 @@ msgstr "afschrijving"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
-msgstr "beschrijving"
+msgstr "Beschrijving"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
-#, fuzzy
 msgid "discount"
-msgstr "dagboek"
+msgstr "korting"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -463,11 +454,11 @@ msgstr "verlies"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
-msgstr "verloren kasboeken"
+msgstr "Verloren rekeningen"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr "partij"
+msgstr "Partij"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -478,9 +469,8 @@ msgid "marker"
 msgstr "markeerstift"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
-msgstr "markeerstift"
+msgstr "marge"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -488,11 +478,11 @@ msgstr "MDI modus"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr "memo"
+msgstr "Memo"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
-msgstr "hypotheek"
+msgstr "Hypotheek"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -544,7 +534,7 @@ msgstr "wees"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "handelspartner"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -552,7 +542,7 @@ msgstr "passphrase"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
-msgstr "schulden/vorderingen"
+msgstr "Schulden/Vorderingen"
 
 #. "A person to whom sth is paid"
 msgid "payee"
@@ -575,18 +565,16 @@ msgid "portfolio"
 msgstr "portfolio"
 
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "sluiten"
+msgstr "boeken"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "voorkeuren"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "betaling"
+msgstr "kapitaalsaflossing"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -662,15 +650,15 @@ msgstr "opnieuw laden"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "rapport vorm: T-account"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "rapport vorm: vertikaal"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "winst reserves"
+msgstr "Winst reserves"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
@@ -678,7 +666,7 @@ msgstr "terugboeken (storneren)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "verkopen"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -686,7 +674,7 @@ msgstr "opslaan"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 msgid "Scheduled Transaction"
-msgstr "geplande transactie"
+msgstr "Geplande transactie"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
@@ -698,13 +686,13 @@ msgstr "waardepapier"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "aandelensaldo"
+msgstr "Aandelensaldo"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
 msgstr "aandeel"
 
-#. "(of a price) A place wfrom which sth comes or is obtained"
+#. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
 msgstr "bron"
 
@@ -721,9 +709,8 @@ msgid "subtotal"
 msgstr "subtotaal"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "belastinginfo"
+msgstr "belastingvak"
 
 #. "field of an account"
 msgid "tax info"

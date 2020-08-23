@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.9.1\n"
-"POT-Creation-Date: 2020-03-27 21:58+0100\n"
+"POT-Creation-Date: 2020-08-08 18:07+0200\n"
 "PO-Revision-Date: 2006-05-04 07:47+0200\n"
 "Last-Translator: Jonas Norling <norling@lysator.liu.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -711,7 +711,7 @@ msgstr "Aktiebalans (register)"
 msgid "shares"
 msgstr "aktier"
 
-#. "(of a price) A place wfrom which sth comes or is obtained"
+#. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
 msgstr "källa"
 

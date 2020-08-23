@@ -52,6 +52,8 @@
 #include "gnc-component-manager.h"
 #include "guid.h"
 #include "gnc-session.h"
+#include "Query.h"
+#include "SplitP.h"
 
 #define GNC_PREFS_GROUP "dialogs.import.generic.transaction-list"
 #define IMPORT_MAIN_MATCHER_CM_CLASS "transaction-matcher-dialog"
@@ -72,6 +74,9 @@ struct _main_matcher_info
     GtkWidget         *reconcile_after_close;
     gboolean add_toggled;   // flag to indicate that add has been toggled to stop selection
     gint id;
+    GSList* temp_trans_list; // Temporary list of imported transactions
+    GHashTable* acct_id_hash;     // Hash table, per account, of list of transaction IDs.
+    GSList* edited_accounts; // List of accounts currently edited.
 };
 
 enum downloaded_cols
@@ -109,6 +114,8 @@ gboolean on_matcher_delete_event (GtkWidget *widget, GdkEvent *event, gpointer d
 void on_matcher_help_clicked (GtkButton *button, gpointer user_data);
 void on_matcher_help_close_clicked (GtkButton *button, gpointer user_data);
 
+static void gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui);
+
 /* Local prototypes */
 static void gnc_gen_trans_assign_transfer_account (
                     GtkTreeView *treeview,
@@ -138,6 +145,35 @@ static void refresh_model_row (
                     GNCImportTransInfo *info);
 /* end local prototypes */
 
+static gboolean delete_hash (gpointer key, gpointer value, gpointer user_data)
+{
+    // Value is a hash table that needs to be destroyed. 
+    g_hash_table_destroy (value);
+    return TRUE;
+}
+
+static void
+update_all_balances (GNCImportMainMatcher *info)
+{
+    for (GSList* iter = info->edited_accounts; iter; iter=iter->next)
+    {
+        gnc_account_set_defer_bal_computation(iter->data,FALSE);
+        xaccAccountRecomputeBalance(iter->data);
+    }
+    g_slist_free (info->edited_accounts);
+    info->edited_accounts = NULL;
+}
+
+static void
+defer_bal_computation (GNCImportMainMatcher *info, Account* acc)
+{
+    if (!gnc_account_get_defer_bal_computation(acc))
+    {
+        gnc_account_set_defer_bal_computation (acc, TRUE);
+        info->edited_accounts = g_slist_prepend (info->edited_accounts, acc);
+    }
+}
+
 void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
 {
     GtkTreeModel *model;
@@ -161,8 +197,6 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
                 info->transaction_processed_cb (trans_info, FALSE,
                                                 info->user_data);
             }
-
-            gnc_import_TransInfo_delete (trans_info);
         }
         while (gtk_tree_model_iter_next (model, &iter));
     }
@@ -176,6 +210,15 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     }
     else
         gnc_import_Settings_delete (info->user_settings);
+
+    g_slist_free_full (info->temp_trans_list,(GDestroyNotify) gnc_import_TransInfo_delete);
+    info->temp_trans_list = NULL;
+    
+    // We've deferred balance computations on many accounts. Let's do it now that we're done.
+    update_all_balances (info);
+    
+    g_hash_table_foreach_remove (info->acct_id_hash, delete_hash, NULL);
+    info->acct_id_hash = NULL;
     g_free (info);
 }
 
@@ -186,11 +229,167 @@ gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info)
     GNCImportTransInfo *trans_info;
     g_assert (info);
     model = gtk_tree_view_get_model (info->view);
-    return !gtk_tree_model_get_iter_first (model, &iter);
+    // Check that both the tree model and the temporary list are empty.
+    return !gtk_tree_model_get_iter_first (model, &iter) && !info->temp_trans_list;
+}
+
+// This returns the transaction ID of the first match candidate in match_list
+static const GncGUID*
+get_top_trans_match_id (GList* match_list)
+{
+    Transaction* trans = NULL;
+    GNCImportMatchInfo* match_info;
+    if (!match_list || !match_list->data) return NULL;
+    match_info = match_list->data;
+    trans = match_info->trans;
+    return xaccTransGetGUID(trans);
+}
+
+// This returns the transaction score of the first match candidate in match_list
+static gint
+get_top_trans_match_score(GList* match_list)
+{
+    GNCImportMatchInfo* match_info;
+    if (!match_list || !match_list->data) return 0;
+    match_info = match_list->data;
+    return match_info->probability;
+}
+
+static GList*
+get_trans_match_list (GtkTreeModel* model, GtkTreeIter* iter)
+{
+    GNCImportTransInfo* transaction_info;
+    gtk_tree_model_get (model, iter,
+                        DOWNLOADED_COL_DATA, &transaction_info,
+                        -1);
+    return gnc_import_TransInfo_get_match_list (transaction_info);
+}
+
+static GNCImportTransInfo*
+get_trans_info(GtkTreeModel* model, GtkTreeIter* iter)
+{
+    GNCImportTransInfo* transaction_info;
+    gtk_tree_model_get (model, iter,
+                        DOWNLOADED_COL_DATA, &transaction_info,
+                        -1);
+    return transaction_info;
+}
+/* This fuction find the top matching register transaction for the imported transaction pointed to by iter
+ * It then goes through the list of all other imported transactions and creates a list of the ones that
+ * have the same register transaction as their top match (i.e., are in conflict). It finds the best of them
+ * (match-score-wise) and returns the rest as a list. The imported transactions in that list will get their
+ * top match modified. */
+static GList*
+get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter, GncGUID* id, gint best_match)
+{
+    GtkTreeIter iter = import_iter;
+    GNCImportTransInfo* best_import = get_trans_info (model, &import_iter);
+    GList* conflicts = g_list_prepend (NULL, best_import);
+
+    while (gtk_tree_model_iter_next (model, &iter))
+    {
+        gint match_score = 0;
+        GNCImportTransInfo* trans_info;
+        GncGUID id2;
+        // Get the ID of the top matching trans for this imported trans.
+        GList* register_iter = get_trans_match_list (model, &iter);
+        if (!register_iter || !register_iter->data)
+            continue;
+
+        id2 = *get_top_trans_match_id (register_iter);
+        if (!guid_equal (id, &id2))
+            continue;
+
+        // Conflict. Get the match score, add this transaction to our list.
+        match_score = get_top_trans_match_score (register_iter);
+        trans_info = get_trans_info (model, &iter);
+        conflicts = g_list_prepend (conflicts, trans_info);
+
+        if (match_score > best_match)
+        {
+            // Keep track of the imported transaction with the best score.
+            best_match = match_score;
+            best_import = trans_info;
+        }
+    }
+
+    // Remove the best match from the list of conflicts, as it will keep its match
+    conflicts = g_list_remove (conflicts, best_import);
+    return conflicts;
+}
+
+static void
+remove_top_matches (GNCImportMainMatcher* gui, GtkTreeModel* model, GList* conflicts)
+{
+    GList* iter = conflicts;
+    for (; iter && iter->data; iter=iter->next)
+    {
+        GNCImportTransInfo* trans_info = iter->data;
+        GList* match_trans = gnc_import_TransInfo_get_match_list (trans_info);
+        match_trans = g_list_remove (match_trans, match_trans->data);
+        gnc_import_TransInfo_set_match_list (trans_info, match_trans);
+    }
+
+    g_list_free (conflicts);
+}
+
+static void
+resolve_conflicts (GNCImportMainMatcher *info)
+{
+    GtkTreeModel* model = gtk_tree_view_get_model (info->view);
+    GtkListStore* store = GTK_LIST_STORE (model);
+    GtkTreeIter import_iter, best_import;
+    gint best_match = 0;
+
+    /* A greedy conflict resolution. Find all imported trans that vie for the same
+     * register trans. Assign the reg trans to the imported trans with the best match.
+     * Loop over the imported transactions */
+    gboolean valid = gtk_tree_model_get_iter_first (model, &import_iter);
+    while (valid)
+    {
+        GList* conflicts = NULL;
+        GncGUID id;
+        GList* match_list = get_trans_match_list (model, &import_iter);
+        if (!match_list || !match_list->data)
+        {
+            valid = gtk_tree_model_iter_next (model, &import_iter);
+            continue;
+        }
+
+        // The ID of the best current match for this imported trans
+        id = *get_top_trans_match_id (match_list);
+        best_match = get_top_trans_match_score (match_list);
+        best_import = import_iter;
+        /* Get a list of all imported transactions that have a conflict with this one.
+         * The returned list excludes the best transaction. */
+        conflicts = get_conflict_list (model, import_iter, &id, best_match);
+
+        if (conflicts)
+        {
+            remove_top_matches (info, model, conflicts);
+            /* Go back to the beginning here, because a nth choice
+             * could now conflict with a previously assigned first choice. */
+            valid = gtk_tree_model_get_iter_first (model, &import_iter);
+        }
+        else
+            valid = gtk_tree_model_iter_next (model, &import_iter);
+        /* NOTE: The loop is guaranteed to terminate because whenever we go back to the top
+         * we remove at least 1 match, and there's a finite number of them. */
+    }
+
+    // Refresh all
+    valid = gtk_tree_model_get_iter_first (model, &import_iter);
+    while (valid)
+    {
+        refresh_model_row (info, model, &import_iter, get_trans_info (model, &import_iter));
+        valid = gtk_tree_model_iter_next (model, &import_iter);
+    }
 }
 
 void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info)
 {
+    gnc_gen_trans_list_create_matches (info);
+    resolve_conflicts (info);
     gtk_widget_show_all (GTK_WIDGET (info->main_widget));
 }
 
@@ -216,12 +415,14 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     /* Don't run any queries and/or split sorts while processing the matcher
     results. */
     gnc_suspend_gui_refresh();
-
     do
     {
         gtk_tree_model_get (model, &iter,
                             DOWNLOADED_COL_DATA, &trans_info,
                             -1);
+
+        // Note: if there's only 1 split (unbalanced) one will be created with the unbalanced account,
+        // and for that account the defer balance will not be set. So things will be slow.
 
         if (gnc_import_process_trans_item (NULL, trans_info))
         {
@@ -233,7 +434,7 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
         }
     }
     while (gtk_tree_model_iter_next (model, &iter));
-
+    
     gnc_gen_trans_list_delete (info);
 
     /* Allow GUI refresh again. */
@@ -334,7 +535,10 @@ run_account_picker_dialog (GNCImportMainMatcher *info,
              old_acc,
              &ok_pressed);
     if (ok_pressed)
+    {
         gnc_import_TransInfo_set_destacc (trans_info, new_acc, TRUE);
+        defer_bal_computation (info, new_acc);
+    }
 }
 
 static void
@@ -486,7 +690,10 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
                             gnc_account_get_full_name (*new_acc));
                 }
                 if (ok_pressed)
+                {
                     gnc_import_TransInfo_set_destacc (trans_info, *new_acc, TRUE);
+                    defer_bal_computation (info, *new_acc);
+                }
             }
             break;
         case GNCImport_CLEAR:
@@ -560,7 +767,7 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (
     }
     g_list_free_full (selected_rows, (GDestroyNotify) gtk_tree_path_free);
 
-    // now reselect the transaction rows.
+    // now reselect the transaction rows. This is very slow if there are lots of transactions.
     for (l = refs; l != NULL; l = l->next)
     {
         GtkTreePath *path = gtk_tree_row_reference_get_path (l->data);
@@ -868,6 +1075,8 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                       G_CALLBACK(gnc_gen_trans_onButtonPressed_cb), info);
     g_signal_connect (view, "popup-menu",
                       G_CALLBACK(gnc_gen_trans_onPopupMenu_cb), info);
+    
+    info->acct_id_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 static void
@@ -1411,6 +1620,14 @@ refresh_model_row (GNCImportMainMatcher *gui,
 
 void gnc_gen_trans_list_add_trans (GNCImportMainMatcher *gui, Transaction *trans)
 {
+    Account* acc = NULL;
+    Split* split = NULL;
+    int i=0;
+    
+    split = xaccTransGetSplit (trans, 0);
+    acc = xaccSplitGetAccount (split);
+    defer_bal_computation (gui, acc);
+    
     gnc_gen_trans_list_add_trans_with_ref_id (gui, trans, 0);
     return;
 }/* end gnc_import_add_trans() */
@@ -1435,38 +1652,170 @@ void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui, Transa
     GNCImportTransInfo * transaction_info = NULL;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    GNCImportMatchInfo *selected_match;
-    gboolean match_selected_manually;
     g_assert (gui);
     g_assert (trans);
-
-
-    if (gnc_import_exists_online_id (trans))
+  
+    if (gnc_import_exists_online_id (trans, gui->acct_id_hash))
         return;
     else
     {
         transaction_info = gnc_import_TransInfo_new (trans, NULL);
         gnc_import_TransInfo_set_ref_id (transaction_info, ref_id);
+        // It's much faster to gather the imported transactions into a GSList than directly into the
+        // treeview.
+        gui->temp_trans_list = g_slist_prepend (gui->temp_trans_list, transaction_info);
+    }
+    return;
+}
 
-        gnc_import_TransInfo_init_matches (transaction_info,
-                                           gui->user_settings);
 
-        selected_match =
-            gnc_import_TransInfo_get_selected_match (transaction_info);
+/* Query the accounts used by the imported transactions to find a list of
+ * candidate matching transactions.
+ */
+static GList*
+query_imported_transaction_accounts (GNCImportMainMatcher *gui)
+{
+    static const int secs_per_day = 86400;
+    GList* query_results = NULL;
+    GList* all_accounts = NULL;
+    GList* retval = NULL;
+    gint match_date_limit =
+        gnc_import_Settings_get_match_date_hardlimit (gui->user_settings);
+    time64 min_time=G_MAXINT64, max_time=0;
+    time64 match_timelimit = match_date_limit * secs_per_day;
+    Query *query = qof_query_create_for (GNC_ID_SPLIT);
+
+    /* Go through all imported transactions, gather the list of accounts, and
+     * min/max date range.
+     */
+    for (GSList* txn = gui->temp_trans_list; txn != NULL;
+         txn = g_slist_next (txn))
+    {
+        GNCImportTransInfo* txn_info = txn->data;
+        Account *txn_account =
+            xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (txn_info));
+        time64 txn_time =
+            xaccTransGetDate (gnc_import_TransInfo_get_trans (txn_info));
+        all_accounts = g_list_prepend (all_accounts, txn_account);
+        min_time = MIN (min_time, txn_time);
+        max_time = MAX (max_time, txn_time);
+    }
+
+    // Make a query to find splits with the right accounts and dates.
+    qof_query_set_book (query, gnc_get_current_book());
+    xaccQueryAddAccountMatch (query, all_accounts,
+                              QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
+    xaccQueryAddDateMatchTT (query,
+                             TRUE, min_time - match_timelimit,
+                             TRUE, max_time + match_timelimit,
+                             QOF_QUERY_AND);
+    query_results = qof_query_run (query);
+    g_list_free (all_accounts);
+    retval = g_list_copy (query_results);
+    qof_query_destroy (query);
+
+    return retval;
+}
+
+/* Create a hash by account of all splits that could match one of the imported
+ * transactions based on their account and date and organized per account.
+ */
+static GHashTable*
+create_hash_of_potential_matches (GList *candidate_txns,
+                                  GHashTable *account_hash)
+{
+    for (GList* candidate = candidate_txns; candidate != NULL;
+         candidate = g_list_next (candidate))
+    {
+        Account* split_account;
+        GSList* split_list;
+        if (gnc_import_split_has_online_id (candidate->data))
+            continue;
+        split_account = xaccSplitGetAccount (candidate->data);
+        /* g_hash_table_steal_extended would do the two calls in one shot but is
+         * not available until GLib 2.58.
+         */
+        split_list = g_hash_table_lookup (account_hash, split_account);
+        g_hash_table_steal (account_hash, split_account);
+        split_list = g_slist_prepend (split_list, candidate->data);
+        g_hash_table_insert (account_hash, split_account, split_list);
+    }
+    return account_hash;
+}
+
+typedef struct _match_struct
+{
+    GNCImportTransInfo* transaction_info;
+    gint display_threshold;
+    double fuzzy_amount;
+} match_struct;
+
+static void
+match_helper (Split* data, match_struct* s)
+{
+    split_find_match (s->transaction_info, data,
+                      s->display_threshold, s->fuzzy_amount);
+}
+
+/* Iterate through the imported transactions selecting matches from the
+ * potential match lists in the account hash and update the matcher with the
+ * results.
+ */
+
+static void
+perform_matching (GNCImportMainMatcher *gui, GHashTable *account_hash)
+{
+    GtkTreeModel* model = gtk_tree_view_get_model (gui->view);
+    gint display_threshold =
+        gnc_import_Settings_get_display_threshold (gui->user_settings);
+    double fuzzy_amount =
+        gnc_import_Settings_get_fuzzy_amount (gui->user_settings);
+
+    for (GSList *imported_txn = gui->temp_trans_list; imported_txn !=NULL;
+         imported_txn = g_slist_next (imported_txn))
+    {
+        GtkTreeIter iter;
+        GNCImportMatchInfo *selected_match;
+        gboolean match_selected_manually;
+        GNCImportTransInfo* txn_info = imported_txn->data;
+        Account *importaccount = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (txn_info));
+        match_struct s = {txn_info, display_threshold, fuzzy_amount};
+
+        g_slist_foreach (g_hash_table_lookup (account_hash, importaccount),
+                         (GFunc) match_helper, &s);
+
+        // Sort the matches, select the best match, and set the action.
+        gnc_import_TransInfo_init_matches (txn_info, gui->user_settings);
+
+        selected_match = gnc_import_TransInfo_get_selected_match (txn_info);
         match_selected_manually =
-            gnc_import_TransInfo_get_match_selected_manually (transaction_info);
+            gnc_import_TransInfo_get_match_selected_manually (txn_info);
 
         if (selected_match)
             gnc_import_PendingMatches_add_match (gui->pending_matches,
                                                  selected_match,
                                                  match_selected_manually);
 
-        model = gtk_tree_view_get_model (gui->view);
-        gtk_tree_store_append (GTK_TREE_STORE(model), &iter, NULL);
-        refresh_model_row (gui, model, &iter, transaction_info);
+        gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
+        refresh_model_row (gui, model, &iter, txn_info);
     }
+}
+
+void
+gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui)
+{
+    GHashTable* account_hash =
+        g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL,
+                              (GDestroyNotify)g_slist_free);
+    GList *candidate_txns = query_imported_transaction_accounts (gui);
+
+    create_hash_of_potential_matches (candidate_txns, account_hash);
+    perform_matching (gui, account_hash);
+
+    g_list_free (candidate_txns);
+    g_hash_table_destroy (account_hash);
     return;
-}/* end gnc_import_add_trans_with_ref_id() */
+}
 
 GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info)
 {

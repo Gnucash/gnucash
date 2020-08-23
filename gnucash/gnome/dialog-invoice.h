@@ -67,6 +67,11 @@ GNCSearchWindow * gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncO
 
 void gnc_business_call_owner_report (GtkWindow* parent, GncOwner *owner, Account *acc);
 
+void gnc_business_call_owner_report_with_enddate (GtkWindow* parent,
+                                                  GncOwner *owner,
+                                                  Account *acc,
+                                                  time64 enddate);
+
 void gnc_invoice_window_sort (InvoiceWindow *iw, invoice_sort_type_t sort_code);
 
 GtkWidget * gnc_invoice_window_create_summary_bar (InvoiceWindow *iw);

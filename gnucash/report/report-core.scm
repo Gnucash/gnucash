@@ -155,29 +155,33 @@ not found.")))
   ;; set of options, and generates the report. the renderer must
   ;; return as its final value an <html-document> object.
   (define report-rec (make-report-template))
+  (define allowable-fields (record-type-fields <report-template>))
+  (define (not-a-field? fld) (not (memq fld allowable-fields)))
 
   (let loop ((args args))
     (match args
-      (() #f)
+      (()
+       (let ((report-guid (gnc:report-template-report-guid report-rec))
+             (report-name (gnc:report-template-name report-rec)))
+         (cond
+          ;; missing report-guid: is an error
+          ((not report-guid)
+           (gui-error (string-append rpterr-guid1 report-name rpterr-guid2)))
+
+          ;; dupe: report-guid is a duplicate
+          ((hash-ref *gnc:_report-templates_* report-guid)
+           (gui-error (string-append rpterr-dupe report-guid)))
+
+          ;; good: new report definition, store into report-templates hash
+          (else
+           (hash-set! *gnc:_report-templates_* report-guid report-rec)))))
+
+      (((? not-a-field? fld) . _)
+       (gnc:error "gnc:define-report: " fld " is not a valid field"))
+
       ((field val . rest)
        ((record-modifier <report-template> field) report-rec val)
-       (loop rest))))
-
-  (let* ((report-guid (gnc:report-template-report-guid report-rec))
-         (report-name (gnc:report-template-name report-rec)))
-    (cond
-
-     ;; missing report-guid: is an error
-     ((not report-guid)
-      (gui-error (string-append rpterr-guid1 report-name rpterr-guid2)))
-
-     ;; dupe: report-guid is a duplicate
-     ((hash-ref *gnc:_report-templates_* report-guid)
-      (gui-error (string-append rpterr-dupe report-guid)))
-
-     ;; good: new report definition, store into report-templates hash
-     (else
-      (hash-set! *gnc:_report-templates_* report-guid report-rec)))))
+       (loop rest)))))
 
 (define (gnc:report-template-new-options/report-guid template-id template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
@@ -725,31 +729,37 @@ not found.")))
       (gnc:report-template-set-name templ new-name)
       (gnc:save-all-reports))))
 
+;;
+;; gnucash-cli helper and exported functions
+;;
+
 (define (stderr-log tmpl . args)
   (apply format (current-error-port) tmpl args)
   #f)
 
-(define (template-export report template export-type output-file dry-run?)
+(define (template-export report template export-type dry-run?)
   (let* ((report-guid (gnc:report-template-report-guid template))
          (parent-template-guid (gnc:report-template-parent-type template))
-         (parent-template (hash-ref *gnc:_report-templates_* parent-template-guid))
-         (parent-export-thunk (gnc:report-template-export-thunk parent-template))
-         (parent-export-types (gnc:report-template-export-types parent-template)))
+         (template (if parent-template-guid
+                       (hash-ref *gnc:_report-templates_* parent-template-guid)
+                       template))
+         (export-thunk (gnc:report-template-export-thunk template))
+         (export-types (gnc:report-template-export-types template)))
 
     (cond
-     ((not parent-export-thunk) (stderr-log "Report ~s has no export code\n" report))
-     ((not parent-export-types) (stderr-log "Report ~s has no export-types\n" report))
-     ((not (assoc export-type parent-export-types))
+     ((not export-thunk) (stderr-log "Report ~s has no export code\n" report))
+     ((not export-types) (stderr-log "Report ~s has no export-types\n" report))
+     ((not (assoc export-type export-types))
       (stderr-log "Export-type disallowed: ~a. Allowed types: ~a\n"
-                  export-type (string-join (map car parent-export-types) ", ")))
-     ((not output-file) (stderr-log "No output file specified\n"))
+                  export-type (string-join (map car export-types) ", ")))
      (dry-run? #t)
      (else
       (display "Running export..." (current-error-port))
-      (parent-export-thunk
-       (gnc-report-find (gnc:make-report report-guid))
-       (assoc-ref parent-export-types export-type) output-file)
-      (display "done!\n" (current-error-port))))))
+      (let ((output (export-thunk
+                     (gnc-report-find (gnc:make-report report-guid))
+                     (assoc-ref export-types export-type))))
+        (display "done!\n" (current-error-port))
+        output)))))
 
 (define (reportname->templates report)
   (or (and=> (gnc:find-report-template report) list)
@@ -797,16 +807,11 @@ not found.")))
                    (gnc:html-render-options-changed (options-gen) #t))))
        templates)))))
 
-(define-public (gnc:cmdline-run-report report export-type output-file dry-run?)
+;; In: report - string matching reportname
+;; In: export-type - string matching export type (eg CSV TXF etc)
+;; Out: if args are valid and runs a single report: #t, otherwise: #f
+(define-public (gnc:cmdline-check-report report export-type)
   (let ((templates (reportname->templates report)))
-
-    (define (run-report output-port)
-      (display
-       (gnc:report-render-html
-        (gnc-report-find
-         (gnc:make-report
-          (gnc:report-template-report-guid (car templates)))) #t) output-port))
-
     (cond
      ((null? templates)
       (stderr-log "Cannot find ~s. Valid reports:\n" report)
@@ -819,11 +824,20 @@ not found.")))
       (stderr-log "\n"))
 
      (export-type (template-export report (car templates)
-                                   export-type output-file dry-run?))
-     (dry-run? #t)
-     (output-file
-      (format (current-error-port) "Saving report to ~a..." output-file)
-      (call-with-output-file output-file run-report)
-      (display "complete!\n" (current-error-port)))
-     (else
-      (run-report (current-output-port))))))
+                                   export-type #t))
+     (else #t))))
+
+;; In: report - string matching reportname
+;; In: export-type - string matching export type (eg CSV TXF etc)
+;; Out: if error, #f
+(define-public (gnc:cmdline-template-export report export-type)
+  (match (reportname->templates report)
+    ((template) (template-export report template export-type #f))
+    (_ (gnc:error report " does not match unique report") #f)))
+
+;; In: report - string matching reportname
+;; Out: a number, or #f if error
+(define-public (gnc:cmdline-get-report-id report)
+  (match (reportname->templates report)
+    ((template) (gnc:make-report (gnc:report-template-report-guid template)))
+    (_ (gnc:error report " does not match unique report") #f)))

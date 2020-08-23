@@ -82,8 +82,11 @@ accounts may be tagged with *EUGOODS* in the account description."))
      #:custom-calculated-cells gst-calculated-cells
      #:custom-source-accounts sales-purch-accounts
      #:custom-split-filter gst-custom-split-filter
-     #:export-type export-type
-     #:filename file-name))
+     #:export-type export-type))
+  (when file-name
+    (issue-deprecation-warning "gst-statement-renderer filename is \
+obsolete, and not supported for exports. please set html-document \
+export-string instead. this warning will be removed in GnuCash 5.0"))
   (when (null? (opt-val "Accounts" "Tax Accounts"))
     (gnc:html-document-add-object! document TAX-SETUP-DESC))
   document)

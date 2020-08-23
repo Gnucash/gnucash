@@ -412,7 +412,7 @@
            ((null? column-list)
             #f)
 
-           ;; fwd-compatibility: the next cond may be removed in master
+           ;; fwd-compatibility for unreversed budgets
            ((and (eq? (car column-list) 'total) unreversed?)
             (let* ((bgt-total (maybe-negate
                                (gnc:get-account-periodlist-budget-value
@@ -423,7 +423,7 @@
                    (dif-total (- bgt-total act-total)))
               (loop (cdr column-list)
                     (disp-cols "total-number-cell" current-col
-                               bgt-total act-total dif-total))))
+                               bgt-total act-total dif-total #f))))
 
            ((eq? (car column-list) 'total)
             (let* ((bgt-total (gnc:get-account-periodlist-budget-value
@@ -438,12 +438,15 @@
                     (disp-cols "total-number-cell" current-col
                                bgt-total act-total dif-total #f))))
 
-           ;; fwd-compatibility: the next cond may be removed in master
+           ;; fwd-compatibility for unreversed budgets
            (unreversed?
             (let* ((period-list (cond
                                  ((list? (car column-list)) (car column-list))
                                  (accumulate? (iota (1+ (car column-list))))
                                  (else (list (car column-list)))))
+                   (note (and (= 1 (length period-list))
+                              (gnc-budget-get-account-period-note
+                               budget acct (car period-list))))
                    (bgt-val (maybe-negate
                              (gnc:get-account-periodlist-budget-value
                               budget acct period-list)))
@@ -453,7 +456,7 @@
                    (dif-val (- bgt-val act-val)))
               (loop (cdr column-list)
                     (disp-cols "number-cell" current-col
-                               bgt-val act-val dif-val))))
+                               bgt-val act-val dif-val note))))
 
            (else
             (let* ((period-list (cond

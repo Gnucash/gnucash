@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="days_adjustment">
@@ -15,7 +15,7 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_plugin_page_register_filter_response_cb" swapped="no"/>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -572,7 +572,7 @@ If 0, all previous days included</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_plugin_page_register_sort_response_cb" swapped="no"/>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -918,7 +918,7 @@ If 0, all previous days included</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -998,7 +998,7 @@ If 0, all previous days included</property>
               <object class="GtkLabel" id="date_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Date</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -1012,7 +1012,7 @@ If 0, all previous days included</property>
               <object class="GtkLabel" id="num_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Number</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -1055,7 +1055,7 @@ If 0, all previous days included</property>
               <object class="GtkLabel" id="tnum_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Transaction Number</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -1099,7 +1099,7 @@ If 0, all previous days included</property>
               <object class="GtkLabel" id="assoc_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Keep Associated Entry</property>
               </object>
               <packing>
@@ -1128,7 +1128,7 @@ If 0, all previous days included</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">

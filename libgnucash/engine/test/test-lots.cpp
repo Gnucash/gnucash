@@ -38,8 +38,8 @@ extern "C"
 #include "Transaction.h"
 }
 
-static gint transaction_num = 320;
-static gint	max_iterate = 10;
+static gint transaction_num = 32;
+static gint	max_iterate = 1;
 
 static void
 run_test (void)

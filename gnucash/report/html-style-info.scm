@@ -61,6 +61,8 @@
     retval))
 
 (define (gnc:html-markup-style-info-set! style . rest)
+  (define allowable-fields (record-type-fields <html-markup-style-info>))
+  (define (not-a-field? fld) (not (memq fld allowable-fields)))
   (let loop ((arglist rest))
     (match arglist
       (('attribute (key val) . rest)
@@ -70,6 +72,9 @@
       (('attribute (key) . rest)
        (gnc:html-markup-style-info-set-attribute! style key #f)
        (loop rest))
+
+      (((? not-a-field? fld) . _)
+       (gnc:error "gnc:html-markup-style-info-set! " fld " is not a valid field"))
 
       ((field value . rest)
        ((record-modifier <html-markup-style-info> field) style value)
@@ -163,7 +168,11 @@
 
 ;; renders a price to target currency
 (define (gnc:default-price-renderer currency amount)
-  (xaccPrintAmount amount (gnc-price-print-info currency #t)))
+  (xaccPrintAmount
+   (gnc-numeric-convert
+    amount (min 10000 (* 100 (gnc-commodity-get-fraction currency)))
+    GNC-HOW-RND-ROUND)
+   (gnc-price-print-info currency #t)))
 
 (define (gnc:default-html-gnc-monetary-renderer datum params)
   (let* ((comm (gnc:gnc-monetary-commodity datum))

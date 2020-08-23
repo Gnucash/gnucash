@@ -1680,6 +1680,7 @@ the option '~a'."))
       ("Void Transactions?" "Filter" "Void Transactions")
       ("Void Transactions" "Filter" "Void Transactions")
       ("Account Substring" "Filter" "Account Name Filter")
+      ("Enable links" #f "Enable Links")
       ;; invoice.scm, renamed November 2018
       ("Individual Taxes" #f "Use Detailed Tax Summary")
       ))

@@ -46,6 +46,13 @@ xaccTransGetSplit (const Transaction *trans, int i)
     return ((MockTransaction*)trans)->getSplit(i);
 }
 
+SplitList *
+xaccTransGetSplitList (const Transaction *trans)
+{
+    g_return_val_if_fail(GNC_IS_MOCK_TRANSACTION(trans), NULL);
+    return trans ? ((MockTransaction*)trans)->getSplitList() : NULL;
+}
+
 Split *
 xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
 {

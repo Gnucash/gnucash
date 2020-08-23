@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.0\n"
-"POT-Creation-Date: 2020-03-27 21:58+0100\n"
+"POT-Creation-Date: 2020-08-08 18:07+0200\n"
 "PO-Revision-Date: 2001-12-28 00:17+0000\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -817,7 +817,7 @@ msgstr ""
 msgid "shares"
 msgstr "Διαμοιραζόμενα"
 
-#. "(of a price) A place wfrom which sth comes or is obtained"
+#. "(often: of a quote) A place from which something comes or is obtained."
 #, fuzzy
 msgid "source"
 msgstr "Πόρος"

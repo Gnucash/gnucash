@@ -2899,78 +2899,32 @@
           ))
 
       (if (not tax-mode?) ; Do Txf mode
-          (if tax-entity-type-valid?
-              (if file-name		; cancel TXF if no file selected
-                  (let ((port (catch #t ;;e.g., system-error
-                                 (lambda () (open-output-file file-name))
-                                 (lambda (key . args)
-                                    (gnc-error-dialog
-                                          '()
-                                          (string-append
-                                              "Could not open the file: "
-                                              file-name
-                                              ". The error is: "
-                                              (symbol->string key)
-                                              " - "
-                                              (car (caddr args))
-                                              "."
-                                          ))
-                                     #f)))
-                       )
-                       (if port ;; port opened successfully
-                           (let* ((output (map (lambda (form-line-acct)
-                                               (handle-tax-code form-line-acct))
-                                    selected-accounts-sorted-by-form-line-acct))
-                                  (output-txf
-                                    (list
-                                      "V042" crlf
-                                      "AGnuCash " gnc:version crlf
-                                      today-date crlf
-                                      "^" crlf
-                                      output
-                                      (if (or
-                                             (gnc-numeric-zero-p tax-code-USD-total)
-                                             (not prior-account))
-                                          '()
-                                          (render-txf-account
-                                              prior-account
-                                              (if (= 4 (get-acct-txf-info
-                                                          'format
-                                                          (xaccAccountGetType
-                                                                  prior-account)
-                                                          (gnc:account-get-txf-code
-                                                                prior-account)))
-                                                  (gnc-numeric-neg
-                                                   tax-code-cap-gain-sales-USD-total)
-                                                  tax-code-USD-total-as-dr)
-                                              #f #f #f #f
-                                              (xaccAccountGetType prior-account)
-                                              (gnc:account-get-txf-code
-                                                                prior-account)
-                                              prior-account-copy
-                                              tax-entity-type #f))
-                                    ))
-                                 )
-                                 ;; prior-account can be #f if selected accounts are
-                                 ;; marked as 'tax-related' in the account edit
-                                 ;; dialog but not actually assigned to a tax code
-                                 ;; using the 'Tax Options' dialog (UI bug?).
-                                 ;; An empty file is unfortunately put out with
-                                 ;; no user warning other than message on report.
-                                 (if prior-account
-                                     (gnc:display-report-list-item output-txf port
-                                                           "taxtxf.scm - ")
-                                     #f)
-                                 (close-output-port port)
-                                 #t
-                           ) ; end of let
-                           ;; Could not open port successfully
-                           #t ;; to prevent 2nd error dialog in
-                              ;; gnc_plugin_page_report_export_cb
-                       ) ;; end of if
-                  ) ;; end of let*
-              #f) ;;end of if
-          #f) ;;end of if
+          (begin
+            (if tax-entity-type-valid?
+                (gnc:html-document-set-export-string
+                 doc
+                 (call-with-output-string
+                   (lambda (port)
+                     (gnc:display-report-list-item
+                      (list
+                       "V042" crlf "AGnuCash " gnc:version crlf
+                       today-date crlf "^" crlf
+                       (map handle-tax-code selected-accounts-sorted-by-form-line-acct)
+                       (if (or (zero? tax-code-USD-total) (not prior-account))
+                           '()
+                           (render-txf-account
+                            prior-account
+                            (if (= 4 (get-acct-txf-info
+                                      'format (xaccAccountGetType prior-account)
+                                      (gnc:account-get-txf-code prior-account)))
+                                (- tax-code-cap-gain-sales-USD-total)
+                                tax-code-USD-total-as-dr)
+                            #f #f #f #f (xaccAccountGetType prior-account)
+                            (gnc:account-get-txf-code prior-account)
+                            prior-account-copy tax-entity-type #f)))
+                      port "taxtxf.scm - "))))
+                (gnc:html-document-set-export-error doc "tax-entity-type is invalid"))
+            doc)
           (begin  ; else do tax report
                   (gnc:html-document-set-style!
                    doc "header-just-top"

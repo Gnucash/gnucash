@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
-"POT-Creation-Date: 2020-03-27 21:58+0100\n"
+"POT-Creation-Date: 2020-08-08 18:07+0200\n"
 "PO-Revision-Date: 2008-11-14 21:02+0100\n"
 "Last-Translator: Zdenko Podobny <zdenop@gmail.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -708,7 +708,7 @@ msgstr "Zostatok podielov (register)"
 msgid "shares"
 msgstr "podiely"
 
-#. "(of a price) A place wfrom which sth comes or is obtained"
+#. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
 msgstr "zdroj"
 

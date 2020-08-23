@@ -2266,6 +2266,8 @@ SplitList *
 xaccTransGetAPARAcctSplitList (const Transaction *trans, gboolean strict)
 {
     GList *apar_splits = NULL;
+    if (!trans) return NULL;
+
     FOR_EACH_SPLIT (trans,
                     const Account *account = xaccSplitGetAccount(s);
                     if (account && xaccAccountIsAPARType(xaccAccountGetType(account)))

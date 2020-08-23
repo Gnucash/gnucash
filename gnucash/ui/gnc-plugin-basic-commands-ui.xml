@@ -16,14 +16,14 @@
         <menuitem name="FileExportAccounts" action="FileExportAccountsAction"/>
       </menu>
     </menu>
-  
+
     <menu name="Edit" action="EditAction">
       <placeholder name="EditFindPlaceholder">
         <menuitem name="EditFindTransactions" action="EditFindTransactionsAction"/>
       </placeholder>
       <menuitem name="EditTaxOptions" action="EditTaxOptionsAction"/>
     </menu>
-  
+
     <menu name="View" action="ViewAction">
       <menuitem name="ViewRefresh" action="ViewRefreshAction"/>
       <separator name="ViewSep1"/>
@@ -33,7 +33,7 @@
       <separator name="ViewSep2"/>
       <placeholder name="ViewPlaceholder"/>
     </menu>
-  
+
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder">
         <menu name="ActionsScheduledTransactions" action="ActionsScheduledTransactionsAction">
@@ -43,7 +43,7 @@
         </menu>
       </placeholder>
     </menu>
-  
+
     <placeholder name="AdditionalMenusPlaceholder"/>
 
     <menu name="Reports" action="ReportsAction">
@@ -70,7 +70,6 @@
         <menuitem name="HelpTipsOfTheDay" action="HelpTipsOfTheDayAction"/>
       </placeholder>
     </menu>
-
   </menubar>
 
   <toolbar name="DefaultToolbar">

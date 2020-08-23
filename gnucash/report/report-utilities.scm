@@ -908,7 +908,13 @@
         (let* ((invoice (gncInvoiceGetInvoiceFromTxn
                          (xaccSplitGetParent (car splits))))
                (lot (gncInvoiceGetPostedLot invoice))
-               (bal (gnc-lot-get-balance lot))
+               (lot-splits (gnc-lot-get-split-list lot))
+               (bal (fold
+                     (lambda (a b)
+                       (if (<= (xaccTransGetDate (xaccSplitGetParent a)) to-date)
+                           (+ (xaccSplitGetAmount a) b)
+                           b))
+                     0 lot-splits))
                (bal (if receivable? bal (- bal)))
                (date (if (eq? date-type 'postdate)
                          (gncInvoiceGetDatePosted invoice)

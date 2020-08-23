@@ -29,6 +29,7 @@
 (define-module (gnucash reports standard new-owner-report))
 
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-2))
 (use-modules (srfi srfi-8))
 (use-modules (srfi srfi-9))
 (use-modules (srfi srfi-11))             ;for let-values
@@ -1193,28 +1194,28 @@ invoices and amounts.")))))
  'in-menu? #t)
 
 
-(define (owner-report-create-internal report-guid owner owner-type)
+(define (owner-report-create-internal report-guid owner owner-type enddate)
   (let* ((options (gnc:make-report-options report-guid))
-         (owner-op (gnc:lookup-option options owner-page (owner-string owner-type))))
+         (owner-op (gnc:lookup-option options owner-page (owner-string owner-type)))
+         (date-op (gnc:lookup-option options gnc:pagename-general optname-to-date)))
 
     (gnc:option-set-value owner-op owner)
+    (when enddate
+      (gnc:option-set-value date-op (cons 'absolute enddate)))
     (gnc:make-report report-guid options)))
 
-(define (owner-report-create owner account)
+(define (owner-report-create-with-enddate owner account enddate)
   ;; note account isn't actually used
-  (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
-    (cond
-     ((eqv? type GNC-OWNER-CUSTOMER)
-      ;; Not sure whether to pass type, or to use the guid in the report function
-      (owner-report-create-internal customer-report-guid owner type))
+  (define guid-alist
+    (list (cons GNC-OWNER-CUSTOMER customer-report-guid)
+          (cons GNC-OWNER-VENDOR vendor-report-guid)
+          (cons GNC-OWNER-EMPLOYEE employee-report-guid)))
+  (and-let* ((type (gncOwnerGetType (gncOwnerGetEndOwner owner)))
+             (guid (assv-ref guid-alist type)))
+    (owner-report-create-internal guid owner type enddate)))
 
-     ((eqv? type GNC-OWNER-VENDOR)
-      (owner-report-create-internal vendor-report-guid owner type))
-
-     ((eqv? type GNC-OWNER-EMPLOYEE)
-      (owner-report-create-internal employee-report-guid owner type))
-
-     (else #f))))
+(define (owner-report-create owner account)
+  (owner-report-create-with-enddate owner account #f))
 
 (define (gnc:owner-report-create-internal
          account split query journal? double? title debit-string credit-string)
@@ -1229,3 +1230,4 @@ invoices and amounts.")))))
 (gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t gnc:owner-report-create-internal)
 (gnc:register-report-hook ACCT-TYPE-PAYABLE #t gnc:owner-report-create-internal)
 (export owner-report-create)
+(export owner-report-create-with-enddate)

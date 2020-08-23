@@ -43,7 +43,6 @@
   (null-test "portfolio" portfolio-uuid)
   (null-test "advanced-portfolio" advanced-uuid)
   (portfolio-tests)
-  (advanced-helper-tests)
   (advanced-tests)
   (test-end "test-portfolios.scm"))
 
@@ -123,76 +122,3 @@
             "-$1.00" "-0.13%")
           (sxml->table-row-col sxml 1 1 #f))))
     (teardown)))
-
-(define (advanced-helper-tests)
-  (define sum-basis
-    (@@ (gnucash reports standard advanced-portfolio) sum-basis))
-  (define units-basis
-    (@@ (gnucash reports standard advanced-portfolio) units-basis))
-  (define apply-basis-ratio
-    (@@ (gnucash reports standard advanced-portfolio) apply-basis-ratio))
-  (define basis-builder
-    (@@ (gnucash reports standard advanced-portfolio) basis-builder))
-  (define basis1 '((3 . 4) (5 . 6) (7 . 8)))
-  (define basis2 '((3 . 4) (5 . 6) (7 . 8) (9 . 10)))
-
-  (test-equal "sum-basis"
-    98
-    (sum-basis basis1 100))
-  (test-equal "sum-basis"
-    188
-    (sum-basis basis2 100))
-
-  (test-equal "units-basis"
-    15
-    (units-basis basis1))
-  (test-equal "units-basis"
-    24
-    (units-basis basis2))
-
-  (test-equal "apply-basis-ratio"
-    '((6 . 12) (10 . 18) (14 . 24))
-    (apply-basis-ratio basis1 2 3))
-  (test-equal "apply-basis-ratio"
-    '((6 . 12) (10 . 18) (14 . 24) (18 . 30))
-    (apply-basis-ratio basis2 2 3))
-
-  (test-equal "basis-builder buy new units"
-    '((3 . 4/3))
-    (basis-builder '() 3 4 'average-basis 100))
-  (test-equal "basis-builder buy new units average"
-    '((6 . 8/3))
-    (basis-builder '((3 . 4) (5 . 6) (7 . 8)) 3 4 'average-basis 100))
-  (test-equal "basis-builder buy new units FIFO"
-    '((3 . 4) (5 . 6) (7 . 8) (3 . 4/3))
-    (basis-builder '((3 . 4) (5 . 6) (7 . 8)) 3 4 'fifo-basis 100))
-  (test-equal "basis-builder buy new units LIFO"
-    '((3 . 4) (5 . 6) (7 . 8) (3 . 4/3))
-    (basis-builder '((3 . 4) (5 . 6) (7 . 8)) 3 4 'filo-basis 100))
-
-  (test-equal "basis-builder sell average"
-    '((0 . 4))
-    (basis-builder '((3 . 4) (5 . 6) (7 . 8)) -3 4 'average-basis 100))
-  (test-equal "basis-builder sell FIFO first"
-    '((5 . 6) (7 . 8))
-    (basis-builder '((3 . 4) (5 . 6) (7 . 8)) -3 4 'fifo-basis 100))
-  (test-equal "basis-builder sell FIFO 2 lots"
-    '((3 . 6) (7 . 8))
-    (basis-builder '((3 . 4) (5 . 6) (7 . 8)) -5 4 'fifo-basis 100))
-  (test-equal "basis-builder sell LIFO"
-    '((3 . 4) (5 . 6) (4 . 8))
-    (basis-builder '((3 . 4) (5 . 6) (7 . 8)) -3 4 'filo-basis 100))
-  (test-equal "basis-builder sell LIFO all"
-    '()
-    (basis-builder '((3 . 4) (5 . 6) (7 . 8)) -15 4 'filo-basis 100))
-  (test-equal "basis-builder sell LIFO more than we have"
-    '()
-    (basis-builder '() -15 4 'filo-basis 100))
-
-  (test-equal "basis-builder = no value just units = split/merge"
-    '((12/5 . 5) (4 . 15/2) (28/5 . 10))
-    (basis-builder '((3 . 4) (5 . 6) (7 . 8)) -3 0 'average-basis 100))
-
-  (test-equal "basis-builder = no units just value = spin-off"
-    '((3 . 8) (5 . 12) (7 . 16))
-    (basis-builder '((3 . 4) (5 . 6) (7 . 8)) 0 98 'average-basis 100)))
