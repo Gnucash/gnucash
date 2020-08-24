@@ -20,9 +20,9 @@ GType gnc_mock_account_get_type(void);
 class MockAccount : public Account
 {
 public:
-    // note: don't use default constructor instead of empty constructor, since
-    // it does zero initialization, which would overwrite GObject
-    // initialization, which is already done in the new operator.
+    /* note: don't use default constructor instead of empty constructor, since
+     * it does zero initialization, which would overwrite GObject
+     * initialization, which is already done in the new operator. */
     MockAccount() {}
     void* operator new(size_t size)
     {
@@ -46,8 +46,8 @@ public:
     MOCK_METHOD0(create_imap, GncImportMatchMap*());
 
 protected:
-    // Protect destructor to avoid MockAccount objects to be created on stack. MockAccount
-    // objects can only be dynamically created, since they are derived from GObject.
+    /* Protect destructor to avoid MockAccount objects to be created on stack. MockAccount
+     * objects can only be dynamically created, since they are derived from GObject. */
     ~MockAccount() {}
 };
 
