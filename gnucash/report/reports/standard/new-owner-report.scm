@@ -475,7 +475,7 @@
       ((if negate? - +)
        (AP-negate (xaccSplitGetAmount split))))))
 
-  (define (print-totals total debit credit tax sale)
+  (define (print-totals total debit credit tax sale invalid-splits)
     (define (total-cell cell)
       (gnc:make-html-table-cell/markup "total-number-cell" cell))
     (define (make-cell amt)
@@ -518,6 +518,20 @@
                   (gnc:make-gnc-monetary currency total)))
           (addif (< 0 rhs-cols)
                  (gnc:make-html-table-cell/size 1 (+ mid-span rhs-cols) #f)))))
+
+    (unless (null? invalid-splits)
+      (gnc:html-table-append-row/markup!
+       table "grand-total"
+       (list (gnc:make-html-table-cell/size
+              1 (+ grand-span mid-span rhs-cols)
+              (gnc:make-html-text
+               (G_ "Please note some transactions were not processed")
+               (gnc:html-markup-ol
+                (map
+                 (match-lambda
+                   ((split txt)
+                    (gnc:html-markup-anchor (gnc:split-anchor-text split) txt)))
+                 invalid-splits)))))))
 
     ;; print aging table
     (gnc:html-table-append-row/markup!
@@ -712,6 +726,7 @@
   (let lp ((printed? #f)
            (odd-row? #t)
            (splits splits)
+           (invalid-splits '())
            (total 0)
            (debit 0)
            (credit 0)
@@ -725,7 +740,7 @@
       ;;start-date (and no other rows would be added either) so add it now
       (when (and (not printed?) (bal-col used-columns) (not (zero? total)))
         (add-balance-row odd-row? total))
-      (print-totals total debit credit tax sale)
+      (print-totals total debit credit tax sale invalid-splits)
       (gnc:html-table-set-style!
        table "table"
        'attribute (list "border" 1)
@@ -736,7 +751,7 @@
      ;; not an invoice/payment. skip transaction.
      ((not (or (txn-is-invoice? (xaccSplitGetParent (car splits)))
                (txn-is-payment? (xaccSplitGetParent (car splits)))))
-      (lp printed? odd-row? (cdr splits) total debit credit tax sale))
+      (lp printed? odd-row? (cdr splits) invalid-splits total debit credit tax sale))
 
      ;; invalid case: txn-type-invoice but no associated invoice, nor lot
      ((let* ((txn (xaccSplitGetParent (car splits)))
@@ -744,14 +759,17 @@
         (and (txn-is-invoice? txn)
              (or (null? invoice)
                  (null? (gncInvoiceGetPostedLot invoice)))))
-      (gnc:warn "sanity check fail" txn)
-      (lp printed? odd-row? (cdr splits) total debit credit tax sale))
+      (gnc:warn "sanity check fail " (gnc:strify (car splits)))
+      (lp printed? odd-row? (cdr splits)
+          (cons (list (car splits) "Transaction has type invoice but no owner or lot")
+                invalid-splits)
+          total debit credit tax sale))
 
      ;; txn-date < start-date. skip display, accumulate amounts
      ((< (xaccTransGetDate (xaccSplitGetParent (car splits))) start-date)
       (let* ((txn (xaccSplitGetParent (car splits)))
              (value (AP-negate (xaccTransGetAccountAmount txn acc))))
-        (lp printed? odd-row? (cdr splits) (+ total value)
+        (lp printed? odd-row? (cdr splits) invalid-splits (+ total value)
             debit credit tax sale)))
 
      ;; if balance row hasn't been rendered, consider
@@ -759,7 +777,7 @@
      ((not printed?)
       (let ((print? (and (bal-col used-columns) (not (zero? total)))))
         (if print? (add-balance-row odd-row? total))
-        (lp #t (not print?) splits total debit credit tax sale)))
+        (lp #t (not print?) splits invalid-splits total debit credit tax sale)))
 
      ;; start printing txns.
      ((txn-is-invoice? (xaccSplitGetParent (car splits)))
@@ -789,7 +807,7 @@
            ((detailed) (make-invoice->payments-table invoice))
            (else '(()))))
 
-        (lp printed? (not odd-row?) (cdr splits) (+ total value)
+        (lp printed? (not odd-row?) (cdr splits) invalid-splits (+ total value)
             (if (< 0 orig-value) (+ debit orig-value) debit)
             (if (< 0 orig-value) credit (- credit orig-value))
             (+ tax (CN-negate gncInvoiceGetTotalTax))
@@ -818,7 +836,7 @@
            ((detailed) (make-payment->payee-table txn))
            (else '(()))))
 
-        (lp printed? (not odd-row?) (cdr splits) (+ total value)
+        (lp printed? (not odd-row?) (cdr splits) invalid-splits (+ total value)
             (if (< 0 orig-value) (+ debit orig-value) debit)
             (if (< 0 orig-value) credit (- credit orig-value))
             tax
