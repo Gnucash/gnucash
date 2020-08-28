@@ -3712,7 +3712,7 @@ static gboolean
 gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
 {
     if (gnc_main_window_all_finish_pending())
-        return gnc_main_window_quit (window);
+        return !gnc_main_window_quit (window);
     return TRUE;
 }
 
