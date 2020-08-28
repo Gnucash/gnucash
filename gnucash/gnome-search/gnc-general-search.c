@@ -507,7 +507,7 @@ gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
 
     gnc_gui_component_clear_watches (priv->component_id);
 
-    if (selection)
+    if (selection && priv->get_guid)
     {
         const QofParam *get_guid = priv->get_guid;
         priv->guid = * ((GncGUID *)(get_guid->param_getfcn
