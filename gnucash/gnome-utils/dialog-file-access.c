@@ -161,6 +161,7 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
         break;
 
     case GTK_RESPONSE_CANCEL:
+    case GTK_RESPONSE_DELETE_EVENT:
         break;
 
     default:
