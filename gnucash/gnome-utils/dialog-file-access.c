@@ -343,6 +343,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
             faw->starting_dir = g_path_get_dirname( filepath );
             g_free ( filepath );
         }
+        g_free (last);
     }
     if (!faw->starting_dir)
         faw->starting_dir = gnc_get_default_directory(settings_section);

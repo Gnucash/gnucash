@@ -609,8 +609,11 @@ gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
     if (guid == NULL)
         gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
     else if (strcmp(guid, "custom") == 0)
+    {
         gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
                                  pcd->format_max - 1);
+        g_free (guid);
+    }
     else
     {
         model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
@@ -622,7 +625,9 @@ gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
         {
             gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
         }
+        g_free (guid);
     }
+
     active = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_CHECK_POSITION);
 
     /* If the check format used last time no longer exists, then the saved check
