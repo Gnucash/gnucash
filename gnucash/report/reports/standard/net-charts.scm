@@ -444,8 +444,7 @@
 
              (cond
               ((eq? export-type 'csv)
-               (let ((old-fmt (qof-date-format-get)))
-                 (qof-date-format-set QOF-DATE-FORMAT-ISO)
+               (let ((iso-date (qof-date-format-get-string QOF-DATE-FORMAT-ISO)))
                  (gnc:html-document-set-export-string
                   document
                   (gnc:lists->csv
@@ -453,10 +452,9 @@
                              (map G_ '("Date" "Income" "Expense" "Net Profit"))
                              (map G_ '("Date" "Assets" "Liabilities" "Net Worth")))
                          (map list
-                              (map qof-print-date dates-list)
+                              (map (cut gnc-print-time64 <> iso-date) dates-list)
                               minuend-balances
-                              subtrahend-balances difference-balances))))
-                 (qof-date-format-set old-fmt)))))
+                              subtrahend-balances difference-balances))))))))
            (gnc:html-document-add-object!
             document
             (gnc:html-make-empty-data-warning

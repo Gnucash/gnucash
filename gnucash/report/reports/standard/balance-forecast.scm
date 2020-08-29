@@ -169,6 +169,7 @@ date point, a projected minimum balance including scheduled transactions."))
                         price currency
                         (gnc:accounts-get-commodities accounts #f)
                         to-date #f #f))
+          (iso-date (qof-date-format-get-string QOF-DATE-FORMAT-ISO))
           (accounts-balancelist
            (map
             (lambda (acc)
@@ -281,11 +282,10 @@ date point, a projected minimum balance including scheduled transactions."))
         (gnc:html-chart-set-y-axis-label!
          chart (gnc-commodity-get-mnemonic currency))
         ;; Set series labels
-        (let ((old-fmt (qof-date-format-get)))
-          (qof-date-format-set QOF-DATE-FORMAT-ISO)
-          (gnc:html-chart-set-data-labels!
-           chart (map qof-print-date (map cadr intervals)))
-          (qof-date-format-set old-fmt))
+        (gnc:html-chart-set-data-labels!
+         chart (map (lambda (data)
+                      (gnc-print-time64 (cadr data) iso-date))
+                    intervals))
 
         ;; Set currency symbol
         (gnc:html-chart-set-currency-iso!

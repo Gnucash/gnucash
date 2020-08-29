@@ -26,6 +26,7 @@
 (define-module (gnucash reports standard category-barchart))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-9))
+(use-modules (srfi srfi-26))
 (use-modules (ice-9 match))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
@@ -640,8 +641,7 @@ developing over time"))
 
              (cond
               ((eq? export-type 'csv)
-               (let ((old-fmt (qof-date-format-get)))
-                 (qof-date-format-set QOF-DATE-FORMAT-ISO)
+               (let ((iso-date (qof-date-format-get-string QOF-DATE-FORMAT-ISO)))
                  (gnc:html-document-set-export-string
                   document
                   (gnc:lists->csv
@@ -665,9 +665,8 @@ developing over time"))
                              (if (pair? (cdr all-data))
                                  (list (apply gnc:monetary+ row))
                                  '())))
-                          (map qof-print-date dates-list)
-                          (apply zip (map cadr all-data))))))
-                 (qof-date-format-set old-fmt)))))
+                          (map (cut gnc-print-time64 <> iso-date) dates-list)
+                          (apply zip (map cadr all-data))))))))))
 
            ;; else if empty data
            (gnc:html-document-add-object!

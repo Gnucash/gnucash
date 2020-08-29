@@ -2266,20 +2266,19 @@ warning will be removed in GnuCash 5.0"))
 
           (cond
            ((eq? export-type 'csv)
-            (let ((old-date-fmt (qof-date-format-get))
-                  (dummy (qof-date-format-set QOF-DATE-FORMAT-ISO))
-                  (infolist
-                   (list
-                    (list "from" (qof-print-date begindate))
-                    (list "to" (qof-print-date enddate)))))
-              (qof-date-format-set old-date-fmt)
-              (cond
-               ((list? csvlist)
+            (cond
+             ((pair? csvlist)
+              (let ((iso-date (qof-date-format-get-string QOF-DATE-FORMAT-ISO)))
                 (gnc:html-document-set-export-string
-                 document (lists->csv (append infolist csvlist))))
+                 document
+                 (lists->csv
+                  (cons*
+                   `("from" ,(gnc-print-time64 begindate iso-date))
+                   `("to" ,(gnc-print-time64 enddate iso-date))
+                   csvlist)))))
 
-               (else
-                (gnc:html-document-set-export-error document csvlist)))))))))))
+             (else
+              (gnc:html-document-set-export-error document csvlist))))))))))
 
     (gnc:report-finished)
 
