@@ -374,7 +374,7 @@ msgstr "Unicode (UTF-32LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:214
 msgid "User Defined"
-msgstr ""
+msgstr "Kasutaja Määratud"
 
 #: borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
@@ -426,7 +426,7 @@ msgstr "Teisendamise suund"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "See väärtus määrab, millist iconv testi sooritada"
 
 #: borrowed/goffice/go-optionmenu.c:336
 msgid "Menu"
@@ -441,6 +441,8 @@ msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
 msgstr ""
+"GnuCashi veebikasutusjuhendis on palju kasulikku infot. Kasutusjuhendi "
+"leiad Abi menüü alt."
 
 #. Translators: You can replace the link, if a transated page exists.
 #: doc/tip_of_the_day.list.c:5
@@ -949,7 +951,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-stock-split.c:408
 msgid "Error adding price."
-msgstr ""
+msgstr "Tõrge hinna lisamisel."
 
 #: gnucash/gnome/assistant-stock-split.c:573
 #: gnucash/gnome/dialog-find-transactions2.c:111
@@ -975,14 +977,14 @@ msgstr ""
 #: gnucash/report/reports/standard/register.scm:406
 #: gnucash/report/trep-engine.scm:1215
 msgid "Account"
-msgstr ""
+msgstr "Konto"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1063
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
-msgstr ""
+msgstr "Sümbol"
 
 #: gnucash/gnome/assistant-stock-split.c:585
 #: gnucash/gnome/dialog-find-transactions.c:122
@@ -1007,7 +1009,7 @@ msgstr ""
 #: gnucash/gnome/dialog-invoice.c:1540
 #: gnucash/gnome-utils/gnc-general-select.c:220
 msgid "Select..."
-msgstr ""
+msgstr "Vali..."
 
 #: gnucash/gnome/business-gnome-utils.c:77
 #: gnucash/gnome-utils/gnc-general-select.c:222
@@ -1023,13 +1025,13 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:783
 #: libgnucash/engine/Account.cpp:169 libgnucash/engine/gncInvoice.c:1082
 msgid "Bill"
-msgstr ""
+msgstr "Ostuarve"
 
 #: gnucash/gnome/business-gnome-utils.c:222 gnucash/gnome/dialog-assoc.c:678
 #: gnucash/gnome/dialog-invoice.c:2590 gnucash/gnome/dialog-invoice.c:2817
 #: gnucash/gnome/dialog-invoice.c:2818
 msgid "Voucher"
-msgstr ""
+msgstr "Vautšer"
 
 #: gnucash/gnome/business-gnome-utils.c:225 gnucash/gnome/dialog-assoc.c:682
 #: gnucash/gnome/dialog-invoice.c:3534
@@ -1052,7 +1054,7 @@ msgstr ""
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
 #: libgnucash/engine/Account.cpp:150 libgnucash/engine/gncInvoice.c:1080
 msgid "Invoice"
-msgstr ""
+msgstr "Müügiarve"
 
 #: gnucash/gnome/business-gnome-utils.c:448 gnucash/gnome/gnc-split-reg.c:676
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
@@ -1076,17 +1078,17 @@ msgstr ""
 #: gnucash/gnome/top-level.c:240
 #, c-format
 msgid "Badly formed URL %s"
-msgstr ""
+msgstr "Vigaselt moodustatud URL %s"
 
 #: gnucash/gnome/business-urls.c:74 gnucash/gnome/top-level.c:98
 #, c-format
 msgid "Bad URL: %s"
-msgstr ""
+msgstr "Vigane URL: %s"
 
 #: gnucash/gnome/business-urls.c:83
 #, c-format
 msgid "No such entity: %s"
-msgstr ""
+msgstr "Pole sellist üksust: %s"
 
 #: gnucash/gnome/business-urls.c:171
 #, c-format
@@ -1096,15 +1098,15 @@ msgstr ""
 #: gnucash/gnome/business-urls.c:289
 #, c-format
 msgid "Entity type does not match %s: %s"
-msgstr ""
+msgstr "Üksuse tüüp ei klapi %s: %s"
 
 #: gnucash/gnome/dialog-assoc.c:186
 msgid "Amend URL:"
-msgstr ""
+msgstr "Paranda URL:"
 
 #: gnucash/gnome/dialog-assoc.c:190
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr ""
+msgstr "Sisesta URL nagu http://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-assoc.c:205
 msgid "Existing Association is"
@@ -1112,19 +1114,19 @@ msgstr ""
 
 #: gnucash/gnome/dialog-assoc.c:423 gnucash/gnome/dialog-assoc.c:466
 msgid "File Found"
-msgstr ""
+msgstr "Fail Leitud"
 
 #: gnucash/gnome/dialog-assoc.c:425
 msgid "File Not Found"
-msgstr ""
+msgstr "Faili Ei Leitud"
 
 #: gnucash/gnome/dialog-assoc.c:438
 msgid "Address Found"
-msgstr ""
+msgstr "Aadress Leitud"
 
 #: gnucash/gnome/dialog-assoc.c:440
 msgid "Address Not Found"
-msgstr ""
+msgstr "Aadressi Ei Leitud"
 
 #: gnucash/gnome/dialog-assoc.c:472 gnucash/gnome/dialog-assoc.c:700
 #: gnucash/gnome/dialog-assoc.c:743 gnucash/gnome/dialog-billterms.c:537
@@ -1152,7 +1154,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-assoc.c:627
 msgid "Transaction can not be modified."
-msgstr ""
+msgstr "Tehingut ei saa muuta."
 
 #: gnucash/gnome/dialog-assoc.c:631 gnucash/gnome/gnc-split-reg.c:1297
 msgid "Change a Transaction Association"
@@ -1160,7 +1162,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-assoc.c:685 libgnucash/engine/gncOwner.c:215
 msgid "Undefined"
-msgstr ""
+msgstr "Määramata"
 
 #: gnucash/gnome/dialog-assoc.c:915
 msgid "Transaction Associations"
@@ -1206,7 +1208,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:215 gnucash/report/trep-engine.scm:942
 #: gnucash/report/trep-engine.scm:1070 gnucash/report/trep-engine.scm:1195
 msgid "Description"
-msgstr ""
+msgstr "Kirjeldus"
 
 #: gnucash/gnome/dialog-assoc.c:929
 msgid ""
@@ -1224,7 +1226,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-billterms.c:324
 msgid "You must provide a name for this Billing Term."
-msgstr ""
+msgstr "Sa pead sellele Arveldamise Tingimusele nime andma."
 
 #: gnucash/gnome/dialog-billterms.c:331
 #, c-format
@@ -1232,6 +1234,8 @@ msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
 msgstr ""
+"Sa pead andma sellele Arveldamise Tingimusele unikaalse nime. Sinu valik \"%s\" is "
+"already in use."
 
 #: gnucash/gnome/dialog-billterms.c:531
 #: gnucash/gnome-utils/gnc-date-delta.c:222
@@ -1240,36 +1244,36 @@ msgstr ""
 #: gnucash/gtkbuilder/gnc-frequency.glade:972
 #: gnucash/report/reports/standard/price-scatter.scm:138
 msgid "Days"
-msgstr ""
+msgstr "Päevad"
 
 #: gnucash/gnome/dialog-billterms.c:534
 #: gnucash/gtkbuilder/dialog-billterms.glade:371
 #: gnucash/gtkbuilder/dialog-billterms.glade:770
 msgid "Proximo"
-msgstr ""
+msgstr "Järgmisel Kuul"
 
 #: gnucash/gnome/dialog-billterms.c:672
 #, c-format
 msgid "Term \"%s\" is in use. You cannot delete it."
-msgstr ""
+msgstr "Tingimus \"%s\" on kasutuses. Sa ei saa seda kustutada."
 
 #: gnucash/gnome/dialog-billterms.c:678
 #: gnucash/gnome-utils/dialog-tax-table.c:670
 #, c-format
 msgid "Are you sure you want to delete \"%s\"?"
-msgstr ""
+msgstr "Kas oled kindel, et soovid kustutada \"%s\"?"
 
 #: gnucash/gnome/dialog-choose-owner.c:78
 msgid ""
 "This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
-msgstr ""
+msgstr "See tehing peab olema määratud Kliendile. Palun vali Klient alt poolt."
 
 #: gnucash/gnome/dialog-choose-owner.c:85
 msgid ""
 "This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
-msgstr ""
+msgstr "See tehing peab olema määratud Hankijale. Palun vali Hankija alt poolt."
 
 #: gnucash/gnome/dialog-commodities.c:168
 msgid ""
@@ -1420,11 +1424,11 @@ msgstr ""
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "You must enter a billing address."
-msgstr ""
+msgstr "Pead sisestama juriidilise aadressi."
 
 #: gnucash/gnome/dialog-customer.c:351
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr ""
+msgstr "Allahindluse protsent peab olema 0-100 või jäetud tühjaks."
 
 #: gnucash/gnome/dialog-customer.c:356
 msgid "Credit must be a positive amount or you must leave it blank."
@@ -1434,29 +1438,29 @@ msgstr ""
 #: gnucash/gnome/dialog-job.c:242 gnucash/gnome/dialog-vendor.c:299
 #: gnucash/gnome-utils/dialog-account.c:1496
 msgid "<No name>"
-msgstr ""
+msgstr "<Nime pole>"
 
 #: gnucash/gnome/dialog-customer.c:439
 msgid "Edit Customer"
-msgstr ""
+msgstr "Redigeeri Klienti"
 
 #: gnucash/gnome/dialog-customer.c:441
 #: gnucash/gnome-search/dialog-search.c:1070
 #: gnucash/gtkbuilder/dialog-customer.glade:31
 msgid "New Customer"
-msgstr ""
+msgstr "Uus Klient"
 
 #: gnucash/gnome/dialog-customer.c:909
 msgid "View/Edit Customer"
-msgstr ""
+msgstr "Vaata/Redigeeri Klienti"
 
 #: gnucash/gnome/dialog-customer.c:910
 msgid "Customer's Jobs"
-msgstr ""
+msgstr "Kliendi Tööd"
 
 #: gnucash/gnome/dialog-customer.c:912
 msgid "Customer's Invoices"
-msgstr ""
+msgstr "Kliendi Müügiarved"
 
 #: gnucash/gnome/dialog-customer.c:913 gnucash/gnome/dialog-employee.c:694
 #: gnucash/gnome/dialog-invoice.c:3286 gnucash/gnome/dialog-invoice.c:3295
@@ -1466,19 +1470,19 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:296
 #: gnucash/gtkbuilder/dialog-payment.glade:61
 msgid "Process Payment"
-msgstr ""
+msgstr "Menetle Makset"
 
 #: gnucash/gnome/dialog-customer.c:923
 msgid "Shipping Contact"
-msgstr ""
+msgstr "Tarne Kontakt"
 
 #: gnucash/gnome/dialog-customer.c:925 gnucash/gnome/dialog-vendor.c:728
 msgid "Billing Contact"
-msgstr ""
+msgstr "Makse Kontakt"
 
 #: gnucash/gnome/dialog-customer.c:927
 msgid "Customer ID"
-msgstr ""
+msgstr "Kliendi ID"
 
 #: gnucash/gnome/dialog-customer.c:929 gnucash/gnome/dialog-vendor.c:732
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:352
@@ -1488,11 +1492,11 @@ msgstr ""
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
 #: libgnucash/app-utils/app-utils.scm:258
 msgid "Company Name"
-msgstr ""
+msgstr "Ettevõtte Nimi"
 
 #: gnucash/gnome/dialog-customer.c:936 gnucash/gnome/dialog-vendor.c:739
 msgid "Contact"
-msgstr ""
+msgstr "Kontakt"
 
 #: gnucash/gnome/dialog-customer.c:938 gnucash/gnome/dialog-invoice.c:3431
 #: gnucash/gnome/dialog-invoice.c:3585 gnucash/gnome/dialog-job.c:591
@@ -1502,22 +1506,22 @@ msgstr ""
 #: gnucash/report/reports/standard/new-aging.scm:192
 #: gnucash/report/reports/standard/owner-report.scm:76
 msgid "Company"
-msgstr ""
+msgstr "Ettevõte"
 
 #: gnucash/gnome/dialog-customer.c:940 gnucash/gnome/dialog-employee.c:716
 #: gnucash/gnome/dialog-job.c:595 gnucash/gnome/dialog-vendor.c:743
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:349
 msgid "ID #"
-msgstr ""
+msgstr "ID #"
 
 #: gnucash/gnome/dialog-customer.c:963
 msgid "Find Customer"
-msgstr ""
+msgstr "Leia Klient"
 
 #: gnucash/gnome/dialog-custom-report.c:318
 #, c-format
 msgid "Are you sure you want to delete %s?"
-msgstr ""
+msgstr "Kas oled kindel, et tahad kustutada %s?"
 
 #: gnucash/gnome/dialog-custom-report.c:423
 msgid "You must select a report configuration to load."
@@ -1551,60 +1555,60 @@ msgstr ""
 
 #: gnucash/gnome/dialog-date-close.c:75
 msgid "No Account selected. Please try again."
-msgstr ""
+msgstr "Ühtegi Kontot pole valitud. Palun proovi uuesti."
 
 #: gnucash/gnome/dialog-date-close.c:82
 msgid "Placeholder account selected. Please try again."
-msgstr ""
+msgstr "Valitud kohatäitekonto. Palun vali uuesti"
 
 #: gnucash/gnome/dialog-employee.c:199
 msgid "You must enter a username."
-msgstr ""
+msgstr "Pead sisestama kasutajanime."
 
 #: gnucash/gnome/dialog-employee.c:204
 msgid "You must enter the employee's name."
-msgstr ""
+msgstr "Pead sisestama töötaja nime."
 
 #: gnucash/gnome/dialog-employee.c:213
 msgid "You must enter an address."
-msgstr ""
+msgstr "Pead sisestama aadressi."
 
 #: gnucash/gnome/dialog-employee.c:294
 msgid "Edit Employee"
-msgstr ""
+msgstr "Regigeeri Töötajat"
 
 #: gnucash/gnome/dialog-employee.c:296
 #: gnucash/gnome-search/dialog-search.c:1074
 #: gnucash/gtkbuilder/dialog-employee.glade:7
 msgid "New Employee"
-msgstr ""
+msgstr "Uus Töötaja"
 
 #: gnucash/gnome/dialog-employee.c:692
 msgid "View/Edit Employee"
-msgstr ""
+msgstr "Vaata/Redigeeri Töötajat"
 
 #: gnucash/gnome/dialog-employee.c:693
 msgid "Expense Vouchers"
-msgstr ""
+msgstr "Kuluvautšerid"
 
 #: gnucash/gnome/dialog-employee.c:703
 msgid "Employee ID"
-msgstr ""
+msgstr "Töötaja ID"
 
 #: gnucash/gnome/dialog-employee.c:705
 msgid "Employee Username"
-msgstr ""
+msgstr "Töötaja Kasutajanimi"
 
 #: gnucash/gnome/dialog-employee.c:707 gnucash/gnome/dialog-invoice.c:3411
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:364
 msgid "Employee Name"
-msgstr ""
+msgstr "Töötaja Nimi"
 
 #: gnucash/gnome/dialog-employee.c:714
 #: gnucash/gtkbuilder/dialog-employee.glade:124
 #: gnucash/gtkbuilder/dialog-file-access.glade:199
 msgid "Username"
-msgstr ""
+msgstr "Kasutajanimi"
 
 #: gnucash/gnome/dialog-employee.c:718 gnucash/gnome/dialog-sx-editor2.c:1754
 #: gnucash/gnome/dialog-sx-editor.c:1809 gnucash/gnome/dialog-tax-info.c:1179
@@ -1630,13 +1634,14 @@ msgstr "Nimi"
 
 #: gnucash/gnome/dialog-employee.c:740
 msgid "Find Employee"
-msgstr ""
+msgstr "Leia Töötaja"
 
 #: gnucash/gnome/dialog-fincalc.c:319
 msgid ""
 "This program can only calculate one value at a time. You must enter values "
 "for all but one quantity."
-msgstr ""
+msgstr "See programm suudab arvutada ainult ühe väärtuse korraga. Pead sisestama "
+"väärtused kõigisse lahtritesse peale ühe."
 
 #: gnucash/gnome/dialog-fincalc.c:321
 msgid ""
@@ -1646,37 +1651,37 @@ msgstr ""
 
 #: gnucash/gnome/dialog-fincalc.c:360
 msgid "The interest rate cannot be zero."
-msgstr ""
+msgstr "Intressimäär ei saa olla null."
 
 #: gnucash/gnome/dialog-fincalc.c:379
 msgid "The number of payments cannot be zero."
-msgstr ""
+msgstr "Maksete arve ei saa olla null."
 
 #: gnucash/gnome/dialog-fincalc.c:384
 msgid "The number of payments cannot be negative."
-msgstr ""
+msgstr "Maksete arv ei saa olla negatiivne."
 
 #: gnucash/gnome/dialog-find-account.c:345
 msgid "Find Account"
-msgstr ""
+msgstr "Leia Konto"
 
 #: gnucash/gnome/dialog-find-account.c:377
 msgid "Place Holder"
-msgstr ""
+msgstr "Kohatäitja"
 
 #: gnucash/gnome/dialog-find-account.c:388
 #: gnucash/gnome-utils/gnc-tree-view-account.c:957
 #: gnucash/gtkbuilder/dialog-account.glade:359
 msgid "Hidden"
-msgstr ""
+msgstr "Peidetud"
 
 #: gnucash/gnome/dialog-find-account.c:399
 msgid "Not Used"
-msgstr ""
+msgstr "Pole Kasutuses"
 
 #: gnucash/gnome/dialog-find-account.c:410
 msgid "Balance Zero"
-msgstr ""
+msgstr "Bilanss Null"
 
 #: gnucash/gnome/dialog-find-account.c:421
 msgid "Tax related"
@@ -1689,7 +1694,7 @@ msgstr ""
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
 msgid "All Accounts"
-msgstr ""
+msgstr "Kõik Kontod"
 
 #: gnucash/gnome/dialog-find-transactions2.c:114
 #: gnucash/gnome/dialog-find-transactions.c:112
@@ -1750,7 +1755,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:1064 gnucash/report/trep-engine.scm:1345
 #: gnucash/report/trep-engine.scm:1361 gnucash/report/trep-engine.scm:2054
 msgid "Amount"
-msgstr ""
+msgstr "Summa"
 
 #: gnucash/gnome/dialog-find-transactions2.c:126
 #: gnucash/gnome/dialog-find-transactions.c:124
@@ -1764,7 +1769,7 @@ msgstr ""
 #: gnucash/report/reports/standard/register.scm:157
 #: gnucash/report/reports/standard/register.scm:435
 msgid "Value"
-msgstr ""
+msgstr "Väärtus"
 
 #: gnucash/gnome/dialog-find-transactions2.c:128
 #: gnucash/gnome/dialog-find-transactions.c:126
@@ -1774,7 +1779,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-invoice.glade:96
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:161
 msgid "Date Posted"
-msgstr ""
+msgstr "Arve kuupäev"
 
 #: gnucash/gnome/dialog-find-transactions2.c:132
 #: gnucash/gnome/dialog-find-transactions2.c:171
@@ -1813,7 +1818,7 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:92
 #: gnucash/report/reports/standard/invoice.scm:222
 msgid "Action"
-msgstr ""
+msgstr "Tegevus"
 
 #: gnucash/gnome/dialog-find-transactions2.c:136
 #: gnucash/gnome/dialog-find-transactions2.c:173
@@ -1829,7 +1834,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:623
 #: gnucash/report/trep-engine.scm:237
 msgid "Transaction Number"
-msgstr ""
+msgstr "Tehingu Number"
 
 #: gnucash/gnome/dialog-find-transactions2.c:137
 #: gnucash/gnome/dialog-find-transactions2.c:172
@@ -1847,12 +1852,12 @@ msgstr ""
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:623
 #: gnucash/report/trep-engine.scm:230
 msgid "Number"
-msgstr "Arv"
+msgstr "Number"
 
 #: gnucash/gnome/dialog-find-transactions2.c:149
 #: gnucash/gnome/dialog-find-transactions.c:149
 msgid "Description, Notes, or Memo"
-msgstr ""
+msgstr "Kirjeldus, Märkmed või Memo"
 
 #: gnucash/gnome/dialog-find-transactions2.c:153
 #: gnucash/gnome/dialog-find-transactions.c:153
@@ -1878,7 +1883,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:1092 gnucash/report/trep-engine.scm:1205
 #: gnucash/report/trep-engine.scm:1206
 msgid "Memo"
-msgstr ""
+msgstr "Memo"
 
 #: gnucash/gnome/dialog-find-transactions2.c:155
 #: gnucash/gnome/dialog-find-transactions.c:155
@@ -1908,13 +1913,13 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:943 gnucash/report/trep-engine.scm:1105
 #: gnucash/report/trep-engine.scm:1205
 msgid "Notes"
-msgstr ""
+msgstr "Märkmed"
 
 #: gnucash/gnome/dialog-find-transactions2.c:229
 #: gnucash/gnome/dialog-find-transactions.c:229
 #: gnucash/gnome-search/dialog-search.c:1473
 msgid "Find Transaction"
-msgstr ""
+msgstr "Leia Tehing"
 
 #: gnucash/gnome/dialog-find-transactions.c:129
 #: gnucash/report/reports/standard/general-ledger.scm:67
@@ -1950,7 +1955,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-imap-editor.c:372
 msgid "(Note, if there is a large number, it may take a while)"
-msgstr ""
+msgstr "(Pane tähele, et kui arv on suur, siis see võib võtta kaua aega)"
 
 #: gnucash/gnome/dialog-imap-editor.c:706
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:126
@@ -1959,11 +1964,11 @@ msgstr ""
 
 #: gnucash/gnome/dialog-imap-editor.c:721
 msgid "Description Field"
-msgstr ""
+msgstr "Kirjelduse Väli"
 
 #: gnucash/gnome/dialog-imap-editor.c:724
 msgid "Memo Field"
-msgstr ""
+msgstr "Memo Väli"
 
 #: gnucash/gnome/dialog-imap-editor.c:727
 msgid "CSV Account Map"
@@ -1988,7 +1993,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:711
 msgid "Are you sure you want to delete the selected entry?"
-msgstr ""
+msgstr "Kas oled kindel, et soovid kustutada valitud kirje?"
 
 #: gnucash/gnome/dialog-invoice.c:713
 msgid ""
@@ -2011,14 +2016,14 @@ msgstr ""
 #: gnucash/report/reports/standard/owner-report.scm:612
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:233
 msgid "Due Date"
-msgstr ""
+msgstr "Maksetähtpäev"
 
 #: gnucash/gnome/dialog-invoice.c:823 gnucash/report/reports/aging.scm:387
 #: gnucash/report/reports/standard/new-aging.scm:129
 #: gnucash/report/reports/standard/new-owner-report.scm:943
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post Date"
-msgstr ""
+msgstr "Väljastamise Kuupäev"
 
 #: gnucash/gnome/dialog-invoice.c:824
 msgid "Post to Account"
@@ -2030,114 +2035,116 @@ msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:917
 msgid "The Invoice must have at least one Entry."
-msgstr ""
+msgstr "Müügiarvel peab olema vähemalt üks Kirje."
 
 #: gnucash/gnome/dialog-invoice.c:937
 msgid "Do you really want to post the invoice?"
-msgstr ""
+msgstr "Kas tahad tõesti müügiarve väljastada?"
 
 #: gnucash/gnome/dialog-invoice.c:955
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked a conversion rate for each."
 msgstr ""
+"Üks või rohkem kirjet on tehtud kontodele, mille valuuta on erinev arve "
+"valuutast. Sult küsitakse iga kirje kohta ümberarvestuskursse."
 
 #: gnucash/gnome/dialog-invoice.c:1088
 msgid "The post action was canceled because not all exchange rates were given."
-msgstr ""
+msgstr "Väljastamine katkestati, sest kõiki ümberarvestuskursse ei antud."
 
 #: gnucash/gnome/dialog-invoice.c:1372
 msgid "Total:"
-msgstr ""
+msgstr "Kogusumma:"
 
 #: gnucash/gnome/dialog-invoice.c:1378
 msgid "Subtotal:"
-msgstr ""
+msgstr "Vahesumma:"
 
 #: gnucash/gnome/dialog-invoice.c:1379
 msgid "Tax:"
-msgstr ""
+msgstr "Maks:"
 
 #: gnucash/gnome/dialog-invoice.c:1383
 msgid "Total Cash:"
-msgstr ""
+msgstr "Kokku Raha:"
 
 #: gnucash/gnome/dialog-invoice.c:1384
 msgid "Total Charge:"
-msgstr ""
+msgstr "Kogutasu:"
 
 #: gnucash/gnome/dialog-invoice.c:1853 gnucash/gnome/dialog-payment.c:1331
 #: gnucash/gtkbuilder/dialog-invoice.glade:858
 #: gnucash/report/reports/standard/invoice.scm:789
 #: libgnucash/engine/gncInvoice.c:1088
 msgid "Credit Note"
-msgstr ""
+msgstr "Kreeditarve"
 
 #: gnucash/gnome/dialog-invoice.c:2049
 msgid "PAID"
-msgstr ""
+msgstr "MAKSTUD"
 
 #: gnucash/gnome/dialog-invoice.c:2051
 #: gnucash/report/reports/standard/new-owner-report.scm:565
 msgid "UNPAID"
-msgstr ""
+msgstr "MAKSMATA"
 
 #: gnucash/gnome/dialog-invoice.c:2099 gnucash/gnome/dialog-invoice.c:2118
 #: gnucash/gnome/dialog-invoice.c:2137
 msgid "New Credit Note"
-msgstr ""
+msgstr "Uus Kreeditarve"
 
 #: gnucash/gnome/dialog-invoice.c:2100
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:292
 #: gnucash/gnome-search/dialog-search.c:1082
 #: gnucash/gtkbuilder/dialog-invoice.glade:640
 msgid "New Invoice"
-msgstr ""
+msgstr "Uus Müügiarve"
 
 #: gnucash/gnome/dialog-invoice.c:2105 gnucash/gnome/dialog-invoice.c:2124
 #: gnucash/gnome/dialog-invoice.c:2143
 msgid "Edit Credit Note"
-msgstr ""
+msgstr "Redigeeri Kreeditarvet"
 
 #: gnucash/gnome/dialog-invoice.c:2106
 msgid "Edit Invoice"
-msgstr ""
+msgstr "Redigeeri Müügiarvet"
 
 #: gnucash/gnome/dialog-invoice.c:2109 gnucash/gnome/dialog-invoice.c:2128
 #: gnucash/gnome/dialog-invoice.c:2147
 msgid "View Credit Note"
-msgstr ""
+msgstr "Vaata Kreeditarvet"
 
 #: gnucash/gnome/dialog-invoice.c:2110
 msgid "View Invoice"
-msgstr ""
+msgstr "Vaata Müügiarvet"
 
 #: gnucash/gnome/dialog-invoice.c:2119
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:291
 #: gnucash/gnome-search/dialog-search.c:1066
 msgid "New Bill"
-msgstr ""
+msgstr "Uus Ostuarve"
 
 #: gnucash/gnome/dialog-invoice.c:2125
 msgid "Edit Bill"
-msgstr ""
+msgstr "Redigeeri Ostuarvet"
 
 #: gnucash/gnome/dialog-invoice.c:2129
 msgid "View Bill"
-msgstr ""
+msgstr "Vaata Ostuarvet"
 
 #: gnucash/gnome/dialog-invoice.c:2138
 #: gnucash/gnome-search/dialog-search.c:1078
 msgid "New Expense Voucher"
-msgstr ""
+msgstr "Uus Kuluvautšer"
 
 #: gnucash/gnome/dialog-invoice.c:2144
 msgid "Edit Expense Voucher"
-msgstr ""
+msgstr "Redigeeri Kuluvautšerit"
 
 #: gnucash/gnome/dialog-invoice.c:2148
 msgid "View Expense Voucher"
-msgstr ""
+msgstr "Vaata Kuluvautšerit"
 
 #: gnucash/gnome/dialog-invoice.c:2470
 msgid "Open Association:"
@@ -2145,21 +2152,21 @@ msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:2583 gnucash/gnome/dialog-invoice.c:2809
 msgid "Bill Information"
-msgstr ""
+msgstr "Ostuarve Info"
 
 #: gnucash/gnome/dialog-invoice.c:2585 gnucash/gnome/dialog-invoice.c:2812
 #: gnucash/gnome/dialog-invoice.c:3381
 msgid "Bill ID"
-msgstr ""
+msgstr "Ostuarve ID"
 
 #: gnucash/gnome/dialog-invoice.c:2589 gnucash/gnome/dialog-invoice.c:2816
 msgid "Voucher Information"
-msgstr ""
+msgstr "Vautšeri Info"
 
 #: gnucash/gnome/dialog-invoice.c:2591 gnucash/gnome/dialog-invoice.c:2819
 #: gnucash/gnome/dialog-invoice.c:3415
 msgid "Voucher ID"
-msgstr ""
+msgstr "Vautšeri ID"
 
 #: gnucash/gnome/dialog-invoice.c:3148
 msgid "Date of duplicated entries"
@@ -2170,14 +2177,16 @@ msgid ""
 "One or more selected invoices have already been posted.\n"
 "Re-check your selection."
 msgstr ""
+"Üks või rohkem valitud müügiarvetest on juba väljastatud. \n"
+"Kontrolli oma valik üle."
 
 #: gnucash/gnome/dialog-invoice.c:3207
 msgid "Do you really want to post these invoices?"
-msgstr ""
+msgstr "Kas tahad tõesti need müügiarved väljastada?"
 
 #: gnucash/gnome/dialog-invoice.c:3285 gnucash/gnome/dialog-invoice.c:3566
 msgid "View/Edit Invoice"
-msgstr ""
+msgstr "Vaata/Redigeeri Müügiarvet"
 
 #: gnucash/gnome/dialog-invoice.c:3287 gnucash/gnome/dialog-invoice.c:3296
 #: gnucash/gnome/dialog-invoice.c:3307
@@ -2191,22 +2200,22 @@ msgstr ""
 #: gnucash/gnome/dialog-invoice.c:3308
 #: gnucash/gnome/gnc-plugin-page-invoice.c:473
 msgid "Post"
-msgstr ""
+msgstr "Väljasta"
 
 #: gnucash/gnome/dialog-invoice.c:3289 gnucash/gnome/dialog-invoice.c:3298
 #: gnucash/gnome/dialog-invoice.c:3309
 msgid "Printable Report"
-msgstr ""
+msgstr "Prinditav Raport"
 
 #: gnucash/gnome/dialog-invoice.c:3294 gnucash/gnome/dialog-invoice.c:3560
 msgid "View/Edit Bill"
-msgstr ""
+msgstr "Vaata/Redigeeri Ostuarvet"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
 #: gnucash/gnome/dialog-invoice.c:3305
 msgid "View/Edit Voucher"
-msgstr ""
+msgstr "Vaata/Redigeeri Vautšerit"
 
 #: gnucash/gnome/dialog-invoice.c:3319
 msgid "Invoice Owner"
@@ -2215,7 +2224,7 @@ msgstr ""
 #: gnucash/gnome/dialog-invoice.c:3322
 #: gnucash/report/reports/standard/invoice.scm:327
 msgid "Invoice Notes"
-msgstr ""
+msgstr "Müügiarve Märkmed"
 
 #: gnucash/gnome/dialog-invoice.c:3325 gnucash/gnome/dialog-invoice.c:3359
 #: gnucash/gnome/dialog-invoice.c:3393 gnucash/gnome/dialog-invoice.c:3422
@@ -2225,17 +2234,17 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-job.glade:220
 #: gnucash/report/reports/standard/invoice.scm:317
 msgid "Billing ID"
-msgstr ""
+msgstr "Arveldamise ID"
 
 #: gnucash/gnome/dialog-invoice.c:3328 gnucash/gnome/dialog-invoice.c:3362
 #: gnucash/gnome/dialog-invoice.c:3396
 msgid "Is Paid?"
-msgstr ""
+msgstr "On Makstud?"
 
 #: gnucash/gnome/dialog-invoice.c:3334 gnucash/gnome/dialog-invoice.c:3368
 #: gnucash/gnome/dialog-invoice.c:3402
 msgid "Is Posted?"
-msgstr ""
+msgstr "On Väljastatud?"
 
 #: gnucash/gnome/dialog-invoice.c:3337 gnucash/gnome/dialog-invoice.c:3371
 #: gnucash/gnome/dialog-invoice.c:3405 gnucash/gnome/dialog-order.c:875
@@ -2245,33 +2254,33 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-order.glade:552
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:143
 msgid "Date Opened"
-msgstr ""
+msgstr "Avamise Kuupäev"
 
 #: gnucash/gnome/dialog-invoice.c:3343 gnucash/gnome/dialog-invoice.c:3377
 msgid "Company Name "
-msgstr ""
+msgstr "Ettevõtte Nimi"
 
 #: gnucash/gnome/dialog-invoice.c:3347
 #: gnucash/gtkbuilder/dialog-invoice.glade:44
 #: gnucash/gtkbuilder/dialog-invoice.glade:750
 msgid "Invoice ID"
-msgstr ""
+msgstr "Müügiarve ID"
 
 #: gnucash/gnome/dialog-invoice.c:3353
 msgid "Bill Owner"
-msgstr ""
+msgstr "Ostuarve Omanik"
 
 #: gnucash/gnome/dialog-invoice.c:3356
 msgid "Bill Notes"
-msgstr ""
+msgstr "Ostuarve Märkmed"
 
 #: gnucash/gnome/dialog-invoice.c:3387
 msgid "Voucher Owner"
-msgstr ""
+msgstr "Vautšeri Omanik"
 
 #: gnucash/gnome/dialog-invoice.c:3390
 msgid "Voucher Notes"
-msgstr ""
+msgstr "Vautšeri Märkmed"
 
 #: gnucash/gnome/dialog-invoice.c:3424 gnucash/gnome/dialog-invoice.c:3583
 #: gnucash/gnome/dialog-lot-viewer.c:860 gnucash/gnome/dialog-tax-info.c:1214
@@ -2294,26 +2303,26 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:232
 #: gnucash/report/reports/standard/owner-report.scm:53
 msgid "Type"
-msgstr ""
+msgstr "Tüüp"
 
 #: gnucash/gnome/dialog-invoice.c:3426
 #: gnucash/register/ledger-core/split-register-model.c:309
 #: gnucash/report/reports/standard/new-owner-report.scm:806
 msgid "Paid"
-msgstr ""
+msgstr "Makstud"
 
 #: gnucash/gnome/dialog-invoice.c:3429
 msgid "Posted"
-msgstr ""
+msgstr "Väljastatud"
 
 #: gnucash/gnome/dialog-invoice.c:3434 gnucash/gnome/dialog-invoice.c:3587
 msgid "Due"
-msgstr ""
+msgstr "Üle maksetähtpäeva"
 
 #: gnucash/gnome/dialog-invoice.c:3436 gnucash/gnome/dialog-lot-viewer.c:866
 #: gnucash/gnome/dialog-order.c:893
 msgid "Opened"
-msgstr ""
+msgstr "Avatud"
 
 #: gnucash/gnome/dialog-invoice.c:3438 gnucash/gnome/dialog-lot-viewer.c:947
 #: gnucash/gnome/dialog-order.c:895 gnucash/gnome/reconcile-view.c:421
@@ -2330,25 +2339,25 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:941 gnucash/report/trep-engine.scm:1069
 #: gnucash/report/trep-engine.scm:1177
 msgid "Num"
-msgstr ""
+msgstr "Number"
 
 #: gnucash/gnome/dialog-invoice.c:3519
 msgid "Find Bill"
-msgstr ""
+msgstr "Leia Ostuarve"
 
 #: gnucash/gnome/dialog-invoice.c:3526
 msgid "Find Expense Voucher"
-msgstr ""
+msgstr "Leia Kuluvautšer"
 
 #: gnucash/gnome/dialog-invoice.c:3527
 #: gnucash/gnome-search/dialog-search.c:1076
 #: gnucash/report/reports/standard/invoice.scm:785
 msgid "Expense Voucher"
-msgstr ""
+msgstr "Kuluvautšer"
 
 #: gnucash/gnome/dialog-invoice.c:3533
 msgid "Find Invoice"
-msgstr ""
+msgstr "Leia Müügiarve"
 
 #. Translators: %d is the number of bills/credit notes due. This is a
 #. ngettext(3) message.
@@ -2356,12 +2365,12 @@ msgstr ""
 #, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Järgmine hankija dokument on ületanud maksetähtpäeva:"
+msgstr[1] "Järgmised %d hankija dokumendid on ületanud maksetähtpäeva:"
 
 #: gnucash/gnome/dialog-invoice.c:3671
 msgid "Due Bills Reminder"
-msgstr ""
+msgstr "Maksetähtpäeva Ületanud Ostuarvete Meeldetuletaja"
 
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
@@ -2369,66 +2378,66 @@ msgstr ""
 #, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Järgmine kliendi dokument on ületanud maksetähtpäeva:"
+msgstr[1] "Järgmised %d kliendi dokumenti on ületanud maksetähtpäeva:"
 
 #: gnucash/gnome/dialog-invoice.c:3682
 msgid "Due Invoices Reminder"
-msgstr ""
+msgstr "Maksetähtpäeva Ületanud Müügiarvete Meeldetuletaja"
 
 #: gnucash/gnome/dialog-job.c:139
 msgid "The Job must be given a name."
-msgstr ""
+msgstr "Tööle tuleb anda nimi."
 
 #: gnucash/gnome/dialog-job.c:149
 msgid "You must choose an owner for this job."
-msgstr ""
+msgstr "Sellele tööle tuleb valida omanik."
 
 #: gnucash/gnome/dialog-job.c:249
 msgid "Edit Job"
-msgstr ""
+msgstr "Redigeeri Tööd"
 
 #: gnucash/gnome/dialog-job.c:251 gnucash/gnome-search/dialog-search.c:1086
 msgid "New Job"
-msgstr ""
+msgstr "Uus Töö"
 
 #: gnucash/gnome/dialog-job.c:559
 msgid "View/Edit Job"
-msgstr ""
+msgstr "Vaata/Redigeeri Tööd"
 
 #: gnucash/gnome/dialog-job.c:560
 msgid "View Invoices"
-msgstr ""
+msgstr "Vaata Müügiarveid"
 
 #: gnucash/gnome/dialog-job.c:570
 msgid "Owner's Name"
-msgstr ""
+msgstr "Omaniku Nimi"
 
 #: gnucash/gnome/dialog-job.c:572
 msgid "Only Active?"
-msgstr ""
+msgstr "Ainult Aktiivsed?"
 
 #: gnucash/gnome/dialog-job.c:576 gnucash/gnome/dialog-job.c:589
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2926
 #: gnucash/gtkbuilder/dialog-job.glade:207
 #: gnucash/register/ledger-core/split-register-model.c:369
 msgid "Rate"
-msgstr ""
+msgstr "Määr"
 
 #: gnucash/gnome/dialog-job.c:578 gnucash/gnome-utils/gnc-tree-view-owner.c:357
 #: gnucash/gtkbuilder/dialog-job.glade:105
 msgid "Job Number"
-msgstr ""
+msgstr "Töö Number"
 
 #: gnucash/gnome/dialog-job.c:580 gnucash/gnome/dialog-job.c:593
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:356
 #: gnucash/gtkbuilder/dialog-job.glade:118
 msgid "Job Name"
-msgstr ""
+msgstr "Töö Nimi"
 
 #: gnucash/gnome/dialog-job.c:644
 msgid "Find Job"
-msgstr ""
+msgstr "Leia Töö"
 
 #: gnucash/gnome/dialog-lot-viewer.c:809
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:391
@@ -2437,11 +2446,11 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
 #: gnucash/gnome-utils/gnc-file.c:1120
 msgid "Open"
-msgstr ""
+msgstr "Avatud"
 
 #: gnucash/gnome/dialog-lot-viewer.c:876 gnucash/gnome/dialog-order.c:891
 msgid "Closed"
-msgstr ""
+msgstr "Suletud"
 
 #: gnucash/gnome/dialog-lot-viewer.c:886
 #: gnucash/gtkbuilder/assistant-acct-period.glade:134
@@ -2465,16 +2474,16 @@ msgstr "Tiitel"
 #: gnucash/report/reports/standard/owner-report.scm:319
 #: gnucash/report/reports/standard/register.scm:163
 msgid "Balance"
-msgstr ""
+msgstr "Bilanss"
 
 #: gnucash/gnome/dialog-lot-viewer.c:899
 msgid "Gains"
-msgstr ""
+msgstr "Tulud"
 
 #: gnucash/gnome/dialog-lot-viewer.c:979
 #: gnucash/report/reports/example/average-balance.scm:131
 msgid "Gain/Loss"
-msgstr ""
+msgstr "Tulu/Kulu"
 
 #: gnucash/gnome/dialog-lot-viewer.c:1043
 #, c-format
@@ -2501,7 +2510,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-order.c:309
 msgid "Close Date"
-msgstr ""
+msgstr "Sulge Kuupäev"
 
 #: gnucash/gnome/dialog-order.c:860
 msgid "View/Edit Order"
@@ -2513,15 +2522,15 @@ msgstr ""
 
 #: gnucash/gnome/dialog-order.c:871 gnucash/gtkbuilder/dialog-order.glade:151
 msgid "Date Closed"
-msgstr ""
+msgstr "Sulgemise Kuupäev"
 
 #: gnucash/gnome/dialog-order.c:873
 msgid "Is Closed?"
-msgstr ""
+msgstr "On Suletud?"
 
 #: gnucash/gnome/dialog-order.c:877
 msgid "Owner Name "
-msgstr ""
+msgstr "Omaniku Nimi "
 
 #: gnucash/gnome/dialog-order.c:879 gnucash/gtkbuilder/dialog-order.glade:125
 #: gnucash/gtkbuilder/dialog-order.glade:521
@@ -2534,11 +2543,11 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:231
 msgid "You must enter a valid account name for posting."
-msgstr ""
+msgstr "Väljastamiseks tuleb sisestada kehtiv konto nimi."
 
 #: gnucash/gnome/dialog-payment.c:240
 msgid "You must select a company for payment processing."
-msgstr ""
+msgstr "Makse menetlemiseks tuleb valida ettevõte."
 
 #: gnucash/gnome/dialog-payment.c:262
 msgid "You must select a transfer account from the account tree."
@@ -2555,13 +2564,15 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:308
 #: gnucash/report/reports/standard/new-owner-report.scm:701
 msgid "Pre-Payment"
-msgstr ""
+msgstr "Ettemaks"
 
 #: gnucash/gnome/dialog-payment.c:1000
 msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
 msgstr ""
+"Ülekandmise ja väljastamise kontod on seotud erinevate valuutadega."
+"Palun sisesta ümberarvestuskurss."
 
 #: gnucash/gnome/dialog-payment.c:1269 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1068
@@ -2580,7 +2591,7 @@ msgstr ""
 #: gnucash/report/reports/standard/owner-report.scm:113
 #: libgnucash/engine/gncOwner.c:217
 msgid "Customer"
-msgstr ""
+msgstr "Klient"
 
 #: gnucash/gnome/dialog-payment.c:1273 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1100
@@ -2594,7 +2605,7 @@ msgstr ""
 #: gnucash/report/reports/standard/owner-report.scm:117
 #: libgnucash/engine/gncOwner.c:221
 msgid "Vendor"
-msgstr ""
+msgstr "Hankija"
 
 #: gnucash/gnome/dialog-payment.c:1277 gnucash/gnome/search-owner.c:213
 #: gnucash/gnome-search/dialog-search.c:1072
@@ -2606,7 +2617,7 @@ msgstr ""
 #: gnucash/report/reports/standard/owner-report.scm:114
 #: libgnucash/engine/gncOwner.c:223
 msgid "Employee"
-msgstr ""
+msgstr "Töötaja"
 
 #: gnucash/gnome/dialog-payment.c:1422
 #, c-format
@@ -2636,7 +2647,7 @@ msgstr "Hoiatus"
 
 #: gnucash/gnome/dialog-payment.c:1595 gnucash/gnome/dialog-payment.c:1713
 msgid "Continue"
-msgstr ""
+msgstr "Jätka"
 
 #: gnucash/gnome/dialog-payment.c:1596
 #: gnucash/gnome/gnc-plugin-page-invoice.c:467
@@ -2644,7 +2655,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.c:597
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:160
 msgid "Cancel"
-msgstr ""
+msgstr "Katkesta"
 
 #: gnucash/gnome/dialog-payment.c:1708
 #, c-format
@@ -2667,7 +2678,7 @@ msgstr[1] ""
 
 #: gnucash/gnome/dialog-price-edit-db.c:185
 msgid "Delete prices?"
-msgstr ""
+msgstr "Kustuta hinnad?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:411
 #: gnucash/gtkbuilder/dialog-invoice.glade:616
@@ -2676,19 +2687,19 @@ msgstr ""
 #: gnucash/report/reports/standard/income-statement.scm:117
 #: gnucash/report/reports/standard/trial-balance.scm:91
 msgid "Entries"
-msgstr ""
+msgstr "Kirjed"
 
 #: gnucash/gnome/dialog-price-edit-db.c:441
 msgid "Are you sure you want to delete these prices ?"
-msgstr ""
+msgstr "Kas oled kindel, et soovid need hinnad kustutada ?"
 
 #: gnucash/gnome/dialog-price-editor.c:221
 msgid "Are you sure you want to replace the existing price?"
-msgstr ""
+msgstr "Kas oled kindel, et soovid olemasolevad hinnad asendada?"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Replace price?"
-msgstr ""
+msgstr "Asenda hind?"
 
 #: gnucash/gnome/dialog-price-editor.c:233
 msgid "_Replace"
@@ -2700,7 +2711,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-price-editor.c:268
 msgid "You must select a Currency."
-msgstr ""
+msgstr "Pead valima Valuuta."
 
 #: gnucash/gnome/dialog-price-editor.c:278
 #: gnucash/gnome-utils/dialog-transfer.c:1713
@@ -2714,7 +2725,7 @@ msgstr ""
 #: gnucash/gnome/dialog-print-check.c:821
 #, c-format
 msgid "Cannot open file %s"
-msgstr ""
+msgstr "Ei saa avada faili %s"
 
 #: gnucash/gnome/dialog-print-check.c:1509
 msgid "There is a duplicate check format file."
@@ -2767,30 +2778,30 @@ msgstr ""
 
 #: gnucash/gnome/dialog-progress.c:484 gnucash/gnome/dialog-progress.c:533
 msgid "(paused)"
-msgstr ""
+msgstr "(peatatud)"
 
 #: gnucash/gnome/dialog-progress.c:768 gnucash/gnome/dialog-progress.c:771
 msgid "Complete"
-msgstr ""
+msgstr "Valmis"
 
 #: gnucash/gnome/dialog-report-column-view.c:381
 msgid "Contents"
-msgstr ""
+msgstr "Sisu"
 
 #: gnucash/gnome/dialog-report-column-view.c:412
 #: gnucash/report/reports/standard/customer-summary.scm:291
 #: gnucash/report/reports/standard/new-owner-report.scm:1043
 #: gnucash/report/reports/standard/owner-report.scm:743
 msgid "Report"
-msgstr ""
+msgstr "Raport"
 
 #: gnucash/gnome/dialog-report-column-view.c:418
 msgid "Rows"
-msgstr ""
+msgstr "Read"
 
 #: gnucash/gnome/dialog-report-column-view.c:424
 msgid "Cols"
-msgstr ""
+msgstr "Tulbad"
 
 #: gnucash/gnome/dialog-report-style-sheet.c:162
 #, c-format
@@ -2816,27 +2827,28 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-tax-info.glade:127
 #: gnucash/gtkbuilder/dialog-tax-table.glade:185
 msgid "_Edit"
-msgstr ""
+msgstr "_Redigeeri"
 
 #: gnucash/gnome/dialog-sx-editor2.c:165 gnucash/gnome/dialog-sx-editor.c:168
 #: gnucash/gnome/window-reconcile2.c:2102 gnucash/gnome/window-reconcile.c:2321
 msgid "_Transaction"
-msgstr ""
+msgstr "_Tehing"
 
 #: gnucash/gnome/dialog-sx-editor2.c:166 gnucash/gnome/dialog-sx-editor.c:169
 #: gnucash/gnome-utils/gnc-main-window.c:271
 msgid "_View"
-msgstr ""
+msgstr "_Vaata"
 
 #: gnucash/gnome/dialog-sx-editor2.c:167 gnucash/gnome/dialog-sx-editor.c:170
 #: gnucash/gnome-utils/gnc-main-window.c:272
 msgid "_Actions"
-msgstr ""
+msgstr "_Tegevused"
 
 #: gnucash/gnome/dialog-sx-editor2.c:199 gnucash/gnome/dialog-sx-editor.c:202
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
 msgstr ""
+"See Plaaniline Tehing on muutunud; kas oled kindel, et soovid katkestada?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:635
 #, c-format
@@ -2857,7 +2869,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-sx-editor2.c:711 gnucash/gnome/dialog-sx-editor.c:493
 msgid "Please name the Scheduled Transaction."
-msgstr ""
+msgstr "Palun anna Plaanilisele Tehingule nimi."
 
 #: gnucash/gnome/dialog-sx-editor2.c:738 gnucash/gnome/dialog-sx-editor.c:519
 #, c-format
@@ -2865,6 +2877,8 @@ msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
 "you want to name this one the same?"
 msgstr ""
+"Plaaniline Tehing nimega \"%s\" on juba olemas. Kas oled kindel, et tahad "
+"anda sellele sama nime?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:766
 msgid "Scheduled Transactions with variables cannot be automatically created."
@@ -2905,7 +2919,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-sx-editor2.c:1346 gnucash/gnome/dialog-sx-editor.c:1389
 msgid "(never)"
-msgstr ""
+msgstr "(mitte kunagi)"
 
 #: gnucash/gnome/dialog-sx-editor2.c:1514 gnucash/gnome/dialog-sx-editor.c:1557
 msgid ""
@@ -2917,7 +2931,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:245
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:251
 msgid "Scheduled Transactions"
-msgstr ""
+msgstr "Plaanilised Tehingud"
 
 #: gnucash/gnome/dialog-sx-editor.c:617
 msgid ""
@@ -2967,11 +2981,11 @@ msgstr ""
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:389
 msgid "Ignored"
-msgstr ""
+msgstr "Ignoreeritud"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:390
 msgid "Postponed"
-msgstr ""
+msgstr "Edasi lükatud"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:391
 msgid "To-Create"
@@ -2979,7 +2993,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:392
 msgid "Reminder"
-msgstr ""
+msgstr "Meeldetuletus"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:393
 #: gnucash/gnome/gnc-plugin-budget.c:168
@@ -2991,7 +3005,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:241
 #: gnucash/report/trep-engine.scm:574
 msgid "Never"
-msgstr ""
+msgstr "Mitte kunagi"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:526
 msgid "(Need Value)"
@@ -2999,7 +3013,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:817
 msgid "Invalid Transactions"
-msgstr ""
+msgstr "Vigased Tehingud"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:864
 #, c-format
@@ -3015,7 +3029,7 @@ msgstr[1] ""
 #: gnucash/gnome/dialog-sx-since-last-run.c:993
 #: gnucash/gnome-search/dialog-search.c:1092
 msgid "Transaction"
-msgstr ""
+msgstr "Tehing"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1009
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:620
@@ -3038,11 +3052,11 @@ msgstr ""
 #: gnucash/gnome/dialog-tax-info.c:288
 #: gnucash/report/reports/standard/account-summary.scm:406
 msgid "Code"
-msgstr ""
+msgstr "Kood"
 
 #: gnucash/gnome/dialog-tax-info.c:363
 msgid "now"
-msgstr ""
+msgstr "praegu"
 
 #: gnucash/gnome/dialog-tax-info.c:1164
 msgid "Income Tax Identity"
@@ -3063,7 +3077,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-tax-info.c:1372
 msgid "Form"
-msgstr ""
+msgstr "Blankett"
+
 
 #: gnucash/gnome/dialog-vendor.c:214
 msgid ""
@@ -3075,40 +3090,40 @@ msgstr ""
 
 #: gnucash/gnome/dialog-vendor.c:226
 msgid "You must enter a payment address."
-msgstr ""
+msgstr "Pead sisestama juriidilise aadressi."
 
 #: gnucash/gnome/dialog-vendor.c:306
 msgid "Edit Vendor"
-msgstr ""
+msgstr "Redigeeri Hankijat"
 
 #: gnucash/gnome/dialog-vendor.c:308 gnucash/gnome-search/dialog-search.c:1102
 #: gnucash/gtkbuilder/dialog-vendor.glade:31
 msgid "New Vendor"
-msgstr ""
+msgstr "Uus Hankija"
 
 #: gnucash/gnome/dialog-vendor.c:714
 msgid "View/Edit Vendor"
-msgstr ""
+msgstr "Vaata/Redigeeri Hankijat"
 
 #: gnucash/gnome/dialog-vendor.c:715
 msgid "Vendor's Jobs"
-msgstr ""
+msgstr "Hankija Tööd"
 
 #: gnucash/gnome/dialog-vendor.c:717
 msgid "Vendor's Bills"
-msgstr ""
+msgstr "Hankija Ostuarved"
 
 #: gnucash/gnome/dialog-vendor.c:718
 msgid "Pay Bill"
-msgstr ""
+msgstr "Maksa Ostuarve"
 
 #: gnucash/gnome/dialog-vendor.c:730
 msgid "Vendor ID"
-msgstr ""
+msgstr "Hankija ID"
 
 #: gnucash/gnome/dialog-vendor.c:765
 msgid "Find Vendor"
-msgstr ""
+msgstr "Leia Hankija"
 
 #: gnucash/gnome/gnc-budget-view.c:499
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2951
@@ -3127,7 +3142,7 @@ msgstr ""
 #: gnucash/report/report-utilities.scm:110 libgnucash/engine/Account.cpp:167
 #: libgnucash/engine/Account.cpp:4305 libgnucash/engine/Scrub.c:422
 msgid "Income"
-msgstr ""
+msgstr "Tulu"
 
 #: gnucash/gnome/gnc-budget-view.c:502
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:80
@@ -3136,7 +3151,7 @@ msgstr ""
 #: gnucash/report/reports/standard/income-statement.scm:512
 #: gnucash/report/report-utilities.scm:111
 msgid "Expenses"
-msgstr ""
+msgstr "Kulu"
 
 #: gnucash/gnome/gnc-budget-view.c:505
 #: gnucash/gnome/gnc-plugin-page-register2.c:483
@@ -3174,7 +3189,7 @@ msgstr ""
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1924
 msgid "Total"
-msgstr ""
+msgstr "Kogusumma"
 
 #: gnucash/gnome/gnc-plugin-account-tree.c:59
 msgid "New Accounts _Page"
@@ -3186,19 +3201,19 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:111
 msgid "New _File"
-msgstr ""
+msgstr "Uus _Fail"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:112
 msgid "Create a new file"
-msgstr ""
+msgstr "Loo uus fail"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:116
 msgid "_Open..."
-msgstr ""
+msgstr "_Ava..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:117
 msgid "Open an existing GnuCash file"
-msgstr ""
+msgstr "Ava olemasolev GnuCashi fail"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:121
 #: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
@@ -3209,15 +3224,15 @@ msgstr "_Salvesta"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:122
 msgid "Save the current file"
-msgstr ""
+msgstr "Salvesta praegune fail"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:126
 msgid "Save _As..."
-msgstr ""
+msgstr "Salvesta _Nimega..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:127
 msgid "Save this file with a different name"
-msgstr ""
+msgstr "Salvesta see fail teise nimega"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:131
 msgid "Re_vert"
@@ -3239,13 +3254,13 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register2.c:253
 #: gnucash/gnome/gnc-plugin-page-register.c:354
 msgid "_Find..."
-msgstr ""
+msgstr "_Leia..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:146
 #: gnucash/gnome/gnc-plugin-page-register2.c:254
 #: gnucash/gnome/gnc-plugin-page-register.c:355
 msgid "Find transactions with a search"
-msgstr ""
+msgstr "Leia tehinguid otsinguga"
 
 #. Translators: remember to reuse this *
 #. * translation in dialog-account.glade
@@ -3263,15 +3278,15 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:164
 msgid "_Scheduled Transactions"
-msgstr ""
+msgstr "_Plaanilised Tehnigud"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:166
 msgid "_Scheduled Transaction Editor"
-msgstr ""
+msgstr "_Plaaniliste Tehingute Redigeerija"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:167
 msgid "The list of Scheduled Transactions"
-msgstr ""
+msgstr "Plaaniliste Tehingute Nimekiri"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:171
 msgid "Since _Last Run..."
@@ -3292,7 +3307,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-basic-commands.c:180
 #: gnucash/report/report-core.scm:71
 msgid "B_udget"
-msgstr ""
+msgstr "E_elarve"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:183
 msgid "Close _Books"
@@ -3728,7 +3743,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-business.c:331
 msgid "Edit payment..."
-msgstr ""
+msgstr "Redigeeri makset..."
 
 #: gnucash/gnome/gnc-plugin-business.c:332
 msgid "Edit the payment this transaction is a part of"
@@ -5832,7 +5847,7 @@ msgstr ""
 #: gnucash/gtkbuilder/business-prefs.glade:26
 #: gnucash/report/reports/standard/invoice.scm:899
 msgid "Printable Invoice"
-msgstr ""
+msgstr "Prinditav Müügiarve"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1808
 #: gnucash/gtkbuilder/business-prefs.glade:29
@@ -5847,13 +5862,13 @@ msgstr ""
 #: gnucash/gtkbuilder/business-prefs.glade:32
 #: gnucash/report/reports/standard/invoice.scm:908
 msgid "Easy Invoice"
-msgstr ""
+msgstr "Lihtne Müügiarve"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1810
 #: gnucash/gtkbuilder/business-prefs.glade:35
 #: gnucash/report/reports/standard/invoice.scm:917
 msgid "Fancy Invoice"
-msgstr ""
+msgstr "Peen Müügiarve"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:136
 msgid "_Scheduled"
@@ -8895,7 +8910,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:952 gnucash/report/trep-engine.scm:1076
 #: gnucash/report/trep-engine.scm:1259
 msgid "Price"
-msgstr ""
+msgstr "Hind"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2945
 #: gnucash/register/ledger-core/split-register.c:2707
@@ -14130,7 +14145,7 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:98
 #: gnucash/report/reports/standard/invoice.scm:237
 msgid "Discount"
-msgstr ""
+msgstr "Allahindlus"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:551
 msgid "Credit Limit"
@@ -18614,7 +18629,7 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:94
 #: gnucash/report/reports/standard/invoice.scm:227
 msgid "Quantity"
-msgstr ""
+msgstr "Kogus"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:154
 msgid "Disc-type"
@@ -18628,7 +18643,7 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:100
 #: gnucash/report/reports/standard/invoice.scm:242
 msgid "Taxable"
-msgstr ""
+msgstr "Käibemaksualune"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:158
 msgid "Taxincluded"
@@ -20351,7 +20366,7 @@ msgstr ""
 #: gnucash/report/reports/standard/taxinvoice.scm:111
 #: gnucash/report/reports/standard/taxinvoice.scm:179
 msgid "Unit Price"
-msgstr ""
+msgstr "Ühiku Hind"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:102
 msgid "Taxable?"
@@ -20369,7 +20384,7 @@ msgstr ""
 #: gnucash/report/options-utilities.scm:221
 #: gnucash/report/reports/standard/invoice.scm:262
 msgid "Subtotal"
-msgstr ""
+msgstr "Vahesumma"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
 #: gnucash/report/reports/standard/invoice.scm:551
@@ -20377,7 +20392,7 @@ msgstr ""
 #: gnucash/report/reports/standard/owner-report.scm:56
 #: libgnucash/app-utils/app-utils.scm:268
 msgid "Tax"
-msgstr ""
+msgstr "Käibemaks"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:127
 msgid "Billable?"
@@ -21292,7 +21307,7 @@ msgstr ""
 #: gnucash/report/reports/standard/register.scm:445
 #: gnucash/report/reports/standard/taxinvoice.scm:79
 msgid "Display"
-msgstr ""
+msgstr "Kuva"
 
 #: gnucash/report/report-core.scm:80
 msgid "Report name"
@@ -23476,7 +23491,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-eg.scm:182
 #: gnucash/report/reports/standard/invoice.scm:342
 msgid "Extra Notes"
-msgstr ""
+msgstr "Lisamärkmed"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:183
 #: gnucash/report/reports/standard/taxinvoice.scm:212
@@ -24466,7 +24481,7 @@ msgstr ""
 #: gnucash/report/reports/standard/owner-report.scm:596
 #: gnucash/report/reports/standard/owner-report.scm:601
 msgid "Display Columns"
-msgstr ""
+msgstr "Kuva Tulbad"
 
 #: gnucash/report/reports/standard/customer-summary.scm:79
 msgid "Show Lines with All Zeros"
@@ -24972,61 +24987,61 @@ msgstr ""
 #: gnucash/report/reports/standard/receipt.scm:131
 #: gnucash/report/reports/standard/taxinvoice.scm:116
 #: gnucash/report/reports/standard/taxinvoice.scm:189
-msgid "Tax Amount"
+msgid "Käibemaksu summa"
 msgstr ""
 
 #. Translators: "Their details" refer to the invoice 'other party' details i.e. client/vendor name/address/ID
 #: gnucash/report/reports/standard/invoice.scm:113
 msgid "Their details"
-msgstr ""
+msgstr "Nende andmed"
 
 #: gnucash/report/reports/standard/invoice.scm:114
 msgid "Client or vendor name, address and ID"
-msgstr ""
+msgstr "Kliendi või hankija nimi, aadress ja ID"
 
 #. Translators: "Our details" refer to the book owner's details i.e. name/address/tax-ID
 #: gnucash/report/reports/standard/invoice.scm:117
 msgid "Our details"
-msgstr ""
+msgstr "Meie andmed"
 
 #: gnucash/report/reports/standard/invoice.scm:118
 msgid "Company name, address and tax-ID"
-msgstr ""
+msgstr "Ettevõtte nimi, aadress ja registrikood"
 
 #: gnucash/report/reports/standard/invoice.scm:120
 msgid "Invoice details"
-msgstr ""
+msgstr "Müügiarve andmed"
 
 #: gnucash/report/reports/standard/invoice.scm:121
 msgid "Invoice date, due date, billing ID, terms, job details"
-msgstr ""
+msgstr "Müügiarve kuupäev, maksetähtpäev, arveldamise ID, tingimused, töö detailid"
 
 #: gnucash/report/reports/standard/invoice.scm:123
 #: gnucash/report/reports/standard/invoice.scm:124
 msgid "Today's date"
-msgstr ""
+msgstr "Tänane kuupäev"
 
 #: gnucash/report/reports/standard/invoice.scm:126
 #: gnucash/report/reports/standard/invoice.scm:127
 msgid "Picture"
-msgstr ""
+msgstr "Pilt"
 
 #. Translators: "(empty)" refers to invoice header section being left blank
 #: gnucash/report/reports/standard/invoice.scm:130
 msgid "(empty)"
-msgstr ""
+msgstr "(tühi)"
 
 #: gnucash/report/reports/standard/invoice.scm:131
 msgid "Empty space"
-msgstr ""
+msgstr "Tühi ruum"
 
 #: gnucash/report/reports/standard/invoice.scm:195
 msgid "Custom Title"
-msgstr ""
+msgstr "Kohandatud Pealkiri"
 
 #: gnucash/report/reports/standard/invoice.scm:196
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
-msgstr ""
+msgstr "Kohandatud riba Müügiarve, Ostuarve või Kuluvautšeri asendamiseks."
 
 #: gnucash/report/reports/standard/invoice.scm:201
 #: gnucash/report/reports/standard/invoice.scm:207
@@ -25043,168 +25058,170 @@ msgstr "Paigutus"
 #: gnucash/report/stylesheets/css.scm:118
 #: gnucash/report/stylesheets/css.scm:224
 msgid "CSS"
-msgstr ""
+msgstr "CSS"
 
 #: gnucash/report/reports/standard/invoice.scm:201
 msgid ""
 "CSS code. This field specifies the CSS code for styling the invoice. Please "
 "see the exported report for the CSS class names."
 msgstr ""
+"CSS kood. See väli täpsustab CSS koodi müügiarve kujundamiseks. CSS klassi "
+"nimede nägemiseks palun vaata eksporditud raportit."
 
 #: gnucash/report/reports/standard/invoice.scm:207
 msgid "Picture Location"
-msgstr ""
+msgstr "Pildi Asukoht"
 
 #: gnucash/report/reports/standard/invoice.scm:207
 msgid "Location for Picture"
-msgstr ""
+msgstr "Pildi Asukoht"
 
 #: gnucash/report/reports/standard/invoice.scm:213
 #: gnucash/report/reports/standard/register.scm:382
 #: gnucash/report/reports/standard/taxinvoice.scm:135
 #: gnucash/report/trep-engine.scm:937
 msgid "Display the date?"
-msgstr ""
+msgstr "Kuva kuupäev?"
 
 #: gnucash/report/reports/standard/invoice.scm:218
 #: gnucash/report/reports/standard/register.scm:397
 #: gnucash/report/trep-engine.scm:942
 msgid "Display the description?"
-msgstr ""
+msgstr "Kuva kirjeldus?"
 
 #: gnucash/report/reports/standard/invoice.scm:223
 msgid "Display the action?"
-msgstr ""
+msgstr "Kuva tegevus?"
 
 #: gnucash/report/reports/standard/invoice.scm:228
 msgid "Display the quantity of items?"
-msgstr ""
+msgstr "Kuva artiklite kogust?"
 
 #: gnucash/report/reports/standard/invoice.scm:233
 msgid "Display the price per item?"
-msgstr ""
+msgstr "Kuva artiklite hinda?"
 
 #: gnucash/report/reports/standard/invoice.scm:238
 msgid "Display the entry's discount?"
-msgstr ""
+msgstr "Kuva kirje allahindlust?"
 
 #: gnucash/report/reports/standard/invoice.scm:243
 msgid "Display the entry's taxable status?"
-msgstr ""
+msgstr "Kuva kirje maksustaatust?"
 
 #: gnucash/report/reports/standard/invoice.scm:248
 msgid "Display each entry's total total tax?"
-msgstr ""
+msgstr "Kuva iga kirje kogu maksusummat?"
 
 #: gnucash/report/reports/standard/invoice.scm:253
 msgid "Display the entry's value?"
-msgstr ""
+msgstr "Kuva kirje väärtust?"
 
 #: gnucash/report/reports/standard/invoice.scm:258
 msgid "Display due date?"
-msgstr ""
+msgstr "Kuva maksetähtpäeva?"
 
 #: gnucash/report/reports/standard/invoice.scm:263
 msgid "Display the subtotals?"
-msgstr ""
+msgstr "Kuva vahesummasid?"
 
 #: gnucash/report/reports/standard/invoice.scm:267
 msgid "Payable to"
-msgstr ""
+msgstr "Makse saaja"
 
 #: gnucash/report/reports/standard/invoice.scm:268
 msgid "Display the Payable to: information."
-msgstr ""
+msgstr "Kuva Makse saaja: info."
 
 #: gnucash/report/reports/standard/invoice.scm:275
 msgid "Payable to string"
-msgstr ""
+msgstr "Makse saaja riba"
 
 #: gnucash/report/reports/standard/invoice.scm:276
 msgid "The phrase for specifying to whom payments should be made."
-msgstr ""
+msgstr "Lause täpsustamaks, kellele tuleks makse vormistada."
 
 #: gnucash/report/reports/standard/invoice.scm:277
 msgid "Please make all checks payable to"
-msgstr ""
+msgstr "Palun kõik arved maksta ettevõttele"
 
 #: gnucash/report/reports/standard/invoice.scm:281
 msgid "Company contact"
-msgstr ""
+msgstr "Ettevõtte kontaktisik"
 
 #: gnucash/report/reports/standard/invoice.scm:282
 msgid "Display the Company contact information."
-msgstr ""
+msgstr "Kuva Ettevõtte kontaktisiku info."
 
 #: gnucash/report/reports/standard/invoice.scm:288
 msgid "Company contact string"
-msgstr ""
+msgstr "Ettevõtte kontaktisiku riba"
 
 #: gnucash/report/reports/standard/invoice.scm:289
 msgid "The phrase used to introduce the company contact."
-msgstr ""
+msgstr "Lause ettevõtte kontaktisiku tutvustamiseks."
 
 #: gnucash/report/reports/standard/invoice.scm:290
 msgid "Please direct all enquiries to"
-msgstr ""
+msgstr "Palun esitada kõik päringud "
 
 #: gnucash/report/reports/standard/invoice.scm:294
 msgid "Minimum # of entries"
-msgstr ""
+msgstr "Kirjete miinimumarv"
 
 #: gnucash/report/reports/standard/invoice.scm:295
 msgid "The minimum number of invoice entries to display."
-msgstr ""
+msgstr "Müügiarve kirjete minimaalne kuvatav arv."
 
 #: gnucash/report/reports/standard/invoice.scm:300
 msgid "Use Detailed Tax Summary"
-msgstr ""
+msgstr "Kasuta Detailset Maksukokkuvõtet"
 
 #: gnucash/report/reports/standard/invoice.scm:301
 msgid ""
 "Display all tax categories separately (one per line) instead of one single "
 "tax line.?"
-msgstr ""
+msgstr "Kuva kõik maksukategooriad eraldi (üks igal real), mitte ühe koondreana."
 
 #: gnucash/report/reports/standard/invoice.scm:307
 msgid "References"
-msgstr ""
+msgstr "Viited"
 
 #: gnucash/report/reports/standard/invoice.scm:308
 msgid "Display the invoice references?"
-msgstr ""
+msgstr "Kuva müügiarve viited?"
 
 #: gnucash/report/reports/standard/invoice.scm:312
 msgid "Billing Terms"
-msgstr ""
+msgstr "Arveldamise tingimused"
 
 #: gnucash/report/reports/standard/invoice.scm:313
 msgid "Display the invoice billing terms?"
-msgstr ""
+msgstr "Kuva arveldamise tingimused?"
 
 #: gnucash/report/reports/standard/invoice.scm:318
 msgid "Display the billing id?"
-msgstr ""
+msgstr "Kuva arveldamise ID?"
 
 #: gnucash/report/reports/standard/invoice.scm:322
 msgid "Invoice owner ID"
-msgstr ""
+msgstr "Müügiarve omaniku ID"
 
 #: gnucash/report/reports/standard/invoice.scm:323
 msgid "Display the customer/vendor id?"
-msgstr ""
+msgstr "Kuva kliendi/hankija ID?"
 
 #: gnucash/report/reports/standard/invoice.scm:328
 msgid "Display the invoice notes?"
-msgstr ""
+msgstr "Kuva müügiarve märkmed?"
 
 #: gnucash/report/reports/standard/invoice.scm:332
 msgid "Payments"
-msgstr ""
+msgstr "Maksed"
 
 #: gnucash/report/reports/standard/invoice.scm:333
 msgid "Display the payments applied to this invoice?"
-msgstr ""
+msgstr "Kuva sellele müügiarvele rakendatud maksed?"
 
 #: gnucash/report/reports/standard/invoice.scm:337
 msgid "Job Details"
@@ -25212,50 +25229,50 @@ msgstr "Töö üksikasjad"
 
 #: gnucash/report/reports/standard/invoice.scm:338
 msgid "Display the job name for this invoice?"
-msgstr ""
+msgstr "Kuva sellele müügiarvele töö nimi?"
 
 #: gnucash/report/reports/standard/invoice.scm:343
 msgid "Extra notes to put on the invoice."
-msgstr ""
+msgstr "Lisamärkmed müügiarvele lisamiseks."
 
 #: gnucash/report/reports/standard/invoice.scm:344
 #: gnucash/report/reports/standard/taxinvoice.scm:213
 msgid "Thank you for your patronage!"
-msgstr ""
+msgstr "Täname koostöö eest!"
 
 #: gnucash/report/reports/standard/invoice.scm:348
 msgid "Row 1 Left"
-msgstr ""
+msgstr "Rida 1 Vasakul"
 
 #: gnucash/report/reports/standard/invoice.scm:355
 msgid "Row 1 Right"
-msgstr ""
+msgstr "Rida 2 Paremal"
 
 #: gnucash/report/reports/standard/invoice.scm:362
 msgid "Row 2 Left"
-msgstr ""
+msgstr "Rida 2 Vasakul"
 
 #: gnucash/report/reports/standard/invoice.scm:369
 msgid "Row 2 Right"
-msgstr ""
+msgstr "Rida 2 Paremal"
 
 #: gnucash/report/reports/standard/invoice.scm:376
 msgid "Row 3 Left"
-msgstr ""
+msgstr "Rida 3 Vasakul"
 
 #: gnucash/report/reports/standard/invoice.scm:383
 msgid "Row 3 Right"
-msgstr ""
+msgstr "Rida 3 Paremal"
 
 #: gnucash/report/reports/standard/invoice.scm:436
 #: gnucash/report/reports/standard/job-report.scm:239
 msgid "Payment, thank you!"
-msgstr ""
+msgstr "Makse, täname!"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
 #: gnucash/report/reports/standard/invoice.scm:491
 msgid "T"
-msgstr ""
+msgstr "M"
 
 #: gnucash/report/reports/standard/invoice.scm:538
 #: gnucash/report/reports/standard/receipt.scm:58
@@ -25263,7 +25280,7 @@ msgstr ""
 #: gnucash/report/reports/standard/taxinvoice.scm:114
 #: gnucash/report/reports/standard/taxinvoice.scm:185
 msgid "Net Price"
-msgstr ""
+msgstr "Netohind"
 
 #: gnucash/report/reports/standard/invoice.scm:554
 #: gnucash/report/reports/standard/receipt.scm:61
@@ -25271,7 +25288,7 @@ msgstr ""
 #: gnucash/report/reports/standard/taxinvoice.scm:117
 #: gnucash/report/reports/standard/taxinvoice.scm:191
 msgid "Total Price"
-msgstr ""
+msgstr "Koguhind"
 
 #: gnucash/report/reports/standard/invoice.scm:574
 #: gnucash/report/reports/standard/receipt.scm:63
@@ -25279,28 +25296,28 @@ msgstr ""
 #: gnucash/report/reports/standard/taxinvoice.scm:119
 #: gnucash/report/reports/standard/taxinvoice.scm:195
 msgid "Amount Due"
-msgstr ""
+msgstr "Tasumisele kuuluv summa"
 
 #: gnucash/report/reports/standard/invoice.scm:615
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
 msgid "Invoice in progress..."
-msgstr ""
+msgstr "Müügiarve töös..."
 
 #: gnucash/report/reports/standard/invoice.scm:623
 msgid "Reference:"
-msgstr ""
+msgstr "Viide:"
 
 #: gnucash/report/reports/standard/invoice.scm:635
 msgid "Terms:"
-msgstr ""
+msgstr "Tingimused:"
 
 #: gnucash/report/reports/standard/invoice.scm:645
 msgid "Job number:"
-msgstr ""
+msgstr "Töö number:"
 
 #: gnucash/report/reports/standard/invoice.scm:650
 msgid "Job name:"
-msgstr ""
+msgstr "Töö nimi:"
 
 #: gnucash/report/reports/standard/invoice.scm:696
 msgid "REF"
@@ -25311,6 +25328,8 @@ msgid ""
 "No valid invoice selected. Click on the Options button and select the "
 "invoice to use."
 msgstr ""
+"Ühtegi kehtivat müügiarvet pole valitud. Vajuta nupul Valikud ja "
+"vali kasutatav müügiarve."
 
 #. Translators: This is the format of the invoice title.
 #. The first ~a is "Invoice", "Credit Note"... and the second the number.
@@ -25318,7 +25337,7 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:796
 #, scheme-format
 msgid "~a #~a"
-msgstr ""
+msgstr "~a nr ~a"
 
 #: gnucash/report/reports/standard/job-report.scm:318
 #: gnucash/report/reports/standard/new-owner-report.scm:512
