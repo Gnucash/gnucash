@@ -48,6 +48,7 @@
         <menuitem name="ActionLots" action="ActionsLotsAction"/>
         <separator name="ActionsSep4"/>
         <menuitem name="BlankTransaction" action="BlankTransactionAction"/>
+        <menuitem name="GotoDate" action="GotoDateAction"/>
         <menuitem name="SplitTransaction" action="SplitTransactionAction"/>
         <menuitem name="EditExchangeRate" action="EditExchangeRateAction"/>
         <menuitem name="ScheduleTransaction" action="ScheduleTransactionAction"/>
@@ -106,6 +107,7 @@
       <menuitem name="JumpAssociateInvoice" action="JumpAssociatedInvoiceAction"/>
       <separator name="PopupSep5"/>
       <menuitem name="BlankTransaction" action="BlankTransactionAction"/>
+      <menuitem name="GotoDate" action="GotoDateAction"/>
       <menuitem name="SplitTransaction" action="SplitTransactionAction"/>
       <menuitem name="EditExchangeRate" action="EditExchangeRateAction"/>
       <menuitem name="ScheduleTransaction" action="ScheduleTransactionAction"/>

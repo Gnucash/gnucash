@@ -232,6 +232,8 @@ static void gnc_plugin_page_register_cmd_delete_transaction (GtkAction* action,
         GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_cmd_blank_transaction (GtkAction* action,
                                                             GncPluginPageRegister* plugin_page);
+static void gnc_plugin_page_register_cmd_goto_date (GtkAction* action,
+                                                    GncPluginPageRegister* page);
 static void gnc_plugin_page_register_cmd_duplicate_transaction (
     GtkAction* action, GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_cmd_reinitialize_transaction (
@@ -478,6 +480,11 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         "BlankTransactionAction", "go-bottom", N_ ("_Blank Transaction"), "<primary>Page_Down",
         N_ ("Move to the blank transaction at the bottom of the register"),
         G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction)
+    },
+    {
+        "GotoDateAction", "x-office-calendar", N_ ("_Go to Date"), "<primary>G",
+        N_ ("Move to the the split at specified date"),
+        G_CALLBACK (gnc_plugin_page_register_cmd_goto_date)
     },
     {
         "EditExchangeRateAction", NULL, N_ ("Edit E_xchange Rate"), NULL,
@@ -4685,6 +4692,47 @@ gnc_plugin_page_register_cmd_blank_transaction (GtkAction* action,
         gnc_split_register_redraw (reg);
 
     gnc_split_reg_jump_to_blank (priv->gsr);
+    LEAVE (" ");
+}
+
+static void
+gnc_plugin_page_register_cmd_goto_date (GtkAction* action,
+                                        GncPluginPageRegister* page)
+{
+    GNCSplitReg* gsr;
+    Query* query;
+    time64 date = gnc_time (NULL);
+    Split *split = NULL;
+
+    ENTER ("(action %p, plugin_page %p)", action, page);
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
+
+    if (!gnc_dup_time64_dialog (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)),
+                                _("Go to Date"), _("Go to Date"), &date))
+    {
+        LEAVE ("goto_date cancelled");
+        return;
+    }
+
+    gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE (page));
+    query = gnc_plugin_page_register_get_query (GNC_PLUGIN_PAGE (page));
+
+    for (GList *lp = qof_query_run (query); lp; lp = lp->next)
+    {
+        if (xaccTransGetDate (xaccSplitGetParent (lp->data)) >= date)
+        {
+            split = lp->data;
+            break;
+        }
+    }
+
+    /* Test for visibility of split */
+    /* if (gnc_split_reg_clear_filter_for_split (gsr, split)) */
+    /*     gnc_plugin_page_register_clear_current_filter (GNC_PLUGIN_PAGE(page)); */
+
+    if (split)
+        gnc_split_reg_jump_to_split (gsr, split);
+
     LEAVE (" ");
 }
 
