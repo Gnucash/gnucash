@@ -4702,7 +4702,7 @@ gnc_plugin_page_register_cmd_goto_date (GtkAction* action,
     GNCSplitReg* gsr;
     Query* query;
     time64 date = gnc_time (NULL);
-    Split *split = NULL;
+    GList *splits;
 
     ENTER ("(action %p, plugin_page %p)", action, page);
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
@@ -4716,23 +4716,19 @@ gnc_plugin_page_register_cmd_goto_date (GtkAction* action,
 
     gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE (page));
     query = gnc_plugin_page_register_get_query (GNC_PLUGIN_PAGE (page));
+    splits = g_list_copy (qof_query_run (query));
+    splits = g_list_sort (splits, (GCompareFunc)xaccSplitOrder);
 
-    for (GList *lp = qof_query_run (query); lp; lp = lp->next)
+    for (GList *lp = splits; lp; lp = lp->next)
     {
         if (xaccTransGetDate (xaccSplitGetParent (lp->data)) >= date)
         {
-            split = lp->data;
+            gnc_split_reg_jump_to_split (gsr, lp->data);
             break;
         }
     }
 
-    /* Test for visibility of split */
-    /* if (gnc_split_reg_clear_filter_for_split (gsr, split)) */
-    /*     gnc_plugin_page_register_clear_current_filter (GNC_PLUGIN_PAGE(page)); */
-
-    if (split)
-        gnc_split_reg_jump_to_split (gsr, split);
-
+    g_list_free (splits);
     LEAVE (" ");
 }
 
