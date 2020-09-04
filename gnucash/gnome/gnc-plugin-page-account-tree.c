@@ -170,6 +170,7 @@ static void gnc_plugin_page_account_tree_cmd_lots (GtkAction *action, GncPluginP
 static void gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_regenerate_reconciled_balances (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_cascade_account_properties (GtkAction *action, GncPluginPageAccountTree *page);
 
 /* Command callback for new Register Test */
@@ -337,6 +338,11 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         "ScrubAllAction", NULL, N_("Check & Repair A_ll"), NULL,
         N_("Check for and repair unbalanced transactions and orphan splits " "in all accounts"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_all)
+    },
+    {
+        "RegenerateReconciledBalancesAction", NULL, N_("Regenerate Reconciled Balances"), NULL,
+        N_("Regenerate stored reconciled balances " "in this account"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_regenerate_reconciled_balances)
     },
     /* Extensions Menu */
     { "Register2TestAction", NULL, N_("_Register2"), NULL, NULL, NULL },
@@ -2088,6 +2094,74 @@ gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAcco
     gncScrubBusinessAccountTree(root, gnc_window_show_progress);
 
     finish_scrubbing (window, scrub_kp_handler_ID);
+}
+
+static gint cmp_rec_date (Split *split1, Split *split2)
+{
+    if (xaccSplitGetReconcile (split1) != YREC) return 1;
+    if (xaccSplitGetReconcile (split2) != YREC) return -1;
+    return (xaccSplitGetDateReconciled (split1) - xaccSplitGetDateReconciled (split2));
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_regenerate_reconciled_balances
+(GtkAction *action, GncPluginPageAccountTree *page)
+{
+    Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+    GtkWindow *window = GTK_WINDOW (GNC_PLUGIN_PAGE (page)->window);
+    GList *splits, *assertion_dates, *split_iter;
+    gnc_numeric balance = gnc_numeric_zero ();
+
+    g_return_if_fail (account);
+
+    assertion_dates = xaccAccountGetBalanceAssertionDates (account);
+
+    if (!assertion_dates)
+    {
+        gnc_info_dialog (window, "The account %s does not have \
+any stored reconciled balances", gnc_account_get_full_name (account));
+        return;
+    }
+    else if (gnc_account_assertions_are_valid (account))
+    {
+        gnc_info_dialog (window, "The stored reconciled \
+balances for account %s are valid. There is no need to regenerate the \
+balances.", gnc_account_get_full_name (account));
+        return;
+    }
+    else if (!gnc_verify_dialog (window, FALSE, "The stored \
+reconciled balances for account %s do not match the account's reconciled \
+balances. This action will regenerate the balances. Do you wish to \
+continue?", gnc_account_get_full_name (account)))
+        return;
+
+    splits = g_list_copy (xaccAccountGetSplitList (account));
+    splits = g_list_sort (splits, (GCompareFunc)cmp_rec_date);
+    split_iter = splits;
+    for (GList *dates = assertion_dates; dates; dates = dates->next)
+    {
+        time64 *date = (time64*)dates->data;
+        time64 d = *date;
+
+        for (; split_iter; split_iter = split_iter->next)
+        {
+            Split *split = (Split*)split_iter->data;
+            if ((xaccSplitGetReconcile (split) == YREC) &&
+                (xaccSplitGetDateReconciled (split) <= d))
+                balance = gnc_numeric_add_fixed (balance, xaccSplitGetAmount (split));
+            else
+            {
+                xaccAccountSetBalanceAssertionAtDate (account, d, balance);
+                break;
+            }
+        }
+    }
+    g_list_free (assertion_dates);
+    g_list_free (splits);
+
+    gnc_info_dialog (window, "The stored reconciled balances \
+for account %s have been regenerated successfully.",
+                     gnc_account_get_full_name (account));
 }
 
 /** @} */

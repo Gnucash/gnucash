@@ -28,6 +28,7 @@
           <menuitem name="Scrub" action="ScrubAction"/>
           <menuitem name="ScrubSub" action="ScrubSubAction"/>
           <menuitem name="ScrubAll" action="ScrubAllAction"/>
+          <menuitem name="RegenReconcile" action="RegenerateReconciledBalancesAction"/>
         </menu>
       </placeholder>
     </menu>
@@ -67,6 +68,7 @@
         <menuitem name="Scrub" action="ScrubAction"/>
         <menuitem name="ScrubSub" action="ScrubSubAction"/>
         <menuitem name="ScrubAll" action="ScrubAllAction"/>
+        <menuitem name="RegenReconcile" action="RegenerateReconciledBalancesAction"/>
       </menu>
     </placeholder>
   </popup>
