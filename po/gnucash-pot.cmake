@@ -32,7 +32,7 @@ execute_process(
                         --keyword=translate:1c,2,3,4t
                         --package-name=${PACKAGE_NAME}
                         --package-version=${PROJECT_VERSION}
-                        --copyright-holder=by\ the\ GnuCash\ developers\ and\ the\ translators:
+                        --copyright-holder=by\ the\ GnuCash\ developers\ and\ the\ translators\ listed\ below.
                         --msgid-bugs-address=https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations
   WORKING_DIRECTORY ${PO_BIN_DIR}
   RESULT_VARIABLE GNUCASH_POT_RESULT
