@@ -3542,7 +3542,7 @@ msgstr "Lihat dan sunting komoditas untuk saham dan reksadana"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:201
 msgid "_Loan Repayment Calculator"
-msgstr "Kalkulator Pembayaran Angsuran Pinjaman"
+msgstr "Kalku_lator Pembayaran Angsuran Pinjaman"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:202
 msgid "Use the loan/mortgage repayment calculator"
@@ -4015,7 +4015,7 @@ msgstr "Buka akun terpilih dan semua sub-akun"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:232
 msgid "Open Old St_yle Subaccounts"
-msgstr "Buka Sub-Akun Gaya Lama"
+msgstr "Buka Sub-Akun Ga_ya Lama"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:233
 msgid "Open the old style register selected account and all its subaccounts"
@@ -4503,7 +4503,7 @@ msgstr "_Kosong"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:199
 msgid "Dup_licate Entry"
-msgstr "Gandakan Entri"
+msgstr "_Gandakan Entri"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:200
 msgid "Make a copy of the current entry"
@@ -8995,7 +8995,7 @@ msgstr "Izinkan GnuCash men_ambahkan sebuah pemecahan penyesuaian"
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:294
 #: gnucash/register/ledger-core/split-register-control.c:145
 msgid "Adjust current account _split total"
-msgstr "Sesuaikan total pemecahan akun saat ini"
+msgstr "_Sesuaikan total pemecahan akun saat ini"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:300
 #: gnucash/register/ledger-core/split-register-control.c:151
