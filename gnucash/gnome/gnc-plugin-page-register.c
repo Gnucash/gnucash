@@ -1912,6 +1912,25 @@ gnc_plugin_page_register_update_edit_menu (GncPluginPage* page, gboolean hide)
     gtk_action_set_visible (action,  !hide || can_paste);
 }
 
+static gboolean abort_scrub = FALSE;
+static gboolean is_scrubbing = FALSE;
+
+static gboolean
+finish_scrub (GncPluginPage* page)
+{
+    if (is_scrubbing)
+    {
+        gboolean ret = gnc_verify_dialog (NULL, FALSE, "%s", "A scrubbing operation is currently pending, do you want to abort it?");
+        if (ret)
+        {
+            abort_scrub = TRUE;
+            gnc_resume_gui_refresh (); // This is so quit does not complain about an ongoing operation.
+            return TRUE;
+        }
+        return FALSE;
+    }
+    return TRUE;
+}
 
 static gboolean
 gnc_plugin_page_register_finish_pending (GncPluginPage* page)
@@ -1923,6 +1942,9 @@ gnc_plugin_page_register_finish_pending (GncPluginPage* page)
     const gchar* name;
     gint response;
 
+    if (!finish_scrub (page))
+        return FALSE;
+    
     reg_page = GNC_PLUGIN_PAGE_REGISTER (page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (reg_page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
@@ -4977,6 +4999,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
     }
 
     gnc_suspend_gui_refresh();
+    is_scrubbing = TRUE;
     window = GNC_WINDOW (GNC_PLUGIN_PAGE (plugin_page)->window);
     gnc_window_set_progressbar_window (window);
 
@@ -5000,6 +5023,8 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
             char* progress_msg = g_strdup_printf (message, curr_split_no, split_count);
             gnc_window_show_progress (progress_msg, (100 * curr_split_no) / split_count);
             g_free (progress_msg);
+            if (abort_scrub)
+                break;
         }
 
         xaccTransScrubOrphans (trans);
@@ -5020,6 +5045,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
 
     gnc_window_show_progress (NULL, -1.0);
     gnc_resume_gui_refresh();
+    is_scrubbing = FALSE;
     LEAVE (" ");
 }
 

@@ -1146,6 +1146,11 @@ gnc_main_window_all_finish_pending (void)
             return FALSE;
         }
     }
+    if (gnc_gui_refresh_suspended ())
+    {
+        gnc_warning_dialog (NULL, "%s", "An operation is still pending, wait for it to complete before quitting ");
+        return FALSE;
+    }
     return TRUE;
 }
 
@@ -3707,7 +3712,7 @@ static gboolean
 gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
 {
     if (gnc_main_window_all_finish_pending())
-        return gnc_main_window_quit (window);
+        return !gnc_main_window_quit (window);
     return TRUE;
 }
 
