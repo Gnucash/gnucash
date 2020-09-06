@@ -102,7 +102,7 @@ QofBackend::register_backend(const char* directory, const char* module_name)
     {
         auto modname = g_strdup_printf ("lib%s.dylib", module_name);
         g_free (fullpath);
-        fullpath = g_build_filename (absdir, modname, NULL);
+        fullpath = g_build_filename (absdir, modname, nullptr);
         g_free (modname);
     }
     auto backend = g_module_open (fullpath, G_MODULE_BIND_LAZY);

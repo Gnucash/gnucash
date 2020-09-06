@@ -614,7 +614,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
 
             gtk_widget_set_halign (GTK_WIDGET(ldd->prmOrigPrincGAE), GTK_ALIGN_FILL);
             gtk_widget_set_hexpand (GTK_WIDGET(ldd->prmOrigPrincGAE), FALSE);
-            g_object_set (GTK_WIDGET(ldd->prmOrigPrincGAE), "margin", 2, NULL);
+            g_object_set (GTK_WIDGET(ldd->prmOrigPrincGAE), "margin", 2, nullptr);
 
             for ( i = 0; gas_data[i].loc != NULL; i++ )
             {
@@ -637,7 +637,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
 
                 gtk_widget_set_halign (GTK_WIDGET(gas), GTK_ALIGN_FILL);
                 gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(gas), true);
-                g_object_set (GTK_WIDGET(gas), "margin", 2, NULL);
+                g_object_set (GTK_WIDGET(gas), "margin", 2, nullptr);
                 *(gas_data[i].loc) = gas;
             }
         }
@@ -679,7 +679,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
 
                 gtk_widget_set_halign (GTK_WIDGET( *gde_data[i].loc ), GTK_ALIGN_START);
                 gtk_widget_set_hexpand (GTK_WIDGET( *gde_data[i].loc ), FALSE);
-                g_object_set (GTK_WIDGET( *gde_data[i].loc ), "margin", 0, NULL);
+                g_object_set (GTK_WIDGET( *gde_data[i].loc ), "margin", 0, nullptr);
             }
 
         }
@@ -1858,25 +1858,25 @@ loan_rev_prep( GtkAssistant *assistant, gpointer user_data )
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
              "text", LOAN_COL_DATE,
-             NULL);
+             nullptr);
     gtk_tree_view_append_column(ldd->revView, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Payment"), renderer,
              "text", LOAN_COL_PAYMENT,
-             NULL);
+             nullptr);
     gtk_tree_view_append_column(ldd->revView, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Principal"), renderer,
              "text", LOAN_COL_PRINCIPAL,
-             NULL);
+             nullptr);
     gtk_tree_view_append_column(ldd->revView, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Interest"), renderer,
              "text", LOAN_COL_INTEREST,
-             NULL);
+             nullptr);
     gtk_tree_view_append_column(ldd->revView, column);
 
     /* move the appropriate names over into the title array */
@@ -1891,7 +1891,7 @@ loan_rev_prep( GtkAssistant *assistant, gpointer user_data )
             column = gtk_tree_view_column_new_with_attributes
                      (ldd->ld.repayOpts[i]->name, renderer,
                       "text", LOAN_COL_INTEREST + col,
-                      NULL);
+                      nullptr);
             gtk_tree_view_append_column(ldd->revView, column);
             col++;
         }

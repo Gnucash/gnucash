@@ -1235,7 +1235,7 @@ gnc_filepath_locate_file (const gchar *default_path, const gchar *name)
     if (g_path_is_absolute (name))
         fullname = g_strdup (name);
     else if (default_path)
-        fullname = g_build_filename (default_path, name, NULL);
+        fullname = g_build_filename (default_path, name, nullptr);
     else
         fullname = gnc_resolve_file_path (name);
 
@@ -1262,7 +1262,7 @@ gnc_filepath_locate_pixmap (const gchar *name)
     gchar *fullname;
     gchar* pkgdatadir = gnc_path_get_pkgdatadir ();
 
-    default_path = g_build_filename (pkgdatadir, "pixmaps", NULL);
+    default_path = g_build_filename (pkgdatadir, "pixmaps", nullptr);
     g_free(pkgdatadir);
     fullname = gnc_filepath_locate_file (default_path, name);
     g_free(default_path);
@@ -1277,7 +1277,7 @@ gnc_filepath_locate_ui_file (const gchar *name)
     gchar *fullname;
     gchar* pkgdatadir = gnc_path_get_pkgdatadir ();
 
-    default_path = g_build_filename (pkgdatadir, "ui", NULL);
+    default_path = g_build_filename (pkgdatadir, "ui", nullptr);
     g_free(pkgdatadir);
     fullname = gnc_filepath_locate_file (default_path, name);
     g_free(default_path);

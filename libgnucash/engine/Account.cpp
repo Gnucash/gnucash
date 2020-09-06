@@ -238,7 +238,7 @@ gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invali
         {
             gchar *tmp_list = NULL;
 
-            tmp_list = g_strconcat (account_list, "\n", node->data, NULL );
+            tmp_list = g_strconcat (account_list, "\n", node->data, nullptr);
             g_free ( account_list );
             account_list = tmp_list;
         }
@@ -4750,7 +4750,7 @@ GetOrMakeOrphanAccount (Account *root, gnc_commodity * currency)
     }
 
     accname = g_strconcat (_("Orphaned Gains"), "-",
-                           gnc_commodity_get_mnemonic (currency), NULL);
+                           gnc_commodity_get_mnemonic (currency), nullptr);
 
     /* See if we've got one of these going already ... */
     acc = gnc_account_lookup_by_name(root, accname);

@@ -942,7 +942,7 @@ qof_book_normalize_counter_format_internal(const gchar *p,
 
     /* Copy the string we have so far and add normalized format specifier for long int */
     aux_str = g_strndup (base, p - base);
-    normalized_str = g_strconcat (aux_str, PRIi64, NULL);
+    normalized_str = g_strconcat (aux_str, PRIi64, nullptr);
     g_free (aux_str);
 
     /* Skip length modifier / conversion specifier */
@@ -974,7 +974,7 @@ qof_book_normalize_counter_format_internal(const gchar *p,
 
     /* Add the suffix to our normalized string */
     aux_str = normalized_str;
-    normalized_str = g_strconcat (aux_str, tmp, NULL);
+    normalized_str = g_strconcat (aux_str, tmp, nullptr);
     g_free (aux_str);
 
     /* If we end up here, the string was valid, so return no error

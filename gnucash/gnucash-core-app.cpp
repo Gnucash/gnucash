@@ -307,7 +307,7 @@ load_system_config(void)
 
     update_message("loading system configuration");
     system_config_dir = gnc_path_get_pkgsysconfdir();
-    system_config = g_build_filename(system_config_dir, "config", NULL);
+    system_config = g_build_filename(system_config_dir, "config", nullptr);
     is_system_config_loaded = gfec_try_load(system_config);
     g_free(system_config_dir);
     g_free(system_config);
