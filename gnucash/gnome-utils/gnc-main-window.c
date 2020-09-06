@@ -3705,14 +3705,17 @@ gnc_quartz_shutdown (GtkosxApplication *theApp, gpointer data)
 {
     /* Do Nothing. It's too late. */
 }
-/* Should quit responds to NSApplicationBlockTermination; returning
- * TRUE means "don't terminate", FALSE means "do terminate".
+/* Should quit responds to NSApplicationBlockTermination; returning TRUE means
+ * "don't terminate", FALSE means "do terminate". gnc_main_window_quit() queues
+ * a timer that starts an orderly shutdown in 250ms and if we tell macOS it's OK
+ * to quit GnuCash gets terminated instead of doing its orderly shutdown,
+ * leaving the book locked.
  */
 static gboolean
 gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
 {
     if (gnc_main_window_all_finish_pending())
-        return !gnc_main_window_quit (window);
+        gnc_main_window_quit (window);
     return TRUE;
 }
 
