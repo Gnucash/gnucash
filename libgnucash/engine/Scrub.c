@@ -137,7 +137,7 @@ xaccAccountScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
     for (node = splits; node; node = node->next)
     {
         Split *split = node->data;
-        if (current_split % 100 == 0)
+        if (current_split % 10 == 0)
         {
             char *progress_msg = g_strdup_printf (message, str, current_split, total_splits);
             (percentagefunc)(progress_msg, (100 * current_split) / total_splits);
@@ -347,7 +347,7 @@ xaccAccountScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
         PINFO("Start processing split %d of %d",
               curr_split_no + 1, split_count);
 
-        if (curr_split_no % 100 == 0)
+        if (curr_split_no % 10 == 0)
         {
             char *progress_msg = g_strdup_printf (message, str, curr_split_no, split_count);
             (percentagefunc)(progress_msg, (100 * curr_split_no) / split_count);
@@ -356,7 +356,6 @@ xaccAccountScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
 
         TransScrubOrphansFast (xaccSplitGetParent (split),
                                gnc_account_get_root (acc));
-        (percentagefunc)(NULL, 0.0);
 
         xaccTransScrubCurrency(trans);
 
