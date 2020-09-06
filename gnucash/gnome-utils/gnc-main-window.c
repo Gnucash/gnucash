@@ -3587,6 +3587,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
                         FALSE, TRUE, 0);
 
     priv->progressbar = gtk_progress_bar_new ();
+    gtk_progress_bar_set_show_text (GTK_PROGRESS_BAR(priv->progressbar), TRUE);
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(priv->progressbar), " ");
     gtk_widget_show (priv->progressbar);
     gtk_box_pack_start (GTK_BOX (priv->statusbar), priv->progressbar,
