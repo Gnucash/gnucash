@@ -80,18 +80,14 @@ gnc_add_scheme_tests("${test_app_utils_scheme_SOURCES}")
 
 if (HAVE_SRFI64)
   gnc_add_scheme_test_targets(scm-test-app-utils-srfi64
-    "${test_app_utils_scheme_SRFI64_SOURCES}"
-    "tests"
-    "${GUILE_DEPENDS};scm-srfi64-extras"
-    FALSE
-    )
+    SOURCES "${test_app_utils_scheme_SRFI64_SOURCES}"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS};scm-srfi64-extras")
 
   gnc_add_scheme_test_targets(scm-test-gnc-optiondb
-    "test-gnc-optiondb.scm"
-    "tests"
-    "swig-apputils-guile-cpp;scm-srfi64-extras"
-    FALSE
-    )
+    SOURCES "test-gnc-optiondb.scm"
+    OUTPUT_DIR "tests"
+    DEPENDS "swig-apputils-guile-cpp;scm-srfi64-extras")
   gnc_add_scheme_tests("test-gnc-optiondb.scm")
   gnc_add_scheme_tests("${test_app_utils_scheme_SRFI64_SOURCES}")
 endif()

@@ -26,7 +26,7 @@
 (use-modules (gnucash gnc-module))
 (eval-when
  (compile load eval expand)
- (load-extension "_sw_app_utils" "scm_init_sw_app_utils_module"))
+ (load-extension "libgnc-app-utils" "scm_init_sw_app_utils_module"))
 
 (use-modules (gnucash engine))
 (use-modules (sw_app_utils))
