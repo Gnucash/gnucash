@@ -4925,16 +4925,34 @@ gnc_plugin_page_register_cmd_schedule (GtkAction* action,
     LEAVE (" ");
 }
 
+static void scrub_split (Split *split)
+{
+    Account *acct;
+    Transaction *trans;
+    GNCLot *lot;
+
+    g_return_if_fail (split);
+    acct = xaccSplitGetAccount (split);
+    trans = xaccSplitGetParent (split);
+    lot = xaccSplitGetLot (split);
+    g_return_if_fail (trans);
+
+    xaccTransScrubOrphans (trans);
+    xaccTransScrubImbalance (trans, gnc_get_current_root_account(), NULL);
+    if (lot && xaccAccountIsAPARType (xaccAccountGetType (acct)))
+    {
+        gncScrubBusinessLot (lot);
+        gncScrubBusinessSplit (split);
+    }
+}
+
 static void
 gnc_plugin_page_register_cmd_scrub_current (GtkAction* action,
                                             GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
     Query* query;
-    Account* root;
-    Transaction* trans;
     Split* split;
-    GNCLot* lot;
     SplitRegister* reg;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
@@ -4950,27 +4968,11 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction* action,
     }
 
     reg = gnc_ledger_display_get_split_register (priv->ledger);
-    trans = gnc_split_register_get_current_trans (reg);
-    if (trans == NULL)
-    {
-        LEAVE ("no trans found");
-        return;
-    }
 
     gnc_suspend_gui_refresh();
-    root = gnc_get_current_root_account();
-    xaccTransScrubOrphans (trans);
-    xaccTransScrubImbalance (trans, root, NULL);
-
-    split = gnc_split_register_get_current_split (reg);
-    lot = xaccSplitGetLot (split);
-    if (lot &&
-        xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
-    {
-        gncScrubBusinessLot (lot);
-        gncScrubBusinessSplit (split);
-    }
+    scrub_split (gnc_split_register_get_current_split (reg));
     gnc_resume_gui_refresh();
+
     LEAVE (" ");
 }
 
@@ -4980,7 +4982,6 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
 {
     GncPluginPageRegisterPrivate* priv;
     Query* query;
-    Account* root;
     GncWindow* window;
     GList* node, *splits;
     gint split_count = 0, curr_split_no = 0;
@@ -5003,44 +5004,28 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
     window = GNC_WINDOW (GNC_PLUGIN_PAGE (plugin_page)->window);
     gnc_window_set_progressbar_window (window);
 
-    root = gnc_get_current_root_account();
-
     splits = qof_query_run (query);
     split_count = g_list_length (splits);
-    for (node = splits; node; node = node->next)
+    for (node = splits; node && !abort_scrub; node = node->next, curr_split_no++)
     {
-        GNCLot* lot;
         Split* split = node->data;
-        Transaction* trans = xaccSplitGetParent (split);
 
         if (!split) continue;
 
         PINFO ("Start processing split %d of %d",
                curr_split_no + 1, split_count);
 
-        if (curr_split_no % 100 == 0)
+        if (curr_split_no % 10 == 0)
         {
             char* progress_msg = g_strdup_printf (message, curr_split_no, split_count);
             gnc_window_show_progress (progress_msg, (100 * curr_split_no) / split_count);
             g_free (progress_msg);
-            if (abort_scrub)
-                break;
         }
 
-        xaccTransScrubOrphans (trans);
-        xaccTransScrubImbalance (trans, root, NULL);
-
-        lot = xaccSplitGetLot (split);
-        if (lot &&
-            xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
-        {
-            gncScrubBusinessLot (lot);
-            gncScrubBusinessSplit (split);
-        }
+        scrub_split (split);
 
         PINFO ("Finished processing split %d of %d",
                curr_split_no + 1, split_count);
-        curr_split_no++;
     }
 
     gnc_window_show_progress (NULL, -1.0);
