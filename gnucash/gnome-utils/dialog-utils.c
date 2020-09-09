@@ -535,6 +535,11 @@ gnc_handle_date_accelerator (GdkEventKey *event,
             g_date_to_struct_tm (&gdate, tm);
         return TRUE;
 
+    case GDK_KEY_question:
+        /* Translators: the []-+MHYRT keyboard shortcuts are hard coded
+           and are not localizable */
+        gnc_info_dialog (NULL, "%s", _("This is a date field. Keyboard shortcuts are available: \n- previous day\n+ next day\nshift- previous week\nshift+ next week\n[,alt- previous month \n],alt+ next month\nctrl- previous year\nctrl+next year\nM beginning of month\nH end of month\nY beginning of year\nR end of year\nT today"));
+        return TRUE;
     default:
         break;
     }
