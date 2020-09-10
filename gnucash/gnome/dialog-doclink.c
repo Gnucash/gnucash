@@ -988,10 +988,10 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
     {
         GtkWidget *help_label = GTK_WIDGET(gtk_builder_get_object (builder, "help_label"));
         const gchar *item_string = N_(
-            "\t\tDouble click on the entry in the Id column to jump to the"
-            "Business Item.\n\t\tDouble click on the entry in the Link column"
-            "to open the Linked Document.\n\t\tDouble click on the entry in"
-            "the Available? column to modify the document link.");
+            "\t\tDouble click on the entry in the Id column to jump to the "
+            "Business Item.\n\t\tDouble click on the entry in the Link column "
+            "to open the Linked Document.\n\t\tDouble click on the entry in "
+            "the Available column to modify the document link.");
 
         /* Translators: This is the label of a dialog box that lists all of the
            invoices, bills, and vouchers that have files or URIs linked with

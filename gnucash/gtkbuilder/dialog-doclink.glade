@@ -671,7 +671,7 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="available">
                     <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Available ?</property>
+                    <property name="title" translatable="yes">Available</property>
                     <property name="alignment">0.5</property>
                     <property name="sort_column_id">5</property>
                     <child>
@@ -730,7 +730,9 @@
             <property name="can_focus">False</property>
             <property name="margin_top">3</property>
             <property name="margin_bottom">3</property>
-            <property name="label" translatable="yes">"\t\tDouble click on the entry in the Description column to jump to the Transaction.\n\t\tDouble click on the entry in the Link column to open the Linked Document.\n\t\tDouble click on the entry in the Available? column to modify the document link."</property>
+            <property name="label" translatable="yes">Double click on the entry in the Description column to jump to the Transaction.
+Double click on the entry in the Link column to open the Linked Document.
+Double click on the entry in the Available column to modify the document link.</property>
           </object>
           <packing>
             <property name="expand">False</property>
