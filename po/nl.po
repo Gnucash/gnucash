@@ -1,23 +1,24 @@
-# Translation of gnucash to Dutch.
-# Copyright (C) 2009 Free Software Foundation, Inc.
-# This file is distributed under the same license as the gnucash package.
-# Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002.
-# Hendrik-Jan Heins <hjh@passys.nl>, 2003.
-# Jeroen ten Berge <twinbit@home.nl>, 2004.
-# Benno Schulenberg <benno@vertaalt.nl>, 2007, 2010.
-# Erwin Poeze <erwin.poeze@gmail.com>, 2009.
-# Tom van Braeckel <tomvanbraeckel@gmail.com>, 2010.
-# Mark Haanen <i18n@haanen.net>, 2009-2017.
+# Dutch translations for GnuCash package
+# Nederlandse vertalingen voor het pakket GnuCash.
+# Copyright (C) 2020 by the GnuCash developers and the translators listed below.
+# This file is distributed under the same license as the GnuCash package.
 # Geert Janssens <geert@kobaltwit.be>, 2020.
+# Mark Haanen <i18n@haanen.net>, 2009-2017.
+# Tom van Braeckel <tomvanbraeckel@gmail.com>, 2010.
+# Erwin Poeze <erwin.poeze@gmail.com>, 2009.
+# Benno Schulenberg <benno@vertaalt.nl>, 2007, 2010.
+# Jeroen ten Berge <twinbit@home.nl>, 2004.
+# Hendrik-Jan Heins <hjh@passys.nl>, 2003.
+# Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 2.7.8\n"
+"Project-Id-Version: GnuCash 4.1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-08-27 21:50+0200\n"
-"PO-Revision-Date: 2020-09-09 22:18+0200\n"
+"PO-Revision-Date: 2020-09-10 10:42+0200\n"
 "Last-Translator: Geert Janssens <geert@kobaltwit.be>\n"
-"Language-Team: Dutch <vertaling@vrijschrift.org>\n"
+"Language-Team: GnuCash Dutch community <gnucash-nl@gnucash.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9025,18 +9026,16 @@ msgstr ""
 "Huidige vertaling door\n"
 "• Geert Janssens <geert@kobaltwit.be>, 2020\n"
 "\n"
-"met bijdrages afkomstig van\n"
+"voortbouwend op eerdere vertalingen en bijdragen door\n"
+"• Mark Haanen <i18n@haanen.net>, 2009-2020\n"
+"• Peter Mosmans <peter.mosmans@go-forward.net>, 2013\n"
 "• Tom van Braeckel <tomvanbraeckel@gmail.com>, 2010\n"
 "• Benno Schulenberg <benno@vertaalt.nl>, 2010\n"
-"• Peter Mosmans <peter.mosmans@go-forward.net>, 2013\n"
-"\n"
-"voortbouwend op eerdere vertalingen door\n"
-"• Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002\n"
-"• Hendrik-Jan Heins <hjh@passys.nl>, 2003\n"
-"• Jeroen ten Berge <twinbit@home.nl>, 2004\n"
-"• Benno Schulenberg <benno@vertaalt.nl>, 2007\n"
 "• Erwin Poeze <erwin.poeze@gmail.com>, 2009\n"
-"• Mark Haanen <i18n@haanen.net>, 2009-2020"
+"• Benno Schulenberg <benno@vertaalt.nl>, 2007\n"
+"• Jeroen ten Berge <twinbit@home.nl>, 2004\n"
+"• Hendrik-Jan Heins <hjh@passys.nl>, 2003\n"
+"• Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4531
 msgid "Visit the GnuCash website."
