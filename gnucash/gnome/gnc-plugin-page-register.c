@@ -5004,6 +5004,23 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction* action,
     LEAVE (" ");
 }
 
+static gboolean scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+    if (event->length == 0) return FALSE;
+
+    switch (event->keyval)
+    {
+    case GDK_KEY_Escape:
+        abort_scrub = gnc_verify_dialog
+            (GTK_WINDOW (widget), FALSE,
+             _("'Check & Repair' is currently running, do you want to abort it?"));
+        return TRUE;
+    default:
+        break;
+    }
+    return FALSE;
+}
+
 static void
 gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
                                         GncPluginPageRegister* plugin_page)
@@ -5013,6 +5030,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
     GncWindow* window;
     GList* node, *splits;
     gint split_count = 0, curr_split_no = 0;
+    guint scrub_kp_handler_ID;
     const char* message = _ ("Checking splits in current register: %u of %u");
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
@@ -5029,7 +5047,10 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
 
     gnc_suspend_gui_refresh();
     is_scrubbing = TRUE;
+    abort_scrub = FALSE;
     window = GNC_WINDOW (GNC_PLUGIN_PAGE (plugin_page)->window);
+    scrub_kp_handler_ID = g_signal_connect (G_OBJECT (window), "key-press-event",
+                                            G_CALLBACK (scrub_kp_handler), NULL);
     gnc_window_set_progressbar_window (window);
 
     splits = qof_query_run (query);
@@ -5043,19 +5064,20 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
         PINFO ("Start processing split %d of %d",
                curr_split_no + 1, split_count);
 
+        scrub_split (split);
+
+        PINFO ("Finished processing split %d of %d",
+               curr_split_no + 1, split_count);
+
         if (curr_split_no % 10 == 0)
         {
             char* progress_msg = g_strdup_printf (message, curr_split_no, split_count);
             gnc_window_show_progress (progress_msg, (100 * curr_split_no) / split_count);
             g_free (progress_msg);
         }
-
-        scrub_split (split);
-
-        PINFO ("Finished processing split %d of %d",
-               curr_split_no + 1, split_count);
     }
 
+    g_signal_handler_disconnect (G_OBJECT (window), scrub_kp_handler_ID);
     gnc_window_show_progress (NULL, -1.0);
     gnc_resume_gui_refresh();
     is_scrubbing = FALSE;
