@@ -573,7 +573,8 @@
                (work-done 0)
                (odd-row? #t))
 
-      (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
+      (unless (zero? work-to-do)
+        (gnc:report-percent-done (* 100 (/ work-done work-to-do))))
 
       (cond
 
@@ -582,6 +583,7 @@
        ;; add debit/credit totals to the table
        ;; ----------------------------------
        ((null? splits)
+        (gnc:report-percent-done 100)
 
         (when reg-report-show-totals?
           (add-subtotal-row (G_ "Total Debits") leader table used-columns
