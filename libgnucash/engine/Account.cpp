@@ -5586,21 +5586,33 @@ convert_imap_account_bayes_to_flat (Account *acc)
  * Checks for import map data and converts them when found.
  */
 static bool
-imap_convert_bayes_to_flat (QofBook * book)
+imap_convert_bayes_to_flat (QofBook * book,
+                            QofPercentageFunc *show_percentage)
 {
     auto root = gnc_book_get_root_account (book);
     auto accts = gnc_account_get_descendants_sorted (root);
     bool ret = false;
+    auto work_to_do = g_list_length (accts);
+    auto work_done = 0;
+    QofPercentageFunc *percentagefunc;
     for (auto ptr = accts; ptr; ptr = g_list_next (ptr))
     {
         Account *acc = static_cast <Account*> (ptr->data);
+        auto msg = g_strdup_printf ("Converting import map for account %s",
+                                    gnc_account_get_full_name (acc));
+        if (show_percentage)
+            (*show_percentage) (msg, (100 * work_done) / work_to_do);
+        g_free (msg);
         if (convert_imap_account_bayes_to_flat (acc))
         {
             ret = true;
             gnc_features_set_used (book, GNC_FEATURE_GUID_FLAT_BAYESIAN);
         }
+        work_done++;
     }
     g_list_free (accts);
+    if (show_percentage)
+        (*show_percentage) (nullptr, -1);
     return ret;
 }
 
@@ -5615,13 +5627,14 @@ imap_convert_bayes_to_flat (QofBook * book)
  * they are converted, and the feature flag set. If there are
  * no previous data, nothing is done.
  */
-static void
-check_import_map_data (QofBook *book)
+void
+gnc_account_check_import_map_data (QofBook *book,
+                                   QofPercentageFunc *percentage_func)
 {
     if (gnc_features_check_used (book, GNC_FEATURE_GUID_FLAT_BAYESIAN))
         return;
     /* This function will set GNC_FEATURE_GUID_FLAT_BAYESIAN if necessary.*/
-    imap_convert_bayes_to_flat (book);
+    imap_convert_bayes_to_flat (book, percentage_func);
 }
 
 static constexpr double threshold = .90 * probability_factor; /* 90% */
@@ -5632,7 +5645,7 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
 {
     if (!imap)
         return nullptr;
-    check_import_map_data (imap->book);
+    gnc_account_check_import_map_data (imap->book, nullptr);
     auto first_pass = get_first_pass_probabilities(imap, tokens);
     if (!first_pass.size())
         return nullptr;
@@ -5705,7 +5718,7 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
         LEAVE(" ");
         return;
     }
-    check_import_map_data (imap->book);
+    gnc_account_check_import_map_data (imap->book, nullptr);
 
     g_return_if_fail (acc != NULL);
     account_fullname = gnc_account_get_full_name(acc);
@@ -5803,7 +5816,7 @@ build_bayes (const char *suffix, KvpValue * value, GncImapInfo & imapInfo)
 GList *
 gnc_account_imap_get_info_bayes (Account *acc)
 {
-    check_import_map_data (gnc_account_get_book (acc));
+    gnc_account_check_import_map_data (gnc_account_get_book (acc), nullptr);
     /* A dummy object which is used to hold the specified account, and the list
      * of data about which we care. */
     GncImapInfo imapInfo {acc, nullptr};

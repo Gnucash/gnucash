@@ -256,6 +256,9 @@ void gnc_book_set_root_account(QofBook *book, Account *root);
 
 /** @} */
 
+/* check import mapping for flattening */
+void gnc_account_check_import_map_data (QofBook *book, QofPercentageFunc *percentage_func);
+
 /** Composes a translatable error message showing which account
  *  names clash with the current account separator. Can be called
  *  after gnc_account_list_name_violations to have a consistent
