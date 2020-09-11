@@ -4075,7 +4075,7 @@ xaccAccountSetTaxUSCopyNumber (Account *acc, gint64 copy_number)
 const char *gnc_account_get_debit_string (GNCAccountType acct_type)
 {
     if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS))
-        return dflt_acct_debit_str;
+        return _(dflt_acct_debit_str);
 
     auto result = gnc_acct_debit_strs.find(acct_type);
     if (result != gnc_acct_debit_strs.end())
@@ -4087,7 +4087,7 @@ const char *gnc_account_get_debit_string (GNCAccountType acct_type)
 const char *gnc_account_get_credit_string (GNCAccountType acct_type)
 {
     if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS))
-        return dflt_acct_credit_str;
+        return _(dflt_acct_credit_str);
 
     auto result = gnc_acct_credit_strs.find(acct_type);
     if (result != gnc_acct_credit_strs.end())
