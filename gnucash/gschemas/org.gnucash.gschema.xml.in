@@ -20,10 +20,10 @@
       <summary>Character to use as separator between account names</summary>
       <description>This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon", "slash", "backslash", "dash" and "period".</description>
     </key>
-    <key name="assoc-head" type="s">
+    <key name="doclink-head" type="s">
       <default>''</default>
-      <summary>Transaction Associations head path</summary>
-      <description>This is the path head for the Transaction file Associations</description>
+      <summary>Transaction Linked Files head path</summary>
+      <description>This is the path head for the Transaction Linked Files with relative paths</description>
     </key>
     <key name="file-compression" type="b">
       <default>true</default>
@@ -297,8 +297,8 @@
     </key>
     <key name="double-line-mode" type="b">
       <default>false</default>
-      <summary>Show a second line with "Action", "Notes", and "File Association" for each transaction.</summary>
-      <description>Show a second line with "Action", "Notes", and "File Association" for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the "View-&gt;Double Line" menu item.</description>
+      <summary>Show a second line with "Action", "Notes", and "Linked Documents" for each transaction.</summary>
+      <description>Show a second line with "Action", "Notes", and "Linked Documents" for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the "View-&gt;Double Line" menu item.</description>
     </key>
     <key name="show-leaf-account-names" type="b">
       <default>false</default>

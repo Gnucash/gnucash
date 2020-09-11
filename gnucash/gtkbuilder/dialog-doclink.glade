@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <object class="GtkDialog" id="association_dialog">
+  <object class="GtkDialog" id="linked_doc_dialog">
     <property name="can_focus">False</property>
     <property name="default_width">600</property>
     <property name="type_hint">dialog</property>
@@ -80,8 +80,8 @@
                 <property name="margin_top">6</property>
                 <property name="margin_bottom">6</property>
                 <child>
-                  <object class="GtkRadioButton" id="file_assoc">
-                    <property name="label" translatable="yes">_File Association</property>
+                  <object class="GtkRadioButton" id="linked_file">
+                    <property name="label" translatable="yes">Linked _File</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -96,15 +96,15 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="loc_assoc">
-                    <property name="label" translatable="yes">_Location Association</property>
+                  <object class="GtkRadioButton" id="linked_loc">
+                    <property name="label" translatable="yes">Linked _Location</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">file_assoc</property>
+                    <property name="group">linked_file</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -267,7 +267,7 @@
       <action-widget response="-5">ok_button</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkDialog" id="association_path_head_changed_dialog">
+  <object class="GtkDialog" id="link_path_head_changed_dialog">
     <property name="can_focus">False</property>
     <property name="default_width">450</property>
     <property name="type_hint">dialog</property>
@@ -314,7 +314,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Change Association path head</property>
+                <property name="label" translatable="yes">Change Linked Document path head</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -350,7 +350,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Existing relative file path associations will be converted to absolute ones by combining them with the existing path head unless box unticked.</property>
+                    <property name="label" translatable="yes">Existing relative file path links will be converted to absolute ones by combining them with the existing path head unless box unticked.</property>
                     <property name="wrap">True</property>
                   </object>
                   <packing>
@@ -405,7 +405,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Existing absolute file path associations will be converted to relative ones by comparing them to the new path head unless box unticked.</property>
+                    <property name="label" translatable="yes">Existing absolute file path links will be converted to relative ones by comparing them to the new path head unless box unticked.</property>
                     <property name="wrap">True</property>
                   </object>
                   <packing>
@@ -443,7 +443,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="margin_top">12</property>
-                <property name="label" translatable="yes">Note: Only Associations that are not read-only will be changed.</property>
+                <property name="label" translatable="yes">Note: Only Document Links that are not read-only will be changed.</property>
                 <property name="wrap">True</property>
               </object>
               <packing>
@@ -489,7 +489,7 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkWindow" id="association_window">
+  <object class="GtkWindow" id="linked_doc_window">
     <property name="can_focus">False</property>
     <child type="titlebar">
       <placeholder/>
@@ -502,7 +502,7 @@
           <object class="GtkLabel" id="title_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">All Associations</property>
+            <property name="label" translatable="yes">All Linked Documents</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -520,7 +520,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="reload_and_check_button">
-                <property name="label" translatable="yes">Reload and Locate _Associations</property>
+                <property name="label" translatable="yes">Reload and Locate Linked Documents</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -548,7 +548,7 @@
             </child>
             <child>
               <object class="GtkButton" id="check_button">
-                <property name="label" translatable="yes">_Locate Associations</property>
+                <property name="label" translatable="yes">_Locate Linked Documentss</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -652,9 +652,9 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkTreeViewColumn" id="assoc">
+                  <object class="GtkTreeViewColumn" id="doclink">
                     <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Association</property>
+                    <property name="title" translatable="yes">Linked Document</property>
                     <property name="alignment">0.5</property>
                     <property name="reorderable">True</property>
                     <property name="sort_column_id">4</property>
@@ -671,7 +671,7 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="available">
                     <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Available ?</property>
+                    <property name="title" translatable="yes">Available</property>
                     <property name="alignment">0.5</property>
                     <property name="sort_column_id">5</property>
                     <child>
@@ -730,8 +730,9 @@
             <property name="can_focus">False</property>
             <property name="margin_top">3</property>
             <property name="margin_bottom">3</property>
-            <property name="label" translatable="yes">   To jump to the Transaction, double click on the entry in the Description
-column, Association column to open the Association or Available to update</property>
+            <property name="label" translatable="yes">Double click on the entry in the Description column to jump to the Transaction.
+Double click on the entry in the Link column to open the Linked Document.
+Double click on the entry in the Available column to modify the document link.</property>
           </object>
           <packing>
             <property name="expand">False</property>

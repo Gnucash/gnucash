@@ -7,7 +7,7 @@ set (gnc_gnome_noinst_HEADERS
   business-options-gnome.h
   business-urls.h
   business-gnome-utils.h
-  dialog-assoc.h
+  dialog-doclink.h
   dialog-billterms.h
   dialog-choose-owner.h
   dialog-customer.h
@@ -75,7 +75,7 @@ set (gnc_gnome_SOURCES
   business-options-gnome.c
   business-urls.c
   business-gnome-utils.c
-  dialog-assoc.c
+  dialog-doclink.c
   dialog-billterms.c
   dialog-choose-owner.c
   dialog-commodities.c

@@ -40,7 +40,7 @@
 #include "gnc-splash.h"
 #include "gnc-window.h"
 #include "gnc-icons.h"
-#include "dialog-assoc-utils.h"
+#include "dialog-doclink-utils.h"
 #include "dialog-options.h"
 #include "dialog-commodity.h"
 #include "dialog-totd.h"
@@ -437,13 +437,13 @@ gnc_gnome_help (const char *file_name, const char *anchor)
  * toolkit.
  */
 void
-gnc_launch_assoc (GtkWindow *parent, const char *uri)
+gnc_launch_doclink (GtkWindow *parent, const char *uri)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSString *uri_str = [NSString stringWithUTF8String: uri];
     NSURL *url = [[[NSURL alloc] initWithString: uri_str] autorelease];
     const gchar *message =
-        _("GnuCash could not find the associated file.");
+        _("GnuCash could not find the linked document.");
 
     if (url)
     {
@@ -459,7 +459,7 @@ gnc_launch_assoc (GtkWindow *parent, const char *uri)
 }
 #elif defined G_OS_WIN32 /* G_OS_WIN32 */
 void
-gnc_launch_assoc (GtkWindow *parent, const char *uri)
+gnc_launch_doclink (GtkWindow *parent, const char *uri)
 {
     wchar_t *winuri = NULL;
     gchar *filename = NULL;
@@ -468,7 +468,7 @@ gnc_launch_assoc (GtkWindow *parent, const char *uri)
     if (gnc_uri_is_file_uri (uri))
     {
         gchar *uri_scheme = gnc_uri_get_scheme (uri);
-        filename = gnc_assoc_get_unescape_uri (NULL, uri, uri_scheme);
+        filename = gnc_doclink_get_unescape_uri (NULL, uri, uri_scheme);
         winuri = (wchar_t *)g_utf8_to_utf16(filename, -1, NULL, NULL, NULL);
         g_free (uri_scheme);
     }
@@ -483,7 +483,7 @@ gnc_launch_assoc (GtkWindow *parent, const char *uri)
                        NULL, NULL, SW_SHOWNORMAL) <= 32)
         {
             const gchar *message =
-            _("GnuCash could not find the associated file.");
+            _("GnuCash could not find the linked document.");
             gnc_error_dialog (parent, "%s:\n%s", message, filename);
         }
         g_free (wincmd);
@@ -494,7 +494,7 @@ gnc_launch_assoc (GtkWindow *parent, const char *uri)
 
 #else
 void
-gnc_launch_assoc (GtkWindow *parent, const char *uri)
+gnc_launch_doclink (GtkWindow *parent, const char *uri)
 {
     GError *error = NULL;
     gboolean success;
@@ -513,12 +513,12 @@ gnc_launch_assoc (GtkWindow *parent, const char *uri)
     {
         gchar *error_uri = NULL;
         const gchar *message =
-            _("GnuCash could not open the associated file:");
+            _("GnuCash could not open the linked document:");
 
         if (gnc_uri_is_file_uri (uri))
         {
             gchar *uri_scheme = gnc_uri_get_scheme (uri);
-            error_uri = gnc_assoc_get_unescape_uri (NULL, uri, uri_scheme);
+            error_uri = gnc_doclink_get_unescape_uri (NULL, uri, uri_scheme);
             g_free (uri_scheme);
         }
         else

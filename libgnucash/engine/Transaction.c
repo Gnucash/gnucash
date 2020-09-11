@@ -175,7 +175,7 @@ const char *void_reason_str = "void-reason";
 const char *void_time_str = "void-time";
 const char *void_former_notes_str = "void-former-notes";
 const char *trans_is_closing_str = "book_closing";
-const char *assoc_uri_str = "assoc_uri";
+const char *doclink_uri_str = "doclink_uri";
 
 /* KVP entry for date-due value */
 #define TRANS_DATE_DUE_KVP       "trans-date-due"
@@ -769,7 +769,7 @@ xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
         xaccTransSetNum(to_trans, xaccTransGetNum(from_trans));
 
     xaccTransSetNotes(to_trans, xaccTransGetNotes(from_trans));
-    xaccTransSetAssociation(to_trans, xaccTransGetAssociation (from_trans));
+    xaccTransSetDocLink(to_trans, xaccTransGetDocLink (from_trans));
     if(!no_date)
     {
         xaccTransSetDatePostedSecs(to_trans, xaccTransRetDatePosted (from_trans));
@@ -2156,18 +2156,18 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
 }
 
 void
-xaccTransSetAssociation (Transaction *trans, const char *assoc)
+xaccTransSetDocLink (Transaction *trans, const char *doclink)
 {
-    if (!trans || !assoc) return;
+    if (!trans || !doclink) return;
     xaccTransBeginEdit(trans);
-    if (g_strcmp0 (assoc, "") == 0)
-        qof_instance_set_kvp (QOF_INSTANCE (trans), NULL, 1, assoc_uri_str);
+    if (g_strcmp0 (doclink, "") == 0)
+        qof_instance_set_kvp (QOF_INSTANCE (trans), NULL, 1, doclink_uri_str);
     else
     {
         GValue v = G_VALUE_INIT;
         g_value_init (&v, G_TYPE_STRING);
-        g_value_set_string (&v, assoc);
-        qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, assoc_uri_str);
+        g_value_set_string (&v, doclink);
+        qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, doclink_uri_str);
     }
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
@@ -2347,11 +2347,11 @@ xaccTransGetDescription (const Transaction *trans)
 }
 
 const char *
-xaccTransGetAssociation (const Transaction *trans)
+xaccTransGetDocLink (const Transaction *trans)
 {
     GValue v = G_VALUE_INIT;
     if (!trans) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, assoc_uri_str);
+    qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, doclink_uri_str);
     if (G_VALUE_HOLDS_STRING (&v))
          return g_value_get_string (&v);
     return NULL;
@@ -3033,9 +3033,9 @@ gboolean xaccTransRegister (void)
                 (QofSetterFunc)qofTransSetNotes
             },
             {
-                TRANS_ASSOCIATION, QOF_TYPE_STRING,
-                (QofAccessFunc)xaccTransGetAssociation,
-                (QofSetterFunc)xaccTransSetAssociation
+                TRANS_DOCLINK, QOF_TYPE_STRING,
+                (QofAccessFunc)xaccTransGetDocLink,
+                (QofSetterFunc)xaccTransSetDocLink
             },
             {
                 TRANS_IS_CLOSING, QOF_TYPE_BOOLEAN,

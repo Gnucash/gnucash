@@ -1081,7 +1081,7 @@ If 0, all previous days included</property>
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="assoc_check_button">
+              <object class="GtkCheckButton" id="link_check_button">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -1096,11 +1096,11 @@ If 0, all previous days included</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="assoc_label">
+              <object class="GtkLabel" id="link_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Keep Associated Entry</property>
+                <property name="label" translatable="yes">Keep Linked Document Entry</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

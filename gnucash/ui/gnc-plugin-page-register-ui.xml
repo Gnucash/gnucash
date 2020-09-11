@@ -22,11 +22,10 @@
       <menuitem name="UnvoidTransaction" action="UnvoidTransactionAction"/>
       <menuitem name="ReverseTransaction" action="ReverseTransactionAction"/>
       <separator name="TransactionSep3"/>
-      <menuitem name="AssociateTransaction" action="AssociateTransactionAction"/>
-      <menuitem name="AssociateTransactionOpen" action="AssociateTransactionOpenAction"/>
-      <menuitem name="AssociateTransactionRemove" action="AssociateTransactionRemoveAction"/>
+      <menuitem name="LinkTransaction" action="LinkTransactionAction"/>
+      <menuitem name="LinkedTransactionOpen" action="LinkedTransactionOpenAction"/>
       <separator name="TransactionSep4"/>
-      <menuitem name="JumpAssociateInvoice" action="JumpAssociatedInvoiceAction"/>
+      <menuitem name="JumpLinkInvoice" action="JumpLinkedInvoiceAction"/>
     </menu>
 
     <menu name="View" action="ViewAction">
@@ -100,11 +99,10 @@
       <menuitem name="RecordTransaction" action="RecordTransactionAction"/>
       <menuitem name="CancelTransaction" action="CancelTransactionAction"/>
       <separator name="PopupSep3"/>
-      <menuitem name="AssociateTransaction" action="AssociateTransactionAction"/>
-      <menuitem name="AssociateTransactionOpen" action="AssociateTransactionOpenAction"/>
-      <menuitem name="AssociateTransactionRemove" action="AssociateTransactionRemoveAction"/>
+      <menuitem name="LinkTransaction" action="LinkTransactionAction"/>
+      <menuitem name="LinkedTransactionOpen" action="LinkedTransactionOpenAction"/>
       <separator name="PopupSep4"/>
-      <menuitem name="JumpAssociateInvoice" action="JumpAssociatedInvoiceAction"/>
+      <menuitem name="JumpLinkedInvoice" action="JumpLinkedInvoiceAction"/>
       <separator name="PopupSep5"/>
       <menuitem name="BlankTransaction" action="BlankTransactionAction"/>
       <menuitem name="GotoDate" action="GotoDateAction"/>

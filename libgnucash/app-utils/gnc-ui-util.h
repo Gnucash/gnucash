@@ -189,28 +189,28 @@ const char * gnc_get_reconcile_str (char reconciled_flag);
 const char * gnc_get_reconcile_valid_flags (void);
 const char * gnc_get_reconcile_flag_order (void);
 
-#define WASSOC 'w'
-#define FASSOC 'f'
+#define WLINK 'w'
+#define FLINK 'f'
 
-/** Get a string containing association valid flags
+/** Get a string containing documentation link valid flags
  *
- *  @return a string containing the list of associated flags
+ *  @return a string containing the list of valid link_flags
  */
-const char *gnc_get_association_valid_flags (void);
+const char *gnc_get_doclink_valid_flags (void);
 
-/** Get a string containing association flag order
+/** Get a string containing document link flag order
  *
- * @return a string containing the association flag change order
+ * @return a string containing the document link flag change order
  */
-const char *gnc_get_association_flag_order (void);
+const char *gnc_get_doclink_flag_order (void);
 
-/** Get a string representing the association type
+/** Get a string representing the document link type
  *
- * @param  association_flag The flag to convert into a string
+ * @param  link_flag The flag to convert into a string
  *
- * @return the i18n'd association string
+ * @return the i18n'd doclink string
  */
-const char *gnc_get_association_str (char association_flag);
+const char *gnc_get_doclink_str (char link_flag);
 
 typedef enum
 {

@@ -27,14 +27,14 @@
 
 #include "datecell.h"
 #include "dialog-utils.h"
-#include "dialog-assoc-utils.h"
+#include "dialog-doclink-utils.h"
 #include "gnc-engine.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-uri-utils.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-warnings.h"
-#include "assoccell.h"
+#include "doclinkcell.h"
 #include "pricecell.h"
 #include "recncell.h"
 #include "split-register.h"
@@ -331,7 +331,7 @@ static const char*
 gnc_split_register_get_associate_label (VirtualLocation virt_loc,
                                         gpointer user_data)
 {
-    return C_ ("Column header for 'Associate'", "A");
+    return C_ ("Column header for 'Document Link'", "L");
 }
 
 static const char*
@@ -557,11 +557,11 @@ gnc_split_register_get_associate_tooltip (VirtualLocation virt_loc,
         return NULL;
 
     // get the existing uri
-    uri = xaccTransGetAssociation (trans);
+    uri = xaccTransGetDocLink (trans);
 
     // Check for uri is empty or NULL
     if (uri && *uri)
-        return gnc_assoc_get_unescaped_just_uri (uri);
+        return gnc_doclink_get_unescaped_just_uri (uri);
     else
         return NULL;
 }
@@ -804,11 +804,11 @@ gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
 {
     SplitRegister* reg = user_data;
     Transaction* trans;
-    char associate;
+    char link_flag;
     const char* uri;
-    AssocCell *cell;
+    Doclinkcell *cell;
 
-    cell = (AssocCell *)gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
+    cell = (Doclinkcell *)gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
 
     if (!cell)
         return NULL;
@@ -818,7 +818,7 @@ gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
         return NULL;
 
     // get the existing uri
-    uri = xaccTransGetAssociation (trans);
+    uri = xaccTransGetDocLink (trans);
 
     // Check for uri is empty or NULL
     if (uri && *uri)
@@ -826,25 +826,25 @@ gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
         gchar* scheme = gnc_uri_get_scheme (uri);
 
         if (!scheme || g_strcmp0 (scheme, "file") == 0)
-            associate = FASSOC;
+            link_flag = FLINK;
         else
-            associate = WASSOC;
+            link_flag = WLINK;
 
         g_free (scheme);
     }
     else
-        associate = ' ';
+        link_flag = ' ';
 
-    if (gnc_assoc_get_use_glyphs (cell))
-        return gnc_assoc_get_glyph_from_flag (associate);
+    if (gnc_doclink_get_use_glyphs (cell))
+        return gnc_doclink_get_glyph_from_flag (link_flag);
 
     if (translate)
-        return gnc_get_association_str (associate);
+        return gnc_get_doclink_str (link_flag);
     else
     {
         static char s[2];
 
-        s[0] = associate;
+        s[0] = link_flag;
         s[1] = '\0';
         return s;
     }
@@ -864,13 +864,13 @@ static char
 gnc_split_register_get_associate_value (SplitRegister* reg,
                                         VirtualLocation virt_loc)
 {
-    AssocCell *cell;
+    Doclinkcell *cell;
 
-    cell = (AssocCell *)gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
+    cell = (Doclinkcell *)gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
     if (!cell)
         return '\0';
 
-    return gnc_assoc_cell_get_flag (cell);
+    return gnc_doclink_cell_get_flag (cell);
 }
 #endif
 

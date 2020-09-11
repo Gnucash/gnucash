@@ -57,7 +57,7 @@
         <menuitem name="ToolsFinancialCalculator" action="ToolsFinancialCalculatorAction"/>
         <menuitem name="ToolsBookClose" action="ToolsBookCloseAction"/>
         <menuitem name="ToolsImapEditor" action="ToolsImapEditorAction"/>
-        <menuitem name="ToolsTransAssoc" action="ToolsTransAssocAction"/>
+        <menuitem name="ToolsTransLink" action="ToolsTransLinkedDocsAction"/>
       </placeholder>
     </menu>
 

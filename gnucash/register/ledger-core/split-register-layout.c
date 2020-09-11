@@ -700,7 +700,7 @@ gnc_split_register_layout_add_cells (SplitRegister* reg,
     gnc_register_add_cell (layout,
                            ASSOC_CELL,
                            ASSOC_CELL_TYPE_NAME,
-                           C_ ("Column header for 'Associate'", "A"),
+                           C_ ("Column header for 'Document Link'", "L"),
                            CELL_ALIGN_CENTER,
                            FALSE,
                            FALSE);

@@ -1,5 +1,5 @@
 /********************************************************************\
- * assoccell.c -- association checkbox cell                         *
+ * doclinkcell.c -- Document Link checkbox cell                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,7 +22,7 @@
 
 /*
  * FILE:
- * assoccell.c
+ * doclinkcell.c
  *
  * FUNCTION:
  * Implements a mouse-click cell that allows a series
@@ -44,19 +44,19 @@
 
 #include "basiccell.h"
 #include "gnc-engine.h"
-#include "assoccell.h"
+#include "doclinkcell.h"
 #include "gnc-ui-util.h"
 
-static void gnc_assoc_cell_set_value (BasicCell *_cell, const char *value);
+static void gnc_doclink_cell_set_value (BasicCell *_cell, const char *value);
 
 const char *
-gnc_assoc_get_glyph_from_flag (char association_flag)
+gnc_doclink_get_glyph_from_flag (char link_flag)
 {
-    switch (association_flag)
+    switch (link_flag)
     {
-    case WASSOC:
+    case WLINK:
         return GLYPH_LINK;
-    case FASSOC:
+    case FLINK:
         return GLYPH_PAPERCLIP;
     default:
         return " ";
@@ -64,29 +64,29 @@ gnc_assoc_get_glyph_from_flag (char association_flag)
 }
 
 static const char
-gnc_assoc_get_flag_from_glyph (const char *glyph)
+gnc_doclink_get_flag_from_glyph (const char *glyph)
 {
     if (strcmp (glyph, GLYPH_LINK) == 0)
-        return WASSOC;
+        return WLINK;
     else if (strcmp (glyph, GLYPH_PAPERCLIP) == 0)
-        return FASSOC;
+        return FLINK;
     else
         return ' ';
 }
 
 gboolean
-gnc_assoc_get_use_glyphs (AssocCell *cell)
+gnc_doclink_get_use_glyphs (Doclinkcell *cell)
 {
     return cell->use_glyphs;
 }
 
 static const char *
-gnc_assoc_cell_get_string (AssocCell *cell, char flag)
+gnc_doclink_cell_get_string (Doclinkcell *cell, char flag)
 {
     static char str[2] = { 0, 0 };
 
     if (cell->use_glyphs)
-        return gnc_assoc_get_glyph_from_flag (flag);
+        return gnc_doclink_get_glyph_from_flag (flag);
 
     if (cell->get_string != NULL)
         return (cell->get_string)(flag);
@@ -97,12 +97,12 @@ gnc_assoc_cell_get_string (AssocCell *cell, char flag)
 }
 
 static gboolean
-gnc_assoc_cell_enter (BasicCell *_cell,
+gnc_doclink_cell_enter (BasicCell *_cell,
                      int *cursor_position,
                      int *start_selection,
                      int *end_selection)
 {
-    AssocCell *cell = (AssocCell *) _cell;
+    Doclinkcell *cell = (Doclinkcell *) _cell;
     char * this_flag;
 
     if (cell->confirm_cb &&
@@ -133,17 +133,17 @@ gnc_assoc_cell_enter (BasicCell *_cell,
     }
 
     /* And set the display */
-    gnc_assoc_cell_set_flag (cell, cell->flag);
+    gnc_doclink_cell_set_flag (cell, cell->flag);
 
     return FALSE;
 }
 
 static void
-gnc_assoc_cell_init (AssocCell *cell)
+gnc_doclink_cell_init (Doclinkcell *cell)
 {
     gnc_basic_cell_init (&cell->cell);
 
-    gnc_assoc_cell_set_flag (cell, '\0');
+    gnc_doclink_cell_set_flag (cell, '\0');
     cell->confirm_cb = NULL;
     cell->get_string = NULL;
     cell->valid_flags = "";
@@ -151,27 +151,27 @@ gnc_assoc_cell_init (AssocCell *cell)
     cell->read_only = FALSE;
     cell->use_glyphs = FALSE;
 
-    cell->cell.enter_cell = gnc_assoc_cell_enter;
-    cell->cell.set_value = gnc_assoc_cell_set_value;
+    cell->cell.enter_cell = gnc_doclink_cell_enter;
+    cell->cell.set_value = gnc_doclink_cell_set_value;
 }
 
 BasicCell *
-gnc_assoc_cell_new (void)
+gnc_doclink_cell_new (void)
 {
-    AssocCell * cell;
+    Doclinkcell * cell;
 
-    cell = g_new0 (AssocCell, 1);
+    cell = g_new0 (Doclinkcell, 1);
 
-    gnc_assoc_cell_init (cell);
+    gnc_doclink_cell_init (cell);
 
     return &cell->cell;
 }
 
 /* assumes we are given the untranslated form */
 static void
-gnc_assoc_cell_set_value (BasicCell *_cell, const char *value)
+gnc_doclink_cell_set_value (BasicCell *_cell, const char *value)
 {
-    AssocCell *cell = (AssocCell *) _cell;
+    Doclinkcell *cell = (Doclinkcell *) _cell;
     char flag;
 
     if (!value || *value == '\0')
@@ -182,31 +182,31 @@ gnc_assoc_cell_set_value (BasicCell *_cell, const char *value)
     }
 
     if (cell->use_glyphs)
-        flag = gnc_assoc_get_flag_from_glyph (value);
+        flag = gnc_doclink_get_flag_from_glyph (value);
     else
     {
         flag = cell->default_flag;
         if (strchr (cell->valid_flags, *value) != NULL)
             flag = *value;
     }
-    gnc_assoc_cell_set_flag (cell, flag);
+    gnc_doclink_cell_set_flag (cell, flag);
 }
 
 void
-gnc_assoc_cell_set_flag (AssocCell *cell, char flag)
+gnc_doclink_cell_set_flag (Doclinkcell *cell, char flag)
 {
     const char *string;
 
     g_return_if_fail (cell != NULL);
 
     cell->flag = flag;
-    string = gnc_assoc_cell_get_string (cell, flag);
+    string = gnc_doclink_cell_get_string (cell, flag);
 
     gnc_basic_cell_set_value_internal (&cell->cell, string);
 }
 
 char
-gnc_assoc_cell_get_flag (AssocCell *cell)
+gnc_doclink_cell_get_flag (Doclinkcell *cell)
 {
     g_return_val_if_fail (cell != NULL, '\0');
 
@@ -214,8 +214,8 @@ gnc_assoc_cell_get_flag (AssocCell *cell)
 }
 
 void
-gnc_assoc_cell_set_string_getter (AssocCell *cell,
-                                  AssocCellStringGetter get_string)
+gnc_doclink_cell_set_string_getter (Doclinkcell *cell,
+                                  DoclinkcellStringGetter get_string)
 {
     g_return_if_fail (cell != NULL);
 
@@ -223,7 +223,7 @@ gnc_assoc_cell_set_string_getter (AssocCell *cell,
 }
 
 void
-gnc_assoc_cell_set_confirm_cb (AssocCell *cell, AssocCellConfirm confirm_cb,
+gnc_doclink_cell_set_confirm_cb (Doclinkcell *cell, DoclinkcellConfirm confirm_cb,
                                gpointer data)
 {
     g_return_if_fail (cell != NULL);
@@ -233,7 +233,7 @@ gnc_assoc_cell_set_confirm_cb (AssocCell *cell, AssocCellConfirm confirm_cb,
 }
 
 void
-gnc_assoc_cell_set_valid_flags (AssocCell *cell, const char *flags,
+gnc_doclink_cell_set_valid_flags (Doclinkcell *cell, const char *flags,
                                 char default_flag)
 {
     g_return_if_fail (cell != NULL);
@@ -244,7 +244,7 @@ gnc_assoc_cell_set_valid_flags (AssocCell *cell, const char *flags,
 }
 
 void
-gnc_assoc_cell_set_flag_order (AssocCell *cell, const char *flags)
+gnc_doclink_cell_set_flag_order (Doclinkcell *cell, const char *flags)
 {
     g_return_if_fail (cell != NULL);
     g_return_if_fail (flags != NULL);
@@ -253,7 +253,7 @@ gnc_assoc_cell_set_flag_order (AssocCell *cell, const char *flags)
 }
 
 void
-gnc_assoc_cell_set_read_only (AssocCell *cell, gboolean read_only)
+gnc_doclink_cell_set_read_only (Doclinkcell *cell, gboolean read_only)
 {
     g_return_if_fail (cell != NULL);
 
@@ -261,7 +261,7 @@ gnc_assoc_cell_set_read_only (AssocCell *cell, gboolean read_only)
 }
 
 void
-gnc_assoc_cell_set_use_glyphs (AssocCell *cell)
+gnc_doclink_cell_set_use_glyphs (Doclinkcell *cell)
 {
 #ifdef MAC_INTEGRATION
     cell->use_glyphs = FALSE;

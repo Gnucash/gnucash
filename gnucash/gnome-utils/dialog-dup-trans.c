@@ -45,14 +45,14 @@ typedef struct
     GtkWidget * date_edit;
     GtkWidget * num_edit;
     GtkWidget * tnum_edit;
-    GtkWidget * assoc_edit;
+    GtkWidget * link_edit;
 
     GtkWidget *duplicate_title_label; // GtkLabel
     GtkWidget *duplicate_table; // GtkTable
     GtkWidget *date_label; // GtkLabel
     GtkWidget *num_label; // GtkLabel
     GtkWidget *tnum_label; // GtkLabel
-    GtkWidget *assoc_label; //GtkLabel
+    GtkWidget *link_label; //GtkLabel
 } DupTransDialog;
 
 /* Parses the string value and returns true if it is a
@@ -172,10 +172,10 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
         else
             gtk_entry_set_text (GTK_ENTRY (tnum_spin), "");
     }
-    /* Transaction Association */
+    /* Transaction Linked Document */
     {
-        dt_dialog->assoc_label = GTK_WIDGET(gtk_builder_get_object (builder, "assoc_label"));
-        dt_dialog->assoc_edit = GTK_WIDGET(gtk_builder_get_object (builder, "assoc_check_button"));
+        dt_dialog->link_label = GTK_WIDGET(gtk_builder_get_object (builder, "link_label"));
+        dt_dialog->link_edit = GTK_WIDGET(gtk_builder_get_object (builder, "link_check_button"));
     }
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dt_dialog);
@@ -189,7 +189,7 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
                                gboolean show_date, time64 *date_p,
                                GDate *gdate_p, const char *num, char **out_num,
                                const char *tnum, char **out_tnum,
-                               const char *tassoc, char **out_tassoc)
+                               const char *tlink, char **out_tlink)
 {
     DupTransDialog *dt_dialog;
     GtkWidget *entry;
@@ -256,15 +256,15 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
         gtk_entry_set_activates_default(GTK_ENTRY(dt_dialog->tnum_edit), TRUE);
     }
 
-    if (tassoc)
+    if (tlink)
     {
-        gtk_widget_set_visible(dt_dialog->assoc_label, TRUE);
-        gtk_widget_set_visible(dt_dialog->assoc_edit, TRUE);
+        gtk_widget_set_visible(dt_dialog->link_label, TRUE);
+        gtk_widget_set_visible(dt_dialog->link_edit, TRUE);
     }
     else
     {
-        gtk_widget_set_visible(dt_dialog->assoc_label, FALSE);
-        gtk_widget_set_visible(dt_dialog->assoc_edit, FALSE);
+        gtk_widget_set_visible(dt_dialog->link_label, FALSE);
+        gtk_widget_set_visible(dt_dialog->link_edit, FALSE);
     }
 
     result = gtk_dialog_run (GTK_DIALOG (dt_dialog->dialog));
@@ -279,10 +279,10 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
             *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY (dt_dialog->num_edit)));
         if (tnum)
             *out_tnum = g_strdup (gtk_entry_get_text (GTK_ENTRY (dt_dialog->tnum_edit)));
-        if (tassoc)
+        if (tlink)
         {
-            if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(dt_dialog->assoc_edit)))
-                *out_tassoc = g_strdup (tassoc);
+            if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(dt_dialog->link_edit)))
+                *out_tlink = g_strdup (tlink);
         }
         ok = TRUE;
     }
@@ -299,10 +299,10 @@ gboolean
 gnc_dup_trans_dialog (GtkWidget * parent, const char* title, gboolean show_date,
                       time64 *date_p, const char *num, char **out_num,
                       const char *tnum, char **out_tnum,
-                      const char *tassoc, char **out_tassoc)
+                      const char *tlink, char **out_tlink)
 {
     return gnc_dup_trans_dialog_internal(parent, NULL, title, show_date, date_p, NULL,
-                                         num, out_num, tnum, out_tnum, tassoc, out_tassoc);
+                                         num, out_num, tnum, out_tnum, tlink, out_tlink);
 }
 
 gboolean

@@ -1,5 +1,5 @@
 /********************************************************************\
- * dialog-assoc.h -- Associations dialog                            *
+ * dialog-doclink.h -- Document links dialog                        *
  * Copyright (C) 2020 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,8 +20,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef DIALOG_ASSOC_H
-#define DIALOG_ASSOC_H
+#ifndef DIALOG_DOCLINK_H
+#define DIALOG_DOCLINK_H
 
 /** Present the right edit dialog for the uri.
  *
@@ -34,37 +34,38 @@
  *
  *  @return The ammeded uri, can be NULL if deletion required.
  */
-gchar * gnc_assoc_get_uri_dialog (GtkWindow *parent, const gchar *title, const gchar *uri);
+gchar * gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
+                                    const gchar *uri);
 
-/** Open the association uri.
+/** Open the doclink uri.
  *
- *  A check is made for the uri being valid and then gnc_launch_assoc is used
+ *  A check is made for the uri being valid and then gnc_launch_doclink is used
  *
  *  @param parent The GtkWindow for the parent widget
- *  @param uri The association
+ *  @param uri The doclink
  */
-void gnc_assoc_open_uri (GtkWindow *parent, const gchar *uri);
+void gnc_doclink_open_uri (GtkWindow *parent, const gchar *uri);
 
-/** Present a dialog to list all the Invoice associations.
+/** Present a dialog to list all the Invoice linked documents.
  *
- *  A query is run to return all the invoice associations which
+ *  A query is run to return all the invoice linked documents which
  *  are then added to a tree view. From this tree view the invoice
- *  and association can be opened along with a dialog to edit the
- *  association.
+ *  and linked document can be opened along with a dialog to edit the
+ *  document link.
  *
  *  @param parent The GtkWindow for the parent widget
  */
-void gnc_assoc_business_dialog (GtkWindow *parent);
+void gnc_doclink_business_dialog (GtkWindow *parent);
 
-/** Present a dialog to list all the Transaction associations.
+/** Present a dialog to list all the Transaction linked documents.
  *
- *  A query is run to return all the transaction associations which
+ *  A query is run to return all the transaction linked documents which
  *  are then added to a tree view. From this tree view the transaction
- *  and association can be opened along with a dialog to edit the
- *  association.
+ *  and linked document can be opened along with a dialog to edit the
+ *  document link.
  *
  *  @param parent The GtkWindow for the parent widget
  */
-void gnc_assoc_trans_dialog (GtkWindow *parent);
+void gnc_doclink_trans_dialog (GtkWindow *parent);
 
 #endif
