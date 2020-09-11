@@ -61,6 +61,7 @@
   (vector-ref columns-used 14))
 
 (define columns-used-size 15)
+(define reportname (N_ "Register"))
 
 (define (num-columns-required columns-used)
   (do ((i 0 (+ i 1))
@@ -558,6 +559,7 @@
          (total-value (gnc:make-commodity-collector))
          (debit-value (gnc:make-commodity-collector))
          (credit-value (gnc:make-commodity-collector))
+         (work-to-do (length splits))
          (action-for-num? (qof-book-use-split-action-for-num-field
                            (gnc-get-current-book))))
 
@@ -568,7 +570,10 @@
                         multi-rows? action-for-num? ledger-type?))
 
     (let loop ((splits splits)
+               (work-done 0)
                (odd-row? #t))
+
+      (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
 
       (cond
 
@@ -577,6 +582,7 @@
        ;; add debit/credit totals to the table
        ;; ----------------------------------
        ((null? splits)
+
         (when reg-report-show-totals?
           (add-subtotal-row (G_ "Total Debits") leader table used-columns
                             debit-collector "grand-total" #f)
@@ -597,7 +603,7 @@
        ;; This split should be skipped or the report errors out.  See
        ;; bug #639082
        ((null? (xaccSplitGetAccount (car splits)))
-        (loop (cdr splits) (not odd-row?)))
+        (loop (cdr splits) (1+ work-done) (not odd-row?)))
 
        ;; ----------------------------------
        ;; process the splits list
@@ -638,6 +644,7 @@
              (xaccTransGetSplitList (xaccSplitGetParent current))))
 
           (loop (cdr splits)
+                (1+ work-done)
                 (not odd-row?))))))
     table))
 
@@ -654,6 +661,8 @@
          (title (opt-val "General" "Title"))
          (query (gnc-scm2query query-scm)))
 
+    (gnc:report-starting (G_ reportname))
+
     (qof-query-set-book query (gnc-get-current-book))
 
     (let* ((splits (if journal?
@@ -666,6 +675,8 @@
       (gnc:html-document-set-title! document title)
       (gnc:html-document-add-object! document table)
       (qof-query-destroy query))
+
+    (gnc:report-finished)
 
     document))
 
@@ -680,7 +691,7 @@
 
 (gnc:define-report
  'version 1
- 'name (N_ "Register")
+ 'name reportname
  'report-guid register-report-guid
  'options-generator options-generator
  'renderer reg-renderer
