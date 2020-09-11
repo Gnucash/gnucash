@@ -1,7 +1,7 @@
  N_( "The GnuCash online manual has lots of helpful information. \
 You can access the manual under the Help menu.")
 
-/* Translators: You can replace the link, if a transated page exists. */
+/* Translators: You can replace the link, if a translated page exists. */
  N_( "Mailing lists are the preferred form of communication in the \
 GnuCash community. For announcements of new releases, user groups etc. \
 see the table at https://wiki.gnucash.org/wiki/Mailing_Lists")
