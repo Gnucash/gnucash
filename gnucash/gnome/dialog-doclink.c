@@ -892,7 +892,7 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
     GtkWidget         *window;
     GtkBuilder        *builder;
     GtkTreeSelection  *selection;
-    GtkTreeViewColumn *tree_column;
+    GtkTreeViewColumn *expanding_column;
     GtkWidget         *button;
 
     ENTER(" ");
@@ -939,10 +939,9 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
     // display path head text and test if present
     gnc_doclink_set_path_head_label (doclink_dialog->path_head_label, NULL, NULL);
 
-    // set the Linked column to be the one that expands
-    tree_column =
+    // Get the column we want to be the expanding column.
+    expanding_column =
         GTK_TREE_VIEW_COLUMN (gtk_builder_get_object (builder, "doclink"));
-    gtk_tree_view_column_set_expand (tree_column, TRUE);
 
     /* default sort order */
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(gtk_tree_view_get_model(
@@ -1015,6 +1014,7 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
 
     gtk_widget_show_all (GTK_WIDGET(window));
 
+    gtk_tree_view_column_set_expand (expanding_column, TRUE);
     gtk_tree_view_columns_autosize (GTK_TREE_VIEW(doclink_dialog->view));
     LEAVE(" ");
 }
