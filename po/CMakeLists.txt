@@ -7,7 +7,7 @@ set (TP_LINGUAS ca cs da eu fa ja ro rw sk sr sv tr uk zh_CN)
 set (GC_LINGUAS ar as az bg brx de doi el en_GB es es_NI fi fr gu he hi hr hu id it kn ko kok kok@latin ks lt lv mai mni mni@bengali mr nb ne nl pl pt pt_BR ru ta te ur vi zh_TW)
 # * New or unmarked: The release manager should announce them to TP 
 # and when listed there move in the respective group above.
-set (NEW_LINGUAS "")
+set (NEW_LINGUAS "et")
 
 set (ALL_LINGUAS ${TP_LINGUAS} ${GC_LINGUAS} ${NEW_LINGUAS})
 
