@@ -168,6 +168,7 @@
            (format #f "colspan=\"~a\"" (gnc:html-table-cell-colspan cell))))
     (for-each
      (lambda (child)
+       (gnc:pulse-progress-bar)
        (push (gnc:html-object-render child doc)))
      cell-data)
     (push (gnc:html-document-markup-end doc cell-tag))
@@ -475,6 +476,7 @@
           (push (gnc:html-document-markup-end doc rowmarkup))
           (when rowstyle (gnc:html-document-pop-style doc))
 
+          (gnc:pulse-progress-bar)
           (rowloop (cdr rows) (1+ rownum)))))
     (push (gnc:html-document-markup-end doc "tbody"))
 

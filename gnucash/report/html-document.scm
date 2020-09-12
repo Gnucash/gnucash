@@ -110,8 +110,6 @@
         (let* ((retval '())
                (push (lambda (l) (set! retval (cons l retval))))
                (objs (gnc:html-document-objects doc))
-               (work-to-do (length objs))
-               (work-done 0)
                (title (gnc:html-document-title doc)))
           ;; compile the doc style
           (gnc:html-style-table-compile (gnc:html-document-style doc)
@@ -144,8 +142,7 @@
           (for-each
            (lambda (child)
                (push (gnc:html-object-render child doc))
-               (set! work-done (+ 1 work-done))
-               (gnc:report-percent-done (* 100 (/ work-done work-to-do))))
+               (gnc:pulse-progress-bar))
            objs)
 
           (when headers?

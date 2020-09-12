@@ -202,6 +202,7 @@
     (gnc:html-document-push-style doc (gnc:html-text-style p))
     (for-each 
      (lambda (elt)
+       (gnc:pulse-progress-bar)
        (cond ((procedure? elt)
               (push (elt doc)))
              (#t 

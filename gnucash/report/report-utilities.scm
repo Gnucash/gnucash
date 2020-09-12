@@ -623,6 +623,14 @@
       (gnc:warn "report more than 100% finished. " percent))
   (gnc-window-show-progress "" percent))
 
+(define-public gnc:pulse-progress-bar
+  (let ((pulse-idx 0))
+    (lambda ()
+      (set! pulse-idx (1+ pulse-idx))
+      (when (= pulse-idx 2500)
+        (set! pulse-idx 0)
+        (gnc-window-show-progress "" 105)))))
+
 (define (gnc:report-finished)
   (gnc-window-show-progress "" -1))
 
