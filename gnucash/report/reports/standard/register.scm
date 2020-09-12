@@ -573,9 +573,6 @@
                (work-done 0)
                (odd-row? #t))
 
-      (unless (zero? work-to-do)
-        (gnc:report-percent-done (* 100 (/ work-done work-to-do))))
-
       (cond
 
        ;; ----------------------------------
@@ -611,6 +608,9 @@
        ;; process the splits list
        ;; ----------------------------------
        (else
+        (when (zero? (modulo work-done 200))
+          (gnc:report-percent-done (* 100 (/ work-done work-to-do))))
+
         (let* ((current (car splits))
                (current-row-style (if (or multi-rows? odd-row?)
                                       "normal-row"
