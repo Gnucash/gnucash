@@ -2085,7 +2085,7 @@ CsvImpTransAssist::assist_match_page_prepare ()
         }
     }
     /* Show the matcher dialog */
-//    gnc_gen_trans_list_show_all (gnc_csv_importer_gui);
+    gnc_gen_trans_list_show_all (gnc_csv_importer_gui);
 }
 
 

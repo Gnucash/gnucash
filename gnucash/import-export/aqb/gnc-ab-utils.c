@@ -1257,8 +1257,8 @@ gnc_ab_import_context(AB_IMEXPORTER_CONTEXT *context,
         AB_ImExporterContext_AccountInfoForEach(context, txn_accountinfo_cb,
                                                 data);
 
-        /* populate and display the matching window */
-        gnc_gen_trans_list_show_all(data->generic_importer);
+    /* populate and display the matching window */
+    gnc_gen_trans_list_show_all(data->generic_importer);
 
     /* Check balances */
     if (!(awaiting & IGNORE_BALANCES))
