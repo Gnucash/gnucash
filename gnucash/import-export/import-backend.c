@@ -1122,6 +1122,10 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
     /* Look for an online_id in the first split */
     source_split = xaccTransGetSplit(trans, 0);
     g_assert(source_split);
+
+    // No online id, no point in continuing. We'd crash if we tried.
+    if (!gnc_import_get_split_online_id (source_split))
+        return FALSE;
     // Create a hash per account of a hash of all transactions IDs. Then the test below will be fast if
     // we have many transactions to import.
     dest_acct = xaccSplitGetAccount (source_split);
