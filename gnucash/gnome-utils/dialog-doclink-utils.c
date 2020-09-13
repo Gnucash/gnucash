@@ -166,8 +166,11 @@ static gchar *
 doclink_get_path_head_and_set (gboolean *path_head_set)
 {
     gchar *ret_path = NULL;
-    gchar *path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "doclink-head");
+    gchar *path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "assoc-head");
     *path_head_set = FALSE;
+
+    /* Note, assoc-head is the old name for the document link head which has been
+       kept for compatability */
 
     if (path_head && *path_head) // not default entry
     {
@@ -191,11 +194,11 @@ doclink_get_path_head_and_set (gboolean *path_head_set)
         ret_path = g_strdup (folder_with_slash);
         g_free (folder_with_slash);
 
-        if (*path_head_set) // prior to 3.5, doclink-head could be with or without a trailing '/'
+        if (*path_head_set) // prior to 3.5, assoc-head could be with or without a trailing '/'
         {
-            if (!gnc_prefs_set_string (GNC_PREFS_GROUP_GENERAL, "doclink-head", ret_path))
+            if (!gnc_prefs_set_string (GNC_PREFS_GROUP_GENERAL, "assoc-head", ret_path))
                 PINFO ("Failed to save preference at %s, %s with %s",
-                       GNC_PREFS_GROUP_GENERAL, "doclink-head", ret_path);
+                       GNC_PREFS_GROUP_GENERAL, "assoc-head", ret_path);
         }
     }
     g_free (path_head);
