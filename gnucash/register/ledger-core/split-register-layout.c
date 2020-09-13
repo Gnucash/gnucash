@@ -117,7 +117,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, ACTN_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_DOUBLE_LEDGER_NUM_ACTN);
@@ -127,7 +127,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, TNUM_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SINGLE_JOURNAL);
@@ -148,7 +148,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
 
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_DOUBLE_JOURNAL_NUM_ACTN);
@@ -158,7 +158,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, TNUM_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SPLIT);
@@ -204,7 +204,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
 
         copy_cursor_row (layout, curs, curs_last, 0);
 
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 1);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, ACTN_CELL,  1, 3);
         gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 1, 4);
 
@@ -213,7 +213,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
 
         copy_cursor_row (layout, curs, curs_last, 0);
 
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 1);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, TNUM_CELL,  1, 3);
         gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 1, 4);
 
@@ -243,7 +243,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
 
         copy_cursor_row (layout, curs, curs_last, 0);
 
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 1);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, TNUM_CELL,  1, 3);
         gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 1, 4);
 
@@ -301,7 +301,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, ACTN_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_DOUBLE_LEDGER_NUM_ACTN);
@@ -311,7 +311,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, ACTN_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SINGLE_JOURNAL);
@@ -345,7 +345,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
 
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_DOUBLE_JOURNAL_NUM_ACTN);
@@ -354,7 +354,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
 
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SPLIT);
@@ -405,7 +405,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, ACTN_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_DOUBLE_LEDGER_NUM_ACTN);
@@ -415,7 +415,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, TNUM_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SINGLE_JOURNAL);
@@ -436,7 +436,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
 
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_DOUBLE_JOURNAL_NUM_ACTN);
@@ -446,7 +446,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, TNUM_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SPLIT);
@@ -488,7 +488,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, ACTN_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_DOUBLE_LEDGER_NUM_ACTN);
@@ -498,7 +498,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, TNUM_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SINGLE_JOURNAL);
@@ -518,7 +518,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
 
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_DOUBLE_JOURNAL_NUM_ACTN);
@@ -528,7 +528,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
         gnc_table_layout_set_cell (layout, curs, TNUM_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
-        gnc_table_layout_set_cell (layout, curs, ASSOC_CELL,  1, 4);
+        gnc_table_layout_set_cell (layout, curs, DOCLINK_CELL,  1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SPLIT);
@@ -698,8 +698,8 @@ gnc_split_register_layout_add_cells (SplitRegister* reg,
                            FALSE);
 
     gnc_register_add_cell (layout,
-                           ASSOC_CELL,
-                           ASSOC_CELL_TYPE_NAME,
+                           DOCLINK_CELL,
+                           DOCLINK_CELL_TYPE_NAME,
                            C_ ("Column header for 'Document Link'", "L"),
                            CELL_ALIGN_CENTER,
                            FALSE,

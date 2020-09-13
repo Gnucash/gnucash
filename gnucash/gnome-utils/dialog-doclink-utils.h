@@ -23,6 +23,11 @@
 #ifndef DIALOG_DOCLINK_UTILS_H
 #define DIALOG_DOCLINK_UTILS_H
 
+#define GNC_DOC_LINK_PATH_HEAD "assoc-head"
+/* Note, assoc-head is the old name for the document link head which has been
+   kept for compatability */
+
+
 /** Return the current documentation-link file path head uri.
  *
  *  This function will get the current documentation-link path head from prefs.

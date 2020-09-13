@@ -58,7 +58,7 @@ gnc_register_init (void)
 
     gnc_register_add_cell_type (RECN_CELL_TYPE_NAME, gnc_recn_cell_new);
 
-    gnc_register_add_cell_type (ASSOC_CELL_TYPE_NAME, gnc_doclink_cell_new);
+    gnc_register_add_cell_type (DOCLINK_CELL_TYPE_NAME, gnc_doclink_cell_new);
 
     gnc_register_add_cell_type (QUICKFILL_CELL_TYPE_NAME,
                                 gnc_quickfill_cell_new);

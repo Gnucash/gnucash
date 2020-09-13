@@ -274,23 +274,23 @@ void gnc_split_reg_set_sheet_focus (GNCSplitReg *gsr, gboolean has_focus);
 void gnc_split_reg_balancing_entry (GNCSplitReg *gsr, Account *account,
                                     time64 statement_date, gnc_numeric balancing_amount);
 
-/** Default transaction association edit handler
+/** Default transaction document link edit handler
  *
  *  @param gsr A pointer to GNCSplitReg
  **/
-void gsr_default_associate_handler (GNCSplitReg *gsr);
+void gsr_default_doclink_handler (GNCSplitReg *gsr);
 
-/** Default transaction association open handler
+/** Default transaction document link open handler
  *
  *  @param gsr A pointer to GNCSplitReg
  **/
-void gsr_default_associate_open_handler (GNCSplitReg *gsr);
+void gsr_default_doclink_open_handler (GNCSplitReg *gsr);
 
-/** Default transaction association delete handler
+/** Default transaction document link delete handler
  *
  *  @param gsr A pointer to GNCSplitReg
  **/
-void gsr_default_associate_remove_handler (GNCSplitReg *gsr);
+void gsr_default_doclink_remove_handler (GNCSplitReg *gsr);
 
 void gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction );
 void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );

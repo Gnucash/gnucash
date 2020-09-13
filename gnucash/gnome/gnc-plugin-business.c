@@ -114,7 +114,7 @@ static void gnc_plugin_business_cmd_employee_find_expense_voucher (GtkAction *ac
 static void gnc_plugin_business_cmd_employee_process_payment      (GtkAction *action,
         GncMainWindowActionData *data);
 
-static void gnc_plugin_business_cmd_assoc              (GtkAction *action,
+static void gnc_plugin_business_cmd_doclink            (GtkAction *action,
         GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_tax_tables         (GtkAction *action,
         GncMainWindowActionData *data);
@@ -277,7 +277,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     {
         "BusinessLinkOpenAction", NULL, N_("Business Links"), NULL,
         N_("View all Linked Business Documents"),
-        G_CALLBACK (gnc_plugin_business_cmd_assoc)
+        G_CALLBACK (gnc_plugin_business_cmd_doclink)
     },
     {
         "TaxTablesOpenAction", NULL, N_("Sales _Tax Table"), NULL,
@@ -753,8 +753,8 @@ gnc_plugin_business_cmd_employee_process_payment (GtkAction *action,
 }
 
 static void
-gnc_plugin_business_cmd_assoc (GtkAction *action,
-                               GncMainWindowActionData *mw)
+gnc_plugin_business_cmd_doclink (GtkAction *action,
+                                 GncMainWindowActionData *mw)
 {
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));

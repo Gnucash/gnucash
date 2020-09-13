@@ -67,7 +67,7 @@
 #define NUM_CELL_TYPE_NAME       "num-cell"
 #define PRICE_CELL_TYPE_NAME     "price-cell"
 #define RECN_CELL_TYPE_NAME      "recn-cell"
-#define ASSOC_CELL_TYPE_NAME     "assoc-cell"
+#define DOCLINK_CELL_TYPE_NAME   "doclink-cell"
 #define QUICKFILL_CELL_TYPE_NAME "quickfill-cell"
 #define FORMULA_CELL_TYPE_NAME   "formula-cell"
 #define CHECKBOX_CELL_TYPE_NAME	 "checkbox-cell"

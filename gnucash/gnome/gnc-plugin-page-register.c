@@ -4557,7 +4557,7 @@ gnc_plugin_page_register_cmd_linked_transaction (GtkAction *action,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    gsr_default_associate_handler (priv->gsr);
+    gsr_default_doclink_handler (priv->gsr);
     gnc_plugin_page_register_ui_update (NULL, plugin_page);
     LEAVE (" ");
 }
@@ -4573,7 +4573,7 @@ gnc_plugin_page_register_cmd_linked_transaction_open (GtkAction *action,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    gsr_default_associate_open_handler (priv->gsr);
+    gsr_default_doclink_open_handler (priv->gsr);
     LEAVE (" ");
 }
 
@@ -4588,7 +4588,7 @@ gnc_plugin_page_register_cmd_linked_transaction_remove (GtkAction *action,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    gsr_default_associate_remove_handler (priv->gsr);
+    gsr_default_doclink_remove_handler (priv->gsr);
     gnc_plugin_page_register_ui_update (NULL, plugin_page);
     LEAVE (" ");
 

@@ -328,8 +328,8 @@ gnc_split_register_get_action_label (VirtualLocation virt_loc,
 }
 
 static const char*
-gnc_split_register_get_associate_label (VirtualLocation virt_loc,
-                                        gpointer user_data)
+gnc_split_register_get_doclink_label (VirtualLocation virt_loc,
+                                      gpointer user_data)
 {
     return C_ ("Column header for 'Document Link'", "L");
 }
@@ -545,8 +545,8 @@ gnc_split_register_get_recn_tooltip (VirtualLocation virt_loc,
 }
 
 static char*
-gnc_split_register_get_associate_tooltip (VirtualLocation virt_loc,
-                                          gpointer user_data)
+gnc_split_register_get_doclink_tooltip (VirtualLocation virt_loc,
+                                        gpointer user_data)
 {
     SplitRegister* reg = user_data;
     Transaction* trans;
@@ -797,10 +797,10 @@ gnc_split_register_get_border (VirtualLocation virt_loc,
 }
 
 static const char*
-gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
-                                        gboolean translate,
-                                        gboolean* conditionally_changed,
-                                        gpointer user_data)
+gnc_split_register_get_doclink_entry (VirtualLocation virt_loc,
+                                      gboolean translate,
+                                      gboolean* conditionally_changed,
+                                      gpointer user_data)
 {
     SplitRegister* reg = user_data;
     Transaction* trans;
@@ -808,7 +808,7 @@ gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
     const char* uri;
     Doclinkcell *cell;
 
-    cell = (Doclinkcell *)gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
+    cell = (Doclinkcell *)gnc_table_layout_get_cell (reg->table->layout, DOCLINK_CELL);
 
     if (!cell)
         return NULL;
@@ -851,8 +851,8 @@ gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
 }
 
 static char *
-gnc_split_register_get_associate_help (VirtualLocation virt_loc,
-                                       gpointer user_data)
+gnc_split_register_get_doclink_help (VirtualLocation virt_loc,
+                                     gpointer user_data)
 {
     // do not want contents displayed as help so return space
     return g_strdup (" ");
@@ -861,12 +861,12 @@ gnc_split_register_get_associate_help (VirtualLocation virt_loc,
 #if 0
 // this code is not used yet
 static char
-gnc_split_register_get_associate_value (SplitRegister* reg,
-                                        VirtualLocation virt_loc)
+gnc_split_register_get_doclink_value (SplitRegister* reg,
+                                      VirtualLocation virt_loc)
 {
     Doclinkcell *cell;
 
-    cell = (Doclinkcell *)gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
+    cell = (Doclinkcell *)gnc_table_layout_get_cell (reg->table->layout, DOCLINK_CELL);
     if (!cell)
         return '\0';
 
@@ -2015,8 +2015,8 @@ gnc_split_register_get_recn_io_flags (VirtualLocation virt_loc,
 }
 
 static CellIOFlags
-gnc_split_register_get_assoc_io_flags (VirtualLocation virt_loc,
-                                       gpointer user_data)
+gnc_split_register_get_doclink_io_flags (VirtualLocation virt_loc,
+                                         gpointer user_data)
 {
     if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
         return XACC_CELL_ALLOW_READ_ONLY;
@@ -2582,8 +2582,8 @@ gnc_split_register_model_new (void)
                                        TCRED_CELL);
 
     gnc_table_model_set_entry_handler (model,
-                                       gnc_split_register_get_associate_entry,
-                                       ASSOC_CELL);
+                                       gnc_split_register_get_doclink_entry,
+                                       DOCLINK_CELL);
 
     gnc_table_model_set_entry_handler (model,
                                        gnc_split_register_get_type_entry,
@@ -2683,8 +2683,8 @@ gnc_split_register_model_new (void)
                                        TBALN_CELL);
 
     gnc_table_model_set_label_handler (model,
-                                       gnc_split_register_get_associate_label,
-                                       ASSOC_CELL);
+                                       gnc_split_register_get_doclink_label,
+                                       DOCLINK_CELL);
 
     gnc_table_model_set_label_handler (model,
                                        gnc_split_register_get_type_label,
@@ -2715,8 +2715,8 @@ gnc_split_register_model_new (void)
                                          RECN_CELL);
 
     gnc_table_model_set_tooltip_handler (model,
-                                         gnc_split_register_get_associate_tooltip,
-                                         ASSOC_CELL);
+                                         gnc_split_register_get_doclink_tooltip,
+                                         DOCLINK_CELL);
 
 
     // help handlers
@@ -2784,8 +2784,8 @@ gnc_split_register_model_new (void)
                                       FDEBT_CELL);
 
     gnc_table_model_set_help_handler (model,
-                                      gnc_split_register_get_associate_help,
-                                      ASSOC_CELL);
+                                      gnc_split_register_get_doclink_help,
+                                      DOCLINK_CELL);
 
     // io flag handlers
     gnc_table_model_set_io_flags_handler (
@@ -2839,7 +2839,7 @@ gnc_split_register_model_new (void)
         model, gnc_split_register_get_recn_io_flags, RECN_CELL);
 
     gnc_table_model_set_io_flags_handler (
-        model, gnc_split_register_get_assoc_io_flags, ASSOC_CELL);
+        model, gnc_split_register_get_doclink_io_flags, DOCLINK_CELL);
 
     gnc_table_model_set_io_flags_handler (
         model, gnc_split_register_get_recn_io_flags, TYPE_CELL);

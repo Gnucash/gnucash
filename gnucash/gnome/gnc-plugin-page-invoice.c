@@ -602,7 +602,7 @@ gnc_plugin_page_invoice_finalize (GObject *object)
 }
 
 static void
-update_assoc_actions (GncPluginPage *plugin_page, gboolean has_uri)
+update_doclink_actions (GncPluginPage *plugin_page, gboolean has_uri)
 {
     GtkAction *uri_action;
 
@@ -746,7 +746,7 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
     if (gncInvoiceGetDocLink (invoice))
         has_uri = TRUE;
 
-    update_assoc_actions (page, has_uri);
+    update_doclink_actions (page, has_uri);
 }
 
 
@@ -1384,7 +1384,7 @@ gnc_plugin_page_invoice_cmd_link (GtkAction *action,
     }
 
     // update the menu actions
-    update_assoc_actions (GNC_PLUGIN_PAGE(plugin_page), has_uri);
+    update_doclink_actions (GNC_PLUGIN_PAGE(plugin_page), has_uri);
 
     g_free (ret_uri);
     LEAVE(" ");
@@ -1414,7 +1414,7 @@ gnc_plugin_page_invoice_cmd_link_remove (GtkAction *action,
         gtk_widget_hide (GTK_WIDGET(doclink_button));
 
     // update the menu actions
-    update_assoc_actions (GNC_PLUGIN_PAGE(plugin_page), FALSE);
+    update_doclink_actions (GNC_PLUGIN_PAGE(plugin_page), FALSE);
 
     LEAVE(" ");
 }

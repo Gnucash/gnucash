@@ -1367,7 +1367,7 @@ gnc_preferences_dialog_create(GtkWindow *parent)
     gtk_box_pack_start(GTK_BOX (box), currency, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
-                     "pref/" GNC_PREFS_GROUP_GENERAL "/assoc-head"));
+                     "pref/" GNC_PREFS_GROUP_GENERAL "/" GNC_DOC_LINK_PATH_HEAD));
     fcb = gtk_file_chooser_button_new (_("Select a folder"),
                              GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
     gtk_box_pack_start (GTK_BOX (box), fcb, TRUE, TRUE, 0);

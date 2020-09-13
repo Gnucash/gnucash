@@ -70,7 +70,7 @@ gnc_split_register_load_recn_cells (SplitRegister* reg)
 }
 
 static void
-gnc_split_register_load_associate_cells (SplitRegister* reg)
+gnc_split_register_load_doclink_cells (SplitRegister* reg)
 {
     Doclinkcell *cell;
     const char * s;
@@ -78,7 +78,7 @@ gnc_split_register_load_associate_cells (SplitRegister* reg)
     if (!reg) return;
 
     cell = (Doclinkcell *)
-           gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
+           gnc_table_layout_get_cell (reg->table->layout, DOCLINK_CELL);
 
     if (!cell) return;
 
@@ -417,7 +417,7 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
      gnc_account_print_info (default_account, FALSE));
 
     gnc_doclink_cell_set_use_glyphs
-    ((Doclinkcell *) gnc_table_layout_get_cell (table->layout, ASSOC_CELL));
+    ((Doclinkcell *) gnc_table_layout_get_cell (table->layout, DOCLINK_CELL));
 
     /* make sure we have a blank split */
     if (blank_split == NULL)
@@ -519,7 +519,7 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
 
         /* load up account names into the transfer combobox menus */
         gnc_split_register_load_xfer_cells (reg, default_account);
-        gnc_split_register_load_associate_cells (reg);
+        gnc_split_register_load_doclink_cells (reg);
         gnc_split_register_load_recn_cells (reg);
         gnc_split_register_load_type_cells (reg);
     }
