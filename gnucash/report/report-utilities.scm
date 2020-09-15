@@ -633,7 +633,7 @@ query instead.")
   (let ((pulse-idx 0))
     (lambda ()
       (set! pulse-idx (1+ pulse-idx))
-      (when (= pulse-idx 2500)
+      (when (= pulse-idx 1000)
         (set! pulse-idx 0)
         (gnc-window-show-progress "" 105)))))
 

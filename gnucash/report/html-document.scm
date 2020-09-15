@@ -141,8 +141,7 @@
           ;; now render the children
           (for-each
            (lambda (child)
-               (push (gnc:html-object-render child doc))
-               (gnc:pulse-progress-bar))
+               (push (gnc:html-object-render child doc)))
            objs)
 
           (when headers?
@@ -331,6 +330,7 @@
        (gnc:html-document-render-data doc obj)) obj))))
 
 (define (gnc:html-object-render obj doc)
+  (gnc:pulse-progress-bar)
   (if (gnc:html-object? obj)
       ((gnc:html-object-renderer obj) (gnc:html-object-data obj) doc)
       (let ((htmlo (gnc:make-html-object obj)))
