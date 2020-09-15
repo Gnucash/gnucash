@@ -139,5 +139,11 @@
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Nyitóegyenlegek</act:description>
   <act:parent type="new">b8b72887da1adf889f171923d23efbdd</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>equity-type</slot:key>
+      <slot:value type="string">opening-balance</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 </gnc-account-example>

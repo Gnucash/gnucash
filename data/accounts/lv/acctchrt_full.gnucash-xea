@@ -1354,5 +1354,11 @@
   </act:commodity>
   <act:description>Sākuma bilances</act:description>
   <act:parent type="new">68d4074f91295062c0b773b4ae8de6bd</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>equity-type</slot:key>
+      <slot:value type="string">opening-balance</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 </gnc-account-example>
