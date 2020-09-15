@@ -352,14 +352,17 @@ in the Options panel."))
 (define show-void-list
   (list
    (list 'non-void-only
+         (cons 'how (logand CLEARED-ALL (lognot CLEARED-VOIDED)))
          (cons 'text (G_ "Non-void only"))
          (cons 'tip (G_ "Show only non-voided transactions.")))
 
    (list 'void-only
+         (cons 'how CLEARED-VOIDED)
          (cons 'text (G_ "Void only"))
          (cons 'tip (G_ "Show only voided transactions.")))
 
    (list 'both
+         (cons 'how CLEARED-ALL)
          (cons 'text (G_ "Both"))
          (cons 'tip (G_ "Show both (and include void transactions in totals).")))))
 
@@ -389,7 +392,7 @@ in the Options panel."))
    (list 'all
          (cons 'text (G_ "All"))
          (cons 'tip (G_ "Show All Transactions"))
-         (cons 'filter-types #f))
+         (cons 'filter-types CLEARED-ALL))
 
    (list 'unreconciled
          (cons 'text (G_ "Unreconciled"))
@@ -2023,10 +2026,12 @@ warning will be removed in GnuCash 5.0"))
                    'no-guile-regex-support)))
          (transaction-filter-exclude?
           (opt-val pagename-filter optname-transaction-matcher-exclude))
-         (reconcile-status-filter
-          (keylist-get-info reconcile-status-list
-                            (opt-val pagename-filter optname-reconcile-status)
-                            'filter-types))
+         (void-filter (opt-val pagename-filter optname-void-transactions))
+         (reconcile-filter (opt-val pagename-filter optname-reconcile-status))
+         (cleared-filter
+          (logand
+           (keylist-get-info reconcile-status-list reconcile-filter 'filter-types)
+           (keylist-get-info show-void-list void-filter 'how)))
          (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
          (primary-key (opt-val pagename-sorting optname-prime-sortkey))
          (primary-order (opt-val pagename-sorting optname-prime-sortorder))
@@ -2034,7 +2039,6 @@ warning will be removed in GnuCash 5.0"))
          (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
          (secondary-order (opt-val pagename-sorting optname-sec-sortorder))
          (secondary-date-subtotal (opt-val pagename-sorting optname-sec-date-subtotal))
-         (void-status (opt-val pagename-filter optname-void-transactions))
          (closing-match (keylist-get-info
                          show-closing-list
                          (opt-val pagename-filter optname-closing-transactions)
@@ -2148,16 +2152,9 @@ warning will be removed in GnuCash 5.0"))
      (else
       (qof-query-set-book query (gnc-get-current-book))
       (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+      (xaccQueryAddClearedMatch query cleared-filter QOF-QUERY-AND)
       (unless split->date
         (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND))
-      (case void-status
-        ((non-void-only)
-         (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
-        ((void-only)
-         (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
-        (else #f))
-      (when reconcile-status-filter
-        (xaccQueryAddClearedMatch query reconcile-status-filter QOF-QUERY-AND))
       (when (boolean? closing-match)
         (xaccQueryAddClosingTransMatch query closing-match QOF-QUERY-AND))
       (unless custom-sort?

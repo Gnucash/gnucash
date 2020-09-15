@@ -573,6 +573,9 @@
 
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)
+  (issue-deprecation-warning
+   "gnc:query-set-match-non-voids-only! is deprecated. add query for\
+(logand CLEARED-ALL (lognot CLEARED-VOIDED)) instead.")
   (let ((temp-query (qof-query-create-for-splits)))
     (qof-query-set-book temp-query book)
 
@@ -589,6 +592,9 @@
 ;; utility function - ensure that a query matches only voids.  Destructive
 
 (define (gnc:query-set-match-voids-only! query book)
+  (issue-deprecation-warning
+   "gnc:query-set-match-non-voids-only! is deprecated. add CLEARED-VOIDED \
+query instead.")
   (let ((temp-query (qof-query-create-for-splits)))
     (qof-query-set-book temp-query book)
 
