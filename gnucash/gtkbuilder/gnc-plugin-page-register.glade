@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="days_adjustment">
     <property name="upper">1100</property>
     <property name="step_increment">1</property>
@@ -15,9 +15,6 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_plugin_page_register_filter_response_cb" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox19">
         <property name="visible">True</property>
@@ -558,6 +555,9 @@ If 0, all previous days included</property>
       <action-widget response="-6">cancelbutton4</action-widget>
       <action-widget response="-5">okbutton4</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkAdjustment" id="num_adjustment">
     <property name="upper">1000000000</property>
@@ -572,9 +572,6 @@ If 0, all previous days included</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_plugin_page_register_sort_response_cb" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox17">
         <property name="visible">True</property>
@@ -905,6 +902,9 @@ If 0, all previous days included</property>
       <action-widget response="-6">cancelbutton2</action-widget>
       <action-widget response="-5">okbutton2</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkAdjustment" id="tnum_adjustment">
     <property name="upper">1000000000</property>
@@ -918,9 +918,6 @@ If 0, all previous days included</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox15">
         <property name="visible">True</property>
@@ -972,25 +969,11 @@ If 0, all previous days included</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="duplicate_title_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes">&lt;b&gt;New Transaction Information&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkGrid" id="duplicate_table">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">6</property>
-            <property name="margin_right">6</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
             <property name="border_width">6</property>
             <property name="row_spacing">3</property>
             <property name="column_spacing">6</property>
@@ -1114,12 +1097,29 @@ If 0, all previous days included</property>
             <property name="position">2</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkLabel" id="duplicate_title_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">&lt;b&gt;New Transaction Information&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
       </object>
     </child>
     <action-widgets>
       <action-widget response="-6">button76</action-widget>
       <action-widget response="-5">button77</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="void_transaction_dialog">
     <property name="can_focus">False</property>
@@ -1128,9 +1128,6 @@ If 0, all previous days included</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox16">
         <property name="visible">True</property>
@@ -1228,5 +1225,8 @@ If 0, all previous days included</property>
       <action-widget response="-6">cancelbutton1</action-widget>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

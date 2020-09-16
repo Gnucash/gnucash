@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="totd_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -10,9 +10,6 @@
     <property name="default_height">300</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_totd_dialog_response_cb" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="visible">True</property>
@@ -113,6 +110,8 @@
                       <object class="GtkTextView" id="tip_textview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="margin_start">3</property>
+                        <property name="margin_end">3</property>
                         <property name="border_width">6</property>
                         <property name="editable">False</property>
                         <property name="wrap_mode">word</property>
@@ -172,5 +171,8 @@
       <action-widget response="1">forward-button</action-widget>
       <action-widget response="-7">close-button</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

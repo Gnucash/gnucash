@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="atm_fee_adj">
     <property name="upper">1000</property>
     <property name="step_increment">0.01</property>
@@ -72,7 +72,7 @@
     <property name="lower">1</property>
     <property name="upper">10</property>
     <property name="value">1</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="key_length_adj">
@@ -127,9 +127,6 @@
     <property name="default_height">400</property>
     <property name="type_hint">normal</property>
     <signal name="response" handler="gnc_preferences_response_cb" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -1632,7 +1629,7 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin_start">12</property>
                     <property name="label" translatable="yes">Time to _wait for answer</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general/autosave-interval-minutes</property>
@@ -3554,5 +3551,8 @@ many months before the current month</property>
       <action-widget response="-11">helpbutton2</action-widget>
       <action-widget response="-7">closebutton2</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

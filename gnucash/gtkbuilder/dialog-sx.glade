@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="account_deletion_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -10,9 +10,6 @@
     <property name="default_width">320</property>
     <property name="default_height">240</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox24">
         <property name="visible">True</property>
@@ -99,6 +96,9 @@
     <action-widgets>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkAdjustment" id="advance_days_adj">
     <property name="upper">731</property>
@@ -146,9 +146,6 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Make Scheduled Transaction</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox23">
         <property name="visible">True</property>
@@ -453,7 +450,7 @@
               <object class="GtkFrame" id="ex_cal_frame">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">6</property>
+                <property name="margin_start">6</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="label_xalign">0</property>
@@ -481,6 +478,9 @@
       <action-widget response="-6">cancel_button1</action-widget>
       <action-widget response="-5">ok_button1</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkAdjustment" id="remain_spin_adj">
     <property name="upper">1000</property>
@@ -497,9 +497,6 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Preferences</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkGrid" id="sx_prefs">
         <property name="visible">True</property>
@@ -681,7 +678,7 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes">Set the 'notify' flag on newly created scheduled transactions.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
+            <property name="margin_start">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
             <signal name="toggled" handler="on_sx_check_toggled_cb" swapped="no"/>
@@ -697,7 +694,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
+            <property name="margin_start">12</property>
             <property name="label" translatable="yes">Crea_te in advance</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.sxs.transaction-editor/create-days</property>
@@ -712,7 +709,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
+            <property name="margin_start">12</property>
             <property name="label" translatable="yes">R_emind in advance</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.sxs.transaction-editor/remind-days</property>
@@ -742,14 +739,14 @@
         </child>
       </object>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="scheduled_transaction_editor_dialog">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Edit Scheduled Transaction</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox17">
         <property name="visible">True</property>
@@ -1171,7 +1168,7 @@
                           <object class="GtkGrid" id="table1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin_start">12</property>
                             <property name="row_spacing">3</property>
                             <property name="column_spacing">6</property>
                             <child>
@@ -1227,8 +1224,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="margin_left">5</property>
-                                <property name="margin_right">5</property>
                                 <property name="label" translatable="yes">occurrences</property>
                               </object>
                               <packing>
@@ -1241,7 +1236,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="margin_left">5</property>
+                                <property name="margin_start">6</property>
+                                <property name="margin_end">6</property>
                                 <property name="label" translatable="yes">remaining</property>
                               </object>
                               <packing>
@@ -1425,6 +1421,9 @@
       <action-widget response="0">cancel_button</action-widget>
       <action-widget response="0">ok_button</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="since_last_run_dialog">
     <property name="can_focus">False</property>
@@ -1434,9 +1433,6 @@
     <property name="default_height">480</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox25">
         <property name="visible">True</property>
@@ -1565,5 +1561,8 @@
       <action-widget response="-6">cancelbutton2</action-widget>
       <action-widget response="-5">okbutton2</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

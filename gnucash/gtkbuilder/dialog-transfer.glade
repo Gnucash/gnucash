@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="transfer_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Transfer Funds</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_xfer_dialog_response_cb" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="vbox">
         <property name="visible">True</property>
@@ -305,8 +302,8 @@
                       <object class="GtkLabel" id="left_currency_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">6</property>
-                        <property name="margin_right">3</property>
+                        <property name="margin_start">6</property>
+                        <property name="margin_end">3</property>
                         <property name="margin_top">3</property>
                         <property name="margin_bottom">3</property>
                         <property name="justify">center</property>
@@ -364,8 +361,8 @@
                       <object class="GtkLabel" id="right_currency_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">6</property>
-                        <property name="margin_right">3</property>
+                        <property name="margin_start">6</property>
+                        <property name="margin_end">3</property>
                         <property name="margin_top">3</property>
                         <property name="margin_bottom">3</property>
                         <property name="justify">center</property>
@@ -647,5 +644,8 @@
       <action-widget response="-6">button</action-widget>
       <action-widget response="-5">button1</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>
