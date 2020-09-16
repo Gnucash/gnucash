@@ -1255,8 +1255,8 @@ be excluded from periodic reporting.")
                                              (gnc:html-transaction-doclink-anchor
                                               (xaccSplitGetParent split)
                                               ;; Translators: 'L' is short for Linked Document
-                                              (G_ "L"))
-                                             (G_ "L"))))))))
+                                              (C_ "Column header for 'Document Link'" "L"))
+                                             (C_ "Column header for 'Document Link'" "L"))))))))
 
                (add-if (column-uses? 'price)
                        (vector (G_ "Price")

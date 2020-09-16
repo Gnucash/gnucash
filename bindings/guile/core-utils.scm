@@ -27,6 +27,7 @@
 (define-module (gnucash core-utils)
   #:export (N_
             G_
+            C_
             gnc:version))
 
 ;; Guile 2 needs to find the symbols from the extension at compile time already
@@ -42,6 +43,7 @@
 
 ;; gettext functions
 (define G_ gnc:gettext)
+(define C_ gnc:C-gettext)
 (define-syntax-rule (N_ x) x)
 
 ;; the following will define _ to call gnc:gettext for guile up to

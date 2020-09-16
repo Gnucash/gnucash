@@ -28,6 +28,7 @@
 #include <gnc-filepath-utils.h>
 #include <gnc-locale-utils.h>
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <gnc-version.h>
 #include <libintl.h>
 
@@ -158,6 +159,20 @@ gchar *gnc_locale_name (void);
 
 %rename ("gnc:gettext") gettext;
 extern const char* gettext(const char*);
+%rename ("gnc:C_gettext") wrap_C_;
+%inline %{
+    /* This helper function wraps the C_() macro in to a function.
+       Direct wrapping results in a compiler error on direct string concatenation
+       inside the macro expansion, so I'm making a detour via g_strconcat */
+    const char* wrap_C_(const char* context, const char* msg);
+    const char* wrap_C_(const char* context, const char* msg)
+    {
+        gchar* combo = g_strconcat (context, "\004", msg, NULL);
+        const gchar* translated = g_dpgettext (NULL, combo, strlen (context) + 1);
+        g_free (combo);
+        return translated;
+    }
+%}
 %rename ("gnc-utf8?") wrap_gnc_utf8_validate;
 %inline %{
   /* This helper function wraps gnc_utf8_validate() into a predicate. */
