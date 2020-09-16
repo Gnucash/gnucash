@@ -770,7 +770,7 @@ copying this report to a spreadsheet for use in a mail merge.")
 			       (addr-fax   (gncAddressGetFax   addr))
 			       (addr-email (gncAddressGetEmail addr))
 			       (company-active (if (gncOwnerGetActive owner)
-			         (G_ "Y") (G_ "N")))
+			         (C_ "One-letter indication for 'yes'" "Y") (C_ "One-letter indication for 'no'" "N")))
 			       (opt-fld-list '())
 			      )
 ;;            (gnc:debug "aging-renderer: disp-addr-source=" disp-addr-source

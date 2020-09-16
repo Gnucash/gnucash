@@ -300,7 +300,7 @@ static action_toolbar_labels invoice_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Invoice")},
     {"BusinessNewInvoiceAction", N_("New _Invoice")},
     {"ToolsProcessPaymentAction", N_("_Pay Invoice")},
-    {"BusinessLinkAction", N_("_Manage Document Link")},
+    {"BusinessLinkAction", N_("_Manage Document Link...")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
@@ -321,7 +321,7 @@ static action_toolbar_labels bill_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Bill")},
     {"BusinessNewInvoiceAction", N_("New _Bill")},
     {"ToolsProcessPaymentAction", N_("_Pay Bill")},
-    {"BusinessLinkAction", N_("_Manage Document Link")},
+    {"BusinessLinkAction", N_("_Manage Document Link...")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
@@ -342,7 +342,7 @@ static action_toolbar_labels voucher_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Voucher")},
     {"BusinessNewInvoiceAction", N_("New _Voucher")},
     {"ToolsProcessPaymentAction", N_("_Pay Voucher")},
-    {"BusinessLinkAction", N_("_Manage Document Link")},
+    {"BusinessLinkAction", N_("_Manage Document Link...")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
@@ -363,7 +363,7 @@ static action_toolbar_labels creditnote_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Credit Note")},
     {"BusinessNewInvoiceAction", N_("New _Credit Note")},
     {"ToolsProcessPaymentAction", N_("_Pay Credit Note")},
-    {"BusinessLinkAction", N_("_Manage Document Link")},
+    {"BusinessLinkAction", N_("_Manage Document Link...")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
@@ -442,7 +442,7 @@ static action_toolbar_labels creditnote_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the credit note")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this credit note") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") },
-    {"BusinessLinkAction", N_("_Manage Document Link")},
+    {"BusinessLinkAction", N_("_Manage Document Link...")},
     {"BusinessLinkOpenAction", N_("Open Linked Document")},
     {NULL, NULL},
 };

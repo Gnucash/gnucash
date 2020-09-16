@@ -529,7 +529,7 @@
             </child>
             <child>
               <object class="GtkButton" id="check_button">
-                <property name="label" translatable="yes">_Locate Linked Documentss</property>
+                <property name="label" translatable="yes">_Locate Linked Documents</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
