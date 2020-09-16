@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAssistant" id="stock_split_assistant">
     <property name="can_focus">False</property>
     <property name="halign">start</property>
@@ -12,6 +12,9 @@
     <signal name="cancel" handler="gnc_stock_split_assistant_cancel" swapped="no"/>
     <signal name="close" handler="gnc_stock_split_assistant_finish" swapped="no"/>
     <signal name="prepare" handler="gnc_stock_split_assistant_prepare" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -20,8 +23,8 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="valign">start</property>
-        <property name="margin_left">12</property>
-        <property name="margin_right">12</property>
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
         <property name="label" translatable="yes">This assistant will help you record a stock split or stock merger.
 </property>
         <property name="wrap">True</property>
@@ -36,7 +39,7 @@
       <object class="GtkBox" id="stock_account_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">12</property>
+        <property name="margin_start">12</property>
         <property name="border_width">6</property>
         <property name="orientation">vertical</property>
         <child>
@@ -408,8 +411,8 @@
       <object class="GtkLabel" id="finish_page_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">12</property>
-        <property name="margin_right">12</property>
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
         <property name="label" translatable="yes">If you are finished creating the stock split or merger, press "Apply". You may also press "Back" to review your choices, or "Cancel" to quit without making any changes.</property>
         <property name="wrap">True</property>
       </object>
@@ -421,6 +424,17 @@
     </child>
     <child>
       <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+      </object>
+      <packing>
+        <property name="has_padding">False</property>
+      </packing>
     </child>
   </object>
 </interface>

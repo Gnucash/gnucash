@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAssistant" id="assistant_xml_encoding">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
@@ -9,6 +9,9 @@
     <signal name="cancel" handler="gxi_cancel_cb" swapped="no"/>
     <signal name="close" handler="gxi_finish_cb" swapped="no"/>
     <signal name="prepare" handler="gxi_prepare_cb" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -160,6 +163,17 @@
     <child>
       <placeholder/>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+      </object>
+      <packing>
+        <property name="has_padding">False</property>
+      </packing>
+    </child>
   </object>
   <object class="GtkDialog" id="encodings_dialog">
     <property name="can_focus">False</property>
@@ -169,9 +183,6 @@
     <property name="window_position">center-on-parent</property>
     <property name="default_height">300</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox4">
         <property name="visible">True</property>
@@ -501,5 +512,8 @@
       <action-widget response="-6">cancelbutton1</action-widget>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

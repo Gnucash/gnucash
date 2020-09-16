@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="account_match_store">
     <columns>
       <!-- column-name import_string -->
@@ -36,6 +36,9 @@
     <child type="titlebar">
       <placeholder/>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -45,8 +48,8 @@
         <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
-        <property name="margin_left">12</property>
-        <property name="margin_right">12</property>
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
         <property name="label" translatable="yes">This assistant will help you import a delimited file containing a list of transactions. It supports both token separated files (such as comma separated or semi-colon separated) and fixed width data.
 
 For a successful import three columns have to be available in the import data:
@@ -203,8 +206,8 @@ There are two reserved names which can't be used to save custom settings:
                   <object class="GtkBox" id="vbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">6</property>
-                    <property name="margin_right">6</property>
+                    <property name="margin_start">6</property>
+                    <property name="margin_end">6</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkGrid" id="table4">
@@ -584,8 +587,8 @@ To know which lines belong to the same transaction, the importer will compare th
                       <object class="GtkGrid" id="table3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">6</property>
-                        <property name="margin_right">6</property>
+                        <property name="margin_start">6</property>
+                        <property name="margin_end">6</property>
                         <property name="margin_bottom">3</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">6</property>
@@ -709,8 +712,8 @@ To know which lines belong to the same transaction, the importer will compare th
                           <object class="GtkSeparator" id="hseparator2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">3</property>
-                            <property name="margin_right">3</property>
+                            <property name="margin_start">3</property>
+                            <property name="margin_end">3</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1070,8 +1073,8 @@ For example
           <object class="GtkLabel" id="label8">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">12</property>
-            <property name="margin_right">12</property>
+            <property name="margin_start">12</property>
+            <property name="margin_end">12</property>
             <property name="label" translatable="yes">If you click "Next" Gnucash will perform a number of checks.
 
 If one of those &lt;i&gt;checks fails&lt;/i&gt; you'll be automatically redirected to the preview page to try and correct.
@@ -1161,6 +1164,17 @@ More information can be displayed by using the help button.</property>
     </child>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+      </object>
+      <packing>
+        <property name="has_padding">False</property>
+      </packing>
     </child>
   </object>
 </interface>

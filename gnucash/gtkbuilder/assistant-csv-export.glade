@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAssistant" id="csv_export_assistant">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
@@ -12,6 +12,9 @@
     <signal name="cancel" handler="csv_export_assistant_cancel" swapped="no"/>
     <signal name="close" handler="csv_export_assistant_close" swapped="no"/>
     <signal name="prepare" handler="csv_export_assistant_prepare" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -743,6 +746,17 @@ Cancel to abort.</property>
     </child>
     <child>
       <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+      </object>
+      <packing>
+        <property name="has_padding">False</property>
+      </packing>
     </child>
   </object>
 </interface>

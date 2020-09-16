@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="currency_liststore">
     <columns>
       <!-- column-name item -->
@@ -32,6 +32,12 @@
     <signal name="cancel" handler="gnc_ui_qif_import_cancel_cb" swapped="no"/>
     <signal name="close" handler="gnc_ui_qif_import_close_cb" swapped="no"/>
     <signal name="prepare" handler="gnc_ui_qif_import_prepare_cb" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -40,8 +46,8 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="valign">start</property>
-        <property name="margin_left">12</property>
-        <property name="margin_right">12</property>
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
         <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">GnuCash can import financial data from QIF (Quicken Interchange Format) files written by Quicken/QuickBooks, MS Money, Moneydance, and many other programs. 
 
 The import process has several steps. Your GnuCash accounts will not be changed until you click "Apply" at the end of the process. 
@@ -254,6 +260,8 @@ You will have the opportunity to load as many files as you wish, so don't worry 
               <object class="GtkTextView" id="load_progress_log">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_start">3</property>
+                <property name="margin_end">3</property>
                 <property name="editable">False</property>
                 <property name="wrap_mode">word</property>
                 <property name="cursor_visible">False</property>
@@ -1196,6 +1204,8 @@ If you don't see your exchange listed, or none of the available choices are appr
               <object class="GtkTextView" id="convert_progress_log">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_start">3</property>
+                <property name="margin_end">3</property>
                 <property name="editable">False</property>
                 <property name="wrap_mode">word</property>
                 <property name="cursor_visible">False</property>
@@ -1381,6 +1391,20 @@ Click "Cancel" to abort the QIF import process.</property>
     </child>
     <child>
       <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+      </object>
+      <packing>
+        <property name="has_padding">False</property>
+      </packing>
     </child>
   </object>
 </interface>

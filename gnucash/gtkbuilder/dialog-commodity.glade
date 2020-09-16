@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">1000000000</property>
@@ -37,9 +37,6 @@
     <property name="title">New Security</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox6">
         <property name="visible">True</property>
@@ -387,7 +384,7 @@
                 <property name="tooltip_markup">These are quote sources that were recently added to F::Q. GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
                 <property name="tooltip_text" translatable="yes">These are quote sources that were recently added to F::Q. GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
                 <property name="halign">start</property>
-                <property name="margin_left">12</property>
+                <property name="margin_start">12</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">single_source_button</property>
@@ -408,7 +405,7 @@
                 <property name="tooltip_markup">These are F::Q quote sources that retrieve information from multiple sites on the internet. If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site.</property>
                 <property name="tooltip_text" translatable="yes">These are F::Q quote sources that retrieve information from multiple sites on the internet. If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site.</property>
                 <property name="halign">start</property>
-                <property name="margin_left">12</property>
+                <property name="margin_start">12</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">single_source_button</property>
@@ -429,7 +426,7 @@
                 <property name="tooltip_markup">These are F::Q quote sources that retrieve information from a single site on the internet. If that site is unavailable, you will not be able to retrieve quotes.</property>
                 <property name="tooltip_text" translatable="yes">These are F::Q quote sources that retrieve information from a single site on the internet. If that site is unavailable, you will not be able to retrieve quotes.</property>
                 <property name="halign">start</property>
-                <property name="margin_left">12</property>
+                <property name="margin_start">12</property>
                 <property name="use_underline">True</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -631,6 +628,9 @@
       <action-widget response="-6">cancel_button</action-widget>
       <action-widget response="-5">ok_button</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="security_selector_dialog">
     <property name="can_focus">False</property>
@@ -638,9 +638,6 @@
     <property name="title" translatable="yes">Select security/currency </property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox4">
         <property name="visible">True</property>
@@ -809,5 +806,8 @@
       <action-widget response="-6">ss_cancel_button</action-widget>
       <action-widget response="-5">ss_ok_button</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>
