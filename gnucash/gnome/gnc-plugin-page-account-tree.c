@@ -1939,6 +1939,9 @@ gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountT
 
     g_return_if_fail (account != NULL);
 
+    gnc_account_check_import_map_data (gnc_get_current_book (),
+                                       (QofPercentageFunc*)gnc_window_show_progress);
+
     prepare_scrubbing ();
 
     window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
