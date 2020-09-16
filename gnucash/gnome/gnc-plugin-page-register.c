@@ -1917,7 +1917,7 @@ finish_scrub (GncPluginPage* page)
 {
     if (is_scrubbing)
     {
-        gboolean ret = gnc_verify_dialog (GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page))), FALSE, _("A scrubbing operation is currently pending, do you want to abort it?"));
+        gboolean ret = gnc_verify_dialog (GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page))), FALSE, _("'Check & Repair' is currently running, do you want to abort it?"));
         if (ret)
         {
             abort_scrub = TRUE;

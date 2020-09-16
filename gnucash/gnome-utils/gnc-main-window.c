@@ -1148,7 +1148,7 @@ gnc_main_window_all_finish_pending (void)
     }
     if (gnc_gui_refresh_suspended ())
     {
-        gnc_warning_dialog (NULL, "%s", "An operation is still pending, wait for it to complete before quitting ");
+        gnc_warning_dialog (NULL, "%s", "An operation is still running, wait for it to complete before quitting.");
         return FALSE;
     }
     return TRUE;
