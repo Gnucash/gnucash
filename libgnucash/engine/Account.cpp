@@ -5540,7 +5540,7 @@ convert_entry (KvpEntry entry, Account* root)
 }
 
 static std::vector<FlatKvpEntry>
-get_new_flat_imap (Account * acc)
+get_flat_imap (Account * acc)
 {
     auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
     auto slot = frame->get_slot ({IMAP_FRAME_BAYES});
@@ -5566,17 +5566,15 @@ convert_imap_account_bayes_to_flat (Account *acc)
     auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
     if (!frame->get_keys().size())
         return false;
-    auto new_imap = get_new_flat_imap(acc);
+    auto flat_imap = get_flat_imap(acc);
+    if (!flat_imap.size ())
+        return false;
     xaccAccountBeginEdit(acc);
     frame->set({IMAP_FRAME_BAYES}, nullptr);
-    if (!new_imap.size ())
-    {
-        xaccAccountCommitEdit(acc);
-        return false;
-    }
-    std::for_each(new_imap.begin(), new_imap.end(), [&frame] (FlatKvpEntry const & entry) {
-        frame->set({entry.first.c_str()}, entry.second);
-    });
+    std::for_each(flat_imap.begin(), flat_imap.end(),
+                  [&frame] (FlatKvpEntry const & entry) {
+                      frame->set({entry.first.c_str()}, entry.second);
+                  });
     qof_instance_set_dirty (QOF_INSTANCE (acc));
     xaccAccountCommitEdit(acc);
     return true;
