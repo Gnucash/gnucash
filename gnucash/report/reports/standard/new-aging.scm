@@ -70,7 +70,8 @@ exist but have no suitable transactions."))
 
 (define (setup-query query accounts date)
   (qof-query-set-book query (gnc-get-current-book))
-  (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+  (xaccQueryAddClearedMatch
+   query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
   (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
   (xaccQueryAddDateMatchTT query #f 0 #t date QOF-QUERY-AND)
   (qof-query-set-sort-order query (list SPLIT-TRANS TRANS-DATE-POSTED) '() '())

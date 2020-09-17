@@ -56,7 +56,8 @@
     ;; Register Report properly ignores voided transactions, I'll err
     ;; on the side of safety by excluding them from the query....
     (qof-query-set-book query (gnc-get-current-book))
-    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+    (xaccQueryAddClearedMatch
+     query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
     (qof-query-set-sort-order query
 			      (list SPLIT-TRANS TRANS-DATE-POSTED)
 			      (list QUERY-DEFAULT-SORT)
