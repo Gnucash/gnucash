@@ -1080,9 +1080,7 @@ invoices and amounts.")))))
            document
            (gnc:make-html-text
             (gnc:html-markup-h2 (G_ "No transactions found."))
-            (gnc:html-markup-p
-             (format #f (G_ "No transactions were found associated with the ~a.")
-                     (string-downcase (car (get-info type)))))
+            (gnc:html-markup-p (G_ "No matching transactions found"))
             (gnc:html-make-options-link (gnc:report-id report-obj)))))
 
          (else
