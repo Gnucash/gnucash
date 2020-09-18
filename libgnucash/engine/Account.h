@@ -1504,6 +1504,11 @@ void gnc_account_delete_map_entry (Account *acc, char *head, char *category,
  */
 void gnc_account_delete_all_bayes_maps (Account *acc);
 
+/** Reset the flag that indicates the function imap_convert_bayes_to_flat
+ *  has been run
+ */
+void gnc_account_reset_convert_bayes_to_flat (void);
+
 /** @} */
 
 

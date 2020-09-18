@@ -449,6 +449,10 @@ gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data)
     if (!gnc_main_window_all_finish_pending())
         return;
 
+    /* Reset the flag that indicates the conversion of the bayes KVP
+     * entries has been run */
+    gnc_account_reset_convert_bayes_to_flat ();
+
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
 #ifdef HAVE_DBI_DBI_H
     gnc_ui_file_access_for_open (GTK_WINDOW (data->window));

@@ -55,6 +55,9 @@ static QofLogModule log_module = GNC_MOD_ACCOUNT;
 /* The Canonical Account Separator.  Pre-Initialized. */
 static gchar account_separator[8] = ".";
 static gunichar account_uc_separator = ':';
+
+static bool imap_convert_bayes_to_flat_run = false;
+
 /* Predefined KVP paths */
 static const std::string KEY_ASSOC_INCOME_ACCOUNT("ofx/associated-income-account");
 static const std::string KEY_RECONCILE_INFO("reconcile-info");
@@ -5602,6 +5605,12 @@ imap_convert_bayes_to_flat (QofBook * book)
     return ret;
 }
 
+void
+gnc_account_reset_convert_bayes_to_flat (void)
+{
+    imap_convert_bayes_to_flat_run = false;
+}
+
 /*
  * Here we check to see the state of import map data.
  *
@@ -5616,10 +5625,13 @@ imap_convert_bayes_to_flat (QofBook * book)
 static void
 check_import_map_data (QofBook *book)
 {
-    if (gnc_features_check_used (book, GNC_FEATURE_GUID_FLAT_BAYESIAN))
+    if (gnc_features_check_used (book, GNC_FEATURE_GUID_FLAT_BAYESIAN) ||
+        imap_convert_bayes_to_flat_run)
         return;
+
     /* This function will set GNC_FEATURE_GUID_FLAT_BAYESIAN if necessary.*/
     imap_convert_bayes_to_flat (book);
+    imap_convert_bayes_to_flat_run = true;
 }
 
 static constexpr double threshold = .90 * probability_factor; /* 90% */
