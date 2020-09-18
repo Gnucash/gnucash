@@ -119,7 +119,7 @@ gnc_file_dialog_int (GtkWindow *parent,
                    NULL);
     if (multi)
         gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (file_box), TRUE);
-    
+
     if (ok_icon)
         gnc_gtk_dialog_add_button(file_box, okbutton, ok_icon, GTK_RESPONSE_ACCEPT);
     else

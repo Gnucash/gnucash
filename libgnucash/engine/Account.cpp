@@ -992,7 +992,7 @@ gnc_account_class_init (AccountClass *klass)
                            "added before reconcile.",
                            FALSE,
                            static_cast<GParamFlags>(G_PARAM_READWRITE)));
-    
+
     g_object_class_install_property
     (gobject_class,
      PROP_PLACEHOLDER,
@@ -1865,12 +1865,12 @@ gnc_account_set_balance_dirty (Account *acc)
 void gnc_account_set_defer_bal_computation (Account *acc, gboolean defer)
 {
     AccountPrivate *priv;
-    
+
     g_return_if_fail (GNC_IS_ACCOUNT (acc));
-    
+
     if (qof_instance_get_destroying (acc))
         return;
-    
+
     priv = GET_PRIVATE (acc);
     priv->defer_bal_computation = defer;
 }

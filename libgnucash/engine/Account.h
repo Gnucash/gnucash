@@ -360,7 +360,7 @@ void gnc_account_set_balance_dirty (Account *acc);
  *
  *  @param acc Set the flag on this account. */
 void gnc_account_set_sort_dirty (Account *acc);
-    
+
 /** Set the defer balance flag. If defer is true, the account balance
  * is not automatically computed, which can save a lot of time if
  * multiple operations have to be done on the same account. If
@@ -371,7 +371,7 @@ void gnc_account_set_sort_dirty (Account *acc);
  *
  *  @param defer New value for the flag. */
 void gnc_account_set_defer_bal_computation (Account *acc, gboolean defer);
-    
+
 /** Insert the given split from an account.
  *
  *  @param acc The account to which the split should be added.
@@ -976,7 +976,7 @@ guint32 xaccAccountTypesValid(void);
  *  Asset or Liability type, but not a business account type
  *  (meaning not an Accounts Payable/Accounts Receivable). */
 gboolean xaccAccountIsAssetLiabType(GNCAccountType t);
-    
+
 /** Convenience function to return the fundamental type
  * asset/liability/income/expense/equity given an account type. */
 GNCAccountType xaccAccountTypeGetFundamental (GNCAccountType t);
@@ -1224,7 +1224,7 @@ void xaccAccountSetHidden (Account *acc, gboolean val);
  *  @return Whether or not this account should be "hidden". */
 gboolean xaccAccountIsHidden (const Account *acc);
 /** @} */
-    
+
 /** @name Account Auto Interest flag
  @{
  */
