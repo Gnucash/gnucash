@@ -884,6 +884,9 @@ create_children (GNCDateEdit *gde)
     gtk_container_add (GTK_CONTAINER (gde->date_button), hbox);
     gtk_widget_show (GTK_WIDGET(hbox));
 
+    gtk_widget_set_tooltip_text (gde->date_entry,
+                                 _("This is a date field. Keyboard shortcuts are available: \n- previous day\n+ next day\nshift- previous week\nshift+ next week\n[,alt- previous month \n],alt+ next month\nctrl- previous year\nctrl+next year\nM beginning of month\nH end of month\nY beginning of year\nR end of year\nT today"));
+
     /* Calendar label, only shown if the date editor has a time field */
     gde->cal_label = gtk_label_new (_("Calendar"));
     gnc_label_set_alignment (gde->cal_label, 0.0, 0.5);

@@ -623,6 +623,8 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
     box->item_edit = item_edit;
     box->date_picker = GNC_DATE_PICKER (gnc_date_picker_new ());
     gtk_widget_show_all (GTK_WIDGET(box->date_picker));
+    gtk_widget_set_tooltip_text (GTK_WIDGET(item_edit),
+                                 _("This is a date field. Keyboard shortcuts are available: \n- previous day\n+ next day\nshift- previous week\nshift+ next week\n[,alt- previous month \n],alt+ next month\nctrl- previous year\nctrl+next year\nM beginning of month\nH end of month\nY beginning of year\nR end of year\nT today"));
     g_object_ref_sink(box->date_picker);
 
     /* to mark cell as realized, remove the realize method */
