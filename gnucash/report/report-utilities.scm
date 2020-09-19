@@ -873,23 +873,14 @@ query instead.")
 ;; Input: account-balances
 ;; Output: commodity-collector
 (define (gnc:get-assoc-account-balances-total account-balances)
-  (let ((total (gnc:make-commodity-collector)))
-    (for-each
-     (lambda (account-balance)
-       (total 'merge (cadr account-balance) #f))
-     account-balances)
-    total))
+  (apply gnc:collector+ (map cadr account-balances)))
 
 (define (gnc:multiline-to-html-text str)
   ;; simple function - splits string containing #\newline into
   ;; substrings, and convert to a gnc:make-html-text construct which
   ;; adds gnc:html-markup-br after each substring.
-  (let loop ((list-of-substrings (string-split str #\newline))
-             (result '()))
-    (if (null? list-of-substrings)
-        (apply gnc:make-html-text (if (null? result) '() (reverse (cdr result))))
-        (loop (cdr list-of-substrings)
-              (cons* (gnc:html-markup-br) (car list-of-substrings) result)))))
+  (define (interleave a b) (cons* a (gnc:html-markup-br) b))
+  (apply gnc:make-html-text (fold-right interleave '() (string-split str #\nl))))
 
 ;; ***************************************************************************
 ;; Business Functions
