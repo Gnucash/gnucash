@@ -546,7 +546,7 @@ test_gnc_account_create_and_destroy (void)
     GNCAccountType type;
     gnc_commodity *commo;
     gint commo_scu, mark;
-    gboolean non_std_scu, sort_dirty, bal_dirty, tax_rel, hide, hold;
+    gboolean non_std_scu, sort_dirty, bal_dirty, opening_balance, tax_rel, hide, hold;
     gint64 copy_num;
     gnc_numeric *start_bal, *start_clr_bal, *start_rec_bal;
     gnc_numeric *end_bal, *end_clr_bal, *end_rec_bal;
@@ -571,6 +571,7 @@ test_gnc_account_create_and_destroy (void)
                   "end-balance", &end_bal,
                   "end-cleared-balance", &end_clr_bal,
                   "end-reconciled-balance", &end_rec_bal,
+                  "opening-balance", &opening_balance,
                   "policy", &pol,
                   "acct-mark", &mark,
                   "tax-related", &tax_rel,
@@ -599,6 +600,7 @@ test_gnc_account_create_and_destroy (void)
     g_assert (gnc_numeric_zero_p (*start_bal));
     g_assert (gnc_numeric_zero_p (*start_clr_bal));
     g_assert (gnc_numeric_zero_p (*start_rec_bal));
+    g_assert (!opening_balance);
     g_assert (pol == xaccGetFIFOPolicy ());
     g_assert (!mark);
     g_assert (!tax_rel);

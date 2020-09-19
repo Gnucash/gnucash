@@ -495,6 +495,29 @@ sort_by_placeholder (GtkTreeModel *f_model,
 }
 
 static gint
+sort_by_opening_balance (GtkTreeModel *f_model,
+                         GtkTreeIter *f_iter_a,
+                         GtkTreeIter *f_iter_b,
+                         gpointer user_data)
+{
+    const Account *account_a, *account_b;
+    gboolean flag_a, flag_b;
+
+    /* Find the accounts */
+    sort_cb_setup (f_model, f_iter_a, f_iter_b, &account_a, &account_b);
+
+    /* Get the opening balance flags. */
+    flag_a = xaccAccountGetIsOpeningBalance (account_a);
+    flag_b = xaccAccountGetIsOpeningBalance (account_b);
+
+    if (flag_a > flag_b)
+        return -1;
+    else if (flag_a < flag_b)
+        return 1;
+    return xaccAccountOrder(account_a, account_b);
+}
+
+static gint
 sort_by_xxx_period_value (GtkTreeModel *f_model,
                           GtkTreeIter *f_iter_a,
                           GtkTreeIter *f_iter_b,
@@ -969,6 +992,14 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                     sort_by_placeholder,
                                     gnc_tree_view_account_placeholder_toggled);
+
+    gnc_tree_view_add_toggle_column(view, _("Opening Balance"),
+                    C_("Column header for 'Opening Balance'", "O"),
+                                    "opening-balance",
+                                    GNC_TREE_MODEL_ACCOUNT_COL_OPENING_BALANCE,
+                                    GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                    sort_by_opening_balance,
+                                    NULL);
 
     /* Add function to each column that optionally sets a background color for accounts */
     col_list = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));

@@ -955,7 +955,7 @@ gnc_find_or_create_equity_account (Account *root,
                                    gnc_commodity *currency)
 {
     Account *parent;
-    Account *account;
+    Account *account = NULL;
     gboolean name_exists;
     gboolean base_name_exists;
     const char *base_name;
@@ -965,6 +965,13 @@ gnc_find_or_create_equity_account (Account *root,
     g_return_val_if_fail (equity_type < NUM_EQUITY_TYPES, NULL);
     g_return_val_if_fail (currency != NULL, NULL);
     g_return_val_if_fail (root != NULL, NULL);
+
+    if (equity_type == EQUITY_OPENING_BALANCE)
+    {
+        account = gnc_account_lookup_by_opening_balance (root, currency);
+        if (account)
+            return account;
+    }
 
     base_name = equity_base_name (equity_type);
 
@@ -985,7 +992,11 @@ gnc_find_or_create_equity_account (Account *root,
 
     if (account &&
             gnc_commodity_equiv (currency, xaccAccountGetCommodity (account)))
+    {
+        if (equity_type == EQUITY_OPENING_BALANCE)
+            xaccAccountSetIsOpeningBalance (account, TRUE);
         return account;
+    }
 
     name = g_strconcat (base_name, " - ",
                         gnc_commodity_get_mnemonic (currency), NULL);
@@ -997,7 +1008,11 @@ gnc_find_or_create_equity_account (Account *root,
 
     if (account &&
             gnc_commodity_equiv (currency, xaccAccountGetCommodity (account)))
+    {
+        if (equity_type == EQUITY_OPENING_BALANCE)
+            xaccAccountSetIsOpeningBalance (account, TRUE);
         return account;
+    }
 
     /* Couldn't find one, so create it */
     if (name_exists && base_name_exists)
@@ -1026,6 +1041,9 @@ gnc_find_or_create_equity_account (Account *root,
     xaccAccountSetName (account, name);
     xaccAccountSetType (account, ACCT_TYPE_EQUITY);
     xaccAccountSetCommodity (account, currency);
+
+    if (equity_type == EQUITY_OPENING_BALANCE)
+        xaccAccountSetIsOpeningBalance (account, TRUE);
 
     xaccAccountBeginEdit (parent);
     gnc_account_append_child (parent, account);

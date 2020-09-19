@@ -116,6 +116,7 @@ enum
 
     PROP_LOT_NEXT_ID,                   /* KVP */
     PROP_ONLINE_ACCOUNT,                /* KVP */
+    PROP_IS_OPENING_BALANCE,            /* KVP */
     PROP_OFX_INCOME_ACCOUNT,            /* KVP */
     PROP_AB_ACCOUNT_ID,                 /* KVP */
     PROP_AB_ACCOUNT_UID,                /* KVP */
@@ -467,6 +468,9 @@ gnc_account_get_property (GObject         *object,
     case PROP_AUTO_INTEREST:
         g_value_set_boolean (value, xaccAccountGetAutoInterest (account));
         break;
+    case PROP_IS_OPENING_BALANCE:
+        g_value_set_boolean(value, xaccAccountGetIsOpeningBalance(account));
+        break;
     case PROP_PLACEHOLDER:
         g_value_set_boolean(value, xaccAccountGetPlaceholder(account));
         break;
@@ -594,6 +598,9 @@ gnc_account_set_property (GObject         *object,
         break;
     case PROP_AUTO_INTEREST:
         xaccAccountSetAutoInterest (account, g_value_get_boolean (value));
+        break;
+    case PROP_IS_OPENING_BALANCE:
+        xaccAccountSetIsOpeningBalance (account, g_value_get_boolean (value));
         break;
     case PROP_PLACEHOLDER:
         xaccAccountSetPlaceholder(account, g_value_get_boolean(value));
@@ -937,6 +944,15 @@ gnc_account_class_init (AccountClass *klass)
                            "Tax Related",
                            "Whether the account maps to an entry on an "
                            "income tax document.",
+                           FALSE,
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_IS_OPENING_BALANCE,
+     g_param_spec_boolean ("opening-balance",
+                           "Opening Balance",
+                           "Whether the account holds opening balances",
                            FALSE,
                            static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
@@ -3018,6 +3034,21 @@ gnc_account_lookup_by_code (const Account *parent, const char * code)
     return NULL;
 }
 
+static gpointer
+is_opening_balance_account (Account* account, gpointer data)
+{
+    gnc_commodity* commodity = GNC_COMMODITY(data);
+    if (xaccAccountGetIsOpeningBalance(account) && gnc_commodity_equiv(commodity, xaccAccountGetCommodity(account)))
+        return account;
+    return nullptr;
+}
+
+Account*
+gnc_account_lookup_by_opening_balance (Account* account, gnc_commodity* commodity)
+{
+    return (Account *)gnc_account_foreach_descendant_until (account, is_opening_balance_account, commodity);
+}
+
 /********************************************************************\
  * Fetch an account, given its full name                            *
 \********************************************************************/
@@ -4126,6 +4157,22 @@ void
 xaccAccountSetPlaceholder (Account *acc, gboolean val)
 {
     set_boolean_key(acc, {"placeholder"}, val);
+}
+
+gboolean
+xaccAccountGetIsOpeningBalance (const Account *acc)
+{
+    if (GET_PRIVATE(acc)->type != ACCT_TYPE_EQUITY)
+        return false;
+    return g_strcmp0(get_kvp_string_tag(acc, "equity-type"), "opening-balance") == 0;
+}
+
+void
+xaccAccountSetIsOpeningBalance (Account *acc, gboolean val)
+{
+    if (GET_PRIVATE(acc)->type != ACCT_TYPE_EQUITY)
+        return;
+    set_kvp_string_tag(acc, "equity-type", val ? "opening-balance" : "");
 }
 
 GNCPlaceholderType
@@ -6033,6 +6080,11 @@ gboolean xaccAccountRegister (void)
             ACCOUNT_TAX_RELATED, QOF_TYPE_BOOLEAN,
             (QofAccessFunc) xaccAccountGetTaxRelated,
             (QofSetterFunc) xaccAccountSetTaxRelated
+        },
+        {
+            ACCOUNT_OPENING_BALANCE_, QOF_TYPE_BOOLEAN,
+            (QofAccessFunc) xaccAccountGetIsOpeningBalance,
+            (QofSetterFunc) xaccAccountSetIsOpeningBalance
         },
         {
             ACCOUNT_SCU, QOF_TYPE_INT32,
