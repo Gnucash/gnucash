@@ -10,10 +10,10 @@
 #include "gmock-gobject.h"
 
 
-GType gnc_mock_account_get_type(void);
+GType gnc_mockaccount_get_type(void);
 
-#define GNC_TYPE_MOCK_ACCOUNT   (gnc_mock_account_get_type ())
-#define GNC_IS_MOCK_ACCOUNT(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MOCK_ACCOUNT))
+#define GNC_TYPE_MOCKACCOUNT   (gnc_mockaccount_get_type ())
+#define GNC_IS_MOCKACCOUNT(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MOCKACCOUNT))
 
 
 // mock up for Account
@@ -26,7 +26,7 @@ public:
     MockAccount() {}
     void* operator new(size_t size)
     {
-        return mock_g_object_new (GNC_TYPE_MOCK_ACCOUNT, NULL, size);
+        return mock_g_object_new (GNC_TYPE_MOCKACCOUNT, NULL, size);
     }
 
     // define separate free() function since destructor is protected

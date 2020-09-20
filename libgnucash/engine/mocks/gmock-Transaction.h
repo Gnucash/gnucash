@@ -10,10 +10,10 @@
 #include "gmock-gobject.h"
 
 
-GType gnc_mock_transaction_get_type(void);
+GType gnc_mocktransaction_get_type(void);
 
-#define GNC_TYPE_MOCK_TRANSACTION   (gnc_mock_transaction_get_type ())
-#define GNC_IS_MOCK_TRANSACTION(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MOCK_TRANSACTION))
+#define GNC_TYPE_MOCKTRANSACTION   (gnc_mocktransaction_get_type ())
+#define GNC_IS_MOCKTRANSACTION(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MOCKTRANSACTION))
 
 
 // mock up for Transaction
@@ -36,7 +36,7 @@ public:
     }
     void* operator new(size_t size)
     {
-        return mock_g_object_new (GNC_TYPE_MOCK_TRANSACTION, NULL, size);
+        return mock_g_object_new (GNC_TYPE_MOCKTRANSACTION, NULL, size);
     }
 
     // define separate free() function since destructor is protected

@@ -6,16 +6,16 @@ struct _QofMockBookClass
 };
 typedef struct _QofMockBookClass QofMockBookClass;
 
-G_DEFINE_TYPE(QofMockBook, qof_mock_book, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(QofMockBook, qof_mockbook, QOF_TYPE_INSTANCE);
 
 static void
-qof_mock_book_init (QofMockBook *inst)
+qof_mockbook_init (QofMockBook *inst)
 {
     // function is unused, initialization is done in the QofMockBook's C++ constructor
 }
 
 static void
-qof_mock_book_class_init(QofMockBookClass *klass)
+qof_mockbook_class_init(QofMockBookClass *klass)
 {
     // function is unused, class functions are defined in C++ code
 }
@@ -23,7 +23,7 @@ qof_mock_book_class_init(QofMockBookClass *klass)
 gboolean
 qof_book_use_split_action_for_num_field (const QofBook *book)
 {
-    g_return_val_if_fail(QOF_IS_MOCK_BOOK(book), FALSE);
+    g_return_val_if_fail(QOF_IS_MOCKBOOK(book), FALSE);
     return ((QofMockBook*)book)->use_split_action_for_num_field();
 }
 

@@ -119,7 +119,7 @@ void
 qof_query_set_book (QofQuery *query, QofBook *book)
 {
     ASSERT_TRUE(queryPool.query_used(query));
-    ASSERT_TRUE(QOF_IS_MOCK_BOOK(book));
+    ASSERT_TRUE(QOF_IS_MOCKBOOK(book));
     ((QofFakeQuery*)query)->set_book(book);
 }
 

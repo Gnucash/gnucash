@@ -10,10 +10,10 @@
 #include "gmock-Split.h"
 
 
-GType qof_mock_book_get_type(void);
+GType qof_mockbook_get_type(void);
 
-#define QOF_TYPE_MOCK_BOOK   (qof_mock_book_get_type ())
-#define QOF_IS_MOCK_BOOK(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), QOF_TYPE_MOCK_BOOK))
+#define QOF_TYPE_MOCKBOOK   (qof_mockbook_get_type ())
+#define QOF_IS_MOCKBOOK(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), QOF_TYPE_MOCKBOOK))
 
 
 // mock up for QofBook
@@ -37,7 +37,7 @@ public:
     }
     void* operator new(size_t size)
     {
-        return mock_g_object_new (QOF_TYPE_MOCK_BOOK, NULL, size);
+        return mock_g_object_new (QOF_TYPE_MOCKBOOK, NULL, size);
     }
 
     // define separate free() function since destructor is protected

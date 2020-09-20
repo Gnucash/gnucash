@@ -10,10 +10,10 @@
 #include "gmock-gobject.h"
 
 
-GType gnc_mock_split_get_type(void);
+GType gnc_mocksplit_get_type(void);
 
-#define GNC_TYPE_MOCK_SPLIT   (gnc_mock_split_get_type ())
-#define GNC_IS_MOCK_SPLIT(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MOCK_SPLIT))
+#define GNC_TYPE_MOCKSPLIT   (gnc_mocksplit_get_type ())
+#define GNC_IS_MOCKSPLIT(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MOCKSPLIT))
 
 
 // mock up for Split
@@ -46,7 +46,7 @@ public:
     }
     void* operator new(size_t size)
     {
-        return mock_g_object_new (GNC_TYPE_MOCK_SPLIT, NULL, size);
+        return mock_g_object_new (GNC_TYPE_MOCKSPLIT, NULL, size);
     }
 
     // define separate free() function since destructor is protected

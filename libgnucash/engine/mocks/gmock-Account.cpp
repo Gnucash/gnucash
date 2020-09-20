@@ -9,16 +9,16 @@ struct _MockAccountClass
 };
 typedef struct _MockAccountClass MockAccountClass;
 
-G_DEFINE_TYPE(MockAccount, gnc_mock_account, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(MockAccount, gnc_mockaccount, QOF_TYPE_INSTANCE);
 
 static void
-gnc_mock_account_init (MockAccount *inst)
+gnc_mockaccount_init (MockAccount *inst)
 {
     // function is unused, initialization is done in the MockAccount's C++ constructor
 }
 
 static void
-gnc_mock_account_class_init(MockAccountClass *klass)
+gnc_mockaccount_class_init(MockAccountClass *klass)
 {
     // function is unused, class functions are defined in C++ code
 }
@@ -26,22 +26,22 @@ gnc_mock_account_class_init(MockAccountClass *klass)
 void
 xaccAccountBeginEdit (Account *account)
 {
-    ASSERT_TRUE(GNC_IS_MOCK_ACCOUNT(account));
+    ASSERT_TRUE(GNC_IS_MOCKACCOUNT(account));
     ((MockAccount*)account)->begin_edit();
 }
 
 void
 xaccAccountCommitEdit (Account *account)
 {
-    ASSERT_TRUE(GNC_IS_MOCK_ACCOUNT(account));
+    ASSERT_TRUE(GNC_IS_MOCKACCOUNT(account));
     ((MockAccount*)account)->commit_edit();
 }
 
 QofBook *
 gnc_account_get_book(const Account *account)
 {
-    EXPECT_TRUE(GNC_IS_MOCK_ACCOUNT(account));
-    if (GNC_IS_MOCK_ACCOUNT(account))
+    EXPECT_TRUE(GNC_IS_MOCKACCOUNT(account));
+    if (GNC_IS_MOCKACCOUNT(account))
         return ((MockAccount*)account)->get_book();
     else
         return nullptr;
@@ -51,8 +51,8 @@ gint
 xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
                               void *data)
 {
-    EXPECT_TRUE(GNC_IS_MOCK_ACCOUNT(acc));
-    if (GNC_IS_MOCK_ACCOUNT(acc))
+    EXPECT_TRUE(GNC_IS_MOCKACCOUNT(acc));
+    if (GNC_IS_MOCKACCOUNT(acc))
         return ((MockAccount*)acc)->for_each_transaction(proc, data);
     else
         return 0;
@@ -61,8 +61,8 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
 GncImportMatchMap *
 gnc_account_imap_create_imap (Account *acc)
 {
-    EXPECT_TRUE(GNC_IS_MOCK_ACCOUNT(acc));
-    if (GNC_IS_MOCK_ACCOUNT(acc))
+    EXPECT_TRUE(GNC_IS_MOCKACCOUNT(acc));
+    if (GNC_IS_MOCKACCOUNT(acc))
         return ((MockAccount*)acc)->create_imap();
     else
         return nullptr;
