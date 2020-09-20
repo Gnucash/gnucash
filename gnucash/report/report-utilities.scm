@@ -504,6 +504,7 @@
 ;; b) the result is sign reversed. Returns a commodity-collector.
 (define (gnc:accounts-get-comm-total-profit accounts 
 					    get-balance-fn)
+  (issue-deprecation-warning "gnc:accounts-get-comm-total-profit deprecated.")
   (gnc:accounts-get-balance-helper
    (gnc:filter-accountlist-type (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE) accounts)
    get-balance-fn
@@ -514,6 +515,7 @@
 ;; the result is sign reversed. Returns a commodity-collector.
 (define (gnc:accounts-get-comm-total-income accounts 
 					    get-balance-fn)
+  (issue-deprecation-warning "gnc:accounts-get-comm-total-income deprecated.")
   (gnc:accounts-get-balance-helper
    (gnc:filter-accountlist-type (list ACCT-TYPE-INCOME) accounts)
    get-balance-fn
@@ -524,6 +526,7 @@
 ;; the result is sign reversed. Returns a commodity-collector.
 (define (gnc:accounts-get-comm-total-expense accounts 
                                              get-balance-fn)
+  (issue-deprecation-warning "gnc:accounts-get-comm-total-expense deprecated.")
   (gnc:accounts-get-balance-helper
    (gnc:filter-accountlist-type (list ACCT-TYPE-EXPENSE) accounts)
    get-balance-fn
@@ -696,7 +699,8 @@ query instead.")
              (regexp (get-val 'regexp))
              (closing (get-val 'closing)))
         (qof-query-set-book query (gnc-get-current-book))
-        (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+        (xaccQueryAddClearedMatch
+         query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
         (xaccQueryAddAccountMatch query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
         (xaccQueryAddDateMatchTT
          query
