@@ -52,6 +52,7 @@ protected:
 };
 
 
+// mock up for GncImportMatchMap
 class GncMockImportMatchMap : public GncImportMatchMap
 {
 public:
