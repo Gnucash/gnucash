@@ -60,20 +60,20 @@ public:
     }
 
     MOCK_METHOD0(init, void());
-    MOCK_METHOD0(get_book, QofBook *());
-    MOCK_METHOD0(get_account, Account *());
+    MOCK_CONST_METHOD0(get_book, QofBook *());
+    MOCK_CONST_METHOD0(get_account, Account *());
     MOCK_METHOD1(set_account, void(Account*));
-    MOCK_METHOD0(get_amount, gnc_numeric());
+    MOCK_CONST_METHOD0(get_amount, gnc_numeric());
     MOCK_METHOD1(set_amount, void(gnc_numeric));
-    MOCK_METHOD0(get_value, gnc_numeric());
+    MOCK_CONST_METHOD0(get_value, gnc_numeric());
     MOCK_METHOD1(set_value, void(gnc_numeric));
-    MOCK_METHOD0(get_memo, const char *());
-    MOCK_METHOD0(get_reconcile, char());
+    MOCK_CONST_METHOD0(get_memo, const char *());
+    MOCK_CONST_METHOD0(get_reconcile, char());
     MOCK_METHOD1(set_reconcile, void(char));
     MOCK_METHOD1(set_date_reconciled_secs, void(time64));
-    MOCK_METHOD0(get_action, const char *());
-    MOCK_METHOD0(get_other_split, Split *());
-    MOCK_METHOD0(get_parent, Transaction *());
+    MOCK_CONST_METHOD0(get_action, const char *());
+    MOCK_CONST_METHOD0(get_other_split, Split *());
+    MOCK_CONST_METHOD0(get_parent, Transaction *());
     MOCK_METHOD1(set_parent, void(Transaction*));
 
 protected:

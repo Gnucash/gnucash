@@ -51,7 +51,7 @@ public:
     }
 
     MOCK_METHOD0(malloc_split, Split *());
-    MOCK_METHOD0(use_split_action_for_num_field, gboolean());
+    MOCK_CONST_METHOD0(use_split_action_for_num_field, gboolean());
 
 protected:
     // Protect destructor to avoid MockQofBook objects to be created on stack. MockQofBook

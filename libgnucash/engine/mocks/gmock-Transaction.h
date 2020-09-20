@@ -51,17 +51,17 @@ public:
 
     MOCK_METHOD0(begin_edit, void());
     MOCK_METHOD0(commit_edit, void());
-    MOCK_METHOD1(get_split, Split *(int));
-    MOCK_METHOD1(find_split_by_account, Split *(const Account*));
-    MOCK_METHOD0(get_date, time64());
+    MOCK_CONST_METHOD1(get_split, Split *(int));
+    MOCK_CONST_METHOD1(find_split_by_account, Split *(const Account*));
+    MOCK_CONST_METHOD0(get_date, time64());
     MOCK_METHOD1(set_date_posted_secs_normalized, void(time64));
-    MOCK_METHOD0(get_description, const char *());
+    MOCK_CONST_METHOD0(get_description, const char *());
     MOCK_METHOD1(set_description, void(const char*));
-    MOCK_METHOD0(get_notes, const char *());
+    MOCK_CONST_METHOD0(get_notes, const char *());
     MOCK_METHOD1(set_notes, void(const char*));
-    MOCK_METHOD0(get_imbalance_value, gnc_numeric());
-    MOCK_METHOD0(get_num, const char *());
-    MOCK_METHOD0(is_open, gboolean());
+    MOCK_CONST_METHOD0(get_imbalance_value, gnc_numeric());
+    MOCK_CONST_METHOD0(get_num, const char *());
+    MOCK_CONST_METHOD0(is_open, gboolean());
     MOCK_METHOD0(destroy, void());
 
 protected:
