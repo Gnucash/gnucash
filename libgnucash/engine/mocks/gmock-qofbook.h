@@ -59,4 +59,25 @@ protected:
     ~QofMockBook() {}
 };
 
+
+// type conversion functions
+static inline QofMockBook*
+qof_mockbook (QofBook *book)
+{
+    if (QOF_IS_MOCKBOOK(book))
+        return static_cast<QofMockBook*>(book);
+    ADD_FAILURE() << "Expected 'book' to be of type 'QofMockBook'";
+    return nullptr;
+}
+
+static inline const QofMockBook*
+qof_mockbook (const QofBook *book)
+{
+    if (QOF_IS_MOCKBOOK(book))
+        return static_cast<const QofMockBook*>(book);
+    ADD_FAILURE() << "Expected 'book' to be of type 'QofMockBook'";
+    return nullptr;
+}
+
+
 #endif

@@ -23,7 +23,8 @@ qof_mockbook_class_init(QofMockBookClass *klass)
 gboolean
 qof_book_use_split_action_for_num_field (const QofBook *book)
 {
-    g_return_val_if_fail(QOF_IS_MOCKBOOK(book), FALSE);
-    return ((QofMockBook*)book)->use_split_action_for_num_field();
+    SCOPED_TRACE("");
+    const QofMockBook* mockbook = qof_mockbook(book);
+    return mockbook ? mockbook->use_split_action_for_num_field() : FALSE;
 }
 

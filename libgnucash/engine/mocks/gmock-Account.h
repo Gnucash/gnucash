@@ -67,4 +67,24 @@ public:
     MOCK_METHOD2(add_account_bayes, void(std::vector<const char*>&, Account*));
 };
 
+
+// type conversion functions
+static inline MockAccount*
+gnc_mockaccount (Account *account)
+{
+    if (GNC_IS_MOCKACCOUNT(account))
+        return static_cast<MockAccount*>(account);
+    ADD_FAILURE() << "Expected 'account' to be of type 'MockAccount'";
+    return nullptr;
+}
+
+static inline const MockAccount*
+gnc_mockaccount (const Account *account)
+{
+    if (GNC_IS_MOCKACCOUNT(account))
+        return static_cast<const MockAccount*>(account);
+    ADD_FAILURE() << "Expected 'account' to be of type 'MockAccount'";
+    return nullptr;
+}
+
 #endif

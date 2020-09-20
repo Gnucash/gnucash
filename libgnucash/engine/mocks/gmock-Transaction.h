@@ -70,4 +70,24 @@ protected:
     ~MockTransaction() {}
 };
 
+
+// type conversion functions
+static inline MockTransaction*
+gnc_mocktransaction (Transaction *trans)
+{
+    if (GNC_IS_MOCKTRANSACTION(trans))
+        return static_cast<MockTransaction*>(trans);
+    ADD_FAILURE() << "Expected 'trans' to be of type 'MockTransaction'";
+    return nullptr;
+}
+
+static inline const MockTransaction*
+gnc_mocktransaction (const Transaction *trans)
+{
+    if (GNC_IS_MOCKTRANSACTION(trans))
+        return static_cast<const MockTransaction*>(trans);
+    ADD_FAILURE() << "Expected 'trans' to be of type 'MockTransaction'";
+    return nullptr;
+}
+
 #endif

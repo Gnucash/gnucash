@@ -82,4 +82,24 @@ protected:
     ~MockSplit() {}
 };
 
+
+// type conversion functions
+static inline MockSplit*
+gnc_mocksplit (Split *split)
+{
+    if (GNC_IS_MOCKSPLIT(split))
+        return static_cast<MockSplit*>(split);
+    ADD_FAILURE() << "Expected 'split' to be of type 'MockSplit'";
+    return nullptr;
+}
+
+static inline const MockSplit*
+gnc_mocksplit (const Split *split)
+{
+    if (GNC_IS_MOCKSPLIT(split))
+        return static_cast<const MockSplit*>(split);
+    ADD_FAILURE() << "Expected 'split' to be of type 'MockSplit'";
+    return nullptr;
+}
+
 #endif

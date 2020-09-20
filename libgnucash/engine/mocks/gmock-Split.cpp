@@ -30,31 +30,25 @@ gnc_mocksplit_class_init (MockSplitClass *klass)
 Split *
 xaccMallocSplit (QofBook *book)
 {
-    EXPECT_TRUE(QOF_IS_MOCKBOOK(book));
-    if (QOF_IS_MOCKBOOK(book))
-        return ((QofMockBook*)book)->malloc_split();
-    else
-        return nullptr;
+    SCOPED_TRACE("");
+    QofMockBook* mockbook = qof_mockbook(book);
+    return mockbook ? mockbook->malloc_split() : nullptr;
 }
 
 QofBook *
 xaccSplitGetBook (const Split *split)
 {
-    EXPECT_TRUE(GNC_IS_MOCKSPLIT(split));
-    if (GNC_IS_MOCKSPLIT(split))
-        return ((MockSplit*)split)->get_book();
-    else
-        return nullptr;
+    SCOPED_TRACE("");
+    const MockSplit* mocksplit = gnc_mocksplit(split);
+    return mocksplit ? mocksplit->get_book() : nullptr;
 }
 
 Account *
 xaccSplitGetAccount (const Split *split)
 {
-    EXPECT_TRUE(GNC_IS_MOCKSPLIT(split));
-    if (GNC_IS_MOCKSPLIT(split))
-        return ((MockSplit*)split)->get_account();
-    else
-        return nullptr;
+    SCOPED_TRACE("");
+    const MockSplit* mocksplit = gnc_mocksplit(split);
+    return mocksplit ? mocksplit->get_account() : nullptr;
 }
 
 void
@@ -62,105 +56,91 @@ xaccSplitSetAccount (Split *split, Account *acc)
 {
     ASSERT_TRUE(GNC_IS_MOCKSPLIT(split));
     ASSERT_TRUE(GNC_IS_MOCKACCOUNT(acc));
-    ((MockSplit*)split)->set_account(acc);
+    gnc_mocksplit(split)->set_account(acc);
 }
 
 gnc_numeric
 xaccSplitGetAmount (const Split *split)
 {
-    EXPECT_TRUE(GNC_IS_MOCKSPLIT(split));
-    if (GNC_IS_MOCKSPLIT(split))
-        return ((MockSplit*)split)->get_amount();
-    else
-        return gnc_numeric_zero();
+    SCOPED_TRACE("");
+    const MockSplit* mocksplit = gnc_mocksplit(split);
+    return mocksplit ? mocksplit->get_amount() : gnc_numeric_zero();
 }
 
 void
 xaccSplitSetAmount (Split *split, gnc_numeric amt)
 {
     ASSERT_TRUE(GNC_IS_MOCKSPLIT(split));
-    ((MockSplit*)split)->set_amount(amt);
+    gnc_mocksplit(split)->set_amount(amt);
 }
 
 gnc_numeric
 xaccSplitGetValue (const Split *split)
 {
-    EXPECT_TRUE(GNC_IS_MOCKSPLIT(split));
-    if (GNC_IS_MOCKSPLIT(split))
-        return ((MockSplit*)split)->get_value();
-    else
-        return gnc_numeric_zero();
+    SCOPED_TRACE("");
+    const MockSplit* mocksplit = gnc_mocksplit(split);
+    return mocksplit ? mocksplit->get_value() : gnc_numeric_zero();
 }
 
 void
 xaccSplitSetValue (Split *split, gnc_numeric val)
 {
     ASSERT_TRUE(GNC_IS_MOCKSPLIT(split));
-    ((MockSplit*)split)->set_value(val);
+    gnc_mocksplit(split)->set_value(val);
 }
 
 const char *
 xaccSplitGetMemo (const Split *split)
 {
-    EXPECT_TRUE(GNC_IS_MOCKSPLIT(split));
-    if (GNC_IS_MOCKSPLIT(split))
-        return ((MockSplit*)split)->get_memo();
-    else
-        return nullptr;
+    SCOPED_TRACE("");
+    const MockSplit* mocksplit = gnc_mocksplit(split);
+    return mocksplit ? mocksplit->get_memo() : "";
 }
 
 char
 xaccSplitGetReconcile (const Split *split)
 {
-    EXPECT_TRUE(GNC_IS_MOCKSPLIT(split));
-    if (GNC_IS_MOCKSPLIT(split))
-        return ((MockSplit*)split)->get_reconcile();
-    else
-        return VREC;
+    SCOPED_TRACE("");
+    const MockSplit* mocksplit = gnc_mocksplit(split);
+    return mocksplit ? mocksplit->get_reconcile() : VREC;
 }
 
 void
 xaccSplitSetReconcile (Split *split, char recn)
 {
     ASSERT_TRUE(GNC_IS_MOCKSPLIT(split));
-    ((MockSplit*)split)->set_reconcile(recn);
+    gnc_mocksplit(split)->set_reconcile(recn);
 }
 
 void
 xaccSplitSetDateReconciledSecs (Split *split, time64 secs)
 {
     ASSERT_TRUE(GNC_IS_MOCKSPLIT(split));
-    ((MockSplit*)split)->set_date_reconciled_secs(secs);
+    gnc_mocksplit(split)->set_date_reconciled_secs(secs);
 }
 
 const char *
 xaccSplitGetAction (const Split *split)
 {
-    EXPECT_TRUE(GNC_IS_MOCKSPLIT(split));
-    if (GNC_IS_MOCKSPLIT(split))
-        return ((MockSplit*)split)->get_action();
-    else
-        return nullptr;
+    SCOPED_TRACE("");
+    const MockSplit* mocksplit = gnc_mocksplit(split);
+    return mocksplit ? mocksplit->get_action() : "";
 }
 
 Split *
 xaccSplitGetOtherSplit (const Split *split)
 {
-    EXPECT_TRUE(GNC_IS_MOCKSPLIT(split));
-    if (GNC_IS_MOCKSPLIT(split))
-        return ((MockSplit*)split)->get_other_split();
-    else
-        return nullptr;
+    SCOPED_TRACE("");
+    const MockSplit* mocksplit = gnc_mocksplit(split);
+    return mocksplit ? mocksplit->get_other_split() : nullptr;
 }
 
 Transaction *
 xaccSplitGetParent (const Split *split)
 {
-    EXPECT_TRUE(GNC_IS_MOCKSPLIT(split));
-    if (GNC_IS_MOCKSPLIT(split))
-        return ((MockSplit*)split)->get_parent();
-    else
-        return nullptr;
+    SCOPED_TRACE("");
+    const MockSplit* mocksplit = gnc_mocksplit(split);
+    return mocksplit ? mocksplit->get_parent() : nullptr;
 }
 
 void
@@ -168,5 +148,5 @@ xaccSplitSetParent(Split *split, Transaction *trans)
 {
     ASSERT_TRUE(GNC_IS_MOCKSPLIT(split));
     ASSERT_TRUE(GNC_IS_MOCKTRANSACTION(trans));
-    ((MockSplit*)split)->set_parent(trans);
+    gnc_mocksplit(split)->set_parent(trans);
 }
