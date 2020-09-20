@@ -1245,7 +1245,8 @@ gnc_ab_import_context(AB_IMEXPORTER_CONTEXT *context,
                                                   data);
 
         /* populate and display the matching window */
-        gnc_gen_trans_list_show_all(data->generic_importer);
+        if (data->generic_importer)
+            gnc_gen_trans_list_show_all(data->generic_importer);
 
         /* Check balances */
         if (!(awaiting & IGNORE_BALANCES))
@@ -1258,7 +1259,8 @@ gnc_ab_import_context(AB_IMEXPORTER_CONTEXT *context,
                                                 data);
 
     /* populate and display the matching window */
-    gnc_gen_trans_list_show_all(data->generic_importer);
+    if (data->generic_importer)
+        gnc_gen_trans_list_show_all(data->generic_importer);
 
     /* Check balances */
     if (!(awaiting & IGNORE_BALANCES))
