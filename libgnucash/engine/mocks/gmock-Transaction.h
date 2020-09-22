@@ -6,7 +6,6 @@
 #include <Transaction.h>
 #include <TransactionP.h>
 
-#include "gmock-qofbook.h"
 #include "gmock-gobject.h"
 
 
