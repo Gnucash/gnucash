@@ -4,10 +4,11 @@
 
 #include <config.h>
 
+#include <qofbook.h>
+
 #include <list>
 
 #include "fake-qofquery.h"
-#include "gmock-qofbook.h"
 
 
 
@@ -119,7 +120,7 @@ void
 qof_query_set_book (QofQuery *query, QofBook *book)
 {
     ASSERT_TRUE(queryPool.query_used(query));
-    ASSERT_TRUE(QOF_IS_MOCKBOOK(book));
+    ASSERT_TRUE(QOF_IS_BOOK(book));
     ((QofFakeQuery*)query)->set_book(book);
 }
 

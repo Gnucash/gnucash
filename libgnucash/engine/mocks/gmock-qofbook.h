@@ -5,9 +5,9 @@
 
 #include <qofbook.h>
 #include <qofbook-p.h>
+#include <Split.h>
 
 #include "gmock-gobject.h"
-#include "gmock-Split.h"
 
 
 GType qof_mockbook_get_type(void);

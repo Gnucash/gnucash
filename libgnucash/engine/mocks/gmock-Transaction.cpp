@@ -1,7 +1,8 @@
 #include <config.h>
 
+#include <Account.h>
+
 #include "gmock-Transaction.h"
-#include "gmock-Account.h"
 
 
 struct _MockTransactionClass
@@ -57,7 +58,7 @@ xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
 {
     SCOPED_TRACE("");
     const MockTransaction* mocktrans = gnc_mocktransaction(trans);
-    EXPECT_TRUE(GNC_IS_MOCKACCOUNT(acc));
+    EXPECT_TRUE(GNC_IS_ACCOUNT(acc));
     return mocktrans ? mocktrans->find_split_by_account(acc) : nullptr;
 }
 

@@ -1,9 +1,10 @@
 #include <config.h>
 
+#include <Transaction.h>
+#include <Account.h>
+
 #include "gmock-Split.h"
 #include "gmock-qofbook.h"
-#include "gmock-Account.h"
-#include "gmock-Transaction.h"
 
 
 struct _MockSplitClass
@@ -60,7 +61,7 @@ void
 xaccSplitSetAccount (Split *split, Account *acc)
 {
     ASSERT_TRUE(GNC_IS_MOCKSPLIT(split));
-    ASSERT_TRUE(GNC_IS_MOCKACCOUNT(acc));
+    ASSERT_TRUE(GNC_IS_ACCOUNT(acc));
     gnc_mocksplit(split)->set_account(acc);
 }
 
@@ -152,6 +153,6 @@ void
 xaccSplitSetParent(Split *split, Transaction *trans)
 {
     ASSERT_TRUE(GNC_IS_MOCKSPLIT(split));
-    ASSERT_TRUE(GNC_IS_MOCKTRANSACTION(trans));
+    ASSERT_TRUE(GNC_IS_TRANSACTION(trans));
     gnc_mocksplit(split)->set_parent(trans);
 }
