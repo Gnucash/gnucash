@@ -23,6 +23,12 @@ gnc_mockaccount_class_init(MockAccountClass *klass)
     // function is unused, class functions are defined in C++ code
 }
 
+
+GType gnc_account_get_type(void)
+{
+    return gnc_mockaccount_get_type();
+}
+
 void
 xaccAccountBeginEdit (Account *account)
 {

@@ -25,6 +25,11 @@ gnc_mocktransaction_class_init(MockTransactionClass *klass)
 }
 
 
+GType gnc_transaction_get_type(void)
+{
+    return gnc_mocktransaction_get_type();
+}
+
 void
 xaccTransBeginEdit (Transaction *trans)
 {

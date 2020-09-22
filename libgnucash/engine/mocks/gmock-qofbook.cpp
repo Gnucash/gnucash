@@ -20,6 +20,12 @@ qof_mockbook_class_init(QofMockBookClass *klass)
     // function is unused, class functions are defined in C++ code
 }
 
+
+GType qof_book_get_type(void)
+{
+    return qof_mockbook_get_type();
+}
+
 gboolean
 qof_book_use_split_action_for_num_field (const QofBook *book)
 {

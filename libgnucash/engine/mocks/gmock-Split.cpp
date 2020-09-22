@@ -27,6 +27,11 @@ gnc_mocksplit_class_init (MockSplitClass *klass)
 }
 
 
+GType gnc_split_get_type(void)
+{
+    return gnc_mocksplit_get_type();
+}
+
 Split *
 xaccMallocSplit (QofBook *book)
 {
