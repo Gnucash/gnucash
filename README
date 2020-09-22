@@ -1,7 +1,7 @@
 ############################################################
-          GnuCash 3.x README file.
+          GnuCash README file.
 
-The current stable series is GnuCash 3.x.
+The current stable series is GnuCash 4.x.
 ------------------------------------------------------------
 
 ##################
@@ -37,9 +37,7 @@ https://www.gnucash.org/download
 Dependencies
 ------------
 
-The following packages are required to be installed to run GnuCash:
-
-[see README.dependencies]
+Please see README.dependencies for current build dependencies.
 
 The optional online stock and currency price retrieval feature requires Perl.
 This is generally already installed on Gnu/Linux and *BSD, and MacOS.

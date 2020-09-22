@@ -67,7 +67,8 @@ Libraries/Deps
   ICU                                           International Components for
                                                 Unicode
   boost                 1.67.0                  All headers plus date_time,
-                                                filesystem, locale, and
+                                                filesystem, locale,
+                                                program_options, and
                                                 regex libraries.
                                                 locale and regex libs must be
                                                 built with ICU support.
