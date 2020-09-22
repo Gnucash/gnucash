@@ -5,8 +5,8 @@
 
 #include <Account.h>
 #include <AccountP.h>
+#include <qofbook.h>
 
-#include "gmock-qofbook.h"
 #include "gmock-gobject.h"
 
 
@@ -41,7 +41,7 @@ public:
 
     MOCK_METHOD0(begin_edit, void());
     MOCK_METHOD0(commit_edit, void());
-    MOCK_CONST_METHOD0(get_book, QofMockBook*());
+    MOCK_CONST_METHOD0(get_book, QofBook*());
     MOCK_CONST_METHOD2(for_each_transaction, gint(TransactionCallback, void*));
     MOCK_METHOD0(create_imap, GncImportMatchMap*());
 
