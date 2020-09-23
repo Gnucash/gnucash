@@ -10,6 +10,8 @@ gmock_gnc_prefs_set_backend(MockPrefsBackend *backend)
     prefsbackend = backend;
 }
 
+extern "C"
+{
 gboolean
 gnc_prefs_get_bool (const gchar *group, const gchar *pref_name)
 {
@@ -63,3 +65,5 @@ gnc_prefs_get_coords (const gchar *group, const gchar *pref_name, gdouble *x, gd
     if (prefsbackend != nullptr)
         prefsbackend->get_coords(group, pref_name, x, y);
 }
+
+} // extern "C"

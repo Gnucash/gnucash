@@ -4,7 +4,10 @@
 #include <gmock/gmock.h>
 
 #include <Split.h>
+extern "C"
+{
 #include <SplitP.h>
+}
 
 #include "gmock-qofbook.h"
 #include "gmock-gobject.h"

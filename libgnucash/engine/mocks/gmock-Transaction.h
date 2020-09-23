@@ -4,7 +4,10 @@
 #include <gmock/gmock.h>
 
 #include <Transaction.h>
+extern "C"
+{
 #include <TransactionP.h>
+}
 
 #include "gmock-gobject.h"
 
