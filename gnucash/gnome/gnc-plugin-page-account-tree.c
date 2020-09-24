@@ -165,6 +165,7 @@ static void gnc_plugin_page_account_tree_cmd_refresh (GtkAction *action, GncPlug
 static void gnc_plugin_page_account_tree_cmd_autoclear (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_transfer (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_edit_tax_options (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_lots (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page);
@@ -272,7 +273,18 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         N_("Renumber the children of the selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_renumber_accounts)
     },
-
+    {
+        "EditTaxOptionsAction", NULL,
+        /* Translators: remember to reuse this *
+         * translation in dialog-account.glade */
+        N_("Ta_x Report Options"), NULL,
+        /* Translators: currently implemented are *
+         * US: income tax and                     *
+         * DE: VAT                                *
+         * So adjust this string                  */
+        N_("Setup relevant accounts for tax reports, e.g. US income tax"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_tax_options)
+    },
     /* View menu */
     {
         "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
@@ -1920,6 +1932,18 @@ gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action,
     account = gnc_plugin_page_account_tree_get_current_account (page);
     window = GNC_PLUGIN_PAGE (page)->window;
     gnc_stock_split_dialog (window, account);
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_edit_tax_options (GtkAction *action,
+        GncPluginPageAccountTree *page)
+{
+    GtkWidget *window;
+    Account *account;
+
+    account = gnc_plugin_page_account_tree_get_current_account (page);
+    window = GNC_PLUGIN_PAGE (page)->window;
+    gnc_tax_info_dialog (window, account);
 }
 
 static void

@@ -103,6 +103,7 @@ typedef struct
     GtkWidget * tax_identity_edit_button;
 
     GtkWidget * acct_info;
+    GtkWidget * income_radio;
     GtkWidget * expense_radio;
     GtkWidget * asset_radio;
     GtkWidget * liab_eq_radio;
@@ -884,6 +885,39 @@ gnc_tax_info_update_accounts (TaxInfoDialog *ti_dialog)
 }
 
 static void
+gnc_tax_info_set_acct (TaxInfoDialog *ti_dialog, Account *account)
+{
+    if (account == NULL)
+        return;
+
+    ti_dialog->account_type = xaccAccountGetType (account);
+
+    if (ti_dialog->account_type == ACCT_TYPE_INCOME)
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(ti_dialog->income_radio), TRUE);
+    else if (ti_dialog->account_type == ACCT_TYPE_EXPENSE)
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(ti_dialog->expense_radio), TRUE);
+    else if ((ti_dialog->account_type == ACCT_TYPE_ASSET) ||
+             (ti_dialog->account_type == ACCT_TYPE_BANK) ||
+             (ti_dialog->account_type == ACCT_TYPE_CASH) ||
+             (ti_dialog->account_type == ACCT_TYPE_STOCK) ||
+             (ti_dialog->account_type == ACCT_TYPE_MUTUAL) ||
+             (ti_dialog->account_type == ACCT_TYPE_RECEIVABLE))
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(ti_dialog->asset_radio), TRUE);
+    else if ((ti_dialog->account_type == ACCT_TYPE_LIABILITY) ||
+             (ti_dialog->account_type == ACCT_TYPE_EQUITY) ||
+             (ti_dialog->account_type == ACCT_TYPE_CREDIT) ||
+             (ti_dialog->account_type == ACCT_TYPE_PAYABLE))
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(ti_dialog->liab_eq_radio), TRUE);
+    else if (ti_dialog->account_type == ACCT_TYPE_EQUITY)
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(ti_dialog->liab_eq_radio), TRUE);
+    else
+        return;
+
+    gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT(ti_dialog->account_treeview),
+                                                account);
+}
+
+static void
 gnc_tax_info_acct_type_cb (GtkWidget *w, gpointer data)
 {
     TaxInfoDialog *ti_dialog = data;
@@ -1440,6 +1474,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), GTK_WIDGET(tree_view));
 
         income_radio = GTK_WIDGET(gtk_builder_get_object (builder, "income_radio"));
+        ti_dialog->income_radio = income_radio;
         expense_radio = GTK_WIDGET(gtk_builder_get_object (builder, "expense_radio"));
         ti_dialog->expense_radio = expense_radio;
         asset_radio = GTK_WIDGET(gtk_builder_get_object (builder, "asset_radio"));
@@ -1520,7 +1555,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_tax_info_dialog (GtkWidget * parent)
+gnc_tax_info_dialog (GtkWidget * parent, Account * account)
 {
     TaxInfoDialog *ti_dialog;
     gint component_id;
@@ -1528,6 +1563,9 @@ gnc_tax_info_dialog (GtkWidget * parent)
     ti_dialog = g_new0 (TaxInfoDialog, 1);
 
     gnc_tax_info_dialog_create (parent, ti_dialog);
+
+    if (account)
+        gnc_tax_info_set_acct (ti_dialog, account);
 
     component_id = gnc_register_gui_component (DIALOG_TAX_INFO_CM_CLASS,
                    refresh_handler, close_handler,

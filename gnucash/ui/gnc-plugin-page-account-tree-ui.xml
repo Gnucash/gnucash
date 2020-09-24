@@ -10,6 +10,7 @@
         <separator name="EditSep2"/>
         <menuitem name="FileOpenAccount" action="FileOpenAccountAction"/>
         <menuitem name="FileOpenSubaccounts" action="FileOpenSubaccountsAction"/>
+        <menuitem name="EditTaxOptions" action="EditTaxOptionsAction"/>
       </placeholder>
     </menu>
     <menu name="Actions" action="ActionsAction">

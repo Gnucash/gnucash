@@ -524,7 +524,7 @@ gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData
 {
     g_return_if_fail (data != NULL);
 
-    gnc_tax_info_dialog (GTK_WIDGET (data->window));
+    gnc_tax_info_dialog (GTK_WIDGET (data->window), NULL);
 }
 
 static void
