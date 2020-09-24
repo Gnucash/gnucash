@@ -573,23 +573,17 @@ gnc_tax_info_dialog_account_filter_func (Account *account,
         gpointer data)
 {
     TaxInfoDialog *dialog = data;
+    GNCAccountType fund_acct_type = xaccAccountTypeGetFundamental (xaccAccountGetType (account));
     gboolean included = FALSE;
 
     if ((dialog->account_type == ACCT_TYPE_INCOME) ||
-            (dialog->account_type == ACCT_TYPE_EXPENSE))
+        (dialog->account_type == ACCT_TYPE_EXPENSE))
         included = (xaccAccountGetType (account) == dialog->account_type);
     else if (dialog->account_type == ACCT_TYPE_ASSET)
-        included = ((xaccAccountGetType (account) == ACCT_TYPE_BANK) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_CASH) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_ASSET) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_STOCK) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_MUTUAL) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_RECEIVABLE));
+        included = (ACCT_TYPE_ASSET == fund_acct_type);
     else if (dialog->account_type == ACCT_TYPE_LIABILITY)
-        included = ((xaccAccountGetType (account) == ACCT_TYPE_CREDIT) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_LIABILITY) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_EQUITY) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_PAYABLE));
+        included = ((ACCT_TYPE_LIABILITY == fund_acct_type) ||
+                    (ACCT_TYPE_EQUITY == fund_acct_type));
     else
         included = FALSE;
     return included;
@@ -890,25 +884,16 @@ gnc_tax_info_set_acct (TaxInfoDialog *ti_dialog, Account *account)
     if (account == NULL)
         return;
 
-    ti_dialog->account_type = xaccAccountGetType (account);
+    ti_dialog->account_type = xaccAccountTypeGetFundamental (xaccAccountGetType (account));
 
     if (ti_dialog->account_type == ACCT_TYPE_INCOME)
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(ti_dialog->income_radio), TRUE);
     else if (ti_dialog->account_type == ACCT_TYPE_EXPENSE)
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(ti_dialog->expense_radio), TRUE);
-    else if ((ti_dialog->account_type == ACCT_TYPE_ASSET) ||
-             (ti_dialog->account_type == ACCT_TYPE_BANK) ||
-             (ti_dialog->account_type == ACCT_TYPE_CASH) ||
-             (ti_dialog->account_type == ACCT_TYPE_STOCK) ||
-             (ti_dialog->account_type == ACCT_TYPE_MUTUAL) ||
-             (ti_dialog->account_type == ACCT_TYPE_RECEIVABLE))
+    else if (ti_dialog->account_type == ACCT_TYPE_ASSET)
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(ti_dialog->asset_radio), TRUE);
     else if ((ti_dialog->account_type == ACCT_TYPE_LIABILITY) ||
-             (ti_dialog->account_type == ACCT_TYPE_EQUITY) ||
-             (ti_dialog->account_type == ACCT_TYPE_CREDIT) ||
-             (ti_dialog->account_type == ACCT_TYPE_PAYABLE))
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(ti_dialog->liab_eq_radio), TRUE);
-    else if (ti_dialog->account_type == ACCT_TYPE_EQUITY)
+             (ti_dialog->account_type == ACCT_TYPE_EQUITY))
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(ti_dialog->liab_eq_radio), TRUE);
     else
         return;
