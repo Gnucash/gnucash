@@ -109,6 +109,7 @@ typedef struct
     GtkWidget * account_treeview;
     GtkWidget * select_button;
     GtkWidget * num_acct_label;
+    GtkWidget * apply_button;
 
     GtkWidget * txf_info;
     GtkWidget * tax_related_button;
@@ -226,6 +227,7 @@ static void
 gnc_tax_info_set_changed (TaxInfoDialog *ti_dialog, gboolean changed)
 {
     ti_dialog->changed = changed;
+    gtk_widget_set_sensitive (ti_dialog->apply_button, changed);
 }
 
 static GList *
@@ -811,10 +813,11 @@ gnc_tax_info_dialog_response (GtkDialog *dialog, gint response, gpointer data)
 {
     TaxInfoDialog *ti_dialog = data;
 
-    if (response == GTK_RESPONSE_OK && ti_dialog->changed)
+    if (ti_dialog->changed && (response == GTK_RESPONSE_APPLY || response == GTK_RESPONSE_OK))
         gui_to_accounts (ti_dialog);
 
-    gnc_close_gui_component_by_data (DIALOG_TAX_INFO_CM_CLASS, ti_dialog);
+    if (response != GTK_RESPONSE_APPLY)
+        gnc_close_gui_component_by_data (DIALOG_TAX_INFO_CM_CLASS, ti_dialog);
 }
 
 static void
@@ -1382,6 +1385,8 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 
         label = GTK_WIDGET(gtk_builder_get_object (builder, "txf_category_label"));
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), GTK_WIDGET(tree_view));
+
+        ti_dialog->apply_button = GTK_WIDGET(gtk_builder_get_object (builder, "apply_button"));
 
         button = GTK_WIDGET(gtk_builder_get_object (builder, "current_account_button"));
         ti_dialog->current_account_button = button;
