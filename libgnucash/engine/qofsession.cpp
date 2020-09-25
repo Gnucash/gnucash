@@ -69,6 +69,7 @@ static QofLogModule log_module = QOF_MOD_SESSION;
 
 using ProviderVec =  std::vector<QofBackendProvider_ptr>;
 static ProviderVec s_providers;
+static const std::string empty_string{};
 /*
  * These getters are used in tests to reach static vars from outside
  * They should be removed when no longer needed
@@ -383,7 +384,7 @@ QofSessionImpl::get_error () noexcept
     return m_last_err;
 }
 
-std::string
+const std::string&
 QofSessionImpl::get_error_message () const noexcept
 {
     return m_error_message;
@@ -414,11 +415,11 @@ QofSession::get_backend () const noexcept
     return m_backend;
 }
 
-std::string
+const std::string&
 QofSessionImpl::get_file_path () const noexcept
 {
     auto backend = qof_book_get_backend (m_book);
-    if (!backend) return nullptr;
+    if (!backend) return empty_string;
     return backend->get_uri();
 }
 
@@ -583,8 +584,9 @@ qof_session_get_book (const QofSession *session)
 const char *
 qof_session_get_file_path (const QofSession *session)
 {
-    if (!session) return NULL;
-    return session->get_file_path ().c_str ();
+    if (!session) return nullptr;
+    auto& path{session->get_file_path()};
+    return path.empty() ? nullptr : path.c_str ();
 }
 
 void
