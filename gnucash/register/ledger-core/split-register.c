@@ -1677,6 +1677,26 @@ gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
 
     return TRUE;
 }
+static void
+unreconcile_splits (SplitRegister* reg)
+{
+    if (reg->unrecn_splits == NULL)
+        return; //Nothing to do.
+    PINFO ("Unreconcile %d splits of reconciled transaction",
+           g_list_length (reg->unrecn_splits));
+
+    for (GList* node = reg->unrecn_splits; node; node = node->next)
+    {
+        Split* split = node->data;
+        Transaction* txn = xaccSplitGetParent (split);
+        if (!xaccTransIsOpen (txn))
+            PWARN ("Unreconcile of split failed because its parent transaction wasn't open for editing");
+        else if (xaccSplitGetReconcile (split) == YREC)
+            xaccSplitSetReconcile (split, NREC);
+    }
+    g_list_free (reg->unrecn_splits);
+    reg->unrecn_splits = NULL;
+}
 
 gboolean
 gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
@@ -1756,6 +1776,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
                 info->pending_trans_guid = *guid_null ();
 
             PINFO ("committing trans (%p)", trans);
+            unreconcile_splits (reg);
             xaccTransCommitEdit (trans);
 
             gnc_resume_gui_refresh ();
@@ -1807,6 +1828,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
         if (xaccTransIsOpen (pending_trans))
         {
             g_warning ("Impossible? committing pending %p", pending_trans);
+            unreconcile_splits (reg);
             xaccTransCommitEdit (pending_trans);
         }
         else if (pending_trans)
@@ -1934,27 +1956,8 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
             pending_trans = NULL;
             info->pending_trans_guid = *guid_null ();
         }
+        unreconcile_splits (reg);
         xaccTransCommitEdit (trans);
-    }
-
-    /* If there are splits in the unreconcile list and we are committing
-     * we need to unreconcile them */
-    if (do_commit && (reg->unrecn_splits != NULL))
-    {
-        GList* node;
-
-        PINFO ("Unreconcile %d splits of reconciled transaction",
-               g_list_length (reg->unrecn_splits));
-
-        for (node = reg->unrecn_splits; node; node = node->next)
-        {
-            Split* split = node->data;
-
-            if (xaccSplitGetReconcile (split) == YREC)
-                xaccSplitSetReconcile (split, NREC);
-        }
-        g_list_free (reg->unrecn_splits);
-        reg->unrecn_splits = NULL;
     }
 
     gnc_table_clear_current_cursor_changes (reg->table);
