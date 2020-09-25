@@ -97,6 +97,9 @@
     <child type="titlebar">
       <placeholder/>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -1262,13 +1265,13 @@ Review the details below and if correct press Apply to create the schedule.</pro
     <child type="titlebar">
       <placeholder/>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child internal-child="action_area">
       <object class="GtkBox">
         <property name="can_focus">False</property>
       </object>
-      <packing>
-        <property name="has_padding">False</property>
-      </packing>
     </child>
   </object>
 </interface>
