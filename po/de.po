@@ -2,11 +2,11 @@
 # Messages in Deutsch für GnuCash
 # This file is distributed under the same license as the GnuCash package.
 # Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
-# Copyright (C) 2005-2020 by the translators:
+# Copyright (C) 2005-2020 by the GnuCash developers and the translators:
+# Christian Stimming <stimming@tuhh.de>, 2001-2020.
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2020.
 # Andreas Hentze <pictarus@gmx.de>, 2019
 # Joachim Wetzig <jo.wetzig@web.de>, 2019
-# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2020.
-# Christian Stimming <stimming@tuhh.de>, 2001-2019.
 # Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
 # Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018.
 # quazgar <quazgar@posteo.de> 2017.
@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-09-26 21:23+0200\n"
-"PO-Revision-Date: 2020-09-19 17:29+0200\n"
+"PO-Revision-Date: 2020-09-26 21:29+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -4296,7 +4296,7 @@ msgstr "Löschen"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:440
 #: gnucash/gnome/gnc-plugin-page-register.c:1920
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr ""
+msgstr "»Konto überprüfen« läuft derzeit. Wollen Sie es abbrechen?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:498
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:504
@@ -4748,11 +4748,11 @@ msgstr "Rechnung be_zahlen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:331
 msgid "_Use as Default Layout for Vendor Documents"
-msgstr ""
+msgstr "Als _voreingestelltes Layout für Lieferantendokumente benutzen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:332
 msgid "_Reset Default Layout for Vendor Documents"
-msgstr ""
+msgstr "Voreingestelltes Layout für Lieferantendokumente _zurücksetzen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:338
 msgid "_Print Voucher"
@@ -4784,11 +4784,11 @@ msgstr "Auslagenerstattung be_zahlen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:352
 msgid "_Use as Default Layout for Employee Documents"
-msgstr ""
+msgstr "Als _voreingestelltes Layout für Mitarbeiterdokumente benutzen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:353
 msgid "_Reset Default Layout for Employee Documents"
-msgstr ""
+msgstr "Voreingestelltes Layout für Mitarbeiterdokumente _zurücksetzen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:359
 msgid "_Print Credit Note"
@@ -4866,16 +4866,19 @@ msgstr "Einen Firmenbericht für den Mandanten dieser Rechnung öffnen"
 msgid "Open Linked Document"
 msgstr "Verknüpfung öffnen"
 
+# Fixme: No accellerator? More unification with other business documents. [FE]
 #: gnucash/gnome/gnc-plugin-page-invoice.c:388
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
-msgstr ""
+msgstr "Verwende das aktuelle Layout als Voreinstellung für Kundendokumente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:389
 msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
+"Setze das voreingestellte Layout für Kundendokumente zurück auf die "
+"eingebauten Voreinstellungen und aktualisiere die aktuelle Seite entsprechend"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:394
 msgid "Make a printable bill"
@@ -4920,12 +4923,15 @@ msgstr "Einen Firmenbericht für den Mandanten dieser Rechnung öffnen"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
 msgid "Use the current layout as default for all vendor bills and credit notes"
 msgstr ""
+"Verwende das aktuelle Layout als Voreinstellung für Lieferantendokumente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:410
 msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
+"Setze das voreingestellte Layout für Lieferantendokumente zurück auf die "
+"eingebauten Voreinstellungen und aktualisiere die aktuelle Seite entsprechend"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:415
 msgid "Make a printable voucher"
@@ -4971,12 +4977,15 @@ msgstr "Einen Firmenbericht für den Mandanten dieser Auslagenerstattung öffnen
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
+"Verwende das aktuelle Layout als Voreinstellung für Mitarbeiterdokumente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:431
 msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
+"Setze das voreingestellte Layout für Mitarbeiterdokumente zurück auf die "
+"eingebauten Voreinstellungen und aktualisiere die aktuelle Seite entsprechend"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:436
 msgid "Make a printable credit note"
@@ -5913,7 +5922,7 @@ msgstr "%s sortieren nach..."
 #: gnucash/gnome/gnc-plugin-page-register.c:4671
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
-msgstr ""
+msgstr "%s %s von %s, gebucht am %s, Betrag %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4680
 msgid "Select document"
@@ -6526,6 +6535,12 @@ msgid ""
 "Select OK to temporarily clear filter and proceed,\n"
 "otherwise the last active cell will be selected."
 msgstr ""
+"Der Buchungsteil des Ziels ist derzeit in dieser Kontenansicht verborgen.\n"
+"\n"
+"%s\n"
+"\n"
+"Wählen Sie »OK«, um den Filter vorübergehend aufzuheben und fortzufahren,\n"
+"andernfalls wird die letzte aktive Zelle selektiert."
 
 #: gnucash/gnome/gnc-split-reg.c:2371
 msgid "Sort By:"
@@ -6537,6 +6552,9 @@ msgid ""
 "have mismatched commodities or currencies.\n"
 "You need to open each account individually to edit transactions."
 msgstr ""
+"Die Buchungen dieses Kontos können nicht bearbeitet werden, da seine "
+"Unterkonten nicht übereinstimmende Währungen oder Wertpapiere enthalten.\n"
+"Sie müssen jedes Konto einzeln öffnen, um die Buchungen zu bearbeiten."
 
 #: gnucash/gnome/gnc-split-reg.c:2501
 msgid ""
@@ -6975,11 +6993,14 @@ msgstr ""
 "Dies kann zu Problemen beim nächsten Abgleichen führen. Bitte prüfen Sie "
 "erneut, ob dieses Datum beabsichtigt ist."
 
+# I18N simplify next 2 strings. [FE}
 #: gnucash/gnome/window-reconcile.c:1851
 msgid ""
 "WARNING! Account contains splits whose reconcile date is after statement "
 "date. Reconciliation may be difficult."
 msgstr ""
+"Warnung! Dieses Konto enthält Buchungsteile, deren Abgleichungsdatum nach "
+"dem Buchungsdatum liegt. Der Kontoabgleich kann schwierig werden."
 
 #: gnucash/gnome/window-reconcile.c:1855
 msgid ""
@@ -6988,6 +7009,10 @@ msgid ""
 "the case, you may use Find Transactions to find them, unreconcile, and re-"
 "reconcile."
 msgstr ""
+"Dieses Konto enthält Buchungsteile, deren Abgleichungsdatum nach "
+"dem Buchungsdatum liegt. Diese Buchungsteile können den Kontoabgleich "
+"erschweren. In dem Fall verwenden Sie »Finde Buchungssätze« um sie zu finden, "
+"heben ihren Abgleich auf und führen ihn erneut durch."
 
 #: gnucash/gnome/window-report.c:115
 msgid "Set the report options you want using this dialog."
@@ -9002,10 +9027,10 @@ msgstr "Finanzverwaltung für Privatanwender und Kleinbetriebe."
 #: gnucash/gnome-utils/gnc-main-window.c:4537
 msgid "translator-credits"
 msgstr ""
+"Christian Stimming, 2001-2020\n"
+"Frank H. Ellenberger, 2007, 2009-2020\n"
 "Andreas Hentze, 2019\n"
 "Joachim Wetzig, 2019\n"
-"Frank H. Ellenberger, 2007, 2009-2020\n"
-"Christian Stimming, 2001-2019\n"
 "Dmitriy Mangul, 2017-2018\n"
 "Mechtilde Stehmann, 2014-2018\n"
 "quazgar, 2017\n"
@@ -10215,8 +10240,9 @@ msgstr "Gewinn:"
 
 #: gnucash/gnucash-cli.cpp:91
 msgid "Price Quotes Retrieval Options"
-msgstr ""
+msgstr "Online-Kursabfrage Optionen"
 
+# I18N: separate get [FE]
 #: gnucash/gnucash-cli.cpp:94
 msgid ""
 "Execute price quote related commands. Currently only one command is "
@@ -10225,13 +10251,18 @@ msgid ""
 "  get: \tFetch current quotes for all foreign currencies and stocks in the "
 "given GnuCash datafile.\n"
 msgstr ""
+"Führe auf Online-Kursabfragen bezogene Befehle aus. Aktuell wird nur ein "
+"Kommando unterstützt.\n"
+"\n"
+"  get: \tHole aktuelle Kurse für alle Fremdwährungen und Wertpapiere in der "
+"gegebenen GnuCash-Datei.\n"
 
 #: gnucash/gnucash-cli.cpp:97
 msgid ""
 "Regular expression determining which namespace commodities will be retrieved "
 "for"
 msgstr ""
-"Regulärer Ausdruck für den Namensraum, in dem die Kurse geholt werden sollen"
+"Regulärer Ausdruck für den Namensraum, in dem die Kurse geholt werden sollen."
 
 #: gnucash/gnucash-cli.cpp:101
 msgid "Report Generation Options"
@@ -10246,6 +10277,13 @@ msgid ""
 "be specified to describe some saved options.\n"
 "  run: \tRun the named report in the given GnuCash datafile.\n"
 msgstr ""
+"Führe Berichts-bezogene Befehle aus. Die folgenden Kommandos werden "
+"unterstützt.\n"
+"\n"
+"  list: \tListe verfügbare Berichte.\n"
+"  show: \tBeschreibe die im genannten Bericht geänderten Optionen. Eine Datei "
+"für die gespeicherten Optionen darf angegeben werden.\n"
+"  run: \tFühre den genannten Bericht in der gegebenen GnuCash-Datei aus.\n"
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Name of the report to run\n"
@@ -10261,24 +10299,24 @@ msgstr "Ausgabedatei für Bericht\n"
 
 #: gnucash/gnucash-cli.cpp:129
 msgid "Unknown quotes command '{1}'"
-msgstr ""
+msgstr "Unbekannter Kurs-Befehl »{1}«"
 
 #: gnucash/gnucash-cli.cpp:136 gnucash/gnucash-cli.cpp:150
 #: gnucash/gnucash.cpp:363
 msgid "Missing data file parameter"
-msgstr ""
+msgstr "Fehlende Datei-Angabe"
 
 #: gnucash/gnucash-cli.cpp:174
 msgid "Missing --name parameter"
-msgstr ""
+msgstr "--name Angabe fehlt"
 
 #: gnucash/gnucash-cli.cpp:182
 msgid "Unknown report command '{1}'"
-msgstr ""
+msgstr "Unbekannter Berichts-Befehl »{1}«"
 
 #: gnucash/gnucash-cli.cpp:188
 msgid "Missing command or option"
-msgstr ""
+msgstr "Befehl oder Option fehlt."
 
 #: gnucash/gnucash-commands.cpp:91
 msgid "No quotes retrieved. Finance::Quote isn't installed properly."
@@ -10413,6 +10451,9 @@ msgid ""
 "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
 "Please use 'gnucash-cli --quotes get <datafile>' instead."
 msgstr ""
+"Hole Online-Kurse für gegebene GnuCash-Datei.\n"
+"Beachten Sie, daß diese Option veraltet ist und in GnuCash 5.0 entfernt wird.\n"
+"Bitte verwenden Sie stattdessen »gnucash-cli --quotes get <GnuCash-Datei>«."
 
 #: gnucash/gnucash.cpp:342
 msgid ""
@@ -10422,6 +10463,10 @@ msgid ""
 "Please use 'gnucash-cli --quotes get --namespace <namespace> <datafile>' "
 "instead."
 msgstr ""
+"Regulärer Ausdruck, welcher Wertpapier-Namensraum abgefragt werden soll.\n"
+"Beachten Sie, daß diese Option veraltet ist und in GnuCash 5.0 entfernt wird.\n"
+"Bitte verwenden Sie stattdessen »gnucash-cli --quotes get --namespace "
+"<Namensraum> <GnuCash-Datei>«."
 
 #: gnucash/gnucash.cpp:359
 msgid ""
@@ -10429,6 +10474,10 @@ msgid ""
 "removed in GnuCash 5.0. Please use 'gnucash-cli --quotes get <datafile>' "
 "instead."
 msgstr ""
+"Die »--add-price-quotes«-Option von gnucash ist veraltet und wird in GnuCash "
+"5.0 entfernt. "
+"Bitte verwenden Sie stattdessen »gnucash-cli --quotes get <GnuCash-Datei>«."
+"instead."
 
 #: gnucash/gnucash.cpp:393
 msgid "Run '{1} --help' to see a full list of available command line options."
@@ -13674,6 +13723,9 @@ msgid ""
 "that you foresee you will use GnuCash. Each category you select will cause "
 "several accounts to be created."
 msgstr ""
+"Wählen Sie Sprach- und Regionsspezifische Kategorien, die Sie künftig in "
+"GnuCash zu benutzen beabsichtigen. Jede ausgewählte Kategorie wird einige "
+"Konten erstellen."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:170
 msgid "<b>Categories</b>"
@@ -13703,26 +13755,23 @@ msgid ""
 "If not satisfied with the available templates, please read the wiki page "
 "linked below and share your new or improved template."
 msgstr ""
+"Sofern die verfügbaren Kontenrahmen Sie nicht zufrieden stellen, lesen Sie "
+"bitte den unten verknüpften Wiki-Artikel und teilen Sie ihre neuen und "
+"verbesserten Kontenrahmen mit der Benutzergemeinschaft."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:487
-#, fuzzy
 msgid ""
 "The selection you make here is only the starting point for your personalized "
 "account hierarchy. Accounts can be added, renamed, moved, or deleted by hand "
 "later at any time."
 msgstr ""
-"\n"
-"Wählen Sie die Kategorien aus, für die Sie GnuCash benutzen möchten. Jede "
-"ausgewählte Kategorie wird zur Erstellung entsprechender Konten führen.\n"
-"\n"
-"<b>Anmerkung:</b> Die Auswahl, die Sie hier treffen, ist nur ein "
-"Ausgangspunkt für Ihre personalisierte Kontohierarchie. Die Konten können zu "
-"einem späteren Zeitpunkt jederzeit manuell hinzugefügt, umbenannt, "
-"verschoben oder gelöscht werden."
+"Die Auswahl, die Sie hier treffen, ist nur der Ausgangspunkt für Ihren "
+"persönlichen Kontenplan. Konten können zu später jederzeit manuell "
+"hinzugefügt, umbenannt, verschoben oder gelöscht werden."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:504
 msgid "GnuCash Account Template Wiki"
-msgstr ""
+msgstr "Wiki-Artikel zur Erstellung von Kontenrahmen (englisch)"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:519
 msgid "Choose accounts to create"
@@ -15754,10 +15803,13 @@ msgid ""
 "Existing absolute file path links will be converted to relative ones by "
 "comparing them to the new path head unless box unticked."
 msgstr ""
-
+"Solange diese Option nicht gesetzt ist, werden existierende absolute "
+"Pfadangaben durch Vergleich mit dem Beginn des neuen Pfades in relative "
+"umgewandelt."
 #: gnucash/gtkbuilder/dialog-doclink.glade:178
 msgid "Note: Only Document Links that are not read-only will be changed."
 msgstr ""
+"Anmerkung: Nur Verknüpfungen, die nicht Nur-Lesen sind, werden geändert."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:279
 msgid "Linked _File"
@@ -15775,6 +15827,7 @@ msgstr "Geben Sie einen Hyperlink (URL) ein, z.B. http://www.gnucash.org"
 msgid "Location does not start with a valid scheme"
 msgstr "Die URL beginnt nicht mit einer Schema- (Protokoll-) Angabe"
 
+#I18N: Accellerator missing [FE]
 #: gnucash/gtkbuilder/dialog-doclink.glade:504
 msgid "Reload and Locate Linked Documents"
 msgstr "Verknüpfungen neu laden und Ort prüfen"
@@ -15807,6 +15860,7 @@ msgstr "Verfügbar"
 msgid "Relative"
 msgstr "Relativ"
 
+# I18N: Better use table columns as parameter  [FE]
 #: gnucash/gtkbuilder/dialog-doclink.glade:730
 msgid ""
 "Double click on the entry in the Description column to jump to the "
@@ -15815,6 +15869,12 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
+"Um zu einer Buchung zu springen, doppelklicken Sie auf ein Element in der "
+"Spalte »Beschreibung«.\n"
+"Um eine verknüpftes Dokument zu öffnen, doppelklicken Sie auf ein Element in "
+"der Spalte »Verknüpftes Dokument«.\n"
+"Um eine Verknüpfung zu modifizieren, doppelklicken Sie auf ein Element in der "
+"Spalte »Verfügbar«."
 
 #: gnucash/gtkbuilder/dialog-employee.glade:166
 msgid ""
@@ -20768,8 +20828,8 @@ msgstr ""
 "Wählen Sie die Einstellungen für die Datei und klicken Sie »Weiter«. Mit "
 "»Abbrechen« können Sie den Export abbrechen.\n"
 
+# fixMe: I18N: Space, Pref path [FE]
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
-#, fuzzy
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
 " with the separator specified below.\n"
@@ -20791,11 +20851,16 @@ msgstr ""
 "\n"
 "Jede Buchung wird mehrere Zeilen ergeben und Sie werden möglicherweise "
 "nacharbeiten müssen, um den Export in ein für Sie nützliches Format zu "
-"bringen. Jede Buchung taucht nur ein Mal im Export auf und zwar in der "
+"bringen.\n"
+"\n"
+"Jede Buchung taucht nur ein Mal im Export auf und zwar in der "
 "Reihenfolge, in der die Kontenblätter verarbeitet werden.\n"
 "\n"
+"Das Ausgabeformat von »Kurs/Preis« wird von »Bearbeiten->Einstellungen->Zahl,"
+" Datum, Zeit->Preise immer als Dezimalstellen anzeigen« bestimmt.\n"
+"\n"
 "Wählen Sie die gewünschten Einstellungen für die Datei aus und klicken Sie "
-"dann auf 'Weiter', um fortzufahren, oder auf 'Abbrechen', um den Export "
+"dann auf »Weiter«, um fortzufahren, oder auf »Abbrechen«, um den Export "
 "abzubrechen.\n"
 
 # Fixme Source: 1. "\n" widerspricht I18N Regeln, letztes überflüssig? [FE]
@@ -21850,7 +21915,7 @@ msgstr ""
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1214
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
-msgstr ""
+msgstr "Open/Quicken Financial Exchange Datei (*.ofx, *.qfx)"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1219
 msgid "Select one or multiple OFX/QFX file(s) to process"
@@ -22311,6 +22376,8 @@ msgstr ""
 #, scheme-format
 msgid "ERROR: ALPHAVANTAGE_API_KEY must be set for currency and quotes; see ~A"
 msgstr ""
+"Fehler: Um einige Online-Kurse wie Währungen abzurufen, muß der "
+"ALPHAVANTAGE_API_KEY gesetzt sein. Siehe ~A"
 
 #: gnucash/price-quotes.scm:460
 msgid "There was a system error while retrieving the price quotes."
@@ -26822,7 +26889,7 @@ msgstr "Gesamtbetrag"
 #: gnucash/report/reports/standard/category-barchart.scm:684
 #: gnucash/report/reports/standard/net-charts.scm:470
 msgid "No exportable data"
-msgstr ""
+msgstr "Keine exportierbaren Daten"
 
 #: gnucash/report/reports/standard/customer-summary.scm:52
 msgid "The income accounts where the sales and income was recorded."
