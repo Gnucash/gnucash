@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100000</property>
     <property name="step_increment">0.10000000149</property>
@@ -20,7 +20,7 @@
   <object class="GtkAdjustment" id="adjustment12">
     <property name="lower">-180</property>
     <property name="upper">180</property>
-    <property name="step_increment">0.0099999997764800008</property>
+    <property name="step_increment">0.00999999977648</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment13">
@@ -40,7 +40,7 @@
   </object>
   <object class="GtkAdjustment" id="adjustment16">
     <property name="upper">100000</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment17">
@@ -130,9 +130,6 @@
     <property name="window_position">center-on-parent</property>
     <property name="default_width">500</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox7">
         <property name="visible">True</property>
@@ -233,6 +230,9 @@
       <action-widget response="-6">cancel_button</action-widget>
       <action-widget response="-5">ok_button</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
@@ -300,9 +300,6 @@
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_ui_print_check_response_cb" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox6">
         <property name="visible">True</property>
@@ -1390,5 +1387,8 @@ to print an address on the check.</property>
       <action-widget response="-6">cancelbutton</action-widget>
       <action-widget response="-5">okbutton</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

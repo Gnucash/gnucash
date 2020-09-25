@@ -20,8 +20,8 @@
     <child name="new-hierarchy" schema="org.gnucash.dialogs.new-hierarchy"/>
     <child name="search" schema="org.gnucash.dialogs.search"/>
     <child name="transfer" schema="org.gnucash.dialogs.transfer"/>
-    <child name="business-assoc" schema="org.gnucash.dialogs.business-assoc"/>
-    <child name="trans-assoc" schema="org.gnucash.dialogs.trans-assoc"/>
+    <child name="business-doclink" schema="org.gnucash.dialogs.business-doclink"/>
+    <child name="trans-doclink" schema="org.gnucash.dialogs.trans-doclink"/>
     <child name="options" schema="org.gnucash.dialogs.options"/>
   </schema>
 
@@ -238,7 +238,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.business-assoc" path="/org/gnucash/dialogs/business-assoc/">
+  <schema id="org.gnucash.dialogs.business-doclink" path="/org/gnucash/dialogs/business-doclink/">
     <key type="(iiii)" name="last-geometry">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -248,7 +248,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.trans-assoc" path="/org/gnucash/dialogs/trans-assoc/">
+  <schema id="org.gnucash.dialogs.trans-doclink" path="/org/gnucash/dialogs/trans-doclink/">
     <key type="(iiii)" name="last-geometry">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>

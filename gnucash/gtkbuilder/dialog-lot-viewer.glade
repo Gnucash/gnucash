@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="lot_viewer_dialog">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Lot Viewer</property>
@@ -10,9 +10,6 @@
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="lv_window_destroy_cb" swapped="no"/>
     <signal name="response" handler="lv_response_cb" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -128,7 +125,7 @@
                   <object class="GtkGrid" id="table1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_right">6</property>
+                    <property name="margin_end">6</property>
                     <property name="row_spacing">3</property>
                     <property name="column_spacing">6</property>
                     <child>
@@ -166,15 +163,14 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="vscrollbar_policy">never</property>
                         <property name="shadow_type">in</property>
                         <child>
                           <object class="GtkTextView" id="lot_notes_text">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Enter any notes you want to make about this lot.</property>
-                            <property name="halign">start</property>
+                            <property name="margin_start">3</property>
+                            <property name="margin_end">3</property>
                             <property name="hexpand">True</property>
                             <property name="wrap_mode">word</property>
                             <property name="accepts_tab">False</property>
@@ -212,7 +208,7 @@
                   <object class="GtkGrid" id="table2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">6</property>
+                    <property name="margin_start">6</property>
                     <property name="row_spacing">3</property>
                     <property name="column_spacing">6</property>
                     <child>
@@ -290,7 +286,7 @@
                   <object class="GtkGrid" id="table3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_right">6</property>
+                    <property name="margin_end">6</property>
                     <property name="margin_top">3</property>
                     <property name="margin_bottom">3</property>
                     <property name="hexpand">True</property>
@@ -345,7 +341,7 @@
                   <object class="GtkGrid" id="table4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">6</property>
+                    <property name="margin_start">6</property>
                     <property name="margin_top">3</property>
                     <property name="margin_bottom">3</property>
                     <property name="hexpand">True</property>
@@ -456,5 +452,8 @@
       <action-widget response="2">delete_button</action-widget>
       <action-widget response="-7">button5</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

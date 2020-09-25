@@ -17,6 +17,7 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(use-modules (srfi srfi-26))
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 format))
 (use-modules (ice-9 match))
@@ -503,6 +504,7 @@
 ;; b) the result is sign reversed. Returns a commodity-collector.
 (define (gnc:accounts-get-comm-total-profit accounts 
 					    get-balance-fn)
+  (issue-deprecation-warning "gnc:accounts-get-comm-total-profit deprecated.")
   (gnc:accounts-get-balance-helper
    (gnc:filter-accountlist-type (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE) accounts)
    get-balance-fn
@@ -513,6 +515,7 @@
 ;; the result is sign reversed. Returns a commodity-collector.
 (define (gnc:accounts-get-comm-total-income accounts 
 					    get-balance-fn)
+  (issue-deprecation-warning "gnc:accounts-get-comm-total-income deprecated.")
   (gnc:accounts-get-balance-helper
    (gnc:filter-accountlist-type (list ACCT-TYPE-INCOME) accounts)
    get-balance-fn
@@ -523,6 +526,7 @@
 ;; the result is sign reversed. Returns a commodity-collector.
 (define (gnc:accounts-get-comm-total-expense accounts 
                                              get-balance-fn)
+  (issue-deprecation-warning "gnc:accounts-get-comm-total-expense deprecated.")
   (gnc:accounts-get-balance-helper
    (gnc:filter-accountlist-type (list ACCT-TYPE-EXPENSE) accounts)
    get-balance-fn
@@ -572,6 +576,9 @@
 
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)
+  (issue-deprecation-warning
+   "gnc:query-set-match-non-voids-only! is deprecated. add query for\
+(logand CLEARED-ALL (lognot CLEARED-VOIDED)) instead.")
   (let ((temp-query (qof-query-create-for-splits)))
     (qof-query-set-book temp-query book)
 
@@ -588,6 +595,9 @@
 ;; utility function - ensure that a query matches only voids.  Destructive
 
 (define (gnc:query-set-match-voids-only! query book)
+  (issue-deprecation-warning
+   "gnc:query-set-match-non-voids-only! is deprecated. add CLEARED-VOIDED \
+query instead.")
   (let ((temp-query (qof-query-create-for-splits)))
     (qof-query-set-book temp-query book)
 
@@ -621,6 +631,14 @@
   (if (> percent 100)
       (gnc:warn "report more than 100% finished. " percent))
   (gnc-window-show-progress "" percent))
+
+(define-public gnc:pulse-progress-bar
+  (let ((pulse-idx 0))
+    (lambda ()
+      (set! pulse-idx (1+ pulse-idx))
+      (when (= pulse-idx 1000)
+        (set! pulse-idx 0)
+        (gnc-window-show-progress "" 105)))))
 
 (define (gnc:report-finished)
   (gnc-window-show-progress "" -1))
@@ -681,7 +699,8 @@
              (regexp (get-val 'regexp))
              (closing (get-val 'closing)))
         (qof-query-set-book query (gnc-get-current-book))
-        (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+        (xaccQueryAddClearedMatch
+         query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
         (xaccQueryAddAccountMatch query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
         (xaccQueryAddDateMatchTT
          query
@@ -858,23 +877,14 @@
 ;; Input: account-balances
 ;; Output: commodity-collector
 (define (gnc:get-assoc-account-balances-total account-balances)
-  (let ((total (gnc:make-commodity-collector)))
-    (for-each
-     (lambda (account-balance)
-       (total 'merge (cadr account-balance) #f))
-     account-balances)
-    total))
+  (apply gnc:collector+ (map cadr account-balances)))
 
 (define (gnc:multiline-to-html-text str)
   ;; simple function - splits string containing #\newline into
   ;; substrings, and convert to a gnc:make-html-text construct which
   ;; adds gnc:html-markup-br after each substring.
-  (let loop ((list-of-substrings (string-split str #\newline))
-             (result '()))
-    (if (null? list-of-substrings)
-        (apply gnc:make-html-text (if (null? result) '() (reverse (cdr result))))
-        (loop (cdr list-of-substrings)
-              (cons* (gnc:html-markup-br) (car list-of-substrings) result)))))
+  (define (interleave a b) (cons* a (gnc:html-markup-br) b))
+  (apply gnc:make-html-text (fold-right interleave '() (string-split str #\nl))))
 
 ;; ***************************************************************************
 ;; Business Functions
@@ -1089,36 +1099,63 @@
       (newline)
       (last args))))
 
+(define (maybe-str name str)
+  (match str
+    ((or "" #f) "")
+    (_ (format #f " ~a<~a>" name str))))
+
+(define-public (gnc:dump-split s show-acc?)
+  (define txn (xaccSplitGetParent s))
+  (format #t "~a Split ~a: ~a~a Amt<~a> ~a~a~a\n"
+          (xaccSplitGetReconcile s)
+          (string-take (gncSplitGetGUID s) 8)
+          (qof-print-date (xaccTransGetDate txn))
+          (maybe-str 'Acc (and show-acc? (xaccAccountGetName (xaccSplitGetAccount s))))
+          (gnc:monetary->string
+           (gnc:make-gnc-monetary
+            (xaccAccountGetCommodity (xaccSplitGetAccount s))
+            (xaccSplitGetAmount s)))
+          (gnc:monetary->string
+           (gnc:make-gnc-monetary
+            (xaccTransGetCurrency txn)
+            (xaccSplitGetValue s)))
+          (maybe-str 'Desc (xaccTransGetDescription txn))
+          (maybe-str 'Memo (xaccSplitGetMemo s))))
+
+(define-public (gnc:dump-all-transactions)
+  (define query (qof-query-create-for-splits))
+  (display "\n(gnc:dump-all-transactions)\n")
+  (qof-query-set-book query (gnc-get-current-book))
+  (qof-query-set-sort-order query (list SPLIT-TRANS TRANS-DATE-POSTED) '() '())
+  (qof-query-set-sort-increasing query #t #t #t)
+  (let lp ((splits (xaccQueryGetSplitsUniqueTrans query)))
+    (newline)
+    (match splits
+      (() (qof-query-destroy query))
+      ((split . rest)
+       (let ((trans (xaccSplitGetParent split)))
+         (format #t "  Trans ~a: ~a Curr ~a ~a~a\n"
+                 (string-take (gncTransGetGUID trans) 8)
+                 (qof-print-date (xaccTransGetDate trans))
+                 (gnc-commodity-get-mnemonic (xaccTransGetCurrency trans))
+                 (maybe-str 'Desc (xaccTransGetDescription trans))
+                 (maybe-str 'Notes (xaccTransGetNotes trans)))
+         (for-each (cut gnc:dump-split <> #t) (xaccTransGetSplitList trans))
+         (lp rest))))))
+
 ;; utility function for testing. dumps the whole book contents to
 ;; console.
 (define (gnc:dump-book)
   (display "\n(gnc:dump-book)\n")
   (for-each
    (lambda (acc)
-     (format #t "\nAccount: <~a> Comm<~a> Type<~a>\n"
+     (format #t "\nAccount ~a: ~a Comm<~a> Type<~a>\n"
+             (string-take (gncAccountGetGUID acc) 8)
              (gnc-account-get-full-name acc)
-             (gnc-commodity-get-mnemonic
-              (xaccAccountGetCommodity acc))
-             (xaccAccountGetTypeStr
-              (xaccAccountGetType acc)))
-     (for-each
-      (lambda (s)
-        (let ((txn (xaccSplitGetParent s)))
-          (format #t "~a Split: ~a Amt<~a> Val<~a> Desc<~a> Memo<~a>\n"
-                  (xaccSplitGetReconcile s)
-                  (qof-print-date (xaccTransGetDate txn))
-                  (gnc:monetary->string
-                   (gnc:make-gnc-monetary
-                    (xaccAccountGetCommodity acc)
-                    (xaccSplitGetAmount s)))
-                  (gnc:monetary->string
-                   (gnc:make-gnc-monetary
-                    (xaccTransGetCurrency txn)
-                    (xaccSplitGetValue s)))
-                  (xaccTransGetDescription txn)
-                  (xaccSplitGetMemo s))))
-      (xaccAccountGetSplitList acc))
-     (format #t "Balance: ~a Cleared: ~a Reconciled: ~a\n"
+             (gnc-commodity-get-mnemonic (xaccAccountGetCommodity acc))
+             (xaccAccountGetTypeStr (xaccAccountGetType acc)))
+     (for-each (cut gnc:dump-split <> #f) (xaccAccountGetSplitList acc))
+     (format #t "         Balance: ~a Cleared: ~a Reconciled: ~a\n"
              (gnc:monetary->string
               (gnc:make-gnc-monetary
                (xaccAccountGetCommodity acc)

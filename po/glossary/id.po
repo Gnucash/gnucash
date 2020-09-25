@@ -1,12 +1,14 @@
-# Indonesian translations for PROJECT package
-# Terjemahan bahasa inggris untuk paket PROJECT. (Glossary)
-# Copyright (C) 2020 THE PROJECT'S COPYRIGHT HOLDER
+# Indonesian translations for GnuCash package
+# Terjemahan bahasa inggris untuk paket GnuCash. (Glossary)
+# Copyright (C) 2020 by the GnuCash developers and the translators listed below.
 # This file is distributed under the same license as the GnuCash package.
 # Triyan W. Nugroho <triyan.wn@gmail.com>, 2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
+"Project-Id-Version: GnuCash 4.1\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-08-13 14:52+0700\n"
 "PO-Revision-Date: 2020-08-15 21:20+0700\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"

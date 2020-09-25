@@ -1146,6 +1146,11 @@ gnc_main_window_all_finish_pending (void)
             return FALSE;
         }
     }
+    if (gnc_gui_refresh_suspended ())
+    {
+        gnc_warning_dialog (NULL, "%s", "An operation is still running, wait for it to complete before quitting.");
+        return FALSE;
+    }
     return TRUE;
 }
 
@@ -3582,6 +3587,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
                         FALSE, TRUE, 0);
 
     priv->progressbar = gtk_progress_bar_new ();
+    gtk_progress_bar_set_show_text (GTK_PROGRESS_BAR(priv->progressbar), TRUE);
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(priv->progressbar), " ");
     gtk_widget_show (priv->progressbar);
     gtk_box_pack_start (GTK_BOX (priv->statusbar), priv->progressbar,
@@ -3700,14 +3706,17 @@ gnc_quartz_shutdown (GtkosxApplication *theApp, gpointer data)
 {
     /* Do Nothing. It's too late. */
 }
-/* Should quit responds to NSApplicationBlockTermination; returning
- * TRUE means "don't terminate", FALSE means "do terminate".
+/* Should quit responds to NSApplicationBlockTermination; returning TRUE means
+ * "don't terminate", FALSE means "do terminate". gnc_main_window_quit() queues
+ * a timer that starts an orderly shutdown in 250ms and if we tell macOS it's OK
+ * to quit GnuCash gets terminated instead of doing its orderly shutdown,
+ * leaving the book locked.
  */
 static gboolean
 gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
 {
     if (gnc_main_window_all_finish_pending())
-        return gnc_main_window_quit (window);
+        gnc_main_window_quit (window);
     return TRUE;
 }
 
@@ -4481,7 +4490,7 @@ get_file_strsplit (const gchar *partial)
 static gboolean
 url_signal_cb (GtkAboutDialog *dialog, gchar *uri, gpointer data)
 {
-    gnc_launch_assoc (GTK_WINDOW(dialog), uri);
+    gnc_launch_doclink (GTK_WINDOW(dialog), uri);
     return TRUE;
 }
 

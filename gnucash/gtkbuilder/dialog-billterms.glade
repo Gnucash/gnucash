@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="discount_adj">
     <property name="upper">100</property>
     <property name="step_increment">0.01</property>
-    <property name="page_increment">0.10000000000000001</property>
+    <property name="page_increment">0.1</property>
   </object>
   <object class="GtkAdjustment" id="discount_days_adj">
     <property name="upper">365</property>
@@ -27,7 +27,7 @@
   <object class="GtkAdjustment" id="pdiscount_adj">
     <property name="upper">100</property>
     <property name="step_increment">0.01</property>
-    <property name="page_increment">0.10000000000000001</property>
+    <property name="page_increment">0.1</property>
   </object>
   <object class="GtkAdjustment" id="pdiscount_day_adj">
     <property name="lower">1</property>
@@ -46,9 +46,6 @@
   <object class="GtkWindow" id="terms_notebook_window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">window1</property>
-    <child>
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkNotebook" id="term_notebook">
         <property name="visible">True</property>
@@ -403,14 +400,14 @@
         </child>
       </object>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkWindow" id="terms_window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Terms</property>
     <signal name="destroy" handler="billterms_window_destroy_cb" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -638,8 +635,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="margin_left">6</property>
-                                <property name="margin_right">6</property>
+                                <property name="margin_start">6</property>
+                                <property name="margin_end">6</property>
                                 <property name="margin_top">3</property>
                                 <property name="margin_bottom">3</property>
                                 <property name="label">(type)</property>
@@ -756,6 +753,9 @@
         </child>
       </object>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkListStore" id="type_liststore">
     <columns>
@@ -775,9 +775,6 @@
     <property name="can_focus">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox9">
         <property name="visible">True</property>
@@ -950,14 +947,14 @@
       <action-widget response="-6">cancel_butt</action-widget>
       <action-widget response="-5">ok_butt</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="new_term_dialog">
     <property name="can_focus">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox7">
         <property name="visible">True</property>
@@ -1190,5 +1187,8 @@
       <action-widget response="-6">cancel_button</action-widget>
       <action-widget response="-5">ok_button</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

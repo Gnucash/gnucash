@@ -269,14 +269,19 @@ static void gnc_currency_edit_active_changed (GtkComboBox *gobject,
 {
     GNCCurrencyEdit *self = GNC_CURRENCY_EDIT (gobject);
 
-    gnc_commodity *currency = gnc_currency_edit_get_currency (self);
-    const gchar *mnemonic = gnc_commodity_get_mnemonic (currency);
+    /* Check that there is a proper selection before proceeding.  Doing so allows
+     * GTK entry completion to proceed. */
+    if (gtk_combo_box_get_active(GTK_COMBO_BOX(self)) != -1)
+    {
+        gnc_commodity *currency = gnc_currency_edit_get_currency (self);
+        const gchar *mnemonic = gnc_commodity_get_mnemonic (currency);
 
-    g_signal_handlers_block_by_func(G_OBJECT(self),
-                                    G_CALLBACK(gnc_currency_edit_active_changed), user_data);
-    g_object_set (G_OBJECT (self), "mnemonic", mnemonic, NULL);
-    g_signal_handlers_unblock_by_func(G_OBJECT(self),
-                                      G_CALLBACK(gnc_currency_edit_active_changed), user_data);
+        g_signal_handlers_block_by_func(G_OBJECT(self),
+                                        G_CALLBACK(gnc_currency_edit_active_changed), user_data);
+        g_object_set (G_OBJECT (self), "mnemonic", mnemonic, NULL);
+        g_signal_handlers_unblock_by_func(G_OBJECT(self),
+                                        G_CALLBACK(gnc_currency_edit_active_changed), user_data);
+    }
 }
 
 /** This auxiliary function adds a single currency name to the combo

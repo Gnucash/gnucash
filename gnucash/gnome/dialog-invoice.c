@@ -73,8 +73,8 @@
 #include "gnc-main-window.h"
 #include "gnc-state.h"
 
-#include "dialog-assoc.h"
-#include "dialog-assoc-utils.h"
+#include "dialog-doclink.h"
+#include "dialog-doclink-utils.h"
 #include "dialog-transfer.h"
 #include "gnc-uri-utils.h"
 
@@ -169,7 +169,7 @@ struct _invoice_window
     GtkWidget  * active_check;
     GtkWidget  * paid_label;
 
-    GtkWidget  * assoc_link_button;
+    GtkWidget  * doclink_button;
 
     GtkWidget  * owner_box;
     GtkWidget  * owner_label;
@@ -328,12 +328,12 @@ gnc_invoice_window_get_invoice (InvoiceWindow *iw)
 }
 
 GtkWidget *
-gnc_invoice_window_get_assoc_link_button (InvoiceWindow *iw)
+gnc_invoice_window_get_doclink_button (InvoiceWindow *iw)
 {
     if (!iw)
         return NULL;
 
-    return iw->assoc_link_button;
+    return iw->doclink_button;
 }
 
 static void
@@ -2407,10 +2407,10 @@ gnc_invoice_save_page (InvoiceWindow *iw,
 }
 
 static gboolean
-assoc_link_button_cb (GtkLinkButton *button, InvoiceWindow *iw)
+doclink_button_cb (GtkLinkButton *button, InvoiceWindow *iw)
 {
     GncInvoice *invoice = gncInvoiceLookup (iw->book, &iw->invoice_guid);
-    gnc_assoc_open_uri (GTK_WINDOW(iw->dialog), gncInvoiceGetAssociation (invoice));
+    gnc_doclink_open_uri (GTK_WINDOW(iw->dialog), gncInvoiceGetDocLink (invoice));
 
     return TRUE;
 }
@@ -2427,7 +2427,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     const gchar *prefs_group = NULL;
     gboolean is_credit_note = FALSE;
     const gchar *style_label = NULL;
-    const gchar *assoc_uri;
+    const gchar *doclink_uri;
 
     invoice = gncInvoiceLookup (iw->book, &iw->invoice_guid);
     is_credit_note = gncInvoiceGetIsCreditNote (invoice);
@@ -2458,22 +2458,24 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     iw->job_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_hbox"));
     iw->paid_label = GTK_WIDGET (gtk_builder_get_object (builder, "paid_label"));
 
-    iw->assoc_link_button = GTK_WIDGET(gtk_builder_get_object (builder, "assoc_link_button"));
-    g_signal_connect (G_OBJECT(iw->assoc_link_button), "activate-link",
-                      G_CALLBACK(assoc_link_button_cb), iw);
+    iw->doclink_button = GTK_WIDGET(gtk_builder_get_object (builder, "doclink_button"));
+    g_signal_connect (G_OBJECT (iw->doclink_button), "activate-link",
+                      G_CALLBACK (doclink_button_cb), iw);
 
-    /* invoice association */
-    assoc_uri = gncInvoiceGetAssociation (invoice);
-    if (assoc_uri)
+    /* invoice doclink */
+    doclink_uri = gncInvoiceGetDocLink (invoice);
+    if (doclink_uri)
     {
-        gchar *display_uri = gnc_assoc_get_unescaped_just_uri (assoc_uri);
-        gtk_button_set_label (GTK_BUTTON(iw->assoc_link_button), _("Open Association:"));
-        gtk_link_button_set_uri (GTK_LINK_BUTTON(iw->assoc_link_button), display_uri);
-        gtk_widget_show (GTK_WIDGET (iw->assoc_link_button));
+        gchar *display_uri = gnc_doclink_get_unescaped_just_uri (doclink_uri);
+        gtk_button_set_label (GTK_BUTTON (iw->doclink_button),
+                              _("Open Linked Document:"));
+        gtk_link_button_set_uri (GTK_LINK_BUTTON (iw->doclink_button),
+                                 display_uri);
+        gtk_widget_show (GTK_WIDGET (iw->doclink_button));
         g_free (display_uri);
     }
     else
-        gtk_widget_hide (GTK_WIDGET (iw->assoc_link_button));
+        gtk_widget_hide (GTK_WIDGET (iw->doclink_button));
 
     // Add a style context for this label so it can be easily manipulated with css
     gnc_widget_style_context_add_class (GTK_WIDGET(iw->paid_label), "gnc-class-highlight");
@@ -2665,31 +2667,30 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 }
 
 void
-gnc_invoice_update_assoc_for_window (GncInvoice *invoice, const gchar *uri)
+gnc_invoice_update_doclink_for_window (GncInvoice *invoice, const gchar *uri)
 {
     InvoiceWindow *iw = gnc_plugin_page_invoice_get_window (invoice);
 
     if (iw)
     {
-        GtkWidget *assoc_link_button = gnc_invoice_window_get_assoc_link_button (iw);
+        GtkWidget *doclink_button = gnc_invoice_window_get_doclink_button (iw);
 
         if (g_strcmp0 (uri, "") == 0) // deleted uri
         {
             GtkAction *uri_action;
 
             // update the menu actions
-            uri_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(iw->page), "BusinessAssociationOpenAction");
-            gtk_action_set_sensitive (uri_action, FALSE);
-            uri_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(iw->page), "BusinessAssociationRemoveAction");
+            uri_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(iw->page), "BusinessLinkOpenAction");
             gtk_action_set_sensitive (uri_action, FALSE);
 
-            gtk_widget_hide (assoc_link_button);
+            gtk_widget_hide (doclink_button);
         }
         else
         {
-            gchar *display_uri = gnc_assoc_get_unescaped_just_uri (uri);
-            gtk_link_button_set_uri (GTK_LINK_BUTTON(assoc_link_button), display_uri);
-            gtk_widget_show (GTK_WIDGET(assoc_link_button));
+            gchar *display_uri = gnc_doclink_get_unescaped_just_uri (uri);
+            gtk_link_button_set_uri (GTK_LINK_BUTTON (doclink_button),
+                                     display_uri);
+            gtk_widget_show (GTK_WIDGET (doclink_button));
             g_free (display_uri);
         }
     }

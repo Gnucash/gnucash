@@ -68,10 +68,10 @@ struct QofSessionImpl
      * for an error in the backend.
      */
     QofBackendError get_error () noexcept;
-    std::string get_error_message () const noexcept;
+    const std::string& get_error_message () const noexcept;
     QofBook * get_book () const noexcept;
     QofBackend * get_backend () const noexcept;
-    std::string get_file_path () const noexcept;
+    const std::string& get_file_path () const noexcept;
     bool is_saving () const noexcept;
 
     /**

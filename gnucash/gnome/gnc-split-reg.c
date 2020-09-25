@@ -37,8 +37,8 @@
 #include "qof.h"
 #include "SX-book.h"
 #include "dialog-account.h"
-#include "dialog-assoc.h"
-#include "dialog-assoc-utils.h"
+#include "dialog-doclink.h"
+#include "dialog-doclink-utils.h"
 #include "dialog-sx-editor.h"
 #include "dialog-sx-from-trans.h"
 #include "gnc-component-manager.h"
@@ -116,10 +116,10 @@ void gsr_default_paste_txn_handler( GNCSplitReg *w, gpointer ud );
 void gsr_default_void_txn_handler ( GNCSplitReg *w, gpointer ud );
 void gsr_default_unvoid_txn_handler ( GNCSplitReg *w, gpointer ud );
 void gsr_default_reverse_txn_handler ( GNCSplitReg *w, gpointer ud );
-void gsr_default_associate_handler ( GNCSplitReg *w );
-void gsr_default_associate_open_handler ( GNCSplitReg *w );
-void gsr_default_associate_remove_handler ( GNCSplitReg *w );
-static void gsr_default_associate_from_sheet_handler ( GNCSplitReg *w );
+void gsr_default_doclink_handler ( GNCSplitReg *w );
+void gsr_default_doclink_open_handler ( GNCSplitReg *w );
+void gsr_default_doclink_remove_handler ( GNCSplitReg *w );
+static void gsr_default_doclink_from_sheet_handler ( GNCSplitReg *w );
 
 static void gsr_emit_simple_signal       ( GNCSplitReg *gsr, const char *sigName );
 static void gsr_emit_help_changed        ( GnucashRegister *reg, gpointer user_data );
@@ -488,9 +488,9 @@ gsr_create_table( GNCSplitReg *gsr )
     gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
     gnucash_sheet_set_window (gnucash_register_get_sheet (gsr->reg), gsr->window);
 
-    // setup the callback for when the associate cell clicked on
-    gnucash_register_set_open_assoc_cb (gsr->reg,
-        (GFunc)gsr_default_associate_from_sheet_handler, gsr);
+    // setup the callback for when the doclink cell clicked on
+    gnucash_register_set_open_doclink_cb (gsr->reg,
+        (GFunc)gsr_default_doclink_from_sheet_handler, gsr);
 
     gtk_widget_show ( GTK_WIDGET(gsr->reg) );
     g_signal_connect (gsr->reg, "activate_cursor",
@@ -1264,9 +1264,9 @@ gnc_split_reg_reinitialize_trans_cb(GtkWidget *widget, gpointer data)
     gsr_emit_simple_signal( gsr, "reinit_ent" );
 }
 
-/* Edit the associated link for the current transaction. */
+/* Edit the document link for the current transaction. */
 void
-gsr_default_associate_handler (GNCSplitReg *gsr)
+gsr_default_doclink_handler (GNCSplitReg *gsr)
 {
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
     Split *split = gnc_split_register_get_current_split (reg);
@@ -1292,20 +1292,23 @@ gsr_default_associate_handler (GNCSplitReg *gsr)
         return;
 
     // fix an earlier error when storing relative paths before version 3.5
-    uri = gnc_assoc_convert_trans_associate_uri (trans, gsr->read_only);
+    uri = gnc_doclink_convert_trans_link_uri (trans, gsr->read_only);
 
-    ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(gsr->window), _("Change a Transaction Association"), uri);
+    ret_uri =
+        gnc_doclink_get_uri_dialog (GTK_WINDOW (gsr->window),
+                                    _("Change a Transaction Linked Document"),
+                                    uri);
 
     if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
-        xaccTransSetAssociation (trans, ret_uri);
+        xaccTransSetDocLink (trans, ret_uri);
 
     g_free (ret_uri);
     g_free (uri);
 }
 
-/* Opens the associated link for the current transaction. */
+/* Opens the document link for the current transaction. */
 void
-gsr_default_associate_open_handler (GNCSplitReg *gsr)
+gsr_default_doclink_open_handler (GNCSplitReg *gsr)
 {
     CursorClass cursor_class;
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
@@ -1327,15 +1330,15 @@ gsr_default_associate_open_handler (GNCSplitReg *gsr)
         return;
 
     // fix an earlier error when storing relative paths before version 3.5
-    uri = gnc_assoc_convert_trans_associate_uri (trans, gsr->read_only);
+    uri = gnc_doclink_convert_trans_link_uri (trans, gsr->read_only);
 
-    gnc_assoc_open_uri (GTK_WINDOW (gsr->window), uri);
+    gnc_doclink_open_uri (GTK_WINDOW (gsr->window), uri);
     g_free (uri);
 }
 
-/* Removes the associated link for the current transaction. */
+/* Removes the document link for the current transaction. */
 void
-gsr_default_associate_remove_handler (GNCSplitReg *gsr)
+gsr_default_doclink_remove_handler (GNCSplitReg *gsr)
 {
     CursorClass cursor_class;
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
@@ -1358,11 +1361,11 @@ gsr_default_associate_remove_handler (GNCSplitReg *gsr)
     if (is_trans_readonly_and_warn (GTK_WINDOW(gsr->window), trans))
         return;
 
-    xaccTransSetAssociation (trans, "");
+    xaccTransSetDocLink (trans, "");
 }
 
 static void
-gsr_default_associate_from_sheet_handler (GNCSplitReg *gsr)
+gsr_default_doclink_from_sheet_handler (GNCSplitReg *gsr)
 {
     CursorClass cursor_class;
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
@@ -1378,10 +1381,10 @@ gsr_default_associate_from_sheet_handler (GNCSplitReg *gsr)
     trans = xaccSplitGetParent (split);
 
     // fix an earlier error when storing relative paths before version 3.5
-    uri = gnc_assoc_convert_trans_associate_uri (trans, gsr->read_only);
+    uri = gnc_doclink_convert_trans_link_uri (trans, gsr->read_only);
 
     if (uri)
-        gnc_assoc_open_uri (GTK_WINDOW (gsr->window), uri);
+        gnc_doclink_open_uri (GTK_WINDOW (gsr->window), uri);
 
     g_free (uri);
 }

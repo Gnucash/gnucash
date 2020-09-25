@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="end_row_adj">
     <property name="upper">1000</property>
     <property name="step_increment">1</property>
@@ -46,6 +46,12 @@
     <child type="titlebar">
       <placeholder/>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -54,8 +60,8 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="valign">start</property>
-        <property name="margin_left">12</property>
-        <property name="margin_right">12</property>
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
         <property name="label" translatable="yes" comments="You should localize the (british) examples to your region.">This assistant will help you import Prices from a CSV file.
 
 There is a minimum number of columns that have to be present for a successful import, these are Date, Amount, From Namespace, From Symbol and Currency To. If all entries are for the same Commodity / Currency then you can select them and then the columns will be Date and Amount.
@@ -213,8 +219,8 @@ There are two reserved names which can't be used to save custom settings:
                   <object class="GtkBox" id="vbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">6</property>
-                    <property name="margin_right">6</property>
+                    <property name="margin_start">6</property>
+                    <property name="margin_end">6</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">3</property>
                     <child>
@@ -577,8 +583,8 @@ There are two reserved names which can't be used to save custom settings:
                   <object class="GtkGrid" id="table3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">6</property>
-                    <property name="margin_right">6</property>
+                    <property name="margin_start">6</property>
+                    <property name="margin_end">6</property>
                     <property name="margin_bottom">6</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">6</property>
@@ -700,8 +706,8 @@ There are two reserved names which can't be used to save custom settings:
                       <object class="GtkSeparator" id="hseparator2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">3</property>
-                        <property name="margin_right">3</property>
+                        <property name="margin_start">3</property>
+                        <property name="margin_end">3</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1072,6 +1078,17 @@ Cancel to abort.&lt;/b&gt;</property>
     </child>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+      </object>
     </child>
   </object>
 </interface>

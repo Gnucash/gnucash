@@ -30,7 +30,8 @@
 (define (get-all-splits accounts end-date)
   (let ((query (qof-query-create-for-splits)))
     (qof-query-set-book query (gnc-get-current-book))
-    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+    (xaccQueryAddClearedMatch
+     query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
     (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddDateMatchTT query #f 0 (and end-date #t) (or end-date 0) QOF-QUERY-AND)
     (let ((splits (qof-query-run query)))

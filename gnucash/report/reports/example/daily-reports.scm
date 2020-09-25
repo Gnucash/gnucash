@@ -217,7 +217,8 @@
 
           ;; for balance purposes, we don't need to do this, but it cleans up
           ;; the table display.
-          (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+          (xaccQueryAddClearedMatch
+           query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
           ;; add accounts to the query (include subaccounts
           ;; if requested)
           (gnc:report-percent-done 25)

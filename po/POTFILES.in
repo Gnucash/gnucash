@@ -55,13 +55,13 @@ gnucash/gnome/assistant-stock-split.c
 gnucash/gnome/business-gnome-utils.c
 gnucash/gnome/business-options-gnome.c
 gnucash/gnome/business-urls.c
-gnucash/gnome/dialog-assoc.c
 gnucash/gnome/dialog-billterms.c
 gnucash/gnome/dialog-choose-owner.c
 gnucash/gnome/dialog-commodities.c
 gnucash/gnome/dialog-customer.c
 gnucash/gnome/dialog-custom-report.c
 gnucash/gnome/dialog-date-close.c
+gnucash/gnome/dialog-doclink.c
 gnucash/gnome/dialog-employee.c
 gnucash/gnome/dialog-fincalc.c
 gnucash/gnome/dialog-find-account.c
@@ -130,9 +130,9 @@ gnucash/gnome-utils/account-quickfill.c
 gnucash/gnome-utils/assistant-xml-encoding.c
 gnucash/gnome-utils/cursors.c
 gnucash/gnome-utils/dialog-account.c
-gnucash/gnome-utils/dialog-assoc-utils.c
 gnucash/gnome-utils/dialog-book-close.c
 gnucash/gnome-utils/dialog-commodity.c
+gnucash/gnome-utils/dialog-doclink-utils.c
 gnucash/gnome-utils/dialog-dup-trans.c
 gnucash/gnome-utils/dialog-file-access.c
 gnucash/gnome-utils/dialog-object-references.c
@@ -248,7 +248,6 @@ gnucash/gtkbuilder/business-options-gnome.glade
 gnucash/gtkbuilder/business-prefs.glade
 gnucash/gtkbuilder/dialog-account.glade
 gnucash/gtkbuilder/dialog-account-picker.glade
-gnucash/gtkbuilder/dialog-assoc.glade
 gnucash/gtkbuilder/dialog-bi-import-gui.glade
 gnucash/gtkbuilder/dialog-billterms.glade
 gnucash/gtkbuilder/dialog-book-close.glade
@@ -259,6 +258,7 @@ gnucash/gtkbuilder/dialog-customer.glade
 gnucash/gtkbuilder/dialog-customer-import-gui.glade
 gnucash/gtkbuilder/dialog-custom-report.glade
 gnucash/gtkbuilder/dialog-date-close.glade
+gnucash/gtkbuilder/dialog-doclink.glade
 gnucash/gtkbuilder/dialog-employee.glade
 gnucash/gtkbuilder/dialog-file-access.glade
 gnucash/gtkbuilder/dialog-fincalc.glade
@@ -402,11 +402,11 @@ gnucash/register/ledger-core/split-register-load.c
 gnucash/register/ledger-core/split-register-model.c
 gnucash/register/ledger-core/split-register-model-save.c
 gnucash/register/ledger-core/split-register-util.c
-gnucash/register/register-core/assoccell.c
 gnucash/register/register-core/basiccell.c
 gnucash/register/register-core/cellblock.c
 gnucash/register/register-core/cell-factory.c
 gnucash/register/register-core/checkboxcell.c
+gnucash/register/register-core/doclinkcell.c
 gnucash/register/register-core/formulacell.c
 gnucash/register/register-core/gtable.c
 gnucash/register/register-core/numcell.c

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">1000000000</property>
     <property name="step_increment">1</property>
@@ -14,9 +14,6 @@
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox15">
         <property name="visible">True</property>
@@ -65,21 +62,6 @@
             <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="duplicate_title_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="margin_left">6</property>
-            <property name="label" translatable="yes">&lt;b&gt;New Transaction Information&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -153,12 +135,30 @@
             <property name="position">2</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkLabel" id="duplicate_title_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin_start">6</property>
+            <property name="label" translatable="yes">&lt;b&gt;New Transaction Information&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
       </object>
     </child>
     <action-widgets>
       <action-widget response="-6">button76</action-widget>
       <action-widget response="-5">button77</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="filter_by_dialog">
     <property name="can_focus">False</property>
@@ -168,9 +168,6 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_plugin_page_register2_filter_response_cb" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox19">
         <property name="visible">True</property>
@@ -667,6 +664,9 @@
       <action-widget response="-6">cancelbutton4</action-widget>
       <action-widget response="-5">okbutton4</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="void_transaction_dialog">
     <property name="can_focus">False</property>
@@ -675,9 +675,6 @@
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox16">
         <property name="visible">True</property>
@@ -775,5 +772,8 @@
       <action-widget response="-6">cancelbutton1</action-widget>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

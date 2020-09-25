@@ -139,7 +139,7 @@ also show overall period profit & loss."))
 
    (list 'YearDelta
          (cons 'text (G_ "Year"))
-         (cons 'tip (G_ "One year.")))
+         (cons 'tip (G_ "One Year.")))
 
    (list 'HalfYearDelta
          (cons 'text (G_ "Half Year"))

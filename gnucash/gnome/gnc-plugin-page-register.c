@@ -232,6 +232,8 @@ static void gnc_plugin_page_register_cmd_delete_transaction (GtkAction* action,
         GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_cmd_blank_transaction (GtkAction* action,
                                                             GncPluginPageRegister* plugin_page);
+static void gnc_plugin_page_register_cmd_goto_date (GtkAction* action,
+                                                    GncPluginPageRegister* page);
 static void gnc_plugin_page_register_cmd_duplicate_transaction (
     GtkAction* action, GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_cmd_reinitialize_transaction (
@@ -254,13 +256,13 @@ static void gnc_plugin_page_register_cmd_account_report (GtkAction* action,
                                                          GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_cmd_transaction_report (GtkAction* action,
         GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_associate_transaction (GtkAction *action,
+static void gnc_plugin_page_register_cmd_linked_transaction (GtkAction *action,
                                                                 GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_associate_transaction_open (GtkAction *action,
+static void gnc_plugin_page_register_cmd_linked_transaction_open (GtkAction *action,
                                                                      GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_associate_transaction_remove (GtkAction *action,
+static void gnc_plugin_page_register_cmd_linked_transaction_remove (GtkAction *action,
                                                                        GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction* action,
+static void gnc_plugin_page_register_cmd_jump_linked_invoice (GtkAction* action,
                                                                   GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_help_changed_cb (GNCSplitReg* gsr,
                                              GncPluginPageRegister* register_page);
@@ -290,10 +292,17 @@ static GList* invoices_from_transaction (Transaction* trans);
 #define PASTE_TRANSACTION_LABEL          N_("_Paste Transaction")
 #define DUPLICATE_TRANSACTION_LABEL      N_("Dup_licate Transaction")
 #define DELETE_TRANSACTION_LABEL         N_("_Delete Transaction")
-#define ASSOCIATE_TRANSACTION_LABEL      N_("Update _Association for Transaction")
-#define ASSOCIATE_TRANSACTION_OPEN_LABEL  N_("_Open Association for Transaction")
-#define ASSOCIATE_TRANSACTION_REMOVE_LABEL N_("Re_move Association from Transaction")
-#define JUMP_ASSOCIATED_INVOICE_LABEL     N_("Open Associated Invoice")
+/* Translators: This is a menu item that opens a dialog for linking an
+   external file or URL with the bill, invoice, transaction, or voucher or
+   removing such an link. */
+#define LINK_TRANSACTION_LABEL           N_("_Manage Document Link...")
+/* Translators: This is a menu item that opens an external file or URI that may
+   be linked to the current bill, invoice, transaction, or voucher using
+   the operating system's default application for the file or URI mime type. */
+#define LINK_TRANSACTION_OPEN_LABEL      N_("_Open Linked Document")
+/* Translators: This is a menu item that will open the bill, invoice, or voucher
+   that is posted to the current transaction if there is one. */
+#define JUMP_LINKED_INVOICE_LABEL        N_("Jump to Invoice")
 #define CUT_SPLIT_LABEL                  N_("Cu_t Split")
 #define COPY_SPLIT_LABEL                 N_("_Copy Split")
 #define PASTE_SPLIT_LABEL                N_("_Paste Split")
@@ -304,10 +313,9 @@ static GList* invoices_from_transaction (Transaction* trans);
 #define PASTE_TRANSACTION_TIP            N_("Paste the transaction from the clipboard")
 #define DUPLICATE_TRANSACTION_TIP        N_("Make a copy of the current transaction")
 #define DELETE_TRANSACTION_TIP           N_("Delete the current transaction")
-#define ASSOCIATE_TRANSACTION_TIP        N_("Update Association for the current transaction")
-#define ASSOCIATE_TRANSACTION_OPEN_TIP   N_("Open Association for the current transaction")
-#define ASSOCIATE_TRANSACTION_REMOVE_TIP N_("Remove the association from the current transaction")
-#define JUMP_ASSOCIATED_INVOICE_TIP      N_("Open the associated invoice")
+#define LINK_TRANSACTION_TIP             N_("Add, change, or unlink the document linked with the current transaction")
+#define LINK_TRANSACTION_OPEN_TIP        N_("Open the linked document for the current transaction")
+#define JUMP_LINKED_INVOICE_TIP          N_("Jump to the linked bill, invoice, or voucher")
 #define CUT_SPLIT_TIP                    N_("Cut the selected split into clipboard")
 #define COPY_SPLIT_TIP                   N_("Copy the selected split into clipboard")
 #define PASTE_SPLIT_TIP                  N_("Paste the split from the clipboard")
@@ -411,24 +419,19 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_reverse_transaction)
     },
     {
-        "AssociateTransactionAction", NULL, ASSOCIATE_TRANSACTION_LABEL, NULL,
-        ASSOCIATE_TRANSACTION_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_associate_transaction)
+        "LinkTransactionAction", NULL, LINK_TRANSACTION_LABEL, NULL,
+        LINK_TRANSACTION_TIP,
+        G_CALLBACK (gnc_plugin_page_register_cmd_linked_transaction)
     },
     {
-        "AssociateTransactionOpenAction", NULL, ASSOCIATE_TRANSACTION_OPEN_LABEL, NULL,
-        ASSOCIATE_TRANSACTION_OPEN_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_associate_transaction_open)
+        "LinkedTransactionOpenAction", NULL, LINK_TRANSACTION_OPEN_LABEL, NULL,
+        LINK_TRANSACTION_OPEN_TIP,
+        G_CALLBACK (gnc_plugin_page_register_cmd_linked_transaction_open)
     },
     {
-        "AssociateTransactionRemoveAction", NULL, ASSOCIATE_TRANSACTION_REMOVE_LABEL, NULL,
-        ASSOCIATE_TRANSACTION_REMOVE_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_associate_transaction_remove)
-    },
-    {
-        "JumpAssociatedInvoiceAction", NULL, JUMP_ASSOCIATED_INVOICE_LABEL, NULL,
-        JUMP_ASSOCIATED_INVOICE_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_jump_associated_invoice)
+        "JumpLinkedInvoiceAction", NULL, JUMP_LINKED_INVOICE_LABEL, NULL,
+        JUMP_LINKED_INVOICE_TIP,
+        G_CALLBACK (gnc_plugin_page_register_cmd_jump_linked_invoice)
     },
 
     /* View menu */
@@ -480,13 +483,21 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction)
     },
     {
+        "GotoDateAction", "x-office-calendar", N_ ("_Go to Date"), "<primary>G",
+        N_ ("Move to the the split at specified date"),
+        G_CALLBACK (gnc_plugin_page_register_cmd_goto_date)
+    },
+    {
         "EditExchangeRateAction", NULL, N_ ("Edit E_xchange Rate"), NULL,
         N_ ("Edit the exchange rate for the current transaction"),
         G_CALLBACK (gnc_plugin_page_register_cmd_exchange_rate)
     },
     {
-        "JumpTransactionAction", GNC_ICON_JUMP_TO, N_ ("_Jump"), NULL,
-        N_ ("Jump to the corresponding transaction in the other account"),
+/* Translators: This is a menu item that will open a register tab for the
+   account of the first other account in the current transaction's split list
+   with focus on the current transaction's entry in that register. */
+        "JumpTransactionAction", GNC_ICON_JUMP_TO, N_ ("_Jump to the other account"), NULL,
+        N_ ("Open a new register tab for the other account with focus on this transaction."),
         G_CALLBACK (gnc_plugin_page_register_cmd_jump)
     },
     {
@@ -526,7 +537,7 @@ static GtkToggleActionEntry toggle_entries[] =
 {
     {
         "ViewStyleDoubleLineAction", NULL, N_ ("_Double Line"), NULL,
-        N_ ("Show a second line with \"Action\", \"Notes\", and \"File Association\" for each transaction."),
+        N_ ("Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for each transaction."),
         G_CALLBACK (gnc_plugin_page_register_cmd_style_double_line), FALSE
     },
 
@@ -598,14 +609,14 @@ static action_toolbar_labels toolbar_labels[] =
     { "DeleteTransactionAction",            N_ ("Delete") },
     { "DuplicateTransactionAction",         N_ ("Duplicate") },
     { "SplitTransactionAction",             N_ ("Split") },
+    { "JumpTransactionAction",              N_ ("Jump") },
     { "ScheduleTransactionAction",          N_ ("Schedule") },
     { "BlankTransactionAction",             N_ ("Blank") },
     { "ActionsReconcileAction",             N_ ("Reconcile") },
     { "ActionsAutoClearAction",             N_ ("Auto-clear") },
-    { "AssociateTransactionAction",         N_ ("Update Association") },
-    { "AssociateTransactionOpenAction",     N_ ("Open Association") },
-    { "AssociateTransactionRemoveAction",   N_ ("Remove Association") },
-    { "JumpAssociatedInvoiceAction",        N_ ("Open Invoice") },
+    { "LinkTransactionAction",              N_ ("Manage Document Link") },
+    { "LinkedTransactionOpenAction",        N_ ("Open Linked Document") },
+    { "JumpLinkedInvoiceAction",            N_ ("Invoice") },
     { NULL, NULL },
 };
 
@@ -988,8 +999,7 @@ static const char* readonly_inactive_actions[] =
     "ScheduleTransactionAction",
     "ScrubAllAction",
     "ScrubCurrentAction",
-    "AssociateTransactionAction",
-    "AssociateTransactionRemoveAction",
+    "LinkTransactionAction",
     NULL
 };
 
@@ -1013,10 +1023,9 @@ static const char* tran_action_labels[] =
     PASTE_TRANSACTION_LABEL,
     DUPLICATE_TRANSACTION_LABEL,
     DELETE_TRANSACTION_LABEL,
-    ASSOCIATE_TRANSACTION_LABEL,
-    ASSOCIATE_TRANSACTION_OPEN_LABEL,
-    ASSOCIATE_TRANSACTION_REMOVE_LABEL,
-    JUMP_ASSOCIATED_INVOICE_LABEL,
+    LINK_TRANSACTION_LABEL,
+    LINK_TRANSACTION_OPEN_LABEL,
+    JUMP_LINKED_INVOICE_LABEL,
     NULL
 };
 
@@ -1028,10 +1037,9 @@ static const char* tran_action_tips[] =
     PASTE_TRANSACTION_TIP,
     DUPLICATE_TRANSACTION_TIP,
     DELETE_TRANSACTION_TIP,
-    ASSOCIATE_TRANSACTION_TIP,
-    ASSOCIATE_TRANSACTION_OPEN_TIP,
-    ASSOCIATE_TRANSACTION_REMOVE_TIP,
-    JUMP_ASSOCIATED_INVOICE_TIP,
+    LINK_TRANSACTION_TIP,
+    LINK_TRANSACTION_OPEN_TIP,
+    JUMP_LINKED_INVOICE_TIP,
     NULL
 };
 
@@ -1133,15 +1141,11 @@ gnc_plugin_page_register_ui_update (gpointer various,
                                          "UnvoidTransactionAction");
     gtk_action_set_sensitive (GTK_ACTION (action), voided);
 
-    /* Set 'Open and Remove Associated' */
-    uri = xaccTransGetAssociation (trans);
+    /* Set 'Open and Remove Linked Documents' */
+    uri = xaccTransGetDocLink (trans);
 
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
-                                         "AssociateTransactionOpenAction");
-    gtk_action_set_sensitive (GTK_ACTION(action), (uri ? TRUE:FALSE));
-
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                         "AssociateTransactionRemoveAction");
+                                         "LinkedTransactionOpenAction");
     gtk_action_set_sensitive (GTK_ACTION(action), (uri ? TRUE:FALSE));
 
     /* Set 'ExecAssociatedInvoice'
@@ -1150,7 +1154,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
        - it has splits with an invoice associated with it
     */
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                        "JumpAssociatedInvoiceAction");
+                                         "JumpLinkedInvoiceAction");
 
     invoices = invoices_from_transaction (trans);
     gtk_action_set_sensitive (GTK_ACTION (action), (invoices != NULL));
@@ -1905,6 +1909,25 @@ gnc_plugin_page_register_update_edit_menu (GncPluginPage* page, gboolean hide)
     gtk_action_set_visible (action,  !hide || can_paste);
 }
 
+static gboolean abort_scrub = FALSE;
+static gboolean is_scrubbing = FALSE;
+
+static gboolean
+finish_scrub (GncPluginPage* page)
+{
+    if (is_scrubbing)
+    {
+        gboolean ret = gnc_verify_dialog (GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page))), FALSE, _("'Check & Repair' is currently running, do you want to abort it?"));
+        if (ret)
+        {
+            abort_scrub = TRUE;
+            gnc_resume_gui_refresh (); // This is so quit does not complain about an ongoing operation.
+            return TRUE;
+        }
+        return FALSE;
+    }
+    return TRUE;
+}
 
 static gboolean
 gnc_plugin_page_register_finish_pending (GncPluginPage* page)
@@ -1916,6 +1939,9 @@ gnc_plugin_page_register_finish_pending (GncPluginPage* page)
     const gchar* name;
     gint response;
 
+    if (!finish_scrub (page))
+        return FALSE;
+    
     reg_page = GNC_PLUGIN_PAGE_REGISTER (page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (reg_page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
@@ -4521,8 +4547,8 @@ gnc_plugin_page_register_cmd_delete_transaction (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_associate_transaction (GtkAction *action,
-                                                    GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_linked_transaction (GtkAction *action,
+                                                 GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
 
@@ -4531,14 +4557,14 @@ gnc_plugin_page_register_cmd_associate_transaction (GtkAction *action,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    gsr_default_associate_handler (priv->gsr);
+    gsr_default_doclink_handler (priv->gsr);
     gnc_plugin_page_register_ui_update (NULL, plugin_page);
     LEAVE (" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_associate_transaction_open (GtkAction *action,
-                                                         GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_linked_transaction_open (GtkAction *action,
+                                                      GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
 
@@ -4547,13 +4573,13 @@ gnc_plugin_page_register_cmd_associate_transaction_open (GtkAction *action,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    gsr_default_associate_open_handler (priv->gsr);
+    gsr_default_doclink_open_handler (priv->gsr);
     LEAVE (" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_associate_transaction_remove (GtkAction *action,
-                                                           GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_linked_transaction_remove (GtkAction *action,
+                                                        GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
 
@@ -4562,7 +4588,7 @@ gnc_plugin_page_register_cmd_associate_transaction_remove (GtkAction *action,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    gsr_default_associate_remove_handler (priv->gsr);
+    gsr_default_doclink_remove_handler (priv->gsr);
     gnc_plugin_page_register_ui_update (NULL, plugin_page);
     LEAVE (" ");
 
@@ -4602,8 +4628,8 @@ GList* invoices_from_transaction (Transaction* trans)
 }
 
 static void
-gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction* action,
-                                                      GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_jump_linked_invoice (GtkAction* action,
+                                                  GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
@@ -4652,7 +4678,7 @@ gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction* action,
             details = g_list_reverse (details);
             choice = gnc_choose_radio_option_dialog
                 (GNC_PLUGIN_PAGE (plugin_page)->window, _("Select document"),
-                 _("Several documents are associated with this transaction. \
+                 _("Several documents are linked with this transaction. \
 Please choose one:"), _("Select"), 0, details);
             if (choice >= 0)
                 invoice = (GncInvoice *)(g_list_nth (invoices, choice))->data;
@@ -4685,6 +4711,43 @@ gnc_plugin_page_register_cmd_blank_transaction (GtkAction* action,
         gnc_split_register_redraw (reg);
 
     gnc_split_reg_jump_to_blank (priv->gsr);
+    LEAVE (" ");
+}
+
+static void
+gnc_plugin_page_register_cmd_goto_date (GtkAction* action,
+                                        GncPluginPageRegister* page)
+{
+    GNCSplitReg* gsr;
+    Query* query;
+    time64 date = gnc_time (NULL);
+    GList *splits;
+
+    ENTER ("(action %p, plugin_page %p)", action, page);
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
+
+    if (!gnc_dup_time64_dialog (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)),
+                                _("Go to Date"), _("Go to Date"), &date))
+    {
+        LEAVE ("goto_date cancelled");
+        return;
+    }
+
+    gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE (page));
+    query = gnc_plugin_page_register_get_query (GNC_PLUGIN_PAGE (page));
+    splits = g_list_copy (qof_query_run (query));
+    splits = g_list_sort (splits, (GCompareFunc)xaccSplitOrder);
+
+    for (GList *lp = splits; lp; lp = lp->next)
+    {
+        if (xaccTransGetDate (xaccSplitGetParent (lp->data)) >= date)
+        {
+            gnc_split_reg_jump_to_split (gsr, lp->data);
+            break;
+        }
+    }
+
+    g_list_free (splits);
     LEAVE (" ");
 }
 
@@ -4859,16 +4922,34 @@ gnc_plugin_page_register_cmd_schedule (GtkAction* action,
     LEAVE (" ");
 }
 
+static void scrub_split (Split *split)
+{
+    Account *acct;
+    Transaction *trans;
+    GNCLot *lot;
+
+    g_return_if_fail (split);
+    acct = xaccSplitGetAccount (split);
+    trans = xaccSplitGetParent (split);
+    lot = xaccSplitGetLot (split);
+    g_return_if_fail (trans);
+
+    xaccTransScrubOrphans (trans);
+    xaccTransScrubImbalance (trans, gnc_get_current_root_account(), NULL);
+    if (lot && xaccAccountIsAPARType (xaccAccountGetType (acct)))
+    {
+        gncScrubBusinessLot (lot);
+        gncScrubBusinessSplit (split);
+    }
+}
+
 static void
 gnc_plugin_page_register_cmd_scrub_current (GtkAction* action,
                                             GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
     Query* query;
-    Account* root;
-    Transaction* trans;
     Split* split;
-    GNCLot* lot;
     SplitRegister* reg;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
@@ -4884,27 +4965,11 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction* action,
     }
 
     reg = gnc_ledger_display_get_split_register (priv->ledger);
-    trans = gnc_split_register_get_current_trans (reg);
-    if (trans == NULL)
-    {
-        LEAVE ("no trans found");
-        return;
-    }
 
     gnc_suspend_gui_refresh();
-    root = gnc_get_current_root_account();
-    xaccTransScrubOrphans (trans);
-    xaccTransScrubImbalance (trans, root, NULL);
-
-    split = gnc_split_register_get_current_split (reg);
-    lot = xaccSplitGetLot (split);
-    if (lot &&
-        xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
-    {
-        gncScrubBusinessLot (lot);
-        gncScrubBusinessSplit (split);
-    }
+    scrub_split (gnc_split_register_get_current_split (reg));
     gnc_resume_gui_refresh();
+
     LEAVE (" ");
 }
 
@@ -4914,7 +4979,6 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
 {
     GncPluginPageRegisterPrivate* priv;
     Query* query;
-    Account* root;
     GncWindow* window;
     GList* node, *splits;
     gint split_count = 0, curr_split_no = 0;
@@ -4933,49 +4997,37 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
     }
 
     gnc_suspend_gui_refresh();
+    is_scrubbing = TRUE;
     window = GNC_WINDOW (GNC_PLUGIN_PAGE (plugin_page)->window);
     gnc_window_set_progressbar_window (window);
 
-    root = gnc_get_current_root_account();
-
     splits = qof_query_run (query);
     split_count = g_list_length (splits);
-    for (node = splits; node; node = node->next)
+    for (node = splits; node && !abort_scrub; node = node->next, curr_split_no++)
     {
-        GNCLot* lot;
         Split* split = node->data;
-        Transaction* trans = xaccSplitGetParent (split);
 
         if (!split) continue;
 
         PINFO ("Start processing split %d of %d",
                curr_split_no + 1, split_count);
 
-        if (curr_split_no % 100 == 0)
+        if (curr_split_no % 10 == 0)
         {
             char* progress_msg = g_strdup_printf (message, curr_split_no, split_count);
             gnc_window_show_progress (progress_msg, (100 * curr_split_no) / split_count);
             g_free (progress_msg);
         }
 
-        xaccTransScrubOrphans (trans);
-        xaccTransScrubImbalance (trans, root, NULL);
-
-        lot = xaccSplitGetLot (split);
-        if (lot &&
-            xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
-        {
-            gncScrubBusinessLot (lot);
-            gncScrubBusinessSplit (split);
-        }
+        scrub_split (split);
 
         PINFO ("Finished processing split %d of %d",
                curr_split_no + 1, split_count);
-        curr_split_no++;
     }
 
     gnc_window_show_progress (NULL, -1.0);
     gnc_resume_gui_refresh();
+    is_scrubbing = FALSE;
     LEAVE (" ");
 }
 

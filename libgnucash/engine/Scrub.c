@@ -57,6 +57,20 @@
 #define G_LOG_DOMAIN "gnc.engine.scrub"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
+static gboolean abort_now = FALSE;
+static gint scrub_depth = 0;
+
+void
+gnc_set_abort_scrub (gboolean abort)
+{
+    abort_now = abort;
+}
+
+gboolean
+gnc_get_ongoing_scrub (void)
+{
+    return scrub_depth > 0;
+}
 
 /* ================================================================ */
 
@@ -64,10 +78,11 @@ void
 xaccAccountTreeScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
 {
     if (!acc) return;
-
+    scrub_depth ++;
     xaccAccountScrubOrphans (acc, percentagefunc);
     gnc_account_foreach_descendant(acc,
                                    (AccountCb)xaccAccountScrubOrphans, percentagefunc);
+    scrub_depth--;
 }
 
 static void
@@ -83,6 +98,7 @@ TransScrubOrphansFast (Transaction *trans, Account *root)
     {
         Split *split = node->data;
         Account *orph;
+        if (abort_now) break;
 
         if (split->acc) continue;
 
@@ -110,6 +126,7 @@ xaccAccountScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
     guint current_split = 0;
 
     if (!acc) return;
+    scrub_depth++;
 
     str = xaccAccountGetName (acc);
     str = str ? str : "(null)";
@@ -120,12 +137,12 @@ xaccAccountScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
     for (node = splits; node; node = node->next)
     {
         Split *split = node->data;
-
-        if (current_split % 100 == 0)
+        if (current_split % 10 == 0)
         {
             char *progress_msg = g_strdup_printf (message, str, current_split, total_splits);
             (percentagefunc)(progress_msg, (100 * current_split) / total_splits);
             g_free (progress_msg);
+            if (abort_now) break;
         }
 
         TransScrubOrphansFast (xaccSplitGetParent (split),
@@ -133,6 +150,7 @@ xaccAccountScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
         current_split++;
     }
     (percentagefunc)(NULL, -1.0);
+    scrub_depth--;
 }
 
 
@@ -148,6 +166,7 @@ xaccTransScrubOrphans (Transaction *trans)
     for (node = trans->splits; node; node = node->next)
     {
         Split *split = node->data;
+        if (abort_now) break;
 
         if (split->acc)
         {
@@ -183,9 +202,13 @@ void
 xaccAccountScrubSplits (Account *account)
 {
     GList *node;
-
+    scrub_depth++;
     for (node = xaccAccountGetSplitList (account); node; node = node->next)
+    {
+        if (abort_now) break;
         xaccSplitScrub (node->data);
+    }
+    scrub_depth--;
 }
 
 void
@@ -291,9 +314,11 @@ xaccSplitScrub (Split *split)
 void
 xaccAccountTreeScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
 {
+    scrub_depth++;
     xaccAccountScrubImbalance (acc, percentagefunc);
     gnc_account_foreach_descendant(acc,
                                    (AccountCb)xaccAccountScrubImbalance, percentagefunc);
+    scrub_depth--;
 }
 
 void
@@ -305,6 +330,7 @@ xaccAccountScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
     gint split_count = 0, curr_split_no = 0;
 
     if (!acc) return;
+    scrub_depth++;
 
     str = xaccAccountGetName(acc);
     str = str ? str : "(null)";
@@ -316,11 +342,12 @@ xaccAccountScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
     {
         Split *split = node->data;
         Transaction *trans = xaccSplitGetParent(split);
+        if (abort_now) break;
 
         PINFO("Start processing split %d of %d",
               curr_split_no + 1, split_count);
 
-        if (curr_split_no % 100 == 0)
+        if (curr_split_no % 10 == 0)
         {
             char *progress_msg = g_strdup_printf (message, str, curr_split_no, split_count);
             (percentagefunc)(progress_msg, (100 * curr_split_no) / split_count);
@@ -329,7 +356,6 @@ xaccAccountScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
 
         TransScrubOrphansFast (xaccSplitGetParent (split),
                                gnc_account_get_root (acc));
-        (percentagefunc)(NULL, 0.0);
 
         xaccTransScrubCurrency(trans);
 
@@ -340,6 +366,7 @@ xaccAccountScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
         curr_split_no++;
     }
     (percentagefunc)(NULL, -1.0);
+    scrub_depth--;
 }
 
 static Split *
@@ -1243,19 +1270,22 @@ scrub_trans_currency_helper (Transaction *t, gpointer data)
 static void
 scrub_account_commodity_helper (Account *account, gpointer data)
 {
+    scrub_depth++;
     xaccAccountScrubCommodity (account);
     xaccAccountDeleteOldData (account);
+    scrub_depth--;
 }
 
 void
 xaccAccountTreeScrubCommodities (Account *acc)
 {
     if (!acc) return;
-
+    scrub_depth++;
     xaccAccountTreeForEachTransaction (acc, scrub_trans_currency_helper, NULL);
 
     scrub_account_commodity_helper (acc, NULL);
     gnc_account_foreach_descendant (acc, scrub_account_commodity_helper, NULL);
+    scrub_depth--;
 }
 
 /* ================================================================ */
@@ -1315,13 +1345,14 @@ xaccAccountTreeScrubQuoteSources (Account *root, gnc_commodity_table *table)
         LEAVE("Oops");
         return;
     }
-
+    scrub_depth++;
     gnc_commodity_table_foreach_commodity (table, check_quote_source, &new_style);
 
     move_quote_source(root, GINT_TO_POINTER(new_style));
     gnc_account_foreach_descendant (root, move_quote_source,
                                     GINT_TO_POINTER(new_style));
     LEAVE("Migration done");
+    scrub_depth--;
 }
 
 /* ================================================================ */
@@ -1333,6 +1364,7 @@ xaccAccountScrubKvp (Account *account)
     gchar *str2;
 
     if (!account) return;
+    scrub_depth++;
 
     qof_instance_get_kvp (QOF_INSTANCE (account), &v, 1, "notes");
     if (G_VALUE_HOLDS_STRING (&v))
@@ -1350,6 +1382,7 @@ xaccAccountScrubKvp (Account *account)
         qof_instance_slot_delete (QOF_INSTANCE (account), "placeholder");
 
     qof_instance_slot_delete_if_empty (QOF_INSTANCE (account), "hbci");
+    scrub_depth--;
 }
 
 /* ================================================================ */

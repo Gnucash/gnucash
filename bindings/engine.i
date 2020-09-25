@@ -361,6 +361,7 @@ void qof_book_set_string_option(QofBook* book, const char* opt_name, const char*
     SET_ENUM("CLEARED-FROZEN");
     SET_ENUM("CLEARED-RECONCILED");
     SET_ENUM("CLEARED-VOIDED");
+    SET_ENUM("CLEARED-ALL");
 
     SET_ENUM("HOOK-REPORT");
     SET_ENUM("HOOK-SAVE-OPTIONS");

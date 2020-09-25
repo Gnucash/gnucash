@@ -303,7 +303,8 @@ more than one currency. This report is not designed to cope with this possibilit
 ;; set up the query to get the splits in the chosen account
 (define (setup-query query account date)
   (qof-query-set-book query (gnc-get-current-book))
-  (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+  (xaccQueryAddClearedMatch
+   query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
   (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
   (xaccQueryAddDateMatchTT query #f 0 #t date QOF-QUERY-AND)
   (qof-query-set-sort-order query
@@ -769,7 +770,7 @@ copying this report to a spreadsheet for use in a mail merge.")
 			       (addr-fax   (gncAddressGetFax   addr))
 			       (addr-email (gncAddressGetEmail addr))
 			       (company-active (if (gncOwnerGetActive owner)
-			         (G_ "Y") (G_ "N")))
+			         (C_ "One-letter indication for 'yes'" "Y") (C_ "One-letter indication for 'no'" "N")))
 			       (opt-fld-list '())
 			      )
 ;;            (gnc:debug "aging-renderer: disp-addr-source=" disp-addr-source

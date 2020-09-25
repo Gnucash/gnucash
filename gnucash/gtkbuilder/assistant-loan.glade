@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="len_liststore">
     <columns>
       <!-- column-name period -->
@@ -94,6 +94,12 @@
     <signal name="cancel" handler="loan_assistant_cancel" swapped="no"/>
     <signal name="close" handler="loan_assistant_close" swapped="no"/>
     <signal name="prepare" handler="loan_assistant_prepare" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -102,8 +108,8 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="valign">start</property>
-        <property name="margin_left">12</property>
-        <property name="margin_right">12</property>
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
         <property name="label" translatable="yes">This is a step-by-step method for creating a loan repayment within GnuCash. In this assistant, you can input the details of your loan and its repayment along with the details of its payback. Using that information, the appropriate Scheduled Transactions will be created.
 
 If you make a mistake or want to make changes later, you can edit the created Scheduled Transactions directly.</property>
@@ -465,7 +471,7 @@ Do you utilise an escrow account, if so an account must be specified...</propert
           <object class="GtkBox" id="vbox174">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">12</property>
+            <property name="margin_start">12</property>
             <property name="margin_bottom">12</property>
             <property name="orientation">vertical</property>
             <child>
@@ -489,7 +495,7 @@ Do you utilise an escrow account, if so an account must be specified...</propert
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin_left">12</property>
+                <property name="margin_start">12</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label847963">
@@ -1255,6 +1261,17 @@ Review the details below and if correct press Apply to create the schedule.</pro
     </child>
     <child>
       <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+      </object>
     </child>
   </object>
 </interface>

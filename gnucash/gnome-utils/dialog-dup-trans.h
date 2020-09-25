@@ -31,29 +31,29 @@
 #include <gnc-date.h>
 
 
-/********************************************************************\
- * gnc_dup_trans_dialog                                             *
- *   opens up a window to do an automatic transfer between accounts *
- *                                                                  *
- * Args:   parent    - the parent of the window to be created       *
- *         title     - the text of the title label, otherwise       *
- *                     defaults to "New Transaction Information"    *
- *         show_date - TRUE to display date label and edit widgets  *
- *         date      - the initial date to use, and the output      *
- *                     parameter for the new date                   *
- *         num       - input num field                              *
- *         out_num   - output num field, g_newed string             *
- *         tnum      - input tnum field, if used, else NULL         *
- *         out_tnum  - output tnum field, g_newed string            *
- *         tassoc    - input association field, if used, else NULL  *
- *         out_tnum  - output association field, g_newed string     *
- * Return: TRUE if user closes dialog with 'OK'                     *
-\********************************************************************/
+/***********************************************************************\
+ * gnc_dup_trans_dialog                                                 *
+ *   opens up a window to do an automatic transfer between accounts     *
+ *                                                                      *
+ * Args:   parent        - the parent of the window to be created       *
+ *         title         - the text of the title label, otherwise       *
+ *                         defaults to "New Transaction Information"    *
+ *         show_date     - TRUE to display date label and edit widgets  *
+ *         date          - the initial date to use, and the output      *
+ *                         parameter for the new date                   *
+ *         num           - input num field                              *
+ *         out_num       - output num field, g_newed string             *
+ *         tnum          - input tnum field, if used, else NULL         *
+ *         out_tnum      - output tnum field, g_newed string            *
+ *         tdoclink      - input document link field, if used, else NULL*
+ *         out_tdoclink  - output document link field, g_newed string   *
+ * Return: TRUE if user closes dialog with 'OK'                         *
+\***********************************************************************/
 gboolean
 gnc_dup_trans_dialog (GtkWidget * parent, const char* title, gboolean show_date,
                       time64 *date_p, const char *num, char **out_num,
                       const char *tnum, char **out_tnum,
-                      const char *tassoc, char **out_tassoc);
+                      const char *tdoclink, char **out_tdoclink);
 
 gboolean
 gnc_dup_trans_dialog_gdate (GtkWidget * parent, GDate *gdate_p,

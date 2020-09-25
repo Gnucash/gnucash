@@ -104,7 +104,8 @@
          (splits
           (let ((query (qof-query-create-for-splits)))
             (qof-query-set-book query (gnc-get-current-book))
-            (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+            (xaccQueryAddClearedMatch
+             query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
             (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
             (xaccQueryAddDateMatchTT query #t from-date #t to-date QOF-QUERY-AND)
             (filter desc-filter? (qof-query-run query))))

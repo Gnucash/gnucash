@@ -55,6 +55,9 @@ static QofLogModule log_module = GNC_MOD_ACCOUNT;
 /* The Canonical Account Separator.  Pre-Initialized. */
 static gchar account_separator[8] = ".";
 static gunichar account_uc_separator = ':';
+
+static bool imap_convert_bayes_to_flat_run = false;
+
 /* Predefined KVP paths */
 static const std::string KEY_ASSOC_INCOME_ACCOUNT("ofx/associated-income-account");
 static const std::string KEY_RECONCILE_INFO("reconcile-info");
@@ -238,7 +241,7 @@ gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invali
         {
             gchar *tmp_list = NULL;
 
-            tmp_list = g_strconcat (account_list, "\n", node->data, NULL );
+            tmp_list = g_strconcat (account_list, "\n", node->data, nullptr);
             g_free ( account_list );
             account_list = tmp_list;
         }
@@ -989,7 +992,7 @@ gnc_account_class_init (AccountClass *klass)
                            "added before reconcile.",
                            FALSE,
                            static_cast<GParamFlags>(G_PARAM_READWRITE)));
-    
+
     g_object_class_install_property
     (gobject_class,
      PROP_PLACEHOLDER,
@@ -1862,12 +1865,12 @@ gnc_account_set_balance_dirty (Account *acc)
 void gnc_account_set_defer_bal_computation (Account *acc, gboolean defer)
 {
     AccountPrivate *priv;
-    
+
     g_return_if_fail (GNC_IS_ACCOUNT (acc));
-    
+
     if (qof_instance_get_destroying (acc))
         return;
-    
+
     priv = GET_PRIVATE (acc);
     priv->defer_bal_computation = defer;
 }
@@ -4075,7 +4078,7 @@ xaccAccountSetTaxUSCopyNumber (Account *acc, gint64 copy_number)
 const char *gnc_account_get_debit_string (GNCAccountType acct_type)
 {
     if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS))
-        return dflt_acct_debit_str;
+        return _(dflt_acct_debit_str);
 
     auto result = gnc_acct_debit_strs.find(acct_type);
     if (result != gnc_acct_debit_strs.end())
@@ -4087,7 +4090,7 @@ const char *gnc_account_get_debit_string (GNCAccountType acct_type)
 const char *gnc_account_get_credit_string (GNCAccountType acct_type)
 {
     if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS))
-        return dflt_acct_credit_str;
+        return _(dflt_acct_credit_str);
 
     auto result = gnc_acct_credit_strs.find(acct_type);
     if (result != gnc_acct_credit_strs.end())
@@ -4750,7 +4753,7 @@ GetOrMakeOrphanAccount (Account *root, gnc_commodity * currency)
     }
 
     accname = g_strconcat (_("Orphaned Gains"), "-",
-                           gnc_commodity_get_mnemonic (currency), NULL);
+                           gnc_commodity_get_mnemonic (currency), nullptr);
 
     /* See if we've got one of these going already ... */
     acc = gnc_account_lookup_by_name(root, accname);
@@ -5540,7 +5543,7 @@ convert_entry (KvpEntry entry, Account* root)
 }
 
 static std::vector<FlatKvpEntry>
-get_new_flat_imap (Account * acc)
+get_flat_imap (Account * acc)
 {
     auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
     auto slot = frame->get_slot ({IMAP_FRAME_BAYES});
@@ -5566,17 +5569,15 @@ convert_imap_account_bayes_to_flat (Account *acc)
     auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
     if (!frame->get_keys().size())
         return false;
-    auto new_imap = get_new_flat_imap(acc);
+    auto flat_imap = get_flat_imap(acc);
+    if (!flat_imap.size ())
+        return false;
     xaccAccountBeginEdit(acc);
     frame->set({IMAP_FRAME_BAYES}, nullptr);
-    if (!new_imap.size ())
-    {
-        xaccAccountCommitEdit(acc);
-        return false;
-    }
-    std::for_each(new_imap.begin(), new_imap.end(), [&frame] (FlatKvpEntry const & entry) {
-        frame->set({entry.first.c_str()}, entry.second);
-    });
+    std::for_each(flat_imap.begin(), flat_imap.end(),
+                  [&frame] (FlatKvpEntry const & entry) {
+                      frame->set({entry.first.c_str()}, entry.second);
+                  });
     qof_instance_set_dirty (QOF_INSTANCE (acc));
     xaccAccountCommitEdit(acc);
     return true;
@@ -5604,6 +5605,12 @@ imap_convert_bayes_to_flat (QofBook * book)
     return ret;
 }
 
+void
+gnc_account_reset_convert_bayes_to_flat (void)
+{
+    imap_convert_bayes_to_flat_run = false;
+}
+
 /*
  * Here we check to see the state of import map data.
  *
@@ -5618,10 +5625,13 @@ imap_convert_bayes_to_flat (QofBook * book)
 static void
 check_import_map_data (QofBook *book)
 {
-    if (gnc_features_check_used (book, GNC_FEATURE_GUID_FLAT_BAYESIAN))
+    if (gnc_features_check_used (book, GNC_FEATURE_GUID_FLAT_BAYESIAN) ||
+        imap_convert_bayes_to_flat_run)
         return;
+
     /* This function will set GNC_FEATURE_GUID_FLAT_BAYESIAN if necessary.*/
     imap_convert_bayes_to_flat (book);
+    imap_convert_bayes_to_flat_run = true;
 }
 
 static constexpr double threshold = .90 * probability_factor; /* 90% */

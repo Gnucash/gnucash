@@ -33,7 +33,7 @@
 #include "business-urls.h"
 #include "combocell.h"
 #include "dialog-account.h"
-#include "dialog-assoc.h"
+#include "dialog-doclink.h"
 #include "dialog-commodity.h"
 #include "dialog-invoice.h"
 #include "dialog-preferences.h"
@@ -167,13 +167,16 @@ gnc_html_register_url_cb (const char *location, const char *label,
         }
     }
 
-    else if (strncmp ("trans-association-guid=", location, strlen ("trans-association-guid=")) == 0)
+    else if (strncmp ("trans-doclink-guid=", location,
+                      strlen ("trans-doclink-guid=")) == 0)
     {
-        if (!validate_type("trans-association-guid=", location, GNC_ID_TRANS, result, &guid, &entity))
+        if (!validate_type("trans-doclink-guid=", location, GNC_ID_TRANS,
+                           result, &guid, &entity))
             return FALSE;
 
         trans = (Transaction *) entity;
-        gnc_assoc_open_uri (gnc_ui_get_gtk_window (GTK_WIDGET(result->parent)), xaccTransGetAssociation (trans));
+        gnc_doclink_open_uri (gnc_ui_get_gtk_window (GTK_WIDGET (result->parent)),
+                              xaccTransGetDocLink (trans));
         return TRUE;
     }
 

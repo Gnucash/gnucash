@@ -13,7 +13,7 @@ set (gtkbuilder_SOURCES
         business-prefs.glade
         dialog-account-picker.glade
         dialog-account.glade
-        dialog-assoc.glade
+        dialog-doclink.glade
         dialog-bi-import-gui.glade
         dialog-billterms.glade
         dialog-book-close.glade

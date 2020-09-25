@@ -104,6 +104,7 @@ typedef struct _AccountWindow
     GNCAccountType preferred_account_type;
     GtkWidget * type_view;
     GtkTreeView * parent_tree;
+    GtkWidget * parent_scroll;
 
     GtkWidget * opening_balance_edit;
     GtkWidget * opening_balance_date_edit;
@@ -150,6 +151,7 @@ void gnc_account_renumber_response_cb (GtkDialog *dialog, gint response, Renumbe
 
 void gnc_account_window_destroy_cb (GtkWidget *object, gpointer data);
 void opening_equity_cb (GtkWidget *w, gpointer data);
+static void gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data);
 void gnc_account_name_changed_cb(GtkWidget *widget, gpointer data);
 void gnc_account_color_default_cb(GtkWidget *widget, gpointer data);
 void gnc_account_name_insert_text_cb (GtkWidget   *entry,
@@ -570,6 +572,17 @@ gnc_finish_ok (AccountWindow *aw)
         gnc_commodity *commodity;
         Account *parent;
         Account *account;
+        GtkTreeSelection *selection;
+
+        /* Drop the old parent_tree so we can update it with an upto date one */
+        gtk_container_remove (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
+        aw->parent_tree = gnc_tree_view_account_new (TRUE);
+        gtk_container_add (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
+        gtk_widget_show (GTK_WIDGET(aw->parent_tree));
+
+        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->parent_tree));
+        g_signal_connect (G_OBJECT(selection), "changed",
+                          G_CALLBACK(gnc_account_parent_changed_cb), aw);
 
         gnc_suspend_gui_refresh ();
 
@@ -1401,11 +1414,11 @@ gnc_account_window_create(GtkWindow *parent, AccountWindow *aw)
 
     aw->account_scu = GTK_WIDGET(gtk_builder_get_object (builder, "account_scu"));
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "parent_scroll"));
+    aw->parent_scroll = GTK_WIDGET(gtk_builder_get_object (builder, "parent_scroll"));
 
-    aw->parent_tree = gnc_tree_view_account_new(TRUE);
-    gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(aw->parent_tree));
-    gtk_widget_show(GTK_WIDGET(aw->parent_tree));
+    aw->parent_tree = gnc_tree_view_account_new (TRUE);
+    gtk_container_add (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
+    gtk_widget_show (GTK_WIDGET(aw->parent_tree));
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->parent_tree));
     g_signal_connect (G_OBJECT (selection), "changed",
                       G_CALLBACK (gnc_account_parent_changed_cb), aw);
@@ -1812,8 +1825,9 @@ gnc_ui_new_accounts_from_name_with_defaults (GtkWindow *parent,
     }
     aw = gnc_ui_new_account_window_internal (parent, book, base_account,
                                              subaccount_names,
-            valid_types, default_commodity,
-            TRUE);
+                                             valid_types,
+                                             default_commodity,
+                                             TRUE);
 
     while (!done)
     {

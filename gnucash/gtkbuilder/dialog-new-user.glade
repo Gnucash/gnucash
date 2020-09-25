@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="new_user_cancel_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -9,9 +9,6 @@
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="vbox">
         <property name="visible">True</property>
@@ -127,13 +124,13 @@
       <action-widget response="-9">no_but</action-widget>
       <action-widget response="-8">yes_but</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkWindow" id="new_user_window">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <child>
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox" id="vbox2">
         <property name="visible">True</property>
@@ -311,6 +308,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>

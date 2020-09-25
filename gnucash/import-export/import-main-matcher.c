@@ -388,6 +388,7 @@ resolve_conflicts (GNCImportMainMatcher *info)
 
 void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info)
 {
+    g_assert (info);
     gnc_gen_trans_list_create_matches (info);
     resolve_conflicts (info);
     gtk_widget_show_all (GTK_WIDGET (info->main_widget));
@@ -1807,7 +1808,9 @@ gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui)
     GHashTable* account_hash =
         g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL,
                               (GDestroyNotify)g_slist_free);
-    GList *candidate_txns = query_imported_transaction_accounts (gui);
+    GList *candidate_txns;
+    g_assert (gui);
+    candidate_txns = query_imported_transaction_accounts (gui);
 
     create_hash_of_potential_matches (candidate_txns, account_hash);
     perform_matching (gui, account_hash);

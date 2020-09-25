@@ -161,8 +161,8 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
     pagename-format (N_ "Report format")
     "a" (G_ "Report Format") 'default
     (list (vector 'default
-                  (G_ "default format")
-                  (G_ "default format"))
+                  (G_ "Default Format")
+                  (G_ "Default Format"))
           (vector 'au-bas
                   (G_ "Australia BAS")
                   (G_ "Australia BAS. Specify sales, purchase and tax \

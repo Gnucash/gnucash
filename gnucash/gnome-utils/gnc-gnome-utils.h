@@ -61,7 +61,7 @@ void gnc_gnome_help (const char *file_name,
                      const char *anchor);
 /** Launch the default browser and open the provided URI.
  */
-void gnc_launch_assoc (GtkWindow *parent, const char *uri);
+void gnc_launch_doclink (GtkWindow *parent, const char *uri);
 
 /** Set the help callback to 'gnc_book_options_help_cb' to open a help browser
  *  and point it to the Book Options link in the Help file.

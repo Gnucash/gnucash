@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="reconcile_start_dialog">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox6">
         <property name="visible">True</property>
@@ -69,8 +66,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin_left">6</property>
-                <property name="margin_right">6</property>
+                <property name="margin_start">6</property>
+                <property name="margin_end">6</property>
                 <property name="label" translatable="yes">&lt;b&gt;Reconcile Information&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </object>
@@ -177,8 +174,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="margin_left">3</property>
-                        <property name="margin_right">3</property>
+                        <property name="margin_start">3</property>
+                        <property name="margin_end">3</property>
                         <property name="margin_top">3</property>
                         <property name="margin_bottom">3</property>
                         <property name="label">$15.00</property>
@@ -243,8 +240,7 @@
                   <object class="GtkImage" id="future_icon">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="stock">gtk-dialog-warning</property>
-                    <property name="icon_size">3</property>
+                    <property name="icon_name">dialog-warning</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -256,6 +252,8 @@
                   <object class="GtkLabel" id="future_text">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_start">3</property>
+                    <property name="margin_end">3</property>
                     <property name="label" translatable="yes">Statement Date is after today</property>
                     <property name="wrap">True</property>
                   </object>
@@ -286,5 +284,8 @@
       <action-widget response="-6">cancelbutton1</action-widget>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

@@ -229,10 +229,10 @@ const char *gnc_float_txn_get_notes (const FloatingTxn *ft)
     return ft->m_notes;
 }
 
-const char *gnc_float_txn_get_association (const FloatingTxn *ft)
+const char *gnc_float_txn_get_doclink (const FloatingTxn *ft)
 {
     g_return_val_if_fail (ft, NULL);
-    return ft->m_association;
+    return ft->m_doclink;
 }
 
 SplitList *gnc_float_txn_get_splits (const FloatingTxn *ft)
@@ -309,10 +309,10 @@ void gnc_float_txn_set_notes (FloatingTxn *ft, const char *notes)
     ft->m_notes = notes;
 };
 
-void gnc_float_txn_set_association (FloatingTxn *ft, const char *association)
+void gnc_float_txn_set_doclink (FloatingTxn *ft, const char *doclink)
 {
     g_return_if_fail (ft);
-    ft->m_association = association;
+    ft->m_doclink = doclink;
 };
 
 void gnc_float_txn_set_splits (FloatingTxn *ft, SplitList *splits)
@@ -346,7 +346,7 @@ FloatingTxn *gnc_txn_to_float_txn (Transaction *txn, gboolean use_cut_semantics)
     }
     ft->m_description = xaccTransGetDescription (txn);
     ft->m_notes = xaccTransGetNotes (txn);
-    ft->m_association = xaccTransGetAssociation (txn);
+    ft->m_doclink = xaccTransGetDocLink (txn);
 
     for (iter = xaccTransGetSplitList (txn); iter ; iter = iter->next)
     {
@@ -388,8 +388,8 @@ void gnc_float_txn_to_txn_swap_accounts (const FloatingTxn *ft, Transaction *txn
         xaccTransSetNum (txn, ft->m_num);
     if (ft->m_notes)
         xaccTransSetNotes (txn, ft->m_notes);
-    if (ft->m_association)
-        xaccTransSetAssociation (txn, ft->m_association);
+    if (ft->m_doclink)
+        xaccTransSetDocLink (txn, ft->m_doclink);
     if (ft->m_date_posted)
         xaccTransSetDatePostedSecs (txn, ft->m_date_posted);
 

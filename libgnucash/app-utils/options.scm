@@ -1683,6 +1683,8 @@ the option '~a'."))
       ("Enable links" #f "Enable Links")
       ;; invoice.scm, renamed November 2018
       ("Individual Taxes" #f "Use Detailed Tax Summary")
+      ;; income-gst-statement.scm
+      ("default format" #f "Default Format")
       ))
 
   (define (lookup-option section name)

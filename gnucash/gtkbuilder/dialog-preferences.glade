@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="atm_fee_adj">
     <property name="upper">1000</property>
     <property name="step_increment">0.01</property>
@@ -72,7 +72,7 @@
     <property name="lower">1</property>
     <property name="upper">10</property>
     <property name="value">1</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="key_length_adj">
@@ -127,9 +127,6 @@
     <property name="default_height">400</property>
     <property name="type_hint">normal</property>
     <signal name="response" handler="gnc_preferences_response_cb" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -886,7 +883,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
+                    <property name="top_attach">9</property>
                   </packing>
                 </child>
                 <child>
@@ -896,7 +893,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">5</property>
+                    <property name="top_attach">8</property>
                   </packing>
                 </child>
                 <child>
@@ -909,7 +906,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
+                    <property name="top_attach">6</property>
                   </packing>
                 </child>
                 <child>
@@ -922,7 +919,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="top_attach">16</property>
                   </packing>
                 </child>
                 <child>
@@ -932,7 +929,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">15</property>
                   </packing>
                 </child>
                 <child>
@@ -950,7 +947,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">17</property>
                   </packing>
                 </child>
                 <child>
@@ -963,7 +960,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">8</property>
+                    <property name="top_attach">11</property>
                   </packing>
                 </child>
                 <child>
@@ -976,7 +973,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">9</property>
+                    <property name="top_attach">12</property>
                   </packing>
                 </child>
                 <child>
@@ -995,7 +992,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">10</property>
+                    <property name="top_attach">13</property>
                   </packing>
                 </child>
                 <child>
@@ -1015,7 +1012,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">11</property>
+                    <property name="top_attach">14</property>
                   </packing>
                 </child>
                 <child>
@@ -1036,7 +1033,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">11</property>
+                    <property name="top_attach">14</property>
                   </packing>
                 </child>
                 <child>
@@ -1063,8 +1060,141 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
+                    <property name="top_attach">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label49">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Numbers&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pref/general/force-price-decimal">
+                    <property name="label" translatable="yes">Force P_rices to display as decimals</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Force prices to display as decimals even if they must be rounded.</property>
+                    <property name="tooltip_text" translatable="yes">If active, GnuCash will round prices as necessary to display them as decimals instead of displaying the exact fraction if the fractional part cannot be exactly represented as a decimal.</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pref/general/negative-in-red">
+                    <property name="label" translatable="yes">Display ne_gative amounts in red</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Display negative amounts in red.</property>
+                    <property name="tooltip_text" translatable="yes">Display negative amounts in red.</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pref/general/auto-decimal-point">
+                    <property name="label" translatable="yes">_Automatic decimal point</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Automatically insert a decimal point into values that are entered without one.</property>
+                    <property name="tooltip_text" translatable="yes">Automatically insert a decimal point into values that are entered without one.</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label17">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">_Decimal places</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">pref/general/auto-decimal-places</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">4</property>
                   </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pref/general/auto-decimal-places">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">How many automatic decimal places will be filled in.</property>
+                    <property name="tooltip_text" translatable="yes">How many automatic decimal places will be filled in.</property>
+                    <property name="invisible_char">●</property>
+                    <property name="text" translatable="yes">2</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="adjustment">auto_decimal_places_adj</property>
+                    <property name="climb_rate">1</property>
+                    <property name="value">2</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label25">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -1112,7 +1242,7 @@ many months before the current month</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Date/Time</property>
+                <property name="label" translatable="yes">Numbers, Date, Time</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -1235,7 +1365,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">24</property>
+                    <property name="top_attach">17</property>
                   </packing>
                 </child>
                 <child>
@@ -1250,7 +1380,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">22</property>
+                    <property name="top_attach">15</property>
                   </packing>
                 </child>
                 <child>
@@ -1268,7 +1398,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">16</property>
+                    <property name="top_attach">9</property>
                   </packing>
                 </child>
                 <child>
@@ -1281,7 +1411,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">15</property>
+                    <property name="top_attach">8</property>
                   </packing>
                 </child>
                 <child>
@@ -1295,114 +1425,13 @@ many months before the current month</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label17">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Decimal places</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">pref/general/auto-decimal-places</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">13</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="pref/general/auto-decimal-places">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">How many automatic decimal places will be filled in.</property>
-                    <property name="tooltip_text" translatable="yes">How many automatic decimal places will be filled in.</property>
-                    <property name="invisible_char">●</property>
-                    <property name="text" translatable="yes">2</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
-                    <property name="adjustment">auto_decimal_places_adj</property>
-                    <property name="climb_rate">1</property>
-                    <property name="value">2</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">13</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/general/auto-decimal-point">
-                    <property name="label" translatable="yes">_Automatic decimal point</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Automatically insert a decimal point into values that are entered without one.</property>
-                    <property name="tooltip_text" translatable="yes">Automatically insert a decimal point into values that are entered without one.</property>
-                    <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">12</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/general/negative-in-red">
-                    <property name="label" translatable="yes">Display ne_gative amounts in red</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Display negative amounts in red.</property>
-                    <property name="tooltip_text" translatable="yes">Display negative amounts in red.</property>
-                    <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">11</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="pref/general/force-price-decimal">
-                    <property name="label" translatable="yes">Force P_rices to display as decimals</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Force prices to display as decimals even if they must be rounded.</property>
-                    <property name="tooltip_text" translatable="yes">If active, GnuCash will round prices as necessary to display them as decimals instead of displaying the exact fraction if the fractional part cannot be exactly represented as a decimal.</property>
-                    <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">10</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label49">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Numbers&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">9</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="label51">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">8</property>
+                    <property name="top_attach">7</property>
                   </packing>
                 </child>
                 <child>
@@ -1415,7 +1444,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">30</property>
+                    <property name="top_attach">23</property>
                   </packing>
                 </child>
                 <child>
@@ -1429,7 +1458,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">31</property>
+                    <property name="top_attach">24</property>
                   </packing>
                 </child>
                 <child>
@@ -1449,7 +1478,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">31</property>
+                    <property name="top_attach">24</property>
                   </packing>
                 </child>
                 <child>
@@ -1481,7 +1510,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">18</property>
+                    <property name="top_attach">11</property>
                   </packing>
                 </child>
                 <child>
@@ -1525,7 +1554,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">18</property>
+                    <property name="top_attach">11</property>
                   </packing>
                 </child>
                 <child>
@@ -1543,7 +1572,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">17</property>
+                    <property name="top_attach">10</property>
                   </packing>
                 </child>
                 <child>
@@ -1553,7 +1582,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">21</property>
+                    <property name="top_attach">14</property>
                   </packing>
                 </child>
                 <child>
@@ -1571,7 +1600,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">23</property>
+                    <property name="top_attach">16</property>
                   </packing>
                 </child>
                 <child>
@@ -1589,7 +1618,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">24</property>
+                    <property name="top_attach">17</property>
                   </packing>
                 </child>
                 <child>
@@ -1607,7 +1636,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">25</property>
+                    <property name="top_attach">18</property>
                   </packing>
                 </child>
                 <child>
@@ -1624,7 +1653,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">19</property>
+                    <property name="top_attach">12</property>
                   </packing>
                 </child>
                 <child>
@@ -1632,14 +1661,14 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin_start">12</property>
                     <property name="label" translatable="yes">Time to _wait for answer</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general/autosave-interval-minutes</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">20</property>
+                    <property name="top_attach">13</property>
                   </packing>
                 </child>
                 <child>
@@ -1681,7 +1710,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">20</property>
+                    <property name="top_attach">13</property>
                   </packing>
                 </child>
                 <child>
@@ -1691,21 +1720,21 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">26</property>
+                    <property name="top_attach">19</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="pref/general/assoc-head">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_markup" translatable="yes">Path head for Associated Files</property>
+                    <property name="tooltip_markup" translatable="yes">Path head for Linked File Relative Paths</property>
                     <child>
                       <placeholder/>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">28</property>
+                    <property name="top_attach">21</property>
                   </packing>
                 </child>
                 <child>
@@ -1716,7 +1745,7 @@ many months before the current month</property>
                       <object class="GtkLabel" id="label20">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Path head for Associated Files</property>
+                        <property name="label" translatable="yes">Path head for Linked Files Relative Paths</property>
                         <property name="use_markup">True</property>
                       </object>
                       <packing>
@@ -1740,7 +1769,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">28</property>
+                    <property name="top_attach">21</property>
                   </packing>
                 </child>
                 <child>
@@ -1782,12 +1811,12 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Associated Files&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Linked Files&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">27</property>
+                    <property name="top_attach">20</property>
                   </packing>
                 </child>
                 <child>
@@ -1797,32 +1826,8 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">29</property>
+                    <property name="top_attach">22</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -3554,5 +3559,8 @@ many months before the current month</property>
       <action-widget response="-11">helpbutton2</action-widget>
       <action-widget response="-7">closebutton2</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

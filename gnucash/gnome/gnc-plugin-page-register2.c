@@ -370,8 +370,8 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         G_CALLBACK (gnc_plugin_page_register2_cmd_exchange_rate)
     },
     {
-        "JumpTransactionAction", GNC_ICON_JUMP_TO, N_("_Jump"), NULL,
-        N_("Jump to the corresponding transaction in the other account"),
+        "JumpTransactionAction", GNC_ICON_JUMP_TO, N_("_Jump to the other account"), NULL,
+        N_("Open a new register tab for the other account with focus on this transaction."),
         G_CALLBACK (gnc_plugin_page_register2_cmd_jump)
     },
     {
@@ -408,7 +408,7 @@ static GtkToggleActionEntry toggle_entries[] =
 {
     {
         "ViewStyleDoubleLineAction", NULL, N_("_Double Line"), NULL,
-        N_("Show a second line with \"Action\", \"Notes\", and \"File Association\" for each transaction."),
+        N_("Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for each transaction."),
         G_CALLBACK (gnc_plugin_page_register2_cmd_style_double_line), FALSE
     },
 
@@ -486,6 +486,7 @@ static action_toolbar_labels toolbar_labels[] =
     { "DeleteTransactionAction", 	  N_("Delete") },
     { "DuplicateTransactionAction", N_("Duplicate") },
     { "SplitTransactionAction",     N_("Split") },
+    { "JumpTransactionAction",      N_("Jump") },
     { "ScheduleTransactionAction",  N_("Schedule") },
     { "BlankTransactionAction",     N_("Blank") },
     { "ActionsReconcileAction",     N_("Reconcile") },

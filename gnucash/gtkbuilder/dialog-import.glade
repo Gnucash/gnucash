@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkImage" id="account_new_icon">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -14,9 +14,6 @@
     <property name="default_height">600</property>
     <property name="type_hint">dialog</property>
     <signal name="map" handler="gnc_ui_generic_account_picker_map_cb" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="account_picker_vbox">
         <property name="visible">True</property>
@@ -125,8 +122,8 @@
         <child>
           <object class="GtkBox" id="warning_hbox">
             <property name="can_focus">False</property>
-            <property name="margin_left">6</property>
-            <property name="margin_right">6</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
             <property name="margin_top">6</property>
             <property name="spacing">6</property>
             <child>
@@ -167,6 +164,9 @@
       <action-widget response="-6">cancelbutton</action-widget>
       <action-widget response="-5">okbutton</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="format_picker_dialog">
     <property name="can_focus">False</property>
@@ -176,9 +176,6 @@
     <property name="default_width">600</property>
     <property name="default_height">400</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox16">
         <property name="visible">True</property>
@@ -296,6 +293,9 @@
     <action-widgets>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="match_picker_dialog">
     <property name="can_focus">False</property>
@@ -303,9 +303,6 @@
     <property name="default_width">600</property>
     <property name="default_height">400</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox14">
         <property name="visible">True</property>
@@ -458,6 +455,9 @@
       <action-widget response="-6">cancel_button1</action-widget>
       <action-widget response="-5">ok_button1</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes">Multiple transaction rows may be selected and a transfer account assigned to all selected rows. Use Ctrl Left Click or Shift-Click to select multiple rows and then Right Click to select a transfer account. Only rows with "A" checked can be added to a selection.</property>
@@ -481,9 +481,6 @@
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <signal name="close" handler="on_matcher_help_close_clicked" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox18">
         <property name="visible">True</property>
@@ -549,6 +546,8 @@
                   <object class="GtkTextView" id="textview3">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_start">3</property>
+                    <property name="margin_end">3</property>
                     <property name="pixels_above_lines">5</property>
                     <property name="pixels_below_lines">5</property>
                     <property name="editable">False</property>
@@ -577,6 +576,8 @@
                   <object class="GtkTextView" id="textview4">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_start">3</property>
+                    <property name="margin_end">3</property>
                     <property name="pixels_above_lines">5</property>
                     <property name="pixels_below_lines">5</property>
                     <property name="editable">False</property>
@@ -605,6 +606,8 @@
                   <object class="GtkTextView" id="textview2">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_start">3</property>
+                    <property name="margin_end">3</property>
                     <property name="pixels_above_lines">5</property>
                     <property name="pixels_below_lines">5</property>
                     <property name="editable">False</property>
@@ -748,6 +751,8 @@
                   <object class="GtkTextView" id="textview5">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_start">3</property>
+                    <property name="margin_end">3</property>
                     <property name="pixels_above_lines">5</property>
                     <property name="pixels_below_lines">5</property>
                     <property name="editable">False</property>
@@ -828,6 +833,8 @@
                   <object class="GtkTextView" id="textview6">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_start">3</property>
+                    <property name="margin_end">3</property>
                     <property name="pixels_above_lines">5</property>
                     <property name="pixels_below_lines">5</property>
                     <property name="editable">False</property>
@@ -864,6 +871,9 @@
     <action-widgets>
       <action-widget response="-7">matcher_help_close</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkBox" id="transaction_matcher_content">
     <property name="visible">True</property>
@@ -976,9 +986,6 @@
     <property name="type_hint">dialog</property>
     <signal name="close" handler="on_matcher_cancel_clicked" swapped="no"/>
     <signal name="delete-event" handler="on_matcher_delete_event" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="transaction_matcher_vbox">
         <property name="visible">True</property>
@@ -1054,5 +1061,8 @@
       <action-widget response="-6">matcher_cancel</action-widget>
       <action-widget response="-5">matcher_ok</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

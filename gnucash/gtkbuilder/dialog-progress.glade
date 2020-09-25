@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes">1234567890123456789012345678901234567890</property>
   </object>
@@ -13,9 +13,6 @@
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox" id="vbox85">
         <property name="visible">True</property>
@@ -98,6 +95,8 @@
               <object class="GtkTextView" id="progress_log">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_start">3</property>
+                <property name="margin_end">3</property>
                 <property name="editable">False</property>
                 <property name="wrap_mode">word</property>
                 <property name="cursor_visible">False</property>
@@ -157,6 +156,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>

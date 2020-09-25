@@ -1546,11 +1546,11 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
 //FIXME does something need to be done if changed_cells is true or false ?
     gnucash_sheet_cursor_move (sheet, new_virt_loc);
 
-    // if clicked in associate cell, run call back
-    if (g_strcmp0 (gnc_table_get_cell_name (table, new_virt_loc), ASSOC_CELL) == 0)
+    // if clicked in ocument link cell, run call back
+    if (g_strcmp0 (gnc_table_get_cell_name (table, new_virt_loc), DOCLINK_CELL) == 0)
     {
-        if (sheet->open_assoc_cb)
-            (sheet->open_assoc_cb)(sheet->open_assoc_cb_data, NULL);
+        if (sheet->open_doclink_cb)
+            (sheet->open_doclink_cb)(sheet->open_doclink_cb_data, NULL);
     }
 
     if (button_1)

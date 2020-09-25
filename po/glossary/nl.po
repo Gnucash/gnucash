@@ -742,7 +742,7 @@ msgstr "bevestigd"
 
 #. "-"
 msgid "transaction state: frozen"
-msgstr "bevroren"
+msgstr "vastgehouden"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"

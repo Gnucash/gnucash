@@ -119,7 +119,7 @@ gnc_file_dialog_int (GtkWindow *parent,
                    NULL);
     if (multi)
         gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (file_box), TRUE);
-    
+
     if (ok_icon)
         gnc_gtk_dialog_add_button(file_box, okbutton, ok_icon, GTK_RESPONSE_ACCEPT);
     else
@@ -1139,6 +1139,10 @@ gnc_file_open_file (GtkWindow *parent, const char * newfile, gboolean open_reado
 
     if (!gnc_file_query_save (parent, TRUE))
         return FALSE;
+
+    /* Reset the flag that indicates the conversion of the bayes KVP
+     * entries has been run */
+    gnc_account_reset_convert_bayes_to_flat ();
 
     return gnc_post_file_open (parent, newfile, open_readonly);
 }

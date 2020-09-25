@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="reset_warnings_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -9,9 +9,6 @@
     <property name="default_width">400</property>
     <property name="type_hint">normal</property>
     <signal name="response" handler="gnc_reset_warnings_response_cb" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -250,5 +247,8 @@
       <action-widget response="-10">applybutton</action-widget>
       <action-widget response="-5">okbutton</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

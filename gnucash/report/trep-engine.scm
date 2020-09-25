@@ -352,14 +352,17 @@ in the Options panel."))
 (define show-void-list
   (list
    (list 'non-void-only
+         (cons 'how (logand CLEARED-ALL (lognot CLEARED-VOIDED)))
          (cons 'text (G_ "Non-void only"))
          (cons 'tip (G_ "Show only non-voided transactions.")))
 
    (list 'void-only
+         (cons 'how CLEARED-VOIDED)
          (cons 'text (G_ "Void only"))
          (cons 'tip (G_ "Show only voided transactions.")))
 
    (list 'both
+         (cons 'how CLEARED-ALL)
          (cons 'text (G_ "Both"))
          (cons 'tip (G_ "Show both (and include void transactions in totals).")))))
 
@@ -389,7 +392,7 @@ in the Options panel."))
    (list 'all
          (cons 'text (G_ "All"))
          (cons 'tip (G_ "Show All Transactions"))
-         (cons 'filter-types #f))
+         (cons 'filter-types CLEARED-ALL))
 
    (list 'unreconciled
          (cons 'text (G_ "Unreconciled"))
@@ -948,7 +951,7 @@ be excluded from periodic reporting.")
       (list (N_ "Use Full Other Account Name")  "i"  (G_ "Display the full account name?") #f)
       (list (N_ "Other Account Code")           "j"  (G_ "Display the other account code?") #f)
       (list (N_ "Shares")                       "k"  (G_ "Display the number of shares?") #f)
-      (list (N_ "Association")                  "l5" (G_ "Display the transaction association") #f)
+      (list (N_ "Link")                         "l5" (G_ "Display the transaction linked document") #f)
       (list (N_ "Price")                        "l"  (G_ "Display the shares price?") #f)
       ;; note the "Amount" multichoice option in between here
       (list optname-grid                        "m5" (G_ "Display a subtotal summary table.") #f)
@@ -1074,7 +1077,7 @@ be excluded from periodic reporting.")
                      (opt-val gnc:pagename-display (N_ "Other Account Name"))))
           (cons 'shares (opt-val gnc:pagename-display (N_ "Shares")))
           (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
-          (cons 'association (opt-val gnc:pagename-display "Association"))
+          (cons 'link (opt-val gnc:pagename-display (N_ "Link")))
           (cons 'amount-single (eq? amount-setting 'single))
           (cons 'amount-double (eq? amount-setting 'double))
           (cons 'common-currency (opt-val gnc:pagename-general optname-common-currency))
@@ -1240,20 +1243,20 @@ be excluded from periodic reporting.")
                                   "number-cell"
                                   (xaccSplitGetAmount split)))))
 
-               (add-if (column-uses? 'association)
+               (add-if (column-uses? 'link)
                        (vector ""
                                (lambda (split transaction-row?)
-                                 (let ((url (xaccTransGetAssociation
+                                 (let ((url (xaccTransGetDocLink
                                              (xaccSplitGetParent split))))
                                    (and (not (string-null? url))
                                         (gnc:make-html-table-cell/markup
                                          "text-cell"
                                          (if opt-use-links?
-                                             (gnc:html-transaction-association-anchor
+                                             (gnc:html-transaction-doclink-anchor
                                               (xaccSplitGetParent split)
-                                              ;; Translators: 'A' is short for Association
-                                              (G_ "A"))
-                                             (G_ "A"))))))))
+                                              ;; Translators: 'L' is short for Linked Document
+                                              (C_ "Column header for 'Document Link'" "L"))
+                                             (C_ "Column header for 'Document Link'" "L"))))))))
 
                (add-if (column-uses? 'price)
                        (vector (G_ "Price")
@@ -2023,10 +2026,12 @@ warning will be removed in GnuCash 5.0"))
                    'no-guile-regex-support)))
          (transaction-filter-exclude?
           (opt-val pagename-filter optname-transaction-matcher-exclude))
-         (reconcile-status-filter
-          (keylist-get-info reconcile-status-list
-                            (opt-val pagename-filter optname-reconcile-status)
-                            'filter-types))
+         (void-filter (opt-val pagename-filter optname-void-transactions))
+         (reconcile-filter (opt-val pagename-filter optname-reconcile-status))
+         (cleared-filter
+          (logand
+           (keylist-get-info reconcile-status-list reconcile-filter 'filter-types)
+           (keylist-get-info show-void-list void-filter 'how)))
          (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
          (primary-key (opt-val pagename-sorting optname-prime-sortkey))
          (primary-order (opt-val pagename-sorting optname-prime-sortorder))
@@ -2034,7 +2039,6 @@ warning will be removed in GnuCash 5.0"))
          (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
          (secondary-order (opt-val pagename-sorting optname-sec-sortorder))
          (secondary-date-subtotal (opt-val pagename-sorting optname-sec-date-subtotal))
-         (void-status (opt-val pagename-filter optname-void-transactions))
          (closing-match (keylist-get-info
                          show-closing-list
                          (opt-val pagename-filter optname-closing-transactions)
@@ -2148,16 +2152,9 @@ warning will be removed in GnuCash 5.0"))
      (else
       (qof-query-set-book query (gnc-get-current-book))
       (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+      (xaccQueryAddClearedMatch query cleared-filter QOF-QUERY-AND)
       (unless split->date
         (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND))
-      (case void-status
-        ((non-void-only)
-         (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
-        ((void-only)
-         (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
-        (else #f))
-      (when reconcile-status-filter
-        (xaccQueryAddClearedMatch query reconcile-status-filter QOF-QUERY-AND))
       (when (boolean? closing-match)
         (xaccQueryAddClosingTransMatch query closing-match QOF-QUERY-AND))
       (unless custom-sort?
@@ -2266,20 +2263,19 @@ warning will be removed in GnuCash 5.0"))
 
           (cond
            ((eq? export-type 'csv)
-            (let ((old-date-fmt (qof-date-format-get))
-                  (dummy (qof-date-format-set QOF-DATE-FORMAT-ISO))
-                  (infolist
-                   (list
-                    (list "from" (qof-print-date begindate))
-                    (list "to" (qof-print-date enddate)))))
-              (qof-date-format-set old-date-fmt)
-              (cond
-               ((list? csvlist)
+            (cond
+             ((pair? csvlist)
+              (let ((iso-date (qof-date-format-get-string QOF-DATE-FORMAT-ISO)))
                 (gnc:html-document-set-export-string
-                 document (lists->csv (append infolist csvlist))))
+                 document
+                 (lists->csv
+                  (cons*
+                   `("from" ,(gnc-print-time64 begindate iso-date))
+                   `("to" ,(gnc-print-time64 enddate iso-date))
+                   csvlist)))))
 
-               (else
-                (gnc:html-document-set-export-error document csvlist)))))))))))
+             (else
+              (gnc:html-document-set-export-error document csvlist))))))))))
 
     (gnc:report-finished)
 

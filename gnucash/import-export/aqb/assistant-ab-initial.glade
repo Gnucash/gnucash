@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAssistant" id="aqbanking_init_assistant">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
@@ -11,6 +11,12 @@
     <signal name="cancel" handler="aai_on_cancel" swapped="no"/>
     <signal name="close" handler="aai_on_finish" swapped="no"/>
     <signal name="prepare" handler="aai_on_prepare" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -18,7 +24,8 @@
       <object class="GtkGrid" id="start_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">12</property>
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
         <property name="border_width">12</property>
         <child>
           <object class="GtkLabel">
@@ -76,7 +83,8 @@ Click on "Next" to proceed or "Cancel" to Abort Import.</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="valign">center</property>
-        <property name="margin_left">12</property>
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
         <property name="border_width">12</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
@@ -121,7 +129,8 @@ Click on "Next" to proceed or "Cancel" to Abort Import.</property>
       <object class="GtkBox" id="account_match_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">12</property>
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
         <property name="border_width">12</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
@@ -147,6 +156,8 @@ Click on "Next" to proceed or "Cancel" to Abort Import.</property>
               <object class="GtkTreeView" id="account_page_view">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_start">3</property>
+                <property name="margin_end">3</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
                 </child>
@@ -223,6 +234,17 @@ Press "Apply" now.</property>
         <property name="complete">True</property>
         <property name="has_padding">False</property>
       </packing>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+      </object>
     </child>
   </object>
 </interface>

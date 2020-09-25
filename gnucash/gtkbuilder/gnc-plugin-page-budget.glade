@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="DigitsToRound_Adj">
     <property name="lower">1</property>
     <property name="upper">12</property>
@@ -15,9 +15,6 @@
     <property name="title" translatable="yes">Edit budget for all periods</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -233,6 +230,9 @@
       <action-widget response="-6">cancelbutton3</action-widget>
       <action-widget response="-5">okbutton3</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="budget_estimate_dialog">
     <property name="can_focus">False</property>
@@ -240,9 +240,6 @@
     <property name="title" translatable="yes">Estimate Budget Values</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox6">
         <property name="visible">True</property>
@@ -409,6 +406,9 @@
       <action-widget response="-6">cancelbutton1</action-widget>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkAdjustment" id="NumPeriods_Adj">
     <property name="lower">1</property>
@@ -422,9 +422,6 @@
     <property name="title" translatable="yes">Budget Options</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox5">
         <property name="visible">True</property>
@@ -488,7 +485,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="margin_left">5</property>
                     <property name="label" translatable="yes">Budget Name</property>
                   </object>
                   <packing>
@@ -515,7 +511,6 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="margin_left">5</property>
                     <property name="label" translatable="yes">Notes</property>
                   </object>
                   <packing>
@@ -535,6 +530,8 @@
                       <object class="GtkTextView" id="BudgetDescription">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="margin_start">3</property>
+                        <property name="margin_end">3</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="wrap_mode">word</property>
@@ -552,7 +549,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="margin_left">5</property>
                     <property name="label" translatable="yes">Number of Periods</property>
                   </object>
                   <packing>
@@ -582,7 +578,6 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="margin_left">5</property>
                     <property name="margin_top">12</property>
                     <property name="label" translatable="yes">Budget Period</property>
                   </object>
@@ -612,8 +607,8 @@
                       <object class="GtkBox" id="BudgetPeriod">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">6</property>
-                        <property name="margin_right">6</property>
+                        <property name="margin_start">3</property>
+                        <property name="margin_end">3</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -716,15 +711,15 @@
       <action-widget response="-6">cancelbutton2</action-widget>
       <action-widget response="-5">okbutton2</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="budget_list_dialog - Not Used">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Budget List</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -863,6 +858,9 @@
     <action-widgets>
       <action-widget response="-7">close_button</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="budget_note_dialog">
     <property name="can_focus">False</property>
@@ -870,9 +868,6 @@
     <property name="title" translatable="yes">Budget Notes</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -945,6 +940,8 @@
               <object class="GtkTextView" id="BudgetNote">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_start">3</property>
+                <property name="margin_end">3</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="wrap_mode">word</property>
@@ -964,5 +961,8 @@
       <action-widget response="-6">cancelbutton4</action-widget>
       <action-widget response="-5">okbutton4</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

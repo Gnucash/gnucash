@@ -85,10 +85,10 @@
     "receipt.css"))
   (add-option (gnc:make-font-option
                 displaypage optname-heading-font "c"
-                (N_ "Font to use for the main heading") "Sans Bold 14"))
+                (N_ "Font to use for the main heading.") "Sans Bold 14"))
   (add-option (gnc:make-font-option
                 displaypage optname-text-font "d"
-                (N_ "Font to use for everything else") "Sans 10"))
+                (N_ "Font to use for everything else.") "Sans 10"))
   (add-option (gnc:make-pixmap-option
                 displaypage optname-logofile-header "e"
                 (N_ "Name of a file containing a logo to be used on the header of the report")

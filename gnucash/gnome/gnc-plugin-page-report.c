@@ -1753,34 +1753,23 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
 
     {
         // Look up the date format that was chosen in the preferences database
-        QofDateFormat date_format_here;
-        QofDateFormat date_format_old = qof_date_format_get();
-        char *format_code = gnc_prefs_get_string(GNC_PREFS_GROUP_REPORT_PDFEXPORT,
-                            GNC_PREF_FILENAME_DATE_FMT);
+        QofDateFormat date_format_here = QOF_DATE_FORMAT_ISO;
+        char *format_code = gnc_prefs_get_string (GNC_PREFS_GROUP_REPORT_PDFEXPORT,
+                                                  GNC_PREF_FILENAME_DATE_FMT);
+        const gchar *date_format_string;
         if (*format_code == '\0')
         {
             g_free(format_code);
             format_code = g_strdup("locale");
         }
 
-        if (gnc_date_string_to_dateformat(format_code, &date_format_here))
-        {
-            PERR("Incorrect date format code");
-            if (format_code != NULL)
-                free(format_code);
-        }
+        if (gnc_date_string_to_dateformat (format_code, &date_format_here))
+            PERR("Incorrect date format code, using ISO-8601.");
 
-        // To apply this chosen date format, temporarily switch the
-        // process-wide default to our chosen date format. Note: It is a
-        // totally brain-dead implementation of qof_print_date() to not offer a
-        // variation where the QofDateFormat can be passed as an argument.
-        // Hrmpf.
-        qof_date_format_set(date_format_here);
+        date_format_string = qof_date_format_get_string (date_format_here);
 
-        job_date = qof_print_date( time( NULL ) );
-
-        // Restore to the original general  date format
-        qof_date_format_set(date_format_old);
+        job_date = gnc_print_time64 (gnc_time (NULL), date_format_string);
+        g_free (format_code);
     }
 
 

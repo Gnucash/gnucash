@@ -221,7 +221,7 @@ qof_log_init_filename(const gchar* log_filename)
         if (fout != NULL && fout != stderr && fout != stdout)
             fclose(fout);
 
-        fname = g_strconcat(log_filename, ".XXXXXX.log", NULL);
+        fname = g_strconcat(log_filename, ".XXXXXX.log", nullptr);
 
         if ((fd = g_mkstemp(fname)) != -1)
         {
@@ -450,7 +450,7 @@ qof_log_parse_log_config(const char *filename)
         str = g_strdup_printf ("%d", logger_max_name_length);
         if (qof_logger_format)
             g_free (qof_logger_format);
-        qof_logger_format = g_strconcat ("* %s %*s <%-", str, ".", str, "s> %*s%s%s", NULL);
+        qof_logger_format = g_strconcat ("* %s %*s <%-", str, ".", str, "s> %*s%s%s", nullptr);
 
         g_free (str);
         g_strfreev(levels);

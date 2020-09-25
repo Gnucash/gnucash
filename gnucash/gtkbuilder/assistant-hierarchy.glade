@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkAssistant" id="hierarchy_assistant">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
@@ -11,6 +11,12 @@
     <signal name="cancel" handler="on_cancel" swapped="no"/>
     <signal name="close" handler="on_finish" swapped="no"/>
     <signal name="prepare" handler="on_prepare" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -19,8 +25,8 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="valign">start</property>
-        <property name="margin_left">12</property>
-        <property name="margin_right">12</property>
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
         <property name="label" translatable="yes">This assistant will help you create a set of GnuCash accounts for your assets (such as investments, checking or savings accounts), liabilities (such as loans) and different kinds of income and expenses you might have.
 
 You can pick a set of accounts here that seem close to your needs. After the assistant completes you will be able to add, rename, modify, and remove accounts, at any time later on. You will also be able to add sub-accounts, as well as move accounts (along with their sub-accounts) from one parent to another.
@@ -112,8 +118,8 @@ Please choose the currency to use for new accounts.</property>
           <object class="GtkLabel" id="pickAccountsDescriptionLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">6</property>
-            <property name="margin_right">6</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
             <property name="label" translatable="yes">Select language and region specific categories that correspond to the ways that you foresee you will use GnuCash. Each category you select will cause several accounts to be created.</property>
             <property name="use_markup">True</property>
             <property name="wrap">True</property>
@@ -330,8 +336,8 @@ Please choose the currency to use for new accounts.</property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
-                                <property name="margin_left">5</property>
-                                <property name="margin_right">5</property>
+                                <property name="margin_start">6</property>
+                                <property name="margin_end">6</property>
                                 <property name="editable">False</property>
                                 <property name="wrap_mode">word</property>
                                 <property name="cursor_visible">False</property>
@@ -416,8 +422,8 @@ Please choose the currency to use for new accounts.</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="margin_left">6</property>
-            <property name="margin_right">6</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
             <property name="label" translatable="yes">&lt;b&gt;Notes&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
@@ -431,8 +437,8 @@ Please choose the currency to use for new accounts.</property>
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">6</property>
-            <property name="margin_right">6</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
             <property name="row_spacing">3</property>
             <child>
               <object class="GtkLabel">
@@ -523,8 +529,8 @@ Please choose the currency to use for new accounts.</property>
           <object class="GtkLabel" id="finalAccountLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">12</property>
-            <property name="margin_right">12</property>
+            <property name="margin_start">12</property>
+            <property name="margin_end">12</property>
             <property name="label" translatable="yes">
 If you would like to change an account's name, click on the row containing the account, then click on the account name and change it.
 
@@ -549,7 +555,7 @@ If you would like an account to have an opening balance, click on the row contai
           <object class="GtkScrolledWindow" id="final_account_tree_box">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="margin_left">12</property>
+            <property name="margin_start">12</property>
             <property name="shadow_type">in</property>
             <child>
               <placeholder/>
@@ -571,8 +577,8 @@ If you would like an account to have an opening balance, click on the row contai
       <object class="GtkLabel" id="finish_page_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">5</property>
-        <property name="margin_right">5</property>
+        <property name="margin_start">6</property>
+        <property name="margin_end">6</property>
         <property name="label" translatable="yes">Press `Apply' to create your new accounts. You will then be able to save them to a file or database.
 
 Press `Back' to review your selections.
@@ -588,6 +594,17 @@ Press `Cancel' to close this dialog without creating any new accounts.</property
     </child>
     <child>
       <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+      </object>
     </child>
   </object>
 </interface>

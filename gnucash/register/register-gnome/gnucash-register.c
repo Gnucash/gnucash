@@ -646,16 +646,16 @@ GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg)
 
 
 void
-gnucash_register_set_open_assoc_cb (GnucashRegister *reg,
-                                    GFunc cb, gpointer cb_data)
+gnucash_register_set_open_doclink_cb (GnucashRegister *reg,
+                                      GFunc cb, gpointer cb_data)
 {
     GnucashSheet *sheet;
 
     if (!reg || !reg->sheet)
         return;
     sheet = GNUCASH_SHEET(reg->sheet);
-    sheet->open_assoc_cb = cb;
-    sheet->open_assoc_cb_data = cb_data;
+    sheet->open_doclink_cb = cb;
+    sheet->open_doclink_cb_data = cb_data;
 }
 
 

@@ -885,37 +885,32 @@
     (test-end "subtotal table")
 
     (test-begin "csv-export")
-    (test-assert "csv output is valid"
-      (let ((options (default-testing-options)))
-        (set-option! options "Accounts" "Accounts"
-                     (list bank usd-bank gbp-bank gbp-income income expense))
-        (set-option! options "General" "Start Date"
-                     (cons 'absolute (gnc-dmy2time64 01 01 1969)))
-        (set-option! options "General" "End Date"
-                     (cons 'absolute (gnc-dmy2time64 31 12 1970)))
-        (set-option! options "Display" "Subtotal Table" #t)
-        (set-option! options "General" "Common Currency" #t)
-        (set-option! options "General" "Report Currency" foreign2)
-        (set-option! options "General" "Show original currency amount" #t)
-        (set-option! options "Sorting" "Primary Key" 'account-name)
-        (set-option! options "Sorting" "Primary Subtotal" #t)
-        (set-option! options "Sorting" "Secondary Key" 'date)
-        (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
+    (let ((options (default-testing-options)))
+      (set-option! options "Accounts" "Accounts"
+                   (list bank usd-bank gbp-bank gbp-income income expense))
+      (set-option! options "General" "Start Date"
+                   (cons 'absolute (gnc-dmy2time64 01 01 1969)))
+      (set-option! options "General" "End Date"
+                   (cons 'absolute (gnc-dmy2time64 31 12 1970)))
+      (set-option! options "Display" "Subtotal Table" #t)
+      (set-option! options "General" "Common Currency" #t)
+      (set-option! options "General" "Report Currency" foreign2)
+      (set-option! options "General" "Show original currency amount" #t)
+      (set-option! options "Sorting" "Primary Key" 'account-name)
+      (set-option! options "Sorting" "Primary Subtotal" #t)
+      (set-option! options "Sorting" "Secondary Key" 'date)
+      (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
 
-        (let* ((template (gnc:find-report-template trep-uuid))
-               (constructor (record-constructor <report>))
-               (report (constructor trep-uuid "bar" options #t #t #f #f ""))
-               (renderer (gnc:report-template-renderer template)))
-          ;; run the renderer, ignore its output. we'll query the csv export.
-          (renderer report #:export-type 'csv #:filename "/tmp/export.csv"))
-        (let ((call-with-input-file "/tmp/export.csv"))
-          (lambda (f)
-            (let lp ((c (read-char f)) (out '()))
-              (if (eof-object? c)
-                  (string=?
-                   "\"from\",\"01/01/69\"\n\"to\",\"12/31/70\"\n\"Amount (GBP)\",2.15\n\"Amount\",3.0"
-                   (reverse-list->string out))
-                  (lp (read-char f) (cons c out))))))))
+      (let* ((template (gnc:find-report-template trep-uuid))
+             (constructor (record-constructor <report>))
+             (report (constructor trep-uuid "bar" options #t #t #f #f ""))
+             (renderer (gnc:report-template-renderer template))
+             (document (renderer report #:export-type 'csv)))
+        (test-assert "csv output has no export error"
+          (not (gnc:html-document-export-error document)))
+        (test-equal "csv output is valid"
+          "\"from\",\"1969-01-01\"\n\"to\",\"1970-12-31\"\n\"Amount (GBP)\",2.15\n\"Amount\",3.0"
+          (gnc:html-document-export-string document))))
     (test-end "csv-export")))
 
 (define (reconcile-tests)
