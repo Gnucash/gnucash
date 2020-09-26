@@ -228,13 +228,10 @@
 
 
 (define (gnc:html-make-generic-simple-warning report-title-string message)
-  (let ((p (gnc:make-html-text)))
-    (gnc:html-text-append!
-     p
-     (gnc:html-markup-h2 (string-append report-title-string ":"))
-     (gnc:html-markup-h2 "")
-     (gnc:html-markup-p message))
-    p))
+  (gnc:make-html-text
+   (gnc:html-markup-h3 (string-append report-title-string ":"))
+   (gnc:html-markup-h3 "")
+   (gnc:html-markup-p message)))
 
 
 (define (gnc:html-make-options-link report-id)
@@ -301,14 +298,11 @@
 (define (gnc:html-make-generic-warning
          report-title-string report-id
          warning-title-string warning-string)
-  (let ((p (gnc:make-html-text)))
-   (gnc:html-text-append!
-    p
-    (gnc:html-markup-h2 (string-append (G_ report-title-string) ":"))
-    (gnc:html-markup-h2 warning-title-string)
-    (gnc:html-markup-p warning-string)
-    (gnc:html-make-options-link report-id))
-   p))
+  (gnc:make-html-text
+   (gnc:html-markup-h3 (string-append (G_ report-title-string) ":"))
+   (gnc:html-markup-h3 warning-title-string)
+   (gnc:html-markup-p warning-string)
+   (gnc:html-make-options-link report-id)))
 
 (define (gnc:html-make-generic-options-warning
          report-title-string report-id)
