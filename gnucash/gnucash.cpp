@@ -328,7 +328,7 @@ Gnucash::Gnucash::configure_program_options (void)
     bpo::options_description app_options(_("Application Options"));
     app_options.add_options()
     ("nofile", bpo::bool_switch (&m_nofile),
-     N_("Do not load the last file opened"))
+     _("Do not load the last file opened"))
     ("help-gtk",  bpo::bool_switch (&m_show_help_gtk),
      _("Show help for gtk options"));
 
