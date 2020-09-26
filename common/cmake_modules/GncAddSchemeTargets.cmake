@@ -283,7 +283,7 @@ function(gnc_add_scheme_targets _TARGET)
 
   set(_TARGET_FILES "${_TARGET_FILES}" PARENT_SCOPE)
 
-  if(TEST)
+  if(SCHEME_TGT_TEST)
     add_dependencies(check ${_TARGET})
   else()
     install(FILES ${_TARGET_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITECCACHEDIR}/${SCHEME_TGT_OUTPUT_DIR})
