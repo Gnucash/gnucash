@@ -406,7 +406,7 @@ document.getElementById(chartid).onclick = function(evt) {
          (push (lambda (l) (set! retval (cons l retval))))
          ;; Use a unique chart-id for each chart. This prevents charts
          ;; clashing on multi-column reports
-         (id (guid-new-return)))
+         (id (symbol->string (gensym "chart"))))
 
     (push (gnc:html-js-include
            (gnc-path-find-localized-html-file "chartjs/Chart.bundle.min.js")))
@@ -417,12 +417,12 @@ document.getElementById(chartid).onclick = function(evt) {
                   (size->str (gnc:html-chart-width chart))
                   (size->str (gnc:html-chart-height chart))))
     (push (format #f "<a id='jump-~a' href='' style='display:none'></a>\n" id))
-    (push (format #f "<canvas id='chart-~a'></canvas>\n" id))
+    (push (format #f "<canvas id=~s></canvas>\n" id))
     (push "</div>\n")
     (push (format #f "<script id='script-~a'>\n" id))
     (push (format #f "var curriso = ~s;\n" (gnc:html-chart-currency-iso chart)))
     (push (format #f "var currsym = ~s;\n" (gnc:html-chart-currency-symbol chart)))
-    (push (format #f "var chartid = 'chart-~a';\n" id))
+    (push (format #f "var chartid = ~s;\n" id))
     (push (format #f "var jumpid = 'jump-~a';\n" id))
     (push (format #f "var loadstring = ~s;\n" (G_ "Load")))
     (push (format #f "var chartjsoptions = ~a;\n\n"
