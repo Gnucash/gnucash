@@ -186,7 +186,6 @@
                                                                      (cons 'display #t)
                                                                      (cons 'labelString "")))
                                                   (cons 'ticks (list
-                                                                (cons 'fontSize 12)
                                                                 (cons 'maxRotation 30))))
                                                  ;; the following another xAxis at the top
                                                  '((position . top)
@@ -205,7 +204,6 @@
                                                                      (cons 'display 1.5)
                                                                      (cons 'labelString "")))
                                                   (cons 'ticks (list
-                                                                (cons 'fontSize 10)
                                                                 (cons 'beginAtZero #f))))
                                                  ;; the following another yAxis on the right
                                                  '((position . right)
@@ -215,7 +213,6 @@
                                                  ))))
                     (cons 'title (list
                                   (cons 'display #t)
-                                  (cons 'fontSize 16)
                                   (cons 'fontStyle "")
                                   (cons 'text ""))))))
    "XXX"     ;currency-iso
@@ -348,6 +345,17 @@ Chart.pluginService.register({
   }
 })
 
+// copy font info from css into chartjs.
+bodyStyle = window.getComputedStyle (document.querySelector ('body'));
+Chart.defaults.global.defaultFontSize = parseInt (bodyStyle.fontSize);
+Chart.defaults.global.defaultFontFamily = bodyStyle.fontFamily;
+Chart.defaults.global.defaultFontStyle = bodyStyle.fontStyle;
+
+titleStyle = window.getComputedStyle (document.querySelector ('h3'));
+chartjsoptions.options.title.fontSize = parseInt (titleStyle.fontSize);
+chartjsoptions.options.title.fontFamily = titleStyle.fontFamily;
+chartjsoptions.options.title.fontStyle = titleStyle.fontStyle;
+
 document.getElementById(chartid).onclick = function(evt) {
   var activepoints = myChart.getElementAtEvent(evt);
   var anchor = document.getElementById(jumpid);
@@ -398,21 +406,23 @@ document.getElementById(chartid).onclick = function(evt) {
          (push (lambda (l) (set! retval (cons l retval))))
          ;; Use a unique chart-id for each chart. This prevents charts
          ;; clashing on multi-column reports
-         (id (guid-new-return)))
+         (id (symbol->string (gensym "chart"))))
 
     (push (gnc:html-js-include
            (gnc-path-find-localized-html-file "chartjs/Chart.bundle.min.js")))
 
+    ;; the following hidden h3 is used to query style and copy onto chartjs
+    (push "<h3 style='display:none'></h3>")
     (push (format #f "<div style='width:~a;height:~a;'>\n"
                   (size->str (gnc:html-chart-width chart))
                   (size->str (gnc:html-chart-height chart))))
     (push (format #f "<a id='jump-~a' href='' style='display:none'></a>\n" id))
-    (push (format #f "<canvas id='chart-~a'></canvas>\n" id))
+    (push (format #f "<canvas id=~s></canvas>\n" id))
     (push "</div>\n")
     (push (format #f "<script id='script-~a'>\n" id))
     (push (format #f "var curriso = ~s;\n" (gnc:html-chart-currency-iso chart)))
     (push (format #f "var currsym = ~s;\n" (gnc:html-chart-currency-symbol chart)))
-    (push (format #f "var chartid = 'chart-~a';\n" id))
+    (push (format #f "var chartid = ~s;\n" id))
     (push (format #f "var jumpid = 'jump-~a';\n" id))
     (push (format #f "var loadstring = ~s;\n" (G_ "Load")))
     (push (format #f "var chartjsoptions = ~a;\n\n"
@@ -428,7 +438,6 @@ document.getElementById(chartid).onclick = function(evt) {
 
     (push "chartjsoptions.options.tooltips.callbacks.label = tooltipLabel;\n")
     (push "chartjsoptions.options.tooltips.callbacks.title = tooltipTitle;\n")
-    (push "Chart.defaults.global.defaultFontFamily = \"'Trebuchet MS', Arial, Helvetica, sans-serif\";\n")
     (push JS-setup)
 
     (push "var myChart = new Chart(chartid, chartjsoptions);\n")
