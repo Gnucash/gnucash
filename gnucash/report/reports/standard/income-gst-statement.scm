@@ -165,8 +165,8 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                   (G_ "Default Format"))
           (vector 'au-bas
                   (G_ "Australia BAS")
-                  (G_ "Australia BAS. Specify sales, purchase and tax \
-accounts."))
+                  (G_ "Australia Business Activity Statement. Specify sales, \
+purchase and tax accounts."))
           (vector 'uk-vat
                   (G_ "UK VAT Return")
                   (G_ "UK VAT Return. Specify sales, purchase and tax \

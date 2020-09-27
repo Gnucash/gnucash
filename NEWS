@@ -1,9 +1,111 @@
 Version history:
 ------- -------
+4.2  - 27 September 2020
+The third release of the 4.x stable series.
+
+Between 4.1 and 4.2, the following bugfixes were accomplished:
+
+    Bug 102787 - Currency selection should do autocompletion
+    Bug 476114 - Goto register by date feature req
+                 Adds ability to jump to arbitrary date.
+    Bug 554391 - Tax Options dialog - can only assign one TXF category at a time
+                 If the Tax options dialog is opened from the Chart of Accounts
+                 and an account is selected then the tax dialog will preselect
+                 that account.
+    Bug 787295 - Allow UI jump from Business accounts to their relevant
+                 invoice/bill/voucher
+    Bug 797514 - Changing transaction unreconciles a split inconsistently
+                 Partial: This make sure that the split's reconcile status
+                 gets updated before the transaction is committed.
+    Bug 797730 - Transaction matching can match multiple imported transactions
+                 to the same existing one
+    Bug 797839 - Auto-complete prevents entering non-ASCII transaction
+                 descriptions
+    Bug 797852 - Error in Accounts Payable Aging re cut off dates
+    Bug 797857 - Edit->Preferences: Help/Close buttons unreachable
+    Bug 797874 - Errors in register and new-account UI
+    Bug 797878 - Pie chart displays fractions and long decimal representations
+                 Ensure amounts rendering is rounded to report-currency SCU
+    Bug 797880 - [gnucash-cli] encoding and font differing from manually
+                 exported reports (Win10, German locale).
+    Bug 797883 - [Transaction Report] non-localized string
+    Bug 797889 - editing amounts in dr / cr behaving oddly
+    Bug 797893 - Unable to change font size in charts
+                 Use the stylesheet font values instead of hard-coded ones.
+    Bug 797895 - Hang for a long time (9 minutes per account) importing a QFX
+                 file.
+    Bug 797896 - [HBCI] crash when downloading transactions.
+    Bug 797897 - Cannot select multiple accounts in Tax Report Options
+    Bug 797898 - [reconciliation] calculated balance amount per reconcilation
+                 date depending on actual time.
+    Bug 797900 - Crash caused by Quitting while Check and Repair All is running
+    Bug 797923 - Running employee report results in "Unbound variable: txn"
+    Bug 797924 - Crash when searching for customer to process payment.
+    Bug 797935 - Strange formal register headers
+                 In languages other than English because of poorly constructed
+                 translatable strings.
+    Bug 797936 - Lot viewer notes field too narrow
+    Bug 797945 - Tools -> Import Map Editor causes GnuCash to lock up
+
+The following fixes and improvements were not associated with bug reports:
+
+    Update version in README, add Boost::program_options to dependencies.
+    [report-utilities] compact functions
+    Small fixes for various translation issues:
+        Deduplicate translatable strings
+        Add context to one-letter strings in guile code
+        Fix typo in linked document gui Align translatable strings
+    Expose C_ function (gettext with context string) to guile code, first use
+        is for the document link short code (L)
+    Improve and repair progress bar display on a variety of reports and
+        windows, improving performance on several by reducing the number of
+        progressbar calls.
+    [gnc-main-window] enable show_text for progressbar, allowing
+        gtk_progress_bar_set_text to actually display the progress text.
+    Fix help_label of dialog-doclink.glade, remove question mark from
+        Available, and insert missing spaces into the Business Item variant.
+    Rename all Transaction and Invoice Association identifiers to DocLink to
+        better reflect the purpose and for consistency with other software
+        (e.g. Libre Office).
+    Rename Transaction and Invoice Associations to Document Links. More clearly
+        describes the actions and is more consistent with other software
+        (e.g. Libre Office).
+    Remove the Remove Linked Document context menu item because that can
+        be done in the Manage dialog box.
+    Fix the horizontal scrollbar in the linked docs window.
+    I18n - deduplicate translatable strings
+    macOS: Give GnuCash time to shut down gracefully instead of letting macOS
+        pull the rug out.
+    I18N: Align glossary to gnucash.pot. Create a similar copyright header.
+        Add missing Report-Msgid-Bugs-To.
+    [report-utilities] More dump data functions:
+        gnc:dump-book - splits grouped by account
+        gnc:dump-all-transactions - splits grouped by transaction
+        gnc:dump-split - dumps single split
+    [business-urls] link to owner report with enddate
+    [dialog-invoice] gnc_business_call_owner_report_with_enddate
+    [new-owner-report][api] owner-report-create-with-enddate; accepts enddate
+        argument like owner-report-create.
+    Enable exporting the tables in charts and some reports as CSV.
+    Tweak a few strings to reuse translations
+    Exported gnc:cmdline-template-export and gnc:cmdline-get-report-id.
+        Handle ambiguous reportnames by returning #f.
+    [price-quotes.scm] ensure missing-alphavantage message can show on console
+    [budget.scm] Fix report crash on books with unreversed budgets
+    [gnucash-cli] -R show should accept & try to load datafile
+    Speed up computation of import match lists by running query only once,
+        committing accounts only once, and doing a bulk insert into the
+        GtkTreeview.
+    Add Python example export_account_totals.py. Exports acount totals of all
+        accounts into a CSV file.
+
+Updated Translations: Dutch, German, Italian, Ukrainian
+New Translations: Estonian, Indonesian
+
 4.1  - 26 July 2020
 The second release of the 4.x stable series.
 
-Between 4.0 and XXX, the following bugfixes were accomplished:
+Between 4.0 and 4.1, the following bugfixes were accomplished:
 
     Bug 775582 - Change "Petrol" (or Gas if seen in USA) to "Fuel".
     Bug 797759 - Some transactions are not highlighted in the matching window

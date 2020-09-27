@@ -319,6 +319,7 @@ Gnucash::Gnucash::configure_program_options (void)
     // for gtk's options. The options themselves are already parsed out by
     // gtk_init_check by the time this function is called though. So it really only
     // serves to be able to display a help message.
+    g_set_prgname ("gnucash");
     auto context = g_option_context_new (m_tagline.c_str());
     auto gtk_options = gtk_get_option_group(FALSE);
     g_option_context_add_group (context, gtk_options);
@@ -328,7 +329,7 @@ Gnucash::Gnucash::configure_program_options (void)
     bpo::options_description app_options(_("Application Options"));
     app_options.add_options()
     ("nofile", bpo::bool_switch (&m_nofile),
-     N_("Do not load the last file opened"))
+     _("Do not load the last file opened"))
     ("help-gtk",  bpo::bool_switch (&m_show_help_gtk),
      _("Show help for gtk options"));
 

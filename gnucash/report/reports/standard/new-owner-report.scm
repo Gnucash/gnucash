@@ -1079,7 +1079,7 @@ invoices and amounts.")))))
           (gnc:html-document-add-object!
            document
            (gnc:make-html-text
-            (gnc:html-markup-h2 (G_ "No transactions found."))
+            (gnc:html-markup-h3 (G_ "No transactions found."))
             (gnc:html-markup-p (G_ "No matching transactions found"))
             (gnc:html-make-options-link (gnc:report-id report-obj)))))
 

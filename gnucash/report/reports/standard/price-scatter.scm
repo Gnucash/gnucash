@@ -192,7 +192,7 @@
       (gnc:html-document-add-object! 
        document 
        (gnc:make-html-text 
-        (gnc:html-markup-h2 title)
+        (gnc:html-markup-h3 title)
         (gnc:html-markup-p text))))
 
     (gnc:html-chart-set-type! chart 'line)
