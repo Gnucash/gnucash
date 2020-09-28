@@ -1,5 +1,5 @@
 # Copyright (C) 2015
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the GnuCash package.
 #
 # Sangeeta Kumari<gistlrc@gmail.com>, 2015.
 msgid ""

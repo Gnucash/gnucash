@@ -6,7 +6,7 @@
 # Aurimas Fišeras <aurimas@members.fsf.org>, 2011, 2012, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: lt\n"
+"Project-Id-Version: GnuCash 2.6.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-06-13 20:45+0200\n"

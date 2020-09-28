@@ -1,6 +1,6 @@
-# translation of gnucash2.ne.po to Nepali
+# translation of gnucash to Nepali
 # This file is distributed under the same license as the GnuCash package.
-# Copyright (C) YEAR Gnumatic, Inc.
+# Copyright (C) 2006 by the GnuCash developers and the translators:
 # Pawan Chitrakar <pchitrakar@gmail.com>, 2006.
 # Jyotshna Shrestha <jyotshna@mpp.org.np>, 2006.
 # Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>, 2006.
@@ -9,7 +9,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash2.ne\n"
+"Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-06-13 20:45+0200\n"

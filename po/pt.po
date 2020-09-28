@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\\n\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
 #: bindings/guile/commodity-table.scm:36

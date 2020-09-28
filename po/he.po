@@ -1,8 +1,8 @@
 # GnuCash Hebrew translation
 # This file is distributed under the same license as the GnuCash package.
 # Copyright (C) 2008 - 2020 by the respective translator
-# FIRST AUTHOR: Ori Hoch <ori@uumpa.com>, 2008 http://www.uumpa.com/gnucash-he/
-# CURRENT AUTHOR: Avi Markovitz <avi.markovitz@gmail.com, 2019 - 2020
+# Avi Markovitz <avi.markovitz@gmail.com, 2019 - 2020
+# Ori Hoch <ori@uumpa.com>, 2008 http://www.uumpa.com/gnucash-he/
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "POT-Creation-Date: 2020-07-06 10:48+0300\n"
 "PO-Revision-Date: 2020-07-07 15:17+0300\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
-"Language-Team: He <avi.markovitz@gmail.com>\n"
+"Language-Team: \n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
