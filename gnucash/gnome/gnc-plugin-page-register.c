@@ -484,7 +484,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     },
     {
         "GotoDateAction", "x-office-calendar", N_ ("_Go to Date"), "<primary>G",
-        N_ ("Move to the the split at specified date"),
+        N_ ("Move to the split at specified date"),
         G_CALLBACK (gnc_plugin_page_register_cmd_goto_date)
     },
     {
