@@ -118,7 +118,6 @@ typedef struct _AccountWindow
     GtkWidget * placeholder_button;
     GtkWidget * hidden_button;
     GtkWidget * auto_interest_button;
-    GtkWidget * auto_interest_button_label;
 
     gint component_id;
 } AccountWindow;
@@ -1115,8 +1114,6 @@ set_auto_interest_box(AccountWindow *aw)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->auto_interest_button),
                                   type_ok && pref_set);
     gtk_widget_set_sensitive (GTK_WIDGET (aw->auto_interest_button), type_ok);
-    gtk_widget_set_sensitive (GTK_WIDGET (aw->auto_interest_button_label),
-                                          type_ok);
 }
 
 static void
@@ -1427,7 +1424,6 @@ gnc_account_window_create(GtkWindow *parent, AccountWindow *aw)
     aw->placeholder_button = GTK_WIDGET(gtk_builder_get_object (builder, "placeholder_button"));
     aw->hidden_button = GTK_WIDGET(gtk_builder_get_object (builder, "hidden_button"));
     aw->auto_interest_button = GTK_WIDGET(gtk_builder_get_object (builder, "auto_interest_button"));
-    aw->auto_interest_button_label = GTK_WIDGET(gtk_builder_get_object (builder, "label405"));
     set_auto_interest_box(aw);
 
 
