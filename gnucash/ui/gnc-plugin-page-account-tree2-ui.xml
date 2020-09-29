@@ -44,6 +44,9 @@
   </menubar>
 
   <popup name="MainPopup" action="FakeToplevel">
+    <placeholder name="PopupPlaceholder1">
+      <menuitem name="ViewFilterBy" action="ViewFilterByAction"/>
+    </placeholder>
     <placeholder name="PopupPlaceholder2">
       <menuitem name="AccountOpenAccount2" action="FileOpenAccount2Action"/>
       <menuitem name="AccountOpenAccount" action="FileOpenAccountAction"/>
