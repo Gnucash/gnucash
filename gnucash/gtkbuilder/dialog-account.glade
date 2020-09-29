@@ -1441,11 +1441,13 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="placeholder_button">
+                            <property name="label" translatable="yes">Placeholde_r</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="tooltip_text" translatable="yes">This account is present solely as a placeholder in the hierarchy. Transactions may not be posted to this account, only to sub-accounts of this account.</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -1455,11 +1457,13 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="hidden_button">
+                            <property name="label" translatable="yes">H_idden</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="tooltip_text" translatable="yes">This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register. To reset this option, you will first need to open the "Filter By..." dialog for the account tree and check the "show hidden accounts" option. Doing so will allow you to select the account and reopen this dialog.</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -1469,11 +1473,13 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="auto_interest_button">
+                            <property name="label" translatable="yes">Auto _interest transfer</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="tooltip_text" translatable="yes">Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts.</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -1483,12 +1489,14 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="tax_related_button">
+                            <property name="label" translatable="yes">Ta_x related</property>
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="tooltip_text" translatable="yes" comments="Translators: use the same words here as in 'Ta_x Report Options'.">Use Edit-&gt;Tax Report Options to set the tax-related flag and assign a tax code to this account.</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -1497,61 +1505,16 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label401">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">H_idden</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">hidden_button</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">8</property>
-                          </packing>
+                          <placeholder/>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label40">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Placeholde_r</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">placeholder_button</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">9</property>
-                          </packing>
+                          <placeholder/>
                         </child>
                         <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Ta_x related</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">tax_related_button</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">7</property>
-                          </packing>
+                          <placeholder/>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label405">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Auto _interest transfer</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">auto_interest_button</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">10</property>
-                          </packing>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
