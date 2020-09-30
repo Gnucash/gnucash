@@ -1389,7 +1389,7 @@ gnc_account_window_create(GtkWindow *parent, AccountWindow *aw)
                          &aw->commodity_mode);
 
     // If the account has transactions, prevent changes by displaying a label and tooltip
-    if (xaccAccountCountSplits (aw_get_account (aw), FALSE) > 0)
+    if (xaccAccountGetSplitList (aw_get_account (aw)) != NULL)
     {
         const gchar *sec_name = gnc_commodity_get_printname (xaccAccountGetCommodity(aw_get_account (aw)));
         GtkWidget *label = gtk_label_new (sec_name);
@@ -1473,7 +1473,7 @@ gnc_account_window_create(GtkWindow *parent, AccountWindow *aw)
     //   immutable if gnucash depends on details that would be lost/missing
     //   if changing from/to such a type. At the time of this writing the
     //   immutable types are AR, AP and trading types.
-    if (xaccAccountCountSplits (aw_get_account (aw), FALSE) > 0)
+    if (xaccAccountGetSplitList (aw_get_account (aw)) != NULL)
     {
         GNCAccountType atype = xaccAccountGetType (aw_get_account (aw));
         compat_types = xaccAccountTypesCompatibleWith (atype);

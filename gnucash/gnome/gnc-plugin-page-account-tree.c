@@ -1643,7 +1643,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     }
 
     // If no transaction or children just delete it.
-    if (!(xaccAccountCountSplits (account, FALSE) ||
+    if (!(xaccAccountGetSplitList (account) != NULL ||
           gnc_account_n_children (account)))
     {
         do_delete_account (account, NULL, NULL, NULL);
