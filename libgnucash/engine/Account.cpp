@@ -3933,11 +3933,11 @@ xaccAccountFindOpenLots (const Account *acc,
             continue;
 
         /* Ok, this is a valid lot.  Add it to our list of lots */
-        if (sort_func)
-            retval = g_list_insert_sorted (retval, lot, sort_func);
-        else
-            retval = g_list_prepend (retval, lot);
+        retval = g_list_prepend (retval, lot);
     }
+
+    if (sort_func)
+        retval = g_list_sort (retval, sort_func);
 
     return retval;
 }
