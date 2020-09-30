@@ -3887,6 +3887,20 @@ xaccAccountCountSplits (const Account *acc, gboolean include_children)
     return nr;
 }
 
+gboolean gnc_account_and_descendants_empty (Account *acc)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT (acc), FALSE);
+    if (xaccAccountGetSplitList (acc)) return FALSE;
+    auto empty = TRUE;
+    auto *children = gnc_account_get_children (acc);
+    for (auto *n = children; n && empty; n = n->next)
+    {
+        empty = gnc_account_and_descendants_empty ((Account*)n->data);
+    }
+    g_list_free (children);
+    return empty;
+}
+
 LotList *
 xaccAccountGetLotList (const Account *acc)
 {
