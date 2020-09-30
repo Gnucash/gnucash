@@ -756,7 +756,7 @@ msgid ""
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
 msgstr ""
-"Um den Inhalt zweier Reiter in einem der Reiter optisch zu vergleichen,"
+"Um den Inhalt zweier Reiter in einem der Reiter optisch zu vergleichen, "
 "wählen Sie im Menü 'Fenster->Neues Fenster mit Seite', um diesen Reiter in "
 "einem neuen Fenster anzuzeigen "
 
