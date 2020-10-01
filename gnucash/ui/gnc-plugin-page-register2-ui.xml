@@ -5,6 +5,7 @@
         <menuitem name="EditEditAccount" action="EditEditAccountAction"/>
         <menuitem name="EditFindAccount" action="EditFindAccountAction"/>
       </placeholder>
+      <menuitem name="EditTaxOptions" action="EditTaxOptionsAction"/>
     </menu>
 
     <menu name="Transaction" action="TransactionAction">

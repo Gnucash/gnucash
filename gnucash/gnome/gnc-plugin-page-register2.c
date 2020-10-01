@@ -78,6 +78,7 @@
 #include "gnc-icons.h"
 #include "gnc-prefs.h"
 #include "gnc-split-reg2.h"
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
 #include "gnc-main-window.h"
@@ -140,6 +141,7 @@ static void gnc_plugin_page_register2_cmd_paste (GtkAction *action, GncPluginPag
 static void gnc_plugin_page_register2_cmd_edit_account (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_find_account (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_find_transactions (GtkAction *action, GncPluginPageRegister2 *plugin_page);
+static void gnc_plugin_page_register2_cmd_edit_tax_options (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_cut_transaction (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_copy_transaction (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_paste_transaction (GtkAction *action, GncPluginPageRegister2 *plugin_page);
@@ -253,6 +255,18 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         "EditFindTransactionsAction", "edit-find", N_("_Find..."), "<primary>f",
         N_("Find transactions with a search"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_find_transactions)
+    },
+    {
+        "EditTaxOptionsAction", NULL,
+        /* Translators: remember to reuse this *
+         * translation in dialog-account.glade */
+        N_("Ta_x Report Options"), NULL,
+        /* Translators: currently implemented are *
+         * US: income tax and                     *
+         * DE: VAT                                *
+         * So adjust this string                  */
+        N_("Setup relevant accounts for tax reports, e.g. US income tax"),
+        G_CALLBACK (gnc_plugin_page_register2_cmd_edit_tax_options)
     },
 
     /* Transaction menu */
@@ -2777,6 +2791,25 @@ gnc_plugin_page_register2_cmd_find_transactions (GtkAction *action,
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
 
     gnc_ui_find_transactions_dialog_create2 (priv->ledger);
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_register2_cmd_edit_tax_options (GtkAction *action,
+        GncPluginPageRegister2 *page) // this works
+{
+    GncPluginPageRegister2Private *priv;
+    GtkWidget *window;
+    Account* account;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
+
+    ENTER("(action %p, page %p)", action, page);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
+
+    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
+    account = gnc_plugin_page_register2_get_account (page);
+    gnc_tax_info_dialog (window, account);
     LEAVE(" ");
 }
 

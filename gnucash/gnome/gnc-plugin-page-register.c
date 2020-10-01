@@ -193,6 +193,8 @@ static void gnc_plugin_page_register_cmd_find_account (GtkAction* action,
                                                        GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_cmd_find_transactions (GtkAction* action,
                                                             GncPluginPageRegister* plugin_page);
+static void gnc_plugin_page_register_cmd_edit_tax_options (GtkAction* action,
+                                                            GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_cmd_cut_transaction (GtkAction* action,
                                                           GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_cmd_copy_transaction (GtkAction* action,
@@ -363,6 +365,18 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         N_ ("Find transactions with a search"),
         G_CALLBACK (gnc_plugin_page_register_cmd_find_transactions)
     },
+    {
+        "EditTaxOptionsAction", NULL,
+        /* Translators: remember to reuse this *
+         * translation in dialog-account.glade */
+        N_("Ta_x Report Options"), NULL,
+        /* Translators: currently implemented are *
+         * US: income tax and                     *
+         * DE: VAT                                *
+         * So adjust this string                  */
+        N_("Setup relevant accounts for tax reports, e.g. US income tax"),
+        G_CALLBACK (gnc_plugin_page_register_cmd_edit_tax_options)
+    },
 
     /* Transaction menu */
 
@@ -484,7 +498,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     },
     {
         "GotoDateAction", "x-office-calendar", N_ ("_Go to Date"), "<primary>G",
-        N_ ("Move to the the split at specified date"),
+        N_ ("Move to the split at specified date"),
         G_CALLBACK (gnc_plugin_page_register_cmd_goto_date)
     },
     {
@@ -3810,7 +3824,6 @@ gnc_plugin_page_register_cmd_find_account (GtkAction* action,
 }
 
 
-
 static void
 gnc_plugin_page_register_cmd_find_transactions (GtkAction* action,
                                                 GncPluginPageRegister* page)
@@ -3827,6 +3840,24 @@ gnc_plugin_page_register_cmd_find_transactions (GtkAction* action,
     LEAVE (" ");
 }
 
+
+static void
+gnc_plugin_page_register_cmd_edit_tax_options (GtkAction* action,
+                                               GncPluginPageRegister* page)
+{
+    GncPluginPageRegisterPrivate* priv;
+    GtkWidget *window;
+    Account* account;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
+
+    ENTER ("(action %p, page %p)", action, page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
+    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
+    account = gnc_plugin_page_register_get_account (page);
+    gnc_tax_info_dialog (window, account);
+    LEAVE (" ");
+}
 
 static void
 gnc_plugin_page_register_cmd_cut_transaction (GtkAction* action,

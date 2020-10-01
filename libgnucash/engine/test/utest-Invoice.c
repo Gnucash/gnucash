@@ -175,6 +175,12 @@ test_invoice_post ( Fixture *fixture, gconstpointer pData )
     g_assert(!gncInvoiceIsPosted(fixture->invoice));
 }
 
+static gboolean account_has_one_split (const Account *acc)
+{
+    GList *splits = xaccAccountGetSplitList (acc);
+    return (splits && !(splits->next));
+}
+
 static void
 test_invoice_posted_trans ( Fixture *fixture, gconstpointer pData )
 {
@@ -183,8 +189,8 @@ test_invoice_posted_trans ( Fixture *fixture, gconstpointer pData )
     gnc_numeric total = gncInvoiceGetTotal(fixture->invoice);
     gnc_numeric acct_balance, acct2_balance;
 
-    g_assert (1 == xaccAccountCountSplits (fixture->account, FALSE));
-    g_assert (1 == xaccAccountCountSplits (fixture->account2, FALSE));
+    g_assert (account_has_one_split (fixture->account));
+    g_assert (account_has_one_split (fixture->account2));
 
     acct_balance = xaccAccountGetBalance(fixture->account);
     acct2_balance = xaccAccountGetBalance(fixture->account2);

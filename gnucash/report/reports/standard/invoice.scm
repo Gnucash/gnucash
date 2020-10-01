@@ -769,9 +769,13 @@ for styling the invoice. Please see the exported report for the CSS class names.
          (custom-title (opt-val gnc:pagename-general "Custom Title")))
 
     (if (null? invoice)
-        (gnc:html-document-add-object! document
-                                       (gnc:make-html-text
-                                        (G_ "No valid invoice selected. Click on the Options button and select the invoice to use.")))
+
+        (gnc:html-document-add-object!
+         document
+         (gnc:html-make-generic-warning
+          (G_ "Invoice") (gnc:report-id report-obj) ""
+          (G_ "No valid invoice selected. Click on the Options button and select the invoice to use.")))
+
         (let* ((book (gncInvoiceGetBook invoice))
                (owner (gncInvoiceGetOwner invoice))
                (type (gncInvoiceGetType invoice))

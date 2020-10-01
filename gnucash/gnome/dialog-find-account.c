@@ -189,7 +189,7 @@ fill_model (GtkTreeModel *model, Account *account)
 {
     GtkTreeIter   iter;
     gchar        *fullname = gnc_account_get_full_name (account);
-    gint          splits = xaccAccountCountSplits (account, TRUE);
+    gboolean      acc_empty = gnc_account_and_descendants_empty (account);
     gnc_numeric   total = xaccAccountGetBalanceInCurrency (account, NULL, TRUE);
 
     PINFO("Add to Store: Account '%s'", fullname);
@@ -200,7 +200,7 @@ fill_model (GtkTreeModel *model, Account *account)
                         ACC_FULL_NAME, fullname, ACCOUNT, account,
                         PLACE_HOLDER, (xaccAccountGetPlaceholder (account) == TRUE ? "emblem-default" : NULL),
                         HIDDEN, (xaccAccountGetHidden (account) == TRUE ? "emblem-default" : NULL),
-                        NOT_USED, (splits == 0 ? "emblem-default" : NULL),
+                        NOT_USED, (acc_empty ? "emblem-default" : NULL),
                         BAL_ZERO, (gnc_numeric_zero_p (total) == TRUE ? "emblem-default" : NULL),
                         TAX, (xaccAccountGetTaxRelated (account) == TRUE ? "emblem-default" : NULL), -1);
     g_free (fullname);

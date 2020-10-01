@@ -256,6 +256,12 @@ void gnc_book_set_root_account(QofBook *book, Account *root);
 
 /** @} */
 
+/*  Tests account and descendants -- if all have no splits then return TRUE.
+ *  Otherwise if any account or its descendants have split return FALSE.
+ */
+
+gboolean gnc_account_and_descendants_empty (Account *acc);
+
 /** Composes a translatable error message showing which account
  *  names clash with the current account separator. Can be called
  *  after gnc_account_list_name_violations to have a consistent
@@ -1020,7 +1026,9 @@ SplitList* xaccAccountGetSplitList (const Account *account);
 
 
 /** The xaccAccountCountSplits() routine returns the number of all
- *    the splits in the account.
+ *    the splits in the account. xaccAccountCountSplits is O(N). if
+ *    testing for emptiness, use xaccAccountGetSplitList != NULL.
+
  * @param acc the account for which to count the splits
  *
  * @param include_children also count splits in descendants (TRUE) or

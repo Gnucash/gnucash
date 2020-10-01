@@ -2046,7 +2046,7 @@ gnc_plugin_page_account_tree_filter_accounts (Account *account,
 
     if (!fd->show_unused)
     {
-        if (xaccAccountCountSplits(account, TRUE) == 0)
+        if (gnc_account_and_descendants_empty(account))
         {
             LEAVE(" hide: unused");
             return FALSE;

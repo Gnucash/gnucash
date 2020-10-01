@@ -1045,12 +1045,14 @@ gncOwnerSetLotLinkMemo (Transaction *ll_txn)
 
         title = g_strdup_printf ("%s %s", gncInvoiceGetTypeString (invoice), gncInvoiceGetID (invoice));
 
-        titles = g_list_insert_sorted (titles, title, (GCompareFunc)g_strcmp0);
+        titles = g_list_prepend (titles, title);
         splits = g_list_prepend (splits, split); // splits don't need to be sorted
     }
 
     if (!titles)
         return; // We didn't find document lots
+
+    titles = g_list_sort (titles, (GCompareFunc)g_strcmp0);
 
     // Create the memo as we'd want it to be
     new_memo = g_strconcat (memo_prefix, titles->data, NULL);
