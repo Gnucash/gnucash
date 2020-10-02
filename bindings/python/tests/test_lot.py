@@ -33,5 +33,11 @@ class TestLot(LotSession):
         self.assertEqual(0, self.lot.get_balance().num())
         self.assertTrue(self.lot.is_closed())
 
+    def test_Split_GetLot(self):
+        if not self.buysplit.GetLot():
+            self.buysplit.AssignToLot(self.lot)
+        rtn_lot = self.buysplit.GetLot()
+        self.assertEqual(rtn_lot.get_title(), self.lot.get_title())
+
 if __name__ == '__main__':
     unittest.main()
