@@ -34,16 +34,20 @@ class TestLot(LotSession):
         self.assertTrue(self.lot.is_closed())
 
     def test_Split_GetLot(self):
-        if not self.buysplit.GetLot():
-            self.buysplit.AssignToLot(self.lot)
+        self.buysplit.AssignToLot(self.lot)
         rtn_lot = self.buysplit.GetLot()
         self.assertEqual(rtn_lot.get_title(), self.lot.get_title())
 
     def test_Account_GetLotList(self):
-        if not self.buysplit.GetLot():
-            self.buysplit.AssignToLot(self.lot)
+        self.buysplit.AssignToLot(self.lot)
         lots = self.account.GetLotList()
         self.assertEqual(self.account.name, lots[0].get_account().name)
+
+    def test_get_split_list(self):
+        self.buysplit.AssignToLot(self.lot)
+        splits = self.lot.get_split_list()
+        self.assertEqual(self.NUM, splits[0].GetAmount().num())
+        self.assertEqual(self.account.name, splits[0].GetAccount().name)
 
 if __name__ == '__main__':
     unittest.main()
