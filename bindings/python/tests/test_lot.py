@@ -2,9 +2,9 @@ from unittest import main
 from gnucash import Book, Account, GncLot, Split, GncNumeric
 
 from test_account import AccountSession
-from test_split import SplitSession
+# from test_split import SplitSession
 
-class LotSession(AccountSession, SplitSession):
+class LotSession(AccountSession):
     def setUp(self):
         AccountSession.setUp(self)
         self.NUM = 10000
@@ -38,6 +38,12 @@ class TestLot(LotSession):
             self.buysplit.AssignToLot(self.lot)
         rtn_lot = self.buysplit.GetLot()
         self.assertEqual(rtn_lot.get_title(), self.lot.get_title())
+
+    def test_Account_GetLotList(self):
+        if not self.buysplit.GetLot():
+            self.buysplit.AssignToLot(self.lot)
+        lots = self.account.GetLotList()
+        self.assertEqual(self.account.name, lots[0].get_account().name)
 
 if __name__ == '__main__':
     unittest.main()
