@@ -308,5 +308,8 @@ typedef char gchar;
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_void, 0));
     }
     $result = list;
+    if ($1_descriptor == $descriptor(AccountList *) ||
+	$1_descriptor == $descriptor(LotList *))
+        g_list_free($1);
 }
 #endif
