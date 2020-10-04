@@ -204,8 +204,8 @@
       (gnc:html-chart-set-y-axis-label! chart (gnc-commodity-get-mnemonic curr))
 
       ;; disable animation; with multiple accounts selected this report
-      ;; will create several charts, all will want to animate
-      (gnc:html-chart-set! chart '(options animation duration) 0)
+      ;; will create several charts, all will want to animate. Initial
+      ;; animation is already disabled globally.
       (gnc:html-chart-set! chart '(options hover animationDuration) 0)
       (gnc:html-chart-set! chart '(options responsiveAnimationDuration) 0)
       (gnc:html-chart-set-title!

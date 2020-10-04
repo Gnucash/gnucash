@@ -155,6 +155,8 @@
                  (cons 'datasets #())))
     (cons 'options (list
                     (cons 'maintainAspectRatio #f)
+                    (cons 'animation (list
+                                      (cons 'duration 0)))
                     (cons 'chartArea (list
                                       (cons 'backgroundColor "#fffdf6")))
                     (cons 'legend (list
