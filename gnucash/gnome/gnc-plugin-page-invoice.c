@@ -442,7 +442,7 @@ static action_toolbar_labels creditnote_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the credit note")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this credit note") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") },
-    {"BusinessLinkAction", N_("_Manage Document Link...")},
+    {"BusinessLinkAction", N_("Manage Document Link...")},
     {"BusinessLinkOpenAction", N_("Open Linked Document")},
     {NULL, NULL},
 };
@@ -1376,13 +1376,12 @@ gnc_plugin_page_invoice_cmd_link (GtkAction *action,
                 gtk_link_button_set_uri (GTK_LINK_BUTTON(doclink_button),
                                          display_uri);
                 gtk_widget_show (GTK_WIDGET(doclink_button));
+                has_uri = TRUE;
                 g_free (display_uri);
             }
         }
         gncInvoiceSetDocLink (invoice, ret_uri);
-        has_uri = TRUE;
     }
-
     // update the menu actions
     update_doclink_actions (GNC_PLUGIN_PAGE(plugin_page), has_uri);
 
