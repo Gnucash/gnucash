@@ -104,7 +104,7 @@ void
 xaccTransSetNotes (Transaction *trans, const char *notes)
 {
     ASSERT_TRUE(GNC_IS_MOCKTRANSACTION(trans));
-    gnc_mocktransaction(trans)->set_description(notes);
+    gnc_mocktransaction(trans)->set_notes(notes);
 }
 
 gnc_numeric
