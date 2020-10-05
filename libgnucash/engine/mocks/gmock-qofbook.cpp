@@ -30,7 +30,7 @@ gboolean
 qof_book_use_split_action_for_num_field (const QofBook *book)
 {
     SCOPED_TRACE("");
-    const QofMockBook* mockbook = qof_mockbook(book);
+    auto mockbook = qof_mockbook(book);
     return mockbook ? mockbook->use_split_action_for_num_field() : FALSE;
 }
 

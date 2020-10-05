@@ -47,7 +47,7 @@ QofBook *
 gnc_account_get_book(const Account *account)
 {
     SCOPED_TRACE("");
-    const MockAccount* mockaccount = gnc_mockaccount(account);
+    auto mockaccount = gnc_mockaccount(account);
     return mockaccount ? mockaccount->get_book() : nullptr;
 }
 
@@ -56,7 +56,7 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
                               void *data)
 {
     SCOPED_TRACE("");
-    const MockAccount* mockaccount = gnc_mockaccount(acc);
+    auto mockaccount = gnc_mockaccount(acc);
     return mockaccount ? mockaccount->for_each_transaction(proc, data) : 0;
 }
 
@@ -64,7 +64,7 @@ GncImportMatchMap *
 gnc_account_imap_create_imap (Account *acc)
 {
     SCOPED_TRACE("");
-    MockAccount* mockaccount = gnc_mockaccount(acc);
+    auto mockaccount = gnc_mockaccount(acc);
     return mockaccount ? mockaccount->create_imap() : nullptr;
 }
 

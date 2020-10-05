@@ -49,7 +49,7 @@ Split *
 xaccTransGetSplit (const Transaction *trans, int i)
 {
     SCOPED_TRACE("");
-    const MockTransaction* mocktrans = gnc_mocktransaction(trans);
+    auto mocktrans = gnc_mocktransaction(trans);
     return mocktrans ? mocktrans->get_split(i) : nullptr;
 }
 
@@ -57,7 +57,7 @@ Split *
 xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
 {
     SCOPED_TRACE("");
-    const MockTransaction* mocktrans = gnc_mocktransaction(trans);
+    auto mocktrans = gnc_mocktransaction(trans);
     EXPECT_TRUE(GNC_IS_ACCOUNT(acc));
     return mocktrans ? mocktrans->find_split_by_account(acc) : nullptr;
 }
@@ -66,7 +66,7 @@ time64
 xaccTransGetDate (const Transaction *trans)
 {
     SCOPED_TRACE("");
-    const MockTransaction* mocktrans = gnc_mocktransaction(trans);
+    auto mocktrans = gnc_mocktransaction(trans);
     return mocktrans ? mocktrans->get_date() : 0;
 }
 
@@ -81,7 +81,7 @@ const char *
 xaccTransGetDescription (const Transaction *trans)
 {
     SCOPED_TRACE("");
-    const MockTransaction* mocktrans = gnc_mocktransaction(trans);
+    auto mocktrans = gnc_mocktransaction(trans);
     return mocktrans ? mocktrans->get_description() : "";
 }
 
@@ -96,7 +96,7 @@ const char *
 xaccTransGetNotes (const Transaction *trans)
 {
     SCOPED_TRACE("");
-    const MockTransaction* mocktrans = gnc_mocktransaction(trans);
+    auto mocktrans = gnc_mocktransaction(trans);
     return mocktrans ? mocktrans->get_notes() : "";
 }
 
@@ -111,7 +111,7 @@ gnc_numeric
 xaccTransGetImbalanceValue (const Transaction * trans)
 {
     SCOPED_TRACE("");
-    const MockTransaction* mocktrans = gnc_mocktransaction(trans);
+    auto mocktrans = gnc_mocktransaction(trans);
     return mocktrans ? mocktrans->get_imbalance_value() : gnc_numeric_zero();
 }
 
@@ -119,7 +119,7 @@ const char *
 xaccTransGetNum (const Transaction *trans)
 {
     SCOPED_TRACE("");
-    const MockTransaction* mocktrans = gnc_mocktransaction(trans);
+    auto mocktrans = gnc_mocktransaction(trans);
     return mocktrans ? mocktrans->get_num() : "";
 }
 
@@ -127,7 +127,7 @@ gboolean
 xaccTransIsOpen (const Transaction *trans)
 {
     SCOPED_TRACE("");
-    const MockTransaction* mocktrans = gnc_mocktransaction(trans);
+    auto mocktrans = gnc_mocktransaction(trans);
     return mocktrans ? mocktrans->is_open() : FALSE;
 }
 

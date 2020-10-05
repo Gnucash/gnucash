@@ -45,7 +45,7 @@ QofBook *
 xaccSplitGetBook (const Split *split)
 {
     SCOPED_TRACE("");
-    const MockSplit* mocksplit = gnc_mocksplit(split);
+    auto mocksplit = gnc_mocksplit(split);
     return mocksplit ? mocksplit->get_book() : nullptr;
 }
 
@@ -53,7 +53,7 @@ Account *
 xaccSplitGetAccount (const Split *split)
 {
     SCOPED_TRACE("");
-    const MockSplit* mocksplit = gnc_mocksplit(split);
+    auto mocksplit = gnc_mocksplit(split);
     return mocksplit ? mocksplit->get_account() : nullptr;
 }
 
@@ -69,7 +69,7 @@ gnc_numeric
 xaccSplitGetAmount (const Split *split)
 {
     SCOPED_TRACE("");
-    const MockSplit* mocksplit = gnc_mocksplit(split);
+    auto mocksplit = gnc_mocksplit(split);
     return mocksplit ? mocksplit->get_amount() : gnc_numeric_zero();
 }
 
@@ -84,7 +84,7 @@ gnc_numeric
 xaccSplitGetValue (const Split *split)
 {
     SCOPED_TRACE("");
-    const MockSplit* mocksplit = gnc_mocksplit(split);
+    auto mocksplit = gnc_mocksplit(split);
     return mocksplit ? mocksplit->get_value() : gnc_numeric_zero();
 }
 
@@ -99,7 +99,7 @@ const char *
 xaccSplitGetMemo (const Split *split)
 {
     SCOPED_TRACE("");
-    const MockSplit* mocksplit = gnc_mocksplit(split);
+    auto mocksplit = gnc_mocksplit(split);
     return mocksplit ? mocksplit->get_memo() : "";
 }
 
@@ -107,7 +107,7 @@ char
 xaccSplitGetReconcile (const Split *split)
 {
     SCOPED_TRACE("");
-    const MockSplit* mocksplit = gnc_mocksplit(split);
+    auto mocksplit = gnc_mocksplit(split);
     return mocksplit ? mocksplit->get_reconcile() : VREC;
 }
 
@@ -129,7 +129,7 @@ const char *
 xaccSplitGetAction (const Split *split)
 {
     SCOPED_TRACE("");
-    const MockSplit* mocksplit = gnc_mocksplit(split);
+    auto mocksplit = gnc_mocksplit(split);
     return mocksplit ? mocksplit->get_action() : "";
 }
 
@@ -137,7 +137,7 @@ Split *
 xaccSplitGetOtherSplit (const Split *split)
 {
     SCOPED_TRACE("");
-    const MockSplit* mocksplit = gnc_mocksplit(split);
+    auto mocksplit = gnc_mocksplit(split);
     return mocksplit ? mocksplit->get_other_split() : nullptr;
 }
 
@@ -145,7 +145,7 @@ Transaction *
 xaccSplitGetParent (const Split *split)
 {
     SCOPED_TRACE("");
-    const MockSplit* mocksplit = gnc_mocksplit(split);
+    auto mocksplit = gnc_mocksplit(split);
     return mocksplit ? mocksplit->get_parent() : nullptr;
 }
 
