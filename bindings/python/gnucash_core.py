@@ -758,6 +758,9 @@ gnclot_dict =   {
                 }
 methods_return_instance(GncLot, gnclot_dict)
 GncLot.make_default = classmethod_function_returns_instance(GncLot.make_default, GncLot)
+methods_return_instance_lists(
+    GncLot, { 'get_split_list': Split
+    })
 
 # Transaction
 Transaction.add_methods_with_prefix('xaccTrans')
@@ -797,6 +800,7 @@ split_dict =    {
                     'GetBook': Book,
                     'GetAccount': Account,
                     'GetParent': Transaction,
+                    'GetLot': GncLot,
                     'Lookup': Split,
                     'GetOtherSplit': Split,
                     'GetAmount': GncNumeric,
@@ -809,7 +813,8 @@ split_dict =    {
                     'GetReconciledBalance': GncNumeric,
                     'VoidFormerAmount': GncNumeric,
                     'VoidFormerValue': GncNumeric,
-                    'GetGUID': GUID
+                    'GetGUID': GUID,
+                    'AssignToLot': Split
                 }
 methods_return_instance(Split, split_dict)
 
@@ -854,6 +859,7 @@ account_dict =  {
 methods_return_instance(Account, account_dict)
 methods_return_instance_lists(
     Account, { 'GetSplitList': Split,
+               'GetLotList': GncLot,
                'get_children': Account,
                'get_children_sorted': Account,
                'get_descendants': Account,
