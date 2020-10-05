@@ -229,6 +229,19 @@ setup_file_dialog (GtkBuilder *builder, GtkFileChooserButton *fcb,
     g_free (display_uri);
 }
 
+static gboolean
+gnc_doclink_get_uri_event_cb (GtkWidget *widget, GdkEventKey *event,
+                              gpointer user_data)
+{
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        gtk_dialog_response (GTK_DIALOG(widget),
+                             GTK_RESPONSE_CANCEL);
+        return TRUE;
+     }
+     return FALSE;
+}
+
 gchar *
 gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
                             const gchar *uri)
@@ -257,6 +270,10 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
     // Set the name and style context for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-doclink");
     gnc_widget_style_context_add_class (GTK_WIDGET(dialog), "gnc-class-doclink");
+
+    // Use this event to capture the escape key being pressed
+    g_signal_connect (dialog, "key_press_event",
+                      G_CALLBACK(gnc_doclink_get_uri_event_cb), dialog);
 
     head_label = GTK_WIDGET(gtk_builder_get_object (builder, "path_head_label"));
     ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
