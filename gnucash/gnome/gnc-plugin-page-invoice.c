@@ -1360,23 +1360,29 @@ gnc_plugin_page_invoice_cmd_link (GtkAction *action,
 
     ret_uri = gnc_doclink_get_uri_dialog (parent, _("Manage Document Link"), uri);
 
+    if (ret_uri)
+        has_uri = TRUE;
+
     if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
     {
         GtkWidget *doclink_button =
             gnc_invoice_window_get_doclink_button (priv->iw);
 
-        if (doclink_button)
+        if (g_strcmp0 (ret_uri, "") == 0)
         {
-            if (g_strcmp0 (ret_uri, "") == 0)
+            has_uri = FALSE;
+            if (doclink_button)
                 gtk_widget_hide (GTK_WIDGET(doclink_button));
-            else
+        }
+        else
+        {
+            if (doclink_button)
             {
                 gchar *display_uri =
                     gnc_doclink_get_unescaped_just_uri (ret_uri);
                 gtk_link_button_set_uri (GTK_LINK_BUTTON(doclink_button),
                                          display_uri);
                 gtk_widget_show (GTK_WIDGET(doclink_button));
-                has_uri = TRUE;
                 g_free (display_uri);
             }
         }
