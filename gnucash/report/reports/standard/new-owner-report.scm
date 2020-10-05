@@ -56,6 +56,7 @@
 (define credit-header (N_ "Credits"))
 (define debit-header (N_ "Debits"))
 (define balance-header (N_ "Balance"))
+(define doclink-header (N_ "Document Links"))
 (define linked-txns-header (N_ "Links"))
 
 (define javascript "
@@ -162,6 +163,8 @@
   (vector-ref columns-used 8))
 (define (bal-col columns-used)
   (vector-ref columns-used 9))
+(define (doclink-col columns-used)
+  (vector-ref columns-used 10))
 
 (define (num-cols columns-used section)
   (let* ((date? (date-col columns-used))
@@ -174,12 +177,14 @@
          (credit? (credit-col columns-used))
          (debit? (debit-col columns-used))
          (bal? (bal-col columns-used))
+         (doclink? (doclink-col columns-used))
          (spacer? (or date? type? ref? desc? debit? credit?))
          (amt? (or credit? debit?))
          (cols-alist
           (list
-           (list 'lhs-cols date? due? ref? type? desc? sale? tax? credit? debit? bal?)
-           (list 'ptt-span date? due? ref? type? desc?)
+           (list 'lhs-cols date? due? ref? type? desc? sale? tax? credit? debit? bal?
+                 doclink?)
+           (list 'ptt-span date? due? ref? type? desc? doclink?)
            (list 'mid-spac spacer?)
            (list 'rhs-cols date? ref? type? desc? amt? amt?)
            (list 'rhs-span date? ref? type? desc?)))
@@ -194,7 +199,7 @@
    (map opt-val
         (list date-header due-date-header reference-header type-header
               desc-header sale-header tax-header debit-header credit-header
-              balance-header))))
+              balance-header doclink-header))))
 
 (define (make-heading-list column-vector link-option acct-type)
   (let ((heading-list '())
@@ -210,6 +215,8 @@
         (addto! heading-list (G_ type-header)))
     (if (desc-col column-vector)
         (addto! heading-list (G_ desc-header)))
+    (if (doclink-col column-vector)
+        (addto! heading-list (C_ "Column header for 'Document Link'" "L")))
     (if (sale-col column-vector)
         (addto! heading-list (G_ sale-header)))
     (if (tax-col column-vector)
@@ -340,7 +347,7 @@
 ;; Make a row list based on the visible columns
 ;;
 (define (add-row table odd-row? column-vector date due-date ref type-str
-                 desc currency amt debit credit sale tax lhs-class
+                 desc doclink-invoice currency amt debit credit sale tax lhs-class
                  link-option link-rows)
   (define nrows (if link-rows (length link-rows) 1))
   (define (link-data->cols link-data)
@@ -431,7 +438,12 @@
                      (and due-date (qof-print-date due-date)))
               (addif (ref-col column-vector)    ref)
               (addif (type-col column-vector)   type-str)
-              (addif (desc-col column-vector)   desc)))
+              (addif (desc-col column-vector)   desc)
+              (addif (doclink-col column-vector)
+                     (and doclink-invoice
+                          (gnc:html-invoice-doclink-anchor
+                           doclink-invoice
+                           (C_ "Column header for 'Document Link'" "L"))))))
             (map
              (lambda (str)
                (let ((cell (gnc:make-html-table-cell/size/markup
@@ -543,7 +555,7 @@
                               payable? date-type currency)))))
 
   (define (add-balance-row odd-row? total)
-    (add-row table odd-row? used-columns start-date #f "" (G_ "Balance") ""
+    (add-row table odd-row? used-columns start-date #f "" (G_ "Balance") "" #f
              currency total #f #f #f #f #f
              link-option (case link-option
                            ((none) '(()))
@@ -796,6 +808,7 @@
          (split->reference split)
          (split->type-str split payable?)
          (splits->desc (list split))
+         (and (not (string-null? (gncInvoiceGetDocLink invoice))) invoice)
          currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
          (and (< orig-value 0) (amount->anchor split (- orig-value)))
@@ -825,7 +838,7 @@
          (split->reference split)
          (split->type-str split payable?)
          (splits->desc (xaccTransGetAPARAcctSplitList txn #t))
-         currency (+ total value)
+         #f currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
          (and (< orig-value 0) (amount->anchor split (- orig-value)))
          #f #f
@@ -928,6 +941,11 @@
                   (N_ "Detailed")
                   (N_ "Invoices show list of payments, payments show list of \
 invoices and amounts.")))))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") doclink-header
+    "hd" (N_ "Display document link?") #f))
 
   (gnc:register-inv-option
    (gnc:make-multichoice-option
