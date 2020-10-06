@@ -15,13 +15,12 @@
 
 (define (test-lookup-option)
   (let* ((options (new-gnc-optiondb))
-         (string-opt (gnc-register-string-option (GncOptionDBPtr-get options)
-                                                 "Section" "Start Date"
+         (string-opt (gnc-register-string-option options "Section" "Start Date"
                                                  "sort-tag" "docstring" "waldo")
                      ))
 
     (gnc-register-simple-boolean-option
-     (GncOptionDBPtr-get options)
+     options
       "Filter" "Void Transactions" "sort-tag" "docstring" 'default-val)
     ;; Testing that the old option name aliases work.
     (let ((option (gnc-lookup-option options "Section" "From")))

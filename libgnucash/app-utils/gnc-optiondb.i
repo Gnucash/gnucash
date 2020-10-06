@@ -234,7 +234,7 @@ gnc_option_test_book_destroy(QofBook* book)
 %rename(end_accounting_period) RelativeDatePeriod::END_ACCOUNTING_PERIOD;
 
 %rename(gnc_register_date_option_set)
-    gnc_register_date_option(GncOptionDB*, const char*, const char*,
+    gnc_register_date_option(GncOptionDBPtr&, const char*, const char*,
                              const char*, const char*, RelativeDatePeriodVec&,
                              bool);
 
@@ -364,6 +364,39 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 
 %ignore gnc_option_to_scheme;
 %ignore gnc_option_from_scheme;
+/* The following functions are overloaded in gnc-optiondb.hpp to provide both
+ * GncOptionDB* and GncOptionDBPtr& versions. That confuses SWIG so ignore the
+ * raw-ptr version.
+ */
+%ignore gnc_register_string_option(GncOptionDB*, const char* section, const char* name, const char* key, const char* doc_string, std::string value);
+%ignore gnc_register_text_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
+%ignore gnc_register_font_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
+%ignore gnc_register_budget_option(GncOptionDB*, const char*, const char*, const char*, const char*, GncBudget*);
+%ignore gnc_register_commodity_option(GncOptionDB*, const char*, const char*, const char*, const char*, gnc_commodity*);
+%ignore gnc_register_simple_boolean_option(GncOptionDB*, const char* section, const char* name, const char* key, const char* doc_string, bool value);
+%ignore gnc_register_complex_boolean_option(GncOptionDB*, const char* section, const char* name, const char* key, const char* doc_string, bool value);
+%ignore gnc_register_pixmap_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
+%ignore gnc_register_account_list_limited_option(GncOptionDB*, const char*, const char*, const char*, const char*, const GncOptionAccountList&, GncOptionAccountTypeList&&);
+%ignore gnc_register_account_list_option(GncOptionDB*, const char*, const char*, const char*, const char*, const GncOptionAccountList&);
+%ignore gnc_register_account_sel_limited_option(GncOptionDB*, const char*, const char*, const char*, const char*, const GncOptionAccountList&, GncOptionAccountTypeList&&);
+%ignore gnc_register_multichoice_option(GncOptionDB*, const char*, const char*, const char*, const char*, GncMultichoiceOptionChoices&&);
+%ignore gnc_register_list_option(GncOptionDB*, const char*, const char*, const char*, const char*, const char*, GncMultichoiceOptionChoices&&);
+%ignore gnc_register_number_Plot_size_option(GncOptionDB*, const char*, const char*, const char*, const char*, int);
+%ignore gnc_register_query_option(GncOptionDB*, const char*, const char*, const char*, const char*, QofQuery*);
+%ignore gnc_register_color_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
+%ignore gnc_register_internal_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
+%ignore gnc_register_currency_option(GncOptionDB*, const char*, const char*, const char*, const char*, gnc_commodity*);
+%ignore gnc_register_invoice_option(GncOptionDB*, const char*, const char*, const char*, const char*, GncInvoice*);
+%ignore gnc_register_owner_option(GncOptionDB*, const char*, const char*, const char*, const char*, GncOwner*, GncOwnerType);
+%ignore gnc_register_taxtable_option(GncOptionDB*, const char*, const char*, const char*, const char*, GncTaxTable*);
+%ignore gnc_register_counter_option(GncOptionDB*, const char*, const char*, const char*, const char*, double);
+%ignore gnc_register_counter_format_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
+%ignore gnc_register_dateformat_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
+%ignore gnc_register_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, RelativeDatePeriod, RelativeDateUI);
+%ignore gnc_register_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, time64, RelativeDateUI);
+%ignore gnc_register_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, RelativeDatePeriodVec, bool);
+%ignore gnc_register_start_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, bool);
+%ignore gnc_register_end_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, bool);
 
 %include "gnc-option-date.hpp"
 %include "gnc-option.hpp"

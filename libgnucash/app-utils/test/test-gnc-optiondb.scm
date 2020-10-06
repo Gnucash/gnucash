@@ -23,7 +23,7 @@
 
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))
-(use-modules (gnucash gnc-module))
+;; Load the C++ option implementation, avoiding the options.scm ones.
 (eval-when
  (compile load eval expand)
  (load-extension "libgnc-app-utils" "scm_init_sw_app_utils_module"))
@@ -46,7 +46,7 @@
 (define (test-gnc-make-text-option)
   (test-begin "test-gnc-test-string-option")
   (let* ((option-db (new-gnc-optiondb))
-         (string-opt (gnc-register-string-option (GncOptionDBPtr-get option-db) "foo" "bar" "baz"
+         (string-opt (gnc-register-string-option option-db "foo" "bar" "baz"
                                                  "Phony Option" "waldo")))
     (test-equal "waldo" (gnc-option-value option-db "foo" "bar"))
 
@@ -92,7 +92,7 @@
     (let ((option-db (new-gnc-optiondb))
           (acctlist (gnc-account-list-from-types book
                                (list ACCT-TYPE-STOCK))))
-      (gnc-register-account-list-option (GncOptionDBPtr-get option-db) "foo" "bar" "baz"
+      (gnc-register-account-list-option option-db "foo" "bar" "baz"
                                         "Phony Option" acctlist)
       (let ((acct-list (gnc-option-value option-db "foo" "bar")))
         (test-equal (length acctlist) (length acct-list))
@@ -104,13 +104,13 @@
           (acctlist (gnc-account-list-from-types book
                                (list ACCT-TYPE-STOCK))))
       (gnc-register-account-list-limited-option
-       (GncOptionDBPtr-get option-db) "foo" "bar" "baz"
+       option-db "foo" "bar" "baz"
        "Phony Option" acctlist (list ACCT-TYPE-STOCK))
       (let ((acct-list (gnc-option-value option-db "foo" "bar")))
         (test-equal (length acctlist) (length acct-list))
         (test-equal (cadr acctlist) (cadr acct-list)))
       (gnc-register-account-list-limited-option
-       (GncOptionDBPtr-get option-db) "waldo" "pepper" "baz"
+       option-db "waldo" "pepper" "baz"
        "Phony Option" acctlist (list ACCT-TYPE-BANK))
       (let ((acct-list (gnc-option-value option-db "waldo" "pepper")))
         (test-equal #f (length acct-list))))))
@@ -121,7 +121,7 @@
           (acctlist (gnc-account-list-from-types book
                                (list ACCT-TYPE-STOCK))))
       (gnc-register-account-sel-limited-option
-       (GncOptionDBPtr-get option-db) "salt" "pork" "baz"
+       option-db "salt" "pork" "baz"
        "Phony Option" (list (cadr acctlist)) (list ACCT-TYPE-STOCK))
       (let ((acct (gnc-option-value option-db "salt" "pork")))
         (test-equal (list (cadr acctlist)) acct)))))
@@ -158,7 +158,7 @@
                        (list "pork" (cons 'text "sausage") (cons 'tip "links"))
                        (list "corge" (cons 'text "grault") (cons 'tip "garply"))))
          (multichoice (keylist->vectorlist multilist))
-         (multi-opt (gnc-register-multichoice-option (GncOptionDBPtr-get option-db) "foo" "bar" "baz"
+         (multi-opt (gnc-register-multichoice-option option-db "foo" "bar" "baz"
                                                      "Phony Option" multichoice)))
 
     (test-equal "plugh" (gnc-option-value option-db "foo" "bar"))
@@ -173,7 +173,7 @@
          (value-list (list (vector "AvgBalPlot" "Average" "Average Balance")
                            (vector "GainPlot" "Profit" "Profit (Gain minus Loss)")
                            (vector "GLPlot" "Gain/Loss" "Gain and Loss")))
-         (list-op (gnc-register-list-option (GncOptionDBPtr-get option-db) "foo" "bar" "baz"
+         (list-op (gnc-register-list-option option-db "foo" "bar" "baz"
                                             "Phony Option" "AvgBalPlot"
                                             value-list)))
     (test-equal "AvgBalPlot" (gnc-option-value option-db "foo" "bar"))
@@ -185,7 +185,7 @@
 (define (test-gnc-make-date-option)
   (test-begin "test-gnc-test-date-option")
   (let* ((option-db (new-gnc-optiondb))
-         (date-opt (gnc-register-date-option (GncOptionDBPtr-get option-db) "foo" "bar"
+         (date-opt (gnc-register-date-option option-db "foo" "bar"
                                              "baz" "Phony Option"
                                              (RelativeDatePeriod-today)))
          (a-time (gnc-dmy2time64 11 07 2019)))
@@ -198,7 +198,7 @@
   (test-begin "test-gnc-test-date-set-option")
   (let* ((option-db (new-gnc-optiondb))
          (date-opt (gnc-register-date-option-set
-                    (GncOptionDBPtr-get option-db) "foo" "bar" "baz" "Phony Option"
+                    option-db "foo" "bar" "baz" "Phony Option"
                     (list (RelativeDatePeriod-today)
                           (RelativeDatePeriod-start-this-month)
                           (RelativeDatePeriod-start-prev-month)
@@ -214,7 +214,7 @@
 (define (test-gnc-make-number-range-option)
   (test-begin "test-gnc-number-range-option")
   (let* ((option-db (new-gnc-optiondb))
-         (number-opt (gnc-register-number-range-option-double (GncOptionDBPtr-get option-db) "foo" "bar"
+         (number-opt (gnc-register-number-range-option-double option-db "foo" "bar"
                                                        "baz" "Phony Option"
                                                        15 5 30 1)))
     (test-equal 15.0 (gnc-option-value option-db "foo" "bar"))

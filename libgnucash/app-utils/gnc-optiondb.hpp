@@ -45,6 +45,7 @@ extern "C"
 
 
 class GncOptionDB;
+using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
 using GncOptionAccountList = std::vector<const Account*>;
 
 using GncOptionAccountTypeList = std::vector<GNCAccountType>;
@@ -72,43 +73,221 @@ GncOptionAccountList
 gnc_account_list_from_types(QofBook *book,
                             const GncOptionAccountTypeList& types);
 
-
+/**
+ * Create a new string option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_string_option(GncOptionDB* db, const char* section,
                                 const char* name, const char* key,
                                 const char* doc_string, std::string value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_string_option(const GncOptionDBPtr& db,
+                                       const char* section, const char* name,
+                                       const char* key, const char* doc_string,
+                                       std::string value)
+{
+    gnc_register_string_option(db.get(), section, name, key,
+                               doc_string, value);
+}
+
+/**
+ * Create a new text option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_text_option(GncOptionDB* db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, std::string value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_text_option(const GncOptionDBPtr& db,
+                                     const char* section,
+                                     const char* name, const char* key,
+                                     const char* doc_string, std::string value)
+{
+    gnc_register_text_option(db.get(), section, name, key, doc_string, value);
+}
+
+/**
+ * Create a new font option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_font_option(GncOptionDB* db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, std::string value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_font_option(const GncOptionDBPtr& db,
+                                     const char* section, const char* name,
+                                     const char* key, const char* doc_string,
+                                     std::string value)
+{
+    gnc_register_font_option(db.get(), section, name, key, doc_string, value);
+}
+
+/**
+ * Create a new budget option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_budget_option(GncOptionDB* db, const char* section,
                                 const char* name, const char* key,
                                 const char* doc_string, GncBudget* value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_budget_option(const GncOptionDBPtr& db,
+                                       const char* section, const char* name,
+                                       const char* key, const char* doc_string,
+                                       GncBudget* value)
+{
+    gnc_register_budget_option(db.get(), section, name, key, doc_string, value);
+}
+
+/**
+ * Create a new commodity option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_commodity_option(GncOptionDB* db,
                                    const char* section, const char* name,
                                    const char* key, const char* doc_string,
                                    gnc_commodity* value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_commodity_option(const GncOptionDBPtr& db,
+                                          const char* section,
+                                          const char* name, const char* key,
+                                          const char* doc_string,
+                                          gnc_commodity* value)
+{
+    gnc_register_commodity_option(db.get(), section, name, key,
+                                  doc_string, value);
+}
+
+/**
+ * Create a new simple boolean option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_simple_boolean_option(GncOptionDB* db,
                                         const char* section, const char* name,
                                         const char* key, const char* doc_string,
                                         bool value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_simple_boolean_option(const GncOptionDBPtr& db,
+                                               const char* section,
+                                               const char* name,
+                                               const char* key,
+                                               const char* doc_string,
+                                               bool value)
+{
+    gnc_register_simple_boolean_option(db.get(), section, name, key,
+                                       doc_string, value);
+}
+
+/**
+ * Create a new complex boolean option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_complex_boolean_option(GncOptionDB* db,
                                          const char* section, const char* name,
                                          const char* key,
                                          const char* doc_string,
                                          bool value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_complex_boolean_option(const GncOptionDBPtr& db,
+                                                const char* section,
+                                                const char* name,
+                                                const char* key,
+                                                const char* doc_string,
+                                                bool value)
+{
+    gnc_register_complex_boolean_option(db.get(), section, name, key,
+                                        doc_string, value);
+}
+
+/**
+ * Create a new pixmap option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_pixmap_option(GncOptionDB* db, const char* section,
                                 const char* name, const char* key,
                                 const char* doc_string, std::string value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_pixmap_option(GncOptionDBPtr& db, const char* section,
+                                       const char* name, const char* key,
+                                       const char* doc_string,
+                                       std::string value)
+{
+    gnc_register_pixmap_option(db.get(), section, name, key, doc_string, value);
+}
+
+/**
+ * Create a new limited account list option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default values for the option.
+ * @param allowed The accounts which are available for selection.
+*/
 void gnc_register_account_list_limited_option(GncOptionDB* db,
                                              const char* section,
                                              const char* name, const char* key,
@@ -116,12 +295,59 @@ void gnc_register_account_list_limited_option(GncOptionDB* db,
                                              const GncOptionAccountList& value,
                                              GncOptionAccountTypeList&& allowed);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_account_list_limited_option(GncOptionDBPtr& db,
+                                             const char* section,
+                                             const char* name, const char* key,
+                                             const char* doc_string,
+                                             const GncOptionAccountList& value,
+                                             GncOptionAccountTypeList&& allowed)
+{
+    gnc_register_account_list_limited_option(db.get(), section, name, key,
+                                             doc_string, value,
+                                             std::move(allowed));
+}
+
+/**
+ * Create a new account list option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default values for the option.
+ */
 void gnc_register_account_list_option(GncOptionDB* db,
                                       const char* section,
                                       const char* name, const char* key,
                                       const char* doc_string,
                                       const GncOptionAccountList& value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_account_list_option(GncOptionDBPtr& db,
+                                      const char* section,
+                                      const char* name, const char* key,
+                                      const char* doc_string,
+                                      const GncOptionAccountList& value)
+{
+    gnc_register_account_list_option(db.get(), section, name, key,
+                                     doc_string, value);
+}
+
+/**
+ * Create a limited account selection option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ * @param allowed The accounts which are available for selection.
+ */
 void gnc_register_account_sel_limited_option(GncOptionDB* db,
                                              const char* section,
                                              const char* name, const char* key,
@@ -129,16 +355,88 @@ void gnc_register_account_sel_limited_option(GncOptionDB* db,
                                              const GncOptionAccountList& value,
                                              GncOptionAccountTypeList&& allowed);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_account_sel_limited_option(GncOptionDBPtr& db,
+                                             const char* section,
+                                             const char* name, const char* key,
+                                             const char* doc_string,
+                                             const GncOptionAccountList& value,
+                                             GncOptionAccountTypeList&& allowed)
+{
+    gnc_register_account_sel_limited_option(db.get(), section, name, key,
+                                            doc_string, value,
+                                            std::move(allowed));
+}
+
+/**
+ * Create a new multichoice option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The set of possible values for the option. Only one can be selected. Note that the value will be moved from the parameter and using the parameter after this call will result in undefined behavior.
+ */
 void gnc_register_multichoice_option(GncOptionDB* db,
                                      const char* section, const char* name,
                                      const char* key, const char* doc_string,
                                      GncMultichoiceOptionChoices&& value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_multichoice_option(GncOptionDBPtr& db,
+                                        const char* section, const char* name,
+                                        const char* key, const char* doc_string,
+                                        GncMultichoiceOptionChoices&& value)
+{
+    gnc_register_multichoice_option(db.get(), section, name,
+                                    key, doc_string, std::move(value));
+}
+
+/**
+ * Create a new list option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ * @param list The values available for selection. Note that this parameter will be moved from so using it after this call will result in undefined behavior.
+ */
 void gnc_register_list_option(GncOptionDB* db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, const char* value,
                               GncMultichoiceOptionChoices&& list);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_list_option(GncOptionDBPtr& db, const char* section,
+                                     const char* name, const char* key,
+                                     const char* doc_string, const char* value,
+                                     GncMultichoiceOptionChoices&& list)
+{
+    gnc_register_list_option(db.get(), section, name, key, doc_string,
+                             value, std::move(list));
+}
+
+/**
+ * Create a new number range option and register it in the options database.
+ *
+ * These are normally associated with spin controls and ValueType is normally
+ * double, but it's templated to permit other numeric types if needed.
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ * @param min The minimum value for the spin control.
+ * @param max The maximum value for the spin control.
+ * @param step The step size (increment) of the spin control.
+ */
 template <typename ValueType>
 void gnc_register_number_range_option(GncOptionDB* db,
                                       const char* section, const char* name,
@@ -146,55 +444,310 @@ void gnc_register_number_range_option(GncOptionDB* db,
                                       ValueType value, ValueType min,
                                       ValueType max, ValueType step);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+template <typename ValueType>
+void gnc_register_number_range_option(GncOptionDBPtr& db,
+                                      const char* section, const char* name,
+                                      const char* key, const char* doc_string,
+                                      ValueType value, ValueType min,
+                                      ValueType max, ValueType step)
+{
+    gnc_register_number_range_option<ValueType>(db.get(), section, name,
+                                                key, doc_string, value,
+                                                min, max, step);
+}
+
+/**
+ * Create a new plot-size option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_number_plot_size_option(GncOptionDB* db,
                                           const char* section, const char* name,
                                           const char* key,
                                           const char* doc_string,
                                           int value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_number_plot_size_option(const GncOptionDBPtr& db,
+                                                 const char* section,
+                                                 const char* name,
+                                                 const char* key,
+                                                 const char* doc_string,
+                                                 int value)
+{
+    gnc_register_number_plot_size_option(db.get(), section, name, key,
+                                         doc_string, value);
+}
+
+/**
+ * Create a new QofQuery option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_query_option(GncOptionDB* db, const char* section,
                                const char* name, const char* key,
                                const char* doc_string, QofQuery* value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_query_option(GncOptionDBPtr& db, const char* section,
+                                      const char* name, const char* key,
+                                      const char* doc_string, QofQuery* value)
+{
+    gnc_register_query_option(db.get(), section, name, key, doc_string, value);
+}
+
+/**
+ * Create a new color option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_color_option(GncOptionDB* db, const char* section,
                                const char* name, const char* key,
                                const char* doc_string, std::string value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_color_option(GncOptionDBPtr& db, const char* section,
+                                      const char* name, const char* key,
+                                      const char* doc_string,
+                                      std::string value)
+{
+    gnc_register_color_option(db.get(), section, name, key, doc_string, value);
+}
+
+/**
+ * Create a new internal string option and register it in the options database.
+ *
+ * Internal options are used for passing state data in some reports. As the name
+ * suggests they do not create UI elements in options dialogs.
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_internal_option(GncOptionDB* db, const char* section,
                                   const char* name, const char* key,
                                   const char* doc_string, SCM value);
 
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_internal_option(GncOptionDBPtr& db,
+                                         const char* section, const char* name,
+                                         const char* key,
+                                         const char* doc_string,
+                                         SCM value)
+{
+    gnc_register_internal_option(db.get(), section, name, key,
+                                 doc_string, value);
+}
+
+/**
+ * Create a new currency option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option. It is checked with gnc_commodity_is_currency.
+ */
 void gnc_register_currency_option(GncOptionDB* db, const char* section,
                                   const char* name, const char* key,
                                   const char* doc_string, gnc_commodity* value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_currency_option(const GncOptionDBPtr& db,
+                                          const char* section,
+                                          const char* name, const char* key,
+                                          const char* doc_string,
+                                          gnc_commodity* value)
+{
+    gnc_register_currency_option(db.get(), section, name, key,
+                                 doc_string, value);
+}
+
+/**
+ * Create a new invoice option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_invoice_option(GncOptionDB* db, const char* section,
                                  const char* name, const char* key,
                                  const char* doc_string, GncInvoice* value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_invoice_option(const GncOptionDBPtr& db,
+                                        const char* section,
+                                        const char* name, const char* key,
+                                        const char* doc_string,
+                                        GncInvoice* value)
+{
+    gnc_register_invoice_option(db.get(), section, name, key,
+                                doc_string, value);
+}
+
+/**
+ * Create a new owner-type option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ * @param type The Owner-type (Customer, Employee, or Vendor)
+ */
 void gnc_register_owner_option(GncOptionDB* db, const char* section,
                                const char* name, const char* key,
                                const char* doc_string, GncOwner* value,
                                GncOwnerType type);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_owner_option(const GncOptionDBPtr& db,
+                                      const char* section, const char* name,
+                                      const char* key, const char* doc_string,
+                                      GncOwner* value, GncOwnerType type)
+{
+    gnc_register_owner_option(db.get(), section, name, key,
+                              doc_string, value, type);
+}
+
+/**
+ * Create a new taxtable option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_taxtable_option(GncOptionDB* db, const char* section,
                                   const char* name, const char* key,
                                   const char* doc_string, GncTaxTable* value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_taxtable_option(const GncOptionDBPtr& db,
+                                         const char* section, const char* name,
+                                         const char* key,
+                                         const char* doc_string,
+                                         GncTaxTable* value)
+{
+    gnc_register_taxtable_option(db.get(), section, name, key,
+                                 doc_string, value);
+}
+
+/**
+ * Create a new counter option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_counter_option(GncOptionDB* db, const char* section,
                                  const char* name, const char* key,
                                  const char* doc_string, double value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_counter_option(const GncOptionDBPtr& db,
+                                        const char* section, const char* name,
+                                        const char* key, const char* doc_string,
+                                        double value)
+{
+    gnc_register_counter_option(db.get(), section, name, key,
+                                  doc_string, value);
+}
+
+/**
+ * Create a new counter format option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_counter_format_option(GncOptionDB* db,
                                         const char* section, const char* name,
                                         const char* key, const char* doc_string,
                                         std::string value);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_counter_format_option(GncOptionDBPtr& db,
+                                               const char* section,
+                                               const char* name,
+                                               const char* key,
+                                               const char* doc_string,
+                                               std::string value)
+{
+    gnc_register_counter_format_option(db.get(), section, name, key,
+                                       doc_string, value);
+}
+
+/**
+ * Create a new date format option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
 void gnc_register_dateformat_option(GncOptionDB* db,
                                     const char* section, const char* name,
                                     const char* key, const char* doc_string,
                                     std::string value);
+
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_dateformat_option(GncOptionDBPtr& db,
+                                           const char* section,
+                                           const char* name, const char* key,
+                                           const char* doc_string,
+                                           std::string value)
+{
+    gnc_register_dateformat_option(db.get(), section, name, key,
+                                   doc_string, value);
+}
 
 enum RelativeDateUI : uint8_t
 {
@@ -203,6 +756,16 @@ enum RelativeDateUI : uint8_t
     BOTH
 };
 
+/**
+ * Create a new date option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param period The default/starting relative date value for the option.
+ * @param ui What UI to display, relative, absolute, or both.
+*/
 void gnc_register_date_option(GncOptionDB* db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string,
@@ -210,25 +773,126 @@ void gnc_register_date_option(GncOptionDB* db, const char* section,
                               RelativeDatePeriod::TODAY,
                               RelativeDateUI ui = RelativeDateUI::BOTH);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_date_option(GncOptionDBPtr& db, const char* section,
+                              const char* name, const char* key,
+                              const char* doc_string,
+                              RelativeDatePeriod period =
+                              RelativeDatePeriod::TODAY,
+                              RelativeDateUI ui = RelativeDateUI::BOTH)
+{
+    gnc_register_date_option(db.get(), section, name, key, doc_string,
+                             period, ui);
+}
+
+/**
+ * Create a new date option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param time The initial time to set in the option.
+ * @param ui What UI to display, relative, absolute, or both.
+ */
 void gnc_register_date_option(GncOptionDB* db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, time64 time,
                               RelativeDateUI ui = RelativeDateUI::BOTH);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_date_option(GncOptionDBPtr& db, const char* section,
+                              const char* name, const char* key,
+                              const char* doc_string, time64 time,
+                              RelativeDateUI ui = RelativeDateUI::BOTH)
+{
+    gnc_register_date_option(db.get(), section, name, key, doc_string,
+                             time, ui);
+}
+
+/**
+ * Create a new date option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param period_set A vector of relative date periods to display in the relative control.
+ * @param both Whether to display both a relative and absolute control or a onla a relative control.
+*/
 void gnc_register_date_option(GncOptionDB* db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string,
                               RelativeDatePeriodVec& period_set,
                               bool both = true);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_date_option(GncOptionDBPtr& db, const char* section,
+                              const char* name, const char* key,
+                              const char* doc_string,
+                              RelativeDatePeriodVec& period_set,
+                              bool both = true)
+{
+    gnc_register_date_option(db.get(), section, name, key, doc_string,
+                             period_set, both);
+}
+
+/**
+ * Create a new start-date option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param both Whether to display both a relative and absolute control or a onla a relative control.
+ */
 void gnc_register_start_date_option(GncOptionDB* db,
                                     const char* section,
                                     const char* name, const char* key,
                                     const char* doc_string, bool both = true);
 
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_start_date_option(GncOptionDBPtr& db,
+                                    const char* section,
+                                    const char* name, const char* key,
+                                    const char* doc_string, bool both = true)
+{
+    gnc_register_start_date_option(db.get(), section, name, key, doc_string,
+                                   both);
+}
+
+/**
+ * Create a new end-date option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param both Whether to display both a relative and absolute control or a onla a relative control.
+ */
 void gnc_register_end_date_option(GncOptionDB* db, const char* section,
                                   const char* name, const char* key,
                                   const char* doc_string, bool both = true);
+
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_end_date_option(GncOptionDBPtr& db, const char* section,
+                                  const char* name, const char* key,
+                                  const char* doc_string, bool both = true)
+{
+    gnc_register_end_date_option(db.get(), section, name, key, doc_string,
+                                 both);
+}
+
 
 
 #endif //GNC_OPTIONDB_HPP_

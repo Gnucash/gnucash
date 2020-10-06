@@ -215,7 +215,7 @@ GncOptionDB::find_option(const std::string& section, const char* name) const
      */
     if (alias && alias->first)
         return find_option(alias->first, alias->second);
-        return nullptr;
+    return nullptr;
 }
 
 std::string
@@ -1497,11 +1497,11 @@ gnc_option_db_set_scm_value(GncOptionDB*, const char*, const char*, SCM)
 }
 
 // Force creation of templates
-template void gnc_register_number_range_option(GncOptionDB* db,
+template void gnc_register_number_range_option(GncOptionDBPtr& db,
                                       const char* section, const char* name,
                                       const char* key, const char* doc_string,
                                       int value, int min, int max, int step);
-template void gnc_register_number_range_option(GncOptionDB* db,
+template void gnc_register_number_range_option(GncOptionDBPtr& db,
                                       const char* section, const char* name,
                                       const char* key, const char* doc_string,
                                       double value, double min,

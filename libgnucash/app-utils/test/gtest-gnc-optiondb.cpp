@@ -75,7 +75,7 @@ TEST_F(GncOptionDBTest, test_unregister_option)
 
 TEST_F(GncOptionDBTest, test_register_string_option)
 {
-    gnc_register_string_option(m_db.get(), "foo", "bar", "baz", "Phony Option",
+    gnc_register_string_option(m_db, "foo", "bar", "baz", "Phony Option",
                                std::string{"waldo"});
     EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "bar").c_str());
 }
@@ -131,7 +131,7 @@ TEST_F(GncOptionDBTest, test_register_account_list_option)
 {
     AccountTestBook book;
     auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
-    gnc_register_account_list_option(m_db.get(), "foo", "bar", "baz",
+    gnc_register_account_list_option(m_db, "foo", "bar", "baz",
                                      "Phony Option", acclist);
     EXPECT_EQ(4U, m_db->find_option("foo", "bar")->get_value<GncOptionAccountList>().size());
     EXPECT_EQ(acclist[3], m_db->find_option("foo", "bar")->get_value<GncOptionAccountList>().at(3));
@@ -141,7 +141,7 @@ TEST_F(GncOptionDBTest, test_register_account_list_limited_option)
 {
     AccountTestBook book;
     auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
-    gnc_register_account_list_limited_option(m_db.get(), "foo", "bar", "baz",
+    gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz",
                                              "Phony Option", acclist,
                                              {ACCT_TYPE_STOCK});
     EXPECT_EQ(4, m_db->find_option("foo", "bar")->get_value<GncOptionAccountList>().size());
@@ -153,7 +153,7 @@ TEST_F(GncOptionDBTest, test_register_account_sel_limited_option)
     AccountTestBook book;
     auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
     GncOptionAccountList accsel{acclist[2]};
-    gnc_register_account_list_limited_option(m_db.get(), "foo", "bar", "baz",
+    gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz",
                                              "Phony Option", accsel,
                                              {ACCT_TYPE_STOCK});
     EXPECT_EQ(1, m_db->find_option("foo", "bar")->get_value<GncOptionAccountList>().size());
@@ -165,10 +165,10 @@ TEST_F(GncOptionDBTest, test_register_account_sel_limited_option_fail_construct)
     AccountTestBook book;
     auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
     GncOptionAccountList accsel{acclist[2]};
-    gnc_register_account_list_limited_option(m_db.get(), "foo", "bar", "baz", "Phony Option",
+    gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz", "Phony Option",
                                      accsel, {ACCT_TYPE_BANK});
     EXPECT_FALSE(m_db->find_option("foo", "bar"));
-    gnc_register_account_list_limited_option(m_db.get(), "foo", "bar", "baz",
+    gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz",
                                              "Phony Option", acclist,
                                              {ACCT_TYPE_BANK});
     EXPECT_FALSE(m_db->find_option("foo", "bar"));
@@ -181,7 +181,7 @@ TEST_F(GncOptionDBTest, test_register_multichoice_option)
         { "waldo", "pepper", "salt"},
         { "pork", "sausage", "links"},
         { "corge", "grault", "garply"}};
-    gnc_register_multichoice_option(m_db.get(), "foo", "bar", "baz",
+    gnc_register_multichoice_option(m_db, "foo", "bar", "baz",
                                     "Phony Option", std::move(choices));
     ASSERT_TRUE(m_db->set_option("foo", "bar", std::string{"corge"}));
     EXPECT_STREQ("corge", m_db->lookup_string_option("foo", "bar").c_str());
@@ -199,7 +199,7 @@ time64_from_gdate(const GDate* g_date, DayPart when)
 
 TEST_F(GncOptionDBTest, test_register_relative_date_option)
 {
-    gnc_register_date_option(m_db.get(), "foo", "bar", "baz", "Phony Option",
+    gnc_register_date_option(m_db, "foo", "bar", "baz", "Phony Option",
                              RelativeDatePeriod::START_ACCOUNTING_PERIOD);
     GDate prev_year_start;
     g_date_set_time_t(&prev_year_start, time(nullptr));
@@ -213,7 +213,7 @@ TEST_F(GncOptionDBTest, test_register_absolute_date_option)
 {
     time64 time1{static_cast<time64>(GncDateTime("2019-07-19 15:32:26 +05:00"))};
 
-    gnc_register_date_option(m_db.get(), "foo", "bar", "baz", "Phony Option",
+    gnc_register_date_option(m_db, "foo", "bar", "baz", "Phony Option",
                              time1);
     GDate prev_year_start;
     g_date_set_time_t(&prev_year_start, time(nullptr));
@@ -240,7 +240,7 @@ static const RelativeDatePeriodVec begin_dates
 
 TEST_F(GncOptionDBTest, test_register_start_date_option)
 {
-    gnc_register_start_date_option(m_db.get(), "foo", "bar", "baz",
+    gnc_register_start_date_option(m_db, "foo", "bar", "baz",
                                    "Phony Option");
     GDate prev_year_start;
     g_date_set_time_t(&prev_year_start, time(nullptr));
@@ -305,18 +305,18 @@ protected:
         create_account(expenses, ACCT_TYPE_EXPENSE, "Gas");
         create_account(expenses, ACCT_TYPE_EXPENSE, "Rent");
 
-        gnc_register_string_option(m_db.get(), "foo", "bar", "baz",
+        gnc_register_string_option(m_db, "foo", "bar", "baz",
                                    "Phony Option", std::string{"waldo"});
-        gnc_register_text_option(m_db.get(), "foo", "sausage", "links",
+        gnc_register_text_option(m_db, "foo", "sausage", "links",
                                  "Phony Option", std::string{"waldo"});
-        gnc_register_string_option(m_db.get(), "qux", "grault", "baz",
+        gnc_register_string_option(m_db, "qux", "grault", "baz",
                                    "Phony Option", std::string{""});
-        gnc_register_text_option(m_db.get(), "qux", "garply", "fred",
+        gnc_register_text_option(m_db, "qux", "garply", "fred",
                                    "Phony Option", std::string{"waldo"});
-        gnc_register_date_option(m_db.get(), "pork", "garply", "first",
+        gnc_register_date_option(m_db, "pork", "garply", "first",
                                  "Phony Date Option",
                                  RelativeDatePeriod::START_CURRENT_QUARTER);
-        gnc_register_account_list_option(m_db.get(), "quux", "xyzzy", "second",
+        gnc_register_account_list_option(m_db, "quux", "xyzzy", "second",
                                          "Phony AccountList Option",
                                          {aapl, hpe});
     }
