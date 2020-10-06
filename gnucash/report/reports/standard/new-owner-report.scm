@@ -57,7 +57,7 @@
 (define debit-header (N_ "Debits"))
 (define balance-header (N_ "Balance"))
 (define doclink-header (N_ "Document Links"))
-(define linked-txns-header (N_ "Links"))
+(define linked-txns-header (N_ "Transaction Links"))
 
 (define javascript "
 <script>
