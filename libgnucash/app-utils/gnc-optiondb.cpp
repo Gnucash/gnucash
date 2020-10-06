@@ -34,6 +34,69 @@
 constexpr const char* log_module{G_LOG_DOMAIN};
 
 constexpr auto stream_max = std::numeric_limits<std::streamsize>::max();
+using AliasedOption = std::pair<const char*, const char*>;
+using OptionAlias = std::pair<const char*, AliasedOption>;
+using OptionAliases = std::vector<OptionAlias>;
+class Aliases
+{
+    static const OptionAliases c_option_aliases;
+public:
+    static const AliasedOption* find_alias (const char* old_name)
+    {
+        if (!old_name) return nullptr;
+        const auto alias =
+            std::find_if(c_option_aliases.begin(), c_option_aliases.end(),
+                         [old_name](auto alias){
+                             return std::strcmp(old_name, alias.first) == 0;
+                         });
+        if (alias == c_option_aliases.end())
+        {
+            std::cerr << "No alias for " << old_name << " found.\n";
+            return nullptr;
+        }
+        std::cerr << "Found " << alias->second.second << " as alias for " << old_name << ".\n";
+        return &alias->second;
+    }
+};
+
+const OptionAliases Aliases::c_option_aliases
+{
+    {"Accounts to include", {nullptr, "Accounts"}},
+    {"Exclude transactions between selected accounts?",
+        {nullptr, "Exclude transactions between selected accounts"}},
+    {"Filter Accounts", {nullptr, "Filter By..."}},
+    {"Flatten list to depth limit?",
+        {nullptr, "Flatten list to depth limit"}},
+    {"From", {nullptr, "Start Date"}},
+    {"Report Accounts", {nullptr, "Accounts"}},
+    {"Report Currency", {nullptr, "Report's currency"}},
+    {"Show Account Code?", {nullptr, "Show Account Code"}},
+    {"Show Full Account Name?", {nullptr, "Show Full Account Name"}},
+    {"Show Multi-currency Totals?",
+        {nullptr, "Show Multi-currency Totals"}},
+    {"Show zero balance items?", {nullptr, "Show zero balance items"}},
+    {"Sign Reverses?", {nullptr, "Sign Reverses"}},
+    {"To", {nullptr, "End Date"}},
+    {"Charge Type", {nullptr, "Action"}}, // easy-invoice.scm, renamed June 2018
+        // the following 4 options in income-gst-statement.scm renamed Dec 2018
+    {"Individual income columns", {nullptr, "Individual sales columns"}},
+    {"Individual expense columns",
+        {nullptr, "Individual purchases columns"}},
+    {"Remittance amount", {nullptr, "Gross Balance"}},
+    {"Net Income", {nullptr, "Net Balance"}},
+        // transaction.scm:
+    {"Use Full Account Name?", {nullptr, "Use Full Account Name"}},
+    {"Use Full Other Account Name?",
+        {nullptr, "Use Full Other Account Name"}},
+    {"Void Transactions?", {"Filter", "Void Transactions"}},
+    {"Void Transactions", {"Filter", "Void Transactions"}},
+    {"Account Substring", {"Filter", "Account Name Filter"}},
+    {"Enable links", {nullptr, "Enable Links"}},
+        // invoice.scm, renamed November 2018
+    {"Individual Taxes", {nullptr, "Use Detailed Tax Summary"}},
+        // income-gst-statement.scm
+    {"default format", {nullptr, "Default Format"}}
+};
 
 static bool
 operator==(const std::string& str, const char* cstr)
@@ -76,7 +139,13 @@ GncOptionSection::find_option(const char* name) const
                                [name](auto& option) -> bool {
                                    return option.get_name() == name;
                                });
-    return (option == m_options.end() ? nullptr : &*option);
+    if (option != m_options.end())
+        return &*option;
+
+    auto alias = Aliases::find_alias(name);
+    if (!alias || alias->first) // No alias or the alias
+        return nullptr;         // is in a different section.
+    return find_option(alias->second);
 }
 
 GncOptionDB::GncOptionDB() : m_default_section{} {}
@@ -133,9 +202,19 @@ const GncOption*
 GncOptionDB::find_option(const std::string& section, const char* name) const
 {
     auto db_section = const_cast<GncOptionDB*>(this)->find_section(section);
-    if (!db_section)
+    const GncOption* option = nullptr;
+    if (db_section)
+        option = db_section->find_option(name);
+    if (option)
+        return option;
+    auto alias = Aliases::find_alias(name);
+     /* Only try again if alias.first isn't
+     * nullptr. GncOptionSection::find_option already checked if the alias
+     * should have been in the same section.
+     */
+    if (alias && alias->first)
+        return find_option(alias->first, alias->second);
         return nullptr;
-    return db_section->find_option(name);
 }
 
 std::string

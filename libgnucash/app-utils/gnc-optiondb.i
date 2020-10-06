@@ -446,6 +446,13 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         auto db_ptr{std::make_unique<GncOptionDB>()};
         return db_ptr;
     }
+
+    GncOption*
+    gnc_lookup_option(const GncOptionDBPtr& optiondb, const char* section,
+                      const char* name)
+    {
+        return optiondb->find_option(section, name);
+    }
 %}
 
 #endif //SWIGGUILE
