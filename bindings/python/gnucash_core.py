@@ -859,6 +859,7 @@ account_dict =  {
 methods_return_instance(Account, account_dict)
 methods_return_instance_lists(
     Account, { 'GetSplitList': Split,
+               'GetLotList': GncLot,
                'get_children': Account,
                'get_children_sorted': Account,
                'get_descendants': Account,
