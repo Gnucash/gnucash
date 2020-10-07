@@ -1,16 +1,42 @@
 from unittest import main
-from gnucash import Book, Account, GncLot
+from gnucash import Book, Account, GncLot, Split, GncNumeric
 
 from test_account import AccountSession
+from test_split import SplitSession
 
-class LotSession(AccountSession):
+class LotSession(AccountSession, SplitSession):
     def setUp(self):
         AccountSession.setUp(self)
+        self.NUM = 10000
+        self.amount = GncNumeric(self.NUM, 100)
+
+    def setup_buysplit(self):
+        self.buysplit = Split(self.book)
+        self.buysplit.SetAccount(self.account)
+        self.buysplit.SetAmount(self.amount)
+
+    def setup_sellsplit(self):
+        self.sellsplit = Split(self.book)
+        self.sellsplit.SetAccount(self.account)
+        self.sellsplit.SetAmount(self.amount.neg())
 
 class TestLot(LotSession):
     def test_make_default(self):
-        lot = GncLot.make_default(self.account)
-        self.assertIsInstance(lot, GncLot)
+        self.lot = GncLot.make_default(self.account)
+        self.assertIsInstance(self.lot, GncLot)
+
+    def test_AssignToLot(self):
+        self.lot = GncLot.make_default(self.account)
+        
+        self.setup_buysplit()
+        self.buysplit.AssignToLot(self.lot)
+        self.assertEqual(self.NUM, self.lot.get_balance().num())
+        self.assertTrue(not self.lot.is_closed())
+
+        self.setup_sellsplit()
+        self.sellsplit.AssignToLot(self.lot)
+        self.assertEqual(0, self.lot.get_balance().num())
+        self.assertTrue(self.lot.is_closed())
 
 if __name__ == '__main__':
     unittest.main()
