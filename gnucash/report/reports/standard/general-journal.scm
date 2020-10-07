@@ -102,16 +102,15 @@
       (list (N_ "Running Balance") #f)
       (list (N_ "Totals") #f)))
 
+    (set-option! gnc:pagename-general "Title" (G_ reportname))
     options))
 
 ;; report renderer
 
 (define (general-journal-renderer report-obj)
   ;; just delegate rendering to the Register Report renderer...
-  (let* ((renderer (gnc:report-template-renderer/report-guid regrptguid #f))
-         (doc (renderer report-obj)))
-    (gnc:html-document-set-title! doc (G_ reportname))
-    doc))
+  (let ((renderer (gnc:report-template-renderer/report-guid regrptguid #f)))
+    (renderer report-obj)))
 
 (gnc:define-report
  'version 1
