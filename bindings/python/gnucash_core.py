@@ -797,6 +797,7 @@ split_dict =    {
                     'GetBook': Book,
                     'GetAccount': Account,
                     'GetParent': Transaction,
+                    'GetLot': GncLot,
                     'Lookup': Split,
                     'GetOtherSplit': Split,
                     'GetAmount': GncNumeric,
