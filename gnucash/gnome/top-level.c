@@ -47,6 +47,7 @@
 #include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-hooks.h"
+#include "gncInvoice.h"
 #include "gfec.h"
 #include "gnc-main-window.h"
 #include "gnc-menu-extensions.h"
@@ -120,6 +121,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
     Split       * split = NULL;
     Account     * account = NULL;
     Transaction * trans;
+    GncInvoice  * invoice;
     GList       * node;
     GncGUID       guid;
     QofInstance * entity = NULL;
@@ -177,6 +179,19 @@ gnc_html_register_url_cb (const char *location, const char *label,
         trans = (Transaction *) entity;
         gnc_doclink_open_uri (gnc_ui_get_gtk_window (GTK_WIDGET (result->parent)),
                               xaccTransGetDocLink (trans));
+        return TRUE;
+    }
+
+    else if (strncmp ("invoice-doclink-guid=", location,
+                      strlen ("invoice-doclink-guid=")) == 0)
+    {
+        if (!validate_type("invoice-doclink-guid=", location, GNC_ID_INVOICE,
+                           result, &guid, &entity))
+            return FALSE;
+
+        invoice = (GncInvoice *) entity;
+        gnc_doclink_open_uri (gnc_ui_get_gtk_window (GTK_WIDGET (result->parent)),
+                              gncInvoiceGetDocLink (invoice));
         return TRUE;
     }
 

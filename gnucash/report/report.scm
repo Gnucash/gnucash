@@ -93,6 +93,7 @@
 (export gnc:html-split-anchor)
 (export gnc:html-transaction-anchor)
 (export gnc:html-transaction-doclink-anchor)
+(export gnc:html-invoice-doclink-anchor)
 (export gnc:html-price-anchor)
 (export gnc:customer-anchor-text)
 (export gnc:job-anchor-text)
