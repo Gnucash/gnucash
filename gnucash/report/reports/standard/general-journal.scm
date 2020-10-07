@@ -41,15 +41,14 @@
 ;; options generator
 
 (define (general-journal-options-generator)
-  
+
   (let* ((options (gnc:report-template-new-options/report-guid regrptguid regrptname))
-	 (query (qof-query-create-for-splits))
-	 )
-    
+         (query (qof-query-create-for-splits)))
+
     (define (set-option! section name value)
       (gnc:option-set-default-value
        (gnc:lookup-option options section name) value))
-    
+
     ;; Match, by default, all non-void transactions ever recorded in
     ;; all accounts....  Whether or not to match void transactions,
     ;; however, may be of issue here. Since I don't know if the
@@ -59,9 +58,9 @@
     (xaccQueryAddClearedMatch
      query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
     (qof-query-set-sort-order query
-			      (list SPLIT-TRANS TRANS-DATE-POSTED)
-			      (list QUERY-DEFAULT-SORT)
-			      '())
+                              (list SPLIT-TRANS TRANS-DATE-POSTED)
+                              (list QUERY-DEFAULT-SORT)
+                              '())
     (qof-query-set-sort-increasing query #t #t #t)
 
     (xaccQueryAddAccountMatch
@@ -81,9 +80,7 @@
       (list "journal" #t)
       (list "double" #t)
       (list "debit-string" (G_ "Debit"))
-      (list "credit-string" (G_ "Credit"))
-      )
-     )
+      (list "credit-string" (G_ "Credit"))))
     ;; we'll leave query malloc'd in case this is required by the C side...
 
     ;; set options in the display tab...
@@ -103,12 +100,9 @@
       ;; note the "Amount" multichoice option here
       (list (N_ "Amount") 'double)
       (list (N_ "Running Balance") #f)
-      (list (N_ "Totals") #f)
-      )
-     )
-    
-    options)
-  )
+      (list (N_ "Totals") #f)))
+
+    options))
 
 ;; report renderer
 
@@ -119,7 +113,7 @@
     (gnc:html-document-set-title! doc (G_ reportname))
     doc))
 
-(gnc:define-report 
+(gnc:define-report
  'version 1
  'name reportname
  'report-guid "25455562bd234dd0b048ecc5a8af9e43"
@@ -129,4 +123,3 @@
  )
 
 ;; END
-
