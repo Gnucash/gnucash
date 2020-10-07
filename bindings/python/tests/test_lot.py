@@ -44,6 +44,14 @@ class TestLot(LotSession):
         self.buysplit.AssignToLot(self.lot)
         rtn_lot = self.buysplit.GetLot()
         self.assertEqual(rtn_lot.get_title(), self.lot.get_title())
+ 
+    def test_get_split_list(self):
+        self.lot = GncLot.make_default(self.account)
+        self.setup_buysplit()
+        self.buysplit.AssignToLot(self.lot)
+        splits = self.lot.get_split_list()
+        self.assertEqual(self.NUM, splits[0].GetAmount().num())
+        self.assertEqual(self.account.name, splits[0].GetAccount().name)
 
 if __name__ == '__main__':
     unittest.main()

@@ -758,6 +758,9 @@ gnclot_dict =   {
                 }
 methods_return_instance(GncLot, gnclot_dict)
 GncLot.make_default = classmethod_function_returns_instance(GncLot.make_default, GncLot)
+methods_return_instance_lists(
+    GncLot, { 'get_split_list': Split
+    })
 
 # Transaction
 Transaction.add_methods_with_prefix('xaccTrans')
