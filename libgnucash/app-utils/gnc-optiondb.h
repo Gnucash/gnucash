@@ -36,11 +36,8 @@ typedef struct GncOptionDB GncOptionDB;
 #include <libguile.h>
 
 #ifdef __cplusplus
-class GncOptionDB;
 extern "C"
 {
-#else
-typedef struct GncOptionDB GncOptionDB;
 #endif
 #include <config.h>
 #include <Account.h>
