@@ -1,6 +1,6 @@
 /********************************************************************
  * dialog-report-style-sheet.c -- window for configuring HTML style *
- *                         sheets in GnuCash                        *
+ *                                sheets in GnuCash                 *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
@@ -44,20 +44,20 @@ StyleSheetDialog * gnc_style_sheet_dialog = NULL;
 
 struct _stylesheetdialog
 {
-    GtkWidget  * toplevel;
+    GtkWidget     * toplevel;
     GtkTreeView   * list_view;
     GtkListStore  * list_store;
-    GtkWidget  * options_frame;
-    gint         component_id;
-    QofSession  *session;
+    GtkWidget     * options_frame;
+    gint            component_id;
+    QofSession    * session;
 };
 
 typedef struct ss_info
 {
-    GNCOptionWin  * odialog;
-    GNCOptionDB   * odb;
-    SCM           stylesheet;
-    GtkTreeRowReference *row_ref;
+    GNCOptionWin        * odialog;
+    GNCOptionDB         * odb;
+    SCM                   stylesheet;
+    GtkTreeRowReference * row_ref;
 } ss_info;
 
 enum
@@ -79,62 +79,60 @@ void gnc_style_sheet_select_dialog_destroy_cb (GtkWidget *widget, gpointer user_
  ************************************************************/
 
 static void
-dirty_same_stylesheet(gpointer key, gpointer val, gpointer data)
+dirty_same_stylesheet (gpointer key, gpointer val, gpointer data)
 {
     SCM dirty_ss = data;
     SCM rep_ss = NULL;
     SCM report = val;
     SCM func = NULL;
 
-    func = scm_c_eval_string("gnc:report-stylesheet");
-    if (scm_is_procedure(func))
-        rep_ss = scm_call_1(func, report);
+    func = scm_c_eval_string ("gnc:report-stylesheet");
+    if (scm_is_procedure (func))
+        rep_ss = scm_call_1 (func, report);
     else
         return;
 
-    if (scm_is_true(scm_eq_p(rep_ss, dirty_ss)))
+    if (scm_is_true (scm_eq_p (rep_ss, dirty_ss)))
     {
-        func = scm_c_eval_string("gnc:report-set-dirty?!");
+        func = scm_c_eval_string ("gnc:report-set-dirty?!");
         /* This makes _me_ feel dirty! */
-        if (scm_is_procedure(func))
-            scm_call_2(func, report, SCM_BOOL_T);
+        if (scm_is_procedure (func))
+            scm_call_2 (func, report, SCM_BOOL_T);
     }
 }
 
 static void
-gnc_style_sheet_options_apply_cb(GNCOptionWin * propertybox,
-                                 gpointer user_data)
+gnc_style_sheet_options_apply_cb (GNCOptionWin * propertybox,
+                                  gpointer user_data)
 {
     ss_info * ssi = (ss_info *)user_data;
     GHashTable *reports = NULL;
     GList *results = NULL, *iter;
 
     /* FIXME: shouldn't be global */
-    reports = gnc_reports_get_global();
+    reports = gnc_reports_get_global ();
     if (reports)
-        g_hash_table_foreach(reports, dirty_same_stylesheet, ssi->stylesheet);
+        g_hash_table_foreach (reports, dirty_same_stylesheet, ssi->stylesheet);
 
     results = gnc_option_db_commit (ssi->odb);
     for (iter = results; iter; iter = iter->next)
     {
-        GtkWidget *dialog = gtk_message_dialog_new(NULL,
-                                                   0,
-                                                   GTK_MESSAGE_ERROR,
-                                                   GTK_BUTTONS_OK,
-                                                   "%s",
-                                                   (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        GtkWidget *dialog = gtk_message_dialog_new (NULL,
+                                                    0,
+                                                    GTK_MESSAGE_ERROR,
+                                                    GTK_BUTTONS_OK,
+                                                    "%s",
+                                                    (char*)iter->data);
+        gtk_dialog_run (GTK_DIALOG(dialog));
+        gtk_widget_destroy (dialog);
         g_free (iter->data);
     }
     g_list_free (results);
-
 }
 
-
 static void
-gnc_style_sheet_options_close_cb(GNCOptionWin * propertybox,
-                                 gpointer user_data)
+gnc_style_sheet_options_close_cb (GNCOptionWin * propertybox,
+                                  gpointer user_data)
 {
     ss_info * ssi = user_data;
     GtkTreeIter iter;
@@ -147,77 +145,74 @@ gnc_style_sheet_options_close_cb(GNCOptionWin * propertybox,
             gtk_list_store_set (ss->list_store, &iter,
                                 COLUMN_DIALOG, NULL,
                                 -1);
-        gtk_tree_path_free(path);
+        gtk_tree_path_free (path);
     }
     gtk_tree_row_reference_free (ssi->row_ref);
-    gnc_options_dialog_destroy(ssi->odialog);
-    gnc_option_db_destroy(ssi->odb);
-    scm_gc_unprotect_object(ssi->stylesheet);
-    g_free(ssi);
+    gnc_options_dialog_destroy (ssi->odialog);
+    gnc_option_db_destroy (ssi->odb);
+    scm_gc_unprotect_object (ssi->stylesheet);
+    g_free (ssi);
 }
-
 
 static ss_info *
-gnc_style_sheet_dialog_create(StyleSheetDialog * ss,
-                              gchar *name,
-                              SCM sheet_info,
-                              GtkTreeRowReference *row_ref)
+gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
+                               gchar *name,
+                               SCM sheet_info,
+                               GtkTreeRowReference *row_ref)
 {
-    SCM get_options = scm_c_eval_string("gnc:html-style-sheet-options");
+    SCM get_options = scm_c_eval_string ("gnc:html-style-sheet-options");
 
-    SCM            scm_options = scm_call_1(get_options, sheet_info);
-    ss_info        * ssinfo = g_new0(ss_info, 1);
+    SCM            scm_options = scm_call_1 (get_options, sheet_info);
+    ss_info        * ssinfo = g_new0 (ss_info, 1);
     GtkWidget      * window;
     gchar          * title;
-    GtkWindow      * parent = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (ss->list_view)));
+    GtkWindow      * parent = GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(ss->list_view)));
 
-    title = g_strdup_printf(_("HTML Style Sheet Properties: %s"), name);
-    ssinfo->odialog = gnc_options_dialog_new(title, parent);
-    ssinfo->odb     = gnc_option_db_new(scm_options);
+    title = g_strdup_printf (_("HTML Style Sheet Properties: %s"), name);
+    ssinfo->odialog = gnc_options_dialog_new (title, parent);
+    ssinfo->odb     = gnc_option_db_new (scm_options);
     ssinfo->stylesheet = sheet_info;
     ssinfo->row_ref    = row_ref;
-    g_free(title);
+    g_free (title);
 
-    scm_gc_protect_object(ssinfo->stylesheet);
-    g_object_ref(gnc_options_dialog_widget(ssinfo->odialog));
+    scm_gc_protect_object (ssinfo->stylesheet);
+    g_object_ref (gnc_options_dialog_widget (ssinfo->odialog));
 
-    gnc_options_dialog_build_contents(ssinfo->odialog,
-                                      ssinfo->odb);
-    gnc_options_dialog_set_apply_cb(ssinfo->odialog,
-                                    gnc_style_sheet_options_apply_cb,
-                                    ssinfo);
-    gnc_options_dialog_set_close_cb(ssinfo->odialog,
-                                    gnc_style_sheet_options_close_cb,
-                                    ssinfo);
-    window = gnc_options_dialog_widget(ssinfo->odialog);
-    gtk_window_set_transient_for(GTK_WINDOW(window),
-                                 GTK_WINDOW(gnc_style_sheet_dialog->toplevel));
-    gtk_window_set_destroy_with_parent(GTK_WINDOW(window), TRUE);
-    gtk_window_present(GTK_WINDOW(window));
-
-    return(ssinfo);
+    gnc_options_dialog_build_contents (ssinfo->odialog,
+                                       ssinfo->odb);
+    gnc_options_dialog_set_apply_cb (ssinfo->odialog,
+                                     gnc_style_sheet_options_apply_cb,
+                                     ssinfo);
+    gnc_options_dialog_set_close_cb (ssinfo->odialog,
+                                     gnc_style_sheet_options_close_cb,
+                                     ssinfo);
+    window = gnc_options_dialog_widget (ssinfo->odialog);
+    gtk_window_set_transient_for (GTK_WINDOW(window),
+                                  GTK_WINDOW(gnc_style_sheet_dialog->toplevel));
+    gtk_window_set_destroy_with_parent (GTK_WINDOW(window), TRUE);
+    gtk_window_present (GTK_WINDOW(window));
+    return (ssinfo);
 }
-
 
 static SCM
 gnc_style_sheet_new (StyleSheetDialog * ssd)
 {
-    SCM              make_ss   = scm_c_eval_string("gnc:make-html-style-sheet");
-    SCM              templates = scm_c_eval_string("(gnc:get-html-templates)");
-    SCM              t_name = scm_c_eval_string("gnc:html-style-sheet-template-name");
-    SCM              new_ss = SCM_BOOL_F;
-    GtkWidget        * template_combo;
-    GtkTreeModel     * template_model;
-    GtkTreeIter      iter;
-    GtkWidget        * name_entry;
-    gint             dialog_retval;
-    GList *template_names = NULL;
+    SCM            make_ss   = scm_c_eval_string ("gnc:make-html-style-sheet");
+    SCM            templates = scm_c_eval_string ("(gnc:get-html-templates)");
+    SCM            t_name    = scm_c_eval_string ("gnc:html-style-sheet-template-name");
+    SCM            new_ss    = SCM_BOOL_F;
+    GtkWidget    * template_combo;
+    GtkTreeModel * template_model;
+    GtkTreeIter    iter;
+    GtkWidget    * name_entry;
+    gint           dialog_retval;
+    GList        * template_names = NULL;
 
     /* get the new name for the style sheet */
-    GtkBuilder *builder;
-    GtkWidget *dlg;
+    GtkBuilder   * builder;
+    GtkWidget    * dlg;
 
-    builder = gtk_builder_new();
+    builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-report.glade", "template_liststore");
     gnc_builder_add_from_file (builder, "dialog-report.glade", "new_style_sheet_dialog");
 
@@ -229,75 +224,73 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     gtk_widget_set_name (GTK_WIDGET(dlg), "gnc-id-style-sheet-new");
     gnc_widget_style_context_add_class (GTK_WIDGET(dlg), "gnc-class-style-sheets");
 
-    g_assert(ssd);
+    g_assert (ssd);
 
     /* Erase the initial dummy entry. */
-    template_model = gtk_combo_box_get_model(GTK_COMBO_BOX(template_combo));
-    gtk_list_store_clear(GTK_LIST_STORE(template_model));
+    template_model = gtk_combo_box_get_model (GTK_COMBO_BOX(template_combo));
+    gtk_list_store_clear (GTK_LIST_STORE(template_model));
 
     /* put in the list of style sheet type names */
-    for (; !scm_is_null(templates); templates = SCM_CDR(templates))
+    for (; !scm_is_null (templates); templates = SCM_CDR(templates))
     {
         gchar* orig_name;
 
         SCM t = SCM_CAR(templates);
-        orig_name = gnc_scm_call_1_to_string(t_name, t);
+        orig_name = gnc_scm_call_1_to_string (t_name, t);
 
         /* Store the untranslated names for lookup later */
         template_names = g_list_prepend (template_names, (gpointer)orig_name);
 
         /* The displayed name should be translated */
-        gtk_list_store_append(GTK_LIST_STORE(template_model), &iter);
+        gtk_list_store_append (GTK_LIST_STORE(template_model), &iter);
         gtk_list_store_set (GTK_LIST_STORE(template_model), &iter, 0, _(orig_name), -1);
 
         /* Note: don't g_free orig_name here - template_names still refers to it*/
     }
-    gtk_combo_box_set_active(GTK_COMBO_BOX(template_combo), 0);
+    gtk_combo_box_set_active (GTK_COMBO_BOX(template_combo), 0);
 
     /* get the name */
     gtk_window_set_transient_for (GTK_WINDOW(dlg), GTK_WINDOW(ssd->toplevel));
-    dialog_retval = gtk_dialog_run(GTK_DIALOG(dlg));
+    dialog_retval = gtk_dialog_run (GTK_DIALOG(dlg));
 
     if (dialog_retval == GTK_RESPONSE_OK)
     {
         gint choice = gtk_combo_box_get_active (GTK_COMBO_BOX(template_combo));
         const char *template_str = g_list_nth_data (template_names, choice);
-        const char *name_str     = gtk_entry_get_text(GTK_ENTRY(name_entry));
-        if (name_str && strlen(name_str) == 0)
+        const char *name_str     = gtk_entry_get_text (GTK_ENTRY(name_entry));
+        if (name_str && strlen (name_str) == 0)
         {
             /* If the name is empty, we display an error dialog but
              * refuse to create the new style sheet. */
-            gnc_error_dialog (GTK_WINDOW (ssd->toplevel), "%s", _("You must provide a name for the new style sheet."));
+            gnc_error_dialog (GTK_WINDOW(ssd->toplevel), "%s", _("You must provide a name for the new style sheet."));
             name_str = NULL;
         }
         if (template_str && name_str)
         {
-            new_ss = scm_call_2(make_ss,
-                                scm_from_utf8_string(template_str),
-                                scm_from_utf8_string(name_str));
+            new_ss = scm_call_2 (make_ss,
+                                 scm_from_utf8_string (template_str),
+                                 scm_from_utf8_string (name_str));
         }
     }
 
     g_list_free_full (template_names, g_free);
 
-    g_object_unref(G_OBJECT(builder));
+    g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_destroy(dlg);
-    return(new_ss);
+    gtk_widget_destroy (dlg);
+    return (new_ss);
 }
-
 
 /************************************************************
  *               Style Sheet Selection Dialog               *
  ************************************************************/
 static void
-gnc_style_sheet_select_dialog_add_one(StyleSheetDialog * ss,
-                                      SCM sheet_info,
-                                      gboolean select)
+gnc_style_sheet_select_dialog_add_one (StyleSheetDialog * ss,
+                                       SCM sheet_info,
+                                       gboolean select)
 {
     SCM get_name;
     gchar *c_name;
-    GtkTreeSelection *selection;
     GtkTreeIter iter;
 
     get_name = scm_c_eval_string ("gnc:html-style-sheet-name");
@@ -319,22 +312,22 @@ gnc_style_sheet_select_dialog_add_one(StyleSheetDialog * ss,
 
     if (select)
     {
-        selection = gtk_tree_view_get_selection (ss->list_view);
+        GtkTreeSelection * selection = gtk_tree_view_get_selection (ss->list_view);
         gtk_tree_selection_select_iter (selection, &iter);
     }
 }
 
 static void
-gnc_style_sheet_select_dialog_fill(StyleSheetDialog * ss)
+gnc_style_sheet_select_dialog_fill (StyleSheetDialog * ss)
 {
-    SCM stylesheets = scm_c_eval_string("(gnc:get-html-style-sheets)");
+    SCM stylesheets = scm_c_eval_string ("(gnc:get-html-style-sheets)");
     SCM sheet_info;
 
     /* pack it full of content */
-    for (; !scm_is_null(stylesheets); stylesheets = SCM_CDR(stylesheets))
+    for (; !scm_is_null (stylesheets); stylesheets = SCM_CDR(stylesheets))
     {
         sheet_info = SCM_CAR(stylesheets);
-        gnc_style_sheet_select_dialog_add_one(ss, sheet_info, FALSE);
+        gnc_style_sheet_select_dialog_add_one (ss, sheet_info, FALSE);
     }
 }
 
@@ -345,8 +338,8 @@ gnc_style_sheet_select_dialog_event_cb (GtkWidget *widget,
 {
     StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
 
-    g_return_if_fail(event != NULL);
-    g_return_if_fail(ss != NULL);
+    g_return_if_fail (event != NULL);
+    g_return_if_fail (ss != NULL);
 
     if (event->type != GDK_2BUTTON_PRESS)
         return;
@@ -354,7 +347,6 @@ gnc_style_sheet_select_dialog_event_cb (GtkWidget *widget,
     /* Synthesize a click of the edit button */
     gnc_style_sheet_select_dialog_edit_cb (NULL, ss);
 }
-
 
 void
 gnc_style_sheet_select_dialog_new_cb (GtkWidget *widget, gpointer user_data)
@@ -372,16 +364,14 @@ gnc_style_sheet_select_dialog_new_cb (GtkWidget *widget, gpointer user_data)
     gnc_style_sheet_select_dialog_edit_cb (NULL, ss);
 }
 
-
 void
 gnc_style_sheet_select_dialog_edit_cb (GtkWidget *widget, gpointer user_data)
 {
     StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
-    GtkTreeSelection  * selection;
+    GtkTreeSelection  * selection = gtk_tree_view_get_selection (ss->list_view);
     GtkTreeModel      * model;
     GtkTreeIter         iter;
 
-    selection = gtk_tree_view_get_selection (ss->list_view);
     if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {
         GtkTreeRowReference * row_ref;
@@ -411,11 +401,10 @@ void
 gnc_style_sheet_select_dialog_delete_cb (GtkWidget *widget, gpointer user_data)
 {
     StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
-    GtkTreeSelection  * selection;
+    GtkTreeSelection  * selection = gtk_tree_view_get_selection (ss->list_view);
     GtkTreeModel      * model;
     GtkTreeIter         iter;
 
-    selection = gtk_tree_view_get_selection (ss->list_view);
     if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {
         ss_info           * ssinfo;
@@ -436,7 +425,6 @@ gnc_style_sheet_select_dialog_delete_cb (GtkWidget *widget, gpointer user_data)
         scm_gc_unprotect_object (sheet_info);
     }
 }
-
 
 void
 gnc_style_sheet_select_dialog_close_cb (GtkWidget *widget, gpointer user_data)
@@ -475,7 +463,6 @@ gnc_style_sheet_select_dialog_destroy_cb (GtkWidget *widget, gpointer user_data)
     g_free (ss);
 }
 
-
 static void
 gnc_style_sheet_window_close_handler (gpointer user_data)
 {
@@ -485,7 +472,6 @@ gnc_style_sheet_window_close_handler (gpointer user_data)
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ss->toplevel));
     gtk_widget_destroy (ss->toplevel);
 }
-
 
 static gboolean
 gnc_style_sheet_select_dialog_check_escape_cb (GtkWidget *widget,
@@ -501,16 +487,15 @@ gnc_style_sheet_select_dialog_check_escape_cb (GtkWidget *widget,
     return FALSE;
 }
 
-
 static StyleSheetDialog *
-gnc_style_sheet_select_dialog_create(GtkWindow *parent)
+gnc_style_sheet_select_dialog_create (GtkWindow *parent)
 {
-    StyleSheetDialog  * ss = g_new0(StyleSheetDialog, 1);
+    StyleSheetDialog  * ss = g_new0 (StyleSheetDialog, 1);
     GtkBuilder        * builder;
     GtkCellRenderer   * renderer;
     GtkTreeSelection  * selection;
 
-    builder = gtk_builder_new();
+    builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-report.glade", "select_style_sheet_window");
 
     ss->toplevel = GTK_WIDGET(gtk_builder_get_object (builder, "select_style_sheet_window"));
@@ -523,19 +508,20 @@ gnc_style_sheet_select_dialog_create(GtkWindow *parent)
 
     ss->list_view  = GTK_TREE_VIEW(gtk_builder_get_object (builder, "style_sheet_list_view"));
     ss->list_store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
-    gtk_tree_view_set_model(ss->list_view, GTK_TREE_MODEL(ss->list_store));
-    g_object_unref(ss->list_store);
+    gtk_tree_view_set_model (ss->list_view, GTK_TREE_MODEL(ss->list_store));
+    g_object_unref (ss->list_store);
+
     renderer = gtk_cell_renderer_text_new ();
-    gtk_tree_view_insert_column_with_attributes(ss->list_view, -1,
-            _("Style Sheet Name"), renderer,
-            "text", COLUMN_NAME,
-            NULL);
+    gtk_tree_view_insert_column_with_attributes (ss->list_view, -1,
+                                                 _("Style Sheet Name"), renderer,
+                                                 "text", COLUMN_NAME,
+                                                 NULL);
 
     selection = gtk_tree_view_get_selection (ss->list_view);
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
-    g_signal_connect(ss->list_view, "event-after",
-                     G_CALLBACK(gnc_style_sheet_select_dialog_event_cb), ss);
+    g_signal_connect (ss->list_view, "event-after",
+                      G_CALLBACK(gnc_style_sheet_select_dialog_event_cb), ss);
 
     g_signal_connect (ss->toplevel, "destroy",
                       G_CALLBACK(gnc_style_sheet_select_dialog_destroy_cb), ss);
@@ -546,22 +532,18 @@ gnc_style_sheet_select_dialog_create(GtkWindow *parent)
     g_signal_connect (ss->toplevel, "key-press-event",
                       G_CALLBACK(gnc_style_sheet_select_dialog_check_escape_cb), ss);
 
-    gnc_style_sheet_select_dialog_fill(ss);
+    gnc_style_sheet_select_dialog_fill (ss);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ss);
-    g_object_unref(G_OBJECT(builder));
-
+    g_object_unref (G_OBJECT(builder));
     return ss;
 }
 
-
 void
-gnc_style_sheet_dialog_open(GtkWindow *parent)
+gnc_style_sheet_dialog_open (GtkWindow *parent)
 {
     if (gnc_style_sheet_dialog)
-    {
-        gtk_window_present(GTK_WINDOW(gnc_style_sheet_dialog->toplevel));
-    }
+        gtk_window_present (GTK_WINDOW(gnc_style_sheet_dialog->toplevel));
     else
     {
         gnc_style_sheet_dialog =
@@ -583,4 +565,3 @@ gnc_style_sheet_dialog_open(GtkWindow *parent)
         gtk_widget_show_all (gnc_style_sheet_dialog->toplevel);
     }
 }
-

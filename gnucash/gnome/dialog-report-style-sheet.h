@@ -1,6 +1,6 @@
 /********************************************************************
  * dialog-report-style-sheet.h -- window for configuring HTML style *
- *                       sheets in GnuCash                          *
+ *                                sheets in GnuCash                 *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -26,6 +26,6 @@
 
 typedef struct _stylesheetdialog StyleSheetDialog;
 
-void gnc_style_sheet_dialog_open(GtkWindow *parent);
+void gnc_style_sheet_dialog_open (GtkWindow *parent);
 
 #endif
