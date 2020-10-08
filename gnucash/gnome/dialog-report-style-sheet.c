@@ -30,10 +30,15 @@
 #include "dialog-report-style-sheet.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
+#include "gnc-component-manager.h"
+#include "gnc-session.h"
 #include "gnc-gtk-utils.h"
 #include "gnc-guile-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
+
+#define DIALOG_STYLE_SHEETS_CM_CLASS "style-sheets-dialog"
+#define GNC_PREFS_GROUP              "dialogs.style-sheet"
 
 StyleSheetDialog * gnc_style_sheet_dialog = NULL;
 
@@ -43,6 +48,8 @@ struct _stylesheetdialog
     GtkTreeView   * list_view;
     GtkListStore  * list_store;
     GtkWidget  * options_frame;
+    gint         component_id;
+    QofSession  *session;
 };
 
 typedef struct ss_info
@@ -61,6 +68,11 @@ enum
     N_COLUMNS
 };
 
+void gnc_style_sheet_select_dialog_new_cb (GtkWidget *widget, gpointer user_data);
+void gnc_style_sheet_select_dialog_edit_cb (GtkWidget *widget, gpointer user_data);
+void gnc_style_sheet_select_dialog_delete_cb (GtkWidget *widget, gpointer user_data);
+void gnc_style_sheet_select_dialog_close_cb (GtkWidget *widget, gpointer user_data);
+void gnc_style_sheet_select_dialog_destroy_cb (GtkWidget *widget, gpointer user_data);
 
 /************************************************************
  *     Style Sheet Edit Dialog (I.E. an options dialog)     *
@@ -327,84 +339,11 @@ gnc_style_sheet_select_dialog_fill(StyleSheetDialog * ss)
 }
 
 static void
-gnc_style_sheet_select_dialog_response_cb (GtkDialog *unused,
-        gint response,
-        gpointer user_data)
-{
-    StyleSheetDialog  * ss;
-    GtkTreeSelection  * selection;
-    GtkTreeRowReference * row_ref;
-    GtkTreeModel      * model;
-    GtkTreePath       * path;
-    GtkTreeIter         iter;
-    ss_info           * ssinfo;
-    SCM                 remover;
-    SCM sheet_info;
-    gchar *name;
-
-    ss = (StyleSheetDialog *)user_data;
-    switch (response)
-    {
-    case GNC_RESPONSE_NEW:
-        sheet_info = gnc_style_sheet_new(ss);
-        if (sheet_info == SCM_BOOL_F)
-            break;
-        gnc_style_sheet_select_dialog_add_one(ss, sheet_info, TRUE);
-        /* Fall through */
-
-    case GNC_RESPONSE_EDIT:
-        selection = gtk_tree_view_get_selection (ss->list_view);
-        if (gtk_tree_selection_get_selected (selection, &model, &iter))
-        {
-            gtk_tree_model_get (model, &iter,
-                                COLUMN_NAME, &name,
-                                COLUMN_STYLESHEET, &sheet_info,
-                                -1);
-            /* Fire off options dialog here */
-            path = gtk_tree_model_get_path (GTK_TREE_MODEL(ss->list_store), &iter);
-            row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL(ss->list_store), path);
-            ssinfo = gnc_style_sheet_dialog_create(ss, name, sheet_info, row_ref);
-            gtk_list_store_set (ss->list_store, &iter,
-                                COLUMN_DIALOG, ssinfo,
-                                -1);
-            g_free(name);
-        }
-        break;
-
-    case GNC_RESPONSE_DELETE:
-        selection = gtk_tree_view_get_selection (ss->list_view);
-        if (gtk_tree_selection_get_selected (selection, &model, &iter))
-        {
-            gtk_tree_model_get (model, &iter,
-                                COLUMN_STYLESHEET, &sheet_info,
-                                COLUMN_DIALOG, &ssinfo,
-                                -1);
-            gtk_list_store_remove (ss->list_store, &iter);
-
-            if (ssinfo)
-                gnc_style_sheet_options_close_cb(NULL, ssinfo);
-            remover = scm_c_eval_string("gnc:html-style-sheet-remove");
-            scm_call_1(remover, sheet_info);
-            scm_gc_unprotect_object(sheet_info);
-        }
-        break;
-
-    case GTK_RESPONSE_CLOSE:
-    default:
-        gtk_widget_destroy(ss->toplevel);
-        gnc_style_sheet_dialog = NULL;
-        g_free(ss);
-        break;
-    }
-}
-
-
-static void
 gnc_style_sheet_select_dialog_event_cb (GtkWidget *widget,
                                         GdkEvent *event,
                                         gpointer user_data)
 {
-    StyleSheetDialog  * ss = user_data;
+    StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
 
     g_return_if_fail(event != NULL);
     g_return_if_fail(ss != NULL);
@@ -413,7 +352,153 @@ gnc_style_sheet_select_dialog_event_cb (GtkWidget *widget,
         return;
 
     /* Synthesize a click of the edit button */
-    gnc_style_sheet_select_dialog_response_cb (NULL, GNC_RESPONSE_EDIT, ss);
+    gnc_style_sheet_select_dialog_edit_cb (NULL, ss);
+}
+
+
+void
+gnc_style_sheet_select_dialog_new_cb (GtkWidget *widget, gpointer user_data)
+{
+    StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
+    SCM                 sheet_info;
+
+    sheet_info = gnc_style_sheet_new (ss);
+    if (sheet_info == SCM_BOOL_F)
+        return;
+
+    gnc_style_sheet_select_dialog_add_one (ss, sheet_info, TRUE);
+
+    // now start the edit dialog
+    gnc_style_sheet_select_dialog_edit_cb (NULL, ss);
+}
+
+
+void
+gnc_style_sheet_select_dialog_edit_cb (GtkWidget *widget, gpointer user_data)
+{
+    StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
+    GtkTreeSelection  * selection;
+    GtkTreeModel      * model;
+    GtkTreeIter         iter;
+
+    selection = gtk_tree_view_get_selection (ss->list_view);
+    if (gtk_tree_selection_get_selected (selection, &model, &iter))
+    {
+        GtkTreeRowReference * row_ref;
+        GtkTreePath         * path;
+        ss_info             * ssinfo;
+        gchar               * name;
+
+        SCM                 sheet_info = NULL;
+
+        gtk_tree_model_get (model, &iter,
+                            COLUMN_NAME, &name,
+                            COLUMN_STYLESHEET, &sheet_info,
+                            -1);
+        /* Fire off options dialog here */
+        path = gtk_tree_model_get_path (GTK_TREE_MODEL(ss->list_store), &iter);
+        row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL(ss->list_store), path);
+        ssinfo = gnc_style_sheet_dialog_create (ss, name, sheet_info, row_ref);
+        gtk_list_store_set (ss->list_store, &iter,
+                            COLUMN_DIALOG, ssinfo,
+                            -1);
+        gtk_tree_path_free (path);
+        g_free (name);
+    }
+}
+
+void
+gnc_style_sheet_select_dialog_delete_cb (GtkWidget *widget, gpointer user_data)
+{
+    StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
+    GtkTreeSelection  * selection;
+    GtkTreeModel      * model;
+    GtkTreeIter         iter;
+
+    selection = gtk_tree_view_get_selection (ss->list_view);
+    if (gtk_tree_selection_get_selected (selection, &model, &iter))
+    {
+        ss_info           * ssinfo;
+
+        SCM                 sheet_info = NULL;
+        SCM                 remover;
+
+        gtk_tree_model_get (model, &iter,
+                            COLUMN_STYLESHEET, &sheet_info,
+                            COLUMN_DIALOG, &ssinfo,
+                            -1);
+        gtk_list_store_remove (ss->list_store, &iter);
+
+        if (ssinfo)
+            gnc_style_sheet_options_close_cb (NULL, ssinfo);
+        remover = scm_c_eval_string ("gnc:html-style-sheet-remove");
+        scm_call_1 (remover, sheet_info);
+        scm_gc_unprotect_object (sheet_info);
+    }
+}
+
+
+void
+gnc_style_sheet_select_dialog_close_cb (GtkWidget *widget, gpointer user_data)
+{
+    StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
+    gnc_close_gui_component (ss->component_id);
+}
+
+static gboolean
+gnc_style_sheet_select_dialog_delete_event_cb (GtkWidget *widget,
+                                               GdkEvent  *event,
+                                               gpointer   user_data)
+{
+    StyleSheetDialog  *ss = (StyleSheetDialog *)user_data;
+    // this cb allows the window size to be saved on closing with the X
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ss->toplevel));
+    return FALSE;
+}
+
+void
+gnc_style_sheet_select_dialog_destroy_cb (GtkWidget *widget, gpointer user_data)
+{
+    StyleSheetDialog  *ss = (StyleSheetDialog *)user_data;
+
+    if (!ss)
+       return;
+
+    gnc_unregister_gui_component (ss->component_id);
+
+    if (ss->toplevel)
+    {
+        gtk_widget_destroy (ss->toplevel);
+        ss->toplevel = NULL;
+    }
+    gnc_style_sheet_dialog = NULL;
+    g_free (ss);
+}
+
+
+static void
+gnc_style_sheet_window_close_handler (gpointer user_data)
+{
+    StyleSheetDialog  *ss = (StyleSheetDialog *)user_data;
+    g_return_if_fail (ss);
+
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ss->toplevel));
+    gtk_widget_destroy (ss->toplevel);
+}
+
+
+static gboolean
+gnc_style_sheet_select_dialog_check_escape_cb (GtkWidget *widget,
+                                               GdkEventKey *event,
+                                               gpointer user_data)
+{
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
+        gnc_close_gui_component (ss->component_id);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 
@@ -426,11 +511,11 @@ gnc_style_sheet_select_dialog_create(GtkWindow *parent)
     GtkTreeSelection  * selection;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-report.glade", "select_style_sheet_dialog");
+    gnc_builder_add_from_file (builder, "dialog-report.glade", "select_style_sheet_window");
 
-    ss->toplevel   = GTK_WIDGET(gtk_builder_get_object (builder, "select_style_sheet_dialog"));
+    ss->toplevel = GTK_WIDGET(gtk_builder_get_object (builder, "select_style_sheet_window"));
 
-    gtk_window_set_transient_for (GTK_WINDOW (ss->toplevel), GTK_WINDOW(parent));
+    ss->session = gnc_get_current_session ();
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(ss->toplevel), "gnc-id-style-sheet-select");
@@ -449,15 +534,21 @@ gnc_style_sheet_select_dialog_create(GtkWindow *parent)
     selection = gtk_tree_view_get_selection (ss->list_view);
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
-    g_signal_connect(ss->toplevel, "response",
-                     G_CALLBACK(gnc_style_sheet_select_dialog_response_cb), ss);
     g_signal_connect(ss->list_view, "event-after",
                      G_CALLBACK(gnc_style_sheet_select_dialog_event_cb), ss);
 
+    g_signal_connect (ss->toplevel, "destroy",
+                      G_CALLBACK(gnc_style_sheet_select_dialog_destroy_cb), ss);
+
+    g_signal_connect (ss->toplevel, "delete-event",
+                      G_CALLBACK(gnc_style_sheet_select_dialog_delete_event_cb), ss);
+
+    g_signal_connect (ss->toplevel, "key-press-event",
+                      G_CALLBACK(gnc_style_sheet_select_dialog_check_escape_cb), ss);
+
     gnc_style_sheet_select_dialog_fill(ss);
 
-    gtk_widget_show_all(ss->toplevel);
-
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ss);
     g_object_unref(G_OBJECT(builder));
 
     return ss;
@@ -474,7 +565,22 @@ gnc_style_sheet_dialog_open(GtkWindow *parent)
     else
     {
         gnc_style_sheet_dialog =
-            gnc_style_sheet_select_dialog_create(parent);
+            gnc_style_sheet_select_dialog_create (parent);
+
+        /* register with component manager */
+        gnc_style_sheet_dialog->component_id =
+            gnc_register_gui_component (DIALOG_STYLE_SHEETS_CM_CLASS,
+                                        NULL, //no refresh handler
+                                        gnc_style_sheet_window_close_handler,
+                                        gnc_style_sheet_dialog);
+
+        gnc_gui_component_set_session (gnc_style_sheet_dialog->component_id,
+                                       gnc_style_sheet_dialog->session);
+
+        gnc_restore_window_size (GNC_PREFS_GROUP,
+                                 GTK_WINDOW(gnc_style_sheet_dialog->toplevel),
+                                 GTK_WINDOW(parent));
+        gtk_widget_show_all (gnc_style_sheet_dialog->toplevel);
     }
 }
 
