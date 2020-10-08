@@ -35,6 +35,10 @@
 
 #ifndef __GNC_MAIN_WINDOW_H
 #define __GNC_MAIN_WINDOW_H
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include <gtk/gtk.h>
 #include "gnc-plugin-page.h"
@@ -443,6 +447,22 @@ void gnc_main_window_show_all_windows(void);
 GtkWidget *gnc_book_options_dialog_cb (gboolean modal, gchar *title,
                                        GtkWindow *parent);
 
+/**
+ * Processes selected options in the Book Options dialog: checks book_currency
+ * and use_split_action_for_num to see if features kvp should be set. To be used
+ * where ever a new book situation requires book option selection (e.g., not
+ * just in Book Options dialog opened from main window but also in new-file
+ * assistant).
+ *
+ *  @param GncOptionDB * options.
+ *
+ *  @return TRUE if gnc_gui_refresh_all should be called; otherwise FALSE.
+ **/
+gboolean gnc_book_options_dialog_apply_helper(GncOptionDB * options);
+
+#ifdef __cplusplus
+}
+#endif
 #endif /* __GNC_MAIN_WINDOW_H */
 
 /** @} */

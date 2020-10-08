@@ -48,7 +48,7 @@ borrowed/libc/setenv.c
 borrowed/libc/strptime.c
 doc/tip_of_the_day.list.c
 gnucash/gnome/assistant-acct-period.c
-gnucash/gnome/assistant-hierarchy.c
+gnucash/gnome/assistant-hierarchy.cpp
 gnucash/gnome/assistant-loan.cpp
 gnucash/gnome/assistant-stock-split.c
 gnucash/gnome/business-gnome-utils.c
@@ -77,8 +77,8 @@ gnucash/gnome/dialog-price-edit-db.c
 gnucash/gnome/dialog-price-editor.c
 gnucash/gnome/dialog-print-check.c
 gnucash/gnome/dialog-progress.c
-gnucash/gnome/dialog-report-column-view.c
-gnucash/gnome/dialog-report-style-sheet.c
+gnucash/gnome/dialog-report-column-view.cpp
+gnucash/gnome/dialog-report-style-sheet.cpp
 gnucash/gnome/dialog-sx-editor2.c
 gnucash/gnome/dialog-sx-editor.c
 gnucash/gnome/dialog-sx-from-trans.c
@@ -96,7 +96,7 @@ gnucash/gnome/gnc-plugin-page-invoice.c
 gnucash/gnome/gnc-plugin-page-owner-tree.c
 gnucash/gnome/gnc-plugin-page-register2.c
 gnucash/gnome/gnc-plugin-page-register.c
-gnucash/gnome/gnc-plugin-page-report.c
+gnucash/gnome/gnc-plugin-page-report.cpp
 gnucash/gnome/gnc-plugin-page-sx-list.c
 gnucash/gnome/gnc-plugin-register2.c
 gnucash/gnome/gnc-plugin-register.c
@@ -112,7 +112,7 @@ gnucash/gnome/top-level.c
 gnucash/gnome/window-autoclear.c
 gnucash/gnome/window-reconcile2.c
 gnucash/gnome/window-reconcile.c
-gnucash/gnome/window-report.c
+gnucash/gnome/window-report.cpp
 gnucash/gnome-search/dialog-search.c
 gnucash/gnome-search/gnc-general-search.c
 gnucash/gnome-search/search-account.c
@@ -172,7 +172,7 @@ gnucash/gnome-utils/gnc-gtk-utils.c
 gnucash/gnome-utils/gnc-gui-query.c
 gnucash/gnome-utils/gnc-icons.c
 gnucash/gnome-utils/gnc-keyring.c
-gnucash/gnome-utils/gnc-main-window.c
+gnucash/gnome-utils/gnc-main-window.cpp
 gnucash/gnome-utils/gnc-menu-extensions.c
 gnucash/gnome-utils/gnc-menu-extensions.scm
 gnucash/gnome-utils/gnc-period-select.c

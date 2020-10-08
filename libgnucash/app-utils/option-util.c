@@ -702,7 +702,7 @@ gnc_option_default_getter (GNCOption *option)
  * Args: option - the GNCOption                                     *
  * Returns: SCM handle to function                                  *
 \********************************************************************/
-SCM
+static SCM
 gnc_option_value_validator(GNCOption *option)
 {
     initialize_getters ();
@@ -723,7 +723,7 @@ gnc_option_value_validator(GNCOption *option)
  * Returns: SCM handle to function                                  *
  *          If no such function exists, returns SCM_UNDEFINED.      *
 \********************************************************************/
-SCM
+static SCM
 gnc_option_widget_changed_proc_getter(GNCOption *option)
 {
     SCM cb;

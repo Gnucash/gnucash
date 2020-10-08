@@ -22,13 +22,15 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
+#include <libguile.h>
+extern "C"
+{
 #include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #include "dialog-report-style-sheet.h"
-#include "dialog-options.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-session.h"
@@ -37,6 +39,9 @@
 #include "gnc-guile-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
+}
+#include "dialog-options.h"
+#include <gnc-optiondb.h>
 
 #define DIALOG_STYLE_SHEETS_CM_CLASS "style-sheets-dialog"
 #define GNC_PREFS_GROUP              "dialogs.style-sheet"
@@ -82,9 +87,9 @@ void gnc_style_sheet_select_dialog_destroy_cb (GtkWidget *widget, gpointer user_
 static void
 dirty_same_stylesheet (gpointer key, gpointer val, gpointer data)
 {
-    SCM dirty_ss = data;
+    auto dirty_ss{static_cast<SCM>(data)};
     SCM rep_ss = NULL;
-    SCM report = val;
+    auto report{static_cast<SCM>(val)};
     SCM func = NULL;
 
     func = scm_c_eval_string ("gnc:report-stylesheet");
@@ -118,14 +123,14 @@ gnc_style_sheet_options_apply_cb (GNCOptionWin * propertybox,
     results = gnc_option_db_commit (ssi->odb);
     for (iter = results; iter; iter = iter->next)
     {
-        GtkWidget *dialog = gtk_message_dialog_new (NULL,
-                                                    0,
-                                                    GTK_MESSAGE_ERROR,
-                                                    GTK_BUTTONS_OK,
-                                                    "%s",
-                                                    (char*)iter->data);
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+        GtkWidget *dialog = gtk_message_dialog_new(nullptr,
+                                                   GTK_DIALOG_MODAL,
+                                                   GTK_MESSAGE_ERROR,
+                                                   GTK_BUTTONS_OK,
+                                                   "%s",
+                                                   (char*)iter->data);
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
         g_free (iter->data);
     }
     g_list_free (results);
@@ -135,7 +140,7 @@ static void
 gnc_style_sheet_options_close_cb (GNCOptionWin * propertybox,
                                   gpointer user_data)
 {
-    ss_info * ssi = user_data;
+    auto ssi{static_cast<ss_info*>(user_data)};
     GtkTreeIter iter;
 
     if (gtk_tree_row_reference_valid (ssi->row_ref))
@@ -182,7 +187,7 @@ gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
     gnc_options_dialog_build_contents (ssinfo->odialog,
                                        ssinfo->odb);
 
-    gnc_options_dialog_set_style_sheet_options_help_cb (ssinfo->odialog);
+//    gnc_options_dialog_set_style_sheet_options_help_cb (ssinfo->odialog);
 
     gnc_options_dialog_set_apply_cb (ssinfo->odialog,
                                      gnc_style_sheet_options_apply_cb,
@@ -260,9 +265,9 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     if (dialog_retval == GTK_RESPONSE_OK)
     {
         gint choice = gtk_combo_box_get_active (GTK_COMBO_BOX(template_combo));
-        const char *template_str = g_list_nth_data (template_names, choice);
-        const char *name_str     = gtk_entry_get_text (GTK_ENTRY(name_entry));
-        if (name_str && strlen (name_str) == 0)
+        auto template_str{static_cast<const char *>(g_list_nth_data (template_names, choice))};
+        const char *name_str     = gtk_entry_get_text(GTK_ENTRY(name_entry));
+        if (name_str && strlen(name_str) == 0)
         {
             /* If the name is empty, we display an error dialog but
              * refuse to create the new style sheet. */
@@ -442,8 +447,7 @@ gnc_style_sheet_select_dialog_delete_event_cb (GtkWidget *widget,
                                                GdkEvent  *event,
                                                gpointer   user_data)
 {
-    StyleSheetDialog  *ss = (StyleSheetDialog *)user_data;
-    // this cb allows the window size to be saved on closing with the X
+    auto ss{static_cast<StyleSheetDialog*>(user_data)};
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ss->toplevel));
     return FALSE;
 }

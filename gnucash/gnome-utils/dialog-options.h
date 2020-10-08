@@ -32,9 +32,9 @@ using GNCOptionDB = GncOptionDB;
 extern "C"
 {
 #else
-#include "option-util.h"
-typedef GNCOption GncOption;
-typedef GNCOptionDB GncOptionDB;
+typedef struct GncOption GncOption;
+typedef struct GncOptionDB GncOptionDB;
+typedef GncOptionDB GNCOptionDB;
 #endif
 #include <guile-mappings.h>
 #include <gtk/gtk.h>

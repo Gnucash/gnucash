@@ -97,8 +97,6 @@ char * gnc_option_documentation (GNCOption *option);
 SCM    gnc_option_getter (GNCOption *option);
 SCM    gnc_option_setter (GNCOption *option);
 SCM    gnc_option_default_getter (GNCOption *option);
-SCM    gnc_option_value_validator (GNCOption *option);
-SCM    gnc_option_widget_changed_proc_getter (GNCOption *option);
 SCM    gnc_option_get_option_data (GNCOption *option);
 
 int    gnc_option_num_permissible_values (GNCOption *option);

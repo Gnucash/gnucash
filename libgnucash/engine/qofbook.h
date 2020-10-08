@@ -44,8 +44,7 @@
 #include <glib.h> //To preempt it being included extern "C" in a later header.
 class GncOptionDB;
 #else
-#include <option-util.h>
-typedef GNCOptionDB GncOptionDB;
+typedef struct GncOptionDB GncOptionDB;
 #endif
 #ifdef __cplusplus
 extern "C"

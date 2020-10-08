@@ -24,25 +24,26 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
-
+#include <libguile.h>
+extern "C"
+{
 #include <config.h>
 
 #include <glib/gi18n.h>
 #include <errno.h>
-#include <libguile.h>
 #include <sys/stat.h>
 
 #include "swig-runtime.h"
 #include "dialog-options.h"
-#include "dialog-report-column-view.h"
 #include "gnc-guile-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
-#include "option-util.h"
 #include "window-report.h"
 #include "guile-mappings.h"
 
 #include "gnc-plugin-page-report.h"
+}
+#include "dialog-report-column-view.hpp"
 
 /********************************************************************
  *
@@ -51,9 +52,9 @@
 void
 reportWindow(int report_id, GtkWindow *parent)
 {
-    gnc_set_busy_cursor (NULL, TRUE);
+    gnc_set_busy_cursor (nullptr, TRUE);
     gnc_main_window_open_report(report_id, GNC_MAIN_WINDOW(parent));
-    gnc_unset_busy_cursor (NULL);
+    gnc_unset_busy_cursor (nullptr);
 }
 
 /********************************************************************
@@ -73,15 +74,15 @@ gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
                             gpointer user_data)
 {
     SCM  dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
-    struct report_default_params_data * win = user_data;
-    GList *results = NULL, *iter;
+    auto win{static_cast<struct report_default_params_data*>(user_data)};
+    GList *results = nullptr, *iter;
 
     if (!win) return;
     results = gnc_option_db_commit (win->odb);
     for (iter = results; iter; iter = iter->next)
     {
         GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW (win->win),
-                                                   0,
+                                                 static_cast<GtkDialogFlags>(0),
                                                    GTK_MESSAGE_ERROR,
                                                    GTK_BUTTONS_OK,
                                                    "%s",
@@ -100,7 +101,7 @@ gnc_options_dialog_help_cb(GNCOptionWin * propertybox,
                            gpointer user_data)
 {
     GtkWidget *dialog, *parent;
-    struct report_default_params_data * prm = user_data;
+    auto prm{static_cast<struct report_default_params_data*>(user_data)};
 
     parent = gnc_options_dialog_widget(prm->win);
     dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
@@ -110,7 +111,7 @@ gnc_options_dialog_help_cb(GNCOptionWin * propertybox,
                                     "%s",
                                     _("Set the report options you want using this dialog."));
     g_signal_connect(G_OBJECT(dialog), "response",
-                     (GCallback)gtk_widget_destroy, NULL);
+                     (GCallback)gtk_widget_destroy, nullptr);
     gtk_widget_show(dialog);
 }
 
@@ -118,7 +119,7 @@ static void
 gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
                             gpointer user_data)
 {
-    struct report_default_params_data * win = user_data;
+    auto win{static_cast<struct report_default_params_data*>(user_data)};
     SCM    set_editor = scm_c_eval_string("gnc:report-set-editor-widget!");
 
     scm_call_2(set_editor, win->cur_report, SCM_BOOL_F);
@@ -135,8 +136,7 @@ gnc_report_raise_editor(SCM report)
     if (editor != SCM_BOOL_F)
     {
 #define FUNC_NAME "gnc-report-raise-editor"
-        GtkWidget *w = SWIG_MustGetPtr(editor,
-                                   SWIG_TypeQuery("_p_GtkWidget"), 1, 0);
+        auto w{static_cast<GtkWidget *>(SWIG_MustGetPtr(editor, SWIG_TypeQuery("_p_GtkWidget"), 1, 0))};
 #undef FUNC_NAME
         gtk_window_present(GTK_WINDOW(w));
         return TRUE;
@@ -155,10 +155,10 @@ gnc_report_window_default_params_editor(GncOptionDB* odb, SCM report,
     SCM get_template_name = scm_c_eval_string("gnc:report-template-name");
     SCM ptr;
 
-    const gchar *title = NULL;
+    const gchar *title = nullptr;
 
     if (gnc_report_raise_editor (report))
-        return NULL;
+        return nullptr;
     else
     {
         struct report_default_params_data * prm =
@@ -212,7 +212,7 @@ gnc_report_edit_options(SCM report, GtkWindow *parent)
     SCM ptr;
     SCM options;
     GncOptionDB* odb;
-    GtkWidget *options_widget = NULL;
+    GtkWidget *options_widget = nullptr;
 
     /* If the options editor widget already exists we simply raise it */
     if (gnc_report_raise_editor (report))
@@ -233,11 +233,9 @@ gnc_report_edit_options(SCM report, GtkWindow *parent)
     if (scm_is_string(ptr))
     {
         gchar *rpt_type = gnc_scm_to_utf8_string (ptr);
-#if 0
         if (g_strcmp0 (rpt_type, "d8ba4a2e89e8479ca9f6eccdeb164588") == 0)
             options_widget = gnc_column_view_edit_options (odb, report);
         else
-#endif
             options_widget = gnc_report_window_default_params_editor (odb, report, parent);
         g_free (rpt_type);
     }

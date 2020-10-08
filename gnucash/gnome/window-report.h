@@ -24,7 +24,10 @@
 #define GNC_REPORT_WINDOW_H
 
 #include <libguile.h>
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 //#include "gnc-html.h"
 #include "qof.h"
 #include <gnc-optiondb.h>
@@ -42,4 +45,7 @@ GtkWidget * gnc_report_window_default_params_editor(GncOptionDB* odb, SCM report
 void       reportWindow(int id, GtkWindow *parent);
 gboolean   gnc_report_edit_options(SCM report, GtkWindow *parent);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

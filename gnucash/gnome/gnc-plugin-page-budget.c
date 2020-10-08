@@ -65,7 +65,6 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
-#include "option-util.h"
 #include "gnc-main-window.h"
 #include "gnc-component-manager.h"
 

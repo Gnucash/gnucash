@@ -29,6 +29,10 @@
  * completes successfully.  I.e., the new-user assistant can finish the GnuCash
  * New-User Experience, create an account plugin-page, &c.
  **/
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 typedef void (*GncHierarchyAssistantFinishedCallback)(void);
 
@@ -37,4 +41,7 @@ GtkWidget* gnc_ui_hierarchy_assistant_with_callback(gboolean use_defaults, GncHi
 
 void gnc_ui_hierarchy_assistant_initialize (void);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

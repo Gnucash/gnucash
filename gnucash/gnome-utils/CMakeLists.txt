@@ -74,7 +74,7 @@ set (gnome_utils_SOURCES
   gnc-gui-query.c
   gnc-icons.c
   gnc-keyring.c
-  gnc-main-window.c
+  gnc-main-window.cpp
   gnc-menu-extensions.c
   gnc-plugin-file-history.c
   gnc-plugin-manager.c
