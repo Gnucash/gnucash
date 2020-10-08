@@ -32,6 +32,9 @@ class GncOptionDB;
 typedef struct GncOption GncOption;
 typedef struct GncOptionDB GncOptionDB;
 #endif
+
+#include <libguile.h>
+
 #ifdef __cplusplus
 class GncOptionDB;
 extern "C"
@@ -153,7 +156,7 @@ const QofInstance* gnc_option_db_lookup_qofinstance_value(GncOptionDB*,
  * @return the GList* of the value or nullptr if the option isn't found
  * or if its value isn't a string.
  */
-GList* gnc_option_db_lookup_glist_value(GncOptionDB*, const char*, const char*);
+SCM gnc_option_db_lookup_scm_value(GncOptionDB*, const char*, const char*);
 
 /**
  * Set the GList* value of an option in the GncOptionDB.
@@ -166,8 +169,8 @@ GList* gnc_option_db_lookup_glist_value(GncOptionDB*, const char*, const char*);
  * @param name the option name
  * @param value the value to be stored in the option.
  */
-void gnc_option_db_set_glist_value(GncOptionDB*, const char*,
-                                    const char*, GList*);
+void gnc_option_db_set_scm_value(GncOptionDB*, const char*,
+                                    const char*, SCM);
 
 #ifdef __cplusplus
 }

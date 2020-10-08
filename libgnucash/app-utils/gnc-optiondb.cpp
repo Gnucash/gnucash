@@ -21,6 +21,7 @@
  *                                                                  *
 \********************************************************************/
 
+#include <libguile.h>
 #include <string>
 #include <limits>
 #include <sstream>
@@ -1484,14 +1485,14 @@ gnc_option_db_lookup_qofinstance_value(GncOptionDB*, const char*, const char*)
     return nullptr;
 }
 
-GList*
-gnc_option_db_lookup_glist_value(GncOptionDB*, const char*, const char*)
+SCM
+gnc_option_db_lookup_scm_value(GncOptionDB*, const char*, const char*)
 {
     return nullptr;
 }
 
 void
-gnc_option_db_set_glist_value(GncOptionDB*, const char*, const char*, GList*)
+gnc_option_db_set_scm_value(GncOptionDB*, const char*, const char*, SCM)
 {
 }
 
