@@ -29,6 +29,7 @@ extern "C"
 #include <glib.h>
 }
 
+#include <libguile.h>
 #include <string>
 #include <iostream>
 #include <variant>
@@ -51,6 +52,7 @@ using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionValue<bool>,
                                       GncOptionValue<int64_t>,
                                       GncOptionValue<const QofInstance*>,
+                                      GncOptionValue<SCM>,
                                       GncOptionAccountValue,
                                       GncOptionMultichoiceValue,
                                       GncOptionRangeValue<int>,

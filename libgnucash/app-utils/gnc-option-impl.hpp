@@ -274,9 +274,14 @@ template<class OptType,
 std::istream& operator>>(std::istream& iss, OptType& opt)
 {
     std::decay_t<decltype(opt.get_value())> value;
-    iss >> value;
-    opt.set_value(value);
-    return iss;
+    if constexpr (std::is_same_v<std::decay_t<decltype(opt.get_value())>, SCM>)
+        return iss;
+    else
+    {
+        iss >> value;
+        opt.set_value(value);
+        return iss;
+    }
 }
 
 template<class OptType,

@@ -29,6 +29,7 @@
 #include <exception>
 #include <optional>
 #include <iostream>
+#include <libguile.h>
 extern "C"
 {
 #include <config.h>
@@ -161,7 +162,7 @@ void gnc_register_color_option(GncOptionDB* db, const char* section,
 
 void gnc_register_internal_option(GncOptionDB* db, const char* section,
                                   const char* name, const char* key,
-                                  const char* doc_string, std::string value);
+                                  const char* doc_string, SCM value);
 
 
 void gnc_register_currency_option(GncOptionDB* db, const char* section,

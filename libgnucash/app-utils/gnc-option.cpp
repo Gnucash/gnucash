@@ -528,6 +528,8 @@ template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, std::string, GncOptionUIType);
 template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, const QofInstance*, GncOptionUIType);
+template GncOption::GncOption(const char*, const char*, const char*,
+                              const char*, SCM, GncOptionUIType);
 
 template bool GncOption::get_value<bool>() const;
 template int GncOption::get_value<int>() const;
@@ -540,6 +542,7 @@ template const QofInstance* GncOption::get_value<const QofInstance*>() const;
 template RelativeDatePeriod GncOption::get_value<RelativeDatePeriod>() const;
 template GncOptionAccountList GncOption::get_value<GncOptionAccountList>() const;
 template GncMultichoiceOptionIndexVec GncOption::get_value<GncMultichoiceOptionIndexVec>() const;
+template SCM GncOption::get_value<SCM>() const;
 
 template bool GncOption::get_default_value<bool>() const;
 template int GncOption::get_default_value<int>() const;
@@ -551,6 +554,7 @@ template const QofInstance* GncOption::get_default_value<const QofInstance*>() c
 template RelativeDatePeriod GncOption::get_default_value<RelativeDatePeriod>() const;
 template GncOptionAccountList GncOption::get_default_value<GncOptionAccountList>() const;
 template GncMultichoiceOptionIndexVec GncOption::get_default_value<GncMultichoiceOptionIndexVec>() const;
+template SCM GncOption::get_default_value<SCM>() const;
 
 template void GncOption::set_value(bool);
 template void GncOption::set_value(int);
@@ -564,6 +568,7 @@ template void GncOption::set_value(RelativeDatePeriod);
 template void GncOption::set_value(size_t);
 template void GncOption::set_value(GncOptionAccountList);
 template void GncOption::set_value(GncMultichoiceOptionIndexVec);
+template void GncOption::set_value(SCM);
 
 template void GncOption::get_limits(double&, double&, double&) const noexcept;
 template void GncOption::get_limits(int&, int&, int&) const noexcept;

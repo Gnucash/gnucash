@@ -1048,7 +1048,7 @@ gnc_register_query_option(GncOptionDB* db, const char* section,
 void
 gnc_register_internal_option(GncOptionDB* db, const char* section,
                              const char* name, const char* key,
-                             const char* doc_string, std::string value)
+                             const char* doc_string, SCM value)
 {
     GncOption option{section, name, key, doc_string, value,
             GncOptionUIType::INTERNAL};

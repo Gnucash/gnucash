@@ -65,6 +65,12 @@ template <typename ValueType> inline SCM
     return SCM_BOOL_F;
     }*/
 template <> inline SCM
+scm_from_value<SCM>(SCM value)
+{
+    return value;
+}
+
+template <> inline SCM
 scm_from_value<QofQuery*>(QofQuery* value)
 {
         return SCM_BOOL_F;
@@ -118,6 +124,8 @@ scm_from_value<const QofInstance*>(const QofInstance* value)
 template <typename ValueType> inline ValueType
 scm_to_value(SCM new_value)
 {
+    if constexpr (std::is_same_v<std::decay_t<ValueType>, SCM>)
+        return new_value;
     return ValueType{};
 }
 
@@ -369,6 +377,9 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     {
         return std::visit([](const auto& option)->SCM {
                 auto value{option.get_value()};
+                if constexpr (std::is_same_v<std::decay_t<decltype(value)>,
+                              SCM>)
+                    return value;
                 return scm_from_value(static_cast<decltype(value)>(value));
             }, swig_get_option($self));
     }
@@ -376,6 +387,9 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     {
         return std::visit([](const auto& option)->SCM {
                 auto value{option.get_default_value()};
+                if constexpr (std::is_same_v<std::decay_t<decltype(value)>,
+                              SCM>)
+                    return value;
                 return scm_from_value(static_cast<decltype(value)>(value));
             }, swig_get_option($self));
     }
