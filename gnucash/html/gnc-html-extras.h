@@ -27,7 +27,7 @@
 // gnc-html.i file.  The full gnc-html.h file can't be parsed because of the new
 // use of GObject
 
-typedef gchar* URLType;
+typedef const char* URLType;
 
 #define URL_TYPE_FILE       "file"
 #define URL_TYPE_JUMP       "jump"
