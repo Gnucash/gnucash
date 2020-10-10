@@ -122,7 +122,8 @@ static void sack_foreach_func(gpointer key, gpointer value, gpointer user_data)
     gnc_numeric thisvalue = *(gnc_numeric *)key;
 
     gnc_numeric reachable_value = gnc_numeric_add_fixed(thisvalue, data->split_value);
-    data->reachable_list = g_list_append(data->reachable_list, g_memdup(&reachable_value, sizeof(gnc_numeric)));
+    data->reachable_list = g_list_prepend
+        (data->reachable_list, g_memdup (&reachable_value, sizeof (gnc_numeric)));
     PINFO("    Sack: found %s, added %s\n", gnc_numeric_to_string(thisvalue), gnc_numeric_to_string(reachable_value));
 }
 
@@ -151,7 +152,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         value = xaccSplitGetAmount (split);
 
         if (recn == NREC)
-            nc_list = g_list_append(nc_list, split);
+            nc_list = g_list_prepend (nc_list, split);
         else
             toclear_value = gnc_numeric_sub_fixed(toclear_value, value);
     }
@@ -189,7 +190,8 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         g_hash_table_foreach (sack, sack_foreach_func, data);
 
         /* Add the value of the split itself to the reachable_list */
-        data->reachable_list = g_list_append(data->reachable_list, g_memdup(&split_value, sizeof(gnc_numeric)));
+        data->reachable_list = g_list_prepend
+            (data->reachable_list, g_memdup (&split_value, sizeof (gnc_numeric)));
 
         /* Add everything to the sack, looking out for duplicates */
         for (node = data->reachable_list; node; node = node->next)
