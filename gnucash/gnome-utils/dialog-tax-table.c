@@ -743,6 +743,7 @@ tax_table_window_close_handler (gpointer data)
     TaxTableWindow *ttw = data;
     g_return_if_fail (ttw);
 
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ttw->dialog));
     gtk_widget_destroy (ttw->dialog);
 }
 
@@ -750,9 +751,19 @@ void
 tax_table_window_close (GtkWidget *widget, gpointer data)
 {
     TaxTableWindow *ttw = data;
+    gnc_close_gui_component (ttw->component_id);
+}
 
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ttw->dialog));
-    gnc_ui_tax_table_window_destroy (ttw);
+static gboolean
+tax_table_window_delete_event_cb (GtkWidget *widget,
+                                  GdkEvent  *event,
+                                  gpointer   user_data)
+{
+    TaxTableWindow *ttw = user_data;
+    // this cb allows the window size to be saved on closing with the X
+    gnc_save_window_size (GNC_PREFS_GROUP,
+                          GTK_WINDOW(ttw->dialog));
+    return FALSE;
 }
 
 void
@@ -764,13 +775,33 @@ tax_table_window_destroy_cb (GtkWidget *widget, gpointer data)
 
     gnc_unregister_gui_component (ttw->component_id);
 
+    if (ttw->dialog)
+    {
+        gtk_widget_destroy (ttw->dialog);
+        ttw->dialog = NULL;
+    }
     g_free (ttw);
 }
 
 static gboolean
-find_handler (gpointer find_data, gpointer user_data)
+tax_table_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+                               gpointer data)
 {
-    TaxTableWindow *ttw = user_data;
+    TaxTableWindow *ttw = data;
+
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        tax_table_window_close_handler (ttw);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+static gboolean
+find_handler (gpointer find_data, gpointer data)
+{
+    TaxTableWindow *ttw = data;
     QofBook *book = find_data;
 
     return (ttw != NULL && ttw->book == book);
@@ -818,6 +849,12 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(ttw->dialog), "gnc-id-new-tax-table");
     gnc_widget_style_context_add_class (GTK_WIDGET(ttw->dialog), "gnc-class-taxes");
+
+    g_signal_connect (ttw->dialog, "delete-event",
+                      G_CALLBACK(tax_table_window_delete_event_cb), ttw);
+
+    g_signal_connect (ttw->dialog, "key_press_event",
+                      G_CALLBACK (tax_table_window_key_press_cb), ttw);
 
     /* Create the tax tables view */
     view = GTK_TREE_VIEW(ttw->names_view);
@@ -888,16 +925,6 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     g_object_unref (G_OBJECT(builder));
 
     return ttw;
-}
-
-/* Destroy a tax-table window */
-void
-gnc_ui_tax_table_window_destroy (TaxTableWindow *ttw)
-{
-    if (!ttw)
-        return;
-
-    gnc_close_gui_component (ttw->component_id);
 }
 
 /* Create a new tax-table by name */

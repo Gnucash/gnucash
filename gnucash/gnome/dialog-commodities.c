@@ -70,6 +70,9 @@ void gnc_commodities_dialog_edit_clicked (GtkWidget *widget, gpointer data);
 void gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data);
 void gnc_commodities_dialog_close_clicked (GtkWidget *widget, gpointer data);
 void gnc_commodities_show_currencies_toggled (GtkToggleButton *toggle, CommoditiesDialog *cd);
+gboolean gnc_commodities_window_key_press_cb (GtkWidget *widget,
+                                              GdkEventKey *event,
+                                              gpointer data);
 
 
 void
@@ -79,10 +82,22 @@ gnc_commodities_window_destroy_cb (GtkWidget *object,   CommoditiesDialog *cd)
 
     if (cd->window)
     {
-        gtk_widget_destroy(cd->window);
+        gtk_widget_destroy (cd->window);
         cd->window = NULL;
     }
     g_free (cd);
+}
+
+static gboolean
+gnc_commodities_window_delete_event_cb (GtkWidget *widget,
+                                        GdkEvent  *event,
+                                        gpointer   data)
+{
+    CommoditiesDialog *cd = data;
+    // this cb allows the window size to be saved on closing with the X
+    gnc_save_window_size (GNC_PREFS_GROUP,
+                          GTK_WINDOW(cd->window));
+    return FALSE;
 }
 
 void
@@ -247,6 +262,7 @@ void
 gnc_commodities_dialog_close_clicked (GtkWidget *widget, gpointer data)
 {
     CommoditiesDialog *cd = data;
+
     gnc_close_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
 }
 
@@ -361,6 +377,12 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     g_signal_connect (cd->window, "destroy",
                       G_CALLBACK(gnc_commodities_window_destroy_cb), cd);
 
+    g_signal_connect (cd->window, "delete-event",
+                      G_CALLBACK(gnc_commodities_window_delete_event_cb), cd);
+
+    g_signal_connect (cd->window, "key_press_event",
+                      G_CALLBACK (gnc_commodities_window_key_press_cb), cd);
+
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, cd);
     g_object_unref (G_OBJECT(builder));
 
@@ -399,6 +421,21 @@ show_handler (const char *klass, gint component_id,
         return(FALSE);
     gtk_window_present (GTK_WINDOW(cd->window));
     return(TRUE);
+}
+
+gboolean
+gnc_commodities_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+                                     gpointer data)
+{
+    CommoditiesDialog *cd = data;
+
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        close_handler (cd);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 /********************************************************************\
