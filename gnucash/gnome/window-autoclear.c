@@ -107,7 +107,7 @@ ght_gnc_numeric_hash(gconstpointer v1)
 {
     gnc_numeric n1 = *(gnc_numeric *)v1;
     gdouble d1 = gnc_numeric_to_double(n1);
-    return g_str_hash(&d1);
+    return g_double_hash (&d1);
 }
 
 typedef struct _sack_foreach_data_t
