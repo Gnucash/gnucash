@@ -12,7 +12,6 @@
 # Stéphane Raimbault <stephane.raimbault@gmail.com>, 2007.
 # Sébastien Villemot <sebastien@debian.org>, 2013.
 # La Boussole <yoann@laboussole.coop>, 2018.
-# Christopher Lam, 2018
 #
 # Please follow the guidelines you'll find here: http://wiki.gnucash.org/wiki/Translation
 #
