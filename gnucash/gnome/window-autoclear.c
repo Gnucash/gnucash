@@ -303,6 +303,7 @@ autoClearWindow (GtkWidget *parent, Account *account)
     GtkBuilder *builder;
     AutoClearWindow *data;
     char *title;
+    gnc_numeric after;
 
     data = g_new0 (AutoClearWindow, 1);
     data->account = account;
@@ -328,6 +329,10 @@ autoClearWindow (GtkWidget *parent, Account *account)
 
     label = GTK_LABEL(gtk_builder_get_object (builder, "end_label"));
     gtk_label_set_mnemonic_widget(label, GTK_WIDGET(data->end_value));
+
+    /* pre-fill with current balance */
+    after = xaccAccountGetBalance(data->account);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), after);
     gtk_widget_grab_focus(GTK_WIDGET(data->end_value));
 
     data->status_label = GTK_LABEL(gtk_builder_get_object (builder, "status_label"));
