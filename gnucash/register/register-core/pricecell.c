@@ -107,23 +107,6 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
             return;
     }
 
-// gnc_basic_cell_set_value_internal doesn't like misplaced thousands separators
-// that can result from deletes, so remove them.
-    for (const char *c = g_utf8_strchr (new_newval, -1, thousands_sep); c;
-         c = g_utf8_strchr (c, -1, thousands_sep))
-    {
-        long len = g_utf8_strlen (new_newval, -1);
-        long pos = g_utf8_pointer_to_offset (new_newval, c);
-        char *start = g_utf8_substring (new_newval, 0, pos);
-        char *end = g_utf8_substring (new_newval, ++pos, len);
-        g_free (new_newval);
-        if (cursor_position && *cursor_position >= pos)
-            --*cursor_position;
-        new_newval = g_strdup_printf ("%s%s", start, end);
-        g_free (start);
-        g_free (end);
-    }
-
     gnc_basic_cell_set_value_internal (_cell, new_newval);
     g_free (new_newval);
     *end_selection = *start_selection = *cursor_position;
