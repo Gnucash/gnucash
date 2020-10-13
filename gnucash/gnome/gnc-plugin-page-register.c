@@ -498,7 +498,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     },
     {
         "GotoDateAction", "x-office-calendar", N_ ("_Go to Date"), "<primary>G",
-        N_ ("Move to the split at specified date"),
+        N_ ("Move to the split at the specified date"),
         G_CALLBACK (gnc_plugin_page_register_cmd_goto_date)
     },
     {
@@ -1955,7 +1955,7 @@ gnc_plugin_page_register_finish_pending (GncPluginPage* page)
 
     if (!finish_scrub (page))
         return FALSE;
-    
+
     reg_page = GNC_PLUGIN_PAGE_REGISTER (page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (reg_page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
