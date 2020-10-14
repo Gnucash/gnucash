@@ -241,6 +241,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
                 /* We couldn't reconstruct the solution */
                 PINFO("    Solution not unique.\n");
                 gtk_label_set_text(data->status_label, _("Cannot uniquely clear splits. Found multiple possibilities."));
+                gtk_editable_select_region (GTK_EDITABLE (data->end_value), 0, -1);
                 return;
             }
         }
@@ -248,6 +249,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         {
             PINFO("    No solution found.\n");
             gtk_label_set_text(data->status_label, _("The selected amount cannot be cleared."));
+            gtk_editable_select_region (GTK_EDITABLE (data->end_value), 0, -1);
             return;
         }
     }
@@ -333,11 +335,12 @@ autoClearWindow (GtkWidget *parent, Account *account)
     gtk_label_set_mnemonic_widget(label, GTK_WIDGET(data->end_value));
 
     /* pre-fill with current balance */
-    after = xaccAccountGetBalance(data->account);
+    after = xaccAccountGetClearedBalance (data->account);
     if (gnc_reverse_balance(data->account))
         after = gnc_numeric_neg(after);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), after);
     gtk_widget_grab_focus(GTK_WIDGET(data->end_value));
+    gtk_editable_select_region (GTK_EDITABLE (data->end_value), 0, -1);
 
     data->status_label = GTK_LABEL(gtk_builder_get_object (builder, "status_label"));
 
