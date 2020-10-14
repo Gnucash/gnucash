@@ -139,6 +139,8 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
 
     /* Value we have to reach */
     toclear_value = gnc_amount_edit_get_amount(data->end_value);
+    if (gnc_reverse_balance(data->account))
+        toclear_value = gnc_numeric_neg(toclear_value);
     toclear_value = gnc_numeric_convert(toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_HOW_RND_NEVER);
 
     /* Extract which splits are not cleared and compute the amount we have to clear */
@@ -332,6 +334,8 @@ autoClearWindow (GtkWidget *parent, Account *account)
 
     /* pre-fill with current balance */
     after = xaccAccountGetBalance(data->account);
+    if (gnc_reverse_balance(data->account))
+        after = gnc_numeric_neg(after);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), after);
     gtk_widget_grab_focus(GTK_WIDGET(data->end_value));
 
