@@ -182,21 +182,21 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         gnc_numeric split_value = xaccSplitGetAmount(split);
 
         GList *node;
-        struct _sack_foreach_data_t data[1];
-        data->split_value = split_value;
-        data->reachable_list = 0;
+        struct _sack_foreach_data_t s_data[1];
+        s_data->split_value = split_value;
+        s_data->reachable_list = 0;
 
         PINFO("  Split value: %s\n", gnc_numeric_to_string(split_value));
 
         /* For each value in the sack, compute a new reachable value */
-        g_hash_table_foreach (sack, sack_foreach_func, data);
+        g_hash_table_foreach (sack, sack_foreach_func, s_data);
 
         /* Add the value of the split itself to the reachable_list */
-        data->reachable_list = g_list_prepend
-            (data->reachable_list, g_memdup (&split_value, sizeof (gnc_numeric)));
+        s_data->reachable_list = g_list_prepend
+            (s_data->reachable_list, g_memdup (&split_value, sizeof (gnc_numeric)));
 
         /* Add everything to the sack, looking out for duplicates */
-        for (node = data->reachable_list; node; node = node->next)
+        for (node = s_data->reachable_list; node; node = node->next)
         {
             gnc_numeric *reachable_value = node->data;
             Split *toinsert_split = split;
@@ -213,7 +213,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
             g_hash_table_insert (sack, reachable_value, toinsert_split);
             PINFO("\n");
         }
-        g_list_free(data->reachable_list);
+        g_list_free(s_data->reachable_list);
     }
 
     /* Check solution */
