@@ -8951,7 +8951,9 @@ msgstr ""
 "• Benno Schulenberg <benno@vertaalt.nl>, 2007\n"
 "• Jeroen ten Berge <twinbit@home.nl>, 2004\n"
 "• Hendrik-Jan Heins <hjh@passys.nl>, 2003\n"
-"• Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002"
+"• Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002\n"
+"\n"
+"Nederlandstalige GnuCash-gemeenschap <gnucash-nl@gnucash.org>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4540
 msgid "Visit the GnuCash website."

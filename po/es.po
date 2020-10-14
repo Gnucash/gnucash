@@ -9121,7 +9121,9 @@ msgstr "Contabilidad financiara personal y pequeños negocios."
 msgid "translator-credits"
 msgstr ""
 "Francisco Javier Serrador <serrador@tecknolabs.com>  7-ene-2019\n"
-"Eneko Lacunza <enlar@enlar.net>"
+"Eneko Lacunza <enlar@enlar.net>\n"
+"\n"
+"Comunidad GnuCash de habla hispana <gnucash-es@gnucash.org>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4540
 msgid "Visit the GnuCash website."

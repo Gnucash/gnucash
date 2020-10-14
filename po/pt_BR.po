@@ -1,17 +1,19 @@
-# Brazilian Portuguese translation of GnuCash
+# Brazilian Portuguese translations for GnuCash package.
 # Copyright (C) 2001, 2003, 2007 Free Software Foundation, Inc.
+# Copyright (C) 2011-15 by the GnuCash developers and the translators listed below.
+# This file is distributed under the same license as the GnuCash package.
+# Miguel Rozsas <miguel@rozsas.eng.br>, 2014.
+# Dorneles Treméa <dorneles@tremea.com>, 2011.
+# Leslie H. Watter <watter@gmail.com>, 2007.
+# Carlos Cleber Pereira Cassol <ccassol@gmail.com>, 2007.
+# Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>, 2007.
+# Goedson Teixeira Paixão <goedson@debian.org>, 2007.
 # Jon Lapham <lapham@jandr.org>, 2003,2004
 # Jose Carlos Nascimento <joseca@psabs.com>, 2001.
-# Goedson Teixeira Paixão <goedson@debian.org>, 2007.
-# Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>, 2007.
-# Carlos Cleber Pereira Cassol <ccassol@gmail.com>, 2007.
-# Leslie H. Watter <watter@gmail.com>, 2007.
-# Dorneles Treméa <dorneles@tremea.com>, 2011.
-# Miguel Rozsas <miguel@rozsas.eng.br>, 2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 2.2\n"
+"Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-10-14 01:49+0200\n"
@@ -9010,10 +9012,17 @@ msgstr "- GnuCash: Gerenciador financeiro pessoal e para pequenos negócios"
 #: gnucash/gnome-utils/gnc-main-window.c:4537
 msgid "translator-credits"
 msgstr ""
-"Jose Carlos Nascimento <joseca@psabs.com>\n"
-"Goedson Teixeira Paixão <goedson@debian.org>\n"
-"Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>\n"
-"Cleber Cassol <ccassol@gmail.com>"
+"Miguel Rozsas, 2014\n"
+"Dorneles Treméa, 2011\n"
+"Leslie H. Watter, 2007\n"
+"Cleber Cassol, 2007\n"
+"Leonardo Ferreira Fontenelle, 2007\n"
+"Goedson Teixeira Paixão, 2007\n"
+"Jon Lapham, 2003-2004\n"
+"Jose Carlos Nascimento, 2001\n"
+"\n"
+"Sugestões e críticas à comunidade GnuCash de língua portuguesa do Brasil "
+"<gnucash-br@gnucash.org>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4540
 msgid "Visit the GnuCash website."
