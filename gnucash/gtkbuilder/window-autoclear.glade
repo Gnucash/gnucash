@@ -72,7 +72,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">&lt;b&gt;Auto-Clear Information&lt;/b&gt;
-Use this dialog if you want GnuCash to automatically find which transactions are cleared, given an ending balance. For example, said ending balance can be the current balance given by your online bank.</property>
+Use this dialog if you want GnuCash to automatically find which transactions are cleared, given an ending balance. For example, said ending balance can be the current balance given by your online bank.
+
+&lt;b&gt;Note&lt;/b&gt;: The complexity of this algorithm is quite high (&lt;a href="https://en.wikipedia.org/wiki/Knapsack_problem#Computational_complexity"&gt;O(nW)&lt;/a&gt;). Use this only on a dozen of uncleared splits.</property>
                 <property name="use_markup">True</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">80</property>
