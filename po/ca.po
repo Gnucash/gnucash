@@ -14598,10 +14598,8 @@ msgstr "_Nota d'abonament"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
-#| msgid "Cash in Lieu"
 msgid "Cash in lieu"
-msgstr "Efectiu en el lloc"
+msgstr "Efectiu en compensació per l'intercanvi"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:352
 msgid "<b>_Income Account</b>"
@@ -14614,7 +14612,7 @@ msgstr "<b>Compte d'_actiu</b>"
 #. Dialog title for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:409
 msgid "Cash In Lieu"
-msgstr "Efectiu en compensació per l'intercanvi"
+msgstr "Efectiu en el lloc"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:419
 #, fuzzy

@@ -14553,10 +14553,9 @@ msgstr "_Memo"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
 #| msgid "Cash in Lieu"
 msgid "Cash in lieu"
-msgstr "Dinheiro em espécie"
+msgstr "Dinheiro em vez de"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:352
 msgid "<b>_Income Account</b>"
@@ -14569,7 +14568,7 @@ msgstr "<b>Conta de ativo_s</b>"
 #. Dialog title for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:409
 msgid "Cash In Lieu"
-msgstr "Dinheiro em vez de"
+msgstr "Dinheiro em espécie"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:419
 #, fuzzy

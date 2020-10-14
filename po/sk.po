@@ -8823,7 +8823,8 @@ msgstr "Účtovníctvo pre súkromné osoby a malé podniky."
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4537
 msgid "translator-credits"
-msgstr "Zdenko Podobný"
+msgstr "Zdenko Podobný, 2001 - 2011, 2018\n"
+"Juraj Korec, 2008"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4540
 msgid "Visit the GnuCash website."
@@ -13849,7 +13850,6 @@ msgstr "Pozná_mka"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
 msgid "Cash in lieu"
 msgstr "V hotovosti"
 

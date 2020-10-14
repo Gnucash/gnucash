@@ -14110,7 +14110,6 @@ msgstr "备注(_M)"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
 msgid "Cash in lieu"
 msgstr "兑现处"
 

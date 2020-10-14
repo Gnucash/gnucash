@@ -2,15 +2,12 @@
 # Copyright (C) 2019 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnucash package.
 # Translators:
-# Aziz2013 <Abdulaziz_ahmed2001@hotmail.com>, 2013
-# ashalash <ashalash@msn.com>, 2013
-# ashalash1409 <ashalash1409@hotmail.com>, 2013
-# ashalash1409 <ashalash1409@hotmail.com>, 2013
-# ashalash <ashalash@msn.com>, 2013
-# Aziz2013 <Abdulaziz_ahmed2001@hotmail.com>, 2013
-# khadiramd <khadird@yahoo.com>, 2013
-# ashalash <ashalash@msn.com>, 2013
+# Abdorhman Ayman <abdorhman.ayman@protonmail.com> 2019
+# ashalash <ashalash@msn.com>, 2013, 2017
 # MOHTARIF_TEC <ashalash@msn.com>, 2016.
+# Aziz2013 <Abdulaziz_ahmed2001@hotmail.com>, 2013
+# ashalash1409 <ashalash1409@hotmail.com>, 2013
+# khadiramd <khadird@yahoo.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 3.4\n"
@@ -14291,7 +14288,6 @@ msgstr "_مذكرة"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
 #| msgid "Cash in Lieu"
 msgid "Cash in lieu"
 msgstr "نقدي"

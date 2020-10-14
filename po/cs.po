@@ -14280,7 +14280,6 @@ msgstr "_Poznámka"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
 msgid "Cash in lieu"
 msgstr "Náhrada v hotovosti"
 

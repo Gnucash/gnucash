@@ -14795,7 +14795,6 @@ msgstr "_Memorandum"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
 #| msgid "Cash in Lieu"
 msgid "Cash in lieu"
 msgstr "Efectivo Contable"

@@ -14491,7 +14491,6 @@ msgstr "_मैमो "
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
 msgid "Cash in lieu"
 msgstr "एवज च नगद रकम "
 

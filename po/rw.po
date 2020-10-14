@@ -9597,7 +9597,7 @@ msgstr ""
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4537
 msgid "translator-credits"
-msgstr ""
+msgstr "Steve Murphy, 2005"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4540
 msgid "Visit the GnuCash website."

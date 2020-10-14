@@ -2,9 +2,9 @@
 # Messages for Gnucash in British English
 # Copyright (C) 2002, 2003, 2004, 2006, 2007 Free Software Foundation, Inc.
 #
-# Nigel Titley <nigel@titley.com>, 2002, 2003, 2004, 2006, 2007.
-# Neil Williams <linux@codehelp.co.uk>, 2006.
 # Mike Evans <mikee@saxicola.idps.co.uk>, 2010, 2013.
+# Nigel Titley <nigel@titley.com>, 2002 - 2007.
+# Neil Williams <linux@codehelp.co.uk>, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: en_GB\n"
@@ -8959,7 +8959,7 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Mike Evans, 2010, 2013\n"
-"Nigel Titley, 2002, 2003, 2004, 2006, 2007\n"
+"Nigel Titley, 2002 - 2007\n"
 "Neil Williams, 2006"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4540
@@ -14388,9 +14388,8 @@ msgstr "_Memo"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
 msgid "Cash in lieu"
-msgstr "Cash In Lieu"
+msgstr "Cash in lieu"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:352
 msgid "<b>_Income Account</b>"
@@ -14403,7 +14402,7 @@ msgstr "<b>A_sset Account</b>"
 #. Dialog title for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:409
 msgid "Cash In Lieu"
-msgstr "Cash In Lieu"
+msgstr "Cash in lieu"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:419
 #, fuzzy

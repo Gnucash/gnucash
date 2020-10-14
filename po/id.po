@@ -13971,7 +13971,6 @@ msgstr "Memo"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
 msgid "Cash in lieu"
 msgstr "tunai"
 
@@ -13987,7 +13986,6 @@ msgstr "<b>Ruang Lingkup</b>"
 
 #. Dialog title for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:409
-#, fuzzy
 msgid "Cash In Lieu"
 msgstr "tunai"
 

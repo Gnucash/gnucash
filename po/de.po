@@ -27,7 +27,7 @@ msgstr ""
 "POT-Creation-Date: 2020-10-14 01:49+0200\n"
 "PO-Revision-Date: 2020-09-26 21:29+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
-"Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
+"Language-Team: Deutschsprachige GnuCash-Gemeinde <gnucash-de@gnucash.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3955,10 +3955,8 @@ msgid "Open the Find Expense Voucher dialog"
 msgstr "Den Dialog für die Suche nach Auslagenerstattungen öffnen"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
-#, fuzzy
-#| msgid "All Linked Documents"
 msgid "Business Linked Documents"
-msgstr "Alle verknüpften Dokumente"
+msgstr "Verknüpfte Geschäftsdokumente"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
 msgid "View all Linked Business Documents"
@@ -5033,10 +5031,8 @@ msgid "Open a company report window for the owner of this credit note"
 msgstr "Einen Firmenbericht für den Mandanten dieser Gutschrift öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:445
-#, fuzzy
-#| msgid "_Manage Document Link..."
 msgid "Manage Document Link..."
-msgstr "_Verknüpfung bearbeiten..."
+msgstr "Dokument_verknüpfungen bearbeiten..."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
 #: gnucash/gnome/gnc-plugin-page-register2.c:498
@@ -5825,8 +5821,6 @@ msgid "_Go to Date"
 msgstr "Zu Datum _gehen"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:501
-#, fuzzy
-#| msgid "Move to the the split at specified date"
 msgid "Move to the split at the specified date"
 msgstr "Zum Buchungsteil mit dem gewählten Datum gehen"
 
@@ -14680,10 +14674,8 @@ msgstr "Buchungs_text"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
-#| msgid "Cash in Lieu"
 msgid "Cash in lieu"
-msgstr "Ausgleichsbetrag"
+msgstr "Restauszahlung von Wertpapierteilung"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:352
 msgid "<b>_Income Account</b>"
@@ -14696,7 +14688,7 @@ msgstr "<b>_Aktiva Konto</b>"
 #. Dialog title for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:409
 msgid "Cash In Lieu"
-msgstr "Ausgleichsbetrag"
+msgstr "Restauszahlungsbetrag der Wertpapierteilung"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:419
 msgid ""
@@ -28142,16 +28134,12 @@ msgid "Debits"
 msgstr "Soll"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:59
-#, fuzzy
-#| msgid "Open Document Link"
 msgid "Document Links"
-msgstr "Verknüpfung öffnen"
+msgstr "Verknüpfte Dokumente"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:60
-#, fuzzy
-#| msgid "Transactions"
 msgid "Transaction Links"
-msgstr "Buchungen"
+msgstr "Verknüpfte Buchungen"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:91
 #: gnucash/report/reports/standard/owner-report.scm:87
@@ -28255,10 +28243,8 @@ msgstr ""
 "und Beträge."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:948
-#, fuzzy
-#| msgid "Display amounts as hyperlinks"
 msgid "Display document link?"
-msgstr "Kontosalden anklickbar anzeigen"
+msgstr "Verknüpfte Dokumente anzeigen?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1076
 msgid "No valid account found"
@@ -31360,9 +31346,3 @@ msgstr "Buchung ungültig gemacht"
 #: libgnucash/tax/us/txf.scm:98
 msgid "No help available."
 msgstr "Keine Hilfe verfügbar."
-
-#~ msgid "Business Links"
-#~ msgstr "Rechnungsverknüpfungen"
-
-#~ msgid "Links"
-#~ msgstr "Zuordnungen"
