@@ -198,7 +198,7 @@ gnc_quickfill_cell_modify_verify (BasicCell *_cell,
     }
 
     /* If we are inserting in the middle, just accept */
-    if (*cursor_position < _cell->value_chars)
+    if (*cursor_position < newval_chars)
     {
         gnc_basic_cell_set_value_internal (&cell->cell, newval);
         gnc_quickfill_cell_set_original (cell, NULL);
@@ -232,8 +232,6 @@ gnc_quickfill_cell_modify_verify (BasicCell *_cell,
     {
         if (cell->original != NULL)
             newval = cell->original;
-
-        *cursor_position = -1;
 
         gnc_basic_cell_set_value_internal (&cell->cell, newval);
         return;
