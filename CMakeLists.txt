@@ -279,7 +279,7 @@ string(REGEX MATCH "^[0-9]+[.]" SWIG_MAJOR ${SWIG_VERSION})
 
 # guile library and include dir
 pkg_check_modules (GUILE3 guile-3.0 QUIET)
-pkg_check_modules (GUILE22 guile-2.2 QUIET)
+pkg_check_modules (GUILE22 guile-2.2)
 pkg_check_modules (GUILE2 guile-2.0>=2.0.9 QUIET)
 
 if (GUILE3_FOUND) # found guile-3.0

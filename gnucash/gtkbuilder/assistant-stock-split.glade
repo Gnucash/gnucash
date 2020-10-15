@@ -313,7 +313,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">●</property>
-                <property name="text" translatable="yes">Cash In Lieu</property>
+                <property name="text" translatable="yes" comments="Default memo text for the remains of a stock split">Cash in lieu</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -406,7 +406,7 @@
         </child>
       </object>
       <packing>
-        <property name="title" translatable="yes">Cash in Lieu</property>
+        <property name="title" translatable="yes" comments="Dialog title for the remains of a stock split">Cash In Lieu</property>
         <property name="has_padding">False</property>
       </packing>
     </child>

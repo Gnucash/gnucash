@@ -442,7 +442,7 @@ static action_toolbar_labels creditnote_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the credit note")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this credit note") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") },
-    {"BusinessLinkAction", N_("_Manage Document Link...")},
+    {"BusinessLinkAction", N_("Manage Document Link...")},
     {"BusinessLinkOpenAction", N_("Open Linked Document")},
     {NULL, NULL},
 };
@@ -1360,16 +1360,23 @@ gnc_plugin_page_invoice_cmd_link (GtkAction *action,
 
     ret_uri = gnc_doclink_get_uri_dialog (parent, _("Manage Document Link"), uri);
 
+    if (ret_uri)
+        has_uri = TRUE;
+
     if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
     {
         GtkWidget *doclink_button =
             gnc_invoice_window_get_doclink_button (priv->iw);
 
-        if (doclink_button)
+        if (g_strcmp0 (ret_uri, "") == 0)
         {
-            if (g_strcmp0 (ret_uri, "") == 0)
+            has_uri = FALSE;
+            if (doclink_button)
                 gtk_widget_hide (GTK_WIDGET(doclink_button));
-            else
+        }
+        else
+        {
+            if (doclink_button)
             {
                 gchar *display_uri =
                     gnc_doclink_get_unescaped_just_uri (ret_uri);
@@ -1380,9 +1387,7 @@ gnc_plugin_page_invoice_cmd_link (GtkAction *action,
             }
         }
         gncInvoiceSetDocLink (invoice, ret_uri);
-        has_uri = TRUE;
     }
-
     // update the menu actions
     update_doclink_actions (GNC_PLUGIN_PAGE(plugin_page), has_uri);
 

@@ -589,19 +589,40 @@
       <placeholder/>
     </child>
   </object>
-  <object class="GtkDialog" id="select_style_sheet_dialog">
+  <object class="GtkWindow" id="select_style_sheet_window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Select HTML Style Sheet</property>
     <property name="default_width">300</property>
     <property name="default_height">200</property>
-    <property name="type_hint">dialog</property>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox9">
+    <child>
+      <object class="GtkBox" id="hbox1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area9">
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <child>
+              <object class="GtkTreeView" id="style_sheet_list_view">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="headers_visible">False</property>
+                <property name="enable_search">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButtonBox" id="dialog-action_area">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
@@ -613,6 +634,7 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <signal name="clicked" handler="gnc_style_sheet_select_dialog_edit_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -628,6 +650,7 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <signal name="clicked" handler="gnc_style_sheet_select_dialog_new_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -643,6 +666,7 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <signal name="clicked" handler="gnc_style_sheet_select_dialog_delete_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -658,6 +682,7 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <signal name="clicked" handler="gnc_style_sheet_select_dialog_close_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -670,41 +695,11 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow28">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">always</property>
-            <property name="vscrollbar_policy">always</property>
-            <child>
-              <object class="GtkTreeView" id="style_sheet_list_view">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="headers_visible">False</property>
-                <property name="enable_search">False</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection3"/>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="3">edit_button</action-widget>
-      <action-widget response="1">add_button</action-widget>
-      <action-widget response="2">delete_button</action-widget>
-      <action-widget response="-7">close_button</action-widget>
-    </action-widgets>
     <child type="titlebar">
       <placeholder/>
     </child>

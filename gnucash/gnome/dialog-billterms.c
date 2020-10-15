@@ -718,8 +718,7 @@ void
 billterms_window_close (GtkWidget *widget, gpointer data)
 {
     BillTermsWindow *btw = data;
-
-    gnc_ui_billterms_window_destroy (btw);
+    gnc_close_gui_component (btw->component_id);
 }
 
 void
@@ -731,13 +730,33 @@ billterms_window_destroy_cb (GtkWidget *widget, gpointer data)
 
     gnc_unregister_gui_component (btw->component_id);
 
+    if (btw->window)
+    {
+        gtk_widget_destroy (btw->window);
+        btw->window = NULL;
+    }
     g_free (btw);
 }
 
 static gboolean
-find_handler (gpointer find_data, gpointer user_data)
+billterms_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+                               gpointer data)
 {
-    BillTermsWindow *btw = user_data;
+    BillTermsWindow *btw = data;
+
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        billterms_window_close_handler (btw);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+static gboolean
+find_handler (gpointer find_data, gpointer data)
+{
+    BillTermsWindow *btw = data;
     QofBook *book = find_data;
 
     return (btw != NULL && btw->book == book);
@@ -789,6 +808,9 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
     gtk_widget_set_name (GTK_WIDGET(btw->window), "gnc-id-bill-terms");
     gnc_widget_style_context_add_class (GTK_WIDGET(btw->window), "gnc-class-bill-terms");
 
+    g_signal_connect (btw->window, "key_press_event",
+                      G_CALLBACK (billterms_window_key_press_cb), btw);
+
     /* Initialize the view */
     view = GTK_TREE_VIEW(btw->terms_view);
     store = gtk_list_store_new (NUM_BILL_TERM_COLS, G_TYPE_STRING, G_TYPE_POINTER);
@@ -834,16 +856,6 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
     g_object_unref (G_OBJECT(builder));
 
     return btw;
-}
-
-/* Destroy a billterms window */
-void
-gnc_ui_billterms_window_destroy (BillTermsWindow *btw)
-{
-    if (!btw)
-        return;
-
-    gnc_close_gui_component (btw->component_id);
 }
 
 #if 0

@@ -59,13 +59,16 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 
-void gnc_prices_dialog_window_destroy_cb (GtkWidget *object, gpointer data);
+void gnc_prices_dialog_destroy_cb (GtkWidget *object, gpointer data);
 void gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer data);
 void gnc_prices_dialog_edit_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_add_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data);
+static gboolean gnc_prices_dialog_key_press_cb (GtkWidget *widget,
+                                                GdkEventKey *event,
+                                                gpointer data);
 
 
 typedef struct
@@ -88,7 +91,7 @@ typedef struct
 
 
 void
-gnc_prices_dialog_window_destroy_cb (GtkWidget *object, gpointer data)
+gnc_prices_dialog_destroy_cb (GtkWidget *object, gpointer data)
 {
     PricesDialog *pdb_dialog = data;
 
@@ -97,12 +100,25 @@ gnc_prices_dialog_window_destroy_cb (GtkWidget *object, gpointer data)
 
     if (pdb_dialog->window)
     {
-        gtk_widget_destroy(pdb_dialog->window);
+        gtk_widget_destroy (pdb_dialog->window);
         pdb_dialog->window = NULL;
     }
 
     g_free (pdb_dialog);
     LEAVE(" ");
+}
+
+
+static gboolean
+gnc_prices_dialog_delete_event_cb (GtkWidget *widget,
+                                   GdkEvent  *event,
+                                   gpointer   data)
+{
+    PricesDialog *pdb_dialog = data;
+    // this cb allows the window size to be saved on closing with the X
+    gnc_save_window_size (GNC_PREFS_GROUP,
+                          GTK_WINDOW(pdb_dialog->window));
+    return FALSE;
 }
 
 
@@ -713,6 +729,12 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     pdb_dialog->book = qof_session_get_book(pdb_dialog->session);
     pdb_dialog->price_db = gnc_pricedb_get_db(pdb_dialog->book);
 
+    g_signal_connect (pdb_dialog->window, "delete-event",
+                      G_CALLBACK(gnc_prices_dialog_delete_event_cb), pdb_dialog);
+
+    g_signal_connect (pdb_dialog->window, "key_press_event",
+                      G_CALLBACK (gnc_prices_dialog_key_press_cb), pdb_dialog);
+
     /* price tree */
     scrolled_window = GTK_WIDGET(gtk_builder_get_object (builder, "price_list_window"));
     view = gnc_tree_view_price_new(pdb_dialog->book,
@@ -761,7 +783,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     }
 
     g_signal_connect (pdb_dialog->window, "destroy",
-                      G_CALLBACK(gnc_prices_dialog_window_destroy_cb), pdb_dialog);
+                      G_CALLBACK(gnc_prices_dialog_destroy_cb), pdb_dialog);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pdb_dialog);
     g_object_unref(G_OBJECT(builder));
@@ -808,6 +830,22 @@ show_handler (const char *klass, gint component_id,
     gtk_window_present (GTK_WINDOW(pdb_dialog->window));
     LEAVE(" ");
     return(TRUE);
+}
+
+
+gboolean
+gnc_prices_dialog_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+                                gpointer data)
+{
+    PricesDialog *pdb_dialog = data;
+
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        close_handler (pdb_dialog);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 

@@ -155,6 +155,8 @@
                  (cons 'datasets #())))
     (cons 'options (list
                     (cons 'maintainAspectRatio #f)
+                    (cons 'animation (list
+                                      (cons 'duration 0)))
                     (cons 'chartArea (list
                                       (cons 'backgroundColor "#fffdf6")))
                     (cons 'legend (list
@@ -265,12 +267,12 @@
                          (cons 'backgroundColor (list-to-vec color))
                          (cons 'borderColor (list-to-vec color)))))
     (match rest
-      (() (gnc:html-chart-set!
-           chart '(data datasets)
-           (list->vector
-            (append (vector->list
-                     (or (gnc:html-chart-get chart '(data datasets)) #()))
-                    (list newseries)))))
+      (() (let* ((old-vec (gnc:html-chart-get chart '(data datasets)))
+                 (old-len (vector-length old-vec))
+                 (new-vec (make-vector (1+ old-len))))
+            (vector-move-left! old-vec 0 old-len new-vec 0)
+            (vector-set! new-vec old-len newseries)
+            (gnc:html-chart-set! chart '(data datasets) new-vec)))
       ((key val . rest) (loop rest (assq-set! newseries key (list-to-vec val)))))))
 
 (define-public (gnc:html-chart-clear-data-series! chart)

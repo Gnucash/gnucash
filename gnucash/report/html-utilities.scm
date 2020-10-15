@@ -48,6 +48,9 @@
 (define (gnc:transaction-doclink-anchor-text trans)
   (gnc:register-guid "trans-doclink-guid=" (gncTransGetGUID trans)))
 
+(define (gnc:invoice-doclink-anchor-text invoice)
+  (gnc:register-guid "invoice-doclink-guid=" (gncInvoiceReturnGUID invoice)))
+
 (define (gnc:report-anchor-text report-id)
   (gnc-build-url URL-TYPE-REPORT
 		      (string-append "id=" (number->string report-id))
@@ -157,6 +160,11 @@
 (define (gnc:html-transaction-doclink-anchor trans text)
   (gnc:make-html-text (gnc:html-markup-anchor
                        (gnc:transaction-doclink-anchor-text trans)
+                       text)))
+
+(define (gnc:html-invoice-doclink-anchor invoice text)
+  (gnc:make-html-text (gnc:html-markup-anchor
+                       (gnc:invoice-doclink-anchor-text invoice)
                        text)))
 
 (define (gnc:html-price-anchor price value)

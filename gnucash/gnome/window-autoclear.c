@@ -107,7 +107,7 @@ ght_gnc_numeric_hash(gconstpointer v1)
 {
     gnc_numeric n1 = *(gnc_numeric *)v1;
     gdouble d1 = gnc_numeric_to_double(n1);
-    return g_str_hash(&d1);
+    return g_double_hash (&d1);
 }
 
 typedef struct _sack_foreach_data_t
@@ -122,7 +122,8 @@ static void sack_foreach_func(gpointer key, gpointer value, gpointer user_data)
     gnc_numeric thisvalue = *(gnc_numeric *)key;
 
     gnc_numeric reachable_value = gnc_numeric_add_fixed(thisvalue, data->split_value);
-    data->reachable_list = g_list_append(data->reachable_list, g_memdup(&reachable_value, sizeof(gnc_numeric)));
+    data->reachable_list = g_list_prepend
+        (data->reachable_list, g_memdup (&reachable_value, sizeof (gnc_numeric)));
     PINFO("    Sack: found %s, added %s\n", gnc_numeric_to_string(thisvalue), gnc_numeric_to_string(reachable_value));
 }
 
@@ -138,6 +139,8 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
 
     /* Value we have to reach */
     toclear_value = gnc_amount_edit_get_amount(data->end_value);
+    if (gnc_reverse_balance(data->account))
+        toclear_value = gnc_numeric_neg(toclear_value);
     toclear_value = gnc_numeric_convert(toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_HOW_RND_NEVER);
 
     /* Extract which splits are not cleared and compute the amount we have to clear */
@@ -151,7 +154,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         value = xaccSplitGetAmount (split);
 
         if (recn == NREC)
-            nc_list = g_list_append(nc_list, split);
+            nc_list = g_list_prepend (nc_list, split);
         else
             toclear_value = gnc_numeric_sub_fixed(toclear_value, value);
     }
@@ -189,7 +192,8 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         g_hash_table_foreach (sack, sack_foreach_func, data);
 
         /* Add the value of the split itself to the reachable_list */
-        data->reachable_list = g_list_append(data->reachable_list, g_memdup(&split_value, sizeof(gnc_numeric)));
+        data->reachable_list = g_list_prepend
+            (data->reachable_list, g_memdup (&split_value, sizeof (gnc_numeric)));
 
         /* Add everything to the sack, looking out for duplicates */
         for (node = data->reachable_list; node; node = node->next)
@@ -237,6 +241,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
                 /* We couldn't reconstruct the solution */
                 PINFO("    Solution not unique.\n");
                 gtk_label_set_text(data->status_label, _("Cannot uniquely clear splits. Found multiple possibilities."));
+                gtk_editable_select_region (GTK_EDITABLE (data->end_value), 0, -1);
                 return;
             }
         }
@@ -244,6 +249,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         {
             PINFO("    No solution found.\n");
             gtk_label_set_text(data->status_label, _("The selected amount cannot be cleared."));
+            gtk_editable_select_region (GTK_EDITABLE (data->end_value), 0, -1);
             return;
         }
     }
@@ -301,6 +307,7 @@ autoClearWindow (GtkWidget *parent, Account *account)
     GtkBuilder *builder;
     AutoClearWindow *data;
     char *title;
+    gnc_numeric after;
 
     data = g_new0 (AutoClearWindow, 1);
     data->account = account;
@@ -326,7 +333,14 @@ autoClearWindow (GtkWidget *parent, Account *account)
 
     label = GTK_LABEL(gtk_builder_get_object (builder, "end_label"));
     gtk_label_set_mnemonic_widget(label, GTK_WIDGET(data->end_value));
+
+    /* pre-fill with current balance */
+    after = xaccAccountGetClearedBalance (data->account);
+    if (gnc_reverse_balance(data->account))
+        after = gnc_numeric_neg(after);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), after);
     gtk_widget_grab_focus(GTK_WIDGET(data->end_value));
+    gtk_editable_select_region (GTK_EDITABLE (data->end_value), 0, -1);
 
     data->status_label = GTK_LABEL(gtk_builder_get_object (builder, "status_label"));
 

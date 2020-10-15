@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkDialog" id="auto_clear_start_dialog">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox6">
         <property name="visible">True</property>
@@ -68,8 +71,11 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">&lt;b&gt;Auto-Clear Information&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;Auto-Clear Information&lt;/b&gt;
+Use this dialog if you want GnuCash to automatically find which transactions are cleared, given an ending balance. For example, said ending balance can be the current balance given by your online bank.</property>
                 <property name="use_markup">True</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">80</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -143,8 +149,5 @@
       <action-widget response="-6">cancel_button</action-widget>
       <action-widget response="-5">ok_button</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
 </interface>

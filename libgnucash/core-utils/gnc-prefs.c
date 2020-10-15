@@ -133,8 +133,10 @@ gulong gnc_prefs_register_cb (const char *group,
     if (prefsbackend && prefsbackend->register_cb)
         return (prefsbackend->register_cb) (group, pref_name, func, user_data);
     else
+    {
         g_warning ("no preferences backend loaded, or the backend doesn't define register_cb, returning 0");
         return 0;
+    }
 }
 
 

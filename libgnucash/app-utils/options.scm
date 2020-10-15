@@ -1681,6 +1681,9 @@ the option '~a'."))
       ("Void Transactions" "Filter" "Void Transactions")
       ("Account Substring" "Filter" "Account Name Filter")
       ("Enable links" #f "Enable Links")
+      ;; new-owner-report.scm, renamed Oct 2020 to differentiate with
+      ;; Document Links:
+      ("Links" #f "Transaction Links")
       ;; invoice.scm, renamed November 2018
       ("Individual Taxes" #f "Use Detailed Tax Summary")
       ;; income-gst-statement.scm

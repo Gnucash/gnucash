@@ -229,6 +229,19 @@ setup_file_dialog (GtkBuilder *builder, GtkFileChooserButton *fcb,
     g_free (display_uri);
 }
 
+static gboolean
+gnc_doclink_get_uri_event_cb (GtkWidget *widget, GdkEventKey *event,
+                              gpointer user_data)
+{
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        gtk_dialog_response (GTK_DIALOG(widget),
+                             GTK_RESPONSE_CANCEL);
+        return TRUE;
+     }
+     return FALSE;
+}
+
 gchar *
 gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
                             const gchar *uri)
@@ -257,6 +270,10 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
     // Set the name and style context for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-doclink");
     gnc_widget_style_context_add_class (GTK_WIDGET(dialog), "gnc-class-doclink");
+
+    // Use this event to capture the escape key being pressed
+    g_signal_connect (dialog, "key_press_event",
+                      G_CALLBACK(gnc_doclink_get_uri_event_cb), dialog);
 
     head_label = GTK_WIDGET(gtk_builder_get_object (builder, "path_head_label"));
     ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
@@ -360,6 +377,22 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
 
 
 static void close_handler (gpointer user_data);
+
+static gboolean
+gnc_doclink_dialog_window_delete_event_cb (GtkWidget *widget,
+                                           GdkEvent  *event,
+                                           gpointer   user_data)
+{
+    DoclinkDialog *doclink_dialog = user_data;
+    // this cb allows the window size to be saved on closing with the X
+    if (doclink_dialog->is_list_trans)
+        gnc_save_window_size (GNC_PREFS_GROUP_TRANS,
+                              GTK_WINDOW(doclink_dialog->window));
+    else
+        gnc_save_window_size (GNC_PREFS_GROUP_BUS,
+                              GTK_WINDOW(doclink_dialog->window));
+    return FALSE;
+}
 
 static void
 gnc_doclink_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
@@ -959,6 +992,9 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
                       G_CALLBACK (gnc_doclink_dialog_window_destroy_cb),
                       doclink_dialog);
 
+    g_signal_connect (doclink_dialog->window, "delete-event",
+                      G_CALLBACK(gnc_doclink_dialog_window_delete_event_cb), doclink_dialog);
+
     g_signal_connect (doclink_dialog->window, "key_press_event",
                       G_CALLBACK (gnc_doclink_dialog_window_key_press_cb),
                       doclink_dialog);
@@ -979,8 +1015,6 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
         g_signal_connect (doclink_dialog->view, "row-activated",
                           G_CALLBACK (row_selected_trans_cb),
                           (gpointer)doclink_dialog);
-        gnc_restore_window_size (GNC_PREFS_GROUP_TRANS,
-                                 GTK_WINDOW (doclink_dialog->window), parent);
         get_trans_info (doclink_dialog);
     }
     else
@@ -1002,8 +1036,6 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
         g_signal_connect (doclink_dialog->view, "row-activated",
                           G_CALLBACK (row_selected_bus_cb),
                           (gpointer)doclink_dialog);
-        gnc_restore_window_size (GNC_PREFS_GROUP_BUS,
-                                 GTK_WINDOW (doclink_dialog->window), parent);
         get_bus_info (doclink_dialog);
     }
 
@@ -1011,8 +1043,6 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
                                       doclink_dialog);
 
     g_object_unref (G_OBJECT(builder));
-
-    gtk_widget_show_all (GTK_WIDGET(window));
 
     gtk_tree_view_column_set_expand (expanding_column, TRUE);
     gtk_tree_view_columns_autosize (GTK_TREE_VIEW(doclink_dialog->view));
@@ -1091,6 +1121,9 @@ gnc_doclink_business_dialog (GtkWindow *parent)
     gnc_gui_component_set_session (doclink_dialog->component_id,
                                    doclink_dialog->session);
 
+    gnc_restore_window_size (GNC_PREFS_GROUP_BUS,
+                             GTK_WINDOW(doclink_dialog->window), parent);
+    gtk_widget_show_all (GTK_WIDGET(doclink_dialog->window));
     LEAVE(" ");
 }
 
@@ -1119,5 +1152,8 @@ gnc_doclink_trans_dialog (GtkWindow *parent)
     gnc_gui_component_set_session (doclink_dialog->component_id,
                                    doclink_dialog->session);
 
+    gnc_restore_window_size (GNC_PREFS_GROUP_TRANS,
+                             GTK_WINDOW(doclink_dialog->window), parent);
+    gtk_widget_show_all (GTK_WIDGET(doclink_dialog->window));
     LEAVE(" ");
 }
