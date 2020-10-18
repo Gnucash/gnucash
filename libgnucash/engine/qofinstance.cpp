@@ -1030,10 +1030,9 @@ qof_commit_edit_part2(QofInstance *inst,
                 on_error(inst, errcode);
             return FALSE;
         }
-        /* XXX the backend commit code should clear dirty!! */
-        priv->dirty = FALSE;
+        if (!priv->dirty) //Cleared if the save was successful
+            priv->infant = FALSE;
     }
-    priv->infant = FALSE;
 
     if (priv->do_free)
     {

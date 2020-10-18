@@ -220,7 +220,7 @@ public:
 /**
  *    Commits the changes from the engine to the backend data storage.
  */
-    virtual void commit (QofInstance*) {}
+    virtual void commit (QofInstance*);
 /**
  *    Revert changes in the engine and unlock the backend.
  */

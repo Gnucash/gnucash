@@ -49,6 +49,13 @@ G_GNUC_UNUSED static QofLogModule log_module = QOF_MOD_BACKEND;
 GModuleVec QofBackend::c_be_registry{};
 
 void
+QofBackend::commit(QofInstance* instance)
+{
+    if (qof_instance_is_dirty(instance))
+        qof_instance_mark_clean(instance);
+}
+
+void
 QofBackend::set_error(QofBackendError err)
 {
     /* use stack-push semantics. Only the earliest error counts */

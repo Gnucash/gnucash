@@ -43,6 +43,7 @@ public:
     void export_coa(QofBook*) override;
     void sync(QofBook* book) override;
     void safe_sync(QofBook* book) override { sync(book); } // XML sync is inherently safe.
+    void commit(QofInstance* instance) override;
     const char * get_filename() { return m_fullpath.c_str(); }
     QofBook* get_book() { return m_book; }
 
