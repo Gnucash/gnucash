@@ -2513,6 +2513,94 @@ extract_common_prices (PriceList *from_prices, PriceList *to_prices,
     return retval;
 }
 
+
+static gnc_numeric
+convert_price (const gnc_commodity *from, const gnc_commodity *to, PriceTuple tuple)
+{
+    gnc_commodity *from_com = gnc_price_get_commodity (tuple.from);
+    gnc_commodity *from_cur = gnc_price_get_currency (tuple.from);
+    gnc_commodity *to_com = gnc_price_get_commodity (tuple.to);
+    gnc_commodity *to_cur = gnc_price_get_currency (tuple.to);
+    gnc_numeric from_val = gnc_price_get_value (tuple.from);
+    gnc_numeric to_val = gnc_price_get_value (tuple.to);
+    gnc_numeric price;
+    int no_round = GNC_HOW_DENOM_EXACT | GNC_HOW_RND_NEVER;
+
+    price = gnc_numeric_div (to_val, from_val, GNC_DENOM_AUTO, no_round);
+
+    if (from_cur == from && to_cur == to)
+        return price;
+
+    if (from_com == from && to_com == to)
+        return gnc_numeric_invert (price);
+
+    price = gnc_numeric_mul (from_val, to_val, GNC_DENOM_AUTO, no_round);
+
+    if (from_cur == from)
+        return gnc_numeric_invert (price);
+
+    return price;
+}
+
+static gnc_numeric
+indirect_price_conversion (GNCPriceDB *db, const gnc_commodity *from,
+                           const gnc_commodity *to, time64 t)
+{
+    GList *from_prices = NULL, *to_prices = NULL;
+    PriceTuple tuple;
+    gnc_numeric zero = gnc_numeric_zero();
+    if (!from || !to)
+        return zero;
+    if (t == INT64_MAX)
+    {
+        from_prices = gnc_pricedb_lookup_latest_any_currency(db, from);
+        /* "to" is often the book currency which may have lots of prices,
+            so avoid getting them if they aren't needed. */
+        if (from_prices)
+            to_prices = gnc_pricedb_lookup_latest_any_currency(db, to);
+    }
+    else
+    {
+        from_prices = gnc_pricedb_lookup_nearest_in_time_any_currency_t64 (db, from, t);
+        if (from_prices)
+            to_prices = gnc_pricedb_lookup_nearest_in_time_any_currency_t64 (db, to, t);
+    }
+    if (!from_prices || !to_prices)
+        return zero;
+    tuple = extract_common_prices (from_prices, to_prices, from, to);
+    gnc_price_list_destroy (from_prices);
+    gnc_price_list_destroy (to_prices);
+    if (tuple.from)
+        return convert_price (from, to, tuple);
+    return zero;
+}
+
+
+static gnc_numeric
+direct_price_conversion (GNCPriceDB *db, const gnc_commodity *from,
+                         const gnc_commodity *to, time64 t)
+{
+    GNCPrice *price;
+    gnc_numeric retval = gnc_numeric_zero();
+
+    if (!from || !to) return retval;
+
+    if (t == INT64_MAX)
+        price = gnc_pricedb_lookup_latest(db, from, to);
+    else
+        price = gnc_pricedb_lookup_nearest_in_time64(db, from, to, t);
+
+    if (!price) return retval;
+
+    retval = gnc_price_get_value (price);
+
+    if (gnc_price_get_commodity (price) != from)
+        retval = gnc_numeric_invert (retval);
+
+    gnc_price_unref (price);
+    return retval;
+}
+
 static gnc_numeric
 convert_balance(gnc_numeric bal, const gnc_commodity *from,
                 const gnc_commodity *to, PriceTuple tuple)
