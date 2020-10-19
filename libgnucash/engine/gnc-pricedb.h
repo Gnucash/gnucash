@@ -559,6 +559,24 @@ PriceList * gnc_pricedb_lookup_latest_before_any_currency_t64(GNCPriceDB *db,
                                                               time64 t);
 
 
+/** @brief Retrieve the price one currency to another at specified date
+ * @param pdb The pricedb
+ * @param orig_currency The commodity in which the balance is currently
+ * expressed
+ * @param new_currency The commodity to which the balance should be converted
+ * @return A price, or gnc_numeric_zero if no price is available.
+ */
+
+gnc_numeric gnc_pricedb_get_nearest_price (GNCPriceDB *pdb,
+                                           const gnc_commodity *orig_currency,
+                                           const gnc_commodity *new_currency,
+                                           const time64 t);
+
+gnc_numeric gnc_pricedb_get_latest_price (GNCPriceDB *pdb,
+                                          const gnc_commodity *orig_currency,
+                                          const gnc_commodity *new_currency);
+
+
 /** @brief Convert a balance from one currency to another using the most recent
  * price between the two.
  * @param pdb The pricedb
