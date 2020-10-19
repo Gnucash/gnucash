@@ -2581,34 +2581,44 @@ indirect_balance_conversion (GNCPriceDB *db, gnc_numeric bal,
     return zero;
 }
 
-
-/*
- * Convert a balance from one currency to another.
- */
-gnc_numeric
-gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
-        gnc_numeric balance,
-        const gnc_commodity *balance_currency,
-        const gnc_commodity *new_currency)
+static gnc_numeric convert_amount_at_date (GNCPriceDB *pdb,
+                                           gnc_numeric amount,
+                                           const gnc_commodity *orig_currency,
+                                           const gnc_commodity *new_currency,
+                                           const time64 t)
 {
     gnc_numeric new_value;
 
-    if (gnc_numeric_zero_p (balance) ||
-            gnc_commodity_equiv (balance_currency, new_currency))
-        return balance;
+    if (gnc_numeric_zero_p (amount) ||
+        gnc_commodity_equiv (orig_currency, new_currency))
+        return amount;
 
     /* Look for a direct price. */
-    new_value = direct_balance_conversion(pdb, balance, balance_currency,
-                                          new_currency, INT64_MAX);
-    if (!gnc_numeric_zero_p(new_value))
-        return new_value;
+    new_value = direct_balance_conversion
+        (pdb, amount, orig_currency, new_currency, t);
 
     /*
      * no direct price found, try if we find a price in another currency
      * and convert in two stages
      */
-    return indirect_balance_conversion(pdb, balance, balance_currency,
-                                       new_currency, INT64_MAX);
+    if (gnc_numeric_zero_p (new_value))
+        new_value = indirect_balance_conversion
+            (pdb, amount, orig_currency, new_currency, t);
+
+    return new_value;
+}
+
+/*
+ * Convert a balance from one currency to another.
+ */
+gnc_numeric
+gnc_pricedb_convert_balance_latest_price (GNCPriceDB *pdb,
+                                          gnc_numeric balance,
+                                          const gnc_commodity *balance_currency,
+                                          const gnc_commodity *new_currency)
+{
+    return convert_amount_at_date
+        (pdb, balance, balance_currency, new_currency, INT64_MAX);
 }
 
 gnc_numeric
@@ -2618,24 +2628,8 @@ gnc_pricedb_convert_balance_nearest_price_t64(GNCPriceDB *pdb,
                                               const gnc_commodity *new_currency,
                                               time64 t)
 {
-    gnc_numeric new_value;
-
-    if (gnc_numeric_zero_p (balance) ||
-        gnc_commodity_equiv (balance_currency, new_currency))
-        return balance;
-
-    /* Look for a direct price. */
-    new_value = direct_balance_conversion(pdb, balance, balance_currency,
-                                          new_currency, t);
-    if (!gnc_numeric_zero_p(new_value))
-        return new_value;
-
-    /*
-     * no direct price found, try if we find a price in another currency
-     * and convert in two stages
-     */
-    return indirect_balance_conversion(pdb, balance, balance_currency,
-                                       new_currency, t);
+    return convert_amount_at_date
+        (pdb, balance, balance_currency, new_currency, t);
 }
 
 
