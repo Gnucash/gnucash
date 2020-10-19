@@ -343,6 +343,7 @@
          (tree-depth (if (eq? depth-limit 'all)
                          (gnc:get-current-account-tree-depth)
                          depth-limit))
+         (price-fn (gnc:case-price-fn price-source report-commodity reportdate))
          ;; exchange rates calculation parameters
          (exchange-fn
           (gnc:case-exchange-fn price-source report-commodity reportdate)))
@@ -550,7 +551,7 @@
           (gnc:report-percent-done 90)
           (when show-rates?
             (gnc:html-document-add-object!
-             doc (gnc:html-make-exchangerates report-commodity exchange-fn accounts)))
+             doc (gnc:html-make-rates-table report-commodity price-fn accounts)))
 
           (gnc:report-percent-done 100)))
 

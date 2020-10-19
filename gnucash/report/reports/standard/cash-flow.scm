@@ -149,6 +149,8 @@
          (exchange-fn (gnc:case-exchange-fn
                        price-source report-currency to-date-t64))
 
+         (price-fn (gnc:case-price-fn price-source report-currency to-date-t64))
+
          (doc (gnc:make-html-document))
          (table (gnc:make-html-table))
 
@@ -321,8 +323,8 @@
               (if show-rates?
                   (gnc:html-document-add-object!
                    doc ;;(gnc:html-markup-p
-                   (gnc:html-make-exchangerates
-                    report-currency exchange-fn accounts))))))
+                   (gnc:html-make-rates-table
+                    report-currency price-fn accounts))))))
 
         ;; error condition: no accounts specified
 
