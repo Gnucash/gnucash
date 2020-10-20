@@ -1923,7 +1923,6 @@ gnc_plugin_page_register_update_edit_menu (GncPluginPage* page, gboolean hide)
     gtk_action_set_visible (action,  !hide || can_paste);
 }
 
-static gboolean abort_scrub = FALSE;
 static gboolean is_scrubbing = FALSE;
 static gboolean show_abort_verify = TRUE;
 
@@ -1942,7 +1941,7 @@ finish_scrub (GncPluginPage* page)
         show_abort_verify = FALSE;
 
         if (ret)
-            abort_scrub = TRUE;
+            gnc_set_abort_scrub (TRUE);
     }
     return ret;
 }
@@ -5018,9 +5017,15 @@ scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
     switch (event->keyval)
     {
     case GDK_KEY_Escape:
-        abort_scrub = gnc_verify_dialog (GTK_WINDOW(widget), FALSE,
-                           _("'Check & Repair' is currently running, do you want to abort it?"));
-        return TRUE;
+        {
+            gboolean abort_scrub = gnc_verify_dialog (GTK_WINDOW(widget), FALSE,
+                 _("'Check & Repair' is currently running, do you want to abort it?"));
+        
+            if (abort_scrub)
+                gnc_set_abort_scrub (TRUE);
+        
+            return TRUE;
+        }
     default:
         break;
     }
@@ -5053,7 +5058,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
 
     gnc_suspend_gui_refresh();
     is_scrubbing = TRUE;
-    abort_scrub = FALSE;
+    gnc_set_abort_scrub (FALSE);
     window = GNC_WINDOW (GNC_PLUGIN_PAGE (plugin_page)->window);
     scrub_kp_handler_ID = g_signal_connect (G_OBJECT (window), "key-press-event",
                                             G_CALLBACK (scrub_kp_handler), NULL);
@@ -5061,7 +5066,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
 
     splits = qof_query_run (query);
     split_count = g_list_length (splits);
-    for (node = splits; node && !abort_scrub; node = node->next, curr_split_no++)
+    for (node = splits; node && !gnc_get_abort_scrub (); node = node->next, curr_split_no++)
     {
         Split* split = node->data;
 
@@ -5087,7 +5092,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
     gnc_window_show_progress (NULL, -1.0);
     is_scrubbing = FALSE;
     show_abort_verify = TRUE;
-    abort_scrub = FALSE;
+    gnc_set_abort_scrub (FALSE);
 
     gnc_resume_gui_refresh();
     LEAVE (" ");
