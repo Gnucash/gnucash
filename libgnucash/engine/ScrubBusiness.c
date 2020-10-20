@@ -582,7 +582,7 @@ gncScrubBusinessSplit (Split *split)
          * Such splits may be the result of scrubbing the business lots, which can
          * merge splits together while reducing superfluous lot links
          */
-        else if (gnc_numeric_zero_p (xaccSplitGetAmount(split)) && !gncInvoiceGetInvoiceFromTxn (txn))
+        else if (gnc_numeric_zero_p (xaccSplitGetAmount(split)) && !gncInvoiceGetInvoiceFromTxn (txn) && !is_void)
         {
             GNCLot *lot = xaccSplitGetLot (split);
             time64 pdate = xaccTransGetDate (txn);
