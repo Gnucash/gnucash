@@ -1925,22 +1925,26 @@ gnc_plugin_page_register_update_edit_menu (GncPluginPage* page, gboolean hide)
 
 static gboolean abort_scrub = FALSE;
 static gboolean is_scrubbing = FALSE;
+static gboolean show_abort_verify = TRUE;
 
 static gboolean
 finish_scrub (GncPluginPage* page)
 {
+    gboolean ret = FALSE;
+
     if (is_scrubbing)
     {
-        gboolean ret = gnc_verify_dialog (GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page))), FALSE, _("'Check & Repair' is currently running, do you want to abort it?"));
+        ret = gnc_verify_dialog (GTK_WINDOW(gnc_plugin_page_get_window
+                                (GNC_PLUGIN_PAGE(page))),
+                                FALSE,
+                                _("'Check & Repair' is currently running, do you want to abort it?"));
+        
+        show_abort_verify = FALSE;
+
         if (ret)
-        {
             abort_scrub = TRUE;
-            gnc_resume_gui_refresh (); // This is so quit does not complain about an ongoing operation.
-            return TRUE;
-        }
-        return FALSE;
     }
-    return TRUE;
+    return ret;
 }
 
 static gboolean
@@ -1953,8 +1957,11 @@ gnc_plugin_page_register_finish_pending (GncPluginPage* page)
     const gchar* name;
     gint response;
 
-    if (!finish_scrub (page))
-        return FALSE;
+    if (is_scrubbing && show_abort_verify)
+    {
+        if (!finish_scrub (page))
+            return FALSE;
+    }
 
     reg_page = GNC_PLUGIN_PAGE_REGISTER (page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (reg_page);
@@ -5000,8 +5007,24 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction* action,
     gnc_suspend_gui_refresh();
     scrub_split (gnc_split_register_get_current_split (reg));
     gnc_resume_gui_refresh();
-
     LEAVE (" ");
+}
+
+static gboolean
+scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+    if (event->length == 0) return FALSE;
+
+    switch (event->keyval)
+    {
+    case GDK_KEY_Escape:
+        abort_scrub = gnc_verify_dialog (GTK_WINDOW(widget), FALSE,
+                           _("'Check & Repair' is currently running, do you want to abort it?"));
+        return TRUE;
+    default:
+        break;
+    }
+    return FALSE;
 }
 
 static void
@@ -5013,6 +5036,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
     GncWindow* window;
     GList* node, *splits;
     gint split_count = 0, curr_split_no = 0;
+    gulong scrub_kp_handler_ID;
     const char* message = _ ("Checking splits in current register: %u of %u");
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
@@ -5029,7 +5053,10 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
 
     gnc_suspend_gui_refresh();
     is_scrubbing = TRUE;
+    abort_scrub = FALSE;
     window = GNC_WINDOW (GNC_PLUGIN_PAGE (plugin_page)->window);
+    scrub_kp_handler_ID = g_signal_connect (G_OBJECT (window), "key-press-event",
+                                            G_CALLBACK (scrub_kp_handler), NULL);
     gnc_window_set_progressbar_window (window);
 
     splits = qof_query_run (query);
@@ -5043,22 +5070,26 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction* action,
         PINFO ("Start processing split %d of %d",
                curr_split_no + 1, split_count);
 
+        scrub_split (split);
+
+        PINFO ("Finished processing split %d of %d",
+               curr_split_no + 1, split_count);
+
         if (curr_split_no % 10 == 0)
         {
             char* progress_msg = g_strdup_printf (message, curr_split_no, split_count);
             gnc_window_show_progress (progress_msg, (100 * curr_split_no) / split_count);
             g_free (progress_msg);
         }
-
-        scrub_split (split);
-
-        PINFO ("Finished processing split %d of %d",
-               curr_split_no + 1, split_count);
     }
 
+    g_signal_handler_disconnect (G_OBJECT(window), scrub_kp_handler_ID);
     gnc_window_show_progress (NULL, -1.0);
-    gnc_resume_gui_refresh();
     is_scrubbing = FALSE;
+    show_abort_verify = TRUE;
+    abort_scrub = FALSE;
+
+    gnc_resume_gui_refresh();
     LEAVE (" ");
 }
 
