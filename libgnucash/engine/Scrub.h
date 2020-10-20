@@ -74,6 +74,7 @@
  *    any scrubbing operation.
  */
 void gnc_set_abort_scrub (gboolean abort);
+gboolean gnc_get_abort_scrub (void);
 
 /** The gnc_get_ongoing_scrub () method returns TRUE if a scrub operation is ongoing.
  */

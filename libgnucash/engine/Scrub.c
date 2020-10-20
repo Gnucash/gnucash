@@ -67,6 +67,12 @@ gnc_set_abort_scrub (gboolean abort)
 }
 
 gboolean
+gnc_get_abort_scrub (void)
+{
+    return abort_now;
+}
+
+gboolean
 gnc_get_ongoing_scrub (void)
 {
     return scrub_depth > 0;
