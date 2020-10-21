@@ -207,6 +207,8 @@
 ;; function 'exchange-fn' and the 'accounts' determine which
 ;; commodities to show. Returns a html-object, a <html-table>.
 (define (gnc:html-make-exchangerates common-commodity exchange-fn accounts)
+  (issue-deprecation-warning
+   "gnc:html-make-exchangerates is deprecated. use gnc:html-make-rates-table instead.")
   (let ((comm-list (gnc:accounts-get-commodities accounts common-commodity))
         (markup (lambda (c) (gnc:make-html-table-cell/markup "number-cell" c)))
         (table (gnc:make-html-table)))
