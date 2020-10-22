@@ -130,7 +130,8 @@ gboolean gnc_option_get_color_info(GNCOption *option,
                                    gdouble *blue,
                                    gdouble *alpha);
 
-void gnc_option_call_option_widget_changed_proc (GNCOption *option);
+void gnc_option_call_option_widget_changed_proc (GNCOption *option,
+                                                 gboolean reset_changed);
 
 void gnc_option_set_default(GNCOption *option);
 

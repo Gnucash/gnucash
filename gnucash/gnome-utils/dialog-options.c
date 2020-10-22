@@ -225,7 +225,7 @@ void
 gnc_option_changed_widget_cb(GtkWidget *widget, GNCOption *option)
 {
     gnc_option_set_changed (option, TRUE);
-    gnc_option_call_option_widget_changed_proc(option);
+    gnc_option_call_option_widget_changed_proc(option, FALSE);
     gnc_options_dialog_changed_internal (widget, TRUE);
 }
 
@@ -369,7 +369,18 @@ gnc_option_set_ui_value_internal (GNCOption *option, gboolean use_default)
     type = gnc_option_type(option);
 
     if (use_default)
+    {
+        SCM opt_getter = gnc_option_getter(option);
+        SCM opt_value = scm_call_0(opt_getter);
+        SCM def_value;
+
         getter = gnc_option_default_getter(option);
+        def_value = scm_call_0(getter);
+
+        // only set changed if the values have changed
+        if (!scm_is_true(scm_equal_p(opt_value, def_value)))
+            gnc_option_set_changed (option, TRUE);
+    }
     else
         getter = gnc_option_getter(option);
 
@@ -1983,8 +1994,9 @@ gnc_options_dialog_build_contents_full (GNCOptionWin *propertybox,
 
         for (j = 0; j < gnc_option_section_num_options(section); j++)
         {
+            // setting TRUE will clear the changed flag after proc
             gnc_option_call_option_widget_changed_proc(
-                gnc_get_option_section_option(section, j) );
+                gnc_get_option_section_option(section, j), TRUE);
         }
     }
 
@@ -2106,13 +2118,16 @@ gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data)
     GNCOptionSection *section;
     gpointer val;
 
-    val = g_object_get_data(G_OBJECT(w), "section");
+    val = g_object_get_data (G_OBJECT(w), "section");
     g_return_if_fail (val);
     g_return_if_fail (win);
 
     section = (GNCOptionSection*)val;
+
     gnc_option_db_section_reset_widgets (section);
-    gnc_options_dialog_changed_internal (win->window, TRUE);
+
+    if (gnc_option_db_get_changed (win->option_db))
+        gnc_options_dialog_changed_internal (win->window, TRUE);
 }
 
 void

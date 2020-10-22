@@ -790,17 +790,19 @@ gnc_option_widget_changed_proc_getter(GNCOption *option)
 }
 
 
-/********************************************************************\
- * gnc_option_call_option_widget_changed_proc                       *
- *   If there is an option_widget_changed_cb for this option, call  *
- *   it with the SCM value of the option that is passed in.  If     *
- *   there is no such callback function or value, do nothing.       *
- *                                                                  *
- * Args: option - the GNCOption                                     *
- * Returns: void                                                    *
-\********************************************************************/
+/**********************************************************************\
+ * gnc_option_call_option_widget_changed_proc                         *
+ *   If there is an option_widget_changed_cb for this option, call    *
+ *   it with the SCM value of the option that is passed in.  If       *
+ *   there is no such callback function or value, do nothing.         *
+ *                                                                    *
+ * Args: option        - the GNCOption                                *
+ *       reset_changed - whether to reset the changed flag afterwards *
+ * Returns: void                                                      *
+\**********************************************************************/
 void
-gnc_option_call_option_widget_changed_proc(GNCOption *option)
+gnc_option_call_option_widget_changed_proc (GNCOption *option,
+                                            gboolean reset_changed)
 {
     SCM cb, value;
 
@@ -815,6 +817,8 @@ gnc_option_call_option_widget_changed_proc(GNCOption *option)
             scm_call_1(cb, value);
         }
     }
+    if (reset_changed)
+        option->changed = FALSE;
 }
 
 
@@ -1847,9 +1851,7 @@ gnc_option_db_section_reset_widgets (GNCOptionSection *section)
             option_node = option_node->next)
     {
         option = option_node->data;
-
         gnc_option_set_ui_value (option, TRUE);
-        gnc_option_set_changed (option, TRUE);
     }
 }
 
