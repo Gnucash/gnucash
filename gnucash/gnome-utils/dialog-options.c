@@ -175,6 +175,8 @@ gnc_option_get_gtk_widget (GNCOption *option)
 static void
 gnc_options_dialog_changed_internal (GtkWidget *widget, gboolean sensitive)
 {
+    GtkButton *button = NULL;
+
     while (widget && !GTK_IS_WINDOW(widget))
         widget = gtk_widget_get_parent(widget);
     if (widget == NULL)
@@ -202,6 +204,9 @@ gnc_options_dialog_changed_internal (GtkWidget *widget, gboolean sensitive)
 
                             if (g_strcmp0 (gtk_widget_get_name(GTK_WIDGET(it->data)), "apply_button") == 0)
                                 gtk_widget_set_sensitive (GTK_WIDGET(it->data), sensitive);
+
+                            if (g_strcmp0 (gtk_widget_get_name(GTK_WIDGET(it->data)), "cancel_button") == 0)
+                                button = GTK_BUTTON(it->data);
                         }
                         g_list_free (children);
                     }
@@ -211,6 +216,15 @@ gnc_options_dialog_changed_internal (GtkWidget *widget, gboolean sensitive)
         }
         g_list_free (children);
     }
+
+    if (button)
+    {
+        if (sensitive)
+           gtk_button_set_label (button, _("_Cancel"));
+        else
+           gtk_button_set_label (button, _("_Close"));
+    }
+
 }
 
 void
