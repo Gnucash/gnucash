@@ -31,11 +31,11 @@ extern "C" {
 
 #include "gtest/gtest.h"
 
-const int DENOM = 100; //< Denomerator is always 100 for simplicity.
+const gint64 DENOM = 100; //< Denomerator is always 100 for simplicity.
 
 struct SplitDatum {
     const char *memo;
-    int amount; //< Numerator of amount.
+    gint64 amount; //< Numerator of amount.
     bool cleared;
 };
 
@@ -73,7 +73,7 @@ SplitDatum splitData[] = {
 };
 
 struct TestCase {
-    int amount;
+    gint64 amount;
     const char *expectedErr;
 };
 
@@ -88,14 +88,15 @@ TestCase testCases[] = {
 TEST(AutoClear, AutoClearAll) {
     QofBook *book = qof_book_new ();
     Account *account = xaccMallocAccount(book);
+    xaccAccountSetName(account, "Test Account");
 
     for (auto &d : splitData) {
         Split *split = xaccMallocSplit(book);
         xaccSplitSetMemo(split, d.memo);
         xaccSplitSetAmount(split, gnc_numeric_create(d.amount, DENOM));
         xaccSplitSetReconcile(split, d.cleared ? CREC : NREC);
+        xaccSplitSetAccount(split, account);
 
-        // This way of inserting a split, seems to actualy work best. :D
         gnc_account_insert_split(account, split);
     }
     xaccAccountRecomputeBalance(account);
