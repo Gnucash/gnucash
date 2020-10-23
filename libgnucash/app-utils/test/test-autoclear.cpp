@@ -58,7 +58,7 @@ SplitDatum splitData[] = {
     { "Memo 16", -152000, true },
     { "Memo 17", +160000, false },
     { "Memo 18", - 63610, false },
-    { "Memo 19", -  2700, false },
+    { "Memo 19", -  2702, false },
     { "Memo 20", - 15400, false },
     { "Memo 21", -  3900, false },
     { "Memo 22", - 22042, false },
@@ -68,7 +68,7 @@ SplitDatum splitData[] = {
     { "Memo 26", -  9200, false },
     { "Memo 27", -  7900, false },
     { "Memo 28", -  1990, false },
-    { "Memo 29", -  7900, false },
+    { "Memo 29", -  7901, false },
     { "Memo 30", - 61200, false },
 };
 
@@ -80,9 +80,9 @@ struct TestCase {
 TestCase testCases[] = {
     { 0, "The selected amount cannot be cleared.", },
     { -869227, "Account is already at Auto-Clear Balance." }, // No splits need to be cleared.
-    { -877127, "Cannot uniquely clear splits. Found multiple possibilities." }, // Two splits need to be cleared.
-    { -891269, NULL }, // One split need to be cleared.
-    { -963269, NULL }, // All splits need to be cleared.
+    { -869300, "The selected amount cannot be cleared." },
+    { -869230, NULL },
+    { -963272, NULL }, // All splits need to be cleared.
 };
 
 TEST(AutoClear, AutoClearAll) {
