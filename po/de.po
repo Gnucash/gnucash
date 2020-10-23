@@ -9047,7 +9047,10 @@ msgstr ""
 "Christian Meyer, 2000-2001\n"
 "Jan-Uwe Finck, 1999\n"
 "\n"
-"Verbesserungsvorschläge zur Übersetzung an gnucash-de@gnucash.org"
+"Anregungen, Kritik und Fragen zur Übersetzung an die\n"
+"deutschsprachige GnuCash-Gemeinschaft <gnucash-de@gnucash.org\n"
+"Um die Moderation zu vermeiden, empfiehlt sich die Anmeldung auf der\n"
+"<a href=\"https://lists.gnucash.org/mailman/listinfo/gnucash-de\">Liste gnucash-de</a>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4540
 msgid "Visit the GnuCash website."
