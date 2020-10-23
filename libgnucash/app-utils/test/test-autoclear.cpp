@@ -39,7 +39,12 @@ struct SplitDatum {
     bool cleared;
 };
 
-SplitDatum splitData[] = {
+struct TestCase {
+    gint64 amount;
+    const char *expectedErr;
+};
+
+std::vector<SplitDatum> easySplitData = {
     { "Memo 01", -  8234, true },
     { "Memo 02", -156326, true },
     { "Memo 03", -  4500, true },
@@ -72,12 +77,7 @@ SplitDatum splitData[] = {
     { "Memo 30", - 61200, false },
 };
 
-struct TestCase {
-    gint64 amount;
-    const char *expectedErr;
-};
-
-TestCase testCases[] = {
+std::vector<TestCase> easyTestCases = {
     { 0, "The selected amount cannot be cleared.", },
     { -869227, "Account is already at Auto-Clear Balance." }, // No splits need to be cleared.
     { -869300, "The selected amount cannot be cleared." },
@@ -85,7 +85,33 @@ TestCase testCases[] = {
     { -963272, NULL }, // All splits need to be cleared.
 };
 
-TEST(AutoClear, AutoClearAll) {
+std::vector<SplitDatum> ambiguousSplitData = {
+    { "Memo 01", -10, false },
+    { "Memo 02", -10, false },
+    { "Memo 03", -10, false },
+};
+
+std::vector<TestCase> ambiguousTestCases = {
+    { -10, "Cannot uniquely clear splits. Found multiple possibilities." },
+    { -20, "Cannot uniquely clear splits. Found multiple possibilities." },
+
+    // Commented out, auto-clear algorithm is not smart enough yet.
+    //{ -30, NULL },
+};
+
+class AutoClearTest
+    : public testing::TestWithParam<
+        std::pair<
+            std::vector<SplitDatum>,
+            std::vector<TestCase>
+        >
+    > {
+};
+
+TEST_P(AutoClearTest, DoesAutoClear) {
+    auto splitData = GetParam().first;
+    auto testCase = GetParam().second;
+
     QofBook *book = qof_book_new ();
     Account *account = xaccMallocAccount(book);
     xaccAccountSetName(account, "Test Account");
@@ -102,7 +128,7 @@ TEST(AutoClear, AutoClearAll) {
     }
     xaccAccountCommitEdit(account);
 
-    for (auto &t : testCases) {
+    for (auto &t : testCase) {
         gnc_numeric amount_to_clear = gnc_numeric_create(t.amount, DENOM);
         char *err;
 
@@ -124,3 +150,12 @@ TEST(AutoClear, AutoClearAll) {
 
     qof_book_destroy(book);
 }
+
+INSTANTIATE_TEST_SUITE_P(
+    InstantiationAutoClearTest,
+    AutoClearTest,
+    testing::Values(
+        std::pair{ easySplitData, easyTestCases },
+        std::pair{ ambiguousSplitData, ambiguousTestCases }
+    )
+);
