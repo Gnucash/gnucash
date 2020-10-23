@@ -90,6 +90,7 @@ TEST(AutoClear, AutoClearAll) {
     Account *account = xaccMallocAccount(book);
     xaccAccountSetName(account, "Test Account");
 
+    xaccAccountBeginEdit(account);
     for (auto &d : splitData) {
         Split *split = xaccMallocSplit(book);
         xaccSplitSetMemo(split, d.memo);
@@ -99,7 +100,7 @@ TEST(AutoClear, AutoClearAll) {
 
         gnc_account_insert_split(account, split);
     }
-    xaccAccountRecomputeBalance(account);
+    xaccAccountCommitEdit(account);
 
     for (auto &t : testCases) {
         gnc_numeric amount_to_clear = gnc_numeric_create(t.amount, DENOM);
