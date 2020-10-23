@@ -894,6 +894,9 @@ gnc_common_ok (AccountWindow *aw)
         return FALSE;
     }
 
+    /* update opening balance account */
+    gnc_find_or_create_equity_account (root, EQUITY_OPENING_BALANCE, commodity);
+
     LEAVE("passed");
     return TRUE;
 }
