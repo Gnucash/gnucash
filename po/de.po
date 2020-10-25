@@ -9048,7 +9048,7 @@ msgstr ""
 "Jan-Uwe Finck, 1999\n"
 "\n"
 "Anregungen, Kritik und Fragen zur Übersetzung an die\n"
-"deutschsprachige GnuCash-Gemeinschaft <gnucash-de@gnucash.org\n"
+"deutschsprachige GnuCash-Gemeinschaft <gnucash-de@gnucash.org>\n"
 "Um die Moderation zu vermeiden, empfiehlt sich die Anmeldung auf der\n"
 "<a href=\"https://lists.gnucash.org/mailman/listinfo/gnucash-de\">Liste gnucash-de</a>"
 
