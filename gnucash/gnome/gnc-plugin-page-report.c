@@ -253,7 +253,7 @@ gnc_plugin_page_report_focus_widget (GncPluginPage *report_plugin_page)
 
         if (window && !gnc_main_window_is_restoring_pages (GNC_MAIN_WINDOW(window)))
         {
-            GtkWidget * widget = gnc_html_get_widget (priv->html);
+            GtkWidget *widget = gnc_html_get_webview (priv->html);
 
             gnc_plugin_page_report_load_uri (report_plugin_page);
 
@@ -752,14 +752,11 @@ static void
 gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
 {
     GncPluginPageReportPrivate *priv;
-    GtkWidget *widget;
 
     // FIXME: cleanup other resources.
 
     PINFO("destroy widget");
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
-
-    widget = gnc_html_get_widget(priv->html);
 
     // Remove the page_changed signal callback
     gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(plugin_page));
