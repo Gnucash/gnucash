@@ -401,6 +401,7 @@
          ;; exchange rates calculation parameters
          (exchange-fn
           (gnc:case-exchange-fn price-source report-commodity end-date))
+         (price-fn (gnc:case-price-fn price-source report-commodity end-date))
          (period-for (string-append " " (G_ "for Period"))))
 
     (gnc:html-document-set-title!
@@ -894,8 +895,8 @@
           (if show-rates?
               (gnc:html-document-add-object!
                doc
-               (gnc:html-make-exchangerates
-                report-commodity exchange-fn accounts)))
+               (gnc:html-make-rates-table
+                report-commodity price-fn accounts)))
           (gnc:report-percent-done 100)))
 
     (gnc:report-finished)

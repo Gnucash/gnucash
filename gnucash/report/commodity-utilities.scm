@@ -21,6 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (ice-9 match))
+(use-modules (srfi srfi-26))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get splits with interesting data from accounts.
@@ -763,6 +764,18 @@
        (lambda (foreign domestic)
          (gnc:exchange-by-pricedb-nearest
           foreign domestic to-date-tp))))))
+
+(define (gnc:case-price-fn source target-curr date)
+  (define pdb (gnc-pricedb-get-db (gnc-get-current-book)))
+  (case source
+    ((pricedb-nearest) (cut gnc-pricedb-get-nearest-price pdb <> target-curr date))
+    ((pricedb-latest)  (cut gnc-pricedb-get-latest-price pdb <> target-curr))
+    (else
+     (lambda (commodity)
+       (let* ((exchange-fn (gnc:case-exchange-fn source target-curr date))
+              (foreign-mon (gnc:make-gnc-monetary commodity 1))
+              (domestic-mon (exchange-fn foreign-mon target-curr)))
+         (gnc:gnc-monetary-amount domestic-mon))))))
 
 ;; Return a ready-to-use function. Which one to use is determined by
 ;; the value of 'source-option', whose possible values are set in

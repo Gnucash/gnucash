@@ -167,12 +167,8 @@
   (xaccPrintAmount datum (gnc-default-print-info #f)))
 
 ;; renders a price to target currency
-(define (gnc:default-price-renderer currency amount)
-  (xaccPrintAmount
-   (gnc-numeric-convert
-    amount (min 10000 (* 100 (gnc-commodity-get-fraction currency)))
-    GNC-HOW-RND-ROUND)
-   (gnc-price-print-info currency #t)))
+(define (gnc:default-price-renderer currency price)
+  (xaccPrintAmount price (gnc-price-print-info currency #t)))
 
 (define (gnc:default-html-gnc-monetary-renderer datum params)
   (let* ((comm (gnc:gnc-monetary-commodity datum))

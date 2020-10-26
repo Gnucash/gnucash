@@ -280,7 +280,9 @@
 	 (end-exchange-fn
 	  (gnc:case-exchange-fn
 	   price-source report-commodity end-date))
-	 )
+
+         (start-price-fn (gnc:case-price-fn price-source report-commodity start-date))
+         (end-price-fn (gnc:case-price-fn price-source report-commodity end-date)))
 
     (define (unrealized-gains-at-date book-balance exchange-fn date)
       (define cost-fn
@@ -496,10 +498,10 @@
 		   (headers (list
 			     (qof-print-date start-date-printable)
 			     (qof-print-date end-date)))
-		   (then (gnc:html-make-exchangerates
-			  report-commodity start-exchange-fn accounts))
-		   (now (gnc:html-make-exchangerates
-                         report-commodity end-exchange-fn accounts)))
+		   (then (gnc:html-make-rates-table
+			  report-commodity start-price-fn accounts))
+		   (now (gnc:html-make-rates-table
+                         report-commodity end-price-fn accounts)))
 	      (gnc:html-table-set-col-headers! curr-tbl headers)
 	      (gnc:html-table-set-style!
 	       curr-tbl "table" 'attribute '("border" "1"))
