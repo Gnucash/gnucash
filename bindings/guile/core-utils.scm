@@ -27,6 +27,7 @@
 (define-module (gnucash core-utils)
   #:export (N_
             G_
+            NG_
             C_
             gnc:string-locale<?
             gnc:string-locale>?
@@ -46,6 +47,7 @@
 
 ;; gettext functions
 (define G_ gnc:gettext)
+(define NG_ gnc:ngettext)
 (define C_ gnc:C-gettext)
 (define-syntax-rule (N_ x) x)
 
