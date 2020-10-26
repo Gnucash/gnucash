@@ -348,6 +348,16 @@ gboolean gnc_main_window_popup_menu_cb (GtkWidget *widget,
  */
 void gnc_main_window_restore_all_windows(const GKeyFile *keyfile);
 
+/** Check if the main window is restoring the plugin pages. This is
+ *  used on report pages to delay the creation of the report till the
+ *  page is focused.
+ *
+ *  @param window When window whose pages should be checked.
+ *
+ *  @return TRUE if pages are being restored
+ */
+gboolean gnc_main_window_is_restoring_pages (GncMainWindow *window);
+
 /** Save the persistent state of all windows.
  *
  *  @param keyfile The GKeyFile to contain persistent window state.

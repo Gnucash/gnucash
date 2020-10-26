@@ -231,6 +231,8 @@ typedef struct GncMainWindowPrivate
      *  group, the values are structures of type
      *  MergedActionEntry. */
     GHashTable *merged_actions_table;
+    /** Set when restoring plugin pages */
+    gboolean restoring_pages;
 } GncMainWindowPrivate;
 
 GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW,
@@ -527,6 +529,14 @@ typedef struct
     gint page_num;
     gint page_offset;
 } GncMainWindowSaveData;
+
+
+gboolean
+gnc_main_window_is_restoring_pages (GncMainWindow *window)
+{
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    return priv->restoring_pages;
+}
 
 
 /*  Iterator function to walk all pages in all windows, calling the
@@ -853,7 +863,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     {
         gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), desired_visibility);
     }
-
+    priv->restoring_pages = TRUE;
     /* Now populate the window with pages. */
     for (i = 0; i < page_count; i++)
     {
@@ -865,7 +875,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         while (gtk_events_pending ())
             gtk_main_iteration ();
     }
-
+    priv->restoring_pages = FALSE;
     /* Restore page ordering within the notebook. Use +1 notation so the
      * numbers in the page order match the page sections, at least for
      * the one window case. */
@@ -899,6 +909,9 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         }
         gtk_notebook_set_current_page (GTK_NOTEBOOK(priv->notebook),
                                        order[0] - 1);
+
+        g_signal_emit_by_name (window, "page_changed",
+                               g_list_nth_data (priv->usage_order, 0));
     }
     if (order)
     {
@@ -2580,6 +2593,8 @@ gnc_main_window_init (GncMainWindow *window, void *data)
 
     priv->event_handler_id =
         qof_event_register_handler(gnc_main_window_event_handler, window);
+
+    priv->restoring_pages = FALSE;
 
     /* Get the show_color_tabs value preference */
     priv->show_color_tabs = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);

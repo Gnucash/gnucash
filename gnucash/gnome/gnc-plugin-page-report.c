@@ -153,6 +153,7 @@ static GncPluginPage *gnc_plugin_page_report_recreate_page (GtkWidget *window, G
 static void gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name);
 static void gnc_plugin_page_report_update_edit_menu (GncPluginPage *page, gboolean hide);
 static gboolean gnc_plugin_page_report_finish_pending (GncPluginPage *page);
+static void gnc_plugin_page_report_load_uri (GncPluginPage *page);
 
 static int gnc_plugin_page_report_check_urltype(URLType t);
 //static void gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
@@ -243,12 +244,24 @@ gnc_plugin_page_report_focus_widget (GncPluginPage *report_plugin_page)
     if (GNC_IS_PLUGIN_PAGE_REPORT(report_plugin_page))
     {
         GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report_plugin_page);
-        GtkWidget *widget = gnc_html_get_widget (priv->html);
+        GtkWidget *window;
 
-        if (GTK_IS_WIDGET(widget))
+        if (!priv)
+            return FALSE;
+
+        window = gnc_plugin_page_get_window (report_plugin_page);
+
+        if (window && !gnc_main_window_is_restoring_pages (GNC_MAIN_WINDOW(window)))
         {
-            if (!gtk_widget_is_focus (GTK_WIDGET(widget)))
-                gtk_widget_grab_focus (GTK_WIDGET(widget));
+            GtkWidget * widget = gnc_html_get_widget (priv->html);
+
+            gnc_plugin_page_report_load_uri (report_plugin_page);
+
+            if (GTK_IS_WIDGET(widget))
+            {
+                if (!gtk_widget_is_focus (GTK_WIDGET(widget)))
+                    gtk_widget_grab_focus (GTK_WIDGET(widget));
+            }
         }
     }
     return FALSE;
@@ -332,7 +345,7 @@ gnc_plugin_page_report_set_progressbar (GncPluginPage *page, gboolean set)
         gtk_widget_set_size_request (GTK_WIDGET(progressbar), -1, -1); //reset
 }
 
-static gboolean
+static void
 gnc_plugin_page_report_load_uri (GncPluginPage *page)
 {
     GncPluginPageReport *report;
@@ -346,7 +359,7 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     report = GNC_PLUGIN_PAGE_REPORT(page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     if (!priv)
-        return FALSE; // No priv means the page doesn't exist anymore.
+        return; // No priv means the page doesn't exist anymore.
 
     DEBUG( "Load uri id=%d", priv->reportId );
     id_name = g_strdup_printf("id=%d", priv->reportId );
@@ -375,20 +388,6 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
     // this resets the window for the progressbar to NULL
     gnc_window_set_progressbar_window( NULL );
-
-    return FALSE;
-}
-
-static void
-gnc_plugin_page_report_realize_uri (GtkWidget *widget, GncPluginPage *page)
-{
-    GtkAllocation allocation;
-
-    gtk_widget_get_allocation (widget, &allocation);
-    PINFO("Realized Container size is %dw x %dh", allocation.width, allocation.height);
-
-    /* load uri when view idle */
-    g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
 }
 
 static
@@ -456,10 +455,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 
     // FIXME.  This is f^-1(f(x)), isn't it?
     DEBUG( "id=%d", priv->reportId );
-
-    /* load uri when view is realized */
-    g_signal_connect (G_OBJECT(GTK_WIDGET(priv->container)), "realize",
-                      G_CALLBACK(gnc_plugin_page_report_realize_uri), page);
 
     g_signal_connect (G_OBJECT(page), "inserted",
                       G_CALLBACK(gnc_plugin_page_inserted_cb),
