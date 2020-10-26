@@ -37,6 +37,7 @@
 (define (font-name-to-style-info font-name)
   (let* ((font-style "")
          (font-weight "")
+         (font-stretch "")
          (idx (string-index-right font-name #\space))
          (font-size (substring font-name (1+ idx) (string-length font-name)))
          (font-name (string-take font-name idx)))
@@ -54,9 +55,18 @@
       (set! font-style "font-style: oblique; ")
       (set! font-name (string-strip font-name " oblique"))))
 
-    (string-append "font-family: " font-name ", Sans-Serif; "
+    (cond
+     ((string-contains-ci font-name " expanded")
+      (set! font-stretch "font-stretch: expanded; ")
+      (set! font-name (string-strip font-name " expanded")))
+
+     ((string-contains-ci font-name " condensed")
+      (set! font-stretch "font-stretch: condensed; ")
+      (set! font-name (string-strip font-name " condensed"))))
+
+    (string-append "font-family: \"" font-name "\", sans-serif; "
                    "font-size: " font-size "pt; "
-                   font-style font-weight)))
+                   font-style font-weight font-stretch)))
 
 ;; Registers font options
 (define (register-font-options options)
