@@ -27,9 +27,8 @@
 extern "C" {
 #include "../gnc-ui-balances.h"
 }
-#include "Split.h"
-
-#include "gtest/gtest.h"
+#include <Split.h>
+#include <gtest/gtest.h>
 
 static const int64_t DENOM = 100; //< Denomerator is always 100 for simplicity.
 
