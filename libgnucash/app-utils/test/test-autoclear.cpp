@@ -27,6 +27,7 @@
 extern "C" {
 #include "../gnc-ui-balances.h"
 }
+#include <memory>
 #include <Split.h>
 #include <gtest/gtest.h>
 
@@ -106,19 +107,18 @@ TestCase ambiguousTestCase = {
     },
 };
 
-class AutoClearTest : public testing::TestWithParam<TestCase> {
+class AutoClearTest : public ::testing::TestWithParam<TestCase *> {
 protected:
     std::shared_ptr<QofBook> book_;
     Account *account_; // owned by book_
-    TestCase testCase_;
+    TestCase &testCase_;
 
 public:
     AutoClearTest() :
         book_(qof_book_new(), qof_book_destroy),
-        account_(xaccMallocAccount(book_.get()))
+        account_(xaccMallocAccount(book_.get())),
+        testCase_(*GetParam())
     {
-        testCase_ = GetParam();
-
         xaccAccountSetName(account_, "Test Account");
         xaccAccountBeginEdit(account_);
         for (auto &d : testCase_.splits) {
@@ -156,11 +156,15 @@ TEST_P(AutoClearTest, DoesAutoClear) {
     }
 }
 
-INSTANTIATE_TEST_SUITE_P(
+// Silence "no previous declaration for" which is treated as error, due to -Werror
+testing::internal::ParamGenerator<TestCase*> gtest_InstantiationAutoClearTestAutoClearTest_EvalGenerator_();
+std::string gtest_InstantiationAutoClearTestAutoClearTest_EvalGenerateName_(const testing::TestParamInfo<TestCase*>&);
+
+INSTANTIATE_TEST_CASE_P(
     InstantiationAutoClearTest,
     AutoClearTest,
-    testing::Values(
-        easyTestCase,
-        ambiguousTestCase
+    ::testing::Values(
+        &easyTestCase,
+        &ambiguousTestCase
     )
 );
