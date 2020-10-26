@@ -210,9 +210,10 @@
   (issue-deprecation-warning
    "gnc:html-make-exchangerates is deprecated. use gnc:html-make-rates-table instead.")
   (let ((comm-list (gnc:accounts-get-commodities accounts common-commodity))
+        (entries (length comm-list))
         (markup (lambda (c) (gnc:make-html-table-cell/markup "number-cell" c)))
         (table (gnc:make-html-table)))
-    (unless (null? comm-list)
+    (unless (= 0 entries)
       (for-each
        (lambda (commodity)
          (let* ((orig-amt (gnc:make-gnc-monetary commodity 1))
@@ -225,9 +226,7 @@
        comm-list)
       (gnc:html-table-set-col-headers!
        table (list (gnc:make-html-table-header-cell/size
-                    1 2 (if (null? (cdr comm-list))
-                            (G_ "Exchange rate")
-                            (G_ "Exchange rates"))))))
+                    1 2 (NG_ "Exchange rate" "Exchange rates" entries)))))
     table))
 
 ;; Create a html-table of all prices. The report-currency is
@@ -244,8 +243,7 @@
        (unless (zero? entries)
          (gnc:html-table-set-col-headers!
           table (list (gnc:make-html-table-header-cell/size
-                       1 2 (if (= entries 1) (G_ "Exchange rate")
-                               (G_ "Exchange rates"))))))
+                       1 2 (NG_ "Exchange rate" "Exchange rates" entries)))))
        table)
       ((comm . rest)
        (gnc:html-table-append-row!
