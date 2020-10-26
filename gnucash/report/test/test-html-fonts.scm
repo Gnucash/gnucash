@@ -14,11 +14,11 @@
   (test-begin "font-name-to-style-info")
 
   (test-equal "basic"
-    "font-family: \"Courier Regular\", sans-serif; font-size: 20pt; "
+    "font-family: \"Courier\", sans-serif; font-size: 20pt; font-weight: normal; "
     (font-name-to-style-info "Courier Regular 20"))
 
   (test-equal "basic size 50"
-    "font-family: \"Courier Regular\", sans-serif; font-size: 50pt; "
+    "font-family: \"Courier\", sans-serif; font-size: 50pt; font-weight: normal; "
     (font-name-to-style-info "Courier Regular 50"))
 
   (test-equal "basic size 50 bold"
@@ -32,5 +32,9 @@
   (test-equal "basic size 15 oblique"
     "font-family: \"Courier\", sans-serif; font-size: 15pt; font-style: oblique; "
     (font-name-to-style-info "Courier oblique 15"))
+
+  (test-equal "basic size 15 numeric weight"
+    "font-family: \"Courier\", sans-serif; font-size: 15pt; font-weight: 550; "
+    (font-name-to-style-info "Courier weight=550 15"))
 
   (test-end "font-name-to-style-info"))
