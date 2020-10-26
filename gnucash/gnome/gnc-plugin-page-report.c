@@ -390,6 +390,45 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     gnc_window_set_progressbar_window( NULL );
 }
 
+/* used to capture Ctrl+Alt+PgUp/Down for tab selection */
+static gboolean
+webkit_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+    GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(user_data);
+    GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+    GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
+    GtkWidget *window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(report));
+
+    if (GNC_PLUGIN_PAGE(report) != gnc_main_window_get_current_page (GNC_MAIN_WINDOW(window)))
+        return FALSE;
+
+    if ((event->keyval == GDK_KEY_Page_Up || event->keyval == GDK_KEY_Page_Down ||
+         event->keyval == GDK_KEY_KP_Page_Up || event->keyval == GDK_KEY_KP_Page_Down)
+          && (event->state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+    {
+        GtkNotebook *notebook = GTK_NOTEBOOK(gtk_widget_get_parent (GTK_WIDGET(priv->container)));
+        gint pages = gtk_notebook_get_n_pages (notebook);
+        gint current_page = gtk_notebook_get_current_page (notebook);
+
+        if (event->keyval == GDK_KEY_Page_Up || event->keyval == GDK_KEY_KP_Page_Up)
+        {
+            if (current_page == 0)
+                gtk_notebook_set_current_page (notebook, pages - 1);
+            else
+                gtk_notebook_prev_page (notebook);
+        }
+        else
+        {
+            if (pages == current_page + 1)
+                gtk_notebook_set_current_page (notebook, 0);
+            else
+                gtk_notebook_next_page (notebook);
+        }
+        return TRUE;
+    }
+    return FALSE;
+}
+
 static
 GtkWidget*
 gnc_plugin_page_report_create_widget( GncPluginPage *page )
@@ -398,6 +437,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     GncPluginPageReportPrivate *priv;
     GtkWindow *topLvl;
     GtkAction *action;
+    GtkWidget *webview;
     URLType type;
     char * id_name;
     char * child_name;
@@ -459,6 +499,18 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     g_signal_connect (G_OBJECT(page), "inserted",
                       G_CALLBACK(gnc_plugin_page_inserted_cb),
                       NULL);
+
+    // used to capture Ctrl+Alt+PgUp/Down for tab selection
+    webview = gnc_html_get_webview (priv->html);
+    if (webview)
+    {
+        gtk_widget_add_events (webview, gtk_widget_get_events (webview) |
+                               GDK_KEY_PRESS_MASK);
+
+        g_signal_connect (webview, "key-press-event",
+                          G_CALLBACK(webkit_key_press_event_cb),
+                          page);
+    }
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
     LEAVE("container %p", priv->container);
