@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-10-14 01:49+0200\n"
-"PO-Revision-Date: 2020-09-26 21:29+0200\n"
+"PO-Revision-Date: 2020-10-27 21:23+0100\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: Deutschsprachige GnuCash-Gemeinde <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -21786,28 +21786,28 @@ msgstr "Neu (und ausgeglichen)"
 #: gnucash/import-export/import-main-matcher.c:1453
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
-msgstr "Neu (Buchung von %s nach »%s«, manuell gewählt)"
+msgstr "Neu (%s nach »%s«, manuell gewählt)"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
 #: gnucash/import-export/import-main-matcher.c:1461
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
-msgstr "Neu (Buchung von %s nach »%s«, automatisch gewählt)"
+msgstr "Neu (%s nach »%s«, automatisch gewählt)"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:1472
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
-msgstr "Neu (Nicht ausgeglichen, benötige Konto für verbleibende %s)"
+msgstr "Neu (verbleibende %s benötigen Konto, nicht ausgeglichen)"
 
 #: gnucash/import-export/import-main-matcher.c:1489
 msgid "Reconcile (manual) match"
-msgstr "Abgleichen (mit manuell gewählter Zuordnung)"
+msgstr "Abgleichen (manuell gewählte Zuordnung)"
 
 #: gnucash/import-export/import-main-matcher.c:1493
 msgid "Reconcile (auto) match"
-msgstr "Abgleichen (mit automatisch gewählter Zuordnung)"
+msgstr "Abgleichen (automatisch gewählte Zuordnung)"
 
 #: gnucash/import-export/import-main-matcher.c:1500
 #: gnucash/import-export/import-main-matcher.c:1526
@@ -21816,11 +21816,11 @@ msgstr "Zuordnung fehlt!"
 
 #: gnucash/import-export/import-main-matcher.c:1515
 msgid "Update and reconcile (manual) match"
-msgstr "Abgleichen und Datenübernahme (mit manuell gewählter Zuordnung)"
+msgstr "Abgleichen und Datenübernahme (manuell gewählte Zuordnung)"
 
 #: gnucash/import-export/import-main-matcher.c:1519
 msgid "Update and reconcile (auto) match"
-msgstr "Abgleichen und Datenübernahme (mit automatisch gewählter Zuordnung)"
+msgstr "Abgleichen und Datenübernahme (automatisch gewählte Zuordnung)"
 
 #: gnucash/import-export/import-main-matcher.c:1534
 msgid "Do not import (no action selected)"
