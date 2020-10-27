@@ -768,7 +768,8 @@
 (define (gnc:case-price-fn source target-curr date)
   (define pdb (gnc-pricedb-get-db (gnc-get-current-book)))
   (case source
-    ((pricedb-nearest) (cut gnc-pricedb-get-nearest-price pdb <> target-curr date))
+    ((pricedb-nearest) (cut gnc-pricedb-get-nearest-price pdb <> target-curr
+                            (time64CanonicalDayTime date)))
     ((pricedb-latest)  (cut gnc-pricedb-get-latest-price pdb <> target-curr))
     (else
      (lambda (commodity)
