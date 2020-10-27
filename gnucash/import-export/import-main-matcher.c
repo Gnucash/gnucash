@@ -143,6 +143,10 @@ static void refresh_model_row (
                     GtkTreeModel *model,
                     GtkTreeIter *iter,
                     GNCImportTransInfo *info);
+static gboolean query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
+                                            gboolean keyboard_tip,
+                                            GtkTooltip *tooltip,
+                                            gpointer user_data);
 /* end local prototypes */
 
 static gboolean delete_hash (gpointer key, gpointer value, gpointer user_data)
@@ -1067,6 +1071,10 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                                           GTK_SORT_ASCENDING);
     selection = gtk_tree_view_get_selection (info->view);
 
+    g_object_set (info->view, "has-tooltip", TRUE, NULL);
+    g_signal_connect (G_OBJECT(info->view), "query-tooltip",
+                      G_CALLBACK(query_tooltip_tree_view_cb), info);
+
     g_signal_connect (info->view, "row-activated",
                       G_CALLBACK(gnc_gen_trans_row_activated_cb), info);
     g_signal_connect (selection, "changed",
@@ -1824,6 +1832,57 @@ GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info)
 {
     g_assert (info);
     return info->main_widget;
+}
+
+gboolean query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
+                                     gboolean keyboard_tip,
+                                     GtkTooltip *tooltip,
+                                     gpointer user_data)
+{
+    GtkTreeView          *tree_view = GTK_TREE_VIEW(widget);
+    GtkTreeModel         *model = gtk_tree_view_get_model(tree_view);
+    //GNCImportMainMatcher *info = user_data;
+    GtkTreePath          *path  = NULL;
+    GtkTreeViewColumn    *column = NULL;
+    GtkTreeIter iter;
+    gboolean show_tooltip = FALSE;
+
+    gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y, &x, &y);
+    if (keyboard_tip || !gtk_tree_view_get_path_at_pos (tree_view, x, y, &path,
+                                                        &column, NULL, NULL))
+        return FALSE;
+
+    // Get the iter pointing to our current column
+    if (gtk_tree_model_get_iter(model, &iter, path)
+            && column)
+    {
+        const gchar *tooltip_text = NULL;
+
+        // Select text based on column
+        gint num_col = gtk_tree_view_column_get_sort_column_id(column);
+        switch (num_col) {
+        case DOWNLOADED_COL_DESCRIPTION:
+            gtk_tree_model_get(model, &iter, DOWNLOADED_COL_DESCRIPTION, &tooltip_text, -1);
+            break;
+        case DOWNLOADED_COL_MEMO:
+            gtk_tree_model_get(model, &iter, DOWNLOADED_COL_MEMO, &tooltip_text, -1);
+            break;
+        default:
+            break;
+        }
+
+        // Did we select any text? If yes, display the tooltip
+        if (tooltip_text)
+        {
+            show_tooltip = TRUE;
+            gtk_tooltip_set_text (tooltip, tooltip_text);
+            gtk_tree_view_set_tooltip_cell (tree_view, tooltip, path, column, NULL);
+        }
+    }
+
+    // Clean up the object
+    gtk_tree_path_free (path);
+    return show_tooltip;
 }
 
 /** @} */
