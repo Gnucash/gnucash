@@ -69,6 +69,7 @@ struct _main_matcher_info
     gpointer user_data;
     GNCImportPendingMatches *pending_matches;
     GtkTreeViewColumn *account_column;
+    GtkTreeViewColumn *memo_column;
     GtkWidget         *show_account_column;
     GtkWidget         *show_matched_info;
     GtkWidget         *reconcile_after_close;
@@ -1036,7 +1037,7 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     gtk_tree_view_column_set_visible (info->account_column, show_account);
     add_text_column (view, _("Amount"), DOWNLOADED_COL_AMOUNT, FALSE);
     add_text_column (view, _("Description"), DOWNLOADED_COL_DESCRIPTION, FALSE);
-    add_text_column (view, _("Memo"), DOWNLOADED_COL_MEMO, TRUE);
+    info->memo_column = add_text_column (view, _("Memo"), DOWNLOADED_COL_MEMO, TRUE);
     add_toggle_column (view,
                        C_("Column header for 'Adding transaction'", "A"), DOWNLOADED_COL_ACTION_ADD,
                        G_CALLBACK(gnc_gen_trans_add_toggled_cb), info);
@@ -1089,6 +1090,14 @@ show_account_column_toggled_cb (GtkToggleButton *togglebutton,
 }
 
 static void
+show_memo_column_toggled_cb (GtkToggleButton *togglebutton,
+                             GNCImportMainMatcher *info)
+{
+    gtk_tree_view_column_set_visible (info->memo_column,
+        gtk_toggle_button_get_active (togglebutton));
+}
+
+static void
 show_matched_info_toggled_cb (GtkToggleButton *togglebutton,
                                 GNCImportMainMatcher *info)
 {
@@ -1103,6 +1112,25 @@ show_matched_info_toggled_cb (GtkToggleButton *togglebutton,
             gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->show_account_column)));
         gtk_tree_view_collapse_all (info->view);
     }
+}
+
+static void prepare_widget_from_builder(GNCImportMainMatcher *info, GtkBuilder *builder,
+                                        gboolean default_show_account)
+{
+    GtkWidget *button;
+    info->show_account_column = GTK_WIDGET(gtk_builder_get_object (builder, "show_source_account_button"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->show_account_column), default_show_account);
+    g_signal_connect (G_OBJECT(info->show_account_column), "toggled",
+                      G_CALLBACK(show_account_column_toggled_cb), info);
+
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "show_memo_column_button"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
+    g_signal_connect (G_OBJECT(button), "toggled",
+                      G_CALLBACK(show_memo_column_toggled_cb), info);
+
+    info->show_matched_info = GTK_WIDGET(gtk_builder_get_object (builder, "show_matched_info_button"));
+    g_signal_connect (G_OBJECT(info->show_matched_info), "toggled",
+                      G_CALLBACK(show_matched_info_toggled_cb), info);
 }
 
 GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
@@ -1147,20 +1175,13 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     info->view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "downloaded_view"));
     g_assert (info->view != NULL);
 
-    info->show_account_column = GTK_WIDGET(gtk_builder_get_object (builder, "show_source_account_button"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->show_account_column), all_from_same_account);
-    g_signal_connect (G_OBJECT(info->show_account_column), "toggled",
-                      G_CALLBACK(show_account_column_toggled_cb), info);
-
-    info->show_matched_info = GTK_WIDGET(gtk_builder_get_object (builder, "show_matched_info_button"));
-    g_signal_connect (G_OBJECT(info->show_matched_info), "toggled",
-                      G_CALLBACK(show_matched_info_toggled_cb), info);
+    prepare_widget_from_builder(info, builder, !all_from_same_account);
 
     // Create the checkbox, but do not show it by default.
     info->reconcile_after_close = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_after_close_button"));
 
     show_update = gnc_import_Settings_get_action_update_enabled (info->user_settings);
-    gnc_gen_trans_init_view (info, all_from_same_account, show_update);
+    gnc_gen_trans_init_view (info, !all_from_same_account, show_update);
     heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
     g_assert (heading_label != NULL);
 
@@ -1234,20 +1255,13 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     info->view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "downloaded_view"));
     g_assert (info->view != NULL);
 
-    info->show_account_column = GTK_WIDGET(gtk_builder_get_object (builder, "show_source_account_button"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->show_account_column), all_from_same_account);
-    g_signal_connect (G_OBJECT(info->show_account_column), "toggled",
-                      G_CALLBACK(show_account_column_toggled_cb), info);
-
-    info->show_matched_info = GTK_WIDGET(gtk_builder_get_object (builder, "show_matched_info_button"));
-    g_signal_connect (G_OBJECT(info->show_matched_info), "toggled",
-                      G_CALLBACK(show_matched_info_toggled_cb), info);
+    prepare_widget_from_builder(info, builder, !all_from_same_account);
 
     // Create the checkbox, but do not show it by default.
     info->reconcile_after_close = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_after_close_button"));
 
     show_update = gnc_import_Settings_get_action_update_enabled (info->user_settings);
-    gnc_gen_trans_init_view (info, all_from_same_account, show_update);
+    gnc_gen_trans_init_view (info, !all_from_same_account, show_update);
     heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
     g_assert (heading_label != NULL);
 
@@ -1610,6 +1624,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
             GtkTreePath *path = gtk_tree_model_get_path (model, iter);
 
             gtk_tree_view_column_set_visible (gui->account_column, TRUE);
+            gtk_tree_view_column_set_visible (gui->memo_column, TRUE);
 
             gtk_tree_view_expand_row (GTK_TREE_VIEW(gui->view), path, TRUE);
             gtk_tree_path_free (path);

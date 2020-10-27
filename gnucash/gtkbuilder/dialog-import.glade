@@ -926,7 +926,7 @@
         <property name="halign">center</property>
         <child>
           <object class="GtkCheckButton" id="show_source_account_button">
-            <property name="label" translatable="yes">Show the _Account column</property>
+            <property name="label" translatable="yes">Show _Account column</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -941,6 +941,22 @@
           </packing>
         </child>
         <child>
+          <object class="GtkCheckButton" id="show_memo_column_button">
+            <property name="label" translatable="yes">Show _Memo column</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="halign">center</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkCheckButton" id="show_matched_info_button">
             <property name="label" translatable="yes">Show _matched information</property>
             <property name="visible">True</property>
@@ -952,7 +968,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
