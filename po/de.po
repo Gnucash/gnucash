@@ -7502,8 +7502,8 @@ msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
 msgstr ""
-"Sie müssen ein Herkunftskonto wählen oder das Ausgleichskonto für den "
-"Anfangsbestand benutzen."
+"Sie müssen ein Herkunftskonto wählen oder das Eigenkapitalkonto "
+"»Anfangsbestand« benutzen."
 
 #: gnucash/gnome-utils/dialog-account.c:1350
 msgid ""
@@ -15166,7 +15166,7 @@ msgstr "<b>Buchung Anfangssaldo</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1755
 msgid "_Use equity 'Opening Balances' account"
-msgstr "Benutze _Ausgleichskonto für Anfangsbestand"
+msgstr "Benutze Eigenkapitalkonto »_Anfangsbestand«"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1772
 msgid "_Select transfer account"
