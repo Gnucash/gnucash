@@ -2743,6 +2743,58 @@ gnc_main_window_destroy (GtkWidget *widget)
 }
 
 
+static gboolean
+gnc_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+    GncMainWindowPrivate *priv;
+    GdkModifierType modifiers;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(widget), FALSE);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(widget);
+
+    modifiers = gtk_accelerator_get_default_mod_mask ();
+
+    if ((event->state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK)) // Ctrl+Alt+
+    {
+        const gchar *account_key = C_ ("lower case key for short cut to 'Accounts'", "a");
+        guint account_keyval = gdk_keyval_from_name (account_key);
+
+        if ((account_keyval == event->keyval) || (account_keyval == gdk_keyval_to_lower (event->keyval)))
+        {
+            gint page = 0;
+
+            for (GList *item = priv->installed_pages; item; item = g_list_next (item))
+            {
+                 const gchar *pname = gnc_plugin_page_get_plugin_name (GNC_PLUGIN_PAGE(item->data));
+
+                 if (g_strcmp0 (pname, "GncPluginPageAccountTree") == 0)
+                 {
+                     gtk_notebook_set_current_page (GTK_NOTEBOOK(priv->notebook), page);
+                     return TRUE;
+                 }
+                 page++;
+            }
+        }
+        else if ((GDK_KEY_Menu == event->keyval) || (GDK_KEY_space == event->keyval))
+        {
+            GList *menu = gtk_menu_get_for_attach_widget (GTK_WIDGET(priv->notebook));
+
+            if (menu)
+            {
+                gtk_menu_popup_at_widget (GTK_MENU(menu->data),
+                                          GTK_WIDGET(priv->notebook),
+                                          GDK_GRAVITY_SOUTH,
+                                          GDK_GRAVITY_SOUTH,
+                                          NULL);
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
+
 /*  Create a new gnc main window plugin.
  */
 GncMainWindow *
@@ -2776,6 +2828,11 @@ gnc_main_window_new (void)
     gnc_main_window_update_all_menu_items();
 #endif
     gnc_engine_add_commit_error_callback( gnc_main_window_engine_commit_error_callback, window );
+
+    // set up a callback for noteboook navigation
+    g_signal_connect (G_OBJECT(window), "key-press-event",
+                      G_CALLBACK(gnc_main_window_key_press_event),
+                      NULL);
 
     return window;
 }
