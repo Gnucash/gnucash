@@ -406,7 +406,9 @@
         ;; Stable-sort the sortingtable according to column, then
         ;; stable-sort according to currency. This results in group-by
         ;; currency then sort by columns.
-        (let* ((str-op (if (eq? sort-order 'descend) string>? string<?))
+        (let* ((str-op (if (eq? sort-order 'descend)
+                           gnc:string-locale>?
+                           gnc:string-locale<?))
                (op (if (eq? sort-order 'descend) > <)))
           (define (<? key)
             (case key
@@ -421,7 +423,7 @@
                   (else (str-op (vector-ref a 0) (vector-ref b 0))))))
               ;; currency sorting always alphabetical a-z
               ((currency)
-               (lambda (a b) (string<?
+               (lambda (a b) (gnc:string-locale<?
                               (gnc-commodity-get-mnemonic (vector-ref a 1))
                               (gnc-commodity-get-mnemonic (vector-ref b 1)))))
               ((markup)

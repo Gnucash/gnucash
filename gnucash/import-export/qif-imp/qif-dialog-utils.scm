@@ -412,8 +412,8 @@
     (set! retval
           (sort retval
                 (lambda (a b)
-                  (string<? (qif-map-entry:qif-name a)
-                            (qif-map-entry:qif-name b)))))
+                  (gnc:string-locale<? (qif-map-entry:qif-name a)
+                                       (qif-map-entry:qif-name b)))))
     retval))
 
 
@@ -532,8 +532,8 @@
     ;; sort by qif account name
     (set! retval (sort retval
                        (lambda (a b)
-                         (string<? (qif-map-entry:qif-name a)
-                                   (qif-map-entry:qif-name b)))))
+                         (gnc:string-locale<? (qif-map-entry:qif-name a)
+                                              (qif-map-entry:qif-name b)))))
     retval))
 
 ;; this one's like the other display builders, it just looks at the
@@ -624,8 +624,8 @@
     ;; sort by qif memo/payee name
     (set! retval (sort retval
                        (lambda (a b)
-                         (string<? (qif-map-entry:qif-name a)
-                                   (qif-map-entry:qif-name b)))))
+                         (gnc:string-locale<? (qif-map-entry:qif-name a)
+                                              (qif-map-entry:qif-name b)))))
     retval))
 
 
@@ -826,7 +826,7 @@
      #f acct-hash)
 
     (if (not (null? names))
-        (sort names string<?)
+        (sort names gnc:string-locale<?)
         #f)))
 
 ;; this is used within the dialog to get a list of all the new
@@ -867,7 +867,7 @@
                           (loop (car tree-left) (cdr tree-left))
                           (set! newtree (cons (cvt-to-tree path new?)
                                               newtree))))))
-              (sort newtree (lambda (a b) (string<? (car a) (car b))))))))
+              (sort newtree (lambda (a b) (gnc:string-locale<? (car a) (car b))))))))
 
 
   (let ((accts '())

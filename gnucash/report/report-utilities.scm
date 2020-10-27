@@ -138,8 +138,8 @@
 	  (sort-and-delete-duplicates
            (map xaccAccountGetCommodity accounts)
            (lambda (a b)
-             (string<? (gnc-commodity-get-unique-name a)
-                       (gnc-commodity-get-unique-name b)))
+             (gnc:string-locale<? (gnc-commodity-get-unique-name a)
+                                  (gnc-commodity-get-unique-name b)))
            gnc-commodity-equiv)))
 
 
