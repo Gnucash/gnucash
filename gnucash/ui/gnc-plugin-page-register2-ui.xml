@@ -43,6 +43,7 @@
         <separator name="ActionsSep1"/>
         <menuitem name="ActionsTransfer" action="ActionsTransferAction"/>
         <menuitem name="ActionsReconcile" action="ActionsReconcileAction"/>
+        <menuitem name="ActionsAutoClear" action="ActionsAutoClearAction"/>
         <menuitem name="ActionsStockSplit" action="ActionsStockSplitAction"/>
         <menuitem name="ActionLots" action="ActionsLotsAction"/>
         <separator name="ActionsSep4"/>
