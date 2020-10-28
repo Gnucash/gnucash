@@ -67,6 +67,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-uri-utils.h"
 #include "gnc-version.h"
+#include "gnc-warnings.h"
 #include "gnc-window.h"
 #include "gnc-prefs.h"
 #include "option-util.h"
@@ -1422,6 +1423,32 @@ gnc_main_window_delete_event (GtkWidget *window,
 
     if (already_dead)
         return TRUE;
+
+    if (g_list_length (active_windows) > 1)
+    {
+        gint response;
+        GtkWidget *dialog;
+        gchar *message = _("This window is closing and will not be restored.");
+
+        dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_QUESTION,
+                                         GTK_BUTTONS_NONE,
+                                         "%s", _("Close Window?"));
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                                                  "%s", message);
+
+        gtk_dialog_add_buttons (GTK_DIALOG(dialog),
+                              _("_Cancel"), GTK_RESPONSE_CANCEL,
+                              _("_OK"), GTK_RESPONSE_YES,
+                               (gchar *)NULL);
+        gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+        response = gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_CLOSING_WINDOW_QUESTION);
+        gtk_widget_destroy (dialog);
+
+        if (response == GTK_RESPONSE_CANCEL)
+            return TRUE;
+    }
 
     if (!gnc_main_window_finish_pending(GNC_MAIN_WINDOW(window)))
     {
