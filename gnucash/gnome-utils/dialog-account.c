@@ -218,9 +218,14 @@ gnc_account_opening_balance_button_update (AccountWindow *aw, gnc_commodity *com
         gtk_widget_set_sensitive (aw->opening_balance_button, FALSE);
         return;
     }
-    /* The opening balance flag can be edited, if there is no opening balance account
-     * or we are editing the only opening balance account and it has no splits assigned.
+
+    /* The opening balance flag can be edited, if the associated feature is enabled and
+     * there is no opening balance account or we are editing the only opening balance account
+     * and it has no splits assigned.
      */
+    if (!gnc_using_equity_type_opening_balance_account (gnc_get_current_book()))
+        return;
+
     switch(aw->dialog_type)
     {
     case EDIT_ACCOUNT:

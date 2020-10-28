@@ -195,6 +195,15 @@ gnc_reverse_budget_balance (const Account *account, gboolean unreversed)
     return FALSE;
 }
 
+gboolean gnc_using_equity_type_opening_balance_account (QofBook* book)
+{
+    return gnc_features_check_used (book, GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE);
+}
+
+void gnc_set_use_equity_type_opening_balance_account (QofBook* book)
+{
+    gnc_features_set_used (book, GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE);
+}
 
 gchar *
 gnc_get_default_directory (const gchar *section)
@@ -960,13 +969,16 @@ gnc_find_or_create_equity_account (Account *root,
     gboolean base_name_exists;
     const char *base_name;
     char *name;
+    gboolean use_eq_op_feature;
 
     g_return_val_if_fail (equity_type >= 0, NULL);
     g_return_val_if_fail (equity_type < NUM_EQUITY_TYPES, NULL);
     g_return_val_if_fail (currency != NULL, NULL);
     g_return_val_if_fail (root != NULL, NULL);
 
-    if (equity_type == EQUITY_OPENING_BALANCE)
+    use_eq_op_feature = equity_type == EQUITY_OPENING_BALANCE && gnc_using_equity_type_opening_balance_account (gnc_get_current_book ());
+
+    if (use_eq_op_feature)
     {
         account = gnc_account_lookup_by_opening_balance (root, currency);
         if (account)
@@ -993,7 +1005,7 @@ gnc_find_or_create_equity_account (Account *root,
     if (account &&
             gnc_commodity_equiv (currency, xaccAccountGetCommodity (account)))
     {
-        if (equity_type == EQUITY_OPENING_BALANCE)
+        if (use_eq_op_feature)
             xaccAccountSetIsOpeningBalance (account, TRUE);
         return account;
     }
@@ -1009,7 +1021,7 @@ gnc_find_or_create_equity_account (Account *root,
     if (account &&
             gnc_commodity_equiv (currency, xaccAccountGetCommodity (account)))
     {
-        if (equity_type == EQUITY_OPENING_BALANCE)
+        if (use_eq_op_feature)
             xaccAccountSetIsOpeningBalance (account, TRUE);
         return account;
     }
@@ -1042,7 +1054,7 @@ gnc_find_or_create_equity_account (Account *root,
     xaccAccountSetType (account, ACCT_TYPE_EQUITY);
     xaccAccountSetCommodity (account, currency);
 
-    if (equity_type == EQUITY_OPENING_BALANCE)
+    if (use_eq_op_feature)
         xaccAccountSetIsOpeningBalance (account, TRUE);
 
     xaccAccountBeginEdit (parent);

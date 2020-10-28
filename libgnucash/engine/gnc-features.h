@@ -55,6 +55,7 @@ extern "C" {
 #define GNC_FEATURE_REG_SORT_FILTER "Register sort and filter settings stored in .gcm file"
 #define GNC_FEATURE_BUDGET_UNREVERSED "Use natural signs in budget amounts"
 #define GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS "Show extra account columns in the Budget View"
+#define GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE "Use a dedicated opening balance account identified by an 'equity-type' slot"
 
 /** @} */
 
