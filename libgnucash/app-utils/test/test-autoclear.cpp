@@ -156,11 +156,15 @@ TEST_P(AutoClearTest, DoesAutoClear) {
     }
 }
 
+#ifndef INSTANTIATE_TEST_SUITE_P
 // Silence "no previous declaration for" which is treated as error, due to -Werror
 testing::internal::ParamGenerator<TestCase*> gtest_InstantiationAutoClearTestAutoClearTest_EvalGenerator_();
 std::string gtest_InstantiationAutoClearTestAutoClearTest_EvalGenerateName_(const testing::TestParamInfo<TestCase*>&);
 
 INSTANTIATE_TEST_CASE_P(
+#else // INSTANTIATE_TEST_SUITE_P
+INSTANTIATE_TEST_SUITE_P(
+#endif // INSTANTIATE_TEST_SUITE_P
     InstantiationAutoClearTest,
     AutoClearTest,
     ::testing::Values(
