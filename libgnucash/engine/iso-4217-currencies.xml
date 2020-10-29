@@ -799,7 +799,7 @@
   isocode="CZK"
   fullname="Czech Koruna"
   unitname="koruna"
-  partname="haleru"
+  partname="haler"
   namespace="ISO4217"
   exchange-code="203"
   parts-per-unit="100"
