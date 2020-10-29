@@ -212,9 +212,6 @@ autoClearWindow (GtkWidget *parent, Account *account)
     g_signal_connect(GTK_WIDGET(data->end_value), "activate",
                      G_CALLBACK(gnc_autoclear_window_ok_cb), data);
 
-    g_signal_connect (GTK_WIDGET(data->end_value), "changed",
-                      G_CALLBACK(clear_status_label_cb), data);
-
     box   = GTK_BOX(gtk_builder_get_object (builder, "end_value_box"));
     gtk_box_pack_start(box, GTK_WIDGET(data->end_value), TRUE, TRUE, 0);
 
@@ -230,6 +227,9 @@ autoClearWindow (GtkWidget *parent, Account *account)
     gtk_editable_select_region (GTK_EDITABLE (data->end_value), 0, -1);
 
     data->status_label = GTK_LABEL(gtk_builder_get_object (builder, "status_label"));
+
+    g_signal_connect (GTK_WIDGET(data->end_value), "changed",
+                      G_CALLBACK(clear_status_label_cb), data);
 
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW (data->window), GTK_WINDOW (parent));
