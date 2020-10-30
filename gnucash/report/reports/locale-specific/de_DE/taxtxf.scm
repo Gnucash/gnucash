@@ -471,9 +471,8 @@
 		 (txf-special-split? (gnc:account-get-txf-code account)))
 	    (+ gen 1)		; Est Fed Tax has a extra generation
 	    gen)	       		; no kids, return input
-	(apply max (gnc:account-map-children
-		    (lambda (x) (num-generations x (+ 1 gen)))
-		    account))))
+	(apply max (map (lambda (x) (num-generations x (1+ gen)))
+                        (or (gnc-account-get-children-sorted account) '())))))
 
   (gnc:report-starting reportname)
   (let* ((from-value (gnc:date-option-absolute-time 
