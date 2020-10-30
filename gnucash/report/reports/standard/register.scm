@@ -177,12 +177,9 @@
 
     (if (date-col column-vector)
         (addto! row-contents
-                (if transaction-info?
-                    (gnc:make-html-table-cell/markup
-                     "date-cell"
-                     (qof-print-date
-                      (xaccTransGetDate parent)))
-                    " ")))
+                (and transaction-info?
+                     (gnc:make-html-table-cell/markup
+                      "date-cell" (qof-print-date (xaccTransGetDate parent))))))
     (if (num-col column-vector)
         (addto! row-contents
                 (gnc:make-html-table-cell/markup
@@ -191,29 +188,18 @@
                      (if (and action-for-num? ledger-type?)
                          (gnc-get-num-action parent #f)
                          (gnc-get-num-action parent split))
-                     (if split-info?
-                         (gnc-get-action-num  #f split)
-                         " ")))))
+                     (and split-info? (gnc-get-action-num  #f split))))))
     (if (description-col column-vector)
         (addto! row-contents
                 (gnc:make-html-table-cell/markup
                  "text-cell"
                  (if transaction-info?
-                     (if description?
-                         (xaccTransGetDescription parent)
-                         " " )
-                     (if split-info?
-                         (if memo?
-                             (xaccSplitGetMemo split)
-                             " ")
-                         " ")))))
+                     (and description? (xaccTransGetDescription parent))
+                     (and split-info? memo? (xaccSplitGetMemo split))))))
     (if (memo-col column-vector)
         (addto! row-contents
                 (gnc:make-html-table-cell/markup
-                 "text-cell"
-                 (if transaction-info?
-                     (xaccSplitGetMemo split)
-                     " "))))
+                 "text-cell" (and transaction-info? (xaccSplitGetMemo split)))))
     (if (account-col column-vector)
         (addto! row-contents
                 (gnc:make-html-table-cell/markup
@@ -231,24 +217,19 @@
         (addto! row-contents
                 (gnc:make-html-table-cell/markup
                  "number-cell"
-                 (if split-info?
-                     (xaccSplitGetAmount split)
-                     " "))))
+                 (and split-info? (xaccSplitGetAmount split)))))
     (if (lot-col column-vector)
         (addto! row-contents
                 (gnc:make-html-table-cell/markup
                  "text-cell"
-                 (if split-info?
-                     (gnc-lot-get-title (xaccSplitGetLot split))
-                     " "))))
+                 (if split-info? (gnc-lot-get-title (xaccSplitGetLot split))))))
     (if (price-col column-vector)
         (addto! row-contents
                 (gnc:make-html-table-cell/markup
                  "number-cell"
-                 (if split-info?
-                     (gnc:default-price-renderer
-                      trans-currency (xaccSplitGetSharePrice split))
-                     " "))))
+                 (and split-info?
+                      (gnc:default-price-renderer
+                       trans-currency (xaccSplitGetSharePrice split))))))
     (if (amount-single-col column-vector)
         (addto! row-contents
                 (if split-info?
