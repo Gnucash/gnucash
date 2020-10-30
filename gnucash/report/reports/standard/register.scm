@@ -170,10 +170,13 @@
   (let* ((row-contents '())
          (parent (xaccSplitGetParent split))
          (account (xaccSplitGetAccount split))
+         (reverse? (gnc-reverse-balance account))
          (currency (xaccAccountGetCommodity account))
          (trans-currency (xaccTransGetCurrency parent))
          (damount (xaccSplitGetAmount split))
-         (split-value (gnc:make-gnc-monetary currency damount)))
+         (dvalue (xaccSplitGetValue split))
+         (split-abs-amount (gnc:make-gnc-monetary currency (abs damount)))
+         (split-abs-value (gnc:make-gnc-monetary currency (abs dvalue))))
 
     (if (date-col column-vector)
         (addto! row-contents
@@ -232,54 +235,41 @@
                        trans-currency (xaccSplitGetSharePrice split))))))
     (if (amount-single-col column-vector)
         (addto! row-contents
-                (if split-info?
-                    (gnc:make-html-table-cell/markup
-                     "number-cell"
-                     (gnc:html-split-anchor split split-value))
-                    " ")))
+                (and split-info?
+                     (gnc:make-html-table-cell/markup
+                      "number-cell"
+                      (gnc:html-split-anchor
+                       split (gnc:make-gnc-monetary
+                              currency (if reverse? (- damount) damount)))))))
     (if (debit-col column-vector)
-        (if (positive? (gnc:gnc-monetary-amount split-value))
-            (addto! row-contents
-                    (if split-info?
-                        (gnc:make-html-table-cell/markup
-                         "number-cell"
-                         (gnc:html-split-anchor split split-value))
-                        " "))
-            (addto! row-contents " ")))
+        (addto! row-contents
+                (and split-info? (positive? damount)
+                     (gnc:make-html-table-cell/markup
+                      "number-cell"
+                      (gnc:html-split-anchor split split-abs-amount)))))
     (if (credit-col column-vector)
-        (if (not (positive? (gnc:gnc-monetary-amount split-value)))
-            (addto! row-contents
-                    (if split-info?
-                        (gnc:make-html-table-cell/markup
-                         "number-cell"
-                         (gnc:html-split-anchor
-                          split (gnc:monetary-neg split-value)))
-                        " "))
-            (addto! row-contents " ")))
+        (addto! row-contents
+                (and split-info? (not (positive? damount))
+                     (gnc:make-html-table-cell/markup
+                      "number-cell"
+                      (gnc:html-split-anchor split split-abs-amount)))))
     (if (value-single-col column-vector)
         (addto! row-contents
-                (if split-info?
-                    (gnc:make-html-table-cell/markup
-                     "number-cell"
-                     (gnc:make-gnc-monetary trans-currency
-                                            (xaccSplitGetValue split)))
-                    " ")))
+                (and split-info?
+                     (gnc:make-html-table-cell/markup
+                      "number-cell"
+                      (gnc:make-gnc-monetary
+                       trans-currency (if reverse? (- dvalue) dvalue))))))
     (if (value-debit-col column-vector)
         (addto! row-contents
-                (if (and split-info? (positive? (xaccSplitGetValue split)))
-                    (gnc:make-html-table-cell/markup
-                     "number-cell"
-                     (gnc:make-gnc-monetary trans-currency
-                                            (xaccSplitGetValue split)))
-                    " ")))
+                (and split-info? (positive? dvalue)
+                     (gnc:make-html-table-cell/markup
+                      "number-cell" split-abs-value))))
     (if (value-credit-col column-vector)
         (addto! row-contents
-                (if (and split-info? (not (positive? (xaccSplitGetValue split))))
-                    (gnc:make-html-table-cell/markup
-                     "number-cell"
-                     (gnc:make-gnc-monetary trans-currency
-                                            (- (xaccSplitGetValue split))))
-                    " ")))
+                (and split-info? (not (positive? dvalue))
+                     (gnc:make-html-table-cell/markup
+                      "number-cell" split-abs-value))))
     ;; For single account registers, use the split's cached balance to remain
     ;; consistent with the balances shown in the register itself
     ;; For others, use the cumulated balance from the totals-collector
@@ -292,9 +282,10 @@
                       split
                       (gnc:make-gnc-monetary
                        currency
-                       (if ledger-type?
-                           (cadr (total-collector 'getpair currency #f))
-                           (xaccSplitGetBalance split)))))
+                       (cond
+                        (ledger-type? (cadr (total-collector 'getpair currency #f)))
+                        ((gnc-reverse-balance account) (- (xaccSplitGetBalance split)))
+                        (else (xaccSplitGetBalance split))))))
                     " ")))
 
     (gnc:html-table-append-row/markup! table row-style
@@ -328,8 +319,7 @@
                          (gnc-get-num-action parent #f)
                          " ")))
                 (gnc:html-table-append-row/markup! table row-style
-                                                   (reverse row-contents))))))
-    split-value))
+                                                   (reverse row-contents))))))))
 
 
 (define (options-generator)
