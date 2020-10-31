@@ -176,7 +176,7 @@
          (damount (xaccSplitGetAmount split))
          (dvalue (xaccSplitGetValue split))
          (split-abs-amount (gnc:make-gnc-monetary currency (abs damount)))
-         (split-abs-value (gnc:make-gnc-monetary currency (abs dvalue))))
+         (split-abs-value (gnc:make-gnc-monetary trans-currency (abs dvalue))))
 
     (if (date-col column-vector)
         (addto! row-contents
