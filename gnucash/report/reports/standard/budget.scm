@@ -717,7 +717,7 @@
 
      (else
       (let* ((tree-depth (if (eq? display-depth 'all)
-                             (accounts-get-children-depth accounts)
+                             (gnc:accounts-get-children-depth accounts)
                              display-depth))
              (to-period-val (lambda (v)
                               (inexact->exact
@@ -732,7 +732,7 @@
                    (list 'zero-balance-mode
                          (if show-zb-accts? 'show-leaf-acct 'omit-leaf-acct))
                    (list 'report-budget budget)))
-             (accounts (sort accounts account-full-name<?))
+             (accounts (sort accounts gnc:account-full-name<?))
              (accumulate? (get-option gnc:pagename-general optname-accumulate))
              (acct-table (gnc:make-html-acct-table/env/accts env accounts))
              (footnotes (make-footnote-collector))

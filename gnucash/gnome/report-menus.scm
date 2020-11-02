@@ -65,7 +65,7 @@
            (gnc-main-window-open-report
             (gnc:make-report report-guid) window))))))
    (sort (filter (compose gnc:report-template-in-menu? cdr) *template-items*)
-         (lambda (a b) (string>? (car a) (car b))))))
+         (lambda (a b) (gnc:string-locale>? (car a) (car b))))))
 
 (define (gnc:report-menu-setup)
   (define asset-liability-menu

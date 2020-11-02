@@ -528,14 +528,14 @@
 
 ;; some useful predicates to export
 (define (gnc:account-code-less-p a b)
-  (string<? (xaccAccountGetCode a)
-	    (xaccAccountGetCode b)))
+  (gnc:string-locale<? (xaccAccountGetCode a)
+                       (xaccAccountGetCode b)))
 (define (gnc:account-name-less-p a b)
-  (string<? (xaccAccountGetName a)
-	    (xaccAccountGetName b)))
+  (gnc:string-locale<? (xaccAccountGetName a)
+                       (xaccAccountGetName b)))
 (define (gnc:account-path-less-p a b)
-  (string<? (gnc-account-get-full-name a)
-	    (gnc-account-get-full-name b)))
+  (gnc:string-locale<? (gnc-account-get-full-name a)
+                       (gnc-account-get-full-name b)))
 
 
 (define (gnc:html-acct-table-add-accounts! acct-table accounts)

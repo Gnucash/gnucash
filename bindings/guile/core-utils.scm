@@ -28,12 +28,15 @@
   #:export (N_
             G_
             C_
+            gnc:string-locale<?
+            gnc:string-locale>?
             gnc:version))
 
 ;; Guile 2 needs to find the symbols from the extension at compile time already
 (eval-when (compile load eval expand)
   (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
 (use-modules (sw_core_utils))
+(use-modules (ice-9 i18n))
 
 ;; Export the swig-wrapped symbols in the public interface of this module
 (module-use! (module-public-interface (current-module))
@@ -54,3 +57,6 @@
    (define-public (_ x)
      (issue-deprecation-warning "Using _ to call gettext is disallowed in guile-3 and will be removed in the future. Use G_ instead.")
      (gnc:gettext x))))
+
+(define gnc:string-locale<? string-locale<?)
+(define gnc:string-locale>? string-locale>?)

@@ -672,6 +672,8 @@
 (export gnc:account-has-shares?)
 (export gnc:account-is-stock?)
 (export gnc:account-is-inc-exp?)
+(export gnc:account-full-name<?)
+(export gnc:accounts-get-children-depth)
 (export gnc:filter-accountlist-type)
 (export gnc:decompose-accountlist)
 (export gnc:account-get-type-string-plural)
