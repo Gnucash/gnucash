@@ -536,7 +536,8 @@ gnc_combo_cell_type_ahead_search (const gchar* newval,
     GRegex* regex0 = g_regex_new (escaped_sep, 0, 0, NULL);
     char* rep_str = g_regex_replace_literal (regex0, escaped_newval, -1, 0,
                                              newval_rep, 0, NULL);
-    GRegex *regex = g_regex_new (rep_str, G_REGEX_CASELESS, 0, NULL);
+    char* normal_rep_str = g_utf8_normalize (rep_str, -1, G_NORMALIZE_ALL);
+    GRegex *regex = g_regex_new (normal_rep_str, G_REGEX_CASELESS, 0, NULL);
 
     gboolean valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (full_store),
                                                     &iter);
@@ -546,6 +547,7 @@ gnc_combo_cell_type_ahead_search (const gchar* newval,
      */
     static const gint MAX_NUM_MATCHES = 30;
 
+    g_free (normal_rep_str);
     g_free (rep_str);
     g_free (newval_rep);
     g_free (escaped_sep);
