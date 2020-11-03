@@ -235,6 +235,60 @@ gnc_gen_trans_list_empty (GNCImportMainMatcher *info)
     return !gtk_tree_model_get_iter_first (model, &iter) && !info->temp_trans_list;
 }
 
+static void
+gnc_gen_trans_list_show_accounts_column (GNCImportMainMatcher *info)
+{
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GNCImportTransInfo *trans_info;
+    gboolean multiple_accounts = FALSE;
+    gboolean valid;
+
+    g_assert (info);
+
+    model = gtk_tree_view_get_model (info->view);
+
+    if (gtk_tree_model_iter_n_children (model, NULL) > 1)
+    {
+        /* Get first row in list store */
+        valid = gtk_tree_model_get_iter_first (model, &iter);
+        if (valid)
+        {
+            gchar *account_name;
+            gtk_tree_model_get (model, &iter, DOWNLOADED_COL_ACCOUNT, &account_name, -1);
+
+            valid = gtk_tree_model_iter_next (model, &iter);
+
+            while (valid)
+            {
+                gchar *test_account_name;
+
+                gtk_tree_model_get (model, &iter, DOWNLOADED_COL_ACCOUNT, &test_account_name, -1);
+                if (g_strcmp0 (account_name, test_account_name) != 0)
+                {
+                     multiple_accounts = TRUE;
+                     g_free (test_account_name);
+                     break;
+                }
+                valid = gtk_tree_model_iter_next (model, &iter);
+                g_free (test_account_name);
+            }
+            g_free (account_name);
+        }
+        // now toggle the column
+        if (multiple_accounts)
+        {
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->show_account_column), TRUE);
+            gtk_tree_view_expand_all (info->view);
+        }
+        else
+        {
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->show_account_column), FALSE);
+            gtk_tree_view_collapse_all (info->view);
+        }
+    }
+}
+
 // This returns the transaction ID of the first match candidate in match_list
 static const GncGUID*
 get_top_trans_match_id (GList* match_list)
@@ -395,6 +449,7 @@ gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
     gnc_gen_trans_list_create_matches (info);
     resolve_conflicts (info);
     gtk_widget_show_all (GTK_WIDGET(info->main_widget));
+    gnc_gen_trans_list_show_accounts_column (info);
 }
 
 void

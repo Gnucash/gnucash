@@ -1163,7 +1163,7 @@ gnc_file_ofx_import_process_file (ofx_info* info)
     /*ofx_set_status_cb(libofx_context, ofx_proc_status_cb, 0);*/
 
     // Create the match dialog, and run the ofx file through the importer.
-    info->gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, TRUE, 42, FALSE);
+    info->gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, FALSE, 42, FALSE);
     libofx_proc_file (libofx_context, selected_filename, AUTODETECT);
 
     // Free the libofx context before recursing to process the next file
