@@ -90,8 +90,10 @@ static QofLogModule log_module = GNC_MOD_PREFS;
 
 void gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused);
 void gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog);
-gboolean gnc_account_separator_validate_cb (GtkEntry *entry, GdkEvent *event, GtkWidget *dialog);
 void gnc_save_on_close_expires_cb (GtkToggleButton *button, GtkWidget *dialog);
+gboolean gnc_preferences_delete_event_cb (GtkWidget *widget,
+                                          GdkEvent  *event,
+                                          gpointer   user_data);
 
 /** This data structure holds the information for a single addition to
  *  the preferences dialog. */
@@ -185,22 +187,95 @@ gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
 }
 
 
-gboolean
-gnc_account_separator_validate_cb (GtkEntry *entry, GdkEvent *event, GtkWidget *dialog)
+/** Called when the 'Close' button pressed or preference dialog closes
+ *  to check if the account separator is valid.
+ *  Offers two choices, to reset separator to original value and exit
+ *  or go back to the 'Accounts' page to change separator
+ *
+ *  @internal
+ *
+ *  @param dialog the prefs dialog.
+ */
+static gboolean
+gnc_account_separator_validate (GtkWidget *dialog)
 {
+    GtkWidget *entry = g_object_get_data (G_OBJECT(dialog), "account-separator");
+    gboolean ret = TRUE;
     gchar *separator;
-    gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (entry), &separator);
+    gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (GTK_ENTRY(entry)), &separator);
 
     /* Check if the new separator clashes with existing account names */
-
     if (conflict_msg)
     {
-        gnc_warning_dialog (GTK_WINDOW (dialog), "%s", conflict_msg);
-        g_free ( conflict_msg );
+        GtkWidget   *msg_dialog;
+        GtkBuilder  *builder;
+        GtkWidget   *msg_label;
+        gint         response;
+
+        builder = gtk_builder_new();
+        gnc_builder_add_from_file (builder, "dialog-preferences.glade", "separator_validation_dialog");
+
+        msg_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "separator_validation_dialog"));
+
+        msg_label = GTK_WIDGET(gtk_builder_get_object (builder, "conflict_message"));
+
+        gtk_label_set_text (GTK_LABEL(msg_label), conflict_msg);
+
+        g_object_unref (G_OBJECT(builder));
+        gtk_widget_show_all (msg_dialog);
+
+        response = gtk_dialog_run (GTK_DIALOG(msg_dialog));
+        if (response == GTK_RESPONSE_ACCEPT) // reset to original
+        {
+            gchar *original_sep = g_object_get_data (G_OBJECT(entry), "original_text");
+
+            if (original_sep != NULL)
+                gtk_entry_set_text (GTK_ENTRY(entry), original_sep);
+        }
+        else
+            ret = FALSE;
+
+        g_free (conflict_msg);
+        gtk_widget_destroy (msg_dialog);
     }
     g_free (separator);
-    return FALSE;
+    return ret;
 }
+
+
+/** Used to select the 'Accounts' page when the user wants
+ *  to return from the account separator validation dialog
+ *  to the preference dialog.
+ *
+ *  @internal
+ *
+ *  @param user_data A pointer to the dialog.
+ */
+static void
+gnc_preferences_select_account_page (GtkDialog *dialog)
+{
+    GtkWidget *notebook = g_object_get_data (G_OBJECT(dialog), NOTEBOOK);
+    GList *children = gtk_container_get_children (GTK_CONTAINER(notebook));
+
+    if (children)
+    {
+        GtkWidget *acc_page = NULL;
+        GList *node;
+
+        for (node = children; node; node = node->next)
+        {
+            if (g_strcmp0 (gtk_widget_get_name (GTK_WIDGET(node->data)), "accounts_page") == 0)
+                acc_page = node->data;
+        }
+
+        if (acc_page)
+            gtk_notebook_set_current_page (GTK_NOTEBOOK(notebook),
+                                           gtk_notebook_page_num (GTK_NOTEBOOK(notebook),
+                                           acc_page));
+    }
+    g_list_free (children);
+}
+
 
 /** Called when the save-on-close checkbutton is toggled.
  * @internal
@@ -1096,6 +1171,15 @@ gnc_prefs_connect_date_edit (GNCDateEdit *gde , const gchar *boxname )
 /*    Callbacks     */
 /********************/
 
+gboolean
+gnc_preferences_delete_event_cb (GtkWidget *widget,
+                                 GdkEvent  *event,
+                                 gpointer   user_data)
+{
+    /* need to block this for the account separator test */
+    return TRUE;
+}
+
 /** Handle a user click on one of the buttons at the bottom of the
  *  preference dialog.  Also handles delete_window events, which have
  *  conveniently converted to a response by GtkDialog.
@@ -1118,11 +1202,17 @@ gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
         gnc_gnome_help(HF_HELP, HL_GLOBPREFS);
         break;
 
+    case GTK_RESPONSE_DELETE_EVENT:
     default:
-        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
-        gnc_unregister_gui_component_by_data(DIALOG_PREFERENCES_CM_CLASS,
-                                             dialog);
-        gtk_widget_destroy(GTK_WIDGET(dialog));
+        if (gnc_account_separator_validate (GTK_WIDGET(dialog)))
+        {
+            gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(dialog));
+            gnc_unregister_gui_component_by_data (DIALOG_PREFERENCES_CM_CLASS,
+                                                  dialog);
+            gtk_widget_destroy (GTK_WIDGET(dialog));
+        }
+        else
+            gnc_preferences_select_account_page (dialog);
         break;
     }
 }
@@ -1239,7 +1329,7 @@ static GtkWidget *
 gnc_preferences_dialog_create(GtkWindow *parent)
 {
     GtkBuilder *builder;
-    GtkWidget *dialog, *notebook, *label, *image, *spinner;
+    GtkWidget *dialog, *notebook, *label, *image, *spinner, *entry;
     GtkWidget *box, *date, *period, *currency, *fcb, *button;
     GHashTable *prefs_table;
     GDate* gdate = NULL;
@@ -1303,6 +1393,9 @@ gnc_preferences_dialog_create(GtkWindow *parent)
 
     image = GTK_WIDGET(gtk_builder_get_object (builder, "separator_error"));
     g_object_set_data(G_OBJECT(dialog), "separator_error", image);
+
+    entry = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general/account-separator"));
+    g_object_set_data (G_OBJECT(dialog), "account-separator", entry);
 
     spinner = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general/save-on-close-wait-time"));
     g_object_set_data(G_OBJECT(dialog), "save_on_close_wait_time", spinner);
@@ -1416,6 +1509,11 @@ gnc_preferences_dialog_create(GtkWindow *parent)
     gnc_save_on_close_expires_cb (GTK_TOGGLE_BUTTON(button), dialog);
 
     g_object_unref(G_OBJECT(builder));
+
+    /* save the original account separator incase it changes */
+    g_object_set_data_full (G_OBJECT(entry), "original_text",
+                            g_strdup (gtk_entry_get_text (GTK_ENTRY(entry))),
+                            g_free);
 
     LEAVE("dialog %p", dialog);
     return dialog;
