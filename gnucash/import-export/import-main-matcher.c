@@ -1113,23 +1113,20 @@ show_matched_info_toggled_cb (GtkToggleButton *togglebutton,
     }
 }
 
-GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
-        const gchar* heading,
-        gboolean all_from_same_account,
-        gint match_date_hardlimit,
-        gboolean show_all)
+static void
+gnc_gen_trans_common_setup (GNCImportMainMatcher *info,
+                            GtkWidget *parent,
+                            GtkBuilder *builder,
+                            const gchar* heading,
+                            gboolean all_from_same_account,
+                            gint match_date_hardlimit)
 {
-    GNCImportMainMatcher *info;
-    GtkBuilder *builder;
-    GtkWidget *heading_label;
-    GtkWidget *box, *pbox;
-    gboolean show_update;
     GtkStyleContext *stylectxt;
     GdkRGBA color;
-    GtkWidget *button;
+    GtkWidget *heading_label;
+    gboolean show_update;
 
-    info = g_new0 (GNCImportMainMatcher, 1);
-    info->pending_matches = gnc_import_PendingMatches_new();
+    info->pending_matches = gnc_import_PendingMatches_new ();
 
     /* Initialize user Settings. */
     info->user_settings = gnc_import_Settings_new ();
@@ -1138,18 +1135,6 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     stylectxt = gtk_widget_get_style_context (GTK_WIDGET(parent));
     gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
     info->dark_theme = gnc_is_dark_theme (&color);
-
-    /* Initialize the GtkDialog. */
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher_dialog");
-    gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher_content");
-    info->main_widget = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_dialog"));
-    g_assert (info->main_widget != NULL);
-
-    /* Pack the content into the dialog vbox */
-    pbox = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_vbox"));
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_content"));
-    gtk_box_pack_start (GTK_BOX(pbox), box, TRUE, TRUE, 0);
 
     /* Get the view */
     info->view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "downloaded_view"));
@@ -1172,15 +1157,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
     g_assert (heading_label != NULL);
 
-    if (parent)
-        gtk_window_set_transient_for (GTK_WINDOW (info->main_widget), GTK_WINDOW (parent));
-
     if (heading)
-        gtk_label_set_text (GTK_LABEL (heading_label), heading);
-
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->main_widget), GTK_WINDOW (parent));
-    if(show_all)
-        gtk_widget_show_all (GTK_WIDGET (info->main_widget));
 
     info->transaction_processed_cb = NULL;
 
@@ -1188,6 +1165,46 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, info);
 
     g_object_unref (G_OBJECT(builder));
+}
+
+
+GNCImportMainMatcher *
+gnc_gen_trans_list_new (GtkWidget *parent,
+                        const gchar* heading,
+                        gboolean all_from_same_account,
+                        gint match_date_hardlimit,
+                        gboolean show_all)
+{
+    GNCImportMainMatcher *info;
+    GtkBuilder *builder;
+    GtkWidget *box, *pbox;
+
+    info = g_new0 (GNCImportMainMatcher, 1);
+
+    /* Initialize the GtkDialog. */
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher_dialog");
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher_content");
+
+    info->main_widget = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_dialog"));
+    g_assert (info->main_widget != NULL);
+
+    /* Pack the content into the dialog vbox */
+    pbox = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_vbox"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_content"));
+    gtk_box_pack_start (GTK_BOX(pbox), box, TRUE, TRUE, 0);
+
+    /* setup the common parts */
+    gnc_gen_trans_common_setup (info, parent, builder, heading,
+                                all_from_same_account, match_date_hardlimit);
+
+    if (parent)
+        gtk_window_set_transient_for (GTK_WINDOW(info->main_widget), GTK_WINDOW(parent));
+
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->main_widget), GTK_WINDOW(parent));
+
+    if (show_all)
+        gtk_widget_show_all (GTK_WIDGET(info->main_widget));
 
     // Register this UI, it needs to be closed when the session is closed.
     info->id = gnc_register_gui_component (IMPORT_MAIN_MATCHER_CM_CLASS,
@@ -1203,71 +1220,32 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
  *                 Assistant routines Start                      *
  *****************************************************************/
 
-GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
-        GtkWidget *assistant_page, const gchar* heading,
-        gboolean all_from_same_account, gint match_date_hardlimit)
+GNCImportMainMatcher *
+gnc_gen_trans_assist_new (GtkWidget *parent,
+                          GtkWidget *assistant_page,
+                          const gchar* heading,
+                          gboolean all_from_same_account,
+                          gint match_date_hardlimit)
 {
     GNCImportMainMatcher *info;
     GtkBuilder *builder;
-    GtkWidget *heading_label;
     GtkWidget *box;
-    gboolean show_update;
-    GtkStyleContext *stylectxt;
-    GdkRGBA color;
 
     info = g_new0 (GNCImportMainMatcher, 1);
-    info->pending_matches = gnc_import_PendingMatches_new();
     info->main_widget = GTK_WIDGET(parent);
-
-    /* Initialize user Settings. */
-    info->user_settings = gnc_import_Settings_new ();
-    gnc_import_Settings_set_match_date_hardlimit (info->user_settings, match_date_hardlimit);
-
-    stylectxt = gtk_widget_get_style_context (GTK_WIDGET(parent));
-    gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
-    info->dark_theme = gnc_is_dark_theme (&color);
 
     /* load the interface */
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher_content");
-    if (builder == NULL)
-    {
-        PERR("Error opening the glade builder interface");
-    }
+
     /* Pack content into Assistant page widget */
     box = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_content"));
+    g_assert (box != NULL);
     gtk_box_pack_start (GTK_BOX(assistant_page), box, TRUE, TRUE, 6);
 
-    /* Get the view */
-    info->view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "downloaded_view"));
-    g_assert (info->view != NULL);
-
-    info->show_account_column = GTK_WIDGET(gtk_builder_get_object (builder, "show_source_account_button"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->show_account_column), all_from_same_account);
-    g_signal_connect (G_OBJECT(info->show_account_column), "toggled",
-                      G_CALLBACK(show_account_column_toggled_cb), info);
-
-    info->show_matched_info = GTK_WIDGET(gtk_builder_get_object (builder, "show_matched_info_button"));
-    g_signal_connect (G_OBJECT(info->show_matched_info), "toggled",
-                      G_CALLBACK(show_matched_info_toggled_cb), info);
-
-    // Create the checkbox, but do not show it by default.
-    info->reconcile_after_close = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_after_close_button"));
-
-    show_update = gnc_import_Settings_get_action_update_enabled (info->user_settings);
-    gnc_gen_trans_init_view (info, all_from_same_account, show_update);
-    heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
-    g_assert (heading_label != NULL);
-
-    if (heading)
-        gtk_label_set_text (GTK_LABEL (heading_label), heading);
-
-    info->transaction_processed_cb = NULL;
-
-    /* Connect the signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, info);
-
-    g_object_unref (G_OBJECT(builder));
+    /* setup the common parts */
+    gnc_gen_trans_common_setup (info, parent, builder, heading,
+                                all_from_same_account, match_date_hardlimit);
 
     return info;
 }
