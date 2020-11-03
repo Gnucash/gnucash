@@ -1841,7 +1841,6 @@ gboolean query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
 {
     GtkTreeView          *tree_view = GTK_TREE_VIEW(widget);
     GtkTreeModel         *model = gtk_tree_view_get_model(tree_view);
-    //GNCImportMainMatcher *info = user_data;
     GtkTreePath          *path  = NULL;
     GtkTreeViewColumn    *column = NULL;
     GtkTreeIter iter;
@@ -1872,7 +1871,7 @@ gboolean query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
         }
 
         // Did we select any text? If yes, display the tooltip
-        if (tooltip_text)
+        if (tooltip_text && *tooltip_text)
         {
             show_tooltip = TRUE;
             gtk_tooltip_set_text (tooltip, tooltip_text);
