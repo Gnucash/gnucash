@@ -1111,6 +1111,8 @@ gnc_ofx_match_done (GtkDialog *dialog, gint response_id, gpointer user_data)
                               G_CALLBACK(gnc_ofx_process_next_file), info);
         }
     }
+    else if (response_id == GTK_RESPONSE_HELP)
+        return;
     else
     {
         gtk_widget_hide (GTK_WIDGET(dialog));
