@@ -39,8 +39,8 @@
 typedef struct _main_matcher_info GNCImportMainMatcher;
 
 typedef void (*GNCTransactionProcessedCB) (GNCImportTransInfo *trans_info,
-        gboolean imported, gpointer user_data);
-
+                                           gboolean imported,
+                                           gpointer user_data);
 
 /** Create a new generic transaction dialog window and return it.
  *
@@ -67,10 +67,10 @@ typedef void (*GNCTransactionProcessedCB) (GNCImportTransInfo *trans_info,
  * @return A pointer to the GNCImportMainMatcher which has been setup.
 */
 GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
-        const gchar* heading,
-        gboolean all_from_same_account,
-        gint match_date_hardlimit,
-        gboolean show_all);
+                                              const gchar* heading,
+                                              gboolean all_from_same_account,
+                                              gint match_date_hardlimit,
+                                              gboolean show_all);
 
 
 
@@ -103,8 +103,10 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
  * @return A pointer to the GNCImportMainMatcher which has been setup.
 */
 GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
-        GtkWidget *assistant_page, const gchar* heading,
-        gboolean all_from_same_account, gint match_date_hardlimit);
+                                                 GtkWidget *assistant_page,
+                                                 const gchar* heading,
+                                                 gboolean all_from_same_account,
+                                                 gint match_date_hardlimit);
 
 
 /**  This starts the import process for transaction from an assistant.
@@ -131,9 +133,9 @@ void on_matcher_help_clicked (GtkButton *button, gpointer user_data);
  *
  * @param trans_processed_cb The callback function.
  */
-void gnc_gen_trans_list_add_tp_cb(GNCImportMainMatcher *info,
-                                  GNCTransactionProcessedCB trans_processed_cb,
-                                  gpointer user_data);
+void gnc_gen_trans_list_add_tp_cb (GNCImportMainMatcher *info,
+                                   GNCTransactionProcessedCB trans_processed_cb,
+                                   gpointer user_data);
 
 
 /** Deletes the given object. */
@@ -150,7 +152,7 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info);
  * must NOT be committed. The Importer takes over ownership of the
  * passed transaction.
  */
-void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans);
+void gnc_gen_trans_list_add_trans (GNCImportMainMatcher *gui, Transaction *trans);
 
 
 /** Add a newly imported Transaction to the Transaction Importer and provide an
@@ -167,7 +169,9 @@ void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans)
  *
  * @param ref_id Reference id which links an external object to the transaction.
  */
-void gnc_gen_trans_list_add_trans_with_ref_id(GNCImportMainMatcher *gui, Transaction *trans, guint32 ref_id);
+void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui,
+                                               Transaction *trans,
+                                               guint32 ref_id);
 
 
 /** Run this dialog and return only after the user pressed Ok, Cancel,
@@ -189,12 +193,12 @@ GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info);
  * @param info A pointer to a the GNCImportMainMatcher structure.
  * @return A boolean indicating whether the transaction list is empty.
  */
-gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info);
+gboolean gnc_gen_trans_list_empty (GNCImportMainMatcher *info);
 
 /** Shows widgets.
  * @param info A pointer to a the GNCImportMainMatcher structure.
  */
-void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info);
+void gnc_gen_trans_list_show_all (GNCImportMainMatcher *info);
 
 /** Show and set the reconcile after close check button.
  * @param info A pointer to a the GNCImportMainMatcher structure.
