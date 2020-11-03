@@ -88,7 +88,7 @@
 /** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PREFS;
 
-void gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused);
+void gnc_preferences_response_cb (GtkDialog *dialog, gint response, GtkDialog *unused);
 void gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog);
 void gnc_save_on_close_expires_cb (GtkToggleButton *button, GtkWidget *dialog);
 gboolean gnc_preferences_delete_event_cb (GtkWidget *widget,
@@ -122,7 +122,7 @@ GSList *add_ins = NULL;
 static gchar *gnc_account_separator_is_valid (const gchar *separator,
                                               gchar **normalized_separator)
 {
-    QofBook *book = gnc_get_current_book();
+    QofBook *book = gnc_get_current_book ();
     GList *conflict_accts = NULL;
     gchar *message = NULL;
 
@@ -133,7 +133,6 @@ static gchar *gnc_account_separator_is_valid (const gchar *separator,
                                                       conflict_accts);
 
     g_list_free (conflict_accts);
-
     return message;
 }
 
@@ -156,29 +155,29 @@ gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
 
     gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (entry), &separator);
 
-    label = g_object_get_data(G_OBJECT(dialog), "sample_account");
-    DEBUG("Sample Account pointer is %p", label );
+    label = g_object_get_data (G_OBJECT(dialog), "sample_account");
+    DEBUG("Sample Account pointer is %p", label);
     /* Translators: Both %s will be the account separator character; the
        resulting string is a demonstration how the account separator
        character will look like. You can replace these three account
        names with other account names that are more suitable for your
        language - just keep in mind to have exactly two %s in your
        translation. */
-    sample = g_strdup_printf(_("Income%sSalary%sTaxable"),
-                             separator, separator);
+    sample = g_strdup_printf (_("Income%sSalary%sTaxable"),
+                              separator, separator);
     PINFO(" Label set to '%s'", sample);
-    gtk_label_set_text(GTK_LABEL(label), sample);
-    g_free(sample);
+    gtk_label_set_text (GTK_LABEL(label), sample);
+    g_free (sample);
 
     /* Check if the new separator clashes with existing account names */
-    image = g_object_get_data(G_OBJECT(dialog), "separator_error");
-    DEBUG("Separator Error Image pointer is %p", image );
+    image = g_object_get_data (G_OBJECT(dialog), "separator_error");
+    DEBUG("Separator Error Image pointer is %p", image);
 
     if (conflict_msg)
     {
-        gtk_widget_set_tooltip_text(GTK_WIDGET(image), conflict_msg);
+        gtk_widget_set_tooltip_text (GTK_WIDGET(image), conflict_msg);
         gtk_widget_show (GTK_WIDGET(image));
-        g_free ( conflict_msg );
+        g_free (conflict_msg);
     }
     else
         gtk_widget_hide (GTK_WIDGET(image));
@@ -207,12 +206,11 @@ gnc_account_separator_validate (GtkWidget *dialog)
     /* Check if the new separator clashes with existing account names */
     if (conflict_msg)
     {
-        GtkWidget   *msg_dialog;
+        GtkWidget   *msg_dialog, *msg_label;
         GtkBuilder  *builder;
-        GtkWidget   *msg_label;
         gint         response;
 
-        builder = gtk_builder_new();
+        builder = gtk_builder_new ();
         gnc_builder_add_from_file (builder, "dialog-preferences.glade", "separator_validation_dialog");
 
         msg_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "separator_validation_dialog"));
@@ -285,9 +283,9 @@ gnc_preferences_select_account_page (GtkDialog *dialog)
 void
 gnc_save_on_close_expires_cb (GtkToggleButton *button, GtkWidget *dialog)
 {
-    GtkWidget *spinner = g_object_get_data (G_OBJECT (dialog),
+    GtkWidget *spinner = g_object_get_data (G_OBJECT(dialog),
                                             "save_on_close_wait_time");
-    gtk_widget_set_sensitive(spinner, gtk_toggle_button_get_active(button));
+    gtk_widget_set_sensitive (spinner, gtk_toggle_button_get_active (button));
 }
 
 /** This function compares two add-ins to see if they specify the same
@@ -305,7 +303,7 @@ static gint
 gnc_prefs_compare_addins (addition *a,
                           addition *b)
 {
-    return g_utf8_collate(a->tabname, b->tabname);
+    return g_utf8_collate (a->tabname, b->tabname);
 }
 
 
@@ -341,30 +339,30 @@ gnc_preferences_add_page_internal (const gchar *filename,
     ENTER("file %s, widget %s, tab %s full page %d",
           filename, widgetname, tabname, full_page);
 
-    add_in = g_malloc(sizeof(addition));
+    add_in = g_malloc (sizeof(addition));
     if (add_in == NULL)
     {
-        g_critical("Unable to allocate memory.\n");
+        g_critical ("Unable to allocate memory.\n");
         LEAVE("no memory");
         return;
     }
 
-    add_in->filename   = g_strdup(filename);
-    add_in->widgetname = g_strdup(widgetname);
-    add_in->tabname    = g_strdup(tabname);
+    add_in->filename   = g_strdup (filename);
+    add_in->widgetname = g_strdup (widgetname);
+    add_in->tabname    = g_strdup (tabname);
     add_in->full_page  = full_page;
     if (!add_in->filename || !add_in->widgetname || !add_in->tabname)
     {
-        g_critical("Unable to allocate memory.\n");
-        g_free(add_in->filename);
-        g_free(add_in->widgetname);
-        g_free(add_in->tabname);
-        g_free(add_in);
+        g_critical ("Unable to allocate memory.\n");
+        g_free (add_in->filename);
+        g_free (add_in->widgetname);
+        g_free (add_in->tabname);
+        g_free (add_in);
         LEAVE("no memory");
         return;
     }
 
-    ptr = g_slist_find_custom(add_ins, add_in, (GCompareFunc)gnc_prefs_compare_addins);
+    ptr = g_slist_find_custom (add_ins, add_in, (GCompareFunc)gnc_prefs_compare_addins);
     if (ptr)
     {
         /* problem? */
@@ -372,34 +370,34 @@ gnc_preferences_add_page_internal (const gchar *filename,
 
         if (preexisting->full_page)
         {
-            g_warning("New tab %s(%s/%s/%s) conflicts with existing tab %s(%s/%s/full)",
-                      add_in->tabname, add_in->filename, add_in->widgetname,
-                      add_in->full_page ? "full" : "partial",
-                      preexisting->tabname, preexisting->filename, preexisting->widgetname);
+            g_warning ("New tab %s(%s/%s/%s) conflicts with existing tab %s(%s/%s/full)",
+                       add_in->tabname, add_in->filename, add_in->widgetname,
+                       add_in->full_page ? "full" : "partial",
+                       preexisting->tabname, preexisting->filename, preexisting->widgetname);
             error = TRUE;
         }
         else if (add_in->full_page)
         {
-            g_warning("New tab %s(%s/%s/%s) conflicts with existing tab %s(%s/%s/partial)",
-                      add_in->tabname, add_in->filename, add_in->widgetname,
-                      add_in->full_page ? "full" : "partial",
-                      preexisting->tabname, preexisting->filename, preexisting->widgetname);
+            g_warning ("New tab %s(%s/%s/%s) conflicts with existing tab %s(%s/%s/partial)",
+                       add_in->tabname, add_in->filename, add_in->widgetname,
+                       add_in->full_page ? "full" : "partial",
+                       preexisting->tabname, preexisting->filename, preexisting->widgetname);
             error = TRUE;
         }
     }
 
     if (error)
     {
-        g_free(add_in->filename);
-        g_free(add_in->widgetname);
-        g_free(add_in->tabname);
-        g_free(add_in);
+        g_free (add_in->filename);
+        g_free (add_in->widgetname);
+        g_free (add_in->tabname);
+        g_free (add_in);
         LEAVE("err");
         return;
     }
     else
     {
-        add_ins = g_slist_append(add_ins, add_in);
+        add_ins = g_slist_append (add_ins, add_in);
     }
     LEAVE("");
 }
@@ -416,7 +414,7 @@ gnc_preferences_add_page (const gchar *filename,
                           const gchar *widgetname,
                           const gchar *tabname)
 {
-    gnc_preferences_add_page_internal(filename, widgetname, tabname, TRUE);
+    gnc_preferences_add_page_internal (filename, widgetname, tabname, TRUE);
 }
 
 
@@ -431,7 +429,7 @@ gnc_preferences_add_to_page (const gchar *filename,
                              const gchar *widgetname,
                              const gchar *tabname)
 {
-    gnc_preferences_add_page_internal(filename, widgetname, tabname, FALSE);
+    gnc_preferences_add_page_internal (filename, widgetname, tabname, FALSE);
 }
 
 
@@ -460,23 +458,23 @@ gnc_prefs_build_widget_table (GtkBuilder *builder,
     const gchar *wname;
     GtkWidget *widget;
 
-    prefs_table = g_object_get_data(G_OBJECT(dialog), PREFS_WIDGET_HASH);
+    prefs_table = g_object_get_data (G_OBJECT(dialog), PREFS_WIDGET_HASH);
 
-    interesting = gtk_builder_get_objects(builder);
+    interesting = gtk_builder_get_objects (builder);
 
     for (runner = interesting; runner; runner = g_slist_next(runner))
     {
         widget = runner->data;
         if (GTK_IS_WIDGET(widget))
         {
-            wname = gtk_widget_get_name(widget);
-            name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+            wname = gtk_widget_get_name (widget);
+            name = gtk_buildable_get_name (GTK_BUILDABLE(widget));
             DEBUG("Widget type is %s and buildable get name is %s", wname, name);
             if (g_str_has_prefix (name, "pref"))
-                g_hash_table_insert(prefs_table, (gchar *)name, widget);
+                g_hash_table_insert (prefs_table, (gchar *)name, widget);
         }
     }
-    g_slist_free(interesting);
+    g_slist_free (interesting);
 
 }
 
@@ -504,7 +502,7 @@ gnc_prefs_find_page (GtkNotebook *notebook, const gchar *name)
     GtkWidget *child;
     const gchar *child_name;
 
-    g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
+    g_return_val_if_fail (GTK_IS_NOTEBOOK(notebook), NULL);
     g_return_val_if_fail (name, NULL);
 
     ENTER("");
@@ -548,12 +546,12 @@ gnc_prefs_get_grid_size (GtkWidget *child, gpointer data)
     struct copy_data *copydata = data;
     gint top, left, height, width;
 
-    gtk_container_child_get(GTK_CONTAINER(copydata->grid_to), child,
-                            "left-attach", &left,
-                            "top-attach", &top,
-                            "height", &height,
-                            "width", &width,
-                            NULL);
+    gtk_container_child_get (GTK_CONTAINER(copydata->grid_to), child,
+                             "left-attach", &left,
+                             "top-attach", &top,
+                             "height", &height,
+                             "width", &width,
+                             NULL);
 
     if (left + width >= copydata->cols)
         copydata->cols = left + width;
@@ -586,12 +584,12 @@ gnc_prefs_move_grid_entry (GtkWidget *child,
     gint topm, bottomm, leftm, rightm;
 
     ENTER("child %p, copy data %p", child, data);
-    gtk_container_child_get(GTK_CONTAINER(copydata->grid_from), child,
-                            "left-attach", &left,
-                            "top-attach", &top,
-                            "height", &height,
-                            "width", &width,
-                            NULL);
+    gtk_container_child_get (GTK_CONTAINER(copydata->grid_from), child,
+                             "left-attach", &left,
+                             "top-attach", &top,
+                             "height", &height,
+                             "width", &width,
+                             NULL);
     hexpand = gtk_widget_get_hexpand (child);
     vexpand = gtk_widget_get_vexpand (child);
     halign = gtk_widget_get_halign (child);
@@ -600,10 +598,10 @@ gnc_prefs_move_grid_entry (GtkWidget *child,
     g_object_get (child, "margin-top", &topm, "margin-bottom", &bottomm, NULL);
     g_object_get (child, "margin-left", &leftm, "margin-right", &rightm, NULL);
 
-    g_object_ref(child);
-    gtk_container_remove(GTK_CONTAINER(copydata->grid_from), child);
+    g_object_ref (child);
+    gtk_container_remove (GTK_CONTAINER(copydata->grid_from), child);
 
-    gtk_grid_attach(copydata->grid_to, child, left, copydata->rows + top , width, height);
+    gtk_grid_attach (copydata->grid_to, child, left, copydata->rows + top , width, height);
 
     gtk_widget_set_hexpand (child, hexpand);
     gtk_widget_set_vexpand (child, vexpand);
@@ -613,7 +611,7 @@ gnc_prefs_move_grid_entry (GtkWidget *child,
     g_object_set (child, "margin-left", leftm, "margin-right", rightm, NULL);
     g_object_set (child, "margin-top", topm, "margin-bottom", bottomm, NULL);
 
-    g_object_unref(child);
+    g_object_unref (child);
     LEAVE(" ");
 }
 
@@ -646,10 +644,10 @@ gnc_preferences_build_page (gpointer data,
     dialog = user_data;
 
     DEBUG("Opening %s to get %s", add_in->filename, add_in->widgetname);
-    builder = gtk_builder_new();
+    builder = gtk_builder_new ();
 
     /* Adjustments etc... must come before dialog information */
-    widgetname = g_strsplit(add_in->widgetname, ",", -1);
+    widgetname = g_strsplit (add_in->widgetname, ",", -1);
 
     for (i = 0; widgetname[i]; i++)
     {
@@ -660,11 +658,11 @@ gnc_preferences_build_page (gpointer data,
     DEBUG("Widget Content is %s", widgetname[i - 1]);
     new_content = GTK_WIDGET(gtk_builder_get_object (builder, widgetname[i - 1]));
 
-    g_strfreev(widgetname);
+    g_strfreev (widgetname);
     DEBUG("done");
 
     /* Add to the list of interesting widgets */
-    gnc_prefs_build_widget_table(builder, dialog);
+    gnc_prefs_build_widget_table (builder, dialog);
 
     /* Connect the signals in this glade file. The dialog is passed in
      * so the callback can find "interesting" widgets from other
@@ -672,14 +670,14 @@ gnc_preferences_build_page (gpointer data,
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     /* Prepare for recursion */
-    notebook = g_object_get_data(G_OBJECT(dialog), NOTEBOOK);
+    notebook = g_object_get_data (G_OBJECT(dialog), NOTEBOOK);
 
     if (add_in->full_page)
     {
-        label = gtk_label_new(add_in->tabname);
-        gnc_label_set_alignment(label, 0.0, 0.5);
-        gtk_notebook_append_page(notebook, new_content, label);
-        g_object_unref(G_OBJECT(builder));
+        label = gtk_label_new (add_in->tabname);
+        gnc_label_set_alignment (label, 0.0, 0.5);
+        gtk_notebook_append_page (notebook, new_content, label);
+        g_object_unref (G_OBJECT(builder));
         LEAVE("appended page");
         return;
     }
@@ -687,33 +685,33 @@ gnc_preferences_build_page (gpointer data,
     /* Copied grids must be grids */
     if (!GTK_IS_GRID(new_content))
     {
-        g_critical("The object name %s in file %s is not a GtkGrid. It cannot "
-                   "be added to the preferences dialog.",
-                   add_in->widgetname, add_in->filename);
-        g_object_unref(G_OBJECT(builder));
+        g_critical ("The object name %s in file %s is not a GtkGrid. It cannot "
+                    "be added to the preferences dialog.",
+                    add_in->widgetname, add_in->filename);
+        g_object_unref (G_OBJECT(builder));
         LEAVE("");
         return;
     }
 
     /* Does the page exist or must we create it */
-    existing_content = gnc_prefs_find_page(notebook, add_in->tabname);
+    existing_content = gnc_prefs_find_page (notebook, add_in->tabname);
 
     if (!existing_content)
     {
         /* No existing content with this name.  Create a blank page */
-        existing_content = gtk_grid_new();
-        gtk_container_set_border_width(GTK_CONTAINER(existing_content), 6);
-        label = gtk_label_new(add_in->tabname);
-        gnc_label_set_alignment(label, 0.0, 0.5);
-        gtk_notebook_append_page(notebook, existing_content, label);
-        gtk_widget_show_all(existing_content);
+        existing_content = gtk_grid_new ();
+        gtk_container_set_border_width (GTK_CONTAINER(existing_content), 6);
+        label = gtk_label_new (add_in->tabname);
+        gnc_label_set_alignment (label, 0.0, 0.5);
+        gtk_notebook_append_page (notebook, existing_content, label);
+        gtk_widget_show_all (existing_content);
         DEBUG("created new page %s, appended it", add_in->tabname);
     }
     else
     {
         /* Lets get the size of the existing grid */
         copydata.grid_to = GTK_GRID(existing_content);
-        gtk_container_foreach(GTK_CONTAINER(existing_content), gnc_prefs_get_grid_size, &copydata);
+        gtk_container_foreach (GTK_CONTAINER(existing_content), gnc_prefs_get_grid_size, &copydata);
 
         DEBUG("found existing page %s, grid size is %d x %d", add_in->tabname, copydata.rows, copydata.cols);
     }
@@ -721,8 +719,8 @@ gnc_preferences_build_page (gpointer data,
     /* Maybe add a spacer row */
     if (copydata.rows > 0)
     {
-        label = gtk_label_new("");
-        gtk_widget_show(label);
+        label = gtk_label_new ("");
+        gtk_widget_show (label);
         gtk_grid_attach (GTK_GRID(existing_content), label, 0, copydata.rows, 1, 1);
         copydata.rows = copydata.rows + 1;
 
@@ -732,10 +730,10 @@ gnc_preferences_build_page (gpointer data,
     /* Now copy all the entries in the grid */
     copydata.grid_from = GTK_GRID(new_content);
     copydata.grid_to = GTK_GRID(existing_content);
-    gtk_container_foreach(GTK_CONTAINER(new_content), gnc_prefs_move_grid_entry, &copydata);
+    gtk_container_foreach (GTK_CONTAINER(new_content), gnc_prefs_move_grid_entry, &copydata);
 
-    g_object_ref_sink(new_content);
-    g_object_unref(G_OBJECT(builder));
+    g_object_ref_sink (new_content);
+    g_object_unref (G_OBJECT(builder));
 
     LEAVE("added content to page");
 }
@@ -755,7 +753,7 @@ gnc_prefs_sort_pages (GtkNotebook *notebook)
     gint n_pages, i;
     GList *tabs = NULL, *iter = NULL;
 
-    g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
+    g_return_if_fail (GTK_IS_NOTEBOOK(notebook));
 
     /* gather tabs */
     n_pages = gtk_notebook_get_n_pages (notebook);
@@ -767,7 +765,7 @@ gnc_prefs_sort_pages (GtkNotebook *notebook)
 
     /* reorder tabs */
     for (i = 0, iter = tabs; iter; i++, iter = iter->next)
-        gtk_notebook_reorder_child (notebook, GTK_WIDGET (iter->data), i);
+        gtk_notebook_reorder_child (notebook, GTK_WIDGET(iter->data), i);
 
     g_list_free (tabs);
 }
@@ -801,15 +799,15 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
 {
     gchar *group, *pref;
 
-    g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
+    g_return_if_fail (GTK_IS_FONT_BUTTON(fb));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(fb)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fb)), &group, &pref);
     gnc_prefs_bind (group, pref, G_OBJECT (fb), "font-name");
 
     g_free (group);
     g_free (pref);
 
-    gtk_widget_show_all(GTK_WIDGET(fb));
+    gtk_widget_show_all (GTK_WIDGET(fb));
 }
 
 /****************************************************************************/
@@ -844,7 +842,7 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
         PINFO("Failed to save preference at %s, %s with %s", group, pref, folder_uri);
     else
         gnc_doclink_pref_path_head_changed (
-            GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (fc))),
+            GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(fc))),
             old_path_head_uri);
 
     g_free (old_path_head_uri);
@@ -949,13 +947,13 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
         PINFO("Failed to Clear preference at %s, %s", group, pref);
     else
         gnc_doclink_pref_path_head_changed (
-            GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (fcb))),
+            GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(fcb))),
             old_path_head_uri);
 
     gtk_widget_destroy (GTK_WIDGET(fcb));
 
     fcb_new = gtk_file_chooser_button_new (_("Select a folder"),
-                             GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+                                           GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
     g_object_set_data (G_OBJECT(fcb_new), "path_head_error", image);
     g_object_set_data_full (G_OBJECT(fcb_new),"group", g_strdup (group), (GDestroyNotify) g_free);
@@ -989,11 +987,11 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
 {
     gchar *group, *pref;
 
-    g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
+    g_return_if_fail (GTK_IS_RADIO_BUTTON(button));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(button)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref);
 
-    gnc_prefs_bind (group, pref, G_OBJECT (button), "active");
+    gnc_prefs_bind (group, pref, G_OBJECT(button), "active");
 
     g_free (group);
     g_free (pref);
@@ -1013,11 +1011,11 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
 {
     gchar *group, *pref;
 
-    g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
+    g_return_if_fail (GTK_IS_CHECK_BUTTON(button));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(button)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref);
 
-    gnc_prefs_bind (group, pref, G_OBJECT (button), "active");
+    gnc_prefs_bind (group, pref, G_OBJECT(button), "active");
 
     g_free (group);
     g_free (pref);
@@ -1037,11 +1035,11 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
 {
     gchar *group, *pref;
 
-    g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
+    g_return_if_fail (GTK_IS_SPIN_BUTTON(spin));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(spin)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(spin)), &group, &pref);
 
-    gnc_prefs_bind (group, pref, G_OBJECT (spin), "value");
+    gnc_prefs_bind (group, pref, G_OBJECT(spin), "value");
 
     g_free (group);
     g_free (pref);
@@ -1060,11 +1058,11 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
 {
     gchar *group, *pref;
 
-    g_return_if_fail(GTK_IS_COMBO_BOX(box));
+    g_return_if_fail (GTK_IS_COMBO_BOX(box));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(box)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(box)), &group, &pref);
 
-    gnc_prefs_bind (group, pref, G_OBJECT (box), "active");
+    gnc_prefs_bind (group, pref, G_OBJECT(box), "active");
 
     g_free (group);
     g_free (pref);
@@ -1083,16 +1081,16 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce, const gchar *boxname )
 {
     gchar *group, *pref;
 
-    g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
+    g_return_if_fail (GNC_IS_CURRENCY_EDIT(gce));
 
     gnc_prefs_split_widget_name (boxname, &group, &pref);
 
-    gnc_prefs_bind (group, pref, G_OBJECT (gce), "mnemonic");
+    gnc_prefs_bind (group, pref, G_OBJECT(gce), "mnemonic");
 
     g_free (group);
     g_free (pref);
 
-    gtk_widget_show_all(GTK_WIDGET(gce));
+    gtk_widget_show_all (GTK_WIDGET(gce));
 }
 
 /****************************************************************************/
@@ -1108,11 +1106,11 @@ gnc_prefs_connect_entry (GtkEntry *entry)
 {
     gchar *group, *pref;
 
-    g_return_if_fail(GTK_IS_ENTRY(entry));
+    g_return_if_fail (GTK_IS_ENTRY(entry));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(entry)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(entry)), &group, &pref);
 
-    gnc_prefs_bind (group, pref, G_OBJECT (entry), "text");
+    gnc_prefs_bind (group, pref, G_OBJECT(entry), "text");
 
     g_free (group);
     g_free (pref);
@@ -1131,11 +1129,11 @@ gnc_prefs_connect_period_select (GncPeriodSelect *period, const gchar *boxname )
 {
     gchar *group, *pref;
 
-    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+    g_return_if_fail (GNC_IS_PERIOD_SELECT(period));
 
     gnc_prefs_split_widget_name (boxname, &group, &pref);
 
-    gnc_prefs_bind (group, pref, G_OBJECT (period), "active");
+    gnc_prefs_bind (group, pref, G_OBJECT(period), "active");
 
     g_free (group);
     g_free (pref);
@@ -1154,11 +1152,11 @@ gnc_prefs_connect_date_edit (GNCDateEdit *gde , const gchar *boxname )
 {
     gchar *group, *pref;
 
-    g_return_if_fail(GNC_IS_DATE_EDIT(gde));
+    g_return_if_fail (GNC_IS_DATE_EDIT(gde));
 
     gnc_prefs_split_widget_name (boxname, &group, &pref);
 
-    gnc_prefs_bind (group, pref, G_OBJECT (gde), "time");
+    gnc_prefs_bind (group, pref, G_OBJECT(gde), "time");
 
     g_free (group);
     g_free (pref);
@@ -1194,12 +1192,12 @@ gnc_preferences_delete_event_cb (GtkWidget *widget,
  *  @param unused
  */
 void
-gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
+gnc_preferences_response_cb (GtkDialog *dialog, gint response, GtkDialog *unused)
 {
     switch (response)
     {
     case GTK_RESPONSE_HELP:
-        gnc_gnome_help(HF_HELP, HL_GLOBPREFS);
+        gnc_gnome_help (HF_HELP, HL_GLOBPREFS);
         break;
 
     case GTK_RESPONSE_DELETE_EVENT:
@@ -1244,66 +1242,66 @@ gnc_prefs_connect_one (const gchar *name,
     if (GTK_IS_FONT_BUTTON(widget))
     {
         DEBUG("  %s - font button", name);
-        gnc_prefs_connect_font_button(GTK_FONT_BUTTON(widget));
+        gnc_prefs_connect_font_button (GTK_FONT_BUTTON(widget));
     }
     else if (GTK_IS_FILE_CHOOSER_BUTTON(widget))
     {
         DEBUG("  %s - file chooser button", name);
-        gnc_prefs_connect_file_chooser_button(GTK_FILE_CHOOSER_BUTTON(widget), NULL);
+        gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget), NULL);
     }
     else if (GTK_IS_RADIO_BUTTON(widget))
     {
         DEBUG("  %s - radio button", name);
-        gnc_prefs_connect_radio_button(GTK_RADIO_BUTTON(widget));
+        gnc_prefs_connect_radio_button (GTK_RADIO_BUTTON(widget));
     }
     else if (GTK_IS_CHECK_BUTTON(widget))
     {
         DEBUG("  %s - check button", name);
-        gnc_prefs_connect_check_button(GTK_CHECK_BUTTON(widget));
+        gnc_prefs_connect_check_button (GTK_CHECK_BUTTON(widget));
     }
     else if (GTK_IS_SPIN_BUTTON(widget))
     {
         DEBUG("  %s - spin button", name);
-        gnc_prefs_connect_spin_button(GTK_SPIN_BUTTON(widget));
+        gnc_prefs_connect_spin_button (GTK_SPIN_BUTTON(widget));
     }
     else if (GTK_IS_COMBO_BOX(widget))
     {
         DEBUG("  %s - combo box", name);
-        gnc_prefs_connect_combo_box(GTK_COMBO_BOX(widget));
+        gnc_prefs_connect_combo_box (GTK_COMBO_BOX(widget));
     }
     else if (GTK_IS_ENTRY(widget))
     {
         DEBUG("  %s - entry", name);
-        gnc_prefs_connect_entry(GTK_ENTRY(widget));
+        gnc_prefs_connect_entry (GTK_ENTRY(widget));
     }
     else if (GTK_IS_BOX(widget))
     {
         /* Test custom widgets are all children of a hbox */
         GtkWidget *widget_child;
-        GList* child = gtk_container_get_children(GTK_CONTAINER(widget));
+        GList* child = gtk_container_get_children (GTK_CONTAINER(widget));
         widget_child = child->data;
-        g_list_free(child);
+        g_list_free (child);
         DEBUG("  %s - box", name);
-        DEBUG("Box widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
+        DEBUG("Box widget type is %s and name is %s", gtk_widget_get_name (GTK_WIDGET(widget_child)), name);
         if (GNC_IS_CURRENCY_EDIT(widget_child))
         {
             DEBUG("  %s - currency_edit", name);
-            gnc_prefs_connect_currency_edit(GNC_CURRENCY_EDIT(widget_child), name );
+            gnc_prefs_connect_currency_edit (GNC_CURRENCY_EDIT(widget_child), name );
         }
         else if (GNC_IS_PERIOD_SELECT(widget_child))
         {
             DEBUG("  %s - period_select", name);
-            gnc_prefs_connect_period_select(GNC_PERIOD_SELECT(widget_child), name );
+            gnc_prefs_connect_period_select (GNC_PERIOD_SELECT(widget_child), name );
         }
         else if (GNC_IS_DATE_EDIT(widget_child))
         {
             DEBUG("  %s - date_edit", name);
-            gnc_prefs_connect_date_edit(GNC_DATE_EDIT(widget_child), name );
+            gnc_prefs_connect_date_edit (GNC_DATE_EDIT(widget_child), name );
         }
         else if (GTK_FILE_CHOOSER_BUTTON(widget_child))
         {
             DEBUG("  %s - file chooser button", name);
-            gnc_prefs_connect_file_chooser_button(GTK_FILE_CHOOSER_BUTTON(widget_child), name );
+            gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget_child), name );
         }
     }
     else
@@ -1326,7 +1324,7 @@ gnc_prefs_connect_one (const gchar *name,
  *  @return A pointer to the newly created dialog.
  */
 static GtkWidget *
-gnc_preferences_dialog_create(GtkWindow *parent)
+gnc_preferences_dialog_create (GtkWindow *parent)
 {
     GtkBuilder *builder;
     GtkWidget *dialog, *notebook, *label, *image, *spinner, *entry;
@@ -1345,7 +1343,7 @@ gnc_preferences_dialog_create(GtkWindow *parent)
 
     ENTER("");
     DEBUG("Opening dialog-preferences.glade:");
-    builder = gtk_builder_new();
+    builder = gtk_builder_new ();
 
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "auto_decimal_places_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "autosave_interval_minutes_adj");
@@ -1374,31 +1372,31 @@ gnc_preferences_dialog_create(GtkWindow *parent)
 
 #ifndef REGISTER2_ENABLED
     /* Hide preferences that are related to register2 */
-    box = GTK_WIDGET (gtk_builder_get_object (builder, "label14"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "label14"));
     gtk_widget_hide (box);
-    box = GTK_WIDGET (gtk_builder_get_object (builder, "pref/general.register/key-length"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.register/key-length"));
     gtk_widget_hide (box);
-    box = GTK_WIDGET (gtk_builder_get_object (builder, "pref/general.register/show-extra-dates"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.register/show-extra-dates"));
     gtk_widget_hide (box);
-    box = GTK_WIDGET (gtk_builder_get_object (builder, "pref/general.register/show-calendar-buttons"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.register/show-calendar-buttons"));
     gtk_widget_hide (box);
-    box = GTK_WIDGET (gtk_builder_get_object (builder, "pref/general.register/selection-to-blank-on-expand"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.register/selection-to-blank-on-expand"));
     gtk_widget_hide (box);
-    box = GTK_WIDGET (gtk_builder_get_object (builder, "pref/general.register/show-extra-dates-on-selection"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.register/show-extra-dates-on-selection"));
     gtk_widget_hide (box);
 #endif
 
     label = GTK_WIDGET(gtk_builder_get_object (builder, "sample_account"));
-    g_object_set_data(G_OBJECT(dialog), "sample_account", label);
+    g_object_set_data (G_OBJECT(dialog), "sample_account", label);
 
     image = GTK_WIDGET(gtk_builder_get_object (builder, "separator_error"));
-    g_object_set_data(G_OBJECT(dialog), "separator_error", image);
+    g_object_set_data (G_OBJECT(dialog), "separator_error", image);
 
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general/account-separator"));
     g_object_set_data (G_OBJECT(dialog), "account-separator", entry);
 
     spinner = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general/save-on-close-wait-time"));
-    g_object_set_data(G_OBJECT(dialog), "save_on_close_wait_time", spinner);
+    g_object_set_data (G_OBJECT(dialog), "save_on_close_wait_time", spinner);
 
     DEBUG("autoconnect");
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
@@ -1406,109 +1404,109 @@ gnc_preferences_dialog_create(GtkWindow *parent)
     DEBUG("done");
 
     notebook = GTK_WIDGET(gtk_builder_get_object (builder, "notebook1"));
-    prefs_table = g_hash_table_new(g_str_hash, g_str_equal);
-    g_object_set_data(G_OBJECT(dialog), NOTEBOOK, notebook);
-    g_object_set_data_full(G_OBJECT(dialog), PREFS_WIDGET_HASH,
-                           prefs_table, (GDestroyNotify)g_hash_table_destroy);
+    prefs_table = g_hash_table_new (g_str_hash, g_str_equal);
+    g_object_set_data (G_OBJECT(dialog), NOTEBOOK, notebook);
+    g_object_set_data_full (G_OBJECT(dialog), PREFS_WIDGET_HASH,
+                            prefs_table, (GDestroyNotify)g_hash_table_destroy);
 
 
-    book = gnc_get_current_book();
+    book = gnc_get_current_book ();
     g_date_clear (&fy_end, 1);
-    qof_instance_get (QOF_INSTANCE (book),
-              "fy-end", &fy_end,
-              NULL);
+    qof_instance_get (QOF_INSTANCE(book),
+                      "fy-end", &fy_end,
+                      NULL);
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_PERIOD));
-    period = gnc_period_select_new(TRUE);
+    period = gnc_period_select_new (TRUE);
     gtk_widget_show (period);
-    gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX(box), period, TRUE, TRUE, 0);
     if (date_is_valid)
-        gnc_period_select_set_fy_end(GNC_PERIOD_SELECT (period), &fy_end);
+        gnc_period_select_set_fy_end (GNC_PERIOD_SELECT(period), &fy_end);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_END_PERIOD));
-    period = gnc_period_select_new(FALSE);
+    period = gnc_period_select_new (FALSE);
     gtk_widget_show (period);
-    gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX(box), period, TRUE, TRUE, 0);
     if (date_is_valid)
-        gnc_period_select_set_fy_end(GNC_PERIOD_SELECT (period), &fy_end);
+        gnc_period_select_set_fy_end (GNC_PERIOD_SELECT(period), &fy_end);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_DATE));
-    date = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
+    date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gtk_widget_show (date);
-    gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX(box), date, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_END_DATE));
-    date = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
+    date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gtk_widget_show (date);
-    gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX(box), date, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL "/" GNC_PREF_CURRENCY_OTHER));
-    currency = gnc_currency_edit_new();
+    currency = gnc_currency_edit_new ();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
     gtk_widget_show (currency);
-    gtk_box_pack_start(GTK_BOX (box), currency, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX(box), currency, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL_REPORT "/" GNC_PREF_CURRENCY_OTHER));
-    currency = gnc_currency_edit_new();
+    currency = gnc_currency_edit_new ();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
     gtk_widget_show (currency);
-    gtk_box_pack_start(GTK_BOX (box), currency, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX(box), currency, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL "/" GNC_DOC_LINK_PATH_HEAD));
     fcb = gtk_file_chooser_button_new (_("Select a folder"),
-                             GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-    gtk_box_pack_start (GTK_BOX (box), fcb, TRUE, TRUE, 0);
+                                       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+    gtk_box_pack_start (GTK_BOX(box), fcb, TRUE, TRUE, 0);
     button = gtk_button_new_with_label (_("Clear"));
-    gtk_box_pack_start (GTK_BOX (box), button, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX(box), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
     g_signal_connect (GTK_BUTTON(button), "clicked",
                       G_CALLBACK(file_chooser_clear_cb), fcb);
 
     image = GTK_WIDGET(gtk_builder_get_object (builder, "path_head_error"));
-    g_object_set_data(G_OBJECT(fcb), "path_head_error", image);
+    g_object_set_data (G_OBJECT(fcb), "path_head_error", image);
 
     /* Add to the list of interesting widgets */
-    gnc_prefs_build_widget_table(builder, dialog);
+    gnc_prefs_build_widget_table (builder, dialog);
 
-    g_slist_foreach(add_ins, gnc_preferences_build_page, dialog);
+    g_slist_foreach (add_ins, gnc_preferences_build_page, dialog);
 
     /* Sort tabs alphabetically */
-    gnc_prefs_sort_pages(GTK_NOTEBOOK(notebook));
-    gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
+    gnc_prefs_sort_pages (GTK_NOTEBOOK(notebook));
+    gtk_notebook_set_current_page (GTK_NOTEBOOK(notebook), 0);
 
     DEBUG("We have the following interesting widgets:");
-    gnc_prefs_block_all(); // Block All Registered callbacks
-    g_hash_table_foreach(prefs_table, (GHFunc)gnc_prefs_connect_one, dialog);
-    gnc_prefs_unblock_all(); // UnBlock All Registered callbacks
+    gnc_prefs_block_all (); // Block All Registered callbacks
+    g_hash_table_foreach (prefs_table, (GHFunc)gnc_prefs_connect_one, dialog);
+    gnc_prefs_unblock_all (); // UnBlock All Registered callbacks
     DEBUG("Done with interesting widgets.");
 
     /* Other stuff */
-    gdate = g_date_new_dmy(31, G_DATE_JULY, 2013);
-    g_date_strftime(buf, sizeof(buf), "%x", gdate);
+    gdate = g_date_new_dmy (31, G_DATE_JULY, 2013);
+    g_date_strftime (buf, sizeof(buf), "%x", gdate);
     store = GTK_LIST_STORE(gtk_builder_get_object (builder, "date_formats"));
     path = gtk_tree_path_new_from_indices (QOF_DATE_FORMAT_LOCALE, -1);
-    if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path))
-            gtk_list_store_set (store, &iter, 1, buf, -1);
-    g_date_free(gdate);
+    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(store), &iter, path))
+        gtk_list_store_set (store, &iter, 1, buf, -1);
+    g_date_free (gdate);
     gtk_tree_path_free (path);
 
     locale_currency = gnc_locale_default_currency ();
-    currency_name = gnc_commodity_get_printname(locale_currency);
+    currency_name = gnc_commodity_get_printname (locale_currency);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "locale_currency"));
-    gtk_label_set_label(GTK_LABEL(label), currency_name);
+    gtk_label_set_label (GTK_LABEL(label), currency_name);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "locale_currency2"));
-    gtk_label_set_label(GTK_LABEL(label), currency_name);
+    gtk_label_set_label (GTK_LABEL(label), currency_name);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general/save-on-close-expires"));
     gnc_save_on_close_expires_cb (GTK_TOGGLE_BUTTON(button), dialog);
 
-    g_object_unref(G_OBJECT(builder));
+    g_object_unref (G_OBJECT(builder));
 
     /* save the original account separator incase it changes */
     g_object_set_data_full (G_OBJECT(entry), "original_text",
@@ -1548,7 +1546,7 @@ show_handler (const char *class_name, gint component_id,
 
     ENTER(" ");
     dialog = GTK_WIDGET(user_data);
-    gtk_window_present(GTK_WINDOW(dialog));
+    gtk_window_present (GTK_WINDOW(dialog));
     LEAVE(" ");
     return(TRUE);
 }
@@ -1567,8 +1565,8 @@ close_handler (gpointer user_data)
 
     ENTER(" ");
     dialog = GTK_WIDGET(user_data);
-    gnc_unregister_gui_component_by_data(DIALOG_PREFERENCES_CM_CLASS, dialog);
-    gtk_widget_destroy(dialog);
+    gnc_unregister_gui_component_by_data (DIALOG_PREFERENCES_CM_CLASS, dialog);
+    gtk_widget_destroy (dialog);
     LEAVE(" ");
 }
 
@@ -1583,8 +1581,8 @@ gnc_preferences_dialog (GtkWindow *parent)
     GtkWidget *dialog;
 
     ENTER("");
-    if (gnc_forall_gui_components(DIALOG_PREFERENCES_CM_CLASS,
-                                  show_handler, NULL))
+    if (gnc_forall_gui_components (DIALOG_PREFERENCES_CM_CLASS,
+                                   show_handler, NULL))
     {
         LEAVE("existing window");
         return;
@@ -1592,11 +1590,11 @@ gnc_preferences_dialog (GtkWindow *parent)
 
     dialog = gnc_preferences_dialog_create(parent);
 
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog), parent);
-    gtk_widget_show(dialog);
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(dialog), parent);
+    gtk_widget_show (dialog);
 
-    gnc_register_gui_component(DIALOG_PREFERENCES_CM_CLASS,
-                               NULL, close_handler, dialog);
+    gnc_register_gui_component (DIALOG_PREFERENCES_CM_CLASS,
+                                NULL, close_handler, dialog);
 
     LEAVE(" ");
 }
