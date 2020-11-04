@@ -50,6 +50,7 @@ struct _AutoClearWindow
     GNCAmountEdit *end_value;/* The ending value                      */
     GtkWidget *ok_button;
     GtkWidget *cancel_button;
+    GtkWidget *show_cleared_splits_button;
     GtkLabel *status_label;
 };
 
@@ -151,7 +152,11 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         for (GList *node = toclear_list; node; node = node->next)
             xaccSplitSetReconcile (node->data, CREC);
         xaccAccountCommitEdit (data->account);
-        show_cleared_splits (toclear_list);
+
+        if (gtk_toggle_button_get_active
+            (GTK_TOGGLE_BUTTON (data->show_cleared_splits_button)))
+            show_cleared_splits (toclear_list);
+
         g_list_free (toclear_list);
 
         /* Close window */
@@ -206,6 +211,9 @@ autoClearWindow (GtkWidget *parent, Account *account)
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(data->window), "gnc-id-auto-clear");
+
+    data->show_cleared_splits_button =
+        GTK_WIDGET (gtk_builder_get_object (builder, "show_cleared_splits_button"));
 
     /* Add amount edit box */
     data->end_value = GNC_AMOUNT_EDIT(gnc_amount_edit_new());
