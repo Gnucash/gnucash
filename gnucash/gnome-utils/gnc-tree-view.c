@@ -274,7 +274,7 @@ gnc_tree_view_init (GncTreeView *view, void *data)
     /* Create the last column which contains the column selection
      * widget.  gnc_tree_view_add_text_column will do most of the
      * work. */
-    icon = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_SMALL_TOOLBAR);
+    icon = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
 
     priv->column_menu_icon_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(priv->column_menu_icon_box), FALSE);
@@ -287,9 +287,6 @@ gnc_tree_view_init (GncTreeView *view, void *data)
     gtk_box_pack_end (GTK_BOX(priv->column_menu_icon_box), sep, FALSE, FALSE, 0);
 
     gtk_widget_show_all (priv->column_menu_icon_box);
-
-    g_signal_connect (G_OBJECT(icon), "draw",
-                      G_CALLBACK(gnc_draw_arrow_cb), GINT_TO_POINTER(1));
 
     column = gnc_tree_view_add_text_column (view, NULL, NULL, NULL, NULL,
                                             -1, -1, NULL);

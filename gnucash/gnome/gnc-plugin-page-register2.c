@@ -324,12 +324,12 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         G_CALLBACK (gnc_plugin_page_register2_cmd_reverse_transaction)
     },
     {
-        TRANSACTION_UP_ACTION, "go-up", N_("Move Transaction _Up"), NULL,
+        TRANSACTION_UP_ACTION, "pan-up-symbolic", N_("Move Transaction _Up"), NULL,
         N_("Move the current transaction one row upwards. Only available if the date and number of both rows are identical and the register window is sorted by date."),
         G_CALLBACK (gnc_plugin_page_register2_cmd_entryUp)
     },
     {
-        TRANSACTION_DOWN_ACTION, "go-down", N_("Move Transaction Do_wn"), NULL,
+        TRANSACTION_DOWN_ACTION, "pan-down-symbolic", N_("Move Transaction Do_wn"), NULL,
         N_("Move the current transaction one row downwards. Only available if the date and number of both rows are identical and the register window is sorted by date."),
         G_CALLBACK (gnc_plugin_page_register2_cmd_entryDown)
     },

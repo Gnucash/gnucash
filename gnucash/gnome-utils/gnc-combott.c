@@ -177,6 +177,7 @@ gnc_combott_init (GncCombott *combott)
     GtkWidget *arrow;
     GtkWidget *button;
     GtkWidget *sep;
+    GtkStyleContext *context;
 
     GncCombottPrivate *priv = GNC_COMBOTT_GET_PRIVATE (combott);
 
@@ -192,10 +193,7 @@ gnc_combott_init (GncCombott *combott)
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(hbox), FALSE);
 
-    arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
-
-    g_signal_connect (G_OBJECT (arrow), "draw",
-                      G_CALLBACK (gnc_draw_arrow_cb), GINT_TO_POINTER(1));
+    arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
 
     gtk_widget_set_margin_start (GTK_WIDGET(arrow), 5);
     gtk_box_pack_end (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
@@ -207,9 +205,15 @@ gnc_combott_init (GncCombott *combott)
     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
     priv->label = label;
 
+    context = gtk_widget_get_style_context (priv->label);
+    gtk_style_context_add_class (context, "combo");
+
     button = gtk_button_new();
     gtk_container_add(GTK_CONTAINER(button), GTK_WIDGET(hbox));
     priv->button = button;
+
+    context = gtk_widget_get_style_context (priv->button);
+    gtk_style_context_add_class (context, "combo");
 
     gtk_container_add(GTK_CONTAINER(combott), GTK_WIDGET(button));
 
