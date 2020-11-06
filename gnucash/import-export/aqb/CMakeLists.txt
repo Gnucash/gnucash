@@ -13,6 +13,7 @@ set (aqbanking_SOURCES
   gnc-ab-transfer.c
   gnc-ab-utils.c
   gnc-file-aqb-import.c
+  gnc-flicker-gui.c
   gnc-gwen-gui.c
   gnc-plugin-aqbanking.c
   gncmod-aqbanking.c
@@ -31,6 +32,7 @@ set (aqbanking_noinst_HEADERS
   gnc-ab-transfer.h
   gnc-ab-utils.h
   gnc-file-aqb-import.h
+  gnc-flicker-gui.h
   gnc-gwen-gui.h
   gnc-plugin-aqbanking.h
 )
