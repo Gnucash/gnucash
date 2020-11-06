@@ -51,13 +51,14 @@
 #endif
 
 /** Links in the Help Files *****************************************/
-#define HL_USAGE             "usage"
-#define HL_USAGE_BSNSS       "chapter_busnss"
+#define HL_USAGE_BSNSS       "busnss-ar-setup1"
 #define HL_USAGE_INVOICE     "busnss-ar-invoices1"
+#define HL_USAGE_VOUCHER     "busnss-emply-newvchr"
 #define HL_USAGE_BILL        "busnss-ap-bills1"
 #define HL_USAGE_CUSTOMER    "busnss-ar-customers1"
 #define HL_USAGE_VENDOR      "busnss-ap-vendors1"
 #define HL_USAGE_EMPLOYEE    "busnss-emply"
+#define HL_USAGE_JOB         "busnss-ar-jobs1"
 #define HL_ACC               "acct-create"
 #define HL_ACCEDIT           "acct-edit"
 #define HL_COMMODITY         "tool-commodity"
@@ -65,10 +66,12 @@
 #define HL_GLOBPREFS         "set-prefs"
 #define HL_PRINTCHECK        "print-check"
 #define HL_RECNWIN           "acct-reconcile"
-#define HL_SXEDITOR          "tool-sched"
+#define HL_SXEDITOR          "trans-sched"
 #define HL_BOOK_OPTIONS      "book-options"
 #define HL_CLOSE_BOOK        "tool-close-book"
-#define HL_USAGE_CUSTOMREP   "report-custom"
+#define HL_USAGE_CUSTOMREP   "report-saving"
+#define HL_IMPORT_BC         "busnss-imp-bills-invoices"
+#define HL_IMPORT_CUST       "busnss-imp-customer-vendor"
 
 /* GTK Windows - Common Response Codes */
 
