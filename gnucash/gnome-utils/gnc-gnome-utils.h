@@ -73,6 +73,11 @@ void gnc_options_dialog_set_book_options_help_cb (GNCOptionWin *win);
  */
 void gnc_options_dialog_set_new_book_option_values (GNCOptionDB *odb);
 
+/** Set the help callback to 'gnc_style_sheet_options_help_cb' to open a help browser
+ *  and point it to the Style Sheet link in the Help file.
+ */
+void gnc_options_dialog_set_style_sheet_options_help_cb (GNCOptionWin *win);
+
 /** Given a file name, find and load the requested pixmap.  This
  *  routine will display an error message if it can't find the file or
  *  load the pixmap.

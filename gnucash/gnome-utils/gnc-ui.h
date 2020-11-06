@@ -68,6 +68,7 @@
 #define HL_RECNWIN           "acct-reconcile"
 #define HL_SXEDITOR          "trans-sched"
 #define HL_BOOK_OPTIONS      "book-options"
+#define HL_STYLE_SHEET       "change-style"
 #define HL_CLOSE_BOOK        "tool-close-book"
 #define HL_USAGE_CUSTOMREP   "report-saving"
 #define HL_IMPORT_BC         "busnss-imp-bills-invoices"
