@@ -57,13 +57,13 @@ parse_hhmap_file(const gchar *chmfile)
     if (!g_key_file_load_from_file(keyfile, mapfile, G_KEY_FILE_NONE, &error))
         goto cleanup_parse;
 
-    if (NULL == (keys = g_key_file_get_keys(keyfile, "Map", NULL, &error)))
+    if (NULL == (keys = g_key_file_get_keys(keyfile, "MAP", NULL, &error)))
         goto cleanup_parse;
 
     ctxtmap = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
     for (key = keys; *key; key++)
     {
-        value = g_key_file_get_integer(keyfile, "Map", *key, &error);
+        value = g_key_file_get_integer(keyfile, "MAP", *key, &error);
         if (error)
             goto cleanup_parse;
         else
