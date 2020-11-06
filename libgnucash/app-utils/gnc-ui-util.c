@@ -1531,7 +1531,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 
     /* Print the absolute value, but remember sign */
     value_is_negative = gnc_numeric_negative_p (val);
-    val = gnc_numeric_abs (val);
+    val = gnc_numeric_abs (gnc_numeric_reduce (val));
 
     /* Try to print as decimal. */
     value_is_decimal = gnc_numeric_to_decimal(&val, NULL);
