@@ -101,3 +101,4 @@ set_local_dist(aqbanking_DIST_local CMakeLists.txt
         ${aqbanking_GLADE} ${aqbanking_UI})
 
 set(aqbanking_DIST ${aqbanking_DIST_local} ${aqbanking_gschema_DIST} ${test_aqb_DIST} PARENT_SCOPE)
+ 
