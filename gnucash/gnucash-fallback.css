@@ -41,10 +41,21 @@
   border-color: black;
 }
 
-/* Make label more important */
-.gnc-class-emphasize-label {
-  font-size: large;
-  font-weight: bold;
+/* Make some labels more important */
+.gnc-class-underline-title {
+font-size: large;
+font-weight: bold;
+text-decoration-line: underline;
+}
+.gnc-class-title {
+font-size: large;
+font-weight: bold;
+}
+.gnc-class-strong {
+font-weight: bold;
+}
+.gnc-class-emphasis {
+font-style: italic;
 }
 
 /* The Dense Calendar defaults */

@@ -699,7 +699,7 @@ verify_children_compatible (AccountWindow *aw)
     gnc_label_set_alignment (label, 0.0, 0.0);
 
     /* make label large */
-    gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-emphasize-label");
+    gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-title");
 
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
