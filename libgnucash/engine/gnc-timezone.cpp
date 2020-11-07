@@ -460,14 +460,12 @@ namespace IANAParser
 
 	//Add in the tzinfo indexes consumed in the previous loop
 	start_index = info_index_zero + time_count;
-	//Can't use sizeof(TZInfo) because it's padded out to 8 bytes.
-	static const size_t tzinfo_size = 6;
-	auto abbrev = start_index + type_count * tzinfo_size;
+	auto abbrev = start_index + type_count * ttinfo_size;
 	auto std_dist = abbrev + char_count;
 	auto gmt_dist = std_dist + type_count;
 	for(uint32_t index = 0; index < type_count; ++index)
 	{
-	    fb_index = start_index + index * tzinfo_size;
+	    fb_index = start_index + index * ttinfo_size;
 	    /* Use memcpy instead of static_cast to avoid memory alignment issues with chars */
 	    TTInfo info{};
 	    memcpy(&info, &fileblock[fb_index], ttinfo_size);
