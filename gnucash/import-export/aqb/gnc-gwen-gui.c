@@ -1478,7 +1478,7 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
 				mimeType = "text/x-flickercode";
 				pChallenge = GWEN_DB_GetCharValue(methodParams, "challenge", 0, NULL);
 				if ((NULL == pChallenge) || ('\0' == pChallenge [0])) {
-				/* empty flicker data */
+				/* empty flicker-data */
 					return GWEN_ERROR_NO_DATA;
 				}
 				break;

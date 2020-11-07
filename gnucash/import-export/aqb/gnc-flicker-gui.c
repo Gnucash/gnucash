@@ -361,7 +361,7 @@ ini_flicker_gui (const char *pChallenge, GncFlickerGui *gui)
     flickerdraw.challenge = pChallenge;
 
     /* Todo:
-	 * Make the dialog resizable
+	 * Make the dialog resizable.
 	 */
     // gtk_window_set_resizable (GTK_WINDOW (flickergui->dialog), FALSE);
 
