@@ -1467,7 +1467,7 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
     {
         /**
         * use GWEN_Gui_PasswordMethod_Mask to get the basic method id
-        *  cf. gui/gui.h of gwenhywfar
+        * cf. gui/gui.h of gwenhywfar
         */
         opticalMethodId=GWEN_DB_GetIntValue(methodParams, "tanMethodId", 0, AB_BANKING_TANMETHOD_TEXT);
         switch(opticalMethodId)

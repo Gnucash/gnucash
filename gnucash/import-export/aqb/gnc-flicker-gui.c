@@ -55,12 +55,6 @@ struct _flickerdraw {
 static GncFlickerGui *flickergui = NULL;
 _Bool bitarray[100][5];
 
-/* *************************************
-*
-* the functions are processed here
-*
-****************************************/
-
 /* convert the bank challenge into the 5 bits for the flicker data */
 char
 *FlickerDaten (char const *challenge)
@@ -141,7 +135,7 @@ time_handler (GtkWidget *widget)
     return TRUE;
 }
 
-/* Markergrafik als Position für den TAN-Generator anzeigen */
+/* Show the colored triangle as a pointer for the position of the TAN generator */
  void
  doMarkerDrawing (cairo_t *cr)
  {
@@ -199,9 +193,7 @@ time_handler (GtkWidget *widget)
     	cairo_fill (cr);
     }
 
-/* jeder Flickerpunkt wird zweimal gezeichnet,
- * einmal mit Takt = 1 und einmal mit Takt = 0
- */
+/* Each flicker point is drawn twice. Once with clock = 1 and once with clock = 0 */
     if ( flickerdraw.clock == 0 ) {
         flickerdraw.clock = 1;
         flickerdraw.halfbyteid++;
@@ -248,6 +240,10 @@ on_flicker_challenge_map (GtkWidget *widget)
     code = FlickerDaten (flickerdraw.challenge);
     flickerdraw.maxWert = strlen(code);
 
+    /* Todo:
+     * Read the dialog size from a file and set the starting values ​​for the spin buttons.
+     */
+
 	flickerdraw.width = gtk_widget_get_allocated_width (widget);  /* Flexibel: Breite der ganzen Zeichenfläche */
 	flickerdraw.height = flickerdraw.barheight + 2*flickerdraw.y_barpos;          		/* Fix: Höhe der Zeichenfläche */
     flickerdraw.x_drawpos = (flickerdraw.width - 4*flickerdraw.margin - 5*flickerdraw.barwidth)/2;		/* Flexibel: Erste Zeichenposition */
@@ -273,6 +269,9 @@ on_flicker_challenge_draw (__attribute__((unused)) GtkWidget *widget, cairo_t *c
 void
 on_flicker_challenge_destroy (__attribute__((unused)) GtkWidget *widget, __attribute__((unused)) gpointer user_data)
 {
+    /* Todo:
+     * Write the dialog size and the values ​​for the spin buttons to a file.
+     */
 
     g_source_remove (flickerdraw.interval);
 
@@ -289,7 +288,10 @@ on_spin_Barwidth_value_changed (GtkSpinButton *spin, GtkWidget *widget)
 	/* Verschieben der Positionsdreiecke */
 	gtk_widget_queue_draw (widget);
 
-//	gtk_widget_grab_focus (GTK_WIDGET (flickergui->input_entry));
+	/* Todo:
+	 * after value changed set the focus on TAN input_entry
+	 */
+	//	gtk_widget_grab_focus (GTK_WIDGET (flickergui->input_entry));
 
 }
 
@@ -315,7 +317,10 @@ on_spin_Delay_value_changed (GtkSpinButton *spin, GtkWidget *widget)
     flickerdraw.change_interval = TRUE;
     time_handler (widget);
 
-//    gtk_widget_grab_focus (GTK_WIDGET (flickergui->input_entry));
+    /* Todo:
+     * after value changed set the focus on TAN input_entry
+     */
+    //	gtk_widget_grab_focus (GTK_WIDGET (flickergui->input_entry));
 
 }
 
@@ -355,8 +360,10 @@ ini_flicker_gui (const char *pChallenge, GncFlickerGui *gui)
     /* Globale Variablen mit Werten vorbelegen */
     flickerdraw.challenge = pChallenge;
 
-    /* Soll das TAN- Fenster vergrößert werden können? */
-//    gtk_window_set_resizable (GTK_WINDOW (flickergui->dialog), FALSE);
+    /* Todo:
+	 * Make the dialog resizable
+	 */
+    // gtk_window_set_resizable (GTK_WINDOW (flickergui->dialog), FALSE);
 
     gtk_widget_set_visible (GTK_WIDGET (flickergui->flicker_challenge), TRUE);
     g_signal_connect (GTK_WIDGET (flickergui->flicker_challenge), "map", G_CALLBACK (on_flicker_challenge_map), NULL);
