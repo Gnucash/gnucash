@@ -13,7 +13,7 @@ set (aqbanking_SOURCES
   gnc-ab-transfer.c
   gnc-ab-utils.c
   gnc-file-aqb-import.c
-  gnc-flicker-gui.
+  gnc-flicker-gui.c
   gnc-gwen-gui.c
   gnc-plugin-aqbanking.c
   gncmod-aqbanking.c
