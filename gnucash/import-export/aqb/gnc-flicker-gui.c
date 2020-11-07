@@ -369,6 +369,10 @@ ini_flicker_gui (const char *pChallenge, GncFlickerGui *gui)
     g_signal_connect (GTK_WIDGET (flickergui->flicker_challenge), "map", G_CALLBACK (on_flicker_challenge_map), NULL);
     g_signal_connect (GTK_WIDGET (flickergui->flicker_challenge), "draw", G_CALLBACK (on_flicker_challenge_draw), NULL);
     g_signal_connect (GTK_WIDGET (flickergui->flicker_challenge), "destroy", G_CALLBACK (on_flicker_challenge_destroy), NULL);
+    tooltip_text = g_strdup (_("Hold the TAN generator in front of the animated graphic. \
+The markings (triangles) on the graphic must match those on the TAN generator."));
+    gtk_widget_set_tooltip_text (GTK_WIDGET (flickergui->flicker_challenge), tooltip_text);
+    g_free(tooltip_text);
 
     gtk_widget_set_visible (GTK_WIDGET (flickergui->flicker_marker), TRUE);
     g_signal_connect (GTK_WIDGET (flickergui->flicker_marker), "map", G_CALLBACK (on_flicker_marker_map), NULL);
@@ -383,7 +387,7 @@ ini_flicker_gui (const char *pChallenge, GncFlickerGui *gui)
     g_signal_connect (GTK_WIDGET (flickergui->spin_Barwidth), "button-press-event", G_CALLBACK (on_spin_Barwidth_button_press_event), NULL);
     gtk_widget_set_visible (GTK_WIDGET (flickergui->spin_Barwidth), TRUE);
     gtk_widget_set_focus_on_click (GTK_WIDGET (flickergui->spin_Barwidth), FALSE);
-    tooltip_text = g_strdup (_("Setting the bar width, /n adapting to the size of the TAN generator"));
+    tooltip_text = g_strdup (_("Setting the bar width, adapting to the size of the TAN generator"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (flickergui->spin_Barwidth), tooltip_text);
     g_free(tooltip_text);
 
@@ -394,7 +398,7 @@ ini_flicker_gui (const char *pChallenge, GncFlickerGui *gui)
     g_signal_connect (GTK_WIDGET (flickergui->spin_Delay), "button-press-event", G_CALLBACK (on_spin_Delay_button_press_event), NULL);
     gtk_widget_set_visible (GTK_WIDGET (flickergui->spin_Delay), TRUE);
     gtk_widget_set_focus_on_click (GTK_WIDGET (flickergui->spin_Delay), FALSE);
-    tooltip_text = g_strdup (_("Setting the delay time, /n with small values the flicker graphic is repeated faster"));
+    tooltip_text = g_strdup (_("Setting the delay time, with small values the flicker graphic is repeated faster"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (flickergui->spin_Delay), tooltip_text);
     g_free(tooltip_text);
 
