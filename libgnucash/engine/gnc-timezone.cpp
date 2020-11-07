@@ -549,10 +549,34 @@ namespace DSTRule
 	    std::swap(to_std_time, to_dst_time);
 	    std::swap(std_info, dst_info);
 	}
-	if (dst_info->isgmt)
-	    to_dst_time += boost::posix_time::seconds(dst_info->info.gmtoff);
-	if (std_info->isgmt)
-	    to_std_time += boost::posix_time::seconds(std_info->info.gmtoff);
+
+        /* Documentation notwithstanding, the date-time rules are
+         * looking for local time (wall clock to use the RFC 8538
+         * definition) values.
+         *
+         * The TZ Info contains two fields, isstd and isgmt (renamed
+         * to isut in newer versions of tzinfo). In theory if both are
+         * 0 the transition times represent wall-clock times,
+         * i.e. time stamps in the respective time zone's local time
+         * at the moment of the transition. If isstd is 1 then the
+         * representation is always in standard time instead of
+         * daylight time; this is significant for dst->std
+         * transitions. If isgmt/isut is one then isstd must also be
+         * set and the transition time is in UTC.
+         *
+         * In practice it seems that the timestamps are always in UTC
+         * so the isgmt/isut flag isn't meaningful. The times always
+         * need to have the utc offset added to them to make the
+         * transition occur at the right time; the isstd flag
+         * determines whether that should be the standard offset or
+         * the daylight offset for the daylight->standard transition.
+         */
+
+        to_dst_time += boost::posix_time::seconds(std_info->info.gmtoff);
+        if (std_info->isstd) //if isstd always use standard time
+            to_std_time += boost::posix_time::seconds(std_info->info.gmtoff);
+        else
+            to_std_time += boost::posix_time::seconds(dst_info->info.gmtoff);
 
     }
 

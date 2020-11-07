@@ -381,6 +381,57 @@ TEST(gnc_datetime_constructors, test_gncdate_end_constructor)
     EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S"), "06-11-2046 23:59:59");
 }
 
+static ::testing::AssertionResult
+test_offset(time64 start_time, int hour, int offset1, int offset2,
+            const char* zone)
+{
+    GncDateTime gdt{start_time + hour * 3600};
+    if ((hour < 2 && gdt.offset() == offset1) ||
+        (hour >= 2 && gdt.offset() == offset2))
+        return ::testing::AssertionSuccess();
+    else
+        return ::testing::AssertionFailure() << zone << ": " << gdt.format("%D %T %z %q") << " hour " << hour;
+}
+
+TEST(gnc_datetime_constructors, test_DST_start_transition_time)
+{
+#ifdef __MINGW32__
+    TimeZoneProvider tzp_can{"A.U.S Eastern Standard Time"};
+    TimeZoneProvider tzp_la{"Pacific Standard Time"};
+#else
+    TimeZoneProvider tzp_can("Australia/Canberra");
+    TimeZoneProvider tzp_la("America/Los_Angeles");
+#endif
+    _set_tzp(tzp_la);
+    for (auto hours = 0; hours < 23; ++hours)
+        EXPECT_TRUE(test_offset(1583657940, hours, -28800, -25200, "Los Angeles"));
+
+    _reset_tzp();
+    _set_tzp(tzp_can);
+    for (auto hours = 0; hours < 23; ++hours)
+        EXPECT_TRUE(test_offset(1601737140, hours, 36000, 39600, "Canberra"));
+    _reset_tzp();
+}
+
+TEST(gnc_datetime_constructors, test_DST_end_transition_time)
+{
+#ifdef __MINGW32__
+    TimeZoneProvider tzp_can{"A.U.S Eastern Standard Time"};
+    TimeZoneProvider tzp_la{"Pacific Standard Time"};
+#else
+    TimeZoneProvider tzp_can("Australia/Canberra");
+    TimeZoneProvider tzp_la("America/Los_Angeles");
+#endif
+    _set_tzp(tzp_la);
+    for (auto hours = 0; hours < 23; ++hours)
+        EXPECT_TRUE(test_offset(1604217540, hours, -25200, -28800, "Los Angeles"));
+    _reset_tzp();
+    _set_tzp(tzp_can);
+    for (auto hours = 0; hours < 23; ++hours)
+        EXPECT_TRUE(test_offset(1586008740, hours, 39600, 36000, "Canberra"));
+    _reset_tzp();
+}
+
 TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
 {
     const ymd aymd = { 2017, 04, 20 };
