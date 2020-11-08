@@ -109,37 +109,37 @@ TestCase ambiguousTestCase = {
 
 class AutoClearTest : public ::testing::TestWithParam<TestCase *> {
 protected:
-    std::shared_ptr<QofBook> book_;
-    Account *account_; // owned by book_
-    TestCase &testCase_;
+    std::shared_ptr<QofBook> m_book;
+    Account *m_account; // owned by m_book
+    TestCase &m_testCase;
 
 public:
     AutoClearTest() :
-        book_(qof_book_new(), qof_book_destroy),
-        account_(xaccMallocAccount(book_.get())),
-        testCase_(*GetParam())
+        m_book(qof_book_new(), qof_book_destroy),
+        m_account(xaccMallocAccount(m_book.get())),
+        m_testCase(*GetParam())
     {
-        xaccAccountSetName(account_, "Test Account");
-        xaccAccountBeginEdit(account_);
-        for (auto &d : testCase_.splits) {
-            Split *split = xaccMallocSplit(book_.get());
+        xaccAccountSetName(m_account, "Test Account");
+        xaccAccountBeginEdit(m_account);
+        for (auto &d : m_testCase.splits) {
+            Split *split = xaccMallocSplit(m_book.get());
             xaccSplitSetMemo(split, d.memo);
             xaccSplitSetAmount(split, gnc_numeric_create(d.amount, DENOM));
             xaccSplitSetReconcile(split, d.cleared ? CREC : NREC);
-            xaccSplitSetAccount(split, account_);
+            xaccSplitSetAccount(split, m_account);
 
-            gnc_account_insert_split(account_, split);
+            gnc_account_insert_split(m_account, split);
         }
-        xaccAccountCommitEdit(account_);
+        xaccAccountCommitEdit(m_account);
     }
 };
 
 TEST_P(AutoClearTest, DoesAutoClear) {
-    for (auto &t : testCase_.tests) {
+    for (auto &t : m_testCase.tests) {
         gnc_numeric amount_to_clear = gnc_numeric_create(t.amount, DENOM);
         char *err;
 
-        GList *splits_to_clear = gnc_account_get_autoclear_splits(account_, amount_to_clear, &err);
+        GList *splits_to_clear = gnc_account_get_autoclear_splits(m_account, amount_to_clear, &err);
 
         // Actually clear splits
         for (GList *node = splits_to_clear; node; node = node->next) {
@@ -149,7 +149,7 @@ TEST_P(AutoClearTest, DoesAutoClear) {
 
         ASSERT_STREQ(err, t.expectedErr);
         if (t.expectedErr == NULL) {
-            gnc_numeric c = xaccAccountGetClearedBalance(account_);
+            gnc_numeric c = xaccAccountGetClearedBalance(m_account);
             ASSERT_EQ(c.num, t.amount);
             ASSERT_EQ(c.denom, DENOM);
         }
