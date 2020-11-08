@@ -571,6 +571,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
     }
     else
     {
+        Account* account;
         NumCell* num_cell;
         Transaction* new_trans;
         int trans_split_index;
@@ -587,18 +588,17 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
         /* We are on a transaction row. Copy the whole transaction. */
 
         date = info->last_date_entered;
-        if (gnc_strisnum (gnc_get_num_action (trans, trans_split)))
-        {
-            Account* account = gnc_split_register_get_default_account (reg);
 
-            if (account)
-                in_num = xaccAccountGetLastNum (account);
-            else
-                in_num = gnc_get_num_action (trans, trans_split);
-            in_tnum = (reg->use_tran_num_for_num_field
-                       ? NULL
-                       : gnc_get_num_action (trans, NULL));
-        }
+        account = gnc_split_register_get_default_account (reg);
+
+        if (account && gnc_strisnum (gnc_get_num_action (trans, trans_split)))
+            in_num = xaccAccountGetLastNum (account);
+        else
+            in_num = gnc_get_num_action (trans, trans_split);
+
+        in_tnum = (reg->use_tran_num_for_num_field
+                   ? NULL
+                   : gnc_get_num_action (trans, NULL));
 
         if (!gnc_dup_trans_dialog (gnc_split_register_get_parent (reg), NULL,
                                    TRUE, &date, in_num, &out_num, in_tnum, &out_tnum,

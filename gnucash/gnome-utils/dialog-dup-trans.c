@@ -81,17 +81,61 @@ parse_num (const char *string, long int *num)
 }
 
 static gboolean
-gnc_dup_trans_output_cb(GtkSpinButton *spinbutton,
-                        gpointer user_data)
+gnc_dup_inc_dec (GtkWidget *widget, const gchar *text, gint inc_dec)
 {
-    gboolean is_number;
     long int num;
-    gchar *txt = gtk_editable_get_chars(GTK_EDITABLE(spinbutton), 0, -1);
-    is_number = parse_num(txt, &num);
-    g_free(txt);
-    if (!is_number)
-        gtk_entry_set_text(GTK_ENTRY(spinbutton), "");
-    return !is_number;
+
+    if (parse_num (text, &num))
+    {
+        gchar *format;
+        gchar *out;
+        num = num + inc_dec;
+
+        if (num == -1)
+            num = 0;
+
+        if (g_str_has_prefix (text, "0"))
+            format = g_strdup_printf ("%s%ld%s", "%0", strlen (text), "d");
+        else
+            format = g_strdup_printf ("%s", "%ld");
+
+        out = g_strdup_printf (format, num);
+
+        gtk_entry_set_text (GTK_ENTRY(widget), out);
+        g_free (format);
+        g_free (out);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static gboolean
+gnc_dup_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+    const gchar *text = gtk_entry_get_text (GTK_ENTRY(widget));
+
+    if (gnc_strisnum (text))
+    {
+        GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
+        gint increment;
+        long int num;
+
+        if ((event->state & modifiers) == GDK_CONTROL_MASK ||
+            (event->state & modifiers) == GDK_MOD1_MASK)
+            return FALSE;
+
+        if (event->keyval == GDK_KEY_plus || event->keyval == GDK_KEY_KP_Add)
+            increment = 1;
+        else if (event->keyval == GDK_KEY_minus || event->keyval == GDK_KEY_KP_Subtract)
+            increment = -1;
+        else
+            return FALSE;
+
+        return gnc_dup_inc_dec (widget, text, increment);
+
+    }
+    else
+        return FALSE;
 }
 
 static void
@@ -101,6 +145,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
 {
     GtkWidget *dialog;
     GtkBuilder  *builder;
+    const gchar *tt = _("Use +- keys to increment/decrement number");
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "num_adjustment");
@@ -147,31 +192,33 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     dt_dialog->num_label = GTK_WIDGET(gtk_builder_get_object (builder, "num_label"));
     dt_dialog->tnum_label = GTK_WIDGET(gtk_builder_get_object (builder, "tnum_label"));
 
+    dt_dialog->num_edit = GTK_WIDGET(gtk_builder_get_object (builder, "num_entry"));
+    dt_dialog->tnum_edit = GTK_WIDGET(gtk_builder_get_object (builder, "tnum_entry"));
+
+    if (num_str)
+        gtk_entry_set_text (GTK_ENTRY(dt_dialog->num_edit), num_str);
+    if (tnum_str)
+        gtk_entry_set_text (GTK_ENTRY(dt_dialog->tnum_edit), tnum_str);
+
+    g_signal_connect (dt_dialog->num_edit, "key-press-event",
+                      G_CALLBACK(gnc_dup_key_press_event_cb),
+                      dt_dialog);
+
+    g_signal_connect (dt_dialog->tnum_edit, "key-press-event",
+                      G_CALLBACK(gnc_dup_key_press_event_cb),
+                      dt_dialog);
+
+    if (gnc_strisnum (num_str))
     {
-        GtkWidget *num_spin, *tnum_spin;
-        long int num, tnum;
-
-        num_spin = GTK_WIDGET(gtk_builder_get_object (builder, "num_spin"));
-        tnum_spin = GTK_WIDGET(gtk_builder_get_object (builder, "tnum_spin"));
-        dt_dialog->num_edit = num_spin;
-        dt_dialog->tnum_edit = tnum_spin;
-
-        gtk_entry_set_activates_default(GTK_ENTRY(num_spin), TRUE);
-        g_signal_connect(num_spin, "output",
-                         G_CALLBACK(gnc_dup_trans_output_cb), dt_dialog);
-        g_signal_connect(tnum_spin, "output",
-                         G_CALLBACK(gnc_dup_trans_output_cb), dt_dialog);
-
-        if (num_str && parse_num (num_str, &num))
-            gtk_spin_button_set_value (GTK_SPIN_BUTTON (num_spin), num + 1);
-        else
-            gtk_entry_set_text (GTK_ENTRY (num_spin), "");
-
-        if (tnum_str && parse_num (tnum_str, &tnum))
-            gtk_spin_button_set_value (GTK_SPIN_BUTTON (tnum_spin), tnum + 1);
-        else
-            gtk_entry_set_text (GTK_ENTRY (tnum_spin), "");
+        gtk_widget_set_tooltip_text (GTK_WIDGET(dt_dialog->num_edit), tt);
+        gnc_dup_inc_dec (GTK_WIDGET(dt_dialog->num_edit), num_str, 1);
     }
+    if (gnc_strisnum (tnum_str))
+    {
+        gtk_widget_set_tooltip_text (GTK_WIDGET(dt_dialog->tnum_edit), tt);
+        gnc_dup_inc_dec (GTK_WIDGET(dt_dialog->tnum_edit), tnum_str, 1);
+    }
+
     /* Transaction Linked Document */
     {
         dt_dialog->link_label = GTK_WIDGET(gtk_builder_get_object (builder, "link_label"));
