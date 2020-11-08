@@ -2,6 +2,7 @@
 #define GMOCK_GOBJECT_H
 
 #include <glib.h>
+#include <glib-object.h>
 
 static gpointer
 mock_g_object_new (GType object_type, const gchar *first_property_name, size_t size)

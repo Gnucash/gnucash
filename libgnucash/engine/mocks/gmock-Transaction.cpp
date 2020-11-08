@@ -1,7 +1,8 @@
 #include <config.h>
 
+#include <Account.h>
+
 #include "gmock-Transaction.h"
-#include "gmock-Account.h"
 
 
 struct _MockTransactionClass
@@ -10,123 +11,136 @@ struct _MockTransactionClass
 };
 typedef struct _MockTransactionClass MockTransactionClass;
 
-G_DEFINE_TYPE(MockTransaction, gnc_mock_transaction, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(MockTransaction, gnc_mocktransaction, QOF_TYPE_INSTANCE);
 
 static void
-gnc_mock_transaction_init (MockTransaction *inst)
+gnc_mocktransaction_init (MockTransaction *inst)
 {
-    // function is unused, initialization is done in the MockTransaction's constructor
+    // function is unused, initialization is done in the MockTransaction's C++ constructor
 }
 
 static void
-gnc_mock_transaction_class_init(MockTransactionClass *klass)
+gnc_mocktransaction_class_init(MockTransactionClass *klass)
 {
     // function is unused, class functions are defined in C++ code
 }
 
 
+GType gnc_transaction_get_type(void)
+{
+    return gnc_mocktransaction_get_type();
+}
+
 void
 xaccTransBeginEdit (Transaction *trans)
 {
-    g_return_if_fail(GNC_IS_MOCK_TRANSACTION(trans));
-    ((MockTransaction*)trans)->beginEdit();
+    ASSERT_TRUE(GNC_IS_MOCKTRANSACTION(trans));
+    gnc_mocktransaction(trans)->begin_edit();
 }
 
 void
 xaccTransCommitEdit (Transaction *trans)
 {
-    g_return_if_fail(GNC_IS_MOCK_TRANSACTION(trans));
-    ((MockTransaction*)trans)->commitEdit();
+    ASSERT_TRUE(GNC_IS_MOCKTRANSACTION(trans));
+    gnc_mocktransaction(trans)->commit_edit();
 }
 
 Split *
 xaccTransGetSplit (const Transaction *trans, int i)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_TRANSACTION(trans), NULL);
-    return ((MockTransaction*)trans)->getSplit(i);
+    SCOPED_TRACE("");
+    auto mocktrans = gnc_mocktransaction(trans);
+    return mocktrans ? mocktrans->get_split(i) : nullptr;
 }
 
 SplitList *
 xaccTransGetSplitList (const Transaction *trans)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_TRANSACTION(trans), NULL);
-    return trans ? ((MockTransaction*)trans)->getSplitList() : NULL;
+    g_return_val_if_fail(GNC_IS_MOCKTRANSACTION(trans), NULL);
+    return trans ? ((MockTransaction*)trans)->get_split_list() : NULL;
 }
 
 Split *
 xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_TRANSACTION(trans), NULL);
-    g_return_val_if_fail(GNC_IS_MOCK_ACCOUNT(acc), NULL);
-    return ((MockTransaction*)trans)->findSplitByAccount(acc);
+    SCOPED_TRACE("");
+    auto mocktrans = gnc_mocktransaction(trans);
+    EXPECT_TRUE(GNC_IS_ACCOUNT(acc));
+    return mocktrans ? mocktrans->find_split_by_account(acc) : nullptr;
 }
 
 time64
 xaccTransGetDate (const Transaction *trans)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_TRANSACTION(trans), 0);
-    return ((MockTransaction*)trans)->getDate();
+    SCOPED_TRACE("");
+    auto mocktrans = gnc_mocktransaction(trans);
+    return mocktrans ? mocktrans->get_date() : 0;
 }
 
 void
 xaccTransSetDatePostedSecsNormalized (Transaction *trans, time64 time)
 {
-    g_return_if_fail(GNC_IS_MOCK_TRANSACTION(trans));
-    ((MockTransaction*)trans)->setDatePostedSecsNormalized(time);
+    ASSERT_TRUE(GNC_IS_MOCKTRANSACTION(trans));
+    gnc_mocktransaction(trans)->set_date_posted_secs_normalized(time);
 }
 
 const char *
 xaccTransGetDescription (const Transaction *trans)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_TRANSACTION(trans), NULL);
-    return ((MockTransaction*)trans)->getDescription();
+    SCOPED_TRACE("");
+    auto mocktrans = gnc_mocktransaction(trans);
+    return mocktrans ? mocktrans->get_description() : "";
 }
 
 void
 xaccTransSetDescription (Transaction *trans, const char *desc)
 {
-    g_return_if_fail(GNC_IS_MOCK_TRANSACTION(trans));
-    ((MockTransaction*)trans)->setDescription(desc);
+    ASSERT_TRUE(GNC_IS_MOCKTRANSACTION(trans));
+    gnc_mocktransaction(trans)->set_description(desc);
 }
 
 const char *
 xaccTransGetNotes (const Transaction *trans)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_TRANSACTION(trans), NULL);
-    return ((MockTransaction*)trans)->getNotes();
+    SCOPED_TRACE("");
+    auto mocktrans = gnc_mocktransaction(trans);
+    return mocktrans ? mocktrans->get_notes() : "";
 }
 
 void
 xaccTransSetNotes (Transaction *trans, const char *notes)
 {
-    g_return_if_fail(GNC_IS_MOCK_TRANSACTION(trans));
-    ((MockTransaction*)trans)->setDescription(notes);
+    ASSERT_TRUE(GNC_IS_MOCKTRANSACTION(trans));
+    gnc_mocktransaction(trans)->set_notes(notes);
 }
 
 gnc_numeric
 xaccTransGetImbalanceValue (const Transaction * trans)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_TRANSACTION(trans), gnc_numeric_zero());
-    return ((MockTransaction*)trans)->getImbalanceValue();
+    SCOPED_TRACE("");
+    auto mocktrans = gnc_mocktransaction(trans);
+    return mocktrans ? mocktrans->get_imbalance_value() : gnc_numeric_zero();
 }
 
 const char *
 xaccTransGetNum (const Transaction *trans)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_TRANSACTION(trans), NULL);
-    return ((MockTransaction*)trans)->getNum();
+    SCOPED_TRACE("");
+    auto mocktrans = gnc_mocktransaction(trans);
+    return mocktrans ? mocktrans->get_num() : "";
 }
 
 gboolean
 xaccTransIsOpen (const Transaction *trans)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_TRANSACTION(trans), FALSE);
-    return ((MockTransaction*)trans)->isOpen();
+    SCOPED_TRACE("");
+    auto mocktrans = gnc_mocktransaction(trans);
+    return mocktrans ? mocktrans->is_open() : FALSE;
 }
 
 void
 xaccTransDestroy (Transaction *trans)
 {
-    g_return_if_fail(GNC_IS_MOCK_TRANSACTION(trans));
-    ((MockTransaction*)trans)->destroy();
+    ASSERT_TRUE(GNC_IS_MOCKTRANSACTION(trans));
+    gnc_mocktransaction(trans)->destroy();
 }
