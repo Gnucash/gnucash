@@ -50,8 +50,9 @@
  * Return: TRUE if user closes dialog with 'OK'                         *
 \***********************************************************************/
 gboolean
-gnc_dup_trans_dialog (GtkWidget * parent, const char* title, gboolean show_date,
-                      time64 *date_p, const char *num, char **out_num,
+gnc_dup_trans_dialog (GtkWidget * parent, const char* title,
+                      gboolean show_date, time64 *date_p,
+                      const char *num, char **out_num,
                       const char *tnum, char **out_tnum,
                       const char *tdoclink, char **out_tdoclink);
 
