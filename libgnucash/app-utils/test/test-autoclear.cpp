@@ -31,7 +31,7 @@ extern "C" {
 #include <Split.h>
 #include <gtest/gtest.h>
 
-static const int64_t DENOM = 100; //< Denomerator is always 100 for simplicity.
+static const int64_t DENOM = 100; //< Denominator is always 100 for simplicity.
 
 struct SplitDatum {
     const char *memo;
