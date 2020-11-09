@@ -23,7 +23,7 @@
 *.sh    text eol=lf
 *.svg   text eol=lf
 *.xsl   text eol=lf
-*.cmake test eol=lf
+*.cmake text eol=lf
 
 Makefile.TAGS    text eol=lf
 Makevars         text eol=lf
