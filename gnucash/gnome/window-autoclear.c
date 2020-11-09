@@ -52,7 +52,6 @@ struct _AutoClearWindow
     GtkWidget *cancel_button;
     GtkWidget *show_cleared_splits_button;
     GtkLabel *status_label;
-    GList *toclear_list;
 };
 
 /** Callback prototypes************************************************/
@@ -123,44 +122,47 @@ void
 gnc_autoclear_window_ok_cb (GtkWidget *widget,
                             AutoClearWindow *data)
 {
+    GList *toclear_list;
     gnc_numeric toclear_value;
     gchar *errmsg = NULL;
 
     g_return_if_fail (widget && data);
 
-    /* sanity check: if toclear_list is null, bail out. but this
-       should not happen because the OK button is disabled if there is
-       autoclear error, and toclear_list is null */
-    g_return_if_fail (data->toclear_list);
+    toclear_value = gnc_amount_edit_get_amount(data->end_value);
 
-    xaccAccountBeginEdit (data->account);
-    for (GList *node = data->toclear_list; node; node = node->next)
-        xaccSplitSetReconcile (node->data, CREC);
-    xaccAccountCommitEdit (data->account);
+    if (gnc_reverse_balance(data->account))
+        toclear_value = gnc_numeric_neg (toclear_value);
 
-    if (gtk_toggle_button_get_active
-        (GTK_TOGGLE_BUTTON (data->show_cleared_splits_button)))
-        show_cleared_splits (data->toclear_list);
+    toclear_value = gnc_numeric_convert
+        (toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_HOW_RND_ROUND);
 
-    /* Close window */
-    gnc_autoclear_window_cancel_cb (widget, data);
-}
+    toclear_list = gnc_account_get_autoclear_splits
+        (data->account, toclear_value, &errmsg);
 
-static gboolean
-gnc_autoclear_window_delete_cb (GtkWidget *widget, GdkEvent  *event,
-                                AutoClearWindow *data)
-{
-    if (data->toclear_list)
-        g_list_free (data->toclear_list);
-    g_free(data);
-    return FALSE;
-}
+    if (errmsg)
+    {
+        gtk_label_set_text (data->status_label, errmsg);
+        gnc_amount_edit_set_amount (data->end_value, toclear_value);
+        gtk_editable_select_region (GTK_EDITABLE (data->end_value), 0, -1);
+        g_free (errmsg);
+    }
+    else
+    {
+        xaccAccountBeginEdit (data->account);
+        for (GList *node = toclear_list; node; node = node->next)
+            xaccSplitSetReconcile (node->data, CREC);
+        xaccAccountCommitEdit (data->account);
 
-static void
-gnc_autoclear_end_value_activate_cb (GtkWidget *widget, AutoClearWindow *data)
-{
-    if (data->toclear_list)
-        gnc_autoclear_window_ok_cb (widget, data);
+        if (gtk_toggle_button_get_active
+            (GTK_TOGGLE_BUTTON (data->show_cleared_splits_button)))
+            show_cleared_splits (toclear_list);
+
+        g_list_free (toclear_list);
+
+        /* Close window */
+        gtk_widget_destroy (data->window);
+        g_free (data);
+    }
 }
 
 void
@@ -169,80 +171,12 @@ gnc_autoclear_window_cancel_cb (GtkWidget *widget,
 {
     /* Close window */
     gtk_widget_destroy(data->window);
-    if (data->toclear_list)
-        g_list_free (data->toclear_list);
     g_free(data);
 }
 
-#define MAX_LENGTH 50
-
-static void end_value_changed_cb (GtkEditable *editable, AutoClearWindow *data)
+static void clear_status_label_cb (GtkEditable *editable, AutoClearWindow *data)
 {
-    gnc_numeric toclear_value;
-    gchar *errmsg = NULL;
-
-    if (gnc_amount_edit_expr_is_valid (data->end_value, &toclear_value, TRUE))
-    {
-        gtk_widget_set_sensitive (data->ok_button, FALSE);
-        gtk_label_set_text (data->status_label, "");
-        return;
-    }
-
-    if (gnc_reverse_balance (data->account))
-        toclear_value = gnc_numeric_neg (toclear_value);
-
-    toclear_value = gnc_numeric_convert
-        (toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_HOW_RND_ROUND);
-
-    if (data->toclear_list)
-        g_list_free (data->toclear_list);
-
-    data->toclear_list = gnc_account_get_autoclear_splits
-        (data->account, toclear_value, &errmsg);
-
-    gtk_widget_set_sensitive (data->ok_button, errmsg == NULL);
-
-    if (errmsg)
-    {
-        gtk_widget_set_sensitive (data->ok_button, FALSE);
-        gtk_label_set_text (data->status_label, errmsg);
-        g_free (errmsg);
-    }
-    else
-    {
-        gchar *status = g_strdup (_("The following splits will be cleared:"));
-        GNCPrintAmountInfo p_info = gnc_account_print_info (data->account, TRUE);
-        gboolean reverse = gnc_reverse_balance (data->account);
-        for (GList *node = data->toclear_list; node; node = node->next)
-        {
-            Transaction *trans = xaccSplitGetParent (node->data);
-            gnc_numeric amount = xaccSplitGetAmount (node->data);
-            const gchar *desc = xaccTransGetDescription (trans);
-            gchar *datestr = qof_print_date (xaccTransGetDate (trans));
-            gchar *newdesc, *newstatus;
-
-            if (g_utf8_strlen (desc, -1) > MAX_LENGTH)
-            {
-                gchar *trunc = g_utf8_substring (desc, 0, MAX_LENGTH);
-                newdesc = g_strdup_printf ("%s...", trunc);
-                g_free (trunc);
-            }
-            else
-                newdesc = g_strdup (desc);
-
-            if (reverse)
-                amount = gnc_numeric_neg (amount);
-
-            newstatus = g_strdup_printf ("%s\n%s %s %s", status, datestr,
-                                         newdesc, xaccPrintAmount (amount, p_info));
-            g_free (status);
-            g_free (datestr);
-            g_free (newdesc);
-            status = newstatus;
-        }
-        gtk_label_set_text (data->status_label, status);
-        g_free (status);
-    }
+    gtk_label_set_text (data->status_label, "");
 }
 
 
@@ -278,23 +212,13 @@ autoClearWindow (GtkWidget *parent, Account *account)
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(data->window), "gnc-id-auto-clear");
 
-    data->ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "ok_button"));
-    gtk_widget_set_sensitive (data->ok_button, FALSE);
-
-    data->cancel_button = GTK_WIDGET (gtk_builder_get_object
-                                      (builder, "cancel_button"));
-
     data->show_cleared_splits_button =
         GTK_WIDGET (gtk_builder_get_object (builder, "show_cleared_splits_button"));
 
     /* Add amount edit box */
     data->end_value = GNC_AMOUNT_EDIT(gnc_amount_edit_new());
     g_signal_connect(GTK_WIDGET(data->end_value), "activate",
-                     G_CALLBACK(gnc_autoclear_end_value_activate_cb), data);
-    g_signal_connect(GTK_WIDGET(data->ok_button), "activate",
                      G_CALLBACK(gnc_autoclear_window_ok_cb), data);
-    g_signal_connect(GTK_WIDGET(data->cancel_button), "activate",
-                     G_CALLBACK(gnc_autoclear_window_cancel_cb), data);
 
     box   = GTK_BOX(gtk_builder_get_object (builder, "end_value_box"));
     gtk_box_pack_start(box, GTK_WIDGET(data->end_value), TRUE, TRUE, 0);
@@ -313,10 +237,7 @@ autoClearWindow (GtkWidget *parent, Account *account)
     data->status_label = GTK_LABEL(gtk_builder_get_object (builder, "status_label"));
 
     g_signal_connect (GTK_WIDGET(data->end_value), "changed",
-                      G_CALLBACK(end_value_changed_cb), data);
-
-    g_signal_connect (data->window, "delete-event",
-                      G_CALLBACK (gnc_autoclear_window_delete_cb), data);
+                      G_CALLBACK(clear_status_label_cb), data);
 
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW (data->window), GTK_WINDOW (parent));
