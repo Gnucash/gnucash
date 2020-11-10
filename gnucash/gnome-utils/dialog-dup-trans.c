@@ -95,7 +95,7 @@ gnc_dup_inc_dec (GtkWidget *widget, const gchar *text, gint inc_dec)
             num = 0;
 
         if (g_str_has_prefix (text, "0"))
-            format = g_strdup_printf ("%s%ld%s", "%0", strlen (text), "d");
+            format = g_strdup_printf ("%s%ld%s", "%0", g_utf8_strlen (text, -1), "d");
         else
             format = g_strdup_printf ("%s", "%ld");
 
