@@ -116,9 +116,6 @@ GncItemEdit *gnucash_sheet_get_item_edit (GnucashSheet *sheet);
 void gnucash_sheet_set_popup (GnucashSheet *sheet, GtkWidget *popup, gpointer data);
 void gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc);
 void gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet);
-//Table       *gnucash_sheet_get_table (GnucashSheet *sheet);
-//gint         gnucash_sheet_get_num_virt_rows (GnucashSheet *sheet);
-//gint         gnucash_sheet_get_num_virt_cols (GnucashSheet *sheet);
 
 gboolean   gnucash_sheet_find_loc_by_pixel (GnucashSheet *sheet, gint x, gint y,
                                            VirtualLocation *vcell_loc);

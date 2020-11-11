@@ -75,16 +75,16 @@ void gnucash_sheet_redraw_help (GnucashSheet *sheet);
 void gnucash_sheet_redraw_block (GnucashSheet *sheet,
                                  VirtualCellLocation vcell_loc);
 
-const char * gnucash_sheet_modify_current_cell(GnucashSheet *sheet,
-        const gchar *new_text);
+const char * gnucash_sheet_modify_current_cell (GnucashSheet *sheet,
+                                                const gchar *new_text);
 
 gboolean gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
-        VirtualCellLocation vcell_loc);
+                                             VirtualCellLocation vcell_loc);
 
 void gnucash_sheet_set_scroll_region (GnucashSheet *sheet);
 
 void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet,
-        gboolean do_scroll);
+                                          gboolean do_scroll);
 
 void gnucash_sheet_compute_visible_range (GnucashSheet *sheet);
 
