@@ -566,11 +566,32 @@ gnc_split_register_get_doclink_tooltip (VirtualLocation virt_loc,
         return NULL;
 }
 
+static gboolean
+is_trans_ledger (SplitRegister* reg, VirtualLocation virt_loc)
+{
+    VirtualCell *vcell = gnc_table_get_virtual_cell (reg->table, virt_loc.vcell_loc);
+    const char *cursor_name = vcell->cellblock->cursor_name;
+    gboolean is_ledger = FALSE;
+
+    if ((g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER) == 0) ||
+        (g_strcmp0 (cursor_name, CURSOR_SINGLE_LEDGER) == 0))
+        is_ledger = TRUE;
+
+    return is_ledger;
+}
+
 static gnc_numeric
 get_trans_total_amount (SplitRegister* reg, Transaction* trans)
 {
     Account* account = gnc_split_register_get_default_account (reg);
     return xaccTransGetAccountAmount (trans, account);
+}
+
+static gnc_numeric
+get_trans_total_value (SplitRegister* reg, Transaction* trans)
+{
+    Account* account = gnc_split_register_get_default_account (reg);
+    return xaccTransGetAccountValue (trans, account);
 }
 
 static gnc_numeric
@@ -1282,9 +1303,14 @@ gnc_split_register_get_action_entry (VirtualLocation virt_loc,
                                      gboolean* conditionally_changed,
                                      gpointer user_data)
 {
-    SplitRegister* reg = user_data;
+    SplitRegister *reg = user_data;
     Split* split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
+    if (is_trans_ledger (reg, virt_loc))
+    {
+        Transaction *trans = xaccSplitGetParent (split);
+        return gnc_get_action_multi (trans, split);
+    }
     return gnc_get_num_action (NULL, split);
 }
 
@@ -1352,7 +1378,7 @@ gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
     is_trans = gnc_cell_name_equal
                (gnc_table_get_cell_name (reg->table, virt_loc), TBALN_CELL);
 
-    if (is_trans)
+    if (is_trans || is_trans_ledger (reg, virt_loc))
         balance = get_trans_total_balance (reg, xaccSplitGetParent (split));
     else
         balance = xaccSplitGetBalance (split);
@@ -1384,7 +1410,28 @@ gnc_split_register_get_price_entry (VirtualLocation virt_loc,
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
-    price = xaccSplitGetSharePrice (split);
+    if (is_trans_ledger (reg, virt_loc))
+    {
+        gnc_numeric amount = get_trans_total_amount (reg, xaccSplitGetParent (split));
+        gnc_numeric value = get_trans_total_value (reg, xaccSplitGetParent (split));
+
+        if (gnc_numeric_zero_p (amount))
+        {
+            if (gnc_numeric_zero_p (value))
+                price = gnc_numeric_create (1, 1);
+            else
+                price = gnc_numeric_create (0, 1);
+        }
+        else
+        {
+            price = gnc_numeric_div (value, amount,
+                                     GNC_DENOM_AUTO,
+                                     GNC_HOW_RND_ROUND_HALF_UP);
+        }
+    }
+    else
+        price = xaccSplitGetSharePrice (split);
+
     curr = xaccTransGetCurrency (xaccSplitGetParent (split));
     if (gnc_numeric_zero_p (price))
         return NULL;
@@ -1421,7 +1468,11 @@ gnc_split_register_get_shares_entry (VirtualLocation virt_loc,
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
-    shares = xaccSplitGetAmount (split);
+    if (is_trans_ledger (reg, virt_loc))
+        shares = get_trans_total_amount (reg, xaccSplitGetParent (split));
+    else
+        shares = xaccSplitGetAmount (split);
+
     if (gnc_numeric_zero_p (shares))
         return NULL;
 
@@ -1721,6 +1772,9 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
     Split* split;
     Transaction* trans;
     gnc_commodity* currency;
+    gboolean is_ledger;
+
+    is_ledger = is_trans_ledger (reg, virt_loc);
 
     is_debit = gnc_cell_name_equal
                (gnc_table_get_cell_name (reg->table, virt_loc), DEBT_CELL);
@@ -1838,12 +1892,18 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
                    use the value, otherwise use the amount.  */
                 if (gnc_split_register_use_security_cells (reg, virt_loc))
                 {
-                    amount = xaccSplitGetValue (split);
+                    if (is_ledger)
+                        amount = get_trans_total_value (reg, xaccSplitGetParent (split));
+                    else
+                        amount = xaccSplitGetValue (split);
                     amount_commodity = currency;
                 }
                 else
                 {
-                    amount = xaccSplitGetAmount (split);
+                    if (is_ledger)
+                        amount = get_trans_total_amount (reg, xaccSplitGetParent (split));
+                    else
+                        amount = xaccSplitGetAmount (split);
                     amount_commodity = split_commodity;
                 }
                 /* Show the currency if it is not the default currency */
@@ -1857,7 +1917,10 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
             else
             {
                 /* non-security register, always use the split amount. */
-                amount = xaccSplitGetAmount (split);
+                if (is_ledger)
+                    amount = get_trans_total_amount (reg, xaccSplitGetParent (split));
+                else
+                    amount = xaccSplitGetAmount (split);
                 if (is_current ||
                     gnc_commodity_equiv (split_commodity, commodity))
                     use_symbol = FALSE;
@@ -1874,7 +1937,10 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
             case STOCK_REGISTER:
             case CURRENCY_REGISTER:
             case PORTFOLIO_LEDGER:
-                amount = xaccSplitGetValue (split);
+                if (is_ledger)
+                    amount = get_trans_total_value (reg, xaccSplitGetParent (split));
+                else
+                    amount = xaccSplitGetValue (split);
                 print_info = gnc_commodity_print_info (currency, reg->mismatched_commodities);
                 break;
 
@@ -1886,11 +1952,20 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
              */
             default:
                 if (commodity && !gnc_commodity_equal (commodity, currency))
-                    /* Convert this to the "local" value */
-                    amount = xaccSplitConvertAmount(split, account);
+                {
+                    if (is_ledger)
+                        amount = get_trans_total_amount (reg, xaccSplitGetParent (split));
+                    else
+                        /* Convert this to the "local" value */
+                        amount = xaccSplitConvertAmount(split, account);
+                }
                 else
-                    amount = xaccSplitGetValue (split);
-
+                {
+                    if (is_ledger)
+                        amount = get_trans_total_value (reg, xaccSplitGetParent (split));
+                    else
+                        amount = xaccSplitGetValue (split);
+                }
                 print_info = gnc_account_print_info (account, reg->mismatched_commodities);
                 print_info.commodity = commodity;
                 break;

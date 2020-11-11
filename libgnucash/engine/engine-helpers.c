@@ -45,6 +45,62 @@ cannot be considered "standard" or public parts of QOF. */
 
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
+
+const char *
+gnc_get_action_multi (const Transaction *trans, const Split *split)
+{
+    SplitList *splits = xaccTransGetSplitList (trans); // do not free
+
+    if (g_list_length (splits) < 3)
+        return gnc_get_num_action (NULL, split);
+    else
+    {
+        Account *account = xaccSplitGetAccount (split);
+        GHashTable *actions_table = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                           g_free, NULL);
+        gboolean multi = FALSE;
+        const gchar *ret;
+
+        for (; splits; splits = splits->next)
+        {
+            Split *s = (Split*)splits->data;
+            const gchar *tmp = gnc_get_num_action (NULL, s);
+
+            if (s == split)
+            {
+                if (tmp && *tmp)
+                    g_hash_table_insert (actions_table, g_strdup (tmp), "test");
+                continue;
+            }
+
+            if (account == xaccSplitGetAccount (s))
+            {
+                if (tmp && *tmp)
+                    g_hash_table_insert (actions_table, g_strdup (tmp), "test");
+                multi = TRUE;
+            }
+        }
+
+        if (multi)
+        {
+            if (g_hash_table_size (actions_table) == 1)
+            {
+                GList *keys = g_hash_table_get_keys (actions_table);
+                ret = g_strdup (keys->data);
+                g_list_free (keys);
+            }
+            else
+                ret = _("-- Multi Line --");
+        }
+        else
+            ret = gnc_get_num_action (NULL, split);
+
+        g_hash_table_destroy (actions_table);
+        return ret;
+    }
+}
+
+
 /** Gets the transaction Number or split Action based on book option:
   * if the book option is TRUE (split action is used for NUM) and a
   * split is provided, split-action is returned; if book option is FALSE
@@ -68,7 +124,7 @@ gnc_get_num_action (const Transaction *trans, const Split *split)
             return NULL;
         }
         if (qof_book_use_split_action_for_num_field (book))
-            return xaccSplitGetAction(split);
+            return gnc_get_action_multi (trans, split);
         else
             return xaccTransGetNum(trans);
     }

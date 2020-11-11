@@ -34,6 +34,12 @@
 
 typedef void (*GncBOCb)    (gpointer new_val, gpointer user_data);
 
+/** Gets the action field for when multiple splits for the same account
+ *  are in the same transaction. If all splits have no action text or
+ *  they all have different text then '-- Multi Line --' is returned. If
+ *  all action texts are the same then that text is returned.*/
+const char * gnc_get_action_multi (const Transaction *trans, const Split *split);
+
 /** Gets the transaction Number or split Action based on book option:
   * if the book option is TRUE (split action is used for NUM) and a
   * split is provided, split-action is returned; if book option is FALSE

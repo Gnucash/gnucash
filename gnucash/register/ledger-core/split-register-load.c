@@ -556,8 +556,8 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
         }
     }
 
-    if (multi_line)
-        trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
+    /* create the has table for duplicat transactions */
+    trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     /* populate the table */
     for (node = slist; node; node = node->next)
@@ -583,14 +583,11 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
         if (trans == blank_trans)
             continue;
 
-        if (multi_line)
-        {
-            /* Skip this split if its transaction has already been loaded. */
-            if (g_hash_table_lookup (trans_table, trans))
-                continue;
+        /* Skip this split if its transaction has already been loaded. */
+        if (g_hash_table_lookup (trans_table, trans))
+            continue;
 
-            g_hash_table_insert (trans_table, trans, trans);
-        }
+        g_hash_table_insert (trans_table, trans, trans);
 
         if (info->show_present_divider &&
             use_autoreadonly &&
@@ -670,8 +667,7 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
             start_primary_color = !start_primary_color;
     }
 
-    if (multi_line)
-        g_hash_table_destroy (trans_table);
+    g_hash_table_destroy (trans_table);
 
     /* add the blank split at the end. */
     if (pending_trans == blank_trans)
