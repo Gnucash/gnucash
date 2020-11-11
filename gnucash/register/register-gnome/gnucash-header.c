@@ -188,6 +188,31 @@ gnc_header_draw_offscreen (GncHeader *header)
 }
 
 
+gint
+gnc_header_get_cell_offset (GncHeader *header, gint col, gint *cell_width)
+{
+    SheetBlockStyle *style = header->style;
+    gint j;
+    gint offset = 0;
+
+    for (j = 0; j < style->ncols; j++)
+    {
+        CellDimensions *cd;
+
+        cd = gnucash_style_get_cell_dimensions (style, 0, j);
+        if (!cd) continue;
+
+        if (j == col)
+        {
+            *cell_width = cd->pixel_width;
+            break;
+        }
+        offset = offset + cd->pixel_width;
+    }
+    return offset;
+}
+
+
 static gboolean
 gnc_header_draw (GtkWidget *header, cairo_t *cr)
 {

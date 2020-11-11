@@ -1627,6 +1627,27 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
     return handled;
 }
 
+static void
+gnucash_sheet_need_horizontal_scroll (GnucashSheet *sheet,
+                                      VirtualLocation *new_virt_loc)
+{
+    gint hscroll_val;
+    gint cell_width = 0;
+    gint offset;
+
+    if (sheet->window_width == sheet->width)
+        return;
+
+    // get the horizontal scroll window value
+    hscroll_val = (gint) gtk_adjustment_get_value (sheet->hadj);
+
+    // offset is the start of the cell for column
+    offset = gnc_header_get_cell_offset (GNC_HEADER(sheet->header_item), new_virt_loc->phys_col_offset, &cell_width);
+
+    if (((offset + cell_width) > sheet->window_width) || (offset < hscroll_val))
+        gtk_adjustment_set_value (sheet->hadj, offset);
+}
+
 static gboolean
 process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
                      gncTableTraversalDir *direction,
@@ -1735,6 +1756,9 @@ process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
             *pass_on = TRUE;
             break;
     }
+    // does the sheet need horizontal scrolling due to tab
+    gnucash_sheet_need_horizontal_scroll (sheet, new_virt_loc);
+
     return FALSE;
 }
 
@@ -1893,6 +1917,9 @@ gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc)
 
     if (abort_move)
         return;
+
+    // does the sheet need horizontal scrolling
+    gnucash_sheet_need_horizontal_scroll (sheet, &virt_loc);
 
     gnucash_sheet_cursor_move (sheet, virt_loc);
 }

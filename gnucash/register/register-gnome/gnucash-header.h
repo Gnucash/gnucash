@@ -74,5 +74,10 @@ void gnc_header_request_redraw (GncHeader *header);
 
 void gnc_header_set_header_rows (GncHeader *header,
                                  int num_phys_rows);
+
+gint gnc_header_get_cell_offset (GncHeader *header,
+                                 gint col,
+                                 gint *cell_width);
+
 /** @} */
 #endif /* GNUCASH_HEADER_H */
