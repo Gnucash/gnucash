@@ -346,7 +346,7 @@ load_user_config(void)
 
 
 static void
-gnc_log_init (const boost::optional <std::vector <std::string>> &log_flags,
+gnc_log_init (const std::vector <std::string> log_flags,
               const boost::optional <std::string> &log_to_filename)
 {
     if (log_to_filename && !log_to_filename->empty())
@@ -389,24 +389,21 @@ gnc_log_init (const boost::optional <std::vector <std::string>> &log_flags,
         qof_log_parse_log_config (log_config_filename);
     g_free (log_config_filename);
 
-    if (log_flags && !log_flags->empty())
+    for (auto log_flag : log_flags)
     {
-        for (auto log_flag : *log_flags)
+        if (log_flag.empty () ||
+            log_flag[0] == '=' ||
+            log_flag[log_flag.length () - 1] == '=')
         {
-            if (log_flag.empty () ||
-                log_flag[0] == '=' ||
-                log_flag[log_flag.length () - 1] == '=')
-            {
-                g_warning ("string [%s] not parseable", log_flag.c_str());
-                continue;
-            }
-
-            std::vector<std::string> split_flag;
-            boost::split (split_flag, log_flag, [](char c){return c == '=';});
-
-            auto level = qof_log_level_from_string (split_flag[1].c_str());
-            qof_log_set_level (split_flag[0].c_str(), level);
+            g_warning ("string [%s] not parseable", log_flag.c_str());
+            continue;
         }
+
+        std::vector<std::string> split_flag;
+        boost::split (split_flag, log_flag, [](char c){return c == '=';});
+
+        auto level = qof_log_level_from_string (split_flag[1].c_str());
+        qof_log_set_level (split_flag[0].c_str(), level);
     }
 }
 
