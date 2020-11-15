@@ -42,5 +42,36 @@ GNCPrintAmountInfo gnc_scm2printinfo(SCM info_scm);
  */
 SCM  gnc_quoteinfo2scm(gnc_commodity *com);
 
+/** Given an account, gets a "linked" account. The linked account is
+ *  identified by an 'id' string. e.g. The source may be a STOCK
+ *  account, and has metadata to identify linked dividends, capital
+ *  gains, broker cash, fees accounts. These accounts are identified
+ *  by the id gchar string. If the guid does not exist the getter will
+ *  return NULL.
+ *
+ * @param acc Source account
+ *
+ * @param id The string identifier
+ *
+ * @return A pointer to the linked account, or NULL
+ *
+ */
+
+Account * gnc_account_get_linked_account (const Account *acc, const gchar *id);
+
+/** Given an account, sets a "linked" account. The linked account is
+ *  identified by an 'id' string. e.g. The source may be a STOCK
+ *  account, and has metadata to identify linked dividends, capital
+ *  gains, broker cash, fees accounts.
+ *
+ * @param acc Source account
+ *
+ * @param id The string identifier
+ *
+ * @param target Target account
+ *
+ */
+void gnc_account_set_linked_account (Account *acc, const gchar *id,
+                                     const Account *target);
 
 #endif

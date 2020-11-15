@@ -32,6 +32,7 @@
 #include "gnc-engine-guile.h"
 #include "gnc-helpers.h"
 #include "gnc-ui-util.h"
+#include "qofinstance-p.h"
 
 
 /* Type converters for GNCPrintAmountInfo */
@@ -132,4 +133,36 @@ gnc_quoteinfo2scm(gnc_commodity *comm)
     info_scm = scm_cons (comm_scm, info_scm);
     info_scm = scm_cons (name ? scm_from_utf8_string (name) : SCM_BOOL_F, info_scm);
     return info_scm;
+}
+
+Account * gnc_account_get_linked_account (const Account *acc, const gchar *id)
+{
+    GValue v = G_VALUE_INIT;
+    GncGUID *guid = NULL;
+
+    g_return_val_if_fail (GNC_IS_ACCOUNT (acc), FALSE);
+
+    qof_instance_get_kvp (QOF_INSTANCE(acc), &v, 1, id);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        guid = (GncGUID*)g_value_get_boxed (&v);
+
+    if (!guid)
+        return NULL;
+
+    return xaccAccountLookup (guid, qof_instance_get_book (acc));
+}
+
+void gnc_account_set_linked_account (Account *acc, const gchar *id,
+                                     const Account *target)
+{
+    GValue v = G_VALUE_INIT;
+    const GncGUID *guid;
+    g_return_if_fail (GNC_IS_ACCOUNT (acc));
+    guid = qof_instance_get_guid (QOF_INSTANCE (target));
+    xaccAccountBeginEdit (acc);
+    g_value_init (&v, GNC_TYPE_GUID);
+    g_value_set_boxed (&v, guid);
+    qof_instance_set_kvp (QOF_INSTANCE (acc), &v, 1, id);
+    qof_instance_set_dirty (QOF_INSTANCE (acc));
+    xaccAccountCommitEdit (acc);
 }
