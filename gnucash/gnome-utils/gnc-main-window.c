@@ -1405,8 +1405,14 @@ gnc_main_window_quit(GncMainWindow *window)
     }
     if (do_shutdown)
     {
+        GList *w;
+
+        for (w = active_windows; w; w = g_list_next (w))
+        {
+            window = w->data;
+            window->window_quitting = TRUE; // set window_quitting on all windows
+        }
         /* remove the preference callbacks from the main window */
-        window->window_quitting = TRUE;
         gnc_main_window_remove_prefs (window);
         g_timeout_add(250, gnc_main_window_timed_quit, NULL);
         return TRUE;
@@ -3232,21 +3238,25 @@ gnc_main_window_close_page (GncPluginPage *page)
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     if (priv->installed_pages == NULL)
     {
-        GncPluginManager *manager = gnc_plugin_manager_get ();
-        GList *plugins = gnc_plugin_manager_get_plugins (manager);
-
-        /* remove only the preference callbacks from the window plugins */
-        window->just_plugin_prefs = TRUE;
-        g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
-        window->just_plugin_prefs = FALSE;
-        g_list_free (plugins);
-
-        /* remove the preference callbacks from the main window */
-        gnc_main_window_remove_prefs (window);
-
-        if (g_list_length(active_windows) > 1)
+        if (window->window_quitting)
         {
-            gtk_widget_destroy(GTK_WIDGET(window));
+            GncPluginManager *manager = gnc_plugin_manager_get ();
+            GList *plugins = gnc_plugin_manager_get_plugins (manager);
+
+            /* remove only the preference callbacks from the window plugins */
+            window->just_plugin_prefs = TRUE;
+            g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
+            window->just_plugin_prefs = FALSE;
+            g_list_free (plugins);
+
+            /* remove the preference callbacks from the main window */
+            gnc_main_window_remove_prefs (window);
+
+            gtk_widget_destroy (GTK_WIDGET(window));
+        }
+        if (g_list_length (active_windows) > 1)
+        {
+            gtk_widget_destroy (GTK_WIDGET(window));
         }
     }
 }
