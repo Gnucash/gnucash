@@ -410,7 +410,6 @@
                                   #\, #\.))
                         ((integer) filtered-string)))
          (num (or (string->number (string-append "#e" read-string)) 0)))
-    (pk value-string has-minus? filtered-string read-string num)
     (if has-minus? (- num) num)))
 
 ;; input: list of numstrings eg "10.50" "20.54"
