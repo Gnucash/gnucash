@@ -29,6 +29,7 @@ set (gnc_gnome_noinst_HEADERS
   dialog-progress.h
   dialog-report-column-view.h
   dialog-report-style-sheet.h
+  dialog-stock-editor.h
   dialog-sx-editor.h
   dialog-sx-editor2.h
   dialog-sx-from-trans.h
@@ -100,6 +101,7 @@ set (gnc_gnome_SOURCES
   dialog-progress.c
   dialog-report-column-view.c
   dialog-report-style-sheet.c
+  dialog-stock-editor.c
   dialog-sx-editor.c
   dialog-sx-editor2.c
   dialog-sx-from-trans.c

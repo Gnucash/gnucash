@@ -46,6 +46,7 @@
         <menuitem name="ActionsReconcile" action="ActionsReconcileAction"/>
         <menuitem name="ActionsAutoClear" action="ActionsAutoClearAction"/>
         <menuitem name="ActionsStockSplit" action="ActionsStockSplitAction"/>
+        <menuitem name="ActionsStockEditor" action="ActionsStockEditorAction"/>
         <menuitem name="ActionLots" action="ActionsLotsAction"/>
         <separator name="ActionsSep4"/>
         <menuitem name="BlankTransaction" action="BlankTransactionAction"/>
