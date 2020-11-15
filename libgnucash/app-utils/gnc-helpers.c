@@ -133,3 +133,30 @@ gnc_quoteinfo2scm(gnc_commodity *comm)
     info_scm = scm_cons (name ? scm_from_utf8_string (name) : SCM_BOOL_F, info_scm);
     return info_scm;
 }
+
+void gnc_account_set_linked_account (Account *acc, const gchar *id,
+                                     const Account *target)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT (acc) && id);
+
+    xaccAccountBeginEdit (acc);
+    qof_instance_set (QOF_INSTANCE (acc), id,
+                      target ? qof_instance_get_guid (QOF_INSTANCE (target))
+                      : NULL, NULL);
+    xaccAccountCommitEdit (acc);
+}
+
+Account * gnc_account_get_linked_account (const Account *acc, const gchar *id)
+{
+    GncGUID *guid = NULL;
+    Account *linked_acc;
+    QofBook *book;
+
+    g_return_val_if_fail (GNC_IS_ACCOUNT (acc), NULL);
+
+    book = gnc_account_get_book (acc);
+    qof_instance_get (QOF_INSTANCE(acc), id, &guid, NULL);
+    linked_acc = guid ? xaccAccountLookup (guid, book) : NULL;
+    guid_free (guid);
+    return linked_acc;
+}

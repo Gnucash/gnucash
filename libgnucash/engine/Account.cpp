@@ -65,6 +65,10 @@ static const std::string KEY_INCLUDE_CHILDREN("include-children");
 static const std::string KEY_POSTPONE("postpone");
 static const std::string KEY_LOT_MGMT("lot-mgmt");
 static const std::string KEY_ONLINE_ID("online_id");
+static const std::string KEY_STOCK_PROCEEDS("stock-proceeds");
+static const std::string KEY_STOCK_EXPENSES("stock-expenses");
+static const std::string KEY_STOCK_DIVIDEND("stock-dividend");
+static const std::string KEY_STOCK_CAPGAINS("stock-capgains");
 static const std::string AB_KEY("hbci");
 static const std::string AB_ACCOUNT_ID("account-id");
 static const std::string AB_ACCOUNT_UID("account-uid");
@@ -122,6 +126,10 @@ enum
     PROP_AB_ACCOUNT_UID,                /* KVP */
     PROP_AB_BANK_CODE,                  /* KVP */
     PROP_AB_TRANS_RETRIEVAL,            /* KVP */
+    PROP_STOCK_PROCEEDS,                /* KVP */
+    PROP_STOCK_DIVIDEND,                /* KVP */
+    PROP_STOCK_CAPGAINS,                /* KVP */
+    PROP_STOCK_EXPENSES,                /* KVP */
 
     PROP_RUNTIME_0,
     PROP_POLICY,                        /* Cached Value */
@@ -506,6 +514,18 @@ gnc_account_get_property (GObject         *object,
     case PROP_AB_TRANS_RETRIEVAL:
         qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {AB_KEY, AB_TRANS_RETRIEVAL});
         break;
+    case PROP_STOCK_PROCEEDS:
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_STOCK_PROCEEDS});
+        break;
+    case PROP_STOCK_DIVIDEND:
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_STOCK_DIVIDEND});
+        break;
+    case PROP_STOCK_EXPENSES:
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_STOCK_EXPENSES});
+        break;
+    case PROP_STOCK_CAPGAINS:
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_STOCK_CAPGAINS});
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -634,6 +654,18 @@ gnc_account_set_property (GObject         *object,
         break;
     case PROP_AB_TRANS_RETRIEVAL:
         qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {AB_KEY, AB_TRANS_RETRIEVAL});
+        break;
+    case PROP_STOCK_PROCEEDS:
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_STOCK_PROCEEDS});
+        break;
+    case PROP_STOCK_DIVIDEND:
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_STOCK_DIVIDEND});
+        break;
+    case PROP_STOCK_EXPENSES:
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_STOCK_EXPENSES});
+        break;
+    case PROP_STOCK_CAPGAINS:
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_STOCK_CAPGAINS});
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -1116,6 +1148,42 @@ gnc_account_class_init (AccountClass *klass)
                         "The time of the last transaction retrieval for this "
                         "account.",
                         GNC_TYPE_TIME64,
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_STOCK_PROCEEDS,
+     g_param_spec_boxed("stock-proceeds",
+                        "Associated stock proceeds account",
+                        "Associated cash account for stock",
+                        GNC_TYPE_GUID,
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_STOCK_DIVIDEND,
+     g_param_spec_boxed("stock-dividend",
+                        "Associated stock dividend account",
+                        "Associated dividend income account for stock",
+                        GNC_TYPE_GUID,
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_STOCK_EXPENSES,
+     g_param_spec_boxed("stock-expenses",
+                        "Associated stock fees account",
+                        "Associated expenses fees account for stock",
+                        GNC_TYPE_GUID,
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_STOCK_CAPGAINS,
+     g_param_spec_boxed("stock-capgains",
+                        "Associated stock capgains account",
+                        "Associated capital gains income account for stock",
+                        GNC_TYPE_GUID,
                         static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
 }
