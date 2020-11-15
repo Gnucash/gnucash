@@ -401,14 +401,17 @@
 
 ;; the following is a working refactored function
 (define (qif-parse:parse-number/format value-string format)
-  (let* ((filtered-string (gnc:string-delete-chars value-string "$'+"))
+  (let* ((has-minus? (string-index value-string #\-))
+         (filtered-string (gnc:string-delete-chars value-string "$'+-"))
          (read-string (case format
                         ((decimal) (gnc:string-delete-chars filtered-string ","))
                         ((comma) (gnc:string-replace-char
                                   (gnc:string-delete-chars filtered-string ".")
                                   #\, #\.))
-                        ((integer) filtered-string))))
-    (or (string->number (string-append "#e" read-string)) 0)))
+                        ((integer) filtered-string)))
+         (num (or (string->number (string-append "#e" read-string)) 0)))
+    (pk value-string has-minus? filtered-string read-string num)
+    (if has-minus? (- num) num)))
 
 ;; input: list of numstrings eg "10.50" "20.54"
 ;; input: formats to test '(decimal comma integer)
