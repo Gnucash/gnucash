@@ -1669,6 +1669,11 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
           gnc_account_n_children (account)))
     {
         do_delete_account (account, NULL, NULL, NULL);
+
+        /* update opening balance account */
+        gnc_find_or_create_equity_account (gnc_account_get_root(account),
+                                           EQUITY_OPENING_BALANCE,
+                                           xaccAccountGetCommodity (account));
         return;
     }
 
@@ -1703,8 +1708,15 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
                                 adopt.subtrans.new_account,
                                 adopt.subacct.new_account,
                                 adopt.delete_res) == GTK_RESPONSE_ACCEPT)
+    {
         do_delete_account (account, adopt.subacct.new_account,
                            adopt.subtrans.new_account, adopt.trans.new_account);
+
+        /* update opening balance account */
+        gnc_find_or_create_equity_account (gnc_account_get_root(account),
+                                           EQUITY_OPENING_BALANCE,
+                                           xaccAccountGetCommodity (account));
+    }
 }
 
 static int

@@ -56,6 +56,11 @@ gboolean gnc_using_unreversed_budgets (QofBook* book);
  * don't match, return FALSE. */
 gboolean gnc_reverse_budget_balance (const Account *account, gboolean unreversed);
 
+/* Backward compatibility *******************************************
+ * Return that book's support opening balance accounts by equity type slot */
+void gnc_set_use_equity_type_opening_balance_account (QofBook* book);
+gboolean gnc_using_equity_type_opening_balance_account (QofBook* book);
+
 /* Default directory sections ***************************************/
 #define GNC_PREFS_GROUP_OPEN_SAVE    "dialogs.open-save"
 #define GNC_PREFS_GROUP_EXPORT       "dialogs.export-accounts"

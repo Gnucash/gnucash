@@ -15678,6 +15678,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>9000</act:code>
     <act:parent type="new">e57d948c9a884e179bd090118b9212f8</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>equity-type</slot:key>
+      <slot:value type="string">opening-balance</slot:value>
+    </slot>
+  </act:slots>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>Saldenvorträge Debitoren</act:name>

@@ -1423,13 +1423,6 @@ on_finish (GtkAssistant  *gtkassistant,
     ENTER (" ");
     com = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(data->currency_selector));
 
-    if (data->our_account_tree)
-    {
-        gnc_account_foreach_descendant (data->our_account_tree,
-                                        (AccountCb)starting_balance_helper,
-                                        data);
-    }
-
     // delete before we suspend GUI events, and then muck with the model,
     // because the model doesn't seem to handle this correctly.
     if (data->initial_category)
@@ -1451,6 +1444,13 @@ on_finish (GtkAssistant  *gtkassistant,
     xaccAccountSetCommodity(root, com);
 
     gnc_resume_gui_refresh ();
+
+    if (data->our_account_tree)
+    {
+        gnc_account_foreach_descendant (data->our_account_tree,
+                                        (AccountCb)starting_balance_helper,
+                                        data);
+    }
 
     if (when_completed)
     {

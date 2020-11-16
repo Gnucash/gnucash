@@ -800,6 +800,12 @@
   </act:commodity>
   <act:description>Početni saldo</act:description>
   <act:parent type="new">73f3a388cebe42a3bc40ab8db179d32d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>equity-type</slot:key>
+      <slot:value type="string">opening-balance</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 </gnc-account-example>
 
