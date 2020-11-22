@@ -2616,6 +2616,10 @@ static gnc_numeric convert_amount_at_date (GNCPriceDB *pdb,
 
     price = gnc_pricedb_get_nearest_price (pdb, orig_currency, new_currency, t);
 
+    /* the price retrieved may be invalid. return zero. see 798015 */
+    if (gnc_numeric_check (price))
+        return gnc_numeric_zero ();
+
     return gnc_numeric_mul
         (amount, price, gnc_commodity_get_fraction (new_currency),
          GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND);
