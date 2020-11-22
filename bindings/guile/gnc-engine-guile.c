@@ -1731,8 +1731,8 @@ gnc_scm_to_numeric(SCM gncnum)
 SCM
 gnc_numeric_to_scm(gnc_numeric arg)
 {
-    return scm_divide(scm_from_int64(arg.num),
-                           scm_from_int64(arg.denom));
+    return gnc_numeric_check (arg) ? SCM_BOOL_F :
+        scm_divide (scm_from_int64 (arg.num), scm_from_int64 (arg.denom));
 }
 
 static SCM
