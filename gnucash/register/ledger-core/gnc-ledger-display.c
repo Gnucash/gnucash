@@ -184,6 +184,9 @@ find_by_query (gpointer find_data, gpointer user_data)
     Query* q = find_data;
     GNCLedgerDisplay* ld = user_data;
 
+    if (ld->reg->type != SEARCH_LEDGER)
+        return FALSE;
+
     if (!q || !ld)
         return FALSE;
 
