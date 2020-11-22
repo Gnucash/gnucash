@@ -74,12 +74,13 @@ GtkWidget* gnc_account_sel_new (void);
  * list, then it doesn't change the state of the GAS.  If the account is
  * NULL, then the first list selection is made if set_default_acct is TRUE.
  **/
-void       gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct, gboolean set_default_acct );
+void       gnc_account_sel_set_account (GNCAccountSel *gas, Account *acct,
+                                        gboolean set_default_acct);
 /**
  * Returns the currently-selected Account.  If, for some reason the selection
  * is in a bad state, NULL will be returned.
  **/
-Account*   gnc_account_sel_get_account( GNCAccountSel *gas );
+Account*   gnc_account_sel_get_account (GNCAccountSel *gas);
 
 /**
  * The GNCAccountSel can be setup to filter the accounts displayed.
@@ -87,25 +88,24 @@ Account*   gnc_account_sel_get_account( GNCAccountSel *gas );
  * @param commodityFilters A GList of gnc_commodity types which are allowed.
  * The list is copied, of course.
  **/
-void gnc_account_sel_set_acct_filters( GNCAccountSel *gas, GList *typeFilters, GList *commodityFilters );
+void gnc_account_sel_set_acct_filters (GNCAccountSel *gas, GList *typeFilters,
+                                       GList *commodityFilters);
 
 /**
  * Conditional inclusion of a new-account button to the right of the
  * combobox.
  * @param state TRUE if the new-account button is desired, FALSE otherwise.
  **/
-void gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
-        gboolean state );
+void gnc_account_sel_set_new_account_ability (GNCAccountSel *gas, gboolean state);
 
 /**
  * Conditional call of the new-account window in modal mode.
  * @param state TRUE if the new-account window should be modal, FALSE otherwise.
  **/
-void gnc_account_sel_set_new_account_modal( GNCAccountSel *gas,
-        gboolean state );
+void gnc_account_sel_set_new_account_modal (GNCAccountSel *gas, gboolean state);
 
-gint gnc_account_sel_get_num_account( GNCAccountSel *gas );
-void gnc_account_sel_purge_account( GNCAccountSel *gas, Account *acc, gboolean recursive);
-void gnc_account_sel_set_hexpand ( GNCAccountSel *gas, gboolean expand);
+gint gnc_account_sel_get_num_account (GNCAccountSel *gas);
+void gnc_account_sel_purge_account (GNCAccountSel *gas, Account *acc, gboolean recursive);
+void gnc_account_sel_set_hexpand (GNCAccountSel *gas, gboolean expand);
 
 #endif /* GNC_ACCOUNT_SEL_H */
