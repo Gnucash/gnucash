@@ -847,11 +847,11 @@ RESTART:
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
         gnc_gtk_dialog_add_button(dialog, _("_Open Read-Only"),
-                                  "document-revert", RESPONSE_READONLY);
+                                  "emblem-readonly", RESPONSE_READONLY);
         gnc_gtk_dialog_add_button(dialog, _("_Open with No File"),
-                                  "document-new", RESPONSE_NO_FILE);
+                                  "document-new-symbolic", RESPONSE_NO_FILE);
         gnc_gtk_dialog_add_button(dialog, _("Open _Anyway"),
-                                  "document-open", RESPONSE_OPEN);
+                                  "document-open-symbolic", RESPONSE_OPEN);
         if (shutdown_cb)
             gtk_dialog_add_button(GTK_DIALOG(dialog),
                                   _("_Quit"), RESPONSE_QUIT);
