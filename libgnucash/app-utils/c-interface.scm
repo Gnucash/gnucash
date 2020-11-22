@@ -78,6 +78,8 @@
 ;; translated with gettext.
 (define (gnc:make-string-database)
   (define string-hash (make-hash-table))
+  (issue-deprecation-warning "gnc:make-string-database is deprecate. record \
+translatable strings with N_ and G_.")
   (lambda args
     (match args
       (('lookup key) (G_ (hash-ref string-hash key)))
