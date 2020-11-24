@@ -144,12 +144,6 @@ gnc_options_dialog_set_style_sheet_options_help_cb (GNCOptionWin *win)
                                     NULL);
 }
 
-static void
-gnc_commodity_help_cb (void)
-{
-    gnc_gnome_help (NULL, HF_HELP, HL_COMMODITY);
-}
-
 /* gnc_configure_date_format
  *    sets dateFormat to the current value on the scheme side
  *
@@ -773,7 +767,6 @@ gnc_gui_init(void)
                                 gnc_gui_refresh_all,
                                 NULL);
 
-    gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
     gnc_file_set_shutdown_callback (gnc_shutdown);
 
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
