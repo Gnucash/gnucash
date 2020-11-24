@@ -151,6 +151,8 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
     if (change == NULL)
     {
         gnc_basic_cell_set_value_internal( &cell->cell, newval );
+        // Remove any selection.
+        *end_selection = *start_selection = *cursor_position;
         return;
     }
 
