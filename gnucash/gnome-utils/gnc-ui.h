@@ -106,7 +106,7 @@ gnc_error_dialog (GtkWindow *parent,
 
 
 extern void
-gnc_gnome_help (const char *file_name, const char *target_link);
+gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *target_link);
 
 int      gnc_choose_radio_option_dialog (GtkWidget *parent,
         const char *title,

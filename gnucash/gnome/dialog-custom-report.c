@@ -107,7 +107,8 @@ custom_report_dialog_close_cb(GtkWidget* widget, gpointer data)
 void
 custom_report_help_cb (GtkWidget *widget, gpointer data)
 {
-    gnc_gnome_help(HF_HELP, HL_USAGE_CUSTOMREP);
+    CustomReportDialog *crd = data;
+    gnc_gnome_help (GTK_WINDOW(crd->dialog), HF_HELP, HL_USAGE_CUSTOMREP);
 }
 
 void

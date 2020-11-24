@@ -390,7 +390,8 @@ gnc_customer_window_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_customer_window_help_cb (GtkWidget *widget, gpointer data)
 {
-    gnc_gnome_help(HF_HELP, HL_USAGE_CUSTOMER);
+    CustomerWindow *cw = data;
+    gnc_gnome_help (GTK_WINDOW(cw->dialog), HF_HELP, HL_USAGE_CUSTOMER);
 }
 
 void

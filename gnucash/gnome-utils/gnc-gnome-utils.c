@@ -90,13 +90,13 @@ gnc_gnome_utils_init (void)
 static void
 gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
 {
-    gnc_gnome_help (HF_HELP, HL_GLOBPREFS);
+    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_GLOBPREFS);
 }
 
 static void
 gnc_book_options_help_cb (GNCOptionWin *win, gpointer dat)
 {
-    gnc_gnome_help (HF_HELP, HL_BOOK_OPTIONS);
+    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_BOOK_OPTIONS);
 }
 
 void
@@ -133,7 +133,7 @@ gnc_options_dialog_set_new_book_option_values (GNCOptionDB *odb)
 static void
 gnc_style_sheet_options_help_cb (GNCOptionWin *win, gpointer dat)
 {
-    gnc_gnome_help (HF_HELP, HL_STYLE_SHEET);
+    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_STYLE_SHEET);
 }
 
 void
@@ -147,7 +147,7 @@ gnc_options_dialog_set_style_sheet_options_help_cb (GNCOptionWin *win)
 static void
 gnc_commodity_help_cb (void)
 {
-    gnc_gnome_help (HF_HELP, HL_COMMODITY);
+    gnc_gnome_help (NULL, HF_HELP, HL_COMMODITY);
 }
 
 /* gnc_configure_date_format
@@ -240,7 +240,7 @@ gnc_add_css_file (void)
  * ?anchor varient, see https://gitlab.gnome.org/GNOME/yelp/issues/116
  */
 static gchar *
-gnc_gnome_help_yelp_anchor_fix (const char *file_name, const char *anchor)
+gnc_gnome_help_yelp_anchor_fix (GtkWindow *parent, const char *file_name, const char *anchor)
 {
     const gchar * const *sdatadirs = g_get_system_data_dirs ();
     const gchar * const *langs = g_get_language_names ();
@@ -261,7 +261,7 @@ gnc_gnome_help_yelp_anchor_fix (const char *file_name, const char *anchor)
 
     if (!help_path)
     {
-        gnc_error_dialog (NULL, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
+        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
         PERR("Unable to find 'gnome/help' directory");
         return NULL;
     }
@@ -283,7 +283,7 @@ gnc_gnome_help_yelp_anchor_fix (const char *file_name, const char *anchor)
         uri = g_strconcat ("ghelp:", full_path, "?", anchor, NULL);
     else
     {
-        gnc_error_dialog (NULL, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
+        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
         PERR("Unable to find valid help language directory");
         return NULL;
     }
@@ -298,7 +298,7 @@ gnc_gnome_help_yelp_anchor_fix (const char *file_name, const char *anchor)
  * toolkit.
  */
 void
-gnc_gnome_help (const char *dir, const char *detail)
+gnc_gnome_help (GtkWindow *parent, const char *dir, const char *detail)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSString *subdir = [NSString stringWithUTF8String: dir];
@@ -339,9 +339,9 @@ gnc_gnome_help (const char *dir, const char *detail)
                   componentsJoinedByString: @"-"];
         if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir])
         {
-            gnc_error_dialog(NULL, "%s\n%s\n%s: %s", _(msg_no_help_found),
-                             _(msg_no_help_reason),
-                             _(msg_no_help_location), [docs_dir UTF8String]);
+            gnc_error_dialog (parent, "%s\n%s\n%s: %s", _(msg_no_help_found),
+                              _(msg_no_help_reason),
+                              _(msg_no_help_location), [docs_dir UTF8String]);
             [pool release];
             return;
         }
@@ -431,13 +431,13 @@ gnc_gnome_help (const char *dir, const char *detail)
         [[NSWorkspace sharedWorkspace] openURL: url];
     else
     {
-       gnc_error_dialog(NULL, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
+       gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
     }
     [pool release];
 }
 #elif defined G_OS_WIN32 /* G_OS_WIN32 */
 void
-gnc_gnome_help (const char *file_name, const char *anchor)
+gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 {
     const gchar * const *lang;
     gchar *pkgdatadir, *fullpath, *found = NULL;
@@ -459,7 +459,7 @@ gnc_gnome_help (const char *file_name, const char *anchor)
 
     if (!found)
     {
-        gnc_error_dialog (NULL, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
+        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
     }
     else
     {
@@ -469,14 +469,14 @@ gnc_gnome_help (const char *file_name, const char *anchor)
 }
 #else
 void
-gnc_gnome_help (const char *file_name, const char *anchor)
+gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 {
     GError *error = NULL;
     gchar *uri = NULL;
     gboolean success = TRUE;
 
     if (anchor)
-        uri = gnc_gnome_help_yelp_anchor_fix (file_name, anchor);
+        uri = gnc_gnome_help_yelp_anchor_fix (parent, file_name, anchor);
     else
         uri = g_strconcat ("ghelp:", file_name, NULL);
 
@@ -491,7 +491,7 @@ gnc_gnome_help (const char *file_name, const char *anchor)
 
     g_assert(error != NULL);
     {
-        gnc_error_dialog(NULL, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
+        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
     }
     PERR ("%s", error->message);
     g_error_free(error);

@@ -248,7 +248,8 @@ gnc_employee_window_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_employee_window_help_cb (GtkWidget *widget, gpointer data)
 {
-    gnc_gnome_help(HF_HELP, HL_USAGE_EMPLOYEE);
+    EmployeeWindow *ew = data;
+    gnc_gnome_help (GTK_WINDOW(ew->dialog), HF_HELP, HL_USAGE_EMPLOYEE);
 }
 
 void

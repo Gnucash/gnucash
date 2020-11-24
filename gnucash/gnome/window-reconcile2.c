@@ -1101,7 +1101,8 @@ gnc_reconcile_window_get_current_split (RecnWindow2 *recnData)
 static void
 gnc_ui_reconcile_window_help_cb (GtkWidget *widget, gpointer data)
 {
-    gnc_gnome_help (HF_HELP, HL_RECNWIN);
+    RecnWindow2 *recnData = data;
+    gnc_gnome_help (GTK_WINDOW(recnData->window), HF_HELP, HL_RECNWIN);
 }
 
 

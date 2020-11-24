@@ -232,7 +232,8 @@ gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_order_window_help_cb (GtkWidget *widget, gpointer data)
 {
-    gnc_gnome_help(HF_HELP, HL_USAGE_BILL);
+    OrderWindow *ow = data;
+    gnc_gnome_help (GTK_WINDOW(ow->dialog), HF_HELP, HL_USAGE_BILL);
 }
 
 void
