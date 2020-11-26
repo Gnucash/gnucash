@@ -5,7 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
-"POT-Creation-Date: 2020-08-08 18:07+0200\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2020-11-26 14:29+0100\n"
 "PO-Revision-Date: 2010-05-05 13:47+1000\n"
 "Last-Translator: Tao Wang <dancefire@gmail.com>\n"
 "Language-Team: Simplified Chinese <LL@li.org>\n"
@@ -446,6 +448,10 @@ msgstr "会计科目"
 #. "Important Buzzword :)"
 msgid "double entry"
 msgstr "复式记账"
+
+#. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
+msgid "document link"
+msgstr ""
 
 # 为某个人或者某个公司工作并且赚取薪金的人
 #. "a person who works for somebody or a company in return for wages"

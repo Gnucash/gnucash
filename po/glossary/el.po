@@ -5,7 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.0\n"
-"POT-Creation-Date: 2020-08-08 18:07+0200\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2020-11-26 14:29+0100\n"
 "PO-Revision-Date: 2001-12-28 00:17+0000\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -426,6 +428,10 @@ msgstr "λογαριασμός"
 #, fuzzy
 msgid "double entry"
 msgstr "διπλό"
+
+#. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
+msgid "document link"
+msgstr ""
 
 #. "a person who works for somebody or a company in return for wages"
 #, fuzzy
