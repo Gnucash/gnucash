@@ -124,6 +124,7 @@ typedef struct GncPluginPageReportPrivate
 
     /* The page is in the process of reloading the html */
     gboolean	reloading;
+    gboolean    loaded;
 
     /// the gnc_html abstraction this PluginPage contains
 //        gnc_html *html;
@@ -255,7 +256,8 @@ gnc_plugin_page_report_focus_widget (GncPluginPage *report_plugin_page)
         {
             GtkWidget *widget = gnc_html_get_webview (priv->html);
 
-            gnc_plugin_page_report_load_uri (report_plugin_page);
+            if (!priv->loaded) // so we only do the load once
+                gnc_plugin_page_report_load_uri (report_plugin_page);
 
             if (GTK_IS_WIDGET(widget))
             {
@@ -384,6 +386,8 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     gnc_html_show_url(priv->html, type, url_location, url_label, 0);
     g_free(url_location);
 
+    priv->loaded = TRUE;
+
     gnc_plugin_page_report_set_progressbar( page, FALSE );
 
     // this resets the window for the progressbar to NULL
@@ -460,6 +464,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 //        priv->html = gnc_html_new( topLvl );
     priv->html = gnc_html_factory_create_html();
     gnc_html_set_parent( priv->html, topLvl );
+    priv->loaded = FALSE;
 
     gnc_html_history_set_node_destroy_cb(gnc_html_get_history(priv->html),
                                          gnc_plugin_page_report_history_destroy_cb,
