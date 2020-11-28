@@ -848,7 +848,7 @@ RESTART:
 
         gnc_gtk_dialog_add_button(dialog, _("_Open Read-Only"),
                                   "emblem-readonly", RESPONSE_READONLY);
-        gnc_gtk_dialog_add_button(dialog, _("_Open with No File"),
+        gnc_gtk_dialog_add_button(dialog, _("Open with _No File"),
                                   "document-new-symbolic", RESPONSE_NO_FILE);
         gnc_gtk_dialog_add_button(dialog, _("Open _Anyway"),
                                   "document-open-symbolic", RESPONSE_OPEN);
