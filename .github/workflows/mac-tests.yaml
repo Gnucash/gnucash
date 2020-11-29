@@ -1,0 +1,55 @@
+name: mac-tests
+on: [push]
+jobs:
+  ci_tests_mac:
+    runs-on: macos-10.15
+    name: macOS Tests
+    env:
+      TZ: America/Los_Angeles
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - run: |
+        echo "PATH=$PATH:$HOME/gnucash/inst/bin" >> $GITHUB_ENV
+        echo "PREFIX=$HOME/gnucash/inst" >> $GITHUB_ENV
+        echo "SRCROOT=$HOME/gnucash/source" >> $GITHUB_ENV
+    - name: download dependency tarball
+      uses: carlosperate/download-file-action@v1.0.3
+      id: dependencies
+      with:
+        file-url: 'https://downloads.sourceforge.net/gnucash/Dependencies/gnucash-4.x-mac-dependencies.tar.xz'
+        file-name: gnucash-dependencies.tar.xz
+    - name: download googletest
+      uses: carlosperate/download-file-action@v1.0.3
+
+      id: googletest
+      with:
+        file-url: 'https://github.com/google/googletest/archive/release-1.10.0.tar.gz'
+        file-name: googletest.tar.gz
+    - run: |
+        cd $HOME
+        mkdir gnucash
+        cd gnucash
+        tar -xf $GITHUB_WORKSPACE/gnucash-dependencies.tar.xz
+        mkdir source
+        cd source
+        tar -xf $GITHUB_WORKSPACE/googletest.tar.gz
+        mv googletest-* googletest
+        cd ..
+        ls source
+    - name: Configure GnuCash
+      run: |
+        mkdir build
+        cd build
+        cmake -GNinja -DCMAKE_INSTALL_PREFIX=$PREFIX -DCMAKE_PREFIX_PATH=$PREFIX -DWITH_PYTHON=ON -DGTEST_ROOT=$SRCROOT/googletest $GITHUB_WORKSPACE
+    - name: Build and Test GnuCash
+      run: |
+        cd build
+        ninja
+        ninja check
+    - uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: TestLog
+        path: ${{ github.workspace }}/build/Testing/Temporary/LastTest.log
+        if-no-files-found: ignore

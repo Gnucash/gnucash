@@ -35,49 +35,49 @@ typedef struct gnc_option_win GNCOptionWin;
 
 typedef void (* GNCOptionWinCallback)(GNCOptionWin *, gpointer data);
 
-GNCOptionWin * gnc_options_dialog_new_modal(gboolean modal, gchar *title,
-                                            const char *component_class,
-                                            GtkWindow *parent);
-GNCOptionWin * gnc_options_dialog_new(gchar *title, GtkWindow *parent);
-GNCOptionWin * gnc_options_dialog_new_w_dialog(gchar *title, GtkWidget *dialog);
-void gnc_options_dialog_destroy(GNCOptionWin * win);
+GNCOptionWin * gnc_options_dialog_new_modal (gboolean modal, gchar *title,
+                                             const char *component_class,
+                                             GtkWindow *parent);
+GNCOptionWin * gnc_options_dialog_new (gchar *title, GtkWindow *parent);
+GNCOptionWin * gnc_options_dialog_new_w_dialog (gchar *title, GtkWidget *dialog);
+void gnc_options_dialog_destroy (GNCOptionWin * win);
 void gnc_options_register_stocks (void);
 
-GtkWidget * gnc_options_dialog_widget(GNCOptionWin * win);
-GtkWidget * gnc_options_page_list(GNCOptionWin * win);
-GtkWidget * gnc_options_dialog_notebook(GNCOptionWin * win);
+GtkWidget * gnc_options_dialog_widget (GNCOptionWin * win);
+GtkWidget * gnc_options_page_list (GNCOptionWin * win);
+GtkWidget * gnc_options_dialog_notebook (GNCOptionWin * win);
 
 void gnc_options_dialog_changed (GNCOptionWin *win);
 
-void gnc_option_changed_widget_cb(GtkWidget *widget, GNCOption *option);
-void gnc_option_changed_option_cb(GtkWidget *dummy, GNCOption *option);
+void gnc_option_changed_widget_cb (GtkWidget *widget, GNCOption *option);
+void gnc_option_changed_option_cb (GtkWidget *dummy, GNCOption *option);
 
-void gnc_options_dialog_set_apply_cb(GNCOptionWin * win,
+void gnc_options_dialog_set_apply_cb (GNCOptionWin * win,
+                                      GNCOptionWinCallback thunk,
+                                      gpointer cb_data);
+void gnc_options_dialog_set_help_cb (GNCOptionWin * win,
                                      GNCOptionWinCallback thunk,
                                      gpointer cb_data);
-void gnc_options_dialog_set_help_cb(GNCOptionWin * win,
-                                    GNCOptionWinCallback thunk,
-                                    gpointer cb_data);
-void gnc_options_dialog_set_close_cb(GNCOptionWin * win,
-                                     GNCOptionWinCallback thunk,
-                                     gpointer cb_data);
+void gnc_options_dialog_set_close_cb (GNCOptionWin * win,
+                                      GNCOptionWinCallback thunk,
+                                      gpointer cb_data);
 
-void gnc_options_dialog_set_global_help_cb(GNCOptionWinCallback thunk,
-        gpointer cb_data);
+void gnc_options_dialog_set_global_help_cb (GNCOptionWinCallback thunk,
+                                            gpointer cb_data);
 
-void gnc_options_dialog_build_contents(GNCOptionWin *win,
-                                       GNCOptionDB  *odb);
+void gnc_options_dialog_build_contents (GNCOptionWin *win,
+                                        GNCOptionDB  *odb);
 
-void gnc_options_dialog_build_contents_full(GNCOptionWin *win,
-                                            GNCOptionDB  *odb,
-                                            gboolean show_dialog);
+void gnc_options_dialog_build_contents_full (GNCOptionWin *win,
+                                             GNCOptionDB  *odb,
+                                             gboolean show_dialog);
 
 /* Both apply_cb and close_cb should be scheme functions with 0 arguments.
  * References to these functions will be held until the close_cb is called
  */
 void gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win,
-        SCM apply_cb,
-        SCM close_cb);
+                                           SCM apply_cb,
+                                           SCM close_cb);
 
 /*****************************************************************/
 /* Option Registration                                           */

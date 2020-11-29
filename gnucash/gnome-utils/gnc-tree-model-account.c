@@ -420,6 +420,7 @@ gnc_tree_model_account_get_column_type (GtkTreeModel *tree_model, int index)
 
     case GNC_TREE_MODEL_ACCOUNT_COL_HIDDEN:
     case GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER:
+    case GNC_TREE_MODEL_ACCOUNT_COL_OPENING_BALANCE:
         return G_TYPE_BOOLEAN;
 
     default:
@@ -954,6 +955,11 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER:
         g_value_init (value, G_TYPE_BOOLEAN);
         g_value_set_boolean (value, xaccAccountGetPlaceholder (account));
+        break;
+
+    case GNC_TREE_MODEL_ACCOUNT_COL_OPENING_BALANCE:
+        g_value_init (value, G_TYPE_BOOLEAN);
+        g_value_set_boolean (value, xaccAccountGetIsOpeningBalance (account));
         break;
 
     default:

@@ -548,4 +548,16 @@ TEST(gnc_numeric_functions, test_conversion_to_decimal)
     EXPECT_NO_THROW(r = c.to_decimal());
     EXPECT_EQ(27434842, r.num());
     EXPECT_EQ(100, r.denom());
+    GncNumeric d(11900000000, 85000000);
+    EXPECT_NO_THROW(r = d.to_decimal());
+    EXPECT_EQ(140, r.num());
+    EXPECT_EQ(1, r.denom());
+    GncNumeric e(11050000000, 65000000);
+    EXPECT_NO_THROW(r = e.to_decimal());
+    EXPECT_EQ(170, r.num());
+    EXPECT_EQ(1, r.denom());
+    GncNumeric f(5000000000, 50000000 );
+    EXPECT_NO_THROW(r = f.to_decimal());
+    EXPECT_EQ(100, r.num());
+    EXPECT_EQ(1, r.denom());
 }

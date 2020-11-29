@@ -252,7 +252,7 @@ gnc_bi_import_gui_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_bi_import_gui_help_cb (GtkWidget *widget, gpointer data)
 {
-    gnc_gnome_help(HF_HELP, HL_USAGE_BSNSS);
+    gnc_gnome_help (HF_GUIDE, HL_IMPORT_BC);
 }
 
 static void

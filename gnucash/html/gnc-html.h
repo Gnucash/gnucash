@@ -257,6 +257,15 @@ gnc_html_history* gnc_html_get_history( GncHtml* html );
 GtkWidget* gnc_html_get_widget( GncHtml* html );
 
 /**
+ * Returns the webview widget for this html engine
+ *
+ * @param html GncHtml object
+ * @return webview widget
+ */
+GtkWidget* gnc_html_get_webview( GncHtml* html );
+
+
+/**
  * Sets the parent window for this html engine.  The engine will be embedded in this parent.
  *
  * @param html GncHtml object

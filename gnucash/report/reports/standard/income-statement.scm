@@ -382,7 +382,7 @@
          ;; exchange rates calculation parameters
 	 (exchange-fn
 	  (gnc:case-exchange-fn price-source report-commodity end-date))
-	 )
+         (price-fn (gnc:case-price-fn price-source report-commodity end-date)))
 
     ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
     ;; with the proper arguments.
@@ -561,8 +561,8 @@
           (gnc:report-percent-done 90)
           (when show-rates?
             (gnc:html-document-add-object!
-             doc (gnc:html-make-exchangerates
-                  report-commodity exchange-fn accounts)))
+             doc (gnc:html-make-rates-table
+                  report-commodity price-fn accounts)))
           (gnc:report-percent-done 100)))
 
     (gnc:report-finished)

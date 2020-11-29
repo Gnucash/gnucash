@@ -460,14 +460,12 @@ namespace IANAParser
 
 	//Add in the tzinfo indexes consumed in the previous loop
 	start_index = info_index_zero + time_count;
-	//Can't use sizeof(TZInfo) because it's padded out to 8 bytes.
-	static const size_t tzinfo_size = 6;
-	auto abbrev = start_index + type_count * tzinfo_size;
+	auto abbrev = start_index + type_count * ttinfo_size;
 	auto std_dist = abbrev + char_count;
 	auto gmt_dist = std_dist + type_count;
 	for(uint32_t index = 0; index < type_count; ++index)
 	{
-	    fb_index = start_index + index * tzinfo_size;
+	    fb_index = start_index + index * ttinfo_size;
 	    /* Use memcpy instead of static_cast to avoid memory alignment issues with chars */
 	    TTInfo info{};
 	    memcpy(&info, &fileblock[fb_index], ttinfo_size);
@@ -549,10 +547,34 @@ namespace DSTRule
 	    std::swap(to_std_time, to_dst_time);
 	    std::swap(std_info, dst_info);
 	}
-	if (dst_info->isgmt)
-	    to_dst_time += boost::posix_time::seconds(dst_info->info.gmtoff);
-	if (std_info->isgmt)
-	    to_std_time += boost::posix_time::seconds(std_info->info.gmtoff);
+
+        /* Documentation notwithstanding, the date-time rules are
+         * looking for local time (wall clock to use the RFC 8538
+         * definition) values.
+         *
+         * The TZ Info contains two fields, isstd and isgmt (renamed
+         * to isut in newer versions of tzinfo). In theory if both are
+         * 0 the transition times represent wall-clock times,
+         * i.e. time stamps in the respective time zone's local time
+         * at the moment of the transition. If isstd is 1 then the
+         * representation is always in standard time instead of
+         * daylight time; this is significant for dst->std
+         * transitions. If isgmt/isut is one then isstd must also be
+         * set and the transition time is in UTC.
+         *
+         * In practice it seems that the timestamps are always in UTC
+         * so the isgmt/isut flag isn't meaningful. The times always
+         * need to have the utc offset added to them to make the
+         * transition occur at the right time; the isstd flag
+         * determines whether that should be the standard offset or
+         * the daylight offset for the daylight->standard transition.
+         */
+
+        to_dst_time += boost::posix_time::seconds(std_info->info.gmtoff);
+        if (std_info->isstd) //if isstd always use standard time
+            to_std_time += boost::posix_time::seconds(std_info->info.gmtoff);
+        else
+            to_std_time += boost::posix_time::seconds(dst_info->info.gmtoff);
 
     }
 

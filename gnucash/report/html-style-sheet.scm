@@ -201,14 +201,14 @@
 (define (gnc:get-html-style-sheets)
   (sort (map cdr (hash-map->list cons *gnc:_style-sheets_*))
         (lambda (a b)
-          (string<? (gnc:html-style-sheet-name a)
-                    (gnc:html-style-sheet-name b)))))
+          (gnc:string-locale<? (gnc:html-style-sheet-name a)
+                               (gnc:html-style-sheet-name b)))))
 
 (define (gnc:get-html-templates)
   (sort (map cdr (hash-map->list cons *gnc:_style-sheet-templates_*))
         (lambda (a b)
-          (string<? (gnc:html-style-sheet-template-name a)
-                    (gnc:html-style-sheet-template-name b)))))
+          (gnc:string-locale<? (gnc:html-style-sheet-template-name a)
+                               (gnc:html-style-sheet-template-name b)))))
 
 (define (gnc:html-style-sheet-find tname)
   (hash-ref *gnc:_style-sheets_* tname))

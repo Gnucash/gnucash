@@ -202,7 +202,7 @@ gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_job_window_help_cb (GtkWidget *widget, gpointer data)
 {
-    gnc_gnome_help(HF_HELP, HL_USAGE_BSNSS);
+    gnc_gnome_help (HF_HELP, HL_USAGE_JOB);
 }
 
 

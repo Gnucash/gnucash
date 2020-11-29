@@ -112,6 +112,7 @@ static void
 gnc_popup_entry_init (GncPopupEntry *widget)
 {
     GtkWidget *arrow;
+    GtkStyleContext *context;
 
     widget->editing_canceled = FALSE;
 
@@ -123,14 +124,17 @@ gnc_popup_entry_init (GncPopupEntry *widget)
     gtk_entry_set_visibility (GTK_ENTRY(widget->entry), TRUE);
     gtk_widget_show (widget->entry);
 
+    context = gtk_widget_get_style_context (widget->entry);
+    gtk_style_context_add_class (context, "combo");
+
     widget->button = gtk_button_new ();
     gtk_widget_show (widget->button);
 
-    arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
-    gtk_widget_show (arrow);
+    context = gtk_widget_get_style_context (widget->button);
+    gtk_style_context_add_class (context, "combo");
 
-    g_signal_connect (G_OBJECT(arrow), "draw",
-                      G_CALLBACK(gnc_draw_arrow_cb), GINT_TO_POINTER(1));
+    arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+    gtk_widget_show (arrow);
 
     gtk_container_add (GTK_CONTAINER(widget->button), arrow);
 
@@ -145,12 +149,20 @@ gnc_popup_entry_init (GncPopupEntry *widget)
 }
 
 static void
+gpw_grab_focus (GtkWidget *box)
+{
+    GncPopupEntry *widget = GNC_POPUP_ENTRY(box);
+    gtk_widget_grab_focus (widget->entry);
+}
+
+static void
 gnc_popup_entry_class_init (GncPopupEntryClass *klass)
 {
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
     GObjectClass   *gobject_class = G_OBJECT_CLASS(klass);
 
     widget_class->key_press_event = gpw_key_press_event;
+    widget_class->grab_focus = gpw_grab_focus;
 
     gobject_class->set_property = gpw_set_property;
     gobject_class->get_property = gpw_get_property;
@@ -249,7 +261,7 @@ gtk_cell_editable_key_press_event (GtkEntry      *entry,
     if (qof_scan_date (date_string, &day, &month, &year))
     {
         when.tm_year = year - 1900;
-        when.tm_mon = month - 1 ;
+        when.tm_mon = month - 1;
         when.tm_mday = day;
 
         if (!gnc_handle_date_accelerator (key_event, &when, date_string))
@@ -363,7 +375,7 @@ gnc_popup_get_button_width (void)
     gtk_widget_show (button);
     gtk_container_add (GTK_CONTAINER(window), button);
 
-    arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+    arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
     gtk_widget_show (arrow);
 
     gtk_container_add (GTK_CONTAINER(button), arrow);

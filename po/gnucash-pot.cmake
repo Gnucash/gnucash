@@ -24,6 +24,7 @@ execute_process(
                         --keyword=Q_:1g
                         --keyword=G_
                         --keyword=N_
+                        --keyword=NG_:1,2
                         --keyword=C_:1c,2
                         --keyword=NC_:1c,2
                         --keyword=translate:1,1t

@@ -85,3 +85,21 @@ set_dist_list(test_app_utils_DIST
   ${test_app_utils_scheme_SOURCES}
   ${test_app_utils_SOURCES}
 )
+
+
+set(test_autoclear_SOURCES
+    test-autoclear.cpp
+)
+set(test_autoclear_INCLUDE_DIRS
+    ${APP_UTILS_TEST_INCLUDE_DIRS}
+    ${GTEST_INCLUDE_DIR}
+)
+set(test_autoclear_LIBS
+    ${APP_UTILS_TEST_LIBS}
+    gtest
+)
+
+gnc_add_test(test-autoclear "${test_autoclear_SOURCES}"
+    test_autoclear_INCLUDE_DIRS
+    test_autoclear_LIBS
+)

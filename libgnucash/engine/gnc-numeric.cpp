@@ -368,7 +368,7 @@ GncNumeric::to_decimal(unsigned int max_places) const
         rr_num *= factor;
         rr_den *= factor;
     }
-    while (!rr_num.isZero() && rr_num % 10 == 0)
+    while (!rr_num.isZero() && rr_num > 9 && rr_den > 9 && rr_num % 10 == 0)
     {
         rr_num /= 10;
         rr_den /= 10;

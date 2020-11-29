@@ -33,6 +33,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-session.h"
 #include "gnc-gtk-utils.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-guile-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
@@ -180,6 +181,9 @@ gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
 
     gnc_options_dialog_build_contents (ssinfo->odialog,
                                        ssinfo->odb);
+
+    gnc_options_dialog_set_style_sheet_options_help_cb (ssinfo->odialog);
+
     gnc_options_dialog_set_apply_cb (ssinfo->odialog,
                                      gnc_style_sheet_options_apply_cb,
                                      ssinfo);

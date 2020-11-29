@@ -207,10 +207,13 @@
 ;; function 'exchange-fn' and the 'accounts' determine which
 ;; commodities to show. Returns a html-object, a <html-table>.
 (define (gnc:html-make-exchangerates common-commodity exchange-fn accounts)
+  (issue-deprecation-warning
+   "gnc:html-make-exchangerates is deprecated. use gnc:html-make-rates-table instead.")
   (let ((comm-list (gnc:accounts-get-commodities accounts common-commodity))
+        (entries (length comm-list))
         (markup (lambda (c) (gnc:make-html-table-cell/markup "number-cell" c)))
         (table (gnc:make-html-table)))
-    (unless (null? comm-list)
+    (unless (= 0 entries)
       (for-each
        (lambda (commodity)
          (let* ((orig-amt (gnc:make-gnc-monetary commodity 1))
@@ -223,10 +226,31 @@
        comm-list)
       (gnc:html-table-set-col-headers!
        table (list (gnc:make-html-table-header-cell/size
-                    1 2 (if (null? (cdr comm-list))
-                            (G_ "Exchange rate")
-                            (G_ "Exchange rates"))))))
+                    1 2 (NG_ "Exchange rate" "Exchange rates" entries)))))
     table))
+
+;; Create a html-table of all prices. The report-currency is
+;; 'currency', The prices are given through the function 'price-fn'
+;; and the 'accounts' determine which commodities to show. Returns a
+;; html-object, a <html-table>. price-fn is easily obtained from
+;; gnc:case-price-fn
+(define (gnc:html-make-rates-table currency price-fn accounts)
+  (define (cell c) (gnc:make-html-table-cell/markup "number-cell" c))
+  (define table (gnc:make-html-table))
+  (let lp ((comm-list (gnc:accounts-get-commodities accounts currency)) (entries 0))
+    (match comm-list
+      (()
+       (unless (zero? entries)
+         (gnc:html-table-set-col-headers!
+          table (list (gnc:make-html-table-header-cell/size
+                       1 2 (NG_ "Exchange rate" "Exchange rates" entries)))))
+       table)
+      ((comm . rest)
+       (gnc:html-table-append-row!
+        table
+        (list (cell (gnc:make-gnc-monetary comm 1))
+              (cell (gnc:default-price-renderer currency (price-fn comm)))))
+       (lp rest (1+ entries))))))
 
 
 (define (gnc:html-make-generic-budget-warning report-title-string)

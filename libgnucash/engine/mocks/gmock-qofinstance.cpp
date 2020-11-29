@@ -1,5 +1,7 @@
 #include <glib.h>
 
+#include <gmock/gmock.h>
+
 extern "C"
 {
 #include <qofinstance.h>
@@ -21,12 +23,14 @@ qof_instance_class_init(QofInstanceClass *klass)
     // function is unused, class functions are defined in C++ code
 }
 
+extern "C"
+{
 // This is a reimplementation of the function from qofinstance.cpp
 void
 qof_instance_get (const QofInstance *inst, const gchar *first_prop, ...)
 {
     va_list ap;
-    g_return_if_fail (QOF_IS_INSTANCE (inst));
+    ASSERT_TRUE (QOF_IS_INSTANCE (inst));
 
     va_start (ap, first_prop);
     g_object_get_valist (G_OBJECT (inst), first_prop, ap);
@@ -34,15 +38,16 @@ qof_instance_get (const QofInstance *inst, const gchar *first_prop, ...)
 }
 
 // This is a reimplementation of the function from qofinstance.cpp
-// with calling qof_instance_set_dirty()
+// without calling qof_instance_set_dirty()
 void
 qof_instance_set (QofInstance *inst, const gchar *first_prop, ...)
 {
     va_list ap;
-    g_return_if_fail (QOF_IS_INSTANCE (inst));
+    ASSERT_TRUE (QOF_IS_INSTANCE (inst));
 
     va_start (ap, first_prop);
     g_object_set_valist (G_OBJECT (inst), first_prop, ap);
     va_end (ap);
 }
 
+} // extern "C"

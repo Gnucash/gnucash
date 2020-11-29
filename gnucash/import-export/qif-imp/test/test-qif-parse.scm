@@ -228,6 +228,10 @@
     -1234
     (qif-parse:parse-number/format "-1234" 'integer))
 
+  (test-equal "qif-parse:parse-number/format 1234-"
+    -1234
+    (qif-parse:parse-number/format "1234-" 'integer))
+
   (test-equal "qif-parse:parse-number/format 1234"
     1234
     (qif-parse:parse-number/format "1234" 'integer))

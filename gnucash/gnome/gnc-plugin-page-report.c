@@ -124,6 +124,7 @@ typedef struct GncPluginPageReportPrivate
 
     /* The page is in the process of reloading the html */
     gboolean	reloading;
+    gboolean    loaded;
 
     /// the gnc_html abstraction this PluginPage contains
 //        gnc_html *html;
@@ -153,6 +154,7 @@ static GncPluginPage *gnc_plugin_page_report_recreate_page (GtkWidget *window, G
 static void gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name);
 static void gnc_plugin_page_report_update_edit_menu (GncPluginPage *page, gboolean hide);
 static gboolean gnc_plugin_page_report_finish_pending (GncPluginPage *page);
+static void gnc_plugin_page_report_load_uri (GncPluginPage *page);
 
 static int gnc_plugin_page_report_check_urltype(URLType t);
 //static void gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
@@ -243,12 +245,25 @@ gnc_plugin_page_report_focus_widget (GncPluginPage *report_plugin_page)
     if (GNC_IS_PLUGIN_PAGE_REPORT(report_plugin_page))
     {
         GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report_plugin_page);
-        GtkWidget *widget = gnc_html_get_widget (priv->html);
+        GtkWidget *window;
 
-        if (GTK_IS_WIDGET(widget))
+        if (!priv)
+            return FALSE;
+
+        window = gnc_plugin_page_get_window (report_plugin_page);
+
+        if (window && !gnc_main_window_is_restoring_pages (GNC_MAIN_WINDOW(window)))
         {
-            if (!gtk_widget_is_focus (GTK_WIDGET(widget)))
-                gtk_widget_grab_focus (GTK_WIDGET(widget));
+            GtkWidget *widget = gnc_html_get_webview (priv->html);
+
+            if (!priv->loaded) // so we only do the load once
+                gnc_plugin_page_report_load_uri (report_plugin_page);
+
+            if (GTK_IS_WIDGET(widget))
+            {
+                if (!gtk_widget_is_focus (GTK_WIDGET(widget)))
+                    gtk_widget_grab_focus (GTK_WIDGET(widget));
+            }
         }
     }
     return FALSE;
@@ -332,7 +347,7 @@ gnc_plugin_page_report_set_progressbar (GncPluginPage *page, gboolean set)
         gtk_widget_set_size_request (GTK_WIDGET(progressbar), -1, -1); //reset
 }
 
-static gboolean
+static void
 gnc_plugin_page_report_load_uri (GncPluginPage *page)
 {
     GncPluginPageReport *report;
@@ -346,7 +361,7 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     report = GNC_PLUGIN_PAGE_REPORT(page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     if (!priv)
-        return FALSE; // No priv means the page doesn't exist anymore.
+        return; // No priv means the page doesn't exist anymore.
 
     DEBUG( "Load uri id=%d", priv->reportId );
     id_name = g_strdup_printf("id=%d", priv->reportId );
@@ -371,24 +386,51 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     gnc_html_show_url(priv->html, type, url_location, url_label, 0);
     g_free(url_location);
 
+    priv->loaded = TRUE;
+
     gnc_plugin_page_report_set_progressbar( page, FALSE );
 
     // this resets the window for the progressbar to NULL
     gnc_window_set_progressbar_window( NULL );
-
-    return FALSE;
 }
 
-static void
-gnc_plugin_page_report_realize_uri (GtkWidget *widget, GncPluginPage *page)
+/* used to capture Ctrl+Alt+PgUp/Down for tab selection */
+static gboolean
+webkit_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-    GtkAllocation allocation;
+    GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(user_data);
+    GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+    GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
+    GtkWidget *window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(report));
 
-    gtk_widget_get_allocation (widget, &allocation);
-    PINFO("Realized Container size is %dw x %dh", allocation.width, allocation.height);
+    if (GNC_PLUGIN_PAGE(report) != gnc_main_window_get_current_page (GNC_MAIN_WINDOW(window)))
+        return FALSE;
 
-    /* load uri when view idle */
-    g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
+    if ((event->keyval == GDK_KEY_Page_Up || event->keyval == GDK_KEY_Page_Down ||
+         event->keyval == GDK_KEY_KP_Page_Up || event->keyval == GDK_KEY_KP_Page_Down)
+          && (event->state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+    {
+        GtkNotebook *notebook = GTK_NOTEBOOK(gtk_widget_get_parent (GTK_WIDGET(priv->container)));
+        gint pages = gtk_notebook_get_n_pages (notebook);
+        gint current_page = gtk_notebook_get_current_page (notebook);
+
+        if (event->keyval == GDK_KEY_Page_Up || event->keyval == GDK_KEY_KP_Page_Up)
+        {
+            if (current_page == 0)
+                gtk_notebook_set_current_page (notebook, pages - 1);
+            else
+                gtk_notebook_prev_page (notebook);
+        }
+        else
+        {
+            if (pages == current_page + 1)
+                gtk_notebook_set_current_page (notebook, 0);
+            else
+                gtk_notebook_next_page (notebook);
+        }
+        return TRUE;
+    }
+    return FALSE;
 }
 
 static
@@ -399,6 +441,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     GncPluginPageReportPrivate *priv;
     GtkWindow *topLvl;
     GtkAction *action;
+    GtkWidget *webview;
     URLType type;
     char * id_name;
     char * child_name;
@@ -421,6 +464,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 //        priv->html = gnc_html_new( topLvl );
     priv->html = gnc_html_factory_create_html();
     gnc_html_set_parent( priv->html, topLvl );
+    priv->loaded = FALSE;
 
     gnc_html_history_set_node_destroy_cb(gnc_html_get_history(priv->html),
                                          gnc_plugin_page_report_history_destroy_cb,
@@ -457,13 +501,21 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     // FIXME.  This is f^-1(f(x)), isn't it?
     DEBUG( "id=%d", priv->reportId );
 
-    /* load uri when view is realized */
-    g_signal_connect (G_OBJECT(GTK_WIDGET(priv->container)), "realize",
-                      G_CALLBACK(gnc_plugin_page_report_realize_uri), page);
-
     g_signal_connect (G_OBJECT(page), "inserted",
                       G_CALLBACK(gnc_plugin_page_inserted_cb),
                       NULL);
+
+    // used to capture Ctrl+Alt+PgUp/Down for tab selection
+    webview = gnc_html_get_webview (priv->html);
+    if (webview)
+    {
+        gtk_widget_add_events (webview, gtk_widget_get_events (webview) |
+                               GDK_KEY_PRESS_MASK);
+
+        g_signal_connect (webview, "key-press-event",
+                          G_CALLBACK(webkit_key_press_event_cb),
+                          page);
+    }
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
     LEAVE("container %p", priv->container);
@@ -757,14 +809,11 @@ static void
 gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
 {
     GncPluginPageReportPrivate *priv;
-    GtkWidget *widget;
 
     // FIXME: cleanup other resources.
 
     PINFO("destroy widget");
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
-
-    widget = gnc_html_get_widget(priv->html);
 
     // Remove the page_changed signal callback
     gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(plugin_page));

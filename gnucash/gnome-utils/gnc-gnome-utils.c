@@ -131,6 +131,20 @@ gnc_options_dialog_set_new_book_option_values (GNCOptionDB *odb)
 }
 
 static void
+gnc_style_sheet_options_help_cb (GNCOptionWin *win, gpointer dat)
+{
+    gnc_gnome_help (HF_HELP, HL_STYLE_SHEET);
+}
+
+void
+gnc_options_dialog_set_style_sheet_options_help_cb (GNCOptionWin *win)
+{
+    gnc_options_dialog_set_help_cb (win,
+                                   (GNCOptionWinCallback)gnc_style_sheet_options_help_cb,
+                                    NULL);
+}
+
+static void
 gnc_commodity_help_cb (void)
 {
     gnc_gnome_help (HF_HELP, HL_COMMODITY);

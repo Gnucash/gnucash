@@ -26,6 +26,7 @@
 
 
 (use-modules (gnucash core-utils))
+(use-modules (ice-9 regex))
 
 (define (string-strip s1 s2)
   (let ((idx (string-contains-ci s1 s2)))
@@ -37,13 +38,27 @@
 (define (font-name-to-style-info font-name)
   (let* ((font-style "")
          (font-weight "")
+         (font-stretch "")
          (idx (string-index-right font-name #\space))
          (font-size (substring font-name (1+ idx) (string-length font-name)))
-         (font-name (string-take font-name idx)))
+         (font-name (string-take font-name idx))
+         (pat (make-regexp " weight=([0-9]+)" regexp/icase regexp/extended))
+         (match (regexp-exec pat font-name)))
 
-    (when (string-contains-ci font-name " bold")
+
+    (cond
+     ((string-contains-ci font-name " bold")
       (set! font-weight "font-weight: bold; ")
       (set! font-name (string-strip font-name " bold")))
+     ((string-contains-ci font-name " regular")
+      (set! font-weight "font-weight: normal; ")
+      (set! font-name (string-strip font-name " regular")))
+     ((string-contains-ci font-name " light")
+      (set! font-weight "font-weight: lighter; ")
+      (set! font-name (string-strip font-name " light")))
+     ((regexp-match? match)
+      (set! font-weight (regexp-substitute #f match "font-weight: " 1 "; "))
+      (set! font-name (regexp-substitute #f match 'pre 'post))))
 
     (cond
      ((string-contains-ci font-name " italic")
@@ -54,9 +69,18 @@
       (set! font-style "font-style: oblique; ")
       (set! font-name (string-strip font-name " oblique"))))
 
-    (string-append "font-family: " font-name ", Sans-Serif; "
+    (cond
+     ((string-contains-ci font-name " expanded")
+      (set! font-stretch "font-stretch: expanded; ")
+      (set! font-name (string-strip font-name " expanded")))
+
+     ((string-contains-ci font-name " condensed")
+      (set! font-stretch "font-stretch: condensed; ")
+      (set! font-name (string-strip font-name " condensed"))))
+
+    (string-append "font-family: \"" font-name "\", sans-serif; "
                    "font-size: " font-size "pt; "
-                   font-style font-weight)))
+                   font-style font-weight font-stretch)))
 
 ;; Registers font options
 (define (register-font-options options)

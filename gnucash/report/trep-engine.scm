@@ -2089,7 +2089,7 @@ warning will be removed in GnuCash 5.0"))
              (value-of-X (comparator-function split-X))
              (value-of-Y (comparator-function split-Y))
              (op (if (string? value-of-X)
-                     (if ascend? string<? string>?)
+                     (if ascend? gnc:string-locale<? gnc:string-locale>?)
                      (if ascend? < >))))
         (and value-of-X (op value-of-X value-of-Y))))
 
@@ -2245,7 +2245,7 @@ warning will be removed in GnuCash 5.0"))
           (when subtotal-table?
             (let* ((generic<?
                     (lambda (a b)
-                      (cond ((string? (car a)) (string<? (car a) (car b)))
+                      (cond ((string? (car a)) (gnc:string-locale<? (car a) (car b)))
                             ((number? (car a)) (< (car a) (car b)))
                             (else (gnc:error "unknown sortvalue")))))
                    (list-of-rows

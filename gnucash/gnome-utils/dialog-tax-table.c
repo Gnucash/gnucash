@@ -409,6 +409,9 @@ tax_table_entries_refresh (TaxTableWindow *ttw)
         g_free (row_text[1]);
     }
 
+    if (list)
+        g_list_free (list);
+
     if (reference)
     {
         path = gtk_tree_row_reference_get_path (reference);

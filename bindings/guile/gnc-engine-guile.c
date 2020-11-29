@@ -1721,18 +1721,28 @@ gnc_scm2query (SCM query_scm)
 gnc_numeric
 gnc_scm_to_numeric(SCM gncnum)
 {
-    if (scm_is_signed_integer(scm_numerator(gncnum), INT64_MIN, INT64_MAX) &&
-        scm_is_signed_integer(scm_denominator(gncnum), INT64_MIN, INT64_MAX))
-        return gnc_numeric_create(scm_to_int64(scm_numerator(gncnum)),
-                                  scm_to_int64(scm_denominator(gncnum)));
-    return gnc_numeric_create(0, GNC_ERROR_OVERFLOW);
+    SCM num, denom;
+
+    /* Not a number. */
+    if (!scm_is_number (gncnum))
+        return gnc_numeric_error (GNC_ERROR_ARG);
+
+    num = scm_numerator (gncnum);
+    denom = scm_denominator (gncnum);
+
+    /* scm overflows 64-bit numbers */
+    if (!scm_is_signed_integer (num, INT64_MIN, INT64_MAX) ||
+        !scm_is_signed_integer (denom, INT64_MIN, INT64_MAX))
+        return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+
+    return gnc_numeric_create (scm_to_int64 (num), scm_to_int64 (denom));
 }
 
 SCM
 gnc_numeric_to_scm(gnc_numeric arg)
 {
-    return scm_divide(scm_from_int64(arg.num),
-                           scm_from_int64(arg.denom));
+    return gnc_numeric_check (arg) ? SCM_BOOL_F :
+        scm_divide (scm_from_int64 (arg.num), scm_from_int64 (arg.denom));
 }
 
 static SCM

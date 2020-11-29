@@ -5,7 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.8\n"
-"POT-Creation-Date: 2020-08-08 18:07+0200\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2020-11-26 14:29+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: None\n"
@@ -364,6 +366,10 @@ msgstr ""
 
 #. "Important Buzzword :)"
 msgid "double entry"
+msgstr ""
+
+#. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
+msgid "document link"
 msgstr ""
 
 #. "a person who works for somebody or a company in return for wages"

@@ -315,6 +315,7 @@
                          (gnc:get-current-account-tree-depth)
                          depth-limit))
          ;; exchange rates calculation parameters
+         (price-fn (gnc:case-price-fn price-source report-commodity to-date))
          (exchange-fn (gnc:case-exchange-fn price-source report-commodity to-date)))
 
     (gnc:html-document-set-title!
@@ -441,8 +442,8 @@
           ;; add currency information
           (when show-rates?
             (gnc:html-document-add-object!
-             doc (gnc:html-make-exchangerates
-                  report-commodity exchange-fn
+             doc (gnc:html-make-rates-table
+                  report-commodity price-fn
                   (gnc:accounts-and-all-descendants accounts))))))
 
     (gnc:report-finished)

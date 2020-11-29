@@ -67,6 +67,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-uri-utils.h"
 #include "gnc-version.h"
+#include "gnc-warnings.h"
 #include "gnc-window.h"
 #include "gnc-prefs.h"
 #include "option-util.h"
@@ -231,6 +232,8 @@ typedef struct GncMainWindowPrivate
      *  group, the values are structures of type
      *  MergedActionEntry. */
     GHashTable *merged_actions_table;
+    /** Set when restoring plugin pages */
+    gboolean restoring_pages;
 } GncMainWindowPrivate;
 
 GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW,
@@ -527,6 +530,14 @@ typedef struct
     gint page_num;
     gint page_offset;
 } GncMainWindowSaveData;
+
+
+gboolean
+gnc_main_window_is_restoring_pages (GncMainWindow *window)
+{
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    return priv->restoring_pages;
+}
 
 
 /*  Iterator function to walk all pages in all windows, calling the
@@ -853,7 +864,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     {
         gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), desired_visibility);
     }
-
+    priv->restoring_pages = TRUE;
     /* Now populate the window with pages. */
     for (i = 0; i < page_count; i++)
     {
@@ -865,7 +876,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         while (gtk_events_pending ())
             gtk_main_iteration ();
     }
-
+    priv->restoring_pages = FALSE;
     /* Restore page ordering within the notebook. Use +1 notation so the
      * numbers in the page order match the page sections, at least for
      * the one window case. */
@@ -899,6 +910,9 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         }
         gtk_notebook_set_current_page (GTK_NOTEBOOK(priv->notebook),
                                        order[0] - 1);
+
+        g_signal_emit_by_name (window, "page_changed",
+                               g_list_nth_data (priv->usage_order, 0));
     }
     if (order)
     {
@@ -1391,8 +1405,14 @@ gnc_main_window_quit(GncMainWindow *window)
     }
     if (do_shutdown)
     {
+        GList *w;
+
+        for (w = active_windows; w; w = g_list_next (w))
+        {
+            window = w->data;
+            window->window_quitting = TRUE; // set window_quitting on all windows
+        }
         /* remove the preference callbacks from the main window */
-        window->window_quitting = TRUE;
         gnc_main_window_remove_prefs (window);
         g_timeout_add(250, gnc_main_window_timed_quit, NULL);
         return TRUE;
@@ -1409,6 +1429,32 @@ gnc_main_window_delete_event (GtkWidget *window,
 
     if (already_dead)
         return TRUE;
+
+    if (g_list_length (active_windows) > 1)
+    {
+        gint response;
+        GtkWidget *dialog;
+        gchar *message = _("This window is closing and will not be restored.");
+
+        dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_QUESTION,
+                                         GTK_BUTTONS_NONE,
+                                         "%s", _("Close Window?"));
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                                                  "%s", message);
+
+        gtk_dialog_add_buttons (GTK_DIALOG(dialog),
+                              _("_Cancel"), GTK_RESPONSE_CANCEL,
+                              _("_OK"), GTK_RESPONSE_YES,
+                               (gchar *)NULL);
+        gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+        response = gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_CLOSING_WINDOW_QUESTION);
+        gtk_widget_destroy (dialog);
+
+        if (response == GTK_RESPONSE_CANCEL)
+            return TRUE;
+    }
 
     if (!gnc_main_window_finish_pending(GNC_MAIN_WINDOW(window)))
     {
@@ -2581,6 +2627,8 @@ gnc_main_window_init (GncMainWindow *window, void *data)
     priv->event_handler_id =
         qof_event_register_handler(gnc_main_window_event_handler, window);
 
+    priv->restoring_pages = FALSE;
+
     /* Get the show_color_tabs value preference */
     priv->show_color_tabs = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
 
@@ -2728,6 +2776,58 @@ gnc_main_window_destroy (GtkWidget *widget)
 }
 
 
+static gboolean
+gnc_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+    GncMainWindowPrivate *priv;
+    GdkModifierType modifiers;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(widget), FALSE);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(widget);
+
+    modifiers = gtk_accelerator_get_default_mod_mask ();
+
+    if ((event->state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK)) // Ctrl+Alt+
+    {
+        const gchar *account_key = C_ ("lower case key for short cut to 'Accounts'", "a");
+        guint account_keyval = gdk_keyval_from_name (account_key);
+
+        if ((account_keyval == event->keyval) || (account_keyval == gdk_keyval_to_lower (event->keyval)))
+        {
+            gint page = 0;
+
+            for (GList *item = priv->installed_pages; item; item = g_list_next (item))
+            {
+                 const gchar *pname = gnc_plugin_page_get_plugin_name (GNC_PLUGIN_PAGE(item->data));
+
+                 if (g_strcmp0 (pname, "GncPluginPageAccountTree") == 0)
+                 {
+                     gtk_notebook_set_current_page (GTK_NOTEBOOK(priv->notebook), page);
+                     return TRUE;
+                 }
+                 page++;
+            }
+        }
+        else if ((GDK_KEY_Menu == event->keyval) || (GDK_KEY_space == event->keyval))
+        {
+            GList *menu = gtk_menu_get_for_attach_widget (GTK_WIDGET(priv->notebook));
+
+            if (menu)
+            {
+                gtk_menu_popup_at_widget (GTK_MENU(menu->data),
+                                          GTK_WIDGET(priv->notebook),
+                                          GDK_GRAVITY_SOUTH,
+                                          GDK_GRAVITY_SOUTH,
+                                          NULL);
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
+
 /*  Create a new gnc main window plugin.
  */
 GncMainWindow *
@@ -2761,6 +2861,11 @@ gnc_main_window_new (void)
     gnc_main_window_update_all_menu_items();
 #endif
     gnc_engine_add_commit_error_callback( gnc_main_window_engine_commit_error_callback, window );
+
+    // set up a callback for noteboook navigation
+    g_signal_connect (G_OBJECT(window), "key-press-event",
+                      G_CALLBACK(gnc_main_window_key_press_event),
+                      NULL);
 
     return window;
 }
@@ -3133,21 +3238,25 @@ gnc_main_window_close_page (GncPluginPage *page)
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     if (priv->installed_pages == NULL)
     {
-        GncPluginManager *manager = gnc_plugin_manager_get ();
-        GList *plugins = gnc_plugin_manager_get_plugins (manager);
-
-        /* remove only the preference callbacks from the window plugins */
-        window->just_plugin_prefs = TRUE;
-        g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
-        window->just_plugin_prefs = FALSE;
-        g_list_free (plugins);
-
-        /* remove the preference callbacks from the main window */
-        gnc_main_window_remove_prefs (window);
-
-        if (g_list_length(active_windows) > 1)
+        if (window->window_quitting)
         {
-            gtk_widget_destroy(GTK_WIDGET(window));
+            GncPluginManager *manager = gnc_plugin_manager_get ();
+            GList *plugins = gnc_plugin_manager_get_plugins (manager);
+
+            /* remove only the preference callbacks from the window plugins */
+            window->just_plugin_prefs = TRUE;
+            g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
+            window->just_plugin_prefs = FALSE;
+            g_list_free (plugins);
+
+            /* remove the preference callbacks from the main window */
+            gnc_main_window_remove_prefs (window);
+
+            gtk_widget_destroy (GTK_WIDGET(window));
+        }
+        if (g_list_length (active_windows) > 1)
+        {
+            gtk_widget_destroy (GTK_WIDGET(window));
         }
     }
 }

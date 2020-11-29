@@ -1,0 +1,8 @@
+from archlinux/base
+run pacman -Syu --quiet --noconfirm gcc cmake make boost python2 pkg-config gettext guile git ninja gtest gmock sqlite3 webkit2gtk swig gwenhywfar aqbanking intltool libxslt postgresql-libs libmariadbclient libdbi libdbi-drivers > /dev/null
+run echo en_US.UTF-8 UTF-8 >> /etc/locale.gen
+run echo en_GB.UTF-8 UTF-8 >> /etc/locale.gen
+run echo fr_FR.UTF-8 UTF-8 >> /etc/locale.gen
+run locale-gen
+copy entrypoint.sh /
+entrypoint /entrypoint.sh

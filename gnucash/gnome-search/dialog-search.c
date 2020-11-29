@@ -367,6 +367,15 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
     max_count = gnc_prefs_get_float(GNC_PREFS_GROUP_SEARCH_GENERAL, GNC_PREF_NEW_SEARCH_LIMIT);
     if (gnc_query_view_get_num_entries(GNC_QUERY_VIEW(sw->result_view)) < max_count)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (sw->new_rb), TRUE);
+
+    /* If there is only one item then select it */
+    if (gnc_query_view_get_num_entries (GNC_QUERY_VIEW(sw->result_view)) == 1)
+    {
+        GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(sw->result_view));
+        GtkTreePath *path = gtk_tree_path_new_first ();
+        gtk_tree_selection_select_path (selection, path);
+        gtk_tree_path_free (path);
+    }
 }
 
 static void

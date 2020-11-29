@@ -67,6 +67,12 @@ gnc_set_abort_scrub (gboolean abort)
 }
 
 gboolean
+gnc_get_abort_scrub (void)
+{
+    return abort_now;
+}
+
+gboolean
 gnc_get_ongoing_scrub (void)
 {
     return scrub_depth > 0;
@@ -78,6 +84,10 @@ void
 xaccAccountTreeScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
 {
     if (!acc) return;
+
+    if (abort_now)
+        (percentagefunc)(NULL, -1.0);
+
     scrub_depth ++;
     xaccAccountScrubOrphans (acc, percentagefunc);
     gnc_account_foreach_descendant(acc,
@@ -314,6 +324,11 @@ xaccSplitScrub (Split *split)
 void
 xaccAccountTreeScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
 {
+    if (!acc) return;
+
+    if (abort_now)
+        (percentagefunc)(NULL, -1.0);
+
     scrub_depth++;
     xaccAccountScrubImbalance (acc, percentagefunc);
     gnc_account_foreach_descendant(acc,

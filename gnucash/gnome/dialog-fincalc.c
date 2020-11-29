@@ -183,12 +183,21 @@ gui_to_fi(FinCalcDialog *fcd)
     GtkToggleButton *toggle;
     gnc_numeric npp;
     int i;
+    const gchar *text;
 
     if (fcd == NULL)
         return;
 
-    npp =
-        gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[PAYMENT_PERIODS]));
+    /* treat PAYMENT_PERIODS as a plain GtkEntry */
+    text = gtk_entry_get_text (GTK_ENTRY(GNC_AMOUNT_EDIT(fcd->amounts[PAYMENT_PERIODS])));
+    if (text && *text)
+    {
+        gnc_numeric out;
+        gboolean result = string_to_gnc_numeric (text, &out);
+        npp = gnc_numeric_convert (out, 1, GNC_HOW_RND_TRUNC);
+    }
+    else
+        npp = gnc_numeric_zero ();
     fcd->financial_info.npp = npp.num;
 
     fcd->financial_info.ir =
@@ -338,10 +347,14 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value, int *error_item)
                 return missing;
             }
 
-            if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (fcd->amounts[i])))
+            /* treat PAYMENT_PERIODS as a plain GtkEntry */
+            if (i != PAYMENT_PERIODS)
             {
-                *error_item = i;
-                return bad_exp;
+                if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (fcd->amounts[i])))
+                {
+                    *error_item = i;
+                    return bad_exp;
+                }
             }
         }
 
@@ -371,17 +384,27 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value, int *error_item)
     case PRESENT_VALUE:
     case PERIODIC_PAYMENT:
     case FUTURE_VALUE:
-        nvalue = gnc_amount_edit_get_amount
-                 (GNC_AMOUNT_EDIT(fcd->amounts[PAYMENT_PERIODS]));
-        if (gnc_numeric_zero_p (nvalue))
         {
-            *error_item = PAYMENT_PERIODS;
-            return _("The number of payments cannot be zero.");
-        }
-        if (gnc_numeric_negative_p (nvalue))
-        {
-            *error_item = PAYMENT_PERIODS;
-            return _("The number of payments cannot be negative.");
+            /* treat PAYMENT_PERIODS as a plain GtkEntry */
+            GNCAmountEdit *edit = GNC_AMOUNT_EDIT(fcd->amounts[PAYMENT_PERIODS]);
+            const gchar *text = gtk_entry_get_text (GTK_ENTRY(edit));
+            gboolean result = string_to_gnc_numeric (text, &nvalue);
+
+            if (!result)
+            {
+                *error_item = PAYMENT_PERIODS;
+                return bad_exp;
+            }
+            if (gnc_numeric_zero_p (nvalue))
+            {
+                *error_item = PAYMENT_PERIODS;
+                return _("The number of payments cannot be zero.");
+            }
+            if (gnc_numeric_negative_p (nvalue))
+            {
+                *error_item = PAYMENT_PERIODS;
+                return _("The number of payments cannot be negative.");
+            }
         }
         break;
     default:

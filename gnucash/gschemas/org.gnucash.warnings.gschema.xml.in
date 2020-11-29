@@ -9,6 +9,11 @@
       <summary>Print checks from multiple accounts</summary>
       <description>This dialog is presented if you try to print checks from multiple accounts at the same time.</description>
     </key>
+    <key name="closing-window-question" type="i">
+      <default>0</default>
+      <summary>Confirm Window Close</summary>
+      <description>This dialog is presented when there is more than one window.</description>
+    </key>
     <key name="inv-entry-mod" type="i">
       <default>0</default>
       <summary>Commit changes to a invoice entry</summary>
@@ -106,6 +111,11 @@
       <default>0</default>
       <summary>Print checks from multiple accounts</summary>
       <description>This dialog is presented if you try to print checks from multiple accounts at the same time.</description>
+    </key>
+    <key name="closing-window-question" type="i">
+      <default>0</default>
+      <summary>Confirm Window Close</summary>
+      <description>This dialog is presented when there is more than one window.</description>
     </key>
     <key name="inv-entry-mod" type="i">
       <default>0</default>

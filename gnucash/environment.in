@@ -64,10 +64,7 @@ GUILE_LOAD_PATH=@GNC_GUILE_LOAD_PATH@;{GUILE_LIBS};{GUILE_LOAD_PATH}
 GUILE_LOAD_COMPILED_PATH=@GNC_GUILE_LOAD_COMPILED_PATH@;{GUILE_COMPILED_LIBS};{GUILE_LOAD_COMPILED_PATH}
 
 # Tell Guile where to find GnuCash specific shared libraries
-GNC_LIBRARY_PATH={SYS_LIB};{GNC_LIB}
-LD_LIBRARY_PATH={GNC_LIBRARY_PATH};{LD_LIBRARY_PATH}
-# The same, but for GnuCash on OS X
-DYLD_LIBRARY_PATH={GNC_LIBRARY_PATH};{DYLD_LIBRARY_PATH}
+LTDL_LIBRARY_PATH={SYS_LIB};{GNC_LIB}
 
 # For changing the language GnuCash uses, first refer to
 # to https://wiki.gnucash.org/wiki/Locale_Settings.

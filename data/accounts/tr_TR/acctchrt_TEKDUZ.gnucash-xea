@@ -3835,6 +3835,12 @@
     </slot>
   </act:slots>
   <act:parent type="new">cfd3ff3dffa577973d3c1c5def43e568</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>equity-type</slot:key>
+      <slot:value type="string">opening-balance</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ödenmemiş Sermaye(-)</act:name>
@@ -3871,6 +3877,12 @@
     </slot>
   </act:slots>
   <act:parent type="new">cfd3ff3dffa577973d3c1c5def43e568</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>equity-type</slot:key>
+      <slot:value type="string">opening-balance</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sermaye Düzeltmesi Olumsuz Farkları(-)</act:name>

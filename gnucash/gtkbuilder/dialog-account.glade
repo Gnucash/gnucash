@@ -1505,6 +1505,23 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkCheckButton" id="opening_balance_button">
+                            <property name="label" translatable="yes">Opening balance</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">This account holds opening balance transactions. Only one account per commodity can hold opening balance transactions.</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">11</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
                           <placeholder/>
                         </child>
                         <child>

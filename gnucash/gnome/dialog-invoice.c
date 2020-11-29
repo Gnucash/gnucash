@@ -538,7 +538,21 @@ gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data)
 {
-    gnc_gnome_help(HF_HELP, HL_USAGE_INVOICE);
+    InvoiceWindow *iw = data;
+    GncOwnerType owner_type = gncOwnerGetType (&iw->owner);
+
+    switch(owner_type)
+    {
+        case GNC_OWNER_CUSTOMER:
+           gnc_gnome_help (HF_HELP, HL_USAGE_INVOICE);
+           break;
+        case GNC_OWNER_VENDOR:
+           gnc_gnome_help (HF_HELP, HL_USAGE_BILL);
+           break;
+        default:
+           gnc_gnome_help (HF_HELP, HL_USAGE_VOUCHER);
+           break;
+    }
 }
 
 static const gchar *

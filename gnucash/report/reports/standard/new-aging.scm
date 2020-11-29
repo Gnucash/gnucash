@@ -218,7 +218,7 @@ exist but have no suitable transactions."))
       (match-let* (((own1 aging1 aging-total1) a)
                    ((own2 aging2 aging-total2) b)
                    (increasing? (eq? sort-order 'increasing))
-                   (op-str (if increasing? string<? string>?))
+                   (op-str (if increasing? gnc:string-locale<? gnc:string-locale>?))
                    (op-num (if increasing? < >)))
         (case sort-by
           ((name)  (op-str (gncOwnerGetName own1) (gncOwnerGetName own2)))

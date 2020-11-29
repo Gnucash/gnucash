@@ -149,6 +149,8 @@
          (exchange-fn (gnc:case-exchange-fn
                        price-source report-currency to-date-t64))
 
+         (price-fn (gnc:case-price-fn price-source report-currency to-date-t64))
+
          (doc (gnc:make-html-document))
          (table (gnc:make-html-table))
 
@@ -156,7 +158,7 @@
          (accounts (if show-subaccts?
                        (gnc:accounts-and-all-descendants accounts)
                        accounts))
-         (accounts (sort accounts account-full-name<?)))
+         (accounts (sort accounts gnc:account-full-name<?)))
 
     (define (add-accounts-flow accounts accounts-alist)
       (let loop ((accounts accounts)
@@ -191,7 +193,7 @@
     (if (not (null? accounts))
 
         (let* ((tree-depth (if (equal? display-depth 'all)
-                               (accounts-get-children-depth accounts)
+                               (gnc:accounts-get-children-depth accounts)
                                display-depth))
                (account-disp-list
                 (map
@@ -240,12 +242,12 @@
                                (cons 'to-report-currency to-report-currency)))))
             (let ((money-in-accounts (sort
                                       (cdr (assq 'money-in-accounts result))
-                                      account-full-name<?))
+                                      gnc:account-full-name<?))
                   (money-in-alist (cdr (assq 'money-in-alist result)))
                   (money-in-collector (cdr (assq 'money-in-collector result)))
                   (money-out-accounts (sort
                                        (cdr (assq 'money-out-accounts result))
-                                       account-full-name<?))
+                                       gnc:account-full-name<?))
                   (money-out-alist (cdr (assq 'money-out-alist result)))
                   (money-out-collector (cdr (assq 'money-out-collector result))))
 
@@ -321,8 +323,8 @@
               (if show-rates?
                   (gnc:html-document-add-object!
                    doc ;;(gnc:html-markup-p
-                   (gnc:html-make-exchangerates
-                    report-currency exchange-fn accounts))))))
+                   (gnc:html-make-rates-table
+                    report-currency price-fn accounts))))))
 
         ;; error condition: no accounts specified
 

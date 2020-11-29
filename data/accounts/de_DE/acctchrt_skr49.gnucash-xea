@@ -14305,6 +14305,12 @@ Den Bereich habe ich mit „9999“ bezeichet, damit er unterhalb der regulären
     </slot>
   </act:slots>
   <act:parent type="guid">ffca2686cb9963bea1089b796763dda0</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>equity-type</slot:key>
+      <slot:value type="string">opening-balance</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>9001-9007 Saldenvorträge, Sachkonten</act:name>

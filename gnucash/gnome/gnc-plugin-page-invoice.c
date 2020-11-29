@@ -201,12 +201,12 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_duplicateEntry)
     },
     {
-        "EntryUpAction", "go-up", N_("Move Entry _Up"), NULL,
+        "EntryUpAction", "pan-up-symbolic", N_("Move Entry _Up"), NULL,
         N_("Move the current entry one row upwards"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_entryUp)
     },
     {
-        "EntryDownAction", "go-down", N_("Move Entry Do_wn"), NULL,
+        "EntryDownAction", "pan-down-symbolic", N_("Move Entry Do_wn"), NULL,
         N_("Move the current entry one row downwards"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_entryDown)
     },

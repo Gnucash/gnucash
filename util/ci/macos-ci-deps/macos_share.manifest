@@ -1,0 +1,7 @@
+cmake
+cmake-3.17
+gettext
+gettext-0.20.2
+guile
+itstool
+swig

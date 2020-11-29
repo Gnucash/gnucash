@@ -65,7 +65,7 @@ private:
     bool m_debug = false;
     bool m_extra = false;
     boost::optional <std::string> m_gsettings_prefix;
-    boost::optional <std::vector <std::string>> m_log_flags;
+    std::vector <std::string> m_log_flags;
 
     char *sys_locale = nullptr;
 };

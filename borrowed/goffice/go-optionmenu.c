@@ -354,7 +354,7 @@ static void go_option_menu_init(GOOptionMenu *option_menu)
 
     option_menu->button_label = GTK_LABEL(gtk_label_new(""));
     gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(option_menu->button_label), FALSE, TRUE, 0);
-    arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+    arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
     gtk_widget_set_margin_start (GTK_WIDGET(arrow), 5);
 
     gtk_box_pack_end(GTK_BOX(box), arrow, FALSE, FALSE, 0);

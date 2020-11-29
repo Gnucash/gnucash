@@ -157,6 +157,9 @@ gchar *gnc_locale_name (void);
 
 }
 
+%rename ("gnc:ngettext") ngettext;
+extern const char* ngettext (const char *msgid1, const char *msgid2,
+                             unsigned long int n);
 %rename ("gnc:gettext") gettext;
 extern const char* gettext(const char*);
 %rename ("gnc:C_gettext") wrap_C_;

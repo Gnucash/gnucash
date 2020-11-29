@@ -68,7 +68,7 @@ set(gtest_import_backend_SOURCES
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/mocks/gmock-Account.cpp
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/mocks/gmock-Transaction.cpp
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/mocks/gmock-Split.cpp
-  ${CMAKE_SOURCE_DIR}/libgnucash/engine/mocks/gmock-qofquery.cpp
+  ${CMAKE_SOURCE_DIR}/libgnucash/engine/mocks/fake-qofquery.cpp
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/gnc-numeric.cpp
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/gnc-rational.cpp
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/gnc-int128.cpp

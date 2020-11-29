@@ -314,6 +314,13 @@ GncXmlBackend::sync(QofBook* book)
     remove_old_files();
 }
 
+void
+GncXmlBackend::commit(QofInstance* instance)
+{
+    if (qof_instance_is_dirty(instance))
+        qof_instance_mark_clean(instance);
+}
+
 bool
 GncXmlBackend::save_may_clobber_data()
 {

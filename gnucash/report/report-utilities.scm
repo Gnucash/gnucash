@@ -56,6 +56,18 @@
   (let ((type (xaccAccountGetType account)))
     (member type (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL))))
 
+;; account related functions
+;; helper for sorting of account list
+(define (gnc:account-full-name<? a b)
+  (gnc:string-locale<? (gnc-account-get-full-name a) (gnc-account-get-full-name b)))
+
+(define (gnc:accounts-get-children-depth accounts)
+  (1- (apply max
+             (map (lambda (acct)
+                    (+ (gnc-account-get-current-depth acct)
+                       (gnc-account-get-tree-depth acct)))
+                  accounts))))
+
 ;; True if the account is of type income or expense
 
 (define (gnc:account-is-inc-exp? account)
@@ -126,8 +138,8 @@
 	  (sort-and-delete-duplicates
            (map xaccAccountGetCommodity accounts)
            (lambda (a b)
-             (string<? (gnc-commodity-get-unique-name a)
-                       (gnc-commodity-get-unique-name b)))
+             (gnc:string-locale<? (gnc-commodity-get-unique-name a)
+                                  (gnc-commodity-get-unique-name b)))
            gnc-commodity-equiv)))
 
 

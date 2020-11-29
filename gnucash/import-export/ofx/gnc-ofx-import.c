@@ -926,6 +926,8 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
     gnc_commodity * default_commodity;
     GNCAccountType default_type = ACCT_TYPE_NONE;
     gchar * account_description;
+    GtkWidget * main_widget;
+    GtkWidget * parent;
     /* In order to trigger a book options display on the creation of a new book,
      * we need to detect when we are dealing with a new book. */
     gboolean new_book = gnc_is_new_book();
@@ -1006,7 +1008,17 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
                                                "%s \"%s\"",
                                                account_type_name,
                                                data.account_name);
-        account = gnc_import_select_account (gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
+
+        main_widget = gnc_gen_trans_list_widget (info->gnc_ofx_importer_gui);
+
+        /* On first use, the import-main-matcher is hidden / not realized so to
+         * get a parent use the transient parent of the matcher */
+        if (gtk_widget_get_realized (main_widget))
+            parent = main_widget;
+        else
+            parent = GTK_WIDGET(gtk_window_get_transient_for (GTK_WINDOW(main_widget)));
+
+        account = gnc_import_select_account (parent,
                                              data.account_id, 1,
                                              account_description, default_commodity,
                                              default_type, NULL, NULL);
@@ -1099,6 +1111,8 @@ gnc_ofx_match_done (GtkDialog *dialog, gint response_id, gpointer user_data)
                               G_CALLBACK(gnc_ofx_process_next_file), info);
         }
     }
+    else if (response_id == GTK_RESPONSE_HELP)
+        return;
     else
     {
         gtk_widget_hide (GTK_WIDGET(dialog));
@@ -1149,9 +1163,9 @@ gnc_file_ofx_import_process_file (ofx_info* info)
     /*ofx_set_status_cb(libofx_context, ofx_proc_status_cb, 0);*/
 
     // Create the match dialog, and run the ofx file through the importer.
-    info->gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, TRUE, 42, FALSE);
+    info->gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, FALSE, 42, FALSE);
     libofx_proc_file (libofx_context, selected_filename, AUTODETECT);
-    
+
     // Free the libofx context before recursing to process the next file
     libofx_free_context(libofx_context);
 
@@ -1173,7 +1187,7 @@ gnc_file_ofx_import_process_file (ofx_info* info)
                           G_CALLBACK (gnc_ofx_match_done), info);
 
         gnc_gen_trans_list_show_all (info->gnc_ofx_importer_gui);
-        
+
         // Show or hide the check box for reconciling after match, depending on whether a statement was received.
         gnc_gen_trans_list_show_reconcile_after_close_button (info->gnc_ofx_importer_gui, info->statement != NULL, info->run_reconcile);
 
@@ -1199,7 +1213,7 @@ void gnc_file_ofx_import (GtkWindow *parent)
     GSList* iter = NULL;
     ofx_info* info = NULL;
     GtkFileFilter* filter = gtk_file_filter_new ();
-    
+
 
     ofx_PARSER_msg = false;
     ofx_DEBUG_msg = false;

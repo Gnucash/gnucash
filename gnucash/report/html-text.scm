@@ -22,6 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (srfi srfi-9))
+(use-modules (ice-9 match))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-text> class
@@ -184,15 +185,10 @@
          rest))
 
 (define (gnc:html-markup-img src . rest)
-  (gnc:html-markup/attr/no-end 
-   "img" 
-   (with-output-to-string
-     (lambda ()
-       (for-each 
-        (lambda (kvp)
-          (format #t "~a=~s " (car kvp) (cadr kvp)))
-        (cons (list 'src src)
-              rest))))))
+  (let lp ((tags (cons (list 'src src) rest)) (acc '()))
+    (match tags
+      (() (gnc:html-markup/attr/no-end "img" (string-concatenate-reverse acc)))
+      (((attr val) . tail) (lp tail (cons (format #f "~a=~s " attr val) acc))))))
 
 (define (gnc:html-text-render p doc)
   (let* ((retval '())

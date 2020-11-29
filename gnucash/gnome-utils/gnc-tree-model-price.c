@@ -164,7 +164,7 @@ gnc_tree_model_price_init (GncTreeModelPrice *model)
     }
 
     priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
-    priv->print_info = gnc_share_print_info_places(6);
+    priv->print_info = gnc_default_price_print_info(NULL);
 }
 
 static void

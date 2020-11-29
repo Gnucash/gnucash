@@ -58,6 +58,7 @@
 (export gnc:exchange-by-pricealist-nearest)
 (export gnc:case-exchange-fn)
 (export gnc:case-exchange-time-fn)
+(export gnc:case-price-fn)
 (export gnc:sum-collector-commodity)
 
 ;; options-utilities.scm
@@ -104,6 +105,7 @@
 (export gnc:assign-colors)
 (export gnc:html-table-append-ruler!)
 (export gnc:html-make-exchangerates)
+(export gnc:html-make-rates-table)
 (export gnc:html-render-options-changed)
 (export gnc:html-make-generic-warning)
 (export gnc:html-make-no-account-warning)
@@ -670,6 +672,8 @@
 (export gnc:account-has-shares?)
 (export gnc:account-is-stock?)
 (export gnc:account-is-inc-exp?)
+(export gnc:account-full-name<?)
+(export gnc:accounts-get-children-depth)
 (export gnc:filter-accountlist-type)
 (export gnc:decompose-accountlist)
 (export gnc:account-get-type-string-plural)

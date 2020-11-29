@@ -1,10 +1,9 @@
 # Italian translation of Gnucash.
-# Copyright (C) 2020 THE Gnucash'S COPYRIGHT HOLDER
+# Copyright (C) 2020 by the GnuCash developers and the translators below.
 # This file is distributed under the same license as the Gnucash package.
-# <>, 2020.
 # Giuseppe Foti <foti.giuseppe@gmail.com>, 2020;
-# Cristian Marchi<cri79@libero.it>, 2008, 2009, 2010;
-# Simone Zinanni <simone@develer.com>,2008;
+# Cristian Marchi <cri79@libero.it>, 2008, 2009, 2010;
+# Simone Zinanni <simone@develer.com>, 2008;
 # Lorenzo Cappelletti <lorenzo.cappelletti@email.com>, 2003-2005.
 # Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;
 # Alessandro Seveso <aleseveso@tiscalinet.it>, 2000;
@@ -51,11 +50,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Gnucash 4.0\n"
+"Project-Id-Version: Gnucash 4.2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-10-14 01:49+0200\n"
-"PO-Revision-Date: 2020-08-15 19:28+0200\n"
+"POT-Creation-Date: 2020-10-22 07:30+0200\n"
+"PO-Revision-Date: 2020-10-22 07:39+0200\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "Language: it\n"
@@ -1452,7 +1451,7 @@ msgstr "Eliminare la commodity?"
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:934
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1144
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:24
-#: gnucash/gtkbuilder/window-autoclear.glade:22
+#: gnucash/gtkbuilder/window-autoclear.glade:25
 #: gnucash/gtkbuilder/window-reconcile.glade:21
 #: gnucash/html/gnc-html-webkit1.c:1197
 #: gnucash/import-export/aqb/dialog-ab.glade:302
@@ -1651,10 +1650,8 @@ msgid "Enter URL like http://www.gnucash.org:"
 msgstr "Inserisci una URL come https://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-doclink.c:205
-#, fuzzy
-#| msgid "Existing Association is"
 msgid "Existing Document Link is"
-msgstr "L'associazione esistente è"
+msgstr "L'attuale associazione ad un documento è"
 
 #: gnucash/gnome/dialog-doclink.c:461 gnucash/gnome/dialog-doclink.c:506
 msgid "File Found"
@@ -1687,7 +1684,7 @@ msgstr "Il file di input non può essere modificato."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
 msgid "Manage Document Link"
-msgstr ""
+msgstr "Gestisci il collegamento al documento"
 
 #: gnucash/gnome/dialog-doclink.c:690
 msgid "Transaction can not be modified."
@@ -1700,10 +1697,8 @@ msgstr "Non definito"
 #. Translators: This is the label of a dialog box that lists all of the
 #. transaction that have files or URIs linked with them.
 #: gnucash/gnome/dialog-doclink.c:1010
-#, fuzzy
-#| msgid "Transaction Details"
 msgid "Transaction Document Links"
-msgstr "Dettagli della transazione"
+msgstr "Collegamenti ai documenti della transazione"
 
 #: gnucash/gnome/dialog-doclink.c:1013
 #: gnucash/gnome/dialog-find-transactions2.c:157
@@ -1748,26 +1743,21 @@ msgid "Description"
 msgstr "Descrizione"
 
 #: gnucash/gnome/dialog-doclink.c:1024
-#, fuzzy
-#| msgid ""
-#| "         To jump to the Business Item, double click on the entry in the "
-#| "id\n"
-#| " column, Association column to open the Association or Available to update"
 msgid ""
 "Double click on the entry in the Id column to jump to the Business Item.\n"
 "Double click on the entry in the Link column to open the Linked Document.\n"
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"     Per passare all'elemento, fai doppio clic sulla colonna id,\n"
-"sulla colonna Associazione per aprire l'Associazione o su Disponibile per "
-"aggiornare"
+"Doppio click sull'elemento nella colonna \"Id\" per passare all'elemento.\n"
+"Doppio click sull'elemento nella colonna \"Documento collegato\" per aprire "
+"il documento collegato.\n"
+"Doppio click sull'elemento nella colonna \"Disponibile\" per modificare il "
+"collegamento al documento."
 
 #: gnucash/gnome/dialog-doclink.c:1033
-#, fuzzy
-#| msgid "Business Associations"
 msgid "Business Document Links"
-msgstr "Documenti associati"
+msgstr "Documenti collegati"
 
 #: gnucash/gnome/dialog-employee.c:199
 msgid "You must enter a username."
@@ -2367,10 +2357,8 @@ msgid "View Expense Voucher"
 msgstr "Visualizza nota spese"
 
 #: gnucash/gnome/dialog-invoice.c:2471
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "Open Linked Document:"
-msgstr "Nessun conto collegato"
+msgstr "Apri il documento collegato:"
 
 #: gnucash/gnome/dialog-invoice.c:2585 gnucash/gnome/dialog-invoice.c:2810
 msgid "Bill Information"
@@ -3651,16 +3639,12 @@ msgid "View and Delete Bayesian and Non Bayesian information"
 msgstr "Vedi e cancella informazioni Bayesiane e Non Bayesiane"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
-#, fuzzy
-#| msgid "Transaction amount"
 msgid "_Transaction Linked Documents"
-msgstr "Importo della transazione"
+msgstr "_Collegamenti ai documenti della transazione"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
-#, fuzzy
-#| msgid "View all Transaction Associations"
 msgid "View all Transaction Linked Documents"
-msgstr "Visualizza tutte le associazioni della transazione"
+msgstr "Visualizza tutti i documenti commerciali collegati alla transazione"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
@@ -3793,7 +3777,7 @@ msgstr "Selezionare un bilancio di previsione"
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:949
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1159
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:39
-#: gnucash/gtkbuilder/window-autoclear.glade:38
+#: gnucash/gtkbuilder/window-autoclear.glade:41
 #: gnucash/gtkbuilder/window-reconcile.glade:36
 #: gnucash/import-export/aqb/dialog-ab.glade:317
 #: gnucash/import-export/aqb/dialog-ab.glade:595
@@ -3988,13 +3972,11 @@ msgstr "Apre la finestra per la ricerca di una nota spese"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr ""
+msgstr "Documenti commerciali collegati"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
-#, fuzzy
-#| msgid "View all Business Associations"
 msgid "View all Linked Business Documents"
-msgstr "Visualizza tutte le associazioni dei documenti commerciali"
+msgstr "Visualizza tutti i documenti commerciali collegati"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
@@ -4346,7 +4328,7 @@ msgstr "Elimina"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:440
 #: gnucash/gnome/gnc-plugin-page-register.c:1934
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr ""
+msgstr "'Controlla e Ripara' è in esecuzione, vuoi interrompere l'operazione?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:498
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:504
@@ -4754,7 +4736,7 @@ msgstr "Registra _pagamento documento di vendita"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:366
 #: gnucash/gnome/gnc-plugin-page-register.c:300
 msgid "_Manage Document Link..."
-msgstr ""
+msgstr "_Gestisci il collegamento al documento..."
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4764,10 +4746,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.c:346
 #: gnucash/gnome/gnc-plugin-page-invoice.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:304
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "_Open Linked Document"
-msgstr "Nessun conto collegato"
+msgstr "_Apri il documento collegato"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
 msgid "_Use as Default Layout for Customer Documents"
@@ -4925,10 +4905,8 @@ msgstr "Apri un resoconto per l'intestatario di questo documento di vendita"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:425
 #: gnucash/gnome/gnc-plugin-page-invoice.c:446
 #: gnucash/gnome/gnc-plugin-page-register.c:632
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "Open Linked Document"
-msgstr "Nessun conto collegato"
+msgstr "Apri il documento collegato"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:388
 msgid ""
@@ -5090,7 +5068,7 @@ msgstr "Apri un resoconto sull'intestatario di questa nota di credito"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:445
 msgid "Manage Document Link..."
-msgstr ""
+msgstr "Gestisci il collegamento al documento..."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
 #: gnucash/gnome/gnc-plugin-page-register2.c:498
@@ -5526,18 +5504,16 @@ msgstr "Modifica il tasso di cambio per la transazione corrente"
 #. with focus on the current transaction's entry in that register.
 #: gnucash/gnome/gnc-plugin-page-register2.c:387
 #: gnucash/gnome/gnc-plugin-page-register.c:513
-#, fuzzy
-#| msgid "Display the other account code?"
 msgid "_Jump to the other account"
-msgstr "Visualizza il codice dell'altro conto?"
+msgstr "_Visualizza il primo conto della contropartita"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:388
 #: gnucash/gnome/gnc-plugin-page-register.c:514
-#, fuzzy
-#| msgid "Open a register report for the selected Transaction"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction."
-msgstr "Apri un resoconto del registro per la transazione selezionata"
+msgstr ""
+"Apri una nuova etichetta del registro per l'altro conto con il focus su "
+"questa transazione."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:392
 #: gnucash/gnome/gnc-plugin-page-register.c:518
@@ -5591,16 +5567,12 @@ msgstr "Riga _doppia"
 # tooltip
 #: gnucash/gnome/gnc-plugin-page-register2.c:425
 #: gnucash/gnome/gnc-plugin-page-register.c:554
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"File Association\" "
-#| "for each transaction."
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for "
 "each transaction."
 msgstr ""
-"Mostra una seconda riga con «Operazione», «Note» e «File associato» per ogni "
-"transazione."
+"Mostra una seconda riga con «Operazione», «Note» e «Documento collegato» per "
+"ogni transazione."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
 msgid "Show _Extra Dates"
@@ -5666,10 +5638,8 @@ msgstr "Suddivisione"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:503
 #: gnucash/gnome/gnc-plugin-page-register.c:626
-#, fuzzy
-#| msgid "_Jump"
 msgid "Jump"
-msgstr "S_alta"
+msgstr "Vai"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:504
 #: gnucash/gnome/gnc-plugin-page-register.c:627
@@ -5873,26 +5843,21 @@ msgstr "Filtra %s per..."
 #. Translators: This is a menu item that will open the bill, invoice, or voucher
 #. that is posted to the current transaction if there is one.
 #: gnucash/gnome/gnc-plugin-page-register.c:307
-#, fuzzy
-#| msgid "Edit Invoice"
 msgid "Jump to Invoice"
-msgstr "Modifica documento di vendita"
+msgstr "Vai al documento di vendita o acquisto"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:318
-#, fuzzy
-#| msgid "Edit the exchange rate for the current transaction"
 msgid "Add, change, or unlink the document linked with the current transaction"
-msgstr "Modifica il tasso di cambio per la transazione corrente"
+msgstr ""
+"Aggiungi cambia o scollega il documento collegato con questa transazione"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:319
-#, fuzzy
-#| msgid "Open Association for the current transaction"
 msgid "Open the linked document for the current transaction"
-msgstr "Apri l'associazione per questa transazione"
+msgstr "Apri il documento collegato per questa transazione"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:320
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr ""
+msgstr "Vai alla fattura o alla nota spesa collegata"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:409
 msgid "Remo_ve Other Splits"
@@ -5904,17 +5869,13 @@ msgid "_Sort By..."
 msgstr "_Ordina per..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:500
-#, fuzzy
-#| msgid "Post Date"
 msgid "_Go to Date"
-msgstr "Data di registrazione"
+msgstr "_vai alla data"
 
 # tooltip
 #: gnucash/gnome/gnc-plugin-page-register.c:501
-#, fuzzy
-#| msgid "Do not print transactions out of specified dates."
 msgid "Move to the split at the specified date"
-msgstr "Non stampa le transazioni al di fuori delle date specificate."
+msgstr "Spostati alla suddivisione ad una data specifica"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:828
 msgid ""
@@ -6022,17 +5983,15 @@ msgstr "Ordina %s per..."
 #: gnucash/gnome/gnc-plugin-page-register.c:4702
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
-msgstr ""
+msgstr "%s %s da %s, emesse %s, importo %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4711
-#, fuzzy
-#| msgid "Select Account"
 msgid "Select document"
-msgstr "Scegliere il conto"
+msgstr "Scegli il documento"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4712
 msgid "Several documents are linked with this transaction. Please choose one:"
-msgstr ""
+msgstr "Più documenti sono collegati a questa transazione. Scegline uno:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4713
 #: gnucash/gnome-search/dialog-search.c:323
@@ -6041,10 +6000,8 @@ msgid "Select"
 msgstr "Seleziona"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4761
-#, fuzzy
-#| msgid "Post Date"
 msgid "Go to Date"
-msgstr "Data di registrazione"
+msgstr "Vai alla data"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:5016
 #, c-format
@@ -6225,6 +6182,8 @@ msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
+"Questo resoconto deve essere aggiornato per restituire un oggetto documento "
+"con una stringa di esportazione o un errore di esportazione."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1710
 #, c-format
@@ -6573,10 +6532,8 @@ msgid "_Remove Splits"
 msgstr "_Rimuovi suddivisioni"
 
 #: gnucash/gnome/gnc-split-reg.c:1299
-#, fuzzy
-#| msgid "Change a Transaction Association"
 msgid "Change a Transaction Linked Document"
-msgstr "Modifica un'associazione della transazione"
+msgstr "Modifica il documento collegato alla transazione"
 
 #: gnucash/gnome/gnc-split-reg.c:1440
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:963
@@ -6843,13 +6800,13 @@ msgstr "Impresa"
 msgid "Searching for splits to clear ..."
 msgstr "Ricerca delle suddivisioni da eliminare..."
 
-#: gnucash/gnome/window-autoclear.c:241
+#: gnucash/gnome/window-autoclear.c:243
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr ""
 "Impossibile eliminare in modo univoco le suddivisioni; sono state "
 "individuate diverse possibilità."
 
-#: gnucash/gnome/window-autoclear.c:248
+#: gnucash/gnome/window-autoclear.c:251
 msgid "The selected amount cannot be cleared."
 msgstr "L'importo selezionato non può essere liquidato."
 
@@ -8778,16 +8735,12 @@ msgstr "Posizione attesa"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:446
 #: gnucash/gnome-utils/gnc-gnome-utils.c:486
-#, fuzzy
-#| msgid "GnuCash could not find the associated file."
 msgid "GnuCash could not find the linked document."
-msgstr "Impossibile trovare il file associato."
+msgstr "Impossibile trovare il file collegato."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:516
-#, fuzzy
-#| msgid "GnuCash could not open the associated file:"
 msgid "GnuCash could not open the linked document:"
-msgstr "GnucCash non può aprire il file associato:"
+msgstr "GnucCash non può aprire il file collegato:"
 
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes
@@ -9114,14 +9067,11 @@ msgstr "Contabilità delle finanze personali e per piccole imprese."
 #: gnucash/gnome-utils/gnc-main-window.c:4537
 msgid "translator-credits"
 msgstr ""
-" \n"
-" Traduzione di Giuseppe Foti (2020)\n"
-" Traduzione di Cristian Marchi (2008, 2009, 2010, 2014)\n"
-" Traduzione di Simone Zinanni (2008)\n"
-" Traduzione di Lorenzo Cappelletti (2002, 2003-2005)\n"
-" Traduzione di Alessandro Seveso (2000)\n"
-"\n"
-"------------------\n"
+" Giuseppe Foti (2020)\n"
+" Cristian Marchi (2008, 2009, 2010, 2014)\n"
+" Simone Zinanni (2008)\n"
+" Lorenzo Cappelletti (2002, 2003-2005)\n"
+" Alessandro Seveso (2000)\n"
 "\n"
 " Si ringraziano per la revisione e l'aiuto:\n"
 "   Andrea Celli\n"
@@ -9130,13 +9080,11 @@ msgstr ""
 "   Martuzzi Pierluigi\n"
 "   Yuri\n"
 "\n"
-"------------------\n"
+" Invia i tuoi suggerimenti o critiche e domande alla\n"
+" comunità Gnucash di lingua italiana <gnucash-it@gnucash.org>\n"
 "\n"
-" Segnalare eventuali problemi o errori\n"
-" nella traduzione a:\n"
-" <gnucash-it@gnucash.org>\n"
-"\n"
-"------------------"
+" Per evitare che le tue email vengano moderate, dovresti iscriverti alla\n"
+" <a href=\"https://lists.gnucash.org/mailman/listinfo/gnucash-it\">lista gnucash-it</a>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4540
 msgid "Visit the GnuCash website."
@@ -10368,13 +10316,6 @@ msgid "Report Generation Options"
 msgstr "Opzioni del _resoconto"
 
 #: gnucash/gnucash-cli.cpp:104
-#, fuzzy
-#| msgid ""
-#| "Execute report related commands. The following commands are supported.\n"
-#| "\n"
-#| "  list: \tLists available reports.\n"
-#| "  show: \tDescribe the options modified in the named report.\n"
-#| "  run: \tRun the named report in the given GnuCash datafile.\n"
 msgid ""
 "Execute report related commands. The following commands are supported.\n"
 "\n"
@@ -10383,10 +10324,11 @@ msgid ""
 "be specified to describe some saved options.\n"
 "  run: \tRun the named report in the given GnuCash datafile.\n"
 msgstr ""
-"Esegui i comandi relativi ai rapporti. Sono supportati i seguenti comandi.\n"
+"Esegui i comandi relativi ai resoconti. Sono supportati i seguenti comandi.\n"
 "+\n"
-"  list: \t Lista i rapporti disponibili.\n"
-"  show: \t Visualizza le opzioni modificate di un resoconto.\n"
+"  list: \t Lista i resoconti disponibili.\n"
+"  show: \t Visualizza le opzioni modificate di un resoconto. Può essere "
+"specificato un file di dati per descrivere alcune opzioni salvate.\n"
 "  run: \t Esegue un resoconto in un file di dati GnuCash.\n"
 
 # tooltip
@@ -11689,18 +11631,15 @@ msgstr ""
 "e «period»."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:25
-#, fuzzy
-#| msgid "Transaction Associations head path"
 msgid "Transaction Linked Files head path"
-msgstr "Percorso file associati alla transazione"
+msgstr "Prefisso dei collegamenti ai file della transazione"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:26
-#, fuzzy
-#| msgid "This is the path head for the Transaction file Associations"
 msgid ""
 "This is the path head for the Transaction Linked Files with relative paths"
 msgstr ""
-"Questa è la prima parte del percorso dei file associati alle transazioni"
+"Questa è la prima parte del percorso relativo dei file collegati alle "
+"transazioni"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:30
 msgid "Compress the data file"
@@ -12438,35 +12377,25 @@ msgstr ""
 
 # tooltip
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:300
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"File Association\" "
-#| "for each transaction."
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
 msgstr ""
-"Mostra una seconda riga con «Operazione», «Note» e «File associato» per ogni "
-"transazione."
+"Mostra una seconda riga con «Operazione», «Note» e «Documento collegato» per "
+"ogni transazione."
 
 # Tooltip
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:301
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"File Association\" "
-#| "for each transaction in a register. This is the default setting for when "
-#| "a register is first opened. The setting can be changed at any time via "
-#| "the \"View->Double Line\" menu item."
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction in a register. This is the default setting for when a "
 "register is first opened. The setting can be changed at any time via the "
 "\"View->Double Line\" menu item."
 msgstr ""
-"Visualizza una seconda riga con «Operazione», «Note» e «File associato» per "
-"ogni transazione presente nel registro. Questa è l'impostazione predefinita "
-"per ogni nuovo registro. L'impostazione può essere cambiata in qualsiasi "
-"momento attraverso la voce del menu «Visualizza->Riga doppia»."
+"Visualizza una seconda riga con «Operazione», «Note» e «Documento collegato» "
+"per ogni transazione presente nel registro. Questa è l'impostazione "
+"predefinita per ogni nuovo registro. L'impostazione può essere cambiata in "
+"qualsiasi momento attraverso la voce del menu «Visualizza->Riga doppia»."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:305
 msgid "Only display leaf account names."
@@ -14959,10 +14888,8 @@ msgstr "_Promemoria"
 
 #. Default memo text for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:316
-#, fuzzy
-#| msgid "Cash in Lieu"
 msgid "Cash in lieu"
-msgstr "Cash in Lieu"
+msgstr "Conguaglio in denaro"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:352
 msgid "<b>_Income Account</b>"
@@ -16118,16 +16045,10 @@ msgid "Question"
 msgstr "Domanda"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:49
-#, fuzzy
-#| msgid "Change Association path head"
 msgid "Change Linked Document path head"
-msgstr "Modifica il percorso dell'associazione"
+msgstr "Modifica il percorso del documento collegato"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:85
-#, fuzzy
-#| msgid ""
-#| "Existing relative file path associations will be converted to absolute "
-#| "ones by combining them with the existing path head unless box unticked."
 msgid ""
 "Existing relative file path links will be converted to absolute ones by "
 "combining them with the existing path head unless box unticked."
@@ -16137,36 +16058,27 @@ msgstr ""
 "selezionata."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:140
-#, fuzzy
-#| msgid ""
-#| "Existing absolute file path associations will be converted to relative "
-#| "ones by comparing them to the new path head unless box unticked."
 msgid ""
 "Existing absolute file path links will be converted to relative ones by "
 "comparing them to the new path head unless box unticked."
 msgstr ""
 "I percorsi assoluti dei file con le associazioni verranno convertiti in "
-"percorsi relativi confrontandoli con il nuovo prefisso se questa box non è "
+"percorsi relativi confrontandoli con il nuovo percorso se questa box non è "
 "selezionata."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:178
-#, fuzzy
-#| msgid "Note: Only Associations that are not read-only will be changed."
 msgid "Note: Only Document Links that are not read-only will be changed."
 msgstr ""
-"Nota: Verranno modificate solo le associazioni che non sono di sola lettura."
+"Nota: Verranno modificate solo i documenti collegati che non sono di sola "
+"lettura."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:279
-#, fuzzy
-#| msgid "Linked Details"
 msgid "Linked _File"
-msgstr "Dettagli collegati"
+msgstr "_File collegato"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:295
-#, fuzzy
-#| msgid "Picture Location"
 msgid "Linked _Location"
-msgstr "Posizione immagine"
+msgstr "_Posizione collegatao"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:380
 msgid "Enter URL like http://www.gnucash.org"
@@ -16177,42 +16089,32 @@ msgid "Location does not start with a valid scheme"
 msgstr "La posizione non inizia con uno schema valido"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:504
-#, fuzzy
-#| msgid "Reload and Locate _Associations"
 msgid "Reload and Locate Linked Documents"
-msgstr "Ricarica ed individua le _associazioni"
+msgstr "Ricarica ed individua i documenti collegati"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:518
 msgid "_Reload"
 msgstr "_Ricarica"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:532
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "_Locate Linked Documents"
-msgstr "Nessun conto collegato"
+msgstr "_Individua i documenti collegati"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:572
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "All Linked Documents"
-msgstr "Nessun conto collegato"
+msgstr "Tutti i documenti collegati"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:626
 msgid "Id"
 msgstr "Id"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:654
-#, fuzzy
-#| msgid "Linked Details"
 msgid "Linked Document"
-msgstr "Dettagli collegati"
+msgstr "Documento collegato"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:671
-#, fuzzy
-#| msgid "Available ?"
 msgid "Available"
-msgstr "Disponibile ?"
+msgstr "Disponibile"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:686
 msgid "Relative"
@@ -16226,6 +16128,12 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
+"Doppio click sull'elemento nella colonna \"Descrizione\" per andare alla "
+"transazione.\n"
+"Doppio click sull'elemento nella colonna \"Documento collegato\" per aprire "
+"il documento collegato.\n"
+"Doppio click sull'elemento nella colonna \"Disponibile\" per modificare il "
+"documento collegato."
 
 # Tooltip
 #: gnucash/gtkbuilder/dialog-employee.glade:166
@@ -16741,10 +16649,8 @@ msgid "(owner)"
 msgstr "(intestatario)"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:418
-#, fuzzy
-#| msgid "Open imported documents in tabs"
 msgid "Open Document Link"
-msgstr "Apri i documenti importati nelle schede"
+msgstr "Apri i collegamenti al documento"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:535
 #: gnucash/gtkbuilder/dialog-invoice.glade:1113
@@ -17386,7 +17292,7 @@ msgstr "2"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1245
 msgid "Numbers, Date, Time"
-msgstr ""
+msgstr "Numeri, Data, Orario"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1274
 msgid "Perform account list _setup on new file"
@@ -17501,16 +17407,12 @@ msgstr "secondi"
 
 # Tooltip
 #: gnucash/gtkbuilder/dialog-preferences.glade:1730
-#, fuzzy
-#| msgid "Path head for Associated Files"
 msgid "Path head for Linked File Relative Paths"
-msgstr "Percorso per i file associati"
+msgstr "Prefisso per i percorsi relativi per i documenti collegati"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1748
-#, fuzzy
-#| msgid "Path head for files is,"
 msgid "Path head for Linked Files Relative Paths"
-msgstr "Il percorso per i file è,"
+msgstr "Prefisso dei percorsi relativi per i file collegati"
 
 # Tooltip
 #: gnucash/gtkbuilder/dialog-preferences.glade:1777
@@ -17541,10 +17443,8 @@ msgstr ""
 "Conti."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1814
-#, fuzzy
-#| msgid "<b>Files</b>"
 msgid "<b>Linked Files</b>"
-msgstr "<b>File</b>"
+msgstr "<b>File collegati</b>"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:1909
@@ -19754,10 +19654,8 @@ msgid "_Transaction Number"
 msgstr "Numero _transazione"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1086
-#, fuzzy
-#| msgid "Delete the current entry"
 msgid "Keep Linked Document Entry"
-msgstr "Elimina l'elemento corrente"
+msgstr "Mantieni la registrazione del documento collegato"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:12
 msgid "day(s)"
@@ -19820,11 +19718,20 @@ msgstr "Mostra solo intestatari _attivi"
 msgid "Show _zero balance owners"
 msgstr "Mostra gli intestatari a saldo _zero"
 
-#: gnucash/gtkbuilder/window-autoclear.glade:71
-msgid "<b>Auto-Clear Information</b>"
-msgstr "<b>Informazioni di liquidazione automatica</b>"
+#: gnucash/gtkbuilder/window-autoclear.glade:74
+msgid ""
+"<b>Auto-Clear Information</b>\n"
+"Use this dialog if you want GnuCash to automatically find which transactions "
+"are cleared, given an ending balance. For example, said ending balance can "
+"be the current balance given by your online bank."
+msgstr ""
+"<b> Liquidazione automatica delle informazioni </b>\n"
+"Utilizza questa finestra di dialogo se desideri che GnuCash trovi "
+"automaticamente quali transazioni sono state liquidate, dato un saldo "
+"finale. Ad esempio, detto saldo finale può essere il saldo corrente fornito "
+"dalla tua banca online."
 
-#: gnucash/gtkbuilder/window-autoclear.glade:92
+#: gnucash/gtkbuilder/window-autoclear.glade:98
 #: gnucash/gtkbuilder/window-reconcile.glade:117
 msgid "_Ending Balance"
 msgstr "Saldo _finale"
@@ -23332,7 +23239,7 @@ msgstr "Descrizione di una transazione"
 #: gnucash/report/trep-engine.scm:1258 gnucash/report/trep-engine.scm:1259
 msgctxt "Column header for 'Document Link'"
 msgid "L"
-msgstr ""
+msgstr "L"
 
 #: gnucash/register/ledger-core/split-register-layout.c:711
 #: gnucash/register/ledger-core/split-register-layout.c:751
@@ -24498,16 +24405,12 @@ msgstr "91+ giorni"
 
 #: gnucash/report/reports/aging.scm:773
 #: gnucash/report/reports/standard/new-aging.scm:164
-#, fuzzy
-#| msgid "Y"
 msgctxt "One-letter indication for 'yes'"
 msgid "Y"
 msgstr "S"
 
 #: gnucash/report/reports/aging.scm:773
 #: gnucash/report/reports/standard/new-aging.scm:164
-#, fuzzy
-#| msgid "N"
 msgctxt "One-letter indication for 'no'"
 msgid "N"
 msgstr "N"
@@ -27498,7 +27401,7 @@ msgstr "Somma complessiva"
 #: gnucash/report/reports/standard/category-barchart.scm:684
 #: gnucash/report/reports/standard/net-charts.scm:471
 msgid "No exportable data"
-msgstr ""
+msgstr "Nessun dato esportabile"
 
 #: gnucash/report/reports/standard/customer-summary.scm:52
 msgid "The income accounts where the sales and income was recorded."
@@ -28027,8 +27930,6 @@ msgstr "Formato del resoconto"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:164
 #: gnucash/report/reports/standard/income-gst-statement.scm:165
-#, fuzzy
-#| msgid "default format"
 msgid "Default Format"
 msgstr "formato predefinito"
 
@@ -28037,8 +27938,6 @@ msgid "Australia BAS"
 msgstr "Dichiarazione BAS Australia"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:168
-#, fuzzy
-#| msgid "Australia BAS. Specify sales, purchase and tax accounts."
 msgid ""
 "Australia Business Activity Statement. Specify sales, purchase and tax "
 "accounts."
@@ -28771,16 +28670,12 @@ msgid "Debits"
 msgstr "Debiti"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:59
-#, fuzzy
-#| msgid "Documents"
 msgid "Document Links"
-msgstr "Documenti"
+msgstr "Documenti collegati"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:60
-#, fuzzy
-#| msgid "Transactions"
 msgid "Transaction Links"
-msgstr "Transazioni"
+msgstr "Collegamenti transazione"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:91
 #: gnucash/report/reports/standard/owner-report.scm:87
@@ -28891,10 +28786,8 @@ msgstr ""
 "delle fatture e gli importi."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:948
-#, fuzzy
-#| msgid "Display amounts as hyperlinks"
 msgid "Display document link?"
-msgstr "Visualizza gli importi come collegamenti ipertestuali"
+msgstr "Visualizza il collegamento al documento?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1076
 msgid "No valid account found"
@@ -29011,16 +28904,12 @@ msgid "Double-Weeks"
 msgstr "Due settimane"
 
 #: gnucash/report/reports/standard/price-scatter.scm:142
-#, fuzzy
-#| msgid "Quarter"
 msgid "Quarters"
-msgstr "Trimestre"
+msgstr "Trimestri"
 
 #: gnucash/report/reports/standard/price-scatter.scm:143
-#, fuzzy
-#| msgid "Half Year"
 msgid "Half Years"
-msgstr "Mezzo anno"
+msgstr "Semestre"
 
 #: gnucash/report/reports/standard/price-scatter.scm:238
 msgid "Identical commodities"
@@ -30880,10 +30769,8 @@ msgstr "Visualizza il codice dell'altro conto?"
 
 # tooltip
 #: gnucash/report/trep-engine.scm:954
-#, fuzzy
-#| msgid "Display the transaction amount?"
 msgid "Display the transaction linked document"
-msgstr "Visualizzare l'importo della transazione?"
+msgstr "Mostra il documento collegato alla transazione"
 
 #: gnucash/report/trep-engine.scm:957
 msgid "Display a subtotal summary table."
@@ -31706,17 +31593,11 @@ msgid "v"
 msgstr "v"
 
 #: libgnucash/app-utils/gnc-ui-util.c:911
-#, fuzzy
-#| msgctxt "Association flag for 'web'"
-#| msgid "w"
 msgctxt "Document Link flag for 'web'"
 msgid "w"
 msgstr "w"
 
 #: libgnucash/app-utils/gnc-ui-util.c:913
-#, fuzzy
-#| msgctxt "Reconciled flag 'frozen'"
-#| msgid "f"
 msgctxt "Document Link flag for 'file'"
 msgid "f"
 msgstr "f"
@@ -32104,222 +31985,3 @@ msgstr "Ho invalidato la transazione"
 #: libgnucash/tax/us/txf.scm:98
 msgid "No help available."
 msgstr "Aiuto non disponibile."
-
-#, c-format
-#~ msgid "Bad URL %s"
-#~ msgstr "URL errato %s"
-
-#, c-format
-#~ msgid "No such Account entity: %s"
-#~ msgstr "Entità conto inesistente: %s"
-
-#~ msgid "Change a Business Association"
-#~ msgstr "Modifica un'associazione del documento commerciale"
-
-#~ msgid "Transaction Associations"
-#~ msgstr "Associazioni della transazione"
-
-#~ msgid "Open Association:"
-#~ msgstr "Apri documento associato:"
-
-#~ msgid "_Transaction Associations"
-#~ msgstr "_Associazioni transazione"
-
-#~ msgid "Business _Associations"
-#~ msgstr "_Documenti associati"
-
-#~ msgid "_Update Association for Invoice"
-#~ msgstr "_Aggiorna l'associazione per il documento di vendita"
-
-#~ msgid "_Open Association for Invoice"
-#~ msgstr "_Apri l'associazione per il documento di vendita"
-
-#~ msgid "_Remove Association from Invoice"
-#~ msgstr "_Rimuovi l'associazione per il documento di vendita"
-
-#~ msgid "_Update Association for Bill"
-#~ msgstr "_Aggiorna documento di acquisto associato"
-
-#~ msgid "_Open Association for Bill"
-#~ msgstr "_Apri documento di acquisto associato"
-
-#~ msgid "_Remove Association from Bill"
-#~ msgstr "_Rimuovi documento di acquisto associato"
-
-#~ msgid "_Update Association for Voucher"
-#~ msgstr "_Aggiorna nota spese associata"
-
-#~ msgid "_Open Association for Voucher"
-#~ msgstr "_Apri nota spese associata"
-
-#~ msgid "_Remove Association from Voucher"
-#~ msgstr "_Rimuovi l'associazione dalla nota spese"
-
-# Tooltip
-#~ msgid "_Update Association for Credit Note"
-#~ msgstr "_Aggiorna nota credito associata"
-
-#~ msgid "_Open Association for Credit Note"
-#~ msgstr "_Apri nota credito associata"
-
-# Tooltip
-#~ msgid "_Remove Association from Credit Note"
-#~ msgstr "_Rimuovi nota credito associata"
-
-#~ msgid "Update Association for current invoice"
-#~ msgstr "Aggiorna l'associazione per questo documento di vendita"
-
-#~ msgid "Open Association for current invoice"
-#~ msgstr "Apri l'associazione per questo documento di vendita"
-
-#~ msgid "Remove Association from invoice"
-#~ msgstr "Rimuovi l'associazione dal documento di vendita"
-
-#~ msgid "Update Association for current bill"
-#~ msgstr "Aggiorna l'associazione per questo documento di acquisto"
-
-#~ msgid "Open Association for current bill"
-#~ msgstr "Apri l'associazione per questo documento di acquisto"
-
-#~ msgid "Remove Association from bill"
-#~ msgstr "Rimuovi l'associazione dal documento di acquisto"
-
-#~ msgid "Update Association for current voucher"
-#~ msgstr "Aggiorna l'associazione per questa nota spese"
-
-#~ msgid "Open Association for current voucher"
-#~ msgstr "Apri l'associazione per questa nota spese"
-
-#~ msgid "Remove Association from voucher"
-#~ msgstr "Rimuovi l'associazione dalla nota spese"
-
-# Tooltip
-#~ msgid "Update Association for credit note"
-#~ msgstr "Aggiorna l'associazione per la nota credito"
-
-#~ msgid "Open Association for credit note"
-#~ msgstr "Apri l'associazione per la nota credito"
-
-#~ msgid "Remove Association from credit note"
-#~ msgstr "Rimuovi l'associazione dalla nota credito"
-
-# Tooltip
-#~ msgid "Jump to the corresponding transaction in the other account"
-#~ msgstr "Va alla transazione corrispondente nell'altro conto"
-
-#~ msgid "Update _Association for Transaction"
-#~ msgstr "A_ggiorna l'associazione per la transazione"
-
-#~ msgid "_Open Association for Transaction"
-#~ msgstr "_Apri l'associazione per la transazione"
-
-#~ msgid "Re_move Association from Transaction"
-#~ msgstr "_Rimuovi l'associazione per la transazione"
-
-#~ msgid "Open Associated Invoice"
-#~ msgstr "Apri documento di vendita associato"
-
-#~ msgid "Update Association for the current transaction"
-#~ msgstr "Aggiorna l'associazione per questa transazione"
-
-#~ msgid "Remove the association from the current transaction"
-#~ msgstr "Rimuovi l'associazione da questa transazione"
-
-#~ msgid "Open the associated invoice"
-#~ msgstr "Apre il documento di vendita associato"
-
-#~ msgid "Update Association"
-#~ msgstr "Aggiorna associazione"
-
-#~ msgid "Open Association"
-#~ msgstr "Apri associazione"
-
-#~ msgid "Remove Association"
-#~ msgstr "Rimuovi associazione"
-
-#~ msgid "Open Invoice"
-#~ msgstr "Apri documento di vendita"
-
-#~ msgid "_File Association"
-#~ msgstr "Associazione _file"
-
-#~ msgid "_Location Association"
-#~ msgstr "Associazione _posizione"
-
-#~ msgid "All Associations"
-#~ msgstr "Tutte le associazioni"
-
-#~ msgid "_Locate Associations"
-#~ msgstr "_Individua le associazioni"
-
-#~ msgid "Association"
-#~ msgstr "Associazione"
-
-#~ msgid ""
-#~ "   To jump to the Transaction, double click on the entry in the "
-#~ "Description\n"
-#~ "column, Association column to open the Association or Available to update"
-#~ msgstr ""
-#~ "     Per passare alla transazione, fai doppio clic sulla voce nella "
-#~ "colonna descrizione\n"
-#~ "o nella colonna associazione per aprire l'Associazione, o su disponibile "
-#~ "per aggiornare"
-
-#~ msgid "Date/Time"
-#~ msgstr "Data e ora"
-
-#~ msgid "<b>Associated Files</b>"
-#~ msgstr "<b>File associati</b>"
-
-#~ msgid "Keep Associated Entry"
-#~ msgstr "Mantieni la voce associata"
-
-#~ msgid "Date-opened"
-#~ msgstr "Data-apertura"
-
-#~ msgid "Date-posted"
-#~ msgstr "Data-emissione"
-
-#~ msgid "Due-date"
-#~ msgstr "Data-scadenza"
-
-#~ msgctxt "Column header for 'Associate'"
-#~ msgid "A"
-#~ msgstr "A"
-
-#~ msgid "One year."
-#~ msgstr "Un anno."
-
-#~ msgid "Links"
-#~ msgstr "Collegamenti"
-
-#, scheme-format
-#~ msgid "No transactions were found associated with the ~a."
-#~ msgstr "Non è stata trovata nessuna transazione associata con ~a."
-
-#~ msgid "Font to use for the main heading"
-#~ msgstr "Tipo di carattere da utilizzare per l'intestazione principale"
-
-#~ msgid "Font to use for everything else"
-#~ msgstr "Tipo di carattere da utilizzare per il resto"
-
-# tooltip
-#~ msgid "Display the transaction association"
-#~ msgstr "Mostra l'associazione della transazione"
-
-#~ msgid "Enable links"
-#~ msgstr "Abilita collegamenti"
-
-#~ msgid "A"
-#~ msgstr "A"
-
-#, scheme-format
-#~ msgid "error ~a during csv output to ~a: ~s"
-#~ msgstr "error ~a durante l'esportazione cvs a ~a: ~s"
-
-#~ msgctxt "Association flag for 'file'"
-#~ msgid "f"
-#~ msgstr "f"
-
-#~ msgid "gnucash-icon"
-#~ msgstr "gnucash-icon"

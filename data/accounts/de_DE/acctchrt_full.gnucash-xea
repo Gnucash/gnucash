@@ -1192,6 +1192,12 @@
   </act:commodity>
   <act:description>Anfangsbestand</act:description>
   <act:parent type="new">320d3cf62b418db6281c3cd8ec2e95c7</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>equity-type</slot:key>
+      <slot:value type="string">opening-balance</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 
 </gnc-account-example>

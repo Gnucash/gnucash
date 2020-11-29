@@ -397,6 +397,12 @@
       <act:commodity-scu>100</act:commodity-scu>
       <act:description>Opening Balances</act:description>
       <act:parent type="new">7081f24a5685d4dfcb8f143f0b7ee31d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>equity-type</slot:key>
+      <slot:value type="string">opening-balance</slot:value>
+    </slot>
+  </act:slots>
     </gnc:account>
 
 </gnc-account-example>

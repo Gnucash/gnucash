@@ -695,7 +695,7 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 
 /* private utilities for file open; done in two stages */
 
-#define RESPONSE_NEW  1
+#define RESPONSE_NO_FILE 1
 #define RESPONSE_OPEN 2
 #define RESPONSE_QUIT 3
 #define RESPONSE_READONLY 4
@@ -847,11 +847,11 @@ RESTART:
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
         gnc_gtk_dialog_add_button(dialog, _("_Open Read-Only"),
-                                  "document-revert", RESPONSE_READONLY);
-        gnc_gtk_dialog_add_button(dialog, _("_Create New File"),
-                                  "document-new", RESPONSE_NEW);
+                                  "emblem-readonly", RESPONSE_READONLY);
+        gnc_gtk_dialog_add_button(dialog, _("Open with _No File"),
+                                  "document-new-symbolic", RESPONSE_NO_FILE);
         gnc_gtk_dialog_add_button(dialog, _("Open _Anyway"),
-                                  "document-open", RESPONSE_OPEN);
+                                  "document-open-symbolic", RESPONSE_OPEN);
         if (shutdown_cb)
             gtk_dialog_add_button(GTK_DIALOG(dialog),
                                   _("_Quit"), RESPONSE_QUIT);
@@ -861,7 +861,7 @@ RESTART:
 
         if (rc == GTK_RESPONSE_DELETE_EVENT)
         {
-            rc = shutdown_cb ? RESPONSE_QUIT : RESPONSE_NEW;
+            rc = shutdown_cb ? RESPONSE_QUIT : RESPONSE_NO_FILE;
         }
         switch (rc)
         {
@@ -881,10 +881,9 @@ RESTART:
             break;
         default:
             /* Can't use the given file, so just create a new
-             * database so that the user will get a window that
-             * they can click "Exit" on.
+             * Gnucash window so they can choose File->New, File->Open
+             * or just "Exit".
              */
-            gnc_file_new (parent);
             break;
         }
     }

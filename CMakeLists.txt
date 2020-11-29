@@ -207,7 +207,7 @@ pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
 pkg_check_modules (LIBXML2 REQUIRED libxml-2.0>=2.9.4)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 if (WITH_GNUCASH)
-  if (WIN32 OR APPLE)
+  if (WIN32)
     pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkitgtk-3.0)
     set(WEBKIT1 1 CACHE INTERNAL "WebKitGtk")
   else()
@@ -279,7 +279,7 @@ string(REGEX MATCH "^[0-9]+[.]" SWIG_MAJOR ${SWIG_VERSION})
 
 # guile library and include dir
 pkg_check_modules (GUILE3 guile-3.0 QUIET)
-pkg_check_modules (GUILE22 guile-2.2)
+pkg_check_modules (GUILE22 guile-2.2 QUIET)
 pkg_check_modules (GUILE2 guile-2.0>=2.0.9 QUIET)
 
 if (GUILE3_FOUND) # found guile-3.0

@@ -574,6 +574,39 @@ gnc_html_get_widget( GncHtml* self )
     return GNC_HTML_GET_PRIVATE(self)->container;
 }
 
+
+GtkWidget *
+gnc_html_get_webview( GncHtml* self )
+{
+    GncHtmlPrivate* priv;
+    GList *sw_list = NULL;
+    GtkWidget *webview = NULL;
+
+    g_return_val_if_fail (self != NULL, NULL);
+    g_return_val_if_fail (GNC_IS_HTML(self), NULL);
+
+    priv = GNC_HTML_GET_PRIVATE(self);
+    sw_list = gtk_container_get_children (GTK_CONTAINER(priv->container));
+
+    if (sw_list) // the scroll window has only one child
+    {
+#ifdef WEBKIT1
+        webview = sw_list->data;
+#else
+        GList *vp_list = gtk_container_get_children (GTK_CONTAINER(sw_list->data));
+ 
+        if (vp_list) // the viewport has only one child
+        {
+            webview = vp_list->data;
+            g_list_free (vp_list);
+        }
+#endif
+    }
+    g_list_free (sw_list);
+    return webview;
+}
+
+
 void
 gnc_html_set_parent( GncHtml* self, GtkWindow* parent )
 {

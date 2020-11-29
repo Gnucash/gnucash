@@ -146,5 +146,12 @@ gchar * gnc_ui_owner_get_print_balance (GncOwner *owner,
 gchar * gnc_ui_owner_get_print_report_balance (GncOwner *owner,
         gboolean *negative);
 
-
+/** Account splits are analysed; attempts to find a unique combination
+ *  of uncleared splits which would set cleared balance to
+ *  toclear_value. If this is not possible, *errmsg will be error
+ *  message. errmsg must be a pointer to a gchar. If it is set, it
+ *  must be freed by the caller.
+ */
+GList * gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
+                                          gchar **errmsg);
 #endif /* GNC_UI_BALANCES_H_ */

@@ -398,6 +398,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:parent type="new">c0b1160d2dd6b3059acc5083348b282f</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>equity-type</slot:key>
+      <slot:value type="string">opening-balance</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Grants</act:name>

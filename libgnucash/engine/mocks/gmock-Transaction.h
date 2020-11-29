@@ -4,16 +4,18 @@
 #include <gmock/gmock.h>
 
 #include <Transaction.h>
+extern "C"
+{
 #include <TransactionP.h>
+}
 
-#include "gmock-qofbook.h"
 #include "gmock-gobject.h"
 
 
-GType gnc_mock_transaction_get_type(void);
+GType gnc_mocktransaction_get_type(void);
 
-#define GNC_TYPE_MOCK_TRANSACTION   (gnc_mock_transaction_get_type ())
-#define GNC_IS_MOCK_TRANSACTION(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MOCK_TRANSACTION))
+#define GNC_TYPE_MOCKTRANSACTION   (gnc_mocktransaction_get_type ())
+#define GNC_IS_MOCKTRANSACTION(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MOCKTRANSACTION))
 
 
 // mock up for Transaction
@@ -36,7 +38,7 @@ public:
     }
     void* operator new(size_t size)
     {
-        return mock_g_object_new (GNC_TYPE_MOCK_TRANSACTION, NULL, size);
+        return mock_g_object_new (GNC_TYPE_MOCKTRANSACTION, NULL, size);
     }
 
     // define separate free() function since destructor is protected
@@ -49,20 +51,20 @@ public:
         mock_g_object_unref(trans, size);
     }
 
-    MOCK_METHOD0(beginEdit, void());
-    MOCK_METHOD0(commitEdit, void());
-    MOCK_METHOD1(getSplit, Split *(int));
-    MOCK_METHOD0(getSplitList, SplitList *());
-    MOCK_METHOD1(findSplitByAccount, Split *(const Account*));
-    MOCK_METHOD0(getDate, time64());
-    MOCK_METHOD1(setDatePostedSecsNormalized, void(time64));
-    MOCK_METHOD0(getDescription, const char *());
-    MOCK_METHOD1(setDescription, void(const char*));
-    MOCK_METHOD0(getNotes, const char *());
-    MOCK_METHOD1(setNotes, void(const char*));
-    MOCK_METHOD0(getImbalanceValue, gnc_numeric());
-    MOCK_METHOD0(getNum, const char *());
-    MOCK_METHOD0(isOpen, gboolean());
+    MOCK_METHOD0(begin_edit, void());
+    MOCK_METHOD0(commit_edit, void());
+    MOCK_CONST_METHOD1(get_split, Split *(int));
+    MOCK_CONST_METHOD0(get_split_list, GList*());
+    MOCK_CONST_METHOD1(find_split_by_account, Split *(const Account*));
+    MOCK_CONST_METHOD0(get_date, time64());
+    MOCK_METHOD1(set_date_posted_secs_normalized, void(time64));
+    MOCK_CONST_METHOD0(get_description, const char *());
+    MOCK_METHOD1(set_description, void(const char*));
+    MOCK_CONST_METHOD0(get_notes, const char *());
+    MOCK_METHOD1(set_notes, void(const char*));
+    MOCK_CONST_METHOD0(get_imbalance_value, gnc_numeric());
+    MOCK_CONST_METHOD0(get_num, const char *());
+    MOCK_CONST_METHOD0(is_open, gboolean());
     MOCK_METHOD0(destroy, void());
 
 protected:
@@ -70,5 +72,25 @@ protected:
     // objects can only be dynamically created, since they are derived from GObject.
     ~MockTransaction() {}
 };
+
+
+// type conversion functions
+static inline MockTransaction*
+gnc_mocktransaction (Transaction *trans)
+{
+    if (GNC_IS_MOCKTRANSACTION(trans))
+        return static_cast<MockTransaction*>(trans);
+    ADD_FAILURE() << "Expected 'trans' to be of type 'MockTransaction'";
+    return nullptr;
+}
+
+static inline const MockTransaction*
+gnc_mocktransaction (const Transaction *trans)
+{
+    if (GNC_IS_MOCKTRANSACTION(trans))
+        return static_cast<const MockTransaction*>(trans);
+    ADD_FAILURE() << "Expected 'trans' to be of type 'MockTransaction'";
+    return nullptr;
+}
 
 #endif

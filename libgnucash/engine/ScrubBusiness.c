@@ -38,6 +38,7 @@
 #include "Account.h"
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
+#include "Scrub.h"
 #include "Scrub2.h"
 #include "ScrubBusiness.h"
 #include "Transaction.h"
@@ -581,7 +582,7 @@ gncScrubBusinessSplit (Split *split)
          * Such splits may be the result of scrubbing the business lots, which can
          * merge splits together while reducing superfluous lot links
          */
-        else if (gnc_numeric_zero_p (xaccSplitGetAmount(split)) && !gncInvoiceGetInvoiceFromTxn (txn))
+        else if (gnc_numeric_zero_p (xaccSplitGetAmount(split)) && !gncInvoiceGetInvoiceFromTxn (txn) && !is_void)
         {
             GNCLot *lot = xaccSplitGetLot (split);
             time64 pdate = xaccTransGetDate (txn);
@@ -614,6 +615,10 @@ gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc)
     const char *message = _( "Checking business lots in account %s: %u of %u");
 
     if (!acc) return;
+
+    if (gnc_get_abort_scrub())
+        (percentagefunc)(NULL, -1.0);
+
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
 
     str = xaccAccountGetName(acc);
@@ -664,6 +669,10 @@ gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
     const char *message = _( "Checking business splits in account %s: %u of %u");
 
     if (!acc) return;
+
+    if (gnc_get_abort_scrub())
+        (percentagefunc)(NULL, -1.0);
+
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
 
     str = xaccAccountGetName(acc);
@@ -683,6 +692,9 @@ restart:
 
         PINFO("Start processing split %d of %d",
               curr_split_no + 1, split_count);
+
+        if (gnc_get_abort_scrub ())
+            break;
 
         if (curr_split_no % 100 == 0)
         {
