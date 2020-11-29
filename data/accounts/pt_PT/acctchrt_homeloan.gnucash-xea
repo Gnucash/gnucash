@@ -38,8 +38,8 @@
     Contas para empréstimo de habitação e juros associados
   </gnc-act:short-description>
   <gnc-act:long-description>
-    Desejará seleccionar este conjunto de contas caso tenha contraido um
-    empréstimo para habitação (emprétimo habitação, juro do empréstimo).
+    Desejará seleccionar este conjunto de contas caso tenha contraído um
+    empréstimo para habitação (empréstimo habitação, juro do empréstimo).
   </gnc-act:long-description>
   <gnc:account version="2.0.0">
     <act:name>Root Account</act:name>
