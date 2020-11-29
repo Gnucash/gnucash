@@ -2444,8 +2444,30 @@ gboolean
 gtk_callback_bug_workaround (gpointer argp)
 {
     dialog_args *args = argp;
-    const gchar *read_only = _("This account register is read-only.");
+    const gchar *read_only_this = _("This account register is read-only.");
+    const gchar *read_only_acc = _("The '%s' account register is read-only.");
+    gchar *read_only = NULL;
     GtkWidget *dialog;
+    GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (args->gsr->ledger);
+    Account *acc = gnc_ledger_display_leader (args->gsr->ledger);
+    const gchar *acc_name = NULL;
+    gchar *tmp = NULL;
+
+    if (acc)
+    {
+        acc_name = xaccAccountGetName (acc);
+
+        if (ledger_type == LD_SINGLE)
+            read_only = g_strdup_printf (read_only_acc, acc_name);
+        else
+        {
+            gchar *tmp = g_strconcat (acc_name, "+", NULL);
+            read_only = g_strdup_printf (read_only_acc, tmp);
+            g_free (tmp);
+        }
+    }
+    else
+        read_only = g_strdup (read_only_this);
 
     dialog = gtk_message_dialog_new(GTK_WINDOW(args->gsr->window),
                                     GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -2456,6 +2478,7 @@ gtk_callback_bug_workaround (gpointer argp)
             "%s", args->string);
     gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_REG_IS_READ_ONLY);
     gtk_widget_destroy(dialog);
+    g_free(read_only);
     g_free(args);
     return FALSE;
 }
