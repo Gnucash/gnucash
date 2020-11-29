@@ -846,7 +846,7 @@ RESTART:
                 "%s", fmt2);
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
-        gnc_gtk_dialog_add_button(dialog, _("_Open Read-Only"),
+        gnc_gtk_dialog_add_button(dialog, _("Open _Read-Only"),
                                   "emblem-readonly", RESPONSE_READONLY);
         gnc_gtk_dialog_add_button(dialog, _("Open with _No File"),
                                   "document-new-symbolic", RESPONSE_NO_FILE);
