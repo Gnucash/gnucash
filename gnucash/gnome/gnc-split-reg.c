@@ -73,7 +73,7 @@ static GtkWidget* add_summary_label( GtkWidget *summarybar, gboolean pack_start,
 
 static void gsr_summarybar_set_arrow_draw (GNCSplitReg *gsr);
 
-static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
+static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr, gboolean show_dialog );
 static gboolean is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans);
 
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
@@ -378,7 +378,7 @@ gnc_split_reg_init2( GNCSplitReg *gsr )
 {
     if ( !gsr ) return;
 
-    gnc_split_reg_determine_read_only( gsr );
+    gnc_split_reg_determine_read_only( gsr, TRUE );
 
     gsr_setup_status_widgets( gsr );
     /* ordering is important here... setup_status before create_table */
@@ -2488,7 +2488,7 @@ gtk_callback_bug_workaround (gpointer argp)
  **/
 static
 void
-gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
+gnc_split_reg_determine_read_only( GNCSplitReg *gsr, gboolean show_dialog )
 {
     SplitRegister *reg;
 
@@ -2542,7 +2542,8 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
         args = g_malloc(sizeof(dialog_args));
         args->string = string;
         args->gsr = gsr;
-        g_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
+        if (show_dialog)
+            g_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
     }
 
     /* Make the contents immutable */
@@ -2631,7 +2632,16 @@ gnc_split_reg_get_summarybar( GNCSplitReg *gsr )
 gboolean
 gnc_split_reg_get_read_only( GNCSplitReg *gsr )
 {
+    SplitRegister *reg;
+
     g_assert( gsr );
+
+    // reset read_only flag
+    gsr->read_only = FALSE;
+    gnc_split_reg_determine_read_only (gsr, FALSE);
+
+    reg = gnc_ledger_display_get_split_register( gsr->ledger );
+    gnc_split_register_set_read_only( reg, gsr->read_only );
     return gsr->read_only;
 }
 

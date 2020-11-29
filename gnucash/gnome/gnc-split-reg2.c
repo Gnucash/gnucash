@@ -53,7 +53,7 @@ void gnc_split_reg2_raise (GNCSplitReg2 *gsr);
 static GtkWidget* add_summary_label (GtkWidget *summarybar,
                                      const char *label_str);
 
-static void gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr);
+static void gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr, gboolean show_dialog);
 
 static void gnc_split_reg2_determine_account_pr (GNCSplitReg2 *gsr);
 
@@ -200,7 +200,7 @@ gnc_split_reg2_init2 (GNCSplitReg2 *gsr)
 {
     if (!gsr) return;
 
-    gnc_split_reg2_determine_read_only (gsr);
+    gnc_split_reg2_determine_read_only (gsr, TRUE);
 
     gnc_split_reg2_determine_account_pr (gsr);
 
@@ -978,7 +978,7 @@ gtk_callback_bug_workaround (gpointer argp)
  **/
 static
 void
-gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr) //this works
+gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr, gboolean show_dialog)
 {
 
     if (qof_book_is_readonly (gnc_get_current_book()))
@@ -1018,7 +1018,8 @@ gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr) //this works
         gsr->read_only = TRUE;
         /* Put up a warning dialog */
         args->gsr = gsr;
-        g_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
+        if (show_dialog)
+            g_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
     }
 }
 
@@ -1125,6 +1126,10 @@ gboolean
 gnc_split_reg2_get_read_only (GNCSplitReg2 *gsr)
 {
     g_assert (gsr);
+
+    // reset read_only flag
+    gsr->read_only = FALSE;
+    gnc_split_reg2_determine_read_only (gsr, FALSE);
     return gsr->read_only;
 }
 
