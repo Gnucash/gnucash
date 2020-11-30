@@ -166,7 +166,7 @@
       <description>When a date is entered without year it can be completed so that it will be within the current calendar year or close to the current date based on a sliding window starting a set number of months backwards in time.</description>
     </key>
     <key name="date-backmonths" type="d">
-      <default>11.0</default>
+      <default>6.0</default>
       <summary>Maximum number of months to go back.</summary>
       <description>Dates will be completed so that they are close to the current date. Enter the maximum number of months to go backwards in time when completing dates.</description>
     </key>
