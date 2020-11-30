@@ -9,6 +9,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - run: sudo apt-get update
     - name: Install additional dependencies
       run: sudo apt-get install -y cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.0-dev  googletest
     - name: Install language packs.
