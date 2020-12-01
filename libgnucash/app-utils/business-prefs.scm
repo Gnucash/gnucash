@@ -19,7 +19,11 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(define-module (gnucash app-utils business-prefs))
+
+(use-modules (gnucash engine))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
 
 (define gnc:*option-section-counters* (N_ "Counters"))
 

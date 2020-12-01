@@ -17,6 +17,16 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash engine business-core)
+  #:export (gnc:owner-get-address
+            gnc:owner-get-name-dep
+            gnc:owner-get-address-dep
+            gnc:owner-get-name-and-address-dep
+            gnc:owner-get-owner-id
+            gnc:owner-from-split
+            gnc:split->owner))
+
+(use-modules (gnucash engine))
 (use-modules (srfi srfi-1))
 
 (define (gnc:owner-get-address owner)

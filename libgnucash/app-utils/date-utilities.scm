@@ -20,8 +20,102 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(define-module (gnucash app-utils date-utilities)
+  #:export (gnc:reldate-list
+            gnc:date-get-year
+            gnc:date-get-quarter
+            gnc:date-get-month-day
+            gnc:date-get-month
+            gnc:date-get-week-day
+            gnc:date-get-week
+            gnc:date-get-year-day
+            gnc:time64-get-year
+            gnc:time64-get-quarter
+            gnc:time64-get-month-day
+            gnc:time64-get-month
+            gnc:time64-get-week-day
+            gnc:time64-get-week
+            gnc:time64-get-year-day
+            gnc:date-get-year-string
+            gnc:date-get-quarter-string
+            gnc:date-get-quarter-year-string
+            gnc:date-get-month-string
+            gnc:date-get-month-year-string
+            gnc:date-get-week-year-string
+            gnc:leap-year?
+            gnc:days-in-year
+            gnc:days-in-month
+            gnc:date-to-year-fraction
+            gnc:date-year-delta
+            gnc:date-to-month-fraction
+            gnc:date-to-week-fraction
+            gnc:date-to-week
+            gnc:date-to-day-fraction
+            gnc:date-get-fraction-func
+            moddatek
+            decdate
+            incdate
+            decdate
+            incdate
+            gnc:make-date-interval-list
+            gnc:make-date-list
+            SecDelta
+            DayDelta
+            WeekDelta 
+            TwoWeekDelta
+            MonthDelta
+            QuarterDelta
+            HalfYearDelta
+            YearDelta 
+            ThirtyDayDelta
+            NinetyDayDelta
+            gnc:deltasym-to-delta
+            gnc:time64-start-day-time
+            gnc:time64-end-day-time
+            gnc:time64-previous-day
+            gnc:time64-next-day
+            gnc:reldate-get-symbol
+            gnc:reldate-get-string
+            gnc:reldate-get-desc
+            gnc:reldate-get-fn
+            gnc:get-absolute-from-relative-date
+            gnc:get-relative-date-string
+            gnc:get-relative-date-desc
+            gnc:get-start-cal-year
+            gnc:get-end-cal-year
+            gnc:get-start-prev-year
+            gnc:get-end-prev-year
+            gnc:get-start-this-month
+            gnc:get-end-this-month
+            gnc:get-start-prev-month
+            gnc:get-end-prev-month
+            gnc:get-start-current-quarter
+            gnc:get-end-current-quarter
+            gnc:get-start-prev-quarter
+            gnc:get-end-prev-quarter
+            gnc:get-today
+            gnc:get-one-month-ago
+            gnc:get-three-months-ago
+            gnc:get-six-months-ago
+            gnc:get-one-year-ago
+            gnc:reldate-initialize
+            gnc:get-end-next-month
+            gnc:get-end-next-quarter
+            gnc:get-end-next-year
+            gnc:get-one-month-ahead
+            gnc:get-one-year-ahead
+            gnc:get-six-months-ahead
+            gnc:get-start-next-month
+            gnc:get-start-next-quarter
+            gnc:get-start-next-year
+            gnc:get-three-months-ahead))
 
+(use-modules (gnucash engine))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash utilities))
+(use-modules (gnucash app-utils)
+             (gnucash app-utils c-interface))
+(use-modules (ice-9 match))
 
 ;; get stuff from localtime date vector
 (define (gnc:date-get-year datevec)
@@ -68,7 +162,7 @@
   (gnc-print-time64 (gnc-mktime datevec) "%Y"))
 
 (define (gnc:date-get-quarter-string datevec)
-  (format #f "Q~d" (gnc:date-get-quarter datevec)))
+  (format #f "Q~a" (gnc:date-get-quarter datevec)))
 
 (define (gnc:date-get-quarter-year-string datevec)
   (string-append 

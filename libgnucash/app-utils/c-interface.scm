@@ -15,7 +15,15 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(define-module (gnucash app-utils c-interface)
+  #:export (gnc:make-string-database
+            gnc:apply-with-error-handling
+            gnc:eval-string-with-error-handling
+            gnc:backtrace-if-exception))
+
 (use-modules (ice-9 match))
+(use-modules (gnucash core-utils)
+             (gnucash utilities))
 
 (define (gnc:call-with-error-handling cmd args)
   (let ((captured-stack #f)

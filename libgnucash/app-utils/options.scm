@@ -16,8 +16,123 @@
 ;; Free Software Foundation           Voice:  +1-617-542-5942
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
-(use-modules (ice-9 regex))
+
+(define-module (gnucash app-utils options)
+  #:export (gnc:make-option
+            gnc:option-section
+            gnc:option-name
+            gnc:option-sort-tag
+            gnc:option-type
+            gnc:option-documentation
+            gnc:option-getter
+            gnc:option-setter
+            gnc:option-default-getter
+            gnc:option-generate-restore-form
+            gnc:option-scm->kvp
+            gnc:set-option-scm->kvp
+            gnc:option-kvp->scm
+            gnc:set-option-kvp->scm
+            gnc:option-value-validator
+            gnc:option-data
+            gnc:option-data-fns
+            gnc:option-set-changed-callback
+            gnc:option-strings-getter
+            gnc:option-widget-changed-proc
+            gnc:option-value
+            gnc:option-set-value
+            gnc:option-index-get-name
+            gnc:option-index-get-description
+            gnc:option-index-get-value
+            gnc:option-value-get-index
+            gnc:option-number-of-indices
+            gnc:option-default-value
+            gnc:option-set-default-value
+            gnc:restore-form-generator
+            gnc:value->string
+            gnc:make-string-option
+            gnc:make-text-option
+            gnc:make-font-option
+            gnc:make-currency-option
+            gnc:make-commodity-option
+            gnc:make-simple-boolean-option
+            gnc:make-complex-boolean-option
+            gnc:make-pixmap-option
+            gnc:make-date-option
+            gnc:make-budget-option
+            gnc:get-rd-option-data-subtype
+            gnc:get-rd-option-data-show-time
+            gnc:get-rd-option-data-rd-list
+            gnc:date-option-get-subtype
+            gnc:date-option-show-time?
+            gnc:date-option-value-type
+            gnc:date-option-absolute-time
+            gnc:date-option-relative-time
+            gnc:make-account-list-option
+            gnc:make-account-list-limited-option
+            gnc:make-account-sel-option
+            gnc:make-account-sel-limited-option
+            gnc:multichoice-list-lookup
+            gnc:make-multichoice-option
+            gnc:make-multichoice-callback-option
+            gnc:make-radiobutton-option
+            gnc:make-radiobutton-callback-option
+            gnc:make-list-option
+            gnc:options-make-end-date!
+            gnc:options-make-date-interval!
+            gnc:option-make-internal!
+            gnc:make-number-range-option
+            gnc:make-number-plot-size-option
+            gnc:plot-size-option-value-type
+            gnc:plot-size-option-value
+            gnc:make-internal-option
+            gnc:make-query-option
+            gnc:make-color-option
+            gnc:make-dateformat-option
+            gnc:dateformat-get-format
+            gnc:currency-accounting-option-get-curr-doc-string
+            gnc:currency-accounting-option-get-default-curr
+            gnc:currency-accounting-option-get-policy-doc-string
+            gnc:currency-accounting-option-get-default-policy
+            gnc:currency-accounting-option-get-gain-loss-account-doc-string
+            gnc:currency-accounting-option-selected-method
+            gnc:currency-accounting-option-selected-currency
+            gnc:currency-accounting-option-selected-policy
+            gnc:currency-accounting-option-selected-gain-loss-account
+            gnc:color->html
+            gnc:color-option->html
+            gnc:color-option->hex-string
+            gnc:new-options
+            gnc:register-option
+            gnc:unregister-option
+            gnc:options-register-callback
+            gnc:options-register-c-callback
+            gnc:options-unregister-callback-id
+            gnc:options-for-each
+            gnc:options-for-each-general
+            gnc:lookup-option
+            gnc:generate-restore-forms
+            gnc:options-fancy-date
+            gnc:options-scm->kvp
+            gnc:options-kvp->scm
+            gnc:options-clear-changes
+            gnc:options-touch
+            gnc:options-run-callbacks
+            gnc:options-set-default-section
+            gnc:options-get-default-section
+            gnc:options-copy-values
+            gnc:send-options
+            gnc:option-get-value
+            ))
+
+(use-modules (gnucash engine))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash utilities))
+(use-modules (ice-9 regex))
+
+(define (gnc:option-get-value book category key)
+  (define acc (if (pair? key) cons list))
+  (qof-book-get-option book (acc category key)))
 
 (define (rpterror-earlier type newoption fallback)
   ;; Translators: the 3 ~a below refer to (1) option type (2) unknown
@@ -1103,7 +1218,7 @@ the option '~a'."))
      (vector (lambda () (length ok-values))
              (lambda (x) (vector-ref (list-ref ok-values x) 0))
              (lambda (x) (vector-ref (list-ref ok-values x) 1))
-             (lambda (x) (vector-ref (ref ok-values x) 2))
+             (lambda (x) (vector-ref (list-ref ok-values x) 2))
              (lambda (x) (gnc:multichoice-list-lookup ok-values x)))
      (lambda () (list-strings ok-values)) #f)))
 
