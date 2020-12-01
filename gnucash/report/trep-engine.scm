@@ -76,6 +76,7 @@
 ;;General
 (define optname-startdate (N_ "Start Date"))
 (define optname-enddate (N_ "End Date"))
+(define optname-price-source (N_ "Price Source"))
 (define optname-table-export (N_ "Table for Exporting"))
 (define optname-common-currency (N_ "Common Currency"))
 (define optname-orig-currency (N_ "Show original currency amount"))
@@ -544,6 +545,9 @@ Credit Card, and Income accounts."))
        options gnc:pagename-general optname-currency x)
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-general optname-orig-currency x))))
+
+  (gnc:options-add-price-source!
+   options gnc:pagename-general optname-price-source "e5" 'pricedb-nearest)
 
   (gnc:options-add-currency!
    options gnc:pagename-general optname-currency "f")
@@ -1051,7 +1055,7 @@ be excluded from periodic reporting.")
 ;; Here comes the big function that builds the whole table.
 
 (define (make-split-table splits options custom-calculated-cells
-                          begindate)
+                          begindate enddate c_account_1)
 
   (define (opt-val section name)
     (let ((option (gnc:lookup-option options section name)))
@@ -1145,7 +1149,15 @@ be excluded from periodic reporting.")
           (gnc-reverse-balance acc)))
 
     (define (column-uses? param)
-      (cdr (assq param used-columns)))
+      (assq-ref used-columns param))
+
+    (define exchange-fn
+      (if (column-uses? 'common-currency)
+          (gnc:case-exchange-time-fn
+           (opt-val gnc:pagename-general optname-price-source)
+           (opt-val gnc:pagename-general optname-currency)
+           (gnc:accounts-get-commodities c_account_1 #f) enddate #f #f)
+          gnc:exchange-by-pricedb-nearest))
 
     (define left-columns
       (let* ((add-if (lambda (pred? . items) (if pred? items '())))
@@ -1306,7 +1318,7 @@ be excluded from periodic reporting.")
            ;; Otherwise it uses midnight which will likely match a
            ;; price on the previous day
            (converted-amount (lambda (s)
-                               (gnc:exchange-by-pricedb-nearest
+                               (exchange-fn
                                 (gnc:make-gnc-monetary (split-currency s)
                                                        (split-amount s))
                                 (row-currency s)
@@ -2223,7 +2235,7 @@ warning will be removed in GnuCash 5.0"))
        (else
         (let-values (((table grid csvlist)
                       (make-split-table splits options custom-calculated-cells
-                                        begindate)))
+                                        begindate enddate c_account_1)))
 
           (gnc:html-document-set-title! document report-title)
 
