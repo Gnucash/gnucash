@@ -76,12 +76,15 @@
 ;;General
 (define optname-startdate (N_ "Start Date"))
 (define optname-enddate (N_ "End Date"))
-(define optname-price-source (N_ "Price Source"))
 (define optname-table-export (N_ "Table for Exporting"))
+(define optname-infobox-display (N_ "Add options summary"))
+
+;; Currency
+(define pagename-currency (N_ "Currency"))
+(define optname-price-source (N_ "Price Source"))
 (define optname-common-currency (N_ "Common Currency"))
 (define optname-orig-currency (N_ "Show original currency amount"))
 (define optname-currency (N_ "Report's currency"))
-(define optname-infobox-display (N_ "Add options summary"))
 
 ;;Filtering
 (define pagename-filter (N_ "Filter"))
@@ -537,25 +540,26 @@ Credit Card, and Income accounts."))
 
   (gnc:register-trep-option
    (gnc:make-complex-boolean-option
-    gnc:pagename-general optname-common-currency
-    "e" (G_ "Convert all transactions into a common currency.") #f
-    #f
+    pagename-currency optname-common-currency
+    "a" (G_ "Convert all transactions into a common currency.") #f #f
     (lambda (x)
       (gnc-option-db-set-option-selectable-by-name
-       options gnc:pagename-general optname-currency x)
+       options pagename-currency optname-currency x)
       (gnc-option-db-set-option-selectable-by-name
-       options gnc:pagename-general optname-orig-currency x))))
-
-  (gnc:options-add-price-source!
-   options gnc:pagename-general optname-price-source "e5" 'pricedb-nearest)
-
-  (gnc:options-add-currency!
-   options gnc:pagename-general optname-currency "f")
+       options pagename-currency optname-orig-currency x)
+      (gnc-option-db-set-option-selectable-by-name
+       options pagename-currency optname-price-source x))))
 
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
-    gnc:pagename-general optname-orig-currency
-    "f1" (G_ "Also show original currency amounts") #f))
+    pagename-currency optname-orig-currency
+    "b" (G_ "Also show original currency amounts") #f))
+
+  (gnc:options-add-currency!
+   options pagename-currency optname-currency "c")
+
+  (gnc:options-add-price-source!
+   options pagename-currency optname-price-source "d" 'pricedb-nearest)
 
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
@@ -1084,10 +1088,10 @@ be excluded from periodic reporting.")
           (cons 'link (opt-val gnc:pagename-display (N_ "Link")))
           (cons 'amount-single (eq? amount-setting 'single))
           (cons 'amount-double (eq? amount-setting 'double))
-          (cons 'common-currency (opt-val gnc:pagename-general optname-common-currency))
+          (cons 'common-currency (opt-val pagename-currency optname-common-currency))
           (cons 'amount-original-currency
-                (and (opt-val gnc:pagename-general optname-common-currency)
-                     (opt-val gnc:pagename-general optname-orig-currency)))
+                (and (opt-val pagename-currency optname-common-currency)
+                     (opt-val pagename-currency optname-orig-currency)))
           (cons 'indenting (opt-val pagename-sorting optname-indenting))
           (cons 'subtotals-only
                 (and (opt-val pagename-sorting optname-show-subtotals-only)
@@ -1154,8 +1158,8 @@ be excluded from periodic reporting.")
     (define exchange-fn
       (if (column-uses? 'common-currency)
           (gnc:case-exchange-time-fn
-           (opt-val gnc:pagename-general optname-price-source)
-           (opt-val gnc:pagename-general optname-currency)
+           (opt-val pagename-currency optname-price-source)
+           (opt-val pagename-currency optname-currency)
            (gnc:accounts-get-commodities c_account_1 #f) enddate #f #f)
           gnc:exchange-by-pricedb-nearest))
 
@@ -1300,7 +1304,7 @@ be excluded from periodic reporting.")
                                          (xaccSplitGetAmount s))))
            (split-currency (compose xaccAccountGetCommodity xaccSplitGetAccount))
            (row-currency (lambda (s) (if (column-uses? 'common-currency)
-                                         (opt-val gnc:pagename-general optname-currency)
+                                         (opt-val pagename-currency optname-currency)
                                          (split-currency s))))
            (friendly-debit (lambda (a) (gnc-account-get-debit-string (xaccAccountGetType a))))
            (friendly-credit (lambda (a) (gnc-account-get-credit-string (xaccAccountGetType a))))
@@ -1310,7 +1314,7 @@ be excluded from periodic reporting.")
                                 (if (column-uses? 'common-currency)
                                     (format #f " (~a)"
                                             (gnc-commodity-get-mnemonic
-                                             (opt-val gnc:pagename-general
+                                             (opt-val pagename-currency
                                                       optname-currency)))
                                     ""))))
            ;; For conversion to row-currency. Use midday as the

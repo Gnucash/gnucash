@@ -1681,6 +1681,10 @@ the option '~a'."))
       ("Void Transactions" "Filter" "Void Transactions")
       ("Account Substring" "Filter" "Account Name Filter")
       ("Enable links" #f "Enable Links")
+      ;; trep-engine: moved currency options to own tab
+      ("Common Currency" "Currency" "Common Currency")
+      ("Show original currency amount" "Currency" "Show original currency amount")
+      ("Report's currency" "Currency" "Report's currency")
       ;; new-owner-report.scm, renamed Oct 2020 to differentiate with
       ;; Document Links:
       ("Links" #f "Transaction Links")
@@ -1708,7 +1712,7 @@ the option '~a'."))
                  (and name-match
                       (let ((new-section (car name-match))
                             (new-name (cadr name-match)))
-                        (gnc:debug
+                        (gnc:warn
                          (format #f "option ~a/~a has been renamed to ~a/~a\n"
                                  section name new-section new-name))
                         (cond
