@@ -17,39 +17,26 @@
 
 (define-module (gnucash utilities))
 
-;; Turn off the scheme compiler's "possibly unbound variable" warnings.
-;; In guile 2.0 we get nearly 7500 of them loading the scheme files.
-;; This is the default value for auto-compilation-options without "unbound-variable".
-;; See module/ice-9/boot-9.scm  */
-(set! %auto-compilation-options
-  '(#:warnings (arity-mismatch format duplicate-case-datum bad-case-datum)))
-
 (use-modules (gnucash core-utils))
 (use-modules (gnucash engine))
-
-;; Load the srfis (eventually, we should see where these are needed
-;; and only have the use-modules statements in those files).
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Exports
-
-;; from utilities.scm
 (export gnc:warn)
 (export gnc:error)
 (export gnc:msg)
 (export gnc:debug)
+(export gnc:gui-warn)
+(export gnc:gui-error)
+(export gnc:gui-msg)
 (export addto!)
 (export sort-and-delete-duplicates)
 (export gnc:list-flatten)
-
-;; Do this stuff very early -- but other than that, don't add any
-;; executable code until the end of the file if you can help it.
-;; These are needed for a guile 1.3.4 bug
-(debug-enable 'backtrace)
-(read-enable 'positions)
-(debug-set! stack    200000)
+(export traverse-list->vec)
+(export traverse-vec->list)
+(export gnc:substring-replace-from-to)
+(export gnc:substring-replace)
+(export gnc:html-string-sanitize)
 
 (define (strify items)
   (string-join (map (lambda (x) (format #f "~A" x)) items) ""))
@@ -72,9 +59,9 @@
 ;; and will be redefined in UI initialization to display dialog
 ;; messages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define-public (gnc:gui-warn str1 str2) (gnc:warn str1))
-(define-public (gnc:gui-error str1 str2) (gnc:error str1))
-(define-public (gnc:gui-msg str1 str2) (gnc:msg str1))
+(define (gnc:gui-warn str1 str2) (gnc:warn str1))
+(define (gnc:gui-error str1 str2) (gnc:error str1))
+(define (gnc:gui-msg str1 str2) (gnc:msg str1))
 
 (define-syntax-rule (addto! alist element)
   (set! alist (cons element alist)))
@@ -84,12 +71,12 @@
 ;; lists converted vectors to save as json arrays. traverse list
 ;; converting into vectors, and vice versa.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define-public (traverse-list->vec lst)
+(define (traverse-list->vec lst)
   (cond
    ((list? lst) (list->vector (map traverse-list->vec lst)))
    (else lst)))
 
-(define-public (traverse-vec->list vec)
+(define (traverse-vec->list vec)
   (cond
    ((vector? vec) (map traverse-vec->list (vector->list vec)))
    (else vec)))
@@ -134,7 +121,7 @@
 ;;           returns "fooxyzfooxyz".
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-public (gnc:substring-replace s1 s2 s3)
+(define (gnc:substring-replace s1 s2 s3)
   (string-replace-substring s1 s2 s3))
 
 
@@ -151,7 +138,7 @@
 ;; start>1 and end-after<=0 will the replace from "start" until end of file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-public (gnc:substring-replace-from-to s1 s2 s3 start end-after)
+(define (gnc:substring-replace-from-to s1 s2 s3 start end-after)
   (issue-deprecation-warning "gnc:substring-replace-from-to is deprecated in 4.x.")
   (string-replace-substring
    s1 s2 s3 0 (string-length s1) (max 0 (1- start))
@@ -161,7 +148,7 @@
 ;; function to sanitize strings. the resulting string can be safely
 ;; added to html.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define-public (gnc:html-string-sanitize str)
+(define (gnc:html-string-sanitize str)
   (with-output-to-string
     (lambda ()
       (string-for-each
