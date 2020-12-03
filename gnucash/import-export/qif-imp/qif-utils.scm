@@ -23,8 +23,24 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash qif-import qif-utils))
 
+;; We do this initialization here because src/gnome isn't a real module.
+;; Note: Guile 2 needs to find the symbols from the extension at compile time already
+(eval-when (compile load eval expand)
+  (load-extension "libgnc-gnome" "scm_init_sw_gnome_module"))
+
+(use-modules (gnucash utilities))
+(use-modules (sw_gnome))
 (use-modules (srfi srfi-13))
+
+(export qif-import:canceled)
+(export qif-import:check-pause)
+(export qif-import:log)
+(export qif-import:reset-cancel-pause)
+(export qif-import:cancel)
+(export qif-import:canceled)
+(export qif-import:toggle-pause)
 
 (define qif-import:paused #f)
 (define qif-import:canceled #f)
@@ -53,4 +69,3 @@
 (define (qif-import:check-pause progress-dialog)
   (while (and qif-import:paused (not qif-import:canceled))
     (gnc-progress-dialog-update progress-dialog)))
-

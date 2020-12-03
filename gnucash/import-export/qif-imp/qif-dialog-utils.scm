@@ -24,7 +24,44 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+(define-module (gnucash qif-import qif-dialog-utils))
+
+(eval-when (compile load eval expand)
+  (load-extension "libgnc-gnome" "scm_init_sw_gnome_module"))
+
+(use-modules (srfi srfi-1))
+(use-modules (sw_gnome))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash engine))
 (use-modules (gnucash string))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash qif-import qif-objects))
+(use-modules (gnucash qif-import qif-guess-map))
+
+(export default-capital-return-acct)
+(export default-cglong-acct)
+(export default-cgmid-acct)
+(export default-cgshort-acct)
+(export default-commission-acct)
+(export default-dividend-acct)
+(export default-equity-account)
+(export default-equity-holding)
+(export default-interest-acct)
+(export default-margin-interest-acct)
+(export default-stock-acct)
+(export default-unspec-acct)
+(export qif-dialog:make-account-display)
+(export qif-dialog:make-category-display)
+(export qif-dialog:make-memo-display)
+(export qif-dialog:qif-file-loaded?)
+(export qif-dialog:unload-qif-file)
+(export qif-import:any-new-accts?)
+(export qif-import:get-account-name)
+(export qif-import:update-security-hash)
+(export qif-import:fix-from-acct)
+(export qif-import:get-all-accts)
+(export qif-import:refresh-match-selection)
 
 (define (default-stock-acct brokerage security)
   (string-append brokerage (gnc-get-account-separator-string) security))

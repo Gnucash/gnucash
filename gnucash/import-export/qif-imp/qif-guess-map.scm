@@ -24,8 +24,36 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+(define-module (gnucash qif-import qif-guess-map))
+
+(eval-when (compile load eval expand)
+  (load-extension "libgnc-gnome" "scm_init_sw_gnome_module"))
+
+(use-modules (gnucash utilities))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash engine))
+(use-modules (gnucash qif-import qif-objects))
+(use-modules (gnucash qif-import qif-dialog-utils))
+
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 match))
+
+(export GNC-ASSET-TYPE)
+(export GNC-BANK-TYPE)
+(export GNC-CASH-TYPE)
+(export GNC-CCARD-TYPE)
+(export GNC-EQUITY-TYPE)
+(export GNC-EXPENSE-TYPE)
+(export GNC-INCOME-TYPE)
+(export GNC-LIABILITY-TYPE)
+(export GNC-MUTUAL-TYPE)
+(export GNC-PAYABLE-TYPE)
+(export GNC-RECEIVABLE-TYPE)
+(export GNC-STOCK-TYPE)
+(export qif-import:guess-acct)
+(export qif-import:load-map-prefs)
+(export qif-import:save-map-prefs)
 
 (define GNC-BANK-TYPE 0)
 (define GNC-CASH-TYPE 1)
