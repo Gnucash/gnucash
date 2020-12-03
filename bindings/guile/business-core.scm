@@ -17,7 +17,21 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash engine business-core))
+
+(eval-when (compile load eval expand)
+  (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
+
+(use-modules (sw_engine))
 (use-modules (srfi srfi-1))
+
+(export gnc:owner-get-address)
+(export gnc:owner-get-name-dep)
+(export gnc:owner-get-address-dep)
+(export gnc:owner-get-name-and-address-dep)
+(export gnc:owner-get-owner-id)
+(export gnc:owner-from-split)
+(export gnc:split->owner)
 
 (define (gnc:owner-get-address owner)
   (let ((type (gncOwnerGetType owner)))

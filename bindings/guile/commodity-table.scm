@@ -23,6 +23,14 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash engine commodity-table))
+
+(export GNC_COMMODITY_NS_CURRENCY)
+(export GNC_COMMODITY_NS_NASDAQ)
+(export GNC_COMMODITY_NS_NYSE)
+(export GNC_COMMODITY_NS_AMEX)
+(export GNC_COMMODITY_NS_EUREX)
+(export GNC_COMMODITY_NS_MUTUAL)
 
 (define GNC_COMMODITY_NS_CURRENCY "CURRENCY")
 
