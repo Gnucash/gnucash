@@ -15,7 +15,18 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(define-module (gnucash app-utils c-interface))
+
 (use-modules (ice-9 match))
+(use-modules (gnucash core-utils)
+             (gnucash utilities))
+
+(export gnc:make-string-database)
+(export gnc:call-with-error-handling)
+(export gnc:apply-with-error-handling)
+(export gnc:eval-string-with-error-handling)
+(export gnc:backtrace-if-exception)
+(export gnc:last-captured-error)
 
 (define (gnc:call-with-error-handling cmd args)
   (let ((captured-stack #f)
@@ -71,7 +82,7 @@
      (when (defined? 'gnc:warn) (gnc:warn captured-error))
      #f)))
 
-(define-public gnc:last-captured-error "")
+(define gnc:last-captured-error "")
 
 ;; This database can be used to store and retrieve translatable
 ;; strings. Strings that are returned by the lookup function are
