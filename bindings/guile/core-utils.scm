@@ -24,24 +24,35 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define-module (gnucash core-utils)
-  #:export (N_
-            G_
-            NG_
-            C_
-            gnc:string-locale<?
-            gnc:string-locale>?
-            gnc:version))
+(define-module (gnucash core-utils))
 
-;; Guile 2 needs to find the symbols from the extension at compile time already
 (eval-when (compile load eval expand)
   (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
-(use-modules (sw_core_utils))
+
 (use-modules (ice-9 i18n))
 
-;; Export the swig-wrapped symbols in the public interface of this module
-(module-use! (module-public-interface (current-module))
-             (resolve-interface '(sw_core_utils)))
+(export N_)
+(export G_)
+(export NG_)
+(export C_)
+(export load-and-reexport)
+(export gnc:string-locale<?)
+(export gnc:string-locale>?)
+(export gnc:version)
+
+;; loads modules and re-exports all its public interface into the
+;; current module
+(define-syntax load-and-reexport
+  (syntax-rules ()
+    ((_ (mod ...) ...)
+     (begin
+       (use-modules (mod ...))
+       ...
+       (module-use! (module-public-interface (current-module))
+                    (resolve-interface '(mod ...)))
+       ...))))
+
+(load-and-reexport (sw_core_utils))
 
 (define gnc:version (gnc-version))
 
