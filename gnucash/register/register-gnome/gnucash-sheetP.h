@@ -44,6 +44,7 @@ struct _GnucashSheet
     gpointer popup_data;
 
     Table *table;
+    gboolean read_only;
 
     GtkWidget *reg;
 
