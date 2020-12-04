@@ -1103,7 +1103,7 @@ the option '~a'."))
      (vector (lambda () (length ok-values))
              (lambda (x) (vector-ref (list-ref ok-values x) 0))
              (lambda (x) (vector-ref (list-ref ok-values x) 1))
-             (lambda (x) (vector-ref (ref ok-values x) 2))
+             (lambda (x) (vector-ref (list-ref ok-values x) 2))
              (lambda (x) (gnc:multichoice-list-lookup ok-values x)))
      (lambda () (list-strings ok-values)) #f)))
 
