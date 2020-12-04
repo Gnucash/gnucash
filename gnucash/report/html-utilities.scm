@@ -209,10 +209,10 @@
 (define (gnc:html-make-exchangerates common-commodity exchange-fn accounts)
   (issue-deprecation-warning
    "gnc:html-make-exchangerates is deprecated. use gnc:html-make-rates-table instead.")
-  (let ((comm-list (gnc:accounts-get-commodities accounts common-commodity))
-        (entries (length comm-list))
-        (markup (lambda (c) (gnc:make-html-table-cell/markup "number-cell" c)))
-        (table (gnc:make-html-table)))
+  (let* ((comm-list (gnc:accounts-get-commodities accounts common-commodity))
+         (entries (length comm-list))
+         (markup (lambda (c) (gnc:make-html-table-cell/markup "number-cell" c)))
+         (table (gnc:make-html-table)))
     (unless (= 0 entries)
       (for-each
        (lambda (commodity)
