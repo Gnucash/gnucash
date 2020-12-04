@@ -22,6 +22,8 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ;; 02111-1307 USA
 
+(define-module (gnucash eguile eguile-utilities))
+
 (use-modules (ice-9 match))
 ; using all of these seems like overkill -- 
 ; not sure which are really required
