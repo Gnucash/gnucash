@@ -15,40 +15,30 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(define (gnc:make-extension
-	 ;; The type of extension item, either 'menu, 'menu-item, or 'separator
-         type
-         ;; The name of the extension in the menu
-         name
-         ;; The guid of object the menu will refer to
-         guid
-         ;; The tooltip
-         documentation-string
-         ;; A list of names indicating the menus under which this item is
-         ;; located. The last item indicates the item *after* which this
-         ;; extension will go.
-         path
-         ;; The script to call when the menu item is selected
-         script)
-  (vector type
-          name
-          guid
-          documentation-string
-          path
-          script))
+(define-module (gnucash gnome-utils gnc-menu-extensions))
 
-(define (gnc:extension-type extension)
-  (vector-ref extension 0))
-(define (gnc:extension-name extension)
-  (vector-ref extension 1))
-(define (gnc:extension-guid extension)
-  (vector-ref extension 2))
-(define (gnc:extension-documentation extension)
-  (vector-ref extension 3))
-(define (gnc:extension-path extension)
-  (vector-ref extension 4))
-(define (gnc:extension-script extension)
-  (vector-ref extension 5))
+(use-modules (srfi srfi-9))
+
+(export gnc:extension-documentation)
+(export gnc:extension-guid)
+(export gnc:extension-name)
+(export gnc:extension-path)
+(export gnc:extension-script)
+(export gnc:extension-type)
+(export gnc:make-extension)
+(export gnc:make-menu)
+(export gnc:make-menu-item)
+(export gnc:make-separator)
+
+(define-record-type :extension
+  (gnc:make-extension type name guid documentation-string path script)
+  :extension?
+  (type gnc:extension-type)
+  (name gnc:extension-name)
+  (guid gnc:extension-guid)
+  (documentation-string gnc:extension-documentation)
+  (path gnc:extension-path)
+  (script gnc:extension-script))
 
 (define (gnc:make-menu-item name guid documentation-string path script)
   (gnc:make-extension 'menu-item name guid documentation-string path script))
