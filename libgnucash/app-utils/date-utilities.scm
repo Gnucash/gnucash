@@ -68,7 +68,7 @@
   (gnc-print-time64 (gnc-mktime datevec) "%Y"))
 
 (define (gnc:date-get-quarter-string datevec)
-  (format #f "Q~d" (gnc:date-get-quarter datevec)))
+  (format #f "Q~a" (gnc:date-get-quarter datevec)))
 
 (define (gnc:date-get-quarter-year-string datevec)
   (string-append 

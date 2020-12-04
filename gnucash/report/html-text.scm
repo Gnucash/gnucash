@@ -133,7 +133,7 @@
             (apply string-append
                    (gnc:html-document-tree-collapse rendered-elt)))
            (#t 
-            (format "hold on there podner. form='~s'\n" rendered-elt)
+            (format #f "hold on there podner. form=~s\n" rendered-elt)
             ""))))
       entities))))
 
