@@ -249,17 +249,6 @@
        (set! rownum (+ 1 rownum)))
      newcol)))
 
-(define (gnc:not-all-zeros data)
-  (define (myor list)
-    (begin 
-      (gnc:debug "list" list)
-      (if (null? list) #f
-	  (or (car list) (myor (cdr list))))))
-
-  (cond ((number? data) (not (= 0 data)))
-	((list? data) (myor (map gnc:not-all-zeros data)))
-	(else #f)))
-
 (define (gnc:html-barchart-prepend-column! barchart newcol)
   (let ((rows (gnc:html-barchart-data barchart))
         (this-row #f)

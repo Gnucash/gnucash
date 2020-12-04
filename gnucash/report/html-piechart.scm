@@ -151,14 +151,6 @@
 (define gnc:html-piechart-set-button-3-legend-urls!
   (record-modifier <html-piechart> 'button-3-legend-urls))
 
-(define (gnc:not-all-zeros data)
-  (define (myor list)
-    (if (null? list) #f
-        (or (car list) (myor (cdr list)))))
-  (cond ((number? data) (not (= 0 data)))
-	((list? data) (myor (map gnc:not-all-zeros data)))
-	(else #f)))
-
 (define (gnc:html-piechart-render piechart doc)
   (let* ((chart (gnc:make-html-chart))
          (title (gnc:html-piechart-title piechart))

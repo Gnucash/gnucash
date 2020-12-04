@@ -974,6 +974,12 @@ query instead.")
 
 ;; ***************************************************************************
 
+(define (gnc:not-all-zeros data)
+  (cond
+   ((number? data) (not (= 0 data)))
+   ((pair? data) (any gnc:not-all-zeros data))
+   (else #f)))
+
 ;; Adds "file:///" to the beginning of a URL if it doesn't already exist
 ;;
 ;; @param url URL

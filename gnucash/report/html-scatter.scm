@@ -132,14 +132,6 @@
        scatter
        (cons newpoint (gnc:html-scatter-data scatter)))))
 
-(define (gnc:not-all-zeros data)
-  (define (myor list)
-    (if (null? list) #f
-        (or (car list) (myor (cdr list)))))
-  (cond ((number? data) (not (= 0 data)))
-	((list? data) (myor (map gnc:not-all-zeros data)))
-	(else #f)))
-
 ;; The Renderer
 (define (gnc:html-scatter-render scatter doc)
   (let* ((chart (gnc:make-html-chart))
