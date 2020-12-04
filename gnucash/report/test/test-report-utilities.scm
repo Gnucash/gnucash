@@ -521,6 +521,26 @@
       5
       (gnc:get-current-account-tree-depth))
 
+    (test-equal "gnc:not-all-zeros #t"
+      #t
+      (gnc:not-all-zeros '((((((1 2 3) 3 5 6 ((4 8))) (2 3)) (3 4 (5)))))))
+
+    (test-equal "gnc:not-all-zeros #f"
+      #f
+      (gnc:not-all-zeros '((((((0 0 0) 0 0 0 ((0 0))) (0 0)) (0 0 (0)))))))
+
+    (test-equal "gnc:not-all-zeros #f"
+      #f
+      (gnc:not-all-zeros 'sym))
+
+    (test-equal "gnc:not-all-zeros #f"
+      #f
+      (gnc:not-all-zeros '()))
+
+    (test-equal "gnc:not-all-zeros #t"
+      #t
+      (gnc:not-all-zeros '(1)))
+
     (test-equal "gnc:accounts-and-all-descendants"
       (list (account-lookup "GBP Bank")
             (account-lookup "GBP Savings")
