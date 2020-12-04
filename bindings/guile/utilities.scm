@@ -76,10 +76,8 @@
 (define-public (gnc:gui-error str1 str2) (gnc:error str1))
 (define-public (gnc:gui-msg str1 str2) (gnc:msg str1))
 
-(define-syntax addto!
-  (syntax-rules ()
-    ((addto! alist element)
-     (set! alist (cons element alist)))))
+(define-syntax-rule (addto! alist element)
+  (set! alist (cons element alist)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; pair of utility functions for use with guile-json which requires
