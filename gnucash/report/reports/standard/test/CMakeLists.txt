@@ -34,7 +34,7 @@ set(GUILE_DEPENDS
   scm-core-utils
   scm-test-report
   scm-reports
-  scm-reports-standard-with-exposed-generator-links
+  scm-reports-standard-with-exposed-generator
   scm-report-stylesheets
   )
 
