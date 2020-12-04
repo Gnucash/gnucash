@@ -49,7 +49,7 @@
 (define G_ gnc:gettext)
 (define NG_ gnc:ngettext)
 (define C_ gnc:C-gettext)
-(define-syntax-rule (N_ x) x)
+(define N_ identity)
 
 ;; the following will define _ to call gnc:gettext for guile up to
 ;; 2.2. It may be removed in the future when minimum guile is 3.0.
