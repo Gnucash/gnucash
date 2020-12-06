@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 3.10\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-11-26 14:29+0100\n"
+"POT-Creation-Date: 2020-12-06 18:14+0100\n"
 "PO-Revision-Date: 2020-04-18 20:54+0300\n"
 "Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: \n"
@@ -450,8 +450,14 @@ msgstr "tilikirja"
 msgid "liabilities/equity"
 msgstr "vastattavat/oma pääoma"
 
-#. "A sum of money that is lent (by a bank)"
+#. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 msgid "loan"
+msgstr "laina"
+
+#. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
+#, fuzzy
+#| msgid "loan"
+msgid "loan: APR"
 msgstr "laina"
 
 #. "The money lost in business activity"
@@ -488,6 +494,14 @@ msgstr "Erittely"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
+msgstr ""
+
+#. "Adjustable Rate Mortgage"
+msgid "mortgage: ARM"
+msgstr ""
+
+#. "Fixed Rate Mortgage"
+msgid "mortgage: FRM"
 msgstr ""
 
 #. "e.g. USD, DEM, see Currency."

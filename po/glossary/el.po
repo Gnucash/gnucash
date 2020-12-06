@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gnucash-glossary 1.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-11-26 14:29+0100\n"
+"POT-Creation-Date: 2020-12-06 18:14+0100\n"
 "PO-Revision-Date: 2001-12-28 00:17+0000\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -523,9 +523,14 @@ msgstr "Επικεφαλίδα"
 msgid "liabilities/equity"
 msgstr ""
 
-#. "A sum of money that is lent (by a bank)"
+#. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 #, fuzzy
 msgid "loan"
+msgstr "Κορεάτικα"
+
+#. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
+#, fuzzy
+msgid "loan: APR"
 msgstr "Κορεάτικα"
 
 #
@@ -574,6 +579,14 @@ msgstr "Μνήμη"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
+msgstr ""
+
+#. "Adjustable Rate Mortgage"
+msgid "mortgage: ARM"
+msgstr ""
+
+#. "Fixed Rate Mortgage"
+msgid "mortgage: FRM"
 msgstr ""
 
 #. "e.g. USD, DEM, see Currency."

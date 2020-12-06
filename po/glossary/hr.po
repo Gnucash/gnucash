@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash Glossary\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-11-26 14:29+0100\n"
+"POT-Creation-Date: 2020-12-06 18:14+0100\n"
 "PO-Revision-Date: 2020-11-30 13:59+0100\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
@@ -453,8 +453,14 @@ msgstr "glavna knjiga"
 msgid "liabilities/equity"
 msgstr "obveze/kapital"
 
-#. "A sum of money that is lent (by a bank)"
+#. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 msgid "loan"
+msgstr "kredit/zajam"
+
+#. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
+#, fuzzy
+#| msgid "loan"
+msgid "loan: APR"
 msgstr "kredit/zajam"
 
 #. "The money lost in business activity"
@@ -491,6 +497,18 @@ msgstr "Zabilješka"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
+msgstr "Hipoteka"
+
+#. "Adjustable Rate Mortgage"
+#, fuzzy
+#| msgid "Mortgage"
+msgid "mortgage: ARM"
+msgstr "Hipoteka"
+
+#. "Fixed Rate Mortgage"
+#, fuzzy
+#| msgid "Mortgage"
+msgid "mortgage: FRM"
 msgstr "Hipoteka"
 
 #. "e.g. USD, DEM, see Currency."
