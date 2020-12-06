@@ -1126,6 +1126,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
             GtkAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
             gtk_action_set_sensitive (action, TRUE);
         }
+        main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(page), FALSE);
 
         if (trans)
             read_only = xaccTransIsReadonlyByPostedDate (trans);
@@ -1209,6 +1210,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
             GtkAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
             gtk_action_set_sensitive (action, FALSE);
         }
+        main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(page), TRUE);
     }
 
     /* Modifying action descriptions based on cursor class */
@@ -3512,6 +3514,27 @@ gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page)
     LEAVE (" ");
 }
 
+
+static void
+gnc_plugin_page_register_update_page_icon (GncPluginPage* plugin_page)
+{
+    GncPluginPageRegisterPrivate* priv;
+    gboolean read_only;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+
+    if (qof_book_is_readonly (gnc_get_current_book()) ||
+        gnc_split_reg_get_read_only (priv->gsr))
+        read_only = TRUE;
+    else
+        read_only = FALSE;
+
+    main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(plugin_page),
+                                                read_only);
+}
+
 /************************************************************/
 /*                  Report Helper Functions                 */
 /************************************************************/
@@ -5393,6 +5416,9 @@ gnc_plugin_page_register_event_handler (QofInstance* entity,
             main_window_update_page_name (GNC_PLUGIN_PAGE (page), label);
             color = gnc_plugin_page_register_get_tab_color (GNC_PLUGIN_PAGE (page));
             main_window_update_page_color (GNC_PLUGIN_PAGE (page), color);
+            // update page icon if read only registers
+            gnc_plugin_page_register_update_page_icon (GNC_PLUGIN_PAGE (page));
+
             g_free (color);
             g_free (label);
         }
