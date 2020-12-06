@@ -1269,7 +1269,7 @@ many months before the current month</property>
                     <property name="tooltip_markup">How many automatic decimal places will be filled in.</property>
                     <property name="tooltip_text" translatable="yes">How many automatic decimal places will be filled in.</property>
                     <property name="invisible_char">●</property>
-                    <property name="text" translatable="yes">2</property>
+                    <property name="text">2</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">auto_decimal_places_adj</property>
@@ -2081,7 +2081,7 @@ many months before the current month</property>
                     <property name="tooltip_markup">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won&amp;apos;t match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
                     <property name="tooltip_text" translatable="yes">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
                     <property name="invisible_char">●</property>
-                    <property name="text" translatable="yes">2,00</property>
+                    <property name="text">2.00</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">atm_fee_adj</property>
@@ -3518,7 +3518,7 @@ many months before the current month</property>
                         <property name="tooltip_markup">If the text in the tab is longer than this value (the test is approximate) then the tab label will have the middle cut and replaced with an ellipsis.</property>
                         <property name="tooltip_text" translatable="yes">If the text in the tab is longer than this value (the test is approximate) then the tab label will have the middle cut and replaced with an ellipsis.</property>
                         <property name="invisible_char">●</property>
-                        <property name="text" translatable="yes">30</property>
+                        <property name="text">30</property>
                         <property name="primary_icon_activatable">False</property>
                         <property name="secondary_icon_activatable">False</property>
                         <property name="adjustment">tab_width_adj</property>

@@ -761,7 +761,7 @@ If 0, all previous days included</property>
     </child>
   </object>
   <object class="GtkEntryBuffer" id="entrybuffer1">
-    <property name="text" translatable="yes">0</property>
+    <property name="text">0</property>
   </object>
   <object class="GtkDialog" id="sort_by_dialog">
     <property name="can_focus">False</property>
