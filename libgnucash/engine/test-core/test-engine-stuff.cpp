@@ -1642,7 +1642,8 @@ set_query_sort (QofQuery *q, sort_type_t sort_code)
     case BY_DATE:
         p1 = g_slist_prepend (p1, const_cast<char*>(TRANS_DATE_POSTED));
         p1 = g_slist_prepend (p1, const_cast<char*>(SPLIT_TRANS));
-        p2 = standard;
+        p2 = g_slist_prepend (p2, const_cast<char*>(TRANS_NUM));
+        p3 = standard;
         break;
     case BY_DATE_ENTERED:
         p1 = g_slist_prepend (p1, const_cast<char*>(TRANS_DATE_ENTERED));

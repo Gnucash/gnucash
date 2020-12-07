@@ -2006,7 +2006,8 @@ gnc_split_reg_sort_force( GNCSplitReg *gsr, SortType sort_code, gboolean force )
     case BY_DATE:
         p1 = g_slist_prepend (p1, TRANS_DATE_POSTED);
         p1 = g_slist_prepend (p1, SPLIT_TRANS);
-        p2 = standard;
+        p2 = g_slist_prepend (p2, TRANS_NUM);
+        p3 = standard;
         show_present_divider = TRUE;
         break;
     case BY_DATE_ENTERED:
