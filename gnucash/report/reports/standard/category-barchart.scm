@@ -572,6 +572,12 @@ developing over time"))
                               ((null? (gnc-account-get-children acct))
                                (gnc:account-anchor-text acct))
 
+                              ;; because the tree-depth option for
+                              ;; accounts/levels goes up to 6. FIXME:
+                              ;; magic number.
+                              ((>= tree-depth 6)
+                               (gnc:account-anchor-text acct))
+
                               (else
                                (gnc:make-report-anchor
                                 reportguid report-obj
