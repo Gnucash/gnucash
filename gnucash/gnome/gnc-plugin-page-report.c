@@ -377,6 +377,8 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
 
+    priv->loaded = TRUE;
+
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
 
@@ -385,8 +387,6 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
     gnc_html_show_url(priv->html, type, url_location, url_label, 0);
     g_free(url_location);
-
-    priv->loaded = TRUE;
 
     gnc_plugin_page_report_set_progressbar( page, FALSE );
 
