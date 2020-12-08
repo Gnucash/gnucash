@@ -633,25 +633,26 @@
         (gnc:account-accumulate-at-dates bank1 dates))
 
       (env-transfer env 15 01 1970 income bank1 10)
-      (env-transfer env 15 02 1970 income bank1 10)
-      (env-transfer env 15 03 1970 income bank1 10)
-      (let ((clos (env-transfer env 18 03 1970 income bank1 10)))
+      (env-transfer env 15 02 1970 income bank1 20)
+      (env-transfer env 15 03 1970 income bank1 40)
+
+      (let ((clos (env-transfer env 18 03 1970 income bank1 80)))
         (xaccTransSetIsClosingTxn clos #t))
 
-      (env-transfer env 15 12 1969 income bank2 10)
-      (env-transfer env 17 12 1969 income bank2 10)
-      (env-transfer env 15 02 1970 income bank2 10)
+      (env-transfer env 15 12 1969 income bank2 11)
+      (env-transfer env 17 12 1969 income bank2 21)
+      (env-transfer env 15 02 1970 income bank2 41)
 
-      (env-transfer env 15 03 1970 income bank3 10)
+      (env-transfer env 15 03 1970 income bank3 14)
 
-      (env-transfer env 15 01 1970 income bank4 10)
+      (env-transfer env 15 01 1970 income bank4 18)
 
       (test-equal "1 txn in each slot"
-        '(("USD" . 0) ("USD" . 10) ("USD" . 20) ("USD" . 40))
+        '(("USD" . 0) ("USD" . 10) ("USD" . 30) ("USD" . 150))
         (map monetary->pair (gnc:account-get-balances-at-dates bank1 dates)))
 
       (test-equal "1 txn in each slot, tests #:split->amount to ignore closing"
-        '(("USD" . 0) ("USD" . 10) ("USD" . 20) ("USD" . 30))
+        '(("USD" . 0) ("USD" . 10) ("USD" . 30) ("USD" . 70))
         (map monetary->pair
              (gnc:account-get-balances-at-dates
               bank1 dates #:split->amount
@@ -660,31 +661,31 @@
                      (xaccSplitGetAmount s))))))
 
       (test-equal "2 txn before start, 1 in middle"
-        '(("USD" . 20) ("USD" . 20) ("USD" . 30) ("USD" . 30))
+        '(("USD" . 32) ("USD" . 32) ("USD" . 73) ("USD" . 73))
         (map monetary->pair (gnc:account-get-balances-at-dates bank2 dates)))
 
       (test-equal "1 txn in late slot"
-        '(("USD" . 0) ("USD" . 0) ("USD" . 0) ("USD" . 10))
+        '(("USD" . 0) ("USD" . 0) ("USD" . 0) ("USD" . 14))
         (map monetary->pair (gnc:account-get-balances-at-dates bank3 dates)))
 
       (test-equal "1 txn in early slot"
-        '(("USD" . 0) ("USD" . 10) ("USD" . 10) ("USD" . 10))
+        '(("USD" . 0) ("USD" . 18) ("USD" . 18) ("USD" . 18))
         (map monetary->pair (gnc:account-get-balances-at-dates bank4 dates)))
 
       (test-equal "1 txn in each slot"
-        '(#f 10 20 40)
+        '(#f 10 30 150)
         (gnc:account-accumulate-at-dates bank1 dates))
 
       (test-equal "2 txn before start, 1 in middle"
-        '(20 20 30 30)
+        '(32 32 73 73)
         (gnc:account-accumulate-at-dates bank2 dates))
 
       (test-equal "1 txn in late slot"
-        '(#f #f #f 10)
+        '(#f #f #f 14)
         (gnc:account-accumulate-at-dates bank3 dates))
 
       (test-equal "1 txn in late slot, tests #:nosplit->elt"
-        '(x x x 10)
+        '(x x x 14)
         (gnc:account-accumulate-at-dates bank3 dates #:nosplit->elt 'x))
 
       (test-equal "1 txn in late slot, tests #:split->elt"
@@ -692,7 +693,7 @@
         (gnc:account-accumulate-at-dates bank3 dates #:split->elt (const 'y)))
 
       (test-equal "1 txn in early slot"
-        '(#f 10 10 10)
+        '(#f 18 18 18)
         (gnc:account-accumulate-at-dates bank4 dates))
 
       ;; Tests split->date sorting. note the 3 txns created below are
