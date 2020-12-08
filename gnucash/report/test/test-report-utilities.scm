@@ -634,7 +634,7 @@
 
       (env-transfer env 15 01 1970 income bank1 10)
       (env-transfer env 15 02 1970 income bank1 20)
-;      (env-transfer env 15 03 1970 income bank1 40)
+      (env-transfer env 15 03 1970 income bank1 40)
 
       (let ((clos (env-transfer env 18 03 1970 income bank1 80)))
         (xaccTransSetIsClosingTxn clos #t))
@@ -648,11 +648,11 @@
       (env-transfer env 15 01 1970 income bank4 18)
 
       (test-equal "1 txn in each slot"
-        '(("USD" . 0) ("USD" . 10) ("USD" . 30) ("USD" . 110))
+        '(("USD" . 0) ("USD" . 10) ("USD" . 30) ("USD" . 150))
         (map monetary->pair (gnc:account-get-balances-at-dates bank1 dates)))
 
       (test-equal "1 txn in each slot, tests #:split->amount to ignore closing"
-        '(("USD" . 0) ("USD" . 10) ("USD" . 30) ("USD" . 30))
+        '(("USD" . 0) ("USD" . 10) ("USD" . 30) ("USD" . 70))
         (map monetary->pair
              (gnc:account-get-balances-at-dates
               bank1 dates #:split->amount
@@ -673,7 +673,7 @@
         (map monetary->pair (gnc:account-get-balances-at-dates bank4 dates)))
 
       (test-equal "1 txn in each slot"
-        '(#f 10 30 110)
+        '(#f 10 30 150)
         (gnc:account-accumulate-at-dates bank1 dates))
 
       (test-equal "2 txn before start, 1 in middle"
