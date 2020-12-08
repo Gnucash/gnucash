@@ -27,6 +27,12 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 
+(define (gnc:options-fancy-date book)
+  (let ((date-format (gnc:fancy-date-info book gnc:*fancy-date-format*)))
+    (if (boolean? date-format) ;; date-format does not exist
+        (qof-date-format-get-string (qof-date-format-get))
+       date-format)))
+
 (define (gnc:make-invoice-option
 	 section
 	 name

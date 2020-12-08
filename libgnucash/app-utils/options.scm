@@ -1944,12 +1944,6 @@ the option '~a'."))
 (define (gnc:generate-restore-forms options options-string)
   ((options 'generate-restore-forms) options-string))
 
-(define (gnc:options-fancy-date book)
-  (let ((date-format (gnc:fancy-date-info book gnc:*fancy-date-format*)))
-    (if (boolean? date-format) ;; date-format does not exist
-        (qof-date-format-get-string (qof-date-format-get))
-       date-format)))
-
 (define (gnc:options-scm->kvp options book clear-option?)
   (if clear-option?
       (qof-book-options-delete book '()))
