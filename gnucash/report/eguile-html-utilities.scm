@@ -34,6 +34,7 @@
 (use-modules (srfi srfi-13)) ; for extra string functions
 
 (export string-substitute-alist)
+(export font-name-to-style-info-eguile)
 
 (define-public (string-substitute-alist str sub-alist)
   (with-output-to-string
@@ -100,7 +101,7 @@
   (and (defined? 'make-regexp)
        (make-regexp "([[:space:]]+(bold|semi-bold|book|regular|medium|light))?([[:space:]]+(normal|roman|italic|oblique))?([[:space:]]+(condensed))?[[:space:]]+([[:digit:]]+)" regexp/icase)))
 
-(define-public (font-name-to-style-info font-name)
+(define (font-name-to-style-info-eguile font-name)
   ;;; Convert a font name as return by a font option to CSS format.
   ;;; e.g. "URW Bookman L Bold Italic 12" becomes
   ;;; "font-family: URW Bookman L; font-size: 12pt; font-style: italic; font-weight: bold"

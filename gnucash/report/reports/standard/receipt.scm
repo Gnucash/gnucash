@@ -169,9 +169,9 @@
                                       (opt-value displaypage optname-template-file)))
          (opt-css-file              (find-stylesheet
                                       (opt-value displaypage optname-css-file)))
-         (opt-heading-font          (font-name-to-style-info
+         (opt-heading-font          (font-name-to-style-info-eguile
                                       (opt-value displaypage optname-heading-font)))
-         (opt-text-font             (font-name-to-style-info
+         (opt-text-font             (font-name-to-style-info-eguile
                                       (opt-value displaypage optname-text-font)))
          (opt-logofile-header       (opt-value displaypage  optname-logofile-header))
          (opt-logo-width-header     (opt-value displaypage  optname-logo-width-header))
