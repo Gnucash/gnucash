@@ -412,24 +412,24 @@
       ((date . rest)
        (define (before-date? s) (<= (to-date s) date))
        (define (after-date? s) (< date (to-date s)))
-       (match splits
+       (cond
 
-         ;; end of splits, but still has dates. pad with last-result
-         ;; until end of dates.
-         (() (lp '() rest (cons last-result result) last-result))
+        ;; end of splits, but still has dates. pad with last-result
+        ;; until end of dates.
+        ((null? splits) (lp '() rest (cons last-result result) last-result))
 
-         ;; the next split is still before date.
-         ((and (_ (? before-date?) . _) (head . tail))
-          (lp tail dates result (split->elt head)))
+        ;; the next split is still before date.
+        ((and (pair? (cdr splits)) (before-date? (cadr splits)))
+         (lp (cdr splits) dates result (split->elt (car splits))))
 
-         ;; head split after date, accumulate previous result
-         (((? after-date?) . tail)
-          (lp splits rest (cons last-result result) last-result))
+        ;; head split after date, accumulate previous result
+        ((after-date? (car splits))
+         (lp splits rest (cons last-result result) last-result))
 
-         ;; head split before date, next split after date, or end.
-         ((head . tail)
-          (let ((head-result (split->elt head)))
-            (lp tail rest (cons head-result result) head-result))))))))
+        ;; head split before date, next split after date, or end.
+        (else
+         (let ((head-result (split->elt (car splits))))
+           (lp (cdr splits) rest (cons head-result result) head-result))))))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
