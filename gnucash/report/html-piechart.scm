@@ -21,6 +21,44 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash report html-piechart))
+
+(use-modules (gnucash utilities))
+(use-modules (gnucash report html-chart)
+             (gnucash report report-utilities))
+
+(export <html-piechart>)
+(export gnc:html-piechart?)
+(export gnc:make-html-piechart-internal)
+(export gnc:make-html-piechart)
+(export gnc:html-piechart-data)
+(export gnc:html-piechart-set-data!)
+(export gnc:html-piechart-width)
+(export gnc:html-piechart-set-width!)
+(export gnc:html-piechart-height)
+(export gnc:html-piechart-set-height!)
+(export gnc:html-piechart-labels)
+(export gnc:html-piechart-set-labels!)
+(export gnc:html-piechart-colors)
+(export gnc:html-piechart-set-colors!)
+(export gnc:html-piechart-title)
+(export gnc:html-piechart-set-title!)
+(export gnc:html-piechart-subtitle)
+(export gnc:html-piechart-set-subtitle!)
+(export gnc:html-piechart-button-1-slice-urls)
+(export gnc:html-piechart-set-button-1-slice-urls!)
+(export gnc:html-piechart-button-2-slice-urls)
+(export gnc:html-piechart-set-button-2-slice-urls!)
+(export gnc:html-piechart-button-3-slice-urls)
+(export gnc:html-piechart-set-button-3-slice-urls!)
+(export gnc:html-piechart-button-1-legend-urls)
+(export gnc:html-piechart-set-button-1-legend-urls!)
+(export gnc:html-piechart-button-2-legend-urls)
+(export gnc:html-piechart-set-button-2-legend-urls!)
+(export gnc:html-piechart-button-3-legend-urls)
+(export gnc:html-piechart-set-button-3-legend-urls!)
+(export gnc:html-piechart-render)
+
 (define <html-piechart>
   (make-record-type '<html-piechart>
                     '(width

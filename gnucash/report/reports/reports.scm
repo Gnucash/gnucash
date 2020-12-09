@@ -25,6 +25,7 @@
 
 
 (define-module (gnucash reports))
+
 (use-modules (srfi srfi-13))
 (use-modules (srfi srfi-8))
 (use-modules (gnucash app-utils))

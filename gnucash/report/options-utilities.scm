@@ -21,7 +21,22 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash report options-utilities))
+
 (use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+
+(export gnc:options-add-report-date!)
+(export gnc:options-add-date-interval!)
+(export gnc:options-add-interval-choice!)
+(export gnc:options-add-account-levels!)
+(export gnc:options-add-account-selection!)
+(export gnc:options-add-currency!)
+(export gnc:options-add-price-source!)
+(export gnc:options-add-plot-size!)
+(export gnc:options-add-marker-choice!)
+(export gnc:options-add-sort-method!)
+(export gnc:options-add-subtotal-view!)
 
 ;; These are just a bunch of options which were useful in several
 ;; reports and hence they got defined in a separate function.

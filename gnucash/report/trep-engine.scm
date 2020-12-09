@@ -39,10 +39,28 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash report trep-engine))
+
 (use-modules (gnucash core-utils))
+(use-modules (gnucash engine))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash utilities))
+(use-modules (gnucash report report-core)
+             (gnucash report report-utilities)
+             (gnucash report options-utilities)
+             (gnucash report commodity-utilities)
+             (gnucash report html-document)
+             (gnucash report html-style-info)
+             (gnucash report html-utilities)
+             (gnucash report html-table)
+             (gnucash report html-text))
 (use-modules (srfi srfi-11))
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 match))
+
+(export gnc:trep-options-generator)
+(export gnc:trep-renderer)
+(export gnc:lists->csv)
 
 ;; Define the strings here to avoid typos and make changes easier.
 

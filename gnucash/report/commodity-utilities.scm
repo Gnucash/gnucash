@@ -20,8 +20,43 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (ice-9 match))
+(define-module (gnucash report commodity-utilities))
+
+(use-modules (gnucash core-utils))
+(use-modules (gnucash engine))
+(use-modules (gnucash utilities))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report report-utilities))
+
+(use-modules (srfi srfi-1))
 (use-modules (srfi srfi-26))
+(use-modules (ice-9 match))
+
+(export gnc:get-match-commodity-splits)
+(export gnc:get-match-commodity-splits-sorted)
+(export gnc:get-all-commodity-splits )
+(export gnc:exchange-by-euro-numeric)
+(export gnc:get-commodity-totalavg-prices)
+(export gnc:get-commoditylist-totalavg-prices)
+(export gnc:get-commodity-inst-prices)
+(export gnc:pricelist-price-find-nearest)
+(export gnc:pricealist-lookup-nearest-in-time)
+(export gnc:resolve-unknown-comm)
+(export gnc:get-exchange-totals)
+(export gnc:get-exchange-cost-totals)
+(export gnc:make-exchange-alist)
+(export gnc:make-exchange-cost-alist)
+(export gnc:exchange-by-euro)
+(export gnc:exchange-if-same)
+(export gnc:make-exchange-function)
+(export gnc:exchange-by-pricedb-latest )
+(export gnc:exchange-by-pricedb-nearest)
+(export gnc:exchange-by-pricealist-nearest)
+(export gnc:case-exchange-fn)
+(export gnc:case-exchange-time-fn)
+(export gnc:case-price-fn)
+(export gnc:sum-collector-commodity)
+(export gnc:uniform-commodity?)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get splits with interesting data from accounts.
