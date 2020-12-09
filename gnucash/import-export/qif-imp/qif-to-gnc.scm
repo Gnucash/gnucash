@@ -25,9 +25,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+(define-module (gnucash qif-import qif-to-gnc))
+(eval-when (compile load eval expand)
+  (load-extension "libgnc-gnome" "scm_init_sw_gnome_module"))
+
+(use-modules (sw_gnome))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash engine))
+(use-modules (gnucash utilities))
+(use-modules (gnucash string))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash qif-import qif-dialog-utils))
+(use-modules (gnucash qif-import qif-objects))
+(use-modules (gnucash qif-import qif-utils))
+(use-modules (gnucash qif-import qif-guess-map))
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 match))
-(use-modules (gnucash string))
+
+(export qif-import:qif-to-gnc)
+(export qif-import:qif-to-gnc-undo)
+(export gnc:account-tree-get-transactions)
 
 (define (n- n) (gnc-numeric-neg n))
 (define (nsub a b) (gnc-numeric-sub a b 0 GNC-DENOM-LCD))
@@ -1240,3 +1257,4 @@
       ;; Destroy the accounts
       (xaccAccountBeginEdit root)
       (xaccAccountDestroy root))))
+

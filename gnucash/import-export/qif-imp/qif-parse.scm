@@ -23,8 +23,35 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash qif-import qif-parse))
+(eval-when (compile load eval expand)
+  (load-extension "libgnc-gnome" "scm_init_sw_gnome_module"))
+
+(use-modules (sw_gnome))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash utilities))
+(use-modules (gnucash engine))
+(use-modules (gnucash qif-import qif-guess-map))
 (use-modules (gnucash string))
+(use-modules (srfi srfi-1))
 (use-modules (srfi srfi-13))
+(use-modules (ice-9 regex))
+
+(export qif-parse:check-date-format)
+(export qif-parse:check-number-format)
+(export qif-parse:check-number-formats)
+(export qif-parse:parse-acct-type)
+(export qif-parse:parse-action-field)
+(export qif-parse:parse-bang-field)
+(export qif-parse:parse-cleared-field)
+(export qif-parse:parse-date/format)
+(export qif-parse:parse-number/format)
+(export qif-parse:parse-numbers/format)
+(export qif-parse:print-date)
+(export qif-parse:print-number)
+(export qif-parse:print-numbers)
+(export qif-split:parse-category)
+(export qif-parse:fix-year)
 
 (define regexp-enabled?
   (defined? 'make-regexp))

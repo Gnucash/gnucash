@@ -24,12 +24,31 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash qif-import qif-file))
 
+(eval-when (compile load eval expand)
+  (load-extension "libgnc-gnome" "scm_init_sw_gnome_module"))
+
+(use-modules (sw_gnome))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash engine))
+(use-modules (gnucash utilities))
 (use-modules (gnucash string))
+(use-modules (gnucash app-utils))
 (use-modules (ice-9 regex))
+(use-modules (srfi srfi-1))
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 rdelim))
+(use-modules (gnucash qif-import qif-objects))
+(use-modules (gnucash qif-import qif-utils))
+(use-modules (gnucash qif-import qif-parse))
+(use-modules (gnucash qif-import qif-dialog-utils))
+
+(export qif-file:check-from-acct)
+(export qif-file:parse-fields)
+(export qif-file:parse-fields-results)
+(export qif-file:read-file)
+(export qif-file:reparse-dates)
 
 (define qif-bad-numeric-rexp
   (make-regexp "^\\.\\.\\."))

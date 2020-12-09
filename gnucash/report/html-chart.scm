@@ -24,16 +24,42 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash report html-chart))
+
+(use-modules (gnucash core-utils))
 (use-modules (gnucash json builder))            ;for building JSON options
+(use-modules (gnucash report html-utilities))
 (use-modules (srfi srfi-9))
+(use-modules (ice-9 match))
+
+;; html-chart.scm
+
+(export gnc:html-chart?)
+(export gnc:make-html-chart)
+(export gnc:html-chart-data)
+(export gnc:html-chart-set-data!)
+(export gnc:html-chart-width)
+(export gnc:html-chart-set-width!)
+(export gnc:html-chart-height)
+(export gnc:html-chart-set-height!)
+(export gnc:html-chart-type)
+(export gnc:html-chart-set-type!)
+(export gnc:html-chart-title)
+(export gnc:html-chart-get)
+(export gnc:html-chart-set!)
+(export gnc:html-chart-currency-iso)
+(export gnc:html-chart-set-currency-iso!)
+(export gnc:html-chart-currency-symbol)
+(export gnc:html-chart-set-currency-symbol!)
+(export gnc:html-chart-render)
+(export gnc:html-chart-set-custom-x-axis-ticks?!)
+(export gnc:html-chart-set-custom-y-axis-ticks?!)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; utility functions for nested list handling
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-modules (ice-9 match))
 
 ;; nested-alist-set! parameters are
 ;; lst - a nested alist e.g. (list (cons 'key1 'val1)

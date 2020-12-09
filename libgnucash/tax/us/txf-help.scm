@@ -26,7 +26,9 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash locale us tax txf-help))
 
+(export txf-help-strings)
 (define txf-help-strings
   '(
     (H001 . "Categories marked with a \"&lt;\" or a \"^\", require a Payer identification to be exported.  \"&lt;\" indicates that the name of this account is exported as this Payer ID.  Typically, this is a bank, stock, or mutual fund name.")

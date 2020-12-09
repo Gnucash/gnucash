@@ -31,6 +31,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
+(use-modules (gnucash gnome-utils))
 (use-modules (srfi srfi-9))
 
 (define optname-to-date (N_ "To"))

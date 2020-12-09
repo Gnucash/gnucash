@@ -24,7 +24,25 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash report html-anytag))
+
 (use-modules (srfi srfi-9))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash report html-style-info))
+(use-modules (gnucash report html-document))
+
+(export <html-anytag>)
+(export gnc:html-anytag?)
+(export gnc:html-anytag-data)
+(export gnc:html-anytag-set-data!)
+(export gnc:html-anytag-style)
+(export gnc:html-anytag-append-data!)
+(export gnc:html-anytag-set-style!)
+(export gnc:html-anytag-render div doc)
+(export gnc:make-html-div)
+(export gnc:make-html-div/markup)
+(export gnc:make-html-span)
+(export gnc:make-html-span/markup)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-anytag> class

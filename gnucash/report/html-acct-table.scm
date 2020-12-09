@@ -495,8 +495,42 @@
 ;; user.  This class simply maps its contents to the html-table.
 ;; 
 
+(define-module (gnucash report html-acct-table))
+
 (use-modules (srfi srfi-2))
 (use-modules (srfi srfi-9))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash engine))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report commodity-utilities))
+(use-modules (gnucash report report-utilities))
+(use-modules (gnucash report html-utilities))
+(use-modules (gnucash report html-text))
+(use-modules (gnucash report html-table))
+
+(export <html-acct-table>)
+(export gnc:html-acct-table?)
+(export gnc:_make-html-acct-table_)
+(export gnc:make-html-acct-table)
+(export gnc:make-html-acct-table/env)
+(export gnc:make-html-acct-table/env/accts)
+(export gnc:_html-acct-table-matrix_)
+(export gnc:_html-acct-table-set-matrix!_)
+(export gnc:_html-acct-table-env_)
+(export gnc:_html-acct-table-set-env!_)
+(export gnc:html-acct-table-add-accounts!)
+(export gnc:html-acct-table-num-rows)
+(export gnc:html-acct-table-get-row)
+(export gnc:html-acct-table-get-cell)
+(export gnc:html-acct-table-set-cell!)
+(export gnc:html-acct-table-get-row-env)
+(export gnc:html-acct-table-set-row-env!)
+(export gnc:account-code-less-p)
+(export gnc:account-name-less-p)
+(export gnc:account-path-less-p)
+(export gnc:html-table-add-labeled-amount-line!)
+(export gnc:html-table-add-account-balances)
+(export gnc-commodity-table)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-acct-table> class
@@ -511,6 +545,8 @@
 
 (define (gnc:make-html-acct-table)
   (gnc:_make-html-acct-table_ (gnc:make-html-table) #f))
+
+(define gnc:html-acct-table-set-env! gnc:_html-acct-table-set-env!_)
 
 (define (gnc:make-html-acct-table/env env)
   (let ((acct-table (gnc:make-html-acct-table)))

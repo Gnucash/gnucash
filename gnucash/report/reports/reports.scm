@@ -25,6 +25,7 @@
 
 
 (define-module (gnucash reports))
+
 (use-modules (srfi srfi-13))
 (use-modules (srfi srfi-8))
 (use-modules (gnucash app-utils))
@@ -32,6 +33,9 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash report))
 (use-modules (gnucash utilities))
+(use-modules (gnucash reports standard register))
+(use-modules (gnucash reports standard new-aging))
+(use-modules (gnucash reports standard new-owner-report))
 
 (export gnc:register-report-create)
 (export gnc:invoice-report-create)
@@ -40,20 +44,12 @@
 (export gnc:owner-report-create)
 (export gnc:owner-report-create-with-enddate)
 
-(define report-dirs (list
+(let ((loc-spec (if (string-prefix? "de_DE" (gnc-locale-name)) 'de_DE 'us)))
+  (report-module-loader
+   (list
     '(gnucash reports standard) ; prefix for standard reports included in gnucash
     '(gnucash reports example)  ; rexample for example reports included in gnucash
-))
-
-; Determine which locale-specific prefix to add to the list above
-; and then load all reports found in the given prefixes
-(let* ((loc (gnc-locale-name))
-       (loc-spec (if (string-prefix? "de_DE" loc) 'de_DE 'us))
-       (all-dirs (append report-dirs
-                         `((gnucash reports locale-specific ,loc-spec)))))
-      (report-module-loader all-dirs))
-
-(use-modules (gnucash engine))
+    `(gnucash reports locale-specific ,loc-spec))))
 
 (define (gnc:register-report-create account split query journal? ledger-type?
                                     double? title debit-string credit-string)
@@ -82,10 +78,7 @@
         0
         ))
 
-(use-modules (gnucash reports standard new-aging))
 (define gnc:payables-report-create payables-report-create-internal)
 (define gnc:receivables-report-create receivables-report-create-internal)
-
-(use-modules (gnucash reports standard new-owner-report))
 (define gnc:owner-report-create owner-report-create)
 (define gnc:owner-report-create-with-enddate owner-report-create-with-enddate)

@@ -24,9 +24,22 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash report html-fonts))
+
+(eval-when (compile load eval expand)
+  (load-extension "libgnc-report" "scm_init_sw_report_module"))
+(use-modules (sw_report))
 
 (use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils options))
+(use-modules (gnucash report html-document))
 (use-modules (ice-9 regex))
+
+;; html-fonts.scm
+
+(export register-font-options)
+(export add-css-information-to-doc)
+(export font-name-to-style-info)
 
 (define (string-strip s1 s2)
   (let ((idx (string-contains-ci s1 s2)))

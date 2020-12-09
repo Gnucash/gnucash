@@ -22,15 +22,28 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ;; 02111-1307 USA
 
+(define-module (gnucash eguile eguile-html-utilities))
+
 ; using all of these seems like overkill --
 ; not sure which are really required
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
-
 (use-modules (ice-9 regex))  ; for regular expressions
 (use-modules (srfi srfi-13)) ; for extra string functions
+
+(export string-substitute-alist)
+
+(define-public (string-substitute-alist str sub-alist)
+  (with-output-to-string
+    (lambda ()
+      (string-for-each
+       (lambda (c)
+         (display
+          (or (assv-ref sub-alist c)
+              c)))
+       str))))
 
 (define (string-repeat s n)
   ;; return a string made of n copies of string s
