@@ -27,6 +27,7 @@
 (use-modules (sw_app_utils))
 (use-modules (gnucash app-utils date-utilities))
 (use-modules (gnucash utilities))
+(use-modules (srfi srfi-1))
 (use-modules (ice-9 regex))
 
 (export gnc:color->html)
