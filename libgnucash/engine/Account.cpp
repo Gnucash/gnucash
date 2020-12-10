@@ -75,6 +75,7 @@ static gnc_numeric GetBalanceAsOfDate (Account *acc, time64 date, gboolean igncl
 
 using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
 using ProbabilityVec=std::vector<std::pair<std::string, struct AccountProbability>>;
+using TokenInfoVec=std::vector<struct TokenAccountsInfo>;
 using FlatKvpEntry=std::pair<std::string, KvpValue*>;
 
 enum
@@ -5463,6 +5464,22 @@ build_token_info(char const * suffix, KvpValue * value, TokenAccountsInfo & toke
     }
 }
 
+static TokenInfoVec
+get_token_info(GncImportMatchMap * imap, GList * tokens)
+{
+    TokenInfoVec ret;
+    /* query token frequencies from import match map */
+    for (auto current_token = tokens; current_token; current_token = current_token->next)
+    {
+        TokenAccountsInfo token_info{};
+        auto token_name = static_cast <char const*> (current_token->data);
+        auto path = std::string(IMAP_FRAME_BAYES "/") + token_name + "/";
+        qof_instance_foreach_slot_prefix (QOF_INSTANCE (imap->acc), path, &build_token_info, token_info);
+        ret.push_back(token_info);
+    }
+    return ret;
+}
+
 /** We scale the probability values by probability_factor.
   ie. with probability_factor of 100000, 10% would be
   0.10 * 100000 = 10000 */
@@ -5497,17 +5514,14 @@ highest_probability(FinalProbabilityVec const & probabilities)
 }
 
 static ProbabilityVec
-get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
+get_first_pass_probabilities(TokenInfoVec token_info)
 {
     ProbabilityVec ret;
     /* find the probability for each account that contains any of the tokens
      * in the input tokens list. */
-    for (auto current_token = tokens; current_token; current_token = current_token->next)
+    for (auto const & token : token_info)
     {
-        TokenAccountsInfo tokenInfo{};
-        auto path = std::string{IMAP_FRAME_BAYES "/"} + static_cast <char const *> (current_token->data) + "/";
-        qof_instance_foreach_slot_prefix (QOF_INSTANCE (imap->acc), path, &build_token_info, tokenInfo);
-        for (auto const & current_account_token : tokenInfo.accounts)
+        for (auto const & current_account_token : token.accounts)
         {
             auto item = std::find_if(ret.begin(), ret.end(), [&current_account_token]
                 (std::pair<std::string, AccountProbability> const & a) {
@@ -5516,16 +5530,16 @@ get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
             if (item != ret.end())
             {/* This account is already in the map */
                 item->second.product = ((double)current_account_token.token_count /
-                                      (double)tokenInfo.total_count) * item->second.product;
+                                      (double)token.total_count) * item->second.product;
                 item->second.product_difference = ((double)1 - ((double)current_account_token.token_count /
-                                              (double)tokenInfo.total_count)) * item->second.product_difference;
+                                              (double)token.total_count)) * item->second.product_difference;
             }
             else
             {
                 /* add a new entry */
                 AccountProbability new_probability;
                 new_probability.product = ((double)current_account_token.token_count /
-                                      (double)tokenInfo.total_count);
+                                      (double)token.total_count);
                 new_probability.product_difference = 1 - (new_probability.product);
                 ret.push_back({current_account_token.account_guid, std::move(new_probability)});
             }
@@ -5704,7 +5718,8 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     if (!imap)
         return nullptr;
     check_import_map_data (imap->book);
-    auto first_pass = get_first_pass_probabilities(imap, tokens);
+    auto token_info = get_token_info(imap, tokens);
+    auto first_pass = get_first_pass_probabilities(token_info);
     if (!first_pass.size())
         return nullptr;
     auto final_probabilities = build_probabilities(first_pass);
