@@ -16,8 +16,8 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (define-module (gnucash string))
-(use-modules (srfi srfi-13))
 
+(use-modules (srfi srfi-13))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  gnc:string-rcontains

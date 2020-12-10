@@ -181,7 +181,7 @@
                   <object class="GtkLabel" id="label814">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">1 /</property>
+                    <property name="label">1 /</property>
                     <property name="justify">center</property>
                   </object>
                   <packing>

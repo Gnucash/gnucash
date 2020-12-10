@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-11-26 14:29+0100\n"
+"POT-Creation-Date: 2020-12-06 18:14+0100\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -549,8 +549,12 @@ msgstr ""
 msgid "liabilities/equity"
 msgstr ""
 
-#. "A sum of money that is lent (by a bank)"
+#. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 msgid "loan"
+msgstr ""
+
+#. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
+msgid "loan: APR"
 msgstr ""
 
 #. "The money lost in business activity"
@@ -589,6 +593,14 @@ msgstr "Ubutumwa"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
+msgstr ""
+
+#. "Adjustable Rate Mortgage"
+msgid "mortgage: ARM"
+msgstr ""
+
+#. "Fixed Rate Mortgage"
+msgid "mortgage: FRM"
 msgstr ""
 
 #. "e.g. USD, DEM, see Currency."

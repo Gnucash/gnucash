@@ -69,48 +69,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Define an account record for cacheing information about all the accounts
-(define (accrec-printer accrec port)
-  ;; accrec printer.  This is for debugging reports, so it uses
-  ;; HTML for pretty-printing
-  (set-current-output-port port)
-  (display "accrec:- ")
-  (display " account: ")     (display (dump (accrec-account accrec)))
-  (display " code: ")        (display (accrec-code accrec))
-  (display " placeholder: ") (display (dump (accrec-placeholder? accrec)))
-  (display " namelink: ")    (display (accrec-namelink accrec))
-  (display " commodity: ")   (if (accrec-commodity accrec)
-                               (display (gnc-commodity-get-mnemonic (accrec-commodity accrec)))
-                               (display "#f"))
-  (display " balance-num: ") (if (accrec-balance-num accrec)
-                               (display (gnc-numeric-to-double (accrec-balance-num accrec)))
-                               ;(display (gnc:monetary->string (accrec-balance-mny accrec)))
-                               ;(display (format-monetary (accrec-balance-num accrec))) ; not this -- too fancy
-                               (display "#f"))
-  (display " depth: ")       (display (accrec-depth accrec))
-  (display " treedepth: ")   (display (accrec-treedepth accrec))
-  (display " non-zero?: ")   (display (accrec-non-zero? accrec))
-  (display " summary?: ")    (display (accrec-summary? accrec))
-  (display " subtotal-cc: ") (if (accrec-subtotal-cc accrec)
-                               ;(display (get-comm-coll-total (accrec-subtotal-cc accrec) #f))
-                               ;(display (format-comm-coll (accrec-subtotal-cc accrec)))
-                               (display
-                                 (string-concatenate
-                                   (map-in-order
-                                     (lambda (mny)
-                                       (string-append (gnc:monetary->string mny) " "))
-                                     ((accrec-subtotal-cc accrec) 'format gnc:make-gnc-monetary #f))))
-                               (display "#f"))
-  (display " sublist: ")     (if (accrec-sublist accrec)
-                               (begin
-                                 (display "\n<ul>")
-                                 (for-each
-                                  (lambda (sub-accrec)
-                                     (display "\n<li>")
-                                     (accrec-printer sub-accrec port)
-                                     (display "</li>"))
-                                  (accrec-sublist accrec))
-                                 (display "</ul>"))
-                               (display "#f")))
 
 (define-record-type <accrec>
   (newaccrec-full account code placeholder? namelink commodity balance-num depth
@@ -128,6 +86,51 @@
   (summary? accrec-summary? accrec-set-summary?!)
   (subtotal-cc accrec-subtotal-cc accrec-set-subtotal-cc!)
   (sublist accrec-sublist accrec-set-sublist!))
+
+(define (accrec-printer accrec port)
+  ;; accrec printer.  This is for debugging reports, so it uses
+  ;; HTML for pretty-printing
+  (set-current-output-port port)
+  (display "accrec:- ")
+  (display " account: ")     (display (dump (accrec-account accrec)))
+  (display " code: ")        (display (accrec-code accrec))
+  (display " placeholder: ") (display (dump (accrec-placeholder? accrec)))
+  (display " namelink: ")    (display (accrec-namelink accrec))
+  (display " commodity: ")
+  (if (accrec-commodity accrec)
+      (display (gnc-commodity-get-mnemonic (accrec-commodity accrec)))
+      (display "#f"))
+  (display " balance-num: ")
+  (if (accrec-balance-num accrec)
+      (display (gnc-numeric-to-double (accrec-balance-num accrec)))
+      (display "#f"))
+  (display " depth: ")       (display (accrec-depth accrec))
+  (display " treedepth: ")   (display (accrec-treedepth accrec))
+  (display " non-zero?: ")   (display (accrec-non-zero? accrec))
+  (display " summary?: ")    (display (accrec-summary? accrec))
+  (display " subtotal-cc: ")
+  (if (accrec-subtotal-cc accrec)
+      ;;(display (get-comm-coll-total (accrec-subtotal-cc accrec) #f))
+      ;;(display (format-comm-coll (accrec-subtotal-cc accrec)))
+      (display
+       (string-concatenate
+        (map-in-order
+         (lambda (mny)
+           (string-append (gnc:monetary->string mny) " "))
+         ((accrec-subtotal-cc accrec) 'format gnc:make-gnc-monetary #f))))
+      (display "#f"))
+  (display " sublist: ")
+  (if (accrec-sublist accrec)
+      (begin
+        (display "\n<ul>")
+        (for-each
+         (lambda (sub-accrec)
+           (display "\n<li>")
+           (accrec-printer sub-accrec port)
+           (display "</li>"))
+         (accrec-sublist accrec))
+        (display "</ul>"))
+      (display "#f")))
 
 (define (accrec-balance-mny accrec)
   (gnc:make-gnc-monetary (accrec-commodity accrec) (accrec-balance-num accrec)))

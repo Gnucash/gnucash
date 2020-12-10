@@ -97,7 +97,8 @@ set(GUILE_DEPENDS
 gnc_add_scheme_targets(scm-report-1
     SOURCES "${report_SCHEME_1}"
     OUTPUT_DIR "gnucash/report"
-    DEPENDS "${GUILE_DEPENDS}")
+    DEPENDS "${GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-report-2
     SOURCES "${report_SCHEME_2}"

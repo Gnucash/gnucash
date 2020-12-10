@@ -22,6 +22,8 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ;; 02111-1307 USA
 
+(define-module (gnucash eguile eguile-utilities))
+
 (use-modules (ice-9 match))
 ; using all of these seems like overkill -- 
 ; not sure which are really required
@@ -41,7 +43,7 @@
 
 (define-public (gnc-monetary-neg? monetary)
   ;; return true if the monetary value is negative
-  (issue-deprecated-warning "gnc-monetary-neg? is deprecated")
+  (issue-deprecation-warning "gnc-monetary-neg? is deprecated")
   (negative? (gnc:gnc-monetary-amount monetary)))
 
 ;; 'Safe' versions of cdr and cadr that don't crash

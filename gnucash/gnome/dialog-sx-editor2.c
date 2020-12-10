@@ -227,7 +227,7 @@ editor_cancel_button_clicked_cb (GtkButton *b, GncSxEditorDialog2 *sxed)
 static void
 editor_help_button_clicked_cb (GtkButton *b, GncSxEditorDialog2 *sxed)
 {
-    gnc_gnome_help (HF_HELP, HL_SXEDITOR);
+    gnc_gnome_help (GTK_WINDOW(sxed->dialog), HF_HELP, HL_SXEDITOR);
 }
 
 

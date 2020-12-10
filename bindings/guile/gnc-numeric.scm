@@ -21,7 +21,35 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash engine gnc-numeric))
+
 (use-modules (srfi srfi-9))
+
+(export GNC-RND-FLOOR)
+(export GNC-RND-CEIL)
+(export GNC-RND-TRUNC)
+(export GNC-RND-PROMOTE)
+(export GNC-RND-ROUND-HALF-DOWN)
+(export GNC-RND-ROUND-HALF-UP)
+(export GNC-RND-ROUND)
+(export GNC-RND-NEVER)
+(export GNC-DENOM-AUTO)
+(export GNC-DENOM-REDUCE)
+(export GNC-DENOM-FIXED)
+(export GNC-DENOM-LCD)
+(export GNC-DENOM-SIGFIG)
+(export GNC-DENOM-SIGFIGS)
+(export GNC-ERROR-OK)
+(export GNC-ERROR-ARG)
+(export GNC-ERROR-OVERFLOW)
+(export GNC-ERROR-DENOM-DIFF)
+(export GNC-ERROR-REMAINDER)
+(export :gnc-monetary)
+(export gnc:gnc-monetary?)
+(export gnc:make-gnc-monetary)
+(export gnc:gnc-monetary-commodity)
+(export gnc:gnc-monetary-amount)
+(export gnc:monetary-neg)
 
 ;; use 'logior' in guile to bit-combine RND and DENOM flags.
 

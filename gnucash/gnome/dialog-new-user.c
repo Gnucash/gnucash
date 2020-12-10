@@ -122,7 +122,7 @@ gnc_ui_new_user_ok_cb (GtkWidget * widget, gpointer data)
     }
     else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_user->tutorial_button)))
     {
-        gnc_gnome_help (HF_GUIDE, NULL);
+        gnc_gnome_help (GTK_WINDOW(new_user->window), HF_GUIDE, NULL);
         gncp_new_user_finish ();
     }
     gtk_widget_destroy (new_user->window);

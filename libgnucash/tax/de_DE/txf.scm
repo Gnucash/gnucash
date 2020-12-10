@@ -44,9 +44,33 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash locale de_DE tax txf))
 
 (use-modules (gnucash app-utils))
 (use-modules (srfi srfi-2))
+(use-modules (gnucash locale de_DE tax txf-help))
+
+(export gnc:tax-type-txf-get-code-info)
+(export gnc:txf-get-category-key)
+(export gnc:txf-get-code-info)
+(export gnc:txf-get-codes)
+(export gnc:txf-get-description)
+(export gnc:txf-get-form)
+(export gnc:txf-get-format)
+(export gnc:txf-get-help)
+(export gnc:txf-get-last-year)
+(export gnc:txf-get-line-data)
+(export gnc:txf-get-multiple)
+(export gnc:txf-get-payer-name-source)
+(export gnc:txf-get-tax-entity-type)
+(export gnc:txf-get-tax-entity-type-codes)
+(export gnc:txf-get-tax-entity-type-description)
+(export txf-asset-categories)
+(export txf-expense-categories)
+(export txf-help-categories)
+(export txf-income-categories)
+(export txf-liab-eq-categories)
+(export txf-tax-entity-types)
 
 (define txf-tax-entity-types
   (list

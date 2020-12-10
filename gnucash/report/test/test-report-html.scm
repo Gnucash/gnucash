@@ -1,7 +1,12 @@
+
+(eval-when (compile load eval expand)
+  (load-extension "libgnc-report" "scm_init_sw_report_module"))
+
 (use-modules (gnucash engine))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 (use-modules (gnucash report stylesheets plain))
+(use-modules (gnucash report html-style-sheet))
 (use-modules (srfi srfi-64))
 (use-modules (ice-9 pretty-print))
 (use-modules (sxml simple))

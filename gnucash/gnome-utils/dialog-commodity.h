@@ -57,16 +57,6 @@ typedef enum
 			       anything. */
 } dialog_commodity_mode;
 
-typedef void (* gnc_commodity_help_callback)(void);
-
-/** This function is used to set the action routine for the help
- *  button in the commodity dialog windows.  If the action routine is
- *  unset, the help button will not be visible to the user.
- *
- *  @param cb The function to be called when the user clicks the help
- *  button. */
-void gnc_ui_commodity_set_help_callback (gnc_commodity_help_callback cb);
-
 
 /** @name Commodity Selection */
 /** @{ */

@@ -170,7 +170,6 @@ install(FILES ${app_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnuca
 
 set (app_utils_SCHEME_1
     business-options.scm
-    business-prefs.scm
     c-interface.scm
     date-utilities.scm
     options.scm
@@ -191,11 +190,15 @@ gnc_add_scheme_targets(scm-app-utils-1
     OUTPUT_DIR "gnucash/app-utils"
     DEPENDS "${GUILE_DEPENDS}"
     MAKE_LINKS)
+  gnc_add_scheme_targets(scm-bus-prefs
+    SOURCES "business-prefs.scm"
+    OUTPUT_DIR "gnucash/app-utils"
+    DEPENDS "scm-app-utils-1")
 
 gnc_add_scheme_targets(scm-app-utils-2
     SOURCES "${app_utils_SCHEME_2}"
     OUTPUT_DIR "gnucash"
-    DEPENDS "scm-app-utils-1")
+    DEPENDS "scm-bus-prefs")
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module (OLD_MODULE "migrate-prefs")

@@ -244,9 +244,9 @@ gnc_report_system_help_url_cb (const char *location, const char *label,
     g_return_val_if_fail (location != NULL, FALSE);
 
     if (label && (*label != '\0'))
-        gnc_gnome_help (location, label);
+        gnc_gnome_help (GTK_WINDOW(result->parent), location, label);
     else
-        gnc_gnome_help (location, NULL);
+        gnc_gnome_help (GTK_WINDOW(result->parent), location, NULL);
     return TRUE;
 }
 

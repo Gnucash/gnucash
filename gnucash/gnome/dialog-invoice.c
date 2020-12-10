@@ -544,13 +544,13 @@ gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data)
     switch(owner_type)
     {
         case GNC_OWNER_CUSTOMER:
-           gnc_gnome_help (HF_HELP, HL_USAGE_INVOICE);
+           gnc_gnome_help (GTK_WINDOW(iw->dialog), HF_HELP, HL_USAGE_INVOICE);
            break;
         case GNC_OWNER_VENDOR:
-           gnc_gnome_help (HF_HELP, HL_USAGE_BILL);
+           gnc_gnome_help (GTK_WINDOW(iw->dialog), HF_HELP, HL_USAGE_BILL);
            break;
         default:
-           gnc_gnome_help (HF_HELP, HL_USAGE_VOUCHER);
+           gnc_gnome_help (GTK_WINDOW(iw->dialog), HF_HELP, HL_USAGE_VOUCHER);
            break;
     }
 }

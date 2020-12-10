@@ -19,7 +19,16 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(define-module (gnucash app-utils business-prefs))
+
+(eval-when (compile load eval expand)
+  (load-extension "libgnc-app-utils" "scm_init_sw_app_utils_module"))
+
+(use-modules (sw_app_utils))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash engine))
+(use-modules (gnucash app-utils options))
+(use-modules (gnucash app-utils business-options))
 
 (define gnc:*option-section-counters* (N_ "Counters"))
 

@@ -381,7 +381,7 @@
                           <object class="GtkLabel" id="num_accounts_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">0</property>
+                            <property name="label">0</property>
                             <property name="justify">center</property>
                           </object>
                           <packing>

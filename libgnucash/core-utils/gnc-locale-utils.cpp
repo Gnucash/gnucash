@@ -61,7 +61,7 @@ gnc_get_locale()
 	    char* locale = g_strdup(setlocale(LC_ALL, ""));
 
 	    g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
-		  "Failed to create C++ default locale from"
+		  "Failed to create C++ default locale from "
 		  "%s because %s. Using the 'C' locale for C++.",
 		  locale, err.what());
 	    g_free(locale);

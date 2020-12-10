@@ -408,6 +408,17 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
     color_type = gnc_table_get_color (table, virt_loc, &hatching);
     gnucash_get_style_classes (sheet, stylectxt, color_type, use_neg_class);
 
+    if (sheet->read_only)
+    {
+        if (!gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND))
+            gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_INSENSITIVE);
+    }
+    else
+    {
+        if (gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND))
+            gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_NORMAL);
+    }
+
     // Are we in a read-only row? Then make the background color somewhat more grey.
     if ((virt_loc.phys_row_offset < block->style->nrows)
                 && (table->model->dividing_row_upper >= 0)
@@ -626,6 +637,8 @@ gnucash_sheet_draw_internal (GnucashSheet* sheet, cairo_t* cr,
     sheet_block = find_block_by_pixel (sheet, x, y, &virt_loc.vcell_loc);
     if (!sheet_block || !sheet_block->style)
         return FALSE;
+
+    sheet->read_only = gnc_table_model_read_only (sheet->table->model);
 
     for ( ; virt_loc.vcell_loc.virt_row < sheet->num_virt_rows;
             virt_loc.vcell_loc.virt_row++ )

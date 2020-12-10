@@ -17,10 +17,92 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(use-modules (srfi srfi-26))
+(define-module (gnucash report report-utilities))
+
+(use-modules (srfi srfi-1))
 (use-modules (srfi srfi-13))
+(use-modules (srfi srfi-26))
 (use-modules (ice-9 format))
 (use-modules (ice-9 match))
+
+(use-modules (gnucash utilities))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash engine))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report html-text))
+(use-modules (gnucash report html-acct-table))
+(use-modules (gnucash gnome-utils))
+
+(export list-ref-safe)
+(export list-set-safe!)
+(export gnc:monetary->string)
+(export gnc:not-all-zeros)
+(export gnc:account-has-shares?)
+(export gnc:account-is-stock?)
+(export gnc:account-is-inc-exp?)
+(export gnc:account-full-name<?)
+(export gnc:accounts-get-children-depth)
+(export gnc:filter-accountlist-type)
+(export gnc:decompose-accountlist)
+(export gnc:account-get-type-string-plural)
+(export gnc:accounts-get-commodities)
+(export gnc:get-current-account-tree-depth)
+(export gnc:accounts-and-all-descendants)
+(export gnc:make-value-collector)
+(export gnc:make-commodity-collector)
+(export gnc:collector+)
+(export gnc:collector-)
+(export gnc:commodity-collector-get-negated)
+(export gnc:account-accumulate-at-dates)
+(export gnc:account-get-balance-at-date)
+(export gnc:account-get-balances-at-dates)
+(export gnc:account-get-comm-balance-at-date)
+(export gnc:account-get-comm-value-interval)
+(export gnc:account-get-comm-value-at-date)
+(export gnc:accounts-get-balance-helper)
+(export gnc:accounts-get-comm-total-profit)
+(export gnc:accounts-get-comm-total-income)
+(export gnc:accounts-get-comm-total-expense)
+(export gnc:accounts-get-comm-total-assets)
+(export gnc:account-get-balance-interval)
+(export gnc:account-get-comm-balance-interval)
+(export gnc:accountlist-get-comm-balance-interval)
+(export gnc:accountlist-get-comm-balance-interval-with-closing)
+(export gnc:accountlist-get-comm-balance-at-date)
+(export gnc:accountlist-get-comm-balance-at-date-with-closing)
+(export gnc:query-set-match-non-voids-only!)
+(export gnc:query-set-match-voids-only!)
+(export gnc:split-voided?)
+(export gnc:report-starting)
+(export gnc:report-render-starting)
+(export gnc:report-percent-done)
+(export gnc:report-finished)
+(export gnc:accounts-count-splits)
+(export gnc-commodity-collector-allzero?)
+(export gnc:monetary+)
+(export gnc:monetaries-add)
+(export gnc:account-get-trans-type-balance-interval)
+(export gnc:account-get-trans-type-balance-interval-with-closing)
+(export gnc:account-get-trans-type-splits-interval)
+(export gnc:budget-get-start-date)
+(export gnc:budget-get-end-date)
+(export gnc:budget-account-get-net)
+(export gnc:budget-accountlist-get-net)
+(export gnc:budget-account-get-initial-balance)
+(export gnc:budget-accountlist-get-initial-balance)
+(export budget-account-sum budget)
+(export gnc:get-account-period-rolledup-budget-value)
+(export gnc:budget-account-get-rolledup-net)
+(export gnc:get-assoc-account-balances)
+(export gnc:select-assoc-account-balance)
+(export gnc:get-assoc-account-balances-total)
+(export gnc:multiline-to-html-text)
+(export make-file-url)
+(export gnc:strify)
+(export gnc:pk)
+(export gnc:dump-book)
+(export gnc:dump-invoices)
+(export gnc:dump-lot)
 
 (define (list-ref-safe list elt)
   (and (> (length list) elt)
@@ -412,24 +494,24 @@
       ((date . rest)
        (define (before-date? s) (<= (to-date s) date))
        (define (after-date? s) (< date (to-date s)))
-       (match splits
+       (cond
 
-         ;; end of splits, but still has dates. pad with last-result
-         ;; until end of dates.
-         (() (lp '() rest (cons last-result result) last-result))
+        ;; end of splits, but still has dates. pad with last-result
+        ;; until end of dates.
+        ((null? splits) (lp '() rest (cons last-result result) last-result))
 
-         ;; the next split is still before date.
-         ((and (_ (? before-date?) . _) (head . tail))
-          (lp tail dates result (split->elt head)))
+        ;; the next split is still before date.
+        ((and (pair? (cdr splits)) (before-date? (cadr splits)))
+         (lp (cdr splits) dates result (split->elt (car splits))))
 
-         ;; head split after date, accumulate previous result
-         (((? after-date?) . tail)
-          (lp splits rest (cons last-result result) last-result))
+        ;; head split after date, accumulate previous result
+        ((after-date? (car splits))
+         (lp splits rest (cons last-result result) last-result))
 
-         ;; head split before date, next split after date, or end.
-         ((head . tail)
-          (let ((head-result (split->elt head)))
-            (lp tail rest (cons head-result result) head-result))))))))
+        ;; head split before date, next split after date, or end.
+        (else
+         (let ((head-result (split->elt (car splits))))
+           (lp (cdr splits) rest (cons head-result result) head-result))))))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
@@ -973,6 +1055,12 @@ query instead.")
         (lp (cdr splits)))))))
 
 ;; ***************************************************************************
+
+(define (gnc:not-all-zeros data)
+  (cond
+   ((number? data) (not (= 0 data)))
+   ((pair? data) (any gnc:not-all-zeros data))
+   (else #f)))
 
 ;; Adds "file:///" to the beginning of a URL if it doesn't already exist
 ;;

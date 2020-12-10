@@ -185,6 +185,15 @@ void
 main_window_update_page_color (GncPluginPage *page,
                                const gchar *color_in);
 
+/** Update the icon on the page tabs in the main window.
+ *
+ *  @param page The page to be updated.
+ *  @param read_only If set a padlock icon will be displayed
+ *  for the page tab icon if it had one.
+*/
+void
+main_window_update_page_set_read_only_icon (GncPluginPage *page,
+                                            gboolean read_only);
 
 /** Manually add a set of actions to the specified window.  Plugins
  *  whose user interface is not hard coded (e.g. the menu-additions *

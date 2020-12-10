@@ -24,6 +24,37 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash report html-scatter))
+
+(use-modules (gnucash utilities))
+(use-modules (gnucash report html-chart)
+             (gnucash report report-utilities))
+
+(export <html-scatter>)
+(export gnc:html-scatter-add-datapoint!)
+(export gnc:html-scatter-data)
+(export gnc:html-scatter-height)
+(export gnc:html-scatter-marker)
+(export gnc:html-scatter-markercolor)
+(export gnc:html-scatter-render)
+(export gnc:html-scatter-set-data!)
+(export gnc:html-scatter-set-height!)
+(export gnc:html-scatter-set-marker!)
+(export gnc:html-scatter-set-markercolor!)
+(export gnc:html-scatter-set-subtitle!)
+(export gnc:html-scatter-set-title!)
+(export gnc:html-scatter-set-width!)
+(export gnc:html-scatter-set-x-axis-label!)
+(export gnc:html-scatter-set-y-axis-label!)
+(export gnc:html-scatter-subtitle)
+(export gnc:html-scatter-title)
+(export gnc:html-scatter-width)
+(export gnc:html-scatter-x-axis-label)
+(export gnc:html-scatter-y-axis-label)
+(export gnc:html-scatter?)
+(export gnc:make-html-scatter)
+(export gnc:make-html-scatter-internal)
+
 (define <html-scatter>
   (make-record-type '<html-scatter>
                     '(width

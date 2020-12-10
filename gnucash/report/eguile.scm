@@ -86,18 +86,13 @@
 (use-modules (ice-9 regex))       ; for regular expressions
 (use-modules (ice-9 rdelim))      ; for read-line
 (use-modules (ice-9 local-eval))  ; for the-environment
-(use-modules (gnucash app-utils)) ; for _
+(use-modules (gnucash core-utils)); for G_ N_
 (use-modules (gnucash utilities)) ; for gnc:html-string-sanitize
 
-(define-public (string-substitute-alist str sub-alist)
-  (with-output-to-string
-    (lambda ()
-      (string-for-each
-       (lambda (c)
-         (display
-          (or (assv-ref sub-alist c)
-              c)))
-       str))))
+(load-and-reexport (gnucash eguile eguile-utilities)
+                   (gnucash eguile eguile-html-utilities))
+
+(export eguile-file-to-string)
 
 ;; regexps used to find start and end of code segments
 (define startre (and (defined? 'make-regexp) (make-regexp "<\\?scm(:d)?[[:space:]]")))
@@ -166,8 +161,3 @@
                 (unless (eof-object? next)
                   (local-eval next local-env)
                   (lp (read))))))))))))
-
-(export eguile-file-to-string)
-
-(load-from-path "gnucash/eguile/eguile-utilities")
-(load-from-path "gnucash/eguile/eguile-html-utilities")

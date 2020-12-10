@@ -1,9 +1,9 @@
 name: mac-tests
-on: [push]
+on: [push, pull_request]
 jobs:
   ci_tests_mac:
     runs-on: macos-10.15
-    name: macOS Tests
+    name: macOS CI Tests
     env:
       TZ: America/Los_Angeles
     steps:

@@ -23,7 +23,13 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash report report-register-hooks))
+
+(use-modules (gnucash utilities))
 (use-modules (srfi srfi-9))
+
+(export gnc:register-report-hook)
+(export gnc:lookup-register-report)
 
 (define gnc:*register-report-hash* (make-hash-table 23))
 

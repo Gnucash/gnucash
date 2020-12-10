@@ -24,8 +24,82 @@
 ;; invoice pointers may be used to set the value of the option. The
 ;; option always returns a single invoice pointer.
 
+(define-module (gnucash app-utils business-options))
+
+(eval-when (compile load eval expand)
+  (load-extension "libgnc-app-utils" "scm_init_sw_app_utils_module"))
+
+(use-modules (gnucash core-utils))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
+(use-modules (gnucash app-utils options))
+(use-modules (sw_app_utils))
+
+(export gnc:*business-label*)
+(export gnc:*company-name*)
+(export gnc:*company-addy*)
+(export gnc:*company-id*)
+(export gnc:*company-phone*)
+(export gnc:*company-fax*)
+(export gnc:*company-url*)
+(export gnc:*company-email*)
+(export gnc:*company-contact*)
+(export gnc:*fancy-date-label*)
+(export gnc:*fancy-date-format*)
+(export gnc:*tax-label*)
+(export gnc:*tax-nr-label*)
+(export gnc:company-info)
+(export gnc:fancy-date-info)
+(export gnc:*option-section-budgeting*)
+(export gnc:*option-name-auto-readonly-days*)
+(export gnc:*option-name-num-field-source*)
+(export gnc:*kvp-option-path*)
+(export gnc:options-fancy-date)
+(export gnc:*option-name-default-budget*)
+
+(define gnc:*kvp-option-path* (list KVP-OPTION-PATH))
+(define gnc:*option-name-auto-readonly-days* OPTION-NAME-AUTO-READONLY-DAYS)
+(define gnc:*option-name-num-field-source* OPTION-NAME-NUM-FIELD-SOURCE)
+
+(define gnc:*option-section-budgeting* OPTION-SECTION-BUDGETING)
+(define gnc:*option-name-default-budget* OPTION-NAME-DEFAULT-BUDGET)
+
+(define gnc:*business-label* (N_ "Business"))
+(define gnc:*company-name* (N_ "Company Name"))
+(define gnc:*company-addy* (N_ "Company Address"))
+(define gnc:*company-id* (N_ "Company ID"))
+(define gnc:*company-phone* (N_ "Company Phone Number"))
+(define gnc:*company-fax* (N_ "Company Fax Number"))
+(define gnc:*company-url* (N_ "Company Website URL"))
+(define gnc:*company-email* (N_ "Company Email Address"))
+(define gnc:*company-contact* (N_ "Company Contact Person"))
+(define gnc:*fancy-date-label* (N_ "Fancy Date Format"))
+(define gnc:*fancy-date-format* (N_ "custom"))
+(define gnc:*tax-label* (N_ "Tax"))
+(define gnc:*tax-nr-label* (N_ "Tax Number"))
+
+
+(define (gnc:options-fancy-date book)
+  (let ((date-format (gnc:fancy-date-info book gnc:*fancy-date-format*)))
+    (if (boolean? date-format) ;; date-format does not exist
+        (qof-date-format-get-string (qof-date-format-get))
+       date-format)))
+
+(define (gnc:company-info book key)
+  ;; Access company info from key-value pairs for current book
+ (gnc:option-get-value book gnc:*business-label* key))
+
+(define (gnc:fancy-date-info book key)
+  ;; Access fancy date info from key-value pairs for current book
+ (gnc:option-get-value book gnc:*business-label* (list gnc:*fancy-date-label* key)))
+
+
+
+(define (gnc:options-fancy-date book)
+  (let ((date-format (gnc:fancy-date-info book gnc:*fancy-date-format*)))
+    (if (boolean? date-format) ;; date-format does not exist
+        (qof-date-format-get-string (qof-date-format-get))
+       date-format)))
 
 (define (gnc:make-invoice-option
 	 section

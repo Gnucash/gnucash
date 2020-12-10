@@ -21,6 +21,60 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-module (gnucash report html-barchart))
+
+(use-modules (gnucash utilities))
+(use-modules (gnucash report html-chart)
+             (gnucash report report-utilities))
+
+(export <html-barchart>)
+(export gnc:html-barchart? )
+(export gnc:make-html-barchart-internal)
+(export gnc:make-html-barchart)
+(export gnc:html-barchart-data)
+(export gnc:html-barchart-set-data!)
+(export gnc:html-barchart-width)
+(export gnc:html-barchart-set-width!)
+(export gnc:html-barchart-height)
+(export gnc:html-barchart-set-height!)
+(export gnc:html-barchart-x-axis-label)
+(export gnc:html-barchart-set-x-axis-label!)
+(export gnc:html-barchart-y-axis-label)
+(export gnc:html-barchart-set-y-axis-label!)
+(export gnc:html-barchart-row-labels)
+(export gnc:html-barchart-set-row-labels!)
+(export gnc:html-barchart-row-labels-rotated?)
+(export gnc:html-barchart-set-row-labels-rotated?!)
+(export gnc:html-barchart-stacked?)
+(export gnc:html-barchart-set-stacked?!)
+(export gnc:html-barchart-col-labels)
+(export gnc:html-barchart-set-col-labels!)
+(export gnc:html-barchart-col-colors)
+(export gnc:html-barchart-set-col-colors!)
+(export gnc:html-barchart-legend-reversed?)
+(export gnc:html-barchart-set-legend-reversed?!)
+(export gnc:html-barchart-title)
+(export gnc:html-barchart-set-title!)
+(export gnc:html-barchart-subtitle)
+(export gnc:html-barchart-set-subtitle!)
+(export gnc:html-barchart-button-1-bar-urls)
+(export gnc:html-barchart-set-button-1-bar-urls!)
+(export gnc:html-barchart-button-2-bar-urls)
+(export gnc:html-barchart-set-button-2-bar-urls!)
+(export gnc:html-barchart-button-3-bar-urls)
+(export gnc:html-barchart-set-button-3-bar-urls!)
+(export gnc:html-barchart-button-1-legend-urls)
+(export gnc:html-barchart-set-button-1-legend-urls!)
+(export gnc:html-barchart-button-2-legend-urls)
+(export gnc:html-barchart-set-button-2-legend-urls!)
+(export gnc:html-barchart-button-3-legend-urls)
+(export gnc:html-barchart-set-button-3-legend-urls!)
+(export gnc:html-barchart-append-row!)
+(export gnc:html-barchart-prepend-row!)
+(export gnc:html-barchart-append-column!)
+(export gnc:html-barchart-prepend-column!)
+(export gnc:html-barchart-render barchart)
+
 (define <html-barchart>
   (make-record-type '<html-barchart>
                     '(width 
@@ -248,17 +302,6 @@
            (list-set! (gnc:html-barchart-data barchart) rownum this-row))
        (set! rownum (+ 1 rownum)))
      newcol)))
-
-(define (gnc:not-all-zeros data)
-  (define (myor list)
-    (begin 
-      (gnc:debug "list" list)
-      (if (null? list) #f
-	  (or (car list) (myor (cdr list))))))
-
-  (cond ((number? data) (not (= 0 data)))
-	((list? data) (myor (map gnc:not-all-zeros data)))
-	(else #f)))
 
 (define (gnc:html-barchart-prepend-column! barchart newcol)
   (let ((rows (gnc:html-barchart-data barchart))

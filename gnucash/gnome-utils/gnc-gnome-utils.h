@@ -53,11 +53,13 @@ void gnc_add_css_file (void);
  *  This routine will display an error message
  *  if it can't find the help file or can't open the help browser.
  *
+ *  @param parent The parent window for any dialogs.
+ *
  *  @param file_name The name of the help file.
  *
  *  @param anchor The anchor the help browser should scroll to.
  */
-void gnc_gnome_help (const char *file_name,
+void gnc_gnome_help (GtkWindow *parent, const char *file_name,
                      const char *anchor);
 /** Launch the default browser and open the provided URI.
  */

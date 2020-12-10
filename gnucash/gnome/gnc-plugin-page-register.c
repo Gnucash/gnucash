@@ -1086,7 +1086,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     GtkAction* action;
-    gboolean expanded, voided, read_only = FALSE;
+    gboolean expanded, voided, read_only = FALSE, read_only_reg = FALSE;
     Transaction* trans;
     GList* invoices;
     CursorClass cursor_class;
@@ -1106,62 +1106,84 @@ gnc_plugin_page_register_ui_update (gpointer various,
     g_signal_handlers_unblock_by_func
     (action, gnc_plugin_page_register_cmd_expand_transaction, page);
 
+    /* If we are in a readonly book, or possibly a place holder
+     * account register make any modifying action inactive */
+    if (qof_book_is_readonly (gnc_get_current_book()) ||
+        gnc_split_reg_get_read_only (priv->gsr))
+        read_only_reg = TRUE;
+
     /* Set available actions based on read only */
     trans = gnc_split_register_get_current_trans (reg);
 
-    if (trans)
-        read_only = xaccTransIsReadonlyByPostedDate (trans);
-    voided = xaccTransHasSplitsInState (trans, VREC);
-
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                         "CutTransactionAction");
-    gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
-
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                         "PasteTransactionAction");
-    gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
-
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                         "DeleteTransactionAction");
-    gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
-
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                         "DuplicateTransactionAction");
-    gtk_action_set_sensitive (GTK_ACTION (action), TRUE);
-
-    if (cursor_class == CURSOR_CLASS_SPLIT)
+    /* If the register is not read only, make any modifying action active
+     * to start with */
+    if (!read_only_reg)
     {
+        const char** iter;
+        for (iter = readonly_inactive_actions; *iter; ++iter)
+        {
+            /* Set the action's sensitivity */
+            GtkAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
+            gtk_action_set_sensitive (action, TRUE);
+        }
+        main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(page), FALSE);
+
+        if (trans)
+            read_only = xaccTransIsReadonlyByPostedDate (trans);
+
+        voided = xaccTransHasSplitsInState (trans, VREC);
+
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+                                             "CutTransactionAction");
+        gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
+
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+                                             "PasteTransactionAction");
+        gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
+
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+                                             "DeleteTransactionAction");
+        gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
+
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                              "DuplicateTransactionAction");
+        gtk_action_set_sensitive (GTK_ACTION (action), !read_only & TRUE);
+
+        if (cursor_class == CURSOR_CLASS_SPLIT)
+        {
+            action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+                                                 "DuplicateTransactionAction");
+            gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
+        }
+
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+                                             "RemoveTransactionSplitsAction");
         gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
+
+        /* Set 'Void' and 'Unvoid' */
+        if (read_only)
+            voided = TRUE;
+
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+                                             "VoidTransactionAction");
+        gtk_action_set_sensitive (GTK_ACTION (action), !voided);
+
+        if (read_only)
+            voided = FALSE;
+
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
+                                             "UnvoidTransactionAction");
+        gtk_action_set_sensitive (GTK_ACTION (action), voided);
     }
 
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                         "RemoveTransactionSplitsAction");
-    gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
-
-    /* Set 'Void' and 'Unvoid' */
-    if (read_only)
-        voided = TRUE;
-
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                         "VoidTransactionAction");
-    gtk_action_set_sensitive (GTK_ACTION (action), !voided);
-
-    if (read_only)
-        voided = FALSE;
-
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                         "UnvoidTransactionAction");
-    gtk_action_set_sensitive (GTK_ACTION (action), voided);
-
     /* Set 'Open and Remove Linked Documents' */
-    uri = xaccTransGetDocLink (trans);
-
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "LinkedTransactionOpenAction");
-    gtk_action_set_sensitive (GTK_ACTION(action), (uri ? TRUE:FALSE));
-
+    if (trans)
+    {
+        uri = xaccTransGetDocLink (trans);
+        gtk_action_set_sensitive (GTK_ACTION(action), (uri ? TRUE:FALSE));
+    }
     /* Set 'ExecAssociatedInvoice'
        We can determine an invoice from a txn if either
        - it is an invoice transaction
@@ -1169,15 +1191,17 @@ gnc_plugin_page_register_ui_update (gpointer various,
     */
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                          "JumpLinkedInvoiceAction");
-
-    invoices = invoices_from_transaction (trans);
-    gtk_action_set_sensitive (GTK_ACTION (action), (invoices != NULL));
-    g_list_free (invoices);
+    if (trans)
+    {
+        invoices = invoices_from_transaction (trans);
+        gtk_action_set_sensitive (GTK_ACTION (action), (invoices != NULL));
+        g_list_free (invoices);
+    }
 
     gnc_plugin_business_split_reg_ui_update (GNC_PLUGIN_PAGE (page));
 
-    /* If we are in a readonly book, make any modifying action inactive */
-    if (qof_book_is_readonly (gnc_get_current_book()))
+    /* If we are read only, make any modifying action inactive */
+    if (read_only_reg)
     {
         const char** iter;
         for (iter = readonly_inactive_actions; *iter; ++iter)
@@ -1186,6 +1210,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
             GtkAction* action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
             gtk_action_set_sensitive (action, FALSE);
         }
+        main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(page), TRUE);
     }
 
     /* Modifying action descriptions based on cursor class */
@@ -1937,7 +1962,7 @@ finish_scrub (GncPluginPage* page)
                                 (GNC_PLUGIN_PAGE(page))),
                                 FALSE,
                                 _("'Check & Repair' is currently running, do you want to abort it?"));
-        
+
         show_abort_verify = FALSE;
 
         if (ret)
@@ -3489,6 +3514,27 @@ gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page)
     LEAVE (" ");
 }
 
+
+static void
+gnc_plugin_page_register_update_page_icon (GncPluginPage* plugin_page)
+{
+    GncPluginPageRegisterPrivate* priv;
+    gboolean read_only;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+
+    if (qof_book_is_readonly (gnc_get_current_book()) ||
+        gnc_split_reg_get_read_only (priv->gsr))
+        read_only = TRUE;
+    else
+        read_only = FALSE;
+
+    main_window_update_page_set_read_only_icon (GNC_PLUGIN_PAGE(plugin_page),
+                                                read_only);
+}
+
 /************************************************************/
 /*                  Report Helper Functions                 */
 /************************************************************/
@@ -5020,10 +5066,10 @@ scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
         {
             gboolean abort_scrub = gnc_verify_dialog (GTK_WINDOW(widget), FALSE,
                  _("'Check & Repair' is currently running, do you want to abort it?"));
-        
+
             if (abort_scrub)
                 gnc_set_abort_scrub (TRUE);
-        
+
             return TRUE;
         }
     default:
@@ -5370,6 +5416,9 @@ gnc_plugin_page_register_event_handler (QofInstance* entity,
             main_window_update_page_name (GNC_PLUGIN_PAGE (page), label);
             color = gnc_plugin_page_register_get_tab_color (GNC_PLUGIN_PAGE (page));
             main_window_update_page_color (GNC_PLUGIN_PAGE (page), color);
+            // update page icon if read only registers
+            gnc_plugin_page_register_update_page_icon (GNC_PLUGIN_PAGE (page));
+
             g_free (color);
             g_free (label);
         }

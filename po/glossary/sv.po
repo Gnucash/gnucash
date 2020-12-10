@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnucash-glossary 1.9.1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-11-26 14:29+0100\n"
+"POT-Creation-Date: 2020-12-06 18:14+0100\n"
 "PO-Revision-Date: 2006-05-04 07:47+0200\n"
 "Last-Translator: Jonas Norling <norling@lysator.liu.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -464,8 +464,15 @@ msgid "liabilities/equity"
 msgstr "skulder/eget kapital"
 
 # src/languages.h:184
-#. "A sum of money that is lent (by a bank)"
+#. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 msgid "loan"
+msgstr "lån"
+
+# src/languages.h:184
+#. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
+#, fuzzy
+#| msgid "loan"
+msgid "loan: APR"
 msgstr "lån"
 
 #. "The money lost in business activity"
@@ -503,6 +510,18 @@ msgstr "Anteckning"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
+msgstr "Inteckning"
+
+#. "Adjustable Rate Mortgage"
+#, fuzzy
+#| msgid "Mortgage"
+msgid "mortgage: ARM"
+msgstr "Inteckning"
+
+#. "Fixed Rate Mortgage"
+#, fuzzy
+#| msgid "Mortgage"
+msgid "mortgage: FRM"
 msgstr "Inteckning"
 
 #. "e.g. USD, DEM, see Currency."

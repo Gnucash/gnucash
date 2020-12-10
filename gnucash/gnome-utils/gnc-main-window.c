@@ -2442,6 +2442,76 @@ main_window_update_page_color (GncPluginPage *page,
 }
 
 
+void
+main_window_update_page_set_read_only_icon (GncPluginPage *page,
+                                            gboolean read_only)
+{
+    GncMainWindow *window;
+    GncMainWindowPrivate *priv;
+    GtkWidget *tab_widget;
+    GtkWidget *image = NULL;
+    GList *children;
+    gchar *image_name = NULL;
+    const gchar *icon_name;
+
+    ENTER(" ");
+
+    window = GNC_MAIN_WINDOW(page->window);
+
+    /* Get the notebook tab widget */
+    main_window_find_tab_widget (window, page, &tab_widget);
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    if (!tab_widget)
+    {
+        LEAVE("no tab widget");
+        return;
+    }
+
+    if (GTK_IS_EVENT_BOX(tab_widget))
+        tab_widget = gtk_bin_get_child (GTK_BIN(tab_widget));
+
+    /* For each, walk the list of container children to get image widget */
+    for (children = gtk_container_get_children (GTK_CONTAINER(tab_widget));
+            children; children = children->next)
+    {
+        GtkWidget *widget = children->data;
+        if (GTK_IS_IMAGE(widget))
+            image = widget;
+    }
+
+    if (!image)
+    {
+        LEAVE("no image to replace");
+        return;
+    }
+
+    g_object_get (image, "icon-name", &image_name, NULL);
+
+    if (read_only)
+        icon_name = "changes-prevent-symbolic";
+    else
+        icon_name = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
+
+    if (g_strcmp0 (icon_name, image_name) == 0)
+    {
+        LEAVE("page icon the same, no need to replace");
+        g_free (image_name);
+        return;
+    }
+    gtk_container_remove (GTK_CONTAINER(tab_widget), image);
+    image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+    gtk_widget_show (image);
+
+    gtk_container_add (GTK_CONTAINER(tab_widget), image);
+    gtk_widget_set_margin_start (GTK_WIDGET(image), 5);
+    gtk_box_reorder_child (GTK_BOX(tab_widget), image, 0);
+
+    g_free (image_name);
+    LEAVE("done");
+}
+
+
 static void
 gnc_main_window_tab_entry_activate (GtkWidget *entry,
                                     GncPluginPage *page)
@@ -4529,13 +4599,13 @@ gnc_main_window_cmd_window_raise (GtkAction *action,
 static void
 gnc_main_window_cmd_help_tutorial (GtkAction *action, GncMainWindow *window)
 {
-    gnc_gnome_help (HF_GUIDE, NULL);
+    gnc_gnome_help (GTK_WINDOW(window), HF_GUIDE, NULL);
 }
 
 static void
 gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow *window)
 {
-    gnc_gnome_help (HF_HELP, NULL);
+    gnc_gnome_help (GTK_WINDOW(window), HF_HELP, NULL);
 }
 
 /** This is a helper function to find a data file and suck it into

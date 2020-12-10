@@ -73,7 +73,7 @@ static GtkWidget* add_summary_label( GtkWidget *summarybar, gboolean pack_start,
 
 static void gsr_summarybar_set_arrow_draw (GNCSplitReg *gsr);
 
-static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
+static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr, gboolean show_dialog );
 static gboolean is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans);
 
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
@@ -378,7 +378,7 @@ gnc_split_reg_init2( GNCSplitReg *gsr )
 {
     if ( !gsr ) return;
 
-    gnc_split_reg_determine_read_only( gsr );
+    gnc_split_reg_determine_read_only( gsr, TRUE );
 
     gsr_setup_status_widgets( gsr );
     /* ordering is important here... setup_status before create_table */
@@ -2444,8 +2444,30 @@ gboolean
 gtk_callback_bug_workaround (gpointer argp)
 {
     dialog_args *args = argp;
-    const gchar *read_only = _("This account register is read-only.");
+    const gchar *read_only_this = _("This account register is read-only.");
+    const gchar *read_only_acc = _("The '%s' account register is read-only.");
+    gchar *read_only = NULL;
     GtkWidget *dialog;
+    GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (args->gsr->ledger);
+    Account *acc = gnc_ledger_display_leader (args->gsr->ledger);
+    const gchar *acc_name = NULL;
+    gchar *tmp = NULL;
+
+    if (acc)
+    {
+        acc_name = xaccAccountGetName (acc);
+
+        if (ledger_type == LD_SINGLE)
+            read_only = g_strdup_printf (read_only_acc, acc_name);
+        else
+        {
+            gchar *tmp = g_strconcat (acc_name, "+", NULL);
+            read_only = g_strdup_printf (read_only_acc, tmp);
+            g_free (tmp);
+        }
+    }
+    else
+        read_only = g_strdup (read_only_this);
 
     dialog = gtk_message_dialog_new(GTK_WINDOW(args->gsr->window),
                                     GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -2456,6 +2478,7 @@ gtk_callback_bug_workaround (gpointer argp)
             "%s", args->string);
     gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_REG_IS_READ_ONLY);
     gtk_widget_destroy(dialog);
+    g_free(read_only);
     g_free(args);
     return FALSE;
 }
@@ -2465,7 +2488,7 @@ gtk_callback_bug_workaround (gpointer argp)
  **/
 static
 void
-gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
+gnc_split_reg_determine_read_only( GNCSplitReg *gsr, gboolean show_dialog )
 {
     SplitRegister *reg;
 
@@ -2519,7 +2542,8 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
         args = g_malloc(sizeof(dialog_args));
         args->string = string;
         args->gsr = gsr;
-        g_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
+        if (show_dialog)
+            g_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
     }
 
     /* Make the contents immutable */
@@ -2608,7 +2632,16 @@ gnc_split_reg_get_summarybar( GNCSplitReg *gsr )
 gboolean
 gnc_split_reg_get_read_only( GNCSplitReg *gsr )
 {
+    SplitRegister *reg;
+
     g_assert( gsr );
+
+    // reset read_only flag
+    gsr->read_only = FALSE;
+    gnc_split_reg_determine_read_only (gsr, FALSE);
+
+    reg = gnc_ledger_display_get_split_register( gsr->ledger );
+    gnc_split_register_set_read_only( reg, gsr->read_only );
     return gsr->read_only;
 }
 

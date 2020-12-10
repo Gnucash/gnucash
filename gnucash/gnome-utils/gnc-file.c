@@ -695,10 +695,11 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 
 /* private utilities for file open; done in two stages */
 
-#define RESPONSE_NO_FILE 1
+#define RESPONSE_NEW 1
 #define RESPONSE_OPEN 2
 #define RESPONSE_QUIT 3
 #define RESPONSE_READONLY 4
+#define RESPONSE_FILE 5
 
 static gboolean
 gnc_post_file_open (GtkWindow *parent, const char * filename, gboolean is_readonly)
@@ -846,22 +847,34 @@ RESTART:
                 "%s", fmt2);
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
-        gnc_gtk_dialog_add_button(dialog, _("_Open Read-Only"),
+        gnc_gtk_dialog_add_button(dialog, _("Open _Read-Only"),
                                   "emblem-readonly", RESPONSE_READONLY);
-        gnc_gtk_dialog_add_button(dialog, _("Open with _No File"),
-                                  "document-new-symbolic", RESPONSE_NO_FILE);
+
+        gnc_gtk_dialog_add_button(dialog, _("Create _New File"),
+                                  "document-new-symbolic", RESPONSE_NEW);
+
         gnc_gtk_dialog_add_button(dialog, _("Open _Anyway"),
                                   "document-open-symbolic", RESPONSE_OPEN);
+
+        gnc_gtk_dialog_add_button(dialog, _("Open _Folder"),
+                                  "folder-open-symbolic", RESPONSE_FILE);
+
         if (shutdown_cb)
+        {
             gtk_dialog_add_button(GTK_DIALOG(dialog),
                                   _("_Quit"), RESPONSE_QUIT);
+            gtk_dialog_set_default_response (GTK_DIALOG(dialog), RESPONSE_QUIT);
+        }
+        else
+            gtk_dialog_set_default_response (GTK_DIALOG(dialog), RESPONSE_FILE);
+
         rc = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         g_free (displayname);
 
         if (rc == GTK_RESPONSE_DELETE_EVENT)
         {
-            rc = shutdown_cb ? RESPONSE_QUIT : RESPONSE_NO_FILE;
+            rc = shutdown_cb ? RESPONSE_QUIT : RESPONSE_FILE;
         }
         switch (rc)
         {
@@ -879,11 +892,19 @@ RESTART:
             /* user told us to ignore locks. So ignore them. */
             qof_session_begin (new_session, newfile, SESSION_BREAK_LOCK);
             break;
-        default:
+        case RESPONSE_NEW:
             /* Can't use the given file, so just create a new
-             * Gnucash window so they can choose File->New, File->Open
-             * or just "Exit".
+             * database so that the user will get a window that
+             * they can click "Exit" on.
              */
+            gnc_file_new (parent);
+            break;
+        default:
+            /* Can't use the given file, so open a file browser dialog
+             * so they can choose a different file and get a window that
+             * they can click "Exit" on.
+             */
+            gnc_file_open (parent);
             break;
         }
     }
