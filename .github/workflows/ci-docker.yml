@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   ci_tests_archlinux:
     runs-on: ubuntu-latest
-    name: Test Docker Action
+    name: Arch Linux (via Docker) CI
     steps:
     - name: Checkout
       uses: actions/checkout@v2

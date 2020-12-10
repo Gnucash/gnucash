@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   ci_tests_ubuntu-18:
     runs-on: ubuntu-18.04
-    name: Ubuntu-18.04 Tests
+    name: Ubuntu-18.04 CI Tests
     env:
       TZ: America/Los_Angeles
     steps:
@@ -37,7 +37,7 @@ jobs:
         path: ${{ github.workspace }}/build/Testing/Temporary/LastTest.log
   ci_tests_ubuntu-20:
     runs-on: ubuntu-20.04
-    name: Ubuntu-20.04 Tests
+    name: Ubuntu-20.04 CI Tests
     env:
       TZ: America/Los_Angeles
     steps:
