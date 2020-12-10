@@ -5429,10 +5429,11 @@ struct AccountProbability
     double product_difference; /* product of (1-probabilities) */
 };
 
-struct AccountTokenCount
+struct AccountTokenProbability
 {
     std::string account_guid;
     int64_t token_count; /** occurrences of a given token for this account_guid */
+    double probability; /* conditional probability of this account_guid for a given token */
 };
 
 /** total_count and the token_count for a given account let us calculate the
@@ -5440,7 +5441,7 @@ struct AccountTokenCount
  */
 struct TokenAccountsInfo
 {
-    std::vector<AccountTokenCount> accounts;
+    std::vector<AccountTokenProbability> accounts;
     int64_t total_count;
 };
 
@@ -5460,7 +5461,7 @@ build_token_info(char const * suffix, KvpValue * value, TokenAccountsInfo & toke
     {
         tokenInfo.total_count += value->get<int64_t>();
         /*By convention, the key ends with the account GUID.*/
-        tokenInfo.accounts.emplace_back(AccountTokenCount{std::string{suffix}, value->get<int64_t>()});
+        tokenInfo.accounts.emplace_back(AccountTokenProbability{std::string{suffix}, value->get<int64_t>(), 0.0});
     }
 }
 
@@ -5468,14 +5469,21 @@ static TokenInfoVec
 get_token_info(GncImportMatchMap * imap, GList * tokens)
 {
     TokenInfoVec ret;
-    /* query token frequencies from import match map */
     for (auto current_token = tokens; current_token; current_token = current_token->next)
     {
+        /* query token frequencies from import match map */
         TokenAccountsInfo token_info{};
         auto token_name = static_cast <char const*> (current_token->data);
         auto path = std::string(IMAP_FRAME_BAYES "/") + token_name + "/";
         qof_instance_foreach_slot_prefix (QOF_INSTANCE (imap->acc), path, &build_token_info, token_info);
-        ret.push_back(token_info);
+
+        /* calculate conditional account probabilities P(A|T) of account A given token T */
+        if (token_info.total_count > 0)
+        {
+            for (auto & account : token_info.accounts)
+                account.probability = (double)account.token_count / (double)token_info.total_count;
+            ret.push_back(token_info);
+        }
     }
     return ret;
 }
@@ -5529,18 +5537,15 @@ get_first_pass_probabilities(TokenInfoVec token_info)
                 });
             if (item != ret.end())
             {/* This account is already in the map */
-                item->second.product = ((double)current_account_token.token_count /
-                                      (double)token.total_count) * item->second.product;
-                item->second.product_difference = ((double)1 - ((double)current_account_token.token_count /
-                                              (double)token.total_count)) * item->second.product_difference;
+                item->second.product = current_account_token.probability * item->second.product;
+                item->second.product_difference = (1.0 - current_account_token.probability) * item->second.product_difference;
             }
             else
             {
                 /* add a new entry */
                 AccountProbability new_probability;
-                new_probability.product = ((double)current_account_token.token_count /
-                                      (double)token.total_count);
-                new_probability.product_difference = 1 - (new_probability.product);
+                new_probability.product = current_account_token.probability;
+                new_probability.product_difference = 1.0 - new_probability.product;
                 ret.push_back({current_account_token.account_guid, std::move(new_probability)});
             }
         } /* for all accounts in tokenInfo */
