@@ -1,5 +1,5 @@
 name: ci-tests
-on: [push]
+on: [push, pull_request]
 jobs:
   ci_tests_ubuntu-18:
     runs-on: ubuntu-18.04

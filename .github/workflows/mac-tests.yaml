@@ -1,5 +1,5 @@
 name: mac-tests
-on: [push]
+on: [push, pull_request]
 jobs:
   ci_tests_mac:
     runs-on: macos-10.15

@@ -1,5 +1,5 @@
 name: ci-tests-docker
-on: [push]
+on: [push, pull_request]
 jobs:
   ci_tests_archlinux:
     runs-on: ubuntu-latest
