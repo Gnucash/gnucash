@@ -74,7 +74,6 @@ static const std::string AB_TRANS_RETRIEVAL("trans-retrieval");
 static gnc_numeric GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing);
 
 using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
-using ProbabilityVec=std::vector<std::pair<std::string, struct AccountProbability>>;
 using TokenInfoVec=std::vector<struct TokenAccountsInfo>;
 using FlatKvpEntry=std::pair<std::string, KvpValue*>;
 
@@ -5418,16 +5417,35 @@ gnc_account_imap_delete_account (GncImportMatchMap *imap,
  Below here is the bayes transaction to account matching system
 --------------------------------------------------------------------------*/
 
-
-/** intermediate values used to calculate the bayes probability of a given account
-  where p(AB) = (a*b)/[a*b + (1-a)(1-b)], product is (a*b),
-  product_difference is (1-a) * (1-b)
+/* The transaction to account matching algorithm uses bayesian inference to
+ * classify a sequence of tokens (observations), i.e. to find the account which
+ * most probably fits to the observed token sequence. See for instance
+ * https://en.wikipedia.org/wiki/Bayesian_inference.
+ *
+ * The underlying probabilistic model is a token generator, which generates
+ * a sequence of identically distributed tokens of arbitrary length with
+ * probability P(T|A), which is the conditional probability of token T given
+ * account A. But the tokens are not independent random variables and therefore
+ * not i.i.d. Instead there is a strong relation between tokens from the same
+ * transaction. That means the joint probability of a token sequence
+ * P(T1,T2,...|A), which belong to the same transaction is not simply the
+ * product of the probabilities of the individual tokens
+ * P(T1|A)*P(T2|A)*... .
+ *
+ * The currently implemented algorithm handles each token individually and
+ * does not consider the joint probabilities between tokens. These statistics
+ * are not captured at the moment, only the token frequencies per account.
+ *
+ * The account classification of a token sequence is realized by an estimator,
+ * which maximizes the posterior probability P(A|T) of each token regarding
+ * the unknown account. This is known as maximum a posteriori (MAP) estimation.
+ *
+ * Since each token is handled individually, the estimation results for each
+ * token of the sequence have to be combined. This is done by calculating an
+ * average posterior probability:
+ *    mean(P(A|T1), P(A|T2), ...)
+ * This final averaged probability is maximized for classification.
  */
-struct AccountProbability
-{
-    double product; /* product of probabilities */
-    double product_difference; /* product of (1-probabilities) */
-};
 
 struct AccountTokenProbability
 {
@@ -5493,21 +5511,45 @@ get_token_info(GncImportMatchMap * imap, GList * tokens)
   0.10 * 100000 = 10000 */
 static constexpr int probability_factor = 100000;
 
+/*
+ * This function calculates the average posterior probabilities
+ *    mean(P(A|T1), P(A|T2), ...)
+ * for each account required for MAP estimation.
+ *
+ * Maximizing these probabilities over all accounts (MAP estimation) returns
+ * the most probably matching account.
+ */
 static FinalProbabilityVec
-build_probabilities(ProbabilityVec const & first_pass)
+build_probabilities(TokenInfoVec const & token_info)
 {
-    FinalProbabilityVec ret;
-    for (auto const & first_pass_prob : first_pass)
+    /* Summarize conditional probabilities P(A|T) from token_info over all
+     * tokens, which are contained in token_selection */
+    std::map<std::string, double> sum_of_probabilities;
+    for (auto const & token : token_info)
     {
-        auto const & account_probability = first_pass_prob.second;
-        /* P(AB) = A*B / [A*B + (1-A)*(1-B)]
-         * NOTE: so we only keep track of a running product(A*B*C...)
-         * and product difference ((1-A)(1-B)...)
-         */
-        int32_t probability = (account_probability.product /
-                (account_probability.product + account_probability.product_difference)) * probability_factor;
-        ret.push_back({first_pass_prob.first, probability});
+        for (auto const & account : token.accounts)
+        {
+            /* try to insert new entry into sum_of_probabilities */
+            auto result = sum_of_probabilities.emplace(account.account_guid, account.probability);
+            if (!result.second)
+            {
+                /* entry already exists > summarize P(A|T) */
+                result.first->second += account.probability;
+            }
+        }
     }
+
+    /* Calculate the final average posterior account probabilities for the set
+     * of selected tokens by dividing summarized conditional probabilities by
+     * the number of tokens (arithmetic mean value of P(A|T1), P(A|T2), etc.
+     * for each account). */
+    FinalProbabilityVec ret;
+    for (auto const & account : sum_of_probabilities)
+    {
+        ret.push_back({account.first,
+            (int32_t)(account.second / (double)token_info.size() * probability_factor)});
+    }
+
     return ret;
 }
 
@@ -5518,38 +5560,6 @@ highest_probability(FinalProbabilityVec const & probabilities)
     for (auto const & prob : probabilities)
         if (prob.second > ret.probability)
             ret = AccountInfo {prob.first, prob.second};
-    return ret;
-}
-
-static ProbabilityVec
-get_first_pass_probabilities(TokenInfoVec token_info)
-{
-    ProbabilityVec ret;
-    /* find the probability for each account that contains any of the tokens
-     * in the input tokens list. */
-    for (auto const & token : token_info)
-    {
-        for (auto const & current_account_token : token.accounts)
-        {
-            auto item = std::find_if(ret.begin(), ret.end(), [&current_account_token]
-                (std::pair<std::string, AccountProbability> const & a) {
-                    return current_account_token.account_guid == a.first;
-                });
-            if (item != ret.end())
-            {/* This account is already in the map */
-                item->second.product = current_account_token.probability * item->second.product;
-                item->second.product_difference = (1.0 - current_account_token.probability) * item->second.product_difference;
-            }
-            else
-            {
-                /* add a new entry */
-                AccountProbability new_probability;
-                new_probability.product = current_account_token.probability;
-                new_probability.product_difference = 1.0 - new_probability.product;
-                ret.push_back({current_account_token.account_guid, std::move(new_probability)});
-            }
-        } /* for all accounts in tokenInfo */
-    }
     return ret;
 }
 
@@ -5724,11 +5734,10 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
         return nullptr;
     check_import_map_data (imap->book);
     auto token_info = get_token_info(imap, tokens);
-    auto first_pass = get_first_pass_probabilities(token_info);
-    if (!first_pass.size())
+    if (token_info.empty())
         return nullptr;
-    auto final_probabilities = build_probabilities(first_pass);
-    if (!final_probabilities.size())
+    auto final_probabilities = build_probabilities(token_info);
+    if (final_probabilities.empty())
         return nullptr;
     auto best = highest_probability(final_probabilities);
     if (best.account_guid == "")
