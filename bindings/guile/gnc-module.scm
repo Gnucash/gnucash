@@ -64,7 +64,7 @@ this module in your code or not.")
 been deprecated. Use '(use-modules (" mod-name-str "))' instead.")
        (module-use! (current-module) (resolve-interface scm-mod-name)))
 
-      ((or "gnucash/gnome-utils" "gnucash/html" "gnucash/report/report-system")
+      ((or "gnucash/gnome-utils" "gnucash/report/report-system")
        (when (string=? gnc-mod-name "gnucash/report/report-system")
          (set! mod-name-str "gnucash report"))
        (set! scm-mod-name '(gnucash report))
@@ -74,6 +74,12 @@ been deprecated. Use '(use-modules (gnucash engine) (gnucash app-utils) \
 '(gnucash app-utils)' guile modules is optional and depends on whether \
 or not you use functions from this module in your code or not.")
        (use-modules (gnucash engine) (gnucash app-utils))
+       (module-use! (current-module) (resolve-interface scm-mod-name)))
+
+      ("gnucash/html"
+       (deprecate "* WARNING * '(gnc:module-load \"gnucash/html\" 0)' has \
+been deprecated. Use '(use-modules (gnucash html))' instead.")
+       (use-modules (gnucash html))
        (module-use! (current-module) (resolve-interface scm-mod-name)))
 
       (_ (deprecate "* WARNING * '(gnc:module-load \"" gnc-mod-name "\" 0)' \
