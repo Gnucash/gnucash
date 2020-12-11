@@ -2275,9 +2275,8 @@ gnc_invoice_new_page (QofBook *bookp, InvoiceDialogType type,
 
     /* Now create the plugin page for this invoice and display it. */
     new_page = gnc_plugin_page_invoice_new (iw);
-    if (window)
-        gnc_plugin_page_set_use_new_window (new_page, FALSE);
-    else
+
+    if (!window)
         window = gnc_plugin_business_get_window ();
 
     gnc_main_window_open_page (window, new_page);
