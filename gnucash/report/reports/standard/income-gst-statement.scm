@@ -195,7 +195,7 @@ with *EUGOODS* in the account description."))) #f
   ;; Disable account filtering
   (gnc:option-make-internal! options gnc:pagename-accounts "Filter Type")
   (gnc:option-make-internal! options gnc:pagename-accounts "Filter By...")
-  (gnc:option-make-internal! options gnc:pagename-general "Show original currency amount")
+  (gnc:option-make-internal! options "Currency" "Show original currency amount")
 
   ;; Enforce compulsory common-currency. It's senseless to allow
   ;; multiple currencies in a government report. Plus, single currency
