@@ -1183,7 +1183,7 @@ also show overall period profit & loss."))
                     (list "General" "End Date" (cons 'absolute (cdr datepair)))
                     (list "Currency" "Show original currency amount" show-orig?)
                     (list "Currency" "Common Currency" common-currency)
-                    (list "General" "Report's currency" curr)
+                    (list "Currency" "Report's currency" curr)
                     (list "Display" "Amount" 'double)
                     (list "Accounts" "Accounts" accts))))))
 
