@@ -475,6 +475,7 @@
 (define (multicol-balsheet-tests)
   (define (default-testing-options)
     (let ((options (gnc:make-report-options multicol-balsheet-uuid)))
+      (set-option! options "General" "Period order is most recent first" #f)
       (set-option! options "General" "Start Date"
                    (cons 'absolute (gnc-dmy2time64 1 1 1970)))
       (set-option! options "General" "End Date"
@@ -557,6 +558,7 @@
 (define (multicol-pnl-tests)
   (define (default-testing-options)
     (let ((options (gnc:make-report-options multicol-pnl-uuid)))
+      (set-option! options "General" "Period order is most recent first" #f)
       (set-option! options "General" "Start Date"
                    (cons 'absolute (gnc-dmy2time64 1 1 1980)))
       (set-option! options "General" "End Date"
