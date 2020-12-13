@@ -49,6 +49,7 @@ extern "C" {
 
 #include <numeric>
 #include <map>
+#include <set>
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
@@ -74,6 +75,7 @@ static const std::string AB_TRANS_RETRIEVAL("trans-retrieval");
 static gnc_numeric GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing);
 
 using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
+using TokenSelection=std::set<std::string>;
 using TokenInfoVec=std::vector<std::pair<std::string, struct TokenAccountsInfo>>;
 using FlatKvpEntry=std::pair<std::string, KvpValue*>;
 
@@ -5445,6 +5447,10 @@ gnc_account_imap_delete_account (GncImportMatchMap *imap,
  * average posterior probability:
  *    mean(P(A|T1), P(A|T2), ...)
  * This final averaged probability is maximized for classification.
+ *
+ * This approach is enhanced by a token selection algorithm. This algorithm
+ * determines, which tokens should be used for calculating the averaged account
+ * probabilities and which tokens should be excluded.
  */
 
 struct AccountTokenProbability
@@ -5506,6 +5512,28 @@ get_token_info(GncImportMatchMap * imap, GList * tokens)
     return ret;
 }
 
+/** Threshold for conditional account probabilities given individual tokens */
+static constexpr double token_account_probability_threshold = .90; /* 90% */
+
+static TokenSelection
+select_tokens(TokenInfoVec const & token_info)
+{
+    TokenSelection ret;
+    for (auto const & token : token_info)
+    {
+        /* select tokens with at least one conditional probability P(A|T)
+         * larger than token_account_probability_threshold */
+        auto const & accounts = token.second.accounts;
+        auto use_token = std::accumulate(accounts.begin(), accounts.end(), false,
+            [](bool const& a, AccountTokenProbability const& v){
+                return a | (v.probability > token_account_probability_threshold);
+            });
+        if (use_token)
+            ret.emplace(token.first);
+    }
+    return ret;
+}
+
 /** We scale the probability values by probability_factor.
   ie. with probability_factor of 100000, 10% would be
   0.10 * 100000 = 10000 */
@@ -5520,22 +5548,28 @@ static constexpr int probability_factor = 100000;
  * the most probably matching account.
  */
 static FinalProbabilityVec
-build_probabilities(TokenInfoVec const & token_info)
+build_probabilities(TokenInfoVec const & token_info, TokenSelection token_selection)
 {
     /* Summarize conditional probabilities P(A|T) from token_info over all
      * tokens, which are contained in token_selection */
     std::map<std::string, double> sum_of_probabilities;
+    auto num_tokens = 0;
     for (auto const & token : token_info)
     {
-        for (auto const & account : token.second.accounts)
+        /* check if token is selected for account probability calculation */
+        if (token_selection.find(token.first) != token_selection.end())
         {
-            /* try to insert new entry into sum_of_probabilities */
-            auto result = sum_of_probabilities.emplace(account.account_guid, account.probability);
-            if (!result.second)
+            for (auto const & account : token.second.accounts)
             {
-                /* entry already exists > summarize P(A|T) */
-                result.first->second += account.probability;
+	             /* try to insert new entry into sum_of_probabilities */
+                auto result = sum_of_probabilities.emplace(account.account_guid, account.probability);
+                if (!result.second)
+                {
+                    /* entry already exists > summarize P(A|T) */
+                    result.first->second += account.probability;
+                }
             }
+            num_tokens++;
         }
     }
 
@@ -5544,10 +5578,13 @@ build_probabilities(TokenInfoVec const & token_info)
      * the number of tokens (arithmetic mean value of P(A|T1), P(A|T2), etc.
      * for each account). */
     FinalProbabilityVec ret;
-    for (auto const & account : sum_of_probabilities)
+    if (num_tokens > 0)
     {
-        ret.push_back({account.first,
-            (int32_t)(account.second / (double)token_info.size() * probability_factor)});
+        for (auto const & account : sum_of_probabilities)
+        {
+            ret.push_back({account.first,
+                (int32_t)(account.second / (double)num_tokens * probability_factor)});
+        }
     }
 
     return ret;
@@ -5724,7 +5761,7 @@ check_import_map_data (QofBook *book)
     imap_convert_bayes_to_flat_run = true;
 }
 
-static constexpr double threshold = .90 * probability_factor; /* 90% */
+static constexpr double account_probability_threshold = .50 * probability_factor; /* 50% */
 
 /** Look up an Account in the map */
 Account*
@@ -5736,13 +5773,14 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     auto token_info = get_token_info(imap, tokens);
     if (token_info.empty())
         return nullptr;
-    auto final_probabilities = build_probabilities(token_info);
+    auto selected_tokens = select_tokens(token_info);
+    auto final_probabilities = build_probabilities(token_info, selected_tokens);
     if (final_probabilities.empty())
         return nullptr;
     auto best = highest_probability(final_probabilities);
     if (best.account_guid == "")
         return nullptr;
-    if (best.probability < threshold)
+    if (best.probability < account_probability_threshold)
         return nullptr;
     gnc::GUID guid;
     try {
