@@ -687,7 +687,7 @@ by preventing negative stock balances.<br/>")
                                    (begin
                                      ;; Wrong account (or no account), assume there isn't a DRP holding account
                                      (set! drp-holding-account 'none)
-                                     (set trans-drp-residual (gnc-numeric-zero))
+                                     (set! trans-drp-residual (gnc-numeric-zero))
                                      (set! drp-holding-amount (gnc-numeric-zero))))))
 
                        ;; Set trans-bought to the amount of money moved in to the account which was used to
