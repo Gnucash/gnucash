@@ -576,7 +576,7 @@
       (set-option! options "Accounts" "Accounts" (list usd-bank gbp-bank))
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 2000)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 2000)))
-      (set-option! options "General" "Common Currency" #t)
+      (set-option! options "Currency" "Common Currency" #t)
       (set-option! options "Currency" "Show original currency amount" #t)
       (let* ((sxml (options->sxml options "single column, with original currency headers")))
         (test-equal "single amount column, with original currency headers"
@@ -650,7 +650,7 @@
       ;; test debit/credit dual columns
       (set! options (default-testing-options))
       (set-option! options "Display" "Amount" 'double)
-      (set-option! options "General" "Common Currency" #t)
+      (set-option! options "Currency" "Common Currency" #t)
       (set-option! options "Currency" "Show original currency amount" #t)
       (set-option! options "Sorting" "Primary Key" 'date)
       (set-option! options "Sorting" "Primary Subtotal for Date Key" 'none)
@@ -893,8 +893,8 @@
       (set-option! options "General" "End Date"
                    (cons 'absolute (gnc-dmy2time64 31 12 1970)))
       (set-option! options "Display" "Subtotal Table" #t)
-      (set-option! options "General" "Common Currency" #t)
-      (set-option! options "General" "Report Currency" foreign2)
+      (set-option! options "Currency" "Common Currency" #t)
+      (set-option! options "Currency" "Report Currency" foreign2)
       (set-option! options "Currency" "Show original currency amount" #t)
       (set-option! options "Sorting" "Primary Key" 'account-name)
       (set-option! options "Sorting" "Primary Subtotal" #t)
