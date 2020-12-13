@@ -1204,7 +1204,7 @@ also show overall period profit & loss."))
              (chart
               (and-let* (include-chart?
                          (curr (or common-currency book-main-currency))
-                         (delta (or (not (eq? incr 'disabled)) 'MonthDelta))
+                         (delta (if (eq? incr 'disabled) 'MonthDelta incr))
                          (price (or price-source 'pricedb-nearest)))
                 (gnc:make-report-anchor
                  pnl-barchart-uuid report-obj
