@@ -46,6 +46,8 @@
 #include "gnc-plugin-aqbanking.h"
 #include "qof.h"
 
+#include "gnc-flicker-gui.h"
+
 # define GNC_GWENHYWFAR_CB GWENHYWFAR_CB
 
 #define GWEN_GUI_CM_CLASS "dialog-hbcilog"
@@ -928,6 +930,9 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     GtkWidget *confirm_label;
     GtkWidget *remember_pin_checkbutton;
     GtkImage *optical_challenge;
+
+    static GncFlickerGui *flickergui = NULL;
+
     const gchar *internal_input, *internal_confirmed;
     gboolean confirm = (flags & GWEN_GUI_INPUT_FLAGS_CONFIRM) != 0;
     gboolean is_tan = (flags & GWEN_GUI_INPUT_FLAGS_TAN) != 0;
@@ -949,9 +954,46 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     remember_pin_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "remember_pin"));
     optical_challenge = GTK_IMAGE(gtk_builder_get_object (builder, "optical_challenge"));
     gtk_widget_set_visible(GTK_WIDGET(optical_challenge), FALSE);
+
+    flickergui = g_slice_new(GncFlickerGui);
+    flickergui->flicker_challenge = GTK_WIDGET(gtk_builder_get_object(builder, "flicker_challenge"));
+    flickergui->flicker_marker = GTK_WIDGET(gtk_builder_get_object(builder, "flicker_marker"));
+    flickergui->flicker_hbox = GTK_WIDGET(gtk_builder_get_object(builder, "flicker_hbox"));
+    flickergui->spin_barwidth = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "spin_barwidth"));
+    flickergui->spin_delay = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "spin_delay"));
+
+    gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_challenge), FALSE);
+    gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_marker), FALSE);
+    gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_hbox), FALSE);
+    gtk_widget_set_visible(GTK_WIDGET(flickergui->spin_barwidth), FALSE);
+    gtk_widget_set_visible(GTK_WIDGET(flickergui->spin_delay), FALSE);
+
     #ifdef AQBANKING6
-    if(mimeType != NULL && pChallenge != NULL && lChallenge > 0)
+    if (g_strcmp0(mimeType,"text/x-flickercode") == 0 && pChallenge != NULL)
+<<<<<<< Updated upstream
     {
+        /* Chiptan Optic (aka Flicker) */
+        gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_challenge), TRUE);
+        gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_marker), TRUE);
+        gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_hbox), TRUE);
+        gtk_widget_set_visible(GTK_WIDGET(flickergui->spin_barwidth), TRUE);
+        gtk_widget_set_visible(GTK_WIDGET(flickergui->spin_delay), TRUE);
+    }
+    else if(mimeType != NULL && pChallenge != NULL && lChallenge > 0)
+    {
+=======
+    {
+        /* Chiptan Optic (aka Flicker) */
+        gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_challenge), TRUE);
+        gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_marker), TRUE);
+        gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_hbox), TRUE);
+        gtk_widget_set_visible(GTK_WIDGET(flickergui->spin_barwidth), TRUE);
+        gtk_widget_set_visible(GTK_WIDGET(flickergui->spin_delay), TRUE);
+    }
+    else if(mimeType != NULL && pChallenge != NULL && lChallenge > 0)
+    {
+>>>>>>> Stashed changes
+        /* Phototan or Chiptan QR */
         gtk_widget_set_visible(GTK_WIDGET(optical_challenge), TRUE);
     }
     #endif
@@ -969,6 +1011,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     if ((flags & (GWEN_GUI_INPUT_FLAGS_TAN | GWEN_GUI_INPUT_FLAGS_SHOW)) != 0)
     {
         gtk_widget_set_visible(input_entry, TRUE);
+        gtk_entry_set_visibility(GTK_ENTRY(input_entry), TRUE);
     }
 
     if (gui->dialog)
@@ -993,9 +1036,22 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     }
 
     #ifdef AQBANKING6
-    //if (optical_challenge)
-    if(mimeType != NULL && pChallenge != NULL && lChallenge > 0)
+    /* Optical challenge. Flickercode sets the mimetype to
+     * x-flickercode and doesn't set the challenge length */
+    if (g_strcmp0(mimeType,"text/x-flickercode") == 0 && pChallenge != NULL)
     {
+         /* Chiptan Optic (aka Flicker) */
+         flickergui->dialog = dialog;
+         flickergui->input_entry = input_entry;
+
+         ini_flicker_gui(pChallenge, flickergui);
+         g_slice_free(GncFlickerGui, flickergui);
+    }
+    /* While phototan has multiple mimetypes and does set the
+     * challenge length. */
+    else if(mimeType != NULL && pChallenge != NULL && lChallenge > 0)
+    {
+        /* Phototan or Chiptan QR */
         // convert PNG and load into widget
         // TBD: check mimeType?
         guchar *gudata = (guchar*)pChallenge;
@@ -1019,7 +1075,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
 
         gtk_image_set_from_pixbuf(optical_challenge, pixbuf);
     }
-    #endif
+#endif
 
     if (*input)
     {
@@ -1425,28 +1481,43 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
     if(is_tan && methodId == GWEN_Gui_PasswordMethod_OpticalHHD)
     {
         /**
-        * TODO: How to handle Flicker code (use WebView and JS???)
-        *
         * use GWEN_Gui_PasswordMethod_Mask to get the basic method id
         *  cf. gui/gui.h of gwenhywfar
         */
         opticalMethodId=GWEN_DB_GetIntValue(methodParams, "tanMethodId", 0, AB_BANKING_TANMETHOD_TEXT);
         switch(opticalMethodId)
         {
+            case AB_BANKING_TANMETHOD_CHIPTAN:
+                break;
+            case AB_BANKING_TANMETHOD_CHIPTAN_OPTIC:
+                mimeType = "text/x-flickercode";
+                pChallenge = GWEN_DB_GetCharValue(methodParams, "challenge", 0, NULL);
+                if ((pChallenge == NULL) || (pChallenge[0] == '\0'))
+                {
+                    /* empty flicker-data */
+                    return GWEN_ERROR_NO_DATA;
+                }
+                break;
+            case AB_BANKING_TANMETHOD_CHIPTAN_USB:
+                /**
+                 * ToDo: is this the same as CHIPTAN_OPTIC ?
+                 */
+                 break;
             case AB_BANKING_TANMETHOD_PHOTOTAN:
             case AB_BANKING_TANMETHOD_CHIPTAN_QR:
-            /**
-            * image data is in methodParams
-            */
-            mimeType=GWEN_DB_GetCharValue(methodParams, "mimeType", 0, NULL);
-            pChallenge=(const char*) GWEN_DB_GetBinValue(methodParams, "imageData", 0, NULL, 0, &lChallenge);
-            if (!(pChallenge && lChallenge)) {
-                /* empty optical data */
-                return GWEN_ERROR_NO_DATA;
-            }
-            break;
-        default:
-            break;
+                /**
+                 * image data is in methodParams
+                 */
+                mimeType=GWEN_DB_GetCharValue(methodParams, "mimeType", 0, NULL);
+                pChallenge=(const char*) GWEN_DB_GetBinValue(methodParams, "imageData", 0, NULL, 0, &lChallenge);
+                if (!(pChallenge && lChallenge))
+                {
+                    /* empty optical data */
+                    return GWEN_ERROR_NO_DATA;
+                }
+                break;
+            default:
+                break;
         }
     }
     #endif

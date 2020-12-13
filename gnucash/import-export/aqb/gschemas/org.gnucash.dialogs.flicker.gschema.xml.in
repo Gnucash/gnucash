@@ -1,0 +1,13 @@
+<schemalist gettext-domain="@PROJECT_NAME@">
+
+  <schema id="org.gnucash.dialogs.flicker" path="/org/gnucash/dialogs/flicker/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+</schemalist>
