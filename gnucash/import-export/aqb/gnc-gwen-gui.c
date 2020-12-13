@@ -970,7 +970,6 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
 
     #ifdef AQBANKING6
     if (g_strcmp0(mimeType,"text/x-flickercode") == 0 && pChallenge != NULL)
-<<<<<<< Updated upstream
     {
         /* Chiptan Optic (aka Flicker) */
         gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_challenge), TRUE);
@@ -981,18 +980,6 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     }
     else if(mimeType != NULL && pChallenge != NULL && lChallenge > 0)
     {
-=======
-    {
-        /* Chiptan Optic (aka Flicker) */
-        gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_challenge), TRUE);
-        gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_marker), TRUE);
-        gtk_widget_set_visible(GTK_WIDGET(flickergui->flicker_hbox), TRUE);
-        gtk_widget_set_visible(GTK_WIDGET(flickergui->spin_barwidth), TRUE);
-        gtk_widget_set_visible(GTK_WIDGET(flickergui->spin_delay), TRUE);
-    }
-    else if(mimeType != NULL && pChallenge != NULL && lChallenge > 0)
-    {
->>>>>>> Stashed changes
         /* Phototan or Chiptan QR */
         gtk_widget_set_visible(GTK_WIDGET(optical_challenge), TRUE);
     }
