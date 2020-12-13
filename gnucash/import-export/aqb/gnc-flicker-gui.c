@@ -131,7 +131,7 @@ static char
      /* prepend synchronization identifier */
      const char pre[] = {'0', 'F', 'F', 'F'};
      size_t len = sizeof (pre) + strlen (challenge) + 1;
-     char* code = (char*)malloc (len);
+     char* code = (char*)g_malloc0 (len);
      memcpy (code, pre, sizeof (pre));
      memcpy (code + sizeof (pre), challenge, strlen (challenge));
 
@@ -306,7 +306,7 @@ do_flicker_store_state (GtkWidget *dialog)
 static void
 on_flicker_challenge_map (GtkWidget *widget)
 {
-    gchar *code = g_malloc (strlen (flickerdraw.challenge) + 4);
+    gchar *code = g_malloc0 (strlen (flickerdraw.challenge) + 4);
     code = flicker_data (flickerdraw.challenge);
     flickerdraw.challenge_length = strlen (code);
 
