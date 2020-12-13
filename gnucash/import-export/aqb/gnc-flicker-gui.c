@@ -89,7 +89,7 @@ static GncFlickerGui *flickergui = NULL;
 static _Bool bitarray[255][5];
 
 /* this function will return number corresponding 0,1,2..,9,A,B,C,D,E,F */
-static uint
+static guint
 get_num (const char ch)
 {
     int num =0;
@@ -137,10 +137,10 @@ static char
 
     /* Swap the position of the bits in pairs throughout the bank challenge
        (low-order nibble first). */
-     for (uint i = 0; i < len - 1; i += 2)
+     for (guint i = 0; i < len - 1; i += 2)
      {
-         u_int val1 = get_num (code[i]);
-         u_int val2 = get_num (code[i+1]);
+         guint val1 = get_num (code[i]);
+         guint val2 = get_num (code[i+1]);
 
          memcpy (&bitarray[i], bits[val2], sizeof(bits[val2]));
          memcpy (&bitarray[i+1], bits[val1], sizeof(bits[val1]));
