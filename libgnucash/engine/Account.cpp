@@ -74,7 +74,7 @@ static const std::string AB_TRANS_RETRIEVAL("trans-retrieval");
 static gnc_numeric GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing);
 
 using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
-using TokenInfoVec=std::vector<struct TokenAccountsInfo>;
+using TokenInfoVec=std::vector<std::pair<std::string, struct TokenAccountsInfo>>;
 using FlatKvpEntry=std::pair<std::string, KvpValue*>;
 
 enum
@@ -5500,7 +5500,7 @@ get_token_info(GncImportMatchMap * imap, GList * tokens)
         {
             for (auto & account : token_info.accounts)
                 account.probability = (double)account.token_count / (double)token_info.total_count;
-            ret.push_back(token_info);
+            ret.emplace_back(token_name, token_info);
         }
     }
     return ret;
@@ -5527,7 +5527,7 @@ build_probabilities(TokenInfoVec const & token_info)
     std::map<std::string, double> sum_of_probabilities;
     for (auto const & token : token_info)
     {
-        for (auto const & account : token.accounts)
+        for (auto const & account : token.second.accounts)
         {
             /* try to insert new entry into sum_of_probabilities */
             auto result = sum_of_probabilities.emplace(account.account_guid, account.probability);
