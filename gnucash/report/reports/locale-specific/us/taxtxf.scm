@@ -107,6 +107,7 @@
 (use-modules (gnucash gnome-utils))
 (use-modules (gnucash report))
 (use-modules (srfi srfi-1))
+(use-modules (ice-9 format))
 (use-modules (gnucash html))
 
 (define reportname (N_ "Tax Schedule Report/TXF Export"))

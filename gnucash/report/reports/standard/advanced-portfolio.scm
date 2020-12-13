@@ -33,6 +33,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 (use-modules (srfi srfi-1))
+(use-modules (ice-9 format))
 
 (define reportname (N_ "Advanced Portfolio"))
 
