@@ -22,18 +22,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.10+\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-11-02 23:21+0100\n"
-"Last-Translator: Christian Stimming <christian@cstimming.de>\n"
-"Language-Team: Deutschsprachige GnuCash-Gemeinde <gnucash-de@gnucash.org>\n"
+"PO-Revision-Date: 2020-12-15 00:37+0000\n"
+"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -468,7 +469,7 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
-"Email-Listen sind die bevorzugte Form der Kommunikation innerhalb der "
+"E-Mail-Listen sind die bevorzugte Form der Kommunikation innerhalb der "
 "GnuCash-Gemeinschaft. Für Ankündigungen neuer Versionen, Benutzergruppen "
 "etc. siehe die Liste in  https://wiki.gnucash.org/wiki/Mailing_Lists."
 
@@ -479,9 +480,9 @@ msgid ""
 "org"
 msgstr ""
 "Die Entwickler von GnuCash können auf einfache Weise erreicht werden. Es "
-"gibt einige Mailing-Listen, aber Sie können genauso gut einen Live-Chat im "
-"IRC (Internet Relay Chat) ausprobieren. Die Entwickler sind im Kanal "
-"#gnucash auf irc.gnome.org zu finden."
+"gibt einige E-Mailing-Listen, aber Sie können genauso gut einen Live-Chat im "
+"IRC (Internet Relay Chat) ausprobieren. Die Entwickler sind im Kanal #"
+"gnucash auf irc.gnome.org zu finden."
 
 #: doc/tip_of_the_day.list.c:13
 msgid ""
@@ -21782,7 +21783,7 @@ msgstr "Liefer-Fax"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:146
 msgid "Shipping Email"
-msgstr "Liefer-Email"
+msgstr "Liefer-E-Mail"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:176
 msgid "Import Customers from csv"
@@ -23964,7 +23965,7 @@ msgstr "Fax"
 #: gnucash/report/reports/aging.scm:55
 #: gnucash/report/reports/standard/new-aging.scm:60
 msgid "Address Email"
-msgstr "Email"
+msgstr "E-Mail-Adresse"
 
 #: gnucash/report/reports/aging.scm:205
 #, scheme-format
@@ -24107,7 +24108,7 @@ msgstr "Faxnummer anzeigen."
 #: gnucash/report/reports/aging.scm:458
 #: gnucash/report/reports/standard/new-aging.scm:60
 msgid "Display Email."
-msgstr "Email-Adresse anzeigen."
+msgstr "E-Mail-Adresse anzeigen."
 
 #: gnucash/report/reports/aging.scm:466
 #: gnucash/report/reports/standard/new-aging.scm:61
