@@ -7,6 +7,7 @@
 # Lorenzo Cappelletti <lorenzo.cappelletti@email.com>, 2003-2005.
 # Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;
 # Alessandro Seveso <aleseveso@tiscalinet.it>, 2000;
+# J. Lavoie <j.lavoie@net-c.ca>, 2020
 #
 # Common translations other than those of the glossary:
 #
@@ -61,8 +62,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -9993,7 +9994,7 @@ msgstr "Fax"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:452
 msgid "E-mail"
-msgstr "Email"
+msgstr "E-mail"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:478
 #: gnucash/gtkbuilder/dialog-customer.glade:200
@@ -15987,7 +15988,7 @@ msgstr "Indirizzo"
 #: gnucash/report/reports/aging.scm:696
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:187
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:420
 msgid "Billing Address"
@@ -22098,7 +22099,7 @@ msgstr "Fax spedizione"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:146
 msgid "Shipping Email"
-msgstr "Email spedizione"
+msgstr "E-mail spedizione"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:176
 msgid "Import Customers from csv"
@@ -24294,7 +24295,7 @@ msgstr "Fax"
 #: gnucash/report/reports/aging.scm:55
 #: gnucash/report/reports/standard/new-aging.scm:60
 msgid "Address Email"
-msgstr "Email"
+msgstr "Indirizzo e-mail"
 
 #: gnucash/report/reports/aging.scm:205
 #, scheme-format
@@ -24449,7 +24450,7 @@ msgstr "Mostra Fax."
 #: gnucash/report/reports/aging.scm:458
 #: gnucash/report/reports/standard/new-aging.scm:60
 msgid "Display Email."
-msgstr "Mostra Email."
+msgstr "Mostra l'e-mail."
 
 #: gnucash/report/reports/aging.scm:466
 #: gnucash/report/reports/standard/new-aging.scm:61
@@ -30979,7 +30980,7 @@ msgstr "Sito internet dell'impresa"
 
 #: libgnucash/app-utils/business-options.scm:74
 msgid "Company Email Address"
-msgstr "Indirizzo email dell'impresa"
+msgstr "Indirizzo e-mail dell'impresa"
 
 #: libgnucash/app-utils/business-options.scm:75
 msgid "Company Contact Person"
@@ -31235,7 +31236,7 @@ msgstr "Il numero di fax della propria attività."
 # Tooltip
 #: libgnucash/app-utils/business-prefs.scm:106
 msgid "The email address of your business."
-msgstr "L'indirizzo email della propria attività."
+msgstr "L'indirizzo e-mail della propria attività."
 
 # Tooltip
 #: libgnucash/app-utils/business-prefs.scm:111
