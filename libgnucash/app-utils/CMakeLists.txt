@@ -193,12 +193,14 @@ gnc_add_scheme_targets(scm-app-utils-1
   gnc_add_scheme_targets(scm-bus-prefs
     SOURCES "business-prefs.scm"
     OUTPUT_DIR "gnucash/app-utils"
-    DEPENDS "scm-app-utils-1")
+    DEPENDS "scm-app-utils-1"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-app-utils-2
     SOURCES "${app_utils_SCHEME_2}"
     OUTPUT_DIR "gnucash"
-    DEPENDS "scm-bus-prefs")
+    DEPENDS "scm-bus-prefs"
+    MAKE_LINKS)
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module (OLD_MODULE "migrate-prefs")
