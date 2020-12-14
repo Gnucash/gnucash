@@ -1,9 +1,0 @@
-#!/bin/bash -le
-
-#-l above (login shell) so that /etc/profile runs so that perl is
-# on the path.
-
-#-e so that if any command has an exit code != 0, this script will
-#  exit immediately.
-
-../commonbuild
