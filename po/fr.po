@@ -19,22 +19,23 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2018-12-22 08:51+0800\n"
-"Last-Translator: La Boussole <yoann@laboussole.coop>\n"
-"Language-Team: Communauté francophone GnuCash <gnucash-fr@gnucash.org>\n"
+"PO-Revision-Date: 2020-12-15 00:37+0000\n"
+"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n>1\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
-msgstr ""
+msgstr "TOUTES LES NON-MONNAIES"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -467,6 +468,10 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"Les listes de diffusion sont la forme de communication préférée de la "
+"communauté GnuCash. Pour les annonces de nouvelles versions, groupes "
+"d'utilisateurs, etc., consultez le tableau à l'adresse https://wiki.gnucash."
+"org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
@@ -1802,7 +1807,7 @@ msgstr ""
 #: gnucash/gnome/dialog-doclink.c:1033
 #, fuzzy
 msgid "Business Document Links"
-msgstr "Fichier/URL associé à la transaction"
+msgstr "Liens de documents commerciaux"
 
 # messages-i18n.c:21
 #: gnucash/gnome/dialog-employee.c:199
@@ -1821,7 +1826,7 @@ msgstr "Vous devez saisir une adresse."
 
 #: gnucash/gnome/dialog-employee.c:295
 msgid "Edit Employee"
-msgstr "Modification de l'employé"
+msgstr "Modifier l'employé"
 
 #: gnucash/gnome/dialog-employee.c:297
 #: gnucash/gnome-search/dialog-search.c:1083
@@ -17006,7 +17011,7 @@ msgstr "_Adresse"
 #: gnucash/report/reports/aging.scm:696
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:187
 msgid "Email"
-msgstr "Adresse électronique"
+msgstr "Courriel"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:420
 msgid "Billing Address"
@@ -23507,9 +23512,8 @@ msgid "Shipping Fax"
 msgstr "Contact de livraison"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:146
-#, fuzzy
 msgid "Shipping Email"
-msgstr "Contact de livraison"
+msgstr "Courriel de livraison"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:176
 msgid "Import Customers from csv"
@@ -25934,9 +25938,8 @@ msgstr "Adresse 1"
 
 #: gnucash/report/reports/aging.scm:55
 #: gnucash/report/reports/standard/new-aging.scm:60
-#, fuzzy
 msgid "Address Email"
-msgstr "Adresse 1"
+msgstr "Adresse courriel"
 
 #: gnucash/report/reports/aging.scm:205
 #, fuzzy, scheme-format
@@ -26096,9 +26099,8 @@ msgstr "Affichage"
 # po/guile_strings.txt:219
 #: gnucash/report/reports/aging.scm:458
 #: gnucash/report/reports/standard/new-aging.scm:60
-#, fuzzy
 msgid "Display Email."
-msgstr "Afficher le symbole"
+msgstr "Afficher le courriel."
 
 # po/guile_strings.txt:219
 #: gnucash/report/reports/aging.scm:466
