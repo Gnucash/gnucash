@@ -19802,21 +19802,19 @@ msgid "Enter your password"
 msgstr "Geben Sie Ihr Passwort ein"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:646
-#, fuzzy
-#| msgid "_Width"
 msgid "Bar_width"
-msgstr "_Breite"
+msgstr "Balken_breite"
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:664
 msgid "Setting the bar width, adapting to the size of the TAN generator."
 msgstr ""
+"Verändern der Balkenbreite um die Flickergrafik an die Größe des TAN-"
+"Generators anzupassen."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:679
-#, fuzzy
-#| msgid "_Delete"
 msgid "_Delay"
-msgstr "_Löschen"
+msgstr "_Verzögerung"
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:694
@@ -19824,6 +19822,8 @@ msgid ""
 "Setting the delay time, with small values the flicker graphic is repeated "
 "faster."
 msgstr ""
+"Durch Verkleinern der Verzögerungszeit wird die Flickergrafik schneller "
+"wiederholt."
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:752
@@ -19831,6 +19831,9 @@ msgid ""
 "Hold the TAN generator in front of the animated graphic. The markings "
 "(triangles) on the graphic must match those on the TAN generator."
 msgstr ""
+"Halten Sie den TAN-Generator vor die animierte Grafik. Die Markierungen "
+"(Dreiecke) oberhalb der Flickeranzeige müssen mit denen auf dem TAN-"
+"Generator übereinstimmen."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:796
 msgid "Con_firm Password"
