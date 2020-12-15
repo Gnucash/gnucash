@@ -74,7 +74,7 @@ static const std::string AB_TRANS_RETRIEVAL("trans-retrieval");
 
 static gnc_numeric GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing);
 
-using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
+using FinalProbabilityVec=std::vector<std::pair<int32_t, std::string>>;
 using TokenSelection=std::set<std::string>;
 using TokenInfoVec=std::vector<std::pair<std::string, struct TokenAccountsInfo>>;
 using FlatKvpEntry=std::pair<std::string, KvpValue*>;
@@ -5469,15 +5469,6 @@ struct TokenAccountsInfo
     int64_t total_count;
 };
 
-/** holds an account guid and its corresponding integer probability
-  the integer probability is some factor of 10
- */
-struct AccountInfo
-{
-    std::string account_guid;
-    int32_t probability;
-};
-
 static void
 build_token_info(char const * suffix, KvpValue * value, TokenAccountsInfo & tokenInfo)
 {
@@ -5582,21 +5573,11 @@ build_probabilities(TokenInfoVec const & token_info, TokenSelection token_select
     {
         for (auto const & account : sum_of_probabilities)
         {
-            ret.push_back({account.first,
-                (int32_t)(account.second / (double)num_tokens * probability_factor)});
+            ret.push_back({(int32_t)(account.second / (double)num_tokens * probability_factor),
+                account.first});
         }
     }
 
-    return ret;
-}
-
-static AccountInfo
-highest_probability(FinalProbabilityVec const & probabilities)
-{
-    AccountInfo ret {"", std::numeric_limits<int32_t>::min()};
-    for (auto const & prob : probabilities)
-        if (prob.second > ret.probability)
-            ret = AccountInfo {prob.first, prob.second};
     return ret;
 }
 
@@ -5777,14 +5758,12 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     auto final_probabilities = build_probabilities(token_info, selected_tokens);
     if (final_probabilities.empty())
         return nullptr;
-    auto best = highest_probability(final_probabilities);
-    if (best.account_guid == "")
-        return nullptr;
-    if (best.probability < account_probability_threshold)
+    auto best = std::max_element(final_probabilities.begin(), final_probabilities.end());
+    if (best->first < account_probability_threshold)
         return nullptr;
     gnc::GUID guid;
     try {
-        guid = gnc::GUID::from_string(best.account_guid);
+        guid = gnc::GUID::from_string(best->second);
     } catch (gnc::guid_syntax_exception&) {
         return nullptr;
     }
