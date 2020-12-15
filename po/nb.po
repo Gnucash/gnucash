@@ -8,18 +8,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-08-17 18:49+0200\n"
-"Last-Translator: John Erling Blad <jeblad@gmail.com>\n"
-"Language-Team: Norwegian <>\n"
+"PO-Revision-Date: 2020-12-15 17:04+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
+"gnucash/nb_NO/>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -1566,8 +1567,9 @@ msgid "Amend URL:"
 msgstr "Legg til URL:"
 
 #: gnucash/gnome/dialog-doclink.c:190
+#, fuzzy
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr ""
+msgstr "Skriv inn en nettadresse, som f.eks. https://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-doclink.c:205
 #, fuzzy
@@ -1576,7 +1578,7 @@ msgstr "Gjeld"
 
 #: gnucash/gnome/dialog-doclink.c:461 gnucash/gnome/dialog-doclink.c:506
 msgid "File Found"
-msgstr ""
+msgstr "Fil funnet"
 
 #: gnucash/gnome/dialog-doclink.c:463
 #, fuzzy
@@ -1584,14 +1586,12 @@ msgid "File Not Found"
 msgstr "Ikke funnet"
 
 #: gnucash/gnome/dialog-doclink.c:476
-#, fuzzy
 msgid "Address Found"
-msgstr "Adresse: "
+msgstr "Fant adresse"
 
 #: gnucash/gnome/dialog-doclink.c:478
-#, fuzzy
 msgid "Address Not Found"
-msgstr "Adresse: "
+msgstr "Fant ikke adresse"
 
 #: gnucash/gnome/dialog-doclink.c:528 gnucash/gnome/dialog-imap-editor.c:885
 #, fuzzy
@@ -1610,7 +1610,7 @@ msgstr "Filen kunne ikke åpnes på nytt."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
 msgid "Manage Document Link"
-msgstr ""
+msgstr "Håndter dokumentlenke"
 
 #: gnucash/gnome/dialog-doclink.c:690
 msgid "Transaction can not be modified."
@@ -2068,8 +2068,14 @@ msgid_plural ""
 "There are %d invalid mappings,\n"
 "\n"
 "Would you like to remove them now?"
-msgstr[0] "MVA-kode %s eksisterer ikke. Vil du opprette den?"
-msgstr[1] "MVA-kode %s eksisterer ikke. Vil du opprette den?"
+msgstr[0] ""
+"Det er %d ugyldige tildelning.\n"
+"\n"
+"Ønsker du å fjerne den nå?"
+msgstr[1] ""
+"Det er %d ugyldige tildelninger.\n"
+"\n"
+"Ønsker du å fjerne dem nå?"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
 #, c-format
@@ -2212,12 +2218,12 @@ msgstr "Kreditnota"
 
 #: gnucash/gnome/dialog-invoice.c:2063
 msgid "PAID"
-msgstr ""
+msgstr "Betalt"
 
 #: gnucash/gnome/dialog-invoice.c:2065
 #: gnucash/report/reports/standard/new-owner-report.scm:577
 msgid "UNPAID"
-msgstr ""
+msgstr "Ubetalt"
 
 #: gnucash/gnome/dialog-invoice.c:2113 gnucash/gnome/dialog-invoice.c:2132
 #: gnucash/gnome/dialog-invoice.c:2151
@@ -2854,7 +2860,7 @@ msgstr "Slette priser?"
 
 #: gnucash/gnome/dialog-price-editor.c:233
 msgid "_Replace"
-msgstr ""
+msgstr "_Erstatt"
 
 #: gnucash/gnome/dialog-price-editor.c:263
 msgid "You must select a Security."
@@ -3226,9 +3232,8 @@ msgid "Created Transactions"
 msgstr "Gjennomsyn av opprettede transaksjoner"
 
 #: gnucash/gnome/dialog-tax-info.c:289
-#, fuzzy
 msgid "Last Valid Year: "
-msgstr "Forrige år"
+msgstr "Sist gyldig år: "
 
 #: gnucash/gnome/dialog-tax-info.c:290
 #, fuzzy
@@ -3256,7 +3261,7 @@ msgstr "Resultatregnskap"
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
 #: gnucash/gtkbuilder/dialog-tax-info.glade:43
 msgid "_Apply"
-msgstr ""
+msgstr "_Bruk"
 
 #: gnucash/gnome/dialog-tax-info.c:1240
 msgid ""
@@ -3717,7 +3722,7 @@ msgstr "Velg et budsjett"
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:385
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:442
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: gnucash/gnome/gnc-plugin-business.c:155
 #: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:161
@@ -4314,7 +4319,7 @@ msgstr "_Velg motkonto"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
 msgid "_Do it anyway"
-msgstr ""
+msgstr "_Gjør det uansett"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1521
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1657
@@ -5151,9 +5156,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:216
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:295
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:934
-#, fuzzy
 msgid "Customer Listing"
-msgstr "Kunde: "
+msgstr "Kundeliste"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:217
 msgid "Show customer aging overview for all customers"
@@ -5209,7 +5213,7 @@ msgstr "Kunde"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:631
 msgid "Jobs"
-msgstr ""
+msgstr "Jobber"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:636
 #, fuzzy
@@ -5914,11 +5918,11 @@ msgstr "Annullert"
 #: gnucash/gnome/gnc-plugin-page-register.c:3458
 #: gnucash/gnome/gnc-plugin-page-register.c:3460
 msgid "Hide:"
-msgstr ""
+msgstr "Skjul:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3460
 msgid "Show:"
-msgstr ""
+msgstr "Vis:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3565
 #: gnucash/gnome/gnc-plugin-page-register.c:3583
@@ -6011,7 +6015,7 @@ msgstr "Eksporter"
 #. * to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr ""
+msgstr "Lagre oppsett"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. * to be used as toolbar button label.
@@ -6021,8 +6025,9 @@ msgid "Save Config As..."
 msgstr "L_agre som..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1144
+#, fuzzy
 msgid "Make Pdf"
-msgstr ""
+msgstr "Opprett PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1196
 #, fuzzy, c-format
@@ -6383,10 +6388,9 @@ msgid "This account register is read-only."
 msgstr "Dette kontoregisteret er skrivebeskyttet."
 
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2448
-#, fuzzy, c-format
-#| msgid "This account register is read-only."
+#, c-format
 msgid "The '%s' account register is read-only."
-msgstr "Dette kontoregisteret er skrivebeskyttet."
+msgstr "«%s»-kontoregisteret er skrivebeskyttet."
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 msgid ""
@@ -7099,9 +7103,8 @@ msgstr "_Nytt element..."
 #: gnucash/gnome-utils/gnc-recurrence.c:549
 #: gnucash/gtkbuilder/dialog-commodities.glade:120
 #: gnucash/gtkbuilder/dialog-price.glade:837
-#, fuzzy
 msgid "_Add"
-msgstr "Adresse: "
+msgstr "_Legg til"
 
 #: gnucash/gnome-search/dialog-search.c:1169
 msgid "all criteria are met"
@@ -7607,13 +7610,12 @@ msgstr ""
 #. like gb:SEDOL, de:WKN, ch:Valorennummer, fr:SICOVAM ...
 #. See http://en.wikipedia.org/wiki/ISIN for hints.
 #: gnucash/gnome-utils/dialog-commodity.c:173
-#, fuzzy
 msgid ""
 "\n"
 "Exchange code (ISIN, CUSIP or similar): "
 msgstr ""
 "\n"
-"Børskode (CUSIP eller lignende):"
+"Børskode (ISIN, CUSIP eller lignende): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:175
 #, fuzzy
@@ -7998,9 +8000,9 @@ msgid "_Rename"
 msgstr "_Nummer"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:641
-#, fuzzy, c-format
+#, c-format
 msgid "Tax table name \"%s\" already exists."
-msgstr "Den varen eksisterer allerede."
+msgstr "Skattetabellnavnet «%s» finnes allerede."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:665
 #, c-format
@@ -8170,7 +8172,7 @@ msgstr "Nærmeste i tid"
 
 #: gnucash/gnome-utils/gnc-autosave.c:122
 msgid "Yes, _always"
-msgstr ""
+msgstr "Ja, _alltid"
 
 #: gnucash/gnome-utils/gnc-autosave.c:123
 #, fuzzy
@@ -8179,7 +8181,7 @@ msgstr "Ikke avslutt"
 
 #: gnucash/gnome-utils/gnc-autosave.c:124
 msgid "_No, not this time"
-msgstr ""
+msgstr "_Nei, ikke nå"
 
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:166
 #: gnucash/gnome-utils/gnc-period-select.c:70
@@ -8595,7 +8597,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:850
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
-msgstr ""
+msgstr "Åpne _skrivebeskyttet"
 
 #: gnucash/gnome-utils/gnc-file.c:853
 #, fuzzy
@@ -8698,9 +8700,9 @@ msgstr "GnuCash får ikke låst opp den koblede filen:"
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes
 #: gnucash/gnome-utils/gnc-keyring.c:356
-#, fuzzy, c-format
+#, c-format
 msgid "Enter a user name and password to connect to: %s"
-msgstr "Fyll inn ditt brukernavn og passord"
+msgstr "Fyll inn ditt brukernavn og passord for å koble til: %s"
 
 #: gnucash/gnome-utils/gnc-main-window.c:131
 #, c-format
@@ -8940,7 +8942,7 @@ msgstr "Lukk dette vinduet"
 #. document is, well, read-only.
 #: gnucash/gnome-utils/gnc-main-window.c:1569
 msgid "(read-only)"
-msgstr ""
+msgstr "(skrivebeskyttet)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1577
 #, fuzzy
@@ -8978,7 +8980,7 @@ msgstr "Bokalternativer"
 #: gnucash/gnome-utils/gnc-main-window.c:4686
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
-msgstr ""
+msgstr "Opphavsrett © 1997-%s GnuCash-bidragsyterne."
 
 #: gnucash/gnome-utils/gnc-main-window.c:4698
 #: gnucash/gnome-utils/gnc-splash.c:97
@@ -8988,7 +8990,7 @@ msgstr "Versjon"
 #: gnucash/gnome-utils/gnc-main-window.c:4699
 #: gnucash/gnome-utils/gnc-splash.c:98 gnucash/gnucash-core-app.cpp:503
 msgid "Build ID"
-msgstr ""
+msgstr "Bygg-ID"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4707
 msgid "Accounting for personal and small business finance."
@@ -9012,7 +9014,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.c:4719
 msgid "Visit the GnuCash website."
-msgstr ""
+msgstr "Besøk GnuCash-nettsiden."
 
 #: gnucash/gnome-utils/gnc-period-select.c:71
 #: libgnucash/app-utils/date-utilities.scm:955
@@ -9837,48 +9839,42 @@ msgstr "Leverandørnummer"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:108
-#, fuzzy
 msgid "Employee Number"
-msgstr "Ansattnummer: "
+msgstr "Ansattnummer"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:417
 #: gnucash/report/reports/aging.scm:48 gnucash/report/reports/aging.scm:682
 #: gnucash/report/reports/standard/new-aging.scm:51
-#, fuzzy
 msgid "Address Name"
-msgstr "Adresse: "
+msgstr "Adressenavn"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:422
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:131
 #: gnucash/report/reports/aging.scm:49 gnucash/report/reports/aging.scm:684
 #: gnucash/report/reports/standard/new-aging.scm:54
-#, fuzzy
 msgid "Address 1"
-msgstr "Adresse: "
+msgstr "Adresse"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:427
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:132
 #: gnucash/report/reports/aging.scm:50 gnucash/report/reports/aging.scm:686
 #: gnucash/report/reports/standard/new-aging.scm:55
-#, fuzzy
 msgid "Address 2"
-msgstr "Adresse: "
+msgstr "Adresse 2"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:432
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:133
 #: gnucash/report/reports/aging.scm:51 gnucash/report/reports/aging.scm:688
 #: gnucash/report/reports/standard/new-aging.scm:56
-#, fuzzy
 msgid "Address 3"
-msgstr "Adresse: "
+msgstr "Adresse 3"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:437
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
 #: gnucash/report/reports/aging.scm:52 gnucash/report/reports/aging.scm:690
 #: gnucash/report/reports/standard/new-aging.scm:57
-#, fuzzy
 msgid "Address 4"
-msgstr "Adresse: "
+msgstr "Adresse 4"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:447
 #: gnucash/gtkbuilder/dialog-customer.glade:282
@@ -9893,9 +9889,8 @@ msgid "Fax"
 msgstr "Faks:"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:452
-#, fuzzy
 msgid "E-mail"
-msgstr "Epost: "
+msgstr "E-post"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:478
 #: gnucash/gtkbuilder/dialog-customer.glade:200
@@ -10211,7 +10206,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:152
 #, fuzzy
 msgid "Last Occur"
-msgstr "Inntraff sist: "
+msgstr "Inntraff sist"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:157
 #, fuzzy
@@ -13080,7 +13075,9 @@ msgstr "Kontosletting"
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
-msgstr "Denne rapporten har ingen alternativer."
+msgstr ""
+"\n"
+"Skriv inn filnavn og plassering for eksporten …\n"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:718
 #, fuzzy
@@ -13182,9 +13179,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:201
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:191
-#, fuzzy
 msgid "<b>Load and Save Settings</b>"
-msgstr "Sparing"
+msgstr "<b>Last inn og lagre innstillinger</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:249
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:238
@@ -13324,11 +13320,12 @@ msgid "Import Preview"
 msgstr "Rapportkontoer"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1028
-#, fuzzy
 msgid ""
 "<b>Press Apply to add the Prices.\n"
 "Cancel to abort.</b>"
-msgstr "Trykk Bruk for å opprette disse transaksjonene."
+msgstr ""
+"Trykk Bruk for å opprette disse transaksjonene.\n"
+"Avbryt for å kansellere.</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1043
 #, fuzzy
@@ -13500,11 +13497,12 @@ msgid "New Account Hierarchy Setup"
 msgstr "Oppsett av nytt kontohierarki"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:53
-#, fuzzy
 msgid ""
 "\n"
 "Please choose the currency to use for new accounts."
-msgstr "Vennligst velg valuta som skal brukes for nye kontoer."
+msgstr ""
+"\n"
+"Velg valuta som skal brukes for nye kontoer."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:108
 msgid "Choose Currency"
@@ -13859,9 +13857,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1111
-#, fuzzy
 msgid "Range"
-msgstr "Område: "
+msgstr "Område"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1187
 #: gnucash/gtkbuilder/dialog-sx.glade:333
@@ -15336,9 +15333,8 @@ msgid "<b>Quote Source Information</b>"
 msgstr "<b>Informasjon om noteringskilde</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:238
-#, fuzzy
 msgid "<b>Security Information</b>"
-msgstr "Verdipapirinformasjon"
+msgstr "Sikkerhetsinfo</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:324
 msgid ""
@@ -15521,9 +15517,8 @@ msgid "Import customers or vendors from text file"
 msgstr "Første splitt i importert transaksjon"
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
-#, fuzzy
 msgid "<b>1. Choose the file to import</b>"
-msgstr "Velg en fil som skal importeres"
+msgstr "<b>1. Velg en fil å importere"
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:155
 msgid "For importing customer lists."
@@ -15534,19 +15529,16 @@ msgid "For importing vendor lists."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:190
-#, fuzzy
 msgid "<b>2. Select Import Type</b>"
-msgstr "Velg importhandling"
+msgstr "<b>2. Velg importtype"
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:308
-#, fuzzy
 msgid "<b>3. Select import options</b>"
-msgstr "Velg importhandling"
+msgstr "<b>3. Velg importhandlinger</b>"
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:349
-#, fuzzy
 msgid "<b>4. Preview</b>"
-msgstr "Se gjennom"
+msgstr "<b>4. Se gjennom</b>"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:51
 #, fuzzy
@@ -15927,9 +15919,8 @@ msgid "Case insensitive searching is available on 'Account Full Name'."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:230
-#, fuzzy
 msgid "_Search"
-msgstr " Søk "
+msgstr "_Søk"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:266
 msgid ""
@@ -16849,9 +16840,8 @@ msgid "days"
 msgstr "dager"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1493
-#, fuzzy
 msgid "<b>_Retain log/backup files</b>"
-msgstr "_Behold loggfiler"
+msgstr "<b>_Behold logg/sikkerhetskopifiler</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1505
 msgid "Com_press files"
@@ -17420,7 +17410,7 @@ msgstr "Vinduer"
 #: gnucash/gtkbuilder/dialog-preferences.glade:3638
 #, fuzzy
 msgid "<b>Online Quotes</b>"
-msgstr "_Hent noteringer online"
+msgstr "<b>_Nettbaserte noteringer</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3659
 #, fuzzy
@@ -18862,9 +18852,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:133
-#, fuzzy
 msgid "Add"
-msgstr "Adresse: "
+msgstr "Legg til"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:137
 msgid "Add 'value' to current budget for each period"
@@ -20509,11 +20498,13 @@ msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:648
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Processing...\n"
-msgstr "_Behandle en betaling..."
+msgstr ""
+"\n"
+"Behandler…\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:717
 #, fuzzy, c-format
@@ -21010,11 +21001,11 @@ msgstr "Vis priskolonnen"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1881
-#, fuzzy, c-format
+#, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
-msgstr[0] "Legg til en ny pris."
-msgstr[1] "Legg til en ny pris."
+msgstr[0] "% tillagt pris"
+msgstr[1] "%s tillagte priser"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1886
@@ -22270,9 +22261,9 @@ msgid "Have a nice day!"
 msgstr "Ha en fin dag!"
 
 #: gnucash/python/init.py:118
-#, fuzzy, python-format
+#, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Velkommen til GnuCash"
+msgstr "Velkommen til GnuCash %-skallet"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -22699,10 +22690,9 @@ msgstr ""
 #. used to estimate widths.
 #: gnucash/register/ledger-core/split-register-layout.c:644
 #: gnucash/register/ledger-core/split-register-layout.c:652
-#, fuzzy
 msgctxt "sample"
 msgid "22/02/2000"
-msgstr "sample:12.12.2000"
+msgstr "22.02.2000"
 
 #. Translators: The 'sample' items are
 #. strings which are not displayed, but only
@@ -23684,9 +23674,8 @@ msgstr "Posteringsdato"
 #: gnucash/report/reports/aging.scm:47
 #: gnucash/report/reports/standard/new-aging.scm:48
 #: gnucash/report/reports/standard/receivables.scm:37
-#, fuzzy
 msgid "Address Source"
-msgstr "Adresse: "
+msgstr "Adressekilde"
 
 #: gnucash/report/reports/aging.scm:53
 #: gnucash/report/reports/standard/new-aging.scm:58
@@ -26194,9 +26183,8 @@ msgid "Barchart"
 msgstr "Eiendeler (stolpediagram)"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1224
-#, fuzzy
 msgid " to "
-msgstr "%s til %s"
+msgstr " til "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1287
 #: gnucash/report/reports/standard/trial-balance.scm:861
@@ -26322,9 +26310,8 @@ msgstr "Type"
 #: gnucash/report/reports/standard/budget-barchart.scm:50
 #: gnucash/report/reports/standard/budget-income-statement.scm:66
 #: gnucash/report/reports/standard/budget.scm:71
-#, fuzzy
 msgid "Range start"
-msgstr "Område: "
+msgstr "Områdestart"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:52
 #: gnucash/report/reports/standard/budget.scm:73
@@ -26346,9 +26333,8 @@ msgstr "Velg en dato for rapporten"
 #: gnucash/report/reports/standard/budget-barchart.scm:57
 #: gnucash/report/reports/standard/budget-income-statement.scm:70
 #: gnucash/report/reports/standard/budget.scm:78
-#, fuzzy
 msgid "Range end"
-msgstr "Område: "
+msgstr "Områdeslutt"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:59
 #: gnucash/report/reports/standard/budget.scm:80
@@ -27125,9 +27111,8 @@ msgid "No Customer"
 msgstr "Ny kunde"
 
 #: gnucash/report/reports/standard/customer-summary.scm:516
-#, fuzzy
 msgid "Customer Summary"
-msgstr "Kundenummer: "
+msgstr "Kundesammendrag"
 
 #: gnucash/report/reports/standard/equity-statement.scm:55
 msgid "Equity Statement"
@@ -27476,9 +27461,8 @@ msgstr "Rapportfeil"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:164
 #: gnucash/report/reports/standard/income-gst-statement.scm:165
-#, fuzzy
 msgid "Default Format"
-msgstr "Standard lønn: "
+msgstr "Forvalgt format"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:167
 msgid "Australia BAS"
@@ -28321,9 +28305,8 @@ msgid "Linked transactions are hidden."
 msgstr "Koblede transaksjoner er skjult."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:938
-#, fuzzy
 msgid "Simple"
-msgstr "Eksempel: "
+msgstr "Enkelt"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:939
 msgid "Invoices show if paid, payments show invoice numbers."
@@ -28595,9 +28578,8 @@ msgstr ""
 #: gnucash/report/reports/standard/receipt.scm:123
 #: gnucash/report/reports/standard/taxinvoice.scm:112
 #: gnucash/report/reports/standard/taxinvoice.scm:181
-#, fuzzy
 msgid "Discount Rate"
-msgstr "Rabatt: "
+msgstr "Rabattsats"
 
 #: gnucash/report/reports/standard/receipt.scm:57
 #: gnucash/report/reports/standard/receipt.scm:125
@@ -28876,9 +28858,8 @@ msgid "column: Units"
 msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:85
-#, fuzzy
 msgid "row: Address"
-msgstr "Adresse: "
+msgstr "rad: Adresse"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:86
 #, fuzzy
@@ -29046,9 +29027,8 @@ msgid "CSS color."
 msgstr "Farger"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:200
-#, fuzzy
 msgid "Invoice number: "
-msgstr "Fakturanummer"
+msgstr "Fakturanummer: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:202
 msgid "To: "
@@ -29059,14 +29039,12 @@ msgid "Your ref: "
 msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:206
-#, fuzzy
 msgid "Job number: "
-msgstr "Jobbnummer"
+msgstr "Jobbnummer: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:208
-#, fuzzy
 msgid "Job name: "
-msgstr "Jobbnavn"
+msgstr "Jobbnavn: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:216
 msgid "Embedded CSS."
@@ -29097,14 +29075,12 @@ msgid "Amount Due (inc GST)"
 msgstr "Å betale"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:314
-#, fuzzy
 msgid "Invoice #: "
-msgstr "Faktura nr. %d"
+msgstr "Faktura nr.: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:315
-#, fuzzy
 msgid "Reference: "
-msgstr "Referanse"
+msgstr "Referanse: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:316
 #, fuzzy
@@ -29814,14 +29790,12 @@ msgstr ""
 #: gnucash/report/stylesheets/head-or-tail.scm:456
 #: gnucash/report/stylesheets/head-or-tail.scm:543
 #: gnucash/report/stylesheets/head-or-tail.scm:550
-#, fuzzy
 msgid "Report Creation Date: "
-msgstr "Rapportvant"
+msgstr "Rapportopprettelsesdato: "
 
 #: gnucash/report/stylesheets/head-or-tail.scm:558
-#, fuzzy
 msgid "GnuCash "
-msgstr "GnuCash %s"
+msgstr "GnuCash "
 
 #: gnucash/report/stylesheets/head-or-tail.scm:573
 #: gnucash/report/stylesheets/head-or-tail.scm:577
@@ -31416,15 +31390,15 @@ msgstr ""
 #: libgnucash/engine/Recurrence.c:628 libgnucash/engine/Recurrence.c:717
 #: libgnucash/engine/Recurrence.c:748 libgnucash/engine/Recurrence.c:765
 #: libgnucash/engine/Recurrence.c:779 libgnucash/engine/Recurrence.c:791
-#, fuzzy, c-format
+#, c-format
 msgid " (x%u)"
-msgstr "Daglig (x%u)"
+msgstr " (x%u)"
 
 #. Translators: %s is an already-localized form of the day of the week.
 #: libgnucash/engine/Recurrence.c:661
-#, fuzzy, c-format
+#, c-format
 msgid "last %s"
-msgstr "siste dag"
+msgstr "siste %s"
 
 #. Translators: %s is the string 1st, 2nd, 3rd and so on, and
 #. * %s is an already-localized form of the day of the week.
