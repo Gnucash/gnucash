@@ -13,20 +13,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-09-17 22:16+0200\n"
-"Last-Translator: Geert Janssens <geert@kobaltwit.be>\n"
-"Language-Team: GnuCash Dutch community <gnucash-nl@gnucash.org>\n"
+"PO-Revision-Date: 2020-12-15 17:04+0000\n"
+"Last-Translator: Geert Janssens <geert.gnucash@kobaltwit.be>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
+">\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4-dev\n"
+"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -383,9 +384,8 @@ msgid "Unicode (UTF-32LE)"
 msgstr "Unicode (UTF-32LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Gebruikersnaam"
+msgstr "Gedefinieer door de gebruiker"
 
 #: borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
@@ -444,9 +444,8 @@ msgid "Menu"
 msgstr "Menu"
 
 #: borrowed/goffice/go-optionmenu.c:336
-#, fuzzy
 msgid "The menu of options"
-msgstr "De numerieke optie is %s."
+msgstr "Het optie menu"
 
 #: doc/tip_of_the_day.list.c:1
 msgid ""
