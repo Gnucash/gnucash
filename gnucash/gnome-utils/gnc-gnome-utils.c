@@ -99,6 +99,7 @@ gnc_book_options_help_cb (GNCOptionWin *win, gpointer dat)
     gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_BOOK_OPTIONS);
 }
 
+#if 0 // Reimplemented in dialog-options.cpp
 void
 gnc_options_dialog_set_book_options_help_cb (GNCOptionWin *win)
 {
@@ -129,6 +130,7 @@ gnc_options_dialog_set_new_book_option_values (GNCOptionDB *odb)
                         num_source_is_split_action);
     }
 }
+#endif
 
 static void
 gnc_style_sheet_options_help_cb (GNCOptionWin *win, gpointer dat)

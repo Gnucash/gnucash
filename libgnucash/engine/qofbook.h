@@ -74,7 +74,12 @@ typedef struct KvpValueImpl KvpValue;
 
 typedef void (*QofBookDirtyCB) (QofBook *, gboolean dirty, gpointer user_data);
 
+#ifdef __cplusplus
+class GncOptionDB;
+using GNCOptionDB = GncOptionDB;
+#else
 typedef struct gnc_option_db GNCOptionDB;
+#endif
 
 typedef void (*GNCOptionSave) (GNCOptionDB*, QofBook*, gboolean);
 typedef void (*GNCOptionLoad) (GNCOptionDB*, QofBook*);

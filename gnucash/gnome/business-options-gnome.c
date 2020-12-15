@@ -42,9 +42,10 @@
 #include "dialog-invoice.h"
 
 #define FUNC_NAME G_STRFUNC
-
+/* To be consolidated into dialog-options.cpp later. */
+#if 0
 static GtkWidget *
-create_owner_widget (GNCOption *option, GncOwnerType type, GtkWidget *hbox)
+create_owner_widget (GncOption *option, GncOwnerType type, GtkWidget *hbox)
 {
     GtkWidget *widget;
     GncOwner owner;
@@ -91,7 +92,7 @@ make_name_label (char *name)
 
 
 static GncOwnerType
-get_owner_type_from_option (GNCOption *option)
+get_owner_type_from_option (GncOption *option)
 {
     SCM odata = gnc_option_get_option_data (option);
 
@@ -102,7 +103,7 @@ get_owner_type_from_option (GNCOption *option)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-owner_set_widget (GNCOption *option, GtkGrid *page_box,
+owner_set_widget (GncOption *option, GtkGrid *page_box,
                   GtkLabel *name_label, char *documentation,
                   /* Return values */
                   GtkWidget **enclosing, gboolean *packed)
@@ -123,7 +124,7 @@ owner_set_widget (GNCOption *option, GtkGrid *page_box,
 
 /* Function to set the UI Value for a particular option */
 static gboolean
-owner_set_value (GNCOption *option, gboolean use_default,
+owner_set_value (GncOption *option, gboolean use_default,
                  GtkWidget *widget, SCM value)
 {
     GncOwner owner_def;
@@ -150,7 +151,7 @@ owner_set_value (GNCOption *option, gboolean use_default,
 
 /* Function to get the UI Value for a particular option */
 static SCM
-owner_get_value (GNCOption *option, GtkWidget *widget)
+owner_get_value (GncOption *option, GtkWidget *widget)
 {
     static GncOwner owner;	/* XXX: might cause trouble? */
     GncOwnerType type;
@@ -169,7 +170,7 @@ owner_get_value (GNCOption *option, GtkWidget *widget)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-customer_set_widget (GNCOption *option, GtkGrid *page_box,
+customer_set_widget (GncOption *option, GtkGrid *page_box,
                      GtkLabel *name_label, char *documentation,
                      /* Return values */
                      GtkWidget **enclosing, gboolean *packed)
@@ -189,7 +190,7 @@ customer_set_widget (GNCOption *option, GtkGrid *page_box,
 
 /* Function to set the UI Value for a particular option */
 static gboolean
-customer_set_value (GNCOption *option, gboolean use_default,
+customer_set_value (GncOption *option, gboolean use_default,
                     GtkWidget *widget, SCM value)
 {
     GncOwner owner;
@@ -209,7 +210,7 @@ customer_set_value (GNCOption *option, gboolean use_default,
 
 /* Function to get the UI Value for a particular option */
 static SCM
-customer_get_value (GNCOption *option, GtkWidget *widget)
+customer_get_value (GncOption *option, GtkWidget *widget)
 {
     GncOwner owner;
 
@@ -225,7 +226,7 @@ customer_get_value (GNCOption *option, GtkWidget *widget)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-vendor_set_widget (GNCOption *option, GtkGrid *page_box,
+vendor_set_widget (GncOption *option, GtkGrid *page_box,
                    GtkLabel *name_label, char *documentation,
                    /* Return values */
                    GtkWidget **enclosing, gboolean *packed)
@@ -245,7 +246,7 @@ vendor_set_widget (GNCOption *option, GtkGrid *page_box,
 
 /* Function to set the UI Value for a particular option */
 static gboolean
-vendor_set_value (GNCOption *option, gboolean use_default,
+vendor_set_value (GncOption *option, gboolean use_default,
                   GtkWidget *widget, SCM value)
 {
     GncOwner owner;
@@ -265,7 +266,7 @@ vendor_set_value (GNCOption *option, gboolean use_default,
 
 /* Function to get the UI Value for a particular option */
 static SCM
-vendor_get_value (GNCOption *option, GtkWidget *widget)
+vendor_get_value (GncOption *option, GtkWidget *widget)
 {
     GncOwner owner;
 
@@ -280,7 +281,7 @@ vendor_get_value (GNCOption *option, GtkWidget *widget)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-employee_set_widget (GNCOption *option, GtkGrid *page_box,
+employee_set_widget (GncOption *option, GtkGrid *page_box,
                      GtkLabel *name_label, char *documentation,
                      /* Return values */
                      GtkWidget **enclosing, gboolean *packed)
@@ -300,7 +301,7 @@ employee_set_widget (GNCOption *option, GtkGrid *page_box,
 
 /* Function to set the UI Value for a particular option */
 static gboolean
-employee_set_value (GNCOption *option, gboolean use_default,
+employee_set_value (GncOption *option, gboolean use_default,
                     GtkWidget *widget, SCM value)
 {
     GncOwner owner;
@@ -320,7 +321,7 @@ employee_set_value (GNCOption *option, gboolean use_default,
 
 /* Function to get the UI Value for a particular option */
 static SCM
-employee_get_value (GNCOption *option, GtkWidget *widget)
+employee_get_value (GncOption *option, GtkWidget *widget)
 {
     GncOwner owner;
 
@@ -335,7 +336,7 @@ employee_get_value (GNCOption *option, GtkWidget *widget)
 
 
 static GtkWidget *
-create_invoice_widget (GNCOption *option, GtkWidget *hbox)
+create_invoice_widget (GncOption *option, GtkWidget *hbox)
 {
     GtkWidget *widget;
 
@@ -352,7 +353,7 @@ create_invoice_widget (GNCOption *option, GtkWidget *hbox)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-invoice_set_widget (GNCOption *option, GtkGrid *page_box,
+invoice_set_widget (GncOption *option, GtkGrid *page_box,
                     GtkLabel *name_label, char *documentation,
                     /* Return values */
                     GtkWidget **enclosing, gboolean *packed)
@@ -372,7 +373,7 @@ invoice_set_widget (GNCOption *option, GtkGrid *page_box,
 
 /* Function to set the UI Value for a particular option */
 static gboolean
-invoice_set_value (GNCOption *option, gboolean use_default,
+invoice_set_value (GncOption *option, gboolean use_default,
                    GtkWidget *widget, SCM value)
 {
     GncInvoice *invoice;
@@ -390,7 +391,7 @@ invoice_set_value (GNCOption *option, gboolean use_default,
 
 /* Function to get the UI Value for a particular option */
 static SCM
-invoice_get_value (GNCOption *option, GtkWidget *widget)
+invoice_get_value (GncOption *option, GtkWidget *widget)
 {
     GncInvoice *invoice;
 
@@ -404,7 +405,7 @@ invoice_get_value (GNCOption *option, GtkWidget *widget)
 
 
 static GtkWidget *
-create_taxtable_widget (GNCOption *option, GtkWidget *hbox)
+create_taxtable_widget (GncOption *option, GtkWidget *hbox)
 {
     GtkWidget *widget;
     GtkBuilder *builder;
@@ -428,7 +429,7 @@ create_taxtable_widget (GNCOption *option, GtkWidget *hbox)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-taxtable_set_widget (GNCOption *option, GtkGrid *page_box,
+taxtable_set_widget (GncOption *option, GtkGrid *page_box,
                      GtkLabel *name_label, char *documentation,
                      /* Return values */
                      GtkWidget **enclosing, gboolean *packed)
@@ -448,7 +449,7 @@ taxtable_set_widget (GNCOption *option, GtkGrid *page_box,
 
 /* Function to set the UI Value for a particular option */
 static gboolean
-taxtable_set_value (GNCOption *option, gboolean use_default,
+taxtable_set_value (GncOption *option, gboolean use_default,
                     GtkWidget *widget, SCM value)
 {
     GncTaxTable *taxtable;
@@ -466,7 +467,7 @@ taxtable_set_value (GNCOption *option, gboolean use_default,
 
 /* Function to get the UI Value for a particular option */
 static SCM
-taxtable_get_value (GNCOption *option, GtkWidget *widget)
+taxtable_get_value (GncOption *option, GtkWidget *widget)
 {
     GncTaxTable *taxtable;
 
@@ -474,28 +475,11 @@ taxtable_get_value (GNCOption *option, GtkWidget *widget)
     return SWIG_NewPointerObj(taxtable, SWIG_TypeQuery("_p__gncTaxTable"), 0);
 }
 
-
+#endif
 
 
 void
 gnc_business_options_gnome_initialize (void)
 {
-    int i;
-    static GNCOptionDef_t options[] =
-    {
-        { "owner", owner_set_widget, owner_set_value, owner_get_value },
-        {
-            "customer", customer_set_widget, customer_set_value,
-            customer_get_value
-        },
-        { "vendor", vendor_set_widget, vendor_set_value, vendor_get_value },
-        { "employee", employee_set_widget, employee_set_value, employee_get_value },
-        { "invoice", invoice_set_widget, invoice_set_value, invoice_get_value },
-        { "taxtable", taxtable_set_widget, taxtable_set_value, taxtable_get_value },
-        { NULL }
-    };
-
-    SWIG_GetModule(NULL); /* Work-around for SWIG bug. */
-    for (i = 0; options[i].option_name; i++)
-        gnc_options_ui_register_option (&(options[i]));
+/* Create the above option types. */
 }

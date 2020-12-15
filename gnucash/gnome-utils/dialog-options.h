@@ -24,12 +24,23 @@
 #define OPTIONS_DIALOG_H
 
 #include <libguile.h>
-#include "option-util.h"
 #include <gtk/gtk.h>
+#ifdef __cplusplus
+class GncOption;
+class GncOptionDB;
+using GNCOption = GncOption;
+using GNCOptionDB = GncOptionDB;
+extern "C"
+{
+#else
+#include "option-util.h"
+typedef GNCOption GncOption;
+typedef GNCOptionDB GncOptionDB;
+#endif
 
 /** A simple wrapper that casts the gpointer result of
  * gnc_option_get_widget() already into a GtkWidget*. */
-GtkWidget *gnc_option_get_gtk_widget (GNCOption *option);
+GtkWidget* const gnc_option_get_gtk_widget (GncOption *option);
 
 typedef struct gnc_option_win GNCOptionWin;
 
@@ -39,7 +50,6 @@ GNCOptionWin * gnc_options_dialog_new_modal (gboolean modal, gchar *title,
                                              const char *component_class,
                                              GtkWindow *parent);
 GNCOptionWin * gnc_options_dialog_new (gchar *title, GtkWindow *parent);
-GNCOptionWin * gnc_options_dialog_new_w_dialog (gchar *title, GtkWidget *dialog);
 void gnc_options_dialog_destroy (GNCOptionWin * win);
 void gnc_options_register_stocks (void);
 
@@ -49,8 +59,8 @@ GtkWidget * gnc_options_dialog_notebook (GNCOptionWin * win);
 
 void gnc_options_dialog_changed (GNCOptionWin *win);
 
-void gnc_option_changed_widget_cb (GtkWidget *widget, GNCOption *option);
-void gnc_option_changed_option_cb (GtkWidget *dummy, GNCOption *option);
+void gnc_option_changed_widget_cb (GtkWidget *widget, GncOption *option);
+void gnc_option_changed_option_cb (GtkWidget *dummy, GncOption *option);
 
 void gnc_options_dialog_set_apply_cb (GNCOptionWin * win,
                                       GNCOptionWinCallback thunk,
@@ -67,50 +77,21 @@ void gnc_options_dialog_set_global_help_cb (GNCOptionWinCallback thunk,
 
 void gnc_options_dialog_build_contents (GNCOptionWin *win,
                                         GNCOptionDB  *odb);
-
 void gnc_options_dialog_build_contents_full (GNCOptionWin *win,
                                              GNCOptionDB  *odb,
                                              gboolean show_dialog);
-
-/* Both apply_cb and close_cb should be scheme functions with 0 arguments.
- * References to these functions will be held until the close_cb is called
- */
-void gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win,
-                                           SCM apply_cb,
-                                           SCM close_cb);
-
-/*****************************************************************/
-/* Option Registration                                           */
-
-/* Function to set the UI widget based upon the option */
-typedef GtkWidget *
-(*GNCOptionUISetWidget) (GNCOption *option, GtkGrid *page_box,
-                         GtkLabel *name_label, char *documentation,
-                         /* Return values */
-                         GtkWidget **enclosing, gboolean *packed);
-
-/* Function to set the UI Value for a particular option */
-typedef gboolean
-(*GNCOptionUISetValue)  (GNCOption *option, gboolean use_default,
-                         GtkWidget *widget, SCM value);
-
-/* Function to get the UI Value for a particular option */
-typedef SCM
-(*GNCOptionUIGetValue)  (GNCOption *option, GtkWidget *widget);
-
-
-typedef struct gnc_option_def
-{
-    const char *         option_name;
-    GNCOptionUISetWidget set_widget;
-    GNCOptionUISetValue  set_value;
-    GNCOptionUIGetValue  get_value;
-} GNCOptionDef_t;
-
-
-/* Register a new option type in the UI */
 void gnc_options_ui_initialize (void);
-void gnc_options_ui_register_option (GNCOptionDef_t *option);
-GNCOptionDef_t * gnc_options_ui_get_option (const char *option_name);
 
+/** Set the help callback to 'gnc_book_options_help_cb' to open a help browser
+ *  and point it to the Book Options link in the Help file.
+ */
+void gnc_options_dialog_set_book_options_help_cb (GNCOptionWin *win);
+
+/** Set the initial values of new book options to values specified in user
+ *  preferences.
+ */
+void gnc_options_dialog_set_new_book_option_values (GNCOptionDB *odb);
+#ifdef __cplusplus
+}
+#endif
 #endif /* OPTIONS_DIALOG_H */

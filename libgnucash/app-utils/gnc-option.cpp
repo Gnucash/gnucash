@@ -505,7 +505,6 @@ GncOption::from_scheme(std::istream& iss)
  * the template implementation in the public header.
  */
 
-using GncOptionAccountList = std::vector<const Account*>;
 
 template class GncOptionValidatedValue<const QofInstance*>;
 
@@ -544,17 +543,20 @@ template const char* GncOption::get_default_value<const char*>() const;
 template std::string GncOption::get_default_value<std::string>() const;
 template const QofInstance* GncOption::get_default_value<const QofInstance*>() const;
 template RelativeDatePeriod GncOption::get_default_value<RelativeDatePeriod>() const;
+template GncOptionAccountList GncOption::get_default_value<GncOptionAccountList>() const;
 template GncMultichoiceOptionIndexVec GncOption::get_default_value<GncMultichoiceOptionIndexVec>() const;
 
 template void GncOption::set_value(bool);
 template void GncOption::set_value(int);
 template void GncOption::set_value(int64_t);
 template void GncOption::set_value(double);
+template void GncOption::set_value(char*);
 template void GncOption::set_value(const char*);
 template void GncOption::set_value(std::string);
 template void GncOption::set_value(const QofInstance*);
 template void GncOption::set_value(RelativeDatePeriod);
 template void GncOption::set_value(size_t);
+template void GncOption::set_value(GncOptionAccountList);
 template void GncOption::set_value(GncMultichoiceOptionIndexVec);
 
 template void GncOption::get_limits(double&, double&, double&) const noexcept;

@@ -136,6 +136,7 @@ gnucash/gnome-utils/dialog-dup-trans.c
 gnucash/gnome-utils/dialog-file-access.c
 gnucash/gnome-utils/dialog-object-references.c
 gnucash/gnome-utils/dialog-options.c
+gnucash/gnome-utils/dialog-options.cpp
 gnucash/gnome-utils/dialog-preferences.c
 gnucash/gnome-utils/dialog-query-view.c
 gnucash/gnome-utils/dialog-reset-warnings.c
@@ -528,6 +529,7 @@ libgnucash/app-utils/gnc-gsettings.c
 libgnucash/app-utils/gnc-helpers.c
 libgnucash/app-utils/gnc-help-utils.c
 libgnucash/app-utils/gnc-option.cpp
+libgnucash/app-utils/gnc-option-date.cpp
 libgnucash/app-utils/gnc-optiondb.cpp
 libgnucash/app-utils/gnc-option-impl.cpp
 libgnucash/app-utils/gnc-prefs-utils.c

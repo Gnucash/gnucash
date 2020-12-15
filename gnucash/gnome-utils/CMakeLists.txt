@@ -36,7 +36,7 @@ set (gnome_utils_SOURCES
   dialog-dup-trans.c
   dialog-file-access.c
   dialog-object-references.c
-  dialog-options.c
+  dialog-options.cpp
   dialog-preferences.c
   dialog-query-view.c
   dialog-reset-warnings.c
@@ -59,7 +59,7 @@ set (gnome_utils_SOURCES
   gnc-currency-edit.c
   gnc-date-delta.c
   gnc-date-edit.c
-  gnc-date-format.c 
+  gnc-date-format.c
   gnc-dense-cal.c
   gnc-dense-cal-model.c
   gnc-dense-cal-store.c
