@@ -45,10 +45,6 @@ install(TARGETS gnc-qif-import
 
 # Scheme
 
-set (qif_import_SCHEME_0
-  string.scm
-  )
-
 set (qif_import_SCHEME
   qif-dialog-utils.scm
   qif-file.scm
@@ -73,12 +69,6 @@ set(GUILE_DEPENDS
   scm-gnome-utils
   )
 
-gnc_add_scheme_targets(scm-qif-import-0
-    SOURCES "${qif_import_SCHEME_0}"
-    OUTPUT_DIR "gnucash"
-    DEPENDS "${GUILE_DEPENDS}"
-    MAKE_LINKS)
-
 gnc_add_scheme_targets(scm-qif-import-2
     SOURCES "${qif_import_SCHEME_2}"
     OUTPUT_DIR "gnucash"
@@ -88,7 +78,7 @@ gnc_add_scheme_targets(scm-qif-import-2
 gnc_add_scheme_targets(scm-qif-import
     SOURCES "${qif_import_SCHEME}"
     OUTPUT_DIR "gnucash/qif-import"
-    DEPENDS "${GUILE_DEPENDS};scm-qif-import-0"
+    DEPENDS "${GUILE_DEPENDS}"
     MAKE_LINKS)
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
@@ -96,11 +86,6 @@ gnc_add_scheme_deprecated_module (
     OLD_MODULE "gnucash import-export qif-import"
     NEW_MODULE "gnucash qif-import"
     DEPENDS "scm-qif-import-2"
-    MAKE_LINKS)
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE "gnucash import-export string"
-    NEW_MODULE "gnucash string"
-    DEPENDS "scm-qif-import-0"
     MAKE_LINKS)
 
 set_local_dist(qif_import_DIST_local CMakeLists.txt file-format.txt ${qif_import_SOURCES} ${qif_import_noinst_HEADERS}

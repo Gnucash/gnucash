@@ -95,6 +95,7 @@ set (engine_SCHEME_1
 )
 
 set (engine_SCHEME_2
+    string.scm
     utilities.scm
 )
 
@@ -134,6 +135,12 @@ gnc_add_scheme_targets(scm-gnc-module
     SOURCES gnc-module.scm
     OUTPUT_DIR gnucash
     DEPENDS "${scm_gnc_module_DEPENDS}")
+
+  gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash import-export string"
+    NEW_MODULE "gnucash string"
+    DEPENDS "scm-engine-2"
+    MAKE_LINKS)
 
 set_local_dist(guile_DIST_local
     CMakeLists.txt
