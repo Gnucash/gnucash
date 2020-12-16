@@ -46,7 +46,7 @@
 #define MARGIN     12    /* Distance between the flicker bars */
 #define DELAY      50    /* Pause between the flickering painting */
 
-static char *flicker_data (char const *challenge);
+static guint flicker_data (char const *challenge);
 static gboolean time_handler (GtkWidget *widget);
 static void do_marker_drawing (cairo_t *cr);
 static void draw_bit (cairo_t *cr, _Bool bit, int i);
@@ -114,8 +114,8 @@ get_num (const char ch)
 }
 
 /* convert the bank challenge into the 5 bits for the flicker data */
-static char
-*flicker_data (const char *challenge)
+static guint
+flicker_data (const char *challenge)
 {
     /* bitfield is a clock bit and a 4-bit code with the bits reversed
        (bit 1 is the least significant and bit 4 the most
@@ -128,16 +128,13 @@ static char
            {0, 0, 0, 1, 1}, {0, 1, 0, 1, 1}, {0, 0, 1, 1, 1}, {0, 1, 1, 1, 1}
      };
 
-     /* prepend synchronization identifier */
-     const char pre[] = {'0', 'F', 'F', 'F'};
-     size_t len = sizeof (pre) + strlen (challenge) + 1;
-     char* code = (char*)g_malloc0 (len);
-     memcpy (code, pre, sizeof (pre));
-     memcpy (code + sizeof (pre), challenge, strlen (challenge));
+    /* prepend synchronization identifier */
+    char* code = g_strdup_printf ("0FFF%s", challenge);
+    guint challenge_length = strlen (code);
 
     /* Swap the position of the bits in pairs throughout the bank challenge
        (low-order nibble first). */
-     for (guint i = 0; i < len - 1; i += 2)
+     for (guint i = 0; i < challenge_length; i += 2)
      {
          guint val1 = get_num (code[i]);
          guint val2 = get_num (code[i+1]);
@@ -145,7 +142,9 @@ static char
          memcpy (&bitarray[i], bits[val2], sizeof(bits[val2]));
          memcpy (&bitarray[i+1], bits[val1], sizeof(bits[val1]));
      }
-     return code;
+     g_free (code);
+
+     return challenge_length;
 }
 
 /* A timer for redrawing the flickering painting, is started here and
@@ -306,9 +305,7 @@ do_flicker_store_state (GtkWidget *dialog)
 static void
 on_flicker_challenge_map (GtkWidget *widget)
 {
-    gchar *code = g_malloc0 (strlen (flickerdraw.challenge) + 4);
-    code = flicker_data (flickerdraw.challenge);
-    flickerdraw.challenge_length = strlen (code);
+    flickerdraw.challenge_length = flicker_data (flickerdraw.challenge);
 
     /* Set the height of the drawing area */
     flickerdraw.height = flickerdraw.barheight + 2 * flickerdraw.y_barpos;
