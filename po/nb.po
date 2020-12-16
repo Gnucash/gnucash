@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-15 17:04+0000\n"
+"PO-Revision-Date: 2020-12-17 06:17+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -15334,7 +15334,7 @@ msgstr "<b>Informasjon om noteringskilde</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:238
 msgid "<b>Security Information</b>"
-msgstr "Sikkerhetsinfo</b>"
+msgstr "<b>Verdipapirinformasjon</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:324
 msgid ""
