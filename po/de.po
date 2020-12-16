@@ -25,8 +25,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-15 17:04+0000\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2020-12-17 06:17+0000\n"
+"Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -6135,6 +6135,8 @@ msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
+"Dieser Bericht muss aktualisiert werden, um ein Dokumentobjekt mit "
+"Exportzeichenfolge oder Exportfehler zurückzugeben."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1759
 #, c-format
@@ -7514,6 +7516,8 @@ msgstr ""
 msgid ""
 "An account with opening balance already exists for the desired currency."
 msgstr ""
+"Für die gewünschte Währung ist bereits ein Konto mit Eröffnungssaldo "
+"vorhanden."
 
 #: gnucash/gnome-utils/dialog-account.c:1332
 #, fuzzy
