@@ -15,13 +15,13 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-glossary 1.7.4\n"
+"Project-Id-Version: gnucash-glossary 4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-06 18:14+0100\n"
-"PO-Revision-Date: 2020-07-09 03:18+0200\n"
+"PO-Revision-Date: 2020-12-16 20:30+0100\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
-"Language-Team: Italian <tp@lists.linux.it>\n"
+"Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,7 +70,7 @@ msgstr "tipo conto: valuta, conto finanziario"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr "tipo conto: capitale, valore netto"
+msgstr "tipo conto: capitale, patrimonio"
 
 #. "-"
 msgid "account type: Expense"
@@ -194,9 +194,8 @@ msgid "action: transfer"
 msgstr "operazione: trasferimento"
 
 #. "-"
-#, fuzzy
 msgid "action: wire"
-msgstr "operazione:"
+msgstr "operazione: bonifico"
 
 #. "-"
 msgid "action: withdraw"
@@ -384,7 +383,7 @@ msgstr "partita doppia"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "collegamento al documento"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -467,10 +466,8 @@ msgid "loan"
 msgstr "prestito"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "prestito"
+msgstr "tasso annuale prestito"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -506,19 +503,15 @@ msgstr "promemoria"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
-msgstr "mutuo"
+msgstr "Mutuo"
 
 #. "Adjustable Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "mutuo"
+msgstr "mutuo a tasso variabile"
 
 #. "Fixed Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "mutuo"
+msgstr "mutuo a tasso fisso"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -696,7 +689,7 @@ msgstr "formato report: Scalare"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "utili a nuovo"
+msgstr "utili portati a nuovo"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
@@ -776,7 +769,7 @@ msgstr "transazione"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "stato transazione: liquidata"
+msgstr "stato transazione: liquidata, verificata"
 
 #. "-"
 msgid "transaction state: frozen"
@@ -834,9 +827,3 @@ msgstr "nota spese, buono, nota, garante"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "prelievo (in una finestra di riconciliazione)"
 
-# "owner is the entity named in the document different from the company that is keeping book (so it could be the customer of an invoice, or the vendor indicated in your bill)."
-#~ msgid "invoice owner"
-#~ msgstr "intestatario"
-
-#~ msgid "Term"
-#~ msgstr "Termine"
