@@ -10,16 +10,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-06 18:14+0100\n"
-"PO-Revision-Date: 2007-07-08 00:44-0300\n"
-"Last-Translator: Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>\n"
-"Language-Team: none\n"
-"Language: Brazilian Portuguese\n"
+"PO-Revision-Date: 2020-12-18 07:06+0000\n"
+"Last-Translator: LL Magical <lolayami2004@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
+"gnucash/glossary/pt_BR/>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -42,18 +45,16 @@ msgid "account name"
 msgstr "nome da conta"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
-#, fuzzy
 msgid "account type: Active"
-msgstr "Ativo"
+msgstr "tipo de conta: Ativa"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
 msgstr "Ativo"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "Passivo"
+msgstr "tipo de conta: Ativos & Passivos"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -88,14 +89,12 @@ msgid "account type: Mutual fund"
 msgstr "Fundo mútuo"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "Ativo"
+msgstr "tipo de conta: Passivo"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "Ativo"
+msgstr "tipo de conta: Lucro & Perda"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -106,9 +105,8 @@ msgid "account type: Stock"
 msgstr "Ação"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "poupança"
+msgstr "tipo de conta: negociação"
 
 #. "-"
 msgid "account: parent account"
@@ -200,7 +198,7 @@ msgstr "saque"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "envelhecimento"
 
 #. "A sum of money"
 msgid "amount"
@@ -215,14 +213,12 @@ msgid "balance (noun)"
 msgstr "saldo"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "equilibrar"
+msgstr "equilíbrio b/f"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "equilibrar"
+msgstr "equilíbrio c/f"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -241,9 +237,8 @@ msgid "bill"
 msgstr "conta"
 
 #. "see invoice owner"
-#, fuzzy
 msgid "bill owner"
-msgstr "forma de faturamento"
+msgstr "proprietário da conta"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -295,7 +290,7 @@ msgstr "fechar"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "commodity"
+msgstr "mercadoria"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
@@ -310,9 +305,8 @@ msgid "commodity option: Symbol"
 msgstr "Símbolo"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "juros"
+msgstr "interesses compostos"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -327,9 +321,8 @@ msgid "credit transfer"
 msgstr "transferência de crédito"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
-#, fuzzy
 msgid "credit note"
-msgstr "transferência de crédito"
+msgstr "nota de crédito"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -376,9 +369,8 @@ msgid "Description (column in register)"
 msgstr "Descrição"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
-#, fuzzy
 msgid "discount"
-msgstr "conta"
+msgstr "desconto"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -386,7 +378,7 @@ msgstr "dupla entrada"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "link de documento"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -469,10 +461,8 @@ msgid "loan"
 msgstr "empréstimo"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "empréstimo"
+msgstr "empréstimo: APR"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -495,9 +485,8 @@ msgid "marker"
 msgstr "marcador"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
-msgstr "marcador"
+msgstr "Marcação"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -512,16 +501,12 @@ msgid "Mortgage"
 msgstr "Hipoteca"
 
 #. "Adjustable Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "Hipoteca"
+msgstr "hipoteca: ARM"
 
 #. "Fixed Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "Hipoteca"
+msgstr "hipoteca: FRM"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -573,7 +558,7 @@ msgstr "órfã"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "proprietário (de conta, fatura ou comprovante de despesa)"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -597,25 +582,23 @@ msgstr "pagamento"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr "temporária"
+msgstr "alocador"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
 msgstr "portfólio"
 
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "fechar"
+msgstr "postar para"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "preferências"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "pagamento"
+msgstr "pagamento principal"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -691,11 +674,11 @@ msgstr "recarregar"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "formulário de relatório: Formulário de Conta T"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "formulário de relatório: Formulário Vertical"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -707,7 +690,7 @@ msgstr "reverter a transação"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "vendas"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -750,9 +733,8 @@ msgid "subtotal"
 msgstr "subtotal"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "info de impostos"
+msgstr "código tributário"
 
 #. "field of an account"
 msgid "tax info"
@@ -804,7 +786,7 @@ msgstr "conta de destino"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr ""
+msgstr "transferência para (registrar barra de ferramentas)"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
