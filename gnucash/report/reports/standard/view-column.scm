@@ -116,21 +116,17 @@
 	 (gnc:report-set-stylesheet! 
 	  subreport (gnc:report-stylesheet report))
 	 
-	 ;; render the report body ... hopefully this will DTRT
-	 ;; if there is an error, then dump a backtrace and print
-	 ;; an error message
-	 ;; and cache when it's ok to cache.
-	 (if (not (gnc:backtrace-if-exception
-		   (lambda ()
-		     (gnc:html-table-cell-append-objects! 
-		      contents-cell (gnc:report-render-html subreport #f))
-		     #t)))
-	     (gnc:html-table-cell-append-objects!
-	      contents-cell
-	      (gnc:make-html-text
-	       (gnc:html-markup-h3 (G_ "Report error"))
-               (G_ "An error occurred while running the report.")
-               (gnc:html-markup "pre" gnc:last-captured-error))))
+	 ;; render the report body ... capture error if report crashes.
+         (gnc:html-table-cell-append-objects!
+          contents-cell
+          (match (gnc:apply-with-error-handling
+                  (lambda () (gnc:report-render-html subreport #f)) '())
+            ((html #f) html)
+            ((_ captured-error)
+             (gnc:make-html-text
+              (gnc:html-markup-h3 (G_ "Report error"))
+              (G_ "An error occurred while running the report.")
+              (gnc:html-markup "pre" captured-error)))))
 
 	 ;; increment the alloc number for each occupied row
 	 (let loop ((row current-row-num))
