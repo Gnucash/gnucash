@@ -54,7 +54,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:27+0100\n"
-"PO-Revision-Date: 2020-12-16 19:57+0100\n"
+"PO-Revision-Date: 2020-12-16 20:53+0100\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "Language: it\n"
@@ -930,7 +930,7 @@ msgstr "Segnaposto"
 #: gnucash/gtkbuilder/dialog-account.glade:1855
 #: libgnucash/app-utils/gnc-ui-util.c:1102
 msgid "Opening Balance"
-msgstr "Bilancio d'apertura"
+msgstr "Saldo d'apertura"
 
 #: gnucash/gnome/assistant-hierarchy.c:1366
 msgid "Use Existing"
@@ -7497,7 +7497,7 @@ msgstr "Questa è una codifica non valida."
 
 #: gnucash/gnome-utils/dialog-account.c:531
 msgid "Could not create opening balance."
-msgstr "Impossibile creare il bilancio d'apertura."
+msgstr "Impossibile creare il saldo d'apertura."
 
 #: gnucash/gnome-utils/dialog-account.c:739
 msgid "Give the children the same type?"
@@ -7546,15 +7546,15 @@ msgstr "Scegliere una commodity."
 
 #: gnucash/gnome-utils/dialog-account.c:955
 msgid "You must enter a valid opening balance or leave it blank."
-msgstr "Inserire un bilancio di apertura valido o lasciare vuoto."
+msgstr "Inserire un saldo di apertura valido o lasciare vuoto."
 
 #: gnucash/gnome-utils/dialog-account.c:979
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
 msgstr ""
-"Selezionare un conto di trasferimento o scegliere il conto del capitale per "
-"i bilanci di apertura."
+"Selezionare un conto di trasferimento o scegliere il conto del patrimonio "
+"per i saldi di apertura."
 
 #: gnucash/gnome-utils/dialog-account.c:1331
 msgid ""
@@ -9534,7 +9534,7 @@ msgstr "Autodep"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2873
 #: gnucash/register/ledger-core/split-register.c:2638
 msgid "Wire"
-msgstr "Cavo"
+msgstr "Bonifico"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2875
 #: gnucash/register/ledger-core/split-register.c:2640
@@ -9621,7 +9621,7 @@ msgstr "Assegno"
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
 #: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4371
 msgid "Equity"
-msgstr "Patrimonio netto"
+msgstr "Patrimonio netto, Capitale"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2942
 #: gnucash/gnome-utils/gnc-tree-view-price.c:426
@@ -9649,7 +9649,7 @@ msgstr "Prezzo"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2945
 #: gnucash/register/ledger-core/split-register.c:2710
 msgid "Dividend"
-msgstr "Dividendi"
+msgstr "Dividendo"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2948
 #: gnucash/register/ledger-core/split-register.c:2713
@@ -9758,7 +9758,7 @@ msgstr "_Ricalcola"
 #: gnucash/report/trep-engine.scm:169 gnucash/report/trep-engine.scm:1007
 #: gnucash/report/trep-engine.scm:1100
 msgid "Account Name"
-msgstr "Nome Conto"
+msgstr "Nome del conto"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:816
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2916
@@ -14071,8 +14071,8 @@ msgstr ""
 "\n"
 "Alcuni conti sono marcati come «Segnaposto». Questi conti sono utilizzati "
 "per creare una struttura di conti e solitamente non hanno transazioni o "
-"bilanci di apertura associati. Per marcare un conto come segnaposto, "
-"abilitare l'opzione relativa.\n"
+"saldi di apertura associati. Per marcare un conto come segnaposto, abilitare "
+"l'opzione relativa.\n"
 "\n"
 "Per assegnare a un conto un saldo di apertura, fare clic sulla riga che "
 "contiene il conto, poi sul nome del conto e inserire il saldo di apertura.\n"
@@ -14585,10 +14585,10 @@ msgstr ""
 "Nota che GnuCash creerà diversi conti che non esistono nell'altro programma "
 "di finanze personali, compresi dei conti separati per ogni azione, per le "
 "commissioni di intermediazione, conti speciali di «patrimonio» (sottoconti "
-"degli utili non distribuiti) che rappresentano la fonte per i bilanci di "
-"apertura, ecc... Tutti questi conti verranno elencati nella pagina "
-"successiva dove sarà possibile cambiarli se lo si desidera, ma si raccomanda "
-"comunque di lasciarli invariati.\n"
+"degli utili non distribuiti) che rappresentano la fonte per i saldi "
+"d'apertura, ecc... Tutti questi conti verranno elencati nella pagina "
+"successiva dove sarà possibile modificarli se lo si desidera, ma si "
+"raccomanda comunque di lasciarli invariati.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:553
 msgid "Accounts and stock holdings"
@@ -15375,13 +15375,13 @@ msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
-"Utilizzare la voce «Modifica->Opzioni del resoconto imposte» per assegnare a "
+"Utilizzare la voce Modifica->Opzioni del resoconto imposte» per assegnare a "
 "questo conto un codice imposta facendolo rientrare tra quelli relativi alle "
 "imposte."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1509
 msgid "Opening balance"
-msgstr "Bilancio d'apertura"
+msgstr "Saldo d'apertura"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1513
 msgid ""
@@ -15445,7 +15445,7 @@ msgstr "<b>Trasferimento del saldo iniziale</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1772
 msgid "_Use equity 'Opening Balances' account"
-msgstr "_Utilizzare il conto del capitale per i bilanci di apertura"
+msgstr "_Utilizzare il conto patrimoniale per i «saldi di apertura»"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1789
 msgid "_Select transfer account"
@@ -16189,7 +16189,7 @@ msgstr ""
 "Doppio clic sull'elemento nella colonna «Documento collegato» per aprire il "
 "documento collegato.\n"
 "Doppio clic sull'elemento nella colonna «Disponibile» per modificare il "
-"documento collegato."
+"collegamento al documento."
 
 # Tooltip
 #: gnucash/gtkbuilder/dialog-employee.glade:166
@@ -25318,7 +25318,7 @@ msgstr "Resoconto imposte/esportazione TXF"
 # tooltip
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:212
 msgid "$0.00 valued Tax codes won't be printed."
-msgstr "I codici tasse con valore $0.00 non verranno stampati."
+msgstr "I codici imposta con valore $0.00 non verranno stampati."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:216
 msgid "Do not print full account names"
@@ -31626,7 +31626,7 @@ msgstr ""
 #. * identification (e.g., Form 1040, Schedule A).
 #: libgnucash/app-utils/gnc-ui-util.c:634
 msgid "Tax-related but has no tax code"
-msgstr "Relativo alle tasse ma non ha un codice"
+msgstr "Imponibile ma senza un codice imposta"
 
 #: libgnucash/app-utils/gnc-ui-util.c:648
 msgid "Tax entity type not specified"
@@ -31725,7 +31725,7 @@ msgstr "f"
 
 #: libgnucash/app-utils/gnc-ui-util.c:951
 msgid "Opening Balances"
-msgstr "Bilanci d'apertura"
+msgstr "Saldi d'apertura"
 
 #. Translators: the 3 ~a below refer to (1) option type (2) unknown
 #. new option name, (3) fallback option name. The order is
