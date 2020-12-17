@@ -8,17 +8,18 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-06 18:14+0100\n"
-"PO-Revision-Date: 2020-04-18 20:54+0300\n"
+"PO-Revision-Date: 2020-12-17 00:06+0200\n"
 "Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: \n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgstr ""
+msgstr "Termi (Hyvä kääntäjä: Tämä tiedosto ei näy koskaan käyttäjälle!)"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -174,7 +175,7 @@ msgstr "tapahtuma: myynti"
 
 #. "-"
 msgid "action: Teller"
-msgstr "tapahtuma: Pankkiiri"
+msgstr "tapahtuma: Pankkivirkailija"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
@@ -205,12 +206,10 @@ msgid "balance (noun)"
 msgstr "saldo"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
 msgstr "alkusaldo"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
 msgstr "loppusaldo"
 
@@ -276,11 +275,11 @@ msgstr "šekki"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
-msgstr "tarkista ja korjaa"
+msgstr "tarkistaa ja korjata"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
 msgid "close, to"
-msgstr "sulje"
+msgstr "sulkea"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
@@ -372,7 +371,7 @@ msgstr "kahdenkertainen"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "liittyvä asiakirja"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -455,10 +454,8 @@ msgid "loan"
 msgstr "laina"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "laina"
+msgstr "laina: todellinen vuosikorko"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -474,19 +471,19 @@ msgstr "Erä"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
-msgstr ""
+msgstr "yhdistää"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
-msgstr ""
+msgstr "piste"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
 msgid "markup"
-msgstr ""
+msgstr "marginaali"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
-msgstr ""
+msgstr "MDI:n (monidokumenttikäyttöliittymän) tila"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
@@ -494,19 +491,19 @@ msgstr "Erittely"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
-msgstr ""
+msgstr "Asuntolaina"
 
 #. "Adjustable Rate Mortgage"
 msgid "mortgage: ARM"
-msgstr ""
+msgstr "säädettäväkorkoinen asuntolaina"
 
 #. "Fixed Rate Mortgage"
 msgid "mortgage: FRM"
-msgstr ""
+msgstr "kiinteäkorkoinen asuntolaina"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
-msgstr ""
+msgstr "valtiollinen valuutta"
 
 #. "(of money) remaining when nothing more is to be taken away"
 msgid "net"
@@ -514,15 +511,15 @@ msgstr "netto"
 
 #. "net total of all assets"
 msgid "net assets"
-msgstr ""
+msgstr "netto-omaisuus"
 
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
-msgstr ""
+msgstr "nettovoitto"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr ""
+msgstr "nettoarvo"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
@@ -547,7 +544,7 @@ msgstr "valinnat"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
-msgstr ""
+msgstr "tilaus"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
@@ -555,11 +552,11 @@ msgstr "orporivit"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "omistaja"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
-msgstr ""
+msgstr "salasana"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
@@ -567,7 +564,7 @@ msgstr "Velat/Saatavat"
 
 #. "A person to whom sth is paid"
 msgid "payee"
-msgstr "mansunsaaja"
+msgstr "maksunsaaja"
 
 #. "A person who pays or who has to pay for sth"
 msgid "payer"
@@ -579,19 +576,19 @@ msgstr "maksu"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr "koontitili"
+msgstr "paikanpitäjä"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
-msgstr ""
+msgstr "salkku"
 
 #. "Register invoice, voucher in account register"
 msgid "post, to"
-msgstr ""
+msgstr " viedä jonnekin"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
-msgstr ""
+msgstr "asetukset"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
 msgid "principal payment"
@@ -603,15 +600,15 @@ msgstr "hinta (rivillä)"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
-msgstr ""
+msgstr "hintatyyppi: pyynti"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr ""
+msgstr "hintatyyppi: tarjous"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
-msgstr ""
+msgstr "hinta: tarjous"
 
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
@@ -623,11 +620,11 @@ msgstr "Tuloslaskelma"
 
 #. "-"
 msgid "quick-fill"
-msgstr ""
+msgstr "pikatäyttö"
 
 #. "-"
 msgid "rebalance, to (a transaction)"
-msgstr "tasaa"
+msgstr "tasata"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
@@ -635,7 +632,7 @@ msgstr "täsmäyttää"
 
 #. "-"
 msgid "record keeping"
-msgstr ""
+msgstr "kirjanpito"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
@@ -643,55 +640,55 @@ msgstr "tilikirja"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr ""
+msgstr "tilikirjamerkintä: jaettu tosite"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr ""
+msgstr "tilikirjamerkintä: osakkeen jako"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr ""
+msgstr "tilikirja: automaattisesti jaettu tilikirja"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr ""
+msgstr "tilikirja: perustilikirja"
 
 #. "another form of register"
 msgid "register: general ledger"
-msgstr ""
+msgstr "tilikirja: yleinen tilikirja"
 
 #. "another form of register"
 msgid "register: transaction journal"
-msgstr "rekisteri: pääkirja"
+msgstr "tilikirja: pääkirja"
 
 #. "reload the current document"
 msgid "reload, to"
-msgstr ""
+msgstr "uudelleenladata"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "raporttimuoto: vierekkäiset tilit"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "raporttimuoto: peräkkäiset tilit"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "Kertyneet voittovarat"
+msgstr "Kertyneet voitot"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
-msgstr ""
+msgstr "käänteinen tosite"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "myynti"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
-msgstr ""
+msgstr "tallentaa jonnekin"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 msgid "Scheduled Transaction"
@@ -707,7 +704,7 @@ msgstr "arvopaperi"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr ""
+msgstr "Osakemäärä?"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
@@ -715,7 +712,7 @@ msgstr "osakkeet"
 
 #. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
-msgstr ""
+msgstr "lähde"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
@@ -723,7 +720,7 @@ msgstr "rivi"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
-msgstr ""
+msgstr "tyylitiedosto"
 
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
@@ -731,23 +728,23 @@ msgstr "välisumma"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"
-msgstr ""
+msgstr "verokoodi"
 
 #. "field of an account"
 msgid "tax info"
-msgstr ""
+msgstr "verotieto"
 
 #. "if you create a new e.g. style sheet, you can start from a template"
 msgid "template"
-msgstr ""
+msgstr "malline"
 
 #. "see: date range"
 msgid "time period"
-msgstr ""
+msgstr "aikaväli"
 
 #. "as abbreviation for Total"
 msgid "Tot"
-msgstr ""
+msgstr "Yht"
 
 #. "The full number or amount: total of some balances, of any account's running balance etc."
 msgid "total"
@@ -780,15 +777,15 @@ msgstr "siirto"
 
 #. "The account where an amount is transferred to"
 msgid "transfer account"
-msgstr ""
+msgstr "siirtotili"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr ""
+msgstr "siirto tilille"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr ""
+msgstr "koetase"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
@@ -796,15 +793,15 @@ msgstr "tyyppi"
 
 #. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
 msgid "units"
-msgstr ""
+msgstr "yksiköt"
 
 #. "-"
 msgid "URL"
-msgstr ""
+msgstr "URL-osoite"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr ""
+msgstr "arvo (jaossa)"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
@@ -816,4 +813,4 @@ msgstr "matkalasku"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr ""
+msgstr "nosto"
