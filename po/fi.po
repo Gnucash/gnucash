@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-17 03:05+0200\n"
+"PO-Revision-Date: 2020-12-19 01:59+0200\n"
 "Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: \n"
 "Language: fi\n"
@@ -1397,7 +1397,7 @@ msgstr "Asiakkaan hankkeet"
 
 #: gnucash/gnome/dialog-customer.c:913
 msgid "Customer's Invoices"
-msgstr "Asiakkaan laskut"
+msgstr "Asiakkaan myyntilaskut"
 
 #: gnucash/gnome/dialog-customer.c:914 gnucash/gnome/dialog-employee.c:695
 #: gnucash/gnome/dialog-invoice.c:3300 gnucash/gnome/dialog-invoice.c:3309
@@ -2082,7 +2082,7 @@ msgstr "Vie tilille"
 
 #: gnucash/gnome/dialog-invoice.c:839
 msgid "Accumulate Splits?"
-msgstr "Kerrytä jaot?"
+msgstr "Kerrytä rivit?"
 
 #: gnucash/gnome/dialog-invoice.c:931
 msgid "The Invoice must have at least one Entry."
@@ -2237,7 +2237,7 @@ msgstr "Haluatko varmasti viedä nämä myyntilaskut kirjanpitoon?"
 
 #: gnucash/gnome/dialog-invoice.c:3299 gnucash/gnome/dialog-invoice.c:3580
 msgid "View/Edit Invoice"
-msgstr "Näytä/muokkaa laskua"
+msgstr "Näytä/muokkaa myyntilaskua"
 
 #: gnucash/gnome/dialog-invoice.c:3301 gnucash/gnome/dialog-invoice.c:3310
 #: gnucash/gnome/dialog-invoice.c:3321
@@ -2458,7 +2458,7 @@ msgstr "Näytä/muokkaa hanketta"
 
 #: gnucash/gnome/dialog-job.c:561
 msgid "View Invoices"
-msgstr "Näytä laskut"
+msgstr "Näytä myyntilaskut"
 
 #: gnucash/gnome/dialog-job.c:571
 msgid "Owner's Name"
@@ -2979,7 +2979,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:245
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:251
 msgid "Scheduled Transactions"
-msgstr "Ajoitetut tapahtumat"
+msgstr "Ajoitetut tositteet"
 
 #: gnucash/gnome/dialog-sx-editor.c:617
 msgid ""
@@ -3352,7 +3352,7 @@ msgstr "_Edellisen ajon jälkeen..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:172
 msgid "Create Scheduled Transactions since the last time run"
-msgstr "Luo edellisen ajon jälkeen ajastetut tapahtumat"
+msgstr "Luo edellisen ajon jälkeen ajastetut tositteet"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:176
 msgid "_Mortgage & Loan Repayment..."
@@ -3360,7 +3360,7 @@ msgstr "_Lainan takaisinmaksu..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:177
 msgid "Setup scheduled transactions for repayment of a loan"
-msgstr "Luo ajastettu tapahtuma lainan takaisinmaksulle"
+msgstr "Luo ajastettu tosite lainan takaisinmaksulle"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:180
 #: gnucash/report/report-core.scm:150
@@ -3409,7 +3409,7 @@ msgstr "Tee tilinpäätös jakson päättyessä"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:211
 msgid "_Import Map Editor"
-msgstr "_Kartantuontimuokkain"
+msgstr "_Tuontikartan muokkain"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
 msgid "View and Delete Bayesian and Non Bayesian information"
@@ -3472,7 +3472,7 @@ msgstr "_Kopioi budjetti"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
 msgid "Copy an existing Budget."
-msgstr "Kopioi olemassaoleva budjetti."
+msgstr "Kopioi olemassa oleva budjetti."
 
 #: gnucash/gnome/gnc-plugin-budget.c:80
 msgid "_Delete Budget"
@@ -3480,7 +3480,7 @@ msgstr "_Poista budjetti"
 
 #: gnucash/gnome/gnc-plugin-budget.c:81
 msgid "Delete an existing Budget."
-msgstr "Poista olemassaoleva budjetti."
+msgstr "Poista olemassa oleva budjetti."
 
 #: gnucash/gnome/gnc-plugin-budget.c:288
 msgid "Select a Budget"
@@ -3806,7 +3806,7 @@ msgstr "Muokkaa maksua..."
 
 #: gnucash/gnome/gnc-plugin-business.c:332
 msgid "Edit the payment this transaction is a part of"
-msgstr "Muokkaa maksua, jonka osa tämä tapahtuma on"
+msgstr "Muokkaa maksua, jonka osa tämä tosite on"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:198
 #: gnucash/gnome/gnc-plugin-page-invoice.c:113
@@ -3965,7 +3965,7 @@ msgstr "Täsmäytä valittu tili"
 #: gnucash/gnome/gnc-plugin-page-register2.c:362
 #: gnucash/gnome/gnc-plugin-page-register.c:480
 msgid "_Auto-clear..."
-msgstr "Hyväksy tapahtumat _automaattisesti..."
+msgstr "Hyväksy tositteet _automaattisesti..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:307
 msgid "Automatically clear individual transactions, given a cleared amount"
@@ -4161,12 +4161,12 @@ msgstr "Tili %s poistetaan."
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1745
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
-msgstr "Kaikki tämän tilin tapahtumat siirretään tilille %s."
+msgstr "Kaikki tämän tilin tositteet siirretään tilille %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1752
 #, c-format
 msgid "All transactions in this account will be deleted."
-msgstr "Kaikki tämän tilin tapahtumat poistetaan."
+msgstr "Kaikki tämän tilin tositteet poistetaan."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1761
 #, c-format
@@ -4240,7 +4240,7 @@ msgstr "Muokkaa kaikkien aikavälien budjettia valituilta tileiltä."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
 msgid "Edit Note"
-msgstr "Muokkaa muistiinpanoa"
+msgstr "Muokkaa huomautusta"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
 msgid "Edit note for the selected account and period"
@@ -4267,7 +4267,7 @@ msgstr "Kaikki jaksot"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:213
 msgid "Note"
-msgstr "Muistiinpano"
+msgstr "Huomautus"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:292
 #: gnucash/gnome/gnc-plugin-page-budget.c:333
@@ -5203,7 +5203,7 @@ msgstr "_Hyppää toiseen tiliin"
 #: gnucash/gnome/gnc-plugin-page-register.c:514
 msgid ""
 "Open a new register tab for the other account with focus on this transaction."
-msgstr "Avaa valittu tapahtuma toisella tilillä uudessa tilikirjavälilehdessä."
+msgstr "Avaa valittu tosite toisella tilillä uudessa tilikirjavälilehdessä."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:392
 #: gnucash/gnome/gnc-plugin-page-register.c:518
@@ -5240,7 +5240,7 @@ msgstr "Avaa tilikirjaraportti tästä tilistä"
 #: gnucash/gnome/gnc-plugin-page-register2.c:413
 #: gnucash/gnome/gnc-plugin-page-register.c:541
 msgid "Account Report - Single Transaction"
-msgstr "Tiliraportti - yksi tapahtuma"
+msgstr "Tiliraportti - yksi tosite"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:414
 #: gnucash/gnome/gnc-plugin-page-register.c:542
@@ -5259,7 +5259,7 @@ msgid ""
 "each transaction."
 msgstr ""
 "Näytä kaksi riviä, joissa näytetään toimenpide, muistiinpano ja yhdistetty "
-"asiakirja, joka tapahtumalle."
+"asiakirja, joka tositteelle."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
 msgid "Show _Extra Dates"
@@ -5299,8 +5299,8 @@ msgstr "_Tilikirjan automaattinen jako"
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
 msgstr ""
-"Näytä tositteet joko yhdellä tai kahdella rivillä, ja näytä valittu "
-"tapahtuma kokonaan"
+"Näytä tositteet joko yhdellä tai kahdella rivillä, ja näytä valittu tosite "
+"kokonaan"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:458
 #: gnucash/gnome/gnc-plugin-page-register.c:581
@@ -5521,11 +5521,11 @@ msgstr "Hyppää laskuun"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:318
 msgid "Add, change, or unlink the document linked with the current transaction"
-msgstr "Lisää, muuta tai poista tähän tapahtumaan liittyvä asiakirja"
+msgstr "Lisää, muuta tai poista tähän tositteeseen liittyvä asiakirja"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:319
 msgid "Open the linked document for the current transaction"
-msgstr "Avaa tähän tapahtumaan liittyvä asiakirja"
+msgstr "Avaa tähän tositteeseen liittyvä asiakirja"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:320
 msgid "Jump to the linked bill, invoice, or voucher"
@@ -5546,7 +5546,7 @@ msgstr "_Siirry päivään"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:501
 msgid "Move to the split at the specified date"
-msgstr "Siirrä jako annetulle päivälle"
+msgstr "Siirrä rivi annetulle päivälle"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:828
 msgid ""
@@ -5633,7 +5633,7 @@ msgstr "Tälle tositteelle on jo luotu käänteinen tosite."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4087
 msgid "Reverse Transaction"
-msgstr "Käänteinen tapahtuma"
+msgstr "Lisää käänteinen tosite"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
 msgid "New Transaction Information"
@@ -5895,7 +5895,7 @@ msgstr "_Uusi"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:139
 msgid "Create a new scheduled transaction"
-msgstr "Luo uusi ajoitettu tapahtuma"
+msgstr "Luo uusi ajoitettu tosite"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:144
 msgid "_New 2"
@@ -5903,11 +5903,11 @@ msgstr "_Uusi 2"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:145
 msgid "Create a new scheduled transaction 2"
-msgstr "Luo uusi ajoitettu tapahtuma 2"
+msgstr "Luo uusi ajoitettu tosite 2"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:151
 msgid "Edit the selected scheduled transaction"
-msgstr "Muokkaa valittua ajastettua tapahtumaa"
+msgstr "Muokkaa valittua ajastettua tositetta"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:156
 msgid "_Edit 2"
@@ -5919,7 +5919,7 @@ msgstr "Muokkaa valittua ajoitettua tositetta 2"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:163
 msgid "Delete the selected scheduled transaction"
-msgstr "Poista valittu ajastettu tapahtuma"
+msgstr "Poista valittu ajastettu tosite"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:385
 #, c-format
@@ -5929,7 +5929,7 @@ msgstr "Tositteet"
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:448
 #, c-format
 msgid "Upcoming Transactions"
-msgstr "Tulevat tapahtumat"
+msgstr "Tulevat tositteet"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:805
 msgid "Do you really want to delete this scheduled transaction?"
@@ -6142,8 +6142,8 @@ msgid ""
 "You would be removing a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"Poistaisit tositteen jolla on tämättyjä jakoja! Se ei ole hyvä idea, sillä "
-"sen jälkeen täsmätyt saldot eivät enää pidä paikkaansa."
+"Olet poistamassa tositteen, jolla on tämäytettyjä rivejä! Sitä ei kannata "
+"tehdä, sillä sen jälkeen täsmäytetyt saldot eivät enää pidä paikkaansa."
 
 #: gnucash/gnome/gnc-split-reg.c:1014
 msgid "_Cut Transaction"
@@ -6152,7 +6152,7 @@ msgstr "_Leikkaa tosite"
 #: gnucash/gnome/gnc-split-reg.c:1158
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:66
 msgid "Cannot modify or delete this transaction."
-msgstr "Tätä tapahtumaa ei voi muokata tai poistaa."
+msgstr "Tätä tositetta ei voi muokata tai poistaa."
 
 #: gnucash/gnome/gnc-split-reg.c:1172
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
@@ -6164,7 +6164,7 @@ msgstr ""
 #: gnucash/gnome/gnc-split-reg.c:1208
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:840
 msgid "Remove the splits from this transaction?"
-msgstr "Poistetaanko jaot tästä tapahtumasta?"
+msgstr "Poistetaanko rivit tästä tositteesta?"
 
 #: gnucash/gnome/gnc-split-reg.c:1209
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:841
@@ -6177,11 +6177,11 @@ msgstr ""
 #: gnucash/gnome/gnc-split-reg.c:1238
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:887
 msgid "_Remove Splits"
-msgstr "_Poista jaot"
+msgstr "_Poista rivit"
 
 #: gnucash/gnome/gnc-split-reg.c:1299
 msgid "Change a Transaction Linked Document"
-msgstr "Muuta tapahtumaan liitettyä asiakirjaa"
+msgstr "Muuta tositteeseen liitettyä asiakirjaa"
 
 #: gnucash/gnome/gnc-split-reg.c:1440
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:963
@@ -6257,8 +6257,8 @@ msgid ""
 "If you want to edit transactions in this register, please open the account "
 "options and turn off the placeholder checkbox."
 msgstr ""
-"Tämän tilin tapahtumia ei voi muokata.\n"
-"Jos haluat muokata tämän tilin tapahtuma, avaa tilin asetukset ja poista "
+"Tämän tilin tositteita ei voi muokata.\n"
+"Jos haluat muokata tämän tilin tositteita, avaa tilin asetukset ja poista "
 "paikanpitäjä-valinta."
 
 #: gnucash/gnome/gnc-split-reg.c:2531
@@ -8514,7 +8514,7 @@ msgstr "Kirjanpito henkilökohtaiseen tai pienen yrityksen talouteen."
 #: gnucash/gnome-utils/gnc-main-window.c:4716
 msgid "translator-credits"
 msgstr ""
-"Jyri-Petteri Paloposki, 2020\n"
+"Jyri-Petteri ”ZeiP” Paloposki, 2020\n"
 "Marko Kohtala, 2020\n"
 "Tuomo Hartikainen, 2017\n"
 "Tuomo Kohvakka, 2008"
@@ -9592,7 +9592,7 @@ msgstr "Syötä toimittajan nimi"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3211
 #: gnucash/register/ledger-core/split-register-model.c:1138
 msgid "Enter a description of the transaction"
-msgstr "Syötä tapahtuman selite"
+msgstr "Syötä tositteen selite"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3225
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3229
@@ -9612,7 +9612,7 @@ msgstr "Syötä täsmäytystila"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3249
 msgid "Enter the type of transaction"
-msgstr "Syötä tapahtuman tyyppi"
+msgstr "Syötä tositteen tyyppi"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3259
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3279
@@ -10577,7 +10577,7 @@ msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as reconciled."
 msgstr ""
-"Kun QIF-tiedostossa ei ole määritelty tapahtuman tilaa, aseta se "
+"Kun QIF-tiedostossa ei ole määritelty tositteen tilaa, merkitse se "
 "täsmäytetyksi."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:32
@@ -11320,13 +11320,13 @@ msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line. (Two in double line mode.)"
 msgstr ""
-"Näytä automaattisesti valitun tapahtuman kaikki jaot. Kaikki muut tapahtumat "
+"Näytä automaattisesti valitun tositteen kaikki rivit. Kaikki muut tositteet "
 "näytetään yhdellä rivillä (tai kahdella kahden rivin näkymässä)."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
 #: gnucash/gtkbuilder/dialog-preferences.glade:2780
 msgid "All transactions are expanded to show all splits."
-msgstr "Avaa kaikki tapahtumat."
+msgstr "Kaikki tositteet avataan näyttämään kaikki rivit."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:300
 msgid ""
@@ -11334,7 +11334,7 @@ msgid ""
 "each transaction."
 msgstr ""
 "Näytä toinen rivi, jossa näytetään toimenpide, muistiinpano ja yhdistetty "
-"asiakirja, joka tapahtumalle."
+"asiakirja, joka tositteelle."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:301
 msgid ""
@@ -12757,7 +12757,7 @@ msgid ""
 msgstr ""
 "Tämä on vaiheittainen avustaja, jolla voit luoda GnuCashiin lainan "
 "takaisinmaksun suunnitelman. Avustaja kysyy lainan ja sen takaisinmaksun "
-"tiedot, ja luo sen perusteella tarvittavat ajoitetut tilitapahtumat.\n"
+"tiedot, ja luo sen perusteella tarvittavat ajoitetut tositteet.\n"
 "Jos teet virheen tai haluat tehdä muutoksia myöhemmin, voit muokata luotuja "
 "ajoitettuja tapahtumia suoraan."
 
@@ -13474,7 +13474,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/business-prefs.glade:101
 msgid "_Accumulate splits on post"
-msgstr "K_errytä jaot yhteen"
+msgstr "K_errytä rivit yhteen"
 
 #: gnucash/gtkbuilder/business-prefs.glade:107
 msgid ""
@@ -13482,9 +13482,8 @@ msgid ""
 "should be accumulated into a single split by default. This setting can be "
 "changed in the Post dialog."
 msgstr ""
-"Tuleeko oletuksena yhdessä myyntilaskussa olevat useat rivit jotka viedään "
-"samalle kohdetilille kerryttää yhdeksi jaetuksi tapahtumaksi. Tätä asetusta "
-"voi muuttaa laskun kirjausikkunassa."
+"Kerrytetäänkö useat yhdessä myyntilaskussa olevat samalle tilille vietävät "
+"rivit yhdeksi riviksi. Tätä asetusta voi muuttaa laskun kirjausikkunassa."
 
 #: gnucash/gtkbuilder/business-prefs.glade:132
 msgid "<b>Invoices</b>"
@@ -13631,7 +13630,7 @@ msgstr "_Siirrä tilille"
 #: gnucash/gtkbuilder/dialog-account.glade:588
 #: gnucash/gtkbuilder/dialog-account.glade:706
 msgid "Delete all _transactions"
-msgstr "Poista kaikki _tapahtumat"
+msgstr "Poista kaikki _tositteet"
 
 #: gnucash/gtkbuilder/dialog-account.glade:609
 msgid ""
@@ -13645,7 +13644,7 @@ msgstr "Tällä tilillä on kirjoitussuojattuja kirjauksia joita ei voi poistaa.
 
 #: gnucash/gtkbuilder/dialog-account.glade:672
 msgid "<b>Sub-account Transactions</b>"
-msgstr "<b>Alatilin tapahtumat</b>"
+msgstr "<b>Alatilin tositteet</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:727
 msgid ""
@@ -13851,7 +13850,7 @@ msgstr "_Käytä oman pääoman \"Avaussaldot\"-tiliä"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1789
 msgid "_Select transfer account"
-msgstr "_Valitse tapahtuman tili"
+msgstr "_Valitse tositteen tili"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1900
 msgid "Renumber sub-accounts"
@@ -15848,7 +15847,7 @@ msgstr "Tulostus"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2409
 msgid "'_Enter' moves to blank transaction"
-msgstr "'_Enter' siirtää tyhjään tapahtumaan"
+msgstr "'_Enter' siirtää tyhjään tositteeseen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2415
 msgid ""
@@ -15871,12 +15870,12 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2445
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
-msgstr "_Säilytä sarkaimen järjestys täydennettäessä tapahtuma"
+msgstr "_Säilytä sarkaimen järjestys täydennettäessä tosite"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2451
 msgid "Move to Transfer field when memorised transaction auto filled."
 msgstr ""
-"Siirry Sarkain siirtää kohdistimen \"siirto\"-kenttään myös kun tapahtuma "
+"Siirry Sarkain siirtää kohdistimen \"siirto\"-kenttään myös kun tosite "
 "täydennetään automaattisesti."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2476
@@ -16002,8 +16001,8 @@ msgid ""
 "Show two lines of information for each transaction instead of one. Does not "
 "affect expanded transactions."
 msgstr ""
-"Näytä jokaiselle tapahtumalle kaksi riviä yhden sijaan. Ei vaikuta "
-"laajennetun tapahtuman asetuksiin."
+"Näytä jokaiselle tositteelle kaksi riviä yhden sijaan. Ei vaikuta "
+"laajennetun tositteen asetuksiin."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2847
 msgid "Register opens in a new _window"
@@ -16726,11 +16725,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-sx.glade:579
 msgid "_Auto-create new transactions"
-msgstr "_Luo uusi tapahtuma automaattisesti"
+msgstr "_Luo uusi tosite automaattisesti"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:583
 msgid "Set the 'auto-create' flag on newly created scheduled transactions."
-msgstr "Aseta uudet ajastetut tapahtumat luotaviksi automaattisesti."
+msgstr "Aseta uudet ajastetut tositteet luotaviksi automaattisesti."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:603
 msgid "Begin notifications this many days before the transaction is created."
@@ -16738,11 +16737,11 @@ msgstr "Ilmoita luotavista tapahtumista näin monta päivää etukäteen."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:642
 msgid "Create the transaction this many days before its effective date."
-msgstr "Luo ajoitettu tapahtuma näin monta päivää ennen varsinaista päivää."
+msgstr "Luo ajoitettu tosite näin monta päivää ennen varsinaista päivää."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
 msgid "_Notify before transactions are created "
-msgstr "Ilm_oita ennen tapahtuman luontia "
+msgstr "Ilm_oita ennen tositteen luontia "
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -19166,7 +19165,7 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"Kun klikkaat \"Toteuta\", tilitapahtumat viedään tiedostoon '%s'.\n"
+"Kun klikkaat \"Toteuta\", tositteet viedään tiedostoon '%s'.\n"
 "\n"
 "Voit vielä muuttaa valintojasi valitsemalla \"Takaisin\" tai peruuttaa "
 "viennin klikkaamalla \"Peruuta\"\n"
@@ -26598,7 +26597,7 @@ msgstr "Kaksisarakkeinen näkymä."
 
 #: gnucash/report/reports/standard/register.scm:408
 msgid "Display the value in transaction currency?"
-msgstr "Näytä arvo tapahtuman valuutassa?"
+msgstr "Näytä arvo tositteen valuutassa?"
 
 #: gnucash/report/reports/standard/register.scm:418
 #: gnucash/report/trep-engine.scm:985
@@ -27690,7 +27689,7 @@ msgstr "Älä suodata."
 
 #: gnucash/report/trep-engine.scm:367
 msgid "Include Transactions to/from Filter Accounts"
-msgstr "Sisällytä tapahtumat suodatetuilta tileiltä"
+msgstr "Sisällytä tositteet suodatetuilta tileiltä"
 
 #: gnucash/report/trep-engine.scm:368
 msgid "Include transactions to/from filter accounts only."
@@ -27698,11 +27697,11 @@ msgstr "Sisällytä tapahtumia vain suodatetuilta tileiltä."
 
 #: gnucash/report/trep-engine.scm:371
 msgid "Exclude Transactions to/from Filter Accounts"
-msgstr "Rajaa suodatettujen tilien tapahtumat pois"
+msgstr "Rajaa suodatettujen tilien tositteet pois"
 
 #: gnucash/report/trep-engine.scm:372
 msgid "Exclude transactions to/from all filter accounts."
-msgstr "Rajaa tapahtumat kaikilta suodatetuilta tileiltä pois."
+msgstr "Rajaa tositteet kaikilta suodatetuilta tileiltä pois."
 
 #: gnucash/report/trep-engine.scm:378
 msgid "Non-void only"
