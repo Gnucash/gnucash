@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-19 01:59+0200\n"
+"PO-Revision-Date: 2020-12-19 13:12+0200\n"
 "Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: \n"
 "Language: fi\n"
@@ -1543,7 +1543,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
 msgid "Manage Document Link"
-msgstr "Muuta liittyvää asiakirjaa"
+msgstr "Vaihda yhdistettyä asiakirjaa"
 
 #: gnucash/gnome/dialog-doclink.c:690
 msgid "Transaction can not be modified."
@@ -3417,7 +3417,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
 msgid "_Transaction Linked Documents"
-msgstr "_Tositteeseen liittyvät asiakirjat"
+msgstr "_Tositteeseen yhdistetyt asiakirjat"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
 msgid "View all Transaction Linked Documents"
@@ -4473,7 +4473,7 @@ msgstr "M_aksa myyntilasku"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:366
 #: gnucash/gnome/gnc-plugin-page-register.c:300
 msgid "_Manage Document Link..."
-msgstr ""
+msgstr "_Vaihda yhdistettyä asiakirjaa..."
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4780,7 +4780,7 @@ msgstr "Avaa hyvityslaskun omistajan yritysraportti-ikkuna"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:445
 msgid "Manage Document Link..."
-msgstr ""
+msgstr "Vaihda yhdistettyä asiakirjaa..."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
 #: gnucash/gnome/gnc-plugin-page-register2.c:498
@@ -5521,11 +5521,11 @@ msgstr "Hyppää laskuun"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:318
 msgid "Add, change, or unlink the document linked with the current transaction"
-msgstr "Lisää, muuta tai poista tähän tositteeseen liittyvä asiakirja"
+msgstr "Lisää, muuta tai poista tähän tositteeseen yhdistetty asiakirja"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:319
 msgid "Open the linked document for the current transaction"
-msgstr "Avaa tähän tositteeseen liittyvä asiakirja"
+msgstr "Avaa tähän tositteeseen yhdistetty asiakirja"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:320
 msgid "Jump to the linked bill, invoice, or voucher"
@@ -6181,7 +6181,7 @@ msgstr "_Poista rivit"
 
 #: gnucash/gnome/gnc-split-reg.c:1299
 msgid "Change a Transaction Linked Document"
-msgstr "Muuta tositteeseen liitettyä asiakirjaa"
+msgstr "Muuta tositteeseen yhdistettyä asiakirjaa"
 
 #: gnucash/gnome/gnc-split-reg.c:1440
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:963
@@ -6259,7 +6259,7 @@ msgid ""
 msgstr ""
 "Tämän tilin tositteita ei voi muokata.\n"
 "Jos haluat muokata tämän tilin tositteita, avaa tilin asetukset ja poista "
-"paikanpitäjä-valinta."
+"koontitili-valinta."
 
 #: gnucash/gnome/gnc-split-reg.c:2531
 msgid ""
@@ -6270,7 +6270,7 @@ msgid ""
 msgstr ""
 "Yhtä valituista alatileistä ei voi muokata.\n"
 "Jos haluat muokata tilikirjan tositteita, avaa alatilin asetukset ja poista "
-"paikanpitotilin valinta.\n"
+"koontitilin valinta.\n"
 "Voit myös avata yksittaisen tilin ryhmän sijaan."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
@@ -7300,6 +7300,8 @@ msgstr ""
 #, c-format
 msgid "Path head not set, using '%s' for relative paths"
 msgstr ""
+"Polun alkuosaa ei ole asetettu, käytetään suhteellisten polkujen alkuosana "
+"'%s'"
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
 msgid "Existing"
@@ -8205,11 +8207,11 @@ msgstr "Odotettu sijainti"
 #: gnucash/gnome-utils/gnc-gnome-utils.c:510
 #: gnucash/gnome-utils/gnc-gnome-utils.c:550
 msgid "GnuCash could not find the linked document."
-msgstr "GnuCash ei löytänyt liittyvää asiakirjaa."
+msgstr "GnuCash ei löytänyt yhdistettyä asiakirjaa."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:580
 msgid "GnuCash could not open the linked document:"
-msgstr "GnuCash ei voinut avata liittyvää asiakirjaa:"
+msgstr "GnuCash ei voinut avata yhdistettyä asiakirjaa:"
 
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes
@@ -14457,7 +14459,7 @@ msgstr "Kysymys"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:49
 msgid "Change Linked Document path head"
-msgstr "Muuta liitettyjen asiakirjojen polun alkuosaa"
+msgstr "Muuta yhdistettyjen asiakirjojen polun alkuosaa"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:85
 msgid ""
@@ -14477,19 +14479,19 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:279
 msgid "Linked _File"
-msgstr "Liittyvä _tiedosto"
+msgstr "_Tiedosto"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:295
 msgid "Linked _Location"
-msgstr "Liittyvä _sijainti"
+msgstr "_Sijainti"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:380
 msgid "Enter URL like http://www.gnucash.org"
-msgstr ""
+msgstr "Syötä URL-osoite, esimerkiksi http://www.gnucash.org"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:425
 msgid "Location does not start with a valid scheme"
-msgstr ""
+msgstr "Sijainti ei ala kelvollisella protokollalla"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:504
 msgid "Reload and Locate Linked Documents"
@@ -14505,7 +14507,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:572
 msgid "All Linked Documents"
-msgstr "Kaikki liittyvät tiedostot"
+msgstr "Kaikki yhdistetyt asiakirjat"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:626
 msgid "Id"
@@ -14513,7 +14515,7 @@ msgstr "Tunniste"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:654
 msgid "Linked Document"
-msgstr "Liitetty asiakirja"
+msgstr "Yhdistetty asiakirja"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:671
 msgid "Available"
@@ -17673,7 +17675,7 @@ msgstr "_Tositteen numero"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:161
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:719
 msgid "Keep Linked Document Entry"
-msgstr "Säilytä liittyvän asiakirjan tietue"
+msgstr "Säilytä yhdistetyn asiakirjan tietue"
 
 #. Filter register by... Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:213
@@ -26168,7 +26170,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/new-owner-report.scm:948
 msgid "Display document link?"
-msgstr "Näytä liittyvä asiakirja?"
+msgstr "Näytä yhdistetty asiakirja?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1076
 msgid "No valid account found"
@@ -27959,7 +27961,7 @@ msgstr "Näytä toinen tilinumero?"
 
 #: gnucash/report/trep-engine.scm:980
 msgid "Display the transaction linked document"
-msgstr "Näytä tositteeseen liitetty asiakirja"
+msgstr "Näytä tositteeseen yhdistetty asiakirja"
 
 #: gnucash/report/trep-engine.scm:983
 msgid "Display a subtotal summary table."
