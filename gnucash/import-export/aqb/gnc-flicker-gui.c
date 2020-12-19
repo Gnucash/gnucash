@@ -120,13 +120,13 @@ flicker_data (const char *challenge)
     /* bitfield is a clock bit and a 4-bit code with the bits reversed
        (bit 1 is the least significant and bit 4 the most
        so 0x1 is 1000 and 0x8 is 0001) */
-     static const _Bool bits[16][5] =
-     {
-           {0, 0, 0, 0, 0}, {0, 1, 0, 0, 0}, {0, 0, 1, 0, 0}, {0, 1, 1, 0, 0},
-           {0, 0, 0, 1, 0}, {0, 1, 0, 1, 0}, {0, 0, 1, 1, 0}, {0, 1, 1, 1, 0},
-           {0, 0, 0, 0, 1}, {0, 1, 0, 0, 1}, {0, 0, 1, 0, 1}, {0, 1, 1, 0, 1},
-           {0, 0, 0, 1, 1}, {0, 1, 0, 1, 1}, {0, 0, 1, 1, 1}, {0, 1, 1, 1, 1}
-     };
+    static const _Bool bits[16][5] =
+    {
+        {0, 0, 0, 0, 0}, {0, 1, 0, 0, 0}, {0, 0, 1, 0, 0}, {0, 1, 1, 0, 0},
+        {0, 0, 0, 1, 0}, {0, 1, 0, 1, 0}, {0, 0, 1, 1, 0}, {0, 1, 1, 1, 0},
+        {0, 0, 0, 0, 1}, {0, 1, 0, 0, 1}, {0, 0, 1, 0, 1}, {0, 1, 1, 0, 1},
+        {0, 0, 0, 1, 1}, {0, 1, 0, 1, 1}, {0, 0, 1, 1, 1}, {0, 1, 1, 1, 1}
+    };
 
     /* prepend synchronization identifier */
     char* code = g_strdup_printf ("0FFF%s", challenge);
@@ -134,17 +134,17 @@ flicker_data (const char *challenge)
 
     /* Swap the position of the bits in pairs throughout the bank challenge
        (low-order nibble first). */
-     for (guint i = 0; i < challenge_length; i += 2)
-     {
-         guint val1 = get_num (code[i]);
-         guint val2 = get_num (code[i+1]);
+    for (guint i = 0; i < challenge_length; i += 2)
+    {
+        guint val1 = get_num (code[i]);
+        guint val2 = get_num (code[i+1]);
 
-         memcpy (&bitarray[i], bits[val2], sizeof(bits[val2]));
-         memcpy (&bitarray[i+1], bits[val1], sizeof(bits[val1]));
-     }
-     g_free (code);
+        memcpy (&bitarray[i], bits[val2], sizeof(bits[val2]));
+        memcpy (&bitarray[i+1], bits[val1], sizeof(bits[val1]));
+    }
+    g_free (code);
 
-     return challenge_length;
+    return challenge_length;
 }
 
 /* A timer for redrawing the flickering painting, is started here and
