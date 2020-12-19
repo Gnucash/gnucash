@@ -1250,16 +1250,6 @@ gnc_option_db_new(void)
     return new GncOptionDB;
 }
 
-GncOptionDB*
-gnc_option_db_new_for_type(QofIdType type)
-{
-    if (strcmp(type, QOF_ID_BOOK))
-        return nullptr;
-    auto db = new GncOptionDB;
-    gnc_option_db_book_options(db);
-    return db;
-}
-
 void
 gnc_option_db_destroy(GncOptionDB* odb)
 {

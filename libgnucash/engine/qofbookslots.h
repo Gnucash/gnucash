@@ -48,7 +48,6 @@
  * It is tied from this C #define in
  *   src/app-utils/app-utils.scm
  * and is extensively used in
- *   src/app-utils/option-util.c
  *   src/gnome-utils/gnome-utils.scm
  *   various reports
  */

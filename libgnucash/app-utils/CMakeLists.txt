@@ -38,7 +38,6 @@ set (app_utils_HEADERS
   gnc-sx-instance-model.h
   gnc-ui-util.h
   gnc-ui-balances.h
-  option-util.h
 )
 
 # Command to generate the swig-app-utils-guile.c wrapper file
@@ -80,7 +79,6 @@ set (app_utils_SOURCES
   gnc-state.c
   gnc-ui-util.c
   gnc-ui-balances.c
-  option-util.c
   )
 
 set_source_files_properties (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})

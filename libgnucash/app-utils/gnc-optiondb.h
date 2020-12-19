@@ -55,13 +55,6 @@ extern "C"
 GncOptionDB* gnc_option_db_new(void);
 
 /**
- * Convenence function duplicating an option-util function. We need this temporarily to make gnc-main-window and assistant-hierarchy happy.
- * @param type The QofType
- * @return a new GncOptionDB*. Transfers ownership.
- */
-GncOptionDB* gnc_option_db_new_for_type(QofIdType type);
-
-/**
  * Destruct and release a GncOptionDB.
  * @param odb The GncOptionDB.
  */

@@ -537,7 +537,6 @@ libgnucash/app-utils/gnc-sx-instance-model.c
 libgnucash/app-utils/gnc-ui-balances.c
 libgnucash/app-utils/gnc-ui-util.c
 libgnucash/app-utils/options.scm
-libgnucash/app-utils/option-util.c
 libgnucash/app-utils/QuickFill.c
 libgnucash/backend/dbi/gnc-backend-dbi.cpp
 libgnucash/backend/dbi/gnc-dbisqlconnection.cpp
