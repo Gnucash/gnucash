@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-19 13:12+0200\n"
+"PO-Revision-Date: 2020-12-19 13:41+0200\n"
 "Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: \n"
 "Language: fi\n"
@@ -3008,7 +3008,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-sx-editor.c:757 gnucash/gnome/dialog-sx-editor.c:773
 msgid "Unparsable Formula in Split"
-msgstr "Tulkintakelvoton kaava jaossa"
+msgstr "Tulkintakelvoton kaava rivissä"
 
 #: gnucash/gnome/dialog-sx-editor.c:770
 #, c-format
@@ -5722,7 +5722,7 @@ msgid ""
 "Add the current report's configuration to the `Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s. "
 msgstr ""
-"Lisää nykyisen raportin asetukset `Tallennetut raporttiasetukset'-valikkoon. "
+"Lisää nykyisen raportin asetukset Tallennetut raporttiasetukset -valikkoon. "
 "Raportti tallennetaan tiedostoon %s. "
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
@@ -7716,18 +7716,18 @@ msgid_plural ""
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
-"Tiedostosi täytyy tallentaa kovalevyllesi jotta muutoksesi tallentuvat. "
+"Tiedostosi täytyy tallentaa kiintolevyllesi jotta muutoksesi tallentuvat. "
 "GnuCash voi tallentaa tiedoston automaattisesti joka minuutti, aivan kuin "
-"olisit painanut \"Tallenna\" -nappia joka kerta.\n"
+"olisit painanut Tallenna-painiketta joka kerta.\n"
 "\n"
 "Voit muuttaa aikaväliä tai laittaa ominaisuuden pois päältä Muokkaa-"
 ">Asetukset->Yleistä->Automaattitallennuksen aikaväli.\n"
 "\n"
 "Tulisiko tiedostosi tallentaa automaattisesti?"
 msgstr[1] ""
-"Tiedostosi täytyy tallentaa kovalevyllesi jotta muutoksesi tallentuvat. "
+"Tiedostosi täytyy tallentaa kiintolevyllesi jotta muutoksesi tallentuvat. "
 "GnuCash voi tallentaa tiedoston automaattisesti joka %d. minuutti, aivan "
-"kuin olisit painanut \"Tallenna\" -nappia joka kerta.\n"
+"kuin olisit painanut Tallenna-painiketta joka kerta.\n"
 "\n"
 "Voit muuttaa aikaväliä tai laittaa ominaisuuden pois päältä Muokkaa-"
 ">Asetukset->Yleistä->Automaattitallennuksen aikaväli.\n"
@@ -8692,7 +8692,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1253
 #: gnucash/register/ledger-core/split-register.c:515
 msgid "New Split Information"
-msgstr "Uuden jaon tiedot"
+msgstr "Uuden rivin tiedot"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1303
 msgid ""
@@ -8740,7 +8740,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1780
 #: gnucash/register/ledger-core/split-register-control.c:1830
 msgid "Mark split as unreconciled?"
-msgstr "Haluatko merkitä jaon täsmäyttämättömäksi?"
+msgstr "Haluatko merkitä rivin täsmäyttämättömäksi?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1782
 #: gnucash/register/ledger-core/split-register-control.c:1832
@@ -9584,7 +9584,7 @@ msgstr "Syötä huomautukset tositteelle"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3215
 #: gnucash/register/ledger-core/split-register-model.c:1330
 msgid "Enter a description of the split"
-msgstr "Syötä jaon kuvaus"
+msgstr "Syötä rivin kuvaus"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3202
 #: gnucash/register/ledger-core/split-register-model.c:1135
@@ -12412,7 +12412,7 @@ msgstr "Tuo hinnat nyt"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:28
 msgid "CSV Transaction Import"
-msgstr "CSV tositteiden tuonti"
+msgstr "CSV-tositteiden tuonti"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:56
 msgid ""
@@ -12679,12 +12679,12 @@ msgid ""
 "\n"
 "Press `Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"Valitse `Toteuta' luodaksesi uudet tilit. Luonnin jälkeen voit tallentaa ne "
+"Klikkaa Toteuta luodaksesi uudet tilit. Luonnin jälkeen voit tallentaa ne "
 "tiedostoon tai tietokantaan\n"
 "\n"
-"Valitse `Takaisin' muuttaaksesi valintojasi.\n"
+"Klikkaa Takaisin muuttaaksesi valintojasi.\n"
 "\n"
-"Valitse `Peruuta' sulkeaksesi tämän ikkunan luomatta tilejä."
+"Klikkaa Peruuta sulkeaksesi tämän ikkunan luomatta tilejä."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:591
 msgid "Finish Account Setup"
@@ -13301,7 +13301,7 @@ msgstr "Yhteenvetoteksti"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1390
 msgid "Qif Import Summary"
-msgstr "Qif tuonnin yhteenveto"
+msgstr "QIF-tuonnin yhteenveto"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:9
 #: gnucash/gtkbuilder/assistant-stock-split.glade:37
@@ -13934,11 +13934,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:153
 msgid "Import bill CSV data"
-msgstr "Tuo ostolaskujen CSV tiedot"
+msgstr "Tuo ostolaskujen CSV-tiedot"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:173
 msgid "Import invoice CSV data"
-msgstr "Tuo myyntilaskujen CSV tiedot"
+msgstr "Tuo myyntilaskujen CSV-tiedot"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:191
 msgid "2. Select import type"
@@ -14059,7 +14059,7 @@ msgstr "Viimeinen päivä, jolloin myönnetään alennus aikaisesta maksusta."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:329
 msgid "The day of the month bills are due"
-msgstr "Kuukaudenpäivä jona laskut erääntyvät"
+msgstr "Päivä kuukaudesta, jolloin laskut erääntyvät"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:393
 msgid "Table"
@@ -17977,7 +17977,7 @@ msgstr ""
 
 #: gnucash/html/gnc-html-webkit1.c:1194
 msgid "Export to PDF File"
-msgstr "Vie PDF tiedostoon"
+msgstr "Vie PDF-tiedostoon"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
 #. * 3. Account Number,  4. Subaccount ID
@@ -19181,10 +19181,10 @@ msgid ""
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
 "Tämän avustajan kautta voit viedä tilihierarkian tiedostoon käyttäen alla "
-"määriteltyö erotinta.\n"
+"määriteltyä erotinta.\n"
 "\n"
-"Valitse haluamasi asetukset ja klikkaa \"Eteenpäin\" jatkaaksesi tai "
-"\"Peruuta\" keskeyttääksesi viennin.\n"
+"Valitse haluamasi asetukset ja klikkaa Eteenpäin jatkaaksesi tai Peruuta "
+"keskeyttääksesi viennin.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
@@ -19904,7 +19904,7 @@ msgstr "Tuo _asiakkaat ja toimittajat..."
 
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:59
 msgid "Import Customers and Vendors from a CSV text file."
-msgstr "Tuo asiakkaat ja toimittajat CSV tiedostosta."
+msgstr "Tuo asiakkaat ja toimittajat CSV-tiedostosta."
 
 #: gnucash/import-export/import-account-matcher.c:260
 #, c-format
@@ -20073,7 +20073,7 @@ msgstr ""
 
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:48
 msgid "_Replay GnuCash .log file..."
-msgstr "Tuo tapahtumat GnuCash ._log tiedostosta..."
+msgstr "Tuo tapahtumat GnuCash ._log-tiedostosta..."
 
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:49
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
@@ -23669,7 +23669,7 @@ msgstr "Saldoennuste"
 #: gnucash/report/reports/standard/trial-balance.scm:78
 #: gnucash/report/trep-engine.scm:687
 msgid "Report on these accounts."
-msgstr "Raportoin näiltä tileiltä."
+msgstr "Tee raportti näistä tileistä."
 
 #: gnucash/report/reports/standard/balance-forecast.scm:49
 #: gnucash/report/reports/standard/net-charts.scm:59
@@ -23684,7 +23684,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-forecast.scm:52
 #: gnucash/report/reports/standard/balance-forecast.scm:53
 msgid "Show reserve line"
-msgstr "Näytä reserviviivca"
+msgstr "Näytä reserviviiva"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:55
 msgid "Reserve amount"
@@ -25252,7 +25252,7 @@ msgstr "Toissijaisen järjestyksen suunta"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:39
 msgid "Income and GST Statement"
-msgstr "Tulo ja LVV-laskelma"
+msgstr "Tulo- ja LVV-laskelma"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:41
 #: gnucash/report/trep-engine.scm:108
@@ -25431,7 +25431,7 @@ msgstr "Otsikoi muunnostilien kappale"
 
 #: gnucash/report/reports/standard/income-statement.scm:97
 msgid "Whether or not to include a label for the trading accounts section."
-msgstr "Otsikoida vai ei muunnostilien kappale."
+msgstr "Otsikoidaanko muunnostilien kappale."
 
 #: gnucash/report/reports/standard/income-statement.scm:98
 msgid "Include trading accounts total"
@@ -25968,7 +25968,7 @@ msgstr "Tulo-/menokuvaaja"
 
 #: gnucash/report/reports/standard/net-charts.scm:502
 msgid "Income & Expense Barchart"
-msgstr "Tulot ja menot pylväskaavio"
+msgstr "Tulot ja menot -pylväskaavio"
 
 #: gnucash/report/reports/standard/net-charts.scm:512
 msgid "Net Worth Linechart"
@@ -25977,7 +25977,7 @@ msgstr "Nettoarvon viivakuvaaja"
 #: gnucash/report/reports/standard/net-charts.scm:525
 #: gnucash/report/reports/standard/net-charts.scm:527
 msgid "Income & Expense Linechart"
-msgstr "Tulot ja menot viivakaavio"
+msgstr "Tulot ja menot -viivakaavio"
 
 #: gnucash/report/reports/standard/new-aging.scm:63
 msgid ""
@@ -26530,11 +26530,11 @@ msgstr ""
 
 #: gnucash/report/reports/standard/register.scm:160
 msgid "Debit Value"
-msgstr "Debit arvo"
+msgstr "Debit-arvo"
 
 #: gnucash/report/reports/standard/register.scm:162
 msgid "Credit Value"
-msgstr "Kredit arvo"
+msgstr "Kredit-arvo"
 
 #: gnucash/report/reports/standard/register.scm:348
 msgid "The title of the report."
@@ -26616,11 +26616,11 @@ msgstr "Yhteensä kredit"
 
 #: gnucash/report/reports/standard/register.scm:561
 msgid "Total Value Debits"
-msgstr "Debit arvo yhteensä"
+msgstr "Debit-arvo yhteensä"
 
 #: gnucash/report/reports/standard/register.scm:563
 msgid "Total Value Credits"
-msgstr "Kredit arvo yhteensä"
+msgstr "Kredit-arvo yhteensä"
 
 #: gnucash/report/reports/standard/register.scm:566
 msgid "Net Change"
@@ -27451,11 +27451,11 @@ msgstr ""
 
 #: gnucash/report/stylesheets/head-or-tail.scm:89
 msgid "Show GnuCash Version"
-msgstr "Näytä GnuCash versio"
+msgstr "Näytä GnuCashin versio"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:90
 msgid "Show the currently used GnuCash version."
-msgstr "Näytä käytössä oleva GnuCash versio."
+msgstr "Näytä käytössä oleva GnuCashin versio."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:103
 msgid "String for additional report information."
@@ -27497,7 +27497,7 @@ msgstr ""
 
 #: gnucash/report/stylesheets/head-or-tail.scm:132
 msgid "Show GnuCash version at bottom"
-msgstr "Näytä GnuCash versio lopussa"
+msgstr "Näytä GnuCashin versio alalaidassa"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:133
 msgid "Per default the GnuCash version will be shown before the report data."
@@ -28993,7 +28993,7 @@ msgstr ""
 
 #: libgnucash/engine/qofbookslots.h:70
 msgid "Default Gain or Loss Account"
-msgstr "Oletus tulo- tai meno-tili"
+msgstr "Oletuksena käytettävä tulo- tai meno-tili"
 
 #: libgnucash/engine/qofbookslots.h:71
 msgid "Day Threshold for Read-Only Transactions (red line)"
