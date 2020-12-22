@@ -561,7 +561,7 @@ balance at a given time"))
                (gnc:html-chart-set-width! chart width)
                (gnc:html-chart-set-height! chart height)
                (gnc:html-chart-add-data-series! chart
-                                                "Accounts"
+                                                (G_ "Accounts")
                                                 (map round-scu (unzip1 combined))
                                                 (gnc:assign-colors (length combined))
                                                 'urls urls)
