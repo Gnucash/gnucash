@@ -30,7 +30,6 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash utilities))
 (use-modules (sw_app_utils))
-(use-modules (gnucash app-utils c-interface))
 (use-modules (ice-9 match))
 
 (export gnc:reldate-list)
@@ -891,7 +890,15 @@ Defaulting to today."))
 ;;one-month-ago three-months-ago six-months-ago one-year-ago
 ;;start-cur-fin-year start-prev-fin-year end-prev-fin-year
 
-(define gnc:reldate-string-db (gnc:make-string-database))
+
+(define (make-string-database)
+  (define string-hash (make-hash-table))
+  (match-lambda*
+    (('lookup key) (G_ (hash-ref string-hash key)))
+    (('store key string) (hash-set! string-hash key string))
+    (_ (gnc:warn "string-database: bad action"))))
+
+(define gnc:reldate-string-db (make-string-database))
 (define gnc:relative-date-values #f)
 (unless gnc:relative-date-hash
   (gnc:reldate-string-db 
