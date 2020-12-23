@@ -25,6 +25,7 @@
 #include "gnc-option-impl.hpp"
 #include <gnc-datetime.hpp>
 #include <guid.hpp>
+#include <cassert>
 
 extern "C"
 {

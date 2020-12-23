@@ -30,7 +30,7 @@ extern "C"
 }
 
 #include <vector>
-
+#include <iostream>
 /**
  * Reporting periods relative to the current date.
  *
@@ -83,6 +83,6 @@ const char* gnc_relative_date_display_string(RelativeDatePeriod);
 const char* gnc_relative_date_description(RelativeDatePeriod);
 RelativeDatePeriod gnc_relative_date_from_storage_string(const char*);
 time64 gnc_relative_date_to_time64(RelativeDatePeriod);
-
+std::ostream& operator<<(std::ostream&, const RelativeDatePeriod);
 
 #endif //GNC_OPTION_DATE_HPP_

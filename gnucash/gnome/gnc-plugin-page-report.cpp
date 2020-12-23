@@ -1156,14 +1156,13 @@ gnc_plugin_page_report_constructor(GType this_type, guint n_properties, GObjectC
     GncPluginPageReportClass *our_class;
     GObjectClass *parent_class;
     gint reportId = -42;
-    int i;
 
     our_class = GNC_PLUGIN_PAGE_REPORT_CLASS (
                     g_type_class_peek (GNC_TYPE_PLUGIN_PAGE_REPORT));
     parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (our_class));
     obj = parent_class->constructor(this_type, n_properties, properties);
 
-    for (i = 0; i < n_properties; i++)
+    for (decltype(n_properties) i = 0; i < n_properties; i++)
     {
         GObjectConstructParam prop = properties[i];
         if (strcmp(prop.pspec->name, "report-id") == 0)
@@ -1719,8 +1718,10 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
         SCM get_export_error = scm_c_eval_string ("gnc:html-document-export-error");
 
         if (scm_is_false (scm_call_1 (query_result, document)))
-            gnc_error_dialog (parent, _("This report must be upgraded to \
-return a document object with export-string or export-error."));
+            gnc_error_dialog (parent, "%s",
+                              _("This report must be upgraded to return a "
+                                "document object with export-string or "
+                                "export-error."));
         else
         {
             SCM export_string = scm_call_1 (get_export_string, document);
@@ -1743,8 +1744,10 @@ return a document object with export-string or export-error."));
                 g_free (str);
             }
             else
-                gnc_error_dialog (parent, _("This report must be upgraded to \
-return a document object with export-string or export-error."));
+	        gnc_error_dialog (parent, "%s",
+				  _("This report must be upgraded to return a "
+				    "document object with export-string or "
+				    "pexport-error."));
         }
         result = TRUE;
     }

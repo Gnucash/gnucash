@@ -1071,6 +1071,7 @@ owner_type_to_ui_type(GncOwnerType type)
         case GNC_OWNER_EMPLOYEE:
             return GncOptionUIType::EMPLOYEE;
     }
+    return GncOptionUIType::INTERNAL;
 }
 
 void

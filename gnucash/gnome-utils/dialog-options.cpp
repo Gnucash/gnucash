@@ -1187,7 +1187,7 @@ create_multichoice_widget(GncOption& option)
 
     auto store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
     /* Add values to the list store, entry and tooltip */
-    for (auto i = 0; i < num_values; i++)
+    for (decltype(num_values) i = 0; i < num_values; i++)
     {
         GtkTreeIter iter;
         auto itemstring = option.permissible_value_name(i);
@@ -1325,7 +1325,7 @@ RelativeDateEntry::RelativeDateEntry(GncOption& option) :
     auto store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
     /* Add values to the list store, entry and tooltip */
     auto num = option.num_permissible_values();
-    for (auto index = 0; index < num; ++index)
+    for (decltype(num) index = 0; index < num; ++index)
     {
         GtkTreeIter  iter;
         gtk_list_store_append (store, &iter);
@@ -1503,7 +1503,7 @@ date_set_relative_cb(GtkWidget *widget, gpointer data1)
     }
 }
 
-GtkWidget*
+static GtkWidget*
 create_date_option_widget(GncOption& option, GtkGrid *page_box,
                           GtkLabel *name_label, char *documentation,
                                /* Return values */
@@ -1682,8 +1682,8 @@ public:
         const GncOptionAccountList& accounts =
             option.get_value<GncOptionAccountList>();
         for (auto account : accounts)
-            g_list_prepend(acc_list, static_cast<void*>(const_cast<Account*>(account)));
-        g_list_reverse(acc_list);
+            acc_list = g_list_prepend(acc_list, static_cast<void*>(const_cast<Account*>(account)));
+        acc_list = g_list_reverse(acc_list);
         gnc_tree_view_account_set_selected_accounts(widget, acc_list, TRUE);
         g_list_free(acc_list);
     }
@@ -1699,7 +1699,7 @@ public:
     }
 };
 
-GtkWidget*
+static GtkWidget*
 create_account_widget(GncOption& option, char *name)
 {
     bool multiple_selection;
@@ -2022,7 +2022,7 @@ create_list_widget(GncOption& option, char *name)
     gtk_tree_view_set_headers_visible(view, FALSE);
 
     auto num_values = option.num_permissible_values();
-    for (auto i = 0; i < num_values; i++)
+    for (decltype(num_values) i = 0; i < num_values; i++)
     {
         auto raw_string = option.permissible_value_name(i);
         auto string = (raw_string && *raw_string) ? _(raw_string) : "";
@@ -2442,7 +2442,7 @@ public:
         g_list_free(list);
         auto val{g_object_get_data (G_OBJECT (button),
                                     "gnc_radiobutton_index")};
-        g_return_if_fail (GPOINTER_TO_INT (val) == index);
+        g_return_if_fail (GPOINTER_TO_UINT (val) == index);
 
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
     }
@@ -2473,7 +2473,7 @@ create_radiobutton_widget(char *name, GncOption& option)
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     /* Iterate over the options and create a radio button for each one */
-    for (auto i = 0; i < num_values; i++)
+    for (decltype(num_values) i = 0; i < num_values; i++)
     {
         auto label = option.permissible_value_name(i);
         auto tip = option.permissible_value_description(i);
@@ -2849,14 +2849,4 @@ gnc_options_dialog_set_book_options_help_cb (GNCOptionWin *win)
     gnc_options_dialog_set_help_cb(win,
                                 (GNCOptionWinCallback)gnc_book_options_help_cb,
                                 nullptr);
-}
-
-/* Dummy function impls. The following functions are declared in
- * dialog_options.h and used by clients but they're made obsolete by the new
- * options system. They're here to satisfy the linker.
- */
-GtkWidget* const
-gnc_option_get_gtk_widget (GncOption *option)
-{
-    return nullptr;
 }

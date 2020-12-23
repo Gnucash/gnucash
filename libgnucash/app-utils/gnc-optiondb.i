@@ -444,6 +444,10 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 
 %inline %{
     using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
+/* Forward decls */
+    GncOptionDBPtr new_gnc_optiondb();
+    GncOption* gnc_lookup_option(const GncOptionDBPtr& optiondb,
+                                 const char* section, const char* name);
 
     static SCM
     gnc_option_value(const GncOptionDBPtr& optiondb, const char* section,

@@ -456,7 +456,7 @@ static GtkRadioActionEntry radio_entries [] =
 };
 
 /** The number of radio actions provided by the main window. */
-static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
+static gsize n_radio_entries = G_N_ELEMENTS (radio_entries);
 #endif
 
 /** These are the "important" actions provided by the main window.
@@ -685,7 +685,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     gsize length;
     gboolean max, visible, desired_visibility;
     gchar *window_group;
-    gint page_start, page_count, i;
+    gsize page_start, page_count, i;
     GError *error = nullptr;
 
     /* Setup */
@@ -903,7 +903,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     }
     else if (length != page_count)
     {
-        g_warning("%s key %s length %" G_GSIZE_FORMAT " differs from window page count %d",
+        g_warning("%s key %s length %" G_GSIZE_FORMAT " differs from window page count %" G_GSIZE_FORMAT,
                   window_group, WINDOW_PAGEORDER, length, page_count);
     }
     else
@@ -1902,7 +1902,7 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
     GtkAction *action, *first_action;
     GSList *action_list;
     gchar *action_name;
-    gint index;
+    gsize index;
 
     ENTER("window %p", window);
 
@@ -1910,12 +1910,12 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
     index = g_list_index(active_windows, window);
     if (index >= n_radio_entries)
     {
-        LEAVE("window %d, only %d actions", index, n_radio_entries);
+        LEAVE("window  %" G_GSIZE_FORMAT ", only %" G_GSIZE_FORMAT " actions", index, n_radio_entries);
         return;
     }
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    action_name = g_strdup_printf("Window%dAction", index);
+    action_name = g_strdup_printf("Window%" G_GSIZE_FORMAT "Action", index);
     action = gtk_action_group_get_action(priv->action_group, action_name);
 
     /* Block the signal so as not to affect window ordering (top to
@@ -1923,15 +1923,15 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
     action_list = gtk_radio_action_get_group(GTK_RADIO_ACTION(action));
     if (action_list)
     {
-        first_action = g_slist_last(action_list)->data;
+        first_action = static_cast<GtkAction*>(g_slist_last(action_list)->data);
         g_signal_handlers_block_by_func(G_OBJECT(first_action),
-                                        G_CALLBACK(gnc_main_window_cmd_window_raise),
+                                        (void*)gnc_main_window_cmd_window_raise,
                                         window);
         DEBUG("blocked signal on %p, set %p active, window %p", first_action,
               action, window);
         gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
         g_signal_handlers_unblock_by_func(G_OBJECT(first_action),
-                                          G_CALLBACK(gnc_main_window_cmd_window_raise),
+                                          (void*)gnc_main_window_cmd_window_raise,
                                           window);
     }
     g_free(action_name);
@@ -1956,13 +1956,13 @@ gnc_main_window_update_menu_item (GncMainWindow *window)
 {
     struct menu_update data;
     gchar **strings, *title, *expanded;
-    gint index;
+    gsize index;
 
     ENTER("window %p", window);
     index = g_list_index(active_windows, window);
     if (index > n_radio_entries)
     {
-        LEAVE("skip window %d (only %d entries)", index, n_radio_entries);
+        LEAVE("skip window %" G_GSIZE_FORMAT " (only %" G_GSIZE_FORMAT " entries)", index, n_radio_entries);
         return;
     }
 
@@ -1973,7 +1973,7 @@ gnc_main_window_update_menu_item (GncMainWindow *window)
     expanded = g_strjoinv("__", strings);
     if (index < 10)
     {
-        data.label = g_strdup_printf("_%d %s", (index + 1) % 10, expanded);
+        data.label = g_strdup_printf("_%" G_GSIZE_FORMAT " %s", (index + 1) % 10, expanded);
         g_free(expanded);
     }
     else
@@ -1983,7 +1983,7 @@ gnc_main_window_update_menu_item (GncMainWindow *window)
     g_strfreev(strings);
 
     data.visible = TRUE;
-    data.action_name = g_strdup_printf("Window%dAction", index);
+    data.action_name = g_strdup_printf("Window%" G_GSIZE_FORMAT "Action", index);
     g_list_foreach(active_windows,
                    (GFunc)gnc_main_window_update_one_menu_action,
                    &data);
@@ -2008,7 +2008,6 @@ gnc_main_window_update_all_menu_items (void)
 {
     struct menu_update data;
     gchar *label;
-    gint i;
 
     ENTER("");
     /* First update the entries for all existing windows */
@@ -2021,10 +2020,10 @@ gnc_main_window_update_all_menu_items (void)
 
     /* Now hide any entries that aren't being used. */
     data.visible = FALSE;
-    for (i = g_list_length(active_windows); i < n_radio_entries; i++)
+    for (gsize i = g_list_length(active_windows); i < n_radio_entries; i++)
     {
-        data.action_name = g_strdup_printf("Window%dAction", i);
-        label = g_strdup_printf("Window _%d", (i - 1) % 10);
+        data.action_name = g_strdup_printf("Window%" G_GSIZE_FORMAT "Action", i);
+        label = g_strdup_printf("Window _%" G_GSIZE_FORMAT, (i - 1) % 10);
         data.label = gettext(label);
 
         g_list_foreach(active_windows,
@@ -4588,7 +4587,7 @@ gnc_main_window_cmd_window_raise (GtkAction *action,
 
     ENTER("action %p, current %p, window %p", action, current, old_window);
     value = gtk_radio_action_get_current_value(current);
-    new_window = g_list_nth_data(active_windows, value);
+    new_window = static_cast<GncMainWindow*>(g_list_nth_data(active_windows, value));
     gtk_window_present(GTK_WINDOW(new_window));
     /* revert the change in the radio group
      * impossible while handling "changed" (G_SIGNAL_NO_RECURSE) */

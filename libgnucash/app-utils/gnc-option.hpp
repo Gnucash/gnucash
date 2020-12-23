@@ -34,7 +34,7 @@ extern "C"
 #include <iostream>
 #include <variant>
 #include <memory>
-#include "gnc-option-uitype.hpp"
+#include "gnc-option-ui.hpp"
 #include "gnc-option-date.hpp"
 
 class GncOptionUIItem;
