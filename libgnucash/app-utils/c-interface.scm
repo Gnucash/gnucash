@@ -88,9 +88,9 @@
 ;; strings. Strings that are returned by the lookup function are
 ;; translated with gettext.
 (define (gnc:make-string-database)
+  (define string-hash (make-hash-table))
   (issue-deprecation-warning "gnc:make-string-database is deprecated. It \
 will be removed in GnuCash 5.x")
-  (define string-hash (make-hash-table))
   (lambda args
     (match args
       (('lookup key) (G_ (hash-ref string-hash key)))
