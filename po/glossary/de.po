@@ -5,6 +5,7 @@
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2013 - 2017.
 # Manuel Bichler <felseninsel@hotmail.com>, 2020.
 # K. Herbert <herbert.ka@mailo.com>, 2020.
+# Milo Ivir <mail@milotype.de>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.18\n"

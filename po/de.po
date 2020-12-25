@@ -16,6 +16,7 @@
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
 # Manuel Bichler <felseninsel@hotmail.com>, 2020.
 # K. Herbert <herbert.ka@mailo.com>, 2020.
+# Milo Ivir <mail@milotype.de>, 2020.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -27,8 +28,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-21 16:47+0000\n"
-"Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
+"PO-Revision-Date: 2020-12-23 00:29+0000\n"
+"Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -36,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -3083,7 +3084,7 @@ msgstr ""
 msgid "Couldn't parse debit formula for split \"%s\"."
 msgstr ""
 "Die Berechnungsformel für die Mehrungsbuchung konnte nicht verarbeitet "
-"werden im Buchungsteil »%s«. "
+"werden im Buchungsteil »%s«."
 
 #: gnucash/gnome/dialog-sx-editor2.c:690 gnucash/gnome/dialog-sx-editor.c:874
 #: gnucash/gnome/dialog-sx-from-trans.c:261
@@ -3181,7 +3182,7 @@ msgstr ""
 #: gnucash/gnome/dialog-sx-editor.c:676
 #, c-format
 msgid "Couldn't parse %s for split \"%s\"."
-msgstr "%s konnte nicht verarbeitet werden im Buchungsteil »%s«. "
+msgstr "%s konnte nicht verarbeitet werden im Buchungsteil »%s«."
 
 #: gnucash/gnome/dialog-sx-editor.c:739
 #, c-format
@@ -3295,11 +3296,11 @@ msgstr "Buchungen erstellt"
 
 #: gnucash/gnome/dialog-tax-info.c:289
 msgid "Last Valid Year: "
-msgstr "Letztes gültiges Jahr:"
+msgstr "Letztes gültiges Jahr: "
 
 #: gnucash/gnome/dialog-tax-info.c:290
 msgid "Form Line Data: "
-msgstr "Daten der Formularzeilen:"
+msgstr "Daten der Formularzeilen: "
 
 #: gnucash/gnome/dialog-tax-info.c:291
 #: gnucash/report/reports/standard/account-summary.scm:407
@@ -6086,7 +6087,7 @@ msgstr "Abbrechen"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1271
 msgid "Cancel outstanding HTML requests"
-msgstr "Unbeantwortete HTML-Anfragen abbrechen "
+msgstr "Unbeantwortete HTML-Anfragen abbrechen"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1518
 #: gnucash/gnome/gnc-plugin-page-report.c:1551
@@ -6764,10 +6765,8 @@ msgid "Business"
 msgstr "Geschäft"
 
 #: gnucash/gnome/window-autoclear.c:115
-#, fuzzy
-#| msgid "Created Transactions"
 msgid "Cleared Transactions"
-msgstr "Buchungen erstellt"
+msgstr "Bestätigte Buchungen"
 
 #: gnucash/gnome/window-reconcile2.c:417 gnucash/gnome/window-reconcile.c:458
 msgid "Interest Payment"
@@ -8279,7 +8278,7 @@ msgstr "Ansicht"
 #: gnucash/gnome-utils/gnc-dense-cal.c:335
 #: gnucash/report/stylesheets/footer.scm:383
 msgid "Date: "
-msgstr "Datum:"
+msgstr "Datum: "
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:348
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:147
@@ -8586,7 +8585,7 @@ msgstr ""
 "installiert und kann große Zahlen nicht korrekt speichern. Dadurch kann "
 "GnuCash keine SQL-Datenbank benutzen. GnuCash kann keine SQL-Datenbank "
 "öffnen oder dahin speichern, bis eine andere Version von »libdbi« "
-"installiert ist. Siehe auch https://bugs.gnucash.org/show_bug.cgi?id=611936 "
+"installiert ist. Siehe auch https://bugs.gnucash.org/show_bug.cgi?id=611936."
 
 #: gnucash/gnome-utils/gnc-file.c:528
 msgid ""
@@ -8693,10 +8692,8 @@ msgid "Open _Anyway"
 msgstr "Tr_otzdem öffnen"
 
 #: gnucash/gnome-utils/gnc-file.c:859
-#, fuzzy
-#| msgid "placeholder"
 msgid "Open _Folder"
-msgstr "Platzhalter"
+msgstr "_Verzeichnis öffnen"
 
 #: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:310
 msgid "_Quit"
@@ -9208,7 +9205,7 @@ msgid ""
 "changes before proceeding, or cancel?"
 msgstr ""
 "Die aktuelle Buchung wurde verändert. Wollen Sie die Änderungen aufzeichnen, "
-"bevor Sie weitermachen oder abbrechen. "
+"bevor Sie weitermachen oder abbrechen?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:149
 #: gnucash/register/ledger-core/gncEntryLedger.c:931
@@ -9219,7 +9216,7 @@ msgstr "_Speichern"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:185
 msgid "This transaction is being edited in a different register."
-msgstr "Diese Buchung wird bereits in einem anderen Kontofenster bearbeitet. "
+msgstr "Diese Buchung wird bereits in einem anderen Kontofenster bearbeitet."
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:205
 #: gnucash/register/ledger-core/split-register-control.c:59
@@ -10395,7 +10392,7 @@ msgstr ""
 msgid "This is a development version. It may or may not work."
 msgstr ""
 "Diese Version befindet sich noch in Entwicklung.\n"
-"Sie kann funktionieren, muss aber nicht. "
+"Sie kann funktionieren, muss aber nicht."
 
 #: gnucash/gnucash-core-app.cpp:86
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
@@ -11185,7 +11182,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:5
 msgid "Enable SKIP transaction action"
-msgstr "»Überspringen«-Aktion aktivieren "
+msgstr "»Überspringen«-Aktion aktivieren"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:2032
@@ -12138,7 +12135,7 @@ msgid ""
 msgstr ""
 "Falls aktiviert wird der Cursor, nachdem eine Buchung aufgrund bekanntem "
 "Buchungstext mittels TAB automatisch ausgefüllt wurde, in das Feld für das "
-"Gegenkonto gesetzt. Andernfalls springt er in das Betragsfeld. "
+"Gegenkonto gesetzt. Andernfalls springt er in das Betragsfeld."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:260
 msgid "Create a new window for each new register"
@@ -13478,7 +13475,7 @@ msgstr "Währungsformat"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:620
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:627
 msgid "Encoding"
-msgstr "Zeichenkodierung: "
+msgstr "Zeichenkodierung"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:632
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:639
@@ -13550,8 +13547,8 @@ msgid ""
 "<b>Press Apply to add the Prices.\n"
 "Cancel to abort.</b>"
 msgstr ""
-"Drücken Sie »Anwenden«, um die Preise hinzuzufügen,\n"
-"oder »Abbrechen«, um den Vorgang abzubrechen."
+"<b>Drücken Sie »Anwenden«, um die Preise hinzuzufügen,\n"
+"oder »Abbrechen«, um den Vorgang abzubrechen.</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1043
 msgid "Import Prices Now"
@@ -15047,7 +15044,7 @@ msgid ""
 "deleted."
 msgstr ""
 "Ein Unterkonto (oder mehrere) dieses Kontos enthalten schreibgeschützte "
-"Buchungen. Sie können diese nicht löschen. "
+"Buchungen. Sie können diese nicht löschen."
 
 #: gnucash/gtkbuilder/dialog-account.glade:801
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:8
@@ -15930,7 +15927,7 @@ msgstr "Neu _laden"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:532
 msgid "_Locate Linked Documents"
-msgstr "Ort _prüfen für verknüpfte Dokumente "
+msgstr "Ort _prüfen für verknüpfte Dokumente"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:572
 msgid "All Linked Documents"
@@ -16638,9 +16635,9 @@ msgid ""
 "will be displayed again next time you start GnuCash. If you press the <i>No</"
 "i> button, it will not be displayed again."
 msgstr ""
-"Wenn Sie »Ja« klicken, wird dieses Begrüßungsfenster beim nächsten Starten "
-"von GnuCash wieder angezeigt. Wenn Sie »Nein« klicken, wird es nicht wieder "
-"angezeigt."
+"Wenn Sie <i>Ja</i> klicken, wird dieses Begrüßungsfenster beim nächsten "
+"Starten von GnuCash wieder angezeigt. Wenn Sie <i>Nein</i> klicken, wird es "
+"nicht wieder angezeigt."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:211
 msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
@@ -16654,8 +16651,8 @@ msgid ""
 "perform any of them."
 msgstr ""
 "Folgende Aktionen können für neue Anwender in GnuCash hilfreich sein. Wählen "
-"Sie eine Aktion und klicken Sie »Ok«. Falls Sie keine dieser Aktionen "
-"durchführen wollen, klicken Sie »Abbrechen«."
+"Sie eine Aktion und klicken Sie <i>OK</i>. Falls Sie keine dieser Aktionen "
+"durchführen wollen, klicken Sie <i>Abbrechen</i>."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:245
 msgid "C_reate a new set of accounts"
@@ -17245,7 +17242,7 @@ msgstr "<b>Verknüpfte Dateien</b>"
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2026
 msgid "Enable skip transaction action"
-msgstr "»Überspringen«-Aktion aktivieren "
+msgstr "»Überspringen«-Aktion aktivieren"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2045
@@ -18271,7 +18268,7 @@ msgstr "Seit-Letztem-Aufruf Fenster starten, wenn eine _Datei geöffnet wird"
 msgid "Run the \"since last run\" process when a file is opened."
 msgstr ""
 "Lasse den »Seit letztem Aufruf« Prozess laufen, wenn eine Datei geöffnet "
-"wird "
+"wird."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:562
 msgid "_Show notification window"
@@ -18283,7 +18280,7 @@ msgid ""
 "is opened."
 msgstr ""
 "Das Benachrichtigungsfenster »Seit letztem Aufruf« anzeigen, wenn eine Datei "
-"geöffnet wird "
+"geöffnet wird."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:579
 msgid "_Auto-create new transactions"
@@ -22352,7 +22349,7 @@ msgstr "Einige Zeichen sind verworfen worden."
 #: gnucash/import-export/qif-imp/qif-file.scm:180
 #: gnucash/import-export/qif-imp/qif-file.scm:184
 msgid "Converted to: "
-msgstr "Konvertiert zu:"
+msgstr "Konvertiert zu: "
 
 #: gnucash/import-export/qif-imp/qif-file.scm:183
 msgid "Some characters have been converted according to your locale."
@@ -22930,7 +22927,7 @@ msgid ""
 msgstr ""
 "Diese Buchung wird bereits von einem anderen Kontofenster aus bearbeitet. "
 "Bitte beenden Sie zuerst jene Bearbeitung, indem Sie in dem anderen "
-"Kontofenster »Eingabe« oder »Abbrechen« wählen. "
+"Kontofenster »Eingabe« oder »Abbrechen« wählen."
 
 #: gnucash/register/ledger-core/split-register.c:459
 msgid "Save transaction before duplicating?"
@@ -25106,7 +25103,7 @@ msgstr "Tortendiagramm der Erträge eines Zeitraums anzeigen"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:46
 msgid "Shows a piechart with the Expenses per given time interval"
-msgstr "Tortendiagramm der Aufwendungen eines Zeitraums anzeigen "
+msgstr "Tortendiagramm der Aufwendungen eines Zeitraums anzeigen"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:48
 msgid "Shows a piechart with the Assets balance at a given time"
@@ -29780,7 +29777,7 @@ msgstr "Datum und Uhrzeit am Ende anzeigen"
 #: gnucash/report/stylesheets/head-or-tail.scm:121
 msgid "Per default the date/time info will be shown before the report data."
 msgstr ""
-"Standardmässig werden Datum und Uhrzeit vor den Berichtsdaten angezeigt. "
+"Standardmässig werden Datum und Uhrzeit vor den Berichtsdaten angezeigt."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:126
 msgid "Show comments at bottom"
