@@ -6,7 +6,7 @@
 # Cleber Cassol <ccassol@gmail.com>, 2007.
 # Caio Alonso <caioalons@gmail.com>, 2007.
 # Vladimir Melo <vladimirmelo.psi@gmail.com>, 2007.
-#
+# LL Magical <lolayami2004@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.8\n"
