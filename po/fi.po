@@ -4,22 +4,22 @@
 # Marko Kohtala <marko.kohtala@gmail.com>, 2020.
 # Tuomo Hartikainen <tth@harski.org>, 2017.
 # Tuomo Kohvakka <tuomo.kohvakka@iki.fi>, 2008.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.10\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-19 13:41+0200\n"
+"PO-Revision-Date: 2020-12-22 08:12+0000\n"
 "Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
-"Language-Team: \n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Weblate 4.4-dev\n"
 "X-Poedit-Bookmarks: -1,-1,2060,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -90,7 +90,7 @@ msgstr "läntinen"
 #: gnucash/report/reports/standard/account-piecharts.scm:487
 #: gnucash/report/reports/standard/category-barchart.scm:537
 msgid "Other"
-msgstr "Muut"
+msgstr "muut"
 
 #: borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
@@ -126,15 +126,15 @@ msgstr "Armenialainen (ARMSCII-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:124
 msgid "Baltic (ISO-8859-13)"
-msgstr "Baltian maiden (ISO-8859-13)"
+msgstr "Balttilainen (ISO-8859-13)"
 
 #: borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr "Baltian maiden (ISO-8859-4)"
+msgstr "Balttilainen (ISO-8859-4)"
 
 #: borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr "Baltian maiden (Windows-1257)"
+msgstr "Balttilainen (Windows-1257)"
 
 #: borrowed/goffice/go-charmap-sel.c:127
 msgid "Celtic (ISO-8859-14)"
@@ -474,7 +474,7 @@ msgid ""
 "follow the instructions provided."
 msgstr ""
 "Voit helposti tuoda vanhan kirjanpidon Quickenistä, MS Moneystä tai muista "
-"ohjelmista jotka osaavat viedä tiedot QIF- tai OFX-tiedostoiksi. Avaa "
+"ohjelmista, jotka osaavat viedä tiedot QIF- tai OFX-tiedostoiksi. Avaa "
 "Tiedosto-valikko, valitse Tuo-alavalikko ja klikkaa QIF- tai OFX-tiedoston "
 "tuonti. Seuraa tuonnin ohjeita jatkaaksesi."
 
@@ -485,7 +485,7 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
-"Jos olet käyttänyt aiemmin muita tauloudenhoidon sovelluksia kuten "
+"Jos olet käyttänyt aiemmin muita taloushallinnon sovelluksia kuten "
 "Quickeniä, huomaathan että GnuCash käyttää tilejä kategorioiden sijaan "
 "pitääkseen kirjaa tuloista ja menoista. Lisätietoja tulo- ja menotileistä "
 "löydät GnuCashin verkko-oppaasta."
@@ -932,7 +932,7 @@ msgstr "Lainanlyhennyksen valinta: \"%s\""
 #: gnucash/report/trep-engine.scm:183 gnucash/report/trep-engine.scm:966
 #: gnucash/report/trep-engine.scm:1094 gnucash/report/trep-engine.scm:1189
 msgid "Date"
-msgstr "Päivämäärä"
+msgstr "Päiväys"
 
 #: gnucash/gnome/assistant-loan.cpp:1867 gnucash/gnome/assistant-loan.cpp:2846
 #: gnucash/gnome/assistant-loan.cpp:2908 gnucash/gnome/assistant-loan.cpp:2921
@@ -1096,7 +1096,7 @@ msgstr "Matkalasku"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
 #: libgnucash/engine/Account.cpp:154 libgnucash/engine/gncInvoice.c:1080
 msgid "Invoice"
-msgstr "Lasku"
+msgstr "Myyntilasku"
 
 #: gnucash/gnome/business-gnome-utils.c:448 gnucash/gnome/gnc-split-reg.c:676
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
@@ -4030,7 +4030,7 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
 msgstr ""
-"Tarkista ja korjaa täsmäämättömät tositteet ja orporivit tällä sekä sen sen "
+"Tarkista ja korjaa täsmäämättömät tositteet ja orporivit tällä sekä sen "
 "alatileillä"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:337
@@ -5474,7 +5474,7 @@ msgstr "Kredit"
 #: gnucash/report/trep-engine.scm:1388 gnucash/report/trep-engine.scm:1405
 #: libgnucash/engine/Account.cpp:158
 msgid "Debit"
-msgstr "Debit"
+msgstr "Debet"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2653
 #: gnucash/gnome/gnc-plugin-page-register.c:3765
@@ -10758,8 +10758,8 @@ msgid ""
 msgstr ""
 "Merkki jota käytetään erottamaan tilin nimen osat. Merkki voi olla mikä "
 "tahansa muu kuin aakkosmerkki tai numero. Myös seuraavat termit hyväksytään: "
-"\"colon\" (:), \"slash\" (/), \"backslash\" (\\), \"dash\" (-) ja \"period"
-"\" (.)"
+"\"colon\" (:), \"slash\" (/), \"backslash\" (\\), \"dash\" (-) ja \"period\" "
+"(.)."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:25
 msgid "Transaction Linked Files head path"
@@ -11302,7 +11302,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-preferences.glade:2742
 msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr ""
-"Näytä kaikki tositteet yhdellä rivillä (tai kahdella kahden rivin näkymässä)."
+"Näytä kaikki tositteet yhdellä rivillä. (Kahdella kahden rivin näkymässä.)"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:286
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:291
@@ -11323,7 +11323,7 @@ msgid ""
 "transactions are shown on one line. (Two in double line mode.)"
 msgstr ""
 "Näytä automaattisesti valitun tositteen kaikki rivit. Kaikki muut tositteet "
-"näytetään yhdellä rivillä (tai kahdella kahden rivin näkymässä)."
+"näytetään yhdellä rivillä. (Kahdella kahden rivin näkymässä.)"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
 #: gnucash/gtkbuilder/dialog-preferences.glade:2780
@@ -12663,6 +12663,7 @@ msgstr ""
 "\n"
 "Jos haluat määrittää tilille avaususaldon, valitse ensin kyseinen rivi, "
 "klikkaa Avaussaldo-kenttää ja syötä saldo.\n"
+"\n"
 "<b>Huomaa:</b> Kaikilla paitsi koonti- ja oma pääoma -tileillä voi olla "
 "avaussaldo.\n"
 
@@ -12760,6 +12761,7 @@ msgstr ""
 "Tämä on vaiheittainen avustaja, jolla voit luoda GnuCashiin lainan "
 "takaisinmaksun suunnitelman. Avustaja kysyy lainan ja sen takaisinmaksun "
 "tiedot, ja luo sen perusteella tarvittavat ajoitetut tositteet.\n"
+"\n"
 "Jos teet virheen tai haluat tehdä muutoksia myöhemmin, voit muokata luotuja "
 "ajoitettuja tapahtumia suoraan."
 
@@ -15505,9 +15507,9 @@ msgid ""
 "\"period\"."
 msgstr ""
 "Merkki jota käytetään erottamaan tilin nimen osat. Merkki voi olla mikä "
-"tahansa muu kuin aakkosmerkki tai numero. Myös seuraavat termit hyväksytään: "
-"\"colon\" (:), \"slash\" (/), \"backslash\" (\\), \"dash\" (-) ja \"period"
-"\" (.)"
+"tahansa muu kuin aakkonen tai numero. Myös seuraavat termit hyväksytään: "
+"\"colon\" (:), \"slash\" (/), \"backslash\" (\\), \"dash\" (-) ja \"period\" "
+"(.)."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:894
 #: gnucash/gtkbuilder/dialog-preferences.glade:3149
@@ -17878,8 +17880,8 @@ msgid ""
 "Match the \"day of week\" and \"week of month\"? (for example, the \"second "
 "Tuesday\" of every month)"
 msgstr ""
-"Säilytä viikonpäivä ja kuukauden viikko samoina (esimerkiksi \"jokaisen "
-"kuukauden toinen tiistai\")."
+"Säilytetäänkö viikonpäivä ja kuukauden viikko samoina? (esimerkiksi "
+"\"jokaisen kuukauden toinen tiistai\")"
 
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:62
 msgid "Only show _active owners"
@@ -20367,7 +20369,7 @@ msgstr ""
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.c:954
 msgid "Retained Earnings"
-msgstr "Jakamaton voitto"
+msgstr "Kertyneet voittovarat"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:118
 msgid "Commissions"
@@ -26526,7 +26528,7 @@ msgstr "Täsmäysraportti"
 #: gnucash/report/reports/standard/register.scm:388
 #: libgnucash/engine/gnc-lot.c:779
 msgid "Lot"
-msgstr ""
+msgstr "Erä"
 
 #: gnucash/report/reports/standard/register.scm:160
 msgid "Debit Value"
