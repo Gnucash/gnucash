@@ -22,8 +22,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-23 02:29+0000\n"
-"Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>\n"
+"PO-Revision-Date: 2020-12-25 15:29+0000\n"
+"Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
 "Language: ja\n"
@@ -5298,7 +5298,7 @@ msgstr ""
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
-msgstr "ある清算金額に達するまで各取引を自動清算します"
+msgstr "特定の清算金額に達するまで各取引を自動清算します。"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:377
 #: gnucash/gnome/gnc-plugin-page-register.c:495
@@ -5790,7 +5790,7 @@ msgstr "%s をソート..."
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
 #: gnucash/gnome/gnc-plugin-page-register.c:4754
-#, c-format
+#, c-format, fuzzy
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr "%s からの %s %s、投稿された %s、金額 %s"
 
@@ -6585,10 +6585,8 @@ msgid "Business"
 msgstr "ビジネス"
 
 #: gnucash/gnome/window-autoclear.c:115
-#, fuzzy
-#| msgid "Created Transactions"
 msgid "Cleared Transactions"
-msgstr "作成した取引"
+msgstr "清算済取引"
 
 #: gnucash/gnome/window-reconcile2.c:417 gnucash/gnome/window-reconcile.c:458
 msgid "Interest Payment"
@@ -7248,7 +7246,7 @@ msgstr "このエンコードは有効でありません。"
 
 #: gnucash/gnome-utils/dialog-account.c:531
 msgid "Could not create opening balance."
-msgstr "開始残高を作成できませんでした"
+msgstr "開始残高を作成できませんでした。"
 
 #: gnucash/gnome-utils/dialog-account.c:739
 msgid "Give the children the same type?"
@@ -18750,10 +18748,8 @@ msgid "Show _zero balance owners"
 msgstr "残高 0 の所有者を表示する"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:71
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "About Auto-Clear"
-msgstr "自動清算"
+msgstr "自動清算について"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:86
 msgid ""
@@ -18761,12 +18757,12 @@ msgid ""
 "are cleared, given an ending balance. For example, said ending balance can "
 "be the current balance given by your bank online."
 msgstr ""
+"このダイアログを使うと、期末残高を指定したら GnuCash "
+"が自動的に清算対象の取引を見つけてくれます。例えば、ここで指定する期末残高はオンラインバンキングの現在の残高でもよいでしょう。"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "小数部"
+msgstr "注意!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
@@ -18774,6 +18770,7 @@ msgid ""
 "than approximately 20. In that case please clear at least some of them "
 "manually."
 msgstr ""
+"このツールは未清算スプリットが約 20 個以上あると遅くなったり止まったりするかもしれません。そのときは少なくともその一部を手動で清算してください。"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:138
 #: gnucash/gtkbuilder/window-reconcile.glade:117
@@ -18781,14 +18778,12 @@ msgid "_Ending Balance"
 msgstr "期末残高(_E)"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:177
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "_Review cleared splits"
-msgstr "作成された取引を確認する(_R)"
+msgstr "清算済取引を確認する(_R)"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:181
 msgid "Select this option to open a register tab with newly cleared splits."
-msgstr ""
+msgstr "このオプションを選択すると新たに清算済になったスプリットの記録簿タブを開きます。"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:71
 msgid "<b>Reconcile Information</b>"
