@@ -15,14 +15,15 @@
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2008-2009.
 # Yasuaki Taniguchi <yasuakit@gmail.com>, 2009-2017.
 # YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2018, 2020.
+# Takuro Onoue <kusanaginoturugi@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-23 00:29+0000\n"
-"Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
+"PO-Revision-Date: 2020-12-23 02:29+0000\n"
+"Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
 "Language: ja\n"
@@ -5791,7 +5792,7 @@ msgstr "%s をソート..."
 #: gnucash/gnome/gnc-plugin-page-register.c:4754
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
-msgstr ""
+msgstr "%s からの %s %s、投稿された %s、金額 %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4763
 #, fuzzy
