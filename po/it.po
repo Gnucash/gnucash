@@ -55,7 +55,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:27+0100\n"
-"PO-Revision-Date: 2020-12-25 12:29+0000\n"
+"PO-Revision-Date: 2020-12-25 21:46+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -2642,7 +2642,7 @@ msgstr "Solo attivo?"
 #: gnucash/gtkbuilder/dialog-job.glade:204
 #: gnucash/register/ledger-core/split-register-model.c:369
 msgid "Rate"
-msgstr "Tasso"
+msgstr "Tariffa"
 
 #: gnucash/gnome/dialog-job.c:579 gnucash/gnome-utils/gnc-tree-view-owner.c:357
 #: gnucash/gtkbuilder/dialog-job.glade:102
@@ -3288,10 +3288,10 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"Non ci sono transazioni pianificate da inserire in questo momento (una "
+"Non ci sono transazioni pianificate da inserire in questo momento. (Una "
 "transazione creata automaticamente)"
 msgstr[1] ""
-"Non ci sono transazioni pianificate da inserire in questo momento (%d "
+"Non ci sono transazioni pianificate da inserire in questo momento. (%d "
 "transazioni create automaticamente)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1005
@@ -10343,7 +10343,7 @@ msgstr ""
 "Esegui comandi relativi alle quotazioni dei titoli. Attualmente è supportato "
 "un solo comando.\n"
 "\n"
-"  get: \t Recupera le quotazioni attuali per tutte le valute straniere e i "
+"  get: \t Recupera le quotazioni attuali per tutte le valute estere e i "
 "titoli in un file di dati GnuCash.\n"
 
 # linea di comando
@@ -15784,7 +15784,7 @@ msgstr "Totale Uscite"
 
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:7
 msgid "Choose Owner Dialog"
-msgstr "Dialogo di chiusura"
+msgstr "Selezione dell'intestatario"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:8
 #: gnucash/report/reports/standard/account-piecharts.scm:61
@@ -16931,7 +16931,7 @@ msgstr "Applica le modifiche e chiudi la finestra di dialogo."
 
 #: gnucash/gtkbuilder/dialog-order.glade:8
 msgid "Order Entry"
-msgstr "Immissione ordine"
+msgstr "Riga ordine"
 
 #: gnucash/gtkbuilder/dialog-order.glade:58
 msgid "_Invoices"
@@ -22216,7 +22216,7 @@ msgstr "Assegnare un conto di trasferimento per la selezione."
 #: gnucash/import-export/import-main-matcher.c:1093
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
-msgstr "A"
+msgstr "N"
 
 #: gnucash/import-export/import-main-matcher.c:1096
 msgctxt "Column header for 'Updating plus Clearing transaction'"
@@ -26590,7 +26590,7 @@ msgid ""
 "without notice. Bug reports are very welcome at\n"
 "https://bugs.gnucash.org/"
 msgstr ""
-"ATTENZIONE: La conversione delle valute straniere e i calcoli degli\n"
+"ATTENZIONE: La conversione delle valute estere e i calcoli degli\n"
 "utili non realizzati non sono confermati correttamente. Questo resoconto\n"
 "può essere modificato senza preavviso. Segnalare i Bug a\n"
 "https://bugs.gnucash.org/"
@@ -29413,7 +29413,7 @@ msgstr "Variazione netta"
 
 #: gnucash/report/reports/standard/register.scm:568
 msgid "Value Change"
-msgstr "Modifica valore"
+msgstr "Valore delle modifiche"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:70
 msgid "n/a"

@@ -4,14 +4,14 @@
 # Tor Harald Thorland <linux@strigen.com>, 2005-2006.
 # Sigve Indregard <sigve.indregard@gmail.com>, 2006.
 # John Erling Blad <jeblad@gmail.com>, 2018, 2020
-#
+# Allan Nordhøy <epost@anotheragency.no>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-17 06:17+0000\n"
+"PO-Revision-Date: 2020-12-25 21:46+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -4398,7 +4398,7 @@ msgstr "_Slett budsjett..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:154
 msgid "Select this or another budget and delete it."
-msgstr ""
+msgstr "Velg dette eller et annet budsjett og slett det."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:158
 msgid "Budget _Options..."
@@ -4679,7 +4679,7 @@ msgstr "_Betal faktura"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:366
 #: gnucash/gnome/gnc-plugin-page-register.c:300
 msgid "_Manage Document Link..."
-msgstr ""
+msgstr "_Håndter dokumentlenke …"
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4695,11 +4695,11 @@ msgstr "Ny konto"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
 msgid "_Use as Default Layout for Customer Documents"
-msgstr ""
+msgstr "_Bruk som forvalgt oppsett for kundedokumenter"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:311
 msgid "_Reset Default Layout for Customer Documents"
-msgstr ""
+msgstr "_Tilbakestill forvalgt oppsett for kundedokumenter"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
 #, fuzzy
@@ -5035,7 +5035,7 @@ msgstr "Åpne et firmarapportvindu for eieren av denne fakturaen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:445
 msgid "Manage Document Link..."
-msgstr ""
+msgstr "Håndter dokumentlenke …"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
 #: gnucash/gnome/gnc-plugin-page-register2.c:498
@@ -5046,12 +5046,12 @@ msgstr "Registrer"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:456
 #: gnucash/gnome/gnc-plugin-page-register2.c:508
 msgid "Up"
-msgstr ""
+msgstr "Oppover"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:457
 #: gnucash/gnome/gnc-plugin-page-register2.c:509
 msgid "Down"
-msgstr ""
+msgstr "Nedover"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:458
 #: gnucash/gnome/gnc-plugin-page-register2.c:505
@@ -6667,7 +6667,7 @@ msgstr ""
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:15
 msgid "With GnuCash you can (but are not limited to):"
-msgstr ""
+msgstr "Med GnuCash kan du (dog ikke begrenset til):"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:17
 msgid "Keep track of your day to day personal income and expenses"

@@ -13,6 +13,7 @@
 # Sébastien Villemot <sebastien@debian.org>, 2013.
 # La Boussole <yoann@laboussole.coop>, 2018.
 # Christopher Lam, 2018
+# K. Herbert <herbert.ka@mailo.com>, 2020.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
@@ -22,8 +23,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-16 14:23+0000\n"
-"Last-Translator: Christopher Lam <christopher.lck@gmail.com>\n"
+"PO-Revision-Date: 2020-12-21 16:47+0000\n"
+"Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -3281,12 +3282,12 @@ msgstr ""
 #: gnucash/gnome/dialog-sx-editor2.c:635
 #, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
-msgstr "Impossible de traiter la formule de crédit pour la répartition \"%s\"."
+msgstr "Impossible de traiter la formule de crédit pour la répartition « %s »."
 
 #: gnucash/gnome/dialog-sx-editor2.c:657
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
-msgstr "Impossible de traiter la formule de débit pour la répartition \"%s\"."
+msgstr "Impossible de traiter la formule de débit pour la répartition « %s »."
 
 #: gnucash/gnome/dialog-sx-editor2.c:690 gnucash/gnome/dialog-sx-editor.c:874
 #: gnucash/gnome/dialog-sx-from-trans.c:261
