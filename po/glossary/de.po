@@ -3,14 +3,15 @@
 #
 # Christian Stimming <stimming@tuhh.de>, 2001 - 2013.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2013 - 2017.
+# Manuel Bichler <felseninsel@hotmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.18\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-06 18:14+0100\n"
-"PO-Revision-Date: 2020-12-17 13:31+0000\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2020-12-20 20:47+0000\n"
+"Last-Translator: Manuel Bichler <felseninsel@hotmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
@@ -472,11 +473,11 @@ msgstr "Verlust"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
-msgstr "Verlorene Konten??"
+msgstr "verlorene Konten"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr "Posten (Los, Partie)"
+msgstr "Charge"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -508,7 +509,7 @@ msgstr "Hypothek: Hypothek mit variablem Zinssatz"
 
 #. "Fixed Rate Mortgage"
 msgid "mortgage: FRM"
-msgstr "Hypothek: Hypothek mit feslem Zinssatz"
+msgstr "Hypothek: Hypothek mit festem Zinssatz"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -626,7 +627,7 @@ msgstr "Ergebnis, Gewinn"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "Gewinn- und Verlustrechnung (GuV)"
+msgstr "Gewinn- und Verlustrechnung"
 
 #. "-"
 msgid "quick-fill"
@@ -634,7 +635,7 @@ msgstr "Quick-Fill"
 
 #. "-"
 msgid "rebalance, to (a transaction)"
-msgstr "neu kalkulieren"
+msgstr "neu kalkulieren (eine Transaktion)"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
@@ -801,7 +802,7 @@ msgstr "Rohbilanz (Probebilanz, Saldenbilanz)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
-msgstr "Art"
+msgstr "Typ"
 
 #. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
 msgid "units"
@@ -813,7 +814,7 @@ msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr "Wert "
+msgstr "Wert"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"

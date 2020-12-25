@@ -14,6 +14,7 @@
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
+# Manuel Bichler <felseninsel@hotmail.com>, 2020.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -25,8 +26,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-18 22:00+0000\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2020-12-20 20:47+0000\n"
+"Last-Translator: Manuel Bichler <felseninsel@hotmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -28782,7 +28783,7 @@ msgstr "Abgleichungsbericht"
 #: gnucash/report/reports/standard/register.scm:388
 #: libgnucash/engine/gnc-lot.c:779
 msgid "Lot"
-msgstr "Posten"
+msgstr "Charge"
 
 #: gnucash/report/reports/standard/register.scm:160
 msgid "Debit Value"
