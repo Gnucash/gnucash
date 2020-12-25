@@ -4,14 +4,15 @@
 # Christian Stimming <stimming@tuhh.de>, 2001 - 2013.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2013 - 2017.
 # Manuel Bichler <felseninsel@hotmail.com>, 2020.
+# K. Herbert <herbert.ka@mailo.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.18\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-06 18:14+0100\n"
-"PO-Revision-Date: 2020-12-20 20:47+0000\n"
-"Last-Translator: Manuel Bichler <felseninsel@hotmail.com>\n"
+"PO-Revision-Date: 2020-12-21 16:47+0000\n"
+"Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
@@ -254,7 +255,7 @@ msgstr ""
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr "Budget (Haushaltsplan)"
+msgstr "Budget"
 
 #. "-"
 msgid "business (adjective)"

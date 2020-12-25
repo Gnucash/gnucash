@@ -15,6 +15,7 @@
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
 # Manuel Bichler <felseninsel@hotmail.com>, 2020.
+# K. Herbert <herbert.ka@mailo.com>, 2020.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -26,8 +27,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-20 20:47+0000\n"
-"Last-Translator: Manuel Bichler <felseninsel@hotmail.com>\n"
+"PO-Revision-Date: 2020-12-21 16:47+0000\n"
+"Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -472,7 +473,7 @@ msgid ""
 msgstr ""
 "E-Mail-Listen sind die bevorzugte Form der Kommunikation innerhalb der "
 "GnuCash-Gemeinschaft. Für Ankündigungen neuer Versionen, Benutzergruppen "
-"etc. siehe die Liste in  https://wiki.gnucash.org/wiki/Mailing_Lists."
+"etc. siehe die Liste in https://wiki.gnucash.org/wiki/Mailing_Lists."
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
@@ -543,7 +544,7 @@ msgstr ""
 "Werkzeugleiste des Hauptfensters klicken. Dies öffnet ein Dialogfenster, in "
 "dem Sie weitere Details zum neuen Konto eingeben können. Weitere "
 "Informationen zu den Kontoarten, die Sie zur Verfügung haben, und Hinweise "
-"zum Erstellen eines Kontenplans finden Sie im GnuCash Online-Handbuch. "
+"zum Erstellen eines Kontenplans finden Sie im GnuCash Online-Handbuch."
 
 # Fell: »Bemerkung anzeigen« ist nicht mehr ganz zutreffend,
 # da die 2. Zeile mindestens auch verknüpfte Dokumente enthält
@@ -695,7 +696,7 @@ msgid ""
 msgstr ""
 "Mit einer Stilvorlage können Sie das Aussehen eines Berichts beeinflussen. "
 "Wählen Sie eine Stilvorlage für Ihren Bericht und benutzen Sie den Menüpunkt "
-"Bearbeiten->»Stilvorlagen...«, um die Stilvorlagen anzupassen. "
+"Bearbeiten->»Stilvorlagen...«, um die Stilvorlagen anzupassen."
 
 #: doc/tip_of_the_day.list.c:99
 msgid ""
@@ -760,7 +761,7 @@ msgid ""
 msgstr ""
 "Um den Inhalt zweier Reiter in einem der Reiter optisch zu vergleichen, "
 "wählen Sie im Menü 'Fenster->Neues Fenster mit Seite', um diesen Reiter in "
-"einem neuen Fenster anzuzeigen "
+"einem neuen Fenster anzuzeigen"
 
 #: doc/tip_of_the_day.list.c:123
 msgid ""
@@ -2728,7 +2729,7 @@ msgstr "Ist geschlossen?"
 
 #: gnucash/gnome/dialog-order.c:878
 msgid "Owner Name "
-msgstr "Mandantenname"
+msgstr "Mandantenname "
 
 #: gnucash/gnome/dialog-order.c:880 gnucash/gtkbuilder/dialog-order.glade:122
 #: gnucash/gtkbuilder/dialog-order.glade:520
@@ -3075,7 +3076,7 @@ msgstr ""
 msgid "Couldn't parse credit formula for split \"%s\"."
 msgstr ""
 "Die Berechnungsformel für die Minderungsbuchung konnte nicht verarbeitet "
-"werden im Buchungsteil »%s«. "
+"werden im Buchungsteil »%s«."
 
 #: gnucash/gnome/dialog-sx-editor2.c:657
 #, c-format
@@ -4353,7 +4354,7 @@ msgid ""
 "Are you sure you want to do this?"
 msgstr ""
 "Das Zielkonto %s hat nicht die gleiche Währung wie das Konto, von dem Sie "
-"die Buchungen verschieben.  Sollen die Buchungen trotzdem verschoben werden?"
+"die Buchungen verschieben. Sollen die Buchungen trotzdem verschoben werden?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1437
 msgid "_Pick another account"
@@ -6344,10 +6345,9 @@ msgid "This account register is read-only."
 msgstr "Dieses Konto ist schreibgeschützt."
 
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2448
-#, fuzzy, c-format
-#| msgid "This account register is read-only."
+#, c-format
 msgid "The '%s' account register is read-only."
-msgstr "Dieses Konto ist schreibgeschützt."
+msgstr "Dieses %s-Kontoregister ist schreibgeschützt."
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 msgid ""
@@ -6472,7 +6472,7 @@ msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
-"Das Datum dieser Buchung ist älter als die \"Nur-Lese Schwelle\", die für "
+"Das Datum dieser Buchung ist älter als die »Nur-Lese Schwelle«, die für "
 "dieses Buch eingestellt ist. Diese Einstellung kann geändert werden unter "
 "Datei->Eigenschaften->Konten."
 
@@ -6631,7 +6631,7 @@ msgid ""
 msgstr ""
 "Enworfen, um einfach im Gebrauch zu sein, aber mächtig und flexibel, erlaubt "
 "GnuCash Ihnen den Überblick über Ihre Bankkonten wie Wertpapiere, Einkünte "
-"wie Aufwendungen zu behalten. So intuitiv und schnell zu benutzen  wie ein "
+"wie Aufwendungen zu behalten. So intuitiv und schnell zu benutzen wie ein "
 "Scheckbuchregister basiert es auf professionellen Prinzipien wie der "
 "doppelten Buchführung um ausgeglichene Bücher und präzise Berichte zu "
 "gewährleisten."
@@ -6681,7 +6681,7 @@ msgstr "GnuCash-Projekt"
 
 #: gnucash/gnome/gnucash.desktop.in.in:7
 msgid "Finance Management"
-msgstr "Finanzmanagement"
+msgstr "Finanzverwaltung"
 
 #: gnucash/gnome/reconcile-view.c:407
 #: gnucash/register/ledger-core/split-register-layout.c:695
@@ -9073,7 +9073,7 @@ msgstr "Version"
 #: gnucash/gnome-utils/gnc-main-window.c:4699
 #: gnucash/gnome-utils/gnc-splash.c:98 gnucash/gnucash-core-app.cpp:503
 msgid "Build ID"
-msgstr "Build ID"
+msgstr "Version-ID"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4707
 msgid "Accounting for personal and small business finance."
@@ -11447,7 +11447,7 @@ msgstr ""
 "Diese Einstellung bestimmt, ob nur der Benachrichtigungsdialog »Seit letztem "
 "Aufruf...« der terminierten Buchungen beim Öffnen einer Datei angezeigt "
 "wird, wenn die »Seit letztem Aufruf«-Verarbeitung aktiviert ist. Nur wenn "
-"diese Einstellung aktiviert ist,  wird der Dialog angezeigt."
+"diese Einstellung aktiviert ist, wird der Dialog angezeigt."
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:30
 msgid "Set the \"auto create\" flag by default"
@@ -12438,7 +12438,7 @@ msgstr ""
 "Rechnung die Rechnungsnummer ist. »%3$s« ist das Datum des Berichts, "
 "formatiert entsprechend der »filename-date-format«-Einstellung. (Anmerkung: "
 "Sämtliche Zeichen, die in Dateinamen nicht erlaubt sind, wie z.B. '/', "
-"werden durch Unterstriche »_«  im resultierenden Dateinamen ersetzt.)"
+"werden durch Unterstriche »_« im resultierenden Dateinamen ersetzt.)"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
@@ -13311,8 +13311,8 @@ msgid ""
 "\n"
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgstr ""
-"Dieser Assistent hilft Ihnen beim Import von Kurswerten aus einer CSV "
-"Datei.\n"
+"Dieser Assistent hilft Ihnen beim Import von Kurswerten aus einer CSV Datei."
+"\n"
 "\n"
 "Für einen erfolgreichen Import müssen mindestens Spalten vorhanden sein für "
 "»Datum«, »Betrag«, »Von Wertpapier/Devise« und »Zu Währung«.\n"
@@ -13329,10 +13329,9 @@ msgstr ""
 "oder \"EUR\",\"2019-04-18\",1.125,\"USD\"\n"
 "\n"
 "Es gibt eine Option zur Auswahl der Startzeile, der Endzeile sowie zur Wahl, "
-"wie viele Zeilen, ausgehend von der Startzeile, übersprungen werden sollen "
-"(z.B. für den Fall, dass Ihre Datei einen Block mit Kopfzeilen enthält). "
-"Eine weitere Option ist, bereits vorhandene Preise für den Tag zu "
-"überschreiben.\n"
+"wie viele Zeilen, ausgehend von der Startzeile, übersprungen werden sollen ("
+"z.B. für den Fall, dass Ihre Datei einen Block mit Kopfzeilen enthält). Eine "
+"weitere Option ist, bereits vorhandene Preise für den Tag zu überschreiben.\n"
 "\n"
 "Zu guter Letzt hat die Vorschauseite für weitere Importe Knöpfe zum "
 "Speichern und Laden der Einstellungen. Passen Sie die Einstellungen nach "
@@ -13342,7 +13341,7 @@ msgstr ""
 "Einstellungen speichern können.\n"
 "\n"
 "Diese Aktion kann nicht zurückgenommen werden, also erstellen Sie bitte "
-"vorher eine  Sicherungskopie.\n"
+"vorher eine Sicherungskopie.\n"
 "\n"
 "Klicken Sie auf »Weiter« um fortzufahren oder »Abbrechen« zum Abbrechen."
 
@@ -30155,7 +30154,7 @@ msgstr ""
 "Standardmäßig sucht der Kontenfilter nur nach Teilstrings. Setzen Sie diese "
 "Einstellung auf true, um die vollen POSIX-Funktionen für reguläre Ausdrücke "
 "zu aktivieren. 'Auto|Flüge' wird sowohl 'Aufwendungen:Auto' and Aufwendungen:"
-"Flüge. anzeigen.Verwenden Sie einen Punkt (.),  um ein Einzelzeichen "
+"Flüge. anzeigen.Verwenden Sie einen Punkt (.), um ein Einzelzeichen "
 "anzuzeigen, z.B. '20../.' wird mit'Reise 2017/1 London' übereinstimmen. "
 
 #: gnucash/report/trep-engine.scm:629
