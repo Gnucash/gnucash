@@ -25,8 +25,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-17 06:17+0000\n"
-"Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
+"PO-Revision-Date: 2020-12-18 22:00+0000\n"
+"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -21637,7 +21637,7 @@ msgstr "Wert ergibt keine gültige Währung für eine Währungsspalte"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:571
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:579
 msgid " could not be understood.\n"
-msgstr "konnte nicht verstanden werden.\n"
+msgstr " konnte nicht verstanden werden.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:323
@@ -23836,7 +23836,7 @@ msgstr "Falsche Berichtskonfiguration: "
 
 #: gnucash/report/report-core.scm:210
 msgid " Report is missing a GUID."
-msgstr "Interner Fehler: Bericht hat keine GUID."
+msgstr " -Bericht hat keine GUID."
 
 #: gnucash/report/report-core.scm:212
 msgid ""
