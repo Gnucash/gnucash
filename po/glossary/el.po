@@ -1,43 +1,44 @@
 # Greek translation of gnucash-glossary.
 # Copyright (C) 2001 Free Software Foundation.
 # Simos Xenitellis <simos@hellug.gr>, 2001.
-#
+# THANOS SIOURDAKIS <siourdakisthanos@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-06 18:14+0100\n"
-"PO-Revision-Date: 2001-12-28 00:17+0000\n"
-"Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
-"Language-Team: Greek <nls@tux.hellug.gr>\n"
+"PO-Revision-Date: 2020-12-20 20:47+0000\n"
+"Last-Translator: THANOS SIOURDAKIS <siourdakisthanos@gmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
+"el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
 msgstr ""
+"Όρος (Αγαπητέ μεταφραστή: Αυτό το αρχείο δεν θα είναι ποτέ ορατό στο χρήστη!)"
 
 #. "A detailed record of money spent and received"
 msgid "account"
 msgstr "λογαριασμός"
 
 #. "An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
-#, fuzzy
 msgid "account code"
-msgstr "Λογαριασμός %d"
+msgstr "κωδικός λογαριασμού"
 
 #. "the tree view of all accounts"
-#, fuzzy
 msgid "account hierarchy"
-msgstr "ιεραρχία"
+msgstr "ιεραρχία λογαριασμών"
 
 #. "-"
-#, fuzzy
 msgid "account name"
-msgstr "Όνομα _λογαριασμού:"
+msgstr "όνομα λογαριασμού"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
 #, fuzzy
