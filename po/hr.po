@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-23 00:29+0000\n"
+"PO-Revision-Date: 2020-12-26 01:29+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -656,8 +656,8 @@ msgid ""
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Možeš prikazati višestruke izvještaje u jednom prozoru, prikazujući sve "
-"financijske podatke koje želiš najednom. Za to koristi izvještaj „Uzorak i "
-"proizvoljno→Proizvoljan višestupčani izvještaj“."
+"financijske podatke koje želiš najednom. U tom slučaju koristi izvještaj „"
+"Uzorak i proizvoljno→Proizvoljan višestupčani izvještaj“."
 
 #: doc/tip_of_the_day.list.c:95
 msgid ""
@@ -19501,7 +19501,7 @@ msgstr "Naziv za novi predložak"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
 msgid " _Name of the new template:"
-msgstr " _Naziv za novi predložak:"
+msgstr " _Naziv novog predloška:"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
 msgid "Enter a unique name for the new template."
@@ -28164,8 +28164,8 @@ msgid ""
 "GnuCash installation directories."
 msgstr ""
 "Naziv datoteke eguile-predloška za ovaj izvještaj. Ova bi se datoteka morala "
-"nalaziti u tvojoj „.gnucash“ mapi ili na svojem ispravnom mjestu u mapama "
-"GnuCash instalacije."
+"nalaziti u tvojoj „.gnucash“ mapi ili na ispravnom mjestu u mapama GnuCash "
+"instalacije."
 
 #: gnucash/report/reports/standard/receipt.scm:84
 msgid ""
@@ -28197,9 +28197,9 @@ msgid ""
 "display the logo at its natural width.  The height of the logo will be "
 "scaled accordingly."
 msgstr ""
-"Širina logotipa u zaglavlju u CSS formatu, npr. 10 % ili 32 px. Ostavi "
-"prazno, za prikaz logotipa u prirodnoj širini. Visina logotipa će se "
-"skalirati proporcionalno."
+"Širina logotipa u zaglavlju u CSS formatu, npr. 10 % ili 32 px. Za prikaz "
+"logotipa u prirodnoj širini, ostavi prazno. Visina logotipa će se skalirati "
+"proporcionalno."
 
 #: gnucash/report/reports/standard/receipt.scm:100
 msgid "Name of a file containing a logo to be used on the footer of the report"
