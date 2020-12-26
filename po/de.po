@@ -28,8 +28,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-23 00:29+0000\n"
-"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"PO-Revision-Date: 2020-12-26 20:25+0000\n"
+"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -7520,10 +7520,8 @@ msgstr ""
 "vorhanden."
 
 #: gnucash/gnome-utils/dialog-account.c:1332
-#, fuzzy
-#| msgid "Cancel the current entry"
 msgid "Cannot change currency"
-msgstr "Aktuellen Posten abbrechen"
+msgstr "Währung kann nicht geändert werden."
 
 #: gnucash/gnome-utils/dialog-account.c:1419
 msgid ""
@@ -8682,8 +8680,6 @@ msgid "Open _Read-Only"
 msgstr "_Schreibgeschützt öffnen"
 
 #: gnucash/gnome-utils/gnc-file.c:853
-#, fuzzy
-#| msgid "_Create New File"
 msgid "Create _New File"
 msgstr "_Neue Datei anlegen"
 
@@ -9013,10 +9009,8 @@ msgid "This window is closing and will not be restored."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.c:1443
-#, fuzzy
-#| msgid "Close this window"
 msgid "Close Window?"
-msgstr "Dieses Fenster schließen"
+msgstr "Fenster schließen?"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
@@ -12540,12 +12534,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:118
-#, fuzzy
-#| msgid "This dialog is presented when a read-only register is opened."
 msgid "This dialog is presented when there is more than one window."
-msgstr ""
-"Diese Rückfrage wird beim Öffnen eines schreibgeschützten Kontofensters "
-"angezeigt."
+msgstr "Dieser Dialog wird angezeigt, wenn es mehr als ein Fenster gibt."
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:19
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:122
@@ -15177,8 +15167,6 @@ msgstr ""
 "Steuerschlüssel zuzuweisen."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1509
-#, fuzzy
-#| msgid "Opening Balance"
 msgid "Opening balance"
 msgstr "Anfangsbestand"
 
@@ -16442,16 +16430,12 @@ msgstr ""
 "Zuordnung)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:929
-#, fuzzy
-#| msgid "Show the _Account column"
 msgid "Show _Account column"
 msgstr "_Kontospalte anzeigen"
 
 #: gnucash/gtkbuilder/dialog-import.glade:945
-#, fuzzy
-#| msgid "Show the _Account column"
 msgid "Show _Memo column"
-msgstr "_Kontospalte anzeigen"
+msgstr "_Buchungstextspalte anzeigen"
 
 #: gnucash/gtkbuilder/dialog-import.glade:961
 msgid "Show _matched information"
@@ -16815,10 +16799,8 @@ msgid "Locale"
 msgstr "Systemsprache"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:133
-#, fuzzy
-#| msgid "_Resume"
 msgid "_Reset"
-msgstr "_Fortsetzen"
+msgstr "_Zurücksetzen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:178
 #: gnucash/gtkbuilder/dialog-preferences.glade:579
@@ -19473,10 +19455,8 @@ msgid "Show _zero balance owners"
 msgstr "Mandanten mit _Nullsalden anzeigen"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:71
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "About Auto-Clear"
-msgstr "Automatischer Abgleich"
+msgstr "Über »Automatischer Abgleich«"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:86
 msgid ""
@@ -19486,10 +19466,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "Stückelung"
+msgstr "Vorsicht!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
