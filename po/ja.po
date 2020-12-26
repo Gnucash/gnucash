@@ -22,8 +22,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-26 14:09+0000\n"
-"Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
+"PO-Revision-Date: 2020-12-26 14:46+0000\n"
+"Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
 "Language: ja\n"
@@ -4197,7 +4197,7 @@ msgstr "削除"
 #: gnucash/gnome/gnc-plugin-page-register.c:1964
 #: gnucash/gnome/gnc-plugin-page-register.c:5068
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr ""
+msgstr "「検査・修復」は現在実行中ですが、中止しますか？"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:520
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:526
