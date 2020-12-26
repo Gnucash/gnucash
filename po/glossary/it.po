@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-06 18:14+0100\n"
-"PO-Revision-Date: 2020-12-25 02:29+0000\n"
+"PO-Revision-Date: 2020-12-26 19:29+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/glossary/"
 "it/>\n"
@@ -33,6 +33,7 @@ msgstr ""
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
 msgstr ""
+"Termine (Gentile traduttore: questo file non sarà mai visibile all'utente!)"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -72,7 +73,7 @@ msgstr "tipo conto: valuta, conto finanziario"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr "tipo conto: capitale, patrimonio"
+msgstr "tipo conto: capitale, patrimonio netto"
 
 #. "-"
 msgid "account type: Expense"
@@ -92,7 +93,7 @@ msgstr "tipo conto: mercato monetario"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "tipo conto: fondi comuni"
+msgstr "tipo conto: fondo comune"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
@@ -100,7 +101,7 @@ msgstr "tipo conto: passivo, passività"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr "tipo conto: Conto economico"
+msgstr "tipo conto: conto economico"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -116,7 +117,7 @@ msgstr "tipo conto: trading"
 
 #. "-"
 msgid "account: parent account"
-msgstr "conto: conto padre"
+msgstr "conto: conto genitore"
 
 #. "-"
 msgid "account: subaccount"
@@ -124,7 +125,7 @@ msgstr "conto: sottoconto"
 
 #. "-"
 msgid "account: top level account"
-msgstr "conto: conto livello principale"
+msgstr "conto: conto di livello principale"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
@@ -137,7 +138,7 @@ msgstr "operazione: ATM, Bancomat, sportello automatico"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr "operazione: autodep"
+msgstr "operazione: deposito automatico"
 
 #. "-"
 msgid "action: buy"
@@ -149,7 +150,9 @@ msgstr "operazione: deposito, versamento"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr "operazione: RID (Rimessa Interbancaria Diretta)"
+msgstr ""
+"operazione: RID (Rimessa Interbancaria Diretta), rimessa diretta, addebito "
+"diretto"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
@@ -161,7 +164,7 @@ msgstr "operazione: div, dividendo"
 
 #. "-"
 msgid "action: fee"
-msgstr "operazione: onorario, emolumento, parcella, commissione, tassa"
+msgstr "operazione: commissione, onorario, emolumento, parcella"
 
 #. "transaction comes from interest"
 msgid "action: int"
@@ -169,7 +172,7 @@ msgstr "operazione: int, interessi"
 
 #. "-"
 msgid "action: loan"
-msgstr "operazione: mutuo, prestito"
+msgstr "operazione: prestito"
 
 #. "see: payment 1."
 msgid "action: payment"
@@ -181,7 +184,7 @@ msgstr "operazione: POS"
 
 #. "-"
 msgid "action: rebate"
-msgstr "operazione: rimborso, riduzione, deduzione, detrazione, sconto"
+msgstr "operazione: riduzione"
 
 #. "-"
 msgid "action: sell"
@@ -189,7 +192,7 @@ msgstr "operazione: vendita"
 
 #. "-"
 msgid "action: Teller"
-msgstr "operazione: banchiere"
+msgstr "operazione: cassiere"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
@@ -229,7 +232,7 @@ msgstr "saldo di chiusura"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
-msgstr "bilancio"
+msgstr "stato patrimoniale"
 
 #. "To arrange for income and spending to be equal"
 msgid "balance, to"
@@ -269,11 +272,11 @@ msgstr "commerciale"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
-msgstr "affare"
+msgstr "impresa"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
-msgstr "utile del capitale"
+msgstr "guadagni in conto capitale, plusvalenze"
 
 #. "Distinguishing the uppercase and lowercase letters"
 msgid "case sensitive"
@@ -325,7 +328,7 @@ msgstr "Carta di credito"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
-msgstr "bonifico"
+msgstr "bonifico bancario"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
 msgid "credit note"
@@ -353,11 +356,11 @@ msgstr "formato data"
 
 #. "A range in time that is delimited by two distinct dates."
 msgid "date range"
-msgstr "intervallo temporale, di tempo"
+msgstr "intervallo temporale, di tempo, di date"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr "Avere, uscita (colonna nel registro)"
+msgstr "Dare, uscita (colonna nel registro)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
@@ -369,7 +372,7 @@ msgstr "versamento (nella finestra di riconciliazione)"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
-msgstr "deprezzamento"
+msgstr "ammortamento"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
@@ -389,11 +392,11 @@ msgstr "collegamento al documento"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr "lavoratore"
+msgstr "dipendente"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
-msgstr "capitale"
+msgstr "patrimonio netto, capitale"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
@@ -453,7 +456,7 @@ msgstr "documento di vendita, documento, fattura"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
-msgstr "lavoro, compito"
+msgstr "lavoro, compito, operazione"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
@@ -461,7 +464,7 @@ msgstr "libro mastro, mastro"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
-msgstr "passività/nette"
+msgstr "passività/patrimonio netto"
 
 #. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 msgid "loan"
@@ -525,7 +528,7 @@ msgstr "netto"
 
 #. "net total of all assets"
 msgid "net assets"
-msgstr "attivo netto"
+msgstr "attività nette, attivo netto"
 
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
@@ -533,7 +536,7 @@ msgstr "utile netto"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr "guadagno netto"
+msgstr "patrimonio netto"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
@@ -541,7 +544,7 @@ msgstr "note (registro)"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr "Nr. (colonna nel registro)"
+msgstr "Num (colonna nel registro)"
 
 #. "to make accessible"
 msgid "open, to"
@@ -575,7 +578,7 @@ msgstr "frase segreta"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
-msgstr "Pagabile/esigibile"
+msgstr "Conti Fornitori / Conti Clienti"
 
 #. "A person to whom sth is paid"
 msgid "payee"
@@ -599,7 +602,7 @@ msgstr "portafoglio, paniere"
 
 #. "Register invoice, voucher in account register"
 msgid "post, to"
-msgstr "emettere, inviare"
+msgstr "emettere, inviare, registrare"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
@@ -647,7 +650,7 @@ msgstr "riconciliare"
 
 #. "-"
 msgid "record keeping"
-msgstr "tenere traccia"
+msgstr "tenere traccia, registrare"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
@@ -663,7 +666,7 @@ msgstr "elemento di registro: scissione azionaria"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "registro: (libro) mastro auto-suddiviso"
+msgstr "registro: (libro) registro a espansione automatica"
 
 #. "another form of register"
 msgid "register: basic ledger"
@@ -699,7 +702,7 @@ msgstr "inserire una transazione inversa"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr "ricavi"
+msgstr "ricavi, vendite"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -719,15 +722,15 @@ msgstr "titolo, certificato, ipoteca, obbligazioni"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "Bilancio quote (registro)"
+msgstr "Bilancio azioni (registro)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
-msgstr "quota"
+msgstr "azioni"
 
 #. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
-msgstr "sorgente,fonte"
+msgstr "sorgente, fonte"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
@@ -771,7 +774,7 @@ msgstr "transazione"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "stato transazione: liquidata, verificata"
+msgstr "stato transazione: compensata, liquidata, verificata"
 
 #. "-"
 msgid "transaction state: frozen"
@@ -783,7 +786,7 @@ msgstr "stato transazione: riconciliata"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr "stato transazione: invalidata"
+msgstr "stato transazione: annullata"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
@@ -823,7 +826,7 @@ msgstr "fornitore"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr "nota spese, buono, nota, garante"
+msgstr "nota spese, buono"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"

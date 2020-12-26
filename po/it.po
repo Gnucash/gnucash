@@ -55,7 +55,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:27+0100\n"
-"PO-Revision-Date: 2020-12-25 21:46+0000\n"
+"PO-Revision-Date: 2020-12-26 19:29+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -466,7 +466,7 @@ msgstr "Occidentale (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr "Impostazione locale: "
+msgstr "Locale: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 msgid "Conversion Direction"
@@ -675,7 +675,7 @@ msgid ""
 msgstr ""
 "Nella finestra di riconciliazione, si può fare clic sulla barra spaziatrice "
 "per marcare le transazioni come riconciliate. È anche possibile premere Tab "
-"o Shift-Tab per spostarsi fra i depositi e i prelievi."
+"o Shift-Tab per spostarsi fra i versamenti e i prelievi."
 
 #: doc/tip_of_the_day.list.c:80
 msgid ""
@@ -710,7 +710,7 @@ msgid ""
 msgstr ""
 "Si possono raggruppare più resoconti in una sola finestra, visualizzando "
 "così tutte le informazioni finanziarie che si desidera avere a colpo "
-"d'occhio. A tal scopo, usare il resoconto «Vista multicolonna->Resoconto "
+"d'occhio. A tal scopo, usare il resoconto «Vista multi colonna->Resoconto "
 "multicolonna personalizzato»."
 
 #: doc/tip_of_the_day.list.c:95
@@ -2559,7 +2559,7 @@ msgstr "Aperta"
 #: gnucash/report/trep-engine.scm:970 gnucash/report/trep-engine.scm:1098
 #: gnucash/report/trep-engine.scm:1214
 msgid "Num"
-msgstr "Nr"
+msgstr "Num"
 
 #: gnucash/gnome/dialog-invoice.c:3533
 msgid "Find Bill"
@@ -3473,7 +3473,7 @@ msgstr "Nuova _pagina dei conti"
 
 #: gnucash/gnome/gnc-plugin-account-tree.c:60
 msgid "Open a new Account Tree page"
-msgstr "Apre la strttura dei conti in una nuova pagina"
+msgstr "Apre la struttura dei conti in una nuova pagina"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:111
 msgid "New _File"
@@ -3801,7 +3801,7 @@ msgstr "_OK"
 #: gnucash/gnome/gnc-plugin-business.c:155
 #: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:161
 msgid "_Business"
-msgstr "Impres_a"
+msgstr "_Impresa"
 
 #: gnucash/gnome/gnc-plugin-business.c:158
 msgid "_Customer"
@@ -3943,7 +3943,7 @@ msgstr "Apre una pagina di riepilogo dei dipendenti"
 
 #: gnucash/gnome/gnc-plugin-business.c:249
 msgid "_Employee"
-msgstr "D_ipendenti"
+msgstr "_Dipendenti"
 
 #: gnucash/gnome/gnc-plugin-business.c:251
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:170
@@ -6667,7 +6667,7 @@ msgstr "Gestisci le tue finanze, i conti e gli investimenti"
 msgid ""
 "GnuCash is a program for personal and small-business financial-accounting."
 msgstr ""
-"GnuCash è un programma per la contibilità personale e delle piccole imprese."
+"GnuCash è un programma per la contabilità personale e delle piccole imprese."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:11
 msgid ""
@@ -7028,7 +7028,7 @@ msgstr "_Annulla la riconciliazione della selezione"
 # Tooltip
 #: gnucash/gnome/window-reconcile2.c:2178 gnucash/gnome/window-reconcile.c:2399
 msgid "Unreconcile the selected transactions"
-msgstr "Annulla la riconciliazion della transazione selezionata"
+msgstr "Annulla la riconciliazione della transazione selezionata"
 
 #: gnucash/gnome/window-reconcile2.c:2186 gnucash/gnome/window-reconcile.c:2407
 msgid "Open the GnuCash help window"
@@ -7148,7 +7148,7 @@ msgstr "corrisponde a tutti i conti"
 
 #: gnucash/gnome-search/search-account.c:177
 msgid "matches any account"
-msgstr "corrisponde almento ad un conto"
+msgstr "corrisponde almeno ad un conto"
 
 #: gnucash/gnome-search/search-account.c:178
 msgid "matches no accounts"
@@ -7437,7 +7437,7 @@ msgstr "KOI8-R (Russo)"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:244
 msgid "KOI8-U (Ukrainian)"
-msgstr "KOI8-U (Ukraino)"
+msgstr "KOI8-U (Ucraino)"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:680
 #, c-format
@@ -7597,7 +7597,7 @@ msgid ""
 "code field of each child account with a newly generated code."
 msgstr ""
 "Rinumerare i sottoconti del conto «%s»?. Questa operazione sostituirà i "
-"valori del campo del codice di ogni conto figlio con un nuovo codice."
+"valori del campo del numero di ogni conto figlio con un nuovo codice."
 
 #: gnucash/gnome-utils/dialog-account.c:2288
 #, c-format
@@ -7664,7 +7664,7 @@ msgid ""
 "Exchange code (ISIN, CUSIP or similar): "
 msgstr ""
 "\n"
-"Codice del titolo (ISIN,CUSIP o simile): "
+"Codice del titolo (ISIN, CUSIP o simile): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:175
 msgid ""
@@ -7987,7 +7987,7 @@ msgstr "Scegli un file immagine."
 
 #: gnucash/gnome-utils/dialog-options.c:3075
 msgid "Pixels"
-msgstr "Pixels"
+msgstr "Pixel"
 
 #: gnucash/gnome-utils/dialog-options.c:3081
 msgid "Percent"
@@ -8468,7 +8468,7 @@ msgid ""
 msgstr ""
 "GnuCash non è riuscito a scrivere in «%s». Il database potrebbe essere su un "
 "file system in sola lettura, oppure non si hanno i permessi di scrittura per "
-"la cartella, oppure il software antivirus sta impendendo questa operazione."
+"la cartella, oppure il software antivirus sta impedendo questa operazione."
 
 #: gnucash/gnome-utils/gnc-file.c:385
 #, c-format
@@ -8790,7 +8790,7 @@ msgstr "Impossibile trovare il documento collegato."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:580
 msgid "GnuCash could not open the linked document:"
-msgstr "GnucCash non può aprire il documento collegato:"
+msgstr "GnuCash non può aprire il documento collegato:"
 
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes
@@ -8935,7 +8935,7 @@ msgstr "Apre l'aiuto di GnuCash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:394
 msgid "_About"
-msgstr "I_nformazioni"
+msgstr "_Informazioni"
 
 #: gnucash/gnome-utils/gnc-main-window.c:395
 msgid "About GnuCash"
@@ -9419,7 +9419,7 @@ msgstr "Nuovo conto di livello principale"
 #: gnucash/register/ledger-core/split-register.c:2620
 msgctxt "Action Column"
 msgid "Deposit"
-msgstr "Deposito"
+msgstr "Versamento"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2856
 #: gnucash/register/ledger-core/split-register.c:2621
@@ -9777,7 +9777,7 @@ msgstr "Commodity"
 #: gnucash/report/trep-engine.scm:176 gnucash/report/trep-engine.scm:975
 #: gnucash/report/trep-engine.scm:1122
 msgid "Account Code"
-msgstr "Codice del conto"
+msgstr "Numero del conto"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:834
 msgid "Last Num"
@@ -10146,7 +10146,7 @@ msgstr "Formula dell'Avere"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
 #: libgnucash/engine/Account.cpp:143
 msgid "Deposit"
-msgstr "Deposito"
+msgstr "Versamento"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3038
 #: libgnucash/engine/Account.cpp:144
@@ -10476,7 +10476,7 @@ msgstr ""
 # linea di comando
 #: gnucash/gnucash-core-app.cpp:533
 msgid "Enable extra/development/debugging features."
-msgstr "Abilita le funzionalià extra/sviluppo/debugging."
+msgstr "Abilita le funzionalità extra/sviluppo/debugging."
 
 #: gnucash/gnucash-core-app.cpp:535
 msgid ""
@@ -10723,7 +10723,7 @@ msgid ""
 "If set to active then tax is included by default in entries of this type. "
 "This setting is inherited by new customers and vendors."
 msgstr ""
-"Se attivata, le imposte sono incluse negli elementi di questo tipo.Questa "
+"Se attivata, le imposte sono incluse negli elementi di questo tipo. Questa "
 "impostazione verrà applicata ai nuovi clienti e fornitori."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:112
@@ -11387,7 +11387,7 @@ msgstr ""
 "direttamente sull'importo, invece di comparire come movimenti separati o "
 "come parte della propria commissione bancaria mensile. Per esempio, se si "
 "prelevano 100€, la banca addebita 101,50€ più le spese di prelievo. Se hai "
-"inserito manualmente l'operazione da 100€, questa nom troverà "
+"inserito manualmente l'operazione da 100€, questa non troverà "
 "corrispondenza. Si dovrebbe impostare questo campo al valore massimo di tale "
 "commissione (in unità della valuta locale), in modo che la transazione sia "
 "riconosciuta come corrispondente."
@@ -12015,8 +12015,8 @@ msgid ""
 msgstr ""
 "Questa impostazione controlla la valuta predefinita utilizzata per i nuovi "
 "conti se l'impostazione «scelta valuta» è su «altro». Questo campo deve "
-"contenere il codice a tre lettere ISO 4217 per la valuta (ad esempio "
-"USD,GBP, RUB)."
+"contenere il codice a tre lettere ISO 4217 per la valuta (ad esempio USD, "
+"GBP, RUB)."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:150
 msgid "Use 24 hour time format"
@@ -12674,7 +12674,8 @@ msgid ""
 msgstr ""
 "Questa impostazione definisce il numero di file da visualizzare nel menu dei "
 "file aperti di recente. Per disabilitare questa opzione è sufficiente "
-"settarla a zero.Il valore massimo che la variabile può assumere, è pari a 10."
+"settarla a zero. Il valore massimo che la variabile può assumere, è pari a "
+"10."
 
 #: gnucash/gschemas/org.gnucash.history.gschema.xml.in:10
 msgid "Most recently opened file"
@@ -13800,7 +13801,7 @@ msgstr ""
 "di importazione:\n"
 "• una colonna Data\n"
 "• una colonna Descrizione\n"
-"• una colonna di deposito o prelievo\n"
+"• una colonna di versamento o prelievo\n"
 "\n"
 "Se non c'è alcun dato relativo al conto, è possibile selezionare un conto di "
 "base in cui verranno importati tutti i dati.\n"
@@ -14113,7 +14114,7 @@ msgstr ""
 "\n"
 "Fai clic su «Indietro» per modificare le impostazioni.\n"
 "\n"
-"Fai clic su«Annulla» per chiudere questa finestra senza creare alcun conto."
+"Fai clic su «Annulla» per chiudere questa finestra senza creare alcun conto."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:591
 msgid "Finish Account Setup"
@@ -15315,7 +15316,7 @@ msgstr "No_me del conto"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1229
 msgid "_Account code"
-msgstr "_Codice del conto"
+msgstr "_Numero del conto"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1243
 msgid "_Description"
@@ -17058,7 +17059,7 @@ msgstr "ISO"
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:59
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:56
 msgid "Locale"
-msgstr "Impostazione locale"
+msgstr "Locale"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:133
 msgid "_Reset"
@@ -17265,7 +17266,7 @@ msgstr "A_ltra"
 #: gnucash/gtkbuilder/dialog-preferences.glade:914
 #: gnucash/gtkbuilder/dialog-preferences.glade:3169
 msgid "Loc_ale"
-msgstr "Loc_alizzazione"
+msgstr "Loc_ale"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:998
 msgid "<b>Fancy Date Format</b>"
@@ -19492,7 +19493,7 @@ msgstr "Periodo di previsione"
 #: gnucash/report/reports/standard/general-ledger.scm:126
 #: gnucash/report/trep-engine.scm:83 gnucash/report/trep-engine.scm:1129
 msgid "Show Account Code"
-msgstr "Visualizza il codice del conto"
+msgstr "Visualizza il numero del conto"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:658
 msgid "Show Description"
@@ -19954,7 +19955,7 @@ msgstr ""
 "* l'ID utente che ti identifica presso la banca;\n"
 "* l'indirizzo internet del server per l'Online Banking;\n"
 "* per l'HBCI Online Banking, le informazioni riguardanti la chiave pubblica "
-"di cifratura della banca (»Ini-Letter»).\n"
+"di cifratura della banca («Ini-Letter»).\n"
 "\n"
 "Queste informazione saranno necessarie nel seguito. Fai clic su «Avanti».\n"
 "\n"
@@ -21846,7 +21847,7 @@ msgid ""
 "From specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Non è né stata selezionatauna colonna «Spazio dei nomi di provenienza/"
+"Non è né stata selezionata una colonna «Spazio dei nomi di provenienza/"
 "Simbolo di provenienza' né è stata selezionata una commodity di provenienza."
 "\n"
 "Questo non deve succedere. Segnala l'accaduto come un Bug."
@@ -21868,7 +21869,7 @@ msgstr "Seleziona una colonna descrizione."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:494
 msgid "Please select a deposit or withdrawal column."
-msgstr "Seleziona una colonna per depositi o prelievi."
+msgstr "Seleziona una colonna per versamenti o prelievi."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:504
 msgid ""
@@ -22032,7 +22033,7 @@ msgstr "Il valore del conto di trasferimento non può essere vuoto."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:591
 msgid "No deposit or withdrawal column."
-msgstr "Nessuna colonna di deposito o prelievo."
+msgstr "Nessuna colonna per versamenti o prelievi."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:597
 msgid "Split is reconciled but reconcile date column is missing or invalid."
@@ -22465,7 +22466,7 @@ msgstr "Scegli un file da caricare."
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1583
 msgid "File not found or read permission denied. Please select another file."
 msgstr ""
-"Il file non è stato trovato oppure è negata la lettura. Selezion un altro "
+"Il file non è stato trovato oppure è negata la lettura. Seleziona un altro "
 "file."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1594
@@ -23996,7 +23997,7 @@ msgstr "Scegliere il criterio di ordinamento dei conti."
 
 #: gnucash/report/options-utilities.scm:212
 msgid "Alphabetical by account code."
-msgstr "Alfabetico per codice del conto."
+msgstr "Alfabetico per numero del conto."
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
@@ -24100,7 +24101,7 @@ msgstr "S_perimentale"
 
 #: gnucash/report/report-core.scm:154
 msgid "_Multicolumn"
-msgstr "Vista _multicolonna"
+msgstr "Vista _multi colonna"
 
 #: gnucash/report/report-core.scm:155
 msgid "_Custom"
@@ -24373,7 +24374,7 @@ msgstr "0 .. 999.999,99, A .. Z."
 #: gnucash/report/reports/aging.scm:361
 #: gnucash/report/reports/standard/new-aging.scm:112
 msgid "Decreasing"
-msgstr "Descrescente"
+msgstr "Decrescente"
 
 # tooltip
 #: gnucash/report/reports/aging.scm:361
@@ -25145,7 +25146,7 @@ msgstr "Dal"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:151
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:174
 msgid "Alternate Period"
-msgstr "Periodi altrenati"
+msgstr "Periodi alternati"
 
 # tooltip
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
@@ -25819,7 +25820,7 @@ msgstr "Visualizza il saldo del conto."
 
 #: gnucash/report/reports/standard/account-summary.scm:116
 msgid "Show an account's account code."
-msgstr "Visualizza il codice del conto."
+msgstr "Visualizza il numero del conto."
 
 #: gnucash/report/reports/standard/account-summary.scm:118
 msgid "Show an account's account type."
@@ -27831,7 +27832,7 @@ msgstr "Usa il nome completo per il conto della contropartita"
 #: gnucash/report/trep-engine.scm:222 gnucash/report/trep-engine.scm:951
 #: gnucash/report/trep-engine.scm:978 gnucash/report/trep-engine.scm:1125
 msgid "Other Account Code"
-msgstr "Codice dell'altro conto"
+msgstr "Numero dell'altro conto"
 
 #: gnucash/report/reports/standard/general-ledger.scm:84
 #: gnucash/report/reports/standard/general-ledger.scm:104
@@ -29539,7 +29540,7 @@ msgstr "Visualizzare il numero del documento di vendita?"
 # Tooltip
 #: gnucash/report/reports/standard/taxinvoice.scm:141
 msgid "Display the Company Name?"
-msgstr "Visualizzare il nome del'impresa?"
+msgstr "Visualizzare il nome dell'impresa?"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:142
 msgid "Invoice Number next to title?"
@@ -29819,11 +29820,11 @@ msgstr "Resoconto singolo"
 
 #: gnucash/report/reports/standard/view-column.scm:219
 msgid "Multicolumn View"
-msgstr "Vista multicolonna"
+msgstr "Vista multi colonna"
 
 #: gnucash/report/reports/standard/view-column.scm:221
 msgid "Custom Multicolumn Report"
-msgstr "Resoconto multicolonna personalizzato"
+msgstr "Resoconto multi colonna personalizzato"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:167
 msgid "Assets Accounts"
@@ -30484,7 +30485,7 @@ msgstr "Ordina e calcola subtotali per nome conto."
 
 #: gnucash/report/trep-engine.scm:177
 msgid "Sort & subtotal by account code."
-msgstr "Ordina e calcola subtotali per codice conto."
+msgstr "Ordina e calcola subtotali per numero conto."
 
 #: gnucash/report/trep-engine.scm:191
 msgid "Sort by the Reconciled Date."
@@ -30811,7 +30812,7 @@ msgstr "Mostrare il nome del conto completo per i subtotali e i sottotitoli?"
 # Tooltip
 #: gnucash/report/trep-engine.scm:819
 msgid "Show the account code for subtotals and subheadings?"
-msgstr "Mostrare il codice del conto per subtotali e sottotitoli?"
+msgstr "Mostrare il numero del conto per subtotali e sottotitoli?"
 
 # Tooltip
 #: gnucash/report/trep-engine.scm:826
@@ -30873,11 +30874,11 @@ msgstr "Visualizzare il nome completo del conto?"
 
 #: gnucash/report/trep-engine.scm:975
 msgid "Display the account code?"
-msgstr "Visualizzare il codice del conto?"
+msgstr "Visualizzare il numero del conto?"
 
 #: gnucash/report/trep-engine.scm:978
 msgid "Display the other account code?"
-msgstr "Visualizzare il codice dell'altro conto?"
+msgstr "Visualizzare il numero dell'altro conto?"
 
 # tooltip
 #: gnucash/report/trep-engine.scm:980
@@ -30952,7 +30953,7 @@ msgstr "Trasferimento da/a"
 #. brought forward".
 #: gnucash/report/trep-engine.scm:1463
 msgid "Balance b/f"
-msgstr "Saldo a nuovo"
+msgstr "Saldo di apertura"
 
 #: gnucash/report/trep-engine.scm:1630
 msgid "Split Transaction"
@@ -30978,7 +30979,7 @@ msgstr "ID dell'impresa"
 
 #: libgnucash/app-utils/business-options.scm:71
 msgid "Company Phone Number"
-msgstr "Nr. di telefono dell'impresa"
+msgstr "Num. di telefono dell'impresa"
 
 #: libgnucash/app-utils/business-options.scm:72
 msgid "Company Fax Number"
@@ -32062,7 +32063,7 @@ msgstr "%s %s"
 #: libgnucash/engine/Recurrence.c:727
 #, c-format
 msgid "Unknown, %d-size list."
-msgstr "Sonosciuta, elenco di %d elementi."
+msgstr "Sconosciuta, elenco di %d elementi."
 
 #: libgnucash/engine/ScrubBusiness.c:548
 msgid ""
