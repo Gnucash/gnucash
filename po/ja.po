@@ -22,8 +22,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-26 14:46+0000\n"
-"Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>\n"
+"PO-Revision-Date: 2020-12-26 19:29+0000\n"
+"Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
 "Language: ja\n"
@@ -4197,7 +4197,7 @@ msgstr "削除"
 #: gnucash/gnome/gnc-plugin-page-register.c:1964
 #: gnucash/gnome/gnc-plugin-page-register.c:5068
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr "「検査・修復」は現在実行中ですが、中止しますか？"
+msgstr "「検査・修復」は現在実行中ですが、中止しますか?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:520
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:526
@@ -4242,13 +4242,12 @@ msgid ""
 msgstr "既存の取引を上書きしようとしています。本当に上書きしますか?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1437
-#, fuzzy
 msgid "_Pick another account"
-msgstr "資金移動させる勘定科目を選択(_S)"
+msgstr "別の勘定科目を選択(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
 msgid "_Do it anyway"
-msgstr ""
+msgstr "構わずに実行する(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1521
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1657
@@ -4290,14 +4289,14 @@ msgid "All transactions in this account will be deleted."
 msgstr "この勘定科目内のすべての取引を削除します。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1761
-#, fuzzy, c-format
+#, c-format
 msgid "Its sub-account will be moved to the account %s."
-msgstr "その子勘定科目をすべて勘定科目 %s に移動します。"
+msgstr "子勘定科目を勘定科目 %s に移動します。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1767
-#, fuzzy, c-format
+#, c-format
 msgid "Its subaccount will be deleted."
-msgstr "その子勘定科目がすべて削除されます。"
+msgstr "子勘定科目が削除されます。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1771
 #, c-format
@@ -5765,14 +5764,12 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "この取引に対する逆方向の取引はすでに作成済みです。"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4087
-#, fuzzy
 msgid "Reverse Transaction"
-msgstr "逆方向の取引を追加(_R)"
+msgstr "逆方向の取引"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
-#, fuzzy
 msgid "New Transaction Information"
-msgstr "取引情報"
+msgstr "新しい取引の情報"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4176
@@ -12042,7 +12039,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:14
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:117
 msgid "Confirm Window Close"
-msgstr ""
+msgstr "ウィンドウを閉じるときに確認する"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:118
@@ -12051,9 +12048,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:19
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:122
-#, fuzzy
 msgid "Commit changes to a invoice entry"
-msgstr "変更を得意先請求書項目に対して確定する"
+msgstr "請求書項目に対する変更を確定する"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:20
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:123
@@ -12064,9 +12060,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:24
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:127
-#, fuzzy
 msgid "Duplicating a changed invoice entry"
-msgstr "変更した得意先請求書項目の複製"
+msgstr "変更した請求書項目の複製"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:25
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:128
@@ -12087,9 +12082,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:34
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:137
-#, fuzzy
 msgid "Delete a commodity with price quotes"
-msgstr "商品と価格を削除する"
+msgstr "相場価格の付いた商品を削除する"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:35
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:138
@@ -12101,7 +12095,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:39
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:142
 msgid "Delete multiple price quotes"
-msgstr "複数の相場表価格を削除する"
+msgstr "複数の相場価格を削除する"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:40
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:143
@@ -12112,9 +12106,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:44
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:147
-#, fuzzy
 msgid "Replace existing price"
-msgstr "既存の勘定科目色をすべて置き換える"
+msgstr "既存の価格を置き換える"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:45
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:148
@@ -12124,9 +12117,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:49
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:152
-#, fuzzy
 msgid "Edit account payable/accounts receivable register"
-msgstr "この記録簿の主勘定科目を編集する"
+msgstr "買掛金・売掛金の記録簿を編集する"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:50
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:153
@@ -12232,9 +12224,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:94
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:197
-#, fuzzy
 msgid "Delete a transaction with reconciled splits"
-msgstr "照合済あるいは清算済の取引を無効にすることはできません。"
+msgstr "照合済スプリットを含む取引を削除する"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:95
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:198
@@ -27753,16 +27744,13 @@ msgid "The receivables account you wish to examine."
 msgstr "検査したい売掛金勘定科目です。"
 
 #: gnucash/report/reports/standard/reconcile-report.scm:59
-#, fuzzy
 msgid ""
 "The reconcile report is designed to be similar to the formal reconciliation "
 "tool.  Please select the account from Report Options. Please note the dates "
 "specified in the options will apply to the Reconciliation Date."
 msgstr ""
-"この照合帳票は正式な照合ツールに似せた作りになっています。\n"
-"帳票オプションで勘定科目を選択してください。なお、オプションで指定した日付"
-"が\n"
-"照合日に設定されます。"
+"この照合帳票は正式な照合ツールに似せた作りになっています。帳票オプションで勘定科目を選択してください。なお、オプションで指定した日付が照合日に設定されます"
+"。"
 
 #: gnucash/report/reports/standard/reconcile-report.scm:103
 msgid "Reconciliation Report"
