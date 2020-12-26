@@ -22,8 +22,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-26 19:33+0000\n"
-"Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>\n"
+"PO-Revision-Date: 2020-12-26 20:25+0000\n"
+"Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
 "Language: ja\n"
@@ -4234,12 +4234,14 @@ msgid "Accounts"
 msgstr "勘定科目"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1429
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
 "transactions from.\n"
 "Are you sure you want to do this?"
-msgstr "既存の取引を上書きしようとしています。本当に上書きしますか?"
+msgstr ""
+"勘定科目 %s は移動しようとしている取引と同じ通貨になっていません。\n"
+"本当にこれを実行しますか?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1437
 msgid "_Pick another account"
@@ -6402,14 +6404,13 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:2524
-#, fuzzy
 msgid ""
 "The transactions of this account may not be edited.\n"
 "If you want to edit transactions in this register, please open the account "
 "options and turn off the placeholder checkbox."
 msgstr ""
-"この勘定科目は編集できません。この記録簿の取引を編集したい場合は、勘定科目の"
-"オプションを開き、プレースホルダーのチェックボックスをオフにしてください。"
+"この勘定科目の取引は編集できません。\n"
+"この記録簿の取引を編集したい場合は、勘定科目のオプションを開き、プレースホルダーのチェックボックスをオフにしてください。"
 
 #: gnucash/gnome/gnc-split-reg.c:2531
 #, fuzzy
