@@ -21004,8 +21004,8 @@ msgstr "Vis priskolonnen"
 #, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
-msgstr[0] "% tillagt pris"
-msgstr[1] "%s tillagte priser"
+msgstr[0] "%d tillagt pris"
+msgstr[1] "%d tillagte priser"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1886
