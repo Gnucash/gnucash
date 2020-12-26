@@ -22,8 +22,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-26 13:25+0000\n"
-"Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>\n"
+"PO-Revision-Date: 2020-12-26 14:09+0000\n"
+"Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
 "Language: ja\n"
@@ -5784,19 +5784,17 @@ msgstr "%s をソート..."
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
 #: gnucash/gnome/gnc-plugin-page-register.c:4754
-#, c-format, fuzzy
+#, c-format
 msgid "%s %s from %s, posted %s, amount %s"
-msgstr "%s からの %s %s、投稿された %s、金額 %s"
+msgstr "%s %s 発行元 %s、発送日 %s、金額 %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4763
-#, fuzzy
-#| msgid "Select Account"
 msgid "Select document"
-msgstr "勘定科目を選択"
+msgstr "文書を選択してください"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4764
 msgid "Several documents are linked with this transaction. Please choose one:"
-msgstr "この取引には、いくつかのドキュメントがリンクされています。一つ選んでください:"
+msgstr "いくつかの文書がこの取引にリンクされています。一つ選んでください:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4765
 #: gnucash/gnome-search/dialog-search.c:323
@@ -15808,10 +15806,8 @@ msgid "(owner)"
 msgstr "(所有者)"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:418
-#, fuzzy
-#| msgid "Open imported documents in tabs"
 msgid "Open Document Link"
-msgstr "インポートされた文書をタブで開く"
+msgstr "文書リンクを開く"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:535
 #: gnucash/gtkbuilder/dialog-invoice.glade:1113
@@ -16138,10 +16134,8 @@ msgid "Locale"
 msgstr "ロケール"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:133
-#, fuzzy
-#| msgid "_Resume"
 msgid "_Reset"
-msgstr "再開(_R)"
+msgstr "リセット(_R)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:178
 #: gnucash/gtkbuilder/dialog-preferences.glade:579
@@ -16154,6 +16148,8 @@ msgid ""
 "window\n"
 "Press 'Close' to return to the preference window\n"
 msgstr ""
+"'リセット' をクリックすると元の勘定科目区切り文字に戻して設定ウィンドウを閉じます。\n"
+"'閉じる' をクリックすると設定ウィンドウに戻ります。\n"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:240
 msgid "GnuCash Preferences"
@@ -18514,10 +18510,8 @@ msgstr "取引番号(_T)"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:161
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:719
-#, fuzzy
-#| msgid "Delete the current entry"
 msgid "Keep Linked Document Entry"
-msgstr "現在の項目を削除します。"
+msgstr "リンクされた文書の項目を維持する"
 
 #. Filter register by... Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:213
@@ -25317,9 +25311,8 @@ msgid "Common Currency"
 msgstr "共通の通貨"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:117
-#, fuzzy
 msgid "Convert all amounts to a single currency."
-msgstr "すべての取引を共通の通貨に変換します。"
+msgstr "すべての金額を単一の通貨に変換します。"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:123
 #: gnucash/report/trep-engine.scm:104
@@ -25363,9 +25356,8 @@ msgid "Total For "
 msgstr "合計"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:860
-#, fuzzy
 msgid "missing"
-msgstr "手数料"
+msgstr "不明"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
 #: libgnucash/engine/Account.cpp:4363
@@ -25378,15 +25370,13 @@ msgid "Liability"
 msgstr "負債"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1127
-#, fuzzy
 msgid "Liability and Equity"
-msgstr "負債/純資産(_L)"
+msgstr "負債および純資産"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1145
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1294
-#, fuzzy
 msgid "Exchange Rates"
-msgstr "為替・交換レート:"
+msgstr "為替レート"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1155
 #: gnucash/report/reports/standard/budget-barchart.scm:157
@@ -29938,11 +29928,11 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-ui-balances.c:407
 msgid "Account is already at Auto-Clear Balance."
-msgstr ""
+msgstr "勘定科目は既に自動清算残高になっています。"
 
 #: libgnucash/app-utils/gnc-ui-balances.c:451
 msgid "Too many uncleared splits"
-msgstr ""
+msgstr "未清算スプリットが多すぎます。"
 
 #: libgnucash/app-utils/gnc-ui-balances.c:467
 msgid "The selected amount cannot be cleared."
