@@ -427,8 +427,10 @@ new, totally cool report, consult the mailing list ~a.")
 
       (if (not (null? list-val))
           (let ((table (gnc:make-html-table)))
-            (gnc:html-table-append-column! 
-             table (map symbol->string list-val))
+            (for-each
+             (lambda (cell)
+               (gnc:html-table-append-row! table (list (symbol->string cell))))
+             list-val)
             (gnc:html-table-set-style! table "table"
              'attribute (list "style" "width:200px"))
             (gnc:html-table-set-caption! table 
