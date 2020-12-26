@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-25 15:29+0000\n"
+"PO-Revision-Date: 2020-12-26 05:34+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
@@ -5383,16 +5383,10 @@ msgstr "2 行(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:425
 #: gnucash/gnome/gnc-plugin-page-register.c:554
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"File Association\" "
-#| "for each transaction."
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for "
 "each transaction."
-msgstr ""
-"各取引の \"アクション\"、\"備考\"、および \"ファイルとの関連付け\" を 2 行目"
-"に表示します。"
+msgstr "各取引の \"アクション\"、\"備考\"、および \"リンクされた文書\" を 2 行目に表示します。"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
 #, fuzzy
@@ -7306,13 +7300,11 @@ msgstr ""
 #: gnucash/gnome-utils/dialog-account.c:1331
 msgid ""
 "An account with opening balance already exists for the desired currency."
-msgstr ""
+msgstr "指定した通貨には開始残高の勘定科目が既に存在します。"
 
 #: gnucash/gnome-utils/dialog-account.c:1332
-#, fuzzy
-#| msgid "Cancel the current entry"
 msgid "Cannot change currency"
-msgstr "現在の項目をキャンセルします。"
+msgstr "通貨を変更できません"
 
 #: gnucash/gnome-utils/dialog-account.c:1419
 msgid ""
@@ -7513,7 +7505,7 @@ msgstr "既存"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
 msgid "Use +- keys to increment/decrement number"
-msgstr ""
+msgstr "+- キーを使って番号を増減させることができます。"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
 msgid "Action/Number"
@@ -8705,13 +8697,11 @@ msgstr "保存せずに閉じる(_W)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1437
 msgid "This window is closing and will not be restored."
-msgstr ""
+msgstr "このウィンドウを閉じようとしていますが復元できなくなります。"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1443
-#, fuzzy
-#| msgid "Close this window"
 msgid "Close Window?"
-msgstr "このウィンドウを閉じる"
+msgstr "ウィンドウを閉じますか?"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
@@ -9492,7 +9482,7 @@ msgstr "隠"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:997
 msgctxt "Column header for 'Opening Balance'"
 msgid "O"
-msgstr ""
+msgstr "開"
 
 #. Translators: %s is a currency mnemonic.
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1818
@@ -11792,16 +11782,10 @@ msgid "All transactions are expanded to show all splits."
 msgstr "すべての取引を展開してスプリットを表示します。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:300
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"File Association\" "
-#| "for each transaction."
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
-msgstr ""
-"各取引の \"アクション\"、\"備考\"、および \"ファイルとの関連付け\" を 2 行目"
-"に表示します。"
+msgstr "各取引の \"アクション\"、\"備考\"、および \"リンクされた文書\" を 2 行目に表示します。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:301
 #, fuzzy
@@ -14569,7 +14553,7 @@ msgstr "開始残高"
 msgid ""
 "This account holds opening balance transactions. Only one account per "
 "commodity can hold opening balance transactions."
-msgstr ""
+msgstr "この勘定科目は開始残高の取引を保持します。商品につき一つの勘定科目だけが開始残高の取引を保持することができます。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1560
 msgid "<b>Acco_unt Type</b>"
@@ -22148,7 +22132,7 @@ msgstr "取引の説明"
 #: gnucash/report/trep-engine.scm:1292 gnucash/report/trep-engine.scm:1293
 msgctxt "Column header for 'Document Link'"
 msgid "L"
-msgstr ""
+msgstr "リ"
 
 #: gnucash/register/ledger-core/split-register-layout.c:711
 #: gnucash/register/ledger-core/split-register-layout.c:751
@@ -29278,10 +29262,8 @@ msgid "Display the other account code?"
 msgstr "相手勘定科目コードを表示するかどうかを指定します。"
 
 #: gnucash/report/trep-engine.scm:980
-#, fuzzy
-#| msgid "Display the transaction amount?"
 msgid "Display the transaction linked document"
-msgstr "取引の金額を表示するかどうかを指定します。"
+msgstr "取引にリンクされた文書を表示するかどうかを指定します。"
 
 #: gnucash/report/trep-engine.scm:983
 msgid "Display a subtotal summary table."
