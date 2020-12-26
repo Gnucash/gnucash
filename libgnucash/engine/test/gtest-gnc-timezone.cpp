@@ -134,6 +134,13 @@ TEST(gnc_timezone_constructors, test_IANA_Belize_tz)
             EXPECT_EQ(tz->dst_zone_abbrev(), "CDT");
             EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
         }
+        /* An IANA update on 22 Dec 2020 added missing DST transitions
+         * for Belize between 1943 and 1967. Ignore those years until
+         * the oldest supported OS version release is later than that
+         * because distros updating of zoneinfo is spotty.
+         */
+        else if (year >= 1943 && year <= 1967)
+            continue;
         else
         {
             EXPECT_EQ(tz->std_zone_abbrev(), "CST");
