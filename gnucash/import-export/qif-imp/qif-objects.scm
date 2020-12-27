@@ -33,8 +33,6 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash engine))
 (use-modules (gnucash string))
-(use-modules (gnucash qif-import qif-guess-map))
-(use-modules (gnucash qif-import qif-parse))
 
 (export <qif-map-entry>)
 (export make-qif-acct)
@@ -95,6 +93,7 @@
 (export qif-map-entry:set-gnc-name!)
 (export qif-map-entry:set-new-acct?!)
 (export qif-map-entry:set-qif-name!)
+(export qif-split:make)
 (export qif-split:amount)
 (export qif-split:category)
 (export qif-split:category-is-account?)
@@ -103,12 +102,15 @@
 (export qif-split:memo)
 (export qif-split:miscx-category)
 (export qif-split:set-amount!)
-(export qif-split:set-category!)
 (export qif-split:set-category-is-account?!)
 (export qif-split:set-category-private!)
+(export qif-split:set-class!)
 (export qif-split:set-mark!)
 (export qif-split:set-matching-cleared!)
 (export qif-split:set-memo!)
+(export qif-split:set-miscx-category!)
+(export qif-split:set-miscx-is-account?!)
+(export qif-split:set-miscx-class!)
 (export qif-stock-symbol:set-name!)
 (export qif-stock-symbol:set-symbol!)
 (export qif-stock-symbol:set-type!)
@@ -145,6 +147,31 @@
 (export qif-xtn:share-price)
 (export qif-xtn:split-amounts)
 (export qif-xtn:splits)
+(export GNC-ASSET-TYPE)
+(export GNC-BANK-TYPE)
+(export GNC-CASH-TYPE)
+(export GNC-CCARD-TYPE)
+(export GNC-EQUITY-TYPE)
+(export GNC-EXPENSE-TYPE)
+(export GNC-INCOME-TYPE)
+(export GNC-LIABILITY-TYPE)
+(export GNC-MUTUAL-TYPE)
+(export GNC-PAYABLE-TYPE)
+(export GNC-RECEIVABLE-TYPE)
+(export GNC-STOCK-TYPE)
+
+(define GNC-BANK-TYPE 0)
+(define GNC-CASH-TYPE 1)
+(define GNC-ASSET-TYPE 2)
+(define GNC-LIABILITY-TYPE 4)
+(define GNC-CCARD-TYPE 3)
+(define GNC-STOCK-TYPE 5)
+(define GNC-MUTUAL-TYPE 6)
+(define GNC-INCOME-TYPE 8)
+(define GNC-EXPENSE-TYPE 9)
+(define GNC-EQUITY-TYPE 10)
+(define GNC-RECEIVABLE-TYPE 11)
+(define GNC-PAYABLE-TYPE 12)
 
 (define (construct class)
   (apply (record-constructor class)
@@ -233,22 +260,6 @@
 (define qif-split:set-category-private!
   (record-modifier <qif-split> 'category))
 
-(define (qif-split:set-category! self value)
-  (let* ((cat-info 
-          (qif-split:parse-category self value))
-         (cat-name (list-ref cat-info 0))
-         (is-account? (list-ref cat-info 1))
-         (class-name (list-ref cat-info 2))
-         (miscx-name (list-ref cat-info 3))
-         (miscx-is-account? (list-ref cat-info 4))
-         (miscx-class (list-ref cat-info 5)))
-    (qif-split:set-category-private! self cat-name)
-    (qif-split:set-class! self class-name)
-    (qif-split:set-category-is-account?! self is-account?)
-    (qif-split:set-miscx-category! self miscx-name)
-    (qif-split:set-miscx-is-account?! self miscx-is-account?)
-    (qif-split:set-miscx-class! self miscx-class)))
-    
 (define qif-split:class 
   (record-accessor <qif-split> 'class))
 
@@ -303,11 +314,8 @@
 (define qif-split:set-miscx-class!
   (record-modifier <qif-split> 'miscx-class))
 
-(define (make-qif-split)
-  (let ((self (construct <qif-split>)))
-    (qif-split:set-category! self "")
-    self))
-
+(define qif-split:make
+  (record-constructor <qif-split>))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-xtn class 

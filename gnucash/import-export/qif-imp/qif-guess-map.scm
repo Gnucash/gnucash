@@ -34,39 +34,25 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
 (use-modules (gnucash qif-import qif-objects))
-(use-modules (gnucash qif-import qif-dialog-utils))
-
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 match))
 
-(export GNC-ASSET-TYPE)
-(export GNC-BANK-TYPE)
-(export GNC-CASH-TYPE)
-(export GNC-CCARD-TYPE)
-(export GNC-EQUITY-TYPE)
-(export GNC-EXPENSE-TYPE)
-(export GNC-INCOME-TYPE)
-(export GNC-LIABILITY-TYPE)
-(export GNC-MUTUAL-TYPE)
-(export GNC-PAYABLE-TYPE)
-(export GNC-RECEIVABLE-TYPE)
-(export GNC-STOCK-TYPE)
 (export qif-import:guess-acct)
 (export qif-import:load-map-prefs)
 (export qif-import:save-map-prefs)
+(export default-equity-account)
+(export default-unspec-acct)
+(export default-capital-return-acct)
+(export default-cglong-acct)
+(export default-cgmid-acct)
+(export default-cgshort-acct)
+(export default-commission-acct)
+(export default-dividend-acct)
+(export default-equity-holding)
+(export default-interest-acct)
+(export default-margin-interest-acct)
+(export default-stock-acct)
 
-(define GNC-BANK-TYPE 0)
-(define GNC-CASH-TYPE 1)
-(define GNC-ASSET-TYPE 2)
-(define GNC-LIABILITY-TYPE 4)
-(define GNC-CCARD-TYPE 3)
-(define GNC-STOCK-TYPE 5)
-(define GNC-MUTUAL-TYPE 6)
-(define GNC-INCOME-TYPE 8)
-(define GNC-EXPENSE-TYPE 9)
-(define GNC-EQUITY-TYPE 10)
-(define GNC-RECEIVABLE-TYPE 11)
-(define GNC-PAYABLE-TYPE 12)
 
 (define (record-fields->list record)
   (let ((type (record-type-descriptor record)))
@@ -76,6 +62,63 @@
 
 (define (list->record-fields lst type)
   (apply (record-constructor type) lst))
+
+
+(define (default-stock-acct brokerage security)
+  (string-append brokerage (gnc-get-account-separator-string) security))
+
+(define (default-dividend-acct brokerage security)
+  (string-append (G_ "Income") (gnc-get-account-separator-string)
+                 (G_ "Dividends") (gnc-get-account-separator-string)
+                 brokerage (gnc-get-account-separator-string)
+                 security))
+
+(define (default-interest-acct brokerage security)
+  (string-append (G_ "Income") (gnc-get-account-separator-string)
+                 (G_ "Interest") (gnc-get-account-separator-string)
+                 brokerage
+                 (if (string=? security "")
+                  ""
+                  (string-append (gnc-get-account-separator-string)
+                                  security))))
+
+(define (default-capital-return-acct brokerage security)
+  (string-append (G_ "Income") (gnc-get-account-separator-string)
+                 (G_ "Cap Return") (gnc-get-account-separator-string)
+                 brokerage (gnc-get-account-separator-string)
+                 security))
+
+(define (default-cglong-acct brokerage security)
+  (string-append (G_ "Income") (gnc-get-account-separator-string)
+                 (G_ "Cap. gain (long)") (gnc-get-account-separator-string)
+                 brokerage (gnc-get-account-separator-string)
+                 security))
+
+(define (default-cgmid-acct brokerage security)
+  (string-append (G_ "Income") (gnc-get-account-separator-string)
+                 (G_ "Cap. gain (mid)") (gnc-get-account-separator-string)
+                 brokerage (gnc-get-account-separator-string)
+                 security))
+
+(define (default-cgshort-acct brokerage security)
+  (string-append (G_ "Income") (gnc-get-account-separator-string)
+                 (G_ "Cap. gain (short)") (gnc-get-account-separator-string)
+                 brokerage (gnc-get-account-separator-string)
+                 security))
+
+(define (default-equity-holding security)
+  (string-append (G_ "Equity") (gnc-get-account-separator-string)
+                 (G_ "Retained Earnings")))
+
+(define (default-commission-acct brokerage)
+  (string-append (G_ "Expenses") (gnc-get-account-separator-string)
+                 (G_ "Commissions") (gnc-get-account-separator-string)
+                 brokerage))
+
+(define (default-margin-interest-acct brokerage)
+  (string-append (G_ "Expenses") (gnc-get-account-separator-string)
+                 (G_ "Margin Interest") (gnc-get-account-separator-string)
+                 brokerage))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:load-map-prefs
@@ -486,6 +529,14 @@
 ;;  Come up with a logical name for a new account based on
 ;;  the Quicken name and type of the account
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(define (default-unspec-acct)
+  (G_ "Unspecified"))
+
+(define (default-equity-account)
+  (string-append (G_ "Equity") (gnc-get-account-separator-string)
+                 (G_ "Retained Earnings")))
 
 (define (qif-import:find-new-acct qif-acct allowed-types gnc-acct-info)
   (cond

@@ -39,18 +39,6 @@
 (use-modules (gnucash qif-import qif-objects))
 (use-modules (gnucash qif-import qif-guess-map))
 
-(export default-capital-return-acct)
-(export default-cglong-acct)
-(export default-cgmid-acct)
-(export default-cgshort-acct)
-(export default-commission-acct)
-(export default-dividend-acct)
-(export default-equity-account)
-(export default-equity-holding)
-(export default-interest-acct)
-(export default-margin-interest-acct)
-(export default-stock-acct)
-(export default-unspec-acct)
 (export qif-dialog:make-account-display)
 (export qif-dialog:make-category-display)
 (export qif-dialog:make-memo-display)
@@ -62,69 +50,6 @@
 (export qif-import:fix-from-acct)
 (export qif-import:get-all-accts)
 (export qif-import:refresh-match-selection)
-
-(define (default-stock-acct brokerage security)
-  (string-append brokerage (gnc-get-account-separator-string) security))
-
-(define (default-dividend-acct brokerage security)
-  (string-append (G_ "Income") (gnc-get-account-separator-string)
-                 (G_ "Dividends") (gnc-get-account-separator-string)
-                 brokerage (gnc-get-account-separator-string)
-                 security))
-
-(define (default-interest-acct brokerage security)
-  (string-append (G_ "Income") (gnc-get-account-separator-string)
-                 (G_ "Interest") (gnc-get-account-separator-string)
-                 brokerage
-                 (if (string=? security "")
-                  ""
-                  (string-append (gnc-get-account-separator-string)
-                                  security))))
-
-(define (default-capital-return-acct brokerage security)
-  (string-append (G_ "Income") (gnc-get-account-separator-string)
-                 (G_ "Cap Return") (gnc-get-account-separator-string)
-                 brokerage (gnc-get-account-separator-string)
-                 security))
-
-(define (default-cglong-acct brokerage security)
-  (string-append (G_ "Income") (gnc-get-account-separator-string)
-                 (G_ "Cap. gain (long)") (gnc-get-account-separator-string)
-                 brokerage (gnc-get-account-separator-string)
-                 security))
-
-(define (default-cgmid-acct brokerage security)
-  (string-append (G_ "Income") (gnc-get-account-separator-string)
-                 (G_ "Cap. gain (mid)") (gnc-get-account-separator-string)
-                 brokerage (gnc-get-account-separator-string)
-                 security))
-
-(define (default-cgshort-acct brokerage security)
-  (string-append (G_ "Income") (gnc-get-account-separator-string)
-                 (G_ "Cap. gain (short)") (gnc-get-account-separator-string)
-                 brokerage (gnc-get-account-separator-string)
-                 security))
-
-(define (default-equity-holding security)
-  (string-append (G_ "Equity") (gnc-get-account-separator-string)
-                 (G_ "Retained Earnings")))
-
-(define (default-equity-account)
-  (string-append (G_ "Equity") (gnc-get-account-separator-string)
-                 (G_ "Retained Earnings")))
-
-(define (default-commission-acct brokerage)
-  (string-append (G_ "Expenses") (gnc-get-account-separator-string)
-                 (G_ "Commissions") (gnc-get-account-separator-string)
-                 brokerage))
-
-(define (default-margin-interest-acct brokerage)
-  (string-append (G_ "Expenses") (gnc-get-account-separator-string)
-                 (G_ "Margin Interest") (gnc-get-account-separator-string)
-                 brokerage))
-
-(define (default-unspec-acct)
-  (G_ "Unspecified"))
 
 ;; The following investment actions implicitly specify
 ;; the two accounts involved in the transaction.

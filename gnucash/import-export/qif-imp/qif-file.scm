@@ -35,6 +35,7 @@
 (use-modules (gnucash utilities))
 (use-modules (gnucash string))
 (use-modules (gnucash app-utils))
+(use-modules (ice-9 match))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-13))
@@ -43,6 +44,7 @@
 (use-modules (gnucash qif-import qif-utils))
 (use-modules (gnucash qif-import qif-parse))
 (use-modules (gnucash qif-import qif-dialog-utils))
+(use-modules (gnucash qif-import qif-guess-map))
 
 (export qif-file:check-from-acct)
 (export qif-file:parse-fields)
@@ -57,6 +59,21 @@
   (let ((match (regexp-exec qif-bad-numeric-rexp input)))
     (if match #f #t)))
 
+
+(define (make-qif-split)
+  (let ((self (qif-split:make #f #f #f #f #f #f #f #f #f #f)))
+    (qif-split:set-category! self "")
+    self))
+
+(define (qif-split:set-category! self value)
+  (match (qif-split:parse-category self value)
+    ((cat-name is-account? class-name miscx-name miscx-is-account? miscx-class)
+     (qif-split:set-category-private! self cat-name)
+     (qif-split:set-class! self class-name)
+     (qif-split:set-category-is-account?! self is-account?)
+     (qif-split:set-miscx-category! self miscx-name)
+     (qif-split:set-miscx-is-account?! self miscx-is-account?)
+     (qif-split:set-miscx-class! self miscx-class))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:read-file
