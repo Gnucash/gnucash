@@ -46,21 +46,33 @@ install(TARGETS gnc-qif-import
 # Scheme
 
 set (qif_import_SCHEME_0
+  qif-utils.scm
   string.scm
   )
 
-set (qif_import_SCHEME
-  qif-dialog-utils.scm
-  qif-file.scm
-  qif-guess-map.scm
+set (qif_import_SCHEME_1
   qif-merge-groups.scm
   qif-objects.scm
-  qif-parse.scm
-  qif-to-gnc.scm
-  qif-utils.scm
 )
 
-set(qif_import_SCHEME_2
+set (qif_import_SCHEME_2
+  qif-guess-map.scm
+)
+
+set (qif_import_SCHEME_3
+  qif-dialog-utils.scm
+)
+
+set (qif_import_SCHEME_4
+  qif-to-gnc.scm
+  qif-parse.scm
+)
+
+set (qif_import_SCHEME_5
+  qif-file.scm
+)
+
+set (qif_import_SCHEME_6
   qif-import.scm
 )
 
@@ -75,21 +87,38 @@ set(GUILE_DEPENDS
 
 gnc_add_scheme_targets(scm-qif-import-0
     SOURCES "${qif_import_SCHEME_0}"
-    OUTPUT_DIR "gnucash"
-    DEPENDS "${GUILE_DEPENDS}"
-    MAKE_LINKS)
+    OUTPUT_DIR "gnucash/qif-import"
+    DEPENDS "${GUILE_DEPENDS}")
+
+gnc_add_scheme_targets(scm-qif-import-1
+    SOURCES "${qif_import_SCHEME_1}"
+    OUTPUT_DIR "gnucash/qif-import"
+    DEPENDS "scm-qif-import-0")
 
 gnc_add_scheme_targets(scm-qif-import-2
     SOURCES "${qif_import_SCHEME_2}"
-    OUTPUT_DIR "gnucash"
-    DEPENDS "${GUILE_DEPENDS};scm-qif-import"
-    MAKE_LINKS)
+    OUTPUT_DIR "gnucash/qif-import"
+    DEPENDS "scm-qif-import-1")
+
+gnc_add_scheme_targets(scm-qif-import-3
+    SOURCES "${qif_import_SCHEME_3}"
+    OUTPUT_DIR "gnucash/qif-import"
+    DEPENDS "scm-qif-import-2")
+
+gnc_add_scheme_targets(scm-qif-import-4
+    SOURCES "${qif_import_SCHEME_4}"
+    OUTPUT_DIR "gnucash/qif-import"
+    DEPENDS "scm-qif-import-3")
+
+gnc_add_scheme_targets(scm-qif-import-5
+    SOURCES "${qif_import_SCHEME_5}"
+    OUTPUT_DIR "gnucash/qif-import"
+    DEPENDS "scm-qif-import-4")
 
 gnc_add_scheme_targets(scm-qif-import
-    SOURCES "${qif_import_SCHEME}"
+    SOURCES "${qif_import_SCHEME_6}"
     OUTPUT_DIR "gnucash/qif-import"
-    DEPENDS "${GUILE_DEPENDS};scm-qif-import-0"
-    MAKE_LINKS)
+    DEPENDS "scm-qif-import-5")
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module (
@@ -104,5 +133,12 @@ gnc_add_scheme_deprecated_module (
     MAKE_LINKS)
 
 set_local_dist(qif_import_DIST_local CMakeLists.txt file-format.txt ${qif_import_SOURCES} ${qif_import_noinst_HEADERS}
-        ${qif_import_SCHEME_0} ${qif_import_SCHEME} ${qif_import_SCHEME_2})
+  ${qif_import_SCHEME_0}
+  ${qif_import_SCHEME_1}
+  ${qif_import_SCHEME_2}
+  ${qif_import_SCHEME_3}
+  ${qif_import_SCHEME_4}
+  ${qif_import_SCHEME_5}
+  ${qif_import_SCHEME_6})
+
 set(qif_import_DIST ${qif_import_DIST_local} ${test_qif_import_DIST} PARENT_SCOPE)
