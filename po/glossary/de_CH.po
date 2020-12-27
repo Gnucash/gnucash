@@ -1,20 +1,23 @@
 # Glossary of terms in GnuCash
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Christian Stimming <stimming@tuhh.de>, 2001
-#
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-06 18:14+0100\n"
-"PO-Revision-Date: 2008-03-03 00:47+0100\n"
-"Last-Translator: Raffael Luthiger <r.luthiger@huanga.com>\n"
-"Language-Team: DE\n"
-"Language: Swiss German \n"
+"PO-Revision-Date: 2020-12-27 01:10+0000\n"
+"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"Language-Team: German (Switzerland) <https://hosted.weblate.org/projects/"
+"gnucash/glossary/de_CH/>\n"
+"Language: de_CH\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -225,7 +228,7 @@ msgstr "Bilanz"
 
 #. "To arrange for income and spending to be equal"
 msgid "balance, to"
-msgstr "Ausgleichen "
+msgstr "Ausgleichen"
 
 #. "-"
 msgid "bank"

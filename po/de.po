@@ -29,8 +29,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-26 22:11+0000\n"
-"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
+"PO-Revision-Date: 2020-12-27 01:10+0000\n"
+"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -7735,9 +7735,8 @@ msgid "Existing"
 msgstr "Existierend"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
-#, fuzzy
 msgid "Use +- keys to increment/decrement number"
-msgstr "Verwenden Sie die Tasten +-, um die Zahl zu erhöhen/verringern"
+msgstr "Verwenden Sie die Tasten »+«/»-«, um die Zahl zu erhöhen/verringern."
 
 # Todo: Im Dialog noch überprüfen
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
