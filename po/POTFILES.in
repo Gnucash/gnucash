@@ -315,9 +315,11 @@ gnucash/import-export/aqb/gnc-ab-kvp.c
 gnucash/import-export/aqb/gnc-ab-transfer.c
 gnucash/import-export/aqb/gnc-ab-utils.c
 gnucash/import-export/aqb/gnc-file-aqb-import.c
+gnucash/import-export/aqb/gnc-flicker-gui.c
 gnucash/import-export/aqb/gnc-gwen-gui.c
 gnucash/import-export/aqb/gncmod-aqbanking.c
 gnucash/import-export/aqb/gnc-plugin-aqbanking.c
+gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.flicker.gschema.xml.in
 gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in
 gnucash/import-export/bi-import/dialog-bi-import.c
 gnucash/import-export/bi-import/dialog-bi-import-gui.c

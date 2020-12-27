@@ -223,10 +223,14 @@
         (addto! heading-list (G_ tax-header)))
     (if (debit-col column-vector)
         (addto! heading-list
-                (if formal? debit-header (gnc-account-get-debit-string acct-type))))
+                (if formal?
+                    (G_ debit-header)
+                    (gnc-account-get-debit-string acct-type))))
     (if (credit-col column-vector)
         (addto! heading-list
-                (if formal? credit-header (gnc-account-get-credit-string acct-type))))
+                (if formal?
+                    (G_ credit-header)
+                    (gnc-account-get-credit-string acct-type))))
     (if (bal-col column-vector)
         (addto! heading-list (G_ balance-header)))
     (case link-option

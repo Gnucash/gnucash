@@ -62,6 +62,9 @@ https://bugs.gnucash.org/")))
 (define optname-period (N_ "Period duration"))
 (define opthelp-period (N_ "Duration between time periods"))
 
+(define optname-reverse-chrono (N_ "Period order is most recent first"))
+(define opthelp-reverse-chrono (N_ "Period order is most recent first"))
+
 (define optname-dual-columns (N_ "Enable dual columns"))
 (define opthelp-dual-columns (N_ "Selecting this option will enable double-column \
 reporting."))
@@ -202,6 +205,8 @@ also show overall period profit & loss."))
            options
            gnc:pagename-general optname-dual-columns
            (not x))
+          (gnc-option-db-set-option-selectable-by-name
+           options gnc:pagename-general optname-reverse-chrono x)
           (case report-type
             ((balsheet)
              (gnc-option-db-set-option-selectable-by-name
@@ -228,6 +233,11 @@ also show overall period profit & loss."))
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-dual-columns
       "c4" opthelp-dual-columns #t))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-general optname-reverse-chrono
+      "c5" opthelp-reverse-chrono #t))
 
     (add-option
      (gnc:make-multichoice-option
@@ -350,6 +360,7 @@ also show overall period profit & loss."))
 
 (define* (add-multicolumn-acct-table
           table title accountlist maxindent get-cell-monetary-fn cols-data #:key
+          (reverse-cols? #f)
           (omit-zb-bals? #f)
           (show-zb-accts? #t)
           (disable-account-indent? #f)
@@ -427,7 +438,7 @@ also show overall period profit & loss."))
                    (list account-cell)
                    (gnc:html-make-empty-cells
                     (if amount-indenting? (1- amount-indent) 0))
-                   rest
+                   (if reverse-cols? (reverse rest) rest)
                    (gnc:html-make-empty-cells
                     (if amount-indenting? (- maxindent amount-indent) 0)))))
         (if row-markup
@@ -749,6 +760,8 @@ also show overall period profit & loss."))
            ((eq? report-type 'pnl) (list startdate enddate))
            (else (list enddate))))
 
+         (reverse-chrono? (get-option gnc:pagename-general optname-reverse-chrono))
+
          (report-dates-vec (list->vector report-dates))
          (num-report-dates (vector-length report-dates-vec))
 
@@ -1057,6 +1070,7 @@ also show overall period profit & loss."))
                               table title accounts
                               maxindent get-cell-monetary-fn
                               (iota num-report-dates)
+                              #:reverse-cols? reverse-chrono?
                               #:omit-zb-bals? omit-zb-bals?
                               #:show-zb-accts? show-zb-accts?
                               #:disable-account-indent? disable-account-indent?
@@ -1181,16 +1195,16 @@ also show overall period profit & loss."))
                    (list
                     (list "General" "Start Date" (cons 'absolute (car datepair)))
                     (list "General" "End Date" (cons 'absolute (cdr datepair)))
-                    (list "General" "Show original currency amount" show-orig?)
-                    (list "General" "Common Currency" common-currency)
-                    (list "General" "Report's currency" curr)
+                    (list "Currency" "Show original currency amount" show-orig?)
+                    (list "Currency" "Common Currency" common-currency)
+                    (list "Currency" "Report's currency" curr)
                     (list "Display" "Amount" 'double)
                     (list "Accounts" "Accounts" accts))))))
 
              (chart
               (and-let* (include-chart?
                          (curr (or common-currency book-main-currency))
-                         (delta (or (not (eq? incr 'disabled)) 'MonthDelta))
+                         (delta (if (eq? incr 'disabled) 'MonthDelta incr))
                          (price (or price-source 'pricedb-nearest)))
                 (gnc:make-report-anchor
                  pnl-barchart-uuid report-obj
@@ -1231,6 +1245,7 @@ also show overall period profit & loss."))
                                         (> num-report-dates 2))
                                    '(overall-period)
                                    '()))
+                              #:reverse-cols? reverse-chrono?
                               #:omit-zb-bals? omit-zb-bals?
                               #:show-zb-accts? show-zb-accts?
                               #:disable-account-indent? disable-account-indent?

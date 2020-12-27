@@ -5,8 +5,8 @@ set(engine_mocks_SOURCES
     gmock-qofbook.cpp
     gmock-qofbook.h
     gmock-qofinstance.cpp
-    gmock-qofquery.cpp
-    gmock-qofquery.h
+    fake-qofquery.cpp
+    fake-qofquery.h
     gmock-Split.cpp
     gmock-Split.h
     gmock-Transaction.cpp

@@ -46,6 +46,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
+(use-modules (ice-9 format))
 
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.

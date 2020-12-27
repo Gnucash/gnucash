@@ -1,5 +1,110 @@
 Version history:
 ------- -------
+4.3  - 27 December 2020
+The fourth release of the 4.x stable series.
+
+Between 4.2 and 4.3, the following bugfixes were accomplished:
+
+    Bug 106746 - In Mort. Repay. druid, creating New acct should also select it.
+    Bug 128772 - Account Help Button does not work
+    Bug 309943 - When unable to obtain a lock, no option to open another database.
+    Bug 330930 - Financial Calculator resets payment period to zero if automatic decimal places used
+    Bug 343647 - [rfe] save tab/report location
+    Bug 345924 - RFE: don't disable "OK" button after using "Apply" to modify chart options
+    Bug 355496 - Mark placeholder accounts in account tree window visibly.
+    Bug 355498 - When there is only one result from a 'Find', select it.
+    Bug 571697 - Transaction Status in Since Last Run needs to look clickable.
+    Bug 644242 - Window Panning Oddity.
+    Bug 645379 - When duplicating a transaction, any non-numeric value entered in the "Number" field is discarded.
+    Bug 667490 - Support image-based TAN methods QR, photoTAN, and chipTAN optical "Flicker code"
+
+    Partial: Implements the display of flashing optical TAN challenges (aka flicker) in the "Enter TAN" dialog box.
+    Bug 688917 - Help button not working when editing style sheets.
+    Bug 720564 - Search in General Ledger cannot be cleared.
+    Bug 794807 - Calendar widget current month shown as (null).
+    Bug 797901 - List of Recently Used Files not updated until GnuCash is closed and reopened.
+    Bug 797944 - Crash on use of File-Open
+    Bug 797953 - RFE: provide access to filter-by on right-mouse-click in Accounts register.
+    Bug 797956 - dialog-report-style-sheet.c stylesheet editor does not set transient_for correctly.
+    Bug 797959 - "Exception" when value greater than one million with commas and periods is pasted to register.
+    Bug 797967 - minor ui niggles - some dialogs don't respond to GDK_KEY_Escape
+    Bug 797971 - odd cursor behaviour in register Description.
+    Bug 797972 - Crash on export report CSV
+    Bug 797982 - exchange rates' decimal places (bis)
+    Bug 797983 - v4.2 report numbers change over gnucash restarts; Price Database dropping user:price-editor entries.
+    Bug 797984 - Infinite loop while Check&Repair AR and AP accounts
+    Bug 797989 - Sorting columns by alphabet with non-ASCII characters
+    Bug 797993 - Reverse balance option does not apply to an Account Report
+    Bug 797994 - Account type-ahead search doesn't match accented characters.
+    Bug 798005 - Import of QIF file sets expenses to zero, deposits are fine
+    Bug 798008 - Option '--log' cannot be specified more than once.
+    Bug 798015 - cash flow numerical-overflow
+    Bug 798031 - Date goes to prior year with mm/dd entry to transaction duplicate.
+    Bug 798036 - Transaction Report should offer price source
+    Bug 798038 - Incorrect spelling in german account templates 'common' and 'full'
+    Bug 798039 - Using 'Consolidate Transactions' option on Consolidate Transaction Report returns Error
+    Bug 798041 - Open invoices in new window.
+    Bug 798047 - Crash on delete account.
+    Bug 798050 - error using Reports->Experimental->Income Statement (Multicolumn)
+
+The following fixes and improvements were not associated with bug reports:
+
+    Add custom unbound-variable exception reporter in guile that identifies what module provides the missing symbol.
+    Balsheet-pnl report: show most recent period first by default
+    Change register page icon to a padlock if read only
+    When a resister is read only make whole sheet insensitive.
+    Add account name to the read-only-register dialog box because under some circumstances it may be unclear to which register the message applies.
+    Strictly use use-modules to import Scheme symbols: Guile 3.0 doesn't like the alternatives. This can cause problems resolving symbols if the source of those symbols isn't yet compiled and hasn't been symlinked into the builddir.
+    Don't try to reload report if the first attempt raised an html error.
+    Barcharts: Limit account drill-down depth to 6.
+    I18N:glossary: add mortgage terms ARM, APR, FRM
+    Change the icons used for the file locked dialog box.
+    Add support for the opening balance accounts flag
+
+    Up to now, opening balance accounts have been identified by means of fixed names and their translations. Support Replacing this with a consistent non-translated tag. The actual replacement will be added to Gnucash 4.4; this change is to ensure a migration path.
+    Replace TravisCI with Github actions for CI testing. TravisCI sharply restricted their free support of Free Software projects.
+    Use LTDL_LIBRARY_PATH instead of (DY)LD_LIBRARY_PATH in environment file.
+    Add a few more CSS classes for labels
+    Add GoogleMocks of some engine objects and refine Import-export unit tests using them.
+    Add auto-clear to register page
+    Change source files dialog-dup-trans.* for space and tabs
+    Fix exception when converting to decimal values that reduce to N/1.
+    Add confirmation of Main Window close when more than one window is displayed
+    Add keyboard shortcuts <Ctrl><Alt><Menu> for the notebook page selection menu and <Ctrl><Alt>A to jump to the Accounts page.
+    Allow using the Ctrl+Alt+PgUp/Down to scroll the report view.
+    Fix report page keyboard focus in the scroll window.
+    Fix some incorrect links to the help file
+    Fix section help on windows not working.
+    Set the visibility of the account column in import-main-matcher depending upon the nubmer of accounts being displayed.
+    Add option to hide memo column on import-main-matcher
+    Fix pressing help button in OFX importer causing main-import-matcher to disappear
+    Preferences dialog: Display the invalid account separator message box only when the user closes the Preferences Dialog instead of after every change to any control.
+    Expose ngettext as gnc:ngettext
+    Add tooltip in import matcher window for description and memo column.
+    Put Macs back on WebKit2.
+    CMake: Mute guile-2.2 again
+    Fix several report stylesheet font-handling issues especially on macOS.
+    Fix price-renderer not converting to decimal.
+    Add some additional places where Check&Repair can be aborted
+    Make the price database list obey the force-prices-to-decimal preference.
+    Several improvements to the auto-clear dialog.
+    Fix some errors found by i18nspector in po files
+    Tax Report Options appeared twice on menu for Chart of Accounts
+    General Journal Report: Allow Report Options>General Title to render
+        document title.
+    [options.scm] rename new-owner-report "Links" to "Transaction Links"
+    [new-owner-report] enable doclink links
+    [html-utilities][API] add function gnc:html-invoice-doclink-anchor
+    Disable chart animation that prevented visual comparison of state before
+        and after reload
+    Select the register account if Tax Options dialog opened from a register tab.
+
+Deprecations
+
+    xaccAccountCountSplits.
+    gnc:html-make-exchangerates
+
+
 4.2  - 27 September 2020
 The third release of the 4.x stable series.
 

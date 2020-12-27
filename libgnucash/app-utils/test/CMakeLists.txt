@@ -71,22 +71,6 @@ endif()
 # Doesn't work yet:
 gnc_add_test_with_guile(test-app-utils "${test_app_utils_SOURCES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 
-set_dist_list(test_app_utils_DIST
-  CMakeLists.txt
-  
-  test-exp-parser.c
-  test-print-parse-amount.cpp
-  test-print-queries.cpp
-  test-scm-query-string.cpp
-  test-sx.cpp
-  test-c-interface.scm
-  test-date-utilities.scm
-  test-options.scm
-  ${test_app_utils_scheme_SOURCES}
-  ${test_app_utils_SOURCES}
-)
-
-
 set(test_autoclear_SOURCES
     test-autoclear.cpp
 )
@@ -102,4 +86,19 @@ set(test_autoclear_LIBS
 gnc_add_test(test-autoclear "${test_autoclear_SOURCES}"
     test_autoclear_INCLUDE_DIRS
     test_autoclear_LIBS
+)
+
+set_dist_list(test_app_utils_DIST
+  CMakeLists.txt
+  test-exp-parser.c
+  test-print-parse-amount.cpp
+  test-print-queries.cpp
+  test-scm-query-string.cpp
+  test-sx.cpp
+  test-c-interface.scm
+  test-date-utilities.scm
+  test-options.scm
+  ${test_app_utils_scheme_SOURCES}
+  ${test_app_utils_SOURCES}
+  ${test_autoclear_SOURCES}
 )

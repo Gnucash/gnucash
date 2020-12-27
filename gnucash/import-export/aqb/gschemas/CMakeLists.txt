@@ -1,8 +1,8 @@
 
 if (WITH_AQBANKING)
-  set(aqb_GSCHEMA org.gnucash.dialogs.import.hbci.gschema.xml)
+  set(aqb_GSCHEMA org.gnucash.dialogs.import.hbci.gschema.xml org.gnucash.dialogs.flicker.gschema.xml)
 
   add_gschema_targets("${aqb_GSCHEMA}")
 endif()
 
-set_dist_list(aqbanking_gschema_DIST CMakeLists.txt org.gnucash.dialogs.import.hbci.gschema.xml.in)
+set_dist_list(aqbanking_gschema_DIST CMakeLists.txt org.gnucash.dialogs.import.hbci.gschema.xml.in org.gnucash.dialogs.flicker.gschema.xml.in)

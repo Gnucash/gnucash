@@ -169,11 +169,21 @@ install(FILES ${app_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnuca
 # And now handle scheme files
 
 set (app_utils_SCHEME_1
-    business-options.scm
     c-interface.scm
     date-utilities.scm
-    options.scm
     fin.scm
+)
+
+set (app_utils_SCHEME_1a
+    options.scm
+)
+
+set (app_utils_SCHEME_1b
+    business-options.scm
+)
+
+set (app_utils_SCHEME_1c
+    business-prefs.scm
 )
 
 set (app_utils_SCHEME_2
@@ -190,15 +200,30 @@ gnc_add_scheme_targets(scm-app-utils-1
     OUTPUT_DIR "gnucash/app-utils"
     DEPENDS "${GUILE_DEPENDS}"
     MAKE_LINKS)
-  gnc_add_scheme_targets(scm-bus-prefs
-    SOURCES "business-prefs.scm"
+
+gnc_add_scheme_targets(scm-app-utils-1a
+    SOURCES "${app_utils_SCHEME_1a}"
     OUTPUT_DIR "gnucash/app-utils"
-    DEPENDS "scm-app-utils-1")
+    DEPENDS "scm-app-utils-1"
+    MAKE_LINKS)
+
+gnc_add_scheme_targets(scm-app-utils-1b
+    SOURCES "${app_utils_SCHEME_1b}"
+    OUTPUT_DIR "gnucash/app-utils"
+    DEPENDS "scm-app-utils-1a"
+    MAKE_LINKS)
+
+gnc_add_scheme_targets(scm-bus-prefs
+    SOURCES "${app_utils_SCHEME_1c}"
+    OUTPUT_DIR "gnucash/app-utils"
+    DEPENDS "scm-app-utils-1b"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-app-utils-2
     SOURCES "${app_utils_SCHEME_2}"
     OUTPUT_DIR "gnucash"
-    DEPENDS "scm-bus-prefs")
+    DEPENDS "scm-bus-prefs"
+    MAKE_LINKS)
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module (OLD_MODULE "migrate-prefs")
@@ -211,8 +236,15 @@ gnc_add_scheme_deprecated_module (
 add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1)
 
 set_local_dist(app_utils_DIST_local
-        ${app_utils_ALL_SOURCES} ${app_utils_SCHEME_1} ${app_utils_SCHEME_2} ${app_utils_SCHEME_3}
-        app-utils.i CMakeLists.txt gnc-help-utils.c)
+    ${app_utils_ALL_SOURCES}
+    ${app_utils_SCHEME_1}
+    ${app_utils_SCHEME_1a}
+    ${app_utils_SCHEME_1b}
+    ${app_utils_SCHEME_1c}
+    ${app_utils_SCHEME_2}
+    ${app_utils_SCHEME_3}
+    app-utils.i CMakeLists.txt gnc-help-utils.c)
+
 set(app_utils_DIST
     ${app_utils_DIST_local}
     ${test_app_utils_DIST}

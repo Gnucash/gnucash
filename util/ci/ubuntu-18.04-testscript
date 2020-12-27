@@ -1,6 +1,0 @@
-#!/bin/bash -e
-
-# -e above so that if any command has an exit code != 0, this script will
-#  exit immediately.
-
-../commonbuild

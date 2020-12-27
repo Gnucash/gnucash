@@ -29,6 +29,8 @@
 (eval-when (compile load eval expand)
   (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
 
+(use-modules (srfi srfi-26))
+(use-modules (ice-9 match))
 (use-modules (ice-9 i18n))
 
 (export N_)
@@ -73,3 +75,35 @@
 
 (define gnc:string-locale<? string-locale<?)
 (define gnc:string-locale>? string-locale>?)
+
+;; Custom unbound-variable exception printer: instead of generic "In
+;; procedure module-lookup: Unbound variable: varname", it will first
+;; search all available modules to identify missing (use-modules) in
+;; header, and offer hint to add it. This is adapted from Guix source.
+(define (known-variable-definition variable)
+  (define seen (make-hash-table))
+  (let lp ((modules (list (resolve-module '() #f #f #:ensure #f))) (retval '()))
+    (match modules
+      (() retval)
+      (((? (cut hash-ref seen <>)) . tail) (lp tail retval))
+      ((head tail ...)
+       (hash-set! seen head #t)
+       (let ((next (append tail (hash-map->list (lambda (name module) module)
+                                                (module-submodules head)))))
+         (match (and=> (module-public-interface head)
+                       (cut module-local-variable <> variable))
+           (#f (lp next retval))
+           (_ (lp next (cons (module-name head) retval)))))))))
+
+(define (print-unbound-variable-error port key args default-printer)
+  (match args
+    ((proc message (variable) _ ...)
+     (format port "Unbound variable: ~a. " variable)
+     (match (known-variable-definition variable)
+       (() (format port "It is a typo, or inaccessible in current module."))
+       ((mod) (format port "Did you forget (use-module ~s)?" mod))
+       (modules (format port "It is defined in one of the following modules\n")
+                (for-each (cut format port "(use-module ~s)\n" <>) modules))))
+    (_ (default-printer))))
+
+(set-exception-printer! 'unbound-variable print-unbound-variable-error)

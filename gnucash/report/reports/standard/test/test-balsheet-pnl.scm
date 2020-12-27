@@ -475,6 +475,7 @@
 (define (multicol-balsheet-tests)
   (define (default-testing-options)
     (let ((options (gnc:make-report-options multicol-balsheet-uuid)))
+      (set-option! options "General" "Period order is most recent first" #f)
       (set-option! options "General" "Start Date"
                    (cons 'absolute (gnc-dmy2time64 1 1 1970)))
       (set-option! options "General" "End Date"
@@ -540,6 +541,15 @@
           "1 FUNDS $350.0000")
         (sxml->table-row-col sxml 1 #f 4)))
 
+    (set-option! multi-bs-options "General" "Period order is most recent first" #t)
+    (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
+                               "multicol-balsheet-halfyear")))
+      (test-equal "bal-1/1/70-reverse-chrono"
+        '("Date" "01/01/72" "01/01/71" "01/01/70")
+        (sxml->table-row-col sxml 1 1 #f)))
+
+    (set-option! multi-bs-options "General" "Period order is most recent first" #f)
+
     ;; the following includes non-zero retained earnings of $1,270
     (set-option! multi-bs-options "General" "End Date"
                  (cons 'absolute (gnc-dmy2time64 1 3 1980)))
@@ -557,6 +567,7 @@
 (define (multicol-pnl-tests)
   (define (default-testing-options)
     (let ((options (gnc:make-report-options multicol-pnl-uuid)))
+      (set-option! options "General" "Period order is most recent first" #f)
       (set-option! options "General" "Start Date"
                    (cons 'absolute (gnc-dmy2time64 1 1 1980)))
       (set-option! options "General" "End Date"
@@ -597,4 +608,11 @@
       (test-equal "pnl-3/80"
         '("03/01/80" " to 03/31/80" "$0.00" "$0.00" "$0.00" "#0.00 "
           "$0.00" "#1.00 $1.7000")
-        (sxml->table-row-col sxml 1 #f 4)))))
+        (sxml->table-row-col sxml 1 #f 4)))
+
+    (set-option! multi-bs-options "General" "Period order is most recent first" #t)
+    (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
+                               "testing period reverse chrono order pnl")))
+      (test-equal "pnl-reverse chrono"
+        '("Date" "03/31/80" "03/01/80" "02/01/80" "01/01/80")
+        (sxml->table-row-col sxml 1 1 #f)))))

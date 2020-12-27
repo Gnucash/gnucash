@@ -174,6 +174,7 @@ function(gnc_add_scheme_targets _TARGET)
   endif()
 
   # If links are requested, we simply link (or copy, for Windows) each source file to the dest directory
+  set(TARGET_LINKS "")
   if(SCHEME_TGT_MAKE_LINKS)
     set(_LINK_DIR ${CMAKE_BINARY_DIR}/${GUILE_REL_UNIX_SITEDIR}/${SCHEME_TGT_OUTPUT_DIR})
     file(MAKE_DIRECTORY ${_LINK_DIR})
@@ -193,7 +194,8 @@ function(gnc_add_scheme_targets _TARGET)
         )
       endif()
     endforeach(scheme_file)
-    add_custom_target(${_TARGET}-links ALL DEPENDS ${_SCHEME_LINKS})
+    set(TARGET_LINKS ${_TARGET}-links)
+    add_custom_target(${TARGET_LINKS} ALL DEPENDS ${_SCHEME_LINKS})
   endif()
 
   # Construct the guile source and compiled load paths
@@ -279,7 +281,7 @@ function(gnc_add_scheme_targets _TARGET)
   if (__DEBUG)
     message("TARGET_FILES are ${_TARGET_FILES}")
   endif()
-  add_custom_target(${_TARGET} ALL DEPENDS ${_TARGET_FILES})
+  add_custom_target(${_TARGET} ALL DEPENDS ${_TARGET_FILES} ${TARGET_LINKS})
 
   set(_TARGET_FILES "${_TARGET_FILES}" PARENT_SCOPE)
 

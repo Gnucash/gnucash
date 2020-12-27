@@ -4,6 +4,7 @@
 (use-modules (gnucash reports standard cash-flow))
 (use-modules (gnucash reports cash-flow-calc))
 (use-modules (gnucash report))
+(use-modules (ice-9 format))
 
 (define (run-test)
   (and (test test-one-tx-in-cash-flow)
@@ -54,17 +55,17 @@
 	     (or (equal? 10000/100
 		     (gnc:gnc-monetary-amount (gnc:sum-collector-commodity expense-acc-in-collector
 									   report-currency exchange-fn)))
-                 (begin (format #t "Failed expense-acc-in-collector ~g expected 100.00~%" (gnc:gnc-monetary-amount (gnc:sum-collector-commodity expense-acc-in-collector
+                 (begin (format #t "Failed expense-acc-in-collector ~a expected 100.00~%" (gnc:gnc-monetary-amount (gnc:sum-collector-commodity expense-acc-in-collector
 									   report-currency exchange-fn))) #f))
 	     (or (equal? 10000/100
 		     (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-in-collector
 									   report-currency exchange-fn)))
-                 (begin (format #t "Failed money-in-collector ~g expected 100.00~%" (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-in-collector
+                 (begin (format #t "Failed money-in-collector ~a expected 100.00~%" (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-in-collector
 									   report-currency exchange-fn))) #f))
 	     (or (equal? 0/1
 		     (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-out-collector
 									   report-currency exchange-fn)))
-                 (begin (format #t "Failed sum-collector-commodity ~g expected 100.00~%" (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-out-collector
+                 (begin (format #t "Failed sum-collector-commodity ~a expected 100.00~%" (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-out-collector
                                                                                                                                                report-currency exchange-fn))) #f))
              (begin (format #t "test-one-tx-in-cash-flow success~%") #t)
 	     )))))

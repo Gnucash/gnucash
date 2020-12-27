@@ -31,6 +31,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 (use-modules (srfi srfi-1))
+(use-modules (ice-9 format))
 
 (define menuname-income (N_ "Income Piechart"))
 (define menuname-expense (N_ "Expense Piechart"))
@@ -560,7 +561,7 @@ balance at a given time"))
                (gnc:html-chart-set-width! chart width)
                (gnc:html-chart-set-height! chart height)
                (gnc:html-chart-add-data-series! chart
-                                                "Accounts"
+                                                (G_ "Accounts")
                                                 (map round-scu (unzip1 combined))
                                                 (gnc:assign-colors (length combined))
                                                 'urls urls)
