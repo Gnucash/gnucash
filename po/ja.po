@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-26 20:25+0000\n"
+"PO-Revision-Date: 2020-12-27 05:29+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
@@ -14433,7 +14433,7 @@ msgstr "隠し勘定科目を表示する(_H)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:972
 msgid "Show accounts which have the option \"Hidden\" checked."
-msgstr " \"隠し勘定科目\" オプションにチェックが入った勘定科目を表示します。"
+msgstr "\"隠し勘定科目\" オプションにチェックが入った勘定科目を表示します。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:986
 msgid "Show _unused accounts"
@@ -17435,7 +17435,7 @@ msgstr "検索(_F)"
 
 #: gnucash/gtkbuilder/dialog-search.glade:134
 msgid " Search "
-msgstr "検索 "
+msgstr " 検索 "
 
 #: gnucash/gtkbuilder/dialog-search.glade:207
 msgid "Search for items where"
