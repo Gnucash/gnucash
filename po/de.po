@@ -17,6 +17,7 @@
 # Manuel Bichler <felseninsel@hotmail.com>, 2020.
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
+# Alois Spitzbart <spitz234@hotmail.com>, 2020.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -28,8 +29,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-26 20:25+0000\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2020-12-26 22:11+0000\n"
+"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -7734,8 +7735,9 @@ msgid "Existing"
 msgstr "Existierend"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
+#, fuzzy
 msgid "Use +- keys to increment/decrement number"
-msgstr ""
+msgstr "Verwenden Sie die Tasten +-, um die Zahl zu erhöhen/verringern"
 
 # Todo: Im Dialog noch überprüfen
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
@@ -9006,7 +9008,7 @@ msgstr "Schließen _ohne zu speichern"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1437
 msgid "This window is closing and will not be restored."
-msgstr ""
+msgstr "Dieses Fenster schließt sich und wird nicht wiederhergestellt."
 
 #: gnucash/gnome-utils/gnc-main-window.c:1443
 msgid "Close Window?"
