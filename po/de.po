@@ -18383,7 +18383,7 @@ msgstr "Erzeugte Buchungen _durchsehen"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:13
 msgid "Income Tax Information"
-msgstr "Einkommenssteuerinformation"
+msgstr "Einkommensteuerinformation"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:89
 msgid "<b>Income Tax Identity</b>"
@@ -27396,7 +27396,7 @@ msgstr "Sekundäre Sortierreihenfolge"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:39
 msgid "Income and GST Statement"
-msgstr "Einkommens- und Umsatzsteuererklärung"
+msgstr "Einkommen- und Umsatzsteuererklärung"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:41
 #: gnucash/report/trep-engine.scm:108
