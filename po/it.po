@@ -55,7 +55,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:27+0100\n"
-"PO-Revision-Date: 2020-12-26 19:29+0000\n"
+"PO-Revision-Date: 2020-12-27 16:29+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -6537,7 +6537,7 @@ msgid ""
 "because that will cause your reconciled balance to be off."
 msgstr ""
 "Questa transazione contiene delle suddivisioni riconciliate. Modificarla non "
-"è una buona idea dato poichè il saldo riconciliato risulterà sbilanciato."
+"è una buona idea dato poiché il saldo riconciliato risulterà sbilanciato."
 
 #. Translators: This is the confirmation button in a warning dialog
 #: gnucash/gnome/gnc-split-reg.c:1238
@@ -15831,7 +15831,7 @@ msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr ""
-"Immettere il nome completo della commodity; per esempio: Cisco Sytems Inc, "
+"Immettere il nome completo della commodity; per esempio: Cisco Systems Inc, "
 "or Apple Computer, Inc."
 
 # Tooltip
@@ -26717,7 +26717,7 @@ msgstr "Converti tutte gli importi in un'unica valuta."
 #: gnucash/report/reports/standard/balsheet-pnl.scm:123
 #: gnucash/report/trep-engine.scm:104
 msgid "Show original currency amount"
-msgstr "VIsualizza gli importi nella valuta originale"
+msgstr "Visualizza gli importi nella valuta originale"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:124
 #: gnucash/report/trep-engine.scm:574
@@ -28762,11 +28762,11 @@ msgstr "Campi indirizzo dall'indirizzo di spedizione."
 
 #: gnucash/report/reports/standard/new-aging.scm:437
 msgid "Payable Aging"
-msgstr "Scadenziario dei debiti"
+msgstr "Scadenzario dei debiti"
 
 #: gnucash/report/reports/standard/new-aging.scm:446
 msgid "Receivable Aging"
-msgstr "Scadenziario dei crediti"
+msgstr "Scadenzario dei crediti"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:54
 #: gnucash/report/reports/standard/owner-report.scm:55
