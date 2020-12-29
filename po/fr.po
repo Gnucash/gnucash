@@ -14,6 +14,7 @@
 # La Boussole <yoann@laboussole.coop>, 2018.
 # Christopher Lam, 2018
 # K. Herbert <herbert.ka@mailo.com>, 2020.
+# Christopher Lam <christopher.lck@gmail.com>, 2020.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
@@ -23,8 +24,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-21 16:47+0000\n"
-"Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
+"PO-Revision-Date: 2020-12-29 04:29+0000\n"
+"Last-Translator: Christopher Lam <christopher.lck@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -32,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -11418,11 +11419,10 @@ msgid "Missing command or option"
 msgstr "C'est une option de couleur"
 
 #: gnucash/gnucash-commands.cpp:91
-#, fuzzy
 msgid "No quotes retrieved. Finance::Quote isn't installed properly."
 msgstr ""
-"Aucun cours téléchargé. Le module perl Finance::Quote n'est pas installé "
-"correctement.\n"
+"Aucune citation téléchargée. Le module perl Finance::Quote n'est pas "
+"installé correctement."
 
 #: gnucash/gnucash-core-app.cpp:85
 msgid "This is a development version. It may or may not work."
@@ -11582,12 +11582,10 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash.cpp:394
-#, fuzzy
 msgid "Run '{1} --help' to see a full list of available command line options."
 msgstr ""
-"%s\n"
-"Lancez '%s --help' pour voir une liste complète des options disponibles en "
-"ligne de commande.\n"
+"Lancez '{1} --help' pour voir une liste complète des options disponibles en "
+"ligne de commande."
 
 #: gnucash/gnucash.cpp:396
 #, fuzzy
@@ -16869,9 +16867,8 @@ msgstr "<b>Informations sur la source du cours</b>"
 
 # messages-i18n.c:231
 #: gnucash/gtkbuilder/dialog-commodity.glade:238
-#, fuzzy
 msgid "<b>Security Information</b>"
-msgstr "Informations sur les titres"
+msgstr "<b>Informations sur les titres</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:324
 msgid ""
@@ -18509,9 +18506,8 @@ msgid "days"
 msgstr "jours"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1493
-#, fuzzy
 msgid "<b>_Retain log/backup files</b>"
-msgstr "_Conserver les fichiers journaux :"
+msgstr "<b>_Conserver les fichiers journaux</b>"
 
 # messages-i18n.c:93
 #: gnucash/gtkbuilder/dialog-preferences.glade:1505
