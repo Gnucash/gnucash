@@ -18,6 +18,7 @@
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
 # Alois Spitzbart <spitz234@hotmail.com>, 2020.
+# Christian Wehling <christian.wehling@web.de>, 2020.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -29,8 +30,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-27 01:10+0000\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2020-12-28 23:29+0000\n"
+"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -12531,7 +12532,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:14
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:117
 msgid "Confirm Window Close"
-msgstr ""
+msgstr "Fenster schließen bestätigen"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:118
@@ -16809,11 +16810,15 @@ msgid "<b>Separator Character</b>"
 msgstr "<b>Trennzeichen</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:204
+#, fuzzy
 msgid ""
 "Press 'Reset' to use the original account separator and close the preference "
 "window\n"
 "Press 'Close' to return to the preference window\n"
 msgstr ""
+"Drücken Sie \"Zurücksetzen\", um das ursprüngliche Kontentrennzeichen zu "
+"verwenden und das Einstellungsfenster zu schließen\n"
+"Drücken Sie \"Schließen\", um zum Einstellungsfenster zurückzukehren\n"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:240
 msgid "GnuCash Preferences"
@@ -19471,11 +19476,15 @@ msgid "Caution!"
 msgstr "Vorsicht!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
+#, fuzzy
 msgid ""
 "This tool might be slow or abort if the number of uncleared splits is more "
 "than approximately 20. In that case please clear at least some of them "
 "manually."
 msgstr ""
+"Dieses Tool ist möglicherweise langsam oder bricht ab, wenn die Anzahl der "
+"nicht gelöschten Splits mehr als etwa 20 beträgt. In diesem Fall löschen Sie "
+"bitte zumindest einige von ihnen manuell."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:138
 #: gnucash/gtkbuilder/window-reconcile.glade:117
@@ -19491,6 +19500,8 @@ msgstr "Erzeugte Buchungen _durchsehen"
 #: gnucash/gtkbuilder/window-autoclear.glade:181
 msgid "Select this option to open a register tab with newly cleared splits."
 msgstr ""
+"Wählen Sie diese Option, um eine Registerkarte mit kürzlich gelöschten "
+"Aufteilungen zu öffnen."
 
 #: gnucash/gtkbuilder/window-reconcile.glade:71
 msgid "<b>Reconcile Information</b>"
@@ -27457,7 +27468,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:71
 msgid "This message will be removed when tax accounts are specified."
-msgstr ""
+msgstr "Diese Meldung wird entfernt, wenn Steuerkonten angegeben werden."
 
 # Todo: Versteht keiner (ff)
 #: gnucash/report/reports/standard/income-gst-statement.scm:110
@@ -27553,14 +27564,17 @@ msgid "Default Format"
 msgstr "Voreingestelltes Format"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:167
+#, fuzzy
 msgid "Australia BAS"
-msgstr ""
+msgstr "Australien BAS"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:168
 msgid ""
 "Australia Business Activity Statement. Specify sales, purchase and tax "
 "accounts."
 msgstr ""
+"Erklärung zur Geschäftstätigkeit in Australien. Geben Sie Verkaufs-, "
+"Einkaufs- und Steuerkonten an."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:171
 msgid "UK VAT Return"
