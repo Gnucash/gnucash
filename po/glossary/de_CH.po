@@ -2,14 +2,15 @@
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Christian Stimming <stimming@tuhh.de>, 2001
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2020.
+# Marco Zietzling <marco.zietzling@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-06 18:14+0100\n"
-"PO-Revision-Date: 2020-12-27 01:10+0000\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2020-12-29 17:29+0000\n"
+"Last-Translator: Marco Zietzling <marco.zietzling@gmail.com>\n"
 "Language-Team: German (Switzerland) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/de_CH/>\n"
 "Language: de_CH\n"
@@ -40,7 +41,6 @@ msgid "account name"
 msgstr "Kontobezeichnung"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
-#, fuzzy
 msgid "account type: Active"
 msgstr "Aktiven"
 
@@ -49,9 +49,8 @@ msgid "account type: Asset"
 msgstr "Aktiven"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "Passiven"
+msgstr "Aktiven & Passiven"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -86,14 +85,12 @@ msgid "account type: Mutual fund"
 msgstr "Investmentfonds"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "Aktiven"
+msgstr "Passiven"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "Aktiven"
+msgstr "Gewinn & Verlust"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -104,9 +101,8 @@ msgid "account type: Stock"
 msgstr "Aktienkonto (früher: Depot)"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "Sparkonto"
+msgstr "Handelskonto"
 
 #. "-"
 msgid "account: parent account"
@@ -198,7 +194,7 @@ msgstr "Abhebung"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "Alterung"
 
 #. "A sum of money"
 msgid "amount"
@@ -213,14 +209,12 @@ msgid "balance (noun)"
 msgstr "Saldo (Bestand, Kontostand?)"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "Ausgleichen "
+msgstr "Ausgleichen"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "Ausgleichen "
+msgstr "Ausgleichen"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -239,9 +233,8 @@ msgid "bill"
 msgstr "Rechnung (Rechnungseingang, Empfangene Rechnung)"
 
 #. "see invoice owner"
-#, fuzzy
 msgid "bill owner"
-msgstr "Zahlungsbedingungen"
+msgstr "Rechnungssteller"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -574,7 +567,7 @@ msgstr "Ausbuchungskonto??"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "Inhaber (einer Rechnung oder eines Ausgabenbelegs)"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -648,7 +641,7 @@ msgstr "Quick-Fill"
 
 #. "-"
 msgid "rebalance, to (a transaction)"
-msgstr "neu kalkulieren "
+msgstr "neu kalkulieren"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
@@ -693,7 +686,7 @@ msgstr "Erneut laden"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "T-Form"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
@@ -709,7 +702,7 @@ msgstr "Stornierungsbuchung hinzufügen"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "Verkäufe"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -733,7 +726,7 @@ msgstr "Aktiensaldo"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
-msgstr "Anteile "
+msgstr "Anteile"
 
 #. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
@@ -826,7 +819,7 @@ msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr "Wert "
+msgstr "Wert"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"

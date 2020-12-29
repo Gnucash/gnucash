@@ -19,6 +19,7 @@
 # Milo Ivir <mail@milotype.de>, 2020.
 # Alois Spitzbart <spitz234@hotmail.com>, 2020.
 # Christian Wehling <christian.wehling@web.de>, 2020.
+# Marco Zietzling <marco.zietzling@gmail.com>, 2020.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -30,8 +31,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-29 02:29+0000\n"
-"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"PO-Revision-Date: 2020-12-29 17:29+0000\n"
+"Last-Translator: Marco Zietzling <marco.zietzling@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -6006,7 +6007,7 @@ msgid ""
 "will be saved in the file %s. "
 msgstr ""
 "Gespeicherte Konfiguration des aktuellen Berichts aktualisieren. Der Bericht "
-"wird in der Datei %s gespeichert."
+"wird in der Datei %s gespeichert. "
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, c-format
@@ -10014,7 +10015,7 @@ msgid ""
 "or discard the changes?"
 msgstr ""
 "Die aktuelle Buchung wurde verändert. Wollen Sie die Änderungen erfassen "
-"oder verwerfen"
+"oder verwerfen?"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2354
 #: gnucash/register/ledger-core/split-register-control.c:1541
