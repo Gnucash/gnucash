@@ -30,8 +30,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-28 23:29+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"PO-Revision-Date: 2020-12-29 02:29+0000\n"
+"Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -1880,7 +1880,7 @@ msgstr "Steuerrelevant"
 
 #: gnucash/gnome/dialog-find-account.c:447
 msgid "Search from "
-msgstr " Suchen "
+msgstr "Suche von "
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2104,7 +2104,7 @@ msgstr "Buchungstext"
 #: gnucash/report/trep-engine.scm:972 gnucash/report/trep-engine.scm:1134
 #: gnucash/report/trep-engine.scm:1242
 msgid "Notes"
-msgstr "Bemerkung"
+msgstr "Bemerkungen"
 
 #: gnucash/gnome/dialog-find-transactions2.c:229
 #: gnucash/gnome/dialog-find-transactions.c:229
@@ -9037,7 +9037,7 @@ msgstr "Datei %s geöffnet. %s"
 #: gnucash/gnome-utils/gnc-main-window.c:2863
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
-msgstr ""
+msgstr "k"
 
 #: gnucash/gnome-utils/gnc-main-window.c:2953
 msgid "Unable to save to database."
@@ -16621,9 +16621,9 @@ msgid ""
 "will be displayed again next time you start GnuCash. If you press the <i>No</"
 "i> button, it will not be displayed again."
 msgstr ""
-"Wenn Sie <i>Ja</i> klicken, wird dieses Begrüßungsfenster beim nächsten "
-"Starten von GnuCash wieder angezeigt. Wenn Sie <i>Nein</i> klicken, wird es "
-"nicht wieder angezeigt."
+"Wenn Sie <i>Ja</i> klicken, wird das Begrüßungsfenster beim nächsten Starten "
+"von GnuCash wieder angezeigt. Wenn Sie <i>Nein</i> klicken, wird es nicht "
+"wieder angezeigt."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:211
 msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
@@ -19852,7 +19852,7 @@ msgstr "Namen für neue Überweisungsvorlage"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
 msgid " _Name of the new template:"
-msgstr "_Namen für neue Überweisungsvorlage"
+msgstr " _Namen der neuen Vorlage:"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
 msgid "Enter a unique name for the new template."
@@ -22307,9 +22307,7 @@ msgstr "Kapitalertrag (kurzfristig)"
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.c:954
 msgid "Retained Earnings"
-msgstr ""
-"Einbehaltener Gewinn, Gewinnvortrag (<=2.6: -rücklagen) # TODO: ist das "
-"wirklich, was das balance sheet ausgibt?"
+msgstr "Einbehaltener Gewinn"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:118
 msgid "Commissions"
