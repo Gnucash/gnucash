@@ -18,6 +18,7 @@
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
 # Alois Spitzbart <spitz234@hotmail.com>, 2020.
+# Christian Wehling <christian.wehling@web.de>, 2020.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -29,8 +30,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-27 01:10+0000\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2020-12-29 02:29+0000\n"
+"Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -1879,7 +1880,7 @@ msgstr "Steuerrelevant"
 
 #: gnucash/gnome/dialog-find-account.c:447
 msgid "Search from "
-msgstr " Suchen "
+msgstr "Suche von "
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2103,7 +2104,7 @@ msgstr "Buchungstext"
 #: gnucash/report/trep-engine.scm:972 gnucash/report/trep-engine.scm:1134
 #: gnucash/report/trep-engine.scm:1242
 msgid "Notes"
-msgstr "Bemerkung"
+msgstr "Bemerkungen"
 
 #: gnucash/gnome/dialog-find-transactions2.c:229
 #: gnucash/gnome/dialog-find-transactions.c:229
@@ -9036,7 +9037,7 @@ msgstr "Datei %s geöffnet. %s"
 #: gnucash/gnome-utils/gnc-main-window.c:2863
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
-msgstr ""
+msgstr "k"
 
 #: gnucash/gnome-utils/gnc-main-window.c:2953
 msgid "Unable to save to database."
@@ -12531,7 +12532,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:14
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:117
 msgid "Confirm Window Close"
-msgstr ""
+msgstr "Fenster schließen bestätigen"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:118
@@ -16620,9 +16621,9 @@ msgid ""
 "will be displayed again next time you start GnuCash. If you press the <i>No</"
 "i> button, it will not be displayed again."
 msgstr ""
-"Wenn Sie <i>Ja</i> klicken, wird dieses Begrüßungsfenster beim nächsten "
-"Starten von GnuCash wieder angezeigt. Wenn Sie <i>Nein</i> klicken, wird es "
-"nicht wieder angezeigt."
+"Wenn Sie <i>Ja</i> klicken, wird das Begrüßungsfenster beim nächsten Starten "
+"von GnuCash wieder angezeigt. Wenn Sie <i>Nein</i> klicken, wird es nicht "
+"wieder angezeigt."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:211
 msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
@@ -16809,11 +16810,15 @@ msgid "<b>Separator Character</b>"
 msgstr "<b>Trennzeichen</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:204
+#, fuzzy
 msgid ""
 "Press 'Reset' to use the original account separator and close the preference "
 "window\n"
 "Press 'Close' to return to the preference window\n"
 msgstr ""
+"Drücken Sie \"Zurücksetzen\", um das ursprüngliche Kontentrennzeichen zu "
+"verwenden und das Einstellungsfenster zu schließen\n"
+"Drücken Sie \"Schließen\", um zum Einstellungsfenster zurückzukehren\n"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:240
 msgid "GnuCash Preferences"
@@ -18383,7 +18388,7 @@ msgstr "Erzeugte Buchungen _durchsehen"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:13
 msgid "Income Tax Information"
-msgstr "Einkommenssteuerinformation"
+msgstr "Einkommensteuerinformation"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:89
 msgid "<b>Income Tax Identity</b>"
@@ -19471,11 +19476,15 @@ msgid "Caution!"
 msgstr "Vorsicht!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
+#, fuzzy
 msgid ""
 "This tool might be slow or abort if the number of uncleared splits is more "
 "than approximately 20. In that case please clear at least some of them "
 "manually."
 msgstr ""
+"Dieses Tool ist möglicherweise langsam oder bricht ab, wenn die Anzahl der "
+"nicht gelöschten Splits mehr als etwa 20 beträgt. In diesem Fall löschen Sie "
+"bitte zumindest einige von ihnen manuell."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:138
 #: gnucash/gtkbuilder/window-reconcile.glade:117
@@ -19491,6 +19500,8 @@ msgstr "Erzeugte Buchungen _durchsehen"
 #: gnucash/gtkbuilder/window-autoclear.glade:181
 msgid "Select this option to open a register tab with newly cleared splits."
 msgstr ""
+"Wählen Sie diese Option, um eine Registerkarte mit kürzlich gelöschten "
+"Aufteilungen zu öffnen."
 
 #: gnucash/gtkbuilder/window-reconcile.glade:71
 msgid "<b>Reconcile Information</b>"
@@ -19841,7 +19852,7 @@ msgstr "Namen für neue Überweisungsvorlage"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
 msgid " _Name of the new template:"
-msgstr "_Namen für neue Überweisungsvorlage"
+msgstr " _Namen der neuen Vorlage:"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
 msgid "Enter a unique name for the new template."
@@ -22296,9 +22307,7 @@ msgstr "Kapitalertrag (kurzfristig)"
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.c:954
 msgid "Retained Earnings"
-msgstr ""
-"Einbehaltener Gewinn, Gewinnvortrag (<=2.6: -rücklagen) # TODO: ist das "
-"wirklich, was das balance sheet ausgibt?"
+msgstr "Einbehaltener Gewinn"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:118
 msgid "Commissions"
@@ -27396,7 +27405,7 @@ msgstr "Sekundäre Sortierreihenfolge"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:39
 msgid "Income and GST Statement"
-msgstr "Einkommens- und Umsatzsteuererklärung"
+msgstr "Einkommen- und Umsatzsteuererklärung"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:41
 #: gnucash/report/trep-engine.scm:108
@@ -27457,7 +27466,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:71
 msgid "This message will be removed when tax accounts are specified."
-msgstr ""
+msgstr "Diese Meldung wird entfernt, wenn Steuerkonten angegeben werden."
 
 # Todo: Versteht keiner (ff)
 #: gnucash/report/reports/standard/income-gst-statement.scm:110
@@ -27553,14 +27562,17 @@ msgid "Default Format"
 msgstr "Voreingestelltes Format"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:167
+#, fuzzy
 msgid "Australia BAS"
-msgstr ""
+msgstr "Australien BAS"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:168
 msgid ""
 "Australia Business Activity Statement. Specify sales, purchase and tax "
 "accounts."
 msgstr ""
+"Erklärung zur Geschäftstätigkeit in Australien. Geben Sie Verkaufs-, "
+"Einkaufs- und Steuerkonten an."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:171
 msgid "UK VAT Return"

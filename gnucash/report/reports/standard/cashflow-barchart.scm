@@ -35,6 +35,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash reports cash-flow-calc))
 (use-modules (gnucash report))
+(use-modules (srfi srfi-26))
 
 (define reportname (N_ "Cash Flow Barchart"))
 
@@ -327,6 +328,17 @@
 
           (if (and non-zeros show-table?)
               (let* ((table (gnc:make-html-table)))
+
+                (define (add-row date in out net)
+                  (gnc:html-table-append-row!
+                   table
+                   (cons date
+                         (map (cut gnc:make-html-table-cell/markup "number-cell" <>)
+                              (append
+                               (if show-in?  (list in)  '())
+                               (if show-out? (list out) '())
+                               (if show-net? (list net) '()))))))
+
                 (gnc:html-table-set-col-headers!
                  table (append (list (G_ "Date"))
                                (if show-in? (list (G_ "Money In")) '())
@@ -335,22 +347,9 @@
 
                 (gnc:html-document-add-object!
                  doc (gnc:make-html-text (gnc:html-markup-h3 (G_ "Overview:"))))
-                (gnc:html-table-append-column! table (append date-string-list (list "Total")))
 
-                (if show-in?
-                    (gnc:html-table-append-column! table (append in-list (list total-in))))
-                (if show-out?
-                    (gnc:html-table-append-column! table (append out-list (list total-out))))
-                (if show-net?
-                    (gnc:html-table-append-column! table (append net-list (list total-net))))
-
-                ;; set numeric columns to align right
-                (for-each
-                 (lambda (col)
-                   (gnc:html-table-set-col-style!
-                    table col "td"
-                    'attribute (list "class" "number-cell")))
-                 '(1 2 3))
+                (for-each add-row date-string-list in-list out-list net-list)
+                (add-row (G_ "Total") total-in total-out total-net)
 
                 (gnc:html-document-add-object! doc table))))
 

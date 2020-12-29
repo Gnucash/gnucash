@@ -1,5 +1,23 @@
 Version history:
 ------- -------
+4.4  - 28 December 2020
+The fifth release of the 4.x stable series, a snap release to fix bug 798063.
+
+Between 4.3 and 4.4, the following bugfixes were accomplished:
+
+    Bug 798038 - Incorrect spelling in german account templates 'common' and
+        'full' part 2: AT
+    Bug 798063 - Crash when opening SX Editor
+
+No other improvements were made.
+Deprecations
+
+    xaccAccountCountSplits: use gnc_account_has_child_splits
+    gnc:html-table-append-column!: Build a new table with all of the columns
+      and copy in the rows.
+
+Updated Translations: German, Italian, Japanese
+
 4.3  - 27 December 2020
 The fourth release of the 4.x stable series.
 

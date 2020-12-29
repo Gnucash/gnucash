@@ -415,6 +415,8 @@
 (define (gnc:html-table-append-column! table newcol)
   (define width (apply max (cons 0 (map length (gnc:html-table-data table)))))
   (define (add-fn a b) (list-set-safe! b width a))
+  (issue-deprecation-warning "gnc:html-table-append-column! deprecated. please \
+populate html-table row-wise using gnc:html-table-append-row! instead.")
   (let lp ((newcol newcol)
            (olddata (reverse (gnc:html-table-data table)))
            (res '())

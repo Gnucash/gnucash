@@ -594,7 +594,7 @@
   <act:parent type="new">073ef0026c59c96d794935e1361602d0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Einkommenssteuer</act:name>
+  <act:name>Einkommensteuer</act:name>
   <act:id type="new">ab3b17af105254efa0aa4348773d34fc</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -602,7 +602,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Einkommenssteuer</act:description>
+  <act:description>Einkommensteuer</act:description>
   <act:parent type="new">92bd7aeef848a997f1af8ac7b132035e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

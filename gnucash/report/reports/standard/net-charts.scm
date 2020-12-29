@@ -229,11 +229,7 @@
     ;; This exchanges the commodity-collector 'c' to one single
     ;; 'report-currency' according to the exchange-fn. Returns a gnc:monetary
     (define (collector->monetary c date)
-      (if (not (number? date))
-          (throw 'wrong))
-      (gnc:sum-collector-commodity
-       c report-currency
-       (lambda (a b) (exchange-fn a b date))))
+      (gnc:sum-collector-commodity c report-currency (cut exchange-fn <> <> date)))
 
     ;; gets an account alist balances
     ;; output: (list acc bal0 bal1 bal2 ...)
@@ -425,21 +421,20 @@
                              (list (G_ "Net Profit"))
                              (list (G_ "Net Worth")))
                          '())))
-                   (gnc:html-table-append-column! table date-string-list)
-                   (when show-sep?
-                     (gnc:html-table-append-column! table minuend-balances)
-                     (gnc:html-table-append-column! table subtrahend-balances))
 
-                   (if show-net?
-                       (gnc:html-table-append-column! table difference-balances))
-
-                   ;; set numeric columns to align right
                    (for-each
-                    (lambda (col)
-                      (gnc:html-table-set-col-style!
-                       table col "td"
-                       'attribute (list "class" "number-cell")))
-                    '(1 2 3))
+                    (lambda (date minuend subtrahend difference)
+                      (gnc:html-table-append-row!
+                       table
+                       (cons date
+                             (map
+                              (cut gnc:make-html-table-cell/markup "number-cell" <>)
+                              (append (if show-sep? (list minuend subtrahend) '())
+                                      (if show-net? (list difference) '()))))))
+                    date-string-list
+                    minuend-balances
+                    subtrahend-balances
+                    difference-balances)
 
                    (gnc:html-document-add-object! document table)))
 
