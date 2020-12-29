@@ -55,7 +55,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:27+0100\n"
-"PO-Revision-Date: 2020-12-27 16:29+0000\n"
+"PO-Revision-Date: 2020-12-29 15:29+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -22078,7 +22078,7 @@ msgstr "Importa le transazioni da un file CSV"
 # Tooltip
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
 msgid "Import _Prices from a CSV file..."
-msgstr "Importa i _prezzi da un file CSV."
+msgstr "Importa i _prezzi da un file CSV..."
 
 # Tooltip
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
