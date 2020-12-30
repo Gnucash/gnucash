@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-06 18:14+0100\n"
+"POT-Creation-Date: 2020-12-30 10:07+0100\n"
 "PO-Revision-Date: 2020-08-15 21:20+0700\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
 "Language-Team: Indonesian\n"
@@ -23,6 +23,10 @@ msgstr ""
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
 msgstr "Pernyataan"
+
+#. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
+msgid "\"\""
+msgstr ""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -374,6 +378,10 @@ msgstr "pembukuan ganda"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
+msgstr ""
+
+#. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
+msgid "email"
 msgstr ""
 
 #. "a person who works for somebody or a company in return for wages"
@@ -748,7 +756,25 @@ msgstr "kode pajak"
 msgid "tax info"
 msgstr "informasi pajak"
 
-#. "if you create a new e.g. style sheet, you can start from a template"
+#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+#, fuzzy
+#| msgid "account type: Income"
+msgid "tax type: income tax"
+msgstr "tipe akun: Pendapatan"
+
+#. "Usually only business users have to handle it."
+msgid "tax type: sales tax"
+msgstr ""
+
+#. "'Goods and Service Tax' is one form of sales tax."
+msgid "tax type: GST"
+msgstr ""
+
+#. "'Value Added Tax' is the other form of sales tax."
+msgid "tax type: VAT"
+msgstr ""
+
+#. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
 msgstr "templat"
 
@@ -808,7 +834,7 @@ msgstr "tipe"
 msgid "units"
 msgstr "satuan"
 
-#. "-"
+#. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"
 msgstr "URL"
 

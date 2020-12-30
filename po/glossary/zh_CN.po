@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-06 18:14+0100\n"
+"POT-Creation-Date: 2020-12-30 10:07+0100\n"
 "PO-Revision-Date: 2010-05-05 13:47+1000\n"
 "Last-Translator: Tao Wang <dancefire@gmail.com>\n"
 "Language-Team: Simplified Chinese <LL@li.org>\n"
@@ -21,6 +21,10 @@ msgstr ""
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
 msgstr "术语 (翻译人员好，这个文件将不会被最终用户所看到)"
+
+#. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
+msgid "\"\""
+msgstr ""
 
 # 关于资金如何支出与收入的细节记录，简称为科目。财会账簿中，Account 将翻译为科目，而有关银行的 Account 将翻译为账户。
 #. "A detailed record of money spent and received"
@@ -451,6 +455,10 @@ msgstr "复式记账"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
+msgstr ""
+
+#. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
+msgid "email"
 msgstr ""
 
 # 为某个人或者某个公司工作并且赚取薪金的人
@@ -909,8 +917,26 @@ msgstr "税务信息"
 msgid "tax info"
 msgstr "税务信息"
 
+#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+#, fuzzy
+#| msgid "account type: Income"
+msgid "tax type: income tax"
+msgstr "科目类型：收入"
+
+#. "Usually only business users have to handle it."
+msgid "tax type: sales tax"
+msgstr ""
+
+#. "'Goods and Service Tax' is one form of sales tax."
+msgid "tax type: GST"
+msgstr ""
+
+#. "'Value Added Tax' is the other form of sales tax."
+msgid "tax type: VAT"
+msgstr ""
+
 # 如果您创建一个新样式表，您可以从模板开始。
-#. "if you create a new e.g. style sheet, you can start from a template"
+#. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
 msgstr "模板"
 
@@ -984,7 +1010,7 @@ msgstr "类型"
 msgid "units"
 msgstr "单位"
 
-#. "-"
+#. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"
 msgstr "URL"
 

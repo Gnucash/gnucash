@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.2.x\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-06 18:14+0100\n"
+"POT-Creation-Date: 2020-12-30 10:07+0100\n"
 "PO-Revision-Date: 2010-09-06 12:20+0200\n"
 "Last-Translator: Radzisław Galler <rgaller@gazeta.pl>\n"
 "Language-Team: Polish <translators@gnomepl.org>\n"
@@ -19,6 +19,10 @@ msgstr ""
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
+msgstr ""
+
+#. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
+msgid "\"\""
 msgstr ""
 
 #. "A detailed record of money spent and received"
@@ -382,6 +386,10 @@ msgstr "podwójny zapis"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
+msgstr ""
+
+#. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
+msgid "email"
 msgstr ""
 
 #. "a person who works for somebody or a company in return for wages"
@@ -754,7 +762,25 @@ msgstr "informacja o podatku"
 msgid "tax info"
 msgstr "informacja o podatku"
 
-#. "if you create a new e.g. style sheet, you can start from a template"
+#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+#, fuzzy
+#| msgid "account type: Income"
+msgid "tax type: income tax"
+msgstr "typ konta: Przychody"
+
+#. "Usually only business users have to handle it."
+msgid "tax type: sales tax"
+msgstr ""
+
+#. "'Goods and Service Tax' is one form of sales tax."
+msgid "tax type: GST"
+msgstr ""
+
+#. "'Value Added Tax' is the other form of sales tax."
+msgid "tax type: VAT"
+msgstr ""
+
+#. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
 msgstr "szablon"
 
@@ -814,7 +840,7 @@ msgstr "typ"
 msgid "units"
 msgstr "jednostki"
 
-#. "-"
+#. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"
 msgstr "URL"
 
