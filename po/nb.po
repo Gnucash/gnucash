@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-25 21:46+0000\n"
+"PO-Revision-Date: 2020-12-31 20:29+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
-msgstr ""
+msgstr "ALL IKKE-VALUTA"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -7909,7 +7909,7 @@ msgstr "Tilbakestill alle verdier til standard."
 
 #: gnucash/gnome-utils/dialog-options.c:2263
 msgid "Page"
-msgstr ""
+msgstr "Side"
 
 #: gnucash/gnome-utils/dialog-options.c:2890
 #: gnucash/gnome-utils/dialog-preferences.c:1465
@@ -7935,7 +7935,7 @@ msgstr "Velg en bildefil."
 
 #: gnucash/gnome-utils/dialog-options.c:3075
 msgid "Pixels"
-msgstr ""
+msgstr "Piksler"
 
 #: gnucash/gnome-utils/dialog-options.c:3081
 msgid "Percent"
@@ -7954,7 +7954,7 @@ msgstr "Inntekter%sLønn%sSkattefritt"
 
 #: gnucash/gnome-utils/dialog-preferences.c:899
 msgid "Path does not exist, "
-msgstr ""
+msgstr "Stien finnes ikke, "
 
 #: gnucash/gnome-utils/dialog-preferences.c:955
 #: gnucash/gnome-utils/dialog-preferences.c:1462
@@ -7991,7 +7991,7 @@ msgstr "Brukernavn"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:634
 msgid "Please enter new name"
-msgstr ""
+msgstr "Skriv inn et nytt navn"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:635
 #: gnucash/gtkbuilder/dialog-tax-table.glade:72
