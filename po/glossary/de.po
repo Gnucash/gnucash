@@ -6,14 +6,15 @@
 # Manuel Bichler <felseninsel@hotmail.com>, 2020.
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
+# SebastianL <Sebastian.Lueck@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.18\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-30 10:07+0100\n"
-"PO-Revision-Date: 2020-12-29 11:12+0100\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2020-12-30 10:57+0000\n"
+"Last-Translator: SebastianL <Sebastian.Lueck@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
@@ -527,11 +528,11 @@ msgstr "Hypothek"
 
 #. "Adjustable Rate Mortgage"
 msgid "mortgage: ARM"
-msgstr "Hypothek: Hypothek mit variablem Zinssatz"
+msgstr "Hypothek: mit variablem Zinssatz"
 
 #. "Fixed Rate Mortgage"
 msgid "mortgage: FRM"
-msgstr "Hypothek: Hypothek mit festem Zinssatz"
+msgstr "Hypothek: mit festem Zinssatz"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
