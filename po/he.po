@@ -3,21 +3,23 @@
 # Copyright (C) 2008 - 2020 by the respective translator
 # Avi Markovitz <avi.markovitz@gmail.com, 2019 - 2020
 # Ori Hoch <ori@uumpa.com>, 2008 http://www.uumpa.com/gnucash-he/
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-07-07 15:17+0300\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2020-12-31 14:29+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -749,11 +751,11 @@ msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
-"תאריך התנועה המוקדם ביותר בספרים הוא %s. בהתבסס על הבחירה שנעשתה לעיל, ספר "
-"החשבונות יפוצל ל- %d ספרים."
+"תאריך העסקה המוקדם ביותר בספרים הוא %s. בהתבסס על הבחירה שנעשתה לעיל, ספר "
+"החשבונות יפוצל לספר אחד."
 msgstr[1] ""
 "תאריך התנועה המוקדם ביותר בספרים הוא %s. בהתבסס על הבחירה שנעשתה לעיל, ספר "
-"החשבונות יפוצל ל- %d ספרים."
+"החשבונות יפוצל ל־%d ספרים."
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:369
@@ -1560,17 +1562,15 @@ msgstr "נבחר חשבון שומר מקום. נא לנסות שוב."
 
 #: gnucash/gnome/dialog-doclink.c:186
 msgid "Amend URL:"
-msgstr "תיקון URL:"
+msgstr "כתובת תיקון:"
 
 #: gnucash/gnome/dialog-doclink.c:190
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr "נא להזין קישור כגון http://www.gnucash.org:"
+msgstr "נא למלא כתובת כגון http://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-doclink.c:205
-#, fuzzy
-#| msgid "Existing Association is"
 msgid "Existing Document Link is"
-msgstr "הצרופה הקיימת היא"
+msgstr "קישור המסמך הקיים הוא"
 
 #: gnucash/gnome/dialog-doclink.c:461 gnucash/gnome/dialog-doclink.c:506
 msgid "File Found"
@@ -1603,7 +1603,7 @@ msgstr "לא ניתן לערוך פריט עיסקי."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
 msgid "Manage Document Link"
-msgstr ""
+msgstr "ניהול קישור מסמכים"
 
 #: gnucash/gnome/dialog-doclink.c:690
 msgid "Transaction can not be modified."
@@ -1664,19 +1664,15 @@ msgid "Description"
 msgstr "תיאור"
 
 #: gnucash/gnome/dialog-doclink.c:1024
-#, fuzzy
-#| msgid ""
-#| "         To jump to the Business Item, double click on the entry in the "
-#| "id\n"
-#| " column, Association column to open the Association or Available to update"
 msgid ""
 "Double click on the entry in the Id column to jump to the Business Item.\n"
 "Double click on the entry in the Link column to open the Linked Document.\n"
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"         למעבר לפריט העסקי, נא להקיש הקשה כפולה על הרשומה ב\n"
-"עמודת המזהה, או עמודת הצרופה על מנת להציג אותה, או זמין לעדכון"
+"יש ללחוץ לחיצה כפולה על עמודת המזהה כדי לעבור אל הפריט העסקי.\n"
+"יש ללחוץ לחיצה כפולה על עמודת הקישור כדי לפתוח את המסמך המקושר.\n"
+"יש ללחוץ לחיצה כפולה על עמודת זמינות כדי לשנות את קישור המסמך."
 
 #: gnucash/gnome/dialog-doclink.c:1033
 #, fuzzy
@@ -2277,10 +2273,8 @@ msgid "View Expense Voucher"
 msgstr "הצגת שובר הוצאות"
 
 #: gnucash/gnome/dialog-invoice.c:2484
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "Open Linked Document:"
-msgstr "אין חשבון מקושר"
+msgstr "מסמך מקושר פתוח:"
 
 #: gnucash/gnome/dialog-invoice.c:2598 gnucash/gnome/dialog-invoice.c:2823
 msgid "Bill Information"
@@ -3690,7 +3684,7 @@ msgstr "_לקוח חדש..."
 
 #: gnucash/gnome/gnc-plugin-business.c:166
 msgid "Open the New Customer dialog"
-msgstr "פתיחת דו-שיח לקוח חדש"
+msgstr "פתיחת דו־שיח לקוח חדש"
 
 #: gnucash/gnome/gnc-plugin-business.c:170
 msgid "_Find Customer..."
@@ -3698,7 +3692,7 @@ msgstr "_חיפוש לקוח..."
 
 #: gnucash/gnome/gnc-plugin-business.c:171
 msgid "Open the Find Customer dialog"
-msgstr "פתיחת דו-שיח חיפוש לקוח"
+msgstr "פתיחת דו־שיח חיפוש לקוח"
 
 #: gnucash/gnome/gnc-plugin-business.c:175
 #: gnucash/gnome/gnc-plugin-business.c:319
@@ -3709,7 +3703,7 @@ msgstr "חשבונית _חדשה..."
 #: gnucash/gnome/gnc-plugin-business.c:176
 #: gnucash/gnome/gnc-plugin-business.c:320
 msgid "Open the New Invoice dialog"
-msgstr "פתיחת דו-שיח חשבונית חדשה"
+msgstr "פתיחת דו־שיח חשבונית חדשה"
 
 #: gnucash/gnome/gnc-plugin-business.c:180
 msgid "Find In_voice..."
@@ -3727,7 +3721,7 @@ msgstr "_ריכוז חדש..."
 #: gnucash/gnome/gnc-plugin-business.c:186
 #: gnucash/gnome/gnc-plugin-business.c:229
 msgid "Open the New Job dialog"
-msgstr "פתיחת דו-שיח ריכוז חדש"
+msgstr "פתיחת דו־שיח ריכוז חדש"
 
 #: gnucash/gnome/gnc-plugin-business.c:190
 #: gnucash/gnome/gnc-plugin-business.c:233
@@ -3737,7 +3731,7 @@ msgstr "חיפוש _ריכוז..."
 #: gnucash/gnome/gnc-plugin-business.c:191
 #: gnucash/gnome/gnc-plugin-business.c:234
 msgid "Open the Find Job dialog"
-msgstr "פתיחת דו-שיח חיפוש ריכוז"
+msgstr "פתיחת דו־שיח חיפוש ריכוז"
 
 #: gnucash/gnome/gnc-plugin-business.c:195
 #: gnucash/gnome/gnc-plugin-business.c:238
@@ -3749,7 +3743,7 @@ msgstr "_עיבוד תשלומים..."
 #: gnucash/gnome/gnc-plugin-business.c:239
 #: gnucash/gnome/gnc-plugin-business.c:272
 msgid "Open the Process Payment dialog"
-msgstr "פתיחת דו-שיח עיבוד תשלומים"
+msgstr "פתיחת דו־שיח עיבוד תשלומים"
 
 #: gnucash/gnome/gnc-plugin-business.c:202
 msgid "Vendors Overview"
@@ -3770,7 +3764,7 @@ msgstr "_ספק חדש..."
 
 #: gnucash/gnome/gnc-plugin-business.c:209
 msgid "Open the New Vendor dialog"
-msgstr "פתיחת דו-שיח ספק חדש"
+msgstr "פתיחת דו־שיח ספק חדש"
 
 #: gnucash/gnome/gnc-plugin-business.c:213
 msgid "_Find Vendor..."
@@ -3778,7 +3772,7 @@ msgstr "_חיפוש ספק..."
 
 #: gnucash/gnome/gnc-plugin-business.c:214
 msgid "Open the Find Vendor dialog"
-msgstr "פתיחת דו-שיח חיפוש ספק"
+msgstr "פתיחת דו־שיח חיפוש ספק"
 
 #: gnucash/gnome/gnc-plugin-business.c:218
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:196
@@ -3787,7 +3781,7 @@ msgstr "חשבונית ספק _חדשה..."
 
 #: gnucash/gnome/gnc-plugin-business.c:219
 msgid "Open the New Bill dialog"
-msgstr "פתיחת דו-שיח חשבונית ספק חדשה"
+msgstr "פתיחת דו־שיח חשבונית ספק חדשה"
 
 #: gnucash/gnome/gnc-plugin-business.c:223
 msgid "Find Bi_ll..."
@@ -3844,7 +3838,7 @@ msgstr "פתיחת דו-שיח חיפוש שובר הוצאות"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr ""
+msgstr "מסמכים מקושרים עסקית"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
 #, fuzzy
@@ -4184,7 +4178,7 @@ msgstr "מחיקה"
 #: gnucash/gnome/gnc-plugin-page-register.c:1964
 #: gnucash/gnome/gnc-plugin-page-register.c:5068
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr ""
+msgstr "‚בדיקה ותיקון’ רצים כרגע, לבטל?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:520
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:526
@@ -4580,7 +4574,7 @@ msgstr "_תשלום חשבון"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:366
 #: gnucash/gnome/gnc-plugin-page-register.c:300
 msgid "_Manage Document Link..."
-msgstr ""
+msgstr "_ניהול קישורי מסמך…"
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4897,7 +4891,7 @@ msgstr "פתיחת חלון דוח ספק עבור נמען הודעת זיכו�
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:445
 msgid "Manage Document Link..."
-msgstr ""
+msgstr "ניהול קישור מסמך…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
 #: gnucash/gnome/gnc-plugin-page-register2.c:498
@@ -5317,10 +5311,8 @@ msgstr "עריכת שער המרה לתנועה הנוכחית"
 #. with focus on the current transaction's entry in that register.
 #: gnucash/gnome/gnc-plugin-page-register2.c:387
 #: gnucash/gnome/gnc-plugin-page-register.c:513
-#, fuzzy
-#| msgid "Display the other account code?"
 msgid "_Jump to the other account"
-msgstr "הצגת קוד החשבון הנגדי?"
+msgstr "ל_קפוץ לחשבון האחר"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:388
 #: gnucash/gnome/gnc-plugin-page-register.c:514
@@ -5664,7 +5656,7 @@ msgstr "פתיחת צרופה לתנועה הנוכחית"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:320
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr ""
+msgstr "קפיצה אל הודעת החיוב, החשבונית או השובר המקושרים"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:409
 msgid "Remo_ve Other Splits"
@@ -5790,7 +5782,7 @@ msgstr "מיון %s לפי..."
 #: gnucash/gnome/gnc-plugin-page-register.c:4754
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
-msgstr ""
+msgstr "%s %s מאת %s, פורסם ב־%s, סכום %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4763
 #, fuzzy
@@ -5800,7 +5792,7 @@ msgstr "בחירת חשבון"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4764
 msgid "Several documents are linked with this transaction. Please choose one:"
-msgstr ""
+msgstr "מגוון מסמכים מקושרים לעסקה הזו. נא לבחור אחד מהם:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4765
 #: gnucash/gnome-search/dialog-search.c:323
@@ -5986,6 +5978,7 @@ msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
+"חובה לשדרג את הדוח הזה כדי להחזיר פריט מסמך עם export-string או export-error."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1759
 #, c-format
@@ -7305,7 +7298,7 @@ msgstr "נא לבחור חשבון העברה או לבחור בחשבון ית�
 #: gnucash/gnome-utils/dialog-account.c:1331
 msgid ""
 "An account with opening balance already exists for the desired currency."
-msgstr ""
+msgstr "כבר קיים חשבון עם יתרת פתיחה עבור המטבע הרצוי."
 
 #: gnucash/gnome-utils/dialog-account.c:1332
 #, fuzzy
@@ -7510,7 +7503,7 @@ msgstr "קיים"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
 msgid "Use +- keys to increment/decrement number"
-msgstr ""
+msgstr "יש להשתמש במקשים +- כדי להגדיל/להקטין את המספר"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
 msgid "Action/Number"
@@ -8713,13 +8706,11 @@ msgstr "סגירה _ללא שמירה"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1437
 msgid "This window is closing and will not be restored."
-msgstr ""
+msgstr "חלון זה נסגר והוא לא ישוחזר."
 
 #: gnucash/gnome-utils/gnc-main-window.c:1443
-#, fuzzy
-#| msgid "Close this window"
 msgid "Close Window?"
-msgstr "סגירת חלון זה"
+msgstr "לסגור את החלון?"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
@@ -8744,7 +8735,7 @@ msgstr "קובץ %s נפתח. %s"
 #: gnucash/gnome-utils/gnc-main-window.c:2863
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
-msgstr ""
+msgstr "ח"
 
 #: gnucash/gnome-utils/gnc-main-window.c:2953
 msgid "Unable to save to database."
@@ -9500,7 +9491,7 @@ msgstr "ס"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:997
 msgctxt "Column header for 'Opening Balance'"
 msgid "O"
-msgstr ""
+msgstr "פ"
 
 #. Translators: %s is a currency mnemonic.
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1818
@@ -11329,7 +11320,7 @@ msgstr "לא למחוק קובץ לוג/גבוי."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:90
 msgid "Delete old log/backup files after this many days (0 = never)"
-msgstr "מחיקת קבצי יומן/גיבוי ישנים לאחר מספר ימים זה (0 = לעולם)."
+msgstr "למחוק קובצי יומן/גיבוי ישנים לאחר מספר ימים זה (0 = לעולם)"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:91
 msgid ""
@@ -11818,7 +11809,7 @@ msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line. (Two in double line mode.)"
 msgstr ""
-"הרחבה אוטומטית את התנועה הנוכחית כדי להציג את כל פיצולים. כל שאר התנועות "
+"להרחיב את התנועה הנוכחית אוטומטית כדי להציג את כל הפיצולים. כל שאר התנועות "
 "יוצגו בשורה אחת. (שניים במצב שורה כפולה)."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
@@ -12103,7 +12094,7 @@ msgstr "תיבת דו-שיח זו מוצגת בעת ניסון הדפסת המח
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:14
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:117
 msgid "Confirm Window Close"
-msgstr ""
+msgstr "אישור סגירת החלון"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:118
@@ -14607,6 +14598,8 @@ msgid ""
 "This account holds opening balance transactions. Only one account per "
 "commodity can hold opening balance transactions."
 msgstr ""
+"חשבון זה מחזיק עסקאות יתרת פתיחה. רק חשבון אחד לכל סחורה יכול להחזיק עסקאות "
+"יתרת פתיחה."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1560
 msgid "<b>Acco_unt Type</b>"
@@ -15359,10 +15352,8 @@ msgid "Linked Document"
 msgstr "פרטים מקושרים"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:671
-#, fuzzy
-#| msgid "Available ?"
 msgid "Available"
-msgstr "זמין ?"
+msgstr "זמין"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:686
 msgid "Relative"
@@ -15376,6 +15367,9 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
+"יש ללחוץ לחיצה כפולה על עמודת התיאור כדי לקפוץ אל העסקה.\n"
+"יש ללחוץ לחיצה כפולה על עמודת הקישור כדי לפתוח את המסמך המקושר.\n"
+"יש ללחוץ לחיצה כפולה על עמודת הזמינות כדי לשנות את קישור המסמך."
 
 #: gnucash/gtkbuilder/dialog-employee.glade:166
 msgid ""
@@ -16470,7 +16464,7 @@ msgstr "מספר המקומות העשרוניים שיושלמו אוטומטי
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1362
 msgid "Numbers, Date, Time"
-msgstr ""
+msgstr "מספרים, תאריך, שעה"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1391
 msgid "Perform account list _setup on new file"
@@ -18797,10 +18791,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "שבר"
+msgstr "זהירות!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
@@ -20124,7 +20116,6 @@ msgid ""
 "- invoices created: %u\n"
 "- invoices updated: %u"
 msgstr ""
-"- חשבוניות שנוצרו:  \n"
 "ייבוא:\n"
 "- שורות מהן המערכת התעלמה: %i\n"
 "- שורות שיובאו: %i\n"
@@ -25953,7 +25944,7 @@ msgstr "הצגת שמות חשבון מלאים"
 
 #: gnucash/report/reports/standard/cash-flow.scm:83
 msgid "Show full account names (including parent accounts)."
-msgstr "הצגת שמות חשבון מלא (כולל חשבונות אב)"
+msgstr "הצגת שמות חשבון מלאים (כולל חשבונות אב)."
 
 #: gnucash/report/reports/standard/cash-flow.scm:205
 #, scheme-format
@@ -27396,10 +27387,8 @@ msgid ""
 msgstr "חשבוניות מציגות רשימת תשלומים, תשלומים מציגים רשימת חשבוניות וסכומים."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:948
-#, fuzzy
-#| msgid "Display amounts as hyperlinks"
 msgid "Display document link?"
-msgstr "הצגת סכומים כהיפר קישורים"
+msgstr "להציג קישור מסמך?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1076
 msgid "No valid account found"
@@ -28110,7 +28099,7 @@ msgstr "סימוכין: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:316
 msgid "Engagement: "
-msgstr "תנאים:  "
+msgstr "תנאים: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:322
 #: gnucash/report/reports/standard/taxinvoice.scm:324
@@ -29241,10 +29230,8 @@ msgid "Display the other account code?"
 msgstr "הצגת קוד החשבון הנגדי?"
 
 #: gnucash/report/trep-engine.scm:980
-#, fuzzy
-#| msgid "Display the transaction amount?"
 msgid "Display the transaction linked document"
-msgstr "הצגת סכום תנועה?"
+msgstr "להציג את המסמך שמקושר לעסקה"
 
 #: gnucash/report/trep-engine.scm:983
 msgid "Display a subtotal summary table."
@@ -30021,9 +30008,6 @@ msgstr "ר"
 
 # ק=מוקפא
 #: libgnucash/app-utils/gnc-ui-util.c:922
-#, fuzzy
-#| msgctxt "Reconciled flag 'frozen'"
-#| msgid "f"
 msgctxt "Document Link flag for 'file'"
 msgid "f"
 msgstr "ק"
