@@ -4,14 +4,15 @@
 # Avi Markovitz <avi.markovitz@gmail.com, 2019 - 2020
 # Ori Hoch <ori@uumpa.com>, 2008 http://www.uumpa.com/gnucash-he/
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2020.
+# Avi Markovitz <avi.markovitz@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-31 14:29+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2020-12-31 20:29+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -24,7 +25,7 @@ msgstr ""
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
-msgstr "פריטים לא-כספיים"
+msgstr "כל הפריטים הלא-כספיים"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -486,9 +487,9 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
-"במידה ותוכניות פיננסיות אחרות כגון קוויקן מוכרות לכם, שימו לב שגנוקאש משתמש "
-"בחשבונות במקום בקטגוריות על מנת לעקוב אחר הכנסות והוצאות. לקבלת מידע נוסף על "
-"חשבונות הכנסה והוצאות, נא לעיין במדריך המקוון של גנוקאש."
+"במידה ותוכניות פיננסיות אחרות כגון קוויקן מוכרות לכם, שימו לב שגנוקאש משתמשת "
+"בחשבונות במקום בקטגוריות על מנת לעקוב אחר הכנסות והוצאות. לקבלת מידע נוסף "
+"אודות חשבונות הכנסה והוצאות, נא לעיין במדריך המקוון של גנוקאש."
 
 #: doc/tip_of_the_day.list.c:23
 msgid ""
@@ -520,7 +521,7 @@ msgid ""
 msgstr ""
 "ליצירת חשבונות חדשים יש להקיש על לחצן 'חדש' בסרגל הכלים בחלון הראשי. בתיבת "
 "דו-השיח שתוצג ניתן להזין את פרטי החשבון. למידע נוסף אודות בחירת סוג חשבון או "
-"הגדרת תרשים תרשים חשבונות, נא לעיין במדריך המקוון של גנוקאש."
+"הגדרת תרשים חשבונות, נא לעיין במדריך המקוון של גנוקאש."
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -568,7 +569,7 @@ msgid ""
 "was last entered."
 msgstr ""
 "מילוי מהיר מקל על הזנת תנועות דומות. בעת הקלדת האות הראשונה של תיאור התנועה, "
-"בהקשה על לחצן ה'טאב', גנוקאש ישלים באופן אוטומטי את שאר התנועה כפי שהוזנו "
+"בהקשה על לחצן ה'טאב', גנוקאש תשלים באופן אוטומטי את שאר התנועה כפי שהוזנו "
 "בפעם האחרונה."
 
 #: doc/tip_of_the_day.list.c:59
@@ -579,10 +580,10 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash.)"
 msgstr ""
-"הקלדת האות הראשונה של שם חשבון קיים בעמודה ביומן ההעברות, וגנוקאש ישלים את "
+"הקלדת האות הראשונה של שם חשבון קיים בעמודה ביומן ההעברות, וגנוקאש תשלים את "
 "השם מרשימת החשבונות הקיימים. לחשבונות משנה, יש להקליד את האות הראשונה של "
-"חשבון האב, ואחריו ':' ואת האות הראשונה של חשבון המשנה (לדוגמה, ר:מ עבור "
-"רכוש: מזומנים.)"
+"חשבון האב, ואחריו ':' ואת האות הראשונה של חשבון המשנה (לדוגמה, ר:מ עבור רכוש:"
+" מזומנים.)"
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -648,8 +649,8 @@ msgid ""
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
-"ניתן לארוז מספר דוחות לתוך חלון בודד לאחזור כל המידע הפיננסי המבוקש במבט "
-"חטוף. לשם כך, יש לבחור מהתפריט: 'דוחות -> דוגמה ומותאם אישית -> מנגנון שרשור "
+"ניתן לארוז מספר דוחות לתוך חלון בודד, לאיחזור כל המידע הפיננסי המבוקש בחטף. "
+"לשם כך, יש לבחור מהתפריט: 'דוחות -> דוגמה ומותאם אישית -> מנגנון שרשור "
 "דוחות'."
 
 #: doc/tip_of_the_day.list.c:95
@@ -1616,10 +1617,8 @@ msgstr "לא מוגדר"
 #. Translators: This is the label of a dialog box that lists all of the
 #. transaction that have files or URIs linked with them.
 #: gnucash/gnome/dialog-doclink.c:1010
-#, fuzzy
-#| msgid "Transaction Details"
 msgid "Transaction Document Links"
-msgstr "פרטי תנועה"
+msgstr "תנועות"
 
 #: gnucash/gnome/dialog-doclink.c:1013
 #: gnucash/gnome/dialog-find-transactions2.c:157
@@ -1675,10 +1674,8 @@ msgstr ""
 "יש ללחוץ לחיצה כפולה על עמודת זמינות כדי לשנות את קישור המסמך."
 
 #: gnucash/gnome/dialog-doclink.c:1033
-#, fuzzy
-#| msgid "Business Associations"
 msgid "Business Document Links"
-msgstr "צרופות עסקיות"
+msgstr "קישורים עסקיים"
 
 #: gnucash/gnome/dialog-employee.c:199
 msgid "You must enter a username."
@@ -1767,7 +1764,7 @@ msgstr ""
 msgid ""
 "GnuCash cannot determine the value in one of the fields. You must enter a "
 "valid expression."
-msgstr "גנוקאש אינו יכול לקבוע את הערך באחד השדות. נא להזין ביטוי חוקי."
+msgstr "גנוקאש לא יודעת להתמודד אם הערך באחד השדות. נא להזין ביטוי חוקי."
 
 #: gnucash/gnome/dialog-fincalc.c:373
 msgid "The interest rate cannot be zero."
@@ -1809,7 +1806,7 @@ msgstr "בר מיסוי"
 
 #: gnucash/gnome/dialog-find-account.c:447
 msgid "Search from "
-msgstr "חיפוש ב "
+msgstr "חיפוש ב- "
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2771,8 +2768,9 @@ msgid ""
 "\n"
 msgstr ""
 "בעוד שלתנועה זו יש מספר פיצולים שנחשבים\n"
-"כ 'פיצול תשלום', גנוקאש יודע להתמודד רק עם אחד.\n"
-"נא לבחור פיצול אחד, גנוקאש יתעלם מהאחרים.\n"
+"כ 'פיצולי תשלום', גנוקאש יודעת להתמודד רק עם אחד.\n"
+"נא לבחור פיצול אחד, גנוקאש תתעלם מהאחרים.\n"
+"\n"
 
 #: gnucash/gnome/dialog-payment.c:1592
 msgid "Warning"
@@ -3005,7 +3003,7 @@ msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
 msgstr ""
-"עורך התנועות המחזוריות לא יכול לאזן אוטומטית את התנועה. האם האם להזין רשומה?"
+"עורך התנועות המחזוריות לא יכול לאזן אוטומטית את התנועה. האם להזין רשומה?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:711 gnucash/gnome/dialog-sx-editor.c:493
 msgid "Please name the Scheduled Transaction."
@@ -3394,7 +3392,7 @@ msgstr "יצוא _חשבונות"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:138
 msgid "Export the account hierarchy to a new GnuCash datafile"
-msgstr "יצוא את תרשים החשבונות לקובץ נתונים חדש של גנוקאש"
+msgstr "יצוא תרשים החשבונות לקובץ נתונים גנוקאש חדש"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:145
 #: gnucash/gnome/gnc-plugin-page-register2.c:255
@@ -3510,16 +3508,12 @@ msgid "View and Delete Bayesian and Non Bayesian information"
 msgstr "הצגת ומחיקת מידע בייסיאני ולא בייסיאני"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
-#, fuzzy
-#| msgid "Transaction amount"
 msgid "_Transaction Linked Documents"
-msgstr "סכום תנועה"
+msgstr "מסמכים מקושרי תנועה"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
-#, fuzzy
-#| msgid "View all Transaction Associations"
 msgid "View all Transaction Linked Documents"
-msgstr "הצגת כל צרופת התנועה"
+msgstr "הצגת כל המסמכים מקושרי התנועה"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
@@ -3663,7 +3657,7 @@ msgstr "_אישור"
 #: gnucash/gnome/gnc-plugin-business.c:155
 #: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:161
 msgid "_Business"
-msgstr "_עסקים"
+msgstr "_עסקי"
 
 #: gnucash/gnome/gnc-plugin-business.c:158
 msgid "_Customer"
@@ -3841,10 +3835,8 @@ msgid "Business Linked Documents"
 msgstr "מסמכים מקושרים עסקית"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
-#, fuzzy
-#| msgid "View all Business Associations"
 msgid "View all Linked Business Documents"
-msgstr "הצגת כל הצרופות העסקיות"
+msgstr "הצגת כל המסמכים העסקיים המקושרים"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
@@ -4584,10 +4576,8 @@ msgstr "_ניהול קישורי מסמך…"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:346
 #: gnucash/gnome/gnc-plugin-page-invoice.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:304
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "_Open Linked Document"
-msgstr "אין חשבון מקושר"
+msgstr "פתיחת מסמך מקושר"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
 msgid "_Use as Default Layout for Customer Documents"
@@ -4738,10 +4728,8 @@ msgstr "פתיחת חלון דוח ספק עבור נמען חשבונית זו"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:425
 #: gnucash/gnome/gnc-plugin-page-invoice.c:446
 #: gnucash/gnome/gnc-plugin-page-register.c:632
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "Open Linked Document"
-msgstr "אין חשבון מקושר"
+msgstr "פתיחת מסמך מקושר"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:388
 msgid ""
@@ -5316,11 +5304,9 @@ msgstr "ל_קפוץ לחשבון האחר"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:388
 #: gnucash/gnome/gnc-plugin-page-register.c:514
-#, fuzzy
-#| msgid "Open a register report for the selected Transaction"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction."
-msgstr "פתיחת דוח יומן לתנועה שנבחרה"
+msgstr "פתיחת לשונית יומן לחשבון האחר ממוקד לתנועה זו."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:392
 #: gnucash/gnome/gnc-plugin-page-register.c:518
@@ -5371,14 +5357,10 @@ msgstr "שורה _כפולה"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:425
 #: gnucash/gnome/gnc-plugin-page-register.c:554
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"File Association\" "
-#| "for each transaction."
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for "
 "each transaction."
-msgstr "הצגת שורה נוספת בכל תנועה הכוללת 'פעולה', 'הערות', ו 'צרופה'."
+msgstr "הצגת שורה נוספת לכל תנועה הכוללת 'פעולה', 'הערות', ו- 'מסמך מקושר'."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
 msgid "Show _Extra Dates"
@@ -5438,10 +5420,8 @@ msgstr "פיצול"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:503
 #: gnucash/gnome/gnc-plugin-page-register.c:626
-#, fuzzy
-#| msgid "_Jump"
 msgid "Jump"
-msgstr "_דילוג"
+msgstr "דילוג"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:504
 #: gnucash/gnome/gnc-plugin-page-register.c:627
@@ -5637,22 +5617,16 @@ msgstr "סינון %s לפי..."
 #. Translators: This is a menu item that will open the bill, invoice, or voucher
 #. that is posted to the current transaction if there is one.
 #: gnucash/gnome/gnc-plugin-page-register.c:307
-#, fuzzy
-#| msgid "Edit Invoice"
 msgid "Jump to Invoice"
-msgstr "עריכת חשבונית"
+msgstr "דילוג לחשבונית"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:318
-#, fuzzy
-#| msgid "Associate a file with the current transaction"
 msgid "Add, change, or unlink the document linked with the current transaction"
-msgstr "צרוף קובץ לתנועה הנוכחית"
+msgstr "הוספה, שינוי או ביטול קישור למסמך המקושר לתנועה הנוכחית"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:319
-#, fuzzy
-#| msgid "Open Association for the current transaction"
 msgid "Open the linked document for the current transaction"
-msgstr "פתיחת צרופה לתנועה הנוכחית"
+msgstr "פתיחת הקובץ המקושר לתנועה הנוכחית"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:320
 msgid "Jump to the linked bill, invoice, or voucher"
@@ -5668,16 +5642,12 @@ msgid "_Sort By..."
 msgstr "_מיון לפי..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:500
-#, fuzzy
-#| msgid "Post Date"
 msgid "_Go to Date"
-msgstr "תאריך רישום"
+msgstr "_מעבר לתאריך"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:501
-#, fuzzy
-#| msgid "Do not print transactions out of specified dates."
 msgid "Move to the split at the specified date"
-msgstr "לא להדפיס תנועות מחוץ לטווח תאריכים שנקבע."
+msgstr "מעבר לפיצול בתאריך שהוגדר"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:828
 msgid ""
@@ -5785,10 +5755,8 @@ msgid "%s %s from %s, posted %s, amount %s"
 msgstr "%s %s מאת %s, פורסם ב־%s, סכום %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4763
-#, fuzzy
-#| msgid "Select Account"
 msgid "Select document"
-msgstr "בחירת חשבון"
+msgstr "בחירת מסמך"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4764
 msgid "Several documents are linked with this transaction. Please choose one:"
@@ -5801,10 +5769,8 @@ msgid "Select"
 msgstr "בחירה"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4813
-#, fuzzy
-#| msgid "Post Date"
 msgid "Go to Date"
-msgstr "תאריך רישום"
+msgstr "מעבר לתאריך"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:5091
 #, c-format
@@ -5987,7 +5953,7 @@ msgstr "לא ניתן לפתוח קובץ %s. השגיאה היא: %s"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1799
 msgid "GnuCash-Report"
-msgstr "דוח גנוקאש"
+msgstr "דוח-גנוקאש"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1845
 #: gnucash/gtkbuilder/business-prefs.glade:26
@@ -6177,10 +6143,9 @@ msgid "This account register is read-only."
 msgstr "יומן חשבון זה מסומן לקריאה בלבד."
 
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2448
-#, fuzzy, c-format
-#| msgid "This account register is read-only."
+#, c-format
 msgid "The '%s' account register is read-only."
-msgstr "יומן חשבון זה מסומן לקריאה בלבד."
+msgstr "יומן החשבון '%s' הוא לקריאה בלבד."
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 msgid ""
@@ -6323,10 +6288,8 @@ msgid "_Remove Splits"
 msgstr "_הסרת פיצולים"
 
 #: gnucash/gnome/gnc-split-reg.c:1299
-#, fuzzy
-#| msgid "Change a Transaction Association"
 msgid "Change a Transaction Linked Document"
-msgstr "שינוי צרופת תנועה"
+msgstr "שינוי קישור מסמך תנועה"
 
 #: gnucash/gnome/gnc-split-reg.c:1440
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:963
@@ -6383,11 +6346,12 @@ msgid ""
 "Select OK to temporarily clear filter and proceed,\n"
 "otherwise the last active cell will be selected."
 msgstr ""
-"פיצול היעד מוסתר כעת ביומן זה.\n"
+"פיצול היעד ביומן זה, מוסתר כעת.\n"
+"\n"
 "%s\n"
 "\n"
-"נא להקיש על אוקיי לנקות את המסנן באופן זמני ולהמשיך.\n"
-"אחרת, יבחר התא שהיה פעיל לאחרונה."
+"נא להקיש על אוקיי לניקוי זמני של המסנן ולהמשיך.\n"
+"אחרת התא פעיל האחרון יבחר."
 
 #: gnucash/gnome/gnc-split-reg.c:2371
 msgid "Sort By:"
@@ -6448,10 +6412,10 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
-"מיועד להיות קל לשימוש, אך עצמתי וגמיש, גנוקאש מאפשר לעקוב אחר חשבונות בנק, "
-"מניות, הכנסות והוצאות. מהיר ואינטואיטיבי לשימוש כמו רישום בפנקס המחאות, הוא "
-"מבוסס על עקרונות חשבונאיים מקצועיים כמו מערכת חשבונאות כפולה כדי להבטיח "
-"ספרים מאוזנים ודוחות מדויקים."
+"מיועדת להיות קלה לשימוש, אך עצמתית וגמישה, גנוקאש מאפשרת לעקוב אחר חשבונות "
+"בנק, מניות, הכנסות והוצאות. מהירה ואינטואיטיבית לשימוש בדומה לרישום בפנקס "
+"המחאות, היא מבוססת על עקרונות חשבונאיים מקצועיים כמו מערכת חשבונאות כפולה "
+"כדי להבטיח ספרים מאוזנים ודוחות מדויקים."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:15
 msgid "With GnuCash you can (but are not limited to):"
@@ -6579,10 +6543,8 @@ msgid "Business"
 msgstr "פעילות עיסקית"
 
 #: gnucash/gnome/window-autoclear.c:115
-#, fuzzy
-#| msgid "Created Transactions"
 msgid "Cleared Transactions"
-msgstr "פעולות שנוצרו"
+msgstr "תנועות מותאמות"
 
 #: gnucash/gnome/window-reconcile2.c:417 gnucash/gnome/window-reconcile.c:458
 msgid "Interest Payment"
@@ -6796,7 +6758,7 @@ msgstr "פתיחת חלון עזרה גנוקאש"
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
 msgstr[0] "תאריך התדפיס מאוחר ב %d ימים מ 'היום'."
-msgstr[1] "תאריך התדפיס מאוחר ב %d ימים מ 'היום'."
+msgstr[1] "תאריך התדפיסים מאוחרים ב %d ימים מ 'היום'."
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:364
@@ -6804,7 +6766,7 @@ msgstr[1] "תאריך התדפיס מאוחר ב %d ימים מ 'היום'."
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
 msgstr[0] "תאריך התדפיס שנבחר הוא %d ימים בעתיד."
-msgstr[1] "תאריך התדפיס שנבחר הוא %d ימים בעתיד."
+msgstr[1] "תאריך התדפיסים שנבחרו הם %d ימים בעתיד."
 
 #: gnucash/gnome/window-reconcile.c:369
 msgid ""
@@ -7083,15 +7045,15 @@ msgstr ""
 "\n"
 "קובץ הטעינה הוא מגרסה ישנה יותר של גנוקאש. תבנית הקובץ בגרסאות ישנות חסרה את "
 "פירוט קידוד התווים שבשימוש. כלומר, המלל שבקובץ הנתונים ניתן לקריאה במספר "
-"דרכים ובמעורפל. לא ניתן לפתור עמימות זו באופן אוטומטי, אך בגרס גנוקאש 2.0.0 "
-"החדש, תבנית הקובץ כוללת את כל המפרטים הדרושים, כך שלא יהיה צורך לעבור את "
+"דרכים ובמעורפל. לא ניתן לפתור עמימות זו באופן אוטומטי, אך בגרסת גנוקאש 2.0.0 "
+"החדשה, תבנית הקובץ כוללת את כל המפרטים הדרושים, כך שלא יהיה צורך לעבור את "
 "השלב הזה שוב.\n"
 "\n"
-"גנוקאש ינסה לנחש את קידוד התווים הנכון עבור קובץ הנתונים לטעינה. בעמוד הבא "
-"גנוקאש יציג את המלל שהתקבל בעת ניסיון הניחוש. נדרש לבדוק אם המילים בעלות "
-"משמעות וכצפוי. במידה והכל נראה תקין, ניתן פשוט להקיש על לחצן. במידה והמילים "
-"מכילות תווים לא צפוים, במקרה זה יש לבחור קידוד תווים שונה לקבלת תוצאות "
-"שונות. יתכן וידרש לערוך את רשימת קידוד התווים על ידי הקשה על המקש המתאים.\n"
+"גנוקאש תנסה לנחש את קידוד התווים הנכון עבור קובץ הנתונים לטעינה. בעמוד הבא "
+"גנוקאש תציג את המלל שהתקבל בעת ניסיון הניחוש. נדרש לבדוק האם המילים בעלות "
+"משמעות וכצפוי. במידה והכל נראה תקין, ניתן פשוט להקיש על לחצן 'הבא'. במידה "
+"והמילים מכילות תווים לא צפוים, יש לבחור קידוד תווים שונה לקבלת תוצאות שונות. "
+"יתכן וידרש לערוך את רשימת קידוד התווים על ידי הקשה על המקש המתאים.\n"
 "\n"
 "נא להקיש על לחצן 'הבא' כעת על מנת לבחור את קידוד התווים הנכון עבור קובץ "
 "הנתונים.\n"
@@ -7301,10 +7263,8 @@ msgid ""
 msgstr "כבר קיים חשבון עם יתרת פתיחה עבור המטבע הרצוי."
 
 #: gnucash/gnome-utils/dialog-account.c:1332
-#, fuzzy
-#| msgid "Cancel the current entry"
 msgid "Cannot change currency"
-msgstr "ביטול תנועה הנוכחית"
+msgstr "לא ניתן לשנות מטבע"
 
 #: gnucash/gnome-utils/dialog-account.c:1419
 msgid ""
@@ -7336,7 +7296,7 @@ msgid ""
 "code field of each child account with a newly generated code."
 msgstr ""
 "מספור מחדש של חשבונות המשנה הישירים של %s? פעולה זו תחליף את שדה קוד החשבון "
-"של כל חשבון חשבון משנה עם קוד חדש שיוצר."
+"של כל חשבון משנה עם קוד חדש שיוצר."
 
 #: gnucash/gnome-utils/dialog-account.c:2288
 #, c-format
@@ -7503,7 +7463,7 @@ msgstr "קיים"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
 msgid "Use +- keys to increment/decrement number"
-msgstr "יש להשתמש במקשים +- כדי להגדיל/להקטין את המספר"
+msgstr "נא להשתמש במקשים +- כדי להגדיל/להקטין את המספר"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
 msgid "Action/Number"
@@ -7924,8 +7884,8 @@ msgid_plural ""
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
-"קובץ הנתונים צריך להישמר על גבי הכונן הקשיח כדי לשמור את השינויים שנעשו. "
-"לגנוקאש יש תכונה לשמור את הקובץ באופן אוטומטי כל %d דקה, בדיוק כאילו הוקש על "
+"על קובץ הנתונים להישמר בכונן קשיח כדי לשמר את השינויים שנעשו. לקיימת תכונה "
+"בגנוקאש הדואגת לשמור את הקובץ באופן אוטומטי כל %d דקה, ממש כאילו הוקש על "
 "לחצן 'שמירה' בכל פעם. \n"
 "\n"
 "ניתן לשנות את מרווח הזמן או לבטל תכונה זו מתפריט 'עריכה -> העדפות -> כללי -> "
@@ -7933,9 +7893,9 @@ msgstr[0] ""
 "\n"
 "האם לשמור את הקובץ באופן אוטומטי?"
 msgstr[1] ""
-"קובץ הנתונים צריך להישמר על גבי הכונן הקשיח כדי לשמור את השינויים שנעשו. "
-"לגנוקאש יש תכונה לשמור את הקובץ באופן אוטומטי כל %d דקות, בדיוק כאילו הוקש "
-"על לחצן 'שמירה' בכל פעם. \n"
+"על קובץ הנתונים להישמר בכונן קשיח כדי לשמר את השינויים שנעשו. לקיימת תכונה "
+"בגנוקאש הדואגת לשמור את הקובץ באופן אוטומטי כל %d דקות, ממש כאילו הוקש על "
+"לחצן 'שמירה' בכל פעם. \n"
 "\n"
 "ניתן לשנות את מרווח הזמן או לבטל תכונה זו מתפריט 'עריכה -> העדפות -> כללי -> "
 "תזמון שמירה אוטומטית'. \n"
@@ -8385,20 +8345,16 @@ msgid "Open _Read-Only"
 msgstr "פתיחה _לקריאה בלבד"
 
 #: gnucash/gnome-utils/gnc-file.c:853
-#, fuzzy
-#| msgid "_Create New File"
 msgid "Create _New File"
-msgstr "_יצירת קובץ חדש"
+msgstr "יצירת _קובץ חדש"
 
 #: gnucash/gnome-utils/gnc-file.c:856
 msgid "Open _Anyway"
 msgstr "פתיחה _בכל זאת"
 
 #: gnucash/gnome-utils/gnc-file.c:859
-#, fuzzy
-#| msgid "placeholder"
 msgid "Open _Folder"
-msgstr "שומר מקום"
+msgstr "פתיחת _תיקייה"
 
 #: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:310
 msgid "_Quit"
@@ -8466,16 +8422,12 @@ msgstr "מיקום צפוי"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:510
 #: gnucash/gnome-utils/gnc-gnome-utils.c:550
-#, fuzzy
-#| msgid "GnuCash could not find the associated file."
 msgid "GnuCash could not find the linked document."
-msgstr "לגנוקאש לא היתה אפשרות למצוא את הקובץ המשויך."
+msgstr "גנוקאש לא מצאה את הקובץ המקושר."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:580
-#, fuzzy
-#| msgid "GnuCash could not open the associated file:"
 msgid "GnuCash could not open the linked document:"
-msgstr "לגנוקאש לא הייתה אפשרות לפתוח את הקובץ המצורף:"
+msgstr "גנוקאש לא הצליחה לפתוח את הקובץ המקושר:"
 
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes
@@ -9980,6 +9932,7 @@ msgid ""
 "given GnuCash datafile.\n"
 msgstr ""
 "הפעלת פקודות הקשורות לאחזור שערים. רק פקודה אחת נתמכת כעת.\n"
+"\n"
 "‏  get: \t‏ אחזור שערים שוטפים לכל המטבעות וניירות הערך בקובץ נתוני גנוקאש.\n"
 
 #: gnucash/gnucash-cli.cpp:97
@@ -9993,13 +9946,6 @@ msgid "Report Generation Options"
 msgstr "_אפשרויות חילול דוח"
 
 #: gnucash/gnucash-cli.cpp:104
-#, fuzzy
-#| msgid ""
-#| "Execute report related commands. The following commands are supported.\n"
-#| "\n"
-#| "  list: \tLists available reports.\n"
-#| "  show: \tDescribe the options modified in the named report.\n"
-#| "  run: \tRun the named report in the given GnuCash datafile.\n"
 msgid ""
 "Execute report related commands. The following commands are supported.\n"
 "\n"
@@ -10008,17 +9954,16 @@ msgid ""
 "be specified to describe some saved options.\n"
 "  run: \tRun the named report in the given GnuCash datafile.\n"
 msgstr ""
-"הפעלת פקודות קשורות לדוחות. הפקודות שלהלן נתמכות.\n"
+"הפעלת פקודות לדוחות. הפקודות הבאות נתמכות.\n"
 "\n"
 "רשימה: \tרשימת דוחות זמינים.\n"
-"הצגה: \tשינויים שנעשו בדוח האמור.\n"
+"הצגה: \tתיאור השינויים שנעשו בדוח האמור. ניתן להגדיר קובץ נתונים לתאור מספר "
+"אפשרויות שנשמרו.\n"
 "הרצה: \tהרצת הדוח האמור בקובץ נתוני גנוקאש הנתון.\n"
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Name of the report to run\n"
-msgstr ""
-"שם הקובץ להרצה\n"
-".\n"
+msgstr "שם הדוח להרצה\n"
 
 #: gnucash/gnucash-cli.cpp:112
 msgid "Specify export type\n"
@@ -10942,8 +10887,7 @@ msgstr "הצגת או הסתרת התאמות"
 msgid ""
 "Shows or hides transactions from the match picker which are already of some "
 "reconciled state."
-msgstr ""
-"הצגה או הסתרה של תנועות מבוחר ההתאמה שכבר מסוימים מסוימים במצב שהותאמו."
+msgstr "הצגה או הסתרה של תנועות מבוחר-ההתאמה הנמצאים כבר במצב התאמה מסוים."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:10
@@ -11171,17 +11115,13 @@ msgstr ""
 "נטוי', 'לוכסן', 'מקף' ו 'נקודה'."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:25
-#, fuzzy
-#| msgid "Transaction Associations head path"
 msgid "Transaction Linked Files head path"
-msgstr "נתיב ראשי לצרופות תנועה"
+msgstr "נתיב ראשי לקבצים המקושרים לתנועה"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:26
-#, fuzzy
-#| msgid "This is the path head for the Transaction file Associations"
 msgid ""
 "This is the path head for the Transaction Linked Files with relative paths"
-msgstr "זהו הנתיב הראשי אל קובצי צרופה לתנועות"
+msgstr "הנתיב הראשי אל הקובצים המקושרים לתנועה עם נתיבים יחסיים"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:30
 msgid "Compress the data file"
@@ -11809,8 +11749,8 @@ msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line. (Two in double line mode.)"
 msgstr ""
-"להרחיב את התנועה הנוכחית אוטומטית כדי להציג את כל הפיצולים. כל שאר התנועות "
-"יוצגו בשורה אחת. (שניים במצב שורה כפולה)."
+"הרחבת התנועה הנוכחית אוטומטית להצגת כל הפיצולים. כל שאר התנועות יוצגו בשורה "
+"אחת. (שניים במצב שורה כפולה.)"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
 #: gnucash/gtkbuilder/dialog-preferences.glade:2780
@@ -11818,31 +11758,21 @@ msgid "All transactions are expanded to show all splits."
 msgstr "כל התנועות הורחבו להצגת כל הפיצולים."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:300
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"File Association\" "
-#| "for each transaction."
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
-msgstr "הצגת שורה נוספת בכל תנועה הכוללת 'פעולה', 'הערות', ו 'צרופה'."
+msgstr "הצגת שורה נוספת בכל תנועה הכוללת 'פעולה', 'הערות', ו- 'מסמכים מקושרים'."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:301
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"File Association\" "
-#| "for each transaction in a register. This is the default setting for when "
-#| "a register is first opened. The setting can be changed at any time via "
-#| "the \"View->Double Line\" menu item."
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction in a register. This is the default setting for when a "
 "register is first opened. The setting can be changed at any time via the "
 "\"View->Double Line\" menu item."
 msgstr ""
-"הצגת שורה נוספת ביומן לכל תנועה הכוללת 'פעולה', 'הערות', ו 'צרופה'. זוהי "
-"הגדרת ברירת המחדל עבור יומן שנפתח לראשונה. ניתן לשנות את ההגדרה בכל עת "
-"באמצעות פריט התפריט 'מצג -> שורה כפולה'."
+"הצגת שורה נוספת ביומן לכל תנועה הכוללת 'פעולה', 'הערות', ו- 'מסמכים "
+"מקושרים'. זוהי הגדרת ברירת המחדל עבור יומן שנפתח לראשונה. ניתן לשנות את "
+"ההגדרה בכל עת מפריט 'מצג -> שורה כפולה'."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:305
 msgid "Only display leaf account names."
@@ -12098,10 +12028,8 @@ msgstr "אישור סגירת החלון"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:118
-#, fuzzy
-#| msgid "This dialog is presented when a read-only register is opened."
 msgid "This dialog is presented when there is more than one window."
-msgstr "תיבת דו-שיח זה מוצג כאשר יומן לקריאה בלבד נפתח."
+msgstr "תיבת דו-שיח זה מוצג כאשר קיים יותר מחלון אחד."
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:19
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:122
@@ -12552,16 +12480,14 @@ msgstr ""
 "\n"
 "הסייען יעזור ביבוא חשבונות מקובץ.\n"
 "\n"
-"הקובץ חייב להיות בתבנית זהה לזה של היצוא, שכן זהו יבוא בתבנית קבועה בה ניתן "
-"לצפות על-ידי עיון בקובץ שנוצר באמצעות האפשרות 'יצוא תרשים חשבונות ל- CSV' "
-"בתפריט היצוא.\n"
+"הקובץ חייב להיות בתבנית זהה לזה של  קובץ היצוא, שכן זהו יבוא בתבנית קבועה. "
+"ניתן לצפות בתבנית על-ידי עיון בקובץ שנוצר באמצעות האפשרות 'יצוא תרשים "
+"חשבונות ל- CSV' מתפריט היצוא.\n"
 "\n"
-"אם חסר חשבון, הוא יתווסף לפי שם חשבון מלא, כל עוד ערך בטוחה / מטבע שצוין "
+"אם חסר חשבון, הוא יתווסף לפי שם חשבון מלא, כל עוד ערך בטוחה / מטבע שצוינו "
 "קיימים. אם החשבון קיים, ארבעה שדות יעודכנו: קוד, תיאור, הערות וצבע.\n"
 "\n"
 "הקשה על 'הבא' כדי להמשיך או 'ביטול' לנטישת היבוא.\n"
-"\n"
-"\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:63
 msgid "Import Account Assistant"
@@ -14569,8 +14495,6 @@ msgstr ""
 "שיאפשר לבחור את החשבון ולפתוח מחדש את חלון דו-השיח."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1476
-#, fuzzy
-#| msgid "Automatic _interest transfer"
 msgid "Auto _interest transfer"
 msgstr "העברת _ריבית אוטומטית"
 
@@ -14588,8 +14512,6 @@ msgstr ""
 "> אפשרויות דוח מס'."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1509
-#, fuzzy
-#| msgid "Opening Balance"
 msgid "Opening balance"
 msgstr "יתרת פתיחה"
 
@@ -15264,52 +15186,36 @@ msgid "Question"
 msgstr "שאלה"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:49
-#, fuzzy
-#| msgid "Change Association path head"
 msgid "Change Linked Document path head"
-msgstr "שינוי נתיב ראשי לצרופות"
+msgstr "שינוי נתיב ראשי למסמך מקושר"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:85
-#, fuzzy
-#| msgid ""
-#| "Existing relative file path associations will be converted to absolute "
-#| "ones by combining them with the existing path head unless box unticked."
 msgid ""
 "Existing relative file path links will be converted to absolute ones by "
 "combining them with the existing path head unless box unticked."
 msgstr ""
-"נתיב יחסי לקובצי הצרופות יומרו למיקום קבוע של הנתיב הקיים אלה אם הוסר הסימון "
-"בתיבת הסימון."
+"נתיב יחסי לקישורי קובצים יומרו לנתיב מוחלט על ידי שילובם עם הנתיב הראשי "
+"הקיים, אלה אם הוסר הסימון בתיבת הסימון."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:140
-#, fuzzy
-#| msgid ""
-#| "Existing absolute file path associations will be converted to relative "
-#| "ones by comparing them to the new path head unless box unticked."
 msgid ""
 "Existing absolute file path links will be converted to relative ones by "
 "comparing them to the new path head unless box unticked."
 msgstr ""
-"נתיב קבוע לקובצי הצרופות יומרו לנתיב יחסי על ידי השוואתם לנתיב החדש אלה אם "
-"הוסר הסימון בתיבת הסימון."
+"נתיב מוחלט לקישורי קבצים יומרו לנתיב יחסי על ידי השוואתם לנתיב הראשי החדש, "
+"אלה אם הוסר הסימון בתיבת הסימון."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:178
-#, fuzzy
-#| msgid "Note: Only Associations that are not read-only will be changed."
 msgid "Note: Only Document Links that are not read-only will be changed."
-msgstr "הערה: ישונו רק צרופות שאינן לקריאה בלבד."
+msgstr "הערה: רק קישורי קבצים שאינם לקריאה בלבד ישונו."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:279
-#, fuzzy
-#| msgid "Linked Details"
 msgid "Linked _File"
-msgstr "פרטים מקושרים"
+msgstr "קבצים _מקושרים"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:295
-#, fuzzy
-#| msgid "Picture Location"
 msgid "Linked _Location"
-msgstr "מיקום תמונה"
+msgstr "מיקום _מקושר"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:380
 msgid "Enter URL like http://www.gnucash.org"
@@ -15320,36 +15226,28 @@ msgid "Location does not start with a valid scheme"
 msgstr "מיקום אינו מתחיל בסכימה תקינה"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:504
-#, fuzzy
-#| msgid "Reload and Locate _Associations"
 msgid "Reload and Locate Linked Documents"
-msgstr "טעינה מחודשת ואיתור _צרופות"
+msgstr "טעינה מחודשת ואיתור מסמכים מקושרים"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:518
 msgid "_Reload"
 msgstr "_טעינה חוזרת"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:532
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "_Locate Linked Documents"
-msgstr "אין חשבון מקושר"
+msgstr "_איתור מסמכים מקושרים"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:572
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "All Linked Documents"
-msgstr "אין חשבון מקושר"
+msgstr "כל המסמכים המקושרים"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:626
 msgid "Id"
 msgstr "מזהה"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:654
-#, fuzzy
-#| msgid "Linked Details"
 msgid "Linked Document"
-msgstr "פרטים מקושרים"
+msgstr "מסמך מקושר"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:671
 msgid "Available"
@@ -15832,16 +15730,12 @@ msgid ""
 msgstr "רשימת תנועות שהורדו (פיצול מקור ומידע התאמה מוצג)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:929
-#, fuzzy
-#| msgid "Show the _Account column"
 msgid "Show _Account column"
-msgstr "הצגת עמודתה_ חשבון"
+msgstr "הצגת עמודת _חשבון"
 
 #: gnucash/gtkbuilder/dialog-import.glade:945
-#, fuzzy
-#| msgid "Show the _Account column"
 msgid "Show _Memo column"
-msgstr "הצגת עמודתה_ חשבון"
+msgstr "הצגת עמודת _מיזכר"
 
 #: gnucash/gtkbuilder/dialog-import.glade:961
 msgid "Show _matched information"
@@ -15869,10 +15763,8 @@ msgid "(owner)"
 msgstr "(נמען)"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:418
-#, fuzzy
-#| msgid "Open imported documents in tabs"
 msgid "Open Document Link"
-msgstr "פתיחת מסמכים שיובאו בלשונית"
+msgstr "פתיחת מסמך מקושר"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:535
 #: gnucash/gtkbuilder/dialog-invoice.glade:1113
@@ -16193,10 +16085,8 @@ msgid "Locale"
 msgstr "מקומי"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:133
-#, fuzzy
-#| msgid "_Resume"
 msgid "_Reset"
-msgstr "_להמשיך"
+msgstr "_איפוס"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:178
 #: gnucash/gtkbuilder/dialog-preferences.glade:579
@@ -16209,6 +16099,8 @@ msgid ""
 "window\n"
 "Press 'Close' to return to the preference window\n"
 msgstr ""
+"לחיצה על 'איפוס' על מנת להשתמש במפריד החשבון המקורי וסגירת חלון ההעדפות\n"
+"לחיצה על 'סגירה' כדי לחזרה לחלון ההעדפות\n"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:240
 msgid "GnuCash Preferences"
@@ -16567,16 +16459,12 @@ msgid "seconds"
 msgstr "שניות"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1847
-#, fuzzy
-#| msgid "Path head for Associated Files"
 msgid "Path head for Linked File Relative Paths"
-msgstr "נתיב ראשי אל קובצי צרופה"
+msgstr "נתיב ראשי לנתיבי קבצים מקושרים יחסיים"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1865
-#, fuzzy
-#| msgid "Path head for files is,"
 msgid "Path head for Linked Files Relative Paths"
-msgstr "הנתיב הראשי לקבצים הוא,"
+msgstr "נתיב ראשי לנתיבי קבצים מקושרים יחסיים"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1894
 msgid "Enable horizontal grid lines on table displays"
@@ -16601,10 +16489,8 @@ msgstr ""
 "אפשור קווי שבכה אנכיים בתצוגת טבלה. בעיקר יחול על תצוגות עץ כמו עמוד חשבונות."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1931
-#, fuzzy
-#| msgid "<b>Files</b>"
 msgid "<b>Linked Files</b>"
-msgstr "<b>קבצים</b>"
+msgstr "<b>קבצים מקושרים</b>"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2026
@@ -18559,10 +18445,8 @@ msgstr "_מספר תנועה"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:161
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:719
-#, fuzzy
-#| msgid "Delete the current entry"
 msgid "Keep Linked Document Entry"
-msgstr "מחיקת הרשומה הנוכחית"
+msgstr "השארת רשומת מסמך מקושר"
 
 #. Filter register by... Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:213
@@ -18745,15 +18629,16 @@ msgid ""
 "Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
-"מספר יחידות קלנדריות בחזרות: כלומר דו שבועי=כל שבועיים, רבעוני=כל 3 חודשים"
+"מספר יחידות קלנדריות במחזורים: כלומר דו שבועי = כל שבועיים, רבעוני = כל 3 "
+"חודשים"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:109
 msgid "beginning on"
-msgstr "מתחיל ב"
+msgstr "התחלה ב"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:144
 msgid "last of month"
-msgstr "האחרון בחודש"
+msgstr "סוף חודש"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:148
 msgid "Always use the last day (or day of week) in the month?"
@@ -18778,10 +18663,8 @@ msgid "Show _zero balance owners"
 msgstr "הצגת נמענים ביתרת _אפס"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:71
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "About Auto-Clear"
-msgstr "התאמה אוטומטית"
+msgstr "אודות התאמה אוטומטית"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:86
 msgid ""
@@ -18789,6 +18672,9 @@ msgid ""
 "are cleared, given an ending balance. For example, said ending balance can "
 "be the current balance given by your bank online."
 msgstr ""
+"נא השתמש בתיבת דו-שיח זו על מנת ש גנוקאש תימצא באופן אוטומטי תנועות מותאמות, "
+"בהינתן יתרת הסגירה. לדוגמה, יתרת הסגירה יכולה להיות היתרה הנוכחית שהתקבלה "
+"באופן מקוון מהבנק."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
 msgid "Caution!"
@@ -18800,6 +18686,8 @@ msgid ""
 "than approximately 20. In that case please clear at least some of them "
 "manually."
 msgstr ""
+"כלי זה עשוי להיות איטי או להפסק אם מספר הפיצולים הבלתי מותאמים עולה על 20 "
+"בערך. במקרה זה נא להתאים לפחות חלק מהם באופן ידני."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:138
 #: gnucash/gtkbuilder/window-reconcile.glade:117
@@ -18807,14 +18695,12 @@ msgid "_Ending Balance"
 msgstr "_יתרת סגירה"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:177
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "_Review cleared splits"
-msgstr "_סקירת תנועות שנוצרו"
+msgstr "_סקירת פיצולים שהותאמו"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:181
 msgid "Select this option to open a register tab with newly cleared splits."
-msgstr ""
+msgstr "בחירה באפשרות זו על מנת לפתוח לשונית יומן עם פיצולים שהותאמו לאחרונה."
 
 #: gnucash/gtkbuilder/window-reconcile.glade:71
 msgid "<b>Reconcile Information</b>"
@@ -19102,28 +18988,24 @@ msgid "Enter your password"
 msgstr "נא להזין ססמה"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:646
-#, fuzzy
-#| msgid "_Width"
 msgid "Bar_width"
-msgstr "_רוחב"
+msgstr "רוחב _סרגל"
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:664
 msgid "Setting the bar width, adapting to the size of the TAN generator."
-msgstr ""
+msgstr "הגדרת רוח העמודה, מותאם לגודל מחולל ה- TAN."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:679
-#, fuzzy
-#| msgid "_Delete"
 msgid "_Delay"
-msgstr "_מחיקה"
+msgstr "_השהיה"
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:694
 msgid ""
 "Setting the delay time, with small values the flicker graphic is repeated "
 "faster."
-msgstr ""
+msgstr "הגדרת זמן השהיה, בערכים נמוכים תדירות הבלחת הגרפיקה תהיה גבוהה יותר."
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:752
@@ -19131,6 +19013,8 @@ msgid ""
 "Hold the TAN generator in front of the animated graphic. The markings "
 "(triangles) on the graphic must match those on the TAN generator."
 msgstr ""
+"החזקת מחולל ה- TAN מול הגרפיקה המונפשת. הסימונים (משולשים) בגרפיקה חייבים "
+"להתאים לסימנים שבמחולל TAN."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:796
 msgid "Con_firm Password"
@@ -22167,7 +22051,7 @@ msgstr "תיאור תנועה"
 #: gnucash/report/trep-engine.scm:1292 gnucash/report/trep-engine.scm:1293
 msgctxt "Column header for 'Document Link'"
 msgid "L"
-msgstr ""
+msgstr "ק"
 
 #: gnucash/register/ledger-core/split-register-layout.c:711
 #: gnucash/register/ledger-core/split-register-layout.c:751
@@ -22471,12 +22355,10 @@ msgid "Can't save style sheet"
 msgstr "לא ניתן לשמור גיליון סגנון"
 
 #: gnucash/report/html-utilities.scm:274 gnucash/report/html-utilities.scm:291
-#, fuzzy
-#| msgid "Exchange rate"
 msgid "Exchange rate"
 msgid_plural "Exchange rates"
 msgstr[0] "שער חליפין"
-msgstr[1] "שער חליפין"
+msgstr[1] "שערי חליפין"
 
 #: gnucash/report/html-utilities.scm:304
 msgid "No budgets exist. You must create at least one budget."
@@ -23257,19 +23139,15 @@ msgstr "91+ ימים"
 
 #: gnucash/report/reports/aging.scm:774
 #: gnucash/report/reports/standard/new-aging.scm:164
-#, fuzzy
-#| msgid "Y"
 msgctxt "One-letter indication for 'yes'"
 msgid "Y"
-msgstr "Y"
+msgstr "כ"
 
 #: gnucash/report/reports/aging.scm:774
 #: gnucash/report/reports/standard/new-aging.scm:164
-#, fuzzy
-#| msgid "N"
 msgctxt "One-letter indication for 'no'"
 msgid "N"
-msgstr "N"
+msgstr "ל"
 
 #: gnucash/report/reports/aging.scm:841
 #: gnucash/report/reports/standard/job-report.scm:547
@@ -25220,7 +25098,7 @@ msgstr "טווח הזמן בין תקופות"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:65
 #: gnucash/report/reports/standard/balsheet-pnl.scm:66
 msgid "Period order is most recent first"
-msgstr ""
+msgstr "סדר תקופות, האחרונה בראש"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:68
 msgid "Enable dual columns"
@@ -26069,10 +25947,8 @@ msgstr "סכום כולל"
 
 #: gnucash/report/reports/standard/category-barchart.scm:690
 #: gnucash/report/reports/standard/net-charts.scm:471
-#, fuzzy
-#| msgid "Job Report (beta)"
 msgid "No exportable data"
-msgstr "דוח ריכוז (בטה)"
+msgstr "אין נתונים לייצוא"
 
 #: gnucash/report/reports/standard/customer-summary.scm:52
 msgid "The income accounts where the sales and income was recorded."
@@ -26190,7 +26066,7 @@ msgstr "מיון לפי סכום רווח."
 #: gnucash/report/reports/standard/customer-summary.scm:133
 #: gnucash/report/reports/standard/customer-summary.scm:323
 msgid "Markup"
-msgstr "מרווח"
+msgstr "אחוז הרווח"
 
 #: gnucash/report/reports/standard/customer-summary.scm:134
 msgid "Sort by markup (which is profit amount divided by sales)."
@@ -26576,10 +26452,8 @@ msgstr "תבניות דוח"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:164
 #: gnucash/report/reports/standard/income-gst-statement.scm:165
-#, fuzzy
-#| msgid "default format"
 msgid "Default Format"
-msgstr "תבנית ברירת המחדל"
+msgstr "מבנה ברירת המחדל"
 
 # BAS=Business activity statements
 #: gnucash/report/reports/standard/income-gst-statement.scm:167
@@ -26587,12 +26461,10 @@ msgid "Australia BAS"
 msgstr "אוסטרליה BAS"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:168
-#, fuzzy
-#| msgid "Australia BAS. Specify sales, purchase and tax accounts."
 msgid ""
 "Australia Business Activity Statement. Specify sales, purchase and tax "
 "accounts."
-msgstr "אוסטרליה BAS. פרוט מכירות, קניות וחשבונות מס."
+msgstr "אוסטרליה, דוח פעילות עסקי. פרוט מכירות, קניות וחשבונות מס."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:171
 msgid "UK VAT Return"
@@ -27276,16 +27148,12 @@ msgid "Debits"
 msgstr "חיובים"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:59
-#, fuzzy
-#| msgid "Documents"
 msgid "Document Links"
-msgstr "מסמכים"
+msgstr "קישורי מסמך"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:60
-#, fuzzy
-#| msgid "Transactions"
 msgid "Transaction Links"
-msgstr "תנועה"
+msgstr "קישורי תנועה"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:91
 #: gnucash/report/reports/standard/owner-report.scm:87
@@ -27500,16 +27368,12 @@ msgid "Double-Weeks"
 msgstr "שבועות כפולים"
 
 #: gnucash/report/reports/standard/price-scatter.scm:142
-#, fuzzy
-#| msgid "Quarter"
 msgid "Quarters"
-msgstr "רבעון"
+msgstr "רבעונים"
 
 #: gnucash/report/reports/standard/price-scatter.scm:143
-#, fuzzy
-#| msgid "Half Year"
 msgid "Half Years"
-msgstr "חצי שנה"
+msgstr "חצאי שנה"
 
 #: gnucash/report/reports/standard/price-scatter.scm:238
 msgid "Identical commodities"
@@ -27701,7 +27565,7 @@ msgid ""
 "scaled accordingly."
 msgstr ""
 "רוחב סמל הכותרת העליונה בתבנית CSS, לדוגמה 10% או 32px. נא להשאיר ריק על מנת "
-"להציג את הסמל ברוחבו הטבעי. גובה הסמל יוקטן בהתאם."
+"להציג את הסמל ברוחבו הטבעי. גובה הסמל יקטן בהתאמה."
 
 #: gnucash/report/reports/standard/receipt.scm:100
 msgid "Name of a file containing a logo to be used on the footer of the report"
@@ -29884,11 +29748,11 @@ msgstr "אין שערי המרה זמינים ב SX [%s] עבור %s -> %s, ער
 
 #: libgnucash/app-utils/gnc-ui-balances.c:407
 msgid "Account is already at Auto-Clear Balance."
-msgstr ""
+msgstr "החשבון כבר במצב התאמה אוטומטית."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:451
 msgid "Too many uncleared splits"
-msgstr ""
+msgstr "יותר מדי פיצולים בלתי מותאמים"
 
 #: libgnucash/app-utils/gnc-ui-balances.c:467
 msgid "The selected amount cannot be cleared."
@@ -29999,9 +29863,6 @@ msgstr "ט"
 
 # ר=מרשתת
 #: libgnucash/app-utils/gnc-ui-util.c:920
-#, fuzzy
-#| msgctxt "Association flag for 'web'"
-#| msgid "w"
 msgctxt "Document Link flag for 'web'"
 msgid "w"
 msgstr "ר"
