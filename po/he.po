@@ -4,14 +4,14 @@
 # Avi Markovitz <avi.markovitz@gmail.com, 2019 - 2020
 # Ori Hoch <ori@uumpa.com>, 2008 http://www.uumpa.com/gnucash-he/
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2020.
-# Avi Markovitz <avi.markovitz@gmail.com>, 2020.
+# Avi Markovitz <avi.markovitz@gmail.com>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-31 20:29+0000\n"
+"PO-Revision-Date: 2021-01-01 11:29+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -1184,12 +1184,12 @@ msgstr "שימוש בגלובלי"
 #: gnucash/gnome/top-level.c:258
 #, c-format
 msgid "Badly formed URL %s"
-msgstr "צורת URL שגויה %s"
+msgstr "תצורת פורטן שגויה %s"
 
 #: gnucash/gnome/business-urls.c:74 gnucash/gnome/top-level.c:99
 #, c-format
 msgid "Bad URL: %s"
-msgstr "URL שגוי: %s"
+msgstr "פורטן שגוי: %s"
 
 #: gnucash/gnome/business-urls.c:83
 #, c-format
@@ -1563,11 +1563,11 @@ msgstr "נבחר חשבון שומר מקום. נא לנסות שוב."
 
 #: gnucash/gnome/dialog-doclink.c:186
 msgid "Amend URL:"
-msgstr "כתובת תיקון:"
+msgstr "תיקון פורטן:"
 
 #: gnucash/gnome/dialog-doclink.c:190
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr "נא למלא כתובת כגון http://www.gnucash.org:"
+msgstr "נא להזין פורטן כגון http://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-doclink.c:205
 msgid "Existing Document Link is"
@@ -5944,7 +5944,7 @@ msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
-"חובה לשדרג את הדוח הזה כדי להחזיר פריט מסמך עם export-string או export-error."
+"חובה לשדרג דוח זה על מנת להחזיר פריט מסמך עם export-string או export-error."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1759
 #, c-format
@@ -6086,7 +6086,7 @@ msgstr "ארעה שגיאה בעת הרצת הדוח."
 #: gnucash/gnome/gnc-plugin-report-system.c:208
 #, c-format
 msgid "Badly formed options URL: %s"
-msgstr "צורת אפשרויות URL שגויה: %s"
+msgstr "תצורת אפשרויות פורטן שגויה: %s"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:196
 #, c-format
@@ -8044,12 +8044,12 @@ msgstr "לא נמצא קצה אחורי מתאים ל %s."
 #: gnucash/gnome-utils/gnc-file.c:285
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
-msgstr "כתובת ה- URL %s אינה נתמכת בגרסה זו של גנוקאש."
+msgstr "פורטן %s לא נתמך בגרסת גנוקאש זו."
 
 #: gnucash/gnome-utils/gnc-file.c:290
 #, c-format
 msgid "Can't parse the URL %s."
-msgstr "לא ניתן לנתח URL %s."
+msgstr "לא ניתן לנתח פורטן %s."
 
 #: gnucash/gnome-utils/gnc-file.c:295
 #, c-format
@@ -8066,8 +8066,8 @@ msgid ""
 "This file/URL appears to be from a newer version of GnuCash. You must "
 "upgrade your version of GnuCash to work with this data."
 msgstr ""
-"נראה שקובץ URL/ זה מגרסה חדשה יותר של גנוקאש. נא לשדרג את גירסת גנוקאש על "
-"מנת שיתאפשר לעבוד עם נתונים אלה."
+"נראה שקובץ/פורטן זה מגרסת גנוקאש חדשה יותר. נא לשדרג גרסת גנוקאש על מנת "
+"לעבוד עם נתונים הללו."
 
 #: gnucash/gnome-utils/gnc-file.c:314
 #, c-format
@@ -8132,13 +8132,13 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:385
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
-msgstr "הקובץ/כתובת URL ה- %s אינו מכיל נתוני גנוקאש או שהנתונים פגומים."
+msgstr "הקובץ/פורטן %s אינו מכיל נתוני גנוקאש או שהנתונים פגומים."
 
 #: gnucash/gnome-utils/gnc-file.c:391
 #, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
-msgstr "השרת ב- URL %s נתקל בשגיאה או נתקל בנתונים פגומים."
+msgstr "השרת בפורטן %s חווה שגיאה או שנתקל בנתונים פגומים."
 
 #: gnucash/gnome-utils/gnc-file.c:397
 #, c-format
@@ -8234,7 +8234,7 @@ msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
 msgstr ""
-"מסד נתונים זה הוא מגרסה ישנה יותר של גנוקאש. נא לבחור ב 'אישור' לשדרג לגרסה "
+"מסד הנתונים הוא מגרסה ישנה יותר של גנוקאש. נא לבחור ב 'אישור' לשדרג לגרסה "
 "הנוכחית, או 'ביטול' כדי לסמנו לקריאה בלבד."
 
 #: gnucash/gnome-utils/gnc-file.c:497
@@ -12480,7 +12480,7 @@ msgstr ""
 "\n"
 "הסייען יעזור ביבוא חשבונות מקובץ.\n"
 "\n"
-"הקובץ חייב להיות בתבנית זהה לזה של  קובץ היצוא, שכן זהו יבוא בתבנית קבועה. "
+"הקובץ חייב להיות בתבנית זהה לזה של קובץ היצוא, שכן זהו יבוא בתבנית קבועה. "
 "ניתן לצפות בתבנית על-ידי עיון בקובץ שנוצר באמצעות האפשרות 'יצוא תרשים "
 "חשבונות ל- CSV' מתפריט היצוא.\n"
 "\n"
@@ -13017,13 +13017,13 @@ msgstr ""
 "סייען זה יעזור ביבוא קובץ מופרד המכיל רשימת תנועות. הוא תומך גם בקבצים "
 "המופרדים בתו (כגון פסיק או נקודתיים) וגם בהפרדה ברוחב קבוע.\n"
 "\n"
-"ליבוא ​​מוצלח, על שלוש עמודות להיות זמינות בנתוני היבוא:\n"
+"ליבוא מוצלח, על שלוש עמודות להיות זמינות בנתוני היבוא:\n"
 "• עמודת תאריך\n"
 "• עמודת תיאור\n"
 "• עמודת הפקדה או משיכה\n"
 "\n"
-"במידה ואין נתוני חשבון זמינים, ניתן לבחור חשבון בסיס אליו ייובאו כל "
-"הנתונים.\n"
+"במידה ואין נתוני חשבון זמינים, ניתן לבחור חשבון בסיס אליו ייובאו כל הנתונים."
+"\n"
 "\n"
 "מלבד הבחירה במפריד, ישנן מספר אפשרויות להגדיר את מנגנון היבוא. לדוגמה, ניתן "
 "לדלג על מספר שורות בתחילת הנתונים או בסופם, כמו גם שורות לא זוגיות. נתמכות "
@@ -13032,7 +13032,7 @@ msgstr ""
 "מנגנון היבוא יכול לטפל בקבצים שבהם התנועות מפוצלות על מספר שורות, כאשר כל "
 "שורה מייצגת פיצול אחד.\n"
 "\n"
-"לבסוף, בייבוא ​​חוזר יש בעמוד התצוגה המקדימה לחצנים לטעינת ושמירת ההגדרות. כדי "
+"לבסוף, בייבוא חוזר יש בעמוד התצוגה המקדימה לחצנים לטעינת ושמירת ההגדרות. כדי "
 "לשמור את ההגדרות, יש לשנות את ההגדרות לפי הצרכים (לחלופין, להתחיל מהגדרות "
 "קיימות שנקבעו מראש), ואז (לחלופין, לשנות את שם ההגדרה ולהקיש על לחצן שמירת "
 "הגדרות. לתשומת לב, לא ניתן לדרוש בשמירה הגדרות קבועות מראש מובנות."
@@ -13293,9 +13293,8 @@ msgstr ""
 "כדי לכלול יתרת פתיחה בחשבון, נא להקיש על השורה המכילה את החשבון, ולאחר מכן "
 "להקיש על שדה יתרת הפתיחה ולהזין את היתרה ההתחלתית.\n"
 "\n"
-"‏<b>הערה:</b> לכל החשבונות, למעט חשבונות הוצאות ושומרי מקום, עשויה להיות יתרת "
+"<b>הערה:</b> לכל החשבונות, למעט חשבונות הוצאות ושומרי מקום, עשויה להיות יתרת "
 "פתיחה.\n"
-"\n"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:572
 msgid "Setup selected accounts"
@@ -14048,9 +14047,9 @@ msgid ""
 "for the share distribution. You can also enter a description of the "
 "transaction, or accept the default one."
 msgstr ""
-"הזנת התאריך ומספר המניות שנוספו או נגרעו מתוצאת מפיצול או מיזוג המניות. עבור "
-"מיזוגים במניה (פיצולים שליליים) נא להשתמש בערך שלילי עבור התפלגות המניה. "
-"ניתן גם להזין תיאור תנועה או לקבל את את ברירת המחדל."
+"הזנת התאריך ומספר המניות שנוספו או נגרעו מתוצאת מפיצול או מיזוג מניות. "
+"למיזוג מניות (פיצולים שליליים) נא להשתמש בערך שלילי בהתפלגות המניה. ניתן גם "
+"להזין תיאור תנועה או לקבל את את ברירת המחדל."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:151
 msgid "Desc_ription"
@@ -14308,7 +14307,7 @@ msgstr "אפשור דרג חשבונות מוסתרים"
 
 #: gnucash/gtkbuilder/dialog-account.glade:151
 msgid "Enable the sections to Cascade"
-msgstr "אפשור דֵּרֵג הבחירה"
+msgstr "אפשור מקטעי דֵּרֵג"
 
 #: gnucash/gtkbuilder/dialog-account.glade:199
 #: gnucash/gtkbuilder/dialog-account.glade:1326
@@ -15219,7 +15218,7 @@ msgstr "מיקום _מקושר"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:380
 msgid "Enter URL like http://www.gnucash.org"
-msgstr "נא להזין URL כגון http://www.gnucash.org"
+msgstr "נא להזין פורטן כגון http://www.gnucash.org"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:425
 msgid "Location does not start with a valid scheme"
@@ -15660,8 +15659,8 @@ msgid ""
 "Double click on the transaction to either change the matching transaction in "
 "GnuCash or the destination account of the auto-balance split (if required)."
 msgstr ""
-"נא להקיש הקשה כפולה כפולה על התנועה על מנת לשנות את התנועה למותאמת בגנוקאש, "
-"או את חשבון היעד של פיצול יתרה אוטומטי (ככל שנדרש)."
+"נא להקיש הקשה כפולה על התנועה על מנת לשנות אתה למותאמת בגנוקאש, או את חשבון "
+"היעד של פיצול יתרה אוטומטי (ככל שנדרש)."
 
 #: gnucash/gtkbuilder/dialog-import.glade:480
 msgid "Transaction List Help"
@@ -18112,11 +18111,11 @@ msgstr "שבת ראשונה"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:343
 msgid "1st Sun"
-msgstr "ראשון ראשון"
+msgstr "יום ראשון, ראשון"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:346
 msgid "2nd Mon"
-msgstr "שני שני"
+msgstr "יום שני, שני"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:349
 msgid "2nd Tue"
@@ -18148,7 +18147,7 @@ msgstr "שני שלישי"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:370
 msgid "3rd Tue"
-msgstr "שלישי שלישי"
+msgstr "יום שלישי, שלישי"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:373
 msgid "3rd Wed"
@@ -18180,7 +18179,7 @@ msgstr "שלישי רביעי"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:394
 msgid "4th Wed"
-msgstr "רביעי רביעי"
+msgstr "יום רביעי, רביעי"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:397
 msgid "4th Thu"
@@ -18732,7 +18731,7 @@ msgstr "לא נמצא"
 
 #: gnucash/html/gnc-html-webkit1.c:81 gnucash/html/gnc-html-webkit2.c:92
 msgid "The specified URL could not be loaded."
-msgstr "לא ניתן לטעון את ה URL שנקבע."
+msgstr "לא ניתן לטעון את הפורטן שנקבע."
 
 #: gnucash/html/gnc-html-webkit1.c:547 gnucash/html/gnc-html-webkit1.c:963
 #: gnucash/html/gnc-html-webkit2.c:551 gnucash/html/gnc-html-webkit2.c:914
@@ -18824,7 +18823,7 @@ msgid ""
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgstr ""
 "\n"
-" יש לבקש תחילה גישה לבנקאות מקוונת מסניף הבנק. במידה והבנק יחליט להעניק גישה "
+"יש לבקש תחילה גישה לבנקאות מקוונת מסניף הבנק. במידה והבנק יחליט להעניק גישה "
 "מקוונת לחשבון, הוא ישלח הודעה המכילה\n"
 "\n"
 "* את קוד הבנק והסניף\n"
@@ -18841,9 +18840,9 @@ msgstr ""
 "\n"
 "הקשה על 'ביטול' כדי לא להגדיר כעת חיבור לבנקאות מקוונת.\n"
 "\n"
-"לבסוף, ליבוא ​​חוזר, בעמוד התצוגה המקדימה ישנם לחצנים לטעינה ושמירה של "
-"ההגדרות. על מנת לשמור את ההגדרות, ניתן לערוך את ההגדרות על פי הצורך "
-"(לחלופין, ניתן להתחיל מהגדרה מוגדרת מראש קיימת, לשנות את שמה ולשמור בהקשה על "
+"לבסוף, ליבוא חוזר, בעמוד התצוגה המקדימה ישנם לחצנים לטעינה ושמירה של "
+"ההגדרות. על מנת לשמור את ההגדרות, ניתן לערוך את ההגדרות על פי הצורך ("
+"לחלופין, ניתן להתחיל מהגדרה מוגדרת מראש קיימת, לשנות את שמה ולשמור בהקשה על "
 "לחצן 'שמירת הגדרות'). לתשומת לב, לא ניתן לשמור שינויים שנעשו בהגדרות קבועות "
 "מראש מובנות.\n"
 "\n"
@@ -19566,9 +19565,7 @@ msgstr "לא נמצא רכיב ליבוא DTAUS."
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:295
 #, c-format
 msgid "Job %d status %d - %s\n"
-msgstr ""
-"ריכוז %d מצב%d - %s\n"
-"\n"
+msgstr "ריכוז %d מצב %d - %s\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:297
 #, c-format
@@ -19847,19 +19844,17 @@ msgstr "שורה %d, חשבונית %s/%u: %s אינו תאריך פרעון ת�
 #: gnucash/import-export/bi-import/dialog-bi-import.c:476
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s does not exist.\n"
-msgstr ""
-"שורה %d, חשבונית %s/%u: חשבון %s לא קיים.\n"
-"\n"
+msgstr "שורה %d, חשבונית %s/%u: חשבון %s לא קיים.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:417
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Payable.\n"
-msgstr "שורה %d, חשבונית %s/%u: חשבון %s אינו אינו מסוג זכאים.\n"
+msgstr "שורה %d, חשבונית %s/%u: חשבון %s אינו מסוג זכאים.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:427
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Receivable.\n"
-msgstr "שורה %d, חשבונית %s/%u: חשבון %s אינו אינו מסוג חייבים.\n"
+msgstr "שורה %d, חשבונית %s/%u: חשבון %s אינו מסוג חייבים.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:465
 #, c-format
@@ -20150,7 +20145,7 @@ msgid ""
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
 "סייען זה יעזור לייצא את התנועות לקובץ\n"
-" השדות יופרדו בתו מפריד שנקבע להלן.\n"
+"השדות יופרדו בתו מפריד שנקבע להלן.\n"
 "\n"
 "לכל תנועה יהיו מספר שורות שעשויות לדרוש מניפולציה נוספת בכדי להביא אותן "
 "לפריסה שניתנת לשימוש. כל תנועה תופיע פעם אחת בייצוא, בסדר עיבוד החשבונות\n"
@@ -20163,7 +20158,6 @@ msgstr ""
 "\n"
 "נא לבחור את ההגדרות הדרושות לקובץ והקשה על 'הבא' כדי להמשיך או 'ביטול' "
 "לנטישת היצוא.\n"
-"\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:762
 msgid ""
@@ -20335,9 +20329,11 @@ msgid ""
 "\n"
 "See below for errors..."
 msgstr ""
-"היבוא הושלם אך נתגלו שגיאות!\n"
+"היבוא הושלם אבל עם שגיאות!\n"
 "\n"
-"נוספו %u חשבונות ו %u עודכנו."
+"נוספו %u חשבונות ו- %u עודכנו.\n"
+"\n"
+"נתן לצפות בשגיאות מטה..."
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:536
 #, c-format
@@ -20414,7 +20410,7 @@ msgstr "_הצרת עמודה זו"
 #, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
-msgstr[0] "נוספו %d מחירים"
+msgstr[0] "נוסף מחיר %d"
 msgstr[1] "נוספו %d מחירים"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
@@ -26604,7 +26600,7 @@ msgstr "כותרת מותאמת אישית"
 
 #: gnucash/report/reports/standard/invoice.scm:196
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
-msgstr "מחרוזת מותאמת אישית להחלפת חשבונית, חשבונית ספק, או שובר הוצאות."
+msgstr "מחרוזת מותאמת אישית להחלפת חשבונית לקוח, חשבונית ספק, או שובר הוצאות."
 
 #: gnucash/report/reports/standard/invoice.scm:201
 #: gnucash/report/reports/standard/invoice.scm:207
@@ -29009,9 +29005,9 @@ msgid ""
 "expense accounts to equity, and must usually be excluded from periodic "
 "reporting."
 msgstr ""
-"כברירת מחדל, רוב המשתמשים לא צריכים לכלול תנועות סגירה בדוח תנועות. תנועות "
-"סגירה הן העברה מחשבונות הכנסות והוצאות להון העצמי, בדרך כלל יש להחריגן "
-"מדיווח תקופתי."
+"כברירת מחדל, לרוב לא נדרש לכלול תנועות סגירה בדוח תנועות. תנועות סגירה הן "
+"יתרות שעברו מחשבונות הכנסות והוצאות לחשבון הון העצמי, בדרך כלל יש להחריג "
+"תנועות סגירה מדיווח תקופתי."
 
 #: gnucash/report/trep-engine.scm:700
 msgid "Filter on these accounts."
@@ -29191,7 +29187,7 @@ msgstr "מספר פקס של החברה"
 
 #: libgnucash/app-utils/business-options.scm:73
 msgid "Company Website URL"
-msgstr "אתר הבית של החברה"
+msgstr "פורטן החברה"
 
 #: libgnucash/app-utils/business-options.scm:74
 msgid "Company Email Address"
@@ -29410,7 +29406,7 @@ msgstr "כתובת הדוא\"ל של העסק."
 
 #: libgnucash/app-utils/business-prefs.scm:111
 msgid "The URL address of your website."
-msgstr "כתובת URL של אתר העסק."
+msgstr "פורטן העסק."
 
 #: libgnucash/app-utils/business-prefs.scm:116
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
