@@ -739,6 +739,8 @@
       (gnc:split-anchor-text split)
       (gnc:make-gnc-monetary currency amount))))
 
+  (define seen-txns (make-hash-table))
+
   (let lp ((printed? #f)
            (odd-row? #t)
            (splits splits)
@@ -763,6 +765,9 @@
        'attribute (list "cellspacing" 0)
        'attribute (list "cellpadding" 4))
       table)
+
+     ((hash-ref seen-txns (xaccSplitGetParent (car splits)))
+      (lp printed? odd-row? (cdr splits) invalid-splits total debit credit tax sale))
 
      ;; not an invoice/payment. skip transaction.
      ((not (or (txn-is-invoice? (xaccSplitGetParent (car splits)))
@@ -797,6 +802,7 @@
 
      ;; start printing txns.
      ((txn-is-invoice? (xaccSplitGetParent (car splits)))
+      (hash-set! seen-txns (xaccSplitGetParent (car splits)) #t)
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
@@ -831,6 +837,7 @@
             (+ sale (CN-negate gncInvoiceGetTotalSubtotal)))))
 
      ((txn-is-payment? (xaccSplitGetParent (car splits)))
+      (hash-set! seen-txns (xaccSplitGetParent (car splits)) #t)
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
@@ -1083,7 +1090,7 @@ invoices and amounts.")))))
      (else
       (setup-query query owner accounts end-date (eqv? GNC-OWNER-JOB type))
 
-      (let ((splits (xaccQueryGetSplitsUniqueTrans query)))
+      (let ((splits (qof-query-run query)))
         (qof-query-destroy query)
 
         (gnc:html-document-set-headline!
