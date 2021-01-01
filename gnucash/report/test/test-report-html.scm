@@ -703,39 +703,14 @@ HTML Document Title</title></head><body></body>\n\
         )
       )
     (test-end "HTML Table - Cell Access and Edit")
-    (test-begin "HTML Table - Append Columns")
-      (let (
-             (test-doc (gnc:make-html-document))
-             (test-table (gnc:make-html-table))
-           )
-        (gnc:html-table-set-caption! test-table #t)
-        (gnc:html-table-append-row! test-table "r1c1")
-        (gnc:html-table-append-row! test-table '("r2c1" "r2c2" "r2c3"))
-        (gnc:html-table-append-row! test-table '("r3c1" "r3c2"))
-        (gnc:html-table-append-column! test-table '("r1c4" "r2c4" "r3c4" "r4c4"))
-        (test-equal "HTML Table - Check Num Rows after append column"
-          4
-          (gnc:html-table-num-rows test-table)
-        )
-        (test-equal "HTML Table - Check data after append column"
-          '((#f #f #f "r4c4") ("r3c1" "r3c2" #f "r3c4") ("r2c1" "r2c2" "r2c3" "r2c4") ("r1c1" #f #f "r1c4"))
-          (gnc:html-table-data test-table)
-        )
-        (test-equal "HTML Table - Check Cell Access after append column"
-          "r3c2"
-          (gnc:html-table-get-cell test-table 2 1)
-        )
-      )
-    (test-end "HTML Table - Append Columns")
     (test-begin "HTML Table - Table Rendering")
       (let (
              (test-doc (gnc:make-html-document))
              (test-table (gnc:make-html-table))
            )
         (gnc:html-table-set-caption! test-table #t)
-        (gnc:html-table-append-row! test-table "Row 1")
-        (gnc:html-table-append-row! test-table "Row 2")
-        (gnc:html-table-append-column! test-table '("Col A" "Col B"))
+        (gnc:html-table-append-row! test-table '("Row 1" "Col A"))
+        (gnc:html-table-append-row! test-table '("Row 2" "Col B"))
         (test-equal "HTML Table - Check table rendering result"
 "<table><caption><boolean> #t</caption>\n\
 <tbody>\

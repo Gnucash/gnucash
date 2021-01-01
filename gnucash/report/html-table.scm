@@ -97,7 +97,6 @@
 (export gnc:html-table-get-cell)
 (export gnc:html-table-set-cell!)
 (export gnc:html-table-set-cell/tag!)
-(export gnc:html-table-append-column!)
 (export gnc:html-table-render)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -411,30 +410,6 @@
                 (apply gnc:make-html-table-cell objects))))
     (gnc:html-table-cell-set-tag! tc tag)
     (gnc:html-table-set-cell-datum! table row col tc)))
-
-(define (gnc:html-table-append-column! table newcol)
-  (define width (apply max (cons 0 (map length (gnc:html-table-data table)))))
-  (define (add-fn a b) (list-set-safe! b width a))
-  (issue-deprecation-warning "gnc:html-table-append-column! deprecated. please \
-populate html-table row-wise using gnc:html-table-append-row! instead.")
-  (let lp ((newcol newcol)
-           (olddata (reverse (gnc:html-table-data table)))
-           (res '())
-           (numrows 0))
-    (cond
-     ((null? newcol)
-      (gnc:html-table-set-num-rows-internal! table numrows)
-      (gnc:html-table-set-data! table res))
-     ((null? olddata)
-      (lp (cdr newcol)
-          '()
-          (cons (add-fn (car newcol) '()) res)
-          (1+ numrows)))
-     (else
-      (lp (cdr newcol)
-          (cdr olddata)
-          (cons (add-fn (car newcol) (car olddata)) res)
-          (1+ numrows))))))
 
 (define (gnc:html-table-render table doc)
   (let* ((retval '())

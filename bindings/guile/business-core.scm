@@ -30,7 +30,6 @@
 (export gnc:owner-get-address-dep)
 (export gnc:owner-get-name-and-address-dep)
 (export gnc:owner-get-owner-id)
-(export gnc:owner-from-split)
 (export gnc:split->owner)
 
 (define (gnc:owner-get-address owner)
@@ -105,37 +104,9 @@
        (gnc:owner-get-owner-id (gncJobGetOwner (gncOwnerGetJob owner))))
       (else ""))))
 
-;; this function aims to find a split's owner. various splits are
-;; supported: (1) any splits in the invoice posted transaction, in
-;; APAR or income/expense accounts (2) any splits from invoice's
-;; payments, in APAR or asset/liability accounts. it returns either
-;; the owner or '() if not found. in addition, if owner was found, the
-;; result-owner argument is mutated to it.
-(define (gnc:owner-from-split split result-owner)
-  (define (notnull x) (and (not (null? x)) x))
-  (issue-deprecation-warning
-   "gnc:owner-from-split is deprecated in 4.x. use gnc:split->owner instead.")
-  (let* ((trans (xaccSplitGetParent split))
-	 (invoice (notnull (gncInvoiceGetInvoiceFromTxn trans)))
-	 (temp (gncOwnerNew))
-	 (owner (or (and invoice (gncInvoiceGetOwner invoice))
-                    (any
-                     (lambda (split)
-                       (let* ((lot (xaccSplitGetLot split))
-                              (invoice (notnull (gncInvoiceGetInvoiceFromLot lot))))
-                         (or (and invoice (gncInvoiceGetOwner invoice))
-                             (and (gncOwnerGetOwnerFromLot lot temp) temp))))
-                     (xaccTransGetSplitList trans)))))
-    (gncOwnerFree temp)
-    (cond (owner (gncOwnerCopy (gncOwnerGetEndOwner owner) result-owner)
-                 result-owner)
-          (else  '()))))
-
-
-;; optimized from above, and simpler: does not search all transaction
-;; splits. It will allocate and memoize (cache) the owners because
-;; gncOwnerGetOwnerFromLot is slow. after use, it must be called with
-;; #f to free the owners.
+;; this function aims to find a split's owner. It will allocate and
+;; memoize (cache) the owners because gncOwnerGetOwnerFromLot is
+;; slow. after use, it must be called with #f to free the owners.
 (define gnc:split->owner
   (let ((ht (make-hash-table)))
     (lambda (split)

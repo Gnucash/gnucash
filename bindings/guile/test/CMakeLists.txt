@@ -32,7 +32,6 @@ set(bindings_test_SCHEME
 #list(APPEND engine_test_SCHEME  test-scm-query-import.scm) Fails
 
 set(GUILE_DEPENDS
-    scm-gnc-module
     scm-app-utils
     scm-core-utils
     scm-engine)
@@ -89,7 +88,6 @@ set(test_scm_SCHEME
 )
 
 set(GUILE_DEPENDS
-    scm-gnc-module
     scm-app-utils
     scm-engine
     scm-srfi64-extras
