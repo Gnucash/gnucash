@@ -206,6 +206,34 @@ gnc_reports_get_global(void)
     return reports;
 }
 
+gboolean
+gnc_run_report_with_error_handling (gint report_id, gchar ** data, gchar **errmsg)
+{
+    SCM report, res, html, captured_error;
+
+    report = gnc_report_find (report_id);
+    g_return_val_if_fail (data, FALSE);
+    g_return_val_if_fail (errmsg, FALSE);
+    g_return_val_if_fail (!scm_is_false (report), FALSE);
+
+    res = scm_call_1 (scm_c_eval_string ("gnc:render-report"), report);
+    html = scm_car (res);
+    captured_error = scm_cadr (res);
+
+    if (!scm_is_false (html))
+    {
+        *data = gnc_scm_to_utf8_string (html);
+        *errmsg = NULL;
+        return TRUE;
+    }
+    else
+    {
+        *errmsg = gnc_scm_to_utf8_string (captured_error);
+        *data = NULL;
+        return FALSE;
+    }
+}
+
 static void
 error_handler(const char *str)
 {
@@ -217,6 +245,8 @@ gnc_run_report (gint report_id, char ** data)
 {
     SCM scm_text;
     gchar *str;
+
+    PWARN ("gnc_run_report is deprecated. use gnc_run_report_with_error_handling instead.");
 
     g_return_val_if_fail (data != NULL, FALSE);
     *data = NULL;
@@ -237,6 +267,8 @@ gboolean
 gnc_run_report_id_string (const char * id_string, char **data)
 {
     gint report_id;
+
+    PWARN ("gnc_run_report_id_string is deprecated. use gnc_run_report_id_string_with_error_handling instead.");
 
     g_return_val_if_fail (id_string != NULL, FALSE);
     g_return_val_if_fail (data != NULL, FALSE);
@@ -260,6 +292,25 @@ gnc_report_name( SCM report )
         return NULL;
 
     return gnc_scm_call_1_to_string(get_name, report);
+}
+
+gboolean
+gnc_run_report_id_string_with_error_handling (const char * id_string, char **data,
+                                              gchar **errmsg)
+{
+    gint report_id;
+
+    g_return_val_if_fail (id_string, FALSE);
+    g_return_val_if_fail (data, FALSE);
+    *data = NULL;
+
+    if (strncmp ("id=", id_string, 3) != 0)
+        return FALSE;
+
+    if (sscanf (id_string + 3, "%d", &report_id) != 1)
+        return FALSE;
+
+    return gnc_run_report_with_error_handling (report_id, data, errmsg);
 }
 
 gchar*
