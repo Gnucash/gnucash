@@ -76,6 +76,7 @@
 (export gnc:report-needs-save?)
 (export gnc:report-options)
 (export gnc:report-render-html)
+(export gnc:render-report)
 (export gnc:report-run)
 (export gnc:report-serialize)
 (export gnc:report-set-ctext!)
@@ -763,9 +764,17 @@ not found.")))
                (gnc:report-set-dirty?! report #f)  ;; mark it clean
                html)))))
 
+;; render report. will return a 2-element list: either (list html #f)
+;; where html is the report html string, or (list #f captured-error)
+;; where captured-error is the error string.
+(define (gnc:render-report report)
+  (define (get-report) (gnc:report-render-html report #t))
+  (gnc:apply-with-error-handling get-report '()))
+
 ;; looks up the report by id and renders it with gnc:report-render-html
 ;; marks the cursor busy during rendering; returns the html
 (define (gnc:report-run id)
+  (issue-deprecation-warning "gnc:report-run is deprecated. use gnc:render-report instead.")
   (let ((report (gnc-report-find id))
         (html #f))
     (gnc-set-busy-cursor '() #t)
