@@ -4,14 +4,14 @@
 # Tor Harald Thorland <linux@strigen.com>, 2005-2006.
 # Sigve Indregard <sigve.indregard@gmail.com>, 2006.
 # John Erling Blad <jeblad@gmail.com>, 2018, 2020
-# Allan Nordhøy <epost@anotheragency.no>, 2020.
+# Allan Nordhøy <epost@anotheragency.no>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-31 20:29+0000\n"
+"PO-Revision-Date: 2021-01-03 05:29+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -606,7 +606,7 @@ msgstr ""
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
-msgstr ""
+msgstr "Trykk Ctrl+Page Up/Down for å bytte mellom flere faner i hovedvinduet."
 
 #: doc/tip_of_the_day.list.c:76
 msgid ""
@@ -1531,7 +1531,7 @@ msgstr "Du må velge en vare."
 
 #: gnucash/gnome/dialog-custom-report.c:449
 msgid "Unable to change report configuration name."
-msgstr ""
+msgstr "Kunne ikke endre rapportoppsettsnavn."
 
 #: gnucash/gnome/dialog-custom-report.c:461
 msgid ""
@@ -2089,7 +2089,7 @@ msgstr "Kontotilordning IKKE funnet"
 
 #: gnucash/gnome/dialog-imap-editor.c:372
 msgid "(Note, if there is a large number, it may take a while)"
-msgstr ""
+msgstr "(Merk, hvis det er et stort tall kan det ta sin tid)"
 
 #: gnucash/gnome/dialog-imap-editor.c:706
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
@@ -3429,15 +3429,16 @@ msgstr "L_agre som..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:127
 msgid "Save this file with a different name"
-msgstr ""
+msgstr "Lagre denne filen med et annet navn"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:131
 msgid "Re_vert"
-msgstr ""
+msgstr "An_gre"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:132
 msgid "Reload the current database, reverting all unsaved changes"
 msgstr ""
+"Last inn nåværende database igjen, og tilbakefør alle ulagrede endringer"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:137
 msgid "Export _Accounts"
