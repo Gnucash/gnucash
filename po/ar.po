@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash 3.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-13 22:01+0100\n"
+"POT-Creation-Date: 2021-01-03 07:22+0100\n"
 "PO-Revision-Date: 2019-02-09 19:15+0300\n"
 "Last-Translator: Abdorhman Ayman <abdorhman.ayman@protonmail.com>\n"
 "Language-Team: Arabic <(nothing)>\n"
@@ -94,7 +94,7 @@ msgstr "سجل"
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:969
 #: gnucash/gtkbuilder/dialog-account.glade:1029
-#: gnucash/report/reports/standard/account-piecharts.scm:487
+#: gnucash/report/reports/standard/account-piecharts.scm:488
 #: gnucash/report/reports/standard/category-barchart.scm:537
 msgid "Other"
 msgstr "آخرى"
@@ -991,10 +991,10 @@ msgstr "خيار سداد القرض: \"%s\""
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
 #: gnucash/register/ledger-core/split-register-model.c:232
 #: gnucash/report/reports/standard/account-summary.scm:83
-#: gnucash/report/reports/standard/advanced-portfolio.scm:72
+#: gnucash/report/reports/standard/advanced-portfolio.scm:73
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1095
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1100
-#: gnucash/report/reports/standard/cashflow-barchart.scm:331
+#: gnucash/report/reports/standard/cashflow-barchart.scm:343
 #: gnucash/report/reports/standard/category-barchart.scm:634
 #: gnucash/report/reports/standard/category-barchart.scm:655
 #: gnucash/report/reports/standard/customer-summary.scm:70
@@ -1005,9 +1005,9 @@ msgstr "خيار سداد القرض: \"%s\""
 #: gnucash/report/reports/standard/invoice.scm:212
 #: gnucash/report/reports/standard/invoice.scm:603
 #: gnucash/report/reports/standard/job-report.scm:40
-#: gnucash/report/reports/standard/net-charts.scm:417
+#: gnucash/report/reports/standard/net-charts.scm:413
 #: gnucash/report/reports/standard/new-owner-report.scm:49
-#: gnucash/report/reports/standard/new-owner-report.scm:237
+#: gnucash/report/reports/standard/new-owner-report.scm:241
 #: gnucash/report/reports/standard/owner-report.scm:50
 #: gnucash/report/reports/standard/portfolio.scm:51
 #: gnucash/report/reports/standard/register.scm:130
@@ -1033,7 +1033,7 @@ msgstr "تاريخ"
 #: gnucash/register/ledger-core/split-register.c:2669
 #: gnucash/register/ledger-core/split-register.c:2674
 #: gnucash/register/ledger-core/split-register.c:2685
-#: gnucash/report/reports/standard/new-owner-report.scm:294
+#: gnucash/report/reports/standard/new-owner-report.scm:298
 #: gnucash/report/reports/standard/owner-report.scm:357
 #: libgnucash/engine/Account.cpp:145 libgnucash/engine/Account.cpp:153
 #: libgnucash/engine/Account.cpp:174 libgnucash/engine/gncOwner.c:814
@@ -1089,14 +1089,14 @@ msgstr "خطأ في إضافة الأسعار."
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:341
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1051
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1052
 #: gnucash/report/reports/standard/budget-flow.scm:41
 #: gnucash/report/reports/standard/budget.scm:47
 #: gnucash/report/reports/standard/cash-flow.scm:47
 #: gnucash/report/reports/standard/general-journal.scm:97
 #: gnucash/report/reports/standard/job-report.scm:36
 #: gnucash/report/reports/standard/lot-viewer.scm:37
-#: gnucash/report/reports/standard/new-owner-report.scm:1128
+#: gnucash/report/reports/standard/new-owner-report.scm:1132
 #: gnucash/report/reports/standard/owner-report.scm:48
 #: gnucash/report/reports/standard/portfolio.scm:253
 #: gnucash/report/reports/standard/register.scm:143
@@ -1107,7 +1107,7 @@ msgstr "حساب"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1063
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
 msgstr "الرمز"
@@ -1115,7 +1115,7 @@ msgstr "الرمز"
 #: gnucash/gnome/assistant-stock-split.c:585
 #: gnucash/gnome/dialog-find-transactions.c:122
 #: gnucash/register/ledger-core/split-register-model.c:419
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1071
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1072
 #: gnucash/report/reports/standard/general-journal.scm:98
 #: gnucash/report/reports/standard/general-ledger.scm:78
 #: gnucash/report/reports/standard/general-ledger.scm:98
@@ -1249,7 +1249,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-billterms.glade:182
 #: gnucash/gtkbuilder/dialog-billterms.glade:767
 #: gnucash/gtkbuilder/gnc-frequency.glade:966
-#: gnucash/report/reports/standard/price-scatter.scm:138
+#: gnucash/report/reports/standard/price-scatter.scm:139
 msgid "Days"
 msgstr "أيام"
 
@@ -1264,7 +1264,7 @@ msgstr "Proximo"
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:622
 #: gnucash/gtkbuilder/dialog-price.glade:24
 #: gnucash/report/reports/standard/job-report.scm:240
-#: gnucash/report/reports/standard/new-owner-report.scm:296
+#: gnucash/report/reports/standard/new-owner-report.scm:300
 #: gnucash/report/reports/standard/owner-report.scm:353
 #: gnucash/report/reports/standard/owner-report.scm:358
 msgid "Unknown"
@@ -1687,7 +1687,7 @@ msgstr "تفاصيل المعاملة"
 #: gnucash/report/reports/standard/invoice.scm:217
 #: gnucash/report/reports/standard/job-report.scm:44
 #: gnucash/report/reports/standard/new-owner-report.scm:53
-#: gnucash/report/reports/standard/new-owner-report.scm:240
+#: gnucash/report/reports/standard/new-owner-report.scm:244
 #: gnucash/report/reports/standard/owner-report.scm:54
 #: gnucash/report/reports/standard/register.scm:138
 #: gnucash/report/reports/standard/register.scm:368
@@ -1905,7 +1905,7 @@ msgstr "سعر السهم"
 #: gnucash/report/reports/standard/general-ledger.scm:81
 #: gnucash/report/reports/standard/general-ledger.scm:101
 #: gnucash/report/reports/standard/job-report.scm:45
-#: gnucash/report/reports/standard/new-owner-report.scm:244
+#: gnucash/report/reports/standard/new-owner-report.scm:248
 #: gnucash/report/reports/standard/owner-report.scm:59
 #: gnucash/report/reports/standard/register.scm:398
 #: gnucash/report/reports/standard/register.scm:647
@@ -1922,7 +1922,7 @@ msgstr "المبلغ"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:78
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1080
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1081
 #: gnucash/report/reports/standard/portfolio.scm:258
 #: gnucash/report/reports/standard/register.scm:158
 #: gnucash/report/reports/standard/register.scm:407
@@ -2178,7 +2178,7 @@ msgstr "هذا المدخل مرتبط بطلب، وسيتم حذفه من ذل�
 #: gnucash/report/reports/standard/job-report.scm:41
 #: gnucash/report/reports/standard/new-aging.scm:126
 #: gnucash/report/reports/standard/new-owner-report.scm:50
-#: gnucash/report/reports/standard/new-owner-report.scm:957
+#: gnucash/report/reports/standard/new-owner-report.scm:961
 #: gnucash/report/reports/standard/owner-report.scm:51
 #: gnucash/report/reports/standard/owner-report.scm:612
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:233
@@ -2187,7 +2187,7 @@ msgstr "تاريخ الاستحقاق"
 
 #: gnucash/gnome/dialog-invoice.c:837 gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:130
-#: gnucash/report/reports/standard/new-owner-report.scm:961
+#: gnucash/report/reports/standard/new-owner-report.scm:965
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post Date"
 msgstr "تاريخ الترحيل"
@@ -2252,7 +2252,7 @@ msgid "PAID"
 msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:2065
-#: gnucash/report/reports/standard/new-owner-report.scm:577
+#: gnucash/report/reports/standard/new-owner-report.scm:581
 msgid "UNPAID"
 msgstr ""
 
@@ -2468,14 +2468,14 @@ msgstr "ملاحظات القسيمة"
 #: gnucash/report/reports/standard/customer-summary.scm:72
 #: gnucash/report/reports/standard/job-report.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:52
-#: gnucash/report/reports/standard/new-owner-report.scm:239
+#: gnucash/report/reports/standard/new-owner-report.scm:243
 #: gnucash/report/reports/standard/owner-report.scm:53
 msgid "Type"
 msgstr "نوع"
 
 #: gnucash/gnome/dialog-invoice.c:3440
 #: gnucash/register/ledger-core/split-register-model.c:309
-#: gnucash/report/reports/standard/new-owner-report.scm:819
+#: gnucash/report/reports/standard/new-owner-report.scm:823
 msgid "Paid"
 msgstr "مدفوع"
 
@@ -2647,7 +2647,7 @@ msgstr "العنوان"
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
 #: gnucash/report/reports/standard/new-owner-report.scm:58
-#: gnucash/report/reports/standard/new-owner-report.scm:558
+#: gnucash/report/reports/standard/new-owner-report.scm:562
 #: gnucash/report/reports/standard/owner-report.scm:319
 #: gnucash/report/reports/standard/register.scm:164
 msgid "Balance"
@@ -2740,8 +2740,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
 #: gnucash/report/reports/standard/new-aging.scm:194
-#: gnucash/report/reports/standard/new-owner-report.scm:315
-#: gnucash/report/reports/standard/new-owner-report.scm:713
+#: gnucash/report/reports/standard/new-owner-report.scm:319
+#: gnucash/report/reports/standard/new-owner-report.scm:717
 msgid "Pre-Payment"
 msgstr "دفع مسبق"
 
@@ -2868,7 +2868,7 @@ msgstr "حذف الأسعار؟"
 
 #: gnucash/gnome/dialog-price-edit-db.c:427
 #: gnucash/gtkbuilder/dialog-invoice.glade:615
-#: gnucash/report/reports/standard/budget-income-statement.scm:123
+#: gnucash/report/reports/standard/budget-income-statement.scm:124
 #: gnucash/report/reports/standard/equity-statement.scm:85
 #: gnucash/report/reports/standard/income-statement.scm:117
 #: gnucash/report/reports/standard/trial-balance.scm:91
@@ -2981,7 +2981,7 @@ msgstr "محتويات"
 
 #: gnucash/gnome/dialog-report-column-view.c:412
 #: gnucash/report/reports/standard/customer-summary.scm:291
-#: gnucash/report/reports/standard/new-owner-report.scm:1061
+#: gnucash/report/reports/standard/new-owner-report.scm:1065
 #: gnucash/report/reports/standard/owner-report.scm:743
 msgid "Report"
 msgstr "تقرير"
@@ -3351,19 +3351,19 @@ msgstr "العثور على المورد"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:97
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
 #: gnucash/register/ledger-core/split-register.c:2716
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1087
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1088
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1279
-#: gnucash/report/reports/standard/net-charts.scm:350
-#: gnucash/report/reports/standard/net-charts.scm:420
+#: gnucash/report/reports/standard/net-charts.scm:346
+#: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4369 libgnucash/engine/Scrub.c:464
+#: libgnucash/engine/Account.cpp:4373 libgnucash/engine/Scrub.c:464
 msgid "Income"
 msgstr "الدخل"
 
 #: gnucash/gnome/gnc-budget-view.c:502
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:122
-#: gnucash/report/reports/standard/budget-income-statement.scm:521
+#: gnucash/report/reports/standard/budget-income-statement.scm:522
 #: gnucash/report/reports/standard/income-statement.scm:512
 #: gnucash/report/report-utilities.scm:205
 msgid "Expenses"
@@ -3391,17 +3391,18 @@ msgstr "فتح الميزانية الحالية"
 #: gnucash/report/html-acct-table.scm:829 gnucash/report/reports/aging.scm:544
 #: gnucash/report/reports/aging.scm:831
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:294
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1052
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1053
 #: gnucash/report/reports/standard/budget-flow.scm:168
 #: gnucash/report/reports/standard/budget-flow.scm:247
 #: gnucash/report/reports/standard/budget.scm:511
+#: gnucash/report/reports/standard/cashflow-barchart.scm:352
 #: gnucash/report/reports/standard/customer-summary.scm:478
 #: gnucash/report/reports/standard/customer-summary.scm:480
 #: gnucash/report/reports/standard/invoice.scm:104
 #: gnucash/report/reports/standard/invoice.scm:252
 #: gnucash/report/reports/standard/new-aging.scm:200
 #: gnucash/report/reports/standard/new-aging.scm:325
-#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:325
 #: gnucash/report/reports/standard/portfolio.scm:278
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1961
@@ -3529,7 +3530,7 @@ msgid "Setup scheduled transactions for repayment of a loan"
 msgstr "إعداد المعاملات الجدولة لسداد قرض"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:180
-#: gnucash/report/report-core.scm:150
+#: gnucash/report/report-core.scm:151
 msgid "B_udget"
 msgstr "الميزانية"
 
@@ -3579,7 +3580,7 @@ msgid "_Import Map Editor"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
-msgid "View and Delete Bayesian and Non Bayesian information"
+msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
@@ -3749,7 +3750,7 @@ msgid "_OK"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-business.c:155
-#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:161
+#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:162
 msgid "_Business"
 msgstr "_الأعمال"
 
@@ -4290,20 +4291,21 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2846
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2850
 #: gnucash/gtkbuilder/dialog-preferences.glade:980
-#: gnucash/report/report-core.scm:157
+#: gnucash/report/report-core.scm:158
 #: gnucash/report/reports/example/average-balance.scm:92
 #: gnucash/report/reports/example/average-balance.scm:296
 #: gnucash/report/reports/example/daily-reports.scm:57
-#: gnucash/report/reports/standard/account-piecharts.scm:69
+#: gnucash/report/reports/standard/account-piecharts.scm:70
+#: gnucash/report/reports/standard/account-piecharts.scm:564
 #: gnucash/report/reports/standard/account-summary.scm:85
-#: gnucash/report/reports/standard/advanced-portfolio.scm:162
+#: gnucash/report/reports/standard/advanced-portfolio.scm:163
 #: gnucash/report/reports/standard/balance-forecast.scm:37
 #: gnucash/report/reports/standard/balance-sheet.scm:87
 #: gnucash/report/reports/standard/balsheet-pnl.scm:81
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:52
 #: gnucash/report/reports/standard/budget-barchart.scm:38
-#: gnucash/report/reports/standard/budget-income-statement.scm:74
-#: gnucash/report/reports/standard/cashflow-barchart.scm:44
+#: gnucash/report/reports/standard/budget-income-statement.scm:75
+#: gnucash/report/reports/standard/cashflow-barchart.scm:45
 #: gnucash/report/reports/standard/category-barchart.scm:75
 #: gnucash/report/reports/standard/equity-statement.scm:68
 #: gnucash/report/reports/standard/income-gst-statement.scm:125
@@ -4490,7 +4492,7 @@ msgstr "ملاحظات"
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:227
 #: gnucash/report/reports/standard/budget-flow.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:59
 #: gnucash/report/reports/standard/budget.scm:94
 msgid "Budget"
 msgstr "الميزانية"
@@ -5167,7 +5169,7 @@ msgstr "إظهار قائمة التقادم لكافة العملاء"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 #: gnucash/report/reports/standard/job-report.scm:511
-#: gnucash/report/reports/standard/new-owner-report.scm:1205
+#: gnucash/report/reports/standard/new-owner-report.scm:1209
 msgid "Vendor Report"
 msgstr "تقرير المورد"
 
@@ -5177,7 +5179,7 @@ msgstr "إظهار تقرير مورد"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
 #: gnucash/report/reports/standard/job-report.scm:505
-#: gnucash/report/reports/standard/new-owner-report.scm:1196
+#: gnucash/report/reports/standard/new-owner-report.scm:1200
 msgid "Customer Report"
 msgstr "تقرير العملاء"
 
@@ -5187,7 +5189,7 @@ msgstr "إظهار تقرير العملاء"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 #: gnucash/report/reports/standard/job-report.scm:514
-#: gnucash/report/reports/standard/new-owner-report.scm:1214
+#: gnucash/report/reports/standard/new-owner-report.scm:1218
 msgid "Employee Report"
 msgstr "تقرير الموظف"
 
@@ -6278,23 +6280,23 @@ msgstr "شكل الأوراق"
 msgid "Edit report style sheets"
 msgstr "تحرير شكل التقرير Stylesheets"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:150
-#: gnucash/report/reports/standard/view-column.scm:131
+#: gnucash/gnome/gnc-plugin-report-system.c:148
+#: gnucash/report/reports/standard/view-column.scm:127
 msgid "Report error"
 msgstr "خطأ في التقرير"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:151
-#: gnucash/report/reports/standard/view-column.scm:132
+#: gnucash/gnome/gnc-plugin-report-system.c:149
+#: gnucash/report/reports/standard/view-column.scm:128
 msgid "An error occurred while running the report."
 msgstr "حدث خطأ أثناء تشغيل التقرير."
 
-#: gnucash/gnome/gnc-plugin-report-system.c:186
-#: gnucash/gnome/gnc-plugin-report-system.c:208
+#: gnucash/gnome/gnc-plugin-report-system.c:184
+#: gnucash/gnome/gnc-plugin-report-system.c:206
 #, c-format
 msgid "Badly formed options URL: %s"
 msgstr "تشكيل سيئ للخيارات URL: %s"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:196
+#: gnucash/gnome/gnc-plugin-report-system.c:194
 #, c-format
 msgid "Badly-formed report id: %s"
 msgstr " تشكيل سيئ لمعرف التقرير: %s"
@@ -7567,8 +7569,9 @@ msgstr ""
 #. Translators: Replace here and later CUSIP by the name of your local
 #. National Securities Identifying Number
 #. like gb:SEDOL, de:WKN, ch:Valorennummer, fr:SICOVAM ...
-#. See http://en.wikipedia.org/wiki/ISIN for hints.
-#: gnucash/gnome-utils/dialog-commodity.c:173
+#. See http://en.wikipedia.org/wiki/ISIN and
+#. https://en.wikipedia.org/wiki/National_numbering_agency for hints.
+#: gnucash/gnome-utils/dialog-commodity.c:174
 msgid ""
 "\n"
 "Exchange code (ISIN, CUSIP or similar): "
@@ -7576,7 +7579,7 @@ msgstr ""
 "\n"
 "كود البورصة (الترقيم الدولي، CUSIP أو ما شابه ذلك):"
 
-#: gnucash/gnome-utils/dialog-commodity.c:175
+#: gnucash/gnome-utils/dialog-commodity.c:176
 msgid ""
 "\n"
 "Mnemonic (Ticker symbol or similar): "
@@ -7584,34 +7587,34 @@ msgstr ""
 "\n"
 "   (رمز السهم أو ما شابه ذلك):"
 
-#: gnucash/gnome-utils/dialog-commodity.c:274
+#: gnucash/gnome-utils/dialog-commodity.c:275
 msgid "Select security/currency"
 msgstr "حدد السهم / العملة"
 
-#: gnucash/gnome-utils/dialog-commodity.c:275
+#: gnucash/gnome-utils/dialog-commodity.c:276
 #: gnucash/gtkbuilder/dialog-account.glade:1257
 msgid "_Security/currency"
 msgstr "السهم / العملة"
 
-#: gnucash/gnome-utils/dialog-commodity.c:279
+#: gnucash/gnome-utils/dialog-commodity.c:280
 msgid "Select security"
 msgstr "حدد السهم"
 
-#: gnucash/gnome-utils/dialog-commodity.c:280
+#: gnucash/gnome-utils/dialog-commodity.c:281
 #: gnucash/gtkbuilder/dialog-price.glade:146
 msgid "_Security"
 msgstr "_الأمان"
 
-#: gnucash/gnome-utils/dialog-commodity.c:284
+#: gnucash/gnome-utils/dialog-commodity.c:285
 msgid "Select currency"
 msgstr "حدد العملة"
 
-#: gnucash/gnome-utils/dialog-commodity.c:285
+#: gnucash/gnome-utils/dialog-commodity.c:286
 #: gnucash/gtkbuilder/dialog-price.glade:161
 msgid "Cu_rrency"
 msgstr "العملة"
 
-#: gnucash/gnome-utils/dialog-commodity.c:759
+#: gnucash/gnome-utils/dialog-commodity.c:760
 #: gnucash/gnome-utils/dialog-options.c:713
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:412
 #: gnucash/gnome-utils/gnc-tree-view-price.c:402
@@ -7620,48 +7623,48 @@ msgstr "العملة"
 #: gnucash/gtkbuilder/dialog-transfer.glade:424
 #: gnucash/gtkbuilder/dialog-transfer.glade:437
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4368
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4372
 msgid "Currency"
 msgstr "تحويل العملات"
 
-#: gnucash/gnome-utils/dialog-commodity.c:854
+#: gnucash/gnome-utils/dialog-commodity.c:855
 msgid "Use local time"
 msgstr "استخدام التوقيت المحلي"
 
-#: gnucash/gnome-utils/dialog-commodity.c:984
+#: gnucash/gnome-utils/dialog-commodity.c:985
 msgid "Edit currency"
 msgstr "تحرير العملة"
 
-#: gnucash/gnome-utils/dialog-commodity.c:985
+#: gnucash/gnome-utils/dialog-commodity.c:986
 msgid "Currency Information"
 msgstr "معلومات العملة"
 
-#: gnucash/gnome-utils/dialog-commodity.c:990
+#: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "Edit security"
 msgstr "تحرير الأسهم والعملات"
 
-#: gnucash/gnome-utils/dialog-commodity.c:990
+#: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "New security"
 msgstr "أمان جديد"
 
-#: gnucash/gnome-utils/dialog-commodity.c:991
+#: gnucash/gnome-utils/dialog-commodity.c:992
 msgid "Security Information"
 msgstr "معلومات الأمان"
 
-#: gnucash/gnome-utils/dialog-commodity.c:1268
+#: gnucash/gnome-utils/dialog-commodity.c:1269
 msgid "You may not create a new national currency."
 msgstr "لا تستطيع إنشاء عملة وطنية جديدة."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1278
+#: gnucash/gnome-utils/dialog-commodity.c:1279
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
 msgstr "%s هو نوع سلعة محجوز. الرجاء استخدام شيء آخر."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1293
+#: gnucash/gnome-utils/dialog-commodity.c:1294
 msgid "That commodity already exists."
 msgstr "تلك السلعة موجودة بالفعل."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1342
+#: gnucash/gnome-utils/dialog-commodity.c:1343
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
@@ -8186,7 +8189,7 @@ msgstr "_لا، ليس هذا وقت"
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:166
 #: gnucash/gnome-utils/gnc-period-select.c:70
 #: gnucash/gnome-utils/gnc-period-select.c:86
-#: libgnucash/app-utils/date-utilities.scm:1039
+#: libgnucash/app-utils/date-utilities.scm:1046
 msgid "Today"
 msgstr "اليوم"
 
@@ -8195,21 +8198,21 @@ msgid "Use Shift combined with Return or Keypad Enter to finish editing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-date-delta.c:224
-#: gnucash/report/reports/standard/price-scatter.scm:139
+#: gnucash/report/reports/standard/price-scatter.scm:140
 msgid "Weeks"
 msgstr "أسابيع"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:226
 #: gnucash/gtkbuilder/assistant-loan.glade:12
 #: gnucash/gtkbuilder/gnc-date-format.glade:169
-#: gnucash/report/reports/standard/price-scatter.scm:141
+#: gnucash/report/reports/standard/price-scatter.scm:142
 msgid "Months"
 msgstr "أشهر"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:228
 #: gnucash/gtkbuilder/assistant-loan.glade:15
 #: gnucash/gtkbuilder/gnc-date-format.glade:181
-#: gnucash/report/reports/standard/price-scatter.scm:144
+#: gnucash/report/reports/standard/price-scatter.scm:145
 msgid "Years"
 msgstr "السنوات"
 
@@ -8975,40 +8978,40 @@ msgstr "تم آخر تعديل في:  %a, %b %e, %Y at %I:%M%P"
 msgid "File %s opened. %s"
 msgstr "فتح%s الملف%s"
 
-#: gnucash/gnome-utils/gnc-main-window.c:2863
+#: gnucash/gnome-utils/gnc-main-window.c:2864
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:2953
+#: gnucash/gnome-utils/gnc-main-window.c:2954
 msgid "Unable to save to database."
 msgstr "غير قادر على الحفظ إلى قاعدة البيانات."
 
-#: gnucash/gnome-utils/gnc-main-window.c:2955
+#: gnucash/gnome-utils/gnc-main-window.c:2956
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "غير قادر على الحفظ إلى قاعدة البيانات: الدفتر للقراءة فقط."
 
-#: gnucash/gnome-utils/gnc-main-window.c:4301
+#: gnucash/gnome-utils/gnc-main-window.c:4302
 msgid "Book Options"
 msgstr "خيارات الدفتر."
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.c:4686
+#: gnucash/gnome-utils/gnc-main-window.c:4687
 #, fuzzy, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr "المشاركون© 1997-2014"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4698
+#: gnucash/gnome-utils/gnc-main-window.c:4699
 #: gnucash/gnome-utils/gnc-splash.c:97
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4699
+#: gnucash/gnome-utils/gnc-main-window.c:4700
 #: gnucash/gnome-utils/gnc-splash.c:98 gnucash/gnucash-core-app.cpp:503
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4707
+#: gnucash/gnome-utils/gnc-main-window.c:4708
 #, fuzzy
 msgid "Accounting for personal and small business finance."
 msgstr "- جنوكاش للإدارة المالية الشخصية والتجارية الصغيرة "
@@ -9017,24 +9020,24 @@ msgstr "- جنوكاش للإدارة المالية الشخصية والتجا
 #. * Enter your name or that of your team and an email contact for feedback.
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
-#: gnucash/gnome-utils/gnc-main-window.c:4716
+#: gnucash/gnome-utils/gnc-main-window.c:4717
 msgid "translator-credits"
 msgstr ""
 "المشاركين في تعريب برنامج Gnucash:معتز الشويكي (المدرسون العرب - دروس "
 "تعليمية محاسبية)http://www.arabstutors.comعبدالسلام بن عبدالعزيز "
 "الشلاشhttps://twitter.com/alashalashكريم سامح (رقميات)www.ritsol.com"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4719
+#: gnucash/gnome-utils/gnc-main-window.c:4720
 msgid "Visit the GnuCash website."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-period-select.c:71
-#: libgnucash/app-utils/date-utilities.scm:955
+#: libgnucash/app-utils/date-utilities.scm:962
 msgid "Start of this month"
 msgstr "بداية هذا الشهر"
 
 #: gnucash/gnome-utils/gnc-period-select.c:72
-#: libgnucash/app-utils/date-utilities.scm:969
+#: libgnucash/app-utils/date-utilities.scm:976
 msgid "Start of previous month"
 msgstr "بداية الشهر السابق"
 
@@ -9043,17 +9046,17 @@ msgid "Start of this quarter"
 msgstr "بداية هذا الربع"
 
 #: gnucash/gnome-utils/gnc-period-select.c:74
-#: libgnucash/app-utils/date-utilities.scm:1011
+#: libgnucash/app-utils/date-utilities.scm:1018
 msgid "Start of previous quarter"
 msgstr "بداية الربع السابق"
 
 #: gnucash/gnome-utils/gnc-period-select.c:75
-#: libgnucash/app-utils/date-utilities.scm:899
+#: libgnucash/app-utils/date-utilities.scm:906
 msgid "Start of this year"
 msgstr "بداية من هذا العام"
 
 #: gnucash/gnome-utils/gnc-period-select.c:76
-#: libgnucash/app-utils/date-utilities.scm:913
+#: libgnucash/app-utils/date-utilities.scm:920
 msgid "Start of previous year"
 msgstr "بداية السنة السابقة"
 
@@ -9066,12 +9069,12 @@ msgid "Start of previous accounting period"
 msgstr "بداية الفترة المحاسبية السابقة"
 
 #: gnucash/gnome-utils/gnc-period-select.c:87
-#: libgnucash/app-utils/date-utilities.scm:962
+#: libgnucash/app-utils/date-utilities.scm:969
 msgid "End of this month"
 msgstr "نهاية هذا الشهر"
 
 #: gnucash/gnome-utils/gnc-period-select.c:88
-#: libgnucash/app-utils/date-utilities.scm:976
+#: libgnucash/app-utils/date-utilities.scm:983
 msgid "End of previous month"
 msgstr "نهاية الشهر السابق"
 
@@ -9080,17 +9083,17 @@ msgid "End of this quarter"
 msgstr "نهاية هذا الربع"
 
 #: gnucash/gnome-utils/gnc-period-select.c:90
-#: libgnucash/app-utils/date-utilities.scm:1018
+#: libgnucash/app-utils/date-utilities.scm:1025
 msgid "End of previous quarter"
 msgstr "نهاية الربع السابق"
 
 #: gnucash/gnome-utils/gnc-period-select.c:91
-#: libgnucash/app-utils/date-utilities.scm:906
+#: libgnucash/app-utils/date-utilities.scm:913
 msgid "End of this year"
 msgstr "نهاية هذا العام"
 
 #: gnucash/gnome-utils/gnc-period-select.c:92
-#: libgnucash/app-utils/date-utilities.scm:920
+#: libgnucash/app-utils/date-utilities.scm:927
 msgid "End of previous year"
 msgstr "نهاية السنة السابقة"
 
@@ -9514,7 +9517,7 @@ msgstr "راتب"
 #: gnucash/report/reports/standard/balance-sheet.scm:503
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4371
+#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4375
 msgid "Equity"
 msgstr "حقوق الملكية"
 
@@ -9525,15 +9528,15 @@ msgstr "حقوق الملكية"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 #: gnucash/register/ledger-core/split-register.c:2707
 #: gnucash/register/ledger-core/split-register-model.c:402
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1075
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1076
 #: gnucash/report/reports/standard/general-journal.scm:99
 #: gnucash/report/reports/standard/general-ledger.scm:79
 #: gnucash/report/reports/standard/general-ledger.scm:99
 #: gnucash/report/reports/standard/invoice.scm:232
 #: gnucash/report/reports/standard/portfolio.scm:257
-#: gnucash/report/reports/standard/price-scatter.scm:39
-#: gnucash/report/reports/standard/price-scatter.scm:312
-#: gnucash/report/reports/standard/price-scatter.scm:326
+#: gnucash/report/reports/standard/price-scatter.scm:40
+#: gnucash/report/reports/standard/price-scatter.scm:313
+#: gnucash/report/reports/standard/price-scatter.scm:327
 #: gnucash/report/reports/standard/register.scm:150
 #: gnucash/report/reports/standard/register.scm:393
 #: gnucash/report/trep-engine.scm:981 gnucash/report/trep-engine.scm:1105
@@ -9965,7 +9968,7 @@ msgstr "تاريخ الترحيل/الادخال/التسوية"
 #: gnucash/report/reports/standard/customer-summary.scm:71
 #: gnucash/report/reports/standard/job-report.scm:42
 #: gnucash/report/reports/standard/new-owner-report.scm:51
-#: gnucash/report/reports/standard/new-owner-report.scm:238
+#: gnucash/report/reports/standard/new-owner-report.scm:242
 #: gnucash/report/reports/standard/owner-report.scm:52
 msgid "Reference"
 msgstr "مرجع"
@@ -10050,9 +10053,9 @@ msgstr "تلقى"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1283
 #: gnucash/report/reports/standard/customer-summary.scm:139
 #: gnucash/report/reports/standard/customer-summary.scm:326
-#: gnucash/report/reports/standard/net-charts.scm:371
-#: gnucash/report/reports/standard/net-charts.scm:420
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4370
+#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:416
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4374
 #: libgnucash/engine/gncInvoice.c:1084
 msgid "Expense"
 msgstr "المصروفات"
@@ -13652,18 +13655,18 @@ msgstr "أدخل تفاصيل القرض، كحد أدنى إدخل حساب ق�
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:346
 #: gnucash/report/reports/example/average-balance.scm:40
 #: gnucash/report/reports/example/daily-reports.scm:52
-#: gnucash/report/reports/standard/account-piecharts.scm:64
+#: gnucash/report/reports/standard/account-piecharts.scm:65
 #: gnucash/report/reports/standard/account-summary.scm:79
 #: gnucash/report/reports/standard/balance-forecast.scm:40
 #: gnucash/report/reports/standard/balsheet-pnl.scm:59
-#: gnucash/report/reports/standard/cashflow-barchart.scm:54
+#: gnucash/report/reports/standard/cashflow-barchart.scm:55
 #: gnucash/report/reports/standard/cash-flow.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:69
 #: gnucash/report/reports/standard/equity-statement.scm:65
 #: gnucash/report/reports/standard/income-statement.scm:59
 #: gnucash/report/reports/standard/lot-viewer.scm:35
 #: gnucash/report/reports/standard/net-charts.scm:39
-#: gnucash/report/reports/standard/price-scatter.scm:35
+#: gnucash/report/reports/standard/price-scatter.scm:36
 #: gnucash/report/trep-engine.scm:95
 msgid "Start Date"
 msgstr "تاريخ البدء"
@@ -13814,25 +13817,25 @@ msgstr "النطاق:"
 #: gnucash/gtkbuilder/dialog-sx.glade:333
 #: gnucash/report/reports/example/average-balance.scm:41
 #: gnucash/report/reports/example/daily-reports.scm:53
-#: gnucash/report/reports/standard/account-piecharts.scm:65
+#: gnucash/report/reports/standard/account-piecharts.scm:66
 #: gnucash/report/reports/standard/account-summary.scm:80
 #: gnucash/report/reports/standard/balance-forecast.scm:41
 #: gnucash/report/reports/standard/balsheet-pnl.scm:60
-#: gnucash/report/reports/standard/cashflow-barchart.scm:55
+#: gnucash/report/reports/standard/cashflow-barchart.scm:56
 #: gnucash/report/reports/standard/cash-flow.scm:43
 #: gnucash/report/reports/standard/category-barchart.scm:70
 #: gnucash/report/reports/standard/equity-statement.scm:66
 #: gnucash/report/reports/standard/income-statement.scm:60
 #: gnucash/report/reports/standard/lot-viewer.scm:36
 #: gnucash/report/reports/standard/net-charts.scm:40
-#: gnucash/report/reports/standard/price-scatter.scm:36
+#: gnucash/report/reports/standard/price-scatter.scm:37
 #: gnucash/report/trep-engine.scm:96
 msgid "End Date"
 msgstr "تاريخ الانتهاء"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1201
 #: gnucash/report/reports/standard/job-report.scm:563
-#: gnucash/report/reports/standard/new-owner-report.scm:1161
+#: gnucash/report/reports/standard/new-owner-report.scm:1165
 #: gnucash/report/reports/standard/owner-report.scm:795
 msgid "Date Range"
 msgstr "نطاق التاريخ"
@@ -14570,7 +14573,7 @@ msgstr "حدد الحسابات للمقارنة"
 
 #: gnucash/gtkbuilder/dialog-account.glade:199
 #: gnucash/gtkbuilder/dialog-account.glade:1326
-#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:292
+#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:293
 #: gnucash/report/stylesheets/plain.scm:232
 msgid "Default"
 msgstr "الافتراضي"
@@ -14805,7 +14808,7 @@ msgstr "<b>الحساب الرئيسي</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1666
 #: gnucash/gtkbuilder/dialog-preferences.glade:2010
-#: gnucash/report/report-core.scm:156
+#: gnucash/report/report-core.scm:157
 #: gnucash/report/reports/standard/equity-statement.scm:108
 #: gnucash/report/reports/standard/equity-statement.scm:112
 #: gnucash/report/reports/standard/register.scm:347
@@ -15167,7 +15170,7 @@ msgid "Choose Owner Dialog"
 msgstr "مربع حوار اختيار المالك"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:8
-#: gnucash/report/reports/standard/account-piecharts.scm:61
+#: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
 msgstr "الأوراق المالية"
 
@@ -15310,6 +15313,7 @@ msgstr "الحصول على عروض الأسعار عبر الإنترنت"
 msgid "F_raction traded"
 msgstr "الكسور المتداولة"
 
+#. Again replace CUSIP by your National Securities Identifying Number.
 #: gnucash/gtkbuilder/dialog-commodity.glade:475
 msgid "ISIN, CUSI_P or other code"
 msgstr "كود الترقيم الدولي، CUSI_P أو رمز آخر"
@@ -15657,7 +15661,7 @@ msgstr "كل شهرين"
 #: gnucash/gtkbuilder/dialog-sx.glade:135
 #: gnucash/gtkbuilder/gnc-frequency.glade:180
 #: gnucash/gtkbuilder/gnc-frequency.glade:1408
-#: gnucash/report/reports/standard/account-piecharts.scm:123
+#: gnucash/report/reports/standard/account-piecharts.scm:124
 #: gnucash/report/reports/standard/category-barchart.scm:123
 #: gnucash/report/trep-engine.scm:336 libgnucash/engine/Recurrence.c:761
 #: libgnucash/engine/Recurrence.c:775
@@ -15680,7 +15684,7 @@ msgstr "كل أسبوعين"
 #: gnucash/gtkbuilder/dialog-sx.glade:129
 #: gnucash/gtkbuilder/gnc-frequency.glade:174
 #: gnucash/gtkbuilder/gnc-frequency.glade:993
-#: gnucash/report/reports/standard/account-piecharts.scm:126
+#: gnucash/report/reports/standard/account-piecharts.scm:127
 #: gnucash/report/reports/standard/category-barchart.scm:126
 #: gnucash/report/trep-engine.scm:327 libgnucash/engine/Recurrence.c:623
 msgid "Weekly"
@@ -16351,7 +16355,7 @@ msgid "<b>Amount</b>"
 msgstr "</b> الكمية<b>"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:460
-#: gnucash/report/reports/standard/new-owner-report.scm:294
+#: gnucash/report/reports/standard/new-owner-report.scm:298
 msgid "Refund"
 msgstr "استرداد"
 
@@ -17420,7 +17424,7 @@ msgid "Before _Date"
 msgstr "_تاريخ"
 
 #: gnucash/gtkbuilder/dialog-price.glade:795
-#: gnucash/report/reports/standard/price-scatter.scm:96
+#: gnucash/report/reports/standard/price-scatter.scm:97
 msgid "Price Database"
 msgstr "قاعدة بيانات الأسعار"
 
@@ -17791,7 +17795,7 @@ msgid "Bi-Weekly"
 msgstr "كل أسبوعين"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:141
-#: gnucash/report/reports/standard/account-piecharts.scm:120
+#: gnucash/report/reports/standard/account-piecharts.scm:121
 #: gnucash/report/trep-engine.scm:354 libgnucash/engine/Recurrence.c:787
 msgid "Yearly"
 msgstr "سنوياً"
@@ -18086,7 +18090,7 @@ msgstr "<b>نقل إلى</b>"
 #: gnucash/gtkbuilder/dialog-transfer.glade:447
 #: gnucash/gtkbuilder/dialog-transfer.glade:463
 #: gnucash/report/reports/standard/net-charts.scm:47
-#: gnucash/report/reports/standard/price-scatter.scm:49
+#: gnucash/report/reports/standard/price-scatter.scm:50
 msgid "Show Income/Expense"
 msgstr "إظهار الدخل/المصروفات"
 
@@ -19836,7 +19840,7 @@ msgid "Unspecified"
 msgstr "غير محدد"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4361
+#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4365
 msgid "Bank"
 msgstr "البنك"
 
@@ -22047,7 +22051,7 @@ msgid "Welcome to GnuCash"
 msgstr "مرحبا بكم في جنوكاش"
 
 #: gnucash/python/init.py:103
-#: gnucash/report/reports/example/hello-world.scm:486
+#: gnucash/report/reports/example/hello-world.scm:488
 msgid "Have a nice day!"
 msgstr "أتمنى لك يوماً لطيفاً!"
 
@@ -22235,7 +22239,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:527
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1091
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4362
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4366
 msgid "Cash"
 msgstr "النقدية"
 
@@ -22496,7 +22500,7 @@ msgstr "عينة: وصف المعاملة"
 #: gnucash/register/ledger-core/split-register-layout.c:703
 #: gnucash/register/ledger-core/split-register-model.c:334
 #: gnucash/report/reports/standard/new-owner-report.scm:219
-#: gnucash/report/reports/standard/new-owner-report.scm:446
+#: gnucash/report/reports/standard/new-owner-report.scm:450
 #: gnucash/report/trep-engine.scm:1292 gnucash/report/trep-engine.scm:1293
 msgctxt "Column header for 'Document Link'"
 msgid "L"
@@ -22828,7 +22832,7 @@ msgstr "لا توجد ميزانيات. يجب أن تقوم بإنشاء ميز
 #: gnucash/report/html-utilities.scm:337
 #: gnucash/report/reports/standard/balsheet-pnl.scm:140
 #: gnucash/report/reports/standard/balsheet-pnl.scm:141
-#: gnucash/report/reports/standard/new-owner-report.scm:935
+#: gnucash/report/reports/standard/new-owner-report.scm:939
 #, fuzzy
 msgid "Disabled"
 msgstr "تمكين"
@@ -22846,7 +22850,7 @@ msgid "This report requires accounts to be selected in the report options."
 msgstr "يتطلب هذا التقرير تحديد الحسابات ضمن خيارات التقارير."
 
 #: gnucash/report/html-utilities.scm:405
-#: gnucash/report/reports/standard/price-scatter.scm:276
+#: gnucash/report/reports/standard/price-scatter.scm:277
 msgid "No data"
 msgstr "لا توجد بيانات"
 
@@ -22988,7 +22992,7 @@ msgstr "تجاوز الحساباتالمحددة وإظهر الحسابات ا
 #: gnucash/report/reports/standard/balance-sheet.scm:89
 #: gnucash/report/reports/standard/balsheet-pnl.scm:82
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:54
-#: gnucash/report/reports/standard/budget-income-statement.scm:76
+#: gnucash/report/reports/standard/budget-income-statement.scm:77
 #: gnucash/report/reports/standard/income-statement.scm:64
 msgid "Report on these accounts, if display depth allows."
 msgstr "تقرير عن هذه الحسابات، إذا كان عمق العرض يسمح."
@@ -22998,8 +23002,8 @@ msgid "Select the currency to display the values of this report in."
 msgstr "حدد العملة لعرض القيم في هذا التقرير."
 
 #: gnucash/report/options-utilities.scm:144
-#: gnucash/report/reports/standard/advanced-portfolio.scm:80
-#: gnucash/report/reports/standard/price-scatter.scm:87
+#: gnucash/report/reports/standard/advanced-portfolio.scm:81
+#: gnucash/report/reports/standard/price-scatter.scm:88
 msgid "The source of price information."
 msgstr "مصدر معلومات السعر."
 
@@ -23012,32 +23016,32 @@ msgid "The volume-weighted average cost of purchases."
 msgstr "متوسط الكميات لتكلفة المشتريات."
 
 #: gnucash/report/options-utilities.scm:149
-#: gnucash/report/reports/standard/price-scatter.scm:90
+#: gnucash/report/reports/standard/price-scatter.scm:91
 msgid "Weighted Average"
 msgstr "متوسط مرجح"
 
 #: gnucash/report/options-utilities.scm:150
-#: gnucash/report/reports/standard/price-scatter.scm:91
+#: gnucash/report/reports/standard/price-scatter.scm:92
 msgid "The weighted average of all currency transactions of the past."
 msgstr "المتوسط المرجح لجميع معاملات العملة في الماضي."
 
 #: gnucash/report/options-utilities.scm:152
-#: gnucash/report/reports/standard/advanced-portfolio.scm:82
+#: gnucash/report/reports/standard/advanced-portfolio.scm:83
 msgid "Most recent"
 msgstr "الأحدث"
 
 #: gnucash/report/options-utilities.scm:153
-#: gnucash/report/reports/standard/advanced-portfolio.scm:83
+#: gnucash/report/reports/standard/advanced-portfolio.scm:84
 msgid "The most recent recorded price."
 msgstr "السعر المسجل الأكثر حداثة."
 
 #: gnucash/report/options-utilities.scm:155
-#: gnucash/report/reports/standard/advanced-portfolio.scm:85
+#: gnucash/report/reports/standard/advanced-portfolio.scm:86
 msgid "Nearest in time"
 msgstr "أقرب في الوقت"
 
 #: gnucash/report/options-utilities.scm:156
-#: gnucash/report/reports/standard/advanced-portfolio.scm:86
+#: gnucash/report/reports/standard/advanced-portfolio.scm:87
 msgid "The price recorded nearest in time to the report date."
 msgstr "سجلت الأسعار الأقرب في الوقت لتاريخ التقرير."
 
@@ -23191,38 +23195,38 @@ msgstr ""
 "إظهار المجاميع الفرعية للحساب الأصل ،  مع وضع مسافة بادئة لكل منها كما ينص "
 "كل كتاب محاسبي  (تجريبي)."
 
-#: gnucash/report/report-core.scm:148
+#: gnucash/report/report-core.scm:149
 msgid "_Assets & Liabilities"
 msgstr "_الأصول & الإلتزامات"
 
-#: gnucash/report/report-core.scm:149
+#: gnucash/report/report-core.scm:150
 msgid "_Income & Expense"
 msgstr "_الدخل & المصروفات"
 
-#: gnucash/report/report-core.scm:151
+#: gnucash/report/report-core.scm:152
 msgid "_Taxes"
 msgstr "_الضرائب"
 
-#: gnucash/report/report-core.scm:152
+#: gnucash/report/report-core.scm:153
 #, fuzzy
 msgid "E_xamples"
 msgstr "أمثلة"
 
-#: gnucash/report/report-core.scm:153
+#: gnucash/report/report-core.scm:154
 #, fuzzy
 msgid "_Experimental"
 msgstr "_تصدير"
 
-#: gnucash/report/report-core.scm:154
+#: gnucash/report/report-core.scm:155
 #, fuzzy
 msgid "_Multicolumn"
 msgstr "عرض متعدد الأعمدة"
 
-#: gnucash/report/report-core.scm:155
+#: gnucash/report/report-core.scm:156
 msgid "_Custom"
 msgstr "_مخصوص"
 
-#: gnucash/report/report-core.scm:158
+#: gnucash/report/report-core.scm:159
 #: gnucash/report/reports/standard/invoice.scm:257
 #: gnucash/report/reports/standard/invoice.scm:262
 #: gnucash/report/reports/standard/invoice.scm:267
@@ -23257,19 +23261,19 @@ msgstr "_مخصوص"
 msgid "Display"
 msgstr "عرض"
 
-#: gnucash/report/report-core.scm:159
+#: gnucash/report/report-core.scm:160
 msgid "Report name"
 msgstr "اسم التقرير"
 
-#: gnucash/report/report-core.scm:160
+#: gnucash/report/report-core.scm:161
 msgid "Stylesheet"
 msgstr "أوراق الأنماط"
 
-#: gnucash/report/report-core.scm:162
+#: gnucash/report/report-core.scm:163
 msgid "Invoice Number"
 msgstr "رقم الفاتورة"
 
-#: gnucash/report/report-core.scm:208
+#: gnucash/report/report-core.scm:209
 msgid ""
 "One of your reports has a report-guid that is a duplicate. Please check the "
 "report system, especially your saved reports, for a report with this report-"
@@ -23278,16 +23282,16 @@ msgstr ""
 "واحد من التقارير الخاصة بك لديه تقرير-GUID مكرر. يرجى التحقق من نظام "
 "التقرير، وخاصة التقارير المحفوظة، للحصول على تقرير مع هذا التقرير-GUID:"
 
-#: gnucash/report/report-core.scm:209
+#: gnucash/report/report-core.scm:210
 #, fuzzy
 msgid "Wrong report definition: "
 msgstr "تحميل خيارات التقرير"
 
-#: gnucash/report/report-core.scm:210
+#: gnucash/report/report-core.scm:211
 msgid " Report is missing a GUID."
 msgstr ""
 
-#: gnucash/report/report-core.scm:212
+#: gnucash/report/report-core.scm:213
 msgid ""
 "Some reports stored in a legacy format were found. This format is not "
 "supported anymore so these reports may not have been restored properly."
@@ -23295,21 +23299,21 @@ msgstr ""
 "تم العثور على بعض التقارير المخزنة في شكل قديم. لا يتم اعتماد هذا الشكل بعد "
 "الآن لذلك قد لا تتم استعادة هذه التقارير بشكل صحيح."
 
-#: gnucash/report/report-core.scm:286
+#: gnucash/report/report-core.scm:287
 msgid "Enter a descriptive name for this report."
 msgstr "أدخل اسما وصفيا لهذا التقرير."
 
-#: gnucash/report/report-core.scm:291
+#: gnucash/report/report-core.scm:292
 msgid "Select a stylesheet for the report."
 msgstr "تحديد أنماط للتقرير."
 
-#: gnucash/report/report-core.scm:299
+#: gnucash/report/report-core.scm:300
 msgid "stylesheet."
 msgstr "أوراق الأنماط"
 
 #: gnucash/report/reports/aging.scm:37
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:170
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:171
 #: gnucash/report/reports/standard/customer-summary.scm:41
 #: gnucash/report/reports/standard/job-report.scm:365
 #: gnucash/report/reports/standard/job-report.scm:496
@@ -23333,17 +23337,17 @@ msgstr "ترتيب الفرز"
 #: gnucash/report/reports/aging.scm:40
 #: gnucash/report/reports/example/average-balance.scm:43
 #: gnucash/report/reports/example/daily-reports.scm:54
-#: gnucash/report/reports/standard/account-piecharts.scm:66
+#: gnucash/report/reports/standard/account-piecharts.scm:67
 #: gnucash/report/reports/standard/account-summary.scm:125
-#: gnucash/report/reports/standard/advanced-portfolio.scm:75
+#: gnucash/report/reports/standard/advanced-portfolio.scm:76
 #: gnucash/report/reports/standard/balance-forecast.scm:44
 #: gnucash/report/reports/standard/balance-sheet.scm:137
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/balsheet-pnl.scm:119
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:102
 #: gnucash/report/reports/standard/budget-flow.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:115
-#: gnucash/report/reports/standard/cashflow-barchart.scm:57
+#: gnucash/report/reports/standard/budget-income-statement.scm:116
+#: gnucash/report/reports/standard/cashflow-barchart.scm:58
 #: gnucash/report/reports/standard/cash-flow.scm:49
 #: gnucash/report/reports/standard/category-barchart.scm:72
 #: gnucash/report/reports/standard/equity-statement.scm:77
@@ -23351,7 +23355,7 @@ msgstr "ترتيب الفرز"
 #: gnucash/report/reports/standard/net-charts.scm:42
 #: gnucash/report/reports/standard/new-aging.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:54
-#: gnucash/report/reports/standard/price-scatter.scm:40
+#: gnucash/report/reports/standard/price-scatter.scm:41
 #: gnucash/report/reports/standard/trial-balance.scm:129
 #: gnucash/report/trep-engine.scm:105
 msgid "Report's currency"
@@ -23360,17 +23364,17 @@ msgstr "العملة في التقرير"
 #: gnucash/report/reports/aging.scm:41
 #: gnucash/report/reports/example/average-balance.scm:44
 #: gnucash/report/reports/example/daily-reports.scm:55
-#: gnucash/report/reports/standard/account-piecharts.scm:67
+#: gnucash/report/reports/standard/account-piecharts.scm:68
 #: gnucash/report/reports/standard/account-summary.scm:126
-#: gnucash/report/reports/standard/advanced-portfolio.scm:39
+#: gnucash/report/reports/standard/advanced-portfolio.scm:40
 #: gnucash/report/reports/standard/balance-forecast.scm:45
 #: gnucash/report/reports/standard/balance-sheet.scm:138
 #: gnucash/report/reports/standard/balsheet-eg.scm:189
 #: gnucash/report/reports/standard/balsheet-pnl.scm:121
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:103
 #: gnucash/report/reports/standard/budget-flow.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:116
-#: gnucash/report/reports/standard/cashflow-barchart.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/cashflow-barchart.scm:59
 #: gnucash/report/reports/standard/cash-flow.scm:50
 #: gnucash/report/reports/standard/category-barchart.scm:73
 #: gnucash/report/reports/standard/equity-statement.scm:78
@@ -23378,7 +23382,7 @@ msgstr "العملة في التقرير"
 #: gnucash/report/reports/standard/net-charts.scm:43
 #: gnucash/report/reports/standard/new-aging.scm:43
 #: gnucash/report/reports/standard/portfolio.scm:35
-#: gnucash/report/reports/standard/price-scatter.scm:42
+#: gnucash/report/reports/standard/price-scatter.scm:43
 #: gnucash/report/reports/standard/trial-balance.scm:130
 #: gnucash/report/trep-engine.scm:102
 msgid "Price Source"
@@ -23498,21 +23502,21 @@ msgstr "إظهار جميع الموردين/العملاء حتى لو كان �
 
 #: gnucash/report/reports/aging.scm:385
 #: gnucash/report/reports/standard/new-aging.scm:122
-#: gnucash/report/reports/standard/new-owner-report.scm:953
+#: gnucash/report/reports/standard/new-owner-report.scm:957
 #: gnucash/report/reports/standard/owner-report.scm:609
 msgid "Leading date."
 msgstr "التاريخ المبدوء به"
 
 #: gnucash/report/reports/aging.scm:388
 #: gnucash/report/reports/standard/new-aging.scm:127
-#: gnucash/report/reports/standard/new-owner-report.scm:958
+#: gnucash/report/reports/standard/new-owner-report.scm:962
 #: gnucash/report/reports/standard/owner-report.scm:612
 msgid "Due date is leading."
 msgstr "تاريخ الاستحقاق هو البادئ"
 
 #: gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:131
-#: gnucash/report/reports/standard/new-owner-report.scm:962
+#: gnucash/report/reports/standard/new-owner-report.scm:966
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post date is leading."
 msgstr "تاريخ الترحيل هو البادئ"
@@ -23570,7 +23574,7 @@ msgstr "عرض الحالات النشطة"
 #: gnucash/report/reports/standard/budget-barchart.scm:72
 #: gnucash/report/reports/standard/budget.scm:119
 #: gnucash/report/reports/standard/new-aging.scm:195
-#: gnucash/report/reports/standard/new-owner-report.scm:316
+#: gnucash/report/reports/standard/new-owner-report.scm:320
 #: gnucash/report/reports/standard/owner-report.scm:259
 msgid "Current"
 msgstr "الحالي"
@@ -23578,7 +23582,7 @@ msgstr "الحالي"
 #: gnucash/report/reports/aging.scm:540
 #: gnucash/report/reports/standard/job-report.scm:159
 #: gnucash/report/reports/standard/new-aging.scm:196
-#: gnucash/report/reports/standard/new-owner-report.scm:317
+#: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/owner-report.scm:260
 msgid "0-30 days"
 msgstr "0-30 يوما"
@@ -23586,7 +23590,7 @@ msgstr "0-30 يوما"
 #: gnucash/report/reports/aging.scm:541
 #: gnucash/report/reports/standard/job-report.scm:160
 #: gnucash/report/reports/standard/new-aging.scm:197
-#: gnucash/report/reports/standard/new-owner-report.scm:318
+#: gnucash/report/reports/standard/new-owner-report.scm:322
 #: gnucash/report/reports/standard/owner-report.scm:261
 msgid "31-60 days"
 msgstr "31-60 يوما"
@@ -23594,7 +23598,7 @@ msgstr "31-60 يوما"
 #: gnucash/report/reports/aging.scm:542
 #: gnucash/report/reports/standard/job-report.scm:161
 #: gnucash/report/reports/standard/new-aging.scm:198
-#: gnucash/report/reports/standard/new-owner-report.scm:319
+#: gnucash/report/reports/standard/new-owner-report.scm:323
 #: gnucash/report/reports/standard/owner-report.scm:262
 msgid "61-90 days"
 msgstr "61-90 يوما"
@@ -23602,7 +23606,7 @@ msgstr "61-90 يوما"
 #: gnucash/report/reports/aging.scm:543
 #: gnucash/report/reports/standard/job-report.scm:162
 #: gnucash/report/reports/standard/new-aging.scm:199
-#: gnucash/report/reports/standard/new-owner-report.scm:320
+#: gnucash/report/reports/standard/new-owner-report.scm:324
 #: gnucash/report/reports/standard/owner-report.scm:263
 msgid "91+ days"
 msgstr "91 + الأيام"
@@ -23636,10 +23640,10 @@ msgid "Average Balance"
 msgstr "متوسط الرصيد"
 
 #: gnucash/report/reports/example/average-balance.scm:42
-#: gnucash/report/reports/standard/cashflow-barchart.scm:56
+#: gnucash/report/reports/standard/cashflow-barchart.scm:57
 #: gnucash/report/reports/standard/category-barchart.scm:71
 #: gnucash/report/reports/standard/net-charts.scm:41
-#: gnucash/report/reports/standard/price-scatter.scm:37
+#: gnucash/report/reports/standard/price-scatter.scm:38
 msgid "Step Size"
 msgstr "حجم الخطوة"
 
@@ -23654,25 +23658,25 @@ msgstr "استبعاد المعاملات بين الحسابات المحددة
 
 #: gnucash/report/reports/example/average-balance.scm:47
 #: gnucash/report/reports/example/daily-reports.scm:64
-#: gnucash/report/reports/standard/account-piecharts.scm:76
+#: gnucash/report/reports/standard/account-piecharts.scm:77
 #: gnucash/report/reports/standard/balance-forecast.scm:47
 #: gnucash/report/reports/standard/budget-barchart.scm:43
-#: gnucash/report/reports/standard/cashflow-barchart.scm:51
+#: gnucash/report/reports/standard/cashflow-barchart.scm:52
 #: gnucash/report/reports/standard/category-barchart.scm:84
 #: gnucash/report/reports/standard/net-charts.scm:53
-#: gnucash/report/reports/standard/price-scatter.scm:57
+#: gnucash/report/reports/standard/price-scatter.scm:58
 msgid "Plot Width"
 msgstr "عرض الرسم"
 
 #: gnucash/report/reports/example/average-balance.scm:48
 #: gnucash/report/reports/example/daily-reports.scm:65
-#: gnucash/report/reports/standard/account-piecharts.scm:77
+#: gnucash/report/reports/standard/account-piecharts.scm:78
 #: gnucash/report/reports/standard/balance-forecast.scm:48
 #: gnucash/report/reports/standard/budget-barchart.scm:44
-#: gnucash/report/reports/standard/cashflow-barchart.scm:52
+#: gnucash/report/reports/standard/cashflow-barchart.scm:53
 #: gnucash/report/reports/standard/category-barchart.scm:85
 #: gnucash/report/reports/standard/net-charts.scm:54
-#: gnucash/report/reports/standard/price-scatter.scm:58
+#: gnucash/report/reports/standard/price-scatter.scm:59
 msgid "Plot Height"
 msgstr "ارتفاع الرسم"
 
@@ -23703,7 +23707,7 @@ msgid "Show table"
 msgstr "إظهار الجدول"
 
 #: gnucash/report/reports/example/average-balance.scm:117
-#: gnucash/report/reports/standard/cashflow-barchart.scm:124
+#: gnucash/report/reports/standard/cashflow-barchart.scm:125
 #: gnucash/report/reports/standard/category-barchart.scm:188
 #: gnucash/report/reports/standard/net-charts.scm:134
 msgid "Display a table of the selected data."
@@ -23729,7 +23733,7 @@ msgstr "نوع الرسم البياني ."
 
 #: gnucash/report/reports/example/average-balance.scm:129
 #: gnucash/report/reports/example/average-balance.scm:149
-#: gnucash/report/reports/standard/advanced-portfolio.scm:94
+#: gnucash/report/reports/standard/advanced-portfolio.scm:95
 #: gnucash/report/trep-engine.scm:1962 libgnucash/engine/policy.c:58
 msgid "Average"
 msgstr "المتوسط"
@@ -23797,7 +23801,7 @@ msgid "Shows a piechart with the total expenses for each day of the week"
 msgstr "اظهار الرسم البياني بالأعمدة مع عرض المصاريف لكل يوم في الإسبوع"
 
 #: gnucash/report/reports/example/daily-reports.scm:58
-#: gnucash/report/reports/standard/account-piecharts.scm:70
+#: gnucash/report/reports/standard/account-piecharts.scm:71
 #: gnucash/report/reports/standard/category-barchart.scm:76
 msgid "Show Accounts until level"
 msgstr "إظهار حسابات حتى مستوى"
@@ -23808,50 +23812,50 @@ msgid "Show long account names"
 msgstr "إظهار أسماء الحسابات الطويلة"
 
 #: gnucash/report/reports/example/daily-reports.scm:62
-#: gnucash/report/reports/standard/account-piecharts.scm:73
+#: gnucash/report/reports/standard/account-piecharts.scm:74
 msgid "Show Totals"
 msgstr "إظهار المجاميع"
 
 #: gnucash/report/reports/example/daily-reports.scm:63
-#: gnucash/report/reports/standard/account-piecharts.scm:75
+#: gnucash/report/reports/standard/account-piecharts.scm:76
 msgid "Maximum Slices"
 msgstr "الشرائح القصوى"
 
 #: gnucash/report/reports/example/daily-reports.scm:66
-#: gnucash/report/reports/standard/account-piecharts.scm:78
+#: gnucash/report/reports/standard/account-piecharts.scm:79
 #: gnucash/report/reports/standard/category-barchart.scm:87
 msgid "Sort Method"
 msgstr "أسلوب الفرز"
 
 #: gnucash/report/reports/example/daily-reports.scm:97
-#: gnucash/report/reports/standard/account-piecharts.scm:136
+#: gnucash/report/reports/standard/account-piecharts.scm:137
 #: gnucash/report/reports/standard/category-barchart.scm:138
 #: gnucash/report/reports/standard/net-charts.scm:92
 msgid "Report on these accounts, if chosen account level allows."
 msgstr "التقرير عن هذه الحسابات، إذا أجاز مستوى الحساب الذي تم اختياره."
 
 #: gnucash/report/reports/example/daily-reports.scm:111
-#: gnucash/report/reports/standard/account-piecharts.scm:151
+#: gnucash/report/reports/standard/account-piecharts.scm:152
 #: gnucash/report/reports/standard/category-barchart.scm:150
 msgid "Show accounts to this depth and not further."
 msgstr "مشاهدة الحسابات إلى هذا العمق وليس أكثر من ذلك."
 
 #: gnucash/report/reports/example/daily-reports.scm:117
-#: gnucash/report/reports/standard/account-piecharts.scm:166
+#: gnucash/report/reports/standard/account-piecharts.scm:167
 msgid "Show the total balance in legend?"
 msgstr "عرض الرصيد الكلي في مفتاح الرسم؟"
 
 #: gnucash/report/reports/example/daily-reports.scm:289
-#: gnucash/report/reports/standard/account-piecharts.scm:545
+#: gnucash/report/reports/standard/account-piecharts.scm:546
 #: gnucash/report/reports/standard/balance-forecast.scm:276
 #: gnucash/report/reports/standard/balsheet-pnl.scm:923
 #: gnucash/report/reports/standard/budget.scm:513
-#: gnucash/report/reports/standard/cashflow-barchart.scm:282
+#: gnucash/report/reports/standard/cashflow-barchart.scm:283
 #: gnucash/report/reports/standard/cash-flow.scm:190
 #: gnucash/report/reports/standard/category-barchart.scm:514
-#: gnucash/report/reports/standard/net-charts.scm:334
-#: gnucash/report/reports/standard/price-scatter.scm:212
-#: libgnucash/app-utils/date-utilities.scm:188
+#: gnucash/report/reports/standard/net-charts.scm:330
+#: gnucash/report/reports/standard/price-scatter.scm:213
+#: libgnucash/app-utils/date-utilities.scm:187
 #, scheme-format
 msgid "~a to ~a"
 msgstr ""
@@ -23927,7 +23931,7 @@ msgstr "هذا خيار سلسلة نصيه ."
 
 #: gnucash/report/reports/example/hello-world.scm:90
 #: gnucash/report/reports/example/hello-world.scm:327
-#: gnucash/report/reports/example/hello-world.scm:499
+#: gnucash/report/reports/example/hello-world.scm:501
 msgid "Hello, World"
 msgstr "مرحبا بالعالم!"
 
@@ -24157,27 +24161,27 @@ msgstr "الخيار الرقم المنسق كعملة هو %s."
 msgid "Items you selected:"
 msgstr "العناصر التي قمت بتحديدها:"
 
-#: gnucash/report/reports/example/hello-world.scm:435
+#: gnucash/report/reports/example/hello-world.scm:437
 msgid "List items selected"
 msgstr "قائمة العناصر المحددة"
 
-#: gnucash/report/reports/example/hello-world.scm:440
+#: gnucash/report/reports/example/hello-world.scm:442
 msgid "(You selected no list items.)"
 msgstr "(لم يتم تحديد أية عناصرمن القائمة.)"
 
-#: gnucash/report/reports/example/hello-world.scm:476
+#: gnucash/report/reports/example/hello-world.scm:478
 msgid "You have selected no accounts."
 msgstr "لم تقم ببتحديد أي حسابات."
 
-#: gnucash/report/reports/example/hello-world.scm:481
+#: gnucash/report/reports/example/hello-world.scm:483
 msgid "Display help"
 msgstr "عرض المساعدة"
 
-#: gnucash/report/reports/example/hello-world.scm:510
+#: gnucash/report/reports/example/hello-world.scm:512
 msgid "Sample Report with Examples"
 msgstr "نموذج تقرير مع الأمثلة"
 
-#: gnucash/report/reports/example/hello-world.scm:514
+#: gnucash/report/reports/example/hello-world.scm:516
 msgid "A sample report with examples."
 msgstr "نموذج تقرير مع الأمثلة."
 
@@ -24217,7 +24221,7 @@ msgid "Tax Report / TXF Export"
 msgstr "تقرير الضريبة / تصدير TXF"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:170
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:171
 #: gnucash/report/reports/standard/customer-summary.scm:40
 #: gnucash/report/reports/standard/job-report.scm:365
 #: gnucash/report/reports/standard/job-report.scm:493
@@ -24227,42 +24231,42 @@ msgid "From"
 msgstr "من"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:151
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:174
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:175
 msgid "Alternate Period"
 msgstr "الفترة البديلة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:175
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:176
 msgid "Override or modify From: & To:."
 msgstr "تجاوز أو تعديل من:  و  إلى:."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
 msgid "Use From - To"
 msgstr "استخدام من - إلى"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
 msgid "Use From - To period."
 msgstr "تجاوز أو تعديل فترة من:  و  إلى:."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
 msgid "1st Est Tax Quarter"
 msgstr "الربع الأول للسنة الضريبية للمؤسسة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
 msgid "Jan 1 - Mar 31."
 msgstr "1 يناير-31 مارس."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
 msgid "2nd Est Tax Quarter"
 msgstr "الربع الثاني للسنة الضريبية للمؤسسة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
 msgid "Apr 1 - May 31."
 msgstr "أبريل 1-31 أيار/مايو."
 
@@ -24270,57 +24274,57 @@ msgstr "أبريل 1-31 أيار/مايو."
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "3rd Est Tax Quarter"
 msgstr "الربع الثاني للسنة الضريبية للمؤسسة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "Jun 1 - Aug 31."
 msgstr "يونيو 1-31 أغسطس."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 msgid "4th Est Tax Quarter"
 msgstr "الربع الرابع للسنة الضريبية للمؤسسة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 msgid "Sep 1 - Dec 31."
 msgstr "1سبتمبر- 31 ديسمبر ."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "Last Year"
 msgstr "العام الماضي"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "Last Year."
 msgstr "العام الماضي."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:187
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr "الربع الأول من السنة الماضية للضريبة المتوقعة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:189
 msgid "Jan 1 - Mar 31, Last year."
 msgstr "يناير 1 - مارس 31, السنة السابقة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:164
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr "الربع الثاني من السنة الماضية للضريبة المتوقعة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:165
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
 msgid "Apr 1 - May 31, Last year."
 msgstr "أبريل 1 - مايو 31, السنة السابقة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr "الربع الثالث من السنة الماضية للضريبة المتوقعة"
 
@@ -24328,32 +24332,32 @@ msgstr "الربع الثالث من السنة الماضية للضريبة ا
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:168
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:197
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
 msgid "Jun 1 - Aug 31, Last year."
 msgstr "يونيو 1 - أغسطس 31, السنة السابقة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:170
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:200
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr "الربع الرابع من السنة الماضية للضريبة المتوقعة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:171
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:200
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:201
 msgid "Sep 1 - Dec 31, Last year."
 msgstr "سبتمبر 1 - ديسمبر 31, السنة السابقة"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:175
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:204
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:205
 msgid "Select Accounts (none = all)"
 msgstr "قم بتحديد الحسابات (عدم التحديد = الكل)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:176
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:205
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:206
 msgid "Select accounts."
 msgstr "حدد حسابات."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:182
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:211
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:212
 msgid "Suppress $0.00 values"
 msgstr "إخفاء القيم 0.00"
 
@@ -24407,99 +24411,99 @@ msgstr "XML"
 msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr "تبين هذا الصفحة الدخل الخاضع للضريبة وخصم النفقات الخاصة بك."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:112
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:113
 msgid "Tax Schedule Report/TXF Export"
 msgstr "تقرير جدول الضريبة / تصدير TXF"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:212
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:213
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr "لن تتم طباعة رموز ضريبة قيمتها 0.00 $."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:216
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:217
 msgid "Do not print full account names"
 msgstr "لا تقم بطباعة إسم الحساب كامل"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:217
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:218
 msgid "Do not print all Parent account names."
 msgstr "لا تقم بطباعة جميع أسماء الحسابات الاعلي في الشجرة."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:221
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:222
 msgid "Print all Transfer To/From Accounts"
 msgstr "طباعة كافة حسابات التحويلات من-الي "
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:222
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:223
 msgid "Print all split details for multi-split transactions."
 msgstr "طباعة جميع تفاصيل تقسيم للمعاملات متعددة الانقسام."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:226
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:227
 msgid "Print TXF export parameters"
 msgstr "طباعةملف TXF به اعدادات تصدير"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:227
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:228
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr "إظهار  اعدادات التصدير  رمز TXF/الحساب في التقرير."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:232
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:233
 msgid "Do not print T-Num:Memo data"
 msgstr "لا تتم طباعة الصيغة الرقميه: بيانات مذكرة"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:233
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:234
 msgid "Do not print T-Num:Memo data for transactions."
 msgstr "لا تتم طباعة الصيغة الرقميه: بيانات مذكرة للمعاملات."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:236
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:237
 msgid "Do not print Action:Memo data"
 msgstr "لا تتم طباعة العمل: بيانات مذكرة"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:237
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:238
 msgid "Do not print Action:Memo data for transactions."
 msgstr "لا تتم طباعة العمل: بيانات مذكرة للمعاملات."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:241
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:242
 msgid "Do not print transaction detail"
 msgstr "لا تقم بطباعة تفاصيل المعاملة"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:242
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:243
 msgid "Do not print transaction detail for accounts."
 msgstr "لا تتم طباعة التفاصيل العملية للحسابات."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:246
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:247
 msgid "Do not use special date processing"
 msgstr "لا تقم بمعلجة التاريخ معاملة خاصة"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:247
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:248
 msgid "Do not print transactions out of specified dates."
 msgstr "لا تتم طباعة المعاملات خارج التواريخ المحددة."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:251
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:252
 msgid "Currency conversion date"
 msgstr "تاريخ تحويل العملة"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:252
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:253
 msgid "Select date to use for PriceDB lookups."
 msgstr "حدد تاريخ لاستخدامه  في عمليات بحث الاسعار."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:255
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 msgid "Nearest transaction date"
 msgstr "أقرب تاريخ للمعملة"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:255
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 msgid "Use nearest to transaction date."
 msgstr "استخدام  التاريخ الأقرب لتاريخ المعاملة."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:257
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:258
 msgid "Nearest report date"
 msgstr "أقرب تاريخ للتقرير"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:257
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:258
 msgid "Use nearest to report date."
 msgstr "استخدام  التاريخ الأقرب لتاريخ التقرير."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3322
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3323
 msgid "Tax Schedule Report & TXF Export"
 msgstr "تصدير تقرير جدول الضرائب TXF"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3324
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3325
 msgid ""
 "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF "
 "file"
@@ -24507,108 +24511,108 @@ msgstr ""
 "الخاضعة للضريبة الدخل / المصروفات واجبة الخصم مع  تفاصيل  العملية / تصدير "
 "إلى ملف .TXF"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3328
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3337
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3329
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3338
 msgid "Taxable Income/Deductible Expenses"
 msgstr "الدخل الخاضع للضريبة/خصم المصروفات"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3329
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3330
 msgid ""
 "This report shows transaction detail for your accounts related to Income "
 "Taxes."
 msgstr "يبين هذا التقرير بالتفصيل عمليات حساباتك المتعلقة بالضرائب على الدخل."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3338
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3339
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr "يبين هذا التقرير بالتفصيل عمليات حساباتك المتعلقة بالضرائب على الدخل."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:35
+#: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
 msgstr "رسم بياني للدخل"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:36
+#: gnucash/report/reports/standard/account-piecharts.scm:37
 msgid "Expense Piechart"
 msgstr "رسم بياني للمصروفات"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:37
+#: gnucash/report/reports/standard/account-piecharts.scm:38
 msgid "Asset Piechart"
 msgstr "رسم بياني للأصول"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:38
+#: gnucash/report/reports/standard/account-piecharts.scm:39
 #, fuzzy
 msgid "Security Piechart"
 msgstr "رسم بياني للأصول"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:39
+#: gnucash/report/reports/standard/account-piecharts.scm:40
 msgid "Liability Piechart"
 msgstr "رسم بياني للإلتزامات"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:44
+#: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
 msgstr "يظهر مخطط دائري بياني الدخل في فترة زمنية معينة"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:46
+#: gnucash/report/reports/standard/account-piecharts.scm:47
 msgid "Shows a piechart with the Expenses per given time interval"
 msgstr "يظهر مخطط دائري بياني للنفقات في فترة زمنية معينة"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:48
+#: gnucash/report/reports/standard/account-piecharts.scm:49
 msgid "Shows a piechart with the Assets balance at a given time"
 msgstr "يظهر مخطط دائري بياني مع ميزان الأصول في وقت معين"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:50
+#: gnucash/report/reports/standard/account-piecharts.scm:51
 #, fuzzy
 msgid "Shows a piechart with distribution of assets over securities"
 msgstr "يظهر مخطط دائري بياني للإلتزامات في فترة زمنية معينة"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:52
+#: gnucash/report/reports/standard/account-piecharts.scm:53
 msgid "Shows a piechart with the Liabilities balance at a given time"
 msgstr "يظهر مخطط دائري بياني للإلتزامات في فترة زمنية معينة"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:58
+#: gnucash/report/reports/standard/account-piecharts.scm:59
 #: gnucash/report/reports/standard/customer-summary.scm:49
 #: gnucash/report/reports/standard/customer-summary.scm:50
 msgid "Income Accounts"
 msgstr "حسابات الدخل"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:59
+#: gnucash/report/reports/standard/account-piecharts.scm:60
 #: gnucash/report/reports/standard/customer-summary.scm:57
 #: gnucash/report/reports/standard/customer-summary.scm:58
 msgid "Expense Accounts"
 msgstr "حسابات المصروفات"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:60
+#: gnucash/report/reports/standard/account-piecharts.scm:61
 #: gnucash/report/reports/standard/balance-sheet.scm:486
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:665
-#: gnucash/report/reports/standard/net-charts.scm:350
-#: gnucash/report/reports/standard/net-charts.scm:421
+#: gnucash/report/reports/standard/net-charts.scm:346
+#: gnucash/report/reports/standard/net-charts.scm:417
 #: gnucash/report/report-utilities.scm:199
 msgid "Assets"
 msgstr "الأصول"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:62
+#: gnucash/report/reports/standard/account-piecharts.scm:63
 #: gnucash/report/reports/standard/balance-sheet.scm:387
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:695
-#: gnucash/report/reports/standard/net-charts.scm:371
-#: gnucash/report/reports/standard/net-charts.scm:421
+#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:417
 #: gnucash/report/report-utilities.scm:200
 msgid "Liabilities"
 msgstr "الإلتزامات"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:72
+#: gnucash/report/reports/standard/account-piecharts.scm:73
 #, fuzzy
 msgid "Show long names"
 msgstr "إظهار أسماء الحسابات الطويلة"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:74
+#: gnucash/report/reports/standard/account-piecharts.scm:75
 msgid "Show Percents"
 msgstr "إظهار النسب المئوية"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:80
+#: gnucash/report/reports/standard/account-piecharts.scm:81
 #: gnucash/report/reports/standard/category-barchart.scm:89
 msgid "Show Average"
 msgstr "إظهار المتوسط"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:81
+#: gnucash/report/reports/standard/account-piecharts.scm:82
 #: gnucash/report/reports/standard/category-barchart.scm:90
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
@@ -24617,63 +24621,63 @@ msgstr ""
 "تحديد ما إذا كان ينبغي أن تظهر المبالغ على مدى فترة زمنية كاملة أو كمتوسط ."
 "على ​​سبيل المثال شهريا."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:117
+#: gnucash/report/reports/standard/account-piecharts.scm:118
 #: gnucash/report/reports/standard/category-barchart.scm:120
 msgid "No Averaging"
 msgstr "لا يوجد في المتوسط"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:118
+#: gnucash/report/reports/standard/account-piecharts.scm:119
 #: gnucash/report/reports/standard/category-barchart.scm:121
 msgid "Just show the amounts, without any averaging."
 msgstr "تظهر فقط المبالغ، دون أي متوسط."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:121
+#: gnucash/report/reports/standard/account-piecharts.scm:122
 msgid "Show the average yearly amount during the reporting period."
 msgstr "عرض متوسط ​​المبلغ السنوي خلال الفترة المشمولة بالتقرير."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:124
+#: gnucash/report/reports/standard/account-piecharts.scm:125
 #: gnucash/report/reports/standard/category-barchart.scm:124
 msgid "Show the average monthly amount during the reporting period."
 msgstr "عرض متوسط ​​المبلغ الشهري خلال الفترة المشمولة بالتقرير."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:127
+#: gnucash/report/reports/standard/account-piecharts.scm:128
 #: gnucash/report/reports/standard/category-barchart.scm:127
 msgid "Show the average weekly amount during the reporting period."
 msgstr "عرض متوسط ​​المبلغ الأسبوعي خلال الفترة المشمولة بالتقرير."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:159
+#: gnucash/report/reports/standard/account-piecharts.scm:160
 #: gnucash/report/reports/standard/category-barchart.scm:157
 msgid "Show the full account name in legend?"
 msgstr "عرض اسم الحساب الكامل في مفتاح الرسم؟"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:160
+#: gnucash/report/reports/standard/account-piecharts.scm:161
 #, fuzzy
 msgid "Show the full security name in the legend?"
 msgstr "عرض اسم الحساب الكامل في مفتاح الرسم؟"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:172
+#: gnucash/report/reports/standard/account-piecharts.scm:173
 msgid "Show the percentage in legend?"
 msgstr "عرض اسم الحساب الكامل في مفتاح الرسم؟"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:178
+#: gnucash/report/reports/standard/account-piecharts.scm:179
 msgid "Maximum number of slices in pie."
 msgstr "الحد الأقصى لعدد الشرائح في الرسم البياني الدائري."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:413
+#: gnucash/report/reports/standard/account-piecharts.scm:414
 msgid "Yearly Average"
 msgstr "المتوسط السنوي"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:414
+#: gnucash/report/reports/standard/account-piecharts.scm:415
 #: gnucash/report/reports/standard/category-barchart.scm:306
 msgid "Monthly Average"
 msgstr "المتوسط الشهري"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:415
+#: gnucash/report/reports/standard/account-piecharts.scm:416
 #: gnucash/report/reports/standard/category-barchart.scm:307
 msgid "Weekly Average"
 msgstr "المتوسط ​​الاسبوعي"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:549
+#: gnucash/report/reports/standard/account-piecharts.scm:550
 #, fuzzy, scheme-format
 msgid "Balance at ~a"
 msgstr "الرصيد في%s"
@@ -24690,7 +24694,7 @@ msgstr "ملخص المعاملات المجدولة المستقبلية"
 #: gnucash/report/reports/standard/balance-sheet.scm:76
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:52
+#: gnucash/report/reports/standard/budget-income-statement.scm:53
 #: gnucash/report/reports/standard/equity-statement.scm:59
 #: gnucash/report/reports/standard/income-statement.scm:53
 #: gnucash/report/reports/standard/trial-balance.scm:65
@@ -24701,7 +24705,7 @@ msgstr "عنوان التقرير"
 #: gnucash/report/reports/standard/balance-sheet.scm:77
 #: gnucash/report/reports/standard/balsheet-eg.scm:151
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:53
+#: gnucash/report/reports/standard/budget-income-statement.scm:54
 #: gnucash/report/reports/standard/equity-statement.scm:60
 #: gnucash/report/reports/standard/income-statement.scm:54
 #: gnucash/report/reports/standard/trial-balance.scm:66
@@ -24711,7 +24715,7 @@ msgstr "عنوان لهذا التقرير."
 #: gnucash/report/reports/standard/account-summary.scm:75
 #: gnucash/report/reports/standard/balance-sheet.scm:79
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:55
+#: gnucash/report/reports/standard/budget-income-statement.scm:56
 #: gnucash/report/reports/standard/equity-statement.scm:62
 #: gnucash/report/reports/standard/income-statement.scm:56
 #: gnucash/report/reports/standard/trial-balance.scm:68
@@ -24721,7 +24725,7 @@ msgstr "اسم الشركة"
 #: gnucash/report/reports/standard/account-summary.scm:76
 #: gnucash/report/reports/standard/balance-sheet.scm:80
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:56
+#: gnucash/report/reports/standard/budget-income-statement.scm:57
 #: gnucash/report/reports/standard/equity-statement.scm:63
 #: gnucash/report/reports/standard/income-statement.scm:57
 #: gnucash/report/reports/standard/trial-balance.scm:69
@@ -24734,7 +24738,7 @@ msgstr "اسم الشركة / الفرد."
 #: gnucash/report/reports/standard/balsheet-pnl.scm:84
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:55
 #: gnucash/report/reports/standard/budget-barchart.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:77
+#: gnucash/report/reports/standard/budget-income-statement.scm:78
 #: gnucash/report/reports/standard/income-statement.scm:65
 #: gnucash/report/reports/standard/trial-balance.scm:79
 msgid "Levels of Subaccounts"
@@ -24746,7 +24750,7 @@ msgstr "مستويات الحسابات الفرعية"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:85
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:57
 #: gnucash/report/reports/standard/budget-barchart.scm:48
-#: gnucash/report/reports/standard/budget-income-statement.scm:79
+#: gnucash/report/reports/standard/budget-income-statement.scm:80
 #: gnucash/report/reports/standard/income-statement.scm:67
 #: gnucash/report/reports/standard/trial-balance.scm:81
 msgid "Maximum number of levels in the account tree displayed."
@@ -24763,7 +24767,7 @@ msgstr "طريقة التعامل مع الحسابات التي تزيد عن �
 #: gnucash/report/reports/standard/account-summary.scm:95
 #: gnucash/report/reports/standard/balance-sheet.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:62
-#: gnucash/report/reports/standard/budget-income-statement.scm:84
+#: gnucash/report/reports/standard/budget-income-statement.scm:85
 #: gnucash/report/reports/standard/income-statement.scm:72
 msgid "Parent account balances"
 msgstr "أرصدة الحساب الرئيسي"
@@ -24771,7 +24775,7 @@ msgstr "أرصدة الحساب الرئيسي"
 #: gnucash/report/reports/standard/account-summary.scm:96
 #: gnucash/report/reports/standard/balance-sheet.scm:98
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:63
-#: gnucash/report/reports/standard/budget-income-statement.scm:85
+#: gnucash/report/reports/standard/budget-income-statement.scm:86
 #: gnucash/report/reports/standard/income-statement.scm:73
 msgid "Parent account subtotals"
 msgstr "المجاميع الفرعية للحساب الأصل"
@@ -24780,7 +24784,7 @@ msgstr "المجاميع الفرعية للحساب الأصل"
 #: gnucash/report/reports/standard/balance-sheet.scm:100
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:65
-#: gnucash/report/reports/standard/budget-income-statement.scm:87
+#: gnucash/report/reports/standard/budget-income-statement.scm:88
 #: gnucash/report/reports/standard/income-statement.scm:75
 #: gnucash/report/reports/standard/trial-balance.scm:121
 msgid "Include accounts with zero total balances"
@@ -24790,7 +24794,7 @@ msgstr "تضمين الحسابات التي تحتوي على أرصدة مسا
 #: gnucash/report/reports/standard/balance-sheet.scm:102
 #: gnucash/report/reports/standard/balsheet-pnl.scm:94
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:67
-#: gnucash/report/reports/standard/budget-income-statement.scm:89
+#: gnucash/report/reports/standard/budget-income-statement.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:77
 #: gnucash/report/reports/standard/trial-balance.scm:123
 msgid "Include accounts with zero total (recursive) balances in this report."
@@ -24800,7 +24804,7 @@ msgstr "تضمين الحسابات التي تحتوي على أرصدة مسا
 #: gnucash/report/reports/standard/balance-sheet.scm:103
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:68
-#: gnucash/report/reports/standard/budget-income-statement.scm:90
+#: gnucash/report/reports/standard/budget-income-statement.scm:91
 #: gnucash/report/reports/standard/income-statement.scm:78
 msgid "Omit zero balance figures"
 msgstr "حذف أرقام الميزان الصفرية"
@@ -24809,7 +24813,7 @@ msgstr "حذف أرقام الميزان الصفرية"
 #: gnucash/report/reports/standard/balance-sheet.scm:105
 #: gnucash/report/reports/standard/balsheet-pnl.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:70
-#: gnucash/report/reports/standard/budget-income-statement.scm:92
+#: gnucash/report/reports/standard/budget-income-statement.scm:93
 #: gnucash/report/reports/standard/income-statement.scm:80
 msgid "Show blank space in place of any zero balances which would be shown."
 msgstr "تظهر مساحة فارغة في مكان أي لأرصدة الصفر التي من شأنها أن تظهر."
@@ -24817,7 +24821,7 @@ msgstr "تظهر مساحة فارغة في مكان أي لأرصدة الصف�
 #: gnucash/report/reports/standard/account-summary.scm:105
 #: gnucash/report/reports/standard/balance-sheet.scm:107
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:72
-#: gnucash/report/reports/standard/budget-income-statement.scm:94
+#: gnucash/report/reports/standard/budget-income-statement.scm:95
 #: gnucash/report/reports/standard/equity-statement.scm:72
 #: gnucash/report/reports/standard/income-statement.scm:82
 msgid "Show accounting-style rules"
@@ -24826,7 +24830,7 @@ msgstr "أظهر أسطر عند الإجمالي الفرعي لكل عامود
 #: gnucash/report/reports/standard/account-summary.scm:107
 #: gnucash/report/reports/standard/balance-sheet.scm:109
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:74
-#: gnucash/report/reports/standard/budget-income-statement.scm:96
+#: gnucash/report/reports/standard/budget-income-statement.scm:97
 #: gnucash/report/reports/standard/equity-statement.scm:74
 #: gnucash/report/reports/standard/income-statement.scm:84
 msgid "Use rules beneath columns of added numbers like accountants do."
@@ -24839,7 +24843,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 #: gnucash/report/reports/standard/balsheet-pnl.scm:99
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:76
-#: gnucash/report/reports/standard/budget-income-statement.scm:98
+#: gnucash/report/reports/standard/budget-income-statement.scm:99
 #: gnucash/report/reports/standard/income-statement.scm:86
 #: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Display accounts as hyperlinks"
@@ -24850,7 +24854,7 @@ msgstr "عرض الحسابات كإرتباطات تشعبية"
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/balsheet-pnl.scm:100
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:77
-#: gnucash/report/reports/standard/budget-income-statement.scm:99
+#: gnucash/report/reports/standard/budget-income-statement.scm:100
 #: gnucash/report/reports/standard/income-statement.scm:87
 #: gnucash/report/reports/standard/trial-balance.scm:126
 msgid "Shows each account in the table as a hyperlink to its register window."
@@ -24889,7 +24893,7 @@ msgstr "تظهر الملاحظات على الحساب."
 #: gnucash/report/reports/standard/balsheet-eg.scm:195
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:101
-#: gnucash/report/reports/standard/budget-income-statement.scm:114
+#: gnucash/report/reports/standard/budget-income-statement.scm:115
 #: gnucash/report/reports/standard/equity-statement.scm:76
 #: gnucash/report/reports/standard/income-statement.scm:108
 #: gnucash/report/reports/standard/trial-balance.scm:128
@@ -24900,7 +24904,7 @@ msgstr "السلع"
 #: gnucash/report/reports/standard/balance-sheet.scm:139
 #: gnucash/report/reports/standard/balsheet-eg.scm:190
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:104
-#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/budget-income-statement.scm:118
 #: gnucash/report/reports/standard/equity-statement.scm:79
 #: gnucash/report/reports/standard/income-statement.scm:111
 #: gnucash/report/reports/standard/trial-balance.scm:131
@@ -24911,7 +24915,7 @@ msgstr "اعرض العملات الأجنبية"
 #: gnucash/report/reports/standard/balance-sheet.scm:141
 #: gnucash/report/reports/standard/balsheet-eg.scm:192
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:106
-#: gnucash/report/reports/standard/budget-income-statement.scm:119
+#: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/equity-statement.scm:81
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:133
@@ -24922,7 +24926,7 @@ msgstr "عرض أي مبلغ بالعملة الأجنبية في الحساب."
 #: gnucash/report/reports/standard/balance-sheet.scm:142
 #: gnucash/report/reports/standard/balsheet-pnl.scm:130
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:107
-#: gnucash/report/reports/standard/budget-income-statement.scm:120
+#: gnucash/report/reports/standard/budget-income-statement.scm:121
 #: gnucash/report/reports/standard/cash-flow.scm:51
 #: gnucash/report/reports/standard/equity-statement.scm:82
 #: gnucash/report/reports/standard/income-statement.scm:114
@@ -24934,7 +24938,7 @@ msgstr "إظهار أسعار الصرف"
 #: gnucash/report/reports/standard/balance-sheet.scm:143
 #: gnucash/report/reports/standard/balsheet-pnl.scm:131
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
-#: gnucash/report/reports/standard/budget-income-statement.scm:121
+#: gnucash/report/reports/standard/budget-income-statement.scm:122
 #: gnucash/report/reports/standard/cash-flow.scm:77
 #: gnucash/report/reports/standard/equity-statement.scm:83
 #: gnucash/report/reports/standard/income-statement.scm:115
@@ -24983,199 +24987,199 @@ msgstr "الفترة تغطي %s إلى %s"
 msgid "Account title"
 msgstr "عنوان الحساب"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:37
+#: gnucash/report/reports/standard/advanced-portfolio.scm:38
 msgid "Advanced Portfolio"
 msgstr "محفظة استثمارات متقدمة"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:40
+#: gnucash/report/reports/standard/advanced-portfolio.scm:41
 #: gnucash/report/reports/standard/portfolio.scm:36
 msgid "Share decimal places"
 msgstr "عدد الفواصل العشرية للسهم"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:41
+#: gnucash/report/reports/standard/advanced-portfolio.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:37
 msgid "Include accounts with no shares"
 msgstr "تضمين الحسابات التي لا تحتوي على أسهم"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:42
+#: gnucash/report/reports/standard/advanced-portfolio.scm:43
 msgid "Show ticker symbols"
 msgstr "إظهار رموز مؤشر الأسهم"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:43
+#: gnucash/report/reports/standard/advanced-portfolio.scm:44
 msgid "Show listings"
 msgstr "إظهار القوائم"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:44
+#: gnucash/report/reports/standard/advanced-portfolio.scm:45
 msgid "Show prices"
 msgstr "إظهار الأسعار"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:45
+#: gnucash/report/reports/standard/advanced-portfolio.scm:46
 msgid "Show number of shares"
 msgstr "إظهار عدد الأسهم"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:46
+#: gnucash/report/reports/standard/advanced-portfolio.scm:47
 msgid "Basis calculation method"
 msgstr "طريقة حساب كلاً على حدة"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:47
+#: gnucash/report/reports/standard/advanced-portfolio.scm:48
 msgid "Set preference for price list data"
 msgstr "تعيين الأفضلية لبيانات قائمة الأسعار"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:48
+#: gnucash/report/reports/standard/advanced-portfolio.scm:49
 msgid "How to report brokerage fees"
 msgstr "كيفية وضع رسوم السمسرة في التقرير"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:92
+#: gnucash/report/reports/standard/advanced-portfolio.scm:93
 msgid "Basis calculation method."
 msgstr "طريقة حساب الأساس."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:95
+#: gnucash/report/reports/standard/advanced-portfolio.scm:96
 msgid "Use average cost of all shares for basis."
 msgstr "استخدام متوسط ​​تكلفة كل سهم كأساس."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:97
+#: gnucash/report/reports/standard/advanced-portfolio.scm:98
 msgid "FIFO"
 msgstr "الداخل أولاً خارج أولاً"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:98
+#: gnucash/report/reports/standard/advanced-portfolio.scm:99
 msgid "Use first-in first-out method for basis."
 msgstr "استخدام طريقة الداخل أولا-خارج أولا  للأساس."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:100
+#: gnucash/report/reports/standard/advanced-portfolio.scm:101
 msgid "LIFO"
 msgstr "طريقة الداخل اخرا-خارج"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:101
+#: gnucash/report/reports/standard/advanced-portfolio.scm:102
 msgid "Use last-in first-out method for basis."
 msgstr "استخدام طريقة الداخل اخرا-خارج أولا  للأساس."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:107
+#: gnucash/report/reports/standard/advanced-portfolio.scm:108
 msgid "Prefer use of price editor pricing over transactions, where applicable."
 msgstr "تفضل استخدام سعر التسعير على محرر المعاملات، حيثما ينطبق ذلك."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:113
+#: gnucash/report/reports/standard/advanced-portfolio.scm:114
 msgid "How to report commissions and other brokerage fees."
 msgstr "كيفية تقرير العمولات ورسوم السمسرة الأخرى."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:115
+#: gnucash/report/reports/standard/advanced-portfolio.scm:116
 msgid "Include in basis"
 msgstr "تدرج في الأساس"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:116
+#: gnucash/report/reports/standard/advanced-portfolio.scm:117
 msgid "Include brokerage fees in the basis for the asset."
 msgstr "شمل رسوم السمسرة في الأساس للأصول."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:118
+#: gnucash/report/reports/standard/advanced-portfolio.scm:119
 msgid "Include in gain"
 msgstr "وتشمل المكاسب"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:119
+#: gnucash/report/reports/standard/advanced-portfolio.scm:120
 msgid "Include brokerage fees in the gain and loss but not in the basis."
 msgstr "شمل رسوم السمسرة في الربح والخسارة ولكن ليس في الأساس."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:121
+#: gnucash/report/reports/standard/advanced-portfolio.scm:122
 msgid "Ignore"
 msgstr "تجاهل"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:122
+#: gnucash/report/reports/standard/advanced-portfolio.scm:123
 msgid "Ignore brokerage fees entirely."
 msgstr "تجاهل رسوم السمسرة تماما."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:129
+#: gnucash/report/reports/standard/advanced-portfolio.scm:130
 msgid "Display the ticker symbols."
 msgstr "إظهار رموز مؤشر الأسهم"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:136
+#: gnucash/report/reports/standard/advanced-portfolio.scm:137
 msgid "Display exchange listings."
 msgstr "اعرض الأسهم المدرجة في البورصة"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:143
+#: gnucash/report/reports/standard/advanced-portfolio.scm:144
 msgid "Display numbers of shares in accounts."
 msgstr " عرض عدد الأسهم في الحساب."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:149
+#: gnucash/report/reports/standard/advanced-portfolio.scm:150
 #: gnucash/report/reports/standard/portfolio.scm:63
 msgid "The number of decimal places to use for share numbers."
 msgstr "عدد المنازل العشرية لاستخدامها لأعداد سهم."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:156
+#: gnucash/report/reports/standard/advanced-portfolio.scm:157
 msgid "Display share prices."
 msgstr "عرض أسعار الأسهم."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:164
+#: gnucash/report/reports/standard/advanced-portfolio.scm:165
 #: gnucash/report/reports/standard/portfolio.scm:71
 msgid "Stock Accounts to report on."
 msgstr "حسابات الأوراق المالية المطلوب أن تقدم تقريرا عنها."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:176
+#: gnucash/report/reports/standard/advanced-portfolio.scm:177
 #: gnucash/report/reports/standard/portfolio.scm:83
 msgid "Include accounts that have a zero share balances."
 msgstr "تشمل الحسابات التي لديها أرصدة السهم بصفر ."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1067
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1068
 #: gnucash/report/reports/standard/portfolio.scm:255
 msgid "Listing"
 msgstr "إدراج"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1079
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1080
 msgid "Basis"
 msgstr "أساس"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1081
-#: gnucash/report/reports/standard/cashflow-barchart.scm:297
-#: gnucash/report/reports/standard/cashflow-barchart.scm:332
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1082
+#: gnucash/report/reports/standard/cashflow-barchart.scm:298
+#: gnucash/report/reports/standard/cashflow-barchart.scm:344
 #: gnucash/report/reports/standard/cash-flow.scm:279
 msgid "Money In"
 msgstr "المال الداخل"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1082
-#: gnucash/report/reports/standard/cashflow-barchart.scm:303
-#: gnucash/report/reports/standard/cashflow-barchart.scm:333
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1083
+#: gnucash/report/reports/standard/cashflow-barchart.scm:304
+#: gnucash/report/reports/standard/cashflow-barchart.scm:345
 #: gnucash/report/reports/standard/cash-flow.scm:300
 msgid "Money Out"
 msgstr "المال الخارج"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1083
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1084
 msgid "Realized Gain"
 msgstr "المكاسب المحققة"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1084
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1085
 msgid "Unrealized Gain"
 msgstr "مكاسب غير محققة"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1085
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1086
 msgid "Total Gain"
 msgstr "إجمالي المكاسب"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1086
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1087
 msgid "Rate of Gain"
 msgstr "معدل الربح"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1090
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1091
 msgid "Brokerage Fees"
 msgstr "رسوم الوساطة"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1092
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1093
 msgid "Total Return"
 msgstr "العائد الإجمالي"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1093
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1094
 msgid "Rate of Return"
 msgstr "معدل العائد"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1190
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1191
 msgid ""
 "* this commodity data was built using transaction pricing instead of the "
 "price list."
 msgstr ""
 "* بنيت هذه البيانات السلع باستخدام تسعير المعاملات بدلا من قائمة الأسعار."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1192
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1193
 msgid ""
 "If you are in a multi-currency situation, the exchanges may not be correct."
 msgstr "إذا كنت في موقف متعدد العملات، قد لا يكون التبادل الصحيح."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1197
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1198
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr "** هذه السلعة لا يوجد لديه سعر واستخدمت بسعر 1."
 
@@ -25187,7 +25191,7 @@ msgstr "الرصيد في%s"
 #: gnucash/report/reports/standard/balance-forecast.scm:38
 #: gnucash/report/reports/standard/budget-barchart.scm:134
 #: gnucash/report/reports/standard/budget-flow.scm:87
-#: gnucash/report/reports/standard/cashflow-barchart.scm:87
+#: gnucash/report/reports/standard/cashflow-barchart.scm:88
 #: gnucash/report/reports/standard/income-gst-statement.scm:131
 #: gnucash/report/reports/standard/income-gst-statement.scm:141
 #: gnucash/report/reports/standard/trial-balance.scm:78
@@ -25283,7 +25287,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:93
 #: gnucash/report/reports/standard/balsheet-eg.scm:160
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:58
-#: gnucash/report/reports/standard/budget-income-statement.scm:80
+#: gnucash/report/reports/standard/budget-income-statement.scm:81
 #: gnucash/report/reports/standard/budget.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:68
 msgid "Flatten list to depth limit"
@@ -25292,7 +25296,7 @@ msgstr "إخفاء القائمة إلى حد العمق"
 #: gnucash/report/reports/standard/balance-sheet.scm:95
 #: gnucash/report/reports/standard/balsheet-eg.scm:162
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:60
-#: gnucash/report/reports/standard/budget-income-statement.scm:82
+#: gnucash/report/reports/standard/budget-income-statement.scm:83
 #: gnucash/report/reports/standard/budget.scm:92
 #: gnucash/report/reports/standard/income-statement.scm:70
 msgid "Displays accounts which exceed the depth limit at the depth limit."
@@ -25746,12 +25750,12 @@ msgid "missing"
 msgstr "لجنة"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
-#: libgnucash/engine/Account.cpp:4363
+#: libgnucash/engine/Account.cpp:4367
 msgid "Asset"
 msgstr "الأصول"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1109
-#: libgnucash/engine/Account.cpp:4365
+#: libgnucash/engine/Account.cpp:4369
 msgid "Liability"
 msgstr "إلتزام"
 
@@ -25811,7 +25815,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:111
 #: gnucash/report/reports/standard/budget-barchart.scm:98
 #: gnucash/report/reports/standard/budget-flow.scm:56
-#: gnucash/report/reports/standard/budget-income-statement.scm:59
+#: gnucash/report/reports/standard/budget-income-statement.scm:60
 #: gnucash/report/reports/standard/budget.scm:138
 msgid "Budget to use."
 msgstr "الميزانية لاستخدام."
@@ -25884,7 +25888,7 @@ msgid "Chart Type"
 msgstr "نوع السداد"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:50
-#: gnucash/report/reports/standard/budget-income-statement.scm:66
+#: gnucash/report/reports/standard/budget-income-statement.scm:67
 #: gnucash/report/reports/standard/budget.scm:71
 msgid "Range start"
 msgstr "بدء النطاق:"
@@ -25907,7 +25911,7 @@ msgid "Select exact period that starts the reporting range."
 msgstr "حدد فترة الميزانية التقديرية التي ينتهي بها نطاق التقرير."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:57
-#: gnucash/report/reports/standard/budget-income-statement.scm:70
+#: gnucash/report/reports/standard/budget-income-statement.scm:71
 #: gnucash/report/reports/standard/budget.scm:78
 msgid "Range end"
 msgstr "نهاية النطاق"
@@ -26027,137 +26031,137 @@ msgstr "رقم الفترة"
 msgid "~a: ~a - ~a"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:62
+#: gnucash/report/reports/standard/budget-income-statement.scm:63
 #: gnucash/report/reports/standard/budget.scm:67
 msgid "Report for range of budget periods"
 msgstr "تقرير لمجموعة من فترات الميزانية"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:64
+#: gnucash/report/reports/standard/budget-income-statement.scm:65
 #: gnucash/report/reports/standard/budget.scm:69
 msgid "Create report for a budget period range instead of the entire budget."
 msgstr "إنشاء تقرير لفترة في الميزانية بدلاً من الميزانية بأكملها."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:68
+#: gnucash/report/reports/standard/budget-income-statement.scm:69
 msgid "Select a budget period that begins the reporting range."
 msgstr "حدد فترة الميزانية التقديرية التي يبدأ بها نطاق التقرير."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:72
+#: gnucash/report/reports/standard/budget-income-statement.scm:73
 msgid "Select a budget period that ends the reporting range."
 msgstr "حدد فترة الميزانية التقديرية التي ينتهي بها نطاق التقرير."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:101
+#: gnucash/report/reports/standard/budget-income-statement.scm:102
 #: gnucash/report/reports/standard/income-statement.scm:89
 msgid "Label the revenue section"
 msgstr "تسمية قسم الإيرادات"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:103
+#: gnucash/report/reports/standard/budget-income-statement.scm:104
 #: gnucash/report/reports/standard/income-statement.scm:91
 msgid "Whether or not to include a label for the revenue section."
 msgstr "إدراج أم عدم إدراج تسمية لقسم الإيراد"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:104
+#: gnucash/report/reports/standard/budget-income-statement.scm:105
 #: gnucash/report/reports/standard/income-statement.scm:92
 msgid "Include revenue total"
 msgstr "وتشمل مجموع الإيرادات"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:106
+#: gnucash/report/reports/standard/budget-income-statement.scm:107
 #: gnucash/report/reports/standard/income-statement.scm:94
 msgid "Whether or not to include a line indicating total revenue."
 msgstr "إدراج أم عدم إدراج خط لإجمالي الإيراد"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:107
+#: gnucash/report/reports/standard/budget-income-statement.scm:108
 #: gnucash/report/reports/standard/income-statement.scm:101
 msgid "Label the expense section"
 msgstr "تسمية قسم المصروفات"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:109
+#: gnucash/report/reports/standard/budget-income-statement.scm:110
 #: gnucash/report/reports/standard/income-statement.scm:103
 msgid "Whether or not to include a label for the expense section."
 msgstr "إدراج أم عدم إدراج تسمية لقسم المصروف"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:110
+#: gnucash/report/reports/standard/budget-income-statement.scm:111
 #: gnucash/report/reports/standard/income-statement.scm:104
 msgid "Include expense total"
 msgstr "وتشمل مجموع المصروفات"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:112
+#: gnucash/report/reports/standard/budget-income-statement.scm:113
 #: gnucash/report/reports/standard/income-statement.scm:106
 msgid "Whether or not to include a line indicating total expense."
 msgstr "إدراج أم عدم إدراج خط لإجمالي المصروف"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:125
+#: gnucash/report/reports/standard/budget-income-statement.scm:126
 #: gnucash/report/reports/standard/income-statement.scm:130
 msgid "Display as a two column report"
 msgstr "عرض كتقرير عمودين"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:127
+#: gnucash/report/reports/standard/budget-income-statement.scm:128
 #: gnucash/report/reports/standard/income-statement.scm:132
 msgid "Divides the report into an income column and an expense column."
 msgstr "يقسم التقرير إلى عمود دخل وعمود مصروفات."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:129
+#: gnucash/report/reports/standard/budget-income-statement.scm:130
 #: gnucash/report/reports/standard/income-statement.scm:134
 msgid "Display in standard, income first, order"
 msgstr "عرض قياسي, الترتيب للدخل أولا."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:131
+#: gnucash/report/reports/standard/budget-income-statement.scm:132
 #: gnucash/report/reports/standard/income-statement.scm:136
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses."
 msgstr "يؤدي الى عرض  التقرير بالنظام القياسي، وضع الإيرادات قبل المصاريف."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:443
+#: gnucash/report/reports/standard/budget-income-statement.scm:444
 msgid "Reporting range end period cannot be less than start period."
 msgstr "لا يمكن أن يكون نطاق نهاية الفترة المشمولة بالتقرير قبل بداية الفترة."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:511
+#: gnucash/report/reports/standard/budget-income-statement.scm:512
 #: gnucash/report/reports/standard/income-statement.scm:505
 msgid "Revenues"
 msgstr "الإيرادات"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:514
+#: gnucash/report/reports/standard/budget-income-statement.scm:515
 #: gnucash/report/reports/standard/income-statement.scm:508
 msgid "Total Revenue"
 msgstr "مجموع الإيرادات"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:524
+#: gnucash/report/reports/standard/budget-income-statement.scm:525
 #: gnucash/report/reports/standard/income-statement.scm:515
 msgid "Total Expenses"
 msgstr "مجموع المصروفات"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:532
+#: gnucash/report/reports/standard/budget-income-statement.scm:533
 #, fuzzy, scheme-format
 msgid "for Budget ~a"
 msgstr "للميزانية %s"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:534
+#: gnucash/report/reports/standard/budget-income-statement.scm:535
 #, fuzzy, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "الميزانية %s لفترة  %u"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:537
+#: gnucash/report/reports/standard/budget-income-statement.scm:538
 #, fuzzy, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
 msgstr "الميزانية %s لفترة   %u%-u"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:565
+#: gnucash/report/reports/standard/budget-income-statement.scm:566
 #: gnucash/report/reports/standard/equity-statement.scm:457
 #: gnucash/report/reports/standard/income-statement.scm:525
 msgid "Net income"
 msgstr "صافي الدخل"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:566
+#: gnucash/report/reports/standard/budget-income-statement.scm:567
 #: gnucash/report/reports/standard/equity-statement.scm:458
 #: gnucash/report/reports/standard/income-statement.scm:526
 msgid "Net loss"
 msgstr "صافي الخسارة"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:606
+#: gnucash/report/reports/standard/budget-income-statement.scm:607
 msgid "Budget Income Statement"
 msgstr "بيان دخل الميزانية"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:607
+#: gnucash/report/reports/standard/budget-income-statement.scm:608
 msgid "Budget Profit & Loss"
 msgstr "ميزانية الأرباح والخسائر"
 
@@ -26285,68 +26289,68 @@ msgstr "فرق"
 msgid "using accumulated amounts"
 msgstr "تحليل الحسابات"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:39
+#: gnucash/report/reports/standard/cashflow-barchart.scm:40
 #, fuzzy
 msgid "Cash Flow Barchart"
 msgstr "التدفق النقدي"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:45
+#: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
 msgid "Include Trading Accounts in report"
 msgstr "تضمين حسابات التداول في التقرير"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:47
+#: gnucash/report/reports/standard/cashflow-barchart.scm:48
 #, fuzzy
 msgid "Show Money In"
 msgstr "المال الداخل"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:48
+#: gnucash/report/reports/standard/cashflow-barchart.scm:49
 #, fuzzy
 msgid "Show Money Out"
 msgstr "المال الخارج"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:49
+#: gnucash/report/reports/standard/cashflow-barchart.scm:50
 #, fuzzy
 msgid "Show Net Flow"
 msgstr "إظهار القيمة الصافية"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:50
+#: gnucash/report/reports/standard/cashflow-barchart.scm:51
 #, fuzzy
 msgid "Show Table"
 msgstr "إظهار الجدول"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:99
+#: gnucash/report/reports/standard/cashflow-barchart.scm:100
 #: gnucash/report/reports/standard/cash-flow.scm:102
 msgid "Include transfers to and from Trading Accounts in the report."
 msgstr "تشمل عمليات التحويل من وإلى حسابات التداول في التقرير."
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:106
+#: gnucash/report/reports/standard/cashflow-barchart.scm:107
 #, fuzzy
 msgid "Show money in?"
 msgstr "أظهر المجموعات المفتوحة فقط"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:112
+#: gnucash/report/reports/standard/cashflow-barchart.scm:113
 #, fuzzy
 msgid "Show money out?"
 msgstr "أظهر المجموعات المفتوحة فقط"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:118
+#: gnucash/report/reports/standard/cashflow-barchart.scm:119
 #, fuzzy
 msgid "Show net money flow?"
 msgstr "أظهر المجموعات المفتوحة فقط"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:309
-#: gnucash/report/reports/standard/cashflow-barchart.scm:334
+#: gnucash/report/reports/standard/cashflow-barchart.scm:310
+#: gnucash/report/reports/standard/cashflow-barchart.scm:346
 #, fuzzy
 msgid "Net Flow"
 msgstr "صافي الخسارة"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:337
+#: gnucash/report/reports/standard/cashflow-barchart.scm:349
 #, fuzzy
 msgid "Overview:"
 msgstr "نظرة عامة"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:376
+#: gnucash/report/reports/standard/cashflow-barchart.scm:375
 #, fuzzy
 msgid "Shows a barchart with cash flow over time"
 msgstr "يظهر مخطط بياني عمودي لتطور للأصول في فترة زمنية"
@@ -26382,22 +26386,22 @@ msgid "Money out of selected accounts goes to"
 msgstr "يذهب المال من الحسابات المحددة على"
 
 #: gnucash/report/reports/standard/category-barchart.scm:41
-#: gnucash/report/reports/standard/net-charts.scm:366
+#: gnucash/report/reports/standard/net-charts.scm:362
 msgid "Income Chart"
 msgstr "الرسم البياني للدخل"
 
 #: gnucash/report/reports/standard/category-barchart.scm:42
-#: gnucash/report/reports/standard/net-charts.scm:387
+#: gnucash/report/reports/standard/net-charts.scm:383
 msgid "Expense Chart"
 msgstr "رسم بياني للمصروفات"
 
 #: gnucash/report/reports/standard/category-barchart.scm:43
-#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:363
 msgid "Asset Chart"
 msgstr "رسم بياني للأصول"
 
 #: gnucash/report/reports/standard/category-barchart.scm:44
-#: gnucash/report/reports/standard/net-charts.scm:388
+#: gnucash/report/reports/standard/net-charts.scm:384
 msgid "Liability Chart"
 msgstr "رسم بياني للإلتزامات"
 
@@ -26496,7 +26500,7 @@ msgid "Grand Total"
 msgstr "مجموع كلي"
 
 #: gnucash/report/reports/standard/category-barchart.scm:690
-#: gnucash/report/reports/standard/net-charts.scm:471
+#: gnucash/report/reports/standard/net-charts.scm:466
 #, fuzzy
 msgid "No exportable data"
 msgstr "وظيفة التقرير"
@@ -26544,18 +26548,18 @@ msgstr "عرض عنوان الشركة وتاريخ الطباعة."
 #: gnucash/report/reports/standard/job-report.scm:384
 #: gnucash/report/reports/standard/job-report.scm:389
 #: gnucash/report/reports/standard/job-report.scm:394
-#: gnucash/report/reports/standard/new-owner-report.scm:882
-#: gnucash/report/reports/standard/new-owner-report.scm:887
-#: gnucash/report/reports/standard/new-owner-report.scm:892
-#: gnucash/report/reports/standard/new-owner-report.scm:897
-#: gnucash/report/reports/standard/new-owner-report.scm:902
-#: gnucash/report/reports/standard/new-owner-report.scm:907
-#: gnucash/report/reports/standard/new-owner-report.scm:912
-#: gnucash/report/reports/standard/new-owner-report.scm:917
-#: gnucash/report/reports/standard/new-owner-report.scm:922
-#: gnucash/report/reports/standard/new-owner-report.scm:927
-#: gnucash/report/reports/standard/new-owner-report.scm:932
-#: gnucash/report/reports/standard/new-owner-report.scm:947
+#: gnucash/report/reports/standard/new-owner-report.scm:886
+#: gnucash/report/reports/standard/new-owner-report.scm:891
+#: gnucash/report/reports/standard/new-owner-report.scm:896
+#: gnucash/report/reports/standard/new-owner-report.scm:901
+#: gnucash/report/reports/standard/new-owner-report.scm:906
+#: gnucash/report/reports/standard/new-owner-report.scm:911
+#: gnucash/report/reports/standard/new-owner-report.scm:916
+#: gnucash/report/reports/standard/new-owner-report.scm:921
+#: gnucash/report/reports/standard/new-owner-report.scm:926
+#: gnucash/report/reports/standard/new-owner-report.scm:931
+#: gnucash/report/reports/standard/new-owner-report.scm:936
+#: gnucash/report/reports/standard/new-owner-report.scm:951
 #: gnucash/report/reports/standard/owner-report.scm:556
 #: gnucash/report/reports/standard/owner-report.scm:561
 #: gnucash/report/reports/standard/owner-report.scm:566
@@ -27077,7 +27081,7 @@ msgid ""
 msgstr "إدراج أم عدم إدراج خط لإجمالي رصيد حسابات التداول"
 
 #: gnucash/report/reports/standard/income-statement.scm:518
-#: libgnucash/engine/Account.cpp:4375 libgnucash/engine/Scrub.c:472
+#: libgnucash/engine/Account.cpp:4379 libgnucash/engine/Scrub.c:472
 #: libgnucash/engine/Scrub.c:537
 msgid "Trading"
 msgstr "تجارة"
@@ -27471,13 +27475,13 @@ msgid "~a #~a"
 msgstr ""
 
 #: gnucash/report/reports/standard/job-report.scm:318
-#: gnucash/report/reports/standard/new-owner-report.scm:524
+#: gnucash/report/reports/standard/new-owner-report.scm:528
 #: gnucash/report/reports/standard/owner-report.scm:505
 msgid "Total Credit"
 msgstr "مجموع القروض"
 
 #: gnucash/report/reports/standard/job-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:525
+#: gnucash/report/reports/standard/new-owner-report.scm:529
 #: gnucash/report/reports/standard/owner-report.scm:506
 msgid "Total Due"
 msgstr "مجموع الاستحقاق"
@@ -27493,27 +27497,27 @@ msgstr "الحساب للبحث عن المعاملات."
 
 #: gnucash/report/reports/standard/job-report.scm:370
 #: gnucash/report/reports/standard/job-report.scm:375
-#: gnucash/report/reports/standard/new-owner-report.scm:883
-#: gnucash/report/reports/standard/new-owner-report.scm:888
+#: gnucash/report/reports/standard/new-owner-report.scm:887
+#: gnucash/report/reports/standard/new-owner-report.scm:892
 #: gnucash/report/reports/standard/owner-report.scm:557
 #: gnucash/report/reports/standard/owner-report.scm:562
 msgid "Display the transaction date?"
 msgstr "عرض تاريخ المعاملة؟"
 
 #: gnucash/report/reports/standard/job-report.scm:380
-#: gnucash/report/reports/standard/new-owner-report.scm:893
+#: gnucash/report/reports/standard/new-owner-report.scm:897
 #: gnucash/report/reports/standard/owner-report.scm:567
 msgid "Display the transaction reference?"
 msgstr "عرض مرجع المعاملة؟"
 
 #: gnucash/report/reports/standard/job-report.scm:385
-#: gnucash/report/reports/standard/new-owner-report.scm:898
+#: gnucash/report/reports/standard/new-owner-report.scm:902
 #: gnucash/report/reports/standard/owner-report.scm:572
 msgid "Display the transaction type?"
 msgstr "عرض نوع المعاملة؟"
 
 #: gnucash/report/reports/standard/job-report.scm:390
-#: gnucash/report/reports/standard/new-owner-report.scm:903
+#: gnucash/report/reports/standard/new-owner-report.scm:907
 #: gnucash/report/reports/standard/owner-report.scm:577
 msgid "Display the transaction description?"
 msgstr "عرض وصف المعاملة؟"
@@ -27524,7 +27528,7 @@ msgid "Display the transaction amount?"
 msgstr "عرض مبلغ المعاملة؟"
 
 #: gnucash/report/reports/standard/job-report.scm:508
-#: gnucash/report/reports/standard/new-owner-report.scm:1223
+#: gnucash/report/reports/standard/new-owner-report.scm:1227
 msgid "Job Report"
 msgstr "وظيفة التقرير"
 
@@ -27563,7 +27567,7 @@ msgid "The account to search for lots."
 msgstr "الحساب للبحث عن المعاملات."
 
 #: gnucash/report/reports/standard/net-charts.scm:48
-#: gnucash/report/reports/standard/price-scatter.scm:50
+#: gnucash/report/reports/standard/price-scatter.scm:51
 msgid "Show Net Profit"
 msgstr "إظهار صافي الربح"
 
@@ -27607,35 +27611,35 @@ msgstr "إظهارعمود القيمة الصافية"
 msgid "Add grid lines."
 msgstr "إضافة خطوط الشبكة."
 
-#: gnucash/report/reports/standard/net-charts.scm:393
-#: gnucash/report/reports/standard/net-charts.scm:425
+#: gnucash/report/reports/standard/net-charts.scm:389
+#: gnucash/report/reports/standard/net-charts.scm:421
 msgid "Net Profit"
 msgstr "الربح الصافي"
 
-#: gnucash/report/reports/standard/net-charts.scm:393
-#: gnucash/report/reports/standard/net-charts.scm:426
+#: gnucash/report/reports/standard/net-charts.scm:389
+#: gnucash/report/reports/standard/net-charts.scm:422
 msgid "Net Worth"
 msgstr "القيمة الصافية"
 
-#: gnucash/report/reports/standard/net-charts.scm:489
+#: gnucash/report/reports/standard/net-charts.scm:484
 msgid "Net Worth Barchart"
 msgstr "رسم بياني عمودي بالقيمة الصافية"
 
-#: gnucash/report/reports/standard/net-charts.scm:500
+#: gnucash/report/reports/standard/net-charts.scm:495
 msgid "Income/Expense Chart"
 msgstr "الرسم البياني : الدخل/المصروفات"
 
-#: gnucash/report/reports/standard/net-charts.scm:502
+#: gnucash/report/reports/standard/net-charts.scm:497
 #, fuzzy
 msgid "Income & Expense Barchart"
 msgstr "رسم بياني للدخل & المصروفات"
 
-#: gnucash/report/reports/standard/net-charts.scm:512
+#: gnucash/report/reports/standard/net-charts.scm:507
 msgid "Net Worth Linechart"
 msgstr "رسم بياني خطي بالقيمة الصافية"
 
-#: gnucash/report/reports/standard/net-charts.scm:525
-#: gnucash/report/reports/standard/net-charts.scm:527
+#: gnucash/report/reports/standard/net-charts.scm:520
+#: gnucash/report/reports/standard/net-charts.scm:522
 #, fuzzy
 msgid "Income & Expense Linechart"
 msgstr "رسم بياني للدخل & المصروفات"
@@ -27662,7 +27666,7 @@ msgid "Reverse alphabetical order"
 msgstr "بترتيب عكسي"
 
 #: gnucash/report/reports/standard/new-aging.scm:343
-#: gnucash/report/reports/standard/new-owner-report.scm:540
+#: gnucash/report/reports/standard/new-owner-report.scm:544
 #, fuzzy
 msgid "Please note some transactions were not processed"
 msgstr "التاريخ مجموعة من المعاملات للاسترداد:"
@@ -27759,12 +27763,12 @@ msgstr "يتطلب هذا التقرير شركة ليتم تحديدها."
 msgid "This report requires a vendor to be selected."
 msgstr "يتطلب هذا التقرير عميل ليتم تحديده."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:242
+#: gnucash/report/reports/standard/new-owner-report.scm:246
 #, fuzzy
 msgid "Partial Amount"
 msgstr "_حساب رئيسي"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:295
+#: gnucash/report/reports/standard/new-owner-report.scm:299
 #: gnucash/report/trep-engine.scm:980 gnucash/report/trep-engine.scm:1106
 #, fuzzy
 msgid "Link"
@@ -27772,105 +27776,105 @@ msgstr "رابط المجموعة"
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
-#: gnucash/report/reports/standard/new-owner-report.scm:343
+#: gnucash/report/reports/standard/new-owner-report.scm:347
 #, scheme-format
 msgid "~a History"
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:345
+#: gnucash/report/reports/standard/new-owner-report.scm:349
 #, fuzzy
 msgid "Linked Details"
 msgstr "تفاصيل القرض"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:504
+#: gnucash/report/reports/standard/new-owner-report.scm:508
 #: gnucash/report/reports/standard/owner-report.scm:463
 msgid "Period Totals"
 msgstr "مجاميع الفترة"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:868
+#: gnucash/report/reports/standard/new-owner-report.scm:872
 #: gnucash/report/reports/standard/owner-report.scm:535
 msgid "The company for this report."
 msgstr "الشركة هذا التقرير."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:908
+#: gnucash/report/reports/standard/new-owner-report.scm:912
 #: gnucash/report/reports/standard/owner-report.scm:582
 #, fuzzy
 msgid "Display the sale amount column?"
 msgstr "عرض المبلغ؟"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:913
+#: gnucash/report/reports/standard/new-owner-report.scm:917
 #: gnucash/report/reports/standard/owner-report.scm:587
 #, fuzzy
 msgid "Display the tax column?"
 msgstr "عرض الحساب؟"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:918
+#: gnucash/report/reports/standard/new-owner-report.scm:922
 #: gnucash/report/reports/standard/owner-report.scm:597
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "عرض عمود  المدين الفترة؟"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:923
+#: gnucash/report/reports/standard/new-owner-report.scm:927
 #: gnucash/report/reports/standard/owner-report.scm:592
 msgid "Display the period credits column?"
 msgstr "عرض عمود الدائن للفترة؟"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:928
+#: gnucash/report/reports/standard/new-owner-report.scm:932
 #: gnucash/report/reports/standard/register.scm:413
 #: gnucash/report/trep-engine.scm:984
 msgid "Display a running balance?"
 msgstr "عرض رصيد الجاري؟"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:933
+#: gnucash/report/reports/standard/new-owner-report.scm:937
 #, fuzzy
 msgid "Show linked transactions"
 msgstr "عرض المعاملات الباطلة فقط"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:936
+#: gnucash/report/reports/standard/new-owner-report.scm:940
 #, fuzzy
 msgid "Linked transactions are hidden."
 msgstr "البحث عن المعاملات مع البحث"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:938
+#: gnucash/report/reports/standard/new-owner-report.scm:942
 #, fuzzy
 msgid "Simple"
 msgstr "عينة :"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:939
+#: gnucash/report/reports/standard/new-owner-report.scm:943
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:941
+#: gnucash/report/reports/standard/new-owner-report.scm:945
 #, fuzzy
 msgid "Detailed"
 msgstr "فشل"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:942
+#: gnucash/report/reports/standard/new-owner-report.scm:946
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:948
+#: gnucash/report/reports/standard/new-owner-report.scm:952
 #, fuzzy
 msgid "Display document link?"
 msgstr "عرض الحسابات كإرتباطات تشعبية"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1076
+#: gnucash/report/reports/standard/new-owner-report.scm:1080
 #, fuzzy
 msgid "No valid account found"
 msgstr "لم يتم العثور على عمليات مطابقة"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1077
+#: gnucash/report/reports/standard/new-owner-report.scm:1081
 #, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
 msgstr "يتطلب هذا التقرير حساب صالح ليتم تحديده."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1100
+#: gnucash/report/reports/standard/new-owner-report.scm:1104
 #, fuzzy
 msgid "No transactions found."
 msgstr "لم يتم العثور على عمليات مطابقة"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1101
+#: gnucash/report/reports/standard/new-owner-report.scm:1105
 #: gnucash/report/trep-engine.scm:130
 msgid "No matching transactions found"
 msgstr "لم يتم العثور على عمليات مطابقة"
@@ -27915,75 +27919,75 @@ msgstr "محفظة الاستثمار"
 msgid "Units"
 msgstr "وحدات"
 
-#: gnucash/report/reports/standard/price-scatter.scm:41
+#: gnucash/report/reports/standard/price-scatter.scm:42
 msgid "Price of Commodity"
 msgstr "سعر السلعة"
 
-#: gnucash/report/reports/standard/price-scatter.scm:43
+#: gnucash/report/reports/standard/price-scatter.scm:44
 msgid "Invert prices"
 msgstr "عكس الأسعار"
 
-#: gnucash/report/reports/standard/price-scatter.scm:52
+#: gnucash/report/reports/standard/price-scatter.scm:53
 msgid "Show Asset & Liability bars"
 msgstr "تظهر أعمدة  الأصول و الالتزامات"
 
-#: gnucash/report/reports/standard/price-scatter.scm:53
+#: gnucash/report/reports/standard/price-scatter.scm:54
 msgid "Show Net Worth bars"
 msgstr "اظهار شريط صافي حقوق الملكية"
 
-#: gnucash/report/reports/standard/price-scatter.scm:55
+#: gnucash/report/reports/standard/price-scatter.scm:56
 msgid "Marker"
 msgstr "علامة"
 
-#: gnucash/report/reports/standard/price-scatter.scm:56
+#: gnucash/report/reports/standard/price-scatter.scm:57
 msgid "Marker Color"
 msgstr "لون العلامة"
 
-#: gnucash/report/reports/standard/price-scatter.scm:81
+#: gnucash/report/reports/standard/price-scatter.scm:82
 msgid "Calculate the price of this commodity."
 msgstr "حساب الأسعار لهذه السلعة."
 
-#: gnucash/report/reports/standard/price-scatter.scm:93
+#: gnucash/report/reports/standard/price-scatter.scm:94
 msgid "Actual Transactions"
 msgstr "المعاملات الفعلية"
 
-#: gnucash/report/reports/standard/price-scatter.scm:94
+#: gnucash/report/reports/standard/price-scatter.scm:95
 msgid "The instantaneous price of actual currency transactions in the past."
 msgstr "السعر الفوري لمعاملات العملة الفعلية في الماضي."
 
-#: gnucash/report/reports/standard/price-scatter.scm:97
+#: gnucash/report/reports/standard/price-scatter.scm:98
 msgid "The recorded prices."
 msgstr "الأسعار المسجلة."
 
-#: gnucash/report/reports/standard/price-scatter.scm:104
+#: gnucash/report/reports/standard/price-scatter.scm:105
 msgid "Plot commodity per currency rather than currency per commodity."
 msgstr "ارسم السلع  لكل العملة بدلاً من العملة  لكل سلعة"
 
-#: gnucash/report/reports/standard/price-scatter.scm:120
+#: gnucash/report/reports/standard/price-scatter.scm:121
 msgid "Color of the marker."
 msgstr "لون العلامة"
 
-#: gnucash/report/reports/standard/price-scatter.scm:140
+#: gnucash/report/reports/standard/price-scatter.scm:141
 msgid "Double-Weeks"
 msgstr "أسابيع مزدوجة"
 
-#: gnucash/report/reports/standard/price-scatter.scm:142
+#: gnucash/report/reports/standard/price-scatter.scm:143
 #, fuzzy
 #| msgid "Quarter"
 msgid "Quarters"
 msgstr "الربع"
 
-#: gnucash/report/reports/standard/price-scatter.scm:143
+#: gnucash/report/reports/standard/price-scatter.scm:144
 #, fuzzy
 #| msgid "Half Year"
 msgid "Half Years"
 msgstr "نصف السنة"
 
-#: gnucash/report/reports/standard/price-scatter.scm:238
+#: gnucash/report/reports/standard/price-scatter.scm:239
 msgid "Identical commodities"
 msgstr "السلع متطابقة"
 
-#: gnucash/report/reports/standard/price-scatter.scm:239
+#: gnucash/report/reports/standard/price-scatter.scm:240
 msgid ""
 "Your selected commodity and the currency of the report are identical. It "
 "doesn't make sense to show prices for identical commodities."
@@ -27991,17 +27995,17 @@ msgstr ""
 "السلع المحددة والعملة من التقرير متطابقان. لا معنى لإظهار أسعار للسلع "
 "المتطابقة."
 
-#: gnucash/report/reports/standard/price-scatter.scm:277
+#: gnucash/report/reports/standard/price-scatter.scm:278
 msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
 msgstr "لا يوجد معلومات عن سعر صرف العملة للعملات والفترات التي تم تحديدها."
 
-#: gnucash/report/reports/standard/price-scatter.scm:282
+#: gnucash/report/reports/standard/price-scatter.scm:283
 msgid "Only one price"
 msgstr "سعر واحد فقط"
 
-#: gnucash/report/reports/standard/price-scatter.scm:283
+#: gnucash/report/reports/standard/price-scatter.scm:284
 msgid ""
 "There was only one single price found for the selected commodities in the "
 "selected time period. This doesn't give a useful plot."
@@ -28009,11 +28013,11 @@ msgstr ""
 "هناك سعر واحد فقط وجد للسلع المحددة في الفترة الزمنية المحددة. وهذا لا يعطي "
 "رسم بياني مفيد."
 
-#: gnucash/report/reports/standard/price-scatter.scm:289
+#: gnucash/report/reports/standard/price-scatter.scm:290
 msgid "All Prices equal"
 msgstr "جميع الأسعار متساوية"
 
-#: gnucash/report/reports/standard/price-scatter.scm:290
+#: gnucash/report/reports/standard/price-scatter.scm:291
 msgid ""
 "All the prices found are equal. This would result in a plot with one "
 "straight line. Unfortunately, the plotting tool can't handle that."
@@ -28021,11 +28025,11 @@ msgstr ""
 " وجدت أن جميع الأسعار  تتساوى  . وهذا سيؤدي الى رسم خط مستقيم واحد. و أداة "
 "الرسم لا يمكنها التعامل مع ذلك."
 
-#: gnucash/report/reports/standard/price-scatter.scm:296
+#: gnucash/report/reports/standard/price-scatter.scm:297
 msgid "All Prices at the same date"
 msgstr "جميع الأسعار في نفس التاريخ"
 
-#: gnucash/report/reports/standard/price-scatter.scm:297
+#: gnucash/report/reports/standard/price-scatter.scm:298
 msgid ""
 "All the prices found are from the same date. This would result in a plot "
 "with one straight line. Unfortunately, the plotting tool can't handle that."
@@ -28033,7 +28037,7 @@ msgstr ""
 " وجدت أن جميع الأسعار  من نفس اليوم  . وهذا سيؤدي الى رسم خط مستقيم واحد. و "
 "أداة الرسم لا يمكنها التعامل مع ذلك."
 
-#: gnucash/report/reports/standard/price-scatter.scm:329
+#: gnucash/report/reports/standard/price-scatter.scm:330
 msgid "Price Scatterplot"
 msgstr "رسم بياني للأسعار بشكل متناثر"
 
@@ -28736,19 +28740,19 @@ msgstr "عدد الأعمدة"
 msgid "Number of columns before wrapping to a new row."
 msgstr "عدد الأعمدة قبل التفاف إلى صف جديد."
 
-#: gnucash/report/reports/standard/view-column.scm:159
+#: gnucash/report/reports/standard/view-column.scm:155
 msgid "Edit Options"
 msgstr "تحرير الخيارات"
 
-#: gnucash/report/reports/standard/view-column.scm:166
+#: gnucash/report/reports/standard/view-column.scm:162
 msgid "Single Report"
 msgstr "تقرير واحد"
 
-#: gnucash/report/reports/standard/view-column.scm:219
+#: gnucash/report/reports/standard/view-column.scm:215
 msgid "Multicolumn View"
 msgstr "عرض متعدد الأعمدة"
 
-#: gnucash/report/reports/standard/view-column.scm:221
+#: gnucash/report/reports/standard/view-column.scm:217
 msgid "Custom Multicolumn Report"
 msgstr "تقرير متعدد الأعمدة مخصص"
 
@@ -30161,214 +30165,214 @@ msgstr ""
 msgid "The electronic tax number of your business"
 msgstr "رقم الضريبة الإلكترونية للأعمال التجارية الخاصة بك"
 
-#: libgnucash/app-utils/date-utilities.scm:524
+#: libgnucash/app-utils/date-utilities.scm:523
 #, scheme-format
 msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
 
-#: libgnucash/app-utils/date-utilities.scm:902
+#: libgnucash/app-utils/date-utilities.scm:909
 msgid "First day of the current calendar year."
 msgstr "اليوم الأول للسنة التقويمية الجارية."
 
-#: libgnucash/app-utils/date-utilities.scm:909
+#: libgnucash/app-utils/date-utilities.scm:916
 msgid "Last day of the current calendar year."
 msgstr "اليوم الأخير من السنة التقويمية الحالية."
 
-#: libgnucash/app-utils/date-utilities.scm:916
+#: libgnucash/app-utils/date-utilities.scm:923
 msgid "First day of the previous calendar year."
 msgstr "اليوم الأول للسنة التقويمية السابقة."
 
-#: libgnucash/app-utils/date-utilities.scm:923
+#: libgnucash/app-utils/date-utilities.scm:930
 msgid "Last day of the previous calendar year."
 msgstr "اليوم الأخير من السنة التقويمية السابقة."
 
-#: libgnucash/app-utils/date-utilities.scm:927
+#: libgnucash/app-utils/date-utilities.scm:934
 msgid "Start of next year"
 msgstr "بداية من العام القادم"
 
-#: libgnucash/app-utils/date-utilities.scm:930
+#: libgnucash/app-utils/date-utilities.scm:937
 msgid "First day of the next calendar year."
 msgstr "أول يوم من السنة التقويمية التالية."
 
-#: libgnucash/app-utils/date-utilities.scm:934
+#: libgnucash/app-utils/date-utilities.scm:941
 msgid "End of next year"
 msgstr "نهاية العام المقبل"
 
-#: libgnucash/app-utils/date-utilities.scm:937
+#: libgnucash/app-utils/date-utilities.scm:944
 msgid "Last day of the next calendar year."
 msgstr "اليوم الأخير من السنة التقويمية التالية."
 
-#: libgnucash/app-utils/date-utilities.scm:941
+#: libgnucash/app-utils/date-utilities.scm:948
 msgid "Start of accounting period"
 msgstr "بداية الفترة المحاسبية"
 
-#: libgnucash/app-utils/date-utilities.scm:944
+#: libgnucash/app-utils/date-utilities.scm:951
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr "اليوم الأول من فترة المحاسبية، كما حدد في التفضيلات العالمية."
 
-#: libgnucash/app-utils/date-utilities.scm:948
+#: libgnucash/app-utils/date-utilities.scm:955
 msgid "End of accounting period"
 msgstr "نهاية الفترة المحاسبية"
 
-#: libgnucash/app-utils/date-utilities.scm:951
+#: libgnucash/app-utils/date-utilities.scm:958
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr "اليوم الأخير من فترة المحاسبية، كما حدد في التفضيلات العالمية."
 
-#: libgnucash/app-utils/date-utilities.scm:958
+#: libgnucash/app-utils/date-utilities.scm:965
 msgid "First day of the current month."
 msgstr "اليوم الأول من الشهر الحالي."
 
-#: libgnucash/app-utils/date-utilities.scm:965
+#: libgnucash/app-utils/date-utilities.scm:972
 msgid "Last day of the current month."
 msgstr "اليوم الأخير من الشهر الحالي."
 
-#: libgnucash/app-utils/date-utilities.scm:972
+#: libgnucash/app-utils/date-utilities.scm:979
 msgid "First day of the previous month."
 msgstr "اليوم الأول من الشهر السابق."
 
-#: libgnucash/app-utils/date-utilities.scm:979
+#: libgnucash/app-utils/date-utilities.scm:986
 msgid "Last day of previous month."
 msgstr "اليوم الأخير من الشهر السابق."
 
-#: libgnucash/app-utils/date-utilities.scm:983
+#: libgnucash/app-utils/date-utilities.scm:990
 msgid "Start of next month"
 msgstr "بداية من الشهر القادم"
 
-#: libgnucash/app-utils/date-utilities.scm:986
+#: libgnucash/app-utils/date-utilities.scm:993
 msgid "First day of the next month."
 msgstr "اليوم الأول من الشهر التالي."
 
-#: libgnucash/app-utils/date-utilities.scm:990
+#: libgnucash/app-utils/date-utilities.scm:997
 msgid "End of next month"
 msgstr "نهاية الشهر المقبل"
 
-#: libgnucash/app-utils/date-utilities.scm:993
+#: libgnucash/app-utils/date-utilities.scm:1000
 msgid "Last day of next month."
 msgstr "اليوم الأخير من الشهر التالي."
 
-#: libgnucash/app-utils/date-utilities.scm:997
+#: libgnucash/app-utils/date-utilities.scm:1004
 msgid "Start of current quarter"
 msgstr "بداية ربع الحالي"
 
-#: libgnucash/app-utils/date-utilities.scm:1000
+#: libgnucash/app-utils/date-utilities.scm:1007
 msgid "First day of the current quarterly accounting period."
 msgstr "اليوم الأول من الفترة المحاسبية الفصلية الحالية."
 
-#: libgnucash/app-utils/date-utilities.scm:1004
+#: libgnucash/app-utils/date-utilities.scm:1011
 msgid "End of current quarter"
 msgstr "نهاية ربع السنة الحالي"
 
-#: libgnucash/app-utils/date-utilities.scm:1007
+#: libgnucash/app-utils/date-utilities.scm:1014
 msgid "Last day of the current quarterly accounting period."
 msgstr "اليوم الأخير للفترة المحاسبية الفصلية الحالية."
 
-#: libgnucash/app-utils/date-utilities.scm:1014
+#: libgnucash/app-utils/date-utilities.scm:1021
 msgid "First day of the previous quarterly accounting period."
 msgstr "اليوم الأول من الفترة المحاسبية الفصلية السابقة."
 
-#: libgnucash/app-utils/date-utilities.scm:1021
+#: libgnucash/app-utils/date-utilities.scm:1028
 msgid "Last day of previous quarterly accounting period."
 msgstr "اليوم الأخير للفترة المحاسبية الفصلية السابقة."
 
-#: libgnucash/app-utils/date-utilities.scm:1025
+#: libgnucash/app-utils/date-utilities.scm:1032
 msgid "Start of next quarter"
 msgstr "بداية الربع القادم"
 
-#: libgnucash/app-utils/date-utilities.scm:1028
+#: libgnucash/app-utils/date-utilities.scm:1035
 msgid "First day of the next quarterly accounting period."
 msgstr "اليوم الأول من الفترة المحاسبية الفصلية المقبلة."
 
-#: libgnucash/app-utils/date-utilities.scm:1032
+#: libgnucash/app-utils/date-utilities.scm:1039
 msgid "End of next quarter"
 msgstr "نهاية الربع القادم"
 
-#: libgnucash/app-utils/date-utilities.scm:1035
+#: libgnucash/app-utils/date-utilities.scm:1042
 msgid "Last day of next quarterly accounting period."
 msgstr "اليوم الأخير للفترة المحاسبية الفصلية القادمة."
 
-#: libgnucash/app-utils/date-utilities.scm:1041
+#: libgnucash/app-utils/date-utilities.scm:1048
 msgid "The current date."
 msgstr "التاريخ الحالي"
 
-#: libgnucash/app-utils/date-utilities.scm:1045
+#: libgnucash/app-utils/date-utilities.scm:1052
 msgid "One Month Ago"
 msgstr "قبل شهر واحد"
 
-#: libgnucash/app-utils/date-utilities.scm:1047
+#: libgnucash/app-utils/date-utilities.scm:1054
 msgid "One Month Ago."
 msgstr "قبل شهر واحد"
 
-#: libgnucash/app-utils/date-utilities.scm:1051
+#: libgnucash/app-utils/date-utilities.scm:1058
 msgid "One Week Ago"
 msgstr "منذ أسبوع واحد"
 
-#: libgnucash/app-utils/date-utilities.scm:1053
+#: libgnucash/app-utils/date-utilities.scm:1060
 msgid "One Week Ago."
 msgstr "منذ أسبوع واحد"
 
-#: libgnucash/app-utils/date-utilities.scm:1057
+#: libgnucash/app-utils/date-utilities.scm:1064
 msgid "Three Months Ago"
 msgstr "قبل ثلاثة أشهر"
 
-#: libgnucash/app-utils/date-utilities.scm:1059
+#: libgnucash/app-utils/date-utilities.scm:1066
 msgid "Three Months Ago."
 msgstr "قبل ثلاثة أشهر"
 
-#: libgnucash/app-utils/date-utilities.scm:1063
+#: libgnucash/app-utils/date-utilities.scm:1070
 msgid "Six Months Ago"
 msgstr "منذ ستة أشهر"
 
-#: libgnucash/app-utils/date-utilities.scm:1065
+#: libgnucash/app-utils/date-utilities.scm:1072
 msgid "Six Months Ago."
 msgstr "منذ ستة أشهر"
 
-#: libgnucash/app-utils/date-utilities.scm:1068
+#: libgnucash/app-utils/date-utilities.scm:1075
 msgid "One Year Ago"
 msgstr "قبل عام واحد"
 
-#: libgnucash/app-utils/date-utilities.scm:1070
+#: libgnucash/app-utils/date-utilities.scm:1077
 msgid "One Year Ago."
 msgstr "قبل عام واحد"
 
-#: libgnucash/app-utils/date-utilities.scm:1074
+#: libgnucash/app-utils/date-utilities.scm:1081
 msgid "One Month Ahead"
 msgstr "بعد شهر واحد"
 
-#: libgnucash/app-utils/date-utilities.scm:1076
+#: libgnucash/app-utils/date-utilities.scm:1083
 msgid "One Month Ahead."
 msgstr "بعد شهر واحد"
 
-#: libgnucash/app-utils/date-utilities.scm:1080
+#: libgnucash/app-utils/date-utilities.scm:1087
 msgid "One Week Ahead"
 msgstr "بعد أسبوع واحد"
 
-#: libgnucash/app-utils/date-utilities.scm:1082
+#: libgnucash/app-utils/date-utilities.scm:1089
 msgid "One Week Ahead."
 msgstr "بعد أسبوع واحد"
 
-#: libgnucash/app-utils/date-utilities.scm:1086
+#: libgnucash/app-utils/date-utilities.scm:1093
 msgid "Three Months Ahead"
 msgstr "بعد ثلاثة أشهر"
 
-#: libgnucash/app-utils/date-utilities.scm:1088
+#: libgnucash/app-utils/date-utilities.scm:1095
 msgid "Three Months Ahead."
 msgstr "بعد ثلاثة أشهر"
 
-#: libgnucash/app-utils/date-utilities.scm:1092
+#: libgnucash/app-utils/date-utilities.scm:1099
 msgid "Six Months Ahead"
 msgstr "بعد ستة أشهر"
 
-#: libgnucash/app-utils/date-utilities.scm:1094
+#: libgnucash/app-utils/date-utilities.scm:1101
 msgid "Six Months Ahead."
 msgstr "بعد ستة أشهر"
 
-#: libgnucash/app-utils/date-utilities.scm:1097
+#: libgnucash/app-utils/date-utilities.scm:1104
 msgid "One Year Ahead"
 msgstr "بعد عام واحد"
 
-#: libgnucash/app-utils/date-utilities.scm:1099
+#: libgnucash/app-utils/date-utilities.scm:1106
 msgid "One Year Ahead."
 msgstr "بعد عام واحد"
 
@@ -30669,40 +30673,40 @@ msgstr ""
 " سوف تجد قائمة أسماء حساب غير صالحة بالأسفل \n"
 " %s"
 
-#: libgnucash/engine/Account.cpp:4364
+#: libgnucash/engine/Account.cpp:4368
 msgid "Credit Card"
 msgstr "بطاقة الائتمان"
 
-#: libgnucash/engine/Account.cpp:4366
+#: libgnucash/engine/Account.cpp:4370
 msgid "Stock"
 msgstr "الأوراق المالية"
 
-#: libgnucash/engine/Account.cpp:4367
+#: libgnucash/engine/Account.cpp:4371
 msgid "Mutual Fund"
 msgstr "صناديق الاستثمار"
 
-#: libgnucash/engine/Account.cpp:4372
+#: libgnucash/engine/Account.cpp:4376
 msgid "A/Receivable"
 msgstr "ح/المقبوضات"
 
-#: libgnucash/engine/Account.cpp:4373
+#: libgnucash/engine/Account.cpp:4377
 msgid "A/Payable"
 msgstr "ح/المدفوعات"
 
-#: libgnucash/engine/Account.cpp:4374
+#: libgnucash/engine/Account.cpp:4378
 msgid "Root"
 msgstr "الجذر"
 
-#: libgnucash/engine/Account.cpp:4816
+#: libgnucash/engine/Account.cpp:4820
 msgid "Orphaned Gains"
 msgstr "أرباح بدون مصدر"
 
-#: libgnucash/engine/Account.cpp:4830 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4834 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "خسارة/مكاسب محققة"
 
-#: libgnucash/engine/Account.cpp:4832
+#: libgnucash/engine/Account.cpp:4836
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."

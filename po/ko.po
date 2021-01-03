@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.3.2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-13 22:01+0100\n"
+"POT-Creation-Date: 2021-01-03 07:22+0100\n"
 "PO-Revision-Date: 2009-07-15 11:40+0900\n"
 "Last-Translator: Jin-Hwan Jeong <yongdoria@gmail.com>\n"
 "Language-Team: \n"
@@ -80,7 +80,7 @@ msgstr "서양어"
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:969
 #: gnucash/gtkbuilder/dialog-account.glade:1029
-#: gnucash/report/reports/standard/account-piecharts.scm:487
+#: gnucash/report/reports/standard/account-piecharts.scm:488
 #: gnucash/report/reports/standard/category-barchart.scm:537
 msgid "Other"
 msgstr "기타"
@@ -875,10 +875,10 @@ msgstr "재무 제표"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
 #: gnucash/register/ledger-core/split-register-model.c:232
 #: gnucash/report/reports/standard/account-summary.scm:83
-#: gnucash/report/reports/standard/advanced-portfolio.scm:72
+#: gnucash/report/reports/standard/advanced-portfolio.scm:73
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1095
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1100
-#: gnucash/report/reports/standard/cashflow-barchart.scm:331
+#: gnucash/report/reports/standard/cashflow-barchart.scm:343
 #: gnucash/report/reports/standard/category-barchart.scm:634
 #: gnucash/report/reports/standard/category-barchart.scm:655
 #: gnucash/report/reports/standard/customer-summary.scm:70
@@ -889,9 +889,9 @@ msgstr "재무 제표"
 #: gnucash/report/reports/standard/invoice.scm:212
 #: gnucash/report/reports/standard/invoice.scm:603
 #: gnucash/report/reports/standard/job-report.scm:40
-#: gnucash/report/reports/standard/net-charts.scm:417
+#: gnucash/report/reports/standard/net-charts.scm:413
 #: gnucash/report/reports/standard/new-owner-report.scm:49
-#: gnucash/report/reports/standard/new-owner-report.scm:237
+#: gnucash/report/reports/standard/new-owner-report.scm:241
 #: gnucash/report/reports/standard/owner-report.scm:50
 #: gnucash/report/reports/standard/portfolio.scm:51
 #: gnucash/report/reports/standard/register.scm:130
@@ -917,7 +917,7 @@ msgstr "날짜"
 #: gnucash/register/ledger-core/split-register.c:2669
 #: gnucash/register/ledger-core/split-register.c:2674
 #: gnucash/register/ledger-core/split-register.c:2685
-#: gnucash/report/reports/standard/new-owner-report.scm:294
+#: gnucash/report/reports/standard/new-owner-report.scm:298
 #: gnucash/report/reports/standard/owner-report.scm:357
 #: libgnucash/engine/Account.cpp:145 libgnucash/engine/Account.cpp:153
 #: libgnucash/engine/Account.cpp:174 libgnucash/engine/gncOwner.c:814
@@ -974,14 +974,14 @@ msgstr "가격 더하는 중 오류."
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:341
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1051
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1052
 #: gnucash/report/reports/standard/budget-flow.scm:41
 #: gnucash/report/reports/standard/budget.scm:47
 #: gnucash/report/reports/standard/cash-flow.scm:47
 #: gnucash/report/reports/standard/general-journal.scm:97
 #: gnucash/report/reports/standard/job-report.scm:36
 #: gnucash/report/reports/standard/lot-viewer.scm:37
-#: gnucash/report/reports/standard/new-owner-report.scm:1128
+#: gnucash/report/reports/standard/new-owner-report.scm:1132
 #: gnucash/report/reports/standard/owner-report.scm:48
 #: gnucash/report/reports/standard/portfolio.scm:253
 #: gnucash/report/reports/standard/register.scm:143
@@ -992,7 +992,7 @@ msgstr "계정"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1063
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
 msgstr "심볼"
@@ -1000,7 +1000,7 @@ msgstr "심볼"
 #: gnucash/gnome/assistant-stock-split.c:585
 #: gnucash/gnome/dialog-find-transactions.c:122
 #: gnucash/register/ledger-core/split-register-model.c:419
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1071
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1072
 #: gnucash/report/reports/standard/general-journal.scm:98
 #: gnucash/report/reports/standard/general-ledger.scm:78
 #: gnucash/report/reports/standard/general-ledger.scm:98
@@ -1134,7 +1134,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-billterms.glade:182
 #: gnucash/gtkbuilder/dialog-billterms.glade:767
 #: gnucash/gtkbuilder/gnc-frequency.glade:966
-#: gnucash/report/reports/standard/price-scatter.scm:138
+#: gnucash/report/reports/standard/price-scatter.scm:139
 msgid "Days"
 msgstr "일"
 
@@ -1149,7 +1149,7 @@ msgstr "내달"
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:622
 #: gnucash/gtkbuilder/dialog-price.glade:24
 #: gnucash/report/reports/standard/job-report.scm:240
-#: gnucash/report/reports/standard/new-owner-report.scm:296
+#: gnucash/report/reports/standard/new-owner-report.scm:300
 #: gnucash/report/reports/standard/owner-report.scm:353
 #: gnucash/report/reports/standard/owner-report.scm:358
 msgid "Unknown"
@@ -1575,7 +1575,7 @@ msgstr "거래 보고서(_R)"
 #: gnucash/report/reports/standard/invoice.scm:217
 #: gnucash/report/reports/standard/job-report.scm:44
 #: gnucash/report/reports/standard/new-owner-report.scm:53
-#: gnucash/report/reports/standard/new-owner-report.scm:240
+#: gnucash/report/reports/standard/new-owner-report.scm:244
 #: gnucash/report/reports/standard/owner-report.scm:54
 #: gnucash/report/reports/standard/register.scm:138
 #: gnucash/report/reports/standard/register.scm:368
@@ -1790,7 +1790,7 @@ msgstr "주식 가격"
 #: gnucash/report/reports/standard/general-ledger.scm:81
 #: gnucash/report/reports/standard/general-ledger.scm:101
 #: gnucash/report/reports/standard/job-report.scm:45
-#: gnucash/report/reports/standard/new-owner-report.scm:244
+#: gnucash/report/reports/standard/new-owner-report.scm:248
 #: gnucash/report/reports/standard/owner-report.scm:59
 #: gnucash/report/reports/standard/register.scm:398
 #: gnucash/report/reports/standard/register.scm:647
@@ -1807,7 +1807,7 @@ msgstr "금액"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:78
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1080
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1081
 #: gnucash/report/reports/standard/portfolio.scm:258
 #: gnucash/report/reports/standard/register.scm:158
 #: gnucash/report/reports/standard/register.scm:407
@@ -2061,7 +2061,7 @@ msgstr ""
 #: gnucash/report/reports/standard/job-report.scm:41
 #: gnucash/report/reports/standard/new-aging.scm:126
 #: gnucash/report/reports/standard/new-owner-report.scm:50
-#: gnucash/report/reports/standard/new-owner-report.scm:957
+#: gnucash/report/reports/standard/new-owner-report.scm:961
 #: gnucash/report/reports/standard/owner-report.scm:51
 #: gnucash/report/reports/standard/owner-report.scm:612
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:233
@@ -2070,7 +2070,7 @@ msgstr "어음 만기일"
 
 #: gnucash/gnome/dialog-invoice.c:837 gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:130
-#: gnucash/report/reports/standard/new-owner-report.scm:961
+#: gnucash/report/reports/standard/new-owner-report.scm:965
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post Date"
 msgstr "어음 등록일"
@@ -2134,7 +2134,7 @@ msgid "PAID"
 msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:2065
-#: gnucash/report/reports/standard/new-owner-report.scm:577
+#: gnucash/report/reports/standard/new-owner-report.scm:581
 msgid "UNPAID"
 msgstr ""
 
@@ -2356,14 +2356,14 @@ msgstr "영수증 장부"
 #: gnucash/report/reports/standard/customer-summary.scm:72
 #: gnucash/report/reports/standard/job-report.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:52
-#: gnucash/report/reports/standard/new-owner-report.scm:239
+#: gnucash/report/reports/standard/new-owner-report.scm:243
 #: gnucash/report/reports/standard/owner-report.scm:53
 msgid "Type"
 msgstr "형태"
 
 #: gnucash/gnome/dialog-invoice.c:3440
 #: gnucash/register/ledger-core/split-register-model.c:309
-#: gnucash/report/reports/standard/new-owner-report.scm:819
+#: gnucash/report/reports/standard/new-owner-report.scm:823
 msgid "Paid"
 msgstr "지불"
 
@@ -2528,7 +2528,7 @@ msgstr "제목"
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
 #: gnucash/report/reports/standard/new-owner-report.scm:58
-#: gnucash/report/reports/standard/new-owner-report.scm:558
+#: gnucash/report/reports/standard/new-owner-report.scm:562
 #: gnucash/report/reports/standard/owner-report.scm:319
 #: gnucash/report/reports/standard/register.scm:164
 msgid "Balance"
@@ -2620,8 +2620,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
 #: gnucash/report/reports/standard/new-aging.scm:194
-#: gnucash/report/reports/standard/new-owner-report.scm:315
-#: gnucash/report/reports/standard/new-owner-report.scm:713
+#: gnucash/report/reports/standard/new-owner-report.scm:319
+#: gnucash/report/reports/standard/new-owner-report.scm:717
 msgid "Pre-Payment"
 msgstr "사전 지불"
 
@@ -2743,7 +2743,7 @@ msgstr "가격을 삭제할까요?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:427
 #: gnucash/gtkbuilder/dialog-invoice.glade:615
-#: gnucash/report/reports/standard/budget-income-statement.scm:123
+#: gnucash/report/reports/standard/budget-income-statement.scm:124
 #: gnucash/report/reports/standard/equity-statement.scm:85
 #: gnucash/report/reports/standard/income-statement.scm:117
 #: gnucash/report/reports/standard/trial-balance.scm:91
@@ -2857,7 +2857,7 @@ msgstr "내용"
 
 #: gnucash/gnome/dialog-report-column-view.c:412
 #: gnucash/report/reports/standard/customer-summary.scm:291
-#: gnucash/report/reports/standard/new-owner-report.scm:1061
+#: gnucash/report/reports/standard/new-owner-report.scm:1065
 #: gnucash/report/reports/standard/owner-report.scm:743
 msgid "Report"
 msgstr "보고서"
@@ -3217,19 +3217,19 @@ msgstr "판매자 찾기"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:97
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
 #: gnucash/register/ledger-core/split-register.c:2716
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1087
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1088
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1279
-#: gnucash/report/reports/standard/net-charts.scm:350
-#: gnucash/report/reports/standard/net-charts.scm:420
+#: gnucash/report/reports/standard/net-charts.scm:346
+#: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4369 libgnucash/engine/Scrub.c:464
+#: libgnucash/engine/Account.cpp:4373 libgnucash/engine/Scrub.c:464
 msgid "Income"
 msgstr "수입"
 
 #: gnucash/gnome/gnc-budget-view.c:502
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:122
-#: gnucash/report/reports/standard/budget-income-statement.scm:521
+#: gnucash/report/reports/standard/budget-income-statement.scm:522
 #: gnucash/report/reports/standard/income-statement.scm:512
 #: gnucash/report/report-utilities.scm:205
 msgid "Expenses"
@@ -3257,17 +3257,18 @@ msgstr "기존 예산 열기"
 #: gnucash/report/html-acct-table.scm:829 gnucash/report/reports/aging.scm:544
 #: gnucash/report/reports/aging.scm:831
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:294
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1052
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1053
 #: gnucash/report/reports/standard/budget-flow.scm:168
 #: gnucash/report/reports/standard/budget-flow.scm:247
 #: gnucash/report/reports/standard/budget.scm:511
+#: gnucash/report/reports/standard/cashflow-barchart.scm:352
 #: gnucash/report/reports/standard/customer-summary.scm:478
 #: gnucash/report/reports/standard/customer-summary.scm:480
 #: gnucash/report/reports/standard/invoice.scm:104
 #: gnucash/report/reports/standard/invoice.scm:252
 #: gnucash/report/reports/standard/new-aging.scm:200
 #: gnucash/report/reports/standard/new-aging.scm:325
-#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:325
 #: gnucash/report/reports/standard/portfolio.scm:278
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1961
@@ -3395,7 +3396,7 @@ msgid "Setup scheduled transactions for repayment of a loan"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:180
-#: gnucash/report/report-core.scm:150
+#: gnucash/report/report-core.scm:151
 #, fuzzy
 msgid "B_udget"
 msgstr "예산"
@@ -3449,7 +3450,7 @@ msgid "_Import Map Editor"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
-msgid "View and Delete Bayesian and Non Bayesian information"
+msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
@@ -3608,7 +3609,7 @@ msgid "_OK"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-business.c:155
-#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:161
+#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:162
 msgid "_Business"
 msgstr "사업(_B)"
 
@@ -4161,20 +4162,21 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2846
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2850
 #: gnucash/gtkbuilder/dialog-preferences.glade:980
-#: gnucash/report/report-core.scm:157
+#: gnucash/report/report-core.scm:158
 #: gnucash/report/reports/example/average-balance.scm:92
 #: gnucash/report/reports/example/average-balance.scm:296
 #: gnucash/report/reports/example/daily-reports.scm:57
-#: gnucash/report/reports/standard/account-piecharts.scm:69
+#: gnucash/report/reports/standard/account-piecharts.scm:70
+#: gnucash/report/reports/standard/account-piecharts.scm:564
 #: gnucash/report/reports/standard/account-summary.scm:85
-#: gnucash/report/reports/standard/advanced-portfolio.scm:162
+#: gnucash/report/reports/standard/advanced-portfolio.scm:163
 #: gnucash/report/reports/standard/balance-forecast.scm:37
 #: gnucash/report/reports/standard/balance-sheet.scm:87
 #: gnucash/report/reports/standard/balsheet-pnl.scm:81
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:52
 #: gnucash/report/reports/standard/budget-barchart.scm:38
-#: gnucash/report/reports/standard/budget-income-statement.scm:74
-#: gnucash/report/reports/standard/cashflow-barchart.scm:44
+#: gnucash/report/reports/standard/budget-income-statement.scm:75
+#: gnucash/report/reports/standard/cashflow-barchart.scm:45
 #: gnucash/report/reports/standard/category-barchart.scm:75
 #: gnucash/report/reports/standard/equity-statement.scm:68
 #: gnucash/report/reports/standard/income-gst-statement.scm:125
@@ -4359,7 +4361,7 @@ msgstr "장부"
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:227
 #: gnucash/report/reports/standard/budget-flow.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:59
 #: gnucash/report/reports/standard/budget.scm:94
 msgid "Budget"
 msgstr "예산"
@@ -5053,7 +5055,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 #: gnucash/report/reports/standard/job-report.scm:511
-#: gnucash/report/reports/standard/new-owner-report.scm:1205
+#: gnucash/report/reports/standard/new-owner-report.scm:1209
 msgid "Vendor Report"
 msgstr "판매인 보고서"
 
@@ -5064,7 +5066,7 @@ msgstr "판매인 보고서"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
 #: gnucash/report/reports/standard/job-report.scm:505
-#: gnucash/report/reports/standard/new-owner-report.scm:1196
+#: gnucash/report/reports/standard/new-owner-report.scm:1200
 msgid "Customer Report"
 msgstr "고객 보고서"
 
@@ -5075,7 +5077,7 @@ msgstr "고객 보고서"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 #: gnucash/report/reports/standard/job-report.scm:514
-#: gnucash/report/reports/standard/new-owner-report.scm:1214
+#: gnucash/report/reports/standard/new-owner-report.scm:1218
 msgid "Employee Report"
 msgstr "종업원 보고서"
 
@@ -6192,23 +6194,23 @@ msgstr "스타일 시트(_Y)"
 msgid "Edit report style sheets"
 msgstr "보고서 스타일 시트 편집."
 
-#: gnucash/gnome/gnc-plugin-report-system.c:150
-#: gnucash/report/reports/standard/view-column.scm:131
+#: gnucash/gnome/gnc-plugin-report-system.c:148
+#: gnucash/report/reports/standard/view-column.scm:127
 msgid "Report error"
 msgstr "보고서 오류"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:151
-#: gnucash/report/reports/standard/view-column.scm:132
+#: gnucash/gnome/gnc-plugin-report-system.c:149
+#: gnucash/report/reports/standard/view-column.scm:128
 msgid "An error occurred while running the report."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-report-system.c:186
-#: gnucash/gnome/gnc-plugin-report-system.c:208
+#: gnucash/gnome/gnc-plugin-report-system.c:184
+#: gnucash/gnome/gnc-plugin-report-system.c:206
 #, c-format
 msgid "Badly formed options URL: %s"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-report-system.c:196
+#: gnucash/gnome/gnc-plugin-report-system.c:194
 #, fuzzy, c-format
 msgid "Badly-formed report id: %s"
 msgstr "안좋은 URL %s"
@@ -7445,8 +7447,9 @@ msgstr ""
 #. Translators: Replace here and later CUSIP by the name of your local
 #. National Securities Identifying Number
 #. like gb:SEDOL, de:WKN, ch:Valorennummer, fr:SICOVAM ...
-#. See http://en.wikipedia.org/wiki/ISIN for hints.
-#: gnucash/gnome-utils/dialog-commodity.c:173
+#. See http://en.wikipedia.org/wiki/ISIN and
+#. https://en.wikipedia.org/wiki/National_numbering_agency for hints.
+#: gnucash/gnome-utils/dialog-commodity.c:174
 #, fuzzy
 msgid ""
 "\n"
@@ -7455,42 +7458,42 @@ msgstr ""
 "\n"
 "교환 코드 (CUSIP 또는 유사): "
 
-#: gnucash/gnome-utils/dialog-commodity.c:175
+#: gnucash/gnome-utils/dialog-commodity.c:176
 msgid ""
 "\n"
 "Mnemonic (Ticker symbol or similar): "
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-commodity.c:274
+#: gnucash/gnome-utils/dialog-commodity.c:275
 msgid "Select security/currency"
 msgstr "단위/통화 선택"
 
-#: gnucash/gnome-utils/dialog-commodity.c:275
+#: gnucash/gnome-utils/dialog-commodity.c:276
 #: gnucash/gtkbuilder/dialog-account.glade:1257
 msgid "_Security/currency"
 msgstr "단위/통화(_S)"
 
-#: gnucash/gnome-utils/dialog-commodity.c:279
+#: gnucash/gnome-utils/dialog-commodity.c:280
 msgid "Select security"
 msgstr "단위 선택"
 
-#: gnucash/gnome-utils/dialog-commodity.c:280
+#: gnucash/gnome-utils/dialog-commodity.c:281
 #: gnucash/gtkbuilder/dialog-price.glade:146
 #, fuzzy
 msgid "_Security"
 msgstr "단위(_S)"
 
-#: gnucash/gnome-utils/dialog-commodity.c:284
+#: gnucash/gnome-utils/dialog-commodity.c:285
 msgid "Select currency"
 msgstr "통화 선택"
 
-#: gnucash/gnome-utils/dialog-commodity.c:285
+#: gnucash/gnome-utils/dialog-commodity.c:286
 #: gnucash/gtkbuilder/dialog-price.glade:161
 #, fuzzy
 msgid "Cu_rrency"
 msgstr "통화(_R)"
 
-#: gnucash/gnome-utils/dialog-commodity.c:759
+#: gnucash/gnome-utils/dialog-commodity.c:760
 #: gnucash/gnome-utils/dialog-options.c:713
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:412
 #: gnucash/gnome-utils/gnc-tree-view-price.c:402
@@ -7499,48 +7502,48 @@ msgstr "통화(_R)"
 #: gnucash/gtkbuilder/dialog-transfer.glade:424
 #: gnucash/gtkbuilder/dialog-transfer.glade:437
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4368
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4372
 msgid "Currency"
 msgstr "통화"
 
-#: gnucash/gnome-utils/dialog-commodity.c:854
+#: gnucash/gnome-utils/dialog-commodity.c:855
 msgid "Use local time"
 msgstr "지역 시간 사용"
 
-#: gnucash/gnome-utils/dialog-commodity.c:984
+#: gnucash/gnome-utils/dialog-commodity.c:985
 msgid "Edit currency"
 msgstr "통화 편집"
 
-#: gnucash/gnome-utils/dialog-commodity.c:985
+#: gnucash/gnome-utils/dialog-commodity.c:986
 msgid "Currency Information"
 msgstr "통화 정보"
 
-#: gnucash/gnome-utils/dialog-commodity.c:990
+#: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "Edit security"
 msgstr "단위 편집"
 
-#: gnucash/gnome-utils/dialog-commodity.c:990
+#: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "New security"
 msgstr "새 단위"
 
-#: gnucash/gnome-utils/dialog-commodity.c:991
+#: gnucash/gnome-utils/dialog-commodity.c:992
 msgid "Security Information"
 msgstr "단위 정보"
 
-#: gnucash/gnome-utils/dialog-commodity.c:1268
+#: gnucash/gnome-utils/dialog-commodity.c:1269
 msgid "You may not create a new national currency."
 msgstr "새 국가 통화를 생성할 수 없습니다."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1278
+#: gnucash/gnome-utils/dialog-commodity.c:1279
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-commodity.c:1293
+#: gnucash/gnome-utils/dialog-commodity.c:1294
 msgid "That commodity already exists."
 msgstr "그 상품은 이미 있습니다."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1342
+#: gnucash/gnome-utils/dialog-commodity.c:1343
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
@@ -8016,7 +8019,7 @@ msgstr "아니오, 이번만 아님(_N)"
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:166
 #: gnucash/gnome-utils/gnc-period-select.c:70
 #: gnucash/gnome-utils/gnc-period-select.c:86
-#: libgnucash/app-utils/date-utilities.scm:1039
+#: libgnucash/app-utils/date-utilities.scm:1046
 msgid "Today"
 msgstr "오늘"
 
@@ -8025,21 +8028,21 @@ msgid "Use Shift combined with Return or Keypad Enter to finish editing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-date-delta.c:224
-#: gnucash/report/reports/standard/price-scatter.scm:139
+#: gnucash/report/reports/standard/price-scatter.scm:140
 msgid "Weeks"
 msgstr "주"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:226
 #: gnucash/gtkbuilder/assistant-loan.glade:12
 #: gnucash/gtkbuilder/gnc-date-format.glade:169
-#: gnucash/report/reports/standard/price-scatter.scm:141
+#: gnucash/report/reports/standard/price-scatter.scm:142
 msgid "Months"
 msgstr "월"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:228
 #: gnucash/gtkbuilder/assistant-loan.glade:15
 #: gnucash/gtkbuilder/gnc-date-format.glade:181
-#: gnucash/report/reports/standard/price-scatter.scm:144
+#: gnucash/report/reports/standard/price-scatter.scm:145
 msgid "Years"
 msgstr "년"
 
@@ -8745,40 +8748,40 @@ msgstr ""
 msgid "File %s opened. %s"
 msgstr "QIF 파일 파싱 오류: %s"
 
-#: gnucash/gnome-utils/gnc-main-window.c:2863
+#: gnucash/gnome-utils/gnc-main-window.c:2864
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:2953
+#: gnucash/gnome-utils/gnc-main-window.c:2954
 msgid "Unable to save to database."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:2955
+#: gnucash/gnome-utils/gnc-main-window.c:2956
 msgid "Unable to save to database: Book is marked read-only."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4301
+#: gnucash/gnome-utils/gnc-main-window.c:4302
 msgid "Book Options"
 msgstr "장부 설정"
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.c:4686
+#: gnucash/gnome-utils/gnc-main-window.c:4687
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4698
+#: gnucash/gnome-utils/gnc-main-window.c:4699
 #: gnucash/gnome-utils/gnc-splash.c:97
 msgid "Version"
 msgstr "버전"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4699
+#: gnucash/gnome-utils/gnc-main-window.c:4700
 #: gnucash/gnome-utils/gnc-splash.c:98 gnucash/gnucash-core-app.cpp:503
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4707
+#: gnucash/gnome-utils/gnc-main-window.c:4708
 msgid "Accounting for personal and small business finance."
 msgstr ""
 
@@ -8786,21 +8789,21 @@ msgstr ""
 #. * Enter your name or that of your team and an email contact for feedback.
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
-#: gnucash/gnome-utils/gnc-main-window.c:4716
+#: gnucash/gnome-utils/gnc-main-window.c:4717
 msgid "translator-credits"
 msgstr "Jin-Hwan Jeong, 2009"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4719
+#: gnucash/gnome-utils/gnc-main-window.c:4720
 msgid "Visit the GnuCash website."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-period-select.c:71
-#: libgnucash/app-utils/date-utilities.scm:955
+#: libgnucash/app-utils/date-utilities.scm:962
 msgid "Start of this month"
 msgstr "이 달 시작"
 
 #: gnucash/gnome-utils/gnc-period-select.c:72
-#: libgnucash/app-utils/date-utilities.scm:969
+#: libgnucash/app-utils/date-utilities.scm:976
 msgid "Start of previous month"
 msgstr "이전 달 시작"
 
@@ -8809,17 +8812,17 @@ msgid "Start of this quarter"
 msgstr "이 분기 시작"
 
 #: gnucash/gnome-utils/gnc-period-select.c:74
-#: libgnucash/app-utils/date-utilities.scm:1011
+#: libgnucash/app-utils/date-utilities.scm:1018
 msgid "Start of previous quarter"
 msgstr "이전 분기 시작"
 
 #: gnucash/gnome-utils/gnc-period-select.c:75
-#: libgnucash/app-utils/date-utilities.scm:899
+#: libgnucash/app-utils/date-utilities.scm:906
 msgid "Start of this year"
 msgstr "올 해 시작"
 
 #: gnucash/gnome-utils/gnc-period-select.c:76
-#: libgnucash/app-utils/date-utilities.scm:913
+#: libgnucash/app-utils/date-utilities.scm:920
 msgid "Start of previous year"
 msgstr "이전년 시작"
 
@@ -8834,12 +8837,12 @@ msgid "Start of previous accounting period"
 msgstr "이전 분기의 계정 기간의 시작"
 
 #: gnucash/gnome-utils/gnc-period-select.c:87
-#: libgnucash/app-utils/date-utilities.scm:962
+#: libgnucash/app-utils/date-utilities.scm:969
 msgid "End of this month"
 msgstr "이 달 끝"
 
 #: gnucash/gnome-utils/gnc-period-select.c:88
-#: libgnucash/app-utils/date-utilities.scm:976
+#: libgnucash/app-utils/date-utilities.scm:983
 msgid "End of previous month"
 msgstr "이전 달 끝"
 
@@ -8848,17 +8851,17 @@ msgid "End of this quarter"
 msgstr "이 분기 끝"
 
 #: gnucash/gnome-utils/gnc-period-select.c:90
-#: libgnucash/app-utils/date-utilities.scm:1018
+#: libgnucash/app-utils/date-utilities.scm:1025
 msgid "End of previous quarter"
 msgstr "이전 분기 끝"
 
 #: gnucash/gnome-utils/gnc-period-select.c:91
-#: libgnucash/app-utils/date-utilities.scm:906
+#: libgnucash/app-utils/date-utilities.scm:913
 msgid "End of this year"
 msgstr "올 해 끝"
 
 #: gnucash/gnome-utils/gnc-period-select.c:92
-#: libgnucash/app-utils/date-utilities.scm:920
+#: libgnucash/app-utils/date-utilities.scm:927
 msgid "End of previous year"
 msgstr "이전년도 끝"
 
@@ -9294,7 +9297,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:503
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4371
+#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4375
 msgid "Equity"
 msgstr "자기자본"
 
@@ -9305,15 +9308,15 @@ msgstr "자기자본"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 #: gnucash/register/ledger-core/split-register.c:2707
 #: gnucash/register/ledger-core/split-register-model.c:402
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1075
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1076
 #: gnucash/report/reports/standard/general-journal.scm:99
 #: gnucash/report/reports/standard/general-ledger.scm:79
 #: gnucash/report/reports/standard/general-ledger.scm:99
 #: gnucash/report/reports/standard/invoice.scm:232
 #: gnucash/report/reports/standard/portfolio.scm:257
-#: gnucash/report/reports/standard/price-scatter.scm:39
-#: gnucash/report/reports/standard/price-scatter.scm:312
-#: gnucash/report/reports/standard/price-scatter.scm:326
+#: gnucash/report/reports/standard/price-scatter.scm:40
+#: gnucash/report/reports/standard/price-scatter.scm:313
+#: gnucash/report/reports/standard/price-scatter.scm:327
 #: gnucash/report/reports/standard/register.scm:150
 #: gnucash/report/reports/standard/register.scm:393
 #: gnucash/report/trep-engine.scm:981 gnucash/report/trep-engine.scm:1105
@@ -9758,7 +9761,7 @@ msgstr ""
 #: gnucash/report/reports/standard/customer-summary.scm:71
 #: gnucash/report/reports/standard/job-report.scm:42
 #: gnucash/report/reports/standard/new-owner-report.scm:51
-#: gnucash/report/reports/standard/new-owner-report.scm:238
+#: gnucash/report/reports/standard/new-owner-report.scm:242
 #: gnucash/report/reports/standard/owner-report.scm:52
 msgid "Reference"
 msgstr "참조"
@@ -9851,9 +9854,9 @@ msgstr "입금"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1283
 #: gnucash/report/reports/standard/customer-summary.scm:139
 #: gnucash/report/reports/standard/customer-summary.scm:326
-#: gnucash/report/reports/standard/net-charts.scm:371
-#: gnucash/report/reports/standard/net-charts.scm:420
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4370
+#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:416
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4374
 #: libgnucash/engine/gncInvoice.c:1084
 msgid "Expense"
 msgstr "지출"
@@ -13180,18 +13183,18 @@ msgstr ""
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:346
 #: gnucash/report/reports/example/average-balance.scm:40
 #: gnucash/report/reports/example/daily-reports.scm:52
-#: gnucash/report/reports/standard/account-piecharts.scm:64
+#: gnucash/report/reports/standard/account-piecharts.scm:65
 #: gnucash/report/reports/standard/account-summary.scm:79
 #: gnucash/report/reports/standard/balance-forecast.scm:40
 #: gnucash/report/reports/standard/balsheet-pnl.scm:59
-#: gnucash/report/reports/standard/cashflow-barchart.scm:54
+#: gnucash/report/reports/standard/cashflow-barchart.scm:55
 #: gnucash/report/reports/standard/cash-flow.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:69
 #: gnucash/report/reports/standard/equity-statement.scm:65
 #: gnucash/report/reports/standard/income-statement.scm:59
 #: gnucash/report/reports/standard/lot-viewer.scm:35
 #: gnucash/report/reports/standard/net-charts.scm:39
-#: gnucash/report/reports/standard/price-scatter.scm:35
+#: gnucash/report/reports/standard/price-scatter.scm:36
 #: gnucash/report/trep-engine.scm:95
 msgid "Start Date"
 msgstr "시작 날짜"
@@ -13336,25 +13339,25 @@ msgstr "범위: "
 #: gnucash/gtkbuilder/dialog-sx.glade:333
 #: gnucash/report/reports/example/average-balance.scm:41
 #: gnucash/report/reports/example/daily-reports.scm:53
-#: gnucash/report/reports/standard/account-piecharts.scm:65
+#: gnucash/report/reports/standard/account-piecharts.scm:66
 #: gnucash/report/reports/standard/account-summary.scm:80
 #: gnucash/report/reports/standard/balance-forecast.scm:41
 #: gnucash/report/reports/standard/balsheet-pnl.scm:60
-#: gnucash/report/reports/standard/cashflow-barchart.scm:55
+#: gnucash/report/reports/standard/cashflow-barchart.scm:56
 #: gnucash/report/reports/standard/cash-flow.scm:43
 #: gnucash/report/reports/standard/category-barchart.scm:70
 #: gnucash/report/reports/standard/equity-statement.scm:66
 #: gnucash/report/reports/standard/income-statement.scm:60
 #: gnucash/report/reports/standard/lot-viewer.scm:36
 #: gnucash/report/reports/standard/net-charts.scm:40
-#: gnucash/report/reports/standard/price-scatter.scm:36
+#: gnucash/report/reports/standard/price-scatter.scm:37
 #: gnucash/report/trep-engine.scm:96
 msgid "End Date"
 msgstr "종료 날짜"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1201
 #: gnucash/report/reports/standard/job-report.scm:563
-#: gnucash/report/reports/standard/new-owner-report.scm:1161
+#: gnucash/report/reports/standard/new-owner-report.scm:1165
 #: gnucash/report/reports/standard/owner-report.scm:795
 msgid "Date Range"
 msgstr "날짜 범위"
@@ -14009,7 +14012,7 @@ msgstr "비교하기 위해 계정 선택"
 
 #: gnucash/gtkbuilder/dialog-account.glade:199
 #: gnucash/gtkbuilder/dialog-account.glade:1326
-#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:292
+#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:293
 #: gnucash/report/stylesheets/plain.scm:232
 msgid "Default"
 msgstr "기본값"
@@ -14241,7 +14244,7 @@ msgstr "<b>부모 계정(_P)</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1666
 #: gnucash/gtkbuilder/dialog-preferences.glade:2010
-#: gnucash/report/report-core.scm:156
+#: gnucash/report/report-core.scm:157
 #: gnucash/report/reports/standard/equity-statement.scm:108
 #: gnucash/report/reports/standard/equity-statement.scm:112
 #: gnucash/report/reports/standard/register.scm:347
@@ -14612,7 +14615,7 @@ msgid "Choose Owner Dialog"
 msgstr "소유자 대화창 선택"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:8
-#: gnucash/report/reports/standard/account-piecharts.scm:61
+#: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
 msgstr "단위"
 
@@ -14748,6 +14751,7 @@ msgstr ""
 msgid "F_raction traded"
 msgstr "기준가 정밀도"
 
+#. Again replace CUSIP by your National Securities Identifying Number.
 #: gnucash/gtkbuilder/dialog-commodity.glade:475
 msgid "ISIN, CUSI_P or other code"
 msgstr "CUSIP 또는 다른 코드(_P)"
@@ -15097,7 +15101,7 @@ msgstr "2개월"
 #: gnucash/gtkbuilder/dialog-sx.glade:135
 #: gnucash/gtkbuilder/gnc-frequency.glade:180
 #: gnucash/gtkbuilder/gnc-frequency.glade:1408
-#: gnucash/report/reports/standard/account-piecharts.scm:123
+#: gnucash/report/reports/standard/account-piecharts.scm:124
 #: gnucash/report/reports/standard/category-barchart.scm:123
 #: gnucash/report/trep-engine.scm:336 libgnucash/engine/Recurrence.c:761
 #: libgnucash/engine/Recurrence.c:775
@@ -15120,7 +15124,7 @@ msgstr "2주"
 #: gnucash/gtkbuilder/dialog-sx.glade:129
 #: gnucash/gtkbuilder/gnc-frequency.glade:174
 #: gnucash/gtkbuilder/gnc-frequency.glade:993
-#: gnucash/report/reports/standard/account-piecharts.scm:126
+#: gnucash/report/reports/standard/account-piecharts.scm:127
 #: gnucash/report/reports/standard/category-barchart.scm:126
 #: gnucash/report/trep-engine.scm:327 libgnucash/engine/Recurrence.c:623
 msgid "Weekly"
@@ -15798,7 +15802,7 @@ msgid "<b>Amount</b>"
 msgstr "<b>계정(_A)</b>"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:460
-#: gnucash/report/reports/standard/new-owner-report.scm:294
+#: gnucash/report/reports/standard/new-owner-report.scm:298
 msgid "Refund"
 msgstr ""
 
@@ -16838,7 +16842,7 @@ msgid "Before _Date"
 msgstr "날짜(_D)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:795
-#: gnucash/report/reports/standard/price-scatter.scm:96
+#: gnucash/report/reports/standard/price-scatter.scm:97
 msgid "Price Database"
 msgstr "가격 데이타베이스"
 
@@ -17214,7 +17218,7 @@ msgid "Bi-Weekly"
 msgstr "2주"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:141
-#: gnucash/report/reports/standard/account-piecharts.scm:120
+#: gnucash/report/reports/standard/account-piecharts.scm:121
 #: gnucash/report/trep-engine.scm:354 libgnucash/engine/Recurrence.c:787
 msgid "Yearly"
 msgstr "매년"
@@ -17524,7 +17528,7 @@ msgstr "<b>이체받을 내용</b>"
 #: gnucash/gtkbuilder/dialog-transfer.glade:447
 #: gnucash/gtkbuilder/dialog-transfer.glade:463
 #: gnucash/report/reports/standard/net-charts.scm:47
-#: gnucash/report/reports/standard/price-scatter.scm:49
+#: gnucash/report/reports/standard/price-scatter.scm:50
 msgid "Show Income/Expense"
 msgstr "수입/지출 보이기"
 
@@ -19271,7 +19275,7 @@ msgid "Unspecified"
 msgstr "지정안됨"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4361
+#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4365
 msgid "Bank"
 msgstr "은행"
 
@@ -21413,7 +21417,7 @@ msgid "Welcome to GnuCash"
 msgstr "이 프로그램은 재정관리를 위한 GnuCash입니다!"
 
 #: gnucash/python/init.py:103
-#: gnucash/report/reports/example/hello-world.scm:486
+#: gnucash/report/reports/example/hello-world.scm:488
 msgid "Have a nice day!"
 msgstr "좋은 하루이길!"
 
@@ -21599,7 +21603,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:527
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1091
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4362
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4366
 msgid "Cash"
 msgstr "현금"
 
@@ -21856,7 +21860,7 @@ msgstr "샘플: 거래 세부 항목"
 #: gnucash/register/ledger-core/split-register-layout.c:703
 #: gnucash/register/ledger-core/split-register-model.c:334
 #: gnucash/report/reports/standard/new-owner-report.scm:219
-#: gnucash/report/reports/standard/new-owner-report.scm:446
+#: gnucash/report/reports/standard/new-owner-report.scm:450
 #: gnucash/report/trep-engine.scm:1292 gnucash/report/trep-engine.scm:1293
 msgctxt "Column header for 'Document Link'"
 msgid "L"
@@ -22202,7 +22206,7 @@ msgstr ""
 #: gnucash/report/html-utilities.scm:337
 #: gnucash/report/reports/standard/balsheet-pnl.scm:140
 #: gnucash/report/reports/standard/balsheet-pnl.scm:141
-#: gnucash/report/reports/standard/new-owner-report.scm:935
+#: gnucash/report/reports/standard/new-owner-report.scm:939
 #, fuzzy
 msgid "Disabled"
 msgstr "가능"
@@ -22221,7 +22225,7 @@ msgid "This report requires accounts to be selected in the report options."
 msgstr "이 보고서는 선택된 계정이 필요합니다."
 
 #: gnucash/report/html-utilities.scm:405
-#: gnucash/report/reports/standard/price-scatter.scm:276
+#: gnucash/report/reports/standard/price-scatter.scm:277
 msgid "No data"
 msgstr "자료 없음"
 
@@ -22376,7 +22380,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:89
 #: gnucash/report/reports/standard/balsheet-pnl.scm:82
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:54
-#: gnucash/report/reports/standard/budget-income-statement.scm:76
+#: gnucash/report/reports/standard/budget-income-statement.scm:77
 #: gnucash/report/reports/standard/income-statement.scm:64
 msgid "Report on these accounts, if display depth allows."
 msgstr ""
@@ -22386,8 +22390,8 @@ msgid "Select the currency to display the values of this report in."
 msgstr "이 보고서의 가격을 보이기 위하여 통화 선택."
 
 #: gnucash/report/options-utilities.scm:144
-#: gnucash/report/reports/standard/advanced-portfolio.scm:80
-#: gnucash/report/reports/standard/price-scatter.scm:87
+#: gnucash/report/reports/standard/advanced-portfolio.scm:81
+#: gnucash/report/reports/standard/price-scatter.scm:88
 #, fuzzy
 msgid "The source of price information."
 msgstr "가격 정보 소스"
@@ -22402,33 +22406,33 @@ msgid "The volume-weighted average cost of purchases."
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:149
-#: gnucash/report/reports/standard/price-scatter.scm:90
+#: gnucash/report/reports/standard/price-scatter.scm:91
 msgid "Weighted Average"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:150
-#: gnucash/report/reports/standard/price-scatter.scm:91
+#: gnucash/report/reports/standard/price-scatter.scm:92
 msgid "The weighted average of all currency transactions of the past."
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:152
-#: gnucash/report/reports/standard/advanced-portfolio.scm:82
+#: gnucash/report/reports/standard/advanced-portfolio.scm:83
 msgid "Most recent"
 msgstr "가장 최근 것"
 
 #: gnucash/report/options-utilities.scm:153
-#: gnucash/report/reports/standard/advanced-portfolio.scm:83
+#: gnucash/report/reports/standard/advanced-portfolio.scm:84
 #, fuzzy
 msgid "The most recent recorded price."
 msgstr "가장 최근 기록된 가격"
 
 #: gnucash/report/options-utilities.scm:155
-#: gnucash/report/reports/standard/advanced-portfolio.scm:85
+#: gnucash/report/reports/standard/advanced-portfolio.scm:86
 msgid "Nearest in time"
 msgstr "가장 가까운 시간"
 
 #: gnucash/report/options-utilities.scm:156
-#: gnucash/report/reports/standard/advanced-portfolio.scm:86
+#: gnucash/report/reports/standard/advanced-portfolio.scm:87
 #, fuzzy
 msgid "The price recorded nearest in time to the report date."
 msgstr "보고 날짜 전 기록된 가격의 가장 최근 내용"
@@ -22589,38 +22593,38 @@ msgid ""
 "(experimental)."
 msgstr ""
 
-#: gnucash/report/report-core.scm:148
+#: gnucash/report/report-core.scm:149
 msgid "_Assets & Liabilities"
 msgstr "자산 및 부채(_A)"
 
-#: gnucash/report/report-core.scm:149
+#: gnucash/report/report-core.scm:150
 msgid "_Income & Expense"
 msgstr "소득 및 지출(_I)"
 
-#: gnucash/report/report-core.scm:151
+#: gnucash/report/report-core.scm:152
 msgid "_Taxes"
 msgstr "세금(_T)"
 
-#: gnucash/report/report-core.scm:152
+#: gnucash/report/report-core.scm:153
 #, fuzzy
 msgid "E_xamples"
 msgstr "예제"
 
-#: gnucash/report/report-core.scm:153
+#: gnucash/report/report-core.scm:154
 #, fuzzy
 msgid "_Experimental"
 msgstr "내보내기(_E)"
 
-#: gnucash/report/report-core.scm:154
+#: gnucash/report/report-core.scm:155
 #, fuzzy
 msgid "_Multicolumn"
 msgstr "다수열 보기"
 
-#: gnucash/report/report-core.scm:155
+#: gnucash/report/report-core.scm:156
 msgid "_Custom"
 msgstr "사용자(_C)"
 
-#: gnucash/report/report-core.scm:158
+#: gnucash/report/report-core.scm:159
 #: gnucash/report/reports/standard/invoice.scm:257
 #: gnucash/report/reports/standard/invoice.scm:262
 #: gnucash/report/reports/standard/invoice.scm:267
@@ -22655,57 +22659,57 @@ msgstr "사용자(_C)"
 msgid "Display"
 msgstr "보이기"
 
-#: gnucash/report/report-core.scm:159
+#: gnucash/report/report-core.scm:160
 msgid "Report name"
 msgstr "보고서명"
 
-#: gnucash/report/report-core.scm:160
+#: gnucash/report/report-core.scm:161
 msgid "Stylesheet"
 msgstr "스타일시트"
 
-#: gnucash/report/report-core.scm:162
+#: gnucash/report/report-core.scm:163
 msgid "Invoice Number"
 msgstr "청구서 번호"
 
-#: gnucash/report/report-core.scm:208
+#: gnucash/report/report-core.scm:209
 msgid ""
 "One of your reports has a report-guid that is a duplicate. Please check the "
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
 
-#: gnucash/report/report-core.scm:209
+#: gnucash/report/report-core.scm:210
 #, fuzzy
 msgid "Wrong report definition: "
 msgstr "설정 경로 설정"
 
-#: gnucash/report/report-core.scm:210
+#: gnucash/report/report-core.scm:211
 msgid " Report is missing a GUID."
 msgstr ""
 
-#: gnucash/report/report-core.scm:212
+#: gnucash/report/report-core.scm:213
 msgid ""
 "Some reports stored in a legacy format were found. This format is not "
 "supported anymore so these reports may not have been restored properly."
 msgstr ""
 
-#: gnucash/report/report-core.scm:286
+#: gnucash/report/report-core.scm:287
 #, fuzzy
 msgid "Enter a descriptive name for this report."
 msgstr "보고서 요약명을 입력"
 
-#: gnucash/report/report-core.scm:291
+#: gnucash/report/report-core.scm:292
 msgid "Select a stylesheet for the report."
 msgstr "보고서 스타일시트 선택"
 
-#: gnucash/report/report-core.scm:299
+#: gnucash/report/report-core.scm:300
 #, fuzzy
 msgid "stylesheet."
 msgstr "스타일시트"
 
 #: gnucash/report/reports/aging.scm:37
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:170
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:171
 #: gnucash/report/reports/standard/customer-summary.scm:41
 #: gnucash/report/reports/standard/job-report.scm:365
 #: gnucash/report/reports/standard/job-report.scm:496
@@ -22729,17 +22733,17 @@ msgstr "정렬 순서"
 #: gnucash/report/reports/aging.scm:40
 #: gnucash/report/reports/example/average-balance.scm:43
 #: gnucash/report/reports/example/daily-reports.scm:54
-#: gnucash/report/reports/standard/account-piecharts.scm:66
+#: gnucash/report/reports/standard/account-piecharts.scm:67
 #: gnucash/report/reports/standard/account-summary.scm:125
-#: gnucash/report/reports/standard/advanced-portfolio.scm:75
+#: gnucash/report/reports/standard/advanced-portfolio.scm:76
 #: gnucash/report/reports/standard/balance-forecast.scm:44
 #: gnucash/report/reports/standard/balance-sheet.scm:137
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/balsheet-pnl.scm:119
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:102
 #: gnucash/report/reports/standard/budget-flow.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:115
-#: gnucash/report/reports/standard/cashflow-barchart.scm:57
+#: gnucash/report/reports/standard/budget-income-statement.scm:116
+#: gnucash/report/reports/standard/cashflow-barchart.scm:58
 #: gnucash/report/reports/standard/cash-flow.scm:49
 #: gnucash/report/reports/standard/category-barchart.scm:72
 #: gnucash/report/reports/standard/equity-statement.scm:77
@@ -22747,7 +22751,7 @@ msgstr "정렬 순서"
 #: gnucash/report/reports/standard/net-charts.scm:42
 #: gnucash/report/reports/standard/new-aging.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:54
-#: gnucash/report/reports/standard/price-scatter.scm:40
+#: gnucash/report/reports/standard/price-scatter.scm:41
 #: gnucash/report/reports/standard/trial-balance.scm:129
 #: gnucash/report/trep-engine.scm:105
 msgid "Report's currency"
@@ -22756,17 +22760,17 @@ msgstr "보고서 통화"
 #: gnucash/report/reports/aging.scm:41
 #: gnucash/report/reports/example/average-balance.scm:44
 #: gnucash/report/reports/example/daily-reports.scm:55
-#: gnucash/report/reports/standard/account-piecharts.scm:67
+#: gnucash/report/reports/standard/account-piecharts.scm:68
 #: gnucash/report/reports/standard/account-summary.scm:126
-#: gnucash/report/reports/standard/advanced-portfolio.scm:39
+#: gnucash/report/reports/standard/advanced-portfolio.scm:40
 #: gnucash/report/reports/standard/balance-forecast.scm:45
 #: gnucash/report/reports/standard/balance-sheet.scm:138
 #: gnucash/report/reports/standard/balsheet-eg.scm:189
 #: gnucash/report/reports/standard/balsheet-pnl.scm:121
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:103
 #: gnucash/report/reports/standard/budget-flow.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:116
-#: gnucash/report/reports/standard/cashflow-barchart.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/cashflow-barchart.scm:59
 #: gnucash/report/reports/standard/cash-flow.scm:50
 #: gnucash/report/reports/standard/category-barchart.scm:73
 #: gnucash/report/reports/standard/equity-statement.scm:78
@@ -22774,7 +22778,7 @@ msgstr "보고서 통화"
 #: gnucash/report/reports/standard/net-charts.scm:43
 #: gnucash/report/reports/standard/new-aging.scm:43
 #: gnucash/report/reports/standard/portfolio.scm:35
-#: gnucash/report/reports/standard/price-scatter.scm:42
+#: gnucash/report/reports/standard/price-scatter.scm:43
 #: gnucash/report/reports/standard/trial-balance.scm:130
 #: gnucash/report/trep-engine.scm:102
 msgid "Price Source"
@@ -22901,7 +22905,7 @@ msgstr "제로 균형일 때조차 전체 판매자/고객 보이기."
 
 #: gnucash/report/reports/aging.scm:385
 #: gnucash/report/reports/standard/new-aging.scm:122
-#: gnucash/report/reports/standard/new-owner-report.scm:953
+#: gnucash/report/reports/standard/new-owner-report.scm:957
 #: gnucash/report/reports/standard/owner-report.scm:609
 #, fuzzy
 msgid "Leading date."
@@ -22909,7 +22913,7 @@ msgstr "자료 읽어오는 중..."
 
 #: gnucash/report/reports/aging.scm:388
 #: gnucash/report/reports/standard/new-aging.scm:127
-#: gnucash/report/reports/standard/new-owner-report.scm:958
+#: gnucash/report/reports/standard/new-owner-report.scm:962
 #: gnucash/report/reports/standard/owner-report.scm:612
 #, fuzzy
 msgid "Due date is leading."
@@ -22917,7 +22921,7 @@ msgstr "날짜 선 위치"
 
 #: gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:131
-#: gnucash/report/reports/standard/new-owner-report.scm:962
+#: gnucash/report/reports/standard/new-owner-report.scm:966
 #: gnucash/report/reports/standard/owner-report.scm:613
 #, fuzzy
 msgid "Post date is leading."
@@ -22982,7 +22986,7 @@ msgstr "날짜를 보일까요?"
 #: gnucash/report/reports/standard/budget-barchart.scm:72
 #: gnucash/report/reports/standard/budget.scm:119
 #: gnucash/report/reports/standard/new-aging.scm:195
-#: gnucash/report/reports/standard/new-owner-report.scm:316
+#: gnucash/report/reports/standard/new-owner-report.scm:320
 #: gnucash/report/reports/standard/owner-report.scm:259
 #, fuzzy
 msgid "Current"
@@ -22991,7 +22995,7 @@ msgstr "통화"
 #: gnucash/report/reports/aging.scm:540
 #: gnucash/report/reports/standard/job-report.scm:159
 #: gnucash/report/reports/standard/new-aging.scm:196
-#: gnucash/report/reports/standard/new-owner-report.scm:317
+#: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/owner-report.scm:260
 msgid "0-30 days"
 msgstr "0-30일"
@@ -22999,7 +23003,7 @@ msgstr "0-30일"
 #: gnucash/report/reports/aging.scm:541
 #: gnucash/report/reports/standard/job-report.scm:160
 #: gnucash/report/reports/standard/new-aging.scm:197
-#: gnucash/report/reports/standard/new-owner-report.scm:318
+#: gnucash/report/reports/standard/new-owner-report.scm:322
 #: gnucash/report/reports/standard/owner-report.scm:261
 msgid "31-60 days"
 msgstr "31-60 일"
@@ -23007,7 +23011,7 @@ msgstr "31-60 일"
 #: gnucash/report/reports/aging.scm:542
 #: gnucash/report/reports/standard/job-report.scm:161
 #: gnucash/report/reports/standard/new-aging.scm:198
-#: gnucash/report/reports/standard/new-owner-report.scm:319
+#: gnucash/report/reports/standard/new-owner-report.scm:323
 #: gnucash/report/reports/standard/owner-report.scm:262
 msgid "61-90 days"
 msgstr "61-90 일"
@@ -23015,7 +23019,7 @@ msgstr "61-90 일"
 #: gnucash/report/reports/aging.scm:543
 #: gnucash/report/reports/standard/job-report.scm:162
 #: gnucash/report/reports/standard/new-aging.scm:199
-#: gnucash/report/reports/standard/new-owner-report.scm:320
+#: gnucash/report/reports/standard/new-owner-report.scm:324
 #: gnucash/report/reports/standard/owner-report.scm:263
 msgid "91+ days"
 msgstr "91+ 일"
@@ -23045,10 +23049,10 @@ msgid "Average Balance"
 msgstr "평균 잔액"
 
 #: gnucash/report/reports/example/average-balance.scm:42
-#: gnucash/report/reports/standard/cashflow-barchart.scm:56
+#: gnucash/report/reports/standard/cashflow-barchart.scm:57
 #: gnucash/report/reports/standard/category-barchart.scm:71
 #: gnucash/report/reports/standard/net-charts.scm:41
-#: gnucash/report/reports/standard/price-scatter.scm:37
+#: gnucash/report/reports/standard/price-scatter.scm:38
 msgid "Step Size"
 msgstr "단계 크기"
 
@@ -23064,25 +23068,25 @@ msgstr "전체 필터 계정에서/로 거래 제외"
 
 #: gnucash/report/reports/example/average-balance.scm:47
 #: gnucash/report/reports/example/daily-reports.scm:64
-#: gnucash/report/reports/standard/account-piecharts.scm:76
+#: gnucash/report/reports/standard/account-piecharts.scm:77
 #: gnucash/report/reports/standard/balance-forecast.scm:47
 #: gnucash/report/reports/standard/budget-barchart.scm:43
-#: gnucash/report/reports/standard/cashflow-barchart.scm:51
+#: gnucash/report/reports/standard/cashflow-barchart.scm:52
 #: gnucash/report/reports/standard/category-barchart.scm:84
 #: gnucash/report/reports/standard/net-charts.scm:53
-#: gnucash/report/reports/standard/price-scatter.scm:57
+#: gnucash/report/reports/standard/price-scatter.scm:58
 msgid "Plot Width"
 msgstr "도표 너비"
 
 #: gnucash/report/reports/example/average-balance.scm:48
 #: gnucash/report/reports/example/daily-reports.scm:65
-#: gnucash/report/reports/standard/account-piecharts.scm:77
+#: gnucash/report/reports/standard/account-piecharts.scm:78
 #: gnucash/report/reports/standard/balance-forecast.scm:48
 #: gnucash/report/reports/standard/budget-barchart.scm:44
-#: gnucash/report/reports/standard/cashflow-barchart.scm:52
+#: gnucash/report/reports/standard/cashflow-barchart.scm:53
 #: gnucash/report/reports/standard/category-barchart.scm:85
 #: gnucash/report/reports/standard/net-charts.scm:54
-#: gnucash/report/reports/standard/price-scatter.scm:58
+#: gnucash/report/reports/standard/price-scatter.scm:59
 msgid "Plot Height"
 msgstr "도표 높이"
 
@@ -23113,7 +23117,7 @@ msgid "Show table"
 msgstr "표 보이기"
 
 #: gnucash/report/reports/example/average-balance.scm:117
-#: gnucash/report/reports/standard/cashflow-barchart.scm:124
+#: gnucash/report/reports/standard/cashflow-barchart.scm:125
 #: gnucash/report/reports/standard/category-barchart.scm:188
 #: gnucash/report/reports/standard/net-charts.scm:134
 msgid "Display a table of the selected data."
@@ -23140,7 +23144,7 @@ msgstr "생성하기 위한 그래프 형태"
 
 #: gnucash/report/reports/example/average-balance.scm:129
 #: gnucash/report/reports/example/average-balance.scm:149
-#: gnucash/report/reports/standard/advanced-portfolio.scm:94
+#: gnucash/report/reports/standard/advanced-portfolio.scm:95
 #: gnucash/report/trep-engine.scm:1962 libgnucash/engine/policy.c:58
 msgid "Average"
 msgstr "평균"
@@ -23211,7 +23215,7 @@ msgid "Shows a piechart with the total expenses for each day of the week"
 msgstr ""
 
 #: gnucash/report/reports/example/daily-reports.scm:58
-#: gnucash/report/reports/standard/account-piecharts.scm:70
+#: gnucash/report/reports/standard/account-piecharts.scm:71
 #: gnucash/report/reports/standard/category-barchart.scm:76
 msgid "Show Accounts until level"
 msgstr "대등하게 될 때까지 계정 보이기"
@@ -23222,51 +23226,51 @@ msgid "Show long account names"
 msgstr "긴 계정명 보이기"
 
 #: gnucash/report/reports/example/daily-reports.scm:62
-#: gnucash/report/reports/standard/account-piecharts.scm:73
+#: gnucash/report/reports/standard/account-piecharts.scm:74
 msgid "Show Totals"
 msgstr "총 합계 보이기"
 
 #: gnucash/report/reports/example/daily-reports.scm:63
-#: gnucash/report/reports/standard/account-piecharts.scm:75
+#: gnucash/report/reports/standard/account-piecharts.scm:76
 msgid "Maximum Slices"
 msgstr "부문 최대값"
 
 #: gnucash/report/reports/example/daily-reports.scm:66
-#: gnucash/report/reports/standard/account-piecharts.scm:78
+#: gnucash/report/reports/standard/account-piecharts.scm:79
 #: gnucash/report/reports/standard/category-barchart.scm:87
 msgid "Sort Method"
 msgstr "정렬 방법"
 
 #: gnucash/report/reports/example/daily-reports.scm:97
-#: gnucash/report/reports/standard/account-piecharts.scm:136
+#: gnucash/report/reports/standard/account-piecharts.scm:137
 #: gnucash/report/reports/standard/category-barchart.scm:138
 #: gnucash/report/reports/standard/net-charts.scm:92
 msgid "Report on these accounts, if chosen account level allows."
 msgstr ""
 
 #: gnucash/report/reports/example/daily-reports.scm:111
-#: gnucash/report/reports/standard/account-piecharts.scm:151
+#: gnucash/report/reports/standard/account-piecharts.scm:152
 #: gnucash/report/reports/standard/category-barchart.scm:150
 #, fuzzy
 msgid "Show accounts to this depth and not further."
 msgstr "이 깊이까지 계정을 보이고 더는 안보이기"
 
 #: gnucash/report/reports/example/daily-reports.scm:117
-#: gnucash/report/reports/standard/account-piecharts.scm:166
+#: gnucash/report/reports/standard/account-piecharts.scm:167
 msgid "Show the total balance in legend?"
 msgstr "레전드에서 총 수지를 보일까요?"
 
 #: gnucash/report/reports/example/daily-reports.scm:289
-#: gnucash/report/reports/standard/account-piecharts.scm:545
+#: gnucash/report/reports/standard/account-piecharts.scm:546
 #: gnucash/report/reports/standard/balance-forecast.scm:276
 #: gnucash/report/reports/standard/balsheet-pnl.scm:923
 #: gnucash/report/reports/standard/budget.scm:513
-#: gnucash/report/reports/standard/cashflow-barchart.scm:282
+#: gnucash/report/reports/standard/cashflow-barchart.scm:283
 #: gnucash/report/reports/standard/cash-flow.scm:190
 #: gnucash/report/reports/standard/category-barchart.scm:514
-#: gnucash/report/reports/standard/net-charts.scm:334
-#: gnucash/report/reports/standard/price-scatter.scm:212
-#: libgnucash/app-utils/date-utilities.scm:188
+#: gnucash/report/reports/standard/net-charts.scm:330
+#: gnucash/report/reports/standard/price-scatter.scm:213
+#: libgnucash/app-utils/date-utilities.scm:187
 #, scheme-format
 msgid "~a to ~a"
 msgstr ""
@@ -23346,7 +23350,7 @@ msgstr "이것은 문자열 설정입니다"
 
 #: gnucash/report/reports/example/hello-world.scm:90
 #: gnucash/report/reports/example/hello-world.scm:327
-#: gnucash/report/reports/example/hello-world.scm:499
+#: gnucash/report/reports/example/hello-world.scm:501
 msgid "Hello, World"
 msgstr "안녕"
 
@@ -23575,29 +23579,29 @@ msgstr "통화 형식의 숫자 설정은 %s임."
 msgid "Items you selected:"
 msgstr "선택된 항목:"
 
-#: gnucash/report/reports/example/hello-world.scm:435
+#: gnucash/report/reports/example/hello-world.scm:437
 msgid "List items selected"
 msgstr "선택된 목록 항목"
 
-#: gnucash/report/reports/example/hello-world.scm:440
+#: gnucash/report/reports/example/hello-world.scm:442
 msgid "(You selected no list items.)"
 msgstr "(목록 항목이 선택되지 않음)"
 
-#: gnucash/report/reports/example/hello-world.scm:476
+#: gnucash/report/reports/example/hello-world.scm:478
 msgid "You have selected no accounts."
 msgstr "선택된 계정이 없습니다."
 
-#: gnucash/report/reports/example/hello-world.scm:481
+#: gnucash/report/reports/example/hello-world.scm:483
 #, fuzzy
 msgid "Display help"
 msgstr "보이기"
 
-#: gnucash/report/reports/example/hello-world.scm:510
+#: gnucash/report/reports/example/hello-world.scm:512
 #, fuzzy
 msgid "Sample Report with Examples"
 msgstr "예제있는 샘플 보고서(_S)"
 
-#: gnucash/report/reports/example/hello-world.scm:514
+#: gnucash/report/reports/example/hello-world.scm:516
 msgid "A sample report with examples."
 msgstr "예제있는 샘플보고서."
 
@@ -23637,7 +23641,7 @@ msgid "Tax Report / TXF Export"
 msgstr "세금 보고서 / TXF 내보내기"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:170
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:171
 #: gnucash/report/reports/standard/customer-summary.scm:40
 #: gnucash/report/reports/standard/job-report.scm:365
 #: gnucash/report/reports/standard/job-report.scm:493
@@ -23647,45 +23651,45 @@ msgid "From"
 msgstr "시작"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:151
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:174
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:175
 msgid "Alternate Period"
 msgstr "대체 기간"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:175
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:176
 #, fuzzy
 msgid "Override or modify From: & To:."
 msgstr ": & 에서 :로 중복 또는 수정"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
 msgid "Use From - To"
 msgstr " - 에서 로 사용"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
 #, fuzzy
 msgid "Use From - To period."
 msgstr " - 에서 로 기간 사용"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
 msgid "1st Est Tax Quarter"
 msgstr "1분기 추정치 세금"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
 #, fuzzy
 msgid "Jan 1 - Mar 31."
 msgstr "1월 1일 - 3월 31일"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
 msgid "2nd Est Tax Quarter"
 msgstr "2분기 추정치 세금"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
 #, fuzzy
 msgid "Apr 1 - May 31."
 msgstr "4월 1일 - 5월 31일"
@@ -23694,62 +23698,62 @@ msgstr "4월 1일 - 5월 31일"
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "3rd Est Tax Quarter"
 msgstr "3분기 추정치 세금"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 #, fuzzy
 msgid "Jun 1 - Aug 31."
 msgstr "6월 1일 - 8월 31일"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 msgid "4th Est Tax Quarter"
 msgstr "4분기 추정치 세금"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 #, fuzzy
 msgid "Sep 1 - Dec 31."
 msgstr "9월 1일 12월 31일"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "Last Year"
 msgstr "미지막 해"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 #, fuzzy
 msgid "Last Year."
 msgstr "미지막 해"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:187
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr "마지막 해 1분기 추정치 세금"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:189
 #, fuzzy
 msgid "Jan 1 - Mar 31, Last year."
 msgstr "1월 1일 - 3월 31일, 마지막 해"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:164
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr "마지막 해 2분기 추정치 세금"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:165
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
 #, fuzzy
 msgid "Apr 1 - May 31, Last year."
 msgstr "4월 1일 - 5월 31일, 마지막 해"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr "마지막 해 3분기 추정치 세금"
 
@@ -23757,35 +23761,35 @@ msgstr "마지막 해 3분기 추정치 세금"
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:168
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:197
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
 #, fuzzy
 msgid "Jun 1 - Aug 31, Last year."
 msgstr "6월 1일 - 8월 31일, 마지막 해"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:170
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:200
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr "마지막 해 4분기 추정치 세금"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:171
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:200
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:201
 #, fuzzy
 msgid "Sep 1 - Dec 31, Last year."
 msgstr "9월 1일 - 12월 31일, 마지막 해"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:175
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:204
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:205
 msgid "Select Accounts (none = all)"
 msgstr "계정 선택 (없음 = 전체)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:176
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:205
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:206
 #, fuzzy
 msgid "Select accounts."
 msgstr "계정 선택"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:182
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:211
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:212
 msgid "Suppress $0.00 values"
 msgstr "$0.00 가격으로 억제"
 
@@ -23840,297 +23844,297 @@ msgstr "XML"
 msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:112
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:113
 #, fuzzy
 msgid "Tax Schedule Report/TXF Export"
 msgstr "세금 보고서 / TXF 내보내기"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:212
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:213
 #, fuzzy
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr "$0.00 가격의 계정을 출력할 수 없습니다."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:216
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:217
 #, fuzzy
 msgid "Do not print full account names"
 msgstr "전체 계정명 출력"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:217
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:218
 #, fuzzy
 msgid "Do not print all Parent account names."
 msgstr "전체 부모 계정명 출력"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:221
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:222
 #, fuzzy
 msgid "Print all Transfer To/From Accounts"
 msgstr "이체 계좌"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:222
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:223
 msgid "Print all split details for multi-split transactions."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:226
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:227
 msgid "Print TXF export parameters"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:227
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:228
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:232
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:233
 #, fuzzy
 msgid "Do not print T-Num:Memo data"
 msgstr "거래를 찾기 위한 계정"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:233
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:234
 #, fuzzy
 msgid "Do not print T-Num:Memo data for transactions."
 msgstr "거래를 찾기 위한 계정"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:236
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:237
 msgid "Do not print Action:Memo data"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:237
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:238
 #, fuzzy
 msgid "Do not print Action:Memo data for transactions."
 msgstr "거래를 찾기 위한 계정"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:241
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:242
 #, fuzzy
 msgid "Do not print transaction detail"
 msgstr "읽을 수 없습니다 ( 선택 작업 없음)"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:242
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:243
 #, fuzzy
 msgid "Do not print transaction detail for accounts."
 msgstr "이 계정에서 거래 보고서 실행"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:246
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:247
 msgid "Do not use special date processing"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:247
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:248
 #, fuzzy
 msgid "Do not print transactions out of specified dates."
 msgstr "양 쪽 보이기( 합계에서 빈 거래 포함)"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:251
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:252
 #, fuzzy
 msgid "Currency conversion date"
 msgstr "통화 정보"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:252
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:253
 msgid "Select date to use for PriceDB lookups."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:255
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 #, fuzzy
 msgid "Nearest transaction date"
 msgstr "거래 날짜를 보입니까?"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:255
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 #, fuzzy
 msgid "Use nearest to transaction date."
 msgstr "거래 날짜를 보입니까?"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:257
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:258
 #, fuzzy
 msgid "Nearest report date"
 msgstr "가장 가까운 시간"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:257
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:258
 #, fuzzy
 msgid "Use nearest to report date."
 msgstr "보고할 가장 최근 내용"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3322
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3323
 #, fuzzy
 msgid "Tax Schedule Report & TXF Export"
 msgstr "세금 보고서 & TXF 내보내기(_T)"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3324
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3325
 #, fuzzy
 msgid ""
 "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF "
 "file"
 msgstr "과세가능 수입 / 일정공제제 지출 / .TXF 파일로 내보내기"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3328
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3337
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3329
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3338
 #, fuzzy
 msgid "Taxable Income/Deductible Expenses"
 msgstr "과세가능 수입 / 일정공제제 지출"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3329
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3330
 msgid ""
 "This report shows transaction detail for your accounts related to Income "
 "Taxes."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3338
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3339
 #, fuzzy
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr "새 거래를 계정에 더하기"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:35
+#: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
 msgstr "수입 파이차트"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:36
+#: gnucash/report/reports/standard/account-piecharts.scm:37
 msgid "Expense Piechart"
 msgstr "지출 파이차트"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:37
+#: gnucash/report/reports/standard/account-piecharts.scm:38
 msgid "Asset Piechart"
 msgstr "자산 파이차트"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:38
+#: gnucash/report/reports/standard/account-piecharts.scm:39
 #, fuzzy
 msgid "Security Piechart"
 msgstr "자산 파이차트"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:39
+#: gnucash/report/reports/standard/account-piecharts.scm:40
 msgid "Liability Piechart"
 msgstr "부채 파이차트"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:44
+#: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:46
+#: gnucash/report/reports/standard/account-piecharts.scm:47
 msgid "Shows a piechart with the Expenses per given time interval"
 msgstr "주어진 시간 간격당 지출 파이차트 보이기"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:48
+#: gnucash/report/reports/standard/account-piecharts.scm:49
 msgid "Shows a piechart with the Assets balance at a given time"
 msgstr "주어진 시간의 자산 잔액 파이차트 보이기"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:50
+#: gnucash/report/reports/standard/account-piecharts.scm:51
 #, fuzzy
 msgid "Shows a piechart with distribution of assets over securities"
 msgstr "주어진 시간의 부채 잔액 파이차트 보이기"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:52
+#: gnucash/report/reports/standard/account-piecharts.scm:53
 msgid "Shows a piechart with the Liabilities balance at a given time"
 msgstr "주어진 시간의 부채 잔액 파이차트 보이기"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:58
+#: gnucash/report/reports/standard/account-piecharts.scm:59
 #: gnucash/report/reports/standard/customer-summary.scm:49
 #: gnucash/report/reports/standard/customer-summary.scm:50
 msgid "Income Accounts"
 msgstr "수입 계정"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:59
+#: gnucash/report/reports/standard/account-piecharts.scm:60
 #: gnucash/report/reports/standard/customer-summary.scm:57
 #: gnucash/report/reports/standard/customer-summary.scm:58
 msgid "Expense Accounts"
 msgstr "지출 계정"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:60
+#: gnucash/report/reports/standard/account-piecharts.scm:61
 #: gnucash/report/reports/standard/balance-sheet.scm:486
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:665
-#: gnucash/report/reports/standard/net-charts.scm:350
-#: gnucash/report/reports/standard/net-charts.scm:421
+#: gnucash/report/reports/standard/net-charts.scm:346
+#: gnucash/report/reports/standard/net-charts.scm:417
 #: gnucash/report/report-utilities.scm:199
 msgid "Assets"
 msgstr "자산"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:62
+#: gnucash/report/reports/standard/account-piecharts.scm:63
 #: gnucash/report/reports/standard/balance-sheet.scm:387
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:695
-#: gnucash/report/reports/standard/net-charts.scm:371
-#: gnucash/report/reports/standard/net-charts.scm:421
+#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:417
 #: gnucash/report/report-utilities.scm:200
 msgid "Liabilities"
 msgstr "부채"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:72
+#: gnucash/report/reports/standard/account-piecharts.scm:73
 #, fuzzy
 msgid "Show long names"
 msgstr "긴 계정명 보이기"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:74
+#: gnucash/report/reports/standard/account-piecharts.scm:75
 #, fuzzy
 msgid "Show Percents"
 msgstr "가격 보이기"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:80
+#: gnucash/report/reports/standard/account-piecharts.scm:81
 #: gnucash/report/reports/standard/category-barchart.scm:89
 #, fuzzy
 msgid "Show Average"
 msgstr "평균"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:81
+#: gnucash/report/reports/standard/account-piecharts.scm:82
 #: gnucash/report/reports/standard/category-barchart.scm:90
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:117
+#: gnucash/report/reports/standard/account-piecharts.scm:118
 #: gnucash/report/reports/standard/category-barchart.scm:120
 #, fuzzy
 msgid "No Averaging"
 msgstr "분류"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:118
+#: gnucash/report/reports/standard/account-piecharts.scm:119
 #: gnucash/report/reports/standard/category-barchart.scm:121
 msgid "Just show the amounts, without any averaging."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:121
+#: gnucash/report/reports/standard/account-piecharts.scm:122
 msgid "Show the average yearly amount during the reporting period."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:124
+#: gnucash/report/reports/standard/account-piecharts.scm:125
 #: gnucash/report/reports/standard/category-barchart.scm:124
 msgid "Show the average monthly amount during the reporting period."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:127
+#: gnucash/report/reports/standard/account-piecharts.scm:128
 #: gnucash/report/reports/standard/category-barchart.scm:127
 msgid "Show the average weekly amount during the reporting period."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:159
+#: gnucash/report/reports/standard/account-piecharts.scm:160
 #: gnucash/report/reports/standard/category-barchart.scm:157
 msgid "Show the full account name in legend?"
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:160
+#: gnucash/report/reports/standard/account-piecharts.scm:161
 #, fuzzy
 msgid "Show the full security name in the legend?"
 msgstr "레전드에서 총 수지를 보일까요?"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:172
+#: gnucash/report/reports/standard/account-piecharts.scm:173
 #, fuzzy
 msgid "Show the percentage in legend?"
 msgstr "레전드에서 총 수지를 보일까요?"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:178
+#: gnucash/report/reports/standard/account-piecharts.scm:179
 #, fuzzy
 msgid "Maximum number of slices in pie."
 msgstr "파이차트에서 조각의 최대 갯수"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:413
+#: gnucash/report/reports/standard/account-piecharts.scm:414
 #, fuzzy
 msgid "Yearly Average"
 msgstr "평균"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:414
+#: gnucash/report/reports/standard/account-piecharts.scm:415
 #: gnucash/report/reports/standard/category-barchart.scm:306
 #, fuzzy
 msgid "Monthly Average"
 msgstr "매월"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:415
+#: gnucash/report/reports/standard/account-piecharts.scm:416
 #: gnucash/report/reports/standard/category-barchart.scm:307
 #, fuzzy
 msgid "Weekly Average"
 msgstr "평균"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:549
+#: gnucash/report/reports/standard/account-piecharts.scm:550
 #, fuzzy, scheme-format
 msgid "Balance at ~a"
 msgstr "%s 잔액"
@@ -24148,7 +24152,7 @@ msgstr "자동 이체"
 #: gnucash/report/reports/standard/balance-sheet.scm:76
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:52
+#: gnucash/report/reports/standard/budget-income-statement.scm:53
 #: gnucash/report/reports/standard/equity-statement.scm:59
 #: gnucash/report/reports/standard/income-statement.scm:53
 #: gnucash/report/reports/standard/trial-balance.scm:65
@@ -24159,7 +24163,7 @@ msgstr "보고서 제목"
 #: gnucash/report/reports/standard/balance-sheet.scm:77
 #: gnucash/report/reports/standard/balsheet-eg.scm:151
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:53
+#: gnucash/report/reports/standard/budget-income-statement.scm:54
 #: gnucash/report/reports/standard/equity-statement.scm:60
 #: gnucash/report/reports/standard/income-statement.scm:54
 #: gnucash/report/reports/standard/trial-balance.scm:66
@@ -24170,7 +24174,7 @@ msgstr "이 보고서 제목"
 #: gnucash/report/reports/standard/account-summary.scm:75
 #: gnucash/report/reports/standard/balance-sheet.scm:79
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:55
+#: gnucash/report/reports/standard/budget-income-statement.scm:56
 #: gnucash/report/reports/standard/equity-statement.scm:62
 #: gnucash/report/reports/standard/income-statement.scm:56
 #: gnucash/report/reports/standard/trial-balance.scm:68
@@ -24180,7 +24184,7 @@ msgstr "회사명"
 #: gnucash/report/reports/standard/account-summary.scm:76
 #: gnucash/report/reports/standard/balance-sheet.scm:80
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:56
+#: gnucash/report/reports/standard/budget-income-statement.scm:57
 #: gnucash/report/reports/standard/equity-statement.scm:63
 #: gnucash/report/reports/standard/income-statement.scm:57
 #: gnucash/report/reports/standard/trial-balance.scm:69
@@ -24194,7 +24198,7 @@ msgstr "회사/개인 이름"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:84
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:55
 #: gnucash/report/reports/standard/budget-barchart.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:77
+#: gnucash/report/reports/standard/budget-income-statement.scm:78
 #: gnucash/report/reports/standard/income-statement.scm:65
 #: gnucash/report/reports/standard/trial-balance.scm:79
 msgid "Levels of Subaccounts"
@@ -24206,7 +24210,7 @@ msgstr "하위 계정의 레벨"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:85
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:57
 #: gnucash/report/reports/standard/budget-barchart.scm:48
-#: gnucash/report/reports/standard/budget-income-statement.scm:79
+#: gnucash/report/reports/standard/budget-income-statement.scm:80
 #: gnucash/report/reports/standard/income-statement.scm:67
 #: gnucash/report/reports/standard/trial-balance.scm:81
 #, fuzzy
@@ -24225,7 +24229,7 @@ msgstr "지정된 깊이 한계를 초과하는 계정 다루는 방법"
 #: gnucash/report/reports/standard/account-summary.scm:95
 #: gnucash/report/reports/standard/balance-sheet.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:62
-#: gnucash/report/reports/standard/budget-income-statement.scm:84
+#: gnucash/report/reports/standard/budget-income-statement.scm:85
 #: gnucash/report/reports/standard/income-statement.scm:72
 msgid "Parent account balances"
 msgstr "부모 계정 잔액"
@@ -24233,7 +24237,7 @@ msgstr "부모 계정 잔액"
 #: gnucash/report/reports/standard/account-summary.scm:96
 #: gnucash/report/reports/standard/balance-sheet.scm:98
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:63
-#: gnucash/report/reports/standard/budget-income-statement.scm:85
+#: gnucash/report/reports/standard/budget-income-statement.scm:86
 #: gnucash/report/reports/standard/income-statement.scm:73
 msgid "Parent account subtotals"
 msgstr "부모 계정 부분합계"
@@ -24242,7 +24246,7 @@ msgstr "부모 계정 부분합계"
 #: gnucash/report/reports/standard/balance-sheet.scm:100
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:65
-#: gnucash/report/reports/standard/budget-income-statement.scm:87
+#: gnucash/report/reports/standard/budget-income-statement.scm:88
 #: gnucash/report/reports/standard/income-statement.scm:75
 #: gnucash/report/reports/standard/trial-balance.scm:121
 msgid "Include accounts with zero total balances"
@@ -24252,7 +24256,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:102
 #: gnucash/report/reports/standard/balsheet-pnl.scm:94
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:67
-#: gnucash/report/reports/standard/budget-income-statement.scm:89
+#: gnucash/report/reports/standard/budget-income-statement.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:77
 #: gnucash/report/reports/standard/trial-balance.scm:123
 #, fuzzy
@@ -24263,7 +24267,7 @@ msgstr "제로 분할 수지를 가진 계정 포함"
 #: gnucash/report/reports/standard/balance-sheet.scm:103
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:68
-#: gnucash/report/reports/standard/budget-income-statement.scm:90
+#: gnucash/report/reports/standard/budget-income-statement.scm:91
 #: gnucash/report/reports/standard/income-statement.scm:78
 msgid "Omit zero balance figures"
 msgstr "제로 잔액 값 빠짐"
@@ -24272,7 +24276,7 @@ msgstr "제로 잔액 값 빠짐"
 #: gnucash/report/reports/standard/balance-sheet.scm:105
 #: gnucash/report/reports/standard/balsheet-pnl.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:70
-#: gnucash/report/reports/standard/budget-income-statement.scm:92
+#: gnucash/report/reports/standard/budget-income-statement.scm:93
 #: gnucash/report/reports/standard/income-statement.scm:80
 msgid "Show blank space in place of any zero balances which would be shown."
 msgstr ""
@@ -24280,7 +24284,7 @@ msgstr ""
 #: gnucash/report/reports/standard/account-summary.scm:105
 #: gnucash/report/reports/standard/balance-sheet.scm:107
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:72
-#: gnucash/report/reports/standard/budget-income-statement.scm:94
+#: gnucash/report/reports/standard/budget-income-statement.scm:95
 #: gnucash/report/reports/standard/equity-statement.scm:72
 #: gnucash/report/reports/standard/income-statement.scm:82
 msgid "Show accounting-style rules"
@@ -24289,7 +24293,7 @@ msgstr ""
 #: gnucash/report/reports/standard/account-summary.scm:107
 #: gnucash/report/reports/standard/balance-sheet.scm:109
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:74
-#: gnucash/report/reports/standard/budget-income-statement.scm:96
+#: gnucash/report/reports/standard/budget-income-statement.scm:97
 #: gnucash/report/reports/standard/equity-statement.scm:74
 #: gnucash/report/reports/standard/income-statement.scm:84
 msgid "Use rules beneath columns of added numbers like accountants do."
@@ -24300,7 +24304,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 #: gnucash/report/reports/standard/balsheet-pnl.scm:99
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:76
-#: gnucash/report/reports/standard/budget-income-statement.scm:98
+#: gnucash/report/reports/standard/budget-income-statement.scm:99
 #: gnucash/report/reports/standard/income-statement.scm:86
 #: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Display accounts as hyperlinks"
@@ -24311,7 +24315,7 @@ msgstr "계정을 하이버링크로 보이기"
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/balsheet-pnl.scm:100
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:77
-#: gnucash/report/reports/standard/budget-income-statement.scm:99
+#: gnucash/report/reports/standard/budget-income-statement.scm:100
 #: gnucash/report/reports/standard/income-statement.scm:87
 #: gnucash/report/reports/standard/trial-balance.scm:126
 #, fuzzy
@@ -24356,7 +24360,7 @@ msgstr "계정 장부 보이기"
 #: gnucash/report/reports/standard/balsheet-eg.scm:195
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:101
-#: gnucash/report/reports/standard/budget-income-statement.scm:114
+#: gnucash/report/reports/standard/budget-income-statement.scm:115
 #: gnucash/report/reports/standard/equity-statement.scm:76
 #: gnucash/report/reports/standard/income-statement.scm:108
 #: gnucash/report/reports/standard/trial-balance.scm:128
@@ -24367,7 +24371,7 @@ msgstr "상품"
 #: gnucash/report/reports/standard/balance-sheet.scm:139
 #: gnucash/report/reports/standard/balsheet-eg.scm:190
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:104
-#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/budget-income-statement.scm:118
 #: gnucash/report/reports/standard/equity-statement.scm:79
 #: gnucash/report/reports/standard/income-statement.scm:111
 #: gnucash/report/reports/standard/trial-balance.scm:131
@@ -24378,7 +24382,7 @@ msgstr "외국 통화 보이기"
 #: gnucash/report/reports/standard/balance-sheet.scm:141
 #: gnucash/report/reports/standard/balsheet-eg.scm:192
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:106
-#: gnucash/report/reports/standard/budget-income-statement.scm:119
+#: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/equity-statement.scm:81
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:133
@@ -24390,7 +24394,7 @@ msgstr "계정에서 임의 외국 통화량 보이기"
 #: gnucash/report/reports/standard/balance-sheet.scm:142
 #: gnucash/report/reports/standard/balsheet-pnl.scm:130
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:107
-#: gnucash/report/reports/standard/budget-income-statement.scm:120
+#: gnucash/report/reports/standard/budget-income-statement.scm:121
 #: gnucash/report/reports/standard/cash-flow.scm:51
 #: gnucash/report/reports/standard/equity-statement.scm:82
 #: gnucash/report/reports/standard/income-statement.scm:114
@@ -24402,7 +24406,7 @@ msgstr "환전 비율 보이기"
 #: gnucash/report/reports/standard/balance-sheet.scm:143
 #: gnucash/report/reports/standard/balsheet-pnl.scm:131
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
-#: gnucash/report/reports/standard/budget-income-statement.scm:121
+#: gnucash/report/reports/standard/budget-income-statement.scm:122
 #: gnucash/report/reports/standard/cash-flow.scm:77
 #: gnucash/report/reports/standard/equity-statement.scm:83
 #: gnucash/report/reports/standard/income-statement.scm:115
@@ -24454,212 +24458,212 @@ msgstr "%s 에서 %s 까지 기간"
 msgid "Account title"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:37
+#: gnucash/report/reports/standard/advanced-portfolio.scm:38
 msgid "Advanced Portfolio"
 msgstr "고급 포트폴리오"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:40
+#: gnucash/report/reports/standard/advanced-portfolio.scm:41
 #: gnucash/report/reports/standard/portfolio.scm:36
 msgid "Share decimal places"
 msgstr "분할 소수점 위치"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:41
+#: gnucash/report/reports/standard/advanced-portfolio.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:37
 msgid "Include accounts with no shares"
 msgstr "구매 계좌수가 없는 계정 포함"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:42
+#: gnucash/report/reports/standard/advanced-portfolio.scm:43
 msgid "Show ticker symbols"
 msgstr "시세 기호 보이기"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:43
+#: gnucash/report/reports/standard/advanced-portfolio.scm:44
 msgid "Show listings"
 msgstr "목록 보이기"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:44
+#: gnucash/report/reports/standard/advanced-portfolio.scm:45
 msgid "Show prices"
 msgstr "가격 보이기"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:45
+#: gnucash/report/reports/standard/advanced-portfolio.scm:46
 msgid "Show number of shares"
 msgstr "구매 계좌 갯수 보이기"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:46
+#: gnucash/report/reports/standard/advanced-portfolio.scm:47
 msgid "Basis calculation method"
 msgstr "기본 계산 방법"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:47
+#: gnucash/report/reports/standard/advanced-portfolio.scm:48
 msgid "Set preference for price list data"
 msgstr "가격 목록 자료의 기본설정 설정"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:48
+#: gnucash/report/reports/standard/advanced-portfolio.scm:49
 msgid "How to report brokerage fees"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:92
+#: gnucash/report/reports/standard/advanced-portfolio.scm:93
 #, fuzzy
 msgid "Basis calculation method."
 msgstr "기본 계산 방법"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:95
+#: gnucash/report/reports/standard/advanced-portfolio.scm:96
 #, fuzzy
 msgid "Use average cost of all shares for basis."
 msgstr "기준에 대한 전체 주식의 평균 비용을 사용"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:97
+#: gnucash/report/reports/standard/advanced-portfolio.scm:98
 msgid "FIFO"
 msgstr "FIFO"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:98
+#: gnucash/report/reports/standard/advanced-portfolio.scm:99
 #, fuzzy
 msgid "Use first-in first-out method for basis."
 msgstr "기준에 대한 처음 들어가면 처음 나오는 방법(FIFO) 사용"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:100
+#: gnucash/report/reports/standard/advanced-portfolio.scm:101
 msgid "LIFO"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:101
+#: gnucash/report/reports/standard/advanced-portfolio.scm:102
 #, fuzzy
 msgid "Use last-in first-out method for basis."
 msgstr "기준에 대한 처음 들어가면 처음 나오는 방법(FIFO) 사용"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:107
+#: gnucash/report/reports/standard/advanced-portfolio.scm:108
 msgid "Prefer use of price editor pricing over transactions, where applicable."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:113
+#: gnucash/report/reports/standard/advanced-portfolio.scm:114
 msgid "How to report commissions and other brokerage fees."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:115
+#: gnucash/report/reports/standard/advanced-portfolio.scm:116
 #, fuzzy
 msgid "Include in basis"
 msgstr "이득과 손실 포함"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:116
+#: gnucash/report/reports/standard/advanced-portfolio.scm:117
 msgid "Include brokerage fees in the basis for the asset."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:118
+#: gnucash/report/reports/standard/advanced-portfolio.scm:119
 #, fuzzy
 msgid "Include in gain"
 msgstr "이득과 손실 포함"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:119
+#: gnucash/report/reports/standard/advanced-portfolio.scm:120
 msgid "Include brokerage fees in the gain and loss but not in the basis."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:121
+#: gnucash/report/reports/standard/advanced-portfolio.scm:122
 msgid "Ignore"
 msgstr "무시"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:122
+#: gnucash/report/reports/standard/advanced-portfolio.scm:123
 msgid "Ignore brokerage fees entirely."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:129
+#: gnucash/report/reports/standard/advanced-portfolio.scm:130
 #, fuzzy
 msgid "Display the ticker symbols."
 msgstr "시세 기호 보이기"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:136
+#: gnucash/report/reports/standard/advanced-portfolio.scm:137
 #, fuzzy
 msgid "Display exchange listings."
 msgstr "교환 목록 보이기"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:143
+#: gnucash/report/reports/standard/advanced-portfolio.scm:144
 #, fuzzy
 msgid "Display numbers of shares in accounts."
 msgstr "계정의 주식수 보이기"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:149
+#: gnucash/report/reports/standard/advanced-portfolio.scm:150
 #: gnucash/report/reports/standard/portfolio.scm:63
 #, fuzzy
 msgid "The number of decimal places to use for share numbers."
 msgstr "분할 갯수로 사용하기 위한 소수점 위치 번호"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:156
+#: gnucash/report/reports/standard/advanced-portfolio.scm:157
 #, fuzzy
 msgid "Display share prices."
 msgstr "주식 가격 보이기"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:164
+#: gnucash/report/reports/standard/advanced-portfolio.scm:165
 #: gnucash/report/reports/standard/portfolio.scm:71
 #, fuzzy
 msgid "Stock Accounts to report on."
 msgstr "보고하기 위한 주식 계정"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:176
+#: gnucash/report/reports/standard/advanced-portfolio.scm:177
 #: gnucash/report/reports/standard/portfolio.scm:83
 msgid "Include accounts that have a zero share balances."
 msgstr "제로 분할 수지를 가진 계정 포함"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1067
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1068
 #: gnucash/report/reports/standard/portfolio.scm:255
 msgid "Listing"
 msgstr "목록"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1079
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1080
 msgid "Basis"
 msgstr "기준"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1081
-#: gnucash/report/reports/standard/cashflow-barchart.scm:297
-#: gnucash/report/reports/standard/cashflow-barchart.scm:332
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1082
+#: gnucash/report/reports/standard/cashflow-barchart.scm:298
+#: gnucash/report/reports/standard/cashflow-barchart.scm:344
 #: gnucash/report/reports/standard/cash-flow.scm:279
 msgid "Money In"
 msgstr "입금"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1082
-#: gnucash/report/reports/standard/cashflow-barchart.scm:303
-#: gnucash/report/reports/standard/cashflow-barchart.scm:333
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1083
+#: gnucash/report/reports/standard/cashflow-barchart.scm:304
+#: gnucash/report/reports/standard/cashflow-barchart.scm:345
 #: gnucash/report/reports/standard/cash-flow.scm:300
 msgid "Money Out"
 msgstr "출금"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1083
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1084
 msgid "Realized Gain"
 msgstr "실제 이득"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1084
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1085
 msgid "Unrealized Gain"
 msgstr "미회수 이득"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1085
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1086
 msgid "Total Gain"
 msgstr "전체 이득"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1086
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1087
 #, fuzzy
 msgid "Rate of Gain"
 msgstr "실제 이득"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1090
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1091
 msgid "Brokerage Fees"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1092
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1093
 msgid "Total Return"
 msgstr "총 수익"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1093
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1094
 #, fuzzy
 msgid "Rate of Return"
 msgstr "보고서 날짜"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1190
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1191
 msgid ""
 "* this commodity data was built using transaction pricing instead of the "
 "price list."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1192
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1193
 msgid ""
 "If you are in a multi-currency situation, the exchanges may not be correct."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1197
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1198
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr ""
 
@@ -24671,7 +24675,7 @@ msgstr "%s 잔액"
 #: gnucash/report/reports/standard/balance-forecast.scm:38
 #: gnucash/report/reports/standard/budget-barchart.scm:134
 #: gnucash/report/reports/standard/budget-flow.scm:87
-#: gnucash/report/reports/standard/cashflow-barchart.scm:87
+#: gnucash/report/reports/standard/cashflow-barchart.scm:88
 #: gnucash/report/reports/standard/income-gst-statement.scm:131
 #: gnucash/report/reports/standard/income-gst-statement.scm:141
 #: gnucash/report/reports/standard/trial-balance.scm:78
@@ -24768,7 +24772,7 @@ msgstr "동일 열에서 부채/자기자본 부분 출력"
 #: gnucash/report/reports/standard/balance-sheet.scm:93
 #: gnucash/report/reports/standard/balsheet-eg.scm:160
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:58
-#: gnucash/report/reports/standard/budget-income-statement.scm:80
+#: gnucash/report/reports/standard/budget-income-statement.scm:81
 #: gnucash/report/reports/standard/budget.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:68
 msgid "Flatten list to depth limit"
@@ -24777,7 +24781,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:95
 #: gnucash/report/reports/standard/balsheet-eg.scm:162
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:60
-#: gnucash/report/reports/standard/budget-income-statement.scm:82
+#: gnucash/report/reports/standard/budget-income-statement.scm:83
 #: gnucash/report/reports/standard/budget.scm:92
 #: gnucash/report/reports/standard/income-statement.scm:70
 #, fuzzy
@@ -25240,12 +25244,12 @@ msgid "missing"
 msgstr "커미션"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
-#: libgnucash/engine/Account.cpp:4363
+#: libgnucash/engine/Account.cpp:4367
 msgid "Asset"
 msgstr "자산"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1109
-#: libgnucash/engine/Account.cpp:4365
+#: libgnucash/engine/Account.cpp:4369
 msgid "Liability"
 msgstr "부채"
 
@@ -25306,7 +25310,7 @@ msgstr "전체 매출을 지시하는 라인 포함할 지 안할지"
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:111
 #: gnucash/report/reports/standard/budget-barchart.scm:98
 #: gnucash/report/reports/standard/budget-flow.scm:56
-#: gnucash/report/reports/standard/budget-income-statement.scm:59
+#: gnucash/report/reports/standard/budget-income-statement.scm:60
 #: gnucash/report/reports/standard/budget.scm:138
 #, fuzzy
 msgid "Budget to use."
@@ -25392,7 +25396,7 @@ msgid "Chart Type"
 msgstr "청구 형태"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:50
-#: gnucash/report/reports/standard/budget-income-statement.scm:66
+#: gnucash/report/reports/standard/budget-income-statement.scm:67
 #: gnucash/report/reports/standard/budget.scm:71
 #, fuzzy
 msgid "Range start"
@@ -25415,7 +25419,7 @@ msgid "Select exact period that starts the reporting range."
 msgstr "읽어올 파일 선택"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:57
-#: gnucash/report/reports/standard/budget-income-statement.scm:70
+#: gnucash/report/reports/standard/budget-income-statement.scm:71
 #: gnucash/report/reports/standard/budget.scm:78
 #, fuzzy
 msgid "Range end"
@@ -25537,144 +25541,144 @@ msgstr "순서 기입"
 msgid "~a: ~a - ~a"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:62
+#: gnucash/report/reports/standard/budget-income-statement.scm:63
 #: gnucash/report/reports/standard/budget.scm:67
 msgid "Report for range of budget periods"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:64
+#: gnucash/report/reports/standard/budget-income-statement.scm:65
 #: gnucash/report/reports/standard/budget.scm:69
 msgid "Create report for a budget period range instead of the entire budget."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:68
+#: gnucash/report/reports/standard/budget-income-statement.scm:69
 msgid "Select a budget period that begins the reporting range."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:72
+#: gnucash/report/reports/standard/budget-income-statement.scm:73
 msgid "Select a budget period that ends the reporting range."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:101
+#: gnucash/report/reports/standard/budget-income-statement.scm:102
 #: gnucash/report/reports/standard/income-statement.scm:89
 msgid "Label the revenue section"
 msgstr "매출 부분 라벨"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:103
+#: gnucash/report/reports/standard/budget-income-statement.scm:104
 #: gnucash/report/reports/standard/income-statement.scm:91
 #, fuzzy
 msgid "Whether or not to include a label for the revenue section."
 msgstr "매출 부분의 라벨을 포함할지 안하는지"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:104
+#: gnucash/report/reports/standard/budget-income-statement.scm:105
 #: gnucash/report/reports/standard/income-statement.scm:92
 msgid "Include revenue total"
 msgstr "매출 전체 포함"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:106
+#: gnucash/report/reports/standard/budget-income-statement.scm:107
 #: gnucash/report/reports/standard/income-statement.scm:94
 #, fuzzy
 msgid "Whether or not to include a line indicating total revenue."
 msgstr "전체 매출을 지시하는 라인 포함할 지 안할지"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:107
+#: gnucash/report/reports/standard/budget-income-statement.scm:108
 #: gnucash/report/reports/standard/income-statement.scm:101
 msgid "Label the expense section"
 msgstr "지출 부분 라벨"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:109
+#: gnucash/report/reports/standard/budget-income-statement.scm:110
 #: gnucash/report/reports/standard/income-statement.scm:103
 #, fuzzy
 msgid "Whether or not to include a label for the expense section."
 msgstr "지출 부분 라벨을 포함할지 안할지"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:110
+#: gnucash/report/reports/standard/budget-income-statement.scm:111
 #: gnucash/report/reports/standard/income-statement.scm:104
 msgid "Include expense total"
 msgstr "지출 전체 포함"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:112
+#: gnucash/report/reports/standard/budget-income-statement.scm:113
 #: gnucash/report/reports/standard/income-statement.scm:106
 #, fuzzy
 msgid "Whether or not to include a line indicating total expense."
 msgstr "전체 지출을 나타내는 라인을 포함할 지 안할지"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:125
+#: gnucash/report/reports/standard/budget-income-statement.scm:126
 #: gnucash/report/reports/standard/income-statement.scm:130
 #, fuzzy
 msgid "Display as a two column report"
 msgstr "계정을 보일까요?"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:127
+#: gnucash/report/reports/standard/budget-income-statement.scm:128
 #: gnucash/report/reports/standard/income-statement.scm:132
 #, fuzzy
 msgid "Divides the report into an income column and an expense column."
 msgstr "전체 수입과 지출 게정의 세금 정보 설정"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:129
+#: gnucash/report/reports/standard/budget-income-statement.scm:130
 #: gnucash/report/reports/standard/income-statement.scm:134
 msgid "Display in standard, income first, order"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:131
+#: gnucash/report/reports/standard/budget-income-statement.scm:132
 #: gnucash/report/reports/standard/income-statement.scm:136
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:443
+#: gnucash/report/reports/standard/budget-income-statement.scm:444
 msgid "Reporting range end period cannot be less than start period."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:511
+#: gnucash/report/reports/standard/budget-income-statement.scm:512
 #: gnucash/report/reports/standard/income-statement.scm:505
 msgid "Revenues"
 msgstr "매출"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:514
+#: gnucash/report/reports/standard/budget-income-statement.scm:515
 #: gnucash/report/reports/standard/income-statement.scm:508
 msgid "Total Revenue"
 msgstr "전체 매출"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:524
+#: gnucash/report/reports/standard/budget-income-statement.scm:525
 #: gnucash/report/reports/standard/income-statement.scm:515
 msgid "Total Expenses"
 msgstr "전체 지출"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:532
+#: gnucash/report/reports/standard/budget-income-statement.scm:533
 #, fuzzy, scheme-format
 msgid "for Budget ~a"
 msgstr "예산"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:534
+#: gnucash/report/reports/standard/budget-income-statement.scm:535
 #, fuzzy, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "예산 기간:"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:537
+#: gnucash/report/reports/standard/budget-income-statement.scm:538
 #, fuzzy, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
 msgstr "예산 기간:"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:565
+#: gnucash/report/reports/standard/budget-income-statement.scm:566
 #: gnucash/report/reports/standard/equity-statement.scm:457
 #: gnucash/report/reports/standard/income-statement.scm:525
 msgid "Net income"
 msgstr "순 수입"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:566
+#: gnucash/report/reports/standard/budget-income-statement.scm:567
 #: gnucash/report/reports/standard/equity-statement.scm:458
 #: gnucash/report/reports/standard/income-statement.scm:526
 msgid "Net loss"
 msgstr "순 손실"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:606
+#: gnucash/report/reports/standard/budget-income-statement.scm:607
 #, fuzzy
 msgid "Budget Income Statement"
 msgstr "손익 계산서"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:607
+#: gnucash/report/reports/standard/budget-income-statement.scm:608
 #, fuzzy
 msgid "Budget Profit & Loss"
 msgstr "예산 기간:"
@@ -25813,70 +25817,70 @@ msgstr ""
 msgid "using accumulated amounts"
 msgstr "기존 계정"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:39
+#: gnucash/report/reports/standard/cashflow-barchart.scm:40
 #, fuzzy
 msgid "Cash Flow Barchart"
 msgstr "현금 흐름표"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:45
+#: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
 #, fuzzy
 msgid "Include Trading Accounts in report"
 msgstr "전체 합계 포함(_G)"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:47
+#: gnucash/report/reports/standard/cashflow-barchart.scm:48
 #, fuzzy
 msgid "Show Money In"
 msgstr "입금"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:48
+#: gnucash/report/reports/standard/cashflow-barchart.scm:49
 #, fuzzy
 msgid "Show Money Out"
 msgstr "출금"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:49
+#: gnucash/report/reports/standard/cashflow-barchart.scm:50
 #, fuzzy
 msgid "Show Net Flow"
 msgstr "순 자산 막대 보이기"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:50
+#: gnucash/report/reports/standard/cashflow-barchart.scm:51
 #, fuzzy
 msgid "Show Table"
 msgstr "표 보이기"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:99
+#: gnucash/report/reports/standard/cashflow-barchart.scm:100
 #: gnucash/report/reports/standard/cash-flow.scm:102
 #, fuzzy
 msgid "Include transfers to and from Trading Accounts in the report."
 msgstr "필터 계정에서/로 거래만 포함"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:106
+#: gnucash/report/reports/standard/cashflow-barchart.scm:107
 #, fuzzy
 msgid "Show money in?"
 msgstr "도표 보이기"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:112
+#: gnucash/report/reports/standard/cashflow-barchart.scm:113
 #, fuzzy
 msgid "Show money out?"
 msgstr "도표 보이기"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:118
+#: gnucash/report/reports/standard/cashflow-barchart.scm:119
 #, fuzzy
 msgid "Show net money flow?"
 msgstr "도표 보이기"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:309
-#: gnucash/report/reports/standard/cashflow-barchart.scm:334
+#: gnucash/report/reports/standard/cashflow-barchart.scm:310
+#: gnucash/report/reports/standard/cashflow-barchart.scm:346
 #, fuzzy
 msgid "Net Flow"
 msgstr "순 손실"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:337
+#: gnucash/report/reports/standard/cashflow-barchart.scm:349
 #, fuzzy
 msgid "Overview:"
 msgstr "개관"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:376
+#: gnucash/report/reports/standard/cashflow-barchart.scm:375
 #, fuzzy
 msgid "Shows a barchart with cash flow over time"
 msgstr "주어진 시간의 자산 잔액 파이차트 보이기"
@@ -25913,22 +25917,22 @@ msgid "Money out of selected accounts goes to"
 msgstr "선택된 계좌의 돈이 이동"
 
 #: gnucash/report/reports/standard/category-barchart.scm:41
-#: gnucash/report/reports/standard/net-charts.scm:366
+#: gnucash/report/reports/standard/net-charts.scm:362
 msgid "Income Chart"
 msgstr "수입 차트"
 
 #: gnucash/report/reports/standard/category-barchart.scm:42
-#: gnucash/report/reports/standard/net-charts.scm:387
+#: gnucash/report/reports/standard/net-charts.scm:383
 msgid "Expense Chart"
 msgstr "지출 차트"
 
 #: gnucash/report/reports/standard/category-barchart.scm:43
-#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:363
 msgid "Asset Chart"
 msgstr "자산 차트"
 
 #: gnucash/report/reports/standard/category-barchart.scm:44
-#: gnucash/report/reports/standard/net-charts.scm:388
+#: gnucash/report/reports/standard/net-charts.scm:384
 msgid "Liability Chart"
 msgstr "부채 차트"
 
@@ -26027,7 +26031,7 @@ msgid "Grand Total"
 msgstr "전체 합계"
 
 #: gnucash/report/reports/standard/category-barchart.scm:690
-#: gnucash/report/reports/standard/net-charts.scm:471
+#: gnucash/report/reports/standard/net-charts.scm:466
 #, fuzzy
 msgid "No exportable data"
 msgstr "보고서"
@@ -26077,18 +26081,18 @@ msgstr ""
 #: gnucash/report/reports/standard/job-report.scm:384
 #: gnucash/report/reports/standard/job-report.scm:389
 #: gnucash/report/reports/standard/job-report.scm:394
-#: gnucash/report/reports/standard/new-owner-report.scm:882
-#: gnucash/report/reports/standard/new-owner-report.scm:887
-#: gnucash/report/reports/standard/new-owner-report.scm:892
-#: gnucash/report/reports/standard/new-owner-report.scm:897
-#: gnucash/report/reports/standard/new-owner-report.scm:902
-#: gnucash/report/reports/standard/new-owner-report.scm:907
-#: gnucash/report/reports/standard/new-owner-report.scm:912
-#: gnucash/report/reports/standard/new-owner-report.scm:917
-#: gnucash/report/reports/standard/new-owner-report.scm:922
-#: gnucash/report/reports/standard/new-owner-report.scm:927
-#: gnucash/report/reports/standard/new-owner-report.scm:932
-#: gnucash/report/reports/standard/new-owner-report.scm:947
+#: gnucash/report/reports/standard/new-owner-report.scm:886
+#: gnucash/report/reports/standard/new-owner-report.scm:891
+#: gnucash/report/reports/standard/new-owner-report.scm:896
+#: gnucash/report/reports/standard/new-owner-report.scm:901
+#: gnucash/report/reports/standard/new-owner-report.scm:906
+#: gnucash/report/reports/standard/new-owner-report.scm:911
+#: gnucash/report/reports/standard/new-owner-report.scm:916
+#: gnucash/report/reports/standard/new-owner-report.scm:921
+#: gnucash/report/reports/standard/new-owner-report.scm:926
+#: gnucash/report/reports/standard/new-owner-report.scm:931
+#: gnucash/report/reports/standard/new-owner-report.scm:936
+#: gnucash/report/reports/standard/new-owner-report.scm:951
 #: gnucash/report/reports/standard/owner-report.scm:556
 #: gnucash/report/reports/standard/owner-report.scm:561
 #: gnucash/report/reports/standard/owner-report.scm:566
@@ -26632,7 +26636,7 @@ msgid ""
 msgstr "전체 매출을 지시하는 라인 포함할 지 안할지"
 
 #: gnucash/report/reports/standard/income-statement.scm:518
-#: libgnucash/engine/Account.cpp:4375 libgnucash/engine/Scrub.c:472
+#: libgnucash/engine/Account.cpp:4379 libgnucash/engine/Scrub.c:472
 #: libgnucash/engine/Scrub.c:537
 #, fuzzy
 msgid "Trading"
@@ -27044,13 +27048,13 @@ msgid "~a #~a"
 msgstr ""
 
 #: gnucash/report/reports/standard/job-report.scm:318
-#: gnucash/report/reports/standard/new-owner-report.scm:524
+#: gnucash/report/reports/standard/new-owner-report.scm:528
 #: gnucash/report/reports/standard/owner-report.scm:505
 msgid "Total Credit"
 msgstr "공제 금액 합계"
 
 #: gnucash/report/reports/standard/job-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:525
+#: gnucash/report/reports/standard/new-owner-report.scm:529
 #: gnucash/report/reports/standard/owner-report.scm:506
 msgid "Total Due"
 msgstr ""
@@ -27068,27 +27072,27 @@ msgstr "거래를 찾기 위한 계정"
 
 #: gnucash/report/reports/standard/job-report.scm:370
 #: gnucash/report/reports/standard/job-report.scm:375
-#: gnucash/report/reports/standard/new-owner-report.scm:883
-#: gnucash/report/reports/standard/new-owner-report.scm:888
+#: gnucash/report/reports/standard/new-owner-report.scm:887
+#: gnucash/report/reports/standard/new-owner-report.scm:892
 #: gnucash/report/reports/standard/owner-report.scm:557
 #: gnucash/report/reports/standard/owner-report.scm:562
 msgid "Display the transaction date?"
 msgstr "거래 날짜를 보입니까?"
 
 #: gnucash/report/reports/standard/job-report.scm:380
-#: gnucash/report/reports/standard/new-owner-report.scm:893
+#: gnucash/report/reports/standard/new-owner-report.scm:897
 #: gnucash/report/reports/standard/owner-report.scm:567
 msgid "Display the transaction reference?"
 msgstr "거래 참고사항을 보입니까?"
 
 #: gnucash/report/reports/standard/job-report.scm:385
-#: gnucash/report/reports/standard/new-owner-report.scm:898
+#: gnucash/report/reports/standard/new-owner-report.scm:902
 #: gnucash/report/reports/standard/owner-report.scm:572
 msgid "Display the transaction type?"
 msgstr "거래 형태를 보입니까?"
 
 #: gnucash/report/reports/standard/job-report.scm:390
-#: gnucash/report/reports/standard/new-owner-report.scm:903
+#: gnucash/report/reports/standard/new-owner-report.scm:907
 #: gnucash/report/reports/standard/owner-report.scm:577
 msgid "Display the transaction description?"
 msgstr "거래 사용 내역을 보입니까?"
@@ -27100,7 +27104,7 @@ msgid "Display the transaction amount?"
 msgstr "거래 날짜를 보입니까?"
 
 #: gnucash/report/reports/standard/job-report.scm:508
-#: gnucash/report/reports/standard/new-owner-report.scm:1223
+#: gnucash/report/reports/standard/new-owner-report.scm:1227
 #, fuzzy
 msgid "Job Report"
 msgstr "보고서"
@@ -27142,7 +27146,7 @@ msgid "The account to search for lots."
 msgstr "거래를 찾기 위한 계정"
 
 #: gnucash/report/reports/standard/net-charts.scm:48
-#: gnucash/report/reports/standard/price-scatter.scm:50
+#: gnucash/report/reports/standard/price-scatter.scm:51
 msgid "Show Net Profit"
 msgstr "순이익 보이기"
 
@@ -27190,36 +27194,36 @@ msgstr "순 자산 막대를 보일까요?"
 msgid "Add grid lines."
 msgstr ""
 
-#: gnucash/report/reports/standard/net-charts.scm:393
-#: gnucash/report/reports/standard/net-charts.scm:425
+#: gnucash/report/reports/standard/net-charts.scm:389
+#: gnucash/report/reports/standard/net-charts.scm:421
 msgid "Net Profit"
 msgstr "순 이익"
 
-#: gnucash/report/reports/standard/net-charts.scm:393
-#: gnucash/report/reports/standard/net-charts.scm:426
+#: gnucash/report/reports/standard/net-charts.scm:389
+#: gnucash/report/reports/standard/net-charts.scm:422
 msgid "Net Worth"
 msgstr "순 자산"
 
-#: gnucash/report/reports/standard/net-charts.scm:489
+#: gnucash/report/reports/standard/net-charts.scm:484
 msgid "Net Worth Barchart"
 msgstr "순 자산 막대차트"
 
-#: gnucash/report/reports/standard/net-charts.scm:500
+#: gnucash/report/reports/standard/net-charts.scm:495
 msgid "Income/Expense Chart"
 msgstr "수입/지출 차트"
 
-#: gnucash/report/reports/standard/net-charts.scm:502
+#: gnucash/report/reports/standard/net-charts.scm:497
 #, fuzzy
 msgid "Income & Expense Barchart"
 msgstr "수입 & 지출 차트"
 
-#: gnucash/report/reports/standard/net-charts.scm:512
+#: gnucash/report/reports/standard/net-charts.scm:507
 #, fuzzy
 msgid "Net Worth Linechart"
 msgstr "순 자산 막대차트"
 
-#: gnucash/report/reports/standard/net-charts.scm:525
-#: gnucash/report/reports/standard/net-charts.scm:527
+#: gnucash/report/reports/standard/net-charts.scm:520
+#: gnucash/report/reports/standard/net-charts.scm:522
 #, fuzzy
 msgid "Income & Expense Linechart"
 msgstr "수입 & 지출 차트"
@@ -27246,7 +27250,7 @@ msgid "Reverse alphabetical order"
 msgstr "등록 순서"
 
 #: gnucash/report/reports/standard/new-aging.scm:343
-#: gnucash/report/reports/standard/new-owner-report.scm:540
+#: gnucash/report/reports/standard/new-owner-report.scm:544
 #, fuzzy
 msgid "Please note some transactions were not processed"
 msgstr "회수하기위한 거래 날짜 범위"
@@ -27348,121 +27352,121 @@ msgstr "이 보고서는 선택된 계정이 필요합니다."
 msgid "This report requires a vendor to be selected."
 msgstr "이 보고서는 선택된 계정이 필요합니다."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:242
+#: gnucash/report/reports/standard/new-owner-report.scm:246
 #, fuzzy
 msgid "Partial Amount"
 msgstr "부모 계정(_P)"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:295
+#: gnucash/report/reports/standard/new-owner-report.scm:299
 #: gnucash/report/trep-engine.scm:980 gnucash/report/trep-engine.scm:1106
 msgid "Link"
 msgstr ""
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
-#: gnucash/report/reports/standard/new-owner-report.scm:343
+#: gnucash/report/reports/standard/new-owner-report.scm:347
 #, scheme-format
 msgid "~a History"
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:345
+#: gnucash/report/reports/standard/new-owner-report.scm:349
 #, fuzzy
 msgid "Linked Details"
 msgstr "작업 대화창"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:504
+#: gnucash/report/reports/standard/new-owner-report.scm:508
 #: gnucash/report/reports/standard/owner-report.scm:463
 #, fuzzy
 msgid "Period Totals"
 msgstr "기간 시작"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:868
+#: gnucash/report/reports/standard/new-owner-report.scm:872
 #: gnucash/report/reports/standard/owner-report.scm:535
 #, fuzzy
 msgid "The company for this report."
 msgstr "이 보고서를 위한 회사"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:908
+#: gnucash/report/reports/standard/new-owner-report.scm:912
 #: gnucash/report/reports/standard/owner-report.scm:582
 #, fuzzy
 msgid "Display the sale amount column?"
 msgstr "수량을 보일까요?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:913
+#: gnucash/report/reports/standard/new-owner-report.scm:917
 #: gnucash/report/reports/standard/owner-report.scm:587
 #, fuzzy
 msgid "Display the tax column?"
 msgstr "계정을 보일까요?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:918
+#: gnucash/report/reports/standard/new-owner-report.scm:922
 #: gnucash/report/reports/standard/owner-report.scm:597
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "기재사항 할인율을 보일까요?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:923
+#: gnucash/report/reports/standard/new-owner-report.scm:927
 #: gnucash/report/reports/standard/owner-report.scm:592
 #, fuzzy
 msgid "Display the period credits column?"
 msgstr "기재사항 할인율을 보일까요?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:928
+#: gnucash/report/reports/standard/new-owner-report.scm:932
 #: gnucash/report/reports/standard/register.scm:413
 #: gnucash/report/trep-engine.scm:984
 #, fuzzy
 msgid "Display a running balance?"
 msgstr "운용 잔액 보이기"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:933
+#: gnucash/report/reports/standard/new-owner-report.scm:937
 #, fuzzy
 msgid "Show linked transactions"
 msgstr "빈 거래만 보이기"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:936
+#: gnucash/report/reports/standard/new-owner-report.scm:940
 #, fuzzy
 msgid "Linked transactions are hidden."
 msgstr "찾기로 거래 찾기"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:938
+#: gnucash/report/reports/standard/new-owner-report.scm:942
 #, fuzzy
 msgid "Simple"
 msgstr "샘플:"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:939
+#: gnucash/report/reports/standard/new-owner-report.scm:943
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:941
+#: gnucash/report/reports/standard/new-owner-report.scm:945
 #, fuzzy
 msgid "Detailed"
 msgstr "파일(_F)"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:942
+#: gnucash/report/reports/standard/new-owner-report.scm:946
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:948
+#: gnucash/report/reports/standard/new-owner-report.scm:952
 #, fuzzy
 msgid "Display document link?"
 msgstr "계정을 하이버링크로 보이기"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1076
+#: gnucash/report/reports/standard/new-owner-report.scm:1080
 #, fuzzy
 msgid "No valid account found"
 msgstr "일치 거래가 없음"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1077
+#: gnucash/report/reports/standard/new-owner-report.scm:1081
 #, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
 msgstr "이 보고서는 선택된 계정이 필요합니다."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1100
+#: gnucash/report/reports/standard/new-owner-report.scm:1104
 #, fuzzy
 msgid "No transactions found."
 msgstr "일치 거래가 없음"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1101
+#: gnucash/report/reports/standard/new-owner-report.scm:1105
 #: gnucash/report/trep-engine.scm:130
 msgid "No matching transactions found"
 msgstr "일치 거래가 없음"
@@ -27512,120 +27516,120 @@ msgstr "투자 포트폴리오"
 msgid "Units"
 msgstr "단위"
 
-#: gnucash/report/reports/standard/price-scatter.scm:41
+#: gnucash/report/reports/standard/price-scatter.scm:42
 msgid "Price of Commodity"
 msgstr "상품 가격"
 
-#: gnucash/report/reports/standard/price-scatter.scm:43
+#: gnucash/report/reports/standard/price-scatter.scm:44
 #, fuzzy
 msgid "Invert prices"
 msgstr "청구서"
 
-#: gnucash/report/reports/standard/price-scatter.scm:52
+#: gnucash/report/reports/standard/price-scatter.scm:53
 msgid "Show Asset & Liability bars"
 msgstr "자산 & 부채 막대 보이기"
 
-#: gnucash/report/reports/standard/price-scatter.scm:53
+#: gnucash/report/reports/standard/price-scatter.scm:54
 msgid "Show Net Worth bars"
 msgstr "순 자산 막대 보이기"
 
-#: gnucash/report/reports/standard/price-scatter.scm:55
+#: gnucash/report/reports/standard/price-scatter.scm:56
 msgid "Marker"
 msgstr "마커"
 
-#: gnucash/report/reports/standard/price-scatter.scm:56
+#: gnucash/report/reports/standard/price-scatter.scm:57
 msgid "Marker Color"
 msgstr "마커 색상"
 
-#: gnucash/report/reports/standard/price-scatter.scm:81
+#: gnucash/report/reports/standard/price-scatter.scm:82
 msgid "Calculate the price of this commodity."
 msgstr "이 상품의 가격 계산"
 
-#: gnucash/report/reports/standard/price-scatter.scm:93
+#: gnucash/report/reports/standard/price-scatter.scm:94
 msgid "Actual Transactions"
 msgstr "실제 거래"
 
-#: gnucash/report/reports/standard/price-scatter.scm:94
+#: gnucash/report/reports/standard/price-scatter.scm:95
 msgid "The instantaneous price of actual currency transactions in the past."
 msgstr ""
 
-#: gnucash/report/reports/standard/price-scatter.scm:97
+#: gnucash/report/reports/standard/price-scatter.scm:98
 #, fuzzy
 msgid "The recorded prices."
 msgstr "기록된 가격"
 
-#: gnucash/report/reports/standard/price-scatter.scm:104
+#: gnucash/report/reports/standard/price-scatter.scm:105
 msgid "Plot commodity per currency rather than currency per commodity."
 msgstr ""
 
-#: gnucash/report/reports/standard/price-scatter.scm:120
+#: gnucash/report/reports/standard/price-scatter.scm:121
 #, fuzzy
 msgid "Color of the marker."
 msgstr "마커 색상"
 
-#: gnucash/report/reports/standard/price-scatter.scm:140
+#: gnucash/report/reports/standard/price-scatter.scm:141
 msgid "Double-Weeks"
 msgstr "2주"
 
-#: gnucash/report/reports/standard/price-scatter.scm:142
+#: gnucash/report/reports/standard/price-scatter.scm:143
 #, fuzzy
 #| msgid "Quarter"
 msgid "Quarters"
 msgstr "4분기"
 
-#: gnucash/report/reports/standard/price-scatter.scm:143
+#: gnucash/report/reports/standard/price-scatter.scm:144
 #, fuzzy
 #| msgid "Half Year"
 msgid "Half Years"
 msgstr "반년"
 
-#: gnucash/report/reports/standard/price-scatter.scm:238
+#: gnucash/report/reports/standard/price-scatter.scm:239
 msgid "Identical commodities"
 msgstr "동일 상품"
 
-#: gnucash/report/reports/standard/price-scatter.scm:239
+#: gnucash/report/reports/standard/price-scatter.scm:240
 msgid ""
 "Your selected commodity and the currency of the report are identical. It "
 "doesn't make sense to show prices for identical commodities."
 msgstr ""
 
-#: gnucash/report/reports/standard/price-scatter.scm:277
+#: gnucash/report/reports/standard/price-scatter.scm:278
 msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
 msgstr ""
 
-#: gnucash/report/reports/standard/price-scatter.scm:282
+#: gnucash/report/reports/standard/price-scatter.scm:283
 msgid "Only one price"
 msgstr "1개 가격만"
 
-#: gnucash/report/reports/standard/price-scatter.scm:283
+#: gnucash/report/reports/standard/price-scatter.scm:284
 msgid ""
 "There was only one single price found for the selected commodities in the "
 "selected time period. This doesn't give a useful plot."
 msgstr ""
 
-#: gnucash/report/reports/standard/price-scatter.scm:289
+#: gnucash/report/reports/standard/price-scatter.scm:290
 msgid "All Prices equal"
 msgstr "전체 가격 동일"
 
-#: gnucash/report/reports/standard/price-scatter.scm:290
+#: gnucash/report/reports/standard/price-scatter.scm:291
 msgid ""
 "All the prices found are equal. This would result in a plot with one "
 "straight line. Unfortunately, the plotting tool can't handle that."
 msgstr ""
 
-#: gnucash/report/reports/standard/price-scatter.scm:296
+#: gnucash/report/reports/standard/price-scatter.scm:297
 msgid "All Prices at the same date"
 msgstr "같은 알짜의 전체 가격"
 
-#: gnucash/report/reports/standard/price-scatter.scm:297
+#: gnucash/report/reports/standard/price-scatter.scm:298
 msgid ""
 "All the prices found are from the same date. This would result in a plot "
 "with one straight line. Unfortunately, the plotting tool can't handle that."
 msgstr ""
 
-#: gnucash/report/reports/standard/price-scatter.scm:329
+#: gnucash/report/reports/standard/price-scatter.scm:330
 msgid "Price Scatterplot"
 msgstr "가격 분산도표"
 
@@ -28345,19 +28349,19 @@ msgstr "열의 갯수"
 msgid "Number of columns before wrapping to a new row."
 msgstr ""
 
-#: gnucash/report/reports/standard/view-column.scm:159
+#: gnucash/report/reports/standard/view-column.scm:155
 msgid "Edit Options"
 msgstr "설정 편집"
 
-#: gnucash/report/reports/standard/view-column.scm:166
+#: gnucash/report/reports/standard/view-column.scm:162
 msgid "Single Report"
 msgstr "단일 보고서"
 
-#: gnucash/report/reports/standard/view-column.scm:219
+#: gnucash/report/reports/standard/view-column.scm:215
 msgid "Multicolumn View"
 msgstr "다수열 보기"
 
-#: gnucash/report/reports/standard/view-column.scm:221
+#: gnucash/report/reports/standard/view-column.scm:217
 #, fuzzy
 msgid "Custom Multicolumn Report"
 msgstr "사용자 다수열 보고서(_C)"
@@ -29830,257 +29834,257 @@ msgstr ""
 msgid "The electronic tax number of your business"
 msgstr "사업 팩스 번호"
 
-#: libgnucash/app-utils/date-utilities.scm:524
+#: libgnucash/app-utils/date-utilities.scm:523
 #, scheme-format
 msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
 
-#: libgnucash/app-utils/date-utilities.scm:902
+#: libgnucash/app-utils/date-utilities.scm:909
 #, fuzzy
 msgid "First day of the current calendar year."
 msgstr "금년 시작일"
 
-#: libgnucash/app-utils/date-utilities.scm:909
+#: libgnucash/app-utils/date-utilities.scm:916
 #, fuzzy
 msgid "Last day of the current calendar year."
 msgstr "금년 시작일"
 
-#: libgnucash/app-utils/date-utilities.scm:916
+#: libgnucash/app-utils/date-utilities.scm:923
 #, fuzzy
 msgid "First day of the previous calendar year."
 msgstr "이전년 시작일"
 
-#: libgnucash/app-utils/date-utilities.scm:923
+#: libgnucash/app-utils/date-utilities.scm:930
 #, fuzzy
 msgid "Last day of the previous calendar year."
 msgstr "이전년 시작일"
 
-#: libgnucash/app-utils/date-utilities.scm:927
+#: libgnucash/app-utils/date-utilities.scm:934
 #, fuzzy
 msgid "Start of next year"
 msgstr "올 해 시작"
 
-#: libgnucash/app-utils/date-utilities.scm:930
+#: libgnucash/app-utils/date-utilities.scm:937
 #, fuzzy
 msgid "First day of the next calendar year."
 msgstr "금년 시작일"
 
-#: libgnucash/app-utils/date-utilities.scm:934
+#: libgnucash/app-utils/date-utilities.scm:941
 #, fuzzy
 msgid "End of next year"
 msgstr "올 해 끝"
 
-#: libgnucash/app-utils/date-utilities.scm:937
+#: libgnucash/app-utils/date-utilities.scm:944
 #, fuzzy
 msgid "Last day of the next calendar year."
 msgstr "금년 시작일"
 
-#: libgnucash/app-utils/date-utilities.scm:941
+#: libgnucash/app-utils/date-utilities.scm:948
 #, fuzzy
 msgid "Start of accounting period"
 msgstr "계정 기간 설정"
 
-#: libgnucash/app-utils/date-utilities.scm:944
+#: libgnucash/app-utils/date-utilities.scm:951
 #, fuzzy
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr "계정 기간의 시작, 전역 설정에서 설정"
 
-#: libgnucash/app-utils/date-utilities.scm:948
+#: libgnucash/app-utils/date-utilities.scm:955
 #, fuzzy
 msgid "End of accounting period"
 msgstr "계정 기간"
 
-#: libgnucash/app-utils/date-utilities.scm:951
+#: libgnucash/app-utils/date-utilities.scm:958
 #, fuzzy
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr "계정 기간의 시작, 전역 설정에서 설정"
 
-#: libgnucash/app-utils/date-utilities.scm:958
+#: libgnucash/app-utils/date-utilities.scm:965
 #, fuzzy
 msgid "First day of the current month."
 msgstr "현재 달의 시작"
 
-#: libgnucash/app-utils/date-utilities.scm:965
+#: libgnucash/app-utils/date-utilities.scm:972
 #, fuzzy
 msgid "Last day of the current month."
 msgstr "현재 달의 시작"
 
-#: libgnucash/app-utils/date-utilities.scm:972
+#: libgnucash/app-utils/date-utilities.scm:979
 #, fuzzy
 msgid "First day of the previous month."
 msgstr "이전 달의 마지막 일"
 
-#: libgnucash/app-utils/date-utilities.scm:979
+#: libgnucash/app-utils/date-utilities.scm:986
 #, fuzzy
 msgid "Last day of previous month."
 msgstr "이전 달의 마지막 일"
 
-#: libgnucash/app-utils/date-utilities.scm:983
+#: libgnucash/app-utils/date-utilities.scm:990
 #, fuzzy
 msgid "Start of next month"
 msgstr "이 달 시작"
 
-#: libgnucash/app-utils/date-utilities.scm:986
+#: libgnucash/app-utils/date-utilities.scm:993
 #, fuzzy
 msgid "First day of the next month."
 msgstr "현재 달의 시작"
 
-#: libgnucash/app-utils/date-utilities.scm:990
+#: libgnucash/app-utils/date-utilities.scm:997
 #, fuzzy
 msgid "End of next month"
 msgstr "이 달 끝"
 
-#: libgnucash/app-utils/date-utilities.scm:993
+#: libgnucash/app-utils/date-utilities.scm:1000
 #, fuzzy
 msgid "Last day of next month."
 msgstr "이전 달의 마지막 일"
 
-#: libgnucash/app-utils/date-utilities.scm:997
+#: libgnucash/app-utils/date-utilities.scm:1004
 msgid "Start of current quarter"
 msgstr "현 분기의 시작"
 
-#: libgnucash/app-utils/date-utilities.scm:1000
+#: libgnucash/app-utils/date-utilities.scm:1007
 #, fuzzy
 msgid "First day of the current quarterly accounting period."
 msgstr "최근 분기의 계정 기간의 시작"
 
-#: libgnucash/app-utils/date-utilities.scm:1004
+#: libgnucash/app-utils/date-utilities.scm:1011
 msgid "End of current quarter"
 msgstr "현 분기의 끝"
 
-#: libgnucash/app-utils/date-utilities.scm:1007
+#: libgnucash/app-utils/date-utilities.scm:1014
 #, fuzzy
 msgid "Last day of the current quarterly accounting period."
 msgstr "최근 분기의 계정 기간의 시작"
 
-#: libgnucash/app-utils/date-utilities.scm:1014
+#: libgnucash/app-utils/date-utilities.scm:1021
 #, fuzzy
 msgid "First day of the previous quarterly accounting period."
 msgstr "이전 분기의 계정 기간의 시작"
 
-#: libgnucash/app-utils/date-utilities.scm:1021
+#: libgnucash/app-utils/date-utilities.scm:1028
 #, fuzzy
 msgid "Last day of previous quarterly accounting period."
 msgstr "이전 분기의 계정 기간의 끝"
 
-#: libgnucash/app-utils/date-utilities.scm:1025
+#: libgnucash/app-utils/date-utilities.scm:1032
 #, fuzzy
 msgid "Start of next quarter"
 msgstr "이 분기 시작"
 
-#: libgnucash/app-utils/date-utilities.scm:1028
+#: libgnucash/app-utils/date-utilities.scm:1035
 #, fuzzy
 msgid "First day of the next quarterly accounting period."
 msgstr "최근 분기의 계정 기간의 시작"
 
-#: libgnucash/app-utils/date-utilities.scm:1032
+#: libgnucash/app-utils/date-utilities.scm:1039
 #, fuzzy
 msgid "End of next quarter"
 msgstr "이 분기 끝"
 
-#: libgnucash/app-utils/date-utilities.scm:1035
+#: libgnucash/app-utils/date-utilities.scm:1042
 #, fuzzy
 msgid "Last day of next quarterly accounting period."
 msgstr "이전 분기의 계정 기간의 끝"
 
-#: libgnucash/app-utils/date-utilities.scm:1041
+#: libgnucash/app-utils/date-utilities.scm:1048
 #, fuzzy
 msgid "The current date."
 msgstr "현재 날짜"
 
-#: libgnucash/app-utils/date-utilities.scm:1045
+#: libgnucash/app-utils/date-utilities.scm:1052
 msgid "One Month Ago"
 msgstr "한 달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1047
+#: libgnucash/app-utils/date-utilities.scm:1054
 #, fuzzy
 msgid "One Month Ago."
 msgstr "한 달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1051
+#: libgnucash/app-utils/date-utilities.scm:1058
 msgid "One Week Ago"
 msgstr "한 주 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1053
+#: libgnucash/app-utils/date-utilities.scm:1060
 #, fuzzy
 msgid "One Week Ago."
 msgstr "한 주 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1057
+#: libgnucash/app-utils/date-utilities.scm:1064
 msgid "Three Months Ago"
 msgstr "세 달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1059
+#: libgnucash/app-utils/date-utilities.scm:1066
 #, fuzzy
 msgid "Three Months Ago."
 msgstr "세 달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1063
+#: libgnucash/app-utils/date-utilities.scm:1070
 msgid "Six Months Ago"
 msgstr "6달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1065
+#: libgnucash/app-utils/date-utilities.scm:1072
 #, fuzzy
 msgid "Six Months Ago."
 msgstr "6달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1068
+#: libgnucash/app-utils/date-utilities.scm:1075
 msgid "One Year Ago"
 msgstr "1년 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1070
+#: libgnucash/app-utils/date-utilities.scm:1077
 #, fuzzy
 msgid "One Year Ago."
 msgstr "1년 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1074
+#: libgnucash/app-utils/date-utilities.scm:1081
 #, fuzzy
 msgid "One Month Ahead"
 msgstr "한 달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1076
+#: libgnucash/app-utils/date-utilities.scm:1083
 #, fuzzy
 msgid "One Month Ahead."
 msgstr "한 달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1080
+#: libgnucash/app-utils/date-utilities.scm:1087
 #, fuzzy
 msgid "One Week Ahead"
 msgstr "한 주 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1082
+#: libgnucash/app-utils/date-utilities.scm:1089
 #, fuzzy
 msgid "One Week Ahead."
 msgstr "한 주 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1086
+#: libgnucash/app-utils/date-utilities.scm:1093
 #, fuzzy
 msgid "Three Months Ahead"
 msgstr "세 달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1088
+#: libgnucash/app-utils/date-utilities.scm:1095
 #, fuzzy
 msgid "Three Months Ahead."
 msgstr "세 달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1092
+#: libgnucash/app-utils/date-utilities.scm:1099
 #, fuzzy
 msgid "Six Months Ahead"
 msgstr "6달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1094
+#: libgnucash/app-utils/date-utilities.scm:1101
 #, fuzzy
 msgid "Six Months Ahead."
 msgstr "6달 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1097
+#: libgnucash/app-utils/date-utilities.scm:1104
 #, fuzzy
 msgid "One Year Ahead"
 msgstr "1년 전"
 
-#: libgnucash/app-utils/date-utilities.scm:1099
+#: libgnucash/app-utils/date-utilities.scm:1106
 #, fuzzy
 msgid "One Year Ahead."
 msgstr "1년 전"
@@ -30366,41 +30370,41 @@ msgid ""
 "%s"
 msgstr ""
 
-#: libgnucash/engine/Account.cpp:4364
+#: libgnucash/engine/Account.cpp:4368
 msgid "Credit Card"
 msgstr "신용 카드"
 
-#: libgnucash/engine/Account.cpp:4366
+#: libgnucash/engine/Account.cpp:4370
 msgid "Stock"
 msgstr "주식"
 
-#: libgnucash/engine/Account.cpp:4367
+#: libgnucash/engine/Account.cpp:4371
 msgid "Mutual Fund"
 msgstr "투자신탁회사"
 
-#: libgnucash/engine/Account.cpp:4372
+#: libgnucash/engine/Account.cpp:4376
 msgid "A/Receivable"
 msgstr "A/받을 어음"
 
-#: libgnucash/engine/Account.cpp:4373
+#: libgnucash/engine/Account.cpp:4377
 msgid "A/Payable"
 msgstr "A/지불 어음"
 
-#: libgnucash/engine/Account.cpp:4374
+#: libgnucash/engine/Account.cpp:4378
 #, fuzzy
 msgid "Root"
 msgstr "보고서"
 
-#: libgnucash/engine/Account.cpp:4816
+#: libgnucash/engine/Account.cpp:4820
 msgid "Orphaned Gains"
 msgstr "버린 이익"
 
-#: libgnucash/engine/Account.cpp:4830 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4834 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "실제 이익/손실"
 
-#: libgnucash/engine/Account.cpp:4832
+#: libgnucash/engine/Account.cpp:4836
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."

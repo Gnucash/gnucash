@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-13 22:01+0100\n"
+"POT-Creation-Date: 2021-01-03 07:22+0100\n"
 "PO-Revision-Date: 2014-06-24 09:34+0530\n"
 "Last-Translator: Neha Aphale <kulkarnineha1208@gmail.com>\n"
 "Language-Team: NONE\n"
@@ -85,7 +85,7 @@ msgstr "रजसटर"
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:969
 #: gnucash/gtkbuilder/dialog-account.glade:1029
-#: gnucash/report/reports/standard/account-piecharts.scm:487
+#: gnucash/report/reports/standard/account-piecharts.scm:488
 #: gnucash/report/reports/standard/category-barchart.scm:537
 msgid "Other"
 msgstr "बाकीय"
@@ -973,10 +973,10 @@ msgstr "लोन रिपेमेनट ऊपशन: \"%s\""
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
 #: gnucash/register/ledger-core/split-register-model.c:232
 #: gnucash/report/reports/standard/account-summary.scm:83
-#: gnucash/report/reports/standard/advanced-portfolio.scm:72
+#: gnucash/report/reports/standard/advanced-portfolio.scm:73
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1095
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1100
-#: gnucash/report/reports/standard/cashflow-barchart.scm:331
+#: gnucash/report/reports/standard/cashflow-barchart.scm:343
 #: gnucash/report/reports/standard/category-barchart.scm:634
 #: gnucash/report/reports/standard/category-barchart.scm:655
 #: gnucash/report/reports/standard/customer-summary.scm:70
@@ -987,9 +987,9 @@ msgstr "लोन रिपेमेनट ऊपशन: \"%s\""
 #: gnucash/report/reports/standard/invoice.scm:212
 #: gnucash/report/reports/standard/invoice.scm:603
 #: gnucash/report/reports/standard/job-report.scm:40
-#: gnucash/report/reports/standard/net-charts.scm:417
+#: gnucash/report/reports/standard/net-charts.scm:413
 #: gnucash/report/reports/standard/new-owner-report.scm:49
-#: gnucash/report/reports/standard/new-owner-report.scm:237
+#: gnucash/report/reports/standard/new-owner-report.scm:241
 #: gnucash/report/reports/standard/owner-report.scm:50
 #: gnucash/report/reports/standard/portfolio.scm:51
 #: gnucash/report/reports/standard/register.scm:130
@@ -1015,7 +1015,7 @@ msgstr "तॊरिख"
 #: gnucash/register/ledger-core/split-register.c:2669
 #: gnucash/register/ledger-core/split-register.c:2674
 #: gnucash/register/ledger-core/split-register.c:2685
-#: gnucash/report/reports/standard/new-owner-report.scm:294
+#: gnucash/report/reports/standard/new-owner-report.scm:298
 #: gnucash/report/reports/standard/owner-report.scm:357
 #: libgnucash/engine/Account.cpp:145 libgnucash/engine/Account.cpp:153
 #: libgnucash/engine/Account.cpp:174 libgnucash/engine/gncOwner.c:814
@@ -1071,14 +1071,14 @@ msgstr "परायीस जमाह करनस मंज़ एिरर"
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:341
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1051
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1052
 #: gnucash/report/reports/standard/budget-flow.scm:41
 #: gnucash/report/reports/standard/budget.scm:47
 #: gnucash/report/reports/standard/cash-flow.scm:47
 #: gnucash/report/reports/standard/general-journal.scm:97
 #: gnucash/report/reports/standard/job-report.scm:36
 #: gnucash/report/reports/standard/lot-viewer.scm:37
-#: gnucash/report/reports/standard/new-owner-report.scm:1128
+#: gnucash/report/reports/standard/new-owner-report.scm:1132
 #: gnucash/report/reports/standard/owner-report.scm:48
 #: gnucash/report/reports/standard/portfolio.scm:253
 #: gnucash/report/reports/standard/register.scm:143
@@ -1089,7 +1089,7 @@ msgstr "एकावुंट"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1063
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
 msgstr "अलामत"
@@ -1097,7 +1097,7 @@ msgstr "अलामत"
 #: gnucash/gnome/assistant-stock-split.c:585
 #: gnucash/gnome/dialog-find-transactions.c:122
 #: gnucash/register/ledger-core/split-register-model.c:419
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1071
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1072
 #: gnucash/report/reports/standard/general-journal.scm:98
 #: gnucash/report/reports/standard/general-ledger.scm:78
 #: gnucash/report/reports/standard/general-ledger.scm:98
@@ -1232,7 +1232,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-billterms.glade:182
 #: gnucash/gtkbuilder/dialog-billterms.glade:767
 #: gnucash/gtkbuilder/gnc-frequency.glade:966
-#: gnucash/report/reports/standard/price-scatter.scm:138
+#: gnucash/report/reports/standard/price-scatter.scm:139
 msgid "Days"
 msgstr " दुह"
 
@@ -1247,7 +1247,7 @@ msgstr " पराकज़िमू"
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:622
 #: gnucash/gtkbuilder/dialog-price.glade:24
 #: gnucash/report/reports/standard/job-report.scm:240
-#: gnucash/report/reports/standard/new-owner-report.scm:296
+#: gnucash/report/reports/standard/new-owner-report.scm:300
 #: gnucash/report/reports/standard/owner-report.scm:353
 #: gnucash/report/reports/standard/owner-report.scm:358
 msgid "Unknown"
@@ -1678,7 +1678,7 @@ msgstr "टरानज़ेकशन तफसील"
 #: gnucash/report/reports/standard/invoice.scm:217
 #: gnucash/report/reports/standard/job-report.scm:44
 #: gnucash/report/reports/standard/new-owner-report.scm:53
-#: gnucash/report/reports/standard/new-owner-report.scm:240
+#: gnucash/report/reports/standard/new-owner-report.scm:244
 #: gnucash/report/reports/standard/owner-report.scm:54
 #: gnucash/report/reports/standard/register.scm:138
 #: gnucash/report/reports/standard/register.scm:368
@@ -1897,7 +1897,7 @@ msgstr "किमत कॊरीव शीयर"
 #: gnucash/report/reports/standard/general-ledger.scm:81
 #: gnucash/report/reports/standard/general-ledger.scm:101
 #: gnucash/report/reports/standard/job-report.scm:45
-#: gnucash/report/reports/standard/new-owner-report.scm:244
+#: gnucash/report/reports/standard/new-owner-report.scm:248
 #: gnucash/report/reports/standard/owner-report.scm:59
 #: gnucash/report/reports/standard/register.scm:398
 #: gnucash/report/reports/standard/register.scm:647
@@ -1914,7 +1914,7 @@ msgstr "रकम"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:78
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1080
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1081
 #: gnucash/report/reports/standard/portfolio.scm:258
 #: gnucash/report/reports/standard/register.scm:158
 #: gnucash/report/reports/standard/register.scm:407
@@ -2167,7 +2167,7 @@ msgstr "यॊ एिंटरी छॊ अटिच कॊरीथ एिक�
 #: gnucash/report/reports/standard/job-report.scm:41
 #: gnucash/report/reports/standard/new-aging.scm:126
 #: gnucash/report/reports/standard/new-owner-report.scm:50
-#: gnucash/report/reports/standard/new-owner-report.scm:957
+#: gnucash/report/reports/standard/new-owner-report.scm:961
 #: gnucash/report/reports/standard/owner-report.scm:51
 #: gnucash/report/reports/standard/owner-report.scm:612
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:233
@@ -2176,7 +2176,7 @@ msgstr "डयू डिट"
 
 #: gnucash/gnome/dialog-invoice.c:837 gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:130
-#: gnucash/report/reports/standard/new-owner-report.scm:961
+#: gnucash/report/reports/standard/new-owner-report.scm:965
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post Date"
 msgstr "पूसट डिट"
@@ -2241,7 +2241,7 @@ msgid "PAID"
 msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:2065
-#: gnucash/report/reports/standard/new-owner-report.scm:577
+#: gnucash/report/reports/standard/new-owner-report.scm:581
 msgid "UNPAID"
 msgstr ""
 
@@ -2455,14 +2455,14 @@ msgstr "वूचर नूट"
 #: gnucash/report/reports/standard/customer-summary.scm:72
 #: gnucash/report/reports/standard/job-report.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:52
-#: gnucash/report/reports/standard/new-owner-report.scm:239
+#: gnucash/report/reports/standard/new-owner-report.scm:243
 #: gnucash/report/reports/standard/owner-report.scm:53
 msgid "Type"
 msgstr " कॆसीम"
 
 #: gnucash/gnome/dialog-invoice.c:3440
 #: gnucash/register/ledger-core/split-register-model.c:309
-#: gnucash/report/reports/standard/new-owner-report.scm:819
+#: gnucash/report/reports/standard/new-owner-report.scm:823
 msgid "Paid"
 msgstr " बुरमुत"
 
@@ -2626,7 +2626,7 @@ msgstr "ऊनवान"
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
 #: gnucash/report/reports/standard/new-owner-report.scm:58
-#: gnucash/report/reports/standard/new-owner-report.scm:558
+#: gnucash/report/reports/standard/new-owner-report.scm:562
 #: gnucash/report/reports/standard/owner-report.scm:319
 #: gnucash/report/reports/standard/register.scm:164
 msgid "Balance"
@@ -2719,8 +2719,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
 #: gnucash/report/reports/standard/new-aging.scm:194
-#: gnucash/report/reports/standard/new-owner-report.scm:315
-#: gnucash/report/reports/standard/new-owner-report.scm:713
+#: gnucash/report/reports/standard/new-owner-report.scm:319
+#: gnucash/report/reports/standard/new-owner-report.scm:717
 msgid "Pre-Payment"
 msgstr "परी-पिमींट"
 
@@ -2849,7 +2849,7 @@ msgstr "किमत कॊरवा डीलिट?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:427
 #: gnucash/gtkbuilder/dialog-invoice.glade:615
-#: gnucash/report/reports/standard/budget-income-statement.scm:123
+#: gnucash/report/reports/standard/budget-income-statement.scm:124
 #: gnucash/report/reports/standard/equity-statement.scm:85
 #: gnucash/report/reports/standard/income-statement.scm:117
 #: gnucash/report/reports/standard/trial-balance.scm:91
@@ -2964,7 +2964,7 @@ msgstr "कनटींट"
 
 #: gnucash/gnome/dialog-report-column-view.c:412
 #: gnucash/report/reports/standard/customer-summary.scm:291
-#: gnucash/report/reports/standard/new-owner-report.scm:1061
+#: gnucash/report/reports/standard/new-owner-report.scm:1065
 #: gnucash/report/reports/standard/owner-report.scm:743
 msgid "Report"
 msgstr "रीपूट"
@@ -3331,19 +3331,19 @@ msgstr "वींडर छ़ॊंडीव"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:97
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
 #: gnucash/register/ledger-core/split-register.c:2716
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1087
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1088
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1279
-#: gnucash/report/reports/standard/net-charts.scm:350
-#: gnucash/report/reports/standard/net-charts.scm:420
+#: gnucash/report/reports/standard/net-charts.scm:346
+#: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4369 libgnucash/engine/Scrub.c:464
+#: libgnucash/engine/Account.cpp:4373 libgnucash/engine/Scrub.c:464
 msgid "Income"
 msgstr "ईनकम"
 
 #: gnucash/gnome/gnc-budget-view.c:502
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:122
-#: gnucash/report/reports/standard/budget-income-statement.scm:521
+#: gnucash/report/reports/standard/budget-income-statement.scm:522
 #: gnucash/report/reports/standard/income-statement.scm:512
 #: gnucash/report/report-utilities.scm:205
 msgid "Expenses"
@@ -3371,17 +3371,18 @@ msgstr "अख मूजूद बजट खूलोव"
 #: gnucash/report/html-acct-table.scm:829 gnucash/report/reports/aging.scm:544
 #: gnucash/report/reports/aging.scm:831
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:294
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1052
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1053
 #: gnucash/report/reports/standard/budget-flow.scm:168
 #: gnucash/report/reports/standard/budget-flow.scm:247
 #: gnucash/report/reports/standard/budget.scm:511
+#: gnucash/report/reports/standard/cashflow-barchart.scm:352
 #: gnucash/report/reports/standard/customer-summary.scm:478
 #: gnucash/report/reports/standard/customer-summary.scm:480
 #: gnucash/report/reports/standard/invoice.scm:104
 #: gnucash/report/reports/standard/invoice.scm:252
 #: gnucash/report/reports/standard/new-aging.scm:200
 #: gnucash/report/reports/standard/new-aging.scm:325
-#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:325
 #: gnucash/report/reports/standard/portfolio.scm:278
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1961
@@ -3508,7 +3509,7 @@ msgid "Setup scheduled transactions for repayment of a loan"
 msgstr "शडूल करनॊ आमोत टरांज़ीकशन कॊरीव सीट अप लून कॊ रीपिमींट बापत"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:180
-#: gnucash/report/report-core.scm:150
+#: gnucash/report/report-core.scm:151
 msgid "B_udget"
 msgstr "बजट"
 
@@ -3558,7 +3559,7 @@ msgid "_Import Map Editor"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
-msgid "View and Delete Bayesian and Non Bayesian information"
+msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
@@ -3722,7 +3723,7 @@ msgid "_OK"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-business.c:155
-#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:161
+#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:162
 msgid "_Business"
 msgstr "कारबार"
 
@@ -4258,20 +4259,21 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2846
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2850
 #: gnucash/gtkbuilder/dialog-preferences.glade:980
-#: gnucash/report/report-core.scm:157
+#: gnucash/report/report-core.scm:158
 #: gnucash/report/reports/example/average-balance.scm:92
 #: gnucash/report/reports/example/average-balance.scm:296
 #: gnucash/report/reports/example/daily-reports.scm:57
-#: gnucash/report/reports/standard/account-piecharts.scm:69
+#: gnucash/report/reports/standard/account-piecharts.scm:70
+#: gnucash/report/reports/standard/account-piecharts.scm:564
 #: gnucash/report/reports/standard/account-summary.scm:85
-#: gnucash/report/reports/standard/advanced-portfolio.scm:162
+#: gnucash/report/reports/standard/advanced-portfolio.scm:163
 #: gnucash/report/reports/standard/balance-forecast.scm:37
 #: gnucash/report/reports/standard/balance-sheet.scm:87
 #: gnucash/report/reports/standard/balsheet-pnl.scm:81
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:52
 #: gnucash/report/reports/standard/budget-barchart.scm:38
-#: gnucash/report/reports/standard/budget-income-statement.scm:74
-#: gnucash/report/reports/standard/cashflow-barchart.scm:44
+#: gnucash/report/reports/standard/budget-income-statement.scm:75
+#: gnucash/report/reports/standard/cashflow-barchart.scm:45
 #: gnucash/report/reports/standard/category-barchart.scm:75
 #: gnucash/report/reports/standard/equity-statement.scm:68
 #: gnucash/report/reports/standard/income-gst-statement.scm:125
@@ -4459,7 +4461,7 @@ msgstr "नौट"
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:227
 #: gnucash/report/reports/standard/budget-flow.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:59
 #: gnucash/report/reports/standard/budget.scm:94
 msgid "Budget"
 msgstr "बजट"
@@ -5136,7 +5138,7 @@ msgstr "हॊयिव कसटमर एजिनग ऊवरविव त�
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 #: gnucash/report/reports/standard/job-report.scm:511
-#: gnucash/report/reports/standard/new-owner-report.scm:1205
+#: gnucash/report/reports/standard/new-owner-report.scm:1209
 msgid "Vendor Report"
 msgstr "वीनडर रीपूट"
 
@@ -5146,7 +5148,7 @@ msgstr "वेनडर रिपोट हॊयिव"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
 #: gnucash/report/reports/standard/job-report.scm:505
-#: gnucash/report/reports/standard/new-owner-report.scm:1196
+#: gnucash/report/reports/standard/new-owner-report.scm:1200
 msgid "Customer Report"
 msgstr "कसटमर रीपूट"
 
@@ -5156,7 +5158,7 @@ msgstr "कसटमर रिपोट हॊयिव"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 #: gnucash/report/reports/standard/job-report.scm:514
-#: gnucash/report/reports/standard/new-owner-report.scm:1214
+#: gnucash/report/reports/standard/new-owner-report.scm:1218
 msgid "Employee Report"
 msgstr "एिमपलायी रीपूट"
 
@@ -6259,23 +6261,23 @@ msgstr "सेटायील शिट"
 msgid "Edit report style sheets"
 msgstr "एडिट कॊरिव रिपोट सिटायिल शीट"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:150
-#: gnucash/report/reports/standard/view-column.scm:131
+#: gnucash/gnome/gnc-plugin-report-system.c:148
+#: gnucash/report/reports/standard/view-column.scm:127
 msgid "Report error"
 msgstr "रीपूट एिरर"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:151
-#: gnucash/report/reports/standard/view-column.scm:132
+#: gnucash/gnome/gnc-plugin-report-system.c:149
+#: gnucash/report/reports/standard/view-column.scm:128
 msgid "An error occurred while running the report."
 msgstr "अख एिरर आव रीपूट रन करनस मंज़."
 
-#: gnucash/gnome/gnc-plugin-report-system.c:186
-#: gnucash/gnome/gnc-plugin-report-system.c:208
+#: gnucash/gnome/gnc-plugin-report-system.c:184
+#: gnucash/gnome/gnc-plugin-report-system.c:206
 #, c-format
 msgid "Badly formed options URL: %s"
 msgstr "बुरी पॊठ बनॊमोत ऊपशन URL: %s"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:196
+#: gnucash/gnome/gnc-plugin-report-system.c:194
 #, c-format
 msgid "Badly-formed report id: %s"
 msgstr "बुरी पॊठ बनॊमोत रीपूट id: %s"
@@ -7561,8 +7563,9 @@ msgstr ""
 #. Translators: Replace here and later CUSIP by the name of your local
 #. National Securities Identifying Number
 #. like gb:SEDOL, de:WKN, ch:Valorennummer, fr:SICOVAM ...
-#. See http://en.wikipedia.org/wiki/ISIN for hints.
-#: gnucash/gnome-utils/dialog-commodity.c:173
+#. See http://en.wikipedia.org/wiki/ISIN and
+#. https://en.wikipedia.org/wiki/National_numbering_agency for hints.
+#: gnucash/gnome-utils/dialog-commodity.c:174
 msgid ""
 "\n"
 "Exchange code (ISIN, CUSIP or similar): "
@@ -7570,7 +7573,7 @@ msgstr ""
 "\n"
 "मूएिकोसचिंज कूड (ISIN, CUSIP या यॊथीय) :"
 
-#: gnucash/gnome-utils/dialog-commodity.c:175
+#: gnucash/gnome-utils/dialog-commodity.c:176
 msgid ""
 "\n"
 "Mnemonic (Ticker symbol or similar): "
@@ -7578,36 +7581,36 @@ msgstr ""
 "\n"
 " नीनूनोक(टोकर अलामत या यॊथीय) :"
 
-#: gnucash/gnome-utils/dialog-commodity.c:274
+#: gnucash/gnome-utils/dialog-commodity.c:275
 msgid "Select security/currency"
 msgstr "हीफाज़त /करनसी च़ॊरीव"
 
-#: gnucash/gnome-utils/dialog-commodity.c:275
+#: gnucash/gnome-utils/dialog-commodity.c:276
 #: gnucash/gtkbuilder/dialog-account.glade:1257
 #, fuzzy
 msgid "_Security/currency"
 msgstr "होफाज़त/ करनसीः"
 
-#: gnucash/gnome-utils/dialog-commodity.c:279
+#: gnucash/gnome-utils/dialog-commodity.c:280
 msgid "Select security"
 msgstr "हीफाज़त च़ॊरीव"
 
-#: gnucash/gnome-utils/dialog-commodity.c:280
+#: gnucash/gnome-utils/dialog-commodity.c:281
 #: gnucash/gtkbuilder/dialog-price.glade:146
 msgid "_Security"
 msgstr "हॊफाज़त "
 
-#: gnucash/gnome-utils/dialog-commodity.c:284
+#: gnucash/gnome-utils/dialog-commodity.c:285
 msgid "Select currency"
 msgstr "करनसी च़ॊरीव"
 
-#: gnucash/gnome-utils/dialog-commodity.c:285
+#: gnucash/gnome-utils/dialog-commodity.c:286
 #: gnucash/gtkbuilder/dialog-price.glade:161
 #, fuzzy
 msgid "Cu_rrency"
 msgstr "करनसी"
 
-#: gnucash/gnome-utils/dialog-commodity.c:759
+#: gnucash/gnome-utils/dialog-commodity.c:760
 #: gnucash/gnome-utils/dialog-options.c:713
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:412
 #: gnucash/gnome-utils/gnc-tree-view-price.c:402
@@ -7616,48 +7619,48 @@ msgstr "करनसी"
 #: gnucash/gtkbuilder/dialog-transfer.glade:424
 #: gnucash/gtkbuilder/dialog-transfer.glade:437
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4368
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4372
 msgid "Currency"
 msgstr "करनसी"
 
-#: gnucash/gnome-utils/dialog-commodity.c:854
+#: gnucash/gnome-utils/dialog-commodity.c:855
 msgid "Use local time"
 msgstr "लूकल टायोम कॊरीव ईसतिमाल"
 
-#: gnucash/gnome-utils/dialog-commodity.c:984
+#: gnucash/gnome-utils/dialog-commodity.c:985
 msgid "Edit currency"
 msgstr "करनसी कॊरीव एिडोट"
 
-#: gnucash/gnome-utils/dialog-commodity.c:985
+#: gnucash/gnome-utils/dialog-commodity.c:986
 msgid "Currency Information"
 msgstr "करनसी जानकॊरी"
 
-#: gnucash/gnome-utils/dialog-commodity.c:990
+#: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "Edit security"
 msgstr "हीफाज़त कॊरीव एिडीट"
 
-#: gnucash/gnome-utils/dialog-commodity.c:990
+#: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "New security"
 msgstr "नॊव हीफाज़त"
 
-#: gnucash/gnome-utils/dialog-commodity.c:991
+#: gnucash/gnome-utils/dialog-commodity.c:992
 msgid "Security Information"
 msgstr "हीफाज़त जानकॊरी"
 
-#: gnucash/gnome-utils/dialog-commodity.c:1268
+#: gnucash/gnome-utils/dialog-commodity.c:1269
 msgid "You may not create a new national currency."
 msgstr "तुहयो मा हयीकोव नॊ शायद अख नॊव कूमी करनसी बनॊवीथ."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1278
+#: gnucash/gnome-utils/dialog-commodity.c:1279
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
 msgstr "%s छु अख रिज़ॊरवॊड कामुडिटी टायिप. पिलीज़ बदल किनह कॊरिव ईसतेमाल."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1293
+#: gnucash/gnome-utils/dialog-commodity.c:1294
 msgid "That commodity already exists."
 msgstr "सु कामूडीटी छॊ  गूडय मूजूद."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1342
+#: gnucash/gnome-utils/dialog-commodity.c:1343
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
@@ -8148,7 +8151,7 @@ msgstr "ना, यथ वखतस पयॊठ नॊ"
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:166
 #: gnucash/gnome-utils/gnc-period-select.c:70
 #: gnucash/gnome-utils/gnc-period-select.c:86
-#: libgnucash/app-utils/date-utilities.scm:1039
+#: libgnucash/app-utils/date-utilities.scm:1046
 msgid "Today"
 msgstr "अज़"
 
@@ -8157,21 +8160,21 @@ msgid "Use Shift combined with Return or Keypad Enter to finish editing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-date-delta.c:224
-#: gnucash/report/reports/standard/price-scatter.scm:139
+#: gnucash/report/reports/standard/price-scatter.scm:140
 msgid "Weeks"
 msgstr "हफतो"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:226
 #: gnucash/gtkbuilder/assistant-loan.glade:12
 #: gnucash/gtkbuilder/gnc-date-format.glade:169
-#: gnucash/report/reports/standard/price-scatter.scm:141
+#: gnucash/report/reports/standard/price-scatter.scm:142
 msgid "Months"
 msgstr "रॊथ"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:228
 #: gnucash/gtkbuilder/assistant-loan.glade:15
 #: gnucash/gtkbuilder/gnc-date-format.glade:181
-#: gnucash/report/reports/standard/price-scatter.scm:144
+#: gnucash/report/reports/standard/price-scatter.scm:145
 msgid "Years"
 msgstr "वॊरी"
 
@@ -8939,40 +8942,40 @@ msgstr "पॊतमि लटॊ बदलोमुत %a, %b %e, %Y at %I:%M%P
 msgid "File %s opened. %s"
 msgstr "फायिल %s आयि ऊपॊन करनॊ. %s"
 
-#: gnucash/gnome-utils/gnc-main-window.c:2863
+#: gnucash/gnome-utils/gnc-main-window.c:2864
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:2953
+#: gnucash/gnome-utils/gnc-main-window.c:2954
 msgid "Unable to save to database."
 msgstr "हयुक नॊ डाटा बिसस मंज़ मोहफूज़ कॊरीथ."
 
-#: gnucash/gnome-utils/gnc-main-window.c:2955
+#: gnucash/gnome-utils/gnc-main-window.c:2956
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "हयुक नॊ डाटा बिसस मंज़ मोहफूज़ कॊरीथ. कोताब छॊ मारोक करनो आमोच़ रिड आनली."
 
-#: gnucash/gnome-utils/gnc-main-window.c:4301
+#: gnucash/gnome-utils/gnc-main-window.c:4302
 msgid "Book Options"
 msgstr "बुक ऊपशन"
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.c:4686
+#: gnucash/gnome-utils/gnc-main-window.c:4687
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4698
+#: gnucash/gnome-utils/gnc-main-window.c:4699
 #: gnucash/gnome-utils/gnc-splash.c:97
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4699
+#: gnucash/gnome-utils/gnc-main-window.c:4700
 #: gnucash/gnome-utils/gnc-splash.c:98 gnucash/gnucash-core-app.cpp:503
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4707
+#: gnucash/gnome-utils/gnc-main-window.c:4708
 #, fuzzy
 msgid "Accounting for personal and small business finance."
 msgstr "- GnuCash ज़ॊती तॊ सुमाल बिज़नस फायनानॊस मनेजमेनट"
@@ -8981,21 +8984,21 @@ msgstr "- GnuCash ज़ॊती तॊ सुमाल बिज़नस फ�
 #. * Enter your name or that of your team and an email contact for feedback.
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
-#: gnucash/gnome-utils/gnc-main-window.c:4716
+#: gnucash/gnome-utils/gnc-main-window.c:4717
 msgid "translator-credits"
 msgstr "Neha Aphale, C-DAC, GIST, Pune, India, 2014"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4719
+#: gnucash/gnome-utils/gnc-main-window.c:4720
 msgid "Visit the GnuCash website."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-period-select.c:71
-#: libgnucash/app-utils/date-utilities.scm:955
+#: libgnucash/app-utils/date-utilities.scm:962
 msgid "Start of this month"
 msgstr "यॊमो रॊतुक शरू"
 
 #: gnucash/gnome-utils/gnc-period-select.c:72
-#: libgnucash/app-utils/date-utilities.scm:969
+#: libgnucash/app-utils/date-utilities.scm:976
 msgid "Start of previous month"
 msgstr "पॊतमी रॊतुक शरू"
 
@@ -9004,17 +9007,17 @@ msgid "Start of this quarter"
 msgstr "यॊमो कवाटरुक शरू"
 
 #: gnucash/gnome-utils/gnc-period-select.c:74
-#: libgnucash/app-utils/date-utilities.scm:1011
+#: libgnucash/app-utils/date-utilities.scm:1018
 msgid "Start of previous quarter"
 msgstr "पॊतमो कवाटरुक शरू"
 
 #: gnucash/gnome-utils/gnc-period-select.c:75
-#: libgnucash/app-utils/date-utilities.scm:899
+#: libgnucash/app-utils/date-utilities.scm:906
 msgid "Start of this year"
 msgstr "यॊमो वॊरयुक शरू"
 
 #: gnucash/gnome-utils/gnc-period-select.c:76
-#: libgnucash/app-utils/date-utilities.scm:913
+#: libgnucash/app-utils/date-utilities.scm:920
 msgid "Start of previous year"
 msgstr "पॊतमो वॊरयुक शरू"
 
@@ -9027,12 +9030,12 @@ msgid "Start of previous accounting period"
 msgstr "पॊतमो  एिकावटींग पिरडुक शरू"
 
 #: gnucash/gnome-utils/gnc-period-select.c:87
-#: libgnucash/app-utils/date-utilities.scm:962
+#: libgnucash/app-utils/date-utilities.scm:969
 msgid "End of this month"
 msgstr "यॊमो रीतुक खतम"
 
 #: gnucash/gnome-utils/gnc-period-select.c:88
-#: libgnucash/app-utils/date-utilities.scm:976
+#: libgnucash/app-utils/date-utilities.scm:983
 msgid "End of previous month"
 msgstr "पॊतमो रीतुक खतम"
 
@@ -9041,17 +9044,17 @@ msgid "End of this quarter"
 msgstr "यॊमो कवाटरुक अंद"
 
 #: gnucash/gnome-utils/gnc-period-select.c:90
-#: libgnucash/app-utils/date-utilities.scm:1018
+#: libgnucash/app-utils/date-utilities.scm:1025
 msgid "End of previous quarter"
 msgstr "पॊतमो कवाटरुक खतम"
 
 #: gnucash/gnome-utils/gnc-period-select.c:91
-#: libgnucash/app-utils/date-utilities.scm:906
+#: libgnucash/app-utils/date-utilities.scm:913
 msgid "End of this year"
 msgstr "यॊमी वॊरयुक अंद"
 
 #: gnucash/gnome-utils/gnc-period-select.c:92
-#: libgnucash/app-utils/date-utilities.scm:920
+#: libgnucash/app-utils/date-utilities.scm:927
 msgid "End of previous year"
 msgstr "पॊतमो वॊरयुक अंद"
 
@@ -9482,7 +9485,7 @@ msgstr "पिचक"
 #: gnucash/report/reports/standard/balance-sheet.scm:503
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4371
+#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4375
 msgid "Equity"
 msgstr "बराबरी"
 
@@ -9493,15 +9496,15 @@ msgstr "बराबरी"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 #: gnucash/register/ledger-core/split-register.c:2707
 #: gnucash/register/ledger-core/split-register-model.c:402
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1075
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1076
 #: gnucash/report/reports/standard/general-journal.scm:99
 #: gnucash/report/reports/standard/general-ledger.scm:79
 #: gnucash/report/reports/standard/general-ledger.scm:99
 #: gnucash/report/reports/standard/invoice.scm:232
 #: gnucash/report/reports/standard/portfolio.scm:257
-#: gnucash/report/reports/standard/price-scatter.scm:39
-#: gnucash/report/reports/standard/price-scatter.scm:312
-#: gnucash/report/reports/standard/price-scatter.scm:326
+#: gnucash/report/reports/standard/price-scatter.scm:40
+#: gnucash/report/reports/standard/price-scatter.scm:313
+#: gnucash/report/reports/standard/price-scatter.scm:327
 #: gnucash/report/reports/standard/register.scm:150
 #: gnucash/report/reports/standard/register.scm:393
 #: gnucash/report/trep-engine.scm:981 gnucash/report/trep-engine.scm:1105
@@ -9939,7 +9942,7 @@ msgstr "पोसट करनुक दोह /एनटर करनॊ आम
 #: gnucash/report/reports/standard/customer-summary.scm:71
 #: gnucash/report/reports/standard/job-report.scm:42
 #: gnucash/report/reports/standard/new-owner-report.scm:51
-#: gnucash/report/reports/standard/new-owner-report.scm:238
+#: gnucash/report/reports/standard/new-owner-report.scm:242
 #: gnucash/report/reports/standard/owner-report.scm:52
 msgid "Reference"
 msgstr "हवालो"
@@ -10024,9 +10027,9 @@ msgstr "रॊटीव"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1283
 #: gnucash/report/reports/standard/customer-summary.scm:139
 #: gnucash/report/reports/standard/customer-summary.scm:326
-#: gnucash/report/reports/standard/net-charts.scm:371
-#: gnucash/report/reports/standard/net-charts.scm:420
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4370
+#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:416
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4374
 #: libgnucash/engine/gncInvoice.c:1084
 msgid "Expense"
 msgstr "खरोच"
@@ -13692,18 +13695,18 @@ msgstr ""
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:346
 #: gnucash/report/reports/example/average-balance.scm:40
 #: gnucash/report/reports/example/daily-reports.scm:52
-#: gnucash/report/reports/standard/account-piecharts.scm:64
+#: gnucash/report/reports/standard/account-piecharts.scm:65
 #: gnucash/report/reports/standard/account-summary.scm:79
 #: gnucash/report/reports/standard/balance-forecast.scm:40
 #: gnucash/report/reports/standard/balsheet-pnl.scm:59
-#: gnucash/report/reports/standard/cashflow-barchart.scm:54
+#: gnucash/report/reports/standard/cashflow-barchart.scm:55
 #: gnucash/report/reports/standard/cash-flow.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:69
 #: gnucash/report/reports/standard/equity-statement.scm:65
 #: gnucash/report/reports/standard/income-statement.scm:59
 #: gnucash/report/reports/standard/lot-viewer.scm:35
 #: gnucash/report/reports/standard/net-charts.scm:39
-#: gnucash/report/reports/standard/price-scatter.scm:35
+#: gnucash/report/reports/standard/price-scatter.scm:36
 #: gnucash/report/trep-engine.scm:95
 msgid "Start Date"
 msgstr "शरू तॊरिख"
@@ -13858,25 +13861,25 @@ msgstr "रिंजः"
 #: gnucash/gtkbuilder/dialog-sx.glade:333
 #: gnucash/report/reports/example/average-balance.scm:41
 #: gnucash/report/reports/example/daily-reports.scm:53
-#: gnucash/report/reports/standard/account-piecharts.scm:65
+#: gnucash/report/reports/standard/account-piecharts.scm:66
 #: gnucash/report/reports/standard/account-summary.scm:80
 #: gnucash/report/reports/standard/balance-forecast.scm:41
 #: gnucash/report/reports/standard/balsheet-pnl.scm:60
-#: gnucash/report/reports/standard/cashflow-barchart.scm:55
+#: gnucash/report/reports/standard/cashflow-barchart.scm:56
 #: gnucash/report/reports/standard/cash-flow.scm:43
 #: gnucash/report/reports/standard/category-barchart.scm:70
 #: gnucash/report/reports/standard/equity-statement.scm:66
 #: gnucash/report/reports/standard/income-statement.scm:60
 #: gnucash/report/reports/standard/lot-viewer.scm:36
 #: gnucash/report/reports/standard/net-charts.scm:40
-#: gnucash/report/reports/standard/price-scatter.scm:36
+#: gnucash/report/reports/standard/price-scatter.scm:37
 #: gnucash/report/trep-engine.scm:96
 msgid "End Date"
 msgstr "खतम तॊरिख"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1201
 #: gnucash/report/reports/standard/job-report.scm:563
-#: gnucash/report/reports/standard/new-owner-report.scm:1161
+#: gnucash/report/reports/standard/new-owner-report.scm:1165
 #: gnucash/report/reports/standard/owner-report.scm:795
 msgid "Date Range"
 msgstr "डिट रिंज"
@@ -14656,7 +14659,7 @@ msgstr "मुकाबलो बापत च़ॊरीव एिकावु
 
 #: gnucash/gtkbuilder/dialog-account.glade:199
 #: gnucash/gtkbuilder/dialog-account.glade:1326
-#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:292
+#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:293
 #: gnucash/report/stylesheets/plain.scm:232
 msgid "Default"
 msgstr "डीफालट"
@@ -14897,7 +14900,7 @@ msgstr "<b>पिरंट एिकावुंट</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1666
 #: gnucash/gtkbuilder/dialog-preferences.glade:2010
-#: gnucash/report/report-core.scm:156
+#: gnucash/report/report-core.scm:157
 #: gnucash/report/reports/standard/equity-statement.scm:108
 #: gnucash/report/reports/standard/equity-statement.scm:112
 #: gnucash/report/reports/standard/register.scm:347
@@ -15264,7 +15267,7 @@ msgid "Choose Owner Dialog"
 msgstr "मॊलीक सुंद डायलाग च़ॊरीव"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:8
-#: gnucash/report/reports/standard/account-piecharts.scm:61
+#: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
 msgstr "होफाज़त"
 
@@ -15414,6 +15417,7 @@ msgstr "आनलायोन कूट कॊरीव हॊसील"
 msgid "F_raction traded"
 msgstr "टरिड करनॊ आमुत फरिकशन"
 
+#. Again replace CUSIP by your National Securities Identifying Number.
 #: gnucash/gtkbuilder/dialog-commodity.glade:475
 #, fuzzy
 msgid "ISIN, CUSI_P or other code"
@@ -15769,7 +15773,7 @@ msgstr "बाय-मनथली"
 #: gnucash/gtkbuilder/dialog-sx.glade:135
 #: gnucash/gtkbuilder/gnc-frequency.glade:180
 #: gnucash/gtkbuilder/gnc-frequency.glade:1408
-#: gnucash/report/reports/standard/account-piecharts.scm:123
+#: gnucash/report/reports/standard/account-piecharts.scm:124
 #: gnucash/report/reports/standard/category-barchart.scm:123
 #: gnucash/report/trep-engine.scm:336 libgnucash/engine/Recurrence.c:761
 #: libgnucash/engine/Recurrence.c:775
@@ -15792,7 +15796,7 @@ msgstr "बाय-वीकली"
 #: gnucash/gtkbuilder/dialog-sx.glade:129
 #: gnucash/gtkbuilder/gnc-frequency.glade:174
 #: gnucash/gtkbuilder/gnc-frequency.glade:993
-#: gnucash/report/reports/standard/account-piecharts.scm:126
+#: gnucash/report/reports/standard/account-piecharts.scm:127
 #: gnucash/report/reports/standard/category-barchart.scm:126
 #: gnucash/report/trep-engine.scm:327 libgnucash/engine/Recurrence.c:623
 msgid "Weekly"
@@ -16478,7 +16482,7 @@ msgid "<b>Amount</b>"
 msgstr "<b>रकम</b>"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:460
-#: gnucash/report/reports/standard/new-owner-report.scm:294
+#: gnucash/report/reports/standard/new-owner-report.scm:298
 msgid "Refund"
 msgstr "रिफनड कॊरिव"
 
@@ -17568,7 +17572,7 @@ msgid "Before _Date"
 msgstr "तॊरिख "
 
 #: gnucash/gtkbuilder/dialog-price.glade:795
-#: gnucash/report/reports/standard/price-scatter.scm:96
+#: gnucash/report/reports/standard/price-scatter.scm:97
 msgid "Price Database"
 msgstr "परायीस डाटा बिस"
 
@@ -17949,7 +17953,7 @@ msgid "Bi-Weekly"
 msgstr "बाय-वीकली"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:141
-#: gnucash/report/reports/standard/account-piecharts.scm:120
+#: gnucash/report/reports/standard/account-piecharts.scm:121
 #: gnucash/report/trep-engine.scm:354 libgnucash/engine/Recurrence.c:787
 msgid "Yearly"
 msgstr "वॊरी पतो वॊरी"
@@ -18254,7 +18258,7 @@ msgstr "<b>कुन टरानसफर</b>"
 #: gnucash/gtkbuilder/dialog-transfer.glade:447
 #: gnucash/gtkbuilder/dialog-transfer.glade:463
 #: gnucash/report/reports/standard/net-charts.scm:47
-#: gnucash/report/reports/standard/price-scatter.scm:49
+#: gnucash/report/reports/standard/price-scatter.scm:50
 msgid "Show Income/Expense"
 msgstr "हॊयीव ईनकम /खरोच"
 
@@ -20038,7 +20042,7 @@ msgid "Unspecified"
 msgstr "छु नॊ मखसूस करनी आमुत"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4361
+#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4365
 msgid "Bank"
 msgstr "बिंक"
 
@@ -22236,7 +22240,7 @@ msgid "Welcome to GnuCash"
 msgstr "खुशआमदिद GNUCASH  अस मंज़"
 
 #: gnucash/python/init.py:103
-#: gnucash/report/reports/example/hello-world.scm:486
+#: gnucash/report/reports/example/hello-world.scm:488
 msgid "Have a nice day!"
 msgstr "अख रूत दुह गूज़रनॊव!"
 
@@ -22424,7 +22428,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:527
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1091
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4362
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4366
 msgid "Cash"
 msgstr "किश"
 
@@ -22690,7 +22694,7 @@ msgstr "सिमपोलः अको टरांज़ीकशनोच व
 #: gnucash/register/ledger-core/split-register-layout.c:703
 #: gnucash/register/ledger-core/split-register-model.c:334
 #: gnucash/report/reports/standard/new-owner-report.scm:219
-#: gnucash/report/reports/standard/new-owner-report.scm:446
+#: gnucash/report/reports/standard/new-owner-report.scm:450
 #: gnucash/report/trep-engine.scm:1292 gnucash/report/trep-engine.scm:1293
 msgctxt "Column header for 'Document Link'"
 msgid "L"
@@ -23032,7 +23036,7 @@ msgstr "कानह बजट छु नॊ मोजूद. तोहयॊ �
 #: gnucash/report/html-utilities.scm:337
 #: gnucash/report/reports/standard/balsheet-pnl.scm:140
 #: gnucash/report/reports/standard/balsheet-pnl.scm:141
-#: gnucash/report/reports/standard/new-owner-report.scm:935
+#: gnucash/report/reports/standard/new-owner-report.scm:939
 #, fuzzy
 msgid "Disabled"
 msgstr "एिन एिबोल करनॊ आमुत"
@@ -23051,7 +23055,7 @@ msgid "This report requires accounts to be selected in the report options."
 msgstr "यथ रीपूटस छु ज़रूरत एिकावुंट च़ारनुक."
 
 #: gnucash/report/html-utilities.scm:405
-#: gnucash/report/reports/standard/price-scatter.scm:276
+#: gnucash/report/reports/standard/price-scatter.scm:277
 msgid "No data"
 msgstr "डाटा छु नॊ"
 
@@ -23194,7 +23198,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:89
 #: gnucash/report/reports/standard/balsheet-pnl.scm:82
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:54
-#: gnucash/report/reports/standard/budget-income-statement.scm:76
+#: gnucash/report/reports/standard/budget-income-statement.scm:77
 #: gnucash/report/reports/standard/income-statement.scm:64
 msgid "Report on these accounts, if display depth allows."
 msgstr "यॊमन एिकावंटन पयॊठ कॊरीव रीफूट, अगर डोसपोली सनयोर ईजाज़त दॊयी."
@@ -23204,8 +23208,8 @@ msgid "Select the currency to display the values of this report in."
 msgstr "च़ॊरीव करनसी यथ मंज़ यॊम रीपूटीक विलीव डोसपेली योयन करनॊ."
 
 #: gnucash/report/options-utilities.scm:144
-#: gnucash/report/reports/standard/advanced-portfolio.scm:80
-#: gnucash/report/reports/standard/price-scatter.scm:87
+#: gnucash/report/reports/standard/advanced-portfolio.scm:81
+#: gnucash/report/reports/standard/price-scatter.scm:88
 msgid "The source of price information."
 msgstr "सोरस परायिस ईनफारमेशनुक."
 
@@ -23218,32 +23222,32 @@ msgid "The volume-weighted average cost of purchases."
 msgstr "वालयूम-वेटिड अवसत कीमत पॊरचेज़न हूनद."
 
 #: gnucash/report/options-utilities.scm:149
-#: gnucash/report/reports/standard/price-scatter.scm:90
+#: gnucash/report/reports/standard/price-scatter.scm:91
 msgid "Weighted Average"
 msgstr "विटीड मुतवाज़ोन"
 
 #: gnucash/report/options-utilities.scm:150
-#: gnucash/report/reports/standard/price-scatter.scm:91
+#: gnucash/report/reports/standard/price-scatter.scm:92
 msgid "The weighted average of all currency transactions of the past."
 msgstr "वेटिड अवसत तमाम पॊतमिन करनसी टरानज़ेकशनन हूनद."
 
 #: gnucash/report/options-utilities.scm:152
-#: gnucash/report/reports/standard/advanced-portfolio.scm:82
+#: gnucash/report/reports/standard/advanced-portfolio.scm:83
 msgid "Most recent"
 msgstr "सारवीय खूतो ताज़ो"
 
 #: gnucash/report/options-utilities.scm:153
-#: gnucash/report/reports/standard/advanced-portfolio.scm:83
+#: gnucash/report/reports/standard/advanced-portfolio.scm:84
 msgid "The most recent recorded price."
 msgstr "ताज़ॊ तरीन रिकाडिड कॊमत."
 
 #: gnucash/report/options-utilities.scm:155
-#: gnucash/report/reports/standard/advanced-portfolio.scm:85
+#: gnucash/report/reports/standard/advanced-portfolio.scm:86
 msgid "Nearest in time"
 msgstr "नज़दिक तरिन वखतस मंज़"
 
 #: gnucash/report/options-utilities.scm:156
-#: gnucash/report/reports/standard/advanced-portfolio.scm:86
+#: gnucash/report/reports/standard/advanced-portfolio.scm:87
 msgid "The price recorded nearest in time to the report date."
 msgstr "कॊमत योस रिकाड करनॊ आव नज़दीक तरीन टायमस मनज़ रिपोटिड डेटस."
 
@@ -23397,38 +23401,38 @@ msgstr ""
 "हॊयिव पेरनट एकावुनट सबटोटल, यिम ईनडेनटिड कॊरिथ छॊ परॊथ एकावनटिनग मतन बोक परेकटिस "
 "(तजरोबॊती)."
 
-#: gnucash/report/report-core.scm:148
+#: gnucash/report/report-core.scm:149
 msgid "_Assets & Liabilities"
 msgstr "एिसीट तॊ लायबीलटीयो"
 
-#: gnucash/report/report-core.scm:149
+#: gnucash/report/report-core.scm:150
 msgid "_Income & Expense"
 msgstr "ईनकम तॊ खरोच"
 
-#: gnucash/report/report-core.scm:151
+#: gnucash/report/report-core.scm:152
 msgid "_Taxes"
 msgstr "टिकोस"
 
-#: gnucash/report/report-core.scm:152
+#: gnucash/report/report-core.scm:153
 #, fuzzy
 msgid "E_xamples"
 msgstr "मीसालेः"
 
-#: gnucash/report/report-core.scm:153
+#: gnucash/report/report-core.scm:154
 #, fuzzy
 msgid "_Experimental"
 msgstr "एिकोसपूट"
 
-#: gnucash/report/report-core.scm:154
+#: gnucash/report/report-core.scm:155
 #, fuzzy
 msgid "_Multicolumn"
 msgstr "मलटीकालम वीव"
 
-#: gnucash/report/report-core.scm:155
+#: gnucash/report/report-core.scm:156
 msgid "_Custom"
 msgstr "कसटम"
 
-#: gnucash/report/report-core.scm:158
+#: gnucash/report/report-core.scm:159
 #: gnucash/report/reports/standard/invoice.scm:257
 #: gnucash/report/reports/standard/invoice.scm:262
 #: gnucash/report/reports/standard/invoice.scm:267
@@ -23463,19 +23467,19 @@ msgstr "कसटम"
 msgid "Display"
 msgstr "डोसपेली कॊरीव"
 
-#: gnucash/report/report-core.scm:159
+#: gnucash/report/report-core.scm:160
 msgid "Report name"
 msgstr "रीपूट नाव"
 
-#: gnucash/report/report-core.scm:160
+#: gnucash/report/report-core.scm:161
 msgid "Stylesheet"
 msgstr "सेटायील शिट"
 
-#: gnucash/report/report-core.scm:162
+#: gnucash/report/report-core.scm:163
 msgid "Invoice Number"
 msgstr "ईनवायीस नमबर"
 
-#: gnucash/report/report-core.scm:208
+#: gnucash/report/report-core.scm:209
 msgid ""
 "One of your reports has a report-guid that is a duplicate. Please check the "
 "report system, especially your saved reports, for a report with this report-"
@@ -23485,16 +23489,16 @@ msgstr ""
 "रीपूट सीसटम, खास तूर पॊठ तुहॊंद मोहफूज़ करनॊ आमोत रीपूट, एिकीस रीपूटस बापत यथ यॊ "
 "रीपूट गायीड सॊत छुः"
 
-#: gnucash/report/report-core.scm:209
+#: gnucash/report/report-core.scm:210
 #, fuzzy
 msgid "Wrong report definition: "
 msgstr "लोड कॊरिव रिपोट कनफिगरेशन"
 
-#: gnucash/report/report-core.scm:210
+#: gnucash/report/report-core.scm:211
 msgid " Report is missing a GUID."
 msgstr ""
 
-#: gnucash/report/report-core.scm:212
+#: gnucash/report/report-core.scm:213
 msgid ""
 "Some reports stored in a legacy format were found. This format is not "
 "supported anymore so these reports may not have been restored properly."
@@ -23502,21 +23506,21 @@ msgstr ""
 "किनह रिपोट आयि लबनॊ यिम लिगेसी फारमेटस मनज़ सिटोर करनॊ आमित छॊ. अथ फारमेटस छु नॊ "
 "वॊन तावुन अमि मोजूब मा आसन नॊ यिम रिपोट सही पॊठ रिसटोर करनॊ आमॊत."
 
-#: gnucash/report/report-core.scm:286
+#: gnucash/report/report-core.scm:287
 msgid "Enter a descriptive name for this report."
 msgstr "अख वज़ाहती नाव कॊरिव एनटर येमि रिपोट बापत."
 
-#: gnucash/report/report-core.scm:291
+#: gnucash/report/report-core.scm:292
 msgid "Select a stylesheet for the report."
 msgstr "यॊमी रीपूट बापत च़ॊरीव अख सेटायील शिट."
 
-#: gnucash/report/report-core.scm:299
+#: gnucash/report/report-core.scm:300
 msgid "stylesheet."
 msgstr "सिटायिलशीट"
 
 #: gnucash/report/reports/aging.scm:37
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:170
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:171
 #: gnucash/report/reports/standard/customer-summary.scm:41
 #: gnucash/report/reports/standard/job-report.scm:365
 #: gnucash/report/reports/standard/job-report.scm:496
@@ -23540,17 +23544,17 @@ msgstr "साट आडर"
 #: gnucash/report/reports/aging.scm:40
 #: gnucash/report/reports/example/average-balance.scm:43
 #: gnucash/report/reports/example/daily-reports.scm:54
-#: gnucash/report/reports/standard/account-piecharts.scm:66
+#: gnucash/report/reports/standard/account-piecharts.scm:67
 #: gnucash/report/reports/standard/account-summary.scm:125
-#: gnucash/report/reports/standard/advanced-portfolio.scm:75
+#: gnucash/report/reports/standard/advanced-portfolio.scm:76
 #: gnucash/report/reports/standard/balance-forecast.scm:44
 #: gnucash/report/reports/standard/balance-sheet.scm:137
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/balsheet-pnl.scm:119
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:102
 #: gnucash/report/reports/standard/budget-flow.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:115
-#: gnucash/report/reports/standard/cashflow-barchart.scm:57
+#: gnucash/report/reports/standard/budget-income-statement.scm:116
+#: gnucash/report/reports/standard/cashflow-barchart.scm:58
 #: gnucash/report/reports/standard/cash-flow.scm:49
 #: gnucash/report/reports/standard/category-barchart.scm:72
 #: gnucash/report/reports/standard/equity-statement.scm:77
@@ -23558,7 +23562,7 @@ msgstr "साट आडर"
 #: gnucash/report/reports/standard/net-charts.scm:42
 #: gnucash/report/reports/standard/new-aging.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:54
-#: gnucash/report/reports/standard/price-scatter.scm:40
+#: gnucash/report/reports/standard/price-scatter.scm:41
 #: gnucash/report/reports/standard/trial-balance.scm:129
 #: gnucash/report/trep-engine.scm:105
 msgid "Report's currency"
@@ -23567,17 +23571,17 @@ msgstr "रीपूटोच करनसी"
 #: gnucash/report/reports/aging.scm:41
 #: gnucash/report/reports/example/average-balance.scm:44
 #: gnucash/report/reports/example/daily-reports.scm:55
-#: gnucash/report/reports/standard/account-piecharts.scm:67
+#: gnucash/report/reports/standard/account-piecharts.scm:68
 #: gnucash/report/reports/standard/account-summary.scm:126
-#: gnucash/report/reports/standard/advanced-portfolio.scm:39
+#: gnucash/report/reports/standard/advanced-portfolio.scm:40
 #: gnucash/report/reports/standard/balance-forecast.scm:45
 #: gnucash/report/reports/standard/balance-sheet.scm:138
 #: gnucash/report/reports/standard/balsheet-eg.scm:189
 #: gnucash/report/reports/standard/balsheet-pnl.scm:121
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:103
 #: gnucash/report/reports/standard/budget-flow.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:116
-#: gnucash/report/reports/standard/cashflow-barchart.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/cashflow-barchart.scm:59
 #: gnucash/report/reports/standard/cash-flow.scm:50
 #: gnucash/report/reports/standard/category-barchart.scm:73
 #: gnucash/report/reports/standard/equity-statement.scm:78
@@ -23585,7 +23589,7 @@ msgstr "रीपूटोच करनसी"
 #: gnucash/report/reports/standard/net-charts.scm:43
 #: gnucash/report/reports/standard/new-aging.scm:43
 #: gnucash/report/reports/standard/portfolio.scm:35
-#: gnucash/report/reports/standard/price-scatter.scm:42
+#: gnucash/report/reports/standard/price-scatter.scm:43
 #: gnucash/report/reports/standard/trial-balance.scm:130
 #: gnucash/report/trep-engine.scm:102
 msgid "Price Source"
@@ -23711,21 +23715,21 @@ msgstr "तमाम वीनडर /कसटमर हॊयीव अगर 
 
 #: gnucash/report/reports/aging.scm:385
 #: gnucash/report/reports/standard/new-aging.scm:122
-#: gnucash/report/reports/standard/new-owner-report.scm:953
+#: gnucash/report/reports/standard/new-owner-report.scm:957
 #: gnucash/report/reports/standard/owner-report.scm:609
 msgid "Leading date."
 msgstr "लीडिनग डेट."
 
 #: gnucash/report/reports/aging.scm:388
 #: gnucash/report/reports/standard/new-aging.scm:127
-#: gnucash/report/reports/standard/new-owner-report.scm:958
+#: gnucash/report/reports/standard/new-owner-report.scm:962
 #: gnucash/report/reports/standard/owner-report.scm:612
 msgid "Due date is leading."
 msgstr "डयू डेट छु लीडिनग."
 
 #: gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:131
-#: gnucash/report/reports/standard/new-owner-report.scm:962
+#: gnucash/report/reports/standard/new-owner-report.scm:966
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post date is leading."
 msgstr "पोसटॊ डेट छु लीडिनग."
@@ -23789,7 +23793,7 @@ msgstr "कुल कॊरवाह  डोसपेली?"
 #: gnucash/report/reports/standard/budget-barchart.scm:72
 #: gnucash/report/reports/standard/budget.scm:119
 #: gnucash/report/reports/standard/new-aging.scm:195
-#: gnucash/report/reports/standard/new-owner-report.scm:316
+#: gnucash/report/reports/standard/new-owner-report.scm:320
 #: gnucash/report/reports/standard/owner-report.scm:259
 msgid "Current"
 msgstr "चालू"
@@ -23797,7 +23801,7 @@ msgstr "चालू"
 #: gnucash/report/reports/aging.scm:540
 #: gnucash/report/reports/standard/job-report.scm:159
 #: gnucash/report/reports/standard/new-aging.scm:196
-#: gnucash/report/reports/standard/new-owner-report.scm:317
+#: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/owner-report.scm:260
 msgid "0-30 days"
 msgstr "0-30दुह"
@@ -23805,7 +23809,7 @@ msgstr "0-30दुह"
 #: gnucash/report/reports/aging.scm:541
 #: gnucash/report/reports/standard/job-report.scm:160
 #: gnucash/report/reports/standard/new-aging.scm:197
-#: gnucash/report/reports/standard/new-owner-report.scm:318
+#: gnucash/report/reports/standard/new-owner-report.scm:322
 #: gnucash/report/reports/standard/owner-report.scm:261
 msgid "31-60 days"
 msgstr "31-60 दुह"
@@ -23813,7 +23817,7 @@ msgstr "31-60 दुह"
 #: gnucash/report/reports/aging.scm:542
 #: gnucash/report/reports/standard/job-report.scm:161
 #: gnucash/report/reports/standard/new-aging.scm:198
-#: gnucash/report/reports/standard/new-owner-report.scm:319
+#: gnucash/report/reports/standard/new-owner-report.scm:323
 #: gnucash/report/reports/standard/owner-report.scm:262
 msgid "61-90 days"
 msgstr "61-90 दुह"
@@ -23821,7 +23825,7 @@ msgstr "61-90 दुह"
 #: gnucash/report/reports/aging.scm:543
 #: gnucash/report/reports/standard/job-report.scm:162
 #: gnucash/report/reports/standard/new-aging.scm:199
-#: gnucash/report/reports/standard/new-owner-report.scm:320
+#: gnucash/report/reports/standard/new-owner-report.scm:324
 #: gnucash/report/reports/standard/owner-report.scm:263
 msgid "91+ days"
 msgstr "91+दुह"
@@ -23853,10 +23857,10 @@ msgid "Average Balance"
 msgstr "अवसत बिलनोस"
 
 #: gnucash/report/reports/example/average-balance.scm:42
-#: gnucash/report/reports/standard/cashflow-barchart.scm:56
+#: gnucash/report/reports/standard/cashflow-barchart.scm:57
 #: gnucash/report/reports/standard/category-barchart.scm:71
 #: gnucash/report/reports/standard/net-charts.scm:41
-#: gnucash/report/reports/standard/price-scatter.scm:37
+#: gnucash/report/reports/standard/price-scatter.scm:38
 msgid "Step Size"
 msgstr "सेटीप सायोज़"
 
@@ -23871,25 +23875,25 @@ msgstr "च़ारनी आमतॊन एिकावंटन दरमी
 
 #: gnucash/report/reports/example/average-balance.scm:47
 #: gnucash/report/reports/example/daily-reports.scm:64
-#: gnucash/report/reports/standard/account-piecharts.scm:76
+#: gnucash/report/reports/standard/account-piecharts.scm:77
 #: gnucash/report/reports/standard/balance-forecast.scm:47
 #: gnucash/report/reports/standard/budget-barchart.scm:43
-#: gnucash/report/reports/standard/cashflow-barchart.scm:51
+#: gnucash/report/reports/standard/cashflow-barchart.scm:52
 #: gnucash/report/reports/standard/category-barchart.scm:84
 #: gnucash/report/reports/standard/net-charts.scm:53
-#: gnucash/report/reports/standard/price-scatter.scm:57
+#: gnucash/report/reports/standard/price-scatter.scm:58
 msgid "Plot Width"
 msgstr "पुलाट खजर"
 
 #: gnucash/report/reports/example/average-balance.scm:48
 #: gnucash/report/reports/example/daily-reports.scm:65
-#: gnucash/report/reports/standard/account-piecharts.scm:77
+#: gnucash/report/reports/standard/account-piecharts.scm:78
 #: gnucash/report/reports/standard/balance-forecast.scm:48
 #: gnucash/report/reports/standard/budget-barchart.scm:44
-#: gnucash/report/reports/standard/cashflow-barchart.scm:52
+#: gnucash/report/reports/standard/cashflow-barchart.scm:53
 #: gnucash/report/reports/standard/category-barchart.scm:85
 #: gnucash/report/reports/standard/net-charts.scm:54
-#: gnucash/report/reports/standard/price-scatter.scm:58
+#: gnucash/report/reports/standard/price-scatter.scm:59
 msgid "Plot Height"
 msgstr "पुलाट थज़र"
 
@@ -23920,7 +23924,7 @@ msgid "Show table"
 msgstr "जदूल हॊयीव"
 
 #: gnucash/report/reports/example/average-balance.scm:117
-#: gnucash/report/reports/standard/cashflow-barchart.scm:124
+#: gnucash/report/reports/standard/cashflow-barchart.scm:125
 #: gnucash/report/reports/standard/category-barchart.scm:188
 #: gnucash/report/reports/standard/net-charts.scm:134
 msgid "Display a table of the selected data."
@@ -23946,7 +23950,7 @@ msgstr "टायिप गराफुक युस जनरेट करु�
 
 #: gnucash/report/reports/example/average-balance.scm:129
 #: gnucash/report/reports/example/average-balance.scm:149
-#: gnucash/report/reports/standard/advanced-portfolio.scm:94
+#: gnucash/report/reports/standard/advanced-portfolio.scm:95
 #: gnucash/report/trep-engine.scm:1962 libgnucash/engine/policy.c:58
 msgid "Average"
 msgstr "अवसत"
@@ -24014,7 +24018,7 @@ msgid "Shows a piechart with the total expenses for each day of the week"
 msgstr "छु  अख पाय चाट हावान यथ सॊत कुल खरोच छु आसान हफतोक परॊथ दुहॊच"
 
 #: gnucash/report/reports/example/daily-reports.scm:58
-#: gnucash/report/reports/standard/account-piecharts.scm:70
+#: gnucash/report/reports/standard/account-piecharts.scm:71
 #: gnucash/report/reports/standard/category-barchart.scm:76
 msgid "Show Accounts until level"
 msgstr "एिकावुंट हॊयीव लीवलो ताम"
@@ -24025,50 +24029,50 @@ msgid "Show long account names"
 msgstr "ज़ॊठ एिकावुंट नाव हॊयीव"
 
 #: gnucash/report/reports/example/daily-reports.scm:62
-#: gnucash/report/reports/standard/account-piecharts.scm:73
+#: gnucash/report/reports/standard/account-piecharts.scm:74
 msgid "Show Totals"
 msgstr "टूटल हॊयीव"
 
 #: gnucash/report/reports/example/daily-reports.scm:63
-#: gnucash/report/reports/standard/account-piecharts.scm:75
+#: gnucash/report/reports/standard/account-piecharts.scm:76
 msgid "Maximum Slices"
 msgstr "ज़यादो खूतो ज़यादो सोलायसी"
 
 #: gnucash/report/reports/example/daily-reports.scm:66
-#: gnucash/report/reports/standard/account-piecharts.scm:78
+#: gnucash/report/reports/standard/account-piecharts.scm:79
 #: gnucash/report/reports/standard/category-barchart.scm:87
 msgid "Sort Method"
 msgstr "साट तरिक"
 
 #: gnucash/report/reports/example/daily-reports.scm:97
-#: gnucash/report/reports/standard/account-piecharts.scm:136
+#: gnucash/report/reports/standard/account-piecharts.scm:137
 #: gnucash/report/reports/standard/category-barchart.scm:138
 #: gnucash/report/reports/standard/net-charts.scm:92
 msgid "Report on these accounts, if chosen account level allows."
 msgstr "यॊमन एिकावंटन पयॊठ दीयीव रीफूट, अगर च़ारनी आमोच़  एिकावुंट लीवल ईजाज़त दॊयी."
 
 #: gnucash/report/reports/example/daily-reports.scm:111
-#: gnucash/report/reports/standard/account-piecharts.scm:151
+#: gnucash/report/reports/standard/account-piecharts.scm:152
 #: gnucash/report/reports/standard/category-barchart.scm:150
 msgid "Show accounts to this depth and not further."
 msgstr "हॊयिव एकावुनट यथ सॊनरस ताम तॊ अमॊ खोतॊ ज़यादॊ नॊ केनह."
 
 #: gnucash/report/reports/example/daily-reports.scm:117
-#: gnucash/report/reports/standard/account-piecharts.scm:166
+#: gnucash/report/reports/standard/account-piecharts.scm:167
 msgid "Show the total balance in legend?"
 msgstr "कुल बिलनोस हाववाह लिजनडस मंज़?"
 
 #: gnucash/report/reports/example/daily-reports.scm:289
-#: gnucash/report/reports/standard/account-piecharts.scm:545
+#: gnucash/report/reports/standard/account-piecharts.scm:546
 #: gnucash/report/reports/standard/balance-forecast.scm:276
 #: gnucash/report/reports/standard/balsheet-pnl.scm:923
 #: gnucash/report/reports/standard/budget.scm:513
-#: gnucash/report/reports/standard/cashflow-barchart.scm:282
+#: gnucash/report/reports/standard/cashflow-barchart.scm:283
 #: gnucash/report/reports/standard/cash-flow.scm:190
 #: gnucash/report/reports/standard/category-barchart.scm:514
-#: gnucash/report/reports/standard/net-charts.scm:334
-#: gnucash/report/reports/standard/price-scatter.scm:212
-#: libgnucash/app-utils/date-utilities.scm:188
+#: gnucash/report/reports/standard/net-charts.scm:330
+#: gnucash/report/reports/standard/price-scatter.scm:213
+#: libgnucash/app-utils/date-utilities.scm:187
 #, scheme-format
 msgid "~a to ~a"
 msgstr ""
@@ -24144,7 +24148,7 @@ msgstr "यि छु अख सिटरिनग ऊपशन."
 
 #: gnucash/report/reports/example/hello-world.scm:90
 #: gnucash/report/reports/example/hello-world.scm:327
-#: gnucash/report/reports/example/hello-world.scm:499
+#: gnucash/report/reports/example/hello-world.scm:501
 msgid "Hello, World"
 msgstr "हीलू,दुनया"
 
@@ -24372,27 +24376,27 @@ msgstr "नमबर ऊपशन  फारमिटोड बतूर अख 
 msgid "Items you selected:"
 msgstr "आयटम युस तुहयो च़ूरवोहः"
 
-#: gnucash/report/reports/example/hello-world.scm:435
+#: gnucash/report/reports/example/hello-world.scm:437
 msgid "List items selected"
 msgstr "लीसटो आयटम च़ूरवोह"
 
-#: gnucash/report/reports/example/hello-world.scm:440
+#: gnucash/report/reports/example/hello-world.scm:442
 msgid "(You selected no list items.)"
 msgstr "(तुहयो च़ूरवॊ नॊ कांह लीसटो आयटम)"
 
-#: gnucash/report/reports/example/hello-world.scm:476
+#: gnucash/report/reports/example/hello-world.scm:478
 msgid "You have selected no accounts."
 msgstr "तुहयो छॊव नॊ च़ॊरमोत कॊंह एिकावुंट"
 
-#: gnucash/report/reports/example/hello-world.scm:481
+#: gnucash/report/reports/example/hello-world.scm:483
 msgid "Display help"
 msgstr "डिसपिले मदद"
 
-#: gnucash/report/reports/example/hello-world.scm:510
+#: gnucash/report/reports/example/hello-world.scm:512
 msgid "Sample Report with Examples"
 msgstr "सिमपोल रीपूट मोसालन सान"
 
-#: gnucash/report/reports/example/hello-world.scm:514
+#: gnucash/report/reports/example/hello-world.scm:516
 msgid "A sample report with examples."
 msgstr "अख सिमपोल रीपूट मोसालन सान"
 
@@ -24432,7 +24436,7 @@ msgid "Tax Report / TXF Export"
 msgstr "टिकोस रीपूट / TXF एिकोसपूट"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:170
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:171
 #: gnucash/report/reports/standard/customer-summary.scm:40
 #: gnucash/report/reports/standard/job-report.scm:365
 #: gnucash/report/reports/standard/job-report.scm:493
@@ -24442,42 +24446,42 @@ msgid "From"
 msgstr "पयॊठ"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:151
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:174
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:175
 msgid "Alternate Period"
 msgstr "मुतबॊदील फिरड"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:175
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:176
 msgid "Override or modify From: & To:."
 msgstr "पयॊठ कॊरिव ऊवररायिड या तबदील: & कुन:."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
 msgid "Use From - To"
 msgstr "पयॊठ कॊरीव ईसतिमाल कुन"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
 msgid "Use From - To period."
 msgstr "ईसतेमाल कॊरिव पयॊठ-कुन पीरड."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
 msgid "1st Est Tax Quarter"
 msgstr "गुडनयुक Est टिकोस कवाटर"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
 msgid "Jan 1 - Mar 31."
 msgstr "जनवरी 1 - मारॊच 31."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
 msgid "2nd Est Tax Quarter"
 msgstr "दुयीम Est टिकोस कवाटर"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
 msgid "Apr 1 - May 31."
 msgstr "एपरिल 1 - मे 31."
 
@@ -24485,57 +24489,57 @@ msgstr "एपरिल 1 - मे 31."
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "3rd Est Tax Quarter"
 msgstr "तरीयोम Est टिकोस कवाटर"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "Jun 1 - Aug 31."
 msgstr "जून 1 - अगसतॊ 31."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 msgid "4th Est Tax Quarter"
 msgstr "च़ूरीम Est टिकोस कवाटर"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 msgid "Sep 1 - Dec 31."
 msgstr "सतमबर 1 -दसमबर 31."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "Last Year"
 msgstr "पॊतयोम वॊरी"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "Last Year."
 msgstr "पॊतयिम वॊरी"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:187
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr "पॊतमी वॊरयुक गुडनयुक Est टिकोस कवाटर"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:189
 msgid "Jan 1 - Mar 31, Last year."
 msgstr "जनवरी 1 - मारॊच 31, पॊतयिम वॊरी."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:164
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr "पॊतमी वॊरयुक दुयीम  Est टिकोस कवाटर"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:165
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
 msgid "Apr 1 - May 31, Last year."
 msgstr "एपरिल 1 - मे 31, पॊतयिम वॊरी."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr "पॊतमी वॊरयुक तरीयीम Est टिकोस कवाटर"
 
@@ -24543,32 +24547,32 @@ msgstr "पॊतमी वॊरयुक तरीयीम Est टिको�
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:168
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:197
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
 msgid "Jun 1 - Aug 31, Last year."
 msgstr "जून 1 - अगसतॊ 31, पॊतयिम वॊरी."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:170
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:200
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr "पॊतमी वॊरयुक च़ूरीम  Est टिकोस कवाटर"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:171
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:200
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:201
 msgid "Sep 1 - Dec 31, Last year."
 msgstr "सतमबर 1 -दसमबर 31, पॊतयिम वॊरी."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:175
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:204
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:205
 msgid "Select Accounts (none = all)"
 msgstr "एिकावींट च़ॊरीव(कांह नॊ = तमाम)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:176
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:205
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:206
 msgid "Select accounts."
 msgstr "एकावुनट च़ॊरिव."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:182
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:211
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:212
 msgid "Suppress $0.00 values"
 msgstr "सपरीस कॊरीव $0.00  विलीव"
 
@@ -24622,111 +24626,111 @@ msgstr "XML"
 msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr "यॊ सफो छु हावान तुहॊंद टिकसस लायक ईनकम तॊ डोडकटिबोल खरचो."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:112
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:113
 msgid "Tax Schedule Report/TXF Export"
 msgstr "टिकोस शडूल  रीपूट/TXF  एिकोसपूट"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:212
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:213
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr "$0.00  विलीव वॊल  टिकोस कूड योयन नॊ परींट करनॊ."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:216
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:217
 msgid "Do not print full account names"
 msgstr "पूरी एिकावुंट नाव मॊ कॊरीव परींट"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:217
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:218
 msgid "Do not print all Parent account names."
 msgstr "तमाम पेरनट एकावुनट नाव मॊ कॊरिव परिनट."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:221
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:222
 msgid "Print all Transfer To/From Accounts"
 msgstr "तमाम  टरानसफर कुन /पयॊठ  एिकावुंट  कॊरीव परींट"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:222
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:223
 msgid "Print all split details for multi-split transactions."
 msgstr "परिनट कॊरिव तमाम सुपलिट तफसील मलटी-सुपलिट टरानज़ेकशनन बापत."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:226
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:227
 msgid "Print TXF export parameters"
 msgstr "परींट कॊरीव TXF  एिकोसपूट पिरामिटर"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:227
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:228
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr "हॊयिव TXF एकॊसपोट पेरामीटर परॊथ TXF कोडस/एकावनटस बापत रिपोटस पयॊठ."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:232
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:233
 msgid "Do not print T-Num:Memo data"
 msgstr "परिनट मॊ कॊरिव T-नमः मेमो डाटा"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:233
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:234
 msgid "Do not print T-Num:Memo data for transactions."
 msgstr "परिनट मॊ कॊरिव T-नमः मेमो डाटा टरानज़ेकशनन बापत."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:236
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:237
 msgid "Do not print Action:Memo data"
 msgstr "एिकशन मॊ कॊरीव परींटः मीमू डाटा"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:237
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:238
 msgid "Do not print Action:Memo data for transactions."
 msgstr "परिनट मॊ कॊरिव एकशनः मेमो डाटा टरानज़ेकशनन बापत."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:241
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:242
 msgid "Do not print transaction detail"
 msgstr "टरांज़ीकशन तफसिल मॊ कॊरीव परींट"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:242
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:243
 msgid "Do not print transaction detail for accounts."
 msgstr "परिनट मॊ कॊरिव टरानज़ेकशन तफसील एकावनटन बापत."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:246
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:247
 msgid "Do not use special date processing"
 msgstr "ईसतिमाल मॊ कॊरीव मखसूस डिट परासीसींग"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:247
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:248
 msgid "Do not print transactions out of specified dates."
 msgstr "परिनट मॊ कॊरिव टरानज़ेकशन मखसूस डेटव नॊबर."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:251
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:252
 msgid "Currency conversion date"
 msgstr "करनसी तबदिली तॊरिख"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:252
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:253
 msgid "Select date to use for PriceDB lookups."
 msgstr "च़ॊरिव डेट युस ईसतेमाल करुन छु परायिसDB लुकअपन बापत."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:255
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 msgid "Nearest transaction date"
 msgstr "सारवीय खूतो तज़दिक टरांज़ीकशन डिट"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:255
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 msgid "Use nearest to transaction date."
 msgstr "ईसतेमाल कॊरिव टरानज़ेकशन डेटस नज़दीक तरीन."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:257
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:258
 msgid "Nearest report date"
 msgstr "सारवीय खूतो तज़दिक रीपूट डिट"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:257
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:258
 msgid "Use nearest to report date."
 msgstr "ईसतेमाल कॊरिव रिपोट डेटस नज़दीक तरीन."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3322
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3323
 msgid "Tax Schedule Report & TXF Export"
 msgstr "टिकोस शडूल रीपूट & TXF एिकीसपूट"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3324
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3325
 msgid ""
 "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF "
 "file"
 msgstr ""
 "टिकसस लायक ईनकम / डोडकटिबोल खरचो टरांज़ीकशन तफसिल सान /एिकोसपूट कॊरीव .TXF फायोल"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3328
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3337
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3329
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3338
 msgid "Taxable Income/Deductible Expenses"
 msgstr "टिकसस लायक ईनकम / डोडकटिबोल खरचो"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3329
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3330
 msgid ""
 "This report shows transaction detail for your accounts related to Income "
 "Taxes."
@@ -24734,97 +24738,97 @@ msgstr ""
 "यॊ रीपूट  छु हावान  टरांज़ीकशन तफसिल तुहॊंदीस एिकावंटस बापत यॊम ईनकम  टिकसस सॊत "
 "वाबसतो छॊ."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3338
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3339
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr "यॊ सफो छु हावान  टरांज़ीकशन तफसिल सही ईनकम टिकोस एिकावंटन बापत."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:35
+#: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
 msgstr "ईनकम पायचाट"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:36
+#: gnucash/report/reports/standard/account-piecharts.scm:37
 msgid "Expense Piechart"
 msgstr "खरचो पायचाट"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:37
+#: gnucash/report/reports/standard/account-piecharts.scm:38
 msgid "Asset Piechart"
 msgstr "एिसीट पायचाट"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:38
+#: gnucash/report/reports/standard/account-piecharts.scm:39
 #, fuzzy
 msgid "Security Piechart"
 msgstr "एिसीट पायचाट"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:39
+#: gnucash/report/reports/standard/account-piecharts.scm:40
 msgid "Liability Piechart"
 msgstr "लायोबीलटी पायचाट"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:44
+#: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
 msgstr "छु हावान अख पायचाट ईनकम  सान परॊथ दॊनी आमतोस टायोम ईनटरवलस सॊत"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:46
+#: gnucash/report/reports/standard/account-piecharts.scm:47
 msgid "Shows a piechart with the Expenses per given time interval"
 msgstr "छु हावान अख पायचाट खरचो   सान परॊथ दॊनी आमतोस टायोम ईनटरवलस सॊत"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:48
+#: gnucash/report/reports/standard/account-piecharts.scm:49
 msgid "Shows a piechart with the Assets balance at a given time"
 msgstr "छु हावान अख पायचाट एिसीटन सान  एिकोस दॊनी आमतोस वखतस पयॊठ"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:50
+#: gnucash/report/reports/standard/account-piecharts.scm:51
 #, fuzzy
 msgid "Shows a piechart with distribution of assets over securities"
 msgstr "छु हावान अख पायचाट लायबलटी बिलनोस  सान  एिकोस दॊनी आमतोस वखतस पयॊठ"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:52
+#: gnucash/report/reports/standard/account-piecharts.scm:53
 msgid "Shows a piechart with the Liabilities balance at a given time"
 msgstr "छु हावान अख पायचाट लायबलटी बिलनोस  सान  एिकोस दॊनी आमतोस वखतस पयॊठ"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:58
+#: gnucash/report/reports/standard/account-piecharts.scm:59
 #: gnucash/report/reports/standard/customer-summary.scm:49
 #: gnucash/report/reports/standard/customer-summary.scm:50
 msgid "Income Accounts"
 msgstr "ईनकम एिकावुंट"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:59
+#: gnucash/report/reports/standard/account-piecharts.scm:60
 #: gnucash/report/reports/standard/customer-summary.scm:57
 #: gnucash/report/reports/standard/customer-summary.scm:58
 msgid "Expense Accounts"
 msgstr "खरचो एिकावुंट"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:60
+#: gnucash/report/reports/standard/account-piecharts.scm:61
 #: gnucash/report/reports/standard/balance-sheet.scm:486
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:665
-#: gnucash/report/reports/standard/net-charts.scm:350
-#: gnucash/report/reports/standard/net-charts.scm:421
+#: gnucash/report/reports/standard/net-charts.scm:346
+#: gnucash/report/reports/standard/net-charts.scm:417
 #: gnucash/report/report-utilities.scm:199
 msgid "Assets"
 msgstr "एिसीट"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:62
+#: gnucash/report/reports/standard/account-piecharts.scm:63
 #: gnucash/report/reports/standard/balance-sheet.scm:387
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:695
-#: gnucash/report/reports/standard/net-charts.scm:371
-#: gnucash/report/reports/standard/net-charts.scm:421
+#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:417
 #: gnucash/report/report-utilities.scm:200
 msgid "Liabilities"
 msgstr "लायबोलटी"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:72
+#: gnucash/report/reports/standard/account-piecharts.scm:73
 #, fuzzy
 msgid "Show long names"
 msgstr "ज़ॊठ एिकावुंट नाव हॊयीव"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:74
+#: gnucash/report/reports/standard/account-piecharts.scm:75
 msgid "Show Percents"
 msgstr "पीरसींट हॊयीव"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:80
+#: gnucash/report/reports/standard/account-piecharts.scm:81
 #: gnucash/report/reports/standard/category-barchart.scm:89
 msgid "Show Average"
 msgstr "मुतवाज़ीन हॊयीव"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:81
+#: gnucash/report/reports/standard/account-piecharts.scm:82
 #: gnucash/report/reports/standard/category-barchart.scm:90
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
@@ -24832,63 +24836,63 @@ msgid ""
 msgstr ""
 "च़ॊरिव ज़ॊ रकम पज़याह हावुन पोरॊ टायिम पीरडस मनज़ या बतोर अवसत.मसलन परॊथ रॊतॊ."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:117
+#: gnucash/report/reports/standard/account-piecharts.scm:118
 #: gnucash/report/reports/standard/category-barchart.scm:120
 msgid "No Averaging"
 msgstr "कांह मुतवॊज़ीन छु नॊ"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:118
+#: gnucash/report/reports/standard/account-piecharts.scm:119
 #: gnucash/report/reports/standard/category-barchart.scm:121
 msgid "Just show the amounts, without any averaging."
 msgstr "सिरिफ हॊयिव रकम, कुनॊ तॊ अवसत करनॊ बगॊर."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:121
+#: gnucash/report/reports/standard/account-piecharts.scm:122
 msgid "Show the average yearly amount during the reporting period."
 msgstr "हॊयिव अवसत सालाना रकम रिपोटिनग पीरडस दोरान."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:124
+#: gnucash/report/reports/standard/account-piecharts.scm:125
 #: gnucash/report/reports/standard/category-barchart.scm:124
 msgid "Show the average monthly amount during the reporting period."
 msgstr "हॊयिव अवसत रॊतवाद रकम रिपोटिनग पीरडस दोरान."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:127
+#: gnucash/report/reports/standard/account-piecharts.scm:128
 #: gnucash/report/reports/standard/category-barchart.scm:127
 msgid "Show the average weekly amount during the reporting period."
 msgstr "हॊयिव अवसत हफतॊवार रकम रिपोटिनग पीरडस दोरान."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:159
+#: gnucash/report/reports/standard/account-piecharts.scm:160
 #: gnucash/report/reports/standard/category-barchart.scm:157
 msgid "Show the full account name in legend?"
 msgstr "पुरी एिकावुंट नाव हाववाह लिजनडस मंज़?"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:160
+#: gnucash/report/reports/standard/account-piecharts.scm:161
 #, fuzzy
 msgid "Show the full security name in the legend?"
 msgstr "पुरी एिकावुंट नाव हाववाह लिजनडस मंज़?"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:172
+#: gnucash/report/reports/standard/account-piecharts.scm:173
 msgid "Show the percentage in legend?"
 msgstr "पीरसनटिज हाववाह लिजनडस मंज़?"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:178
+#: gnucash/report/reports/standard/account-piecharts.scm:179
 msgid "Maximum number of slices in pie."
 msgstr "मेकसिमम तेदाद सिलायसन हुनद पाय मनज़."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:413
+#: gnucash/report/reports/standard/account-piecharts.scm:414
 msgid "Yearly Average"
 msgstr "वॊरयुक अवसत"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:414
+#: gnucash/report/reports/standard/account-piecharts.scm:415
 #: gnucash/report/reports/standard/category-barchart.scm:306
 msgid "Monthly Average"
 msgstr "रॊतुक अवसत"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:415
+#: gnucash/report/reports/standard/account-piecharts.scm:416
 #: gnucash/report/reports/standard/category-barchart.scm:307
 msgid "Weekly Average"
 msgstr "हफतुक अवसत"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:549
+#: gnucash/report/reports/standard/account-piecharts.scm:550
 #, fuzzy, scheme-format
 msgid "Balance at ~a"
 msgstr "%s अस पयॊठ बिलनोस"
@@ -24905,7 +24909,7 @@ msgstr "फयूचरस मंज़ शडूल करनॊ आमोच�
 #: gnucash/report/reports/standard/balance-sheet.scm:76
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:52
+#: gnucash/report/reports/standard/budget-income-statement.scm:53
 #: gnucash/report/reports/standard/equity-statement.scm:59
 #: gnucash/report/reports/standard/income-statement.scm:53
 #: gnucash/report/reports/standard/trial-balance.scm:65
@@ -24916,7 +24920,7 @@ msgstr "रीपूट ऊनवान"
 #: gnucash/report/reports/standard/balance-sheet.scm:77
 #: gnucash/report/reports/standard/balsheet-eg.scm:151
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:53
+#: gnucash/report/reports/standard/budget-income-statement.scm:54
 #: gnucash/report/reports/standard/equity-statement.scm:60
 #: gnucash/report/reports/standard/income-statement.scm:54
 #: gnucash/report/reports/standard/trial-balance.scm:66
@@ -24926,7 +24930,7 @@ msgstr "येमि रिपोच बापत ऊनवान."
 #: gnucash/report/reports/standard/account-summary.scm:75
 #: gnucash/report/reports/standard/balance-sheet.scm:79
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:55
+#: gnucash/report/reports/standard/budget-income-statement.scm:56
 #: gnucash/report/reports/standard/equity-statement.scm:62
 #: gnucash/report/reports/standard/income-statement.scm:56
 #: gnucash/report/reports/standard/trial-balance.scm:68
@@ -24936,7 +24940,7 @@ msgstr "कमपनी नाव"
 #: gnucash/report/reports/standard/account-summary.scm:76
 #: gnucash/report/reports/standard/balance-sheet.scm:80
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:56
+#: gnucash/report/reports/standard/budget-income-statement.scm:57
 #: gnucash/report/reports/standard/equity-statement.scm:63
 #: gnucash/report/reports/standard/income-statement.scm:57
 #: gnucash/report/reports/standard/trial-balance.scm:69
@@ -24949,7 +24953,7 @@ msgstr "नाव कमपनी/नफरॊ सुनद."
 #: gnucash/report/reports/standard/balsheet-pnl.scm:84
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:55
 #: gnucash/report/reports/standard/budget-barchart.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:77
+#: gnucash/report/reports/standard/budget-income-statement.scm:78
 #: gnucash/report/reports/standard/income-statement.scm:65
 #: gnucash/report/reports/standard/trial-balance.scm:79
 msgid "Levels of Subaccounts"
@@ -24961,7 +24965,7 @@ msgstr "सबएिकावंटन हॊंज़ लीवलो"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:85
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:57
 #: gnucash/report/reports/standard/budget-barchart.scm:48
-#: gnucash/report/reports/standard/budget-income-statement.scm:79
+#: gnucash/report/reports/standard/budget-income-statement.scm:80
 #: gnucash/report/reports/standard/income-statement.scm:67
 #: gnucash/report/reports/standard/trial-balance.scm:81
 msgid "Maximum number of levels in the account tree displayed."
@@ -24980,7 +24984,7 @@ msgstr ""
 #: gnucash/report/reports/standard/account-summary.scm:95
 #: gnucash/report/reports/standard/balance-sheet.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:62
-#: gnucash/report/reports/standard/budget-income-statement.scm:84
+#: gnucash/report/reports/standard/budget-income-statement.scm:85
 #: gnucash/report/reports/standard/income-statement.scm:72
 msgid "Parent account balances"
 msgstr "पिरंट एिकावुंट बिलनोस"
@@ -24988,7 +24992,7 @@ msgstr "पिरंट एिकावुंट बिलनोस"
 #: gnucash/report/reports/standard/account-summary.scm:96
 #: gnucash/report/reports/standard/balance-sheet.scm:98
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:63
-#: gnucash/report/reports/standard/budget-income-statement.scm:85
+#: gnucash/report/reports/standard/budget-income-statement.scm:86
 #: gnucash/report/reports/standard/income-statement.scm:73
 msgid "Parent account subtotals"
 msgstr "पिरंट एिकावुंट सबटूटल"
@@ -24997,7 +25001,7 @@ msgstr "पिरंट एिकावुंट सबटूटल"
 #: gnucash/report/reports/standard/balance-sheet.scm:100
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:65
-#: gnucash/report/reports/standard/budget-income-statement.scm:87
+#: gnucash/report/reports/standard/budget-income-statement.scm:88
 #: gnucash/report/reports/standard/income-statement.scm:75
 #: gnucash/report/reports/standard/trial-balance.scm:121
 msgid "Include accounts with zero total balances"
@@ -25007,7 +25011,7 @@ msgstr "शॊमील कॊरीव एिकावुंट यॊमन �
 #: gnucash/report/reports/standard/balance-sheet.scm:102
 #: gnucash/report/reports/standard/balsheet-pnl.scm:94
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:67
-#: gnucash/report/reports/standard/budget-income-statement.scm:89
+#: gnucash/report/reports/standard/budget-income-statement.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:77
 #: gnucash/report/reports/standard/trial-balance.scm:123
 msgid "Include accounts with zero total (recursive) balances in this report."
@@ -25017,7 +25021,7 @@ msgstr "शॊमिल कॊरिव एकावुनट यिमन ज�
 #: gnucash/report/reports/standard/balance-sheet.scm:103
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:68
-#: gnucash/report/reports/standard/budget-income-statement.scm:90
+#: gnucash/report/reports/standard/budget-income-statement.scm:91
 #: gnucash/report/reports/standard/income-statement.scm:78
 msgid "Omit zero balance figures"
 msgstr "तरॊयीव ज़िरू बिलनोस फीगर"
@@ -25026,7 +25030,7 @@ msgstr "तरॊयीव ज़िरू बिलनोस फीगर"
 #: gnucash/report/reports/standard/balance-sheet.scm:105
 #: gnucash/report/reports/standard/balsheet-pnl.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:70
-#: gnucash/report/reports/standard/budget-income-statement.scm:92
+#: gnucash/report/reports/standard/budget-income-statement.scm:93
 #: gnucash/report/reports/standard/income-statement.scm:80
 msgid "Show blank space in place of any zero balances which would be shown."
 msgstr "हॊयिव बुलेनक सुपेस ज़ीरू बेलेनसॊच कुनॊ तॊ जायॊ यिम ज़न हावनॊ यियन."
@@ -25034,7 +25038,7 @@ msgstr "हॊयिव बुलेनक सुपेस ज़ीरू ब�
 #: gnucash/report/reports/standard/account-summary.scm:105
 #: gnucash/report/reports/standard/balance-sheet.scm:107
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:72
-#: gnucash/report/reports/standard/budget-income-statement.scm:94
+#: gnucash/report/reports/standard/budget-income-statement.scm:95
 #: gnucash/report/reports/standard/equity-statement.scm:72
 #: gnucash/report/reports/standard/income-statement.scm:82
 msgid "Show accounting-style rules"
@@ -25043,7 +25047,7 @@ msgstr "एिकावंटींग सोटायील असूल हॊ
 #: gnucash/report/reports/standard/account-summary.scm:107
 #: gnucash/report/reports/standard/balance-sheet.scm:109
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:74
-#: gnucash/report/reports/standard/budget-income-statement.scm:96
+#: gnucash/report/reports/standard/budget-income-statement.scm:97
 #: gnucash/report/reports/standard/equity-statement.scm:74
 #: gnucash/report/reports/standard/income-statement.scm:84
 msgid "Use rules beneath columns of added numbers like accountants do."
@@ -25056,7 +25060,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 #: gnucash/report/reports/standard/balsheet-pnl.scm:99
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:76
-#: gnucash/report/reports/standard/budget-income-statement.scm:98
+#: gnucash/report/reports/standard/budget-income-statement.scm:99
 #: gnucash/report/reports/standard/income-statement.scm:86
 #: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Display accounts as hyperlinks"
@@ -25067,7 +25071,7 @@ msgstr "एिकावुंट कॊरीव डोसपेली बतू
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/balsheet-pnl.scm:100
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:77
-#: gnucash/report/reports/standard/budget-income-statement.scm:99
+#: gnucash/report/reports/standard/budget-income-statement.scm:100
 #: gnucash/report/reports/standard/income-statement.scm:87
 #: gnucash/report/reports/standard/trial-balance.scm:126
 msgid "Shows each account in the table as a hyperlink to its register window."
@@ -25106,7 +25110,7 @@ msgstr "अकॊ एकावनटॊक नोट हॊयिव."
 #: gnucash/report/reports/standard/balsheet-eg.scm:195
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:101
-#: gnucash/report/reports/standard/budget-income-statement.scm:114
+#: gnucash/report/reports/standard/budget-income-statement.scm:115
 #: gnucash/report/reports/standard/equity-statement.scm:76
 #: gnucash/report/reports/standard/income-statement.scm:108
 #: gnucash/report/reports/standard/trial-balance.scm:128
@@ -25117,7 +25121,7 @@ msgstr "कामूडीटयो"
 #: gnucash/report/reports/standard/balance-sheet.scm:139
 #: gnucash/report/reports/standard/balsheet-eg.scm:190
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:104
-#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/budget-income-statement.scm:118
 #: gnucash/report/reports/standard/equity-statement.scm:79
 #: gnucash/report/reports/standard/income-statement.scm:111
 #: gnucash/report/reports/standard/trial-balance.scm:131
@@ -25128,7 +25132,7 @@ msgstr "फारिन करनसी हॊयीव"
 #: gnucash/report/reports/standard/balance-sheet.scm:141
 #: gnucash/report/reports/standard/balsheet-eg.scm:192
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:106
-#: gnucash/report/reports/standard/budget-income-statement.scm:119
+#: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/equity-statement.scm:81
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:133
@@ -25139,7 +25143,7 @@ msgstr "डिसपिले कॊरिव कानह तॊ पारे�
 #: gnucash/report/reports/standard/balance-sheet.scm:142
 #: gnucash/report/reports/standard/balsheet-pnl.scm:130
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:107
-#: gnucash/report/reports/standard/budget-income-statement.scm:120
+#: gnucash/report/reports/standard/budget-income-statement.scm:121
 #: gnucash/report/reports/standard/cash-flow.scm:51
 #: gnucash/report/reports/standard/equity-statement.scm:82
 #: gnucash/report/reports/standard/income-statement.scm:114
@@ -25151,7 +25155,7 @@ msgstr "एिकोसचिंज रिट हॊयीव"
 #: gnucash/report/reports/standard/balance-sheet.scm:143
 #: gnucash/report/reports/standard/balsheet-pnl.scm:131
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
-#: gnucash/report/reports/standard/budget-income-statement.scm:121
+#: gnucash/report/reports/standard/budget-income-statement.scm:122
 #: gnucash/report/reports/standard/cash-flow.scm:77
 #: gnucash/report/reports/standard/equity-statement.scm:83
 #: gnucash/report/reports/standard/income-statement.scm:115
@@ -25200,187 +25204,187 @@ msgstr "%s कुन %s कवर करवॊनीस पीरडस बा�
 msgid "Account title"
 msgstr "एिकावुंट ऊनवान"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:37
+#: gnucash/report/reports/standard/advanced-portfolio.scm:38
 msgid "Advanced Portfolio"
 msgstr "एिडवानोस करनॊ आमुत पूटफूलयू"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:40
+#: gnucash/report/reports/standard/advanced-portfolio.scm:41
 #: gnucash/report/reports/standard/portfolio.scm:36
 msgid "Share decimal places"
 msgstr "डोसीमोल जायो कॊरीव शीयर"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:41
+#: gnucash/report/reports/standard/advanced-portfolio.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:37
 msgid "Include accounts with no shares"
 msgstr "शॊमोल कॊरीव एिकावुंट योमन नॊ शीयर छु"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:42
+#: gnucash/report/reports/standard/advanced-portfolio.scm:43
 msgid "Show ticker symbols"
 msgstr "टीकर अलामतो हॊयीव"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:43
+#: gnucash/report/reports/standard/advanced-portfolio.scm:44
 msgid "Show listings"
 msgstr "लीसटोंग हॊयीव"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:44
+#: gnucash/report/reports/standard/advanced-portfolio.scm:45
 msgid "Show prices"
 msgstr "किमत हॊयीव"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:45
+#: gnucash/report/reports/standard/advanced-portfolio.scm:46
 msgid "Show number of shares"
 msgstr "शीयरन हुंद तिदाद हॊयीव"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:46
+#: gnucash/report/reports/standard/advanced-portfolio.scm:47
 msgid "Basis calculation method"
 msgstr "बिसोज़ शुमार तरिक"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:47
+#: gnucash/report/reports/standard/advanced-portfolio.scm:48
 msgid "Set preference for price list data"
 msgstr "परायोस लीसटो डाटा बापत कॊरीव सीट तरजिहात"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:48
+#: gnucash/report/reports/standard/advanced-portfolio.scm:49
 msgid "How to report brokerage fees"
 msgstr "रिपोट कॊथ कॊन छु करुन बरोकरेज पीस"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:92
+#: gnucash/report/reports/standard/advanced-portfolio.scm:93
 msgid "Basis calculation method."
 msgstr "बेसिक कलकुलेशन मेथड."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:95
+#: gnucash/report/reports/standard/advanced-portfolio.scm:96
 msgid "Use average cost of all shares for basis."
 msgstr "ईसतेमाल कॊरिव अवसत कॊमत तमाम शियरन हूनद बेसिज़ बापत."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:97
+#: gnucash/report/reports/standard/advanced-portfolio.scm:98
 msgid "FIFO"
 msgstr "FIFO"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:98
+#: gnucash/report/reports/standard/advanced-portfolio.scm:99
 msgid "Use first-in first-out method for basis."
 msgstr "बेसिज़ बापत कॊरिव ईसतेमाल फॊसटॊ-ईन फॊसटॊ आवुट मेथड."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:100
+#: gnucash/report/reports/standard/advanced-portfolio.scm:101
 msgid "LIFO"
 msgstr "LIFO"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:101
+#: gnucash/report/reports/standard/advanced-portfolio.scm:102
 msgid "Use last-in first-out method for basis."
 msgstr "ईसतेमाल कॊरिव लासटॊ-ईन फॊसटॊ-आवुट मेथड बेसिज़ बापत."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:107
+#: gnucash/report/reports/standard/advanced-portfolio.scm:108
 msgid "Prefer use of price editor pricing over transactions, where applicable."
 msgstr "तरजिह दॊयीव परायीस एिडटर कोस ईसतिमालस  टरांज़ीकशनन पयॊठ,यॊतनस लागू सपदो."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:113
+#: gnucash/report/reports/standard/advanced-portfolio.scm:114
 msgid "How to report commissions and other brokerage fees."
 msgstr "कॊथ कॊन छु रिपोट करुन कमिशन तॊ बाकय बरोकरेज फीज़."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:115
+#: gnucash/report/reports/standard/advanced-portfolio.scm:116
 msgid "Include in basis"
 msgstr "बेसिज़ मनज़ कॊरिव शॊमिल"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:116
+#: gnucash/report/reports/standard/advanced-portfolio.scm:117
 msgid "Include brokerage fees in the basis for the asset."
 msgstr "शॊमिल कॊरिव बरोकरेज फीज़ बेसिज़ मनज़ अथ एसेटस बापत."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:118
+#: gnucash/report/reports/standard/advanced-portfolio.scm:119
 msgid "Include in gain"
 msgstr "फॊयदस मनज़ कॊरिव शॊमिल"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:119
+#: gnucash/report/reports/standard/advanced-portfolio.scm:120
 msgid "Include brokerage fees in the gain and loss but not in the basis."
 msgstr "शॊमिल कॊरिव बरोकरेज फीस फॊयदस तॊ नोकसानस मनज़ मगर बेसिज़ मनज़ नॊ केनह."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:121
+#: gnucash/report/reports/standard/advanced-portfolio.scm:122
 msgid "Ignore"
 msgstr "यक तरफ तरॊयिव"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:122
+#: gnucash/report/reports/standard/advanced-portfolio.scm:123
 msgid "Ignore brokerage fees entirely."
 msgstr "यक तरफ तरॊयिव बरोकरेज फीस पोरॊ पॊठ."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:129
+#: gnucash/report/reports/standard/advanced-portfolio.scm:130
 msgid "Display the ticker symbols."
 msgstr "टिकर सिमबुल कॊरिव डिसपिले."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:136
+#: gnucash/report/reports/standard/advanced-portfolio.scm:137
 msgid "Display exchange listings."
 msgstr "डिसपिले कॊरिव एकॊसचेनज लिसटिनग."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:143
+#: gnucash/report/reports/standard/advanced-portfolio.scm:144
 msgid "Display numbers of shares in accounts."
 msgstr "डिसपिले कॊरिव तेदाद शियरन हुनद एकावनटन मनज़."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:149
+#: gnucash/report/reports/standard/advanced-portfolio.scm:150
 #: gnucash/report/reports/standard/portfolio.scm:63
 msgid "The number of decimal places to use for share numbers."
 msgstr "तेदाद डेसिमिल पॊलेसन हुनद यिम ईसतेमाल करनॊ छॊ शियर नमबरन बापत."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:156
+#: gnucash/report/reports/standard/advanced-portfolio.scm:157
 msgid "Display share prices."
 msgstr "डिसपिले कॊरिव शियर परायॊस."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:164
+#: gnucash/report/reports/standard/advanced-portfolio.scm:165
 #: gnucash/report/reports/standard/portfolio.scm:71
 msgid "Stock Accounts to report on."
 msgstr "सिटाक एकावुनट यिमन पयॊठ रिपोट करुन छु."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:176
+#: gnucash/report/reports/standard/advanced-portfolio.scm:177
 #: gnucash/report/reports/standard/portfolio.scm:83
 msgid "Include accounts that have a zero share balances."
 msgstr "शॊमील कॊरीव एिकावुंट यॊमन अख ज़िरू शीयर बिलनोस छॊ."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1067
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1068
 #: gnucash/report/reports/standard/portfolio.scm:255
 msgid "Listing"
 msgstr "लीसटींग"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1079
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1080
 msgid "Basis"
 msgstr "बुनयाद"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1081
-#: gnucash/report/reports/standard/cashflow-barchart.scm:297
-#: gnucash/report/reports/standard/cashflow-barchart.scm:332
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1082
+#: gnucash/report/reports/standard/cashflow-barchart.scm:298
+#: gnucash/report/reports/standard/cashflow-barchart.scm:344
 #: gnucash/report/reports/standard/cash-flow.scm:279
 msgid "Money In"
 msgstr "मनी ईन"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1082
-#: gnucash/report/reports/standard/cashflow-barchart.scm:303
-#: gnucash/report/reports/standard/cashflow-barchart.scm:333
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1083
+#: gnucash/report/reports/standard/cashflow-barchart.scm:304
+#: gnucash/report/reports/standard/cashflow-barchart.scm:345
 #: gnucash/report/reports/standard/cash-flow.scm:300
 msgid "Money Out"
 msgstr "मनी आवुट"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1083
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1084
 msgid "Realized Gain"
 msgstr "रीयालायोज़ करनॊ आमुत फॊयदो"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1084
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1085
 msgid "Unrealized Gain"
 msgstr "रीयालायोज़ करनॊ  बगॊर आमुत फॊयदो"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1085
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1086
 msgid "Total Gain"
 msgstr "कुल फॊयदो"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1086
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1087
 msgid "Rate of Gain"
 msgstr "फॊयदॊच रेट"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1090
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1091
 msgid "Brokerage Fees"
 msgstr "बरूकरिज फिस"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1092
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1093
 msgid "Total Return"
 msgstr "कुल वापसी"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1093
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1094
 msgid "Rate of Return"
 msgstr "वापस करनॊच रेट"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1190
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1191
 msgid ""
 "* this commodity data was built using transaction pricing instead of the "
 "price list."
@@ -25388,12 +25392,12 @@ msgstr ""
 "* यॊ कामूडीटी डाटा आव बनावनो  टरांज़ीकशन परायसींग ईसतिमाल कॊरीथ बजाय परायोस "
 "लीसटो."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1192
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1193
 msgid ""
 "If you are in a multi-currency situation, the exchanges may not be correct."
 msgstr "अगर तुहयो एिकोस मलटी करनसी हालतो मंज़ छॊव, एिकोसचिंज मा आसो नॊ शायद सही."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1197
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1198
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr "** यथ  कामोडिटी छु नॊ कानह परायिज़ तॊ अख परायिज़ 1 छु ईसतेमाल करनॊ आमुत."
 
@@ -25405,7 +25409,7 @@ msgstr "%s अस पयॊठ बिलनोस"
 #: gnucash/report/reports/standard/balance-forecast.scm:38
 #: gnucash/report/reports/standard/budget-barchart.scm:134
 #: gnucash/report/reports/standard/budget-flow.scm:87
-#: gnucash/report/reports/standard/cashflow-barchart.scm:87
+#: gnucash/report/reports/standard/cashflow-barchart.scm:88
 #: gnucash/report/reports/standard/income-gst-statement.scm:131
 #: gnucash/report/reports/standard/income-gst-statement.scm:141
 #: gnucash/report/reports/standard/trial-balance.scm:78
@@ -25501,7 +25505,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:93
 #: gnucash/report/reports/standard/balsheet-eg.scm:160
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:58
-#: gnucash/report/reports/standard/budget-income-statement.scm:80
+#: gnucash/report/reports/standard/budget-income-statement.scm:81
 #: gnucash/report/reports/standard/budget.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:68
 msgid "Flatten list to depth limit"
@@ -25510,7 +25514,7 @@ msgstr "लीसटो कॊरीव फोलिट सनरॊ कॊस �
 #: gnucash/report/reports/standard/balance-sheet.scm:95
 #: gnucash/report/reports/standard/balsheet-eg.scm:162
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:60
-#: gnucash/report/reports/standard/budget-income-statement.scm:82
+#: gnucash/report/reports/standard/budget-income-statement.scm:83
 #: gnucash/report/reports/standard/budget.scm:92
 #: gnucash/report/reports/standard/income-statement.scm:70
 msgid "Displays accounts which exceed the depth limit at the depth limit."
@@ -25964,12 +25968,12 @@ msgid "missing"
 msgstr "कमीशन"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
-#: libgnucash/engine/Account.cpp:4363
+#: libgnucash/engine/Account.cpp:4367
 msgid "Asset"
 msgstr "एिसीट"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1109
-#: libgnucash/engine/Account.cpp:4365
+#: libgnucash/engine/Account.cpp:4369
 msgid "Liability"
 msgstr "ज़ीमदॊरी"
 
@@ -26029,7 +26033,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:111
 #: gnucash/report/reports/standard/budget-barchart.scm:98
 #: gnucash/report/reports/standard/budget-flow.scm:56
-#: gnucash/report/reports/standard/budget-income-statement.scm:59
+#: gnucash/report/reports/standard/budget-income-statement.scm:60
 #: gnucash/report/reports/standard/budget.scm:138
 msgid "Budget to use."
 msgstr "बजट युस ईसतिमाल करुन छु"
@@ -26102,7 +26106,7 @@ msgid "Chart Type"
 msgstr "चारोज टायोप"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:50
-#: gnucash/report/reports/standard/budget-income-statement.scm:66
+#: gnucash/report/reports/standard/budget-income-statement.scm:67
 #: gnucash/report/reports/standard/budget.scm:71
 msgid "Range start"
 msgstr "रिंजुक शरू "
@@ -26123,7 +26127,7 @@ msgid "Select exact period that starts the reporting range."
 msgstr "च़ॊरिव बराबर पीरड योस शरो करान छु रिपोटिनग रेनज."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:57
-#: gnucash/report/reports/standard/budget-income-statement.scm:70
+#: gnucash/report/reports/standard/budget-income-statement.scm:71
 #: gnucash/report/reports/standard/budget.scm:78
 msgid "Range end"
 msgstr "रिंजुक खतम"
@@ -26238,137 +26242,137 @@ msgstr "पीरड नमबर."
 msgid "~a: ~a - ~a"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:62
+#: gnucash/report/reports/standard/budget-income-statement.scm:63
 #: gnucash/report/reports/standard/budget.scm:67
 msgid "Report for range of budget periods"
 msgstr "रीपूट बजट पीरडस बापत रिंजस खॊतरी"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:64
+#: gnucash/report/reports/standard/budget-income-statement.scm:65
 #: gnucash/report/reports/standard/budget.scm:69
 msgid "Create report for a budget period range instead of the entire budget."
 msgstr "बनॊयीव अख रीपूट एिकोस बजट पिरड रिंजस  बापत बजाय तमाम बजटस."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:68
+#: gnucash/report/reports/standard/budget-income-statement.scm:69
 msgid "Select a budget period that begins the reporting range."
 msgstr "अख बजट पिरड च़ॊरीव युस शरू करान छु अख रीपूटींग रिंज."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:72
+#: gnucash/report/reports/standard/budget-income-statement.scm:73
 msgid "Select a budget period that ends the reporting range."
 msgstr "अख बजट पिरड च़ॊरीव युस खतम करान छु अख रीपूटींग रिंज."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:101
+#: gnucash/report/reports/standard/budget-income-statement.scm:102
 #: gnucash/report/reports/standard/income-statement.scm:89
 msgid "Label the revenue section"
 msgstr "रीवनयू सीकशन कॊरीव लिबोल"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:103
+#: gnucash/report/reports/standard/budget-income-statement.scm:104
 #: gnucash/report/reports/standard/income-statement.scm:91
 msgid "Whether or not to include a label for the revenue section."
 msgstr "करवाह कॊनॊ नॊ शॊमिल अख लेबॊल रेवनयू सेकशन बापत."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:104
+#: gnucash/report/reports/standard/budget-income-statement.scm:105
 #: gnucash/report/reports/standard/income-statement.scm:92
 msgid "Include revenue total"
 msgstr "शॊमील कॊरीव रीवनयू टूटल"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:106
+#: gnucash/report/reports/standard/budget-income-statement.scm:107
 #: gnucash/report/reports/standard/income-statement.scm:94
 msgid "Whether or not to include a line indicating total revenue."
 msgstr "करवाह कॊनॊ नॊ शॊमिल अख लायिन योस हावॊ कुल रिवनयू."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:107
+#: gnucash/report/reports/standard/budget-income-statement.scm:108
 #: gnucash/report/reports/standard/income-statement.scm:101
 msgid "Label the expense section"
 msgstr "खरचो सीकशन कॊरीव लिबोल"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:109
+#: gnucash/report/reports/standard/budget-income-statement.scm:110
 #: gnucash/report/reports/standard/income-statement.scm:103
 msgid "Whether or not to include a label for the expense section."
 msgstr "करवाह कॊनॊ नॊ शॊमिल अख लेबॊल खरॊच सेकशन बापत."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:110
+#: gnucash/report/reports/standard/budget-income-statement.scm:111
 #: gnucash/report/reports/standard/income-statement.scm:104
 msgid "Include expense total"
 msgstr "शॊमील कॊरीव खरचो टूटल"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:112
+#: gnucash/report/reports/standard/budget-income-statement.scm:113
 #: gnucash/report/reports/standard/income-statement.scm:106
 msgid "Whether or not to include a line indicating total expense."
 msgstr "करवाह कॊनॊ नॊ शॊमिल अख लायिन योस हावॊ कुल खरॊच."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:125
+#: gnucash/report/reports/standard/budget-income-statement.scm:126
 #: gnucash/report/reports/standard/income-statement.scm:130
 msgid "Display as a two column report"
 msgstr "हॊयीव बतूर अख दुकालम रीपूट"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:127
+#: gnucash/report/reports/standard/budget-income-statement.scm:128
 #: gnucash/report/reports/standard/income-statement.scm:132
 msgid "Divides the report into an income column and an expense column."
 msgstr "छु तखसीम करान रिपोट एकिस आमदन कालम तॊ एकिस खरॊच कालमस मनज़."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:129
+#: gnucash/report/reports/standard/budget-income-statement.scm:130
 #: gnucash/report/reports/standard/income-statement.scm:134
 msgid "Display in standard, income first, order"
 msgstr "हॊयीव  मयारस मंज़,ईनकम पॊसटो, आडर"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:131
+#: gnucash/report/reports/standard/budget-income-statement.scm:132
 #: gnucash/report/reports/standard/income-statement.scm:136
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses."
 msgstr "छु रिपोटस डिसपिले करान मयॊरी आडरस मनज़, तॊ छु थावन आमदन खरचस बरुनह."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:443
+#: gnucash/report/reports/standard/budget-income-statement.scm:444
 msgid "Reporting range end period cannot be less than start period."
 msgstr "रीपूटींग रिंज कतम पिरड हयोको नॊकम एिसोथ शरू पिरडो खूतो."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:511
+#: gnucash/report/reports/standard/budget-income-statement.scm:512
 #: gnucash/report/reports/standard/income-statement.scm:505
 msgid "Revenues"
 msgstr "रीवनयू"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:514
+#: gnucash/report/reports/standard/budget-income-statement.scm:515
 #: gnucash/report/reports/standard/income-statement.scm:508
 msgid "Total Revenue"
 msgstr "कुल रीवनयू"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:524
+#: gnucash/report/reports/standard/budget-income-statement.scm:525
 #: gnucash/report/reports/standard/income-statement.scm:515
 msgid "Total Expenses"
 msgstr "कुल खरचो"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:532
+#: gnucash/report/reports/standard/budget-income-statement.scm:533
 #, fuzzy, scheme-format
 msgid "for Budget ~a"
 msgstr "बजट %s बापत"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:534
+#: gnucash/report/reports/standard/budget-income-statement.scm:535
 #, fuzzy, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "बजट %s पिरड %u बापत"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:537
+#: gnucash/report/reports/standard/budget-income-statement.scm:538
 #, fuzzy, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
 msgstr "बजट %s पिरडन %u- %u बापत"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:565
+#: gnucash/report/reports/standard/budget-income-statement.scm:566
 #: gnucash/report/reports/standard/equity-statement.scm:457
 #: gnucash/report/reports/standard/income-statement.scm:525
 msgid "Net income"
 msgstr "नीट ईनकम"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:566
+#: gnucash/report/reports/standard/budget-income-statement.scm:567
 #: gnucash/report/reports/standard/equity-statement.scm:458
 #: gnucash/report/reports/standard/income-statement.scm:526
 msgid "Net loss"
 msgstr "नीट नुखसान"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:606
+#: gnucash/report/reports/standard/budget-income-statement.scm:607
 msgid "Budget Income Statement"
 msgstr " बजट ईनकम सोटिटमींट"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:607
+#: gnucash/report/reports/standard/budget-income-statement.scm:608
 msgid "Budget Profit & Loss"
 msgstr "बजट फॊयदी तॊ मुकसान"
 
@@ -26499,70 +26503,70 @@ msgstr "Diff"
 msgid "using accumulated amounts"
 msgstr "पारसींग एिकावुंट"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:39
+#: gnucash/report/reports/standard/cashflow-barchart.scm:40
 #, fuzzy
 msgid "Cash Flow Barchart"
 msgstr "किश पुलू"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:45
+#: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
 #, fuzzy
 msgid "Include Trading Accounts in report"
 msgstr "शॊमील कॊरीव टरिडींग एकावुंट टूटल"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:47
+#: gnucash/report/reports/standard/cashflow-barchart.scm:48
 #, fuzzy
 msgid "Show Money In"
 msgstr "मनी ईन"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:48
+#: gnucash/report/reports/standard/cashflow-barchart.scm:49
 #, fuzzy
 msgid "Show Money Out"
 msgstr "मनी आवुट"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:49
+#: gnucash/report/reports/standard/cashflow-barchart.scm:50
 #, fuzzy
 msgid "Show Net Flow"
 msgstr "नेट कॊमत हॊयिव"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:50
+#: gnucash/report/reports/standard/cashflow-barchart.scm:51
 #, fuzzy
 msgid "Show Table"
 msgstr "जदूल हॊयीव"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:99
+#: gnucash/report/reports/standard/cashflow-barchart.scm:100
 #: gnucash/report/reports/standard/cash-flow.scm:102
 #, fuzzy
 msgid "Include transfers to and from Trading Accounts in the report."
 msgstr "शॊमिल कॊरिव टरानज़ेकशन तमाम फिलटर एकावनटन कुन/एकावनटव पयॊठ."
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:106
+#: gnucash/report/reports/standard/cashflow-barchart.scm:107
 #, fuzzy
 msgid "Show money in?"
 msgstr "सॊरिफ हॊयिव ऊपॊन लाट"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:112
+#: gnucash/report/reports/standard/cashflow-barchart.scm:113
 #, fuzzy
 msgid "Show money out?"
 msgstr "सॊरिफ हॊयिव ऊपॊन लाट"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:118
+#: gnucash/report/reports/standard/cashflow-barchart.scm:119
 #, fuzzy
 msgid "Show net money flow?"
 msgstr "सॊरिफ हॊयिव ऊपॊन लाट"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:309
-#: gnucash/report/reports/standard/cashflow-barchart.scm:334
+#: gnucash/report/reports/standard/cashflow-barchart.scm:310
+#: gnucash/report/reports/standard/cashflow-barchart.scm:346
 #, fuzzy
 msgid "Net Flow"
 msgstr "नीट नुखसान"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:337
+#: gnucash/report/reports/standard/cashflow-barchart.scm:349
 #, fuzzy
 msgid "Overview:"
 msgstr "ऊवरवीव"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:376
+#: gnucash/report/reports/standard/cashflow-barchart.scm:375
 #, fuzzy
 msgid "Shows a barchart with cash flow over time"
 msgstr "छु अख बारचाट हावान यथ एिसीट छॊ  बडान वखतस सॊत."
@@ -26598,22 +26602,22 @@ msgid "Money out of selected accounts goes to"
 msgstr "कुन छॊ च़ारनो आमोतीव एिकावंटव पयॊठ रुपयो गछ़ान"
 
 #: gnucash/report/reports/standard/category-barchart.scm:41
-#: gnucash/report/reports/standard/net-charts.scm:366
+#: gnucash/report/reports/standard/net-charts.scm:362
 msgid "Income Chart"
 msgstr "ईनकम चाट"
 
 #: gnucash/report/reports/standard/category-barchart.scm:42
-#: gnucash/report/reports/standard/net-charts.scm:387
+#: gnucash/report/reports/standard/net-charts.scm:383
 msgid "Expense Chart"
 msgstr "खरचो चाट"
 
 #: gnucash/report/reports/standard/category-barchart.scm:43
-#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:363
 msgid "Asset Chart"
 msgstr "एिसीट चाट"
 
 #: gnucash/report/reports/standard/category-barchart.scm:44
-#: gnucash/report/reports/standard/net-charts.scm:388
+#: gnucash/report/reports/standard/net-charts.scm:384
 msgid "Liability Chart"
 msgstr "लायबलटी चाट"
 
@@ -26712,7 +26716,7 @@ msgid "Grand Total"
 msgstr "गरांड टूटल"
 
 #: gnucash/report/reports/standard/category-barchart.scm:690
-#: gnucash/report/reports/standard/net-charts.scm:471
+#: gnucash/report/reports/standard/net-charts.scm:466
 #, fuzzy
 msgid "No exportable data"
 msgstr "जाब रीपूट"
@@ -26761,18 +26765,18 @@ msgstr "हॊयिव पननॊ कमपनी हुनद पताह �
 #: gnucash/report/reports/standard/job-report.scm:384
 #: gnucash/report/reports/standard/job-report.scm:389
 #: gnucash/report/reports/standard/job-report.scm:394
-#: gnucash/report/reports/standard/new-owner-report.scm:882
-#: gnucash/report/reports/standard/new-owner-report.scm:887
-#: gnucash/report/reports/standard/new-owner-report.scm:892
-#: gnucash/report/reports/standard/new-owner-report.scm:897
-#: gnucash/report/reports/standard/new-owner-report.scm:902
-#: gnucash/report/reports/standard/new-owner-report.scm:907
-#: gnucash/report/reports/standard/new-owner-report.scm:912
-#: gnucash/report/reports/standard/new-owner-report.scm:917
-#: gnucash/report/reports/standard/new-owner-report.scm:922
-#: gnucash/report/reports/standard/new-owner-report.scm:927
-#: gnucash/report/reports/standard/new-owner-report.scm:932
-#: gnucash/report/reports/standard/new-owner-report.scm:947
+#: gnucash/report/reports/standard/new-owner-report.scm:886
+#: gnucash/report/reports/standard/new-owner-report.scm:891
+#: gnucash/report/reports/standard/new-owner-report.scm:896
+#: gnucash/report/reports/standard/new-owner-report.scm:901
+#: gnucash/report/reports/standard/new-owner-report.scm:906
+#: gnucash/report/reports/standard/new-owner-report.scm:911
+#: gnucash/report/reports/standard/new-owner-report.scm:916
+#: gnucash/report/reports/standard/new-owner-report.scm:921
+#: gnucash/report/reports/standard/new-owner-report.scm:926
+#: gnucash/report/reports/standard/new-owner-report.scm:931
+#: gnucash/report/reports/standard/new-owner-report.scm:936
+#: gnucash/report/reports/standard/new-owner-report.scm:951
 #: gnucash/report/reports/standard/owner-report.scm:556
 #: gnucash/report/reports/standard/owner-report.scm:561
 #: gnucash/report/reports/standard/owner-report.scm:566
@@ -27291,7 +27295,7 @@ msgid ""
 msgstr "करॊन छाह कॊनि नॊ शॊमिल अख लायिन योस हावन छॊ कुल टरेडिनग एकावुनट बेलनॊस."
 
 #: gnucash/report/reports/standard/income-statement.scm:518
-#: libgnucash/engine/Account.cpp:4375 libgnucash/engine/Scrub.c:472
+#: libgnucash/engine/Account.cpp:4379 libgnucash/engine/Scrub.c:472
 #: libgnucash/engine/Scrub.c:537
 msgid "Trading"
 msgstr "टरिडींग"
@@ -27686,13 +27690,13 @@ msgid "~a #~a"
 msgstr ""
 
 #: gnucash/report/reports/standard/job-report.scm:318
-#: gnucash/report/reports/standard/new-owner-report.scm:524
+#: gnucash/report/reports/standard/new-owner-report.scm:528
 #: gnucash/report/reports/standard/owner-report.scm:505
 msgid "Total Credit"
 msgstr "कुल करीडीट"
 
 #: gnucash/report/reports/standard/job-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:525
+#: gnucash/report/reports/standard/new-owner-report.scm:529
 #: gnucash/report/reports/standard/owner-report.scm:506
 msgid "Total Due"
 msgstr "कुल डयू"
@@ -27708,27 +27712,27 @@ msgstr "एकावुनट योस तलाश करुन छु टर�
 
 #: gnucash/report/reports/standard/job-report.scm:370
 #: gnucash/report/reports/standard/job-report.scm:375
-#: gnucash/report/reports/standard/new-owner-report.scm:883
-#: gnucash/report/reports/standard/new-owner-report.scm:888
+#: gnucash/report/reports/standard/new-owner-report.scm:887
+#: gnucash/report/reports/standard/new-owner-report.scm:892
 #: gnucash/report/reports/standard/owner-report.scm:557
 #: gnucash/report/reports/standard/owner-report.scm:562
 msgid "Display the transaction date?"
 msgstr "टरांज़ीकशन डिट छाह डोसपेली करुन?"
 
 #: gnucash/report/reports/standard/job-report.scm:380
-#: gnucash/report/reports/standard/new-owner-report.scm:893
+#: gnucash/report/reports/standard/new-owner-report.scm:897
 #: gnucash/report/reports/standard/owner-report.scm:567
 msgid "Display the transaction reference?"
 msgstr "टरांज़ीकशन हवाल छाह डोसपेली करुन?"
 
 #: gnucash/report/reports/standard/job-report.scm:385
-#: gnucash/report/reports/standard/new-owner-report.scm:898
+#: gnucash/report/reports/standard/new-owner-report.scm:902
 #: gnucash/report/reports/standard/owner-report.scm:572
 msgid "Display the transaction type?"
 msgstr "टरांज़ीकशन कोसोम छाह डोसपेली करुन?"
 
 #: gnucash/report/reports/standard/job-report.scm:390
-#: gnucash/report/reports/standard/new-owner-report.scm:903
+#: gnucash/report/reports/standard/new-owner-report.scm:907
 #: gnucash/report/reports/standard/owner-report.scm:577
 msgid "Display the transaction description?"
 msgstr "टरांज़ीकशन वज़ाहत  छाह डोसपेली करॊन?"
@@ -27739,7 +27743,7 @@ msgid "Display the transaction amount?"
 msgstr "टरांज़ीकशन रकम  छाह डोसपेली करुन?"
 
 #: gnucash/report/reports/standard/job-report.scm:508
-#: gnucash/report/reports/standard/new-owner-report.scm:1223
+#: gnucash/report/reports/standard/new-owner-report.scm:1227
 msgid "Job Report"
 msgstr "जाब रीपूट"
 
@@ -27780,7 +27784,7 @@ msgid "The account to search for lots."
 msgstr "एकावुनट योस तलाश करुन छु टरानज़ेकशनन बापत."
 
 #: gnucash/report/reports/standard/net-charts.scm:48
-#: gnucash/report/reports/standard/price-scatter.scm:50
+#: gnucash/report/reports/standard/price-scatter.scm:51
 msgid "Show Net Profit"
 msgstr "नीट नफाह हॊयीव"
 
@@ -27824,35 +27828,35 @@ msgstr "नीट किमत बार हाववाह?"
 msgid "Add grid lines."
 msgstr "गरिड लायनॊ कॊरिव जमाह."
 
-#: gnucash/report/reports/standard/net-charts.scm:393
-#: gnucash/report/reports/standard/net-charts.scm:425
+#: gnucash/report/reports/standard/net-charts.scm:389
+#: gnucash/report/reports/standard/net-charts.scm:421
 msgid "Net Profit"
 msgstr "नीट नफाह"
 
-#: gnucash/report/reports/standard/net-charts.scm:393
-#: gnucash/report/reports/standard/net-charts.scm:426
+#: gnucash/report/reports/standard/net-charts.scm:389
+#: gnucash/report/reports/standard/net-charts.scm:422
 msgid "Net Worth"
 msgstr "नीट किमत"
 
-#: gnucash/report/reports/standard/net-charts.scm:489
+#: gnucash/report/reports/standard/net-charts.scm:484
 msgid "Net Worth Barchart"
 msgstr "नीट किमत बारचाट"
 
-#: gnucash/report/reports/standard/net-charts.scm:500
+#: gnucash/report/reports/standard/net-charts.scm:495
 msgid "Income/Expense Chart"
 msgstr "ईनकम /खरोच चाट"
 
-#: gnucash/report/reports/standard/net-charts.scm:502
+#: gnucash/report/reports/standard/net-charts.scm:497
 #, fuzzy
 msgid "Income & Expense Barchart"
 msgstr "ईनकम तॊ खरोच चाट"
 
-#: gnucash/report/reports/standard/net-charts.scm:512
+#: gnucash/report/reports/standard/net-charts.scm:507
 msgid "Net Worth Linechart"
 msgstr "नेट कॊमत लायिनचाट"
 
-#: gnucash/report/reports/standard/net-charts.scm:525
-#: gnucash/report/reports/standard/net-charts.scm:527
+#: gnucash/report/reports/standard/net-charts.scm:520
+#: gnucash/report/reports/standard/net-charts.scm:522
 #, fuzzy
 msgid "Income & Expense Linechart"
 msgstr "ईनकम तॊ खरोच चाट"
@@ -27879,7 +27883,7 @@ msgid "Reverse alphabetical order"
 msgstr "ऊलटॊ आडर"
 
 #: gnucash/report/reports/standard/new-aging.scm:343
-#: gnucash/report/reports/standard/new-owner-report.scm:540
+#: gnucash/report/reports/standard/new-owner-report.scm:544
 #, fuzzy
 msgid "Please note some transactions were not processed"
 msgstr "रीटरिव करनो योनी वाली टरांज़ीकशनुक डिट रिंजः"
@@ -27979,12 +27983,12 @@ msgstr "यथ रिपोटस छॊ ज़रूरत अख कमपन�
 msgid "This report requires a vendor to be selected."
 msgstr "यथ रिपोटस छॊ ज़रूरत अख कसटमर च़ारनॊच."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:242
+#: gnucash/report/reports/standard/new-owner-report.scm:246
 #, fuzzy
 msgid "Partial Amount"
 msgstr "पिरींट एिकावुंट"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:295
+#: gnucash/report/reports/standard/new-owner-report.scm:299
 #: gnucash/report/trep-engine.scm:980 gnucash/report/trep-engine.scm:1106
 #, fuzzy
 msgid "Link"
@@ -27992,105 +27996,105 @@ msgstr "लाट लिनक"
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
-#: gnucash/report/reports/standard/new-owner-report.scm:343
+#: gnucash/report/reports/standard/new-owner-report.scm:347
 #, scheme-format
 msgid "~a History"
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:345
+#: gnucash/report/reports/standard/new-owner-report.scm:349
 #, fuzzy
 msgid "Linked Details"
 msgstr "लोन तफसील"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:504
+#: gnucash/report/reports/standard/new-owner-report.scm:508
 #: gnucash/report/reports/standard/owner-report.scm:463
 msgid "Period Totals"
 msgstr "पीरड टोटल"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:868
+#: gnucash/report/reports/standard/new-owner-report.scm:872
 #: gnucash/report/reports/standard/owner-report.scm:535
 msgid "The company for this report."
 msgstr "येमि रिपोटॊच कमपनी."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:908
+#: gnucash/report/reports/standard/new-owner-report.scm:912
 #: gnucash/report/reports/standard/owner-report.scm:582
 #, fuzzy
 msgid "Display the sale amount column?"
 msgstr "रकम हाववाह?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:913
+#: gnucash/report/reports/standard/new-owner-report.scm:917
 #: gnucash/report/reports/standard/owner-report.scm:587
 #, fuzzy
 msgid "Display the tax column?"
 msgstr "एिकावुंट हाववाह?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:918
+#: gnucash/report/reports/standard/new-owner-report.scm:922
 #: gnucash/report/reports/standard/owner-report.scm:597
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "डिसपिले करवाह अख पीरड डेबिट कालम?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:923
+#: gnucash/report/reports/standard/new-owner-report.scm:927
 #: gnucash/report/reports/standard/owner-report.scm:592
 msgid "Display the period credits column?"
 msgstr "डिसपिले करवाह अख पीरड करेडिट कालम?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:928
+#: gnucash/report/reports/standard/new-owner-report.scm:932
 #: gnucash/report/reports/standard/register.scm:413
 #: gnucash/report/trep-engine.scm:984
 msgid "Display a running balance?"
 msgstr "अख रनॊनग बेलनॊस करवाह डिसपिले?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:933
+#: gnucash/report/reports/standard/new-owner-report.scm:937
 #, fuzzy
 msgid "Show linked transactions"
 msgstr "सिरिफ हॊयिव वायडिड टरानज़ेकशन."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:936
+#: gnucash/report/reports/standard/new-owner-report.scm:940
 #, fuzzy
 msgid "Linked transactions are hidden."
 msgstr "अको तलाश सॊत छ़ॊंडीव टरांज़ीकशन"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:938
+#: gnucash/report/reports/standard/new-owner-report.scm:942
 #, fuzzy
 msgid "Simple"
 msgstr "नमूनः    "
 
-#: gnucash/report/reports/standard/new-owner-report.scm:939
+#: gnucash/report/reports/standard/new-owner-report.scm:943
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:941
+#: gnucash/report/reports/standard/new-owner-report.scm:945
 #, fuzzy
 msgid "Detailed"
 msgstr "गुव नाकाम"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:942
+#: gnucash/report/reports/standard/new-owner-report.scm:946
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:948
+#: gnucash/report/reports/standard/new-owner-report.scm:952
 #, fuzzy
 msgid "Display document link?"
 msgstr "एिकावुंट कॊरीव डोसपेली बतूर हायपरलींक"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1076
+#: gnucash/report/reports/standard/new-owner-report.scm:1080
 #, fuzzy
 msgid "No valid account found"
 msgstr "कांह मिचोंग टरांज़ीकशन आव नॊ लबनो"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1077
+#: gnucash/report/reports/standard/new-owner-report.scm:1081
 #, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
 msgstr "यथ रिपोटस छॊ ज़रूरत अख लायक एकावुनट च़ारनॊच."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1100
+#: gnucash/report/reports/standard/new-owner-report.scm:1104
 #, fuzzy
 msgid "No transactions found."
 msgstr "कांह मिचोंग टरांज़ीकशन आव नॊ लबनो"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1101
+#: gnucash/report/reports/standard/new-owner-report.scm:1105
 #: gnucash/report/trep-engine.scm:130
 msgid "No matching transactions found"
 msgstr "कांह मिचोंग टरांज़ीकशन आव नॊ लबनो"
@@ -28135,75 +28139,75 @@ msgstr "ईनवीसटोमींट पूटफूलयू"
 msgid "Units"
 msgstr "युनीट"
 
-#: gnucash/report/reports/standard/price-scatter.scm:41
+#: gnucash/report/reports/standard/price-scatter.scm:42
 msgid "Price of Commodity"
 msgstr "कामूडीटी हुंद किमत"
 
-#: gnucash/report/reports/standard/price-scatter.scm:43
+#: gnucash/report/reports/standard/price-scatter.scm:44
 msgid "Invert prices"
 msgstr "परायीस कॊरीव ईनविट"
 
-#: gnucash/report/reports/standard/price-scatter.scm:52
+#: gnucash/report/reports/standard/price-scatter.scm:53
 msgid "Show Asset & Liability bars"
 msgstr "एिसीट तॊ लायबीलटी बार हॊयीव"
 
-#: gnucash/report/reports/standard/price-scatter.scm:53
+#: gnucash/report/reports/standard/price-scatter.scm:54
 msgid "Show Net Worth bars"
 msgstr "नीट वॊरीथ बार हॊयीव"
 
-#: gnucash/report/reports/standard/price-scatter.scm:55
+#: gnucash/report/reports/standard/price-scatter.scm:56
 msgid "Marker"
 msgstr "मारकर"
 
-#: gnucash/report/reports/standard/price-scatter.scm:56
+#: gnucash/report/reports/standard/price-scatter.scm:57
 msgid "Marker Color"
 msgstr "मारकर रंग"
 
-#: gnucash/report/reports/standard/price-scatter.scm:81
+#: gnucash/report/reports/standard/price-scatter.scm:82
 msgid "Calculate the price of this commodity."
 msgstr "यॊमी कामूडीटी हुंद परायीस कॊरीव शुमार."
 
-#: gnucash/report/reports/standard/price-scatter.scm:93
+#: gnucash/report/reports/standard/price-scatter.scm:94
 msgid "Actual Transactions"
 msgstr "असली टरांज़ीकशन"
 
-#: gnucash/report/reports/standard/price-scatter.scm:94
+#: gnucash/report/reports/standard/price-scatter.scm:95
 msgid "The instantaneous price of actual currency transactions in the past."
 msgstr "ईनसटनटेनयस कॊमत असली करनसी टरानज़ेकशनन हूनद पॊतमिस वखतस मनज़."
 
-#: gnucash/report/reports/standard/price-scatter.scm:97
+#: gnucash/report/reports/standard/price-scatter.scm:98
 msgid "The recorded prices."
 msgstr "रिकाड करनॊ आमॊत कीमत."
 
-#: gnucash/report/reports/standard/price-scatter.scm:104
+#: gnucash/report/reports/standard/price-scatter.scm:105
 msgid "Plot commodity per currency rather than currency per commodity."
 msgstr "पुलाट कामूडीटी परॊथ करनसी ना कॊ करनसी परॊथ कामूडीटी. "
 
-#: gnucash/report/reports/standard/price-scatter.scm:120
+#: gnucash/report/reports/standard/price-scatter.scm:121
 msgid "Color of the marker."
 msgstr "मारकरुक रनग."
 
-#: gnucash/report/reports/standard/price-scatter.scm:140
+#: gnucash/report/reports/standard/price-scatter.scm:141
 msgid "Double-Weeks"
 msgstr "डबल -हफतो"
 
-#: gnucash/report/reports/standard/price-scatter.scm:142
+#: gnucash/report/reports/standard/price-scatter.scm:143
 #, fuzzy
 #| msgid "Quarter"
 msgid "Quarters"
 msgstr "कवाटर"
 
-#: gnucash/report/reports/standard/price-scatter.scm:143
+#: gnucash/report/reports/standard/price-scatter.scm:144
 #, fuzzy
 #| msgid "Half Year"
 msgid "Half Years"
 msgstr "नॊसीब वॊरी"
 
-#: gnucash/report/reports/standard/price-scatter.scm:238
+#: gnucash/report/reports/standard/price-scatter.scm:239
 msgid "Identical commodities"
 msgstr "हयोशय कामूडीटी"
 
-#: gnucash/report/reports/standard/price-scatter.scm:239
+#: gnucash/report/reports/standard/price-scatter.scm:240
 msgid ""
 "Your selected commodity and the currency of the report are identical. It "
 "doesn't make sense to show prices for identical commodities."
@@ -28211,7 +28215,7 @@ msgstr ""
 "तुहॊंज़ च़ॊरमोच़ कामूडीटी तॊ  रीपूटोच करनसी छॊ हॊशीय. अथ छु नॊ कांह मतलब निरान यॊली "
 "हॊशन कामूडीटयन बापत परायीस हावीन पॊवान छॊ."
 
-#: gnucash/report/reports/standard/price-scatter.scm:277
+#: gnucash/report/reports/standard/price-scatter.scm:278
 msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
@@ -28219,11 +28223,11 @@ msgstr ""
 "कांह परायीस ईनफारमिशन छॊ नॊ दसतीयाब च़ारनी आमच़न कामूडीटयन बापत च़ॊरमीतोस टायोम "
 "पिरडस मंज़."
 
-#: gnucash/report/reports/standard/price-scatter.scm:282
+#: gnucash/report/reports/standard/price-scatter.scm:283
 msgid "Only one price"
 msgstr "सोरोफ अक किमत"
 
-#: gnucash/report/reports/standard/price-scatter.scm:283
+#: gnucash/report/reports/standard/price-scatter.scm:284
 msgid ""
 "There was only one single price found for the selected commodities in the "
 "selected time period. This doesn't give a useful plot."
@@ -28231,11 +28235,11 @@ msgstr ""
 "अकूय किमत ऊस लबनी आमुत च़ारनी आमच़न कामूडीटयन बापत च़ॊरमीतोस टायोम पिरडस मंज़. यॊ छु "
 "नॊ अख फॊयदो मंद पुलाट दोवान."
 
-#: gnucash/report/reports/standard/price-scatter.scm:289
+#: gnucash/report/reports/standard/price-scatter.scm:290
 msgid "All Prices equal"
 msgstr "तमाम परायीस कुनो"
 
-#: gnucash/report/reports/standard/price-scatter.scm:290
+#: gnucash/report/reports/standard/price-scatter.scm:291
 msgid ""
 "All the prices found are equal. This would result in a plot with one "
 "straight line. Unfortunately, the plotting tool can't handle that."
@@ -28243,11 +28247,11 @@ msgstr ""
 "तमाम लबनी आमोत परायोस छॊ कुनीय. अमयुक नतिज नॊरी अख पुलाट यथ अख सयोदो सयुद लायोन "
 "आसो. बदकोसमती सान हयोको नॊ पुलाटींग टूल तॊ हिमडील कॊरीथ."
 
-#: gnucash/report/reports/standard/price-scatter.scm:296
+#: gnucash/report/reports/standard/price-scatter.scm:297
 msgid "All Prices at the same date"
 msgstr "तमाम परायोस कुनसीय डिटस पयॊठ"
 
-#: gnucash/report/reports/standard/price-scatter.scm:297
+#: gnucash/report/reports/standard/price-scatter.scm:298
 msgid ""
 "All the prices found are from the same date. This would result in a plot "
 "with one straight line. Unfortunately, the plotting tool can't handle that."
@@ -28255,7 +28259,7 @@ msgstr ""
 "तमाम लबनी आमोत परायोस छॊ कुनीय तॊरिख पयॊठ. अमयुक नतिज नॊरी अख पुलाट यथ अख सयोदो "
 "सयुद लायोन आसो. बदकोसमती सान हयोको नॊ पुलाटींग टूल तॊ हिमडील कॊरीथ."
 
-#: gnucash/report/reports/standard/price-scatter.scm:329
+#: gnucash/report/reports/standard/price-scatter.scm:330
 msgid "Price Scatterplot"
 msgstr "परायीस सोकिटर पुलाट"
 
@@ -28958,19 +28962,19 @@ msgstr "कालमन हुंद तिदाद"
 msgid "Number of columns before wrapping to a new row."
 msgstr "नमबर कालमन हूनद एकिस नोविस रोवस कुन वलनॊ बरुनह."
 
-#: gnucash/report/reports/standard/view-column.scm:159
+#: gnucash/report/reports/standard/view-column.scm:155
 msgid "Edit Options"
 msgstr "ऊपशन कॊरीव एिडोट"
 
-#: gnucash/report/reports/standard/view-column.scm:166
+#: gnucash/report/reports/standard/view-column.scm:162
 msgid "Single Report"
 msgstr "कुन  रीपूट"
 
-#: gnucash/report/reports/standard/view-column.scm:219
+#: gnucash/report/reports/standard/view-column.scm:215
 msgid "Multicolumn View"
 msgstr "मलटीकालम वीव"
 
-#: gnucash/report/reports/standard/view-column.scm:221
+#: gnucash/report/reports/standard/view-column.scm:217
 msgid "Custom Multicolumn Report"
 msgstr "कसटम मलटीकालम रीपूट"
 
@@ -30407,218 +30411,218 @@ msgstr "बजट युस मखसूस करुन छु येलॊ न
 msgid "The electronic tax number of your business"
 msgstr "टिकोस नमबर"
 
-#: libgnucash/app-utils/date-utilities.scm:524
+#: libgnucash/app-utils/date-utilities.scm:523
 #, scheme-format
 msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
 
-#: libgnucash/app-utils/date-utilities.scm:902
+#: libgnucash/app-utils/date-utilities.scm:909
 msgid "First day of the current calendar year."
 msgstr "गोडनयुक दोह मोजूद कलॊनडर वॊरयुक."
 
-#: libgnucash/app-utils/date-utilities.scm:909
+#: libgnucash/app-utils/date-utilities.scm:916
 msgid "Last day of the current calendar year."
 msgstr "पॊतयिम दोह मोजूद कलॊनडर वॊरयुक."
 
-#: libgnucash/app-utils/date-utilities.scm:916
+#: libgnucash/app-utils/date-utilities.scm:923
 msgid "First day of the previous calendar year."
 msgstr "गोडनयुक दोह पॊतमि कलॊनडर वॊरयुक."
 
-#: libgnucash/app-utils/date-utilities.scm:923
+#: libgnucash/app-utils/date-utilities.scm:930
 msgid "Last day of the previous calendar year."
 msgstr " पॊतयिम दोह पॊतमि कलॊनडर वॊरयुक."
 
-#: libgnucash/app-utils/date-utilities.scm:927
+#: libgnucash/app-utils/date-utilities.scm:934
 msgid "Start of next year"
 msgstr "बीयो वॊरयुक शरू"
 
-#: libgnucash/app-utils/date-utilities.scm:930
+#: libgnucash/app-utils/date-utilities.scm:937
 msgid "First day of the next calendar year."
 msgstr " गोडनयुक दोह बेयि कलॊनडर वॊरयुक."
 
-#: libgnucash/app-utils/date-utilities.scm:934
+#: libgnucash/app-utils/date-utilities.scm:941
 msgid "End of next year"
 msgstr "खतम बीयो वॊरयुक"
 
-#: libgnucash/app-utils/date-utilities.scm:937
+#: libgnucash/app-utils/date-utilities.scm:944
 msgid "Last day of the next calendar year."
 msgstr "पॊतयिम दोह बेयि कलॊनडर वॊरयुक."
 
-#: libgnucash/app-utils/date-utilities.scm:941
+#: libgnucash/app-utils/date-utilities.scm:948
 msgid "Start of accounting period"
 msgstr "एिकावटींग पिरडुक शरू"
 
-#: libgnucash/app-utils/date-utilities.scm:944
+#: libgnucash/app-utils/date-utilities.scm:951
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr ""
 "गोडनयुक दोह एकावनटिनग परिनटिनग हूनद, यिथ कॊन ज़न सेट करनॊ आमुत छु गुलोबल तरजीहातन "
 "मनज़."
 
-#: libgnucash/app-utils/date-utilities.scm:948
+#: libgnucash/app-utils/date-utilities.scm:955
 msgid "End of accounting period"
 msgstr "एिकावटींग पिरडुक खतम"
 
-#: libgnucash/app-utils/date-utilities.scm:951
+#: libgnucash/app-utils/date-utilities.scm:958
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr ""
 "पॊतयिम दोह एकावनटिनग परिनटिनग हूनद, यिथ कॊन ज़न सेट करनॊ आमुत छु गुलोबल तरजीहातन "
 "मनज़."
 
-#: libgnucash/app-utils/date-utilities.scm:958
+#: libgnucash/app-utils/date-utilities.scm:965
 msgid "First day of the current month."
 msgstr "गोडनयुक दोह मोजूद रॊतुक"
 
-#: libgnucash/app-utils/date-utilities.scm:965
+#: libgnucash/app-utils/date-utilities.scm:972
 msgid "Last day of the current month."
 msgstr "पॊतयिम दोह मोजूद रॊतुक"
 
-#: libgnucash/app-utils/date-utilities.scm:972
+#: libgnucash/app-utils/date-utilities.scm:979
 msgid "First day of the previous month."
 msgstr "गोडनयुक दोह पॊतमि रॊतुक"
 
-#: libgnucash/app-utils/date-utilities.scm:979
+#: libgnucash/app-utils/date-utilities.scm:986
 msgid "Last day of previous month."
 msgstr "पॊतयिम  दोह पॊतमि रॊतुक"
 
-#: libgnucash/app-utils/date-utilities.scm:983
+#: libgnucash/app-utils/date-utilities.scm:990
 msgid "Start of next month"
 msgstr "बीयो रितयुक शरू"
 
-#: libgnucash/app-utils/date-utilities.scm:986
+#: libgnucash/app-utils/date-utilities.scm:993
 msgid "First day of the next month."
 msgstr "गोडनयुक दोह बेयि रॊतुक."
 
-#: libgnucash/app-utils/date-utilities.scm:990
+#: libgnucash/app-utils/date-utilities.scm:997
 msgid "End of next month"
 msgstr "बीयो रितयुक खतम"
 
-#: libgnucash/app-utils/date-utilities.scm:993
+#: libgnucash/app-utils/date-utilities.scm:1000
 msgid "Last day of next month."
 msgstr "पॊतयिम दोह बेयि रॊतुक."
 
-#: libgnucash/app-utils/date-utilities.scm:997
+#: libgnucash/app-utils/date-utilities.scm:1004
 msgid "Start of current quarter"
 msgstr "शरू मूजूद काटरुक"
 
-#: libgnucash/app-utils/date-utilities.scm:1000
+#: libgnucash/app-utils/date-utilities.scm:1007
 msgid "First day of the current quarterly accounting period."
 msgstr "मोजूद काटरली एकावनटिनग पीरडुक गोडनयुक दोह."
 
-#: libgnucash/app-utils/date-utilities.scm:1004
+#: libgnucash/app-utils/date-utilities.scm:1011
 msgid "End of current quarter"
 msgstr "मूजूद काटरुक खतम"
 
-#: libgnucash/app-utils/date-utilities.scm:1007
+#: libgnucash/app-utils/date-utilities.scm:1014
 msgid "Last day of the current quarterly accounting period."
 msgstr "मोजूद काटरली एकावनटिनग पीरडुक पॊतयिम दोह."
 
-#: libgnucash/app-utils/date-utilities.scm:1014
+#: libgnucash/app-utils/date-utilities.scm:1021
 msgid "First day of the previous quarterly accounting period."
 msgstr "पॊतमि काटरली एकावनटिनग पीरडुक गोडनयुक दोह."
 
-#: libgnucash/app-utils/date-utilities.scm:1021
+#: libgnucash/app-utils/date-utilities.scm:1028
 msgid "Last day of previous quarterly accounting period."
 msgstr "पॊतमि काटरली एकावनटिनग पीरडुक पॊतयिम दोह."
 
-#: libgnucash/app-utils/date-utilities.scm:1025
+#: libgnucash/app-utils/date-utilities.scm:1032
 msgid "Start of next quarter"
 msgstr "बीयोस काटरुक शरू"
 
-#: libgnucash/app-utils/date-utilities.scm:1028
+#: libgnucash/app-utils/date-utilities.scm:1035
 msgid "First day of the next quarterly accounting period."
 msgstr "बेयिस काटरली एकावनटिनग पीरडुक गोडनयुक दोह."
 
-#: libgnucash/app-utils/date-utilities.scm:1032
+#: libgnucash/app-utils/date-utilities.scm:1039
 msgid "End of next quarter"
 msgstr "बीयोस काटरुक खतम"
 
-#: libgnucash/app-utils/date-utilities.scm:1035
+#: libgnucash/app-utils/date-utilities.scm:1042
 msgid "Last day of next quarterly accounting period."
 msgstr "बेयिस काटरली एकावनटिनग पीरडुक पॊतयिम दोह."
 
-#: libgnucash/app-utils/date-utilities.scm:1041
+#: libgnucash/app-utils/date-utilities.scm:1048
 msgid "The current date."
 msgstr "मोजूद डेट."
 
-#: libgnucash/app-utils/date-utilities.scm:1045
+#: libgnucash/app-utils/date-utilities.scm:1052
 msgid "One Month Ago"
 msgstr "अख रॊथ बरुंह"
 
-#: libgnucash/app-utils/date-utilities.scm:1047
+#: libgnucash/app-utils/date-utilities.scm:1054
 msgid "One Month Ago."
 msgstr "अख रॊथ बरुनह."
 
-#: libgnucash/app-utils/date-utilities.scm:1051
+#: libgnucash/app-utils/date-utilities.scm:1058
 msgid "One Week Ago"
 msgstr "अख हफतो बरुंह"
 
-#: libgnucash/app-utils/date-utilities.scm:1053
+#: libgnucash/app-utils/date-utilities.scm:1060
 msgid "One Week Ago."
 msgstr "अख हफतॊ बरुनह."
 
-#: libgnucash/app-utils/date-utilities.scm:1057
+#: libgnucash/app-utils/date-utilities.scm:1064
 msgid "Three Months Ago"
 msgstr "तरॊ रॊथ बरुंह"
 
-#: libgnucash/app-utils/date-utilities.scm:1059
+#: libgnucash/app-utils/date-utilities.scm:1066
 msgid "Three Months Ago."
 msgstr "तरॊ रॊथ बरुनह."
 
-#: libgnucash/app-utils/date-utilities.scm:1063
+#: libgnucash/app-utils/date-utilities.scm:1070
 msgid "Six Months Ago"
 msgstr "शॊ रॊथ बरुंह"
 
-#: libgnucash/app-utils/date-utilities.scm:1065
+#: libgnucash/app-utils/date-utilities.scm:1072
 msgid "Six Months Ago."
 msgstr "शॊ रॊथ बरुनह."
 
-#: libgnucash/app-utils/date-utilities.scm:1068
+#: libgnucash/app-utils/date-utilities.scm:1075
 msgid "One Year Ago"
 msgstr "अख वॊरी बरुंह"
 
-#: libgnucash/app-utils/date-utilities.scm:1070
+#: libgnucash/app-utils/date-utilities.scm:1077
 msgid "One Year Ago."
 msgstr "अख वॊरी बरुनह."
 
-#: libgnucash/app-utils/date-utilities.scm:1074
+#: libgnucash/app-utils/date-utilities.scm:1081
 msgid "One Month Ahead"
 msgstr "अख रॊथ पतो"
 
-#: libgnucash/app-utils/date-utilities.scm:1076
+#: libgnucash/app-utils/date-utilities.scm:1083
 msgid "One Month Ahead."
 msgstr "अख रॊथ गॊछ़िथ."
 
-#: libgnucash/app-utils/date-utilities.scm:1080
+#: libgnucash/app-utils/date-utilities.scm:1087
 msgid "One Week Ahead"
 msgstr "अख हफतो पतो"
 
-#: libgnucash/app-utils/date-utilities.scm:1082
+#: libgnucash/app-utils/date-utilities.scm:1089
 msgid "One Week Ahead."
 msgstr "अख हपतॊ गॊछ़िथ."
 
-#: libgnucash/app-utils/date-utilities.scm:1086
+#: libgnucash/app-utils/date-utilities.scm:1093
 msgid "Three Months Ahead"
 msgstr "तरॊ रॊथ पतो"
 
-#: libgnucash/app-utils/date-utilities.scm:1088
+#: libgnucash/app-utils/date-utilities.scm:1095
 msgid "Three Months Ahead."
 msgstr "तरॊ रॊथ गॊछ़िथ."
 
-#: libgnucash/app-utils/date-utilities.scm:1092
+#: libgnucash/app-utils/date-utilities.scm:1099
 msgid "Six Months Ahead"
 msgstr "शॊ रॊथ पतॊ"
 
-#: libgnucash/app-utils/date-utilities.scm:1094
+#: libgnucash/app-utils/date-utilities.scm:1101
 msgid "Six Months Ahead."
 msgstr "शॊ रॊथ गॊछ़िथ."
 
-#: libgnucash/app-utils/date-utilities.scm:1097
+#: libgnucash/app-utils/date-utilities.scm:1104
 msgid "One Year Ahead"
 msgstr "अख वॊरी पतॊ"
 
-#: libgnucash/app-utils/date-utilities.scm:1099
+#: libgnucash/app-utils/date-utilities.scm:1106
 msgid "One Year Ahead."
 msgstr "अख वॊरी गॊछ़िथ."
 
@@ -30912,40 +30916,40 @@ msgstr ""
 "बून कॊन लॊबीव तुहयो लीसटो गलत एिकावुंट नावन हुंद:\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4364
+#: libgnucash/engine/Account.cpp:4368
 msgid "Credit Card"
 msgstr "करीडीट काड"
 
-#: libgnucash/engine/Account.cpp:4366
+#: libgnucash/engine/Account.cpp:4370
 msgid "Stock"
 msgstr "सीटाक"
 
-#: libgnucash/engine/Account.cpp:4367
+#: libgnucash/engine/Account.cpp:4371
 msgid "Mutual Fund"
 msgstr "मयूचवल फंड"
 
-#: libgnucash/engine/Account.cpp:4372
+#: libgnucash/engine/Account.cpp:4376
 msgid "A/Receivable"
 msgstr "A/रटनस लायक"
 
-#: libgnucash/engine/Account.cpp:4373
+#: libgnucash/engine/Account.cpp:4377
 msgid "A/Payable"
 msgstr "A/पि करनस लायक"
 
-#: libgnucash/engine/Account.cpp:4374
+#: libgnucash/engine/Account.cpp:4378
 msgid "Root"
 msgstr "रूट"
 
-#: libgnucash/engine/Account.cpp:4816
+#: libgnucash/engine/Account.cpp:4820
 msgid "Orphaned Gains"
 msgstr "आरफिनीड फॊयदी"
 
-#: libgnucash/engine/Account.cpp:4830 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4834 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "रीयालायज़ीड फॊयदी /नुकसान"
 
-#: libgnucash/engine/Account.cpp:4832
+#: libgnucash/engine/Account.cpp:4836
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."

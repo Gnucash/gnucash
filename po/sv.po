@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.6.11\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-13 22:01+0100\n"
+"POT-Creation-Date: 2021-01-03 07:22+0100\n"
 "PO-Revision-Date: 2016-01-14 21:51+0100\n"
 "Last-Translator: Erik Johansson <erik@ejohansson.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -91,7 +91,7 @@ msgstr "Västerländsk"
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:969
 #: gnucash/gtkbuilder/dialog-account.glade:1029
-#: gnucash/report/reports/standard/account-piecharts.scm:487
+#: gnucash/report/reports/standard/account-piecharts.scm:488
 #: gnucash/report/reports/standard/category-barchart.scm:537
 msgid "Other"
 msgstr "Annat"
@@ -938,10 +938,10 @@ msgstr ""
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
 #: gnucash/register/ledger-core/split-register-model.c:232
 #: gnucash/report/reports/standard/account-summary.scm:83
-#: gnucash/report/reports/standard/advanced-portfolio.scm:72
+#: gnucash/report/reports/standard/advanced-portfolio.scm:73
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1095
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1100
-#: gnucash/report/reports/standard/cashflow-barchart.scm:331
+#: gnucash/report/reports/standard/cashflow-barchart.scm:343
 #: gnucash/report/reports/standard/category-barchart.scm:634
 #: gnucash/report/reports/standard/category-barchart.scm:655
 #: gnucash/report/reports/standard/customer-summary.scm:70
@@ -952,9 +952,9 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:212
 #: gnucash/report/reports/standard/invoice.scm:603
 #: gnucash/report/reports/standard/job-report.scm:40
-#: gnucash/report/reports/standard/net-charts.scm:417
+#: gnucash/report/reports/standard/net-charts.scm:413
 #: gnucash/report/reports/standard/new-owner-report.scm:49
-#: gnucash/report/reports/standard/new-owner-report.scm:237
+#: gnucash/report/reports/standard/new-owner-report.scm:241
 #: gnucash/report/reports/standard/owner-report.scm:50
 #: gnucash/report/reports/standard/portfolio.scm:51
 #: gnucash/report/reports/standard/register.scm:130
@@ -980,7 +980,7 @@ msgstr "Datum"
 #: gnucash/register/ledger-core/split-register.c:2669
 #: gnucash/register/ledger-core/split-register.c:2674
 #: gnucash/register/ledger-core/split-register.c:2685
-#: gnucash/report/reports/standard/new-owner-report.scm:294
+#: gnucash/report/reports/standard/new-owner-report.scm:298
 #: gnucash/report/reports/standard/owner-report.scm:357
 #: libgnucash/engine/Account.cpp:145 libgnucash/engine/Account.cpp:153
 #: libgnucash/engine/Account.cpp:174 libgnucash/engine/gncOwner.c:814
@@ -1036,14 +1036,14 @@ msgstr "Fel vid prisinläggning."
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:341
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1051
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1052
 #: gnucash/report/reports/standard/budget-flow.scm:41
 #: gnucash/report/reports/standard/budget.scm:47
 #: gnucash/report/reports/standard/cash-flow.scm:47
 #: gnucash/report/reports/standard/general-journal.scm:97
 #: gnucash/report/reports/standard/job-report.scm:36
 #: gnucash/report/reports/standard/lot-viewer.scm:37
-#: gnucash/report/reports/standard/new-owner-report.scm:1128
+#: gnucash/report/reports/standard/new-owner-report.scm:1132
 #: gnucash/report/reports/standard/owner-report.scm:48
 #: gnucash/report/reports/standard/portfolio.scm:253
 #: gnucash/report/reports/standard/register.scm:143
@@ -1054,7 +1054,7 @@ msgstr "Konto"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1063
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
 msgstr "Symbol"
@@ -1062,7 +1062,7 @@ msgstr "Symbol"
 #: gnucash/gnome/assistant-stock-split.c:585
 #: gnucash/gnome/dialog-find-transactions.c:122
 #: gnucash/register/ledger-core/split-register-model.c:419
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1071
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1072
 #: gnucash/report/reports/standard/general-journal.scm:98
 #: gnucash/report/reports/standard/general-ledger.scm:78
 #: gnucash/report/reports/standard/general-ledger.scm:98
@@ -1197,7 +1197,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-billterms.glade:182
 #: gnucash/gtkbuilder/dialog-billterms.glade:767
 #: gnucash/gtkbuilder/gnc-frequency.glade:966
-#: gnucash/report/reports/standard/price-scatter.scm:138
+#: gnucash/report/reports/standard/price-scatter.scm:139
 msgid "Days"
 msgstr "Dagar"
 
@@ -1212,7 +1212,7 @@ msgstr "Proximo"
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:622
 #: gnucash/gtkbuilder/dialog-price.glade:24
 #: gnucash/report/reports/standard/job-report.scm:240
-#: gnucash/report/reports/standard/new-owner-report.scm:296
+#: gnucash/report/reports/standard/new-owner-report.scm:300
 #: gnucash/report/reports/standard/owner-report.scm:353
 #: gnucash/report/reports/standard/owner-report.scm:358
 msgid "Unknown"
@@ -1643,7 +1643,7 @@ msgstr "Transaktionsdetaljer"
 #: gnucash/report/reports/standard/invoice.scm:217
 #: gnucash/report/reports/standard/job-report.scm:44
 #: gnucash/report/reports/standard/new-owner-report.scm:53
-#: gnucash/report/reports/standard/new-owner-report.scm:240
+#: gnucash/report/reports/standard/new-owner-report.scm:244
 #: gnucash/report/reports/standard/owner-report.scm:54
 #: gnucash/report/reports/standard/register.scm:138
 #: gnucash/report/reports/standard/register.scm:368
@@ -1858,7 +1858,7 @@ msgstr "Aktiepris"
 #: gnucash/report/reports/standard/general-ledger.scm:81
 #: gnucash/report/reports/standard/general-ledger.scm:101
 #: gnucash/report/reports/standard/job-report.scm:45
-#: gnucash/report/reports/standard/new-owner-report.scm:244
+#: gnucash/report/reports/standard/new-owner-report.scm:248
 #: gnucash/report/reports/standard/owner-report.scm:59
 #: gnucash/report/reports/standard/register.scm:398
 #: gnucash/report/reports/standard/register.scm:647
@@ -1875,7 +1875,7 @@ msgstr "Belopp"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:78
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1080
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1081
 #: gnucash/report/reports/standard/portfolio.scm:258
 #: gnucash/report/reports/standard/register.scm:158
 #: gnucash/report/reports/standard/register.scm:407
@@ -2128,7 +2128,7 @@ msgstr ""
 #: gnucash/report/reports/standard/job-report.scm:41
 #: gnucash/report/reports/standard/new-aging.scm:126
 #: gnucash/report/reports/standard/new-owner-report.scm:50
-#: gnucash/report/reports/standard/new-owner-report.scm:957
+#: gnucash/report/reports/standard/new-owner-report.scm:961
 #: gnucash/report/reports/standard/owner-report.scm:51
 #: gnucash/report/reports/standard/owner-report.scm:612
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:233
@@ -2137,7 +2137,7 @@ msgstr "Förfallodatum"
 
 #: gnucash/gnome/dialog-invoice.c:837 gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:130
-#: gnucash/report/reports/standard/new-owner-report.scm:961
+#: gnucash/report/reports/standard/new-owner-report.scm:965
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post Date"
 msgstr ""
@@ -2200,7 +2200,7 @@ msgid "PAID"
 msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:2065
-#: gnucash/report/reports/standard/new-owner-report.scm:577
+#: gnucash/report/reports/standard/new-owner-report.scm:581
 msgid "UNPAID"
 msgstr ""
 
@@ -2414,14 +2414,14 @@ msgstr ""
 #: gnucash/report/reports/standard/customer-summary.scm:72
 #: gnucash/report/reports/standard/job-report.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:52
-#: gnucash/report/reports/standard/new-owner-report.scm:239
+#: gnucash/report/reports/standard/new-owner-report.scm:243
 #: gnucash/report/reports/standard/owner-report.scm:53
 msgid "Type"
 msgstr "Typ"
 
 #: gnucash/gnome/dialog-invoice.c:3440
 #: gnucash/register/ledger-core/split-register-model.c:309
-#: gnucash/report/reports/standard/new-owner-report.scm:819
+#: gnucash/report/reports/standard/new-owner-report.scm:823
 msgid "Paid"
 msgstr "Betald"
 
@@ -2585,7 +2585,7 @@ msgstr "Rubrik"
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
 #: gnucash/report/reports/standard/new-owner-report.scm:58
-#: gnucash/report/reports/standard/new-owner-report.scm:558
+#: gnucash/report/reports/standard/new-owner-report.scm:562
 #: gnucash/report/reports/standard/owner-report.scm:319
 #: gnucash/report/reports/standard/register.scm:164
 msgid "Balance"
@@ -2676,8 +2676,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
 #: gnucash/report/reports/standard/new-aging.scm:194
-#: gnucash/report/reports/standard/new-owner-report.scm:315
-#: gnucash/report/reports/standard/new-owner-report.scm:713
+#: gnucash/report/reports/standard/new-owner-report.scm:319
+#: gnucash/report/reports/standard/new-owner-report.scm:717
 msgid "Pre-Payment"
 msgstr "Förskottsbetalning"
 
@@ -2797,7 +2797,7 @@ msgstr "Ta bort priser?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:427
 #: gnucash/gtkbuilder/dialog-invoice.glade:615
-#: gnucash/report/reports/standard/budget-income-statement.scm:123
+#: gnucash/report/reports/standard/budget-income-statement.scm:124
 #: gnucash/report/reports/standard/equity-statement.scm:85
 #: gnucash/report/reports/standard/income-statement.scm:117
 #: gnucash/report/reports/standard/trial-balance.scm:91
@@ -2908,7 +2908,7 @@ msgstr "Innehåll"
 
 #: gnucash/gnome/dialog-report-column-view.c:412
 #: gnucash/report/reports/standard/customer-summary.scm:291
-#: gnucash/report/reports/standard/new-owner-report.scm:1061
+#: gnucash/report/reports/standard/new-owner-report.scm:1065
 #: gnucash/report/reports/standard/owner-report.scm:743
 msgid "Report"
 msgstr "Rapport"
@@ -3275,19 +3275,19 @@ msgstr "Sök leverantör"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:97
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
 #: gnucash/register/ledger-core/split-register.c:2716
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1087
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1088
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1279
-#: gnucash/report/reports/standard/net-charts.scm:350
-#: gnucash/report/reports/standard/net-charts.scm:420
+#: gnucash/report/reports/standard/net-charts.scm:346
+#: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4369 libgnucash/engine/Scrub.c:464
+#: libgnucash/engine/Account.cpp:4373 libgnucash/engine/Scrub.c:464
 msgid "Income"
 msgstr "Intäkt"
 
 #: gnucash/gnome/gnc-budget-view.c:502
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:122
-#: gnucash/report/reports/standard/budget-income-statement.scm:521
+#: gnucash/report/reports/standard/budget-income-statement.scm:522
 #: gnucash/report/reports/standard/income-statement.scm:512
 #: gnucash/report/report-utilities.scm:205
 msgid "Expenses"
@@ -3315,17 +3315,18 @@ msgstr "Öppna en budget"
 #: gnucash/report/html-acct-table.scm:829 gnucash/report/reports/aging.scm:544
 #: gnucash/report/reports/aging.scm:831
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:294
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1052
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1053
 #: gnucash/report/reports/standard/budget-flow.scm:168
 #: gnucash/report/reports/standard/budget-flow.scm:247
 #: gnucash/report/reports/standard/budget.scm:511
+#: gnucash/report/reports/standard/cashflow-barchart.scm:352
 #: gnucash/report/reports/standard/customer-summary.scm:478
 #: gnucash/report/reports/standard/customer-summary.scm:480
 #: gnucash/report/reports/standard/invoice.scm:104
 #: gnucash/report/reports/standard/invoice.scm:252
 #: gnucash/report/reports/standard/new-aging.scm:200
 #: gnucash/report/reports/standard/new-aging.scm:325
-#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:325
 #: gnucash/report/reports/standard/portfolio.scm:278
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1961
@@ -3452,7 +3453,7 @@ msgid "Setup scheduled transactions for repayment of a loan"
 msgstr "Skapa schemalagda transaktioner för återbetalning av ett lån"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:180
-#: gnucash/report/report-core.scm:150
+#: gnucash/report/report-core.scm:151
 msgid "B_udget"
 msgstr "B_udget"
 
@@ -3502,7 +3503,7 @@ msgid "_Import Map Editor"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
-msgid "View and Delete Bayesian and Non Bayesian information"
+msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
@@ -3666,7 +3667,7 @@ msgid "_OK"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-business.c:155
-#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:161
+#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:162
 msgid "_Business"
 msgstr "_Företag"
 
@@ -4206,20 +4207,21 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2846
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2850
 #: gnucash/gtkbuilder/dialog-preferences.glade:980
-#: gnucash/report/report-core.scm:157
+#: gnucash/report/report-core.scm:158
 #: gnucash/report/reports/example/average-balance.scm:92
 #: gnucash/report/reports/example/average-balance.scm:296
 #: gnucash/report/reports/example/daily-reports.scm:57
-#: gnucash/report/reports/standard/account-piecharts.scm:69
+#: gnucash/report/reports/standard/account-piecharts.scm:70
+#: gnucash/report/reports/standard/account-piecharts.scm:564
 #: gnucash/report/reports/standard/account-summary.scm:85
-#: gnucash/report/reports/standard/advanced-portfolio.scm:162
+#: gnucash/report/reports/standard/advanced-portfolio.scm:163
 #: gnucash/report/reports/standard/balance-forecast.scm:37
 #: gnucash/report/reports/standard/balance-sheet.scm:87
 #: gnucash/report/reports/standard/balsheet-pnl.scm:81
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:52
 #: gnucash/report/reports/standard/budget-barchart.scm:38
-#: gnucash/report/reports/standard/budget-income-statement.scm:74
-#: gnucash/report/reports/standard/cashflow-barchart.scm:44
+#: gnucash/report/reports/standard/budget-income-statement.scm:75
+#: gnucash/report/reports/standard/cashflow-barchart.scm:45
 #: gnucash/report/reports/standard/category-barchart.scm:75
 #: gnucash/report/reports/standard/equity-statement.scm:68
 #: gnucash/report/reports/standard/income-gst-statement.scm:125
@@ -4408,7 +4410,7 @@ msgstr "Anteckningar"
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:227
 #: gnucash/report/reports/standard/budget-flow.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:59
 #: gnucash/report/reports/standard/budget.scm:94
 msgid "Budget"
 msgstr "Budget"
@@ -5065,7 +5067,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 #: gnucash/report/reports/standard/job-report.scm:511
-#: gnucash/report/reports/standard/new-owner-report.scm:1205
+#: gnucash/report/reports/standard/new-owner-report.scm:1209
 msgid "Vendor Report"
 msgstr "Leverantörsrapport"
 
@@ -5075,7 +5077,7 @@ msgstr "Visa leverantörsrapport"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
 #: gnucash/report/reports/standard/job-report.scm:505
-#: gnucash/report/reports/standard/new-owner-report.scm:1196
+#: gnucash/report/reports/standard/new-owner-report.scm:1200
 msgid "Customer Report"
 msgstr "Kundrapport"
 
@@ -5085,7 +5087,7 @@ msgstr "Visa kundrapport"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 #: gnucash/report/reports/standard/job-report.scm:514
-#: gnucash/report/reports/standard/new-owner-report.scm:1214
+#: gnucash/report/reports/standard/new-owner-report.scm:1218
 msgid "Employee Report"
 msgstr "Rapport över anställda"
 
@@ -6170,23 +6172,23 @@ msgstr "_Stilmallar"
 msgid "Edit report style sheets"
 msgstr "Redigera stilmallar för rapporten"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:150
-#: gnucash/report/reports/standard/view-column.scm:131
+#: gnucash/gnome/gnc-plugin-report-system.c:148
+#: gnucash/report/reports/standard/view-column.scm:127
 msgid "Report error"
 msgstr "Rapportfel"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:151
-#: gnucash/report/reports/standard/view-column.scm:132
+#: gnucash/gnome/gnc-plugin-report-system.c:149
+#: gnucash/report/reports/standard/view-column.scm:128
 msgid "An error occurred while running the report."
 msgstr "Ett fel inträffade när rapporten kördes."
 
-#: gnucash/gnome/gnc-plugin-report-system.c:186
-#: gnucash/gnome/gnc-plugin-report-system.c:208
+#: gnucash/gnome/gnc-plugin-report-system.c:184
+#: gnucash/gnome/gnc-plugin-report-system.c:206
 #, c-format
 msgid "Badly formed options URL: %s"
 msgstr "Felaktigt formaterad alternativ-URL: %s"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:196
+#: gnucash/gnome/gnc-plugin-report-system.c:194
 #, c-format
 msgid "Badly-formed report id: %s"
 msgstr "Felaktigt formaterat rapport-id: %s"
@@ -7414,47 +7416,48 @@ msgstr ""
 #. Translators: Replace here and later CUSIP by the name of your local
 #. National Securities Identifying Number
 #. like gb:SEDOL, de:WKN, ch:Valorennummer, fr:SICOVAM ...
-#. See http://en.wikipedia.org/wiki/ISIN for hints.
-#: gnucash/gnome-utils/dialog-commodity.c:173
+#. See http://en.wikipedia.org/wiki/ISIN and
+#. https://en.wikipedia.org/wiki/National_numbering_agency for hints.
+#: gnucash/gnome-utils/dialog-commodity.c:174
 msgid ""
 "\n"
 "Exchange code (ISIN, CUSIP or similar): "
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-commodity.c:175
+#: gnucash/gnome-utils/dialog-commodity.c:176
 msgid ""
 "\n"
 "Mnemonic (Ticker symbol or similar): "
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-commodity.c:274
+#: gnucash/gnome-utils/dialog-commodity.c:275
 msgid "Select security/currency"
 msgstr "Välj värdepapper/valuta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:275
+#: gnucash/gnome-utils/dialog-commodity.c:276
 #: gnucash/gtkbuilder/dialog-account.glade:1257
 msgid "_Security/currency"
 msgstr "_Värdepapper/valuta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:279
+#: gnucash/gnome-utils/dialog-commodity.c:280
 msgid "Select security"
 msgstr "Välj värdepapper"
 
-#: gnucash/gnome-utils/dialog-commodity.c:280
+#: gnucash/gnome-utils/dialog-commodity.c:281
 #: gnucash/gtkbuilder/dialog-price.glade:146
 msgid "_Security"
 msgstr "_Värdepapper"
 
-#: gnucash/gnome-utils/dialog-commodity.c:284
+#: gnucash/gnome-utils/dialog-commodity.c:285
 msgid "Select currency"
 msgstr "Välj valuta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:285
+#: gnucash/gnome-utils/dialog-commodity.c:286
 #: gnucash/gtkbuilder/dialog-price.glade:161
 msgid "Cu_rrency"
 msgstr "Va_luta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:759
+#: gnucash/gnome-utils/dialog-commodity.c:760
 #: gnucash/gnome-utils/dialog-options.c:713
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:412
 #: gnucash/gnome-utils/gnc-tree-view-price.c:402
@@ -7463,48 +7466,48 @@ msgstr "Va_luta"
 #: gnucash/gtkbuilder/dialog-transfer.glade:424
 #: gnucash/gtkbuilder/dialog-transfer.glade:437
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4368
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4372
 msgid "Currency"
 msgstr "Valuta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:854
+#: gnucash/gnome-utils/dialog-commodity.c:855
 msgid "Use local time"
 msgstr "Använd lokal tid"
 
-#: gnucash/gnome-utils/dialog-commodity.c:984
+#: gnucash/gnome-utils/dialog-commodity.c:985
 msgid "Edit currency"
 msgstr "Redigera valuta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:985
+#: gnucash/gnome-utils/dialog-commodity.c:986
 msgid "Currency Information"
 msgstr "Valutainformation"
 
-#: gnucash/gnome-utils/dialog-commodity.c:990
+#: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "Edit security"
 msgstr "Redigera värdepapper"
 
-#: gnucash/gnome-utils/dialog-commodity.c:990
+#: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "New security"
 msgstr "Nytt värdepapper"
 
-#: gnucash/gnome-utils/dialog-commodity.c:991
+#: gnucash/gnome-utils/dialog-commodity.c:992
 msgid "Security Information"
 msgstr "Värdepappersinformation"
 
-#: gnucash/gnome-utils/dialog-commodity.c:1268
+#: gnucash/gnome-utils/dialog-commodity.c:1269
 msgid "You may not create a new national currency."
 msgstr "Du kan inte skapa en ny nationell valuta."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1278
+#: gnucash/gnome-utils/dialog-commodity.c:1279
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-commodity.c:1293
+#: gnucash/gnome-utils/dialog-commodity.c:1294
 msgid "That commodity already exists."
 msgstr "Den varan finns redan."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1342
+#: gnucash/gnome-utils/dialog-commodity.c:1343
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
@@ -7971,7 +7974,7 @@ msgstr "Nej, _inte denna gång"
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:166
 #: gnucash/gnome-utils/gnc-period-select.c:70
 #: gnucash/gnome-utils/gnc-period-select.c:86
-#: libgnucash/app-utils/date-utilities.scm:1039
+#: libgnucash/app-utils/date-utilities.scm:1046
 msgid "Today"
 msgstr "Idag"
 
@@ -7980,21 +7983,21 @@ msgid "Use Shift combined with Return or Keypad Enter to finish editing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-date-delta.c:224
-#: gnucash/report/reports/standard/price-scatter.scm:139
+#: gnucash/report/reports/standard/price-scatter.scm:140
 msgid "Weeks"
 msgstr "Veckor"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:226
 #: gnucash/gtkbuilder/assistant-loan.glade:12
 #: gnucash/gtkbuilder/gnc-date-format.glade:169
-#: gnucash/report/reports/standard/price-scatter.scm:141
+#: gnucash/report/reports/standard/price-scatter.scm:142
 msgid "Months"
 msgstr "Månader"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:228
 #: gnucash/gtkbuilder/assistant-loan.glade:15
 #: gnucash/gtkbuilder/gnc-date-format.glade:181
-#: gnucash/report/reports/standard/price-scatter.scm:144
+#: gnucash/report/reports/standard/price-scatter.scm:145
 msgid "Years"
 msgstr "År"
 
@@ -8739,40 +8742,40 @@ msgstr ""
 msgid "File %s opened. %s"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:2863
+#: gnucash/gnome-utils/gnc-main-window.c:2864
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:2953
+#: gnucash/gnome-utils/gnc-main-window.c:2954
 msgid "Unable to save to database."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:2955
+#: gnucash/gnome-utils/gnc-main-window.c:2956
 msgid "Unable to save to database: Book is marked read-only."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4301
+#: gnucash/gnome-utils/gnc-main-window.c:4302
 msgid "Book Options"
 msgstr "Bokinställningar"
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.c:4686
+#: gnucash/gnome-utils/gnc-main-window.c:4687
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4698
+#: gnucash/gnome-utils/gnc-main-window.c:4699
 #: gnucash/gnome-utils/gnc-splash.c:97
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4699
+#: gnucash/gnome-utils/gnc-main-window.c:4700
 #: gnucash/gnome-utils/gnc-splash.c:98 gnucash/gnucash-core-app.cpp:503
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4707
+#: gnucash/gnome-utils/gnc-main-window.c:4708
 msgid "Accounting for personal and small business finance."
 msgstr ""
 
@@ -8780,7 +8783,7 @@ msgstr ""
 #. * Enter your name or that of your team and an email contact for feedback.
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
-#: gnucash/gnome-utils/gnc-main-window.c:4716
+#: gnucash/gnome-utils/gnc-main-window.c:4717
 msgid "translator-credits"
 msgstr ""
 "Översättning av\n"
@@ -8790,17 +8793,17 @@ msgstr ""
 "Jonas Norling <norling@lysator.liu.se>, 2004, 2006.\n"
 "Erik Johansson <erik@ejohansson.se>, 2014, 2016."
 
-#: gnucash/gnome-utils/gnc-main-window.c:4719
+#: gnucash/gnome-utils/gnc-main-window.c:4720
 msgid "Visit the GnuCash website."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-period-select.c:71
-#: libgnucash/app-utils/date-utilities.scm:955
+#: libgnucash/app-utils/date-utilities.scm:962
 msgid "Start of this month"
 msgstr "Början på denna månad"
 
 #: gnucash/gnome-utils/gnc-period-select.c:72
-#: libgnucash/app-utils/date-utilities.scm:969
+#: libgnucash/app-utils/date-utilities.scm:976
 msgid "Start of previous month"
 msgstr "Början på föregående månad"
 
@@ -8809,17 +8812,17 @@ msgid "Start of this quarter"
 msgstr "Början på detta kvartal"
 
 #: gnucash/gnome-utils/gnc-period-select.c:74
-#: libgnucash/app-utils/date-utilities.scm:1011
+#: libgnucash/app-utils/date-utilities.scm:1018
 msgid "Start of previous quarter"
 msgstr "Början på föregående kvartal"
 
 #: gnucash/gnome-utils/gnc-period-select.c:75
-#: libgnucash/app-utils/date-utilities.scm:899
+#: libgnucash/app-utils/date-utilities.scm:906
 msgid "Start of this year"
 msgstr "Början på detta år"
 
 #: gnucash/gnome-utils/gnc-period-select.c:76
-#: libgnucash/app-utils/date-utilities.scm:913
+#: libgnucash/app-utils/date-utilities.scm:920
 msgid "Start of previous year"
 msgstr "Början på föregående år"
 
@@ -8832,12 +8835,12 @@ msgid "Start of previous accounting period"
 msgstr "Början på föregående räkenskapsperioden"
 
 #: gnucash/gnome-utils/gnc-period-select.c:87
-#: libgnucash/app-utils/date-utilities.scm:962
+#: libgnucash/app-utils/date-utilities.scm:969
 msgid "End of this month"
 msgstr "Slutet på denna månad"
 
 #: gnucash/gnome-utils/gnc-period-select.c:88
-#: libgnucash/app-utils/date-utilities.scm:976
+#: libgnucash/app-utils/date-utilities.scm:983
 msgid "End of previous month"
 msgstr "Slutet på föregående månad"
 
@@ -8846,17 +8849,17 @@ msgid "End of this quarter"
 msgstr "Slutet på detta kvartal"
 
 #: gnucash/gnome-utils/gnc-period-select.c:90
-#: libgnucash/app-utils/date-utilities.scm:1018
+#: libgnucash/app-utils/date-utilities.scm:1025
 msgid "End of previous quarter"
 msgstr "Slutet på föregående kvartal"
 
 #: gnucash/gnome-utils/gnc-period-select.c:91
-#: libgnucash/app-utils/date-utilities.scm:906
+#: libgnucash/app-utils/date-utilities.scm:913
 msgid "End of this year"
 msgstr "Slutet på detta år"
 
 #: gnucash/gnome-utils/gnc-period-select.c:92
-#: libgnucash/app-utils/date-utilities.scm:920
+#: libgnucash/app-utils/date-utilities.scm:927
 msgid "End of previous year"
 msgstr "Slutet på föregående år"
 
@@ -9271,7 +9274,7 @@ msgstr "Lönecheck"
 #: gnucash/report/reports/standard/balance-sheet.scm:503
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4371
+#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4375
 msgid "Equity"
 msgstr "Eget kapital"
 
@@ -9282,15 +9285,15 @@ msgstr "Eget kapital"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 #: gnucash/register/ledger-core/split-register.c:2707
 #: gnucash/register/ledger-core/split-register-model.c:402
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1075
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1076
 #: gnucash/report/reports/standard/general-journal.scm:99
 #: gnucash/report/reports/standard/general-ledger.scm:79
 #: gnucash/report/reports/standard/general-ledger.scm:99
 #: gnucash/report/reports/standard/invoice.scm:232
 #: gnucash/report/reports/standard/portfolio.scm:257
-#: gnucash/report/reports/standard/price-scatter.scm:39
-#: gnucash/report/reports/standard/price-scatter.scm:312
-#: gnucash/report/reports/standard/price-scatter.scm:326
+#: gnucash/report/reports/standard/price-scatter.scm:40
+#: gnucash/report/reports/standard/price-scatter.scm:313
+#: gnucash/report/reports/standard/price-scatter.scm:327
 #: gnucash/report/reports/standard/register.scm:150
 #: gnucash/report/reports/standard/register.scm:393
 #: gnucash/report/trep-engine.scm:981 gnucash/report/trep-engine.scm:1105
@@ -9717,7 +9720,7 @@ msgstr ""
 #: gnucash/report/reports/standard/customer-summary.scm:71
 #: gnucash/report/reports/standard/job-report.scm:42
 #: gnucash/report/reports/standard/new-owner-report.scm:51
-#: gnucash/report/reports/standard/new-owner-report.scm:238
+#: gnucash/report/reports/standard/new-owner-report.scm:242
 #: gnucash/report/reports/standard/owner-report.scm:52
 msgid "Reference"
 msgstr "Referens"
@@ -9802,9 +9805,9 @@ msgstr "Ta emot"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1283
 #: gnucash/report/reports/standard/customer-summary.scm:139
 #: gnucash/report/reports/standard/customer-summary.scm:326
-#: gnucash/report/reports/standard/net-charts.scm:371
-#: gnucash/report/reports/standard/net-charts.scm:420
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4370
+#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:416
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4374
 #: libgnucash/engine/gncInvoice.c:1084
 msgid "Expense"
 msgstr "Kostnad"
@@ -13043,18 +13046,18 @@ msgstr ""
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:346
 #: gnucash/report/reports/example/average-balance.scm:40
 #: gnucash/report/reports/example/daily-reports.scm:52
-#: gnucash/report/reports/standard/account-piecharts.scm:64
+#: gnucash/report/reports/standard/account-piecharts.scm:65
 #: gnucash/report/reports/standard/account-summary.scm:79
 #: gnucash/report/reports/standard/balance-forecast.scm:40
 #: gnucash/report/reports/standard/balsheet-pnl.scm:59
-#: gnucash/report/reports/standard/cashflow-barchart.scm:54
+#: gnucash/report/reports/standard/cashflow-barchart.scm:55
 #: gnucash/report/reports/standard/cash-flow.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:69
 #: gnucash/report/reports/standard/equity-statement.scm:65
 #: gnucash/report/reports/standard/income-statement.scm:59
 #: gnucash/report/reports/standard/lot-viewer.scm:35
 #: gnucash/report/reports/standard/net-charts.scm:39
-#: gnucash/report/reports/standard/price-scatter.scm:35
+#: gnucash/report/reports/standard/price-scatter.scm:36
 #: gnucash/report/trep-engine.scm:95
 msgid "Start Date"
 msgstr "Startdatum"
@@ -13196,25 +13199,25 @@ msgstr "Tidsperiod: "
 #: gnucash/gtkbuilder/dialog-sx.glade:333
 #: gnucash/report/reports/example/average-balance.scm:41
 #: gnucash/report/reports/example/daily-reports.scm:53
-#: gnucash/report/reports/standard/account-piecharts.scm:65
+#: gnucash/report/reports/standard/account-piecharts.scm:66
 #: gnucash/report/reports/standard/account-summary.scm:80
 #: gnucash/report/reports/standard/balance-forecast.scm:41
 #: gnucash/report/reports/standard/balsheet-pnl.scm:60
-#: gnucash/report/reports/standard/cashflow-barchart.scm:55
+#: gnucash/report/reports/standard/cashflow-barchart.scm:56
 #: gnucash/report/reports/standard/cash-flow.scm:43
 #: gnucash/report/reports/standard/category-barchart.scm:70
 #: gnucash/report/reports/standard/equity-statement.scm:66
 #: gnucash/report/reports/standard/income-statement.scm:60
 #: gnucash/report/reports/standard/lot-viewer.scm:36
 #: gnucash/report/reports/standard/net-charts.scm:40
-#: gnucash/report/reports/standard/price-scatter.scm:36
+#: gnucash/report/reports/standard/price-scatter.scm:37
 #: gnucash/report/trep-engine.scm:96
 msgid "End Date"
 msgstr "Slutdatum"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1201
 #: gnucash/report/reports/standard/job-report.scm:563
-#: gnucash/report/reports/standard/new-owner-report.scm:1161
+#: gnucash/report/reports/standard/new-owner-report.scm:1165
 #: gnucash/report/reports/standard/owner-report.scm:795
 msgid "Date Range"
 msgstr "Datumintervall"
@@ -13960,7 +13963,7 @@ msgstr "Välj de konton som ska jämföras"
 
 #: gnucash/gtkbuilder/dialog-account.glade:199
 #: gnucash/gtkbuilder/dialog-account.glade:1326
-#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:292
+#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:293
 #: gnucash/report/stylesheets/plain.scm:232
 msgid "Default"
 msgstr "Standard"
@@ -14185,7 +14188,7 @@ msgstr "<b>_Gruppkonto</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1666
 #: gnucash/gtkbuilder/dialog-preferences.glade:2010
-#: gnucash/report/report-core.scm:156
+#: gnucash/report/report-core.scm:157
 #: gnucash/report/reports/standard/equity-statement.scm:108
 #: gnucash/report/reports/standard/equity-statement.scm:112
 #: gnucash/report/reports/standard/register.scm:347
@@ -14541,7 +14544,7 @@ msgid "Choose Owner Dialog"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:8
-#: gnucash/report/reports/standard/account-piecharts.scm:61
+#: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
 msgstr "Värdepapper"
 
@@ -14681,6 +14684,7 @@ msgstr "_Hämta kurser från nätet"
 msgid "F_raction traded"
 msgstr "_Bråkdel som handlas"
 
+#. Again replace CUSIP by your National Securities Identifying Number.
 #: gnucash/gtkbuilder/dialog-commodity.glade:475
 msgid "ISIN, CUSI_P or other code"
 msgstr "ISIN, CUSI_P eller annan kod"
@@ -15023,7 +15027,7 @@ msgstr "Varannan månad"
 #: gnucash/gtkbuilder/dialog-sx.glade:135
 #: gnucash/gtkbuilder/gnc-frequency.glade:180
 #: gnucash/gtkbuilder/gnc-frequency.glade:1408
-#: gnucash/report/reports/standard/account-piecharts.scm:123
+#: gnucash/report/reports/standard/account-piecharts.scm:124
 #: gnucash/report/reports/standard/category-barchart.scm:123
 #: gnucash/report/trep-engine.scm:336 libgnucash/engine/Recurrence.c:761
 #: libgnucash/engine/Recurrence.c:775
@@ -15046,7 +15050,7 @@ msgstr "Varannan vecka"
 #: gnucash/gtkbuilder/dialog-sx.glade:129
 #: gnucash/gtkbuilder/gnc-frequency.glade:174
 #: gnucash/gtkbuilder/gnc-frequency.glade:993
-#: gnucash/report/reports/standard/account-piecharts.scm:126
+#: gnucash/report/reports/standard/account-piecharts.scm:127
 #: gnucash/report/reports/standard/category-barchart.scm:126
 #: gnucash/report/trep-engine.scm:327 libgnucash/engine/Recurrence.c:623
 msgid "Weekly"
@@ -15707,7 +15711,7 @@ msgid "<b>Amount</b>"
 msgstr "<b>_Summa</b>"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:460
-#: gnucash/report/reports/standard/new-owner-report.scm:294
+#: gnucash/report/reports/standard/new-owner-report.scm:298
 msgid "Refund"
 msgstr ""
 
@@ -16738,7 +16742,7 @@ msgid "Before _Date"
 msgstr "_Datum"
 
 #: gnucash/gtkbuilder/dialog-price.glade:795
-#: gnucash/report/reports/standard/price-scatter.scm:96
+#: gnucash/report/reports/standard/price-scatter.scm:97
 msgid "Price Database"
 msgstr "Prisdatabas"
 
@@ -17104,7 +17108,7 @@ msgid "Bi-Weekly"
 msgstr "Varannan vecka"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:141
-#: gnucash/report/reports/standard/account-piecharts.scm:120
+#: gnucash/report/reports/standard/account-piecharts.scm:121
 #: gnucash/report/trep-engine.scm:354 libgnucash/engine/Recurrence.c:787
 msgid "Yearly"
 msgstr "Årligen"
@@ -17404,7 +17408,7 @@ msgstr "<b>Överför till</b>"
 #: gnucash/gtkbuilder/dialog-transfer.glade:447
 #: gnucash/gtkbuilder/dialog-transfer.glade:463
 #: gnucash/report/reports/standard/net-charts.scm:47
-#: gnucash/report/reports/standard/price-scatter.scm:49
+#: gnucash/report/reports/standard/price-scatter.scm:50
 msgid "Show Income/Expense"
 msgstr "Visa intäkter/kostnader"
 
@@ -19082,7 +19086,7 @@ msgid "Unspecified"
 msgstr "Ospecificerat"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4361
+#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4365
 msgid "Bank"
 msgstr "Bank"
 
@@ -21147,7 +21151,7 @@ msgid "Welcome to GnuCash"
 msgstr "Välkommen till GnuCash"
 
 #: gnucash/python/init.py:103
-#: gnucash/report/reports/example/hello-world.scm:486
+#: gnucash/report/reports/example/hello-world.scm:488
 msgid "Have a nice day!"
 msgstr "Ha en trevlig dag!"
 
@@ -21331,7 +21335,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:527
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1091
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4362
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4366
 msgid "Cash"
 msgstr "Kontant"
 
@@ -21589,7 +21593,7 @@ msgstr "sample:Beskrivning av transaktionen"
 #: gnucash/register/ledger-core/split-register-layout.c:703
 #: gnucash/register/ledger-core/split-register-model.c:334
 #: gnucash/report/reports/standard/new-owner-report.scm:219
-#: gnucash/report/reports/standard/new-owner-report.scm:446
+#: gnucash/report/reports/standard/new-owner-report.scm:450
 #: gnucash/report/trep-engine.scm:1292 gnucash/report/trep-engine.scm:1293
 msgctxt "Column header for 'Document Link'"
 msgid "L"
@@ -21920,7 +21924,7 @@ msgstr ""
 #: gnucash/report/html-utilities.scm:337
 #: gnucash/report/reports/standard/balsheet-pnl.scm:140
 #: gnucash/report/reports/standard/balsheet-pnl.scm:141
-#: gnucash/report/reports/standard/new-owner-report.scm:935
+#: gnucash/report/reports/standard/new-owner-report.scm:939
 #, fuzzy
 msgid "Disabled"
 msgstr "Tabell"
@@ -21939,7 +21943,7 @@ msgid "This report requires accounts to be selected in the report options."
 msgstr "Denna rapport kräver att konton är valda."
 
 #: gnucash/report/html-utilities.scm:405
-#: gnucash/report/reports/standard/price-scatter.scm:276
+#: gnucash/report/reports/standard/price-scatter.scm:277
 msgid "No data"
 msgstr "Ingen data"
 
@@ -22081,7 +22085,7 @@ msgstr "Övertrumfa kontovalet och visa underkonton till alla valda konton?"
 #: gnucash/report/reports/standard/balance-sheet.scm:89
 #: gnucash/report/reports/standard/balsheet-pnl.scm:82
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:54
-#: gnucash/report/reports/standard/budget-income-statement.scm:76
+#: gnucash/report/reports/standard/budget-income-statement.scm:77
 #: gnucash/report/reports/standard/income-statement.scm:64
 msgid "Report on these accounts, if display depth allows."
 msgstr "Rapportera om dessa konton, om visningsdjupet tillåter."
@@ -22091,8 +22095,8 @@ msgid "Select the currency to display the values of this report in."
 msgstr "Välj valuta som värdena i denna rapport ska visas i."
 
 #: gnucash/report/options-utilities.scm:144
-#: gnucash/report/reports/standard/advanced-portfolio.scm:80
-#: gnucash/report/reports/standard/price-scatter.scm:87
+#: gnucash/report/reports/standard/advanced-portfolio.scm:81
+#: gnucash/report/reports/standard/price-scatter.scm:88
 msgid "The source of price information."
 msgstr "Källan för prisuppgifter."
 
@@ -22105,32 +22109,32 @@ msgid "The volume-weighted average cost of purchases."
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:149
-#: gnucash/report/reports/standard/price-scatter.scm:90
+#: gnucash/report/reports/standard/price-scatter.scm:91
 msgid "Weighted Average"
 msgstr "Viktat genomsnitt"
 
 #: gnucash/report/options-utilities.scm:150
-#: gnucash/report/reports/standard/price-scatter.scm:91
+#: gnucash/report/reports/standard/price-scatter.scm:92
 msgid "The weighted average of all currency transactions of the past."
 msgstr "Ett viktat genomsnitt av alla valutatransaktioner i det förflutna."
 
 #: gnucash/report/options-utilities.scm:152
-#: gnucash/report/reports/standard/advanced-portfolio.scm:82
+#: gnucash/report/reports/standard/advanced-portfolio.scm:83
 msgid "Most recent"
 msgstr "Mest nyligen"
 
 #: gnucash/report/options-utilities.scm:153
-#: gnucash/report/reports/standard/advanced-portfolio.scm:83
+#: gnucash/report/reports/standard/advanced-portfolio.scm:84
 msgid "The most recent recorded price."
 msgstr "Det mest nyligen inskrivna priset."
 
 #: gnucash/report/options-utilities.scm:155
-#: gnucash/report/reports/standard/advanced-portfolio.scm:85
+#: gnucash/report/reports/standard/advanced-portfolio.scm:86
 msgid "Nearest in time"
 msgstr "Närmast i tiden"
 
 #: gnucash/report/options-utilities.scm:156
-#: gnucash/report/reports/standard/advanced-portfolio.scm:86
+#: gnucash/report/reports/standard/advanced-portfolio.scm:87
 msgid "The price recorded nearest in time to the report date."
 msgstr "Det pris som skrevs in närmast rapportdatum."
 
@@ -22282,38 +22286,38 @@ msgid ""
 "(experimental)."
 msgstr ""
 
-#: gnucash/report/report-core.scm:148
+#: gnucash/report/report-core.scm:149
 msgid "_Assets & Liabilities"
 msgstr "_Balansräkning"
 
-#: gnucash/report/report-core.scm:149
+#: gnucash/report/report-core.scm:150
 msgid "_Income & Expense"
 msgstr "_Resultaträkning"
 
-#: gnucash/report/report-core.scm:151
+#: gnucash/report/report-core.scm:152
 msgid "_Taxes"
 msgstr "_Skatter"
 
-#: gnucash/report/report-core.scm:152
+#: gnucash/report/report-core.scm:153
 #, fuzzy
 msgid "E_xamples"
 msgstr "Exempel"
 
-#: gnucash/report/report-core.scm:153
+#: gnucash/report/report-core.scm:154
 #, fuzzy
 msgid "_Experimental"
 msgstr "_Exportera"
 
-#: gnucash/report/report-core.scm:154
+#: gnucash/report/report-core.scm:155
 #, fuzzy
 msgid "_Multicolumn"
 msgstr "Flerkolumnsvy"
 
-#: gnucash/report/report-core.scm:155
+#: gnucash/report/report-core.scm:156
 msgid "_Custom"
 msgstr "_Anpassade"
 
-#: gnucash/report/report-core.scm:158
+#: gnucash/report/report-core.scm:159
 #: gnucash/report/reports/standard/invoice.scm:257
 #: gnucash/report/reports/standard/invoice.scm:262
 #: gnucash/report/reports/standard/invoice.scm:267
@@ -22348,55 +22352,55 @@ msgstr "_Anpassade"
 msgid "Display"
 msgstr "Visa"
 
-#: gnucash/report/report-core.scm:159
+#: gnucash/report/report-core.scm:160
 msgid "Report name"
 msgstr "Rapportnamn"
 
-#: gnucash/report/report-core.scm:160
+#: gnucash/report/report-core.scm:161
 msgid "Stylesheet"
 msgstr "Stilmall"
 
-#: gnucash/report/report-core.scm:162
+#: gnucash/report/report-core.scm:163
 msgid "Invoice Number"
 msgstr "Fakturanummer"
 
-#: gnucash/report/report-core.scm:208
+#: gnucash/report/report-core.scm:209
 msgid ""
 "One of your reports has a report-guid that is a duplicate. Please check the "
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
 
-#: gnucash/report/report-core.scm:209
+#: gnucash/report/report-core.scm:210
 #, fuzzy
 msgid "Wrong report definition: "
 msgstr "Läs in användarkonfiguration"
 
-#: gnucash/report/report-core.scm:210
+#: gnucash/report/report-core.scm:211
 msgid " Report is missing a GUID."
 msgstr ""
 
-#: gnucash/report/report-core.scm:212
+#: gnucash/report/report-core.scm:213
 msgid ""
 "Some reports stored in a legacy format were found. This format is not "
 "supported anymore so these reports may not have been restored properly."
 msgstr ""
 
-#: gnucash/report/report-core.scm:286
+#: gnucash/report/report-core.scm:287
 msgid "Enter a descriptive name for this report."
 msgstr "Mata in ett beskrivande namn för den här rapporten."
 
-#: gnucash/report/report-core.scm:291
+#: gnucash/report/report-core.scm:292
 msgid "Select a stylesheet for the report."
 msgstr "Välj en stilmall för rapporten."
 
-#: gnucash/report/report-core.scm:299
+#: gnucash/report/report-core.scm:300
 msgid "stylesheet."
 msgstr "stilmall."
 
 #: gnucash/report/reports/aging.scm:37
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:170
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:171
 #: gnucash/report/reports/standard/customer-summary.scm:41
 #: gnucash/report/reports/standard/job-report.scm:365
 #: gnucash/report/reports/standard/job-report.scm:496
@@ -22420,17 +22424,17 @@ msgstr "Sorteringsordning"
 #: gnucash/report/reports/aging.scm:40
 #: gnucash/report/reports/example/average-balance.scm:43
 #: gnucash/report/reports/example/daily-reports.scm:54
-#: gnucash/report/reports/standard/account-piecharts.scm:66
+#: gnucash/report/reports/standard/account-piecharts.scm:67
 #: gnucash/report/reports/standard/account-summary.scm:125
-#: gnucash/report/reports/standard/advanced-portfolio.scm:75
+#: gnucash/report/reports/standard/advanced-portfolio.scm:76
 #: gnucash/report/reports/standard/balance-forecast.scm:44
 #: gnucash/report/reports/standard/balance-sheet.scm:137
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/balsheet-pnl.scm:119
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:102
 #: gnucash/report/reports/standard/budget-flow.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:115
-#: gnucash/report/reports/standard/cashflow-barchart.scm:57
+#: gnucash/report/reports/standard/budget-income-statement.scm:116
+#: gnucash/report/reports/standard/cashflow-barchart.scm:58
 #: gnucash/report/reports/standard/cash-flow.scm:49
 #: gnucash/report/reports/standard/category-barchart.scm:72
 #: gnucash/report/reports/standard/equity-statement.scm:77
@@ -22438,7 +22442,7 @@ msgstr "Sorteringsordning"
 #: gnucash/report/reports/standard/net-charts.scm:42
 #: gnucash/report/reports/standard/new-aging.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:54
-#: gnucash/report/reports/standard/price-scatter.scm:40
+#: gnucash/report/reports/standard/price-scatter.scm:41
 #: gnucash/report/reports/standard/trial-balance.scm:129
 #: gnucash/report/trep-engine.scm:105
 msgid "Report's currency"
@@ -22447,17 +22451,17 @@ msgstr "Valuta för rapporten"
 #: gnucash/report/reports/aging.scm:41
 #: gnucash/report/reports/example/average-balance.scm:44
 #: gnucash/report/reports/example/daily-reports.scm:55
-#: gnucash/report/reports/standard/account-piecharts.scm:67
+#: gnucash/report/reports/standard/account-piecharts.scm:68
 #: gnucash/report/reports/standard/account-summary.scm:126
-#: gnucash/report/reports/standard/advanced-portfolio.scm:39
+#: gnucash/report/reports/standard/advanced-portfolio.scm:40
 #: gnucash/report/reports/standard/balance-forecast.scm:45
 #: gnucash/report/reports/standard/balance-sheet.scm:138
 #: gnucash/report/reports/standard/balsheet-eg.scm:189
 #: gnucash/report/reports/standard/balsheet-pnl.scm:121
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:103
 #: gnucash/report/reports/standard/budget-flow.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:116
-#: gnucash/report/reports/standard/cashflow-barchart.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/cashflow-barchart.scm:59
 #: gnucash/report/reports/standard/cash-flow.scm:50
 #: gnucash/report/reports/standard/category-barchart.scm:73
 #: gnucash/report/reports/standard/equity-statement.scm:78
@@ -22465,7 +22469,7 @@ msgstr "Valuta för rapporten"
 #: gnucash/report/reports/standard/net-charts.scm:43
 #: gnucash/report/reports/standard/new-aging.scm:43
 #: gnucash/report/reports/standard/portfolio.scm:35
-#: gnucash/report/reports/standard/price-scatter.scm:42
+#: gnucash/report/reports/standard/price-scatter.scm:43
 #: gnucash/report/reports/standard/trial-balance.scm:130
 #: gnucash/report/trep-engine.scm:102
 msgid "Price Source"
@@ -22589,21 +22593,21 @@ msgstr ""
 
 #: gnucash/report/reports/aging.scm:385
 #: gnucash/report/reports/standard/new-aging.scm:122
-#: gnucash/report/reports/standard/new-owner-report.scm:953
+#: gnucash/report/reports/standard/new-owner-report.scm:957
 #: gnucash/report/reports/standard/owner-report.scm:609
 msgid "Leading date."
 msgstr ""
 
 #: gnucash/report/reports/aging.scm:388
 #: gnucash/report/reports/standard/new-aging.scm:127
-#: gnucash/report/reports/standard/new-owner-report.scm:958
+#: gnucash/report/reports/standard/new-owner-report.scm:962
 #: gnucash/report/reports/standard/owner-report.scm:612
 msgid "Due date is leading."
 msgstr ""
 
 #: gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:131
-#: gnucash/report/reports/standard/new-owner-report.scm:962
+#: gnucash/report/reports/standard/new-owner-report.scm:966
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post date is leading."
 msgstr ""
@@ -22667,7 +22671,7 @@ msgstr "Visa summorna?"
 #: gnucash/report/reports/standard/budget-barchart.scm:72
 #: gnucash/report/reports/standard/budget.scm:119
 #: gnucash/report/reports/standard/new-aging.scm:195
-#: gnucash/report/reports/standard/new-owner-report.scm:316
+#: gnucash/report/reports/standard/new-owner-report.scm:320
 #: gnucash/report/reports/standard/owner-report.scm:259
 msgid "Current"
 msgstr "Nuvarande"
@@ -22675,7 +22679,7 @@ msgstr "Nuvarande"
 #: gnucash/report/reports/aging.scm:540
 #: gnucash/report/reports/standard/job-report.scm:159
 #: gnucash/report/reports/standard/new-aging.scm:196
-#: gnucash/report/reports/standard/new-owner-report.scm:317
+#: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/owner-report.scm:260
 msgid "0-30 days"
 msgstr "0-30 dagar"
@@ -22683,7 +22687,7 @@ msgstr "0-30 dagar"
 #: gnucash/report/reports/aging.scm:541
 #: gnucash/report/reports/standard/job-report.scm:160
 #: gnucash/report/reports/standard/new-aging.scm:197
-#: gnucash/report/reports/standard/new-owner-report.scm:318
+#: gnucash/report/reports/standard/new-owner-report.scm:322
 #: gnucash/report/reports/standard/owner-report.scm:261
 msgid "31-60 days"
 msgstr "31-60 dagar"
@@ -22691,7 +22695,7 @@ msgstr "31-60 dagar"
 #: gnucash/report/reports/aging.scm:542
 #: gnucash/report/reports/standard/job-report.scm:161
 #: gnucash/report/reports/standard/new-aging.scm:198
-#: gnucash/report/reports/standard/new-owner-report.scm:319
+#: gnucash/report/reports/standard/new-owner-report.scm:323
 #: gnucash/report/reports/standard/owner-report.scm:262
 msgid "61-90 days"
 msgstr "61-90 dagar"
@@ -22699,7 +22703,7 @@ msgstr "61-90 dagar"
 #: gnucash/report/reports/aging.scm:543
 #: gnucash/report/reports/standard/job-report.scm:162
 #: gnucash/report/reports/standard/new-aging.scm:199
-#: gnucash/report/reports/standard/new-owner-report.scm:320
+#: gnucash/report/reports/standard/new-owner-report.scm:324
 #: gnucash/report/reports/standard/owner-report.scm:263
 msgid "91+ days"
 msgstr "över 91 dagar"
@@ -22731,10 +22735,10 @@ msgid "Average Balance"
 msgstr "Genomsnittligt saldo"
 
 #: gnucash/report/reports/example/average-balance.scm:42
-#: gnucash/report/reports/standard/cashflow-barchart.scm:56
+#: gnucash/report/reports/standard/cashflow-barchart.scm:57
 #: gnucash/report/reports/standard/category-barchart.scm:71
 #: gnucash/report/reports/standard/net-charts.scm:41
-#: gnucash/report/reports/standard/price-scatter.scm:37
+#: gnucash/report/reports/standard/price-scatter.scm:38
 msgid "Step Size"
 msgstr "Stegstorlek"
 
@@ -22749,25 +22753,25 @@ msgstr "Uteslut transaktioner mellan valda konton"
 
 #: gnucash/report/reports/example/average-balance.scm:47
 #: gnucash/report/reports/example/daily-reports.scm:64
-#: gnucash/report/reports/standard/account-piecharts.scm:76
+#: gnucash/report/reports/standard/account-piecharts.scm:77
 #: gnucash/report/reports/standard/balance-forecast.scm:47
 #: gnucash/report/reports/standard/budget-barchart.scm:43
-#: gnucash/report/reports/standard/cashflow-barchart.scm:51
+#: gnucash/report/reports/standard/cashflow-barchart.scm:52
 #: gnucash/report/reports/standard/category-barchart.scm:84
 #: gnucash/report/reports/standard/net-charts.scm:53
-#: gnucash/report/reports/standard/price-scatter.scm:57
+#: gnucash/report/reports/standard/price-scatter.scm:58
 msgid "Plot Width"
 msgstr "Grafbredd"
 
 #: gnucash/report/reports/example/average-balance.scm:48
 #: gnucash/report/reports/example/daily-reports.scm:65
-#: gnucash/report/reports/standard/account-piecharts.scm:77
+#: gnucash/report/reports/standard/account-piecharts.scm:78
 #: gnucash/report/reports/standard/balance-forecast.scm:48
 #: gnucash/report/reports/standard/budget-barchart.scm:44
-#: gnucash/report/reports/standard/cashflow-barchart.scm:52
+#: gnucash/report/reports/standard/cashflow-barchart.scm:53
 #: gnucash/report/reports/standard/category-barchart.scm:85
 #: gnucash/report/reports/standard/net-charts.scm:54
-#: gnucash/report/reports/standard/price-scatter.scm:58
+#: gnucash/report/reports/standard/price-scatter.scm:59
 msgid "Plot Height"
 msgstr "Grafhöjd"
 
@@ -22796,7 +22800,7 @@ msgid "Show table"
 msgstr "Visa tabell"
 
 #: gnucash/report/reports/example/average-balance.scm:117
-#: gnucash/report/reports/standard/cashflow-barchart.scm:124
+#: gnucash/report/reports/standard/cashflow-barchart.scm:125
 #: gnucash/report/reports/standard/category-barchart.scm:188
 #: gnucash/report/reports/standard/net-charts.scm:134
 msgid "Display a table of the selected data."
@@ -22822,7 +22826,7 @@ msgstr "Vilken sorts graf som ska genereras."
 
 #: gnucash/report/reports/example/average-balance.scm:129
 #: gnucash/report/reports/example/average-balance.scm:149
-#: gnucash/report/reports/standard/advanced-portfolio.scm:94
+#: gnucash/report/reports/standard/advanced-portfolio.scm:95
 #: gnucash/report/trep-engine.scm:1962 libgnucash/engine/policy.c:58
 msgid "Average"
 msgstr "Genomsnitt"
@@ -22890,7 +22894,7 @@ msgid "Shows a piechart with the total expenses for each day of the week"
 msgstr "Visar ett tårtbitsdiagram över kostnaderna under varje veckodag"
 
 #: gnucash/report/reports/example/daily-reports.scm:58
-#: gnucash/report/reports/standard/account-piecharts.scm:70
+#: gnucash/report/reports/standard/account-piecharts.scm:71
 #: gnucash/report/reports/standard/category-barchart.scm:76
 msgid "Show Accounts until level"
 msgstr "Visa konton till nivå"
@@ -22901,50 +22905,50 @@ msgid "Show long account names"
 msgstr "Visa långa kontonamn"
 
 #: gnucash/report/reports/example/daily-reports.scm:62
-#: gnucash/report/reports/standard/account-piecharts.scm:73
+#: gnucash/report/reports/standard/account-piecharts.scm:74
 msgid "Show Totals"
 msgstr "Visa summor"
 
 #: gnucash/report/reports/example/daily-reports.scm:63
-#: gnucash/report/reports/standard/account-piecharts.scm:75
+#: gnucash/report/reports/standard/account-piecharts.scm:76
 msgid "Maximum Slices"
 msgstr "Max antal tårtbitar"
 
 #: gnucash/report/reports/example/daily-reports.scm:66
-#: gnucash/report/reports/standard/account-piecharts.scm:78
+#: gnucash/report/reports/standard/account-piecharts.scm:79
 #: gnucash/report/reports/standard/category-barchart.scm:87
 msgid "Sort Method"
 msgstr "Sorteringsordning"
 
 #: gnucash/report/reports/example/daily-reports.scm:97
-#: gnucash/report/reports/standard/account-piecharts.scm:136
+#: gnucash/report/reports/standard/account-piecharts.scm:137
 #: gnucash/report/reports/standard/category-barchart.scm:138
 #: gnucash/report/reports/standard/net-charts.scm:92
 msgid "Report on these accounts, if chosen account level allows."
 msgstr "Rapportera för dessa konton, om den valda kontonivån tillåter det."
 
 #: gnucash/report/reports/example/daily-reports.scm:111
-#: gnucash/report/reports/standard/account-piecharts.scm:151
+#: gnucash/report/reports/standard/account-piecharts.scm:152
 #: gnucash/report/reports/standard/category-barchart.scm:150
 msgid "Show accounts to this depth and not further."
 msgstr "Visa konton för det här djupet och inte mer."
 
 #: gnucash/report/reports/example/daily-reports.scm:117
-#: gnucash/report/reports/standard/account-piecharts.scm:166
+#: gnucash/report/reports/standard/account-piecharts.scm:167
 msgid "Show the total balance in legend?"
 msgstr "Visa det totala saldot i beskrivningen?"
 
 #: gnucash/report/reports/example/daily-reports.scm:289
-#: gnucash/report/reports/standard/account-piecharts.scm:545
+#: gnucash/report/reports/standard/account-piecharts.scm:546
 #: gnucash/report/reports/standard/balance-forecast.scm:276
 #: gnucash/report/reports/standard/balsheet-pnl.scm:923
 #: gnucash/report/reports/standard/budget.scm:513
-#: gnucash/report/reports/standard/cashflow-barchart.scm:282
+#: gnucash/report/reports/standard/cashflow-barchart.scm:283
 #: gnucash/report/reports/standard/cash-flow.scm:190
 #: gnucash/report/reports/standard/category-barchart.scm:514
-#: gnucash/report/reports/standard/net-charts.scm:334
-#: gnucash/report/reports/standard/price-scatter.scm:212
-#: libgnucash/app-utils/date-utilities.scm:188
+#: gnucash/report/reports/standard/net-charts.scm:330
+#: gnucash/report/reports/standard/price-scatter.scm:213
+#: libgnucash/app-utils/date-utilities.scm:187
 #, scheme-format
 msgid "~a to ~a"
 msgstr ""
@@ -23020,7 +23024,7 @@ msgstr "Detta är ett strängalternativ."
 
 #: gnucash/report/reports/example/hello-world.scm:90
 #: gnucash/report/reports/example/hello-world.scm:327
-#: gnucash/report/reports/example/hello-world.scm:499
+#: gnucash/report/reports/example/hello-world.scm:501
 msgid "Hello, World"
 msgstr "Hej, världen"
 
@@ -23249,27 +23253,27 @@ msgstr "Nummeralternativet visat som valuta är %s."
 msgid "Items you selected:"
 msgstr "Element du valt:"
 
-#: gnucash/report/reports/example/hello-world.scm:435
+#: gnucash/report/reports/example/hello-world.scm:437
 msgid "List items selected"
 msgstr "Valda listelement"
 
-#: gnucash/report/reports/example/hello-world.scm:440
+#: gnucash/report/reports/example/hello-world.scm:442
 msgid "(You selected no list items.)"
 msgstr "(Du valde inga listelement.)"
 
-#: gnucash/report/reports/example/hello-world.scm:476
+#: gnucash/report/reports/example/hello-world.scm:478
 msgid "You have selected no accounts."
 msgstr "Du har inte valt några konton."
 
-#: gnucash/report/reports/example/hello-world.scm:481
+#: gnucash/report/reports/example/hello-world.scm:483
 msgid "Display help"
 msgstr "Visa hjälp"
 
-#: gnucash/report/reports/example/hello-world.scm:510
+#: gnucash/report/reports/example/hello-world.scm:512
 msgid "Sample Report with Examples"
 msgstr "Rapport med exempel"
 
-#: gnucash/report/reports/example/hello-world.scm:514
+#: gnucash/report/reports/example/hello-world.scm:516
 msgid "A sample report with examples."
 msgstr "En exempelrapport."
 
@@ -23309,7 +23313,7 @@ msgid "Tax Report / TXF Export"
 msgstr "Skatterapport / TXF-export"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:170
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:171
 #: gnucash/report/reports/standard/customer-summary.scm:40
 #: gnucash/report/reports/standard/job-report.scm:365
 #: gnucash/report/reports/standard/job-report.scm:493
@@ -23319,42 +23323,42 @@ msgid "From"
 msgstr "Från"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:151
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:174
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:175
 msgid "Alternate Period"
 msgstr "Alternativ period"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:175
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:176
 msgid "Override or modify From: & To:."
 msgstr "Ersätt eller modifiera Från: och Till:."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
 msgid "Use From - To"
 msgstr "Använd Från - Till"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
 msgid "Use From - To period."
 msgstr "Använd \"Från - Till\"-period."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
 msgid "1st Est Tax Quarter"
 msgstr "Första skattekvartalet"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
 msgid "Jan 1 - Mar 31."
 msgstr "1 jan - 31 mar."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
 msgid "2nd Est Tax Quarter"
 msgstr "Andra skattekvartalet"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
 msgid "Apr 1 - May 31."
 msgstr "1 apr - 31 maj."
 
@@ -23362,57 +23366,57 @@ msgstr "1 apr - 31 maj."
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "3rd Est Tax Quarter"
 msgstr "Tredje skattekvartalet"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "Jun 1 - Aug 31."
 msgstr "1 jun - 31 aug."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 msgid "4th Est Tax Quarter"
 msgstr "Fjärde skattekvartalet"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 msgid "Sep 1 - Dec 31."
 msgstr "1 sep - 31 dec."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "Last Year"
 msgstr "Föregående år"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "Last Year."
 msgstr "Föregående år."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:187
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr "Föregående års första skattekvartal"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:189
 msgid "Jan 1 - Mar 31, Last year."
 msgstr "1 jan - 31 mar, förra året."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:164
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr "Föregående års andra skattekvartal"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:165
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
 msgid "Apr 1 - May 31, Last year."
 msgstr "1 apr - 31 maj, förra året."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr "Föregående års tredje skattekvartal"
 
@@ -23420,32 +23424,32 @@ msgstr "Föregående års tredje skattekvartal"
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:168
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:197
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
 msgid "Jun 1 - Aug 31, Last year."
 msgstr "1 jun - 31 aug, föregående år."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:170
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:200
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr "Föregående års fjärde skattekvartal"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:171
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:200
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:201
 msgid "Sep 1 - Dec 31, Last year."
 msgstr "1 sep - 31 dec, föregående år."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:175
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:204
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:205
 msgid "Select Accounts (none = all)"
 msgstr "Välj konton (inga = alla)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:176
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:205
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:206
 msgid "Select accounts."
 msgstr "Välj konton."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:182
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:211
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:212
 msgid "Suppress $0.00 values"
 msgstr "Visa inte 0-värden"
 
@@ -23499,99 +23503,99 @@ msgstr "XML"
 msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr "Denna sida visar din taxerbara inkomst och avdragsgilla utgifter."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:112
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:113
 msgid "Tax Schedule Report/TXF Export"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:212
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:213
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:216
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:217
 msgid "Do not print full account names"
 msgstr "Skriv inte ut fullständiga kontonamn"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:217
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:218
 msgid "Do not print all Parent account names."
 msgstr "Skriv inte ut alla gruppkontonamn."
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:221
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:222
 msgid "Print all Transfer To/From Accounts"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:222
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:223
 msgid "Print all split details for multi-split transactions."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:226
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:227
 msgid "Print TXF export parameters"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:227
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:228
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:232
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:233
 msgid "Do not print T-Num:Memo data"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:233
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:234
 msgid "Do not print T-Num:Memo data for transactions."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:236
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:237
 msgid "Do not print Action:Memo data"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:237
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:238
 msgid "Do not print Action:Memo data for transactions."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:241
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:242
 msgid "Do not print transaction detail"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:242
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:243
 msgid "Do not print transaction detail for accounts."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:246
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:247
 msgid "Do not use special date processing"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:247
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:248
 msgid "Do not print transactions out of specified dates."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:251
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:252
 msgid "Currency conversion date"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:252
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:253
 msgid "Select date to use for PriceDB lookups."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:255
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 msgid "Nearest transaction date"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:255
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 msgid "Use nearest to transaction date."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:257
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:258
 msgid "Nearest report date"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:257
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:258
 msgid "Use nearest to report date."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3322
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3323
 msgid "Tax Schedule Report & TXF Export"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3324
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3325
 msgid ""
 "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF "
 "file"
@@ -23599,171 +23603,171 @@ msgstr ""
 "Taxerbar inkomst/Avdragsgilla utgifter med transaktionsdetalj/Exportera "
 "till .TXF-fil"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3328
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3337
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3329
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3338
 msgid "Taxable Income/Deductible Expenses"
 msgstr "Taxerbar inkomst/Avdragsgilla utgifter"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3329
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3330
 msgid ""
 "This report shows transaction detail for your accounts related to Income "
 "Taxes."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3338
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3339
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:35
+#: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
 msgstr "Tårtbitsdiagram över intäkter"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:36
+#: gnucash/report/reports/standard/account-piecharts.scm:37
 msgid "Expense Piechart"
 msgstr "Tårtbitsdiagram över kostnader"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:37
+#: gnucash/report/reports/standard/account-piecharts.scm:38
 msgid "Asset Piechart"
 msgstr "Tårtbitsdiagram över tillgångar"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:38
+#: gnucash/report/reports/standard/account-piecharts.scm:39
 #, fuzzy
 msgid "Security Piechart"
 msgstr "Tårtbitsdiagram över tillgångar"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:39
+#: gnucash/report/reports/standard/account-piecharts.scm:40
 msgid "Liability Piechart"
 msgstr "Tårtbitsdiagram över skulder"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:44
+#: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
 msgstr "Visar ett tårtbitsdiagram över intäkterna under en given tidsperiod"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:46
+#: gnucash/report/reports/standard/account-piecharts.scm:47
 msgid "Shows a piechart with the Expenses per given time interval"
 msgstr "Visar ett tårtbitsdiagram över kostnaderna under en given tidsperiod"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:48
+#: gnucash/report/reports/standard/account-piecharts.scm:49
 msgid "Shows a piechart with the Assets balance at a given time"
 msgstr "Visar ett tårtbitsdiagram med tillgångsbalansen för en given tidpunkt"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:50
+#: gnucash/report/reports/standard/account-piecharts.scm:51
 #, fuzzy
 msgid "Shows a piechart with distribution of assets over securities"
 msgstr "Visar ett tårtbitsdiagram med skuldbalansen för en given tidpunkt"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:52
+#: gnucash/report/reports/standard/account-piecharts.scm:53
 msgid "Shows a piechart with the Liabilities balance at a given time"
 msgstr "Visar ett tårtbitsdiagram med skuldbalansen för en given tidpunkt"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:58
+#: gnucash/report/reports/standard/account-piecharts.scm:59
 #: gnucash/report/reports/standard/customer-summary.scm:49
 #: gnucash/report/reports/standard/customer-summary.scm:50
 msgid "Income Accounts"
 msgstr "Intäktskonton"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:59
+#: gnucash/report/reports/standard/account-piecharts.scm:60
 #: gnucash/report/reports/standard/customer-summary.scm:57
 #: gnucash/report/reports/standard/customer-summary.scm:58
 msgid "Expense Accounts"
 msgstr "Kostnadskonton"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:60
+#: gnucash/report/reports/standard/account-piecharts.scm:61
 #: gnucash/report/reports/standard/balance-sheet.scm:486
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:665
-#: gnucash/report/reports/standard/net-charts.scm:350
-#: gnucash/report/reports/standard/net-charts.scm:421
+#: gnucash/report/reports/standard/net-charts.scm:346
+#: gnucash/report/reports/standard/net-charts.scm:417
 #: gnucash/report/report-utilities.scm:199
 msgid "Assets"
 msgstr "Tillgångar"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:62
+#: gnucash/report/reports/standard/account-piecharts.scm:63
 #: gnucash/report/reports/standard/balance-sheet.scm:387
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:695
-#: gnucash/report/reports/standard/net-charts.scm:371
-#: gnucash/report/reports/standard/net-charts.scm:421
+#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:417
 #: gnucash/report/report-utilities.scm:200
 msgid "Liabilities"
 msgstr "Skulder"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:72
+#: gnucash/report/reports/standard/account-piecharts.scm:73
 #, fuzzy
 msgid "Show long names"
 msgstr "Visa långa kontonamn"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:74
+#: gnucash/report/reports/standard/account-piecharts.scm:75
 msgid "Show Percents"
 msgstr "Visa procent"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:80
+#: gnucash/report/reports/standard/account-piecharts.scm:81
 #: gnucash/report/reports/standard/category-barchart.scm:89
 msgid "Show Average"
 msgstr "Visa genomsnitt"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:81
+#: gnucash/report/reports/standard/account-piecharts.scm:82
 #: gnucash/report/reports/standard/category-barchart.scm:90
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:117
+#: gnucash/report/reports/standard/account-piecharts.scm:118
 #: gnucash/report/reports/standard/category-barchart.scm:120
 msgid "No Averaging"
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:118
+#: gnucash/report/reports/standard/account-piecharts.scm:119
 #: gnucash/report/reports/standard/category-barchart.scm:121
 msgid "Just show the amounts, without any averaging."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:121
+#: gnucash/report/reports/standard/account-piecharts.scm:122
 msgid "Show the average yearly amount during the reporting period."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:124
+#: gnucash/report/reports/standard/account-piecharts.scm:125
 #: gnucash/report/reports/standard/category-barchart.scm:124
 msgid "Show the average monthly amount during the reporting period."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:127
+#: gnucash/report/reports/standard/account-piecharts.scm:128
 #: gnucash/report/reports/standard/category-barchart.scm:127
 msgid "Show the average weekly amount during the reporting period."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:159
+#: gnucash/report/reports/standard/account-piecharts.scm:160
 #: gnucash/report/reports/standard/category-barchart.scm:157
 msgid "Show the full account name in legend?"
 msgstr "Visa det fullständiga kontonamnet i beskrivningen?"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:160
+#: gnucash/report/reports/standard/account-piecharts.scm:161
 #, fuzzy
 msgid "Show the full security name in the legend?"
 msgstr "Visa det fullständiga kontonamnet i beskrivningen?"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:172
+#: gnucash/report/reports/standard/account-piecharts.scm:173
 msgid "Show the percentage in legend?"
 msgstr "Visa procenten i beskrivningen?"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:178
+#: gnucash/report/reports/standard/account-piecharts.scm:179
 msgid "Maximum number of slices in pie."
 msgstr "Max antal tårtbitar i diagrammet."
 
-#: gnucash/report/reports/standard/account-piecharts.scm:413
+#: gnucash/report/reports/standard/account-piecharts.scm:414
 msgid "Yearly Average"
 msgstr "Årligt genomsnitt"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:414
+#: gnucash/report/reports/standard/account-piecharts.scm:415
 #: gnucash/report/reports/standard/category-barchart.scm:306
 msgid "Monthly Average"
 msgstr "Månatligt genomsnitt"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:415
+#: gnucash/report/reports/standard/account-piecharts.scm:416
 #: gnucash/report/reports/standard/category-barchart.scm:307
 msgid "Weekly Average"
 msgstr "Veckogenomsnitt"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:549
+#: gnucash/report/reports/standard/account-piecharts.scm:550
 #, fuzzy, scheme-format
 msgid "Balance at ~a"
 msgstr "Saldo vid %s"
@@ -23780,7 +23784,7 @@ msgstr "Framtida schemalagda transaktionssammanställning"
 #: gnucash/report/reports/standard/balance-sheet.scm:76
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:52
+#: gnucash/report/reports/standard/budget-income-statement.scm:53
 #: gnucash/report/reports/standard/equity-statement.scm:59
 #: gnucash/report/reports/standard/income-statement.scm:53
 #: gnucash/report/reports/standard/trial-balance.scm:65
@@ -23791,7 +23795,7 @@ msgstr "Rapporttitel"
 #: gnucash/report/reports/standard/balance-sheet.scm:77
 #: gnucash/report/reports/standard/balsheet-eg.scm:151
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:53
+#: gnucash/report/reports/standard/budget-income-statement.scm:54
 #: gnucash/report/reports/standard/equity-statement.scm:60
 #: gnucash/report/reports/standard/income-statement.scm:54
 #: gnucash/report/reports/standard/trial-balance.scm:66
@@ -23801,7 +23805,7 @@ msgstr "Titel för denna rapporten."
 #: gnucash/report/reports/standard/account-summary.scm:75
 #: gnucash/report/reports/standard/balance-sheet.scm:79
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:55
+#: gnucash/report/reports/standard/budget-income-statement.scm:56
 #: gnucash/report/reports/standard/equity-statement.scm:62
 #: gnucash/report/reports/standard/income-statement.scm:56
 #: gnucash/report/reports/standard/trial-balance.scm:68
@@ -23811,7 +23815,7 @@ msgstr "Företagsnamn"
 #: gnucash/report/reports/standard/account-summary.scm:76
 #: gnucash/report/reports/standard/balance-sheet.scm:80
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:56
+#: gnucash/report/reports/standard/budget-income-statement.scm:57
 #: gnucash/report/reports/standard/equity-statement.scm:63
 #: gnucash/report/reports/standard/income-statement.scm:57
 #: gnucash/report/reports/standard/trial-balance.scm:69
@@ -23824,7 +23828,7 @@ msgstr "Namn på företag/person."
 #: gnucash/report/reports/standard/balsheet-pnl.scm:84
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:55
 #: gnucash/report/reports/standard/budget-barchart.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:77
+#: gnucash/report/reports/standard/budget-income-statement.scm:78
 #: gnucash/report/reports/standard/income-statement.scm:65
 #: gnucash/report/reports/standard/trial-balance.scm:79
 msgid "Levels of Subaccounts"
@@ -23836,7 +23840,7 @@ msgstr "Undernivåer"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:85
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:57
 #: gnucash/report/reports/standard/budget-barchart.scm:48
-#: gnucash/report/reports/standard/budget-income-statement.scm:79
+#: gnucash/report/reports/standard/budget-income-statement.scm:80
 #: gnucash/report/reports/standard/income-statement.scm:67
 #: gnucash/report/reports/standard/trial-balance.scm:81
 msgid "Maximum number of levels in the account tree displayed."
@@ -23853,7 +23857,7 @@ msgstr ""
 #: gnucash/report/reports/standard/account-summary.scm:95
 #: gnucash/report/reports/standard/balance-sheet.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:62
-#: gnucash/report/reports/standard/budget-income-statement.scm:84
+#: gnucash/report/reports/standard/budget-income-statement.scm:85
 #: gnucash/report/reports/standard/income-statement.scm:72
 msgid "Parent account balances"
 msgstr "Saldon för gruppkonton"
@@ -23861,7 +23865,7 @@ msgstr "Saldon för gruppkonton"
 #: gnucash/report/reports/standard/account-summary.scm:96
 #: gnucash/report/reports/standard/balance-sheet.scm:98
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:63
-#: gnucash/report/reports/standard/budget-income-statement.scm:85
+#: gnucash/report/reports/standard/budget-income-statement.scm:86
 #: gnucash/report/reports/standard/income-statement.scm:73
 msgid "Parent account subtotals"
 msgstr "Delsummor för gruppkonton"
@@ -23870,7 +23874,7 @@ msgstr "Delsummor för gruppkonton"
 #: gnucash/report/reports/standard/balance-sheet.scm:100
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:65
-#: gnucash/report/reports/standard/budget-income-statement.scm:87
+#: gnucash/report/reports/standard/budget-income-statement.scm:88
 #: gnucash/report/reports/standard/income-statement.scm:75
 #: gnucash/report/reports/standard/trial-balance.scm:121
 msgid "Include accounts with zero total balances"
@@ -23880,7 +23884,7 @@ msgstr "Ta med konton med saldo noll"
 #: gnucash/report/reports/standard/balance-sheet.scm:102
 #: gnucash/report/reports/standard/balsheet-pnl.scm:94
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:67
-#: gnucash/report/reports/standard/budget-income-statement.scm:89
+#: gnucash/report/reports/standard/budget-income-statement.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:77
 #: gnucash/report/reports/standard/trial-balance.scm:123
 msgid "Include accounts with zero total (recursive) balances in this report."
@@ -23890,7 +23894,7 @@ msgstr "Ta med konton med totalt saldo noll (rekursivt) i rapporten."
 #: gnucash/report/reports/standard/balance-sheet.scm:103
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:68
-#: gnucash/report/reports/standard/budget-income-statement.scm:90
+#: gnucash/report/reports/standard/budget-income-statement.scm:91
 #: gnucash/report/reports/standard/income-statement.scm:78
 msgid "Omit zero balance figures"
 msgstr "Utelämna saldon som är noll"
@@ -23899,7 +23903,7 @@ msgstr "Utelämna saldon som är noll"
 #: gnucash/report/reports/standard/balance-sheet.scm:105
 #: gnucash/report/reports/standard/balsheet-pnl.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:70
-#: gnucash/report/reports/standard/budget-income-statement.scm:92
+#: gnucash/report/reports/standard/budget-income-statement.scm:93
 #: gnucash/report/reports/standard/income-statement.scm:80
 msgid "Show blank space in place of any zero balances which would be shown."
 msgstr "Visa ett tomt fält istället för att skriva ut saldon som är noll."
@@ -23907,7 +23911,7 @@ msgstr "Visa ett tomt fält istället för att skriva ut saldon som är noll."
 #: gnucash/report/reports/standard/account-summary.scm:105
 #: gnucash/report/reports/standard/balance-sheet.scm:107
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:72
-#: gnucash/report/reports/standard/budget-income-statement.scm:94
+#: gnucash/report/reports/standard/budget-income-statement.scm:95
 #: gnucash/report/reports/standard/equity-statement.scm:72
 #: gnucash/report/reports/standard/income-statement.scm:82
 msgid "Show accounting-style rules"
@@ -23916,7 +23920,7 @@ msgstr ""
 #: gnucash/report/reports/standard/account-summary.scm:107
 #: gnucash/report/reports/standard/balance-sheet.scm:109
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:74
-#: gnucash/report/reports/standard/budget-income-statement.scm:96
+#: gnucash/report/reports/standard/budget-income-statement.scm:97
 #: gnucash/report/reports/standard/equity-statement.scm:74
 #: gnucash/report/reports/standard/income-statement.scm:84
 msgid "Use rules beneath columns of added numbers like accountants do."
@@ -23927,7 +23931,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 #: gnucash/report/reports/standard/balsheet-pnl.scm:99
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:76
-#: gnucash/report/reports/standard/budget-income-statement.scm:98
+#: gnucash/report/reports/standard/budget-income-statement.scm:99
 #: gnucash/report/reports/standard/income-statement.scm:86
 #: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Display accounts as hyperlinks"
@@ -23938,7 +23942,7 @@ msgstr "Visa konton som hyperlänkar"
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/balsheet-pnl.scm:100
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:77
-#: gnucash/report/reports/standard/budget-income-statement.scm:99
+#: gnucash/report/reports/standard/budget-income-statement.scm:100
 #: gnucash/report/reports/standard/income-statement.scm:87
 #: gnucash/report/reports/standard/trial-balance.scm:126
 msgid "Shows each account in the table as a hyperlink to its register window."
@@ -23978,7 +23982,7 @@ msgstr "Visa ett kontos anteckningar."
 #: gnucash/report/reports/standard/balsheet-eg.scm:195
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:101
-#: gnucash/report/reports/standard/budget-income-statement.scm:114
+#: gnucash/report/reports/standard/budget-income-statement.scm:115
 #: gnucash/report/reports/standard/equity-statement.scm:76
 #: gnucash/report/reports/standard/income-statement.scm:108
 #: gnucash/report/reports/standard/trial-balance.scm:128
@@ -23989,7 +23993,7 @@ msgstr "Varor"
 #: gnucash/report/reports/standard/balance-sheet.scm:139
 #: gnucash/report/reports/standard/balsheet-eg.scm:190
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:104
-#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/budget-income-statement.scm:118
 #: gnucash/report/reports/standard/equity-statement.scm:79
 #: gnucash/report/reports/standard/income-statement.scm:111
 #: gnucash/report/reports/standard/trial-balance.scm:131
@@ -24000,7 +24004,7 @@ msgstr "Visa utländska valutor"
 #: gnucash/report/reports/standard/balance-sheet.scm:141
 #: gnucash/report/reports/standard/balsheet-eg.scm:192
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:106
-#: gnucash/report/reports/standard/budget-income-statement.scm:119
+#: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/equity-statement.scm:81
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:133
@@ -24011,7 +24015,7 @@ msgstr "Visa eventuellt saldo i utländsk valuta i konto."
 #: gnucash/report/reports/standard/balance-sheet.scm:142
 #: gnucash/report/reports/standard/balsheet-pnl.scm:130
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:107
-#: gnucash/report/reports/standard/budget-income-statement.scm:120
+#: gnucash/report/reports/standard/budget-income-statement.scm:121
 #: gnucash/report/reports/standard/cash-flow.scm:51
 #: gnucash/report/reports/standard/equity-statement.scm:82
 #: gnucash/report/reports/standard/income-statement.scm:114
@@ -24023,7 +24027,7 @@ msgstr "Visa växelkurser"
 #: gnucash/report/reports/standard/balance-sheet.scm:143
 #: gnucash/report/reports/standard/balsheet-pnl.scm:131
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
-#: gnucash/report/reports/standard/budget-income-statement.scm:121
+#: gnucash/report/reports/standard/budget-income-statement.scm:122
 #: gnucash/report/reports/standard/cash-flow.scm:77
 #: gnucash/report/reports/standard/equity-statement.scm:83
 #: gnucash/report/reports/standard/income-statement.scm:115
@@ -24070,198 +24074,198 @@ msgstr "För period från %s till %s"
 msgid "Account title"
 msgstr "Kontotitel"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:37
+#: gnucash/report/reports/standard/advanced-portfolio.scm:38
 msgid "Advanced Portfolio"
 msgstr "Avancerad portfölj"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:40
+#: gnucash/report/reports/standard/advanced-portfolio.scm:41
 #: gnucash/report/reports/standard/portfolio.scm:36
 msgid "Share decimal places"
 msgstr "Decimaler för andelar"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:41
+#: gnucash/report/reports/standard/advanced-portfolio.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:37
 msgid "Include accounts with no shares"
 msgstr "Ta med konton utan andelar"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:42
+#: gnucash/report/reports/standard/advanced-portfolio.scm:43
 msgid "Show ticker symbols"
 msgstr "Visa ticker-symboler"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:43
+#: gnucash/report/reports/standard/advanced-portfolio.scm:44
 msgid "Show listings"
 msgstr "Visa lista"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:44
+#: gnucash/report/reports/standard/advanced-portfolio.scm:45
 msgid "Show prices"
 msgstr "Visa pris"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:45
+#: gnucash/report/reports/standard/advanced-portfolio.scm:46
 msgid "Show number of shares"
 msgstr "Visa antal aktier"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:46
+#: gnucash/report/reports/standard/advanced-portfolio.scm:47
 msgid "Basis calculation method"
 msgstr "Metod för att beräkna omkostnadsbelopp"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:47
+#: gnucash/report/reports/standard/advanced-portfolio.scm:48
 msgid "Set preference for price list data"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:48
+#: gnucash/report/reports/standard/advanced-portfolio.scm:49
 msgid "How to report brokerage fees"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:92
+#: gnucash/report/reports/standard/advanced-portfolio.scm:93
 msgid "Basis calculation method."
 msgstr "Metod för att beräkna omkostnadsbelopp."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:95
+#: gnucash/report/reports/standard/advanced-portfolio.scm:96
 msgid "Use average cost of all shares for basis."
 msgstr "Använd genomsnittspriset för alla aktier som omkostnadsbelopp."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:97
+#: gnucash/report/reports/standard/advanced-portfolio.scm:98
 msgid "FIFO"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:98
+#: gnucash/report/reports/standard/advanced-portfolio.scm:99
 msgid "Use first-in first-out method for basis."
 msgstr "Använd först-in först-ut som omkostnadsbelopp."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:100
+#: gnucash/report/reports/standard/advanced-portfolio.scm:101
 msgid "LIFO"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:101
+#: gnucash/report/reports/standard/advanced-portfolio.scm:102
 msgid "Use last-in first-out method for basis."
 msgstr "Använd sist-in först-ut som omkostnadsbelopp."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:107
+#: gnucash/report/reports/standard/advanced-portfolio.scm:108
 msgid "Prefer use of price editor pricing over transactions, where applicable."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:113
+#: gnucash/report/reports/standard/advanced-portfolio.scm:114
 msgid "How to report commissions and other brokerage fees."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:115
+#: gnucash/report/reports/standard/advanced-portfolio.scm:116
 msgid "Include in basis"
 msgstr "Ta med i omkostnadsbelopp"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:116
+#: gnucash/report/reports/standard/advanced-portfolio.scm:117
 msgid "Include brokerage fees in the basis for the asset."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:118
+#: gnucash/report/reports/standard/advanced-portfolio.scm:119
 msgid "Include in gain"
 msgstr "Ta med i vinst"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:119
+#: gnucash/report/reports/standard/advanced-portfolio.scm:120
 msgid "Include brokerage fees in the gain and loss but not in the basis."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:121
+#: gnucash/report/reports/standard/advanced-portfolio.scm:122
 msgid "Ignore"
 msgstr "Ignorera"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:122
+#: gnucash/report/reports/standard/advanced-portfolio.scm:123
 msgid "Ignore brokerage fees entirely."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:129
+#: gnucash/report/reports/standard/advanced-portfolio.scm:130
 msgid "Display the ticker symbols."
 msgstr "Visa ticker-symbolerna."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:136
+#: gnucash/report/reports/standard/advanced-portfolio.scm:137
 msgid "Display exchange listings."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:143
+#: gnucash/report/reports/standard/advanced-portfolio.scm:144
 msgid "Display numbers of shares in accounts."
 msgstr "Visa antal aktier i konton."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:149
+#: gnucash/report/reports/standard/advanced-portfolio.scm:150
 #: gnucash/report/reports/standard/portfolio.scm:63
 msgid "The number of decimal places to use for share numbers."
 msgstr "Antalet decimaler som används för att visa andelar av innehav."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:156
+#: gnucash/report/reports/standard/advanced-portfolio.scm:157
 msgid "Display share prices."
 msgstr "Visa aktiepriser."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:164
+#: gnucash/report/reports/standard/advanced-portfolio.scm:165
 #: gnucash/report/reports/standard/portfolio.scm:71
 msgid "Stock Accounts to report on."
 msgstr "Aktiekonton att rapportera om."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:176
+#: gnucash/report/reports/standard/advanced-portfolio.scm:177
 #: gnucash/report/reports/standard/portfolio.scm:83
 msgid "Include accounts that have a zero share balances."
 msgstr "Ta med konton som har noll aktier som saldo."
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1067
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1068
 #: gnucash/report/reports/standard/portfolio.scm:255
 msgid "Listing"
 msgstr "Lista"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1079
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1080
 msgid "Basis"
 msgstr "Omkostnadsbelopp"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1081
-#: gnucash/report/reports/standard/cashflow-barchart.scm:297
-#: gnucash/report/reports/standard/cashflow-barchart.scm:332
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1082
+#: gnucash/report/reports/standard/cashflow-barchart.scm:298
+#: gnucash/report/reports/standard/cashflow-barchart.scm:344
 #: gnucash/report/reports/standard/cash-flow.scm:279
 msgid "Money In"
 msgstr "Pengar in"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1082
-#: gnucash/report/reports/standard/cashflow-barchart.scm:303
-#: gnucash/report/reports/standard/cashflow-barchart.scm:333
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1083
+#: gnucash/report/reports/standard/cashflow-barchart.scm:304
+#: gnucash/report/reports/standard/cashflow-barchart.scm:345
 #: gnucash/report/reports/standard/cash-flow.scm:300
 msgid "Money Out"
 msgstr "Pengar ut"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1083
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1084
 msgid "Realized Gain"
 msgstr "Realiserad vinst"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1084
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1085
 msgid "Unrealized Gain"
 msgstr "Orealiserad vinst"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1085
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1086
 msgid "Total Gain"
 msgstr "Total vinst"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1086
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1087
 msgid "Rate of Gain"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1090
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1091
 msgid "Brokerage Fees"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1092
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1093
 msgid "Total Return"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1093
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1094
 msgid "Rate of Return"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1190
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1191
 msgid ""
 "* this commodity data was built using transaction pricing instead of the "
 "price list."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1192
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1193
 msgid ""
 "If you are in a multi-currency situation, the exchanges may not be correct."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1197
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1198
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr ""
 
@@ -24273,7 +24277,7 @@ msgstr "Saldo vid %s"
 #: gnucash/report/reports/standard/balance-forecast.scm:38
 #: gnucash/report/reports/standard/budget-barchart.scm:134
 #: gnucash/report/reports/standard/budget-flow.scm:87
-#: gnucash/report/reports/standard/cashflow-barchart.scm:87
+#: gnucash/report/reports/standard/cashflow-barchart.scm:88
 #: gnucash/report/reports/standard/income-gst-statement.scm:131
 #: gnucash/report/reports/standard/income-gst-statement.scm:141
 #: gnucash/report/reports/standard/trial-balance.scm:78
@@ -24367,7 +24371,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:93
 #: gnucash/report/reports/standard/balsheet-eg.scm:160
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:58
-#: gnucash/report/reports/standard/budget-income-statement.scm:80
+#: gnucash/report/reports/standard/budget-income-statement.scm:81
 #: gnucash/report/reports/standard/budget.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:68
 msgid "Flatten list to depth limit"
@@ -24376,7 +24380,7 @@ msgstr "Platta till listan till djupgränsen"
 #: gnucash/report/reports/standard/balance-sheet.scm:95
 #: gnucash/report/reports/standard/balsheet-eg.scm:162
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:60
-#: gnucash/report/reports/standard/budget-income-statement.scm:82
+#: gnucash/report/reports/standard/budget-income-statement.scm:83
 #: gnucash/report/reports/standard/budget.scm:92
 #: gnucash/report/reports/standard/income-statement.scm:70
 msgid "Displays accounts which exceed the depth limit at the depth limit."
@@ -24818,12 +24822,12 @@ msgid "missing"
 msgstr "Avgift"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
-#: libgnucash/engine/Account.cpp:4363
+#: libgnucash/engine/Account.cpp:4367
 msgid "Asset"
 msgstr "Tillgång"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1109
-#: libgnucash/engine/Account.cpp:4365
+#: libgnucash/engine/Account.cpp:4369
 msgid "Liability"
 msgstr "Skuld"
 
@@ -24881,7 +24885,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:111
 #: gnucash/report/reports/standard/budget-barchart.scm:98
 #: gnucash/report/reports/standard/budget-flow.scm:56
-#: gnucash/report/reports/standard/budget-income-statement.scm:59
+#: gnucash/report/reports/standard/budget-income-statement.scm:60
 #: gnucash/report/reports/standard/budget.scm:138
 msgid "Budget to use."
 msgstr "Budget som ska användas."
@@ -24954,7 +24958,7 @@ msgid "Chart Type"
 msgstr "Avgiftstyp"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:50
-#: gnucash/report/reports/standard/budget-income-statement.scm:66
+#: gnucash/report/reports/standard/budget-income-statement.scm:67
 #: gnucash/report/reports/standard/budget.scm:71
 msgid "Range start"
 msgstr "Periodstart"
@@ -24976,7 +24980,7 @@ msgid "Select exact period that starts the reporting range."
 msgstr "Välj ett datum att rapportera för."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:57
-#: gnucash/report/reports/standard/budget-income-statement.scm:70
+#: gnucash/report/reports/standard/budget-income-statement.scm:71
 #: gnucash/report/reports/standard/budget.scm:78
 msgid "Range end"
 msgstr "Periodslut"
@@ -25093,137 +25097,137 @@ msgstr "Periodnummer."
 msgid "~a: ~a - ~a"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:62
+#: gnucash/report/reports/standard/budget-income-statement.scm:63
 #: gnucash/report/reports/standard/budget.scm:67
 msgid "Report for range of budget periods"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:64
+#: gnucash/report/reports/standard/budget-income-statement.scm:65
 #: gnucash/report/reports/standard/budget.scm:69
 msgid "Create report for a budget period range instead of the entire budget."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:68
+#: gnucash/report/reports/standard/budget-income-statement.scm:69
 msgid "Select a budget period that begins the reporting range."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:72
+#: gnucash/report/reports/standard/budget-income-statement.scm:73
 msgid "Select a budget period that ends the reporting range."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:101
+#: gnucash/report/reports/standard/budget-income-statement.scm:102
 #: gnucash/report/reports/standard/income-statement.scm:89
 msgid "Label the revenue section"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:103
+#: gnucash/report/reports/standard/budget-income-statement.scm:104
 #: gnucash/report/reports/standard/income-statement.scm:91
 msgid "Whether or not to include a label for the revenue section."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:104
+#: gnucash/report/reports/standard/budget-income-statement.scm:105
 #: gnucash/report/reports/standard/income-statement.scm:92
 msgid "Include revenue total"
 msgstr "Inkludera omsättning"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:106
+#: gnucash/report/reports/standard/budget-income-statement.scm:107
 #: gnucash/report/reports/standard/income-statement.scm:94
 msgid "Whether or not to include a line indicating total revenue."
 msgstr "Huruvida omsättningsraden ska ingå eller inte."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:107
+#: gnucash/report/reports/standard/budget-income-statement.scm:108
 #: gnucash/report/reports/standard/income-statement.scm:101
 msgid "Label the expense section"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:109
+#: gnucash/report/reports/standard/budget-income-statement.scm:110
 #: gnucash/report/reports/standard/income-statement.scm:103
 msgid "Whether or not to include a label for the expense section."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:110
+#: gnucash/report/reports/standard/budget-income-statement.scm:111
 #: gnucash/report/reports/standard/income-statement.scm:104
 msgid "Include expense total"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:112
+#: gnucash/report/reports/standard/budget-income-statement.scm:113
 #: gnucash/report/reports/standard/income-statement.scm:106
 msgid "Whether or not to include a line indicating total expense."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:125
+#: gnucash/report/reports/standard/budget-income-statement.scm:126
 #: gnucash/report/reports/standard/income-statement.scm:130
 msgid "Display as a two column report"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:127
+#: gnucash/report/reports/standard/budget-income-statement.scm:128
 #: gnucash/report/reports/standard/income-statement.scm:132
 msgid "Divides the report into an income column and an expense column."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:129
+#: gnucash/report/reports/standard/budget-income-statement.scm:130
 #: gnucash/report/reports/standard/income-statement.scm:134
 msgid "Display in standard, income first, order"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:131
+#: gnucash/report/reports/standard/budget-income-statement.scm:132
 #: gnucash/report/reports/standard/income-statement.scm:136
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:443
+#: gnucash/report/reports/standard/budget-income-statement.scm:444
 msgid "Reporting range end period cannot be less than start period."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:511
+#: gnucash/report/reports/standard/budget-income-statement.scm:512
 #: gnucash/report/reports/standard/income-statement.scm:505
 msgid "Revenues"
 msgstr "Intäkter"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:514
+#: gnucash/report/reports/standard/budget-income-statement.scm:515
 #: gnucash/report/reports/standard/income-statement.scm:508
 msgid "Total Revenue"
 msgstr "Omsättning"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:524
+#: gnucash/report/reports/standard/budget-income-statement.scm:525
 #: gnucash/report/reports/standard/income-statement.scm:515
 msgid "Total Expenses"
 msgstr "Summa kostnader"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:532
+#: gnucash/report/reports/standard/budget-income-statement.scm:533
 #, fuzzy, scheme-format
 msgid "for Budget ~a"
 msgstr "Kopiera budget"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:534
+#: gnucash/report/reports/standard/budget-income-statement.scm:535
 #, fuzzy, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "Budgetperiod:"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:537
+#: gnucash/report/reports/standard/budget-income-statement.scm:538
 #, fuzzy, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
 msgstr "Budgetperiod:"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:565
+#: gnucash/report/reports/standard/budget-income-statement.scm:566
 #: gnucash/report/reports/standard/equity-statement.scm:457
 #: gnucash/report/reports/standard/income-statement.scm:525
 msgid "Net income"
 msgstr "Nettointäkt"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:566
+#: gnucash/report/reports/standard/budget-income-statement.scm:567
 #: gnucash/report/reports/standard/equity-statement.scm:458
 #: gnucash/report/reports/standard/income-statement.scm:526
 msgid "Net loss"
 msgstr "Nettoförlust"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:606
+#: gnucash/report/reports/standard/budget-income-statement.scm:607
 msgid "Budget Income Statement"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:607
+#: gnucash/report/reports/standard/budget-income-statement.scm:608
 msgid "Budget Profit & Loss"
 msgstr "Budgetresultaträkning"
 
@@ -25350,69 +25354,69 @@ msgstr "Skillnad"
 msgid "using accumulated amounts"
 msgstr ""
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:39
+#: gnucash/report/reports/standard/cashflow-barchart.scm:40
 #, fuzzy
 msgid "Cash Flow Barchart"
 msgstr "Kassaflöde"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:45
+#: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
 #, fuzzy
 msgid "Include Trading Accounts in report"
 msgstr "Ta med konton utan andelar"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:47
+#: gnucash/report/reports/standard/cashflow-barchart.scm:48
 #, fuzzy
 msgid "Show Money In"
 msgstr "Pengar in"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:48
+#: gnucash/report/reports/standard/cashflow-barchart.scm:49
 #, fuzzy
 msgid "Show Money Out"
 msgstr "Pengar ut"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:49
+#: gnucash/report/reports/standard/cashflow-barchart.scm:50
 #, fuzzy
 msgid "Show Net Flow"
 msgstr "Visa nettovärde"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:50
+#: gnucash/report/reports/standard/cashflow-barchart.scm:51
 #, fuzzy
 msgid "Show Table"
 msgstr "Visa tabell"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:99
+#: gnucash/report/reports/standard/cashflow-barchart.scm:100
 #: gnucash/report/reports/standard/cash-flow.scm:102
 #, fuzzy
 msgid "Include transfers to and from Trading Accounts in the report."
 msgstr "Inkludera endast transaktioner till/från filterkonton."
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:106
+#: gnucash/report/reports/standard/cashflow-barchart.scm:107
 msgid "Show money in?"
 msgstr ""
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:112
+#: gnucash/report/reports/standard/cashflow-barchart.scm:113
 #, fuzzy
 msgid "Show money out?"
 msgstr "Visa rapport över anställda"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:118
+#: gnucash/report/reports/standard/cashflow-barchart.scm:119
 #, fuzzy
 msgid "Show net money flow?"
 msgstr "Visa nettovinst?"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:309
-#: gnucash/report/reports/standard/cashflow-barchart.scm:334
+#: gnucash/report/reports/standard/cashflow-barchart.scm:310
+#: gnucash/report/reports/standard/cashflow-barchart.scm:346
 #, fuzzy
 msgid "Net Flow"
 msgstr "Nettoförlust"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:337
+#: gnucash/report/reports/standard/cashflow-barchart.scm:349
 #, fuzzy
 msgid "Overview:"
 msgstr "Översikt"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:376
+#: gnucash/report/reports/standard/cashflow-barchart.scm:375
 #, fuzzy
 msgid "Shows a barchart with cash flow over time"
 msgstr "Visar ett stapeldiagram över tillgångar över tiden"
@@ -25448,22 +25452,22 @@ msgid "Money out of selected accounts goes to"
 msgstr ""
 
 #: gnucash/report/reports/standard/category-barchart.scm:41
-#: gnucash/report/reports/standard/net-charts.scm:366
+#: gnucash/report/reports/standard/net-charts.scm:362
 msgid "Income Chart"
 msgstr "Intäktsdiagram"
 
 #: gnucash/report/reports/standard/category-barchart.scm:42
-#: gnucash/report/reports/standard/net-charts.scm:387
+#: gnucash/report/reports/standard/net-charts.scm:383
 msgid "Expense Chart"
 msgstr "Kostnadsdiagram"
 
 #: gnucash/report/reports/standard/category-barchart.scm:43
-#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:363
 msgid "Asset Chart"
 msgstr "Tillgångsdiagram"
 
 #: gnucash/report/reports/standard/category-barchart.scm:44
-#: gnucash/report/reports/standard/net-charts.scm:388
+#: gnucash/report/reports/standard/net-charts.scm:384
 msgid "Liability Chart"
 msgstr "Skulddiagram"
 
@@ -25561,7 +25565,7 @@ msgid "Grand Total"
 msgstr "Slutsumma"
 
 #: gnucash/report/reports/standard/category-barchart.scm:690
-#: gnucash/report/reports/standard/net-charts.scm:471
+#: gnucash/report/reports/standard/net-charts.scm:466
 msgid "No exportable data"
 msgstr ""
 
@@ -25607,18 +25611,18 @@ msgstr ""
 #: gnucash/report/reports/standard/job-report.scm:384
 #: gnucash/report/reports/standard/job-report.scm:389
 #: gnucash/report/reports/standard/job-report.scm:394
-#: gnucash/report/reports/standard/new-owner-report.scm:882
-#: gnucash/report/reports/standard/new-owner-report.scm:887
-#: gnucash/report/reports/standard/new-owner-report.scm:892
-#: gnucash/report/reports/standard/new-owner-report.scm:897
-#: gnucash/report/reports/standard/new-owner-report.scm:902
-#: gnucash/report/reports/standard/new-owner-report.scm:907
-#: gnucash/report/reports/standard/new-owner-report.scm:912
-#: gnucash/report/reports/standard/new-owner-report.scm:917
-#: gnucash/report/reports/standard/new-owner-report.scm:922
-#: gnucash/report/reports/standard/new-owner-report.scm:927
-#: gnucash/report/reports/standard/new-owner-report.scm:932
-#: gnucash/report/reports/standard/new-owner-report.scm:947
+#: gnucash/report/reports/standard/new-owner-report.scm:886
+#: gnucash/report/reports/standard/new-owner-report.scm:891
+#: gnucash/report/reports/standard/new-owner-report.scm:896
+#: gnucash/report/reports/standard/new-owner-report.scm:901
+#: gnucash/report/reports/standard/new-owner-report.scm:906
+#: gnucash/report/reports/standard/new-owner-report.scm:911
+#: gnucash/report/reports/standard/new-owner-report.scm:916
+#: gnucash/report/reports/standard/new-owner-report.scm:921
+#: gnucash/report/reports/standard/new-owner-report.scm:926
+#: gnucash/report/reports/standard/new-owner-report.scm:931
+#: gnucash/report/reports/standard/new-owner-report.scm:936
+#: gnucash/report/reports/standard/new-owner-report.scm:951
 #: gnucash/report/reports/standard/owner-report.scm:556
 #: gnucash/report/reports/standard/owner-report.scm:561
 #: gnucash/report/reports/standard/owner-report.scm:566
@@ -26131,7 +26135,7 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/income-statement.scm:518
-#: libgnucash/engine/Account.cpp:4375 libgnucash/engine/Scrub.c:472
+#: libgnucash/engine/Account.cpp:4379 libgnucash/engine/Scrub.c:472
 #: libgnucash/engine/Scrub.c:537
 msgid "Trading"
 msgstr ""
@@ -26522,13 +26526,13 @@ msgid "~a #~a"
 msgstr ""
 
 #: gnucash/report/reports/standard/job-report.scm:318
-#: gnucash/report/reports/standard/new-owner-report.scm:524
+#: gnucash/report/reports/standard/new-owner-report.scm:528
 #: gnucash/report/reports/standard/owner-report.scm:505
 msgid "Total Credit"
 msgstr "Total kredit"
 
 #: gnucash/report/reports/standard/job-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:525
+#: gnucash/report/reports/standard/new-owner-report.scm:529
 #: gnucash/report/reports/standard/owner-report.scm:506
 msgid "Total Due"
 msgstr ""
@@ -26544,27 +26548,27 @@ msgstr "Kontot som ska sökas på efter transaktioner."
 
 #: gnucash/report/reports/standard/job-report.scm:370
 #: gnucash/report/reports/standard/job-report.scm:375
-#: gnucash/report/reports/standard/new-owner-report.scm:883
-#: gnucash/report/reports/standard/new-owner-report.scm:888
+#: gnucash/report/reports/standard/new-owner-report.scm:887
+#: gnucash/report/reports/standard/new-owner-report.scm:892
 #: gnucash/report/reports/standard/owner-report.scm:557
 #: gnucash/report/reports/standard/owner-report.scm:562
 msgid "Display the transaction date?"
 msgstr "Visa transaktionsdatum?"
 
 #: gnucash/report/reports/standard/job-report.scm:380
-#: gnucash/report/reports/standard/new-owner-report.scm:893
+#: gnucash/report/reports/standard/new-owner-report.scm:897
 #: gnucash/report/reports/standard/owner-report.scm:567
 msgid "Display the transaction reference?"
 msgstr "Visa transaktionsreferens?"
 
 #: gnucash/report/reports/standard/job-report.scm:385
-#: gnucash/report/reports/standard/new-owner-report.scm:898
+#: gnucash/report/reports/standard/new-owner-report.scm:902
 #: gnucash/report/reports/standard/owner-report.scm:572
 msgid "Display the transaction type?"
 msgstr "Visa transaktionstyp?"
 
 #: gnucash/report/reports/standard/job-report.scm:390
-#: gnucash/report/reports/standard/new-owner-report.scm:903
+#: gnucash/report/reports/standard/new-owner-report.scm:907
 #: gnucash/report/reports/standard/owner-report.scm:577
 msgid "Display the transaction description?"
 msgstr "Visa transaktionsbeskrivning?"
@@ -26575,7 +26579,7 @@ msgid "Display the transaction amount?"
 msgstr "Visa transaktionssumma?"
 
 #: gnucash/report/reports/standard/job-report.scm:508
-#: gnucash/report/reports/standard/new-owner-report.scm:1223
+#: gnucash/report/reports/standard/new-owner-report.scm:1227
 msgid "Job Report"
 msgstr ""
 
@@ -26613,7 +26617,7 @@ msgid "The account to search for lots."
 msgstr "Kontot som ska sökas på efter transaktioner."
 
 #: gnucash/report/reports/standard/net-charts.scm:48
-#: gnucash/report/reports/standard/price-scatter.scm:50
+#: gnucash/report/reports/standard/price-scatter.scm:51
 msgid "Show Net Profit"
 msgstr "Visa nettovinst"
 
@@ -26657,35 +26661,35 @@ msgstr "Visa stapel för nettovärde?"
 msgid "Add grid lines."
 msgstr ""
 
-#: gnucash/report/reports/standard/net-charts.scm:393
-#: gnucash/report/reports/standard/net-charts.scm:425
+#: gnucash/report/reports/standard/net-charts.scm:389
+#: gnucash/report/reports/standard/net-charts.scm:421
 msgid "Net Profit"
 msgstr "Nettovinst"
 
-#: gnucash/report/reports/standard/net-charts.scm:393
-#: gnucash/report/reports/standard/net-charts.scm:426
+#: gnucash/report/reports/standard/net-charts.scm:389
+#: gnucash/report/reports/standard/net-charts.scm:422
 msgid "Net Worth"
 msgstr "Nettovärde"
 
-#: gnucash/report/reports/standard/net-charts.scm:489
+#: gnucash/report/reports/standard/net-charts.scm:484
 msgid "Net Worth Barchart"
 msgstr "Stapeldiagram för nettovärde"
 
-#: gnucash/report/reports/standard/net-charts.scm:500
+#: gnucash/report/reports/standard/net-charts.scm:495
 msgid "Income/Expense Chart"
 msgstr "Intäkts-/kostnadsdiagram"
 
-#: gnucash/report/reports/standard/net-charts.scm:502
+#: gnucash/report/reports/standard/net-charts.scm:497
 #, fuzzy
 msgid "Income & Expense Barchart"
 msgstr "Intäkts- & kostnadsdiagram"
 
-#: gnucash/report/reports/standard/net-charts.scm:512
+#: gnucash/report/reports/standard/net-charts.scm:507
 msgid "Net Worth Linechart"
 msgstr "Nettovärdesdiagram"
 
-#: gnucash/report/reports/standard/net-charts.scm:525
-#: gnucash/report/reports/standard/net-charts.scm:527
+#: gnucash/report/reports/standard/net-charts.scm:520
+#: gnucash/report/reports/standard/net-charts.scm:522
 #, fuzzy
 msgid "Income & Expense Linechart"
 msgstr "Intäkts- & kostnadsdiagram"
@@ -26712,7 +26716,7 @@ msgid "Reverse alphabetical order"
 msgstr "Omvänd ordning"
 
 #: gnucash/report/reports/standard/new-aging.scm:343
-#: gnucash/report/reports/standard/new-owner-report.scm:540
+#: gnucash/report/reports/standard/new-owner-report.scm:544
 #, fuzzy
 msgid "Please note some transactions were not processed"
 msgstr "Klistra in transaktionen från klippbordet"
@@ -26811,117 +26815,117 @@ msgstr "Denna rapport kräver att ett företag är valt."
 msgid "This report requires a vendor to be selected."
 msgstr "Denna rapport kräver att en kund är vald."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:242
+#: gnucash/report/reports/standard/new-owner-report.scm:246
 #, fuzzy
 msgid "Partial Amount"
 msgstr "_Gruppkonto"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:295
+#: gnucash/report/reports/standard/new-owner-report.scm:299
 #: gnucash/report/trep-engine.scm:980 gnucash/report/trep-engine.scm:1106
 msgid "Link"
 msgstr ""
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
-#: gnucash/report/reports/standard/new-owner-report.scm:343
+#: gnucash/report/reports/standard/new-owner-report.scm:347
 #, scheme-format
 msgid "~a History"
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:345
+#: gnucash/report/reports/standard/new-owner-report.scm:349
 #, fuzzy
 msgid "Linked Details"
 msgstr "Låndetaljer"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:504
+#: gnucash/report/reports/standard/new-owner-report.scm:508
 #: gnucash/report/reports/standard/owner-report.scm:463
 msgid "Period Totals"
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:868
+#: gnucash/report/reports/standard/new-owner-report.scm:872
 #: gnucash/report/reports/standard/owner-report.scm:535
 msgid "The company for this report."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:908
+#: gnucash/report/reports/standard/new-owner-report.scm:912
 #: gnucash/report/reports/standard/owner-report.scm:582
 #, fuzzy
 msgid "Display the sale amount column?"
 msgstr "Visa beloppet?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:913
+#: gnucash/report/reports/standard/new-owner-report.scm:917
 #: gnucash/report/reports/standard/owner-report.scm:587
 #, fuzzy
 msgid "Display the tax column?"
 msgstr "Visa kontot?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:918
+#: gnucash/report/reports/standard/new-owner-report.scm:922
 #: gnucash/report/reports/standard/owner-report.scm:597
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "Visa kontot?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:923
+#: gnucash/report/reports/standard/new-owner-report.scm:927
 #: gnucash/report/reports/standard/owner-report.scm:592
 msgid "Display the period credits column?"
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:928
+#: gnucash/report/reports/standard/new-owner-report.scm:932
 #: gnucash/report/reports/standard/register.scm:413
 #: gnucash/report/trep-engine.scm:984
 msgid "Display a running balance?"
 msgstr "Visa löpande saldo?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:933
+#: gnucash/report/reports/standard/new-owner-report.scm:937
 #, fuzzy
 msgid "Show linked transactions"
 msgstr "Visa enbart transaktioner som är annullerade."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:936
+#: gnucash/report/reports/standard/new-owner-report.scm:940
 #, fuzzy
 msgid "Linked transactions are hidden."
 msgstr "Hitta transaktioner med en sökning"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:938
+#: gnucash/report/reports/standard/new-owner-report.scm:942
 #, fuzzy
 msgid "Simple"
 msgstr "Exempel:"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:939
+#: gnucash/report/reports/standard/new-owner-report.scm:943
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:941
+#: gnucash/report/reports/standard/new-owner-report.scm:945
 #, fuzzy
 msgid "Detailed"
 msgstr "Låndetaljer"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:942
+#: gnucash/report/reports/standard/new-owner-report.scm:946
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:948
+#: gnucash/report/reports/standard/new-owner-report.scm:952
 #, fuzzy
 msgid "Display document link?"
 msgstr "Visa konton som hyperlänkar"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1076
+#: gnucash/report/reports/standard/new-owner-report.scm:1080
 #, fuzzy
 msgid "No valid account found"
 msgstr "Inga matchande transaktioner hittades"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1077
+#: gnucash/report/reports/standard/new-owner-report.scm:1081
 #, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
 msgstr "Denna rapport kräver att ett giltigt konto är valt."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1100
+#: gnucash/report/reports/standard/new-owner-report.scm:1104
 #, fuzzy
 msgid "No transactions found."
 msgstr "Inga matchande transaktioner hittades"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1101
+#: gnucash/report/reports/standard/new-owner-report.scm:1105
 #: gnucash/report/trep-engine.scm:130
 msgid "No matching transactions found"
 msgstr "Inga matchande transaktioner hittades"
@@ -26966,76 +26970,76 @@ msgstr "Investeringsportfölj"
 msgid "Units"
 msgstr "Enheter"
 
-#: gnucash/report/reports/standard/price-scatter.scm:41
+#: gnucash/report/reports/standard/price-scatter.scm:42
 msgid "Price of Commodity"
 msgstr "Varupris"
 
-#: gnucash/report/reports/standard/price-scatter.scm:43
+#: gnucash/report/reports/standard/price-scatter.scm:44
 msgid "Invert prices"
 msgstr "Invertera priser"
 
-#: gnucash/report/reports/standard/price-scatter.scm:52
+#: gnucash/report/reports/standard/price-scatter.scm:53
 msgid "Show Asset & Liability bars"
 msgstr "Visa staplar för tillgångar och skulder"
 
-#: gnucash/report/reports/standard/price-scatter.scm:53
+#: gnucash/report/reports/standard/price-scatter.scm:54
 msgid "Show Net Worth bars"
 msgstr "Visa nettovärdesstaplar"
 
-#: gnucash/report/reports/standard/price-scatter.scm:55
+#: gnucash/report/reports/standard/price-scatter.scm:56
 msgid "Marker"
 msgstr "Markering"
 
-#: gnucash/report/reports/standard/price-scatter.scm:56
+#: gnucash/report/reports/standard/price-scatter.scm:57
 msgid "Marker Color"
 msgstr "Markeringsfärg"
 
-#: gnucash/report/reports/standard/price-scatter.scm:81
+#: gnucash/report/reports/standard/price-scatter.scm:82
 msgid "Calculate the price of this commodity."
 msgstr "Beräkna priset på denna vara."
 
-#: gnucash/report/reports/standard/price-scatter.scm:93
+#: gnucash/report/reports/standard/price-scatter.scm:94
 msgid "Actual Transactions"
 msgstr "Faktiska transaktioner"
 
-#: gnucash/report/reports/standard/price-scatter.scm:94
+#: gnucash/report/reports/standard/price-scatter.scm:95
 msgid "The instantaneous price of actual currency transactions in the past."
 msgstr ""
 "Det ögonblickliga priset av faktiska valutatransaktioner i det förflutna."
 
-#: gnucash/report/reports/standard/price-scatter.scm:97
+#: gnucash/report/reports/standard/price-scatter.scm:98
 msgid "The recorded prices."
 msgstr "De sparade priserna."
 
-#: gnucash/report/reports/standard/price-scatter.scm:104
+#: gnucash/report/reports/standard/price-scatter.scm:105
 msgid "Plot commodity per currency rather than currency per commodity."
 msgstr ""
 
-#: gnucash/report/reports/standard/price-scatter.scm:120
+#: gnucash/report/reports/standard/price-scatter.scm:121
 msgid "Color of the marker."
 msgstr "Färg på markeringen."
 
-#: gnucash/report/reports/standard/price-scatter.scm:140
+#: gnucash/report/reports/standard/price-scatter.scm:141
 msgid "Double-Weeks"
 msgstr "Dubbla veckor"
 
-#: gnucash/report/reports/standard/price-scatter.scm:142
+#: gnucash/report/reports/standard/price-scatter.scm:143
 #, fuzzy
 #| msgid "Quarter"
 msgid "Quarters"
 msgstr "Kvartal"
 
-#: gnucash/report/reports/standard/price-scatter.scm:143
+#: gnucash/report/reports/standard/price-scatter.scm:144
 #, fuzzy
 #| msgid "Half Year"
 msgid "Half Years"
 msgstr "Halvår"
 
-#: gnucash/report/reports/standard/price-scatter.scm:238
+#: gnucash/report/reports/standard/price-scatter.scm:239
 msgid "Identical commodities"
 msgstr "Identiska varor"
 
-#: gnucash/report/reports/standard/price-scatter.scm:239
+#: gnucash/report/reports/standard/price-scatter.scm:240
 msgid ""
 "Your selected commodity and the currency of the report are identical. It "
 "doesn't make sense to show prices for identical commodities."
@@ -27043,7 +27047,7 @@ msgstr ""
 "Din valda vara och valutan för rapporten är identiska. Det är ingen mening "
 "att visa priser för identiska varor."
 
-#: gnucash/report/reports/standard/price-scatter.scm:277
+#: gnucash/report/reports/standard/price-scatter.scm:278
 msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
@@ -27051,11 +27055,11 @@ msgstr ""
 "Det finns ingen prisinformation tillgänglig för de valda varorna i den valda "
 "tidsperioden."
 
-#: gnucash/report/reports/standard/price-scatter.scm:282
+#: gnucash/report/reports/standard/price-scatter.scm:283
 msgid "Only one price"
 msgstr "Bara ett pris"
 
-#: gnucash/report/reports/standard/price-scatter.scm:283
+#: gnucash/report/reports/standard/price-scatter.scm:284
 msgid ""
 "There was only one single price found for the selected commodities in the "
 "selected time period. This doesn't give a useful plot."
@@ -27063,11 +27067,11 @@ msgstr ""
 "Det fanns bara ett enda pris för de valda varorna i den valda tidsperioden. "
 "Detta ger ingen användbar graf."
 
-#: gnucash/report/reports/standard/price-scatter.scm:289
+#: gnucash/report/reports/standard/price-scatter.scm:290
 msgid "All Prices equal"
 msgstr "Alla priser lika"
 
-#: gnucash/report/reports/standard/price-scatter.scm:290
+#: gnucash/report/reports/standard/price-scatter.scm:291
 msgid ""
 "All the prices found are equal. This would result in a plot with one "
 "straight line. Unfortunately, the plotting tool can't handle that."
@@ -27075,11 +27079,11 @@ msgstr ""
 "Alla priser som hittades är lika. Det borde resultera i en graf med en rak "
 "linje. Olyckligtvis kan grafritarverktyget inte hantera detta."
 
-#: gnucash/report/reports/standard/price-scatter.scm:296
+#: gnucash/report/reports/standard/price-scatter.scm:297
 msgid "All Prices at the same date"
 msgstr "Alla priser på samma datum"
 
-#: gnucash/report/reports/standard/price-scatter.scm:297
+#: gnucash/report/reports/standard/price-scatter.scm:298
 msgid ""
 "All the prices found are from the same date. This would result in a plot "
 "with one straight line. Unfortunately, the plotting tool can't handle that."
@@ -27087,7 +27091,7 @@ msgstr ""
 "Alla priser som hittades är från samma datum. Det borde resultera i en graf "
 "med en rak linje. Olyckligtvis kan grafritarverktyget inte hantera detta."
 
-#: gnucash/report/reports/standard/price-scatter.scm:329
+#: gnucash/report/reports/standard/price-scatter.scm:330
 msgid "Price Scatterplot"
 msgstr "Prisgraf"
 
@@ -27754,19 +27758,19 @@ msgstr "Antal kolumner"
 msgid "Number of columns before wrapping to a new row."
 msgstr "Antal kolumner innan radbrytning sker."
 
-#: gnucash/report/reports/standard/view-column.scm:159
+#: gnucash/report/reports/standard/view-column.scm:155
 msgid "Edit Options"
 msgstr "Redigera alternativ"
 
-#: gnucash/report/reports/standard/view-column.scm:166
+#: gnucash/report/reports/standard/view-column.scm:162
 msgid "Single Report"
 msgstr "Enkel rapport"
 
-#: gnucash/report/reports/standard/view-column.scm:219
+#: gnucash/report/reports/standard/view-column.scm:215
 msgid "Multicolumn View"
 msgstr "Flerkolumnsvy"
 
-#: gnucash/report/reports/standard/view-column.scm:221
+#: gnucash/report/reports/standard/view-column.scm:217
 msgid "Custom Multicolumn Report"
 msgstr "Anpassad flerkolumnsrapport"
 
@@ -29152,214 +29156,214 @@ msgstr ""
 msgid "The electronic tax number of your business"
 msgstr ""
 
-#: libgnucash/app-utils/date-utilities.scm:524
+#: libgnucash/app-utils/date-utilities.scm:523
 #, scheme-format
 msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
 
-#: libgnucash/app-utils/date-utilities.scm:902
+#: libgnucash/app-utils/date-utilities.scm:909
 msgid "First day of the current calendar year."
 msgstr "Första dagen på nuvarande kalenderår."
 
-#: libgnucash/app-utils/date-utilities.scm:909
+#: libgnucash/app-utils/date-utilities.scm:916
 msgid "Last day of the current calendar year."
 msgstr "Sista dagen på nuvarande kalenderår."
 
-#: libgnucash/app-utils/date-utilities.scm:916
+#: libgnucash/app-utils/date-utilities.scm:923
 msgid "First day of the previous calendar year."
 msgstr "Första dagen på föregående kalenderår."
 
-#: libgnucash/app-utils/date-utilities.scm:923
+#: libgnucash/app-utils/date-utilities.scm:930
 msgid "Last day of the previous calendar year."
 msgstr "Sista dagen på föregående kalenderår."
 
-#: libgnucash/app-utils/date-utilities.scm:927
+#: libgnucash/app-utils/date-utilities.scm:934
 msgid "Start of next year"
 msgstr "Början av nästa år"
 
-#: libgnucash/app-utils/date-utilities.scm:930
+#: libgnucash/app-utils/date-utilities.scm:937
 msgid "First day of the next calendar year."
 msgstr "Första dagen på nästa kalenderår."
 
-#: libgnucash/app-utils/date-utilities.scm:934
+#: libgnucash/app-utils/date-utilities.scm:941
 msgid "End of next year"
 msgstr "Slutet av nästa år"
 
-#: libgnucash/app-utils/date-utilities.scm:937
+#: libgnucash/app-utils/date-utilities.scm:944
 msgid "Last day of the next calendar year."
 msgstr "Sista dagen på nästa kalenderår."
 
-#: libgnucash/app-utils/date-utilities.scm:941
+#: libgnucash/app-utils/date-utilities.scm:948
 msgid "Start of accounting period"
 msgstr "Början av räkenskapsperiod"
 
-#: libgnucash/app-utils/date-utilities.scm:944
+#: libgnucash/app-utils/date-utilities.scm:951
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr "Första dagen i räkenskapsperioden, enligt de globala inställningar."
 
-#: libgnucash/app-utils/date-utilities.scm:948
+#: libgnucash/app-utils/date-utilities.scm:955
 msgid "End of accounting period"
 msgstr "Slutet av räkenskapsperiod"
 
-#: libgnucash/app-utils/date-utilities.scm:951
+#: libgnucash/app-utils/date-utilities.scm:958
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr "Sista dagen i räkenskapsperioden, enligt de globala inställningar."
 
-#: libgnucash/app-utils/date-utilities.scm:958
+#: libgnucash/app-utils/date-utilities.scm:965
 msgid "First day of the current month."
 msgstr "Första dagen i nuvarande månad."
 
-#: libgnucash/app-utils/date-utilities.scm:965
+#: libgnucash/app-utils/date-utilities.scm:972
 msgid "Last day of the current month."
 msgstr "Sista dagen i nuvarande månad."
 
-#: libgnucash/app-utils/date-utilities.scm:972
+#: libgnucash/app-utils/date-utilities.scm:979
 msgid "First day of the previous month."
 msgstr "Första dagen i föregående månad."
 
-#: libgnucash/app-utils/date-utilities.scm:979
+#: libgnucash/app-utils/date-utilities.scm:986
 msgid "Last day of previous month."
 msgstr "Sista dagen i föregående månad."
 
-#: libgnucash/app-utils/date-utilities.scm:983
+#: libgnucash/app-utils/date-utilities.scm:990
 msgid "Start of next month"
 msgstr "Början av nästa månad"
 
-#: libgnucash/app-utils/date-utilities.scm:986
+#: libgnucash/app-utils/date-utilities.scm:993
 msgid "First day of the next month."
 msgstr "Första dagen i nästa månad."
 
-#: libgnucash/app-utils/date-utilities.scm:990
+#: libgnucash/app-utils/date-utilities.scm:997
 msgid "End of next month"
 msgstr "Slutet av nästa månad"
 
-#: libgnucash/app-utils/date-utilities.scm:993
+#: libgnucash/app-utils/date-utilities.scm:1000
 msgid "Last day of next month."
 msgstr "Sista dagen i nästa månad."
 
-#: libgnucash/app-utils/date-utilities.scm:997
+#: libgnucash/app-utils/date-utilities.scm:1004
 msgid "Start of current quarter"
 msgstr "Början av nuvarande kvartal"
 
-#: libgnucash/app-utils/date-utilities.scm:1000
+#: libgnucash/app-utils/date-utilities.scm:1007
 msgid "First day of the current quarterly accounting period."
 msgstr "Första dagen i nuvarande kvartalsvisa räkenskapsperiod."
 
-#: libgnucash/app-utils/date-utilities.scm:1004
+#: libgnucash/app-utils/date-utilities.scm:1011
 msgid "End of current quarter"
 msgstr "Slutet på nuvarande kvartal"
 
-#: libgnucash/app-utils/date-utilities.scm:1007
+#: libgnucash/app-utils/date-utilities.scm:1014
 msgid "Last day of the current quarterly accounting period."
 msgstr "Sista dagen i nuvarande kvartalsvisa räkenskapsperiod."
 
-#: libgnucash/app-utils/date-utilities.scm:1014
+#: libgnucash/app-utils/date-utilities.scm:1021
 msgid "First day of the previous quarterly accounting period."
 msgstr "Första dagen i föregående kvartalsvisa räkenskapsperiod."
 
-#: libgnucash/app-utils/date-utilities.scm:1021
+#: libgnucash/app-utils/date-utilities.scm:1028
 msgid "Last day of previous quarterly accounting period."
 msgstr "Sista dagen i föregående kvartalsvisa räkenskapsperiod."
 
-#: libgnucash/app-utils/date-utilities.scm:1025
+#: libgnucash/app-utils/date-utilities.scm:1032
 msgid "Start of next quarter"
 msgstr "Början av nästa kvartal"
 
-#: libgnucash/app-utils/date-utilities.scm:1028
+#: libgnucash/app-utils/date-utilities.scm:1035
 msgid "First day of the next quarterly accounting period."
 msgstr "Första dagen av nästa kvartalsvisa räkenskapsperiod."
 
-#: libgnucash/app-utils/date-utilities.scm:1032
+#: libgnucash/app-utils/date-utilities.scm:1039
 msgid "End of next quarter"
 msgstr "Slutet av nästa kvartal"
 
-#: libgnucash/app-utils/date-utilities.scm:1035
+#: libgnucash/app-utils/date-utilities.scm:1042
 msgid "Last day of next quarterly accounting period."
 msgstr "Sista dagen av nästa kvartalsvisa räkenskapsperiod."
 
-#: libgnucash/app-utils/date-utilities.scm:1041
+#: libgnucash/app-utils/date-utilities.scm:1048
 msgid "The current date."
 msgstr "Dagens datum."
 
-#: libgnucash/app-utils/date-utilities.scm:1045
+#: libgnucash/app-utils/date-utilities.scm:1052
 msgid "One Month Ago"
 msgstr "En månad sen"
 
-#: libgnucash/app-utils/date-utilities.scm:1047
+#: libgnucash/app-utils/date-utilities.scm:1054
 msgid "One Month Ago."
 msgstr "En månad sen."
 
-#: libgnucash/app-utils/date-utilities.scm:1051
+#: libgnucash/app-utils/date-utilities.scm:1058
 msgid "One Week Ago"
 msgstr "En vecka sen"
 
-#: libgnucash/app-utils/date-utilities.scm:1053
+#: libgnucash/app-utils/date-utilities.scm:1060
 msgid "One Week Ago."
 msgstr "En vecka sen."
 
-#: libgnucash/app-utils/date-utilities.scm:1057
+#: libgnucash/app-utils/date-utilities.scm:1064
 msgid "Three Months Ago"
 msgstr "Tre månader sen"
 
-#: libgnucash/app-utils/date-utilities.scm:1059
+#: libgnucash/app-utils/date-utilities.scm:1066
 msgid "Three Months Ago."
 msgstr "Tre månader sen."
 
-#: libgnucash/app-utils/date-utilities.scm:1063
+#: libgnucash/app-utils/date-utilities.scm:1070
 msgid "Six Months Ago"
 msgstr "Ett halvår sen"
 
-#: libgnucash/app-utils/date-utilities.scm:1065
+#: libgnucash/app-utils/date-utilities.scm:1072
 msgid "Six Months Ago."
 msgstr "Ett halvår sen."
 
-#: libgnucash/app-utils/date-utilities.scm:1068
+#: libgnucash/app-utils/date-utilities.scm:1075
 msgid "One Year Ago"
 msgstr "Ett år sen"
 
-#: libgnucash/app-utils/date-utilities.scm:1070
+#: libgnucash/app-utils/date-utilities.scm:1077
 msgid "One Year Ago."
 msgstr "Ett år sen."
 
-#: libgnucash/app-utils/date-utilities.scm:1074
+#: libgnucash/app-utils/date-utilities.scm:1081
 msgid "One Month Ahead"
 msgstr "En månad före"
 
-#: libgnucash/app-utils/date-utilities.scm:1076
+#: libgnucash/app-utils/date-utilities.scm:1083
 msgid "One Month Ahead."
 msgstr "En månad före."
 
-#: libgnucash/app-utils/date-utilities.scm:1080
+#: libgnucash/app-utils/date-utilities.scm:1087
 msgid "One Week Ahead"
 msgstr "En vecka före"
 
-#: libgnucash/app-utils/date-utilities.scm:1082
+#: libgnucash/app-utils/date-utilities.scm:1089
 msgid "One Week Ahead."
 msgstr "En vecka före."
 
-#: libgnucash/app-utils/date-utilities.scm:1086
+#: libgnucash/app-utils/date-utilities.scm:1093
 msgid "Three Months Ahead"
 msgstr "Tre månader före"
 
-#: libgnucash/app-utils/date-utilities.scm:1088
+#: libgnucash/app-utils/date-utilities.scm:1095
 msgid "Three Months Ahead."
 msgstr "Tre månader före."
 
-#: libgnucash/app-utils/date-utilities.scm:1092
+#: libgnucash/app-utils/date-utilities.scm:1099
 msgid "Six Months Ahead"
 msgstr "Ett halvår före"
 
-#: libgnucash/app-utils/date-utilities.scm:1094
+#: libgnucash/app-utils/date-utilities.scm:1101
 msgid "Six Months Ahead."
 msgstr "Ett halvår före."
 
-#: libgnucash/app-utils/date-utilities.scm:1097
+#: libgnucash/app-utils/date-utilities.scm:1104
 msgid "One Year Ahead"
 msgstr "Ett år före"
 
-#: libgnucash/app-utils/date-utilities.scm:1099
+#: libgnucash/app-utils/date-utilities.scm:1106
 msgid "One Year Ahead."
 msgstr "Ett år före."
 
@@ -29640,40 +29644,40 @@ msgid ""
 "%s"
 msgstr ""
 
-#: libgnucash/engine/Account.cpp:4364
+#: libgnucash/engine/Account.cpp:4368
 msgid "Credit Card"
 msgstr "Kreditkort"
 
-#: libgnucash/engine/Account.cpp:4366
+#: libgnucash/engine/Account.cpp:4370
 msgid "Stock"
 msgstr "Aktie"
 
-#: libgnucash/engine/Account.cpp:4367
+#: libgnucash/engine/Account.cpp:4371
 msgid "Mutual Fund"
 msgstr "Aktiefond"
 
-#: libgnucash/engine/Account.cpp:4372
+#: libgnucash/engine/Account.cpp:4376
 msgid "A/Receivable"
 msgstr "Fordringskonto"
 
-#: libgnucash/engine/Account.cpp:4373
+#: libgnucash/engine/Account.cpp:4377
 msgid "A/Payable"
 msgstr "Skuldkonto"
 
-#: libgnucash/engine/Account.cpp:4374
+#: libgnucash/engine/Account.cpp:4378
 msgid "Root"
 msgstr "Rot"
 
-#: libgnucash/engine/Account.cpp:4816
+#: libgnucash/engine/Account.cpp:4820
 msgid "Orphaned Gains"
 msgstr "Föräldralösa vinster"
 
-#: libgnucash/engine/Account.cpp:4830 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4834 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "Realiserad vinst/förlust"
 
-#: libgnucash/engine/Account.cpp:4832
+#: libgnucash/engine/Account.cpp:4836
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."

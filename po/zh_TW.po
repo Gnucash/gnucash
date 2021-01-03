@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: GnuCash-2.4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-13 22:01+0100\n"
+"POT-Creation-Date: 2021-01-03 07:22+0100\n"
 "PO-Revision-Date: 2012-05-13 16:21+0800\n"
 "Last-Translator: Kuang-che Wu <kcwu@csie.org>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -84,7 +84,7 @@ msgstr "西歐語系"
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:969
 #: gnucash/gtkbuilder/dialog-account.glade:1029
-#: gnucash/report/reports/standard/account-piecharts.scm:487
+#: gnucash/report/reports/standard/account-piecharts.scm:488
 #: gnucash/report/reports/standard/category-barchart.scm:537
 msgid "Other"
 msgstr "其他"
@@ -913,10 +913,10 @@ msgstr "貸款償還計算機"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
 #: gnucash/register/ledger-core/split-register-model.c:232
 #: gnucash/report/reports/standard/account-summary.scm:83
-#: gnucash/report/reports/standard/advanced-portfolio.scm:72
+#: gnucash/report/reports/standard/advanced-portfolio.scm:73
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1095
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1100
-#: gnucash/report/reports/standard/cashflow-barchart.scm:331
+#: gnucash/report/reports/standard/cashflow-barchart.scm:343
 #: gnucash/report/reports/standard/category-barchart.scm:634
 #: gnucash/report/reports/standard/category-barchart.scm:655
 #: gnucash/report/reports/standard/customer-summary.scm:70
@@ -927,9 +927,9 @@ msgstr "貸款償還計算機"
 #: gnucash/report/reports/standard/invoice.scm:212
 #: gnucash/report/reports/standard/invoice.scm:603
 #: gnucash/report/reports/standard/job-report.scm:40
-#: gnucash/report/reports/standard/net-charts.scm:417
+#: gnucash/report/reports/standard/net-charts.scm:413
 #: gnucash/report/reports/standard/new-owner-report.scm:49
-#: gnucash/report/reports/standard/new-owner-report.scm:237
+#: gnucash/report/reports/standard/new-owner-report.scm:241
 #: gnucash/report/reports/standard/owner-report.scm:50
 #: gnucash/report/reports/standard/portfolio.scm:51
 #: gnucash/report/reports/standard/register.scm:130
@@ -955,7 +955,7 @@ msgstr "日期"
 #: gnucash/register/ledger-core/split-register.c:2669
 #: gnucash/register/ledger-core/split-register.c:2674
 #: gnucash/register/ledger-core/split-register.c:2685
-#: gnucash/report/reports/standard/new-owner-report.scm:294
+#: gnucash/report/reports/standard/new-owner-report.scm:298
 #: gnucash/report/reports/standard/owner-report.scm:357
 #: libgnucash/engine/Account.cpp:145 libgnucash/engine/Account.cpp:153
 #: libgnucash/engine/Account.cpp:174 libgnucash/engine/gncOwner.c:814
@@ -1011,14 +1011,14 @@ msgstr "加入價格時發生錯誤。"
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:341
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1051
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1052
 #: gnucash/report/reports/standard/budget-flow.scm:41
 #: gnucash/report/reports/standard/budget.scm:47
 #: gnucash/report/reports/standard/cash-flow.scm:47
 #: gnucash/report/reports/standard/general-journal.scm:97
 #: gnucash/report/reports/standard/job-report.scm:36
 #: gnucash/report/reports/standard/lot-viewer.scm:37
-#: gnucash/report/reports/standard/new-owner-report.scm:1128
+#: gnucash/report/reports/standard/new-owner-report.scm:1132
 #: gnucash/report/reports/standard/owner-report.scm:48
 #: gnucash/report/reports/standard/portfolio.scm:253
 #: gnucash/report/reports/standard/register.scm:143
@@ -1029,7 +1029,7 @@ msgstr "科目"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1063
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
 msgstr "代號"
@@ -1037,7 +1037,7 @@ msgstr "代號"
 #: gnucash/gnome/assistant-stock-split.c:585
 #: gnucash/gnome/dialog-find-transactions.c:122
 #: gnucash/register/ledger-core/split-register-model.c:419
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1071
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1072
 #: gnucash/report/reports/standard/general-journal.scm:98
 #: gnucash/report/reports/standard/general-ledger.scm:78
 #: gnucash/report/reports/standard/general-ledger.scm:98
@@ -1171,7 +1171,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-billterms.glade:182
 #: gnucash/gtkbuilder/dialog-billterms.glade:767
 #: gnucash/gtkbuilder/gnc-frequency.glade:966
-#: gnucash/report/reports/standard/price-scatter.scm:138
+#: gnucash/report/reports/standard/price-scatter.scm:139
 msgid "Days"
 msgstr "日"
 
@@ -1186,7 +1186,7 @@ msgstr "下個月的"
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:622
 #: gnucash/gtkbuilder/dialog-price.glade:24
 #: gnucash/report/reports/standard/job-report.scm:240
-#: gnucash/report/reports/standard/new-owner-report.scm:296
+#: gnucash/report/reports/standard/new-owner-report.scm:300
 #: gnucash/report/reports/standard/owner-report.scm:353
 #: gnucash/report/reports/standard/owner-report.scm:358
 msgid "Unknown"
@@ -1612,7 +1612,7 @@ msgstr "交易報表"
 #: gnucash/report/reports/standard/invoice.scm:217
 #: gnucash/report/reports/standard/job-report.scm:44
 #: gnucash/report/reports/standard/new-owner-report.scm:53
-#: gnucash/report/reports/standard/new-owner-report.scm:240
+#: gnucash/report/reports/standard/new-owner-report.scm:244
 #: gnucash/report/reports/standard/owner-report.scm:54
 #: gnucash/report/reports/standard/register.scm:138
 #: gnucash/report/reports/standard/register.scm:368
@@ -1828,7 +1828,7 @@ msgstr "單位股份價格"
 #: gnucash/report/reports/standard/general-ledger.scm:81
 #: gnucash/report/reports/standard/general-ledger.scm:101
 #: gnucash/report/reports/standard/job-report.scm:45
-#: gnucash/report/reports/standard/new-owner-report.scm:244
+#: gnucash/report/reports/standard/new-owner-report.scm:248
 #: gnucash/report/reports/standard/owner-report.scm:59
 #: gnucash/report/reports/standard/register.scm:398
 #: gnucash/report/reports/standard/register.scm:647
@@ -1845,7 +1845,7 @@ msgstr "總額"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:78
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1080
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1081
 #: gnucash/report/reports/standard/portfolio.scm:258
 #: gnucash/report/reports/standard/register.scm:158
 #: gnucash/report/reports/standard/register.scm:407
@@ -2099,7 +2099,7 @@ msgstr "這個項目是附加在訂單上的因此也要刪除其來源！"
 #: gnucash/report/reports/standard/job-report.scm:41
 #: gnucash/report/reports/standard/new-aging.scm:126
 #: gnucash/report/reports/standard/new-owner-report.scm:50
-#: gnucash/report/reports/standard/new-owner-report.scm:957
+#: gnucash/report/reports/standard/new-owner-report.scm:961
 #: gnucash/report/reports/standard/owner-report.scm:51
 #: gnucash/report/reports/standard/owner-report.scm:612
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:233
@@ -2108,7 +2108,7 @@ msgstr "到期日"
 
 #: gnucash/gnome/dialog-invoice.c:837 gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:130
-#: gnucash/report/reports/standard/new-owner-report.scm:961
+#: gnucash/report/reports/standard/new-owner-report.scm:965
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post Date"
 msgstr "張貼日期"
@@ -2173,7 +2173,7 @@ msgid "PAID"
 msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:2065
-#: gnucash/report/reports/standard/new-owner-report.scm:577
+#: gnucash/report/reports/standard/new-owner-report.scm:581
 msgid "UNPAID"
 msgstr ""
 
@@ -2395,14 +2395,14 @@ msgstr "憑證備註"
 #: gnucash/report/reports/standard/customer-summary.scm:72
 #: gnucash/report/reports/standard/job-report.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:52
-#: gnucash/report/reports/standard/new-owner-report.scm:239
+#: gnucash/report/reports/standard/new-owner-report.scm:243
 #: gnucash/report/reports/standard/owner-report.scm:53
 msgid "Type"
 msgstr "類型"
 
 #: gnucash/gnome/dialog-invoice.c:3440
 #: gnucash/register/ledger-core/split-register-model.c:309
-#: gnucash/report/reports/standard/new-owner-report.scm:819
+#: gnucash/report/reports/standard/new-owner-report.scm:823
 msgid "Paid"
 msgstr "支付"
 
@@ -2567,7 +2567,7 @@ msgstr "標題"
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
 #: gnucash/report/reports/standard/new-owner-report.scm:58
-#: gnucash/report/reports/standard/new-owner-report.scm:558
+#: gnucash/report/reports/standard/new-owner-report.scm:562
 #: gnucash/report/reports/standard/owner-report.scm:319
 #: gnucash/report/reports/standard/register.scm:164
 msgid "Balance"
@@ -2660,8 +2660,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
 #: gnucash/report/reports/standard/new-aging.scm:194
-#: gnucash/report/reports/standard/new-owner-report.scm:315
-#: gnucash/report/reports/standard/new-owner-report.scm:713
+#: gnucash/report/reports/standard/new-owner-report.scm:319
+#: gnucash/report/reports/standard/new-owner-report.scm:717
 msgid "Pre-Payment"
 msgstr "預付款"
 
@@ -2781,7 +2781,7 @@ msgstr "刪除價格？"
 
 #: gnucash/gnome/dialog-price-edit-db.c:427
 #: gnucash/gtkbuilder/dialog-invoice.glade:615
-#: gnucash/report/reports/standard/budget-income-statement.scm:123
+#: gnucash/report/reports/standard/budget-income-statement.scm:124
 #: gnucash/report/reports/standard/equity-statement.scm:85
 #: gnucash/report/reports/standard/income-statement.scm:117
 #: gnucash/report/reports/standard/trial-balance.scm:91
@@ -2896,7 +2896,7 @@ msgstr "內容"
 
 #: gnucash/gnome/dialog-report-column-view.c:412
 #: gnucash/report/reports/standard/customer-summary.scm:291
-#: gnucash/report/reports/standard/new-owner-report.scm:1061
+#: gnucash/report/reports/standard/new-owner-report.scm:1065
 #: gnucash/report/reports/standard/owner-report.scm:743
 msgid "Report"
 msgstr "報表"
@@ -3245,19 +3245,19 @@ msgstr "尋找廠商"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:97
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
 #: gnucash/register/ledger-core/split-register.c:2716
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1087
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1088
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1279
-#: gnucash/report/reports/standard/net-charts.scm:350
-#: gnucash/report/reports/standard/net-charts.scm:420
+#: gnucash/report/reports/standard/net-charts.scm:346
+#: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4369 libgnucash/engine/Scrub.c:464
+#: libgnucash/engine/Account.cpp:4373 libgnucash/engine/Scrub.c:464
 msgid "Income"
 msgstr "收入"
 
 #: gnucash/gnome/gnc-budget-view.c:502
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:122
-#: gnucash/report/reports/standard/budget-income-statement.scm:521
+#: gnucash/report/reports/standard/budget-income-statement.scm:522
 #: gnucash/report/reports/standard/income-statement.scm:512
 #: gnucash/report/report-utilities.scm:205
 msgid "Expenses"
@@ -3285,17 +3285,18 @@ msgstr "開啟已存在的預算"
 #: gnucash/report/html-acct-table.scm:829 gnucash/report/reports/aging.scm:544
 #: gnucash/report/reports/aging.scm:831
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:294
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1052
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1053
 #: gnucash/report/reports/standard/budget-flow.scm:168
 #: gnucash/report/reports/standard/budget-flow.scm:247
 #: gnucash/report/reports/standard/budget.scm:511
+#: gnucash/report/reports/standard/cashflow-barchart.scm:352
 #: gnucash/report/reports/standard/customer-summary.scm:478
 #: gnucash/report/reports/standard/customer-summary.scm:480
 #: gnucash/report/reports/standard/invoice.scm:104
 #: gnucash/report/reports/standard/invoice.scm:252
 #: gnucash/report/reports/standard/new-aging.scm:200
 #: gnucash/report/reports/standard/new-aging.scm:325
-#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:325
 #: gnucash/report/reports/standard/portfolio.scm:278
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1961
@@ -3422,7 +3423,7 @@ msgid "Setup scheduled transactions for repayment of a loan"
 msgstr "設定用於貸款償還的排程交易"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:180
-#: gnucash/report/report-core.scm:150
+#: gnucash/report/report-core.scm:151
 msgid "B_udget"
 msgstr "預算(_U)"
 
@@ -3472,7 +3473,7 @@ msgid "_Import Map Editor"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
-msgid "View and Delete Bayesian and Non Bayesian information"
+msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
@@ -3631,7 +3632,7 @@ msgid "_OK"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-business.c:155
-#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:161
+#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:162
 msgid "_Business"
 msgstr "商務(_B)"
 
@@ -4181,20 +4182,21 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2846
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2850
 #: gnucash/gtkbuilder/dialog-preferences.glade:980
-#: gnucash/report/report-core.scm:157
+#: gnucash/report/report-core.scm:158
 #: gnucash/report/reports/example/average-balance.scm:92
 #: gnucash/report/reports/example/average-balance.scm:296
 #: gnucash/report/reports/example/daily-reports.scm:57
-#: gnucash/report/reports/standard/account-piecharts.scm:69
+#: gnucash/report/reports/standard/account-piecharts.scm:70
+#: gnucash/report/reports/standard/account-piecharts.scm:564
 #: gnucash/report/reports/standard/account-summary.scm:85
-#: gnucash/report/reports/standard/advanced-portfolio.scm:162
+#: gnucash/report/reports/standard/advanced-portfolio.scm:163
 #: gnucash/report/reports/standard/balance-forecast.scm:37
 #: gnucash/report/reports/standard/balance-sheet.scm:87
 #: gnucash/report/reports/standard/balsheet-pnl.scm:81
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:52
 #: gnucash/report/reports/standard/budget-barchart.scm:38
-#: gnucash/report/reports/standard/budget-income-statement.scm:74
-#: gnucash/report/reports/standard/cashflow-barchart.scm:44
+#: gnucash/report/reports/standard/budget-income-statement.scm:75
+#: gnucash/report/reports/standard/cashflow-barchart.scm:45
 #: gnucash/report/reports/standard/category-barchart.scm:75
 #: gnucash/report/reports/standard/equity-statement.scm:68
 #: gnucash/report/reports/standard/income-gst-statement.scm:125
@@ -4379,7 +4381,7 @@ msgstr "筆記"
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:227
 #: gnucash/report/reports/standard/budget-flow.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:59
 #: gnucash/report/reports/standard/budget.scm:94
 msgid "Budget"
 msgstr "預算"
@@ -5079,7 +5081,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 #: gnucash/report/reports/standard/job-report.scm:511
-#: gnucash/report/reports/standard/new-owner-report.scm:1205
+#: gnucash/report/reports/standard/new-owner-report.scm:1209
 msgid "Vendor Report"
 msgstr "廠商報表"
 
@@ -5090,7 +5092,7 @@ msgstr "廠商報表"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
 #: gnucash/report/reports/standard/job-report.scm:505
-#: gnucash/report/reports/standard/new-owner-report.scm:1196
+#: gnucash/report/reports/standard/new-owner-report.scm:1200
 msgid "Customer Report"
 msgstr "客戶報表"
 
@@ -5101,7 +5103,7 @@ msgstr "客戶報表"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 #: gnucash/report/reports/standard/job-report.scm:514
-#: gnucash/report/reports/standard/new-owner-report.scm:1214
+#: gnucash/report/reports/standard/new-owner-report.scm:1218
 msgid "Employee Report"
 msgstr "員工報表"
 
@@ -6214,23 +6216,23 @@ msgstr "樣式表(_Y)"
 msgid "Edit report style sheets"
 msgstr "編輯報表樣式表。"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:150
-#: gnucash/report/reports/standard/view-column.scm:131
+#: gnucash/gnome/gnc-plugin-report-system.c:148
+#: gnucash/report/reports/standard/view-column.scm:127
 msgid "Report error"
 msgstr "報表錯誤"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:151
-#: gnucash/report/reports/standard/view-column.scm:132
+#: gnucash/gnome/gnc-plugin-report-system.c:149
+#: gnucash/report/reports/standard/view-column.scm:128
 msgid "An error occurred while running the report."
 msgstr "執行報表時發生錯誤。"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:186
-#: gnucash/gnome/gnc-plugin-report-system.c:208
+#: gnucash/gnome/gnc-plugin-report-system.c:184
+#: gnucash/gnome/gnc-plugin-report-system.c:206
 #, c-format
 msgid "Badly formed options URL: %s"
 msgstr "錯誤形式的選項 URL ： %s"
 
-#: gnucash/gnome/gnc-plugin-report-system.c:196
+#: gnucash/gnome/gnc-plugin-report-system.c:194
 #, c-format
 msgid "Badly-formed report id: %s"
 msgstr "錯誤形式的報表 id： %s"
@@ -7470,8 +7472,9 @@ msgstr ""
 #. Translators: Replace here and later CUSIP by the name of your local
 #. National Securities Identifying Number
 #. like gb:SEDOL, de:WKN, ch:Valorennummer, fr:SICOVAM ...
-#. See http://en.wikipedia.org/wiki/ISIN for hints.
-#: gnucash/gnome-utils/dialog-commodity.c:173
+#. See http://en.wikipedia.org/wiki/ISIN and
+#. https://en.wikipedia.org/wiki/National_numbering_agency for hints.
+#: gnucash/gnome-utils/dialog-commodity.c:174
 msgid ""
 "\n"
 "Exchange code (ISIN, CUSIP or similar): "
@@ -7479,7 +7482,7 @@ msgstr ""
 "\n"
 "證券交換碼 (ISIN, CUSIP 之類的): "
 
-#: gnucash/gnome-utils/dialog-commodity.c:175
+#: gnucash/gnome-utils/dialog-commodity.c:176
 msgid ""
 "\n"
 "Mnemonic (Ticker symbol or similar): "
@@ -7487,35 +7490,35 @@ msgstr ""
 "\n"
 "易記符號(股票代碼之類的): "
 
-#: gnucash/gnome-utils/dialog-commodity.c:274
+#: gnucash/gnome-utils/dialog-commodity.c:275
 msgid "Select security/currency"
 msgstr "選擇證券/貨幣"
 
-#: gnucash/gnome-utils/dialog-commodity.c:275
+#: gnucash/gnome-utils/dialog-commodity.c:276
 #: gnucash/gtkbuilder/dialog-account.glade:1257
 msgid "_Security/currency"
 msgstr "證券/貨幣(_S)"
 
-#: gnucash/gnome-utils/dialog-commodity.c:279
+#: gnucash/gnome-utils/dialog-commodity.c:280
 msgid "Select security"
 msgstr "選擇證券"
 
-#: gnucash/gnome-utils/dialog-commodity.c:280
+#: gnucash/gnome-utils/dialog-commodity.c:281
 #: gnucash/gtkbuilder/dialog-price.glade:146
 msgid "_Security"
 msgstr "證券(_S)"
 
-#: gnucash/gnome-utils/dialog-commodity.c:284
+#: gnucash/gnome-utils/dialog-commodity.c:285
 msgid "Select currency"
 msgstr "選擇貨幣"
 
-#: gnucash/gnome-utils/dialog-commodity.c:285
+#: gnucash/gnome-utils/dialog-commodity.c:286
 #: gnucash/gtkbuilder/dialog-price.glade:161
 #, fuzzy
 msgid "Cu_rrency"
 msgstr "貨幣(_R)："
 
-#: gnucash/gnome-utils/dialog-commodity.c:759
+#: gnucash/gnome-utils/dialog-commodity.c:760
 #: gnucash/gnome-utils/dialog-options.c:713
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:412
 #: gnucash/gnome-utils/gnc-tree-view-price.c:402
@@ -7524,48 +7527,48 @@ msgstr "貨幣(_R)："
 #: gnucash/gtkbuilder/dialog-transfer.glade:424
 #: gnucash/gtkbuilder/dialog-transfer.glade:437
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4368
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4372
 msgid "Currency"
 msgstr "貨幣"
 
-#: gnucash/gnome-utils/dialog-commodity.c:854
+#: gnucash/gnome-utils/dialog-commodity.c:855
 msgid "Use local time"
 msgstr "使用當地時間"
 
-#: gnucash/gnome-utils/dialog-commodity.c:984
+#: gnucash/gnome-utils/dialog-commodity.c:985
 msgid "Edit currency"
 msgstr "編輯貨幣"
 
-#: gnucash/gnome-utils/dialog-commodity.c:985
+#: gnucash/gnome-utils/dialog-commodity.c:986
 msgid "Currency Information"
 msgstr "貨幣資訊"
 
-#: gnucash/gnome-utils/dialog-commodity.c:990
+#: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "Edit security"
 msgstr "編輯證券"
 
-#: gnucash/gnome-utils/dialog-commodity.c:990
+#: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "New security"
 msgstr "新增證券"
 
-#: gnucash/gnome-utils/dialog-commodity.c:991
+#: gnucash/gnome-utils/dialog-commodity.c:992
 msgid "Security Information"
 msgstr "證券資訊"
 
-#: gnucash/gnome-utils/dialog-commodity.c:1268
+#: gnucash/gnome-utils/dialog-commodity.c:1269
 msgid "You may not create a new national currency."
 msgstr "您不能建立新的國家貨幣。"
 
-#: gnucash/gnome-utils/dialog-commodity.c:1278
+#: gnucash/gnome-utils/dialog-commodity.c:1279
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-commodity.c:1293
+#: gnucash/gnome-utils/dialog-commodity.c:1294
 msgid "That commodity already exists."
 msgstr "此商品已經存在。"
 
-#: gnucash/gnome-utils/dialog-commodity.c:1342
+#: gnucash/gnome-utils/dialog-commodity.c:1343
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
@@ -8036,7 +8039,7 @@ msgstr "否, 這次不要(_N)"
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:166
 #: gnucash/gnome-utils/gnc-period-select.c:70
 #: gnucash/gnome-utils/gnc-period-select.c:86
-#: libgnucash/app-utils/date-utilities.scm:1039
+#: libgnucash/app-utils/date-utilities.scm:1046
 msgid "Today"
 msgstr "今天"
 
@@ -8045,21 +8048,21 @@ msgid "Use Shift combined with Return or Keypad Enter to finish editing"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-date-delta.c:224
-#: gnucash/report/reports/standard/price-scatter.scm:139
+#: gnucash/report/reports/standard/price-scatter.scm:140
 msgid "Weeks"
 msgstr "週"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:226
 #: gnucash/gtkbuilder/assistant-loan.glade:12
 #: gnucash/gtkbuilder/gnc-date-format.glade:169
-#: gnucash/report/reports/standard/price-scatter.scm:141
+#: gnucash/report/reports/standard/price-scatter.scm:142
 msgid "Months"
 msgstr "月"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:228
 #: gnucash/gtkbuilder/assistant-loan.glade:15
 #: gnucash/gtkbuilder/gnc-date-format.glade:181
-#: gnucash/report/reports/standard/price-scatter.scm:144
+#: gnucash/report/reports/standard/price-scatter.scm:145
 msgid "Years"
 msgstr "年"
 
@@ -8782,40 +8785,40 @@ msgstr ""
 msgid "File %s opened. %s"
 msgstr "檔案開啟失敗。"
 
-#: gnucash/gnome-utils/gnc-main-window.c:2863
+#: gnucash/gnome-utils/gnc-main-window.c:2864
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:2953
+#: gnucash/gnome-utils/gnc-main-window.c:2954
 msgid "Unable to save to database."
 msgstr "無法存到資料庫。"
 
-#: gnucash/gnome-utils/gnc-main-window.c:2955
+#: gnucash/gnome-utils/gnc-main-window.c:2956
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "無法存到資料庫：帳本已標為唯讀。"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4301
+#: gnucash/gnome-utils/gnc-main-window.c:4302
 msgid "Book Options"
 msgstr "帳本選項"
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.c:4686
+#: gnucash/gnome-utils/gnc-main-window.c:4687
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4698
+#: gnucash/gnome-utils/gnc-main-window.c:4699
 #: gnucash/gnome-utils/gnc-splash.c:97
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4699
+#: gnucash/gnome-utils/gnc-main-window.c:4700
 #: gnucash/gnome-utils/gnc-splash.c:98 gnucash/gnucash-core-app.cpp:503
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4707
+#: gnucash/gnome-utils/gnc-main-window.c:4708
 msgid "Accounting for personal and small business finance."
 msgstr ""
 
@@ -8823,7 +8826,7 @@ msgstr ""
 #. * Enter your name or that of your team and an email contact for feedback.
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
-#: gnucash/gnome-utils/gnc-main-window.c:4716
+#: gnucash/gnome-utils/gnc-main-window.c:4717
 msgid "translator-credits"
 msgstr ""
 "Chao-Hsiung Liao <pesder.liao@msa.hinet.net>, 2003.\n"
@@ -8831,17 +8834,17 @@ msgstr ""
 "Barlos Lee <barlos.lee@gmail.com>, 2010.\n"
 "Tryneeds (http://tryneeds.westart.tw/tryneeds/) team, 2011-2012."
 
-#: gnucash/gnome-utils/gnc-main-window.c:4719
+#: gnucash/gnome-utils/gnc-main-window.c:4720
 msgid "Visit the GnuCash website."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-period-select.c:71
-#: libgnucash/app-utils/date-utilities.scm:955
+#: libgnucash/app-utils/date-utilities.scm:962
 msgid "Start of this month"
 msgstr "本月初"
 
 #: gnucash/gnome-utils/gnc-period-select.c:72
-#: libgnucash/app-utils/date-utilities.scm:969
+#: libgnucash/app-utils/date-utilities.scm:976
 msgid "Start of previous month"
 msgstr "上個月月初"
 
@@ -8850,17 +8853,17 @@ msgid "Start of this quarter"
 msgstr "本季初"
 
 #: gnucash/gnome-utils/gnc-period-select.c:74
-#: libgnucash/app-utils/date-utilities.scm:1011
+#: libgnucash/app-utils/date-utilities.scm:1018
 msgid "Start of previous quarter"
 msgstr "上一季初"
 
 #: gnucash/gnome-utils/gnc-period-select.c:75
-#: libgnucash/app-utils/date-utilities.scm:899
+#: libgnucash/app-utils/date-utilities.scm:906
 msgid "Start of this year"
 msgstr "今年初"
 
 #: gnucash/gnome-utils/gnc-period-select.c:76
-#: libgnucash/app-utils/date-utilities.scm:913
+#: libgnucash/app-utils/date-utilities.scm:920
 msgid "Start of previous year"
 msgstr "去年初"
 
@@ -8873,12 +8876,12 @@ msgid "Start of previous accounting period"
 msgstr "前一會計週期開始時間"
 
 #: gnucash/gnome-utils/gnc-period-select.c:87
-#: libgnucash/app-utils/date-utilities.scm:962
+#: libgnucash/app-utils/date-utilities.scm:969
 msgid "End of this month"
 msgstr "本月底"
 
 #: gnucash/gnome-utils/gnc-period-select.c:88
-#: libgnucash/app-utils/date-utilities.scm:976
+#: libgnucash/app-utils/date-utilities.scm:983
 msgid "End of previous month"
 msgstr "上個月月底"
 
@@ -8887,17 +8890,17 @@ msgid "End of this quarter"
 msgstr "本季終"
 
 #: gnucash/gnome-utils/gnc-period-select.c:90
-#: libgnucash/app-utils/date-utilities.scm:1018
+#: libgnucash/app-utils/date-utilities.scm:1025
 msgid "End of previous quarter"
 msgstr "上一季終"
 
 #: gnucash/gnome-utils/gnc-period-select.c:91
-#: libgnucash/app-utils/date-utilities.scm:906
+#: libgnucash/app-utils/date-utilities.scm:913
 msgid "End of this year"
 msgstr "今年底"
 
 #: gnucash/gnome-utils/gnc-period-select.c:92
-#: libgnucash/app-utils/date-utilities.scm:920
+#: libgnucash/app-utils/date-utilities.scm:927
 msgid "End of previous year"
 msgstr "去年底"
 
@@ -9327,7 +9330,7 @@ msgstr "薪水"
 #: gnucash/report/reports/standard/balance-sheet.scm:503
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4371
+#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4375
 msgid "Equity"
 msgstr "財產淨值"
 
@@ -9338,15 +9341,15 @@ msgstr "財產淨值"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 #: gnucash/register/ledger-core/split-register.c:2707
 #: gnucash/register/ledger-core/split-register-model.c:402
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1075
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1076
 #: gnucash/report/reports/standard/general-journal.scm:99
 #: gnucash/report/reports/standard/general-ledger.scm:79
 #: gnucash/report/reports/standard/general-ledger.scm:99
 #: gnucash/report/reports/standard/invoice.scm:232
 #: gnucash/report/reports/standard/portfolio.scm:257
-#: gnucash/report/reports/standard/price-scatter.scm:39
-#: gnucash/report/reports/standard/price-scatter.scm:312
-#: gnucash/report/reports/standard/price-scatter.scm:326
+#: gnucash/report/reports/standard/price-scatter.scm:40
+#: gnucash/report/reports/standard/price-scatter.scm:313
+#: gnucash/report/reports/standard/price-scatter.scm:327
 #: gnucash/report/reports/standard/register.scm:150
 #: gnucash/report/reports/standard/register.scm:393
 #: gnucash/report/trep-engine.scm:981 gnucash/report/trep-engine.scm:1105
@@ -9790,7 +9793,7 @@ msgstr ""
 #: gnucash/report/reports/standard/customer-summary.scm:71
 #: gnucash/report/reports/standard/job-report.scm:42
 #: gnucash/report/reports/standard/new-owner-report.scm:51
-#: gnucash/report/reports/standard/new-owner-report.scm:238
+#: gnucash/report/reports/standard/new-owner-report.scm:242
 #: gnucash/report/reports/standard/owner-report.scm:52
 msgid "Reference"
 msgstr "參照"
@@ -9883,9 +9886,9 @@ msgstr "收到"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1283
 #: gnucash/report/reports/standard/customer-summary.scm:139
 #: gnucash/report/reports/standard/customer-summary.scm:326
-#: gnucash/report/reports/standard/net-charts.scm:371
-#: gnucash/report/reports/standard/net-charts.scm:420
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4370
+#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:416
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4374
 #: libgnucash/engine/gncInvoice.c:1084
 msgid "Expense"
 msgstr "支出"
@@ -13244,18 +13247,18 @@ msgstr ""
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:346
 #: gnucash/report/reports/example/average-balance.scm:40
 #: gnucash/report/reports/example/daily-reports.scm:52
-#: gnucash/report/reports/standard/account-piecharts.scm:64
+#: gnucash/report/reports/standard/account-piecharts.scm:65
 #: gnucash/report/reports/standard/account-summary.scm:79
 #: gnucash/report/reports/standard/balance-forecast.scm:40
 #: gnucash/report/reports/standard/balsheet-pnl.scm:59
-#: gnucash/report/reports/standard/cashflow-barchart.scm:54
+#: gnucash/report/reports/standard/cashflow-barchart.scm:55
 #: gnucash/report/reports/standard/cash-flow.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:69
 #: gnucash/report/reports/standard/equity-statement.scm:65
 #: gnucash/report/reports/standard/income-statement.scm:59
 #: gnucash/report/reports/standard/lot-viewer.scm:35
 #: gnucash/report/reports/standard/net-charts.scm:39
-#: gnucash/report/reports/standard/price-scatter.scm:35
+#: gnucash/report/reports/standard/price-scatter.scm:36
 #: gnucash/report/trep-engine.scm:95
 msgid "Start Date"
 msgstr "開始日期"
@@ -13400,25 +13403,25 @@ msgstr "範圍: "
 #: gnucash/gtkbuilder/dialog-sx.glade:333
 #: gnucash/report/reports/example/average-balance.scm:41
 #: gnucash/report/reports/example/daily-reports.scm:53
-#: gnucash/report/reports/standard/account-piecharts.scm:65
+#: gnucash/report/reports/standard/account-piecharts.scm:66
 #: gnucash/report/reports/standard/account-summary.scm:80
 #: gnucash/report/reports/standard/balance-forecast.scm:41
 #: gnucash/report/reports/standard/balsheet-pnl.scm:60
-#: gnucash/report/reports/standard/cashflow-barchart.scm:55
+#: gnucash/report/reports/standard/cashflow-barchart.scm:56
 #: gnucash/report/reports/standard/cash-flow.scm:43
 #: gnucash/report/reports/standard/category-barchart.scm:70
 #: gnucash/report/reports/standard/equity-statement.scm:66
 #: gnucash/report/reports/standard/income-statement.scm:60
 #: gnucash/report/reports/standard/lot-viewer.scm:36
 #: gnucash/report/reports/standard/net-charts.scm:40
-#: gnucash/report/reports/standard/price-scatter.scm:36
+#: gnucash/report/reports/standard/price-scatter.scm:37
 #: gnucash/report/trep-engine.scm:96
 msgid "End Date"
 msgstr "結束日期"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1201
 #: gnucash/report/reports/standard/job-report.scm:563
-#: gnucash/report/reports/standard/new-owner-report.scm:1161
+#: gnucash/report/reports/standard/new-owner-report.scm:1165
 #: gnucash/report/reports/standard/owner-report.scm:795
 msgid "Date Range"
 msgstr "日期範圍"
@@ -14153,7 +14156,7 @@ msgstr "選擇要比較的科目"
 
 #: gnucash/gtkbuilder/dialog-account.glade:199
 #: gnucash/gtkbuilder/dialog-account.glade:1326
-#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:292
+#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:293
 #: gnucash/report/stylesheets/plain.scm:232
 msgid "Default"
 msgstr "預設值"
@@ -14383,7 +14386,7 @@ msgstr "<b>母科目(_P)</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1666
 #: gnucash/gtkbuilder/dialog-preferences.glade:2010
-#: gnucash/report/report-core.scm:156
+#: gnucash/report/report-core.scm:157
 #: gnucash/report/reports/standard/equity-statement.scm:108
 #: gnucash/report/reports/standard/equity-statement.scm:112
 #: gnucash/report/reports/standard/register.scm:347
@@ -14744,7 +14747,7 @@ msgid "Choose Owner Dialog"
 msgstr "選擇所有人對話盒"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:8
-#: gnucash/report/reports/standard/account-piecharts.scm:61
+#: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
 msgstr "證券"
 
@@ -14880,6 +14883,7 @@ msgstr "取得線上報價(_G)"
 msgid "F_raction traded"
 msgstr "最小單位交易(_R)："
 
+#. Again replace CUSIP by your National Securities Identifying Number.
 #: gnucash/gtkbuilder/dialog-commodity.glade:475
 #, fuzzy
 msgid "ISIN, CUSI_P or other code"
@@ -15225,7 +15229,7 @@ msgstr "每半月"
 #: gnucash/gtkbuilder/dialog-sx.glade:135
 #: gnucash/gtkbuilder/gnc-frequency.glade:180
 #: gnucash/gtkbuilder/gnc-frequency.glade:1408
-#: gnucash/report/reports/standard/account-piecharts.scm:123
+#: gnucash/report/reports/standard/account-piecharts.scm:124
 #: gnucash/report/reports/standard/category-barchart.scm:123
 #: gnucash/report/trep-engine.scm:336 libgnucash/engine/Recurrence.c:761
 #: libgnucash/engine/Recurrence.c:775
@@ -15249,7 +15253,7 @@ msgstr "每週"
 #: gnucash/gtkbuilder/dialog-sx.glade:129
 #: gnucash/gtkbuilder/gnc-frequency.glade:174
 #: gnucash/gtkbuilder/gnc-frequency.glade:993
-#: gnucash/report/reports/standard/account-piecharts.scm:126
+#: gnucash/report/reports/standard/account-piecharts.scm:127
 #: gnucash/report/reports/standard/category-barchart.scm:126
 #: gnucash/report/trep-engine.scm:327 libgnucash/engine/Recurrence.c:623
 msgid "Weekly"
@@ -15922,7 +15926,7 @@ msgid "<b>Amount</b>"
 msgstr "<b>科目(_A)</b>"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:460
-#: gnucash/report/reports/standard/new-owner-report.scm:294
+#: gnucash/report/reports/standard/new-owner-report.scm:298
 msgid "Refund"
 msgstr ""
 
@@ -16982,7 +16986,7 @@ msgid "Before _Date"
 msgstr "日期(_D)："
 
 #: gnucash/gtkbuilder/dialog-price.glade:795
-#: gnucash/report/reports/standard/price-scatter.scm:96
+#: gnucash/report/reports/standard/price-scatter.scm:97
 msgid "Price Database"
 msgstr "價格資料庫"
 
@@ -17361,7 +17365,7 @@ msgid "Bi-Weekly"
 msgstr "每週"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:141
-#: gnucash/report/reports/standard/account-piecharts.scm:120
+#: gnucash/report/reports/standard/account-piecharts.scm:121
 #: gnucash/report/trep-engine.scm:354 libgnucash/engine/Recurrence.c:787
 msgid "Yearly"
 msgstr "年度"
@@ -17665,7 +17669,7 @@ msgstr "<b>轉帳到</b>"
 #: gnucash/gtkbuilder/dialog-transfer.glade:447
 #: gnucash/gtkbuilder/dialog-transfer.glade:463
 #: gnucash/report/reports/standard/net-charts.scm:47
-#: gnucash/report/reports/standard/price-scatter.scm:49
+#: gnucash/report/reports/standard/price-scatter.scm:50
 msgid "Show Income/Expense"
 msgstr "顯示收入/支出"
 
@@ -19425,7 +19429,7 @@ msgid "Unspecified"
 msgstr "未指定的"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4361
+#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4365
 msgid "Bank"
 msgstr "銀行"
 
@@ -21555,7 +21559,7 @@ msgid "Welcome to GnuCash"
 msgstr "歡迎使用 GnuCash"
 
 #: gnucash/python/init.py:103
-#: gnucash/report/reports/example/hello-world.scm:486
+#: gnucash/report/reports/example/hello-world.scm:488
 msgid "Have a nice day!"
 msgstr "祝您有美好的一天！"
 
@@ -21741,7 +21745,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:527
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1091
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4362
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4366
 msgid "Cash"
 msgstr "現金"
 
@@ -21998,7 +22002,7 @@ msgstr "sample:交易的敘述"
 #: gnucash/register/ledger-core/split-register-layout.c:703
 #: gnucash/register/ledger-core/split-register-model.c:334
 #: gnucash/report/reports/standard/new-owner-report.scm:219
-#: gnucash/report/reports/standard/new-owner-report.scm:446
+#: gnucash/report/reports/standard/new-owner-report.scm:450
 #: gnucash/report/trep-engine.scm:1292 gnucash/report/trep-engine.scm:1293
 msgctxt "Column header for 'Document Link'"
 msgid "L"
@@ -22338,7 +22342,7 @@ msgstr ""
 #: gnucash/report/html-utilities.scm:337
 #: gnucash/report/reports/standard/balsheet-pnl.scm:140
 #: gnucash/report/reports/standard/balsheet-pnl.scm:141
-#: gnucash/report/reports/standard/new-owner-report.scm:935
+#: gnucash/report/reports/standard/new-owner-report.scm:939
 #, fuzzy
 msgid "Disabled"
 msgstr "啟用"
@@ -22358,7 +22362,7 @@ msgid "This report requires accounts to be selected in the report options."
 msgstr "這個報表需要有選定的科目。"
 
 #: gnucash/report/html-utilities.scm:405
-#: gnucash/report/reports/standard/price-scatter.scm:276
+#: gnucash/report/reports/standard/price-scatter.scm:277
 msgid "No data"
 msgstr "無資料"
 
@@ -22514,7 +22518,7 @@ msgstr "無視科目的選擇並顯示所有已選科目的子科目？"
 #: gnucash/report/reports/standard/balance-sheet.scm:89
 #: gnucash/report/reports/standard/balsheet-pnl.scm:82
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:54
-#: gnucash/report/reports/standard/budget-income-statement.scm:76
+#: gnucash/report/reports/standard/budget-income-statement.scm:77
 #: gnucash/report/reports/standard/income-statement.scm:64
 msgid "Report on these accounts, if display depth allows."
 msgstr "如果顯示深度允許，提出這些科目的報表。"
@@ -22524,8 +22528,8 @@ msgid "Select the currency to display the values of this report in."
 msgstr "選擇用來顯示這份報表的數值的貨幣。"
 
 #: gnucash/report/options-utilities.scm:144
-#: gnucash/report/reports/standard/advanced-portfolio.scm:80
-#: gnucash/report/reports/standard/price-scatter.scm:87
+#: gnucash/report/reports/standard/advanced-portfolio.scm:81
+#: gnucash/report/reports/standard/price-scatter.scm:88
 #, fuzzy
 msgid "The source of price information."
 msgstr "價格資訊來源"
@@ -22539,34 +22543,34 @@ msgid "The volume-weighted average cost of purchases."
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:149
-#: gnucash/report/reports/standard/price-scatter.scm:90
+#: gnucash/report/reports/standard/price-scatter.scm:91
 msgid "Weighted Average"
 msgstr "加權平均數"
 
 #: gnucash/report/options-utilities.scm:150
-#: gnucash/report/reports/standard/price-scatter.scm:91
+#: gnucash/report/reports/standard/price-scatter.scm:92
 #, fuzzy
 msgid "The weighted average of all currency transactions of the past."
 msgstr "過去所有貨幣交易的加權平均數"
 
 #: gnucash/report/options-utilities.scm:152
-#: gnucash/report/reports/standard/advanced-portfolio.scm:82
+#: gnucash/report/reports/standard/advanced-portfolio.scm:83
 msgid "Most recent"
 msgstr "最新的"
 
 #: gnucash/report/options-utilities.scm:153
-#: gnucash/report/reports/standard/advanced-portfolio.scm:83
+#: gnucash/report/reports/standard/advanced-portfolio.scm:84
 #, fuzzy
 msgid "The most recent recorded price."
 msgstr "最新的記錄價格"
 
 #: gnucash/report/options-utilities.scm:155
-#: gnucash/report/reports/standard/advanced-portfolio.scm:85
+#: gnucash/report/reports/standard/advanced-portfolio.scm:86
 msgid "Nearest in time"
 msgstr "時間上最接近"
 
 #: gnucash/report/options-utilities.scm:156
-#: gnucash/report/reports/standard/advanced-portfolio.scm:86
+#: gnucash/report/reports/standard/advanced-portfolio.scm:87
 #, fuzzy
 msgid "The price recorded nearest in time to the report date."
 msgstr "時間上最接近報表日期的記錄價格"
@@ -22729,38 +22733,38 @@ msgid ""
 "(experimental)."
 msgstr ""
 
-#: gnucash/report/report-core.scm:148
+#: gnucash/report/report-core.scm:149
 msgid "_Assets & Liabilities"
 msgstr "資產 & 債務(_A)"
 
-#: gnucash/report/report-core.scm:149
+#: gnucash/report/report-core.scm:150
 msgid "_Income & Expense"
 msgstr "收入 & 支出(_I)"
 
-#: gnucash/report/report-core.scm:151
+#: gnucash/report/report-core.scm:152
 msgid "_Taxes"
 msgstr "稅務(_T)"
 
-#: gnucash/report/report-core.scm:152
+#: gnucash/report/report-core.scm:153
 #, fuzzy
 msgid "E_xamples"
 msgstr "範例："
 
-#: gnucash/report/report-core.scm:153
+#: gnucash/report/report-core.scm:154
 #, fuzzy
 msgid "_Experimental"
 msgstr "匯出(_E)"
 
-#: gnucash/report/report-core.scm:154
+#: gnucash/report/report-core.scm:155
 #, fuzzy
 msgid "_Multicolumn"
 msgstr "多欄檢視"
 
-#: gnucash/report/report-core.scm:155
+#: gnucash/report/report-core.scm:156
 msgid "_Custom"
 msgstr "自訂(_C)"
 
-#: gnucash/report/report-core.scm:158
+#: gnucash/report/report-core.scm:159
 #: gnucash/report/reports/standard/invoice.scm:257
 #: gnucash/report/reports/standard/invoice.scm:262
 #: gnucash/report/reports/standard/invoice.scm:267
@@ -22795,57 +22799,57 @@ msgstr "自訂(_C)"
 msgid "Display"
 msgstr "顯示"
 
-#: gnucash/report/report-core.scm:159
+#: gnucash/report/report-core.scm:160
 msgid "Report name"
 msgstr "報表名稱"
 
-#: gnucash/report/report-core.scm:160
+#: gnucash/report/report-core.scm:161
 msgid "Stylesheet"
 msgstr "樣式表"
 
-#: gnucash/report/report-core.scm:162
+#: gnucash/report/report-core.scm:163
 msgid "Invoice Number"
 msgstr "發票號碼"
 
-#: gnucash/report/report-core.scm:208
+#: gnucash/report/report-core.scm:209
 msgid ""
 "One of your reports has a report-guid that is a duplicate. Please check the "
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
 
-#: gnucash/report/report-core.scm:209
+#: gnucash/report/report-core.scm:210
 #, fuzzy
 msgid "Wrong report definition: "
 msgstr "設定組態路徑"
 
-#: gnucash/report/report-core.scm:210
+#: gnucash/report/report-core.scm:211
 msgid " Report is missing a GUID."
 msgstr ""
 
-#: gnucash/report/report-core.scm:212
+#: gnucash/report/report-core.scm:213
 msgid ""
 "Some reports stored in a legacy format were found. This format is not "
 "supported anymore so these reports may not have been restored properly."
 msgstr ""
 
-#: gnucash/report/report-core.scm:286
+#: gnucash/report/report-core.scm:287
 #, fuzzy
 msgid "Enter a descriptive name for this report."
 msgstr "為此報表輸入敘述名稱"
 
-#: gnucash/report/report-core.scm:291
+#: gnucash/report/report-core.scm:292
 msgid "Select a stylesheet for the report."
 msgstr "選擇用於此報表的樣式表。"
 
-#: gnucash/report/report-core.scm:299
+#: gnucash/report/report-core.scm:300
 #, fuzzy
 msgid "stylesheet."
 msgstr "樣式表"
 
 #: gnucash/report/reports/aging.scm:37
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:170
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:171
 #: gnucash/report/reports/standard/customer-summary.scm:41
 #: gnucash/report/reports/standard/job-report.scm:365
 #: gnucash/report/reports/standard/job-report.scm:496
@@ -22869,17 +22873,17 @@ msgstr "排列順序"
 #: gnucash/report/reports/aging.scm:40
 #: gnucash/report/reports/example/average-balance.scm:43
 #: gnucash/report/reports/example/daily-reports.scm:54
-#: gnucash/report/reports/standard/account-piecharts.scm:66
+#: gnucash/report/reports/standard/account-piecharts.scm:67
 #: gnucash/report/reports/standard/account-summary.scm:125
-#: gnucash/report/reports/standard/advanced-portfolio.scm:75
+#: gnucash/report/reports/standard/advanced-portfolio.scm:76
 #: gnucash/report/reports/standard/balance-forecast.scm:44
 #: gnucash/report/reports/standard/balance-sheet.scm:137
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/balsheet-pnl.scm:119
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:102
 #: gnucash/report/reports/standard/budget-flow.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:115
-#: gnucash/report/reports/standard/cashflow-barchart.scm:57
+#: gnucash/report/reports/standard/budget-income-statement.scm:116
+#: gnucash/report/reports/standard/cashflow-barchart.scm:58
 #: gnucash/report/reports/standard/cash-flow.scm:49
 #: gnucash/report/reports/standard/category-barchart.scm:72
 #: gnucash/report/reports/standard/equity-statement.scm:77
@@ -22887,7 +22891,7 @@ msgstr "排列順序"
 #: gnucash/report/reports/standard/net-charts.scm:42
 #: gnucash/report/reports/standard/new-aging.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:54
-#: gnucash/report/reports/standard/price-scatter.scm:40
+#: gnucash/report/reports/standard/price-scatter.scm:41
 #: gnucash/report/reports/standard/trial-balance.scm:129
 #: gnucash/report/trep-engine.scm:105
 msgid "Report's currency"
@@ -22896,17 +22900,17 @@ msgstr "報表的貨幣"
 #: gnucash/report/reports/aging.scm:41
 #: gnucash/report/reports/example/average-balance.scm:44
 #: gnucash/report/reports/example/daily-reports.scm:55
-#: gnucash/report/reports/standard/account-piecharts.scm:67
+#: gnucash/report/reports/standard/account-piecharts.scm:68
 #: gnucash/report/reports/standard/account-summary.scm:126
-#: gnucash/report/reports/standard/advanced-portfolio.scm:39
+#: gnucash/report/reports/standard/advanced-portfolio.scm:40
 #: gnucash/report/reports/standard/balance-forecast.scm:45
 #: gnucash/report/reports/standard/balance-sheet.scm:138
 #: gnucash/report/reports/standard/balsheet-eg.scm:189
 #: gnucash/report/reports/standard/balsheet-pnl.scm:121
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:103
 #: gnucash/report/reports/standard/budget-flow.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:116
-#: gnucash/report/reports/standard/cashflow-barchart.scm:58
+#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/cashflow-barchart.scm:59
 #: gnucash/report/reports/standard/cash-flow.scm:50
 #: gnucash/report/reports/standard/category-barchart.scm:73
 #: gnucash/report/reports/standard/equity-statement.scm:78
@@ -22914,7 +22918,7 @@ msgstr "報表的貨幣"
 #: gnucash/report/reports/standard/net-charts.scm:43
 #: gnucash/report/reports/standard/new-aging.scm:43
 #: gnucash/report/reports/standard/portfolio.scm:35
-#: gnucash/report/reports/standard/price-scatter.scm:42
+#: gnucash/report/reports/standard/price-scatter.scm:43
 #: gnucash/report/reports/standard/trial-balance.scm:130
 #: gnucash/report/trep-engine.scm:102
 msgid "Price Source"
@@ -23044,7 +23048,7 @@ msgstr ""
 
 #: gnucash/report/reports/aging.scm:385
 #: gnucash/report/reports/standard/new-aging.scm:122
-#: gnucash/report/reports/standard/new-owner-report.scm:953
+#: gnucash/report/reports/standard/new-owner-report.scm:957
 #: gnucash/report/reports/standard/owner-report.scm:609
 #, fuzzy
 msgid "Leading date."
@@ -23052,14 +23056,14 @@ msgstr "載入資料..."
 
 #: gnucash/report/reports/aging.scm:388
 #: gnucash/report/reports/standard/new-aging.scm:127
-#: gnucash/report/reports/standard/new-owner-report.scm:958
+#: gnucash/report/reports/standard/new-owner-report.scm:962
 #: gnucash/report/reports/standard/owner-report.scm:612
 msgid "Due date is leading."
 msgstr ""
 
 #: gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:131
-#: gnucash/report/reports/standard/new-owner-report.scm:962
+#: gnucash/report/reports/standard/new-owner-report.scm:966
 #: gnucash/report/reports/standard/owner-report.scm:613
 #, fuzzy
 msgid "Post date is leading."
@@ -23124,7 +23128,7 @@ msgstr "是否顯示合計？"
 #: gnucash/report/reports/standard/budget-barchart.scm:72
 #: gnucash/report/reports/standard/budget.scm:119
 #: gnucash/report/reports/standard/new-aging.scm:195
-#: gnucash/report/reports/standard/new-owner-report.scm:316
+#: gnucash/report/reports/standard/new-owner-report.scm:320
 #: gnucash/report/reports/standard/owner-report.scm:259
 #, fuzzy
 msgid "Current"
@@ -23133,7 +23137,7 @@ msgstr "貨幣"
 #: gnucash/report/reports/aging.scm:540
 #: gnucash/report/reports/standard/job-report.scm:159
 #: gnucash/report/reports/standard/new-aging.scm:196
-#: gnucash/report/reports/standard/new-owner-report.scm:317
+#: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/owner-report.scm:260
 msgid "0-30 days"
 msgstr "0-30 天"
@@ -23141,7 +23145,7 @@ msgstr "0-30 天"
 #: gnucash/report/reports/aging.scm:541
 #: gnucash/report/reports/standard/job-report.scm:160
 #: gnucash/report/reports/standard/new-aging.scm:197
-#: gnucash/report/reports/standard/new-owner-report.scm:318
+#: gnucash/report/reports/standard/new-owner-report.scm:322
 #: gnucash/report/reports/standard/owner-report.scm:261
 msgid "31-60 days"
 msgstr "31-60 天"
@@ -23149,7 +23153,7 @@ msgstr "31-60 天"
 #: gnucash/report/reports/aging.scm:542
 #: gnucash/report/reports/standard/job-report.scm:161
 #: gnucash/report/reports/standard/new-aging.scm:198
-#: gnucash/report/reports/standard/new-owner-report.scm:319
+#: gnucash/report/reports/standard/new-owner-report.scm:323
 #: gnucash/report/reports/standard/owner-report.scm:262
 msgid "61-90 days"
 msgstr "61-90 天"
@@ -23157,7 +23161,7 @@ msgstr "61-90 天"
 #: gnucash/report/reports/aging.scm:543
 #: gnucash/report/reports/standard/job-report.scm:162
 #: gnucash/report/reports/standard/new-aging.scm:199
-#: gnucash/report/reports/standard/new-owner-report.scm:320
+#: gnucash/report/reports/standard/new-owner-report.scm:324
 #: gnucash/report/reports/standard/owner-report.scm:263
 msgid "91+ days"
 msgstr "91+ 天"
@@ -23187,10 +23191,10 @@ msgid "Average Balance"
 msgstr "平均餘額"
 
 #: gnucash/report/reports/example/average-balance.scm:42
-#: gnucash/report/reports/standard/cashflow-barchart.scm:56
+#: gnucash/report/reports/standard/cashflow-barchart.scm:57
 #: gnucash/report/reports/standard/category-barchart.scm:71
 #: gnucash/report/reports/standard/net-charts.scm:41
-#: gnucash/report/reports/standard/price-scatter.scm:37
+#: gnucash/report/reports/standard/price-scatter.scm:38
 msgid "Step Size"
 msgstr "刻度大小"
 
@@ -23206,25 +23210,25 @@ msgstr "不包括所有交易到/從過濾器科目"
 
 #: gnucash/report/reports/example/average-balance.scm:47
 #: gnucash/report/reports/example/daily-reports.scm:64
-#: gnucash/report/reports/standard/account-piecharts.scm:76
+#: gnucash/report/reports/standard/account-piecharts.scm:77
 #: gnucash/report/reports/standard/balance-forecast.scm:47
 #: gnucash/report/reports/standard/budget-barchart.scm:43
-#: gnucash/report/reports/standard/cashflow-barchart.scm:51
+#: gnucash/report/reports/standard/cashflow-barchart.scm:52
 #: gnucash/report/reports/standard/category-barchart.scm:84
 #: gnucash/report/reports/standard/net-charts.scm:53
-#: gnucash/report/reports/standard/price-scatter.scm:57
+#: gnucash/report/reports/standard/price-scatter.scm:58
 msgid "Plot Width"
 msgstr "製圖寬度"
 
 #: gnucash/report/reports/example/average-balance.scm:48
 #: gnucash/report/reports/example/daily-reports.scm:65
-#: gnucash/report/reports/standard/account-piecharts.scm:77
+#: gnucash/report/reports/standard/account-piecharts.scm:78
 #: gnucash/report/reports/standard/balance-forecast.scm:48
 #: gnucash/report/reports/standard/budget-barchart.scm:44
-#: gnucash/report/reports/standard/cashflow-barchart.scm:52
+#: gnucash/report/reports/standard/cashflow-barchart.scm:53
 #: gnucash/report/reports/standard/category-barchart.scm:85
 #: gnucash/report/reports/standard/net-charts.scm:54
-#: gnucash/report/reports/standard/price-scatter.scm:58
+#: gnucash/report/reports/standard/price-scatter.scm:59
 msgid "Plot Height"
 msgstr "製圖高度"
 
@@ -23255,7 +23259,7 @@ msgid "Show table"
 msgstr "顯示表格"
 
 #: gnucash/report/reports/example/average-balance.scm:117
-#: gnucash/report/reports/standard/cashflow-barchart.scm:124
+#: gnucash/report/reports/standard/cashflow-barchart.scm:125
 #: gnucash/report/reports/standard/category-barchart.scm:188
 #: gnucash/report/reports/standard/net-charts.scm:134
 msgid "Display a table of the selected data."
@@ -23282,7 +23286,7 @@ msgstr "要產生的圖形種類"
 
 #: gnucash/report/reports/example/average-balance.scm:129
 #: gnucash/report/reports/example/average-balance.scm:149
-#: gnucash/report/reports/standard/advanced-portfolio.scm:94
+#: gnucash/report/reports/standard/advanced-portfolio.scm:95
 #: gnucash/report/trep-engine.scm:1962 libgnucash/engine/policy.c:58
 msgid "Average"
 msgstr "平均"
@@ -23353,7 +23357,7 @@ msgid "Shows a piechart with the total expenses for each day of the week"
 msgstr "顯示以星期幾區分的支出圓餅圖"
 
 #: gnucash/report/reports/example/daily-reports.scm:58
-#: gnucash/report/reports/standard/account-piecharts.scm:70
+#: gnucash/report/reports/standard/account-piecharts.scm:71
 #: gnucash/report/reports/standard/category-barchart.scm:76
 msgid "Show Accounts until level"
 msgstr "顯示此層級之前的科目"
@@ -23364,51 +23368,51 @@ msgid "Show long account names"
 msgstr "顯示完整科目名稱"
 
 #: gnucash/report/reports/example/daily-reports.scm:62
-#: gnucash/report/reports/standard/account-piecharts.scm:73
+#: gnucash/report/reports/standard/account-piecharts.scm:74
 msgid "Show Totals"
 msgstr "顯示總數"
 
 #: gnucash/report/reports/example/daily-reports.scm:63
-#: gnucash/report/reports/standard/account-piecharts.scm:75
+#: gnucash/report/reports/standard/account-piecharts.scm:76
 msgid "Maximum Slices"
 msgstr "最多幾片"
 
 #: gnucash/report/reports/example/daily-reports.scm:66
-#: gnucash/report/reports/standard/account-piecharts.scm:78
+#: gnucash/report/reports/standard/account-piecharts.scm:79
 #: gnucash/report/reports/standard/category-barchart.scm:87
 msgid "Sort Method"
 msgstr "排序方式"
 
 #: gnucash/report/reports/example/daily-reports.scm:97
-#: gnucash/report/reports/standard/account-piecharts.scm:136
+#: gnucash/report/reports/standard/account-piecharts.scm:137
 #: gnucash/report/reports/standard/category-barchart.scm:138
 #: gnucash/report/reports/standard/net-charts.scm:92
 msgid "Report on these accounts, if chosen account level allows."
 msgstr "如果選擇的科目層級允許，提出這些科目的報表。"
 
 #: gnucash/report/reports/example/daily-reports.scm:111
-#: gnucash/report/reports/standard/account-piecharts.scm:151
+#: gnucash/report/reports/standard/account-piecharts.scm:152
 #: gnucash/report/reports/standard/category-barchart.scm:150
 #, fuzzy
 msgid "Show accounts to this depth and not further."
 msgstr "顯示科目到此深度，不再往下"
 
 #: gnucash/report/reports/example/daily-reports.scm:117
-#: gnucash/report/reports/standard/account-piecharts.scm:166
+#: gnucash/report/reports/standard/account-piecharts.scm:167
 msgid "Show the total balance in legend?"
 msgstr "在圖例中顯示全部結餘？"
 
 #: gnucash/report/reports/example/daily-reports.scm:289
-#: gnucash/report/reports/standard/account-piecharts.scm:545
+#: gnucash/report/reports/standard/account-piecharts.scm:546
 #: gnucash/report/reports/standard/balance-forecast.scm:276
 #: gnucash/report/reports/standard/balsheet-pnl.scm:923
 #: gnucash/report/reports/standard/budget.scm:513
-#: gnucash/report/reports/standard/cashflow-barchart.scm:282
+#: gnucash/report/reports/standard/cashflow-barchart.scm:283
 #: gnucash/report/reports/standard/cash-flow.scm:190
 #: gnucash/report/reports/standard/category-barchart.scm:514
-#: gnucash/report/reports/standard/net-charts.scm:334
-#: gnucash/report/reports/standard/price-scatter.scm:212
-#: libgnucash/app-utils/date-utilities.scm:188
+#: gnucash/report/reports/standard/net-charts.scm:330
+#: gnucash/report/reports/standard/price-scatter.scm:213
+#: libgnucash/app-utils/date-utilities.scm:187
 #, scheme-format
 msgid "~a to ~a"
 msgstr ""
@@ -23488,7 +23492,7 @@ msgstr "這是一個字串選項"
 
 #: gnucash/report/reports/example/hello-world.scm:90
 #: gnucash/report/reports/example/hello-world.scm:327
-#: gnucash/report/reports/example/hello-world.scm:499
+#: gnucash/report/reports/example/hello-world.scm:501
 msgid "Hello, World"
 msgstr "哈囉，世界"
 
@@ -23723,28 +23727,28 @@ msgstr "貨幣形式的數字選項為 %s。"
 msgid "Items you selected:"
 msgstr "您選擇的項目："
 
-#: gnucash/report/reports/example/hello-world.scm:435
+#: gnucash/report/reports/example/hello-world.scm:437
 msgid "List items selected"
 msgstr "列表中被選擇的項目"
 
-#: gnucash/report/reports/example/hello-world.scm:440
+#: gnucash/report/reports/example/hello-world.scm:442
 msgid "(You selected no list items.)"
 msgstr "(您沒有選擇列表中的項目。)"
 
-#: gnucash/report/reports/example/hello-world.scm:476
+#: gnucash/report/reports/example/hello-world.scm:478
 msgid "You have selected no accounts."
 msgstr "您沒有選擇科目。"
 
-#: gnucash/report/reports/example/hello-world.scm:481
+#: gnucash/report/reports/example/hello-world.scm:483
 #, fuzzy
 msgid "Display help"
 msgstr "顯示"
 
-#: gnucash/report/reports/example/hello-world.scm:510
+#: gnucash/report/reports/example/hello-world.scm:512
 msgid "Sample Report with Examples"
 msgstr "具有範例的樣本報表"
 
-#: gnucash/report/reports/example/hello-world.scm:514
+#: gnucash/report/reports/example/hello-world.scm:516
 msgid "A sample report with examples."
 msgstr "具有範例的樣本報表。"
 
@@ -23784,7 +23788,7 @@ msgid "Tax Report / TXF Export"
 msgstr "稅務報表/ TXF 匯出"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:170
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:171
 #: gnucash/report/reports/standard/customer-summary.scm:40
 #: gnucash/report/reports/standard/job-report.scm:365
 #: gnucash/report/reports/standard/job-report.scm:493
@@ -23794,45 +23798,45 @@ msgid "From"
 msgstr "從"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:151
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:174
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:175
 msgid "Alternate Period"
 msgstr "替代週期"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:175
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:176
 #, fuzzy
 msgid "Override or modify From: & To:."
 msgstr "無視或修改 從： & 到："
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
 msgid "Use From - To"
 msgstr "使用 從 - 到"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
 #, fuzzy
 msgid "Use From - To period."
 msgstr "使用 從 - 到期間"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
 msgid "1st Est Tax Quarter"
 msgstr "第一稅季"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:178
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
 #, fuzzy
 msgid "Jan 1 - Mar 31."
 msgstr "一月 1 - 三月 31"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
 msgid "2nd Est Tax Quarter"
 msgstr "第二稅季"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
 #, fuzzy
 msgid "Apr 1 - May 31."
 msgstr "四月 1 - 五月 31"
@@ -23841,62 +23845,62 @@ msgstr "四月 1 - 五月 31"
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "3rd Est Tax Quarter"
 msgstr "第三稅季"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 #, fuzzy
 msgid "Jun 1 - Aug 31."
 msgstr "六月 1 - 八月 31"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 msgid "4th Est Tax Quarter"
 msgstr "第四稅季"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 #, fuzzy
 msgid "Sep 1 - Dec 31."
 msgstr "九月 1 - 十二月 31"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "Last Year"
 msgstr "去年"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 #, fuzzy
 msgid "Last Year."
 msgstr "去年"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:187
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr "去年第一稅季"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:189
 #, fuzzy
 msgid "Jan 1 - Mar 31, Last year."
 msgstr "去年一月 1 - 三月 31"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:164
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr "去年第二稅季"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:165
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
 #, fuzzy
 msgid "Apr 1 - May 31, Last year."
 msgstr "去年四月 1 - 五月 31"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr "去年第三稅季"
 
@@ -23904,35 +23908,35 @@ msgstr "去年第三稅季"
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:168
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:197
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
 #, fuzzy
 msgid "Jun 1 - Aug 31, Last year."
 msgstr "去年六月 1 - 八月 31"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:170
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:200
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr "去年第四稅季"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:171
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:200
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:201
 #, fuzzy
 msgid "Sep 1 - Dec 31, Last year."
 msgstr "去年九月 1 - 十二月 31"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:175
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:204
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:205
 msgid "Select Accounts (none = all)"
 msgstr "選擇科目 (無=全選)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:176
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:205
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:206
 #, fuzzy
 msgid "Select accounts."
 msgstr "選擇科目"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:182
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:211
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:212
 msgid "Suppress $0.00 values"
 msgstr "抑制 $0.00 值"
 
@@ -23985,287 +23989,287 @@ msgstr "XML"
 msgid "This page shows your Taxable Income and Deductible Expenses."
 msgstr "這一頁顯示您應納稅的收入與可減免的支出。"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:112
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:113
 msgid "Tax Schedule Report/TXF Export"
 msgstr "稅務計畫報表/ TXF 匯出"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:212
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:213
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr "其值為 $0.00 的稅不會列印出來。"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:216
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:217
 msgid "Do not print full account names"
 msgstr "不列印科目全名"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:217
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:218
 #, fuzzy
 msgid "Do not print all Parent account names."
 msgstr "不列印所有母科目的名稱"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:221
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:222
 #, fuzzy
 msgid "Print all Transfer To/From Accounts"
 msgstr "轉帳科目"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:222
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:223
 #, fuzzy
 msgid "Print all split details for multi-split transactions."
 msgstr "印出含有多分割交易的明細"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:226
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:227
 msgid "Print TXF export parameters"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:227
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:228
 msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:232
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:233
 #, fuzzy
 msgid "Do not print T-Num:Memo data"
 msgstr "不顯示 Action:Memo"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:233
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:234
 #, fuzzy
 msgid "Do not print T-Num:Memo data for transactions."
 msgstr "要搜尋交易的科目"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:236
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:237
 msgid "Do not print Action:Memo data"
 msgstr "不顯示 Action:Memo"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:237
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:238
 #, fuzzy
 msgid "Do not print Action:Memo data for transactions."
 msgstr "要搜尋交易的科目"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:241
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:242
 msgid "Do not print transaction detail"
 msgstr "不要列印交易明細"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:242
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:243
 #, fuzzy
 msgid "Do not print transaction detail for accounts."
 msgstr "不要列印帳戶交易明細"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:246
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:247
 msgid "Do not use special date processing"
 msgstr ""
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:247
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:248
 #, fuzzy
 msgid "Do not print transactions out of specified dates."
 msgstr "不要列印帳戶交易明細"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:251
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:252
 msgid "Currency conversion date"
 msgstr "貨幣轉換日期"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:252
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:253
 #, fuzzy
 msgid "Select date to use for PriceDB lookups."
 msgstr "選擇提出報表的日期"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:255
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 msgid "Nearest transaction date"
 msgstr "最接近交易的日期"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:255
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 #, fuzzy
 msgid "Use nearest to transaction date."
 msgstr "使用是最接近交易的日期"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:257
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:258
 #, fuzzy
 msgid "Nearest report date"
 msgstr "時間上最接近"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:257
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:258
 #, fuzzy
 msgid "Use nearest to report date."
 msgstr "很接近"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3322
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3323
 msgid "Tax Schedule Report & TXF Export"
 msgstr "稅務計畫報表 & TXF 匯出"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3324
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3325
 #, fuzzy
 msgid ""
 "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF "
 "file"
 msgstr "應納稅的收入 / 可減免的支出 / 匯出至 .TXF 檔案"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3328
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3337
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3329
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3338
 #, fuzzy
 msgid "Taxable Income/Deductible Expenses"
 msgstr "應納稅的收入 / 可減免的支出"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3329
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3330
 #, fuzzy
 msgid ""
 "This report shows transaction detail for your accounts related to Income "
 "Taxes."
 msgstr "這個報表顯示您應納稅的收入與可減免的支出。"
 
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3338
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:3339
 #, fuzzy
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr "這個報表顯示您應納稅的收入與可減免的支出。"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:35
+#: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
 msgstr "收入圓餅圖"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:36
+#: gnucash/report/reports/standard/account-piecharts.scm:37
 msgid "Expense Piechart"
 msgstr "支出圓餅圖"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:37
+#: gnucash/report/reports/standard/account-piecharts.scm:38
 msgid "Asset Piechart"
 msgstr "資產圓餅圖"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:38
+#: gnucash/report/reports/standard/account-piecharts.scm:39
 #, fuzzy
 msgid "Security Piechart"
 msgstr "資產圓餅圖"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:39
+#: gnucash/report/reports/standard/account-piecharts.scm:40
 msgid "Liability Piechart"
 msgstr "債務圓餅圖"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:44
+#: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
 msgstr "顯示每個時間間隔的收入圓餅圖"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:46
+#: gnucash/report/reports/standard/account-piecharts.scm:47
 msgid "Shows a piechart with the Expenses per given time interval"
 msgstr "顯示每個時間間隔的支出圓餅圖"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:48
+#: gnucash/report/reports/standard/account-piecharts.scm:49
 msgid "Shows a piechart with the Assets balance at a given time"
 msgstr "顯示特定時間的資產結餘圓餅圖"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:50
+#: gnucash/report/reports/standard/account-piecharts.scm:51
 #, fuzzy
 msgid "Shows a piechart with distribution of assets over securities"
 msgstr "顯示特定時間的債務結餘圓餅圖"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:52
+#: gnucash/report/reports/standard/account-piecharts.scm:53
 msgid "Shows a piechart with the Liabilities balance at a given time"
 msgstr "顯示特定時間的債務結餘圓餅圖"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:58
+#: gnucash/report/reports/standard/account-piecharts.scm:59
 #: gnucash/report/reports/standard/customer-summary.scm:49
 #: gnucash/report/reports/standard/customer-summary.scm:50
 msgid "Income Accounts"
 msgstr "收入科目"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:59
+#: gnucash/report/reports/standard/account-piecharts.scm:60
 #: gnucash/report/reports/standard/customer-summary.scm:57
 #: gnucash/report/reports/standard/customer-summary.scm:58
 msgid "Expense Accounts"
 msgstr "支出科目"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:60
+#: gnucash/report/reports/standard/account-piecharts.scm:61
 #: gnucash/report/reports/standard/balance-sheet.scm:486
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:665
-#: gnucash/report/reports/standard/net-charts.scm:350
-#: gnucash/report/reports/standard/net-charts.scm:421
+#: gnucash/report/reports/standard/net-charts.scm:346
+#: gnucash/report/reports/standard/net-charts.scm:417
 #: gnucash/report/report-utilities.scm:199
 msgid "Assets"
 msgstr "資產"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:62
+#: gnucash/report/reports/standard/account-piecharts.scm:63
 #: gnucash/report/reports/standard/balance-sheet.scm:387
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:695
-#: gnucash/report/reports/standard/net-charts.scm:371
-#: gnucash/report/reports/standard/net-charts.scm:421
+#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:417
 #: gnucash/report/report-utilities.scm:200
 msgid "Liabilities"
 msgstr "債務"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:72
+#: gnucash/report/reports/standard/account-piecharts.scm:73
 #, fuzzy
 msgid "Show long names"
 msgstr "顯示完整科目名稱"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:74
+#: gnucash/report/reports/standard/account-piecharts.scm:75
 msgid "Show Percents"
 msgstr "顯示百分比"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:80
+#: gnucash/report/reports/standard/account-piecharts.scm:81
 #: gnucash/report/reports/standard/category-barchart.scm:89
 msgid "Show Average"
 msgstr "顯示平均"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:81
+#: gnucash/report/reports/standard/account-piecharts.scm:82
 #: gnucash/report/reports/standard/category-barchart.scm:90
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:117
+#: gnucash/report/reports/standard/account-piecharts.scm:118
 #: gnucash/report/reports/standard/category-barchart.scm:120
 msgid "No Averaging"
 msgstr "不平均"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:118
+#: gnucash/report/reports/standard/account-piecharts.scm:119
 #: gnucash/report/reports/standard/category-barchart.scm:121
 #, fuzzy
 msgid "Just show the amounts, without any averaging."
 msgstr "只顯示數量，不顯示平均"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:121
+#: gnucash/report/reports/standard/account-piecharts.scm:122
 msgid "Show the average yearly amount during the reporting period."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:124
+#: gnucash/report/reports/standard/account-piecharts.scm:125
 #: gnucash/report/reports/standard/category-barchart.scm:124
 msgid "Show the average monthly amount during the reporting period."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:127
+#: gnucash/report/reports/standard/account-piecharts.scm:128
 #: gnucash/report/reports/standard/category-barchart.scm:127
 msgid "Show the average weekly amount during the reporting period."
 msgstr ""
 
-#: gnucash/report/reports/standard/account-piecharts.scm:159
+#: gnucash/report/reports/standard/account-piecharts.scm:160
 #: gnucash/report/reports/standard/category-barchart.scm:157
 msgid "Show the full account name in legend?"
 msgstr "在圖例中顯示科目全名？"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:160
+#: gnucash/report/reports/standard/account-piecharts.scm:161
 #, fuzzy
 msgid "Show the full security name in the legend?"
 msgstr "在圖例中顯示科目全名？"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:172
+#: gnucash/report/reports/standard/account-piecharts.scm:173
 msgid "Show the percentage in legend?"
 msgstr "在圖例中顯示比例？"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:178
+#: gnucash/report/reports/standard/account-piecharts.scm:179
 #, fuzzy
 msgid "Maximum number of slices in pie."
 msgstr "圓餅中最多畫出數量最大的前幾片"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:413
+#: gnucash/report/reports/standard/account-piecharts.scm:414
 msgid "Yearly Average"
 msgstr "年平均"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:414
+#: gnucash/report/reports/standard/account-piecharts.scm:415
 #: gnucash/report/reports/standard/category-barchart.scm:306
 msgid "Monthly Average"
 msgstr "月平均"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:415
+#: gnucash/report/reports/standard/account-piecharts.scm:416
 #: gnucash/report/reports/standard/category-barchart.scm:307
 msgid "Weekly Average"
 msgstr "週平均"
 
-#: gnucash/report/reports/standard/account-piecharts.scm:549
+#: gnucash/report/reports/standard/account-piecharts.scm:550
 #, fuzzy, scheme-format
 msgid "Balance at ~a"
 msgstr "%s 的結算"
@@ -24282,7 +24286,7 @@ msgstr "未來排程交易摘要"
 #: gnucash/report/reports/standard/balance-sheet.scm:76
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:52
+#: gnucash/report/reports/standard/budget-income-statement.scm:53
 #: gnucash/report/reports/standard/equity-statement.scm:59
 #: gnucash/report/reports/standard/income-statement.scm:53
 #: gnucash/report/reports/standard/trial-balance.scm:65
@@ -24293,7 +24297,7 @@ msgstr "報表標題"
 #: gnucash/report/reports/standard/balance-sheet.scm:77
 #: gnucash/report/reports/standard/balsheet-eg.scm:151
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:53
+#: gnucash/report/reports/standard/budget-income-statement.scm:54
 #: gnucash/report/reports/standard/equity-statement.scm:60
 #: gnucash/report/reports/standard/income-statement.scm:54
 #: gnucash/report/reports/standard/trial-balance.scm:66
@@ -24304,7 +24308,7 @@ msgstr "報表的標題"
 #: gnucash/report/reports/standard/account-summary.scm:75
 #: gnucash/report/reports/standard/balance-sheet.scm:79
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:55
+#: gnucash/report/reports/standard/budget-income-statement.scm:56
 #: gnucash/report/reports/standard/equity-statement.scm:62
 #: gnucash/report/reports/standard/income-statement.scm:56
 #: gnucash/report/reports/standard/trial-balance.scm:68
@@ -24314,7 +24318,7 @@ msgstr "公司名稱"
 #: gnucash/report/reports/standard/account-summary.scm:76
 #: gnucash/report/reports/standard/balance-sheet.scm:80
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:56
+#: gnucash/report/reports/standard/budget-income-statement.scm:57
 #: gnucash/report/reports/standard/equity-statement.scm:63
 #: gnucash/report/reports/standard/income-statement.scm:57
 #: gnucash/report/reports/standard/trial-balance.scm:69
@@ -24328,7 +24332,7 @@ msgstr "公司/個人的名字"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:84
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:55
 #: gnucash/report/reports/standard/budget-barchart.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:77
+#: gnucash/report/reports/standard/budget-income-statement.scm:78
 #: gnucash/report/reports/standard/income-statement.scm:65
 #: gnucash/report/reports/standard/trial-balance.scm:79
 msgid "Levels of Subaccounts"
@@ -24340,7 +24344,7 @@ msgstr "子科目層數"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:85
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:57
 #: gnucash/report/reports/standard/budget-barchart.scm:48
-#: gnucash/report/reports/standard/budget-income-statement.scm:79
+#: gnucash/report/reports/standard/budget-income-statement.scm:80
 #: gnucash/report/reports/standard/income-statement.scm:67
 #: gnucash/report/reports/standard/trial-balance.scm:81
 #, fuzzy
@@ -24358,7 +24362,7 @@ msgstr ""
 #: gnucash/report/reports/standard/account-summary.scm:95
 #: gnucash/report/reports/standard/balance-sheet.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:62
-#: gnucash/report/reports/standard/budget-income-statement.scm:84
+#: gnucash/report/reports/standard/budget-income-statement.scm:85
 #: gnucash/report/reports/standard/income-statement.scm:72
 #, fuzzy
 msgid "Parent account balances"
@@ -24367,7 +24371,7 @@ msgstr "母科目"
 #: gnucash/report/reports/standard/account-summary.scm:96
 #: gnucash/report/reports/standard/balance-sheet.scm:98
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:63
-#: gnucash/report/reports/standard/budget-income-statement.scm:85
+#: gnucash/report/reports/standard/budget-income-statement.scm:86
 #: gnucash/report/reports/standard/income-statement.scm:73
 msgid "Parent account subtotals"
 msgstr "母科目小計"
@@ -24376,7 +24380,7 @@ msgstr "母科目小計"
 #: gnucash/report/reports/standard/balance-sheet.scm:100
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:65
-#: gnucash/report/reports/standard/budget-income-statement.scm:87
+#: gnucash/report/reports/standard/budget-income-statement.scm:88
 #: gnucash/report/reports/standard/income-statement.scm:75
 #: gnucash/report/reports/standard/trial-balance.scm:121
 #, fuzzy
@@ -24387,7 +24391,7 @@ msgstr "包含有零股份結算的科目。"
 #: gnucash/report/reports/standard/balance-sheet.scm:102
 #: gnucash/report/reports/standard/balsheet-pnl.scm:94
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:67
-#: gnucash/report/reports/standard/budget-income-statement.scm:89
+#: gnucash/report/reports/standard/budget-income-statement.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:77
 #: gnucash/report/reports/standard/trial-balance.scm:123
 #, fuzzy
@@ -24398,7 +24402,7 @@ msgstr "包含有零股份結算的科目。"
 #: gnucash/report/reports/standard/balance-sheet.scm:103
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:68
-#: gnucash/report/reports/standard/budget-income-statement.scm:90
+#: gnucash/report/reports/standard/budget-income-statement.scm:91
 #: gnucash/report/reports/standard/income-statement.scm:78
 msgid "Omit zero balance figures"
 msgstr "略過零結餘的數值"
@@ -24407,7 +24411,7 @@ msgstr "略過零結餘的數值"
 #: gnucash/report/reports/standard/balance-sheet.scm:105
 #: gnucash/report/reports/standard/balsheet-pnl.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:70
-#: gnucash/report/reports/standard/budget-income-statement.scm:92
+#: gnucash/report/reports/standard/budget-income-statement.scm:93
 #: gnucash/report/reports/standard/income-statement.scm:80
 #, fuzzy
 msgid "Show blank space in place of any zero balances which would be shown."
@@ -24416,7 +24420,7 @@ msgstr "若結餘為零則顯示空白"
 #: gnucash/report/reports/standard/account-summary.scm:105
 #: gnucash/report/reports/standard/balance-sheet.scm:107
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:72
-#: gnucash/report/reports/standard/budget-income-statement.scm:94
+#: gnucash/report/reports/standard/budget-income-statement.scm:95
 #: gnucash/report/reports/standard/equity-statement.scm:72
 #: gnucash/report/reports/standard/income-statement.scm:82
 #, fuzzy
@@ -24426,7 +24430,7 @@ msgstr "顯示此層級之前的科目"
 #: gnucash/report/reports/standard/account-summary.scm:107
 #: gnucash/report/reports/standard/balance-sheet.scm:109
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:74
-#: gnucash/report/reports/standard/budget-income-statement.scm:96
+#: gnucash/report/reports/standard/budget-income-statement.scm:97
 #: gnucash/report/reports/standard/equity-statement.scm:74
 #: gnucash/report/reports/standard/income-statement.scm:84
 msgid "Use rules beneath columns of added numbers like accountants do."
@@ -24437,7 +24441,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 #: gnucash/report/reports/standard/balsheet-pnl.scm:99
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:76
-#: gnucash/report/reports/standard/budget-income-statement.scm:98
+#: gnucash/report/reports/standard/budget-income-statement.scm:99
 #: gnucash/report/reports/standard/income-statement.scm:86
 #: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Display accounts as hyperlinks"
@@ -24448,7 +24452,7 @@ msgstr "以超連結顯示科目"
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/balsheet-pnl.scm:100
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:77
-#: gnucash/report/reports/standard/budget-income-statement.scm:99
+#: gnucash/report/reports/standard/budget-income-statement.scm:100
 #: gnucash/report/reports/standard/income-statement.scm:87
 #: gnucash/report/reports/standard/trial-balance.scm:126
 msgid "Shows each account in the table as a hyperlink to its register window."
@@ -24492,7 +24496,7 @@ msgstr "顯示科目備註"
 #: gnucash/report/reports/standard/balsheet-eg.scm:195
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:101
-#: gnucash/report/reports/standard/budget-income-statement.scm:114
+#: gnucash/report/reports/standard/budget-income-statement.scm:115
 #: gnucash/report/reports/standard/equity-statement.scm:76
 #: gnucash/report/reports/standard/income-statement.scm:108
 #: gnucash/report/reports/standard/trial-balance.scm:128
@@ -24503,7 +24507,7 @@ msgstr "商品"
 #: gnucash/report/reports/standard/balance-sheet.scm:139
 #: gnucash/report/reports/standard/balsheet-eg.scm:190
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:104
-#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/budget-income-statement.scm:118
 #: gnucash/report/reports/standard/equity-statement.scm:79
 #: gnucash/report/reports/standard/income-statement.scm:111
 #: gnucash/report/reports/standard/trial-balance.scm:131
@@ -24514,7 +24518,7 @@ msgstr "顯示外國貨幣"
 #: gnucash/report/reports/standard/balance-sheet.scm:141
 #: gnucash/report/reports/standard/balsheet-eg.scm:192
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:106
-#: gnucash/report/reports/standard/budget-income-statement.scm:119
+#: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/equity-statement.scm:81
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:133
@@ -24526,7 +24530,7 @@ msgstr "顯示科目中外來貨幣的總額？"
 #: gnucash/report/reports/standard/balance-sheet.scm:142
 #: gnucash/report/reports/standard/balsheet-pnl.scm:130
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:107
-#: gnucash/report/reports/standard/budget-income-statement.scm:120
+#: gnucash/report/reports/standard/budget-income-statement.scm:121
 #: gnucash/report/reports/standard/cash-flow.scm:51
 #: gnucash/report/reports/standard/equity-statement.scm:82
 #: gnucash/report/reports/standard/income-statement.scm:114
@@ -24538,7 +24542,7 @@ msgstr "顯示匯率"
 #: gnucash/report/reports/standard/balance-sheet.scm:143
 #: gnucash/report/reports/standard/balsheet-pnl.scm:131
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
-#: gnucash/report/reports/standard/budget-income-statement.scm:121
+#: gnucash/report/reports/standard/budget-income-statement.scm:122
 #: gnucash/report/reports/standard/cash-flow.scm:77
 #: gnucash/report/reports/standard/equity-statement.scm:83
 #: gnucash/report/reports/standard/income-statement.scm:115
@@ -24591,214 +24595,214 @@ msgstr "包含 %s 至 %s 的會計期間"
 msgid "Account title"
 msgstr "科目名稱"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:37
+#: gnucash/report/reports/standard/advanced-portfolio.scm:38
 msgid "Advanced Portfolio"
 msgstr "進階投資組合"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:40
+#: gnucash/report/reports/standard/advanced-portfolio.scm:41
 #: gnucash/report/reports/standard/portfolio.scm:36
 msgid "Share decimal places"
 msgstr "股份小數位數"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:41
+#: gnucash/report/reports/standard/advanced-portfolio.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:37
 msgid "Include accounts with no shares"
 msgstr "包含沒有股份的科目"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:42
+#: gnucash/report/reports/standard/advanced-portfolio.scm:43
 msgid "Show ticker symbols"
 msgstr "顯示股票代碼"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:43
+#: gnucash/report/reports/standard/advanced-portfolio.scm:44
 msgid "Show listings"
 msgstr "顯示上市/上櫃交易所"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:44
+#: gnucash/report/reports/standard/advanced-portfolio.scm:45
 msgid "Show prices"
 msgstr "顯示價格"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:45
+#: gnucash/report/reports/standard/advanced-portfolio.scm:46
 msgid "Show number of shares"
 msgstr "顯示股份數量"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:46
+#: gnucash/report/reports/standard/advanced-portfolio.scm:47
 msgid "Basis calculation method"
 msgstr "成本計算方式"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:47
+#: gnucash/report/reports/standard/advanced-portfolio.scm:48
 msgid "Set preference for price list data"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:48
+#: gnucash/report/reports/standard/advanced-portfolio.scm:49
 msgid "How to report brokerage fees"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:92
+#: gnucash/report/reports/standard/advanced-portfolio.scm:93
 #, fuzzy
 msgid "Basis calculation method."
 msgstr "成本計算方式"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:95
+#: gnucash/report/reports/standard/advanced-portfolio.scm:96
 #, fuzzy
 msgid "Use average cost of all shares for basis."
 msgstr "用平均股價當成本"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:97
+#: gnucash/report/reports/standard/advanced-portfolio.scm:98
 msgid "FIFO"
 msgstr "FIFO"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:98
+#: gnucash/report/reports/standard/advanced-portfolio.scm:99
 #, fuzzy
 msgid "Use first-in first-out method for basis."
 msgstr "以先進先出方式計算成本"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:100
+#: gnucash/report/reports/standard/advanced-portfolio.scm:101
 msgid "LIFO"
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:101
+#: gnucash/report/reports/standard/advanced-portfolio.scm:102
 #, fuzzy
 msgid "Use last-in first-out method for basis."
 msgstr "以先進先出方式計算成本"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:107
+#: gnucash/report/reports/standard/advanced-portfolio.scm:108
 msgid "Prefer use of price editor pricing over transactions, where applicable."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:113
+#: gnucash/report/reports/standard/advanced-portfolio.scm:114
 msgid "How to report commissions and other brokerage fees."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:115
+#: gnucash/report/reports/standard/advanced-portfolio.scm:116
 #, fuzzy
 msgid "Include in basis"
 msgstr "包含子科目(_S)"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:116
+#: gnucash/report/reports/standard/advanced-portfolio.scm:117
 msgid "Include brokerage fees in the basis for the asset."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:118
+#: gnucash/report/reports/standard/advanced-portfolio.scm:119
 #, fuzzy
 msgid "Include in gain"
 msgstr "包含總合(_G)"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:119
+#: gnucash/report/reports/standard/advanced-portfolio.scm:120
 msgid "Include brokerage fees in the gain and loss but not in the basis."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:121
+#: gnucash/report/reports/standard/advanced-portfolio.scm:122
 #, fuzzy
 msgid "Ignore"
 msgstr "已忽略"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:122
+#: gnucash/report/reports/standard/advanced-portfolio.scm:123
 #, fuzzy
 msgid "Ignore brokerage fees entirely."
 msgstr "計算報酬時不計手續費"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:129
+#: gnucash/report/reports/standard/advanced-portfolio.scm:130
 #, fuzzy
 msgid "Display the ticker symbols."
 msgstr "顯示股票代碼"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:136
+#: gnucash/report/reports/standard/advanced-portfolio.scm:137
 #, fuzzy
 msgid "Display exchange listings."
 msgstr "顯示交易所"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:143
+#: gnucash/report/reports/standard/advanced-portfolio.scm:144
 #, fuzzy
 msgid "Display numbers of shares in accounts."
 msgstr "顯示股份數量"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:149
+#: gnucash/report/reports/standard/advanced-portfolio.scm:150
 #: gnucash/report/reports/standard/portfolio.scm:63
 #, fuzzy
 msgid "The number of decimal places to use for share numbers."
 msgstr "用在股份數字的小數位數"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:156
+#: gnucash/report/reports/standard/advanced-portfolio.scm:157
 #, fuzzy
 msgid "Display share prices."
 msgstr "顯示股份價格"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:164
+#: gnucash/report/reports/standard/advanced-portfolio.scm:165
 #: gnucash/report/reports/standard/portfolio.scm:71
 #, fuzzy
 msgid "Stock Accounts to report on."
 msgstr "要提出報表的股票科目"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:176
+#: gnucash/report/reports/standard/advanced-portfolio.scm:177
 #: gnucash/report/reports/standard/portfolio.scm:83
 msgid "Include accounts that have a zero share balances."
 msgstr "包含有零股份結算的科目。"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1067
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1068
 #: gnucash/report/reports/standard/portfolio.scm:255
 msgid "Listing"
 msgstr "上市櫃"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1079
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1080
 msgid "Basis"
 msgstr "成本"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1081
-#: gnucash/report/reports/standard/cashflow-barchart.scm:297
-#: gnucash/report/reports/standard/cashflow-barchart.scm:332
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1082
+#: gnucash/report/reports/standard/cashflow-barchart.scm:298
+#: gnucash/report/reports/standard/cashflow-barchart.scm:344
 #: gnucash/report/reports/standard/cash-flow.scm:279
 msgid "Money In"
 msgstr "金錢流入"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1082
-#: gnucash/report/reports/standard/cashflow-barchart.scm:303
-#: gnucash/report/reports/standard/cashflow-barchart.scm:333
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1083
+#: gnucash/report/reports/standard/cashflow-barchart.scm:304
+#: gnucash/report/reports/standard/cashflow-barchart.scm:345
 #: gnucash/report/reports/standard/cash-flow.scm:300
 msgid "Money Out"
 msgstr "金錢流出"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1083
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1084
 msgid "Realized Gain"
 msgstr "已實現獲利(虧損)"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1084
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1085
 msgid "Unrealized Gain"
 msgstr "未實現獲利(虧損)"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1085
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1086
 msgid "Total Gain"
 msgstr "總獲利"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1086
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1087
 #, fuzzy
 msgid "Rate of Gain"
 msgstr "已實現獲利(虧損)"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1090
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1091
 msgid "Brokerage Fees"
 msgstr "手續費"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1092
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1093
 msgid "Total Return"
 msgstr "總報酬"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1093
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1094
 #, fuzzy
 msgid "Rate of Return"
 msgstr "報表日期"
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1190
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1191
 msgid ""
 "* this commodity data was built using transaction pricing instead of the "
 "price list."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1192
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1193
 msgid ""
 "If you are in a multi-currency situation, the exchanges may not be correct."
 msgstr ""
 
-#: gnucash/report/reports/standard/advanced-portfolio.scm:1197
+#: gnucash/report/reports/standard/advanced-portfolio.scm:1198
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr ""
 
@@ -24810,7 +24814,7 @@ msgstr "%s 的結算"
 #: gnucash/report/reports/standard/balance-forecast.scm:38
 #: gnucash/report/reports/standard/budget-barchart.scm:134
 #: gnucash/report/reports/standard/budget-flow.scm:87
-#: gnucash/report/reports/standard/cashflow-barchart.scm:87
+#: gnucash/report/reports/standard/cashflow-barchart.scm:88
 #: gnucash/report/reports/standard/income-gst-statement.scm:131
 #: gnucash/report/reports/standard/income-gst-statement.scm:141
 #: gnucash/report/reports/standard/trial-balance.scm:78
@@ -24906,7 +24910,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:93
 #: gnucash/report/reports/standard/balsheet-eg.scm:160
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:58
-#: gnucash/report/reports/standard/budget-income-statement.scm:80
+#: gnucash/report/reports/standard/budget-income-statement.scm:81
 #: gnucash/report/reports/standard/budget.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:68
 msgid "Flatten list to depth limit"
@@ -24915,7 +24919,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:95
 #: gnucash/report/reports/standard/balsheet-eg.scm:162
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:60
-#: gnucash/report/reports/standard/budget-income-statement.scm:82
+#: gnucash/report/reports/standard/budget-income-statement.scm:83
 #: gnucash/report/reports/standard/budget.scm:92
 #: gnucash/report/reports/standard/income-statement.scm:70
 #, fuzzy
@@ -25366,12 +25370,12 @@ msgid "missing"
 msgstr "佣金"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
-#: libgnucash/engine/Account.cpp:4363
+#: libgnucash/engine/Account.cpp:4367
 msgid "Asset"
 msgstr "資產"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1109
-#: libgnucash/engine/Account.cpp:4365
+#: libgnucash/engine/Account.cpp:4369
 msgid "Liability"
 msgstr "債務"
 
@@ -25430,7 +25434,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:111
 #: gnucash/report/reports/standard/budget-barchart.scm:98
 #: gnucash/report/reports/standard/budget-flow.scm:56
-#: gnucash/report/reports/standard/budget-income-statement.scm:59
+#: gnucash/report/reports/standard/budget-income-statement.scm:60
 #: gnucash/report/reports/standard/budget.scm:138
 #, fuzzy
 msgid "Budget to use."
@@ -25505,7 +25509,7 @@ msgid "Chart Type"
 msgstr "費用類型"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:50
-#: gnucash/report/reports/standard/budget-income-statement.scm:66
+#: gnucash/report/reports/standard/budget-income-statement.scm:67
 #: gnucash/report/reports/standard/budget.scm:71
 #, fuzzy
 msgid "Range start"
@@ -25529,7 +25533,7 @@ msgid "Select exact period that starts the reporting range."
 msgstr "選擇提出報表的日期"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:57
-#: gnucash/report/reports/standard/budget-income-statement.scm:70
+#: gnucash/report/reports/standard/budget-income-statement.scm:71
 #: gnucash/report/reports/standard/budget.scm:78
 #, fuzzy
 msgid "Range end"
@@ -25651,84 +25655,84 @@ msgstr "訂單編號"
 msgid "~a: ~a - ~a"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:62
+#: gnucash/report/reports/standard/budget-income-statement.scm:63
 #: gnucash/report/reports/standard/budget.scm:67
 msgid "Report for range of budget periods"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:64
+#: gnucash/report/reports/standard/budget-income-statement.scm:65
 #: gnucash/report/reports/standard/budget.scm:69
 msgid "Create report for a budget period range instead of the entire budget."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:68
+#: gnucash/report/reports/standard/budget-income-statement.scm:69
 msgid "Select a budget period that begins the reporting range."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:72
+#: gnucash/report/reports/standard/budget-income-statement.scm:73
 #, fuzzy
 msgid "Select a budget period that ends the reporting range."
 msgstr "選擇提出報表的日期"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:101
+#: gnucash/report/reports/standard/budget-income-statement.scm:102
 #: gnucash/report/reports/standard/income-statement.scm:89
 #, fuzzy
 msgid "Label the revenue section"
 msgstr "取消目前的交易"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:103
+#: gnucash/report/reports/standard/budget-income-statement.scm:104
 #: gnucash/report/reports/standard/income-statement.scm:91
 msgid "Whether or not to include a label for the revenue section."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:104
+#: gnucash/report/reports/standard/budget-income-statement.scm:105
 #: gnucash/report/reports/standard/income-statement.scm:92
 msgid "Include revenue total"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:106
+#: gnucash/report/reports/standard/budget-income-statement.scm:107
 #: gnucash/report/reports/standard/income-statement.scm:94
 msgid "Whether or not to include a line indicating total revenue."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:107
+#: gnucash/report/reports/standard/budget-income-statement.scm:108
 #: gnucash/report/reports/standard/income-statement.scm:101
 #, fuzzy
 msgid "Label the expense section"
 msgstr "取消目前的交易"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:109
+#: gnucash/report/reports/standard/budget-income-statement.scm:110
 #: gnucash/report/reports/standard/income-statement.scm:103
 msgid "Whether or not to include a label for the expense section."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:110
+#: gnucash/report/reports/standard/budget-income-statement.scm:111
 #: gnucash/report/reports/standard/income-statement.scm:104
 msgid "Include expense total"
 msgstr "包含總支出"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:112
+#: gnucash/report/reports/standard/budget-income-statement.scm:113
 #: gnucash/report/reports/standard/income-statement.scm:106
 msgid "Whether or not to include a line indicating total expense."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:125
+#: gnucash/report/reports/standard/budget-income-statement.scm:126
 #: gnucash/report/reports/standard/income-statement.scm:130
 msgid "Display as a two column report"
 msgstr "以雙欄方式顯示報表"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:127
+#: gnucash/report/reports/standard/budget-income-statement.scm:128
 #: gnucash/report/reports/standard/income-statement.scm:132
 #, fuzzy
 msgid "Divides the report into an income column and an expense column."
 msgstr "設定所有收入與支出科目的稅務資訊"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:129
+#: gnucash/report/reports/standard/budget-income-statement.scm:130
 #: gnucash/report/reports/standard/income-statement.scm:134
 msgid "Display in standard, income first, order"
 msgstr "以標準(收入在前)的順序顯示"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:131
+#: gnucash/report/reports/standard/budget-income-statement.scm:132
 #: gnucash/report/reports/standard/income-statement.scm:136
 #, fuzzy
 msgid ""
@@ -25736,57 +25740,57 @@ msgid ""
 "expenses."
 msgstr "使報表以標準順序顯示，將收入放在支出之前"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:443
+#: gnucash/report/reports/standard/budget-income-statement.scm:444
 msgid "Reporting range end period cannot be less than start period."
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:511
+#: gnucash/report/reports/standard/budget-income-statement.scm:512
 #: gnucash/report/reports/standard/income-statement.scm:505
 msgid "Revenues"
 msgstr "收入"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:514
+#: gnucash/report/reports/standard/budget-income-statement.scm:515
 #: gnucash/report/reports/standard/income-statement.scm:508
 msgid "Total Revenue"
 msgstr "總收入"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:524
+#: gnucash/report/reports/standard/budget-income-statement.scm:525
 #: gnucash/report/reports/standard/income-statement.scm:515
 msgid "Total Expenses"
 msgstr "總支出"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:532
+#: gnucash/report/reports/standard/budget-income-statement.scm:533
 #, fuzzy, scheme-format
 msgid "for Budget ~a"
 msgstr "預算"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:534
+#: gnucash/report/reports/standard/budget-income-statement.scm:535
 #, fuzzy, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "預算週期:"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:537
+#: gnucash/report/reports/standard/budget-income-statement.scm:538
 #, fuzzy, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
 msgstr "預算週期:"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:565
+#: gnucash/report/reports/standard/budget-income-statement.scm:566
 #: gnucash/report/reports/standard/equity-statement.scm:457
 #: gnucash/report/reports/standard/income-statement.scm:525
 msgid "Net income"
 msgstr "淨收入"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:566
+#: gnucash/report/reports/standard/budget-income-statement.scm:567
 #: gnucash/report/reports/standard/equity-statement.scm:458
 #: gnucash/report/reports/standard/income-statement.scm:526
 msgid "Net loss"
 msgstr "淨虧損"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:606
+#: gnucash/report/reports/standard/budget-income-statement.scm:607
 msgid "Budget Income Statement"
 msgstr "預算損益表"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:607
+#: gnucash/report/reports/standard/budget-income-statement.scm:608
 msgid "Budget Profit & Loss"
 msgstr "預算損益帳目"
 
@@ -25921,70 +25925,70 @@ msgstr ""
 msgid "using accumulated amounts"
 msgstr "已存在的科目"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:39
+#: gnucash/report/reports/standard/cashflow-barchart.scm:40
 #, fuzzy
 msgid "Cash Flow Barchart"
 msgstr "現金流量"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:45
+#: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
 #, fuzzy
 msgid "Include Trading Accounts in report"
 msgstr "包含總合(_G)"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:47
+#: gnucash/report/reports/standard/cashflow-barchart.scm:48
 #, fuzzy
 msgid "Show Money In"
 msgstr "金錢流入"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:48
+#: gnucash/report/reports/standard/cashflow-barchart.scm:49
 #, fuzzy
 msgid "Show Money Out"
 msgstr "金錢流出"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:49
+#: gnucash/report/reports/standard/cashflow-barchart.scm:50
 #, fuzzy
 msgid "Show Net Flow"
 msgstr "顯示價值淨額長條"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:50
+#: gnucash/report/reports/standard/cashflow-barchart.scm:51
 #, fuzzy
 msgid "Show Table"
 msgstr "顯示表格"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:99
+#: gnucash/report/reports/standard/cashflow-barchart.scm:100
 #: gnucash/report/reports/standard/cash-flow.scm:102
 #, fuzzy
 msgid "Include transfers to and from Trading Accounts in the report."
 msgstr "只包含 流進/流出 過濾器所指定科目的交易"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:106
+#: gnucash/report/reports/standard/cashflow-barchart.scm:107
 #, fuzzy
 msgid "Show money in?"
 msgstr "顯示圖表"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:112
+#: gnucash/report/reports/standard/cashflow-barchart.scm:113
 #, fuzzy
 msgid "Show money out?"
 msgstr "顯示圖表"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:118
+#: gnucash/report/reports/standard/cashflow-barchart.scm:119
 #, fuzzy
 msgid "Show net money flow?"
 msgstr "顯示圖表"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:309
-#: gnucash/report/reports/standard/cashflow-barchart.scm:334
+#: gnucash/report/reports/standard/cashflow-barchart.scm:310
+#: gnucash/report/reports/standard/cashflow-barchart.scm:346
 #, fuzzy
 msgid "Net Flow"
 msgstr "淨虧損"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:337
+#: gnucash/report/reports/standard/cashflow-barchart.scm:349
 #, fuzzy
 msgid "Overview:"
 msgstr "概觀"
 
-#: gnucash/report/reports/standard/cashflow-barchart.scm:376
+#: gnucash/report/reports/standard/cashflow-barchart.scm:375
 #, fuzzy
 msgid "Shows a barchart with cash flow over time"
 msgstr "顯示資產隨時間變化長條圖"
@@ -26021,22 +26025,22 @@ msgid "Money out of selected accounts goes to"
 msgstr "金錢流出到所選的科目"
 
 #: gnucash/report/reports/standard/category-barchart.scm:41
-#: gnucash/report/reports/standard/net-charts.scm:366
+#: gnucash/report/reports/standard/net-charts.scm:362
 msgid "Income Chart"
 msgstr "收入圖"
 
 #: gnucash/report/reports/standard/category-barchart.scm:42
-#: gnucash/report/reports/standard/net-charts.scm:387
+#: gnucash/report/reports/standard/net-charts.scm:383
 msgid "Expense Chart"
 msgstr "支出圖"
 
 #: gnucash/report/reports/standard/category-barchart.scm:43
-#: gnucash/report/reports/standard/net-charts.scm:367
+#: gnucash/report/reports/standard/net-charts.scm:363
 msgid "Asset Chart"
 msgstr "資產圖"
 
 #: gnucash/report/reports/standard/category-barchart.scm:44
-#: gnucash/report/reports/standard/net-charts.scm:388
+#: gnucash/report/reports/standard/net-charts.scm:384
 msgid "Liability Chart"
 msgstr "債務圖"
 
@@ -26136,7 +26140,7 @@ msgid "Grand Total"
 msgstr "總和"
 
 #: gnucash/report/reports/standard/category-barchart.scm:690
-#: gnucash/report/reports/standard/net-charts.scm:471
+#: gnucash/report/reports/standard/net-charts.scm:466
 #, fuzzy
 msgid "No exportable data"
 msgstr "工作報表"
@@ -26185,18 +26189,18 @@ msgstr ""
 #: gnucash/report/reports/standard/job-report.scm:384
 #: gnucash/report/reports/standard/job-report.scm:389
 #: gnucash/report/reports/standard/job-report.scm:394
-#: gnucash/report/reports/standard/new-owner-report.scm:882
-#: gnucash/report/reports/standard/new-owner-report.scm:887
-#: gnucash/report/reports/standard/new-owner-report.scm:892
-#: gnucash/report/reports/standard/new-owner-report.scm:897
-#: gnucash/report/reports/standard/new-owner-report.scm:902
-#: gnucash/report/reports/standard/new-owner-report.scm:907
-#: gnucash/report/reports/standard/new-owner-report.scm:912
-#: gnucash/report/reports/standard/new-owner-report.scm:917
-#: gnucash/report/reports/standard/new-owner-report.scm:922
-#: gnucash/report/reports/standard/new-owner-report.scm:927
-#: gnucash/report/reports/standard/new-owner-report.scm:932
-#: gnucash/report/reports/standard/new-owner-report.scm:947
+#: gnucash/report/reports/standard/new-owner-report.scm:886
+#: gnucash/report/reports/standard/new-owner-report.scm:891
+#: gnucash/report/reports/standard/new-owner-report.scm:896
+#: gnucash/report/reports/standard/new-owner-report.scm:901
+#: gnucash/report/reports/standard/new-owner-report.scm:906
+#: gnucash/report/reports/standard/new-owner-report.scm:911
+#: gnucash/report/reports/standard/new-owner-report.scm:916
+#: gnucash/report/reports/standard/new-owner-report.scm:921
+#: gnucash/report/reports/standard/new-owner-report.scm:926
+#: gnucash/report/reports/standard/new-owner-report.scm:931
+#: gnucash/report/reports/standard/new-owner-report.scm:936
+#: gnucash/report/reports/standard/new-owner-report.scm:951
 #: gnucash/report/reports/standard/owner-report.scm:556
 #: gnucash/report/reports/standard/owner-report.scm:561
 #: gnucash/report/reports/standard/owner-report.scm:566
@@ -26733,7 +26737,7 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/income-statement.scm:518
-#: libgnucash/engine/Account.cpp:4375 libgnucash/engine/Scrub.c:472
+#: libgnucash/engine/Account.cpp:4379 libgnucash/engine/Scrub.c:472
 #: libgnucash/engine/Scrub.c:537
 msgid "Trading"
 msgstr "交易"
@@ -27138,13 +27142,13 @@ msgid "~a #~a"
 msgstr ""
 
 #: gnucash/report/reports/standard/job-report.scm:318
-#: gnucash/report/reports/standard/new-owner-report.scm:524
+#: gnucash/report/reports/standard/new-owner-report.scm:528
 #: gnucash/report/reports/standard/owner-report.scm:505
 msgid "Total Credit"
 msgstr "合計貸"
 
 #: gnucash/report/reports/standard/job-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:525
+#: gnucash/report/reports/standard/new-owner-report.scm:529
 #: gnucash/report/reports/standard/owner-report.scm:506
 msgid "Total Due"
 msgstr "總計到期"
@@ -27162,27 +27166,27 @@ msgstr "要搜尋交易的科目"
 
 #: gnucash/report/reports/standard/job-report.scm:370
 #: gnucash/report/reports/standard/job-report.scm:375
-#: gnucash/report/reports/standard/new-owner-report.scm:883
-#: gnucash/report/reports/standard/new-owner-report.scm:888
+#: gnucash/report/reports/standard/new-owner-report.scm:887
+#: gnucash/report/reports/standard/new-owner-report.scm:892
 #: gnucash/report/reports/standard/owner-report.scm:557
 #: gnucash/report/reports/standard/owner-report.scm:562
 msgid "Display the transaction date?"
 msgstr "是否顯示交易日期？"
 
 #: gnucash/report/reports/standard/job-report.scm:380
-#: gnucash/report/reports/standard/new-owner-report.scm:893
+#: gnucash/report/reports/standard/new-owner-report.scm:897
 #: gnucash/report/reports/standard/owner-report.scm:567
 msgid "Display the transaction reference?"
 msgstr "是否顯示交易參照？"
 
 #: gnucash/report/reports/standard/job-report.scm:385
-#: gnucash/report/reports/standard/new-owner-report.scm:898
+#: gnucash/report/reports/standard/new-owner-report.scm:902
 #: gnucash/report/reports/standard/owner-report.scm:572
 msgid "Display the transaction type?"
 msgstr "是否顯示交易類型？"
 
 #: gnucash/report/reports/standard/job-report.scm:390
-#: gnucash/report/reports/standard/new-owner-report.scm:903
+#: gnucash/report/reports/standard/new-owner-report.scm:907
 #: gnucash/report/reports/standard/owner-report.scm:577
 msgid "Display the transaction description?"
 msgstr "是否顯示交易描述？"
@@ -27194,7 +27198,7 @@ msgid "Display the transaction amount?"
 msgstr "是否顯示交易日期？"
 
 #: gnucash/report/reports/standard/job-report.scm:508
-#: gnucash/report/reports/standard/new-owner-report.scm:1223
+#: gnucash/report/reports/standard/new-owner-report.scm:1227
 msgid "Job Report"
 msgstr "工作報表"
 
@@ -27234,7 +27238,7 @@ msgid "The account to search for lots."
 msgstr "要搜尋交易的科目"
 
 #: gnucash/report/reports/standard/net-charts.scm:48
-#: gnucash/report/reports/standard/price-scatter.scm:50
+#: gnucash/report/reports/standard/price-scatter.scm:51
 msgid "Show Net Profit"
 msgstr "顯示收益淨額"
 
@@ -27282,36 +27286,36 @@ msgstr "顯示價值淨額長條？"
 msgid "Add grid lines."
 msgstr ""
 
-#: gnucash/report/reports/standard/net-charts.scm:393
-#: gnucash/report/reports/standard/net-charts.scm:425
+#: gnucash/report/reports/standard/net-charts.scm:389
+#: gnucash/report/reports/standard/net-charts.scm:421
 msgid "Net Profit"
 msgstr "收益淨額"
 
-#: gnucash/report/reports/standard/net-charts.scm:393
-#: gnucash/report/reports/standard/net-charts.scm:426
+#: gnucash/report/reports/standard/net-charts.scm:389
+#: gnucash/report/reports/standard/net-charts.scm:422
 msgid "Net Worth"
 msgstr "價值淨額"
 
-#: gnucash/report/reports/standard/net-charts.scm:489
+#: gnucash/report/reports/standard/net-charts.scm:484
 msgid "Net Worth Barchart"
 msgstr "價值淨額長條圖"
 
-#: gnucash/report/reports/standard/net-charts.scm:500
+#: gnucash/report/reports/standard/net-charts.scm:495
 msgid "Income/Expense Chart"
 msgstr "收入/支出圖表"
 
-#: gnucash/report/reports/standard/net-charts.scm:502
+#: gnucash/report/reports/standard/net-charts.scm:497
 #, fuzzy
 msgid "Income & Expense Barchart"
 msgstr "收入 & 支出圖表"
 
-#: gnucash/report/reports/standard/net-charts.scm:512
+#: gnucash/report/reports/standard/net-charts.scm:507
 #, fuzzy
 msgid "Net Worth Linechart"
 msgstr "價值淨額長條圖"
 
-#: gnucash/report/reports/standard/net-charts.scm:525
-#: gnucash/report/reports/standard/net-charts.scm:527
+#: gnucash/report/reports/standard/net-charts.scm:520
+#: gnucash/report/reports/standard/net-charts.scm:522
 #, fuzzy
 msgid "Income & Expense Linechart"
 msgstr "收入 & 支出圖表"
@@ -27338,7 +27342,7 @@ msgid "Reverse alphabetical order"
 msgstr "登記簿順序"
 
 #: gnucash/report/reports/standard/new-aging.scm:343
-#: gnucash/report/reports/standard/new-owner-report.scm:540
+#: gnucash/report/reports/standard/new-owner-report.scm:544
 #, fuzzy
 msgid "Please note some transactions were not processed"
 msgstr "要取回的交易的日期範圍:"
@@ -27438,121 +27442,121 @@ msgstr "這個報表需要有選定的科目。"
 msgid "This report requires a vendor to be selected."
 msgstr "這個報表需要有選定的科目。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:242
+#: gnucash/report/reports/standard/new-owner-report.scm:246
 #, fuzzy
 msgid "Partial Amount"
 msgstr "母科目(_P)"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:295
+#: gnucash/report/reports/standard/new-owner-report.scm:299
 #: gnucash/report/trep-engine.scm:980 gnucash/report/trep-engine.scm:1106
 msgid "Link"
 msgstr ""
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
-#: gnucash/report/reports/standard/new-owner-report.scm:343
+#: gnucash/report/reports/standard/new-owner-report.scm:347
 #, scheme-format
 msgid "~a History"
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:345
+#: gnucash/report/reports/standard/new-owner-report.scm:349
 #, fuzzy
 msgid "Linked Details"
 msgstr "工作對話盒"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:504
+#: gnucash/report/reports/standard/new-owner-report.scm:508
 #: gnucash/report/reports/standard/owner-report.scm:463
 #, fuzzy
 msgid "Period Totals"
 msgstr "週期開始"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:868
+#: gnucash/report/reports/standard/new-owner-report.scm:872
 #: gnucash/report/reports/standard/owner-report.scm:535
 #, fuzzy
 msgid "The company for this report."
 msgstr "此報表的公司"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:908
+#: gnucash/report/reports/standard/new-owner-report.scm:912
 #: gnucash/report/reports/standard/owner-report.scm:582
 #, fuzzy
 msgid "Display the sale amount column?"
 msgstr "是否顯示總額？"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:913
+#: gnucash/report/reports/standard/new-owner-report.scm:917
 #: gnucash/report/reports/standard/owner-report.scm:587
 #, fuzzy
 msgid "Display the tax column?"
 msgstr "是否顯示科目？"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:918
+#: gnucash/report/reports/standard/new-owner-report.scm:922
 #: gnucash/report/reports/standard/owner-report.scm:597
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "顯示項目的折扣"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:923
+#: gnucash/report/reports/standard/new-owner-report.scm:927
 #: gnucash/report/reports/standard/owner-report.scm:592
 #, fuzzy
 msgid "Display the period credits column?"
 msgstr "顯示項目的折扣"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:928
+#: gnucash/report/reports/standard/new-owner-report.scm:932
 #: gnucash/report/reports/standard/register.scm:413
 #: gnucash/report/trep-engine.scm:984
 #, fuzzy
 msgid "Display a running balance?"
 msgstr "顯示進行中的結算"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:933
+#: gnucash/report/reports/standard/new-owner-report.scm:937
 #, fuzzy
 msgid "Show linked transactions"
 msgstr "只顯示無效的交易"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:936
+#: gnucash/report/reports/standard/new-owner-report.scm:940
 #, fuzzy
 msgid "Linked transactions are hidden."
 msgstr "以搜尋來找到交易"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:938
+#: gnucash/report/reports/standard/new-owner-report.scm:942
 #, fuzzy
 msgid "Simple"
 msgstr "範例："
 
-#: gnucash/report/reports/standard/new-owner-report.scm:939
+#: gnucash/report/reports/standard/new-owner-report.scm:943
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:941
+#: gnucash/report/reports/standard/new-owner-report.scm:945
 #, fuzzy
 msgid "Detailed"
 msgstr "失敗"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:942
+#: gnucash/report/reports/standard/new-owner-report.scm:946
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:948
+#: gnucash/report/reports/standard/new-owner-report.scm:952
 #, fuzzy
 msgid "Display document link?"
 msgstr "以超連結顯示科目"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1076
+#: gnucash/report/reports/standard/new-owner-report.scm:1080
 #, fuzzy
 msgid "No valid account found"
 msgstr "找不到相符的交易"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1077
+#: gnucash/report/reports/standard/new-owner-report.scm:1081
 #, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
 msgstr "這個報表需要有選定的科目。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1100
+#: gnucash/report/reports/standard/new-owner-report.scm:1104
 #, fuzzy
 msgid "No transactions found."
 msgstr "找不到相符的交易"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1101
+#: gnucash/report/reports/standard/new-owner-report.scm:1105
 #: gnucash/report/trep-engine.scm:130
 msgid "No matching transactions found"
 msgstr "找不到相符的交易"
@@ -27602,105 +27606,105 @@ msgstr "投資組合"
 msgid "Units"
 msgstr "單位"
 
-#: gnucash/report/reports/standard/price-scatter.scm:41
+#: gnucash/report/reports/standard/price-scatter.scm:42
 msgid "Price of Commodity"
 msgstr "商品價格"
 
-#: gnucash/report/reports/standard/price-scatter.scm:43
+#: gnucash/report/reports/standard/price-scatter.scm:44
 msgid "Invert prices"
 msgstr "反向價格"
 
-#: gnucash/report/reports/standard/price-scatter.scm:52
+#: gnucash/report/reports/standard/price-scatter.scm:53
 msgid "Show Asset & Liability bars"
 msgstr "顯示資產&債務長條"
 
-#: gnucash/report/reports/standard/price-scatter.scm:53
+#: gnucash/report/reports/standard/price-scatter.scm:54
 msgid "Show Net Worth bars"
 msgstr "顯示價值淨額長條"
 
-#: gnucash/report/reports/standard/price-scatter.scm:55
+#: gnucash/report/reports/standard/price-scatter.scm:56
 msgid "Marker"
 msgstr "標記"
 
-#: gnucash/report/reports/standard/price-scatter.scm:56
+#: gnucash/report/reports/standard/price-scatter.scm:57
 msgid "Marker Color"
 msgstr "標記顏色"
 
-#: gnucash/report/reports/standard/price-scatter.scm:81
+#: gnucash/report/reports/standard/price-scatter.scm:82
 msgid "Calculate the price of this commodity."
 msgstr "計算此商品的價格。"
 
-#: gnucash/report/reports/standard/price-scatter.scm:93
+#: gnucash/report/reports/standard/price-scatter.scm:94
 msgid "Actual Transactions"
 msgstr "實際交易"
 
-#: gnucash/report/reports/standard/price-scatter.scm:94
+#: gnucash/report/reports/standard/price-scatter.scm:95
 #, fuzzy
 msgid "The instantaneous price of actual currency transactions in the past."
 msgstr "過去實際貨幣交易的即時價格"
 
-#: gnucash/report/reports/standard/price-scatter.scm:97
+#: gnucash/report/reports/standard/price-scatter.scm:98
 #, fuzzy
 msgid "The recorded prices."
 msgstr "記錄的價格"
 
-#: gnucash/report/reports/standard/price-scatter.scm:104
+#: gnucash/report/reports/standard/price-scatter.scm:105
 msgid "Plot commodity per currency rather than currency per commodity."
 msgstr ""
 
-#: gnucash/report/reports/standard/price-scatter.scm:120
+#: gnucash/report/reports/standard/price-scatter.scm:121
 #, fuzzy
 msgid "Color of the marker."
 msgstr "標記的顏色"
 
-#: gnucash/report/reports/standard/price-scatter.scm:140
+#: gnucash/report/reports/standard/price-scatter.scm:141
 msgid "Double-Weeks"
 msgstr "雙週"
 
-#: gnucash/report/reports/standard/price-scatter.scm:142
+#: gnucash/report/reports/standard/price-scatter.scm:143
 #, fuzzy
 #| msgid "Quarter"
 msgid "Quarters"
 msgstr "季"
 
-#: gnucash/report/reports/standard/price-scatter.scm:143
+#: gnucash/report/reports/standard/price-scatter.scm:144
 #, fuzzy
 #| msgid "Half Year"
 msgid "Half Years"
 msgstr "半年"
 
-#: gnucash/report/reports/standard/price-scatter.scm:238
+#: gnucash/report/reports/standard/price-scatter.scm:239
 msgid "Identical commodities"
 msgstr "完全相同的商品"
 
-#: gnucash/report/reports/standard/price-scatter.scm:239
+#: gnucash/report/reports/standard/price-scatter.scm:240
 msgid ""
 "Your selected commodity and the currency of the report are identical. It "
 "doesn't make sense to show prices for identical commodities."
 msgstr "您選擇的商品與報表的貨幣是完全相同的。顯示同樣商品的價格是沒意義的。"
 
-#: gnucash/report/reports/standard/price-scatter.scm:277
+#: gnucash/report/reports/standard/price-scatter.scm:278
 msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
 msgstr "所選定的商品在指定的時間週期中並沒有可用的價格資訊。"
 
-#: gnucash/report/reports/standard/price-scatter.scm:282
+#: gnucash/report/reports/standard/price-scatter.scm:283
 msgid "Only one price"
 msgstr "只有一個價格"
 
-#: gnucash/report/reports/standard/price-scatter.scm:283
+#: gnucash/report/reports/standard/price-scatter.scm:284
 msgid ""
 "There was only one single price found for the selected commodities in the "
 "selected time period. This doesn't give a useful plot."
 msgstr ""
 "所選定的商品在指定的時間週期中僅能找到一個價格。這並不能成為一張有用的圖。"
 
-#: gnucash/report/reports/standard/price-scatter.scm:289
+#: gnucash/report/reports/standard/price-scatter.scm:290
 msgid "All Prices equal"
 msgstr "所有價格均等"
 
-#: gnucash/report/reports/standard/price-scatter.scm:290
+#: gnucash/report/reports/standard/price-scatter.scm:291
 msgid ""
 "All the prices found are equal. This would result in a plot with one "
 "straight line. Unfortunately, the plotting tool can't handle that."
@@ -27708,11 +27712,11 @@ msgstr ""
 "所有找到的價格都相等。這會產生一個只有一條直線的圖。很不幸地，繪圖工具不能處"
 "理這種情況。"
 
-#: gnucash/report/reports/standard/price-scatter.scm:296
+#: gnucash/report/reports/standard/price-scatter.scm:297
 msgid "All Prices at the same date"
 msgstr "所有價格的日期相同"
 
-#: gnucash/report/reports/standard/price-scatter.scm:297
+#: gnucash/report/reports/standard/price-scatter.scm:298
 msgid ""
 "All the prices found are from the same date. This would result in a plot "
 "with one straight line. Unfortunately, the plotting tool can't handle that."
@@ -27720,7 +27724,7 @@ msgstr ""
 "所有找到的價格日期都相同。這會產生只有一條直線的圖。很不幸地，繪圖工具不能處"
 "理這種情況。"
 
-#: gnucash/report/reports/standard/price-scatter.scm:329
+#: gnucash/report/reports/standard/price-scatter.scm:330
 msgid "Price Scatterplot"
 msgstr "價格散佈圖"
 
@@ -28432,19 +28436,19 @@ msgstr "欄數"
 msgid "Number of columns before wrapping to a new row."
 msgstr "繞到新一列前的欄數"
 
-#: gnucash/report/reports/standard/view-column.scm:159
+#: gnucash/report/reports/standard/view-column.scm:155
 msgid "Edit Options"
 msgstr "編輯選項"
 
-#: gnucash/report/reports/standard/view-column.scm:166
+#: gnucash/report/reports/standard/view-column.scm:162
 msgid "Single Report"
 msgstr "單一報表"
 
-#: gnucash/report/reports/standard/view-column.scm:219
+#: gnucash/report/reports/standard/view-column.scm:215
 msgid "Multicolumn View"
 msgstr "多欄檢視"
 
-#: gnucash/report/reports/standard/view-column.scm:221
+#: gnucash/report/reports/standard/view-column.scm:217
 msgid "Custom Multicolumn Report"
 msgstr "自訂多欄報表"
 
@@ -29889,244 +29893,244 @@ msgstr ""
 msgid "The electronic tax number of your business"
 msgstr "您的商務名稱"
 
-#: libgnucash/app-utils/date-utilities.scm:524
+#: libgnucash/app-utils/date-utilities.scm:523
 #, scheme-format
 msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
 
-#: libgnucash/app-utils/date-utilities.scm:902
+#: libgnucash/app-utils/date-utilities.scm:909
 #, fuzzy
 msgid "First day of the current calendar year."
 msgstr "目前日曆年的第一天"
 
-#: libgnucash/app-utils/date-utilities.scm:909
+#: libgnucash/app-utils/date-utilities.scm:916
 #, fuzzy
 msgid "Last day of the current calendar year."
 msgstr "目前日曆年的最後一天"
 
-#: libgnucash/app-utils/date-utilities.scm:916
+#: libgnucash/app-utils/date-utilities.scm:923
 #, fuzzy
 msgid "First day of the previous calendar year."
 msgstr "前一日曆年的第一天"
 
-#: libgnucash/app-utils/date-utilities.scm:923
+#: libgnucash/app-utils/date-utilities.scm:930
 #, fuzzy
 msgid "Last day of the previous calendar year."
 msgstr "前一日曆年的最後一天"
 
-#: libgnucash/app-utils/date-utilities.scm:927
+#: libgnucash/app-utils/date-utilities.scm:934
 msgid "Start of next year"
 msgstr "明年初"
 
-#: libgnucash/app-utils/date-utilities.scm:930
+#: libgnucash/app-utils/date-utilities.scm:937
 #, fuzzy
 msgid "First day of the next calendar year."
 msgstr "下一日曆年的第一天"
 
-#: libgnucash/app-utils/date-utilities.scm:934
+#: libgnucash/app-utils/date-utilities.scm:941
 msgid "End of next year"
 msgstr "明年底"
 
-#: libgnucash/app-utils/date-utilities.scm:937
+#: libgnucash/app-utils/date-utilities.scm:944
 #, fuzzy
 msgid "Last day of the next calendar year."
 msgstr "下個日曆年的最後一天"
 
-#: libgnucash/app-utils/date-utilities.scm:941
+#: libgnucash/app-utils/date-utilities.scm:948
 msgid "Start of accounting period"
 msgstr "會計期間的起點"
 
-#: libgnucash/app-utils/date-utilities.scm:944
+#: libgnucash/app-utils/date-utilities.scm:951
 #, fuzzy
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr "於全域偏好設定的，會計期間的第一天"
 
-#: libgnucash/app-utils/date-utilities.scm:948
+#: libgnucash/app-utils/date-utilities.scm:955
 msgid "End of accounting period"
 msgstr "會計期間的期末"
 
-#: libgnucash/app-utils/date-utilities.scm:951
+#: libgnucash/app-utils/date-utilities.scm:958
 #, fuzzy
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr "於全域偏好設定的，會計期間的最後一天"
 
-#: libgnucash/app-utils/date-utilities.scm:958
+#: libgnucash/app-utils/date-utilities.scm:965
 #, fuzzy
 msgid "First day of the current month."
 msgstr "本月份的第一天"
 
-#: libgnucash/app-utils/date-utilities.scm:965
+#: libgnucash/app-utils/date-utilities.scm:972
 #, fuzzy
 msgid "Last day of the current month."
 msgstr "本月份的最後一天"
 
-#: libgnucash/app-utils/date-utilities.scm:972
+#: libgnucash/app-utils/date-utilities.scm:979
 #, fuzzy
 msgid "First day of the previous month."
 msgstr "前一月份的第一天"
 
-#: libgnucash/app-utils/date-utilities.scm:979
+#: libgnucash/app-utils/date-utilities.scm:986
 #, fuzzy
 msgid "Last day of previous month."
 msgstr "前一月份的最後一天"
 
-#: libgnucash/app-utils/date-utilities.scm:983
+#: libgnucash/app-utils/date-utilities.scm:990
 msgid "Start of next month"
 msgstr "下個月月初"
 
-#: libgnucash/app-utils/date-utilities.scm:986
+#: libgnucash/app-utils/date-utilities.scm:993
 #, fuzzy
 msgid "First day of the next month."
 msgstr "下個月的第一天"
 
-#: libgnucash/app-utils/date-utilities.scm:990
+#: libgnucash/app-utils/date-utilities.scm:997
 msgid "End of next month"
 msgstr "下個月月底"
 
-#: libgnucash/app-utils/date-utilities.scm:993
+#: libgnucash/app-utils/date-utilities.scm:1000
 #, fuzzy
 msgid "Last day of next month."
 msgstr "下個月的最後一天"
 
-#: libgnucash/app-utils/date-utilities.scm:997
+#: libgnucash/app-utils/date-utilities.scm:1004
 msgid "Start of current quarter"
 msgstr "本季初"
 
-#: libgnucash/app-utils/date-utilities.scm:1000
+#: libgnucash/app-utils/date-utilities.scm:1007
 #, fuzzy
 msgid "First day of the current quarterly accounting period."
 msgstr "本季會計週期的第一天"
 
-#: libgnucash/app-utils/date-utilities.scm:1004
+#: libgnucash/app-utils/date-utilities.scm:1011
 msgid "End of current quarter"
 msgstr "本季末"
 
-#: libgnucash/app-utils/date-utilities.scm:1007
+#: libgnucash/app-utils/date-utilities.scm:1014
 #, fuzzy
 msgid "Last day of the current quarterly accounting period."
 msgstr "本季會計週期的最後一天"
 
-#: libgnucash/app-utils/date-utilities.scm:1014
+#: libgnucash/app-utils/date-utilities.scm:1021
 #, fuzzy
 msgid "First day of the previous quarterly accounting period."
 msgstr "前一季會計週期的第一天"
 
-#: libgnucash/app-utils/date-utilities.scm:1021
+#: libgnucash/app-utils/date-utilities.scm:1028
 #, fuzzy
 msgid "Last day of previous quarterly accounting period."
 msgstr "前一季會計週期的最後一天"
 
-#: libgnucash/app-utils/date-utilities.scm:1025
+#: libgnucash/app-utils/date-utilities.scm:1032
 msgid "Start of next quarter"
 msgstr "下一季初"
 
-#: libgnucash/app-utils/date-utilities.scm:1028
+#: libgnucash/app-utils/date-utilities.scm:1035
 #, fuzzy
 msgid "First day of the next quarterly accounting period."
 msgstr "下一季會計週期的第一天"
 
-#: libgnucash/app-utils/date-utilities.scm:1032
+#: libgnucash/app-utils/date-utilities.scm:1039
 msgid "End of next quarter"
 msgstr "下一季末"
 
-#: libgnucash/app-utils/date-utilities.scm:1035
+#: libgnucash/app-utils/date-utilities.scm:1042
 #, fuzzy
 msgid "Last day of next quarterly accounting period."
 msgstr "下一季會計週期的最後一天"
 
-#: libgnucash/app-utils/date-utilities.scm:1041
+#: libgnucash/app-utils/date-utilities.scm:1048
 #, fuzzy
 msgid "The current date."
 msgstr "目前的日期"
 
-#: libgnucash/app-utils/date-utilities.scm:1045
+#: libgnucash/app-utils/date-utilities.scm:1052
 msgid "One Month Ago"
 msgstr "一個月以前"
 
-#: libgnucash/app-utils/date-utilities.scm:1047
+#: libgnucash/app-utils/date-utilities.scm:1054
 #, fuzzy
 msgid "One Month Ago."
 msgstr "一個月以前"
 
-#: libgnucash/app-utils/date-utilities.scm:1051
+#: libgnucash/app-utils/date-utilities.scm:1058
 msgid "One Week Ago"
 msgstr "一星期以前"
 
-#: libgnucash/app-utils/date-utilities.scm:1053
+#: libgnucash/app-utils/date-utilities.scm:1060
 #, fuzzy
 msgid "One Week Ago."
 msgstr "一星期以前"
 
-#: libgnucash/app-utils/date-utilities.scm:1057
+#: libgnucash/app-utils/date-utilities.scm:1064
 msgid "Three Months Ago"
 msgstr "三個月以前"
 
-#: libgnucash/app-utils/date-utilities.scm:1059
+#: libgnucash/app-utils/date-utilities.scm:1066
 #, fuzzy
 msgid "Three Months Ago."
 msgstr "三個月以前"
 
-#: libgnucash/app-utils/date-utilities.scm:1063
+#: libgnucash/app-utils/date-utilities.scm:1070
 msgid "Six Months Ago"
 msgstr "六個月以前"
 
-#: libgnucash/app-utils/date-utilities.scm:1065
+#: libgnucash/app-utils/date-utilities.scm:1072
 #, fuzzy
 msgid "Six Months Ago."
 msgstr "六個月以前"
 
-#: libgnucash/app-utils/date-utilities.scm:1068
+#: libgnucash/app-utils/date-utilities.scm:1075
 msgid "One Year Ago"
 msgstr "一年以前"
 
-#: libgnucash/app-utils/date-utilities.scm:1070
+#: libgnucash/app-utils/date-utilities.scm:1077
 #, fuzzy
 msgid "One Year Ago."
 msgstr "一年以前"
 
-#: libgnucash/app-utils/date-utilities.scm:1074
+#: libgnucash/app-utils/date-utilities.scm:1081
 msgid "One Month Ahead"
 msgstr "一個月以後"
 
-#: libgnucash/app-utils/date-utilities.scm:1076
+#: libgnucash/app-utils/date-utilities.scm:1083
 #, fuzzy
 msgid "One Month Ahead."
 msgstr "一個月以後"
 
-#: libgnucash/app-utils/date-utilities.scm:1080
+#: libgnucash/app-utils/date-utilities.scm:1087
 msgid "One Week Ahead"
 msgstr "一星期以後"
 
-#: libgnucash/app-utils/date-utilities.scm:1082
+#: libgnucash/app-utils/date-utilities.scm:1089
 #, fuzzy
 msgid "One Week Ahead."
 msgstr "一星期以後"
 
-#: libgnucash/app-utils/date-utilities.scm:1086
+#: libgnucash/app-utils/date-utilities.scm:1093
 msgid "Three Months Ahead"
 msgstr "三個月以後"
 
-#: libgnucash/app-utils/date-utilities.scm:1088
+#: libgnucash/app-utils/date-utilities.scm:1095
 #, fuzzy
 msgid "Three Months Ahead."
 msgstr "三個月以後"
 
-#: libgnucash/app-utils/date-utilities.scm:1092
+#: libgnucash/app-utils/date-utilities.scm:1099
 msgid "Six Months Ahead"
 msgstr "六個月以後"
 
-#: libgnucash/app-utils/date-utilities.scm:1094
+#: libgnucash/app-utils/date-utilities.scm:1101
 #, fuzzy
 msgid "Six Months Ahead."
 msgstr "六個月以後"
 
-#: libgnucash/app-utils/date-utilities.scm:1097
+#: libgnucash/app-utils/date-utilities.scm:1104
 msgid "One Year Ahead"
 msgstr "一年以後"
 
-#: libgnucash/app-utils/date-utilities.scm:1099
+#: libgnucash/app-utils/date-utilities.scm:1106
 #, fuzzy
 msgid "One Year Ahead."
 msgstr "一年以後"
@@ -30412,40 +30416,40 @@ msgid ""
 "%s"
 msgstr ""
 
-#: libgnucash/engine/Account.cpp:4364
+#: libgnucash/engine/Account.cpp:4368
 msgid "Credit Card"
 msgstr "信用卡"
 
-#: libgnucash/engine/Account.cpp:4366
+#: libgnucash/engine/Account.cpp:4370
 msgid "Stock"
 msgstr "股票"
 
-#: libgnucash/engine/Account.cpp:4367
+#: libgnucash/engine/Account.cpp:4371
 msgid "Mutual Fund"
 msgstr "共同基金"
 
-#: libgnucash/engine/Account.cpp:4372
+#: libgnucash/engine/Account.cpp:4376
 msgid "A/Receivable"
 msgstr "A/應收"
 
-#: libgnucash/engine/Account.cpp:4373
+#: libgnucash/engine/Account.cpp:4377
 msgid "A/Payable"
 msgstr "A/應付"
 
-#: libgnucash/engine/Account.cpp:4374
+#: libgnucash/engine/Account.cpp:4378
 msgid "Root"
 msgstr "根"
 
-#: libgnucash/engine/Account.cpp:4816
+#: libgnucash/engine/Account.cpp:4820
 msgid "Orphaned Gains"
 msgstr "無主的獲利"
 
-#: libgnucash/engine/Account.cpp:4830 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4834 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "已實現獲利(虧損)"
 
-#: libgnucash/engine/Account.cpp:4832
+#: libgnucash/engine/Account.cpp:4836
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
