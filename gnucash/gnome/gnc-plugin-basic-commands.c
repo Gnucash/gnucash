@@ -113,7 +113,7 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_main_window_cmd_file_new)
     },
     {
-        "FileOpenAction", "document-open", N_("_Open..."), "<primary>o",
+        "FileOpenAction", "document-open", N_("_Open…"), "<primary>o",
         N_("Open an existing GnuCash file"),
         G_CALLBACK (gnc_main_window_cmd_file_open)
     },
@@ -123,7 +123,7 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_main_window_cmd_file_save)
     },
     {
-        "FileSaveAsAction", "document-save-as", N_("Save _As..."), "<shift><primary>s",
+        "FileSaveAsAction", "document-save-as", N_("Save _As…"), "<shift><primary>s",
         N_("Save this file with a different name"),
         G_CALLBACK (gnc_main_window_cmd_file_save_as)
     },
@@ -142,7 +142,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     /* Edit menu */
 
     {
-        "EditFindTransactionsAction", "edit-find", N_("_Find..."), "<primary>f",
+        "EditFindTransactionsAction", "edit-find", N_("_Find…"), "<primary>f",
         N_("Find transactions with a search"),
         G_CALLBACK (gnc_main_window_cmd_tools_find_transactions)
     },
@@ -155,7 +155,7 @@ static GtkActionEntry gnc_plugin_actions [] =
          * US: income tax and                     *
          * DE: VAT                                *
          * So adjust this string                  */
-        N_("Setup relevant accounts for tax reports, e.g. US income tax"),
+        N_("Set up relevant accounts for tax reports, e.g. US income tax"),
         G_CALLBACK (gnc_main_window_cmd_edit_tax_options)
     },
 
@@ -168,13 +168,13 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_main_window_cmd_actions_scheduled_transaction_editor)
     },
     {
-        "ActionsSinceLastRunAction", NULL, N_("Since _Last Run..."), NULL,
+        "ActionsSinceLastRunAction", NULL, N_("Since _Last Run…"), NULL,
         N_("Create Scheduled Transactions since the last time run"),
         G_CALLBACK (gnc_main_window_cmd_actions_since_last_run)
     },
     {
-        "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
-        N_("Setup scheduled transactions for repayment of a loan"),
+        "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment…"), NULL,
+        N_("Set up scheduled transactions for repayment of a loan"),
         G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan)
     },
     { "ActionsBudgetAction", NULL, N_("B_udget"), NULL, NULL, NULL },
@@ -209,7 +209,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
     {
         "ToolsImapEditorAction", NULL, N_("_Import Map Editor"), NULL,
-        N_("View and Delete Bayesian and Non Bayesian information"),
+        N_("View and Delete Bayesian and non-Bayesian information"),
         G_CALLBACK (gnc_main_window_cmd_tools_imap_editor)
     },
     {
