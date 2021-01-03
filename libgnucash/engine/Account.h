@@ -1476,7 +1476,7 @@ int xaccAccountTreeForEachTransaction(Account *acc,
  */
 GncImportMatchMap *gnc_account_imap_create_imap (Account *acc);
 
-/* Look up an Account in the map non Baysian
+/* Look up an Account in the map non-Baysian
  */
 Account* gnc_account_imap_find_account (GncImportMatchMap *imap, const char* category,
                                         const char *key);
