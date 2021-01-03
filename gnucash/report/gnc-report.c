@@ -234,55 +234,6 @@ gnc_run_report_with_error_handling (gint report_id, gchar ** data, gchar **errms
     }
 }
 
-static void
-error_handler(const char *str)
-{
-    g_warning("Failure running report: %s", str);
-}
-
-gboolean
-gnc_run_report (gint report_id, char ** data)
-{
-    SCM scm_text;
-    gchar *str;
-
-    PWARN ("gnc_run_report is deprecated. use gnc_run_report_with_error_handling instead.");
-
-    g_return_val_if_fail (data != NULL, FALSE);
-    *data = NULL;
-
-    str = g_strdup_printf("(gnc:report-run %d)", report_id);
-    scm_text = gfec_eval_string(str, error_handler);
-    g_free(str);
-
-    if (scm_text == SCM_UNDEFINED || !scm_is_string (scm_text))
-        return FALSE;
-
-    *data = gnc_scm_to_utf8_string (scm_text);
-
-    return TRUE;
-}
-
-gboolean
-gnc_run_report_id_string (const char * id_string, char **data)
-{
-    gint report_id;
-
-    PWARN ("gnc_run_report_id_string is deprecated. use gnc_run_report_id_string_with_error_handling instead.");
-
-    g_return_val_if_fail (id_string != NULL, FALSE);
-    g_return_val_if_fail (data != NULL, FALSE);
-    *data = NULL;
-
-    if (strncmp ("id=", id_string, 3) != 0)
-        return FALSE;
-
-    if (sscanf (id_string + 3, "%d", &report_id) != 1)
-        return FALSE;
-
-    return gnc_run_report (report_id, data);
-}
-
 gchar*
 gnc_report_name( SCM report )
 {
