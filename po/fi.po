@@ -4,14 +4,15 @@
 # Marko Kohtala <marko.kohtala@gmail.com>, 2020.
 # Tuomo Hartikainen <tth@harski.org>, 2017.
 # Tuomo Kohvakka <tuomo.kohvakka@iki.fi>, 2008.
+# Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.10\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2020-12-22 08:12+0000\n"
-"Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
+"PO-Revision-Date: 2021-01-03 02:29+0000\n"
+"Last-Translator: Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
 "Language: fi\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Poedit-Bookmarks: -1,-1,2060,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -126,15 +127,15 @@ msgstr "Armenialainen (ARMSCII-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:124
 msgid "Baltic (ISO-8859-13)"
-msgstr "Balttilainen (ISO-8859-13)"
+msgstr "Balttialainen (ISO-8859-13)"
 
 #: borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr "Balttilainen (ISO-8859-4)"
+msgstr "Balttialainen (ISO-8859-4)"
 
 #: borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr "Balttilainen (Windows-1257)"
+msgstr "Balttialainen (Windows-1257)"
 
 #: borrowed/goffice/go-charmap-sel.c:127
 msgid "Celtic (ISO-8859-14)"
@@ -504,10 +505,10 @@ msgid ""
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
-"Klikkaamalla tiliä hiiren oikealla painikkeella (CTRL + klikkaus Mac OS X:"
-"ssä) tilivälilehdellä pääset muokkaamaan kyseisen tilivalikon asetuksia. "
-"Kussakin tilikirjassa hiiren oikean painikkeen takaa löytyy puolestaan "
-"tosittevalikon asetukset."
+"Klikkaamalla tiliä hiiren oikealla painikkeella (CTRL+klikkaus Mac OS X:ssä) "
+"tilivälilehdellä pääset muokkaamaan kyseisen tilivalikon asetuksia. Kussakin "
+"tilikirjassa hiiren oikean painikkeen takaa löytyvät puolestaan "
+"tositevalikon asetukset."
 
 #: doc/tip_of_the_day.list.c:32
 msgid ""
@@ -586,7 +587,8 @@ msgstr ""
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
-msgstr "Siirtyäksesi välilehdeltä toiselle, paina CTRL + Sivu ylös/alas."
+msgstr ""
+"Siirtyäksesi välilehdeltä toiselle, paina CTRL + Sivu ylös/alas -näppäimiä."
 
 #: doc/tip_of_the_day.list.c:76
 msgid ""
@@ -665,7 +667,7 @@ msgid ""
 "start the search from that account's register."
 msgstr ""
 "Etsiäksesi kaikista tositteista, avaa hakuvalikko (Muokkaa->Etsi...) tilien "
-"pääsivulta. Rajoittaaksesi haun tiettyyn tiliin, avaa haku kyseisen tilin "
+"pääsivulta. Rajataksesi haun tiettyyn tiliin, avaa haku kyseisen tilin "
 "kirjasta."
 
 #: doc/tip_of_the_day.list.c:119
@@ -675,8 +677,8 @@ msgid ""
 "new window."
 msgstr ""
 "Jos haluat vertailla kahden välilehden sisältöä, valitse toisessa "
-"välilehdessä valikosta \"Ikkunat\"->\"Uusi ikkuna sivun kanssa"
-"\"irroittaaksesi välilehden omaksi ikkunakseen."
+"välilehdessä valikosta Ikkunat->Uusi ikkuna sivun kanssa näyttääksesi "
+"välilehden erillisessä ikkunassa."
 
 #: doc/tip_of_the_day.list.c:123
 msgid ""
@@ -690,7 +692,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
-msgstr "Tilinpäätös tehty onnistuneesti."
+msgstr "Tilinpäätös tehtiin onnistuneesti."
 
 #. Translators: %s is a date string. %d is the number of books
 #. * that will be created. This is a ngettext(3) message (but

@@ -1,6 +1,7 @@
 # Finnish messages for gnucash-glossary.
 # Copyright (C) 2020 Free Software Foundation, Inc.
 # Marko Kohtala <marko.kohtala@gmail.com>, 2020.
+# Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.10\n"
