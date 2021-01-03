@@ -76,6 +76,7 @@
 "credit note"	"A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
 "currency"	"The system of money used in a country"
 "Custom"	"Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
+"Dashboard"	"Compact, well-structured presentation of informations"
 "database"	"The backend where the data is stored."
 "Date"	"A specific numbered day of the month"
 "date format"	"DD/MM/YY or MM/DD/YY or something else"
