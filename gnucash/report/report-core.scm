@@ -385,6 +385,8 @@ not found.")))
 
 
 (define (gnc:restore-report-by-guid id template-id template-name options)
+  (issue-deprecation-warning "gnc:restore-report-by-guid is now deprecated.
+ use gnc:restore-report-by-guid-with-custom-template instead.")
   (if options
       (let* ((r (make-report template-id id options #t #t #f #f ""))
              (report-id (gnc-report-add r)))
