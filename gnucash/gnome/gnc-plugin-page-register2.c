@@ -220,7 +220,7 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
     /* File menu */
 
     {
-        "FilePrintAction", "document-print", N_("_Print Checks..."), "<primary>p", NULL,
+        "FilePrintAction", "document-print", N_("_Print Checks…"), "<primary>p", NULL,
         G_CALLBACK (gnc_plugin_page_register2_cmd_print_check)
     },
 
@@ -252,7 +252,7 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         G_CALLBACK (gnc_plugin_page_register2_cmd_find_account)
     },
     {
-        "EditFindTransactionsAction", "edit-find", N_("_Find..."), "<primary>f",
+        "EditFindTransactionsAction", "edit-find", N_("_Find…"), "<primary>f",
         N_("Find transactions with a search"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_find_transactions)
     },
@@ -265,7 +265,7 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
          * US: income tax and                     *
          * DE: VAT                                *
          * So adjust this string                  */
-        N_("Setup relevant accounts for tax reports, e.g. US income tax"),
+        N_("Set up relevant accounts for tax reports, e.g. US income tax"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_edit_tax_options)
     },
 
@@ -337,7 +337,7 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
     /* View menu */
 
     {
-        "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
+        "ViewFilterByAction", NULL, N_("_Filter By…"), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_register2_cmd_view_filter_by)
     },
     {
@@ -349,27 +349,27 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
     /* Actions menu */
 
     {
-        "ActionsTransferAction", GNC_ICON_TRANSFER, N_("_Transfer..."), "<primary>t",
+        "ActionsTransferAction", GNC_ICON_TRANSFER, N_("_Transfer…"), "<primary>t",
         N_("Transfer funds from one account to another"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_transfer)
     },
     {
-        "ActionsReconcileAction", "edit-select-all", N_("_Reconcile..."), NULL,
+        "ActionsReconcileAction", "edit-select-all", N_("_Reconcile…"), NULL,
         N_("Reconcile the selected account"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_reconcile)
     },
     {
-        "ActionsAutoClearAction", "edit-select-all", N_("_Auto-clear..."), NULL,
+        "ActionsAutoClearAction", "edit-select-all", N_("_Auto-clear…"), NULL,
         N_("Automatically clear individual transactions, so as to reach a certain cleared amount"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_autoclear)
     },
     {
-        "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
+        "ActionsStockSplitAction", NULL, N_("Stoc_k Split…"), NULL,
         N_("Record a stock split or a stock merger"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_stock_split)
     },
     {
-        "ActionsLotsAction", NULL, N_("View _Lots..."), NULL,
+        "ActionsLotsAction", NULL, N_("View _Lots…"), NULL,
         N_("Bring up the lot viewer/editor window"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_lots)
     },
@@ -389,7 +389,7 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         G_CALLBACK (gnc_plugin_page_register2_cmd_jump)
     },
     {
-        "ScheduleTransactionAction", GNC_ICON_SCHEDULE, N_("Sche_dule..."), NULL,
+        "ScheduleTransactionAction", GNC_ICON_SCHEDULE, N_("Sche_dule…"), NULL,
         N_("Create a Scheduled Transaction with the current transaction as a template"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_schedule)
     },
@@ -2310,7 +2310,7 @@ gnc_plugin_page_register2_filter_save_cb (GtkToggleButton *button,
     LEAVE(" ");
 }
 
-/** This function is called when the "Filter By..." dialog is closed.
+/** This function is called when the "Filter By…" dialog is closed.
  *  If the dialog was closed by any method other than clicking the OK
  *  button, the original filter will be restored.
  *
@@ -3036,7 +3036,7 @@ gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action,
                                  gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window)));
 
     /* Translators: The %s is the name of the plugin page */
-    title = g_strdup_printf (_("Filter %s by..."),
+    title = g_strdup_printf (_("Filter %s by…"),
                             gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE (page)));
     gtk_window_set_title (GTK_WINDOW (dialog), title);
     g_free(title);
