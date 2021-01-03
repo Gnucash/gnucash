@@ -78,11 +78,12 @@
     ((result #f) result)
     ((_ captured-error)
      (display captured-error (current-error-port))
+     ;; the next line will be removed in 5.x - deprecated
      (set! gnc:last-captured-error (gnc:html-string-sanitize captured-error))
      (when (defined? 'gnc:warn) (gnc:warn captured-error))
      #f)))
 
-(define gnc:last-captured-error "")
+(define gnc:last-captured-error "")     ;deprecate - remove in 5.x
 
 ;; This database can be used to store and retrieve translatable
 ;; strings. Strings that are returned by the lookup function are

@@ -260,9 +260,9 @@ return a document object with export-string or export-error.") << std::endl;
 
         if (scm_is_false (id))
             scm_cleanup_and_exit_with_failure (nullptr);
-        char* html;
-        gnc_run_report (scm_to_int(id), &html);
-        if (html && *html)
+        char *html, *errmsg;
+
+        if (gnc_run_report_with_error_handling (scm_to_int(id), &html, &errmsg))
         {
             if (!args->output_file.empty())
             {
@@ -272,6 +272,10 @@ return a document object with export-string or export-error.") << std::endl;
             {
                 std::cout << html << std::endl;
             }
+        }
+        else
+        {
+            std::cerr << errmsg << std::endl;
         }
     }
 

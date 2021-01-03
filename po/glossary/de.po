@@ -6,14 +6,15 @@
 # Manuel Bichler <felseninsel@hotmail.com>, 2020.
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
+# SebastianL <Sebastian.Lueck@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.18\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-06 18:14+0100\n"
-"PO-Revision-Date: 2020-12-29 02:29+0000\n"
-"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"POT-Creation-Date: 2020-12-30 10:07+0100\n"
+"PO-Revision-Date: 2020-12-30 11:03+0000\n"
+"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
@@ -26,6 +27,11 @@ msgstr ""
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
 msgstr "Begriff"
+
+# Tastenkürzel: [altgr]+[Y]/[X]
+#. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
+msgid "\"\""
+msgstr "»«"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -67,17 +73,19 @@ msgstr "Währung (Währungskonto)"
 msgid "account type: Equity"
 msgstr "Eigenkapital"
 
+# (pl. Aufwendungen)
 #. "-"
 msgid "account type: Expense"
-msgstr "Aufwand (pl. Aufwendungen)"
+msgstr "Aufwand"
 
 #. "-"
 msgid "account type: Income"
 msgstr "Ertrag"
 
+# (bis <=2.2.8: Passiva)
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr "Fremdkapital (bis <=2.2.8: Passiva)"
+msgstr "Fremdkapital"
 
 #. "-"
 msgid "account type: money-market"
@@ -91,33 +99,37 @@ msgstr "Investmentfonds"
 msgid "account type: Passive"
 msgstr "Passiva"
 
+# auch GuV; Gewinn- & Verlustkonten
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr "GuV; Gewinn- & Verlustkonten; Erfolgskonten"
+msgstr "Erfolgskonten"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
 msgstr "Sparkonto"
 
+# früher: Depot
 #. "-"
 msgid "account type: Stock"
-msgstr "Aktienkonto (früher: Depot)"
+msgstr "Aktienkonto"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
 msgstr "Devisenhandel"
 
+# bis <= 2.2.4: Hauptkonto
 #. "-"
 msgid "account: parent account"
-msgstr "Übergeordnetes Konto (bis <= 2.2.4: Hauptkonto)"
+msgstr "Übergeordnetes Konto"
 
 #. "-"
 msgid "account: subaccount"
 msgstr "Unterkonto"
 
+# (bis <=2.2.4: Top-Level-Konto?) (Oberkonto?)
 #. "-"
 msgid "account: top level account"
-msgstr "Konto der obersten Ebene (bis <=2.2.4: Top-Level-Konto?) (Oberkonto?)"
+msgstr "Konto der obersten Ebene"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
@@ -195,11 +207,10 @@ msgstr "Überweisung"
 msgid "action: withdraw"
 msgstr "Abhebung"
 
+#Fälligkeitstabelle, Fälligkeitsliste, (of receivables) Altersaufteilung der Debitoren
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
-"Fälligkeitstabelle, Fälligkeitsliste, (of receivables) Altersaufteilung der "
-"Debitoren"
+msgstr "Verlauf"
 
 #. "A sum of money"
 msgid "amount"
@@ -209,9 +220,10 @@ msgstr "Betrag"
 msgid "average"
 msgstr "Durchschnitt/Durchschnittlich"
 
+# (Bestand, Kontostand?)
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
-msgstr "Saldo (Bestand, Kontostand?)"
+msgstr "Saldo"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
 msgid "balance b/f"
@@ -233,9 +245,10 @@ msgstr "ausgleichen"
 msgid "bank"
 msgstr "Bank"
 
+# Rechnung, Rechnungseingang, Empfangene Rechnung
 #. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
-msgstr "Lieferantenrechnung (Rechnung, Rechnungseingang, Empfangene Rechnung)"
+msgstr "Lieferantenrechnung"
 
 #. "see invoice owner"
 msgid "bill owner"
@@ -245,14 +258,15 @@ msgstr "Lieferant"
 msgid "billing terms"
 msgstr "Zahlungsbedingungen"
 
+# (Bücher, Buch, Handelsbuch)
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
-msgstr "Geschäftsbuch (Bücher, Buch, Handelsbuch)"
+msgstr "Geschäftsbuch"
 
+# Jahresabschluss; die Bücher abschließen; Jahresendabrechnung
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr ""
-"Buchabschluss (Jahresabschluss; die Bücher abschließen; Jahresendabrechnung)"
+msgstr "Buchabschluss"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
@@ -294,9 +308,10 @@ msgstr "Schliessen"
 msgid "commodity"
 msgstr "Handelsgut, Devise/Wertpapier (auch: Währung, Aktie, Option)"
 
+# bis <=2.2.4: Börsenplatzkürzel
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr "Handelsplatz (bis <=2.2.4: Börsenplatzkürzel)"
+msgstr "Handelsplatz"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
@@ -310,10 +325,11 @@ msgstr "Symbol"
 msgid "compound interests"
 msgstr "Zinseszins"
 
+# ist der professionelle Ausdruck für (a). Sonst: Gutschrift, Eingang?
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
 msgstr ""
-"Haben (ist der professionelle Ausdruck für (a). Sonst: Gutschrift, Eingang?)"
+"Haben"
 
 #. "-"
 msgid "Credit Card"
@@ -351,10 +367,10 @@ msgstr "Datumsformat"
 msgid "date range"
 msgstr "Zeitraum"
 
+# ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr ""
-"Soll (ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?)"
+msgstr "Soll (ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
@@ -368,9 +384,10 @@ msgstr "Gutschrift"
 msgid "depreciation"
 msgstr "Abschreibung"
 
+# Verwendungszweck, Buchungstext, Text?
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
-msgstr "Beschreibung (Verwendungszweck, Buchungstext, Text?)"
+msgstr "Beschreibung"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
 msgid "discount"
@@ -384,6 +401,10 @@ msgstr "Doppelte Buchführung"
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
 msgstr "Verknüpfung, Verknüpftes Dokument"
+
+#. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
+msgid "email"
+msgstr ""
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -507,11 +528,11 @@ msgstr "Hypothek"
 
 #. "Adjustable Rate Mortgage"
 msgid "mortgage: ARM"
-msgstr "Hypothek: Hypothek mit variablem Zinssatz"
+msgstr "Hypothek mit variablem Zinssatz"
 
 #. "Fixed Rate Mortgage"
 msgid "mortgage: FRM"
-msgstr "Hypothek: Hypothek mit festem Zinssatz"
+msgstr "Hypothek mit festem Zinssatz"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -523,11 +544,12 @@ msgstr "netto, rein-"
 
 #. "net total of all assets"
 msgid "net assets"
-msgstr "Netto Anlagevermögen"
+msgstr "Netto-Anlagevermögen"
 
+# Ergebnis?
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
-msgstr "Reingewinn, (Ergebnis)"
+msgstr "Reingewinn"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
@@ -567,7 +589,7 @@ msgstr "Mandant"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
-msgstr "Passwort (Mantra, Passphrase)"
+msgstr "Passwort"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
@@ -595,9 +617,10 @@ msgstr "Platzhalter"
 msgid "portfolio"
 msgstr "Portfolio"
 
+# fakturieren?
 #. "Register invoice, voucher in account register"
 msgid "post, to"
-msgstr "buchen? fakturieren?"
+msgstr "einbuchen"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
@@ -619,13 +642,16 @@ msgstr "Briefkurs, Ankauf"
 msgid "price type: bid"
 msgstr "Geldkurs, Verkauf"
 
+#Börsenkurs, Börsennotierung, Marktwert
+#FE: Warum plural?
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
-msgstr "Börsenkurs, (Kurs, Börsennotierung, Marktwert)"
+msgstr "Kurs"
 
+# manchmal in Kombinationen: Ergebnis
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
-msgstr "Ergebnis, Gewinn"
+msgstr "Gewinn"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
@@ -647,34 +673,40 @@ msgstr "Abgleichen (In Einklang bringen, Abstimmen, Ausgleichen?)"
 msgid "record keeping"
 msgstr "Buchführung"
 
+# 1.8.2 und älter: Kassenbericht
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr "Kontobuch (1.8.2 und älter: Kassenbericht)"
+msgstr "Kontobuch"
 
+# früher (2.x): Mehrteiliger Buchungssatz
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "Mehrteilig (Mehrteiliger Buchungssatz)"
+msgstr "Mehrteilig"
 
 #. "-"
 msgid "register entry: stock split"
 msgstr "Aktienteilung"
 
+# bis 1.8.7: Auto-Mehrteiliges Hauptbuch
 #. "one form of register"
 msgid "register: auto-split ledger"
 msgstr ""
-"Buchungsansicht: Aktive vollständig (bis 1.8.7: Auto-Mehrteiliges Hauptbuch)"
+"Buchungsansicht: Aktive vollständig"
 
+# bis 1.8.7: Vereinfachtes Hauptbuch
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr "Buchungsansicht: Einzeilig (bis 1.8.7: Vereinfachtes Hauptbuch)"
+msgstr "Buchungsansicht: Einzeilig"
 
+# (bis 1.8.7: Hauptbuch)
 #. "another form of register"
 msgid "register: general ledger"
-msgstr "Journal (bis 1.8.7: Hauptbuch)"
+msgstr "Journal"
 
+# bis 1.8.7: Amerikanisches Journal
 #. "another form of register"
 msgid "register: transaction journal"
-msgstr "Buchungsansicht: Vollständig (bis 1.8.7: Amerikanisches Journal)"
+msgstr "Buchungsansicht: Vollständig"
 
 #. "reload the current document"
 msgid "reload, to"
@@ -708,13 +740,15 @@ msgstr "speichern"
 msgid "Scheduled Transaction"
 msgstr "Terminierte Buchung (Dauerauftrag, Termin-Überweisung)"
 
+# bis 1.6: ausbuchen
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
-msgstr "überprüfen (bis 1.6: ausbuchen)"
+msgstr "überprüfen"
 
+# nicht nur Aktie, sondern auch Anteilsscheine etc.
 #. "A document or certificate showing who owns shares"
 msgid "security"
-msgstr "Wertpapier (nicht nur Aktie, sondern auch Anteilsscheine etc.)"
+msgstr "Wertpapier"
 
 #. "-"
 msgid "Share Balance (register)"
@@ -728,9 +762,10 @@ msgstr "Anteile"
 msgid "source"
 msgstr "Quelle"
 
+# bis gnucash 1.8.7: Buchung
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
-msgstr "Buchungsteil (bis gnucash 1.8.7: Buchung)"
+msgstr "Buchungsteil"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -740,21 +775,38 @@ msgstr "Stilvorlage"
 msgid "subtotal"
 msgstr "Zwischensumme"
 
+# Steuerschlüssel
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"
-msgstr "Steuerschlüssel, Steuerformularfeldnummer"
+msgstr "Feldnummer im Steuerformular"
 
 #. "field of an account"
 msgid "tax info"
 msgstr "Steuerrelevante Informationen"
 
-#. "if you create a new e.g. style sheet, you can start from a template"
+#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+msgid "tax type: income tax"
+msgstr "Einkommensteuer"
+
+#. "Usually only business users have to handle it."
+msgid "tax type: sales tax"
+msgstr "Verkaufssteuer"
+
+#. "'Goods and Service Tax' is one form of sales tax."
+msgid "tax type: GST"
+msgstr "USt."
+
+#. "'Value Added Tax' is the other form of sales tax."
+msgid "tax type: VAT"
+msgstr "MwSt."
+
+#. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
 msgstr "Vorlage"
 
 #. "see: date range"
 msgid "time period"
-msgstr "-"
+msgstr "Zeitraum"
 
 #. "as abbreviation for Total"
 msgid "Tot"
@@ -764,9 +816,10 @@ msgstr "Gesamt"
 msgid "total"
 msgstr "Betrag"
 
+# bis 1.8.7: Geschäftsvorgang
 #. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
-msgstr "Buchungssatz, ggf. Buchung (bis 1.8.7: Geschäftsvorgang)"
+msgstr "Buchungssatz, ggf. Buchung"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
@@ -780,9 +833,10 @@ msgstr "Fixiert"
 msgid "transaction state: reconciled"
 msgstr "Abgeglichen"
 
+# bis 1.99.x: Storniert
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr "Ungültig (ungültig gemacht, gelöscht) (bis 1.99.x: Storniert)"
+msgstr "Ungültig (ungültig gemacht, gelöscht)"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
@@ -796,9 +850,10 @@ msgstr "Gegenkonto"
 msgid "transfer, to (register toolbar)"
 msgstr "Buchen"
 
+# Probebilanz, Saldenbilanz
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr "Rohbilanz (Probebilanz, Saldenbilanz)"
+msgstr "Rohbilanz"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
@@ -808,7 +863,7 @@ msgstr "Typ"
 msgid "units"
 msgstr "Maßeinheiten"
 
-#. "-"
+#. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"
 msgstr "URL"
 

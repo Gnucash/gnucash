@@ -137,14 +137,12 @@ static gboolean
 gnc_report_system_report_stream_cb (const char *location, char ** data, int *len)
 {
     gboolean ok;
+    gchar *captured_str;
 
-    ok = gnc_run_report_id_string (location, data);
+    ok = gnc_run_report_id_string_with_error_handling (location, data, &captured_str);
 
     if (!ok)
     {
-        SCM captured = scm_c_eval_string ("gnc:last-captured-error");
-        gchar *captured_str = gnc_scm_to_utf8_string(captured);
-
         *data = g_strdup_printf ("<html><body><h3>%s</h3>"
                                  "<p>%s</p><pre>%s</pre></body></html>",
                                  _("Report error"),

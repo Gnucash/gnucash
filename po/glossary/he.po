@@ -3,13 +3,14 @@
 # Ori Hoch <ori@uumpa.com>, 2008
 # http://www.uumpa.com/gnucash-he/
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2020.
+# Avi Markovitz <avi.markovitz@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 3.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-06 18:14+0100\n"
-"PO-Revision-Date: 2020-12-22 15:29+0000\n"
+"POT-Creation-Date: 2020-12-30 10:07+0100\n"
+"PO-Revision-Date: 2020-12-31 14:29+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/glossary/"
 "he/>\n"
@@ -19,11 +20,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
 msgstr "מונח"
+
+#. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
+msgid "\"\""
+msgstr "„”"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -327,7 +332,7 @@ msgstr "מטבע"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
-msgstr "מותאם אישית"
+msgstr "מותאם"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -376,6 +381,10 @@ msgstr "הכנסה כפולה"
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
 msgstr "קישור למסמך"
+
+#. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
+msgid "email"
+msgstr "דוא״ל"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -737,7 +746,23 @@ msgstr "קוד מס"
 msgid "tax info"
 msgstr "מידע מס"
 
-#. "if you create a new e.g. style sheet, you can start from a template"
+#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+msgid "tax type: income tax"
+msgstr "סוג מס: מס הכנסה"
+
+#. "Usually only business users have to handle it."
+msgid "tax type: sales tax"
+msgstr "סוג מס: מס מכירה"
+
+#. "'Goods and Service Tax' is one form of sales tax."
+msgid "tax type: GST"
+msgstr "סוג מס: מס קנייה (טובין ושירותים)"
+
+#. "'Value Added Tax' is the other form of sales tax."
+msgid "tax type: VAT"
+msgstr "סוג מס: מע״מ"
+
+#. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
 msgstr "תבנית"
 
@@ -797,7 +822,7 @@ msgstr "סוג"
 msgid "units"
 msgstr "יחידות"
 
-#. "-"
+#. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"
 msgstr "כתובת אינטרנט (‏‪URL‬‏)‏"
 

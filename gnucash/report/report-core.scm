@@ -76,6 +76,7 @@
 (export gnc:report-needs-save?)
 (export gnc:report-options)
 (export gnc:report-render-html)
+(export gnc:render-report)
 (export gnc:report-run)
 (export gnc:report-serialize)
 (export gnc:report-set-ctext!)
@@ -384,6 +385,8 @@ not found.")))
 
 
 (define (gnc:restore-report-by-guid id template-id template-name options)
+  (issue-deprecation-warning "gnc:restore-report-by-guid is now deprecated.
+ use gnc:restore-report-by-guid-with-custom-template instead.")
   (if options
       (let* ((r (make-report template-id id options #t #t #f #f ""))
              (report-id (gnc-report-add r)))
@@ -530,24 +533,12 @@ not found.")))
     (gnc:report-template-name
      (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
    (gnc:generate-restore-forms (gnc:report-options report) "options")
-   ;; 2.6->2.4 compatibility code prefix
-   ;; Temporary check to make the new report saving code more or less backwards
-   ;; compatible with older gnucash versions. This can be removed again in 2.8.
-   "(if (defined? 'gnc:restore-report-by-guid-with-custom-template)\n"
-   ;; end of 2.6->2.4 compatibility code prefix.
    (format
     #f "  (gnc:restore-report-by-guid-with-custom-template ~S ~S ~S ~S options)\n"
     (gnc:report-id report) (gnc:report-type report)
     (gnc:report-template-name
      (hash-ref *gnc:_report-templates_* (gnc:report-type report)))
     (gnc:report-custom-template report))
-   ;; 2.6->2.4 compatibility code suffix
-   (format
-    #f "  (gnc:restore-report-by-guid ~S ~S ~S options))\n"
-    (gnc:report-id report) (gnc:report-type report)
-    (gnc:report-template-name
-     (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
-   ;; end of 2.6->2.4 compatibility code suffix.
    ")"))
 
 ;; Generate guile code required to recreate embedded report instances
@@ -763,9 +754,17 @@ not found.")))
                (gnc:report-set-dirty?! report #f)  ;; mark it clean
                html)))))
 
+;; render report. will return a 2-element list: either (list html #f)
+;; where html is the report html string, or (list #f captured-error)
+;; where captured-error is the error string.
+(define (gnc:render-report report)
+  (define (get-report) (gnc:report-render-html report #t))
+  (gnc:apply-with-error-handling get-report '()))
+
 ;; looks up the report by id and renders it with gnc:report-render-html
 ;; marks the cursor busy during rendering; returns the html
 (define (gnc:report-run id)
+  (issue-deprecation-warning "gnc:report-run is deprecated. use gnc:render-report instead.")
   (let ((report (gnc-report-find id))
         (html #f))
     (gnc-set-busy-cursor '() #t)
