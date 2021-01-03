@@ -531,24 +531,12 @@ not found.")))
     (gnc:report-template-name
      (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
    (gnc:generate-restore-forms (gnc:report-options report) "options")
-   ;; 2.6->2.4 compatibility code prefix
-   ;; Temporary check to make the new report saving code more or less backwards
-   ;; compatible with older gnucash versions. This can be removed again in 2.8.
-   "(if (defined? 'gnc:restore-report-by-guid-with-custom-template)\n"
-   ;; end of 2.6->2.4 compatibility code prefix.
    (format
     #f "  (gnc:restore-report-by-guid-with-custom-template ~S ~S ~S ~S options)\n"
     (gnc:report-id report) (gnc:report-type report)
     (gnc:report-template-name
      (hash-ref *gnc:_report-templates_* (gnc:report-type report)))
     (gnc:report-custom-template report))
-   ;; 2.6->2.4 compatibility code suffix
-   (format
-    #f "  (gnc:restore-report-by-guid ~S ~S ~S options))\n"
-    (gnc:report-id report) (gnc:report-type report)
-    (gnc:report-template-name
-     (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
-   ;; end of 2.6->2.4 compatibility code suffix.
    ")"))
 
 ;; Generate guile code required to recreate embedded report instances
