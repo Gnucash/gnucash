@@ -209,7 +209,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
     {
         "ToolsImapEditorAction", NULL, N_("_Import Map Editor"), NULL,
-        N_("View and Delete Bayesian and Non Bayesian information"),
+        N_("View and Delete Bayesian and non-Bayesian information"),
         G_CALLBACK (gnc_main_window_cmd_tools_imap_editor)
     },
     {
