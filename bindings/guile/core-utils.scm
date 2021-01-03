@@ -101,9 +101,9 @@
      (format port "Unbound variable: ~a. " variable)
      (match (known-variable-definition variable)
        (() (format port "It is a typo, or inaccessible in current module."))
-       ((mod) (format port "Did you forget (use-module ~s)?" mod))
+       ((mod) (format port "Did you forget (use-modules ~s)?" mod))
        (modules (format port "It is defined in one of the following modules\n")
-                (for-each (cut format port "(use-module ~s)\n" <>) modules))))
+                (for-each (cut format port "(use-modules ~s)\n" <>) modules))))
     (_ (default-printer))))
 
 (set-exception-printer! 'unbound-variable print-unbound-variable-error)
