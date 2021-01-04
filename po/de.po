@@ -20,6 +20,7 @@
 # Alois Spitzbart <spitz234@hotmail.com>, 2020.
 # Christian Wehling <christian.wehling@web.de>, 2020.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020.
+# Christian Stimming <christian@cstimming.de>, 2021.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -28,11 +29,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.10+\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-03 07:22+0100\n"
-"PO-Revision-Date: 2020-12-29 17:29+0000\n"
-"Last-Translator: Marco Zietzling <marco.zietzling@gmail.com>\n"
+"PO-Revision-Date: 2021-01-04 22:29+0000\n"
+"Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -19484,15 +19485,14 @@ msgid "Caution!"
 msgstr "Vorsicht!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
-#, fuzzy
 msgid ""
 "This tool might be slow or abort if the number of uncleared splits is more "
 "than approximately 20. In that case please clear at least some of them "
 "manually."
 msgstr ""
-"Dieses Tool ist möglicherweise langsam oder bricht ab, wenn die Anzahl der "
-"nicht gelöschten Splits mehr als etwa 20 beträgt. In diesem Fall löschen Sie "
-"bitte zumindest einige von ihnen manuell."
+"Dieser Schritt könnte langsam sein oder abbrechen, falls mehr als ca. 20 "
+"Buchungsteile noch nicht abgeglichen sind. In diesem Fall müssten Sie vorher "
+"einige manuell abgleichen."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:138
 #: gnucash/gtkbuilder/window-reconcile.glade:117
@@ -19500,10 +19500,8 @@ msgid "_Ending Balance"
 msgstr "_Schlusssaldo"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:177
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "_Review cleared splits"
-msgstr "Erzeugte Buchungen _durchsehen"
+msgstr "Abgeglichene Buchungen _durchsehen"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:181
 msgid "Select this option to open a register tab with newly cleared splits."
@@ -30994,7 +30992,7 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-ui-balances.c:451
 msgid "Too many uncleared splits"
-msgstr ""
+msgstr "Zu viele unabgeglichene Buchungsteile"
 
 #: libgnucash/app-utils/gnc-ui-balances.c:467
 msgid "The selected amount cannot be cleared."
