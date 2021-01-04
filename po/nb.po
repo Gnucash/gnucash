@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-03 07:22+0100\n"
-"PO-Revision-Date: 2021-01-03 05:29+0000\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2020-12-13 22:01+0100\n"
+"PO-Revision-Date: 2021-01-03 08:03+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -3112,9 +3112,9 @@ msgid ""
 msgstr "Planlagte transaksjoner med variabler kan ikke opprettes automatisk."
 
 #: gnucash/gnome/dialog-sx-editor.c:676
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't parse %s for split \"%s\"."
-msgstr "Kan ikke analysere debetformelen for splitten \"%s\"."
+msgstr "Kunne ikke analysere %s for splitten «%s»."
 
 #: gnucash/gnome/dialog-sx-editor.c:739
 #, c-format
@@ -5229,11 +5229,13 @@ msgid "Employees"
 msgstr "Ansatt"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1102
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The owner %s will be deleted.\n"
 "Are you sure you want to do this?"
-msgstr "Kontoen er ikke i balanse. Er du sikker på at du vil fullføre?"
+msgstr ""
+"Eieren «%s vil bli slettet.\n"
+"Er du sikker på at du vil gjøre dette?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:194
 #: gnucash/gnome/gnc-plugin-page-register.c:292
@@ -8711,7 +8713,7 @@ msgstr "Fyll inn ditt brukernavn og passord for å koble til: %s"
 #: gnucash/gnome-utils/gnc-main-window.c:131
 #, c-format
 msgid "Changes will be saved automatically in %u seconds"
-msgstr ""
+msgstr "Endringer vil lagres automatisk om %u sekunder"
 
 #: gnucash/gnome-utils/gnc-main-window.c:272
 msgid "_File"
@@ -8970,7 +8972,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.c:2954
 msgid "Unable to save to database."
-msgstr ""
+msgstr "Klarte ikke å lagre database."
 
 #: gnucash/gnome-utils/gnc-main-window.c:2956
 msgid "Unable to save to database: Book is marked read-only."
@@ -10303,7 +10305,7 @@ msgstr ""
 #: gnucash/gnucash-cli.cpp:136 gnucash/gnucash-cli.cpp:150
 #: gnucash/gnucash.cpp:364
 msgid "Missing data file parameter"
-msgstr ""
+msgstr "Manglende datafil-parameter"
 
 #: gnucash/gnucash-cli.cpp:174
 msgid "Missing --name parameter"
@@ -10369,7 +10371,7 @@ msgstr "Bokalternativer"
 
 #: gnucash/gnucash-core-app.cpp:527
 msgid "Show this help message"
-msgstr ""
+msgstr "Vis denne hjelpemeldingen"
 
 #: gnucash/gnucash-core-app.cpp:529
 msgid "Show GnuCash version"
@@ -10412,7 +10414,7 @@ msgstr "Budsjettoppsett"
 
 #: gnucash/gnucash-core-app.cpp:544
 msgid "[datafile]"
-msgstr ""
+msgstr "[datafil]"
 
 #: gnucash/gnucash.cpp:224
 msgid "Checking Finance::Quote..."
@@ -11010,7 +11012,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:106
 msgid "Print '***' before and after text."
-msgstr ""
+msgstr "Skriv ut «***» før og etter tekst."
 
 #: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:6
@@ -11431,7 +11433,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:10
 msgid "The version of these settings"
-msgstr ""
+msgstr "Versjonen av disse innstillingene"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:11
 msgid ""
@@ -11600,7 +11602,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:85
 #: gnucash/gtkbuilder/dialog-preferences.glade:1749
 msgid "Do not delete log/backup files."
-msgstr ""
+msgstr "Ikke slett logg/sikkerhetskopifiler."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:90
 msgid "Delete old log/backup files after this many days (0 = never)"
@@ -11842,7 +11844,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:185
 msgid "Show splash screen"
-msgstr ""
+msgstr "Vis oppstartsbilde"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:186
 #, fuzzy
@@ -11876,7 +11878,7 @@ msgstr "Vis notatflikene i bunnen av vinduet."
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3386
 msgid "Display the notebook tabs at the left of the window."
-msgstr ""
+msgstr "Vis notatboksfaner til venstre for vinduet."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:205
 #: gnucash/gtkbuilder/dialog-preferences.glade:3405
