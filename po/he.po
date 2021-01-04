@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-03 07:22+0100\n"
-"PO-Revision-Date: 2021-01-01 11:29+0000\n"
+"PO-Revision-Date: 2021-01-03 13:59+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -3505,10 +3505,8 @@ msgid "_Import Map Editor"
 msgstr "_עורך מיפוי יבוא"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
-#, fuzzy
-#| msgid "View and Delete Bayesian and Non Bayesian information"
 msgid "View and Delete Bayesian and non-Bayesian information"
-msgstr "הצגת ומחיקת מידע בייסיאני ולא בייסיאני"
+msgstr "הצגה ומחיקת מידע בייסיאני ולא בייסיאני"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
 msgid "_Transaction Linked Documents"
