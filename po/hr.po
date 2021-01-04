@@ -1,14 +1,14 @@
 # Croatian translations for GnuCash.
 # Copyright (C) 2019 Free Software Foundation, Inc.
 # This file is distributed under the same license as the GnuCash package.
-# Milo Ivir <mail@milotype.de>, 2019., 2020.
+# Milo Ivir <mail@milotype.de>, 2019., 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-03 07:22+0100\n"
-"PO-Revision-Date: 2020-12-26 01:29+0000\n"
+"PO-Revision-Date: 2021-01-04 01:29+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -3565,8 +3565,6 @@ msgid "_Import Map Editor"
 msgstr "_Uređivač mapiranja unosa"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
-#, fuzzy
-#| msgid "View and Delete Bayesian and Non Bayesian information"
 msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr "Prikaži i izbriši Bayesove i ne-Bayesove podatke"
 
@@ -27258,7 +27256,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/invoice.scm:207
 msgid "Picture Location"
-msgstr "Mjesto za sliku"
+msgstr "Mjesto slike"
 
 #: gnucash/report/reports/standard/invoice.scm:207
 msgid "Location for Picture"
@@ -30621,7 +30619,7 @@ msgstr "Tvoji su GnuCash metapodaci migrirani."
 #. Translators: this refers to a directory name.
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:679
 msgid "Old location:"
-msgstr "Staro mjesto spremanja:"
+msgstr "Staro mjesto:"
 
 #. Translators: this refers to a directory name.
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:681
