@@ -1039,10 +1039,7 @@ invoices and amounts.")))))
     (gnc:option-value
      (gnc:lookup-option options section name)))
 
-  (let* ((accounts (filter (compose xaccAccountIsAPARType xaccAccountGetType)
-                           (gnc-account-get-descendants-sorted
-                            (gnc-get-current-root-account))))
-         (start-date (gnc:time64-start-day-time
+  (let* ((start-date (gnc:time64-start-day-time
                       (gnc:date-option-absolute-time
                        (opt-val gnc:pagename-general optname-from-date))))
          (end-date (gnc:time64-end-day-time
@@ -1057,18 +1054,18 @@ invoices and amounts.")))))
          (owner-descr (owner-string type))
          (date-type (opt-val gnc:pagename-general optname-date-driver))
          (owner (opt-val owner-page owner-descr))
-         (payable? (memv (gncOwnerGetType (gncOwnerGetEndOwner owner))
-                         (list GNC-OWNER-VENDOR GNC-OWNER-EMPLOYEE)))
+         (acct-type (if (eqv? (gncOwnerGetType (gncOwnerGetEndOwner owner))
+                              GNC-OWNER-CUSTOMER)
+                        ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE))
+         (accounts (filter (lambda (a) (eqv? (xaccAccountGetType a) acct-type))
+                           (gnc-account-get-descendants-sorted
+                            (gnc-get-current-root-account))))
+         (payable? (eqv? ACCT-TYPE-PAYABLE acct-type))
          (query (qof-query-create-for-splits))
          (document (gnc:make-html-document))
          (table (gnc:make-html-table))
          (section-headings (make-section-heading-list used-columns owner-descr))
-         (headings (make-heading-list
-                    used-columns link-option
-                    (if (eqv? (gncOwnerGetType (gncOwnerGetEndOwner owner))
-                              GNC-OWNER-CUSTOMER)
-                        ACCT-TYPE-RECEIVABLE
-                        ACCT-TYPE-PAYABLE)))
+         (headings (make-heading-list used-columns link-option acct-type))
          (report-title (string-append (G_ owner-descr) " " (G_ "Report"))))
 
     (cond
