@@ -690,17 +690,17 @@ is_qofinstance_ui_type(GncOptionUIType type)
 {
     switch (type)
     {
-        case CURRENCY:
-        case COMMODITY:
-        case ACCOUNT_SEL:
-        case BUDGET:
-        case OWNER:
-        case CUSTOMER:
-        case VENDOR:
-        case EMPLOYEE:
-        case INVOICE:
-        case TAX_TABLE:
-        case QUERY:
+        case GncOptionUIType::CURRENCY:
+        case GncOptionUIType::COMMODITY:
+        case GncOptionUIType::ACCOUNT_SEL:
+        case GncOptionUIType::BUDGET:
+        case GncOptionUIType::OWNER:
+        case GncOptionUIType::CUSTOMER:
+        case GncOptionUIType::VENDOR:
+        case GncOptionUIType::EMPLOYEE:
+        case GncOptionUIType::INVOICE:
+        case GncOptionUIType::TAX_TABLE:
+        case GncOptionUIType::QUERY:
             return true;
         default:
             return false;

@@ -23,7 +23,7 @@
 #ifndef GNC_OPTION_UITYPE_HPP__
 #define GNC_OPTION_UITYPE_HPP__
 
-enum GncOptionUIType
+enum class GncOptionUIType : unsigned int
 {
     INTERNAL,
     BOOLEAN,

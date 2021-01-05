@@ -63,7 +63,7 @@ ui_type_to_owner_type(GncOptionUIType ui_type)
         return GNC_OWNER_EMPLOYEE;
 
     std::ostringstream oss;
-    oss << "UI type " << ui_type << " could not be converted to owner type\n";
+    oss << "UI type " << static_cast<unsigned int>(ui_type) << " could not be converted to owner type\n";
     throw std::invalid_argument(oss.str());
 }
 
