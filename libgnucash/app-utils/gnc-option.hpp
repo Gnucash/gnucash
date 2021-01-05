@@ -37,6 +37,7 @@ extern "C"
 #include "gnc-option-ui.hpp"
 #include "gnc-option-date.hpp"
 
+struct OptionClassifier;
 class GncOptionUIItem;
 using GncOptionUIItemPtr = std::unique_ptr<GncOptionUIItem>;
 struct QofInstance_s;
@@ -65,10 +66,16 @@ using GncOptionVariantPtr = std::unique_ptr<GncOptionVariant>;
 class GncOption
 {
 public:
-    template <typename OptionType>
+    template <typename OptionType,
+              typename std::enable_if_t<std::is_base_of_v<OptionClassifier,
+                                                          std::decay_t<OptionType>>,
+                               int>  = 0>
     GncOption(OptionType option) :
         m_option{std::make_unique<GncOptionVariant>(option)} {}
-    template <typename ValueType>
+    template <typename ValueType,
+              typename std::enable_if_t<!std::is_base_of_v<OptionClassifier,
+                                                          std::decay_t<ValueType>>,
+                               int>  = 0>
     GncOption(const char* section, const char* name,
               const char* key, const char* doc_string,
               ValueType value,

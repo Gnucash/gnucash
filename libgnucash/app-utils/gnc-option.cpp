@@ -33,7 +33,10 @@ extern "C"
 #include <qoflog.h>
 }
 
-template <typename ValueType>
+template <typename ValueType,
+          typename std::enable_if_t<!std::is_base_of_v<OptionClassifier,
+                                                       std::decay_t<ValueType>>,
+                               int>>
 GncOption::GncOption(const char* section, const char* name,
                      const char* key, const char* doc_string,
                      ValueType value, GncOptionUIType ui_type) :
