@@ -584,3 +584,21 @@ template bool GncOption::validate(std::string) const;
 template bool GncOption::validate(const QofInstance*) const;
 template bool GncOption::validate(RelativeDatePeriod) const;
 template bool GncOption::validate(GncMultichoiceOptionIndexVec) const;
+
+template GncOption* gnc_make_option<const std::string&>(const char*,
+                                                        const char*,
+                                                        const char*,
+                                                        const char*,
+                                                        const std::string&,
+                                                        GncOptionUIType);
+template GncOption* gnc_make_option<bool>(const char*, const char*, const char*,
+                                          const char*, bool, GncOptionUIType);
+template GncOption* gnc_make_option<int64_t>(const char*, const char*,
+                                             const char*, const char*, int64_t,
+                                             GncOptionUIType);
+template GncOption* gnc_make_option<const QofInstance*>(const char*,
+                                                        const char*,
+                                                        const char*,
+                                                        const char*,
+                                                        const QofInstance*,
+                                                        GncOptionUIType);

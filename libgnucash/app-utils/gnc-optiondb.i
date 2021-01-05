@@ -406,11 +406,17 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %include "gnc-option-date.hpp"
 %include "gnc-option.hpp"
 %include "gnc-option-impl.hpp"
+%include "gnc-optiondb.h"
 %include "gnc-optiondb.hpp"
 %include "gnc-optiondb-impl.hpp"
+%include "gnc-option-uitype.hpp"
+
+%template(gnc_make_string_option) gnc_make_option<std::string>;
+%template(gnc_make_bool_option) gnc_make_option<bool>;
+%template(gnc_make_int64_option) gnc_make_option<int64_t>;
+%template(gnc_make_qofinstance_option) gnc_make_option<const QofInstance*>;
 
 %extend GncOption {
-
     SCM get_scm_value()
     {
         return std::visit([](const auto& option)->SCM {
@@ -448,6 +454,160 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %template(gnc_register_number_range_option_int) gnc_register_number_range_option<int>;
 
 %inline %{
+    GncOption* gnc_make_account_list_option(const char* section,
+                                            const char* name, const char* key,
+                                            const char* doc_string,
+                                            const GncOptionAccountList& value)
+    {
+        try {
+            return new GncOption{GncOptionAccountValue{section, name, key,
+                        doc_string, GncOptionUIType::ACCOUNT_LIST, value}};
+        }
+        catch (const std::exception& err)
+        {
+            std::cerr << "Make account list option threw unexpected exception " << err.what() << ", option not created." << std::endl;
+            return nullptr;
+        }
+    }
+
+    GncOption* gnc_make_account_list_limited_option(const char* section,
+                                                    const char* name,
+                                                    const char* key,
+                                                    const char* doc_string,
+                                                    const GncOptionAccountList& value,
+                                                    GncOptionAccountTypeList&& allowed)
+    {
+        try
+        {
+            return new GncOption{GncOptionAccountValue{section, name, key,
+                        doc_string, GncOptionUIType::ACCOUNT_LIST, value,
+                        std::move(allowed)}};
+        }
+        catch (const std::invalid_argument& err)
+        {
+            std::cerr << "Account List Limited Option, value failed validation, option not created.\n";
+            return nullptr;
+        }
+    }
+
+    GncOption* gnc_make_account_sel_limited_option(const char* section,
+                                                   const char* name,
+                                                   const char* key,
+                                                   const char* doc_string,
+                                                   const GncOptionAccountList& value,
+                                                   GncOptionAccountTypeList&& allowed)
+    {
+        try
+        {
+            return new GncOption{GncOptionAccountValue{section, name, key,
+                        doc_string, GncOptionUIType::ACCOUNT_SEL, value,
+                        std::move(allowed)}};
+        }
+        catch (const std::invalid_argument& err)
+        {
+            std::cerr <<"Account Sel Limited Option, value failed validation, option not creted.\n";
+            return nullptr;
+        }
+    }
+
+    GncOption* gnc_make_multichoice_option(const char* section,
+                                           const char* name, const char* key,
+                                           const char* doc_string,
+                                           GncMultichoiceOptionChoices&& choices)
+    {
+        try {
+            return new GncOption{GncOptionMultichoiceValue{section, name, key,
+                        doc_string,
+                        choices.empty() ? "None" :
+                        std::get<0>(choices.at(0)).c_str(),
+                        std::move(choices)}};
+        }
+        catch (const std::exception& err)
+        {
+            std::cerr << "Make multichoice option threw unexpected exception " << err.what() << ", option not created." << std::endl;
+            return nullptr;
+        }
+    }
+
+    GncOption* gnc_make_list_option(const char* section,
+                                    const char* name, const char* key,
+                                    const char* doc_string, const char* value,
+                                    GncMultichoiceOptionChoices&& list)
+    {
+        try {
+            return new GncOption{GncOptionMultichoiceValue{section, name, key,
+                        doc_string, value,  std::move(list),
+                        GncOptionUIType::LIST}};
+        }
+        catch (const std::exception& err)
+        {
+            std::cerr << "Make list option threw unexpected exception " << err.what() << ", option not created." << std::endl;
+            return nullptr;
+        }
+    }
+
+    GncOption* gnc_make_range_value_option(const char* section,
+                                           const char* name, const char* key,
+                                           const char* doc_string, double value,
+                                           double min, double max, double step)
+    {
+        try
+        {
+            return new GncOption{GncOptionRangeValue<double>{section, name, key,
+                        doc_string, value, min,
+                        max, step}};
+        }
+        catch(const std::invalid_argument& err)
+        {
+            std::cerr <<"Number Range Option " << err.what() << ", option not created.\n";
+            return nullptr;
+        }
+    }
+
+    GncOption* gnc_make_plot_size_option(const char* section,
+                                         const char* name, const char* key,
+                                         const char* doc_string, int value,
+                                         int min, int max, int step)
+    {
+        try
+        {
+            return new GncOption{GncOptionRangeValue<int>{section, name, key,
+                        doc_string, value, min,
+                        max, step}};
+        }
+        catch(const std::invalid_argument& err)
+        {
+            std::cerr <<"Plot Size Option " << err.what() << ", option not created.\n";
+            return nullptr;
+        }
+    }
+
+    GncOption* gnc_make_currency_option(const char* section,
+                                        const char* name, const char* key,
+                                        const char* doc_string,
+                                        gnc_commodity *value)
+    {
+        try
+        {
+            return new GncOption{GncOptionValidatedValue<const QofInstance*>{
+                    section, name, key, doc_string, (const QofInstance*)value,
+                        [](const QofInstance* new_value) -> bool
+                    {
+                        return GNC_IS_COMMODITY (new_value) &&
+                            gnc_commodity_is_currency(GNC_COMMODITY(new_value));
+                    },
+                        GncOptionUIType::CURRENCY
+                            }
+            };
+        }
+        catch (const std::exception& err)
+        {
+            std::cerr << "gnc_make_currency_option threw " << err.what() <<
+                ", option not created." << std::endl;
+            return nullptr;
+        }
+    }
+
     using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
 /* Forward decls */
     GncOptionDBPtr new_gnc_optiondb();

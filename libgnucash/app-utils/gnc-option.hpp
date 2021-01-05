@@ -134,5 +134,12 @@ operator>>(std::istream& iss, GncOption& opt)
     return opt.in_stream(iss);
 }
 
+template<typename ValueType> GncOption*
+gnc_make_option(const char* section, const char* name,
+                const char* key, const char* doc_string,
+                ValueType value, GncOptionUIType ui_type)
+{
+    return new GncOption(section, name, key, doc_string, value, ui_type);
+}
 
 #endif //GNC_OPTION_HPP_
