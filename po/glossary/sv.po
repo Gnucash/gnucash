@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnucash-glossary 1.9.1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-30 10:07+0100\n"
+"POT-Creation-Date: 2021-01-05 02:56+0100\n"
 "PO-Revision-Date: 2006-05-04 07:47+0200\n"
 "Last-Translator: Jonas Norling <norling@lysator.liu.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -342,6 +342,10 @@ msgstr "valuta"
 msgid "Custom"
 msgstr "Anpassat"
 
+#. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
+msgid "dashboard"
+msgstr ""
+
 #. "The backend where the data is stored."
 msgid "database"
 msgstr "databas"
@@ -434,6 +438,11 @@ msgstr "finansiell miniräknare: räntesats"
 #. "see: payment"
 msgid "financial calculator: payments"
 msgstr "finansiell miniräknare: betalningar"
+
+#. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
+#, fuzzy
+msgid "financial statement"
+msgstr "händelse: betalning"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -769,13 +778,13 @@ msgstr "skatteinformation"
 msgid "tax info"
 msgstr "skatteinformation"
 
-#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+#. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 #, fuzzy
 #| msgid "account type: Income"
 msgid "tax type: income tax"
 msgstr "kontotyp: Inkomst"
 
-#. "Usually only business users have to handle it."
+#. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
 msgstr ""
 

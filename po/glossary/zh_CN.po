@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-30 10:07+0100\n"
+"POT-Creation-Date: 2021-01-05 02:56+0100\n"
 "PO-Revision-Date: 2010-05-05 13:47+1000\n"
 "Last-Translator: Tao Wang <dancefire@gmail.com>\n"
 "Language-Team: Simplified Chinese <LL@li.org>\n"
@@ -395,6 +395,10 @@ msgstr "货币"
 msgid "Custom"
 msgstr "自定义"
 
+#. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
+msgid "dashboard"
+msgstr ""
+
 # 数据存储的后台
 #. "The backend where the data is stored."
 msgid "database"
@@ -507,6 +511,13 @@ msgstr "金融计算器：利率"
 #. "see: payment"
 msgid "financial calculator: payments"
 msgstr "金融计算器：支付"
+
+# 这个报表曾经称为“损益”，但是在2004-07-13重命名了。
+#. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
+#, fuzzy
+#| msgid "income statement"
+msgid "financial statement"
+msgstr "收益表"
 
 # 财富的增长；利润；利益 (见：资本收益)
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
@@ -917,13 +928,13 @@ msgstr "税务信息"
 msgid "tax info"
 msgstr "税务信息"
 
-#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+#. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 #, fuzzy
 #| msgid "account type: Income"
 msgid "tax type: income tax"
 msgstr "科目类型：收入"
 
-#. "Usually only business users have to handle it."
+#. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
 msgstr ""
 

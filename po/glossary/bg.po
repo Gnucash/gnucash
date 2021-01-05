@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.2.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-30 10:07+0100\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-01-05 02:56+0100\n"
 "PO-Revision-Date: 2020-12-30 22:29+0000\n"
 "Last-Translator: An's Page <anspage@outlook.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/gnucash/"
@@ -343,6 +343,10 @@ msgstr "валута"
 msgid "Custom"
 msgstr "собствен"
 
+#. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
+msgid "dashboard"
+msgstr ""
+
 #. "The backend where the data is stored."
 msgid "database"
 msgstr "база от данни"
@@ -434,6 +438,12 @@ msgstr "financial calculator: лихвен процент"
 #. "see: payment"
 msgid "financial calculator: payments"
 msgstr "financial calculator: вноски по плащания"
+
+#. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
+#, fuzzy
+#| msgid "income statement"
+msgid "financial statement"
+msgstr "отчет за приходите и разходите"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -767,13 +777,13 @@ msgstr "данъчен код"
 msgid "tax info"
 msgstr "информация за данък"
 
-#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+#. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 #, fuzzy
 #| msgid "account type: Income"
 msgid "tax type: income tax"
 msgstr "account type: приходи"
 
-#. "Usually only business users have to handle it."
+#. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
 msgstr ""
 
