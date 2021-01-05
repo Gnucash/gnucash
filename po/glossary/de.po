@@ -10,9 +10,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.18\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-30 10:07+0100\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-01-05 02:56+0100\n"
 "PO-Revision-Date: 2020-12-30 11:03+0000\n"
 "Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -207,7 +207,7 @@ msgstr "Überweisung"
 msgid "action: withdraw"
 msgstr "Abhebung"
 
-#Fälligkeitstabelle, Fälligkeitsliste, (of receivables) Altersaufteilung der Debitoren
+# Fälligkeitstabelle, Fälligkeitsliste, (of receivables) Altersaufteilung der Debitoren
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
 msgstr "Verlauf"
@@ -328,8 +328,7 @@ msgstr "Zinseszins"
 # ist der professionelle Ausdruck für (a). Sonst: Gutschrift, Eingang?
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr ""
-"Haben"
+msgstr "Haben"
 
 #. "-"
 msgid "Credit Card"
@@ -351,6 +350,10 @@ msgstr "Währung"
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
+#. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
+msgid "dashboard"
+msgstr ""
+
 #. "The backend where the data is stored."
 msgid "database"
 msgstr "Datei"
@@ -370,7 +373,7 @@ msgstr "Zeitraum"
 # ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr "Soll (ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?)"
+msgstr "Soll"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
@@ -445,6 +448,12 @@ msgstr "Zinssatz"
 #. "see: payment"
 msgid "financial calculator: payments"
 msgstr "Raten"
+
+#. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
+#, fuzzy
+#| msgid "income statement"
+msgid "financial statement"
+msgstr "Einnahmeüberschussrechnung"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -642,8 +651,8 @@ msgstr "Briefkurs, Ankauf"
 msgid "price type: bid"
 msgstr "Geldkurs, Verkauf"
 
-#Börsenkurs, Börsennotierung, Marktwert
-#FE: Warum plural?
+# Börsenkurs, Börsennotierung, Marktwert
+# FE: Warum plural?
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
 msgstr "Kurs"
@@ -690,8 +699,7 @@ msgstr "Aktienteilung"
 # bis 1.8.7: Auto-Mehrteiliges Hauptbuch
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr ""
-"Buchungsansicht: Aktive vollständig"
+msgstr "Buchungsansicht: Aktive vollständig"
 
 # bis 1.8.7: Vereinfachtes Hauptbuch
 #. "another form of register"
@@ -784,11 +792,11 @@ msgstr "Feldnummer im Steuerformular"
 msgid "tax info"
 msgstr "Steuerrelevante Informationen"
 
-#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+#. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 msgid "tax type: income tax"
 msgstr "Einkommensteuer"
 
-#. "Usually only business users have to handle it."
+#. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
 msgstr "Verkaufssteuer"
 

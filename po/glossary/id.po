@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-30 10:07+0100\n"
+"POT-Creation-Date: 2021-01-05 02:56+0100\n"
 "PO-Revision-Date: 2020-08-15 21:20+0700\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
 "Language-Team: Indonesian\n"
@@ -332,6 +332,10 @@ msgstr "mata uang"
 msgid "Custom"
 msgstr "Kustom"
 
+#. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
+msgid "dashboard"
+msgstr ""
+
 #. "The backend where the data is stored."
 msgid "database"
 msgstr "basis data"
@@ -423,6 +427,12 @@ msgstr "kalkulator finansial: suku bunga"
 #. "see: payment"
 msgid "financial calculator: payments"
 msgstr "kalkulator finansial: pembayaran"
+
+#. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
+#, fuzzy
+#| msgid "income statement"
+msgid "financial statement"
+msgstr "laporan laba-rugi"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -756,13 +766,13 @@ msgstr "kode pajak"
 msgid "tax info"
 msgstr "informasi pajak"
 
-#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+#. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 #, fuzzy
 #| msgid "account type: Income"
 msgid "tax type: income tax"
 msgstr "tipe akun: Pendapatan"
 
-#. "Usually only business users have to handle it."
+#. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
 msgstr ""
 

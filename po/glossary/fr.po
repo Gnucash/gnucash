@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-30 10:07+0100\n"
+"POT-Creation-Date: 2021-01-05 02:56+0100\n"
 "PO-Revision-Date: 2020-12-17 13:31+0000\n"
 "Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -340,6 +340,10 @@ msgstr "devise"
 msgid "Custom"
 msgstr "Personalisé"
 
+#. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
+msgid "dashboard"
+msgstr ""
+
 #. "The backend where the data is stored."
 msgid "database"
 msgstr "base de données"
@@ -431,6 +435,12 @@ msgstr "calcul financier : taux d'intérêt"
 #. "see: payment"
 msgid "financial calculator: payments"
 msgstr "calcul financier : paiements"
+
+#. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
+#, fuzzy
+#| msgid "income statement"
+msgid "financial statement"
+msgstr "relevé des revenus"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -758,13 +768,13 @@ msgstr "code de taxe"
 msgid "tax info"
 msgstr "détails de la taxation"
 
-#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+#. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 #, fuzzy
 #| msgid "account type: Income"
 msgid "tax type: income tax"
 msgstr "type de compte : revenu"
 
-#. "Usually only business users have to handle it."
+#. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
 msgstr ""
 

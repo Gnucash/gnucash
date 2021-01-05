@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 3.10\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-12-30 10:07+0100\n"
+"POT-Creation-Date: 2021-01-05 02:56+0100\n"
 "PO-Revision-Date: 2020-12-22 08:12+0000\n"
 "Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -331,6 +331,10 @@ msgstr "valuutta"
 msgid "Custom"
 msgstr "Mukautettu"
 
+#. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
+msgid "dashboard"
+msgstr ""
+
 #. "The backend where the data is stored."
 msgid "database"
 msgstr "tietokanta"
@@ -422,6 +426,12 @@ msgstr "talouslaskin: korkoprosentti"
 #. "see: payment"
 msgid "financial calculator: payments"
 msgstr "talouslaskin: maksut"
+
+#. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
+#, fuzzy
+#| msgid "income statement"
+msgid "financial statement"
+msgstr "tuloslaskelma"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -744,13 +754,13 @@ msgstr "verokoodi"
 msgid "tax info"
 msgstr "verotieto"
 
-#. "Amost everybody has to declare and probably pay it. Ask Al Capone or Donald Trump! ;-)"
+#. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 #, fuzzy
 #| msgid "account type: Income"
 msgid "tax type: income tax"
 msgstr "tilityyppi: Tulo"
 
-#. "Usually only business users have to handle it."
+#. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
 msgstr ""
 
