@@ -18,7 +18,7 @@
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
 # Alois Spitzbart <spitz234@hotmail.com>, 2020.
-# Christian Wehling <christian.wehling@web.de>, 2020.
+# Christian Wehling <christian.wehling@web.de>, 2020, 2021.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020.
 # Christian Stimming <christian@cstimming.de>, 2021.
 #
@@ -32,8 +32,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-03 07:22+0100\n"
-"PO-Revision-Date: 2021-01-04 22:29+0000\n"
-"Last-Translator: Christian Stimming <christian@cstimming.de>\n"
+"PO-Revision-Date: 2021-01-05 15:29+0000\n"
+"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -19479,6 +19479,10 @@ msgid ""
 "are cleared, given an ending balance. For example, said ending balance can "
 "be the current balance given by your bank online."
 msgstr ""
+"Verwenden Sie diesen Dialog, wenn Sie möchten, dass GnuCash automatisch "
+"ermitteln soll, welche Transaktionen bei einem bestimmten Endsaldo "
+"ausgeglichen sind. Dieser Endsaldo kann z. B. der aktuelle Saldo sein, der "
+"von Ihrer Bank online angegeben wird."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
 msgid "Caution!"
