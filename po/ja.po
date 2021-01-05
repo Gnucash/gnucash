@@ -14,15 +14,15 @@
 # Hiroto Kagotani <hiroto.kagotani@gmail.com>, 2007.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2008-2009.
 # Yasuaki Taniguchi <yasuakit@gmail.com>, 2009-2017.
-# YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2018, 2020.
+# YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2018, 2020, 2021.
 # Takuro Onoue <kusanaginoturugi@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-03 07:22+0100\n"
-"PO-Revision-Date: 2020-12-27 05:29+0000\n"
+"PO-Revision-Date: 2021-01-05 13:31+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
@@ -3520,8 +3520,6 @@ msgid "_Import Map Editor"
 msgstr "インポートマッピングエディター(_I)"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
-#, fuzzy
-#| msgid "View and Delete Bayesian and Non Bayesian information"
 msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr "ベイズおよび非ベイズ推定の情報を表示・削除します。"
 
