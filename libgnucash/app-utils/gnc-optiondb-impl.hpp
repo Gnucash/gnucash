@@ -84,6 +84,7 @@ public:
     size_t num_sections() const noexcept { return m_sections.size(); }
     bool get_changed() const noexcept { return m_dirty; }
     void register_option(const char* section, GncOption&& option);
+    void register_option(const char* section, GncOption* option);
     void unregister_option(const char* section, const char* name);
     void set_default_section(const char* section);
     const GncOptionSection* const get_default_section() const noexcept;

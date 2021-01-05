@@ -364,6 +364,11 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 
 %ignore gnc_option_to_scheme;
 %ignore gnc_option_from_scheme;
+/* GncOptionDB::register_option comes in GncOption* and GncOption&&
+ * overloads. The latter isn't useful to SWIG, ignore it.
+ */
+%ignore GncOptionDB::register_option(const char*, GncOption&&);
+
 /* The following functions are overloaded in gnc-optiondb.hpp to provide both
  * GncOptionDB* and GncOptionDBPtr& versions. That confuses SWIG so ignore the
  * raw-ptr version.

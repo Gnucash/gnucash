@@ -169,6 +169,13 @@ GncOptionDB::register_option(const char* sectname, GncOption&& option)
 }
 
 void
+GncOptionDB::register_option(const char* sectname, GncOption* option)
+{
+    register_option(sectname, std::move(*option));
+    delete option;
+}
+
+void
 GncOptionDB::unregister_option(const char* sectname, const char* name)
 {
     auto section = find_section(sectname);
