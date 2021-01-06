@@ -230,6 +230,7 @@ gnc_run_report_with_error_handling (gint report_id, gchar ** data, gchar **errms
     {
         *errmsg = gnc_scm_to_utf8_string (captured_error);
         *data = NULL;
+        PWARN ("Error in report: %s", *errmsg);
         return FALSE;
     }
 }
