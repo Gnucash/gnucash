@@ -790,6 +790,7 @@
      ((< (xaccTransGetDate (xaccSplitGetParent (car splits))) start-date)
       (let* ((txn (xaccSplitGetParent (car splits)))
              (value (AP-negate (xaccTransGetAccountAmount txn acc))))
+        (hash-set! seen-txns txn #t)
         (lp printed? odd-row? (cdr splits) invalid-splits (+ total value)
             debit credit tax sale)))
 
