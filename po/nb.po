@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2021-01-03 08:03+0000\n"
+"PO-Revision-Date: 2021-01-10 04:32+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -4306,14 +4306,14 @@ msgid "Accounts"
 msgstr "Kontoer"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1429
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
 "transactions from.\n"
 "Are you sure you want to do this?"
 msgstr ""
-"Du er i ferd med å skrive over en eksisterende transaksjon. Er du sikker på "
-"at du vil gjøre dette?"
+"Kontoen %s har ikke samme valuta som den du flytter overføringer fra.\n"
+"Er du sikker på at du vil gjøre dette?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1437
 #, fuzzy
@@ -6035,24 +6035,22 @@ msgid "Make Pdf"
 msgstr "Opprett PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1196
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
 "will be saved in the file %s. "
 msgstr ""
-"Legg til nåværende rapport i `Egendefinert'-menyen for senere bruk. "
-"Rapporten vil lagres i filen ~/.gnucash/saved-reports-2.0. Den vil være "
-"tilgjengelig som et menyvalg i rapportmenyen ved neste oppstart av GnuCash."
+"Oppdater nåværende rapports lagrede oppsett. Rapportoppsettet vil lagres i "
+"filen %s. "
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Add the current report's configuration to the `Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s. "
 msgstr ""
-"Legg til nåværende rapport i `Egendefinert'-menyen for senere bruk. "
-"Rapporten vil lagres i filen ~/.gnucash/saved-reports-2.0. Den vil være "
-"tilgjengelig som et menyvalg i rapportmenyen ved neste oppstart av GnuCash."
+"Legg til nåværende rapports oppsett til i filen `Reports->Saved Report "
+"Configurations`-menyen. Rapportoppsettet vil lagres i filen %s. "
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -7525,10 +7523,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:1332
-#, fuzzy
-#| msgid "Cancel the current entry"
 msgid "Cannot change currency"
-msgstr "Avbryt gjeldende føring"
+msgstr "Kan ikke endre valuta"
 
 #: gnucash/gnome-utils/dialog-account.c:1419
 #, fuzzy
@@ -7570,20 +7566,17 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:2315
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
 msgstr ""
-"Vis bare saldoen for den overordnede kontoen, eksluder eventuelle "
-"underkontoer"
+"Sett kontoplassholderverdi for kontoen «%s», inkludert alle underkontoer"
 
 #: gnucash/gnome-utils/dialog-account.c:2329
 #, fuzzy, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
-msgstr ""
-"Vis bare saldoen for den overordnede kontoen, eksluder eventuelle "
-"underkontoer"
+msgstr "Sett kontoskjulingsverdi for kontoen «%s», inkludert alle underkontoer"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -7739,8 +7732,9 @@ msgid "Existing"
 msgstr "Bruk eksisterende"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
+#, fuzzy
 msgid "Use +- keys to increment/decrement number"
-msgstr ""
+msgstr "Bruk +-taster for å øke/minke tall"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
 msgid "Action/Number"
@@ -8920,15 +8914,17 @@ msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
 "discarded."
 msgstr ""
-"Hvis du ikke lagrer, vil endringer fra de siste %d minuttene forkastes."
+"Hvis du ikke lagrer, vil endringer fra den siste %d timen og de siste %d "
+"minuttene forkastes."
 
 #: gnucash/gnome-utils/gnc-main-window.c:1258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you don't save, changes from the past %d days and %d hours will be "
 "discarded."
 msgstr ""
-"Hvis du ikke lagrer, vil endringer fra de siste %d minuttene forkastes."
+"Hvis du ikke lagrer, vil endringer fra de siste %d dagene, og %d timene "
+"forkastes."
 
 #: gnucash/gnome-utils/gnc-main-window.c:1306
 msgid "Close _Without Saving"
@@ -8961,9 +8957,9 @@ msgstr ""
 
 #. Translators: This message appears in the status bar after opening the file.
 #: gnucash/gnome-utils/gnc-main-window.c:1740
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened. %s"
-msgstr "Åpning av QIF mislyktes: %s"
+msgstr "Fil %s åpnet: %s"
 
 #: gnucash/gnome-utils/gnc-main-window.c:2864
 msgctxt "lower case key for short cut to 'Accounts'"
@@ -13326,12 +13322,13 @@ msgid "Import Preview"
 msgstr "Rapportkontoer"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1028
+#, fuzzy
 msgid ""
 "<b>Press Apply to add the Prices.\n"
 "Cancel to abort.</b>"
 msgstr ""
-"Trykk Bruk for å opprette disse transaksjonene.\n"
-"Avbryt for å kansellere.</b>"
+"<b>Trykk «Bruk» for å legge til prisene.\n"
+"«Avbryt» for å kansellere.</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1043
 #, fuzzy
@@ -15525,7 +15522,7 @@ msgstr "Første splitt i importert transaksjon"
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
 msgid "<b>1. Choose the file to import</b>"
-msgstr "<b>1. Velg en fil å importere"
+msgstr "<b>1. Velg en fil å importere</b>"
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:155
 msgid "For importing customer lists."
@@ -15537,7 +15534,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:190
 msgid "<b>2. Select Import Type</b>"
-msgstr "<b>2. Velg importtype"
+msgstr "<b>2. Velg importtype</b>"
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:308
 msgid "<b>3. Select import options</b>"
@@ -19884,14 +19881,13 @@ msgid "Credited BIC (Bank Code)"
 msgstr "Debitert kontos bankkode"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:494
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The internal check of the destination IBAN '%s' failed. This means the "
 "account number might contain an error."
 msgstr ""
-"Den interne kontrollen av målkontonummeret «%s» hos den valgte banken med "
-"bankkode «%s» mislyktes. Dette betyr at kontonummeret kan inneholde en feil. "
-"Skal onlineoverføringen sendes med dette kontonummeret likevel?"
+"Den interne kontrollen av IBAN-målet «%s» mislyktes. Dette betyr at "
+"kontonummeret kanskje inneholder en feil."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:549
 #, c-format
@@ -19966,9 +19962,9 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:1182
-#, fuzzy, c-format
+#, c-format
 msgid "Do you really want to delete the template with the name \"%s\"?"
-msgstr "Er du sikker på at du vil slette den valgte transaksjonen?"
+msgstr "Er du sikker på at du vil slette malen med navnet «%s»?"
 
 #: gnucash/import-export/aqb/gnc-ab-getbalance.c:86
 #: gnucash/import-export/aqb/gnc-ab-gettrans.c:137
@@ -20475,9 +20471,9 @@ msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:405
 #: gnucash/import-export/bi-import/dialog-bi-import.c:476
-#, fuzzy, c-format
+#, c-format
 msgid "Row %d, invoice %s/%u: account %s does not exist.\n"
-msgstr "Vis kontonotater"
+msgstr "Rad %d, faktura %s/%u: konto %s finnes ikke.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:417
 #, c-format
@@ -20514,9 +20510,9 @@ msgstr ""
 "Behandler…\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:717
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s created.\n"
-msgstr "Fakturanotater"
+msgstr "Faktura %s opprettet.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:732
 #, fuzzy
@@ -20534,14 +20530,14 @@ msgid "Invoice %s not updated because it is already posted.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:768
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s updated.\n"
-msgstr "Fakturanotater"
+msgstr "Faktura %s oppdatert.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:891
 #, fuzzy, c-format
 msgid "Invoice %s posted.\n"
-msgstr "Fakturanotater"
+msgstr "Faktura %s postet.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:896
 #, c-format
@@ -21016,22 +21012,22 @@ msgstr[1] "%d tillagte priser"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1886
-#, fuzzy, c-format
+#, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
-msgstr[0] "_Rediger faktura"
-msgstr[1] "_Rediger faktura"
+msgstr[0] "%d duplisert pris"
+msgstr[1] "%d dupliserte priser"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1891
-#, fuzzy, c-format
+#, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
-msgstr[0] "Førte priser"
-msgstr[1] "Førte priser"
+msgstr[0] "%d erstattet pris"
+msgstr[1] "%d erstattede priser"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1896
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The prices were imported from file '%s'.\n"
 "\n"
@@ -21039,7 +21035,13 @@ msgid ""
 "- %s\n"
 "- %s\n"
 "- %s"
-msgstr "Det oppstod en feil under lesing av filen %s."
+msgstr ""
+"Prisene ble importert fra filen «%s».\n"
+"\n"
+"Importsammendrag:\n"
+"- %s\n"
+"- %s\n"
+"- %s"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1940
 #, c-format
@@ -21103,9 +21105,9 @@ msgid "Row %u, commodity %s / %s not found\n"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/csv-account-import.c:313
-#, fuzzy, c-format
+#, c-format
 msgid "Row %u, account %s not in %s\n"
-msgstr "Vis kontonotater"
+msgstr "Rad %u, konto %s ikke i %s\n"
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:60
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:57
@@ -21295,7 +21297,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:579
 #, fuzzy
 msgid " could not be understood.\n"
-msgstr "Filen kunne ikke åpnes på nytt."
+msgstr " kunne ikke forstås.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:323
@@ -21520,8 +21522,8 @@ msgid ""
 "The account '%s' has a different commodity to the one required, '%s'. Please "
 "choose a different account."
 msgstr ""
-"Kontoen %s er en plassholderkonto og tillater ikke transaksjoner. Velg en "
-"annen konto."
+"Kontoen «%s» har en annen kommoditet enn den som kreves, «%s». Velg en annen "
+"konto."
 
 #: gnucash/import-export/import-account-matcher.c:469
 msgid "(Full account ID: "
@@ -21919,11 +21921,9 @@ msgid "GnuCash was unable to save your mapping preferences."
 msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3447
-#, fuzzy, c-format
+#, c-format
 msgid "There was a problem with the import."
-msgstr ""
-"Det er et problem med alternativet %s:%s.\n"
-"%s"
+msgstr "Importen var problematisk."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3449
 #, fuzzy, c-format
@@ -22270,7 +22270,7 @@ msgstr "Ha en fin dag!"
 #: gnucash/python/init.py:118
 #, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Velkommen til GnuCash %-skallet"
+msgstr "Velkommen til GnuCash %s-skallet"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -22819,9 +22819,9 @@ msgid "Tot Shares"
 msgstr "Tot aksjer"
 
 #: gnucash/register/ledger-core/split-register-model.c:536
-#, fuzzy, c-format
+#, c-format
 msgid "Reconciled on %s"
-msgstr "Avstemt"
+msgstr "Avstemt %s"
 
 #: gnucash/register/ledger-core/split-register-model.c:1013
 msgid "Scheduled"
@@ -22925,8 +22925,11 @@ msgid ""
 "\n"
 "Are you sure you want to continue with this change ?"
 msgstr ""
-"Du er i ferd med å endre en avstemt splitt. Hvis du gjør det kan avstemming "
-"bli vanskelig i fremtiden. Fortsett med denne endringen?"
+"Overføringen du er i ferd med å endre inneholder avstemte splitter i "
+"følgende kontoer:\n"
+"%s\n"
+"\n"
+"Fortsett med denne endringen?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2228
 #, fuzzy
@@ -27072,9 +27075,8 @@ msgstr "Sorter etter fortjenestebeløp."
 #. Translators: "Markup" is profit amount divided by sales amount
 #: gnucash/report/reports/standard/customer-summary.scm:133
 #: gnucash/report/reports/standard/customer-summary.scm:323
-#, fuzzy
 msgid "Markup"
-msgstr "Markør"
+msgstr "Oppmerking"
 
 #: gnucash/report/reports/standard/customer-summary.scm:134
 msgid "Sort by markup (which is profit amount divided by sales)."
@@ -31057,9 +31059,9 @@ msgid "Not tax-related; %s%s: %s (code %s, tax type %s)"
 msgstr ""
 
 #: libgnucash/app-utils/gnc-ui-util.c:852
-#, fuzzy, c-format
+#, c-format
 msgid "(Tax-related subaccounts: %d)"
-msgstr "%s og valgte underkontoer"
+msgstr "(Skatterelaterte underkontoer: %d)"
 
 #: libgnucash/app-utils/gnc-ui-util.c:872
 msgctxt "Reconciled flag 'not cleared'"
