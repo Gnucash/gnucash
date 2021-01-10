@@ -2,14 +2,14 @@
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Duarte Loreto <happyguy_pt@hotmail.com>, 2001
 # Tiago Neiva <tneiva@gmail.com>, 2018.
-#
+# Pedro Albuquerque <pmra@gmx.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2020-12-17 13:31+0000\n"
+"PO-Revision-Date: 2021-01-10 13:32+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "glossary/pt/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -26,7 +26,7 @@ msgstr "Termo"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -334,7 +334,7 @@ msgstr "Personalizado"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "painel"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -386,7 +386,7 @@ msgstr "ligação do documento"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "email"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -429,14 +429,12 @@ msgid "financial calculator: payments"
 msgstr "pagamentos"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
-#| msgid "income statement"
 msgid "financial statement"
-msgstr "declaração de rendimentos"
+msgstr "declaração financeira"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "programa gratuito"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -572,7 +570,7 @@ msgstr "encomenda"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr "órfão"
+msgstr "órfã"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
@@ -759,22 +757,20 @@ msgid "tax info"
 msgstr "informação de impostos"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "Receitas"
+msgstr "Imposto sobre rendimentos"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "imposto sobre vendas"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "Imposto sobre bens e serviços"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "IVA"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
