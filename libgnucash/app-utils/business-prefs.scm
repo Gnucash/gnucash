@@ -115,7 +115,17 @@
     gnc:*business-label* gnc:*company-id*
     "c5" (N_ "The ID for your company (eg 'Tax-ID: 00-000000).")
     ""))
- 
+
+  (reg-option
+   (gnc:make-string-option
+    gnc:*business-label* gnc:*company-iban*
+    "c6" (N_ "The International Bank Account Number for receiving payments.") ""))
+
+  (reg-option
+   (gnc:make-string-option
+    gnc:*business-label* gnc:*company-bic*
+    "c7" (N_ "The Business Identifier Codes (or SWIFT) for your bank.") ""))
+
   (reg-option
    (gnc:make-taxtable-option
     gnc:*business-label* (N_ "Default Customer TaxTable")
