@@ -101,6 +101,7 @@
 "financial calculator: interest rate"	"-"
 "financial calculator: payments"	"see: payment"
 "financial statement"	"formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
+"free software"	"Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 "gain"	"An increase in wealth; profit; advantage (See also: capital gains)"
 "imbalance"	"Name of an automatically created account to get imbalanced transactions back in balance"
 "import"	"Process of extracting data from a non-Gnucash format into a Gnucash file. E.g. QIF Import."
