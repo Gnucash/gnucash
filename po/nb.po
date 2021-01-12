@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-12-13 22:01+0100\n"
-"PO-Revision-Date: 2021-01-10 04:32+0000\n"
+"PO-Revision-Date: 2021-01-11 12:32+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -12793,8 +12793,11 @@ msgid ""
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
-"Velg en regnskapsperiode og en dato for avslutning av perioden. Regnskapet "
-"vil bli lukket ved midnatt på den valgte datoen."
+"\n"
+"Velg en regnskapsperiode og en dato for avslutning av perioden som ikke er i "
+"fremtiden, og er senere enn lukkingsdato for forrige regnskap.\n"
+"\n"
+"Regnskapet vil bli lukket ved midnatt på den valgte datoen."
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:82
 #: gnucash/gtkbuilder/assistant-acct-period.glade:107
@@ -12856,11 +12859,12 @@ msgid "Import Account Assistant"
 msgstr "Rapportkontoer"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:78
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Import...\n"
-msgstr "Denne rapporten har ingen alternativer."
+msgstr ""
+"\n"
+"Skriv inn filnavn og sted for importen …\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:91
 #, fuzzy
