@@ -6,6 +6,7 @@
 # Lorenzo Cappelletti <lorenzo.cappelletti@email.it>, 2003;
 # Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;
 # Alessandro Seveso <aleseveso@tiscalinet.it>, 2002.
+# giuseppe <g.pecoraro@odissea.at>, 2021.
 #
 # Contributors:
 #
@@ -16,11 +17,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 4.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2020-12-27 14:29+0000\n"
-"Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
+"PO-Revision-Date: 2021-01-11 16:32+0000\n"
+"Last-Translator: giuseppe <g.pecoraro@odissea.at>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/glossary/"
 "it/>\n"
 "Language: it\n"
@@ -348,7 +349,7 @@ msgstr "Personalizzato"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "pannello di controllo"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -400,7 +401,7 @@ msgstr "collegamento al documento"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "posta elettronica"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
