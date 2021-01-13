@@ -301,14 +301,16 @@
 
 ;; input: list of html-text elements
 ;; output: a cell with html-text interleaved with <br> tags
-(define (list->cell lst)
+(define* (list->cell lst #:optional skip-empty?)
   (let lp ((lst lst) (result '()))
     (match lst
       (() (apply gnc:make-html-text result))
+      (("" . rest) (=> fail) (if skip-empty? (lp rest result) (fail)))
       ((elt . rest) (lp rest (cons* elt (gnc:html-markup-br) result))))))
 
-(define (splits->desc splits)
-  (list->cell (map (compose gnc:html-string-sanitize xaccSplitGetMemo) splits)))
+(define* (splits->desc splits #:optional skip-empty?)
+  (list->cell (map (compose gnc:html-string-sanitize xaccSplitGetMemo) splits)
+              skip-empty?))
 
 (define (make-aging-table splits to-date payable? date-type currency)
   (let ((table (gnc:make-html-table))
@@ -849,7 +851,7 @@
          table odd-row? used-columns date #f
          (split->reference split)
          (split->type-str split payable?)
-         (splits->desc (xaccTransGetAPARAcctSplitList txn #t))
+         (splits->desc (xaccTransGetAPARAcctSplitList txn #t) #t)
          #f currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
          (and (< orig-value 0) (amount->anchor split (- orig-value)))
