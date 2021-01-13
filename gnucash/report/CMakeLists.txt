@@ -17,9 +17,21 @@ set (report_SOURCES
         gnc-report.cpp
 )
 
+set (qrencode_HEADERS gnc-qrencode.h)
+
+if (HAVE_QRENCODE)
+  set (qrencode_SOURCES gnc-qrencode.c)
+  set (qrencode_LIBRARY PkgConfig::QRENCODE)
+else ()
+  set (qrencode_SOURCES gnc-qrencode-stub.c)
+  set (qrencode_LIBRARY)
+endif ()
+
 add_library (gnc-report
   ${report_SOURCES}
   ${report_HEADERS}
+  ${qrencode_SOURCES}
+  ${qrencode_HEADERS}
   ${SWIG_REPORT_C}
 )
 
@@ -32,6 +44,7 @@ target_link_libraries(gnc-report
     gnucash-guile
     gnc-expressions-guile
     PkgConfig::GTK3
+    ${qrencode_LIBRARY}
     ${GUILE_LDFLAGS})
 
 target_include_directories (gnc-report
@@ -54,6 +67,7 @@ install(FILES ${report_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
 set (report_SCHEME_1
     commodity-utilities.scm
+    gnc-qrencode.scm
     html-acct-table.scm
     html-chart.scm
     html-document.scm
@@ -122,6 +136,7 @@ add_custom_target(scm-report ALL DEPENDS scm-report-2 scm-report-eguile)
 set_local_dist(report_DIST_local CMakeLists.txt
   report.i
   ${report_HEADERS} ${report_SOURCES}
+  gnc-qrencode.c gnc-qrencode-stub.c ${qrencode_HEADERS}
   ${report_SCHEME} ${report_SCHEME_1} ${report_SCHEME_2}
   ${report_eguile_parts_SCHEME} ${report_eguile_SCHEME})
 
