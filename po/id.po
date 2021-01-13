@@ -3,22 +3,23 @@
 # Copyright (C) 2020 by the GnuCash developers and the translators listed below.
 # This file is distributed under the same license as the GnuCash package.
 # Triyan W. Nugroho <triyan.wn@gmail.com>, 2020.
-#
+# Ferdinand Tampubolon <dnandz@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-03 07:22+0100\n"
-"PO-Revision-Date: 2020-11-21 08:25+0700\n"
-"Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-01-13 15:32+0000\n"
+"Last-Translator: Ferdinand Tampubolon <dnandz@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
+"gnucash/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -3570,8 +3571,6 @@ msgid "_Import Map Editor"
 msgstr "Penyunting Peta _Impor"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
-#, fuzzy
-#| msgid "View and Delete Bayesian and Non Bayesian information"
 msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr "Lihat dan Hapus informasi Bayesian dan Non Bayesian"
 
@@ -6263,10 +6262,9 @@ msgid "This account register is read-only."
 msgstr "Register akun ini hanya-baca."
 
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2448
-#, fuzzy, c-format
-#| msgid "This account register is read-only."
+#, c-format
 msgid "The '%s' account register is read-only."
-msgstr "Register akun ini hanya-baca."
+msgstr "Akun '%s' terdaftar hanya bisa dibaca saja"
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 msgid ""
@@ -8519,8 +8517,6 @@ msgid "Open _Read-Only"
 msgstr "Buka _Hanya-Baca"
 
 #: gnucash/gnome-utils/gnc-file.c:853
-#, fuzzy
-#| msgid "_Create New File"
 msgid "Create _New File"
 msgstr "_Buat Berkas Baru"
 
@@ -8529,10 +8525,8 @@ msgid "Open _Anyway"
 msgstr "Tetap Buk_a"
 
 #: gnucash/gnome-utils/gnc-file.c:859
-#, fuzzy
-#| msgid "placeholder"
 msgid "Open _Folder"
-msgstr "placeholder"
+msgstr "Buka_folder"
 
 #: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:310
 msgid "_Quit"

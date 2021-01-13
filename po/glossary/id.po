@@ -3,22 +3,23 @@
 # Copyright (C) 2020 by the GnuCash developers and the translators listed below.
 # This file is distributed under the same license as the GnuCash package.
 # Triyan W. Nugroho <triyan.wn@gmail.com>, 2020.
-#
+# Ferdinand Tampubolon <dnandz@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2020-08-15 21:20+0700\n"
-"Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
-"Language-Team: Indonesian\n"
+"PO-Revision-Date: 2021-01-13 13:46+0000\n"
+"Last-Translator: Ferdinand Tampubolon <dnandz@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
+"glossary/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.4\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -26,7 +27,7 @@ msgstr "Pernyataan"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -334,7 +335,7 @@ msgstr "Kustom"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "dasbor"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -362,7 +363,7 @@ msgstr "bawaan"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr ""
+msgstr "deposit"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
@@ -382,11 +383,11 @@ msgstr "pembukuan ganda"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "link Dokumen"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "surel"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -429,14 +430,12 @@ msgid "financial calculator: payments"
 msgstr "kalkulator finansial: pembayaran"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
-#| msgid "income statement"
 msgid "financial statement"
-msgstr "laporan laba-rugi"
+msgstr "Laporan keuangan"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "Perangkat lunak gratis"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -479,10 +478,8 @@ msgid "loan"
 msgstr "pinjaman"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "pinjaman"
+msgstr "pinjaman:APR"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -521,16 +518,12 @@ msgid "Mortgage"
 msgstr "Hipotek"
 
 #. "Adjustable Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "Hipotek"
+msgstr "Hipotek: ARM"
 
 #. "Fixed Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "Hipotek"
+msgstr "Hipotek: Hipotek Bunga Tetap"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -574,11 +567,11 @@ msgstr "opsi"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
-msgstr "order"
+msgstr "pembelian"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr ""
+msgstr "anak yatim piatu"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
@@ -614,7 +607,7 @@ msgstr "portofolio"
 
 #. "Register invoice, voucher in account register"
 msgid "post, to"
-msgstr ""
+msgstr "posting, ke"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
@@ -658,7 +651,7 @@ msgstr "seimbangkan ulang"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
-msgstr ""
+msgstr "rekonsiliasi, ke"
 
 #. "-"
 msgid "record keeping"
@@ -670,30 +663,27 @@ msgstr "daftar"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr ""
+msgstr "memasukkan pendaftaran: pembayaran terpisah"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr ""
+msgstr "memasukkan pendaftaran : stok terpisah"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr ""
+msgstr "Pendaftar : otomatis buku kas terpisah"
 
 #. "another form of register"
-#, fuzzy
 msgid "register: basic ledger"
-msgstr "Dasar"
+msgstr "pendaftar : buku kas awal"
 
 #. "another form of register"
-#, fuzzy
 msgid "register: general ledger"
-msgstr "Register"
+msgstr "Pendaftar: Kas umum"
 
 #. "another form of register"
-#, fuzzy
 msgid "register: transaction journal"
-msgstr "Transaksi gagal"
+msgstr "Pendaftar: Jurnal transaksi"
 
 #. "reload the current document"
 msgid "reload, to"
@@ -701,12 +691,11 @@ msgstr "muat ulang"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "Formulir Laporan: Formulir akun T"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
-#, fuzzy
 msgid "report form: Vertical Form"
-msgstr "Formulir Bebas"
+msgstr "formulir laporan: formulir laporan"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -714,7 +703,7 @@ msgstr "Pendapatan Ditahan"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
-msgstr ""
+msgstr "transaksi mundur. ke (aksi di dalam pendaftaran)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
@@ -722,7 +711,7 @@ msgstr "penjualan"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
-msgstr "simpan"
+msgstr "simpan, ke ( ke sebuah file)"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 msgid "Scheduled Transaction"
@@ -730,16 +719,15 @@ msgstr "Transaksi Terjadwal"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
-msgstr ""
+msgstr "gesek, ke"
 
 #. "A document or certificate showing who owns shares"
-#, fuzzy
 msgid "security"
-msgstr "Keamanan"
+msgstr "Keamanan dokumen"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr ""
+msgstr "berbagi saldo (terdaftar)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
@@ -751,16 +739,15 @@ msgstr "sumber"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
-msgstr "pecah"
+msgstr "Terbagi"
 
 #. "This sets the particular design or shape of a report."
-#, fuzzy
 msgid "style sheet"
-msgstr "_Cascade Style Sheet"
+msgstr "desain laporan"
 
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
-msgstr "subtotal"
+msgstr "sub-total"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"
@@ -771,26 +758,24 @@ msgid "tax info"
 msgstr "informasi pajak"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "tipe akun: Pendapatan"
+msgstr "tipe akun: Pajak Pendapatan"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "tipe pajak: pajak penjualan"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "tipe pajak:Pajak Barang dan Jasa"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "tipe pajak: PPN"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
-msgstr "templat"
+msgstr "gambaran"
 
 #. "see: date range"
 msgid "time period"
@@ -834,11 +819,11 @@ msgstr "akun tujuan transfer"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr "transfer"
+msgstr "transfer ke (daftar window)"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr "neraca saldo"
+msgstr "percobaan neraca saldo(laporan)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
@@ -854,7 +839,7 @@ msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr "nilai"
+msgstr "nilai( dalam pecahan)"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
@@ -862,8 +847,8 @@ msgstr "pemasok"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr ""
+msgstr "kupon"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr "penarikan"
+msgstr "penarikan( dalam rekonsiliasi dialog)"
