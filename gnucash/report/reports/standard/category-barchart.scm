@@ -256,6 +256,7 @@ developing over time"))
 
          (work-done 0)
          (work-to-do 0)
+         (all-data #f)
          (show-table? (get-option gnc:pagename-display (N_ "Show table")))
          (document (gnc:make-html-document))
          (chart (gnc:make-html-chart))
@@ -468,8 +469,10 @@ developing over time"))
                  (list a (account->balance-list a #t)))
                (filter show-acct? accts))))
 
+        (set! work-to-do (count-accounts 1 topl-accounts))
+
         ;; Sort the account list according to the account code field.
-        (define all-data
+        (set! all-data
           (sort
            (filter (lambda (l)
                      (not (zero? (gnc:gnc-monetary-amount
@@ -491,8 +494,6 @@ developing over time"))
               (lambda (a b)
                 (> (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr a)))
                    (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr b)))))))))
-
-        (set! work-to-do (count-accounts 1 topl-accounts))
 
         (cond
          ((or (null? all-data) (all-zeros (map cadr all-data)))
