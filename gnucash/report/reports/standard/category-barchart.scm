@@ -428,8 +428,6 @@ developing over time"))
                 sum)
               (length (filter show-acct? accts))))
 
-        (set! work-to-do (count-accounts 1 topl-accounts))
-
         ;; Calculates all account's balances. Returns a list of pairs:
         ;; (<account> <balance-list>), like '((Earnings (10.0 11.2))
         ;; (Gifts (12.3 14.5))), where each element of <balance-list>
@@ -493,6 +491,8 @@ developing over time"))
               (lambda (a b)
                 (> (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr a)))
                    (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr b)))))))))
+
+        (set! work-to-do (count-accounts 1 topl-accounts))
 
         (cond
          ((or (null? all-data) (all-zeros (map cadr all-data)))
