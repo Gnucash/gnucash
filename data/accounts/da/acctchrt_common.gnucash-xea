@@ -624,14 +624,14 @@
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Amt</act:name>
+  <act:name>Region</act:name>
   <act:id type="new">0785932c5de43e814659420762c9b577</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
   </act:commodity>
-  <act:description>Amt</act:description>
+  <act:description>Region</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
