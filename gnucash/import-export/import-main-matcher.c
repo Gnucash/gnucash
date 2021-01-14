@@ -708,13 +708,15 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
     Account *old_acc;
     gboolean ok_pressed;
     gchar *path_str = gtk_tree_path_to_string (path);
+    gchar *acct_str = gnc_get_account_name_for_register (*new_acc);
 
     ENTER("");
     DEBUG("first = %s", *first ? "true" : "false");
     DEBUG("is_selection = %s", is_selection ? "true" : "false");
     DEBUG("path  = %s", path_str);
     g_free (path_str);
-    DEBUG("account passed in = %s", gnc_get_account_name_for_register (*new_acc));
+    DEBUG("account passed in = %s", acct_str);
+    g_free (acct_str);
 
     // only allow response at the top level
     if (gtk_tree_path_get_depth (path) != 1)
