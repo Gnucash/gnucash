@@ -281,6 +281,14 @@ developing over time"))
        (gnc:html-make-no-account-warning
         report-title (gnc:report-id report-obj))))
 
+     ((<= to-date-t64 from-date-t64)
+      (gnc:html-document-add-object!
+       document
+       (gnc:html-make-generic-warning
+        report-title (gnc:report-id report-obj)
+        (G_ "Invalid dates")
+        (G_ "Start date must be earlier than End date"))))
+
      (else
       (let* ((commodity-list (gnc:accounts-get-commodities
                               (gnc:accounts-and-all-descendants accounts)
