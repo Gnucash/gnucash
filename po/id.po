@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-03 07:22+0100\n"
-"PO-Revision-Date: 2021-01-13 15:32+0000\n"
+"PO-Revision-Date: 2021-01-14 13:32+0000\n"
 "Last-Translator: Ferdinand Tampubolon <dnandz@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -10499,7 +10499,6 @@ msgstr "Bayar otomatis saat mengepos."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:113
 #: gnucash/gtkbuilder/business-prefs.glade:196
-#, fuzzy
 msgid ""
 "At post time, automatically attempt to pay customer documents with "
 "outstanding pre-payments and counter documents. The pre-payments and "
@@ -10507,7 +10506,7 @@ msgid ""
 "are documents with opposite sign. For example for an invoice, customer "
 "credit notes and negative invoices are considered counter documents."
 msgstr ""
-"Pada saat pos, secara otomatis mencoba untuk membayar dokumen pelanggan "
+"Pada saat posting, secara otomatis mencoba untuk membayar dokumen pelanggan "
 "dengan pra-pembayaran yang luar biasa dan dokumen counter. Pra-pembayaran "
 "dan dokumen jelas harus melawan pelanggan yang sama. Dokumen counter dokumen "
 "dengan tanda berlawanan. Misalnya untuk faktur, nota kredit pelanggan dan "
@@ -10593,7 +10592,6 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:155
 #: gnucash/gtkbuilder/business-prefs.glade:273
-#, fuzzy
 msgid ""
 "At post time, automatically attempt to pay vendor documents with outstanding "
 "pre-payments and counter documents. The pre-payments and documents obviously "
@@ -16300,19 +16298,16 @@ msgid "_New Lot"
 msgstr "Lot _Baru"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:40
-#, fuzzy
 msgid "Scrub _Account"
-msgstr "scrub _Account"
+msgstr "Menggesek _Akun"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:55
-#, fuzzy
 msgid "_Scrub"
-msgstr "_Menggosok"
+msgstr "_Menggesek"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:61
-#, fuzzy
 msgid "Scrub the highlighted lot"
-msgstr "Scrub banyak disorot"
+msgstr "Gosok Bagian yang disorot"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:78
 msgid "Delete the highlighted lot"
@@ -16343,9 +16338,8 @@ msgid "Show only open lots"
 msgstr "Tampilkan hanya lot terbuka"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:300
-#, fuzzy
 msgid "<b>Splits _free</b>"
-msgstr "<B> Splits _free </ b>"
+msgstr "<B> Berbagi_gratis </ b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:355
 msgid "<b>Splits _in lot</b>"
@@ -17488,24 +17482,20 @@ msgid "Remove all prices before date."
 msgstr "Hapus semua harga sebelum tanggal."
 
 #: gnucash/gtkbuilder/dialog-price.glade:465
-#, fuzzy
 msgid "Last of _Week"
-msgstr "Terakhir _Week"
+msgstr "Minggu_terakhir"
 
 #: gnucash/gtkbuilder/dialog-price.glade:469
-#, fuzzy
 msgid "Keep the last price of each week if present before date."
 msgstr "Menjaga harga terakhir dari setiap minggu jika ada sebelum tanggal."
 
 #: gnucash/gtkbuilder/dialog-price.glade:482
-#, fuzzy
 msgid "Last of _Month"
-msgstr "Terakhir _Month"
+msgstr "Minggu_terakhir"
 
 #: gnucash/gtkbuilder/dialog-price.glade:486
-#, fuzzy
 msgid "Keep the last price of each month if present before date."
-msgstr "Menjaga harga terakhir setiap bulan jika ada sebelum tanggal."
+msgstr "Menjaga harga terakhir setiap bulan jika ada sebelum tanggalnya."
 
 #: gnucash/gtkbuilder/dialog-price.glade:499
 msgid "Last of _Quarter"
@@ -17520,33 +17510,30 @@ msgstr ""
 "Kuartal fiskal berasal dari tanggal akhir periode akuntansi."
 
 #: gnucash/gtkbuilder/dialog-price.glade:516
-#, fuzzy
 msgid "Last of _Period"
-msgstr "Terakhir _Period"
+msgstr "Periode_terakhir"
 
 #: gnucash/gtkbuilder/dialog-price.glade:520
-#, fuzzy
 msgid ""
 "Keep the last price of each fiscal period if present before date. The fiscal "
 "period is derived from the accounting period end date."
 msgstr ""
-"Menjaga harga terakhir setiap periode fiskal jika ada sebelum tanggal. "
-"Periode fiskal berasal dari tanggal akhir periode akuntansi."
+"Menjaga harga terakhir setiap periode fiskal jika ada sebelum tanggalnya. "
+"Periode fiskal berasal dari tanggal berakhir periode akuntansi."
 
 #: gnucash/gtkbuilder/dialog-price.glade:533
 msgid "_Scaled"
 msgstr "Ter_skala"
 
 #: gnucash/gtkbuilder/dialog-price.glade:537
-#, fuzzy
 msgid ""
 "With the scaled option, prices are removed relative to the date selected. "
 "'One a month' is used for dates older than a year and 'One a week' is used "
 "for dates older than six months to a year."
 msgstr ""
 "Dengan pilihan berskala, harga relatif dihapus untuk tanggal yang dipilih. "
-"'Satu bulan' digunakan untuk tanggal tua dari satu tahun dan 'Satu minggu' "
-"digunakan untuk tanggal tua dari enam bulan sampai satu tahun."
+"'Satu bulan' digunakan untuk tanggal lebih tua dari satu tahun dan 'Satu "
+"minggu' digunakan untuk tanggal lebih tua dari enam bulan sampai satu tahun."
 
 #: gnucash/gtkbuilder/dialog-price.glade:585
 msgid "First Date"
@@ -17557,7 +17544,6 @@ msgid "From these Commodities"
 msgstr "Dari Komoditas ini"
 
 #: gnucash/gtkbuilder/dialog-price.glade:630
-#, fuzzy
 msgid "Keeping the last available price for option"
 msgstr "Menjaga harga terakhir yang tersedia untuk pilihan"
 
@@ -17583,7 +17569,6 @@ msgid "_Added by the application"
 msgstr "Ditambahkan oleh _aplikasi"
 
 #: gnucash/gtkbuilder/dialog-price.glade:706
-#, fuzzy
 msgid ""
 "If activated, include application added prices.\n"
 "\n"
@@ -17726,7 +17711,6 @@ msgid "y"
 msgstr "y"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:686
-#, fuzzy
 msgid "Pa_yee"
 msgstr "Pa_yee"
 
@@ -19198,15 +19182,12 @@ msgid "Only show _active owners"
 msgstr "Hanya tampilkan pemilik _aktif"
 
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:79
-#, fuzzy
 msgid "Show _zero balance owners"
-msgstr "Tampilkan _zero pemilik keseimbangan"
+msgstr "Tampilkan _pemilik saldo nol"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:71
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "About Auto-Clear"
-msgstr "Klir-otomatis"
+msgstr "Tentang Pembersihan otomatis"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:86
 msgid ""
@@ -19214,6 +19195,10 @@ msgid ""
 "are cleared, given an ending balance. For example, said ending balance can "
 "be the current balance given by your bank online."
 msgstr ""
+"Gunakan dialog ini jika Anda ingin GnuCash secara otomatis menemukan "
+"transaksi mana yang dihapus, dengan saldo akhir. Misalnya, saldo akhir "
+"tersebut dapat menjadi saldo saat ini yang diberikan oleh bank Anda secara "
+"online."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
 msgid "Caution!"
@@ -19542,21 +19527,17 @@ msgid "Enter your password"
 msgstr "Masukkan kata sandi Anda"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:646
-#, fuzzy
-#| msgid "_Width"
 msgid "Bar_width"
-msgstr "_Lebar"
+msgstr "Batang_Lebar"
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:664
 msgid "Setting the bar width, adapting to the size of the TAN generator."
-msgstr ""
+msgstr "Mengatur lebar batang, menyesuaikan dengan ukuran generator TAN."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:679
-#, fuzzy
-#| msgid "_Delete"
 msgid "_Delay"
-msgstr "_Hapus"
+msgstr "_Menunda"
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:694
@@ -19564,6 +19545,7 @@ msgid ""
 "Setting the delay time, with small values the flicker graphic is repeated "
 "faster."
 msgstr ""
+"Mengatur waktu tunda, dengan nilai kecil kedipan grafik terulang lebih cepat."
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:752
@@ -19571,6 +19553,8 @@ msgid ""
 "Hold the TAN generator in front of the animated graphic. The markings "
 "(triangles) on the graphic must match those on the TAN generator."
 msgstr ""
+"Tahan generator TAN di depan grafik animasi. Tanda (segitiga) pada grafik "
+"harus cocok dengan yang ada di generator TAN."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:796
 msgid "Con_firm Password"
@@ -19802,34 +19786,28 @@ msgid "Originator BIC (Bank Code)"
 msgstr "BIC (Kode Bank) Originator"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:395
-#, fuzzy
 msgid "Enter a SEPA Online Direct Debit Note"
-msgstr "Masukkan SEPA online Direct Debit Note"
+msgstr "Masukkan Nota Debit Langsung SEPA Online"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:398
-#, fuzzy
 msgid "Debited Account Owner"
-msgstr "Didebit Pemilik Rekening"
+msgstr "Didebit Pemilik Akun"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:400
-#, fuzzy
 msgid "Debited IBAN (International Account Number)"
-msgstr "Didebit IBAN (International Nomor Rekening)"
+msgstr "Didebit IBAN (International Nomor Akun Bank)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:402
-#, fuzzy
 msgid "Debited BIC (Bank Code)"
 msgstr "Didebit BIC (Kode Bank)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:405
-#, fuzzy
 msgid "Credited Account Owner"
 msgstr "Dikreditkan Pemilik Akun"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:407
-#, fuzzy
 msgid "Credited IBAN (International Account Number)"
-msgstr "Dikreditkan IBAN (International Nomor Rekening)"
+msgstr "Dikreditkan IBAN (International Nomor Akun Bank)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
 #, fuzzy
@@ -19999,19 +19977,16 @@ msgstr ""
 "Apakah Anda ingin memasukkan tugas ini lagi?"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:210
-#, fuzzy
 msgid "Online Banking Direct Debit Note"
-msgstr "Online Banking Direct Debit Note"
+msgstr "Nota Debit Langsung Perbankan Online"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:215
-#, fuzzy
 msgid "Online Banking Bank-Internal Transfer"
-msgstr "Alih Online Banking Bank-internal"
+msgstr "Perbankan Online Bank transfer Internal"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:220
-#, fuzzy
 msgid "Online Banking European (SEPA) Transfer"
-msgstr "Secara online Perbankan Eropa (SEPA) transfer"
+msgstr "Transfer Perbankan Online Eropa (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:225
 #, fuzzy
