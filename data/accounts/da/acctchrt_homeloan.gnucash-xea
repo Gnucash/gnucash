@@ -56,6 +56,12 @@
   </act:commodity>
   <act:description>Passiver</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Lån</act:name>
@@ -67,6 +73,12 @@
   </act:commodity>
   <act:description>Lån</act:description>
   <act:parent type="new">6664763bd1ea41462cba5ef856d9c00c</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Realkreditlån</act:name>
@@ -89,6 +101,12 @@
   </act:commodity>
   <act:description>Udgifter</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Renter</act:name>
@@ -100,6 +118,12 @@
   </act:commodity>
   <act:description>Renter</act:description>
   <act:parent type="new">2f076f5ae073173a11d33420cd39fa4d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Realkreditrenter</act:name>

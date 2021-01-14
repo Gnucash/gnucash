@@ -57,6 +57,12 @@
   </act:commodity>
   <act:description>Aktiver</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Aktuelle aktiver</act:name>
@@ -68,6 +74,12 @@
   </act:commodity>
   <act:description>Aktuelle aktiver</act:description>
   <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Checkkonto</act:name>
@@ -112,6 +124,12 @@
   </act:commodity>
   <act:description>Passiver</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Forventede udgifter</act:name>
@@ -123,6 +141,12 @@
   </act:commodity>
   <act:description>Forventede udgifter</act:description>
   <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kreditkort</act:name>
@@ -145,6 +169,12 @@
   </act:commodity>
   <act:description>Indtægter</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bonus</act:name>
@@ -178,6 +208,12 @@
   </act:commodity>
   <act:description>Renteindtægter</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Checkrenter</act:name>
@@ -244,6 +280,12 @@
   </act:commodity>
   <act:description>Udgifter</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Justering</act:name>
@@ -563,6 +605,12 @@
   </act:commodity>
   <act:description>Skatter og afgifter</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Stat</act:name>
@@ -618,6 +666,12 @@
   </act:commodity>
   <act:description>Forsyning</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>El</act:name>

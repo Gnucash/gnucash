@@ -56,6 +56,12 @@
   </act:commodity>
   <act:description>Udgifter</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Vedligehold af bolig</act:name>
@@ -89,6 +95,12 @@
   </act:commodity>
   <act:description>Forsikring</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Husforsikring</act:name>
@@ -111,6 +123,12 @@
   </act:commodity>
   <act:description>Skatter/afgifter</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ejendomsskat</act:name>
