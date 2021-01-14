@@ -274,417 +274,394 @@ developing over time"))
                            account-levels))
 
     ;;(gnc:debug accounts)
-    (if (not (null? accounts))
+    (cond
+     ((null? accounts)
+      (gnc:html-document-add-object!
+       document
+       (gnc:html-make-no-account-warning
+        report-title (gnc:report-id report-obj))))
 
-        ;; Define more helper variables.
-        (let* ((commodity-list #f)
-               (exchange-fn #f)
-               (averaging-fraction-func (gnc:date-get-fraction-func averaging-selection))
-               (interval-fraction-func (gnc:date-get-fraction-func interval))
-               (averaging-multiplier
-                (if averaging-fraction-func
-                    ;; Calculate the divisor of the amounts so that an
-                    ;; average is shown. Multiplier factor is a gnc-numeric
-                    (let* ((start-frac-avg (averaging-fraction-func from-date-t64))
-                           (end-frac-avg (averaging-fraction-func (1+ to-date-t64)))
-                           (diff-avg (- end-frac-avg start-frac-avg))
-                           (diff-avg-numeric (/ (inexact->exact (round (* diff-avg 1000000))) ; 6 decimals precision
-                                                1000000))
-                           (start-frac-int (interval-fraction-func from-date-t64))
-                           (end-frac-int (interval-fraction-func (1+ to-date-t64)))
-                           (diff-int (- end-frac-int start-frac-int))
-                           (diff-int-numeric (inexact->exact diff-int)))
-                      ;; Extra sanity check to ensure a number smaller than 1
-                      (if (> diff-avg diff-int)
-                          (/ diff-int-numeric diff-avg-numeric)
-                          1))
-                    1))
-               ;; If there is averaging, the report-title is extended
-               ;; accordingly.
-               (report-title
-                (case averaging-selection
-                  ((MonthDelta) (string-append report-title " " (G_ "Monthly Average")))
-                  ((WeekDelta) (string-append report-title " " (G_ "Weekly Average")))
-                  ((DayDelta) (string-append report-title " " (G_ "Daily Average")))
-                  (else report-title)))
-               (currency-frac (gnc-commodity-get-fraction report-currency))
-               ;; This is the list of date intervals to calculate.
-               (dates-list (gnc:make-date-list
-                            ((if do-intervals?
-                                 gnc:time64-start-day-time
-                                 gnc:time64-end-day-time) from-date-t64)
-                            (gnc:time64-end-day-time to-date-t64)
-                            (gnc:deltasym-to-delta interval)))
-               ;; Here the date strings for the x-axis labels are
-               ;; created.
-               (other-anchor "")
-               (all-data '()))
+     (else
+      (let* ((commodity-list (gnc:accounts-get-commodities
+                              (gnc:accounts-and-all-descendants accounts)
+                              report-currency))
+             (exchange-fn (gnc:case-exchange-time-fn
+                           price-source report-currency
+                           commodity-list to-date-t64
+                           5 15))
+             (averaging-fraction-func (gnc:date-get-fraction-func averaging-selection))
+             (interval-fraction-func (gnc:date-get-fraction-func interval))
+             (averaging-multiplier
+              (if averaging-fraction-func
+                  ;; Calculate the divisor of the amounts so that an
+                  ;; average is shown. Multiplier factor is a gnc-numeric
+                  (let* ((start-frac-avg (averaging-fraction-func from-date-t64))
+                         (end-frac-avg (averaging-fraction-func (1+ to-date-t64)))
+                         (diff-avg (- end-frac-avg start-frac-avg))
+                         (diff-avg-numeric
+                          (/ (inexact->exact (round (* diff-avg 1000000)))
+                             ;; 6 decimals precision
+                             1000000))
+                         (start-frac-int (interval-fraction-func from-date-t64))
+                         (end-frac-int (interval-fraction-func (1+ to-date-t64)))
+                         (diff-int (- end-frac-int start-frac-int))
+                         (diff-int-numeric (inexact->exact diff-int)))
+                    ;; Extra sanity check to ensure a number smaller than 1
+                    (if (> diff-avg diff-int)
+                        (/ diff-int-numeric diff-avg-numeric)
+                        1))
+                  1))
+             ;; If there is averaging, the report-title is extended
+             ;; accordingly.
+             (report-title
+              (case averaging-selection
+                ((MonthDelta) (string-append report-title " " (G_ "Monthly Average")))
+                ((WeekDelta) (string-append report-title " " (G_ "Weekly Average")))
+                ((DayDelta) (string-append report-title " " (G_ "Daily Average")))
+                (else report-title)))
+             (currency-frac (gnc-commodity-get-fraction report-currency))
+             ;; This is the list of date intervals to calculate.
+             (dates-list (gnc:make-date-list
+                          ((if do-intervals?
+                               gnc:time64-start-day-time
+                               gnc:time64-end-day-time) from-date-t64)
+                          (gnc:time64-end-day-time to-date-t64)
+                          (gnc:deltasym-to-delta interval)))
+             ;; Here the date strings for the x-axis labels are
+             ;; created.
+             (other-anchor ""))
 
-          ;; Converts a commodity-collector into gnc-monetary in the report's
-          ;; currency using the exchange-fn calculated above. Returns a gnc-monetary
-          ;; multiplied by the averaging-multiplier (smaller than one; multiplication
-          ;; instead of division to avoid division-by-zero issues) in case
-          ;; the user wants to see the amounts averaged over some value.
-          (define (collector->monetary c date)
-            (gnc:make-gnc-monetary
-             report-currency
-             (* averaging-multiplier
-                (gnc:gnc-monetary-amount
-                 (gnc:sum-collector-commodity
-                  c report-currency
-                  (lambda (a b) (exchange-fn a b date)))))))
+        ;; Converts a commodity-collector into gnc-monetary in the report's
+        ;; currency using the exchange-fn calculated above. Returns a gnc-monetary
+        ;; multiplied by the averaging-multiplier (smaller than one; multiplication
+        ;; instead of division to avoid division-by-zero issues) in case
+        ;; the user wants to see the amounts averaged over some value.
+        (define (collector->monetary c date)
+          (gnc:make-gnc-monetary
+           report-currency
+           (* averaging-multiplier
+              (gnc:gnc-monetary-amount
+               (gnc:sum-collector-commodity
+                c report-currency
+                (lambda (a b) (exchange-fn a b date)))))))
 
-          ;; copy of gnc:not-all-zeros using gnc-monetary
-          (define (not-all-zeros data)
-            (cond ((gnc:gnc-monetary? data) (not (zero? (gnc:gnc-monetary-amount data))))
-                  ((list? data) (or-map not-all-zeros data))
-                  (else #f)))
+        (define (all-zeros data)
+          (cond
+           ((gnc:gnc-monetary? data) (zero? (gnc:gnc-monetary-amount data)))
+           ((pair? data) (every all-zeros data))
+           (else (error 'huh))))
 
-          ;; this is an alist of account-balances
-          ;; (list (list acc0 bal0 bal1 bal2 ...)
-          ;;       (list acc1 bal0 bal1 bal2 ...)
-          ;;       ...)
-          ;; whereby each balance is a gnc-monetary
-          (define account-balances-alist
-            (map
-             (lambda (acc)
-               (let* ((comm (xaccAccountGetCommodity acc))
-                      (split->elt (if reverse-bal?
-                                      (lambda (s)
-                                        (gnc:make-gnc-monetary
-                                         comm (- (xaccSplitGetNoclosingBalance s))))
-                                      (lambda (s)
-                                        (gnc:make-gnc-monetary
-                                         comm (xaccSplitGetNoclosingBalance s))))))
-                 (cons acc
-                       (gnc:account-accumulate-at-dates
-                        acc dates-list
-                        #:split->elt split->elt
-                        #:nosplit->elt (gnc:make-gnc-monetary comm 0)))))
-             ;; all selected accounts (of report-specific type), *and*
-             ;; their descendants (of any type) need to be scanned.
-             (gnc:accounts-and-all-descendants accounts)))
+        ;; this is an alist of account-balances
+        ;; (list (list acc0 bal0 bal1 bal2 ...)
+        ;;       (list acc1 bal0 bal1 bal2 ...)
+        ;;       ...)
+        ;; whereby each balance is a gnc-monetary
+        (define account-balances-alist
+          (map
+           (lambda (acc)
+             (let* ((comm (xaccAccountGetCommodity acc))
+                    (split->elt (if reverse-bal?
+                                    (lambda (s)
+                                      (gnc:make-gnc-monetary
+                                       comm (- (xaccSplitGetNoclosingBalance s))))
+                                    (lambda (s)
+                                      (gnc:make-gnc-monetary
+                                       comm (xaccSplitGetNoclosingBalance s))))))
+               (cons acc
+                     (gnc:account-accumulate-at-dates
+                      acc dates-list
+                      #:split->elt split->elt
+                      #:nosplit->elt (gnc:make-gnc-monetary comm 0)))))
+           ;; all selected accounts (of report-specific type), *and*
+           ;; their descendants (of any type) need to be scanned.
+           (gnc:accounts-and-all-descendants accounts)))
 
-          ;; Creates the <balance-list> to be used in the function
-          ;; below.
-          (define (account->balance-list account subacct?)
-            (let* ((accountslist (cons account
-                                   (if subacct?
-                                       (gnc-account-get-descendants account)
-                                       '())))
-                   (selected-balances (filter
-                                       (lambda (entry)
-                                         (member (car entry) accountslist))
-                                       account-balances-alist))
-                   (selected-monetaries (map cdr selected-balances))
-                   (list-of-mon-collectors (apply map gnc:monetaries-add selected-monetaries)))
-              (let loop ((list-of-mon-collectors list-of-mon-collectors)
-                         (dates-list dates-list)
-                         (result '()))
-                (if (null? (if do-intervals?
-                               (cdr list-of-mon-collectors)
-                               list-of-mon-collectors))
-                    (reverse result)
-                    (loop (cdr list-of-mon-collectors)
-                          (cdr dates-list)
-                          (cons (if do-intervals?
-                                    (collector->monetary
-                                     (gnc:collector- (cadr list-of-mon-collectors)
-                                                     (car list-of-mon-collectors))
-                                     (cadr dates-list))
-                                    (collector->monetary
-                                     (car list-of-mon-collectors)
-                                     (car dates-list)))
-                                result))))))
+        ;; Creates the <balance-list> to be used in the function
+        ;; below.
+        (define (account->balance-list account subacct?)
+          (let* ((accountslist (cons account
+                                     (if subacct?
+                                         (gnc-account-get-descendants account)
+                                         '())))
+                 (selected-balances (filter
+                                     (lambda (entry)
+                                       (member (car entry) accountslist))
+                                     account-balances-alist))
+                 (selected-monetaries (map cdr selected-balances))
+                 (list-of-mon-collectors (apply map gnc:monetaries-add selected-monetaries)))
+            (let loop ((list-of-mon-collectors list-of-mon-collectors)
+                       (dates-list dates-list)
+                       (result '()))
+              (if (null? (if do-intervals?
+                             (cdr list-of-mon-collectors)
+                             list-of-mon-collectors))
+                  (reverse result)
+                  (loop (cdr list-of-mon-collectors)
+                        (cdr dates-list)
+                        (cons (if do-intervals?
+                                  (collector->monetary
+                                   (gnc:collector- (cadr list-of-mon-collectors)
+                                                   (car list-of-mon-collectors))
+                                   (cadr dates-list))
+                                  (collector->monetary
+                                   (car list-of-mon-collectors)
+                                   (car dates-list)))
+                              result))))))
 
-          (define (count-accounts current-depth accts)
-            (if (< current-depth tree-depth)
-                (let ((sum 0))
-                  (for-each
-                   (lambda (a)
-                     (set! sum (+ sum (1+ (count-accounts (1+ current-depth)
-                                                          (gnc-account-get-children a))))))
-                   accts)
-                  sum)
-                (length (filter show-acct? accts))))
+        (define (count-accounts current-depth accts)
+          (if (< current-depth tree-depth)
+              (let ((sum 0))
+                (for-each
+                 (lambda (a)
+                   (set! sum
+                     (+ sum (1+ (count-accounts (1+ current-depth)
+                                                (gnc-account-get-children a))))))
+                 accts)
+                sum)
+              (length (filter show-acct? accts))))
 
-          ;; Calculates all account's balances. Returns a list of pairs:
-          ;; (<account> <balance-list>), like '((Earnings (10.0 11.2))
-          ;; (Gifts (12.3 14.5))), where each element of <balance-list>
-          ;; is the balance corresponding to one element in
-          ;; <dates-list>.
-          ;;
-          ;; If current-depth >= tree-depth, then the balances are
-          ;; calculated *with* subaccount's balances. Else only the
-          ;; current account is regarded. Note: All accounts in accts
-          ;; and all their subaccounts are processed, but a balances is
-          ;; calculated and returned *only* for those accounts where
-          ;; show-acct? is true. This is necessary because otherwise we
-          ;; would forget an account that is selected but not its
-          ;; parent.
-          (define (traverse-accounts current-depth accts)
-            (if (< current-depth tree-depth)
-                (let ((res '()))
-                  (for-each
-                   (lambda (a)
-                     (begin
-                       (set! work-done (1+ work-done))
-                       (gnc:report-percent-done (+ 20 (* 70 (/ work-done work-to-do))))
-                       (if (show-acct? a)
-                           (set! res
-                             (cons (list a (account->balance-list a #f))
-                                   res)))
-                       (set! res (append
-                                  (traverse-accounts
-                                   (1+ current-depth)
-                                   (gnc-account-get-children a))
-                                  res))))
-                   accts)
-                  res)
-                ;; else (i.e. current-depth == tree-depth)
-                (map
+        (set! work-to-do (count-accounts 1 topl-accounts))
+
+        ;; Calculates all account's balances. Returns a list of pairs:
+        ;; (<account> <balance-list>), like '((Earnings (10.0 11.2))
+        ;; (Gifts (12.3 14.5))), where each element of <balance-list>
+        ;; is the balance corresponding to one element in
+        ;; <dates-list>.
+        ;;
+        ;; If current-depth >= tree-depth, then the balances are
+        ;; calculated *with* subaccount's balances. Else only the
+        ;; current account is regarded. Note: All accounts in accts
+        ;; and all their subaccounts are processed, but a balances is
+        ;; calculated and returned *only* for those accounts where
+        ;; show-acct? is true. This is necessary because otherwise we
+        ;; would forget an account that is selected but not its
+        ;; parent.
+        (define (traverse-accounts current-depth accts)
+          (if (< current-depth tree-depth)
+              (let ((res '()))
+                (for-each
                  (lambda (a)
                    (set! work-done (1+ work-done))
                    (gnc:report-percent-done (+ 20 (* 70 (/ work-done work-to-do))))
-                   (list a (account->balance-list a #t)))
-                 (filter show-acct? accts))))
+                   (if (show-acct? a)
+                       (set! res
+                         (cons (list a (account->balance-list a #f))
+                               res)))
+                   (set! res
+                     (append (traverse-accounts
+                              (1+ current-depth)
+                              (gnc-account-get-children a))
+                             res)))
+                 accts)
+                res)
+              ;; else (i.e. current-depth == tree-depth)
+              (map
+               (lambda (a)
+                 (set! work-done (1+ work-done))
+                 (gnc:report-percent-done (+ 20 (* 70 (/ work-done work-to-do))))
+                 (list a (account->balance-list a #t)))
+               (filter show-acct? accts))))
 
+        ;; Sort the account list according to the account code field.
+        (define all-data
+          (sort
+           (filter (lambda (l)
+                     (not (zero? (gnc:gnc-monetary-amount
+                                  (apply gnc:monetary+ (cadr l))))))
+                   (traverse-accounts 1 topl-accounts))
+           (case sort-method
+             ((alphabetical)
+              (lambda (a b)
+                (if show-fullname?
+                    (gnc:string-locale<? (gnc-account-get-full-name (car a))
+                                         (gnc-account-get-full-name (car b)))
+                    (gnc:string-locale<? (xaccAccountGetName (car a))
+                                         (xaccAccountGetName (car b))))))
+             ((acct-code)
+              (lambda (a b)
+                (gnc:string-locale<? (xaccAccountGetCode (car a))
+                                     (xaccAccountGetCode (car b)))))
+             ((amount)
+              (lambda (a b)
+                (> (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr a)))
+                   (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr b)))))))))
 
-          ;; The percentage done numbers here are a hack so that
-          ;; something gets displayed. On my system the
-          ;; gnc:case-exchange-time-fn takes about 20% of the time
-          ;; building up a list of prices for later use. Either this
-          ;; routine needs to send progress reports, or the price
-          ;; lookup should be distributed and done when actually
-          ;; needed so as to amortize the cpu time properly.
-          (gnc:report-percent-done 1)
-          (set! commodity-list (gnc:accounts-get-commodities
-                                (gnc:accounts-and-all-descendants accounts)
-                                report-currency))
-          (set! exchange-fn (gnc:case-exchange-time-fn
-                             price-source report-currency
-                             commodity-list to-date-t64
-                             5 15))
+        (cond
+         ((or (null? all-data) (all-zeros (map cadr all-data)))
+          (gnc:html-document-add-object!
+           document
+           (gnc:html-make-empty-data-warning
+            report-title (gnc:report-id report-obj))))
 
-          (set! work-to-do (count-accounts 1 topl-accounts))
+         (else
+          (let* ((dates-list (if do-intervals?
+                                 (list-head dates-list (1- (length dates-list)))
+                                 dates-list))
+                 (date-string-list (map qof-print-date dates-list)))
 
-          ;; Sort the account list according to the account code field.
-          (set! all-data
-            (sort
-             (filter (lambda (l)
-                       (not (zero? (gnc:gnc-monetary-amount
-                                    (apply gnc:monetary+ (cadr l))))))
-                     (traverse-accounts 1 topl-accounts))
-             (case sort-method
-               ((alphabetical)
-                (lambda (a b)
-                  (if show-fullname?
-                      (gnc:string-locale<? (gnc-account-get-full-name (car a))
-                                           (gnc-account-get-full-name (car b)))
-                      (gnc:string-locale<? (xaccAccountGetName (car a))
-                                           (xaccAccountGetName (car b))))))
-               ((acct-code)
-                (lambda (a b)
-                  (gnc:string-locale<? (xaccAccountGetCode (car a))
-                                       (xaccAccountGetCode (car b)))))
-               ((amount)
-                (lambda (a b)
-                  (> (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr a)))
-                     (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr b)))))))))
+            ;; Set chart title, subtitle etc.
+            (gnc:html-chart-set-type!
+             chart (if (eq? chart-type 'barchart) 'bar 'line))
 
-          ;; Proceed if the data is non-zeros
-          (if
-           (and (not (null? all-data))
-                (not-all-zeros  (map cadr all-data)))
+            (gnc:html-chart-set-title!
+             chart (list report-title
+                         (format #f
+                                 (if do-intervals?
+                                     (G_ "~a to ~a")
+                                     (G_ "Balances ~a to ~a"))
+                                 (qof-print-date from-date-t64)
+                                 (qof-print-date to-date-t64))))
 
-           (let* ((dates-list (if do-intervals?
-                                  (list-head dates-list (1- (length dates-list)))
-                                  dates-list))
-                  (date-string-list (map qof-print-date dates-list)))
+            (gnc:html-chart-set-width! chart width)
+            (gnc:html-chart-set-height! chart height)
 
-             ;; Set chart title, subtitle etc.
+            (gnc:html-chart-set-data-labels! chart date-string-list)
+            (gnc:html-chart-set-y-axis-label!
+             chart (gnc-commodity-get-mnemonic report-currency))
 
-             (gnc:html-chart-set-type!
-              chart (if (eq? chart-type 'barchart) 'bar 'line))
+            ;; If we have too many categories, we sum them into a new
+            ;; 'other' category and add a link to a new report with just
+            ;; those accounts.
+            (if (> (length all-data) max-slices)
+                (let* ((start (take all-data (1- max-slices)))
+                       (finish (drop all-data (1- max-slices)))
+                       (other-sum (map
+                                   (lambda (l) (apply gnc:monetary+ l))
+                                   (apply zip (map cadr finish)))))
+                  (set! all-data
+                    (append start
+                            (list (list (G_ "Other") other-sum))))
+                  (let* ((options (gnc:make-report-options reportguid)))
+                    ;; now copy all the options
+                    (gnc:options-copy-values
+                     (gnc:report-options report-obj) options)
+                    ;; and set the destination accounts
+                    (gnc:option-set-value
+                     (gnc:lookup-option options gnc:pagename-accounts
+                                        optname-accounts)
+                     (map car finish))
+                    ;; Set the URL to point to this report.
+                    (set! other-anchor
+                      (gnc:report-anchor-text
+                       (gnc:make-report reportguid options))))))
 
-             (gnc:html-chart-set-title!
-              chart (list report-title
-                          (format #f
-                                  (if do-intervals?
-                                      (G_ "~a to ~a")
-                                      (G_ "Balances ~a to ~a"))
-                                  (qof-print-date from-date-t64)
-                                  (qof-print-date to-date-t64))))
+            (gnc:report-percent-done 92)
 
-             (gnc:html-chart-set-width! chart width)
-             (gnc:html-chart-set-height! chart height)
+            (for-each
+             (lambda (series color stack)
+               (let* ((acct (car series))
+                      (label (cond
+                              ((string? acct) (car series))
+                              (show-fullname? (gnc-account-get-full-name acct))
+                              (else (xaccAccountGetName acct))))
+                      (amounts (map gnc:gnc-monetary-amount (cadr series)))
+                      (stack (if stacked? "default" (number->string stack)))
+                      (fill (eq? chart-type 'barchart))
+                      (urls (cond
+                             ((string? acct) other-anchor)
+                             ((null? (gnc-account-get-children acct))
+                              (gnc:account-anchor-text acct))
 
-             (gnc:html-chart-set-data-labels! chart date-string-list)
-             (gnc:html-chart-set-y-axis-label!
-              chart (gnc-commodity-get-mnemonic report-currency))
+                             ;; because the tree-depth option for
+                             ;; accounts/levels goes up to 6. FIXME:
+                             ;; magic number.
+                             ((>= tree-depth 6) (gnc:account-anchor-text acct))
 
-             ;; If we have too many categories, we sum them into a new
-             ;; 'other' category and add a link to a new report with just
-             ;; those accounts.
-             (if (> (length all-data) max-slices)
-                 (let* ((start (take all-data (1- max-slices)))
-                        (finish (drop all-data (1- max-slices)))
-                        (other-sum (map
-                                    (lambda (l) (apply gnc:monetary+ l))
-                                    (apply zip (map cadr finish)))))
-                   (set! all-data
-                     (append start
-                             (list (list (G_ "Other") other-sum))))
-                   (let* ((options (gnc:make-report-options reportguid)))
-                     ;; now copy all the options
-                     (gnc:options-copy-values
-                      (gnc:report-options report-obj) options)
-                     ;; and set the destination accounts
-                     (gnc:option-set-value
-                      (gnc:lookup-option options gnc:pagename-accounts
-                                         optname-accounts)
-                      (map car finish))
-                     ;; Set the URL to point to this report.
-                     (set! other-anchor
-                       (gnc:report-anchor-text
-                        (gnc:make-report reportguid options))))))
+                             (else
+                              (gnc:make-report-anchor
+                               reportguid report-obj
+                               (list
+                                (list gnc:pagename-accounts optname-accounts
+                                      (cons acct (gnc-account-get-children acct)))
+                                (list gnc:pagename-accounts optname-levels
+                                      (1+ tree-depth))
+                                (list gnc:pagename-general
+                                      gnc:optname-reportname
+                                      (if show-fullname?
+                                          (gnc-account-get-full-name acct)
+                                          (xaccAccountGetName acct)))))))))
+                 (gnc:html-chart-add-data-series!
+                  chart label amounts color
+                  'stack stack 'fill fill 'urls urls)))
+             all-data
+             (gnc:assign-colors (length all-data))
+             (iota (length all-data)))
 
-             (gnc:report-percent-done 92)
+            (gnc:html-chart-set-stacking?! chart stacked?)
+            (gnc:html-chart-set-currency-iso!
+             chart (gnc-commodity-get-mnemonic report-currency))
+            (gnc:html-chart-set-currency-symbol!
+             chart (gnc-commodity-get-nice-symbol report-currency))
 
-             (for-each
-              (lambda (series color stack)
-                (let* ((acct (car series))
-                       (label (cond
-                               ((string? acct)
-                                (car series))
-                               (show-fullname?
-                                (gnc-account-get-full-name acct))
-                               (else (xaccAccountGetName acct))))
-                       (amounts (map gnc:gnc-monetary-amount (cadr series)))
-                       (stack (if stacked?
-                                  "default"
-                                  (number->string stack)))
-                       (fill (eq? chart-type 'barchart))
-                       (urls (cond
-                              ((string? acct)
-                               other-anchor)
+            (gnc:report-percent-done 98)
+            (gnc:html-document-add-object! document chart)
 
-                              ((null? (gnc-account-get-children acct))
-                               (gnc:account-anchor-text acct))
+            (when show-table?
+              (let ((table (gnc:make-html-table))
+                    (scu (gnc-commodity-get-fraction report-currency))
+                    (cols>1? (pair? (cdr all-data))))
 
-                              ;; because the tree-depth option for
-                              ;; accounts/levels goes up to 6. FIXME:
-                              ;; magic number.
-                              ((>= tree-depth 6)
-                               (gnc:account-anchor-text acct))
+                (define (make-cell contents)
+                  (gnc:make-html-table-cell/markup "number-cell" contents))
 
-                              (else
-                               (gnc:make-report-anchor
-                                reportguid report-obj
+                (for-each
+                 (lambda (date row)
+                   (gnc:html-table-append-row!
+                    table
+                    (append (list (make-cell date))
+                            (map make-cell row)
+                            (if cols>1?
                                 (list
-                                 (list gnc:pagename-accounts optname-accounts
-                                       (cons acct (gnc-account-get-children acct)))
-                                 (list gnc:pagename-accounts optname-levels
-                                       (1+ tree-depth))
-                                 (list gnc:pagename-general
-                                       gnc:optname-reportname
-                                       (if show-fullname?
-                                           (gnc-account-get-full-name acct)
-                                           (xaccAccountGetName acct)))))))))
-                  (gnc:html-chart-add-data-series!
-                   chart label amounts color
-                   'stack stack 'fill fill 'urls urls)))
-              all-data
-              (gnc:assign-colors (length all-data))
-              (iota (length all-data)))
+                                 (make-cell (apply gnc:monetary+ row)))
+                                '()))))
+                 date-string-list
+                 (apply zip (map cadr all-data)))
 
-             (gnc:html-chart-set-stacking?! chart stacked?)
-             (gnc:html-chart-set-currency-iso!
-              chart (gnc-commodity-get-mnemonic report-currency))
-             (gnc:html-chart-set-currency-symbol!
-              chart (gnc-commodity-get-nice-symbol report-currency))
+                (gnc:html-table-set-col-headers!
+                 table
+                 (append
+                  (list (G_ "Date"))
+                  (map
+                   (lambda (col)
+                     (cond
+                      ((string? col) col)
+                      (show-fullname? (gnc-account-get-full-name col))
+                      (else (xaccAccountGetName col))))
+                   (map car all-data))
+                  (if cols>1?
+                      (list (G_ "Grand Total"))
+                      '())))
 
-             (gnc:report-percent-done 98)
-             (gnc:html-document-add-object! document chart)
+                (gnc:html-document-add-object! document table)))
 
-             (when show-table?
-               (let ((table (gnc:make-html-table))
-                     (scu (gnc-commodity-get-fraction report-currency))
-                     (cols>1? (pair? (cdr all-data))))
-
-                 (define (make-cell contents)
-                   (gnc:make-html-table-cell/markup "number-cell" contents))
-
-                 (for-each
-                  (lambda (date row)
-                    (gnc:html-table-append-row!
-                     table
-                     (append (list (make-cell date))
-                             (map make-cell row)
-                             (if cols>1?
-                                 (list
-                                  (make-cell (apply gnc:monetary+ row)))
-                                 '()))))
-                  date-string-list
-                  (apply zip (map cadr all-data)))
-
-                 (gnc:html-table-set-col-headers!
-                  table
-                  (append
-                   (list (G_ "Date"))
-                   (map
-                    (lambda (col)
-                      (cond
-                       ((string? col) col)
-                       (show-fullname? (gnc-account-get-full-name col))
-                       (else (xaccAccountGetName col))))
-                    (map car all-data))
-                   (if cols>1?
-                       (list (G_ "Grand Total"))
-                       '())))
-
-                 (gnc:html-document-add-object! document table)))
-
-             (cond
-              ((eq? export-type 'csv)
-               (let ((iso-date (qof-date-format-get-string QOF-DATE-FORMAT-ISO)))
-                 (gnc:html-document-set-export-string
-                  document
-                  (gnc:lists->csv
-                   (cons (append
-                          (list (G_ "Date"))
-                          (map
-                           (lambda (col)
-                             (cond
-                              ((string? col) col)
-                              (show-fullname? (gnc-account-get-full-name col))
-                              (else (xaccAccountGetName col))))
-                           (map car all-data))
-                          (if (pair? (cdr all-data))
-                              (list (G_ "Grand Total"))
-                              '()))
+            (cond
+             ((eq? export-type 'csv)
+              (let ((iso-date (qof-date-format-get-string QOF-DATE-FORMAT-ISO)))
+                (gnc:html-document-set-export-string
+                 document
+                 (gnc:lists->csv
+                  (cons (append
+                         (list (G_ "Date"))
                          (map
-                          (lambda (date row)
-                            (append
-                             (list date)
-                             row
-                             (if (pair? (cdr all-data))
-                                 (list (apply gnc:monetary+ row))
-                                 '())))
-                          (map (cut gnc-print-time64 <> iso-date) dates-list)
-                          (apply zip (map cadr all-data))))))))))
-
-           ;; else if empty data
-           (gnc:html-document-add-object!
-            document
-            (gnc:html-make-empty-data-warning
-             report-title (gnc:report-id report-obj)))))
-
-        ;; else if no accounts selected
-        (gnc:html-document-add-object!
-         document
-         (gnc:html-make-no-account-warning
-          report-title (gnc:report-id report-obj))))
+                          (lambda (col)
+                            (cond
+                             ((string? col) col)
+                             (show-fullname? (gnc-account-get-full-name col))
+                             (else (xaccAccountGetName col))))
+                          (map car all-data))
+                         (if (pair? (cdr all-data))
+                             (list (G_ "Grand Total"))
+                             '()))
+                        (map
+                         (lambda (date row)
+                           (append
+                            (list date)
+                            row
+                            (if (pair? (cdr all-data))
+                                (list (apply gnc:monetary+ row))
+                                '())))
+                         (map (cut gnc-print-time64 <> iso-date) dates-list)
+                         (apply zip (map cadr all-data)))))))))))))))
 
     (unless (gnc:html-document-export-string document)
       (gnc:html-document-set-export-error document (G_ "No exportable data")))
