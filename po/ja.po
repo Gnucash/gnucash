@@ -19,10 +19,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-14 22:46+0100\n"
-"PO-Revision-Date: 2021-01-05 13:31+0000\n"
+"PO-Revision-Date: 2021-01-15 13:32+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -26068,14 +26068,12 @@ msgid "Maximum number of stacks in the chart."
 msgstr "チャート内の積み上げの最大数です。"
 
 #: gnucash/report/reports/standard/category-barchart.scm:290
-#, fuzzy
-#| msgid "Invalid Transactions"
 msgid "Invalid dates"
-msgstr "無効な取引"
+msgstr "無効な日付"
 
 #: gnucash/report/reports/standard/category-barchart.scm:291
 msgid "Start date must be earlier than End date"
-msgstr ""
+msgstr "開始日付は終了日付より前にしてください。"
 
 #: gnucash/report/reports/standard/category-barchart.scm:329
 msgid "Daily Average"
