@@ -15,17 +15,18 @@
 # Christopher Lam, 2018
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Christopher Lam <christopher.lck@gmail.com>, 2020.
+# Laurent DÉRÉDEC <images-ld@gmx.fr>, 2021.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-14 22:46+0100\n"
-"PO-Revision-Date: 2020-12-29 04:29+0000\n"
-"Last-Translator: Christopher Lam <christopher.lck@gmail.com>\n"
+"PO-Revision-Date: 2021-01-15 23:32+0000\n"
+"Last-Translator: Laurent DÉRÉDEC <images-ld@gmx.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -33,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -554,6 +555,13 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"Toute transaction à un champs \"Notes\" où il est possible de mettre un "
+"information utile.\n"
+"\n"
+"Pour le rendre visible\n"
+"sélectionner \"view\" dans la barre de de menu et cliquer sur \"Double "
+"ligne\" ou\n"
+"cocher \"Mode Double ligne\" dans les préférences : Défauts du registre."
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -624,7 +632,7 @@ msgid ""
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
 msgstr ""
-"Quand vous saisissez des dates, vous pouvez appuyez sur \"+\" ou \"-\"  pour "
+"Quand vous saisissez des dates, vous pouvez appuyez sur \"+\" ou \"-\" pour "
 "incrémenter ou décrémenter la date sélectionnée. Vous pouvez également "
 "utiliser \"+\" et \"-\" pour incrémenter et décrémenter les numéros de "
 "chèques."
@@ -3198,7 +3206,7 @@ msgstr "Haut"
 
 #: gnucash/gnome/dialog-progress.c:484 gnucash/gnome/dialog-progress.c:533
 msgid "(paused)"
-msgstr " (en pause)"
+msgstr "(en pause)"
 
 #: gnucash/gnome/dialog-progress.c:768 gnucash/gnome/dialog-progress.c:771
 msgid "Complete"
@@ -11685,15 +11693,14 @@ msgstr "Dernières position et dimensions de la fenêtre"
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.flicker.gschema.xml.in:7
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:6
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:65
-#, fuzzy
 msgid ""
 "This setting describes the size and position of the window when it was last "
 "closed. The numbers are the X and Y coordinates of the top left corner of "
 "the window followed by the width and height of the window."
 msgstr ""
 "Cette option contient les coordonnées de la dernière position de la fenêtre. "
-"Les chiffres sont les coordonnées du coin en haut à gauche (X, Y),  ainsi "
-"que la largeur et la hauteur de la fenêtre."
+"Les chiffres sont les coordonnées du coin en haut à gauche (X, Y), ainsi que "
+"la largeur et la hauteur de la fenêtre."
 
 # po/guile_strings.txt:92
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:24
@@ -12196,8 +12203,8 @@ msgid ""
 "This field contains the last pathname used by this window. It will be used "
 "as the initial filename/pathname the next time this window is opened."
 msgstr ""
-" Ce champ contient le dernier chemin utilisé par ce dialogue. Il sera "
-"utilisé comme chemin initial à la prochaine ouverture de ce dialogue."
+"Ce champ contient le dernier chemin utilisé par ce dialogue. Il sera utilisé "
+"comme chemin initial à la prochaine ouverture de ce dialogue."
 
 # po/guile_strings.txt:192
 #: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:17
@@ -12222,8 +12229,8 @@ msgid ""
 "This setting indicates whether to search in all items in the current class, "
 "or only in 'active' items in the current class."
 msgstr ""
-" Ce champ permet de définir si la recherche doit être effectuée dans tous "
-"les éléments de la classe actuelle ou seulement les éléments \"actifs\"."
+"Ce champ permet de définir si la recherche doit être effectuée dans tous les "
+"éléments de la classe actuelle ou seulement les éléments \"actifs\"."
 
 #: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:189
 #: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:190
@@ -14918,14 +14925,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:487
-#, fuzzy
 msgid ""
 "The selection you make here is only the starting point for your personalized "
 "account hierarchy. Accounts can be added, renamed, moved, or deleted by hand "
 "later at any time."
 msgstr ""
-"\n"
-"Sélectionnez les catégories correspondantes à votre utilisation de GnuCash. "
+"sélectionnez les catégories correspondantes à votre utilisation de GnuCash. "
 "Chaque catégorie sélectionnée entrainera la création de plusieurs comptes. "
 "Choisissez les catégories vous concernant. Vous pourrez toujours créer des "
 "comptes supplémentaires manuellement plus tard."
@@ -16905,7 +16910,7 @@ msgid ""
 "know if these sources retrieve information from a single site or from "
 "multiple sites on the internet."
 msgstr ""
-"Ce sont des sources de cours récemment ajoutées à  \"F::Q\". GnuCash ne sait "
+"Ce sont des sources de cours récemment ajoutées à \"F::Q\". GnuCash ne sait "
 "pas si elles chargent des informations depuis un seul ou plusieurs sites sur "
 "Internet."
 
@@ -17507,9 +17512,8 @@ msgid "Case insensitive searching is available on 'Account Full Name'."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:230
-#, fuzzy
 msgid "_Search"
-msgstr " Recherche "
+msgstr "Recherche"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:266
 msgid ""
@@ -19848,7 +19852,7 @@ msgstr "Prévenir d'avance "
 #: gnucash/gtkbuilder/dialog-sx.glade:965
 #: gnucash/gtkbuilder/dialog-sx.glade:1024
 msgid " days"
-msgstr "jours"
+msgstr " jours"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:982
 msgid "Create automatically"
@@ -21520,9 +21524,8 @@ msgstr "Nom du nouveau modèle"
 
 # messages-i18n.c:123
 #: gnucash/import-export/aqb/dialog-ab.glade:942
-#, fuzzy
 msgid " _Name of the new template:"
-msgstr "Nom du nouveau modèle"
+msgstr " Nom du nouveau modèle"
 
 # messages-i18n.c:123
 #: gnucash/import-export/aqb/dialog-ab.glade:956
@@ -22496,7 +22499,9 @@ msgstr ""
 msgid ""
 "\n"
 "Processing...\n"
-msgstr "Saisir un _paiement..."
+msgstr ""
+"\n"
+"Saisir un _paiement...\n"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -22611,9 +22616,8 @@ msgid "Account-posted"
 msgstr "Notes des comptes"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:164
-#, fuzzy
 msgid "Memo-posted"
-msgstr " (publié)"
+msgstr "(publié)"
 
 # messages-i18n.c:188 po/guile_strings.txt:51
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:165
@@ -23024,21 +23028,21 @@ msgstr "_Compresser cette colonne"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1881
-#, fuzzy, c-format
+#, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
 msgstr[0] "Ajouter un nouveau cours."
-msgstr[1] "Ajouter un nouveau cours."
+msgstr[1] "Ajouter des nouveaux cours."
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1886
-#, fuzzy, c-format
+#, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
 msgstr[0] "_Dupliquer la facture"
-msgstr[1] "_Dupliquer la facture"
+msgstr[1] "_Dupliquer les factures"
 
 # messages-i18n.c:46
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
@@ -23327,9 +23331,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:516
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:571
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:579
-#, fuzzy
 msgid " could not be understood.\n"
-msgstr "La colonne %s n'a pas pu être comprise."
+msgstr " La colonne %s n'a pas pu être comprise.\n"
 
 # po/guile_strings.txt:230
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
@@ -28684,7 +28687,7 @@ msgstr "Histogramme de l'actif"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1224
 #, fuzzy
 msgid " to "
-msgstr "du %s au %s"
+msgstr " du %s au %s "
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -34069,7 +34072,7 @@ msgstr "Non lié aux taxes ; %s%s: %s (code %s, type de taxe %s)"
 #: libgnucash/app-utils/gnc-ui-util.c:852
 #, c-format
 msgid "(Tax-related subaccounts: %d)"
-msgstr "(Taxes liées aux sous-comptes :  %d)"
+msgstr "(Taxes liées aux sous-comptes : %d)"
 
 #: libgnucash/app-utils/gnc-ui-util.c:872
 msgctxt "Reconciled flag 'not cleared'"
@@ -34434,7 +34437,7 @@ msgstr " + "
 #: libgnucash/engine/Recurrence.c:779 libgnucash/engine/Recurrence.c:791
 #, c-format
 msgid " (x%u)"
-msgstr "(x%u)"
+msgstr " (x%u)"
 
 #. Translators: %s is an already-localized form of the day of the week.
 #: libgnucash/engine/Recurrence.c:661
