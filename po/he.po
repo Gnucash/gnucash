@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-14 22:46+0100\n"
-"PO-Revision-Date: 2021-01-13 12:32+0000\n"
+"PO-Revision-Date: 2021-01-15 09:32+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -488,7 +488,7 @@ msgid ""
 "online manual."
 msgstr ""
 "במידה ותוכניות פיננסיות אחרות כגון קוויקן מוכרות לכם, שימו לב שגנוקאש משתמשת "
-"בחשבונות במקום בקטגוריות על מנת לעקוב אחר הכנסות והוצאות. לקבלת מידע נוסף "
+"בחשבונות במקום סוגי-אב על מנת לעקוב אחר הכנסות והוצאות. לקבלת מידע נוסף "
 "אודות חשבונות הכנסה והוצאות, נא לעיין במדריך המקוון של גנוקאש."
 
 #: doc/tip_of_the_day.list.c:23
@@ -831,7 +831,7 @@ msgstr "ללא תיאור."
 
 #: gnucash/gnome/assistant-hierarchy.c:891
 msgid "Accounts in Category"
-msgstr "חשבונות בקטגוריה"
+msgstr "חשבונות בסוג-אב"
 
 #: gnucash/gnome/assistant-hierarchy.c:1103
 msgid "zero"
@@ -3214,8 +3214,8 @@ msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
-"זהירות: אם תוגדר קטגוריות TXF ולאחר מכן ישתנה ה- ' סוג ', נדרש יהיה לאפס "
-"באופן ידני קטגוריות אלה אחת בכל פעם"
+"זהירות: במידה ויוגדר סוג-אב TXF ולאחר מכן ישתנה ה- ' סוג ', נדרש יהיה לאפס "
+"באופן ידני סוגי-אב אלה אחת בכל פעם"
 
 #: gnucash/gnome/dialog-tax-info.c:1393
 msgid "Form"
@@ -3917,7 +3917,7 @@ msgstr "תרשים חשבונות _חדש..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:204
 msgid "Extend the current book by merging with new account type categories"
-msgstr "הרחבת ספר החשבונות הנוכחי על ידי מיזוג עם קטגוריות סוגי חשבונות חדשים"
+msgstr "הרחבת ספר החשבונות הנוכחי על ידי מיזוגם עם סוגי-אב סוג חשבון חדשים"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:209
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:220
@@ -13149,7 +13149,7 @@ msgstr ""
 "במידה ואחת מה<i>בדיקות כשלו</i> עמוד התצוגה המקדימה יוצג כדי לאפשר לנסות "
 "ולתקן את הבעיה.\n"
 "\n"
-"בעמוד הבא ניתן יהיה לשייך כל תנועה לקטגוריה.\n"
+"בעמוד הבא ניתן יהיה לשייך כל תנועה לסוג-אב.\n"
 "\n"
 "במידה וזה <i>יבוא ראשוני לקובץ חדש</i>, תוצג תחילה תיבת דו-שיח להגדרת "
 "אפשרויות ספרים, מכיוון שאלו עשויים להשפיע על אופן המרת הנתונים המיובאים "
@@ -13217,8 +13217,8 @@ msgid ""
 "that you foresee you will use GnuCash. Each category you select will cause "
 "several accounts to be created."
 msgstr ""
-"נא לבחור בקטגורית שפה ואזור ייחודית שתתאים לדרך השימוש הצפויה שלכם בגנוקאש. "
-"כל קטגוריה שתבחר תביא ליצירת סדרת חשבונות."
+"נא לבחור בסוג-אב שפה ואזור ייחודיים שיתאימו לדרך השימוש הצפויה שלכם בגנוקאש. "
+"כל סוג-אב שיבחר יביא ליצירת סדרת חשבונות בהתאם."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:170
 msgid "<b>Categories</b>"
@@ -13237,7 +13237,7 @@ msgstr "_נקה הכל"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:319
 msgid "<b>Category Description</b>"
-msgstr "<b>תיאור קטגוריה</b>"
+msgstr "<b>תיאור סוג-אב</b>"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:427
 msgid "<b>Notes</b>"
@@ -13819,7 +13819,7 @@ msgid ""
 "safely within GnuCash."
 msgstr ""
 "גנוקאש משתמש בחשבונות נפרדים של הכנסות והוצאות במקום בקטגוריות כדי לסווג את "
-"תנועות. כל אחת מהקטגוריות בקובץ ה-QIF יומר לחשבון גנוקאש. \n"
+"תנועות. כל אחד מסוגי-האב בקובץ ה-QIF יומר לחשבון גנוקאש. \n"
 "\n"
 "בעמוד הבא, יתאפשר לבדוק את ההתאמות המוצעות בין קטגוריות QIF וחשבונות גנוקאש. "
 "ניתן לשנות את ההתאמות על ידי הקשה כפולה על הקו המכיל את שם הקטגוריה.\n"
@@ -13848,9 +13848,9 @@ msgstr ""
 "קבצי QIF שהורדו מבנקים וממוסדות פיננסיים אחרים עשויים שלא להכיל מידע על "
 "חשבונות וקטגוריות אשר יאפשרו להקצות אותם נכון לחשבונות גנוקאש.\n"
 "\n"
-"בעמוד הבא יוצג המלל המופיע בשדות המוטב והמזכר של תנועות ללא חשבון QIF או "
-"קטגוריה. כברירת מחדל תנועות אלו מוקצות לחשבון 'לא מוגדר' בגנוקאש. במידה "
-"ויבחר חשבון אחר, הוא ייזכר עבור קבצי QIF עתידיים. "
+"בעמוד הבא יוצג המלל המופיע בשדות המוטב והמזכר של תנועות ללא חשבון QIF או סוג-"
+"אב. כברירת מחדל תנועות אלו מוקצות לחשבון 'לא מוגדר' בגנוקאש. במידה ויבחר "
+"חשבון אחר, הוא ייזכר עבור קבצי QIF עתידיים. "
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:815
 msgid "Payees and memos"
@@ -14005,9 +14005,9 @@ msgid ""
 "\n"
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
-"הקשה על 'החלה' ליבוא נתונים מאזור האחסון הזמני ולעדכן את חשבונות גנוקאש. "
-"מידע הקטגוריה והתאמת חשבון שהוזנו יישמרו וישמשו לברירות המחדל לפעם הבאה "
-"שיעשה שימוש במנגנון יבוא ה- QIF. \n"
+"הקשה על 'החלה' ליבוא נתונים מאזור האחסון הזמני ולעדכון חשבונות גנוקאש. מידע "
+"סוג-אב והתאמת חשבון שהוזנו יישמרו וישמשו לברירות המחדל לפעם הבאה שיעשה שימוש "
+"במנגנון יבוא ה- QIF. \n"
 "\n"
 "הקשה על 'הקודם' לסקירת התאמת החשבון והקטגוריה, כדי לשנות הגדרות מטבע ואבטחה "
 "עבור חשבונות חדשים, או כדי להוסיף קבצים נוספים לאזור האחסון הזמני.\n"
@@ -20181,7 +20181,7 @@ msgstr "קובץ יוצא בהצלחה!\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 msgid "Full Category Path"
-msgstr "נתיב קטגוריה מלא"
+msgstr "נתיב סוג-אב מלא"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:616
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:628
@@ -21313,7 +21313,7 @@ msgstr "שם חשבון QIF"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3673
 msgid "QIF category name"
-msgstr "שם קטגורית QIF"
+msgstr "שם סוג-אב QIF"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3679
 msgid "QIF payee/memo"
@@ -21425,7 +21425,7 @@ msgstr "המערכת תתעלם משורת מחלקה"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:477
 msgid "Ignoring category line"
-msgstr "המערכת תתעלם משורת קטגוריה"
+msgstr "המערכת תתעלם משורת סוג-אב"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:508
 msgid "Ignoring security line"
@@ -21473,7 +21473,7 @@ msgstr "מדרגת מס"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:701
 msgid "Category budget amount"
-msgstr "סכום קטגורית תקציב"
+msgstr "סכום סוג-אב תקציב"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:702
 msgid "Account budget amount"
@@ -25932,14 +25932,12 @@ msgid "Maximum number of stacks in the chart."
 msgstr "מספר מרבי של ערימות בתרשים."
 
 #: gnucash/report/reports/standard/category-barchart.scm:290
-#, fuzzy
-#| msgid "Invalid Transactions"
 msgid "Invalid dates"
-msgstr "תנועה לא תקינה"
+msgstr "לא תקין"
 
 #: gnucash/report/reports/standard/category-barchart.scm:291
 msgid "Start date must be earlier than End date"
-msgstr ""
+msgstr "תאריך התחלה חייב להיות מוקדם מתאריך סיום"
 
 #: gnucash/report/reports/standard/category-barchart.scm:329
 msgid "Daily Average"
