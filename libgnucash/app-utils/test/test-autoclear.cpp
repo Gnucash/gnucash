@@ -157,9 +157,9 @@ TEST_P(AutoClearTest, DoesAutoClear) {
 }
 
 #ifndef INSTANTIATE_TEST_SUITE_P
-// Silence "no previous declaration for" which is treated as error, due to -Werror
-testing::internal::ParamGenerator<TestCase*> gtest_InstantiationAutoClearTestAutoClearTest_EvalGenerator_();
-std::string gtest_InstantiationAutoClearTestAutoClearTest_EvalGenerateName_(const testing::TestParamInfo<TestCase*>&);
+// Silence "no previous declaration for" (treated as error due to -Werror) when building with GoogleTest < 1.8.1
+static testing::internal::ParamGenerator<TestCase*> gtest_InstantiationAutoClearTestAutoClearTest_EvalGenerator_();
+static std::string gtest_InstantiationAutoClearTestAutoClearTest_EvalGenerateName_(const testing::TestParamInfo<TestCase*>&);
 
 INSTANTIATE_TEST_CASE_P(
 #else // INSTANTIATE_TEST_SUITE_P
