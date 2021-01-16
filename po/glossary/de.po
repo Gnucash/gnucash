@@ -8,14 +8,15 @@
 # Milo Ivir <mail@milotype.de>, 2020.
 # SebastianL <Sebastian.Lueck@gmail.com>, 2020.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2021.
+# Moritz Höppner <moritz.hoeppner@resourcify.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.18\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-01-10 18:32+0000\n"
-"Last-Translator: Marco Zietzling <marco.zietzling@gmail.com>\n"
+"PO-Revision-Date: 2021-01-16 22:32+0000\n"
+"Last-Translator: Moritz Höppner <moritz.hoeppner@resourcify.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -353,7 +354,7 @@ msgstr "Benutzerdefiniert"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "Dashboard"
 
 #. "The backend where the data is stored."
 msgid "database"
