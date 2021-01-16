@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-14 22:46+0100\n"
-"PO-Revision-Date: 2021-01-04 01:29+0000\n"
+"PO-Revision-Date: 2021-01-16 18:32+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -3139,7 +3139,7 @@ msgstr "Stavka s bilješkom „%s” ima neispravan konto."
 
 #: gnucash/gnome/dialog-sx-editor.c:742
 msgid "Invalid Account in Split"
-msgstr "Nevaljani konto u stavci"
+msgstr "Neispravan konto u stavci"
 
 #: gnucash/gnome/dialog-sx-editor.c:754
 #, c-format
@@ -3203,7 +3203,7 @@ msgstr "(Potrebna je vrijednost)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:829
 msgid "Invalid Transactions"
-msgstr "Nevaljane transakcije"
+msgstr "Neispravne transakcije"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:876
 #, c-format
@@ -20886,7 +20886,7 @@ msgstr "Došlo je do problema prilikom spremanja postavaka. Pokušaj ponovo."
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1143
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1118
 msgid "Invalid encoding selected"
-msgstr "Odabrano je nevaljano kodiranje"
+msgstr "Odabrano je neispravno kodiranje"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1304
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1228
@@ -21217,7 +21217,7 @@ msgstr "„Valuta u” ne smije biti ista kao „Roba iz”."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:221
 msgid "Value parsed into an invalid currency for a currency column type."
-msgstr "Vrijednost je obrađena u nevaljanu valutu za vrstu stupca valute."
+msgstr "Vrijednost je obrađena u neispravnu valutu za vrstu stupca valute."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:235
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:243
@@ -21303,15 +21303,15 @@ msgstr "Nema stupca dugovanja ili potraživanja."
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr ""
 "Stavka je usklađena, ali stupac datuma usklađivanja nedostaje ili je "
-"nevaljan."
+"neispravan."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:604
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
 msgstr ""
-"Podjela prijenosa je usklađena, ali sutpac za datum usklađivanja prijenosa "
-"nedostaje ili je nevaljan."
+"Podjela prijenosa je usklađena, ali stupac datuma usklađivanja prijenosa "
+"nedostaje ili je neispravan."
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:49
 msgid "No Settings"
@@ -22184,7 +22184,8 @@ msgstr ""
 msgid ""
 "Invalid Entry: You need to supply an account in the right currency for this "
 "position."
-msgstr "Nevaljani unos: Moraš zadati konto u ispavnoj valuti za ovaj položaj."
+msgstr ""
+"Neispravan unos: Moraš zadati konto s ispravnom valutom za ovu poziciju."
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:184
 msgid "This account should usually be of type income."
@@ -26546,14 +26547,12 @@ msgid "Maximum number of stacks in the chart."
 msgstr "Najveći broj naslaganja u stupčanom dijagramu."
 
 #: gnucash/report/reports/standard/category-barchart.scm:290
-#, fuzzy
-#| msgid "Invalid Transactions"
 msgid "Invalid dates"
-msgstr "Nevaljane transakcije"
+msgstr "Neispravni datumi"
 
 #: gnucash/report/reports/standard/category-barchart.scm:291
 msgid "Start date must be earlier than End date"
-msgstr ""
+msgstr "Datum početka mora biti prije datuma završetka"
 
 #: gnucash/report/reports/standard/category-barchart.scm:329
 msgid "Daily Average"
@@ -30507,7 +30506,7 @@ msgstr ""
 #: libgnucash/app-utils/gnc-ui-util.c:720
 #, c-format
 msgid "Invalid code %s for tax type %s"
-msgstr "Nevaljana šifra „%s“ za vrstu poreza „%s“"
+msgstr "Neispravna šifra „%s“ za vrstu poreza „%s“"
 
 #: libgnucash/app-utils/gnc-ui-util.c:724
 #, c-format
@@ -30611,7 +30610,7 @@ msgstr ""
 
 #: libgnucash/app-utils/option-util.c:1664
 msgid "Invalid option value"
-msgstr "Nevaljana vrijednost opcije"
+msgstr "Neispravna vrijednost opcije"
 
 #. Translators: this string refers to a file name that gets renamed
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:647
@@ -30687,10 +30686,10 @@ msgid ""
 msgstr ""
 "Znak razdvajanja „%s“ koristi se u jednom ili više naziva konta.\n"
 "\n"
-"To će prouzročiti neočekivano ponašanje. Ili promijeni nazive konta ili "
-"odaberi drugi znak razdvajanja.\n"
+"To će prouzročiti neočekivano ponašanje. Promijeni nazive konta ili odaberi "
+"jedan drugi znak razdvajanja.\n"
 "\n"
-"Ispod ćeš naći popis nevaljanih naziva konta:\n"
+"Ispod ćeš naći popis neispravnih naziva konta:\n"
 "%s"
 
 #: libgnucash/engine/Account.cpp:4368
