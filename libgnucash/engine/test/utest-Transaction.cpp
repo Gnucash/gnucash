@@ -901,7 +901,6 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (check->hits, ==, 10);
     g_assert_cmpint (check2->hits, ==, 1);
 
-    g_free (check->msg);
     g_free (check2->msg);
     check2->msg = g_strdup_printf (
                      "[xaccTransEqual] splits %s and %s differ", split_guid0, split_guid0);
@@ -924,6 +923,7 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
         auto bal01 = gnc_numeric_to_string (split01->balance);
         auto bal10 = gnc_numeric_to_string (split10->balance);
         auto bal11 = gnc_numeric_to_string (split11->balance);
+        g_free (check->msg);
         check->msg = g_strdup_printf("[xaccSplitEqualCheckBal] balances differ: %s vs %s", bal10, bal00);
         check3->msg = g_strdup_printf("[xaccSplitEqualCheckBal] balances differ: %s vs %s", bal11, bal01);
 
