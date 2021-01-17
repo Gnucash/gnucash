@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: gnucash 4.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-03 07:22+0100\n"
-"PO-Revision-Date: 2021-01-05 13:31+0000\n"
+"POT-Creation-Date: 2021-01-14 22:46+0100\n"
+"PO-Revision-Date: 2021-01-16 09:32+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -100,7 +100,7 @@ msgstr "西洋諸語"
 #: gnucash/gtkbuilder/assistant-loan.glade:969
 #: gnucash/gtkbuilder/dialog-account.glade:1029
 #: gnucash/report/reports/standard/account-piecharts.scm:488
-#: gnucash/report/reports/standard/category-barchart.scm:537
+#: gnucash/report/reports/standard/category-barchart.scm:542
 msgid "Other"
 msgstr "その他"
 
@@ -959,7 +959,7 @@ msgstr "ローン返済オプション: \"%s\""
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:49
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
-#: gnucash/import-export/import-main-matcher.c:1087
+#: gnucash/import-export/import-main-matcher.c:1089
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3700
@@ -971,8 +971,8 @@ msgstr "ローン返済オプション: \"%s\""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1095
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1100
 #: gnucash/report/reports/standard/cashflow-barchart.scm:343
-#: gnucash/report/reports/standard/category-barchart.scm:634
-#: gnucash/report/reports/standard/category-barchart.scm:655
+#: gnucash/report/reports/standard/category-barchart.scm:632
+#: gnucash/report/reports/standard/category-barchart.scm:653
 #: gnucash/report/reports/standard/customer-summary.scm:70
 #: gnucash/report/reports/standard/general-journal.scm:92
 #: gnucash/report/reports/standard/general-ledger.scm:66
@@ -1061,7 +1061,7 @@ msgstr "価格追加中にエラーが発生しました。"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:541
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:151
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
-#: gnucash/import-export/import-main-matcher.c:1088
+#: gnucash/import-export/import-main-matcher.c:1090
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:341
@@ -1072,7 +1072,7 @@ msgstr "価格追加中にエラーが発生しました。"
 #: gnucash/report/reports/standard/general-journal.scm:97
 #: gnucash/report/reports/standard/job-report.scm:36
 #: gnucash/report/reports/standard/lot-viewer.scm:37
-#: gnucash/report/reports/standard/new-owner-report.scm:1132
+#: gnucash/report/reports/standard/new-owner-report.scm:1139
 #: gnucash/report/reports/standard/owner-report.scm:48
 #: gnucash/report/reports/standard/portfolio.scm:253
 #: gnucash/report/reports/standard/register.scm:143
@@ -1651,7 +1651,7 @@ msgstr "取引の文書リンク"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
-#: gnucash/import-export/import-main-matcher.c:1091
+#: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3710
@@ -1869,7 +1869,7 @@ msgstr "株価"
 #: gnucash/gtkbuilder/assistant-loan.glade:764
 #: gnucash/gtkbuilder/dialog-transfer.glade:112
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:50
-#: gnucash/import-export/import-main-matcher.c:1090
+#: gnucash/import-export/import-main-matcher.c:1092
 #: gnucash/import-export/import-match-picker.c:394
 #: gnucash/import-export/import-match-picker.c:434
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3721
@@ -2004,7 +2004,7 @@ msgstr "説明、備考、または摘要"
 #: gnucash/gtkbuilder/dialog-transfer.glade:215
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
-#: gnucash/import-export/import-main-matcher.c:1092
+#: gnucash/import-export/import-main-matcher.c:1094
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
 #: gnucash/register/ledger-core/split-register-model.c:355
@@ -2146,7 +2146,7 @@ msgstr "この項目には注文が関連づけられています。それらも
 #: gnucash/report/reports/standard/job-report.scm:41
 #: gnucash/report/reports/standard/new-aging.scm:126
 #: gnucash/report/reports/standard/new-owner-report.scm:50
-#: gnucash/report/reports/standard/new-owner-report.scm:961
+#: gnucash/report/reports/standard/new-owner-report.scm:971
 #: gnucash/report/reports/standard/owner-report.scm:51
 #: gnucash/report/reports/standard/owner-report.scm:612
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:233
@@ -2155,7 +2155,7 @@ msgstr "期日"
 
 #: gnucash/gnome/dialog-invoice.c:837 gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:130
-#: gnucash/report/reports/standard/new-owner-report.scm:965
+#: gnucash/report/reports/standard/new-owner-report.scm:975
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post Date"
 msgstr "発送日"
@@ -2220,7 +2220,7 @@ msgid "PAID"
 msgstr "支払済"
 
 #: gnucash/gnome/dialog-invoice.c:2065
-#: gnucash/report/reports/standard/new-owner-report.scm:581
+#: gnucash/report/reports/standard/new-owner-report.scm:583
 msgid "UNPAID"
 msgstr "未払"
 
@@ -2442,7 +2442,7 @@ msgstr "タイプ"
 
 #: gnucash/gnome/dialog-invoice.c:3440
 #: gnucash/register/ledger-core/split-register-model.c:309
-#: gnucash/report/reports/standard/new-owner-report.scm:823
+#: gnucash/report/reports/standard/new-owner-report.scm:832
 msgid "Paid"
 msgstr "支払済"
 
@@ -2603,7 +2603,7 @@ msgstr "タイトル"
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
 #: gnucash/report/reports/standard/new-owner-report.scm:58
-#: gnucash/report/reports/standard/new-owner-report.scm:562
+#: gnucash/report/reports/standard/new-owner-report.scm:564
 #: gnucash/report/reports/standard/owner-report.scm:319
 #: gnucash/report/reports/standard/register.scm:164
 msgid "Balance"
@@ -2698,8 +2698,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
 #: gnucash/report/reports/standard/new-aging.scm:194
-#: gnucash/report/reports/standard/new-owner-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:717
+#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:719
 msgid "Pre-Payment"
 msgstr "繰上げ返済"
 
@@ -2935,7 +2935,7 @@ msgstr "内容"
 
 #: gnucash/gnome/dialog-report-column-view.c:412
 #: gnucash/report/reports/standard/customer-summary.scm:291
-#: gnucash/report/reports/standard/new-owner-report.scm:1065
+#: gnucash/report/reports/standard/new-owner-report.scm:1072
 #: gnucash/report/reports/standard/owner-report.scm:743
 msgid "Report"
 msgstr "帳票"
@@ -3344,7 +3344,7 @@ msgstr "予算残"
 #: gnucash/report/reports/standard/invoice.scm:252
 #: gnucash/report/reports/standard/new-aging.scm:200
 #: gnucash/report/reports/standard/new-aging.scm:325
-#: gnucash/report/reports/standard/new-owner-report.scm:325
+#: gnucash/report/reports/standard/new-owner-report.scm:327
 #: gnucash/report/reports/standard/portfolio.scm:278
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1961
@@ -5024,7 +5024,7 @@ msgstr "全得意先の売掛金推移の一覧を表示します。"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 #: gnucash/report/reports/standard/job-report.scm:511
-#: gnucash/report/reports/standard/new-owner-report.scm:1209
+#: gnucash/report/reports/standard/new-owner-report.scm:1216
 msgid "Vendor Report"
 msgstr "仕入先帳票"
 
@@ -5034,7 +5034,7 @@ msgstr "仕入先帳票を表示します。"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
 #: gnucash/report/reports/standard/job-report.scm:505
-#: gnucash/report/reports/standard/new-owner-report.scm:1200
+#: gnucash/report/reports/standard/new-owner-report.scm:1207
 msgid "Customer Report"
 msgstr "得意先帳票"
 
@@ -5044,7 +5044,7 @@ msgstr "得意先帳票を表示します。"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 #: gnucash/report/reports/standard/job-report.scm:514
-#: gnucash/report/reports/standard/new-owner-report.scm:1218
+#: gnucash/report/reports/standard/new-owner-report.scm:1225
 msgid "Employee Report"
 msgstr "従業員帳票"
 
@@ -6629,7 +6629,7 @@ msgstr "利払いの入力(_I)..."
 
 #: gnucash/gnome/window-reconcile2.c:724 gnucash/gnome/window-reconcile.c:761
 msgid "Enter _Interest Charge..."
-msgstr "利子・手数料を入力(I)..."
+msgstr "利子・手数料を入力(_I)..."
 
 #: gnucash/gnome/window-reconcile2.c:1200 gnucash/gnome/window-reconcile.c:1333
 msgid "Are you sure you want to delete the selected transaction?"
@@ -9311,7 +9311,7 @@ msgid "Dist"
 msgstr "分配"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
-#: gnucash/import-export/import-main-matcher.c:1395
+#: gnucash/import-export/import-main-matcher.c:1397
 #: gnucash/report/reports/standard/register.scm:218
 #: libgnucash/engine/Split.c:1592 libgnucash/engine/Split.c:1609
 msgid "-- Split Transaction --"
@@ -13597,7 +13597,7 @@ msgstr "終了日付"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1201
 #: gnucash/report/reports/standard/job-report.scm:563
-#: gnucash/report/reports/standard/new-owner-report.scm:1165
+#: gnucash/report/reports/standard/new-owner-report.scm:1172
 #: gnucash/report/reports/standard/owner-report.scm:795
 msgid "Date Range"
 msgstr "日付範囲"
@@ -16344,7 +16344,7 @@ msgstr "<b>時刻の書式</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1054
 msgid "U_se 24-hour clock"
-msgstr "24時間形式を使用する"
+msgstr "24時間形式を使用する(_S)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1060
 msgid "Use a 24 hour (instead of a 12 hour) time format."
@@ -18733,7 +18733,7 @@ msgstr "アクティブな所有者のみ表示する(_A)"
 
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:79
 msgid "Show _zero balance owners"
-msgstr "残高 0 の所有者を表示する"
+msgstr "残高 0 の所有者を表示する(_Z)"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:71
 msgid "About Auto-Clear"
@@ -18948,7 +18948,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:106
 msgid "_Start AqBanking Wizard"
-msgstr "AqBanking ウィザードを起動(S)"
+msgstr "AqBanking ウィザードを起動(_S)"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:123
 msgid "Start Online Banking Wizard"
@@ -21016,84 +21016,84 @@ msgid "y/d/m"
 msgstr "年/日/月"
 
 #: gnucash/import-export/import-main-matcher.c:591
-#: gnucash/import-export/import-main-matcher.c:741
+#: gnucash/import-export/import-main-matcher.c:743
 msgid "Destination account for the auto-balance split."
 msgstr "自動で貸借一致させるために追加されるスプリットの相手勘定科目です。"
 
-#: gnucash/import-export/import-main-matcher.c:930
+#: gnucash/import-export/import-main-matcher.c:932
 msgid "Assign a transfer account to the selection."
 msgstr "選択した行の資金移動先勘定科目を割り当てる"
 
-#: gnucash/import-export/import-main-matcher.c:1093
+#: gnucash/import-export/import-main-matcher.c:1095
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "追加"
 
-#: gnucash/import-export/import-main-matcher.c:1096
+#: gnucash/import-export/import-main-matcher.c:1098
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "更新+清算"
 
-#: gnucash/import-export/import-main-matcher.c:1100
+#: gnucash/import-export/import-main-matcher.c:1102
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "清算"
 
-#: gnucash/import-export/import-main-matcher.c:1107
+#: gnucash/import-export/import-main-matcher.c:1109
 msgid "Info"
 msgstr "情報"
 
-#: gnucash/import-export/import-main-matcher.c:1114
+#: gnucash/import-export/import-main-matcher.c:1116
 #: gnucash/report/stylesheets/head-or-tail.scm:102
 msgid "Additional Comments"
 msgstr "追加コメント"
 
-#: gnucash/import-export/import-main-matcher.c:1478
+#: gnucash/import-export/import-main-matcher.c:1480
 msgid "New, already balanced"
 msgstr "新規、貸借一致済"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1504
+#: gnucash/import-export/import-main-matcher.c:1506
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "新規、%s を (手動) \"%s\" に資金移動"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1512
+#: gnucash/import-export/import-main-matcher.c:1514
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "新規、%s を (自動) \"%s\" に資金移動"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:1523
+#: gnucash/import-export/import-main-matcher.c:1525
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "新規、貸借不一致 (%s を資金移動する勘定科目が必要)!"
 
-#: gnucash/import-export/import-main-matcher.c:1540
+#: gnucash/import-export/import-main-matcher.c:1542
 msgid "Reconcile (manual) match"
 msgstr "(手動) 合致を照合"
 
-#: gnucash/import-export/import-main-matcher.c:1544
+#: gnucash/import-export/import-main-matcher.c:1546
 msgid "Reconcile (auto) match"
 msgstr "(自動) 合致を照合"
 
-#: gnucash/import-export/import-main-matcher.c:1551
-#: gnucash/import-export/import-main-matcher.c:1577
+#: gnucash/import-export/import-main-matcher.c:1553
+#: gnucash/import-export/import-main-matcher.c:1579
 msgid "Match missing!"
 msgstr "合致するものがありません!"
 
-#: gnucash/import-export/import-main-matcher.c:1566
+#: gnucash/import-export/import-main-matcher.c:1568
 msgid "Update and reconcile (manual) match"
 msgstr "(手動) 合致を更新して照合"
 
-#: gnucash/import-export/import-main-matcher.c:1570
+#: gnucash/import-export/import-main-matcher.c:1572
 msgid "Update and reconcile (auto) match"
 msgstr "(自動) 合致を更新して照合"
 
-#: gnucash/import-export/import-main-matcher.c:1585
+#: gnucash/import-export/import-main-matcher.c:1587
 msgid "Do not import (no action selected)"
 msgstr "インポートしない (アクションを選択しない)"
 
@@ -22136,7 +22136,7 @@ msgstr "取引の説明"
 #: gnucash/register/ledger-core/split-register-layout.c:703
 #: gnucash/register/ledger-core/split-register-model.c:334
 #: gnucash/report/reports/standard/new-owner-report.scm:219
-#: gnucash/report/reports/standard/new-owner-report.scm:450
+#: gnucash/report/reports/standard/new-owner-report.scm:452
 #: gnucash/report/trep-engine.scm:1292 gnucash/report/trep-engine.scm:1293
 msgctxt "Column header for 'Document Link'"
 msgid "L"
@@ -22471,7 +22471,7 @@ msgstr "予算が存在していません。最低 1 個の予算を作成する
 #: gnucash/report/html-utilities.scm:337
 #: gnucash/report/reports/standard/balsheet-pnl.scm:140
 #: gnucash/report/reports/standard/balsheet-pnl.scm:141
-#: gnucash/report/reports/standard/new-owner-report.scm:939
+#: gnucash/report/reports/standard/new-owner-report.scm:949
 msgid "Disabled"
 msgstr "無効"
 
@@ -23138,21 +23138,21 @@ msgstr "残高が 0 であっても仕入先・得意先をすべて表示しま
 
 #: gnucash/report/reports/aging.scm:385
 #: gnucash/report/reports/standard/new-aging.scm:122
-#: gnucash/report/reports/standard/new-owner-report.scm:957
+#: gnucash/report/reports/standard/new-owner-report.scm:967
 #: gnucash/report/reports/standard/owner-report.scm:609
 msgid "Leading date."
 msgstr "優先する日付です。"
 
 #: gnucash/report/reports/aging.scm:388
 #: gnucash/report/reports/standard/new-aging.scm:127
-#: gnucash/report/reports/standard/new-owner-report.scm:962
+#: gnucash/report/reports/standard/new-owner-report.scm:972
 #: gnucash/report/reports/standard/owner-report.scm:612
 msgid "Due date is leading."
 msgstr "期日を優先します。"
 
 #: gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:131
-#: gnucash/report/reports/standard/new-owner-report.scm:966
+#: gnucash/report/reports/standard/new-owner-report.scm:976
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post date is leading."
 msgstr "発送日を優先します。"
@@ -23210,7 +23210,7 @@ msgstr "アクティブかどうかの状態を表示します。"
 #: gnucash/report/reports/standard/budget-barchart.scm:72
 #: gnucash/report/reports/standard/budget.scm:119
 #: gnucash/report/reports/standard/new-aging.scm:195
-#: gnucash/report/reports/standard/new-owner-report.scm:320
+#: gnucash/report/reports/standard/new-owner-report.scm:322
 #: gnucash/report/reports/standard/owner-report.scm:259
 msgid "Current"
 msgstr "現在"
@@ -23218,7 +23218,7 @@ msgstr "現在"
 #: gnucash/report/reports/aging.scm:540
 #: gnucash/report/reports/standard/job-report.scm:159
 #: gnucash/report/reports/standard/new-aging.scm:196
-#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:323
 #: gnucash/report/reports/standard/owner-report.scm:260
 msgid "0-30 days"
 msgstr "0-30 日"
@@ -23226,7 +23226,7 @@ msgstr "0-30 日"
 #: gnucash/report/reports/aging.scm:541
 #: gnucash/report/reports/standard/job-report.scm:160
 #: gnucash/report/reports/standard/new-aging.scm:197
-#: gnucash/report/reports/standard/new-owner-report.scm:322
+#: gnucash/report/reports/standard/new-owner-report.scm:324
 #: gnucash/report/reports/standard/owner-report.scm:261
 msgid "31-60 days"
 msgstr "31-60 日"
@@ -23234,7 +23234,7 @@ msgstr "31-60 日"
 #: gnucash/report/reports/aging.scm:542
 #: gnucash/report/reports/standard/job-report.scm:161
 #: gnucash/report/reports/standard/new-aging.scm:198
-#: gnucash/report/reports/standard/new-owner-report.scm:323
+#: gnucash/report/reports/standard/new-owner-report.scm:325
 #: gnucash/report/reports/standard/owner-report.scm:262
 msgid "61-90 days"
 msgstr "61-90 日"
@@ -23242,7 +23242,7 @@ msgstr "61-90 日"
 #: gnucash/report/reports/aging.scm:543
 #: gnucash/report/reports/standard/job-report.scm:162
 #: gnucash/report/reports/standard/new-aging.scm:199
-#: gnucash/report/reports/standard/new-owner-report.scm:324
+#: gnucash/report/reports/standard/new-owner-report.scm:326
 #: gnucash/report/reports/standard/owner-report.scm:263
 msgid "91+ days"
 msgstr "91 日以上"
@@ -23337,7 +23337,7 @@ msgstr "この勘定科目について取引出納帳を作成します。"
 #: gnucash/report/reports/example/average-balance.scm:116
 #: gnucash/report/reports/example/average-balance.scm:303
 #: gnucash/report/reports/standard/category-barchart.scm:187
-#: gnucash/report/reports/standard/category-barchart.scm:259
+#: gnucash/report/reports/standard/category-barchart.scm:260
 #: gnucash/report/reports/standard/net-charts.scm:133
 #: gnucash/report/reports/standard/net-charts.scm:225
 msgid "Show table"
@@ -23490,7 +23490,7 @@ msgstr "凡例に合計残高を表示しますか?"
 #: gnucash/report/reports/standard/budget.scm:513
 #: gnucash/report/reports/standard/cashflow-barchart.scm:283
 #: gnucash/report/reports/standard/cash-flow.scm:190
-#: gnucash/report/reports/standard/category-barchart.scm:514
+#: gnucash/report/reports/standard/category-barchart.scm:519
 #: gnucash/report/reports/standard/net-charts.scm:330
 #: gnucash/report/reports/standard/price-scatter.scm:213
 #: libgnucash/app-utils/date-utilities.scm:187
@@ -24297,12 +24297,12 @@ msgid "Yearly Average"
 msgstr "年平均"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:415
-#: gnucash/report/reports/standard/category-barchart.scm:306
+#: gnucash/report/reports/standard/category-barchart.scm:327
 msgid "Monthly Average"
 msgstr "月平均"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:416
-#: gnucash/report/reports/standard/category-barchart.scm:307
+#: gnucash/report/reports/standard/category-barchart.scm:328
 msgid "Weekly Average"
 msgstr "週平均"
 
@@ -26067,22 +26067,30 @@ msgstr "チャートを積み上げチャートで表示しますか?"
 msgid "Maximum number of stacks in the chart."
 msgstr "チャート内の積み上げの最大数です。"
 
-#: gnucash/report/reports/standard/category-barchart.scm:308
+#: gnucash/report/reports/standard/category-barchart.scm:290
+msgid "Invalid dates"
+msgstr "無効な日付"
+
+#: gnucash/report/reports/standard/category-barchart.scm:291
+msgid "Start date must be earlier than End date"
+msgstr "開始日付は終了日付より前にしてください。"
+
+#: gnucash/report/reports/standard/category-barchart.scm:329
 msgid "Daily Average"
 msgstr "日平均"
 
-#: gnucash/report/reports/standard/category-barchart.scm:515
+#: gnucash/report/reports/standard/category-barchart.scm:520
 #, scheme-format
 msgid "Balances ~a to ~a"
 msgstr "~aから~aの残高"
 
-#: gnucash/report/reports/standard/category-barchart.scm:643
-#: gnucash/report/reports/standard/category-barchart.scm:664
+#: gnucash/report/reports/standard/category-barchart.scm:641
+#: gnucash/report/reports/standard/category-barchart.scm:662
 #: gnucash/report/trep-engine.scm:1688 gnucash/report/trep-engine.scm:1947
 msgid "Grand Total"
 msgstr "総合計"
 
-#: gnucash/report/reports/standard/category-barchart.scm:690
+#: gnucash/report/reports/standard/category-barchart.scm:676
 #: gnucash/report/reports/standard/net-charts.scm:466
 #, fuzzy
 msgid "No exportable data"
@@ -26131,8 +26139,6 @@ msgstr "会社の住所と印刷日を表示します。"
 #: gnucash/report/reports/standard/job-report.scm:384
 #: gnucash/report/reports/standard/job-report.scm:389
 #: gnucash/report/reports/standard/job-report.scm:394
-#: gnucash/report/reports/standard/new-owner-report.scm:886
-#: gnucash/report/reports/standard/new-owner-report.scm:891
 #: gnucash/report/reports/standard/new-owner-report.scm:896
 #: gnucash/report/reports/standard/new-owner-report.scm:901
 #: gnucash/report/reports/standard/new-owner-report.scm:906
@@ -26142,7 +26148,9 @@ msgstr "会社の住所と印刷日を表示します。"
 #: gnucash/report/reports/standard/new-owner-report.scm:926
 #: gnucash/report/reports/standard/new-owner-report.scm:931
 #: gnucash/report/reports/standard/new-owner-report.scm:936
-#: gnucash/report/reports/standard/new-owner-report.scm:951
+#: gnucash/report/reports/standard/new-owner-report.scm:941
+#: gnucash/report/reports/standard/new-owner-report.scm:946
+#: gnucash/report/reports/standard/new-owner-report.scm:961
 #: gnucash/report/reports/standard/owner-report.scm:556
 #: gnucash/report/reports/standard/owner-report.scm:561
 #: gnucash/report/reports/standard/owner-report.scm:566
@@ -27039,13 +27047,13 @@ msgid "~a #~a"
 msgstr "~a #~a"
 
 #: gnucash/report/reports/standard/job-report.scm:318
-#: gnucash/report/reports/standard/new-owner-report.scm:528
+#: gnucash/report/reports/standard/new-owner-report.scm:530
 #: gnucash/report/reports/standard/owner-report.scm:505
 msgid "Total Credit"
 msgstr "貸方合計"
 
 #: gnucash/report/reports/standard/job-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:529
+#: gnucash/report/reports/standard/new-owner-report.scm:531
 #: gnucash/report/reports/standard/owner-report.scm:506
 msgid "Total Due"
 msgstr "支払合計"
@@ -27061,27 +27069,27 @@ msgstr "取引を検索する勘定科目です。"
 
 #: gnucash/report/reports/standard/job-report.scm:370
 #: gnucash/report/reports/standard/job-report.scm:375
-#: gnucash/report/reports/standard/new-owner-report.scm:887
-#: gnucash/report/reports/standard/new-owner-report.scm:892
+#: gnucash/report/reports/standard/new-owner-report.scm:897
+#: gnucash/report/reports/standard/new-owner-report.scm:902
 #: gnucash/report/reports/standard/owner-report.scm:557
 #: gnucash/report/reports/standard/owner-report.scm:562
 msgid "Display the transaction date?"
 msgstr "取引の日付を表示するかどうかを指定します。"
 
 #: gnucash/report/reports/standard/job-report.scm:380
-#: gnucash/report/reports/standard/new-owner-report.scm:897
+#: gnucash/report/reports/standard/new-owner-report.scm:907
 #: gnucash/report/reports/standard/owner-report.scm:567
 msgid "Display the transaction reference?"
 msgstr "取引の参照を表示するかどうかを指定します。"
 
 #: gnucash/report/reports/standard/job-report.scm:385
-#: gnucash/report/reports/standard/new-owner-report.scm:902
+#: gnucash/report/reports/standard/new-owner-report.scm:912
 #: gnucash/report/reports/standard/owner-report.scm:572
 msgid "Display the transaction type?"
 msgstr "取引のタイプを表示するかどうかを指定します。"
 
 #: gnucash/report/reports/standard/job-report.scm:390
-#: gnucash/report/reports/standard/new-owner-report.scm:907
+#: gnucash/report/reports/standard/new-owner-report.scm:917
 #: gnucash/report/reports/standard/owner-report.scm:577
 msgid "Display the transaction description?"
 msgstr "取引の説明を表示するかどうかを指定します。"
@@ -27092,7 +27100,7 @@ msgid "Display the transaction amount?"
 msgstr "取引の金額を表示するかどうかを指定します。"
 
 #: gnucash/report/reports/standard/job-report.scm:508
-#: gnucash/report/reports/standard/new-owner-report.scm:1227
+#: gnucash/report/reports/standard/new-owner-report.scm:1234
 msgid "Job Report"
 msgstr "請求のまとめ帳票"
 
@@ -27224,7 +27232,7 @@ msgid "Reverse alphabetical order"
 msgstr "逆アルファベット順"
 
 #: gnucash/report/reports/standard/new-aging.scm:343
-#: gnucash/report/reports/standard/new-owner-report.scm:544
+#: gnucash/report/reports/standard/new-owner-report.scm:546
 msgid "Please note some transactions were not processed"
 msgstr "なお、一部の取引は処理されませんでした。"
 
@@ -27323,96 +27331,96 @@ msgstr "リンク"
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
-#: gnucash/report/reports/standard/new-owner-report.scm:347
+#: gnucash/report/reports/standard/new-owner-report.scm:349
 #, scheme-format
 msgid "~a History"
 msgstr "~a履歴"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:349
+#: gnucash/report/reports/standard/new-owner-report.scm:351
 msgid "Linked Details"
 msgstr "リンク詳細"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:508
+#: gnucash/report/reports/standard/new-owner-report.scm:510
 #: gnucash/report/reports/standard/owner-report.scm:463
 msgid "Period Totals"
 msgstr "期間合計"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:872
+#: gnucash/report/reports/standard/new-owner-report.scm:882
 #: gnucash/report/reports/standard/owner-report.scm:535
 msgid "The company for this report."
 msgstr "この帳票の対象となる会社です。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:912
+#: gnucash/report/reports/standard/new-owner-report.scm:922
 #: gnucash/report/reports/standard/owner-report.scm:582
 msgid "Display the sale amount column?"
 msgstr "売上金額の列を表示するかどうかを指定します。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:917
+#: gnucash/report/reports/standard/new-owner-report.scm:927
 #: gnucash/report/reports/standard/owner-report.scm:587
 msgid "Display the tax column?"
 msgstr "税金の列を表示するかどうかを指定します。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:922
+#: gnucash/report/reports/standard/new-owner-report.scm:932
 #: gnucash/report/reports/standard/owner-report.scm:597
 msgid "Display the period debits column?"
 msgstr "期間の借方の列を表示するかどうかを指定します。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:927
+#: gnucash/report/reports/standard/new-owner-report.scm:937
 #: gnucash/report/reports/standard/owner-report.scm:592
 msgid "Display the period credits column?"
 msgstr "期間の貸方の列を表示するかどうかを指定します。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:932
+#: gnucash/report/reports/standard/new-owner-report.scm:942
 #: gnucash/report/reports/standard/register.scm:413
 #: gnucash/report/trep-engine.scm:984
 msgid "Display a running balance?"
 msgstr "運用中の残高を表示するかどうかを指定します。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:937
+#: gnucash/report/reports/standard/new-owner-report.scm:947
 msgid "Show linked transactions"
 msgstr "リンクされた取引を表示します。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:940
+#: gnucash/report/reports/standard/new-owner-report.scm:950
 msgid "Linked transactions are hidden."
 msgstr "リンクされた取引は非表示です。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:942
+#: gnucash/report/reports/standard/new-owner-report.scm:952
 msgid "Simple"
 msgstr "単純"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:943
+#: gnucash/report/reports/standard/new-owner-report.scm:953
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr "請求書では支払済かどうかを表示し、支払では請求書番号を表示します。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:945
+#: gnucash/report/reports/standard/new-owner-report.scm:955
 msgid "Detailed"
 msgstr "詳細"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:946
+#: gnucash/report/reports/standard/new-owner-report.scm:956
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
 "請求書では支払一覧を表示し、支払では請求書番号と金額の一覧を表示します。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:952
+#: gnucash/report/reports/standard/new-owner-report.scm:962
 msgid "Display document link?"
 msgstr "文書リンクを表示するかどうかを指定します。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1080
+#: gnucash/report/reports/standard/new-owner-report.scm:1087
 #, fuzzy
 msgid "No valid account found"
 msgstr "有効な勘定科目が選択されていません"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1081
+#: gnucash/report/reports/standard/new-owner-report.scm:1088
 #, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
 msgstr "この帳票を出力するには有効な勘定科目を選択する必要があります。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1104
+#: gnucash/report/reports/standard/new-owner-report.scm:1111
 msgid "No transactions found."
 msgstr "取引がありません。"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1105
+#: gnucash/report/reports/standard/new-owner-report.scm:1112
 #: gnucash/report/trep-engine.scm:130
 msgid "No matching transactions found"
 msgstr "一致する取引はありませんでした"
@@ -29929,7 +29937,7 @@ msgstr ""
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1758
 #, c-format
 msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
-msgstr "エラー %d。予定取引 [%s] の計算結果の値が不正、代わりに 0 を使います。"
+msgstr "エラー %d。予定取引 [%s] の計算結果の gnc_numeric 値が不正、代わりに 0 を使います。"
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1767
 #, c-format

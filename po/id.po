@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-03 07:22+0100\n"
-"PO-Revision-Date: 2021-01-13 15:32+0000\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-01-14 22:46+0100\n"
+"PO-Revision-Date: 2021-01-14 13:32+0000\n"
 "Last-Translator: Ferdinand Tampubolon <dnandz@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -87,7 +87,7 @@ msgstr "Barat"
 #: gnucash/gtkbuilder/assistant-loan.glade:969
 #: gnucash/gtkbuilder/dialog-account.glade:1029
 #: gnucash/report/reports/standard/account-piecharts.scm:488
-#: gnucash/report/reports/standard/category-barchart.scm:537
+#: gnucash/report/reports/standard/category-barchart.scm:542
 msgid "Other"
 msgstr "Lainnya"
 
@@ -980,7 +980,7 @@ msgstr "Opsi Angsuran Pinjaman: \"%s\""
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:49
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
-#: gnucash/import-export/import-main-matcher.c:1087
+#: gnucash/import-export/import-main-matcher.c:1089
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3700
@@ -992,8 +992,8 @@ msgstr "Opsi Angsuran Pinjaman: \"%s\""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1095
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1100
 #: gnucash/report/reports/standard/cashflow-barchart.scm:343
-#: gnucash/report/reports/standard/category-barchart.scm:634
-#: gnucash/report/reports/standard/category-barchart.scm:655
+#: gnucash/report/reports/standard/category-barchart.scm:632
+#: gnucash/report/reports/standard/category-barchart.scm:653
 #: gnucash/report/reports/standard/customer-summary.scm:70
 #: gnucash/report/reports/standard/general-journal.scm:92
 #: gnucash/report/reports/standard/general-ledger.scm:66
@@ -1081,7 +1081,7 @@ msgstr "Galat saat menambahkan harga."
 #: gnucash/import-export/aqb/gnc-ab-utils.c:541
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:151
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
-#: gnucash/import-export/import-main-matcher.c:1088
+#: gnucash/import-export/import-main-matcher.c:1090
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:341
@@ -1092,7 +1092,7 @@ msgstr "Galat saat menambahkan harga."
 #: gnucash/report/reports/standard/general-journal.scm:97
 #: gnucash/report/reports/standard/job-report.scm:36
 #: gnucash/report/reports/standard/lot-viewer.scm:37
-#: gnucash/report/reports/standard/new-owner-report.scm:1132
+#: gnucash/report/reports/standard/new-owner-report.scm:1139
 #: gnucash/report/reports/standard/owner-report.scm:48
 #: gnucash/report/reports/standard/portfolio.scm:253
 #: gnucash/report/reports/standard/register.scm:143
@@ -1668,7 +1668,7 @@ msgstr "Taut Dokumen Transaksi"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
-#: gnucash/import-export/import-main-matcher.c:1091
+#: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3710
@@ -1887,7 +1887,7 @@ msgstr "Harga Saham"
 #: gnucash/gtkbuilder/assistant-loan.glade:764
 #: gnucash/gtkbuilder/dialog-transfer.glade:112
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:50
-#: gnucash/import-export/import-main-matcher.c:1090
+#: gnucash/import-export/import-main-matcher.c:1092
 #: gnucash/import-export/import-match-picker.c:394
 #: gnucash/import-export/import-match-picker.c:434
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3721
@@ -2022,7 +2022,7 @@ msgstr "Deskripsi, Catatan, atau Memo"
 #: gnucash/gtkbuilder/dialog-transfer.glade:215
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
-#: gnucash/import-export/import-main-matcher.c:1092
+#: gnucash/import-export/import-main-matcher.c:1094
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
 #: gnucash/register/ledger-core/split-register-model.c:355
@@ -2169,7 +2169,7 @@ msgstr ""
 #: gnucash/report/reports/standard/job-report.scm:41
 #: gnucash/report/reports/standard/new-aging.scm:126
 #: gnucash/report/reports/standard/new-owner-report.scm:50
-#: gnucash/report/reports/standard/new-owner-report.scm:961
+#: gnucash/report/reports/standard/new-owner-report.scm:971
 #: gnucash/report/reports/standard/owner-report.scm:51
 #: gnucash/report/reports/standard/owner-report.scm:612
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:233
@@ -2178,7 +2178,7 @@ msgstr "Tanggal Tenggat"
 
 #: gnucash/gnome/dialog-invoice.c:837 gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:130
-#: gnucash/report/reports/standard/new-owner-report.scm:965
+#: gnucash/report/reports/standard/new-owner-report.scm:975
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post Date"
 msgstr "Tanggal Pos"
@@ -2243,7 +2243,7 @@ msgid "PAID"
 msgstr "LUNAS"
 
 #: gnucash/gnome/dialog-invoice.c:2065
-#: gnucash/report/reports/standard/new-owner-report.scm:581
+#: gnucash/report/reports/standard/new-owner-report.scm:583
 msgid "UNPAID"
 msgstr "BELUM LUNAS"
 
@@ -2465,7 +2465,7 @@ msgstr "Tipe"
 
 #: gnucash/gnome/dialog-invoice.c:3440
 #: gnucash/register/ledger-core/split-register-model.c:309
-#: gnucash/report/reports/standard/new-owner-report.scm:823
+#: gnucash/report/reports/standard/new-owner-report.scm:832
 msgid "Paid"
 msgstr "Lunas"
 
@@ -2628,7 +2628,7 @@ msgstr "Judul"
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
 #: gnucash/report/reports/standard/new-owner-report.scm:58
-#: gnucash/report/reports/standard/new-owner-report.scm:562
+#: gnucash/report/reports/standard/new-owner-report.scm:564
 #: gnucash/report/reports/standard/owner-report.scm:319
 #: gnucash/report/reports/standard/register.scm:164
 msgid "Balance"
@@ -2723,8 +2723,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
 #: gnucash/report/reports/standard/new-aging.scm:194
-#: gnucash/report/reports/standard/new-owner-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:717
+#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:719
 msgid "Pre-Payment"
 msgstr "Prabayar"
 
@@ -2968,7 +2968,7 @@ msgstr "Isi"
 
 #: gnucash/gnome/dialog-report-column-view.c:412
 #: gnucash/report/reports/standard/customer-summary.scm:291
-#: gnucash/report/reports/standard/new-owner-report.scm:1065
+#: gnucash/report/reports/standard/new-owner-report.scm:1072
 #: gnucash/report/reports/standard/owner-report.scm:743
 msgid "Report"
 msgstr "Laporan"
@@ -3393,7 +3393,7 @@ msgstr "Tersisa ke Anggaran"
 #: gnucash/report/reports/standard/invoice.scm:252
 #: gnucash/report/reports/standard/new-aging.scm:200
 #: gnucash/report/reports/standard/new-aging.scm:325
-#: gnucash/report/reports/standard/new-owner-report.scm:325
+#: gnucash/report/reports/standard/new-owner-report.scm:327
 #: gnucash/report/reports/standard/portfolio.scm:278
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1961
@@ -5089,7 +5089,7 @@ msgstr "Tampilkan ikhtisar umur pelanggan untuk semua pelanggan"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 #: gnucash/report/reports/standard/job-report.scm:511
-#: gnucash/report/reports/standard/new-owner-report.scm:1209
+#: gnucash/report/reports/standard/new-owner-report.scm:1216
 msgid "Vendor Report"
 msgstr "Laporan Vendor"
 
@@ -5099,7 +5099,7 @@ msgstr "Tampilkan laporan vendor"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
 #: gnucash/report/reports/standard/job-report.scm:505
-#: gnucash/report/reports/standard/new-owner-report.scm:1200
+#: gnucash/report/reports/standard/new-owner-report.scm:1207
 msgid "Customer Report"
 msgstr "Laporan Pelanggan"
 
@@ -5109,7 +5109,7 @@ msgstr "Tampilkan laporan pelanggan"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 #: gnucash/report/reports/standard/job-report.scm:514
-#: gnucash/report/reports/standard/new-owner-report.scm:1218
+#: gnucash/report/reports/standard/new-owner-report.scm:1225
 msgid "Employee Report"
 msgstr "Laporan Pegawai"
 
@@ -9457,7 +9457,7 @@ msgid "Dist"
 msgstr "Dist"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
-#: gnucash/import-export/import-main-matcher.c:1395
+#: gnucash/import-export/import-main-matcher.c:1397
 #: gnucash/report/reports/standard/register.scm:218
 #: libgnucash/engine/Split.c:1592 libgnucash/engine/Split.c:1609
 msgid "-- Split Transaction --"
@@ -10499,7 +10499,6 @@ msgstr "Bayar otomatis saat mengepos."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:113
 #: gnucash/gtkbuilder/business-prefs.glade:196
-#, fuzzy
 msgid ""
 "At post time, automatically attempt to pay customer documents with "
 "outstanding pre-payments and counter documents. The pre-payments and "
@@ -10507,7 +10506,7 @@ msgid ""
 "are documents with opposite sign. For example for an invoice, customer "
 "credit notes and negative invoices are considered counter documents."
 msgstr ""
-"Pada saat pos, secara otomatis mencoba untuk membayar dokumen pelanggan "
+"Pada saat posting, secara otomatis mencoba untuk membayar dokumen pelanggan "
 "dengan pra-pembayaran yang luar biasa dan dokumen counter. Pra-pembayaran "
 "dan dokumen jelas harus melawan pelanggan yang sama. Dokumen counter dokumen "
 "dengan tanda berlawanan. Misalnya untuk faktur, nota kredit pelanggan dan "
@@ -10593,7 +10592,6 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:155
 #: gnucash/gtkbuilder/business-prefs.glade:273
-#, fuzzy
 msgid ""
 "At post time, automatically attempt to pay vendor documents with outstanding "
 "pre-payments and counter documents. The pre-payments and documents obviously "
@@ -13969,7 +13967,7 @@ msgstr "Tanggal Akhir"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1201
 #: gnucash/report/reports/standard/job-report.scm:563
-#: gnucash/report/reports/standard/new-owner-report.scm:1165
+#: gnucash/report/reports/standard/new-owner-report.scm:1172
 #: gnucash/report/reports/standard/owner-report.scm:795
 msgid "Date Range"
 msgstr "Rentang Tanggal"
@@ -16300,19 +16298,16 @@ msgid "_New Lot"
 msgstr "Lot _Baru"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:40
-#, fuzzy
 msgid "Scrub _Account"
-msgstr "scrub _Account"
+msgstr "Menggesek _Akun"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:55
-#, fuzzy
 msgid "_Scrub"
-msgstr "_Menggosok"
+msgstr "_Menggesek"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:61
-#, fuzzy
 msgid "Scrub the highlighted lot"
-msgstr "Scrub banyak disorot"
+msgstr "Gosok Bagian yang disorot"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:78
 msgid "Delete the highlighted lot"
@@ -16343,9 +16338,8 @@ msgid "Show only open lots"
 msgstr "Tampilkan hanya lot terbuka"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:300
-#, fuzzy
 msgid "<b>Splits _free</b>"
-msgstr "<B> Splits _free </ b>"
+msgstr "<B> Berbagi_gratis </ b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:355
 msgid "<b>Splits _in lot</b>"
@@ -17488,24 +17482,20 @@ msgid "Remove all prices before date."
 msgstr "Hapus semua harga sebelum tanggal."
 
 #: gnucash/gtkbuilder/dialog-price.glade:465
-#, fuzzy
 msgid "Last of _Week"
-msgstr "Terakhir _Week"
+msgstr "Minggu_terakhir"
 
 #: gnucash/gtkbuilder/dialog-price.glade:469
-#, fuzzy
 msgid "Keep the last price of each week if present before date."
 msgstr "Menjaga harga terakhir dari setiap minggu jika ada sebelum tanggal."
 
 #: gnucash/gtkbuilder/dialog-price.glade:482
-#, fuzzy
 msgid "Last of _Month"
-msgstr "Terakhir _Month"
+msgstr "Minggu_terakhir"
 
 #: gnucash/gtkbuilder/dialog-price.glade:486
-#, fuzzy
 msgid "Keep the last price of each month if present before date."
-msgstr "Menjaga harga terakhir setiap bulan jika ada sebelum tanggal."
+msgstr "Menjaga harga terakhir setiap bulan jika ada sebelum tanggalnya."
 
 #: gnucash/gtkbuilder/dialog-price.glade:499
 msgid "Last of _Quarter"
@@ -17520,33 +17510,30 @@ msgstr ""
 "Kuartal fiskal berasal dari tanggal akhir periode akuntansi."
 
 #: gnucash/gtkbuilder/dialog-price.glade:516
-#, fuzzy
 msgid "Last of _Period"
-msgstr "Terakhir _Period"
+msgstr "Periode_terakhir"
 
 #: gnucash/gtkbuilder/dialog-price.glade:520
-#, fuzzy
 msgid ""
 "Keep the last price of each fiscal period if present before date. The fiscal "
 "period is derived from the accounting period end date."
 msgstr ""
-"Menjaga harga terakhir setiap periode fiskal jika ada sebelum tanggal. "
-"Periode fiskal berasal dari tanggal akhir periode akuntansi."
+"Menjaga harga terakhir setiap periode fiskal jika ada sebelum tanggalnya. "
+"Periode fiskal berasal dari tanggal berakhir periode akuntansi."
 
 #: gnucash/gtkbuilder/dialog-price.glade:533
 msgid "_Scaled"
 msgstr "Ter_skala"
 
 #: gnucash/gtkbuilder/dialog-price.glade:537
-#, fuzzy
 msgid ""
 "With the scaled option, prices are removed relative to the date selected. "
 "'One a month' is used for dates older than a year and 'One a week' is used "
 "for dates older than six months to a year."
 msgstr ""
 "Dengan pilihan berskala, harga relatif dihapus untuk tanggal yang dipilih. "
-"'Satu bulan' digunakan untuk tanggal tua dari satu tahun dan 'Satu minggu' "
-"digunakan untuk tanggal tua dari enam bulan sampai satu tahun."
+"'Satu bulan' digunakan untuk tanggal lebih tua dari satu tahun dan 'Satu "
+"minggu' digunakan untuk tanggal lebih tua dari enam bulan sampai satu tahun."
 
 #: gnucash/gtkbuilder/dialog-price.glade:585
 msgid "First Date"
@@ -17557,7 +17544,6 @@ msgid "From these Commodities"
 msgstr "Dari Komoditas ini"
 
 #: gnucash/gtkbuilder/dialog-price.glade:630
-#, fuzzy
 msgid "Keeping the last available price for option"
 msgstr "Menjaga harga terakhir yang tersedia untuk pilihan"
 
@@ -17583,7 +17569,6 @@ msgid "_Added by the application"
 msgstr "Ditambahkan oleh _aplikasi"
 
 #: gnucash/gtkbuilder/dialog-price.glade:706
-#, fuzzy
 msgid ""
 "If activated, include application added prices.\n"
 "\n"
@@ -17726,7 +17711,6 @@ msgid "y"
 msgstr "y"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:686
-#, fuzzy
 msgid "Pa_yee"
 msgstr "Pa_yee"
 
@@ -19198,15 +19182,12 @@ msgid "Only show _active owners"
 msgstr "Hanya tampilkan pemilik _aktif"
 
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:79
-#, fuzzy
 msgid "Show _zero balance owners"
-msgstr "Tampilkan _zero pemilik keseimbangan"
+msgstr "Tampilkan _pemilik saldo nol"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:71
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "About Auto-Clear"
-msgstr "Klir-otomatis"
+msgstr "Tentang Pembersihan otomatis"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:86
 msgid ""
@@ -19214,6 +19195,10 @@ msgid ""
 "are cleared, given an ending balance. For example, said ending balance can "
 "be the current balance given by your bank online."
 msgstr ""
+"Gunakan dialog ini jika Anda ingin GnuCash secara otomatis menemukan "
+"transaksi mana yang dihapus, dengan saldo akhir. Misalnya, saldo akhir "
+"tersebut dapat menjadi saldo saat ini yang diberikan oleh bank Anda secara "
+"online."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
 msgid "Caution!"
@@ -19542,21 +19527,17 @@ msgid "Enter your password"
 msgstr "Masukkan kata sandi Anda"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:646
-#, fuzzy
-#| msgid "_Width"
 msgid "Bar_width"
-msgstr "_Lebar"
+msgstr "Batang_Lebar"
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:664
 msgid "Setting the bar width, adapting to the size of the TAN generator."
-msgstr ""
+msgstr "Mengatur lebar batang, menyesuaikan dengan ukuran generator TAN."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:679
-#, fuzzy
-#| msgid "_Delete"
 msgid "_Delay"
-msgstr "_Hapus"
+msgstr "_Menunda"
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:694
@@ -19564,6 +19545,7 @@ msgid ""
 "Setting the delay time, with small values the flicker graphic is repeated "
 "faster."
 msgstr ""
+"Mengatur waktu tunda, dengan nilai kecil kedipan grafik terulang lebih cepat."
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:752
@@ -19571,6 +19553,8 @@ msgid ""
 "Hold the TAN generator in front of the animated graphic. The markings "
 "(triangles) on the graphic must match those on the TAN generator."
 msgstr ""
+"Tahan generator TAN di depan grafik animasi. Tanda (segitiga) pada grafik "
+"harus cocok dengan yang ada di generator TAN."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:796
 msgid "Con_firm Password"
@@ -19802,34 +19786,28 @@ msgid "Originator BIC (Bank Code)"
 msgstr "BIC (Kode Bank) Originator"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:395
-#, fuzzy
 msgid "Enter a SEPA Online Direct Debit Note"
-msgstr "Masukkan SEPA online Direct Debit Note"
+msgstr "Masukkan Nota Debit Langsung SEPA Online"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:398
-#, fuzzy
 msgid "Debited Account Owner"
-msgstr "Didebit Pemilik Rekening"
+msgstr "Didebit Pemilik Akun"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:400
-#, fuzzy
 msgid "Debited IBAN (International Account Number)"
-msgstr "Didebit IBAN (International Nomor Rekening)"
+msgstr "Didebit IBAN (International Nomor Akun Bank)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:402
-#, fuzzy
 msgid "Debited BIC (Bank Code)"
 msgstr "Didebit BIC (Kode Bank)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:405
-#, fuzzy
 msgid "Credited Account Owner"
 msgstr "Dikreditkan Pemilik Akun"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:407
-#, fuzzy
 msgid "Credited IBAN (International Account Number)"
-msgstr "Dikreditkan IBAN (International Nomor Rekening)"
+msgstr "Dikreditkan IBAN (International Nomor Akun Bank)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
 #, fuzzy
@@ -19999,19 +19977,16 @@ msgstr ""
 "Apakah Anda ingin memasukkan tugas ini lagi?"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:210
-#, fuzzy
 msgid "Online Banking Direct Debit Note"
-msgstr "Online Banking Direct Debit Note"
+msgstr "Nota Debit Langsung Perbankan Online"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:215
-#, fuzzy
 msgid "Online Banking Bank-Internal Transfer"
-msgstr "Alih Online Banking Bank-internal"
+msgstr "Perbankan Online Bank transfer Internal"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:220
-#, fuzzy
 msgid "Online Banking European (SEPA) Transfer"
-msgstr "Secara online Perbankan Eropa (SEPA) transfer"
+msgstr "Transfer Perbankan Online Eropa (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:225
 #, fuzzy
@@ -21599,91 +21574,91 @@ msgid "y/d/m"
 msgstr "y/d/m"
 
 #: gnucash/import-export/import-main-matcher.c:591
-#: gnucash/import-export/import-main-matcher.c:741
+#: gnucash/import-export/import-main-matcher.c:743
 msgid "Destination account for the auto-balance split."
 msgstr "Akun tujuan untuk split seimbang-otomatis."
 
-#: gnucash/import-export/import-main-matcher.c:930
+#: gnucash/import-export/import-main-matcher.c:932
 #, fuzzy
 msgid "Assign a transfer account to the selection."
 msgstr "Menetapkan rekening transfer ke seleksi."
 
-#: gnucash/import-export/import-main-matcher.c:1093
+#: gnucash/import-export/import-main-matcher.c:1095
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "T"
 
-#: gnucash/import-export/import-main-matcher.c:1096
+#: gnucash/import-export/import-main-matcher.c:1098
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "U+C"
 
-#: gnucash/import-export/import-main-matcher.c:1100
+#: gnucash/import-export/import-main-matcher.c:1102
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "C"
 
-#: gnucash/import-export/import-main-matcher.c:1107
+#: gnucash/import-export/import-main-matcher.c:1109
 msgid "Info"
 msgstr "Info"
 
-#: gnucash/import-export/import-main-matcher.c:1114
+#: gnucash/import-export/import-main-matcher.c:1116
 #: gnucash/report/stylesheets/head-or-tail.scm:102
 msgid "Additional Comments"
 msgstr "Komentar Tambahan"
 
-#: gnucash/import-export/import-main-matcher.c:1478
+#: gnucash/import-export/import-main-matcher.c:1480
 #, fuzzy
 msgid "New, already balanced"
 msgstr "Baru, sudah seimbang"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1504
+#: gnucash/import-export/import-main-matcher.c:1506
 #, fuzzy, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Gagal mentransfer pesan: %s"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1512
+#: gnucash/import-export/import-main-matcher.c:1514
 #, fuzzy, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Gagal mentransfer pesan: %s"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:1523
+#: gnucash/import-export/import-main-matcher.c:1525
 #, fuzzy, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Baru, TAK SEIMBANG (kebutuhan acct transfer% s)!"
 
-#: gnucash/import-export/import-main-matcher.c:1540
+#: gnucash/import-export/import-main-matcher.c:1542
 #, fuzzy
 msgid "Reconcile (manual) match"
 msgstr "Rekonsiliasi (manual) pertandingan"
 
-#: gnucash/import-export/import-main-matcher.c:1544
+#: gnucash/import-export/import-main-matcher.c:1546
 #, fuzzy
 msgid "Reconcile (auto) match"
 msgstr "Rekonsiliasi (auto) pertandingan"
 
-#: gnucash/import-export/import-main-matcher.c:1551
-#: gnucash/import-export/import-main-matcher.c:1577
+#: gnucash/import-export/import-main-matcher.c:1553
+#: gnucash/import-export/import-main-matcher.c:1579
 #, fuzzy
 msgid "Match missing!"
 msgstr "Mencocokkan hilang!"
 
-#: gnucash/import-export/import-main-matcher.c:1566
+#: gnucash/import-export/import-main-matcher.c:1568
 #, fuzzy
 msgid "Update and reconcile (manual) match"
 msgstr "Update dan mendamaikan (manual) pertandingan"
 
-#: gnucash/import-export/import-main-matcher.c:1570
+#: gnucash/import-export/import-main-matcher.c:1572
 #, fuzzy
 msgid "Update and reconcile (auto) match"
 msgstr "Update dan mendamaikan (auto) pertandingan"
 
-#: gnucash/import-export/import-main-matcher.c:1585
+#: gnucash/import-export/import-main-matcher.c:1587
 #, fuzzy
 msgid "Do not import (no action selected)"
 msgstr "Jangan impor (tidak ada tindakan yang dipilih)"
@@ -22749,7 +22724,7 @@ msgstr "Deskripsi transaksi"
 #: gnucash/register/ledger-core/split-register-layout.c:703
 #: gnucash/register/ledger-core/split-register-model.c:334
 #: gnucash/report/reports/standard/new-owner-report.scm:219
-#: gnucash/report/reports/standard/new-owner-report.scm:450
+#: gnucash/report/reports/standard/new-owner-report.scm:452
 #: gnucash/report/trep-engine.scm:1292 gnucash/report/trep-engine.scm:1293
 msgctxt "Column header for 'Document Link'"
 msgid "L"
@@ -23092,7 +23067,7 @@ msgstr "Tidak ada anggaran. Anda harus membuat setidaknya satu anggaran."
 #: gnucash/report/html-utilities.scm:337
 #: gnucash/report/reports/standard/balsheet-pnl.scm:140
 #: gnucash/report/reports/standard/balsheet-pnl.scm:141
-#: gnucash/report/reports/standard/new-owner-report.scm:939
+#: gnucash/report/reports/standard/new-owner-report.scm:949
 msgid "Disabled"
 msgstr "Dinonaktifkan"
 
@@ -23765,21 +23740,21 @@ msgstr "Tampilkan semua vendor/pelanggan meskipun memiliki saldo nol."
 
 #: gnucash/report/reports/aging.scm:385
 #: gnucash/report/reports/standard/new-aging.scm:122
-#: gnucash/report/reports/standard/new-owner-report.scm:957
+#: gnucash/report/reports/standard/new-owner-report.scm:967
 #: gnucash/report/reports/standard/owner-report.scm:609
 msgid "Leading date."
 msgstr "Tanggal lebih awal."
 
 #: gnucash/report/reports/aging.scm:388
 #: gnucash/report/reports/standard/new-aging.scm:127
-#: gnucash/report/reports/standard/new-owner-report.scm:962
+#: gnucash/report/reports/standard/new-owner-report.scm:972
 #: gnucash/report/reports/standard/owner-report.scm:612
 msgid "Due date is leading."
 msgstr "Tanggal jatuh tempo lebih awal."
 
 #: gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:131
-#: gnucash/report/reports/standard/new-owner-report.scm:966
+#: gnucash/report/reports/standard/new-owner-report.scm:976
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post date is leading."
 msgstr "Tanggal pos lebih awal."
@@ -23838,7 +23813,7 @@ msgstr "Status aktif Tampilan."
 #: gnucash/report/reports/standard/budget-barchart.scm:72
 #: gnucash/report/reports/standard/budget.scm:119
 #: gnucash/report/reports/standard/new-aging.scm:195
-#: gnucash/report/reports/standard/new-owner-report.scm:320
+#: gnucash/report/reports/standard/new-owner-report.scm:322
 #: gnucash/report/reports/standard/owner-report.scm:259
 msgid "Current"
 msgstr "Saat ini"
@@ -23846,7 +23821,7 @@ msgstr "Saat ini"
 #: gnucash/report/reports/aging.scm:540
 #: gnucash/report/reports/standard/job-report.scm:159
 #: gnucash/report/reports/standard/new-aging.scm:196
-#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:323
 #: gnucash/report/reports/standard/owner-report.scm:260
 msgid "0-30 days"
 msgstr "0-30 hari"
@@ -23854,7 +23829,7 @@ msgstr "0-30 hari"
 #: gnucash/report/reports/aging.scm:541
 #: gnucash/report/reports/standard/job-report.scm:160
 #: gnucash/report/reports/standard/new-aging.scm:197
-#: gnucash/report/reports/standard/new-owner-report.scm:322
+#: gnucash/report/reports/standard/new-owner-report.scm:324
 #: gnucash/report/reports/standard/owner-report.scm:261
 msgid "31-60 days"
 msgstr "31-60 hari"
@@ -23862,7 +23837,7 @@ msgstr "31-60 hari"
 #: gnucash/report/reports/aging.scm:542
 #: gnucash/report/reports/standard/job-report.scm:161
 #: gnucash/report/reports/standard/new-aging.scm:198
-#: gnucash/report/reports/standard/new-owner-report.scm:323
+#: gnucash/report/reports/standard/new-owner-report.scm:325
 #: gnucash/report/reports/standard/owner-report.scm:262
 msgid "61-90 days"
 msgstr "61-90 hari"
@@ -23870,7 +23845,7 @@ msgstr "61-90 hari"
 #: gnucash/report/reports/aging.scm:543
 #: gnucash/report/reports/standard/job-report.scm:162
 #: gnucash/report/reports/standard/new-aging.scm:199
-#: gnucash/report/reports/standard/new-owner-report.scm:324
+#: gnucash/report/reports/standard/new-owner-report.scm:326
 #: gnucash/report/reports/standard/owner-report.scm:263
 msgid "91+ days"
 msgstr "91+ hari"
@@ -23961,7 +23936,7 @@ msgstr "Lakukan laporan transaksi pada akun ini."
 #: gnucash/report/reports/example/average-balance.scm:116
 #: gnucash/report/reports/example/average-balance.scm:303
 #: gnucash/report/reports/standard/category-barchart.scm:187
-#: gnucash/report/reports/standard/category-barchart.scm:259
+#: gnucash/report/reports/standard/category-barchart.scm:260
 #: gnucash/report/reports/standard/net-charts.scm:133
 #: gnucash/report/reports/standard/net-charts.scm:225
 msgid "Show table"
@@ -24119,7 +24094,7 @@ msgstr "Tampilkan saldo total di legenda?"
 #: gnucash/report/reports/standard/budget.scm:513
 #: gnucash/report/reports/standard/cashflow-barchart.scm:283
 #: gnucash/report/reports/standard/cash-flow.scm:190
-#: gnucash/report/reports/standard/category-barchart.scm:514
+#: gnucash/report/reports/standard/category-barchart.scm:519
 #: gnucash/report/reports/standard/net-charts.scm:330
 #: gnucash/report/reports/standard/price-scatter.scm:213
 #: libgnucash/app-utils/date-utilities.scm:187
@@ -24943,12 +24918,12 @@ msgid "Yearly Average"
 msgstr "Rata-rata Tahunan"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:415
-#: gnucash/report/reports/standard/category-barchart.scm:306
+#: gnucash/report/reports/standard/category-barchart.scm:327
 msgid "Monthly Average"
 msgstr "Rata-rata Bulanan"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:416
-#: gnucash/report/reports/standard/category-barchart.scm:307
+#: gnucash/report/reports/standard/category-barchart.scm:328
 msgid "Weekly Average"
 msgstr "Rata-rata Mingguan"
 
@@ -26750,22 +26725,32 @@ msgstr "Tampilkan bagan sebagai bagan bertumpuk?"
 msgid "Maximum number of stacks in the chart."
 msgstr "Jumlah maksimum tumpukan pada bagan."
 
-#: gnucash/report/reports/standard/category-barchart.scm:308
+#: gnucash/report/reports/standard/category-barchart.scm:290
+#, fuzzy
+#| msgid "Invalid Transactions"
+msgid "Invalid dates"
+msgstr "Transaksi Tak Valid"
+
+#: gnucash/report/reports/standard/category-barchart.scm:291
+msgid "Start date must be earlier than End date"
+msgstr ""
+
+#: gnucash/report/reports/standard/category-barchart.scm:329
 msgid "Daily Average"
 msgstr "Rata-rata Harian"
 
-#: gnucash/report/reports/standard/category-barchart.scm:515
+#: gnucash/report/reports/standard/category-barchart.scm:520
 #, scheme-format
 msgid "Balances ~a to ~a"
 msgstr "Saldo ~a ke ~a"
 
-#: gnucash/report/reports/standard/category-barchart.scm:643
-#: gnucash/report/reports/standard/category-barchart.scm:664
+#: gnucash/report/reports/standard/category-barchart.scm:641
+#: gnucash/report/reports/standard/category-barchart.scm:662
 #: gnucash/report/trep-engine.scm:1688 gnucash/report/trep-engine.scm:1947
 msgid "Grand Total"
 msgstr "Total Keseluruhan"
 
-#: gnucash/report/reports/standard/category-barchart.scm:690
+#: gnucash/report/reports/standard/category-barchart.scm:676
 #: gnucash/report/reports/standard/net-charts.scm:466
 msgid "No exportable data"
 msgstr "Tak ada data yang dapat diekspor"
@@ -26814,8 +26799,6 @@ msgstr "Tampilkan alamat perusahaan Anda dan tanggal pencetakan."
 #: gnucash/report/reports/standard/job-report.scm:384
 #: gnucash/report/reports/standard/job-report.scm:389
 #: gnucash/report/reports/standard/job-report.scm:394
-#: gnucash/report/reports/standard/new-owner-report.scm:886
-#: gnucash/report/reports/standard/new-owner-report.scm:891
 #: gnucash/report/reports/standard/new-owner-report.scm:896
 #: gnucash/report/reports/standard/new-owner-report.scm:901
 #: gnucash/report/reports/standard/new-owner-report.scm:906
@@ -26825,7 +26808,9 @@ msgstr "Tampilkan alamat perusahaan Anda dan tanggal pencetakan."
 #: gnucash/report/reports/standard/new-owner-report.scm:926
 #: gnucash/report/reports/standard/new-owner-report.scm:931
 #: gnucash/report/reports/standard/new-owner-report.scm:936
-#: gnucash/report/reports/standard/new-owner-report.scm:951
+#: gnucash/report/reports/standard/new-owner-report.scm:941
+#: gnucash/report/reports/standard/new-owner-report.scm:946
+#: gnucash/report/reports/standard/new-owner-report.scm:961
 #: gnucash/report/reports/standard/owner-report.scm:556
 #: gnucash/report/reports/standard/owner-report.scm:561
 #: gnucash/report/reports/standard/owner-report.scm:566
@@ -27743,13 +27728,13 @@ msgid "~a #~a"
 msgstr "~a No.~a"
 
 #: gnucash/report/reports/standard/job-report.scm:318
-#: gnucash/report/reports/standard/new-owner-report.scm:528
+#: gnucash/report/reports/standard/new-owner-report.scm:530
 #: gnucash/report/reports/standard/owner-report.scm:505
 msgid "Total Credit"
 msgstr "Kredit Total"
 
 #: gnucash/report/reports/standard/job-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:529
+#: gnucash/report/reports/standard/new-owner-report.scm:531
 #: gnucash/report/reports/standard/owner-report.scm:506
 msgid "Total Due"
 msgstr "Total yang Harus Dibayar"
@@ -27765,27 +27750,27 @@ msgstr "Akun untuk mencari transaksi."
 
 #: gnucash/report/reports/standard/job-report.scm:370
 #: gnucash/report/reports/standard/job-report.scm:375
-#: gnucash/report/reports/standard/new-owner-report.scm:887
-#: gnucash/report/reports/standard/new-owner-report.scm:892
+#: gnucash/report/reports/standard/new-owner-report.scm:897
+#: gnucash/report/reports/standard/new-owner-report.scm:902
 #: gnucash/report/reports/standard/owner-report.scm:557
 #: gnucash/report/reports/standard/owner-report.scm:562
 msgid "Display the transaction date?"
 msgstr "Tampilkan tanggal transaksi?"
 
 #: gnucash/report/reports/standard/job-report.scm:380
-#: gnucash/report/reports/standard/new-owner-report.scm:897
+#: gnucash/report/reports/standard/new-owner-report.scm:907
 #: gnucash/report/reports/standard/owner-report.scm:567
 msgid "Display the transaction reference?"
 msgstr "Tampilkan referensi transaksi?"
 
 #: gnucash/report/reports/standard/job-report.scm:385
-#: gnucash/report/reports/standard/new-owner-report.scm:902
+#: gnucash/report/reports/standard/new-owner-report.scm:912
 #: gnucash/report/reports/standard/owner-report.scm:572
 msgid "Display the transaction type?"
 msgstr "Tampilkan tipe transaksi?"
 
 #: gnucash/report/reports/standard/job-report.scm:390
-#: gnucash/report/reports/standard/new-owner-report.scm:907
+#: gnucash/report/reports/standard/new-owner-report.scm:917
 #: gnucash/report/reports/standard/owner-report.scm:577
 msgid "Display the transaction description?"
 msgstr "Tampilkan deskripsi transaksi?"
@@ -27796,7 +27781,7 @@ msgid "Display the transaction amount?"
 msgstr "Tampilkan jumlah transaksi?"
 
 #: gnucash/report/reports/standard/job-report.scm:508
-#: gnucash/report/reports/standard/new-owner-report.scm:1227
+#: gnucash/report/reports/standard/new-owner-report.scm:1234
 msgid "Job Report"
 msgstr "Laporan Pekerjaan"
 
@@ -27929,7 +27914,7 @@ msgid "Reverse alphabetical order"
 msgstr "Urutan secara alfabet terbalik"
 
 #: gnucash/report/reports/standard/new-aging.scm:343
-#: gnucash/report/reports/standard/new-owner-report.scm:544
+#: gnucash/report/reports/standard/new-owner-report.scm:546
 msgid "Please note some transactions were not processed"
 msgstr "Mohon dicatat bahwa beberapa transaksi tidak diproses"
 
@@ -28032,97 +28017,97 @@ msgstr "Tautan"
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
-#: gnucash/report/reports/standard/new-owner-report.scm:347
+#: gnucash/report/reports/standard/new-owner-report.scm:349
 #, scheme-format
 msgid "~a History"
 msgstr "Riwayat ~a"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:349
+#: gnucash/report/reports/standard/new-owner-report.scm:351
 msgid "Linked Details"
 msgstr "Detail Tertaut"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:508
+#: gnucash/report/reports/standard/new-owner-report.scm:510
 #: gnucash/report/reports/standard/owner-report.scm:463
 msgid "Period Totals"
 msgstr "Total Periode"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:872
+#: gnucash/report/reports/standard/new-owner-report.scm:882
 #: gnucash/report/reports/standard/owner-report.scm:535
 msgid "The company for this report."
 msgstr "Perusahaan untuk laporan ini."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:912
+#: gnucash/report/reports/standard/new-owner-report.scm:922
 #: gnucash/report/reports/standard/owner-report.scm:582
 msgid "Display the sale amount column?"
 msgstr "Tampilkan kolom jumlah penjualan?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:917
+#: gnucash/report/reports/standard/new-owner-report.scm:927
 #: gnucash/report/reports/standard/owner-report.scm:587
 msgid "Display the tax column?"
 msgstr "Tampilkan kolom pajak?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:922
+#: gnucash/report/reports/standard/new-owner-report.scm:932
 #: gnucash/report/reports/standard/owner-report.scm:597
 msgid "Display the period debits column?"
 msgstr "Tampilkan kolom periode debit?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:927
+#: gnucash/report/reports/standard/new-owner-report.scm:937
 #: gnucash/report/reports/standard/owner-report.scm:592
 msgid "Display the period credits column?"
 msgstr "Tampilkan kolom periode kredit?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:932
+#: gnucash/report/reports/standard/new-owner-report.scm:942
 #: gnucash/report/reports/standard/register.scm:413
 #: gnucash/report/trep-engine.scm:984
 msgid "Display a running balance?"
 msgstr "Tampilkan saldo berjalan?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:937
+#: gnucash/report/reports/standard/new-owner-report.scm:947
 msgid "Show linked transactions"
 msgstr "Tampilkan transaksi tertaut"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:940
+#: gnucash/report/reports/standard/new-owner-report.scm:950
 msgid "Linked transactions are hidden."
 msgstr "Transaksi tertaut disembunyikan."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:942
+#: gnucash/report/reports/standard/new-owner-report.scm:952
 msgid "Simple"
 msgstr "Sederhana"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:943
+#: gnucash/report/reports/standard/new-owner-report.scm:953
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr "Faktur menampilkan jika dibayar, pembayaran menampilkan nomor faktur."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:945
+#: gnucash/report/reports/standard/new-owner-report.scm:955
 msgid "Detailed"
 msgstr "Detail"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:946
+#: gnucash/report/reports/standard/new-owner-report.scm:956
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
 "Faktur menampilkan daftar pembayaran, pembayaran menampilkan daftar faktur "
 "dan jumlahnya."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:952
+#: gnucash/report/reports/standard/new-owner-report.scm:962
 #, fuzzy
 #| msgid "Display amounts as hyperlinks"
 msgid "Display document link?"
 msgstr "Tampilkan jumlah sebagai tautan"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1080
+#: gnucash/report/reports/standard/new-owner-report.scm:1087
 msgid "No valid account found"
 msgstr "Akun yang valid tidak ditemukan"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1081
+#: gnucash/report/reports/standard/new-owner-report.scm:1088
 msgid "This report requires a valid AP/AR account to be available."
 msgstr "Laporan ini membutuhkan akun AP/AR yang valid."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1104
+#: gnucash/report/reports/standard/new-owner-report.scm:1111
 msgid "No transactions found."
 msgstr "Transaksi tidak ditemukan."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1105
+#: gnucash/report/reports/standard/new-owner-report.scm:1112
 #: gnucash/report/trep-engine.scm:130
 msgid "No matching transactions found"
 msgstr "Tak ditemukan transaksi yang cocok"

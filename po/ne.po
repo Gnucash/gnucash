@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-03 07:22+0100\n"
+"POT-Creation-Date: 2021-01-14 22:46+0100\n"
 "PO-Revision-Date: 2006-08-21 17:18+0545\n"
 "Last-Translator: Shiva Prasad Pokharel <pokharelshiva@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -93,7 +93,7 @@ msgstr "रजिस्टर"
 #: gnucash/gtkbuilder/assistant-loan.glade:969
 #: gnucash/gtkbuilder/dialog-account.glade:1029
 #: gnucash/report/reports/standard/account-piecharts.scm:488
-#: gnucash/report/reports/standard/category-barchart.scm:537
+#: gnucash/report/reports/standard/category-barchart.scm:542
 msgid "Other"
 msgstr "अन्य"
 
@@ -960,7 +960,7 @@ msgstr "वित्तिय क्यालकूलेटर"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:49
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
-#: gnucash/import-export/import-main-matcher.c:1087
+#: gnucash/import-export/import-main-matcher.c:1089
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3700
@@ -972,8 +972,8 @@ msgstr "वित्तिय क्यालकूलेटर"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1095
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1100
 #: gnucash/report/reports/standard/cashflow-barchart.scm:343
-#: gnucash/report/reports/standard/category-barchart.scm:634
-#: gnucash/report/reports/standard/category-barchart.scm:655
+#: gnucash/report/reports/standard/category-barchart.scm:632
+#: gnucash/report/reports/standard/category-barchart.scm:653
 #: gnucash/report/reports/standard/customer-summary.scm:70
 #: gnucash/report/reports/standard/general-journal.scm:92
 #: gnucash/report/reports/standard/general-ledger.scm:66
@@ -1063,7 +1063,7 @@ msgstr "मूल्य थप्दा त्रुटि।"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:541
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:151
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
-#: gnucash/import-export/import-main-matcher.c:1088
+#: gnucash/import-export/import-main-matcher.c:1090
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:341
@@ -1074,7 +1074,7 @@ msgstr "मूल्य थप्दा त्रुटि।"
 #: gnucash/report/reports/standard/general-journal.scm:97
 #: gnucash/report/reports/standard/job-report.scm:36
 #: gnucash/report/reports/standard/lot-viewer.scm:37
-#: gnucash/report/reports/standard/new-owner-report.scm:1132
+#: gnucash/report/reports/standard/new-owner-report.scm:1139
 #: gnucash/report/reports/standard/owner-report.scm:48
 #: gnucash/report/reports/standard/portfolio.scm:253
 #: gnucash/report/reports/standard/register.scm:143
@@ -1658,7 +1658,7 @@ msgstr "कारोबार प्रतिवेदन"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
-#: gnucash/import-export/import-main-matcher.c:1091
+#: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3710
@@ -1882,7 +1882,7 @@ msgstr "शेयर मूल्य"
 #: gnucash/gtkbuilder/assistant-loan.glade:764
 #: gnucash/gtkbuilder/dialog-transfer.glade:112
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:50
-#: gnucash/import-export/import-main-matcher.c:1090
+#: gnucash/import-export/import-main-matcher.c:1092
 #: gnucash/import-export/import-match-picker.c:394
 #: gnucash/import-export/import-match-picker.c:434
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3721
@@ -2019,7 +2019,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-transfer.glade:215
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
-#: gnucash/import-export/import-main-matcher.c:1092
+#: gnucash/import-export/import-main-matcher.c:1094
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
 #: gnucash/register/ledger-core/split-register-model.c:355
@@ -2165,7 +2165,7 @@ msgstr "यो प्रविष्टि क्रमसँग संलग्
 #: gnucash/report/reports/standard/job-report.scm:41
 #: gnucash/report/reports/standard/new-aging.scm:126
 #: gnucash/report/reports/standard/new-owner-report.scm:50
-#: gnucash/report/reports/standard/new-owner-report.scm:961
+#: gnucash/report/reports/standard/new-owner-report.scm:971
 #: gnucash/report/reports/standard/owner-report.scm:51
 #: gnucash/report/reports/standard/owner-report.scm:612
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:233
@@ -2174,7 +2174,7 @@ msgstr "देयमिति"
 
 #: gnucash/gnome/dialog-invoice.c:837 gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:130
-#: gnucash/report/reports/standard/new-owner-report.scm:965
+#: gnucash/report/reports/standard/new-owner-report.scm:975
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post Date"
 msgstr "पछिको मिति"
@@ -2238,7 +2238,7 @@ msgid "PAID"
 msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:2065
-#: gnucash/report/reports/standard/new-owner-report.scm:581
+#: gnucash/report/reports/standard/new-owner-report.scm:583
 msgid "UNPAID"
 msgstr ""
 
@@ -2467,7 +2467,7 @@ msgstr "प्रकार"
 
 #: gnucash/gnome/dialog-invoice.c:3440
 #: gnucash/register/ledger-core/split-register-model.c:309
-#: gnucash/report/reports/standard/new-owner-report.scm:823
+#: gnucash/report/reports/standard/new-owner-report.scm:832
 msgid "Paid"
 msgstr "भुक्तान"
 
@@ -2632,7 +2632,7 @@ msgstr "शीर्षक"
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
 #: gnucash/report/reports/standard/new-owner-report.scm:58
-#: gnucash/report/reports/standard/new-owner-report.scm:562
+#: gnucash/report/reports/standard/new-owner-report.scm:564
 #: gnucash/report/reports/standard/owner-report.scm:319
 #: gnucash/report/reports/standard/register.scm:164
 msgid "Balance"
@@ -2726,8 +2726,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
 #: gnucash/report/reports/standard/new-aging.scm:194
-#: gnucash/report/reports/standard/new-owner-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:717
+#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:719
 msgid "Pre-Payment"
 msgstr "पूर्व-भुक्तानी"
 
@@ -2968,7 +2968,7 @@ msgstr "सामग्रीहरू"
 
 #: gnucash/gnome/dialog-report-column-view.c:412
 #: gnucash/report/reports/standard/customer-summary.scm:291
-#: gnucash/report/reports/standard/new-owner-report.scm:1065
+#: gnucash/report/reports/standard/new-owner-report.scm:1072
 #: gnucash/report/reports/standard/owner-report.scm:743
 msgid "Report"
 msgstr "प्रतिवेदन"
@@ -3394,7 +3394,7 @@ msgstr "एउटा अवस्थित बजेट खोल्नुहो
 #: gnucash/report/reports/standard/invoice.scm:252
 #: gnucash/report/reports/standard/new-aging.scm:200
 #: gnucash/report/reports/standard/new-aging.scm:325
-#: gnucash/report/reports/standard/new-owner-report.scm:325
+#: gnucash/report/reports/standard/new-owner-report.scm:327
 #: gnucash/report/reports/standard/portfolio.scm:278
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1961
@@ -5197,7 +5197,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 #: gnucash/report/reports/standard/job-report.scm:511
-#: gnucash/report/reports/standard/new-owner-report.scm:1209
+#: gnucash/report/reports/standard/new-owner-report.scm:1216
 msgid "Vendor Report"
 msgstr "बिक्रेता प्रतिवेदन"
 
@@ -5208,7 +5208,7 @@ msgstr "बिक्रेता प्रतिवेदन"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
 #: gnucash/report/reports/standard/job-report.scm:505
-#: gnucash/report/reports/standard/new-owner-report.scm:1200
+#: gnucash/report/reports/standard/new-owner-report.scm:1207
 msgid "Customer Report"
 msgstr "ग्राहक प्रतिवेदन"
 
@@ -5219,7 +5219,7 @@ msgstr "ग्राहक प्रतिवेदन"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 #: gnucash/report/reports/standard/job-report.scm:514
-#: gnucash/report/reports/standard/new-owner-report.scm:1218
+#: gnucash/report/reports/standard/new-owner-report.scm:1225
 msgid "Employee Report"
 msgstr "कर्मचारी प्रतिवेदन"
 
@@ -9576,7 +9576,7 @@ msgid "Dist"
 msgstr "छुट"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
-#: gnucash/import-export/import-main-matcher.c:1395
+#: gnucash/import-export/import-main-matcher.c:1397
 #: gnucash/report/reports/standard/register.scm:218
 #: libgnucash/engine/Split.c:1592 libgnucash/engine/Split.c:1609
 msgid "-- Split Transaction --"
@@ -13863,7 +13863,7 @@ msgstr "अन्तिम मिति"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1201
 #: gnucash/report/reports/standard/job-report.scm:563
-#: gnucash/report/reports/standard/new-owner-report.scm:1165
+#: gnucash/report/reports/standard/new-owner-report.scm:1172
 #: gnucash/report/reports/standard/owner-report.scm:795
 msgid "Date Range"
 msgstr "मिति दायरा"
@@ -21495,91 +21495,91 @@ msgid "y/d/m"
 msgstr "बर्ष/दिन/महिना"
 
 #: gnucash/import-export/import-main-matcher.c:591
-#: gnucash/import-export/import-main-matcher.c:741
+#: gnucash/import-export/import-main-matcher.c:743
 msgid "Destination account for the auto-balance split."
 msgstr "स्वत-सन्तुलन विभाजनका लागि गन्तव्य खाता।"
 
-#: gnucash/import-export/import-main-matcher.c:930
+#: gnucash/import-export/import-main-matcher.c:932
 #, fuzzy
 msgid "Assign a transfer account to the selection."
 msgstr "तपाईँले खाता ट्रिबाट स्थानान्तरण खाता चयन गर्नु पर्दछ।"
 
-#: gnucash/import-export/import-main-matcher.c:1093
+#: gnucash/import-export/import-main-matcher.c:1095
 #, fuzzy
 #| msgid "A"
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.c:1096
+#: gnucash/import-export/import-main-matcher.c:1098
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.c:1100
+#: gnucash/import-export/import-main-matcher.c:1102
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.c:1107
+#: gnucash/import-export/import-main-matcher.c:1109
 #, fuzzy
 msgid "Info"
 msgstr "कर सूचना"
 
-#: gnucash/import-export/import-main-matcher.c:1114
+#: gnucash/import-export/import-main-matcher.c:1116
 #: gnucash/report/stylesheets/head-or-tail.scm:102
 #, fuzzy
 msgid "Additional Comments"
 msgstr "कार्डमा थप:"
 
-#: gnucash/import-export/import-main-matcher.c:1478
+#: gnucash/import-export/import-main-matcher.c:1480
 msgid "New, already balanced"
 msgstr "नयाँ, पहिल्यै सन्तुलन गरिएको"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1504
+#: gnucash/import-export/import-main-matcher.c:1506
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "नयाँ, (म्यानुअल) %s मा \"%s\" स्थानान्तरण गर्नुहोस्"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1512
+#: gnucash/import-export/import-main-matcher.c:1514
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "नयाँ, (स्वत:) %s मा \"%s\" स्थानान्तरण गर्नुहोस्"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:1523
+#: gnucash/import-export/import-main-matcher.c:1525
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "नयाँ, असन्तुलित (%s स्थान्तरण गर्न acct को आवश्यक)!"
 
-#: gnucash/import-export/import-main-matcher.c:1540
+#: gnucash/import-export/import-main-matcher.c:1542
 msgid "Reconcile (manual) match"
 msgstr "(म्यानुल) जोडा मिलान गर्नुहोस्"
 
-#: gnucash/import-export/import-main-matcher.c:1544
+#: gnucash/import-export/import-main-matcher.c:1546
 msgid "Reconcile (auto) match"
 msgstr "(स्वत:) जोडा मिलान गर्नुहोस्"
 
-#: gnucash/import-export/import-main-matcher.c:1551
-#: gnucash/import-export/import-main-matcher.c:1577
+#: gnucash/import-export/import-main-matcher.c:1553
+#: gnucash/import-export/import-main-matcher.c:1579
 msgid "Match missing!"
 msgstr "हराइरहेको जोडा मिलाउनुहोस!"
 
-#: gnucash/import-export/import-main-matcher.c:1566
+#: gnucash/import-export/import-main-matcher.c:1568
 #, fuzzy
 msgid "Update and reconcile (manual) match"
 msgstr "(म्यानुल) जोडा मिलान गर्नुहोस्"
 
-#: gnucash/import-export/import-main-matcher.c:1570
+#: gnucash/import-export/import-main-matcher.c:1572
 #, fuzzy
 msgid "Update and reconcile (auto) match"
 msgstr "(स्वत:) जोडा मिलान गर्नुहोस्"
 
-#: gnucash/import-export/import-main-matcher.c:1585
+#: gnucash/import-export/import-main-matcher.c:1587
 msgid "Do not import (no action selected)"
 msgstr "आयात नगर्नुहोस् (कुनै कार्य चयन गरिएको छैन)"
 
@@ -22661,7 +22661,7 @@ msgstr "नमूना:कारोबारको वर्णन"
 #: gnucash/register/ledger-core/split-register-layout.c:703
 #: gnucash/register/ledger-core/split-register-model.c:334
 #: gnucash/report/reports/standard/new-owner-report.scm:219
-#: gnucash/report/reports/standard/new-owner-report.scm:450
+#: gnucash/report/reports/standard/new-owner-report.scm:452
 #: gnucash/report/trep-engine.scm:1292 gnucash/report/trep-engine.scm:1293
 msgctxt "Column header for 'Document Link'"
 msgid "L"
@@ -23010,7 +23010,7 @@ msgstr ""
 #: gnucash/report/html-utilities.scm:337
 #: gnucash/report/reports/standard/balsheet-pnl.scm:140
 #: gnucash/report/reports/standard/balsheet-pnl.scm:141
-#: gnucash/report/reports/standard/new-owner-report.scm:939
+#: gnucash/report/reports/standard/new-owner-report.scm:949
 #, fuzzy
 msgid "Disabled"
 msgstr "तालिका"
@@ -23728,7 +23728,7 @@ msgstr "सबै बिक्रेताहरू/ग्राहकहरू�
 
 #: gnucash/report/reports/aging.scm:385
 #: gnucash/report/reports/standard/new-aging.scm:122
-#: gnucash/report/reports/standard/new-owner-report.scm:957
+#: gnucash/report/reports/standard/new-owner-report.scm:967
 #: gnucash/report/reports/standard/owner-report.scm:609
 #, fuzzy
 msgid "Leading date."
@@ -23736,7 +23736,7 @@ msgstr "डेटा लोड गर्दैछ..."
 
 #: gnucash/report/reports/aging.scm:388
 #: gnucash/report/reports/standard/new-aging.scm:127
-#: gnucash/report/reports/standard/new-owner-report.scm:962
+#: gnucash/report/reports/standard/new-owner-report.scm:972
 #: gnucash/report/reports/standard/owner-report.scm:612
 #, fuzzy
 msgid "Due date is leading."
@@ -23744,7 +23744,7 @@ msgstr "मिति रेखाको स्थिति"
 
 #: gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:131
-#: gnucash/report/reports/standard/new-owner-report.scm:966
+#: gnucash/report/reports/standard/new-owner-report.scm:976
 #: gnucash/report/reports/standard/owner-report.scm:613
 #, fuzzy
 msgid "Post date is leading."
@@ -23809,7 +23809,7 @@ msgstr "मिति प्रदर्शन गर्नुहुन्छ?"
 #: gnucash/report/reports/standard/budget-barchart.scm:72
 #: gnucash/report/reports/standard/budget.scm:119
 #: gnucash/report/reports/standard/new-aging.scm:195
-#: gnucash/report/reports/standard/new-owner-report.scm:320
+#: gnucash/report/reports/standard/new-owner-report.scm:322
 #: gnucash/report/reports/standard/owner-report.scm:259
 #, fuzzy
 msgid "Current"
@@ -23818,7 +23818,7 @@ msgstr "मुद्रा"
 #: gnucash/report/reports/aging.scm:540
 #: gnucash/report/reports/standard/job-report.scm:159
 #: gnucash/report/reports/standard/new-aging.scm:196
-#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:323
 #: gnucash/report/reports/standard/owner-report.scm:260
 msgid "0-30 days"
 msgstr "०-३० दिन"
@@ -23826,7 +23826,7 @@ msgstr "०-३० दिन"
 #: gnucash/report/reports/aging.scm:541
 #: gnucash/report/reports/standard/job-report.scm:160
 #: gnucash/report/reports/standard/new-aging.scm:197
-#: gnucash/report/reports/standard/new-owner-report.scm:322
+#: gnucash/report/reports/standard/new-owner-report.scm:324
 #: gnucash/report/reports/standard/owner-report.scm:261
 msgid "31-60 days"
 msgstr "३१-६० दिन"
@@ -23834,7 +23834,7 @@ msgstr "३१-६० दिन"
 #: gnucash/report/reports/aging.scm:542
 #: gnucash/report/reports/standard/job-report.scm:161
 #: gnucash/report/reports/standard/new-aging.scm:198
-#: gnucash/report/reports/standard/new-owner-report.scm:323
+#: gnucash/report/reports/standard/new-owner-report.scm:325
 #: gnucash/report/reports/standard/owner-report.scm:262
 msgid "61-90 days"
 msgstr "६१-९० दिन"
@@ -23842,7 +23842,7 @@ msgstr "६१-९० दिन"
 #: gnucash/report/reports/aging.scm:543
 #: gnucash/report/reports/standard/job-report.scm:162
 #: gnucash/report/reports/standard/new-aging.scm:199
-#: gnucash/report/reports/standard/new-owner-report.scm:324
+#: gnucash/report/reports/standard/new-owner-report.scm:326
 #: gnucash/report/reports/standard/owner-report.scm:263
 msgid "91+ days"
 msgstr "९१+ दिन"
@@ -23935,7 +23935,7 @@ msgstr "यो प्रतिवेदनमा कारोबार प्र
 #: gnucash/report/reports/example/average-balance.scm:116
 #: gnucash/report/reports/example/average-balance.scm:303
 #: gnucash/report/reports/standard/category-barchart.scm:187
-#: gnucash/report/reports/standard/category-barchart.scm:259
+#: gnucash/report/reports/standard/category-barchart.scm:260
 #: gnucash/report/reports/standard/net-charts.scm:133
 #: gnucash/report/reports/standard/net-charts.scm:225
 msgid "Show table"
@@ -24092,7 +24092,7 @@ msgstr "लिजेण्डमा सन्तुलन जोड देखा
 #: gnucash/report/reports/standard/budget.scm:513
 #: gnucash/report/reports/standard/cashflow-barchart.scm:283
 #: gnucash/report/reports/standard/cash-flow.scm:190
-#: gnucash/report/reports/standard/category-barchart.scm:514
+#: gnucash/report/reports/standard/category-barchart.scm:519
 #: gnucash/report/reports/standard/net-charts.scm:330
 #: gnucash/report/reports/standard/price-scatter.scm:213
 #: libgnucash/app-utils/date-utilities.scm:187
@@ -24957,13 +24957,13 @@ msgid "Yearly Average"
 msgstr "औसत"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:415
-#: gnucash/report/reports/standard/category-barchart.scm:306
+#: gnucash/report/reports/standard/category-barchart.scm:327
 #, fuzzy
 msgid "Monthly Average"
 msgstr "मासिक"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:416
-#: gnucash/report/reports/standard/category-barchart.scm:307
+#: gnucash/report/reports/standard/category-barchart.scm:328
 #, fuzzy
 msgid "Weekly Average"
 msgstr "वजन गरिएको औसत"
@@ -26859,23 +26859,32 @@ msgstr "एउटा थाक गरिएको बारचार्टको
 msgid "Maximum number of stacks in the chart."
 msgstr "चित्रपटमा बारहरूको अधिकतम सङ्ख्या"
 
-#: gnucash/report/reports/standard/category-barchart.scm:308
+#: gnucash/report/reports/standard/category-barchart.scm:290
+#, fuzzy
+msgid "Invalid dates"
+msgstr "कारोबार खाली नगर्नुहोस्"
+
+#: gnucash/report/reports/standard/category-barchart.scm:291
+msgid "Start date must be earlier than End date"
+msgstr ""
+
+#: gnucash/report/reports/standard/category-barchart.scm:329
 #, fuzzy
 msgid "Daily Average"
 msgstr "औसत"
 
-#: gnucash/report/reports/standard/category-barchart.scm:515
+#: gnucash/report/reports/standard/category-barchart.scm:520
 #, fuzzy, scheme-format
 msgid "Balances ~a to ~a"
 msgstr "सन्तुलनहरू %s देखि %s"
 
-#: gnucash/report/reports/standard/category-barchart.scm:643
-#: gnucash/report/reports/standard/category-barchart.scm:664
+#: gnucash/report/reports/standard/category-barchart.scm:641
+#: gnucash/report/reports/standard/category-barchart.scm:662
 #: gnucash/report/trep-engine.scm:1688 gnucash/report/trep-engine.scm:1947
 msgid "Grand Total"
 msgstr "कूल जोड"
 
-#: gnucash/report/reports/standard/category-barchart.scm:690
+#: gnucash/report/reports/standard/category-barchart.scm:676
 #: gnucash/report/reports/standard/net-charts.scm:466
 #, fuzzy
 msgid "No exportable data"
@@ -26926,8 +26935,6 @@ msgstr ""
 #: gnucash/report/reports/standard/job-report.scm:384
 #: gnucash/report/reports/standard/job-report.scm:389
 #: gnucash/report/reports/standard/job-report.scm:394
-#: gnucash/report/reports/standard/new-owner-report.scm:886
-#: gnucash/report/reports/standard/new-owner-report.scm:891
 #: gnucash/report/reports/standard/new-owner-report.scm:896
 #: gnucash/report/reports/standard/new-owner-report.scm:901
 #: gnucash/report/reports/standard/new-owner-report.scm:906
@@ -26937,7 +26944,9 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:926
 #: gnucash/report/reports/standard/new-owner-report.scm:931
 #: gnucash/report/reports/standard/new-owner-report.scm:936
-#: gnucash/report/reports/standard/new-owner-report.scm:951
+#: gnucash/report/reports/standard/new-owner-report.scm:941
+#: gnucash/report/reports/standard/new-owner-report.scm:946
+#: gnucash/report/reports/standard/new-owner-report.scm:961
 #: gnucash/report/reports/standard/owner-report.scm:556
 #: gnucash/report/reports/standard/owner-report.scm:561
 #: gnucash/report/reports/standard/owner-report.scm:566
@@ -27897,13 +27906,13 @@ msgid "~a #~a"
 msgstr ""
 
 #: gnucash/report/reports/standard/job-report.scm:318
-#: gnucash/report/reports/standard/new-owner-report.scm:528
+#: gnucash/report/reports/standard/new-owner-report.scm:530
 #: gnucash/report/reports/standard/owner-report.scm:505
 msgid "Total Credit"
 msgstr "जम्मा क्रेडिट"
 
 #: gnucash/report/reports/standard/job-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:529
+#: gnucash/report/reports/standard/new-owner-report.scm:531
 #: gnucash/report/reports/standard/owner-report.scm:506
 msgid "Total Due"
 msgstr "जम्मा बाँकी"
@@ -27921,27 +27930,27 @@ msgstr "कारोबारहरूका लागि खोजी गर्
 
 #: gnucash/report/reports/standard/job-report.scm:370
 #: gnucash/report/reports/standard/job-report.scm:375
-#: gnucash/report/reports/standard/new-owner-report.scm:887
-#: gnucash/report/reports/standard/new-owner-report.scm:892
+#: gnucash/report/reports/standard/new-owner-report.scm:897
+#: gnucash/report/reports/standard/new-owner-report.scm:902
 #: gnucash/report/reports/standard/owner-report.scm:557
 #: gnucash/report/reports/standard/owner-report.scm:562
 msgid "Display the transaction date?"
 msgstr "कारोबार मिति प्रदर्शन गर्नुहुन्छ ?"
 
 #: gnucash/report/reports/standard/job-report.scm:380
-#: gnucash/report/reports/standard/new-owner-report.scm:897
+#: gnucash/report/reports/standard/new-owner-report.scm:907
 #: gnucash/report/reports/standard/owner-report.scm:567
 msgid "Display the transaction reference?"
 msgstr "कारोबार सन्दर्भ प्रदर्शन गर्नुहुन्छ ?"
 
 #: gnucash/report/reports/standard/job-report.scm:385
-#: gnucash/report/reports/standard/new-owner-report.scm:902
+#: gnucash/report/reports/standard/new-owner-report.scm:912
 #: gnucash/report/reports/standard/owner-report.scm:572
 msgid "Display the transaction type?"
 msgstr "कारोबार प्रकार प्रदर्शन गर्नुहुन्छ ?"
 
 #: gnucash/report/reports/standard/job-report.scm:390
-#: gnucash/report/reports/standard/new-owner-report.scm:907
+#: gnucash/report/reports/standard/new-owner-report.scm:917
 #: gnucash/report/reports/standard/owner-report.scm:577
 msgid "Display the transaction description?"
 msgstr "कारोबार वर्णन प्रदर्शन गर्नुहुन्छ ?"
@@ -27953,7 +27962,7 @@ msgid "Display the transaction amount?"
 msgstr "कारोबार मिति प्रदर्शन गर्नुहुन्छ ?"
 
 #: gnucash/report/reports/standard/job-report.scm:508
-#: gnucash/report/reports/standard/new-owner-report.scm:1227
+#: gnucash/report/reports/standard/new-owner-report.scm:1234
 #, fuzzy
 msgid "Job Report"
 msgstr "प्रतिवेदन"
@@ -28099,7 +28108,7 @@ msgid "Reverse alphabetical order"
 msgstr "दर्ता क्रम"
 
 #: gnucash/report/reports/standard/new-aging.scm:343
-#: gnucash/report/reports/standard/new-owner-report.scm:544
+#: gnucash/report/reports/standard/new-owner-report.scm:546
 #, fuzzy
 msgid "Please note some transactions were not processed"
 msgstr "कारोबारहरू पुन: प्राप्त गर्ने मिति को दायरा:"
@@ -28211,109 +28220,109 @@ msgstr ""
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
-#: gnucash/report/reports/standard/new-owner-report.scm:347
+#: gnucash/report/reports/standard/new-owner-report.scm:349
 #, scheme-format
 msgid "~a History"
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:349
+#: gnucash/report/reports/standard/new-owner-report.scm:351
 #, fuzzy
 msgid "Linked Details"
 msgstr "काम संवाद"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:508
+#: gnucash/report/reports/standard/new-owner-report.scm:510
 #: gnucash/report/reports/standard/owner-report.scm:463
 #, fuzzy
 msgid "Period Totals"
 msgstr "अवधि सुरु"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:872
+#: gnucash/report/reports/standard/new-owner-report.scm:882
 #: gnucash/report/reports/standard/owner-report.scm:535
 #, fuzzy
 msgid "The company for this report."
 msgstr "यो प्रतिवेदनका लागि कम्पनी"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:912
+#: gnucash/report/reports/standard/new-owner-report.scm:922
 #: gnucash/report/reports/standard/owner-report.scm:582
 #, fuzzy
 msgid "Display the sale amount column?"
 msgstr "रकम प्रदर्शन गर्नुहुन्छ?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:917
+#: gnucash/report/reports/standard/new-owner-report.scm:927
 #: gnucash/report/reports/standard/owner-report.scm:587
 #, fuzzy
 msgid "Display the tax column?"
 msgstr "खाता प्रदर्शन गर्नुहुन्छ?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:922
+#: gnucash/report/reports/standard/new-owner-report.scm:932
 #: gnucash/report/reports/standard/owner-report.scm:597
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "प्रविष्टिको छुट प्रदर्शन गर्नुहोस्"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:927
+#: gnucash/report/reports/standard/new-owner-report.scm:937
 #: gnucash/report/reports/standard/owner-report.scm:592
 #, fuzzy
 msgid "Display the period credits column?"
 msgstr "प्रविष्टिको छुट प्रदर्शन गर्नुहोस्"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:932
+#: gnucash/report/reports/standard/new-owner-report.scm:942
 #: gnucash/report/reports/standard/register.scm:413
 #: gnucash/report/trep-engine.scm:984
 #, fuzzy
 msgid "Display a running balance?"
 msgstr "एउटा चलिरहेको सन्तुलन प्रदर्शन गर्नुहोस्"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:937
+#: gnucash/report/reports/standard/new-owner-report.scm:947
 #, fuzzy
 msgid "Show linked transactions"
 msgstr "खाली नगरिएको कारोबारहरू मात्र देखाउनुहोस्"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:940
+#: gnucash/report/reports/standard/new-owner-report.scm:950
 #, fuzzy
 msgid "Linked transactions are hidden."
 msgstr "खोजी सहित कारोबारहरू फेला पार्नुहोस्"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:942
+#: gnucash/report/reports/standard/new-owner-report.scm:952
 #, fuzzy
 msgid "Simple"
 msgstr "नमूना:"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:943
+#: gnucash/report/reports/standard/new-owner-report.scm:953
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:945
+#: gnucash/report/reports/standard/new-owner-report.scm:955
 #, fuzzy
 msgid "Detailed"
 msgstr "फाइल"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:946
+#: gnucash/report/reports/standard/new-owner-report.scm:956
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:952
+#: gnucash/report/reports/standard/new-owner-report.scm:962
 #, fuzzy
 msgid "Display document link?"
 msgstr "हाइपरलिङ्कको रूपमा खाताहरू प्रदर्शन गर्नुहोस्"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1080
+#: gnucash/report/reports/standard/new-owner-report.scm:1087
 #, fuzzy
 msgid "No valid account found"
 msgstr "जोडा मिलेको कारोबार फेला परेन"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1081
+#: gnucash/report/reports/standard/new-owner-report.scm:1088
 #, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
 msgstr "यस प्रतिवेदनलाई खाताहरू चयन गरिएको हुनु पर्दछ।"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1104
+#: gnucash/report/reports/standard/new-owner-report.scm:1111
 #, fuzzy
 msgid "No transactions found."
 msgstr "जोडा मिलेको कारोबार फेला परेन"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1105
+#: gnucash/report/reports/standard/new-owner-report.scm:1112
 #: gnucash/report/trep-engine.scm:130
 msgid "No matching transactions found"
 msgstr "जोडा मिलेको कारोबार फेला परेन"

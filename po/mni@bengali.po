@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-03 07:22+0100\n"
+"POT-Creation-Date: 2021-01-14 22:46+0100\n"
 "PO-Revision-Date: 2014-08-19 15:04+0530\n"
 "Last-Translator: Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>\n"
 "Language-Team: Manipuri (Bengali Script) <gistlrc@gmail.com>\n"
@@ -87,7 +87,7 @@ msgstr "রেজিস্তর"
 #: gnucash/gtkbuilder/assistant-loan.glade:969
 #: gnucash/gtkbuilder/dialog-account.glade:1029
 #: gnucash/report/reports/standard/account-piecharts.scm:488
-#: gnucash/report/reports/standard/category-barchart.scm:537
+#: gnucash/report/reports/standard/category-barchart.scm:542
 msgid "Other"
 msgstr "অতোপ্পা"
 
@@ -971,7 +971,7 @@ msgstr "লোন সিংবগী ওপসন: \"%s\""
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:49
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
-#: gnucash/import-export/import-main-matcher.c:1087
+#: gnucash/import-export/import-main-matcher.c:1089
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3700
@@ -983,8 +983,8 @@ msgstr "লোন সিংবগী ওপসন: \"%s\""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1095
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1100
 #: gnucash/report/reports/standard/cashflow-barchart.scm:343
-#: gnucash/report/reports/standard/category-barchart.scm:634
-#: gnucash/report/reports/standard/category-barchart.scm:655
+#: gnucash/report/reports/standard/category-barchart.scm:632
+#: gnucash/report/reports/standard/category-barchart.scm:653
 #: gnucash/report/reports/standard/customer-summary.scm:70
 #: gnucash/report/reports/standard/general-journal.scm:92
 #: gnucash/report/reports/standard/general-ledger.scm:66
@@ -1073,7 +1073,7 @@ msgstr "মমল হাপচিনবদা শোয়রে."
 #: gnucash/import-export/aqb/gnc-ab-utils.c:541
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:151
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
-#: gnucash/import-export/import-main-matcher.c:1088
+#: gnucash/import-export/import-main-matcher.c:1090
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:341
@@ -1084,7 +1084,7 @@ msgstr "মমল হাপচিনবদা শোয়রে."
 #: gnucash/report/reports/standard/general-journal.scm:97
 #: gnucash/report/reports/standard/job-report.scm:36
 #: gnucash/report/reports/standard/lot-viewer.scm:37
-#: gnucash/report/reports/standard/new-owner-report.scm:1132
+#: gnucash/report/reports/standard/new-owner-report.scm:1139
 #: gnucash/report/reports/standard/owner-report.scm:48
 #: gnucash/report/reports/standard/portfolio.scm:253
 #: gnucash/report/reports/standard/register.scm:143
@@ -1668,7 +1668,7 @@ msgstr "ত্রাঞ্জেক্সনগী অকুপ্পা ৱা�
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
-#: gnucash/import-export/import-main-matcher.c:1091
+#: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3710
@@ -1892,7 +1892,7 @@ msgstr "সেয়র প্রাইস"
 #: gnucash/gtkbuilder/assistant-loan.glade:764
 #: gnucash/gtkbuilder/dialog-transfer.glade:112
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:50
-#: gnucash/import-export/import-main-matcher.c:1090
+#: gnucash/import-export/import-main-matcher.c:1092
 #: gnucash/import-export/import-match-picker.c:394
 #: gnucash/import-export/import-match-picker.c:434
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3721
@@ -2032,7 +2032,7 @@ msgstr "দিস্ক্রিপসন/ নোতসিং/ মেমো"
 #: gnucash/gtkbuilder/dialog-transfer.glade:215
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
-#: gnucash/import-export/import-main-matcher.c:1092
+#: gnucash/import-export/import-main-matcher.c:1094
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
 #: gnucash/register/ledger-core/split-register-model.c:355
@@ -2177,7 +2177,7 @@ msgstr "এন্ত্রি অসি ওর্দর অমদা পুন�
 #: gnucash/report/reports/standard/job-report.scm:41
 #: gnucash/report/reports/standard/new-aging.scm:126
 #: gnucash/report/reports/standard/new-owner-report.scm:50
-#: gnucash/report/reports/standard/new-owner-report.scm:961
+#: gnucash/report/reports/standard/new-owner-report.scm:971
 #: gnucash/report/reports/standard/owner-report.scm:51
 #: gnucash/report/reports/standard/owner-report.scm:612
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:233
@@ -2186,7 +2186,7 @@ msgstr "দিউ ওইবা তাং"
 
 #: gnucash/gnome/dialog-invoice.c:837 gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:130
-#: gnucash/report/reports/standard/new-owner-report.scm:965
+#: gnucash/report/reports/standard/new-owner-report.scm:975
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post Date"
 msgstr "পোস্ত তৌবগী তাং"
@@ -2251,7 +2251,7 @@ msgid "PAID"
 msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:2065
-#: gnucash/report/reports/standard/new-owner-report.scm:581
+#: gnucash/report/reports/standard/new-owner-report.scm:583
 msgid "UNPAID"
 msgstr ""
 
@@ -2473,7 +2473,7 @@ msgstr "মখল"
 
 #: gnucash/gnome/dialog-invoice.c:3440
 #: gnucash/register/ledger-core/split-register-model.c:309
-#: gnucash/report/reports/standard/new-owner-report.scm:823
+#: gnucash/report/reports/standard/new-owner-report.scm:832
 msgid "Paid"
 msgstr "পীরে"
 
@@ -2653,7 +2653,7 @@ msgstr "মিংথোল"
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
 #: gnucash/report/reports/standard/new-owner-report.scm:58
-#: gnucash/report/reports/standard/new-owner-report.scm:562
+#: gnucash/report/reports/standard/new-owner-report.scm:564
 #: gnucash/report/reports/standard/owner-report.scm:319
 #: gnucash/report/reports/standard/register.scm:164
 msgid "Balance"
@@ -2746,8 +2746,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
 #: gnucash/report/reports/standard/new-aging.scm:194
-#: gnucash/report/reports/standard/new-owner-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:717
+#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:719
 msgid "Pre-Payment"
 msgstr "হান্না পীবা পেমেন্ত"
 
@@ -2984,7 +2984,7 @@ msgstr "হীরমশিং"
 
 #: gnucash/gnome/dialog-report-column-view.c:412
 #: gnucash/report/reports/standard/customer-summary.scm:291
-#: gnucash/report/reports/standard/new-owner-report.scm:1065
+#: gnucash/report/reports/standard/new-owner-report.scm:1072
 #: gnucash/report/reports/standard/owner-report.scm:743
 msgid "Report"
 msgstr "রিপোর্ত"
@@ -3408,7 +3408,7 @@ msgstr "লৈরিবা বজেত হাংদোকউ"
 #: gnucash/report/reports/standard/invoice.scm:252
 #: gnucash/report/reports/standard/new-aging.scm:200
 #: gnucash/report/reports/standard/new-aging.scm:325
-#: gnucash/report/reports/standard/new-owner-report.scm:325
+#: gnucash/report/reports/standard/new-owner-report.scm:327
 #: gnucash/report/reports/standard/portfolio.scm:278
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1961
@@ -5173,7 +5173,7 @@ msgstr "কস্তমর লোয়নমক্কী কস্তমরগী 
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 #: gnucash/report/reports/standard/job-report.scm:511
-#: gnucash/report/reports/standard/new-owner-report.scm:1209
+#: gnucash/report/reports/standard/new-owner-report.scm:1216
 msgid "Vendor Report"
 msgstr "ভেন্দর রিপোর্ত"
 
@@ -5183,7 +5183,7 @@ msgstr "ভেন্দর রিপোর্ত উৎলু"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
 #: gnucash/report/reports/standard/job-report.scm:505
-#: gnucash/report/reports/standard/new-owner-report.scm:1200
+#: gnucash/report/reports/standard/new-owner-report.scm:1207
 msgid "Customer Report"
 msgstr "কস্তমর রিপোর্ত"
 
@@ -5193,7 +5193,7 @@ msgstr "কস্তমর রিপোর্ত উৎলু"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 #: gnucash/report/reports/standard/job-report.scm:514
-#: gnucash/report/reports/standard/new-owner-report.scm:1218
+#: gnucash/report/reports/standard/new-owner-report.scm:1225
 msgid "Employee Report"
 msgstr "ইমপ্লোয়ি রিপোর্ত"
 
@@ -9572,7 +9572,7 @@ msgid "Dist"
 msgstr "দিস্কাউন্ত"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
-#: gnucash/import-export/import-main-matcher.c:1395
+#: gnucash/import-export/import-main-matcher.c:1397
 #: gnucash/report/reports/standard/register.scm:218
 #: libgnucash/engine/Split.c:1592 libgnucash/engine/Split.c:1609
 msgid "-- Split Transaction --"
@@ -13925,7 +13925,7 @@ msgstr "অরোইবা তাং"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1201
 #: gnucash/report/reports/standard/job-report.scm:563
-#: gnucash/report/reports/standard/new-owner-report.scm:1165
+#: gnucash/report/reports/standard/new-owner-report.scm:1172
 #: gnucash/report/reports/standard/owner-report.scm:795
 msgid "Date Range"
 msgstr "তাংগী রেনজ"
@@ -21548,91 +21548,91 @@ msgid "y/d/m"
 msgstr "y/d/m"
 
 #: gnucash/import-export/import-main-matcher.c:591
-#: gnucash/import-export/import-main-matcher.c:741
+#: gnucash/import-export/import-main-matcher.c:743
 msgid "Destination account for the auto-balance split."
 msgstr "আউতো-বেলেন্স স্প্লিতগী দেস্তিনেসন একাউন্ত."
 
-#: gnucash/import-export/import-main-matcher.c:930
+#: gnucash/import-export/import-main-matcher.c:932
 #, fuzzy
 msgid "Assign a transfer account to the selection."
 msgstr "একাউন্ত ত্রিদগী ত্রান্সফর একাউন্ত অমা খনগদবনি."
 
-#: gnucash/import-export/import-main-matcher.c:1093
+#: gnucash/import-export/import-main-matcher.c:1095
 #, fuzzy
 #| msgid "A"
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.c:1096
+#: gnucash/import-export/import-main-matcher.c:1098
 #, fuzzy
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "U+R"
 
-#: gnucash/import-export/import-main-matcher.c:1100
+#: gnucash/import-export/import-main-matcher.c:1102
 #, fuzzy
 #| msgid "C"
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "C"
 
-#: gnucash/import-export/import-main-matcher.c:1107
+#: gnucash/import-export/import-main-matcher.c:1109
 msgid "Info"
 msgstr "ঈপাউ"
 
-#: gnucash/import-export/import-main-matcher.c:1114
+#: gnucash/import-export/import-main-matcher.c:1116
 #: gnucash/report/stylesheets/head-or-tail.scm:102
 #, fuzzy
 msgid "Additional Comments"
 msgstr "কার্দতা অহেনবা হাপচিনবা:"
 
-#: gnucash/import-export/import-main-matcher.c:1478
+#: gnucash/import-export/import-main-matcher.c:1480
 msgid "New, already balanced"
 msgstr "অনৌবা, হান্না বেলেন্স তৌরে"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1504
+#: gnucash/import-export/import-main-matcher.c:1506
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "অনৌবা, %s (মেনুয়েল ওইনা) \"%s\" ত্রান্সফর তৌরো"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1512
+#: gnucash/import-export/import-main-matcher.c:1514
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "অনৌবা, %s (আউতো ওইনা) \"%s\" ত্রান্সফর তৌরো"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:1523
+#: gnucash/import-export/import-main-matcher.c:1525
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "অনৌবা, UNBALANCED (%s ত্রান্সফর তৌনবা একাউন্ত তঙাইফদে)!"
 
-#: gnucash/import-export/import-main-matcher.c:1540
+#: gnucash/import-export/import-main-matcher.c:1542
 msgid "Reconcile (manual) match"
 msgstr "চান্নবা রিকনসাইল (মেনুয়েল ওইনা) তৌরো"
 
-#: gnucash/import-export/import-main-matcher.c:1544
+#: gnucash/import-export/import-main-matcher.c:1546
 msgid "Reconcile (auto) match"
 msgstr "চান্নবা রিকনসাইল (আউতো ওইনা) তৌরো"
 
-#: gnucash/import-export/import-main-matcher.c:1551
-#: gnucash/import-export/import-main-matcher.c:1577
+#: gnucash/import-export/import-main-matcher.c:1553
+#: gnucash/import-export/import-main-matcher.c:1579
 msgid "Match missing!"
 msgstr "চান্নবা লৈত্রে!"
 
-#: gnucash/import-export/import-main-matcher.c:1566
+#: gnucash/import-export/import-main-matcher.c:1568
 msgid "Update and reconcile (manual) match"
 msgstr "চান্নবা অপদেত অমসুং রিকনসাইল (মেনুয়েল ওইনা) তৌরো"
 
-#: gnucash/import-export/import-main-matcher.c:1570
+#: gnucash/import-export/import-main-matcher.c:1572
 msgid "Update and reconcile (auto) match"
 msgstr "চান্নবা অপদেত অমসুং রিকনসাইল (আউতো ওইনা) তৌরো"
 
-#: gnucash/import-export/import-main-matcher.c:1585
+#: gnucash/import-export/import-main-matcher.c:1587
 msgid "Do not import (no action selected)"
 msgstr "পুশিল্লক্কনু (এক্সন অমত্তা খনদ্রে)"
 
@@ -22687,7 +22687,7 @@ msgstr "সেমপল:ত্রান্সেকসনগী দিস্ক�
 #: gnucash/register/ledger-core/split-register-layout.c:703
 #: gnucash/register/ledger-core/split-register-model.c:334
 #: gnucash/report/reports/standard/new-owner-report.scm:219
-#: gnucash/report/reports/standard/new-owner-report.scm:450
+#: gnucash/report/reports/standard/new-owner-report.scm:452
 #: gnucash/report/trep-engine.scm:1292 gnucash/report/trep-engine.scm:1293
 msgctxt "Column header for 'Document Link'"
 msgid "L"
@@ -23033,7 +23033,7 @@ msgstr "বজেত অমত্তা লৈতে। নহাক্না �
 #: gnucash/report/html-utilities.scm:337
 #: gnucash/report/reports/standard/balsheet-pnl.scm:140
 #: gnucash/report/reports/standard/balsheet-pnl.scm:141
-#: gnucash/report/reports/standard/new-owner-report.scm:939
+#: gnucash/report/reports/standard/new-owner-report.scm:949
 #, fuzzy
 msgid "Disabled"
 msgstr "ঙমহল্লে"
@@ -23716,21 +23716,21 @@ msgstr "মখোয়গী জিরো বেলেন্স লৈরবসু
 
 #: gnucash/report/reports/aging.scm:385
 #: gnucash/report/reports/standard/new-aging.scm:122
-#: gnucash/report/reports/standard/new-owner-report.scm:957
+#: gnucash/report/reports/standard/new-owner-report.scm:967
 #: gnucash/report/reports/standard/owner-report.scm:609
 msgid "Leading date."
 msgstr "লিদ তৌরিবা তারিখ।"
 
 #: gnucash/report/reports/aging.scm:388
 #: gnucash/report/reports/standard/new-aging.scm:127
-#: gnucash/report/reports/standard/new-owner-report.scm:962
+#: gnucash/report/reports/standard/new-owner-report.scm:972
 #: gnucash/report/reports/standard/owner-report.scm:612
 msgid "Due date is leading."
 msgstr "দ্যু ওইবা তারিখ অদু লিদ তৌরি।"
 
 #: gnucash/report/reports/aging.scm:389
 #: gnucash/report/reports/standard/new-aging.scm:131
-#: gnucash/report/reports/standard/new-owner-report.scm:966
+#: gnucash/report/reports/standard/new-owner-report.scm:976
 #: gnucash/report/reports/standard/owner-report.scm:613
 msgid "Post date is leading."
 msgstr "তারিখকী মতুংনা লিদ তৌরি।"
@@ -23797,7 +23797,7 @@ msgstr "অপুনবা উৎকদ্রা?"
 #: gnucash/report/reports/standard/budget-barchart.scm:72
 #: gnucash/report/reports/standard/budget.scm:119
 #: gnucash/report/reports/standard/new-aging.scm:195
-#: gnucash/report/reports/standard/new-owner-report.scm:320
+#: gnucash/report/reports/standard/new-owner-report.scm:322
 #: gnucash/report/reports/standard/owner-report.scm:259
 msgid "Current"
 msgstr "চৎলিবা/ হৌজিক্কী"
@@ -23805,7 +23805,7 @@ msgstr "চৎলিবা/ হৌজিক্কী"
 #: gnucash/report/reports/aging.scm:540
 #: gnucash/report/reports/standard/job-report.scm:159
 #: gnucash/report/reports/standard/new-aging.scm:196
-#: gnucash/report/reports/standard/new-owner-report.scm:321
+#: gnucash/report/reports/standard/new-owner-report.scm:323
 #: gnucash/report/reports/standard/owner-report.scm:260
 msgid "0-30 days"
 msgstr "0-30 নুমিৎ"
@@ -23813,7 +23813,7 @@ msgstr "0-30 নুমিৎ"
 #: gnucash/report/reports/aging.scm:541
 #: gnucash/report/reports/standard/job-report.scm:160
 #: gnucash/report/reports/standard/new-aging.scm:197
-#: gnucash/report/reports/standard/new-owner-report.scm:322
+#: gnucash/report/reports/standard/new-owner-report.scm:324
 #: gnucash/report/reports/standard/owner-report.scm:261
 msgid "31-60 days"
 msgstr "31-60 নুমিৎ"
@@ -23821,7 +23821,7 @@ msgstr "31-60 নুমিৎ"
 #: gnucash/report/reports/aging.scm:542
 #: gnucash/report/reports/standard/job-report.scm:161
 #: gnucash/report/reports/standard/new-aging.scm:198
-#: gnucash/report/reports/standard/new-owner-report.scm:323
+#: gnucash/report/reports/standard/new-owner-report.scm:325
 #: gnucash/report/reports/standard/owner-report.scm:262
 msgid "61-90 days"
 msgstr "61-90 নুমিৎ"
@@ -23829,7 +23829,7 @@ msgstr "61-90 নুমিৎ"
 #: gnucash/report/reports/aging.scm:543
 #: gnucash/report/reports/standard/job-report.scm:162
 #: gnucash/report/reports/standard/new-aging.scm:199
-#: gnucash/report/reports/standard/new-owner-report.scm:324
+#: gnucash/report/reports/standard/new-owner-report.scm:326
 #: gnucash/report/reports/standard/owner-report.scm:263
 msgid "91+ days"
 msgstr "91+ নুমিৎ"
@@ -23921,7 +23921,7 @@ msgstr "একাউন্ত অসিদা ত্রাঞ্জেক্স�
 #: gnucash/report/reports/example/average-balance.scm:116
 #: gnucash/report/reports/example/average-balance.scm:303
 #: gnucash/report/reports/standard/category-barchart.scm:187
-#: gnucash/report/reports/standard/category-barchart.scm:259
+#: gnucash/report/reports/standard/category-barchart.scm:260
 #: gnucash/report/reports/standard/net-charts.scm:133
 #: gnucash/report/reports/standard/net-charts.scm:225
 msgid "Show table"
@@ -24073,7 +24073,7 @@ msgstr "লিজেন্দদা অপুনবা বেলেন্স উ
 #: gnucash/report/reports/standard/budget.scm:513
 #: gnucash/report/reports/standard/cashflow-barchart.scm:283
 #: gnucash/report/reports/standard/cash-flow.scm:190
-#: gnucash/report/reports/standard/category-barchart.scm:514
+#: gnucash/report/reports/standard/category-barchart.scm:519
 #: gnucash/report/reports/standard/net-charts.scm:330
 #: gnucash/report/reports/standard/price-scatter.scm:213
 #: libgnucash/app-utils/date-utilities.scm:187
@@ -24893,12 +24893,12 @@ msgid "Yearly Average"
 msgstr "চহীগী ওইবা চাংচৎ"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:415
-#: gnucash/report/reports/standard/category-barchart.scm:306
+#: gnucash/report/reports/standard/category-barchart.scm:327
 msgid "Monthly Average"
 msgstr "থাগী ওইবা চাংচৎ"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:416
-#: gnucash/report/reports/standard/category-barchart.scm:307
+#: gnucash/report/reports/standard/category-barchart.scm:328
 msgid "Weekly Average"
 msgstr "চয়োলগী ওইবা চাংচৎ"
 
@@ -26723,22 +26723,31 @@ msgstr "বরচার্ত অসি স্তেক ওইবা বার�
 msgid "Maximum number of stacks in the chart."
 msgstr "চার্ত অদুদা লৈবা খ্বাইদগী য়াম্না ওইবা য়াবা বারসিংগী মসিং।"
 
-#: gnucash/report/reports/standard/category-barchart.scm:308
+#: gnucash/report/reports/standard/category-barchart.scm:290
+#, fuzzy
+msgid "Invalid dates"
+msgstr "_য়াদ্রবা নত্তবা ত্রান্সেকসন"
+
+#: gnucash/report/reports/standard/category-barchart.scm:291
+msgid "Start date must be earlier than End date"
+msgstr ""
+
+#: gnucash/report/reports/standard/category-barchart.scm:329
 msgid "Daily Average"
 msgstr "নোংমগী ওইবা চাংচৎ"
 
-#: gnucash/report/reports/standard/category-barchart.scm:515
+#: gnucash/report/reports/standard/category-barchart.scm:520
 #, fuzzy, scheme-format
 msgid "Balances ~a to ~a"
 msgstr "বেলেন্সেস %s দগী %s দা"
 
-#: gnucash/report/reports/standard/category-barchart.scm:643
-#: gnucash/report/reports/standard/category-barchart.scm:664
+#: gnucash/report/reports/standard/category-barchart.scm:641
+#: gnucash/report/reports/standard/category-barchart.scm:662
 #: gnucash/report/trep-engine.scm:1688 gnucash/report/trep-engine.scm:1947
 msgid "Grand Total"
 msgstr "পুম্নমক্কী অপুনবা"
 
-#: gnucash/report/reports/standard/category-barchart.scm:690
+#: gnucash/report/reports/standard/category-barchart.scm:676
 #: gnucash/report/reports/standard/net-charts.scm:466
 #, fuzzy
 msgid "No exportable data"
@@ -26786,8 +26795,6 @@ msgstr "নসাগী কম্পনিগী এদ্রেস অমসু
 #: gnucash/report/reports/standard/job-report.scm:384
 #: gnucash/report/reports/standard/job-report.scm:389
 #: gnucash/report/reports/standard/job-report.scm:394
-#: gnucash/report/reports/standard/new-owner-report.scm:886
-#: gnucash/report/reports/standard/new-owner-report.scm:891
 #: gnucash/report/reports/standard/new-owner-report.scm:896
 #: gnucash/report/reports/standard/new-owner-report.scm:901
 #: gnucash/report/reports/standard/new-owner-report.scm:906
@@ -26797,7 +26804,9 @@ msgstr "নসাগী কম্পনিগী এদ্রেস অমসু
 #: gnucash/report/reports/standard/new-owner-report.scm:926
 #: gnucash/report/reports/standard/new-owner-report.scm:931
 #: gnucash/report/reports/standard/new-owner-report.scm:936
-#: gnucash/report/reports/standard/new-owner-report.scm:951
+#: gnucash/report/reports/standard/new-owner-report.scm:941
+#: gnucash/report/reports/standard/new-owner-report.scm:946
+#: gnucash/report/reports/standard/new-owner-report.scm:961
 #: gnucash/report/reports/standard/owner-report.scm:556
 #: gnucash/report/reports/standard/owner-report.scm:561
 #: gnucash/report/reports/standard/owner-report.scm:566
@@ -27718,13 +27727,13 @@ msgid "~a #~a"
 msgstr ""
 
 #: gnucash/report/reports/standard/job-report.scm:318
-#: gnucash/report/reports/standard/new-owner-report.scm:528
+#: gnucash/report/reports/standard/new-owner-report.scm:530
 #: gnucash/report/reports/standard/owner-report.scm:505
 msgid "Total Credit"
 msgstr "অপুনবা ক্রেদিত"
 
 #: gnucash/report/reports/standard/job-report.scm:319
-#: gnucash/report/reports/standard/new-owner-report.scm:529
+#: gnucash/report/reports/standard/new-owner-report.scm:531
 #: gnucash/report/reports/standard/owner-report.scm:506
 msgid "Total Due"
 msgstr "অপুনবা দিউ"
@@ -27740,27 +27749,27 @@ msgstr "ত্রাঞ্জেক্সনসিং থীনবা একা�
 
 #: gnucash/report/reports/standard/job-report.scm:370
 #: gnucash/report/reports/standard/job-report.scm:375
-#: gnucash/report/reports/standard/new-owner-report.scm:887
-#: gnucash/report/reports/standard/new-owner-report.scm:892
+#: gnucash/report/reports/standard/new-owner-report.scm:897
+#: gnucash/report/reports/standard/new-owner-report.scm:902
 #: gnucash/report/reports/standard/owner-report.scm:557
 #: gnucash/report/reports/standard/owner-report.scm:562
 msgid "Display the transaction date?"
 msgstr "ত্রান্সেকসনগী তাং ফোঙদোক্কদ্রা?"
 
 #: gnucash/report/reports/standard/job-report.scm:380
-#: gnucash/report/reports/standard/new-owner-report.scm:897
+#: gnucash/report/reports/standard/new-owner-report.scm:907
 #: gnucash/report/reports/standard/owner-report.scm:567
 msgid "Display the transaction reference?"
 msgstr "ত্রান্সেকসনগী রিফরেন্স ফোঙদোক্কদ্রা?"
 
 #: gnucash/report/reports/standard/job-report.scm:385
-#: gnucash/report/reports/standard/new-owner-report.scm:902
+#: gnucash/report/reports/standard/new-owner-report.scm:912
 #: gnucash/report/reports/standard/owner-report.scm:572
 msgid "Display the transaction type?"
 msgstr "ত্রান্সেকসনগী মখল ফোঙদোক্কদ্রা?"
 
 #: gnucash/report/reports/standard/job-report.scm:390
-#: gnucash/report/reports/standard/new-owner-report.scm:907
+#: gnucash/report/reports/standard/new-owner-report.scm:917
 #: gnucash/report/reports/standard/owner-report.scm:577
 msgid "Display the transaction description?"
 msgstr "ত্রান্সেকসনগী দিস্ক্রিপসন ফোঙদোক্কদ্রা?"
@@ -27771,7 +27780,7 @@ msgid "Display the transaction amount?"
 msgstr "ত্রান্সেকসন অমাউন্ত ফোঙদোক্কদ্রা?"
 
 #: gnucash/report/reports/standard/job-report.scm:508
-#: gnucash/report/reports/standard/new-owner-report.scm:1227
+#: gnucash/report/reports/standard/new-owner-report.scm:1234
 msgid "Job Report"
 msgstr "থবক্কী রিপোর্ত"
 
@@ -27910,7 +27919,7 @@ msgid "Reverse alphabetical order"
 msgstr "মথং মনাউ ওন্থোক্নৌ"
 
 #: gnucash/report/reports/standard/new-aging.scm:343
-#: gnucash/report/reports/standard/new-owner-report.scm:544
+#: gnucash/report/reports/standard/new-owner-report.scm:546
 #, fuzzy
 msgid "Please note some transactions were not processed"
 msgstr "রিত্রিভ তৌগদবা ত্রান্সেকসনগী তাংগী রেনজ"
@@ -28023,105 +28032,105 @@ msgstr "লোতকী লিঙ্ক"
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
-#: gnucash/report/reports/standard/new-owner-report.scm:347
+#: gnucash/report/reports/standard/new-owner-report.scm:349
 #, scheme-format
 msgid "~a History"
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:349
+#: gnucash/report/reports/standard/new-owner-report.scm:351
 #, fuzzy
 msgid "Linked Details"
 msgstr "লোনগী অকুপ্পা ৱারোলসিং"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:508
+#: gnucash/report/reports/standard/new-owner-report.scm:510
 #: gnucash/report/reports/standard/owner-report.scm:463
 msgid "Period Totals"
 msgstr "পেরিওদ অপুনবসিং"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:872
+#: gnucash/report/reports/standard/new-owner-report.scm:882
 #: gnucash/report/reports/standard/owner-report.scm:535
 msgid "The company for this report."
 msgstr "রিপোর্ত অসিগী কম্পনি।"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:912
+#: gnucash/report/reports/standard/new-owner-report.scm:922
 #: gnucash/report/reports/standard/owner-report.scm:582
 #, fuzzy
 msgid "Display the sale amount column?"
 msgstr "অমাউন্ত উৎকদ্রা?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:917
+#: gnucash/report/reports/standard/new-owner-report.scm:927
 #: gnucash/report/reports/standard/owner-report.scm:587
 #, fuzzy
 msgid "Display the tax column?"
 msgstr "একাউন্ত উৎকদ্রা?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:922
+#: gnucash/report/reports/standard/new-owner-report.scm:932
 #: gnucash/report/reports/standard/owner-report.scm:597
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "পেরিওদ দেবিতস কলম অমা উৎকদ্রা?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:927
+#: gnucash/report/reports/standard/new-owner-report.scm:937
 #: gnucash/report/reports/standard/owner-report.scm:592
 msgid "Display the period credits column?"
 msgstr "পেরিওদ ক্রেদিতস কলম অদু উৎকদ্রা?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:932
+#: gnucash/report/reports/standard/new-owner-report.scm:942
 #: gnucash/report/reports/standard/register.scm:413
 #: gnucash/report/trep-engine.scm:984
 msgid "Display a running balance?"
 msgstr "রন্নিং বেলেন্স অমা উৎকদ্রা?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:937
+#: gnucash/report/reports/standard/new-owner-report.scm:947
 #, fuzzy
 msgid "Show linked transactions"
 msgstr "চৎনবা য়াবা ওইরবা ত্রাঞ্জেক্সনসিংখক্তং উৎলু।"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:940
+#: gnucash/report/reports/standard/new-owner-report.scm:950
 #, fuzzy
 msgid "Linked transactions are hidden."
 msgstr "থিদুনা ত্রান্সেকসনশিং পুথোকউ"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:942
+#: gnucash/report/reports/standard/new-owner-report.scm:952
 #, fuzzy
 msgid "Simple"
 msgstr "সেমপল:"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:943
+#: gnucash/report/reports/standard/new-owner-report.scm:953
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:945
+#: gnucash/report/reports/standard/new-owner-report.scm:955
 #, fuzzy
 msgid "Detailed"
 msgstr "মায় পাক্ত্রে"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:946
+#: gnucash/report/reports/standard/new-owner-report.scm:956
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:952
+#: gnucash/report/reports/standard/new-owner-report.scm:962
 #, fuzzy
 msgid "Display document link?"
 msgstr "একাউন্তস হাইপরলিঙ্কস ওইনা ফোঙদোকউ"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1080
+#: gnucash/report/reports/standard/new-owner-report.scm:1087
 #, fuzzy
 msgid "No valid account found"
 msgstr "চান্নবা ত্রান্সেকসন ফংদে"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1081
+#: gnucash/report/reports/standard/new-owner-report.scm:1088
 #, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
 msgstr "রিপোর্ত অসিদা খনগদবা চৎনবা য়াবা একাউন্ত অমগী মথৌ তাই।"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1104
+#: gnucash/report/reports/standard/new-owner-report.scm:1111
 #, fuzzy
 msgid "No transactions found."
 msgstr "চান্নবা ত্রান্সেকসন ফংদে"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1105
+#: gnucash/report/reports/standard/new-owner-report.scm:1112
 #: gnucash/report/trep-engine.scm:130
 msgid "No matching transactions found"
 msgstr "চান্নবা ত্রান্সেকসন ফংদে"
