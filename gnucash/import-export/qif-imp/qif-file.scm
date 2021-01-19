@@ -54,8 +54,7 @@
   (make-regexp "^\\.\\.\\."))
 
 (define (not-bad-numeric-string? input)
-  (let ((match (regexp-exec qif-bad-numeric-rexp input)))
-    (if match #f #t)))
+  (not (regexp-exec qif-bad-numeric-rexp input)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
