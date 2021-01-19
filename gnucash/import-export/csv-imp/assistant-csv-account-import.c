@@ -700,18 +700,18 @@ csv_import_assistant_create (CsvImportInfo *info)
   gtk_tree_view_column_set_resizable (column, TRUE); \
   gtk_tree_view_append_column (GTK_TREE_VIEW(info->tree_view), column); \
   g_free (mnemonic_desc);
-    CREATE_COLUMN ("type", TYPE);
-    CREATE_COLUMN ("full_name", FULL_NAME);
-    CREATE_COLUMN ("name", NAME);
-    CREATE_COLUMN ("code", CODE);
-    CREATE_COLUMN ("description", DESCRIPTION);
-    CREATE_COLUMN ("color", COLOR);
-    CREATE_COLUMN ("notes", NOTES);
-    CREATE_COLUMN ("commoditym", COMMODITYM);
-    CREATE_COLUMN ("commodityn", COMMODITYN);
-    CREATE_COLUMN ("hidden", HIDDEN);
-    CREATE_COLUMN ("tax", TAX);
-    CREATE_COLUMN ("place_holder", PLACE_HOLDER);
+    CREATE_COLUMN ("Type", TYPE);
+    CREATE_COLUMN ("Account Full Name", FULL_NAME);
+    CREATE_COLUMN ("Account Name", NAME);
+    CREATE_COLUMN ("Account Code", CODE);
+    CREATE_COLUMN ("Description", DESCRIPTION);
+    CREATE_COLUMN ("Account Color", COLOR);
+    CREATE_COLUMN ("Notes", NOTES);
+    CREATE_COLUMN ("Symbol", COMMODITYM);
+    CREATE_COLUMN ("Namespace", COMMODITYN);
+    CREATE_COLUMN ("Hidden", HIDDEN);
+    CREATE_COLUMN ("Tax Info", TAX);
+    CREATE_COLUMN ("Placeholder", PLACE_HOLDER);
 
     /* Finish Page */
     info->finish_label = GTK_WIDGET(gtk_builder_get_object (builder, "end_page"));

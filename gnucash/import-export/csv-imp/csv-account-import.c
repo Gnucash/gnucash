@@ -150,7 +150,7 @@ csv_import_read_file (GtkWindow *window, const gchar *filename,
             gchar *str_type;
             gtk_tree_model_get (GTK_TREE_MODEL(store), &iter, TYPE, &str_type, -1);
 
-            if (g_strcmp0 (_("type"), str_type) == 0)
+            if (g_strcmp0 (_("Type"), str_type) == 0)
                 match_found = TRUE;
             g_free (str_type);
         }
