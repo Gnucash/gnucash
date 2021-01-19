@@ -3,15 +3,15 @@
 # Jonathan Ernst <jonathan@ernstfamily.ch>, 2006
 # Sébastien Villemot <sebastien@debian.org>, 2013
 # La Boussole <yoann@laboussole.coop>, 2018.
-#
+# Q <qualaelay@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2020-12-17 13:31+0000\n"
-"Last-Translator: K. Herbert <herbert.ka@mailo.com>\n"
+"PO-Revision-Date: 2021-01-19 11:32+0000\n"
+"Last-Translator: Q <qualaelay@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -93,9 +93,8 @@ msgid "account type: Mutual fund"
 msgstr "type de compte : fond mutuel"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "type de compte : actif"
+msgstr "type de compte : passif"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 #, fuzzy
@@ -204,7 +203,7 @@ msgstr "action : retrait"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "vieillissement"
 
 #. "A sum of money"
 msgid "amount"
