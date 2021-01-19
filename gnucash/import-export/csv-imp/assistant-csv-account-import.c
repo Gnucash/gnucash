@@ -124,11 +124,11 @@ void create_regex (GString *regex_str, const gchar *sep)
             "(?<description>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<color>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<notes>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
-            "(?<commoditym>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
-            "(?<commodityn>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
+            "(?<symbol>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
+            "(?<namespace>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<hidden>[^%s]*)%s"
             "(?<tax>[^%s]*)%s"
-            "(?<place_holder>[^%s[:cntrl:]]*)(?:\\R*)",
+            "(?<placeholder>[^%s[:cntrl:]]*)(?:\\R*)",
             sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep,
             sep, sep, sep, sep, sep, sep, sep, sep, sep, sep, sep);
 
@@ -707,8 +707,8 @@ csv_import_assistant_create (CsvImportInfo *info)
     CREATE_COLUMN ("Description", DESCRIPTION);
     CREATE_COLUMN ("Account Color", COLOR);
     CREATE_COLUMN ("Notes", NOTES);
-    CREATE_COLUMN ("Symbol", COMMODITYM);
-    CREATE_COLUMN ("Namespace", COMMODITYN);
+    CREATE_COLUMN ("Symbol", SYMBOL);
+    CREATE_COLUMN ("Namespace", NAMESPACE);
     CREATE_COLUMN ("Hidden", HIDDEN);
     CREATE_COLUMN ("Tax Info", TAX);
     CREATE_COLUMN ("Placeholder", PLACE_HOLDER);

@@ -129,7 +129,8 @@ csv_import_read_file (GtkWindow *window, const gchar *filename,
     g_regex_match (regexpat, contents, 0, &match_info);
     while (g_match_info_matches (match_info))
     {
-        // fill in the values
+        // fill in the values, pattern match names must match those defined in
+        // regular expression
         gtk_list_store_append (store, &iter);
         fill_model_with_match (match_info, "type", store, &iter, TYPE);
         fill_model_with_match (match_info, "full_name", store, &iter, FULL_NAME);
@@ -138,11 +139,11 @@ csv_import_read_file (GtkWindow *window, const gchar *filename,
         fill_model_with_match (match_info, "description", store, &iter, DESCRIPTION);
         fill_model_with_match (match_info, "color", store, &iter, COLOR);
         fill_model_with_match (match_info, "notes", store, &iter, NOTES);
-        fill_model_with_match (match_info, "commoditym", store, &iter, COMMODITYM);
-        fill_model_with_match (match_info, "commodityn", store, &iter, COMMODITYN);
+        fill_model_with_match (match_info, "symbol", store, &iter, SYMBOL);
+        fill_model_with_match (match_info, "namespace", store, &iter, NAMESPACE);
         fill_model_with_match (match_info, "hidden", store, &iter, HIDDEN);
         fill_model_with_match (match_info, "tax", store, &iter, TAX);
-        fill_model_with_match (match_info, "place_holder", store, &iter, PLACE_HOLDER);
+        fill_model_with_match (match_info, "placeholder", store, &iter, PLACE_HOLDER);
         gtk_list_store_set (store, &iter, ROW_COLOR, NULL, -1);
 
         if (row == 0)
@@ -192,7 +193,7 @@ csv_account_import (CsvImportInfo *info)
     GdkRGBA       testcolor;
     GtkTreeIter    iter;
     gchar         *type, *full_name, *name, *code, *description, *color;
-    gchar         *notes, *commoditym, *commodityn, *hidden, *tax, *place_holder;
+    gchar         *notes, *symbol, *namespace, *hidden, *tax, *place_holder;
     int            row;
 
     ENTER("");
@@ -216,8 +217,8 @@ csv_account_import (CsvImportInfo *info)
                             DESCRIPTION, &description,
                             COLOR, &color,
                             NOTES, &notes,
-                            COMMODITYM, &commoditym,
-                            COMMODITYN, &commodityn,
+                            SYMBOL, &symbol,
+                            NAMESPACE, &namespace,
                             HIDDEN, &hidden,
                             TAX, &tax,
                             PLACE_HOLDER, &place_holder, -1);
@@ -260,7 +261,7 @@ csv_account_import (CsvImportInfo *info)
 
                 /* Do we have a valid commodity */
                 table = gnc_commodity_table_get_table (book);
-                commodity = gnc_commodity_table_lookup (table, commodityn, commoditym);
+                commodity = gnc_commodity_table_lookup (table, namespace, symbol);
 
                 if (commodity)
                 {
@@ -302,7 +303,7 @@ csv_account_import (CsvImportInfo *info)
                 else
                 {
                     gchar *err_string = g_strdup_printf (gettext("Row %u, commodity %s / %s not found\n"), row + 1,
-                                                         commoditym, commodityn);
+                                                         symbol, namespace);
                     info->error = g_strconcat (info->error, err_string, NULL);
                     g_free (err_string);
                     PINFO("Unable to import Row %u for account %s, commodity!", row, full_name);
@@ -349,8 +350,8 @@ csv_account_import (CsvImportInfo *info)
         g_free (description);
         g_free (color);
         g_free (notes);
-        g_free (commoditym);
-        g_free (commodityn);
+        g_free (symbol);
+        g_free (namespace);
         g_free (hidden);
         g_free (tax);
         g_free (place_holder);
