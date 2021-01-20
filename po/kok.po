@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-14 22:46+0100\n"
+"POT-Creation-Date: 2021-01-20 03:31+0100\n"
 "PO-Revision-Date: 2014-09-26 19:47-0500\n"
 "Last-Translator: Rahul Borade <rahulborade01@gmail.com>\n"
 "Language-Team: NONE\n"
@@ -847,6 +847,7 @@ msgstr "ना "
 #: gnucash/gnome-utils/dialog-options.c:729
 #: gnucash/gnome-utils/gnc-tree-view-account.c:988
 #: gnucash/gtkbuilder/dialog-account.glade:272
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Placeholder"
 msgstr "प्लेसहोल्डर"
 
@@ -1078,6 +1079,7 @@ msgstr "खाते"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
@@ -1646,6 +1648,7 @@ msgstr "व्यवहार तपशील"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
@@ -1801,6 +1804,7 @@ msgstr "प्लेसहोल्डर"
 #: gnucash/gnome/dialog-find-account.c:388
 #: gnucash/gnome-utils/gnc-tree-view-account.c:980
 #: gnucash/gtkbuilder/dialog-account.glade:322
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 #, fuzzy
 msgid "Hidden"
 msgstr "लिपिल्ले"
@@ -2037,6 +2041,7 @@ msgstr "मेमो"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:514
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
 #: gnucash/register/ledger-core/split-register-model.c:491
@@ -2434,6 +2439,8 @@ msgstr "व्हावचर टिपों"
 #: gnucash/gtkbuilder/dialog-invoice.glade:736
 #: gnucash/gtkbuilder/dialog-payment.glade:280
 #: gnucash/gtkbuilder/dialog-tax-info.glade:127
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
+#: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:362
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/customer-summary.scm:72
@@ -9514,6 +9521,7 @@ msgstr "परत मेजात"
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1005
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:291
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
@@ -9530,6 +9538,7 @@ msgid "Commodity"
 msgstr "वस्त"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:822
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/report/options-utilities.scm:212
 #: gnucash/report/reports/standard/account-summary.scm:115
 #: gnucash/report/reports/standard/general-ledger.scm:74
@@ -9596,10 +9605,12 @@ msgstr "C"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:954
 #: gnucash/gnome-utils/gnc-tree-view-account.c:957
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 msgid "Account Color"
 msgstr "खाते रंग"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:967
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Tax Info"
 msgstr "कर इंन्फो"
 
@@ -9651,6 +9662,7 @@ msgid "Total (%s)"
 msgstr "एकूण (%s)"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 msgid "Namespace"
 msgstr "नेमस्पेस"
 
@@ -20443,6 +20455,7 @@ msgid "Commodity/Currency"
 msgstr "सामान्य चलन"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #, fuzzy
 msgid "Full Account Name"
 msgstr "पुराय खाते नाव वापरात"
@@ -20452,55 +20465,6 @@ msgstr "पुराय खाते नाव वापरात"
 #, fuzzy
 msgid "Reconcile Date"
 msgstr "परत मेळयल्ली तारीक"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-#: gnucash/import-export/csv-imp/csv-account-import.c:153
-msgid "type"
-msgstr "प्रकार"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "full_name"
-msgstr "पुराय_नाव"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "name"
-msgstr "नाव"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "code"
-msgstr "कोड"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "description"
-msgstr "विवरण"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "color"
-msgstr "रंग"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "notes"
-msgstr "टिपण्यो"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commoditym"
-msgstr "commoditym"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commodityn"
-msgstr "commodityn"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "hidden"
-msgstr "लिपील्ली"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "tax"
-msgstr "कर"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "placeholder"
-msgstr "प्लेस होल्डर"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."
@@ -20736,17 +20700,17 @@ msgstr "बदलुपाक ओळींचेर दोनदा क्ली
 msgid "The transactions were imported from file '{1}'."
 msgstr " '%s' फायलीतल्यान व्यवहारांची आयात जाल्ली."
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:252
+#: gnucash/import-export/csv-imp/csv-account-import.c:253
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
 msgstr "ओळ %u, %s खात्यान वाट मेळू ना, वयली पातळ म्हण जोडल्या\n"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:304
+#: gnucash/import-export/csv-imp/csv-account-import.c:305
 #, c-format
 msgid "Row %u, commodity %s / %s not found\n"
 msgstr "%u ओळ,  %s / %s वस्त मेळू ना\n"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:313
+#: gnucash/import-export/csv-imp/csv-account-import.c:314
 #, c-format
 msgid "Row %u, account %s not in %s\n"
 msgstr "%u ओळ, %s खाते %s न ना\n"
@@ -21649,124 +21613,124 @@ msgstr "ओळ"
 msgid "Read aborted."
 msgstr "वाचप सोडून दिले"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:149
+#: gnucash/import-export/qif-imp/qif-file.scm:155
 msgid "Reading"
 msgstr "वाचता"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:179
+#: gnucash/import-export/qif-imp/qif-file.scm:185
 msgid "Some characters have been discarded."
 msgstr "काय अक्षरां काडून उडयल्यात."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:180
-#: gnucash/import-export/qif-imp/qif-file.scm:184
+#: gnucash/import-export/qif-imp/qif-file.scm:186
+#: gnucash/import-export/qif-imp/qif-file.scm:190
 msgid "Converted to: "
 msgstr "न रूपांतरीत: "
 
-#: gnucash/import-export/qif-imp/qif-file.scm:183
+#: gnucash/import-export/qif-imp/qif-file.scm:189
 msgid "Some characters have been converted according to your locale."
 msgstr "तुमच्या लोकेलाप्रमाण काय अक्षरां रूपांतरीत केल्यात."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:242
+#: gnucash/import-export/qif-imp/qif-file.scm:248
 msgid "Ignoring unknown option"
 msgstr "अज्ञात पर्याय दुर्लक्ष करता"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:376
+#: gnucash/import-export/qif-imp/qif-file.scm:386
 msgid "Date required."
 msgstr "तारीक जाय."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:377
+#: gnucash/import-export/qif-imp/qif-file.scm:387
 msgid "Discarding this transaction."
 msgstr "हो व्यवहार काडून उडयता."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:409
+#: gnucash/import-export/qif-imp/qif-file.scm:419
 msgid "Ignoring class line"
 msgstr "वर्ग ओळ दुर्लक्ष करता"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:477
+#: gnucash/import-export/qif-imp/qif-file.scm:487
 msgid "Ignoring category line"
 msgstr "विभाग ओळ दुर्लक्ष करता"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:508
+#: gnucash/import-export/qif-imp/qif-file.scm:518
 msgid "Ignoring security line"
 msgstr "सुरक्षा ओळ दुर्लक्ष करता"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:516
+#: gnucash/import-export/qif-imp/qif-file.scm:526
 msgid "File does not appear to be in QIF format"
 msgstr "फायल QIF स्वरूपान आसा अशे दिसना"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:692
+#: gnucash/import-export/qif-imp/qif-file.scm:702
 msgid "Transaction date"
 msgstr "व्यवहार तारीक"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:693
+#: gnucash/import-export/qif-imp/qif-file.scm:703
 msgid "Transaction amount"
 msgstr "व्यवहार संख्या"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:694
+#: gnucash/import-export/qif-imp/qif-file.scm:704
 msgid "Share price"
 msgstr "शेअर दर"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:695
+#: gnucash/import-export/qif-imp/qif-file.scm:705
 msgid "Share quantity"
 msgstr "शेअर प्रमाण"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:696
+#: gnucash/import-export/qif-imp/qif-file.scm:706
 msgid "Investment action"
 msgstr "गुंतवणूक कारवाय"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:697
+#: gnucash/import-export/qif-imp/qif-file.scm:707
 msgid "Reconciliation status"
 msgstr "परत एकठाय करप स्थिती"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:698
+#: gnucash/import-export/qif-imp/qif-file.scm:708
 msgid "Commission"
 msgstr "दलाली"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:699
+#: gnucash/import-export/qif-imp/qif-file.scm:709
 msgid "Account type"
 msgstr "खाते प्रकार"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:700
+#: gnucash/import-export/qif-imp/qif-file.scm:710
 msgid "Tax class"
 msgstr "कर वर्ग"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:701
+#: gnucash/import-export/qif-imp/qif-file.scm:711
 msgid "Category budget amount"
 msgstr "विभाग बजेट संख्या"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:702
+#: gnucash/import-export/qif-imp/qif-file.scm:712
 msgid "Account budget amount"
 msgstr "खाते बजेट संख्या"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:703
+#: gnucash/import-export/qif-imp/qif-file.scm:713
 msgid "Credit limit"
 msgstr "क्ऱीट मर्यादा"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:716
+#: gnucash/import-export/qif-imp/qif-file.scm:726
 msgid "Parsing categories"
 msgstr "पार्सिंग विभाग"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:748
+#: gnucash/import-export/qif-imp/qif-file.scm:758
 msgid "Parsing accounts"
 msgstr "पार्सिंग खातीं"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:789
+#: gnucash/import-export/qif-imp/qif-file.scm:799
 msgid "Parsing transactions"
 msgstr "पार्सिंग व्यवहार"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:965
+#: gnucash/import-export/qif-imp/qif-file.scm:975
 msgid "Unrecognized or inconsistent format."
 msgstr "अनोळखी वो असुसंगत स्वरूप."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1007
+#: gnucash/import-export/qif-imp/qif-file.scm:1017
 msgid "Parsing failed."
 msgstr "पार्सींग असफळ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1048
+#: gnucash/import-export/qif-imp/qif-file.scm:1058
 msgid "Parse ambiguity between formats"
 msgstr "स्वरूपांमजगती पार्स एम्बिग्युटी"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1050
+#: gnucash/import-export/qif-imp/qif-file.scm:1060
 #, fuzzy, scheme-format
 msgid "Value '~a' could be ~a or ~a."
 msgstr "मोल '%s'  %s वो %s आसपाक शकना."
@@ -30734,6 +30698,42 @@ msgstr "वैध केल्लो व्यवहार"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "मदत उपलब्द ना"
+
+#~ msgid "type"
+#~ msgstr "प्रकार"
+
+#~ msgid "full_name"
+#~ msgstr "पुराय_नाव"
+
+#~ msgid "name"
+#~ msgstr "नाव"
+
+#~ msgid "code"
+#~ msgstr "कोड"
+
+#~ msgid "description"
+#~ msgstr "विवरण"
+
+#~ msgid "color"
+#~ msgstr "रंग"
+
+#~ msgid "notes"
+#~ msgstr "टिपण्यो"
+
+#~ msgid "commoditym"
+#~ msgstr "commoditym"
+
+#~ msgid "commodityn"
+#~ msgstr "commodityn"
+
+#~ msgid "hidden"
+#~ msgstr "लिपील्ली"
+
+#~ msgid "tax"
+#~ msgstr "कर"
+
+#~ msgid "placeholder"
+#~ msgstr "प्लेस होल्डर"
 
 #~ msgid "Searching for splits to clear ..."
 #~ msgstr "विभागणी काडून उडोवपाक सोदता..."

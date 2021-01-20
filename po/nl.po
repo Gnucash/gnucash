@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-14 22:46+0100\n"
+"POT-Creation-Date: 2021-01-20 03:31+0100\n"
 "PO-Revision-Date: 2020-12-15 17:04+0000\n"
 "Last-Translator: Geert Janssens <geert.gnucash@kobaltwit.be>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
@@ -891,6 +891,7 @@ msgstr "Nee"
 #: gnucash/gnome-utils/dialog-options.c:729
 #: gnucash/gnome-utils/gnc-tree-view-account.c:988
 #: gnucash/gtkbuilder/dialog-account.glade:272
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Placeholder"
 msgstr "Aggregatie"
 
@@ -1122,6 +1123,7 @@ msgstr "Rekening"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
@@ -1691,6 +1693,7 @@ msgstr "Boekingsdetails"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
@@ -1850,6 +1853,7 @@ msgstr "Aggregatie"
 #: gnucash/gnome/dialog-find-account.c:388
 #: gnucash/gnome-utils/gnc-tree-view-account.c:980
 #: gnucash/gtkbuilder/dialog-account.glade:322
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Hidden"
 msgstr "Verborgen"
 
@@ -2081,6 +2085,7 @@ msgstr "Notitie"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:514
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
 #: gnucash/register/ledger-core/split-register-model.c:491
@@ -2476,6 +2481,8 @@ msgstr "Toelichting op onkostendeclaratie"
 #: gnucash/gtkbuilder/dialog-invoice.glade:736
 #: gnucash/gtkbuilder/dialog-payment.glade:280
 #: gnucash/gtkbuilder/dialog-tax-info.glade:127
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
+#: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:362
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/customer-summary.scm:72
@@ -9629,6 +9636,7 @@ msgstr "_Herrekenen"
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1005
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:291
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
@@ -9645,6 +9653,7 @@ msgid "Commodity"
 msgstr "Goed (effect/valuta)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:822
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/report/options-utilities.scm:212
 #: gnucash/report/reports/standard/account-summary.scm:115
 #: gnucash/report/reports/standard/general-ledger.scm:74
@@ -9710,10 +9719,12 @@ msgstr "K"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:954
 #: gnucash/gnome-utils/gnc-tree-view-account.c:957
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 msgid "Account Color"
 msgstr "Rekeningkleur"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:967
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Tax Info"
 msgstr "Fiscale informatie"
 
@@ -9765,6 +9776,7 @@ msgid "Total (%s)"
 msgstr "Totaal (%s)"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 msgid "Namespace"
 msgstr "Naamruimte"
 
@@ -20860,6 +20872,7 @@ msgid "Commodity/Currency"
 msgstr "Effect/valuta/munt"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 msgid "Full Account Name"
 msgstr "Volledige rekeningnaam"
 
@@ -20868,55 +20881,6 @@ msgstr "Volledige rekeningnaam"
 #, fuzzy
 msgid "Reconcile Date"
 msgstr "Datum van afstemming"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-#: gnucash/import-export/csv-imp/csv-account-import.c:153
-msgid "type"
-msgstr "type"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "full_name"
-msgstr "volledige_naam"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "name"
-msgstr "naam"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "code"
-msgstr "goed-code"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "description"
-msgstr "omschrijving"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "color"
-msgstr "kleur"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "notes"
-msgstr "toelichting"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commoditym"
-msgstr "goed-symbool"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commodityn"
-msgstr "goed-naamruimte"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "hidden"
-msgstr "verborgen"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "tax"
-msgstr "btw"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "placeholder"
-msgstr "aggregatie"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."
@@ -21168,17 +21132,17 @@ msgstr ""
 msgid "The transactions were imported from file '{1}'."
 msgstr "De boekingen zijn geïmporteerd vanuit het bestand ‘{1}’."
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:252
+#: gnucash/import-export/csv-imp/csv-account-import.c:253
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
 msgstr "Rij %u, rekening %s niet gevonden, toegevoegd op hoofdniveau\n"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:304
+#: gnucash/import-export/csv-imp/csv-account-import.c:305
 #, c-format
 msgid "Row %u, commodity %s / %s not found\n"
 msgstr "Rij %u, goed %s / %s niet gevonden\n"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:313
+#: gnucash/import-export/csv-imp/csv-account-import.c:314
 #, c-format
 msgid "Row %u, account %s not in %s\n"
 msgstr "Rij %u, rekening %s niet in %s\n"
@@ -22085,124 +22049,124 @@ msgstr "Regel"
 msgid "Read aborted."
 msgstr "Laden afgebroken."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:149
+#: gnucash/import-export/qif-imp/qif-file.scm:155
 msgid "Reading"
 msgstr "Laden"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:179
+#: gnucash/import-export/qif-imp/qif-file.scm:185
 msgid "Some characters have been discarded."
 msgstr "Enkele tekens zijn verworpen."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:180
-#: gnucash/import-export/qif-imp/qif-file.scm:184
+#: gnucash/import-export/qif-imp/qif-file.scm:186
+#: gnucash/import-export/qif-imp/qif-file.scm:190
 msgid "Converted to: "
 msgstr "Omgezet naar: "
 
-#: gnucash/import-export/qif-imp/qif-file.scm:183
+#: gnucash/import-export/qif-imp/qif-file.scm:189
 msgid "Some characters have been converted according to your locale."
 msgstr "Enkele tekens zijn omgezet op basis van uw landinstelling."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:242
+#: gnucash/import-export/qif-imp/qif-file.scm:248
 msgid "Ignoring unknown option"
 msgstr "Onbekende optie wordt genegeerd"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:376
+#: gnucash/import-export/qif-imp/qif-file.scm:386
 msgid "Date required."
 msgstr "Datum is vereist."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:377
+#: gnucash/import-export/qif-imp/qif-file.scm:387
 msgid "Discarding this transaction."
 msgstr "Deze boeking wordt verworpen."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:409
+#: gnucash/import-export/qif-imp/qif-file.scm:419
 msgid "Ignoring class line"
 msgstr "Kostenplaats-regel wordt genegeerd"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:477
+#: gnucash/import-export/qif-imp/qif-file.scm:487
 msgid "Ignoring category line"
 msgstr "Categorie-regel wordt genegeerd"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:508
+#: gnucash/import-export/qif-imp/qif-file.scm:518
 msgid "Ignoring security line"
 msgstr "Fonds-regel wordt genegeerd"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:516
+#: gnucash/import-export/qif-imp/qif-file.scm:526
 msgid "File does not appear to be in QIF format"
 msgstr "Het bestand lijkt geen QIF-indeling te hebben"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:692
+#: gnucash/import-export/qif-imp/qif-file.scm:702
 msgid "Transaction date"
 msgstr "Boekdatum"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:693
+#: gnucash/import-export/qif-imp/qif-file.scm:703
 msgid "Transaction amount"
 msgstr "Boekwaarde"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:694
+#: gnucash/import-export/qif-imp/qif-file.scm:704
 msgid "Share price"
 msgstr "Aandelenkoers"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:695
+#: gnucash/import-export/qif-imp/qif-file.scm:705
 msgid "Share quantity"
 msgstr "Aantal aandelen"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:696
+#: gnucash/import-export/qif-imp/qif-file.scm:706
 msgid "Investment action"
 msgstr "Investering"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:697
+#: gnucash/import-export/qif-imp/qif-file.scm:707
 msgid "Reconciliation status"
 msgstr "Afstemmingsstatus"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:698
+#: gnucash/import-export/qif-imp/qif-file.scm:708
 msgid "Commission"
 msgstr "Commissie"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:699
+#: gnucash/import-export/qif-imp/qif-file.scm:709
 msgid "Account type"
 msgstr "Rekeningsoort"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:700
+#: gnucash/import-export/qif-imp/qif-file.scm:710
 msgid "Tax class"
 msgstr "Belastingtarief"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:701
+#: gnucash/import-export/qif-imp/qif-file.scm:711
 msgid "Category budget amount"
 msgstr "Budget voor categorie"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:702
+#: gnucash/import-export/qif-imp/qif-file.scm:712
 msgid "Account budget amount"
 msgstr "Budget voor rekening"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:703
+#: gnucash/import-export/qif-imp/qif-file.scm:713
 msgid "Credit limit"
 msgstr "Kredietlimiet"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:716
+#: gnucash/import-export/qif-imp/qif-file.scm:726
 msgid "Parsing categories"
 msgstr "Categorieën aan het verwerken"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:748
+#: gnucash/import-export/qif-imp/qif-file.scm:758
 msgid "Parsing accounts"
 msgstr "Rekeningen aan het verwerken"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:789
+#: gnucash/import-export/qif-imp/qif-file.scm:799
 msgid "Parsing transactions"
 msgstr "Boekingen aan het verwerken"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:965
+#: gnucash/import-export/qif-imp/qif-file.scm:975
 msgid "Unrecognized or inconsistent format."
 msgstr "Onherkenbare of inconsistente opmaak."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1007
+#: gnucash/import-export/qif-imp/qif-file.scm:1017
 msgid "Parsing failed."
 msgstr "Het verwerken is mislukt."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1048
+#: gnucash/import-export/qif-imp/qif-file.scm:1058
 msgid "Parse ambiguity between formats"
 msgstr "Niet-eenduidige opmaak verwerken"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1050
+#: gnucash/import-export/qif-imp/qif-file.scm:1060
 #, fuzzy, scheme-format
 msgid "Value '~a' could be ~a or ~a."
 msgstr "Waarde ‘%s’ kan zowel %s als %s zijn."
@@ -31283,6 +31247,42 @@ msgstr "Boeking gestorneerd"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "Geen hulp beschikbaar."
+
+#~ msgid "type"
+#~ msgstr "type"
+
+#~ msgid "full_name"
+#~ msgstr "volledige_naam"
+
+#~ msgid "name"
+#~ msgstr "naam"
+
+#~ msgid "code"
+#~ msgstr "goed-code"
+
+#~ msgid "description"
+#~ msgstr "omschrijving"
+
+#~ msgid "color"
+#~ msgstr "kleur"
+
+#~ msgid "notes"
+#~ msgstr "toelichting"
+
+#~ msgid "commoditym"
+#~ msgstr "goed-symbool"
+
+#~ msgid "commodityn"
+#~ msgstr "goed-naamruimte"
+
+#~ msgid "hidden"
+#~ msgstr "verborgen"
+
+#~ msgid "tax"
+#~ msgstr "btw"
+
+#~ msgid "placeholder"
+#~ msgstr "aggregatie"
 
 #~ msgid "Searching for splits to clear ..."
 #~ msgstr "Zoeken naar boekregels om te bevestigen..."

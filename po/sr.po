@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.6.18\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-14 22:46+0100\n"
+"POT-Creation-Date: 2021-01-20 03:31+0100\n"
 "PO-Revision-Date: 2017-11-05 08:54+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
@@ -853,6 +853,7 @@ msgstr "Не"
 #: gnucash/gnome-utils/dialog-options.c:729
 #: gnucash/gnome-utils/gnc-tree-view-account.c:988
 #: gnucash/gtkbuilder/dialog-account.glade:272
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Placeholder"
 msgstr "Местодржач"
 
@@ -1084,6 +1085,7 @@ msgstr "Налог"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
@@ -1656,6 +1658,7 @@ msgstr "Појединости о трансакцији"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
@@ -1811,6 +1814,7 @@ msgstr "Местодржач"
 #: gnucash/gnome/dialog-find-account.c:388
 #: gnucash/gnome-utils/gnc-tree-view-account.c:980
 #: gnucash/gtkbuilder/dialog-account.glade:322
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 #, fuzzy
 msgid "Hidden"
 msgstr "_Скривено"
@@ -2046,6 +2050,7 @@ msgstr "Белешка"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:514
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
 #: gnucash/register/ledger-core/split-register-model.c:491
@@ -2446,6 +2451,8 @@ msgstr "Белешке ваучера"
 #: gnucash/gtkbuilder/dialog-invoice.glade:736
 #: gnucash/gtkbuilder/dialog-payment.glade:280
 #: gnucash/gtkbuilder/dialog-tax-info.glade:127
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
+#: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:362
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/customer-summary.scm:72
@@ -9644,6 +9651,7 @@ msgstr "Поново _израчунај"
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1005
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:291
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
@@ -9660,6 +9668,7 @@ msgid "Commodity"
 msgstr "Роба"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:822
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/report/options-utilities.scm:212
 #: gnucash/report/reports/standard/account-summary.scm:115
 #: gnucash/report/reports/standard/general-ledger.scm:74
@@ -9726,10 +9735,12 @@ msgstr "Б"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:954
 #: gnucash/gnome-utils/gnc-tree-view-account.c:957
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 msgid "Account Color"
 msgstr "Боја налога"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:967
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Tax Info"
 msgstr "Порески подаци"
 
@@ -9781,6 +9792,7 @@ msgid "Total (%s)"
 msgstr "Укупно (%s)"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 msgid "Namespace"
 msgstr "Називни простор"
 
@@ -20788,6 +20800,7 @@ msgid "Commodity/Currency"
 msgstr "Општа валута"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #, fuzzy
 msgid "Full Account Name"
 msgstr "Користи пун назив налога"
@@ -20797,55 +20810,6 @@ msgstr "Користи пун назив налога"
 #, fuzzy
 msgid "Reconcile Date"
 msgstr "Датум измирења"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-#: gnucash/import-export/csv-imp/csv-account-import.c:153
-msgid "type"
-msgstr "врста"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "full_name"
-msgstr "име и презиме"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "name"
-msgstr "име"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "code"
-msgstr "шифра"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "description"
-msgstr "опис"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "color"
-msgstr "боја"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "notes"
-msgstr "белешке"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commoditym"
-msgstr "робам"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commodityn"
-msgstr "робан"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "hidden"
-msgstr "скривено"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "tax"
-msgstr "порез"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "placeholder"
-msgstr "местодржач"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."
@@ -21087,18 +21051,18 @@ msgstr ""
 msgid "The transactions were imported from file '{1}'."
 msgstr "Трансакције су увезене из датотеке „%s“."
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:252
+#: gnucash/import-export/csv-imp/csv-account-import.c:253
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
 msgstr ""
 "%u. ред, путања до налога „%s“ није пронађена, додато је као највиши ниво\n"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:304
+#: gnucash/import-export/csv-imp/csv-account-import.c:305
 #, c-format
 msgid "Row %u, commodity %s / %s not found\n"
 msgstr "%u. ред, роба „%s / %s“ није пронађена\n"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:313
+#: gnucash/import-export/csv-imp/csv-account-import.c:314
 #, c-format
 msgid "Row %u, account %s not in %s\n"
 msgstr "%u. ред, налог „%s“ није у „%s“\n"
@@ -22012,124 +21976,124 @@ msgstr "Ред"
 msgid "Read aborted."
 msgstr "Читање је прекинуто."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:149
+#: gnucash/import-export/qif-imp/qif-file.scm:155
 msgid "Reading"
 msgstr "Читам"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:179
+#: gnucash/import-export/qif-imp/qif-file.scm:185
 msgid "Some characters have been discarded."
 msgstr "Неки знаци су одбачени."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:180
-#: gnucash/import-export/qif-imp/qif-file.scm:184
+#: gnucash/import-export/qif-imp/qif-file.scm:186
+#: gnucash/import-export/qif-imp/qif-file.scm:190
 msgid "Converted to: "
 msgstr "Претворено у: "
 
-#: gnucash/import-export/qif-imp/qif-file.scm:183
+#: gnucash/import-export/qif-imp/qif-file.scm:189
 msgid "Some characters have been converted according to your locale."
 msgstr "Неки знаци су претворени у складу са вашим језиком."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:242
+#: gnucash/import-export/qif-imp/qif-file.scm:248
 msgid "Ignoring unknown option"
 msgstr "Занемарујем непознату опцију"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:376
+#: gnucash/import-export/qif-imp/qif-file.scm:386
 msgid "Date required."
 msgstr "Потребан је датум."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:377
+#: gnucash/import-export/qif-imp/qif-file.scm:387
 msgid "Discarding this transaction."
 msgstr "Одбацујем ову трансакцију."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:409
+#: gnucash/import-export/qif-imp/qif-file.scm:419
 msgid "Ignoring class line"
 msgstr "Занемарујем линију разреда"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:477
+#: gnucash/import-export/qif-imp/qif-file.scm:487
 msgid "Ignoring category line"
 msgstr "Занемарујем линију категорије"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:508
+#: gnucash/import-export/qif-imp/qif-file.scm:518
 msgid "Ignoring security line"
 msgstr "Занемарујем линију безбедности"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:516
+#: gnucash/import-export/qif-imp/qif-file.scm:526
 msgid "File does not appear to be in QIF format"
 msgstr "Датотека није у КуИФ запису"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:692
+#: gnucash/import-export/qif-imp/qif-file.scm:702
 msgid "Transaction date"
 msgstr "Датум трансакције"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:693
+#: gnucash/import-export/qif-imp/qif-file.scm:703
 msgid "Transaction amount"
 msgstr "Износ трансакције"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:694
+#: gnucash/import-export/qif-imp/qif-file.scm:704
 msgid "Share price"
 msgstr "Цена акције"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:695
+#: gnucash/import-export/qif-imp/qif-file.scm:705
 msgid "Share quantity"
 msgstr "Количина акције"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:696
+#: gnucash/import-export/qif-imp/qif-file.scm:706
 msgid "Investment action"
 msgstr "Радња улагања"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:697
+#: gnucash/import-export/qif-imp/qif-file.scm:707
 msgid "Reconciliation status"
 msgstr "Стање измирења"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:698
+#: gnucash/import-export/qif-imp/qif-file.scm:708
 msgid "Commission"
 msgstr "Провизија"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:699
+#: gnucash/import-export/qif-imp/qif-file.scm:709
 msgid "Account type"
 msgstr "Врста налога"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:700
+#: gnucash/import-export/qif-imp/qif-file.scm:710
 msgid "Tax class"
 msgstr "Разред пореза"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:701
+#: gnucash/import-export/qif-imp/qif-file.scm:711
 msgid "Category budget amount"
 msgstr "Износ буџета категорије"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:702
+#: gnucash/import-export/qif-imp/qif-file.scm:712
 msgid "Account budget amount"
 msgstr "Износ буџета налога"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:703
+#: gnucash/import-export/qif-imp/qif-file.scm:713
 msgid "Credit limit"
 msgstr "Ограничење кредита"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:716
+#: gnucash/import-export/qif-imp/qif-file.scm:726
 msgid "Parsing categories"
 msgstr "Обрађујем категорије"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:748
+#: gnucash/import-export/qif-imp/qif-file.scm:758
 msgid "Parsing accounts"
 msgstr "Обрађујем налоге"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:789
+#: gnucash/import-export/qif-imp/qif-file.scm:799
 msgid "Parsing transactions"
 msgstr "Обрађујем трансакције"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:965
+#: gnucash/import-export/qif-imp/qif-file.scm:975
 msgid "Unrecognized or inconsistent format."
 msgstr "Непознат или недоследан запис."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1007
+#: gnucash/import-export/qif-imp/qif-file.scm:1017
 msgid "Parsing failed."
 msgstr "Обрада није успела."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1048
+#: gnucash/import-export/qif-imp/qif-file.scm:1058
 msgid "Parse ambiguity between formats"
 msgstr "Нејасноћа обраде између записа"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1050
+#: gnucash/import-export/qif-imp/qif-file.scm:1060
 #, fuzzy, scheme-format
 msgid "Value '~a' could be ~a or ~a."
 msgstr "Вредност „%s“ може бити %s или %s."
@@ -31215,6 +31179,42 @@ msgstr "Трансакција је поништена"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "Помоћ није доступна."
+
+#~ msgid "type"
+#~ msgstr "врста"
+
+#~ msgid "full_name"
+#~ msgstr "име и презиме"
+
+#~ msgid "name"
+#~ msgstr "име"
+
+#~ msgid "code"
+#~ msgstr "шифра"
+
+#~ msgid "description"
+#~ msgstr "опис"
+
+#~ msgid "color"
+#~ msgstr "боја"
+
+#~ msgid "notes"
+#~ msgstr "белешке"
+
+#~ msgid "commoditym"
+#~ msgstr "робам"
+
+#~ msgid "commodityn"
+#~ msgstr "робан"
+
+#~ msgid "hidden"
+#~ msgstr "скривено"
+
+#~ msgid "tax"
+#~ msgstr "порез"
+
+#~ msgid "placeholder"
+#~ msgstr "местодржач"
 
 #~ msgid "Searching for splits to clear ..."
 #~ msgstr "Тражим поделе за чишћење ..."

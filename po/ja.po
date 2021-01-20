@@ -19,9 +19,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-14 22:46+0100\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-01-20 03:31+0100\n"
 "PO-Revision-Date: 2021-01-16 09:32+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -855,6 +855,7 @@ msgstr "いいえ"
 #: gnucash/gnome-utils/dialog-options.c:729
 #: gnucash/gnome-utils/gnc-tree-view-account.c:988
 #: gnucash/gtkbuilder/dialog-account.glade:272
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Placeholder"
 msgstr "プレースホルダー"
 
@@ -1083,6 +1084,7 @@ msgstr "勘定科目"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
@@ -1650,6 +1652,7 @@ msgstr "取引の文書リンク"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
@@ -1805,6 +1808,7 @@ msgstr "プレースホルダー"
 #: gnucash/gnome/dialog-find-account.c:388
 #: gnucash/gnome-utils/gnc-tree-view-account.c:980
 #: gnucash/gtkbuilder/dialog-account.glade:322
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Hidden"
 msgstr "隠し勘定科目"
 
@@ -2035,6 +2039,7 @@ msgstr "摘要"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:514
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
 #: gnucash/register/ledger-core/split-register-model.c:491
@@ -2430,6 +2435,8 @@ msgstr "立替払請求書備考"
 #: gnucash/gtkbuilder/dialog-invoice.glade:736
 #: gnucash/gtkbuilder/dialog-payment.glade:280
 #: gnucash/gtkbuilder/dialog-tax-info.glade:127
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
+#: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:362
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/customer-summary.scm:72
@@ -9390,6 +9397,7 @@ msgstr "再計算(_R)"
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1005
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:291
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
@@ -9406,6 +9414,7 @@ msgid "Commodity"
 msgstr "商品"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:822
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/report/options-utilities.scm:212
 #: gnucash/report/reports/standard/account-summary.scm:115
 #: gnucash/report/reports/standard/general-ledger.scm:74
@@ -9470,10 +9479,12 @@ msgstr "色"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:954
 #: gnucash/gnome-utils/gnc-tree-view-account.c:957
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 msgid "Account Color"
 msgstr "勘定科目色"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:967
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Tax Info"
 msgstr "税金情報"
 
@@ -9525,6 +9536,7 @@ msgid "Total (%s)"
 msgstr "合計 (%s)"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 msgid "Namespace"
 msgstr "名前空間"
 
@@ -20262,6 +20274,7 @@ msgid "Commodity/Currency"
 msgstr "商品・通貨"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 msgid "Full Account Name"
 msgstr "勘定科目フルネーム"
 
@@ -20269,55 +20282,6 @@ msgstr "勘定科目フルネーム"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 msgid "Reconcile Date"
 msgstr "照合日"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-#: gnucash/import-export/csv-imp/csv-account-import.c:153
-msgid "type"
-msgstr "タイプ"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "full_name"
-msgstr "フルネーム"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "name"
-msgstr "名前"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "code"
-msgstr "コード"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "description"
-msgstr "説明"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "color"
-msgstr "色"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "notes"
-msgstr "備考"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commoditym"
-msgstr "商品m"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commodityn"
-msgstr "商品n"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "hidden"
-msgstr "隠し勘定科目"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "tax"
-msgstr "税金"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "placeholder"
-msgstr "プレースホルダー"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."
@@ -20569,18 +20533,18 @@ msgstr ""
 msgid "The transactions were imported from file '{1}'."
 msgstr "取引はファイル '{1}' からインポートされました。"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:252
+#: gnucash/import-export/csv-imp/csv-account-import.c:253
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
 msgstr ""
 "行 %u、勘定科目 %s へのパスが見つからないため、最上位に追加されます。\n"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:304
+#: gnucash/import-export/csv-imp/csv-account-import.c:305
 #, c-format
 msgid "Row %u, commodity %s / %s not found\n"
 msgstr "行 %u、商品 %s / %s がありません。\n"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:313
+#: gnucash/import-export/csv-imp/csv-account-import.c:314
 #, c-format
 msgid "Row %u, account %s not in %s\n"
 msgstr "行 %u、勘定科目 %s が %s 内にありません。\n"
@@ -21475,124 +21439,124 @@ msgstr "行"
 msgid "Read aborted."
 msgstr "読み込みを中止しました。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:149
+#: gnucash/import-export/qif-imp/qif-file.scm:155
 msgid "Reading"
 msgstr "読み込み中です"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:179
+#: gnucash/import-export/qif-imp/qif-file.scm:185
 msgid "Some characters have been discarded."
 msgstr "いくつかの文字が破棄されました。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:180
-#: gnucash/import-export/qif-imp/qif-file.scm:184
+#: gnucash/import-export/qif-imp/qif-file.scm:186
+#: gnucash/import-export/qif-imp/qif-file.scm:190
 msgid "Converted to: "
 msgstr "変換先: "
 
-#: gnucash/import-export/qif-imp/qif-file.scm:183
+#: gnucash/import-export/qif-imp/qif-file.scm:189
 msgid "Some characters have been converted according to your locale."
 msgstr "ロケールに基づいていくつかの文字が変換されました。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:242
+#: gnucash/import-export/qif-imp/qif-file.scm:248
 msgid "Ignoring unknown option"
 msgstr "不明なオプションを無視しています"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:376
+#: gnucash/import-export/qif-imp/qif-file.scm:386
 msgid "Date required."
 msgstr "日付が必要です。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:377
+#: gnucash/import-export/qif-imp/qif-file.scm:387
 msgid "Discarding this transaction."
 msgstr "この取引を破棄します。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:409
+#: gnucash/import-export/qif-imp/qif-file.scm:419
 msgid "Ignoring class line"
 msgstr "クラス行を無視しています"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:477
+#: gnucash/import-export/qif-imp/qif-file.scm:487
 msgid "Ignoring category line"
 msgstr "カテゴリー行を無視しています"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:508
+#: gnucash/import-export/qif-imp/qif-file.scm:518
 msgid "Ignoring security line"
 msgstr "証券行を無視しています"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:516
+#: gnucash/import-export/qif-imp/qif-file.scm:526
 msgid "File does not appear to be in QIF format"
 msgstr "ファイルがQIF形式ではありません。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:692
+#: gnucash/import-export/qif-imp/qif-file.scm:702
 msgid "Transaction date"
 msgstr "取引日"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:693
+#: gnucash/import-export/qif-imp/qif-file.scm:703
 msgid "Transaction amount"
 msgstr "取引金額"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:694
+#: gnucash/import-export/qif-imp/qif-file.scm:704
 msgid "Share price"
 msgstr "株価"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:695
+#: gnucash/import-export/qif-imp/qif-file.scm:705
 msgid "Share quantity"
 msgstr "株式数"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:696
+#: gnucash/import-export/qif-imp/qif-file.scm:706
 msgid "Investment action"
 msgstr "投資アクション"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:697
+#: gnucash/import-export/qif-imp/qif-file.scm:707
 msgid "Reconciliation status"
 msgstr "照合の状態"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:698
+#: gnucash/import-export/qif-imp/qif-file.scm:708
 msgid "Commission"
 msgstr "手数料"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:699
+#: gnucash/import-export/qif-imp/qif-file.scm:709
 msgid "Account type"
 msgstr "勘定科目タイプ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:700
+#: gnucash/import-export/qif-imp/qif-file.scm:710
 msgid "Tax class"
 msgstr "税金のクラス"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:701
+#: gnucash/import-export/qif-imp/qif-file.scm:711
 msgid "Category budget amount"
 msgstr "予算カテゴリーの金額"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:702
+#: gnucash/import-export/qif-imp/qif-file.scm:712
 msgid "Account budget amount"
 msgstr "予算勘定科目の金額"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:703
+#: gnucash/import-export/qif-imp/qif-file.scm:713
 msgid "Credit limit"
 msgstr "与信限度額"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:716
+#: gnucash/import-export/qif-imp/qif-file.scm:726
 msgid "Parsing categories"
 msgstr "カテゴリーを解析中..."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:748
+#: gnucash/import-export/qif-imp/qif-file.scm:758
 msgid "Parsing accounts"
 msgstr "勘定科目を解析中..."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:789
+#: gnucash/import-export/qif-imp/qif-file.scm:799
 msgid "Parsing transactions"
 msgstr "取引を解析中..."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:965
+#: gnucash/import-export/qif-imp/qif-file.scm:975
 msgid "Unrecognized or inconsistent format."
 msgstr "認識できない、または不整合のあるファイル形式です。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1007
+#: gnucash/import-export/qif-imp/qif-file.scm:1017
 msgid "Parsing failed."
 msgstr "解析に失敗しました。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1048
+#: gnucash/import-export/qif-imp/qif-file.scm:1058
 msgid "Parse ambiguity between formats"
 msgstr "ファイル形式が曖昧です"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1050
+#: gnucash/import-export/qif-imp/qif-file.scm:1060
 #, scheme-format
 msgid "Value '~a' could be ~a or ~a."
 msgstr "値 '~a' は ~a または ~a のようです。"
@@ -29937,7 +29901,9 @@ msgstr ""
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1758
 #, c-format
 msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
-msgstr "エラー %d。予定取引 [%s] の計算結果の gnc_numeric 値が不正、代わりに 0 を使います。"
+msgstr ""
+"エラー %d。予定取引 [%s] の計算結果の gnc_numeric 値が不正、代わりに 0 を使い"
+"ます。"
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1767
 #, c-format
@@ -30445,6 +30411,42 @@ msgstr "無効化した取引"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "ヘルプが利用できません。"
+
+#~ msgid "type"
+#~ msgstr "タイプ"
+
+#~ msgid "full_name"
+#~ msgstr "フルネーム"
+
+#~ msgid "name"
+#~ msgstr "名前"
+
+#~ msgid "code"
+#~ msgstr "コード"
+
+#~ msgid "description"
+#~ msgstr "説明"
+
+#~ msgid "color"
+#~ msgstr "色"
+
+#~ msgid "notes"
+#~ msgstr "備考"
+
+#~ msgid "commoditym"
+#~ msgstr "商品m"
+
+#~ msgid "commodityn"
+#~ msgstr "商品n"
+
+#~ msgid "hidden"
+#~ msgstr "隠し勘定科目"
+
+#~ msgid "tax"
+#~ msgstr "税金"
+
+#~ msgid "placeholder"
+#~ msgstr "プレースホルダー"
 
 #~ msgid "Searching for splits to clear ..."
 #~ msgstr "清算すべきスプリットを検索しています ... "

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: GNUCash 1.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-14 22:46+0100\n"
+"POT-Creation-Date: 2021-01-20 03:31+0100\n"
 "PO-Revision-Date: 2001-10-22 14:04-0600\n"
 "Last-Translator: Georg Lehner <Jorge.Lehner@gmx.net>, Juan Manuel García "
 "Molina <juanmagm@mail.com>\n"
@@ -841,6 +841,7 @@ msgstr "No"
 #: gnucash/gnome-utils/dialog-options.c:729
 #: gnucash/gnome-utils/gnc-tree-view-account.c:988
 #: gnucash/gtkbuilder/dialog-account.glade:272
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Placeholder"
 msgstr ""
 
@@ -1081,6 +1082,7 @@ msgstr "Cuenta"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
@@ -1671,6 +1673,7 @@ msgstr "Informe de Transacción"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
@@ -1829,6 +1832,7 @@ msgstr ""
 #: gnucash/gnome/dialog-find-account.c:388
 #: gnucash/gnome-utils/gnc-tree-view-account.c:980
 #: gnucash/gtkbuilder/dialog-account.glade:322
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 #, fuzzy
 msgid "Hidden"
 msgstr "En Medio"
@@ -2070,6 +2074,7 @@ msgstr "Memo"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:514
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
 #: gnucash/register/ledger-core/split-register-model.c:491
@@ -2517,6 +2522,8 @@ msgstr "Factura"
 #: gnucash/gtkbuilder/dialog-invoice.glade:736
 #: gnucash/gtkbuilder/dialog-payment.glade:280
 #: gnucash/gtkbuilder/dialog-tax-info.glade:127
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
+#: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:362
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/customer-summary.scm:72
@@ -10085,6 +10092,7 @@ msgstr "Calcular"
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1005
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:291
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
@@ -10101,6 +10109,7 @@ msgid "Commodity"
 msgstr "Valores"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:822
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/report/options-utilities.scm:212
 #: gnucash/report/reports/standard/account-summary.scm:115
 #: gnucash/report/reports/standard/general-ledger.scm:74
@@ -10176,11 +10185,13 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:954
 #: gnucash/gnome-utils/gnc-tree-view-account.c:957
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #, fuzzy
 msgid "Account Color"
 msgstr "Código de Cuenta"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:967
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Tax Info"
 msgstr "Información de Impuesto"
 
@@ -10232,6 +10243,7 @@ msgid "Total (%s)"
 msgstr "Totales %s"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #, fuzzy
 msgid "Namespace"
 msgstr "Nombre"
@@ -21162,6 +21174,7 @@ msgid "Commodity/Currency"
 msgstr "Seleccionar moneda"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #, fuzzy
 msgid "Full Account Name"
 msgstr "¿Usar nombre completo de cuenta?"
@@ -21171,65 +21184,6 @@ msgstr "¿Usar nombre completo de cuenta?"
 #, fuzzy
 msgid "Reconcile Date"
 msgstr "Reconciliado:"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-#: gnucash/import-export/csv-imp/csv-account-import.c:153
-#, fuzzy
-msgid "type"
-msgstr "Tipo:"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-#, fuzzy
-msgid "full_name"
-msgstr "Nombre completo:"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-#, fuzzy
-msgid "name"
-msgstr "Nombre de usuario:"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-#, fuzzy
-msgid "code"
-msgstr "Ingreso"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-#, fuzzy
-msgid "description"
-msgstr "Descripción"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "color"
-msgstr "color"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-#, fuzzy
-msgid "notes"
-msgstr "Notas"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-#, fuzzy
-msgid "commoditym"
-msgstr "Valores"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-#, fuzzy
-msgid "commodityn"
-msgstr "Valores"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-#, fuzzy
-msgid "hidden"
-msgstr "En Medio"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-#, fuzzy
-msgid "tax"
-msgstr "Máx"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "placeholder"
-msgstr ""
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 #, fuzzy
@@ -21462,17 +21416,17 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:252
+#: gnucash/import-export/csv-imp/csv-account-import.c:253
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:304
+#: gnucash/import-export/csv-imp/csv-account-import.c:305
 #, c-format
 msgid "Row %u, commodity %s / %s not found\n"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:313
+#: gnucash/import-export/csv-imp/csv-account-import.c:314
 #, fuzzy, c-format
 msgid "Row %u, account %s not in %s\n"
 msgstr "Mostrar nombres de cuentas largas"
@@ -22409,146 +22363,146 @@ msgstr "Línea"
 msgid "Read aborted."
 msgstr "Volver a cargar el reporte actual"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:149
+#: gnucash/import-export/qif-imp/qif-file.scm:155
 #, fuzzy
 msgid "Reading"
 msgstr "Encabezado"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:179
+#: gnucash/import-export/qif-imp/qif-file.scm:185
 #, fuzzy
 msgid "Some characters have been discarded."
 msgstr "Mostrr transacciones en una sola línea"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:180
-#: gnucash/import-export/qif-imp/qif-file.scm:184
+#: gnucash/import-export/qif-imp/qif-file.scm:186
+#: gnucash/import-export/qif-imp/qif-file.scm:190
 #, fuzzy
 msgid "Converted to: "
 msgstr "Crear un archivo nuevo"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:183
+#: gnucash/import-export/qif-imp/qif-file.scm:189
 msgid "Some characters have been converted according to your locale."
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:242
+#: gnucash/import-export/qif-imp/qif-file.scm:248
 msgid "Ignoring unknown option"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:376
+#: gnucash/import-export/qif-imp/qif-file.scm:386
 #, fuzzy
 msgid "Date required."
 msgstr "Rango de _Fechas"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:377
+#: gnucash/import-export/qif-imp/qif-file.scm:387
 #, fuzzy
 msgid "Discarding this transaction."
 msgstr "Buscar Transacciones"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:409
+#: gnucash/import-export/qif-imp/qif-file.scm:419
 msgid "Ignoring class line"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:477
+#: gnucash/import-export/qif-imp/qif-file.scm:487
 #, fuzzy
 msgid "Ignoring category line"
 msgstr "Nombre de categoría QIF"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:508
+#: gnucash/import-export/qif-imp/qif-file.scm:518
 msgid "Ignoring security line"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:516
+#: gnucash/import-export/qif-imp/qif-file.scm:526
 msgid "File does not appear to be in QIF format"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:692
+#: gnucash/import-export/qif-imp/qif-file.scm:702
 #, fuzzy
 msgid "Transaction date"
 msgstr "Informe de Transacción"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:693
+#: gnucash/import-export/qif-imp/qif-file.scm:703
 #, fuzzy
 msgid "Transaction amount"
 msgstr "Diario de transacciones"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:694
+#: gnucash/import-export/qif-imp/qif-file.scm:704
 #, fuzzy
 msgid "Share price"
 msgstr "Nuevo precio:"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:695
+#: gnucash/import-export/qif-imp/qif-file.scm:705
 #, fuzzy
 msgid "Share quantity"
 msgstr "Quitar"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:696
+#: gnucash/import-export/qif-imp/qif-file.scm:706
 #, fuzzy
 msgid "Investment action"
 msgstr "Cartera de inversiones"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:697
+#: gnucash/import-export/qif-imp/qif-file.scm:707
 #, fuzzy
 msgid "Reconciliation status"
 msgstr "Reconciliado (y)"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:698
+#: gnucash/import-export/qif-imp/qif-file.scm:708
 #, fuzzy
 msgid "Commission"
 msgstr "Comisiones"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:699
+#: gnucash/import-export/qif-imp/qif-file.scm:709
 #, fuzzy
 msgid "Account type"
 msgstr "Tipo de Cuenta"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:700
+#: gnucash/import-export/qif-imp/qif-file.scm:710
 #, fuzzy
 msgid "Tax class"
 msgstr "Tablas"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:701
+#: gnucash/import-export/qif-imp/qif-file.scm:711
 #, fuzzy
 msgid "Category budget amount"
 msgstr "Ordenar por monto"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:702
+#: gnucash/import-export/qif-imp/qif-file.scm:712
 #, fuzzy
 msgid "Account budget amount"
 msgstr "Cuartas Opciones"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:703
+#: gnucash/import-export/qif-imp/qif-file.scm:713
 #, fuzzy
 msgid "Credit limit"
 msgstr "Líneas de Crédito"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:716
+#: gnucash/import-export/qif-imp/qif-file.scm:726
 #, fuzzy
 msgid "Parsing categories"
 msgstr "_Reconciliar..."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:748
+#: gnucash/import-export/qif-imp/qif-file.scm:758
 #, fuzzy
 msgid "Parsing accounts"
 msgstr "Editar Cuenta"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:789
+#: gnucash/import-export/qif-imp/qif-file.scm:799
 #, fuzzy
 msgid "Parsing transactions"
 msgstr "Coincidir Transacciones..."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:965
+#: gnucash/import-export/qif-imp/qif-file.scm:975
 msgid "Unrecognized or inconsistent format."
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1007
+#: gnucash/import-export/qif-imp/qif-file.scm:1017
 #, fuzzy
 msgid "Parsing failed."
 msgstr "_Reconciliar..."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1048
+#: gnucash/import-export/qif-imp/qif-file.scm:1058
 msgid "Parse ambiguity between formats"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1050
+#: gnucash/import-export/qif-imp/qif-file.scm:1060
 #, scheme-format
 msgid "Value '~a' could be ~a or ~a."
 msgstr ""
@@ -32150,6 +32104,49 @@ msgstr "Informe de Transacción"
 #, fuzzy
 msgid "No help available."
 msgstr "No es una variable"
+
+#, fuzzy
+#~ msgid "type"
+#~ msgstr "Tipo:"
+
+#, fuzzy
+#~ msgid "full_name"
+#~ msgstr "Nombre completo:"
+
+#, fuzzy
+#~ msgid "name"
+#~ msgstr "Nombre de usuario:"
+
+#, fuzzy
+#~ msgid "code"
+#~ msgstr "Ingreso"
+
+#, fuzzy
+#~ msgid "description"
+#~ msgstr "Descripción"
+
+#~ msgid "color"
+#~ msgstr "color"
+
+#, fuzzy
+#~ msgid "notes"
+#~ msgstr "Notas"
+
+#, fuzzy
+#~ msgid "commoditym"
+#~ msgstr "Valores"
+
+#, fuzzy
+#~ msgid "commodityn"
+#~ msgstr "Valores"
+
+#, fuzzy
+#~ msgid "hidden"
+#~ msgstr "En Medio"
+
+#, fuzzy
+#~ msgid "tax"
+#~ msgstr "Máx"
 
 #, fuzzy
 #~ msgid "<b>Auto-Clear Information</b>"
