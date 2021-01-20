@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-14 22:46+0100\n"
+"POT-Creation-Date: 2021-01-20 03:31+0100\n"
 "PO-Revision-Date: 2014-06-02 10:43+0530\n"
 "Last-Translator: Ritu Panwar <ritup@cdac.in> \n"
 "Language-Team: NONE\n"
@@ -867,6 +867,7 @@ msgstr "ಇಲ್ಲ"
 #: gnucash/gnome-utils/dialog-options.c:729
 #: gnucash/gnome-utils/gnc-tree-view-account.c:988
 #: gnucash/gtkbuilder/dialog-account.glade:272
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Placeholder"
 msgstr "ಪ್ಲೇಸ್‌ಹೋಲ್ಡರ್‌"
 
@@ -1098,6 +1099,7 @@ msgstr "ಖಾತೆ"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
@@ -1671,6 +1673,7 @@ msgstr "ವ್ಯವಹಾರದ ವಿವರಗಳು"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
@@ -1827,6 +1830,7 @@ msgstr "ಪ್ಲೇಸ್‌ಹೋಲ್ಡರ್‌"
 #: gnucash/gnome/dialog-find-account.c:388
 #: gnucash/gnome-utils/gnc-tree-view-account.c:980
 #: gnucash/gtkbuilder/dialog-account.glade:322
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 #, fuzzy
 msgid "Hidden"
 msgstr "ಅಡಗಿಸಲಾದ (_i)"
@@ -2063,6 +2067,7 @@ msgstr "ಮೆಮೋ"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:514
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
 #: gnucash/register/ledger-core/split-register-model.c:491
@@ -2461,6 +2466,8 @@ msgstr "ವೋಚರ್ ಟಿಪ್ಪಣಿಗಳು"
 #: gnucash/gtkbuilder/dialog-invoice.glade:736
 #: gnucash/gtkbuilder/dialog-payment.glade:280
 #: gnucash/gtkbuilder/dialog-tax-info.glade:127
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
+#: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:362
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/customer-summary.scm:72
@@ -9662,6 +9669,7 @@ msgstr "ಮರುಎಣಿಕೆ (_R)"
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1005
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:291
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
@@ -9678,6 +9686,7 @@ msgid "Commodity"
 msgstr "ಸರಕು (ಕಮೋಡಿಟಿ)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:822
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/report/options-utilities.scm:212
 #: gnucash/report/reports/standard/account-summary.scm:115
 #: gnucash/report/reports/standard/general-ledger.scm:74
@@ -9744,10 +9753,12 @@ msgstr "C"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:954
 #: gnucash/gnome-utils/gnc-tree-view-account.c:957
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 msgid "Account Color"
 msgstr "ಖಾತೆಯ ಬಣ್ಣ"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:967
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Tax Info"
 msgstr "ತೆರಿಗೆ ಮಾಹಿತಿ"
 
@@ -9799,6 +9810,7 @@ msgid "Total (%s)"
 msgstr "ಮೊತ್ತ (%s)"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 msgid "Namespace"
 msgstr "ನಾಮಸ್ಥಳ"
 
@@ -20851,6 +20863,7 @@ msgid "Commodity/Currency"
 msgstr "ಸಾಮಾನ್ಯ ಕರೆನ್ಸಿ"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #, fuzzy
 msgid "Full Account Name"
 msgstr "ಖಾತೆಯ ಪೂರ್ಣ ಹೆಸರನ್ನು ಉಪಯೋಗಿಸಿ"
@@ -20860,55 +20873,6 @@ msgstr "ಖಾತೆಯ ಪೂರ್ಣ ಹೆಸರನ್ನು ಉಪಯೋಗ
 #, fuzzy
 msgid "Reconcile Date"
 msgstr "ಬಗೆಹರಿದ ದಿನಾಂಕ"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-#: gnucash/import-export/csv-imp/csv-account-import.c:153
-msgid "type"
-msgstr "ಬಗೆ"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "full_name"
-msgstr "ಪೂರ್ಣ_ಹೆಸರು"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "name"
-msgstr "ಹೆಸರು"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "code"
-msgstr "ಸಂಕೇತ"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "description"
-msgstr "ವಿವರಣೆ"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "color"
-msgstr "ಬಣ್ಣ"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "notes"
-msgstr "ಟಿಪ್ಪಣಿಗಳು"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commoditym"
-msgstr "commoditym"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commodityn"
-msgstr "commodityn"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "hidden"
-msgstr "ಅಡಗಿಸಿದ"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "tax"
-msgstr "ತೆರಿಗೆ"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "placeholder"
-msgstr "ಪ್ಲೇಸ್‌ಹೋಲ್ಡರ್‌"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."
@@ -21146,17 +21110,17 @@ msgstr ""
 msgid "The transactions were imported from file '{1}'."
 msgstr "'%s' ಕಡತದಿಂದ ವ್ಯವಹಾರಗಳನ್ನು ಆಮದು ಮಾಡಲಾಗಿದೆ."
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:252
+#: gnucash/import-export/csv-imp/csv-account-import.c:253
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
 msgstr "%u ಅಡ್ಡಸಾಲು, %s ಖಾತೆಯ ಮಾರ್ಗವು ಕಂಡುಬಂದಿಲ್ಲ, ಮೇಲಿನ ಮಟ್ಟವಾಗಿ ಸೇರಿಸಲಾಗಿದೆ\n"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:304
+#: gnucash/import-export/csv-imp/csv-account-import.c:305
 #, c-format
 msgid "Row %u, commodity %s / %s not found\n"
 msgstr "%u ಅಡ್ಡಸಾಲು, %s / %s ಕಮಾಡಿಟಿ (ಸರಕು) ಕಂಡುಬಂದಿಲ್ಲ\n"
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:313
+#: gnucash/import-export/csv-imp/csv-account-import.c:314
 #, c-format
 msgid "Row %u, account %s not in %s\n"
 msgstr "%u ಅಡ್ಡಸಾಲು, %s ಖಾತೆಯು %s ನಲ್ಲಿ ಇಲ್ಲ\n"
@@ -22076,124 +22040,124 @@ msgstr "ಸಾಲು"
 msgid "Read aborted."
 msgstr "ಓದುವಿಕೆಯನ್ನು ಸ್ಥಗಿತಗೊಳಿಸಲಾಗಿದೆ."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:149
+#: gnucash/import-export/qif-imp/qif-file.scm:155
 msgid "Reading"
 msgstr "ಓದುವಿಕೆ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:179
+#: gnucash/import-export/qif-imp/qif-file.scm:185
 msgid "Some characters have been discarded."
 msgstr "ಕೆಲವು ಅಕ್ಷರಗಳನ್ನು ಕಡೆಗಣಿಸಲಾಗಿದೆ."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:180
-#: gnucash/import-export/qif-imp/qif-file.scm:184
+#: gnucash/import-export/qif-imp/qif-file.scm:186
+#: gnucash/import-export/qif-imp/qif-file.scm:190
 msgid "Converted to: "
 msgstr "ಇದಕ್ಕೆ ಪರಿವರ್ತಿಸಲಾಗಿದೆ: "
 
-#: gnucash/import-export/qif-imp/qif-file.scm:183
+#: gnucash/import-export/qif-imp/qif-file.scm:189
 msgid "Some characters have been converted according to your locale."
 msgstr "ಕೆಲವು ಅಕ್ಷರಗಳನ್ನು ನಿಮ್ಮ ಲೊಕ್ಯಾಲ್‌ಗೆ ಅನುಗುಣವಾಗಿ ಪರಿವರ್ತಿಸಲಾಗಿದೆ."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:242
+#: gnucash/import-export/qif-imp/qif-file.scm:248
 msgid "Ignoring unknown option"
 msgstr "ಅಜ್ಞಾತ ಆಯ್ಕೆಯನ್ನು ಕಡೆಗಣಿಸಲಾಗುತ್ತಿದೆ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:376
+#: gnucash/import-export/qif-imp/qif-file.scm:386
 msgid "Date required."
 msgstr "ದಿನಾಂಕದ ಅಗತ್ಯವಿದೆ."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:377
+#: gnucash/import-export/qif-imp/qif-file.scm:387
 msgid "Discarding this transaction."
 msgstr "ಈ ವ್ಯವಹಾರವನ್ನು ಕಡೆಗಣಿಸಲಾಗುತ್ತಿದೆ."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:409
+#: gnucash/import-export/qif-imp/qif-file.scm:419
 msgid "Ignoring class line"
 msgstr "ವರ್ಗದ ಸಾಲನ್ನು ಕಡೆಗಣಿಸು"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:477
+#: gnucash/import-export/qif-imp/qif-file.scm:487
 msgid "Ignoring category line"
 msgstr "ಗುಂಪಿನ ಸಾಲನ್ನು ಕಡೆಗಣಿಸು"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:508
+#: gnucash/import-export/qif-imp/qif-file.scm:518
 msgid "Ignoring security line"
 msgstr "ಸೆಕ್ಯುರಿಟಿ ಸಾಲನ್ನು ಕಡೆಗಣಿಸು"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:516
+#: gnucash/import-export/qif-imp/qif-file.scm:526
 msgid "File does not appear to be in QIF format"
 msgstr "ಕಡತವು QIF ವಿನ್ಯಾಸದಲ್ಲಿ ಇರುವಂತೆ ಕಾಣಿಸುತ್ತಿಲ್ಲ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:692
+#: gnucash/import-export/qif-imp/qif-file.scm:702
 msgid "Transaction date"
 msgstr "ವ್ಯವಹಾರದ ದಿನಾಂಕ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:693
+#: gnucash/import-export/qif-imp/qif-file.scm:703
 msgid "Transaction amount"
 msgstr "ವ್ಯವಹಾರದ ಮೊತ್ತ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:694
+#: gnucash/import-export/qif-imp/qif-file.scm:704
 msgid "Share price"
 msgstr "ಶೇರಿನ ಬೆಲೆ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:695
+#: gnucash/import-export/qif-imp/qif-file.scm:705
 msgid "Share quantity"
 msgstr "ಶೇರಿನ ಪ್ರಮಾಣ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:696
+#: gnucash/import-export/qif-imp/qif-file.scm:706
 msgid "Investment action"
 msgstr "ಹೂಡಿಕೆ ಕ್ರಿಯೆ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:697
+#: gnucash/import-export/qif-imp/qif-file.scm:707
 msgid "Reconciliation status"
 msgstr "ಹೊಂದಿಕೆ ಮಾಡುವಿಕೆಯ ಸ್ಥಿತಿ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:698
+#: gnucash/import-export/qif-imp/qif-file.scm:708
 msgid "Commission"
 msgstr "ಕಮಿಶನ್"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:699
+#: gnucash/import-export/qif-imp/qif-file.scm:709
 msgid "Account type"
 msgstr "ಖಾತೆಯ ಬಗೆ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:700
+#: gnucash/import-export/qif-imp/qif-file.scm:710
 msgid "Tax class"
 msgstr "ತೆರಿಗೆ ವರ್ಗ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:701
+#: gnucash/import-export/qif-imp/qif-file.scm:711
 msgid "Category budget amount"
 msgstr "ಗುಂಪಿನ ಮುಂಗಡಪತ್ರ ಮೊತ್ತ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:702
+#: gnucash/import-export/qif-imp/qif-file.scm:712
 msgid "Account budget amount"
 msgstr "ಖಾತೆಯ ಮುಂಗಡಪತ್ರ ಮೊತ್ತ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:703
+#: gnucash/import-export/qif-imp/qif-file.scm:713
 msgid "Credit limit"
 msgstr "ಕ್ರೆಡಿಟ್‌ ಮಿತಿ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:716
+#: gnucash/import-export/qif-imp/qif-file.scm:726
 msgid "Parsing categories"
 msgstr "ಗುಂಪುಗಳನ್ನು ಪಾರ್ಸ್ ಮಾಡಲಾಗುತ್ತಿದೆ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:748
+#: gnucash/import-export/qif-imp/qif-file.scm:758
 msgid "Parsing accounts"
 msgstr "ಖಾತೆಗಳನ್ನು ಪಾರ್ಸ್ ಮಾಡುವಿಕೆ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:789
+#: gnucash/import-export/qif-imp/qif-file.scm:799
 msgid "Parsing transactions"
 msgstr "ವ್ಯವಹಾರಗಳನ್ನು ಪಾರ್ಸ್ ಮಾಡುವಿಕೆ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:965
+#: gnucash/import-export/qif-imp/qif-file.scm:975
 msgid "Unrecognized or inconsistent format."
 msgstr "ಗುರುತಿಸದೆ ಇರುವ ಅಥವ ಅಸ್ಥಿರ ವಿನ್ಯಾಸ."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1007
+#: gnucash/import-export/qif-imp/qif-file.scm:1017
 msgid "Parsing failed."
 msgstr "ಪಾರ್ಸಿಂಗ್ ವಿಫಲಗೊಂಡಿದೆ."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1048
+#: gnucash/import-export/qif-imp/qif-file.scm:1058
 msgid "Parse ambiguity between formats"
 msgstr "ವಿನ್ಯಾಸಗಳ ನಡುವಿನ ಅಸ್ಪಷ್ಟತೆಯನ್ನು ಪಾರ್ಸ್ ಮಾಡು"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1050
+#: gnucash/import-export/qif-imp/qif-file.scm:1060
 #, fuzzy, scheme-format
 msgid "Value '~a' could be ~a or ~a."
 msgstr "'%s' ಮೌಲ್ಯವು %s ಅಥವ %s ಆಗಿರಬಹುದು."
@@ -31289,6 +31253,42 @@ msgstr "ವ್ಯವಹಾರವು ಅನೂರ್ಜಿತಗೊಂಡಿದ�
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "ಯಾವುದೆ ನೆರವು ಲಭ್ಯವಿಲ್ಲ."
+
+#~ msgid "type"
+#~ msgstr "ಬಗೆ"
+
+#~ msgid "full_name"
+#~ msgstr "ಪೂರ್ಣ_ಹೆಸರು"
+
+#~ msgid "name"
+#~ msgstr "ಹೆಸರು"
+
+#~ msgid "code"
+#~ msgstr "ಸಂಕೇತ"
+
+#~ msgid "description"
+#~ msgstr "ವಿವರಣೆ"
+
+#~ msgid "color"
+#~ msgstr "ಬಣ್ಣ"
+
+#~ msgid "notes"
+#~ msgstr "ಟಿಪ್ಪಣಿಗಳು"
+
+#~ msgid "commoditym"
+#~ msgstr "commoditym"
+
+#~ msgid "commodityn"
+#~ msgstr "commodityn"
+
+#~ msgid "hidden"
+#~ msgstr "ಅಡಗಿಸಿದ"
+
+#~ msgid "tax"
+#~ msgstr "ತೆರಿಗೆ"
+
+#~ msgid "placeholder"
+#~ msgstr "ಪ್ಲೇಸ್‌ಹೋಲ್ಡರ್‌"
 
 #~ msgid "Searching for splits to clear ..."
 #~ msgstr "ವಿಭಜನೆಗಳು ತೆರವುಗೊಳ್ಳುವವರೆಗೆ ಹುಡುಕಲಾಗುತ್ತಿದೆ ..."

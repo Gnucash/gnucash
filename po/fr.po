@@ -22,9 +22,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-14 22:46+0100\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-01-20 03:31+0100\n"
 "PO-Revision-Date: 2021-01-15 23:32+0000\n"
 "Last-Translator: Laurent DÉRÉDEC <images-ld@gmx.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -559,8 +559,8 @@ msgstr ""
 "information utile.\n"
 "\n"
 "Pour le rendre visible\n"
-"sélectionner \"view\" dans la barre de de menu et cliquer sur \"Double "
-"ligne\" ou\n"
+"sélectionner \"view\" dans la barre de de menu et cliquer sur \"Double ligne"
+"\" ou\n"
 "cocher \"Mode Double ligne\" dans les préférences : Défauts du registre."
 
 #: doc/tip_of_the_day.list.c:44
@@ -910,6 +910,7 @@ msgstr "Non"
 #: gnucash/gnome-utils/dialog-options.c:729
 #: gnucash/gnome-utils/gnc-tree-view-account.c:988
 #: gnucash/gtkbuilder/dialog-account.glade:272
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Placeholder"
 msgstr "Virtuel"
 
@@ -1159,6 +1160,7 @@ msgstr "Compte"
 # messages-i18n.c:334
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1064
 #: gnucash/report/reports/standard/portfolio.scm:254
 msgid "Symbol"
@@ -1776,6 +1778,7 @@ msgstr "Détails de la transaction"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
@@ -1939,6 +1942,7 @@ msgstr "Virtuel"
 #: gnucash/gnome/dialog-find-account.c:388
 #: gnucash/gnome-utils/gnc-tree-view-account.c:980
 #: gnucash/gtkbuilder/dialog-account.glade:322
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Hidden"
 msgstr "C_aché"
 
@@ -2190,6 +2194,7 @@ msgstr "Mémo"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:514
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
 #: gnucash/register/ledger-core/split-register-model.c:491
@@ -2649,6 +2654,8 @@ msgstr "Notes du bon"
 #: gnucash/gtkbuilder/dialog-invoice.glade:736
 #: gnucash/gtkbuilder/dialog-payment.glade:280
 #: gnucash/gtkbuilder/dialog-tax-info.glade:127
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
+#: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:362
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/customer-summary.scm:72
@@ -10701,6 +10708,7 @@ msgstr "_Recalculer"
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1005
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:291
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
@@ -10719,6 +10727,7 @@ msgstr "Produit"
 
 # messages-i18n.c:164
 #: gnucash/gnome-utils/gnc-tree-view-account.c:822
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/report/options-utilities.scm:212
 #: gnucash/report/reports/standard/account-summary.scm:115
 #: gnucash/report/reports/standard/general-ledger.scm:74
@@ -10795,11 +10804,13 @@ msgstr "C"
 # messages-i18n.c:164
 #: gnucash/gnome-utils/gnc-tree-view-account.c:954
 #: gnucash/gnome-utils/gnc-tree-view-account.c:957
+#: gnucash/import-export/csv-exp/csv-tree-export.c:156
 msgid "Account Color"
 msgstr "Couleur du compte"
 
 # messages-i18n.c:231
 #: gnucash/gnome-utils/gnc-tree-view-account.c:967
+#: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Tax Info"
 msgstr "Informations d'imposition"
 
@@ -10856,6 +10867,7 @@ msgstr "Total (%s)"
 
 # po/guile_strings.txt:188
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
+#: gnucash/import-export/csv-exp/csv-tree-export.c:157
 msgid "Namespace"
 msgstr "Domaine"
 
@@ -22822,6 +22834,7 @@ msgstr "Devise commune"
 
 # messages-i18n.c:199
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
+#: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #, fuzzy
 msgid "Full Account Name"
 msgstr "Utiliser le nom complet du compte"
@@ -22832,64 +22845,6 @@ msgstr "Utiliser le nom complet du compte"
 #, fuzzy
 msgid "Reconcile Date"
 msgstr "Date de rapprochement"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-#: gnucash/import-export/csv-imp/csv-account-import.c:153
-msgid "type"
-msgstr ""
-
-# src/gnome/glade-gnc-dialogs.c:155
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "full_name"
-msgstr "nom_complet"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
-msgid "name"
-msgstr "nom"
-
-# messages-i18n.c:294 po/guile_strings.txt:205
-# src/gnome/glade-gnc-dialogs.c:644
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "code"
-msgstr "code"
-
-# messages-i18n.c:275 po/guile_strings.txt:129
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "description"
-msgstr "description"
-
-# messages-i18n.c:261
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
-msgid "color"
-msgstr "couleur"
-
-# messages-i18n.c:306 po/guile_strings.txt:176
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "notes"
-msgstr "notes"
-
-# messages-i18n.c:262
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commoditym"
-msgstr "mnemo_produit"
-
-# messages-i18n.c:262
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
-msgid "commodityn"
-msgstr "domaine_produit"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "hidden"
-msgstr "cache"
-
-# po/guile_strings.txt:264
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "tax"
-msgstr "taxe"
-
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "placeholder"
-msgstr "virtuel"
 
 # messages-i18n.c:186
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
@@ -23118,18 +23073,18 @@ msgstr ""
 msgid "The transactions were imported from file '{1}'."
 msgstr "Les transactions ont été importées à partir du fichier « %s »."
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:252
+#: gnucash/import-export/csv-imp/csv-account-import.c:253
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/csv-account-import.c:304
+#: gnucash/import-export/csv-imp/csv-account-import.c:305
 #, c-format
 msgid "Row %u, commodity %s / %s not found\n"
 msgstr ""
 
 # po/guile_strings.txt:55
-#: gnucash/import-export/csv-imp/csv-account-import.c:313
+#: gnucash/import-export/csv-imp/csv-account-import.c:314
 #, c-format
 msgid "Row %u, account %s not in %s\n"
 msgstr "Ligne %u, le compte %s n’est pas dans %s\n"
@@ -24099,142 +24054,142 @@ msgid "Read aborted."
 msgstr "Lecture abandonnée."
 
 # po/guile_strings.txt:212
-#: gnucash/import-export/qif-imp/qif-file.scm:149
+#: gnucash/import-export/qif-imp/qif-file.scm:155
 msgid "Reading"
 msgstr "Lecture"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:179
+#: gnucash/import-export/qif-imp/qif-file.scm:185
 msgid "Some characters have been discarded."
 msgstr "Certains caractères ont été ignorés."
 
 # messages-i18n.c:93
-#: gnucash/import-export/qif-imp/qif-file.scm:180
-#: gnucash/import-export/qif-imp/qif-file.scm:184
+#: gnucash/import-export/qif-imp/qif-file.scm:186
+#: gnucash/import-export/qif-imp/qif-file.scm:190
 msgid "Converted to: "
 msgstr "Converti à :"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:183
+#: gnucash/import-export/qif-imp/qif-file.scm:189
 msgid "Some characters have been converted according to your locale."
 msgstr "Certains caractères ont été convertis d'après votre locale."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:242
+#: gnucash/import-export/qif-imp/qif-file.scm:248
 msgid "Ignoring unknown option"
 msgstr "Ignore l'option inconnue"
 
 # messages-i18n.c:135
-#: gnucash/import-export/qif-imp/qif-file.scm:376
+#: gnucash/import-export/qif-imp/qif-file.scm:386
 msgid "Date required."
 msgstr "Date requise."
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
-#: gnucash/import-export/qif-imp/qif-file.scm:377
+#: gnucash/import-export/qif-imp/qif-file.scm:387
 msgid "Discarding this transaction."
 msgstr "Abandonner cette transaction."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:409
+#: gnucash/import-export/qif-imp/qif-file.scm:419
 msgid "Ignoring class line"
 msgstr "Ignore la ligne de classe"
 
 # src/gnome/glade-gnc-dialogs.c:387
-#: gnucash/import-export/qif-imp/qif-file.scm:477
+#: gnucash/import-export/qif-imp/qif-file.scm:487
 msgid "Ignoring category line"
 msgstr "Ignore la ligne catégorie"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:508
+#: gnucash/import-export/qif-imp/qif-file.scm:518
 msgid "Ignoring security line"
 msgstr "Ignore la ligne de sécurité"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:516
+#: gnucash/import-export/qif-imp/qif-file.scm:526
 msgid "File does not appear to be in QIF format"
 msgstr "Ce fichier ne semble pas être au format QIF."
 
 # messages-i18n.c:346
-#: gnucash/import-export/qif-imp/qif-file.scm:692
+#: gnucash/import-export/qif-imp/qif-file.scm:702
 msgid "Transaction date"
 msgstr "Date de transaction"
 
 # messages-i18n.c:346
-#: gnucash/import-export/qif-imp/qif-file.scm:693
+#: gnucash/import-export/qif-imp/qif-file.scm:703
 msgid "Transaction amount"
 msgstr "Montant brut de la transaction"
 
 # messages-i18n.c:204
-#: gnucash/import-export/qif-imp/qif-file.scm:694
+#: gnucash/import-export/qif-imp/qif-file.scm:704
 msgid "Share price"
 msgstr "Prix partagé"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:695
+#: gnucash/import-export/qif-imp/qif-file.scm:705
 msgid "Share quantity"
 msgstr "Quantité partagée"
 
 # po/guile_strings.txt:15
-#: gnucash/import-export/qif-imp/qif-file.scm:696
+#: gnucash/import-export/qif-imp/qif-file.scm:706
 msgid "Investment action"
 msgstr "Portefeuille d'actions"
 
 # messages-i18n.c:322
-#: gnucash/import-export/qif-imp/qif-file.scm:697
+#: gnucash/import-export/qif-imp/qif-file.scm:707
 msgid "Reconciliation status"
 msgstr "Status du rapprochage"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:698
+#: gnucash/import-export/qif-imp/qif-file.scm:708
 msgid "Commission"
 msgstr "Commission"
 
 # messages-i18n.c:166
-#: gnucash/import-export/qif-imp/qif-file.scm:699
+#: gnucash/import-export/qif-imp/qif-file.scm:709
 msgid "Account type"
 msgstr "Type de compte"
 
 # po/guile_strings.txt:264
-#: gnucash/import-export/qif-imp/qif-file.scm:700
+#: gnucash/import-export/qif-imp/qif-file.scm:710
 msgid "Tax class"
 msgstr "Table de taxation"
 
 # po/guile_strings.txt:261
-#: gnucash/import-export/qif-imp/qif-file.scm:701
+#: gnucash/import-export/qif-imp/qif-file.scm:711
 msgid "Category budget amount"
 msgstr "Catégorie du montant brut budgétisé"
 
 # po/guile_strings.txt:138
-#: gnucash/import-export/qif-imp/qif-file.scm:702
+#: gnucash/import-export/qif-imp/qif-file.scm:712
 msgid "Account budget amount"
 msgstr "Compte du montant brut budgétisé"
 
 # messages-i18n.c:173
-#: gnucash/import-export/qif-imp/qif-file.scm:703
+#: gnucash/import-export/qif-imp/qif-file.scm:713
 msgid "Credit limit"
 msgstr "Limite de crédit"
 
 # messages-i18n.c:151
-#: gnucash/import-export/qif-imp/qif-file.scm:716
+#: gnucash/import-export/qif-imp/qif-file.scm:726
 msgid "Parsing categories"
 msgstr "Analyse des catégories"
 
 # messages-i18n.c:178
-#: gnucash/import-export/qif-imp/qif-file.scm:748
+#: gnucash/import-export/qif-imp/qif-file.scm:758
 msgid "Parsing accounts"
 msgstr "Analyse des comptes"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
-#: gnucash/import-export/qif-imp/qif-file.scm:789
+#: gnucash/import-export/qif-imp/qif-file.scm:799
 msgid "Parsing transactions"
 msgstr "Analyse des transactions..."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:965
+#: gnucash/import-export/qif-imp/qif-file.scm:975
 msgid "Unrecognized or inconsistent format."
 msgstr "Format inconsistant ou non reconnu."
 
 # messages-i18n.c:151
-#: gnucash/import-export/qif-imp/qif-file.scm:1007
+#: gnucash/import-export/qif-imp/qif-file.scm:1017
 msgid "Parsing failed."
 msgstr "Analyse échouée."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1048
+#: gnucash/import-export/qif-imp/qif-file.scm:1058
 msgid "Parse ambiguity between formats"
 msgstr "Analyse des ambiguités entre les formats"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1050
+#: gnucash/import-export/qif-imp/qif-file.scm:1060
 #, fuzzy, scheme-format
 msgid "Value '~a' could be ~a or ~a."
 msgstr "La valeur '~a' peut être ~a ou ~a."
@@ -34511,6 +34466,48 @@ msgstr "Transaction invalidée"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "Aide non disponible."
+
+# src/gnome/glade-gnc-dialogs.c:155
+#~ msgid "full_name"
+#~ msgstr "nom_complet"
+
+#~ msgid "name"
+#~ msgstr "nom"
+
+# messages-i18n.c:294 po/guile_strings.txt:205
+# src/gnome/glade-gnc-dialogs.c:644
+#~ msgid "code"
+#~ msgstr "code"
+
+# messages-i18n.c:275 po/guile_strings.txt:129
+#~ msgid "description"
+#~ msgstr "description"
+
+# messages-i18n.c:261
+#~ msgid "color"
+#~ msgstr "couleur"
+
+# messages-i18n.c:306 po/guile_strings.txt:176
+#~ msgid "notes"
+#~ msgstr "notes"
+
+# messages-i18n.c:262
+#~ msgid "commoditym"
+#~ msgstr "mnemo_produit"
+
+# messages-i18n.c:262
+#~ msgid "commodityn"
+#~ msgstr "domaine_produit"
+
+#~ msgid "hidden"
+#~ msgstr "cache"
+
+# po/guile_strings.txt:264
+#~ msgid "tax"
+#~ msgstr "taxe"
+
+#~ msgid "placeholder"
+#~ msgstr "virtuel"
 
 #~ msgid "Searching for splits to clear ..."
 #~ msgstr "Recherche de répartitions à effacer…"

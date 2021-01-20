@@ -135,6 +135,12 @@
 	      (unread-char c1)
 	      #f))))
 
+      (define (qif-split-set-amount split value override?)
+        (when (and split
+                   (not-bad-numeric-string? value)
+                   (or override? (not (qif-split:amount split))))
+          (qif-split:set-amount! split value)))
+
       (qif-file:set-path! self path)
       (if (not (access? path R_OK))
           ;; A UTF-8 encoded path won't succeed on some systems, such as
@@ -261,9 +267,13 @@
 
                            ;; T : total amount
                            ((#\T)
-                            (if (and default-split
-                                    (not-bad-numeric-string? value))
-                                (qif-split:set-amount! default-split value)))
+                            (qif-split-set-amount default-split value #f))
+
+                           ;; U : total amount (handle larger amount
+                           ;; than T; present in Quicken 2005
+                           ;; exports). See bug 798085
+                           ((#\U)
+                            (qif-split-set-amount default-split value #t))
 
                            ;; P : payee
                            ((#\P)

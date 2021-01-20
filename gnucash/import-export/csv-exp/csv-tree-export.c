@@ -152,10 +152,10 @@ void csv_tree_export (CsvExportInfo *info)
         }
 
         /* Header string, 'eol = end of line marker' */
-        header = g_strconcat (end_sep, _("type"), mid_sep, _("full_name"), mid_sep, _("name"), mid_sep,
-                                _("code"), mid_sep, _("description"), mid_sep, _("color"), mid_sep,
-                                _("notes"), mid_sep, _("commoditym"), mid_sep, _("commodityn"), mid_sep,
-                                _("hidden"), mid_sep, _("tax"), mid_sep, _("placeholder"), end_sep, EOLSTR, NULL);
+        header = g_strconcat (end_sep, _("Type"), mid_sep, _("Full Account Name"), mid_sep, _("Account Name"), mid_sep,
+                                _("Account Code"), mid_sep, _("Description"), mid_sep, _("Account Color"), mid_sep,
+                                _("Notes"), mid_sep, _("Symbol"), mid_sep, _("Namespace"), mid_sep,
+                                _("Hidden"), mid_sep, _("Tax Info"), mid_sep, _("Placeholder"), end_sep, EOLSTR, NULL);
         DEBUG("Header String: %s", header);
 
         /* Write header line */
@@ -215,7 +215,7 @@ void csv_tree_export (CsvExportInfo *info)
             part1 = g_strconcat (part2, str_temp, mid_sep, NULL);
             g_free (str_temp);
             g_free (part2);
-            /* Commodity Mnemonic */
+            /* Commodity Symbol */
             currentSel = gnc_commodity_get_mnemonic (xaccAccountGetCommodity (acc));
             str_temp = csv_test_field_string (info, currentSel);
             part2 = g_strconcat (part1, str_temp, mid_sep, NULL);
