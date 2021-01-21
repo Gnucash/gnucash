@@ -10,6 +10,7 @@
 # Miguel Rozsas <miguel@rozsas.eng.br>, 2014.
 # LL Magical <lolayami2004@gmail.com>, 2020.
 # Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2021.
+# José Lemos Neto <lemosjosex@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.2\n"
@@ -17,7 +18,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-20 03:31+0100\n"
 "PO-Revision-Date: 2021-01-21 11:15+0000\n"
-"Last-Translator: Fábio Rodrigues Ribeiro <farribeiro@gmail.com>\n"
+"Last-Translator: José Lemos Neto <lemosjosex@protonmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -509,16 +510,16 @@ msgstr ""
 "clicar nele para ver as diferentes colunas disponíveis."
 
 #: doc/tip_of_the_day.list.c:27
-#, fuzzy
 msgid ""
 "Click the right mouse button (control-click in Mac OS X) in the Accounts tab "
 "of the main window to bring up the account menu options. Within each "
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
-"Clique com o botão direito do mouse sobre a janela principal para visualizar "
-"as opções do menu de contas. Dentro de cada registro, clicar com o botão "
-"direito do mouse fará com que apareçam as opções do menu de transação."
+"Clique com o botão direito do mouse (control-click no Mac OS X) na aba de "
+"contas da janela principal para trazer as opções do menu de contas. Dentro "
+"de cada registro, clicar com o botão direito do mouse trará as opções do "
+"menu de transação."
 
 #: doc/tip_of_the_day.list.c:32
 msgid ""
