@@ -17,8 +17,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-20 03:31+0100\n"
-"PO-Revision-Date: 2021-01-21 11:15+0000\n"
-"Last-Translator: José Lemos Neto <lemosjosex@protonmail.com>\n"
+"PO-Revision-Date: 2021-01-21 13:32+0000\n"
+"Last-Translator: Fábio Rodrigues Ribeiro <farribeiro@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -2132,9 +2132,9 @@ msgstr[1] ""
 "Gostaria de removê-los agora?"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
-#, c-format
+#, c-format, fuzzy
 msgid "To see the invalid mappings, use a filter of '%s'"
-msgstr ""
+msgstr "Para ver os mapeamentos inválidos, use um filtro de '%s'"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
 #: gnucash/gnome/dialog-imap-editor.c:607
@@ -18977,9 +18977,8 @@ msgid "On the"
 msgstr "No"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:15
-#, fuzzy
 msgid "Edit budget for all periods"
-msgstr "Período do Orçamento:"
+msgstr "Editar orçamento para todos os períodos"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:116
 msgid "Replace"
@@ -19769,9 +19768,8 @@ msgid " _Name of the new template:"
 msgstr " _Nome para o novo modelo:"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
-#, fuzzy
 msgid "Enter a unique name for the new template."
-msgstr "Digite o nome do novo modelo."
+msgstr "Digite um nome exclusivo para o novo modelo."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:989
 msgid "Online Transaction"
@@ -22524,10 +22522,9 @@ msgid "TI"
 msgstr "T"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:141
-#, fuzzy
 msgctxt "sample for 'Tax Table'"
 msgid "Tax Table 1"
-msgstr "Tabela de Impostos: "
+msgstr "Tabela Fiscal 1"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:149
 #, fuzzy
@@ -27872,9 +27869,8 @@ msgid "Payable to"
 msgstr "Pagável a"
 
 #: gnucash/report/reports/standard/invoice.scm:268
-#, fuzzy
 msgid "Display the Payable to: information."
-msgstr "Exibir a informação de Pagável a:"
+msgstr "Exibir o Pagamento para: informações."
 
 #: gnucash/report/reports/standard/invoice.scm:275
 msgid "Payable to string"
@@ -28402,9 +28398,8 @@ msgstr "Conta _Pai"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:299
 #: gnucash/report/trep-engine.scm:980 gnucash/report/trep-engine.scm:1106
-#, fuzzy
 msgid "Link"
-msgstr "Ligação de Lote "
+msgstr "Vínculo"
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
@@ -29230,9 +29225,8 @@ msgid "GST Rate"
 msgstr "Taxa de imposto"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:312
-#, fuzzy
 msgid "GST Amount"
-msgstr "Quantia de Destino:"
+msgstr "Quantidade de GST"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:313
 #, fuzzy
