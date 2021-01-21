@@ -18,7 +18,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-20 03:31+0100\n"
 "PO-Revision-Date: 2021-01-21 13:32+0000\n"
-"Last-Translator: Fábio Rodrigues Ribeiro <farribeiro@gmail.com>\n"
+"Last-Translator: José Lemos Neto <lemosjosex@protonmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -42,7 +42,7 @@ msgstr "Báltico"
 
 #: borrowed/goffice/go-charmap-sel.c:72
 msgid "Central European"
-msgstr "Europa Central"
+msgstr "Europeu Central"
 
 #: borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
@@ -59,7 +59,7 @@ msgstr "Grego"
 
 #: borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr "Hebráico"
+msgstr "Hebraico"
 
 #: borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
@@ -84,7 +84,7 @@ msgstr "Unicode"
 
 #: borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr "Vietinamita"
+msgstr "Vietnamita"
 
 #: borrowed/goffice/go-charmap-sel.c:83
 msgid "Western"
@@ -108,7 +108,7 @@ msgstr "Arábico (IBM-864-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr "Arábico (ISO-8856-6)"
+msgstr "Arábico (ISO-8859-6)"
 
 #: borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
@@ -14972,7 +14972,7 @@ msgstr "Menor _fração"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1297
 msgid "Account _Color"
-msgstr "_Cor da conta"
+msgstr "_Cor_da_conta"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1350
 msgid "No_tes"
