@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-20 03:31+0100\n"
-"PO-Revision-Date: 2021-01-21 01:32+0000\n"
+"PO-Revision-Date: 2021-01-21 11:15+0000\n"
 "Last-Translator: Fábio Rodrigues Ribeiro <farribeiro@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -460,6 +460,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"As listas de discussão são a forma preferida de comunicação na comunidade "
+"GnuCash. Para anúncios de novas versões, grupos de usuários etc. veja a "
+"tabela em https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
@@ -501,6 +504,9 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
+"É possível alterar quais colunas são exibidas no Plano de contas. Basta "
+"localizar o triângulo na extremidade direita dos títulos das colunas e "
+"clicar nele para ver as diferentes colunas disponíveis."
 
 #: doc/tip_of_the_day.list.c:27
 #, fuzzy
@@ -729,6 +735,9 @@ msgid ""
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
 msgstr ""
+"Para comparar visualmente na tela o conteúdo de 2 guias, em uma das guias, "
+"selecione Janela-> Nova Janela com Página no menu para duplicar essa guia em "
+"uma nova janela."
 
 #: doc/tip_of_the_day.list.c:123
 msgid ""
@@ -890,6 +899,9 @@ msgid ""
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
+"Você selecionou uma moeda do livro e ela será usada para\n"
+"novas contas. Contas em outras moedas devem ser\n"
+"adicionado manualmente."
 
 #: gnucash/gnome/assistant-hierarchy.c:1490
 msgid "Please choose the currency to use for new accounts."
@@ -1221,7 +1233,7 @@ msgstr "Tipo de entidade não é igual ao do %s: %s"
 
 #: gnucash/gnome/dialog-billterms.c:270
 msgid "Discount days cannot be more than due days."
-msgstr ""
+msgstr "Os dias de desconto não podem ser mais do que os dias devidos."
 
 #: gnucash/gnome/dialog-billterms.c:324
 msgid "You must provide a name for this Billing Term."
@@ -5018,7 +5030,7 @@ msgstr "Editar Nota de Crédito"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:438
 msgid "Create a new credit note as a duplicate of the current one"
-msgstr "Cria uma nova nota de crédito a partir da atual, duplicando-a"
+msgstr "Crie uma nova nota de crédito como uma duplicata da atual"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:439
 #, fuzzy
@@ -8721,7 +8733,7 @@ msgstr "O GnuCash não conseguiu obter trava (\"lock\") para %s."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:580
 msgid "GnuCash could not open the linked document:"
-msgstr ""
+msgstr "O GnuCash não conseguiu abrir o documento vinculado:"
 
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes
@@ -8980,9 +8992,9 @@ msgstr ""
 
 #. Translators: This message appears in the status bar after opening the file.
 #: gnucash/gnome-utils/gnc-main-window.c:1740
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened. %s"
-msgstr "Falhou a abertura do arquivo."
+msgstr "Arquivo %s aberto. %s"
 
 #: gnucash/gnome-utils/gnc-main-window.c:2864
 msgctxt "lower case key for short cut to 'Accounts'"
@@ -12256,7 +12268,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:330
 msgid "Number of transactions to show in a register."
-msgstr ""
+msgstr "Número de transações a serem mostradas em um registro."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:331
 #: gnucash/gtkbuilder/dialog-preferences.glade:2811
@@ -13602,7 +13614,6 @@ msgid "Match Transactions"
 msgstr "Pareie Transações"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:30
-#, fuzzy
 msgid ""
 "This assistant will help you create a set of GnuCash accounts for your "
 "assets (such as investments, checking or savings accounts), liabilities "
@@ -13617,9 +13628,15 @@ msgid ""
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
 "Este assistente vai ajudá-lo a criar um conjunto de contas do GnuCash para "
-"os seus ativos (tais como investimentos, conta corrente e conta de "
-"poupança), passivos (tais como empréstimos) e diferentes tipos de receitas e "
-"despesas que você possa ter.\n"
+"os seus ativos (tais como investimentos, conta corrente e conta de poupança)"
+", passivos (tais como empréstimos) e diferentes tipos de receitas e despesas "
+"que você possa ter.\n"
+"\n"
+"Você pode escolher um conjunto de contas aqui que pareça próximo de suas "
+"necessidades. Depois que o assistente for concluído, você poderá adicionar, "
+"renomear, modificar e remover contas a qualquer momento posteriormente. Você "
+"também poderá adicionar subcontas, bem como mover contas (junto com suas "
+"subcontas) de um pai para outro.\n"
 "\n"
 "Selecione \"Cancelar\" caso não deseje criar nenhuma conta nova agora."
 
@@ -14954,7 +14971,7 @@ msgstr "Menor _fração"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1297
 msgid "Account _Color"
-msgstr "_Cor  da conta"
+msgstr "_Cor da conta"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1350
 msgid "No_tes"
