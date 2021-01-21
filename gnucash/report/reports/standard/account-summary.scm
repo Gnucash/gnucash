@@ -404,7 +404,8 @@
            build-table
            (map make-header
                 (append
-                 (if show-code? (list (G_ "Code")) '())
+                 ;; Note: If this is to long, do not use "Code" it is currently used for tax code.
+                 (if show-code? (list (G_ "Account Code")) '())
                  (if show-type? (list (G_ "Type")) '())
                  (if show-desc? (list (G_ "Description")) '())
                  (list (G_ "Account title")))))
