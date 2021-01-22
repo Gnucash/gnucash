@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-22 10:21+0100\n"
+"POT-Creation-Date: 2021-01-22 11:07+0100\n"
 "PO-Revision-Date: 2014-09-26 19:58-0500\n"
 "Last-Translator: Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>\n"
 "Language-Team: NONE\n"
@@ -1319,7 +1319,7 @@ msgstr "कमोडिटी डिलीट करायची?"
 #: gnucash/gnome-utils/dialog-options.c:224
 #: gnucash/gnome-utils/dialog-tax-table.c:603
 #: gnucash/gnome-utils/gnc-file.c:118 gnucash/gnome-utils/gnc-file.c:366
-#: gnucash/gnome-utils/gnc-file.c:664 gnucash/gnome-utils/gnc-gui-query.c:300
+#: gnucash/gnome-utils/gnc-file.c:663 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-main-window.c:1307
 #: gnucash/gnome-utils/gnc-main-window.c:1448
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:886
@@ -2600,7 +2600,7 @@ msgstr "जॉब शोधा"
 #: gnucash/gnome/gnc-plugin-page-budget.c:208
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1140
+#: gnucash/gnome-utils/gnc-file.c:1139
 msgid "Open"
 msgstr "उघडा"
 
@@ -3400,7 +3400,7 @@ msgid "Open an existing GnuCash file"
 msgstr "अस्तित्वात असलेली GnuCash फाइल उघडा"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:121
-#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
+#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:665
 #: gnucash/gnome-utils/gnc-main-window.c:1308
 #: gnucash/html/gnc-html-webkit1.c:1198
 msgid "_Save"
@@ -6091,7 +6091,7 @@ msgid "You cannot save to that file."
 msgstr "तुम्ही त्या फाइलवर साठवू शकत नाही."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1610
-#: gnucash/gnome-utils/gnc-file.c:1320 gnucash/gnome-utils/gnc-file.c:1567
+#: gnucash/gnome-utils/gnc-file.c:1319 gnucash/gnome-utils/gnc-file.c:1566
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:741
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -7370,7 +7370,7 @@ msgid "There was an error parsing the file."
 msgstr "फाइल पार्स करण्यात त्रुटी आली होती."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1409 gnucash/gnome-utils/gnc-file.c:1648
+#: gnucash/gnome-utils/gnc-file.c:1408 gnucash/gnome-utils/gnc-file.c:1647
 msgid "Writing file..."
 msgstr "फाइल लिहीत आहे"
 
@@ -8214,7 +8214,7 @@ msgid "Import"
 msgstr "आयात करा"
 
 #: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:343
-#: gnucash/gnome-utils/gnc-file.c:1194 gnucash/gnome-utils/gnc-file.c:1466
+#: gnucash/gnome-utils/gnc-file.c:1193 gnucash/gnome-utils/gnc-file.c:1465
 msgid "Save"
 msgstr "साठवा "
 
@@ -8401,8 +8401,7 @@ msgstr "%s या फाइलमधून वाचण्याची परव
 
 #. Translators: the first %s is a path in the filesystem,
 #. the second %s is PACKAGE_NAME, which by default is "GnuCash"
-#.
-#: gnucash/gnome-utils/gnc-file.c:481
+#: gnucash/gnome-utils/gnc-file.c:480
 #, c-format
 msgid ""
 "You attempted to save in\n"
@@ -8419,7 +8418,7 @@ msgstr ""
 "\n"
 "कृपया पुन्हा वेगळ्या मार्गदर्शिकेमध्ये प्रयत्न करा."
 
-#: gnucash/gnome-utils/gnc-file.c:488
+#: gnucash/gnome-utils/gnc-file.c:487
 msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
@@ -8427,7 +8426,7 @@ msgstr ""
 "हा डेटाबेस GnuCash च्या जुन्या आवृत्तीमधील आहे. त्यास वर्तमान आवृत्तीमध्ये अद्यतन करण्यासाठी "
 "ठीक आहे वर क्लिक करा, त्यास रीड-ओन्ली असे चिन्हित करण्यासाठी रद्द करा वर क्लिक करा."
 
-#: gnucash/gnome-utils/gnc-file.c:497
+#: gnucash/gnome-utils/gnc-file.c:496
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do File-"
@@ -8437,7 +8436,7 @@ msgstr ""
 "सुरक्षितपणे त्यामध्ये सेव्ह करु शकत नाही. तुम्ही धारिका->या नावाने सेव्ह करा करेपर्यंत त्यावर "
 "केवळ-वाचण्यायोग्य म्हणून खूण केली जाईल, मात्र जुन्या आवृत्तीवर लिहीताना डाटा हरवू शकतो."
 
-#: gnucash/gnome-utils/gnc-file.c:506
+#: gnucash/gnome-utils/gnc-file.c:505
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
@@ -8447,7 +8446,7 @@ msgstr ""
 "शक्य नाही. जर आत्ता कोणतेही यूजर्स नसतील तर विनाकारण उघडे राहीलेले लॉग-इन सत्र कसे "
 "थांबवायचे हे पाहण्यासाठी याचे माहितीपुस्तक पाहा. "
 
-#: gnucash/gnome-utils/gnc-file.c:516
+#: gnucash/gnome-utils/gnc-file.c:515
 #, fuzzy
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
@@ -8462,7 +8461,7 @@ msgstr ""
 "माहिती साठा उघडता येणार नाही किंवा त्यामध्ये संग्रहित करता येणार नाही. कृपया अधिक "
 "माहितीसाठी https://bugs.gnucash.org/show_bug.cgi?id=611936 पाहा."
 
-#: gnucash/gnome-utils/gnc-file.c:528
+#: gnucash/gnome-utils/gnc-file.c:527
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
@@ -8474,7 +8473,7 @@ msgstr ""
 "शकते. कृपया अधिक माहितीसाठी  https://bugs.gnucash.org/show_bug.cgi?id=645216 "
 "पाहा."
 
-#: gnucash/gnome-utils/gnc-file.c:538
+#: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
 "This file is from an older version of GnuCash and will be upgraded when "
 "saved by this version. You will not be able to read the saved file from the "
@@ -8486,16 +8485,16 @@ msgstr ""
 "\"धारिकेच्या पदनिरुपणात चूक\" असल्याची नोंद करेल). जुनी आवृत्ती साठवून ठेवण्याची तुमची "
 "इच्छा असल्यास, न साठवता बाहेर पडा.    "
 
-#: gnucash/gnome-utils/gnc-file.c:549
+#: gnucash/gnome-utils/gnc-file.c:548
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
 msgstr "एक अपरिचित I/O त्रुटी(%d)  आली. "
 
-#: gnucash/gnome-utils/gnc-file.c:643
+#: gnucash/gnome-utils/gnc-file.c:642
 msgid "Save changes to the file?"
 msgstr "फाइलमध्ये बदल साठवायचे का?"
 
-#: gnucash/gnome-utils/gnc-file.c:656
+#: gnucash/gnome-utils/gnc-file.c:655
 #: gnucash/gnome-utils/gnc-main-window.c:1301
 #, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
@@ -8504,16 +8503,16 @@ msgid_plural ""
 msgstr[0] "तुम्ही न साठवल्यास मागील %d मिनीटांपासूनचे बदल त्यागले जातील."
 msgstr[1] "तुम्ही न साठवल्यास मागील %d मिनीटांपासूनचे बदल त्यागले जातील."
 
-#: gnucash/gnome-utils/gnc-file.c:660
+#: gnucash/gnome-utils/gnc-file.c:659
 msgid "Continue _Without Saving"
 msgstr "न _साठवता पुढे चालू ठेवा"
 
-#: gnucash/gnome-utils/gnc-file.c:822
+#: gnucash/gnome-utils/gnc-file.c:821
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GnuCash %s साठी लॉक प्राप्त करू शकला नाही."
 
-#: gnucash/gnome-utils/gnc-file.c:824
+#: gnucash/gnome-utils/gnc-file.c:823
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
@@ -8521,7 +8520,7 @@ msgstr ""
 "अन्य एखादा यूजर त्या डेटाबेसचा उपयोग करत असावा, व अशा स्थितीत तुम्ही हा डेटाबेस उघडू "
 "नये. तुम्ही काय करू इच्छिता?"
 
-#: gnucash/gnome-utils/gnc-file.c:827
+#: gnucash/gnome-utils/gnc-file.c:826
 #, fuzzy
 msgid ""
 "That database may be on a read-only file system, you may not have write "
@@ -8533,44 +8532,44 @@ msgstr ""
 "लिहीण्याची परवानगी नसावी. तुम्ही पुढे काम चालू ठेवले तरी केलेले बदल साठवू शकणार नाही. "
 "तुम्ही काय करू इच्छिता?"
 
-#: gnucash/gnome-utils/gnc-file.c:850
+#: gnucash/gnome-utils/gnc-file.c:849
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
 msgstr "उघडा_केवळ-वाचा"
 
-#: gnucash/gnome-utils/gnc-file.c:853
+#: gnucash/gnome-utils/gnc-file.c:852
 #, fuzzy
 #| msgid "_Create New File"
 msgid "Create _New File"
 msgstr "_नवीन फाइल तयार करा"
 
-#: gnucash/gnome-utils/gnc-file.c:856
+#: gnucash/gnome-utils/gnc-file.c:855
 msgid "Open _Anyway"
 msgstr "तरीही_उघडा"
 
-#: gnucash/gnome-utils/gnc-file.c:859
+#: gnucash/gnome-utils/gnc-file.c:858
 #, fuzzy
 #| msgid "placeholder"
 msgid "Open _Folder"
 msgstr "स्थानधारक"
 
-#: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:310
+#: gnucash/gnome-utils/gnc-file.c:864 gnucash/gnome-utils/gnc-main-window.c:310
 msgid "_Quit"
 msgstr "_बाहेर पडा"
 
-#: gnucash/gnome-utils/gnc-file.c:951 gnucash/gnome-utils/gnc-file.c:971
+#: gnucash/gnome-utils/gnc-file.c:950 gnucash/gnome-utils/gnc-file.c:970
 msgid "Loading user data..."
 msgstr "यूजर डेटा लोड करत आहे"
 
-#: gnucash/gnome-utils/gnc-file.c:987
+#: gnucash/gnome-utils/gnc-file.c:986
 msgid "Re-saving user data..."
 msgstr "यूजर डेटाची पुनःसाठवणी करत आहे... "
 
-#: gnucash/gnome-utils/gnc-file.c:1349
+#: gnucash/gnome-utils/gnc-file.c:1348
 msgid "Exporting file..."
 msgstr "फाइल निर्यात करत आहे..."
 
-#: gnucash/gnome-utils/gnc-file.c:1362
+#: gnucash/gnome-utils/gnc-file.c:1361
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -8581,7 +8580,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome-utils/gnc-file.c:1397
+#: gnucash/gnome-utils/gnc-file.c:1396
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
@@ -8589,14 +8588,14 @@ msgstr ""
 "माहिती संग्रह केवळ-वाचण्यायोग्य म्हणून उघडला होता. तुम्हाला तो वेगळ्या ठिकाणी सेव्ह "
 "करायचा आहे का?"
 
-#: gnucash/gnome-utils/gnc-file.c:1692
+#: gnucash/gnome-utils/gnc-file.c:1691
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed ?"
 msgstr "%s ही फाइल आधीपासून अस्तित्वात आहे. तुम्हाला ती नक्की ओव्हरराइट करायची आहे का?"
 
-#: gnucash/gnome-utils/gnc-file.c:1700
+#: gnucash/gnome-utils/gnc-file.c:1699
 #: gnucash/gnome-utils/gnc-main-window.c:1269
 msgid "<unknown>"
 msgstr "<अपरिचित>"
@@ -9147,7 +9146,7 @@ msgstr ""
 "नक्कल व्यवहाराची घातलेली तारीख या पुस्तकासाठी निश्चित केलेल्या \"केवळ-वाचा सीमारेषेपेक्षा"
 "\" जुनी आहे. ही मांडणी धारिका->वैशिष्ट्ये->खाती यामध्ये बदलली जाऊ शकते."
 
-#. Translators: This message will be presented when a use
+#. Translators: This message will be presented when a user
 #. attempts to record a transaction without splits
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1723
 msgid "Not enough information for Blank Transaction?"

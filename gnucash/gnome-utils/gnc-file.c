@@ -476,8 +476,7 @@ show_session_error (GtkWindow *parent,
 
     case ERR_FILEIO_RESERVED_WRITE:
         /* Translators: the first %s is a path in the filesystem,
-           the second %s is PACKAGE_NAME, which by default is "GnuCash"
-         */
+           the second %s is PACKAGE_NAME, which by default is "GnuCash" */
         fmt = _("You attempted to save in\n%s\nor a subdirectory thereof. "
                 "This is not allowed as %s reserves that directory for internal use.\n\n"
                 "Please try again in a different directory.");

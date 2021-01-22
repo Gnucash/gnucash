@@ -1718,7 +1718,7 @@ gnc_tree_control_split_reg_save (GncTreeViewSplitReg *view, gboolean reg_closing
             {
                 GtkWidget *dialog, *window;
                 gint response;
-                /* Translators: This message will be presented when a use
+                /* Translators: This message will be presented when a user
                    attempts to record a transaction without splits        */
                 const char *title = _("Not enough information for Blank Transaction?");
                 const char *message =
