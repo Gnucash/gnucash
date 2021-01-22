@@ -1580,7 +1580,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
         if (gnc_uri_targets_local_fs (uri))
         {
             /* The filename is a true file.
-             * The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
+               The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
             gchar *path = gnc_uri_get_path ( uri );
             filename = g_path_get_basename ( path );
             g_free ( path );
@@ -1588,7 +1588,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
         else
         {
             /* The filename is composed of database connection parameters.
-             * For this we will show access_method://username@database[:port] */
+               For this we will show access_method://username@database[:port] */
             filename = gnc_uri_normalize_uri (uri, FALSE);
         }
     }
@@ -1598,7 +1598,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     if (page)
     {
         /* The Gnome HIG 2.0 recommends the application name not be used. (p16)
-         * but several developers prefer to use it anyway. */
+           but several developers prefer to use it anyway. */
         title = g_strdup_printf("%s%s%s - %s - GnuCash", dirty, filename, readonly,
                                 gnc_plugin_page_get_page_name(page));
     }
@@ -4711,9 +4711,9 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
                   "logo", logo,
                   "name", "GnuCash",
                   /* Translators: the following string will be shown in Help->About->Credits
-                   * Enter your name or that of your team and an email contact for feedback.
-                   * The string can have multiple rows, so you can also add a list of
-                   * contributors. */
+                     Enter your name or that of your team and an email contact for feedback.
+                     The string can have multiple rows, so you can also add a list of
+                     contributors. */
                   "translator-credits", _("translator-credits"),
                   "version", version,
                   "website", PACKAGE_URL,

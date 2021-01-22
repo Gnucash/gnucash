@@ -1130,12 +1130,12 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
                      GTK_BUTTONS_OK,
                      "%s",
                      /* Translators: Strings from this file are needed only in
-                      * countries that have one of aqbanking's Online Banking
-                      * techniques available. This is 'OFX DirectConnect'
-                      * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
-                      * (Switzerland). If none of these techniques are available
-                      * in your country, you may safely ignore strings from the
-                      * import-export/hbci subdirectory. */
+                        countries that have one of aqbanking's Online Banking
+                        techniques available. This is 'OFX DirectConnect'
+                        (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
+                        (Switzerland). If none of these techniques are available
+                        in your country, you may safely ignore strings from the
+                        import-export/hbci subdirectory. */
                      _("The downloaded Online Banking Balance was zero.\n\n"
                        "Either this is the correct balance, or your bank does not "
                        "support Balance download in this Online Banking version. "

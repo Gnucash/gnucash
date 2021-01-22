@@ -463,10 +463,10 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
     {
         gnc_error_dialog (GTK_WINDOW (iw_get_window(iw)), "%s",
                           /* Translators: In this context,
-                           * 'Billing information' maps to the
-                           * label in the frame and means
-                           * e.g. customer i.e. the company being
-                           * invoiced. */
+                             'Billing information' maps to the
+                             label in the frame and means
+                             e.g. customer i.e. the company being
+                             invoiced. */
                           _("You need to supply Billing Information."));
         return FALSE;
     }

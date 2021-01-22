@@ -4,14 +4,15 @@
 # Sébastien Villemot <sebastien@debian.org>, 2013
 # La Boussole <yoann@laboussole.coop>, 2018.
 # Q <qualaelay@gmail.com>, 2021.
+# Julien Humbert <julroy67@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-01-19 11:32+0000\n"
-"Last-Translator: Q <qualaelay@gmail.com>\n"
+"PO-Revision-Date: 2021-01-22 04:32+0000\n"
+"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
@@ -337,7 +338,7 @@ msgstr "devise"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
-msgstr "Personalisé"
+msgstr "Personnalisé"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"

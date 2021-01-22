@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash-1.8.10pre2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-20 03:31+0100\n"
+"POT-Creation-Date: 2021-01-22 10:21+0100\n"
 "PO-Revision-Date: 2005-08-05 10:45+0200\n"
 "Last-Translator: Mikel Olasagasti <hey_neken@mundurat.net>\n"
 "Language-Team: Basque <translation-team-eu@lists.sourceforge.net>\n"
@@ -736,8 +736,8 @@ msgid "The book was closed successfully."
 msgstr ""
 
 #. Translators: %s is a date string. %d is the number of books
-#. * that will be created. This is a ngettext(3) message (but
-#. * only for the %d part).
+#. that will be created. This is a ngettext(3) message (but
+#. only for the %d part).
 #: gnucash/gnome/assistant-acct-period.c:313
 #, c-format
 msgid ""
@@ -919,7 +919,7 @@ msgid "Miscellaneous Payment"
 msgstr "Prozesatu ordainketa"
 
 #. Translators: %s is "Taxes",
-#. * "Insurance", or similar.
+#. "Insurance", or similar.
 #: gnucash/gnome/assistant-loan.cpp:765
 #, c-format
 msgid "... pay \"%s\"?"
@@ -1305,7 +1305,7 @@ msgstr "_Ezabatu kontua"
 
 #: gnucash/gnome/dialog-commodities.c:217
 #: gnucash/gnome/dialog-price-edit-db.c:206
-#: gnucash/gnome/dialog-price-editor.c:232 gnucash/gnome/dialog-tax-info.c:1189
+#: gnucash/gnome/dialog-price-editor.c:232 gnucash/gnome/dialog-tax-info.c:1190
 #: gnucash/gnome/gnc-plugin-budget.c:289
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1797
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
@@ -1659,7 +1659,7 @@ msgstr "Transakzio-txostena"
 #: gnucash/gnome/dialog-doclink.c:1013
 #: gnucash/gnome/dialog-find-transactions2.c:157
 #: gnucash/gnome/dialog-find-transactions.c:157
-#: gnucash/gnome/dialog-lot-viewer.c:953 gnucash/gnome/dialog-tax-info.c:1397
+#: gnucash/gnome/dialog-lot-viewer.c:953 gnucash/gnome/dialog-tax-info.c:1398
 #: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:417
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:828
@@ -1680,7 +1680,7 @@ msgstr "Transakzio-txostena"
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3761
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
 #: gnucash/register/ledger-core/split-register-model.c:295
-#: gnucash/report/reports/standard/account-summary.scm:409
+#: gnucash/report/reports/standard/account-summary.scm:410
 #: gnucash/report/reports/standard/customer-summary.scm:73
 #: gnucash/report/reports/standard/general-journal.scm:96
 #: gnucash/report/reports/standard/general-ledger.scm:70
@@ -1762,7 +1762,7 @@ msgid "Username"
 msgstr "Erabiltzaile-izena"
 
 #: gnucash/gnome/dialog-employee.c:719 gnucash/gnome/dialog-sx-editor2.c:1754
-#: gnucash/gnome/dialog-sx-editor.c:1809 gnucash/gnome/dialog-tax-info.c:1200
+#: gnucash/gnome/dialog-sx-editor.c:1809 gnucash/gnome/dialog-tax-info.c:1201
 #: gnucash/gnome-utils/gnc-dense-cal.c:347
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:368
@@ -2068,7 +2068,7 @@ msgstr "Memo"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
 #: gnucash/register/ledger-core/split-register-model.c:491
-#: gnucash/report/reports/standard/account-summary.scm:437
+#: gnucash/report/reports/standard/account-summary.scm:438
 #: gnucash/report/reports/standard/balsheet-eg.scm:198
 #: gnucash/report/reports/standard/receipt.scm:38
 #: gnucash/report/reports/standard/taxinvoice.scm:78
@@ -2157,10 +2157,10 @@ msgid "Online HBCI"
 msgstr "Linean"
 
 #. Translators: In this context,
-#. * 'Billing information' maps to the
-#. * label in the frame and means
-#. * e.g. customer i.e. the company being
-#. * invoiced.
+#. 'Billing information' maps to the
+#. label in the frame and means
+#. e.g. customer i.e. the company being
+#. invoiced.
 #: gnucash/gnome/dialog-invoice.c:470 gnucash/gnome/dialog-order.c:181
 msgid "You need to supply Billing Information."
 msgstr "Fakturazio-informazioa eman behar duzu."
@@ -2472,7 +2472,7 @@ msgid "Voucher Notes"
 msgstr "Faktura-oharrak"
 
 #: gnucash/gnome/dialog-invoice.c:3438 gnucash/gnome/dialog-invoice.c:3597
-#: gnucash/gnome/dialog-lot-viewer.c:860 gnucash/gnome/dialog-tax-info.c:1235
+#: gnucash/gnome/dialog-lot-viewer.c:860 gnucash/gnome/dialog-tax-info.c:1236
 #: gnucash/gnome-utils/gnc-tree-view-account.c:811
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
@@ -2487,7 +2487,7 @@ msgstr "Faktura-oharrak"
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:362
-#: gnucash/report/reports/standard/account-summary.scm:408
+#: gnucash/report/reports/standard/account-summary.scm:409
 #: gnucash/report/reports/standard/customer-summary.scm:72
 #: gnucash/report/reports/standard/job-report.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:52
@@ -2660,7 +2660,7 @@ msgstr "Titulua"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3112
 #: gnucash/register/ledger-core/split-register-model.c:320
 #: gnucash/register/ledger-core/split-register-model.c:484
-#: gnucash/report/reports/standard/account-summary.scm:422
+#: gnucash/report/reports/standard/account-summary.scm:423
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
 #: gnucash/report/reports/standard/new-owner-report.scm:58
@@ -2949,11 +2949,11 @@ msgid "There is a duplicate check format file."
 msgstr ""
 
 #. Translators:
-#. * %1$s is the type of the first check format
-#. *  (user defined or application defined);
-#. * %2$s is the filename of that format;
-#. * %3$s the type of the other check format; and
-#. * %4$s the filename of that other format.
+#. %1$s is the type of the first check format
+#. (user defined or application defined);
+#. %2$s is the filename of that format;
+#. %3$s the type of the other check format; and
+#. %4$s the filename of that other format.
 #: gnucash/gnome/dialog-print-check.c:1523
 #, c-format
 msgid ""
@@ -3311,22 +3311,22 @@ msgstr "Iaz"
 msgid "Form Line Data: "
 msgstr "Inprimakia"
 
-#: gnucash/gnome/dialog-tax-info.c:291
-#: gnucash/report/reports/standard/account-summary.scm:407
+#. Translators: Tax Code
+#: gnucash/gnome/dialog-tax-info.c:292
 msgid "Code"
 msgstr "Kodea"
 
-#: gnucash/gnome/dialog-tax-info.c:366
+#: gnucash/gnome/dialog-tax-info.c:367
 #, fuzzy
 msgid "now"
 msgstr "Ezezaguna"
 
-#: gnucash/gnome/dialog-tax-info.c:1185
+#: gnucash/gnome/dialog-tax-info.c:1186
 #, fuzzy
 msgid "Income Tax Identity"
 msgstr "Sarreren diagrama"
 
-#: gnucash/gnome/dialog-tax-info.c:1191
+#: gnucash/gnome/dialog-tax-info.c:1192
 #: gnucash/gtkbuilder/dialog-options.glade:55
 #: gnucash/gtkbuilder/dialog-price.glade:85
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
@@ -3334,13 +3334,13 @@ msgstr "Sarreren diagrama"
 msgid "_Apply"
 msgstr ""
 
-#: gnucash/gnome/dialog-tax-info.c:1240
+#: gnucash/gnome/dialog-tax-info.c:1241
 msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
 
-#: gnucash/gnome/dialog-tax-info.c:1393
+#: gnucash/gnome/dialog-tax-info.c:1394
 msgid "Form"
 msgstr "Inprimakia"
 
@@ -3542,8 +3542,8 @@ msgstr "Bila_tu"
 msgid "Find transactions with a search"
 msgstr "Transakzioak aurkitzeko bilaketa"
 
-#. Translators: remember to reuse this *
-#. * translation in dialog-account.glade
+#. Translators: remember to reuse this
+#. translation in dialog-account.glade
 #: gnucash/gnome/gnc-plugin-basic-commands.c:153
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:280
 #: gnucash/gnome/gnc-plugin-page-register2.c:263
@@ -3552,10 +3552,10 @@ msgstr "Transakzioak aurkitzeko bilaketa"
 msgid "Ta_x Report Options"
 msgstr "Laugarren aukera"
 
-#. Translators: currently implemented are *
-#. * US: income tax and                     *
-#. * DE: VAT                                *
-#. * So adjust this string
+#. Translators: currently implemented are
+#. US: income tax and
+#. DE: VAT
+#. So adjust this string
 #: gnucash/gnome/gnc-plugin-basic-commands.c:158
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:285
 #: gnucash/gnome/gnc-plugin-page-register2.c:268
@@ -6212,13 +6212,13 @@ msgid "Export"
 msgstr "Esportatu"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration"
-#. * to be used as toolbar button label.
+#. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
 msgstr ""
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
-#. * to be used as toolbar button label.
+#. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1143
 #, fuzzy
 msgid "Save Config As..."
@@ -7631,8 +7631,8 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr ""
 
 #. Translators: Please insert encodings here that are typically used in your
-#. * locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
-#. * for assistance with spelling.
+#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
 msgstr ""
@@ -8781,7 +8781,7 @@ msgid "No read permission to read from file %s."
 msgstr ""
 
 #. Translators: the first %s is a path in the filesystem,
-#. * the second %s is PACKAGE_NAME, which by default is "GnuCash"
+#. the second %s is PACKAGE_NAME, which by default is "GnuCash"
 #.
 #: gnucash/gnome-utils/gnc-file.c:481
 #, c-format
@@ -9344,9 +9344,9 @@ msgid "Accounting for personal and small business finance."
 msgstr ""
 
 #. Translators: the following string will be shown in Help->About->Credits
-#. * Enter your name or that of your team and an email contact for feedback.
-#. * The string can have multiple rows, so you can also add a list of
-#. * contributors.
+#. Enter your name or that of your team and an email contact for feedback.
+#. The string can have multiple rows, so you can also add a list of
+#. contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4717
 msgid "translator-credits"
 msgstr ""
@@ -9573,8 +9573,8 @@ msgid ""
 ">Properties->Accounts."
 msgstr ""
 
-#. Translators: This message will be presented when a user *
-#. * attempts to record a transaction without splits
+#. Translators: This message will be presented when a use
+#. attempts to record a transaction without splits
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1723
 #, fuzzy
 msgid "Not enough information for Blank Transaction?"
@@ -10032,6 +10032,7 @@ msgstr "Balorea"
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/report/options-utilities.scm:212
 #: gnucash/report/reports/standard/account-summary.scm:115
+#: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/general-ledger.scm:74
 #: gnucash/report/reports/standard/general-ledger.scm:94
 #: gnucash/report/trep-engine.scm:176 gnucash/report/trep-engine.scm:975
@@ -19701,7 +19702,7 @@ msgid "Export to PDF File"
 msgstr "Inportatu QIF fitxategiak"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
-#. * 3. Account Number,  4. Subaccount ID
+#. 3. Account Number,  4. Subaccount ID
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
@@ -20190,15 +20191,15 @@ msgid "(unknown)"
 msgstr "(ezezaguna)"
 
 #. Translators: Strings from this file are
-#. * needed only in countries that have one of
-#. * aqbanking's Online Banking techniques
-#. * available. This is 'OFX DirectConnect'
-#. * (U.S. and others), 'HBCI' (Germany),
-#. * or 'YellowNet' (Switzerland). If none of
-#. * these techniques are available in your
-#. * country, you may safely ignore strings
-#. * from the import-export/hbci
-#. * subdirectory.
+#. needed only in countries that have one of
+#. aqbanking's Online Banking techniques
+#. available. This is 'OFX DirectConnect'
+#. (U.S. and others), 'HBCI' (Germany),
+#. or 'YellowNet' (Switzerland). If none of
+#. these techniques are available in your
+#. country, you may safely ignore strings
+#. from the import-export/hbci
+#. subdirectory.
 #: gnucash/import-export/aqb/dialog-ab-trans.c:377
 #, fuzzy
 msgid "Enter a SEPA Online Transfer"
@@ -20469,12 +20470,12 @@ msgid ""
 msgstr ""
 
 #. Translators: Strings from this file are needed only in
-#. * countries that have one of aqbanking's Online Banking
-#. * techniques available. This is 'OFX DirectConnect'
-#. * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
-#. * (Switzerland). If none of these techniques are available
-#. * in your country, you may safely ignore strings from the
-#. * import-export/hbci subdirectory.
+#. countries that have one of aqbanking's Online Banking
+#. techniques available. This is 'OFX DirectConnect'
+#. (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
+#. (Switzerland). If none of these techniques are available
+#. in your country, you may safely ignore strings from the
+#. import-export/hbci subdirectory.
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1139
 #, fuzzy
 msgid ""
@@ -22302,155 +22303,155 @@ msgstr "Komisioak"
 msgid "Margin Interest"
 msgstr "Interes marjinala"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:104
-#: gnucash/import-export/qif-imp/qif-file.scm:112
+#: gnucash/import-export/qif-imp/qif-file.scm:103
+#: gnucash/import-export/qif-imp/qif-file.scm:111
 msgid "Line"
 msgstr "Marra"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:115
+#: gnucash/import-export/qif-imp/qif-file.scm:114
 msgid "Read aborted."
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:155
+#: gnucash/import-export/qif-imp/qif-file.scm:154
 #, fuzzy
 msgid "Reading"
 msgstr "Izenburua"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:185
+#: gnucash/import-export/qif-imp/qif-file.scm:184
 #, fuzzy
 msgid "Some characters have been discarded."
 msgstr "Transakzio batzuk baztertu egingo dira."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:186
-#: gnucash/import-export/qif-imp/qif-file.scm:190
+#: gnucash/import-export/qif-imp/qif-file.scm:185
+#: gnucash/import-export/qif-imp/qif-file.scm:189
 #, fuzzy
 msgid "Converted to: "
 msgstr "Konprimitu datu-fitxategia."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:189
+#: gnucash/import-export/qif-imp/qif-file.scm:188
 msgid "Some characters have been converted according to your locale."
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:248
+#: gnucash/import-export/qif-imp/qif-file.scm:247
 msgid "Ignoring unknown option"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:386
+#: gnucash/import-export/qif-imp/qif-file.scm:385
 #, fuzzy
 msgid "Date required."
 msgstr "Irekitze-data"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:387
+#: gnucash/import-export/qif-imp/qif-file.scm:386
 #, fuzzy
 msgid "Discarding this transaction."
 msgstr "_Bilatu transakzioak"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:419
+#: gnucash/import-export/qif-imp/qif-file.scm:418
 msgid "Ignoring class line"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:487
+#: gnucash/import-export/qif-imp/qif-file.scm:486
 #, fuzzy
 msgid "Ignoring category line"
 msgstr "QIF kategoria-izena"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:518
+#: gnucash/import-export/qif-imp/qif-file.scm:517
 msgid "Ignoring security line"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:526
+#: gnucash/import-export/qif-imp/qif-file.scm:525
 msgid "File does not appear to be in QIF format"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:702
+#: gnucash/import-export/qif-imp/qif-file.scm:701
 #, fuzzy
 msgid "Transaction date"
 msgstr "Transakzioen oroigarriak"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:703
+#: gnucash/import-export/qif-imp/qif-file.scm:702
 #, fuzzy
 msgid "Transaction amount"
 msgstr "_Transakzioen egunkaria"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:704
+#: gnucash/import-export/qif-imp/qif-file.scm:703
 #, fuzzy
 msgid "Share price"
 msgstr "Akzio-prezioa:"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:705
+#: gnucash/import-export/qif-imp/qif-file.scm:704
 #, fuzzy
 msgid "Share quantity"
 msgstr "Ordenatu kopuruz"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:706
+#: gnucash/import-export/qif-imp/qif-file.scm:705
 #, fuzzy
 msgid "Investment action"
 msgstr "Inbertsio-zorroa"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:707
+#: gnucash/import-export/qif-imp/qif-file.scm:706
 #, fuzzy
 msgid "Reconciliation status"
 msgstr "Berdinkatu (automatikoki) "
 
-#: gnucash/import-export/qif-imp/qif-file.scm:708
+#: gnucash/import-export/qif-imp/qif-file.scm:707
 #, fuzzy
 msgid "Commission"
 msgstr "Komisioak"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:709
+#: gnucash/import-export/qif-imp/qif-file.scm:708
 #, fuzzy
 msgid "Account type"
 msgstr "Kontu-mota"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:710
+#: gnucash/import-export/qif-imp/qif-file.scm:709
 #, fuzzy
 msgid "Tax class"
 msgstr "Zerga-taulak"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:711
+#: gnucash/import-export/qif-imp/qif-file.scm:710
 #, fuzzy
 msgid "Category budget amount"
 msgstr "Ordenatu zenbatekoz"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:712
+#: gnucash/import-export/qif-imp/qif-file.scm:711
 #, fuzzy
 msgid "Account budget amount"
 msgstr "Kontu-aukerak"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:713
+#: gnucash/import-export/qif-imp/qif-file.scm:712
 #, fuzzy
 msgid "Credit limit"
 msgstr "Kredituaren muga: "
 
-#: gnucash/import-export/qif-imp/qif-file.scm:726
+#: gnucash/import-export/qif-imp/qif-file.scm:725
 #, fuzzy
 msgid "Parsing categories"
 msgstr "Fitxategia irakurtzen..."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:758
+#: gnucash/import-export/qif-imp/qif-file.scm:757
 #, fuzzy
 msgid "Parsing accounts"
 msgstr "Kargu-kontua"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:799
+#: gnucash/import-export/qif-imp/qif-file.scm:798
 #, fuzzy
 msgid "Parsing transactions"
 msgstr "Transakzioak sortzen..."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:975
+#: gnucash/import-export/qif-imp/qif-file.scm:974
 msgid "Unrecognized or inconsistent format."
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1017
+#: gnucash/import-export/qif-imp/qif-file.scm:1016
 #, fuzzy
 msgid "Parsing failed."
 msgstr "Fitxategia irakurtzen..."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1058
+#: gnucash/import-export/qif-imp/qif-file.scm:1057
 msgid "Parse ambiguity between formats"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1060
+#: gnucash/import-export/qif-imp/qif-file.scm:1059
 #, scheme-format
 msgid "Value '~a' could be ~a or ~a."
 msgstr ""
@@ -25663,7 +25664,7 @@ msgstr "Erakutsi maila honetarainoko kontuak, gainerako aukerak ahaztuta."
 msgid "For Period Covering ~a to ~a"
 msgstr "%s - %s denboraldia"
 
-#: gnucash/report/reports/standard/account-summary.scm:410
+#: gnucash/report/reports/standard/account-summary.scm:411
 #, fuzzy
 msgid "Account title"
 msgstr "Kontu-mota"
@@ -31360,7 +31361,7 @@ msgid "Numeric error"
 msgstr "Zenbakizko errorea"
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
-#. * They might appear in their editor or in "Since last run".
+#. They might appear in their editor or in "Since last run".
 #: libgnucash/app-utils/gnc-sx-instance-model.c:990
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
@@ -31400,14 +31401,14 @@ msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr ""
 
 #. Translators: This and the following strings appear on
-#. * the account tab if the Tax Info column is displayed,
-#. * i.e. if the user wants to record the tax form number
-#. * and location on that tax form which corresponds to this
-#. * gnucash account. For the US Income Tax support in
-#. * gnucash, each tax code that can be assigned to an
-#. * account generally corresponds to a specific line number
-#. * on a paper form and each form has a unique
-#. * identification (e.g., Form 1040, Schedule A).
+#. the account tab if the Tax Info column is displayed,
+#. i.e. if the user wants to record the tax form number
+#. and location on that tax form which corresponds to this
+#. gnucash account. For the US Income Tax support in
+#. gnucash, each tax code that can be assigned to an
+#. account generally corresponds to a specific line number
+#. on a paper form and each form has a unique
+#. identification (e.g., Form 1040, Schedule A).
 #: libgnucash/app-utils/gnc-ui-util.c:634
 msgid "Tax-related but has no tax code"
 msgstr ""
@@ -31820,7 +31821,7 @@ msgid "last %s"
 msgstr "azken eguna"
 
 #. Translators: %s is the string 1st, 2nd, 3rd and so on, and
-#. * %s is an already-localized form of the day of the week.
+#. %s is an already-localized form of the day of the week.
 #: libgnucash/engine/Recurrence.c:675
 #, c-format
 msgid "%s %s"

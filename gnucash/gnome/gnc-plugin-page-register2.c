@@ -258,13 +258,13 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
     },
     {
         "EditTaxOptionsAction", NULL,
-        /* Translators: remember to reuse this *
-         * translation in dialog-account.glade */
+        /* Translators: remember to reuse this
+           translation in dialog-account.glade */
         N_("Ta_x Report Options"), NULL,
-        /* Translators: currently implemented are *
-         * US: income tax and                     *
-         * DE: VAT                                *
-         * So adjust this string                  */
+        /* Translators: currently implemented are
+           US: income tax and
+           DE: VAT
+           So adjust this string                  */
         N_("Setup relevant accounts for tax reports, e.g. US income tax"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_edit_tax_options)
     },

@@ -288,6 +288,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
         SCM code_scm;
         const gchar *last_yr = _("Last Valid Year: ");
         const gchar *form_line = _("Form Line Data: ");
+        /* Translators: Tax Code */
         const gchar *code_line_word = _("Code");
         const gchar *code_line_colon = ": ";
         const gchar *prefix = "N";

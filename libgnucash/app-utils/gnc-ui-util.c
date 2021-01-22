@@ -623,14 +623,14 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         /* tax_related && !code */
         else
             /* Translators: This and the following strings appear on
-             * the account tab if the Tax Info column is displayed,
-             * i.e. if the user wants to record the tax form number
-             * and location on that tax form which corresponds to this
-             * gnucash account. For the US Income Tax support in
-             * gnucash, each tax code that can be assigned to an
-             * account generally corresponds to a specific line number
-             * on a paper form and each form has a unique
-             * identification (e.g., Form 1040, Schedule A). */
+               the account tab if the Tax Info column is displayed,
+               i.e. if the user wants to record the tax form number
+               and location on that tax form which corresponds to this
+               gnucash account. For the US Income Tax support in
+               gnucash, each tax code that can be assigned to an
+               account generally corresponds to a specific line number
+               on a paper form and each form has a unique
+               identification (e.g., Form 1040, Schedule A). */
             return g_strdup (_("Tax-related but has no tax code"));
     }
     else  /* with tax code */
@@ -840,14 +840,14 @@ gnc_ui_account_get_tax_info_sub_acct_string (const Account *account)
         g_list_free (account_descendants);
         g_list_free (descendant);
         /* Translators: This and the following strings appear on
-         * the account tab if the Tax Info column is displayed,
-         * i.e. if the user wants to record the tax form number
-         * and location on that tax form which corresponds to this
-         * gnucash account. For the US Income Tax support in
-         * gnucash, each tax code that can be assigned to an
-         * account generally corresponds to a specific line number
-         * on a paper form and each form has a unique
-         * identification (e.g., Form 1040, Schedule A). */
+           the account tab if the Tax Info column is displayed,
+           i.e. if the user wants to record the tax form number
+           and location on that tax form which corresponds to this
+           gnucash account. For the US Income Tax support in
+           gnucash, each tax code that can be assigned to an
+           account generally corresponds to a specific line number
+           on a paper form and each form has a unique
+           identification (e.g., Form 1040, Schedule A). */
         return (sub_acct_tax_number == 0) ? NULL :
                g_strdup_printf (_("(Tax-related subaccounts: %d)"),
                                 sub_acct_tax_number);
@@ -1615,7 +1615,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
         *buf = '\0';
         return 0;
     }
-    
+
     // Value may now be decimal, for example if the factional part is zero
     value_is_decimal = gnc_numeric_to_decimal(&val, NULL);
     /* print the integer part without separators */

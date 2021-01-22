@@ -986,7 +986,7 @@ _get_template_split_account(const SchedXaction* sx,
     {
         char guid_str[GUID_ENCODING_LENGTH+1];
 /* Translators: A list of error messages from the Scheduled Transactions (SX).
- * They might appear in their editor or in "Since last run".                  */
+   They might appear in their editor or in "Since last run".                  */
         gchar* err = N_("Unknown account for guid [%s], cancelling SX [%s] creation.");
         guid_to_string_buff((const GncGUID*)acct_guid, guid_str);
         REPORT_ERROR(creation_errors, err, guid_str, xaccSchedXactionGetName(sx));

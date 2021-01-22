@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnucash 3.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-20 03:31+0100\n"
+"POT-Creation-Date: 2021-01-22 10:21+0100\n"
 "PO-Revision-Date: 2019-12-25 22:26-0500\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -712,8 +712,8 @@ msgid "The book was closed successfully."
 msgstr "结账成功。"
 
 #. Translators: %s is a date string. %d is the number of books
-#. * that will be created. This is a ngettext(3) message (but
-#. * only for the %d part).
+#. that will be created. This is a ngettext(3) message (but
+#. only for the %d part).
 #: gnucash/gnome/assistant-acct-period.c:313
 #, fuzzy, c-format
 msgid ""
@@ -889,7 +889,7 @@ msgid "Miscellaneous Payment"
 msgstr "其它付款"
 
 #. Translators: %s is "Taxes",
-#. * "Insurance", or similar.
+#. "Insurance", or similar.
 #: gnucash/gnome/assistant-loan.cpp:765
 #, c-format
 msgid "... pay \"%s\"?"
@@ -1261,7 +1261,7 @@ msgstr "删除商品？"
 
 #: gnucash/gnome/dialog-commodities.c:217
 #: gnucash/gnome/dialog-price-edit-db.c:206
-#: gnucash/gnome/dialog-price-editor.c:232 gnucash/gnome/dialog-tax-info.c:1189
+#: gnucash/gnome/dialog-price-editor.c:232 gnucash/gnome/dialog-tax-info.c:1190
 #: gnucash/gnome/gnc-plugin-budget.c:289
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1797
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
@@ -1606,7 +1606,7 @@ msgstr "交易事项报表"
 #: gnucash/gnome/dialog-doclink.c:1013
 #: gnucash/gnome/dialog-find-transactions2.c:157
 #: gnucash/gnome/dialog-find-transactions.c:157
-#: gnucash/gnome/dialog-lot-viewer.c:953 gnucash/gnome/dialog-tax-info.c:1397
+#: gnucash/gnome/dialog-lot-viewer.c:953 gnucash/gnome/dialog-tax-info.c:1398
 #: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:417
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:828
@@ -1627,7 +1627,7 @@ msgstr "交易事项报表"
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3761
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
 #: gnucash/register/ledger-core/split-register-model.c:295
-#: gnucash/report/reports/standard/account-summary.scm:409
+#: gnucash/report/reports/standard/account-summary.scm:410
 #: gnucash/report/reports/standard/customer-summary.scm:73
 #: gnucash/report/reports/standard/general-journal.scm:96
 #: gnucash/report/reports/standard/general-ledger.scm:70
@@ -1709,7 +1709,7 @@ msgid "Username"
 msgstr "用户名"
 
 #: gnucash/gnome/dialog-employee.c:719 gnucash/gnome/dialog-sx-editor2.c:1754
-#: gnucash/gnome/dialog-sx-editor.c:1809 gnucash/gnome/dialog-tax-info.c:1200
+#: gnucash/gnome/dialog-sx-editor.c:1809 gnucash/gnome/dialog-tax-info.c:1201
 #: gnucash/gnome-utils/gnc-dense-cal.c:347
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:368
@@ -2009,7 +2009,7 @@ msgstr "备注"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
 #: gnucash/register/ledger-core/split-register-model.c:491
-#: gnucash/report/reports/standard/account-summary.scm:437
+#: gnucash/report/reports/standard/account-summary.scm:438
 #: gnucash/report/reports/standard/balsheet-eg.scm:198
 #: gnucash/report/reports/standard/receipt.scm:38
 #: gnucash/report/reports/standard/taxinvoice.scm:78
@@ -2091,10 +2091,10 @@ msgid "Online HBCI"
 msgstr "网上编号"
 
 #. Translators: In this context,
-#. * 'Billing information' maps to the
-#. * label in the frame and means
-#. * e.g. customer i.e. the company being
-#. * invoiced.
+#. 'Billing information' maps to the
+#. label in the frame and means
+#. e.g. customer i.e. the company being
+#. invoiced.
 #: gnucash/gnome/dialog-invoice.c:470 gnucash/gnome/dialog-order.c:181
 msgid "You need to supply Billing Information."
 msgstr "您需要提供账单信息。"
@@ -2400,7 +2400,7 @@ msgid "Voucher Notes"
 msgstr "支出凭证说明"
 
 #: gnucash/gnome/dialog-invoice.c:3438 gnucash/gnome/dialog-invoice.c:3597
-#: gnucash/gnome/dialog-lot-viewer.c:860 gnucash/gnome/dialog-tax-info.c:1235
+#: gnucash/gnome/dialog-lot-viewer.c:860 gnucash/gnome/dialog-tax-info.c:1236
 #: gnucash/gnome-utils/gnc-tree-view-account.c:811
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
@@ -2415,7 +2415,7 @@ msgstr "支出凭证说明"
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:362
-#: gnucash/report/reports/standard/account-summary.scm:408
+#: gnucash/report/reports/standard/account-summary.scm:409
 #: gnucash/report/reports/standard/customer-summary.scm:72
 #: gnucash/report/reports/standard/job-report.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:52
@@ -2585,7 +2585,7 @@ msgstr "标题"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3112
 #: gnucash/register/ledger-core/split-register-model.c:320
 #: gnucash/register/ledger-core/split-register-model.c:484
-#: gnucash/report/reports/standard/account-summary.scm:422
+#: gnucash/report/reports/standard/account-summary.scm:423
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
 #: gnucash/report/reports/standard/new-owner-report.scm:58
@@ -2860,11 +2860,11 @@ msgid "There is a duplicate check format file."
 msgstr "有重复的支票格式文件。"
 
 #. Translators:
-#. * %1$s is the type of the first check format
-#. *  (user defined or application defined);
-#. * %2$s is the filename of that format;
-#. * %3$s the type of the other check format; and
-#. * %4$s the filename of that other format.
+#. %1$s is the type of the first check format
+#. (user defined or application defined);
+#. %2$s is the filename of that format;
+#. %3$s the type of the other check format; and
+#. %4$s the filename of that other format.
 #: gnucash/gnome/dialog-print-check.c:1523
 #, c-format
 msgid ""
@@ -3178,20 +3178,20 @@ msgstr "上一个有效的年份："
 msgid "Form Line Data: "
 msgstr "表单行数据："
 
-#: gnucash/gnome/dialog-tax-info.c:291
-#: gnucash/report/reports/standard/account-summary.scm:407
+#. Translators: Tax Code
+#: gnucash/gnome/dialog-tax-info.c:292
 msgid "Code"
 msgstr "代码"
 
-#: gnucash/gnome/dialog-tax-info.c:366
+#: gnucash/gnome/dialog-tax-info.c:367
 msgid "now"
 msgstr "现在"
 
-#: gnucash/gnome/dialog-tax-info.c:1185
+#: gnucash/gnome/dialog-tax-info.c:1186
 msgid "Income Tax Identity"
 msgstr "所得税身份"
 
-#: gnucash/gnome/dialog-tax-info.c:1191
+#: gnucash/gnome/dialog-tax-info.c:1192
 #: gnucash/gtkbuilder/dialog-options.glade:55
 #: gnucash/gtkbuilder/dialog-price.glade:85
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
@@ -3199,14 +3199,14 @@ msgstr "所得税身份"
 msgid "_Apply"
 msgstr "应用(_A)"
 
-#: gnucash/gnome/dialog-tax-info.c:1240
+#: gnucash/gnome/dialog-tax-info.c:1241
 msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
 "警告：如果您设置了 TXF 类别，并且之后改变“类型”，您需要逐个手动重置这些类别。"
 
-#: gnucash/gnome/dialog-tax-info.c:1393
+#: gnucash/gnome/dialog-tax-info.c:1394
 msgid "Form"
 msgstr "表单"
 
@@ -3397,8 +3397,8 @@ msgstr "查找(_F)..."
 msgid "Find transactions with a search"
 msgstr "通过搜索寻找交易事项"
 
-#. Translators: remember to reuse this *
-#. * translation in dialog-account.glade
+#. Translators: remember to reuse this
+#. translation in dialog-account.glade
 #: gnucash/gnome/gnc-plugin-basic-commands.c:153
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:280
 #: gnucash/gnome/gnc-plugin-page-register2.c:263
@@ -3406,10 +3406,10 @@ msgstr "通过搜索寻找交易事项"
 msgid "Ta_x Report Options"
 msgstr "税务报表选项(_X)"
 
-#. Translators: currently implemented are *
-#. * US: income tax and                     *
-#. * DE: VAT                                *
-#. * So adjust this string
+#. Translators: currently implemented are
+#. US: income tax and
+#. DE: VAT
+#. So adjust this string
 #: gnucash/gnome/gnc-plugin-basic-commands.c:158
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:285
 #: gnucash/gnome/gnc-plugin-page-register2.c:268
@@ -5932,13 +5932,13 @@ msgid "Export"
 msgstr "导出"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration"
-#. * to be used as toolbar button label.
+#. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
 msgstr ""
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
-#. * to be used as toolbar button label.
+#. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1143
 #, fuzzy
 msgid "Save Config As..."
@@ -7322,8 +7322,8 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr "有 %d 个无法解码的文字。请添加编码。"
 
 #. Translators: Please insert encodings here that are typically used in your
-#. * locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
-#. * for assistance with spelling.
+#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
 msgstr "GBK GB2312 GB18030 EUC-TW BIG5 BIG5-HKSCS"
@@ -8356,7 +8356,7 @@ msgid "No read permission to read from file %s."
 msgstr "没有从文件 %s 中读取数据的权限。"
 
 #. Translators: the first %s is a path in the filesystem,
-#. * the second %s is PACKAGE_NAME, which by default is "GnuCash"
+#. the second %s is PACKAGE_NAME, which by default is "GnuCash"
 #.
 #: gnucash/gnome-utils/gnc-file.c:481
 #, c-format
@@ -8858,9 +8858,9 @@ msgid "Accounting for personal and small business finance."
 msgstr "个人及小企业融资账务。"
 
 #. Translators: the following string will be shown in Help->About->Credits
-#. * Enter your name or that of your team and an email contact for feedback.
-#. * The string can have multiple rows, so you can also add a list of
-#. * contributors.
+#. Enter your name or that of your team and an email contact for feedback.
+#. The string can have multiple rows, so you can also add a list of
+#. contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4717
 msgid "translator-credits"
 msgstr ""
@@ -9074,8 +9074,8 @@ msgid ""
 ">Properties->Accounts."
 msgstr ""
 
-#. Translators: This message will be presented when a user *
-#. * attempts to record a transaction without splits
+#. Translators: This message will be presented when a use
+#. attempts to record a transaction without splits
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1723
 msgid "Not enough information for Blank Transaction?"
 msgstr ""
@@ -9515,6 +9515,7 @@ msgstr "商品"
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/report/options-utilities.scm:212
 #: gnucash/report/reports/standard/account-summary.scm:115
+#: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/general-ledger.scm:74
 #: gnucash/report/reports/standard/general-ledger.scm:94
 #: gnucash/report/trep-engine.scm:176 gnucash/report/trep-engine.scm:975
@@ -19072,7 +19073,7 @@ msgid "Export to PDF File"
 msgstr "报表标题"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
-#. * 3. Account Number,  4. Subaccount ID
+#. 3. Account Number,  4. Subaccount ID
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
@@ -19539,15 +19540,15 @@ msgid "(unknown)"
 msgstr "(未知)"
 
 #. Translators: Strings from this file are
-#. * needed only in countries that have one of
-#. * aqbanking's Online Banking techniques
-#. * available. This is 'OFX DirectConnect'
-#. * (U.S. and others), 'HBCI' (Germany),
-#. * or 'YellowNet' (Switzerland). If none of
-#. * these techniques are available in your
-#. * country, you may safely ignore strings
-#. * from the import-export/hbci
-#. * subdirectory.
+#. needed only in countries that have one of
+#. aqbanking's Online Banking techniques
+#. available. This is 'OFX DirectConnect'
+#. (U.S. and others), 'HBCI' (Germany),
+#. or 'YellowNet' (Switzerland). If none of
+#. these techniques are available in your
+#. country, you may safely ignore strings
+#. from the import-export/hbci
+#. subdirectory.
 #: gnucash/import-export/aqb/dialog-ab-trans.c:377
 #, fuzzy
 msgid "Enter a SEPA Online Transfer"
@@ -19849,12 +19850,12 @@ msgstr ""
 "您想导入它么？"
 
 #. Translators: Strings from this file are needed only in
-#. * countries that have one of aqbanking's Online Banking
-#. * techniques available. This is 'OFX DirectConnect'
-#. * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
-#. * (Switzerland). If none of these techniques are available
-#. * in your country, you may safely ignore strings from the
-#. * import-export/hbci subdirectory.
+#. countries that have one of aqbanking's Online Banking
+#. techniques available. This is 'OFX DirectConnect'
+#. (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
+#. (Switzerland). If none of these techniques are available
+#. in your country, you may safely ignore strings from the
+#. import-export/hbci subdirectory.
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1139
 msgid ""
 "The downloaded Online Banking Balance was zero.\n"
@@ -21643,133 +21644,133 @@ msgstr "佣金"
 msgid "Margin Interest"
 msgstr "保证金利率"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:104
-#: gnucash/import-export/qif-imp/qif-file.scm:112
+#: gnucash/import-export/qif-imp/qif-file.scm:103
+#: gnucash/import-export/qif-imp/qif-file.scm:111
 msgid "Line"
 msgstr "行数"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:115
+#: gnucash/import-export/qif-imp/qif-file.scm:114
 msgid "Read aborted."
 msgstr "停止读取。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:155
+#: gnucash/import-export/qif-imp/qif-file.scm:154
 msgid "Reading"
 msgstr "阅读"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:185
+#: gnucash/import-export/qif-imp/qif-file.scm:184
 msgid "Some characters have been discarded."
 msgstr "丢弃了一些字符。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:186
-#: gnucash/import-export/qif-imp/qif-file.scm:190
+#: gnucash/import-export/qif-imp/qif-file.scm:185
+#: gnucash/import-export/qif-imp/qif-file.scm:189
 msgid "Converted to: "
 msgstr "转换到："
 
-#: gnucash/import-export/qif-imp/qif-file.scm:189
+#: gnucash/import-export/qif-imp/qif-file.scm:188
 msgid "Some characters have been converted according to your locale."
 msgstr "一些字符已经根据您的本地区域设置进行了转换。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:248
+#: gnucash/import-export/qif-imp/qif-file.scm:247
 msgid "Ignoring unknown option"
 msgstr "忽略未知选项"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:386
+#: gnucash/import-export/qif-imp/qif-file.scm:385
 msgid "Date required."
 msgstr "需要的日期。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:387
+#: gnucash/import-export/qif-imp/qif-file.scm:386
 msgid "Discarding this transaction."
 msgstr "丢弃这笔交易事项。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:419
+#: gnucash/import-export/qif-imp/qif-file.scm:418
 msgid "Ignoring class line"
 msgstr "忽略级别行"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:487
+#: gnucash/import-export/qif-imp/qif-file.scm:486
 msgid "Ignoring category line"
 msgstr "忽略类别行"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:518
+#: gnucash/import-export/qif-imp/qif-file.scm:517
 msgid "Ignoring security line"
 msgstr "忽略证券行"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:526
+#: gnucash/import-export/qif-imp/qif-file.scm:525
 msgid "File does not appear to be in QIF format"
 msgstr "文件看起来不像 QIF 格式。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:702
+#: gnucash/import-export/qif-imp/qif-file.scm:701
 msgid "Transaction date"
 msgstr "交易日期"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:703
+#: gnucash/import-export/qif-imp/qif-file.scm:702
 msgid "Transaction amount"
 msgstr "交易金额"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:704
+#: gnucash/import-export/qif-imp/qif-file.scm:703
 msgid "Share price"
 msgstr "股价"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:705
+#: gnucash/import-export/qif-imp/qif-file.scm:704
 msgid "Share quantity"
 msgstr "股份数量"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:706
+#: gnucash/import-export/qif-imp/qif-file.scm:705
 msgid "Investment action"
 msgstr "投资操作"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:707
+#: gnucash/import-export/qif-imp/qif-file.scm:706
 msgid "Reconciliation status"
 msgstr "对账状态"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:708
+#: gnucash/import-export/qif-imp/qif-file.scm:707
 msgid "Commission"
 msgstr "交易"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:709
+#: gnucash/import-export/qif-imp/qif-file.scm:708
 msgid "Account type"
 msgstr "科目类型"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:710
+#: gnucash/import-export/qif-imp/qif-file.scm:709
 msgid "Tax class"
 msgstr "税级"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:711
+#: gnucash/import-export/qif-imp/qif-file.scm:710
 msgid "Category budget amount"
 msgstr "类别预算金额"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:712
+#: gnucash/import-export/qif-imp/qif-file.scm:711
 msgid "Account budget amount"
 msgstr "科目预算金额"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:713
+#: gnucash/import-export/qif-imp/qif-file.scm:712
 msgid "Credit limit"
 msgstr "信贷限额"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:726
+#: gnucash/import-export/qif-imp/qif-file.scm:725
 msgid "Parsing categories"
 msgstr "解析类别"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:758
+#: gnucash/import-export/qif-imp/qif-file.scm:757
 msgid "Parsing accounts"
 msgstr "解析科目"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:799
+#: gnucash/import-export/qif-imp/qif-file.scm:798
 msgid "Parsing transactions"
 msgstr "解析交易"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:975
+#: gnucash/import-export/qif-imp/qif-file.scm:974
 msgid "Unrecognized or inconsistent format."
 msgstr "无法识别或不一致的格式。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1017
+#: gnucash/import-export/qif-imp/qif-file.scm:1016
 msgid "Parsing failed."
 msgstr "语法分析失败。"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1058
+#: gnucash/import-export/qif-imp/qif-file.scm:1057
 msgid "Parse ambiguity between formats"
 msgstr "在格式间出现解析歧义"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1060
+#: gnucash/import-export/qif-imp/qif-file.scm:1059
 #, fuzzy, scheme-format
 msgid "Value '~a' could be ~a or ~a."
 msgstr "值“%s”可能是“%s”或“%s”。"
@@ -24899,7 +24900,7 @@ msgstr "完全无视任何深度大于深度限制的任何科目"
 msgid "For Period Covering ~a to ~a"
 msgstr "于覆盖 %s 至 %s 的会计期间"
 
-#: gnucash/report/reports/standard/account-summary.scm:410
+#: gnucash/report/reports/standard/account-summary.scm:411
 msgid "Account title"
 msgstr "科目名称"
 
@@ -30498,7 +30499,7 @@ msgid "Numeric error"
 msgstr "数字错误"
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
-#. * They might appear in their editor or in "Since last run".
+#. They might appear in their editor or in "Since last run".
 #: libgnucash/app-utils/gnc-sx-instance-model.c:990
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
@@ -30539,14 +30540,14 @@ msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr "发现多种可能性，无法确定分册。"
 
 #. Translators: This and the following strings appear on
-#. * the account tab if the Tax Info column is displayed,
-#. * i.e. if the user wants to record the tax form number
-#. * and location on that tax form which corresponds to this
-#. * gnucash account. For the US Income Tax support in
-#. * gnucash, each tax code that can be assigned to an
-#. * account generally corresponds to a specific line number
-#. * on a paper form and each form has a unique
-#. * identification (e.g., Form 1040, Schedule A).
+#. the account tab if the Tax Info column is displayed,
+#. i.e. if the user wants to record the tax form number
+#. and location on that tax form which corresponds to this
+#. gnucash account. For the US Income Tax support in
+#. gnucash, each tax code that can be assigned to an
+#. account generally corresponds to a specific line number
+#. on a paper form and each form has a unique
+#. identification (e.g., Form 1040, Schedule A).
 #: libgnucash/app-utils/gnc-ui-util.c:634
 msgid "Tax-related but has no tax code"
 msgstr "与税务相关但是没有税代码"
@@ -30949,7 +30950,7 @@ msgid "last %s"
 msgstr "上%s"
 
 #. Translators: %s is the string 1st, 2nd, 3rd and so on, and
-#. * %s is an already-localized form of the day of the week.
+#. %s is an already-localized form of the day of the week.
 #: libgnucash/engine/Recurrence.c:675
 #, c-format
 msgid "%s %s"

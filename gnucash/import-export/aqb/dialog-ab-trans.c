@@ -365,15 +365,15 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     case SEPA_TRANSFER:
         gtk_label_set_text(GTK_LABEL (heading_label),
                            /* Translators: Strings from this file are
-                             * needed only in countries that have one of
-                             * aqbanking's Online Banking techniques
-                             * available. This is 'OFX DirectConnect'
-                             * (U.S. and others), 'HBCI' (Germany),
-                             * or 'YellowNet' (Switzerland). If none of
-                             * these techniques are available in your
-                             * country, you may safely ignore strings
-                             * from the import-export/hbci
-                             * subdirectory. */
+                              needed only in countries that have one of
+                              aqbanking's Online Banking techniques
+                              available. This is 'OFX DirectConnect'
+                              (U.S. and others), 'HBCI' (Germany),
+                              or 'YellowNet' (Switzerland). If none of
+                              these techniques are available in your
+                              country, you may safely ignore strings
+                              from the import-export/hbci
+                              subdirectory. */
                            _("Enter a SEPA Online Transfer"));
         gtk_label_set_text(GTK_LABEL(recp_account_heading),
                            _("Recipient IBAN (International Account Number)"));

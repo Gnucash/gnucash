@@ -275,13 +275,13 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
     },
     {
         "EditTaxOptionsAction", NULL,
-        /* Translators: remember to reuse this *
-         * translation in dialog-account.glade */
+        /* Translators: remember to reuse this
+           translation in dialog-account.glade */
         N_("Ta_x Report Options"), NULL,
-        /* Translators: currently implemented are *
-         * US: income tax and                     *
-         * DE: VAT                                *
-         * So adjust this string                  */
+        /* Translators: currently implemented are
+           US: income tax and
+           DE: VAT
+           So adjust this string                  */
         N_("Setup relevant accounts for tax reports, e.g. US income tax"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_tax_options)
     },
@@ -1808,10 +1808,10 @@ void do_delete_account (Account* account, Account* saa, Account* sta, Account* t
     GList *acct_list, *ptr;
     const GncGUID *guid;
     gchar guidstr[GUID_ENCODING_LENGTH+1];
-    
+
     gnc_set_busy_cursor(NULL, TRUE);
     gnc_suspend_gui_refresh ();
-    
+
     /* Move subaccounts and transactions if this was requested */
     xaccAccountBeginEdit (account);
     if (saa)
@@ -1836,7 +1836,7 @@ void do_delete_account (Account* account, Account* saa, Account* sta, Account* t
         xaccAccountMoveAllSplits (account, ta);
     }
     xaccAccountCommitEdit (account);
-    
+
     /* Drop all references from the state file for
      * any subaccount the account still has
      */
@@ -1848,13 +1848,13 @@ void do_delete_account (Account* account, Account* saa, Account* sta, Account* t
         gnc_state_drop_sections_for (guidstr);
     }
     g_list_free(acct_list);
-    
+
     /* Drop all references from the state file for this account
      */
     guid = xaccAccountGetGUID (account);
     guid_to_string_buff (guid, guidstr);
     gnc_state_drop_sections_for (guidstr);
-    
+
     /*
      * Finally, delete the account, any subaccounts it may still
      * have, and any splits it or its subaccounts may still have.
