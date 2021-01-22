@@ -16,17 +16,18 @@
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Christopher Lam <christopher.lck@gmail.com>, 2020.
 # Laurent DÉRÉDEC <images-ld@gmx.fr>, 2021.
+# Julien Humbert <julroy67@gmail.com>, 2021.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-20 03:31+0100\n"
-"PO-Revision-Date: 2021-01-15 23:32+0000\n"
-"Last-Translator: Laurent DÉRÉDEC <images-ld@gmx.fr>\n"
+"PO-Revision-Date: 2021-01-22 04:32+0000\n"
+"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -3202,7 +3203,7 @@ msgstr "utilisateur"
 #: gnucash/gtkbuilder/dialog-print-check.glade:293
 #: gnucash/gtkbuilder/gnc-date-format.glade:30
 msgid "Custom"
-msgstr "Personnaliser"
+msgstr "Personnalisé"
 
 # messages-i18n.c:342 po/guile_strings.txt:252
 #: gnucash/gnome/dialog-print-check.c:2602
