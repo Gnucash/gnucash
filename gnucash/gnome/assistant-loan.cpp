@@ -761,7 +761,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                 /* Add payment checkbox. */
 
                 /* Translators: %s is "Taxes",
-                 * "Insurance", or similar. */
+                   "Insurance", or similar. */
                 g_string_printf( str, _("... pay \"%s\"?"),
                                  rouid->optData->name );
                 rouid->optCb =
