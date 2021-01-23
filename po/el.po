@@ -30,26 +30,27 @@
 #
 # Nikos Charonitakis <nikosx@gmail.com>, 2002, 2003, 2004, 2005, 2006, 2008, 2009, 2010.
 # ta_panta_rei, 2003, 2006.
-#
+# giorgos georgopoulakis <huskyaek@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-22 11:07+0100\n"
-"PO-Revision-Date: 2018-02-20 23:10+0200\n"
-"Last-Translator: Nikolaos Charonitakis <nikosx@gmail.com>\n"
-"Language-Team: Greek <team@gnome.gr>\n"
+"PO-Revision-Date: 2021-01-23 01:32+0000\n"
+"Last-Translator: giorgos georgopoulakis <huskyaek@gmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
+">\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
-msgstr ""
+msgstr "ΟΛΑ ΤΑ ΜΗ-ΝΟΜΙΣΜΑΤΑ"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -199,15 +200,15 @@ msgstr "Κινέζικα Απλοποιημένα (HZ)"
 
 #: borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Κινέζικα απλοποιημένα (Windows-936)"
 
 #: borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr "Κινεζική παραδοσιακή  (Big5)"
+msgstr "Κινεζική παραδοσιακή (Big5)"
 
 #: borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Κινεζική παραδοσιακή (Big5-HKSCS)"
 
 #: borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
@@ -243,11 +244,11 @@ msgstr "Κυριλλική (Windows-1251)"
 
 #: borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Ρώσσικα (CP-866)"
 
 #: borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ουκρανικά (KOI8-U)"
 
 #: borrowed/goffice/go-charmap-sel.c:161
 #, fuzzy
@@ -304,7 +305,7 @@ msgstr "Εβραϊκή (_MacHebrew)"
 
 #: borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr "Εβραϊκή  (Windows-1255)"
+msgstr "Εβραϊκή (Windows-1255)"
 
 #: borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
@@ -352,7 +353,7 @@ msgstr "Ρουμανική (MacRomanian)"
 
 #: borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Ρουμάνικα (ISO-8859-16)"
 
 #: borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
@@ -465,9 +466,8 @@ msgid "Menu"
 msgstr "Μενού"
 
 #: borrowed/goffice/go-optionmenu.c:336
-#, fuzzy
 msgid "The menu of options"
-msgstr "Η επιλογή αριθμού είναι %s."
+msgstr "Το μενου επιλογών"
 
 #: doc/tip_of_the_day.list.c:1
 msgid ""
