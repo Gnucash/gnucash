@@ -14,11 +14,7 @@
 (use-modules (system vm vm))
 
 (define uuid-list
-  (list (cons 'employee "08ae9c2e884b4f9787144f47eacd7f44-old")
-        (cons 'vendor "d7d1e53505ee4b1b82efad9eacedaea0-old")
-        (cons 'customer "c146317be32e4948a561ec7fc89d15c1-old")
-        (cons 'customer-new "c146317be32e4948a561ec7fc89d15c1")
-        (cons 'job "5518ac227e474f47a34439f2d4d049de-old")))
+  (list (cons 'customer-new "c146317be32e4948a561ec7fc89d15c1")))
 
 (setlocale LC_ALL "C")
 
@@ -301,32 +297,6 @@
                                (gnc-dmy2time64 22 06 1980) ;due
                                "inv $3 CN" #t #f))
 
-    ;; (gnc:dump-book) (newline)
-    ;; (gnc:dump-invoices) (newline)
-    (display "customer-report tests:\n")
-    (test-begin "customer-report")
-    (let* ((options (default-testing-options 'customer owner-1 (get-acct "AR-USD")))
-           (sxml (options->sxml 'customer options "customer-report basic")))
-      (test-equal "inv-descriptions"
-        '("inv >90 $11.50" "inv 60-90 $7.50" "inv 30-60 $8.50"
-          "inv >90 payment" "inv >90 payment" "inv <30days $4.00"
-          "inv $200" "inv $200" "inv current $6.75" "inv $3 CN"
-          "$31.75" "$8.00" "$8.00")
-        (sxml-get-row-col sxml #f 5))
-      (test-equal "debit-amounts"
-        '("$11.50" "$7.50" "$8.50" "$4.00" "$200.00" "$6.75")
-        (sxml-get-row-col sxml #f 6))
-      (test-equal "crebit-amounts"
-        '("-$1.50" "-$2.00" "-$200.00" "-$3.00")
-        (sxml-get-row-col sxml #f 7))
-      ;; from the report, find the 3rd table, last row, find embedded
-      ;; table, retrieve tr contents
-      (test-equal "aging-table"
-        '("$6.75" "$1.00" "$8.50" "$7.50" "$8.00")
-        ((sxpath `(// (table 3) // (tr -1) // table // tbody // tr // *text*))
-         sxml)))
-    (test-end "customer-report")
-
     (display "new-owner-report tests:\n")
     (test-begin "new-customer-report")
     (let* ((options (default-testing-options 'customer-new
@@ -371,29 +341,4 @@
         '("$0.00" "$6.75" "$1.00" "$8.50" "$7.50" "$8.00" "$31.75")
         ((sxpath `(// (table 3) // (tr -1) // table // tbody // tr // *text*))
          sxml)))
-    (test-end "new-customer-report")
-
-    (display "job-report tests:\n")
-    ;; inv for job
-    (let ((inv-2-copy (gncInvoiceCopy inv-2)))
-      (gncInvoiceAddEntry inv-2-copy (entry 25/4))
-      (gncInvoicePostToAccount inv-2-copy
-                               (get-acct "AR-USD")         ;post-to acc
-                               (gnc-dmy2time64 13 05 1980) ;posted
-                               (gnc-dmy2time64 18 06 1980) ;due
-                               "inv for job" #t #f)
-      (gncInvoiceApplyPayment
-       inv-2-copy '() (get-acct "Bank-USD") 25/4 1
-       (gnc-dmy2time64 18 06 1980)
-       "inv for job" "fully paid"))
-
-    (test-begin "job-report")
-    (let* ((options (default-testing-options 'job owner-2 (get-acct "AR-USD")))
-           (sxml (options->sxml 'job options "job-report basic")))
-      (test-equal "inv-descriptions"
-        '("inv for job" "inv for job")
-        (sxml-get-row-col sxml #f 5))
-      (test-equal "amounts"
-        '("$6.25" "-$6.25")
-        (sxml-get-row-col sxml #f 6)))
-    (test-end "job-report")))
+    (test-end "new-customer-report")))

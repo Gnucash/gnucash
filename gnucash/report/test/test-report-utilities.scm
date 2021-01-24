@@ -383,30 +383,6 @@
                                              (gnc-dmy2time64 01 01 2001)
                                              #t)))
 
-      (test-equal "gnc:accounts-get-comm-total-profit"
-        '(("GBP" . 612) ("USD" . 2389))
-        (collector->list
-         (gnc:accounts-get-comm-total-profit all-accounts
-                                             (lambda (acct)
-                                               (gnc:account-get-comm-balance-at-date
-                                                acct (gnc-dmy2time64 01 01 2001) #f)))))
-
-      (test-equal "gnc:accounts-get-comm-total-income"
-        '(("GBP" . 612) ("USD" . 2573))
-        (collector->list
-         (gnc:accounts-get-comm-total-income all-accounts
-                                             (lambda (acct)
-                                               (gnc:account-get-comm-balance-at-date
-                                                acct (gnc-dmy2time64 01 01 2001) #f)))))
-
-      (test-equal "gnc:accounts-get-comm-total-expense"
-        '(("USD" . -184))
-        (collector->list
-         (gnc:accounts-get-comm-total-expense all-accounts
-                                              (lambda (acct)
-                                                (gnc:account-get-comm-balance-at-date
-                                                 acct (gnc-dmy2time64 01 01 2001) #f)))))
-
       (test-equal "gnc:accounts-get-comm-total-assets"
         '(("GBP" . 608) ("USD" . 2394))
         (collector->list

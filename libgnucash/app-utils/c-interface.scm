@@ -26,7 +26,6 @@
 (export gnc:apply-with-error-handling)
 (export gnc:eval-string-with-error-handling)
 (export gnc:backtrace-if-exception)
-(export gnc:last-captured-error)
 
 (define (gnc:call-with-error-handling cmd args)
   (let ((captured-stack #f)
@@ -78,22 +77,5 @@
     ((result #f) result)
     ((_ captured-error)
      (display captured-error (current-error-port))
-     ;; the next line will be removed in 5.x - deprecated
-     (set! gnc:last-captured-error (gnc:html-string-sanitize captured-error))
      (when (defined? 'gnc:warn) (gnc:warn captured-error))
      #f)))
-
-(define gnc:last-captured-error "")     ;deprecate - remove in 5.x
-
-;; This database can be used to store and retrieve translatable
-;; strings. Strings that are returned by the lookup function are
-;; translated with gettext.
-(define (gnc:make-string-database)
-  (define string-hash (make-hash-table))
-  (issue-deprecation-warning "gnc:make-string-database is deprecated. It \
-will be removed in GnuCash 5.x")
-  (lambda args
-    (match args
-      (('lookup key) (G_ (hash-ref string-hash key)))
-      (('store key string) (hash-set! string-hash key string))
-      (_ (gnc:warn "string-database: bad action")))))

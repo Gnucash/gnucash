@@ -124,26 +124,6 @@
 (define (gnc:substring-replace s1 s2 s3)
   (string-replace-substring s1 s2 s3))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  gnc:substring-replace-from-to
-;;  same as gnc:substring-replace extended by:
-;;  start: from which occurrence onwards the replacement shall start
-;;  end-after: max. number times the replacement should executed
-;;
-;;  Example: (gnc:substring-replace-from-to "foobarfoobarfoobar" "bar" "xyz" 2 1)
-;;           returns "foobarfooxyzfoobar".
-;;
-;; start=1 and end-after<=0 will call gnc:substring-replace (replace all)
-;; start>1 and end-after<=0 will the replace from "start" until end of file
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define (gnc:substring-replace-from-to s1 s2 s3 start end-after)
-  (issue-deprecation-warning "gnc:substring-replace-from-to is deprecated in 4.x.")
-  (string-replace-substring
-   s1 s2 s3 0 (string-length s1) (max 0 (1- start))
-   (and (positive? end-after) (+ (max 0 (1- start)) (1- end-after)))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; function to sanitize strings. the resulting string can be safely
 ;; added to html.

@@ -34,35 +34,6 @@
     "fooxyzfooxyz"
     (gnc:substring-replace "foobarfoobar" "bar" "xyz"))
 
-  ;; note the following 2 tests illustrate code behaviour: start from
-  ;; 2nd matched substring, and perform either 2 or 1 substitution.
-  (test-equal "gnc:substring-replace-from-to ... ... 2 2"
-    "foobarfooxyzfooxyz"
-    (gnc:substring-replace-from-to "foobarfoobarfoobar" "bar" "xyz" 2 2))
-
-  (test-equal "gnc:substring-replace-from-to ... ... 2 1"
-    "foobarfooxyzfoobar"
-    (gnc:substring-replace-from-to "foobarfoobarfoobar" "bar" "xyz" 2 1))
-
-  ;; comprehensive test suite for gnc:substring-replace-from-to:
-  (test-equal "gnc:substring-replace-from-to ... ... 2 1"
-    "foo xxx foo foo foo foo foo foo"
-    (gnc:substring-replace-from-to
-     "foo foo foo foo foo foo foo foo"
-     "foo" "xxx" 2 1))
-
-  (test-equal "gnc:substring-replace-from-to ... ... 1 1"
-    "xxx foo foo foo foo foo foo foo"
-    (gnc:substring-replace-from-to
-     "foo foo foo foo foo foo foo foo"
-     "foo" "xxx" 1 1))
-
-  (test-equal "gnc:substring-replace-from-to ... ... 4 -1"
-    "foo foo foo xxx xxx xxx xxx xxx"
-    (gnc:substring-replace-from-to
-     "foo foo foo foo foo foo foo foo"
-     "foo" "xxx" 4 -1))
-
   (test-end "substring-replace"))
 
 (define (test-sort-and-delete-duplicates)
