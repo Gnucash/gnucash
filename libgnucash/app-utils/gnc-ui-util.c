@@ -975,6 +975,7 @@ gnc_find_or_create_equity_account (Account *root,
     g_return_val_if_fail (equity_type < NUM_EQUITY_TYPES, NULL);
     g_return_val_if_fail (currency != NULL, NULL);
     g_return_val_if_fail (root != NULL, NULL);
+    g_return_val_if_fail (gnc_commodity_is_currency(currency), NULL);
 
     use_eq_op_feature = equity_type == EQUITY_OPENING_BALANCE && gnc_using_equity_type_opening_balance_account (gnc_get_current_book ());
 
@@ -1077,16 +1078,19 @@ gnc_account_create_opening_balance (Account *account,
     Account *equity_account;
     Transaction *trans;
     Split *split;
+    gnc_commodity *commodity;
 
     if (gnc_numeric_zero_p (balance))
         return TRUE;
 
     g_return_val_if_fail (account != NULL, FALSE);
+    commodity = xaccAccountGetCommodity (account);
+    g_return_val_if_fail (gnc_commodity_is_currency (commodity), FALSE);
 
     equity_account =
         gnc_find_or_create_equity_account (gnc_account_get_root(account),
                                            EQUITY_OPENING_BALANCE,
-                                           xaccAccountGetCommodity (account));
+                                           commodity);
     if (!equity_account)
         return FALSE;
 
