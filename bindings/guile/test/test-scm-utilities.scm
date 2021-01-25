@@ -7,24 +7,11 @@
 (define (run-test)
   (test-runner-factory gnc:test-runner)
   (test-begin "test-scm-utilities.scm")
-  (test-traverse-vec)
   (test-substring-replace)
   (test-sort-and-delete-duplicates)
   (test-gnc:html-string-sanitize)
   (test-gnc:list-flatten)
   (test-end "test-scm-utilities.scm"))
-
-(define (test-traverse-vec)
-  (test-begin "traverse-vec")
-  (test-equal "list->vec"
-    (vector 1 (vector 2 3))
-    (traverse-list->vec
-     (list 1 (list 2 3))))
-  (test-equal "vec->list"
-    (list 1 (list 2 3))
-    (traverse-vec->list
-     (vector 1 (vector 2 3))))
-  (test-end "traverse-vec"))
 
 (define (test-substring-replace)
   (test-begin "substring-replace")

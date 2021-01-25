@@ -32,8 +32,6 @@
 (export addto!)
 (export sort-and-delete-duplicates)
 (export gnc:list-flatten)
-(export traverse-list->vec)
-(export traverse-vec->list)
 (export gnc:substring-replace-from-to)
 (export gnc:substring-replace)
 (export gnc:html-string-sanitize)
@@ -66,22 +64,6 @@
 (define-syntax-rule (addto! alist element)
   (set! alist (cons element alist)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; pair of utility functions for use with guile-json which requires
-;; lists converted vectors to save as json arrays. traverse list
-;; converting into vectors, and vice versa.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define (traverse-list->vec lst)
-  (issue-deprecation-warning "traverse-list->vec unused.")
-  (cond
-   ((list? lst) (list->vector (map traverse-list->vec lst)))
-   (else lst)))
-
-(define (traverse-vec->list vec)
-  (issue-deprecation-warning "traverse-vec->list unused.")
-  (cond
-   ((vector? vec) (map traverse-vec->list (vector->list vec)))
-   (else vec)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; general and efficent string-replace-substring function, based on
