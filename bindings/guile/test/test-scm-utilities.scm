@@ -12,7 +12,7 @@
   (test-sort-and-delete-duplicates)
   (test-gnc:html-string-sanitize)
   (test-gnc:list-flatten)
-  (test-begin "test-scm-utilities.scm"))
+  (test-end "test-scm-utilities.scm"))
 
 (define (test-traverse-vec)
   (test-begin "traverse-vec")
