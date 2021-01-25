@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.7.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-22 10:21+0100\n"
+"POT-Creation-Date: 2021-01-22 11:07+0100\n"
 "PO-Revision-Date: 2021-01-18 10:32+0000\n"
 "Last-Translator: Val Saven <val.saven@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -1332,7 +1332,7 @@ msgstr "Удалить товар?"
 #: gnucash/gnome-utils/dialog-options.c:224
 #: gnucash/gnome-utils/dialog-tax-table.c:603
 #: gnucash/gnome-utils/gnc-file.c:118 gnucash/gnome-utils/gnc-file.c:366
-#: gnucash/gnome-utils/gnc-file.c:664 gnucash/gnome-utils/gnc-gui-query.c:300
+#: gnucash/gnome-utils/gnc-file.c:663 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-main-window.c:1307
 #: gnucash/gnome-utils/gnc-main-window.c:1448
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:886
@@ -2619,7 +2619,7 @@ msgstr "Найти операцию"
 #: gnucash/gnome/gnc-plugin-page-budget.c:208
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1140
+#: gnucash/gnome-utils/gnc-file.c:1139
 msgid "Open"
 msgstr "Открыть"
 
@@ -3426,7 +3426,7 @@ msgid "Open an existing GnuCash file"
 msgstr "Открыть существующий файл GnuCash"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:121
-#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
+#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:665
 #: gnucash/gnome-utils/gnc-main-window.c:1308
 #: gnucash/html/gnc-html-webkit1.c:1198
 msgid "_Save"
@@ -6131,7 +6131,7 @@ msgid "You cannot save to that file."
 msgstr "Вы не можете сохранять в этот файл."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1610
-#: gnucash/gnome-utils/gnc-file.c:1320 gnucash/gnome-utils/gnc-file.c:1567
+#: gnucash/gnome-utils/gnc-file.c:1319 gnucash/gnome-utils/gnc-file.c:1566
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:741
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -7419,7 +7419,7 @@ msgid "There was an error parsing the file."
 msgstr "Произошла ошибка обработки файла."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1409 gnucash/gnome-utils/gnc-file.c:1648
+#: gnucash/gnome-utils/gnc-file.c:1408 gnucash/gnome-utils/gnc-file.c:1647
 msgid "Writing file..."
 msgstr "Запись файла..."
 
@@ -8286,7 +8286,7 @@ msgid "Import"
 msgstr "Импорт"
 
 #: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:343
-#: gnucash/gnome-utils/gnc-file.c:1194 gnucash/gnome-utils/gnc-file.c:1466
+#: gnucash/gnome-utils/gnc-file.c:1193 gnucash/gnome-utils/gnc-file.c:1465
 msgid "Save"
 msgstr "_Сохранить"
 
@@ -8481,8 +8481,7 @@ msgstr "Нет прав на чтение файла \"%s\"."
 
 #. Translators: the first %s is a path in the filesystem,
 #. the second %s is PACKAGE_NAME, which by default is "GnuCash"
-#.
-#: gnucash/gnome-utils/gnc-file.c:481
+#: gnucash/gnome-utils/gnc-file.c:480
 #, c-format
 msgid ""
 "You attempted to save in\n"
@@ -8499,7 +8498,7 @@ msgstr ""
 "\n"
 "Следует выбрать другой каталог."
 
-#: gnucash/gnome-utils/gnc-file.c:488
+#: gnucash/gnome-utils/gnc-file.c:487
 msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
@@ -8507,7 +8506,7 @@ msgstr ""
 "Эта база данных от более ранней версии GnuCash. Нажмите ОК для обновления "
 "базы или Отмену, чтобы отметить её только для чтения."
 
-#: gnucash/gnome-utils/gnc-file.c:497
+#: gnucash/gnome-utils/gnc-file.c:496
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do File-"
@@ -8518,7 +8517,7 @@ msgstr ""
 "будет сохранена под другим именем, тем не менее при записи старой версией "
 "части данных может быть утеряна."
 
-#: gnucash/gnome-utils/gnc-file.c:506
+#: gnucash/gnome-utils/gnc-file.c:505
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
@@ -8529,7 +8528,7 @@ msgstr ""
 "нет других пользователей, то обратитесь к документации, чтобы понять как "
 "очистить информацию об открытых сессиях."
 
-#: gnucash/gnome-utils/gnc-file.c:516
+#: gnucash/gnome-utils/gnc-file.c:515
 #, fuzzy
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
@@ -8544,7 +8543,7 @@ msgstr ""
 "исправлено установкой другой версии \"libdbi\". По ссылке https://bugzilla."
 "gnome.org/show_bug.cgi?id=611936 можно узнать подробности."
 
-#: gnucash/gnome-utils/gnc-file.c:528
+#: gnucash/gnome-utils/gnc-file.c:527
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
@@ -8556,7 +8555,7 @@ msgstr ""
 "правами доступа в вашей SQL БД. Более подробную информацию смотрите на "
 "странице https://bugs.gnucash.org/show_bug.cgi?id=645216."
 
-#: gnucash/gnome-utils/gnc-file.c:538
+#: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
 "This file is from an older version of GnuCash and will be upgraded when "
 "saved by this version. You will not be able to read the saved file from the "
@@ -8568,16 +8567,16 @@ msgstr ""
 "версии (она выдаст ошибку \"ошибка при обработке файла\"). Если вы хотите "
 "сохранить совместимость со старой версией, выйдите без сохранения."
 
-#: gnucash/gnome-utils/gnc-file.c:549
+#: gnucash/gnome-utils/gnc-file.c:548
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
 msgstr "Произошла неизвестная ошибка ввода-вывода (%d)."
 
-#: gnucash/gnome-utils/gnc-file.c:643
+#: gnucash/gnome-utils/gnc-file.c:642
 msgid "Save changes to the file?"
 msgstr "Сохранить изменения в файл?"
 
-#: gnucash/gnome-utils/gnc-file.c:656
+#: gnucash/gnome-utils/gnc-file.c:655
 #: gnucash/gnome-utils/gnc-main-window.c:1301
 #, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
@@ -8590,16 +8589,16 @@ msgstr[1] ""
 msgstr[2] ""
 "Если вы не сохранитесь, изменения за последние %d минут будут потеряны."
 
-#: gnucash/gnome-utils/gnc-file.c:660
+#: gnucash/gnome-utils/gnc-file.c:659
 msgid "Continue _Without Saving"
 msgstr "Продолжить _без сохранения"
 
-#: gnucash/gnome-utils/gnc-file.c:822
+#: gnucash/gnome-utils/gnc-file.c:821
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GnuCash не может заблокировать \"%s\"."
 
-#: gnucash/gnome-utils/gnc-file.c:824
+#: gnucash/gnome-utils/gnc-file.c:823
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
@@ -8607,7 +8606,7 @@ msgstr ""
 "Открываемый файл (база данных) может использоваться другим пользователем, в "
 "этом случае вы не должны его открывать. Продолжить?"
 
-#: gnucash/gnome-utils/gnc-file.c:827
+#: gnucash/gnome-utils/gnc-file.c:826
 #, fuzzy
 msgid ""
 "That database may be on a read-only file system, you may not have write "
@@ -8619,44 +8618,44 @@ msgstr ""
 "чтения, или у вас нет прав на запись на папку. Если вы продолжите, то не "
 "сможете сохранить изменения. Продолжить?"
 
-#: gnucash/gnome-utils/gnc-file.c:850
+#: gnucash/gnome-utils/gnc-file.c:849
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
 msgstr "Открыть только для _чтения"
 
-#: gnucash/gnome-utils/gnc-file.c:853
+#: gnucash/gnome-utils/gnc-file.c:852
 #, fuzzy
 #| msgid "_Create New File"
 msgid "Create _New File"
 msgstr "_Создать новый файл"
 
-#: gnucash/gnome-utils/gnc-file.c:856
+#: gnucash/gnome-utils/gnc-file.c:855
 msgid "Open _Anyway"
 msgstr "Всё равно _открыть"
 
-#: gnucash/gnome-utils/gnc-file.c:859
+#: gnucash/gnome-utils/gnc-file.c:858
 #, fuzzy
 #| msgid "placeholder"
 msgid "Open _Folder"
 msgstr "виртуальный"
 
-#: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:310
+#: gnucash/gnome-utils/gnc-file.c:864 gnucash/gnome-utils/gnc-main-window.c:310
 msgid "_Quit"
 msgstr "В_ыход"
 
-#: gnucash/gnome-utils/gnc-file.c:951 gnucash/gnome-utils/gnc-file.c:971
+#: gnucash/gnome-utils/gnc-file.c:950 gnucash/gnome-utils/gnc-file.c:970
 msgid "Loading user data..."
 msgstr "Загружаются данные..."
 
-#: gnucash/gnome-utils/gnc-file.c:987
+#: gnucash/gnome-utils/gnc-file.c:986
 msgid "Re-saving user data..."
 msgstr "Пересохраняются данные..."
 
-#: gnucash/gnome-utils/gnc-file.c:1349
+#: gnucash/gnome-utils/gnc-file.c:1348
 msgid "Exporting file..."
 msgstr "Экспорт файла..."
 
-#: gnucash/gnome-utils/gnc-file.c:1362
+#: gnucash/gnome-utils/gnc-file.c:1361
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -8667,7 +8666,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome-utils/gnc-file.c:1397
+#: gnucash/gnome-utils/gnc-file.c:1396
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
@@ -8675,7 +8674,7 @@ msgstr ""
 "База данных была открыта только для чтения. Вы хотите сохранить её в другое "
 "место?"
 
-#: gnucash/gnome-utils/gnc-file.c:1692
+#: gnucash/gnome-utils/gnc-file.c:1691
 #, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
@@ -8684,7 +8683,7 @@ msgstr ""
 "Возврат отменит все несохранённые изменения в %s. Вы уверены, что хотите "
 "продолжить?"
 
-#: gnucash/gnome-utils/gnc-file.c:1700
+#: gnucash/gnome-utils/gnc-file.c:1699
 #: gnucash/gnome-utils/gnc-main-window.c:1269
 msgid "<unknown>"
 msgstr "<неизвестно>"
@@ -9241,7 +9240,7 @@ msgstr ""
 "проводок, установленную в настройках для этой книги. Эта настройка может "
 "быть изменена в меню Файл->Свойства->Счета."
 
-#. Translators: This message will be presented when a use
+#. Translators: This message will be presented when a user
 #. attempts to record a transaction without splits
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1723
 msgid "Not enough information for Blank Transaction?"

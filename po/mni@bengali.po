@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-22 10:21+0100\n"
+"POT-Creation-Date: 2021-01-22 11:07+0100\n"
 "PO-Revision-Date: 2014-08-19 15:04+0530\n"
 "Last-Translator: Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>\n"
 "Language-Team: Manipuri (Bengali Script) <gistlrc@gmail.com>\n"
@@ -1328,7 +1328,7 @@ msgstr "কমোদিতি মুত্থৎকদ্রা?"
 #: gnucash/gnome-utils/dialog-options.c:224
 #: gnucash/gnome-utils/dialog-tax-table.c:603
 #: gnucash/gnome-utils/gnc-file.c:118 gnucash/gnome-utils/gnc-file.c:366
-#: gnucash/gnome-utils/gnc-file.c:664 gnucash/gnome-utils/gnc-gui-query.c:300
+#: gnucash/gnome-utils/gnc-file.c:663 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-main-window.c:1307
 #: gnucash/gnome-utils/gnc-main-window.c:1448
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:886
@@ -2634,7 +2634,7 @@ msgstr "থবক থিদোকউ"
 #: gnucash/gnome/gnc-plugin-page-budget.c:208
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1140
+#: gnucash/gnome-utils/gnc-file.c:1139
 msgid "Open"
 msgstr "হাংদোকপা"
 
@@ -3447,7 +3447,7 @@ msgid "Open an existing GnuCash file"
 msgstr "লৈরিবা GnuCash ফাইল হাংদোকউ"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:121
-#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
+#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:665
 #: gnucash/gnome-utils/gnc-main-window.c:1308
 #: gnucash/html/gnc-html-webkit1.c:1198
 msgid "_Save"
@@ -6159,7 +6159,7 @@ msgid "You cannot save to that file."
 msgstr "অদোম্না ফাইল অদুদা সেভ তৌবা য়াদে."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1610
-#: gnucash/gnome-utils/gnc-file.c:1320 gnucash/gnome-utils/gnc-file.c:1567
+#: gnucash/gnome-utils/gnc-file.c:1319 gnucash/gnome-utils/gnc-file.c:1566
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:741
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -7446,7 +7446,7 @@ msgid "There was an error parsing the file."
 msgstr "ফাইল পার্সিং তৌবদা অশোয়বা অমা থোক্লে"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1409 gnucash/gnome-utils/gnc-file.c:1648
+#: gnucash/gnome-utils/gnc-file.c:1408 gnucash/gnome-utils/gnc-file.c:1647
 msgid "Writing file..."
 msgstr "ফাইল ইরি..."
 
@@ -8296,7 +8296,7 @@ msgid "Import"
 msgstr "পুশিল্লকপা"
 
 #: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:343
-#: gnucash/gnome-utils/gnc-file.c:1194 gnucash/gnome-utils/gnc-file.c:1466
+#: gnucash/gnome-utils/gnc-file.c:1193 gnucash/gnome-utils/gnc-file.c:1465
 msgid "Save"
 msgstr "সেভ তৌবা"
 
@@ -8483,8 +8483,7 @@ msgstr "ফাইল  %s দগী পাননবা পাবগী অয়া�
 
 #. Translators: the first %s is a path in the filesystem,
 #. the second %s is PACKAGE_NAME, which by default is "GnuCash"
-#.
-#: gnucash/gnome-utils/gnc-file.c:481
+#: gnucash/gnome-utils/gnc-file.c:480
 #, c-format
 msgid ""
 "You attempted to save in\n"
@@ -8501,7 +8500,7 @@ msgstr ""
 "\n"
 "চানবীদুনা অতোপ্পা দিরেক্তরি অমদা অমুক হন্না হোৎনবীয়ু।"
 
-#: gnucash/gnome-utils/gnc-file.c:488
+#: gnucash/gnome-utils/gnc-file.c:487
 msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
@@ -8509,7 +8508,7 @@ msgstr ""
 "দাতাবেজ অসি GnuCash গী অরিবা ভর্স অমদগীনি. হৌজিক্কী ভর্সন অসিদা অপগ্রেদ তৌনবা "
 "য়ারে হায়বসি খনবিরো, পাবতমক ওইনা মার্ক তৌনবা ককথৎপা খনবিরো."
 
-#: gnucash/gnome-utils/gnc-file.c:497
+#: gnucash/gnome-utils/gnc-file.c:496
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do File-"
@@ -8519,7 +8518,7 @@ msgstr ""
 "মদুদা সোয়-ঙামদনা সেভ তৌবদি ঙমদে। নহাক্না ফাইল->সেভ এজ তৌদ্রিফাউবা মদু পাবা-খক্তা "
 "হায়না মার্ক তৌগনি, অদুবু অরিবা ভর্সন্দা ইবা মতমদা দেতা মাংখিবা য়াই।"
 
-#: gnucash/gnome-utils/gnc-file.c:506
+#: gnucash/gnome-utils/gnc-file.c:505
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
@@ -8529,7 +8528,7 @@ msgstr ""
 "অপগ্রেদ তৌবা য়ারোই. হৌজিক্কী ওইনা অতোপ্পা শিজিন্নরিবা লৈত্রবদি, ৱাৎলিবা লোগিং "
 "সেসন করম্না তোখথোক্কনি হায়বা খঙনবা দোকুমেন্তেসনদা য়েংবিয়ু"
 
-#: gnucash/gnome-utils/gnc-file.c:516
+#: gnucash/gnome-utils/gnc-file.c:515
 #, fuzzy
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
@@ -8544,7 +8543,7 @@ msgstr ""
 "GnuCash হাংলোই নত্ত্রগা সেভ তৌরোই। চানবীদুনা অহেনবা ইনফোর্মেসনগীদমক https://bugs."
 "gnucash.org/show_bug.cgi?id=611936 য়েংবীয়ু।"
 
-#: gnucash/gnome-utils/gnc-file.c:528
+#: gnucash/gnome-utils/gnc-file.c:527
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
@@ -8556,7 +8555,7 @@ msgstr ""
 "থোকহনবা ওইরম্বা য়াই। চানবীদুনা অহেনবা ইনফোর্মেসনগীদমক্তা https://bugzilla.gnome."
 "org/show_bug.cgi?id=645216 য়েংবীয়ু।"
 
-#: gnucash/gnome-utils/gnc-file.c:538
+#: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
 "This file is from an older version of GnuCash and will be upgraded when "
 "saved by this version. You will not be able to read the saved file from the "
@@ -8568,16 +8567,16 @@ msgstr ""
 "পাবা ঙম্লোই (মসিনা \"ফাইল পার্সিং তৌবদা অসোয়বা\" অমা রিপোর্ত পীগনি)। করিগুম্বা "
 "নহাক্না অরিবা ভর্সন অদু তুংগীদমক থমগে হায়না খল্লবদি, সেভ তৌদনা থোক্লকউ।"
 
-#: gnucash/gnome-utils/gnc-file.c:549
+#: gnucash/gnome-utils/gnc-file.c:548
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
 msgstr "শকখঙদবা I/O অশোয়বা (%d) থোক্লে."
 
-#: gnucash/gnome-utils/gnc-file.c:643
+#: gnucash/gnome-utils/gnc-file.c:642
 msgid "Save changes to the file?"
 msgstr "অহোংবশিংসি ফাইলদা সেভ তৌগদ্রা?"
 
-#: gnucash/gnome-utils/gnc-file.c:656
+#: gnucash/gnome-utils/gnc-file.c:655
 #: gnucash/gnome-utils/gnc-main-window.c:1301
 #, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
@@ -8586,16 +8585,16 @@ msgid_plural ""
 msgstr[0] "অদোম্না সেভ তৌদ্রবদি, হৌখিবা মিনিত %d দগী ওইবা অহোংবশিংদু  হুন্দোকখ্রগনি."
 msgstr[1] "অদোম্না সেভ তৌদ্রবদি, হৌখিবা মিনিত %d দগী ওইবা অহোংবশিংদু  হুন্দোকখ্রগনি."
 
-#: gnucash/gnome-utils/gnc-file.c:660
+#: gnucash/gnome-utils/gnc-file.c:659
 msgid "Continue _Without Saving"
 msgstr "Continue _সেভ তৌদনা মখা চত্থরো"
 
-#: gnucash/gnome-utils/gnc-file.c:822
+#: gnucash/gnome-utils/gnc-file.c:821
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GnuCash না %s গী লোক ফংবা ঙমদে."
 
-#: gnucash/gnome-utils/gnc-file.c:824
+#: gnucash/gnome-utils/gnc-file.c:823
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
@@ -8603,7 +8602,7 @@ msgstr ""
 "দাতাবেজ অদু অতোপ্পা শিজিন্নরিবা অমনা শিজিন্নরিবা মাল্লি, অসিগুম্বা ফিবমদা অদোম্না "
 "দাতাবেজ অসি হাংদোক্লোইদবনি. অদোম করি তৌবা পাম্বিবগে?"
 
-#: gnucash/gnome-utils/gnc-file.c:827
+#: gnucash/gnome-utils/gnc-file.c:826
 #, fuzzy
 msgid ""
 "That database may be on a read-only file system, you may not have write "
@@ -8616,44 +8615,44 @@ msgstr ""
 "অদোম্না করি তৌবা পাম্বিবগে?"
 
 # Considering as "Open (as) Read Only)
-#: gnucash/gnome-utils/gnc-file.c:850
+#: gnucash/gnome-utils/gnc-file.c:849
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
 msgstr "_পাবা-খক্কী ওইনা হাংউ"
 
-#: gnucash/gnome-utils/gnc-file.c:853
+#: gnucash/gnome-utils/gnc-file.c:852
 #, fuzzy
 #| msgid "_Create New File"
 msgid "Create _New File"
 msgstr "অনৌবা ফাইল _শেমগৎলো"
 
-#: gnucash/gnome-utils/gnc-file.c:856
+#: gnucash/gnome-utils/gnc-file.c:855
 msgid "Open _Anyway"
 msgstr "_মওং অমদা হেক্তা হাংউ"
 
-#: gnucash/gnome-utils/gnc-file.c:859
+#: gnucash/gnome-utils/gnc-file.c:858
 #, fuzzy
 #| msgid "placeholder"
 msgid "Open _Folder"
 msgstr "প্লেসহোল্ডর"
 
-#: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:310
+#: gnucash/gnome-utils/gnc-file.c:864 gnucash/gnome-utils/gnc-main-window.c:310
 msgid "_Quit"
 msgstr "_থাদোকপা"
 
-#: gnucash/gnome-utils/gnc-file.c:951 gnucash/gnome-utils/gnc-file.c:971
+#: gnucash/gnome-utils/gnc-file.c:950 gnucash/gnome-utils/gnc-file.c:970
 msgid "Loading user data..."
 msgstr "শিজিন্নরিবগী দাতা লোদ তৌরি..."
 
-#: gnucash/gnome-utils/gnc-file.c:987
+#: gnucash/gnome-utils/gnc-file.c:986
 msgid "Re-saving user data..."
 msgstr "শিজিন্নরিবগী দাতা রি-সেভিং তৌবা..."
 
-#: gnucash/gnome-utils/gnc-file.c:1349
+#: gnucash/gnome-utils/gnc-file.c:1348
 msgid "Exporting file..."
 msgstr "থাদোক্লিবা ফাইল..."
 
-#: gnucash/gnome-utils/gnc-file.c:1362
+#: gnucash/gnome-utils/gnc-file.c:1361
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -8664,21 +8663,21 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome-utils/gnc-file.c:1397
+#: gnucash/gnome-utils/gnc-file.c:1396
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
 msgstr ""
 "দেতাবেজ অদু পাবা-খক্তা হাংখ্রে। নহাক্না মদু তোঙানবা মফম অমদা সেভ তৌবা পাম্ব্রা?"
 
-#: gnucash/gnome-utils/gnc-file.c:1692
+#: gnucash/gnome-utils/gnc-file.c:1691
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed ?"
 msgstr "ফাইল %s অসি হান্না লৈরে. অদোম্না মসি মথক্তা ইশিনবা পাম্মী হায়বসি শোয়দ্রব্রা?"
 
-#: gnucash/gnome-utils/gnc-file.c:1700
+#: gnucash/gnome-utils/gnc-file.c:1699
 #: gnucash/gnome-utils/gnc-main-window.c:1269
 msgid "<unknown>"
 msgstr "<শকখঙদবা>"
@@ -9234,7 +9233,7 @@ msgstr ""
 "হোংদোক-হোংজিন তৌবা য়াই।"
 
 # the word "Blank" can be translated as "অহাংবা" in Manipuri. But, if the same is banking terminology, it may be kept as "ব্লেঙ্ক" also considering the context.
-#. Translators: This message will be presented when a use
+#. Translators: This message will be presented when a user
 #. attempts to record a transaction without splits
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1723
 msgid "Not enough information for Blank Transaction?"

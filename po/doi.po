@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-22 10:21+0100\n"
+"POT-Creation-Date: 2021-01-22 11:07+0100\n"
 "PO-Revision-Date: 2014-04-28 20:16-0500\n"
 "Last-Translator: Chandrakant Dhutadmal <chandrakantd@cdac.in>\n"
 "Language-Team: NONE\n"
@@ -1323,7 +1323,7 @@ msgstr "क्या जिनसा गी म्हेसी दित्त�
 #: gnucash/gnome-utils/dialog-options.c:224
 #: gnucash/gnome-utils/dialog-tax-table.c:603
 #: gnucash/gnome-utils/gnc-file.c:118 gnucash/gnome-utils/gnc-file.c:366
-#: gnucash/gnome-utils/gnc-file.c:664 gnucash/gnome-utils/gnc-gui-query.c:300
+#: gnucash/gnome-utils/gnc-file.c:663 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-main-window.c:1307
 #: gnucash/gnome-utils/gnc-main-window.c:1448
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:886
@@ -2628,7 +2628,7 @@ msgstr "जॉब तुप्पो"
 #: gnucash/gnome/gnc-plugin-page-budget.c:208
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1140
+#: gnucash/gnome-utils/gnc-file.c:1139
 msgid "Open"
 msgstr "खोह्‌ल्लो"
 
@@ -3434,7 +3434,7 @@ msgid "Open an existing GnuCash file"
 msgstr "इक मजूद GnuCash फ़ाइल खोह्‌ल्लो"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:121
-#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
+#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:665
 #: gnucash/gnome-utils/gnc-main-window.c:1308
 #: gnucash/html/gnc-html-webkit1.c:1198
 msgid "_Save"
@@ -6198,7 +6198,7 @@ msgid "You cannot save to that file."
 msgstr " तुस  उस फ़ाइल च बचाइयै नेईं रक्खी सकते. "
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1610
-#: gnucash/gnome-utils/gnc-file.c:1320 gnucash/gnome-utils/gnc-file.c:1567
+#: gnucash/gnome-utils/gnc-file.c:1319 gnucash/gnome-utils/gnc-file.c:1566
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:741
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -7490,7 +7490,7 @@ msgid "There was an error parsing the file."
 msgstr "फ़ाइल दी व्याख्या च कोई गल्ती ही. "
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1409 gnucash/gnome-utils/gnc-file.c:1648
+#: gnucash/gnome-utils/gnc-file.c:1408 gnucash/gnome-utils/gnc-file.c:1647
 msgid "Writing file..."
 msgstr "फ़ाइल लिखी जा करदी ऐ..."
 
@@ -8344,7 +8344,7 @@ msgid "Import"
 msgstr "दरामद करो "
 
 #: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:343
-#: gnucash/gnome-utils/gnc-file.c:1194 gnucash/gnome-utils/gnc-file.c:1466
+#: gnucash/gnome-utils/gnc-file.c:1193 gnucash/gnome-utils/gnc-file.c:1465
 msgid "Save"
 msgstr "बचाइयै रक्खो"
 
@@ -8534,8 +8534,7 @@ msgstr "फ़ाइल %s थमां पढ़ने आस्तै पढ�
 
 #. Translators: the first %s is a path in the filesystem,
 #. the second %s is PACKAGE_NAME, which by default is "GnuCash"
-#.
-#: gnucash/gnome-utils/gnc-file.c:481
+#: gnucash/gnome-utils/gnc-file.c:480
 #, fuzzy, c-format
 msgid ""
 "You attempted to save in\n"
@@ -8553,7 +8552,7 @@ msgstr ""
 "\n"
 "कृपा करियै बक्खरी डायरैक्टरी च दोबारा कोशश करो. "
 
-#: gnucash/gnome-utils/gnc-file.c:488
+#: gnucash/gnome-utils/gnc-file.c:487
 msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
@@ -8561,7 +8560,7 @@ msgstr ""
 " एह्   डैटाबेस GnuCashदे कुसै पराने  सरूप कन्नै सरबंधत  ऐ . इसी चालू  सरूप च अपडेट करने आस्तै "
 "OK चुनो, सिर्फ-पढ़ो दे रूप च चिऱन्नत करने आस्तै रद्द करो चुनो. "
 
-#: gnucash/gnome-utils/gnc-file.c:497
+#: gnucash/gnome-utils/gnc-file.c:496
 #, fuzzy
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
@@ -8572,7 +8571,7 @@ msgstr ""
 "ऐ , पर इस च सुरक्षत तरीके  कन्नै बचाइयै नेईं रक्खी सकदा. इसी सिर्फ-पढ़ो दे रूप च चिऱन्नत "
 "करी दित्ता जाह्‌ग  जिसले तगर  तुस  फ़ाइल->सेव ऐज़ नेईं करते  न . "
 
-#: gnucash/gnome-utils/gnc-file.c:506
+#: gnucash/gnome-utils/gnc-file.c:505
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
@@ -8583,7 +8582,7 @@ msgstr ""
 "नेईं  ऐ , तां नेईं मुक्के दे लाग-इन सत्रें  गी किऱयां ठीक करना ऐ ,  एह्  सिक्खने आस्तै "
 "दस्तावेजीकरण कन्नै  मशबरा करो. "
 
-#: gnucash/gnome-utils/gnc-file.c:516
+#: gnucash/gnome-utils/gnc-file.c:515
 #, fuzzy
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
@@ -8598,7 +8597,7 @@ msgstr ""
 "Gnucash  SQL  डैटाबेसें च खोह्‌लेआ जां बचाइयै नेईं  रक्खेआ  जाह्‌ग. होर मती जानकारी आस्तै कृपा "
 "करियै https://bugs.gnucash.org/show_bug.cgi?id=611936 दिक्खो. "
 
-#: gnucash/gnome-utils/gnc-file.c:528
+#: gnucash/gnome-utils/gnc-file.c:527
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
@@ -8606,7 +8605,7 @@ msgid ""
 "id=645216 for more information."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:538
+#: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
 "This file is from an older version of GnuCash and will be upgraded when "
 "saved by this version. You will not be able to read the saved file from the "
@@ -8614,16 +8613,16 @@ msgid ""
 "you wish to preserve the old version, exit without saving."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:549
+#: gnucash/gnome-utils/gnc-file.c:548
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
 msgstr "इक अनजांती I/O गल्ती (%d) पेश आई. "
 
-#: gnucash/gnome-utils/gnc-file.c:643
+#: gnucash/gnome-utils/gnc-file.c:642
 msgid "Save changes to the file?"
 msgstr "तब्दीलियें  गी फ़ाइल च बचाइयै रक्खो? "
 
-#: gnucash/gnome-utils/gnc-file.c:656
+#: gnucash/gnome-utils/gnc-file.c:655
 #: gnucash/gnome-utils/gnc-main-window.c:1301
 #, fuzzy, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
@@ -8634,16 +8633,16 @@ msgstr[0] ""
 msgstr[1] ""
 " जेकर  तुस  बचाइयै नेईं रखदे, तां पिछले %d मिंटें दियें तब्दीलियें गी खारज करी दित्ता  जाह्‌ग."
 
-#: gnucash/gnome-utils/gnc-file.c:660
+#: gnucash/gnome-utils/gnc-file.c:659
 msgid "Continue _Without Saving"
 msgstr "बचाइयै रक्खे बिजन_जारी रक्खो ."
 
-#: gnucash/gnome-utils/gnc-file.c:822
+#: gnucash/gnome-utils/gnc-file.c:821
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GnuCash %s आस्तै जंदरा हासल नेईं करी सकेआ. "
 
-#: gnucash/gnome-utils/gnc-file.c:824
+#: gnucash/gnome-utils/gnc-file.c:823
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
@@ -8651,7 +8650,7 @@ msgstr ""
 "संभावना ऐ जे कोई होर बरतूनी उस डैटाबेस गी बरता दा ऐ, इस स्थिति च  तुसें  डैटाबेस  गी "
 "खोह्‌लना नेईं चाहिदा. तुस  केह्  करना चाह्‌गेओ? "
 
-#: gnucash/gnome-utils/gnc-file.c:827
+#: gnucash/gnome-utils/gnc-file.c:826
 #, fuzzy
 msgid ""
 "That database may be on a read-only file system, you may not have write "
@@ -8663,44 +8662,44 @@ msgstr ""
 "लिखने  दी     इजाज़त थुआढ़े कोल नेईं  ऐ . जेकर        तुस  प्रक्रिया अग्गें चलांदे ओ तां होई "
 "सकदा ऐ जे तुस तब्दीलियें गी बचाइयै रक्खने च समर्थ नेईं होवो. तुस  केह्  करना चाह्‌गेओ?"
 
-#: gnucash/gnome-utils/gnc-file.c:850
+#: gnucash/gnome-utils/gnc-file.c:849
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:853
+#: gnucash/gnome-utils/gnc-file.c:852
 #, fuzzy
 #| msgid "_Create New File"
 msgid "Create _New File"
 msgstr "_नमीं फ़ाइल बनाओ"
 
-#: gnucash/gnome-utils/gnc-file.c:856
+#: gnucash/gnome-utils/gnc-file.c:855
 #, fuzzy
 msgid "Open _Anyway"
 msgstr "_फ्ही बी खोह्‌ल्लो "
 
-#: gnucash/gnome-utils/gnc-file.c:859
+#: gnucash/gnome-utils/gnc-file.c:858
 #, fuzzy
 msgid "Open _Folder"
 msgstr "प्लेसहोल्डर "
 
-#: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:310
+#: gnucash/gnome-utils/gnc-file.c:864 gnucash/gnome-utils/gnc-main-window.c:310
 msgid "_Quit"
 msgstr "_छोड़ी देओ "
 
-#: gnucash/gnome-utils/gnc-file.c:951 gnucash/gnome-utils/gnc-file.c:971
+#: gnucash/gnome-utils/gnc-file.c:950 gnucash/gnome-utils/gnc-file.c:970
 msgid "Loading user data..."
 msgstr "बरतूनीदा डैटा लोड होआ दा  ऐ ... "
 
-#: gnucash/gnome-utils/gnc-file.c:987
+#: gnucash/gnome-utils/gnc-file.c:986
 msgid "Re-saving user data..."
 msgstr "बरतूनी दा डैटा  परतियै बचाइयै रक्खेआ  जा दा  ऐ ... "
 
-#: gnucash/gnome-utils/gnc-file.c:1349
+#: gnucash/gnome-utils/gnc-file.c:1348
 msgid "Exporting file..."
 msgstr "फ़ाइल बरामद कीती जा करदी  ऐ ... "
 
-#: gnucash/gnome-utils/gnc-file.c:1362
+#: gnucash/gnome-utils/gnc-file.c:1361
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -8711,21 +8710,21 @@ msgstr ""
 "\n"
 "%s "
 
-#: gnucash/gnome-utils/gnc-file.c:1397
+#: gnucash/gnome-utils/gnc-file.c:1396
 #, fuzzy
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
 msgstr "इऱयां लगदा  ऐ  जे  डैटाबेस %s मजूद नेईं  ऐ . क्या  तुस  इसी बनाना चांह्‌दे ओ  ? "
 
-#: gnucash/gnome-utils/gnc-file.c:1692
+#: gnucash/gnome-utils/gnc-file.c:1691
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed ?"
 msgstr "फ़ाइल %s पैह्‌लें थमां  मजूद  ऐ . क्या  तुस  सच्चें गै इसी ओवर-राइट करना चांह्‌दे ओ ? "
 
-#: gnucash/gnome-utils/gnc-file.c:1700
+#: gnucash/gnome-utils/gnc-file.c:1699
 #: gnucash/gnome-utils/gnc-main-window.c:1269
 msgid "<unknown>"
 msgstr "<अनजांता> "
@@ -9278,7 +9277,7 @@ msgid ""
 ">Properties->Accounts."
 msgstr ""
 
-#. Translators: This message will be presented when a use
+#. Translators: This message will be presented when a user
 #. attempts to record a transaction without splits
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1723
 #, fuzzy

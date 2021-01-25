@@ -72,11 +72,13 @@
 ;; converting into vectors, and vice versa.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (traverse-list->vec lst)
+  (issue-deprecation-warning "traverse-list->vec unused.")
   (cond
    ((list? lst) (list->vector (map traverse-list->vec lst)))
    (else lst)))
 
 (define (traverse-vec->list vec)
+  (issue-deprecation-warning "traverse-vec->list unused.")
   (cond
    ((vector? vec) (map traverse-vec->list (vector->list vec)))
    (else vec)))
