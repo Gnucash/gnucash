@@ -47,7 +47,6 @@
 #include "Account.h"
 #include "AccountP.h"
 #include "Scrub.h"
-#include "ScrubP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "gnc-commodity.h"
@@ -59,6 +58,13 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 static gboolean abort_now = FALSE;
 static gint scrub_depth = 0;
+
+
+static Account* xaccScrubUtilityGetOrMakeAccount (Account *root,
+                                                  gnc_commodity* currency,
+                                                  const char* accname,
+                                                  GNCAccountType acctype,
+                                                  gboolean placeholder);
 
 void
 gnc_set_abort_scrub (gboolean abort)

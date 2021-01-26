@@ -40,7 +40,6 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "Scrub2.h"
-#include "ScrubP.h"
 #include "cap-gains.h"
 #include "gnc-engine.h"
 #include "gncInvoice.h"
