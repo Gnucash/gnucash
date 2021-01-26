@@ -5,14 +5,15 @@
 # La Boussole <yoann@laboussole.coop>, 2018.
 # Q <qualaelay@gmail.com>, 2021.
 # Julien Humbert <julroy67@gmail.com>, 2021.
+# Un Anonyme <vehrzafk1@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-01-22 04:32+0000\n"
-"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
+"PO-Revision-Date: 2021-01-26 00:41+0000\n"
+"Last-Translator: Un Anonyme <vehrzafk1@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
@@ -30,7 +31,7 @@ msgstr ""
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -57,9 +58,8 @@ msgid "account type: Asset"
 msgstr "type de compte : actif"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "type de compte : passif"
+msgstr "type de compte : Actif et passif"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -98,9 +98,8 @@ msgid "account type: Passive"
 msgstr "type de compte : passif"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "type de compte : actif"
+msgstr "type de compte : profits et pertes"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -219,14 +218,12 @@ msgid "balance (noun)"
 msgstr "bilan"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "bilan, pour"
+msgstr "équilibre b / f"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "bilan, pour"
+msgstr "équilibre b / f"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -342,7 +339,7 @@ msgstr "Personnalisé"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "tableau de bord"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -390,11 +387,11 @@ msgstr "entrée double"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "lien du document"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "email"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -437,14 +434,12 @@ msgid "financial calculator: payments"
 msgstr "calcul financier : paiements"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
-#| msgid "income statement"
 msgid "financial statement"
-msgstr "relevé des revenus"
+msgstr "état financier"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "logiciel gratuit"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -487,10 +482,8 @@ msgid "loan"
 msgstr "prêt"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "prêt"
+msgstr "prêt : APR"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -518,7 +511,7 @@ msgstr "marge"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
-msgstr ""
+msgstr "Modus MDI"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
@@ -529,16 +522,12 @@ msgid "Mortgage"
 msgstr "Hypothèque"
 
 #. "Adjustable Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "Hypothèque"
+msgstr "hypothèque : ARM"
 
 #. "Fixed Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "Hypothèque"
+msgstr "hypothèque : FRM"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -590,7 +579,7 @@ msgstr "orphelin"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "propriétaire (de la facture, facture ou bon de dépense)"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -706,15 +695,15 @@ msgstr "recharger, pour"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "formulaire de rapport : formulaire de compte T"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "formulaire de rapport : formulaire vertical"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "Réserve comptable"
+msgstr "Des bénéfices non répartis"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
@@ -773,22 +762,20 @@ msgid "tax info"
 msgstr "détails de la taxation"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "type de compte : revenu"
+msgstr "type d'impôt : impôt sur le revenu"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "type de taxe : taxe de vente"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "type de taxe : TPS"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "type de taxe : TVA"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
