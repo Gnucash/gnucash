@@ -2,20 +2,23 @@
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Chao-Hsiung Liao <pesder@seed.net.tw>, 2002.
 # Kuang-che Wu <kcwu@csie.org>, 2007, 2011.
-#
+# 01qwasa10 <a090889eric@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2011-03-10 22:11+0800\n"
-"Last-Translator: Kuang-che Wu <kcwu@csie.org>\n"
-"Language-Team: traditional Chinese <zh-l10n@linux.org.tw>\n"
-"Language: Traditional Chinese\n"
+"PO-Revision-Date: 2021-01-24 14:32+0000\n"
+"Last-Translator: 01qwasa10 <a090889eric@gmail.com>\n"
+"Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
+"gnucash/glossary/zh_Hant/>\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -23,7 +26,7 @@ msgstr "術語"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "「」"
 
 #. "A detailed record of money spent and received"
 msgid "account"
