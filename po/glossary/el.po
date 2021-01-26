@@ -2,14 +2,15 @@
 # Copyright (C) 2001 Free Software Foundation.
 # Simos Xenitellis <simos@hellug.gr>, 2001.
 # THANOS SIOURDAKIS <siourdakisthanos@gmail.com>, 2020.
+# giorgos georgopoulakis <huskyaek@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2020-12-20 20:47+0000\n"
-"Last-Translator: THANOS SIOURDAKIS <siourdakisthanos@gmail.com>\n"
+"PO-Revision-Date: 2021-01-24 18:32+0000\n"
+"Last-Translator: giorgos georgopoulakis <huskyaek@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
 "Language: el\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -26,7 +27,7 @@ msgstr ""
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -45,117 +46,104 @@ msgid "account name"
 msgstr "όνομα λογαριασμού"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
-#, fuzzy
 msgid "account type: Active"
-msgstr "Είδος Παρασκηνίου:"
+msgstr "Είδος λογαριασμού: Ενεργός"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
-#, fuzzy
 msgid "account type: Asset"
-msgstr "Είδος Παρασκηνίου:"
+msgstr "Είδος λογαριασμού: Kεφάλαιο"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "Είδος Παρασκηνίου:"
+msgstr "Είδος λογαριασμού: κεφάλαιο & έξωδα"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr ""
+msgstr "Είδος λογαριασμού: Έλεγχος"
 
 #. "-"
 msgid "account type: currency"
-msgstr ""
+msgstr "Είδος λογαριασμού: Νόμισμα"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr ""
+msgstr "Είδος λογαριασμού: Ισοτιμία"
 
 #. "-"
 msgid "account type: Expense"
-msgstr ""
+msgstr "Είδος λογαριασμού: Έξοδα"
 
 #. "-"
 msgid "account type: Income"
-msgstr ""
+msgstr "Είδος λογαριασμού: Έσοδα"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr ""
+msgstr "Είδος λογαριασμού: Παθητικό"
 
 #. "-"
 msgid "account type: money-market"
-msgstr ""
+msgstr "Είδος λογαριασμού: Χρηματιστήριο"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr ""
+msgstr "Είδος λογαριασμού: αλληλόχρεος"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "Είδος Παρασκηνίου:"
+msgstr "Είδος λογαριασμού: Παθητικό"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "Είδος Παρασκηνίου:"
+msgstr "Είδος λογαριασμού: Κέρδος & ζημία"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr ""
+msgstr "Είδος λογαριασμού: Αποταμειευτικός"
 
 #. "-"
-#, fuzzy
 msgid "account type: Stock"
-msgstr "Είδος Παρασκηνίου:"
+msgstr "Είδος λογαριασμού: Μετοχικός"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "Είδος Παρασκηνίου:"
+msgstr "Είδος λογαριασμού: Συναλλαγματικός"
 
 #. "-"
-#, fuzzy
 msgid "account: parent account"
-msgstr "Διαφανές παρασκήνιο"
+msgstr "λογαριασμός: Κύριος λογαριασμός"
 
 #. "-"
 msgid "account: subaccount"
-msgstr ""
+msgstr "λογαριασμός: υπολογαριασμός"
 
 #. "-"
 msgid "account: top level account"
-msgstr ""
+msgstr "λογαριασμός: υψηλού επιπέδου λογαρισμός"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
-msgstr ""
+msgstr "Ενέργεια (εγγραφή)"
 
 #. "Automated teller machine"
-#, fuzzy
 msgid "action: ATM"
-msgstr "Τοποθεσία: "
+msgstr "Ενέργεια: ΑΤΜ"
 
 #. "Transaction was an auto deposit"
-#, fuzzy
 msgid "action: autoDep"
-msgstr "Βάση ενεργειών"
+msgstr "Ενέργεια: αυτόματη κατάθεση"
 
 #. "-"
-#, fuzzy
 msgid "action: buy"
-msgstr "Τοποθεσία: "
+msgstr "Ενέργεια: Αγορά"
 
 #. "-"
-#, fuzzy
 msgid "action: deposit"
-msgstr "Σημείο εισαγωγής"
+msgstr "Ενέργεια: Κατάθεση"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
-#, fuzzy
 msgid "action: direct debit"
-msgstr "Ανύπαρκτη συνάρτηση"
+msgstr "Ενέργεια: Άμεση ανάληψη"
 
 #. "transaction is a distribution (???)"
 #, fuzzy
@@ -168,9 +156,8 @@ msgid "action: div"
 msgstr "Τοποθεσία: "
 
 #. "-"
-#, fuzzy
 msgid "action: fee"
-msgstr "Τοποθεσία: "
+msgstr "Ενέργεια: πρόστιμο"
 
 #. "transaction comes from interest"
 #, fuzzy
@@ -662,7 +649,7 @@ msgstr "επιλογές:\n"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
-msgstr ""
+msgstr "Παραγγελία"
 
 #. "Name of an automatically created account that holds splits that have no account."
 #, fuzzy
@@ -878,14 +865,12 @@ msgid "subtotal"
 msgstr "%d συνολικά"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "πληροφορίες ηλεκ. διεύθ."
+msgstr "φορολογικός κώδικας"
 
 #. "field of an account"
-#, fuzzy
 msgid "tax info"
-msgstr "πληροφορίες ηλεκ. διεύθ."
+msgstr "φορολογική ενημερότητα"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 msgid "tax type: income tax"
