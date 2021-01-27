@@ -64,7 +64,8 @@ static Account* xaccScrubUtilityGetOrMakeAccount (Account *root,
                                                   gnc_commodity* currency,
                                                   const char* accname,
                                                   GNCAccountType acctype,
-                                                  gboolean placeholder);
+                                                  gboolean placeholder,
+                                                  gboolean checkname);
 
 void
 gnc_set_abort_scrub (gboolean abort)
@@ -124,7 +125,8 @@ TransScrubOrphansFast (Transaction *trans, Account *root)
                                gnc_commodity_get_mnemonic (trans->common_currency),
                                NULL);
         orph = xaccScrubUtilityGetOrMakeAccount (root, trans->common_currency,
-                                                 accname, ACCT_TYPE_BANK, FALSE);
+                                                 accname, ACCT_TYPE_BANK,
+                                                 FALSE, TRUE);
         g_free (accname);
         if (!orph) continue;
 
@@ -413,7 +415,8 @@ get_balance_split (Transaction *trans, Account *root, Account *account,
         accname = g_strconcat (_("Imbalance"), "-",
                                gnc_commodity_get_mnemonic (commodity), NULL);
         account = xaccScrubUtilityGetOrMakeAccount (root, commodity,
-                                                    accname, ACCT_TYPE_BANK, FALSE);
+                                                    accname, ACCT_TYPE_BANK,
+                                                    FALSE, TRUE);
         g_free (accname);
         if (!account)
         {
@@ -476,7 +479,8 @@ get_trading_split (Transaction *trans, Account *root,
     trading_account = xaccScrubUtilityGetOrMakeAccount (root,
                                                         default_currency,
                                                         _("Trading"),
-                                                        ACCT_TYPE_TRADING, TRUE);
+                                                        ACCT_TYPE_TRADING,
+                                                        TRUE, FALSE);
     if (!trading_account)
     {
         PERR ("Can't get trading account");
@@ -486,7 +490,8 @@ get_trading_split (Transaction *trans, Account *root,
     ns_account = xaccScrubUtilityGetOrMakeAccount (trading_account,
                                                    default_currency,
                                                    gnc_commodity_get_namespace(commodity),
-                                                   ACCT_TYPE_TRADING, TRUE);
+                                                   ACCT_TYPE_TRADING,
+                                                   TRUE, TRUE);
     if (!ns_account)
     {
         PERR ("Can't get namespace account");
@@ -495,7 +500,8 @@ get_trading_split (Transaction *trans, Account *root,
 
     account = xaccScrubUtilityGetOrMakeAccount (ns_account, commodity,
                                                 gnc_commodity_get_mnemonic(commodity),
-                                                ACCT_TYPE_TRADING, FALSE);
+                                                ACCT_TYPE_TRADING,
+                                                FALSE, FALSE);
     if (!account)
     {
         PERR ("Can't get commodity account");
@@ -1447,7 +1453,7 @@ xaccAccountScrubColorNotSet (QofBook *book)
 Account *
 xaccScrubUtilityGetOrMakeAccount (Account *root, gnc_commodity * currency,
                                   const char *accname, GNCAccountType acctype,
-                                  gboolean placeholder)
+                                  gboolean placeholder, gboolean checkname)
 {
     Account * acc;
 
@@ -1461,7 +1467,9 @@ xaccScrubUtilityGetOrMakeAccount (Account *root, gnc_commodity * currency,
     }
 
     /* See if we've got one of these going already ... */
-    acc = gnc_account_lookup_by_name(root, accname);
+    acc = gnc_account_lookup_by_type_and_commodity (root,
+                                                    checkname ? accname : NULL,
+                                                    acctype, currency);
 
     if (acc == NULL)
     {
