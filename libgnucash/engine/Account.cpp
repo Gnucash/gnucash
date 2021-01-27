@@ -5539,7 +5539,7 @@ static constexpr int probability_factor = 100000;
  * the most probably matching account.
  */
 static FinalProbabilityVec
-build_probabilities(TokenInfoVec const & token_info, TokenSelection token_selection)
+build_account_probabilities(TokenInfoVec const & token_info, TokenSelection token_selection)
 {
     /* Summarize conditional probabilities P(A|T) from token_info over all
      * tokens, which are contained in token_selection */
@@ -5755,7 +5755,7 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     if (token_info.empty())
         return nullptr;
     auto selected_tokens = select_tokens(token_info);
-    auto final_probabilities = build_probabilities(token_info, selected_tokens);
+    auto final_probabilities = build_account_probabilities(token_info, selected_tokens);
     if (final_probabilities.empty())
         return nullptr;
     auto best = std::max_element(final_probabilities.begin(), final_probabilities.end());
