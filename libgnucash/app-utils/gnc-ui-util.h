@@ -47,16 +47,6 @@ gchar *gnc_normalize_account_separator (const gchar* separator);
 gboolean gnc_reverse_balance(const Account *account);
 
 /* Backward compatibility *******************************************
- * Return book's UNREVERSED_BUDGET feature check. */
-gboolean gnc_using_unreversed_budgets (QofBook* book);
-
-/* Backward compatibility *******************************************
- * Compare book's UNREVERSED_BUDGET with unreverse_check. If they
- * match, return account reversal according to global pref. If they
- * don't match, return FALSE. */
-gboolean gnc_reverse_budget_balance (const Account *account, gboolean unreversed);
-
-/* Backward compatibility *******************************************
  * Return that book's support opening balance accounts by equity type slot */
 void gnc_set_use_equity_type_opening_balance_account (QofBook* book);
 gboolean gnc_using_equity_type_opening_balance_account (QofBook* book);

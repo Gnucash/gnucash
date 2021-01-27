@@ -108,8 +108,6 @@ const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 gchar *number_to_words(gdouble val, gint64 denom);
 const gchar *printable_value (gdouble val, gint denom);
 
-gboolean gnc_using_unreversed_budgets (QofBook* book);
-gboolean gnc_reverse_budget_balance (const Account *account, gboolean unreversed);
 gboolean gnc_reverse_balance (const Account *account);
 
 gboolean gnc_is_euro_currency(const gnc_commodity * currency);
