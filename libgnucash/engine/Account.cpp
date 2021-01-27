@@ -5470,7 +5470,7 @@ struct TokenAccountsInfo
 };
 
 static void
-build_token_info(char const * suffix, KvpValue * value, TokenAccountsInfo & tokenInfo)
+build_token_info(char const * suffix, const KvpValue* const value, TokenAccountsInfo & tokenInfo)
 {
     if (strlen(suffix) == GUID_ENCODING_LENGTH)
     {
