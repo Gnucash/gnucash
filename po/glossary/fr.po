@@ -6,14 +6,15 @@
 # Q <qualaelay@gmail.com>, 2021.
 # Julien Humbert <julroy67@gmail.com>, 2021.
 # Un Anonyme <vehrzafk1@gmail.com>, 2021.
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-01-26 00:41+0000\n"
-"Last-Translator: Un Anonyme <vehrzafk1@gmail.com>\n"
+"PO-Revision-Date: 2021-01-27 18:32+0000\n"
+"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
@@ -438,6 +439,7 @@ msgid "financial statement"
 msgstr "état financier"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
+#, fuzzy
 msgid "free software"
 msgstr "logiciel gratuit"
 
