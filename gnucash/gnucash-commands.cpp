@@ -44,6 +44,7 @@ extern "C" {
 #include <boost/locale.hpp>
 #include <fstream>
 #include <iostream>
+#include <gnc-quotes.hpp>
 
 namespace bl = boost::locale;
 
@@ -77,21 +78,29 @@ scm_add_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **ar
 {
     auto add_quotes_file = static_cast<const std::string*>(data);
 
+    gnc_prefs_init ();
+    qof_event_suspend();
+
+    auto quotes = gnc_get_quotes_instance();
+    if (quotes.check())
+    {
+        std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << std::endl;
+        auto quote_sources = quotes.sources_as_glist();
+        gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
+        g_list_free (quote_sources);
+    }
+    else
+    {
+        std::cerr << bl::translate ("No quotes retrieved. Finance::Quote isn't "
+                                    "installed properly.") << "\n";
+        std::cerr << bl::translate ("Error message:") << std::endl;
+        std::cerr << quotes.error_msg() << std::endl;
+    }
+
     scm_c_eval_string("(debug-set! stack 200000)");
 
     auto mod = scm_c_resolve_module("gnucash price-quotes");
     scm_set_current_module(mod);
-
-    gnc_prefs_init ();
-    qof_event_suspend();
-    scm_c_eval_string("(gnc:price-quotes-install-sources)");
-
-    if (!gnc_quote_source_fq_installed())
-    {
-        std::cerr << bl::translate ("No quotes retrieved. Finance::Quote isn't "
-                                    "installed properly.") << "\n";
-        scm_cleanup_and_exit_with_failure (nullptr);
-    }
 
     auto add_quotes = scm_c_eval_string("gnc:book-add-quotes");
     auto session = gnc_get_current_session();

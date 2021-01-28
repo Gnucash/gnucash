@@ -1,3 +1,54 @@
+### libgnc-quotes
+set (quotes_SOURCES
+    gnc-quotes.cpp
+)
+
+# Add dependency on config.h
+set_source_files_properties (${quotes_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+
+set(quotes_noinst_HEADERS
+    gnc-quotes.hpp
+)
+
+add_library(gnc-quotes ${quotes_SOURCES} ${quotes_noinst_HEADERS})
+
+add_dependencies(gnc-quotes gnc-vcs-info)
+
+target_include_directories(gnc-quotes
+    PUBLIC
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${GLIB2_INCLUDE_DIRS}
+    PRIVATE
+        ${GTK_MAC_INCLUDE_DIRS}
+)
+
+target_link_libraries(gnc-quotes
+    PRIVATE
+        gnc-core-utils
+        ${Boost_LIBRARIES}
+        ${GLIB2_LDFLAGS}
+        ${GOBJECT_LDFLAGS}
+        ${GTK_MAC_LDFLAGS}
+        "$<$<BOOL:${MAC_INTEGRATION}>:${OSX_EXTRA_LIBRARIES}>"
+)
+
+target_compile_definitions(gnc-quotes
+    PRIVATE
+        G_LOG_DOMAIN=\"gnc.quotes\"
+        ${GTK_MAC_CFLAGS_OTHER}
+)
+
+target_compile_options(gnc-quotes
+    PRIVATE
+        $<$<BOOL:${MAC_INTEGRATION}>:${OSX_EXTRA_COMPILE_FLAGS}>
+)
+
+install(TARGETS gnc-quotes
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
 
 set(_BIN_FILES "")
 foreach(file gnc-fq-check.in gnc-fq-helper.in gnc-fq-update.in gnc-fq-dump.in)

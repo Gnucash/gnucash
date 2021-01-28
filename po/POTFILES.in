@@ -691,6 +691,7 @@ libgnucash/engine/Transaction.c
 libgnucash/engine/TransLog.c
 libgnucash/gnc-module/example/gncmod-example.c
 libgnucash/gnc-module/gnc-module.c
+libgnucash/quotes/gnc-quotes.cpp
 libgnucash/tax/de_DE/tax.scm
 libgnucash/tax/de_DE/txf-help.scm
 libgnucash/tax/de_DE/txf.scm

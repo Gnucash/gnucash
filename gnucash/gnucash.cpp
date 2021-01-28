@@ -66,6 +66,7 @@ extern "C" {
 #endif
 #include <iostream>
 #include <gnc-locale-utils.hpp>
+#include <gnc-quotes.hpp>
 
 namespace bl = boost::locale;
 
@@ -225,9 +226,24 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
 
     /* Install Price Quote Sources */
     auto msg = bl::translate ("Checking Finance::Quote...").str(gnc_get_boost_locale());
+
+    auto quotes = gnc_get_quotes_instance();
+    if (quotes.check())
+    {
+        msg = (bl::format (bl::translate("Found Finance::Quote version {1}.")) % quotes.version()).str(gnc_get_boost_locale());
+        auto quote_sources = quotes.sources_as_glist();
+        gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
+        g_list_free (quote_sources);
+        scm_c_use_module("gnucash price-quotes");
+    }
+    else
+    {
+        msg = bl::translate("Unable to load Finance::Quote.").str(gnc_get_boost_locale());
+        PINFO ("Attempt to load Finance::Quote returned this error message:\n");
+        PINFO ("%s", quotes.error_msg().c_str());
+    }
+
     gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
-    scm_c_use_module("gnucash price-quotes");
-    scm_c_eval_string("(gnc:price-quotes-install-sources)");
 
     gnc_hook_run(HOOK_STARTUP, NULL);
 
