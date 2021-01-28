@@ -112,6 +112,7 @@ set(test_guile_DIST
 )
 
 # Define two imaginary deprecated guile modules to test the compat file generation code
+# See commit bbcffa3ec for old code using this function.
 gnc_add_scheme_deprecated_module (OLD_MODULE "gnucash deprecated-module")
 gnc_add_scheme_deprecated_module (
     OLD_MODULE "gnucash superseded-module"
