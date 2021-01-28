@@ -41,17 +41,10 @@ gnc_add_scheme_test_targets(scm-test-engine-extras
     OUTPUT_DIR "tests"
     DEPENDS "${GUILE_DEPENDS}")
 
-# Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE "gnucash engine test test-extras"
-    NEW_MODULE "tests test-engine-extras"
-    DEPENDS "scm-test-engine-extras")
-
 gnc_add_scheme_test_targets(scm-test-engine
-    SOURCES "${bindings_test_SCHEME}"
-    OUTPUT_DIR "tests"
-    DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras")
-
+  SOURCES "${bindings_test_SCHEME}"
+  OUTPUT_DIR "tests"
+  DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras")
 
 add_dependencies(check scm-test-engine)
 gnc_add_scheme_tests("${engine_test_SCHEME}")
@@ -61,12 +54,6 @@ if (HAVE_SRFI64)
         SOURCES "srfi64-extras.scm"
         OUTPUT_DIR "tests"
         DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras")
-
-    # Module interfaces deprecated in 4.x, will be removed for 5.x
-    gnc_add_scheme_deprecated_module (
-        OLD_MODULE "gnucash engine test srfi64-extras"
-        NEW_MODULE "tests srfi64-extras"
-        DEPENDS "scm-srfi64-extras")
 
     set (scm_tests_with_srfi64_SOURCES
         test-business-core.scm

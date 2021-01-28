@@ -53,9 +53,3 @@ set_dist_list(test_report_DIST
   ${scm_test_report_SOURCES}
   test-report-extras.scm
 )
-
-# Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE "tests test-report-system-extras"
-    NEW_MODULE "tests test-report-extras"
-    DEPENDS "scm-test-report")
