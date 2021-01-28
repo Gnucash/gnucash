@@ -63,7 +63,7 @@ target_compile_definitions(gnucash PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 
 target_link_libraries (gnucash
    gnc-ledger-core gnc-gnome gnc-gnome-utils gnc-app-utils
-   gnc-engine gnc-module gnc-core-utils gnucash-guile
+   gnc-engine gnc-module gnc-core-utils gnc-quotes gnucash-guile
    gnc-qif-import gnc-csv-import gnc-csv-export gnc-log-replay
    gnc-bi-import gnc-customer-import gnc-report
    PkgConfig::GTK3 ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS}
@@ -98,7 +98,7 @@ target_compile_definitions(gnucash-cli PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 
 target_link_libraries (gnucash-cli
    gnc-gnome-utils gnc-app-utils
-   gnc-engine gnc-core-utils gnucash-guile gnc-report
+   gnc-engine gnc-core-utils gnc-quotes gnucash-guile gnc-report
    ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS}
    ${Boost_LIBRARIES}
 )
