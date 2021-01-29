@@ -29,6 +29,7 @@ set (app_utils_HEADERS
   gnc-help-utils.h
   gnc-helpers.h
   gnc-prefs-utils.h
+  gnc-quotes.hpp
   gnc-state.h  
   gnc-sx-instance-model.h
   gnc-ui-util.h
@@ -65,6 +66,7 @@ set (app_utils_SOURCES
   gnc-gsettings.c
   gnc-helpers.c
   gnc-prefs-utils.c
+  gnc-quotes.cpp
   gnc-sx-instance-model.c
   gnc-state.c
   gnc-ui-util.c
@@ -84,6 +86,7 @@ set(app_utils_ALL_LIBRARIES
     gnc-engine
     gnc-locale-tax
     gnucash-guile
+    ${Boost_FILESYSTEM_LIBRARY}
     ${GIO_LDFLAGS}
     ${LIBXML2_LDFLAGS}
     ${LIBXSLT_LDFLAGS}

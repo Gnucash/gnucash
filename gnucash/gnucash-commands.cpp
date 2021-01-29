@@ -87,7 +87,7 @@ scm_add_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **ar
         std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << std::endl;
         auto quote_sources = quotes.sources_as_glist();
         gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
-        g_list_free_full (quote_sources);
+        g_list_free_full (quote_sources, g_free);
     }
     else
     {
