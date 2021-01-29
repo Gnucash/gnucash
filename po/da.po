@@ -21236,13 +21236,12 @@ msgid "No Settings"
 msgstr "Indstillinger for forhåndsvisning"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:50
-#, fuzzy
 msgid "GnuCash Export Format"
-msgstr "Vælg eksportformat"
+msgstr "GnuCash eksportformat"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:50
 msgid "Import _Accounts from CSV..."
-msgstr "Eksporter _konti fra CSV ..."
+msgstr "Importer _konti fra CSV ..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:51
 msgid "Import Accounts from a CSV file"
@@ -21257,14 +21256,12 @@ msgid "Import Transactions from a CSV file"
 msgstr "Import transaktioner fra en CSV-fil"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
-#, fuzzy
 msgid "Import _Prices from a CSV file..."
-msgstr "Importer konti fra en CSV-fil"
+msgstr "Importer ku_rser fra en CSV-fil ..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
-#, fuzzy
 msgid "Import Prices from a CSV file"
-msgstr "Importer konti fra en CSV-fil"
+msgstr "Importer kurser fra en CSV-fil."
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:139
 #, fuzzy
