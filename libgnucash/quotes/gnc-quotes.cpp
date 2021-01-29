@@ -53,12 +53,13 @@ GncQuotes::check (void)
     bp::child process (perl_executable, "-w", fq_check, bp::std_out > out_stream, bp::std_err > err_stream);
 
     std::string stream_line;
-    while (getline (out_stream, stream_line))
+    while (process.running() && getline (out_stream, stream_line))
         if (m_version.empty())
             std::swap (m_version, stream_line);
         else
             m_sources.push_back (std::move(stream_line));
-    while (getline (err_stream, stream_line))
+
+    while (process.running() && getline (err_stream, stream_line))
         m_error_msg.append(stream_line + "\n");
 
     process.wait();
