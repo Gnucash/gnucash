@@ -36,8 +36,14 @@ extern "C" {
 namespace bp = boost::process;
 
 static GncQuotes quotes_cached;
+static bool quotes_initialized = false;
 
-bool
+GncQuotes::GncQuotes()
+{
+    check();
+}
+
+void
 GncQuotes::check (void)
 {
     m_version.clear();
@@ -74,12 +80,8 @@ GncQuotes::check (void)
         m_error_msg = e.what();
     };
 
-    auto success = (m_cmd_result == 0);
-
-    if (success)
+    if (m_cmd_result == 0)
         std::sort (m_sources.begin(), m_sources.end());
-
-    return success;
 }
 
 GList*
@@ -95,5 +97,16 @@ GncQuotes::sources_as_glist()
 
 const GncQuotes& gnc_get_quotes_instance()
 {
+    // The GncQuotes constructor runs check to test if Finance::Quote is properly installed
+    // However due to a race condition the instantiation of the static quotes_cached
+    // may or may not happen before binreloc has run. If binreloc didn't run, this will
+    // try to run gnc-fq-check from the hard-coded install dir. This will fail in all
+    // cases where binreloc is relevant (Windows, macOS or run from builddir).
+    // To catch this, explicitly reinstantiate quotes_cached at first use.
+    if (!quotes_initialized)
+    {
+        quotes_cached = GncQuotes();
+        quotes_initialized = true;
+    }
     return quotes_cached;
 }
