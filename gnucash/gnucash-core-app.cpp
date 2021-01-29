@@ -475,7 +475,7 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
     catch (std::exception &e)
     {
         std::cerr << e.what() << "\n\n";
-        std::cerr << *m_opt_desc_display.get() << "\n";
+        std::cerr << *m_opt_desc_display.get() << std::endl;
 
         exit(1);
     }
@@ -490,13 +490,13 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
         else
             std::cout << rel_fmt % gnc_version () << "\n";
 
-        std::cout << bl::translate ("Build ID") << ": " << gnc_build_id () << "\n";
+        std::cout << bl::translate ("Build ID") << ": " << gnc_build_id () << std::endl;
         exit(0);
     }
 
     if (m_show_help)
     {
-        std::cout << *m_opt_desc_display.get() << "\n";
+        std::cout << *m_opt_desc_display.get() << std::endl;
         exit(0);
     }
 
