@@ -201,8 +201,8 @@ with *EUGOODS* in the account description."))) #f
   ;; multiple currencies in a government report. Plus, single currency
   ;; means only 1 amount per heading for CSV output.
   (gnc:option-set-default-value
-   (gnc:lookup-option options gnc:pagename-general "Common Currency") #t)
-  (gnc:option-make-internal! options gnc:pagename-general "Common Currency")
+   (gnc:lookup-option options "Currency" "Common Currency") #t)
+  (gnc:option-make-internal! options "Currency" "Common Currency")
 
   ;; Set default dates to report on last quarter.
   (gnc:option-set-default-value
@@ -263,7 +263,7 @@ with *EUGOODS* in the account description."))) #f
          (accounts-tax-paid      (accfilter tax-accounts ACCT-TYPE-ASSET))
          (accounts-sales         (opt-val gnc:pagename-accounts "Sales"))
          (accounts-purchases     (opt-val gnc:pagename-accounts "Purchases"))
-         (common-currency        (opt-val gnc:pagename-general "Report's currency")))
+         (common-currency        (opt-val "Currency" "Report's currency")))
 
     (define (split-adder split accountlist)
       (define txn (xaccSplitGetParent split))
