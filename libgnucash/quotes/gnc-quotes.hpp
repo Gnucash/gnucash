@@ -29,6 +29,10 @@ extern  "C" {
 #include <glib.h>
 }
 
+using QuoteSources = std::vector<std::string>;
+
+const std::string not_found = std::string ("Not Found");
+
 class GncQuotes
 {
 public:
@@ -38,18 +42,18 @@ public:
     GncQuotes()  { check(); }
 
     // Function to check if Finance::Quote is properly installed
-    int cmd_result() { return m_cmd_result; }
-    std::string error_msg() { return m_error_msg; }
-    std::string version() { return m_version.empty() ? "Not Found" : m_version; }
-    std::vector <std::string> sources() { return m_sources; }
+    const int cmd_result() noexcept { return m_cmd_result; }
+    const std::string& error_msg() noexcept { return m_error_msg; }
+    const std::string& version() noexcept { return m_version.empty() ? not_found : m_version; }
+    const QuoteSources& sources() noexcept { return m_sources; }
     GList* sources_as_glist ();
 private:
     std::string m_version;
-    std::vector <std::string> m_sources;
+    QuoteSources m_sources;
     int m_cmd_result;
     std::string m_error_msg;
 };
 
-GncQuotes& gnc_get_quotes_instance (void);
+const GncQuotes& gnc_get_quotes_instance (void);
 
 #endif /* GNC_QUOTES_HPP */

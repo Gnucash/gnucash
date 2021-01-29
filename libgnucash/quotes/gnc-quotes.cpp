@@ -55,9 +55,9 @@ GncQuotes::check (void)
     std::string stream_line;
     while (getline (out_stream, stream_line))
         if (m_version.empty())
-            m_version = stream_line;
+            std::swap (m_version, stream_line);
         else
-            m_sources.push_back (stream_line);
+            m_sources.push_back (std::move(stream_line));
     while (getline (err_stream, stream_line))
         m_error_msg.append(stream_line + "\n");
 
@@ -76,15 +76,14 @@ GList*
 GncQuotes::sources_as_glist()
 {
     GList* slist = nullptr;
-    for (auto source : m_sources)
-        slist  = g_list_append (slist, g_strdup(source.c_str()));
+    std::for_each (m_sources.rbegin(), m_sources.rend(),
+                    [&slist](const std::string& source) { slist  = g_list_prepend (slist, g_strdup(source.c_str())); });
     return slist;
 }
 
 
 
-GncQuotes&
-gnc_get_quotes_instance (void)
+const GncQuotes& gnc_get_quotes_instance()
 {
     return quotes_cached;
 }
