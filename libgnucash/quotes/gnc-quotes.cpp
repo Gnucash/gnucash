@@ -50,20 +50,29 @@ GncQuotes::check (void)
 
     bp::ipstream out_stream;
     bp::ipstream err_stream;
-    bp::child process (perl_executable, "-w", fq_check, bp::std_out > out_stream, bp::std_err > err_stream);
 
-    std::string stream_line;
-    while (process.running() && getline (out_stream, stream_line))
-        if (m_version.empty())
-            std::swap (m_version, stream_line);
-        else
-            m_sources.push_back (std::move(stream_line));
+    try
+    {
+        bp::child process (perl_executable, "-w", fq_check, bp::std_out > out_stream, bp::std_err > err_stream);
 
-    while (process.running() && getline (err_stream, stream_line))
-        m_error_msg.append(stream_line + "\n");
+        std::string stream_line;
+        while (process.running() && getline (out_stream, stream_line))
+            if (m_version.empty())
+                std::swap (m_version, stream_line);
+            else
+                m_sources.push_back (std::move(stream_line));
 
-    process.wait();
-    m_cmd_result = process.exit_code();
+        while (process.running() && getline (err_stream, stream_line))
+            m_error_msg.append(stream_line + "\n");
+
+        process.wait();
+        m_cmd_result = process.exit_code();
+    }
+    catch (std::exception &e)
+    {
+        m_cmd_result = -1;
+        m_error_msg = e.what();
+    };
 
     auto success = (m_cmd_result == 0);
 
