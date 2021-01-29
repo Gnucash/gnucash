@@ -36,10 +36,8 @@ const std::string not_found = std::string ("Not Found");
 class GncQuotes
 {
 public:
-    bool check (void);
-
     // Constructor - check for presence of Finance::Quote and import version and quote sources
-    GncQuotes()  { check(); }
+    GncQuotes();
 
     // Function to check if Finance::Quote is properly installed
     const int cmd_result() noexcept { return m_cmd_result; }
@@ -47,7 +45,10 @@ public:
     const std::string& version() noexcept { return m_version.empty() ? not_found : m_version; }
     const QuoteSources& sources() noexcept { return m_sources; }
     GList* sources_as_glist ();
+
 private:
+    void check (void);
+
     std::string m_version;
     QuoteSources m_sources;
     int m_cmd_result;
