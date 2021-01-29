@@ -3120,6 +3120,28 @@ gnc_account_lookup_by_full_name (const Account *any_acc,
     return found;
 }
 
+Account*
+gnc_account_lookup_by_type_and_commodity (Account* root,
+                                          const char* name,
+                                          GNCAccountType acctype,
+                                          gnc_commodity* commodity)
+{
+    auto rpriv{GET_PRIVATE(root)};
+    for (auto node = rpriv->children; node; node = node->next)
+    {
+        auto account{static_cast<Account*>(node->data)};
+        if (xaccAccountGetType (account) == acctype &&
+            gnc_commodity_equiv(xaccAccountGetCommodity (account), commodity))
+        {
+            if (name && strcmp(name, xaccAccountGetName(account)))
+                continue; //name doesn't match so skip this one
+
+            return account;
+        }
+    }
+    return nullptr;
+}
+
 void
 gnc_account_foreach_child (const Account *acc,
                            AccountCb thunk,

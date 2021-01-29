@@ -3324,8 +3324,9 @@ gnc_main_window_close_page (GncPluginPage *page)
             gnc_main_window_remove_prefs (window);
 
             gtk_widget_destroy (GTK_WIDGET(window));
+            window = NULL;
         }
-        if (g_list_length (active_windows) > 1)
+        if (window && g_list_length (active_windows) > 1)
         {
             gtk_widget_destroy (GTK_WIDGET(window));
         }

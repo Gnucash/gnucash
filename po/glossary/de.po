@@ -9,14 +9,15 @@
 # SebastianL <Sebastian.Lueck@gmail.com>, 2020.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2021.
 # Moritz Höppner <moritz.hoeppner@resourcify.de>, 2021.
+# Tobias Mohr <tobias_mohr_1991@gmx.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.18\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-01-16 22:32+0000\n"
-"Last-Translator: Moritz Höppner <moritz.hoeppner@resourcify.de>\n"
+"PO-Revision-Date: 2021-01-23 19:32+0000\n"
+"Last-Translator: Tobias Mohr <tobias_mohr_1991@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
@@ -459,7 +460,7 @@ msgstr "Einnahmeüberschussrechnung"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "Freie Software"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"

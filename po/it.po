@@ -1,7 +1,7 @@
 # Italian translation of Gnucash.
 # Copyright (C) 2020 by the GnuCash developers and the translators below.
 # This file is distributed under the same license as the Gnucash package.
-# Giuseppe Foti <foti.giuseppe@gmail.com>, 2020;
+# Giuseppe Foti <foti.giuseppe@gmail.com>, 2020;, 2021.
 # Cristian Marchi <cri79@libero.it>, 2008, 2009, 2010;
 # Simone Zinanni <simone@develer.com>, 2008;
 # Lorenzo Cappelletti <lorenzo.cappelletti@email.com>, 2003-2005.
@@ -52,10 +52,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gnucash 4.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-22 11:07+0100\n"
-"PO-Revision-Date: 2020-12-29 15:29+0000\n"
+"PO-Revision-Date: 2021-01-23 19:32+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -64,7 +64,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -3651,10 +3651,8 @@ msgid "_Import Map Editor"
 msgstr "Editor mappa _importazione"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
-#, fuzzy
-#| msgid "View and Delete Bayesian and Non Bayesian information"
 msgid "View and Delete Bayesian and non-Bayesian information"
-msgstr "Vedi e cancella informazioni Bayesiane e Non Bayesiane"
+msgstr "Vedi e cancella informazioni bayesiane e non bayesiane"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
 msgid "_Transaction Linked Documents"
@@ -27476,14 +27474,12 @@ msgid "Maximum number of stacks in the chart."
 msgstr "Numero massimo di pile nel grafico."
 
 #: gnucash/report/reports/standard/category-barchart.scm:290
-#, fuzzy
-#| msgid "Invalid Transactions"
 msgid "Invalid dates"
-msgstr "Transazioni non valide"
+msgstr "Date non valide"
 
 #: gnucash/report/reports/standard/category-barchart.scm:291
 msgid "Start date must be earlier than End date"
-msgstr ""
+msgstr "La data di inizio deve essere precedente alla data finale"
 
 #: gnucash/report/reports/standard/category-barchart.scm:329
 msgid "Daily Average"

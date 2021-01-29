@@ -938,6 +938,24 @@ Account *gnc_account_lookup_by_code (const Account *parent,
  */
 Account *gnc_account_lookup_by_opening_balance (Account *account, gnc_commodity *commodity);
 
+/** Find a direct child account matching name, GNCAccountType, and commodity.
+ *
+ * Note that commodity matching is by equivalence: If the
+ * mnemonic/symbol and namespace are the same, it matches.
+ *
+ *  @param root The account among whose children one expects to find
+ *  the account.
+ *  @param name The name of the account to look for. If nullptr the
+ *  returned account will match only on acctype and commodity.
+ *  @param acctype The GNCAccountType to match.
+ *  @param commodity The commodity in which the account should be denominated.
+ *  @return The book's trading account for the given commodity if
+ *  trading accounts are enabled and one exists; NULL otherwise.
+ */
+Account *gnc_account_lookup_by_type_and_commodity (Account* root,
+                                                   const char* name,
+                                                   GNCAccountType acctype,
+                                                   gnc_commodity* commodity);
 /** @} */
 
 /* ------------------ */
