@@ -132,7 +132,7 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
         if (*m_quotes_cmd == "info")
         {
             auto quotes = gnc_get_quotes_instance();
-            if (quotes.check())
+            if (quotes.cmd_result() == 0)
             {
                 std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << std::endl;
                 std::cout << bl::translate ("Finance::Quote sources: ");
