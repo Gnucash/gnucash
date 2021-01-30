@@ -74,7 +74,7 @@ static const std::string AB_TRANS_RETRIEVAL("trans-retrieval");
 
 static gnc_numeric GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing);
 
-using FinalProbabilityVec=std::vector<std::pair<int32_t, std::string>>;
+using FinalProbabilityVec=std::vector<std::pair<double, std::string>>;
 using TokenSelection=std::set<std::string>;
 using TokenInfoVec=std::vector<std::pair<std::string, struct TokenAccountsInfo>>;
 using FlatKvpEntry=std::pair<std::string, KvpValue*>;
@@ -5525,11 +5525,6 @@ select_tokens(TokenInfoVec const & token_info)
     return ret;
 }
 
-/** We scale the probability values by probability_factor.
-  ie. with probability_factor of 100000, 10% would be
-  0.10 * 100000 = 10000 */
-static constexpr int probability_factor = 100000;
-
 /*
  * This function calculates the average posterior probabilities
  *    mean(P(A|T1), P(A|T2), ...)
@@ -5573,8 +5568,7 @@ build_account_probabilities(TokenInfoVec const & token_info, TokenSelection toke
     {
         for (auto const & account : sum_of_probabilities)
         {
-            ret.push_back({(int32_t)(account.second / (double)num_tokens * probability_factor),
-                account.first});
+            ret.push_back({account.second / (double)num_tokens, account.first});
         }
     }
 
@@ -5742,7 +5736,7 @@ check_import_map_data (QofBook *book)
     imap_convert_bayes_to_flat_run = true;
 }
 
-static constexpr double account_probability_threshold = .50 * probability_factor; /* 50% */
+static constexpr double account_probability_threshold = .50; /* 50% */
 
 /** Look up an Account in the map */
 Account*
