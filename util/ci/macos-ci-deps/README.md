@@ -1,6 +1,6 @@
 For creating the macOS dependency tarball required by the Github CI tests.
 
-Reruirements:
+Requirements:
 * Administrator privs on your Mac.
 * Project admin privs for https://sourceforge.net/projects/gnucash.
 * You must be running the same or newer version of macOS as the Github runner.
