@@ -11,14 +11,15 @@
 # LL Magical <lolayami2004@gmail.com>, 2020.
 # Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2021.
 # José Lemos Neto <lemosjosex@protonmail.com>, 2021.
+# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-22 11:07+0100\n"
-"PO-Revision-Date: 2021-01-21 13:32+0000\n"
-"Last-Translator: José Lemos Neto <lemosjosex@protonmail.com>\n"
+"PO-Revision-Date: 2021-01-31 07:41+0000\n"
+"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -21364,9 +21365,8 @@ msgid "From Namespace"
 msgstr "Espaço de nomes"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
-#, fuzzy
 msgid "Currency To"
-msgstr "Moeda: "
+msgstr "Moeda para"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:66
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:117
@@ -31546,7 +31546,7 @@ msgstr ""
 
 #: libgnucash/engine/gncOwner.c:1127
 msgid "Lot Link"
-msgstr "Ligação de Lote "
+msgstr "Ligação de Lote"
 
 #: libgnucash/engine/policy.c:52
 msgid "First In, First Out"
