@@ -74,7 +74,7 @@ static const std::string AB_TRANS_RETRIEVAL("trans-retrieval");
 
 static gnc_numeric GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing);
 
-using FinalProbabilityVec=std::vector<std::pair<double, std::string>>;
+using FinalProbabilityVec=std::vector<std::pair<double, gnc::GUID>>;
 using TokenSelection=std::set<std::string>;
 using TokenInfoVec=std::vector<std::pair<std::string, struct TokenAccountsInfo>>;
 using FlatKvpEntry=std::pair<std::string, KvpValue*>;
@@ -5455,7 +5455,7 @@ gnc_account_imap_delete_account (GncImportMatchMap *imap,
 
 struct AccountTokenProbability
 {
-    std::string account_guid;
+    gnc::GUID account_guid;
     int64_t token_count; /** occurrences of a given token for this account_guid */
     double probability; /* conditional probability of this account_guid for a given token */
 };
@@ -5474,9 +5474,14 @@ build_token_info(char const * suffix, const KvpValue* const value, TokenAccounts
 {
     if (strlen(suffix) == GUID_ENCODING_LENGTH)
     {
-        tokenInfo.total_count += value->get<int64_t>();
-        /*By convention, the key ends with the account GUID.*/
-        tokenInfo.accounts.emplace_back(AccountTokenProbability{std::string{suffix}, value->get<int64_t>(), 0.0});
+        try
+        {
+            /*By convention, the key ends with the account GUID.*/
+            auto guid = gnc::GUID::from_string(std::string(suffix));
+            tokenInfo.total_count += value->get<int64_t>();
+            tokenInfo.accounts.emplace_back(AccountTokenProbability{guid, value->get<int64_t>(), 0.0});
+        }
+        catch (gnc::guid_syntax_exception&) {}  /* ignore this entry, if GUID is not valid */
     }
 }
 
@@ -5538,7 +5543,7 @@ build_account_probabilities(TokenInfoVec const & token_info, TokenSelection toke
 {
     /* Summarize conditional probabilities P(A|T) from token_info over all
      * tokens, which are contained in token_selection */
-    std::map<std::string, double> sum_of_probabilities;
+    std::map<gnc::GUID, double> sum_of_probabilities;
     auto num_tokens = 0;
     for (auto const & token : token_info)
     {
@@ -5755,13 +5760,7 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     auto best = std::max_element(final_probabilities.begin(), final_probabilities.end());
     if (best->first < account_probability_threshold)
         return nullptr;
-    gnc::GUID guid;
-    try {
-        guid = gnc::GUID::from_string(best->second);
-    } catch (gnc::guid_syntax_exception&) {
-        return nullptr;
-    }
-    auto account = xaccAccountLookup (reinterpret_cast<GncGUID*>(&guid), imap->book);
+    auto account = xaccAccountLookup (reinterpret_cast<GncGUID*>(&best->second), imap->book);
     return account;
 }
 
