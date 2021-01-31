@@ -54,14 +54,13 @@ struct GUID
     std::string to_string () const noexcept;
     auto begin () const noexcept -> decltype (implementation.begin ());
     auto end () const noexcept -> decltype (implementation.end ());
-    bool operator < (GUID const &) noexcept;
+    bool operator < (GUID const &) const noexcept;
     friend bool operator == (GUID const &, GncGUID const &) noexcept;
     friend bool operator != (GUID const &, GUID const &) noexcept;
 };
 
 bool operator != (GUID const &, GUID const &) noexcept;
 bool operator == (GUID const &, GncGUID const &) noexcept;
-
 
 }
 #endif

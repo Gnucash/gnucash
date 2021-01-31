@@ -405,7 +405,7 @@ GUID::begin () const noexcept -> decltype (implementation.begin ())
 }
 
 bool
-GUID::operator < (GUID const & other) noexcept
+GUID::operator < (GUID const & other) const noexcept
 {
     return implementation < other.implementation;
 }
