@@ -8,6 +8,7 @@
 # Vladimir Melo <vladimirmelo.psi@gmail.com>, 2007.
 # LL Magical <lolayami2004@gmail.com>, 2020.
 # Fábio Rodrigues Ribeiro <farribeiro@gmail.com>, 2021.
+# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.8\n"
@@ -15,7 +16,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
 "PO-Revision-Date: 2021-01-31 05:42+0000\n"
-"Last-Translator: Fábio Rodrigues Ribeiro <farribeiro@gmail.com>\n"
+"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -339,7 +340,7 @@ msgstr "Personalizado"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "Painel"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -391,7 +392,7 @@ msgstr "link de documento"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "E-mail"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -434,14 +435,12 @@ msgid "financial calculator: payments"
 msgstr "pagamentos"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
-#| msgid "income statement"
 msgid "financial statement"
-msgstr "declaração de renda"
+msgstr "demonstrativo financeiro"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "software livre"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -764,10 +763,8 @@ msgid "tax info"
 msgstr "info de impostos"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "Receita"
+msgstr "tipo do imposto: imposto de renda"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
