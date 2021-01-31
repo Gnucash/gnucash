@@ -30,20 +30,9 @@ extern "C"
 #include "config.h"
 
 #include <platform.h>
-#ifdef __STRICT_ANSI__
-#undef __STRICT_ANSI__
-#define __STRICT_ANSI_UNSET__ 1
-#endif
-#ifdef _NO_OLDNAMES
-#undef _NO_OLDNAMES
-#endif
-#ifdef _UWIN
-#undef _UWIN
-#endif
 #if PLATFORM(WINDOWS)
 #include <winsock2.h>
 #include <windows.h>
-#define __STDC_FORMAT_MACROS 1
 #endif
 
 #include <inttypes.h>
@@ -84,13 +73,6 @@ extern "C"
 #include <gnc-sql-object-backend.hpp>
 #include "gnc-dbisqlresult.hpp"
 #include "gnc-dbisqlconnection.hpp"
-
-#if PLATFORM(WINDOWS)
-#ifdef __STRICT_ANSI_UNSET__
-#undef __STRICT_ANSI_UNSET__
-#define __STRICT_ANSI__ 1
-#endif
-#endif
 
 #if LIBDBI_VERSION >= 900
 #define HAVE_LIBDBI_R 1
