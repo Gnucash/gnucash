@@ -19,7 +19,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-22 11:07+0100\n"
 "PO-Revision-Date: 2021-02-01 11:42+0000\n"
-"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
+"Last-Translator: Fábio Rodrigues Ribeiro <farribeiro@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -1586,7 +1586,7 @@ msgstr "Você precisa selecionar um relatório para apagar."
 
 #: gnucash/gnome/dialog-custom-report.c:449
 msgid "Unable to change report configuration name."
-msgstr ""
+msgstr "Impossível alterar o nome da configuração do relatório."
 
 #: gnucash/gnome/dialog-custom-report.c:461
 #, fuzzy
@@ -1633,7 +1633,7 @@ msgstr "Bens existentes"
 
 #: gnucash/gnome/dialog-doclink.c:461 gnucash/gnome/dialog-doclink.c:506
 msgid "File Found"
-msgstr ""
+msgstr "Arquivo Encontrado"
 
 #: gnucash/gnome/dialog-doclink.c:463
 #, fuzzy
@@ -1736,6 +1736,12 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
+"Clique duas vezes na entrada na coluna Id para saltar para o Item de "
+"Negócios.\n"
+"Clique duas vezes na entrada na coluna Link para abrir o Documento Vinculado."
+"\n"
+"Clique duas vezes na entrada na coluna Disponível para modificar o link do "
+"documento."
 
 #: gnucash/gnome/dialog-doclink.c:1033
 #, fuzzy
@@ -23078,9 +23084,9 @@ msgid ""
 "\" set for this book. This setting can be changed in File->Properties-"
 ">Accounts, resetting to the threshold."
 msgstr ""
-"A data da nova transação é mais antiga que o Limite configurado para esse "
-"Livro como Apenas-Leitura (\"Read-Only Threshold\"). Este ajuste pode ser "
-"alterado pelo menu Arquivo->Propriedades->Contas, redefinindo o limite."
+"A data da transação inserida é anterior ao \"Limite somente leitura\" "
+"definido para este livro. Esta configuração pode ser alterada em Arquivo-> "
+"Propriedades-> Contas, redefinindo para o limite."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:528
 msgid "List"
