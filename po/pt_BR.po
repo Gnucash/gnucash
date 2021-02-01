@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-22 11:07+0100\n"
-"PO-Revision-Date: 2021-01-31 07:41+0000\n"
+"PO-Revision-Date: 2021-02-01 09:41+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -2133,7 +2133,7 @@ msgstr[1] ""
 "Gostaria de removê-los agora?"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
-#, fuzzy, c-format
+#, c-format
 msgid "To see the invalid mappings, use a filter of '%s'"
 msgstr "Para ver os mapeamentos inválidos, use um filtro de '%s'"
 
@@ -14583,7 +14583,6 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:286
 #: gnucash/import-export/aqb/dialog-ab.glade:1206
-#, fuzzy
 msgid "_Amount"
 msgstr "_Quantia"
 
@@ -14797,14 +14796,12 @@ msgid "Cascade Account Values"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:69
-#, fuzzy
 msgid "Enable Cascading Account Color"
-msgstr "Cor da conta"
+msgstr "Ative a cor da conta em cascata"
 
 #: gnucash/gtkbuilder/dialog-account.glade:104
-#, fuzzy
 msgid "Enable Cascading Account Placeholder"
-msgstr "Cor da conta"
+msgstr "Ative a cor da conta em cascata para o titular da conta"
 
 #: gnucash/gtkbuilder/dialog-account.glade:129
 #, fuzzy
@@ -15124,7 +15121,6 @@ msgstr "Exemplos"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2015
 #: gnucash/report/reports/standard/balance-forecast.scm:42
-#, fuzzy
 msgid "Interval"
 msgstr "Intervalo"
 
@@ -16664,7 +16660,6 @@ msgstr "Europeu"
 
 #. Date format label for 2013-07-31
 #: gnucash/gtkbuilder/dialog-preferences.glade:62
-#, fuzzy
 msgid "ISO"
 msgstr "ISO"
 
@@ -16896,9 +16891,8 @@ msgid "<b>Date Completion</b>"
 msgstr "<b>Data de conclusão</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1088
-#, fuzzy
 msgid "When a date is entered without year, it should be taken"
-msgstr "Quando uma data é introduzida sem o ano, ele deve ser obtido de"
+msgstr "Quando uma data for inserida sem o ano, ela deve ser considerada"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1104
 msgid ""
@@ -16906,7 +16900,6 @@ msgid ""
 msgstr "Datas serão completadas usando-se o ano atual."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1117
-#, fuzzy
 msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month"
@@ -17590,7 +17583,6 @@ msgid "Last"
 msgstr "Último"
 
 #: gnucash/gtkbuilder/dialog-price.glade:21
-#, fuzzy
 msgid "Net Asset Value"
 msgstr "Valor Liquido dos Ativos"
 
@@ -18042,7 +18034,6 @@ msgid "<b>Match all entries</b>"
 msgstr "<b>Todas as entradas</b>"
 
 #: gnucash/gtkbuilder/dialog-search.glade:298
-#, fuzzy
 msgid "Search Criteria"
 msgstr "Critério de pesquisa"
 
@@ -18481,7 +18472,6 @@ msgid "Include Century"
 msgstr "Incluir Século"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:115
-#, fuzzy
 msgid "Abbreviation"
 msgstr "Abreviatura"
 
@@ -19001,9 +18991,8 @@ msgid "Add 'value' to current budget for each period"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:151
-#, fuzzy
 msgid "Multiply"
-msgstr "Múltiplo"
+msgstr "Multiplique"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:155
 msgid "Multiply current budget for each period by 'value'"
@@ -19526,34 +19515,35 @@ msgid ""
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgstr ""
 "\n"
-"Primeiro você precisa solicitar acesso ao Banco Online em seu banco. Se o "
-"seu banco decidir conceder-lhe acesso eletrônico, eles enviarão-lhe uma "
+"Primeiro você precisa solicitar acesso ao Banco Online no seu banco. Caso o "
+"seu banco decida conceder-lhe um acesso eletrônico, eles lhe enviarão uma "
 "carta contendo\n"
 "\n"
 "* O código bancário do seu banco\n"
-"* O ID do usuário que o identifica ao seu banco\n"
-"* O endereço de Internet do servidor do Banco Online do seu banco\n"
-"* Para o HBCI Online Banking, informações sobre a chave pública "
+"* O ID do usuário que o identifica junto à sua conta\n"
+"* O endereço de Internet do servidor do seu Banco Online\n"
+"* Para o HBCI Online Banking, as informações sobre a chave pública "
 "criptográfica do seu banco (\"Ini-Letter\").\n"
 "\n"
-"Essas informações serão necessárias em seguinte. Pressione \"Próximo\" "
-"agora.\n"
-"\n"
-"NOTA: SEM GARANTIAS PARA NADA. Alguns bancos executam um servidor de Bancos "
-"Online mal implementado. Você não deve confiar em transferências de tempo "
-"críticos através do Online Banking, porque às vezes o banco não lhe dá "
-"feedback correto quando uma transferência é rejeitada.\n"
+"A seguira, estas informações serão necessárias. Pressione \"Próximo\" agora."
 "\n"
 "\n"
-"Pressione \"Cancelar\" se você não desejar configurar qualquer conexão "
-"Online Banking agora.\n"
+"NOTA: SEM QUAISQUER GARANTIAS. Alguns bancos fornecem um servidor com um "
+"serviço bancário online mal implementado. Você não deve confiar nas "
+"transferências que sejam críticas através do Online Banking, pois às vezes o "
+"banco não lhe dará um feedback correto quando uma transferência for "
+"rejeitada.\n"
 "\n"
-"Por fim, para importações repetidas, a página de visualização tem botões "
+"Pressione \"Cancelar\" caso você não queira configurar uma conexão com o seu "
+"banco agora.\n"
+"\n"
+"Por fim, para importações repetidas, a página de pré visualização tem botões "
 "para carregar e salvar as configurações. Para salvar as configurações, "
-"ajuste as configurações para suas preferências (opcionalmente começando a "
-"partir de uma predefinição existente) em seguida (altere opcionalmente o "
-"nome das configurações e pressione o botão Salvar Configurações. Note que "
-"você não pode salvar em predefinições incorporadas.\n"
+"ajuste as configurações de acordo com as suas preferências (opcionalmente "
+"começando a partir de uma predefinição já existente) em seguida (altere "
+"opcionalmente o nome das configurações e pressione o botão Salvar as "
+"Configurações. Note que você não pode salvar nas predefinições já existentes."
+"\n"
 "\n"
 "Esta operação não é reversível, então certifique-se de ter um backup "
 "funcionando.\n"
@@ -19700,9 +19690,8 @@ msgid "No_w"
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:566
-#, fuzzy
 msgid "Enter Password"
-msgstr "Digitar Senha"
+msgstr "Digite a senha"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:627
 msgid "Enter your password"
@@ -19740,9 +19729,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:796
-#, fuzzy
 msgid "Con_firm Password"
-msgstr "Con_firmar Senha"
+msgstr "Con_firme a Senha"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:836
 #, fuzzy
@@ -20872,7 +20860,6 @@ msgstr ""
 "'Cancelar' para interromper a exportação.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:97
-#, fuzzy
 msgid ""
 "This assistant will help you export the Account Tree to a file\n"
 " with the separator specified below.\n"
@@ -20880,10 +20867,11 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"Esse assistente irá ajuda-lo a exportar o plano de contas para um arquivo.\n"
+"Esse assistente irá ajuda-lo a exportar o plano das contas para um arquivo.\n"
+" com um separados definido abaixo.\n"
 "\n"
-"Faça os ajustes necessários e clique em 'Avançar' para proceder ou "
-"'Cancelar' para interromper a exportação.\n"
+"Faça os ajustes necessários e clique em \"Avançar\" para proceder ou "
+"\"Cancelar\" para interromper a exportação.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
@@ -21026,7 +21014,7 @@ msgstr ""
 "'Cancelar' para interromper a importação.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:75
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The accounts will be imported from the file '%s' when you click 'Apply'.\n"
 "\n"
@@ -21041,12 +21029,14 @@ msgid ""
 msgstr ""
 "As contas serão importadas do arquivo '%s' quando você clicar em 'Aplicar'.\n"
 "\n"
-"Você também pode voltar e verificar suas escolhas clicando em 'Voltar' ou "
-"'Cancelar' para interromper a importação.\n"
+"Você também pode voltar e verificar as suas escolhas clicando em 'Voltar' ou "
+"em 'Cancelar' para interromper a importação.\n"
+"\n"
 "Se essa é a primeira importação para um novo arquivo, você irá receber uma "
 "janela com opções de importação, já que essas opções afetam como os dados "
-"serão convertidos para as transações do GnuCash. Se o arquivo já existir, "
-"essas opções não serão exibidas.\n"
+"serão convertidos para as transações do GnuCash.\n"
+"Nota: Após a importação, você pode precisar usar a opção 'Ver / Filtrar por /"
+" Outros' e selecionar para exibir as contas não utilizadas.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:528
 #, fuzzy, c-format
@@ -21159,7 +21149,7 @@ msgstr[0] "%d preço substituído"
 msgstr[1] "%d preços substituídos"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1896
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The prices were imported from file '%s'.\n"
 "\n"
@@ -21167,7 +21157,13 @@ msgid ""
 "- %s\n"
 "- %s\n"
 "- %s"
-msgstr "As transações foram importadas a partir do arquivo '%s'."
+msgstr ""
+"As transações foram importadas a partir do arquivo '%s'.\n"
+"\n"
+"Resumo do que foi importado:\n"
+"- %s\n"
+"- %s\n"
+"- %s"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1940
 #, c-format
@@ -22764,16 +22760,14 @@ msgstr ""
 "que quer fazer isso?"
 
 #: gnucash/register/ledger-core/split-register.c:947
-#, fuzzy
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
 "overwrite it from this register window. You may overwrite it if you navigate "
 "to a register that shows another side of this same transaction."
 msgstr ""
-"Esta é a divisão \"ancorando\" esta transação ao registro.\n"
-"Você não pode excluí-la a partir desta janela. Você pode excluir a transação "
-"inteira desta janela, ou você pode ir até o registro contendo o outro lado "
-"desta mesma transação e remover a divisão a partir daquela transação."
+"Esta é a divisão que ancora essa transação ao registo. Você não pode "
+"sobrescrevê-la a partir daqui. Você pode sobrescrevê-la navegando para um "
+"registro que exiba o outro lado desta mesma transação."
 
 #: gnucash/register/ledger-core/split-register.c:1005
 msgid ""
@@ -23038,7 +23032,7 @@ msgid "Change transaction containing a reconciled split?"
 msgstr "Modificar o desdobramento associado a um desdobramento reconciliado?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2217
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The transaction you are about to change contains reconciled splits in the "
 "following accounts:\n"
@@ -23046,9 +23040,11 @@ msgid ""
 "\n"
 "Are you sure you want to continue with this change ?"
 msgstr ""
-"Você está prestes a modificar um desdobramento reconciliado. Fazer isso "
-"poderá fazer com que futuras reconciliações sejam difíceis! Continuar com "
-"esta mudança?"
+"Você está prestes a modificar um desdobramento reconciliado nas seguintes "
+"contas:\n"
+"%s\n"
+"\n"
+"Tem certeza que deseja continuar com esta alteração?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2228
 #, fuzzy
