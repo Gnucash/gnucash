@@ -59,16 +59,6 @@ gnc_add_scheme_targets(scm-tax-de_DE-2
     OUTPUT_DIR "gnucash/locale/de_DE"
     DEPENDS "scm-tax-de_DE-1;${GUILE_DEPENDS}")
 
-# Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE "gnucash tax de_DE"
-    NEW_MODULE "gnucash locale de_DE tax"
-    DEPENDS "scm-tax-de_DE-2")
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE "gnucash tax us"
-    NEW_MODULE "gnucash locale us tax"
-    DEPENDS "scm-tax-us-2")
-
 add_custom_target(scm-locale-tax ALL DEPENDS scm-tax-us-1 scm-tax-us-2 scm-tax-de_DE-1 scm-tax-de_DE-2 )
 
 set(de_DE_tax_EXTRA_DIST
