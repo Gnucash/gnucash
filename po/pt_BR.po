@@ -18,8 +18,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-22 11:07+0100\n"
-"PO-Revision-Date: 2021-02-01 11:42+0000\n"
-"Last-Translator: Fábio Rodrigues Ribeiro <farribeiro@gmail.com>\n"
+"PO-Revision-Date: 2021-02-02 00:42+0000\n"
+"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -22145,7 +22145,7 @@ msgstr "Ganho de Capital (curto)"
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.c:954
 msgid "Retained Earnings"
-msgstr "Ganhos Retidos"
+msgstr "Ganhos retidos"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:118
 msgid "Commissions"
