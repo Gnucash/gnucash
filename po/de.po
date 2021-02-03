@@ -22273,6 +22273,8 @@ msgstr "Kapitalertrag (mittelfristig)"
 msgid "Cap. gain (short)"
 msgstr "Kapitalertrag (kurzfristig)"
 
+# Einbehaltener Gewinn, Gewinnvortrag (<=2.6: -rücklagen)
+# TODO: ist das wirklich, was das balance sheet ausgibt?
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:110
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:114
 #: gnucash/report/reports/standard/balance-sheet.scm:510
