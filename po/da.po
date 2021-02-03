@@ -107,7 +107,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.7.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-28 23:37+0100\n"
+"POT-Creation-Date: 2021-02-03 23:00+0100\n"
 "PO-Revision-Date: 2018-03-03 22:41+0200\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -6523,14 +6523,16 @@ msgstr "Indtastningsdato"
 msgid "Statement Date"
 msgstr "Udskriftsdato"
 
-#: gnucash/gnome/gnc-split-reg.c:711
+#: gnucash/gnome/gnc-split-reg.c:711 gnucash/report/reports/aging.scm:361
 #: gnucash/report/reports/standard/customer-summary.scm:152
+#: gnucash/report/reports/standard/new-aging.scm:112
 #: gnucash/report/trep-engine.scm:441
 msgid "Descending"
 msgstr "Faldende"
 
-#: gnucash/gnome/gnc-split-reg.c:713
+#: gnucash/gnome/gnc-split-reg.c:713 gnucash/report/reports/aging.scm:360
 #: gnucash/report/reports/standard/customer-summary.scm:149
+#: gnucash/report/reports/standard/new-aging.scm:111
 #: gnucash/report/trep-engine.scm:438
 msgid "Ascending"
 msgstr "Stigende"
@@ -8815,8 +8817,7 @@ msgstr "GnuCash kunne ikke finde filerne med dokumentationen."
 msgid ""
 "This is likely because the \"gnucash-docs\" package is not properly "
 "installed."
-msgstr ""
-"Det skyldes sikkert at pakken »gnucash-docs« ikke er installeret."
+msgstr "Det skyldes sikkert at pakken »gnucash-docs« ikke er installeret."
 
 #. Translators: URI of missing help files
 #: gnucash/gnome-utils/gnc-gnome-utils.c:74
@@ -10499,8 +10500,7 @@ msgstr "Du kan også finde og anmelde fejlrapporter på {1}"
 #. Translators: {1} will be replaced with a URL
 #: gnucash/gnucash-core-app.cpp:90
 msgid "To find the last stable version, please refer to {1}"
-msgstr ""
-"For at finde den sidste stabile version, så gå venligst til {1}"
+msgstr "For at finde den sidste stabile version, så gå venligst til {1}"
 
 #: gnucash/gnucash-core-app.cpp:465
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -23566,18 +23566,8 @@ msgid "Sort order."
 msgstr "Sorteringsorden."
 
 #: gnucash/report/reports/aging.scm:360
-#: gnucash/report/reports/standard/new-aging.scm:111
-msgid "Increasing"
-msgstr "Forøger"
-
-#: gnucash/report/reports/aging.scm:360
 msgid "0 .. 999,999.99, A .. Z."
 msgstr ""
-
-#: gnucash/report/reports/aging.scm:361
-#: gnucash/report/reports/standard/new-aging.scm:112
-msgid "Decreasing"
-msgstr "Sænker"
 
 #: gnucash/report/reports/aging.scm:361
 msgid "999,999.99 .. 0, Z .. A."
@@ -24210,8 +24200,8 @@ msgid ""
 "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/"
 "&gt;."
 msgstr ""
-"Du kan læse mere om at skrive schemekode på &lt;https://www.scheme.com/tspl2d/"
-"&gt;."
+"Du kan læse mere om at skrive schemekode på &lt;https://www.scheme.com/"
+"tspl2d/&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:358
 #, scheme-format
@@ -31260,6 +31250,12 @@ msgstr "Transaktion ugyldig"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "Ingen hjælp tilgængelig."
+
+#~ msgid "Increasing"
+#~ msgstr "Forøger"
+
+#~ msgid "Decreasing"
+#~ msgstr "Sænker"
 
 #~ msgid "Period:"
 #~ msgstr "Periode:"

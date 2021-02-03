@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-22 11:07+0100\n"
+"POT-Creation-Date: 2021-02-03 23:00+0100\n"
 "PO-Revision-Date: 2014-07-14 08:57-0800\n"
 "Last-Translator: Atiur Rahman Khan <ciil_khan@yahoo.co.in>\n"
 "Language-Team: NONE\n"
@@ -870,7 +870,7 @@ msgstr "پلیس ہولڈر"
 #: gnucash/gnome-utils/dialog-account.c:351
 #: gnucash/gnome-utils/gnc-tree-view-account.c:996
 #: gnucash/gtkbuilder/dialog-account.glade:1855
-#: libgnucash/app-utils/gnc-ui-util.c:1102
+#: libgnucash/app-utils/gnc-ui-util.c:1106
 msgid "Opening Balance"
 msgstr "شروعاتی باقی"
 
@@ -878,22 +878,22 @@ msgstr "شروعاتی باقی"
 msgid "Use Existing"
 msgstr "موجودہ كا استعمال كریں"
 
-#: gnucash/gnome/assistant-hierarchy.c:1480
+#: gnucash/gnome/assistant-hierarchy.c:1481
 msgid ""
 "You selected a book currency and it will be used for\n"
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
 
-#: gnucash/gnome/assistant-hierarchy.c:1490
+#: gnucash/gnome/assistant-hierarchy.c:1491
 #, fuzzy
 msgid "Please choose the currency to use for new accounts."
 msgstr ""
 "\n"
 "نئے اکاؤنٹ کے لئے استعمال کرنے کے لئے کرنسی منتخب کریں."
 
-#: gnucash/gnome/assistant-hierarchy.c:1535
-#: gnucash/gnome/assistant-hierarchy.c:1554
+#: gnucash/gnome/assistant-hierarchy.c:1536
+#: gnucash/gnome/assistant-hierarchy.c:1555
 #: gnucash/gnome-utils/dialog-utils.c:809
 msgid "New Book Options"
 msgstr "نیا بُك آپشن"
@@ -1314,7 +1314,7 @@ msgstr "كومیڈیٹی كو خارج كریں؟"
 #: gnucash/gnome/dialog-price-edit-db.c:206
 #: gnucash/gnome/dialog-price-editor.c:232 gnucash/gnome/dialog-tax-info.c:1190
 #: gnucash/gnome/gnc-plugin-budget.c:289
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1797
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1789
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1111
 #: gnucash/gnome/gnc-plugin-page-register2.c:1630
@@ -1415,7 +1415,7 @@ msgstr "_منسوخ"
 
 #: gnucash/gnome/dialog-commodities.c:218
 #: gnucash/gnome/dialog-price-edit-db.c:207
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1798
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1790
 #: gnucash/gnome/gnc-plugin-page-invoice.c:189
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1112
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:162
@@ -1457,7 +1457,7 @@ msgstr "كریڈیٹ ایك مثبت رقم ہونا چاہیے یا آپ كو �
 
 #: gnucash/gnome/dialog-customer.c:433 gnucash/gnome/dialog-employee.c:288
 #: gnucash/gnome/dialog-job.c:243 gnucash/gnome/dialog-vendor.c:300
-#: gnucash/gnome-utils/dialog-account.c:1575
+#: gnucash/gnome-utils/dialog-account.c:1572
 msgid "<No name>"
 msgstr "<كوئی نام نہیں>"
 
@@ -3346,7 +3346,7 @@ msgstr "فروخت كرنے والے كو تلاش كریں"
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4373 libgnucash/engine/Scrub.c:464
+#: libgnucash/engine/Account.cpp:4395 libgnucash/engine/Scrub.c:473
 msgid "Income"
 msgstr "آمدنی"
 
@@ -4261,7 +4261,7 @@ msgid "Delete"
 msgstr "خارج کرو"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:454
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1999
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1991
 #: gnucash/gnome/gnc-plugin-page-register.c:1964
 #: gnucash/gnome/gnc-plugin-page-register.c:5068
 msgid "'Check & Repair' is currently running, do you want to abort it?"
@@ -4340,42 +4340,42 @@ msgid ""
 "of another account"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1736
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "%s اكاؤنٹ كو خارج كرنا ہوگا  "
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1745
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1737
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "اس اكاؤنٹ میں سبھی لین دینوں %s اكاؤنٹ كو ہٹانا ہوگا"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1752
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1744
 #, c-format
 msgid "All transactions in this account will be deleted."
 msgstr "اس اكاؤنٹ كے سبھی لین دینوں كو خارج كرنا ہوگا۔"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1761
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1753
 #, fuzzy, c-format
 msgid "Its sub-account will be moved to the account %s."
 msgstr "سبھی یہ سب اكاؤنٹس %s اكاؤنٹ كو ہٹانا ہوگا۔"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1767
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1759
 #, fuzzy, c-format
 msgid "Its subaccount will be deleted."
 msgstr "اس كے سبھی سب اكاؤنٹس كو خارج كرنا ہوگا۔"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1771
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1763
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "سبھی سب اكاؤنٹ كے لین دینوں كو %s اكاؤنٹ میں ہٹادیا جائے گا۔"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1778
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1770
 #, c-format
 msgid "All sub-account transactions will be deleted."
 msgstr "سبھی سب اكاؤنٹ كے لین دینوں كو خارج كردیا جائے گا۔"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1784
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1776
 msgid "Are you sure you want to do this?"
 msgstr "كیا آپ واقعی یہ كرنا چاہتے ہیں؟"
 
@@ -6390,14 +6390,16 @@ msgstr "داخلہ كی تاریخ"
 msgid "Statement Date"
 msgstr "اسٹیٹمینٹ تاریخ "
 
-#: gnucash/gnome/gnc-split-reg.c:711
+#: gnucash/gnome/gnc-split-reg.c:711 gnucash/report/reports/aging.scm:361
 #: gnucash/report/reports/standard/customer-summary.scm:152
+#: gnucash/report/reports/standard/new-aging.scm:112
 #: gnucash/report/trep-engine.scm:441
 msgid "Descending"
 msgstr "نزولی"
 
-#: gnucash/gnome/gnc-split-reg.c:713
+#: gnucash/gnome/gnc-split-reg.c:713 gnucash/report/reports/aging.scm:360
 #: gnucash/report/reports/standard/customer-summary.scm:149
+#: gnucash/report/reports/standard/new-aging.scm:111
 #: gnucash/report/trep-engine.scm:438
 msgid "Ascending"
 msgstr "صعودی"
@@ -7476,11 +7478,11 @@ msgstr "منتخب اكاؤنٹ كی قسم منتخب پرینٹ میں سے ا
 msgid "You must choose a commodity."
 msgstr "آپ كو ایك كمیوڈیٹی كا انتخاب كرناچاہیے۔"
 
-#: gnucash/gnome-utils/dialog-account.c:955
+#: gnucash/gnome-utils/dialog-account.c:952
 msgid "You must enter a valid opening balance or leave it blank."
 msgstr "آپ كو ایك معتبر شروعاتی بقایا درج كرنا چاہیے یا اسے خالی  چھوڑ دو۔"
 
-#: gnucash/gnome-utils/dialog-account.c:979
+#: gnucash/gnome-utils/dialog-account.c:976
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
@@ -7488,40 +7490,40 @@ msgstr ""
 "آپ كو ایك منتقل اكاؤنٹ كو منتخب كرنا چاہیے یا شروعاتی بقایا كے اكویٹی اكاؤنٹ "
 "كا انتخاب كریں۔"
 
-#: gnucash/gnome-utils/dialog-account.c:1331
+#: gnucash/gnome-utils/dialog-account.c:1328
 msgid ""
 "An account with opening balance already exists for the desired currency."
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-account.c:1332
+#: gnucash/gnome-utils/dialog-account.c:1329
 #, fuzzy
 #| msgid "Cancel the current entry"
 msgid "Cannot change currency"
 msgstr "حالیہ داخلہ كو منسوخ كرو"
 
-#: gnucash/gnome-utils/dialog-account.c:1419
+#: gnucash/gnome-utils/dialog-account.c:1416
 #, fuzzy
 msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
 msgstr "یہ اكاؤنٹس ریڈ_ اونلی لین دین پرمشتمل ہے جو كہ خارج نہیں ہوسكتا۔"
 
-#: gnucash/gnome-utils/dialog-account.c:1609
+#: gnucash/gnome-utils/dialog-account.c:1606
 msgid "Edit Account"
 msgstr "اكاؤنٹ مرتب كرو"
 
-#: gnucash/gnome-utils/dialog-account.c:1612
+#: gnucash/gnome-utils/dialog-account.c:1609
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) نیا اكاؤنٹس"
 
-#: gnucash/gnome-utils/dialog-account.c:1622
+#: gnucash/gnome-utils/dialog-account.c:1619
 #: gnucash/gtkbuilder/dialog-account.glade:1100
 #: gnucash/gtkbuilder/dialog-account-picker.glade:158
 msgid "New Account"
 msgstr "نیا اكاؤنٹ"
 
-#: gnucash/gnome-utils/dialog-account.c:2183
+#: gnucash/gnome-utils/dialog-account.c:2180
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s? This will replace the account "
@@ -7530,20 +7532,20 @@ msgstr ""
 " %s کےفوری ذیلی اکاؤنٹ ری نمبر كریں؟ یہ ایک نئے  جنریٹڈ کوڈ کے ساتھ ہر ایك "
 "چائلڈ اکاؤنٹ کے اکاؤنٹ کوڈ  فیلڈ .ری پلیس كرے گا۔"
 
-#: gnucash/gnome-utils/dialog-account.c:2288
+#: gnucash/gnome-utils/dialog-account.c:2285
 #, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-account.c:2315
+#: gnucash/gnome-utils/dialog-account.c:2312
 #, fuzzy, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
 msgstr "پیرنٹ  اکاؤنٹ میں صرف توازن، دکھائیں، کسی بھی ذیلی اكاؤنٹس  کو چھوڑ كر"
 
-#: gnucash/gnome-utils/dialog-account.c:2329
+#: gnucash/gnome-utils/dialog-account.c:2326
 #, fuzzy, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
@@ -7632,7 +7634,7 @@ msgstr "كرنسی "
 #: gnucash/gtkbuilder/dialog-transfer.glade:424
 #: gnucash/gtkbuilder/dialog-transfer.glade:437
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4372
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4394
 msgid "Currency"
 msgstr "كرنسی"
 
@@ -8975,27 +8977,27 @@ msgstr "ڈاٹا بیس میں محفوظ كرنے میں ناقابل "
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "ڈاٹا بیس میں محفوظ كرنے میں ناقابل : كتاب صرف پڑھے نشان كرو۔"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4302
+#: gnucash/gnome-utils/gnc-main-window.c:4303
 msgid "Book Options"
 msgstr "بیاض كا آپشنس"
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.c:4687
+#: gnucash/gnome-utils/gnc-main-window.c:4688
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4699
+#: gnucash/gnome-utils/gnc-main-window.c:4700
 #: gnucash/gnome-utils/gnc-splash.c:97
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4700
+#: gnucash/gnome-utils/gnc-main-window.c:4701
 #: gnucash/gnome-utils/gnc-splash.c:98 gnucash/gnucash-core-app.cpp:503
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4708
+#: gnucash/gnome-utils/gnc-main-window.c:4709
 #, fuzzy
 msgid "Accounting for personal and small business finance."
 msgstr "- GnuCash ذاتی اور چھوٹے کاروبار کے فائنانس مینجمنٹ"
@@ -9004,11 +9006,11 @@ msgstr "- GnuCash ذاتی اور چھوٹے کاروبار کے فائنانس 
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.c:4717
+#: gnucash/gnome-utils/gnc-main-window.c:4718
 msgid "translator-credits"
 msgstr "Atiur Rahman Khan, C-DAC, GIST, Pune, India, 2014"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4720
+#: gnucash/gnome-utils/gnc-main-window.c:4721
 msgid "Visit the GnuCash website."
 msgstr ""
 
@@ -9501,7 +9503,7 @@ msgstr "پے چیك"
 #: gnucash/report/reports/standard/balance-sheet.scm:503
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4375
+#: libgnucash/app-utils/gnc-ui-util.c:1045 libgnucash/engine/Account.cpp:4397
 msgid "Equity"
 msgstr "اكویٹی"
 
@@ -9913,7 +9915,7 @@ msgstr "اسٹیٹس بار"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1247
 #: gnucash/report/reports/standard/balsheet-eg.scm:389
-#: libgnucash/engine/Scrub.c:407
+#: libgnucash/engine/Scrub.c:415
 msgid "Imbalance"
 msgstr "عدم تناسب"
 
@@ -10049,7 +10051,7 @@ msgstr "حاصل"
 #: gnucash/report/reports/standard/customer-summary.scm:326
 #: gnucash/report/reports/standard/net-charts.scm:367
 #: gnucash/report/reports/standard/net-charts.scm:416
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4374
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4396
 #: libgnucash/engine/gncInvoice.c:1084
 msgid "Expense"
 msgstr "خرچ"
@@ -20091,7 +20093,7 @@ msgid "Unspecified"
 msgstr "تشكیل نہیں كیا گیا"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4365
+#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4387
 msgid "Bank"
 msgstr "بینك"
 
@@ -22442,7 +22444,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:527
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1091
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4366
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4388
 msgid "Cash"
 msgstr "نقد"
 
@@ -23698,18 +23700,8 @@ msgid "Sort order."
 msgstr "ترتیب."
 
 #: gnucash/report/reports/aging.scm:360
-#: gnucash/report/reports/standard/new-aging.scm:111
-msgid "Increasing"
-msgstr "بڑھتا ہوا"
-
-#: gnucash/report/reports/aging.scm:360
 msgid "0 .. 999,999.99, A .. Z."
 msgstr "0 .. 999,999.99, A .. Z."
-
-#: gnucash/report/reports/aging.scm:361
-#: gnucash/report/reports/standard/new-aging.scm:112
-msgid "Decreasing"
-msgstr "گھٹتا ہوا"
 
 #: gnucash/report/reports/aging.scm:361
 msgid "999,999.99 .. 0, Z .. A."
@@ -25807,7 +25799,7 @@ msgstr ""
 "پیغام كو نكالنے كے لیے <br> 'زائد نوٹس' آپشن كو تبدیل كرو)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:392
-#: libgnucash/engine/Scrub.c:117
+#: libgnucash/engine/Scrub.c:124
 msgid "Orphan"
 msgstr "یتیم"
 
@@ -25995,12 +25987,12 @@ msgid "missing"
 msgstr "كمیشن"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
-#: libgnucash/engine/Account.cpp:4367
+#: libgnucash/engine/Account.cpp:4389
 msgid "Asset"
 msgstr "ملكیت"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1109
-#: libgnucash/engine/Account.cpp:4369
+#: libgnucash/engine/Account.cpp:4391
 msgid "Liability"
 msgstr "قابلیت"
 
@@ -27333,8 +27325,8 @@ msgid ""
 msgstr "کل ٹریڈنگ اکاؤنٹ توازن کا اشارہ ایک لائن شامل كریں یا نہیں."
 
 #: gnucash/report/reports/standard/income-statement.scm:518
-#: libgnucash/engine/Account.cpp:4379 libgnucash/engine/Scrub.c:472
-#: libgnucash/engine/Scrub.c:537
+#: libgnucash/engine/Account.cpp:4401 libgnucash/engine/Scrub.c:481
+#: libgnucash/engine/Scrub.c:549
 msgid "Trading"
 msgstr "ٹریڈینگ"
 
@@ -30957,40 +30949,40 @@ msgstr ""
 "\n"
 "نچیے آپ غیر معتبر اكاؤنٹ ناموں كی فہرست كو ڈھونڈو%s"
 
-#: libgnucash/engine/Account.cpp:4368
+#: libgnucash/engine/Account.cpp:4390
 msgid "Credit Card"
 msgstr "كریڈیٹ كارڈ"
 
-#: libgnucash/engine/Account.cpp:4370
+#: libgnucash/engine/Account.cpp:4392
 msgid "Stock"
 msgstr "اسٹاك"
 
-#: libgnucash/engine/Account.cpp:4371
+#: libgnucash/engine/Account.cpp:4393
 msgid "Mutual Fund"
 msgstr "میچول فنڈ"
 
-#: libgnucash/engine/Account.cpp:4376
+#: libgnucash/engine/Account.cpp:4398
 msgid "A/Receivable"
 msgstr "A/قابل قبول"
 
-#: libgnucash/engine/Account.cpp:4377
+#: libgnucash/engine/Account.cpp:4399
 msgid "A/Payable"
 msgstr "A/قابل ادا"
 
-#: libgnucash/engine/Account.cpp:4378
+#: libgnucash/engine/Account.cpp:4400
 msgid "Root"
 msgstr "روٹ"
 
-#: libgnucash/engine/Account.cpp:4820
+#: libgnucash/engine/Account.cpp:4842
 msgid "Orphaned Gains"
 msgstr "یتیم نفع"
 
-#: libgnucash/engine/Account.cpp:4834 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4856 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "حقیقی نفع/ نقصان"
 
-#: libgnucash/engine/Account.cpp:4836
+#: libgnucash/engine/Account.cpp:4858
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -31201,12 +31193,12 @@ msgstr ""
 msgid "Checking business splits in account %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/Scrub.c:134
+#: libgnucash/engine/Scrub.c:142
 #, c-format
 msgid "Looking for orphans in account %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/Scrub.c:344
+#: libgnucash/engine/Scrub.c:352
 #, c-format
 msgid "Looking for imbalances in account %s: %u of %u"
 msgstr ""
@@ -31229,6 +31221,12 @@ msgstr "لین دین فضول ہے"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "مدد دستیاب نہیں ہے۔"
+
+#~ msgid "Increasing"
+#~ msgstr "بڑھتا ہوا"
+
+#~ msgid "Decreasing"
+#~ msgstr "گھٹتا ہوا"
 
 #~ msgid "type"
 #~ msgstr "قسم"

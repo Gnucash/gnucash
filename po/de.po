@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 3.10+\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-22 11:07+0100\n"
+"POT-Creation-Date: 2021-02-03 23:00+0100\n"
 "PO-Revision-Date: 2021-01-05 15:29+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -915,7 +915,7 @@ msgstr "Platzhalter"
 #: gnucash/gnome-utils/dialog-account.c:351
 #: gnucash/gnome-utils/gnc-tree-view-account.c:996
 #: gnucash/gtkbuilder/dialog-account.glade:1855
-#: libgnucash/app-utils/gnc-ui-util.c:1102
+#: libgnucash/app-utils/gnc-ui-util.c:1106
 msgid "Opening Balance"
 msgstr "Anfangsbestand"
 
@@ -923,7 +923,7 @@ msgstr "Anfangsbestand"
 msgid "Use Existing"
 msgstr "Existierendes verwenden"
 
-#: gnucash/gnome/assistant-hierarchy.c:1480
+#: gnucash/gnome/assistant-hierarchy.c:1481
 msgid ""
 "You selected a book currency and it will be used for\n"
 "new accounts. Accounts in other currencies must be\n"
@@ -933,12 +933,12 @@ msgstr ""
 "neue Konten genutzt. Konten in anderen Währungen müssen\n"
 "manuell hinzugefügt werden."
 
-#: gnucash/gnome/assistant-hierarchy.c:1490
+#: gnucash/gnome/assistant-hierarchy.c:1491
 msgid "Please choose the currency to use for new accounts."
 msgstr "Wählen Sie eine Währung für die neuen Konten."
 
-#: gnucash/gnome/assistant-hierarchy.c:1535
-#: gnucash/gnome/assistant-hierarchy.c:1554
+#: gnucash/gnome/assistant-hierarchy.c:1536
+#: gnucash/gnome/assistant-hierarchy.c:1555
 #: gnucash/gnome-utils/dialog-utils.c:809
 msgid "New Book Options"
 msgstr "Buch-Optionen für neues Buch"
@@ -1360,7 +1360,7 @@ msgstr "Devise/Wertpapier löschen?"
 #: gnucash/gnome/dialog-price-edit-db.c:206
 #: gnucash/gnome/dialog-price-editor.c:232 gnucash/gnome/dialog-tax-info.c:1190
 #: gnucash/gnome/gnc-plugin-budget.c:289
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1797
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1789
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1111
 #: gnucash/gnome/gnc-plugin-page-register2.c:1630
@@ -1461,7 +1461,7 @@ msgstr "_Abbrechen"
 
 #: gnucash/gnome/dialog-commodities.c:218
 #: gnucash/gnome/dialog-price-edit-db.c:207
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1798
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1790
 #: gnucash/gnome/gnc-plugin-page-invoice.c:189
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1112
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:162
@@ -1504,7 +1504,7 @@ msgstr "Haben muss ein positiver Betrag sein oder Sie müssen es frei lassen."
 
 #: gnucash/gnome/dialog-customer.c:433 gnucash/gnome/dialog-employee.c:288
 #: gnucash/gnome/dialog-job.c:243 gnucash/gnome/dialog-vendor.c:300
-#: gnucash/gnome-utils/dialog-account.c:1575
+#: gnucash/gnome-utils/dialog-account.c:1572
 msgid "<No name>"
 msgstr "<Kein Name>"
 
@@ -3410,7 +3410,7 @@ msgstr "Lieferant suchen"
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4373 libgnucash/engine/Scrub.c:464
+#: libgnucash/engine/Account.cpp:4395 libgnucash/engine/Scrub.c:473
 msgid "Income"
 msgstr "Ertrag"
 
@@ -4321,7 +4321,7 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:454
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1999
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1991
 #: gnucash/gnome/gnc-plugin-page-register.c:1964
 #: gnucash/gnome/gnc-plugin-page-register.c:5068
 msgid "'Check & Repair' is currently running, do you want to abort it?"
@@ -4405,42 +4405,42 @@ msgstr ""
 "die Objekte ändern, damit diese\n"
 "ein anderes Konto verwenden"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1736
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "Das Konto %s wird gelöscht."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1745
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1737
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "Alle Buchungen in diesem Konto werden in das Konto %s verschoben."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1752
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1744
 #, c-format
 msgid "All transactions in this account will be deleted."
 msgstr "Alle Buchungen in diesem Konto werden gelöscht."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1761
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1753
 #, c-format
 msgid "Its sub-account will be moved to the account %s."
 msgstr "Sein Unterkonto wird zum Konto %s verschoben."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1767
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1759
 #, c-format
 msgid "Its subaccount will be deleted."
 msgstr "Sein Unterkonto wird ebenfalls gelöscht."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1771
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1763
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "Alle Buchungen in Unterkonten werden in das Konto %s verschoben."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1778
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1770
 #, c-format
 msgid "All sub-account transactions will be deleted."
 msgstr "Alle Buchungen in Unterkonten werden ebenfalls gelöscht."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1784
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1776
 msgid "Are you sure you want to do this?"
 msgstr "Soll diese Aktion durchgeführt werden?"
 
@@ -6400,14 +6400,16 @@ msgstr "Eingabe-Datum"
 msgid "Statement Date"
 msgstr "Datum des Kontoauszugs"
 
-#: gnucash/gnome/gnc-split-reg.c:711
+#: gnucash/gnome/gnc-split-reg.c:711 gnucash/report/reports/aging.scm:361
 #: gnucash/report/reports/standard/customer-summary.scm:152
+#: gnucash/report/reports/standard/new-aging.scm:112
 #: gnucash/report/trep-engine.scm:441
 msgid "Descending"
 msgstr "Absteigend"
 
-#: gnucash/gnome/gnc-split-reg.c:713
+#: gnucash/gnome/gnc-split-reg.c:713 gnucash/report/reports/aging.scm:360
 #: gnucash/report/reports/standard/customer-summary.scm:149
+#: gnucash/report/reports/standard/new-aging.scm:111
 #: gnucash/report/trep-engine.scm:438
 msgid "Ascending"
 msgstr "Aufsteigend"
@@ -7513,13 +7515,13 @@ msgstr ""
 msgid "You must choose a commodity."
 msgstr "Sie müssen eine Währung/Wertpapier auswählen."
 
-#: gnucash/gnome-utils/dialog-account.c:955
+#: gnucash/gnome-utils/dialog-account.c:952
 msgid "You must enter a valid opening balance or leave it blank."
 msgstr ""
 "Sie müssen entweder einen gültigen Anfangsbestand angeben \n"
 "oder das Feld freilassen."
 
-#: gnucash/gnome-utils/dialog-account.c:979
+#: gnucash/gnome-utils/dialog-account.c:976
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
@@ -7527,18 +7529,18 @@ msgstr ""
 "Sie müssen ein Herkunftskonto wählen oder das Eigenkapitalkonto "
 "»Anfangsbestand« benutzen."
 
-#: gnucash/gnome-utils/dialog-account.c:1331
+#: gnucash/gnome-utils/dialog-account.c:1328
 msgid ""
 "An account with opening balance already exists for the desired currency."
 msgstr ""
 "Für die gewünschte Währung ist bereits ein Konto mit Eröffnungssaldo "
 "vorhanden."
 
-#: gnucash/gnome-utils/dialog-account.c:1332
+#: gnucash/gnome-utils/dialog-account.c:1329
 msgid "Cannot change currency"
 msgstr "Währung kann nicht geändert werden."
 
-#: gnucash/gnome-utils/dialog-account.c:1419
+#: gnucash/gnome-utils/dialog-account.c:1416
 msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
@@ -7546,22 +7548,22 @@ msgstr ""
 "Dieses Konto enthält Buchungen. Daher kann diese Option nicht geändert "
 "werden."
 
-#: gnucash/gnome-utils/dialog-account.c:1609
+#: gnucash/gnome-utils/dialog-account.c:1606
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
-#: gnucash/gnome-utils/dialog-account.c:1612
+#: gnucash/gnome-utils/dialog-account.c:1609
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Neue Konten"
 
-#: gnucash/gnome-utils/dialog-account.c:1622
+#: gnucash/gnome-utils/dialog-account.c:1619
 #: gnucash/gtkbuilder/dialog-account.glade:1100
 #: gnucash/gtkbuilder/dialog-account-picker.glade:158
 msgid "New Account"
 msgstr "Neues Konto"
 
-#: gnucash/gnome-utils/dialog-account.c:2183
+#: gnucash/gnome-utils/dialog-account.c:2180
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s? This will replace the account "
@@ -7570,7 +7572,7 @@ msgstr ""
 "Das Unterkonto von %s neu nummerieren? Dies wird das Kontonummer-Feld von "
 "jedem Unterkonto mit dem entsprechenden neuen Wert überschreiben."
 
-#: gnucash/gnome-utils/dialog-account.c:2288
+#: gnucash/gnome-utils/dialog-account.c:2285
 #, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
@@ -7578,7 +7580,7 @@ msgid ""
 msgstr ""
 "Die Kontenfarbe für das Konto '%s' inklusive aller Unterkonten einrichten"
 
-#: gnucash/gnome-utils/dialog-account.c:2315
+#: gnucash/gnome-utils/dialog-account.c:2312
 #, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
@@ -7586,7 +7588,7 @@ msgstr ""
 "Die Platzhalter-Eigenschaft für das Konto »%s« inklusive aller Unterkonten "
 "einrichten"
 
-#: gnucash/gnome-utils/dialog-account.c:2329
+#: gnucash/gnome-utils/dialog-account.c:2326
 #, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
@@ -7679,7 +7681,7 @@ msgstr "_Währung"
 #: gnucash/gtkbuilder/dialog-transfer.glade:424
 #: gnucash/gtkbuilder/dialog-transfer.glade:437
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4372
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4394
 msgid "Currency"
 msgstr "Währung"
 
@@ -9061,27 +9063,27 @@ msgid "Unable to save to database: Book is marked read-only."
 msgstr ""
 "Datenbank konnte nicht gespeichert werden: Dieses Buch ist schreibgeschützt."
 
-#: gnucash/gnome-utils/gnc-main-window.c:4302
+#: gnucash/gnome-utils/gnc-main-window.c:4303
 msgid "Book Options"
 msgstr "Buch-Optionen"
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.c:4687
+#: gnucash/gnome-utils/gnc-main-window.c:4688
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr "© 1997-%s GnuCash-Mitwirkende."
 
-#: gnucash/gnome-utils/gnc-main-window.c:4699
+#: gnucash/gnome-utils/gnc-main-window.c:4700
 #: gnucash/gnome-utils/gnc-splash.c:97
 msgid "Version"
 msgstr "Version"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4700
+#: gnucash/gnome-utils/gnc-main-window.c:4701
 #: gnucash/gnome-utils/gnc-splash.c:98 gnucash/gnucash-core-app.cpp:503
 msgid "Build ID"
 msgstr "Version-ID"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4708
+#: gnucash/gnome-utils/gnc-main-window.c:4709
 msgid "Accounting for personal and small business finance."
 msgstr "Finanzverwaltung für Privatanwender und Kleinbetriebe."
 
@@ -9089,7 +9091,7 @@ msgstr "Finanzverwaltung für Privatanwender und Kleinbetriebe."
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.c:4717
+#: gnucash/gnome-utils/gnc-main-window.c:4718
 msgid "translator-credits"
 msgstr ""
 "Christian Stimming, 2001-2020\n"
@@ -9110,7 +9112,7 @@ msgstr ""
 "<a href=\"https://lists.gnucash.org/mailman/listinfo/gnucash-de\">Liste "
 "gnucash-de</a>"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4720
+#: gnucash/gnome-utils/gnc-main-window.c:4721
 msgid "Visit the GnuCash website."
 msgstr "Besuchen Sie die GnuCash-Website."
 
@@ -9606,7 +9608,7 @@ msgstr "Gehalt"
 #: gnucash/report/reports/standard/balance-sheet.scm:503
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4375
+#: libgnucash/app-utils/gnc-ui-util.c:1045 libgnucash/engine/Account.cpp:4397
 msgid "Equity"
 msgstr "Eigenkapital"
 
@@ -10014,7 +10016,7 @@ msgstr "Statusleiste"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1247
 #: gnucash/report/reports/standard/balsheet-eg.scm:389
-#: libgnucash/engine/Scrub.c:407
+#: libgnucash/engine/Scrub.c:415
 msgid "Imbalance"
 msgstr "Ausgleichskonto"
 
@@ -10151,7 +10153,7 @@ msgstr "Empfangen"
 #: gnucash/report/reports/standard/customer-summary.scm:326
 #: gnucash/report/reports/standard/net-charts.scm:367
 #: gnucash/report/reports/standard/net-charts.scm:416
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4374
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4396
 #: libgnucash/engine/gncInvoice.c:1084
 msgid "Expense"
 msgstr "Aufwand"
@@ -20311,7 +20313,7 @@ msgid "Unspecified"
 msgstr "Nicht spezifiziert"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4365
+#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4387
 msgid "Bank"
 msgstr "Bank"
 
@@ -22713,7 +22715,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:527
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1091
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4366
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4388
 msgid "Cash"
 msgstr "Bargeld"
 
@@ -23981,18 +23983,8 @@ msgid "Sort order."
 msgstr "Die Sortierreihenfolge."
 
 #: gnucash/report/reports/aging.scm:360
-#: gnucash/report/reports/standard/new-aging.scm:111
-msgid "Increasing"
-msgstr "Aufsteigend"
-
-#: gnucash/report/reports/aging.scm:360
 msgid "0 .. 999,999.99, A .. Z."
 msgstr "0,00 .. 999.999,99; A .. Z."
-
-#: gnucash/report/reports/aging.scm:361
-#: gnucash/report/reports/standard/new-aging.scm:112
-msgid "Decreasing"
-msgstr "Absteigend"
 
 #: gnucash/report/reports/aging.scm:361
 msgid "999,999.99 .. 0, Z .. A."
@@ -26100,7 +26092,7 @@ msgstr ""
 "um diese Nachricht loszuwerden."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:392
-#: libgnucash/engine/Scrub.c:117
+#: libgnucash/engine/Scrub.c:124
 msgid "Orphan"
 msgstr "Ausbuchungskonto"
 
@@ -26287,12 +26279,12 @@ msgid "missing"
 msgstr "fehlt"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
-#: libgnucash/engine/Account.cpp:4367
+#: libgnucash/engine/Account.cpp:4389
 msgid "Asset"
 msgstr "Aktiva"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1109
-#: libgnucash/engine/Account.cpp:4369
+#: libgnucash/engine/Account.cpp:4391
 msgid "Liability"
 msgstr "Fremdkapital"
 
@@ -27616,8 +27608,8 @@ msgid ""
 msgstr "Summenzeile für die Devisenhandel-Konten anzeigen."
 
 #: gnucash/report/reports/standard/income-statement.scm:518
-#: libgnucash/engine/Account.cpp:4379 libgnucash/engine/Scrub.c:472
-#: libgnucash/engine/Scrub.c:537
+#: libgnucash/engine/Account.cpp:4401 libgnucash/engine/Scrub.c:481
+#: libgnucash/engine/Scrub.c:549
 msgid "Trading"
 msgstr "Devisenhandel"
 
@@ -31203,40 +31195,40 @@ msgstr ""
 "Folgende Kontennamen sind betroffen:\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4368
+#: libgnucash/engine/Account.cpp:4390
 msgid "Credit Card"
 msgstr "Kreditkarte"
 
-#: libgnucash/engine/Account.cpp:4370
+#: libgnucash/engine/Account.cpp:4392
 msgid "Stock"
 msgstr "Aktienkonto"
 
-#: libgnucash/engine/Account.cpp:4371
+#: libgnucash/engine/Account.cpp:4393
 msgid "Mutual Fund"
 msgstr "Investmentfonds"
 
-#: libgnucash/engine/Account.cpp:4376
+#: libgnucash/engine/Account.cpp:4398
 msgid "A/Receivable"
 msgstr "Offene Forderungen"
 
-#: libgnucash/engine/Account.cpp:4377
+#: libgnucash/engine/Account.cpp:4399
 msgid "A/Payable"
 msgstr "Offene Verbindlichkeiten"
 
-#: libgnucash/engine/Account.cpp:4378
+#: libgnucash/engine/Account.cpp:4400
 msgid "Root"
 msgstr "Oberkonto"
 
-#: libgnucash/engine/Account.cpp:4820
+#: libgnucash/engine/Account.cpp:4842
 msgid "Orphaned Gains"
 msgstr "Unverknüpfte Gewinne"
 
-#: libgnucash/engine/Account.cpp:4834 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4856 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "Realisierter Gewinn/Verlust"
 
-#: libgnucash/engine/Account.cpp:4836
+#: libgnucash/engine/Account.cpp:4858
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -31454,12 +31446,12 @@ msgstr "Überprüfe geschäftliche Posten im Konto %s: %u von %u"
 msgid "Checking business splits in account %s: %u of %u"
 msgstr "Überprüfe geschäftliche Buchungsteile im Konto %s: %u von %u"
 
-#: libgnucash/engine/Scrub.c:134
+#: libgnucash/engine/Scrub.c:142
 #, c-format
 msgid "Looking for orphans in account %s: %u of %u"
 msgstr "Suche nach verwaisten Buchungen im Konto %s: %u von %u"
 
-#: libgnucash/engine/Scrub.c:344
+#: libgnucash/engine/Scrub.c:352
 #, c-format
 msgid "Looking for imbalances in account %s: %u of %u"
 msgstr "Suche nach unausgeglichenen Buchungen im Konto %s: %u von %u"
@@ -31481,6 +31473,12 @@ msgstr "Buchung ungültig gemacht"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "Keine Hilfe verfügbar."
+
+#~ msgid "Increasing"
+#~ msgstr "Aufsteigend"
+
+#~ msgid "Decreasing"
+#~ msgstr "Absteigend"
 
 #~ msgid "type"
 #~ msgstr "Typ"

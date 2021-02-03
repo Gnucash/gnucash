@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.6.18\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-22 11:07+0100\n"
+"POT-Creation-Date: 2021-02-03 23:00+0100\n"
 "PO-Revision-Date: 2017-11-05 08:54+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
@@ -861,7 +861,7 @@ msgstr "Местодржач"
 #: gnucash/gnome-utils/dialog-account.c:351
 #: gnucash/gnome-utils/gnc-tree-view-account.c:996
 #: gnucash/gtkbuilder/dialog-account.glade:1855
-#: libgnucash/app-utils/gnc-ui-util.c:1102
+#: libgnucash/app-utils/gnc-ui-util.c:1106
 msgid "Opening Balance"
 msgstr "Почетно стање"
 
@@ -869,22 +869,22 @@ msgstr "Почетно стање"
 msgid "Use Existing"
 msgstr "Користи постојећи"
 
-#: gnucash/gnome/assistant-hierarchy.c:1480
+#: gnucash/gnome/assistant-hierarchy.c:1481
 msgid ""
 "You selected a book currency and it will be used for\n"
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
 
-#: gnucash/gnome/assistant-hierarchy.c:1490
+#: gnucash/gnome/assistant-hierarchy.c:1491
 #, fuzzy
 msgid "Please choose the currency to use for new accounts."
 msgstr ""
 "\n"
 "Изаберите валуту за нове налоге."
 
-#: gnucash/gnome/assistant-hierarchy.c:1535
-#: gnucash/gnome/assistant-hierarchy.c:1554
+#: gnucash/gnome/assistant-hierarchy.c:1536
+#: gnucash/gnome/assistant-hierarchy.c:1555
 #: gnucash/gnome-utils/dialog-utils.c:809
 msgid "New Book Options"
 msgstr "Опције нове књиге"
@@ -1303,7 +1303,7 @@ msgstr "Да обришем робу?"
 #: gnucash/gnome/dialog-price-edit-db.c:206
 #: gnucash/gnome/dialog-price-editor.c:232 gnucash/gnome/dialog-tax-info.c:1190
 #: gnucash/gnome/gnc-plugin-budget.c:289
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1797
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1789
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1111
 #: gnucash/gnome/gnc-plugin-page-register2.c:1630
@@ -1404,7 +1404,7 @@ msgstr "_Откажи"
 
 #: gnucash/gnome/dialog-commodities.c:218
 #: gnucash/gnome/dialog-price-edit-db.c:207
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1798
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1790
 #: gnucash/gnome/gnc-plugin-page-invoice.c:189
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1112
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:162
@@ -1446,7 +1446,7 @@ msgstr "Кредит мора бити позитиван износ или га
 
 #: gnucash/gnome/dialog-customer.c:433 gnucash/gnome/dialog-employee.c:288
 #: gnucash/gnome/dialog-job.c:243 gnucash/gnome/dialog-vendor.c:300
-#: gnucash/gnome-utils/dialog-account.c:1575
+#: gnucash/gnome-utils/dialog-account.c:1572
 msgid "<No name>"
 msgstr "<Без имена>"
 
@@ -3342,7 +3342,7 @@ msgstr "Нађи продавца"
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4373 libgnucash/engine/Scrub.c:464
+#: libgnucash/engine/Account.cpp:4395 libgnucash/engine/Scrub.c:473
 msgid "Income"
 msgstr "Приход"
 
@@ -4259,7 +4259,7 @@ msgid "Delete"
 msgstr "Обриши"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:454
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1999
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1991
 #: gnucash/gnome/gnc-plugin-page-register.c:1964
 #: gnucash/gnome/gnc-plugin-page-register.c:5068
 msgid "'Check & Repair' is currently running, do you want to abort it?"
@@ -4339,42 +4339,42 @@ msgid ""
 "of another account"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1736
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "Налог „%s“ ће бити избрисан."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1745
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1737
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "Све трансакције у овом налогу биће премештене у налог „%s“."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1752
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1744
 #, c-format
 msgid "All transactions in this account will be deleted."
 msgstr "Све трансакције у овом налогу биће обрисане."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1761
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1753
 #, fuzzy, c-format
 msgid "Its sub-account will be moved to the account %s."
 msgstr "Сви његови садржани налози биће премештени у налог „%s“."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1767
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1759
 #, fuzzy, c-format
 msgid "Its subaccount will be deleted."
 msgstr "Сви његови подналози биће обрисани."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1771
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1763
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "Све трансакције подналога биће премештене у налог „%s“."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1778
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1770
 #, c-format
 msgid "All sub-account transactions will be deleted."
 msgstr "Све трансакције подналога биће обрисане."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1784
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1776
 msgid "Are you sure you want to do this?"
 msgstr "Да ли сигурно желите то да урадите?"
 
@@ -6385,14 +6385,16 @@ msgstr "Датум _уноса"
 msgid "Statement Date"
 msgstr "Датум стања"
 
-#: gnucash/gnome/gnc-split-reg.c:711
+#: gnucash/gnome/gnc-split-reg.c:711 gnucash/report/reports/aging.scm:361
 #: gnucash/report/reports/standard/customer-summary.scm:152
+#: gnucash/report/reports/standard/new-aging.scm:112
 #: gnucash/report/trep-engine.scm:441
 msgid "Descending"
 msgstr "Опадајуће"
 
-#: gnucash/gnome/gnc-split-reg.c:713
+#: gnucash/gnome/gnc-split-reg.c:713 gnucash/report/reports/aging.scm:360
 #: gnucash/report/reports/standard/customer-summary.scm:149
+#: gnucash/report/reports/standard/new-aging.scm:111
 #: gnucash/report/trep-engine.scm:438
 msgid "Ascending"
 msgstr "Растуће"
@@ -7472,29 +7474,29 @@ msgstr "Врста изабраног налога није сагласна с�
 msgid "You must choose a commodity."
 msgstr "Морате изабрати робу."
 
-#: gnucash/gnome-utils/dialog-account.c:955
+#: gnucash/gnome-utils/dialog-account.c:952
 msgid "You must enter a valid opening balance or leave it blank."
 msgstr "Морате унети исправан почетни салдо или га оставите празним."
 
-#: gnucash/gnome-utils/dialog-account.c:979
+#: gnucash/gnome-utils/dialog-account.c:976
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
 msgstr ""
 "Морате изабрати налог преноса или одаберите налог акција салда отварања."
 
-#: gnucash/gnome-utils/dialog-account.c:1331
+#: gnucash/gnome-utils/dialog-account.c:1328
 msgid ""
 "An account with opening balance already exists for the desired currency."
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-account.c:1332
+#: gnucash/gnome-utils/dialog-account.c:1329
 #, fuzzy
 #| msgid "Cancel the current entry"
 msgid "Cannot change currency"
 msgstr "Откажите тренутни унос"
 
-#: gnucash/gnome-utils/dialog-account.c:1419
+#: gnucash/gnome-utils/dialog-account.c:1416
 msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
@@ -7502,22 +7504,22 @@ msgstr ""
 "Овај налог садржи трансакције.\n"
 "Промена ове опције није могућа."
 
-#: gnucash/gnome-utils/dialog-account.c:1609
+#: gnucash/gnome-utils/dialog-account.c:1606
 msgid "Edit Account"
 msgstr "Измените налог"
 
-#: gnucash/gnome-utils/dialog-account.c:1612
+#: gnucash/gnome-utils/dialog-account.c:1609
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "Нови налози (%d)"
 
-#: gnucash/gnome-utils/dialog-account.c:1622
+#: gnucash/gnome-utils/dialog-account.c:1619
 #: gnucash/gtkbuilder/dialog-account.glade:1100
 #: gnucash/gtkbuilder/dialog-account-picker.glade:158
 msgid "New Account"
 msgstr "Нови налог"
 
-#: gnucash/gnome-utils/dialog-account.c:2183
+#: gnucash/gnome-utils/dialog-account.c:2180
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s? This will replace the account "
@@ -7526,14 +7528,14 @@ msgstr ""
 "Да изменим бројеве непосредних подналога „%s“? Ово ће заменити кодно поље "
 "налога сваког садржаног налога новоствореним кодом."
 
-#: gnucash/gnome-utils/dialog-account.c:2288
+#: gnucash/gnome-utils/dialog-account.c:2285
 #, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-account.c:2315
+#: gnucash/gnome-utils/dialog-account.c:2312
 #, fuzzy, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
@@ -7541,7 +7543,7 @@ msgstr ""
 "Прикажите само билансе у матичном налогу, искључујући било које садржане "
 "налоге."
 
-#: gnucash/gnome-utils/dialog-account.c:2329
+#: gnucash/gnome-utils/dialog-account.c:2326
 #, fuzzy, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
@@ -7631,7 +7633,7 @@ msgstr "_Валута"
 #: gnucash/gtkbuilder/dialog-transfer.glade:424
 #: gnucash/gtkbuilder/dialog-transfer.glade:437
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4372
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4394
 msgid "Currency"
 msgstr "Валута"
 
@@ -8984,27 +8986,27 @@ msgstr "Не могу да сачувам у базу података."
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "Немогу да сачувам у базу података: Књига је означена само за читање."
 
-#: gnucash/gnome-utils/gnc-main-window.c:4302
+#: gnucash/gnome-utils/gnc-main-window.c:4303
 msgid "Book Options"
 msgstr "Опције књиге"
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.c:4687
+#: gnucash/gnome-utils/gnc-main-window.c:4688
 #, fuzzy, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr "© 1997-%s. доприносиоци"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4699
+#: gnucash/gnome-utils/gnc-main-window.c:4700
 #: gnucash/gnome-utils/gnc-splash.c:97
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4700
+#: gnucash/gnome-utils/gnc-main-window.c:4701
 #: gnucash/gnome-utils/gnc-splash.c:98 gnucash/gnucash-core-app.cpp:503
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.c:4708
+#: gnucash/gnome-utils/gnc-main-window.c:4709
 #, fuzzy
 msgid "Accounting for personal and small business finance."
 msgstr ""
@@ -9014,14 +9016,14 @@ msgstr ""
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.c:4717
+#: gnucash/gnome-utils/gnc-main-window.c:4718
 msgid "translator-credits"
 msgstr ""
 "Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "\n"
 "http://prevod.org — превод на српски језик."
 
-#: gnucash/gnome-utils/gnc-main-window.c:4720
+#: gnucash/gnome-utils/gnc-main-window.c:4721
 msgid "Visit the GnuCash website."
 msgstr ""
 
@@ -9518,7 +9520,7 @@ msgstr "Исплатница"
 #: gnucash/report/reports/standard/balance-sheet.scm:503
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4375
+#: libgnucash/app-utils/gnc-ui-util.c:1045 libgnucash/engine/Account.cpp:4397
 msgid "Equity"
 msgstr "Акција"
 
@@ -9929,7 +9931,7 @@ msgstr "Трака стања"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1247
 #: gnucash/report/reports/standard/balsheet-eg.scm:389
-#: libgnucash/engine/Scrub.c:407
+#: libgnucash/engine/Scrub.c:415
 msgid "Imbalance"
 msgstr "Дебаланс"
 
@@ -10065,7 +10067,7 @@ msgstr "Прими"
 #: gnucash/report/reports/standard/customer-summary.scm:326
 #: gnucash/report/reports/standard/net-charts.scm:367
 #: gnucash/report/reports/standard/net-charts.scm:416
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4374
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4396
 #: libgnucash/engine/gncInvoice.c:1084
 msgid "Expense"
 msgstr "Расход"
@@ -20043,7 +20045,7 @@ msgid "Unspecified"
 msgstr "Неодређено"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4365
+#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4387
 msgid "Bank"
 msgstr "Банка"
 
@@ -22388,7 +22390,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:527
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1091
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4366
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4388
 msgid "Cash"
 msgstr "Готовина"
 
@@ -23648,19 +23650,9 @@ msgid "Sort order."
 msgstr "Редослед ређања."
 
 #: gnucash/report/reports/aging.scm:360
-#: gnucash/report/reports/standard/new-aging.scm:111
-msgid "Increasing"
-msgstr "Растуће"
-
-#: gnucash/report/reports/aging.scm:360
 #, fuzzy
 msgid "0 .. 999,999.99, A .. Z."
 msgstr " 0 .. 999.999,99, A .. Z."
-
-#: gnucash/report/reports/aging.scm:361
-#: gnucash/report/reports/standard/new-aging.scm:112
-msgid "Decreasing"
-msgstr "Опадајуће"
 
 #: gnucash/report/reports/aging.scm:361
 #, fuzzy
@@ -25765,7 +25757,7 @@ msgstr ""
 "ове поруке)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:392
-#: libgnucash/engine/Scrub.c:117
+#: libgnucash/engine/Scrub.c:124
 msgid "Orphan"
 msgstr "Напуштено"
 
@@ -25952,12 +25944,12 @@ msgid "missing"
 msgstr "Провизија"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
-#: libgnucash/engine/Account.cpp:4367
+#: libgnucash/engine/Account.cpp:4389
 msgid "Asset"
 msgstr "Добро"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1109
-#: libgnucash/engine/Account.cpp:4369
+#: libgnucash/engine/Account.cpp:4391
 msgid "Liability"
 msgstr "Дуговање"
 
@@ -27291,8 +27283,8 @@ msgid ""
 msgstr "Да ли ће да укључи ред који показује збир салда налога трговања."
 
 #: gnucash/report/reports/standard/income-statement.scm:518
-#: libgnucash/engine/Account.cpp:4379 libgnucash/engine/Scrub.c:472
-#: libgnucash/engine/Scrub.c:537
+#: libgnucash/engine/Account.cpp:4401 libgnucash/engine/Scrub.c:481
+#: libgnucash/engine/Scrub.c:549
 msgid "Trading"
 msgstr "Трговачки"
 
@@ -30903,40 +30895,40 @@ msgstr ""
 "Испод ћете наћи списак неисправних назива налога:\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4368
+#: libgnucash/engine/Account.cpp:4390
 msgid "Credit Card"
 msgstr "Кредитна картица"
 
-#: libgnucash/engine/Account.cpp:4370
+#: libgnucash/engine/Account.cpp:4392
 msgid "Stock"
 msgstr "Деоница"
 
-#: libgnucash/engine/Account.cpp:4371
+#: libgnucash/engine/Account.cpp:4393
 msgid "Mutual Fund"
 msgstr "Инвестициони фонд"
 
-#: libgnucash/engine/Account.cpp:4376
+#: libgnucash/engine/Account.cpp:4398
 msgid "A/Receivable"
 msgstr "За пријем"
 
-#: libgnucash/engine/Account.cpp:4377
+#: libgnucash/engine/Account.cpp:4399
 msgid "A/Payable"
 msgstr "За исплату"
 
-#: libgnucash/engine/Account.cpp:4378
+#: libgnucash/engine/Account.cpp:4400
 msgid "Root"
 msgstr "Корен"
 
-#: libgnucash/engine/Account.cpp:4820
+#: libgnucash/engine/Account.cpp:4842
 msgid "Orphaned Gains"
 msgstr "Напуштени добици"
 
-#: libgnucash/engine/Account.cpp:4834 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4856 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "Остварени добитак/губитак"
 
-#: libgnucash/engine/Account.cpp:4836
+#: libgnucash/engine/Account.cpp:4858
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -31151,12 +31143,12 @@ msgstr "Проверавам артикле пословања у налогу �
 msgid "Checking business splits in account %s: %u of %u"
 msgstr "Проверавам поделе пословања у налогу „%s“: %u од %u"
 
-#: libgnucash/engine/Scrub.c:134
+#: libgnucash/engine/Scrub.c:142
 #, c-format
 msgid "Looking for orphans in account %s: %u of %u"
 msgstr "Тражим сирочиће у налогу „%s“: %u од %u"
 
-#: libgnucash/engine/Scrub.c:344
+#: libgnucash/engine/Scrub.c:352
 #, c-format
 msgid "Looking for imbalances in account %s: %u of %u"
 msgstr "Тражим дебалансе у налогу „%s“: %u од %u"
@@ -31179,6 +31171,12 @@ msgstr "Трансакција је поништена"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "Помоћ није доступна."
+
+#~ msgid "Increasing"
+#~ msgstr "Растуће"
+
+#~ msgid "Decreasing"
+#~ msgstr "Опадајуће"
 
 #~ msgid "type"
 #~ msgstr "врста"
