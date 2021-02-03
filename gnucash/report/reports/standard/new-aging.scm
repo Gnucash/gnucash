@@ -108,8 +108,8 @@ exist but have no suitable transactions."))
      (gnc:make-multichoice-option
       gnc:pagename-general optname-sort-order "ia" (N_ "Sort order.") 'increasing
       (list
-       (vector 'increasing (N_ "Increasing") (N_ "Alphabetical order"))
-       (vector 'decreasing (N_ "Decreasing") (N_ "Reverse alphabetical order")))))
+       (vector 'increasing (N_ "Ascending") (N_ "Alphabetical order"))
+       (vector 'decreasing (N_ "Descending") (N_ "Reverse alphabetical order")))))
 
     (add-option
      (gnc:make-simple-boolean-option
