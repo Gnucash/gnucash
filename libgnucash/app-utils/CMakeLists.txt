@@ -49,6 +49,7 @@ set(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS})
 set(app_utils_ALL_LIBRARIES
     gnc-engine
     ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_PROPERTY_TREE_LIBRARY}
     ${GIO_LDFLAGS}
     ${LIBXML2_LDFLAGS}
     ${LIBXSLT_LDFLAGS}

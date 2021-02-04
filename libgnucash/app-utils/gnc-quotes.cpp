@@ -20,22 +20,32 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \ *******************************************************************/
 
+#include <config.h>
+
 #include <algorithm>
 #include <vector>
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <boost/filesystem.hpp>
 #include <boost/process.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <glib.h>
+#include "gnc-commodity.hpp"
 #include "gnc-quotes.hpp"
 
 extern "C" {
-    #include "gnc-path.h"
+#include "gnc-commodity.h"
+#include "gnc-path.h"
+#include "gnc-ui-util.h"
 #include <gnc-prefs.h>
 #include <regex.h>
+#include <qofbook.h>
 }
 
 namespace bp = boost::process;
+namespace bpt = boost::property_tree;
 
 static GncQuotes quotes_cached;
 static bool quotes_initialized = false;
@@ -96,6 +106,56 @@ GncQuotes::sources_as_glist()
     std::for_each (m_sources.rbegin(), m_sources.rend(),
                     [&slist](const std::string& source) { slist  = g_list_prepend (slist, g_strdup(source.c_str())); });
     return slist;
+}
+
+
+void
+GncQuotes::fetch (const CommVec& commodities)
+{
+    auto dflt_curr = gnc_default_currency();
+    bpt::ptree pt, pt_child;
+    pt.put ("defaultcurrency", gnc_commodity_get_mnemonic (dflt_curr));
+
+    std::for_each (commodities.cbegin(), commodities.cend(),
+        [&pt, &dflt_curr] (auto comm)
+        {
+            auto comm_mnemonic = gnc_commodity_get_mnemonic (comm);
+            auto comm_ns = std::string("currency");
+            if (gnc_commodity_is_currency (comm))
+            {
+                if (gnc_commodity_equiv(comm, dflt_curr) ||
+                    (!comm_mnemonic  || (strcmp (comm_mnemonic, "XXX") == 0)))
+                    return;
+            }
+            else
+                comm_ns = gnc_quote_source_get_internal_name (gnc_commodity_get_quote_source (comm));
+
+            auto key = comm_ns + "." + comm_mnemonic;
+            pt.put (key, "");
+        }
+
+    );
+
+    std::ostringstream result;
+    bpt::write_json(result, pt);
+    std::cerr << "GncQuotes fetch_all - resulting json object\n" << result.str() << std::endl;
+
+}
+
+
+void
+GncQuotes::fetch_all (QofBook *book)
+{
+    auto commodities = gnc_quotes_get_quotable_commodities (
+        gnc_commodity_table_get_table (book));
+
+    fetch (commodities);
+}
+
+static const std::vector <std::string>
+format_quotes (const std::vector<gnc_commodity*>)
+{
+    return std::vector <std::string>();
 }
 
 
