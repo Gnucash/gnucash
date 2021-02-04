@@ -27,6 +27,7 @@
 
 extern  "C" {
 #include <glib.h>
+#include <qofbook.h>
 }
 
 using QuoteSources = std::vector<std::string>;
@@ -38,6 +39,9 @@ class GncQuotes
 public:
     // Constructor - check for presence of Finance::Quote and import version and quote sources
     GncQuotes();
+
+    void fetch_all (QofBook *book);
+    void fetch (const std::vector<std::string>& commodities);
 
     // Function to check if Finance::Quote is properly installed
     const int cmd_result() noexcept { return m_cmd_result; }

@@ -87,6 +87,7 @@ set(app_utils_ALL_LIBRARIES
     gnc-locale-tax
     gnucash-guile
     ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_PROPERTY_TREE_LIBRARY}
     ${GIO_LDFLAGS}
     ${LIBXML2_LDFLAGS}
     ${LIBXSLT_LDFLAGS}

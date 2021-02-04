@@ -46,6 +46,7 @@ set (engine_HEADERS
   gnc-aqbanking-templates.h
   gnc-budget.h
   gnc-commodity.h
+  gnc-commodity.hpp
   gnc-date.h
   gnc-datetime.hpp
   gnc-engine.h
