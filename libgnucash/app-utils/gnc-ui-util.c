@@ -51,7 +51,6 @@
 #include "Transaction.h"
 #include "gnc-engine.h"
 #include "gnc-features.h"
-#include "gnc-euro.h"
 #include "gnc-hooks.h"
 #include "gnc-locale-tax.h"
 #include "gnc-session.h"
@@ -1187,13 +1186,6 @@ gnc_locale_default_currency_nodefault (void)
     code = gnc_locale_default_iso_currency_code ();
 
     currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, code);
-
-    /* Some very old locales (notably on win32) still announce a euro
-       currency as default, although it has been replaced by EUR in
-       2001. We use EUR as default in that case, but the user can always
-       override from gsettings. */
-    if (gnc_is_euro_currency (currency))
-        currency = gnc_get_euro();
 
     return (currency ? currency : NULL);
 }
