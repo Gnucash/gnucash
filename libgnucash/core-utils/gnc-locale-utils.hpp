@@ -45,7 +45,7 @@ const std::locale& gnc_get_locale();
  *  on boost::locale instead.  Calling boost::locale("") is expensive,
  *  so call gnc_get_boost_locale instead.
  *
- * However before that funcation can be called the locale should be initialized
+ * However before that function can be called the locale should be initialized
  * with gnc_init_boost_locale.
  */
 void gnc_init_boost_locale(const std::string& messages_path);

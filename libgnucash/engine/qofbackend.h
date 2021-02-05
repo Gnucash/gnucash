@@ -150,7 +150,7 @@ typedef struct QofBackend QofBackend;
     gboolean
     qof_load_backend_library(const gchar *directory, const gchar* module_name);
 
-/** \brief Finalize all loaded backend sharable libraries. */
+/** \brief Finalize all loaded backend shareable libraries. */
     void qof_finalize_backend_libraries(void);
 
 /** \brief Retrieve the backend used by this book */

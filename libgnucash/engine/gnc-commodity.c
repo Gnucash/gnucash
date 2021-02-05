@@ -167,7 +167,7 @@ static gnc_quote_source currency_quote_source =
 { TRUE, 0, 0, "Currency", "CURRENCY", "currency" };
 
 /* The single quote method is usually the module name, but
- * sometimes it get's the suffix "_direct"
+ * sometimes it gets the suffix "_direct"
  * and the failover method is without suffix.
  */
 static gnc_quote_source single_quote_sources[] =
@@ -1747,7 +1747,7 @@ gnc_commodity_table_new(void)
 }
 
 /********************************************************************
- * book anchor functons
+ * book anchor functions
  ********************************************************************/
 
 gnc_commodity_table *

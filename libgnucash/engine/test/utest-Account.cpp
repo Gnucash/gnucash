@@ -941,7 +941,7 @@ No test, just a pass-through.
 /* acc_free
 static void acc_free (QofInstance *inst)// 2
 ***Callback for qof_commit_edit_part2
-No test, just a passthrough -- plus see comment at test_xaccFreeAccount, which is what this is a passtrough of.
+No test, just a passthrough -- plus see comment at test_xaccFreeAccount, which is what this is a passthrough of.
 */
 /* static void
 test_acc_free (Fixture *fixture, gconstpointer pData)

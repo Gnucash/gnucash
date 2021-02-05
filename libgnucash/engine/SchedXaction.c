@@ -268,8 +268,8 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
     (gobject_class,
      PROP_NUM_OCCURANCE,
      g_param_spec_int ("num-occurance",
-                       "Number of occurances",
-                       "Total number of occurances for this scheduled transaction.",
+                       "Number of occurrences",
+                       "Total number of occurrences for this scheduled transaction.",
                        0,
                        G_MAXINT16,
                        1,
@@ -279,8 +279,8 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
     (gobject_class,
      PROP_REM_OCCURANCE,
      g_param_spec_int ("rem-occurance",
-                       "Number of occurances remaining",
-                       "Remaining number of occurances for this scheduled transaction.",
+                       "Number of occurrences remaining",
+                       "Remaining number of occurrences for this scheduled transaction.",
                        0,
                        G_MAXINT16,
                        1,
@@ -333,7 +333,7 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
      PROP_START_DATE,
      g_param_spec_boxed("start-date",
                         "Start Date",
-                        "Date for the first occurence for the scheduled transaction.",
+                        "Date for the first occurrence for the scheduled transaction.",
                         G_TYPE_DATE,
                         G_PARAM_READWRITE));
 
@@ -350,8 +350,8 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
     (gobject_class,
      PROP_LAST_OCCURANCE_DATE,
      g_param_spec_boxed("last-occurance-date",
-                        "Last Occurance Date",
-                        "Date for the last occurance of the scheduled transaction.",
+                        "Last Occurrence Date",
+                        "Date for the last occurrence of the scheduled transaction.",
                         G_TYPE_DATE,
                         G_PARAM_READWRITE));
 
@@ -661,7 +661,7 @@ xaccSchedXactionGetEndDate(const SchedXaction *sx )
 void
 xaccSchedXactionSetEndDate( SchedXaction *sx, const GDate *newEnd )
 {
-/* Note that an invalid GDate IS a permissable value: It means that
+/* Note that an invalid GDate IS a permissible value: It means that
  * the SX is to run "forever". See gnc_sxed_save_sx() and
  * schedXact_editor_populate() in dialog-sx-editor.c.
  */
@@ -1177,7 +1177,7 @@ gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData )
 /**
  * Returns the defer list from the SX; this is a (date-)sorted
  * temporal-state-data instance list.  The list should not be modified by the
- * caller; use the gnc_sx_{add,remove}_defer_instance() functions to modifiy
+ * caller; use the gnc_sx_{add,remove}_defer_instance() functions to modify
  * the list.
  *
  * @param sx Scheduled transaction

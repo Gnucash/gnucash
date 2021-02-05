@@ -45,7 +45,7 @@ progress bar of completion.
 Each stage of the import process may require some user input.  What
 input is required depends on the stage of the process and what the
 last stage returned.  In some cases stages can be skipped.  For
-example, during the conversion phase if the date format is unambigious
+example, during the conversion phase if the date format is unambiguous
 then no user input would be required and the "ask for date format
 disamiguation" input can be skipped.
 

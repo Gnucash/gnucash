@@ -358,7 +358,7 @@ const char * gnc_commodity_get_mnemonic(const gnc_commodity * cm);
  */
 const char * gnc_commodity_get_namespace(const gnc_commodity * cm);
 
-/** Retrieve the namespace data strucure for the specified commodity.
+/** Retrieve the namespace data structure for the specified commodity.
  *  This will be a pointer to another data structure.
  *
  *  @param cm A pointer to a commodity data structure.
@@ -804,18 +804,18 @@ gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBoo
  @{
 */
 
-/** Return the textual name of a namespace data strucure.
+/** Return the textual name of a namespace data structure.
  *
- *  @param ns A pointer to the namespace data strucure.
+ *  @param ns A pointer to the namespace data structure.
  *
  *  @return A pointer to the name of the namespace.  This string is
  *  owned by the engine and should not be freed by the caller. */
 const char * gnc_commodity_namespace_get_name (const gnc_commodity_namespace *ns) ;
 
-/** Return the textual name of a namespace data strucure in a form suitable to
+/** Return the textual name of a namespace data structure in a form suitable to
  * present to the user.
  *
- *  @param ns A pointer to the namespace data strucure.
+ *  @param ns A pointer to the namespace data structure.
  *
  *  @return A pointer to the gui friendly name of the namespace.  This string is
  *  owned by the engine and should not be freed by the caller.
@@ -971,7 +971,7 @@ gboolean gnc_commodity_table_foreach_commodity(const gnc_commodity_table * table
  @{
 */
 
-/** You proably shouldn't be using gnc_commodity_table_new() directly,
+/** You probably shouldn't be using gnc_commodity_table_new() directly,
  * its for internal use only. You should probably be using
  * gnc_commodity_table_get_table()
  */

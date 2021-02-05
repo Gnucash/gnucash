@@ -37,7 +37,7 @@
  *  For GnuCash' purposes a full uri can be described as:
  *
  *  @li @c scheme://[[username[:password]@]hostname[:port]]/path (universal uri)
- *  @li @c file://[localhost]/path (uri refering to a file on the local file system)
+ *  @li @c file://[localhost]/path (uri referring to a file on the local file system)
  *
  *  Anything in square brackets is optional.
  *
@@ -179,7 +179,7 @@ gchar *gnc_uri_create_uri (const gchar *scheme,
  *  The function allocates memory for the uri. The calling function should
  *  free this memory with g_free the uri is no longer needed.
  *
- *  @param uri The uri that schould be converted into a normalized uri
+ *  @param uri The uri that should be converted into a normalized uri
  *  @param allow_password If set to TRUE, the normalized uri and the input uri
  *  has a password, this passworld will also be set in the normalized uri.
  *  Otherwise no password will be set in the normalized uri.
@@ -256,7 +256,7 @@ gboolean gnc_uri_targets_local_fs (const gchar *uri);
  *                   is added verbatim, so if a dot should be added, this
  *                   should be part of the extension.
  *
- *  @return The uri, but garanteed to end with extension if the uri is file
+ *  @return The uri, but guaranteed to end with extension if the uri is file
  *          based. Otherwise the uri is returned unmodified. Note that the
  *          returned value should be freed with g_free when no longer needed.
  */

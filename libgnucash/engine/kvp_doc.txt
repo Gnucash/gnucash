@@ -141,7 +141,7 @@ Use:  The posted opening date of this book.  This book only contains transaction
 Name: /book/prev-acct
 Type: GUID
 Entities: Account
-Use:  The GUID of the account that preceeds this one, chronologically.
+Use:  The GUID of the account that precedes this one, chronologically.
       Note that the close-date of the previous book should equal the open-date
       of the book that this account belongs to.
 \endverbatim
@@ -150,7 +150,7 @@ Use:  The GUID of the account that preceeds this one, chronologically.
 Name: /book/prev-book
 Type: GUID
 Entities: Account, Book
-Use:  The GUID of the book that preceeds this one, chronologically.
+Use:  The GUID of the book that precedes this one, chronologically.
       Note that the close-date of the previous book should equal the open-date
       of this book.
 \endverbatim
@@ -264,7 +264,7 @@ Use:  date that the copy was created.
 \verbatim
 Name: /hbci/
 Type: frame
-Entitites: Account, Book
+Entities: Account, Book
 Use: subdirectory for information related to the German online banking
 protocol HBCI
 \endverbatim
@@ -280,14 +280,14 @@ in the real world
 \verbatim
 Name: /hbci/bank-code
 Type: string
-Entitites: Account
+Entities: Account
 Use: Bank code of HBCI account
 \endverbatim
 
 \verbatim
 Name: /hbci/country-code
 Type: gint64
-Entitites: Account
+Entities: Account
 Use: Country code of the bank of HBCI account
 \endverbatim
 

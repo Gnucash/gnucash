@@ -382,7 +382,7 @@ way to load several files at once.
    Need to write test cases.  Also test cases for prices in book
    closing.
 
-- price-saving in the SQL backend is probably borken, its certainly
+- price-saving in the SQL backend is probably broken, its certainly
    untested.  Need to remove old deprecated price-lookup mechanism, 
    and replace w/ qofquery.
 

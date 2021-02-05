@@ -132,7 +132,7 @@ book_slots_handler (xmlNodePtr node, gpointer book_pdata)
     QofBook* book = static_cast<decltype (book)> (book_pdata);
     gboolean success;
 
-    /* the below works only because the get is gaurenteed to return
+    /* the below works only because the get is guaranteed to return
      * a frame, even if its empty */
     success = dom_tree_create_instance_slots (node, QOF_INSTANCE (book));
 

@@ -175,7 +175,7 @@ const char *void_reason_str = "void-reason";
 const char *void_time_str = "void-time";
 const char *void_former_notes_str = "void-former-notes";
 const char *trans_is_closing_str = "book_closing";
-const char *doclink_uri_str = "assoc_uri"; // this is the old name for the document link, kept for compatability
+const char *doclink_uri_str = "assoc_uri"; // this is the old name for the document link, kept for compatibility
 
 /* KVP entry for date-due value */
 #define TRANS_DATE_DUE_KVP       "trans-date-due"
