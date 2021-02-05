@@ -31,12 +31,17 @@
 
 extern "C" {
     #include "gnc-path.h"
+#include <gnc-prefs.h>
+#include <regex.h>
 }
 
 namespace bp = boost::process;
 
 static GncQuotes quotes_cached;
 static bool quotes_initialized = false;
+
+CommVec
+gnc_quotes_get_quotable_commodities(const gnc_commodity_table * table);
 
 GncQuotes::GncQuotes()
 {
@@ -94,6 +99,88 @@ GncQuotes::sources_as_glist()
 }
 
 
+/********************************************************************
+ * gnc_quotes_get_quotable_commodities
+ * list commodities in a given namespace that get price quotes
+ ********************************************************************/
+static void
+get_quotables_helper1 (gpointer value, gpointer data)
+{
+    auto l = static_cast<CommVec *> (data);
+    auto comm = static_cast<gnc_commodity *> (value);
+    auto quote_flag = gnc_commodity_get_quote_flag (comm);
+    auto quote_source = gnc_commodity_get_quote_source (comm);
+    auto quote_source_supported = gnc_quote_source_get_supported (quote_source);
+
+    if (!quote_flag ||
+        !quote_source || !quote_source_supported)
+        return;
+    l->push_back (comm);
+}
+
+static gboolean
+get_quotables_helper2 (gnc_commodity *comm, gpointer data)
+{
+    auto l = static_cast<CommVec *> (data);
+    auto quote_flag = gnc_commodity_get_quote_flag (comm);
+    auto quote_source = gnc_commodity_get_quote_source (comm);
+    auto quote_source_supported = gnc_quote_source_get_supported (quote_source);
+
+    if (!quote_flag ||
+        !quote_source || !quote_source_supported)
+        return TRUE;
+    l->push_back (comm);
+    return TRUE;
+}
+
+CommVec
+gnc_quotes_get_quotable_commodities (const gnc_commodity_table * table)
+{
+    gnc_commodity_namespace * ns = NULL;
+    const char *name_space;
+    GList * nslist, * tmp;
+    CommVec l;
+    regex_t pattern;
+    const char *expression = gnc_prefs_get_namespace_regexp ();
+
+    // ENTER("table=%p, expression=%s", table, expression);
+    if (!table)
+        return CommVec ();
+
+    if (expression && *expression)
+    {
+        if (regcomp (&pattern, expression, REG_EXTENDED | REG_ICASE) != 0)
+        {
+            // LEAVE ("Cannot compile regex");
+            return CommVec ();
+        }
+
+        nslist = gnc_commodity_table_get_namespaces (table);
+        for (tmp = nslist; tmp; tmp = tmp->next)
+        {
+            name_space = static_cast<const char *> (tmp->data);
+            if (regexec (&pattern, name_space, 0, NULL, 0) == 0)
+            {
+                // DEBUG ("Running list of %s commodities", name_space);
+                ns = gnc_commodity_table_find_namespace (table, name_space);
+                if (ns)
+                {
+                    auto cm_list = gnc_commodity_namespace_get_commodity_list (ns);
+                    g_list_foreach (cm_list, &get_quotables_helper1, (gpointer) &l);
+                }
+            }
+        }
+        g_list_free (nslist);
+        regfree (&pattern);
+    }
+    else
+    {
+        gnc_commodity_table_foreach_commodity (table, get_quotables_helper2,
+                                               (gpointer) &l);
+    }
+    //LEAVE ("list head %p", &l);
+    return l;
+}
 
 const GncQuotes& gnc_get_quotes_instance()
 {
