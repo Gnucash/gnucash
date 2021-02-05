@@ -22991,13 +22991,13 @@ msgstr "_Compresser cette colonne"
 msgid "%d added price"
 msgid_plural "%d added prices"
 msgstr[0] "Ajouter un nouveau cours."
-msgstr[1] "Ajouter des nouveaux cours."
+msgstr[1] "Ajouter des %d nouveaux cours."
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1886
-#, c-format
+#, fuzzy, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
 msgstr[0] "_Dupliquer la facture"
