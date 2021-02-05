@@ -31,14 +31,15 @@
 # Nikos Charonitakis <nikosx@gmail.com>, 2002, 2003, 2004, 2005, 2006, 2008, 2009, 2010.
 # ta_panta_rei, 2003, 2006.
 # giorgos georgopoulakis <huskyaek@gmail.com>, 2021.
+# Michalis <michalisntovas@yahoo.gr>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-03 23:00+0100\n"
-"PO-Revision-Date: 2021-01-23 01:32+0000\n"
-"Last-Translator: giorgos georgopoulakis <huskyaek@gmail.com>\n"
+"PO-Revision-Date: 2021-02-05 00:42+0000\n"
+"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
 "Language: el\n"
@@ -15513,7 +15514,7 @@ msgstr "<b>Αρχείο</b>"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:170
 msgid "Host"
-msgstr "Σύστημα"
+msgstr "Εξυπηρετητής"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:183
 msgid "Database"
@@ -17628,9 +17629,8 @@ msgid "_New item..."
 msgstr "_Νέο αντικείμενο..."
 
 #: gnucash/gtkbuilder/dialog-search.glade:82
-#, fuzzy
 msgid "_Find"
-msgstr "_Εύρεση..."
+msgstr "_Εύρεση"
 
 #: gnucash/gtkbuilder/dialog-search.glade:134
 msgid " Search "
@@ -28883,7 +28883,7 @@ msgstr ""
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
-msgstr "Ιστοτόπος"
+msgstr "Ιστότοπος"
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:229
 msgid "Invoice Date"
