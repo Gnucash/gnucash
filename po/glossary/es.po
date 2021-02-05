@@ -4,28 +4,31 @@
 # Eneko Lacunza <enlar@enlar.net>, 2003.
 # Raúl Miró <cotin@geocities.com>, 2003.
 # Eneko Lacunza <enlar@enlar.net>, 2004.
-#
+# Gabriel Ortiz Severino <gabrielortizseverino@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2004-11-23 22:19+0100\n"
-"Last-Translator: Eneko Lacunza <enlar@enlar.net>\n"
-"Language-Team: Spanish <es@li.org>\n"
+"PO-Revision-Date: 2021-02-04 08:41+0000\n"
+"Last-Translator: Gabriel Ortiz Severino <gabrielortizseverino@gmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
+"es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgstr ""
+msgstr "Término"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "“”"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -44,9 +47,8 @@ msgid "account name"
 msgstr "nombre de cuenta"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
-#, fuzzy
 msgid "account type: Active"
-msgstr "tipo de cuenta: Activo"
+msgstr "Activo"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
