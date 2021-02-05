@@ -115,7 +115,7 @@
 ;; equivalents of gnc:pmt, gnc:ipmt and gnc:ppmt above, with some differences.
 ;; First difference is that they take the annual nominal rate and two yearly
 ;; frequencies: rate is annual, not per period (the functions calculate it
-;; themselves) yfreq determines the compounding frequency of the payed/charged
+;; themselves) yfreq determines the compounding frequency of the paid/charged
 ;; interest ycomp determines the compounding frequency of the annual nominal
 ;; rate
 

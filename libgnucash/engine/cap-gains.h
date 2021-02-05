@@ -67,7 +67,7 @@
  * lots may have been user-hand-built. These should be left alone.
  *
 ToDo:
- o XXX Need to create a data-integrity scrubber, tht makes sure that
+ o XXX Need to create a data-integrity scrubber, that makes sure that
    the various flags, and pointers & etc. match.
  *     @{ */
 

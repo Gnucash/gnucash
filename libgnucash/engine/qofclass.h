@@ -164,7 +164,7 @@ typedef gint (*QofCompareFunc) (gpointer a, gpointer b,
                                 gint compare_options,
                                 QofParam *getter);
 
-/** This structure is for each queriable parameter in an object
+/** This structure is for each queryable parameter in an object
  *
  * -- param_name is the name of the parameter.
  * -- param_type is the type of the parameter, which can be either another

@@ -201,7 +201,7 @@ storing their C pointers.
 
 @item If the first test succeeds and the @var{changes} hash table
 of the refresh handler is non-NULL, the component should use the hash to
-determine of the GNC_EVENT_DESTROY event has ocurred for the Engine
+determine of the GNC_EVENT_DESTROY event has occurred for the Engine
 object in question. The @var{changes} hash is a mapping from
 @code{GUID}s to @code{EventInfo} structures. An @code{EventInfo}
 structure has a single member, @code{event_mask}, of type

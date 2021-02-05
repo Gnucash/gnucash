@@ -1063,7 +1063,7 @@ gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2)
 
 /* ==================================================================== */
 /* The add_price() function is a utility that only manages the
- * dual hash table instertion */
+ * dual hash table insertion */
 
 static gboolean
 add_price(GNCPriceDB *db, GNCPrice *p)
@@ -2183,7 +2183,7 @@ list_combine (gpointer element, gpointer data)
  * collections of prices in multiple currencies (here commodity is the one being
  * priced and currency the one in which the price is denominated; note that they
  * may both be currencies or not) just concatenating the price lists together
- * can be expensive because the recieving list must be traversed to obtain its
+ * can be expensive because the receiving list must be traversed to obtain its
  * end. To avoid that cost n times we cache the commodity and merged price list.
  * Since this is a GUI-driven function there is no concern about concurrency.
  */

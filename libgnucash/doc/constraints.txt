@@ -51,7 +51,7 @@ certain ways.   The 'double-entry' constraint belongs to this class:
 it computes the total value of all the splits in a transaction, and 
 adds one, if needed, to bring the total to zero.  This constraint
 runs when the transaction is committed.   Although this is an important
-cosntraint, there is no (easy) way to reflect it directly in the
+constraint, there is no (easy) way to reflect it directly in the
 object design; thus, it acts as a rule that must be periodically
 imposed.
 

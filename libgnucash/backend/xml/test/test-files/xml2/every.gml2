@@ -1260,7 +1260,7 @@
   <trn:splits>
     <trn:split>
       <split:id type="guid">96d4d8f635a24068e09c73e6fb953539</split:id>
-      <split:memo>Begining balance</split:memo>
+      <split:memo>Beginning balance</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>103534000/100000</split:value>
       <split:quantity>103534000/100000</split:quantity>

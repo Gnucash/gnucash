@@ -457,7 +457,7 @@ gnc_numeric gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b)
 gnc_numeric gnc_numeric_convert(gnc_numeric n, gint64 denom,
                                 gint how);
 
-/** Return input after reducing it by Greated Common Factor (GCF)
+/** Return input after reducing it by Greater Common Factor (GCF)
  *  elimination */
 gnc_numeric gnc_numeric_reduce(gnc_numeric n);
 

@@ -84,7 +84,7 @@ enum // Values for m_flags
  *  arbitrary integer type or pair of integer types.
  * @note If the two parameters are of differing sign, it's taken to
  * mean that the lower magnitude is *reducing* the magnitude of the
- * upper, so the lower magnitude will be subracted from UINT64_MAX to
+ * upper, so the lower magnitude will be subtracted from UINT64_MAX to
  * obtain the lower limb value.
 *  @{
  */
