@@ -1,0 +1,219 @@
+#!@PERL@ -w
+######################################################################
+### finance-quote-wrapper - interface file between gnucash and
+###                         Finanace::Quote. Only intended to be used
+###                         from gnucash code.
+### Based on code taken from gnc-fq-helper.
+### Copyright 2001 Rob Browning <rlb@cs.utexas.edu>
+### Copyright 2021 Geert Janssens
+### 
+### This program is free software; you can redistribute it and/or    
+### modify it under the terms of the GNU General Public License as   
+### published by the Free Software Foundation; either version 2 of   
+### the License, or (at your option) any later version.              
+###                                                                  
+### This program is distributed in the hope that it will be useful,  
+### but WITHOUT ANY WARRANTY; without even the implied warranty of   
+### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+### GNU General Public License for more details.                     
+###                                                                  
+### You should have received a copy of the GNU General Public License
+### along with this program# if not, contact:
+###
+### Free Software Foundation           Voice:  +1-617-542-5942
+### 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+### Boston, MA  02110-1301,  USA       gnu@gnu.org
+######################################################################
+
+use strict;
+use English;
+
+=head1 NAME
+
+finance-quote-wrapper  -  internal interface between gnucash and Finance::Quote
+
+=head1 SYNOPSIS
+
+finance-quote-wrapper
+
+=head1 DESCRIPTION
+
+Input: a JSON encoded hash of namespaces and commodities to query prices for.
+Currencies all go under the "currency' namespace, other commodities are
+grouped according to the quotes source they should be queried from
+There should also be a "defaultcurrency" key with the currency to be used as
+base currency for currency quotes.
+
+{
+    "defaultcurrency": "EUR",
+    "currency": {
+        "XAG": "",
+        "HKD": "",
+        "USD": ""
+    },
+    "yahoo_json": {
+        "CSCO": ""
+    }
+}
+
+Output (on standard output):
+
+The retrieved quotes in JSON format for further processing. These are
+the raw values returned by Finance::Quote. The caller is responsible for
+parsing and interpreting the results.
+
+If there are program failures, an error message will be printed on standard error.
+
+Exit status
+
+0 - success
+non-zero - failure
+
+=cut
+
+sub check_modules {
+  my @modules = qw(Finance::Quote JSON::Parse);
+  my @missing;
+
+  foreach my $mod (@modules) {
+    if (eval "require $mod") {
+      $mod->import();
+    }
+    else {
+      push (@missing, $mod);
+    }
+  }
+
+  return unless @missing;
+
+  print STDERR "\n";
+  print STDERR "You need to install the following Perl modules:\n";
+  foreach my $mod (@missing) {
+    print STDERR "  ".$mod."\n";
+  }
+
+  print STDERR "\n";
+  print STDERR "Use your system's package manager to install them,\n";
+  print STDERR "or run 'gnc-fq-update' as root.\n";
+
+  print "missing-lib\n";
+
+  exit 1;
+}
+
+sub sanitize_hash {
+
+    my (%quotehash) = @_;
+    my %newhash;
+
+    my @oldkeys = sort keys %quotehash;
+
+    foreach my $singlekey (@oldkeys) {
+        my ($symbol, $newkey) = split /\x1c/, $singlekey, 2;
+        $newhash{$symbol}{$newkey} = $quotehash{$singlekey};
+    }
+
+    return %newhash;
+}
+
+sub parse_currencies {
+    my($quoter, $currencies, $to_currency) = @_;
+
+    return unless $to_currency;
+
+    my %results;
+    foreach my $from_currency (keys %$currencies) {
+
+        next unless $from_currency;
+
+        my $price = $quoter->currency($from_currency, $to_currency);
+        my $inv_price = undef;
+        my $inverted = 0;
+        # Sometimes price quotes are available in only one direction.
+        unless (defined($price)) {
+            $inv_price = $quoter->currency($to_currency, $from_currency);
+            if (defined($inv_price)) {
+                $price = $inv_price;
+                $inverted = 1;
+            }
+        }
+
+        $results{$from_currency}{"success"} = defined($price);
+        $results{$from_currency}{"inverted"} = $inverted;
+        $results{$from_currency}{"symbol"} = $from_currency;
+        $results{$from_currency}{"currency"} = $to_currency;
+        $results{$from_currency}{"last"} = $price;
+    }
+    return %results;
+}
+
+sub parse_commodities {
+    my($quoter, $quote_method_name, $commodities) = @_;
+
+    my %quote_data = $quoter->fetch($quote_method_name, keys %$commodities);
+    my %normalized_quote_data = sanitize_hash(%quote_data);
+    return %normalized_quote_data;
+}
+
+#---------------------------------------------------------------------------
+# Runtime.
+
+# Check for and load non-standard modules
+check_modules ();
+JSON::Parse->import(qw(valid_json parse_json));
+
+my $json_input = do { local $/; <STDIN> };
+
+if (!valid_json($json_input)) {
+    print STDERR "Could not parse input as valid JSON.\n";
+    print STDERR "Received input:\n$json_input\n";
+    exit 1;
+}
+
+my $requests = parse_json ($json_input);
+
+my $defaultcurrency = $$requests{'defaultcurrency'};
+if (!$defaultcurrency) {
+    $defaultcurrency = "USD";
+    print STDERR "Warning: no default currency was specified, assuming 'USD'\n";
+}
+
+# Create a stockquote object.
+my $quoter = Finance::Quote->new();
+my $prgnam = "gnc-fq-helper";
+
+# Disable default currency conversions.
+$quoter->set_currency();
+
+my $key;
+my $values;
+my %results;
+while (($key, $values) = each %$requests)
+{
+    next if ($key eq "defaultcurrency");
+    if ($key eq "currency")  {
+        my %curr_results = parse_currencies ($quoter, $values, $defaultcurrency, %results);
+        if (%curr_results) {
+            %results = (%results, %curr_results);
+        }
+    }
+    else
+    {
+        my %comm_results = parse_commodities ($quoter, $key, $values, %results);
+        if (%comm_results) {
+            %results = (%results, %comm_results);
+        }
+    }
+}
+
+if (%results) {
+    use JSON;
+    my $jsonval = encode_json \%results;
+    print "$jsonval\n";
+}
+
+STDOUT->flush();
+
+## Local Variables:
+## mode: perl
+## End:
