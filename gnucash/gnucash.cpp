@@ -61,6 +61,9 @@ extern "C" {
 
 #include <boost/locale.hpp>
 #include <boost/optional.hpp>
+#ifdef __MINGW32__
+#include <boost/nowide/args.hpp>
+#endif
 #include <iostream>
 #include <gnc-locale-utils.hpp>
 
@@ -387,7 +390,9 @@ int
 main(int argc, char ** argv)
 {
     Gnucash::Gnucash application (argv[0]);
-
+#ifdef __MINGW32__
+    boost::nowide::args a(argc, argv); // Fix arguments - make them UTF-8
+#endif
     /* We need to initialize gtk before looking up all modules */
     if(!gtk_init_check (&argc, &argv))
     {

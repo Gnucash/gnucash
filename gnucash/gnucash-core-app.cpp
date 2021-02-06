@@ -345,24 +345,14 @@ load_user_config(void)
     try_load_config_array(stylesheet_files);
 }
 
-
 static void
 gnc_log_init (const std::vector <std::string> log_flags,
               const boost::optional <std::string> &log_to_filename)
 {
     if (log_to_filename && !log_to_filename->empty())
     {
-#ifdef __MINGW64__
-        auto *utf8_filename = g_utf16_to_utf8 (log_to_filename->c_str(), -1, NULL, NULL, NULL);
-#else
         auto utf8_filename = log_to_filename->c_str();
-#endif
-
         qof_log_init_filename_special (utf8_filename);
-
-#ifdef __MINGW64__
-        g_free (utf8_filename);
-#endif
     }
     else
     {
