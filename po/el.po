@@ -38,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-03 23:00+0100\n"
-"PO-Revision-Date: 2021-02-05 00:42+0000\n"
+"PO-Revision-Date: 2021-02-07 13:50+0000\n"
 "Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
@@ -55,7 +55,7 @@ msgstr "ΟΛΑ ΤΑ ΜΗ-ΝΟΜΙΣΜΑΤΑ"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr "Κατεύθυνση μετατροπής"
+msgstr "Αραβικά"
 
 #: borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
@@ -72,7 +72,7 @@ msgstr "Κινέζικα"
 #: borrowed/goffice/go-charmap-sel.c:74
 #: gnucash/gnome-utils/assistant-xml-encoding.c:242
 msgid "Cyrillic"
-msgstr "Κυριλλική"
+msgstr "Κυριλλικά"
 
 #: borrowed/goffice/go-charmap-sel.c:75
 msgid "Greek"
@@ -15522,7 +15522,7 @@ msgstr "Βάση δεδομένων"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:209
 msgid "Password"
-msgstr "Συνθηματικό"
+msgstr "Κωδικός πρόσβασης"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:280
 msgid "<b>Database Connection</b>"
@@ -27638,7 +27638,7 @@ msgstr "Εμφάνιση ακίδας Καθαρής Θέσης;"
 
 #: gnucash/report/reports/standard/net-charts.scm:153
 msgid "Add grid lines."
-msgstr ""
+msgstr "Προσθήκη γραμμών πλέγματος."
 
 #: gnucash/report/reports/standard/net-charts.scm:389
 #: gnucash/report/reports/standard/net-charts.scm:421
@@ -27659,20 +27659,17 @@ msgid "Income/Expense Chart"
 msgstr "Διάγραμμα Εσόδων/Εξόδων"
 
 #: gnucash/report/reports/standard/net-charts.scm:497
-#, fuzzy
 msgid "Income & Expense Barchart"
-msgstr "Διάγραμμα Εσόδων και Εξόδων"
+msgstr "Ακιδωτό διάγραμμα Εσόδων και Εξόδων"
 
 #: gnucash/report/reports/standard/net-charts.scm:507
-#, fuzzy
 msgid "Net Worth Linechart"
-msgstr "Ακιδωτό διάγραμμα καθαρής θέσης"
+msgstr "Γραμμικό διάγραμμα καθαρής θέσης"
 
 #: gnucash/report/reports/standard/net-charts.scm:520
 #: gnucash/report/reports/standard/net-charts.scm:522
-#, fuzzy
 msgid "Income & Expense Linechart"
-msgstr "Διάγραμμα Εσόδων και Εξόδων"
+msgstr "Γραμμικό διάγραμμα Εσόδων και Εξόδων"
 
 #: gnucash/report/reports/standard/new-aging.scm:63
 msgid ""
@@ -27684,6 +27681,8 @@ msgstr ""
 msgid ""
 "A/Payable or A/Receivable accounts exist but have no suitable transactions."
 msgstr ""
+"Υπάρχουν A/Πληρωτέοι ή A/Εισπρακτέοι λογαριασμοί, αλλά δεν έχουν κατάλληλες "
+"συναλλαγές."
 
 #: gnucash/report/reports/standard/new-aging.scm:111
 #, fuzzy
@@ -27691,53 +27690,47 @@ msgid "Alphabetical order"
 msgstr "Αλφαβητικά"
 
 #: gnucash/report/reports/standard/new-aging.scm:112
-#, fuzzy
 msgid "Reverse alphabetical order"
-msgstr "Σειρά ταξινόμησης μητρώου"
+msgstr "Αντίστροφη αλφαβητική σειρά"
 
 #: gnucash/report/reports/standard/new-aging.scm:343
 #: gnucash/report/reports/standard/new-owner-report.scm:546
-#, fuzzy
 msgid "Please note some transactions were not processed"
-msgstr "Ημερολογιακό διάστημα από όπου θα ανακτηθούν συναλλαγές:"
+msgstr "Λάβετε υπόψη ότι ορισμένες συναλλαγές δεν υποβλήθηκαν σε επεξεργασία"
 
 #: gnucash/report/reports/standard/new-aging.scm:376
 #, scheme-format
 msgid "Invalid Txn Type ~a"
-msgstr ""
+msgstr "Μη έγκυρος Txn τύπος ~a"
 
 #: gnucash/report/reports/standard/new-aging.scm:386
-#, fuzzy
 msgid "Payment has no owner"
-msgstr "Πληρωμή, ευχαριστούμε"
+msgstr "Η πληρωμή δεν έχει κάτοχο"
 
 #: gnucash/report/reports/standard/new-aging.scm:416
 #: gnucash/report/reports/standard/receivables.scm:65
-#, fuzzy
 msgid "Address source."
-msgstr "Διεύθυνση: "
+msgstr "Πηγή διεύθυνσης."
 
 #: gnucash/report/reports/standard/new-aging.scm:419
 #: gnucash/report/reports/standard/receivables.scm:68
 msgid "Billing"
-msgstr "Τιμολόγηση"
+msgstr "Χρέωση"
 
 #: gnucash/report/reports/standard/new-aging.scm:420
 #: gnucash/report/reports/standard/receivables.scm:68
-#, fuzzy
 msgid "Address fields from billing address."
-msgstr "Πρέπει να εισάγετε μια διεύθυνση πληρωμής."
+msgstr "Πεδία διεύθυνσης από τη διεύθυνση χρέωσης."
 
 #: gnucash/report/reports/standard/new-aging.scm:422
 #: gnucash/report/reports/standard/receivables.scm:69
-#, fuzzy
 msgid "Shipping"
-msgstr "Υπεύθυνος παραλαβής"
+msgstr "Αποστολή"
 
 #: gnucash/report/reports/standard/new-aging.scm:423
 #: gnucash/report/reports/standard/receivables.scm:69
 msgid "Address fields from shipping address."
-msgstr ""
+msgstr "Πεδία διεύθυνσης από τη διεύθυνση αποστολής."
 
 #: gnucash/report/reports/standard/new-aging.scm:437
 msgid "Payable Aging"
@@ -27749,9 +27742,8 @@ msgstr "Καθυστερήσεις εισπράξεων"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:54
 #: gnucash/report/reports/standard/owner-report.scm:55
-#, fuzzy
 msgid "Sale"
-msgstr "Μετοχές"
+msgstr "Πώληση"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:56
 #: gnucash/report/reports/standard/owner-report.scm:57
@@ -27765,177 +27757,153 @@ msgid "Debits"
 msgstr "Χρεώσεις"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:59
-#, fuzzy
-#| msgid "Documents"
 msgid "Document Links"
-msgstr "Έγγραφα"
+msgstr "Σύνδεσμοι εγγράφων"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:60
-#, fuzzy
-#| msgid "Transactions"
 msgid "Transaction Links"
-msgstr "Συναλλαγές"
+msgstr "Σύνδεσμοι συναλλαγών"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:91
 #: gnucash/report/reports/standard/owner-report.scm:87
-#, fuzzy
 msgid "This report requires a customer to be selected."
-msgstr "Η αναφορά απαιτεί να έχουν επιλεγεί λογαριασμοί."
+msgstr "Αυτή η αναφορά απαιτεί την επιλογή ενός πελάτη."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:96
 #: gnucash/report/reports/standard/owner-report.scm:88
-#, fuzzy
 msgid "This report requires a employee to be selected."
-msgstr "Η αναφορά απαιτεί να έχουν επιλεγεί λογαριασμοί."
+msgstr "Αυτή η αναφορά απαιτεί την επιλογή ενός υπαλλήλου."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:101
-#, fuzzy
 msgid "This report requires a job to be selected."
-msgstr "Η αναφορά απαιτεί να έχουν επιλεγεί λογαριασμοί."
+msgstr "Αυτή η αναφορά απαιτεί την επιλογή μιας εργασίας."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:106
-#, fuzzy
 msgid "This report requires a vendor to be selected."
-msgstr "Η αναφορά απαιτεί να έχουν επιλεγεί λογαριασμοί."
+msgstr "Αυτή η αναφορά απαιτεί την επιλογή ενός προμηθευτή."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:246
-#, fuzzy
 msgid "Partial Amount"
-msgstr "_Γονικός λογαριασμός"
+msgstr "Μερικό ποσό"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:299
 #: gnucash/report/trep-engine.scm:980 gnucash/report/trep-engine.scm:1106
 msgid "Link"
-msgstr ""
+msgstr "Σύνδεσμος"
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
 #: gnucash/report/reports/standard/new-owner-report.scm:349
 #, scheme-format
 msgid "~a History"
-msgstr ""
+msgstr "~a Ιστορικό"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:351
-#, fuzzy
 msgid "Linked Details"
-msgstr "Λεπτομέρειες δανείου"
+msgstr "Συνδεδεμένες λεπτομέρειες"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:510
 #: gnucash/report/reports/standard/owner-report.scm:463
-#, fuzzy
 msgid "Period Totals"
-msgstr "Αρχή περιόδου"
+msgstr "Σύνολα περιόδου"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:882
 #: gnucash/report/reports/standard/owner-report.scm:535
-#, fuzzy
 msgid "The company for this report."
-msgstr "Η εταιρία σε αυτή την αναφορά"
+msgstr "Η εταιρεία για αυτή την αναφορά."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:922
 #: gnucash/report/reports/standard/owner-report.scm:582
-#, fuzzy
 msgid "Display the sale amount column?"
-msgstr "Εμφάνιση του ποσού;"
+msgstr "Εμφάνιση της στήλης ποσού πώλησης;"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:927
 #: gnucash/report/reports/standard/owner-report.scm:587
-#, fuzzy
 msgid "Display the tax column?"
-msgstr "Εμφάνιση του λογαριασμού;"
+msgstr "Εμφάνιση της στήλης φόρου;"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:932
 #: gnucash/report/reports/standard/owner-report.scm:597
-#, fuzzy
 msgid "Display the period debits column?"
-msgstr "Εμφανίζει την έκπτωση της καταχώρησης"
+msgstr "Εμφάνιση της στήλης χρεώσεων περιόδου;"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:937
 #: gnucash/report/reports/standard/owner-report.scm:592
-#, fuzzy
 msgid "Display the period credits column?"
-msgstr "Εμφανίζει την έκπτωση της καταχώρησης"
+msgstr "Εμφάνιση της στήλης πιστώσεων περιόδου;"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:942
 #: gnucash/report/reports/standard/register.scm:413
 #: gnucash/report/trep-engine.scm:984
-#, fuzzy
 msgid "Display a running balance?"
-msgstr "Εμφάνιση αθροιστικού υπόλοιπου"
+msgstr "Εμφάνιση τρεχούμενου υπολοίπου;"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:947
-#, fuzzy
 msgid "Show linked transactions"
-msgstr "Εμφάνιση μόνο ακυρωμένων συναλλαγών"
+msgstr "Εμφάνιση συνδεδεμένων συναλλαγών"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:950
-#, fuzzy
 msgid "Linked transactions are hidden."
-msgstr "Εύρεση συναλλαγών με αναζήτηση"
+msgstr "Οι συνδεδεμένες συναλλαγές είναι κρυφές."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:952
-#, fuzzy
 msgid "Simple"
-msgstr "sample:"
+msgstr "Απλή"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:953
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
+"Τα τιμολόγια εμφανίζουν εάν έχουν πληρωθεί, οι πληρωμές εμφανίζουν τους "
+"αριθμούς τιμολογίου."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:955
-#, fuzzy
 msgid "Detailed"
-msgstr "Απέτυχε"
+msgstr "Λεπτομερής"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:956
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
+"Τα τιμολόγια εμφανίζουν λίστα πληρωμών, οι πληρωμές εμφανίζουν λίστα "
+"τιμολογίων και ποσών."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:962
-#, fuzzy
 msgid "Display document link?"
-msgstr "Εμφάνιση λογαριασμών ως συνδέσμων"
+msgstr "Εμφάνιση συνδέσμου εγγράφου;"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1087
-#, fuzzy
 msgid "No valid account found"
-msgstr "Δε βρέθηκαν συναλλαγές που ταιριάζουν"
+msgstr "Δεν βρέθηκε έγκυρος λογαριασμός"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1088
-#, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
-msgstr "Η αναφορά απαιτεί να έχουν επιλεγεί λογαριασμοί."
+msgstr ""
+"Αυτή η αναφορά απαιτεί να είναι διαθέσιμος ένας έγκυρος λογαριασμός AP/AR."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1111
-#, fuzzy
 msgid "No transactions found."
-msgstr "Δε βρέθηκαν συναλλαγές που ταιριάζουν"
+msgstr "Δεν βρέθηκαν συναλλαγές."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1112
 #: gnucash/report/trep-engine.scm:130
 msgid "No matching transactions found"
-msgstr "Δε βρέθηκαν συναλλαγές που ταιριάζουν"
+msgstr "Δεν βρέθηκαν συναλλαγές που να ταιριάζουν"
 
 #: gnucash/report/reports/standard/owner-report.scm:84
-#, fuzzy
 msgid "No valid company selected."
-msgstr "Επιλέξατε μη έγκυρη κωδικοποίηση"
+msgstr "Δεν έχει επιλεγεί έγκυρη εταιρεία."
 
 #: gnucash/report/reports/standard/owner-report.scm:91
-#, fuzzy
 msgid "This report requires a company to be selected."
-msgstr "Η αναφορά απαιτεί να έχουν επιλεγεί λογαριασμοί."
+msgstr "Αυτή η αναφορά απαιτεί την επιλογή μιας εταιρείας."
 
 #: gnucash/report/reports/standard/owner-report.scm:107
-#, fuzzy
 msgid "No valid account selected"
-msgstr "Δεν έχουν επιλεγεί λογαριασμοί"
+msgstr "Δεν έχει επιλεγεί έγκυρος λογαριασμός"
 
 #: gnucash/report/reports/standard/owner-report.scm:108
-#, fuzzy
 msgid "This report requires a valid account to be selected."
-msgstr "Η αναφορά απαιτεί να έχουν επιλεγεί λογαριασμοί."
+msgstr "Αυτή η αναφορά απαιτεί την επιλογή ενός έγκυρου λογαριασμού."
 
 #: gnucash/report/reports/standard/owner-report.scm:768
 msgid "Report:"
@@ -27943,12 +27911,11 @@ msgstr "Αναφορά:"
 
 #: gnucash/report/reports/standard/payables.scm:36
 msgid "Payable Account"
-msgstr "Λογαριασμός πληρωτέος"
+msgstr "Πληρωτέος λογαριασμός"
 
 #: gnucash/report/reports/standard/payables.scm:47
-#, fuzzy
 msgid "The payable account you wish to examine."
-msgstr "Υπάρχει ήδη λογαριασμός με αυτό το όνομα"
+msgstr "Ο πληρωτέος λογαριασμός που θέλετε να εξετάσετε."
 
 #: gnucash/report/reports/standard/portfolio.scm:33
 msgid "Investment Portfolio"
@@ -27964,7 +27931,7 @@ msgstr "Μονάδες"
 
 #: gnucash/report/reports/standard/price-scatter.scm:42
 msgid "Price of Commodity"
-msgstr "Τιμή της Αξίας"
+msgstr "Τιμή του Εμπορεύματος"
 
 #: gnucash/report/reports/standard/price-scatter.scm:44
 msgid "Invert prices"
