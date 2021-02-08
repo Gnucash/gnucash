@@ -39,40 +39,36 @@
 
 
 /** Help Files ******************************************************/
-#ifdef G_OS_WIN32
-#    define HF_GUIDE         "gnucash-guide.chm"
-#    define HF_HELP          "gnucash-help.chm"
-#elif defined MAC_INTEGRATION
-#    define HF_GUIDE         "GnuCash Guide"
-#    define HF_HELP          "GnuCash Help"
-#else
-#    define HF_GUIDE         "gnucash-guide"
-#    define HF_HELP          "gnucash-help"
-#endif
+#define HF_HELP       "gnucash-help"
+#define HF_HELP_HOME  "index.html"
+#define HF_GUIDE      "gnucash-guide"
+#define HF_GUIDE_HOME "index.html"
 
 /** Links in the Help Files *****************************************/
-#define HL_USAGE_BSNSS       "busnss-ar-setup1"
-#define HL_USAGE_INVOICE     "busnss-ar-invoices1"
-#define HL_USAGE_VOUCHER     "busnss-emply-newvchr"
-#define HL_USAGE_BILL        "busnss-ap-bills1"
-#define HL_USAGE_CUSTOMER    "busnss-ar-customers1"
-#define HL_USAGE_VENDOR      "busnss-ap-vendors1"
-#define HL_USAGE_EMPLOYEE    "busnss-emply"
-#define HL_USAGE_JOB         "busnss-ar-jobs1"
-#define HL_ACC               "acct-create"
-#define HL_ACCEDIT           "acct-edit"
-#define HL_COMMODITY         "tool-commodity"
-#define HL_FIND_TRANSACTIONS "tool-find"
-#define HL_GLOBPREFS         "set-prefs"
-#define HL_PRINTCHECK        "print-check"
-#define HL_RECNWIN           "acct-reconcile"
-#define HL_SXEDITOR          "trans-sched"
-#define HL_BOOK_OPTIONS      "book-options"
-#define HL_STYLE_SHEET       "change-style"
-#define HL_CLOSE_BOOK        "tool-close-book"
-#define HL_USAGE_CUSTOMREP   "report-saving"
-#define HL_IMPORT_BC         "busnss-imp-bills-invoices"
-#define HL_IMPORT_CUST       "busnss-imp-customer-vendor"
+#define HL_USAGE_BSNSS       "ch07.html#busnss-ar-setup1"
+#define HL_USAGE_INVOICE     "ch07s04.html#busnss-ar-invoices1"
+#define HL_USAGE_VOUCHER     "ch07s13.html#busnss-emply-newvchr"
+#define HL_USAGE_BILL        "ch07s10.html#busnss-ap-bills1"
+#define HL_USAGE_CUSTOMER    "ch07s03.html#busnss-ar-customers1"
+#define HL_USAGE_VENDOR      "ch07s09.html#busnss-ap-vendors1"
+#define HL_USAGE_EMPLOYEE    "ch07s13.html#busnss-emply"
+#define HL_USAGE_JOB         "ch07s05.html#busnss-ar-jobs1"
+#define HL_ACC               "ch05s04.html#acct-create"
+#define HL_ACCEDIT           "ch05s05.html#acct-edit"
+#define HL_COMMODITY         "ch08s07.html#tool-commodity"
+#define HL_FIND_TRANSACTIONS "ch08.html#tool-find"
+#define HL_GLOBPREFS         "ch10s02.html#set-prefs"
+#define HL_PRINTCHECK        "ch06s15.html#print-check"
+#define HL_RECNWIN           "ch05s08.html#acct-reconcile"
+#define HL_SXEDITOR          "ch06s13.html#trans-sched"
+#define HL_BOOK_OPTIONS      "ch10s03.html#book-options"
+#define HL_STYLE_SHEET       "ch10s04.html#change-style"
+#define HL_CLOSE_BOOK        "ch08s09.html#tool-close-book"
+#define HL_USAGE_CUSTOMREP   "ch09.html#report-saving"
+#define HL_IMPORT_BC         "ch18.html#busnss-imp-bills-invoices"
+#define HL_IMPORT_CUST       "ch18s02.html"
+/*********************************************************************/
+
 
 /* GTK Windows - Common Response Codes */
 
@@ -106,7 +102,7 @@ gnc_error_dialog (GtkWindow *parent,
 
 
 extern void
-gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *target_link);
+gnc_gnome_help (GtkWindow *parent, const char *dir_name, const char *anchor);
 
 int      gnc_choose_radio_option_dialog (GtkWidget *parent,
         const char *title,

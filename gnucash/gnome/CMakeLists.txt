@@ -18,6 +18,7 @@ set (gnc_gnome_noinst_HEADERS
   dialog-find-account.h
   dialog-find-transactions.h
   dialog-find-transactions2.h
+  dialog-help.h
   dialog-imap-editor.h
   dialog-invoice.h
   dialog-job.h
@@ -87,6 +88,7 @@ set (gnc_gnome_SOURCES
   dialog-find-account.c
   dialog-find-transactions.c
   dialog-find-transactions2.c
+  dialog-help.c
   dialog-imap-editor.c
   dialog-invoice.c
   dialog-job.c

@@ -92,6 +92,8 @@ gnc_html_class_init( GncHtmlClass* klass )
     klass->reload = NULL;
     klass->copy_to_clipboard = NULL;
     klass->export_to_file = NULL;
+    klass->go_back = NULL;
+    klass->go_forward = NULL;
     klass->print = NULL;
     klass->cancel = NULL;
     klass->parse_url = NULL;
@@ -345,6 +347,33 @@ gnc_html_show_data( GncHtml* self, const gchar* data, int datalen )
     }
 }
 
+/********************************************************************
+ * gnc_html_show_docs
+ *
+ * open a document URL.
+ ********************************************************************/
+void
+gnc_html_show_docs (GncHtml* self, URLType type,
+                    const gchar* location, const gchar* label,
+                    gboolean new_window_hint)
+{
+    URLType lc_type = NULL;
+
+    g_return_if_fail (self != NULL);
+    g_return_if_fail (GNC_IS_HTML(self));
+
+    lc_type = g_ascii_strdown (type, -1);
+    if (GNC_HTML_GET_CLASS(self)->show_docs != NULL)
+    {
+        GNC_HTML_GET_CLASS(self)->show_docs (self, lc_type, location,
+                                             label, new_window_hint);
+    }
+    else
+    {
+        DEBUG("'show_docs' not implemented");
+    }
+    g_free (lc_type);
+}
 
 /********************************************************************
  * gnc_html_show_url
@@ -529,6 +558,47 @@ gnc_html_export_to_file( GncHtml* self, const gchar* filepath )
         return FALSE;
     }
 }
+
+/**************************************************************
+ * gnc_html_go_back : wrapper around the builtin function in gtkhtml
+ **************************************************************/
+const gchar*
+gnc_html_go_back ( GncHtml* self )
+{
+    g_return_val_if_fail( self != NULL, FALSE );
+    g_return_val_if_fail( GNC_IS_HTML(self), FALSE );
+
+    if ( GNC_HTML_GET_CLASS(self)->go_forward != NULL )
+    {
+        return GNC_HTML_GET_CLASS(self)->go_back( self );
+    }
+    else
+    {
+        DEBUG( "'go_back' not implemented" );
+        return NULL;
+    }
+}
+
+/**************************************************************
+ * gnc_html_go_forward : wrapper around the builtin function in gtkhtml
+ **************************************************************/
+const gchar*
+gnc_html_go_forward ( GncHtml* self )
+{
+    g_return_val_if_fail( self != NULL, FALSE );
+    g_return_val_if_fail( GNC_IS_HTML(self), FALSE );
+
+    if ( GNC_HTML_GET_CLASS(self)->go_forward != NULL )
+    {
+        return GNC_HTML_GET_CLASS(self)->go_forward( self );
+    }
+    else
+    {
+        DEBUG( "'go_forward' not implemented" );
+        return NULL;
+    }
+}
+
 #ifdef WEBKIT1
 void
 gnc_html_print (GncHtml* self, const char *jobname, gboolean export_pdf)
@@ -594,7 +664,7 @@ gnc_html_get_webview( GncHtml* self )
         webview = sw_list->data;
 #else
         GList *vp_list = gtk_container_get_children (GTK_CONTAINER(sw_list->data));
- 
+
         if (vp_list) // the viewport has only one child
         {
             webview = vp_list->data;
@@ -605,7 +675,6 @@ gnc_html_get_webview( GncHtml* self )
     g_list_free (sw_list);
     return webview;
 }
-
 
 void
 gnc_html_set_parent( GncHtml* self, GtkWindow* parent )
@@ -660,8 +729,8 @@ gnc_html_initialize( void )
     int i;
     static struct
     {
-        URLType	type;
-        char *	protocol;
+        URLType type;
+        char *  protocol;
     } types[] =
     {
         { URL_TYPE_FILE, "file" },

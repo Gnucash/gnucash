@@ -48,19 +48,32 @@ void gnc_gnome_utils_init (void);
  */
 void gnc_add_css_file (void);
 
-/** Launch the systems default help browser, gnome's yelp for linux,
- *  and open to a given link within a given file.
+typedef struct help_dialog_args
+{
+    GtkWindow   *parent;
+    const gchar *dir_name;
+    const gchar *anchor;
+} help_dialog_args;
+
+/** This sets the help dialog function to be called for the
+ *  gnome help.
+ */
+void gnc_gnome_help_set_help_dialog_func (GFunc cb, gpointer user_data);
+
+/** Launch a dialog with a gnc_html widget contained
+ *  and open to a given link within a given a directory.
  *  This routine will display an error message
  *  if it can't find the help file or can't open the help browser.
  *
  *  @param parent The parent window for any dialogs.
  *
- *  @param file_name The name of the help file.
+ *  @param dir_name The name of the help directory.
  *
  *  @param anchor The anchor the help browser should scroll to.
  */
-void gnc_gnome_help (GtkWindow *parent, const char *file_name,
+void gnc_gnome_help (GtkWindow *parent, const char *dir_name,
                      const char *anchor);
+
 /** Launch the default browser and open the provided URI.
  */
 void gnc_launch_doclink (GtkWindow *parent, const char *uri);

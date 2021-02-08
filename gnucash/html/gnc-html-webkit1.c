@@ -111,6 +111,13 @@ static int gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
 static void impl_webkit_show_url( GncHtml* self, URLType type,
                                   const gchar* location, const gchar* label,
                                   gboolean new_window_hint );
+static void impl_webkit_show_docs( GncHtml* self, URLType type,
+                                  const gchar* location, const gchar* label,
+                                  gboolean new_window_hint );
+
+static const gchar* impl_webkit_go_back( GncHtml* self );
+static const gchar* impl_webkit_go_forward( GncHtml* self );
+
 static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen );
 static void impl_webkit_reload( GncHtml* self, gboolean force_rebuild );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
@@ -227,7 +234,10 @@ gnc_html_webkit_class_init( GncHtmlWebkitClass* klass )
     gobject_class->finalize = gnc_html_webkit_finalize;
 
     html_class->show_url = impl_webkit_show_url;
+    html_class->show_docs = impl_webkit_show_docs;
     html_class->show_data = impl_webkit_show_data;
+    html_class->go_back = impl_webkit_go_back;
+    html_class->go_forward = impl_webkit_go_forward;
     html_class->reload = impl_webkit_reload;
     html_class->copy_to_clipboard = impl_webkit_copy_to_clipboard;
     html_class->export_to_file = impl_webkit_export_to_file;
@@ -816,6 +826,21 @@ impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
 }
 
 /********************************************************************
+ * gnc_html_show_docs
+ *
+ * open a URL. Used in gnc_html window to explicitly request a URL.
+ ********************************************************************/
+
+static void
+impl_webkit_show_docs (GncHtml* self, URLType type,
+                       const gchar* location, const gchar* label,
+                       gboolean new_window_hint)
+{
+    GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+    webkit_web_view_load_uri (priv->web_view, location);
+}
+
+/********************************************************************
  * gnc_html_show_url
  *
  * open a URL.  This is called when the user clicks a link or
@@ -1131,6 +1156,71 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
     {
         return FALSE;
     }
+}
+
+
+/**************************************************************
+ * gnc_html_go_back
+ *
+ * @param self GncHtmlWebkit object
+ * @return TRUE if successful, FALSE if unsuccessful
+ **************************************************************/
+static const gchar*
+impl_webkit_go_back( GncHtml* self )
+{
+     GncHtmlWebkitPrivate* priv;
+     WebKitWebBackForwardList *bfl;
+     WebKitWebHistoryItem *hi;
+     gboolean can_go = FALSE;
+
+     g_return_val_if_fail( self != NULL, FALSE );
+     g_return_val_if_fail( GNC_IS_HTML_WEBKIT(self), FALSE );
+
+     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+
+     bfl = webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW(priv->web_view));
+
+     can_go = webkit_web_view_can_go_back (WEBKIT_WEB_VIEW(priv->web_view));
+
+     if (can_go)
+     {
+         hi = webkit_web_back_forward_list_get_back_item (bfl);
+         webkit_web_view_go_back (WEBKIT_WEB_VIEW(priv->web_view));
+         return webkit_web_history_item_get_uri (hi);
+     }
+     return NULL;
+}
+
+/**************************************************************
+ * gnc_html_go_forward
+ *
+ * @param self GncHtmlWebkit object
+ * @return TRUE if successful, FALSE if unsuccessful
+ **************************************************************/
+static const gchar*
+impl_webkit_go_forward( GncHtml* self )
+{
+     GncHtmlWebkitPrivate* priv;
+     WebKitWebBackForwardList *bfl;
+     WebKitWebHistoryItem *hi;
+     gboolean can_go = FALSE;
+
+     g_return_val_if_fail( self != NULL, FALSE );
+     g_return_val_if_fail( GNC_IS_HTML_WEBKIT(self), FALSE );
+
+     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+
+     bfl = webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW(priv->web_view));
+
+     can_go = webkit_web_view_can_go_forward (WEBKIT_WEB_VIEW(priv->web_view));
+
+     if (can_go)
+     {
+         hi = webkit_web_back_forward_list_get_forward_item (bfl);
+         webkit_web_view_go_forward (WEBKIT_WEB_VIEW(priv->web_view));
+         return webkit_web_history_item_get_uri (hi);
+     }
+     return NULL;
 }
 
 /**

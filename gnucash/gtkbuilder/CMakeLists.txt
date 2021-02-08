@@ -28,6 +28,7 @@ set (gtkbuilder_SOURCES
         dialog-file-access.glade
         dialog-fincalc.glade
         dialog-find-account.glade
+        dialog-help.glade
         dialog-imap-editor.glade
         dialog-import.glade
         dialog-invoice.glade

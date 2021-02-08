@@ -230,269 +230,30 @@ gnc_add_css_file (void)
     g_object_unref (provider_fallback);
 }
 
-/* This function fixes an issue with yelp that it does not work with the
- * ?anchor varient, see https://gitlab.gnome.org/GNOME/yelp/issues/116
- */
-static gchar *
-gnc_gnome_help_yelp_anchor_fix (GtkWindow *parent, const char *file_name, const char *anchor)
-{
-    const gchar * const *sdatadirs = g_get_system_data_dirs ();
-    const gchar * const *langs = g_get_language_names ();
-    gchar *lookfor = g_strconcat ("gnome/help/", file_name, NULL);
-    gchar *help_path = NULL;
-    gchar *help_file = NULL;
-    gchar *full_path = NULL;
-    gchar *uri = NULL;
+static GFunc help_dialog = NULL;
 
-    for (; *sdatadirs; sdatadirs++)
-    {
-        gchar *filepath = g_build_filename (*sdatadirs, lookfor, NULL);
-        if (g_file_test (filepath, G_FILE_TEST_EXISTS))
-            help_path = g_strdup (filepath);
-        g_free (filepath);
-    }
-    g_free (lookfor);
-
-    if (!help_path)
-    {
-        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
-        PERR("Unable to find 'gnome/help' directory");
-        return NULL;
-    }
-
-    // add the file extension, currently .xml
-    help_file = g_strconcat (file_name, ".xml", NULL);
-
-    for (; *langs; langs++)
-    {
-        gchar *filename = g_build_filename (help_path, *langs, help_file, NULL);
-        if (g_file_test (filename, G_FILE_TEST_EXISTS))
-            full_path = g_strdup (filename);
-        g_free (filename);
-    }
-    g_free (help_path);
-    g_free (help_file);
-
-    if (full_path)
-        uri = g_strconcat ("ghelp:", full_path, "?", anchor, NULL);
-    else
-    {
-        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
-        PERR("Unable to find valid help language directory");
-        return NULL;
-    }
-    g_free (full_path);
-    return uri;
-}
-
-#ifdef MAC_INTEGRATION
-
-/* Don't be alarmed if this function looks strange to you: It's
- * written in Objective-C, the native language of the OSX Cocoa
- * toolkit.
- */
 void
-gnc_gnome_help (GtkWindow *parent, const char *dir, const char *detail)
+gnc_gnome_help_set_help_dialog_func (GFunc cb, gpointer user_data)
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSString *subdir = [NSString stringWithUTF8String: dir];
-    NSString *tag, *subdirectory;
-    NSURL *url = NULL;
-
-    if (detail)
-        tag  = [NSString stringWithUTF8String: detail];
-    else if ([subdir compare: @HF_HELP] == NSOrderedSame)
-        tag = @"help";
-    else if ([subdir compare: @HF_GUIDE] == NSOrderedSame)
-        tag = @"index";
-    else
-    {
-        PWARN("gnc_gnome_help called with unknown subdirectory %s", dir);
-        return;
-    }
-
-    if (![[NSBundle mainBundle] bundleIdentifier])
-    {
-        /* If bundleIdentifier is NULL, then we're running from the
-         * commandline and must construct a file path to the resource. We can
-         * still get the resource path, but it will point to the "bin"
-         * directory so we chop that off, break up what's left into pieces,
-         * add some more pieces, and put it all back together again. Then,
-         * because the gettext way of handling localizations is different from
-         * OSX's, we have to figure out which translation to use. */
-        NSArray *components = [NSArray arrayWithObjects: @"share", @"doc", @"gnucash-docs", nil ];
-        NSString *prefix = [[[NSBundle mainBundle] resourcePath]
-                            stringByDeletingLastPathComponent];
-        NSArray *prefix_comps = [[prefix pathComponents]
-                                 arrayByAddingObjectsFromArray: components];
-        NSString *docs_dir = [NSString pathWithComponents: prefix_comps];
-        NSArray *languages = [[NSUserDefaults standardUserDefaults]
-                              objectForKey: @"AppleLanguages"];
-        BOOL dir;
-        subdir = [[[subdir lowercaseString] componentsSeparatedByString: @" "]
-                  componentsJoinedByString: @"-"];
-        if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir])
-        {
-            gnc_error_dialog (parent, "%s\n%s\n%s: %s", _(msg_no_help_found),
-                              _(msg_no_help_reason),
-                              _(msg_no_help_location), [docs_dir UTF8String]);
-            [pool release];
-            return;
-        }
-        if ([languages count] > 0)
-        {
-            NSEnumerator *lang_iter = [languages objectEnumerator];
-            NSString *path;
-            NSString *this_lang;
-            while ((this_lang = [lang_iter nextObject]))
-            {
-                NSArray *elements;
-                unsigned int paths;
-                NSString *completed_path = [NSString alloc];
-                this_lang = [this_lang stringByTrimmingCharactersInSet:
-                             [NSCharacterSet characterSetWithCharactersInString:
-                              @"\""]];
-                elements = [this_lang componentsSeparatedByString: @"-"];
-                this_lang = [elements objectAtIndex: 0];
-                path = [docs_dir stringByAppendingPathComponent: this_lang];
-                paths = [path completePathIntoString: &completed_path
-                         caseSensitive: FALSE
-                         matchesIntoArray: NULL filterTypes: NULL];
-                if (paths > 1 &&
-                    [[NSFileManager defaultManager]
-                     fileExistsAtPath: completed_path
-                     isDirectory: &dir])
-                    if (dir)
-                    {
-                        @try
-                        {
-                            url = [NSURL fileURLWithPath:
-                                   [[[completed_path
-                                      stringByAppendingPathComponent: subdir]
-                                     stringByAppendingPathComponent: tag]
-                                    stringByAppendingPathExtension: @"html"]];
-                        }
-                        @catch (NSException *e)
-                        {
-                            PWARN("fileURLWithPath threw %s: %s",
-                                  [[e name] UTF8String], [[e reason] UTF8String]);
-                            return;
-                        }
-                        break;
-                    }
-                if ([this_lang compare: @"en"] == NSOrderedSame)
-                    break; /* Special case, forces use of "C" locale */
-            }
-        }
-        if (!url)
-        {
-            @try
-            {
-                url = [NSURL
-                       fileURLWithPath: [[[[docs_dir
-                                            stringByAppendingPathComponent: @"C"]
-                                           stringByAppendingPathComponent: subdir]
-                                          stringByAppendingPathComponent: tag]
-                                         stringByAppendingPathExtension: @"html"]];
-            }
-            @catch (NSException *e)
-            {
-                PWARN("fileURLWithPath threw %s: %s",
-                      [[e name] UTF8String], [[e reason] UTF8String]);
-                return;
-            }
-        }
-    }
-    /* It's a lot easier in a bundle! OSX finds the best translation for us. */
-    else
-    {
-        @try
-        {
-            url = [NSURL fileURLWithPath: [[NSBundle mainBundle]
-                                           pathForResource: tag
-                                           ofType: @"html"
-                                           inDirectory: subdir ]];
-        }
-        @catch (NSException *e)
-        {
-            PWARN("fileURLWithPath threw %s: %s",
-                  [[e name] UTF8String], [[e reason] UTF8String]);
-            return;
-        }
-    }
-    /* Now just open the URL in the default app for opening URLs */
-    if (url)
-        [[NSWorkspace sharedWorkspace] openURL: url];
-    else
-    {
-       gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
-    }
-    [pool release];
+    help_dialog = cb;
 }
-#elif defined G_OS_WIN32 /* G_OS_WIN32 */
+
 void
-gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
+gnc_gnome_help (GtkWindow *parent, const char *dir_name, const char *anchor)
 {
-    const gchar * const *lang;
-    gchar *pkgdatadir, *fullpath, *found = NULL;
+    help_dialog_args *args;
 
-    pkgdatadir = gnc_path_get_pkgdatadir ();
-    for (lang = g_get_language_names (); *lang; lang++)
+    if (help_dialog)
     {
-        fullpath = g_build_filename (pkgdatadir, "help", *lang, file_name,
-                                     (gchar*) NULL);
-        if (g_file_test (fullpath, G_FILE_TEST_IS_REGULAR))
-        {
-            found = g_strdup (fullpath);
-            g_free (fullpath);
-            break;
-        }
-        g_free (fullpath);
-    }
-    g_free (pkgdatadir);
+        help_dialog_args *args;
 
-    if (!found)
-    {
-        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
+        args = g_malloc(sizeof(help_dialog_args));
+        args->parent = parent;
+        args->dir_name = dir_name;
+        args->anchor = anchor;
+        help_dialog (args, NULL);
     }
-    else
-    {
-        gnc_show_htmlhelp (found, anchor);
-    }
-    g_free (found);
 }
-#else
-void
-gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
-{
-    GError *error = NULL;
-    gchar *uri = NULL;
-    gboolean success = TRUE;
-
-    if (anchor)
-        uri = gnc_gnome_help_yelp_anchor_fix (parent, file_name, anchor);
-    else
-        uri = g_strconcat ("ghelp:", file_name, NULL);
-
-    DEBUG ("Attempting to opening help uri %s", uri);
-
-    if (uri)
-        success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
-
-    g_free (uri);
-    if (success)
-        return;
-
-    g_assert(error != NULL);
-    {
-        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
-    }
-    PERR ("%s", error->message);
-    g_error_free(error);
-}
-
-
-#endif
 
 #ifdef MAC_INTEGRATION
 

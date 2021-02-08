@@ -134,6 +134,13 @@ struct _GncHtmlClass
                       const gchar* location,
                       const gchar* label,
                       gboolean new_window_hint );
+    void (*show_docs)( GncHtml* html,
+                      URLType type,
+                      const gchar* location,
+                      const gchar* label,
+                      gboolean new_window_hint );
+    const gchar* (*go_back)( GncHtml* html );
+    const gchar* (*go_forward)( GncHtml* html );
     void (*show_data)( GncHtml* html, const gchar* data, int datalen );
     void (*reload)( GncHtml* html, gboolean force_rebuild );
     void (*copy_to_clipboard)( GncHtml* html );
@@ -163,6 +170,14 @@ struct _GncHtml
  * @param html GncHtml object to destroy
  */
 void gnc_html_destroy( GncHtml* html );
+
+/**
+ * Displays a URL directly in a GncHtml object.
+ *
+ * @param html GncHtml object
+ */
+void gnc_html_show_docs( GncHtml* html, URLType type, const gchar* location,
+                         const gchar* label, gboolean new_window_hint );
 
 /**
  * Displays a URL in a GncHtml object.
@@ -202,6 +217,22 @@ void gnc_html_copy_to_clipboard( GncHtml* html );
  * @param TRUE if successful, FALSE if unsuccessful
  */
 gboolean gnc_html_export_to_file( GncHtml* html, const gchar* filename );
+
+/**
+ * Go Back a page.
+ *
+ * @param html GncHtml object
+ * @return the url if available or NULL
+ */
+const gchar* gnc_html_go_back ( GncHtml* html );
+
+/**
+ * Go Forward.
+ *
+ * @param html GncHtml object
+ * @return the url if available or NULL
+ */
+const gchar* gnc_html_go_forward ( GncHtml* html );
 
 #ifdef WEBKIT1
 /**
@@ -263,7 +294,6 @@ GtkWidget* gnc_html_get_widget( GncHtml* html );
  * @return webview widget
  */
 GtkWidget* gnc_html_get_webview( GncHtml* html );
-
 
 /**
  * Sets the parent window for this html engine.  The engine will be embedded in this parent.

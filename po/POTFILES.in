@@ -67,6 +67,7 @@ gnucash/gnome/dialog-fincalc.c
 gnucash/gnome/dialog-find-account.c
 gnucash/gnome/dialog-find-transactions2.c
 gnucash/gnome/dialog-find-transactions.c
+gnucash/gnome/dialog-help.c
 gnucash/gnome/dialog-imap-editor.c
 gnucash/gnome/dialog-invoice.c
 gnucash/gnome/dialog-job.c
@@ -263,6 +264,7 @@ gnucash/gtkbuilder/dialog-employee.glade
 gnucash/gtkbuilder/dialog-file-access.glade
 gnucash/gtkbuilder/dialog-fincalc.glade
 gnucash/gtkbuilder/dialog-find-account.glade
+gnucash/gtkbuilder/dialog-help.glade
 gnucash/gtkbuilder/dialog-imap-editor.glade
 gnucash/gtkbuilder/dialog-import.glade
 gnucash/gtkbuilder/dialog-invoice.glade
