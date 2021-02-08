@@ -38,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-03 23:00+0100\n"
-"PO-Revision-Date: 2021-02-08 19:48+0000\n"
+"PO-Revision-Date: 2021-02-08 23:50+0000\n"
 "Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
@@ -7034,7 +7034,7 @@ msgstr "Πρέπει να επιλέξετε ένα αντικείμενο απ�
 #: gnucash/gtkbuilder/dialog-doclink.glade:218
 #: gnucash/gtkbuilder/dialog-price.glade:854
 msgid "_Remove"
-msgstr "_Απομάκρυνση"
+msgstr "_Αφαίρεση"
 
 #: gnucash/gnome-search/dialog-search.c:1097
 #, fuzzy
@@ -13074,7 +13074,7 @@ msgstr "Σταθερό πλάτος"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:290
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:282
 msgid "Space"
-msgstr "Κενό διάστημα"
+msgstr "Κενό"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:306
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:298
