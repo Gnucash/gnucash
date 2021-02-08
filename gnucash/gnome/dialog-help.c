@@ -54,6 +54,13 @@ const gchar *msg_no_help_reason = N_("This is likely because the \"gnucash-docs\
 
 const gchar *msg_no_help_file = N_("Unable to find html file in a valid language directory");
 
+/** Enumeration for the completion model */
+enum GncHelpComp
+{
+    TEXT_ITEM,
+    ANCHOR_ITEM
+};
+
 typedef struct
 {
     GtkWidget    *window;
@@ -67,6 +74,9 @@ typedef struct
     const char   *anchor;
     gchar        *help_path;
     gchar        *url;
+
+    GtkWidget    *entry;
+    GtkListStore *store;
 
     gint          component_id;
     QofSession   *session;
@@ -198,6 +208,115 @@ gnc_help_dialog_set_title (HelpDialog *help_dialog)
         gtk_window_set_title (GTK_WINDOW(help_dialog->window), _("GnuCash Tutorial and Concepts Guide"));
         gtk_button_set_label (GTK_BUTTON(help_dialog->button), _("_Help"));
     }
+}
+
+static gchar **
+get_file_strsplit (const gchar *partial)
+{
+    gchar **lines;
+#ifdef G_OS_WIN32
+    lines = g_strsplit_set (partial, "\r\n", -1);
+#else
+    lines = g_strsplit_set (partial, "\n", -1);
+#endif
+    return lines;
+}
+
+static void
+gnc_help_dialog_get_anchors (HelpDialog *help_dialog)
+{
+    gchar *toc_file = NULL;
+    gchar *contents;
+    gchar **lines;
+    guint i, length;
+    GHashTable *hash;
+
+    ENTER(" ");
+
+    if (help_dialog->entry)
+        gtk_widget_hide (GTK_WIDGET(help_dialog->entry));
+
+    toc_file = g_strconcat (help_dialog->help_path, help_dialog->dir_name, "/toc.hhc", NULL);
+
+    if (!g_file_test (toc_file, G_FILE_TEST_EXISTS))
+     {
+        g_free (toc_file);
+        PERR("toc.hhc file not found");
+        LEAVE(" ");
+        return;
+    }
+
+    PINFO("toc file full path is '%s'", toc_file);
+
+    if (!g_file_get_contents (toc_file, &contents, NULL, NULL))
+    {
+        g_free (toc_file);
+        LEAVE(" ");
+        return;
+    }
+    g_free (toc_file);
+
+    if (help_dialog->entry)
+        gtk_widget_show (GTK_WIDGET(help_dialog->entry));
+
+    hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+    lines = get_file_strsplit (contents);
+    length = g_strv_length (lines);
+
+    // clear the completion store
+    gtk_list_store_clear (help_dialog->store);
+
+    for (i = 0; i < length; i++)
+    {
+        gchar *text = NULL;
+        gchar *anchor = NULL;
+
+        if (lines[i])
+        {
+            if (g_str_has_prefix (lines[i], "<param name=\"Name\""))
+            {
+                gchar *ptr1 = g_strstr_len (lines[i], -1, "value=\"");
+                if (ptr1)
+                {
+                    gchar *ptr2 = g_strstr_len (lines[i], -1, "\">");
+                    text = g_strndup (ptr1 + 7, (ptr2 - (ptr1 + 7)));
+                    i++;
+                }
+            }
+            if (g_str_has_prefix (lines[i], "<param name=\"Local\""))
+            {
+                gchar *ptr1 = g_strstr_len (lines[i], -1, "value=\"");
+                if (ptr1)
+                {
+                    gchar *ptr2 = g_strstr_len (lines[i], -1, "\">");
+                    anchor = g_strndup (ptr1 + 7, (ptr2 - (ptr1 + 7)));
+                }
+            }
+            if (text && anchor)
+            {
+                GtkTreeIter iter;
+                gchar *test = g_strconcat (text, anchor, NULL);
+                // see if text/anchor is in hash table so we only add it once.
+                if (g_hash_table_lookup (hash, test) == NULL)
+                {
+                    gtk_list_store_append (help_dialog->store, &iter);
+                    gtk_list_store_set (help_dialog->store, &iter,
+                                        TEXT_ITEM, text,
+                                        ANCHOR_ITEM, anchor, -1);
+
+                    PINFO("completion text is '%s', anchor is '%s'", text, anchor);
+                    g_hash_table_insert (hash, test, "test");
+                }
+            }
+            g_free (text);
+            g_free (anchor);
+        }
+    }
+    g_hash_table_destroy (hash);
+    g_strfreev (lines);
+    g_free (contents);
+    LEAVE(" ");
 }
 
 static gchar *
@@ -336,7 +455,10 @@ update_titles (HelpDialog *help_dialog, const gchar *url)
         help_dialog->dir_name = HF_GUIDE;
     }
     if (changed)
+    {
         gnc_help_dialog_set_title (help_dialog);
+        gnc_help_dialog_get_anchors (help_dialog);
+    }
 }
 
 void
@@ -444,6 +566,57 @@ gnc_help_dialog_help_guide_button_cb (GtkWidget *widget, gpointer user_data)
     }
 }
 
+static gboolean
+gnc_help_dialog_match_selected_cb (GtkEntryCompletion *widget,
+                                   GtkTreeModel       *model,
+                                   GtkTreeIter        *iter,
+                                   gpointer            user_data)
+{
+    HelpDialog *help_dialog = user_data;
+    gchar *anchor = NULL;
+
+    gtk_tree_model_get (model, iter, ANCHOR_ITEM, &anchor, -1);
+    if (anchor)
+    {
+        gchar *url = gnc_help_dialog_build_url (GTK_WINDOW(help_dialog->window),
+                                                help_dialog->help_path,
+                                                help_dialog->dir_name, anchor);
+
+        if (url)
+            gnc_html_show_docs (help_dialog->html, URL_TYPE_FILE, url, "Help", FALSE);
+
+        gtk_entry_set_text (GTK_ENTRY(help_dialog->entry), "");
+
+        g_free (url);
+        g_free (anchor);
+    }
+    return TRUE;
+}
+
+static gboolean
+completion_func (GtkEntryCompletion *completion, const gchar *key,
+                 GtkTreeIter *iter, gpointer user_data)
+{
+    GtkTreeModel *model = gtk_entry_completion_get_model (completion);
+    gchar *item = NULL;
+    gboolean ret = FALSE;
+
+    gtk_tree_model_get (model, iter, TEXT_ITEM, &item, -1);
+
+    if (item)
+    {
+        gchar *item_lower = g_ascii_strdown (item, -1);
+        gchar *ptr = g_strstr_len (item_lower, -1, key);
+
+        if (ptr)
+            ret = TRUE;
+
+        g_free (item_lower);
+        g_free (item);
+    }
+    return ret;
+}
+
 static void
 gnc_help_dialog_create (HelpDialog *help_dialog, GtkWindow *parent)
 {
@@ -452,6 +625,7 @@ gnc_help_dialog_create (HelpDialog *help_dialog, GtkWindow *parent)
     GtkWidget      *button;
     GtkWindow      *topLvl;
     GtkWindowGroup *group;
+    GtkEntryCompletion *completion;
 
     ENTER(" ");
     builder = gtk_builder_new ();
@@ -488,11 +662,36 @@ gnc_help_dialog_create (HelpDialog *help_dialog, GtkWindow *parent)
     // handle any external secure links so they open in default browser
     gnc_html_register_url_handler (URL_TYPE_SECURE, gnc_dialog_help_file_url_cb);
 
+    help_dialog->entry = GTK_WIDGET(gtk_builder_get_object (builder, "entry_search"));
+
+    completion = gtk_entry_completion_new ();
+    gtk_entry_set_completion (GTK_ENTRY(help_dialog->entry), completion);
+    g_object_unref (completion);
+
+    help_dialog->store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+
+    gtk_entry_completion_set_model (completion, GTK_TREE_MODEL(help_dialog->store));
+    g_object_unref (GTK_TREE_MODEL(help_dialog->store));
+
+    /* Use model column 0 as the text column and min key length */
+    gtk_entry_completion_set_text_column (completion, TEXT_ITEM);
+    gtk_entry_completion_set_minimum_key_length (completion, 2);
+
+    gtk_entry_completion_set_match_func (completion,
+                                        (GtkEntryCompletionMatchFunc) completion_func,
+                                         NULL, NULL);
+
+    g_signal_connect (completion, "match-selected",
+                      G_CALLBACK (gnc_help_dialog_match_selected_cb), help_dialog);
+
     help_dialog->is_help = TRUE;
 
     help_dialog->button = GTK_WIDGET(gtk_builder_get_object (builder, "help_guide_button"));
 
     update_titles (help_dialog, help_dialog->url);
+
+    if (help_dialog->is_help) // anchors only loaded on change so at start test
+        gnc_help_dialog_get_anchors (help_dialog);
 
     //  typical file paths used
     // 'file:///usr/share/gnucash/help/C/gnucash-help/index.html'
