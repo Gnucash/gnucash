@@ -4,14 +4,15 @@
 # This file is distributed under the same license as the GnuCash package.
 # Triyan W. Nugroho <triyan.wn@gmail.com>, 2020.
 # Ferdinand Tampubolon <dnandz@gmail.com>, 2021.
+# Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-03 23:00+0100\n"
-"PO-Revision-Date: 2021-01-14 13:32+0000\n"
-"Last-Translator: Ferdinand Tampubolon <dnandz@gmail.com>\n"
+"PO-Revision-Date: 2021-02-08 08:50+0000\n"
+"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
 "Language: id\n"
@@ -19824,7 +19825,6 @@ msgid "Credited IBAN (International Account Number)"
 msgstr "Dikreditkan IBAN (International Nomor Akun Bank)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
-#, fuzzy
 msgid "Credited BIC (Bank Code)"
 msgstr "Dikreditkan BIC (Kode Bank)"
 
@@ -20003,9 +20003,8 @@ msgid "Online Banking European (SEPA) Transfer"
 msgstr "Transfer Perbankan Online Eropa (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:225
-#, fuzzy
 msgid "Online Banking European (SEPA) Debit Note"
-msgstr "Secara online Perbankan Eropa (SEPA) Debit Note"
+msgstr "Catatan Debit Perbankan Online Eropa (SEPA)"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:231
 msgid "Online Banking Transaction"
@@ -20242,18 +20241,16 @@ msgstr "Dapatkan transaksi secara daring melalui Perbankan Daring"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:113
-#, fuzzy
 msgid "Issue _SEPA Transaction..."
-msgstr "Isu _SEPA Transaksi ..."
+msgstr "Masalah _SEPA Transaksi..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:114
-#, fuzzy
 msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
 msgstr ""
-"Mengeluarkan internasional Eropa (SEPA) transaksi baru secara online melalui "
-"Online Banking"
+"Menerbitkan transaksi Eropa internasional (SEPA) baru secara online melalui "
+"Perbankan Online"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:118
 msgid "_Internal Transaction..."
@@ -22677,7 +22674,7 @@ msgstr "22/02/2000"
 #: gnucash/register/ledger-core/split-register-layout.c:671
 msgctxt "sample"
 msgid "99999"
-msgstr ""
+msgstr "99999"
 
 #: gnucash/register/ledger-core/split-register-layout.c:679
 msgctxt "sample"
@@ -25819,7 +25816,7 @@ msgstr "Durasi antar periode waktu"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:65
 #: gnucash/report/reports/standard/balsheet-pnl.scm:66
 msgid "Period order is most recent first"
-msgstr ""
+msgstr "Urutan periode adalah yang terbaru lebih dulu"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:68
 msgid "Enable dual columns"
@@ -26687,7 +26684,7 @@ msgstr "Transaksi Tak Valid"
 
 #: gnucash/report/reports/standard/category-barchart.scm:291
 msgid "Start date must be earlier than End date"
-msgstr ""
+msgstr "Tanggal mulai harus lebih awal dari Tanggal akhir"
 
 #: gnucash/report/reports/standard/category-barchart.scm:329
 msgid "Daily Average"
@@ -29322,7 +29319,6 @@ msgstr "Padding sel tabel"
 #: gnucash/report/stylesheets/footer.scm:190
 #: gnucash/report/stylesheets/head-or-tail.scm:237
 #: gnucash/report/stylesheets/plain.scm:74
-#, fuzzy
 msgid "Space between table cell edge and content."
 msgstr "Ruang antara tepi sel tabel dan konten."
 
@@ -29368,9 +29364,8 @@ msgid "Show receiver info"
 msgstr "Tampilkan info penerima"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:72
-#, fuzzy
 msgid "Name of organization or company the report is prepared for."
-msgstr "Nama organisasi atau perusahaan laporan dipersiapkan untuk."
+msgstr "Nama organisasi atau perusahaan laporan sedang dipersiapkan."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:77
 msgid "Show date"
@@ -30617,11 +30612,11 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-ui-balances.c:407
 msgid "Account is already at Auto-Clear Balance."
-msgstr ""
+msgstr "Akun sudah berada di Saldo Bersihkan Otomatis."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:451
 msgid "Too many uncleared splits"
-msgstr ""
+msgstr "Terlalu banyak pemisahan yang tidak jelas"
 
 #: libgnucash/app-utils/gnc-ui-balances.c:467
 msgid "The selected amount cannot be cleared."
