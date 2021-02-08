@@ -700,9 +700,11 @@ lv_add_split_to_lot_cb (GtkWidget *widget, GNCLotViewer * lv)
     split = lv_get_selected_split(lv, lv->split_free_view);
     if ( NULL == split ) return;
 
+    gnc_suspend_gui_refresh();
     xaccAccountBeginEdit(lv->account);
     gnc_lot_add_split(lv->selected_lot, split);
     xaccAccountCommitEdit(lv->account);
+    gnc_resume_gui_refresh();
 
     lv_refresh(lv);
 }
@@ -719,9 +721,11 @@ lv_remove_split_from_lot_cb (GtkWidget *widget, GNCLotViewer * lv)
     if ( FALSE == lv_can_remove_split_from_lot(split, lv->selected_lot) )
         return;
 
+    gnc_suspend_gui_refresh();
     xaccAccountBeginEdit(lv->account);
     gnc_lot_remove_split(lv->selected_lot, split);
     xaccAccountCommitEdit(lv->account);
+    gnc_resume_gui_refresh();
 
     lv_refresh(lv);
 }
