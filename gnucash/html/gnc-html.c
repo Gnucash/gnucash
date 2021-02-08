@@ -90,6 +90,7 @@ gnc_html_class_init( GncHtmlClass* klass )
     klass->show_url = NULL;
     klass->show_data = NULL;
     klass->reload = NULL;
+    klass->inspector_enable = NULL;
     klass->copy_to_clipboard = NULL;
     klass->export_to_file = NULL;
     klass->go_back = NULL;
@@ -427,6 +428,28 @@ gnc_html_reload( GncHtml* self, gboolean force_rebuild )
     else
     {
         DEBUG( "'reload' not implemented" );
+    }
+}
+
+/********************************************************************
+ * gnc_html_inspector_enable
+ * sets the visibility of the wekit inspector
+ * default is enabled, set visible to FALSE to disable
+ ********************************************************************/
+
+void
+gnc_html_inspector_enable( GncHtml* self, gboolean enable )
+{
+    g_return_if_fail( self != NULL );
+    g_return_if_fail( GNC_IS_HTML(self) );
+
+    if ( GNC_HTML_GET_CLASS(self)->inspector_enable != NULL )
+    {
+        GNC_HTML_GET_CLASS(self)->inspector_enable( self, enable );
+    }
+    else
+    {
+        DEBUG( "'webkit inspector visibility' not implemented" );
     }
 }
 

@@ -125,6 +125,7 @@ static const gchar* impl_webkit_go_forward( GncHtml* self );
 
 static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen );
 static void impl_webkit_reload( GncHtml* self, gboolean force_rebuild );
+static void impl_webkit_inspector_enable( GncHtml* self, gboolean enable );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
 static gboolean impl_webkit_export_to_file( GncHtml* self, const gchar* filepath );
 static void impl_webkit_print (GncHtml* self,const gchar* jobname);
@@ -240,6 +241,7 @@ gnc_html_webkit_class_init( GncHtmlWebkitClass* klass )
      html_class->go_back = impl_webkit_go_back;
      html_class->go_forward = impl_webkit_go_forward;
      html_class->reload = impl_webkit_reload;
+     html_class->inspector_enable = impl_webkit_inspector_enable;
      html_class->copy_to_clipboard = impl_webkit_copy_to_clipboard;
      html_class->export_to_file = impl_webkit_export_to_file;
      html_class->print = impl_webkit_print;
@@ -1007,6 +1009,26 @@ impl_webkit_reload( GncHtml* self, gboolean force_rebuild )
           webkit_web_view_reload( priv->web_view );
 }
 
+/********************************************************************
+ * impl_webkit_inspector_enable
+ * sets the visibility of the wekit inspector
+ * default is enabled, set visible to FALSE to disable
+ ********************************************************************/
+
+static void
+impl_webkit_inspector_enable( GncHtml* self, gboolean enable )
+{
+     GncHtmlWebkitPrivate* priv;
+     WebKitSettings *settings = NULL;
+
+     g_return_if_fail( self != NULL );
+     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
+
+     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+
+     settings = webkit_web_view_get_settings (priv->web_view);
+     webkit_settings_set_enable_developer_extras (settings, enable);
+}
 
 /********************************************************************
  * gnc_html_new

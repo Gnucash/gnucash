@@ -143,6 +143,7 @@ struct _GncHtmlClass
     const gchar* (*go_forward)( GncHtml* html );
     void (*show_data)( GncHtml* html, const gchar* data, int datalen );
     void (*reload)( GncHtml* html, gboolean force_rebuild );
+    void (*inspector_enable)( GncHtml* html, gboolean enable );
     void (*copy_to_clipboard)( GncHtml* html );
     gboolean (*export_to_file)( GncHtml* html, const gchar* file );
 #ifdef WEBKIT1
@@ -201,6 +202,14 @@ void gnc_html_show_data( GncHtml* html, const gchar* data, int datalen );
  * @param view if TRUE, view is reloaded, if FALSE, report is recreated
  */
 void gnc_html_reload( GncHtml* html, gboolean view );
+
+/**
+ * Set the visibility of the Webkit inspector for GncHtml object.
+ *
+ * @param html GncHtml object
+ * @param view if FALSE, webkit inspector disabled
+ */
+void gnc_html_inspector_enable( GncHtml* html, gboolean enable );
 
 /**
  * Copies the html to the clipboard

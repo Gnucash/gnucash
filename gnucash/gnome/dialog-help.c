@@ -662,6 +662,9 @@ gnc_help_dialog_create (HelpDialog *help_dialog, GtkWindow *parent)
     // handle any external secure links so they open in default browser
     gnc_html_register_url_handler (URL_TYPE_SECURE, gnc_dialog_help_file_url_cb);
 
+    // disable the webkit inspector applet
+    gnc_html_inspector_enable (help_dialog->html, FALSE);
+
     help_dialog->entry = GTK_WIDGET(gtk_builder_get_object (builder, "entry_search"));
 
     completion = gtk_entry_completion_new ();
