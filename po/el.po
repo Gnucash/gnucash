@@ -38,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-03 23:00+0100\n"
-"PO-Revision-Date: 2021-02-07 13:50+0000\n"
+"PO-Revision-Date: 2021-02-08 19:48+0000\n"
 "Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
@@ -1378,7 +1378,7 @@ msgstr "Διαγραφή αξίας;"
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
 #: gnucash/register/ledger-core/split-register-control.c:1542
 msgid "_Cancel"
-msgstr "_Ακύρωση"
+msgstr "_Άκυρο"
 
 #: gnucash/gnome/dialog-commodities.c:218
 #: gnucash/gnome/dialog-price-edit-db.c:207
@@ -2802,7 +2802,7 @@ msgstr "Συνέχεια"
 #: gnucash/gnome/gnc-plugin-page-register.c:622
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:160
 msgid "Cancel"
-msgstr "Ακύρωση"
+msgstr "Άκυρο"
 
 #: gnucash/gnome/dialog-payment.c:1708
 #, c-format
@@ -2919,7 +2919,7 @@ msgstr "χρήστης"
 #: gnucash/gtkbuilder/dialog-print-check.glade:293
 #: gnucash/gtkbuilder/gnc-date-format.glade:30
 msgid "Custom"
-msgstr "Προσαρμογή"
+msgstr "Προσαρμοσμένο"
 
 #: gnucash/gnome/dialog-print-check.c:2602
 #: gnucash/gtkbuilder/dialog-preferences.glade:3431
@@ -8813,11 +8813,11 @@ msgstr "Άνοιγμα  της Βοήθειας του Gnucash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:394
 msgid "_About"
-msgstr "_Περί"
+msgstr "_Σχετικά με"
 
 #: gnucash/gnome-utils/gnc-main-window.c:395
 msgid "About GnuCash"
-msgstr "Περί του GnuCash"
+msgstr "Σχετικά με το GnuCash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:407
 msgid "_Toolbar"
@@ -9867,7 +9867,7 @@ msgstr "Φαξ"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:452
 msgid "E-mail"
-msgstr "E-mail"
+msgstr "Ηλεκτρονικό ταχυδρομείο"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:478
 #: gnucash/gtkbuilder/dialog-customer.glade:200
@@ -15143,15 +15143,16 @@ msgid "<b>Quote Source Information</b>"
 msgstr "<b>Πληροφορία πηγής τιμών</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:238
-#, fuzzy
 msgid "<b>Security Information</b>"
-msgstr "Πληροφορίες χρεογράφου"
+msgstr "<b> Πληροφορίες ασφαλείας</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:324
 msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
 msgstr ""
+"Εισαγάγετε ένα σύμβολο εμφάνισης. Αυτό μπορεί με ασφάλεια να μείνει κενό, "
+"οπότε θα χρησιμοποιηθεί το σύμβολο ticker ή ο κωδικός ISO νομίσματος."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:340
 msgid "Type of quote source"
@@ -15263,7 +15264,7 @@ msgstr "_Διεύθυνση"
 #: gnucash/report/reports/aging.scm:696
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:187
 msgid "Email"
-msgstr "Email"
+msgstr "Ηλεκτρονικό ταχυδρομείο"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:420
 msgid "Billing Address"
@@ -23056,7 +23057,7 @@ msgstr "Προβολή πολλαπλών στηλών"
 
 #: gnucash/report/report-core.scm:156
 msgid "_Custom"
-msgstr "_Προσαρμογή"
+msgstr "_Προσαρμοσμένο"
 
 #: gnucash/report/report-core.scm:159
 #: gnucash/report/reports/standard/invoice.scm:257
