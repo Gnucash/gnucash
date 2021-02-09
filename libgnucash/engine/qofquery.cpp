@@ -982,11 +982,11 @@ GSList * qof_query_get_term_type (QofQuery *q, QofQueryParamList *term_param)
         {
             QofQueryTerm *qt = static_cast<QofQueryTerm*>(_and_->data);
             if (!param_list_cmp (term_param, qt->param_list))
-                results = g_slist_append(results, qt->pdata);
+                results = g_slist_prepend (results, qt->pdata);
         }
     }
 
-    return results;
+    return g_slist_reverse (results);
 }
 
 void qof_query_destroy (QofQuery *q)

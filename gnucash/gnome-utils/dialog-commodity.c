@@ -470,8 +470,8 @@ gnc_ui_update_commodity_picker (GtkWidget *cbwe,
     for (iterator = commodities; iterator; iterator = iterator->next)
     {
         commodity_items =
-            g_list_append(commodity_items,
-                          (gpointer) gnc_commodity_get_printname(iterator->data));
+            g_list_prepend (commodity_items,
+                            (gpointer) gnc_commodity_get_printname(iterator->data));
     }
     g_list_free(commodities);
 

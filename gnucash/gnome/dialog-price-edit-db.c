@@ -305,13 +305,13 @@ gnc_prices_dialog_get_commodities (GtkTreeView *view)
         if (gtk_tree_model_get_iter (model, &iter, row->data))
         {
             gtk_tree_model_get (model, &iter, PRICED_COMM, &comm, -1);
-            comm_list = g_list_append (comm_list, comm);
+            comm_list = g_list_prepend (comm_list, comm);
         }
     }
     g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
     g_list_free (list);
 
-    return comm_list;
+    return g_list_reverse (comm_list);
 }
 
 static void
