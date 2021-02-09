@@ -404,6 +404,9 @@ int main(int argc, char** argv)
 }
 " HAVE_OFX_BUG_39)
   set(HAVE_OFX_BUG_39 ${HAVE_OFX_BUG_39})
+  if (LIBOFX_VERSION VERSION_GREATER_EQUAL 0.10.0)
+    set(HAVE_LIBOFX_VERSION_0_10 1)
+  endif()
   set(CMAKE_REQUIRED_LIBRARIES)
 endif()
 # ############################################################

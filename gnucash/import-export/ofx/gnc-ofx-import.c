@@ -584,13 +584,17 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
     {
         if (!data.invtransactiontype_valid)
         {
+            double amount = data.amount;
+#ifdef HAVE_LIBOFX_VERSION_0_10
+            if (data.currency_ratio_valid && data.currency_ratio != 0)
+                amount *= data.currency_ratio;
+#endif
             /***** Process a normal transaction ******/
             DEBUG("Adding split; Ordinary banking transaction, money flows from or into the source account");
             split = xaccMallocSplit(book);
             xaccTransAppendSplit(transaction, split);
             xaccAccountInsertSplit(account, split);
-
-            gnc_amount = gnc_ofx_numeric_from_double_txn(data.amount, transaction);
+            gnc_amount = gnc_ofx_numeric_from_double_txn(amount, transaction);
             xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
             /* set tran-num and/or split-action per book option */
@@ -798,11 +802,15 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
 
             if (data.invtransactiontype_valid && investment_account)
             {
+                double amount = data.amount;
+#ifdef HAVE_LIBOFX_VERSION_0_10
+                if (data.currency_ratio_valid && data.currency_ratio != 0)
+                    amount *= data.currency_ratio;
+#endif
                 if (data.invtransactiontype == OFX_REINVEST
                         || data.invtransactiontype == OFX_INCOME)
                 {
                     DEBUG("Now let's find an account for the destination split");
-
                     income_account =
                         get_associated_income_account(investment_account);
 
@@ -845,8 +853,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
                     split = xaccMallocSplit(book);
                     xaccTransAppendSplit(transaction, split);
                     xaccAccountInsertSplit(income_account, split);
-
-                    gnc_amount = gnc_ofx_numeric_from_double_txn (data.amount, transaction);
+                    gnc_amount = gnc_ofx_numeric_from_double_txn(amount,
+                                                                 transaction);
                     xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
                     // Set split memo from ofx transaction name or memo
@@ -859,9 +867,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
                     split = xaccMallocSplit(book);
                     xaccTransAppendSplit(transaction, split);
                     xaccAccountInsertSplit(income_account, split);
+                    /*OFX_INCOME amounts come in as positive numbers*/
+                    gnc_amount = gnc_ofx_numeric_from_double_txn (-amount,
+                                                                  transaction);
 
-                    gnc_amount = gnc_ofx_numeric_from_double_txn (-data.amount,/*OFX_INCOME amounts come in as positive numbers*/
-                                 transaction);
                     xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
                     // Set split memo from ofx transaction name or memo
@@ -1040,6 +1049,11 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
 
 double ofx_get_investment_amount(const struct OfxTransactionData* data)
 {
+    double amount = data->amount;
+#ifdef HAVE_LIBOFX_VERSION_0_10
+   if (data->currency_ratio_valid && data->currency_ratio != 0)
+        amount *= data->currency_ratio;
+#endif
     g_assert(data);
     switch (data->invtransactiontype)
     {
@@ -1048,15 +1062,15 @@ double ofx_get_investment_amount(const struct OfxTransactionData* data)
     case OFX_BUYOPT:
     case OFX_BUYOTHER:
     case OFX_BUYSTOCK:
-        return fabs(data->amount);
+        return fabs(amount);
     case OFX_SELLDEBT:
     case OFX_SELLMF:
     case OFX_SELLOPT:
     case OFX_SELLOTHER:
     case OFX_SELLSTOCK:
-        return -1 * fabs(data->amount);
+        return -1 * fabs(amount);
     default:
-        return -1 * data->amount;
+        return -1 * amount;
     }
 }
 
