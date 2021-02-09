@@ -1037,6 +1037,7 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
         GList *splits = NULL;
         splits = g_list_append(splits, split);
         gnc_ui_print_check_dialog_create(NULL, splits);
+        g_list_free (splits);
     }
 
     gnc_ui_payment_window_destroy (pw);
