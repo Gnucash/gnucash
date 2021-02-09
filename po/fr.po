@@ -14,7 +14,7 @@
 # La Boussole <yoann@laboussole.coop>, 2018.
 # Christopher Lam, 2018
 # K. Herbert <herbert.ka@mailo.com>, 2020.
-# Christopher Lam <christopher.lck@gmail.com>, 2020.
+# Christopher Lam <christopher.lck@gmail.com>, 2020, 2021.
 # Laurent DÉRÉDEC <images-ld@gmx.fr>, 2021.
 # Julien Humbert <julroy67@gmail.com>, 2021.
 # Un Anonyme <vehrzafk1@gmail.com>, 2021.
@@ -24,11 +24,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-03 23:00+0100\n"
-"PO-Revision-Date: 2021-01-26 00:41+0000\n"
-"Last-Translator: Un Anonyme <vehrzafk1@gmail.com>\n"
+"PO-Revision-Date: 2021-02-09 05:50+0000\n"
+"Last-Translator: Christopher Lam <christopher.lck@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -549,6 +549,7 @@ msgstr ""
 "tableau de comptes, consultez le manuel en ligne de GnuCash."
 
 #: doc/tip_of_the_day.list.c:38
+#, fuzzy
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -561,8 +562,8 @@ msgstr ""
 "information utile.\n"
 "\n"
 "Pour le rendre visible\n"
-"sélectionner \"view\" dans la barre de de menu et cliquer sur \"Double ligne"
-"\" ou\n"
+"sélectionner \"view\" dans la barre de de menu et cliquer sur \"Double "
+"ligne\" ou\n"
 "cocher \"Mode Double ligne\" dans les préférences : Défauts du registre."
 
 #: doc/tip_of_the_day.list.c:44
@@ -17255,7 +17256,7 @@ msgstr "Adresse de paiement"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:456
 msgid "Language"
-msgstr "Langage "
+msgstr "Langue"
 
 # messages-i18n.c:227
 #: gnucash/gtkbuilder/dialog-employee.glade:494
