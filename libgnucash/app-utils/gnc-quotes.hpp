@@ -24,6 +24,7 @@
 
 #include <string>
 #include <vector>
+#include <gnc-commodity.hpp>  // For CommVec alias
 
 extern  "C" {
 #include <glib.h>
@@ -37,13 +38,12 @@ const std::string not_found = std::string ("Not Found");
 class GncQuotes
 {
 public:
-    // Constructor - check for presence of Finance::Quote and import version and quote sources
+    // Constructor - checks for presence of Finance::Quote and import version and quote sources
     GncQuotes();
 
     void fetch_all (QofBook *book);
-    void fetch (const std::vector<std::string>& commodities);
+    void fetch (const CommVec& commodities);
 
-    // Function to check if Finance::Quote is properly installed
     const int cmd_result() noexcept { return m_cmd_result; }
     const std::string& error_msg() noexcept { return m_error_msg; }
     const std::string& version() noexcept { return m_version.empty() ? not_found : m_version; }
@@ -51,6 +51,7 @@ public:
     GList* sources_as_glist ();
 
 private:
+    // Function to check if Finance::Quote is properly installed
     void check (void);
 
     std::string m_version;

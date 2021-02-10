@@ -110,11 +110,8 @@ GncQuotes::sources_as_glist()
 
 
 void
-GncQuotes::fetch_all (QofBook *book)
+GncQuotes::fetch (const CommVec& commodities)
 {
-    auto commodities = gnc_quotes_get_quotable_commodities (
-                        gnc_commodity_table_get_table (book));
-
     auto dflt_curr = gnc_default_currency();
     bpt::ptree pt, pt_child;
     pt.put ("defaultcurrency", gnc_commodity_get_mnemonic (dflt_curr));
@@ -143,6 +140,16 @@ GncQuotes::fetch_all (QofBook *book)
     bpt::write_json(result, pt);
     std::cerr << "GncQuotes fetch_all - resulting json object\n" << result.str() << std::endl;
 
+}
+
+
+void
+GncQuotes::fetch_all (QofBook *book)
+{
+    auto commodities = gnc_quotes_get_quotable_commodities (
+        gnc_commodity_table_get_table (book));
+
+    fetch (commodities);
 }
 
 static const std::vector <std::string>
