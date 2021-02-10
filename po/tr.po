@@ -4,22 +4,23 @@
 # Copyright (C) 2010 Free Software Foundation, Inc.
 # Mesutcan Kurt <mesutcank@gmail.com>, 2017.
 # Emin Tufan Çetin <etcetin@gmail.com>, 2018.
-#
+# Oğuz Ersen <oguzersen@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.7.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-03 23:00+0100\n"
-"PO-Revision-Date: 2018-01-25 22:58+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
-"Language-Team: Turkish <gnu-tr-u12a@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2021-02-10 11:50+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-POOTLE-MTIME: 1497808015.000000\n"
 
@@ -103,7 +104,7 @@ msgstr "Arapça (IBM-864-I)"
 
 #: borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr "Arapça  (ISO-8859-6)"
+msgstr "Arapça (ISO-8859-6)"
 
 #: borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
@@ -423,7 +424,7 @@ msgstr "Batı (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr "Yerel:"
+msgstr "Yerel: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 msgid "Conversion Direction"
@@ -2400,7 +2401,7 @@ msgstr "Açılış Tarihi"
 
 #: gnucash/gnome/dialog-invoice.c:3357 gnucash/gnome/dialog-invoice.c:3391
 msgid "Company Name "
-msgstr "Firma Adı"
+msgstr "Firma Adı "
 
 #: gnucash/gnome/dialog-invoice.c:3361
 #: gnucash/gtkbuilder/dialog-invoice.glade:41
@@ -2677,7 +2678,7 @@ msgstr "Kapatıldı mı?"
 
 #: gnucash/gnome/dialog-order.c:878
 msgid "Owner Name "
-msgstr "Sahip Adı"
+msgstr "Sahip Adı "
 
 #: gnucash/gnome/dialog-order.c:880 gnucash/gtkbuilder/dialog-order.glade:122
 #: gnucash/gtkbuilder/dialog-order.glade:520
@@ -2894,8 +2895,8 @@ msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
-"%s denetim biçimi dosyasındaki GUID '%s'  ve %s denetim biçimi dosyasındaki "
-"GUID '%s' eşleşiyor."
+"%s denetim biçimi dosyası '%s' içindeki GUID'ler ve %s denetim biçimi "
+"dosyası '%s' içindeki GUID'ler eşleşiyor."
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -3253,8 +3254,8 @@ msgid ""
 "Identification - Company Name, and\n"
 "Payment Address - Name."
 msgstr ""
-"Bir şirket adı girmelisiniz. Bu sağlayıcı bir şirket değilse aynı değeri  "
-"şunlar için girmeniz gerekir:\n"
+"Bir şirket adı girmelisiniz. Bu sağlayıcı bir birey ise (şirket değilse) "
+"aynı değeri şunlar için girmeniz gerekir:\n"
 "Kimlik - Şirket Adı ve\n"
 "Ödeme Adresi - Ad."
 
@@ -7830,7 +7831,7 @@ msgstr "Sayfa"
 #: gnucash/gtkbuilder/dialog-fincalc.glade:299
 #: gnucash/gtkbuilder/dialog-fincalc.glade:314
 msgid "Clear"
-msgstr "Sil "
+msgstr "Temizle"
 
 #: gnucash/gnome-utils/dialog-options.c:2891
 msgid "Clear any selected image file."
@@ -7866,7 +7867,7 @@ msgstr "Dönen Varlıklar%sStoklar%sMamüller"
 
 #: gnucash/gnome-utils/dialog-preferences.c:899
 msgid "Path does not exist, "
-msgstr "Yol yok,"
+msgstr "Yol yok, "
 
 #: gnucash/gnome-utils/dialog-preferences.c:955
 #: gnucash/gnome-utils/dialog-preferences.c:1462
@@ -8572,9 +8573,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-" %s\n"
-"dosyası kayıt edilirken bir hata oldu.\n"
-" "
+"Dosya kaydedilirken bir hata oluştu.\n"
+"\n"
+"%s"
 
 #: gnucash/gnome-utils/gnc-file.c:1396
 msgid ""
@@ -10255,9 +10256,8 @@ msgid "{1} [options] [datafile]"
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:495
-#, fuzzy
 msgid "GnuCash {1}"
-msgstr "GnuCash "
+msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:496
 #, fuzzy
@@ -10595,7 +10595,7 @@ msgstr "Yazdırma için kullanılacak fatura raporu."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:133
 msgid "The name of the report to be used for invoice printing."
-msgstr "Yazdırma için kullanılacak fatura raporunun adı. "
+msgstr "Fatura yazdırmada kullanılacak raporun adı."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:137
 msgid "Open new invoice in new window"
@@ -13509,16 +13509,14 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:487
-#, fuzzy
 msgid ""
 "The selection you make here is only the starting point for your personalized "
 "account hierarchy. Accounts can be added, renamed, moved, or deleted by hand "
 "later at any time."
 msgstr ""
-"\n"
-"GnuCash'i kullanacağınız şekle karşılık gelen kategorileri seçin. Seçtiğiniz "
-"her kategori, birkaç hesap oluşturulmasına neden olur. Sizinle alakalı "
-"kategorileri seçin. Daha sonra her zaman ek hesaplar oluşturabilirsiniz."
+"Burada yaptığınız seçim, kişiselleştirilmiş hesap planınız için yalnızca "
+"başlangıç noktasıdır. Hesaplar daha sonra herhangi bir zamanda elle "
+"eklenebilir, yeniden adlandırılabilir, taşınabilir veya silinebilir."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:504
 #, fuzzy
@@ -13840,9 +13838,8 @@ msgstr ""
 "Uygula'ya basın."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1111
-#, fuzzy
 msgid "Range"
-msgstr "Aralık: "
+msgstr "Aralık"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1187
 #: gnucash/gtkbuilder/dialog-sx.glade:333
@@ -14227,11 +14224,8 @@ msgid "Enter Information about..."
 msgstr "Hakkında bilgi girin"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1064
-#, fuzzy
 msgid "All fields must be complete to continue..."
-msgstr ""
-"\n"
-"Devam etmek için tüm hesaplar geçerli girdiler içermelidir.\n"
+msgstr "Devam etmek için tüm alanlar tamamlanmalıdır..."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1081
 msgid "Tradable commodities"
@@ -15105,9 +15099,8 @@ msgid "Discount Day"
 msgstr "İndirim gün sayısı"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:249
-#, fuzzy
 msgid "Cutoff Day"
-msgstr "Son Gün: "
+msgstr "Son Gün"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:263
 msgid ""
@@ -15921,9 +15914,8 @@ msgid "Based On"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:219
-#, fuzzy
 msgid "Match String"
-msgstr "Eşleşme eksik!"
+msgstr "Eşleşme Dizgesi"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:233
 #, fuzzy
@@ -19127,10 +19119,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "Kesir"
+msgstr "Dikkat!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
@@ -20388,11 +20378,13 @@ msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:648
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Processing...\n"
-msgstr "Ö_deme yap..."
+msgstr ""
+"\n"
+"İşleniyor...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:717
 #, fuzzy, c-format
@@ -22088,9 +22080,9 @@ msgid "Have a nice day!"
 msgstr "Güzel bir gün geçirin!"
 
 #: gnucash/python/init.py:118
-#, fuzzy, python-format
+#, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "GnuCash ~a'e Hoşgeldiniz!"
+msgstr "GnuCash %s Kabuğuna Hoş Geldiniz"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -26181,7 +26173,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:444
 msgid "Reporting range end period cannot be less than start period."
-msgstr "Raporlama aralığı bitiş dönemi başlangıç ​​döneminden az olamaz."
+msgstr "Raporlama aralığı bitiş dönemi başlangıç döneminden az olamaz."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:512
 #: gnucash/report/reports/standard/income-statement.scm:505
@@ -27476,9 +27468,8 @@ msgstr "Sağ"
 
 #: gnucash/report/reports/standard/invoice.scm:436
 #: gnucash/report/reports/standard/job-report.scm:239
-#, fuzzy
 msgid "Payment, thank you!"
-msgstr "Ödeme, teşekkürler"
+msgstr "Ödeme, teşekkürler!"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
 #: gnucash/report/reports/standard/invoice.scm:491
@@ -28292,9 +28283,8 @@ msgstr "%A %d %B %Y"
 
 #: gnucash/report/reports/standard/receipt.scm:140
 #: gnucash/report/reports/standard/taxinvoice.scm:198
-#, fuzzy
 msgid "Payment received, thank you!"
-msgstr "Ödeme alındı, teşekkürler"
+msgstr "Ödeme alındı, teşekkürler!"
 
 #: gnucash/report/reports/standard/receipt.scm:144
 #, fuzzy
