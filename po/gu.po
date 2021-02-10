@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-02-03 23:00+0100\n"
+"POT-Creation-Date: 2021-02-10 23:02+0100\n"
 "PO-Revision-Date: 2014-10-19 16:37-0500\n"
 "Last-Translator: Ronak Shah <ronaks@cdac.in>\n"
 "Language-Team: NONE\n"
@@ -940,7 +940,7 @@ msgstr "ઋણ પુનઃચુકવણી ગણક "
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
-#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:937
+#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:941
 #: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:429
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
 #: gnucash/gtkbuilder/dialog-doclink.glade:612
@@ -1485,7 +1485,8 @@ msgstr "બિલ મોકલવાનો સંપર્ક "
 msgid "Customer ID"
 msgstr "ગ્રાહક ID"
 
-#: gnucash/gnome/dialog-customer.c:930 gnucash/gnome/dialog-vendor.c:733
+#: gnucash/gnome/dialog-customer.c:930 gnucash/gnome/dialog-invoice.c:3357
+#: gnucash/gnome/dialog-invoice.c:3391 gnucash/gnome/dialog-vendor.c:733
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:352
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:360
 #: gnucash/gtkbuilder/dialog-customer.glade:145
@@ -1642,7 +1643,7 @@ msgstr "સોદાનો અહેવાલ"
 #: gnucash/gnome/dialog-doclink.c:1013
 #: gnucash/gnome/dialog-find-transactions2.c:157
 #: gnucash/gnome/dialog-find-transactions.c:157
-#: gnucash/gnome/dialog-lot-viewer.c:953 gnucash/gnome/dialog-tax-info.c:1398
+#: gnucash/gnome/dialog-lot-viewer.c:957 gnucash/gnome/dialog-tax-info.c:1398
 #: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:417
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:828
@@ -1871,7 +1872,7 @@ msgid "Share Price"
 msgstr "શેરના ભાવ"
 
 #: gnucash/gnome/dialog-find-transactions2.c:124
-#: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:967
+#: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:971
 #: gnucash/gnome/gnc-split-reg.c:694 gnucash/gnome/reconcile-view.c:413
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2892
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2904
@@ -1903,7 +1904,7 @@ msgstr "રકમ "
 
 #: gnucash/gnome/dialog-find-transactions2.c:126
 #: gnucash/gnome/dialog-find-transactions.c:124
-#: gnucash/gnome/dialog-lot-viewer.c:973
+#: gnucash/gnome/dialog-lot-viewer.c:977
 #: gnucash/gnome/dialog-sx-since-last-run.c:1051
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
@@ -2227,7 +2228,7 @@ msgstr "કુલ રોકડ:"
 msgid "Total Charge:"
 msgstr "કુલ ચાર્જ:"
 
-#: gnucash/gnome/dialog-invoice.c:1867 gnucash/gnome/dialog-payment.c:1331
+#: gnucash/gnome/dialog-invoice.c:1867 gnucash/gnome/dialog-payment.c:1332
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:793
 #: libgnucash/engine/gncInvoice.c:1088
@@ -2418,10 +2419,6 @@ msgstr "શું મોકલવામાં આવ્યું છે?"
 msgid "Date Opened"
 msgstr "ખોલવાની તારીખ "
 
-#: gnucash/gnome/dialog-invoice.c:3357 gnucash/gnome/dialog-invoice.c:3391
-msgid "Company Name "
-msgstr "કંપનીનું નામ"
-
 #: gnucash/gnome/dialog-invoice.c:3361
 #: gnucash/gtkbuilder/dialog-invoice.glade:41
 #: gnucash/gtkbuilder/dialog-invoice.glade:749
@@ -2445,7 +2442,7 @@ msgid "Voucher Notes"
 msgstr "પહોંચની નોંધ "
 
 #: gnucash/gnome/dialog-invoice.c:3438 gnucash/gnome/dialog-invoice.c:3597
-#: gnucash/gnome/dialog-lot-viewer.c:860 gnucash/gnome/dialog-tax-info.c:1236
+#: gnucash/gnome/dialog-lot-viewer.c:864 gnucash/gnome/dialog-tax-info.c:1236
 #: gnucash/gnome-utils/gnc-tree-view-account.c:811
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
@@ -2483,12 +2480,12 @@ msgstr "રવાના"
 msgid "Due"
 msgstr "બાકી"
 
-#: gnucash/gnome/dialog-invoice.c:3450 gnucash/gnome/dialog-lot-viewer.c:866
+#: gnucash/gnome/dialog-invoice.c:3450 gnucash/gnome/dialog-lot-viewer.c:870
 #: gnucash/gnome/dialog-order.c:894
 msgid "Opened"
 msgstr "ખોલેલું"
 
-#: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:947
+#: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:951
 #: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:421
 #: gnucash/gnome/reconcile-view.c:425
 #: gnucash/gtkbuilder/dialog-payment.glade:473
@@ -2605,7 +2602,7 @@ msgstr "કામગીરીનું નામ "
 msgid "Find Job"
 msgstr "કામગીરી શોધો "
 
-#: gnucash/gnome/dialog-lot-viewer.c:809
+#: gnucash/gnome/dialog-lot-viewer.c:813
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:403
 #: gnucash/gnome/gnc-plugin-page-budget.c:208
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
@@ -2614,18 +2611,18 @@ msgstr "કામગીરી શોધો "
 msgid "Open"
 msgstr "ખોલો"
 
-#: gnucash/gnome/dialog-lot-viewer.c:876 gnucash/gnome/dialog-order.c:892
+#: gnucash/gnome/dialog-lot-viewer.c:880 gnucash/gnome/dialog-order.c:892
 msgid "Closed"
 msgstr "બંધ"
 
-#: gnucash/gnome/dialog-lot-viewer.c:886
+#: gnucash/gnome/dialog-lot-viewer.c:890
 #: gnucash/gtkbuilder/assistant-acct-period.glade:143
 #: gnucash/report/html-fonts.scm:106
 #: gnucash/report/reports/standard/register.scm:347
 msgid "Title"
 msgstr "અધિકાર "
 
-#: gnucash/gnome/dialog-lot-viewer.c:893 gnucash/gnome/dialog-lot-viewer.c:985
+#: gnucash/gnome/dialog-lot-viewer.c:897 gnucash/gnome/dialog-lot-viewer.c:989
 #: gnucash/gnome-utils/gnc-tree-view-account.c:854
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
@@ -2642,16 +2639,16 @@ msgstr "અધિકાર "
 msgid "Balance"
 msgstr "બેલેન્સ"
 
-#: gnucash/gnome/dialog-lot-viewer.c:899
+#: gnucash/gnome/dialog-lot-viewer.c:903
 msgid "Gains"
 msgstr "ફાયદો"
 
-#: gnucash/gnome/dialog-lot-viewer.c:979
+#: gnucash/gnome/dialog-lot-viewer.c:983
 #: gnucash/report/reports/example/average-balance.scm:131
 msgid "Gain/Loss"
 msgstr "લાભ/હાનિ"
 
-#: gnucash/gnome/dialog-lot-viewer.c:1043
+#: gnucash/gnome/dialog-lot-viewer.c:1047
 #, c-format
 msgid "Lots in Account %s"
 msgstr "%s ખાતામાં લોટ્સ "
@@ -2697,8 +2694,8 @@ msgid "Is Closed?"
 msgstr "શું બંધ થયું?"
 
 #: gnucash/gnome/dialog-order.c:878
-msgid "Owner Name "
-msgstr "માલિકનું નામ "
+msgid "Owner Name"
+msgstr "માલિકનું નામ"
 
 #: gnucash/gnome/dialog-order.c:880 gnucash/gtkbuilder/dialog-order.glade:122
 #: gnucash/gtkbuilder/dialog-order.glade:520
@@ -2728,7 +2725,7 @@ msgid ""
 "unattached payment."
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
+#: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1327
 #: gnucash/report/reports/standard/new-aging.scm:194
 #: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/new-owner-report.scm:719
@@ -2744,7 +2741,7 @@ msgstr ""
 "ટ્રાન્સફર અને પોસ્ટ એકાઉન્ટ જુદાં જુદાં ચલણ સાથે જોડાયેલા છે. મહેરબાની કરીને પરિવર્તન દર "
 "જણાવો. "
 
-#: gnucash/gnome/dialog-payment.c:1269 gnucash/gnome/search-owner.c:211
+#: gnucash/gnome/dialog-payment.c:1270 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2783
 #: gnucash/gtkbuilder/dialog-customer.glade:479
@@ -2763,7 +2760,7 @@ msgstr ""
 msgid "Customer"
 msgstr "ગ્રાહક"
 
-#: gnucash/gnome/dialog-payment.c:1273 gnucash/gnome/search-owner.c:212
+#: gnucash/gnome/dialog-payment.c:1274 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1109
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2794
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:168
@@ -2777,7 +2774,7 @@ msgstr "ગ્રાહક"
 msgid "Vendor"
 msgstr "વિક્રેતા"
 
-#: gnucash/gnome/dialog-payment.c:1277 gnucash/gnome/search-owner.c:213
+#: gnucash/gnome/dialog-payment.c:1278 gnucash/gnome/search-owner.c:213
 #: gnucash/gnome-search/dialog-search.c:1081
 #: gnucash/gtkbuilder/dialog-employee.glade:510
 #: gnucash/gtkbuilder/dialog-payment.glade:48
@@ -2789,7 +2786,7 @@ msgstr "વિક્રેતા"
 msgid "Employee"
 msgstr "કર્મચારી"
 
-#: gnucash/gnome/dialog-payment.c:1422
+#: gnucash/gnome/dialog-payment.c:1423
 #, fuzzy, c-format
 msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type \"%s"
@@ -2799,13 +2796,13 @@ msgstr ""
 "તમારા પાસે કોઈ માન્યતાપ્રાપ્ત \"પોસ્ટ ટુ\" ખાતું નથી. મહેરબાની કરીને ચુકવણીની પ્રક્રિયા "
 "આગળ ધપાવતા અગાઉ એક \"%s\" પ્રકારનું ખાતું બનાવો. કદાચ તમે ચલણ કે બિલ બનાવવા માંગો છો?"
 
-#: gnucash/gnome/dialog-payment.c:1575
+#: gnucash/gnome/dialog-payment.c:1576
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:1589
+#: gnucash/gnome/dialog-payment.c:1590
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', gnucash only knows how to handle one.\n"
@@ -2813,17 +2810,17 @@ msgid ""
 "\n"
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:1592
+#: gnucash/gnome/dialog-payment.c:1593
 #, fuzzy
 msgid "Warning"
 msgstr "ચેતવણીઓને રિસેટ કરો "
 
-#: gnucash/gnome/dialog-payment.c:1595 gnucash/gnome/dialog-payment.c:1713
+#: gnucash/gnome/dialog-payment.c:1596 gnucash/gnome/dialog-payment.c:1714
 #, fuzzy
 msgid "Continue"
 msgstr "સતત"
 
-#: gnucash/gnome/dialog-payment.c:1596
+#: gnucash/gnome/dialog-payment.c:1597
 #: gnucash/gnome/gnc-plugin-page-invoice.c:453
 #: gnucash/gnome/gnc-plugin-page-register2.c:499
 #: gnucash/gnome/gnc-plugin-page-register.c:622
@@ -2831,7 +2828,7 @@ msgstr "સતત"
 msgid "Cancel"
 msgstr "રદ કરો "
 
-#: gnucash/gnome/dialog-payment.c:1708
+#: gnucash/gnome/dialog-payment.c:1709
 #, c-format
 msgid ""
 "The transaction has at least one split in a business account that is not "
@@ -21679,59 +21676,59 @@ msgstr "_GnuCash .log ફાઈલ ફરી ચલાવો."
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr "દુર્ઘટના બાદ GnuCash લોગ ફાઈલ ફરી ચલાવો. તેને પૂર્વ સ્થિતિમાં નહીં લાવી શકાય."
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:643
+#: gnucash/import-export/ofx/gnc-ofx-import.c:647
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "સિક્યોરિટી \"%s\" માટે સ્ટોક ખાતું"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:816
+#: gnucash/import-export/ofx/gnc-ofx-import.c:824
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "સિક્યોરિટી \"%s\" માટે આવક ખાતું"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:937
+#: gnucash/import-export/ofx/gnc-ofx-import.c:946
 msgid "Unknown OFX account"
 msgstr "અજ્ઞાત OFX ખાતું"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:960
+#: gnucash/import-export/ofx/gnc-ofx-import.c:969
 msgid "Unknown OFX checking account"
 msgstr "અજ્ઞાત OFX તપાસ ખાતું"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:964
+#: gnucash/import-export/ofx/gnc-ofx-import.c:973
 msgid "Unknown OFX savings account"
 msgstr "અજ્ઞાત OFX બચત ખાતું "
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:968
+#: gnucash/import-export/ofx/gnc-ofx-import.c:977
 msgid "Unknown OFX money market account"
 msgstr "અજ્ઞાત OFX મની માર્કેટ ખાતું"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:972
+#: gnucash/import-export/ofx/gnc-ofx-import.c:981
 msgid "Unknown OFX credit line account"
 msgstr "અજ્ઞાત OFX ક્રેડિટ લાઇન ખાતું"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:977
+#: gnucash/import-export/ofx/gnc-ofx-import.c:986
 msgid "Unknown OFX CMA account"
 msgstr "અજ્ઞાત OFX CMA ખાતું"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:981
+#: gnucash/import-export/ofx/gnc-ofx-import.c:990
 msgid "Unknown OFX credit card account"
 msgstr "અજ્ઞાત OFX ક્રેડિટ કાર્ડ ખાતું"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:985
+#: gnucash/import-export/ofx/gnc-ofx-import.c:994
 msgid "Unknown OFX investment account"
 msgstr "અજ્ઞાત OFX રોકાણ ખાતું"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1177
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1191
 #, c-format
 msgid ""
 "OFX file '%s' imported, %d transactions processed, no transactions to match"
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1228
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1242
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1233
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1247
 #, fuzzy
 msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "પ્રક્રિયા માટે એક OFX/QFX ફાઈલ પસંદ કરો"
@@ -31489,6 +31486,9 @@ msgstr "વ્યવહાર રદ થયેલ છે"
 msgid "No help available."
 msgstr "કોઇ મદદ ઉપલબ્ધ નથી"
 
+#~ msgid "Company Name "
+#~ msgstr "કંપનીનું નામ"
+
 #~ msgid "Increasing"
 #~ msgstr "વધી રહી છે"
 
@@ -32793,10 +32793,6 @@ msgstr "કોઇ મદદ ઉપલબ્ધ નથી"
 #, fuzzy
 #~ msgid "Version: GnuCash-%s (rev %s built %s)"
 #~ msgstr "આવૃત્તિ : GnuCash-%s (r%s built %s)"
-
-#, fuzzy
-#~ msgid "Owner Name"
-#~ msgstr "માલિકનું નામ "
 
 #~ msgid "Remember _PIN"
 #~ msgstr "PIN_યાદ રાખો"

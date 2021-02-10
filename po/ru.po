@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.7.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-02-03 23:00+0100\n"
+"POT-Creation-Date: 2021-02-10 23:02+0100\n"
 "PO-Revision-Date: 2021-01-18 10:32+0000\n"
 "Last-Translator: Val Saven <val.saven@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -960,7 +960,7 @@ msgstr "Параметры выплат по займу: \"%s\""
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
-#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:937
+#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:941
 #: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:429
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
 #: gnucash/gtkbuilder/dialog-doclink.glade:612
@@ -1511,7 +1511,8 @@ msgstr "Плательщик"
 msgid "Customer ID"
 msgstr "ID клиента"
 
-#: gnucash/gnome/dialog-customer.c:930 gnucash/gnome/dialog-vendor.c:733
+#: gnucash/gnome/dialog-customer.c:930 gnucash/gnome/dialog-invoice.c:3357
+#: gnucash/gnome/dialog-invoice.c:3391 gnucash/gnome/dialog-vendor.c:733
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:352
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:360
 #: gnucash/gtkbuilder/dialog-customer.glade:145
@@ -1660,7 +1661,7 @@ msgstr "Детали проводки"
 #: gnucash/gnome/dialog-doclink.c:1013
 #: gnucash/gnome/dialog-find-transactions2.c:157
 #: gnucash/gnome/dialog-find-transactions.c:157
-#: gnucash/gnome/dialog-lot-viewer.c:953 gnucash/gnome/dialog-tax-info.c:1398
+#: gnucash/gnome/dialog-lot-viewer.c:957 gnucash/gnome/dialog-tax-info.c:1398
 #: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:417
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:828
@@ -1888,7 +1889,7 @@ msgid "Share Price"
 msgstr "Курс акций"
 
 #: gnucash/gnome/dialog-find-transactions2.c:124
-#: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:967
+#: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:971
 #: gnucash/gnome/gnc-split-reg.c:694 gnucash/gnome/reconcile-view.c:413
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2892
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2904
@@ -1920,7 +1921,7 @@ msgstr "Сумма"
 
 #: gnucash/gnome/dialog-find-transactions2.c:126
 #: gnucash/gnome/dialog-find-transactions.c:124
-#: gnucash/gnome/dialog-lot-viewer.c:973
+#: gnucash/gnome/dialog-lot-viewer.c:977
 #: gnucash/gnome/dialog-sx-since-last-run.c:1051
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
@@ -2242,7 +2243,7 @@ msgstr "Всего наличных:"
 msgid "Total Charge:"
 msgstr "Всего удержано:"
 
-#: gnucash/gnome/dialog-invoice.c:1867 gnucash/gnome/dialog-payment.c:1331
+#: gnucash/gnome/dialog-invoice.c:1867 gnucash/gnome/dialog-payment.c:1332
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:793
 #: libgnucash/engine/gncInvoice.c:1088
@@ -2426,10 +2427,6 @@ msgstr "Введено?"
 msgid "Date Opened"
 msgstr "Дата открытия"
 
-#: gnucash/gnome/dialog-invoice.c:3357 gnucash/gnome/dialog-invoice.c:3391
-msgid "Company Name "
-msgstr "Название фирмы "
-
 #: gnucash/gnome/dialog-invoice.c:3361
 #: gnucash/gtkbuilder/dialog-invoice.glade:41
 #: gnucash/gtkbuilder/dialog-invoice.glade:749
@@ -2453,7 +2450,7 @@ msgid "Voucher Notes"
 msgstr "Примечание к товарному чеку"
 
 #: gnucash/gnome/dialog-invoice.c:3438 gnucash/gnome/dialog-invoice.c:3597
-#: gnucash/gnome/dialog-lot-viewer.c:860 gnucash/gnome/dialog-tax-info.c:1236
+#: gnucash/gnome/dialog-lot-viewer.c:864 gnucash/gnome/dialog-tax-info.c:1236
 #: gnucash/gnome-utils/gnc-tree-view-account.c:811
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
@@ -2491,12 +2488,12 @@ msgstr "Введено"
 msgid "Due"
 msgstr "Подлежит оплате"
 
-#: gnucash/gnome/dialog-invoice.c:3450 gnucash/gnome/dialog-lot-viewer.c:866
+#: gnucash/gnome/dialog-invoice.c:3450 gnucash/gnome/dialog-lot-viewer.c:870
 #: gnucash/gnome/dialog-order.c:894
 msgid "Opened"
 msgstr "Открыто"
 
-#: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:947
+#: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:951
 #: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:421
 #: gnucash/gnome/reconcile-view.c:425
 #: gnucash/gtkbuilder/dialog-payment.glade:473
@@ -2614,7 +2611,7 @@ msgstr "Название операции"
 msgid "Find Job"
 msgstr "Найти операцию"
 
-#: gnucash/gnome/dialog-lot-viewer.c:809
+#: gnucash/gnome/dialog-lot-viewer.c:813
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:403
 #: gnucash/gnome/gnc-plugin-page-budget.c:208
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
@@ -2623,18 +2620,18 @@ msgstr "Найти операцию"
 msgid "Open"
 msgstr "Открыть"
 
-#: gnucash/gnome/dialog-lot-viewer.c:876 gnucash/gnome/dialog-order.c:892
+#: gnucash/gnome/dialog-lot-viewer.c:880 gnucash/gnome/dialog-order.c:892
 msgid "Closed"
 msgstr "Закрыто"
 
-#: gnucash/gnome/dialog-lot-viewer.c:886
+#: gnucash/gnome/dialog-lot-viewer.c:890
 #: gnucash/gtkbuilder/assistant-acct-period.glade:143
 #: gnucash/report/html-fonts.scm:106
 #: gnucash/report/reports/standard/register.scm:347
 msgid "Title"
 msgstr "Заголовок"
 
-#: gnucash/gnome/dialog-lot-viewer.c:893 gnucash/gnome/dialog-lot-viewer.c:985
+#: gnucash/gnome/dialog-lot-viewer.c:897 gnucash/gnome/dialog-lot-viewer.c:989
 #: gnucash/gnome-utils/gnc-tree-view-account.c:854
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
@@ -2651,16 +2648,16 @@ msgstr "Заголовок"
 msgid "Balance"
 msgstr "Остаток"
 
-#: gnucash/gnome/dialog-lot-viewer.c:899
+#: gnucash/gnome/dialog-lot-viewer.c:903
 msgid "Gains"
 msgstr "Прибыль"
 
-#: gnucash/gnome/dialog-lot-viewer.c:979
+#: gnucash/gnome/dialog-lot-viewer.c:983
 #: gnucash/report/reports/example/average-balance.scm:131
 msgid "Gain/Loss"
 msgstr "Доход/Убытки"
 
-#: gnucash/gnome/dialog-lot-viewer.c:1043
+#: gnucash/gnome/dialog-lot-viewer.c:1047
 #, c-format
 msgid "Lots in Account %s"
 msgstr "Наборы в счетах %s"
@@ -2706,8 +2703,8 @@ msgid "Is Closed?"
 msgstr "Закрыт?"
 
 #: gnucash/gnome/dialog-order.c:878
-msgid "Owner Name "
-msgstr "Имя владельца "
+msgid "Owner Name"
+msgstr "Имя владельца"
 
 #: gnucash/gnome/dialog-order.c:880 gnucash/gtkbuilder/dialog-order.glade:122
 #: gnucash/gtkbuilder/dialog-order.glade:520
@@ -2736,7 +2733,7 @@ msgid ""
 "unattached payment."
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
+#: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1327
 #: gnucash/report/reports/standard/new-aging.scm:194
 #: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/new-owner-report.scm:719
@@ -2751,7 +2748,7 @@ msgstr ""
 "Счета для снятия и зачисления имеют разные валюты. Пожалуйста, укажите курс "
 "обмена."
 
-#: gnucash/gnome/dialog-payment.c:1269 gnucash/gnome/search-owner.c:211
+#: gnucash/gnome/dialog-payment.c:1270 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2783
 #: gnucash/gtkbuilder/dialog-customer.glade:479
@@ -2770,7 +2767,7 @@ msgstr ""
 msgid "Customer"
 msgstr "Клиент"
 
-#: gnucash/gnome/dialog-payment.c:1273 gnucash/gnome/search-owner.c:212
+#: gnucash/gnome/dialog-payment.c:1274 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1109
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2794
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:168
@@ -2784,7 +2781,7 @@ msgstr "Клиент"
 msgid "Vendor"
 msgstr "Поставщик"
 
-#: gnucash/gnome/dialog-payment.c:1277 gnucash/gnome/search-owner.c:213
+#: gnucash/gnome/dialog-payment.c:1278 gnucash/gnome/search-owner.c:213
 #: gnucash/gnome-search/dialog-search.c:1081
 #: gnucash/gtkbuilder/dialog-employee.glade:510
 #: gnucash/gtkbuilder/dialog-payment.glade:48
@@ -2796,7 +2793,7 @@ msgstr "Поставщик"
 msgid "Employee"
 msgstr "Работник"
 
-#: gnucash/gnome/dialog-payment.c:1422
+#: gnucash/gnome/dialog-payment.c:1423
 #, c-format
 msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type \"%s"
@@ -2807,13 +2804,13 @@ msgstr ""
 "перед продолжением оплаты. Вероятно, сначала Вы хотите создать счёт-фактуру "
 "или платёжный счёт?"
 
-#: gnucash/gnome/dialog-payment.c:1575
+#: gnucash/gnome/dialog-payment.c:1576
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:1589
+#: gnucash/gnome/dialog-payment.c:1590
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', gnucash only knows how to handle one.\n"
@@ -2821,17 +2818,17 @@ msgid ""
 "\n"
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:1592
+#: gnucash/gnome/dialog-payment.c:1593
 #, fuzzy
 msgid "Warning"
 msgstr "Сбросить предупреждения"
 
-#: gnucash/gnome/dialog-payment.c:1595 gnucash/gnome/dialog-payment.c:1713
+#: gnucash/gnome/dialog-payment.c:1596 gnucash/gnome/dialog-payment.c:1714
 #, fuzzy
 msgid "Continue"
 msgstr "Непрерывно"
 
-#: gnucash/gnome/dialog-payment.c:1596
+#: gnucash/gnome/dialog-payment.c:1597
 #: gnucash/gnome/gnc-plugin-page-invoice.c:453
 #: gnucash/gnome/gnc-plugin-page-register2.c:499
 #: gnucash/gnome/gnc-plugin-page-register.c:622
@@ -2839,7 +2836,7 @@ msgstr "Непрерывно"
 msgid "Cancel"
 msgstr "Отменить"
 
-#: gnucash/gnome/dialog-payment.c:1708
+#: gnucash/gnome/dialog-payment.c:1709
 #, c-format
 msgid ""
 "The transaction has at least one split in a business account that is not "
@@ -21702,59 +21699,59 @@ msgstr ""
 "Воспроизведение лог-файла GnuCash после аварийного завершения. Это не может "
 "быть отменено."
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:643
+#: gnucash/import-export/ofx/gnc-ofx-import.c:647
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "Акционерный счёт для ценных бумаг \"%s\""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:816
+#: gnucash/import-export/ofx/gnc-ofx-import.c:824
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "Приходный счёт для ценных бумаг \"%s\""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:937
+#: gnucash/import-export/ofx/gnc-ofx-import.c:946
 msgid "Unknown OFX account"
 msgstr "Неизвестный счёт OFX"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:960
+#: gnucash/import-export/ofx/gnc-ofx-import.c:969
 msgid "Unknown OFX checking account"
 msgstr "Неизвестный чековый счёт OFX"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:964
+#: gnucash/import-export/ofx/gnc-ofx-import.c:973
 msgid "Unknown OFX savings account"
 msgstr "Неизвестный депозитный счёт OFX"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:968
+#: gnucash/import-export/ofx/gnc-ofx-import.c:977
 msgid "Unknown OFX money market account"
 msgstr "Неизвестный валютно-биржевой счёт OFX"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:972
+#: gnucash/import-export/ofx/gnc-ofx-import.c:981
 msgid "Unknown OFX credit line account"
 msgstr "Неизвестный кредитный счёт OFX"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:977
+#: gnucash/import-export/ofx/gnc-ofx-import.c:986
 msgid "Unknown OFX CMA account"
 msgstr "Неизвестный CMA счёт OFX"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:981
+#: gnucash/import-export/ofx/gnc-ofx-import.c:990
 msgid "Unknown OFX credit card account"
 msgstr "Неизвестный счёт OFX кредитных карт"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:985
+#: gnucash/import-export/ofx/gnc-ofx-import.c:994
 msgid "Unknown OFX investment account"
 msgstr "Неизвестный инвестиционный счёт OFX"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1177
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1191
 #, c-format
 msgid ""
 "OFX file '%s' imported, %d transactions processed, no transactions to match"
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1228
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1242
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1233
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1247
 #, fuzzy
 msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "Выберите файл OFX/QFX для обработки"
@@ -31227,6 +31224,9 @@ msgstr "Проводка аннулирована"
 msgid "No help available."
 msgstr "Справка недоступна."
 
+#~ msgid "Company Name "
+#~ msgstr "Название фирмы "
+
 #~ msgid "Increasing"
 #~ msgstr "Увеличение"
 
@@ -32820,9 +32820,6 @@ msgstr "Справка недоступна."
 
 #~ msgid "You must select a commodity. To create a new one, click \"New\""
 #~ msgstr "Вы должны выбрать товар. Чтобы создать новый, нажмите \"Новый\""
-
-#~ msgid "Owner Name"
-#~ msgstr "Имя владельца"
 
 #~ msgid "UTC"
 #~ msgstr "UTC"

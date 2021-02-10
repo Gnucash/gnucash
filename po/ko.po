@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.3.2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-02-03 23:00+0100\n"
+"POT-Creation-Date: 2021-02-10 23:02+0100\n"
 "PO-Revision-Date: 2009-07-15 11:40+0900\n"
 "Last-Translator: Jin-Hwan Jeong <yongdoria@gmail.com>\n"
 "Language-Team: \n"
@@ -854,7 +854,7 @@ msgstr "재무 제표"
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
-#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:937
+#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:941
 #: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:429
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
 #: gnucash/gtkbuilder/dialog-doclink.glade:612
@@ -1393,7 +1393,8 @@ msgstr "청구서 연락처"
 msgid "Customer ID"
 msgstr "고객 ID"
 
-#: gnucash/gnome/dialog-customer.c:930 gnucash/gnome/dialog-vendor.c:733
+#: gnucash/gnome/dialog-customer.c:930 gnucash/gnome/dialog-invoice.c:3357
+#: gnucash/gnome/dialog-invoice.c:3391 gnucash/gnome/dialog-vendor.c:733
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:352
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:360
 #: gnucash/gtkbuilder/dialog-customer.glade:145
@@ -1548,7 +1549,7 @@ msgstr "거래 보고서(_R)"
 #: gnucash/gnome/dialog-doclink.c:1013
 #: gnucash/gnome/dialog-find-transactions2.c:157
 #: gnucash/gnome/dialog-find-transactions.c:157
-#: gnucash/gnome/dialog-lot-viewer.c:953 gnucash/gnome/dialog-tax-info.c:1398
+#: gnucash/gnome/dialog-lot-viewer.c:957 gnucash/gnome/dialog-tax-info.c:1398
 #: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:417
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:828
@@ -1774,7 +1775,7 @@ msgid "Share Price"
 msgstr "주식 가격"
 
 #: gnucash/gnome/dialog-find-transactions2.c:124
-#: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:967
+#: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:971
 #: gnucash/gnome/gnc-split-reg.c:694 gnucash/gnome/reconcile-view.c:413
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2892
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2904
@@ -1806,7 +1807,7 @@ msgstr "금액"
 
 #: gnucash/gnome/dialog-find-transactions2.c:126
 #: gnucash/gnome/dialog-find-transactions.c:124
-#: gnucash/gnome/dialog-lot-viewer.c:973
+#: gnucash/gnome/dialog-lot-viewer.c:977
 #: gnucash/gnome/dialog-sx-since-last-run.c:1051
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
@@ -2126,7 +2127,7 @@ msgstr "현금 합계:"
 msgid "Total Charge:"
 msgstr "총 청구금액:"
 
-#: gnucash/gnome/dialog-invoice.c:1867 gnucash/gnome/dialog-payment.c:1331
+#: gnucash/gnome/dialog-invoice.c:1867 gnucash/gnome/dialog-payment.c:1332
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:793
 #: libgnucash/engine/gncInvoice.c:1088
@@ -2317,10 +2318,6 @@ msgstr "보냅니까?"
 msgid "Date Opened"
 msgstr "개설 날짜"
 
-#: gnucash/gnome/dialog-invoice.c:3357 gnucash/gnome/dialog-invoice.c:3391
-msgid "Company Name "
-msgstr "회사명"
-
 #: gnucash/gnome/dialog-invoice.c:3361
 #: gnucash/gtkbuilder/dialog-invoice.glade:41
 #: gnucash/gtkbuilder/dialog-invoice.glade:749
@@ -2344,7 +2341,7 @@ msgid "Voucher Notes"
 msgstr "영수증 장부"
 
 #: gnucash/gnome/dialog-invoice.c:3438 gnucash/gnome/dialog-invoice.c:3597
-#: gnucash/gnome/dialog-lot-viewer.c:860 gnucash/gnome/dialog-tax-info.c:1236
+#: gnucash/gnome/dialog-lot-viewer.c:864 gnucash/gnome/dialog-tax-info.c:1236
 #: gnucash/gnome-utils/gnc-tree-view-account.c:811
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
@@ -2382,12 +2379,12 @@ msgstr "붙임"
 msgid "Due"
 msgstr "만기"
 
-#: gnucash/gnome/dialog-invoice.c:3450 gnucash/gnome/dialog-lot-viewer.c:866
+#: gnucash/gnome/dialog-invoice.c:3450 gnucash/gnome/dialog-lot-viewer.c:870
 #: gnucash/gnome/dialog-order.c:894
 msgid "Opened"
 msgstr "개봉"
 
-#: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:947
+#: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:951
 #: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:421
 #: gnucash/gnome/reconcile-view.c:425
 #: gnucash/gtkbuilder/dialog-payment.glade:473
@@ -2504,7 +2501,7 @@ msgstr "작업명"
 msgid "Find Job"
 msgstr "작업 찾기"
 
-#: gnucash/gnome/dialog-lot-viewer.c:809
+#: gnucash/gnome/dialog-lot-viewer.c:813
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:403
 #: gnucash/gnome/gnc-plugin-page-budget.c:208
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
@@ -2513,18 +2510,18 @@ msgstr "작업 찾기"
 msgid "Open"
 msgstr "열기"
 
-#: gnucash/gnome/dialog-lot-viewer.c:876 gnucash/gnome/dialog-order.c:892
+#: gnucash/gnome/dialog-lot-viewer.c:880 gnucash/gnome/dialog-order.c:892
 msgid "Closed"
 msgstr "마감"
 
-#: gnucash/gnome/dialog-lot-viewer.c:886
+#: gnucash/gnome/dialog-lot-viewer.c:890
 #: gnucash/gtkbuilder/assistant-acct-period.glade:143
 #: gnucash/report/html-fonts.scm:106
 #: gnucash/report/reports/standard/register.scm:347
 msgid "Title"
 msgstr "제목"
 
-#: gnucash/gnome/dialog-lot-viewer.c:893 gnucash/gnome/dialog-lot-viewer.c:985
+#: gnucash/gnome/dialog-lot-viewer.c:897 gnucash/gnome/dialog-lot-viewer.c:989
 #: gnucash/gnome-utils/gnc-tree-view-account.c:854
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
@@ -2541,16 +2538,16 @@ msgstr "제목"
 msgid "Balance"
 msgstr "잔액"
 
-#: gnucash/gnome/dialog-lot-viewer.c:899
+#: gnucash/gnome/dialog-lot-viewer.c:903
 msgid "Gains"
 msgstr "수익"
 
-#: gnucash/gnome/dialog-lot-viewer.c:979
+#: gnucash/gnome/dialog-lot-viewer.c:983
 #: gnucash/report/reports/example/average-balance.scm:131
 msgid "Gain/Loss"
 msgstr "이득/손실"
 
-#: gnucash/gnome/dialog-lot-viewer.c:1043
+#: gnucash/gnome/dialog-lot-viewer.c:1047
 #, c-format
 msgid "Lots in Account %s"
 msgstr "%s 계정 몫"
@@ -2594,7 +2591,7 @@ msgid "Is Closed?"
 msgstr "종료되었습니까?"
 
 #: gnucash/gnome/dialog-order.c:878
-msgid "Owner Name "
+msgid "Owner Name"
 msgstr "소유자 이름"
 
 #: gnucash/gnome/dialog-order.c:880 gnucash/gtkbuilder/dialog-order.glade:122
@@ -2625,7 +2622,7 @@ msgid ""
 "unattached payment."
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
+#: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1327
 #: gnucash/report/reports/standard/new-aging.scm:194
 #: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/new-owner-report.scm:719
@@ -2638,7 +2635,7 @@ msgid ""
 "Please specify the conversion rate."
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:1269 gnucash/gnome/search-owner.c:211
+#: gnucash/gnome/dialog-payment.c:1270 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2783
 #: gnucash/gtkbuilder/dialog-customer.glade:479
@@ -2657,7 +2654,7 @@ msgstr ""
 msgid "Customer"
 msgstr "소비자"
 
-#: gnucash/gnome/dialog-payment.c:1273 gnucash/gnome/search-owner.c:212
+#: gnucash/gnome/dialog-payment.c:1274 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1109
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2794
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:168
@@ -2671,7 +2668,7 @@ msgstr "소비자"
 msgid "Vendor"
 msgstr "판매자"
 
-#: gnucash/gnome/dialog-payment.c:1277 gnucash/gnome/search-owner.c:213
+#: gnucash/gnome/dialog-payment.c:1278 gnucash/gnome/search-owner.c:213
 #: gnucash/gnome-search/dialog-search.c:1081
 #: gnucash/gtkbuilder/dialog-employee.glade:510
 #: gnucash/gtkbuilder/dialog-payment.glade:48
@@ -2683,7 +2680,7 @@ msgstr "판매자"
 msgid "Employee"
 msgstr "종업원"
 
-#: gnucash/gnome/dialog-payment.c:1422
+#: gnucash/gnome/dialog-payment.c:1423
 #, c-format
 msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type \"%s"
@@ -2693,13 +2690,13 @@ msgstr ""
 "유효한 보낼 계정이 없습니다. 이 지불을 계속하기 전 \"%s\" 형의 계정을 생성하"
 "시오. 아마 청구서 또는 어음을 우선 생성하겠습니까? "
 
-#: gnucash/gnome/dialog-payment.c:1575
+#: gnucash/gnome/dialog-payment.c:1576
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:1589
+#: gnucash/gnome/dialog-payment.c:1590
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', gnucash only knows how to handle one.\n"
@@ -2707,17 +2704,17 @@ msgid ""
 "\n"
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:1592
+#: gnucash/gnome/dialog-payment.c:1593
 #, fuzzy
 msgid "Warning"
 msgstr "초기화 경고"
 
-#: gnucash/gnome/dialog-payment.c:1595 gnucash/gnome/dialog-payment.c:1713
+#: gnucash/gnome/dialog-payment.c:1596 gnucash/gnome/dialog-payment.c:1714
 #, fuzzy
 msgid "Continue"
 msgstr "연속"
 
-#: gnucash/gnome/dialog-payment.c:1596
+#: gnucash/gnome/dialog-payment.c:1597
 #: gnucash/gnome/gnc-plugin-page-invoice.c:453
 #: gnucash/gnome/gnc-plugin-page-register2.c:499
 #: gnucash/gnome/gnc-plugin-page-register.c:622
@@ -2725,7 +2722,7 @@ msgstr "연속"
 msgid "Cancel"
 msgstr "취소"
 
-#: gnucash/gnome/dialog-payment.c:1708
+#: gnucash/gnome/dialog-payment.c:1709
 #, c-format
 msgid ""
 "The transaction has at least one split in a business account that is not "
@@ -20801,60 +20798,60 @@ msgstr "GnuCash .log파일 재생하기(_R)..."
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr "충돌 후 GunCash 로그 파일을 재생하기. 이것을 취소할 수 없습니다."
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:643
+#: gnucash/import-export/ofx/gnc-ofx-import.c:647
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "단위 \"%s\" 위한 주식 계좌"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:816
+#: gnucash/import-export/ofx/gnc-ofx-import.c:824
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "단위 \"%s\" 위한 수입 계좌"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:937
+#: gnucash/import-export/ofx/gnc-ofx-import.c:946
 #, fuzzy
 msgid "Unknown OFX account"
 msgstr "미지의 OFX CMA 계정"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:960
+#: gnucash/import-export/ofx/gnc-ofx-import.c:969
 msgid "Unknown OFX checking account"
 msgstr "미지의 OFX 자유 입출금 계정"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:964
+#: gnucash/import-export/ofx/gnc-ofx-import.c:973
 msgid "Unknown OFX savings account"
 msgstr "미지의 OFX 저축 계정"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:968
+#: gnucash/import-export/ofx/gnc-ofx-import.c:977
 msgid "Unknown OFX money market account"
 msgstr "미지의 OFX 머니마켓 계정"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:972
+#: gnucash/import-export/ofx/gnc-ofx-import.c:981
 msgid "Unknown OFX credit line account"
 msgstr "미지의 OFX 크래딧 라인 계정"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:977
+#: gnucash/import-export/ofx/gnc-ofx-import.c:986
 msgid "Unknown OFX CMA account"
 msgstr "미지의 OFX CMA 계정"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:981
+#: gnucash/import-export/ofx/gnc-ofx-import.c:990
 msgid "Unknown OFX credit card account"
 msgstr "미지의 QFX 신용 카드 계정"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:985
+#: gnucash/import-export/ofx/gnc-ofx-import.c:994
 msgid "Unknown OFX investment account"
 msgstr "미지의 QFX 투자 계정"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1177
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1191
 #, c-format
 msgid ""
 "OFX file '%s' imported, %d transactions processed, no transactions to match"
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1228
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1242
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1233
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1247
 #, fuzzy
 msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "진행하기 위하여 OFX/QFX 파일 선택"
@@ -30596,6 +30593,9 @@ msgstr "공 거래"
 #, fuzzy
 msgid "No help available."
 msgstr "변수 아님"
+
+#~ msgid "Company Name "
+#~ msgstr "회사명"
 
 #~ msgid "Increasing"
 #~ msgstr "증가"

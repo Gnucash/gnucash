@@ -3354,7 +3354,7 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                                _("Due Date"), NULL, type,
                                                INVOICE_DUE, NULL);
         inv_params = gnc_search_param_prepend (inv_params,
-                                               _("Company Name "), NULL, type,
+                                               _("Company Name"), NULL, type,
                                                INVOICE_OWNER, OWNER_PARENT,
                                                OWNER_NAME, NULL);
         inv_params = gnc_search_param_prepend (inv_params,
@@ -3388,7 +3388,7 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                                 _("Due Date"), NULL, type,
                                                 INVOICE_DUE, NULL);
         bill_params = gnc_search_param_prepend (bill_params,
-                                                _("Company Name "), NULL, type,
+                                                _("Company Name"), NULL, type,
                                                 INVOICE_OWNER, OWNER_PARENT,
                                                 OWNER_NAME, NULL);
         bill_params = gnc_search_param_prepend (bill_params,

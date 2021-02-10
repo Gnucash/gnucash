@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 4.2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-02-03 23:00+0100\n"
+"POT-Creation-Date: 2021-02-10 23:02+0100\n"
 "PO-Revision-Date: 2021-01-16 18:32+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -963,7 +963,7 @@ msgstr "Opcija za otplaćivanje kredita: „%s“"
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
-#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:937
+#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:941
 #: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:429
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
 #: gnucash/gtkbuilder/dialog-doclink.glade:612
@@ -1510,7 +1510,8 @@ msgstr "Kontakt za račun"
 msgid "Customer ID"
 msgstr "ID kupca"
 
-#: gnucash/gnome/dialog-customer.c:930 gnucash/gnome/dialog-vendor.c:733
+#: gnucash/gnome/dialog-customer.c:930 gnucash/gnome/dialog-invoice.c:3357
+#: gnucash/gnome/dialog-invoice.c:3391 gnucash/gnome/dialog-vendor.c:733
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:352
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:360
 #: gnucash/gtkbuilder/dialog-customer.glade:145
@@ -1651,7 +1652,7 @@ msgstr "Poveznice dokumenata transakcija"
 #: gnucash/gnome/dialog-doclink.c:1013
 #: gnucash/gnome/dialog-find-transactions2.c:157
 #: gnucash/gnome/dialog-find-transactions.c:157
-#: gnucash/gnome/dialog-lot-viewer.c:953 gnucash/gnome/dialog-tax-info.c:1398
+#: gnucash/gnome/dialog-lot-viewer.c:957 gnucash/gnome/dialog-tax-info.c:1398
 #: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:417
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:828
@@ -1878,7 +1879,7 @@ msgid "Share Price"
 msgstr "Cijena dionice"
 
 #: gnucash/gnome/dialog-find-transactions2.c:124
-#: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:967
+#: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:971
 #: gnucash/gnome/gnc-split-reg.c:694 gnucash/gnome/reconcile-view.c:413
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2892
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2904
@@ -1910,7 +1911,7 @@ msgstr "Iznos"
 
 #: gnucash/gnome/dialog-find-transactions2.c:126
 #: gnucash/gnome/dialog-find-transactions.c:124
-#: gnucash/gnome/dialog-lot-viewer.c:973
+#: gnucash/gnome/dialog-lot-viewer.c:977
 #: gnucash/gnome/dialog-sx-since-last-run.c:1051
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
@@ -2235,7 +2236,7 @@ msgstr "Ukupno gotovina:"
 msgid "Total Charge:"
 msgstr "Ukupno trošak:"
 
-#: gnucash/gnome/dialog-invoice.c:1867 gnucash/gnome/dialog-payment.c:1331
+#: gnucash/gnome/dialog-invoice.c:1867 gnucash/gnome/dialog-payment.c:1332
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:793
 #: libgnucash/engine/gncInvoice.c:1088
@@ -2418,10 +2419,6 @@ msgstr "Uknjiženjo?"
 msgid "Date Opened"
 msgstr "Datum računa"
 
-#: gnucash/gnome/dialog-invoice.c:3357 gnucash/gnome/dialog-invoice.c:3391
-msgid "Company Name "
-msgstr "Ime poduzeća "
-
 #: gnucash/gnome/dialog-invoice.c:3361
 #: gnucash/gtkbuilder/dialog-invoice.glade:41
 #: gnucash/gtkbuilder/dialog-invoice.glade:749
@@ -2445,7 +2442,7 @@ msgid "Voucher Notes"
 msgstr "Napomene za vaučer"
 
 #: gnucash/gnome/dialog-invoice.c:3438 gnucash/gnome/dialog-invoice.c:3597
-#: gnucash/gnome/dialog-lot-viewer.c:860 gnucash/gnome/dialog-tax-info.c:1236
+#: gnucash/gnome/dialog-lot-viewer.c:864 gnucash/gnome/dialog-tax-info.c:1236
 #: gnucash/gnome-utils/gnc-tree-view-account.c:811
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
@@ -2483,12 +2480,12 @@ msgstr "Uknjiženo"
 msgid "Due"
 msgstr "Dospjelo"
 
-#: gnucash/gnome/dialog-invoice.c:3450 gnucash/gnome/dialog-lot-viewer.c:866
+#: gnucash/gnome/dialog-invoice.c:3450 gnucash/gnome/dialog-lot-viewer.c:870
 #: gnucash/gnome/dialog-order.c:894
 msgid "Opened"
 msgstr "Otvoreno"
 
-#: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:947
+#: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:951
 #: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:421
 #: gnucash/gnome/reconcile-view.c:425
 #: gnucash/gtkbuilder/dialog-payment.glade:473
@@ -2605,7 +2602,7 @@ msgstr "Naziv naloga"
 msgid "Find Job"
 msgstr "Nađi nalog"
 
-#: gnucash/gnome/dialog-lot-viewer.c:809
+#: gnucash/gnome/dialog-lot-viewer.c:813
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:403
 #: gnucash/gnome/gnc-plugin-page-budget.c:208
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
@@ -2614,18 +2611,18 @@ msgstr "Nađi nalog"
 msgid "Open"
 msgstr "Otvori"
 
-#: gnucash/gnome/dialog-lot-viewer.c:876 gnucash/gnome/dialog-order.c:892
+#: gnucash/gnome/dialog-lot-viewer.c:880 gnucash/gnome/dialog-order.c:892
 msgid "Closed"
 msgstr "Zaključano"
 
-#: gnucash/gnome/dialog-lot-viewer.c:886
+#: gnucash/gnome/dialog-lot-viewer.c:890
 #: gnucash/gtkbuilder/assistant-acct-period.glade:143
 #: gnucash/report/html-fonts.scm:106
 #: gnucash/report/reports/standard/register.scm:347
 msgid "Title"
 msgstr "Naslov"
 
-#: gnucash/gnome/dialog-lot-viewer.c:893 gnucash/gnome/dialog-lot-viewer.c:985
+#: gnucash/gnome/dialog-lot-viewer.c:897 gnucash/gnome/dialog-lot-viewer.c:989
 #: gnucash/gnome-utils/gnc-tree-view-account.c:854
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
@@ -2642,16 +2639,16 @@ msgstr "Naslov"
 msgid "Balance"
 msgstr "Saldo"
 
-#: gnucash/gnome/dialog-lot-viewer.c:899
+#: gnucash/gnome/dialog-lot-viewer.c:903
 msgid "Gains"
 msgstr "Dobit"
 
-#: gnucash/gnome/dialog-lot-viewer.c:979
+#: gnucash/gnome/dialog-lot-viewer.c:983
 #: gnucash/report/reports/example/average-balance.scm:131
 msgid "Gain/Loss"
 msgstr "Dobit/Gubitak"
 
-#: gnucash/gnome/dialog-lot-viewer.c:1043
+#: gnucash/gnome/dialog-lot-viewer.c:1047
 #, c-format
 msgid "Lots in Account %s"
 msgstr "Pozicije u računu „%s“"
@@ -2697,8 +2694,8 @@ msgid "Is Closed?"
 msgstr "Je zatvoreno?"
 
 #: gnucash/gnome/dialog-order.c:878
-msgid "Owner Name "
-msgstr "Ime vlasnika "
+msgid "Owner Name"
+msgstr "Ime vlasnika"
 
 #: gnucash/gnome/dialog-order.c:880 gnucash/gtkbuilder/dialog-order.glade:122
 #: gnucash/gtkbuilder/dialog-order.glade:520
@@ -2729,7 +2726,7 @@ msgstr ""
 "Nije odabran nijedan dokument kojem bi se dodijelilo ovo plaćanje. To može "
 "stvoriti nepovezano plaćanje."
 
-#: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
+#: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1327
 #: gnucash/report/reports/standard/new-aging.scm:194
 #: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/new-owner-report.scm:719
@@ -2743,7 +2740,7 @@ msgid ""
 msgstr ""
 "Konti prijenosa i knjiženja povezani su s različitim valutama. Odredi tečaj."
 
-#: gnucash/gnome/dialog-payment.c:1269 gnucash/gnome/search-owner.c:211
+#: gnucash/gnome/dialog-payment.c:1270 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2783
 #: gnucash/gtkbuilder/dialog-customer.glade:479
@@ -2762,7 +2759,7 @@ msgstr ""
 msgid "Customer"
 msgstr "Kupac"
 
-#: gnucash/gnome/dialog-payment.c:1273 gnucash/gnome/search-owner.c:212
+#: gnucash/gnome/dialog-payment.c:1274 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1109
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2794
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:168
@@ -2776,7 +2773,7 @@ msgstr "Kupac"
 msgid "Vendor"
 msgstr "Dobavljač"
 
-#: gnucash/gnome/dialog-payment.c:1277 gnucash/gnome/search-owner.c:213
+#: gnucash/gnome/dialog-payment.c:1278 gnucash/gnome/search-owner.c:213
 #: gnucash/gnome-search/dialog-search.c:1081
 #: gnucash/gtkbuilder/dialog-employee.glade:510
 #: gnucash/gtkbuilder/dialog-payment.glade:48
@@ -2788,7 +2785,7 @@ msgstr "Dobavljač"
 msgid "Employee"
 msgstr "Zaposlenik"
 
-#: gnucash/gnome/dialog-payment.c:1422
+#: gnucash/gnome/dialog-payment.c:1423
 #, c-format
 msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type \"%s"
@@ -2799,14 +2796,14 @@ msgstr ""
 "nastaviš s obradom ovog plaćanja. Možda najprije želiš stvoriti izlazni ili "
 "ulazni račun?"
 
-#: gnucash/gnome/dialog-payment.c:1575
+#: gnucash/gnome/dialog-payment.c:1576
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
 "Odabrane transakcije nemaju stavke, koje bi se mogle odrediti kao plaćanje"
 
-#: gnucash/gnome/dialog-payment.c:1589
+#: gnucash/gnome/dialog-payment.c:1590
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', gnucash only knows how to handle one.\n"
@@ -2818,15 +2815,15 @@ msgstr ""
 "Odaberi jednu stavku, ostale će se zanemariti.\n"
 "\n"
 
-#: gnucash/gnome/dialog-payment.c:1592
+#: gnucash/gnome/dialog-payment.c:1593
 msgid "Warning"
 msgstr "Upozorenje"
 
-#: gnucash/gnome/dialog-payment.c:1595 gnucash/gnome/dialog-payment.c:1713
+#: gnucash/gnome/dialog-payment.c:1596 gnucash/gnome/dialog-payment.c:1714
 msgid "Continue"
 msgstr "Nastavi"
 
-#: gnucash/gnome/dialog-payment.c:1596
+#: gnucash/gnome/dialog-payment.c:1597
 #: gnucash/gnome/gnc-plugin-page-invoice.c:453
 #: gnucash/gnome/gnc-plugin-page-register2.c:499
 #: gnucash/gnome/gnc-plugin-page-register.c:622
@@ -2834,7 +2831,7 @@ msgstr "Nastavi"
 msgid "Cancel"
 msgstr "Prekini"
 
-#: gnucash/gnome/dialog-payment.c:1708
+#: gnucash/gnome/dialog-payment.c:1709
 #, c-format
 msgid ""
 "The transaction has at least one split in a business account that is not "
@@ -21566,49 +21563,49 @@ msgstr ""
 "Ponovo pokreni log-datoteku GnuCasha nakon rušenja programa. Ovo se ne može "
 "opozvati."
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:643
+#: gnucash/import-export/ofx/gnc-ofx-import.c:647
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "Konto dionica za vrijednosni papir „%s“"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:816
+#: gnucash/import-export/ofx/gnc-ofx-import.c:824
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "Konto prihoda za vrijednosni papir „%s“"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:937
+#: gnucash/import-export/ofx/gnc-ofx-import.c:946
 msgid "Unknown OFX account"
 msgstr "Nepoznat OFX konto"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:960
+#: gnucash/import-export/ofx/gnc-ofx-import.c:969
 msgid "Unknown OFX checking account"
 msgstr "Nepoznat OFX žiro konto"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:964
+#: gnucash/import-export/ofx/gnc-ofx-import.c:973
 msgid "Unknown OFX savings account"
 msgstr "Nepoznat OFX konto štednje"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:968
+#: gnucash/import-export/ofx/gnc-ofx-import.c:977
 msgid "Unknown OFX money market account"
 msgstr "Nepoznat OFX konto tržišta novca"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:972
+#: gnucash/import-export/ofx/gnc-ofx-import.c:981
 msgid "Unknown OFX credit line account"
 msgstr "Nepoznat OFX konto kreditne linije"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:977
+#: gnucash/import-export/ofx/gnc-ofx-import.c:986
 msgid "Unknown OFX CMA account"
 msgstr "Nepoznat OFX CMA konto"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:981
+#: gnucash/import-export/ofx/gnc-ofx-import.c:990
 msgid "Unknown OFX credit card account"
 msgstr "Nepoznat OFX konto kreditne kartice"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:985
+#: gnucash/import-export/ofx/gnc-ofx-import.c:994
 msgid "Unknown OFX investment account"
 msgstr "Nepoznat OFX konto ulaganja"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1177
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1191
 #, c-format
 msgid ""
 "OFX file '%s' imported, %d transactions processed, no transactions to match"
@@ -21616,11 +21613,11 @@ msgstr ""
 "OFX datoteka „%s” je uvezena. Broj obrađenih transakcija: %d. Nema "
 "transakcija za uspoređivanje"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1228
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1242
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr "Otvori/Quicken Financial Exchange datoteku (*.ofx, *.qfx)"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1233
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1247
 msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "Odaberi jednu ili više OFX/QFX datoteka"
 
@@ -30918,6 +30915,9 @@ msgstr "Transakcija je stornirana"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "Pomoć nije dostupna."
+
+#~ msgid "Company Name "
+#~ msgstr "Ime poduzeća "
 
 #~ msgid "Increasing"
 #~ msgstr "Uzlazno"

@@ -875,7 +875,7 @@ gnc_order_search (GtkWindow *parent, GncOrder *start, GncOwner *owner, QofBook *
                                            ORDER_IS_CLOSED, NULL);
         params = gnc_search_param_prepend (params, _("Date Opened"), NULL, type,
                                            ORDER_OPENED, NULL);
-        params = gnc_search_param_prepend (params, _("Owner Name "), NULL, type,
+        params = gnc_search_param_prepend (params, _("Owner Name"), NULL, type,
                                            ORDER_OWNER, OWNER_NAME, NULL);
         params = gnc_search_param_prepend (params, _("Order ID"), NULL, type,
                                            ORDER_ID, NULL);
