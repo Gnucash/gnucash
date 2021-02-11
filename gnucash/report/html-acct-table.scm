@@ -227,19 +227,11 @@
 ;;          account having a balance of zero. otherwise, a row will be
 ;;          generated for the account.
 ;; 
-;;     balance-mode: 'pre-adjusting 'pre-closing 'post-closing
+;;     balance-mode: 'pre-closing 'post-closing
 ;;
 ;;          indicates whether or not to ignore adjusting/closing
 ;;          entries when computing account balances. 'pre-closing
-;;          ignores only closing entries. 'pre-adjusting also ignores
-;;          adjusting entries. 'post-closing counts all entries.
-;; 
-;;     adjusting-pattern: alist of 'str 'cased 'regexp
-;; 
-;;          a pattern alist, as accepted by
-;;          gnc:account-get-trans-type-balance-interval, matching
-;;          adjusting transactions to be ignored when balance-mode is
-;;          'pre-adjusting.
+;;          ignores, 'post-closing counts closing entries.
 ;; 
 ;;     closing-pattern: alist of 'str 'cased 'regexp
 ;; 
@@ -631,11 +623,6 @@
 			       (list 'cased #f)
 			       (list 'regexp #f)
 			       (list 'closing #t))))
-	 (adjusting-pattern (or (get-val env 'adjusting-pattern)
-				(list
-				 (list 'str (G_ "Adjusting Entries"))
-				 (list 'cased #f)
-				 (list 'regexp #f))))
 	 (report-budget (or (get-val env 'report-budget) #f))
 	 ;; local variables
 	 (toplvl-accts
@@ -683,13 +670,6 @@
           ((pre-closing)
            (merge-splits (gnc:account-get-trans-type-splits-interval
                           accts closing-pattern start-date end-date) #t))
-
-          ;; remove closing and adjusting entries
-          ((pre-adjusting)
-           (merge-splits (gnc:account-get-trans-type-splits-interval
-                          accts closing-pattern start-date end-date) #t)
-           (merge-splits (gnc:account-get-trans-type-splits-interval
-                          accts adjusting-pattern start-date end-date) #t))
 
           (else
            (display "you fail it\n"))))
