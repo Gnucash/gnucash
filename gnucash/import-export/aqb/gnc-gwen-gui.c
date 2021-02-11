@@ -120,23 +120,23 @@ static void get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
                       const char *pChallenge, uint32_t lChallenge,
                       gchar **input, gint min_len, gint max_len);
 #endif
-static gint messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
+static gint GNC_GWENHYWFAR_CB messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
                           const gchar *text, const gchar *b1, const gchar *b2,
                           const gchar *b3, guint32 guiid);
-static gint inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
+static gint GNC_GWENHYWFAR_CB inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
                         const gchar *text, gchar *buffer, gint min_len,
                         gint max_len, guint32 guiid);
-static guint32 showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
+static guint32 GNC_GWENHYWFAR_CB showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
                           const gchar *text, guint32 guiid);
-static void hidebox_cb(GWEN_GUI *gwen_gui, guint32 id);
-static guint32 progress_start_cb(GWEN_GUI *gwen_gui, uint32_t progressFlags,
+static void GWENHYWFAR_CB hidebox_cb(GWEN_GUI *gwen_gui, guint32 id);
+static guint32 GNC_GWENHYWFAR_CB progress_start_cb(GWEN_GUI *gwen_gui, uint32_t progressFlags,
                                  const char *title, const char *text,
                                  uint64_t total, uint32_t guiid);
-static gint progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id,
+static gint GNC_GWENHYWFAR_CB progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id,
                                 uint64_t new_progress);
-static gint progress_log_cb(GWEN_GUI *gwen_gui, guint32 id,
+static gint GNC_GWENHYWFAR_CB progress_log_cb(GWEN_GUI *gwen_gui, guint32 id,
                             GWEN_LOGGER_LEVEL level, const gchar *text);
-static gint progress_end_cb(GWEN_GUI *gwen_gui, guint32 id);
+static gint GNC_GWENHYWFAR_CB progress_end_cb(GWEN_GUI *gwen_gui, guint32 id);
 #ifndef AQBANKING6
 static gint GNC_GWENHYWFAR_CB getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags,
                                              const gchar *token,
@@ -1141,7 +1141,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     LEAVE("input %s", *input ? "non-NULL" : "NULL");
 }
 
-static gint
+static gint GNC_GWENHYWFAR_CB
 messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
               const gchar *text, const gchar *b1, const gchar *b2,
               const gchar *b3, guint32 guiid)
@@ -1187,7 +1187,7 @@ messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     return result;
 }
 
-static gint
+static gint GNC_GWENHYWFAR_CB
 inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
             const gchar *text, gchar *buffer, gint min_len, gint max_len,
             guint32 guiid)
@@ -1216,7 +1216,7 @@ inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     return input ? 0 : -1;
 }
 
-static guint32
+static guint32 GNC_GWENHYWFAR_CB
 showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
            const gchar *text, guint32 guiid)
 {
@@ -1251,7 +1251,7 @@ showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     return showbox_id;
 }
 
-static void
+static void GNC_GWENHYWFAR_CB
 hidebox_cb(GWEN_GUI *gwen_gui, guint32 id)
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
@@ -1292,7 +1292,7 @@ hidebox_cb(GWEN_GUI *gwen_gui, guint32 id)
     LEAVE(" ");
 }
 
-static guint32
+static guint32 GNC_GWENHYWFAR_CB
 progress_start_cb(GWEN_GUI *gwen_gui, uint32_t progressFlags, const char *title,
                   const char *text, uint64_t total, uint32_t guiid)
 {
@@ -1346,7 +1346,7 @@ progress_start_cb(GWEN_GUI *gwen_gui, uint32_t progressFlags, const char *title,
     return g_list_length(gui->progresses);
 }
 
-static gint
+static gint GNC_GWENHYWFAR_CB
 progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id, uint64_t progress)
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
@@ -1373,7 +1373,7 @@ progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id, uint64_t progress)
     return !keep_alive(gui);
 }
 
-static gint
+static gint GNC_GWENHYWFAR_CB
 progress_log_cb(GWEN_GUI *gwen_gui, guint32 id, GWEN_LOGGER_LEVEL level,
                 const gchar *text)
 {
@@ -1402,7 +1402,7 @@ progress_log_cb(GWEN_GUI *gwen_gui, guint32 id, GWEN_LOGGER_LEVEL level,
     return !keep_alive(gui);
 }
 
-static gint
+static gint GNC_GWENHYWFAR_CB
 progress_end_cb(GWEN_GUI *gwen_gui, guint32 id)
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
