@@ -60,6 +60,4 @@ private:
     std::string m_error_msg;
 };
 
-const GncQuotes& gnc_get_quotes_instance (void);
-
 #endif /* GNC_QUOTES_HPP */
