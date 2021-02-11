@@ -31,9 +31,12 @@ extern  "C" {
 #include <qofbook.h>
 }
 
-using QuoteSources = std::vector<std::string>;
+using StrVec = std::vector  <std::string>;
+using QuoteSources = StrVec;
+using CmdOutput = std::pair <StrVec, StrVec>;
 
 const std::string not_found = std::string ("Not Found");
+
 
 class GncQuotes
 {
@@ -51,8 +54,14 @@ public:
     GList* sources_as_glist ();
 
 private:
-    // Function to check if Finance::Quote is properly installed
+    // Check if Finance::Quote is properly installed
     void check (void);
+    // Run the command specified. Returns two vectors for further processing by the caller
+    // - one with the contents of stdout
+    // - one with the contents of stderr
+    // Will also set m_cmd_result
+    CmdOutput run_cmd (std::string cmd_name, StrVec args, StrVec input_vec);
+
 
     std::string m_version;
     QuoteSources m_sources;

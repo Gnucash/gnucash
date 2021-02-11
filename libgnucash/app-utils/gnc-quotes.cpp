@@ -68,45 +68,20 @@ GncQuotes::check (void)
     m_error_msg.clear();
     m_cmd_result  = 0;
 
-    auto perl_executable = bp::search_path("perl"); //or get it from somewhere else.
+    auto perl_executable = bp::search_path("perl");
     auto fq_check = std::string(gnc_path_get_bindir()) + "/gnc-fq-check";
+    StrVec args { "-w", fq_check };
 
-    try
-    {
-        std::future<std::vector<char> > output, error;
-        boost::asio::io_service svc;
+    auto cmd_out = run_cmd (perl_executable.string(), args, StrVec());
 
-        bp::child process (perl_executable, "-w", fq_check, bp::std_out > output, bp::std_err > error, svc);
-        svc.run();
-        process.wait();
+    for (auto line : cmd_out.first)
+        if (m_version.empty())
+            std::swap (m_version, line);
+        else
+            m_sources.push_back (std::move(line));
 
-        {
-            auto raw = output.get();
-            std::vector<std::string> data;
-            std::string line;
-            bio::stream_buffer<bio::array_source> sb(raw.data(), raw.size());
-            std::istream is(&sb);
-
-            while (std::getline(is, line) && !line.empty())
-                if (m_version.empty())
-                    std::swap (m_version, line);
-                else
-                    m_sources.push_back (std::move(line));
-
-            raw = error.get();
-            bio::stream_buffer<bio::array_source> eb(raw.data(), raw.size());
-            std::istream es(&eb);
-
-            while (std::getline(es, line) && !line.empty())
-                m_error_msg.append(std::move(line) + "\n");
-        }
-        m_cmd_result = process.exit_code();
-    }
-    catch (std::exception &e)
-    {
-        m_cmd_result = -1;
-        m_error_msg = e.what();
-    };
+    for (auto line : cmd_out.second)
+        m_error_msg.append(std::move(line) + "\n");
 
     if (m_cmd_result == 0)
         std::sort (m_sources.begin(), m_sources.end());
@@ -169,6 +144,54 @@ static const std::vector <std::string>
 format_quotes (const std::vector<gnc_commodity*>)
 {
     return std::vector <std::string>();
+}
+
+
+CmdOutput
+GncQuotes::run_cmd (std::string cmd_name, StrVec args, StrVec input_vec)
+{
+    StrVec out_vec, err_vec;
+
+    try
+    {
+        std::future<std::vector<char> > out_buf, err_buf;
+        boost::asio::io_service svc;
+
+        auto input_buf = bp::buffer (input_vec);
+        bp::child process (cmd_name, args,
+                            bp::std_out > out_buf,
+                            bp::std_err > err_buf,
+                            bp::std_in < input_buf,
+                            svc);
+        svc.run();
+        process.wait();
+
+        {
+            auto raw = out_buf.get();
+            std::vector<std::string> data;
+            std::string line;
+            bio::stream_buffer<bio::array_source> sb(raw.data(), raw.size());
+            std::istream is(&sb);
+
+            while (std::getline(is, line) && !line.empty())
+                out_vec.push_back (std::move(line));
+
+            raw = err_buf.get();
+            bio::stream_buffer<bio::array_source> eb(raw.data(), raw.size());
+            std::istream es(&eb);
+
+            while (std::getline(es, line) && !line.empty())
+                err_vec.push_back (std::move(line));
+        }
+        m_cmd_result = process.exit_code();
+    }
+    catch (std::exception &e)
+    {
+        m_cmd_result = -1;
+        m_error_msg = e.what();
+    };
+
+    return CmdOutput (std::move(out_vec), std::move(err_vec));
 }
 
 
