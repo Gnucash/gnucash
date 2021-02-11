@@ -145,12 +145,6 @@ sub parse_currencies {
         $results{$from_currency}{"currency"} = $to_currency;
         $results{$from_currency}{"last"} = $price;
     }
-
-    print STDERR "Resulting currency keys:\n";
-    foreach my $key (keys %results) {
-        print STDERR "$key\n";
-    }
-
     return %results;
 }
 
@@ -159,12 +153,6 @@ sub parse_commodities {
 
     my %quote_data = $quoter->fetch($quote_method_name, keys %$commodities);
     my %normalized_quote_data = sanitize_hash(%quote_data);
-
-
-    print STDERR "Resulting commodity keys:\n";
-    foreach my $key (keys %normalized_quote_data) {
-        print STDERR "$key\n";
-    }
     return %normalized_quote_data;
 }
 
@@ -176,18 +164,15 @@ check_modules ();
 
 my $json_input = do { local $/; <STDIN> };
 
-print STDERR "Input:\n$json_input\n";
-
 if (!valid_json($json_input)) {
     print STDERR "Could not parse input as valid JSON.\n";
+    print STDERR "Received input:\n$json_input\n";
     exit 1;
 }
 
 my $requests = parse_json ($json_input);
-print STDERR "Reftype: ", ref $requests, "\n";
 
 my $defaultcurrency = $$requests{'defaultcurrency'};
-print STDERR "Default currency: $defaultcurrency\n";
 if (!$defaultcurrency) {
     $defaultcurrency = "USD";
     print STDERR "Warning: no default currency was specified, assuming 'USD'\n";
@@ -219,11 +204,6 @@ while (($key, $values) = each %$requests)
             %results = (%results, %comm_results);
         }
     }
-}
-
-print STDERR "Resulting keys:\n";
-foreach $key (keys %results) {
-    print STDERR "$key\n";
 }
 
 if (%results) {
