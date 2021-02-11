@@ -31,6 +31,9 @@
 #include <boost/process.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/iostreams/device/array.hpp>
+#include <boost/iostreams/stream_buffer.hpp>
+#include <boost/asio.hpp>
 #include <glib.h>
 #include "gnc-commodity.hpp"
 #include "gnc-quotes.hpp"
@@ -46,6 +49,7 @@ extern "C" {
 
 namespace bp = boost::process;
 namespace bpt = boost::property_tree;
+namespace bio = boost::iostreams;
 
 static GncQuotes quotes_cached;
 static bool quotes_initialized = false;
@@ -69,24 +73,35 @@ GncQuotes::check (void)
     auto perl_executable = bp::search_path("perl"); //or get it from somewhere else.
     auto fq_check = std::string(gnc_path_get_bindir()) + "/gnc-fq-check";
 
-    bp::ipstream out_stream;
-    bp::ipstream err_stream;
-
     try
     {
-        bp::child process (perl_executable, "-w", fq_check, bp::std_out > out_stream, bp::std_err > err_stream);
+        std::future<std::vector<char> > output, error;
+        boost::asio::io_service svc;
 
-        std::string stream_line;
-        while (process.running() && getline (out_stream, stream_line))
-            if (m_version.empty())
-                std::swap (m_version, stream_line);
-            else
-                m_sources.push_back (std::move(stream_line));
-
-        while (process.running() && getline (err_stream, stream_line))
-            m_error_msg.append(stream_line + "\n");
-
+        bp::child process (perl_executable, "-w", fq_check, bp::std_out > output, bp::std_err > error, svc);
+        svc.run();
         process.wait();
+
+        {
+            auto raw = output.get();
+            std::vector<std::string> data;
+            std::string line;
+            bio::stream_buffer<bio::array_source> sb(raw.data(), raw.size());
+            std::istream is(&sb);
+
+            while (std::getline(is, line) && !line.empty())
+                if (m_version.empty())
+                    std::swap (m_version, line);
+                else
+                    m_sources.push_back (std::move(line));
+
+            raw = error.get();
+            bio::stream_buffer<bio::array_source> eb(raw.data(), raw.size());
+            std::istream es(&eb);
+
+            while (std::getline(es, line) && !line.empty())
+                m_error_msg.append(std::move(line) + "\n");
+        }
         m_cmd_result = process.exit_code();
     }
     catch (std::exception &e)
