@@ -81,7 +81,7 @@ scm_add_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **ar
     gnc_prefs_init ();
     qof_event_suspend();
 
-    auto quotes = gnc_get_quotes_instance();
+    GncQuotes quotes;
     if (quotes.cmd_result() == 0)
     {
         std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << std::endl;
