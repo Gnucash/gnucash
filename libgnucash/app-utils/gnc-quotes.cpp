@@ -55,18 +55,24 @@ namespace bio = boost::iostreams;
 CommVec
 gnc_quotes_get_quotable_commodities(const gnc_commodity_table * table);
 
-GncQuotes::GncQuotes()
+GncQuotes::GncQuotes ()
 {
-    check();
+    check (nullptr);
+}
+
+GncQuotes::GncQuotes (QofBook *book)
+{
+    check (book);
 }
 
 void
-GncQuotes::check (void)
+GncQuotes::check (QofBook *book)
 {
     m_version.clear();
     m_sources.clear();
     m_error_msg.clear();
     m_cmd_result  = 0;
+    m_book = book;
 
     auto perl_executable = bp::search_path("perl");
     auto fq_check = std::string(gnc_path_get_bindir()) + "/gnc-fq-check";
@@ -121,7 +127,6 @@ GncQuotes::fetch (const CommVec& commodities)
             auto key = comm_ns + "." + comm_mnemonic;
             pt.put (key, "");
         }
-
     );
 
     std::ostringstream result;
@@ -132,10 +137,10 @@ GncQuotes::fetch (const CommVec& commodities)
 
 
 void
-GncQuotes::fetch_all (QofBook *book)
+GncQuotes::fetch_all ()
 {
     auto commodities = gnc_quotes_get_quotable_commodities (
-        gnc_commodity_table_get_table (book));
+        gnc_commodity_table_get_table (m_book));
 
     fetch (commodities);
 }

@@ -42,9 +42,11 @@ class GncQuotes
 {
 public:
     // Constructor - checks for presence of Finance::Quote and import version and quote sources
-    GncQuotes();
+    GncQuotes ();
+    GncQuotes (QofBook *book);
+    ~GncQuotes () = default;
 
-    void fetch_all (QofBook *book);
+    void fetch_all ();
     void fetch (const CommVec& commodities);
 
     const int cmd_result() noexcept { return m_cmd_result; }
@@ -54,19 +56,23 @@ public:
     GList* sources_as_glist ();
 
 private:
+    GncQuotes () = delete;
     // Check if Finance::Quote is properly installed
-    void check (void);
+    void check (QofBook *book);
     // Run the command specified. Returns two vectors for further processing by the caller
     // - one with the contents of stdout
     // - one with the contents of stderr
     // Will also set m_cmd_result
-    CmdOutput run_cmd (std::string cmd_name, StrVec args, StrVec input_vec);
+    template <typename BufferT> CmdOutput run_cmd (std::string cmd_name, StrVec args, BufferT input_vec);
+
+    void parse_quotes (std::string);
 
 
     std::string m_version;
     QuoteSources m_sources;
     int m_cmd_result;
     std::string m_error_msg;
+    QofBook *m_book;
 };
 
 #endif /* GNC_QUOTES_HPP */
