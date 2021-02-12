@@ -46,6 +46,7 @@
 #include "gnc-plugin-file-history.h"
 #include "qof.h"
 #include "Scrub.h"
+#include "Scrub4.h"
 #include "TransLog.h"
 #include "gnc-session.h"
 #include "gnc-state.h"
@@ -1038,6 +1039,7 @@ RESTART:
                 }
                 g_list_free (children);
             }
+            gnc_scrub_closing_kvp (book);
         }
     }
 
