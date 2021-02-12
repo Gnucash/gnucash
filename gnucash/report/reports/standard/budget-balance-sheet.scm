@@ -308,7 +308,7 @@
          (parent-balance-mode (get-option gnc:pagename-display
                                            optname-parent-balance-mode))
          (parent-total-mode
-	  (assq-ref '((t . #t) (f . #f) (canonically-tabbed . canonically-tabbed))
+	  (assq-ref '((t . #t) (f . #f))
 		    (get-option gnc:pagename-display
 				optname-parent-total-mode)))
          (show-zb-accts? (get-option gnc:pagename-display
