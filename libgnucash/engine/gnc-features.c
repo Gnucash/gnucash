@@ -52,6 +52,7 @@ static gncFeature known_features[] =
     { GNC_FEATURE_BUDGET_UNREVERSED, "Store budget amounts unreversed (i.e. natural) signs (requires at least Gnucash 3.8)"},
     { GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS, "Show extra account columns in the Budget View (requires at least Gnucash 3.8)"},
     { GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE, GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE " (requires at least Gnucash 4.3)" },
+    { GNC_FEATURE_SCRUBBED_CLOSING, "Closing Entries have been scrubbed." },
     { NULL },
 };
 
