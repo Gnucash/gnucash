@@ -5,14 +5,15 @@
 # Raúl Miró <cotin@geocities.com>, 2003.
 # Eneko Lacunza <enlar@enlar.net>, 2004.
 # Gabriel Ortiz Severino <gabrielortizseverino@gmail.com>, 2021.
+# Pablo <ppicapietra@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-02-04 08:41+0000\n"
-"Last-Translator: Gabriel Ortiz Severino <gabrielortizseverino@gmail.com>\n"
+"PO-Revision-Date: 2021-02-12 02:50+0000\n"
+"Last-Translator: Pablo <ppicapietra@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "es/>\n"
 "Language: es\n"
@@ -55,9 +56,8 @@ msgid "account type: Asset"
 msgstr "tipo de cuenta: Activo"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "tipo de cuenta: Pasivo"
+msgstr "tipo de cuenta: Activos y Pasivos"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
