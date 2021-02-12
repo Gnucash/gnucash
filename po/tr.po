@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.4+\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2021-02-10 11:50+0000\n"
+"PO-Revision-Date: 2021-02-11 21:50+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
@@ -10181,19 +10181,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:110
-#, fuzzy
 msgid "Name of the report to run\n"
-msgstr "Firmanın adı."
+msgstr "Çalıştırılacak raporun adı\n"
 
 #: gnucash/gnucash-cli.cpp:112
-#, fuzzy
 msgid "Specify export type\n"
-msgstr "2. İçe aktarma türünü seçin"
+msgstr "Dışa aktarma türünü belirtin\n"
 
 #: gnucash/gnucash-cli.cpp:114
-#, fuzzy
 msgid "Output file for report\n"
-msgstr "Raporlar için artalan karo."
+msgstr "Rapor için çıktı dosyası\n"
 
 #: gnucash/gnucash-cli.cpp:129
 msgid "Unknown quotes command '{1}'"
@@ -10218,9 +10215,8 @@ msgid "Missing command or option"
 msgstr "Bu bir renk seçeneğidir."
 
 #: gnucash/gnucash-commands.cpp:91
-#, fuzzy
 msgid "No quotes retrieved. Finance::Quote isn't installed properly."
-msgstr "Kotasyonlar alınamadı. Finance:Quote muntazam olarak kurulu değil.\n"
+msgstr "Kotasyonlar alınamadı. Finance:Quote düzgün olarak kurulu değil."
 
 #: gnucash/gnucash-core-app.cpp:85
 msgid "This is a development version. It may or may not work."
@@ -10369,12 +10365,10 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash.cpp:394
-#, fuzzy
 msgid "Run '{1} --help' to see a full list of available command line options."
 msgstr ""
-"%s\n"
-"Kullanılabilir komut satırı seçeneklerini listelemek için '%s --help' "
-"çalıştırın.\n"
+"Kullanılabilir komut satırı seçeneklerinin tam listesini görmek için '{1} --"
+"help' komutunu çalıştırın."
 
 #: gnucash/gnucash.cpp:396
 msgid ""
@@ -20309,9 +20303,9 @@ msgstr ""
 "biçimleri (\"profiller\") sunar."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:298
-#, fuzzy, c-format
+#, c-format
 msgid "Validation...\n"
-msgstr "uygulama"
+msgstr "Doğrulama...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:328
 #, c-format
@@ -20345,9 +20339,9 @@ msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:405
 #: gnucash/import-export/bi-import/dialog-bi-import.c:476
-#, fuzzy, c-format
+#, c-format
 msgid "Row %d, invoice %s/%u: account %s does not exist.\n"
-msgstr "%s hesabı mevcut değildir"
+msgstr "Satır %d, fatura %s/%u: hesap %s mevcut değil.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:417
 #, c-format
@@ -20424,9 +20418,9 @@ msgid "Invoice %s NOT posted because it requires currency conversion.\n"
 msgstr "Para birimi dönüşümü gerektirdiği için fatura %s gönderileMEDİ.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:926
-#, fuzzy, c-format
+#, c-format
 msgid "Nothing to process.\n"
-msgstr "Sıfırlanacak uyarı yok."
+msgstr "İşlenecek bir şey yok.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:142
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:128
@@ -21132,9 +21126,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:516
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:571
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:579
-#, fuzzy
 msgid " could not be understood.\n"
-msgstr "%s sütunu anlaşılamadı."
+msgstr " anlaşılamadı.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:323

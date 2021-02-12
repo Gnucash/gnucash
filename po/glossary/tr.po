@@ -4,14 +4,15 @@
 # Automatically generated, 2021.
 #
 # Muha Aliss <muhaaliss@pm.me>, 2021.
+# Oğuz Ersen <oguzersen@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-09 01:51+0100\n"
-"PO-Revision-Date: 2021-02-09 18:50+0000\n"
-"Last-Translator: Muha Aliss <muhaaliss@pm.me>\n"
+"PO-Revision-Date: 2021-02-11 21:50+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "tr/>\n"
 "Language: tr\n"
@@ -257,7 +258,7 @@ msgstr ""
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr ""
+msgstr "Bütçe"
 
 #. "-"
 msgid "business (adjective)"
@@ -317,7 +318,7 @@ msgstr ""
 
 #. "-"
 msgid "Credit Card"
-msgstr ""
+msgstr "Kredi Kartı"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
@@ -333,7 +334,7 @@ msgstr ""
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
-msgstr ""
+msgstr "Özel biçim"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
@@ -345,7 +346,7 @@ msgstr ""
 
 #. "A specific numbered day of the month"
 msgid "Date"
-msgstr ""
+msgstr "Tarih"
 
 #. "DD/MM/YY or MM/DD/YY or something else"
 msgid "date format"
@@ -493,7 +494,7 @@ msgstr ""
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr ""
+msgstr "Hisse"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -513,7 +514,7 @@ msgstr ""
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr ""
+msgstr "Bilgi Notu"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
@@ -641,7 +642,7 @@ msgstr ""
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr ""
+msgstr "Kâr ve Zarar"
 
 #. "-"
 msgid "quick-fill"
@@ -701,7 +702,7 @@ msgstr ""
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr ""
+msgstr "Dağıtılmamış Kârlar"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
