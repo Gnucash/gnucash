@@ -5,25 +5,27 @@
 # Raúl Miró <cotin@geocities.com>, 2001.
 # Eneko Lacunza <enlar@enlar.net>, 2003, 2004, 2006, 2008.
 # Francisco Javier Serrador <fserrador@gmail.com>, 2018.
+# Carlos Manrique Enguita <UO258425@uniovi.es>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.7.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2019-01-09 15:53+0100\n"
-"Last-Translator: Francisco Javier Serrador <fserrador@gmail.com>\n"
-"Language-Team: Spanish <es@tp.org.es>\n"
+"PO-Revision-Date: 2021-02-12 02:50+0000\n"
+"Last-Translator: Carlos Manrique Enguita <UO258425@uniovi.es>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -592,6 +594,12 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"Toda transacción tiene un campo \"Anotaciones\" donde puedes añadir "
+"información útil.\n"
+"\n"
+"Para hacerlo visible\n"
+"selecciona \"Ver\" en la barra de menú y  marca \"Doble línea\" o\n"
+"marca \"Modo de doble línea\" en Preferencias:Registro predeterminados."
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -3193,7 +3201,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:245
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:251
 msgid "Scheduled Transactions"
-msgstr "Transacciones Programadas"
+msgstr "Transacciones programadas"
 
 #: gnucash/gnome/dialog-sx-editor.c:617
 msgid ""
@@ -17780,7 +17788,7 @@ msgstr "<b>Nivel de zoom Prederminado</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3242
 msgid "Reports"
-msgstr "Boletines"
+msgstr "Reporte"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3261
 msgid "<b>Window Geometry</b>"
@@ -25995,7 +26003,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:72
 #: gnucash/report/reports/standard/trial-balance.scm:574
 msgid "Balance Sheet"
-msgstr "Hoja de Balance"
+msgstr "Hoja de balance"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:82
 #: gnucash/report/reports/standard/balsheet-eg.scm:153
