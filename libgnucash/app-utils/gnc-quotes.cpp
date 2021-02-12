@@ -55,18 +55,52 @@ namespace bio = boost::iostreams;
 CommVec
 gnc_quotes_get_quotable_commodities(const gnc_commodity_table * table);
 
-GncQuotes::GncQuotes ()
+class GncQuotesImpl
+{
+public:
+    // Constructor - checks for presence of Finance::Quote and import version and quote sources
+    GncQuotesImpl ();
+    GncQuotesImpl (QofBook *book);
+
+    void fetch_all ();
+    void fetch (const CommVec& commodities);
+
+    const int cmd_result() noexcept { return m_cmd_result; }
+    const std::string& error_msg() noexcept { return m_error_msg; }
+    const std::string& version() noexcept { return m_version.empty() ? not_found : m_version; }
+    const QuoteSources& sources() noexcept { return m_sources; }
+    GList* sources_as_glist ();
+
+private:
+    // Check if Finance::Quote is properly installed
+    void check (QofBook *book);
+    // Run the command specified. Returns two vectors for further processing by the caller
+    // - one with the contents of stdout
+    // - one with the contents of stderr
+    // Will also set m_cmd_result
+    CmdOutput run_cmd (std::string cmd_name, StrVec args, StrVec input_vec);
+
+    std::string m_version;
+    QuoteSources m_sources;
+    int m_cmd_result;
+    std::string m_error_msg;
+    QofBook *m_book;
+};
+
+/* GncQuotes implementation */
+
+GncQuotesImpl::GncQuotesImpl ()
 {
     check (nullptr);
 }
 
-GncQuotes::GncQuotes (QofBook *book)
+GncQuotesImpl::GncQuotesImpl (QofBook *book)
 {
     check (book);
 }
 
 void
-GncQuotes::check (QofBook *book)
+GncQuotesImpl::check (QofBook *book)
 {
     m_version.clear();
     m_sources.clear();
@@ -94,7 +128,7 @@ GncQuotes::check (QofBook *book)
 }
 
 GList*
-GncQuotes::sources_as_glist()
+GncQuotesImpl::sources_as_glist()
 {
     GList* slist = nullptr;
     std::for_each (m_sources.rbegin(), m_sources.rend(),
@@ -104,7 +138,7 @@ GncQuotes::sources_as_glist()
 
 
 void
-GncQuotes::fetch (const CommVec& commodities)
+GncQuotesImpl::fetch (const CommVec& commodities)
 {
     auto dflt_curr = gnc_default_currency();
     bpt::ptree pt, pt_child;
@@ -137,7 +171,7 @@ GncQuotes::fetch (const CommVec& commodities)
 
 
 void
-GncQuotes::fetch_all ()
+GncQuotesImpl::fetch_all ()
 {
     auto commodities = gnc_quotes_get_quotable_commodities (
         gnc_commodity_table_get_table (m_book));
@@ -153,7 +187,7 @@ format_quotes (const std::vector<gnc_commodity*>)
 
 
 CmdOutput
-GncQuotes::run_cmd (std::string cmd_name, StrVec args, StrVec input_vec)
+GncQuotesImpl::run_cmd (std::string cmd_name, StrVec args, StrVec input_vec)
 {
     StrVec out_vec, err_vec;
 
@@ -282,3 +316,54 @@ gnc_quotes_get_quotable_commodities (const gnc_commodity_table * table)
     //LEAVE ("list head %p", &l);
     return l;
 }
+
+/* Public interface functions */
+// Constructor - checks for presence of Finance::Quote and import version and quote sources
+GncQuotes::GncQuotes ()
+{
+    m_impl = std::make_unique<GncQuotesImpl> ();
+}
+
+GncQuotes::GncQuotes (QofBook *book)
+{
+    m_impl = std::make_unique<GncQuotesImpl> (book);
+}
+
+void
+GncQuotes::fetch_all ()
+{
+    m_impl->fetch_all ();
+}
+
+void GncQuotes::fetch (const CommVec& commodities)
+{
+    m_impl->fetch (commodities);
+}
+
+const int GncQuotes::cmd_result() noexcept
+{
+    return m_impl->cmd_result ();
+}
+
+const std::string& GncQuotes::error_msg() noexcept
+{
+    return m_impl->error_msg ();
+}
+
+const std::string& GncQuotes::version() noexcept
+{
+    return m_impl->version ();
+}
+
+const QuoteSources& GncQuotes::sources() noexcept
+{
+    return m_impl->sources ();
+}
+
+GList* GncQuotes::sources_as_glist ()
+{
+    return m_impl->sources_as_glist ();
+}
+
+GncQuotes::~GncQuotes() = default;
+
