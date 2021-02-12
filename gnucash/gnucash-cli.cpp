@@ -131,24 +131,7 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
     {
         if (*m_quotes_cmd == "info")
         {
-            GncQuotes quotes;
-            if (quotes.cmd_result() == 0)
-            {
-                std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << "\n";
-                std::cout << bl::translate ("Finance::Quote sources: ");
-                for (auto source : quotes.sources())
-                    std::cout << source << " ";
-                std::cout << std::endl;
-                return 0;
-            }
-            else
-            {
-                std::cerr << bl::translate ("Finance::Quote isn't "
-                                            "installed properly.") << "\n";
-                std::cerr << bl::translate ("Error message:") << "\n";
-                std::cerr << quotes.error_msg() << std::endl;
-                return 1;
-            }
+            return Gnucash::quotes_info ();
         }
         else if (*m_quotes_cmd == "get")
         {

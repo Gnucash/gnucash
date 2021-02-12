@@ -32,6 +32,7 @@ using bo_str = boost::optional <std::string>;
 
 namespace Gnucash {
 
+    int quotes_info (void);
     int add_quotes (const bo_str& uri);
     int run_report (const bo_str& file_to_load,
                     const bo_str& run_report,

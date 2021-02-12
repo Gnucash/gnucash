@@ -351,6 +351,30 @@ scm_report_list ([[maybe_unused]] void *data,
 }
 
 int
+Gnucash::quotes_info (void)
+{
+    gnc_prefs_init ();
+    GncQuotes quotes;
+    if (quotes.cmd_result() == 0)
+    {
+        std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << "\n";
+        std::cout << bl::translate ("Finance::Quote sources: ");
+        for (auto source : quotes.sources())
+            std::cout << source << " ";
+        std::cout << std::endl;
+        return 0;
+    }
+    else
+    {
+        std::cerr << bl::translate ("Finance::Quote isn't "
+                                    "installed properly.") << "\n";
+        std::cerr << bl::translate ("Error message:") << "\n";
+        std::cerr << quotes.error_msg() << std::endl;
+        return 1;
+    }
+}
+
+int
 Gnucash::add_quotes (const bo_str& uri)
 {
     if (uri && !uri->empty())
