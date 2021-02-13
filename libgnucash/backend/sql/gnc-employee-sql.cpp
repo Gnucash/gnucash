@@ -31,13 +31,13 @@ extern "C"
 {
 #include <config.h>
 
-#include <glib.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "gnc-commodity.h"
 #include "gncEmployeeP.h"
 }
+#include <glib.h>
 
 #include "gnc-sql-connection.hpp"
 #include "gnc-sql-backend.hpp"

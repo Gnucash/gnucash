@@ -22,11 +22,8 @@
  *                                                                  *
  ********************************************************************/
 
-extern "C"
-{
 #include <config.h>
 #include <glib.h>
-}
 
 #include "qof.h"
 #include "qofevent-p.h"

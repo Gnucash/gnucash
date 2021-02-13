@@ -41,7 +41,6 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 
-#include <glib.h>
 #ifdef GNC_PLATFORM_WINDOWS
   /* Mingw disables the standard type macros for C++ without this override. */
 #define __STDC_FORMAT_MACROS = 1
@@ -50,6 +49,7 @@ extern "C"
 
 }
 
+#include <glib.h>
 #include "qof.h"
 #include "qofevent-p.h"
 #include "qofbackend.h"

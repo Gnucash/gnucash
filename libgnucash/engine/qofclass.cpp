@@ -21,11 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-extern "C"
-{
 #include <config.h>
 #include <glib.h>
-}
 
 #include "qof.h"
 #include "qofclass-p.h"

@@ -24,12 +24,11 @@
 extern "C"
 {
 #include <config.h>
-
-#include <glib.h>
 #include <string.h>
 #include "qof.h"
 #include "Recurrence.h"
 }
+#include <glib.h>
 
 #include "gnc-xml.h"
 #include "gnc-xml-helper.h"

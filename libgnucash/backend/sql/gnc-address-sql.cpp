@@ -31,12 +31,12 @@ extern "C"
 {
 #include <config.h>
 
-#include <glib.h>
-
 #include "gnc-engine.h"
 
 #include "gncAddress.h"
 }
+#include <glib.h>
+
 #include <cstdlib>
 #include <cstring>
 #include <sstream>

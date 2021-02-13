@@ -41,9 +41,6 @@ extern "C"
 # include <unistd.h>
 #endif
 
-#include <glib.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
 #include "gnc-engine.h"
 #include "Scrub.h"
 #include "TransLog.h"
@@ -53,6 +50,9 @@ extern "C"
 #endif
 }
 
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include "sixtp.h"
 
 #include "gnc-xml.h"

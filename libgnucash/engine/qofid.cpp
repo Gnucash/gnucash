@@ -26,9 +26,9 @@ extern "C"
 {
 #include <config.h>
 #include <string.h>
-#include <glib.h>
 }
 
+#include <glib.h>
 #include "qof.h"
 #include "qofid-p.h"
 #include "qofinstance-p.h"

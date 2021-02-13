@@ -37,9 +37,6 @@ extern "C"
 
 #include <inttypes.h>
 #include <errno.h>
-#include <glib.h>
-#include <glib/gstdio.h>
-
 #include "qof.h"
 #include "qofquery-p.h"
 #include "qofquerycore-p.h"
@@ -61,6 +58,10 @@ extern "C"
 #endif
 
 }
+
+#include <glib.h>
+#include <glib/gstdio.h>
+
 #include <boost/regex.hpp>
 #include <string>
 #include <iomanip>

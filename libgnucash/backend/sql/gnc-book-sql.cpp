@@ -29,8 +29,6 @@ extern "C"
 {
 #include <config.h>
 
-#include <glib.h>
-
 #include "qof.h"
 
 #include "gnc-engine.h"
@@ -41,6 +39,8 @@ extern "C"
 #include "splint-defs.h"
 #endif
 }
+
+#include <glib.h>
 
 #include "gnc-sql-connection.hpp"
 #include "gnc-sql-backend.hpp"

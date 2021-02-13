@@ -23,11 +23,8 @@
  * Copyright (C) 2001 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
-extern "C"
-{
 #include <config.h>
 #include <glib.h>
-}
 
 #include "qof.h"
 #include "qofobject-p.h"

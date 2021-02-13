@@ -19,10 +19,7 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-extern "C"
-{
 #include <glib.h>
-}
 #include <clocale>
 #include <boost/locale.hpp>
 #include "gnc-locale-utils.hpp"

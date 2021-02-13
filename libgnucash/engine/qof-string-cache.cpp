@@ -31,11 +31,12 @@ extern "C"
 #include <config.h>
 
 #include <ctype.h>
-#include <glib.h>
 #include <stdlib.h>
 #include <string.h>
 #include "qof.h"
 }
+
+#include <glib.h>
 
 /* Uncomment if you need to log anything.
 static QofLogModule log_module = QOF_MOD_UTIL;
