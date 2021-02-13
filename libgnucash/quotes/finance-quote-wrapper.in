@@ -131,16 +131,18 @@ sub parse_currencies {
 
         my $price = $quoter->currency($from_currency, $to_currency);
         my $inv_price = undef;
+        my $inverted = 0;
         # Sometimes price quotes are available in only one direction.
         unless (defined($price)) {
             $inv_price = $quoter->currency($to_currency, $from_currency);
             if (defined($inv_price)) {
-                ($to_currency, $from_currency) = ($from_currency, $to_currency);
                 $price = $inv_price;
+                $inverted = 1;
             }
         }
 
         $results{$from_currency}{"success"} = defined($price);
+        $results{$from_currency}{"inverted"} = $inverted;
         $results{$from_currency}{"symbol"} = $from_currency;
         $results{$from_currency}{"currency"} = $to_currency;
         $results{$from_currency}{"last"} = $price;
