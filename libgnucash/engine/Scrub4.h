@@ -20,11 +20,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include <glib.h>
 #include <qofbook.h>
-
-/* ================================================================ */
-gboolean gnc_scrub_closing_kvp_check (QofBook *book);
 
 void gnc_scrub_closing_kvp (QofBook *book);
 

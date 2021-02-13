@@ -30,15 +30,17 @@
 #include <stdint.h>
 
 #include "gnc-engine.h"
-#include "gnc-features.h"
+#include "qofinstance-p.h"
 #include "qofquery.h"
 #include "Query.h"
 #include "Scrub4.h"
 #include "Transaction.h"
 
+#define CLOSING_SCRUB_FLAG "closing-entries-scrubbed"
+
 static QofLogModule log_module = "gnc.engine.scrub";
 
-static GList * get_closing_without_KVP (QofBook *book)
+static GList * get_closing_splits_without_KVP (QofBook *book)
 {
     QofQuery *q = qof_query_create_for (GNC_ID_SPLIT);
     qof_query_set_book (q, book);
@@ -48,17 +50,30 @@ static GList * get_closing_without_KVP (QofBook *book)
     return xaccQueryGetSplitsUniqueTrans (q);
 }
 
-gboolean gnc_scrub_closing_kvp_check (QofBook *book)
+static gboolean book_has_scrubbed_flag (QofBook *book)
 {
-    if (gnc_features_check_used (book, GNC_FEATURE_SCRUBBED_CLOSING))
-        return FALSE;
-    else
-    {
-        GList *lst = get_closing_without_KVP (book);
-        gboolean retval = (lst != NULL);
-        g_list_free (lst);
-        return retval;
-    }
+    GValue value_s = G_VALUE_INIT;
+    qof_instance_get_kvp (QOF_INSTANCE (book), &value_s, 1, CLOSING_SCRUB_FLAG);
+    return (G_VALUE_HOLDS_STRING (&value_s) &&
+            (g_strcmp0 (g_value_get_string (&value_s), "true") == 0));
+}
+
+static void set_book_scrubbed_flag (QofBook *book)
+{
+    GValue value_b = G_VALUE_INIT;
+    g_value_init (&value_b, G_TYPE_BOOLEAN);
+    g_value_set_boolean (&value_b, TRUE);
+    qof_instance_set_kvp (QOF_INSTANCE (book), &value_b, 1, CLOSING_SCRUB_FLAG);
+}
+
+static void set_closing_kvp (Split *s)
+{
+    Transaction *t = xaccSplitGetParent (s);
+    PWARN ("Setting Closing KVP: Date[%s] Description[%s] Amount[%s]",
+           qof_print_date (xaccTransGetDate (t)),
+           xaccTransGetDescription (t),
+           gnc_numeric_to_string (xaccSplitGetAmount (s)));
+    xaccTransSetIsClosingTxn (t, TRUE);
 }
 
 void gnc_scrub_closing_kvp (QofBook *book)
@@ -66,34 +81,15 @@ void gnc_scrub_closing_kvp (QofBook *book)
     Account* root = gnc_book_get_root_account (book);
     GList *lst;
 
-    if (gnc_features_check_used (book, GNC_FEATURE_SCRUBBED_CLOSING))
-    {
-        PWARN ("Don't run gnc_scrub_closing_entries with featured book!");
+    if (book_has_scrubbed_flag (book))
         return;
-    }
 
-    lst = get_closing_without_KVP (book);
-
-    if (!lst)
-    {
-        PWARN ("No closing entries without KVP flag found in this book");
-        goto end;
-    }
-
+    lst = get_closing_splits_without_KVP (book);
     for (GList *n = lst; n; n = n->next)
-    {
-        Split *s = n->data;
-        Transaction *t = xaccSplitGetParent (s);
-        PWARN ("Setting Closing KVP: Date[%s] Description[%s] Amount[%s]",
-               qof_print_date (xaccTransGetDate (t)),
-               xaccTransGetDescription (t),
-               gnc_numeric_to_string (xaccSplitGetAmount (s)));
-        xaccTransSetIsClosingTxn (t, TRUE);
-    }
-    g_list_free (lst);    
+        set_closing_kvp (n->data);
+    g_list_free (lst);
 
- end:
-    gnc_features_set_used (book, GNC_FEATURE_SCRUBBED_CLOSING);
+    set_book_scrubbed_flag (book);
     PWARN ("Scrubbed Closing Entries!");
 }
 /* ==================== END OF FILE ==================== */
