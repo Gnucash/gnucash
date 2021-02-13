@@ -924,7 +924,8 @@ cleanup:
     if (error)
         g_error_free(error);
     g_free(window_group);
-    gtk_widget_show(GTK_WIDGET(window));
+    if (window)
+        gtk_widget_show (GTK_WIDGET(window));
 }
 
 void
@@ -1405,12 +1406,26 @@ gnc_main_window_quit(GncMainWindow *window)
     }
     if (do_shutdown)
     {
-        GList *w;
+        GList *w, *next;
 
-        for (w = active_windows; w; w = g_list_next (w))
+        /* This is not a typical list iteration. There is a possability
+         * that the window maybe removed from the active_windows list so
+         * we have to cache the 'next' pointer before executing any code
+         * in the loop. */
+        for (w = active_windows; w; w = next)
         {
-            window = w->data;
-            window->window_quitting = TRUE; // set window_quitting on all windows
+            GncMainWindowPrivate *priv;
+            GncMainWindow *wind = w->data;
+
+            next = g_list_next (w);
+
+            wind->window_quitting = TRUE; // set window_quitting on all windows
+
+            priv = GNC_MAIN_WINDOW_GET_PRIVATE(wind);
+
+            // if there are no pages destroy window
+            if (priv->installed_pages == NULL)
+                gtk_widget_destroy (GTK_WIDGET(wind));
         }
         /* remove the preference callbacks from the main window */
         gnc_main_window_remove_prefs (window);
@@ -1522,6 +1537,10 @@ gnc_main_window_event_handler (QofInstance *entity,  QofEventId event_type,
         if (gnc_plugin_page_has_book (page, (QofBook *)entity))
             gnc_main_window_close_page (page);
     }
+
+    if (GTK_IS_WIDGET(window) && window->window_quitting)
+        gtk_widget_destroy (GTK_WIDGET(window));
+
     LEAVE(" ");
 }
 
@@ -3322,14 +3341,9 @@ gnc_main_window_close_page (GncPluginPage *page)
 
             /* remove the preference callbacks from the main window */
             gnc_main_window_remove_prefs (window);
-
-            gtk_widget_destroy (GTK_WIDGET(window));
-            window = NULL;
         }
         if (window && g_list_length (active_windows) > 1)
-        {
             gtk_widget_destroy (GTK_WIDGET(window));
-        }
     }
 }
 
