@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2021-02-12 05:50+0000\n"
+"PO-Revision-Date: 2021-02-13 01:19+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -24087,42 +24087,41 @@ msgstr "Perda"
 #: gnucash/report/reports/example/daily-reports.scm:37
 #: gnucash/report/reports/example/daily-reports.scm:49
 msgid "Income vs. Day of Week"
-msgstr "Receitas em função de Dia de Semana"
+msgstr "Receitas versus dia da semana"
 
 #: gnucash/report/reports/example/daily-reports.scm:38
 #: gnucash/report/reports/example/daily-reports.scm:50
 msgid "Expenses vs. Day of Week"
-msgstr "Despesas em função de Dia de Semana"
+msgstr "Despesas versus dia da semana"
 
 #: gnucash/report/reports/example/daily-reports.scm:42
 msgid "Shows a piechart with the total income for each day of the week"
-msgstr "Mostra um gráfico circular com a receita total para cada dia de semana"
+msgstr "Mostra um gráfico circular com a receita total para cada dia da semana"
 
 #: gnucash/report/reports/example/daily-reports.scm:44
 msgid "Shows a piechart with the total expenses for each day of the week"
-msgstr ""
-"Mostra umr gráfico circular com a despesa total para cada dia de semana"
+msgstr "Mostra um gráfico circular com a despesa total para cada dia da semana"
 
 #: gnucash/report/reports/example/daily-reports.scm:58
 #: gnucash/report/reports/standard/account-piecharts.scm:71
 #: gnucash/report/reports/standard/category-barchart.scm:76
 msgid "Show Accounts until level"
-msgstr "Mostrar Contas até o nível"
+msgstr "Mostra as contas até o nível"
 
 #: gnucash/report/reports/example/daily-reports.scm:61
 #: gnucash/report/reports/standard/category-barchart.scm:78
 msgid "Show long account names"
-msgstr "Mostrar contas com nomes longos"
+msgstr "Mostra as contas com nomes longos"
 
 #: gnucash/report/reports/example/daily-reports.scm:62
 #: gnucash/report/reports/standard/account-piecharts.scm:74
 msgid "Show Totals"
-msgstr "Mostrar Totais"
+msgstr "Mostre os totais"
 
 #: gnucash/report/reports/example/daily-reports.scm:63
 #: gnucash/report/reports/standard/account-piecharts.scm:76
 msgid "Maximum Slices"
-msgstr "Quantidade Máxima de Fatias"
+msgstr "Quantidade máxima das fatias"
 
 #: gnucash/report/reports/example/daily-reports.scm:66
 #: gnucash/report/reports/standard/account-piecharts.scm:79
@@ -24242,7 +24241,7 @@ msgstr "Olá, Mundo"
 
 #: gnucash/report/reports/example/hello-world.scm:100
 msgid "Just a Date Option"
-msgstr "Apenas uma Opção de Data"
+msgstr "Apenas uma opção de data"
 
 #: gnucash/report/reports/example/hello-world.scm:101
 msgid "This is a date option."
@@ -24250,7 +24249,7 @@ msgstr "Esta é uma opção para a data."
 
 #: gnucash/report/reports/example/hello-world.scm:109
 msgid "Time and Date Option"
-msgstr "Opção de Data e Hora"
+msgstr "Opção de data e hora"
 
 #: gnucash/report/reports/example/hello-world.scm:110
 msgid "This is a date option with time."
@@ -24274,7 +24273,7 @@ msgstr "Esta é uma opção relativa da data."
 
 #: gnucash/report/reports/example/hello-world.scm:134
 msgid "Number Option"
-msgstr "Opção Numérica"
+msgstr "Opção numérica"
 
 #: gnucash/report/reports/example/hello-world.scm:135
 msgid "This is a number option."
@@ -24285,7 +24284,7 @@ msgstr "Esta é uma opção numérica."
 #: gnucash/report/stylesheets/head-or-tail.scm:171
 #: gnucash/report/stylesheets/plain.scm:47
 msgid "Background Color"
-msgstr "Cor de Fundo"
+msgstr "Cor do fundo"
 
 #: gnucash/report/reports/example/hello-world.scm:153
 msgid "This is a color option."
@@ -24336,12 +24335,12 @@ msgstr "Opção ruim."
 #: gnucash/report/reports/example/hello-world.scm:197
 #: gnucash/report/reports/example/hello-world.scm:223
 msgid "The Ugly"
-msgstr "A Feia"
+msgstr "A pior"
 
 #: gnucash/report/reports/example/hello-world.scm:198
 #: gnucash/report/reports/example/hello-world.scm:224
 msgid "Ugly option."
-msgstr "Opção feia."
+msgstr "A pior opção."
 
 #: gnucash/report/reports/example/hello-world.scm:204
 msgid "Testing"
