@@ -24,6 +24,9 @@
 
 #ifndef GNC_XML_HELPER_H
 #define GNC_XML_HELPER_H
+
+#include <glib.h>
+
 extern "C"
 {
 #include <libxml/xmlversion.h>

@@ -24,10 +24,8 @@
 
 #ifndef IO_GNCXML_GEN_H
 #define IO_GNCXML_GEN_H
-extern "C"
-{
+
 #include <glib.h>
-}
 
 #include "sixtp.h"
 

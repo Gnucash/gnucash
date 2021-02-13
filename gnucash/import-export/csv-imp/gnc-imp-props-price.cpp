@@ -27,12 +27,12 @@ extern "C" {
 #include <windows.h>
 #endif
 
-#include <glib.h>
-#include <glib/gi18n.h>
-
 #include "engine-helpers.h"
 #include "gnc-ui-util.h"
 }
+
+#include <glib.h>
+#include <glib/gi18n.h>
 
 #include <exception>
 #include <map>

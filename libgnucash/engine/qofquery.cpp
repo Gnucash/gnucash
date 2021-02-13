@@ -27,11 +27,11 @@ extern "C"
 
 #include <sys/types.h>
 #include <time.h>
-#include <glib.h>
 #include <regex.h>
 #include <string.h>
 }
 
+#include <glib.h>
 #include "qof.h"
 #include "qof-backend.hpp"
 #include "qofbook-p.h"

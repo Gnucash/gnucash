@@ -36,8 +36,6 @@ extern "C"
 #endif
 #include <windows.h>
 #endif
-#include <glib.h>
-#include <glib/gstdio.h>
 #include <fcntl.h>
 #include <string.h>
 #ifdef HAVE_UNISTD_H
@@ -65,6 +63,9 @@ extern "C"
 # define g_open _open
 #endif
 }
+
+#include <glib.h>
+#include <glib/gstdio.h>
 
 #include "gnc-xml-backend.hpp"
 #include "sixtp-parsers.h"

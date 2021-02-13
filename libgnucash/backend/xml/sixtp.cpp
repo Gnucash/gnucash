@@ -23,9 +23,6 @@
 extern "C"
 {
 #include <config.h>
-
-#include <glib.h>
-#include <glib/gstdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdarg.h>
@@ -36,6 +33,9 @@ extern "C"
 # define g_fopen fopen
 #endif
 }
+
+#include <glib.h>
+#include <glib/gstdio.h>
 
 #include "sixtp.h"
 #include "sixtp-parsers.h"

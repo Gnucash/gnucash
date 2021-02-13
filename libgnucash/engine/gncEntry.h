@@ -31,6 +31,12 @@
 #ifndef GNC_ENTRY_H_
 #define GNC_ENTRY_H_
 
+#ifdef __cplusplus
+extern "C++" {
+#include <glib.h>
+}
+#endif
+
 typedef struct _gncEntry GncEntry;
 typedef struct _gncEntryClass GncEntryClass;
 

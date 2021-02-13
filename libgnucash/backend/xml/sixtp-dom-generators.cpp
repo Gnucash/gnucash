@@ -25,10 +25,10 @@ extern "C"
 #define __EXTENSIONS__
 
 #include <config.h>
-#include <glib.h>
 
 #include <gnc-date.h>
 }
+#include <glib.h>
 
 #include "gnc-xml-helper.h"
 #include "sixtp-dom-generators.h"

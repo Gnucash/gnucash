@@ -32,6 +32,7 @@
 
 #include <config.h>
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <glib-object.h>
 #include <stdlib.h>
 

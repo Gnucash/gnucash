@@ -24,8 +24,6 @@
 extern "C"
 {
 #include <config.h>
-
-#include <glib.h>
 #include <stdlib.h>
 #include <string.h>
 #include "gncBillTermP.h"
@@ -33,6 +31,7 @@ extern "C"
 #include "gncTaxTableP.h"
 }
 
+#include <glib.h>
 #include "gnc-xml-helper.h"
 #include "sixtp.h"
 #include "sixtp-utils.h"

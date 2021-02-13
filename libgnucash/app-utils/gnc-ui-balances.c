@@ -29,6 +29,7 @@
 #include "gnc-ui-util.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "Account.h"
 #include "Split.h"
