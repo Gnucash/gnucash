@@ -11,14 +11,15 @@
 # ashed <craysy@gmail.com>, 2017
 # Dmitriy Mangul <dimang.freetime@gmail.com>, 2017, 2018
 # Val Saven <val.saven@gmail.com>, 2021.
+# Artem <KovalevArtem.ru@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.7.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2021-01-18 10:32+0000\n"
-"Last-Translator: Val Saven <val.saven@gmail.com>\n"
+"PO-Revision-Date: 2021-02-14 22:50+0000\n"
+"Last-Translator: Artem <KovalevArtem.ru@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
@@ -18351,7 +18352,7 @@ msgstr "_Имя пользователя"
 #: gnucash/gtkbuilder/dialog-userpass.glade:99
 #: gnucash/import-export/aqb/dialog-ab.glade:781
 msgid "_Password"
-msgstr "Пароль"
+msgstr "_Пароль"
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:158
 msgid ""
