@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2021-02-13 01:19+0000\n"
+"PO-Revision-Date: 2021-02-14 00:50+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -24106,12 +24106,12 @@ msgstr "Mostra um gráfico circular com a despesa total para cada dia da semana"
 #: gnucash/report/reports/standard/account-piecharts.scm:71
 #: gnucash/report/reports/standard/category-barchart.scm:76
 msgid "Show Accounts until level"
-msgstr "Mostra as contas até o nível"
+msgstr "Mostre as contas até o nível"
 
 #: gnucash/report/reports/example/daily-reports.scm:61
 #: gnucash/report/reports/standard/category-barchart.scm:78
 msgid "Show long account names"
-msgstr "Mostra as contas com nomes longos"
+msgstr "Mostre as contas com nomes longos"
 
 #: gnucash/report/reports/example/daily-reports.scm:62
 #: gnucash/report/reports/standard/account-piecharts.scm:74
@@ -24195,7 +24195,7 @@ msgstr "Esta é uma opção de múltipla escolha."
 
 #: gnucash/report/reports/example/hello-world.scm:70
 msgid "First Option"
-msgstr "Primeira Opção"
+msgstr "Primeira opção"
 
 #: gnucash/report/reports/example/hello-world.scm:71
 msgid "Help for first option."
@@ -24203,7 +24203,7 @@ msgstr "Ajuda para a primeira opção."
 
 #: gnucash/report/reports/example/hello-world.scm:73
 msgid "Second Option"
-msgstr "Segunda Opção"
+msgstr "Segunda opção"
 
 #: gnucash/report/reports/example/hello-world.scm:74
 msgid "Help for second option."
@@ -24211,7 +24211,7 @@ msgstr "Ajuda para a segunda opção."
 
 #: gnucash/report/reports/example/hello-world.scm:76
 msgid "Third Option"
-msgstr "Terceira Opção"
+msgstr "Terceira opção"
 
 #: gnucash/report/reports/example/hello-world.scm:77
 msgid "Help for third option."
@@ -24219,7 +24219,7 @@ msgstr "Ajuda para a terceira opção."
 
 #: gnucash/report/reports/example/hello-world.scm:79
 msgid "Fourth Options"
-msgstr "Quarta Opção"
+msgstr "Quarta opção"
 
 #: gnucash/report/reports/example/hello-world.scm:80
 msgid "The fourth option rules!"
@@ -24265,7 +24265,7 @@ msgstr "Esta é uma opção da combinação da data."
 
 #: gnucash/report/reports/example/hello-world.scm:123
 msgid "Relative Date Option"
-msgstr "Opção relativa da Data"
+msgstr "Opção relativa da data"
 
 #: gnucash/report/reports/example/hello-world.scm:124
 msgid "This is a relative date option."
@@ -24325,7 +24325,7 @@ msgstr "Opção boa."
 #: gnucash/report/reports/example/hello-world.scm:194
 #: gnucash/report/reports/example/hello-world.scm:220
 msgid "The Bad"
-msgstr "A Ruim"
+msgstr "A ruim"
 
 #: gnucash/report/reports/example/hello-world.scm:195
 #: gnucash/report/reports/example/hello-world.scm:221
@@ -24478,7 +24478,7 @@ msgstr "Você não selecionou nenhuma conta."
 
 #: gnucash/report/reports/example/hello-world.scm:483
 msgid "Display help"
-msgstr "Mostrar a ajuda"
+msgstr "Mostre a ajuda"
 
 #: gnucash/report/reports/example/hello-world.scm:512
 msgid "Sample Report with Examples"
@@ -24535,7 +24535,7 @@ msgstr "De"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:151
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:175
 msgid "Alternate Period"
-msgstr "Período Alternativo"
+msgstr "Período alternativo"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:176
@@ -24555,7 +24555,7 @@ msgstr "Utilize o período De - Até."
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
 msgid "1st Est Tax Quarter"
-msgstr "Imposto Estimado do 1º Trimestre"
+msgstr "Imposto estimado do 1º trimestre"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:179
@@ -24565,7 +24565,7 @@ msgstr "1 Jan - 31 Mar."
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
 msgid "2nd Est Tax Quarter"
-msgstr "Imposto Estimado do 2º Trimestre"
+msgstr "Imposto estimado do 2º trimestre"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:180
@@ -24578,7 +24578,7 @@ msgstr "1 Abr - 31 Mai."
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "3rd Est Tax Quarter"
-msgstr "Imposto Estimado do 3º Trimestre"
+msgstr "Imposto estimado do 3º trimestre"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
@@ -24588,7 +24588,7 @@ msgstr "1 Jun - 31 Ago."
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 msgid "4th Est Tax Quarter"
-msgstr "Imposto Estimado do 4º Trimestre"
+msgstr "Imposto estimado do 4º trimestre"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
@@ -24598,37 +24598,37 @@ msgstr "1 Set - 31 Dez."
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "Last Year"
-msgstr "Ano Anterior"
+msgstr "Ano anterior"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "Last Year."
-msgstr "Ano Anterior."
+msgstr "Ano anterior."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
 msgid "Last Yr 1st Est Tax Qtr"
-msgstr "Imposto Estimado do 1º Trimestre do Ano Anterior"
+msgstr "Imposto estimado do 1º trimestre do ano anterior"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:189
 msgid "Jan 1 - Mar 31, Last year."
-msgstr "1 Jan - 31 Mar, último ano."
+msgstr "1 Jan - 31 Mar, ano anterior."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:164
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 msgid "Last Yr 2nd Est Tax Qtr"
-msgstr "Imposto Estimado do 2º Trimestre do Ano Anterior"
+msgstr "Imposto estimado do 2º trimestre do ano anterior"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:165
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
 msgid "Apr 1 - May 31, Last year."
-msgstr "1 Abr - 31 Mai, último ano."
+msgstr "1 Abr - 31 Mai, ano anterior."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
 msgid "Last Yr 3rd Est Tax Qtr"
-msgstr "Imposto Estimado do 3º Trimestre do Ano Anterior"
+msgstr "Imposto estimado do 3º trimestre do ano anterior"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -24636,22 +24636,22 @@ msgstr "Imposto Estimado do 3º Trimestre do Ano Anterior"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:168
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
 msgid "Jun 1 - Aug 31, Last year."
-msgstr "1 Jun - 31 Ago, último ano."
+msgstr "1 Jun - 31 Ago, ano anterior."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:170
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:200
 msgid "Last Yr 4th Est Tax Qtr"
-msgstr "Imposto Estimado do 4º Trimestre do Ano Anterior"
+msgstr "Imposto estimado do 4º trimestre do ano anterior"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:171
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:201
 msgid "Sep 1 - Dec 31, Last year."
-msgstr "1 Set - 31 Dez, último ano."
+msgstr "1 Set - 31 Dez, ano anterior."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:175
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:205
 msgid "Select Accounts (none = all)"
-msgstr "Selecione Contas (nenhuma = todas)"
+msgstr "Selecione as contas (nenhuma = todas)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:176
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:206
@@ -24686,11 +24686,11 @@ msgstr ""
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:817
 #, scheme-format
 msgid "Period from ~a to ~a"
-msgstr "Período de ~a até ~a"
+msgstr "Período a partir de ~a até ~a"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:854
 msgid "Tax Report & XML Export"
-msgstr "Relatório de Tributos & Exportação XML"
+msgstr "Relatório dos Tributos & Exportação XML"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:856
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
