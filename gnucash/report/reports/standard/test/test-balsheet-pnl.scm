@@ -529,7 +529,7 @@
           "$2,609.00" "$0.00" "$100.00" "$11,000.30" "$2,000.00" "$9,000.30"
           "30 FUNDS " "$297.03" "$297.03" "#200.00 " "$100,000.00" "$116,006.33"
           "$9,500.00" "$9,500.00" "$500.00" "$9,000.00" "$9,500.00" "$103,600.00"
-          "$2,906.33" "$0.00" "$106,506.33" "$116,006.33" "#1.00 $1.4900"
+          "$2,906.33" "$0.00" "$106,506.33" "$116,006.33" "#1.00 $1 + 49/101"
           "1 FUNDS $300.0100")
         (sxml->table-row-col sxml 1 #f 3))
       (test-equal "bal-1/1/72"
@@ -537,8 +537,8 @@
           "$2,609.00" "$0.00" "$100.00" "$12,396.63" "$2,000.00" "$10,396.63"
           "30 FUNDS " "$331.37" "$331.37" "#200.00 " "$100,000.00" "$117,437.00"
           "$9,500.00" "$9,500.00" "$500.00" "$9,000.00" "$9,500.00" "$103,600.00"
-          "$4,337.00" "$0.00" "$107,937.00" "$117,437.00" "#1.00 $1.6600"
-          "1 FUNDS $346.5500")
+          "$4,337.00" "$0.00" "$107,937.00" "$117,437.00" "#1.00 $1 + 67/102"
+          "1 FUNDS $346 + 56/101")
         (sxml->table-row-col sxml 1 #f 4)))
 
     (set-option! multi-bs-options "General" "Period order is most recent first" #t)
@@ -562,7 +562,7 @@
           "$1,190.00" "$1,190.00" "#700.00 " "$100,000.00" "$122,743.52"
           "$9,500.00" "$9,500.00" "$500.00" "$9,000.00" "$9,500.00"
           "$103,600.00" "$8,373.52" "$1,270.00" "$113,243.52" "$122,743.52"
-          "#1.00 $1.7000" "1 FUNDS $480.8200")
+          "#1.00 $1.7000" "1 FUNDS $480 + 85/104")
         (sxml->table-row-col sxml 1 #f 2)))))
 
 (define (multicol-pnl-tests)
@@ -622,26 +622,26 @@
     (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
                                "multicol pnl weighted-average")))
       (test-equal "weighted average exchange-rate"
-        (list "#1.00 $1 + 569/1100" "1 FUNDS $235 + 3/7")
+        '("#1.00 $1.4990" "1 FUNDS $235 + 3/7")
         (sxml->table-row-col sxml 1 -2 -1)))
 
     (set-option! multi-bs-options "Commodities" "Price Source" 'average-cost)
     (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
                                "multicol pnl average-cost")))
       (test-equal "average-cost exchange-rate"
-        '("#1.00 $1.2100" "1 FUNDS $203 + 1/3")
+        '("#1.00 $1.4550" "1 FUNDS $203 + 1/3")
         (sxml->table-row-col sxml 1 -2 -1)))
 
     (set-option! multi-bs-options "Commodities" "Price Source" 'pricedb-nearest)
     (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
                                "multicol pnl pricedb-nearest")))
       (test-equal "pricedb-nearest exchange-rate"
-        '("#1.00 $1.7000" "1 FUNDS $480.8200")
+        '("#1.00 $1.7000" "1 FUNDS $480 + 85/104")
         (sxml->table-row-col sxml 1 -2 -1)))
 
     (set-option! multi-bs-options "Commodities" "Price Source" 'pricedb-latest)
     (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
                                "multicol pnl pricedb-latest")))
       (test-equal "pricedb-latest exchange-rate"
-        '("#1.00 $1.7000" "1 FUNDS $480.8200")
+        '("#1.00 $1.7000" "1 FUNDS $480 + 85/104")
         (sxml->table-row-col sxml 1 -2 -1)))))
