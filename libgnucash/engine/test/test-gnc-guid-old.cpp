@@ -21,12 +21,13 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
+#include <glib.h>
 #include "../guid.hpp"
+
 extern "C"
 {
 #include <config.h>
 #include <string.h>
-#include <glib.h>
 #include <unittest-support.h>
 void test_suite_gnc_guid (void);
 }

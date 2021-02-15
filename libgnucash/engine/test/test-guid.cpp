@@ -26,11 +26,12 @@
  *
  */
 #include <guid.hpp>
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
 #include <ctype.h>
-#include <glib.h>
 #include "cashobjects.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"

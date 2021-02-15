@@ -41,6 +41,7 @@
 #define QOF_BOOK_H
 
 #ifdef __cplusplus
+#include <glib.h> //To preempt it being included extern "C" in a later header.
 extern "C"
 {
 #endif

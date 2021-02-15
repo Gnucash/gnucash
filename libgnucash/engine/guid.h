@@ -25,13 +25,13 @@
 #ifndef GUID_H
 #define GUID_H
 
+#include <glib-object.h>
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
 #include <stddef.h>
-#include <glib-object.h>
 
 /** @addtogroup Entity
     @{ */
