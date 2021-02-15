@@ -26,8 +26,6 @@ extern "C" {
 #include <windows.h>
 #endif
 
-#include <glib.h>
-#include <glib/gi18n.h>
 
 #include "engine-helpers.h"
 #include "gnc-csv-account-map.h"
@@ -38,6 +36,9 @@ extern "C" {
 #include <gnc-exp-parser.h>
 
 }
+
+#include <glib.h>
+#include <glib/gi18n.h>
 
 #include <algorithm>
 #include <exception>

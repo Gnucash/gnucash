@@ -24,8 +24,6 @@
 extern "C"
 {
 #include <config.h>
-
-#include <glib.h>
 #include <string.h>
 #include "AccountP.h"
 #include "Transaction.h"
@@ -33,6 +31,7 @@ extern "C"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 }
+#include <glib.h>
 #include "gnc-xml-helper.h"
 
 #include "sixtp.h"

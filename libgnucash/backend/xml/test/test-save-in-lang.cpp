@@ -17,17 +17,17 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+#include <glib.h>
+#include <glib/gstdio.h>
+
 extern "C"
 {
 #include <config.h>
-#include <glib.h>
-#include <glib/gstdio.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
 #include <errno.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "test-engine-stuff.h"
@@ -35,6 +35,8 @@ extern "C"
 #include "gnc-engine.h"
 #include "TransLog.h"
 }
+
+#include <cstdlib>
 
 #include "test-file-stuff.h"
 #include "io-gncxml-v2.h"

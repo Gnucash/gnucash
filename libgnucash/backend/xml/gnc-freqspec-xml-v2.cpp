@@ -25,13 +25,12 @@
 extern "C"
 {
 #include <config.h>
-
-#include <glib.h>
 #include <string.h>
 #include "qof.h"
 #include "SchedXaction.h"
 #include "FreqSpec.h"
 }
+#include <glib.h>
 
 #include "gnc-xml-helper.h"
 #include "sixtp.h"

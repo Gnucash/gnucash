@@ -21,10 +21,11 @@
 \********************************************************************/
 
 #include "../guid.hpp"
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
-#include <glib.h>
 #include <unittest-support.h>
 }
 

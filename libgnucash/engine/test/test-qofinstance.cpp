@@ -20,11 +20,12 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#include <glib.h>
 #include <guid.hpp>
+
 extern "C"
 {
 #include <config.h>
-#include <glib.h>
 #include <unittest-support.h>
 #include "../qof.h"
 }

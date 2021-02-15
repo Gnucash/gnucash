@@ -26,11 +26,11 @@
 \********************************************************************/
 
 #define __EXTENSIONS__
+#include <glib.h>
 extern "C"
 {
 
 #include <config.h>
-#include <glib.h>
 #include <libintl.h>
 #include <stdlib.h>
 #include "platform.h"

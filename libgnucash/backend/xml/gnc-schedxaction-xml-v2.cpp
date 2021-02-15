@@ -23,12 +23,11 @@
 extern "C"
 {
 #include <config.h>
-
-#include <glib.h>
 #include <string.h>
 
 #include "SX-book.h"
 }
+#include <glib.h>
 
 #include "gnc-xml-helper.h"
 #include "sixtp.h"

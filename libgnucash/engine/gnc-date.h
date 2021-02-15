@@ -68,12 +68,21 @@
 
 #ifndef GNC_DATE_H
 #define GNC_DATE_H
+
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
- 
+
+#ifdef __cplusplus
+extern "C++" {
+#endif
 #include <glib-object.h>
+#ifdef __cplusplus
+}
+#endif
+ 
 #include <time.h>
 
 /**

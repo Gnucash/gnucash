@@ -25,7 +25,11 @@
 #ifndef ENGINE_HELPERS_H
 #define ENGINE_HELPERS_H
 
+#ifdef __cplusplus
+extern "C++" {
 #include <glib.h>
+}
+#endif
 
 #include "gnc-engine.h"
 #include "Account.h"

@@ -145,8 +145,8 @@ type_name##_get_instance_private (TypeName *self) \
 GType \
 type_name##_get_type (void) \
 { \
-  static volatile gsize g_define_type_id__volatile = 0; \
-  if (g_once_init_enter (&g_define_type_id__volatile))  \
+  static gsize g_define_type_id_static = 0; \
+  if (g_once_init_enter (&g_define_type_id_static))  \
     { \
       GType g_define_type_id = \
         g_type_register_static_simple (TYPE_PARENT, \
@@ -160,9 +160,9 @@ type_name##_get_type (void) \
 #define _GNC_DEFINE_TYPE_EXTENDED_END()   \
         /* following custom code */     \
       }                                 \
-      g_once_init_leave (&g_define_type_id__volatile, g_define_type_id); \
+      g_once_init_leave (&g_define_type_id_static, g_define_type_id); \
     }                                   \
-  return g_define_type_id__volatile;    \
+  return g_define_type_id_static;    \
 } /* closes type_name##_get_type() */
 
 

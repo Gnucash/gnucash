@@ -24,12 +24,12 @@
 extern "C"
 {
 #include <config.h>
-
-#include <glib.h>
 #include <string.h>
 #include "AccountP.h"
 #include "Account.h"
 }
+
+#include <glib.h>
 
 #include "gnc-xml-helper.h"
 #include "sixtp.h"
