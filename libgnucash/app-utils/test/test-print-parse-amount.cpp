@@ -21,9 +21,7 @@
 extern "C"
 {
 #include <config.h>
-#include <glib.h>
 #include <stdlib.h>
-#include <glib/gprintf.h>
 
 #include "gnc-ui-util.h"
 #include "gnc-numeric.h"
@@ -31,6 +29,9 @@ extern "C"
 #include "test-stuff.h"
 #include <unittest-support.h>
 }
+
+#include <glib.h>
+#include <glib/gprintf.h>
 
 static void
 test_num_print_info (gnc_numeric n, GNCPrintAmountInfo print_info, int line)

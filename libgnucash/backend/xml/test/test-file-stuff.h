@@ -24,10 +24,10 @@
 
 #ifndef TEST_FILE_STUFF_H
 #define TEST_FILE_STUFF_H
-extern "C"
-{
 #include <glib.h>
 
+extern "C"
+{
 #include <gnc-commodity.h>
 #include <gnc-engine.h>
 }

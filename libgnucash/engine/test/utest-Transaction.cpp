@@ -21,11 +21,12 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
 #include <string.h>
-#include <glib.h>
 #include <unittest-support.h>
 /* Add specific headers for this class */
 #include "../Transaction.h"

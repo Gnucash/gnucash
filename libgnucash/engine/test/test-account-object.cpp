@@ -24,11 +24,12 @@
  * @brief Minimal test of reading/writing account parameters
  * @author David Hampton <hampton@employees.org>
  */
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
 #include <unistd.h>
-#include <glib.h>
 #include "qof.h"
 #include "Account.h"
 #include "cashobjects.h"

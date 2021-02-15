@@ -21,13 +21,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
+#include <glib.h>
+#include <glib/gstdio.h>
+
 extern "C"
 {
 #include <config.h>
 
-#include <glib.h>
-#include <glib/gstdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <gnc-engine.h>
 #include <cashobjects.h>
@@ -38,6 +38,8 @@ extern "C"
 #include "Account.h"
 #include "Scrub.h"
 }
+
+#include <cstdlib>
 
 #include "../gnc-xml-helper.h"
 #include "../gnc-xml.h"

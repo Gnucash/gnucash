@@ -20,12 +20,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
-#include <glib.h>
 #include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -35,6 +35,8 @@ extern "C"
 #include "gnc-engine.h"
 #include "test-engine-stuff.h"
 }
+
+#include <cstdlib>
 
 #include "test-file-stuff.h"
 #include "io-gncxml-v2.h"

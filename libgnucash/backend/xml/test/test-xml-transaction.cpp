@@ -21,12 +21,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
+#include <glib.h>
+#include <glib/gstdio.h>
+
 extern "C"
 {
 #include <config.h>
 
-#include <glib.h>
-#include <glib/gstdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 

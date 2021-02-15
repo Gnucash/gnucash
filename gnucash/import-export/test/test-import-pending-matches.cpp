@@ -1,9 +1,10 @@
+#include <glib.h>
+#include <gtk/gtk.h> /* for references in import-backend.h */
+
 extern "C" {
 #include <config.h>
 #include <unittest-support.h>
 
-#include <glib.h>
-#include <gtk/gtk.h> /* for references in import-backend.h */
 #include "import-backend.h"
 #include "import-pending-matches.h"
 #include "Split.h"

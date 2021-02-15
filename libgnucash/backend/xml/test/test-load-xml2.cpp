@@ -25,6 +25,10 @@
 /* @file test-load-xml2.c
  * @brief test the loading of a version-2 gnucash XML file
  */
+#include <glib.h>
+#include <glib-object.h>
+#include <glib/gstdio.h>
+
 extern "C"
 {
 #include <config.h>
@@ -36,9 +40,6 @@ extern "C"
 #include <unistd.h>
 #include <dirent.h>
 #include <string.h>
-#include <glib.h>
-#include <glib-object.h>
-#include <glib/gstdio.h>
 
 #include <cashobjects.h>
 #include <TransLog.h>

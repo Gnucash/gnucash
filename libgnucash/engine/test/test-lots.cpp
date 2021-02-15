@@ -24,11 +24,12 @@
  * @brief Minimal test to see if automatic lot scrubbing works.
  * @author Linas Vepstas <linas@linas.org>
  */
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
 #include <ctype.h>
-#include <glib.h>
 #include "qof.h"
 #include "Account.h"
 #include "Scrub3.h"

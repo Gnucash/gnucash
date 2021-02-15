@@ -21,10 +21,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
-#include <glib.h>
 #include "qof.h"
 #include "cashobjects.h"
 #include "AccountP.h"
