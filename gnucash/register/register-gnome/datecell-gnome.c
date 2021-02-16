@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "datecell.h"

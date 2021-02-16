@@ -32,9 +32,6 @@ extern "C"
 #include <config.h>
 
 
-#include <glib.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
 #include <libintl.h>
 #include <locale.h>
 #include <fcntl.h>
@@ -75,6 +72,10 @@ extern "C"
 # include "strptime.h"
 #endif
 }
+
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
 
 #include <gnc-backend-prov.hpp>
 #include "gnc-backend-xml.h"

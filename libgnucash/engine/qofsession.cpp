@@ -48,13 +48,13 @@ extern "C"
 # endif
 #endif
 
-#include <glib.h>
 #include "qof.h"
 #include "qofobject-p.h"
 
 static QofLogModule log_module = QOF_MOD_SESSION;
 } //extern 'C'
 
+#include <glib.h>
 #include "qofbook-p.h"
 #include "qof-backend.hpp"
 #include "qofsession.hpp"

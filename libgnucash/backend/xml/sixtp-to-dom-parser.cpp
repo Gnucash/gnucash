@@ -23,11 +23,10 @@
 extern "C"
 {
 #include <config.h>
-
-#include <glib.h>
-
 #include <ctype.h>
 }
+
+#include <glib.h>
 
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"

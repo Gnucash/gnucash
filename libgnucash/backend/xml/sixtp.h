@@ -25,12 +25,12 @@
 #define SIXTP_H
 extern "C"
 {
-#include <glib.h>
 #include <stdio.h>
 
 #include <stdarg.h>
 #include "gnc-engine.h"
 }
+#include <glib.h>
 #include "gnc-xml-helper.h"
 #include "gnc-backend-xml.h"
 

@@ -34,8 +34,6 @@ extern "C"
 #include <windows.h>
 #endif
 
-#include <glib.h>
-#include <glib/gstdio.h>
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #else
@@ -48,10 +46,12 @@ extern "C"
 #include <string.h>
 #include <stdio.h>
 
-#undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN "qof.log"
 }
 
+#include <glib.h>
+#include <glib/gstdio.h>
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "qof.log"
 #include "qof.h"
 #include "qoflog.h"
 #include <string>

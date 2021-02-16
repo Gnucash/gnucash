@@ -1,7 +1,8 @@
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
-#include <glib.h>
 #include <gncla-dir.h>
 #include <gnc-path.h>
 #include <binreloc.h>

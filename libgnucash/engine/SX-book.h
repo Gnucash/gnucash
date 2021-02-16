@@ -42,7 +42,11 @@
 typedef struct xaccSchedXactionsDef SchedXactions;
 typedef struct _SchedXactionsClass SchedXactionsClass;
 
+#ifdef __cplusplus
+extern "C++" {
 #include <glib.h>
+}
+#endif
 #include "SchedXaction.h"
 #include "qof.h"
 

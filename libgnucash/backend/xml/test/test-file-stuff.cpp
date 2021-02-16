@@ -21,6 +21,8 @@
  *  02110-1301, USA.
  */
 #include <kvp-frame.hpp>
+#include <glib.h>
+#include <glib/gstdio.h>
 
 extern "C"
 {
@@ -31,14 +33,13 @@ extern "C"
 #include <sys/stat.h>
 #include <dirent.h>
 #include <fcntl.h>
-#include <stdlib.h>
 #include <string.h>
-#include <glib.h>
-#include <glib/gstdio.h>
 
 #include "gnc-engine.h"
 #include "test-stuff.h"
 }
+
+#include <cstdlib>
 
 #include "test-file-stuff.h"
 #include "sixtp-dom-parsers.h"

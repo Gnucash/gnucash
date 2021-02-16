@@ -45,7 +45,11 @@
 #ifndef GNC_PREFS_H
 #define GNC_PREFS_H
 
+#ifdef __cplusplus
+extern "C++" {
 #include <glib.h>
+}
+#endif
 
 /* Preference groups used across multiple modules */
 #define GNC_PREFS_GROUP_GENERAL           "general"

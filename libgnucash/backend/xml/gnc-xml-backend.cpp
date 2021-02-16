@@ -27,8 +27,6 @@ extern "C"
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <glib.h>
-#include <glib/gstdio.h>
 #include <regex.h>
 
 #include <gnc-engine.h> //for GNC_MOD_BACKEND
@@ -38,6 +36,8 @@ extern "C"
 
 }
 
+#include <glib.h>
+#include <glib/gstdio.h>
 #include <sstream>
 
 #include "gnc-xml-backend.hpp"
