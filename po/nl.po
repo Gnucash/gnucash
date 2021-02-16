@@ -10,15 +10,14 @@
 # Jeroen ten Berge <twinbit@home.nl>, 2004.
 # Hendrik-Jan Heins <hjh@passys.nl>, 2003.
 # Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002.
-# insensitiveclod <contact@sociallife.org>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2021-02-15 11:50+0000\n"
-"Last-Translator: insensitiveclod <contact@sociallife.org>\n"
+"PO-Revision-Date: 2020-12-15 17:04+0000\n"
+"Last-Translator: Geert Janssens <geert.gnucash@kobaltwit.be>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
 "Language: nl\n"
@@ -26,9 +25,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
-"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"X-Generator: Weblate 4.4-dev\n"
+"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -61,7 +60,7 @@ msgstr "Grieks"
 
 #: borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr "Herbreeuws"
+msgstr "Hebreeuws"
 
 #: borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
