@@ -811,6 +811,19 @@ also show overall period profit & loss."))
                             (map xaccAccountGetCommodity accounts) enddate
                             #f #f)))
 
+         ;; from col-idx, find effective date to retrieve pricedb
+         ;; entry or to limit transactions to calculate average-cost
+         ;; or weighted-average
+         (col-idx->price-date
+          (lambda (col-idx)
+            (cond
+             ((eq? price-source 'pricedb-latest) (current-time))
+             ((eq? col-idx 'overall-period) enddate)
+             ((eq? report-type 'balsheet) (vector-ref report-dates-vec col-idx))
+             ((= col-idx (- num-report-dates 2)) enddate)
+             ((eq? report-type 'pnl)
+              (decdate (vector-ref report-dates-vec (1+ col-idx)) DayDelta)))))
+
          ;; this function will convert the monetary found at col-idx
          ;; into report-currency if the latter exists. The price
          ;; applicable to the col-idx column is used. If the monetary
@@ -824,11 +837,7 @@ also show overall period profit & loss."))
                  (has-price? (gnc:gnc-monetary-commodity monetary))
                  (exchange-fn
                   monetary common-currency
-                  (cond
-                   ((eq? price-source 'pricedb-latest) (current-time))
-                   ((eq? col-idx 'overall-period) enddate)
-                   ((eq? report-type 'balsheet) (vector-ref report-dates-vec col-idx))
-                   ((eq? report-type 'pnl) (vector-ref report-dates-vec (1+ col-idx))))))))
+                  (col-idx->price-date col-idx)))))
 
          ;; the following function generates an gnc:html-text object
          ;; to dump exchange rate for a particular column. From the
@@ -843,14 +852,15 @@ also show overall period profit & loss."))
                (lambda (commodity)
                  (let ((orig-monetary (gnc:make-gnc-monetary commodity 1)))
                    (if (has-price? commodity)
-                       (let* ((conv-monetary (convert-curr-fn orig-monetary col-idx))
-                              (conv-amount (gnc:gnc-monetary-amount conv-monetary)))
+                       (let ((price (gnc:case-price-fn
+                                     price-source common-currency
+                                     (col-idx->price-date col-idx))))
                          (gnc:html-text-append!
                           cell
                           (format #f "~a ~a"
                                   (gnc:monetary->string orig-monetary)
                                   (gnc:default-price-renderer common-currency
-                                                              conv-amount))))
+                                                              (price commodity)))))
                        (gnc:html-text-append!
                         cell
                         (string-append
@@ -1159,14 +1169,10 @@ also show overall period profit & loss."))
                                                   optname-include-overall-period))
              (col-idx->datepair
               (lambda (idx)
-                (cond
-                 ((eq? idx 'overall-period)
-                  (cons startdate enddate))
-                 ((= idx (- num-report-dates 2))
-                  (cons (vector-ref report-dates-vec idx) enddate))
-                 (else
-                  (cons (vector-ref report-dates-vec idx)
-                        (decdate (vector-ref report-dates-vec (1+ idx)) DayDelta))))))
+                (cons (if (eq? idx 'overall-period)
+                          startdate
+                          (vector-ref report-dates-vec idx))
+                      (col-idx->price-date idx))))
 
              (col-idx->monetarypair (lambda (balancelist idx)
                                       (if (eq? idx 'overall-period)

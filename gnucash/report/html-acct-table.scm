@@ -206,19 +206,14 @@
 ;;          text.  stylesheets, really, should be able to remove
 ;;          link markup.
 ;; 
-;;     parent-account-subtotal-mode: #t #f 'canonically-tabbed
+;;     parent-account-subtotal-mode: #t #f
 ;; 
 ;;          indicates whether or not to add a line, recursively
 ;;          subtotalling an account and its descendents, for any
-;;          account with children (non-leaf account).  if #t or
-;;          #canonically-tabbed, a subtotal row will be created for
-;;          each non-leaf account.  if #f, no non-leaf account
-;;          subtotal rows will be created.  if 'canonically-tabbed,
-;;          account total entry labels will be placed at the position
-;;          specified by accounting texts (indented one column from
-;;          the accounts being totalled, two columns from where
-;;          gnc:html-acct-table would otherwise place them). the
-;;          default is #f.
+;;          account with children (non-leaf account).  if #t, a
+;;          subtotal row will be created for each non-leaf account.
+;;          if #f, no non-leaf account subtotal rows will be
+;;          created. the default is #f.
 ;; 
 ;;     zero-balance-mode: 'show-leaf-acct 'omit-leaf-acct
 ;; 
@@ -227,19 +222,11 @@
 ;;          account having a balance of zero. otherwise, a row will be
 ;;          generated for the account.
 ;; 
-;;     balance-mode: 'pre-adjusting 'pre-closing 'post-closing
+;;     balance-mode: 'pre-closing 'post-closing
 ;;
 ;;          indicates whether or not to ignore adjusting/closing
 ;;          entries when computing account balances. 'pre-closing
-;;          ignores only closing entries. 'pre-adjusting also ignores
-;;          adjusting entries. 'post-closing counts all entries.
-;; 
-;;     adjusting-pattern: alist of 'str 'cased 'regexp
-;; 
-;;          a pattern alist, as accepted by
-;;          gnc:account-get-trans-type-balance-interval, matching
-;;          adjusting transactions to be ignored when balance-mode is
-;;          'pre-adjusting.
+;;          ignores, 'post-closing counts closing entries.
 ;; 
 ;;     closing-pattern: alist of 'str 'cased 'regexp
 ;; 
@@ -357,18 +344,14 @@
 ;;         the number of columns in the group of account columns to
 ;;         which a row was assigned.  also one more than the maximum
 ;;         column depth at which rows were positioned in the
-;;         table. this value may be different from logical-cols when
-;;         parent-account-subtotal-mode is 'canonically-tabbed.
+;;         table.
 ;; 
 ;;     account-cols: integer
 ;; 
 ;;         the number of columns in the group of account columns.  if
 ;;         display-tree-depth is #f, this is the value of label-cols
 ;;         plus any indent.  if display-tree-depth is set, this is the
-;;         value of display-tree-depth, plus indent plus zero, if
-;;         parent-account-subotal-mode is not 'canonically-tabbed, or,
-;;         if parent-account-subtotal-mode is 'canonically-tabbed,
-;;         plus one.  don't you just love english?
+;;         value of display-tree-depth, plus indent.
 ;; 
 ;;     account-colspan: integer
 ;; 
@@ -631,11 +614,6 @@
 			       (list 'cased #f)
 			       (list 'regexp #f)
 			       (list 'closing #t))))
-	 (adjusting-pattern (or (get-val env 'adjusting-pattern)
-				(list
-				 (list 'str (G_ "Adjusting Entries"))
-				 (list 'cased #f)
-				 (list 'regexp #f))))
 	 (report-budget (or (get-val env 'report-budget) #f))
 	 ;; local variables
 	 (toplvl-accts
@@ -683,13 +661,6 @@
           ((pre-closing)
            (merge-splits (gnc:account-get-trans-type-splits-interval
                           accts closing-pattern start-date end-date) #t))
-
-          ;; remove closing and adjusting entries
-          ((pre-adjusting)
-           (merge-splits (gnc:account-get-trans-type-splits-interval
-                          accts closing-pattern start-date end-date) #t)
-           (merge-splits (gnc:account-get-trans-type-splits-interval
-                          accts adjusting-pattern start-date end-date) #t))
 
           (else
            (display "you fail it\n"))))
@@ -828,9 +799,7 @@
                              (eq? zero-mode 'omit-leaf-acct)))
               (let ((lbl-txt (gnc:make-html-text (G_ "Total") " ")))
                 (apply gnc:html-text-append! lbl-txt (gnc:html-text-body label))
-                (if (eq? subtotal-mode 'canonically-tabbed)
-                    (set! disp-depth (+ disp-depth 1))
-                    (set! disp-depth-reached (max disp-depth-reached disp-depth)))
+                (set! disp-depth-reached (max disp-depth-reached disp-depth))
                 (add-row
                  (cons* (list 'account-label lbl-txt)
                         (list 'row-type 'subtotal-row)
@@ -1105,7 +1074,6 @@
 	      amount
 	      (+ account-cols (- 0 1)
 		 (- logical-cols display-depth)
-		 (if (equal? subtotal-mode 'canonically-tabbed) 1 0)
 		 )                          ;; amount-depth
 	      1                             ;; amount-colspan
               "number-cell"                 ;; amount-markup

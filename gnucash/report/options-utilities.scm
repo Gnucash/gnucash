@@ -252,8 +252,4 @@
 		  (N_ "Show subtotals for selected parent accounts which have subaccounts."))
 	  (vector 'f
 		  (N_ "Do not show")
-		  (N_ "Do not show any subtotals for parent accounts."))
-	  (vector 'canonically-tabbed
-		  ;;(N_ "Subtotals indented text book style")
-		  (N_ "Text book style (experimental)")
-		  (N_ "Show parent account subtotals, indented per accounting text book practice (experimental)."))))))
+		  (N_ "Do not show any subtotals for parent accounts."))))))

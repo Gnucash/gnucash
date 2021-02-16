@@ -17,6 +17,9 @@
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
 
+;; Explicitly set locale to make the report output predictable
+(setlocale LC_ALL "C")
+
 ;; NOTE: This file will attempt to run most reports and set their
 ;; options. First, the reports are run on empty-book, then on a book
 ;; with sample transactions and invoices.
@@ -48,8 +51,6 @@
 ;; the following is the N-tuple
 (define N-TUPLE 2)
 
-(define optionslist '())
-
 (define-record-type :combo
   (make-combo section name combos)
   combo?
@@ -58,6 +59,7 @@
   (combos get-combos))
 
 (define (generate-optionslist)
+  (define optionslist '())
   (gnc:report-templates-for-each
    (lambda (report-id template)
      (let* ((options-generator (gnc:report-template-options-generator template))
@@ -83,42 +85,16 @@
          (cons (list (cons 'report-id report-id)
                      (cons 'report-name (gnc:report-template-name template))
                      (cons 'options report-options-tested))
-               optionslist))))))
-
-;; Explicitly set locale to make the report output predictable
-(setlocale LC_ALL "C")
-
-(define (run-test)
-  (test-runner-factory gnc:test-runner)
-  (test-begin "stress options")
-  (generate-optionslist)
-  (tests)
-  (gnc:dump-book)
-  (gnc:dump-invoices)
-  (test-end "stress options"))
+               optionslist)))))
+  optionslist)
 
 (define jennypath
   (get-environment-variable "COMBINATORICS"))
-
-(define jenny-exists?
-  ;; this is a simple test for presence of jenny - will check
-  ;; COMBINATORICS env exists, and running it produces exit-code of
-  ;; zero, and tests the first few letters of its output.
-  (and (string? jennypath)
-       (zero? (system jennypath))
-       (string=? (string-take (get-string-all (open-input-pipe jennypath)) 6)
-                 "jenny:")))
 
 (define (set-option! options section name value)
   (let ((option (gnc:lookup-option options section name)))
     (if option
         (gnc:option-set-value option value))))
-
-(define (mnemonic->commodity sym)
-  (gnc-commodity-table-lookup
-   (gnc-commodity-table-get-table (gnc-get-current-book))
-   (gnc-commodity-get-namespace (gnc-default-report-currency))
-   sym))
 
 ;; code snippet to run report uuid, with options object
 (define (try-run-report uuid options option-summary)
@@ -235,15 +211,24 @@
      (else
       (display "...aborted due to basic test failure")))))
 
-(define test
+(define (jenny-exists?)
+  ;; this is a simple test for presence of jenny - will check
+  ;; COMBINATORICS env exists, and running it produces exit-code of
+  ;; zero, and tests the first few letters of its output.
+  (and (string? jennypath)
+       (zero? (system jennypath))
+       (string=? (string-take (get-string-all (open-input-pipe jennypath)) 6)
+                 "jenny:")))
+
+(define (get-stress-test-runner)
   ;; what strategy are we using here? simple stress test (ie tests as
   ;; many times as the maximum number of options) or combinatorial
   ;; tests (using jenny)
-  (if jenny-exists?
+  (if (jenny-exists?)
       combinatorial-stress-test
       simple-stress-test))
 
-(define (run-tests prefix)
+(define (run-tests prefix optionslist stress-test-runner)
   (for-each
    (lambda (option-set)
      (let ((report-name (assq-ref option-set 'report-name))
@@ -264,13 +249,23 @@
            (format #t "\nSkipping ~a ~a...\n" report-name prefix)
            (begin
              (format #t "\nTesting ~a ~a...\n" report-name prefix)
-             (test report-name report-guid report-options)))))
+             (stress-test-runner report-name report-guid report-options)))))
    optionslist))
 
-(define (tests)
-  (run-tests "with empty book")
+(define (tests optionslist stress-test-runner)
+  (run-tests "with empty book" optionslist stress-test-runner)
   (let ((env (create-test-env))
         (account-alist (create-test-data)))
     (gnc:create-budget-and-transactions env account-alist))
   (create-test-invoice-data)
-  (run-tests "on a populated book"))
+  (run-tests "on a populated book" optionslist stress-test-runner))
+
+(define (run-test)
+  (let ((optionslist (generate-optionslist))
+        (stress-test-runner (get-stress-test-runner)))
+    (test-runner-factory gnc:test-runner)
+    (test-begin "stress options")
+    (tests optionslist stress-test-runner)
+    (gnc:dump-book)
+    (gnc:dump-invoices)
+    (test-end "stress options")))

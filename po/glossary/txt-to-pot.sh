@@ -23,7 +23,7 @@ then
 	exit 1;
 fi
 
-# Note: Line 2, 3, 9: PROJECT and probably a few other variables are hardcoded
+# Note: Line 2, 3, 9, 18: PROJECT, CHARSET and probably a few other variables are hardcoded
 cat <<!
 # SOME DESCRIPTIVE TITLE. (Glossary)
 # This file is distributed under the same license as the GnuCash package.
@@ -42,7 +42,7 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 

@@ -68,7 +68,7 @@ compare_account_trees (QofBook* book_1, QofBook* book_2)
     Account* root_1 = gnc_book_get_root_account (book_1);
     Account* root_2 = gnc_book_get_root_account (book_2);
 
-    xaccAccountSetHidden (root_1, xaccAccountGetHidden (root_1));
+    xaccAccountSetHidden (root_2, xaccAccountGetHidden (root_1));
     g_assert (xaccAccountEqual (root_1, root_2, FALSE));
 }
 

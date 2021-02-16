@@ -1145,10 +1145,6 @@ gnc_plugin_page_register_ui_update (gpointer various,
                                              "DeleteTransactionAction");
         gtk_action_set_sensitive (GTK_ACTION (action), !read_only & !voided);
 
-        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                             "DuplicateTransactionAction");
-        gtk_action_set_sensitive (GTK_ACTION (action), !read_only & TRUE);
-
         if (cursor_class == CURSOR_CLASS_SPLIT)
         {
             action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),

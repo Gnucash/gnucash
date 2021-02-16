@@ -295,6 +295,8 @@
 /* Result of LibOFX Bug 39 detection (see
   https://sourceforge.net/p/libofx/bugs/39/ for details). */
 #cmakedefine HAVE_OFX_BUG_39 1
+/* LibOFX supports investment transactions. */
+#cmakedefine HAVE_LIBOFX_VERSION_0_10
 
 /* Name of package containing qt3-wizard. */
 #define QT3_WIZARD_PACKAGE "aqbanking"

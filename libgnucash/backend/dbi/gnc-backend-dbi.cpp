@@ -572,12 +572,21 @@ adjust_sql_options (dbi_conn connection)
         return;
     }
     PINFO("Initial sql_mode: %s", str.c_str());
-    if(str.find(SQL_OPTION_TO_REMOVE) == std::string::npos)
-        return;
+    if(str.find(SQL_OPTION_TO_REMOVE) != std::string::npos)
+        str = adjust_sql_options_string(str);
 
-    std::string adjusted_str{adjust_sql_options_string(str)};
-    PINFO("Setting sql_mode to %s", adjusted_str.c_str());
-    std::string set_str{"SET sql_mode='" + std::move(adjusted_str) + "'"};
+    //https://bugs.gnucash.org/show_bug.cgi?id=798112
+    const char* backslash_option{"NO_BACKSLASH_ESCAPES"};
+
+    if (str.find(backslash_option) == std::string::npos)
+    {
+        if (!str.empty())
+            str.append(",");
+        str.append(backslash_option);
+    }
+
+    PINFO("Setting sql_mode to %s", str.c_str());
+    std::string set_str{"SET sql_mode='" + std::move(str) + "'"};
     dbi_result set_result = dbi_conn_query(connection,
                                            set_str.c_str());
     if (set_result)

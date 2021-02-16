@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-01-22 11:07+0100\n"
-"PO-Revision-Date: 2021-01-15 09:32+0000\n"
+"POT-Creation-Date: 2021-02-10 23:02+0100\n"
+"PO-Revision-Date: 2021-02-03 08:41+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -863,7 +863,7 @@ msgstr "שומר מקום"
 #: gnucash/gnome-utils/dialog-account.c:351
 #: gnucash/gnome-utils/gnc-tree-view-account.c:996
 #: gnucash/gtkbuilder/dialog-account.glade:1855
-#: libgnucash/app-utils/gnc-ui-util.c:1102
+#: libgnucash/app-utils/gnc-ui-util.c:1106
 msgid "Opening Balance"
 msgstr "יתרת פתיחה"
 
@@ -871,7 +871,7 @@ msgstr "יתרת פתיחה"
 msgid "Use Existing"
 msgstr "שימוש בקיים"
 
-#: gnucash/gnome/assistant-hierarchy.c:1480
+#: gnucash/gnome/assistant-hierarchy.c:1481
 msgid ""
 "You selected a book currency and it will be used for\n"
 "new accounts. Accounts in other currencies must be\n"
@@ -881,12 +881,12 @@ msgstr ""
 "חשבונות חדשים. חשבונות במטבעות אחרים יש \n"
 "להוסיף באופן ידני."
 
-#: gnucash/gnome/assistant-hierarchy.c:1490
+#: gnucash/gnome/assistant-hierarchy.c:1491
 msgid "Please choose the currency to use for new accounts."
 msgstr "נא לבחור מטבע שישמש לחשבונות החדשים."
 
-#: gnucash/gnome/assistant-hierarchy.c:1535
-#: gnucash/gnome/assistant-hierarchy.c:1554
+#: gnucash/gnome/assistant-hierarchy.c:1536
+#: gnucash/gnome/assistant-hierarchy.c:1555
 #: gnucash/gnome-utils/dialog-utils.c:809
 msgid "New Book Options"
 msgstr "אפשרויות ספר חשבונות חדש"
@@ -949,7 +949,7 @@ msgstr "אפשרות פרעון הלוואה: '%s'"
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
-#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:937
+#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:941
 #: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:429
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
 #: gnucash/gtkbuilder/dialog-doclink.glade:612
@@ -1296,7 +1296,7 @@ msgstr "מחיקת סחורה?"
 #: gnucash/gnome/dialog-price-edit-db.c:206
 #: gnucash/gnome/dialog-price-editor.c:232 gnucash/gnome/dialog-tax-info.c:1190
 #: gnucash/gnome/gnc-plugin-budget.c:289
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1797
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1789
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1111
 #: gnucash/gnome/gnc-plugin-page-register2.c:1630
@@ -1397,7 +1397,7 @@ msgstr "_ביטול"
 
 #: gnucash/gnome/dialog-commodities.c:218
 #: gnucash/gnome/dialog-price-edit-db.c:207
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1798
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1790
 #: gnucash/gnome/gnc-plugin-page-invoice.c:189
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1112
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:162
@@ -1438,7 +1438,7 @@ msgstr "אשראי חייב להיות ערך חיובי או ריק."
 
 #: gnucash/gnome/dialog-customer.c:433 gnucash/gnome/dialog-employee.c:288
 #: gnucash/gnome/dialog-job.c:243 gnucash/gnome/dialog-vendor.c:300
-#: gnucash/gnome-utils/dialog-account.c:1575
+#: gnucash/gnome-utils/dialog-account.c:1572
 msgid "<No name>"
 msgstr "<ללא שם>"
 
@@ -1486,7 +1486,8 @@ msgstr "איש קשר חשבונית ספק"
 msgid "Customer ID"
 msgstr "מזהה לקוח"
 
-#: gnucash/gnome/dialog-customer.c:930 gnucash/gnome/dialog-vendor.c:733
+#: gnucash/gnome/dialog-customer.c:930 gnucash/gnome/dialog-invoice.c:3357
+#: gnucash/gnome/dialog-invoice.c:3391 gnucash/gnome/dialog-vendor.c:733
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:352
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:360
 #: gnucash/gtkbuilder/dialog-customer.glade:145
@@ -1625,7 +1626,7 @@ msgstr "תנועות"
 #: gnucash/gnome/dialog-doclink.c:1013
 #: gnucash/gnome/dialog-find-transactions2.c:157
 #: gnucash/gnome/dialog-find-transactions.c:157
-#: gnucash/gnome/dialog-lot-viewer.c:953 gnucash/gnome/dialog-tax-info.c:1398
+#: gnucash/gnome/dialog-lot-viewer.c:957 gnucash/gnome/dialog-tax-info.c:1398
 #: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:417
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:828
@@ -1848,7 +1849,7 @@ msgid "Share Price"
 msgstr "מחיר מניה"
 
 #: gnucash/gnome/dialog-find-transactions2.c:124
-#: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:967
+#: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:971
 #: gnucash/gnome/gnc-split-reg.c:694 gnucash/gnome/reconcile-view.c:413
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2892
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2904
@@ -1880,7 +1881,7 @@ msgstr "סכום"
 
 #: gnucash/gnome/dialog-find-transactions2.c:126
 #: gnucash/gnome/dialog-find-transactions.c:124
-#: gnucash/gnome/dialog-lot-viewer.c:973
+#: gnucash/gnome/dialog-lot-viewer.c:977
 #: gnucash/gnome/dialog-sx-since-last-run.c:1051
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
@@ -2201,7 +2202,7 @@ msgstr "סך הכל מזומן:"
 msgid "Total Charge:"
 msgstr "סך הכל חיוב:"
 
-#: gnucash/gnome/dialog-invoice.c:1867 gnucash/gnome/dialog-payment.c:1331
+#: gnucash/gnome/dialog-invoice.c:1867 gnucash/gnome/dialog-payment.c:1332
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:793
 #: libgnucash/engine/gncInvoice.c:1088
@@ -2384,10 +2385,6 @@ msgstr "האם נרשם?"
 msgid "Date Opened"
 msgstr "תאריך פתיחה"
 
-#: gnucash/gnome/dialog-invoice.c:3357 gnucash/gnome/dialog-invoice.c:3391
-msgid "Company Name "
-msgstr "שם החברה "
-
 #: gnucash/gnome/dialog-invoice.c:3361
 #: gnucash/gtkbuilder/dialog-invoice.glade:41
 #: gnucash/gtkbuilder/dialog-invoice.glade:749
@@ -2411,7 +2408,7 @@ msgid "Voucher Notes"
 msgstr "הערות לשובר"
 
 #: gnucash/gnome/dialog-invoice.c:3438 gnucash/gnome/dialog-invoice.c:3597
-#: gnucash/gnome/dialog-lot-viewer.c:860 gnucash/gnome/dialog-tax-info.c:1236
+#: gnucash/gnome/dialog-lot-viewer.c:864 gnucash/gnome/dialog-tax-info.c:1236
 #: gnucash/gnome-utils/gnc-tree-view-account.c:811
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
@@ -2449,12 +2446,12 @@ msgstr "נרשם"
 msgid "Due"
 msgstr "תאריך לחיוב"
 
-#: gnucash/gnome/dialog-invoice.c:3450 gnucash/gnome/dialog-lot-viewer.c:866
+#: gnucash/gnome/dialog-invoice.c:3450 gnucash/gnome/dialog-lot-viewer.c:870
 #: gnucash/gnome/dialog-order.c:894
 msgid "Opened"
 msgstr "נפתח"
 
-#: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:947
+#: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:951
 #: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:421
 #: gnucash/gnome/reconcile-view.c:425
 #: gnucash/gtkbuilder/dialog-payment.glade:473
@@ -2569,7 +2566,7 @@ msgstr "שם ריכוז"
 msgid "Find Job"
 msgstr "חיפוש ריכוז"
 
-#: gnucash/gnome/dialog-lot-viewer.c:809
+#: gnucash/gnome/dialog-lot-viewer.c:813
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:403
 #: gnucash/gnome/gnc-plugin-page-budget.c:208
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
@@ -2578,18 +2575,18 @@ msgstr "חיפוש ריכוז"
 msgid "Open"
 msgstr "פתיחה"
 
-#: gnucash/gnome/dialog-lot-viewer.c:876 gnucash/gnome/dialog-order.c:892
+#: gnucash/gnome/dialog-lot-viewer.c:880 gnucash/gnome/dialog-order.c:892
 msgid "Closed"
 msgstr "סגורים"
 
-#: gnucash/gnome/dialog-lot-viewer.c:886
+#: gnucash/gnome/dialog-lot-viewer.c:890
 #: gnucash/gtkbuilder/assistant-acct-period.glade:143
 #: gnucash/report/html-fonts.scm:106
 #: gnucash/report/reports/standard/register.scm:347
 msgid "Title"
 msgstr "כותרת"
 
-#: gnucash/gnome/dialog-lot-viewer.c:893 gnucash/gnome/dialog-lot-viewer.c:985
+#: gnucash/gnome/dialog-lot-viewer.c:897 gnucash/gnome/dialog-lot-viewer.c:989
 #: gnucash/gnome-utils/gnc-tree-view-account.c:854
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
@@ -2606,16 +2603,16 @@ msgstr "כותרת"
 msgid "Balance"
 msgstr "יתרה"
 
-#: gnucash/gnome/dialog-lot-viewer.c:899
+#: gnucash/gnome/dialog-lot-viewer.c:903
 msgid "Gains"
 msgstr "רווחים"
 
-#: gnucash/gnome/dialog-lot-viewer.c:979
+#: gnucash/gnome/dialog-lot-viewer.c:983
 #: gnucash/report/reports/example/average-balance.scm:131
 msgid "Gain/Loss"
 msgstr "רוח/הפסד"
 
-#: gnucash/gnome/dialog-lot-viewer.c:1043
+#: gnucash/gnome/dialog-lot-viewer.c:1047
 #, c-format
 msgid "Lots in Account %s"
 msgstr "דבוקות בחשבון %s"
@@ -2661,8 +2658,8 @@ msgid "Is Closed?"
 msgstr "סגור?"
 
 #: gnucash/gnome/dialog-order.c:878
-msgid "Owner Name "
-msgstr "שם נמען "
+msgid "Owner Name"
+msgstr "שם נמען"
 
 #: gnucash/gnome/dialog-order.c:880 gnucash/gtkbuilder/dialog-order.glade:122
 #: gnucash/gtkbuilder/dialog-order.glade:520
@@ -2692,7 +2689,7 @@ msgid ""
 msgstr ""
 "לא נבחרו מסמכים להם ניתן להקצות תשלום זה. הדבר עשוי ליצור תשלום שאינו מוקצה."
 
-#: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
+#: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1327
 #: gnucash/report/reports/standard/new-aging.scm:194
 #: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/new-owner-report.scm:719
@@ -2706,7 +2703,7 @@ msgid ""
 msgstr ""
 "החשבון הנגדי וחשבון הרישום משויכים למטבעות שונים. נא להזין את שער ההמרה."
 
-#: gnucash/gnome/dialog-payment.c:1269 gnucash/gnome/search-owner.c:211
+#: gnucash/gnome/dialog-payment.c:1270 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2783
 #: gnucash/gtkbuilder/dialog-customer.glade:479
@@ -2725,7 +2722,7 @@ msgstr ""
 msgid "Customer"
 msgstr "לקוח"
 
-#: gnucash/gnome/dialog-payment.c:1273 gnucash/gnome/search-owner.c:212
+#: gnucash/gnome/dialog-payment.c:1274 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1109
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2794
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:168
@@ -2739,7 +2736,7 @@ msgstr "לקוח"
 msgid "Vendor"
 msgstr "ספק"
 
-#: gnucash/gnome/dialog-payment.c:1277 gnucash/gnome/search-owner.c:213
+#: gnucash/gnome/dialog-payment.c:1278 gnucash/gnome/search-owner.c:213
 #: gnucash/gnome-search/dialog-search.c:1081
 #: gnucash/gtkbuilder/dialog-employee.glade:510
 #: gnucash/gtkbuilder/dialog-payment.glade:48
@@ -2751,7 +2748,7 @@ msgstr "ספק"
 msgid "Employee"
 msgstr "עובד"
 
-#: gnucash/gnome/dialog-payment.c:1422
+#: gnucash/gnome/dialog-payment.c:1423
 #, c-format
 msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type \"%s"
@@ -2761,13 +2758,13 @@ msgstr ""
 "לא נמצאו חשבונות תקינים לרישום לחשבון נגדי. נא ליצור חשבון מסוג '%s' לפני "
 "ביצוע עיבוד תשלומים. האם ליצור חשבונית או חשבונית ספק תחילה?"
 
-#: gnucash/gnome/dialog-payment.c:1575
+#: gnucash/gnome/dialog-payment.c:1576
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr "לתנועה שנבחרה אין פיצולים שניתן להקצות כתשלום"
 
-#: gnucash/gnome/dialog-payment.c:1589
+#: gnucash/gnome/dialog-payment.c:1590
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', gnucash only knows how to handle one.\n"
@@ -2779,15 +2776,15 @@ msgstr ""
 "נא לבחור פיצול אחד, גנוקאש תתעלם מהאחרים.\n"
 "\n"
 
-#: gnucash/gnome/dialog-payment.c:1592
+#: gnucash/gnome/dialog-payment.c:1593
 msgid "Warning"
 msgstr "אזהרה"
 
-#: gnucash/gnome/dialog-payment.c:1595 gnucash/gnome/dialog-payment.c:1713
+#: gnucash/gnome/dialog-payment.c:1596 gnucash/gnome/dialog-payment.c:1714
 msgid "Continue"
 msgstr "המשך"
 
-#: gnucash/gnome/dialog-payment.c:1596
+#: gnucash/gnome/dialog-payment.c:1597
 #: gnucash/gnome/gnc-plugin-page-invoice.c:453
 #: gnucash/gnome/gnc-plugin-page-register2.c:499
 #: gnucash/gnome/gnc-plugin-page-register.c:622
@@ -2795,7 +2792,7 @@ msgstr "המשך"
 msgid "Cancel"
 msgstr "ביטול"
 
-#: gnucash/gnome/dialog-payment.c:1708
+#: gnucash/gnome/dialog-payment.c:1709
 #, c-format
 msgid ""
 "The transaction has at least one split in a business account that is not "
@@ -2863,7 +2860,7 @@ msgstr "נא להזין סכום תקין."
 
 #: gnucash/gnome/dialog-print-check.c:824
 msgid "Cannot save check format file."
-msgstr "לא ניתן לשמור קובץ תבנית המחאה."
+msgstr "לא ניתן לשמור קובץ מבנה המחאה."
 
 #: gnucash/gnome/dialog-print-check.c:826
 #, c-format
@@ -2872,7 +2869,7 @@ msgstr "לא ניתן לפתוח קובץ %s"
 
 #: gnucash/gnome/dialog-print-check.c:1514
 msgid "There is a duplicate check format file."
-msgstr "קיים קובץ תבנית המחאה כפול."
+msgstr "קיים קובץ מבנה המחאה כפול."
 
 #. Translators:
 #. %1$s is the type of the first check format
@@ -2886,7 +2883,7 @@ msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
-"המזהים הייחודאיים האוניברסליים %s בקובץ תבנית הבדיקה '%s' וב %s קובץ תבנית "
+"המזהים הייחודאיים האוניברסליים %s בקובץ מבנה הבדיקה '%s' וב %s קובץ מבנה "
 "הביקורת '%s' תואמים."
 
 #. Translators: This is a directory name. It may be presented to
@@ -3032,7 +3029,7 @@ msgstr "לא ניתן ליצור פעולות מתוזמנות עם משתנים
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
-msgstr "לא ניתן ליצור תנועה מחזורית באופן אוטומטי ללא תבנית תנועה."
+msgstr "לא ניתן ליצור תנועה מחזורית באופן אוטומטי ללא מבנה תנועה."
 
 #: gnucash/gnome/dialog-sx-editor2.c:791 gnucash/gnome/dialog-sx-editor.c:543
 msgid "Please provide a valid end selection."
@@ -3059,7 +3056,7 @@ msgstr "התנועה המחזורית הזו שביצירה, אף פעם לא ת
 msgid ""
 "Note: If you have already accepted changes to the Template, Cancel will not "
 "revoke them."
-msgstr "הערה: אם כבר נתקבלו השינויים בתבנית, הקשה על ביטול לא תבטל אותם."
+msgstr "הערה: אם כבר נתקבלו השינויים במבנה, הקשה על ביטול לא תבטל אותם."
 
 #: gnucash/gnome/dialog-sx-editor2.c:1346 gnucash/gnome/dialog-sx-editor.c:1389
 msgid "(never)"
@@ -3291,7 +3288,7 @@ msgstr "חיפוש ספק"
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4373 libgnucash/engine/Scrub.c:464
+#: libgnucash/engine/Account.cpp:4395 libgnucash/engine/Scrub.c:473
 msgid "Income"
 msgstr "הכנסות"
 
@@ -4174,7 +4171,7 @@ msgid "Delete"
 msgstr "מחיקה"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:454
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1999
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1991
 #: gnucash/gnome/gnc-plugin-page-register.c:1964
 #: gnucash/gnome/gnc-plugin-page-register.c:5068
 msgid "'Check & Repair' is currently running, do you want to abort it?"
@@ -4256,42 +4253,42 @@ msgstr ""
 "לפני שניתן יהיה למחוק אותו, יש למחוק אובייקטים אלה או לשנותם כך שישתמשו\n"
 "בחשבון אחר"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1736
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "חשבון %s יימחק."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1745
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1737
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "כל הפעולות בחשבון זה יעברו לחשבון %s."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1752
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1744
 #, c-format
 msgid "All transactions in this account will be deleted."
 msgstr "כל התנועות בחשבון זה יימחקו."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1761
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1753
 #, c-format
 msgid "Its sub-account will be moved to the account %s."
 msgstr "חשבונות המשנה שלו יועברו לחשבון %s."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1767
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1759
 #, c-format
 msgid "Its subaccount will be deleted."
 msgstr "חשבונות המשנה שלו יימחקו."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1771
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1763
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "כל התנועות חשבונות המשנה יועברו לחשבון %s."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1778
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1770
 #, c-format
 msgid "All sub-account transactions will be deleted."
 msgstr "כל התנועות בחשבונות המשנה ימחקו."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1784
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1776
 msgid "Are you sure you want to do this?"
 msgstr "האם לבצע זאת?"
 
@@ -5326,7 +5323,7 @@ msgstr "תז_מןן..."
 #: gnucash/gnome/gnc-plugin-page-register.c:519
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template"
-msgstr "יצירת תנועה מחזורית מהתנועה הנוכחית כתבנית"
+msgstr "יצירת תנועה מחזורית מהתנועה הנוכחית כמבנה"
 
 #. Translators: The following 2 are Scrub actions in register view
 #: gnucash/gnome/gnc-plugin-page-register2.c:397
@@ -5863,7 +5860,7 @@ msgstr "יצוא _דוח"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1245
 msgid "Export HTML-formatted report to file"
-msgstr "יצוא דוח בתבנית HTML לקובץ"
+msgstr "יצוא דוח במבנה HTML לקובץ"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1249
 msgid "_Report Options"
@@ -6189,14 +6186,16 @@ msgstr "תאריך רישום"
 msgid "Statement Date"
 msgstr "תאריך תדפיס"
 
-#: gnucash/gnome/gnc-split-reg.c:711
+#: gnucash/gnome/gnc-split-reg.c:711 gnucash/report/reports/aging.scm:361
 #: gnucash/report/reports/standard/customer-summary.scm:152
+#: gnucash/report/reports/standard/new-aging.scm:112
 #: gnucash/report/trep-engine.scm:441
 msgid "Descending"
 msgstr "סדר יורד"
 
-#: gnucash/gnome/gnc-split-reg.c:713
+#: gnucash/gnome/gnc-split-reg.c:713 gnucash/report/reports/aging.scm:360
 #: gnucash/report/reports/standard/customer-summary.scm:149
+#: gnucash/report/reports/standard/new-aging.scm:111
 #: gnucash/report/trep-engine.scm:438
 msgid "Ascending"
 msgstr "סדר עולה"
@@ -7052,10 +7051,10 @@ msgid ""
 "file.\n"
 msgstr ""
 "\n"
-"קובץ הטעינה הוא מגרסה ישנה יותר של גנוקאש. תבנית הקובץ בגרסאות ישנות חסרה את "
+"קובץ הטעינה הוא מגרסה ישנה יותר של גנוקאש. מבנה הקובץ בגרסאות ישנות חסרה את "
 "פירוט קידוד התווים שבשימוש. כלומר, המלל שבקובץ הנתונים ניתן לקריאה במספר "
 "דרכים ובמעורפל. לא ניתן לפתור עמימות זו באופן אוטומטי, אך בגרסת גנוקאש 2.0.0 "
-"החדשה, תבנית הקובץ כוללת את כל המפרטים הדרושים, כך שלא יהיה צורך לעבור את "
+"החדשה, מבנה הקובץ כוללת את כל המפרטים הדרושים, כך שלא יהיה צורך לעבור את "
 "השלב הזה שוב.\n"
 "\n"
 "גנוקאש תנסה לנחש את קידוד התווים הנכון עבור קובץ הנתונים לטעינה. בעמוד הבא "
@@ -7256,26 +7255,26 @@ msgstr "סוג החשבון שנבחר אינו תואם לאחד מהורים �
 msgid "You must choose a commodity."
 msgstr "נא לבחור סחורה."
 
-#: gnucash/gnome-utils/dialog-account.c:955
+#: gnucash/gnome-utils/dialog-account.c:952
 msgid "You must enter a valid opening balance or leave it blank."
 msgstr "נא להזין יתרת פתיחה תקינה או להשאיר את השדה ריק."
 
-#: gnucash/gnome-utils/dialog-account.c:979
+#: gnucash/gnome-utils/dialog-account.c:976
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
 msgstr "נא לבחור חשבון העברה או לבחור בחשבון יתרת פתיחה במקטע ההון."
 
-#: gnucash/gnome-utils/dialog-account.c:1331
+#: gnucash/gnome-utils/dialog-account.c:1328
 msgid ""
 "An account with opening balance already exists for the desired currency."
 msgstr "כבר קיים חשבון עם יתרת פתיחה עבור המטבע הרצוי."
 
-#: gnucash/gnome-utils/dialog-account.c:1332
+#: gnucash/gnome-utils/dialog-account.c:1329
 msgid "Cannot change currency"
 msgstr "לא ניתן לשנות מטבע"
 
-#: gnucash/gnome-utils/dialog-account.c:1419
+#: gnucash/gnome-utils/dialog-account.c:1416
 msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
@@ -7283,22 +7282,22 @@ msgstr ""
 "חשבון זה מכיל תנועות.\n"
 "לא ניתן לשנות אפשרות זו."
 
-#: gnucash/gnome-utils/dialog-account.c:1609
+#: gnucash/gnome-utils/dialog-account.c:1606
 msgid "Edit Account"
 msgstr "עריכת חשבון"
 
-#: gnucash/gnome-utils/dialog-account.c:1612
+#: gnucash/gnome-utils/dialog-account.c:1609
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) חשבונות חדשים"
 
-#: gnucash/gnome-utils/dialog-account.c:1622
+#: gnucash/gnome-utils/dialog-account.c:1619
 #: gnucash/gtkbuilder/dialog-account.glade:1100
 #: gnucash/gtkbuilder/dialog-account-picker.glade:158
 msgid "New Account"
 msgstr "חשבון חדש"
 
-#: gnucash/gnome-utils/dialog-account.c:2183
+#: gnucash/gnome-utils/dialog-account.c:2180
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s? This will replace the account "
@@ -7307,20 +7306,20 @@ msgstr ""
 "מספור מחדש של חשבונות המשנה הישירים של %s? פעולה זו תחליף את שדה קוד החשבון "
 "של כל חשבון משנה עם קוד חדש שיוצר."
 
-#: gnucash/gnome-utils/dialog-account.c:2288
+#: gnucash/gnome-utils/dialog-account.c:2285
 #, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
 msgstr "הגדרת צבע לחשבון '%s ' כולל כל חשבונות המשנה לצבע שנבחר"
 
-#: gnucash/gnome-utils/dialog-account.c:2315
+#: gnucash/gnome-utils/dialog-account.c:2312
 #, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
 msgstr "הגדרת ערך שומר-מקום לחשבון '%s ' כולל כל חשבונות המשנה"
 
-#: gnucash/gnome-utils/dialog-account.c:2329
+#: gnucash/gnome-utils/dialog-account.c:2326
 #, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
@@ -7407,7 +7406,7 @@ msgstr "מט_בע"
 #: gnucash/gtkbuilder/dialog-transfer.glade:424
 #: gnucash/gtkbuilder/dialog-transfer.glade:437
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4372
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4394
 msgid "Currency"
 msgstr "מטבע"
 
@@ -8286,9 +8285,9 @@ msgid ""
 "your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
-"גנוקאש לא יכול להשלים בדיקה קריטית לנוכחות תקל בספרייה 'libdbi'. יתכן שנגרם "
-"עקב תצורת הרשאות שגויה במסד הנתונים SQL. אנא ראו https://bugs.gnucash.org/"
-"show_bug.cgi?id=645216 לקבלת מידע נוסף."
+"גנוקאש לא יכולה להשלים בדיקה מהותית להמצאות תקל בספריה 'libdbi'. יתכן שנגרם "
+"עקב תצורת הרשאות שגויה במסד הנתונים SQL. נא ראו https://bugs.gnucash.org/"
+"show_bug.cgi?id=645216 למידע נוסף."
 
 #: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
@@ -8706,27 +8705,27 @@ msgstr "לא ניתן לשמור מסד נתונים."
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "לא ניתן לשמור במסד הנתונים: הספר מסומן לקריאה בלבד."
 
-#: gnucash/gnome-utils/gnc-main-window.c:4302
+#: gnucash/gnome-utils/gnc-main-window.c:4303
 msgid "Book Options"
 msgstr "מאפייני ספר חשבונות"
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.c:4687
+#: gnucash/gnome-utils/gnc-main-window.c:4688
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr "זכויות יוצרים © 1997-%s תומכי גנוקאש."
 
-#: gnucash/gnome-utils/gnc-main-window.c:4699
+#: gnucash/gnome-utils/gnc-main-window.c:4700
 #: gnucash/gnome-utils/gnc-splash.c:97
 msgid "Version"
 msgstr "גרסה"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4700
+#: gnucash/gnome-utils/gnc-main-window.c:4701
 #: gnucash/gnome-utils/gnc-splash.c:98 gnucash/gnucash-core-app.cpp:503
 msgid "Build ID"
 msgstr "מזהה מהדורה"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4708
+#: gnucash/gnome-utils/gnc-main-window.c:4709
 msgid "Accounting for personal and small business finance."
 msgstr "חשבונאות לאנשים פרטיים ועסקים קטנים."
 
@@ -8734,13 +8733,13 @@ msgstr "חשבונאות לאנשים פרטיים ועסקים קטנים."
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.c:4717
+#: gnucash/gnome-utils/gnc-main-window.c:4718
 msgid "translator-credits"
 msgstr ""
 "אבי מרקוביץ - avi.markovitz@gmail.com\n"
 "אורי הוך 2006"
 
-#: gnucash/gnome-utils/gnc-main-window.c:4720
+#: gnucash/gnome-utils/gnc-main-window.c:4721
 msgid "Visit the GnuCash website."
 msgstr "בקרו באתר גנוקאש."
 
@@ -9226,7 +9225,7 @@ msgstr "שכר"
 #: gnucash/report/reports/standard/balance-sheet.scm:503
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4375
+#: libgnucash/app-utils/gnc-ui-util.c:1045 libgnucash/engine/Account.cpp:4397
 msgid "Equity"
 msgstr "הון"
 
@@ -9635,7 +9634,7 @@ msgstr "סרגל מצב"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1247
 #: gnucash/report/reports/standard/balsheet-eg.scm:389
-#: libgnucash/engine/Scrub.c:407
+#: libgnucash/engine/Scrub.c:415
 msgid "Imbalance"
 msgstr "חוסר איזון"
 
@@ -9769,7 +9768,7 @@ msgstr "תקבולים"
 #: gnucash/report/reports/standard/customer-summary.scm:326
 #: gnucash/report/reports/standard/net-charts.scm:367
 #: gnucash/report/reports/standard/net-charts.scm:416
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4374
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4396
 #: libgnucash/engine/gncInvoice.c:1084
 msgid "Expense"
 msgstr "הוצאות"
@@ -10443,15 +10442,15 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:5
 msgid "GUID of predefined check format to use"
-msgstr "שימוש בתבנית המחאה מזהה ייחודי אוניברסלי מוגדרת מראש"
+msgstr "שימוש במבנה המחאה מזהה ייחודי אוניברסלי מוגדרת מראש"
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:6
 msgid ""
 "This value specifies the predefined check format to use. The number is the "
 "guid of a known check format."
 msgstr ""
-"ערך זה מציין את תבנית ההמחאה המוגדרת מראש לשימוש. המספר הוא המזהה ייחודי "
-"אוניברסלי של תבנית המחאה מוכרת."
+"ערך זה מציין את מבנה ההמחאה המוגדרת מראש לשימוש. המספר הוא המזהה ייחודי "
+"אוניברסלי של מבנה המחאה מוכרת."
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:10
 msgid "Which check position to print"
@@ -10474,15 +10473,15 @@ msgstr "מספר ההמחאות שיודפסו על העמוד הראשון."
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:20
 msgid "Date format to use"
-msgstr "תבנית תאריך לשימוש"
+msgstr "מבנה תאריך לשימוש"
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:21
 msgid "This is the numerical identifier of the predefined date format to use."
-msgstr "זהו המזהה המספרי של תבנית התאריך המוגדרת מראש שבה יעשה שימוש."
+msgstr "זהו המזהה המספרי של מבנה התאריך המוגדרת מראש שבה יעשה שימוש."
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:25
 msgid "Custom date format"
-msgstr "תבנית תאריך מותאמת אישית"
+msgstr "מבנה תאריך מותאמת אישית"
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:26
 msgid ""
@@ -10491,9 +10490,9 @@ msgid ""
 "any valid strftime string; for more information about this format, read the "
 "manual page of strftime by \"man 3 strftime\"."
 msgstr ""
-"במידה ותבנית התאריך מוגדרת כתבנית תאריך מותאמת אישית, הערך ישמש כמשתנה ל "
+"במידה ומבנה התאריך מוגדרת כמבנה תאריך מותאמת אישית, הערך ישמש כמשתנה ל "
 "strftime ליצור את התאריך שיודפס. יכול להיות כל מחרוזת strftime תקפה; לקבלת "
-"מידע נוסף אודות תבנית זו, נא לקרוא את העמוד המדריך, 'man 3 strftime'."
+"מידע נוסף אודות מבנה זו, נא לקרוא את העמוד המדריך, 'man 3 strftime'."
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:30
 msgid "Units in which the custom coordinates are expressed"
@@ -10653,14 +10652,14 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:95
 msgid "Print the date format below the date."
-msgstr "הדפסת תבנית תאריך תחת התאריך."
+msgstr "הדפסת מבנה תאריך תחת התאריך."
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:96
 msgid ""
 "Each time the date is printed, print the date format immediately below in 8 "
 "point type using the characters Y, M, and D."
 msgstr ""
-"בכל פעם שהתאריך מודפס, להדפיס את התאריך באופן מיידי בתבנית 8 תווים, Y, M ו-D."
+"בכל פעם שהתאריך מודפס, להדפיס את התאריך באופן מיידי במבנה 8 תווים, Y, M ו-D."
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:100
 msgid "The default check printing font"
@@ -11428,18 +11427,18 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:150
 msgid "Use 24 hour time format"
-msgstr "שימוש בתבנית זמן בת 24 שעות"
+msgstr "שימוש במבנה זמן בת 24 שעות"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:151
 msgid ""
 "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
 msgstr ""
-"במידה והאפשרות הופעלה, שימוש בתבנית זמן בת 24 שעות. אחרת, שימוש בתבנית זמן "
-"בת 12 שעות."
+"במידה והאפשרות הופעלה, שימוש במבנה זמן בת 24 שעות. אחרת, שימוש במבנה זמן בת "
+"12 שעות."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:155
 msgid "Date format choice"
-msgstr "אפשרות תבנית תאריך"
+msgstr "אפשרות מבנה תאריך"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:156
 msgid ""
@@ -11926,7 +11925,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:373
 msgid "PDF export file name format"
-msgstr "תבנית שם קובץ יצוא PDF"
+msgstr "מבנה שם קובץ יצוא PDF"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:374
 #, c-format
@@ -11942,12 +11941,12 @@ msgstr ""
 "הגדרה זו קובעת את שם קובץ ה PDF שייוצא. זוהי מחרוזת מסוג sprintf(3) בעלת "
 "שלושה משתנים: '%1$s' הוא שם הדוח, כגון 'חשבונית'. '%2$s' הוא מספר הדוח, "
 "שעבור דוח חשבוניות הוא מספר החשבונית. '%3$s' הוא התאריך הדוח, המעוצב לפי "
-"הגדרת תבנית-קובץ-תאריך. (הערה: תווים לא מותרים בשמות קבצים, כגון '/', יוחלפו "
+"הגדרת מבנה-קובץ-תאריך. (הערה: תווים לא מותרים בשמות קבצים, כגון '/', יוחלפו "
 "במקפים תחתונים ' _ ' בשם הקובץ שיוצר.)"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
-msgstr "אפשרות תבנית שם תאריך קובץ יצוא PDF"
+msgstr "אפשרות מבנה שם תאריך קובץ יצוא PDF"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:379
 msgid ""
@@ -12496,9 +12495,9 @@ msgstr ""
 "\n"
 "הסייען יעזור ביבוא חשבונות מקובץ.\n"
 "\n"
-"הקובץ חייב להיות בתבנית זהה לזה של קובץ היצוא, שכן זהו יבוא בתבנית קבועה. "
-"ניתן לצפות בתבנית על-ידי עיון בקובץ שנוצר באמצעות האפשרות 'יצוא תרשים "
-"חשבונות ל- CSV' מתפריט היצוא.\n"
+"הקובץ חייב להיות במבנה זהה לזה של קובץ היצוא, שכן זהו יבוא במבנה קבועה. ניתן "
+"לצפות במבנה על-ידי עיון בקובץ שנוצר באמצעות האפשרות 'יצוא תרשים חשבונות ל- "
+"CSV' מתפריט היצוא.\n"
 "\n"
 "אם חסר חשבון, הוא יתווסף לפי שם חשבון מלא, כל עוד ערך בטוחה / מטבע שצוינו "
 "קיימים. אם החשבון קיים, ארבעה שדות יעודכנו: קוד, תיאור, הערות וצבע.\n"
@@ -12829,7 +12828,7 @@ msgstr ""
 "מחיקת ההגדרות שנשמרו תחת השם כפי שהוזנו בשדה הטקסט הסמוך.\n"
 "ישנם שני שמות שמורים שלא ניתן למחוק לעולם:\n"
 "- אין הגדרות\n"
-"- תבנית ייצוא ברירת מחדל של גנוקאש"
+"- מבנה ייצוא ברירת מחדל של גנוקאש"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:173
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:164
@@ -12845,7 +12844,7 @@ msgstr ""
 "ההגדרות הנוכחיות ישמרו בשם שיוזן בשדה המלל הסמוך.\n"
 "ישנם שני שמות שמורים שלא ניתן להשתמש בהם לשמירת הגדרות מותאמות אישית:\n"
 "- אין הגדרות\n"
-"- תבנית ייצוא ברירת מחדל של גנוקאש"
+"- מבנה ייצוא ברירת מחדל של גנוקאש"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:201
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:191
@@ -12905,18 +12904,18 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:567
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:568
 msgid "<b>File Format</b>"
-msgstr "<b>תבנית קובץ</b>"
+msgstr "<b>מבנה קובץ</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:596
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:603
 #: gnucash/gtkbuilder/gnc-date-format.glade:39
 msgid "Date Format"
-msgstr "תבנית תאריך"
+msgstr "מבנה תאריך"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:608
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:615
 msgid "Currency Format"
-msgstr "תבנית מטבע"
+msgstr "מבנה מטבע"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:620
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:627
@@ -13274,7 +13273,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:504
 msgid "GnuCash Account Template Wiki"
-msgstr "וויקי תבנית חשבון גנוקאש"
+msgstr "וויקי מבנה חשבון גנוקאש"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:519
 msgid "Choose accounts to create"
@@ -13645,7 +13644,7 @@ msgid ""
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
 msgstr ""
-"גנוקאש יכול לייבא נתונים פיננסיים מקובץ QIF (תבנית תעבורת קוויקן) קבצים "
+"גנוקאש יכולה לייבא נתונים פיננסיים מקובץ QIF (מבנה תעבורת קוויקן) קבצים "
 "שנכתבים על ידי התכנות כמו אמ.אס מוני, קוויקן/ קוויקבוקס, מונידנס, ותוכניות "
 "רבות אחרות. \n"
 "\n"
@@ -13702,13 +13701,13 @@ msgid ""
 "software are likely  to be in \"d-m-y\" or day-month-year format, where US "
 "QIF files are likely to be \"m-d-y\" or month-day-year. \n"
 msgstr ""
-"תבנית הקובץ QIF לא מגדירה באיזה סדר מודפסים רכיבי ה: יום, חודש ושנה של "
-"תאריך. לרוב, ניתן לקבוע אוטומטית איזה תבנית נמצאת בשימוש בקובץ מסוים. יחד עם "
-"זאת, בקובץ שיובא זה עתה קיימות יותר מתבנית אפשרית אחת שמתאימה לנתונים.\n"
+"מבנה הקובץ QIF לא מגדירה באיזה סדר מודפסים רכיבי ה: יום, חודש ושנה של תאריך. "
+"לרוב, ניתן לקבוע אוטומטית איזה מבנה נמצאת בשימוש בקובץ מסוים. יחד עם זאת, "
+"בקובץ שיובא זה עתה קיימות יותר ממבנה אפשרית אחת שמתאימה לנתונים.\n"
 "\n"
-"נא לבחור תבנית תאריך לקובץ. קבצי QIF שנוצרו על ידי תוכנה אירופאית עשויים "
+"נא לבחור מבנה תאריך לקובץ. קבצי QIF שנוצרו על ידי תוכנה אירופאית עשויים "
 "להיות בפורמט 'd-m-y' או יום-חודש-שנה, כאשר קבצי ה QIF הם מארה\"ב ככל הנראה "
-"התבנית תהיה במבנה 'm-d-y' או חודש-יום-שנה.\n"
+"המבנה תהיה במבנה 'm-d-y' או חודש-יום-שנה. \n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:332
 #: gnucash/gtkbuilder/assistant-qif-import.glade:417
@@ -13717,7 +13716,7 @@ msgstr "הקשה על 'הקודם' לביטול טעינת הקובץ ולבחו
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:345
 msgid "Set a date format for this QIF file"
-msgstr "הגדרת תבנית זמן עבור קובץ QIF זה"
+msgstr "הגדרת מבנה זמן עבור קובץ QIF זה"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:359
 msgid ""
@@ -13925,7 +13924,7 @@ msgid ""
 msgstr ""
 "בעמודים הבאים תתבקשו לספק מידע אודות ניירות ערך, קרנות נאמנות והשקעות אחרות "
 "המופיעות בקובץ(י) ה QIF שהוגדר ליבוא. לגנוקאש נדרשים מספר פרטים נוספים אודות "
-"השקעות אלו שתבנית QIF אינה מספקת.\n"
+"השקעות אלו שמבנה QIF אינה מספקת.\n"
 "\n"
 "לכל ניר ערך, קרן נאמנות או השקעה אחרת, יש שם וקיצור כגון סמל מניה. מאחר "
 "ולחלק מההשקעות שאינן קשורות עשויים להיות קיצורים זהים, נדרש להגדיר גם את סוג "
@@ -15322,7 +15321,7 @@ msgstr "הגבלת גישה"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:72
 msgid "<b>Data Format</b>"
-msgstr "<b>תבנית נתונים</b>"
+msgstr "<b>מבנה נתונים</b>"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:140
 msgid "<b>File</b>"
@@ -15613,13 +15612,13 @@ msgstr "מזהה חשבון מקוון כאן..."
 #: gnucash/gtkbuilder/dialog-import.glade:173
 #: gnucash/gtkbuilder/dialog-import.glade:281
 msgid "Choose a format"
-msgstr "בחירת תבנית"
+msgstr "בחירת מבנה"
 
 #: gnucash/gtkbuilder/dialog-import.glade:245
 #: gnucash/gtkbuilder/gnc-date-format.glade:193
 #: gnucash/report/reports/standard/income-gst-statement.scm:42
 msgid "Format"
-msgstr "תבנית"
+msgstr "מבנה"
 
 #: gnucash/gtkbuilder/dialog-import.glade:302
 msgid "Select matching existing transaction"
@@ -16289,15 +16288,15 @@ msgstr "_מקומי"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:998
 msgid "<b>Fancy Date Format</b>"
-msgstr "<b>תבנית תאריך מהודרת</b>"
+msgstr "<b>מבנה תאריך מהודרת</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1021
 msgid "<b>Date Format</b>"
-msgstr "<b>תבנית תאריך</b>"
+msgstr "<b>מבנה תאריך</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1034
 msgid "<b>Time Format</b>"
-msgstr "<b>תבנית שעה</b>"
+msgstr "<b>מבנה שעה</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1054
 msgid "U_se 24-hour clock"
@@ -16305,7 +16304,7 @@ msgstr "ש_ימוש בשעון 24 שעות"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1060
 msgid "Use a 24 hour (instead of a 12 hour) time format."
-msgstr "שימוש בתבנית זמן בת 24 שעות (במקום 12 שעות)."
+msgstr "שימוש במבנה זמן בת 24 שעות (במקום 12 שעות)."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1075
 msgid "<b>Date Completion</b>"
@@ -16334,7 +16333,7 @@ msgstr "נא להזין מספר החודשים."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1162
 msgid "Use the date format specified by the system locale."
-msgstr "שמשוש בתבנית זמן המערכת."
+msgstr "שמשוש במבנה זמן המערכת."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1188
 msgid "<b>Numbers</b>"
@@ -16600,11 +16599,11 @@ msgstr "גופן ברירת המחדל להדפסת המחאה."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2312
 msgid "Print _date format"
-msgstr "הדפסת _תבנית תאריך"
+msgstr "הדפסת _מבנה תאריך"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2318
 msgid "Below the actual date, print the format of that date in 8 point type."
-msgstr "מתחת לתאריך בפועל, הדפסת תבנית התאריך בת 8 תווים."
+msgstr "מתחת לתאריך בפועל, הדפסת מבנה התאריך בת 8 תווים."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2330
 msgid "Print _blocking chars"
@@ -17134,7 +17133,7 @@ msgstr "אחזור שערים מקוון חדש לחשבונות ניירות ע
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:129
 msgid "Save Custom Check Format"
-msgstr "שמירת תבנית המחאה מותאמת אישית"
+msgstr "שמירת מבנה המחאה מותאמת אישית"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:192
 msgid ""
@@ -17142,9 +17141,9 @@ msgid ""
 "format\" selector of the Print Check dialog. Using the title of an existing "
 "custom format will cause that format to be overwritten."
 msgstr ""
-"הזנת כותרת לתבנית מותאמת אישית זו. כותרת זו תופיע בבורר 'תבנית המחאה' של "
-"תיבת דו-השיח 'הדפסת המחאה'. שימוש בכותרת של תבנית מותאמת אישית קיימת יגרום "
-"לדריסת תבנית זו."
+"הזנת כותרת למבנה מותאמת אישית זו. כותרת זו תופיע בבורר 'מבנה המחאה' של תיבת "
+"דו-השיח 'הדפסת המחאה'. שימוש בכותרת של מבנה מותאמת אישית קיימת יגרום לדריסת "
+"מבנה זו."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:244
 msgid "Inches"
@@ -17184,7 +17183,7 @@ msgstr "_הדפסה"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:386
 msgid "Check _format"
-msgstr "תבנית _המחאה"
+msgstr "מבנה _המחאה"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:401
 msgid "Check po_sition"
@@ -17192,7 +17191,7 @@ msgstr "מיקום המ_חאה"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:417
 msgid "_Date format"
-msgstr "תבנית _תאריך"
+msgstr "מבנה _תאריך"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:531
 msgid ""
@@ -17200,7 +17199,7 @@ msgid ""
 "ADDRESS item defined in order\n"
 "to print an address on the check."
 msgstr ""
-"תבנית ההמחאה חייבת לכלול\n"
+"מבנה ההמחאה חייבת לכלול\n"
 "פריט כתובת שהוגדר לצורך\n"
 "הדפסת הכתובת על גבי ההמחאה."
 
@@ -17264,7 +17263,7 @@ msgstr "מעלות"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1067
 msgid "_Save Format"
-msgstr "_שמירת תבנית"
+msgstr "_שמירת מבנה"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1176
 msgid "Splits Memo"
@@ -17280,7 +17279,7 @@ msgstr "חשבון פיצולים"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:1368
 msgid "Custom format"
-msgstr "תבנית מותאמת אישית"
+msgstr "מבנה מותאמת אישית"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
 msgid "Working..."
@@ -17356,7 +17355,7 @@ msgstr "<b>מידע גיליון סגנון חדש</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:811
 msgid "_Template"
-msgstr "_תבנית"
+msgstr "_מבנה"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
@@ -17611,7 +17610,7 @@ msgstr "סקירה"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1396
 msgid "Template Transaction"
-msgstr "תבנית תנועה"
+msgstr "מבנה תנועה"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1430
 msgid "Since Last Run..."
@@ -17817,7 +17816,7 @@ msgstr "UTC - זמן בינלאומי מתואם"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:33
 msgid "No Fancy Date Format"
-msgstr "אין תבנית תאריך מהודרת"
+msgstr "אין מבנה תאריך מהודרת"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:65
 msgid "%Y-%m-%d"
@@ -17833,7 +17832,7 @@ msgstr "קיצור"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:225
 msgid "Date format"
-msgstr "תבנית תאריך"
+msgstr "מבנה תאריך"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
@@ -19052,15 +19051,15 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:880
 msgid "Name for new template"
-msgstr "שם התבנית החדשה"
+msgstr "שם המבנה החדשה"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
 msgid " _Name of the new template:"
-msgstr " _שם התבנית החדשה:"
+msgstr " _שם המבנה החדשה:"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
 msgid "Enter a unique name for the new template."
-msgstr "נא להזין שם יחידאי לתבנית החדשה."
+msgstr "נא להזין שם יחידאי למבנה החדשה."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:989
 msgid "Online Transaction"
@@ -19129,7 +19128,7 @@ msgstr "_הוספת נוכחי"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1494
 msgid "Add the current online transaction as a new transaction template"
-msgstr "הוספת התנועה המקוונת הנוכחית כתבנית תנועה חדשה"
+msgstr "הוספת התנועה המקוונת הנוכחית כמבנה תנועה חדשה"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1506
 msgid "_Up"
@@ -19137,7 +19136,7 @@ msgstr "_מעלה"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1512
 msgid "Move the selected transaction template one row up"
-msgstr "העברת תבנית התנועות שנבחרה שורה אחת מעלה"
+msgstr "העברת מבנה התנועות שנבחרה שורה אחת מעלה"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1524
 msgid "_Down"
@@ -19145,7 +19144,7 @@ msgstr "_מטה"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1530
 msgid "Move the selected transaction template one row down"
-msgstr "העברת תבנית התנועות שנבחרה שורה אחת מטה"
+msgstr "העברת מבנה התנועות שנבחרה שורה אחת מטה"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1542
 msgid "_Sort"
@@ -19161,7 +19160,7 @@ msgstr "מ_חיקה"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1566
 msgid "Delete the currently selected transaction template"
-msgstr "מחיקת תבנית תנועה נוכחית שנבחרה"
+msgstr "מחיקת מבנה תנועה נוכחית שנבחרה"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1615
 msgid "_Templates"
@@ -19346,12 +19345,12 @@ msgstr "לא הוזנה מטרת ההעברה. נדרשת מטרה לביצוע 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:1047
 msgid ""
 "A template with the given name already exists. Please enter another name."
-msgstr "תבנית בעלת שם זה קיימת כבר. נא להזין שם שונה."
+msgstr "מבנה בעלת שם זה קיימת כבר. נא להזין שם שונה."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:1182
 #, c-format
 msgid "Do you really want to delete the template with the name \"%s\"?"
-msgstr "האם למחוק את התבנית '%s'?"
+msgstr "האם למחוק את המבנה '%s'?"
 
 #: gnucash/import-export/aqb/gnc-ab-getbalance.c:86
 #: gnucash/import-export/aqb/gnc-ab-gettrans.c:137
@@ -19470,7 +19469,7 @@ msgid "Unspecified"
 msgstr "לא מוגדר"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4365
+#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4387
 msgid "Bank"
 msgstr "בנק"
 
@@ -19713,7 +19712,7 @@ msgstr "יבוא _MT940"
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:134
 msgid ""
 "Import an end-of-day account statement in SWIFT MT940 format into GnuCash."
-msgstr "יבוא דף חשבון סוף יום באמצעות תבנית SWIFT MT940 לגנוקאש."
+msgstr "יבוא דף חשבון סוף יום באמצעות מבנה SWIFT MT940 לגנוקאש."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:138
 msgid "Import MT94_2"
@@ -19721,7 +19720,7 @@ msgstr "יבוא קובץ MT94_2"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:139
 msgid "Import an interim account statement in SWIFT MT942 format into GnuCash."
-msgstr "יבוא דף חשבון מלא באמצעות תבנית SWIFT MT940 לגנוקאש."
+msgstr "יבוא דף חשבון מלא באמצעות מבנה SWIFT MT940 לגנוקאש."
 
 #. Translators: DTAUS is a traditional german exchange format.
 #. https://de.wikipedia.org/wiki/Datentr%C3%A4geraustauschverfahren
@@ -19768,7 +19767,7 @@ msgstr "הודעות ניפוי תקלים HBCI מפורטות"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:35
 msgid "DTAUS import data format"
-msgstr "תבנית קובץ יבוא DTAUS"
+msgstr "מבנה קובץ יבוא DTAUS"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:36
 msgid ""
@@ -19776,13 +19775,13 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
-"הגדרה זו קובעת את תבנית הנתונים בה יעשה שימוש בעת יבוא קבצי DTAUS. ספרית "
-"אייקיובנקינג מציעה מדוון תבניות יבוא (נקראות 'פרופילים') שמהן, ניתן כאן, "
+"הגדרה זו קובעת את מבנה הנתונים בה יעשה שימוש בעת יבוא קבצי DTAUS. ספרית "
+"אייקיו-בנקינג מציעה מגוון מבני יבוא (נקראות 'פרופילים') שמהן, ניתן כאן, "
 "לבחור אחת."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:40
 msgid "CSV import data format"
-msgstr "תבנית קובץ יבוא CSV"
+msgstr "מבנה קובץ יבוא CSV"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:41
 msgid ""
@@ -19790,13 +19789,12 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
-"הגדרה זו קובעת את תבנית הנתונים בה יעשה שימוש בעת יבוא קבצי CSV. ספרית "
-"אייקיובנקינג מציעה מדוון תבניות יבוא (נקראות 'פרופילים') שמהן, ניתן כאן, "
-"לבחור אחת."
+"הגדרה זו קובעת את מבנה הנתונים בה יעשה שימוש בעת יבוא קבצי CSV. ספרית אייקיו-"
+"בנקינג מציעה מגוון מבני יבוא (נקראות 'פרופילים') שמהן, ניתן כאן, לבחור אחת."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:45
 msgid "SWIFT MT940 import data format"
-msgstr "תבנית קובץ יבוא סוויפט MT940"
+msgstr "מבנה קובץ יבוא סוויפט MT940"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:46
 msgid ""
@@ -19804,13 +19802,12 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
-"הגדרת תבנית הנתונים בה יעשה שימוש בעת יבוא קבצי SWIFT MT940. ספרית "
-"אייקיובנקינג מציעה מדוון תבניות יבוא (נקראות 'פרופילים') שמהן, ניתן כאן, "
-"לבחור אחת."
+"הגדרת מבנה הנתונים בה יעשה שימוש בעת יבוא קבצי SWIFT MT940. ספרית אייקיו-"
+"בנקינג מציעה מגוון מבני יבוא (נקראות 'פרופילים') שמהן, ניתן כאן, לבחור אחת."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:50
 msgid "SWIFT MT942 import data format"
-msgstr "תבנית קובץ יבוא סוויפט MT942"
+msgstr "מבנה קובץ יבוא סוויפט MT942"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:51
 msgid ""
@@ -19818,9 +19815,8 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
-"הגדרת תבנית הנתונים בה יעשה שימוש בעת יבוא קבצי SWIFT MT942. ספרית "
-"אייקיובנקינג מציעה מדוון תבניות יבוא (נקראות 'פרופילים') שמהן, ניתן כאן, "
-"לבחור אחת."
+"הגדרת מבנה נתונים בו יעשה שימוש בעת יבוא קבצי SWIFT MT942. ספרית אייקיו-"
+"בנקינג מציעה מגוון מבני יבוא (נקראות 'פרופילים') שמהן, ניתן כאן, לבחור אחת."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:298
 #, c-format
@@ -20133,10 +20129,10 @@ msgstr ""
 "\n"
 "\n"
 "לכל תנועה יהיו מספר שורות שעשויות לדרוש מניפולציה נוספת בכדי להביא אותן "
-"לתבנית בה ניתן להשתמש.\n"
+"למבנה בה ניתן להשתמש.\n"
 "\n"
 "כל תנועה תופיע פעם אחת בייצוא, בסדר עיבוד החשבונות\n"
-"תבנית פלט מחיר/שער נשלט מהגדרת העדפות,\n"
+"מבנה פלט מחיר/שער נשלט מהגדרת העדפות,\n"
 "כללי -> אילוץ הצגת מחירים כמספר עשרוני\n"
 "\n"
 "נא לבחור את ההגדרות הדרושות לקובץ והקשה על 'הבא' כדי להמשיך או 'ביטול' "
@@ -20167,7 +20163,7 @@ msgstr ""
 "לכל תנועה יהיו מספר שורות שעשויות לדרוש מניפולציה נוספת בכדי להביא אותן "
 "לפריסה שניתנת לשימוש. כל תנועה תופיע פעם אחת בייצוא, בסדר עיבוד החשבונות\n"
 "\n"
-"פלט תבנית מחיר/שער נשלט בהגדרות העדפות,\n"
+"פלט מבנה מחיר/שער נשלט בהגדרות העדפות,\n"
 "כללי -> מספרים -> אילוץ תצוגת מחיר כמספר עשרוני\n"
 "\n"
 "בבחירת פריסה פשוטה, הפלט יוצג כיומן עם שורה בודדת וככזה, חלק מפרטי ההעברה "
@@ -20636,7 +20632,7 @@ msgstr "הערך אינו מכיל מספר תקין."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:135
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:140
 msgid "Value can't be parsed into a number using the selected currency format."
-msgstr "לא ניתן לפרוס ערך למספר תוך שימוש בתבנית המטבעה שנבחרה."
+msgstr "לא ניתן לפרוס ערך למספר תוך שימוש במבנה המטבעה שנבחרה."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:121
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:197
@@ -20930,7 +20926,7 @@ msgstr "ע+מ"
 #: gnucash/import-export/import-main-matcher.c:1102
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
-msgstr "צ"
+msgstr "ה"
 
 #: gnucash/import-export/import-main-matcher.c:1109
 msgid "Info"
@@ -21040,59 +21036,59 @@ msgstr "_הרצה מחודשת של קובץ log. גנוקאש..."
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr "הרצה מחודשת של קובץ לוג של גנוקאש אחרי התרסקות. לא ניתן להסגה."
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:643
+#: gnucash/import-export/ofx/gnc-ofx-import.c:647
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "חשבון ניירות ערך עבור בטוחה '%s'"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:816
+#: gnucash/import-export/ofx/gnc-ofx-import.c:824
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "חשבון הכנסות עבור בטוחה '%s'"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:937
+#: gnucash/import-export/ofx/gnc-ofx-import.c:946
 msgid "Unknown OFX account"
 msgstr "חשבון OFX לא ידוע"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:960
+#: gnucash/import-export/ofx/gnc-ofx-import.c:969
 msgid "Unknown OFX checking account"
 msgstr "חשבון עובר ושב OFX לא ידוע"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:964
+#: gnucash/import-export/ofx/gnc-ofx-import.c:973
 msgid "Unknown OFX savings account"
 msgstr "חשבון חיסכון OFX לא ידוע"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:968
+#: gnucash/import-export/ofx/gnc-ofx-import.c:977
 msgid "Unknown OFX money market account"
 msgstr "חשבון שוק מטח OFX לא ידוע"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:972
+#: gnucash/import-export/ofx/gnc-ofx-import.c:981
 msgid "Unknown OFX credit line account"
 msgstr "חשבון קו אשראי OFX לא ידוע"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:977
+#: gnucash/import-export/ofx/gnc-ofx-import.c:986
 msgid "Unknown OFX CMA account"
 msgstr "חשבון OFX CMA לא ידוע"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:981
+#: gnucash/import-export/ofx/gnc-ofx-import.c:990
 msgid "Unknown OFX credit card account"
 msgstr "חשבון כרטיס אשראי OFX לא ידוע"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:985
+#: gnucash/import-export/ofx/gnc-ofx-import.c:994
 msgid "Unknown OFX investment account"
 msgstr "חשבון השקעות OFX לא ידוע"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1177
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1191
 #, c-format
 msgid ""
 "OFX file '%s' imported, %d transactions processed, no transactions to match"
 msgstr "קובץ OFX '%s' יובא, %d תנועות עובדו, לא נמצאו תנועות להתאמה"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1228
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1242
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr "פתיחת קובץ קוויקן פיננשיאל אקסצ'נג' (*.ofx, *.qfx)"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1233
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1247
 msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "בחירת קובץ OFX/QFX אחד או יותר לעיבוד"
 
@@ -21397,7 +21393,7 @@ msgstr "המערכת תתעלם משורת בטוחה"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:525
 msgid "File does not appear to be in QIF format"
-msgstr "נראה שהקובץ אינו בתבנית QIF"
+msgstr "נראה שהקובץ אינו במבנה QIF"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:701
 msgid "Transaction date"
@@ -21461,7 +21457,7 @@ msgstr "ניתוח תנועות"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:974
 msgid "Unrecognized or inconsistent format."
-msgstr "תבנית לא מזוהה או לא עקבית."
+msgstr "מבנה לא מזוהה או לא עקבית."
 
 #: gnucash/import-export/qif-imp/qif-file.scm:1016
 msgid "Parsing failed."
@@ -21757,7 +21753,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:527
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1091
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4366
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4388
 msgid "Cash"
 msgstr "מזומן"
 
@@ -22228,7 +22224,7 @@ msgstr "רשימה"
 #: gnucash/report/eguile.scm:150
 #, scheme-format
 msgid "Template file \"~a\" can not be read"
-msgstr "קובץ תבנית '~a' לא ניתן לקריאה"
+msgstr "קובץ מבנה '~a' לא ניתן לקריאה"
 
 #: gnucash/report/html-acct-table.scm:636
 #: gnucash/report/reports/standard/trial-balance.scm:279
@@ -22788,8 +22784,8 @@ msgid ""
 "Some reports stored in a legacy format were found. This format is not "
 "supported anymore so these reports may not have been restored properly."
 msgstr ""
-"נמצאו מספר דוחות המאוחסנים בתבנית מדור קודם. תבנית זו אינה נתמכת יותר כך "
-"שיתכן ודוחות אלו לא שוחזרו כראוי."
+"נמצאו מספר דוחות המאוחסנים במבנה מדור קודם. מבנה זו אינה נתמכת יותר כך שיתכן "
+"ודוחות אלו לא שוחזרו כראוי."
 
 #: gnucash/report/report-core.scm:287
 msgid "Enter a descriptive name for this report."
@@ -22962,18 +22958,8 @@ msgid "Sort order."
 msgstr "סדר מיון."
 
 #: gnucash/report/reports/aging.scm:360
-#: gnucash/report/reports/standard/new-aging.scm:111
-msgid "Increasing"
-msgstr "גָדֵל"
-
-#: gnucash/report/reports/aging.scm:360
 msgid "0 .. 999,999.99, A .. Z."
 msgstr "0 .. 999,999.99, א .. ת."
-
-#: gnucash/report/reports/aging.scm:361
-#: gnucash/report/reports/standard/new-aging.scm:112
-msgid "Decreasing"
-msgstr "עולה"
 
 #: gnucash/report/reports/aging.scm:361
 msgid "999,999.99 .. 0, Z .. A."
@@ -23634,7 +23620,7 @@ msgstr "אפשרות מספר היא ~a."
 #: gnucash/report/reports/example/hello-world.scm:414
 #, scheme-format
 msgid "The number option formatted as currency is ~a."
-msgstr "אפשרויות מספר בתבנית מטבע הוא ~a."
+msgstr "אפשרויות מספר במבנה מטבע הוא ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:426
 msgid "Items you selected:"
@@ -24918,13 +24904,13 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:171
 msgid "Negative amount format"
-msgstr "תבנית סכומים שליליים"
+msgstr "מבנה סכומים שליליים"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:173
 msgid ""
 "The formatting to use for negative amounts: with a leading sign, or "
 "enclosing brackets."
-msgstr "התבנית שתשמש לסכומים שליליים: סימן מוביל, או סוגריים סוגרים."
+msgstr "המבנה שתשמש לסכומים שליליים: סימן מוביל, או סוגריים סוגרים."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:175
 msgid "Font family"
@@ -24932,7 +24918,7 @@ msgstr "משפחת גופן"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:176
 msgid "Font definition in CSS font-family format."
-msgstr "הגדרות גופן היא גופנים בתבנית משפחת CSS."
+msgstr "הגדרות גופן היא גופנים במבנה משפחת CSS."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:177
 msgid "Font size"
@@ -24940,13 +24926,13 @@ msgstr "גודל גופן"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:178
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
-msgstr "גודל גופן בתבנית גודל-גופן CSS (כלומר, 'בינוני' או '10נק')."
+msgstr "גודל גופן במבנה גודל-גופן CSS (כלומר, 'בינוני' או '10נק')."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:179
 #: gnucash/report/reports/standard/receipt.scm:45
 #: gnucash/report/reports/standard/taxinvoice.scm:103
 msgid "Template file"
-msgstr "קובץ תבנית"
+msgstr "קובץ מבנה"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:181
 msgid ""
@@ -24954,7 +24940,7 @@ msgid ""
 "in your .gnucash directory, or else in its proper place within the GnuCash "
 "installation directories."
 msgstr ""
-"שם קובץ תבנית האגויל של דוח זה. קובץ זה אמור להיות בספרית gnucash. או במקומו "
+"שם קובץ מבנה האגויל של דוח זה. קובץ זה אמור להיות בספרית gnucash. או במקומו "
 "הטבעי בספריות ההתקנה של גנוקאש."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:182
@@ -25028,7 +25014,7 @@ msgstr ""
 "את 'הערות נוספות' באפשרויות על מנת להעלים הודעה זו)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:392
-#: libgnucash/engine/Scrub.c:117
+#: libgnucash/engine/Scrub.c:124
 msgid "Orphan"
 msgstr "יתומים"
 
@@ -25038,7 +25024,7 @@ msgstr "גיליון מאזן תוך שימוש באגויל-גיאנסי"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:568
 msgid "Display a balance sheet (using eguile template)"
-msgstr "הצגת גיליון מאזן (שימוש בתבנית אגויל)"
+msgstr "הצגת גיליון מאזן (שימוש במבנה אגויל)"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:52
 msgid ""
@@ -25205,12 +25191,12 @@ msgid "missing"
 msgstr "חסר"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
-#: libgnucash/engine/Account.cpp:4367
+#: libgnucash/engine/Account.cpp:4389
 msgid "Asset"
 msgstr "נכסים"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1109
-#: libgnucash/engine/Account.cpp:4369
+#: libgnucash/engine/Account.cpp:4391
 msgid "Liability"
 msgstr "התחייבות"
 
@@ -26096,7 +26082,7 @@ msgstr "הפקת דוחות לחשבונות אלו."
 #: gnucash/report/reports/standard/income-statement.scm:118
 #: gnucash/report/reports/standard/trial-balance.scm:104
 msgid "Closing Entries pattern"
-msgstr "תבנית רשומות סגירה"
+msgstr "מבנה רשומות סגירה"
 
 #: gnucash/report/reports/standard/equity-statement.scm:88
 #: gnucash/report/reports/standard/income-statement.scm:120
@@ -26127,7 +26113,7 @@ msgstr "דפוס רשומות סגירה הן ביטוי רגיל"
 #: gnucash/report/reports/standard/trial-balance.scm:114
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression."
-msgstr "התייחסות לתבנית רשומות סגירה כאל ביטוי רגיל."
+msgstr "התייחסות למבנה רשומות סגירה כאל ביטוי רגיל."
 
 #: gnucash/report/reports/standard/equity-statement.scm:425
 #: gnucash/report/reports/standard/income-statement.scm:481
@@ -26498,8 +26484,8 @@ msgid ""
 msgstr "האם לכלול שורת סיכום חשבונות סחר מוכללים."
 
 #: gnucash/report/reports/standard/income-statement.scm:518
-#: libgnucash/engine/Account.cpp:4379 libgnucash/engine/Scrub.c:472
-#: libgnucash/engine/Scrub.c:537
+#: libgnucash/engine/Account.cpp:4401 libgnucash/engine/Scrub.c:481
+#: libgnucash/engine/Scrub.c:549
 msgid "Trading"
 msgstr "סחר"
 
@@ -27497,7 +27483,7 @@ msgstr "הערות נוספות"
 
 #: gnucash/report/reports/standard/receipt.scm:66
 msgid "Today date format"
-msgstr "תבנית תאריך היום"
+msgstr "מבנה תאריך היום"
 
 #: gnucash/report/reports/standard/receipt.scm:81
 msgid ""
@@ -27505,7 +27491,7 @@ msgid ""
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
-"שם קובץ תבנית האגויל של דוח זה. קובץ זה אמור להיות בספרית gnucash. או במקומו "
+"שם קובץ מבנה האגויל של דוח זה. קובץ זה אמור להיות בספרית gnucash. או במקומו "
 "הטבעי בספריות ההתקנה של גנוקאש."
 
 #: gnucash/report/reports/standard/receipt.scm:84
@@ -27537,7 +27523,7 @@ msgid ""
 "display the logo at its natural width.  The height of the logo will be "
 "scaled accordingly."
 msgstr ""
-"רוחב סמל הכותרת העליונה בתבנית CSS, לדוגמה 10% או 32px. נא להשאיר ריק על מנת "
+"רוחב סמל הכותרת העליונה במבנה CSS, לדוגמה 10% או 32px. נא להשאיר ריק על מנת "
 "להציג את הסמל ברוחבו הטבעי. גובה הסמל יקטן בהתאמה."
 
 #: gnucash/report/reports/standard/receipt.scm:100
@@ -27550,12 +27536,12 @@ msgid ""
 "display the logo at its natural width.  The height of the logo will be "
 "scaled accordingly."
 msgstr ""
-"רוחב סמל הכותרת התחתונה בתבנית CSS, לדוגמה 10% או 32px. נא להשאיר ריק להצגת "
+"רוחב סמל הכותרת התחתונה במבנה CSS, לדוגמה 10% או 32px. נא להשאיר ריק להצגת "
 "הסמל ברוחבו הטבעי. גובה הסמל יוקטן בהתאם."
 
 #: gnucash/report/reports/standard/receipt.scm:107
 msgid "The format for the date->string conversion for today's date."
-msgstr "התבנית להמרת תאריך->מחרוזת לתאריך היום."
+msgstr "המבנה להמרת תאריך->מחרוזת לתאריך היום."
 
 #. Translators: Boost::date_time format string
 #. "%l:%M %P, %e %B %Y" means " 9:56 pm, 19 June 2019"
@@ -27847,7 +27833,7 @@ msgid ""
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
-"שם קובץ תבנית האגויל של דוח זה. קובץ זה אמור להיות בספרית gnucash. או במקומו "
+"שם קובץ מבנה האגויל של דוח זה. קובץ זה אמור להיות בספרית gnucash. או במקומו "
 "הטבעי בספריות ההתקנה של גנוקאש."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:152
@@ -27869,7 +27855,7 @@ msgid ""
 "the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
-"רוחב סמל בתבנית CSS, לדוגמה 10% או 32px. נא להשאיר ריק על מנת להציג את הסמל "
+"רוחב סמל במבנה CSS, לדוגמה 10% או 32px. נא להשאיר ריק על מנת להציג את הסמל "
 "ברוחבו הטבעי. גובה הסמל יוקטן בהתאם."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:166
@@ -27907,7 +27893,7 @@ msgstr "CSS משובץ."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:298
 msgid "Display a customer invoice with tax columns (using eguile template)"
-msgstr "הצגת חשבונית לקוח עם עמודות מס (שימוש בתבנית אגויל)"
+msgstr "הצגת חשבונית לקוח עם עמודות מס (שימוש במבנה אגויל)"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:310
 msgid "Unit"
@@ -27947,7 +27933,7 @@ msgstr "חשבונית מס אוסטרלית"
 msgid ""
 "Display an Australian customer invoice with tax columns (using eguile "
 "template)"
-msgstr "הצגת חשבונית מס אוסטרלית עם עמודות מס (שימוש בתבנית אגויל)"
+msgstr "הצגת חשבונית מס אוסטרלית עם עמודות מס (שימוש במבנה אגויל)"
 
 #: gnucash/report/reports/standard/trial-balance.scm:61
 #: gnucash/report/reports/standard/trial-balance.scm:570
@@ -28013,7 +27999,7 @@ msgstr "דפוס רשומות תאום תלוית רישיות"
 
 #: gnucash/report/reports/standard/trial-balance.scm:98
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
-msgstr "גורם לתבנית רשומות תאום להיות תלויות רישיות."
+msgstr "גורם למבנה רשומות תאום להיות תלויות רישיות."
 
 #: gnucash/report/reports/standard/trial-balance.scm:100
 msgid "Adjusting Entries Pattern is regular expression"
@@ -28022,7 +28008,7 @@ msgstr "דפוס רשומות תאום כביטוי רגיל"
 #: gnucash/report/reports/standard/trial-balance.scm:102
 msgid ""
 "Causes the Adjusting Entries Pattern to be treated as a regular expression."
-msgstr "גורם לתבנית רשומות תאום להיות מטופלות כביטוי רגיל."
+msgstr "גורם למבנה רשומות תאום להיות מטופלות כביטוי רגיל."
 
 #: gnucash/report/reports/standard/trial-balance.scm:204
 msgid "Current Trial Balance"
@@ -29176,7 +29162,7 @@ msgstr "איש הקשר של החברה"
 
 #: libgnucash/app-utils/business-options.scm:76
 msgid "Fancy Date Format"
-msgstr "תבנית תאריך מהודרת"
+msgstr "מבנה תאריך מהודרת"
 
 #: libgnucash/app-utils/business-options.scm:77
 msgid "custom"
@@ -29192,7 +29178,7 @@ msgstr "מונים"
 
 #: libgnucash/app-utils/business-prefs.scm:40
 msgid "Customer number format"
-msgstr "תבנית מספר לקוח"
+msgstr "מבנה מספר לקוח"
 
 #: libgnucash/app-utils/business-prefs.scm:41
 msgid "Customer number"
@@ -29202,8 +29188,7 @@ msgstr "מספר לקוח"
 msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
-msgstr ""
-"תבנית המחרוזת שתשמש ליצירת מספרי לקוח. זוהי תבנית מחרוזת בסגנון printf."
+msgstr "מבנה המחרוזת שתשמש ליצירת מספרי לקוח. זוהי מבנה מחרוזת בסגנון printf."
 
 #: libgnucash/app-utils/business-prefs.scm:43
 msgid ""
@@ -29213,7 +29198,7 @@ msgstr "מספר הלקוח הקודם שנוצר. מספר זה יגדל ב 1 �
 
 #: libgnucash/app-utils/business-prefs.scm:44
 msgid "Employee number format"
-msgstr "תבנית מזהה עובד"
+msgstr "מבנה מזהה עובד"
 
 #: libgnucash/app-utils/business-prefs.scm:45
 msgid "Employee number"
@@ -29223,8 +29208,7 @@ msgstr "מספר עובד"
 msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
-msgstr ""
-"תבנית המחרוזת שתשמש ליצירת מספרי עובד. זוהי תבנית מחרוזת בסגנון printf."
+msgstr "מבנה המחרוזת שתשמש ליצירת מספרי עובד. זוהי מבנה מחרוזת בסגנון printf."
 
 #: libgnucash/app-utils/business-prefs.scm:47
 msgid ""
@@ -29234,14 +29218,14 @@ msgstr "מספר העובד הקודם שנוצר. מספר זה יגדל ב 1 �
 
 #: libgnucash/app-utils/business-prefs.scm:48
 msgid "Invoice number format"
-msgstr "תבנית מספר חשבונית"
+msgstr "מבנה מספר חשבונית"
 
 #: libgnucash/app-utils/business-prefs.scm:50
 msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
 msgstr ""
-"תבנית המחרוזת שתשמש ליצירת מספרי חשבוניות. זוהי תבנית מחרוזת בסגנון printf."
+"מבנה המחרוזת שתשמש ליצירת מספרי חשבוניות. זוהי מבנה מחרוזת בסגנון printf."
 
 #: libgnucash/app-utils/business-prefs.scm:51
 msgid ""
@@ -29252,7 +29236,7 @@ msgstr ""
 
 #: libgnucash/app-utils/business-prefs.scm:52
 msgid "Bill number format"
-msgstr "תבנית מספר חשבונית ספק"
+msgstr "מבנה מספר חשבונית ספק"
 
 #: libgnucash/app-utils/business-prefs.scm:53
 msgid "Bill number"
@@ -29263,8 +29247,7 @@ msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
 msgstr ""
-"תבנית המחרוזת שתשמש ליצירת מספרי חשבונית ספק. זוהי תבנית מחרוזת בסגנון "
-"printf."
+"מבנה המחרוזת שתשמש ליצירת מספרי חשבונית ספק. זוהי מבנה מחרוזת בסגנון printf."
 
 #: libgnucash/app-utils/business-prefs.scm:55
 msgid ""
@@ -29274,7 +29257,7 @@ msgstr "מספר החיוב הקודם שנוצר. מספר זה יגדל ב 1 �
 
 #: libgnucash/app-utils/business-prefs.scm:56
 msgid "Expense voucher number format"
-msgstr "תבנית מספר שובר הוצאות"
+msgstr "מבנה מספר שובר הוצאות"
 
 #: libgnucash/app-utils/business-prefs.scm:57
 msgid "Expense voucher number"
@@ -29285,8 +29268,7 @@ msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
-"תבנית המחרוזת שתשמש ליצירת מספרי שוברי הוצאה. זוהי תבנית מחרוזת בסגנון "
-"printf."
+"מבנה המחרוזת שתשמש ליצירת מספרי שוברי הוצאה. זוהי מבנה מחרוזת בסגנון printf."
 
 #: libgnucash/app-utils/business-prefs.scm:59
 msgid ""
@@ -29297,7 +29279,7 @@ msgstr ""
 
 #: libgnucash/app-utils/business-prefs.scm:60
 msgid "Job number format"
-msgstr "תבנית מספר ריכוז"
+msgstr "מבנה מספר ריכוז"
 
 #: libgnucash/app-utils/business-prefs.scm:61
 msgid "Job number"
@@ -29307,8 +29289,7 @@ msgstr "מספר ריכוז"
 msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
-msgstr ""
-"תבנית המחרוזת שתשמש ליצירת מספרי ריכוז. זוהי תבנית מחרוזת בסגנון printf."
+msgstr "מבנה המחרוזת שתשמש ליצירת מספרי ריכוז. זוהי מבנה מחרוזת בסגנון printf."
 
 #: libgnucash/app-utils/business-prefs.scm:63
 msgid ""
@@ -29318,7 +29299,7 @@ msgstr "מספר הריכוז הקודם שנוצר. מספר זה יגדל ב 1
 
 #: libgnucash/app-utils/business-prefs.scm:64
 msgid "Order number format"
-msgstr "תבנית מספר הזמנה"
+msgstr "מבנה מספר הזמנה"
 
 #: libgnucash/app-utils/business-prefs.scm:65
 msgid "Order number"
@@ -29328,8 +29309,7 @@ msgstr "מספר הזמנה"
 msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
-msgstr ""
-"תבנית המחרוזת שתשמש ליצירת מספרי הזמנה. זוהי תבנית מחרוזת בסגנון printf."
+msgstr "מבנה המחרוזת שתשמש ליצירת מספרי הזמנה. זוהי מבנה מחרוזת בסגנון printf."
 
 #: libgnucash/app-utils/business-prefs.scm:67
 msgid ""
@@ -29339,7 +29319,7 @@ msgstr "מספר ההזמנה הקודמת שנוצרה. מספר זה יגדל 
 
 #: libgnucash/app-utils/business-prefs.scm:68
 msgid "Vendor number format"
-msgstr "תבנית מזהה ספק"
+msgstr "מבנה מזהה ספק"
 
 #: libgnucash/app-utils/business-prefs.scm:69
 msgid "Vendor number"
@@ -29349,7 +29329,7 @@ msgstr "מספר ספק"
 msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
-msgstr "תבנית המחרוזת שתשמש ליצירת מספרי ספק. זוהי תבנית מחרוזת בסגנון printf."
+msgstr "מבנה המחרוזת שתשמש ליצירת מספרי ספק. זוהי מבנה מחרוזת בסגנון printf."
 
 #: libgnucash/app-utils/business-prefs.scm:71
 msgid ""
@@ -29407,7 +29387,7 @@ msgstr "טבלת מס ברירת מחדל להחלה על ספקים."
 
 #: libgnucash/app-utils/business-prefs.scm:134
 msgid "The default date format used for fancy printed dates."
-msgstr "תבנית תאריך ברירת המחדל המשמשת להדפסת תאריך מהודר."
+msgstr "מבנה תאריך ברירת המחדל המשמשת להדפסת תאריך מהודר."
 
 #: libgnucash/app-utils/business-prefs.scm:142
 msgid ""
@@ -29905,7 +29885,7 @@ msgid ""
 "safely remove the old directory."
 msgstr ""
 "במידה ואין בכוונתכם להמשיך ולהשתמש במערכת זו ב {1} ‏2.6.x‏‏ או ישן יותר, ניתן "
-"להסיר בבטחה את הספרייה הישנה."
+"להסיר בבטחה את הספריה הישנה."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:690
 msgid "In addition:"
@@ -29952,40 +29932,40 @@ msgstr ""
 "להלן רשימת שמות החשבונות הבעיתים:\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4368
+#: libgnucash/engine/Account.cpp:4390
 msgid "Credit Card"
 msgstr "כרטיס אשראי"
 
-#: libgnucash/engine/Account.cpp:4370
+#: libgnucash/engine/Account.cpp:4392
 msgid "Stock"
 msgstr "נייר ערך"
 
-#: libgnucash/engine/Account.cpp:4371
+#: libgnucash/engine/Account.cpp:4393
 msgid "Mutual Fund"
 msgstr "קרן נאמנות"
 
-#: libgnucash/engine/Account.cpp:4376
+#: libgnucash/engine/Account.cpp:4398
 msgid "A/Receivable"
 msgstr "חייבים"
 
-#: libgnucash/engine/Account.cpp:4377
+#: libgnucash/engine/Account.cpp:4399
 msgid "A/Payable"
 msgstr "זכאים"
 
-#: libgnucash/engine/Account.cpp:4378
+#: libgnucash/engine/Account.cpp:4400
 msgid "Root"
 msgstr "שורש"
 
-#: libgnucash/engine/Account.cpp:4820
+#: libgnucash/engine/Account.cpp:4842
 msgid "Orphaned Gains"
 msgstr "רווחים יתומים"
 
-#: libgnucash/engine/Account.cpp:4834 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4856 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "רוח/הפסד ממומש"
 
-#: libgnucash/engine/Account.cpp:4836
+#: libgnucash/engine/Account.cpp:4858
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -30026,15 +30006,15 @@ msgstr "m-d"
 
 #: libgnucash/engine/gnc-datetime.cpp:554
 msgid "Unknown date format specifier passed as argument."
-msgstr "תבנית תאריך לא ידוע הועברה כמשתנה."
+msgstr "מבנה תאריך לא ידוע הועברה כמשתנה."
 
 #: libgnucash/engine/gnc-datetime.cpp:559
 msgid "Value can't be parsed into a date using the selected date format."
-msgstr "לא ניתן לפרוס ערך לתאריך תוך שימוש בתבנית התאריך שנבחרה."
+msgstr "לא ניתן לפרוס ערך לתאריך תוך שימוש במבנה התאריך שנבחרה."
 
 #: libgnucash/engine/gnc-datetime.cpp:564
 msgid "Value appears to contain a year while the selected format forbids this."
-msgstr "נראה שהערך מכיל שנה בעוד שהתבנית שנבחרה מונעת זאת."
+msgstr "נראה שהערך מכיל שנה בעוד שהמבנה שנבחרה מונעת זאת."
 
 #: libgnucash/engine/gnc-features.c:119
 msgid ""
@@ -30190,12 +30170,12 @@ msgstr "בדיקת דבוקות עסקיות בחשבון %s: %u מ %u"
 msgid "Checking business splits in account %s: %u of %u"
 msgstr "בדיקת פיצולים עסקיים בחשבון %s: %u מ %u"
 
-#: libgnucash/engine/Scrub.c:134
+#: libgnucash/engine/Scrub.c:142
 #, c-format
 msgid "Looking for orphans in account %s: %u of %u"
 msgstr "חיפוש יתומים בחשבון %s: %u מ %u"
 
-#: libgnucash/engine/Scrub.c:344
+#: libgnucash/engine/Scrub.c:352
 #, c-format
 msgid "Looking for imbalances in account %s: %u of %u"
 msgstr "חיפוש חוסר איזון בחשבון %s: %u מ %u"
@@ -30217,6 +30197,15 @@ msgstr "התנועה בוטלה"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "אין עזרה זמניה."
+
+#~ msgid "Company Name "
+#~ msgstr "שם החברה "
+
+#~ msgid "Increasing"
+#~ msgstr "גָדֵל"
+
+#~ msgid "Decreasing"
+#~ msgstr "עולה"
 
 #~ msgid "type"
 #~ msgstr "סוג"

@@ -297,7 +297,7 @@
          (show-rates? (get-option pagename-commodities optname-show-rates))
          (parent-mode (get-option gnc:pagename-display optname-parent-balance-mode))
          (parent-total-mode
-          (assq-ref '((t . #t) (f . #f) (canonically-tabbed . canonically-tabbed))
+          (assq-ref '((t . #t) (f . #f))
                     (get-option gnc:pagename-display optname-parent-total-mode)))
          (show-zb-accts? (get-option gnc:pagename-display optname-show-zb-accts))
          (omit-zb-bals? (get-option gnc:pagename-display optname-omit-zb-bals))
