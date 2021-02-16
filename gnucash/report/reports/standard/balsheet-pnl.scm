@@ -820,6 +820,7 @@ also show overall period profit & loss."))
              ((eq? price-source 'pricedb-latest) (current-time))
              ((eq? col-idx 'overall-period) enddate)
              ((eq? report-type 'balsheet) (vector-ref report-dates-vec col-idx))
+             ((= col-idx (- num-report-dates 2)) enddate)
              ((eq? report-type 'pnl)
               (decdate (vector-ref report-dates-vec (1+ col-idx)) DayDelta)))))
 
@@ -1168,14 +1169,10 @@ also show overall period profit & loss."))
                                                   optname-include-overall-period))
              (col-idx->datepair
               (lambda (idx)
-                (cond
-                 ((eq? idx 'overall-period)
-                  (cons startdate enddate))
-                 ((= idx (- num-report-dates 2))
-                  (cons (vector-ref report-dates-vec idx) enddate))
-                 (else
-                  (cons (vector-ref report-dates-vec idx)
-                        (decdate (vector-ref report-dates-vec (1+ idx)) DayDelta))))))
+                (cons (if (eq? idx 'overall-period)
+                          startdate
+                          (vector-ref report-dates-vec idx))
+                      (col-idx->price-date idx))))
 
              (col-idx->monetarypair (lambda (balancelist idx)
                                       (if (eq? idx 'overall-period)
