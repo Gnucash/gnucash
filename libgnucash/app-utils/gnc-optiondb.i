@@ -40,6 +40,7 @@ namespace std {
 
  //%module sw_gnc_optiondb
 %{
+#include "gnc-optiondb.h"
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
 #include "gnc-option-date.hpp"
