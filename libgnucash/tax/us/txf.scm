@@ -624,7 +624,7 @@
     (cons 'N496 #(none "Sched C" "Other costs, cost of goods" 1 #t "" ((1996 "39") (1991 "37") (1990 "35") (1989 "36") (1988 "III,5") (1980 "C-1,5"))))
 
     (cons 'N497 #(not-impl "Sched C-EZ" "Schedule C-EZ" 1 #t ""))
-    (cons 'N500 #(none "Sched C-EZ" "Total expenses" 1 #t "" ((1992 "2"))))
+    (cons 'N500 #(none "Sched C-EZ" "Total expenses" 1 #t "" ((1992 "2")) 2018))
 
     (cons 'N325 #(not-impl "Sched E" "Schedule E" 1 #t ""))
     (cons 'N328 #(none "Sched E" "Advertising" 1 #t "" ((1990 "5") (1987 "6") (1981 "4") (1980 "VII"))))
