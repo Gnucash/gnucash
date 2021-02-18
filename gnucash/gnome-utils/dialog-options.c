@@ -39,7 +39,6 @@
 #include "gnc-account-sel.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-tree-model-account.h"
-#include "gnc-combott.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-general-select.h"
@@ -494,7 +493,6 @@ static void
 gnc_option_multichoice_cb (GtkWidget *widget, gpointer data)
 {
     GNCOption *option = data;
-    /* GtkComboBox per-item tooltip changes needed below */
     gnc_option_changed_widget_cb (widget, option);
 }
 
@@ -615,9 +613,8 @@ gnc_set_default_cost_policy_widget (SCM list_symbol)
                            gnc_scm_symbol_to_locale_string (list_symbol))
                            == 0)
             {
-                /* GtkComboBox per-item tooltip changes needed below */
-                gnc_combott_set_active (
-                    GNC_COMBOTT(
+                gtk_combo_box_set_active (
+                    GTK_COMBO_BOX(
                         book_currency_data->default_cost_policy_widget), i);
             }
             i++;
@@ -626,8 +623,8 @@ gnc_set_default_cost_policy_widget (SCM list_symbol)
     }
     else
     {
-        gnc_combott_set_active (
-            GNC_COMBOTT(book_currency_data->default_cost_policy_widget), -1);
+        gtk_combo_box_set_active (
+            GTK_COMBO_BOX(book_currency_data->default_cost_policy_widget), -1);
     }
 }
 
@@ -928,9 +925,9 @@ gnc_option_currency_accounting_non_book_cb (GtkWidget *widget, gpointer data)
 {
     gnc_currency_edit_clear_display (GNC_CURRENCY_EDIT(
                                      book_currency_data->book_currency_widget));
-    gnc_combott_set_active (GNC_COMBOTT(
-                            book_currency_data->default_cost_policy_widget),
-                            -1);
+    gtk_combo_box_set_active (GTK_COMBO_BOX(
+                              book_currency_data->default_cost_policy_widget),
+                              -1);
     gnc_set_default_gain_loss_account_widget (NULL);
     gtk_widget_show_all (book_currency_data->book_currency_vbox);
     gtk_widget_set_sensitive (book_currency_data->book_currency_vbox, FALSE);
@@ -1016,33 +1013,26 @@ gnc_option_create_date_widget (GNCOption *option)
         g_return_val_if_fail (num_values >= 0, NULL);
 
         {
-            /* GtkComboBox still does not support per-item tooltips, so have
-               created a basic one called Combott implemented in gnc-combott.
-               Have highlighted changes in this file with comments for when
-               the feature of per-item tooltips is implemented in gtk,
-               see https://bugs.gnucash.org/show_bug.cgi?id=303717 */
-
-            GtkListStore *store;
+            GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
+            GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
             GtkTreeIter  iter;
-
             char *itemstring;
-            char *description;
-            store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
-            /* Add values to the list store, entry and tooltip */
+
+            /* Add values to the list store */
             for (i = 0; i < num_values; i++)
             {
                 itemstring = gnc_option_permissible_value_name (option, i);
-                description = gnc_option_permissible_value_description (option, i);
                 gtk_list_store_append (store, &iter);
-                gtk_list_store_set (store, &iter, 0, itemstring, 1, description, -1);
+                gtk_list_store_set (store, &iter, 0, itemstring, -1);
                 if (itemstring)
                     g_free (itemstring);
-                if (description)
-                    g_free (description);
             }
-            /* Create the new Combo with tooltip and add the store */
-            rel_widget = GTK_WIDGET(gnc_combott_new ());
-            g_object_set (G_OBJECT(rel_widget), "model", GTK_TREE_MODEL(store), NULL );
+            /* Create the new Combo and add the store */
+            rel_widget = GTK_WIDGET(gtk_combo_box_new_with_model (GTK_TREE_MODEL(store)));
+
+            gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(rel_widget), renderer, TRUE);
+            gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT(rel_widget),
+                                           renderer, "text", 0);
             g_object_unref (store);
 
             g_signal_connect (G_OBJECT(rel_widget), "changed",
@@ -1121,34 +1111,29 @@ gnc_option_create_multichoice_widget (GNCOption *option)
     g_return_val_if_fail (num_values >= 0, NULL);
 
     {
-        /* GtkComboBox still does not support per-item tooltips, so have
-           created a basic one called Combott implemented in gnc-combott.
-           Have highlighted changes in this file with comments for when
-           the feature of per-item tooltips is implemented in gtk,
-           see https://bugs.gnucash.org/show_bug.cgi?id=303717 */
-        GtkListStore *store;
+        GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
+        GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
         GtkTreeIter  iter;
-
         char *itemstring;
-        char *description;
-        store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
-        /* Add values to the list store, entry and tooltip */
+
+        /* Add values to the list store */
         for (i = 0; i < num_values; i++)
         {
             itemstring = gnc_option_permissible_value_name (option, i);
-            description = gnc_option_permissible_value_description (option, i);
+
             gtk_list_store_append (store, &iter);
             gtk_list_store_set (store, &iter, 0,
-                                (itemstring && *itemstring) ? _(itemstring) : "", 1,
-                                (description && *description) ? _(description) : "", -1);
+                                (itemstring && *itemstring) ? _(itemstring) : "", -1);
+
             if (itemstring)
                 g_free (itemstring);
-            if (description)
-                g_free (description);
         }
-        /* Create the new Combo with tooltip and add the store */
-        widget = GTK_WIDGET(gnc_combott_new ());
-        g_object_set (G_OBJECT( widget ), "model", GTK_TREE_MODEL(store), NULL );
+        /* Create the new Combo and add the store */
+        widget = GTK_WIDGET(gtk_combo_box_new_with_model (GTK_TREE_MODEL(store)));
+
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(widget), renderer, TRUE);
+        gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT(widget),
+                                       renderer, "text", 0);
         g_object_unref (store);
 
         g_signal_connect (G_OBJECT(widget), "changed",
@@ -3259,8 +3244,7 @@ gnc_option_set_ui_value_multichoice (GNCOption *option, gboolean use_default,
         return TRUE;
     else
     {
-        /* GtkComboBox per-item tooltip changes needed below */
-        gnc_combott_set_active (GNC_COMBOTT(widget), index);
+        gtk_combo_box_set_active (GTK_COMBO_BOX(widget), index);
         return FALSE;
     }
 }
@@ -3288,8 +3272,7 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
                 index = gnc_option_permissible_value_index (option, relative);
                 if (g_strcmp0 (date_option_type, "relative") == 0)
                 {
-                    /* GtkComboBox per-item tooltip changes needed below */
-                    gnc_combott_set_active (GNC_COMBOTT(widget), index);
+                    gtk_combo_box_set_active (GTK_COMBO_BOX(widget), index);
                 }
                 else if (g_strcmp0 (date_option_type, "both") == 0)
                 {
@@ -3301,8 +3284,7 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
                                                        GNC_RD_WID_REL_WIDGET_POS);
                     g_list_free (widget_list);
                     gnc_date_option_set_select_method (option, FALSE, TRUE);
-                    /* GtkComboBox per-item tooltip changes needed below */
-                    gnc_combott_set_active (GNC_COMBOTT(rel_date_widget), index);
+                    gtk_combo_box_set_active (GTK_COMBO_BOX(rel_date_widget), index);
                 }
                 else
                     bad_value = TRUE;
@@ -3819,10 +3801,7 @@ gnc_option_get_ui_value_commodity (GNCOption *option, GtkWidget *widget)
 static SCM
 gnc_option_get_ui_value_multichoice (GNCOption *option, GtkWidget *widget)
 {
-    int index;
-
-    /* GtkComboBox per-item tooltip changes needed below */
-    index = gnc_combott_get_active (GNC_COMBOTT(widget));
+    int index = gtk_combo_box_get_active (GTK_COMBO_BOX(widget));
     return (gnc_option_permissible_value (option, index));
 }
 
@@ -3835,8 +3814,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
 
     if (g_strcmp0 (subtype, "relative") == 0)
     {
-        /* GtkComboBox per-item tooltip changes needed below */
-        index = gnc_combott_get_active (GNC_COMBOTT(widget));
+        index = gtk_combo_box_get_active (GTK_COMBO_BOX(widget));
 
         type = scm_from_locale_symbol ("relative");
         val = gnc_option_permissible_value (option, index);
@@ -3870,8 +3848,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
         }
         else
         {
-            /* GtkComboBox per-item tooltip changes needed below */
-            index = gnc_combott_get_active (GNC_COMBOTT(rel_widget));
+            index = gtk_combo_box_get_active (GTK_COMBO_BOX(rel_widget));
 
             val = gnc_option_permissible_value (option, index);
             result = scm_cons (scm_from_locale_symbol ("relative"), val);
@@ -4129,9 +4106,9 @@ gnc_option_get_ui_value_currency_accounting (GNCOption *option,
         {
             GList *l = NULL;
             gint i = 0;
-            /* GtkComboBox per-item tooltip changes needed below */
+
             policy_index =
-                gnc_combott_get_active (GNC_COMBOTT(
+                gtk_combo_box_get_active (GTK_COMBO_BOX(
                              book_currency_data->default_cost_policy_widget));
             for (l = list_of_policies; l != NULL; l = l->next)
             {
