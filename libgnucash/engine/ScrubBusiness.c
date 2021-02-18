@@ -625,7 +625,7 @@ gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc)
     str = str ? str : "(null)";
 
     ENTER ("(acc=%s)", str);
-    PINFO ("Cleaning up superfluous lot links in account %s \n", str);
+    PINFO ("Cleaning up superfluous lot links in account %s\n", str);
     xaccAccountBeginEdit(acc);
 
     lots = xaccAccountGetLotList(acc);
@@ -679,7 +679,7 @@ gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
     str = str ? str : "(null)";
 
     ENTER ("(acc=%s)", str);
-    PINFO ("Cleaning up superfluous lot links in account %s \n", str);
+    PINFO ("Cleaning up superfluous lot links in account %s\n", str);
     xaccAccountBeginEdit(acc);
 
 restart:

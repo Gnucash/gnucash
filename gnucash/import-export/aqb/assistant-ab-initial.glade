@@ -45,8 +45,7 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">
-You first need to apply for Online Banking access at your bank. If your bank  decides to grant you electronic access, they will send you a letter containing 
-
+You first need to apply for Online Banking access at your bank. If your bank decides to grant you electronic access, they will send you a letter containing:
 * The bank code of your bank
 * The user ID that identifies you to your bank
 * The Internet address of your bank's Online Banking server

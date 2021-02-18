@@ -119,7 +119,7 @@ TransScrubOrphansFast (Transaction *trans, Account *root)
 
         if (split->acc) continue;
 
-        DEBUG ("Found an orphan \n");
+        DEBUG ("Found an orphan\n");
 
         accname = g_strconcat (_("Orphan"), "-",
                                gnc_commodity_get_mnemonic (trans->common_currency),
@@ -148,7 +148,7 @@ xaccAccountScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
 
     str = xaccAccountGetName (acc);
     str = str ? str : "(null)";
-    PINFO ("Looking for orphans in account %s \n", str);
+    PINFO ("Looking for orphans in account %s\n", str);
     splits = xaccAccountGetSplitList(acc);
     total_splits = g_list_length (splits);
 
@@ -357,7 +357,7 @@ xaccAccountScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
 
     str = xaccAccountGetName(acc);
     str = str ? str : "(null)";
-    PINFO ("Looking for imbalances in account %s \n", str);
+    PINFO ("Looking for imbalances in account %s\n", str);
 
     splits = xaccAccountGetSplitList(acc);
     split_count = g_list_length (splits);

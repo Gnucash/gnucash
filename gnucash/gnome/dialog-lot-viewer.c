@@ -754,7 +754,7 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
     case RESPONSE_VIEW:
         if (NULL == lot)
             return;
-        printf ("UNIMPLEMENTED: need to display register showing only this one lot \n");
+        printf ("UNIMPLEMENTED: need to display register showing only this one lot.\n");
         break;
 
     case RESPONSE_DELETE:

@@ -179,7 +179,7 @@ xaccOpenLog (void)
     if (!trans_log)
     {
         int norr = errno;
-        printf ("Error: xaccOpenLog(): cannot open journal \n"
+        printf ("Error: xaccOpenLog(): cannot open journal\n"
                 "\t %d %s\n", norr, g_strerror (norr) ? g_strerror (norr) : "");
 
         g_free (filename);

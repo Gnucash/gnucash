@@ -3231,7 +3231,7 @@ gnc_split_register_get_register_group (SplitRegister *reg)
         }
         default:
             return REG_TYPE_GROUP_UNKNOWN;
-            PERR ("unknown register type %d \n", reg->type);
+            PERR ("unknown register type %d\n", reg->type);
         break;
     }
 }

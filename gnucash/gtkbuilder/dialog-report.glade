@@ -98,7 +98,7 @@
             </child>
             <child>
               <object class="GtkButton" id="add_button1">
-                <property name="label" translatable="yes">A_dd  &gt;&gt;</property>
+                <property name="label" translatable="yes">A_dd &gt;&gt;</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>

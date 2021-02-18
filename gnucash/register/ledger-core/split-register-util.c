@@ -164,7 +164,7 @@ gnc_split_register_get_trans_split (SplitRegister *reg,
     {
         if ((0 > vcell_loc.virt_row) || (0 > vcell_loc.virt_col))
         {
-            PERR ("bad row \n");
+            PERR ("bad row\n");
             return NULL;
         }
 
@@ -346,7 +346,7 @@ gnc_split_register_set_cell_fractions (SplitRegister *reg, Split *split)
     int fraction;
     gboolean trading_accts;
     gnc_commodity *commodity;
-    
+
     /* This function must use the same algorithm as gnc_split_register_get_shares_entry
        and gnc_split_register_get_debcred_entry.  Changes here may require changes in
        one of them or vice versa. */
@@ -367,7 +367,7 @@ gnc_split_register_set_cell_fractions (SplitRegister *reg, Split *split)
     }
     else
     {
-        /* It should be ok to use the current book since that's what 
+        /* It should be ok to use the current book since that's what
            gnc_split_register_get_account uses to find the account. */
         trading_accts = qof_book_use_trading_accounts (gnc_get_current_book());
         trans_currency = gnc_default_currency();

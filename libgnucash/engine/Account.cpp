@@ -1332,8 +1332,8 @@ xaccFreeAccount (Account *acc)
 
     if (priv->children)
     {
-        PERR (" instead of calling xaccFreeAccount(), please call \n"
-              " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
+        PERR (" instead of calling xaccFreeAccount(), please call\n"
+              " xaccAccountBeginEdit(); xaccAccountDestroy();\n");
 
         /* First, recursively free children */
         xaccFreeAccountChildren(acc);
@@ -1342,8 +1342,8 @@ xaccFreeAccount (Account *acc)
     /* remove lots -- although these should be gone by now. */
     if (priv->lots)
     {
-        PERR (" instead of calling xaccFreeAccount(), please call \n"
-              " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
+        PERR (" instead of calling xaccFreeAccount(), please call\n"
+              " xaccAccountBeginEdit(); xaccAccountDestroy();\n");
 
         for (lp = priv->lots; lp; lp = lp->next)
         {
@@ -1361,8 +1361,8 @@ xaccFreeAccount (Account *acc)
     if (priv->splits)
     {
         GList *slist;
-        PERR (" instead of calling xaccFreeAccount(), please call \n"
-              " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
+        PERR (" instead of calling xaccFreeAccount(), please call\n"
+              " xaccAccountBeginEdit(); xaccAccountDestroy();\n");
 
         qof_instance_reset_editlevel(acc);
 

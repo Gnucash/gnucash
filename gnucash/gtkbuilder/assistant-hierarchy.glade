@@ -31,7 +31,7 @@
 
 You can pick a set of accounts here that seem close to your needs. After the assistant completes you will be able to add, rename, modify, and remove accounts, at any time later on. You will also be able to add sub-accounts, as well as move accounts (along with their sub-accounts) from one parent to another.
 
-Click 'Cancel'  if you do not wish to create any new accounts now.</property>
+Click 'Cancel' if you do not wish to create any new accounts now.</property>
         <property name="wrap">True</property>
       </object>
       <packing>

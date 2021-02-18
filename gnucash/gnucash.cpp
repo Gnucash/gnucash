@@ -10,7 +10,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -66,7 +66,7 @@ extern "C" {
 
 namespace bl = boost::locale;
 
-/* This static indicates the debugging module that this .o belongs to.  */
+/* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;
 static gchar *userdata_migration_msg = NULL;
 
@@ -394,7 +394,7 @@ main(int argc, char ** argv)
         std::cerr << bl::format (bl::translate ("Run '{1} --help' to see a full list of available command line options.")) % *argv[0]
         << "\n"
         << bl::translate ("Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
-        "       Perhaps you need to set the $DISPLAY environment variable ?");
+        "       Perhaps you need to set the $DISPLAY environment variable?");
         return 1;
     }
 

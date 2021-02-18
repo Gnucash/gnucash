@@ -59,7 +59,7 @@
               <object class="GtkSpinButton" id="GSB_Mult">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; Quarterly = every 3 months</property>
+                <property name="tooltip_text" translatable="yes">Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; Quarterly = every 3 months</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
                 <property name="adjustment">GSB_Mult_Adj</property>

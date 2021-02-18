@@ -853,8 +853,8 @@ acc_free
 static void
 test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
 {
-    auto msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call \n"
-                  " xaccAccountBeginEdit(); xaccAccountDestroy(); \n";
+    auto msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call\n"
+                  " xaccAccountBeginEdit(); xaccAccountDestroy();\n";
 #ifdef USE_CLANG_FUNC_SIG
 #define _func "int xaccTransGetSplitIndex(const Transaction *, const Split *)"
 #else
@@ -967,8 +967,8 @@ Also tests:
 static void
 test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
 {
-    auto msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call \n"
-                  " xaccAccountBeginEdit(); xaccAccountDestroy(); \n";
+    auto msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call\n"
+                  " xaccAccountBeginEdit(); xaccAccountDestroy();\n";
 #ifdef USE_CLANG_FUNC_SIG
 #define _func "int xaccTransGetSplitIndex(const Transaction *, const Split *)"
 #else

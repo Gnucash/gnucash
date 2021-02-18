@@ -1708,7 +1708,7 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
                                          GTK_BUTTONS_CANCEL,
                                          _("The transaction has at least one split in a business account that is not part of a business transaction.\n"
                                          "If you continue these splits will be ignored:\n\n%s\n"
-                                         "Do you wish to continue and ignore these splits ?"),
+                                         "Do you wish to continue and ignore these splits?"),
                                          split_str);
         gtk_dialog_add_buttons (GTK_DIALOG(dialog),
                                 _("Continue"), GTK_BUTTONS_OK, NULL);

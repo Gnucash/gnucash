@@ -95,7 +95,7 @@ main (int argc, char **argv)
         run_test ();
     }
     /* 'erase' the recurring tag line with dummy spaces. */
-    fprintf(stdout, "Lots: Test series complete.         \n");
+    fprintf(stdout, "Lots: Test series complete.\n");
     fflush(stdout);
     print_test_results();
 

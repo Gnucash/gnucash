@@ -116,9 +116,9 @@ sub report {
   printf "    symbol: %-20s <=== required\n",     $symbol;
   printf "      date: %-20s <=== recommended\n",  $date;
   printf "  currency: %-20s <=== required\n",     $currency;
-  printf "      last: %-20s <=\\       \n",       $last;
+  printf "      last: %-20s <=\\\n",              $last;
   printf "       nav: %-20s <=== one of these\n", $nav;
-  printf "     price: %-20s <=/        \n",       $price;
+  printf "     price: %-20s <=/\n",               $price;
   printf "  timezone: %-20s <=== optional\n",     $timezone;
 
   # Report failure
@@ -146,8 +146,8 @@ sub chk_api_key {
   my $url = " https://wiki.gnucash.org/wiki/Online_Quotes#Source_Alphavantage.2C_US\n";
   if (($exch eq "currency") || ($exch eq "alphavantage")
   ||  ($exch eq "vanguard")) {
-    die "ERROR: ALPHAVANTAGE_API_KEY *must* be set for currency quotes and \n" .
-        " stock quotes with source 'alphavantage' or 'vanguard'; see\n" . $url
+    die "ERROR: ALPHAVANTAGE_API_KEY *must* be set for currency quotes and\n" .
+        "stock quotes with source 'alphavantage' or 'vanguard'; see\n" . $url
       unless (defined ($ENV{'ALPHAVANTAGE_API_KEY'}));
   }
   if (($exch eq "canada") || ($exch eq "nasdaq")
@@ -170,7 +170,7 @@ if ($#ARGV < 1) {
   my @sources = sort $q->sources();
   printf "\nUsage: $0 [-v] <quote-source> <stock> [<stock> ...]\n\n";
   printf "-v: verbose\n";
-  printf "Available sources are: \n     %s\n\n", join(' ', @sources);
+  printf "Available sources are:\n     %s\n\n", join(' ', @sources);
   exit 0;
 }
 

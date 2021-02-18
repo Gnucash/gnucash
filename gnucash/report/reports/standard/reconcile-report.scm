@@ -57,7 +57,7 @@
 (define reconcile-report-instructions
   (gnc:make-html-text
    (G_ "The reconcile report is designed to be similar to the formal \
-reconciliation tool.  Please select the account from Report \
+reconciliation tool. Please select the account from Report \
 Options. Please note the dates specified in the options will apply \
 to the Reconciliation Date.")
    (gnc:html-markup-br)
