@@ -24,7 +24,7 @@ namespace std {
      pointer get () const;
 //     operator bool () const;
 
-     ~unique_ptr();
+      ~unique_ptr() = delete; //Otherwise swig takes the unique_ptr and calls delete on it.
   };
 }
 
