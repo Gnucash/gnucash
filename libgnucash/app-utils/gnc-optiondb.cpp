@@ -1486,14 +1486,17 @@ gnc_option_db_lookup_qofinstance_value(GncOptionDB* odb, const char* section,
 }
 
 SCM
-gnc_option_db_lookup_scm_value(GncOptionDB*, const char*, const char*)
+gnc_option_db_lookup_scm_value(GncOptionDB* odb, const char* section,
+                               const char* name)
 {
-    return nullptr;
+    std::cerr << "Use gnc_option_db_lookup_value." << std::endl;
+    return SCM_BOOL_F;
 }
 
 void
 gnc_option_db_set_scm_value(GncOptionDB*, const char*, const char*, SCM)
 {
+    std::cerr << "Use gnc_set_option." << std::endl;
 }
 
 // Force creation of templates

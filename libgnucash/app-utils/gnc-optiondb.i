@@ -392,11 +392,13 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 
 %ignore swig_get_option(GncOption&);
 %inline %{
+#include <cassert>
 #include "gnc-option.hpp"
 #include "gnc-option-ui.hpp"
 
     GncOptionVariant& swig_get_option(GncOption* option)
     {
+        assert(option);
         return *option->m_option;
     }
 %}
@@ -442,6 +444,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %ignore gnc_register_start_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, bool);
 %ignore gnc_register_end_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, bool);
 
+%typemap(in) GncOption* "$1 = scm_is_true($input) ? static_cast<GncOption*>(scm_to_pointer($input)) : nullptr;"
+%typemap(out) GncOption* "$result = ($1) ? scm_from_pointer($1, nullptr) : SCM_BOOL_F;"
 
 %ignore GncOptionMultichoiceKeyType;
  /* Replace GncOptionMultichoiceValue::get_value with one that restores the keytype that Scheme sent it. */
@@ -497,6 +501,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %extend GncOption {
     SCM get_scm_value()
     {
+        if (!$self)
+            return SCM_BOOL_F;
         return std::visit([](const auto& option)->SCM {
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
                               GncOptionMultichoiceValue>)
@@ -510,6 +516,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     }
     SCM get_scm_default_value()
     {
+        if (!$self)
+            return SCM_BOOL_F;
         return std::visit([](const auto& option)->SCM {
                 auto value{option.get_default_value()};
                 if constexpr (std::is_same_v<std::decay_t<decltype(value)>,
@@ -706,10 +714,20 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     }
 
     static SCM
+    gnc_option_db_lookup_value(const GncOptionDB* optiondb, const char* section,
+                               const char* name)
+    {
+        auto db_opt = optiondb->find_option(section, name);
+        if (!db_opt)
+            return SCM_BOOL_F;
+        return GncOption_get_scm_value(const_cast<GncOption*>(db_opt));
+    }
+
+    static SCM
     gnc_option_default_value(const GncOptionDBPtr& optiondb,
                              const char* section, const char* name)
     {
-        auto db_opt = optiondb->find_option(section, name);
+        auto db_opt{optiondb->find_option(section, name)};
         if (!db_opt)
             return SCM_BOOL_F;
         return GncOption_get_scm_default_value(db_opt);
@@ -719,7 +737,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     gnc_set_option(const GncOptionDBPtr& optiondb, const char* section,
                    const char* name, SCM new_value)
     {
-        auto db_opt = optiondb->find_option(section, name);
+        auto db_opt{optiondb->find_option(section, name)};
         if (!db_opt)
         {
             std::cerr <<"Attempt to write non-existent option " << section
