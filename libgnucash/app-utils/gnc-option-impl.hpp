@@ -500,7 +500,8 @@ operator>> (std::istream& iss, OptType& opt)
 
 using GncMultichoiceOptionEntry = std::tuple<const std::string,
                                              const std::string,
-                                             const std::string>;
+                                             const std::string,
+                                             GncOptionMultichoiceKeyType>;
 using GncMultichoiceOptionIndexVec = std::vector<std::size_t>;
 using GncMultichoiceOptionChoices = std::vector<GncMultichoiceOptionEntry>;
 
@@ -575,7 +576,8 @@ public:
         if (vec.size() == 1)
             return std::get<0>(m_choices.at(vec[0]));
         else
-            return c_list_string;
+            throw std::length_error("Retrieving multiple values from a multichoice isn't implemented.");
+
     }
     const std::string& get_default_value() const
     {
@@ -671,6 +673,7 @@ public:
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    GncOptionMultichoiceKeyType get_keytype(unsigned i) const { return std::get<3>(m_choices.at(i)); }
 private:
     std::size_t find_key (const std::string& key) const noexcept
     {

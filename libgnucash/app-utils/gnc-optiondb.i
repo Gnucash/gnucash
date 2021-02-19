@@ -256,14 +256,34 @@ gnc_option_test_book_destroy(QofBook* book)
 
 %typemap(in) GncMultichoiceOptionChoices&& (GncMultichoiceOptionChoices choices)
 {
+    using KeyType = GncOptionMultichoiceKeyType;
     auto len = scm_to_size_t(scm_length($input));
     for (std::size_t i = 0; i < len; ++i)
     {
         SCM vec = scm_list_ref($input, scm_from_size_t(i));
-        std::string key{scm_to_utf8_string(SCM_SIMPLE_VECTOR_REF(vec, 0))};
+        SCM keyval, v_ref_0 = SCM_SIMPLE_VECTOR_REF(vec, 0);
+        GncOptionMultichoiceKeyType keytype;
+        if (scm_is_symbol(v_ref_0))
+        {
+            keyval = scm_symbol_to_string(SCM_SIMPLE_VECTOR_REF(vec, 0));
+            keytype = KeyType::SYMBOL;
+        }
+        else if (scm_is_string(v_ref_0))
+        {
+            keyval = SCM_SIMPLE_VECTOR_REF(vec, 0);
+            keytype = KeyType::STRING;
+        }
+        else if (scm_is_integer(v_ref_0))
+        {
+            keyval = scm_number_to_string(v_ref_0, scm_from_uint(10u));
+            keytype = KeyType::NUMBER;
+        }
+        else
+            throw std::invalid_argument("Unsupported key type in multichoice option.");
+        std::string key{scm_to_utf8_string(keyval)};
         std::string name{scm_to_utf8_string(SCM_SIMPLE_VECTOR_REF(vec, 1))};
         std::string desc{scm_to_utf8_string(SCM_SIMPLE_VECTOR_REF(vec, 2))};
-        choices.push_back({std::move(key), std::move(name), std::move(desc)});
+        choices.push_back({std::move(key), std::move(name), std::move(desc), keytype});
     }
     $1 = &choices;
  }
@@ -404,6 +424,45 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %ignore gnc_register_start_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, bool);
 %ignore gnc_register_end_date_option(GncOptionDB*, const char*, const char*, const char*, const char*, bool);
 
+
+%ignore GncOptionMultichoiceKeyType;
+ /* Replace GncOptionMultichoiceValue::get_value with one that restores the keytype that Scheme sent it. */
+%inline %{
+    SCM get_scm_value(const GncOptionMultichoiceValue& option)
+    {
+        using KeyType = GncOptionMultichoiceKeyType;
+        auto scm_value = [](const char* value, KeyType keytype) -> SCM {
+            auto scm_str{scm_from_utf8_string(value)};
+            switch (keytype)
+            {
+                case KeyType::SYMBOL:
+                return scm_string_to_symbol(scm_str);
+                case KeyType::STRING:
+                return scm_str;
+                case KeyType::NUMBER:
+                    return scm_string_to_number(scm_str, scm_from_int(10));
+            };
+        };
+
+        auto indexes = option.get_multiple();
+        if (indexes.empty())
+            indexes = option.get_default_multiple();
+        if (indexes.empty())
+            return SCM_BOOL_F;
+        if (indexes.size() == 1) // FIXME: Should use bool member to decide
+            return scm_value(option.permissible_value(indexes[0]),
+                             option.get_keytype(indexes[0]));
+        auto values{scm_list_1(SCM_UNDEFINED)};
+        for(auto index : indexes)
+        {
+            auto val{scm_list_1(scm_value(option.permissible_value(index),
+                                          option.get_keytype(index)))};
+            values = scm_append(scm_list_2(val, values));
+        }
+        return scm_reverse(values);
+    }
+ %}
+
 %include "gnc-option-date.hpp"
 %include "gnc-option.hpp"
 %include "gnc-option-impl.hpp"
@@ -421,6 +480,9 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     SCM get_scm_value()
     {
         return std::visit([](const auto& option)->SCM {
+                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                              GncOptionMultichoiceValue>)
+                    return get_scm_value(option);
                 auto value{option.get_value()};
                 if constexpr (std::is_same_v<std::decay_t<decltype(value)>,
                               SCM>)

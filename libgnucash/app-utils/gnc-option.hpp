@@ -63,6 +63,13 @@ using GncOptionVariant = std::variant<GncOptionValue<std::string>,
 
 using GncOptionVariantPtr = std::unique_ptr<GncOptionVariant>;
 
+enum class GncOptionMultichoiceKeyType
+{
+    SYMBOL,
+    STRING,
+    NUMBER,
+};
+
 class GncOption
 {
 public:
