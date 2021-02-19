@@ -556,6 +556,23 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                     }
                     return;
                 }
+                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionMultichoiceValue>)
+                {
+                    if (scm_is_integer(new_value))
+                    {
+                        option.set_value(scm_to_int(new_value));
+                        return;
+                    }
+                    std::string new_value_str{};
+                    if (scm_is_symbol(new_value))
+                        new_value_str = scm_to_utf8_string(scm_symbol_to_string(new_value));
+                    else if (scm_is_string(new_value))
+                        new_value_str = scm_to_utf8_string(new_value);
+                    if (!new_value_str.empty())
+                        option.set_value(new_value_str);
+                    return;
+                }
                 option.set_value(scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value));
             }, swig_get_option($self));
     }
