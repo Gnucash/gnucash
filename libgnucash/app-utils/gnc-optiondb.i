@@ -216,41 +216,10 @@ gnc_option_test_book_destroy(QofBook* book)
 %ignore GncOptionDateValue::operator=(GncOptionDateValue&&);
 %ignore GncOptionDateValue::set_value(size_t); // Used only by dialog-options
 %ignore operator<<(std::ostream&, const GncOption&);
+%ignore operator<<(std::ostream&, const RelativeDatePeriod);
 %ignore operator>>(std::istream&, GncOption&);
 %ignore GncOption::_get_option();
 
-%rename(absolute) RelativeDatePeriod::ABSOLUTE;
-%rename(today) RelativeDatePeriod::TODAY;
-%rename(one_week_ago) RelativeDatePeriod::ONE_WEEK_AGO;
-%rename(one_week_ahead) RelativeDatePeriod::ONE_WEEK_AHEAD;
-%rename(one_month_ago) RelativeDatePeriod::ONE_MONTH_AGO;
-%rename(one_month_ahead) RelativeDatePeriod::ONE_MONTH_AHEAD;
-%rename(three_months_ago) RelativeDatePeriod::THREE_MONTHS_AGO;
-%rename(three_months_ahead) RelativeDatePeriod::THREE_MONTHS_AHEAD;
-%rename(six_months_ago) RelativeDatePeriod::SIX_MONTHS_AGO;
-%rename(six_months_ahead) RelativeDatePeriod::SIX_MONTHS_AHEAD;
-%rename(one_year_ago) RelativeDatePeriod::ONE_YEAR_AGO;
-%rename(one_year_ahead) RelativeDatePeriod::ONE_YEAR_AHEAD;
-%rename(start_this_month) RelativeDatePeriod::START_THIS_MONTH;
-%rename(end_this_month) RelativeDatePeriod::END_THIS_MONTH;
-%rename(start_prev_month) RelativeDatePeriod::START_PREV_MONTH;
-%rename(end_prev_month) RelativeDatePeriod::END_PREV_MONTH;
-%rename(start_next_month) RelativeDatePeriod::START_NEXT_MONTH;
-%rename(end_next_month) RelativeDatePeriod::END_NEXT_MONTH;
-%rename(start_current_quarter) RelativeDatePeriod::START_CURRENT_QUARTER;
-%rename(end_current_quarter) RelativeDatePeriod::END_CURRENT_QUARTER;
-%rename(start_prev_quarter) RelativeDatePeriod::START_PREV_QUARTER;
-%rename(end_prev_quarter) RelativeDatePeriod::END_PREV_QUARTER;
-%rename(start_next_quarter) RelativeDatePeriod::START_NEXT_QUARTER;
-%rename(end_next_quarter) RelativeDatePeriod::END_NEXT_QUARTER;
-%rename(start_cal_year) RelativeDatePeriod::START_CAL_YEAR;
-%rename(end_cal_year) RelativeDatePeriod::END_CAL_YEAR;
-%rename(start_prev_year) RelativeDatePeriod::START_PREV_YEAR;
-%rename(end_prev_year) RelativeDatePeriod::END_PREV_YEAR;
-%rename(start_next_year) RelativeDatePeriod::START_NEXT_YEAR;
-%rename(end_next_year) RelativeDatePeriod::END_NEXT_YEAR;
-%rename(start_accounting_period) RelativeDatePeriod::START_ACCOUNTING_PERIOD;
-%rename(end_accounting_period) RelativeDatePeriod::END_ACCOUNTING_PERIOD;
 
 %rename(gnc_register_date_option_set)
     gnc_register_date_option(GncOptionDBPtr&, const char*, const char*,
@@ -447,8 +416,44 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %typemap(in) GncOption* "$1 = scm_is_true($input) ? static_cast<GncOption*>(scm_to_pointer($input)) : nullptr;"
 %typemap(out) GncOption* "$result = ($1) ? scm_from_pointer($1, nullptr) : SCM_BOOL_F;"
 
+%header %{
+    static const SCM reldate_values = scm_c_eval_string(
+        "'((absolute RelativeDatePeriod-ABSOLUTE)"
+        "(today RelativeDatePeriod-TODAY)"
+        "(one-week-ago RelativeDatePeriod-ONE-WEEK-AGO)"
+        "(one-week-ahead RelativeDatePeriod-ONE-WEEK-AHEAD)"
+        "(one-month-ago RelativeDatePeriod-ONE-MONTH-AGO)"
+        "(one-month-ahead RelativeDatePeriod-ONE-MONTH-AHEAD)"
+        "(three-months-ago RelativeDatePeriod-THREE-MONTHS-AGO)"
+        "(three-months-ahead RelativeDatePeriod-THREE-MONTHS-AHEAD)"
+        "(six-months-ago RelativeDatePeriod-SIX-MONTHS-AGO)"
+        "(six-months-ahead RelativeDatePeriod-SIX-MONTHS-AHEAD)"
+        "(one-year-ago RelativeDatePeriod-ONE-YEAR-AGO)"
+        "(one-year-ahead RelativeDatePeriod-ONE-YEAR-AHEAD)"
+        "(start-this-month RelativeDatePeriod-START-THIS-MONTH)"
+        "(end-this-month RelativeDatePeriod-END-THIS-MONTH)"
+        "(start-prev-month RelativeDatePeriod-START-PREV-MONTH)"
+        "(end-prev-month RelativeDatePeriod-END-PREV-MONTH)"
+        "(start-next-month RelativeDatePeriod-START-NEXT-MONTH)"
+        "(end-next-month RelativeDatePeriod-END-NEXT-MONTH)"
+        "(start-current-quarter RelativeDatePeriod-START-CURRENT-QUARTER)"
+        "(end-current-quarter RelativeDatePeriod-END-CURRENT-QUARTER)"
+        "(start-prev-quarter RelativeDatePeriod-START-PREV-QUARTER)"
+        "(end-prev-quarter RelativeDatePeriod-END-PREV-QUARTER)"
+        "(start-next-quarter RelativeDatePeriod-START-NEXT-QUARTER)"
+        "(end-next-quarter RelativeDatePeriod-END-NEXT-QUARTER)"
+        "(start-cal-year RelativeDatePeriod-START-CAL-YEAR)"
+        "(end-cal-year RelativeDatePeriod-END-CAL-YEAR)"
+        "(start-prev-year RelativeDatePeriod-START-PREV-YEAR)"
+        "(end-prev-year RelativeDatePeriod-END-PREV-YEAR)"
+        "(start-next-year RelativeDatePeriod-START-NEXT-YEAR)"
+        "(end-next-year RelativeDatePeriod-END-NEXT-YEAR)"
+        "(start-accounting-period RelativeDatePeriod-START-ACCOUNTING-PERIOD)"
+        "(end-accounting-period RelativeDatePeriod-END-ACCOUNTING-PERIOD))");
+    %}
+
 %ignore GncOptionMultichoiceKeyType;
- /* Replace GncOptionMultichoiceValue::get_value with one that restores the keytype that Scheme sent it. */
+
 %inline %{
     SCM get_scm_value(const GncOptionMultichoiceValue& option)
     {
@@ -528,11 +533,34 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     }
     void set_value_from_scm(SCM new_value)
     {
+        if (!$self)
+            return;
         std::visit([new_value](auto& option) {
+                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionDateValue>)
+                {
+                    if (scm_is_pair(new_value))
+                    {
+                        auto car{scm_to_utf8_string(scm_symbol_to_string(scm_car(new_value)))};
+                        if (strcmp(car, "relative") == 0)
+                        {
+                            auto lookup{scm_assq_ref(reldate_values,
+                                                     scm_cdr(new_value))};
+                            auto reldate{scm_primitive_eval(lookup)};
+                            option.set_value(static_cast<RelativeDatePeriod>(scm_to_int(reldate)));
+                        }
+                        else
+                        {
+                            option.set_value(scm_to_int64(scm_cdr(new_value)));
+                        }
+                    }
+                    return;
+                }
                 option.set_value(scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value));
             }, swig_get_option($self));
     }
 };
+
 %extend GncOptionDB {
     %template(set_option_string) set_option<std::string>;
     %template(set_option_int) set_option<int>;
