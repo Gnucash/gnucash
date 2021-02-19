@@ -1478,9 +1478,11 @@ gnc_option_db_set_string_value(GncOptionDB*, const char*,
 }
 
 const QofInstance*
-gnc_option_db_lookup_qofinstance_value(GncOptionDB*, const char*, const char*)
+gnc_option_db_lookup_qofinstance_value(GncOptionDB* odb, const char* section,
+                                       const char* name)
 {
-    return nullptr;
+    auto option{odb->find_option(section, name)};
+    return option->get_value<const QofInstance*>();
 }
 
 SCM

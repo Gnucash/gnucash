@@ -116,10 +116,13 @@ scm_from_value<double>(double value)
 template <> inline SCM
 scm_from_value<const QofInstance*>(const QofInstance* value)
 {
-    auto guid = guid_to_string(qof_instance_get_guid(value));
-    auto scm_guid = scm_from_utf8_string(guid);
-    g_free(guid);
-    return scm_guid;
+    if (!value) return SCM_BOOL_F;
+    auto type{qof_collection_get_type(qof_instance_get_collection(value))};
+    auto guid_str{guid_to_string(qof_instance_get_guid(value))};
+    auto scm_guid = scm_from_utf8_string(guid_str);
+    auto scm_type = scm_from_utf8_string(type);
+    free(guid_str);
+    return scm_cons(scm_type, scm_guid);
 }
 
 template <typename ValueType> inline ValueType
@@ -155,6 +158,21 @@ template <> inline double
 scm_to_value<double>(SCM new_value)
 {
     return scm_to_double(new_value);
+}
+
+template <> inline const QofInstance*
+scm_to_value<const QofInstance*>(SCM new_value)
+{
+    if (new_value == SCM_BOOL_F || !scm_is_pair(new_value))
+        return nullptr;
+    auto guid_str{scm_to_utf8_stringn(scm_car(new_value), nullptr)};
+    auto type{scm_to_utf8_stringn(scm_cdr(new_value), nullptr)};
+    GncGUID new_guid;
+    string_to_guid(guid_str, &new_guid);
+    free(guid_str);
+    auto coll{qof_book_get_collection(qof_session_get_book(gnc_get_current_session()), type)};
+    free(type);
+    return qof_collection_lookup_entity(coll, &new_guid);
 }
 
 template <>inline SCM
