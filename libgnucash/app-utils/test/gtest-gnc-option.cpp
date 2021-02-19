@@ -526,6 +526,7 @@ public:
     ~OptionUIItem() = default;
     void set_dirty(bool status) noexcept override { m_dirty = status; }
     bool get_dirty() const noexcept override { return m_dirty; }
+    void set_selectable(bool selectable) const noexcept override {}
     void clear_ui_item() override { m_widget.clear(); }
     void set_ui_item_from_option(GncOption& option) noexcept override
     {

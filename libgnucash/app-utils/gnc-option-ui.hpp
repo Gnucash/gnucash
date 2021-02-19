@@ -51,6 +51,7 @@ public:
     GncOptionUIType get_ui_type() const noexcept { return m_type; }
     virtual void set_dirty(bool status) noexcept { m_dirty = status; }
     virtual bool get_dirty() const noexcept { return m_dirty; }
+    virtual void set_selectable(bool selectable) const noexcept = 0;
     virtual void clear_ui_item() = 0;
     virtual void set_ui_item_from_option(GncOption& option) noexcept = 0;
     virtual void set_option_from_ui_item(GncOption& option) noexcept = 0;

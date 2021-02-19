@@ -193,6 +193,13 @@ GncOption::set_ui_item(GncOptionUIItemPtr&& ui_item)
     m_ui_item = std::move(ui_item);
 }
 
+void
+GncOption::set_ui_item_selectable(bool selectable) const noexcept
+{
+    if (m_ui_item)
+        m_ui_item->set_selectable(selectable);
+}
+
 const GncOptionUIType
 GncOption::get_ui_type() const
 {

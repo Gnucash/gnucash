@@ -50,6 +50,7 @@ public:
     GncOptionGtkUIItem(const GncOptionGtkUIItem& item);
     GncOptionGtkUIItem(GncOptionGtkUIItem&&) = default;
     virtual ~GncOptionGtkUIItem() override;
+    virtual void set_selectable(bool) const noexcept override;
     void clear_ui_item() override;
     void set_widget(GtkWidget* widget);
     virtual GtkWidget* const get_widget() const { return m_widget; }

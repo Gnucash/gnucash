@@ -768,6 +768,16 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     {
         return optiondb->find_option(section, name);
     }
+
+    void
+    gnc_option_db_set_option_selectable_by_name(GncOptionDBPtr& odb,
+                                                const char* section,
+                                                const char* name,
+                                                bool selectable)
+    {
+        auto option{odb->find_option(section, name)};
+        option->set_ui_item_selectable(selectable);
+    }
 %}
 
 #endif //SWIGGUILE

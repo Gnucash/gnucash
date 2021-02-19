@@ -171,6 +171,13 @@ GncOptionGtkUIItem::~GncOptionGtkUIItem()
 }
 
 void
+GncOptionGtkUIItem::set_selectable(bool selectable) const noexcept
+{
+    if (m_widget)
+        gtk_widget_set_sensitive (m_widget, selectable);
+}
+
+void
 GncOptionGtkUIItem::clear_ui_item()
 {
     if (m_widget)
@@ -289,24 +296,6 @@ gnc_option_changed_option_cb(GtkWidget *dummy, GncOption* option)
     gnc_option_changed_widget_cb(widget, option);
 }
 
-
-/*
- * set_selectable                               *
- *   Change the selectable state of the widget that represents a
- *   GUI option.
- *
- * option      - option to change widget state for
- * selectable  - if false, update the widget so that it
- *                     cannot be selected by the user.  If true,
- *                     update the widget so that it can be selected.
- */
-static void
-set_selectable (GncOption& option, bool selectable)
-{
-    auto widget = gnc_option_get_gtk_widget(&option);
-    if (widget)
-        gtk_widget_set_sensitive (widget, selectable);
-}
 
 // This do-nothing template is specialized for each GncOptionUIType.
 template<GncOptionUIType type> GtkWidget*
