@@ -1466,15 +1466,19 @@ gnc_option_db_book_options(GncOptionDB* odb)
 }
 
 const char*
-gnc_option_db_lookup_string_value(GncOptionDB*, const char*, const char*)
+gnc_option_db_lookup_string_value(GncOptionDB* odb, const char* section, const char* name)
 {
+    auto value{odb->lookup_string_option(section, name)};
+    if (value.empty())
     return nullptr;
+    return strdup(value.c_str());
 }
 
 void
-gnc_option_db_set_string_value(GncOptionDB*, const char*,
-                               const char*, const char*)
+gnc_option_db_set_string_value(GncOptionDB* odb, const char* section,
+                               const char* name, const char* value)
 {
+    odb->set_option<std::string>(section, name, value);
 }
 
 const QofInstance*
