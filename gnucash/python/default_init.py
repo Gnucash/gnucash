@@ -8,8 +8,6 @@ require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
 
-sys.path.append(os.path.dirname(__file__))
-
 # output file location if gnucash has been started with
 # gnucash --extra
 if gnc_prefs_is_extra_enabled():
