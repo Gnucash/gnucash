@@ -164,7 +164,16 @@ template <> inline const QofInstance*
 scm_to_value<const QofInstance*>(SCM new_value)
 {
     if (new_value == SCM_BOOL_F || !scm_is_pair(new_value))
-        return nullptr;
+    {
+        void* ptr{};
+        SWIG_ConvertPtr(new_value, &ptr, SWIGTYPE_p_QofInstance_s, 0);
+        if (ptr)
+            return static_cast<const QofInstance*>(ptr);
+        SWIG_ConvertPtr(new_value, &ptr, SWIGTYPE_p_gnc_commodity, 0);
+        if (ptr)
+            return static_cast<const QofInstance*>(ptr);
+    }
+
     auto guid_str{scm_to_utf8_stringn(scm_car(new_value), nullptr)};
     auto type{scm_to_utf8_stringn(scm_cdr(new_value), nullptr)};
     GncGUID new_guid;
