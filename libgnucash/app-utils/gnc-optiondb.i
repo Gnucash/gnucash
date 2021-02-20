@@ -832,6 +832,23 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         auto option{odb->find_option(section, name)};
         option->set_ui_item_selectable(selectable);
     }
+
+    void
+    gnc_optiondb_foreach(GncOptionDBPtr& odb, SCM thunk)
+    {
+        odb->foreach_section(
+            [&thunk](const GncOptionSectionPtr& section)
+            {
+                section->foreach_option(
+                    [&thunk](auto& option)
+                    {
+                        auto optvoidptr{reinterpret_cast<void*>(
+                                const_cast<GncOption*>(&option))};
+                        auto scm_opt{scm_from_pointer(optvoidptr, nullptr)};
+                        scm_call_1(thunk, scm_opt);
+                    });
+            });
+    }
 %}
 
 #endif //SWIGGUILE
