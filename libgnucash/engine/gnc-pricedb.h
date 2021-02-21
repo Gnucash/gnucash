@@ -173,6 +173,7 @@ typedef enum
     PRICE_SOURCE_USER_PRICE,       // "user:price"
     PRICE_SOURCE_XFER_DLG_VAL,     // "user:xfer-dialog"
     PRICE_SOURCE_SPLIT_REG,        // "user:split-register"
+    PRICE_SOURCE_SPLIT_IMPORT,     // "user:split-import"
     PRICE_SOURCE_STOCK_SPLIT,      // "user:stock-split"
     PRICE_SOURCE_INVOICE,          // "user:invoice-post"
     PRICE_SOURCE_TEMP,             // "temporary"

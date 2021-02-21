@@ -124,6 +124,7 @@ static const char* source_names[(size_t)PRICE_SOURCE_INVALID + 1] =
     /* String retained for backwards compatibility. */
     "user:xfer-dialog",
     "user:split-register",
+    "user:split-import",
     "user:stock-split",
     "user:invoice-post", /* Retained for backwards compatibility */
     "temporary",
