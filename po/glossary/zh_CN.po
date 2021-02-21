@@ -1,20 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Theresa Zhang <theresa7qing@sina.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2010-05-05 13:47+1000\n"
-"Last-Translator: Tao Wang <dancefire@gmail.com>\n"
-"Language-Team: Simplified Chinese <LL@li.org>\n"
-"Language: Simplified Chinese\n"
+"PO-Revision-Date: 2021-02-19 14:50+0000\n"
+"Last-Translator: Theresa Zhang <theresa7qing@sina.com>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
+"gnucash/glossary/zh_Hans/>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.5\n"
 
 # 翻译人员好，这个是不会被最终用户所见的。这是为了您，也就是翻译人员所提供的一个工具。GnuCash 是一个个人或小型企业理财的软件，是一个会计专业性比较强的软件，其中包含了很多的术语。而这里就是针对很多术语的解释。
 # 请大家务必在翻译前先浏览此文件，否则很容易出现翻译不一致的地方。如果有必须修正的术语错误，也请先修改这个文件，然后再修改软件的 po，这样后来的翻译人员就不会犯同样的出错了。请大家在翻译术语的时候，尽量参考国内会计行业术语，以方便专业人士使用。谢谢！
@@ -24,7 +26,7 @@ msgstr "术语 (翻译人员好，这个文件将不会被最终用户所看到)
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "“”"
 
 # 关于资金如何支出与收入的细节记录，简称为科目。财会账簿中，Account 将翻译为科目，而有关银行的 Account 将翻译为账户。
 #. "A detailed record of money spent and received"
@@ -45,9 +47,8 @@ msgstr "科目名称"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
-#, fuzzy
 msgid "account type: Active"
-msgstr "科目类型：资产"
+msgstr "科目类型：流动"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
@@ -56,9 +57,8 @@ msgstr "科目类型：资产"
 
 # 债务，财政义务
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "科目类型：负债"
+msgstr "科目类型：资产和负债"
 
 # 英国称为 current account 即，现金流账户。是指一个可以随意从银行取款而不需要事先通知的银行账户
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
@@ -97,15 +97,13 @@ msgstr "科目类型：投资基金"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "科目类型：资产"
+msgstr "科目类型：被动"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "科目类型：资产"
+msgstr "科目类型：收益和损耗"
 
 # 1. (美国) 任何赚取利息的账户类型
 # 2. (英国) 任何比现金流账户或存款账户利息更高的银行账户
@@ -120,9 +118,8 @@ msgstr "科目类型：股票"
 # 1. (美国) 任何赚取利息的账户类型
 # 2. (英国) 任何比现金流账户或存款账户利息更高的银行账户
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "科目类型：储蓄存款"
+msgstr "科目类型：交易"
 
 #. "-"
 msgid "account: parent account"
@@ -214,9 +211,8 @@ msgid "action: transfer"
 msgstr "操作：转账"
 
 #. "-"
-#, fuzzy
 msgid "action: wire"
-msgstr "操作：电报"
+msgstr "操作：电汇"
 
 #. "-"
 msgid "action: withdraw"
@@ -224,7 +220,7 @@ msgstr "操作：取款"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "账龄"
 
 #. "A sum of money"
 msgid "amount"
@@ -241,15 +237,13 @@ msgstr "余额 (名词)"
 
 # 安排收入与支出相等
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "平衡，于"
+msgstr "结转余额"
 
 # 安排收入与支出相等
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "平衡，于"
+msgstr "结转"
 
 # 一种记录资金收到与支付的书面记录，显示两者之间的总差额。
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
@@ -273,9 +267,8 @@ msgstr "账单"
 # 支付款额的条件。发票和账单都有结算条款。比如，您可以有“条款”：“Net-30”，既账单30天后到期。
 # http://en.wikipedia.org/wiki/Net_30
 #. "see invoice owner"
-#, fuzzy
 msgid "bill owner"
-msgstr "结算条款"
+msgstr "账单所有人"
 
 # 支付款额的条件。发票和账单都有结算条款。比如，您可以有“条款”：“Net-30”，既账单30天后到期。
 # http://en.wikipedia.org/wiki/Net_30
@@ -359,9 +352,8 @@ msgstr "商品期权：代码"
 
 # 借钱的费用，或者对某人的投资所支付的费用
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "利息"
+msgstr "复利"
 
 # (a) 支付到一个科目中的金额
 # (b) 这种支付的记录
@@ -381,9 +373,8 @@ msgstr "转账"
 
 # 直接从一个银行账户转到另一个银行账户，而不使用支票。
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
-#, fuzzy
 msgid "credit note"
-msgstr "转账"
+msgstr "信用证"
 
 # 一个国家内使用的金钱
 #. "The system of money used in a country"
@@ -397,7 +388,7 @@ msgstr "自定义"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "仪表盘"
 
 # 数据存储的后台
 #. "The backend where the data is stored."
@@ -448,9 +439,8 @@ msgstr "描述 (账簿中的一栏)"
 
 # 关于资金如何支出与收入的细节记录，简称为科目。财会账簿中，Account 将翻译为科目，而有关银行的 Account 将翻译为账户。
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
-#, fuzzy
 msgid "discount"
-msgstr "会计科目"
+msgstr "贴现"
 
 # 嗯，GnuCash的卖点
 #. "Important Buzzword :)"
@@ -463,7 +453,7 @@ msgstr ""
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "电子邮件"
 
 # 为某个人或者某个公司工作并且赚取薪金的人
 #. "a person who works for somebody or a company in return for wages"
@@ -514,14 +504,12 @@ msgstr "金融计算器：支付"
 
 # 这个报表曾经称为“损益”，但是在2004-07-13重命名了。
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
-#| msgid "income statement"
 msgid "financial statement"
-msgstr "收益表"
+msgstr "财务报表"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "免费软件"
 
 # 财富的增长；利润；利益 (见：资本收益)
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
@@ -578,10 +566,8 @@ msgstr "贷款"
 
 # 从银行借的钱的数额。
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "贷款"
+msgstr "年百分利率"
 
 # 在商业活动中损失的资金
 #. "The money lost in business activity"
