@@ -1,22 +1,23 @@
 # Localization for Hindi language.
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Parimal Khade <parimal.khade@gmail.com>, 2014.
-#
+# Hindi and Sanskrit Speaker <ifiotsbywzpamtrbbk@wqcefp.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2014-09-25 20:13-0500\n"
-"Last-Translator: Parimal Khade <parimal.khade@gmail.com>\n"
-"Language-Team: NONE\n"
+"PO-Revision-Date: 2021-02-20 06:50+0000\n"
+"Last-Translator: Hindi and Sanskrit Speaker <ifiotsbywzpamtrbbk@wqcefp.com>\n"
+"Language-Team: Hindi <https://hosted.weblate.org/projects/gnucash/gnucash/hi/"
+">\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Weblate 4.5\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -24,50 +25,48 @@ msgstr ""
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "अरबी"
 
 #: borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "बाल्टिक"
 
 #: borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "यूरोपीय"
+msgstr "मध्य यूरोपियन"
 
 #: borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "चाइनीस"
 
 #: borrowed/goffice/go-charmap-sel.c:74
 #: gnucash/gnome-utils/assistant-xml-encoding.c:242
 msgid "Cyrillic"
-msgstr "सिरिलिक  "
+msgstr "सिरिलिक"
 
 #: borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "हरा"
+msgstr "ग्रीक"
 
 #: borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "हिब्रू"
 
 #: borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "इंडियन"
 
 #: borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "जापानी"
 
 #: borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "कोरियन"
 
 #: borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "तुर्किश"
 
 #: borrowed/goffice/go-charmap-sel.c:81
 #: gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -76,12 +75,11 @@ msgstr "यूनिकोड"
 
 #: borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "वियतनामीस"
 
 #: borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "रजिस्टर "
+msgstr "पश्चिमी"
 
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:969
@@ -93,7 +91,7 @@ msgstr "अन्य"
 
 #: borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "अरेबिक (IBM -864)"
 
 #: borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
@@ -124,9 +122,8 @@ msgid "Armenian (ARMSCII-8)"
 msgstr ""
 
 #: borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (बाल्टिक) "
+msgstr "बाल्टिक (ISO-8859-13)"
 
 #: borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
@@ -137,9 +134,8 @@ msgid "Baltic (Windows-1257)"
 msgstr ""
 
 #: borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (सेल्टिक) "
+msgstr "सेल्टिक (ISO-8859-14)"
 
 #: borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
@@ -194,13 +190,12 @@ msgid "Croatian (MacCroatian)"
 msgstr ""
 
 #: borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "सिरिलिक  "
+msgstr "सिरिलिक (IBM-855)"
 
 #: borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "सिरिलिक (ISO-8859-5)"
 
 #: borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
@@ -457,8 +452,8 @@ msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
 msgstr ""
-"GnuCash ऑनलाइन मैनुअल में बहुत सी उपयोगी जानकारियां हैं. आप हेल्प मेन्यू के अंतर्गत इस मैनुअल "
-"को प्राप्त कर सकते हैं.  "
+"GnuCash ऑनलाइन मैनुअल में बहुत सी उपयोगी जानकारियां हैं. आप हेल्प मेन्यू के "
+"अंतर्गत इस मैनुअल को प्राप्त कर सकते हैं."
 
 #. Translators: You can replace the link, if a translated page exists.
 #: doc/tip_of_the_day.list.c:5
