@@ -840,6 +840,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
 {
     Split * other_split;
     gnc_numeric imbalance_value;
+    Transaction *trans;
 
     /* DEBUG("Begin"); */
 
@@ -894,7 +895,9 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
         xaccSplitSetDateReconciledSecs(gnc_import_TransInfo_get_fsplit (trans_info),
                                        gnc_time (NULL));
         /* Done editing. */
-        xaccTransCommitEdit(gnc_import_TransInfo_get_trans (trans_info));
+        trans = gnc_import_TransInfo_get_trans (trans_info);
+        xaccTransCommitEdit(trans);
+        xaccTransRecordPrice(trans);
         return TRUE;
     case GNCImport_UPDATE:
     {

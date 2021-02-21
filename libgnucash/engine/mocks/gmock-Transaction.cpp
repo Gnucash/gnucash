@@ -144,3 +144,10 @@ xaccTransDestroy (Transaction *trans)
     ASSERT_TRUE(GNC_IS_MOCKTRANSACTION(trans));
     gnc_mocktransaction(trans)->destroy();
 }
+
+void
+xaccTransRecordPrice (Transaction *trans)
+{
+    g_return_if_fail(GNC_IS_MOCKTRANSACTION(trans));
+    ((MockTransaction*)trans)->recordPrice();
+}

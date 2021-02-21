@@ -66,6 +66,7 @@ public:
     MOCK_CONST_METHOD0(get_num, const char *());
     MOCK_CONST_METHOD0(is_open, gboolean());
     MOCK_METHOD0(destroy, void());
+    MOCK_METHOD0(recordPrice, void());
 
 protected:
     // Protect destructor to avoid MockTransaction objects to be created on stack. MockTransaction

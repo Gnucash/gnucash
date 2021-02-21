@@ -767,6 +767,12 @@ time64 xaccTransGetVoidTime(const Transaction *tr);
 void xaccTransDump (const Transaction *trans, const char *tag);
 #endif
 
+/** The xaccTransRecord() method iterates through the splits and
+ *  and record the non-currency equivalent prices in the price database.
+ */
+void xaccTransRecordPrice (Transaction *trans);
+
+
 #define RECONCILED_MATCH_TYPE	"reconciled-match"
 
 /** \deprecated */
