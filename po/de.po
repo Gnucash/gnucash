@@ -32,8 +32,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2021-02-14 19:50+0000\n"
-"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
+"PO-Revision-Date: 2021-02-20 22:50+0000\n"
+"Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -9835,6 +9835,7 @@ msgid "H"
 msgstr "V"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:997
+#, fuzzy
 msgctxt "Column header for 'Opening Balance'"
 msgid "O"
 msgstr "O"
