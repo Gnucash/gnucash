@@ -5,21 +5,23 @@
 # Mike Evans <mikee@saxicola.idps.co.uk>, 2010, 2013.
 # Nigel Titley <nigel@titley.com>, 2002 - 2007.
 # Neil Williams <linux@codehelp.co.uk>, 2006.
+# Adithya K <adithyak04@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: en_GB\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2013-12-28 15:16+0000\n"
-"Last-Translator: Mike Evans <mikee@saxicola.co.uk>\n"
-"Language-Team: British English <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2021-02-20 14:50+0000\n"
+"Last-Translator: Adithya K <adithyak04@gmail.com>\n"
+"Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
+"gnucash/gnucash/en_GB/>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.5\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -1829,9 +1831,8 @@ msgid "Tax related"
 msgstr "Ta_x related"
 
 #: gnucash/gnome/dialog-find-account.c:447
-#, fuzzy
 msgid "Search from "
-msgstr " Search "
+msgstr "Search "
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2947,7 +2948,7 @@ msgstr "To_p"
 
 #: gnucash/gnome/dialog-progress.c:484 gnucash/gnome/dialog-progress.c:533
 msgid "(paused)"
-msgstr " (paused)"
+msgstr "(paused)"
 
 #: gnucash/gnome/dialog-progress.c:768 gnucash/gnome/dialog-progress.c:771
 msgid "Complete"
@@ -4061,7 +4062,7 @@ msgstr "_Delete Account"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:253
 msgid "Delete selected account"
-msgstr "Delete selected account. "
+msgstr "Delete selected account."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:257
 #, fuzzy
@@ -5130,9 +5131,8 @@ msgid "_Delete Owner..."
 msgstr "_Delete Account"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:178
-#, fuzzy
 msgid "Delete selected owner"
-msgstr "Delete selected account. "
+msgstr "Delete selected account."
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:197
 #, fuzzy
@@ -7646,7 +7646,7 @@ msgstr "_Security/currency"
 
 #: gnucash/gnome-utils/dialog-commodity.c:280
 msgid "Select security"
-msgstr "Select security "
+msgstr "Select security"
 
 #: gnucash/gnome-utils/dialog-commodity.c:281
 #: gnucash/gtkbuilder/dialog-price.glade:146
@@ -7655,7 +7655,7 @@ msgstr "_Security"
 
 #: gnucash/gnome-utils/dialog-commodity.c:285
 msgid "Select currency"
-msgstr "Select currency "
+msgstr "Select currency"
 
 #: gnucash/gnome-utils/dialog-commodity.c:286
 #: gnucash/gtkbuilder/dialog-price.glade:161
@@ -9799,7 +9799,7 @@ msgstr "Display the ticker symbols"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:386
 msgid "Unique Name"
-msgstr "Unique Name "
+msgstr "Unique Name"
 
 #. Translators: Again replace CUSIP by the name of your
 #. National Securities Identifying Number.
@@ -9936,9 +9936,8 @@ msgid "Imbalance"
 msgstr "Imbalance"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1487
-#, fuzzy
 msgid " Scheduled "
-msgstr "Scheduled"
+msgstr " Scheduled "
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2314
 #: gnucash/register/ledger-core/split-register-control.c:1526
@@ -13993,7 +13992,6 @@ msgstr "Import QIF files"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:78
-#, fuzzy
 msgid ""
 "Please select a file to load. When you click \"Next\", the file will be "
 "loaded and analyzed. You may need to answer some questions about the "
@@ -14006,7 +14004,7 @@ msgstr ""
 "loaded and analysed. You may need to answer some questions about the "
 "account(s) in the file.\n"
 "\n"
-"You will have the opportunity to load as many files as you wish, so don't  "
+"You will have the opportunity to load as many files as you wish, so don't "
 "worry if your data is in multiple files. \n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:114
@@ -14059,7 +14057,6 @@ msgid "Set a date format for this QIF file"
 msgstr "Set a date format for this QIF file"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:359
-#, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
 "one account, but the file does not specify a name for that account. \n"
@@ -14069,10 +14066,10 @@ msgid ""
 "that program.\n"
 msgstr ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account. \n"
+"one account, but the file does not specify a name for that account.\n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
-"accounting program, you should use the same account name that was used  in "
+"accounting program, you should use the same account name that was used in "
 "that program.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:380
@@ -14337,7 +14334,6 @@ msgid "Select possible duplicates"
 msgstr "Select possible duplicates"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1368
-#, fuzzy
 msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
@@ -14352,8 +14348,8 @@ msgid ""
 msgstr ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
-"will be saved and used for defaults the next time you use the QIF import  "
-"facility. \n"
+"will be saved and used for defaults the next time you use the QIF import "
+"facility.\n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -15964,9 +15960,8 @@ msgid "Case insensitive searching is available on 'Account Full Name'."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:230
-#, fuzzy
 msgid "_Search"
-msgstr " Search "
+msgstr "Search"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:266
 msgid ""
@@ -19635,9 +19630,8 @@ msgid "Name for new template"
 msgstr "Name for new template"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
-#, fuzzy
 msgid " _Name of the new template:"
-msgstr "Name for new template"
+msgstr " Name for new template"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
 #, fuzzy
@@ -20623,9 +20617,8 @@ msgid "Account-posted"
 msgstr "Account Notes"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:164
-#, fuzzy
 msgid "Memo-posted"
-msgstr " (posted)"
+msgstr "(posted)"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:165
 #, fuzzy
@@ -21241,9 +21234,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:516
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:571
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:579
-#, fuzzy
 msgid " could not be understood.\n"
-msgstr "The file could not be reopened."
+msgstr " The file could not be reopened.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:323
@@ -26047,9 +26039,8 @@ msgid "Barchart"
 msgstr "Asset Barchart"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1224
-#, fuzzy
 msgid " to "
-msgstr "%s to %s"
+msgstr " %s to %s "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1287
 #: gnucash/report/reports/standard/trial-balance.scm:861

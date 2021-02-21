@@ -1,21 +1,23 @@
 # Localization for Bodo language.
 # Copyright (C) 2003, C-DAC, GIST, Pune, India.
 # Ritu Panwar <ritup@cdac.in>, 2014.
-#
+# Adithya K <adithyak04@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2014-08-19 21:49-0800\n"
-"Last-Translator: Ritu Panwar <ritup@cdac.in>\n"
-"Language-Team: NONE \n"
+"PO-Revision-Date: 2021-02-20 14:50+0000\n"
+"Last-Translator: Adithya K <adithyak04@gmail.com>\n"
+"Language-Team: Bodo <https://hosted.weblate.org/projects/gnucash/gnucash/brx/"
+">\n"
 "Language: brx\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.5\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -3433,8 +3435,8 @@ msgstr " सिगांनि अबस्थायाव लाबो"
 #: gnucash/gnome/gnc-plugin-basic-commands.c:132
 msgid "Reload the current database, reverting all unsaved changes"
 msgstr ""
-"गासै थिना दोनखानाय सोलायनायखौ  सिगांनि अबस्थायाव लाबोनानै दानि डाटाबेसखौ फिन ल'ड "
-"खालाम"
+"गासै थिना दोनखानाय सोलायनायखौ सिगांनि अबस्थायाव लाबोनानै दानि डाटाबेसखौ फिन "
+"ल'ड खालाम"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:137
 msgid "Export _Accounts"
@@ -6823,7 +6825,7 @@ msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
 msgstr ""
-"नोंथाङा  बे गोरोबहोनाय उइन्ड'याव सोलायबाय। थारैनो नोंथाङा बातिल खालामनो नामा?"
+"नोंथाङा बे गोरोबहोनाय उइन्ड'याव सोलायबाय। थारैनो नोंथाङा बातिल खालामनो नामा?"
 
 #: gnucash/gnome/window-reconcile2.c:2006 gnucash/gnome/window-reconcile.c:2227
 msgid "The account is not balanced. Are you sure you want to finish?"
@@ -7062,11 +7064,11 @@ msgstr "नोंथाङा जेबो एकाउन्टखौ साय
 
 #: gnucash/gnome-search/search-account.c:172
 msgid "matches all accounts"
-msgstr "गासै एकाउन्टखौ  गोरोब होयो"
+msgstr "गासै एकाउन्टखौ गोरोब होयो"
 
 #: gnucash/gnome-search/search-account.c:177
 msgid "matches any account"
-msgstr "जायखिजाया एकाउन्टखौ  गोरोब होयो"
+msgstr "जायखिजाया एकाउन्टखौ गोरोब होयो"
 
 #: gnucash/gnome-search/search-account.c:178
 msgid "matches no accounts"
