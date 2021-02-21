@@ -4,22 +4,24 @@
 # Tadas Masiulionis <tadzikaz@gmail.com>, 2009.
 # Mantas Kriaučiūnas <mantas@akl.lt>, 2011.
 # Aurimas Fišeras <aurimas@members.fsf.org>, 2011, 2012, 2013.
+# Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2013-12-26 17:53+0300\n"
-"Last-Translator: Aurimas Fišeras <aurimas@members.fsf.org>\n"
-"Language-Team: komp_lt@konf.lt\n"
+"PO-Revision-Date: 2021-02-21 11:50+0000\n"
+"Last-Translator: Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/gnucash/"
+"gnucash/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Weblate 4.5\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -422,7 +424,7 @@ msgstr "Vakarų Europos (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr "Lokalė:"
+msgstr "Lokalė: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 #, fuzzy
@@ -883,11 +885,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-hierarchy.c:1491
-#, fuzzy
 msgid "Please choose the currency to use for new accounts."
-msgstr ""
-"\n"
-"Pasirinkite valiutą, kuri bus naudojama naujoms sąskaitoms."
+msgstr "Pasirinkite valiutą, kuri bus naudojama naujoms sąskaitoms."
 
 #: gnucash/gnome/assistant-hierarchy.c:1536
 #: gnucash/gnome/assistant-hierarchy.c:1555
@@ -2096,7 +2095,7 @@ msgstr "Suderinimo data"
 
 #. Translators: This is a ngettext(3) message, %d is the number of maps missing
 #: gnucash/gnome/dialog-imap-editor.c:365
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There is %d invalid mapping,\n"
 "\n"
@@ -2105,9 +2104,18 @@ msgid_plural ""
 "There are %d invalid mappings,\n"
 "\n"
 "Would you like to remove them now?"
-msgstr[0] "Mokesčių lentelės „%s“ nėra. Ar norėtumėte ją sukurti?"
-msgstr[1] "Mokesčių lentelės „%s“ nėra. Ar norėtumėte ją sukurti?"
-msgstr[2] "Mokesčių lentelės „%s“ nėra. Ar norėtumėte ją sukurti?"
+msgstr[0] ""
+"Mokesčių lentelės „%d“ nėra.\n"
+"\n"
+"Ar norėtumėte ją sukurti?"
+msgstr[1] ""
+"Mokesčių lentelių „%d“ nėra.\n"
+"\n"
+"Ar norėtumėte jas sukurti?"
+msgstr[2] ""
+"Mokesčių lentelių „%d“ nėra.\n"
+"\n"
+"Ar norėtumėte jas sukurti?"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
 #, c-format
@@ -6362,10 +6370,9 @@ msgid "This account register is read-only."
 msgstr "Šis sąskaitos registras yra tik skaitymui."
 
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2448
-#, fuzzy, c-format
-#| msgid "This account register is read-only."
+#, c-format
 msgid "The '%s' account register is read-only."
-msgstr "Šis sąskaitos registras yra tik skaitymui."
+msgstr "Sąskaitos registras „%s“ yra tik skaitymui."
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 msgid ""
@@ -13241,13 +13248,12 @@ msgid "Import Preview"
 msgstr "Importuoti sąskaitas dabar"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1028
-#, fuzzy
 msgid ""
 "<b>Press Apply to add the Prices.\n"
 "Cancel to abort.</b>"
 msgstr ""
-"Spauskite „Pritaikyti“ eksporto failo sukūrimui.\n"
-"„Atsisakyti“, jei norite nutraukti."
+"<b>Spauskite „Pritaikyti“, norėdami pridėti kainas.\n"
+"„Atsisakyti“, jei norite nutraukti.</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1043
 #, fuzzy
