@@ -183,7 +183,7 @@ scm_to_value<const QofInstance*>(SCM new_value)
             SWIGTYPE_p_GncBudget, SWIGTYPE_p_GncInvoice,
             SWIGTYPE_p_GncTaxTable, SWIGTYPE_p_Account
                 };
-        void* ptr{};
+    void* ptr{};
     auto pos = std::find_if(types.begin(), types.end(),
                             [&new_value, &ptr](auto type){
                                 SWIG_ConvertPtr(new_value, &ptr, type, 0);
@@ -509,7 +509,15 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
         return scm_reverse(values);
     }
- %}
+
+    SCM get_scm_value(const GncOptionRangeValue<int>& option)
+    {
+        auto val{option.get_value()};
+        auto desig{scm_c_eval_string(val > 100 ? "'pixels" : "'percent")};
+        return scm_cons(desig, scm_from_int(val));
+    }
+
+    %}
 
 %include "gnc-option-date.hpp"
 %include "gnc-option.hpp"
@@ -531,7 +539,9 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             return SCM_BOOL_F;
         return std::visit([](const auto& option)->SCM {
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                              GncOptionMultichoiceValue>)
+                              GncOptionMultichoiceValue> ||
+                              std::is_same_v<std::decay_t<decltype(option)>,
+                              GncOptionRangeValue<int>>)
                     return get_scm_value(option);
                 auto value{option.get_value()};
                 if constexpr (std::is_same_v<std::decay_t<decltype(value)>,
