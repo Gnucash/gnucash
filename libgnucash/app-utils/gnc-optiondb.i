@@ -117,12 +117,24 @@ template <> inline SCM
 scm_from_value<const QofInstance*>(const QofInstance* value)
 {
     if (!value) return SCM_BOOL_F;
-    auto type{qof_collection_get_type(qof_instance_get_collection(value))};
-    auto guid_str{guid_to_string(qof_instance_get_guid(value))};
-    auto scm_guid = scm_from_utf8_string(guid_str);
-    auto scm_type = scm_from_utf8_string(type);
-    free(guid_str);
-    return scm_cons(scm_type, scm_guid);
+
+    auto ptr{static_cast<void*>(const_cast<QofInstance*>(value))};
+    swig_type_info *type = SWIGTYPE_p_QofInstance_s;
+    if (GNC_IS_COMMODITY(value))
+        type = SWIGTYPE_p_gnc_commodity;
+    else if (GNC_IS_ACCOUNT(value))
+        type = SWIGTYPE_p_Account;
+    else if (GNC_IS_BUDGET(value))
+        type = SWIGTYPE_p_GncBudget;
+    else if (GNC_IS_INVOICE(value))
+        type = SWIGTYPE_p_GncInvoice;
+    else if (GNC_IS_TAXTABLE(value))
+        type = SWIGTYPE_p_GncTaxTable;
+/* There is no type macro for QofQuery, it's not a GObject.
+    else if (GNC_IS_QOFQUERY(value))
+        type = SWIGTYPE_p_Query;
+*/
+    return SWIG_NewPointerObj(ptr, type, FALSE);
 }
 
 template <typename ValueType> inline ValueType
@@ -163,25 +175,23 @@ scm_to_value<double>(SCM new_value)
 template <> inline const QofInstance*
 scm_to_value<const QofInstance*>(SCM new_value)
 {
-    if (new_value == SCM_BOOL_F || !scm_is_pair(new_value))
-    {
-        void* ptr{};
-        SWIG_ConvertPtr(new_value, &ptr, SWIGTYPE_p_QofInstance_s, 0);
-        if (ptr)
-            return static_cast<const QofInstance*>(ptr);
-        SWIG_ConvertPtr(new_value, &ptr, SWIGTYPE_p_gnc_commodity, 0);
-        if (ptr)
-            return static_cast<const QofInstance*>(ptr);
-    }
+    if (new_value == SCM_BOOL_F)
+        return nullptr;
 
-    auto guid_str{scm_to_utf8_stringn(scm_car(new_value), nullptr)};
-    auto type{scm_to_utf8_stringn(scm_cdr(new_value), nullptr)};
-    GncGUID new_guid;
-    string_to_guid(guid_str, &new_guid);
-    free(guid_str);
-    auto coll{qof_book_get_collection(qof_session_get_book(gnc_get_current_session()), type)};
-    free(type);
-    return qof_collection_lookup_entity(coll, &new_guid);
+    static const std::array<swig_type_info*, 9> types{
+            SWIGTYPE_p_QofInstance_s, SWIGTYPE_p_gnc_commodity,
+            SWIGTYPE_p_GncBudget, SWIGTYPE_p_GncInvoice,
+            SWIGTYPE_p_GncTaxTable, SWIGTYPE_p_Account
+                };
+        void* ptr{};
+    auto pos = std::find_if(types.begin(), types.end(),
+                            [&new_value, &ptr](auto type){
+                                SWIG_ConvertPtr(new_value, &ptr, type, 0);
+                                return ptr != nullptr; });
+    if (pos == types.end())
+        return nullptr;
+
+    return static_cast<const QofInstance*>(ptr);
 }
 
 template <>inline SCM
@@ -371,6 +381,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %ignore swig_get_option(GncOption&);
 %inline %{
 #include <cassert>
+#include <algorithm>
+#include <array>
 #include "gnc-option.hpp"
 #include "gnc-option-ui.hpp"
 
