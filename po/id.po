@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-10 23:02+0100\n"
-"PO-Revision-Date: 2021-02-08 08:50+0000\n"
+"PO-Revision-Date: 2021-02-20 04:50+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -422,7 +422,7 @@ msgstr "Barat (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr "Locale: "
+msgstr "Pelokalan: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 msgid "Conversion Direction"
@@ -2951,7 +2951,7 @@ msgstr "user"
 #: gnucash/gtkbuilder/dialog-print-check.glade:293
 #: gnucash/gtkbuilder/gnc-date-format.glade:30
 msgid "Custom"
-msgstr "Suai"
+msgstr "Kustom"
 
 #: gnucash/gnome/dialog-print-check.c:2602
 #: gnucash/gtkbuilder/dialog-preferences.glade:3431
@@ -3127,7 +3127,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:245
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:251
 msgid "Scheduled Transactions"
-msgstr "Transaksi Terjadwal"
+msgstr "Jadwal Transaksi"
 
 #: gnucash/gnome/dialog-sx-editor.c:617
 msgid ""
