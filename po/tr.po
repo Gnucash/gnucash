@@ -640,11 +640,11 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:90
 msgid ""
-"You can pack multiple reports into a single window,  providing all the "
+"You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
-"İstediğiniz tüm finansal bilgileri bir bakışta sunarak tek bir pencerede  "
+"İstediğiniz tüm finansal bilgileri bir bakışta sunarak tek bir pencerede "
 "birden çok raporu toplayabilirsiniz. Bunu yapmak için, Örnek ve Özel->\"Özel "
 "Çoklusütun raporu\"'nu kullanın."
 
@@ -763,14 +763,14 @@ msgid ""
 "transactions up to midnight %s (for a total of %d transactions spread over "
 "%d accounts).\n"
 "\n"
-" Amend the Title and Notes or Click on \"Next\" to proceed.\n"
-" Click on \"Back\" to adjust the dates or \"Cancel\"."
+"Amend the Title and Notes or Click on \"Next\" to proceed.\n"
+"Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
 "Bir defter oluşturmak istediniz. Bu defter gece yarısı %s kadar olan tüm "
 "işlemleri içerecektir (%d işlemin tamamı %d hesap üzerinden yayılmıştır).\n"
 "\n"
-" Başlığı ve Notları Değiştirin veya Devam etmek için 'İleri'yi tıklayın.\n"
-" Tarihleri ayarlamak için 'Geri' ya da 'İptal'i tıklayın."
+"Başlığı ve Notları Değiştirin veya Devam etmek için 'İleri'yi tıklayın.\n"
+"Tarihleri ayarlamak için 'Geri' ya da 'İptal'i tıklayın."
 
 #: gnucash/gnome/assistant-acct-period.c:386
 #, c-format
@@ -1824,7 +1824,7 @@ msgstr "Ver_giyle İlgili"
 #: gnucash/gnome/dialog-find-account.c:447
 #, fuzzy
 msgid "Search from "
-msgstr " Ara "
+msgstr "Ara "
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -6088,7 +6088,7 @@ msgstr "Bu dosyaya kaydedemezsiniz."
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:741
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
-msgstr " %s dosyası zaten var. Üzerine yazılsın mı?"
+msgstr "%s dosyası zaten var. Üzerine yazılsın mı?"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1725
 #: gnucash/gnome/gnc-plugin-page-report.c:1749 gnucash/gnucash-commands.cpp:224
@@ -8057,19 +8057,19 @@ msgstr "Dosya otomatik kaydedilsin mi?"
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -8226,23 +8226,23 @@ msgstr "%s için uygun bir arka uç bulunamadı."
 #: gnucash/gnome-utils/gnc-file.c:285
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
-msgstr " %s adresini bu GnuCash sürümü desteklemiyor."
+msgstr "%s adresini bu GnuCash sürümü desteklemiyor."
 
 #: gnucash/gnome-utils/gnc-file.c:290
 #, c-format
 msgid "Can't parse the URL %s."
-msgstr " %s adresi anlaşılamadı."
+msgstr "%s adresi anlaşılamadı."
 
 #: gnucash/gnome-utils/gnc-file.c:295
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
 msgstr ""
-" %sxile bağlantı kurulamadı. Bilgisayar, kullanıcı adı veya parola hatalı."
+"%sxile bağlantı kurulamadı. Bilgisayar, kullanıcı adı veya parola hatalı."
 
 #: gnucash/gnome-utils/gnc-file.c:301
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
-msgstr " %s ile bağlantı kurulamadı. Bağlantı koptu, veri gönderilemiyor."
+msgstr "%s ile bağlantı kurulamadı. Bağlantı koptu, veri gönderilemiyor."
 
 #: gnucash/gnome-utils/gnc-file.c:307
 msgid ""
@@ -8255,7 +8255,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:314
 #, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
-msgstr " %s veri tabanı yok. Oluşturulsun mu?"
+msgstr "%s veri tabanı yok. Oluşturulsun mu?"
 
 #: gnucash/gnome-utils/gnc-file.c:328
 #, c-format
@@ -8264,7 +8264,7 @@ msgid ""
 "another user, in which case you should not open the database. Do you want to "
 "proceed with opening the database?"
 msgstr ""
-" %s kilitlenemedi. Bu veri tabanı başkası tarafından kullanılıyorsa açmanız "
+"%s kilitlenemedi. Bu veri tabanı başkası tarafından kullanılıyorsa açmanız "
 "uygun olmayabilir. Veri tabanını açma işlemine devam edilsin mi?"
 
 #: gnucash/gnome-utils/gnc-file.c:336
@@ -8314,27 +8314,27 @@ msgstr ""
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
 msgstr ""
-" %s dosyası GnuCash paketine ait değil, veya içindeki veriler bozulmuş."
+"%s dosyası GnuCash paketine ait değil, veya içindeki veriler bozulmuş."
 
 #: gnucash/gnome-utils/gnc-file.c:391
 #, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
 msgstr ""
-" %s adresindeki sunucuda bir hata oluştu, veya hatalı ya da bozuk veriyle "
+"%s adresindeki sunucuda bir hata oluştu, veya hatalı ya da bozuk veriyle "
 "karşılaştı."
 
 #: gnucash/gnome-utils/gnc-file.c:397
 #, c-format
 msgid "You do not have permission to access %s."
-msgstr " %s için erişim izniniz yoktur."
+msgstr "%s için erişim izniniz yoktur."
 
 #: gnucash/gnome-utils/gnc-file.c:402
 #: gnucash/register/register-core/formulacell.c:118
 #: gnucash/register/register-core/pricecell.c:172
 #, c-format
 msgid "An error occurred while processing %s."
-msgstr " %s işlenirken bir hata oldu."
+msgstr "%s işlenirken bir hata oldu."
 
 #: gnucash/gnome-utils/gnc-file.c:407
 msgid "There was an error reading the file. Do you want to continue?"
@@ -8343,12 +8343,12 @@ msgstr "Dosya okunurken bir hata oldu. Devam edilsin mi?"
 #: gnucash/gnome-utils/gnc-file.c:416
 #, c-format
 msgid "There was an error parsing the file %s."
-msgstr " %s dosyası okunurken bir hata oldu."
+msgstr "%s dosyası okunurken bir hata oldu."
 
 #: gnucash/gnome-utils/gnc-file.c:421
 #, c-format
 msgid "The file %s is empty."
-msgstr " %s dosyasının içi boştur."
+msgstr "%s dosyasının içi boştur."
 
 #: gnucash/gnome-utils/gnc-file.c:434
 #, c-format
@@ -8370,7 +8370,7 @@ msgstr "Bu dosya daha eski bir GnuCash sürümüne ait. Devam edilsin mi?"
 #: gnucash/gnome-utils/gnc-file.c:456
 #, c-format
 msgid "The file type of file %s is unknown."
-msgstr " %s dosyasının türü bilinmiyor."
+msgstr "%s dosyasının türü bilinmiyor."
 
 #: gnucash/gnome-utils/gnc-file.c:461
 #, c-format
@@ -8434,7 +8434,7 @@ msgstr ""
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
-"the  documentation to learn how to clear out dangling login sessions."
+"the documentation to learn how to clear out dangling login sessions."
 msgstr ""
 "SQL veri tabanı başkaları tarafından kullanılıyor, ve oturumları "
 "kapatılmadan güncelleme yapılamaz. Eğer başka kullanıcılar yoksa, başıboş "
@@ -12727,15 +12727,15 @@ msgstr "Bu ayar, verilen sütunun genişliğini piksel cinsinden depolar."
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:29
 msgid ""
-"This assistant will help you setup and use accounting periods. \n"
-" \n"
+"This assistant will help you setup and use accounting periods.\n"
+"\n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
 msgstr ""
 "Bu asistan, hesap dönemlerini ayarlamanıza ve kullanmanıza yardımcı "
 "olacaktır.\n"
-" \n"
+"\n"
 "Tehlike: Bu özellik şu anda doğru çalışmıyor; hala geliştirme aşamasındadır. "
 "Muhtemelen verilerinize tamir edilemeyecek şekilde zarar verecektir!"
 
@@ -13438,13 +13438,13 @@ msgid ""
 "as well as move accounts (along with their sub-accounts) from one parent to "
 "another.\n"
 "\n"
-"Click 'Cancel'  if you do not wish to create any new accounts now."
+"Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
 "Bu asistan, varlıklarınız (yatırımlar, çek veya tasarruf hesapları gibi), "
 "yükümlülükler (krediler gibi) ve farklı türde gelir ve giderler için bir "
 "dizi GnuCash hesabı oluşturmanıza yardımcı olacaktır.\n"
 "\n"
-"Şimdi yeni hesaplar oluşturmak istemiyorsanız  'İptal'i tıklayın."
+"Şimdi yeni hesaplar oluşturmak istemiyorsanız 'İptal'i tıklayın."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:39
 msgid "New Account Hierarchy Setup"
@@ -13887,10 +13887,10 @@ msgstr "QIF İçe Aktarma Yardımcısı"
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-"programs. \n"
+"programs.\n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Apply\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process.\n"
 "\n"
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
@@ -13918,7 +13918,7 @@ msgid ""
 "account(s) in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't "
-"worry if your data is in multiple files. \n"
+"worry if your data is in multiple files.\n"
 msgstr ""
 "Lütfen yüklenecek bir dosya seçin. \"İleri\"yi tıkladığınızda, dosya "
 "yüklenir ve analiz edilir. Dosyadaki hesaplarla ilgili bazı soruları "
@@ -13949,11 +13949,11 @@ msgid ""
 "components of a date are printed. In most cases, it is possible to "
 "automatically determine which format is in use in a particular file. "
 "However, in the file you have just imported there exist more than one "
-"possible format that fits the data. \n"
+"possible format that fits the data.\n"
 "\n"
 "Please select a date format for the file. QIF files created by European "
-"software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-day-year. \n"
+"software are likely to be in \"d-m-y\" or day-month-year format, where US "
+"QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
 "QIF dosya biçimi, bir tarihin gün, ay ve yıl bileşenlerinin hangi sırayla "
 "yazdırılacağını belirtmez. Çoğu durumda, hangi dosyanın belirli bir dosyada "
@@ -13962,7 +13962,7 @@ msgstr ""
 "biçim var.\n"
 "\n"
 "Lütfen dosya için bir tarih biçimi seçin. Avrupa'daki yazılımlar tarafından "
-"oluşturulan QIF  dosyaları \"d-m-y\" veya gün-ay-yıl biçiminde, ABD QIF "
+"oluşturulan QIF dosyaları \"d-m-y\" veya gün-ay-yıl biçiminde, ABD QIF "
 "dosyaları büyük olasılıkla \"m-d-y\" veya ay-gün-yıl biçimindedir.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:332
@@ -13979,7 +13979,7 @@ msgstr "Bu QIF dosyası için bir tarih biçimi ayarlayın"
 #: gnucash/gtkbuilder/assistant-qif-import.glade:359
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account. \n"
+"one account, but the file does not specify a name for that account.\n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
 "accounting program, you should use the same account name that was used in "
@@ -14083,7 +14083,7 @@ msgstr "QIF hesaplarını GnuCash hesapları ile eşleştir"
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
-"converted to a GnuCash account. \n"
+"converted to a GnuCash account.\n"
 "\n"
 "On the next page, you will have an opportunity to look at the suggested "
 "matches between QIF categories and GnuCash accounts. You may change matches "
@@ -14116,7 +14116,7 @@ msgstr "QIF kategorilerini GnuCash hesapları ile eşleştir"
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
-"correctly assigned to GnuCash accounts. \n"
+"correctly assigned to GnuCash accounts.\n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
@@ -14183,8 +14183,8 @@ msgid ""
 "Below you are asked to provide information about stocks, mutual funds, and "
 "other investments that appear in the QIF file(s) you are importing. GnuCash "
 "needs some additional details about these investments that the QIF format "
-"does not provide. \n"
-" \n"
+"does not provide.\n"
+"\n"
 "Each stock, mutual fund, or other investment must have a name and an "
 "abbreviation, such as a stock symbol. Because some unrelated investments "
 "have the same abbreviation, you also need to indicate what type of "
@@ -14287,7 +14287,7 @@ msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
 "will be saved and used for defaults the next time you use the QIF import "
-"facility. \n"
+"facility.\n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -16294,7 +16294,7 @@ msgstr ""
 "Yeni kullanıcılar için hazırlanmış bazı hazır eylemler mevcuttur. Bu "
 "eylemlerden birini aşağıda seçip <i>Tamam</i>'ı tıklatın, veya hiçbirini "
 "seçmeden devam etmek isterseniz\n"
-" <i>İptal</i>'i tıklatın."
+"<i>İptal</i>'i tıklatın."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:245
 msgid "C_reate a new set of accounts"
@@ -17688,8 +17688,8 @@ msgid "<b>_Selected Reports</b>"
 msgstr "<b>_Seçili Raporlar</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
-msgid "A_dd  >>"
-msgstr "E_kle  >>"
+msgid "A_dd >>"
+msgstr "E_kle >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
 msgid "<< _Remove"
@@ -17963,11 +17963,6 @@ msgstr "Önceden oluştur"
 #: gnucash/gtkbuilder/dialog-sx.glade:924
 msgid "Remind in advance"
 msgstr "Önceden haber ver"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:965
-#: gnucash/gtkbuilder/dialog-sx.glade:1024
-msgid " days"
-msgstr " gün"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:982
 msgid "Create automatically"
@@ -19058,10 +19053,10 @@ msgstr "Her "
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:62
 msgid ""
-"Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
+"Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
-"Tekrarlamada takvim birimlerinin sayısı:  Örn. İkihaftalık = 2 haftada bir; "
+"Tekrarlamada takvim birimlerinin sayısı: Örn. İkihaftalık = 2 haftada bir; "
 "çeyrek = 3 ayda bir"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:109
@@ -19196,7 +19191,7 @@ msgid "Export to PDF File"
 msgstr "PDF Dosyası Olarak Dışarı Aktar"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
-#. 3. Account Number,  4. Subaccount ID
+#. 3. Account Number, 4. Subaccount ID
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
@@ -19231,9 +19226,8 @@ msgstr ""
 msgid ""
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
-"bank  decides to grant you electronic access, they will send you a letter "
-"containing \n"
-"\n"
+"bank decides to grant you electronic access, they will send you a letter "
+"containing:\n"
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's Online Banking server\n"
@@ -19265,9 +19259,8 @@ msgstr ""
 "olur.\n"
 "\n"
 "Önce bankanıza Çevrim İçi Bankacılık başvurusunda bulunmanız gerekir. "
-"Bankanız  size elektronik erişim hakkı vermeye karar verirse, size şunları "
-"içeren bir mektup göndereceklerdir\n"
-"\n"
+"Bankanız size elektronik erişim hakkı vermeye karar verirse, size şunları "
+"içeren bir mektup göndereceklerdir:\n"
 "* Bankanızın banka kodu\n"
 "* Sizi bankanıza tanıtan kullanıcı kimliği\n"
 "* Bankanızın İnternet Bankacılığı sunucusunun İnternet adresi\n"
@@ -19487,14 +19480,12 @@ msgid "Name for new template"
 msgstr "Yeni şablon için ad"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
-#, fuzzy
-msgid " _Name of the new template:"
-msgstr "Yeni şablon için ad"
+msgid "_Name of the new template"
+msgstr "_Yeni şablon için ad"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
-#, fuzzy
 msgid "Enter a unique name for the new template."
-msgstr "Yeni şablon için ad girin:"
+msgstr "Yeni şablon için ad girin."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:989
 msgid "Online Transaction"
@@ -19877,7 +19868,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:184
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probable the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -19939,7 +19930,7 @@ msgstr "Banka"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:799
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probably the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -20008,10 +19999,10 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1156
 #, c-format
 msgid ""
-"Result of Online Banking job: \n"
+"Result of Online Banking job:\n"
 "Account booked balance is %s"
 msgstr ""
-"Çevrim İçi Bankacılık işinin sonucu: \n"
+"Çevrim İçi Bankacılık işinin sonucu:\n"
 "Hesap bakiyesi %s"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1162
@@ -20049,12 +20040,12 @@ msgstr "DTAUS içe aktarımı için içe aktarma modülü bulunmadı."
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:295
 #, fuzzy, c-format
 msgid "Job %d status %d - %s\n"
-msgstr "İş %d durumu %d - %s: %s \n"
+msgstr "İş %d durumu %d - %s: %s\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:297
 #, fuzzy, c-format
 msgid "Job %d status %d - %s: %s\n"
-msgstr "İş %d durumu %d - %s: %s \n"
+msgstr "İş %d durumu %d - %s: %s\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:317
 msgid "...\n"
@@ -20093,10 +20084,10 @@ msgstr[0] ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
 #, c-format
 msgid ""
-"The PIN needs to be at least %d characters \n"
+"The PIN needs to be at least %d characters\n"
 "long. Do you want to try again?"
 msgstr ""
-"PIN en az %d karakter uzunluğunda \n"
+"PIN en az %d karakter uzunluğunda\n"
 "olmalıdır. Yeniden denemek ister misiniz?"
 
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1676
@@ -20479,7 +20470,7 @@ msgstr "Hesap Notları"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:164
 #, fuzzy
 msgid "Memo-posted"
-msgstr " (muhasebeleşmiş)"
+msgstr "(muhasebeleşmiş)"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:165
 #, fuzzy
@@ -20591,7 +20582,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "This assistant will help you export the Account Tree to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20604,7 +20595,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use.\n"
@@ -20613,7 +20604,7 @@ msgid ""
 "order the accounts were processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20622,7 +20613,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:115
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use. Each Transaction will "
@@ -20630,7 +20621,7 @@ msgid ""
 "processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "By selecting the simple layout, the output will be equivalent to a single "
 "row register view and as such some of the transfer detail could be lost.\n"
@@ -28199,19 +28190,19 @@ msgid "Today date format"
 msgstr "Bugün tarih biçimi"
 
 #: gnucash/report/reports/standard/receipt.scm:81
-#, fuzzy
+#: gnucash/report/reports/standard/taxinvoice.scm:149
 msgid ""
-"The file name of the eguile template part of this report.  This file should "
+"The file name of the eguile template part of this report. This file should "
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
 "Bu raporun eguile şablon bölümünün dosya adı. Bu dosya ya .gnucash "
 "dizininizde ya da GnuCash kurulum dizinindeki uygun yerde olmalıdır."
 
+#: gnucash/report/reports/standard/taxinvoice.scm:152
 #: gnucash/report/reports/standard/receipt.scm:84
-#, fuzzy
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  This file "
+"The file name of the CSS stylesheet to use with this report. This file "
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -28236,8 +28227,8 @@ msgstr "Raporda kullanılacak bir logo içeren dosyanın adı."
 #: gnucash/report/reports/standard/receipt.scm:97
 #, fuzzy
 msgid ""
-"Width of the header logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 "Logo'nun CSS biçimindeki genişliği, ör. % 10 veya 32px. Logoyu doğal "
@@ -28252,8 +28243,8 @@ msgstr "Raporda kullanılacak bir logo içeren dosyanın adı."
 #: gnucash/report/reports/standard/receipt.scm:103
 #, fuzzy
 msgid ""
-"Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 "Logo'nun CSS biçimindeki genişliği, ör. % 10 veya 32px. Logoyu doğal "
@@ -28299,7 +28290,7 @@ msgstr "İncelemek istediğiniz alacak hesapları."
 #: gnucash/report/reports/standard/reconcile-report.scm:59
 msgid ""
 "The reconcile report is designed to be similar to the formal reconciliation "
-"tool.  Please select the account from Report Options. Please note the dates "
+"tool. Please select the account from Report Options. Please note the dates "
 "specified in the options will apply to the Reconciliation Date."
 msgstr ""
 
@@ -28554,24 +28545,6 @@ msgstr "Fatura İş numarası?"
 #: gnucash/report/reports/standard/taxinvoice.scm:145
 msgid "Show net price?"
 msgstr "Net fiyatı göster?"
-
-#: gnucash/report/reports/standard/taxinvoice.scm:149
-msgid ""
-"The file name of the eguile template part of this report. This file should "
-"either be in your .gnucash directory, or else in its proper place within the "
-"GnuCash installation directories."
-msgstr ""
-"Bu raporun eguile şablon bölümünün dosya adı. Bu dosya ya .gnucash "
-"dizininizde ya da GnuCash kurulum dizinindeki uygun yerde olmalıdır."
-
-#: gnucash/report/reports/standard/taxinvoice.scm:152
-msgid ""
-"The file name of the CSS stylesheet to use with this report. This file "
-"should either be in your .gnucash directory, or else in its proper place "
-"within the GnuCash installation directories."
-msgstr ""
-"Bu raporla birlikte kullanılacak CSS stil sayfasının dosya adı. Bu dosya ya ."
-"gnucash dizininizde ya da GnuCash kurulum dizinindeki uygun yerde olmalıdır."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:162
 msgid "Name of a file containing a logo to be used on the report."
@@ -31885,7 +31858,7 @@ msgstr "Yardım uygun değil."
 #~ "Eğer artık çalıştırmayı düşünmüyorsanız"
 
 #~ msgid ""
-#~ "The external program \"AqBanking Setup Wizard\" has not been found. \n"
+#~ "The external program \"AqBanking Setup Wizard\" has not been found.\n"
 #~ "\n"
 #~ "The %s package should include the program \"qt3-wizard\". Please check "
 #~ "your installation to ensure this program is present. On some "
@@ -31971,7 +31944,7 @@ msgstr "Yardım uygun değil."
 #~ "The text you entered contained at least one character that is invalid for "
 #~ "a SEPA transaction. In SEPA, unfortunately only exactly the following "
 #~ "characters are allowed: a...z, A...Z, 0...9, and the following "
-#~ "punctuations: ' : ? , - ( + . ) / \n"
+#~ "punctuations: ' : ? , - ( + . ) /\n"
 #~ "\n"
 #~ "In particular, neither Umlauts nor an ampersand (&) is allowed, neither "
 #~ "in the recipient or sender name nor in any purpose line."
@@ -31979,7 +31952,7 @@ msgstr "Yardım uygun değil."
 #~ "Girdiğiniz metin, SEPA işlemi için geçersiz olan en az bir karakter "
 #~ "içeriyordu. SEPA'da maalesef tam olarak yalnızca şu karakterlere izin "
 #~ "verilir: a... z, A... Z, 0... 9 ve aşağıdaki noktalamalar: ' : ? , - "
-#~ "(+ .) / \n"
+#~ "(+ .) /\n"
 #~ "\n"
 #~ "Özellikle, ne alıcı veya gönderen adında ne de herhangi bir amaç "
 #~ "satırında, ne Umlautlara ne de bir ampersanda (&) izin verilir."
@@ -32299,14 +32272,14 @@ msgstr "Yardım uygun değil."
 #~ msgid ""
 #~ "The directory\n"
 #~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
+#~ "exists but cannot be accessed. This program\n"
+#~ "must have full access (read/write/execute) to\n"
 #~ "the directory in order to function properly.\n"
 #~ msgstr ""
 #~ "Dizin\n"
 #~ "  %s\n"
-#~ "mevcut ancak erişilemiyor. Program \n"
-#~ "düzgün şekilde işlevini yerine getirebilmek için \n"
+#~ "mevcut ancak erişilemiyor. Program\n"
+#~ "düzgün şekilde işlevini yerine getirebilmek için\n"
 #~ "dizine tam erişim yetkilerine sahip olmalıdır (okuma/yazma/çalıştırma).\n"
 
 #~ msgid ""
@@ -32324,13 +32297,13 @@ msgstr "Yardım uygun değil."
 #~ "An unknown error occurred when validating that the\n"
 #~ "  %s\n"
 #~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
+#~ "problem and restart GnuCash. The reported error\n"
 #~ "was '%s' (errno %d)."
 #~ msgstr ""
 #~ "Beklenmeyen bir hata oluştu. Dizin\n"
 #~ "  %s\n"
 #~ "mevcut ve kullanılabilir. Lütfen sorunu\n"
-#~ "düzeltin ve GnuCash'i yeniden başlatın. Bildirilen \n"
+#~ "düzeltin ve GnuCash'i yeniden başlatın. Bildirilen\n"
 #~ "hata '%s' (hatano %d)."
 
 #~ msgid ""
@@ -32760,7 +32733,7 @@ msgstr "Yardım uygun değil."
 #~ "with the command 'gconftool-2 --shutdown'. When you click Apply, there "
 #~ "will be a short delay before GnuCash is loaded."
 #~ msgstr ""
-#~ "Sorunu zaten giderip gconf arka ucunu \n"
+#~ "Sorunu zaten giderip gconf arka ucunu\n"
 #~ "'gconftool-2 --shutdown' komutuyla tekrar başlatmışsınız. Uygula "
 #~ "düğmesini tıklatınca GnuCash yüklemeye devam edecektir."
 
@@ -33434,7 +33407,7 @@ msgstr "Yardım uygun değil."
 #~ msgid "The number of rows in an invoice"
 #~ msgstr "Faturalarda görünecek varsayılan satır sayısı."
 
-#~ msgid "Invalid Entry:  You need to supply %s."
+#~ msgid "Invalid Entry: You need to supply %s."
 #~ msgstr "Geçersiz Giriş: %s vermelisiniz."
 
 #~ msgid "This SX has changed; are you sure you want to cancel?"

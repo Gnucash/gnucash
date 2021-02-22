@@ -618,7 +618,7 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:90
 msgid ""
-"You can pack multiple reports into a single window,  providing all the "
+"You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
@@ -716,8 +716,8 @@ msgid ""
 "transactions up to midnight %s (for a total of %d transactions spread over "
 "%d accounts).\n"
 "\n"
-" Amend the Title and Notes or Click on \"Next\" to proceed.\n"
-" Click on \"Back\" to adjust the dates or \"Cancel\"."
+"Amend the Title and Notes or Click on \"Next\" to proceed.\n"
+"Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:386
@@ -1774,7 +1774,7 @@ msgstr "與稅相關(_X)"
 #: gnucash/gnome/dialog-find-account.c:447
 #, fuzzy
 msgid "Search from "
-msgstr " 搜尋 "
+msgstr "搜尋 "
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2768,7 +2768,7 @@ msgid ""
 "If you continue these splits will be ignored:\n"
 "\n"
 "%s\n"
-"Do you wish to continue and ignore these splits ?"
+"Do you wish to continue and ignore these splits?"
 msgstr ""
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
@@ -2795,7 +2795,7 @@ msgstr "訂單項目"
 
 #: gnucash/gnome/dialog-price-edit-db.c:457
 #, fuzzy
-msgid "Are you sure you want to delete these prices ?"
+msgid "Are you sure you want to delete these prices?"
 msgstr "您確定要刪除這 %d 個選擇的價格？"
 
 #: gnucash/gnome/dialog-price-editor.c:221
@@ -2888,7 +2888,7 @@ msgstr "上"
 
 #: gnucash/gnome/dialog-progress.c:484 gnucash/gnome/dialog-progress.c:533
 msgid "(paused)"
-msgstr " (已暫停)"
+msgstr "(已暫停)"
 
 #: gnucash/gnome/dialog-progress.c:768 gnucash/gnome/dialog-progress.c:771
 msgid "Complete"
@@ -8008,19 +8008,19 @@ msgstr "自動存檔？"
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -8360,7 +8360,7 @@ msgstr ""
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
-"the  documentation to learn how to clear out dangling login sessions."
+"the documentation to learn how to clear out dangling login sessions."
 msgstr ""
 "其他使用者正在使用此 SQL 資料庫，在他們登出前不能進行升級的動作。如果目前沒有"
 "其他的使用者，請參閱文件學習如何清除掛在站上的登入工作階段。"
@@ -8493,7 +8493,7 @@ msgstr "資料庫 %s 似乎不存在。您要建立它嗎？"
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
-"proceed ?"
+"proceed?"
 msgstr "檔案 %s 已存在。您確定要覆蓋它？"
 
 #: gnucash/gnome-utils/gnc-file.c:1699
@@ -10293,7 +10293,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable ?"
+"       Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
@@ -12334,8 +12334,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:29
 msgid ""
-"This assistant will help you setup and use accounting periods. \n"
-" \n"
+"This assistant will help you setup and use accounting periods.\n"
+"\n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
@@ -13034,7 +13034,7 @@ msgid ""
 "as well as move accounts (along with their sub-accounts) from one parent to "
 "another.\n"
 "\n"
-"Click 'Cancel'  if you do not wish to create any new accounts now."
+"Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
 "這個精靈會幫助您建立一組 GnuCash 科目，包括您的資產(像是投資、支票或儲蓄帳"
 "號)、債務(像是貸款)與您可能會有的各種不同的收入和支出。\n"
@@ -13469,10 +13469,10 @@ msgstr "QIF 匯入"
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-"programs. \n"
+"programs.\n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Apply\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process.\n"
 "\n"
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
@@ -13498,7 +13498,7 @@ msgid ""
 "account(s) in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't "
-"worry if your data is in multiple files. \n"
+"worry if your data is in multiple files.\n"
 msgstr ""
 "請選擇要載入的檔案。當您點選「向前」時，檔案將會被載入並分析。您可能需要回答"
 "一些關於此檔案中的科目的問題。\n"
@@ -13529,11 +13529,11 @@ msgid ""
 "components of a date are printed. In most cases, it is possible to "
 "automatically determine which format is in use in a particular file. "
 "However, in the file you have just imported there exist more than one "
-"possible format that fits the data. \n"
+"possible format that fits the data.\n"
 "\n"
 "Please select a date format for the file. QIF files created by European "
-"software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-day-year. \n"
+"software are likely to be in \"d-m-y\" or day-month-year format, where US "
+"QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
 "此 QIF 檔案格式沒有指定日期中的年、月、日等要素要以何種順序列印。程式在大多數"
 "情形下能夠自動判定在特別的檔案中所使用的格式。然而，您正匯入的檔案存在一種以"
@@ -13555,7 +13555,7 @@ msgstr "設定此 QIF 檔案的日期格式"
 #, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account. \n"
+"one account, but the file does not specify a name for that account.\n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
 "accounting program, you should use the same account name that was used in "
@@ -13655,7 +13655,7 @@ msgstr "以 GnuCash 科目比對 QIF 科目"
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
-"converted to a GnuCash account. \n"
+"converted to a GnuCash account.\n"
 "\n"
 "On the next page, you will have an opportunity to look at the suggested "
 "matches between QIF categories and GnuCash accounts. You may change matches "
@@ -13685,7 +13685,7 @@ msgstr "比對 QIF 分類與 GnuCash 科目"
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
-"correctly assigned to GnuCash accounts. \n"
+"correctly assigned to GnuCash accounts.\n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
@@ -13744,8 +13744,8 @@ msgid ""
 "Below you are asked to provide information about stocks, mutual funds, and "
 "other investments that appear in the QIF file(s) you are importing. GnuCash "
 "needs some additional details about these investments that the QIF format "
-"does not provide. \n"
-" \n"
+"does not provide.\n"
+"\n"
 "Each stock, mutual fund, or other investment must have a name and an "
 "abbreviation, such as a stock symbol. Because some unrelated investments "
 "have the same abbreviation, you also need to indicate what type of "
@@ -13835,7 +13835,7 @@ msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
 "will be saved and used for defaults the next time you use the QIF import "
-"facility. \n"
+"facility.\n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -15413,7 +15413,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-find-account.glade:230
 #, fuzzy
 msgid "_Search"
-msgstr " 搜尋 "
+msgstr "搜尋 "
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:266
 msgid ""
@@ -17202,8 +17202,8 @@ msgid "<b>_Selected Reports</b>"
 msgstr "<b>已選的報表(_S)</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
-msgid "A_dd  >>"
-msgstr "新增(_D)  >>"
+msgid "A_dd >>"
+msgstr "新增(_D) >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
 msgid "<< _Remove"
@@ -17478,11 +17478,6 @@ msgstr "多久前建立"
 #: gnucash/gtkbuilder/dialog-sx.glade:924
 msgid "Remind in advance"
 msgstr "幾天前提醒"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:965
-#: gnucash/gtkbuilder/dialog-sx.glade:1024
-msgid " days"
-msgstr " 天"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:982
 msgid "Create automatically"
@@ -18617,7 +18612,7 @@ msgstr "每"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:62
 msgid ""
-"Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
+"Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
 
@@ -18750,7 +18745,7 @@ msgid "Export to PDF File"
 msgstr "報表標題"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
-#. 3. Account Number,  4. Subaccount ID
+#. 3. Account Number, 4. Subaccount ID
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
@@ -18786,9 +18781,8 @@ msgstr ""
 msgid ""
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
-"bank  decides to grant you electronic access, they will send you a letter "
-"containing \n"
-"\n"
+"bank decides to grant you electronic access, they will send you a letter "
+"containing:\n"
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's Online Banking server\n"
@@ -18819,8 +18813,7 @@ msgstr ""
 "這個精靈會幫助您設定與您的網路銀行的連線。\n"
 "\n"
 "您首先要向您的銀行申請網路銀行存取權。如果您的銀行決定授予您電子化存取權，銀"
-"行會寄給您一封信，裡面包含 \n"
-"\n"
+"行會寄給您一封信，裡面包含:\n"
 "* 您的銀行的銀行代碼\n"
 "* 使用者 ID ，讓您的銀行能辨認您\n"
 "* 您銀行伺服器的網路位址\n"
@@ -19027,7 +19020,7 @@ msgstr "新範本的名稱"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
 #, fuzzy
-msgid " _Name of the new template:"
+msgid "_Name of the new template"
 msgstr "新範本的名稱"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
@@ -19394,7 +19387,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:184
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probable the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -19447,7 +19440,7 @@ msgstr "銀行"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:799
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probably the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -19495,13 +19488,13 @@ msgstr ""
 "下載的 HBCI 結餘為零。\n"
 "這似乎是因為您的銀行不支援這個 HBCI 版本的\n"
 "結餘下載。您應該在 HBCI 設定中選擇更高的\n"
-"HBCI 版號。在那之後，再次嘗試下載 HBCI \n"
+"HBCI 版號。在那之後，再次嘗試下載 HBCI\n"
 "結餘。\n"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1156
 #, fuzzy, c-format
 msgid ""
-"Result of Online Banking job: \n"
+"Result of Online Banking job:\n"
 "Account booked balance is %s"
 msgstr ""
 "HBCI 工作的結果：\n"
@@ -19580,7 +19573,7 @@ msgstr[1] ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
 #, c-format
 msgid ""
-"The PIN needs to be at least %d characters \n"
+"The PIN needs to be at least %d characters\n"
 "long. Do you want to try again?"
 msgstr ""
 "PIN 至少要有 %d 個字元長。\n"
@@ -19949,7 +19942,7 @@ msgstr "科目備註"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:164
 #, fuzzy
 msgid "Memo-posted"
-msgstr " (已張貼)"
+msgstr "(已張貼)"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:165
 #, fuzzy
@@ -20043,7 +20036,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:97
 msgid ""
 "This assistant will help you export the Account Tree to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20052,7 +20045,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use.\n"
@@ -20061,7 +20054,7 @@ msgid ""
 "order the accounts were processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20070,7 +20063,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:115
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use. Each Transaction will "
@@ -20078,7 +20071,7 @@ msgid ""
 "processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "By selecting the simple layout, the output will be equivalent to a single "
 "row register view and as such some of the transfer detail could be lost.\n"
@@ -22142,7 +22135,7 @@ msgid ""
 "following accounts:\n"
 "%s\n"
 "\n"
-"Are you sure you want to continue with this change ?"
+"Are you sure you want to continue with this change?"
 msgstr "您即將要修改已對帳的交易。這麼做可能使未來的對帳很困難！繼續這個修改？"
 
 #: gnucash/register/ledger-core/split-register-model.c:2228
@@ -27781,15 +27774,17 @@ msgid "Today date format"
 msgstr "今天日期格式"
 
 #: gnucash/report/reports/standard/receipt.scm:81
+#: gnucash/report/reports/standard/taxinvoice.scm:149
 msgid ""
-"The file name of the eguile template part of this report.  This file should "
+"The file name of the eguile template part of this report. This file should "
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:84
+#: gnucash/report/reports/standard/taxinvoice.scm:152
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  This file "
+"The file name of the CSS stylesheet to use with this report. This file "
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -27812,8 +27807,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:97
 msgid ""
-"Width of the header logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -27823,8 +27818,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:103
 msgid ""
-"Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -27864,7 +27859,7 @@ msgstr "您希望檢驗的應收科目"
 #: gnucash/report/reports/standard/reconcile-report.scm:59
 msgid ""
 "The reconcile report is designed to be similar to the formal reconciliation "
-"tool.  Please select the account from Report Options. Please note the dates "
+"tool. Please select the account from Report Options. Please note the dates "
 "specified in the options will apply to the Reconciliation Date."
 msgstr ""
 
@@ -28152,20 +28147,6 @@ msgstr "發票編號"
 #, fuzzy
 msgid "Show net price?"
 msgstr "顯示價格"
-
-#: gnucash/report/reports/standard/taxinvoice.scm:149
-msgid ""
-"The file name of the eguile template part of this report. This file should "
-"either be in your .gnucash directory, or else in its proper place within the "
-"GnuCash installation directories."
-msgstr ""
-
-#: gnucash/report/reports/standard/taxinvoice.scm:152
-msgid ""
-"The file name of the CSS stylesheet to use with this report. This file "
-"should either be in your .gnucash directory, or else in its proper place "
-"within the GnuCash installation directories."
-msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:162
 msgid "Name of a file containing a logo to be used on the report."
@@ -31147,7 +31128,7 @@ msgstr "沒有說明。"
 #~ msgstr "股票分割"
 
 #, fuzzy
-#~ msgid "Are you sure you want to delete the entries ?"
+#~ msgid "Are you sure you want to delete the entries?"
 #~ msgstr "您確定要刪除這個項目？"
 
 #, fuzzy

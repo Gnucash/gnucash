@@ -27,7 +27,6 @@
 # Gnucash 2.4
 # Updated translation 9/2009
 #
-#
 # Nikos Charonitakis <nikosx@gmail.com>, 2002, 2003, 2004, 2005, 2006, 2008, 2009, 2010.
 # ta_panta_rei, 2003, 2006.
 # giorgos georgopoulakis <huskyaek@gmail.com>, 2021.
@@ -536,7 +535,7 @@ msgstr ""
 "εργαλειοθήκη του κυρίως παραθύρου. Αυτό θα ανοίξει ένα παράθυρο διαλόγου "
 "όπου μπορείτε να εισάγετε τις λεπτομέρειες του λογαριασμού. Για περισσότερες "
 "πληροφορίες σχετικά με την επιλογή τύπου λογαριασμού ή για την ρύθμιση ενός "
-"συνόλου λογαριασμών, παρακαλώ ανατρέξτε στο online  εγχειρίδιο του GnuCash."
+"συνόλου λογαριασμών, παρακαλώ ανατρέξτε στο online εγχειρίδιο του GnuCash."
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -566,7 +565,7 @@ msgid ""
 msgstr ""
 "Όταν εισάγετε ποσά στο μητρώο, μπορείτε να χρησιμοποιήσετε την αριθμομηχανή "
 "του GnuCash και να κάνετε πρόσθεση, αφαίρεση πολλαπλασιασμό και διαίρεση. "
-"Απλά εισάγετε μια τιμή, και μετά επιλέξτε  '+',  '-',  '*' ή  '/'. Έπειτα "
+"Απλά εισάγετε μια τιμή, και μετά επιλέξτε '+', '-', '*' ή '/'. Έπειτα "
 "εισάγετε μια δεύτερη τιμή και πατάτε Enter για να εισαχθεί ή υπολογισμένη "
 "τιμή."
 
@@ -579,8 +578,8 @@ msgid ""
 msgstr ""
 "Η γρήγορη συμπλήρωση κάνει εύκολη την εισαγωγή συνηθισμένων συναλλαγών. Όταν "
 "πληκτρολογείτε τα πρώτα γράμματα της περιγραφής μιας συνηθισμένης "
-"συναλλαγής,  πατήστε το πλήκτρο Tab και τότε το GnuCash  θα συμπληρώσει "
-"αυτόματα το υπόλοιπο της περιγραφής  συναλλαγής όπως αυτή δόθηκε την "
+"συναλλαγής, πατήστε το πλήκτρο Tab και τότε το GnuCash θα συμπληρώσει "
+"αυτόματα το υπόλοιπο της περιγραφής συναλλαγής όπως αυτή δόθηκε την "
 "περασμένη φορά."
 
 #: doc/tip_of_the_day.list.c:59
@@ -643,7 +642,7 @@ msgstr ""
 #: doc/tip_of_the_day.list.c:90
 #, fuzzy
 msgid ""
-"You can pack multiple reports into a single window,  providing all the "
+"You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
@@ -741,8 +740,8 @@ msgid ""
 "transactions up to midnight %s (for a total of %d transactions spread over "
 "%d accounts).\n"
 "\n"
-" Amend the Title and Notes or Click on \"Next\" to proceed.\n"
-" Click on \"Back\" to adjust the dates or \"Cancel\"."
+"Amend the Title and Notes or Click on \"Next\" to proceed.\n"
+"Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
 "Ζητήσατε να δημιουργηθεί ένα βιβλίο. Αυτό το βιβλίο θα περιέχει όλες τις "
 "συναλλαγές μέχρι τα μεσάνυχτα στις %s (για ένα σύνολο %d συναλλαγών από %d "
@@ -1815,7 +1814,7 @@ msgstr "Σχετίζεται με _φορολογία"
 
 #: gnucash/gnome/dialog-find-account.c:447
 msgid "Search from "
-msgstr " Αναζήτηση από"
+msgstr "Αναζήτηση από "
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2809,7 +2808,7 @@ msgid ""
 "If you continue these splits will be ignored:\n"
 "\n"
 "%s\n"
-"Do you wish to continue and ignore these splits ?"
+"Do you wish to continue and ignore these splits?"
 msgstr ""
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
@@ -2817,8 +2816,8 @@ msgstr ""
 #, c-format
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Είστε σίγουρος ότι θέλετε τη διαγραφή της  επιλεγμένης τιμής;"
-msgstr[1] "Είστε σίγουρος ότι θέλετε τη διαγραφή των %d  επιλεγμένων τιμών;"
+msgstr[0] "Είστε σίγουρος ότι θέλετε τη διαγραφή της επιλεγμένης τιμής;"
+msgstr[1] "Είστε σίγουρος ότι θέλετε τη διαγραφή των %d επιλεγμένων τιμών;"
 
 #: gnucash/gnome/dialog-price-edit-db.c:201
 msgid "Delete prices?"
@@ -2835,13 +2834,13 @@ msgstr "Καταχωρήσεις"
 
 #: gnucash/gnome/dialog-price-edit-db.c:457
 #, fuzzy
-msgid "Are you sure you want to delete these prices ?"
-msgstr "Είστε σίγουρος ότι θέλετε τη διαγραφή της %d  επιλεγμένης τιμής;"
+msgid "Are you sure you want to delete these prices?"
+msgstr "Είστε σίγουρος ότι θέλετε τη διαγραφή της %d επιλεγμένης τιμής;"
 
 #: gnucash/gnome/dialog-price-editor.c:221
 #, fuzzy
 msgid "Are you sure you want to replace the existing price?"
-msgstr "Είστε σίγουρος ότι θέλετε τη διαγραφή της %d  επιλεγμένης τιμής;"
+msgstr "Είστε σίγουρος ότι θέλετε τη διαγραφή της %d επιλεγμένης τιμής;"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 #, fuzzy
@@ -3264,7 +3263,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-vendor.c:226
 msgid "You must enter a payment address."
-msgstr "Πρέπει να εισάγετε  διεύθυνση πληρωμής."
+msgstr "Πρέπει να εισάγετε διεύθυνση πληρωμής."
 
 #: gnucash/gnome/dialog-vendor.c:307
 msgid "Edit Vendor"
@@ -3523,7 +3522,7 @@ msgstr "_Αριθμομηχανή αποπληρωμής δανείου"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:202
 msgid "Use the loan/mortgage repayment calculator"
-msgstr "Χρησιμοποίηση  αριθμομηχανής αποπληρωμής δανείου"
+msgstr "Χρησιμοποίηση αριθμομηχανής αποπληρωμής δανείου"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:206
 msgid "_Close Book"
@@ -6685,7 +6684,7 @@ msgstr ""
 #: gnucash/gnome/report-menus.scm:57
 #, fuzzy, scheme-format
 msgid "Display the ~a report"
-msgstr "Εμφάνιση της  αναφοράς %s"
+msgstr "Εμφάνιση της αναφοράς %s"
 
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
@@ -7195,7 +7194,7 @@ msgstr "μεγαλύτερο ή ίσο με"
 
 #: gnucash/gnome-search/search-numeric.c:241
 msgid "has credits or debits"
-msgstr "έχει  πιστώσεις ή χρεώσεις"
+msgstr "έχει πιστώσεις ή χρεώσεις"
 
 #: gnucash/gnome-search/search-numeric.c:242
 msgid "has debits"
@@ -7374,7 +7373,7 @@ msgstr ""
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
-msgstr " ~/.gconf.path"
+msgstr ""
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1089
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1109
@@ -7510,7 +7509,7 @@ msgid ""
 "Renumber the immediate sub-accounts of %s? This will replace the account "
 "code field of each child account with a newly generated code."
 msgstr ""
-"Νέα αρίθμηση των υπολογαριασμών  του %s;  Αυτό θα αντικαταστήσει το πεδίο "
+"Νέα αρίθμηση των υπολογαριασμών του %s; Αυτό θα αντικαταστήσει το πεδίο "
 "κωδικού λογαριασμού σε κάθε θυγατρικό λογαριασμό με την δημιουργία ενός νέου "
 "κωδικού."
 
@@ -8097,26 +8096,26 @@ msgstr "Αυτόματη αποθήκευση αρχείου;"
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
 "Το αρχείο με τα δεδομένα σας χρειάζεται να αποθηκευθεί στο σκληρό σας δίσκο "
 "για να διατηρηθούν οι αλλαγές που κάνατε. Το GnuCash έχει την δυνατότητα να "
 "αποθηκεύει αυτόματα το αρχείο κάθε %d λεπτά, αντί να πατάτε το κουμπί "
-"\"Αποθήκευση\" κάθε φορά. \n"
+"\"Αποθήκευση\" κάθε φορά.\n"
 "\n"
 "Μπορείτε να αλλάξετε το μεσοδιάστημα ή να απενεργοποιήσετε αυτή την "
 "δυνατότητα στο Επεξεργασία->Προτιμήσεις->Γενικά->Χρονικό διάστημα αυτόματης "
@@ -8127,7 +8126,7 @@ msgstr[1] ""
 "Το αρχείο με τα δεδομένα σας χρειάζεται να αποθηκευθεί στο σκληρό σας δίσκο "
 "για να διατηρηθούν οι αλλαγές που κάνατε. Το GnuCash έχει την δυνατότητα να "
 "αποθηκεύει αυτόματα το αρχείο κάθε %d λεπτά, αντί να πατάτε το κουμπί "
-"\"Αποθήκευση\" κάθε φορά. \n"
+"\"Αποθήκευση\" κάθε φορά.\n"
 "\n"
 "Μπορείτε να αλλάξετε το μεσοδιάστημα ή να απενεργοποιήσετε αυτή την "
 "δυνατότητα στο Επεξεργασία->Προτιμήσεις->Γενικά->Χρονικό διάστημα αυτόματης "
@@ -8273,7 +8272,7 @@ msgstr "(κενό)"
 #: gnucash/gnome-utils/gnc-file.c:280
 #, c-format
 msgid "No suitable backend was found for %s."
-msgstr "Δεν βρέθηκε κατάλληλη υποδομή για  %s."
+msgstr "Δεν βρέθηκε κατάλληλη υποδομή για %s."
 
 #: gnucash/gnome-utils/gnc-file.c:285
 #, c-format
@@ -8320,7 +8319,7 @@ msgid ""
 "another user, in which case you should not open the database. Do you want to "
 "proceed with opening the database?"
 msgstr ""
-"Αδυναμία ανάκτησης κλειδώματος για το  %s. Αυτή η βάση δεδομένων μπορεί να "
+"Αδυναμία ανάκτησης κλειδώματος για το %s. Αυτή η βάση δεδομένων μπορεί να "
 "είναι σε χρήση από κάποιον άλλο χρήστη, σε αυτή την περίπτωση δεν πρέπει να "
 "την ανοίξετε. Θέλετε να προχωρήσετε στο άνοιγμα της βάσης δεδομένων;"
 
@@ -8331,7 +8330,7 @@ msgid ""
 "another user, in which case you should not import the database. Do you want "
 "to proceed with importing the database?"
 msgstr ""
-"Αδυναμία ανάκτησης κλειδώματος για το  %s. Αυτή η βάση δεδομένων μπορεί να "
+"Αδυναμία ανάκτησης κλειδώματος για το %s. Αυτή η βάση δεδομένων μπορεί να "
 "είναι σε χρήση από κάποιον άλλο χρήστη, σε αυτή την περίπτωση δεν πρέπει να "
 "την ανοίξετε. Θέλετε να προχωρήσετε στην εισαγωγή της βάσης δεδομένων;"
 
@@ -8342,7 +8341,7 @@ msgid ""
 "another user, in which case you should not save the database. Do you want to "
 "proceed with saving the database?"
 msgstr ""
-"Αδυναμία ανάκτησης κλειδώματος για το  %s. Αυτή η βάση δεδομένων μπορεί να "
+"Αδυναμία ανάκτησης κλειδώματος για το %s. Αυτή η βάση δεδομένων μπορεί να "
 "είναι σε χρήση από κάποιον άλλο χρήστη, σε αυτή την περίπτωση δεν πρέπει να "
 "την αποθηκεύσετε. Θέλετε να προχωρήσετε στην αποθήκευση της βάσης δεδομένων;"
 
@@ -8353,7 +8352,7 @@ msgid ""
 "another user, in which case you should not export the database. Do you want "
 "to proceed with exporting the database?"
 msgstr ""
-"Αδυναμία ανάκτησης κλειδώματος για το  %s. Αυτή η βάση δεδομένων μπορεί να "
+"Αδυναμία ανάκτησης κλειδώματος για το %s. Αυτή η βάση δεδομένων μπορεί να "
 "είναι σε χρήση από κάποιον άλλο χρήστη, σε αυτή την περίπτωση δεν πρέπει να "
 "την εξάγετε. Θέλετε να προχωρήσετε στην εξαγωγή της βάσης δεδομένων;"
 
@@ -8423,7 +8422,7 @@ msgstr "Το αρχείο /URI %s δεν βρέθηκε."
 #: gnucash/gnome-utils/gnc-file.c:447
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
 msgstr ""
-"Αυτό το αρχείο προέρχεται από  παλαιότερη έκδοση του GnuCash. Θέλετε να "
+"Αυτό το αρχείο προέρχεται από παλαιότερη έκδοση του GnuCash. Θέλετε να "
 "συνεχίσετε;"
 
 #: gnucash/gnome-utils/gnc-file.c:456
@@ -8484,7 +8483,7 @@ msgstr ""
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
-"the  documentation to learn how to clear out dangling login sessions."
+"the documentation to learn how to clear out dangling login sessions."
 msgstr ""
 "Η SQL βάση δεδομένων είναι σε χρήση από άλλους χρήστες και η αναβάθμιση δεν "
 "μπορεί να γίνει πριν αυτοί αποσυνδεθούν. Αν δεν υπάρχουν αυτή την στιγμή "
@@ -8553,7 +8552,7 @@ msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
 msgstr ""
-"Η  βάση δεδομένων μπορεί να είναι σε χρήση από άλλον χρήστη, σε αυτή την "
+"Η βάση δεδομένων μπορεί να είναι σε χρήση από άλλον χρήστη, σε αυτή την "
 "περίπτωση δεν πρέπει να ανοίξετε την βάση δεδομένων. Τι θέλετε να κάνετε;"
 
 #: gnucash/gnome-utils/gnc-file.c:826
@@ -8564,7 +8563,7 @@ msgid ""
 "action. If you proceed you may not be able to save any changes. What would "
 "you like to do?"
 msgstr ""
-"Η  βάση δεδομένων μπορεί να βρίσκεται σε σύστημα αρχείων μόνο για ανάγνωση, "
+"Η βάση δεδομένων μπορεί να βρίσκεται σε σύστημα αρχείων μόνο για ανάγνωση, "
 "ή να μην έχετε δικαιώματα εγγραφής στον κατάλογο. Αν προχωρήσετε μπορεί να "
 "μην είναι δυνατό να αποθηκεύσετε τις αλλαγές. Τι θα θέλατε να κάνετε;"
 
@@ -8629,7 +8628,7 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
-"proceed ?"
+"proceed?"
 msgstr ""
 "Το αρχείο %s υπάρχει ήδη. Είστε σίγουροι ότι θέλετε να γράψετε επάνω από "
 "αυτό;"
@@ -8766,7 +8765,7 @@ msgstr "Επαναφορά _προειδοποιήσεων"
 #: gnucash/gnome-utils/gnc-main-window.c:359
 msgid "Reset the state of all warning messages so they will be shown again."
 msgstr ""
-"Επαναφορά ρύθμισης ώστε να εμφανίζονται  πάλι όλα τα μηνύματα προειδοποίησης."
+"Επαναφορά ρύθμισης ώστε να εμφανίζονται πάλι όλα τα μηνύματα προειδοποίησης."
 
 #: gnucash/gnome-utils/gnc-main-window.c:363
 msgid "Re_name Page"
@@ -8806,7 +8805,7 @@ msgstr "_Περιεχόμενα"
 
 #: gnucash/gnome-utils/gnc-main-window.c:390
 msgid "Open the GnuCash Help"
-msgstr "Άνοιγμα  της Βοήθειας του Gnucash"
+msgstr "Άνοιγμα της Βοήθειας του Gnucash"
 
 #: gnucash/gnome-utils/gnc-main-window.c:394
 msgid "_About"
@@ -9734,7 +9733,7 @@ msgstr "Υπόλοιπο (%s)"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1824
 #, c-format
 msgid "Cleared (%s)"
-msgstr "Εκκαθαρισμένο  (%s)"
+msgstr "Εκκαθαρισμένο (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1827
@@ -10372,8 +10371,8 @@ msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Αρχείο για αποθήκευση καταγραφών, προεπιλογή είναι το  \"/tmp/gnucash.trace"
-"\", μπορεί να γίνει  \"stderr\"  ή \"stdout\"."
+"Αρχείο για αποθήκευση καταγραφών, προεπιλογή είναι το \"/tmp/gnucash.trace"
+"\", μπορεί να γίνει \"stderr\" ή \"stdout\"."
 
 #: gnucash/gnucash-core-app.cpp:539
 msgid ""
@@ -10448,7 +10447,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable ?"
+"       Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
@@ -10607,7 +10606,7 @@ msgid ""
 msgstr ""
 "Αν είναι ενεργό, στο ξεκίνημα το GnuCash θα ελέγξει αν υπάρχουν τιμολόγια "
 "που λήγουν σύντομα. Αν συμβαίνει αυτό θα παρουσιαστεί στον χρήστη ένας "
-"διάλογος υπενθύμισης. Ο ορισμός του  \"soon\" ελέγχεται από την ρύθμιση  "
+"διάλογος υπενθύμισης. Ο ορισμός του \"soon\" ελέγχεται από την ρύθμιση "
 "\"Days in Advance\". Διαφορετικά το GnuCash δεν θα ελέγξει για τιμολόγια που "
 "λήγουν."
 
@@ -10696,7 +10695,7 @@ msgid ""
 msgstr ""
 "Αν είναι ενεργό, στο ξεκίνημα το GnuCash θα ελέγξει αν υπάρχουν τιμολόγια "
 "που λήγουν σύντομα. Αν συμβαίνει αυτό θα παρουσιαστεί στον χρήστη ένας "
-"διάλογος υπενθύμισης. Ο ορισμός του  \"soon\" ελέγχεται από την ρύθμιση  "
+"διάλογος υπενθύμισης. Ο ορισμός του \"soon\" ελέγχεται από την ρύθμιση "
 "\"Days in Advance\". Διαφορετικά το GnuCash δεν θα ελέγξει για τιμολόγια που "
 "λήγουν."
 
@@ -10968,7 +10967,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:106
 msgid "Print '***' before and after text."
-msgstr "Εκτύπωση '***  στην αρχή και στο τέλος του κειμένου."
+msgstr "Εκτύπωση '*** στην αρχή και στο τέλος του κειμένου."
 
 #: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:6
@@ -11044,14 +11043,14 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:219
 msgid "New hierarchy window on \"New File\""
-msgstr "Παράθυρο νέας ιεραρχίας με το  \"Νέο αρχείο\""
+msgstr "Παράθυρο νέας ιεραρχίας με το \"Νέο αρχείο\""
 
 #: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:220
 msgid ""
 "If active, the \"New Hierarchy\" window will be shown whenever the \"New File"
 "\" menu item is chosen. Otherwise it will not be shown."
 msgstr ""
-"Αν είναι ενεργό,  θα εμφανιστεί το παράθυρο  \"New Hierarchy\" κάθε φορά που "
+"Αν είναι ενεργό, θα εμφανιστεί το παράθυρο \"New Hierarchy\" κάθε φορά που "
 "επιλέγεται το στοιχείο μενού \"New File\". Διαφορετικά δεν θα εμφανιστεί."
 
 #: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:227
@@ -11545,8 +11544,8 @@ msgid ""
 "balances."
 msgstr ""
 "Αυτή η ρύθμιση επιτρέπει σε ορισμένους λογαριασμούς να έχουν τα υπόλοιπα "
-"τους με αντίστροφο πρόσημο από θετικό σε αρνητικό ή το αντίθετο. Η ρύθμιση  "
-"\"income_expense\"  αφορά τους χρήστες που προτιμούν να βλέπουν τα έξοδα ως "
+"τους με αντίστροφο πρόσημο από θετικό σε αρνητικό ή το αντίθετο. Η ρύθμιση "
+"\"income_expense\" αφορά τους χρήστες που προτιμούν να βλέπουν τα έξοδα ως "
 "αρνητικά μεγέθη και τα έσοδα ως θετικά. Η ρύθμιση \"credit\" είναι για "
 "χρήστες που προτιμούν να βλέπουν τα υπόλοιπα σύμφωνα με την κατάσταση "
 "χρέωσης/πίστωσης του λογαριασμού. Η ρύθμιση \"none\" δεν αλλάζει πρόσημο σε "
@@ -11639,7 +11638,7 @@ msgid ""
 "the user's locale setting. If set to \"other\", GnuCash will use the setting "
 "specified by the currency-other key."
 msgstr ""
-"Αυτή η ρύθμιση ορίζει  την πηγή για το προεπιλεγμένο νόμισμα στους νέους "
+"Αυτή η ρύθμιση ορίζει την πηγή για το προεπιλεγμένο νόμισμα στους νέους "
 "λογαριασμούς. Αν οριστεί σε \"σύστημα\" τότε το GnuCash θα λάβει το "
 "προεπιλεγμένο νόμισμα από τις ρυθμίσεις χρήστη του συστήματος. Άν οριστεί σε "
 "\"άλλο\", τότε το GnuCash θα χρησιμοποιήσει την ρύθμιση που ορίζεται από το "
@@ -11671,7 +11670,7 @@ msgstr "Χρήση 24ωρη μορφής ώρας"
 #, fuzzy
 msgid ""
 "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
-msgstr "Χρήση  24 ωρών (αντί 12 ωρών) στη μορφή ώρας."
+msgstr "Χρήση 24 ωρών (αντί 12 ωρών) στη μορφή ώρας."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:155
 msgid "Date format choice"
@@ -11686,8 +11685,8 @@ msgid ""
 msgstr ""
 "Αυτή η ρύθμιση ορίζει πως θα εμφανίζονται οι ημερομηνίες στο GnuCash. "
 "Πιθανές τιμές είναι \"locale\" για χρήση των τοπικών ρυθμίσεων του "
-"συστήματος,  \"ce\" για χρήση στυλ ημερομηνιών κεντρικής Ευρώπης,  \"iso\" "
-"για ημερομηνίες σύμφωνα με το πρότυπο  ISO 8601, \"uk\"  για στυλ "
+"συστήματος, \"ce\" για χρήση στυλ ημερομηνιών κεντρικής Ευρώπης, \"iso\" "
+"για ημερομηνίες σύμφωνα με το πρότυπο ISO 8601, \"uk\" για στυλ "
 "ημερομηνιών Μεγάλης Βρετανίας, και \"us\" για στυλ ημερομηνιών ΗΠΑ."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:160
@@ -11775,7 +11774,7 @@ msgid ""
 "\"right\". It defaults to \"top\"."
 msgstr ""
 "Αυτή η ρύθμιση ορίζει που θα εμφανίζονται οι καρτέλες που χρησιμοποιούνται "
-"για εναλλαγή ανάμεσα σε σελίδες. Πιθανές τιμές είναι  \"πάνω\", \"αριστερά"
+"για εναλλαγή ανάμεσα σε σελίδες. Πιθανές τιμές είναι \"πάνω\", \"αριστερά"
 "\", \"κάτω\" and \"δεξιά\". Προεπιλογή είναι το \"πάνω\"."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:195
@@ -11806,7 +11805,7 @@ msgid ""
 "\"."
 msgstr ""
 "Αυτή η ρύθμιση ορίζει που θα εμφανίζεται η γραμμή περίληψης για τις διάφορες "
-"σελίδες. Πιθανές τιμές είναι  \"πάνω\" και \"κάτω\". Προεπιλογή είναι το "
+"σελίδες. Πιθανές τιμές είναι \"πάνω\" και \"κάτω\". Προεπιλογή είναι το "
 "\"κάτω\"."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:215
@@ -12118,7 +12117,7 @@ msgid ""
 "locale setting. If set to \"other\", GnuCash will use the setting specified "
 "by the currency-other key."
 msgstr ""
-"Αυτή η ρύθμιση ορίζει  την πηγή για το προεπιλεγμένο νόμισμα στις αναφορές. "
+"Αυτή η ρύθμιση ορίζει την πηγή για το προεπιλεγμένο νόμισμα στις αναφορές. "
 "Αν οριστεί σε \"σύστημα\" τότε το GnuCash θα λάβει το προεπιλεγμένο νόμισμα "
 "από τις ρυθμίσεις χρήστη του συστήματος. Άν οριστεί σε \"άλλο\", τότε το "
 "GnuCash θα χρησιμοποιήσει την ρύθμιση που ορίζεται από το κλειδί "
@@ -12179,8 +12178,8 @@ msgid ""
 msgstr ""
 "Αυτή η ρύθμιση ορίζει πως θα εμφανίζονται οι ημερομηνίες στο GnuCash. "
 "Πιθανές τιμές είναι \"locale\" για χρήση των τοπικών ρυθμίσεων του "
-"συστήματος,  \"ce\" για χρήση στυλ ημερομηνιών κεντρικής Ευρώπης,  \"iso\" "
-"για ημερομηνίες σύμφωνα με το πρότυπο  ISO 8601, \"uk\"  για στυλ "
+"συστήματος, \"ce\" για χρήση στυλ ημερομηνιών κεντρικής Ευρώπης, \"iso\" "
+"για ημερομηνίες σύμφωνα με το πρότυπο ISO 8601, \"uk\" για στυλ "
 "ημερομηνιών Μεγάλης Βρετανίας, και \"us\" για στυλ ημερομηνιών ΗΠΑ."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:385
@@ -12553,7 +12552,7 @@ msgid ""
 "date specified by the start-date key. If set to anything else, GnuCash will "
 "retrieve the starting date specified by the start-period key."
 msgstr ""
-"Αυτή η ρύθμιση ορίζει  την πηγή για το προεπιλεγμένο νόμισμα στους νέους "
+"Αυτή η ρύθμιση ορίζει την πηγή για το προεπιλεγμένο νόμισμα στους νέους "
 "λογαριασμούς. Αν οριστεί σε \"σύστημα\" τότε το GnuCash θα λάβει το "
 "προεπιλεγμένο νόμισμα από τις ρυθμίσεις χρήστη του συστήματος. Άν οριστεί σε "
 "\"άλλο\", τότε το GnuCash θα χρησιμοποιήσει την ρύθμιση που ορίζεται από το "
@@ -12599,7 +12598,7 @@ msgid ""
 "date specified by the end-date key. If set to anything else, GnuCash will "
 "retrieve the ending date specified by the end-period key."
 msgstr ""
-"Αυτή η ρύθμιση ορίζει  την πηγή για το προεπιλεγμένο νόμισμα στους νέους "
+"Αυτή η ρύθμιση ορίζει την πηγή για το προεπιλεγμένο νόμισμα στους νέους "
 "λογαριασμούς. Αν οριστεί σε \"σύστημα\" τότε το GnuCash θα λάβει το "
 "προεπιλεγμένο νόμισμα από τις ρυθμίσεις χρήστη του συστήματος. Άν οριστεί σε "
 "\"άλλο\", τότε το GnuCash θα χρησιμοποιήσει την ρύθμιση που ορίζεται από το "
@@ -12653,8 +12652,8 @@ msgstr "Αυτή η ρύθμιση ενεργοποιεί την στήλη Ημ
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:29
 msgid ""
-"This assistant will help you setup and use accounting periods. \n"
-" \n"
+"This assistant will help you setup and use accounting periods.\n"
+"\n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
@@ -12668,7 +12667,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:36
 msgid "Setup Account Period"
-msgstr "Ρύθμιση λογιστικής  περιόδου"
+msgstr "Ρύθμιση λογιστικής περιόδου"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:50
 #, fuzzy
@@ -13081,7 +13080,7 @@ msgstr "Tab"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:371
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:363
 msgid "Hyphen (-)"
-msgstr "Παύλα  (-)"
+msgstr "Παύλα (-)"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:453
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:481
@@ -13292,7 +13291,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:993
 #: gnucash/import-export/import-account-matcher.c:185
 msgid "Account ID"
-msgstr "ID  Λογαριασμού"
+msgstr "ID Λογαριασμού"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1032
 #, fuzzy
@@ -13357,12 +13356,12 @@ msgid ""
 "as well as move accounts (along with their sub-accounts) from one parent to "
 "another.\n"
 "\n"
-"Click 'Cancel'  if you do not wish to create any new accounts now."
+"Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
 "Αυτός ο οδηγός θα σας βοηθήσει να δημιουργήσετε ένα σύνολο λογαριασμών στο "
 "GnuCash για το ενεργητικό σας (όπως λογαριασμοί αποταμίευσης ή επενδύσεων), "
 "το παθητικό σας (όπως δάνεια, πιστωτικές κάρτες) και για κάθε είδος εσόδων "
-"και εξόδων που μπορεί να έχετε. \n"
+"και εξόδων που μπορεί να έχετε.\n"
 "\n"
 "Πατήστε 'Ακύρωση' αν δε θέλετε να δημιουργήσετε τώρα νέους λογαριασμούς."
 
@@ -13802,23 +13801,23 @@ msgstr "Βοηθός εισαγωγής QIF"
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-"programs. \n"
+"programs.\n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Apply\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process.\n"
 "\n"
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
 msgstr ""
 "Το GnuCash μπορεί να εισάγει οικονομικά δεδομένα από αρχεία QIF (Quicken "
 "Interchange Format) που προέρχονται από προγράμματα όπως τα Quicken/"
-"QuickBooks, MS Money, Moneydance, και αρκετά άλλα. \n"
+"QuickBooks, MS Money, Moneydance, και αρκετά άλλα.\n"
 "\n"
 "Η διαδικασία εισαγωγής έχει αρκετά βήματα. Οι GnuCash λογαριασμοί σας δε θα "
 "αλλάξουν μέχρι να κάνετε κλικ στο \"Εφαρμογή\" όταν ολοκληρωθεί η "
-"διαδικασία. \n"
+"διαδικασία.\n"
 "\n"
-"Κάντε κλικ στο \"Μπροστά\" για να ξεκινήσετε τη φόρτωση των QIF  δεδομένων "
+"Κάντε κλικ στο \"Μπροστά\" για να ξεκινήσετε τη φόρτωση των QIF δεδομένων "
 "σας, ή \"Άκυρο\" για να εγκαταλείψετε τη διαδικασία."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:63
@@ -13834,7 +13833,7 @@ msgid ""
 "account(s) in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't "
-"worry if your data is in multiple files. \n"
+"worry if your data is in multiple files.\n"
 msgstr ""
 "Παρακαλώ επιλέξτε ένα αρχείο για φόρτωση. Όταν κάνετε κλικ στο \"Μπροστά\", "
 "το αρχείο θα φορτωθεί και θα γίνει ανάλυση του. Ίσως χρειαστεί να απαντήσετε "
@@ -13842,7 +13841,7 @@ msgstr ""
 "περιέχει\n"
 "\n"
 "Θα έχετε τη δυνατότητα να φορτώσετε όσα αρχεία επιθυμείτε, έτσι δε πρέπει να "
-"ανησυχείτε αν τα δεδομένα σας βρίσκονται σε πολλά διαφορετικά αρχεία. \n"
+"ανησυχείτε αν τα δεδομένα σας βρίσκονται σε πολλά διαφορετικά αρχεία.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:114
 msgid "_Select..."
@@ -13866,11 +13865,11 @@ msgid ""
 "components of a date are printed. In most cases, it is possible to "
 "automatically determine which format is in use in a particular file. "
 "However, in the file you have just imported there exist more than one "
-"possible format that fits the data. \n"
+"possible format that fits the data.\n"
 "\n"
 "Please select a date format for the file. QIF files created by European "
-"software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-day-year. \n"
+"software are likely to be in \"d-m-y\" or day-month-year format, where US "
+"QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:332
@@ -13887,7 +13886,7 @@ msgstr "Ορισμός της μορφής ημερομηνίας για αυτ�
 #: gnucash/gtkbuilder/assistant-qif-import.glade:359
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account. \n"
+"one account, but the file does not specify a name for that account.\n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
 "accounting program, you should use the same account name that was used in "
@@ -13966,7 +13965,7 @@ msgstr "Ταίριασμα λογαριασμών QIF με λογαριασμο�
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
-"converted to a GnuCash account. \n"
+"converted to a GnuCash account.\n"
 "\n"
 "On the next page, you will have an opportunity to look at the suggested "
 "matches between QIF categories and GnuCash accounts. You may change matches "
@@ -13978,7 +13977,7 @@ msgid ""
 msgstr ""
 "Το Gnucash χρησιμοποιεί ξεχωριστούς λογαριασμούς εσόδων και τα εξόδων αντί "
 "για κατηγορίες για να καταγράψει τις συναλλαγές σας. Κάθε κατηγορία που "
-"υπάρχει στο QIF αρχείο θα μετατραπεί σε λογαριασμό GnuCash. \n"
+"υπάρχει στο QIF αρχείο θα μετατραπεί σε λογαριασμό GnuCash.\n"
 "\n"
 "Η επόμενη σελίδα θα σας δώσει την δυνατότητα να ελέγξετε τις προτεινόμενες "
 "αντιστοιχήσεις μεταξύ των κατηγοριών QIF και λογαριασμών GnuCash. Μπορείτε "
@@ -14000,7 +13999,7 @@ msgstr "Ταίριασμα κατηγορων QIF με λογαριασμούς 
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
-"correctly assigned to GnuCash accounts. \n"
+"correctly assigned to GnuCash accounts.\n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
@@ -14055,8 +14054,8 @@ msgid ""
 "Below you are asked to provide information about stocks, mutual funds, and "
 "other investments that appear in the QIF file(s) you are importing. GnuCash "
 "needs some additional details about these investments that the QIF format "
-"does not provide. \n"
-" \n"
+"does not provide.\n"
+"\n"
 "Each stock, mutual fund, or other investment must have a name and an "
 "abbreviation, such as a stock symbol. Because some unrelated investments "
 "have the same abbreviation, you also need to indicate what type of "
@@ -14133,7 +14132,7 @@ msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
 "will be saved and used for defaults the next time you use the QIF import "
-"facility. \n"
+"facility.\n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -14548,7 +14547,7 @@ msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
 "would you like to do with these transactions?"
 msgstr ""
-"Ένας ή περισσότεροι λογαριασμοί περιέχουν συναλλαγές  Τι θα θέλατε να κάνετε "
+"Ένας ή περισσότεροι λογαριασμοί περιέχουν συναλλαγές Τι θα θέλατε να κάνετε "
 "με αυτές τις συναλλαγές;"
 
 #: gnucash/gtkbuilder/dialog-account.glade:741
@@ -15118,7 +15117,7 @@ msgid ""
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case). "
 msgstr ""
-"Εισάγετε το σύμβολο της αξίας (πχ OTE ή ΟΠΑΠ) Αν λαμβάνετε τιμές online,  "
+"Εισάγετε το σύμβολο της αξίας (πχ OTE ή ΟΠΑΠ) Αν λαμβάνετε τιμές online, "
 "αυτό το πεδίο πρέπει να ταιριάζει ακριβώς με το σύμβολο που χρησιμοποιεί η "
 "πηγή από την οποία λαμβάνετε τις τιμές (πρέπει να υπάρχει και ταίριασμα "
 "πεζών/κεφαλαίων)"
@@ -15445,10 +15444,8 @@ msgid "Linked Document"
 msgstr "Λεπτομέρειες δανείου"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:671
-#, fuzzy
-#| msgid "Available ?"
 msgid "Available"
-msgstr "Διαθέσιμο;"
+msgstr "Διαθέσιμο"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:686
 msgid "Relative"
@@ -16428,7 +16425,7 @@ msgstr "Λογαριασμοί _πίστωσης"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:668
 msgid "_Income & expense"
-msgstr "Έ_σοδα και  έξοδα"
+msgstr "Έ_σοδα και έξοδα"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:690
 msgid "<b>Reverse Balanced Accounts</b>"
@@ -16485,7 +16482,7 @@ msgid ""
 msgstr ""
 "Ο χαρακτήρας που θα χρησιμοποιηθεί ανάμεσα στα μέρη ενός ονόματος "
 "λογαριασμού. Μια αποδεκτή τιμή είναι ο οποιοσδήποτε απλός χαρακτήρας με "
-"εξαίρεση γράμματα και αριθμούς, ή οποιοδήποτε από τα ακόλουθα  \"colon\" "
+"εξαίρεση γράμματα και αριθμούς, ή οποιοδήποτε από τα ακόλουθα \"colon\" "
 "\"slash\", \"backslash\", \"dash\" και \"period\"."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:894
@@ -16516,7 +16513,7 @@ msgstr "_Χρήση 24-ώρου μορφής"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1060
 msgid "Use a 24 hour (instead of a 12 hour) time format."
-msgstr "Χρήση  24 ωρών (αντί 12 ωρών) στη μορφή ώρας."
+msgstr "Χρήση 24 ωρών (αντί 12 ωρών) στη μορφή ώρας."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1075
 #, fuzzy
@@ -16598,7 +16595,7 @@ msgstr "Εκκίνηση _ρύθμισης νέας λίστας λογαρια�
 #, fuzzy
 msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
-"Εμφάνιση του διαλόγου νέας λίστας λογαριασμών όταν επιλέγεται  \"New File\" "
+"Εμφάνιση του διαλόγου νέας λίστας λογαριασμών όταν επιλέγεται \"New File\" "
 "από το μενού \"File\""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1428
@@ -16833,11 +16830,11 @@ msgstr "Εκτύπωση _περιοριστικών χαρακτήρων"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2336
 msgid "Print '***' before and after each text field on the check."
-msgstr "Εκτύπωση  '***' μπροστά και πίσω από κάθε πεδίο κειμένου στην επιταγή."
+msgstr "Εκτύπωση '***' μπροστά και πίσω από κάθε πεδίο κειμένου στην επιταγή."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2351
 msgid "Default _font"
-msgstr "Προεπιλεγμένη  _γραμματοσειρά"
+msgstr "Προεπιλεγμένη _γραμματοσειρά"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2380
 msgid "Printing"
@@ -17527,8 +17524,8 @@ msgid "<b>_Selected Reports</b>"
 msgstr "<b>_Επιλεγμένες αναφορές</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
-msgid "A_dd  >>"
-msgstr "_Προσθήκη  >>"
+msgid "A_dd >>"
+msgstr "_Προσθήκη >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
 msgid "<< _Remove"
@@ -17730,7 +17727,7 @@ msgstr "Αριθμός των επαναλήψεων"
 #: gnucash/gtkbuilder/dialog-sx.glade:512
 #, fuzzy
 msgid "<b>Since Last Run</b>"
-msgstr "<b>Διάλογος  Από την τελευταία εκτέλεση</b>"
+msgstr "<b>Διάλογος Από την τελευταία εκτέλεση</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:535
 msgid "<b>Transaction Editor Defaults</b>"
@@ -17808,11 +17805,6 @@ msgstr "Δημιουργία νωρίτερα"
 #: gnucash/gtkbuilder/dialog-sx.glade:924
 msgid "Remind in advance"
 msgstr "Υπόμνηση πριν"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:965
-#: gnucash/gtkbuilder/dialog-sx.glade:1024
-msgid " days"
-msgstr " ημέρες"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:982
 msgid "Create automatically"
@@ -18044,7 +18036,7 @@ msgid ""
 "The vendor ID number. If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
-"Ο αριθμός ID  προμηθευτή. Αν αφεθεί κενό θα αποδοθεί αυτόματα ένας εύλογος "
+"Ο αριθμός ID προμηθευτή. Αν αφεθεί κενό θα αποδοθεί αυτόματα ένας εύλογος "
 "αριθμός"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:12
@@ -18282,7 +18274,7 @@ msgstr "31η"
 #: gnucash/gtkbuilder/gnc-frequency.glade:301
 #: gnucash/gtkbuilder/gnc-frequency.glade:527
 msgid "Last day of month"
-msgstr "Τελευταία ημέρα του  μήνα"
+msgstr "Τελευταία ημέρα του μήνα"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:136
 #: gnucash/gtkbuilder/gnc-frequency.glade:304
@@ -18609,7 +18601,7 @@ msgstr ""
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:196
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:334
 msgid "Significant Digits"
-msgstr "Σημαντικά  ψηφία"
+msgstr "Σημαντικά ψηφία"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:208
 msgid "Use a fixed value or apply transformation for all periods."
@@ -18830,7 +18822,7 @@ msgstr "Ημερομηνία αντίγραφου _κινήσεως"
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr ""
-"Ταξινόμηση κατά  ημ/νία αντίγραφου λογαρισμού (μη συμφωνημένα στοιχεία στο "
+"Ταξινόμηση κατά ημ/νία αντίγραφου λογαρισμού (μη συμφωνημένα στοιχεία στο "
 "τέλος)"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:918
@@ -18916,7 +18908,7 @@ msgstr "Κάθε "
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:62
 msgid ""
-"Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
+"Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
 
@@ -19051,7 +19043,7 @@ msgid "Export to PDF File"
 msgstr "Εξαγωγή σε αρχείο PDF"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
-#. 3. Account Number,  4. Subaccount ID
+#. 3. Account Number, 4. Subaccount ID
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
@@ -19086,9 +19078,8 @@ msgstr ""
 msgid ""
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
-"bank  decides to grant you electronic access, they will send you a letter "
-"containing \n"
-"\n"
+"bank decides to grant you electronic access, they will send you a letter "
+"containing:\n"
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's Online Banking server\n"
@@ -19120,8 +19111,7 @@ msgstr ""
 "\n"
 "Πρώτα πρέπει να έχετε κάνει αίτηση σύνδεσης Online Banking στην τράπεζα σας. "
 "Αν η τράπεζα σας εγκρίνει την ηλεκτρονική σύνδεση θα σας αποστείλει ένα "
-"γράμμα που θα περιέχει \n"
-"\n"
+"γράμμα που θα περιέχει:\n"
 "* Τον κωδικό πρόσβασης\n"
 "* Το αναγνωριστικό (ID) που σας ταυτοποιεί στην τράπεζα σας\n"
 "* Την διεύθυνση στο διαδίκτυο όπου βρίσκεται ο server του Online Banking της "
@@ -19149,7 +19139,7 @@ msgid ""
 "program \"AqBanking Setup Wizard\". Please press the button below to start "
 "this program."
 msgstr ""
-"Η ρύθμιση της σύνδεσης Online Banking γίνεται από ένα εξωτερικό πρόγραμμα  "
+"Η ρύθμιση της σύνδεσης Online Banking γίνεται από ένα εξωτερικό πρόγραμμα "
 "\"AqBanking Setup Wizard\". Παρακαλώ πατήστε το παρακάτω κουμπί για να "
 "ξεκινήσετε αυτό το πρόγραμμα."
 
@@ -19195,7 +19185,7 @@ msgstr ""
 "Αν θέλετε να προσθέσετε και άλλη τράπεζα, χρήστη ή λογαριασμό, μπορείτε να "
 "εκτελέσετε όποτε θέλετε ξανά αυτόν τον οδηγό.\n"
 "\n"
-"Πατήστε τώρα  \"Εφαρμογή\"."
+"Πατήστε τώρα \"Εφαρμογή\"."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:233
 msgid "Online Banking Setup Finished"
@@ -19336,7 +19326,7 @@ msgstr "Όνομα για νέο πρότυπο"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
 #, fuzzy
-msgid " _Name of the new template:"
+msgid "_Name of the new template"
 msgstr "Όνομα για νέο πρότυπο"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
@@ -19705,7 +19695,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:184
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probable the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -19758,7 +19748,7 @@ msgstr "Τράπεζα"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:799
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probably the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -19812,7 +19802,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1156
 #, c-format
 msgid ""
-"Result of Online Banking job: \n"
+"Result of Online Banking job:\n"
 "Account booked balance is %s"
 msgstr ""
 
@@ -19893,7 +19883,7 @@ msgstr[1] ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
 #, c-format
 msgid ""
-"The PIN needs to be at least %d characters \n"
+"The PIN needs to be at least %d characters\n"
 "long. Do you want to try again?"
 msgstr ""
 "Το PIN πρέπει να αποτελείται από τουλάχιστον %d χαρακτήρες\n"
@@ -19923,7 +19913,7 @@ msgid ""
 "Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using "
 "AqBanking)"
 msgstr ""
-"Αρχική ρύθμιση πρόσβασης στο Online Banking (HBCI, ή OFX  DirectConnect, με "
+"Αρχική ρύθμιση πρόσβασης στο Online Banking (HBCI, ή OFX DirectConnect, με "
 "χρήση AqBanking)"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:101
@@ -20264,7 +20254,7 @@ msgstr "Σημειώσεις λογαριασμού"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:164
 #, fuzzy
 msgid "Memo-posted"
-msgstr " (καταχωρήθηκε)"
+msgstr "(καταχωρήθηκε)"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:165
 #, fuzzy
@@ -20359,7 +20349,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:97
 msgid ""
 "This assistant will help you export the Account Tree to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20368,7 +20358,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use.\n"
@@ -20377,7 +20367,7 @@ msgid ""
 "order the accounts were processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20386,7 +20376,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:115
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use. Each Transaction will "
@@ -20394,7 +20384,7 @@ msgid ""
 "processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "By selecting the simple layout, the output will be equivalent to a single "
 "row register view and as such some of the transfer detail could be lost.\n"
@@ -21253,7 +21243,7 @@ msgstr "Αδυναμία ανοίγματος του τρέχοντος αρχε
 #: gnucash/import-export/log-replay/gnc-log-replay.c:615
 #, c-format
 msgid "Failed to open log file: %s: %s"
-msgstr "Αποτυχία  ανοίγματος αρχείου καταγραφής %s: %s"
+msgstr "Αποτυχία ανοίγματος αρχείου καταγραφής %s: %s"
 
 #: gnucash/import-export/log-replay/gnc-log-replay.c:625
 msgid "The log file you selected was empty."
@@ -21279,7 +21269,7 @@ msgstr ""
 #: gnucash/import-export/ofx/gnc-ofx-import.c:647
 #, c-format
 msgid "Stock account for security \"%s\""
-msgstr "Λογαριασμός μετοχής για την αξία  \"%s\""
+msgstr "Λογαριασμός μετοχής για την αξία \"%s\""
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:824
 #, c-format
@@ -21296,7 +21286,7 @@ msgstr "Άγνωστος OFX τρεχούμενος λογαριασμός "
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:973
 msgid "Unknown OFX savings account"
-msgstr "Άγνωστος  OFX  λογαριασμός ταμιευτηρίου"
+msgstr "Άγνωστος OFX λογαριασμός ταμιευτηρίου"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:977
 msgid "Unknown OFX money market account"
@@ -21312,11 +21302,11 @@ msgstr "Άγνωστος OFX CMA λογαριασμός "
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:990
 msgid "Unknown OFX credit card account"
-msgstr "Άγνωστος  OFX  λογαριασμός  πιστωτικής κάρτα"
+msgstr "Άγνωστος OFX λογαριασμός πιστωτικής κάρτα"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:994
 msgid "Unknown OFX investment account"
-msgstr "Άγνωστος  OFX  λογαριασμός επενδύσεων"
+msgstr "Άγνωστος OFX λογαριασμός επενδύσεων"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1191
 #, c-format
@@ -21462,7 +21452,7 @@ msgid ""
 "Otherwise, the details will be shown below for your review."
 msgstr ""
 "Το GnuCash θα φορτώσει τώρα το QIF αρχείο σας. Αν δεν υπάρχουν σφάλματα, θα "
-"προχωρήσει αυτόματα στο επόμενο βήμα. Σε αντίθετη περίπτωση, θα εμφανιστούν  "
+"προχωρήσει αυτόματα στο επόμενο βήμα. Σε αντίθετη περίπτωση, θα εμφανιστούν "
 "παρακάτω οι λεπτομέρειες για να τις ελέγξετετε."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2649
@@ -21729,7 +21719,7 @@ msgstr ""
 #: gnucash/import-export/qif-imp/qif-file.scm:1059
 #, fuzzy, scheme-format
 msgid "Value '~a' could be ~a or ~a."
-msgstr "Αξία '%s' μπορεί να είναι  %s ή %s."
+msgstr "Αξία '%s' μπορεί να είναι %s ή %s."
 
 #: gnucash/import-export/qif-imp/qif-merge-groups.scm:105
 #, fuzzy
@@ -21753,7 +21743,7 @@ msgstr "Δεν αναγνωρίστηκε ο τύπος του λογαριασ�
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."
-msgstr "Εισαγωγή QIF: Ασυμβατότητα ονόματος με  κάποιο άλλο λογαριασμό."
+msgstr "Εισαγωγή QIF: Ασυμβατότητα ονόματος με κάποιο άλλο λογαριασμό."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:302
 msgid "Preparing to convert your QIF data"
@@ -22491,7 +22481,7 @@ msgid ""
 "following accounts:\n"
 "%s\n"
 "\n"
-"Are you sure you want to continue with this change ?"
+"Are you sure you want to continue with this change?"
 msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:2228
@@ -22519,7 +22509,7 @@ msgstr "Λίστα"
 #: gnucash/report/eguile.scm:150
 #, fuzzy, scheme-format
 msgid "Template file \"~a\" can not be read"
-msgstr "Το αρχείο προτύπου  \"%s\" δεν μπορεί να αναγνωσθεί"
+msgstr "Το αρχείο προτύπου \"%s\" δεν μπορεί να αναγνωσθεί"
 
 #: gnucash/report/html-acct-table.scm:636
 #: gnucash/report/reports/standard/trial-balance.scm:279
@@ -23017,7 +23007,7 @@ msgstr "Να μην εμφανίζονται καθόλου μερικά σύν�
 
 #: gnucash/report/options-utilities.scm:258
 msgid "Text book style (experimental)"
-msgstr "Στυλ Text book  (πειραματικό)"
+msgstr "Στυλ Text book (πειραματικό)"
 
 #: gnucash/report/options-utilities.scm:259
 msgid ""
@@ -23487,7 +23477,7 @@ msgstr "Συμπερίληψη υπολογαριασμών"
 #: gnucash/report/reports/example/average-balance.scm:46
 #, fuzzy
 msgid "Exclude transactions between selected accounts"
-msgstr "Εξαίρεση συναλλαγών  μεταξύ επιλεγμένων λογαριασμών;"
+msgstr "Εξαίρεση συναλλαγών μεταξύ επιλεγμένων λογαριασμών;"
 
 #: gnucash/report/reports/example/average-balance.scm:47
 #: gnucash/report/reports/example/daily-reports.scm:64
@@ -23838,7 +23828,7 @@ msgstr "Επιλογή λίστας λογαριασμών"
 #: gnucash/report/reports/example/hello-world.scm:175
 #, fuzzy
 msgid "This is an account list option."
-msgstr "Αυτή είναι μια  επιλογή λίστας λογαριασμού"
+msgstr "Αυτή είναι μια επιλογή λίστας λογαριασμού"
 
 #: gnucash/report/reports/example/hello-world.scm:187
 msgid "A list option"
@@ -23917,7 +23907,7 @@ msgid ""
 "report, consult the mailing list ~a."
 msgstr ""
 "Επικοινωνήστε με τη λίστα ταχυδρομείου %s για να βρείτε βοήθεια για τον "
-"τρόπο δημιουργίας αναφορών ή  να προσφέρετε μια εντελώς καινούρια."
+"τρόπο δημιουργίας αναφορών ή να προσφέρετε μια εντελώς καινούρια."
 
 #: gnucash/report/reports/example/hello-world.scm:353
 #, fuzzy
@@ -23934,7 +23924,7 @@ msgid ""
 "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/"
 "&gt;."
 msgstr ""
-"Μπορείτε να μάθετε περισσότερα για τον προγραμματισμό σε  scheme στο  &lt;"
+"Μπορείτε να μάθετε περισσότερα για τον προγραμματισμό σε scheme στο &lt;"
 "http://www.scheme.com/tspl2d/&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:358
@@ -23983,7 +23973,7 @@ msgstr "Η επιλογή ημερομηνίας και ώρας είναι %s."
 #: gnucash/report/reports/example/hello-world.scm:393
 #, fuzzy, scheme-format
 msgid "The relative date option is ~a."
-msgstr "Η επιλογή σχετικής ημερομηνίας είναι  %s."
+msgstr "Η επιλογή σχετικής ημερομηνίας είναι %s."
 
 #: gnucash/report/reports/example/hello-world.scm:398
 #, fuzzy, scheme-format
@@ -24958,7 +24948,7 @@ msgstr "Χρήση μεθόδου FIFO για τον υπολογισμό της
 msgid "Prefer use of price editor pricing over transactions, where applicable."
 msgstr ""
 "Προτίμηση όπου είναι δυνατό της χρήσης δεδομένων από τον διορθωτή τιμών "
-"αντί  των τιμών που προκύπτουν από τις συναλλαγές."
+"αντί των τιμών που προκύπτουν από τις συναλλαγές."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:114
 msgid "How to report commissions and other brokerage fees."
@@ -26098,7 +26088,7 @@ msgstr "Σύνολο εξόδων"
 #: gnucash/report/reports/standard/budget-income-statement.scm:533
 #, fuzzy, scheme-format
 msgid "for Budget ~a"
-msgstr "για προϋπολογισμό  %s"
+msgstr "για προϋπολογισμό %s"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:535
 #, fuzzy, scheme-format
@@ -27007,7 +26997,7 @@ msgstr "Σφάλμα αναφοράς"
 #: gnucash/report/reports/standard/income-gst-statement.scm:165
 #, fuzzy
 msgid "Default Format"
-msgstr "Προεπιλεγμένη  _γραμματοσειρά"
+msgstr "Προεπιλεγμένη _γραμματοσειρά"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:167
 msgid "Australia BAS"
@@ -27604,7 +27594,7 @@ msgstr "Εμφάνιση Ενεργητικού και Παθητικού"
 
 #: gnucash/report/reports/standard/net-charts.scm:51
 msgid "Show Net Worth"
-msgstr "Εμφάνιση  Καθαρής θέσης"
+msgstr "Εμφάνιση Καθαρής θέσης"
 
 #: gnucash/report/reports/standard/net-charts.scm:56
 msgid "Line Width"
@@ -28152,9 +28142,10 @@ msgid "Today date format"
 msgstr "Μορφή σημερινής ημερομηνίας"
 
 #: gnucash/report/reports/standard/receipt.scm:81
+#: gnucash/report/reports/standard/taxinvoice.scm:149
 #, fuzzy
 msgid ""
-"The file name of the eguile template part of this report.  This file should "
+"The file name of the eguile template part of this report. This file should "
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
@@ -28163,9 +28154,10 @@ msgstr ""
 "τοποθεσία μέσα στους καταλόγους εγκατάστασης του GnuCash."
 
 #: gnucash/report/reports/standard/receipt.scm:84
+#: gnucash/report/reports/standard/taxinvoice.scm:152
 #, fuzzy
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  This file "
+"The file name of the CSS stylesheet to use with this report. This file "
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -28194,8 +28186,8 @@ msgstr "Όνομα του αρχείου με το λογότυπο που θα 
 #: gnucash/report/reports/standard/receipt.scm:97
 #, fuzzy
 msgid ""
-"Width of the header logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 "Πλάτος του λογότυπου στην μορφή CSS, πχ 10% or 32px.. Αφήστε το κενό για να "
@@ -28210,8 +28202,8 @@ msgstr "Όνομα του αρχείου με το λογότυπο που θα 
 #: gnucash/report/reports/standard/receipt.scm:103
 #, fuzzy
 msgid ""
-"Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 "Πλάτος του λογότυπου στην μορφή CSS, πχ 10% or 32px.. Αφήστε το κενό για να "
@@ -28258,7 +28250,7 @@ msgstr "Ο λογαριασμός εισπρακτέων που επιθυμεί
 #: gnucash/report/reports/standard/reconcile-report.scm:59
 msgid ""
 "The reconcile report is designed to be similar to the formal reconciliation "
-"tool.  Please select the account from Report Options. Please note the dates "
+"tool. Please select the account from Report Options. Please note the dates "
 "specified in the options will apply to the Reconciliation Date."
 msgstr ""
 
@@ -28537,20 +28529,6 @@ msgstr "Αριθμός τιμολογίου"
 #, fuzzy
 msgid "Show net price?"
 msgstr "Εμφάνιση τιμών"
-
-#: gnucash/report/reports/standard/taxinvoice.scm:149
-msgid ""
-"The file name of the eguile template part of this report. This file should "
-"either be in your .gnucash directory, or else in its proper place within the "
-"GnuCash installation directories."
-msgstr ""
-
-#: gnucash/report/reports/standard/taxinvoice.scm:152
-msgid ""
-"The file name of the CSS stylesheet to use with this report. This file "
-"should either be in your .gnucash directory, or else in its proper place "
-"within the GnuCash installation directories."
-msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:162
 #, fuzzy
@@ -28921,7 +28899,7 @@ msgstr ""
 #: gnucash/report/stylesheets/css.scm:228
 #, fuzzy
 msgid "CSS-based stylesheet (experimental)"
-msgstr "Στυλ Text book  (πειραματικό)"
+msgstr "Στυλ Text book (πειραματικό)"
 
 #: gnucash/report/stylesheets/footer.scm:55
 #: gnucash/report/stylesheets/head-or-tail.scm:53
@@ -29543,7 +29521,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:368
 #, fuzzy
 msgid "Include transactions to/from filter accounts only."
-msgstr "Εξαίρεση συναλλαγών  μεταξύ επιλεγμένων λογαριασμών;"
+msgstr "Εξαίρεση συναλλαγών μεταξύ επιλεγμένων λογαριασμών;"
 
 #: gnucash/report/trep-engine.scm:371
 msgid "Exclude Transactions to/from Filter Accounts"
@@ -29552,7 +29530,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:372
 #, fuzzy
 msgid "Exclude transactions to/from all filter accounts."
-msgstr "Εξαίρεση συναλλαγών  μεταξύ επιλεγμένων λογαριασμών;"
+msgstr "Εξαίρεση συναλλαγών μεταξύ επιλεγμένων λογαριασμών;"
 
 #: gnucash/report/trep-engine.scm:378
 msgid "Non-void only"
@@ -29589,7 +29567,7 @@ msgstr "Ανάλυση συναλλαγών"
 #: gnucash/report/trep-engine.scm:395
 #, fuzzy
 msgid "Exclude closing transactions from report."
-msgstr "Εξαίρεση συναλλαγών  μεταξύ επιλεγμένων λογαριασμών;"
+msgstr "Εξαίρεση συναλλαγών μεταξύ επιλεγμένων λογαριασμών;"
 
 #: gnucash/report/trep-engine.scm:399
 #, fuzzy
@@ -29965,7 +29943,7 @@ msgstr "Διεύθυνση Email εταιρίας"
 
 #: libgnucash/app-utils/business-options.scm:75
 msgid "Company Contact Person"
-msgstr "Υπεύθυνος  επικοινωνίας εταιρίας"
+msgstr "Υπεύθυνος επικοινωνίας εταιρίας"
 
 #: libgnucash/app-utils/business-options.scm:76
 msgid "Fancy Date Format"
@@ -30158,7 +30136,7 @@ msgstr "Το όνομα της επιχείρησης σας."
 
 #: libgnucash/app-utils/business-prefs.scm:86
 msgid "The address of your business."
-msgstr "Η διεύθυνση της  επιχείρησης σας."
+msgstr "Η διεύθυνση της επιχείρησης σας."
 
 #: libgnucash/app-utils/business-prefs.scm:91
 #, fuzzy
@@ -30755,7 +30733,7 @@ msgid ""
 "Below you will find the list of invalid account names:\n"
 "%s"
 msgstr ""
-"Ο διαχωριστικός χαρακτήρας  \"%s\" χρησιμοποιείται από ένα ή περισσότερα "
+"Ο διαχωριστικός χαρακτήρας \"%s\" χρησιμοποιείται από ένα ή περισσότερα "
 "ονόματα λογαριασμών.\n"
 "\n"
 "Αυτό θα οδηγήσει σε απρόσμενη συμπεριφορά. Αλλάξτε τα ονόματα λογαριασμών ή "
@@ -31280,7 +31258,7 @@ msgstr "Δεν υπάρχει διαθέσιμη βοήθεια."
 
 #, fuzzy
 #~ msgid "Stock account registers"
-#~ msgstr "Λογαριασμός μετοχής για την αξία  \"%s\""
+#~ msgstr "Λογαριασμός μετοχής για την αξία \"%s\""
 
 #, fuzzy
 #~ msgid "Portfolio registers"
@@ -31586,7 +31564,7 @@ msgstr "Δεν υπάρχει διαθέσιμη βοήθεια."
 #~ msgid "Action Column|Split"
 #~ msgstr "Διαίρεση"
 
-#~ msgid "Are you sure you want to delete the entries ?"
+#~ msgid "Are you sure you want to delete the entries?"
 #~ msgstr "Είστε σίγουρος ότι θέλετε να διαγράψετε τις καταχωρήσεις;"
 
 #~ msgid "Transfers"
@@ -31786,15 +31764,15 @@ msgstr "Δεν υπάρχει διαθέσιμη βοήθεια."
 #~ msgstr "Έτη:"
 
 #~ msgid ""
-#~ "The external program \"AqBanking Setup Wizard\" has not been found. \n"
+#~ "The external program \"AqBanking Setup Wizard\" has not been found.\n"
 #~ "\n"
 #~ "The %s package should include the program \"qt3-wizard\". Please check "
 #~ "your installation to ensure this program is present. On some "
 #~ "distributions this may require installing additional packages."
 #~ msgstr ""
-#~ "Δεν βρέθηκε το εξωτερικό πρόγραμμα  \"AqBanking Setup Wizard\". \n"
+#~ "Δεν βρέθηκε το εξωτερικό πρόγραμμα \"AqBanking Setup Wizard\".\n"
 #~ "\n"
-#~ "Το πακέτο %s πρέπει να περιέχει το πρόγραμμα  \"qt3-wizard\". Παρακαλώ "
+#~ "Το πακέτο %s πρέπει να περιέχει το πρόγραμμα \"qt3-wizard\". Παρακαλώ "
 #~ "ελέγξτε το σύστημα σας για να επιβεβαιώσετε ότι το πρόγραμμα είναι "
 #~ "εγκατεστημένο. Σε μερικές διανομές ίσως είναι απαραίτητη η εγκατάσταση "
 #~ "και επιπλέον πακέτων."
@@ -31825,7 +31803,7 @@ msgstr "Δεν υπάρχει διαθέσιμη βοήθεια."
 #~ msgstr "_Εισαγωγή συναλλαγής..."
 
 #~ msgid "Issue a new transaction online through Online Banking"
-#~ msgstr "Έκδοση μιας νέας συναλλαγής online μέσω του  Online Banking"
+#~ msgstr "Έκδοση μιας νέας συναλλαγής online μέσω του Online Banking"
 
 #~ msgid "_Direct Debit..."
 #~ msgstr "_Άμεση χρέωση..."

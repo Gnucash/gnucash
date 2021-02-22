@@ -643,7 +643,7 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:90
 msgid ""
-"You can pack multiple reports into a single window,  providing all the "
+"You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
@@ -748,8 +748,8 @@ msgid ""
 "transactions up to midnight %s (for a total of %d transactions spread over "
 "%d accounts).\n"
 "\n"
-" Amend the Title and Notes or Click on \"Next\" to proceed.\n"
-" Click on \"Back\" to adjust the dates or \"Cancel\"."
+"Amend the Title and Notes or Click on \"Next\" to proceed.\n"
+"Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
 "Bạn đã yêu cầu tạo một sổ sách. Sổ sách này sẽ chứa tất cả các giao dịch đến "
 "mười hai giờ đêm %s (đến tổng số %d giao dịch phân phối ra %d tài khoản. "
@@ -1826,7 +1826,7 @@ msgstr "Liên _quan đến thuế"
 #: gnucash/gnome/dialog-find-account.c:447
 #, fuzzy
 msgid "Search from "
-msgstr " Tìm kiếm "
+msgstr "Tìm kiếm "
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2939,7 +2939,7 @@ msgstr "Trên"
 #: gnucash/gnome/dialog-progress.c:484 gnucash/gnome/dialog-progress.c:533
 #, fuzzy
 msgid "(paused)"
-msgstr " (vào sổ cái)"
+msgstr "(vào sổ cái)"
 
 #: gnucash/gnome/dialog-progress.c:768 gnucash/gnome/dialog-progress.c:771
 msgid "Complete"
@@ -8172,19 +8172,19 @@ msgstr "Tự động lưu tập tin không?"
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -8540,7 +8540,7 @@ msgstr ""
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
-"the  documentation to learn how to clear out dangling login sessions."
+"the documentation to learn how to clear out dangling login sessions."
 msgstr ""
 "Cơ sở dữ liệu SQL đang được dùng bởi người dùng khác: không thể nâng cấp đến "
 "khi họ đăng xuất. Nếu không có người dùng khác, xem tài liệu hướng dẫn để "
@@ -9179,8 +9179,6 @@ msgstr "Ch_o GnuCash thêm một sự phân tách điều chỉnh"
 # progress messages were requested
 # $Current        Current test number
 # $Total          Total number of tests
-#
-#
 #
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:294
 #: gnucash/register/ledger-core/split-register-control.c:145
@@ -11513,11 +11511,11 @@ msgid ""
 msgstr ""
 "Thiết lập này đặt ký tự phân cách các thành phần của tên tài khoản. Giá trị "
 "có thể là bất cứ ký tự Unicode đơn nào không phải là chữ số, hoặc:\n"
-" • colon\t\tdấu hai chấm « : »\n"
-" • slash\t\tdấu xuyệc « / »\n"
-" • backslash\t    dấu xuyệc ngược « \\ »\n"
-" • dash\t\tdấu gạch nối « - »\n"
-" • period\t\tdấu chấm « . »."
+"• colon\t\tdấu hai chấm « : »\n"
+"• slash\t\tdấu xuyệc « / »\n"
+"• backslash\t    dấu xuyệc ngược « \\ »\n"
+"• dash\t\tdấu gạch nối « - »\n"
+"• period\t\tdấu chấm « . »."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:25
 #, fuzzy
@@ -11685,9 +11683,9 @@ msgid ""
 msgstr ""
 "Thiết lập này cho phép một số tài khoản nào đó có số dư với dấu (+/-) ngược "
 "lại. (Số tiền dương trở thành âm, và âm trở thành dương.) Thiết lập:\n"
-" • income_expense\t\thiển thị phí tổn âm và thu nhập dương\n"
-" • credit\t\t\t\thiển thị số dư ngụ ý trạng thái bên nợ/có của tài khoản\n"
-" • none\t\t\t\tkhông đảo ngược dấu của số dư."
+"• income_expense\t\thiển thị phí tổn âm và thu nhập dương\n"
+"• credit\t\t\t\thiển thị số dư ngụ ý trạng thái bên nợ/có của tài khoản\n"
+"• none\t\t\t\tkhông đảo ngược dấu của số dư."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:100
 #: gnucash/gtkbuilder/dialog-preferences.glade:655
@@ -11789,8 +11787,8 @@ msgid ""
 "specified by the currency-other key."
 msgstr ""
 "Thiết lập này điều khiển nguồn của tiền tệ mặc định cho các tài khoản mới :\n"
-" • locale\t\ttheo miền địa phương\n"
-" • other\t\ttheo khoá « currency_other »"
+"• locale\t\ttheo miền địa phương\n"
+"• other\t\ttheo khoá « currency_other »"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:900
@@ -11835,10 +11833,10 @@ msgid ""
 msgstr ""
 "Thiết lập này ghi rõ cách hiển thị ngày tháng trong GnuCash.\n"
 "Giá trị có thể hiển thị ngày tháng:\n"
-" • locale\t\ttheo miền địa phương của hệ thống\n"
-" • ce\t\t\tkiểu Châu Âu\n"
-" • iso\t\ttheo tiêu chuẩn ISO 8601\n"
-" • us\t\t\tkiểu Mỹ."
+"• locale\t\ttheo miền địa phương của hệ thống\n"
+"• ce\t\t\tkiểu Châu Âu\n"
+"• iso\t\ttheo tiêu chuẩn ISO 8601\n"
+"• us\t\t\tkiểu Mỹ."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:160
 #: gnucash/gtkbuilder/dialog-preferences.glade:1098
@@ -11929,10 +11927,10 @@ msgstr ""
 "Thiết lập này đặt cạnh ở đó cần vẽ những thẻ để chuyển đổi trang trong cuốn "
 "vở.\n"
 "Giá trị có thể:\n"
-" • top\t\tbên trên\n"
-" • left\t\tbên trái\n"
-" • bottom\tbên dưới\n"
-" • right\t\tbên phải\n"
+"• top\t\tbên trên\n"
+"• left\t\tbên trái\n"
+"• bottom\tbên dưới\n"
+"• right\t\tbên phải\n"
 "Giá trị mặc định là « top »."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:195
@@ -11964,8 +11962,8 @@ msgid ""
 msgstr ""
 "Thiết lập này đặt cạnh ở đó cần vẽ thanh tóm tắt cho các trang khác nhau.\n"
 "Giá trị có thể:\n"
-" • top\t\tbên trên\n"
-" • bottom\tbên dưới\n"
+"• top\t\tbên trên\n"
+"• bottom\tbên dưới\n"
 "Giá trị mặc định là « bottom »."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:215
@@ -12141,10 +12139,10 @@ msgid ""
 msgstr ""
 "Trường này ghi rõ kiểu dáng xem mặc định khi mở cửa sổ mới chứa sổ cái.\n"
 "Giá trị có thể:\n"
-" • ledger\t\t\thiển thị mỗi giao dịch trên một hay hai dòng\n"
-" • auto-ledger\t\tcũng vậy, nhưng cũng mở rộng chỉ giao dịch hiện tại\n"
+"• ledger\t\t\thiển thị mỗi giao dịch trên một hay hai dòng\n"
+"• auto-ledger\t\tcũng vậy, nhưng cũng mở rộng chỉ giao dịch hiện tại\n"
 "\t\t\t\t\tđể tập tin tất cả các sự phân tách\n"
-" • journal\t\t\thiển thị mọi giao dịch theo dạng đã mở rộng."
+"• journal\t\t\thiển thị mọi giao dịch theo dạng đã mở rộng."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
 #: gnucash/gtkbuilder/dialog-preferences.glade:2761
@@ -12291,8 +12289,8 @@ msgid ""
 "by the currency-other key."
 msgstr ""
 "Thiết lập này điều khiển tiền tệ mặc định được dùng trong báo cáo :\n"
-" • locale\t\ttheo miền địa phương\n"
-" • other\t\ttheo khoá « currency_other »."
+"• locale\t\ttheo miền địa phương\n"
+"• other\t\ttheo khoá « currency_other »."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:353
 #: gnucash/gtkbuilder/dialog-preferences.glade:3155
@@ -12347,10 +12345,10 @@ msgid ""
 msgstr ""
 "Thiết lập này ghi rõ cách hiển thị ngày tháng trong GnuCash.\n"
 "Giá trị có thể hiển thị ngày tháng:\n"
-" • locale\t\ttheo miền địa phương của hệ thống\n"
-" • ce\t\t\tkiểu Châu Âu\n"
-" • iso\t\ttheo tiêu chuẩn ISO 8601\n"
-" • us\t\t\tkiểu Mỹ."
+"• locale\t\ttheo miền địa phương của hệ thống\n"
+"• ce\t\t\tkiểu Châu Âu\n"
+"• iso\t\ttheo tiêu chuẩn ISO 8601\n"
+"• us\t\t\tkiểu Mỹ."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:385
 msgid "Allow file incompatibility with older versions."
@@ -12853,8 +12851,8 @@ msgstr "Thiết lập này hiệu lực cột Ngày."
 #: gnucash/gtkbuilder/assistant-acct-period.glade:29
 #, fuzzy
 msgid ""
-"This assistant will help you setup and use accounting periods. \n"
-" \n"
+"This assistant will help you setup and use accounting periods.\n"
+"\n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
@@ -13569,7 +13567,7 @@ msgid ""
 "as well as move accounts (along with their sub-accounts) from one parent to "
 "another.\n"
 "\n"
-"Click 'Cancel'  if you do not wish to create any new accounts now."
+"Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
 "Trợ lý này sẽ giúp bạn tạo một nhóm tài khoản GnuCash cho các tài sản (v.d. "
 "vốn thường trực, tài khoản séc hay tiết kiệm), tài sản nợ (v.d. tiền cho "
@@ -14000,10 +13998,10 @@ msgstr "Nhập QIF"
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-"programs. \n"
+"programs.\n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Apply\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process.\n"
 "\n"
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
@@ -14032,7 +14030,7 @@ msgid ""
 "account(s) in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't "
-"worry if your data is in multiple files. \n"
+"worry if your data is in multiple files.\n"
 msgstr ""
 "Hãy chọn môt tập tin cần nạp. Khi bạn nhấn vào cái nút « Tiếp », tập tin này "
 "sẽ được nạp và phân tích. Có lẽ bạn cần phải đáp ứng một số câu hỏi về (các) "
@@ -14065,11 +14063,11 @@ msgid ""
 "components of a date are printed. In most cases, it is possible to "
 "automatically determine which format is in use in a particular file. "
 "However, in the file you have just imported there exist more than one "
-"possible format that fits the data. \n"
+"possible format that fits the data.\n"
 "\n"
 "Please select a date format for the file. QIF files created by European "
-"software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-day-year. \n"
+"software are likely to be in \"d-m-y\" or day-month-year format, where US "
+"QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
 "Định dạng tập tin QIF không ghi rõ thứ tự in các thành phần ngày, tháng và "
 "năm của ngày tháng. Trong phần lớn trường hợp, có thể tự động quyết định "
@@ -14094,7 +14092,7 @@ msgstr "Đặt định dạng ngày cho tập tin QIF này"
 #, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account. \n"
+"one account, but the file does not specify a name for that account.\n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
 "accounting program, you should use the same account name that was used in "
@@ -14201,7 +14199,7 @@ msgstr "Khớp tài khoản QIF với tài khoản GnuCash"
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
-"converted to a GnuCash account. \n"
+"converted to a GnuCash account.\n"
 "\n"
 "On the next page, you will have an opportunity to look at the suggested "
 "matches between QIF categories and GnuCash accounts. You may change matches "
@@ -14234,7 +14232,7 @@ msgstr "Khớp phân loại QIF với tài khoản GnuCash"
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
-"correctly assigned to GnuCash accounts. \n"
+"correctly assigned to GnuCash accounts.\n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
@@ -14301,8 +14299,8 @@ msgid ""
 "Below you are asked to provide information about stocks, mutual funds, and "
 "other investments that appear in the QIF file(s) you are importing. GnuCash "
 "needs some additional details about these investments that the QIF format "
-"does not provide. \n"
-" \n"
+"does not provide.\n"
+"\n"
 "Each stock, mutual fund, or other investment must have a name and an "
 "abbreviation, such as a stock symbol. Because some unrelated investments "
 "have the same abbreviation, you also need to indicate what type of "
@@ -14383,7 +14381,7 @@ msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
 "will be saved and used for defaults the next time you use the QIF import "
-"facility. \n"
+"facility.\n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -15445,7 +15443,7 @@ msgid ""
 "multiple sites on the internet."
 msgstr ""
 "Đây là các nguồn chào giá vừa được thêm vào F::Q. GnuCash không biết nếu các "
-"nguồn này  lấy thông tin từ cùng một địa chỉ, hoặc từ nhiều địa chỉ trên "
+"nguồn này lấy thông tin từ cùng một địa chỉ, hoặc từ nhiều địa chỉ trên "
 "Internet."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:400
@@ -16002,7 +16000,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-find-account.glade:230
 #, fuzzy
 msgid "_Search"
-msgstr " Tìm kiếm "
+msgstr "Tìm kiếm "
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:266
 msgid ""
@@ -16781,11 +16779,11 @@ msgid ""
 msgstr ""
 "Ký tự phân cách các thành phần của tên tài khoản. Giá trị có thể là bất cứ "
 "ký tự Unicode đơn nào không phải là chữ số, hoặc:\n"
-" • colon\t\tdấu hai chấm « : »\n"
-" • slash\t\tdấu xuyệc « / »\n"
-" • backslash   \tdấu xuyệc ngược « \\ »\n"
-" • dash\t\tdấu gạch nối « - »\n"
-" • period\t\tdấu chấm « . »."
+"• colon\t\tdấu hai chấm « : »\n"
+"• slash\t\tdấu xuyệc « / »\n"
+"• backslash   \tdấu xuyệc ngược « \\ »\n"
+"• dash\t\tdấu gạch nối « - »\n"
+"• period\t\tdấu chấm « . »."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:894
 #: gnucash/gtkbuilder/dialog-preferences.glade:3149
@@ -17834,7 +17832,7 @@ msgid "<b>_Selected Reports</b>"
 msgstr "<b>Báo _cáo đã chọn</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
-msgid "A_dd  >>"
+msgid "A_dd >>"
 msgstr "Thê_m >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
@@ -18114,11 +18112,6 @@ msgstr "Tạo trước"
 #: gnucash/gtkbuilder/dialog-sx.glade:924
 msgid "Remind in advance"
 msgstr "Nhắc nhở trước"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:965
-#: gnucash/gtkbuilder/dialog-sx.glade:1024
-msgid " days"
-msgstr " ngày"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:982
 msgid "Create automatically"
@@ -19256,7 +19249,7 @@ msgstr "Mỗi "
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:62
 msgid ""
-"Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
+"Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
 "Số đơn vị lịch trong lần xảy ra: v.d. mỗi hai tuần, hàng quý (mỗi ba tháng)"
@@ -19394,7 +19387,7 @@ msgid "Export to PDF File"
 msgstr "Tên báo cáo"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
-#. 3. Account Number,  4. Subaccount ID
+#. 3. Account Number, 4. Subaccount ID
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
@@ -19429,9 +19422,8 @@ msgstr ""
 msgid ""
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
-"bank  decides to grant you electronic access, they will send you a letter "
-"containing \n"
-"\n"
+"bank decides to grant you electronic access, they will send you a letter "
+"containing:\n"
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's Online Banking server\n"
@@ -19464,11 +19456,10 @@ msgstr ""
 "Trước tiên bạn cần phải xin ngân hàng cung cấp truy cập Ngân hàng Trực "
 "tuyến. Cấp thì ngân hàng gửi cho bạn một lá thư chứa những mục thông tin "
 "này:\n"
-"\n"
-" • Mã ngân hàng riêng của ngân hàng bạn dùng\n"
-" • ID người dùng mà nhận diện bạn cho ngân hàng này\n"
-" • Địa chỉ Internet của máy phục vụ Ngân hàng Trực tuyến của ngân hàng này\n"
-" • Đối với Ngân hàng Trực tuyến HBCI, thông tin về khoá công mật mã củ ngân "
+"• Mã ngân hàng riêng của ngân hàng bạn dùng\n"
+"• ID người dùng mà nhận diện bạn cho ngân hàng này\n"
+"• Địa chỉ Internet của máy phục vụ Ngân hàng Trực tuyến của ngân hàng này\n"
+"• Đối với Ngân hàng Trực tuyến HBCI, thông tin về khoá công mật mã củ ngân "
 "hàng (Thư Ini)\n"
 "\n"
 "Thông tin này cần thiết sau. Bấm cái nút « Tiếp » ngay bây giờ.\n"
@@ -19686,14 +19677,12 @@ msgid "Name for new template"
 msgstr "Tên cho mẫu mới"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
-#, fuzzy
-msgid " _Name of the new template:"
-msgstr "Tên cho mẫu mới"
+msgid "_Name of the new template"
+msgstr "_Tên cho mẫu mới"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
-#, fuzzy
 msgid "Enter a unique name for the new template."
-msgstr "Gõ tên cho mẫu mới:"
+msgstr "Gõ tên cho mẫu mới."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:989
 msgid "Online Transaction"
@@ -20091,7 +20080,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:184
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probable the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -20151,7 +20140,7 @@ msgstr "Ngân hàng"
 #, fuzzy
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probably the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -20216,7 +20205,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1156
 #, c-format
 msgid ""
-"Result of Online Banking job: \n"
+"Result of Online Banking job:\n"
 "Account booked balance is %s"
 msgstr ""
 "Kết quả của công việc Ngân hàng Trực tuyến:\n"
@@ -20296,7 +20285,7 @@ msgstr[0] ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
 #, fuzzy, c-format
 msgid ""
-"The PIN needs to be at least %d characters \n"
+"The PIN needs to be at least %d characters\n"
 "long. Do you want to try again?"
 msgstr "Số PIN phải chứa ít nhất %d ký tự. Bạn có muốn thử lại không?"
 
@@ -20686,7 +20675,7 @@ msgstr "Ghi chú tài khoản"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:164
 #, fuzzy
 msgid "Memo-posted"
-msgstr " (vào sổ cái)"
+msgstr "(vào sổ cái)"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:165
 #, fuzzy
@@ -20781,7 +20770,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:97
 msgid ""
 "This assistant will help you export the Account Tree to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20790,7 +20779,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use.\n"
@@ -20799,7 +20788,7 @@ msgid ""
 "order the accounts were processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20808,7 +20797,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:115
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use. Each Transaction will "
@@ -20816,7 +20805,7 @@ msgid ""
 "processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "By selecting the simple layout, the output will be equivalent to a single "
 "row register view and as such some of the transfer detail could be lost.\n"
@@ -28734,20 +28723,6 @@ msgstr "Ghi chú thêm"
 msgid "Today date format"
 msgstr "Định dạng ngày hôm nay"
 
-#: gnucash/report/reports/standard/receipt.scm:81
-msgid ""
-"The file name of the eguile template part of this report.  This file should "
-"either be in your .gnucash directory, or else in its proper place within the "
-"GnuCash installation directories."
-msgstr ""
-
-#: gnucash/report/reports/standard/receipt.scm:84
-msgid ""
-"The file name of the CSS stylesheet to use with this report.  This file "
-"should either be in your .gnucash directory, or else in its proper place "
-"within the GnuCash installation directories."
-msgstr ""
-
 #: gnucash/report/reports/standard/receipt.scm:88
 #: gnucash/report/reports/standard/taxinvoice.scm:156
 #, fuzzy
@@ -28766,8 +28741,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:97
 msgid ""
-"Width of the header logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -28777,8 +28752,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:103
 msgid ""
-"Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -28818,7 +28793,7 @@ msgstr "Tài khoản phải thu mà bạn muốn xem"
 #: gnucash/report/reports/standard/reconcile-report.scm:59
 msgid ""
 "The reconcile report is designed to be similar to the formal reconciliation "
-"tool.  Please select the account from Report Options. Please note the dates "
+"tool. Please select the account from Report Options. Please note the dates "
 "specified in the options will apply to the Reconciliation Date."
 msgstr ""
 
@@ -29108,6 +29083,7 @@ msgid "Show net price?"
 msgstr "Hiện giá"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:149
+#: gnucash/report/reports/standard/receipt.scm:81
 msgid ""
 "The file name of the eguile template part of this report. This file should "
 "either be in your .gnucash directory, or else in its proper place within the "
@@ -29115,6 +29091,7 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:152
+#: gnucash/report/reports/standard/receipt.scm:84
 msgid ""
 "The file name of the CSS stylesheet to use with this report. This file "
 "should either be in your .gnucash directory, or else in its proper place "
@@ -32392,7 +32369,7 @@ msgstr "Không phải biến"
 #~ msgstr "Năm:"
 
 #~ msgid ""
-#~ "The external program \"AqBanking Setup Wizard\" has not been found. \n"
+#~ "The external program \"AqBanking Setup Wizard\" has not been found.\n"
 #~ "\n"
 #~ "The %s package should include the program \"qt3-wizard\". Please check "
 #~ "your installation to ensure this program is present. On some "

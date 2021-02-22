@@ -793,7 +793,7 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:90
 msgid ""
-"You can pack multiple reports into a single window,  providing all the "
+"You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
@@ -876,7 +876,7 @@ msgid_plural ""
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
 "A legkorábbi könyvelés dátuma a könyvben %s. A fenti kiválasztás alapján a "
-"könyvelés-megosztás  a %d könyvekben megy végbe. Kattintson a \"Következő\"-"
+"könyvelés-megosztás a %d könyvekben megy végbe. Kattintson a \"Következő\"-"
 "re, hogy elkezdje bezárni az első könyvet."
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
@@ -887,10 +887,10 @@ msgid ""
 "transactions up to midnight %s (for a total of %d transactions spread over "
 "%d accounts).\n"
 "\n"
-" Amend the Title and Notes or Click on \"Next\" to proceed.\n"
-" Click on \"Back\" to adjust the dates or \"Cancel\"."
+"Amend the Title and Notes or Click on \"Next\" to proceed.\n"
+"Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
-"Egy könyv létrehozását választotta. Az új könyv  minden tranzakciót  %s "
+"Egy könyv létrehozását választotta. Az új könyv minden tranzakciót %s "
 "éjfélig tartalmazni fog(összesen %d tranzakció a %d folyószámlákon). "
 "Kattintson a 'Következő' -re a könyv létrehozásához.Kattintson a 'Vissza' "
 "gombra az adatok megváltoztatásához."
@@ -1047,7 +1047,7 @@ msgstr "Egyéb kifizetés"
 #: gnucash/gnome/assistant-loan.cpp:765
 #, c-format
 msgid "... pay \"%s\"?"
-msgstr "... fizet \"%s\" ?"
+msgstr "... fizet \"%s\"?"
 
 #: gnucash/gnome/assistant-loan.cpp:777
 msgid "via Escrow account?"
@@ -1739,7 +1739,7 @@ msgstr "Összár"
 #: gnucash/gnome/dialog-doclink.c:586
 #, fuzzy
 msgid "Business item can not be modified."
-msgstr "A fájlt nem lehet  megnyitni."
+msgstr "A fájlt nem lehet megnyitni."
 
 #: gnucash/gnome/dialog-doclink.c:595 gnucash/gnome/dialog-doclink.c:696
 #: gnucash/gnome/gnc-plugin-page-invoice.c:382
@@ -1964,7 +1964,7 @@ msgstr "A_dóvonatkozású"
 #: gnucash/gnome/dialog-find-account.c:447
 #, fuzzy
 msgid "Search from "
-msgstr " Keresés "
+msgstr "Keresés "
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -2351,7 +2351,7 @@ msgstr "Készpénz összesen:"
 
 #: gnucash/gnome/dialog-invoice.c:1398
 msgid "Total Charge:"
-msgstr " Összes Költség:"
+msgstr "Összes Költség:"
 
 #: gnucash/gnome/dialog-invoice.c:1867 gnucash/gnome/dialog-payment.c:1332
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
@@ -2776,11 +2776,11 @@ msgstr "Nyereség/veszteség"
 #: gnucash/gnome/dialog-lot-viewer.c:1047
 #, c-format
 msgid "Lots in Account %s"
-msgstr "Tételek a  %s számlán"
+msgstr "Tételek a %s számlán"
 
 #: gnucash/gnome/dialog-order.c:171
 msgid "The Order must be given an ID."
-msgstr "A megrendelésnek  egy számot kell adni."
+msgstr "A megrendelésnek egy számot kell adni."
 
 #: gnucash/gnome/dialog-order.c:278
 msgid "The Order must have at least one Entry."
@@ -2959,7 +2959,7 @@ msgid ""
 "If you continue these splits will be ignored:\n"
 "\n"
 "%s\n"
-"Do you wish to continue and ignore these splits ?"
+"Do you wish to continue and ignore these splits?"
 msgstr ""
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
@@ -2984,7 +2984,7 @@ msgstr "Tételek"
 
 #: gnucash/gnome/dialog-price-edit-db.c:457
 #, fuzzy
-msgid "Are you sure you want to delete these prices ?"
+msgid "Are you sure you want to delete these prices?"
 msgstr "Biztosan törölni kívánja a %d kiválasztott árat?"
 
 #: gnucash/gnome/dialog-price-editor.c:221
@@ -3204,7 +3204,7 @@ msgstr "Adjon meg érvényes végződési dátumot."
 
 #: gnucash/gnome/dialog-sx-editor2.c:809 gnucash/gnome/dialog-sx-editor.c:558
 msgid "There must be some number of occurrences."
-msgstr "Az előfordulás számát  meg kell adni."
+msgstr "Az előfordulás számát meg kell adni."
 
 #: gnucash/gnome/dialog-sx-editor2.c:818 gnucash/gnome/dialog-sx-editor.c:566
 #, c-format
@@ -3526,7 +3526,7 @@ msgstr "Új folyószámlák oldal"
 
 #: gnucash/gnome/gnc-plugin-account-tree.c:60
 msgid "Open a new Account Tree page"
-msgstr "Új folyószámla-nézet  oldal nyitása"
+msgstr "Új folyószámla-nézet oldal nyitása"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:111
 msgid "New _File"
@@ -3621,7 +3621,7 @@ msgstr "Ütemezett tranzakció-szerke_sztő"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:167
 msgid "The list of Scheduled Transactions"
-msgstr "Az  ütemezett tranzakciók felsorolása"
+msgstr "Az ütemezett tranzakciók felsorolása"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:171
 msgid "Since _Last Run..."
@@ -3717,7 +3717,7 @@ msgstr "Tekintse meg a nap ötleteit"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:545
 msgid "There are no Scheduled Transactions to be entered at this time."
-msgstr "Most nincsenek rögzítendő  ütemezett tranzakciók."
+msgstr "Most nincsenek rögzítendő ütemezett tranzakciók."
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
@@ -3948,7 +3948,7 @@ msgstr "Áttekintés"
 #: gnucash/gnome/gnc-plugin-business.c:203
 #, fuzzy
 msgid "Open a Vendor overview page"
-msgstr "Új folyószámla-nézet  oldal nyitása"
+msgstr "Új folyószámla-nézet oldal nyitása"
 
 #: gnucash/gnome/gnc-plugin-business.c:206
 msgid "_Vendor"
@@ -6459,7 +6459,7 @@ msgstr "Rosszul kialakított beállítások URL: %s"
 #: gnucash/gnome/gnc-plugin-report-system.c:194
 #, c-format
 msgid "Badly-formed report id: %s"
-msgstr "Rosszul formázott  jelentés azonosító: %s"
+msgstr "Rosszul formázott jelentés azonosító: %s"
 
 #: gnucash/gnome/gnc-split-reg2.c:632 gnucash/gnome/gnc-split-reg.c:1865
 msgid "Balancing entry from reconciliation"
@@ -6710,7 +6710,7 @@ msgstr ""
 #: gnucash/gnome/gnc-split-reg.c:1520
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1040
 msgid "Delete the current transaction?"
-msgstr "A jelenlegi tranzakció törlése ?"
+msgstr "A jelenlegi tranzakció törlése?"
 
 #: gnucash/gnome/gnc-split-reg.c:1521
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1041
@@ -8250,19 +8250,19 @@ msgstr "Automatikus mentés?"
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -8442,7 +8442,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:314
 #, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
-msgstr "Úgy tűnik, %s adatbázis nem létezik. Akar létrehozni egyet ?"
+msgstr "Úgy tűnik, %s adatbázis nem létezik. Akar létrehozni egyet?"
 
 #: gnucash/gnome-utils/gnc-file.c:328
 #, c-format
@@ -8596,7 +8596,7 @@ msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
 msgstr ""
-"Ez az adatbázis a GnuCash egy régebbi változatából való. Nyomjon OK -t  ha "
+"Ez az adatbázis a GnuCash egy régebbi változatából való. Nyomjon OK -t ha "
 "frissíti az adatbázist a jelenlegi verzióra, vagy Megszakítást, ha megjelöli "
 "csak olvashatónak."
 
@@ -8611,7 +8611,7 @@ msgstr ""
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
-"the  documentation to learn how to clear out dangling login sessions."
+"the documentation to learn how to clear out dangling login sessions."
 msgstr ""
 "Az SQL adatbázist mások használják, és a felfejlesztést nem lehet "
 "végrehajtani, amíg ki nem jelentkeznek. Ha jelenleg nincs más felhasználó a "
@@ -8742,13 +8742,13 @@ msgstr ""
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
-msgstr "Úgy tűnik, %s adatbázis nem létezik. Akar létrehozni egyet ?"
+msgstr "Úgy tűnik, %s adatbázis nem létezik. Akar létrehozni egyet?"
 
 #: gnucash/gnome-utils/gnc-file.c:1691
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
-"proceed ?"
+"proceed?"
 msgstr "%s fájl már létezik. Biztos, hogy felül akarja írni?"
 
 #: gnucash/gnome-utils/gnc-file.c:1699
@@ -9134,7 +9134,7 @@ msgstr "Könyvelés időszakának kezdete"
 
 #: gnucash/gnome-utils/gnc-period-select.c:80
 msgid "Start of previous accounting period"
-msgstr "Az előző  könyvelési időszak kezdete"
+msgstr "Az előző könyvelési időszak kezdete"
 
 #: gnucash/gnome-utils/gnc-period-select.c:87
 #: libgnucash/app-utils/date-utilities.scm:969
@@ -9171,7 +9171,7 @@ msgstr "Ezen könyvelési időszak vége"
 
 #: gnucash/gnome-utils/gnc-period-select.c:96
 msgid "End of previous accounting period"
-msgstr "Az előző  könyvelési időszak vége"
+msgstr "Az előző könyvelési időszak vége"
 
 #: gnucash/gnome-utils/gnc-splash.c:112
 msgid "Loading..."
@@ -10485,7 +10485,7 @@ msgstr ""
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
-msgstr "Log-fájl  \"/tmp/gnucash.trace\"; lehet \"stderr\" vagy \"stdout\" is."
+msgstr "Log-fájl \"/tmp/gnucash.trace\"; lehet \"stderr\" vagy \"stdout\" is."
 
 #: gnucash/gnucash-core-app.cpp:539
 msgid ""
@@ -10560,7 +10560,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable ?"
+"       Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
@@ -11281,7 +11281,7 @@ msgid ""
 "currency), so the transaction will be recognised as a match."
 msgstr ""
 "Ez a mező adja meg a plusz összeget, amit felszámítanak importált "
-"tranzakciók egyezésekor. Néhány kereskedelmi ATM (nem bankhoz tartozó),  a "
+"tranzakciók egyezésekor. Néhány kereskedelmi ATM (nem bankhoz tartozó), a "
 "díjaikat hozzáadják az összeghez, ahelyett, hogy külön tranzakcióként, vagy "
 "a havi bankszámladíjként jelenne meg. Például 1000Ft felvételekor 1150Ft-ot "
 "számláz. Ha kézzel rögzíti az 1000Ft-ot, az összegek nem fognak egyezni. Ezt "
@@ -12498,7 +12498,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:69
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:172
 msgid "Remove a split from a transaction"
-msgstr " Részkönyvelés törlése a tranzakcióból"
+msgstr "Részkönyvelés törlése a tranzakcióból"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:70
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:173
@@ -12512,7 +12512,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:74
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:177
 msgid "Remove a reconciled split from a transaction"
-msgstr " Egyeztetett részkönyvelés törlése a tranzakcióból"
+msgstr "Egyeztetett részkönyvelés törlése a tranzakcióból"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:75
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:178
@@ -12735,8 +12735,8 @@ msgstr "E beállítás engedélyezi a dátum oszlopot."
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:29
 msgid ""
-"This assistant will help you setup and use accounting periods. \n"
-" \n"
+"This assistant will help you setup and use accounting periods.\n"
+"\n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
@@ -13446,7 +13446,7 @@ msgid ""
 "as well as move accounts (along with their sub-accounts) from one parent to "
 "another.\n"
 "\n"
-"Click 'Cancel'  if you do not wish to create any new accounts now."
+"Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
 "A Varászló segíti a GnuCash-számlakészlet létrehozását,eszközökhöz (pl. "
 "befektetések, folyószámlák és betétszámlák), forrásokhoz (pl. kölcsönök), "
@@ -13560,10 +13560,10 @@ msgid ""
 msgstr ""
 "Kattintson az 'Alkalmazás' -ra új számla létrehozásához. Ezután elmentheti "
 "fájlba vagy adatbázisba.\n"
-" \n"
-" Kattintson a 'Vissza' -ra az ellenőrzéshez.\n"
-" \n"
-" Kattintson a 'Megszakítás' -ra a párbeszédablak bezárásához,új számlák "
+"\n"
+"Kattintson a 'Vissza' -ra az ellenőrzéshez.\n"
+"\n"
+"Kattintson a 'Megszakítás' -ra a párbeszédablak bezárásához,új számlák "
 "létrehozása nélkül."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:591
@@ -13877,17 +13877,17 @@ msgstr "QIF-importálás"
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-"programs. \n"
+"programs.\n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Apply\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process.\n"
 "\n"
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
 msgstr ""
 "GnuCash képes pénzügyi adatokat importálni QIF (Quicken Interchange Format) "
 "típusú fájlokból, Quicken/QuickBooks, MS Money, Moneydance és sok más "
-"program által írtakból. \n"
+"program által írtakból.\n"
 "\n"
 "Az importálási folyamatnak több lépése van.A GnuCash számlái nem változnak "
 "mialatt ön az 'Alkalmazás'-ra kattint a folyamat végén.\n"
@@ -13908,14 +13908,14 @@ msgid ""
 "account(s) in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't "
-"worry if your data is in multiple files. \n"
+"worry if your data is in multiple files.\n"
 msgstr ""
 "Please select a file to load. When you click \"Forward\", the file will be "
 "loaded and analyzed. You may need to answer some questions about the "
 "account(s) in the file.\n"
 "\n"
-"You will have the opportunity to load as many files as you wish, so don't  "
-"worry if your data is in multiple files. \n"
+"You will have the opportunity to load as many files as you wish, so don't "
+"worry if your data is in multiple files.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:114
 msgid "_Select..."
@@ -13941,16 +13941,16 @@ msgid ""
 "components of a date are printed. In most cases, it is possible to "
 "automatically determine which format is in use in a particular file. "
 "However, in the file you have just imported there exist more than one "
-"possible format that fits the data. \n"
+"possible format that fits the data.\n"
 "\n"
 "Please select a date format for the file. QIF files created by European "
-"software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-day-year. \n"
+"software are likely to be in \"d-m-y\" or day-month-year format, where US "
+"QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
 "A QIF formátum nem határozza meg, milyen formában kell egy dátum évét, "
 "hónapját és napját nyomtatni. Legtöbb esetben automatikusan meg lehet "
 "állapítani, hogy egy adott fájl milyen formátumot használ.A most importált "
-"fájlban azonban több formátum is alkalmazható az adatokra. \n"
+"fájlban azonban több formátum is alkalmazható az adatokra.\n"
 "\n"
 "Válasszon egy egy dátumformátumot a fájlnak. Az európai szoftverek által "
 "készített QIF fájlok \"n-h-é\" vagy nap-hónap-év formátumban vannak. Az US "
@@ -13969,14 +13969,14 @@ msgstr "Dátumformátum kiválasztása ehhez a QIF fájlhoz"
 #, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account. \n"
+"one account, but the file does not specify a name for that account.\n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
 "accounting program, you should use the same account name that was used in "
 "that program.\n"
 msgstr ""
 "Az éppen most betöltött QIF-fájl egyetlen számla tranzakcióit tartalmazza, "
-"de nem tartalmazza e számlának a nevét. \n"
+"de nem tartalmazza e számlának a nevét.\n"
 "\n"
 "Adjon nevet a számlának! Ha a fájlt egy másik számlázó program exportálta, "
 "akkor ugyanazt a nevet kell megadni, amit az exportáló program használt.\n"
@@ -14073,7 +14073,7 @@ msgstr "QIF és GnuCash számlák összevetése"
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
-"converted to a GnuCash account. \n"
+"converted to a GnuCash account.\n"
 "\n"
 "On the next page, you will have an opportunity to look at the suggested "
 "matches between QIF categories and GnuCash accounts. You may change matches "
@@ -14106,7 +14106,7 @@ msgstr "QIF-kategóriák és GnuCash-számlák összevetése"
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
-"correctly assigned to GnuCash accounts. \n"
+"correctly assigned to GnuCash accounts.\n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
@@ -14132,7 +14132,7 @@ msgid ""
 msgstr ""
 "A QIF-et importáló program jelenleg nem tud több pénznemű QIF fájlokat "
 "kezelni. A QIF fájl(ok) összes importált számlája ugyanarra a pénznemre kell "
-"vonatkozzon. \n"
+"vonatkozzon.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:947
 msgid "_Select the currency to use for all imported transactions:"
@@ -14162,8 +14162,8 @@ msgid ""
 "Below you are asked to provide information about stocks, mutual funds, and "
 "other investments that appear in the QIF file(s) you are importing. GnuCash "
 "needs some additional details about these investments that the QIF format "
-"does not provide. \n"
-" \n"
+"does not provide.\n"
+"\n"
 "Each stock, mutual fund, or other investment must have a name and an "
 "abbreviation, such as a stock symbol. Because some unrelated investments "
 "have the same abbreviation, you also need to indicate what type of "
@@ -14243,7 +14243,7 @@ msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
 "will be saved and used for defaults the next time you use the QIF import "
-"facility. \n"
+"facility.\n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -14253,8 +14253,8 @@ msgid ""
 msgstr ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
-"will be saved and used for defaults the next time you use the QIF import  "
-"facility. \n"
+"will be saved and used for defaults the next time you use the QIF import "
+"facility.\n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -15839,7 +15839,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-find-account.glade:230
 #, fuzzy
 msgid "_Search"
-msgstr " Keresés "
+msgstr "Keresés "
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:266
 msgid ""
@@ -16117,7 +16117,7 @@ msgid ""
 "Unposting this Invoice will delete the posted transaction.\n"
 "Are you sure you want to unpost it?"
 msgstr ""
-"E számla visszavonása törölni fogja a tranzakciót. \n"
+"E számla visszavonása törölni fogja a tranzakciót.\n"
 "Biztosan fel kívánja oldani?"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1292
@@ -17645,7 +17645,7 @@ msgid "<b>_Selected Reports</b>"
 msgstr "<b>Kivála_sztott jelentések</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
-msgid "A_dd  >>"
+msgid "A_dd >>"
 msgstr "Hozzáa_dás >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
@@ -17926,11 +17926,6 @@ msgstr "Megelőző létrehozás"
 #: gnucash/gtkbuilder/dialog-sx.glade:924
 msgid "Remind in advance"
 msgstr "Megelőző emlékeztetés"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:965
-#: gnucash/gtkbuilder/dialog-sx.glade:1024
-msgid " days"
-msgstr " nap"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:982
 msgid "Create automatically"
@@ -19062,7 +19057,7 @@ msgstr "Minden"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:62
 msgid ""
-"Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
+"Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
 "Naptári egységek száma az ismétlődő időszakokban: pl. kétheti = minden 2. "
@@ -19200,7 +19195,7 @@ msgid "Export to PDF File"
 msgstr "Jelentés címe"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
-#. 3. Account Number,  4. Subaccount ID
+#. 3. Account Number, 4. Subaccount ID
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
@@ -19235,9 +19230,8 @@ msgstr ""
 msgid ""
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
-"bank  decides to grant you electronic access, they will send you a letter "
-"containing \n"
-"\n"
+"bank decides to grant you electronic access, they will send you a letter "
+"containing:\n"
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's Online Banking server\n"
@@ -19268,7 +19262,6 @@ msgstr ""
 "\n"
 "Először kérni kell egy Online Banking hozzáférést a banktól. Ha a bank "
 "megadja, küld egy levelet, ami tartalmazza:\n"
-"\n"
 "* a bank kódját\n"
 "* a felhasználó azonosítóját, amivel a bank azonosítja a felhasználót\n"
 "* a bank Online Banking kiszolgálójának az internetes címét\n"
@@ -19481,7 +19474,7 @@ msgstr "Új sablon neve"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
 #, fuzzy
-msgid " _Name of the new template:"
+msgid "_Name of the new template"
 msgstr "Új sablon neve"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
@@ -19793,7 +19786,7 @@ msgid ""
 "settings. This does not result in a valid online transfer job."
 msgstr ""
 "Az összeg nulla vagy az összeg mező nem értelmezhető. Talán összekeverte a "
-"tizedesvesszőt és pontot. Ez nem eredményez érvényes online átutalást. \n"
+"tizedesvesszőt és pontot. Ez nem eredményez érvényes online átutalást.\n"
 "\n"
 "Kívánja újra bevinni a feladatot?"
 
@@ -19875,7 +19868,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:184
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probable the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -19884,7 +19877,7 @@ msgid ""
 "Do you want to enter the job again?"
 msgstr ""
 "A Modul hibát talált a feladat előkészítésekor. Nem lehetséges a feladat "
-"végrehajtása. \n"
+"végrehajtása.\n"
 "\n"
 "Legvalószínűbb, hogy a bank nem támogatja a kiválasztott feladatot, vagy a "
 "HBCI számlán nincs engedélyezve a feladat végrehajtása. További "
@@ -19935,7 +19928,7 @@ msgstr "Bank"
 #, fuzzy
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probably the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -19944,7 +19937,7 @@ msgid ""
 "Do you want to enter the job again?"
 msgstr ""
 "A Modul hibát talált a feladat előkészítésekor. Nem lehetséges a feladat "
-"végrehajtása. \n"
+"végrehajtása.\n"
 "\n"
 "Legvalószínűbb, hogy a bank nem támogatja a kiválasztott feladatot, vagy a "
 "HBCI számlán nincs engedélyezve a feladat végrehajtása. További "
@@ -19997,7 +19990,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1156
 #, c-format
 msgid ""
-"Result of Online Banking job: \n"
+"Result of Online Banking job:\n"
 "Account booked balance is %s"
 msgstr ""
 
@@ -20015,7 +20008,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1184
 msgid "Reconcile account now?"
-msgstr "Folyószámla egyeztetése most ?"
+msgstr "Folyószámla egyeztetése most?"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1279
 msgid "The bank has sent a message in its response."
@@ -20036,12 +20029,12 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:295
 #, fuzzy, c-format
 msgid "Job %d status %d - %s\n"
-msgstr "Feladat %d státusz %d - %s: %s \n"
+msgstr "Feladat %d státusz %d - %s: %s\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:297
 #, fuzzy, c-format
 msgid "Job %d status %d - %s: %s\n"
-msgstr "Feladat %d státusz %d - %s: %s \n"
+msgstr "Feladat %d státusz %d - %s: %s\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:317
 msgid "...\n"
@@ -20074,7 +20067,7 @@ msgstr[0] ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
 #, c-format
 msgid ""
-"The PIN needs to be at least %d characters \n"
+"The PIN needs to be at least %d characters\n"
 "long. Do you want to try again?"
 msgstr "A PIN-kód legalább %d karakter kell legyen. Akarja újrapróbálni?"
 
@@ -20434,7 +20427,7 @@ msgstr "Számla megjegyzései"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:164
 #, fuzzy
 msgid "Memo-posted"
-msgstr " (könyvelve)"
+msgstr "(könyvelve)"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:165
 #, fuzzy
@@ -20468,7 +20461,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:462
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:212
 msgid "The input file can not be opened."
-msgstr "A fájlt nem lehet  megnyitni."
+msgstr "A fájlt nem lehet megnyitni."
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:357
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:304
@@ -20528,7 +20521,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:97
 msgid ""
 "This assistant will help you export the Account Tree to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20537,7 +20530,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use.\n"
@@ -20546,7 +20539,7 @@ msgid ""
 "order the accounts were processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20555,7 +20548,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:115
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use. Each Transaction will "
@@ -20563,7 +20556,7 @@ msgid ""
 "processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "By selecting the simple layout, the output will be equivalent to a single "
 "row register view and as such some of the transfer detail could be lost.\n"
@@ -22019,12 +22012,12 @@ msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:184
 msgid "This account should usually be of type income."
-msgstr "Ennek  a számlának lehetőség szerint bevételinek kellene lennie."
+msgstr "Ennek a számlának lehetőség szerint bevételinek kellene lennie."
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:192
 msgid "This account should usually be of type expense or asset."
 msgstr ""
-"Ennek  a számlának lehetőség szerint kötség vagy Saját tőke számlának "
+"Ennek a számlának lehetőség szerint kötség vagy Saját tőke számlának "
 "kellene lennie."
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:760
@@ -22632,7 +22625,7 @@ msgid ""
 "following accounts:\n"
 "%s\n"
 "\n"
-"Are you sure you want to continue with this change ?"
+"Are you sure you want to continue with this change?"
 msgstr ""
 "Egyeztetett kifejtés megváltoztatására készül. Ezzel megnehezítheti a "
 "későbbi egyeztetést! Folytatás e változtatással?"
@@ -24447,7 +24440,7 @@ msgstr "$0.00 valued Tax codes won't be printed."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:217
 msgid "Do not print full account names"
-msgstr "Teljes számlaneveket ne  nyomtassa"
+msgstr "Teljes számlaneveket ne nyomtassa"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:218
 #, fuzzy
@@ -28289,15 +28282,17 @@ msgid "Today date format"
 msgstr "Mai dátum alakja"
 
 #: gnucash/report/reports/standard/receipt.scm:81
+#: gnucash/report/reports/standard/taxinvoice.scm:149
 msgid ""
-"The file name of the eguile template part of this report.  This file should "
+"The file name of the eguile template part of this report. This file should "
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:84
+#: gnucash/report/reports/standard/taxinvoice.scm:152
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  This file "
+"The file name of the CSS stylesheet to use with this report. This file "
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -28320,8 +28315,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:97
 msgid ""
-"Width of the header logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -28331,8 +28326,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:103
 msgid ""
-"Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -28373,7 +28368,7 @@ msgstr "A megvizsgálni kívánt követelések-számla"
 #: gnucash/report/reports/standard/reconcile-report.scm:59
 msgid ""
 "The reconcile report is designed to be similar to the formal reconciliation "
-"tool.  Please select the account from Report Options. Please note the dates "
+"tool. Please select the account from Report Options. Please note the dates "
 "specified in the options will apply to the Reconciliation Date."
 msgstr ""
 
@@ -28653,20 +28648,6 @@ msgstr "Számlaszám"
 #, fuzzy
 msgid "Show net price?"
 msgstr "Árak feltüntetése"
-
-#: gnucash/report/reports/standard/taxinvoice.scm:149
-msgid ""
-"The file name of the eguile template part of this report. This file should "
-"either be in your .gnucash directory, or else in its proper place within the "
-"GnuCash installation directories."
-msgstr ""
-
-#: gnucash/report/reports/standard/taxinvoice.scm:152
-msgid ""
-"The file name of the CSS stylesheet to use with this report. This file "
-"should either be in your .gnucash directory, or else in its proper place "
-"within the GnuCash installation directories."
-msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:162
 msgid "Name of a file containing a logo to be used on the report."
@@ -30744,7 +30725,7 @@ msgstr "Nem adó vonatkozású; Nincs leírás: űrlap %s, kód %s, adó típus 
 #: libgnucash/app-utils/gnc-ui-util.c:805
 #, c-format
 msgid "Not tax-related; %s%s: %s (code %s, tax type %s)"
-msgstr "Nem adó vonatkozású;  %s%s: %s (kód %s, adó típus %s)"
+msgstr "Nem adó vonatkozású; %s%s: %s (kód %s, adó típus %s)"
 
 #: libgnucash/app-utils/gnc-ui-util.c:852
 #, c-format
@@ -31358,7 +31339,7 @@ msgstr "Segítség nem áll rendelkezésre."
 
 #, fuzzy
 #~ msgid "Re_move Association from Transaction"
-#~ msgstr " Részkönyvelés törlése a tranzakcióból"
+#~ msgstr "Részkönyvelés törlése a tranzakcióból"
 
 #, fuzzy
 #~ msgid "Open Associated Invoice"
@@ -31673,7 +31654,7 @@ msgstr "Segítség nem áll rendelkezésre."
 #~ msgstr "Végrehajt oszlop | felosztás"
 
 #, fuzzy
-#~ msgid "Are you sure you want to delete the entries ?"
+#~ msgid "Are you sure you want to delete the entries?"
 #~ msgstr "Biztosan törölni kívánja ezt a tételt?"
 
 #, fuzzy
@@ -31879,13 +31860,13 @@ msgstr "Segítség nem áll rendelkezésre."
 #~ msgstr "Évek:"
 
 #~ msgid ""
-#~ "The external program \"AqBanking Setup Wizard\" has not been found. \n"
+#~ "The external program \"AqBanking Setup Wizard\" has not been found.\n"
 #~ "\n"
 #~ "The %s package should include the program \"qt3-wizard\". Please check "
 #~ "your installation to ensure this program is present. On some "
 #~ "distributions this may require installing additional packages."
 #~ msgstr ""
-#~ "Az \"AqBanking Setup Wizard\" külső program nem található. \n"
+#~ "Az \"AqBanking Setup Wizard\" külső program nem található.\n"
 #~ "\n"
 #~ "Az %s csomagnak tartalmaznia kellene \"qt3-wizard\" programot.Ellenőrizze "
 #~ "az aqbanking csomag meglétét. Némelyik disztribúció esetén további "
@@ -32085,7 +32066,7 @@ msgstr "Segítség nem áll rendelkezésre."
 #~ msgstr "Roll up budget amounts to parent"
 
 #~ msgid "%s: %s"
-#~ msgstr "%s  %s"
+#~ msgstr "%s %s"
 
 #~ msgid "%s and subaccounts"
 #~ msgstr "%s és alszámlák"

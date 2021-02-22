@@ -599,7 +599,7 @@ msgid ""
 msgstr ""
 "¿Quiere ver todas las transacciones de subcuentas en una hoja?\n"
 "Desde el menú principal marque la cuenta superior y seleccione\n"
-"Cuentas->Abrir subcuentas  desde el menu."
+"Cuentas->Abrir subcuentas desde el menu."
 
 #: doc/tip_of_the_day.list.c:69
 #, fuzzy
@@ -654,7 +654,7 @@ msgstr ""
 #: doc/tip_of_the_day.list.c:90
 #, fuzzy
 msgid ""
-"You can pack multiple reports into a single window,  providing all the "
+"You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
@@ -725,7 +725,7 @@ msgid ""
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
 "Existe la teoría, que si alguna vez alguién descubre para\n"
-"que sirve el universo y porque está aquí, entonces desaparecerá y \n"
+"que sirve el universo y porque está aquí, entonces desaparecerá y\n"
 "será reemplazado con algo todavía más raro e inexplicable.\n"
 "Hay otra teoría que esto ya ha pasado.\n"
 "Douglas Adams, \"El restaurante al final del universo\""
@@ -756,8 +756,8 @@ msgid ""
 "transactions up to midnight %s (for a total of %d transactions spread over "
 "%d accounts).\n"
 "\n"
-" Amend the Title and Notes or Click on \"Next\" to proceed.\n"
-" Click on \"Back\" to adjust the dates or \"Cancel\"."
+"Amend the Title and Notes or Click on \"Next\" to proceed.\n"
+"Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:386
@@ -1509,7 +1509,7 @@ msgstr "Propio"
 #: libgnucash/app-utils/business-options.scm:68
 #, fuzzy
 msgid "Company Name"
-msgstr "Imágen del logtipo de la organización o  companía"
+msgstr "Imágen del logtipo de la organización o companía"
 
 #: gnucash/gnome/dialog-customer.c:937 gnucash/gnome/dialog-vendor.c:740
 #, fuzzy
@@ -1629,9 +1629,9 @@ msgstr ". (Periodo)"
 #, fuzzy
 msgid "Business item can not be modified."
 msgstr ""
-"El archivo \n"
+"El archivo\n"
 "    %s\n"
-" no se encontró."
+"no se encontró."
 
 #: gnucash/gnome/dialog-doclink.c:595 gnucash/gnome/dialog-doclink.c:696
 #: gnucash/gnome/gnc-plugin-page-invoice.c:382
@@ -2808,7 +2808,7 @@ msgstr "Debe seleccionar valores."
 #, fuzzy
 msgid "You must select a transfer account from the account tree."
 msgstr ""
-"Debe seleccionar una cuenta de transferencia \n"
+"Debe seleccionar una cuenta de transferencia\n"
 "o seleccionar la cuenta de equidades de balances de apertura."
 
 #: gnucash/gnome/dialog-payment.c:273
@@ -2926,7 +2926,7 @@ msgid ""
 "If you continue these splits will be ignored:\n"
 "\n"
 "%s\n"
-"Do you wish to continue and ignore these splits ?"
+"Do you wish to continue and ignore these splits?"
 msgstr ""
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
@@ -2954,7 +2954,7 @@ msgstr "Entradas del presupuesto"
 
 #: gnucash/gnome/dialog-price-edit-db.c:457
 #, fuzzy
-msgid "Are you sure you want to delete these prices ?"
+msgid "Are you sure you want to delete these prices?"
 msgstr "¿Está seguro de que quiere borrar el precio actual?"
 
 #: gnucash/gnome/dialog-price-editor.c:221
@@ -3155,9 +3155,9 @@ msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
 "you want to name this one the same?"
 msgstr ""
-"El archivo \n"
+"El archivo\n"
 "    %s\n"
-" ya existe.\n"
+"ya existe.\n"
 "¿Está seguro de que desea sobreescribirlo?"
 
 #: gnucash/gnome/dialog-sx-editor2.c:766
@@ -6440,9 +6440,9 @@ msgstr "No puede guardar a este archivo."
 #, fuzzy, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr ""
-"El archivo \n"
+"El archivo\n"
 "    %s\n"
-" ya existe.\n"
+"ya existe.\n"
 "¿Está seguro de que desea sobreescribirlo?"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1725
@@ -7222,7 +7222,7 @@ msgstr "_Finalizar"
 
 #: gnucash/gnome/window-reconcile2.c:2116 gnucash/gnome/window-reconcile.c:2337
 msgid "Finish the reconciliation of this account"
-msgstr "Finalizar la reconciliación  de esta cuenta"
+msgstr "Finalizar la reconciliación de esta cuenta"
 
 #: gnucash/gnome/window-reconcile2.c:2120 gnucash/gnome/window-reconcile.c:2341
 msgid "_Postpone"
@@ -7722,9 +7722,9 @@ msgstr ""
 #, fuzzy
 msgid "The file could not be reopened."
 msgstr ""
-"El archivo \n"
+"El archivo\n"
 "    %s\n"
-" no se encontró."
+"no se encontró."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1094
 #, fuzzy
@@ -7820,7 +7820,7 @@ msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
 msgstr ""
-"Debe seleccionar una cuenta de transferencia \n"
+"Debe seleccionar una cuenta de transferencia\n"
 "o seleccionar la cuenta de equidades de balances de apertura."
 
 #: gnucash/gnome-utils/dialog-account.c:1328
@@ -8359,7 +8359,7 @@ msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
 msgstr ""
-"Debe especificar una cuenta destino o \n"
+"Debe especificar una cuenta destino o\n"
 "fuente para esta transacción, o ambas.\n"
 "De otro modo, no será grabada."
 
@@ -8464,19 +8464,19 @@ msgstr ""
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -8638,8 +8638,8 @@ msgstr ""
 #, fuzzy, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
 msgstr ""
-"El URL \n"
-"     %s\n"
+"El URL\n"
+"    %s\n"
 "no está soportado por esta versión de GnuCash."
 
 #: gnucash/gnome-utils/gnc-file.c:290
@@ -8647,7 +8647,7 @@ msgstr ""
 msgid "Can't parse the URL %s."
 msgstr ""
 "No se puede interpretar el URL\n"
-"     %s\n"
+"    %s\n"
 
 #: gnucash/gnome-utils/gnc-file.c:295
 #, fuzzy, c-format
@@ -8756,7 +8756,7 @@ msgstr ""
 #, fuzzy, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
 msgstr ""
-"El URL \n"
+"El URL\n"
 "    %s\n"
 "no contiene datos GnuCash o los datos son corruptos."
 
@@ -8765,7 +8765,7 @@ msgstr ""
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
 msgstr ""
-"El servidor en URL \n"
+"El servidor en URL\n"
 "   %s\n"
 "tiene una fallo o se encontraron datos incorrectos o corruptos."
 
@@ -8787,7 +8787,7 @@ msgstr ""
 #, fuzzy
 msgid "There was an error reading the file. Do you want to continue?"
 msgstr ""
-"Hubo un error al leer el archivo. \n"
+"Hubo un error al leer el archivo.\n"
 "Quiere continuar"
 
 #: gnucash/gnome-utils/gnc-file.c:416
@@ -8795,7 +8795,7 @@ msgstr ""
 msgid "There was an error parsing the file %s."
 msgstr ""
 "Hubo un error al cerrar el archivo\n"
-"     %s\n"
+"    %s\n"
 "\n"
 "%s"
 
@@ -8803,9 +8803,9 @@ msgstr ""
 #, fuzzy, c-format
 msgid "The file %s is empty."
 msgstr ""
-"El archivo \n"
+"El archivo\n"
 "    %s\n"
-" está vacío."
+"está vacío."
 
 #: gnucash/gnome-utils/gnc-file.c:434
 #, c-format
@@ -8819,31 +8819,31 @@ msgstr ""
 #, fuzzy, c-format
 msgid "The file/URI %s could not be found."
 msgstr ""
-"El archivo \n"
+"El archivo\n"
 "    %s\n"
-" no se encontró."
+"no se encontró."
 
 #: gnucash/gnome-utils/gnc-file.c:447
 #, fuzzy
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
 msgstr ""
-"Este archivo es de una versión anterior de GnuCash. \n"
+"Este archivo es de una versión anterior de GnuCash.\n"
 "¿Quiere continuar?"
 
 #: gnucash/gnome-utils/gnc-file.c:456
 #, fuzzy, c-format
 msgid "The file type of file %s is unknown."
 msgstr ""
-"El archivo \n"
+"El archivo\n"
 "    %s\n"
-" está vacío."
+"está vacío."
 
 #: gnucash/gnome-utils/gnc-file.c:461
 #, fuzzy, c-format
 msgid "Could not make a backup of the file %s"
 msgstr ""
 "Hubo un error al abrir el fichero\n"
-"     %s\n"
+"    %s\n"
 "\n"
 "%s"
 
@@ -8878,7 +8878,7 @@ msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
 msgstr ""
-"Este archivo es de una versión anterior de GnuCash. \n"
+"Este archivo es de una versión anterior de GnuCash.\n"
 "¿Quiere continuar?"
 
 #: gnucash/gnome-utils/gnc-file.c:496
@@ -8892,7 +8892,7 @@ msgstr ""
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
-"the  documentation to learn how to clear out dangling login sessions."
+"the documentation to learn how to clear out dangling login sessions."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:515
@@ -8955,7 +8955,7 @@ msgid ""
 "open the database. What would you like to do?"
 msgstr ""
 "GnuCash no pudo enllavar\n"
-"   %s.\n"
+"  %s.\n"
 "La base de datos puede estar en uso por otro usuario,\n"
 "en este caso no debe abrir la base de datos.\n"
 "\n"
@@ -8970,7 +8970,7 @@ msgid ""
 "you like to do?"
 msgstr ""
 "GnuCash no pudo enllavar\n"
-"   %s.\n"
+"  %s.\n"
 "La base de datos puede estar en uso por otro usuario,\n"
 "en este caso no debe abrir la base de datos.\n"
 "\n"
@@ -9029,18 +9029,18 @@ msgid ""
 "place?"
 msgstr ""
 "Parece que la base de datos\n"
-"   %s\n"
+"  %s\n"
 "no existe. ¿Quiere crearla?\n"
 
 #: gnucash/gnome-utils/gnc-file.c:1691
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
-"proceed ?"
+"proceed?"
 msgstr ""
-"El archivo \n"
-"    %s\n"
-" ya existe.\n"
+"El archivo\n"
+"  %s\n"
+"ya existe.\n"
 "¿Está seguro de que desea sobreescribirlo?"
 
 #: gnucash/gnome-utils/gnc-file.c:1699
@@ -9059,7 +9059,7 @@ msgstr "Nuevo..."
 msgid "GnuCash could not find the files of the help documentation."
 msgstr ""
 "Hubo un error al abrir el fichero\n"
-"     %s\n"
+"  %s\n"
 "\n"
 "%s"
 
@@ -9081,7 +9081,7 @@ msgstr "Información de precios"
 msgid "GnuCash could not find the linked document."
 msgstr ""
 "Hubo un error al abrir el fichero\n"
-"     %s\n"
+"  %s\n"
 "\n"
 "%s"
 
@@ -9090,7 +9090,7 @@ msgstr ""
 msgid "GnuCash could not open the linked document:"
 msgstr ""
 "Hubo un error al abrir el fichero\n"
-"     %s\n"
+"  %s\n"
 "\n"
 "%s"
 
@@ -10955,7 +10955,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable ?"
+"       Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
@@ -12007,9 +12007,9 @@ msgstr "Invertir cuentas de ingreso y egreso"
 #, fuzzy
 msgid "Use account colors in the account hierarchy"
 msgstr ""
-"El archivo \n"
-"    %s\n"
-" no se encontró."
+"El archivo\n"
+"  %s\n"
+"no se encontró."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:111
 msgid ""
@@ -13018,8 +13018,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:29
 msgid ""
-"This assistant will help you setup and use accounting periods. \n"
-" \n"
+"This assistant will help you setup and use accounting periods.\n"
+"\n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
@@ -13734,7 +13734,7 @@ msgid ""
 "as well as move accounts (along with their sub-accounts) from one parent to "
 "another.\n"
 "\n"
-"Click 'Cancel'  if you do not wish to create any new accounts now."
+"Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
 "Este asistente le ayudará a crear un juego de cuentas GnuCash\n"
 "para su activo (como inversiones, cuentas de cheques o de ahorro),\n"
@@ -14179,15 +14179,15 @@ msgstr "Importar QIF"
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-"programs. \n"
+"programs.\n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Apply\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process.\n"
 "\n"
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
 msgstr ""
-"GnuCash puede importar datos financieros desde archivos QIF (Quicken \n"
+"GnuCash puede importar datos financieros desde archivos QIF (Quicken\n"
 "Interchange Format), producidos por Quicken/QuickBooks,\n"
 "MS Money, Moneydance, y muchos otros programas.\n"
 "\n"
@@ -14211,7 +14211,7 @@ msgid ""
 "account(s) in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't "
-"worry if your data is in multiple files. \n"
+"worry if your data is in multiple files.\n"
 msgstr ""
 "Porfaor seleccione un archivo a cargar. Si pulsa \"Siguiente\" se\n"
 "carga y analiza este archivo. Puede que tenga que contestar algunas "
@@ -14246,11 +14246,11 @@ msgid ""
 "components of a date are printed. In most cases, it is possible to "
 "automatically determine which format is in use in a particular file. "
 "However, in the file you have just imported there exist more than one "
-"possible format that fits the data. \n"
+"possible format that fits the data.\n"
 "\n"
 "Please select a date format for the file. QIF files created by European "
-"software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-day-year. \n"
+"software are likely to be in \"d-m-y\" or day-month-year format, where US "
+"QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
 "El formato QIF no especifica el orden en cual aparecen los componentes día, "
 "mes y año de una fecha. En la mayoría de los casos se puede determinar "
@@ -14275,7 +14275,7 @@ msgstr "Seleccione un formato de fechas para este archivo QIF"
 #, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account. \n"
+"one account, but the file does not specify a name for that account.\n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
 "accounting program, you should use the same account name that was used in "
@@ -14388,7 +14388,7 @@ msgstr "Coincidir las cuentas QIF con las cuentas GnuCash"
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
-"converted to a GnuCash account. \n"
+"converted to a GnuCash account.\n"
 "\n"
 "On the next page, you will have an opportunity to look at the suggested "
 "matches between QIF categories and GnuCash accounts. You may change matches "
@@ -14424,7 +14424,7 @@ msgstr "Coincidir categorias QIF con cuentas GnuCash"
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
-"correctly assigned to GnuCash accounts. \n"
+"correctly assigned to GnuCash accounts.\n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
@@ -14489,8 +14489,8 @@ msgid ""
 "Below you are asked to provide information about stocks, mutual funds, and "
 "other investments that appear in the QIF file(s) you are importing. GnuCash "
 "needs some additional details about these investments that the QIF format "
-"does not provide. \n"
-" \n"
+"does not provide.\n"
+"\n"
 "Each stock, mutual fund, or other investment must have a name and an "
 "abbreviation, such as a stock symbol. Because some unrelated investments "
 "have the same abbreviation, you also need to indicate what type of "
@@ -14572,7 +14572,7 @@ msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
 "will be saved and used for defaults the next time you use the QIF import "
-"facility. \n"
+"facility.\n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -16700,7 +16700,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-new-user.glade:245
 #, fuzzy
 msgid "C_reate a new set of accounts"
-msgstr "Crear un nuevo conjunto de  cuentas"
+msgstr "Crear un nuevo conjunto de cuentas"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:262
 #, fuzzy
@@ -18134,7 +18134,7 @@ msgstr "Moneda por defecto"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
 #, fuzzy
-msgid "A_dd  >>"
+msgid "A_dd >>"
 msgstr "Añadir"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
@@ -18438,12 +18438,6 @@ msgstr "Crear un archivo nuevo"
 #, fuzzy
 msgid "Remind in advance"
 msgstr "Balance de cierre"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:965
-#: gnucash/gtkbuilder/dialog-sx.glade:1024
-#, fuzzy
-msgid " days"
-msgstr "Días"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:982
 msgid "Create automatically"
@@ -19641,7 +19635,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:62
 msgid ""
-"Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
+"Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
 
@@ -19751,9 +19745,9 @@ msgstr ""
 #, fuzzy
 msgid "The specified URL could not be loaded."
 msgstr ""
-"El archivo \n"
-"    %s\n"
-" no se encontró."
+"El archivo\n"
+"  %s\n"
+"no se encontró."
 
 #: gnucash/html/gnc-html-webkit1.c:547 gnucash/html/gnc-html-webkit1.c:963
 #: gnucash/html/gnc-html-webkit2.c:551 gnucash/html/gnc-html-webkit2.c:914
@@ -19788,7 +19782,7 @@ msgid "Export to PDF File"
 msgstr "Estilo de informe"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
-#. 3. Account Number,  4. Subaccount ID
+#. 3. Account Number, 4. Subaccount ID
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
@@ -19824,9 +19818,8 @@ msgstr ""
 msgid ""
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
-"bank  decides to grant you electronic access, they will send you a letter "
-"containing \n"
-"\n"
+"bank decides to grant you electronic access, they will send you a letter "
+"containing:\n"
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's Online Banking server\n"
@@ -20049,7 +20042,7 @@ msgstr "Introducir un nombre para la cuenta"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
 #, fuzzy
-msgid " _Name of the new template:"
+msgid "_Name of the new template"
 msgstr "Introducir un nombre para la cuenta"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
@@ -20426,7 +20419,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:184
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probable the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -20479,7 +20472,7 @@ msgstr "Banco"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:799
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probably the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -20527,7 +20520,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1156
 #, c-format
 msgid ""
-"Result of Online Banking job: \n"
+"Result of Online Banking job:\n"
 "Account booked balance is %s"
 msgstr ""
 
@@ -20606,7 +20599,7 @@ msgstr[1] ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
 #, c-format
 msgid ""
-"The PIN needs to be at least %d characters \n"
+"The PIN needs to be at least %d characters\n"
 "long. Do you want to try again?"
 msgstr ""
 
@@ -21020,9 +21013,9 @@ msgstr ""
 #, fuzzy
 msgid "The input file can not be opened."
 msgstr ""
-"El archivo \n"
-"    %s\n"
-" no se encontró."
+"El archivo\n"
+"  %s\n"
+"no se encontró."
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:357
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:304
@@ -21082,7 +21075,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:97
 msgid ""
 "This assistant will help you export the Account Tree to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -21091,7 +21084,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use.\n"
@@ -21100,7 +21093,7 @@ msgid ""
 "order the accounts were processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -21109,7 +21102,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:115
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use. Each Transaction will "
@@ -21117,7 +21110,7 @@ msgid ""
 "processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "By selecting the simple layout, the output will be equivalent to a single "
 "row register view and as such some of the transfer detail could be lost.\n"
@@ -21186,7 +21179,7 @@ msgstr "Reconciliado:"
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 #, fuzzy
 msgid "Export Account T_ree to CSV..."
-msgstr "Crear un nuevo conjunto de  cuentas"
+msgstr "Crear un nuevo conjunto de cuentas"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:55
 #, fuzzy
@@ -21206,7 +21199,7 @@ msgstr "Transacciones con duplicados"
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:64
 #, fuzzy
 msgid "Export A_ctive Register to CSV..."
-msgstr "Crear un nuevo conjunto de  cuentas"
+msgstr "Crear un nuevo conjunto de cuentas"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:66
 #, fuzzy
@@ -21285,7 +21278,7 @@ msgstr "Mostrr transacciones en una sola línea"
 msgid "There was a problem saving the settings, please try again."
 msgstr ""
 "Hubo un error al cerrar el archivo\n"
-"     %s\n"
+"  %s\n"
 "\n"
 "%s"
 
@@ -21355,7 +21348,7 @@ msgid ""
 "- %s"
 msgstr ""
 "Hubo un error al cerrar el archivo\n"
-"     %s\n"
+"  %s\n"
 "\n"
 "%s"
 
@@ -21410,7 +21403,7 @@ msgstr ""
 msgid "The transactions were imported from file '{1}'."
 msgstr ""
 "Hubo un error al cerrar el archivo\n"
-"     %s\n"
+"  %s\n"
 "\n"
 "%s"
 
@@ -21537,7 +21530,7 @@ msgid ""
 "Please select a transfer account column or remove the other transfer related "
 "columns."
 msgstr ""
-"Debe seleccionar una cuenta de transferencia \n"
+"Debe seleccionar una cuenta de transferencia\n"
 "o seleccionar la cuenta de equidades de balances de apertura."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
@@ -21618,9 +21611,9 @@ msgstr ""
 #, fuzzy
 msgid " could not be understood.\n"
 msgstr ""
-"El archivo \n"
-"    %s\n"
-" no se encontró."
+"El archivo\n"
+"  %s\n"
+"no se encontró."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:323
@@ -21881,7 +21874,7 @@ msgstr ""
 #, fuzzy
 msgid "Assign a transfer account to the selection."
 msgstr ""
-"Debe seleccionar una cuenta de transferencia \n"
+"Debe seleccionar una cuenta de transferencia\n"
 "o seleccionar la cuenta de equidades de balances de apertura."
 
 #: gnucash/import-export/import-main-matcher.c:1095
@@ -22001,7 +21994,7 @@ msgstr "Remover el precio actual"
 msgid "Failed to open log file: %s: %s"
 msgstr ""
 "Hubo un error al abrir el fichero\n"
-"     %s\n"
+"  %s\n"
 "\n"
 "%s"
 
@@ -22009,9 +22002,9 @@ msgstr ""
 #, fuzzy
 msgid "The log file you selected was empty."
 msgstr ""
-"El archivo \n"
-"    %s\n"
-" está vacío."
+"El archivo\n"
+"  %s\n"
+"está vacío."
 
 #: gnucash/import-export/log-replay/gnc-log-replay.c:634
 msgid ""
@@ -22266,7 +22259,7 @@ msgstr ""
 msgid "There was a problem with the import."
 msgstr ""
 "Hubo un error al cerrar el archivo\n"
-"     %s\n"
+"  %s\n"
 "\n"
 "%s"
 
@@ -22581,7 +22574,7 @@ msgstr ""
 msgid "There was a system error while retrieving the price quotes."
 msgstr ""
 "Hubo un error al escribir el fichero\n"
-"     %s\n"
+"  %s\n"
 "\n"
 "%s"
 
@@ -22590,7 +22583,7 @@ msgstr ""
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr ""
 "Hubo un error al escribir el fichero\n"
-"     %s\n"
+"  %s\n"
 "\n"
 "%s"
 
@@ -23065,9 +23058,9 @@ msgstr ""
 #, fuzzy
 msgid "The entered account could not be found."
 msgstr ""
-"El archivo \n"
-"    %s\n"
-" no se encontró."
+"El archivo\n"
+"  %s\n"
+"no se encontró."
 
 #: gnucash/register/ledger-core/split-register-control.c:1477
 msgid "The split's amount is zero, so no exchange rate is needed."
@@ -23303,7 +23296,7 @@ msgid ""
 "following accounts:\n"
 "%s\n"
 "\n"
-"Are you sure you want to continue with this change ?"
+"Are you sure you want to continue with this change?"
 msgstr ""
 "¿Seguro que quiere marcar esta transacción no conciliada?\n"
 "¡Hacer esto puede dificultar el cuadre futuro!"
@@ -23339,9 +23332,9 @@ msgstr "Último"
 #, fuzzy, scheme-format
 msgid "Template file \"~a\" can not be read"
 msgstr ""
-"El archivo \n"
-"    %s\n"
-" no se encontró."
+"El archivo\n"
+"  %s\n"
+"no se encontró."
 
 #: gnucash/report/html-acct-table.scm:636
 #: gnucash/report/reports/standard/trial-balance.scm:279
@@ -25483,7 +25476,7 @@ msgstr "El título del informe"
 #: gnucash/report/reports/standard/trial-balance.scm:68
 #, fuzzy
 msgid "Company name"
-msgstr "Imágen del logtipo de la organización o  companía"
+msgstr "Imágen del logtipo de la organización o companía"
 
 #: gnucash/report/reports/standard/account-summary.scm:76
 #: gnucash/report/reports/standard/balance-sheet.scm:80
@@ -28212,7 +28205,7 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:281
 #, fuzzy
 msgid "Company contact"
-msgstr "Imágen del logtipo de la organización o  companía"
+msgstr "Imágen del logtipo de la organización o companía"
 
 #: gnucash/report/reports/standard/invoice.scm:282
 #, fuzzy
@@ -29149,15 +29142,17 @@ msgid "Today date format"
 msgstr "Formato de fecha:"
 
 #: gnucash/report/reports/standard/receipt.scm:81
+#: gnucash/report/reports/standard/taxinvoice.scm:149
 msgid ""
-"The file name of the eguile template part of this report.  This file should "
+"The file name of the eguile template part of this report. This file should "
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:84
+#: gnucash/report/reports/standard/taxinvoice.scm:152
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  This file "
+"The file name of the CSS stylesheet to use with this report. This file "
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -29180,8 +29175,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:97
 msgid ""
-"Width of the header logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -29191,8 +29186,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:103
 msgid ""
-"Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -29233,7 +29228,7 @@ msgstr "Ya existe una cuenta con ese nombre."
 #: gnucash/report/reports/standard/reconcile-report.scm:59
 msgid ""
 "The reconcile report is designed to be similar to the formal reconciliation "
-"tool.  Please select the account from Report Options. Please note the dates "
+"tool. Please select the account from Report Options. Please note the dates "
 "specified in the options will apply to the Reconciliation Date."
 msgstr ""
 
@@ -29406,7 +29401,7 @@ msgstr "Factura"
 #: gnucash/report/reports/standard/taxinvoice.scm:88
 #, fuzzy
 msgid "row: Company Name"
-msgstr "Imágen del logtipo de la organización o  companía"
+msgstr "Imágen del logtipo de la organización o companía"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:89
 #, fuzzy
@@ -29525,20 +29520,6 @@ msgstr "Factura"
 #, fuzzy
 msgid "Show net price?"
 msgstr "Ordenar por memo"
-
-#: gnucash/report/reports/standard/taxinvoice.scm:149
-msgid ""
-"The file name of the eguile template part of this report. This file should "
-"either be in your .gnucash directory, or else in its proper place within the "
-"GnuCash installation directories."
-msgstr ""
-
-#: gnucash/report/reports/standard/taxinvoice.scm:152
-msgid ""
-"The file name of the CSS stylesheet to use with this report. This file "
-"should either be in your .gnucash directory, or else in its proper place "
-"within the GnuCash installation directories."
-msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:162
 msgid "Name of a file containing a logo to be used on the report."
@@ -30060,7 +30041,7 @@ msgstr ""
 #: gnucash/report/stylesheets/footer.scm:118
 #: gnucash/report/stylesheets/head-or-tail.scm:165
 msgid "Company logo image."
-msgstr "Imágen del logtipo de la organización o  companía"
+msgstr "Imágen del logtipo de la organización o companía"
 
 #: gnucash/report/stylesheets/footer.scm:123
 #: gnucash/report/stylesheets/footer.scm:130
@@ -30972,17 +30953,17 @@ msgstr "Extensión columna:"
 #: libgnucash/app-utils/business-options.scm:71
 #, fuzzy
 msgid "Company Phone Number"
-msgstr "Imágen del logtipo de la organización o  companía"
+msgstr "Imágen del logtipo de la organización o companía"
 
 #: libgnucash/app-utils/business-options.scm:72
 #, fuzzy
 msgid "Company Fax Number"
-msgstr "Imágen del logtipo de la organización o  companía"
+msgstr "Imágen del logtipo de la organización o companía"
 
 #: libgnucash/app-utils/business-options.scm:73
 #, fuzzy
 msgid "Company Website URL"
-msgstr "Imágen del logtipo de la organización o  companía"
+msgstr "Imágen del logtipo de la organización o companía"
 
 #: libgnucash/app-utils/business-options.scm:74
 #, fuzzy
@@ -30992,7 +30973,7 @@ msgstr "Dirección de Cliente"
 #: libgnucash/app-utils/business-options.scm:75
 #, fuzzy
 msgid "Company Contact Person"
-msgstr "Imágen del logtipo de la organización o  companía"
+msgstr "Imágen del logtipo de la organización o companía"
 
 #: libgnucash/app-utils/business-options.scm:76
 #, fuzzy
@@ -31792,13 +31773,13 @@ msgstr[1] ""
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] ""
-"El archivo \n"
-"    %s\n"
-" no se encontró."
+"El archivo\n"
+"  %s\n"
+"no se encontró."
 msgstr[1] ""
-"El archivo \n"
-"    %s\n"
-" no se encontró."
+"El archivo\n"
+"  %s\n"
+"no se encontró."
 
 #: libgnucash/engine/Account.cpp:256
 #, c-format
@@ -32093,7 +32074,7 @@ msgstr "No es una variable"
 
 #, fuzzy
 #~ msgid "Company Name "
-#~ msgstr "Imágen del logtipo de la organización o  companía"
+#~ msgstr "Imágen del logtipo de la organización o companía"
 
 #, fuzzy
 #~ msgid "Increasing"
@@ -32469,7 +32450,7 @@ msgstr "No es una variable"
 #~ msgid "An error occurred when processing the template:"
 #~ msgstr ""
 #~ "Ocurrio un error durante el procesamiento\n"
-#~ "    %s\n"
+#~ "  %s\n"
 
 #~ msgid "Include sub-account balances in printed balance?"
 #~ msgstr "¿Incluir balances de sub-cuentas en los balances impresas?"
@@ -32544,7 +32525,7 @@ msgstr "No es una variable"
 #~ msgstr "División de acciones"
 
 #, fuzzy
-#~ msgid "Are you sure you want to delete the entries ?"
+#~ msgid "Are you sure you want to delete the entries?"
 #~ msgstr "¿Está seguro de que desea borrar la cuenta %s?"
 
 #, fuzzy
@@ -32598,7 +32579,7 @@ msgstr "No es una variable"
 
 #, fuzzy
 #~ msgid "Company Name: "
-#~ msgstr "Imágen del logtipo de la organización o  companía"
+#~ msgstr "Imágen del logtipo de la organización o companía"
 
 #, fuzzy
 #~ msgid "Name: "
@@ -32733,7 +32714,7 @@ msgstr "No es una variable"
 
 #, fuzzy
 #~ msgid "December 31, 2000"
-#~ msgstr "Diciembre  31, 2000"
+#~ msgstr "Diciembre 31, 2000"
 
 #, fuzzy
 #~ msgid "Months:"

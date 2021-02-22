@@ -648,7 +648,7 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:90
 msgid ""
-"You can pack multiple reports into a single window,  providing all the "
+"You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
@@ -771,8 +771,8 @@ msgid ""
 "transactions up to midnight %s (for a total of %d transactions spread over "
 "%d accounts).\n"
 "\n"
-" Amend the Title and Notes or Click on \"Next\" to proceed.\n"
-" Click on \"Back\" to adjust the dates or \"Cancel\"."
+"Amend the Title and Notes or Click on \"Next\" to proceed.\n"
+"Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
 "सोरजिनो गोनां बुकनि थाखाय सोंबाय। बे बुकआव हर गेजेर %s सिम गासै लेनदेन दं (%d लेनदेननि "
 "दाजाबगासैनि थाखाय %d एकाउन्टखौ फेहेरो)।\n"
@@ -2832,7 +2832,7 @@ msgid ""
 "If you continue these splits will be ignored:\n"
 "\n"
 "%s\n"
-"Do you wish to continue and ignore these splits ?"
+"Do you wish to continue and ignore these splits?"
 msgstr ""
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
@@ -2858,7 +2858,7 @@ msgstr "हाबहोनाय"
 
 #: gnucash/gnome/dialog-price-edit-db.c:457
 #, fuzzy
-msgid "Are you sure you want to delete these prices ?"
+msgid "Are you sure you want to delete these prices?"
 msgstr "थारैनो नोंथाङा सायखखानाय दामखौ खोमोरनो लुबैयो नामा?"
 
 #: gnucash/gnome/dialog-price-editor.c:221
@@ -3430,7 +3430,7 @@ msgstr "गुबुन मुंजों बे फाइलखौ थिन�
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:131
 msgid "Re_vert"
-msgstr " सिगांनि अबस्थायाव लाबो"
+msgstr "सिगांनि अबस्थायाव लाबो"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:132
 msgid "Reload the current database, reverting all unsaved changes"
@@ -7072,7 +7072,7 @@ msgstr "जायखिजाया एकाउन्टखौ गोरोब 
 
 #: gnucash/gnome-search/search-account.c:178
 msgid "matches no accounts"
-msgstr "जेबो एकाउन्टखौ  गोरोब होआखै"
+msgstr "जेबो एकाउन्टखौ गोरोब होआखै"
 
 #: gnucash/gnome-search/search-account.c:195
 #: gnucash/report/reports/standard/cash-flow.scm:256
@@ -7918,7 +7918,7 @@ msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"नोंथाङा बे खाजोना फारिलाइनि थाखाय मोनसे रुजुजायै मुं होथार नांगोन।  \"%s\" नोंथांनि "
+"नोंथाङा बे खाजोना फारिलाइनि थाखाय मोनसे रुजुजायै मुं होथार नांगोन। \"%s\" नोंथांनि "
 "पसन्दआ सिगाङावनो बाहाय जादों।"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:140
@@ -8091,19 +8091,19 @@ msgstr "फाइल गावनो गाव महरै थिना दो�
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -8306,7 +8306,7 @@ msgid ""
 "proceed with opening the database?"
 msgstr ""
 "GnuCash आ %s नि थाखाय लकखौ मोननो हायाखै। बै डाटाबेसआ गुबुन मोनसे बाहायग्राजों "
-"बाहायजादों जानो हागौ, बे बुब्लियाव नोंथाङा डाटाबेसखौ खेवनो गोनां जानाय नङा।  थारैनो "
+"बाहायजादों जानो हागौ, बे बुब्लियाव नोंथाङा डाटाबेसखौ खेवनो गोनां जानाय नङा। थारैनो "
 "नोंथाङा डाटाबेसखौ खेवनो लुबैयो नामा?"
 
 #: gnucash/gnome-utils/gnc-file.c:336
@@ -8317,7 +8317,7 @@ msgid ""
 "to proceed with importing the database?"
 msgstr ""
 "GnuCash आ %s नि थाखाय लकखौ मोननो हायाखै। बै डाटाबेसआ गुबुन मोनसे बाहायग्राजों "
-"बाहायजादों जानो हागौ, बे बुब्लियाव नोंथाङा डाटाबेसखौ लाबोनो गोनां जानाय नङा।  थारैनो "
+"बाहायजादों जानो हागौ, बे बुब्लियाव नोंथाङा डाटाबेसखौ लाबोनो गोनां जानाय नङा। थारैनो "
 "नोंथाङा डाटाबेसखौ लाबोनो लुबैयो नामा?"
 
 #: gnucash/gnome-utils/gnc-file.c:344
@@ -8328,7 +8328,7 @@ msgid ""
 "proceed with saving the database?"
 msgstr ""
 "GnuCash आ %s नि थाखाय लकखौ मोननो हायाखै। बै डाटाबेसआ गुबुन मोनसे बाहायग्राजों "
-"बाहायजादों जानो हागौ, बे बुब्लियाव नोंथाङा डाटाबेसखौ थिनानै दोननो गोनां जानाय नङा।  "
+"बाहायजादों जानो हागौ, बे बुब्लियाव नोंथाङा डाटाबेसखौ थिनानै दोननो गोनां जानाय नङा। "
 "थारैनो नोंथाङा डाटाबेसखौ थिना दोननो लुबैयो नामा?"
 
 #: gnucash/gnome-utils/gnc-file.c:352
@@ -8339,7 +8339,7 @@ msgid ""
 "to proceed with exporting the database?"
 msgstr ""
 "GnuCash आ %s नि थाखाय लकखौ मोननो हायाखै। बै डाटाबेसआ गुबुन मोनसे बाहायग्राजों "
-"बाहायजादों जानो हागौ, बे बुब्लियाव नोंथाङा डाटाबेसखौ दैथाय हरनो गोनां जानाय नङा।  "
+"बाहायजादों जानो हागौ, बे बुब्लियाव नोंथाङा डाटाबेसखौ दैथाय हरनो गोनां जानाय नङा। "
 "थारैनो नोंथाङा डाटाबेसखौ दैथाय हरनो लुबैयो नामा?"
 
 #: gnucash/gnome-utils/gnc-file.c:377
@@ -8476,7 +8476,7 @@ msgstr ""
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
-"the  documentation to learn how to clear out dangling login sessions."
+"the documentation to learn how to clear out dangling login sessions."
 msgstr ""
 "SQL डाटाबेसआ गुबुन बाहायग्राफोरजों बाहाय जागासिनो दं, आरो बेफोरखौ लगअफ खालामागौमानि "
 "आपग्रेटखौ खालामनो हाया। दासान्दि जेबो गुबुन बाहायग्रा गैयाब्ला डेंलिं लगिन जथुम्माखौ माबोरै "
@@ -8630,7 +8630,7 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
-"proceed ?"
+"proceed?"
 msgstr "%s फाइलआ सिगाङावनो दं। थारैनो नोंथाङा बेखौ अभारराइट खालामनो लुबैयो नामा?"
 
 #: gnucash/gnome-utils/gnc-file.c:1699
@@ -10425,7 +10425,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable ?"
+"       Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "गोरोन्थि: ग्राफिकेल बाहायग्रा इन्टारफेसखौ जागायनो हायाखैमोन आरो उफ्रा दाजाबदेर-बेसेन-"
 "दैखांना होनाय(क'ट्स)खौ फजआखै।"
@@ -10579,7 +10579,7 @@ msgstr ""
 "बिलाइखौ गावनो गाव महरै रांहोनो नाजा। आगु-रांहोनाय आरो फोरमान बिलाइआ रोखायै एखे "
 "बायग्रानि उल्था जाथारनांगोन। उल्था फोरमान बिलाइआ बेरेखा सहिजों फोरमान बिलाइ जायो। "
 "बिदिन्थि महरै- मोनसे इनभइसनि थाखाय, बायग्रा क्रेडिट लिरसुंथाइ आरो नङै दिन्थिग्रा "
-"इनभइसखौ उल्था फोरमान बिलाइ होननानै साननाय जायो।  "
+"इनभइसखौ उल्था फोरमान बिलाइ होननानै साननाय जायो।"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:117
 #, fuzzy
@@ -10732,7 +10732,7 @@ msgid ""
 msgstr ""
 "गिबि साफायनाय आनजादफोराव मोनफ्रोम बिलाइनि गोबां आनजाद दं, बे सेटिंआ बबे आनजाद "
 "जायगाखौ साफायनांगौ थिक खालामो। बिलाइनि गोजौ, गेजेर आरो गाहाय आनजादजों सोमोन्दो "
-"थानाय जाथाव बेसेनआ  0, 1 आरो 2."
+"थानाय जाथाव बेसेनआ 0, 1 आरो 2."
 
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:16
@@ -11499,7 +11499,7 @@ msgid ""
 "that are entered without one. Otherwise GnuCash will not modify entered "
 "numbers."
 msgstr ""
-"मावथिब्ला GnuCash आ बेसेनाव मोनसे दसमिक बिन्दोखौ गावनो गाव महरै सोसनगोन  जायखौ "
+"मावथिब्ला GnuCash आ बेसेनाव मोनसे दसमिक बिन्दोखौ गावनो गाव महरै सोसनगोन जायखौ "
 "मोनसे नङाबालानो हाबहोनाय जाबाय। नङाब्ला, GnuCash आ हाबहोनाय अनजिमाफोरखौ सोलाय "
 "होनाय नङा।"
 
@@ -11739,7 +11739,7 @@ msgstr ""
 "बे सेटिंआ GnuCash आव खालार दिन्थिफुंनाय राहाखौ बासिखयो। बे सेटिंनि थाखाय जाथाव "
 "बेसेनफोरा सिस्टेम जायगानि सेटिंखौ बाहायनो \"जायगानि\", इउर'प हादरमा आदब खालारनि "
 "थाखाय \"ce\", ISO 8601 थाखोमान खालारनि थाखाय \"iso\", इउनाइटेड किंडम आदबनि "
-"खालारनि थाखाय \"uk\", आरो आमेरिका आदब खालारनि थाखाय   \"us\"।"
+"खालारनि थाखाय \"uk\", आरो आमेरिका आदब खालारनि थाखाय \"us\"।"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:160
 #: gnucash/gtkbuilder/dialog-preferences.glade:1098
@@ -12464,7 +12464,7 @@ msgid ""
 "reconciliations."
 msgstr ""
 "बे बिबुंखौ नोंथांखौ मोनसे गोरोबहोनाय बोखावनायनि आयदा सोलायहोनो गनायथि होनायनि सिगां "
-"दिन्थिनाय जायो। बेफोर सोलायनायखौ  गनायथि होनाया इयुनाव गोरोबहोफिननायखौ मावफुंनो "
+"दिन्थिनाय जायो। बेफोर सोलायनायखौ गनायथि होनाया इयुनाव गोरोबहोफिननायखौ मावफुंनो "
 "गोब्राब खालामना होनो हायो।"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:64
@@ -12733,14 +12733,14 @@ msgstr "बे सेटिंआ पिक्सेलआव होखाना
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:29
 msgid ""
-"This assistant will help you setup and use accounting periods. \n"
-" \n"
+"This assistant will help you setup and use accounting periods.\n"
+"\n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
 msgstr ""
 "बे हेफाजाबआ नोंथांखौ एकाउन्टिं समफारिखौ सेटआप खालामनो आरो बाहायनो मदद खालामगोन।\n"
-" \n"
+"\n"
 "खैफोद: बे आखुथाया बे समाव गेबेङै खामानि मावया; बेयो दासो जौगाखांगासिनो दं। बेयो नोंथांनि "
 "डाटाखौ ओरैबायदि खहा खालामदि नोंथाङा बेखौ फाहाबनो हानाय नङा!"
 
@@ -13449,7 +13449,7 @@ msgid ""
 "as well as move accounts (along with their sub-accounts) from one parent to "
 "another.\n"
 "\n"
-"Click 'Cancel'  if you do not wish to create any new accounts now."
+"Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
 "बे हेफाजाबआ नोंथांनि धोन (जेरै- रां खामानिआव फोनांनाय, हिसाब एबा थिनना दोननाय "
 "एकाउन्ट), दाहार (जेरै- लन) आरो नोंथांनाव थानाय गुबुन गुबुन रोखोमनि आय आरो खरसानि "
@@ -13714,7 +13714,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:296
 msgid "Months Remaining"
-msgstr " थाबावनाय दान"
+msgstr "थाबावनाय दान"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:348
 msgid ""
@@ -13894,19 +13894,19 @@ msgstr "QIF लाबोनाय हेफाजाब"
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-"programs. \n"
+"programs.\n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Apply\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process.\n"
 "\n"
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
 msgstr ""
-"GnuCash आ कुइकेन/कुइकबुक,  MS धोन, मानिडेन्स आरो गोबां गुबुन प्रग्रामजों लिरजानाय QIF "
+"GnuCash आ कुइकेन/कुइकबुक, MS धोन, मानिडेन्स आरो गोबां गुबुन प्रग्रामजों लिरजानाय QIF "
 "(कुइकेन इन्टारसेन्स फरमेट) फाइलफोर निफ्राय राङारि डाटाखौ लाबोनो हायो।\n"
 "\n"
 "लाबोनाय खान्थिहा गोबां स्टेप दं। नोंथाङा खान्थिनि जोबथायाव \"बाहाय\"खौ क्लिक "
-"खालामागौमानि नोंथांनि GnuCash एकाउन्टफोरा सोलायनाय नङा। \n"
+"खालामागौमानि नोंथांनि GnuCash एकाउन्टफोरा सोलायनाय नङा।\n"
 "\n"
 "नोंथांनि QIF डाटा ल'ड खालामनायखौ जागायनो \"सिगांथिं\"खौ एबा खान्थिखौ नागारनो "
 "\"बातिल\" खौ क्लिक खालाम।"
@@ -13924,7 +13924,7 @@ msgid ""
 "account(s) in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't "
-"worry if your data is in multiple files. \n"
+"worry if your data is in multiple files.\n"
 msgstr ""
 "अननानै ल'ड खालामनो थाखाय फाइलखौ सायख। नोंथाङा \"फर्‌वार्ड\"खौ क्लिक खालामनाय समाव, "
 "फाइलखौ ल'ड खालामगोन आरो बिजिरगोन। नोंथाङा फाइलआव थानाय एकाउन्टनि सोमोन्दै माखासे "
@@ -13955,11 +13955,11 @@ msgid ""
 "components of a date are printed. In most cases, it is possible to "
 "automatically determine which format is in use in a particular file. "
 "However, in the file you have just imported there exist more than one "
-"possible format that fits the data. \n"
+"possible format that fits the data.\n"
 "\n"
 "Please select a date format for the file. QIF files created by European "
-"software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-day-year. \n"
+"software are likely to be in \"d-m-y\" or day-month-year format, where US "
+"QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
 "QIF फाइल फरमेटआ थि खालामोदि मोनसे अक्ट'नि मबे फारिनि सान, दान आरो बोसोर थाफानाय-"
 "मुवाखौ साफायनाय जायो। बांसिन बुब्लिआव, थि फाइलआव मबे फरमेट बाहायगासिनो दं बेखौ गावनो "
@@ -13984,7 +13984,7 @@ msgstr "बे QIF फाइलनि थाखाय मोनसे डाट�
 #: gnucash/gtkbuilder/assistant-qif-import.glade:359
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account. \n"
+"one account, but the file does not specify a name for that account.\n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
 "accounting program, you should use the same account name that was used in "
@@ -14062,7 +14062,7 @@ msgstr ""
 "कमिसननि थाखाय आलादा एकाउन्ट, जुनिया \"बन्दक\" एकाउन्ट (Retained Earnings नि "
 "दालाइ-एकाउन्टफोर, डिफल्ट मथे) जायफोरा नोंथांनि खेवनाय बेलेन्सनि फुंखा, बाइदि बाइदि। "
 "बेफोर एकाउन्टआ उननि बिलाइयाव नुजागोन जाहाते नोंथाङा लुबैयोब्ला बेफोरखौ सोलायनो हायो, "
-"नाथाय बेफोरखौ हार्सिङै नागारोब्ला रैखाथिगोनां जायो। \n"
+"नाथाय बेफोरखौ हार्सिङै नागारोब्ला रैखाथिगोनां जायो।\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:553
 msgid "Accounts and stock holdings"
@@ -14088,7 +14088,7 @@ msgstr "GnuCash एकाउन्टफोरजों लोगोसे QIF �
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
-"converted to a GnuCash account. \n"
+"converted to a GnuCash account.\n"
 "\n"
 "On the next page, you will have an opportunity to look at the suggested "
 "matches between QIF categories and GnuCash accounts. You may change matches "
@@ -14121,7 +14121,7 @@ msgstr "GnuCash एकाउन्टफोरजों लोगोसे QIF �
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
-"correctly assigned to GnuCash accounts. \n"
+"correctly assigned to GnuCash accounts.\n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
@@ -14186,8 +14186,8 @@ msgid ""
 "Below you are asked to provide information about stocks, mutual funds, and "
 "other investments that appear in the QIF file(s) you are importing. GnuCash "
 "needs some additional details about these investments that the QIF format "
-"does not provide. \n"
-" \n"
+"does not provide.\n"
+"\n"
 "Each stock, mutual fund, or other investment must have a name and an "
 "abbreviation, such as a stock symbol. Because some unrelated investments "
 "have the same abbreviation, you also need to indicate what type of "
@@ -14294,7 +14294,7 @@ msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
 "will be saved and used for defaults the next time you use the QIF import "
-"facility. \n"
+"facility.\n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -14353,7 +14353,7 @@ msgid ""
 "transaction, or accept the default one."
 msgstr ""
 "स्टक बोखावनाय एबा मार्जार निफ्राय नोंथाङा मुलाम्फा एबा खहा जानाय शेयारफोरनि खालार "
-"आरो नाम्बारखौ हाबहो। स्टक मार्जारफोरनि थाखाय (निगेटिभ बोखावनाय)  शेयार रानना "
+"आरो नाम्बारखौ हाबहो। स्टक मार्जारफोरनि थाखाय (निगेटिभ बोखावनाय) शेयार रानना "
 "होनायनि थाखाय मोनसे निगेटिभ बेसेन बाहाय। नोंथाङा लेनदेननि मोनसे बेखेवथिबो हाबहोनो हायो "
 "एबा मोनसे डिफल्टखौ आजावनो हायो।"
 
@@ -14510,7 +14510,7 @@ msgid ""
 "clear, the invoice will be opened in the current window."
 msgstr ""
 "आनजाद खालामोब्ला, मोनफ्रोम इनभइसखौ बेनि निजि बिजौ लेभेल उइन्ड'आव खेवगोन। खोमोरोब्ला, "
-"इनभइसखौ दानि उइन्ड'आव खेवगोन।  "
+"इनभइसखौ दानि उइन्ड'आव खेवगोन।"
 
 #: gnucash/gtkbuilder/business-prefs.glade:101
 msgid "_Accumulate splits on post"
@@ -14553,7 +14553,7 @@ msgid ""
 "inherited by new customers and vendors."
 msgstr ""
 "खाजोनाखौ बिलाव हाबहोनायफोराव डिफल्ट महरै सोफादेरनाय जायो ना जाया। बे सेटिंखौ गोदान "
-"फानग्रा आरो बायग्राफोरजों  मोननाय जायो।"
+"फानग्रा आरो बायग्राफोरजों मोननाय जायो।"
 
 #. See the tooltip "At post time..." for details.
 #: gnucash/gtkbuilder/business-prefs.glade:190
@@ -15528,7 +15528,7 @@ msgstr ""
 "रिपर्टनि उफ्राखौ नोंथांनि जुथिखौ सोलायनानै आरो बेनि उनाव रिपर्ट मेनु एबा टुल बार "
 "निफ्राय\n"
 "\"रिपर्ट बाइजोमहरखौ थिना दोन\"खौ बासिखनानै थिना दोनखामाय रिपर्ट बाइजोमहरखौ\n"
-" रिपर्ट मेनु निफ्राय गिबि खेबनाय रिपर्टजों सोरजिजायो।"
+"रिपर्ट मेनु निफ्राय गिबि खेबनाय रिपर्टजों सोरजिजायो।"
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:263
@@ -16297,7 +16297,7 @@ msgid ""
 "i> button, it will not be displayed again."
 msgstr ""
 "नोंथाङा <i>नंगौ</i> बुथामखौ नारसिनोब्ला, उननि खेबयाव GnuCash जागायोब्ला <i>GnuCash "
-"आव बरायबाय</i> बिबुंखौ  दिन्थिफुंनाय जागोन। नोंथाङा <i>नङा</i> बुथामखौ नारसिनोब्ला, "
+"आव बरायबाय</i> बिबुंखौ दिन्थिफुंनाय जागोन। नोंथाङा <i>नङा</i> बुथामखौ नारसिनोब्ला, "
 "बेखौ उनाव दिन्थिफुंनाय जानाय नङा।"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:211
@@ -17246,7 +17246,7 @@ msgid ""
 "clear, the report will be opened in the current window."
 msgstr ""
 "आनजाद खालामोब्ला, मोनफ्रोम रिपर्टखौ बेनि निजि बिजौ लेभेल उइन्ड'आव खेवगोन। खोमोरोब्ला, "
-"रिपर्टखौ दानि उइन्ड'आव खेवगोन।  "
+"रिपर्टखौ दानि उइन्ड'आव खेवगोन।"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3129
 #, fuzzy
@@ -17603,7 +17603,7 @@ msgid ""
 "to print an address on the check."
 msgstr ""
 "आनजादाव मोनसे थं साफाय होनो\n"
-"थि खालाम आनजाद फरमेटहा \n"
+"थि खालाम आनजाद फरमेटहा\n"
 "ADDRESS आइटेमखौ थारनांगोन।"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:535
@@ -17698,8 +17698,8 @@ msgid "<b>_Selected Reports</b>"
 msgstr "<b>सायखखानाय रिपर्टफोर</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
-msgid "A_dd  >>"
-msgstr "दाजाबदेर  >>"
+msgid "A_dd >>"
+msgstr "दाजाबदेर >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
 msgid "<< _Remove"
@@ -17974,11 +17974,6 @@ msgstr "जौगानायाव सोरजि"
 #: gnucash/gtkbuilder/dialog-sx.glade:924
 msgid "Remind in advance"
 msgstr "सिगाङावनो गोसोखांहो"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:965
-#: gnucash/gtkbuilder/dialog-sx.glade:1024
-msgid " days"
-msgstr "सान"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:982
 msgid "Create automatically"
@@ -19078,10 +19073,10 @@ msgstr "मोनफ्रोम"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:62
 msgid ""
-"Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
+"Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
-"जाफिननायाव केलेन्दार सानगुदिफोरनि अनजिमा:  जेरै हाबथानैयारि = मोनफ्रोम 2 हाबथा; "
+"जाफिननायाव केलेन्दार सानगुदिफोरनि अनजिमा: जेरै हाबथानैयारि = मोनफ्रोम 2 हाबथा; "
 "दानथामारि = मोनफ्रोम 3 दान"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:109
@@ -19105,7 +19100,7 @@ msgid ""
 "Match the \"day of week\" and \"week of month\"? (for example, the \"second "
 "Tuesday\" of every month)"
 msgstr ""
-"\"हाबथानि सान\" आरो \"दाननि हाबथा\" खौ गोरोबहो? (बिदिन्थि महरै- मोनफ्रोम दाननि  "
+"\"हाबथानि सान\" आरो \"दाननि हाबथा\" खौ गोरोबहो? (बिदिन्थि महरै- मोनफ्रोम दाननि "
 "\"नैथि मंगलबार\")"
 
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:62
@@ -19216,7 +19211,7 @@ msgid "Export to PDF File"
 msgstr "PDF फाइलआव दैथाय हर"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
-#. 3. Account Number,  4. Subaccount ID
+#. 3. Account Number, 4. Subaccount ID
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
@@ -19251,9 +19246,8 @@ msgstr ""
 msgid ""
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
-"bank  decides to grant you electronic access, they will send you a letter "
-"containing \n"
-"\n"
+"bank decides to grant you electronic access, they will send you a letter "
+"containing:\n"
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's Online Banking server\n"
@@ -19285,8 +19279,7 @@ msgstr ""
 "मदद खालामो।\n"
 "\n"
 "गिबियाव नोंथांङा नोंथांनि बेंकआव अनलाइन बेंकिं हाबनायखौ आरज गाबनांगोन। नोंथांनि बेंकआ "
-"इलेक्ट्र'निक हाबनायखौ आजावनो थिरांथा लायोब्ला बिसोरो नोंथांनो गांसे लाइजाम हरगोन\n"
-"\n"
+"इलेक्ट्र'निक हाबनायखौ आजावनो थिरांथा लायोब्ला बिसोरो नोंथांनो गांसे लाइजाम हरगोन:\n"
 "* नोंथांनि बेंकनि बेंक क'ड\n"
 "* बाहायग्रा ID जाय नोंथांखौ नोंथांनि बेंकजों सिनायथियो\n"
 "* नोंथांनि बेंकनि अनलाइन बेंकिं सार्भारनि इन्टारनेट थं\n"
@@ -19502,7 +19495,7 @@ msgstr "गोदान टेमप्लेटनि थाखाय मुं
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
 #, fuzzy
-msgid " _Name of the new template:"
+msgid "_Name of the new template"
 msgstr "गोदान टेमप्लेटनि थाखाय मुं"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
@@ -19888,7 +19881,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:184
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probable the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -19897,9 +19890,9 @@ msgid ""
 "Do you want to enter the job again?"
 msgstr ""
 "खामानिखौ थियारि खालामनाय समाव बेकएन्डआ मोनसे गोरोन्थि मोनबाय। बे खामानिखौ मावफुंनो "
-"हाथाव नङा। \n"
+"हाथाव नङा।\n"
 "\n"
-" जानो हागौ बेंकआ नोंथांनि सायखनाय हाबाखौ हेफाजाब खालामा एबा नोंथांनि अनलाइन बेंकिं "
+"जानो हागौ बेंकआ नोंथांनि सायखनाय हाबाखौ हेफाजाब खालामा एबा नोंथांनि अनलाइन बेंकिं "
 "एकाउन्टआ बे खामानिखौ मावफुंनो गनायथि गैया। नोंथांनि कनस'ल लगयाव गोबां गोरोन्थि खौरांआ "
 "नुथाव जानो हागौ।\n"
 "\n"
@@ -19950,7 +19943,7 @@ msgstr "लांदां"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:799
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probably the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -20018,10 +20011,10 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1156
 #, c-format
 msgid ""
-"Result of Online Banking job: \n"
+"Result of Online Banking job:\n"
 "Account booked balance is %s"
 msgstr ""
-"अनलाइन बेंकिं खामानिनि फिथाइ: \n"
+"अनलाइन बेंकिं खामानिनि फिथाइ:\n"
 "एकाउन्ट थिखाना दोननाय बेलेन्सआ जाबाय %s"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1162
@@ -20061,12 +20054,12 @@ msgstr "DTAUS लाबोनायनि थाखाय लाबोनाय 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:295
 #, fuzzy, c-format
 msgid "Job %d status %d - %s\n"
-msgstr "खामानि %d थाखोमान %d - %s: %s \n"
+msgstr "खामानि %d थाखोमान %d - %s: %s\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:297
 #, fuzzy, c-format
 msgid "Job %d status %d - %s: %s\n"
-msgstr "खामानि %d थाखोमान %d - %s: %s \n"
+msgstr "खामानि %d थाखोमान %d - %s: %s\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:317
 msgid "...\n"
@@ -20108,10 +20101,10 @@ msgstr[1] ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
 #, c-format
 msgid ""
-"The PIN needs to be at least %d characters \n"
+"The PIN needs to be at least %d characters\n"
 "long. Do you want to try again?"
 msgstr ""
-"PIN नो खमैबो %d हांखो \n"
+"PIN नो खमैबो %d हांखो\n"
 "गोलाव जानांगौ। नोंथाङा फिन नाजानो लुबैयो नामा?"
 
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1676
@@ -20600,7 +20593,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "This assistant will help you export the Account Tree to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20613,7 +20606,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use.\n"
@@ -20622,7 +20615,7 @@ msgid ""
 "order the accounts were processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20631,7 +20624,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:115
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use. Each Transaction will "
@@ -20639,7 +20632,7 @@ msgid ""
 "processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "By selecting the simple layout, the output will be equivalent to a single "
 "row register view and as such some of the transfer detail could be lost.\n"
@@ -22150,7 +22143,7 @@ msgid ""
 "your order?"
 msgstr ""
 "दानि हाबहोनायखौ सोलायबाय। अदेबानि, बे हाबहोनायआ थाखानाय अर्डारनि बाहागो। नोंथाङा "
-"सोलायनायखौ रेकर्ड खालामनो आरो नोंथांनि अर्डारखौ सोलायनो  लुबैयो नामा? "
+"सोलायनायखौ रेकर्ड खालामनो आरो नोंथांनि अर्डारखौ सोलायनो लुबैयो नामा? "
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:895
 msgid "_Don't Record"
@@ -22744,7 +22737,7 @@ msgid ""
 "following accounts:\n"
 "%s\n"
 "\n"
-"Are you sure you want to continue with this change ?"
+"Are you sure you want to continue with this change?"
 msgstr ""
 "नोंथाङा मोनसे बोखावनायखौ सोलायनोसै जाय रां सुखनाय बोखावनायजों लिंक दं। बेबाइदि "
 "खालामोब्ला इयुनाव रां सुखनाया गोब्राब जानो हागौ! बे सोलायनायजों सालाय लांबाय था?"
@@ -24332,7 +24325,7 @@ msgstr "एप्रिल 1 - मार्स 31"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "3rd Est Tax Quarter"
-msgstr " थामथि अनुमान खाजोना दानथामारि"
+msgstr "थामथि अनुमान खाजोना दानथामारि"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
@@ -26186,7 +26179,7 @@ msgstr "%s बाजेतनि थाखाय"
 #: gnucash/report/reports/standard/budget-income-statement.scm:535
 #, fuzzy, scheme-format
 msgid "for Budget ~a Period ~d"
-msgstr " %s बाजेतनि थाखाय %u समफारि"
+msgstr "%s बाजेतनि थाखाय %u समफारि"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:538
 #, fuzzy, scheme-format
@@ -28209,9 +28202,9 @@ msgid "Today date format"
 msgstr "दिनैनि खालारनि फरमेट"
 
 #: gnucash/report/reports/standard/receipt.scm:81
-#, fuzzy
+#: gnucash/report/reports/standard/taxinvoice.scm:149
 msgid ""
-"The file name of the eguile template part of this report.  This file should "
+"The file name of the eguile template part of this report. This file should "
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
@@ -28219,9 +28212,9 @@ msgstr ""
 "एबा GnuCash इनष्टलेसन डिरेक्टरिनि सिङाव बेनि मोजां जायगायाव थाथारनांगोन।"
 
 #: gnucash/report/reports/standard/receipt.scm:84
-#, fuzzy
+#: gnucash/report/reports/standard/taxinvoice.scm:152
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  This file "
+"The file name of the CSS stylesheet to use with this report. This file "
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -28246,8 +28239,8 @@ msgstr "रिपर्टआव बाहायनो गोनां ल'ग' 
 #: gnucash/report/reports/standard/receipt.scm:97
 #, fuzzy
 msgid ""
-"Width of the header logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 "CSS फरमेटआव ल'ग'नि गुवार, जेरै- 10% एबा 32px. ल'ग'खौ दिन्थिफुंनो थाखाय बेनि सरासनस्रा "
@@ -28261,8 +28254,8 @@ msgstr "रिपर्टआव बाहायनो गोनां ल'ग' 
 #: gnucash/report/reports/standard/receipt.scm:103
 #, fuzzy
 msgid ""
-"Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 "CSS फरमेटआव ल'ग'नि गुवार, जेरै- 10% एबा 32px. ल'ग'खौ दिन्थिफुंनो थाखाय बेनि सरासनस्रा "
@@ -28307,7 +28300,7 @@ msgstr "नोंथाङा आनजाद खालामनो लुबै
 #: gnucash/report/reports/standard/reconcile-report.scm:59
 msgid ""
 "The reconcile report is designed to be similar to the formal reconciliation "
-"tool.  Please select the account from Report Options. Please note the dates "
+"tool. Please select the account from Report Options. Please note the dates "
 "specified in the options will apply to the Reconciliation Date."
 msgstr ""
 
@@ -28561,24 +28554,6 @@ msgstr "इनभइस साख्रिखौ दिन्थिफुं?"
 #, fuzzy
 msgid "Show net price?"
 msgstr "दामफोरखौ दिन्थि"
-
-#: gnucash/report/reports/standard/taxinvoice.scm:149
-msgid ""
-"The file name of the eguile template part of this report. This file should "
-"either be in your .gnucash directory, or else in its proper place within the "
-"GnuCash installation directories."
-msgstr ""
-"बे रिपर्टनि eguile टेमप्लेट बाहागोनि फाइल मुं। बे फाइलआ नोंथांनि .gnucash डिरेक्टरिआव "
-"एबा GnuCash इनष्टलेसन डिरेक्टरिनि सिङाव बेनि मोजां जायगायाव थाथारनांगोन।"
-
-#: gnucash/report/reports/standard/taxinvoice.scm:152
-msgid ""
-"The file name of the CSS stylesheet to use with this report. This file "
-"should either be in your .gnucash directory, or else in its proper place "
-"within the GnuCash installation directories."
-msgstr ""
-"बे रिपर्टजों बाहायनो थाखाय CSS स्टाइलसिटनि फाइल मुं। बे फाइलखौ नोंथांनि .gnucash "
-"डिरेक्टरिआव एबा GnuCash इनष्टलेसन डिरेक्टरिनि सिङाव बेनि मोजां जायगायाव थाथारनांगोन।"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:162
 msgid "Name of a file containing a logo to be used on the report."
@@ -31678,7 +31653,7 @@ msgstr "जेबो मदद गैया।"
 #~ msgstr "हाबा खाम्फा|बोखावनाय"
 
 #, fuzzy
-#~ msgid "Are you sure you want to delete the entries ?"
+#~ msgid "Are you sure you want to delete the entries?"
 #~ msgstr "थारैनो नोंथाङा हाबहोनायखौ खोमोरनो लुबैयो नामा?"
 
 #~ msgid "Transfers"
@@ -31890,7 +31865,7 @@ msgstr "जेबो मदद गैया।"
 #~ msgstr "बोसोर:"
 
 #~ msgid ""
-#~ "The external program \"AqBanking Setup Wizard\" has not been found. \n"
+#~ "The external program \"AqBanking Setup Wizard\" has not been found.\n"
 #~ "\n"
 #~ "The %s package should include the program \"qt3-wizard\". Please check "
 #~ "your installation to ensure this program is present. On some "
@@ -31932,7 +31907,7 @@ msgstr "जेबो मदद गैया।"
 #~ "successfully. Please try running the \"AqBanking Setup Wizard\" again."
 #~ msgstr ""
 #~ "बाइजोनि प्रग्राम \"AqBanking सेटआप उइजार्ड\"आ जाफुंसारै सालायनो फेलें जाबाय। बे "
-#~ "उइजार्डआ जाफुंसारै सालायदोंब्लाल'नो अनलाइन बेंकिखौ सेटआप खालामनो हायो। अननानै  "
+#~ "उइजार्डआ जाफुंसारै सालायदोंब्लाल'नो अनलाइन बेंकिखौ सेटआप खालामनो हायो। अननानै "
 #~ "\"AqBanking सेटआप उइजार्ड\" खौ आरोबाव सालायनो नाजा"
 
 #~ msgid "_Now"
@@ -31971,7 +31946,7 @@ msgstr "जेबो मदद गैया।"
 #~ "The text you entered contained at least one character that is invalid for "
 #~ "a SEPA transaction. In SEPA, unfortunately only exactly the following "
 #~ "characters are allowed: a...z, A...Z, 0...9, and the following "
-#~ "punctuations: ' : ? , - ( + . ) / \n"
+#~ "punctuations: ' : ? , - ( + . ) /\n"
 #~ "\n"
 #~ "In particular, neither Umlauts nor an ampersand (&) is allowed, neither "
 #~ "in the recipient or sender name nor in any purpose line."
@@ -31979,7 +31954,7 @@ msgstr "जेबो मदद गैया।"
 #~ "नोंथाङा हाबहोखानाय फरायाव खमैबो मोनसे हांखो दंमोन जाय SEPA लेनदेननि थाखाय "
 #~ "बाहायजायै। SEPA आव, खाफाल गाज्रियै गाहायनि हांखोखौ थारैनो गनायथि होनाय जायो: "
 #~ "a...z, A...Z, 0...9, आरो गाहायनि थाद'नाय सिन बाहायनाय: ' : ? , - "
-#~ "( + . ) / \n"
+#~ "( + . ) /\n"
 #~ "\n"
 #~ "जुनियायै, Umlauts एबा ampersand (&)खौ गनायथि होनाय जाया, मोनग्रा एबा दैथाय "
 #~ "हरग्रा मुंआव नङा एबा जायखि जाया थांखि सारियाव नङा।"
@@ -32294,59 +32269,59 @@ msgstr "जेबो मदद गैया।"
 
 #~ msgid ""
 #~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
+#~ " %s\n"
 #~ "Please correct the problem and restart GnuCash.\n"
 #~ "The reported error was '%s' (errno %d).\n"
 #~ msgstr ""
 #~ "डिरेक्टरि सोरजिनाय समाव मोनसे गोरोन्थि जाबाय:\n"
-#~ "  %s\n"
+#~ " %s\n"
 #~ "अननानै जेंनाखौ सुस्रां आरो GnuCash खौ फिन जागाय।\n"
 #~ "रिपर्ट खालामखानाय गोरोन्थिआ '%s' (errno %d) मोन।\n"
 
 #~ msgid ""
 #~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
+#~ " %s\n"
+#~ "exists but cannot be accessed. This program\n"
+#~ "must have full access (read/write/execute) to\n"
 #~ "the directory in order to function properly.\n"
 #~ msgstr ""
 #~ "डिरेक्टरि\n"
-#~ "  %s\n"
+#~ " %s\n"
 #~ "आ दं, नाथाय हाबनो हाया। मोजाङै खामानि\n"
 #~ "मावहोनो बे प्रग्रामहा डिरेक्टरिआव (फरायनाय/लिरनाय/मावफुंनाय)\n"
 #~ "आबु हाबनाय थाथारनांगोन।\n"
 
 #~ msgid ""
 #~ "The path\n"
-#~ "  %s\n"
+#~ " %s\n"
 #~ "exists but it is not a directory. Please delete\n"
 #~ "the file and start GnuCash again.\n"
 #~ msgstr ""
 #~ "लामा\n"
-#~ "  %s\n"
+#~ " %s\n"
 #~ "दं नाथाय बेयो डिरेक्टरि नङा। अननानै\n"
 #~ "फाइलखौ खोमोर आरो GnuCash खौ फिन जागाय।\n"
 
 #~ msgid ""
 #~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
+#~ " %s\n"
 #~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
+#~ "problem and restart GnuCash. The reported error\n"
 #~ "was '%s' (errno %d)."
 #~ msgstr ""
 #~ "भेलिडेट खालामनाय समाव मोनसे गोरोन्थि जादोंमोन\n"
-#~ "  %s\n"
+#~ " %s\n"
 #~ "डिरेक्टरिआ दं आरो बेयो खामानिआव नांथाव। अननानै जेंनाखौ गेबें खालाम\n"
 #~ "आरो GnuCash खौ फिन जागाय। रिपर्ट खालामखानाय गोरोन्थिआ\n"
 #~ "'%s' (errno %d) मोन।"
 
 #~ msgid ""
 #~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
+#~ " %s\n"
 #~ "They must be at least 'rwx' for the user.\n"
 #~ msgstr ""
 #~ "गनायथिआ डिरेक्टरियाव गोरोन्थि\n"
-#~ "  %s\n"
+#~ " %s\n"
 #~ "बेफोरो बाहायग्रानि थाखाय खमैबो 'rwx' जाथार नांगोन।\n"
 
 #~ msgid "_Price Editor"

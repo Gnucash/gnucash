@@ -611,7 +611,7 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:90
 msgid ""
-"You can pack multiple reports into a single window,  providing all the "
+"You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
@@ -710,8 +710,8 @@ msgid ""
 "transactions up to midnight %s (for a total of %d transactions spread over "
 "%d accounts).\n"
 "\n"
-" Amend the Title and Notes or Click on \"Next\" to proceed.\n"
-" Click on \"Back\" to adjust the dates or \"Cancel\"."
+"Amend the Title and Notes or Click on \"Next\" to proceed.\n"
+"Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:386
@@ -1372,7 +1372,7 @@ msgid ""
 msgstr ""
 "Musíte vložiť názov spoločnosti. Pokiaľ je tento odberateľ fyzická osoba (a "
 "nie spoločnosť), mali by ste vložiť rovnakú hodnotu pre:\n"
-"Identifikáciu - názov spoločnosti a \n"
+"Identifikáciu - názov spoločnosti a\n"
 "Adresa platby - názov."
 
 #: gnucash/gnome/dialog-customer.c:341
@@ -1782,7 +1782,7 @@ msgstr "S_úvisí s daňami"
 #: gnucash/gnome/dialog-find-account.c:447
 #, fuzzy
 msgid "Search from "
-msgstr " Hľadať "
+msgstr "Hľadať "
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -8041,19 +8041,19 @@ msgstr "Ukladať súbor automaticky?"
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -8392,7 +8392,7 @@ msgstr ""
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
-"the  documentation to learn how to clear out dangling login sessions."
+"the documentation to learn how to clear out dangling login sessions."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:515
@@ -12381,8 +12381,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:29
 msgid ""
-"This assistant will help you setup and use accounting periods. \n"
-" \n"
+"This assistant will help you setup and use accounting periods.\n"
+"\n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
@@ -13089,7 +13089,7 @@ msgid ""
 "as well as move accounts (along with their sub-accounts) from one parent to "
 "another.\n"
 "\n"
-"Click 'Cancel'  if you do not wish to create any new accounts now."
+"Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
 "Tento asistent vám pomôže vytvoriť sadu účtov GnuCash pre vaše aktíva (napr. "
 "investície, bežné alebo sporiace účty), pasíva (napr. úvery) a rôzne typy "
@@ -13512,10 +13512,10 @@ msgstr "QIF Import"
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-"programs. \n"
+"programs.\n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Apply\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process.\n"
 "\n"
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
@@ -13533,7 +13533,7 @@ msgid ""
 "account(s) in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't "
-"worry if your data is in multiple files. \n"
+"worry if your data is in multiple files.\n"
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:114
@@ -13559,11 +13559,11 @@ msgid ""
 "components of a date are printed. In most cases, it is possible to "
 "automatically determine which format is in use in a particular file. "
 "However, in the file you have just imported there exist more than one "
-"possible format that fits the data. \n"
+"possible format that fits the data.\n"
 "\n"
 "Please select a date format for the file. QIF files created by European "
-"software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-day-year. \n"
+"software are likely to be in \"d-m-y\" or day-month-year format, where US "
+"QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:332
@@ -13578,7 +13578,7 @@ msgstr "Nastaviť formát dátumu pre tento QIF súbor"
 #: gnucash/gtkbuilder/assistant-qif-import.glade:359
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account. \n"
+"one account, but the file does not specify a name for that account.\n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
 "accounting program, you should use the same account name that was used in "
@@ -13667,7 +13667,7 @@ msgstr "Zodpovedajúce QIF účty s GnuCash účtami"
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
-"converted to a GnuCash account. \n"
+"converted to a GnuCash account.\n"
 "\n"
 "On the next page, you will have an opportunity to look at the suggested "
 "matches between QIF categories and GnuCash accounts. You may change matches "
@@ -13690,7 +13690,7 @@ msgstr "Zodpovedajúce QIF kategórie s GnuCash účtami"
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
-"correctly assigned to GnuCash accounts. \n"
+"correctly assigned to GnuCash accounts.\n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
@@ -13741,8 +13741,8 @@ msgid ""
 "Below you are asked to provide information about stocks, mutual funds, and "
 "other investments that appear in the QIF file(s) you are importing. GnuCash "
 "needs some additional details about these investments that the QIF format "
-"does not provide. \n"
-" \n"
+"does not provide.\n"
+"\n"
 "Each stock, mutual fund, or other investment must have a name and an "
 "abbreviation, such as a stock symbol. Because some unrelated investments "
 "have the same abbreviation, you also need to indicate what type of "
@@ -13822,7 +13822,7 @@ msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
 "will be saved and used for defaults the next time you use the QIF import "
-"facility. \n"
+"facility.\n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -14508,7 +14508,7 @@ msgstr "Zvoľte alebo pridajte GnuCash účet"
 msgid "Import transactions from text file"
 msgstr ""
 "\n"
-"  # CIEĽ tag        ŠTART riadok  v súbore/texte"
+"# CIEĽ tag        ŠTART riadok v súbore/texte"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:123
 #, fuzzy
@@ -15008,7 +15008,7 @@ msgstr "Adresa odoslania"
 msgid "Import customers or vendors from text file"
 msgstr ""
 "\n"
-"  # CIEĽ tag        ŠTART riadok  v súbore/texte"
+"# CIEĽ tag        ŠTART riadok v súbore/texte"
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
 #, fuzzy
@@ -15415,7 +15415,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-find-account.glade:230
 #, fuzzy
 msgid "_Search"
-msgstr " Hľadať "
+msgstr "Hľadať "
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:266
 msgid ""
@@ -15737,7 +15737,7 @@ msgstr "Aktívna úloha"
 #: gnucash/report/reports/standard/lot-viewer.scm:34
 #, fuzzy
 msgid "Lot Viewer"
-msgstr " - Prehliadač LRF"
+msgstr "- Prehliadač LRF"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:25
 #, fuzzy
@@ -17233,8 +17233,8 @@ msgid "<b>_Selected Reports</b>"
 msgstr "<b>_Zvolené výkazy</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
-msgid "A_dd  >>"
-msgstr "Pri_dať  >>"
+msgid "A_dd >>"
+msgstr "Pri_dať >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
 msgid "<< _Remove"
@@ -17511,11 +17511,6 @@ msgstr "Vopred vytvoriť"
 #: gnucash/gtkbuilder/dialog-sx.glade:924
 msgid "Remind in advance"
 msgstr "Pripomenúť skôr"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:965
-#: gnucash/gtkbuilder/dialog-sx.glade:1024
-msgid " days"
-msgstr " dní"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:982
 msgid "Create automatically"
@@ -18652,7 +18647,7 @@ msgstr "Každý "
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:62
 msgid ""
-"Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
+"Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
 
@@ -18785,7 +18780,7 @@ msgid "Export to PDF File"
 msgstr "Titulok výkazu"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
-#. 3. Account Number,  4. Subaccount ID
+#. 3. Account Number, 4. Subaccount ID
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
@@ -18820,9 +18815,8 @@ msgstr ""
 msgid ""
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
-"bank  decides to grant you electronic access, they will send you a letter "
-"containing \n"
-"\n"
+"bank decides to grant you electronic access, they will send you a letter "
+"containing:\n"
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's Online Banking server\n"
@@ -19046,14 +19040,12 @@ msgid "Name for new template"
 msgstr "Vložte názov pre novú šablónu:"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
-#, fuzzy
-msgid " _Name of the new template:"
-msgstr "Vložte názov pre novú šablónu:"
+msgid "_Name of the new template"
+msgstr "_Názov pre novú šablónu"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
-#, fuzzy
 msgid "Enter a unique name for the new template."
-msgstr "Vložte názov pre novú šablónu:"
+msgstr "Vložte názov pre novú šablónu."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:989
 msgid "Online Transaction"
@@ -19411,7 +19403,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:184
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probable the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -19464,7 +19456,7 @@ msgstr "Bankový účet"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:799
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probably the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -19512,7 +19504,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1156
 #, c-format
 msgid ""
-"Result of Online Banking job: \n"
+"Result of Online Banking job:\n"
 "Account booked balance is %s"
 msgstr ""
 
@@ -19590,7 +19582,7 @@ msgstr[2] ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
 #, c-format
 msgid ""
-"The PIN needs to be at least %d characters \n"
+"The PIN needs to be at least %d characters\n"
 "long. Do you want to try again?"
 msgstr ""
 "PIN musí byť dlhý aspoň %d znakov.\n"
@@ -19673,7 +19665,7 @@ msgstr "_Inkaso..."
 msgid ""
 "Issue a new international European (SEPA) direct debit note online through "
 "Online Banking"
-msgstr "Vydať nové  online inkaso pomocou Online bankingu"
+msgstr "Vydať nové online inkaso pomocou Online bankingu"
 
 #. Translators: Message types MTxxxx are exchange formats used by the SWIFT network
 #. https://en.wikipedia.org/wiki/Society_for_Worldwide_Interbank_Financial_Telecommunication
@@ -20058,7 +20050,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:97
 msgid ""
 "This assistant will help you export the Account Tree to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20067,7 +20059,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use.\n"
@@ -20076,7 +20068,7 @@ msgid ""
 "order the accounts were processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -20085,7 +20077,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:115
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use. Each Transaction will "
@@ -20093,7 +20085,7 @@ msgid ""
 "processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "By selecting the simple layout, the output will be equivalent to a single "
 "row register view and as such some of the transfer detail could be lost.\n"
@@ -20179,7 +20171,7 @@ msgstr "Získať _transakcie..."
 msgid "Export the Transactions to a CSV file"
 msgstr ""
 "\n"
-"  # CIEĽ tag        ŠTART riadok  v súbore/texte"
+"# CIEĽ tag        ŠTART riadok v súbore/texte"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:64
 #, fuzzy
@@ -20386,7 +20378,7 @@ msgstr ""
 msgid "The transactions were imported from file '{1}'."
 msgstr ""
 "\n"
-"  # CIEĽ tag        ŠTART riadok  v súbore/texte"
+"# CIEĽ tag        ŠTART riadok v súbore/texte"
 
 #: gnucash/import-export/csv-imp/csv-account-import.c:253
 #, c-format
@@ -20702,35 +20694,35 @@ msgstr "Expo_rtovať účty"
 msgid "Import Accounts from a CSV file"
 msgstr ""
 "\n"
-"  # CIEĽ tag        ŠTART riadok  v súbore/texte"
+"# CIEĽ tag        ŠTART riadok v súbore/texte"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:55
 #, fuzzy
 msgid "Import _Transactions from CSV..."
 msgstr ""
 "\n"
-"  # CIEĽ tag        ŠTART riadok  v súbore/texte"
+"# CIEĽ tag        ŠTART riadok v súbore/texte"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:56
 #, fuzzy
 msgid "Import Transactions from a CSV file"
 msgstr ""
 "\n"
-"  # CIEĽ tag        ŠTART riadok  v súbore/texte"
+"# CIEĽ tag        ŠTART riadok v súbore/texte"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
 #, fuzzy
 msgid "Import _Prices from a CSV file..."
 msgstr ""
 "\n"
-"  # CIEĽ tag        ŠTART riadok  v súbore/texte"
+"# CIEĽ tag        ŠTART riadok v súbore/texte"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
 #, fuzzy
 msgid "Import Prices from a CSV file"
 msgstr ""
 "\n"
-"  # CIEĽ tag        ŠTART riadok  v súbore/texte"
+"# CIEĽ tag        ŠTART riadok v súbore/texte"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:139
 #, fuzzy
@@ -20810,7 +20802,7 @@ msgstr "Pripomenutie splatnosti faktúry"
 msgid "Import Customers and Vendors from a CSV text file."
 msgstr ""
 "\n"
-"  # CIEĽ tag        ŠTART riadok  v súbore/texte"
+"# CIEĽ tag        ŠTART riadok v súbore/texte"
 
 #: gnucash/import-export/import-account-matcher.c:260
 #, fuzzy, c-format
@@ -22962,7 +22954,7 @@ msgid ""
 "Transactions relating to '~a' contain more than one currency. This report is "
 "not designed to cope with this possibility."
 msgstr ""
-"Transakcie súvisiace s  '%s' obsahujú viac ako len jednu menu. Tento výkaz "
+"Transakcie súvisiace s '%s' obsahujú viac ako len jednu menu. Tento výkaz "
 "nie je navrhnutý tak, aby sa s ním mohlo pracovať."
 
 #: gnucash/report/reports/aging.scm:345
@@ -23670,7 +23662,7 @@ msgstr "nepravda"
 #: gnucash/report/reports/example/hello-world.scm:368
 #, fuzzy, scheme-format
 msgid "The radio button option is ~a."
-msgstr "Nastavenie reťazca je  %s."
+msgstr "Nastavenie reťazca je %s."
 
 #: gnucash/report/reports/example/hello-world.scm:373
 #, fuzzy, scheme-format
@@ -23680,7 +23672,7 @@ msgstr "Nastavenie s viacerými voľbami je %s."
 #: gnucash/report/reports/example/hello-world.scm:378
 #, fuzzy, scheme-format
 msgid "The string option is ~a."
-msgstr "Nastavenie reťazca je  %s."
+msgstr "Nastavenie reťazca je %s."
 
 #: gnucash/report/reports/example/hello-world.scm:383
 #, fuzzy, scheme-format
@@ -27870,15 +27862,17 @@ msgid "Today date format"
 msgstr "Dnešný formát dátumu"
 
 #: gnucash/report/reports/standard/receipt.scm:81
+#: gnucash/report/reports/standard/taxinvoice.scm:149
 msgid ""
-"The file name of the eguile template part of this report.  This file should "
+"The file name of the eguile template part of this report. This file should "
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:84
+#: gnucash/report/reports/standard/taxinvoice.scm:152
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  This file "
+"The file name of the CSS stylesheet to use with this report. This file "
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -27901,8 +27895,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:97
 msgid ""
-"Width of the header logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -27912,8 +27906,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:103
 msgid ""
-"Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -27954,7 +27948,7 @@ msgstr "Pohľadávkový účet, ktorý chcete preskúmať"
 #: gnucash/report/reports/standard/reconcile-report.scm:59
 msgid ""
 "The reconcile report is designed to be similar to the formal reconciliation "
-"tool.  Please select the account from Report Options. Please note the dates "
+"tool. Please select the account from Report Options. Please note the dates "
 "specified in the options will apply to the Reconciliation Date."
 msgstr ""
 
@@ -28240,20 +28234,6 @@ msgstr "Číslo faktúry"
 #, fuzzy
 msgid "Show net price?"
 msgstr "Zobraziť ceny"
-
-#: gnucash/report/reports/standard/taxinvoice.scm:149
-msgid ""
-"The file name of the eguile template part of this report. This file should "
-"either be in your .gnucash directory, or else in its proper place within the "
-"GnuCash installation directories."
-msgstr ""
-
-#: gnucash/report/reports/standard/taxinvoice.scm:152
-msgid ""
-"The file name of the CSS stylesheet to use with this report. This file "
-"should either be in your .gnucash directory, or else in its proper place "
-"within the GnuCash installation directories."
-msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:162
 msgid "Name of a file containing a logo to be used on the report."
@@ -31525,13 +31505,13 @@ msgstr "Pomocník nie je k dispozícii."
 
 #, fuzzy
 #~ msgid "Issue a new transaction online through Online Banking"
-#~ msgstr "Vydať nové  online inkaso pomocou Online bankingu"
+#~ msgstr "Vydať nové online inkaso pomocou Online bankingu"
 
 #~ msgid "_Direct Debit..."
 #~ msgstr "_Inkaso..."
 
 #~ msgid "Issue a new direct debit note online through Online Banking"
-#~ msgstr "Vydať nové  online inkaso pomocou Online bankingu"
+#~ msgstr "Vydať nové online inkaso pomocou Online bankingu"
 
 #~ msgid "Import a MT940 file into GnuCash"
 #~ msgstr "Importovať súbor MT940 do GnuCash"
@@ -31621,7 +31601,7 @@ msgstr "Pomocník nie je k dispozícii."
 #~ msgstr "Ďalšie poznámky, ktoré dať na faktúru"
 
 #~ msgid "INVOICE NOT POSTED"
-#~ msgstr "FAKTÚRA JE  NEVYSTAVENÁ"
+#~ msgstr "FAKTÚRA JE NEVYSTAVENÁ"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefón:"
@@ -31810,7 +31790,7 @@ msgstr "Pomocník nie je k dispozícii."
 #~ "sumou."
 
 #~ msgid ""
-#~ "You must enter the amount of the payment.  The payment amount must be "
+#~ "You must enter the amount of the payment. The payment amount must be "
 #~ "greater than zero."
 #~ msgstr "Musíte zadať čiastku platby. Čiastka musí byť väčšia ako nula."
 
@@ -32189,7 +32169,7 @@ msgstr "Pomocník nie je k dispozícii."
 #~ "Ročne"
 
 #~ msgid "Do you..."
-#~ msgstr " "
+#~ msgstr ""
 
 #~ msgid "Loan Information"
 #~ msgstr "Informácie o úvere"
@@ -32518,11 +32498,11 @@ msgstr "Pomocník nie je k dispozícii."
 #~ "GnuCash - správca osobných financií. GNU spôsob spravovania svojich "
 #~ "peňazí!"
 
-#~ msgid "%s  This copy was built from svn r%s on %s."
-#~ msgstr "%s  Táto kópia bola zostavená z svn r%s na %s."
+#~ msgid "%s This copy was built from svn r%s on %s."
+#~ msgstr "%s Táto kópia bola zostavená z svn r%s na %s."
 
-#~ msgid "%s  This copy was built from r%s on %s."
-#~ msgstr "%s  Táto kópia bola zostavená z r%s na %s."
+#~ msgid "%s This copy was built from r%s on %s."
+#~ msgstr "%s Táto kópia bola zostavená z r%s na %s."
 
 #~ msgid "Version: GnuCash-%s svn (r%s built %s)"
 #~ msgstr "Verzia: GnuCash-%s svn (r%s vytvorené %s)"
@@ -32565,18 +32545,18 @@ msgstr "Pomocník nie je k dispozícii."
 #~ msgstr "Importovať súbor CSV/s fixnou šírkou"
 
 #~ msgid " a CSV/Fixed-Width file"
-#~ msgstr "  súbor CSV/s fixnou šírkou"
+#~ msgstr " súbor CSV/s fixnou šírkou"
 
 #~ msgid ""
 #~ "For a new transaction, click on the \"Other Account\" entry to choose the "
 #~ "other (destination) account of this transaction.\n"
 #~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
+#~ "\"Other Account\" or \"Description\" entry to\n"
 #~ "check whether GnuCash chose the right existing transaction.\n"
 #~ "To switch transactions between both states, click on the checkmark in the "
 #~ "\"New\" column.\n"
 #~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
+#~ "duplicates are matched with the right existing transaction,\n"
 #~ "click \"OK\"."
 #~ msgstr ""
 #~ "Pre novú transakciu zvoľte druhý (cieľový) účet tejto transakcie\n"
@@ -32707,7 +32687,7 @@ msgstr "Pomocník nie je k dispozícii."
 #~ "Stlačte Export na ich vyexportovanie."
 
 #~ msgid ""
-#~ "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog "
+#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog "
 #~ "to set up tax-related accounts."
 #~ msgstr ""
 #~ "Neboli nájdené žiadne účty súvisiace s daňami. Nastavte účty súvisiace s "
@@ -32770,8 +32750,8 @@ msgstr "Pomocník nie je k dispozícii."
 #~ msgid "Export Employees to XML"
 #~ msgstr "Exportovať zamestnancov do XML"
 
-#~ msgid "Invalid Entry:  You need to supply %s."
-#~ msgstr "Neplatná položky:  Musíte zabezpečiť %s."
+#~ msgid "Invalid Entry: You need to supply %s."
+#~ msgstr "Neplatná položky: Musíte zabezpečiť %s."
 
 #~ msgid ""
 #~ "Key file contains key '%s' in group '%s' which has a value that cannot be "
@@ -32838,7 +32818,7 @@ msgstr "Pomocník nie je k dispozícii."
 #~ "checkbox for that account.\n"
 #~ msgstr ""
 #~ "Pokiaľ chcete, aby mal účet začiatočný stav, kliknite na neho a ešte raz "
-#~ "kliknite do stĺpca počiatočný stav a do poľa vložte  sumu. Všetky účty "
+#~ "kliknite do stĺpca počiatočný stav a do poľa vložte sumu. Všetky účty "
 #~ "okrem Vlastného imania a účtov držiacich miesto, môžu mať počiatočnú "
 #~ "hodnotu.\n"
 #~ "\n"
@@ -32987,7 +32967,7 @@ msgstr "Pomocník nie je k dispozícii."
 
 #, fuzzy
 #~ msgid "Choose AqBanking Backend"
-#~ msgstr "Vybrať  AqBanking Backend"
+#~ msgstr "Vybrať AqBanking Backend"
 
 #~ msgid "Co_nfigure"
 #~ msgstr "Ko_nfigurácia"
@@ -33240,7 +33220,7 @@ msgstr "Pomocník nie je k dispozícii."
 #~ msgstr "Vypočítať nezrealizované zisky a straty"
 
 #~ msgid ""
-#~ "Include unrealized gains and losses in the computation.  Will produce "
+#~ "Include unrealized gains and losses in the computation. Will produce "
 #~ "incorrect results if the current file uses commodity trading accounts"
 #~ msgstr ""
 #~ "Zahrnúť nezrealizované zisky a straty do výpočtu. Spôsobí, že výsledky "

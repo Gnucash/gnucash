@@ -641,7 +641,7 @@ msgstr ""
 #: doc/tip_of_the_day.list.c:90
 #, fuzzy
 msgid ""
-"You can pack multiple reports into a single window,  providing all the "
+"You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
@@ -738,8 +738,8 @@ msgid ""
 "transactions up to midnight %s (for a total of %d transactions spread over "
 "%d accounts).\n"
 "\n"
-" Amend the Title and Notes or Click on \"Next\" to proceed.\n"
-" Click on \"Back\" to adjust the dates or \"Cancel\"."
+"Amend the Title and Notes or Click on \"Next\" to proceed.\n"
+"Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:386
@@ -8730,19 +8730,19 @@ msgstr "(Byuzuye in ku buryo bwikora"
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
-"as if you had pressed the \"Save\" button each time. \n"
+"as if you had pressed the \"Save\" button each time.\n"
 "\n"
 "You can change the time interval or turn off this feature under Edit-"
-">Preferences->General->Auto-save time interval. \n"
+">Preferences->General->Auto-save time interval.\n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -9126,7 +9126,7 @@ msgstr ""
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
-"the  documentation to learn how to clear out dangling login sessions."
+"the documentation to learn how to clear out dangling login sessions."
 msgstr ""
 "Ububikoshingiro ni in Gukoresha ku Ikindi Na i Oya Ikindi i Kuri Kuri Gusiba "
 "Inyuma"
@@ -13266,8 +13266,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:29
 msgid ""
-"This assistant will help you setup and use accounting periods. \n"
-" \n"
+"This assistant will help you setup and use accounting periods.\n"
+"\n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
@@ -14008,7 +14008,7 @@ msgid ""
 "as well as move accounts (along with their sub-accounts) from one parent to "
 "another.\n"
 "\n"
-"Click 'Cancel'  if you do not wish to create any new accounts now."
+"Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
 "Ifashayobora Kurema a Gushyiraho Bya Konti kugirango Ikintu Nka Ishoramari "
 "Cyangwa Konti Nka Na Bya Na Ibisohoka NIBA OYA Kuri Kurema Gishya Konti "
@@ -14484,10 +14484,10 @@ msgstr ""
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-"programs. \n"
+"programs.\n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Apply\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process.\n"
 "\n"
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
@@ -14510,7 +14510,7 @@ msgid ""
 "account(s) in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't "
-"worry if your data is in multiple files. \n"
+"worry if your data is in multiple files.\n"
 msgstr ""
 "Guhitamo a IDOSIYE Kuri Ibirimo Kanda i IDOSIYE Gicurasi Kuri Ibyerekeye i "
 "Aderesi S in i IDOSIYE i Kuri Ibirimo Nka Idosiye Nka NIBA Ibyatanzwe ni in "
@@ -14543,11 +14543,11 @@ msgid ""
 "components of a date are printed. In most cases, it is possible to "
 "automatically determine which format is in use in a particular file. "
 "However, in the file you have just imported there exist more than one "
-"possible format that fits the data. \n"
+"possible format that fits the data.\n"
 "\n"
 "Please select a date format for the file. QIF files created by European "
-"software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-day-year. \n"
+"software are likely to be in \"d-m-y\" or day-month-year format, where US "
+"QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
 "IDOSIYE Imiterere OYA Itondekanya i UMUNSI Ukwezi Na Umwaka Bya a Itariki "
 "Byacapwe ni Kuri ku buryo bwikora Imiterere ni in Gukoresha in a IDOSIYE in "
@@ -14571,7 +14571,7 @@ msgstr "a Itariki Imiterere kugirango iyi IDOSIYE"
 #, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account. \n"
+"one account, but the file does not specify a name for that account.\n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
 "accounting program, you should use the same account name that was used in "
@@ -14673,7 +14673,7 @@ msgstr "Konti Na: Konti"
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
-"converted to a GnuCash account. \n"
+"converted to a GnuCash account.\n"
 "\n"
 "On the next page, you will have an opportunity to look at the suggested "
 "matches between QIF categories and GnuCash accounts. You may change matches "
@@ -14703,7 +14703,7 @@ msgstr "Ibyiciro Na: Konti"
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
-"correctly assigned to GnuCash accounts. \n"
+"correctly assigned to GnuCash accounts.\n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
@@ -14765,8 +14765,8 @@ msgid ""
 "Below you are asked to provide information about stocks, mutual funds, and "
 "other investments that appear in the QIF file(s) you are importing. GnuCash "
 "needs some additional details about these investments that the QIF format "
-"does not provide. \n"
-" \n"
+"does not provide.\n"
+"\n"
 "Each stock, mutual fund, or other investment must have a name and an "
 "abbreviation, such as a stock symbol. Because some unrelated investments "
 "have the same abbreviation, you also need to indicate what type of "
@@ -14854,7 +14854,7 @@ msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
 "will be saved and used for defaults the next time you use the QIF import "
-"facility. \n"
+"facility.\n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -15075,14 +15075,6 @@ msgstr ""
 msgid "Preferences"
 msgstr "Irebero"
 
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 #. Preferences Dialog, General Tab
 #: gnucash/gtkbuilder/business-prefs.glade:55
@@ -15470,14 +15462,6 @@ msgstr ""
 msgid "<b>_Parent Account</b>"
 msgstr ""
 
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 #: gnucash/gtkbuilder/dialog-account.glade:1666
 #: gnucash/gtkbuilder/dialog-preferences.glade:2010
@@ -17583,7 +17567,6 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-preferences.glade:1474
 #: gnucash/gtkbuilder/dialog-sx.glade:619
 #: gnucash/gtkbuilder/dialog-sx.glade:658
-#, fuzzy
 msgid "days"
 msgstr "Iminsi"
 
@@ -18569,7 +18552,7 @@ msgstr ""
 # setup2/source\ui\pages\pprofile.src:RESID_PAGE_PAGEPROFILE.PB_ADDNEW.text
 #: gnucash/gtkbuilder/dialog-report.glade:101
 #, fuzzy
-msgid "A_dd  >>"
+msgid "A_dd >>"
 msgstr "Kongera>>"
 
 # sfx2/source\toolbox\tbxcust.src:RID_TOOLBOXCUSTOMIZE.BTN_TB_REMOVE.text
@@ -18921,13 +18904,6 @@ msgstr "Iminsi in"
 #, fuzzy
 msgid "Remind in advance"
 msgstr "Iminsi in"
-
-# scaddins/source\analysis\analysis.src:RID_ANALYSIS_FUNCTION_DESCRIPTIONS.ANALYSIS_Workday.4.text
-#: gnucash/gtkbuilder/dialog-sx.glade:965
-#: gnucash/gtkbuilder/dialog-sx.glade:1024
-#, fuzzy
-msgid " days"
-msgstr "Iminsi"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:982
 #, fuzzy
@@ -20148,7 +20124,7 @@ msgstr "buri"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:62
 msgid ""
-"Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
+"Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
 
@@ -20319,7 +20295,7 @@ msgid "Export to PDF File"
 msgstr ""
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
-#. 3. Account Number,  4. Subaccount ID
+#. 3. Account Number, 4. Subaccount ID
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
@@ -20359,9 +20335,8 @@ msgstr ""
 msgid ""
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
-"bank  decides to grant you electronic access, they will send you a letter "
-"containing \n"
-"\n"
+"bank decides to grant you electronic access, they will send you a letter "
+"containing:\n"
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's Online Banking server\n"
@@ -20596,9 +20571,8 @@ msgid "Name for new template"
 msgstr "Izina: kugirango Gishya Inyandikorugero"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:942
-#, fuzzy
-msgid " _Name of the new template:"
-msgstr "Izina: kugirango Gishya Inyandikorugero"
+msgid "_Name of the new template"
+msgstr "_Izina kugirango Gishya Inyandikorugero"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:956
 #, fuzzy
@@ -20968,7 +20942,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:184
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probable the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -21022,7 +20996,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-utils.c:799
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
+"possible to execute this job.\n"
 "\n"
 "Most probably the bank does not support your chosen job or your Online "
 "Banking account does not have the permission to execute this job. More error "
@@ -21073,7 +21047,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1156
 #, fuzzy, c-format
 msgid ""
-"Result of Online Banking job: \n"
+"Result of Online Banking job:\n"
 "Account booked balance is %s"
 msgstr "Bya ni"
 
@@ -21151,7 +21125,7 @@ msgstr[1] ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
 #, fuzzy, c-format
 msgid ""
-"The PIN needs to be at least %d characters \n"
+"The PIN needs to be at least %d characters\n"
 "long. Do you want to try again?"
 msgstr "Urashakakwongerakugeragezananone."
 
@@ -21634,7 +21608,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:97
 msgid ""
 "This assistant will help you export the Account Tree to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -21643,7 +21617,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use.\n"
@@ -21652,7 +21626,7 @@ msgid ""
 "order the accounts were processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
@@ -21661,7 +21635,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:115
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
-" with the separator specified below.\n"
+"with the separator specified below.\n"
 "\n"
 "There will be multiple rows for each transaction and may require further "
 "manipulation to get them in a format you can use. Each Transaction will "
@@ -21669,7 +21643,7 @@ msgid ""
 "processed\n"
 "\n"
 "Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"General->Force Prices to display as decimals\n"
 "\n"
 "By selecting the simple layout, the output will be equivalent to a single "
 "row register view and as such some of the transfer detail could be lost.\n"
@@ -29685,15 +29659,17 @@ msgid "Today date format"
 msgstr "Imiterere isanzwe"
 
 #: gnucash/report/reports/standard/receipt.scm:81
+#: gnucash/report/reports/standard/taxinvoice.scm:149
 msgid ""
-"The file name of the eguile template part of this report.  This file should "
+"The file name of the eguile template part of this report. This file should "
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:84
+#: gnucash/report/reports/standard/taxinvoice.scm:152
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  This file "
+"The file name of the CSS stylesheet to use with this report. This file "
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -29714,8 +29690,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:97
 msgid ""
-"Width of the header logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -29725,8 +29701,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:103
 msgid ""
-"Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to "
-"display the logo at its natural width.  The height of the logo will be "
+"Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to "
+"display the logo at its natural width. The height of the logo will be "
 "scaled accordingly."
 msgstr ""
 
@@ -29769,7 +29745,7 @@ msgstr "Aderesi Kuri"
 #: gnucash/report/reports/standard/reconcile-report.scm:59
 msgid ""
 "The reconcile report is designed to be similar to the formal reconciliation "
-"tool.  Please select the account from Report Options. Please note the dates "
+"tool. Please select the account from Report Options. Please note the dates "
 "specified in the options will apply to the Reconciliation Date."
 msgstr ""
 
@@ -30105,20 +30081,6 @@ msgstr "ku"
 #, fuzzy
 msgid "Show net price?"
 msgstr "ku Igiciro"
-
-#: gnucash/report/reports/standard/taxinvoice.scm:149
-msgid ""
-"The file name of the eguile template part of this report. This file should "
-"either be in your .gnucash directory, or else in its proper place within the "
-"GnuCash installation directories."
-msgstr ""
-
-#: gnucash/report/reports/standard/taxinvoice.scm:152
-msgid ""
-"The file name of the CSS stylesheet to use with this report. This file "
-"should either be in your .gnucash directory, or else in its proper place "
-"within the GnuCash installation directories."
-msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:162
 msgid "Name of a file containing a logo to be used on the report."
@@ -33359,8 +33321,6 @@ msgstr "a IMPINDURAGACIRO"
 #~ msgstr "Ikinyuranyo/ Itandukaniro"
 
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 #, fuzzy
 #~ msgid "()"
 #~ msgstr "()"
@@ -33694,7 +33654,7 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "You must enter the amount of the payment.  The payment amount must be "
+#~ "You must enter the amount of the payment. The payment amount must be "
 #~ "greater than zero."
 #~ msgstr "Injiza i Igiteranyo Bya i Igiteranyo Biruta Zeru"
 
@@ -33759,7 +33719,7 @@ msgstr "a IMPINDURAGACIRO"
 #~ msgstr "Umubare Bya Kwiyandikisha Imbariro Kuri Kugaragaza in"
 
 #, fuzzy
-#~ msgid "Invalid Entry:  You need to supply %s."
+#~ msgid "Invalid Entry: You need to supply %s."
 #~ msgstr "Kuri"
 
 #, fuzzy
@@ -33943,13 +33903,13 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "The following scheduled transactions have expired.  Select those you wish "
+#~ "The following scheduled transactions have expired. Select those you wish "
 #~ "to delete."
 #~ msgstr "Ibikorwa by'ubucuruzi Byarengeje igihe Kuri Gusiba"
 
 #, fuzzy
 #~ msgid ""
-#~ "The listed Scheduled Transactions are to-be created soon.  Select any "
+#~ "The listed Scheduled Transactions are to-be created soon. Select any "
 #~ "which you would like to create now, and click \"Forward\" to create them."
 #~ msgstr "Kuri Byaremwe nka Kuri Kurema NONEAHA Na Kuri Kurema"
 
@@ -34002,7 +33962,7 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "The current transaction has been changed.  Would you like to record the "
+#~ "The current transaction has been changed. Would you like to record the "
 #~ "changes before closing this page, close the page without recording the "
 #~ "changes, or cancel the close?"
 #~ msgstr ""
@@ -34187,7 +34147,7 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Enable the SKIP action in the transaction matcher.  If enabled, a "
+#~ "Enable the SKIP action in the transaction matcher. If enabled, a "
 #~ "transaction whose best match's score is in the yellow zone (above the "
 #~ "Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by "
 #~ "default."
@@ -34200,12 +34160,12 @@ msgstr "a IMPINDURAGACIRO"
 #~ "For a new transaction, click on the \"Other Account\" entry to choose the "
 #~ "other (destination) account of this transaction.\n"
 #~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
+#~ "\"Other Account\" or \"Description\" entry to\n"
 #~ "check whether GnuCash chose the right existing transaction.\n"
 #~ "To switch transactions between both states, click on the checkmark in the "
 #~ "\"New\" column.\n"
 #~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
+#~ "duplicates are matched with the right existing transaction,\n"
 #~ "click \"Ok\"."
 #~ msgstr ""
 #~ "a Gishya Kanda ku i Icyinjijwe Kuri Guhitamo i Ikindi Ishyika Aderesi Bya "
@@ -34422,13 +34382,13 @@ msgstr "a IMPINDURAGACIRO"
 #~ msgid ""
 #~ "If you are importing a QIF file downloaded from a bank or other financial "
 #~ "institution, some of the information in the QIF file may duplicate "
-#~ "information already in your GnuCash accounts.  GnuCash will try to detect "
-#~ "duplicates of existing transactions.  \n"
+#~ "information already in your GnuCash accounts. GnuCash will try to detect "
+#~ "duplicates of existing transactions.\n"
 #~ "\n"
 #~ "On the next page, you will be asked to confirm that an existing "
-#~ "transaction matches an imported transaction.  Imported transactions are "
-#~ "shown on the left side of the page, and possible  matches for the "
-#~ "selected left-hand transaction are shown  to the right.  There may be "
+#~ "transaction matches an imported transaction. Imported transactions are "
+#~ "shown on the left side of the page, and possible matches for the "
+#~ "selected left-hand transaction are shown to the right. There may be "
 #~ "several old transactions that could match an imported transaction; you "
 #~ "will be able to select the correct one by double-clicking in the \"Dup?\" "
 #~ "column of the correct transaction.\n"
@@ -34497,7 +34457,7 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog "
+#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog "
 #~ "to set up tax-related accounts."
 #~ msgstr "Konti Byabonetse Kuri i Ikiganiro Kuri Gushyiraho Hejuru Konti"
 
@@ -35080,13 +35040,13 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "The file you are loading is from an older version of GnuCash. \n"
+#~ "The file you are loading is from an older version of GnuCash.\n"
 #~ "Information about currencies, stocks, and mutual funds needs to\n"
-#~ "be updated for the new version. \n"
+#~ "be updated for the new version.\n"
 #~ "\n"
-#~ "This dialog will prompt you for some additional information about \n"
+#~ "This dialog will prompt you for some additional information about\n"
 #~ "each currency, stock, and mutual fund that appear in your\n"
-#~ "accounts.  After you have entered this information, you can\n"
+#~ "accounts. After you have entered this information, you can\n"
 #~ "update your accounts for the new version of GnuCash.\n"
 #~ "\n"
 #~ "Hit \"Cancel\" now to stop loading the file. "
@@ -35102,10 +35062,10 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Click \"Finish\" to update your accounts to use the new \n"
+#~ "Click \"Finish\" to update your accounts to use the new\n"
 #~ "information you have entered.\n"
 #~ "\n"
-#~ "Click \"Cancel\" to cancel the file-loading process.  \n"
+#~ "Click \"Cancel\" to cancel the file-loading process.\n"
 #~ "\n"
 #~ "Click \"Back\" to review your currency selections."
 #~ msgstr ""
@@ -35114,7 +35074,7 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Pick the type of the currency or security. For national currencies, \n"
+#~ "Pick the type of the currency or security. For national currencies,\n"
 #~ "use \"CURRENCY\". Enter a new type in the box if the ones in the\n"
 #~ "pick list are inappropriate."
 #~ msgstr ""
@@ -35123,13 +35083,13 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Enter a descriptive name for the currency or stock, such as \n"
+#~ "Enter a descriptive name for the currency or stock, such as\n"
 #~ "\"US Dollar\" or \"Red Hat Stock\""
 #~ msgstr "a Izina: kugirango i Ifaranga Cyangwa Nka Cyangwa"
 
 #, fuzzy
 #~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\"), national currency symbol \n"
+#~ "Enter the ticker symbol (such as \"RHAT\"), national currency symbol\n"
 #~ "(such as \"USD\"), or other unique abbreviation for the name."
 #~ msgstr ""
 #~ "i Mucapurirakure IKIMENYETSO Nka Ifaranga IKIMENYETSO Nka Cyangwa Ikindi "
@@ -35137,7 +35097,7 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Click \"Next\" to accept the information and move \n"
+#~ "Click \"Next\" to accept the information and move\n"
 #~ "to the next currency or stock."
 #~ msgstr ""
 #~ "Kuri Kwemera i Ibisobanuro Na Kwimura Kuri i Komeza>> Ifaranga Cyangwa"
@@ -35200,14 +35160,14 @@ msgstr "a IMPINDURAGACIRO"
 #, fuzzy
 #~ msgid ""
 #~ "If you already have an OpenHBCI configuration file (e.g. from "
-#~ "'aqmoney'), \n"
+#~ "'aqmoney'),\n"
 #~ "please select it here. GnuCash will continue to use your existing "
 #~ "configuration.\n"
 #~ "\n"
 #~ "If you do not yet have an OpenHBCI configuration file, please specify a "
-#~ "file name here. \n"
+#~ "file name here.\n"
 #~ "A new OpenHBCI configuration file with that name will be created when "
-#~ "this HBCI \n"
+#~ "this HBCI\n"
 #~ "Setup finishes."
 #~ msgstr "g."
 
@@ -35244,7 +35204,7 @@ msgstr "a IMPINDURAGACIRO"
 #~ msgid ""
 #~ "If you already have a key file, please choose it here and make sure the "
 #~ "User ID and\n"
-#~ "Customer ID match the ones when you created that key file earlier. \n"
+#~ "Customer ID match the ones when you created that key file earlier.\n"
 #~ "If you do not have one yet, choose a filename, and a key file will be "
 #~ "created there. Make\n"
 #~ "sure to remember the exact User ID and Customer ID specified now."
@@ -35256,7 +35216,7 @@ msgstr "a IMPINDURAGACIRO"
 #, fuzzy
 #~ msgid ""
 #~ "If you have a Chip Card but are not sure about the exact User ID and "
-#~ "Customer ID, you can \n"
+#~ "Customer ID, you can\n"
 #~ "use the tool 'hbcicard' from the libchipcard package to read these "
 #~ "numbers from the Chip Card."
 #~ msgstr ""
@@ -35266,10 +35226,10 @@ msgstr "a IMPINDURAGACIRO"
 #, fuzzy
 #~ msgid ""
 #~ "In order to update your list of HBCI-enabled accounts, your bank\n"
-#~ "server will be contacted and will be queried for the \n"
+#~ "server will be contacted and will be queried for the\n"
 #~ "HBCI-accessible accounts.\n"
 #~ "\n"
-#~ "Press 'Next' now to contact the bank server. You can then see the \n"
+#~ "Press 'Next' now to contact the bank server. You can then see the\n"
 #~ "progress of the HBCI connection in the HBCI connection window."
 #~ msgstr ""
 #~ "Itondekanya Kuri Kuvugurura Urutonde Bya Bikora Konti Na kugirango i "
@@ -35282,26 +35242,26 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Update \n"
+#~ "Update\n"
 #~ "account list"
 #~ msgstr "Aderesi Urutonde"
 
 #, fuzzy
 #~ msgid ""
-#~ "Add \n"
+#~ "Add\n"
 #~ "User"
 #~ msgstr "Kongeramo ukoresha..."
 
 #, fuzzy
 #~ msgid ""
-#~ "In order to setup HBCI access to your bank, OpenHBCI first has to \n"
-#~ "retrieve the cryptographic public keys of your bank. You will need \n"
-#~ "to enter your PIN for this to happen. After the successful key \n"
-#~ "retrieval, you need to verify those against the Ini-Letter that \n"
+#~ "In order to setup HBCI access to your bank, OpenHBCI first has to\n"
+#~ "retrieve the cryptographic public keys of your bank. You will need\n"
+#~ "to enter your PIN for this to happen. After the successful key\n"
+#~ "retrieval, you need to verify those against the Ini-Letter that\n"
 #~ "your bank gave to you on paper.\n"
 #~ "\n"
 #~ "Press 'Next' now to retrieve the keys from the bank. If you have just\n"
-#~ "created a new key file, you have to enter its PIN again. \n"
+#~ "created a new key file, you have to enter its PIN again.\n"
 #~ "\n"
 #~ "You can then see the progress of the HBCI connection in the HBCI\n"
 #~ "connection window. Please do not close the HBCI connection window\n"
@@ -35328,18 +35288,18 @@ msgstr "a IMPINDURAGACIRO"
 #, fuzzy
 #~ msgid ""
 #~ "Now you need to send your cryptographic public keys to the bank\n"
-#~ "server. Once you press 'Next', you public keys are sent to the \n"
-#~ "bank. ATTENTION: This step cannot be undone. Once you have sent \n"
-#~ "your keys to the bank, you cannot generate new ones but instead \n"
-#~ "have to use these for months to come (unless you personally ask \n"
+#~ "server. Once you press 'Next', you public keys are sent to the\n"
+#~ "bank. ATTENTION: This step cannot be undone. Once you have sent\n"
+#~ "your keys to the bank, you cannot generate new ones but instead\n"
+#~ "have to use these for months to come (unless you personally ask\n"
 #~ "your bank to reset them).\n"
 #~ "\n"
 #~ "AGAIN ATTENTION: If you happen to encounter a bug in this unstable\n"
 #~ "Gnucash version and/or OpenHBCI, these keys might get broken and you\n"
 #~ "might actually have ask your bank to reset them and generate new ones.\n"
 #~ "\n"
-#~ "If you are really sure to proceed, then press 'Next' now to send \n"
-#~ "the keys to the bank. You can then see the progress of the HBCI \n"
+#~ "If you are really sure to proceed, then press 'Next' now to send\n"
+#~ "the keys to the bank. You can then see the progress of the HBCI\n"
 #~ "connection in the HBCI connection window."
 #~ msgstr ""
 #~ "Kuri Kohereza Rusange Utubuto Kuri i Kanda Rusange Utubuto Yoherejwe: "
@@ -35354,19 +35314,19 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "This is the Ini-Letter of you, the user. Please print out a paper copy \n"
+#~ "This is the Ini-Letter of you, the user. Please print out a paper copy\n"
 #~ "by pressing 'Print'. Then press 'Next'."
 #~ msgstr "ni i Bya i Ukoresha: Gucapa Inyuma a urupapuro Gukoporora ku Kanda"
 
 #, fuzzy
 #~ msgid ""
 #~ "Now you need to sign your (the User's) Ini-Letter and send it to your "
-#~ "bank. \n"
+#~ "bank.\n"
 #~ "\n"
 #~ "The initial HBCI setup is now finished.\n"
 #~ "\n"
 #~ "Once your bank has received and processed your Ini-Letter, you\n"
-#~ "have to execute this \"HBCI Setup\" druid again in order \n"
+#~ "have to execute this \"HBCI Setup\" druid again in order\n"
 #~ "to use the HBCI functionality in your accounts.\n"
 #~ "\n"
 #~ "Press 'Finish' now."
@@ -35377,7 +35337,7 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "You have changed the HBCI version. GnuCash will now need to \n"
+#~ "You have changed the HBCI version. GnuCash will now need to\n"
 #~ "update various system parameters, including the account list.\n"
 #~ "Press 'Ok' now to proceed to updating the system and the account list."
 #~ msgstr ""
@@ -35386,7 +35346,7 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Enter account id for new account \n"
+#~ "Enter account id for new account\n"
 #~ "at bank %s (bank code %s):"
 #~ msgstr "Aderesi ID kugirango Gishya Aderesi ku ITEGEKONGENGA"
 
@@ -35428,9 +35388,9 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "There was an error when loading the plugin for your security medium \n"
-#~ "(see log window). Probably the versions of your currently installed \n"
-#~ "OpenHBCI library and of the plugin do not match. In that case you need \n"
+#~ "There was an error when loading the plugin for your security medium\n"
+#~ "(see log window). Probably the versions of your currently installed\n"
+#~ "OpenHBCI library and of the plugin do not match. In that case you need\n"
 #~ "to recompile and reinstall the plugin again. Aborting now."
 #~ msgstr ""
 #~ "Ikosa Ryari: Itangira... i kugirango Umutekano biringaniye LOG Idirishya "
@@ -35438,14 +35398,14 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Your security medium is not supported. No appropriate plugin \n"
+#~ "Your security medium is not supported. No appropriate plugin\n"
 #~ "has been found for that medium. Aborting."
 #~ msgstr "Umutekano biringaniye ni OYA Byabonetse kugirango biringaniye"
 
 #, fuzzy
 #~ msgid ""
-#~ "More than one HBCI bank is available for \n"
-#~ "the requested operation. Please choose \n"
+#~ "More than one HBCI bank is available for\n"
+#~ "the requested operation. Please choose\n"
 #~ "the one that should be used."
 #~ msgstr "ni Bihari kugirango i Guhitamo i"
 
@@ -35455,8 +35415,8 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "More than one HBCI customer is available for \n"
-#~ "the requested operation. Please choose \n"
+#~ "More than one HBCI customer is available for\n"
+#~ "the requested operation. Please choose\n"
 #~ "the one that should be used."
 #~ msgstr "ni Bihari kugirango i Guhitamo i"
 
@@ -35466,21 +35426,21 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "More than one HBCI user is available for \n"
-#~ "the requested operation. Please choose \n"
+#~ "More than one HBCI user is available for\n"
+#~ "the requested operation. Please choose\n"
 #~ "the one that should be used."
 #~ msgstr "Ukoresha: ni Bihari kugirango i Guhitamo i"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please enter and confirm new PIN for \n"
+#~ "Please enter and confirm new PIN for\n"
 #~ "user '%s' at bank '%s',\n"
 #~ "with at least %d characters."
 #~ msgstr "Injiza Na Kwemeza Gishya kugirango Ukoresha: ku Na: ku Inyuguti"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please enter and confirm a new PIN for \n"
+#~ "Please enter and confirm a new PIN for\n"
 #~ "user '%s',\n"
 #~ "with at least %d characters."
 #~ msgstr "Injiza Na Kwemeza a Gishya kugirango Ukoresha: Na: ku Inyuguti"
@@ -35493,27 +35453,27 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please enter PIN for \n"
+#~ "Please enter PIN for\n"
 #~ "user '%s' at bank '%s'."
 #~ msgstr "Injiza kugirango Ukoresha: ku"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please enter PIN for \n"
+#~ "Please enter PIN for\n"
 #~ "user '%s' at unknown bank."
 #~ msgstr "Injiza kugirango Ukoresha: ku Kitazwi"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please enter the PIN for \n"
+#~ "Please enter the PIN for\n"
 #~ "the newly created user."
 #~ msgstr "Injiza i kugirango i Byaremwe Ukoresha:"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please make sure the key file for user '%s' at bank '%s' can be \n"
-#~ "accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
-#~ "the key file is on a floppy disk or other removable media, please make \n"
+#~ "Please make sure the key file for user '%s' at bank '%s' can be\n"
+#~ "accessed. If the key file is on your harddisk, simply press 'Ok'. If\n"
+#~ "the key file is on a floppy disk or other removable media, please make\n"
 #~ "sure the floppy disk or medium is correctly mounted."
 #~ msgstr ""
 #~ "Ubwoko i Urufunguzo IDOSIYE kugirango Ukoresha: ku birabonetse i "
@@ -35522,9 +35482,9 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please make sure the key file for user '%s' can be \n"
-#~ "accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
-#~ "the key file is on a floppy disk or other removable media, please make \n"
+#~ "Please make sure the key file for user '%s' can be\n"
+#~ "accessed. If the key file is on your harddisk, simply press 'Ok'. If\n"
+#~ "the key file is on a floppy disk or other removable media, please make\n"
 #~ "sure the floppy disk or medium is correctly mounted."
 #~ msgstr ""
 #~ "Ubwoko i Urufunguzo IDOSIYE kugirango Ukoresha: birabonetse i Urufunguzo "
@@ -35533,22 +35493,22 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please insert chip card for \n"
+#~ "Please insert chip card for\n"
 #~ "user '%s' at bank '%s'."
 #~ msgstr "Kongeramo kugirango Ukoresha: ku"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please insert chip card for \n"
+#~ "Please insert chip card for\n"
 #~ "user '%s'."
 #~ msgstr "Kongeramo kugirango Ukoresha:"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please make sure the key file for the newly created user can be \n"
-#~ "accessed. If you want to create the key file on your harddisk, simply \n"
-#~ "press 'Ok'. If you want to create the key on a floppy disk or other \n"
-#~ "removable media, please make sure the floppy disk or medium is \n"
+#~ "Please make sure the key file for the newly created user can be\n"
+#~ "accessed. If you want to create the key file on your harddisk, simply\n"
+#~ "press 'Ok'. If you want to create the key on a floppy disk or other\n"
+#~ "removable media, please make sure the floppy disk or medium is\n"
 #~ "correctly mounted."
 #~ msgstr ""
 #~ "Ubwoko i Urufunguzo IDOSIYE kugirango i Byaremwe Ukoresha: birabonetse "
@@ -35557,8 +35517,8 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "The key file does not seem to be the correct \n"
-#~ "file for user '%s' at bank '%s'. Please make \n"
+#~ "The key file does not seem to be the correct\n"
+#~ "file for user '%s' at bank '%s'. Please make\n"
 #~ "sure the correct key file can be accessed."
 #~ msgstr ""
 #~ "Urufunguzo IDOSIYE OYA Kuri i IDOSIYE kugirango Ukoresha: ku Ubwoko i "
@@ -35566,8 +35526,8 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "The key file does not seem to be the correct \n"
-#~ "file for user '%s'. Please make sure the \n"
+#~ "The key file does not seem to be the correct\n"
+#~ "file for user '%s'. Please make sure the\n"
 #~ "correct key file can be accessed."
 #~ msgstr ""
 #~ "Urufunguzo IDOSIYE OYA Kuri i IDOSIYE kugirango Ukoresha: Ubwoko i "
@@ -35575,20 +35535,20 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please insert the correct chip card for \n"
+#~ "Please insert the correct chip card for\n"
 #~ "user '%s' at bank '%s'."
 #~ msgstr "Kongeramo i kugirango Ukoresha: ku"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please insert the correct chip card for \n"
+#~ "Please insert the correct chip card for\n"
 #~ "user '%s'."
 #~ msgstr "Kongeramo i kugirango Ukoresha:"
 
 #, fuzzy
 #~ msgid ""
-#~ "The key file does not seem to be the correct \n"
-#~ "file for the newly created user. Please make \n"
+#~ "The key file does not seem to be the correct\n"
+#~ "file for the newly created user. Please make\n"
 #~ "sure the correct key file can be accessed."
 #~ msgstr ""
 #~ "Urufunguzo IDOSIYE OYA Kuri i IDOSIYE kugirango i Byaremwe Ukoresha: "
@@ -35596,28 +35556,28 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please insert the correct chip card for \n"
+#~ "Please insert the correct chip card for\n"
 #~ "the newly created user."
 #~ msgstr "Kongeramo i kugirango i Byaremwe Ukoresha:"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please enter PIN for \n"
+#~ "Please enter PIN for\n"
 #~ "user '%s' at bank '%s'\n"
 #~ "at the keypad of your chip card reader."
 #~ msgstr "Injiza kugirango Ukoresha: ku ku i Bya"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please enter PIN for \n"
+#~ "Please enter PIN for\n"
 #~ "user '%s'\n"
 #~ "at the keypad of your chip card reader."
 #~ msgstr "Injiza kugirango Ukoresha: ku i Bya"
 
 #, fuzzy
 #~ msgid ""
-#~ "Please enter PIN for \n"
-#~ "the newly created user \n"
+#~ "Please enter PIN for\n"
+#~ "the newly created user\n"
 #~ "at the keypad of your chip card reader."
 #~ msgstr "Injiza kugirango i Byaremwe Ukoresha: ku i Bya"
 
@@ -35651,13 +35611,13 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "GnuCash can import financial data from OFX (Quicken \n"
+#~ "GnuCash can import financial data from OFX (Quicken\n"
 #~ "Interchange Format) files written by Quicken/QuickBooks,\n"
-#~ "MS Money, Moneydance, and many other programs. \n"
+#~ "MS Money, Moneydance, and many other programs.\n"
 #~ "\n"
 #~ "The import process has several steps. Your GnuCash\n"
 #~ "accounts will not be changed until you click \"Finish\"\n"
-#~ "at the end of the process. \n"
+#~ "at the end of the process.\n"
 #~ "\n"
 #~ "Click \"Next\" to start loading your OFX data, or \"Cancel\"\n"
 #~ "to abort the process. "
@@ -36274,8 +36234,8 @@ msgstr "a IMPINDURAGACIRO"
 
 #, fuzzy
 #~ msgid ""
-#~ "GnuCash can act as a simple web browser!  To display\n"
-#~ "a web page as a report, use the Sample & Custom -> \n"
+#~ "GnuCash can act as a simple web browser! To display\n"
+#~ "a web page as a report, use the Sample & Custom ->\n"
 #~ "\"Custom Web Report\" report."
 #~ msgstr ""
 #~ "Nka a Byoroheje Urubuga Mucukumbuzi Urubuga Ipaji Nka a Icyegeranyo "
