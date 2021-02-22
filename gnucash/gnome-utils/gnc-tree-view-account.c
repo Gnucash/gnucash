@@ -1557,7 +1557,7 @@ get_selected_accounts_helper (GtkTreeModel *s_model,
     /* Only selected if it passes the filter */
     if (gtvsi->priv->filter_fn == NULL || gtvsi->priv->filter_fn(account, gtvsi->priv->filter_data))
     {
-        gtvsi->return_list = g_list_append(gtvsi->return_list, account);
+        gtvsi->return_list = g_list_prepend (gtvsi->return_list, account);
     }
 }
 
@@ -1580,6 +1580,7 @@ gnc_tree_view_account_get_selected_accounts (GncTreeViewAccount *view)
     info.priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
     gtk_tree_selection_selected_foreach(selection, get_selected_accounts_helper, &info);
+    info.return_list = g_list_reverse (info.return_list);
     return info.return_list;
 }
 

@@ -569,7 +569,7 @@ xaccTransSortSplits (Transaction *trans)
         split = node->data;
         if (gnc_numeric_negative_p (xaccSplitGetValue(split)))
             continue;
-        new_list = g_list_append(new_list, split);
+        new_list = g_list_prepend (new_list, split);
     }
 
     /* then credits */
@@ -578,12 +578,12 @@ xaccTransSortSplits (Transaction *trans)
         split = node->data;
         if (!gnc_numeric_negative_p (xaccSplitGetValue(split)))
             continue;
-        new_list = g_list_append(new_list, split);
+        new_list = g_list_prepend (new_list, split);
     }
 
     /* install newly sorted list */
     g_list_free(trans->splits);
-    trans->splits = new_list;
+    trans->splits = g_list_reverse (new_list);
 }
 
 

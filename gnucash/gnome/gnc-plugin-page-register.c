@@ -3722,7 +3722,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction* action,
         {
             if (xaccSplitGetAccount (split) == account)
             {
-                splits = g_list_append (splits, split);
+                splits = g_list_prepend (splits, split);
                 gnc_ui_print_check_dialog_create (window, splits);
                 g_list_free (splits);
             }
@@ -3733,7 +3733,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction* action,
                 split = gnc_split_register_get_current_trans_split (reg, NULL);
                 if (split)
                 {
-                    splits = g_list_append (splits, split);
+                    splits = g_list_prepend (splits, split);
                     gnc_ui_print_check_dialog_create (window, splits);
                     g_list_free (splits);
                 }
@@ -5349,18 +5349,19 @@ gppr_account_destroy_cb (Account* account)
         ledger_type = gnc_ledger_display_type (priv->ledger);
         if (ledger_type == LD_GL)
         {
-            kill = g_list_append (kill, page);
+            kill = g_list_prepend (kill, page);
             /* kill it */
         }
         else if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
         {
             if (guid_compare (acct_guid, &priv->key) == 0)
             {
-                kill = g_list_append (kill, page);
+                kill = g_list_prepend (kill, page);
             }
         }
     }
 
+    kill = g_list_reverse (kill);
     /* Now kill them. */
     for (item = kill; item; item = g_list_next (item))
     {

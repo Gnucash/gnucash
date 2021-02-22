@@ -1629,7 +1629,7 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
         if (col != NULL)
         {
             gtk_tree_view_append_column (priv->totals_tree_view, col);
-            totals_col_list = g_list_append (totals_col_list, col);
+            totals_col_list = g_list_prepend (totals_col_list, col);
         }
 
         num_periods_visible = g_list_length (col_list);
@@ -1639,7 +1639,7 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
     gdk_rgba_free (note_color_selected);
 
     priv->period_col_list = col_list;
-    priv->totals_col_list = totals_col_list;
+    priv->totals_col_list = g_list_reverse (totals_col_list);
 
     if (priv->total_col == NULL)
     {

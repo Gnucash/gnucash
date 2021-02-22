@@ -522,9 +522,10 @@ gnc_sx_get_instances(const GDate *range_end, gboolean include_disabled)
             SchedXaction *sx = (SchedXaction*)sx_iter->data;
             if (xaccSchedXactionGetEnabled(sx))
             {
-                enabled_sxes = g_list_append(enabled_sxes, sx);
+                enabled_sxes = g_list_prepend (enabled_sxes, sx);
             }
         }
+        enabled_sxes = g_list_reverse (enabled_sxes);
         instances->sx_instance_list = gnc_g_list_map(enabled_sxes, (GncGMapFunc)_gnc_sx_gen_instances, (gpointer)range_end);
         g_list_free(enabled_sxes);
     }
