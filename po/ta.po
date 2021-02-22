@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-02-10 23:02+0100\n"
+"POT-Creation-Date: 2021-02-22 17:34+0100\n"
 "PO-Revision-Date: 2014-06-02 12:18+0530\n"
 "Last-Translator: Shanmugam R. <shanfaace@yahoo.co.in>\n"
 "Language-Team: NONE\n"
@@ -486,8 +486,8 @@ msgid ""
 msgstr ""
 "QIF கோப்புகள் மற்றும் OFX கோப்புகளை ஏற்றுமதி செய்யும் Quicken, MS Money மற்றும் மற்ற "
 "நிரல்களிலிருந்து நீங்கள் எளிதாக உள்ள உங்கள் நிதி தரவை இறக்குமதி செய்யலாம். கோப்பு "
-"மெனுவில், துணை-மெனு இறக்குமதியை கிளிக் செய்து QIF அல்லது OFX கோப்பினை முறையே "
-"கிளிக் செய்யவும். பின், வழங்கப்பட்டுள்ள குறிப்புகளை பின்பற்றவும்."
+"மெனுவில், துணை-மெனு இறக்குமதியை கிளிக் செய்து QIF அல்லது OFX கோப்பினை முறையே கிளிக் "
+"செய்யவும். பின், வழங்கப்பட்டுள்ள குறிப்புகளை பின்பற்றவும்."
 
 #: doc/tip_of_the_day.list.c:18
 msgid ""
@@ -806,8 +806,8 @@ msgstr ""
 "வாழ்த்துக்கள்! கணக்குபுத்தகங்களை மூடுவதை நீங்கள் முடித்துவிட்டீர்கள்!\n"
 
 #: gnucash/gnome/assistant-acct-period.c:589
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1268
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1273
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1274
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1279
 #: gnucash/report/reports/standard/budget-flow.scm:44
 msgid "Period"
 msgstr "காலம்"
@@ -898,65 +898,65 @@ msgstr ""
 msgid "New Book Options"
 msgstr "புதிய புத்தக விருப்பங்கள்"
 
-#: gnucash/gnome/assistant-loan.cpp:126
+#: gnucash/gnome/assistant-loan.cpp:127
 msgid "Taxes"
 msgstr "வரிகள்"
 
-#: gnucash/gnome/assistant-loan.cpp:126
+#: gnucash/gnome/assistant-loan.cpp:127
 msgid "Tax Payment"
 msgstr "வரிக் கட்டணம்"
 
-#: gnucash/gnome/assistant-loan.cpp:127
+#: gnucash/gnome/assistant-loan.cpp:128
 msgid "Insurance"
 msgstr "காப்பீடு"
 
-#: gnucash/gnome/assistant-loan.cpp:127
+#: gnucash/gnome/assistant-loan.cpp:128
 msgid "Insurance Payment"
 msgstr "காப்பீடு கட்டணம்"
 
 #. Translators: PMI stands for Private Mortgage Insurance.
-#: gnucash/gnome/assistant-loan.cpp:129
+#: gnucash/gnome/assistant-loan.cpp:130
 msgid "PMI"
 msgstr "PMI"
 
-#: gnucash/gnome/assistant-loan.cpp:129
+#: gnucash/gnome/assistant-loan.cpp:130
 msgid "PMI Payment"
 msgstr "PMI கட்டணம்"
 
-#: gnucash/gnome/assistant-loan.cpp:130
+#: gnucash/gnome/assistant-loan.cpp:131
 msgid "Other Expense"
 msgstr "மற்றச் செலவு"
 
-#: gnucash/gnome/assistant-loan.cpp:130
+#: gnucash/gnome/assistant-loan.cpp:131
 msgid "Miscellaneous Payment"
 msgstr "மற்ற கட்டணம்"
 
 #. Translators: %s is "Taxes",
 #. "Insurance", or similar.
-#: gnucash/gnome/assistant-loan.cpp:765
+#: gnucash/gnome/assistant-loan.cpp:766
 #, c-format
 msgid "... pay \"%s\"?"
 msgstr "... \"%s\" கட்டவா?"
 
-#: gnucash/gnome/assistant-loan.cpp:777
+#: gnucash/gnome/assistant-loan.cpp:778
 msgid "via Escrow account?"
 msgstr "மூன்றாம்தர கணக்கின் வழியாகவா?"
 
-#: gnucash/gnome/assistant-loan.cpp:924
+#: gnucash/gnome/assistant-loan.cpp:925
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2902
 #: gnucash/register/ledger-core/split-register.c:2667
 msgid "Loan"
 msgstr "கடன்"
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
-#: gnucash/gnome/assistant-loan.cpp:1459
+#: gnucash/gnome/assistant-loan.cpp:1460
 #, c-format
 msgid "Loan Repayment Option: \"%s\""
 msgstr "கடன் மறுகட்டண விருப்பம்: \"%s\""
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
-#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:941
+#: gnucash/gnome/assistant-loan.cpp:1862 gnucash/gnome/dialog-lot-viewer.c:941
 #: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:429
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
 #: gnucash/gtkbuilder/dialog-doclink.glade:612
@@ -969,7 +969,7 @@ msgstr "கடன் மறுகட்டண விருப்பம்: \"%s\
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:49
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
 #: gnucash/import-export/import-main-matcher.c:1089
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
@@ -979,8 +979,8 @@ msgstr "கடன் மறுகட்டண விருப்பம்: \"%s\
 #: gnucash/register/ledger-core/split-register-model.c:232
 #: gnucash/report/reports/standard/account-summary.scm:83
 #: gnucash/report/reports/standard/advanced-portfolio.scm:73
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1095
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1100
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1105
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1110
 #: gnucash/report/reports/standard/cashflow-barchart.scm:343
 #: gnucash/report/reports/standard/category-barchart.scm:632
 #: gnucash/report/reports/standard/category-barchart.scm:653
@@ -1006,14 +1006,14 @@ msgstr "கடன் மறுகட்டண விருப்பம்: \"%s\
 msgid "Date"
 msgstr "தேதி"
 
-#: gnucash/gnome/assistant-loan.cpp:1867 gnucash/gnome/assistant-loan.cpp:2846
-#: gnucash/gnome/assistant-loan.cpp:2908 gnucash/gnome/assistant-loan.cpp:2921
+#: gnucash/gnome/assistant-loan.cpp:1868 gnucash/gnome/assistant-loan.cpp:2847
+#: gnucash/gnome/assistant-loan.cpp:2909 gnucash/gnome/assistant-loan.cpp:2922
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2863
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2904
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2909
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2920
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2993
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3079
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2996
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3082
 #: gnucash/gtkbuilder/dialog-payment.glade:436
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:132
 #: gnucash/register/ledger-core/split-register.c:2628
@@ -1029,11 +1029,11 @@ msgstr "தேதி"
 msgid "Payment"
 msgstr "கட்டணம்"
 
-#: gnucash/gnome/assistant-loan.cpp:1873 gnucash/gnome/assistant-loan.cpp:2941
+#: gnucash/gnome/assistant-loan.cpp:1874 gnucash/gnome/assistant-loan.cpp:2942
 msgid "Principal"
 msgstr "அசல்"
 
-#: gnucash/gnome/assistant-loan.cpp:1879 gnucash/gnome/assistant-loan.cpp:2961
+#: gnucash/gnome/assistant-loan.cpp:1880 gnucash/gnome/assistant-loan.cpp:2962
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2858
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2895
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2903
@@ -1050,7 +1050,7 @@ msgstr "அசல்"
 msgid "Interest"
 msgstr "வட்டி"
 
-#: gnucash/gnome/assistant-loan.cpp:2847
+#: gnucash/gnome/assistant-loan.cpp:2848
 msgid "Escrow Payment"
 msgstr "மூன்றாம்தர கட்டணம்"
 
@@ -1071,7 +1071,7 @@ msgstr "விலை சேர்க்கும் போது பிழை."
 #: gnucash/gnome/dialog-find-transactions.c:109
 #: gnucash/import-export/aqb/gnc-ab-utils.c:541
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:151
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
 #: gnucash/import-export/import-main-matcher.c:1090
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
@@ -1134,7 +1134,7 @@ msgstr "திருத்து...."
 #: gnucash/gnome/dialog-invoice.c:2599 gnucash/gnome/dialog-invoice.c:2824
 #: gnucash/gnome/dialog-invoice.c:2825 gnucash/gnome/dialog-invoice.c:3534
 #: gnucash/gnome-search/dialog-search.c:1073
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2998
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3001
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
 #: gnucash/report/reports/standard/invoice.scm:787
 #: libgnucash/engine/Account.cpp:173 libgnucash/engine/gncInvoice.c:1082
@@ -1154,7 +1154,7 @@ msgstr "வவூச்சர்"
 #: gnucash/gnome/gnc-plugin-page-report.c:1853
 #: gnucash/gnome-search/dialog-search.c:1089
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2908
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3073
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3076
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:167
 #: gnucash/gtkbuilder/dialog-invoice.glade:8
 #: gnucash/gtkbuilder/dialog-invoice.glade:205
@@ -1176,7 +1176,7 @@ msgstr "விவரப்பட்டியல்"
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
 #: gnucash/gtkbuilder/gnc-frequency.glade:656
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:48
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:56
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
 #: gnucash/import-export/import-pending-matches.c:192
 #: gnucash/report/reports/standard/register.scm:217
 #: gnucash/report/trep-engine.scm:280 gnucash/report/trep-engine.scm:313
@@ -1318,7 +1318,7 @@ msgstr "சரக்கை அழிக்கவா?"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1111
 #: gnucash/gnome/gnc-plugin-page-register2.c:1630
-#: gnucash/gnome/gnc-plugin-page-register.c:2015
+#: gnucash/gnome/gnc-plugin-page-register.c:2011
 #: gnucash/gnome/gnc-split-reg.c:975 gnucash/gnome/gnc-split-reg.c:1013
 #: gnucash/gnome/gnc-split-reg.c:1235 gnucash/gnome/gnc-split-reg.c:1503
 #: gnucash/gnome/gnc-split-reg.c:1543 gnucash/gnome/window-reconcile2.c:2125
@@ -1334,7 +1334,7 @@ msgstr "சரக்கை அழிக்கவா?"
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:886
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1023
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1063
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2355
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2358
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:202
 #: gnucash/gtkbuilder/dialog-account.glade:20
 #: gnucash/gtkbuilder/dialog-account.glade:383
@@ -1662,7 +1662,7 @@ msgstr "பரிமாற்ற விவரங்கள்"
 #: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:417
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:828
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2812
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2815
 #: gnucash/gtkbuilder/dialog-book-close.glade:163
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:97
 #: gnucash/gtkbuilder/dialog-date-close.glade:140
@@ -1671,7 +1671,7 @@ msgstr "பரிமாற்ற விவரங்கள்"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
@@ -1865,9 +1865,9 @@ msgstr "சமநிலைபடுத்தப்பட்டது"
 
 #: gnucash/gnome/dialog-find-transactions2.c:117
 #: gnucash/gnome/dialog-find-transactions.c:115
-#: gnucash/report/html-acct-table.scm:630
+#: gnucash/report/html-acct-table.scm:613
 #: gnucash/report/reports/standard/equity-statement.scm:169
-#: gnucash/report/reports/standard/income-statement.scm:268
+#: gnucash/report/reports/standard/income-statement.scm:267
 #: gnucash/report/reports/standard/trial-balance.scm:291
 msgid "Closing Entries"
 msgstr "உள்ளீடுகளை மூடுகிறது"
@@ -1890,8 +1890,8 @@ msgstr "பங்கு விலை"
 #: gnucash/gnome/dialog-find-transactions2.c:124
 #: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:971
 #: gnucash/gnome/gnc-split-reg.c:694 gnucash/gnome/reconcile-view.c:413
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2892
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2904
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2895
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2907
 #: gnucash/gtkbuilder/assistant-loan.glade:199
 #: gnucash/gtkbuilder/assistant-loan.glade:617
 #: gnucash/gtkbuilder/assistant-loan.glade:764
@@ -1922,8 +1922,8 @@ msgstr "தொகை"
 #: gnucash/gnome/dialog-find-transactions.c:124
 #: gnucash/gnome/dialog-lot-viewer.c:977
 #: gnucash/gnome/dialog-sx-since-last-run.c:1051
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2885
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2905
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:78
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1081
 #: gnucash/report/reports/standard/portfolio.scm:258
@@ -1936,7 +1936,7 @@ msgstr "மதிப்பு"
 #: gnucash/gnome/dialog-find-transactions.c:126
 #: gnucash/gnome/dialog-invoice.c:3345 gnucash/gnome/dialog-invoice.c:3379
 #: gnucash/gnome/dialog-invoice.c:3413
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2720
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2723
 #: gnucash/gtkbuilder/dialog-invoice.glade:93
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:161
 msgid "Date Posted"
@@ -1948,8 +1948,8 @@ msgstr "வெளியிடப்பட்ட தேதி"
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.c:2507
-#: gnucash/gnome/gnc-plugin-page-register.c:4212
+#: gnucash/gnome/gnc-plugin-page-register.c:2503
+#: gnucash/gnome/gnc-plugin-page-register.c:4208
 #: gnucash/gnome-search/dialog-search.c:875
 #: gnucash/gnome-search/dialog-search.c:881
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
@@ -1963,17 +1963,17 @@ msgstr "எண்/செயல்"
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
 #: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.c:2512
+#: gnucash/gnome/gnc-plugin-page-register.c:2508
 #: gnucash/gnome/gnc-split-reg.c:703 gnucash/gnome-search/dialog-search.c:874
 #: gnucash/gnome-search/dialog-search.c:882
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2749
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2751
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2769
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2771
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2752
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2754
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2772
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2774
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:102
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:150
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
 #: gnucash/register/ledger-core/split-register-model.c:327
 #: gnucash/report/reports/standard/invoice.scm:92
@@ -1987,8 +1987,8 @@ msgstr "செயல்"
 #: gnucash/gnome/dialog-find-transactions.c:136
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
-#: gnucash/gnome/gnc-plugin-page-register.c:2506
-#: gnucash/gnome/gnc-plugin-page-register.c:4211
+#: gnucash/gnome/gnc-plugin-page-register.c:2502
+#: gnucash/gnome/gnc-plugin-page-register.c:4207
 #: gnucash/gnome-search/dialog-search.c:877
 #: gnucash/gnome-search/dialog-search.c:883
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:614
@@ -2003,10 +2003,10 @@ msgstr "பரிமாற்ற எண்"
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
 #: gnucash/gnome/dialog-find-transactions.c:180
-#: gnucash/gnome/gnc-plugin-page-register.c:2511
+#: gnucash/gnome/gnc-plugin-page-register.c:2507
 #: gnucash/gnome/gnc-split-reg.c:691 gnucash/gnome-search/dialog-search.c:876
 #: gnucash/gnome-search/dialog-search.c:884
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2765
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2768
 #: gnucash/gtkbuilder/dialog-payment.glade:264
 #: gnucash/gtkbuilder/gnc-date-format.glade:98
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:614
@@ -2024,15 +2024,15 @@ msgstr "விளக்கம் / குறிப்புகள் / மெம
 #: gnucash/gnome/dialog-find-transactions2.c:153
 #: gnucash/gnome/dialog-find-transactions.c:153
 #: gnucash/gnome/gnc-split-reg.c:697
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2785
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2787
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2796
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2798
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2816
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2788
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2790
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2799
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2801
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2819
 #: gnucash/gtkbuilder/dialog-payment.glade:486
 #: gnucash/gtkbuilder/dialog-transfer.glade:215
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 #: gnucash/import-export/import-main-matcher.c:1094
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
@@ -2052,8 +2052,8 @@ msgstr "மெமொ"
 #: gnucash/gnome/gnc-split-reg.c:706
 #: gnucash/gnome-utils/gnc-tree-view-account.c:960
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:473
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2814
-#: gnucash/gtkbuilder/assistant-acct-period.glade:155
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2817
+#: gnucash/gtkbuilder/assistant-acct-period.glade:146
 #: gnucash/gtkbuilder/dialog-customer.glade:463
 #: gnucash/gtkbuilder/dialog-invoice.glade:445
 #: gnucash/gtkbuilder/dialog-invoice.glade:1154
@@ -2065,7 +2065,7 @@ msgstr "மெமொ"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-exp/csv-tree-export.c:157
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
 #: gnucash/register/ledger-core/split-register-model.c:491
 #: gnucash/report/reports/standard/account-summary.scm:438
@@ -2170,7 +2170,7 @@ msgstr "ஒரு ஆர்டரிடன் இணைக்கப்பட்�
 
 #: gnucash/gnome/dialog-invoice.c:836 gnucash/gnome/dialog-invoice.c:3354
 #: gnucash/gnome/dialog-invoice.c:3388 gnucash/gnome/dialog-invoice.c:3422
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2736
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2739
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:162
 #: gnucash/register/ledger-core/split-register-model.c:239
 #: gnucash/report/reports/aging.scm:388
@@ -2450,7 +2450,7 @@ msgstr "வவூச்சர் குறிப்புகள்"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:811
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2872
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2875
 #: gnucash/gtkbuilder/assistant-loan.glade:283
 #: gnucash/gtkbuilder/dialog-doclink.glade:639
 #: gnucash/gtkbuilder/dialog-fincalc.glade:727
@@ -2494,7 +2494,7 @@ msgstr "திறக்கப்பட்டது"
 #: gnucash/gnome/reconcile-view.c:425
 #: gnucash/gtkbuilder/dialog-payment.glade:473
 #: gnucash/gtkbuilder/dialog-transfer.glade:165
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/register/ledger-core/split-register-model.c:255
 #: gnucash/register/ledger-core/split-register-model.c:275
 #: gnucash/report/reports/standard/general-journal.scm:95
@@ -2584,7 +2584,7 @@ msgid "Only Active?"
 msgstr "செயல்படுத்த மட்டுமா?"
 
 #: gnucash/gnome/dialog-job.c:577 gnucash/gnome/dialog-job.c:590
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2926
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2929
 #: gnucash/gtkbuilder/dialog-job.glade:204
 #: gnucash/register/ledger-core/split-register-model.c:369
 msgid "Rate"
@@ -2619,7 +2619,7 @@ msgid "Closed"
 msgstr "மூடப்பட்டது"
 
 #: gnucash/gnome/dialog-lot-viewer.c:890
-#: gnucash/gtkbuilder/assistant-acct-period.glade:143
+#: gnucash/gtkbuilder/assistant-acct-period.glade:134
 #: gnucash/report/html-fonts.scm:106
 #: gnucash/report/reports/standard/register.scm:347
 msgid "Title"
@@ -2629,7 +2629,7 @@ msgstr "தலைப்பு"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:854
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3112
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3115
 #: gnucash/register/ledger-core/split-register-model.c:320
 #: gnucash/register/ledger-core/split-register-model.c:484
 #: gnucash/report/reports/standard/account-summary.scm:423
@@ -2744,7 +2744,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:1270 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1077
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2783
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2786
 #: gnucash/gtkbuilder/dialog-customer.glade:479
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:151
 #: gnucash/gtkbuilder/dialog-invoice.glade:479
@@ -2763,7 +2763,7 @@ msgstr "வாடிக்கையாளர்"
 
 #: gnucash/gnome/dialog-payment.c:1274 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1109
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2794
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2797
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:168
 #: gnucash/gtkbuilder/dialog-payment.glade:44
 #: gnucash/gtkbuilder/dialog-vendor.glade:475
@@ -2838,7 +2838,7 @@ msgid ""
 "If you continue these splits will be ignored:\n"
 "\n"
 "%s\n"
-"Do you wish to continue and ignore these splits ?"
+"Do you wish to continue and ignore these splits?"
 msgstr ""
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
@@ -2855,16 +2855,16 @@ msgstr "விலைகளை அழிக்கவா?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:427
 #: gnucash/gtkbuilder/dialog-invoice.glade:615
-#: gnucash/report/reports/standard/budget-income-statement.scm:124
+#: gnucash/report/reports/standard/budget-income-statement.scm:123
 #: gnucash/report/reports/standard/equity-statement.scm:85
-#: gnucash/report/reports/standard/income-statement.scm:117
+#: gnucash/report/reports/standard/income-statement.scm:116
 #: gnucash/report/reports/standard/trial-balance.scm:91
 msgid "Entries"
 msgstr "உள்ளிடுகள்"
 
 #: gnucash/gnome/dialog-price-edit-db.c:457
 #, fuzzy
-msgid "Are you sure you want to delete these prices ?"
+msgid "Are you sure you want to delete these prices?"
 msgstr "நீங்கள் தேர்ந்தெடுத்த விலையை உறுதியாக நீக்க வேண்டுமா?"
 
 #: gnucash/gnome/dialog-price-editor.c:221
@@ -2919,8 +2919,8 @@ msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
-"GUIDகளை %s சரிபார்த்தல் வடிவ கோப்பு '%s' இல் மற்றும் %s சரிபார்த்தல் வடிவ கோப்பினை "
-"'%s' பொருத்தவும்."
+"GUIDகளை %s சரிபார்த்தல் வடிவ கோப்பு '%s' இல் மற்றும் %s சரிபார்த்தல் வடிவ கோப்பினை '%s' "
+"பொருத்தவும்."
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -3331,7 +3331,7 @@ msgstr "விற்பனையாளரை தேடு "
 
 #: gnucash/gnome/gnc-budget-view.c:499
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2951
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2976
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2979
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:70
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:76
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:85
@@ -3340,7 +3340,7 @@ msgstr "விற்பனையாளரை தேடு "
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
 #: gnucash/register/ledger-core/split-register.c:2716
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1088
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1279
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1285
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
@@ -3351,8 +3351,8 @@ msgstr "ஊதியம்"
 #: gnucash/gnome/gnc-budget-view.c:502
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:122
-#: gnucash/report/reports/standard/budget-income-statement.scm:522
-#: gnucash/report/reports/standard/income-statement.scm:512
+#: gnucash/report/reports/standard/budget-income-statement.scm:521
+#: gnucash/report/reports/standard/income-statement.scm:511
 #: gnucash/report/report-utilities.scm:205
 msgid "Expenses"
 msgstr "செலவுகள்"
@@ -3376,7 +3376,7 @@ msgstr "ஏற்கனவே இருக்கும் ஒரு பட்ஜ
 #: gnucash/gnome/gnc-budget-view.c:1652 gnucash/gnome/window-reconcile2.c:1069
 #: gnucash/gnome/window-reconcile.c:1122
 #: gnucash/gnome-utils/gnc-tree-view-account.c:923
-#: gnucash/report/html-acct-table.scm:829 gnucash/report/reports/aging.scm:544
+#: gnucash/report/html-acct-table.scm:800 gnucash/report/reports/aging.scm:544
 #: gnucash/report/reports/aging.scm:831
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:294
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1053
@@ -4260,19 +4260,19 @@ msgstr "அழி"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:454
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1991
-#: gnucash/gnome/gnc-plugin-page-register.c:1964
-#: gnucash/gnome/gnc-plugin-page-register.c:5068
+#: gnucash/gnome/gnc-plugin-page-register.c:1960
+#: gnucash/gnome/gnc-plugin-page-register.c:5064
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:520
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:526
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2829
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2831
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2833
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2835
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2846
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2850
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2832
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2834
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2836
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2838
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2849
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2853
 #: gnucash/gtkbuilder/dialog-preferences.glade:980
 #: gnucash/report/report-core.scm:158
 #: gnucash/report/reports/example/average-balance.scm:92
@@ -4283,16 +4283,16 @@ msgstr ""
 #: gnucash/report/reports/standard/account-summary.scm:85
 #: gnucash/report/reports/standard/advanced-portfolio.scm:163
 #: gnucash/report/reports/standard/balance-forecast.scm:37
-#: gnucash/report/reports/standard/balance-sheet.scm:87
+#: gnucash/report/reports/standard/balance-sheet.scm:86
 #: gnucash/report/reports/standard/balsheet-pnl.scm:81
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:52
 #: gnucash/report/reports/standard/budget-barchart.scm:38
-#: gnucash/report/reports/standard/budget-income-statement.scm:75
+#: gnucash/report/reports/standard/budget-income-statement.scm:74
 #: gnucash/report/reports/standard/cashflow-barchart.scm:45
 #: gnucash/report/reports/standard/category-barchart.scm:75
 #: gnucash/report/reports/standard/equity-statement.scm:68
 #: gnucash/report/reports/standard/income-gst-statement.scm:125
-#: gnucash/report/reports/standard/income-statement.scm:62
+#: gnucash/report/reports/standard/income-statement.scm:61
 #: gnucash/report/reports/standard/net-charts.scm:45
 #: gnucash/report/reports/standard/portfolio.scm:69
 #: gnucash/report/reports/standard/trial-balance.scm:76
@@ -4477,7 +4477,7 @@ msgstr "குறிப்புகள்"
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:227
 #: gnucash/report/reports/standard/budget-flow.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:59
+#: gnucash/report/reports/standard/budget-income-statement.scm:58
 #: gnucash/report/reports/standard/budget.scm:94
 msgid "Budget"
 msgstr "பட்ஜெட்"
@@ -5622,13 +5622,13 @@ msgstr "பொது குறிப்பேடு"
 #. Translators: %s is the name
 #. of the tab page
 #: gnucash/gnome/gnc-plugin-page-register2.c:1620
-#: gnucash/gnome/gnc-plugin-page-register.c:2005
+#: gnucash/gnome/gnc-plugin-page-register.c:2001
 #, c-format
 msgid "Save changes to %s?"
 msgstr "%s இல் மாற்றங்களை சேமிக்கவா?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1624
-#: gnucash/gnome/gnc-plugin-page-register.c:2009
+#: gnucash/gnome/gnc-plugin-page-register.c:2005
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -5639,12 +5639,12 @@ msgstr ""
 "விரும்புகிறீர்களா?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1627
-#: gnucash/gnome/gnc-plugin-page-register.c:2012
+#: gnucash/gnome/gnc-plugin-page-register.c:2008
 msgid "_Discard Transaction"
 msgstr "பரிமாற்றத்தை நீக்கு (_D)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1631
-#: gnucash/gnome/gnc-plugin-page-register.c:2016
+#: gnucash/gnome/gnc-plugin-page-register.c:2012
 msgid "_Save Transaction"
 msgstr "பரிமாற்றத்தை சேமி (_S)"
 
@@ -5653,35 +5653,35 @@ msgstr "பரிமாற்றத்தை சேமி (_S)"
 #: gnucash/gnome/gnc-plugin-page-register2.c:1707
 #: gnucash/gnome/gnc-plugin-page-register2.c:1730
 #: gnucash/gnome/gnc-plugin-page-register2.c:1778
-#: gnucash/gnome/gnc-plugin-page-register.c:2049
-#: gnucash/gnome/gnc-plugin-page-register.c:2084
-#: gnucash/gnome/gnc-plugin-page-register.c:2097
-#: gnucash/gnome/gnc-plugin-page-register.c:2160
-#: gnucash/gnome/gnc-plugin-page-register.c:2265
-#: gnucash/gnome/gnc-plugin-page-register.c:2403
+#: gnucash/gnome/gnc-plugin-page-register.c:2045
+#: gnucash/gnome/gnc-plugin-page-register.c:2080
+#: gnucash/gnome/gnc-plugin-page-register.c:2093
+#: gnucash/gnome/gnc-plugin-page-register.c:2156
+#: gnucash/gnome/gnc-plugin-page-register.c:2261
+#: gnucash/gnome/gnc-plugin-page-register.c:2399
 msgid "unknown"
 msgstr "தெரியாத "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1681
 #: gnucash/gnome/gnc-plugin-page-register2.c:2416
 #: gnucash/gnome/gnc-plugin-page-register.c:906
-#: gnucash/gnome/gnc-plugin-page-register.c:2070
-#: gnucash/gnome/gnc-plugin-page-register.c:3563
+#: gnucash/gnome/gnc-plugin-page-register.c:2066
+#: gnucash/gnome/gnc-plugin-page-register.c:3559
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
 msgstr "பொது குறிப்பேடு"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1683
 #: gnucash/gnome/gnc-plugin-page-register2.c:2422
-#: gnucash/gnome/gnc-plugin-page-register.c:2072
-#: gnucash/gnome/gnc-plugin-page-register.c:3569
+#: gnucash/gnome/gnc-plugin-page-register.c:2068
+#: gnucash/gnome/gnc-plugin-page-register.c:3565
 msgid "Portfolio"
 msgstr "போர்ட்ஃபோலியோ"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1685
 #: gnucash/gnome/gnc-plugin-page-register2.c:2428
-#: gnucash/gnome/gnc-plugin-page-register.c:2074
-#: gnucash/gnome/gnc-plugin-page-register.c:3575
+#: gnucash/gnome/gnc-plugin-page-register.c:2070
+#: gnucash/gnome/gnc-plugin-page-register.c:3571
 msgid "Search Results"
 msgstr "முடிவுகளைத் தேடு"
 
@@ -5691,17 +5691,17 @@ msgid "General Journal Report"
 msgstr "பொது குறிப்பேடு"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2424
-#: gnucash/gnome/gnc-plugin-page-register.c:3571
+#: gnucash/gnome/gnc-plugin-page-register.c:3567
 msgid "Portfolio Report"
 msgstr "போர்ட்ஃபோலியோ அறிக்கை"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2430
-#: gnucash/gnome/gnc-plugin-page-register.c:3577
+#: gnucash/gnome/gnc-plugin-page-register.c:3573
 msgid "Search Results Report"
 msgstr "முடிவுகளின் அறிக்கையைத் தேடு"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2434
-#: gnucash/gnome/gnc-plugin-page-register.c:3581
+#: gnucash/gnome/gnc-plugin-page-register.c:3577
 #: gnucash/gtkbuilder/dialog-preferences.glade:2684
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
@@ -5714,17 +5714,17 @@ msgid "Register Report"
 msgstr "பதிவேடு அறிக்கை"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2452
-#: gnucash/gnome/gnc-plugin-page-register.c:3599
+#: gnucash/gnome/gnc-plugin-page-register.c:3595
 msgid "and subaccounts"
 msgstr "மற்றும் துணைக்கணக்குகள்"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2484
-#: gnucash/gnome/gnc-plugin-page-register.c:3628
+#: gnucash/gnome/gnc-plugin-page-register.c:3624
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2874
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2893
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2911
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3018
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3023
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3021
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3026
 #: gnucash/gtkbuilder/dialog-payment.glade:312
 #: gnucash/register/ledger-core/split-register.c:2544
 #: gnucash/register/ledger-core/split-register.c:2639
@@ -5739,9 +5739,9 @@ msgid "Credit"
 msgstr "வரவு"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2487
-#: gnucash/gnome/gnc-plugin-page-register.c:3632
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3099
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3104
+#: gnucash/gnome/gnc-plugin-page-register.c:3628
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3102
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3107
 #: gnucash/gtkbuilder/dialog-payment.glade:296
 #: gnucash/register/ledger-core/split-register.c:2521
 #: gnucash/report/reports/standard/general-journal.scm:82
@@ -5753,12 +5753,12 @@ msgid "Debit"
 msgstr "பற்று"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2653
-#: gnucash/gnome/gnc-plugin-page-register.c:3765
+#: gnucash/gnome/gnc-plugin-page-register.c:3761
 msgid "Print checks from multiple accounts?"
 msgstr "பல கணக்குகளிலிருந்து அச்சினை சரிபார்க்கவா?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2655
-#: gnucash/gnome/gnc-plugin-page-register.c:3767
+#: gnucash/gnome/gnc-plugin-page-register.c:3763
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
@@ -5767,25 +5767,25 @@ msgstr ""
 "அவை இல்லையெனிலும் அவற்றை நீங்கள் சரிபார்த்து அச்சிட விரும்புகிறீர்களா?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2665
-#: gnucash/gnome/gnc-plugin-page-register.c:3777
+#: gnucash/gnome/gnc-plugin-page-register.c:3773
 msgid "_Print checks"
 msgstr "அச்சினை சரிபார்க்கிறது (_P)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2684
-#: gnucash/gnome/gnc-plugin-page-register.c:3796
+#: gnucash/gnome/gnc-plugin-page-register.c:3792
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr "நீங்கள் ஒரு வங்கி பதிவு அல்லது தேடல் முடிவுகளிலிருந்து சரிபார்த்தல்களை அச்சிடலாம்."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2896
-#: gnucash/gnome/gnc-plugin-page-register.c:3993
+#: gnucash/gnome/gnc-plugin-page-register.c:3989
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
 "ஒப்பிடப்பட்ட அல்லது தீர்க்கப்பட்ட பிரிவுடன் ஒரு பரிமாற்றத்தை உங்களால் காலியாக்க முடியாது."
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register2.c:3039
-#: gnucash/gnome/gnc-plugin-page-register.c:4264
+#: gnucash/gnome/gnc-plugin-page-register.c:4260
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2327
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
@@ -5844,98 +5844,98 @@ msgstr ""
 "புதிய பதிவேட்டில் திறந்திருந்த போது பழைய பதிவேட்டில் ஒரு கணக்கை திறக்க நீங்கள் முயற்சி "
 "செய்துள்ளீர்கள்."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3409
+#: gnucash/gnome/gnc-plugin-page-register.c:3405
 #, fuzzy
 msgid "Filter By:"
 msgstr "இதன்படி வடிகட்டு..."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3423
+#: gnucash/gnome/gnc-plugin-page-register.c:3419
 msgid "Start Date:"
 msgstr "துவக்க தேதி:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3429
+#: gnucash/gnome/gnc-plugin-page-register.c:3425
 #, fuzzy
 msgid "Show previous number of days:"
 msgstr "பங்குகளின் எண்ணிக்கையைக் காட்டு"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3436
+#: gnucash/gnome/gnc-plugin-page-register.c:3432
 msgid "End Date:"
 msgstr "முடியும் தேதி:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3446
+#: gnucash/gnome/gnc-plugin-page-register.c:3442
 #: gnucash/report/trep-engine.scm:146 gnucash/report/trep-engine.scm:420
 #, fuzzy
 msgid "Unreconciled"
 msgstr "ஒப்பிடப்படாதது (_U)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3448
+#: gnucash/gnome/gnc-plugin-page-register.c:3444
 #: gnucash/gnome-search/search-reconciled.c:218
 #: gnucash/gnome-utils/gnc-tree-view-account.c:875
 #: gnucash/report/trep-engine.scm:147 gnucash/report/trep-engine.scm:425
 msgid "Cleared"
 msgstr "தீர்க்கப்பட்டது"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3450
+#: gnucash/gnome/gnc-plugin-page-register.c:3446
 #: gnucash/gnome-search/search-reconciled.c:221
 #: gnucash/gnome-utils/gnc-tree-view-account.c:889
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 #: gnucash/import-export/import-match-picker.c:437
 #: gnucash/report/trep-engine.scm:148 gnucash/report/trep-engine.scm:430
 msgid "Reconciled"
 msgstr "ஒப்பிடப்பட்டது"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3452
+#: gnucash/gnome/gnc-plugin-page-register.c:3448
 #: gnucash/gnome-search/search-reconciled.c:224
 #: gnucash/report/trep-engine.scm:149
 msgid "Frozen"
 msgstr "உறைதல்"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3454
+#: gnucash/gnome/gnc-plugin-page-register.c:3450
 #: gnucash/gnome-search/search-reconciled.c:227
 #: gnucash/report/trep-engine.scm:150
 msgid "Voided"
 msgstr "காலியாக்கப்பட்டது"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3458
-#: gnucash/gnome/gnc-plugin-page-register.c:3460
+#: gnucash/gnome/gnc-plugin-page-register.c:3454
+#: gnucash/gnome/gnc-plugin-page-register.c:3456
 msgid "Hide:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3460
+#: gnucash/gnome/gnc-plugin-page-register.c:3456
 msgid "Show:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3565
-#: gnucash/gnome/gnc-plugin-page-register.c:3583
+#: gnucash/gnome/gnc-plugin-page-register.c:3561
+#: gnucash/gnome/gnc-plugin-page-register.c:3579
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
 msgstr "பரிமாற்ற அறிக்கை"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4000
+#: gnucash/gnome/gnc-plugin-page-register.c:3996
 #: gnucash/gnome/gnc-split-reg.c:1160
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:68
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "இந்த பரிமாற்றமானது கருத்துடன் வாசிக்க-மட்டும் என குறிப்பிடப்பட்டது: '%s'"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4080
+#: gnucash/gnome/gnc-plugin-page-register.c:4076
 #: gnucash/gnome/gnc-split-reg.c:1131
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1121
 msgid "A reversing entry has already been created for this transaction."
 msgstr "இந்த பரிமாற்றத்திற்காக ஏற்கனவே ஒரு தலைகீழான உள்ளீடு உருவாக்கப்பட்டது."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4087
+#: gnucash/gnome/gnc-plugin-page-register.c:4083
 #, fuzzy
 msgid "Reverse Transaction"
 msgstr "தலைகீழ் பரிமாற்றத்தை சேர் (_R)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4088
+#: gnucash/gnome/gnc-plugin-page-register.c:4084
 #, fuzzy
 msgid "New Transaction Information"
 msgstr "பரிமாற்றத் தகவல்"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:4176
+#: gnucash/gnome/gnc-plugin-page-register.c:4172
 #, c-format
 msgid "Sort %s by..."
 msgstr "இதன்படி %s ஐ வரிசைபடுத்து..."
@@ -5943,34 +5943,34 @@ msgstr "இதன்படி %s ஐ வரிசைபடுத்து..."
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.c:4754
+#: gnucash/gnome/gnc-plugin-page-register.c:4750
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4763
+#: gnucash/gnome/gnc-plugin-page-register.c:4759
 #, fuzzy
 #| msgid "Select Account"
 msgid "Select document"
 msgstr "கணக்கைத் தேர்ந்தெடு"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4764
+#: gnucash/gnome/gnc-plugin-page-register.c:4760
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4765
+#: gnucash/gnome/gnc-plugin-page-register.c:4761
 #: gnucash/gnome-search/dialog-search.c:323
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:172
 msgid "Select"
 msgstr "தேர்ந்தெடு"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4813
+#: gnucash/gnome/gnc-plugin-page-register.c:4809
 #, fuzzy
 #| msgid "Post Date"
 msgid "Go to Date"
 msgstr "வெளியீடு தேதி"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:5091
+#: gnucash/gnome/gnc-plugin-page-register.c:5087
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr ""
@@ -8519,10 +8519,10 @@ msgid ""
 "your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
-"GnuCash-ஆல் \"libdbi\" நூலகத்தில் ஒரு பிழை இருக்கிறதா என்ற ஒரு முக்கியமான "
-"சோதனையை முடிக்க முடியவில்லை. இந்த உங்கள் SQL தரவுத்தள அனுமதிகளின் தவறான கட்டமைப்பு "
-"காரணமாக இருக்கலாம். மேலும் தகவலுக்கு https://bugs.gnucash.org/show_bug.cgi?"
-"id=645216-ஐ பார்க்கவும்."
+"GnuCash-ஆல் \"libdbi\" நூலகத்தில் ஒரு பிழை இருக்கிறதா என்ற ஒரு முக்கியமான சோதனையை "
+"முடிக்க முடியவில்லை. இந்த உங்கள் SQL தரவுத்தள அனுமதிகளின் தவறான கட்டமைப்பு காரணமாக "
+"இருக்கலாம். மேலும் தகவலுக்கு https://bugs.gnucash.org/show_bug.cgi?id=645216-ஐ "
+"பார்க்கவும்."
 
 #: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
@@ -8643,7 +8643,7 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
-"proceed ?"
+"proceed?"
 msgstr "கோப்பு %s ஏற்கனவே உள்ளது. அதை நீங்கள் மேலெழுத விரும்புகிறீர்களா?"
 
 #: gnucash/gnome-utils/gnc-file.c:1699
@@ -9184,7 +9184,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1357
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:477
 #: gnucash/register/ledger-core/split-register.c:624
-#: gnucash/register/register-gnome/datecell-gnome.c:107
+#: gnucash/register/register-gnome/datecell-gnome.c:108
 msgid "Cannot store a transaction at this date"
 msgstr "இந்த தேதியில் ஒரு பரிமாற்றத்தை சேமிக்க முடியாது"
 
@@ -9318,8 +9318,8 @@ msgid "Teller"
 msgstr "காசாளர்"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2862
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2970
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3056
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2973
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3059
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:133
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:529
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1093
@@ -9342,8 +9342,8 @@ msgstr "இரசீது"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2915
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2926
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2958
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2965
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3043
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2968
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3046
 #: gnucash/register/ledger-core/split-register.c:2630
 #: gnucash/register/ledger-core/split-register.c:2644
 #: gnucash/register/ledger-core/split-register.c:2680
@@ -9359,8 +9359,8 @@ msgstr "அதிகரித்தல்"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2916
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2927
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2959
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2958
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3050
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2961
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3053
 #: gnucash/register/ledger-core/split-register.c:2631
 #: gnucash/register/ledger-core/split-register.c:2645
 #: gnucash/register/ledger-core/split-register.c:2681
@@ -9421,7 +9421,7 @@ msgstr "நேரடி பற்று"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2933
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2940
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2960
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3068
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3071
 #: gnucash/register/ledger-core/split-register.c:2646
 #: gnucash/register/ledger-core/split-register.c:2650
 #: gnucash/register/ledger-core/split-register.c:2657
@@ -9444,7 +9444,7 @@ msgstr "வாங்குதல்"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2934
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2941
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2961
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2988
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2991
 #: gnucash/register/ledger-core/split-register.c:2647
 #: gnucash/register/ledger-core/split-register.c:2651
 #: gnucash/register/ledger-core/split-register.c:2662
@@ -9472,7 +9472,7 @@ msgid "ATM Withdraw"
 msgstr "ATM-இல் பணம் எடுத்தல்"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2921
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2981
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2984
 #: gnucash/register/ledger-core/split-register.c:2686
 #: libgnucash/engine/Account.cpp:172
 msgid "Rebate"
@@ -9487,8 +9487,8 @@ msgstr "Paycheck"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:109
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:113
 #: gnucash/register/ledger-core/split-register.c:2700
-#: gnucash/report/reports/standard/balance-sheet.scm:503
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1113
+#: gnucash/report/reports/standard/balance-sheet.scm:502
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1123
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
 #: libgnucash/app-utils/gnc-ui-util.c:1045 libgnucash/engine/Account.cpp:4397
 msgid "Equity"
@@ -9496,9 +9496,9 @@ msgstr "உறுப்பு"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2942
 #: gnucash/gnome-utils/gnc-tree-view-price.c:426
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2936
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2939
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:153
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
 #: gnucash/register/ledger-core/split-register.c:2707
 #: gnucash/register/ledger-core/split-register-model.c:402
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1076
@@ -9632,7 +9632,7 @@ msgid "Account Name"
 msgstr "கணக்கு பெயர்"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:816
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2916
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2919
 #: gnucash/gtkbuilder/dialog-price.glade:574
 msgid "Commodity"
 msgstr "சரக்கு"
@@ -9906,16 +9906,18 @@ msgstr "நிலைப்பட்டை"
 msgid "Imbalance"
 msgstr "சமநிலையில்லாத"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1487
+#. Translators: currently max 34 (ASCII) chars (= 17 or 8 UTF-8 chars depending on the block)
+#. See "MAX_DATE_LENGTH" in https://code.gnucash.org/docs/MAINT/group__Date.html
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1490
 msgid " Scheduled "
 msgstr " திட்டமிட்டப்பட்டது"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2314
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2317
 #: gnucash/register/ledger-core/split-register-control.c:1526
 msgid "Save the changed transaction?"
 msgstr "மாற்றப்பட்ட பரிமாற்றங்களை சேமிக்கவா?"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2316
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2319
 msgid ""
 "The current transaction has changed. Would you like to record the changes, "
 "or discard the changes?"
@@ -9923,29 +9925,29 @@ msgstr ""
 "நடப்பு பரிமாற்றம் மாற்றப்படும். பரிமாற்றத்தை நகலெடுப்பதற்கு முன் மாற்றங்களை பதிவுசெய்யவா, "
 "அல்லது நகலை ரத்துசெய்ய விரும்புகிறீர்களா?"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2354
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2357
 #: gnucash/register/ledger-core/split-register-control.c:1541
 msgid "_Discard Changes"
 msgstr "மாற்றங்களை நீக்கு (_D)"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2356
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2359
 #: gnucash/register/ledger-core/split-register-control.c:1543
 msgid "_Record Changes"
 msgstr "மாற்றங்களை பதிவுசெய் (_R)"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2722
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2725
 msgid "Date Entered"
 msgstr "உள்ளிட்ட தேதி"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2724
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2727
 msgid "Date Reconciled"
 msgstr "சரிக்கட்டிய தேதி"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2726
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2729
 msgid "Date Posted / Entered / Reconciled"
 msgstr "போட்ட தேதி / உள்ளிட்ட / சரிக்கட்டப்பட்டது"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2747
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2750
 #: gnucash/gtkbuilder/dialog-order.glade:270
 #: gnucash/gtkbuilder/dialog-order.glade:632
 #: gnucash/report/reports/standard/customer-summary.scm:71
@@ -9956,84 +9958,84 @@ msgstr "போட்ட தேதி / உள்ளிட்ட / சரிக�
 msgid "Reference"
 msgstr "குறிப்பிடுதல்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2753
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2756
 msgid "Reference / Action"
 msgstr "குறிப்புரை / செயல்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2767
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2770
 msgid "T-Number"
 msgstr "T-எண்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2773
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2776
 msgid "Number / Action"
 msgstr "எண் / செயல்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2789
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2792
 msgid "Customer / Memo"
 msgstr "வாடிக்கையாளர் / மெமோ"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2800
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2803
 msgid "Vendor / Memo"
 msgstr "விற்பனையாளர் / மெமோ"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2818
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2821
 msgid "Description / Notes / Memo"
 msgstr "விளக்கம் / குறிப்புகள் / மெமோ"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2848
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2851
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:625
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
 msgid "Void Reason"
 msgstr "செல்லாத காரணம்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2852
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2855
 msgid "Accounts / Void Reason"
 msgstr "கணக்குகள் / செல்லாத காரணம்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2862
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2865
 msgid "R"
 msgstr "R"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2906
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2909
 msgid "Amount / Value"
 msgstr "தொகை / மதிப்பு"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2948
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2951
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 #: libgnucash/engine/Account.cpp:163
 msgid "Withdrawal"
 msgstr "எடுத்தல்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2953
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2956
 #: libgnucash/engine/Account.cpp:164
 msgid "Spend"
 msgstr "செலவிடு"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3003
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3010
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3006
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3013
 #: gnucash/report/reports/standard/reconcile-report.scm:89
 #: libgnucash/engine/Account.cpp:162
 msgid "Funds Out"
 msgstr "நிதிகள் வெளியே"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3012
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3015
 #: gnucash/register/ledger-core/split-register-model.c:505
 msgid "Credit Formula"
 msgstr "வரவு சூத்திரம்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3033
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3036
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
 #: libgnucash/engine/Account.cpp:143
 msgid "Deposit"
 msgstr "வைப்புத் கொகை"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3038
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3041
 #: libgnucash/engine/Account.cpp:144
 msgid "Receive"
 msgstr "பெறு"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3061
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1283
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3064
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1289
 #: gnucash/report/reports/standard/customer-summary.scm:139
 #: gnucash/report/reports/standard/customer-summary.scm:326
 #: gnucash/report/reports/standard/net-charts.scm:367
@@ -10043,114 +10045,114 @@ msgstr "பெறு"
 msgid "Expense"
 msgstr "செலவு"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3084
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3091
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3087
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3094
 #: gnucash/report/reports/standard/reconcile-report.scm:86
 #: libgnucash/engine/Account.cpp:142
 msgid "Funds In"
 msgstr "நிதிகள் உள்ளே"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3093
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3096
 #: gnucash/register/ledger-core/split-register-model.c:498
 msgid "Debit Formula"
 msgstr "பற்று சூத்திரம்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3163
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3166
 msgid "Enter Due Date"
 msgstr "உரிய தேதியை உள்ளிடு"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3174
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3177
 msgid "Enter the transaction reference, such as the invoice or check number"
 msgstr "விவரப்பட்டியல் அல்லது சரிபார்க்கும் எண் போன்ற, பரிமாற்ற குறிப்பினை உள்ளிடவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3176
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3183
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3179
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3186
 msgid "Enter the type of transaction, or choose one from the list"
 msgstr "பரிமாற்ற வகையை உள்ளிடவும், அல்லது பட்டியலிலிருந்து ஒன்றை தேர்ந்தெடுக்கவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3181
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3184
 msgid "Enter the transaction number, such as the check number"
 msgstr "காசோலை எண்ணை போன்ற, பரிமாற்ற எண்ணை உள்ளிடவும்."
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3193
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3196
 #: gnucash/register/ledger-core/split-register-model.c:1132
 msgid "Enter the name of the Customer"
 msgstr "வாடிக்கையாளரின் பெயரை உள்ளிடவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3195
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3204
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3213
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3198
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3207
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3216
 #: gnucash/register/ledger-core/split-register-model.c:1169
 msgid "Enter notes for the transaction"
 msgstr "பரிமாற்றத்திற்கான குறிப்புகளை உள்ளிடவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3197
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3206
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3215
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3200
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3209
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3218
 #: gnucash/register/ledger-core/split-register-model.c:1330
 msgid "Enter a description of the split"
 msgstr "பிரிப்பிற்கான ஒரு விளக்கத்தை உள்ளிடவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3202
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3205
 #: gnucash/register/ledger-core/split-register-model.c:1135
 msgid "Enter the name of the Vendor"
 msgstr "விற்பனையாளரின் பெயரை உள்ளிடவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3211
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3214
 #: gnucash/register/ledger-core/split-register-model.c:1138
 msgid "Enter a description of the transaction"
 msgstr "ஒரு பரிமாற்றத்தின் விளக்கத்தை உள்ளிடவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3225
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3229
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3228
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3232
 #: gnucash/register/ledger-core/split-register-model.c:1492
 #: gnucash/register/ledger-core/split-register-model.c:1559
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "பரிமாற்றத்திற்கு கணக்கை உள்ளிடவும், அல்லது பட்டியலிலிருந்து ஒன்றை தேர்ந்தெடுக்கவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3227
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3230
 #: gnucash/register/ledger-core/split-register-model.c:1202
 msgid "Reason the transaction was voided"
 msgstr "பரிமாற்றம் காலியாக்கப்பட்டதற்கான காரணம்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3239
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3242
 msgid "Enter the reconcile type"
 msgstr "சரிக்கட்டிய வகையை உள்ளிடவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3249
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3252
 msgid "Enter the type of transaction"
 msgstr "பரிமாற்ற வகையை உள்ளிடவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3259
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3279
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3262
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3282
 msgid "Enter the value of shares bought or sold"
 msgstr "வாங்கிய அல்லது விற்ற பங்குகளின் மதிப்பை உள்ளிடவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3269
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3281
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3272
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3284
 #: gnucash/register/ledger-core/split-register-model.c:1440
 msgid "Enter the number of shares bought or sold"
 msgstr "வாங்கிய அல்லது விற்கப்பட்ட பங்குகளின் எண்ணிக்கையை உள்ளிடவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3291
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3294
 msgid "* Indicates the transaction Commodity."
 msgstr "* பரிமாற்ற சரக்கை சுட்டிகாட்டுகிறது."
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3301
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3304
 msgid "Enter the rate"
 msgstr "வீதத்தை உள்ளிடு"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3311
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3314
 #: gnucash/register/ledger-core/split-register-model.c:1404
 msgid "Enter the effective share price"
 msgstr "பயனுள்ள பங்கு விலையை உள்ளிடவும்"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3321
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3324
 #: gnucash/register/ledger-core/split-register-model.c:2385
 msgid "Enter credit formula for real transaction"
 msgstr "சரியான பரிமாற்றத்திற்கான வரவு"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3331
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3334
 #: gnucash/register/ledger-core/split-register-model.c:2351
 msgid "Enter debit formula for real transaction"
 msgstr "சரியான பரிமாற்றத்திற்கான பற்று சூத்திரம்"
@@ -10436,7 +10438,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable ?"
+"       Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "பிழை: வரைகலை பயனர் இடைமுகத்தை துவக்க முடியவில்லை மற்றும் விருப்பம் கூடுதல்-விலை-"
 "மதிப்புகள் அமைக்கப்படவில்லை."
@@ -11692,8 +11694,8 @@ msgid ""
 "will have the middle cut and replaced with an ellipsis."
 msgstr ""
 "இந்த விசையானது குறிப்பு புத்தகத்தின் தத்தல்களின் அதிகபட்ச அகலத்தை குறிப்பிடுகிறது. "
-"தத்தலில் உள்ள உரையானது அதன் மதிப்பை விட அதிகமாக இருந்தால் (உரையானது தோராயமானது) "
-"பின் தத்தல் லேபில் மத்திய வெட்டையும் ஒரு எலிப்ஸிசுடன் இடமாற்றப்படும்."
+"தத்தலில் உள்ள உரையானது அதன் மதிப்பை விட அதிகமாக இருந்தால் (உரையானது தோராயமானது) பின் "
+"தத்தல் லேபில் மத்திய வெட்டையும் ஒரு எலிப்ஸிசுடன் இடமாற்றப்படும்."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:135
 #: gnucash/gtkbuilder/dialog-preferences.glade:920
@@ -12362,8 +12364,7 @@ msgid ""
 "This dialog is presented if you try to print checks from multiple accounts "
 "at the same time."
 msgstr ""
-"அதே நேரத்தில் பல கணக்குகளிலிருந்து காசோலைகளை அச்சிட முயற்சித்தால் இந்த உரையாடல் "
-"தோன்றும்."
+"அதே நேரத்தில் பல கணக்குகளிலிருந்து காசோலைகளை அச்சிட முயற்சித்தால் இந்த உரையாடல் தோன்றும்."
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:14
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:117
@@ -12762,7 +12763,7 @@ msgstr "இந்த நிரலின் அகலம்"
 msgid "This setting stores the width of the given column in pixels."
 msgstr "இந்த அமைப்பு பிக்சல்களில் தரப்பட்ட நிரலின் அகலத்தை சேமிக்கிறது."
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:29
+#: gnucash/gtkbuilder/assistant-acct-period.glade:20
 msgid ""
 "This assistant will help you setup and use accounting periods.\n"
 "\n"
@@ -12775,11 +12776,11 @@ msgstr ""
 "அபாயம்: இம்முறை இந்த அம்சம் சரியாக பணிபுரியாவிட்டால்; இது இன்னும் உருவாக்க நிலையில் "
 "உள்ளது. இது உங்கள் தரவை பழுதுநீக்க முடியாத படி சேதமாக்குகிறது! "
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:36
+#: gnucash/gtkbuilder/assistant-acct-period.glade:27
 msgid "Setup Account Period"
 msgstr "கணக்கு காலத்தை அமை"
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:50
+#: gnucash/gtkbuilder/assistant-acct-period.glade:41
 msgid ""
 "\n"
 "Select an accounting period and the closing date which must not be in the "
@@ -12794,32 +12795,24 @@ msgstr ""
 "\n"
 "தேர்ந்தெடுத்த தேதி அன்று நள்ளிரவில் புத்தகங்கள் மூடப்படும்."
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:82
-#: gnucash/gtkbuilder/assistant-acct-period.glade:107
-#: gnucash/gtkbuilder/assistant-acct-period.glade:121
-#: gnucash/gtkbuilder/assistant-acct-period.glade:216
-#: gnucash/gtkbuilder/assistant-acct-period.glade:235
-msgid "xxx"
-msgstr "xxx"
-
-#: gnucash/gtkbuilder/assistant-acct-period.glade:94
+#: gnucash/gtkbuilder/assistant-acct-period.glade:85
 msgid "Book Closing Dates"
 msgstr "புத்தகம் மூடும் தேதிகள்"
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:208
+#: gnucash/gtkbuilder/assistant-acct-period.glade:214
 #: gnucash/gtkbuilder/dialog-book-close.glade:7
 msgid "Close Book"
 msgstr "புத்தகத்தை மூடு"
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:222
+#: gnucash/gtkbuilder/assistant-acct-period.glade:228
 msgid "Account Period Finish"
 msgstr "கணக்கு கால முடிவு"
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:249
+#: gnucash/gtkbuilder/assistant-acct-period.glade:255
 msgid "Press 'Close' to Exit."
 msgstr "வெளியேற 'மூடு' என்பதை அமுத்தவும்."
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:260
+#: gnucash/gtkbuilder/assistant-acct-period.glade:266
 msgid "Summary Page"
 msgstr "சுருக்க பக்கம்"
 
@@ -13729,7 +13722,7 @@ msgstr ""
 #: gnucash/report/reports/standard/cash-flow.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:69
 #: gnucash/report/reports/standard/equity-statement.scm:65
-#: gnucash/report/reports/standard/income-statement.scm:59
+#: gnucash/report/reports/standard/income-statement.scm:58
 #: gnucash/report/reports/standard/lot-viewer.scm:35
 #: gnucash/report/reports/standard/net-charts.scm:39
 #: gnucash/report/reports/standard/price-scatter.scm:36
@@ -13891,7 +13884,7 @@ msgstr "வரம்பு "
 #: gnucash/report/reports/standard/cash-flow.scm:43
 #: gnucash/report/reports/standard/category-barchart.scm:70
 #: gnucash/report/reports/standard/equity-statement.scm:66
-#: gnucash/report/reports/standard/income-statement.scm:60
+#: gnucash/report/reports/standard/income-statement.scm:59
 #: gnucash/report/reports/standard/lot-viewer.scm:36
 #: gnucash/report/reports/standard/net-charts.scm:40
 #: gnucash/report/reports/standard/price-scatter.scm:37
@@ -13940,7 +13933,7 @@ msgid ""
 "changed until you click \"Apply\" at the end of the process.\n"
 "\n"
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
-"process. "
+"process."
 msgstr ""
 "GnuCash ஆனது நிதி தரவை QIF (Quicken Interchange Format) கோப்புகளை Quicken/"
 "QuickBooks ஆல் எழுத்தப்பட்டதை இறக்குமதி செய்யலாம், MS Money, Moneydance, மற்றும் மற்ற "
@@ -14004,8 +13997,8 @@ msgid ""
 msgstr ""
 "QIF கோப்பு வடிவம் எந்த வரிசையில் தேதி, மாதம் மற்றும் தேதியின் ஆண்டு கூறுகள் அச்சிடப்பட "
 "வேண்டும் என குறிப்பிடவில்லை. பல நிலைகளில், ஒரு குறிப்பிட்ட கோப்பில் எந்த வடிவம் "
-"பயன்படுத்த வேண்டும் என்பதை தானாக தீர்மானிக்க முடிகிறது. எனினும், நீங்கள் தற்போது "
-"இறக்குமதி செய்த கோப்பில், ஒன்றை விட அதிகமாக பொருந்தும் சாத்தியமான வடிவமுள்ளது.\n"
+"பயன்படுத்த வேண்டும் என்பதை தானாக தீர்மானிக்க முடிகிறது. எனினும், நீங்கள் தற்போது இறக்குமதி "
+"செய்த கோப்பில், ஒன்றை விட அதிகமாக பொருந்தும் சாத்தியமான வடிவமுள்ளது.\n"
 "\n"
 "ஒரு தேதி வடிவத்தை கோப்பிற்காக தேர்ந்தெடுக்கவும். ஐரோப்பியன் மென்பொருளால் உருவாக்கப்பட்ட "
 "QIF கோப்புகள்  \"d-m-y\" அல்லது day-month-year வடிவத்தில் இருக்கலாம், US QIF "
@@ -14054,7 +14047,7 @@ msgid ""
 "this if you have saved your accounts to separate QIF files.\n"
 "\n"
 "Click \"Next\" to finish loading files and move to the next step of the QIF "
-"import process. "
+"import process."
 msgstr ""
 "இம்முறை இறக்குவதற்கு அதிக தரவு நீங்கள் கொண்டிருந்தால் \"மற்றொரு கோப்பினை ஏற்று\" என்பதைக் "
 "கிளிக் செய்யவும். உங்களுடைய கணக்குகளை தனிப்பட்ட QIF கோப்புகளில் சேமித்திருந்தால் இதை "
@@ -14160,6 +14153,17 @@ msgid "Match QIF categories with GnuCash accounts"
 msgstr "QIF கணக்குகளை GnuCash வகைகளுடன் பொருந்துகிறது"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:802
+#, fuzzy
+#| msgid ""
+#| "QIF files downloaded from banks and other financial institutions may not "
+#| "have information about Accounts and Categories which would allow them to "
+#| "be correctly assigned to GnuCash accounts.\n"
+#| "\n"
+#| "In the following page, you will see the text that appears in the Payee "
+#| "and Memo fields of transactions with no QIF Account or Category. By "
+#| "default these transactions are assigned to the 'Unspecified' account in "
+#| "GnuCash. If you select a different account, it will be remembered for "
+#| "future QIF files. "
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
@@ -14168,7 +14172,7 @@ msgid ""
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
 "these transactions are assigned to the 'Unspecified' account in GnuCash. If "
-"you select a different account, it will be remembered for future QIF files. "
+"you select a different account, it will be remembered for future QIF files."
 msgstr ""
 "வங்கிகள் மற்றும் மற்ற நிதி நிறுவனங்களிலிருந்து பதிவிறக்கப்பட்ட QIF கோப்புகளில், GnuCash "
 "கணக்குகளில் சரியானவற்றை ஒதுக்குகிற மாதிரி கணக்குகள் மற்றும் வகைகள் தகவலை "
@@ -15319,9 +15323,9 @@ msgid ""
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case). "
 msgstr ""
-"சரக்கிற்கான டிக்கர் குறியீட்டை உள்ளிடவும் (எ.கா. CSCO அல்லது AAPL). ஆன்லைனில் "
-"மேற்கோள்களை மீட்டெடுத்தால், இந்த புலமானது சரியாக டிக்கர் குறியீடு மேற்கோள் மூலத்தால் "
-"பயன்படுத்தப்பட்டு பொருந்துகிறது (தட்டு பொருத்தத்தையும் சேர்த்து). "
+"சரக்கிற்கான டிக்கர் குறியீட்டை உள்ளிடவும் (எ.கா. CSCO அல்லது AAPL). ஆன்லைனில் மேற்கோள்களை "
+"மீட்டெடுத்தால், இந்த புலமானது சரியாக டிக்கர் குறியீடு மேற்கோள் மூலத்தால் பயன்படுத்தப்பட்டு "
+"பொருந்துகிறது (தட்டு பொருத்தத்தையும் சேர்த்து). "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -16493,7 +16497,7 @@ msgid "Transaction Details"
 msgstr "பரிமாற்ற விவரங்கள்"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:689
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
 msgid "Transfer Account"
 msgstr "கணக்கை இடமாற்று"
 
@@ -16831,6 +16835,8 @@ msgstr "பழைய பதிவு/பிரதி கோப்புகளை
 #: gnucash/gtkbuilder/dialog-preferences.glade:1474
 #: gnucash/gtkbuilder/dialog-sx.glade:619
 #: gnucash/gtkbuilder/dialog-sx.glade:658
+#: gnucash/gtkbuilder/dialog-sx.glade:965
+#: gnucash/gtkbuilder/dialog-sx.glade:1024
 msgid "days"
 msgstr "நாட்கள்"
 
@@ -17076,9 +17082,9 @@ msgid ""
 "transaction in the register. If clear, pressing the 'Enter' key will move "
 "down one row."
 msgstr ""
-"சரிபார்க்கப்பட்டால், 'உள்ளிடு' விசையை அழுத்தினால் காலி பரிமாற்றம் பதிவேட்டின் "
-"கீழ்பகுதிக்கு நகர்த்தப்படும். சுத்தமாக இருந்தால், 'உள்ளிடு' விசையை அழுத்துவதன் மூலம் ஒரு "
-"வரிசை கீழே நகர்த்தலாம்."
+"சரிபார்க்கப்பட்டால், 'உள்ளிடு' விசையை அழுத்தினால் காலி பரிமாற்றம் பதிவேட்டின் கீழ்பகுதிக்கு "
+"நகர்த்தப்படும். சுத்தமாக இருந்தால், 'உள்ளிடு' விசையை அழுத்துவதன் மூலம் ஒரு வரிசை கீழே "
+"நகர்த்தலாம்."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2427
 msgid "_Auto-raise lists"
@@ -17382,8 +17388,8 @@ msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
 msgstr ""
-"தத்தலில் உள்ள உரையானது அதன் மதிப்பை விட நீளமாக இருந்தால் (சோதனை தோராயமானது) பின் "
-"தத்தல் லேபிலில் மையம் வெட்டப்பட்டு ஒரு எலிப்ஸிசுடன் இடமாற்றப்படும்."
+"தத்தலில் உள்ள உரையானது அதன் மதிப்பை விட நீளமாக இருந்தால் (சோதனை தோராயமானது) பின் தத்தல் "
+"லேபிலில் மையம் வெட்டப்பட்டு ஒரு எலிப்ஸிசுடன் இடமாற்றப்படும்."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3539
 msgid "characters"
@@ -19311,8 +19317,8 @@ msgstr ""
 #, fuzzy
 msgid ""
 "\n"
-"You first need to apply for Online Banking access at your bank. If your "
-"bank decides to grant you electronic access, they will send you a letter "
+"You first need to apply for Online Banking access at your bank. If your bank "
+"decides to grant you electronic access, they will send you a letter "
 "containing:\n"
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
@@ -19361,11 +19367,11 @@ msgstr ""
 "இப்போது எந்த ஆன்லைன் பேங்கிங் இணைப்பையும் அமைக்க விரும்பாவிட்டால் \"ரத்துசெய்\" என்பதை "
 "அழுத்தவும்..\n"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:76
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:75
 msgid "Initial Online Banking Setup"
 msgstr "துவக்க ஆன்லைன் பேங்கிங் அமைவு"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:95
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:94
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup Wizard\". Please press the button below to start "
@@ -19374,15 +19380,15 @@ msgstr ""
 "உங்கள் ஆன்லைன் பேங்கிங் இணைப்பின் அமைப்பானது வெளிப்புற நிரல் \"AqBanking அமைப்பு வழிகாட்டி"
 "\" ஆல் கையாளப்பட்டது. இந்த நிரலை துவக்க கீழுள்ள பட்டனை அழுத்தவும்."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:106
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:105
 msgid "_Start AqBanking Wizard"
 msgstr "AqBanking வழிகாட்டியை துவக்கு (_S)"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:123
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:122
 msgid "Start Online Banking Wizard"
 msgstr "ஆன்லைன் பேங்கிங் வழிகாட்டியைத் துவக்கு"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:141
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:140
 #, fuzzy
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
@@ -19393,16 +19399,16 @@ msgstr ""
 "வரியில் இரட்டை கிளிக் செய்யவும். அனைத்து தேவையான கணக்குகள் பொருந்தும் போது \"Forward"
 "\" என்பதை கிளிக் செய்யவும்."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:179
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:178
 #, fuzzy
 msgid "_Delete selected matches"
 msgstr "தேர்ந்தெடுக்கப்பட்ட கணக்கினை அழி"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:202
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:201
 msgid "Match Online accounts with GnuCash accounts"
 msgstr "GnuCash கணக்குகளுடன் ஆன்லைன் கணக்குகளை பொருத்தவும்"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:217
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:216
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished. You can now invoke Online Banking actions on those accounts.\n"
@@ -19420,7 +19426,7 @@ msgstr ""
 "\n"
 "இப்போது \"செயல்படுத்து\" என்பதை அழுத்தவும்."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:233
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:232
 msgid "Online Banking Setup Finished"
 msgstr "ஆன்லைன் பேங்கிங் அமைவு முடிந்தது"
 
@@ -20329,9 +20335,9 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
-"DTAUS கோப்புகளை இறக்குமதி செய்யும் போது இந்த அமைவானதுதரவு வடிவத்தை "
-"குறிப்பிடுகிறது. AqBanking நூலகமானது பல்வேறு இறக்குமதி வடிவங்களை இங்கே "
-"(\"விவரக்குறிப்புகள்\"என அழைக்கப்படுகிறது) ஒன்றை தேர்ந்தெடுக்கலாம் என வழங்குகிறது."
+"DTAUS கோப்புகளை இறக்குமதி செய்யும் போது இந்த அமைவானதுதரவு வடிவத்தை குறிப்பிடுகிறது. "
+"AqBanking நூலகமானது பல்வேறு இறக்குமதி வடிவங்களை இங்கே (\"விவரக்குறிப்புகள்\"என "
+"அழைக்கப்படுகிறது) ஒன்றை தேர்ந்தெடுக்கலாம் என வழங்குகிறது."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:40
 msgid "CSV import data format"
@@ -20751,7 +20757,7 @@ msgid "Rate/Price"
 msgstr "வீதம்/விலைக்கு"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
 #, fuzzy
 msgid "Transaction ID"
 msgstr "பரிமாற்றம்"
@@ -20768,7 +20774,7 @@ msgid "Full Account Name"
 msgstr "முழு கணக்குப் பெயரை பயன்படுத்து"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:629
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
 #, fuzzy
 msgid "Reconcile Date"
 msgstr "ஒப்பிடப்பட்ட நாள்"
@@ -21160,22 +21166,22 @@ msgid "Currency To"
 msgstr "நாணயம்:"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:66
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:117
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:211
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:118
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:212
 msgid "Value doesn't appear to contain a valid number."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:79
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:84
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:89
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:130
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:135
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:140
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:131
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:136
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:141
 msgid "Value can't be parsed into a number using the selected currency format."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:121
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:197
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:198
 #, fuzzy
 msgid "Value can't be parsed into a valid commodity."
 msgstr "இந்த சரக்கிற்கான விலையைக் கணக்கிடு."
@@ -21207,18 +21213,18 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:235
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:243
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:289
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:297
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:508
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:516
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:571
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:579
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:298
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:509
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:517
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:572
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:580
 #, fuzzy
 msgid " could not be understood.\n"
 msgstr "%s நிரலை புரிந்து கொள்ள முடியாது."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:323
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:324
 msgid "No date column."
 msgstr "தேதி நிரல் இல்லை."
 
@@ -21242,66 +21248,66 @@ msgstr "தேதி நிரல் இல்லை."
 msgid "Failed to create price from selected columns."
 msgstr "இந்த உருப்படிகளுக்கு விலைகளை உருவாக்க முடியவில்லை:"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
 #, fuzzy
 msgid "Transaction Commodity"
 msgstr "பரிமாற்ற தொகை"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
 #, fuzzy
 msgid "Transfer Action"
 msgstr "கணக்கை இடமாற்று"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
 #, fuzzy
 msgid "Transfer Memo"
 msgstr "இதற்கு இடமாற்று"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
 #, fuzzy
 msgid "Transfer Reconciled"
 msgstr "சரிக்கட்டிய தேதி"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:77
 #, fuzzy
 msgid "Transfer Reconcile Date"
 msgstr "கடைசியாக ஒப்பிடப்பட்ட தேதி"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:160
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:161
 msgid "Value can't be parsed into a valid reconcile state."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:223
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:224
 #, fuzzy
 msgid "Price can't be parsed into a number."
 msgstr "இந்த சரக்கிற்கான விலையைக் கணக்கிடு."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:379
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:380
 msgid "Account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:380
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:381
 msgid "Transfer account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:429
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:430
 msgid "Account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:440
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:441
 msgid "Transfer account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:591
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:592
 #, fuzzy
 msgid "No deposit or withdrawal column."
 msgstr "இருப்பு, வைப்பு அல்லது எடுத்தல் நிரல் இல்லை."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:597
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:598
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:604
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:605
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
@@ -21913,9 +21919,9 @@ msgstr "முதல் லாபம் (குறைந்தது)"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:110
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:114
-#: gnucash/report/reports/standard/balance-sheet.scm:510
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1122
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1137
+#: gnucash/report/reports/standard/balance-sheet.scm:509
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1132
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1147
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.c:954
 msgid "Retained Earnings"
@@ -22821,7 +22827,7 @@ msgid ""
 "following accounts:\n"
 "%s\n"
 "\n"
-"Are you sure you want to continue with this change ?"
+"Are you sure you want to continue with this change?"
 msgstr ""
 "சரிக்கட்டிய பிரிப்புடன் இணைக்கப்பட்டுள்ள பிரிப்பை நீங்கள் மாக்க உள்ளீர்கள். இதை செய்வது "
 "எதிர்கால சரிக்கட்டுதலை கடினமானதாக்கலாம்! இந்த மாற்றத்தை தொடரலாமா?"
@@ -22841,7 +22847,7 @@ msgstr ""
 msgid "Chan_ge Transaction"
 msgstr "பரிமாற்றத்தை ரத்துசெய் (_n)"
 
-#: gnucash/register/register-gnome/datecell-gnome.c:103
+#: gnucash/register/register-gnome/datecell-gnome.c:104
 #, fuzzy
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
@@ -22859,11 +22865,6 @@ msgstr "பட்டியல்"
 #, fuzzy, scheme-format
 msgid "Template file \"~a\" can not be read"
 msgstr "மாதிரிஉரு கோப்பு \"%s\"ஐ வாசிக்க முடியவில்லை"
-
-#: gnucash/report/html-acct-table.scm:636
-#: gnucash/report/reports/standard/trial-balance.scm:279
-msgid "Adjusting Entries"
-msgstr "உள்ளீடுகளை சரிசெய்கிறது"
 
 #: gnucash/report/html-chart.scm:455
 msgid "Load"
@@ -23124,11 +23125,11 @@ msgstr ""
 
 #: gnucash/report/options-utilities.scm:122
 #: gnucash/report/reports/standard/account-summary.scm:87
-#: gnucash/report/reports/standard/balance-sheet.scm:89
+#: gnucash/report/reports/standard/balance-sheet.scm:88
 #: gnucash/report/reports/standard/balsheet-pnl.scm:82
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:54
-#: gnucash/report/reports/standard/budget-income-statement.scm:77
-#: gnucash/report/reports/standard/income-statement.scm:64
+#: gnucash/report/reports/standard/budget-income-statement.scm:76
+#: gnucash/report/reports/standard/income-statement.scm:63
 msgid "Report on these accounts, if display depth allows."
 msgstr "காட்சி ஆழம் அனுமதித்தால், இந்த கணக்குகளில் அறிக்கையிடவும்."
 
@@ -23319,18 +23320,6 @@ msgstr ""
 msgid "Do not show any subtotals for parent accounts."
 msgstr "முதன்மை கணக்குகளின் எந்த துணைகூட்டல்களையும் காட்ட வேண்டாம்"
 
-#: gnucash/report/options-utilities.scm:258
-msgid "Text book style (experimental)"
-msgstr "உரை புத்தக பாணி (சோதனைக்காக)"
-
-#: gnucash/report/options-utilities.scm:259
-msgid ""
-"Show parent account subtotals, indented per accounting text book practice "
-"(experimental)."
-msgstr ""
-"முதன்மை கணக்கு துணை கூட்டல்களை காட்டு, ஒவ்வொரு கணக்கிடும் உரை புத்தக பயிற்சிக்கும் "
-"(பரிசோதனை) உள்தள் போடப்பட்டு."
-
 #: gnucash/report/report-core.scm:149
 msgid "_Assets & Liabilities"
 msgstr "சொத்துக்கள் & பொறுப்பீடுகள் (_A)"
@@ -23477,17 +23466,17 @@ msgstr "வரிசை ஆர்டர்"
 #: gnucash/report/reports/standard/account-summary.scm:125
 #: gnucash/report/reports/standard/advanced-portfolio.scm:76
 #: gnucash/report/reports/standard/balance-forecast.scm:44
-#: gnucash/report/reports/standard/balance-sheet.scm:137
+#: gnucash/report/reports/standard/balance-sheet.scm:136
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/balsheet-pnl.scm:119
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:102
 #: gnucash/report/reports/standard/budget-flow.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:116
+#: gnucash/report/reports/standard/budget-income-statement.scm:115
 #: gnucash/report/reports/standard/cashflow-barchart.scm:58
 #: gnucash/report/reports/standard/cash-flow.scm:49
 #: gnucash/report/reports/standard/category-barchart.scm:72
 #: gnucash/report/reports/standard/equity-statement.scm:77
-#: gnucash/report/reports/standard/income-statement.scm:109
+#: gnucash/report/reports/standard/income-statement.scm:108
 #: gnucash/report/reports/standard/net-charts.scm:42
 #: gnucash/report/reports/standard/new-aging.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:54
@@ -23504,17 +23493,17 @@ msgstr "அறிக்கையின் நாணயம்"
 #: gnucash/report/reports/standard/account-summary.scm:126
 #: gnucash/report/reports/standard/advanced-portfolio.scm:40
 #: gnucash/report/reports/standard/balance-forecast.scm:45
-#: gnucash/report/reports/standard/balance-sheet.scm:138
+#: gnucash/report/reports/standard/balance-sheet.scm:137
 #: gnucash/report/reports/standard/balsheet-eg.scm:189
 #: gnucash/report/reports/standard/balsheet-pnl.scm:121
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:103
 #: gnucash/report/reports/standard/budget-flow.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/budget-income-statement.scm:116
 #: gnucash/report/reports/standard/cashflow-barchart.scm:59
 #: gnucash/report/reports/standard/cash-flow.scm:50
 #: gnucash/report/reports/standard/category-barchart.scm:73
 #: gnucash/report/reports/standard/equity-statement.scm:78
-#: gnucash/report/reports/standard/income-statement.scm:110
+#: gnucash/report/reports/standard/income-statement.scm:109
 #: gnucash/report/reports/standard/net-charts.scm:43
 #: gnucash/report/reports/standard/new-aging.scm:43
 #: gnucash/report/reports/standard/portfolio.scm:35
@@ -23985,7 +23974,7 @@ msgstr "மொத்த இருப்பை லெஜென்டில் க
 #: gnucash/report/reports/example/daily-reports.scm:289
 #: gnucash/report/reports/standard/account-piecharts.scm:546
 #: gnucash/report/reports/standard/balance-forecast.scm:276
-#: gnucash/report/reports/standard/balsheet-pnl.scm:923
+#: gnucash/report/reports/standard/balsheet-pnl.scm:933
 #: gnucash/report/reports/standard/budget.scm:513
 #: gnucash/report/reports/standard/cashflow-barchart.scm:283
 #: gnucash/report/reports/standard/cash-flow.scm:190
@@ -24723,7 +24712,7 @@ msgid "Expense Accounts"
 msgstr "செலவு கணக்குகள்"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:61
-#: gnucash/report/reports/standard/balance-sheet.scm:486
+#: gnucash/report/reports/standard/balance-sheet.scm:485
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:665
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:417
@@ -24732,7 +24721,7 @@ msgid "Assets"
 msgstr "சொத்துக்கள்"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:63
-#: gnucash/report/reports/standard/balance-sheet.scm:387
+#: gnucash/report/reports/standard/balance-sheet.scm:386
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:695
 #: gnucash/report/reports/standard/net-charts.scm:367
 #: gnucash/report/reports/standard/net-charts.scm:417
@@ -24833,67 +24822,67 @@ msgid "Future Scheduled Transactions Summary"
 msgstr "எதிர்காலத்திற்கு திட்டமிடப்பட்ட பரிமாற்றங்களின் சுருக்கம்"
 
 #: gnucash/report/reports/standard/account-summary.scm:72
-#: gnucash/report/reports/standard/balance-sheet.scm:76
+#: gnucash/report/reports/standard/balance-sheet.scm:75
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:53
+#: gnucash/report/reports/standard/budget-income-statement.scm:52
 #: gnucash/report/reports/standard/equity-statement.scm:59
-#: gnucash/report/reports/standard/income-statement.scm:53
+#: gnucash/report/reports/standard/income-statement.scm:52
 #: gnucash/report/reports/standard/trial-balance.scm:65
 msgid "Report Title"
 msgstr "அறிக்கை தலைப்பு"
 
 #: gnucash/report/reports/standard/account-summary.scm:73
-#: gnucash/report/reports/standard/balance-sheet.scm:77
+#: gnucash/report/reports/standard/balance-sheet.scm:76
 #: gnucash/report/reports/standard/balsheet-eg.scm:151
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:54
+#: gnucash/report/reports/standard/budget-income-statement.scm:53
 #: gnucash/report/reports/standard/equity-statement.scm:60
-#: gnucash/report/reports/standard/income-statement.scm:54
+#: gnucash/report/reports/standard/income-statement.scm:53
 #: gnucash/report/reports/standard/trial-balance.scm:66
 msgid "Title for this report."
 msgstr "இந்த அறிக்கைக்கான தலைப்பு."
 
 #: gnucash/report/reports/standard/account-summary.scm:75
-#: gnucash/report/reports/standard/balance-sheet.scm:79
+#: gnucash/report/reports/standard/balance-sheet.scm:78
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:56
+#: gnucash/report/reports/standard/budget-income-statement.scm:55
 #: gnucash/report/reports/standard/equity-statement.scm:62
-#: gnucash/report/reports/standard/income-statement.scm:56
+#: gnucash/report/reports/standard/income-statement.scm:55
 #: gnucash/report/reports/standard/trial-balance.scm:68
 msgid "Company name"
 msgstr "நிறுவனத்தின் பெயர்"
 
 #: gnucash/report/reports/standard/account-summary.scm:76
-#: gnucash/report/reports/standard/balance-sheet.scm:80
+#: gnucash/report/reports/standard/balance-sheet.scm:79
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:57
+#: gnucash/report/reports/standard/budget-income-statement.scm:56
 #: gnucash/report/reports/standard/equity-statement.scm:63
-#: gnucash/report/reports/standard/income-statement.scm:57
+#: gnucash/report/reports/standard/income-statement.scm:56
 #: gnucash/report/reports/standard/trial-balance.scm:69
 msgid "Name of company/individual."
 msgstr "நிறுவனம்/தனிநபர் பெயர்."
 
 #: gnucash/report/reports/standard/account-summary.scm:88
-#: gnucash/report/reports/standard/balance-sheet.scm:90
+#: gnucash/report/reports/standard/balance-sheet.scm:89
 #: gnucash/report/reports/standard/balsheet-eg.scm:158
 #: gnucash/report/reports/standard/balsheet-pnl.scm:84
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:55
 #: gnucash/report/reports/standard/budget-barchart.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:78
-#: gnucash/report/reports/standard/income-statement.scm:65
+#: gnucash/report/reports/standard/budget-income-statement.scm:77
+#: gnucash/report/reports/standard/income-statement.scm:64
 #: gnucash/report/reports/standard/trial-balance.scm:79
 msgid "Levels of Subaccounts"
 msgstr "துணைக்கணக்குகளின் நிலைகள்"
 
 #: gnucash/report/reports/standard/account-summary.scm:90
-#: gnucash/report/reports/standard/balance-sheet.scm:92
+#: gnucash/report/reports/standard/balance-sheet.scm:91
 #: gnucash/report/reports/standard/balsheet-eg.scm:159
 #: gnucash/report/reports/standard/balsheet-pnl.scm:85
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:57
 #: gnucash/report/reports/standard/budget-barchart.scm:48
-#: gnucash/report/reports/standard/budget-income-statement.scm:80
-#: gnucash/report/reports/standard/income-statement.scm:67
+#: gnucash/report/reports/standard/budget-income-statement.scm:79
+#: gnucash/report/reports/standard/income-statement.scm:66
 #: gnucash/report/reports/standard/trial-balance.scm:81
 msgid "Maximum number of levels in the account tree displayed."
 msgstr "கணக்கு ட்ரீயில் காட்டப்படும் நிலைகளின் அதிகபட்ச எண்ணிக்கை."
@@ -24907,96 +24896,96 @@ msgid "How to treat accounts which exceed the specified depth limit (if any)."
 msgstr "குறிப்பிட்ட ஆழ வரம்பை மீறும் கணக்குகளை எவ்வாறு பார்க்க வேண்டும் (ஏதாவது இருந்தால்)."
 
 #: gnucash/report/reports/standard/account-summary.scm:95
-#: gnucash/report/reports/standard/balance-sheet.scm:97
+#: gnucash/report/reports/standard/balance-sheet.scm:96
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:62
-#: gnucash/report/reports/standard/budget-income-statement.scm:85
-#: gnucash/report/reports/standard/income-statement.scm:72
+#: gnucash/report/reports/standard/budget-income-statement.scm:84
+#: gnucash/report/reports/standard/income-statement.scm:71
 msgid "Parent account balances"
 msgstr "முதன்மை கணக்கு மீதங்கள்"
 
 #: gnucash/report/reports/standard/account-summary.scm:96
-#: gnucash/report/reports/standard/balance-sheet.scm:98
+#: gnucash/report/reports/standard/balance-sheet.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:63
-#: gnucash/report/reports/standard/budget-income-statement.scm:86
-#: gnucash/report/reports/standard/income-statement.scm:73
+#: gnucash/report/reports/standard/budget-income-statement.scm:85
+#: gnucash/report/reports/standard/income-statement.scm:72
 msgid "Parent account subtotals"
 msgstr "முதன்மை கணக்கு துணைமொத்தங்கள்"
 
 #: gnucash/report/reports/standard/account-summary.scm:98
-#: gnucash/report/reports/standard/balance-sheet.scm:100
+#: gnucash/report/reports/standard/balance-sheet.scm:99
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:65
-#: gnucash/report/reports/standard/budget-income-statement.scm:88
-#: gnucash/report/reports/standard/income-statement.scm:75
+#: gnucash/report/reports/standard/budget-income-statement.scm:87
+#: gnucash/report/reports/standard/income-statement.scm:74
 #: gnucash/report/reports/standard/trial-balance.scm:121
 msgid "Include accounts with zero total balances"
 msgstr "பூஜ்ஜிய மொத்த மீதிகளுடன் உள்ள கணக்குகளை சேர்க்கவும்"
 
 #: gnucash/report/reports/standard/account-summary.scm:100
-#: gnucash/report/reports/standard/balance-sheet.scm:102
+#: gnucash/report/reports/standard/balance-sheet.scm:101
 #: gnucash/report/reports/standard/balsheet-pnl.scm:94
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:67
-#: gnucash/report/reports/standard/budget-income-statement.scm:90
-#: gnucash/report/reports/standard/income-statement.scm:77
+#: gnucash/report/reports/standard/budget-income-statement.scm:89
+#: gnucash/report/reports/standard/income-statement.scm:76
 #: gnucash/report/reports/standard/trial-balance.scm:123
 msgid "Include accounts with zero total (recursive) balances in this report."
 msgstr ""
 "பூஜ்ஜிய கூட்டல் (மறுபடியும் வரும்) இருப்புகள் உள்ள கணக்குகளை இந்த அறிக்கையில் சேர்க்கவும்."
 
 #: gnucash/report/reports/standard/account-summary.scm:101
-#: gnucash/report/reports/standard/balance-sheet.scm:103
+#: gnucash/report/reports/standard/balance-sheet.scm:102
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:68
-#: gnucash/report/reports/standard/budget-income-statement.scm:91
-#: gnucash/report/reports/standard/income-statement.scm:78
+#: gnucash/report/reports/standard/budget-income-statement.scm:90
+#: gnucash/report/reports/standard/income-statement.scm:77
 msgid "Omit zero balance figures"
 msgstr "பூஜ்ஜிய இருப்பு வடிவங்களை ஒதுக்கு"
 
 #: gnucash/report/reports/standard/account-summary.scm:103
-#: gnucash/report/reports/standard/balance-sheet.scm:105
+#: gnucash/report/reports/standard/balance-sheet.scm:104
 #: gnucash/report/reports/standard/balsheet-pnl.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:70
-#: gnucash/report/reports/standard/budget-income-statement.scm:93
-#: gnucash/report/reports/standard/income-statement.scm:80
+#: gnucash/report/reports/standard/budget-income-statement.scm:92
+#: gnucash/report/reports/standard/income-statement.scm:79
 msgid "Show blank space in place of any zero balances which would be shown."
 msgstr "ஏதாவது பூஜ்ஜிய இருப்புகள் காட்டப்படும் இடத்தில் காலி இடத்தை காட்டவும்."
 
 #: gnucash/report/reports/standard/account-summary.scm:105
-#: gnucash/report/reports/standard/balance-sheet.scm:107
+#: gnucash/report/reports/standard/balance-sheet.scm:106
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:72
-#: gnucash/report/reports/standard/budget-income-statement.scm:95
+#: gnucash/report/reports/standard/budget-income-statement.scm:94
 #: gnucash/report/reports/standard/equity-statement.scm:72
-#: gnucash/report/reports/standard/income-statement.scm:82
+#: gnucash/report/reports/standard/income-statement.scm:81
 msgid "Show accounting-style rules"
 msgstr "கணக்கிடுதல்-பாணி விதிகளை காட்டு"
 
 #: gnucash/report/reports/standard/account-summary.scm:107
-#: gnucash/report/reports/standard/balance-sheet.scm:109
+#: gnucash/report/reports/standard/balance-sheet.scm:108
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:74
-#: gnucash/report/reports/standard/budget-income-statement.scm:97
+#: gnucash/report/reports/standard/budget-income-statement.scm:96
 #: gnucash/report/reports/standard/equity-statement.scm:74
-#: gnucash/report/reports/standard/income-statement.scm:84
+#: gnucash/report/reports/standard/income-statement.scm:83
 msgid "Use rules beneath columns of added numbers like accountants do."
 msgstr "கணக்காளர்கள் செய்வது போல் கூட்டப்பட்ட எண்களுள்ள நிரல்களின் கீழே விதிகளை பயன்படுத்தவும்"
 
 #: gnucash/report/reports/standard/account-summary.scm:109
-#: gnucash/report/reports/standard/balance-sheet.scm:111
+#: gnucash/report/reports/standard/balance-sheet.scm:110
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 #: gnucash/report/reports/standard/balsheet-pnl.scm:99
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:76
-#: gnucash/report/reports/standard/budget-income-statement.scm:99
-#: gnucash/report/reports/standard/income-statement.scm:86
+#: gnucash/report/reports/standard/budget-income-statement.scm:98
+#: gnucash/report/reports/standard/income-statement.scm:85
 #: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Display accounts as hyperlinks"
 msgstr "கணக்குகளை மீஇணைப்புகளாக காட்டு"
 
 #: gnucash/report/reports/standard/account-summary.scm:111
-#: gnucash/report/reports/standard/balance-sheet.scm:112
+#: gnucash/report/reports/standard/balance-sheet.scm:111
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/balsheet-pnl.scm:100
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:77
-#: gnucash/report/reports/standard/budget-income-statement.scm:100
-#: gnucash/report/reports/standard/income-statement.scm:87
+#: gnucash/report/reports/standard/budget-income-statement.scm:99
+#: gnucash/report/reports/standard/income-statement.scm:86
 #: gnucash/report/reports/standard/trial-balance.scm:126
 msgid "Shows each account in the table as a hyperlink to its register window."
 msgstr ""
@@ -25032,59 +25021,59 @@ msgid "Show an account's notes."
 msgstr "ஒரு கணக்கின் குறிப்புகளைக் காட்டு."
 
 #: gnucash/report/reports/standard/account-summary.scm:124
-#: gnucash/report/reports/standard/balance-sheet.scm:136
+#: gnucash/report/reports/standard/balance-sheet.scm:135
 #: gnucash/report/reports/standard/balsheet-eg.scm:195
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:101
-#: gnucash/report/reports/standard/budget-income-statement.scm:115
+#: gnucash/report/reports/standard/budget-income-statement.scm:114
 #: gnucash/report/reports/standard/equity-statement.scm:76
-#: gnucash/report/reports/standard/income-statement.scm:108
+#: gnucash/report/reports/standard/income-statement.scm:107
 #: gnucash/report/reports/standard/trial-balance.scm:128
 msgid "Commodities"
 msgstr "சரக்குகள்"
 
 #: gnucash/report/reports/standard/account-summary.scm:127
-#: gnucash/report/reports/standard/balance-sheet.scm:139
+#: gnucash/report/reports/standard/balance-sheet.scm:138
 #: gnucash/report/reports/standard/balsheet-eg.scm:190
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:104
-#: gnucash/report/reports/standard/budget-income-statement.scm:118
+#: gnucash/report/reports/standard/budget-income-statement.scm:117
 #: gnucash/report/reports/standard/equity-statement.scm:79
-#: gnucash/report/reports/standard/income-statement.scm:111
+#: gnucash/report/reports/standard/income-statement.scm:110
 #: gnucash/report/reports/standard/trial-balance.scm:131
 msgid "Show Foreign Currencies"
 msgstr "வெளிநாட்டு நாணயங்களை காட்டு"
 
 #: gnucash/report/reports/standard/account-summary.scm:129
-#: gnucash/report/reports/standard/balance-sheet.scm:141
+#: gnucash/report/reports/standard/balance-sheet.scm:140
 #: gnucash/report/reports/standard/balsheet-eg.scm:192
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:106
-#: gnucash/report/reports/standard/budget-income-statement.scm:120
+#: gnucash/report/reports/standard/budget-income-statement.scm:119
 #: gnucash/report/reports/standard/equity-statement.scm:81
-#: gnucash/report/reports/standard/income-statement.scm:113
+#: gnucash/report/reports/standard/income-statement.scm:112
 #: gnucash/report/reports/standard/trial-balance.scm:133
 msgid "Display any foreign currency amount in an account."
 msgstr "ஒரு கணக்கில் உள்ள எந்த வெளிநாட்டு நாணயத் தொகையையும் காட்டு."
 
 #: gnucash/report/reports/standard/account-summary.scm:130
-#: gnucash/report/reports/standard/balance-sheet.scm:142
+#: gnucash/report/reports/standard/balance-sheet.scm:141
 #: gnucash/report/reports/standard/balsheet-pnl.scm:130
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:107
-#: gnucash/report/reports/standard/budget-income-statement.scm:121
+#: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/cash-flow.scm:51
 #: gnucash/report/reports/standard/equity-statement.scm:82
-#: gnucash/report/reports/standard/income-statement.scm:114
+#: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:134
 msgid "Show Exchange Rates"
 msgstr "பரிமாற்ற விலைகளை காட்டு"
 
 #: gnucash/report/reports/standard/account-summary.scm:131
-#: gnucash/report/reports/standard/balance-sheet.scm:143
+#: gnucash/report/reports/standard/balance-sheet.scm:142
 #: gnucash/report/reports/standard/balsheet-pnl.scm:131
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
-#: gnucash/report/reports/standard/budget-income-statement.scm:122
+#: gnucash/report/reports/standard/budget-income-statement.scm:121
 #: gnucash/report/reports/standard/cash-flow.scm:77
 #: gnucash/report/reports/standard/equity-statement.scm:83
-#: gnucash/report/reports/standard/income-statement.scm:115
+#: gnucash/report/reports/standard/income-statement.scm:114
 #: gnucash/report/reports/standard/trial-balance.scm:135
 msgid "Show the exchange rates used."
 msgstr "பயன்படுத்தப்பட்ட பரிமாற்ற விலைகளைக் காட்டு."
@@ -25120,7 +25109,7 @@ msgstr "ஆழ வரம்பை விட ஆழமாக உள்ள எந�
 #. Translators: This is part of the report title, which is capitalzed in English, but not all other languages
 #: gnucash/report/reports/standard/account-summary.scm:326
 #: gnucash/report/reports/standard/equity-statement.scm:304
-#: gnucash/report/reports/standard/income-statement.scm:407
+#: gnucash/report/reports/standard/income-statement.scm:406
 #: gnucash/report/reports/standard/trial-balance.scm:413
 #, fuzzy, scheme-format
 msgid "For Period Covering ~a to ~a"
@@ -25404,22 +25393,22 @@ msgstr "கட்டணம்"
 msgid "Reserve"
 msgstr ""
 
-#: gnucash/report/reports/standard/balance-sheet.scm:72
+#: gnucash/report/reports/standard/balance-sheet.scm:71
 #: gnucash/report/reports/standard/trial-balance.scm:574
 msgid "Balance Sheet"
 msgstr "இருப்புத் தாள்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:82
+#: gnucash/report/reports/standard/balance-sheet.scm:81
 #: gnucash/report/reports/standard/balsheet-eg.scm:153
 msgid "Balance Sheet Date"
 msgstr "இருப்பு தாள் தேதி"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:83
+#: gnucash/report/reports/standard/balance-sheet.scm:82
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:48
 msgid "Single column Balance Sheet"
 msgstr "ஒற்றை நிரல் இருப்புத் தாள்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:85
+#: gnucash/report/reports/standard/balance-sheet.scm:84
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:50
 msgid ""
 "Print liability/equity section in the same column under the assets section "
@@ -25428,49 +25417,49 @@ msgstr ""
 "பொறுப்பீடு/ஈக்விட்டி பிரிவை அதே நிரலில் சொத்துகளின் பிரிவிற்குகீழ் ஒரு இரண்டாம் நிரலுக்கு "
 "எதிராக வலது பக்கத்தில் சொத்துக்களின் பிரிவில் அச்சிடவும்."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:93
+#: gnucash/report/reports/standard/balance-sheet.scm:92
 #: gnucash/report/reports/standard/balsheet-eg.scm:160
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:58
-#: gnucash/report/reports/standard/budget-income-statement.scm:81
+#: gnucash/report/reports/standard/budget-income-statement.scm:80
 #: gnucash/report/reports/standard/budget.scm:90
-#: gnucash/report/reports/standard/income-statement.scm:68
+#: gnucash/report/reports/standard/income-statement.scm:67
 msgid "Flatten list to depth limit"
 msgstr "ஆழ வரம்பிற்கு தட்டையான பட்டியல்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:95
+#: gnucash/report/reports/standard/balance-sheet.scm:94
 #: gnucash/report/reports/standard/balsheet-eg.scm:162
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:60
-#: gnucash/report/reports/standard/budget-income-statement.scm:83
+#: gnucash/report/reports/standard/budget-income-statement.scm:82
 #: gnucash/report/reports/standard/budget.scm:92
-#: gnucash/report/reports/standard/income-statement.scm:70
+#: gnucash/report/reports/standard/income-statement.scm:69
 msgid "Displays accounts which exceed the depth limit at the depth limit."
 msgstr "ஆழ வரம்பில் ஆழ வரம்பை மீறும் கணக்குகளை காட்டுகிறது."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:114
+#: gnucash/report/reports/standard/balance-sheet.scm:113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:79
 msgid "Label the assets section"
 msgstr "சொத்துக்களின் பிரிவை பெயரிடவும்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:116
+#: gnucash/report/reports/standard/balance-sheet.scm:115
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:81
 msgid "Whether or not to include a label for the assets section."
 msgstr "சொத்துக்களின் பிரிவிற்கான ஒரு லேபிலை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:117
+#: gnucash/report/reports/standard/balance-sheet.scm:116
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:82
 msgid "Include assets total"
 msgstr "மொத்த சொத்துக்களையும் சேர்க்கவும்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:119
+#: gnucash/report/reports/standard/balance-sheet.scm:118
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:84
 msgid "Whether or not to include a line indicating total assets."
 msgstr "மொத்த சொத்துக்களை சுட்டிக்காட்டும் ஒரு வரியை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:120
+#: gnucash/report/reports/standard/balance-sheet.scm:119
 msgid "Use standard US layout"
 msgstr "தரமான US அடுக்கமைப்பை பயன்படுத்து"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:122
+#: gnucash/report/reports/standard/balance-sheet.scm:121
 msgid ""
 "Report section order is assets/liabilities/equity (rather than assets/equity/"
 "liabilities)."
@@ -25478,91 +25467,91 @@ msgstr ""
 "அறிக்கை பிரிவு வரிசை என்பது சொத்துக்கள்/கடன்பொறுப்புகள்/பங்கு (சொத்துக்கள்/பங்கு/கடன் "
 "பொறுப்புகள் என்பதை விட) என உள்ளது."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:123
+#: gnucash/report/reports/standard/balance-sheet.scm:122
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:85
 msgid "Label the liabilities section"
 msgstr "பொறுப்பீடுகளின் பிரிவை பெயரிடவும்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:125
+#: gnucash/report/reports/standard/balance-sheet.scm:124
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:87
 msgid "Whether or not to include a label for the liabilities section."
 msgstr "பொறுப்பீடுகளின் பிரிவிற்கான ஒரு லேபிலை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:126
+#: gnucash/report/reports/standard/balance-sheet.scm:125
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:88
 msgid "Include liabilities total"
 msgstr "மொத்த பொறுப்பீடுகளையும் சேர்க்கவும்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:128
+#: gnucash/report/reports/standard/balance-sheet.scm:127
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:90
 msgid "Whether or not to include a line indicating total liabilities."
 msgstr "மொத்த பொறுப்பீடுகளை சுட்டிக்காட்டும் ஒரு வரியை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:129
+#: gnucash/report/reports/standard/balance-sheet.scm:128
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:91
 msgid "Label the equity section"
 msgstr "உறுப்பு பிரிவின் லேபிள் செய்யவும்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:131
+#: gnucash/report/reports/standard/balance-sheet.scm:130
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:93
 msgid "Whether or not to include a label for the equity section."
 msgstr "ஈக்விட்டி பிரிவிற்கான ஒரு லேபிலை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:132
+#: gnucash/report/reports/standard/balance-sheet.scm:131
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:94
 msgid "Include equity total"
 msgstr "உறுப்பு மொத்தத்தை சேர்க்கவும்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:134
+#: gnucash/report/reports/standard/balance-sheet.scm:133
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:96
 msgid "Whether or not to include a line indicating total equity."
 msgstr "மொத்த ஈக்விட்டியை சுட்டிக்காட்டும் ஒரு வரியை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:391
+#: gnucash/report/reports/standard/balance-sheet.scm:390
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:717
 msgid "Total Liabilities"
 msgstr "மொத்த பொறுப்பீடுகள்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:489
+#: gnucash/report/reports/standard/balance-sheet.scm:488
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:686
 msgid "Total Assets"
 msgstr "மொத்த சொத்துகள்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:511
+#: gnucash/report/reports/standard/balance-sheet.scm:510
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:188
 msgid "Retained Losses"
 msgstr "வைத்திருக்கும் நஷ்டங்கள்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:515
+#: gnucash/report/reports/standard/balance-sheet.scm:514
 msgid "Trading Gains"
 msgstr "வணிக இலாபங்கள்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:516
+#: gnucash/report/reports/standard/balance-sheet.scm:515
 msgid "Trading Losses"
 msgstr "வணிக நஷ்டங்கள்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:520
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1117
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1132
+#: gnucash/report/reports/standard/balance-sheet.scm:519
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1127
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1142
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:759
 #: gnucash/report/reports/standard/equity-statement.scm:474
 #: gnucash/report/reports/standard/trial-balance.scm:735
 msgid "Unrealized Gains"
 msgstr "உணரப்படாத இலாபங்கள்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:521
+#: gnucash/report/reports/standard/balance-sheet.scm:520
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:760
 #: gnucash/report/reports/standard/equity-statement.scm:475
 #: gnucash/report/reports/standard/trial-balance.scm:736
 msgid "Unrealized Losses"
 msgstr "உணரப்படாத நஷ்டங்கள்"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:525
+#: gnucash/report/reports/standard/balance-sheet.scm:524
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:775
 msgid "Total Equity"
 msgstr "மொத்த உறுப்பு"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:535
+#: gnucash/report/reports/standard/balance-sheet.scm:534
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:781
 msgid "Total Liabilities & Equity"
 msgstr "மொத்த பொறுப்பீடுகள் & உறுப்பு"
@@ -25897,54 +25886,54 @@ msgstr "QIF இறக்குமதி சுருக்கம்"
 msgid "Total For "
 msgstr "இதற்கான மொத்தம்"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:860
+#: gnucash/report/reports/standard/balsheet-pnl.scm:870
 #, fuzzy
 msgid "missing"
 msgstr "தரகு"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1106
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1116
 #: libgnucash/engine/Account.cpp:4389
 msgid "Asset"
 msgstr "சொத்து"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1109
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1119
 #: libgnucash/engine/Account.cpp:4391
 msgid "Liability"
 msgstr "பொறுப்பு"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1127
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1137
 #, fuzzy
 msgid "Liability and Equity"
 msgstr "பொறுப்பீடு/உறுப்பு (_L)"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1145
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1294
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1155
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1300
 #, fuzzy
 msgid "Exchange Rates"
 msgstr "பரிமாற்ற விலை:"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1155
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1165
 #: gnucash/report/reports/standard/budget-barchart.scm:157
 #, fuzzy
 msgid "Barchart"
 msgstr "சொத்து பார்வரைபடம்"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1224
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1230
 #, fuzzy
 msgid " to "
 msgstr "%s லிருந்து %sக்கு"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1287
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1293
 #: gnucash/report/reports/standard/trial-balance.scm:861
 msgid "Net Income"
 msgstr "நிகர வருமானம்"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1323
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1329
 #, fuzzy
 msgid "Balance Sheet (Multicolumn)"
 msgstr "இருப்பு தாள் (eguile)"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1324
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1330
 #, fuzzy
 msgid "Income Statement (Multicolumn)"
 msgstr "வருமான அறிக்கை"
@@ -25968,7 +25957,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:111
 #: gnucash/report/reports/standard/budget-barchart.scm:98
 #: gnucash/report/reports/standard/budget-flow.scm:56
-#: gnucash/report/reports/standard/budget-income-statement.scm:60
+#: gnucash/report/reports/standard/budget-income-statement.scm:59
 #: gnucash/report/reports/standard/budget.scm:138
 msgid "Budget to use."
 msgstr "பயன்படுத்துவதற்கான பட்ஜெட்"
@@ -26041,7 +26030,7 @@ msgid "Chart Type"
 msgstr "கட்டண வகை"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:50
-#: gnucash/report/reports/standard/budget-income-statement.scm:67
+#: gnucash/report/reports/standard/budget-income-statement.scm:66
 #: gnucash/report/reports/standard/budget.scm:71
 msgid "Range start"
 msgstr "வரம்பின் துவக்கம்"
@@ -26062,7 +26051,7 @@ msgid "Select exact period that starts the reporting range."
 msgstr "அறிக்கையிடும் வரம்பை துவக்கும் சரியான காலத்தை தேர்ந்தெடுக்கவும்."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:57
-#: gnucash/report/reports/standard/budget-income-statement.scm:71
+#: gnucash/report/reports/standard/budget-income-statement.scm:70
 #: gnucash/report/reports/standard/budget.scm:78
 msgid "Range end"
 msgstr "வரம்பின் முடிவு"
@@ -26177,138 +26166,138 @@ msgstr "கால எண்."
 msgid "~a: ~a - ~a"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:63
+#: gnucash/report/reports/standard/budget-income-statement.scm:62
 #: gnucash/report/reports/standard/budget.scm:67
 msgid "Report for range of budget periods"
 msgstr "பட்ஜெட் காலங்களின் வரம்பிற்காக அறிக்கையிடவும்"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:65
+#: gnucash/report/reports/standard/budget-income-statement.scm:64
 #: gnucash/report/reports/standard/budget.scm:69
 msgid "Create report for a budget period range instead of the entire budget."
 msgstr "முழு பட்ஜெட்டுக்கு பதிலாக பட்ஜெட் கால வரம்பிற்கு அறிக்கையை உருவாக்கவும்."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:69
+#: gnucash/report/reports/standard/budget-income-statement.scm:68
 msgid "Select a budget period that begins the reporting range."
 msgstr "அறிக்கையிடும் வரம்பை துவக்கும் ஒரு பட்ஜெட் காலத்தை தேர்ந்தெடுக்கவும்."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:73
+#: gnucash/report/reports/standard/budget-income-statement.scm:72
 msgid "Select a budget period that ends the reporting range."
 msgstr "அறிக்கையிடும் வரம்பை முடிக்கும் ஒரு பட்ஜெட் காலத்தை தேர்ந்தெடுக்கவும்."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:102
-#: gnucash/report/reports/standard/income-statement.scm:89
+#: gnucash/report/reports/standard/budget-income-statement.scm:101
+#: gnucash/report/reports/standard/income-statement.scm:88
 msgid "Label the revenue section"
 msgstr "வருவாய் பிரிவை லேபில் செய்யவும்"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:104
-#: gnucash/report/reports/standard/income-statement.scm:91
+#: gnucash/report/reports/standard/budget-income-statement.scm:103
+#: gnucash/report/reports/standard/income-statement.scm:90
 msgid "Whether or not to include a label for the revenue section."
 msgstr "வருமான பிரிவுக்காக ஒரு லேபிலை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:105
-#: gnucash/report/reports/standard/income-statement.scm:92
+#: gnucash/report/reports/standard/budget-income-statement.scm:104
+#: gnucash/report/reports/standard/income-statement.scm:91
 msgid "Include revenue total"
 msgstr "மொத்த வருவாயை சேர்க்கவும்"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:107
-#: gnucash/report/reports/standard/income-statement.scm:94
+#: gnucash/report/reports/standard/budget-income-statement.scm:106
+#: gnucash/report/reports/standard/income-statement.scm:93
 msgid "Whether or not to include a line indicating total revenue."
 msgstr "மொத்த வருமானத்தை சுட்டிக்காட்டும் ஒரு வரியை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:108
-#: gnucash/report/reports/standard/income-statement.scm:101
+#: gnucash/report/reports/standard/budget-income-statement.scm:107
+#: gnucash/report/reports/standard/income-statement.scm:100
 msgid "Label the expense section"
 msgstr "செலவுப் பிரிவை லேபில் செய்யவும்"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:110
-#: gnucash/report/reports/standard/income-statement.scm:103
+#: gnucash/report/reports/standard/budget-income-statement.scm:109
+#: gnucash/report/reports/standard/income-statement.scm:102
 msgid "Whether or not to include a label for the expense section."
 msgstr "செலவு பிரிவிற்காக ஒரு லேபிலை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:111
-#: gnucash/report/reports/standard/income-statement.scm:104
+#: gnucash/report/reports/standard/budget-income-statement.scm:110
+#: gnucash/report/reports/standard/income-statement.scm:103
 msgid "Include expense total"
 msgstr "மொத்த செலவை சேர்க்கவும்"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:113
-#: gnucash/report/reports/standard/income-statement.scm:106
+#: gnucash/report/reports/standard/budget-income-statement.scm:112
+#: gnucash/report/reports/standard/income-statement.scm:105
 msgid "Whether or not to include a line indicating total expense."
 msgstr "மொத்த செலவை சுட்டிக்காட்டும் ஒரு வரியை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:126
-#: gnucash/report/reports/standard/income-statement.scm:130
+#: gnucash/report/reports/standard/budget-income-statement.scm:125
+#: gnucash/report/reports/standard/income-statement.scm:129
 msgid "Display as a two column report"
 msgstr "ஒரு இரண்டு நிரல் அறிக்கையாக காட்டு"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:128
-#: gnucash/report/reports/standard/income-statement.scm:132
+#: gnucash/report/reports/standard/budget-income-statement.scm:127
+#: gnucash/report/reports/standard/income-statement.scm:131
 msgid "Divides the report into an income column and an expense column."
 msgstr "ஒரு வருமான நிரல் மற்றும் செலவு நிரல் என அறிக்கையை பிரிக்கிறது."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:130
-#: gnucash/report/reports/standard/income-statement.scm:134
+#: gnucash/report/reports/standard/budget-income-statement.scm:129
+#: gnucash/report/reports/standard/income-statement.scm:133
 msgid "Display in standard, income first, order"
 msgstr "நிலையான, முதலில் வருமானம், வரிசையில் காட்டு"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:132
-#: gnucash/report/reports/standard/income-statement.scm:136
+#: gnucash/report/reports/standard/budget-income-statement.scm:131
+#: gnucash/report/reports/standard/income-statement.scm:135
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses."
 msgstr ""
 "நிலையான வரிசையில் அறிக்கை காட்டப்பட வைக்கிறது, வரவிற்கு முன் செலவுகளை வைக்கிறது."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:444
+#: gnucash/report/reports/standard/budget-income-statement.scm:443
 msgid "Reporting range end period cannot be less than start period."
 msgstr "அறிக்கையிடும் வரம்பு முடிவு காலம் துவக்கும் காலத்தை விட குறைவாக இல்லை."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:512
-#: gnucash/report/reports/standard/income-statement.scm:505
+#: gnucash/report/reports/standard/budget-income-statement.scm:511
+#: gnucash/report/reports/standard/income-statement.scm:504
 msgid "Revenues"
 msgstr "வருவாய்"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:515
-#: gnucash/report/reports/standard/income-statement.scm:508
+#: gnucash/report/reports/standard/budget-income-statement.scm:514
+#: gnucash/report/reports/standard/income-statement.scm:507
 msgid "Total Revenue"
 msgstr "மொத்த வருவாய்"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:525
-#: gnucash/report/reports/standard/income-statement.scm:515
+#: gnucash/report/reports/standard/budget-income-statement.scm:524
+#: gnucash/report/reports/standard/income-statement.scm:514
 msgid "Total Expenses"
 msgstr "மொத்த செலவுகள்"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:533
+#: gnucash/report/reports/standard/budget-income-statement.scm:532
 #, fuzzy, scheme-format
 msgid "for Budget ~a"
 msgstr "%s பட்ஜெட்டுக்காக"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:535
+#: gnucash/report/reports/standard/budget-income-statement.scm:534
 #, fuzzy, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "%s பட்ஜெட்டுக்கான காலம் %u"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:538
+#: gnucash/report/reports/standard/budget-income-statement.scm:537
 #, fuzzy, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
 msgstr "பட்ஜெட்டுக்கான %s காலங்கள் %u - %u"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:566
+#: gnucash/report/reports/standard/budget-income-statement.scm:565
 #: gnucash/report/reports/standard/equity-statement.scm:457
-#: gnucash/report/reports/standard/income-statement.scm:525
+#: gnucash/report/reports/standard/income-statement.scm:524
 msgid "Net income"
 msgstr "நிகர வருமானம்"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:567
+#: gnucash/report/reports/standard/budget-income-statement.scm:566
 #: gnucash/report/reports/standard/equity-statement.scm:458
-#: gnucash/report/reports/standard/income-statement.scm:526
+#: gnucash/report/reports/standard/income-statement.scm:525
 msgid "Net loss"
 msgstr "நிகர நஷ்டம்"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:607
+#: gnucash/report/reports/standard/budget-income-statement.scm:606
 msgid "Budget Income Statement"
 msgstr "பட்ஜெட் வரவு அறிக்கை"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:608
+#: gnucash/report/reports/standard/budget-income-statement.scm:607
 msgid "Budget Profit & Loss"
 msgstr "பட்ஜெட் இலாபம் & நஷ்டம்"
 
@@ -26389,8 +26378,8 @@ msgid ""
 "Include accounts with zero total (recursive) balances and budget values in "
 "this report."
 msgstr ""
-"பூஜ்ஜிய கூட்டல் (மறுபடியும் வரும்) இருப்புகளுடன் உள்ள கணக்குகளை மற்றும் பட்ஜெட் "
-"மதிப்புகளை இந்த அறிக்கையில் சேர்க்கவும்."
+"பூஜ்ஜிய கூட்டல் (மறுபடியும் வரும்) இருப்புகளுடன் உள்ள கணக்குகளை மற்றும் பட்ஜெட் மதிப்புகளை "
+"இந்த அறிக்கையில் சேர்க்கவும்."
 
 #: gnucash/report/reports/standard/budget.scm:85
 msgid "Include collapsed periods before selected."
@@ -26840,44 +26829,44 @@ msgid "Report only on these accounts."
 msgstr "இந்த கணக்குகளை பற்றி மட்டும் அறிக்கையிடு."
 
 #: gnucash/report/reports/standard/equity-statement.scm:86
-#: gnucash/report/reports/standard/income-statement.scm:118
+#: gnucash/report/reports/standard/income-statement.scm:117
 #: gnucash/report/reports/standard/trial-balance.scm:104
 msgid "Closing Entries pattern"
 msgstr "உள்ளிடுகளின் பாணியை மூடுகிறது"
 
 #: gnucash/report/reports/standard/equity-statement.scm:88
-#: gnucash/report/reports/standard/income-statement.scm:120
+#: gnucash/report/reports/standard/income-statement.scm:119
 #: gnucash/report/reports/standard/trial-balance.scm:106
 msgid "Any text in the Description column which identifies closing entries."
 msgstr "மூடும் உள்ளீடுகளை அடையாளங் காட்டும் விளக்க நிரலிலுள்ள ஏதாவது உரை."
 
 #: gnucash/report/reports/standard/equity-statement.scm:90
-#: gnucash/report/reports/standard/income-statement.scm:122
+#: gnucash/report/reports/standard/income-statement.scm:121
 #: gnucash/report/reports/standard/trial-balance.scm:108
 msgid "Closing Entries pattern is case-sensitive"
 msgstr "மூடும் உள்ளிடுகளின் பாணியை எழுத்துணர்வுடையது"
 
 #: gnucash/report/reports/standard/equity-statement.scm:92
-#: gnucash/report/reports/standard/income-statement.scm:124
+#: gnucash/report/reports/standard/income-statement.scm:123
 #: gnucash/report/reports/standard/trial-balance.scm:110
 msgid "Causes the Closing Entries Pattern match to be case-sensitive."
 msgstr "மூடும் உள்ளிடுகளின் பாணியின் பொருத்தத்தை எழுத்துணர்வுடையதாக உண்டாக்குகிறது."
 
 #: gnucash/report/reports/standard/equity-statement.scm:94
-#: gnucash/report/reports/standard/income-statement.scm:126
+#: gnucash/report/reports/standard/income-statement.scm:125
 #: gnucash/report/reports/standard/trial-balance.scm:112
 msgid "Closing Entries Pattern is regular expression"
 msgstr "மூடும் உள்ளீடுகளின் பாணியின் வழக்கமான தொடர்"
 
 #: gnucash/report/reports/standard/equity-statement.scm:96
-#: gnucash/report/reports/standard/income-statement.scm:128
+#: gnucash/report/reports/standard/income-statement.scm:127
 #: gnucash/report/reports/standard/trial-balance.scm:114
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression."
 msgstr "மூடும் உள்ளீடுகளின் பாணி ஒரு வழக்கமான கோவையாக நடத்தப்படுவதை உண்டாக்குகிறது."
 
 #: gnucash/report/reports/standard/equity-statement.scm:425
-#: gnucash/report/reports/standard/income-statement.scm:481
+#: gnucash/report/reports/standard/income-statement.scm:480
 #: gnucash/report/reports/standard/trial-balance.scm:405
 msgid "for Period"
 msgstr "காலத்திற்காக"
@@ -27223,41 +27212,41 @@ msgstr "நிகர விலை"
 msgid "Tax on Purchases"
 msgstr "வரி வகுப்பு"
 
-#: gnucash/report/reports/standard/income-statement.scm:95
+#: gnucash/report/reports/standard/income-statement.scm:94
 msgid "Label the trading accounts section"
 msgstr "வணிக கணக்குகள் பகுதியை லேபிளிடவும்"
 
-#: gnucash/report/reports/standard/income-statement.scm:97
+#: gnucash/report/reports/standard/income-statement.scm:96
 msgid "Whether or not to include a label for the trading accounts section."
 msgstr ""
 "வணிக கணக்குகளின் பிரிவிற்காக சுட்டிக்காட்டும் ஒரு லேபிலை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/income-statement.scm:98
+#: gnucash/report/reports/standard/income-statement.scm:97
 msgid "Include trading accounts total"
 msgstr "வணிக கணக்குகள் மொத்தத்தை சேர்க்கவும்"
 
-#: gnucash/report/reports/standard/income-statement.scm:100
+#: gnucash/report/reports/standard/income-statement.scm:99
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance."
 msgstr ""
 "மொத்த வணிக கணக்குகளின் இருப்பினை சுட்டிக்காட்டும் ஒரு வரியை சேர்க்கவா அல்லது வேண்டாமா."
 
-#: gnucash/report/reports/standard/income-statement.scm:518
+#: gnucash/report/reports/standard/income-statement.scm:517
 #: libgnucash/engine/Account.cpp:4401 libgnucash/engine/Scrub.c:481
 #: libgnucash/engine/Scrub.c:549
 msgid "Trading"
 msgstr "வணிகம்"
 
-#: gnucash/report/reports/standard/income-statement.scm:521
+#: gnucash/report/reports/standard/income-statement.scm:520
 msgid "Total Trading"
 msgstr "மொத்த வணிகம்"
 
-#: gnucash/report/reports/standard/income-statement.scm:572
+#: gnucash/report/reports/standard/income-statement.scm:571
 #: gnucash/report/reports/standard/trial-balance.scm:573
 msgid "Income Statement"
 msgstr "வருமான அறிக்கை"
 
-#: gnucash/report/reports/standard/income-statement.scm:573
+#: gnucash/report/reports/standard/income-statement.scm:572
 msgid "Profit & Loss"
 msgstr "இலாபம் & நஷ்டம்"
 
@@ -28350,8 +28339,8 @@ msgstr "அறிக்கையில் பயன்படும் ஒரு 
 #, fuzzy
 msgid ""
 "Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to "
-"display the logo at its natural width. The height of the logo will be "
-"scaled accordingly."
+"display the logo at its natural width. The height of the logo will be scaled "
+"accordingly."
 msgstr ""
 "CSS வடிவில் லோகோவின் அகலம், எ.கா. 10% அல்லது 32px. லோகோவை அதன இயல்பான அகலத்தில் "
 "காட்ட காலியாக விடவும். லோகோவின் உயரமானது அதற்கு ஏற்றவாறு அளவிடப்படுகிறது."
@@ -28365,8 +28354,8 @@ msgstr "அறிக்கையில் பயன்படும் ஒரு 
 #, fuzzy
 msgid ""
 "Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to "
-"display the logo at its natural width. The height of the logo will be "
-"scaled accordingly."
+"display the logo at its natural width. The height of the logo will be scaled "
+"accordingly."
 msgstr ""
 "CSS வடிவில் லோகோவின் அகலம், எ.கா. 10% அல்லது 32px. லோகோவை அதன இயல்பான அகலத்தில் "
 "காட்ட காலியாக விடவும். லோகோவின் உயரமானது அதற்கு ஏற்றவாறு அளவிடப்படுகிறது."
@@ -28870,6 +28859,10 @@ msgstr "பணித்தாள்"
 msgid "Creates a complete end-of-period work sheet"
 msgstr "ஒரு முழு கால-இறுதி பணித்தாளை உருவாக்குகிறது"
 
+#: gnucash/report/reports/standard/trial-balance.scm:279
+msgid "Adjusting Entries"
+msgstr "உள்ளீடுகளை சரிசெய்கிறது"
+
 #: gnucash/report/reports/standard/trial-balance.scm:571
 msgid "Adjustments"
 msgstr "சரி செய்தல்கள்"
@@ -28979,7 +28972,7 @@ msgid "Mutual Funds"
 msgstr "மியுச்சுவல் ஃபண்ட்"
 
 #: gnucash/report/report-utilities.scm:203
-#: libgnucash/engine/gnc-commodity.h:116
+#: libgnucash/engine/gnc-commodity.h:121
 msgid "Currencies"
 msgstr "நாணயங்கள்"
 
@@ -30587,40 +30580,40 @@ msgstr "எண் பிழை"
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
 #. They might appear in their editor or in "Since last run".
-#: libgnucash/app-utils/gnc-sx-instance-model.c:990
+#: libgnucash/app-utils/gnc-sx-instance-model.c:991
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1043
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1044
 #, c-format
 msgid "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1097
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1758
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1098
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1759
 #, c-format
 msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1767
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1768
 #, c-format
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:407
+#: libgnucash/app-utils/gnc-ui-balances.c:408
 msgid "Account is already at Auto-Clear Balance."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:451
+#: libgnucash/app-utils/gnc-ui-balances.c:452
 msgid "Too many uncleared splits"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:467
+#: libgnucash/app-utils/gnc-ui-balances.c:468
 msgid "The selected amount cannot be cleared."
 msgstr "தேர்ந்தெடுத்த தொகையை தீர்க்கமுடியாது."
 
-#: libgnucash/app-utils/gnc-ui-balances.c:473
+#: libgnucash/app-utils/gnc-ui-balances.c:474
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr "தனிப்பட்டதாக பிரிப்புகளை தீர்க்கமுடியாது. பல சாத்தியங்கள் காணப்பட்டன."
 
@@ -30758,60 +30751,60 @@ msgid "Invalid option value"
 msgstr "தவறான மறைகுறி தேர்ந்தெடுக்கப்பட்டது"
 
 #. Translators: this string refers to a file name that gets renamed
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:647
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:648
 #, fuzzy
 msgid "Renamed to:"
 msgstr "பக்கத்தை மறுபெயரிடு (_n)"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:672
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:673
 msgid "Notice"
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:677
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:678
 msgid "Your gnucash metadata has been migrated."
 msgstr ""
 
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:679
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:680
 #, fuzzy
 msgid "Old location:"
 msgstr "கோப்பு/இடத்தை திற"
 
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:681
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:682
 #, fuzzy
 msgid "New location:"
 msgstr "புதிய பிரிவு தகவல்"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:683
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:684
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:690
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:691
 msgid "In addition:"
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:696
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:697
 #, fuzzy
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "இந்த குறிமுறை ஏற்கனவே பட்டியலில் சேர்க்கப்பட்டது."
 msgstr[1] "இந்த குறிமுறை ஏற்கனவே பட்டியலில் சேர்க்கப்பட்டது."
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:700
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:701
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:710
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:711
 msgid "The following file has become obsolete and will be ignored:"
 msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:720
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:721
 #, fuzzy
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
@@ -30879,7 +30872,7 @@ msgstr ""
 "உணரப்பட்ட இலாபங்கள் அல்லது சரகிலிருந்து நஷ்டங்கள் அல்லது தொழில் கணக்குகள் எங்கேயும் "
 "பதிவுசெய்யப்படவில்லை."
 
-#: libgnucash/engine/gnc-commodity.h:113
+#: libgnucash/engine/gnc-commodity.h:118
 #, fuzzy
 msgid "All non-currency"
 msgstr "நாணயத்தை தேர்ந்தெடு"
@@ -31111,6 +31104,19 @@ msgstr "பரிமாற்றம் காலியாக்கப்பட�
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "உதவி எதுவும் இல்லை."
+
+#~ msgid "xxx"
+#~ msgstr "xxx"
+
+#~ msgid "Text book style (experimental)"
+#~ msgstr "உரை புத்தக பாணி (சோதனைக்காக)"
+
+#~ msgid ""
+#~ "Show parent account subtotals, indented per accounting text book practice "
+#~ "(experimental)."
+#~ msgstr ""
+#~ "முதன்மை கணக்கு துணை கூட்டல்களை காட்டு, ஒவ்வொரு கணக்கிடும் உரை புத்தக பயிற்சிக்கும் "
+#~ "(பரிசோதனை) உள்தள் போடப்பட்டு."
 
 #~ msgid "Company Name "
 #~ msgstr "நிறுவனத்தின் பெயர் "
@@ -31993,8 +31999,8 @@ msgstr "உதவி எதுவும் இல்லை."
 #~ "வெளிப்புற நிரல் \"AqBanking அமைப்பு வழிகாட்டி\" காணப்படவில்லை.\n"
 #~ "\n"
 #~ "இந்த %s தொகுப்பு நிரல் \"qt3-wizard\"-ஐ கொண்டிருக்க வேண்டும். இந்த நிரல் உள்ளதா என "
-#~ "உறுதிப்படுத்த நிறுவலை சரிபார்க்கவும். சில விநியோகங்களில் இதற்கு கூடுதல் "
-#~ "தொகுப்புகளை நிறுவ தேவைப்படலாம்."
+#~ "உறுதிப்படுத்த நிறுவலை சரிபார்க்கவும். சில விநியோகங்களில் இதற்கு கூடுதல் தொகுப்புகளை "
+#~ "நிறுவ தேவைப்படலாம்."
 
 #~ msgid ""
 #~ "The external program \"AqBanking Setup Wizard\" failed to run "
@@ -32027,8 +32033,8 @@ msgstr "உதவி எதுவும் இல்லை."
 #~ "successfully. Please try running the \"AqBanking Setup Wizard\" again."
 #~ msgstr ""
 #~ "வெளிப்புற நிரல் \"AqBanking அமைப்பு வழிகாட்டி\" ஐ வெற்றிகரமாக இயக்க முடியவில்லை. "
-#~ "வழிகாட்டி சரியாக இயக்கினால் மட்டுமே ஆன்லைன் பேங்கிங்கை அமைக்க முடியும். "
-#~ "\"AqBanking அமைப்பு வழிகாட்டி\"ஐ மீண்டும் இயக்குவதற்கு முயற்சிக்கவும்."
+#~ "வழிகாட்டி சரியாக இயக்கினால் மட்டுமே ஆன்லைன் பேங்கிங்கை அமைக்க முடியும். \"AqBanking "
+#~ "அமைப்பு வழிகாட்டி\"ஐ மீண்டும் இயக்குவதற்கு முயற்சிக்கவும்."
 
 #~ msgid "_Now"
 #~ msgstr "இப்போது (_N)"

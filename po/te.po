@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-02-10 23:02+0100\n"
+"POT-Creation-Date: 2021-02-22 17:34+0100\n"
 "PO-Revision-Date: 2014-09-25 20:34-0500\n"
 "Last-Translator: Ravi Kumar Ragam <ragamrravi@gmail.com>\n"
 "Language-Team: NONE\n"
@@ -580,8 +580,8 @@ msgid ""
 "Assets:Cash.)"
 msgstr ""
 "బదిలీ రిజిష్టర్ నిలువువరుసలో ప్రస్తుత ఖాతా పేరు మొదటి అక్షరం(లు) టైప్ చేస్తే, GnuCash మీ ఖాతాల జాబితా "
-"నుంచి పేరును పూర్తి చేస్తుంది. ఉపఖాతాల కోసం, మాతృక ఖాతా మొదటి అక్షరం(లు) టైప్ చేసిదాని తర్వాత ':', "
-"ఆ తర్వాత ఉపఖాతా మొదటి అక్షరం టైప్ చేయి.. (ఉదా ఎసెట్స్: క్యాష్ కోసం A:C)"
+"నుంచి పేరును పూర్తి చేస్తుంది. ఉపఖాతాల కోసం, మాతృక ఖాతా మొదటి అక్షరం(లు) టైప్ చేసిదాని తర్వాత ':', ఆ "
+"తర్వాత ఉపఖాతా మొదటి అక్షరం టైప్ చేయి.. (ఉదా ఎసెట్స్: క్యాష్ కోసం A:C)"
 
 #: doc/tip_of_the_day.list.c:65
 #, fuzzy
@@ -788,8 +788,8 @@ msgstr ""
 "అభినందనలు! మీరు పుస్తకాలు మూయడం చేశారు!\n"
 
 #: gnucash/gnome/assistant-acct-period.c:589
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1268
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1273
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1274
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1279
 #: gnucash/report/reports/standard/budget-flow.scm:44
 msgid "Period"
 msgstr "అవధి"
@@ -880,65 +880,65 @@ msgstr ""
 msgid "New Book Options"
 msgstr "కొత్త పుస్తకం ఐచ్చికాలు"
 
-#: gnucash/gnome/assistant-loan.cpp:126
+#: gnucash/gnome/assistant-loan.cpp:127
 msgid "Taxes"
 msgstr "పన్నులు"
 
-#: gnucash/gnome/assistant-loan.cpp:126
+#: gnucash/gnome/assistant-loan.cpp:127
 msgid "Tax Payment"
 msgstr "పన్ను చెల్లింపు"
 
-#: gnucash/gnome/assistant-loan.cpp:127
+#: gnucash/gnome/assistant-loan.cpp:128
 msgid "Insurance"
 msgstr "బీమా"
 
-#: gnucash/gnome/assistant-loan.cpp:127
+#: gnucash/gnome/assistant-loan.cpp:128
 msgid "Insurance Payment"
 msgstr "బీమా చెల్లింపు"
 
 #. Translators: PMI stands for Private Mortgage Insurance.
-#: gnucash/gnome/assistant-loan.cpp:129
+#: gnucash/gnome/assistant-loan.cpp:130
 msgid "PMI"
 msgstr "PMI"
 
-#: gnucash/gnome/assistant-loan.cpp:129
+#: gnucash/gnome/assistant-loan.cpp:130
 msgid "PMI Payment"
 msgstr "PMI చెల్లింపు"
 
-#: gnucash/gnome/assistant-loan.cpp:130
+#: gnucash/gnome/assistant-loan.cpp:131
 msgid "Other Expense"
 msgstr "ఇతర వ్యయం "
 
-#: gnucash/gnome/assistant-loan.cpp:130
+#: gnucash/gnome/assistant-loan.cpp:131
 msgid "Miscellaneous Payment"
 msgstr "చిల్లర చెల్లింపు"
 
 #. Translators: %s is "Taxes",
 #. "Insurance", or similar.
-#: gnucash/gnome/assistant-loan.cpp:765
+#: gnucash/gnome/assistant-loan.cpp:766
 #, c-format
 msgid "... pay \"%s\"?"
 msgstr "... చెల్లింపు \"%s\"?"
 
-#: gnucash/gnome/assistant-loan.cpp:777
+#: gnucash/gnome/assistant-loan.cpp:778
 msgid "via Escrow account?"
 msgstr "ప్రతిబంధ ఖాతా ద్వారా?"
 
-#: gnucash/gnome/assistant-loan.cpp:924
+#: gnucash/gnome/assistant-loan.cpp:925
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2902
 #: gnucash/register/ledger-core/split-register.c:2667
 msgid "Loan"
 msgstr "ఋణం"
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
-#: gnucash/gnome/assistant-loan.cpp:1459
+#: gnucash/gnome/assistant-loan.cpp:1460
 #, c-format
 msgid "Loan Repayment Option: \"%s\""
 msgstr "రుణం తిరిగి చెల్లింపు ఐచ్చికం: \"%s\""
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
-#: gnucash/gnome/assistant-loan.cpp:1861 gnucash/gnome/dialog-lot-viewer.c:941
+#: gnucash/gnome/assistant-loan.cpp:1862 gnucash/gnome/dialog-lot-viewer.c:941
 #: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:429
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
 #: gnucash/gtkbuilder/dialog-doclink.glade:612
@@ -951,7 +951,7 @@ msgstr "రుణం తిరిగి చెల్లింపు ఐచ్చ
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:49
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
 #: gnucash/import-export/import-main-matcher.c:1089
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
@@ -961,8 +961,8 @@ msgstr "రుణం తిరిగి చెల్లింపు ఐచ్చ
 #: gnucash/register/ledger-core/split-register-model.c:232
 #: gnucash/report/reports/standard/account-summary.scm:83
 #: gnucash/report/reports/standard/advanced-portfolio.scm:73
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1095
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1100
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1105
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1110
 #: gnucash/report/reports/standard/cashflow-barchart.scm:343
 #: gnucash/report/reports/standard/category-barchart.scm:632
 #: gnucash/report/reports/standard/category-barchart.scm:653
@@ -988,14 +988,14 @@ msgstr "రుణం తిరిగి చెల్లింపు ఐచ్చ
 msgid "Date"
 msgstr "తేదీ"
 
-#: gnucash/gnome/assistant-loan.cpp:1867 gnucash/gnome/assistant-loan.cpp:2846
-#: gnucash/gnome/assistant-loan.cpp:2908 gnucash/gnome/assistant-loan.cpp:2921
+#: gnucash/gnome/assistant-loan.cpp:1868 gnucash/gnome/assistant-loan.cpp:2847
+#: gnucash/gnome/assistant-loan.cpp:2909 gnucash/gnome/assistant-loan.cpp:2922
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2863
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2904
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2909
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2920
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2993
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3079
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2996
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3082
 #: gnucash/gtkbuilder/dialog-payment.glade:436
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:132
 #: gnucash/register/ledger-core/split-register.c:2628
@@ -1011,11 +1011,11 @@ msgstr "తేదీ"
 msgid "Payment"
 msgstr "చెల్లింపు"
 
-#: gnucash/gnome/assistant-loan.cpp:1873 gnucash/gnome/assistant-loan.cpp:2941
+#: gnucash/gnome/assistant-loan.cpp:1874 gnucash/gnome/assistant-loan.cpp:2942
 msgid "Principal"
 msgstr "అసలు"
 
-#: gnucash/gnome/assistant-loan.cpp:1879 gnucash/gnome/assistant-loan.cpp:2961
+#: gnucash/gnome/assistant-loan.cpp:1880 gnucash/gnome/assistant-loan.cpp:2962
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2858
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2895
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2903
@@ -1032,7 +1032,7 @@ msgstr "అసలు"
 msgid "Interest"
 msgstr "వడ్డీ"
 
-#: gnucash/gnome/assistant-loan.cpp:2847
+#: gnucash/gnome/assistant-loan.cpp:2848
 msgid "Escrow Payment"
 msgstr "ప్రతిబంధ చెల్లింపు"
 
@@ -1053,7 +1053,7 @@ msgstr "ధర చేర్చుతున్న దోషం"
 #: gnucash/gnome/dialog-find-transactions.c:109
 #: gnucash/import-export/aqb/gnc-ab-utils.c:541
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:151
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
 #: gnucash/import-export/import-main-matcher.c:1090
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
@@ -1116,7 +1116,7 @@ msgstr "సవరించు..."
 #: gnucash/gnome/dialog-invoice.c:2599 gnucash/gnome/dialog-invoice.c:2824
 #: gnucash/gnome/dialog-invoice.c:2825 gnucash/gnome/dialog-invoice.c:3534
 #: gnucash/gnome-search/dialog-search.c:1073
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2998
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3001
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
 #: gnucash/report/reports/standard/invoice.scm:787
 #: libgnucash/engine/Account.cpp:173 libgnucash/engine/gncInvoice.c:1082
@@ -1136,7 +1136,7 @@ msgstr "ఓచర్‌"
 #: gnucash/gnome/gnc-plugin-page-report.c:1853
 #: gnucash/gnome-search/dialog-search.c:1089
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2908
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3073
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3076
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:167
 #: gnucash/gtkbuilder/dialog-invoice.glade:8
 #: gnucash/gtkbuilder/dialog-invoice.glade:205
@@ -1158,7 +1158,7 @@ msgstr "ఇన్వాయిస్‌"
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
 #: gnucash/gtkbuilder/gnc-frequency.glade:656
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:48
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:56
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
 #: gnucash/import-export/import-pending-matches.c:192
 #: gnucash/report/reports/standard/register.scm:217
 #: gnucash/report/trep-engine.scm:280 gnucash/report/trep-engine.scm:313
@@ -1294,7 +1294,7 @@ msgstr "సరుకును తొలగించాలా?"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1111
 #: gnucash/gnome/gnc-plugin-page-register2.c:1630
-#: gnucash/gnome/gnc-plugin-page-register.c:2015
+#: gnucash/gnome/gnc-plugin-page-register.c:2011
 #: gnucash/gnome/gnc-split-reg.c:975 gnucash/gnome/gnc-split-reg.c:1013
 #: gnucash/gnome/gnc-split-reg.c:1235 gnucash/gnome/gnc-split-reg.c:1503
 #: gnucash/gnome/gnc-split-reg.c:1543 gnucash/gnome/window-reconcile2.c:2125
@@ -1310,7 +1310,7 @@ msgstr "సరుకును తొలగించాలా?"
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:886
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1023
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1063
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2355
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2358
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:202
 #: gnucash/gtkbuilder/dialog-account.glade:20
 #: gnucash/gtkbuilder/dialog-account.glade:383
@@ -1635,7 +1635,7 @@ msgstr "లావాదేవీ వివరాలు"
 #: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:417
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:828
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2812
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2815
 #: gnucash/gtkbuilder/dialog-book-close.glade:163
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:97
 #: gnucash/gtkbuilder/dialog-date-close.glade:140
@@ -1644,7 +1644,7 @@ msgstr "లావాదేవీ వివరాలు"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/import-main-matcher.c:1093
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
@@ -1835,9 +1835,9 @@ msgstr "సమతుల్యమైనది"
 
 #: gnucash/gnome/dialog-find-transactions2.c:117
 #: gnucash/gnome/dialog-find-transactions.c:115
-#: gnucash/report/html-acct-table.scm:630
+#: gnucash/report/html-acct-table.scm:613
 #: gnucash/report/reports/standard/equity-statement.scm:169
-#: gnucash/report/reports/standard/income-statement.scm:268
+#: gnucash/report/reports/standard/income-statement.scm:267
 #: gnucash/report/reports/standard/trial-balance.scm:291
 msgid "Closing Entries"
 msgstr "మూసే నమోదులు"
@@ -1860,8 +1860,8 @@ msgstr "వాటా ధర"
 #: gnucash/gnome/dialog-find-transactions2.c:124
 #: gnucash/gnome/dialog-invoice.c:3594 gnucash/gnome/dialog-lot-viewer.c:971
 #: gnucash/gnome/gnc-split-reg.c:694 gnucash/gnome/reconcile-view.c:413
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2892
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2904
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2895
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2907
 #: gnucash/gtkbuilder/assistant-loan.glade:199
 #: gnucash/gtkbuilder/assistant-loan.glade:617
 #: gnucash/gtkbuilder/assistant-loan.glade:764
@@ -1892,8 +1892,8 @@ msgstr "మొత్తం"
 #: gnucash/gnome/dialog-find-transactions.c:124
 #: gnucash/gnome/dialog-lot-viewer.c:977
 #: gnucash/gnome/dialog-sx-since-last-run.c:1051
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2882
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2902
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2885
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2905
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:78
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1081
 #: gnucash/report/reports/standard/portfolio.scm:258
@@ -1906,7 +1906,7 @@ msgstr "విలువ"
 #: gnucash/gnome/dialog-find-transactions.c:126
 #: gnucash/gnome/dialog-invoice.c:3345 gnucash/gnome/dialog-invoice.c:3379
 #: gnucash/gnome/dialog-invoice.c:3413
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2720
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2723
 #: gnucash/gtkbuilder/dialog-invoice.glade:93
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:161
 msgid "Date Posted"
@@ -1918,8 +1918,8 @@ msgstr "తేదీ నమోదు చేయబడింది."
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.c:2507
-#: gnucash/gnome/gnc-plugin-page-register.c:4212
+#: gnucash/gnome/gnc-plugin-page-register.c:2503
+#: gnucash/gnome/gnc-plugin-page-register.c:4208
 #: gnucash/gnome-search/dialog-search.c:875
 #: gnucash/gnome-search/dialog-search.c:881
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
@@ -1933,17 +1933,17 @@ msgstr "సంఖ్య/చర్య"
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
 #: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.c:2512
+#: gnucash/gnome/gnc-plugin-page-register.c:2508
 #: gnucash/gnome/gnc-split-reg.c:703 gnucash/gnome-search/dialog-search.c:874
 #: gnucash/gnome-search/dialog-search.c:882
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2749
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2751
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2769
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2771
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2752
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2754
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2772
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2774
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:102
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:150
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
 #: gnucash/register/ledger-core/split-register-model.c:327
 #: gnucash/report/reports/standard/invoice.scm:92
@@ -1957,8 +1957,8 @@ msgstr "చర్య"
 #: gnucash/gnome/dialog-find-transactions.c:136
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
-#: gnucash/gnome/gnc-plugin-page-register.c:2506
-#: gnucash/gnome/gnc-plugin-page-register.c:4211
+#: gnucash/gnome/gnc-plugin-page-register.c:2502
+#: gnucash/gnome/gnc-plugin-page-register.c:4207
 #: gnucash/gnome-search/dialog-search.c:877
 #: gnucash/gnome-search/dialog-search.c:883
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:614
@@ -1973,10 +1973,10 @@ msgstr "లావాదేవీ సంఖ్య"
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
 #: gnucash/gnome/dialog-find-transactions.c:180
-#: gnucash/gnome/gnc-plugin-page-register.c:2511
+#: gnucash/gnome/gnc-plugin-page-register.c:2507
 #: gnucash/gnome/gnc-split-reg.c:691 gnucash/gnome-search/dialog-search.c:876
 #: gnucash/gnome-search/dialog-search.c:884
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2765
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2768
 #: gnucash/gtkbuilder/dialog-payment.glade:264
 #: gnucash/gtkbuilder/gnc-date-format.glade:98
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:614
@@ -1994,15 +1994,15 @@ msgstr "వివరణ/గమనికలు/మెమో"
 #: gnucash/gnome/dialog-find-transactions2.c:153
 #: gnucash/gnome/dialog-find-transactions.c:153
 #: gnucash/gnome/gnc-split-reg.c:697
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2785
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2787
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2796
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2798
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2816
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2788
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2790
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2799
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2801
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2819
 #: gnucash/gtkbuilder/dialog-payment.glade:486
 #: gnucash/gtkbuilder/dialog-transfer.glade:215
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 #: gnucash/import-export/import-main-matcher.c:1094
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
@@ -2022,8 +2022,8 @@ msgstr "మెమో"
 #: gnucash/gnome/gnc-split-reg.c:706
 #: gnucash/gnome-utils/gnc-tree-view-account.c:960
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:473
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2814
-#: gnucash/gtkbuilder/assistant-acct-period.glade:155
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2817
+#: gnucash/gtkbuilder/assistant-acct-period.glade:146
 #: gnucash/gtkbuilder/dialog-customer.glade:463
 #: gnucash/gtkbuilder/dialog-invoice.glade:445
 #: gnucash/gtkbuilder/dialog-invoice.glade:1154
@@ -2035,7 +2035,7 @@ msgstr "మెమో"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-exp/csv-tree-export.c:157
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
 #: gnucash/register/ledger-core/split-register-model.c:491
 #: gnucash/report/reports/standard/account-summary.scm:438
@@ -2140,7 +2140,7 @@ msgstr "ఈ నమోదు క్రమానికి జతపరచబడి
 
 #: gnucash/gnome/dialog-invoice.c:836 gnucash/gnome/dialog-invoice.c:3354
 #: gnucash/gnome/dialog-invoice.c:3388 gnucash/gnome/dialog-invoice.c:3422
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2736
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2739
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:162
 #: gnucash/register/ledger-core/split-register-model.c:239
 #: gnucash/report/reports/aging.scm:388
@@ -2420,7 +2420,7 @@ msgstr "ఓచర్‌ గమనికలు"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:811
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2872
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2875
 #: gnucash/gtkbuilder/assistant-loan.glade:283
 #: gnucash/gtkbuilder/dialog-doclink.glade:639
 #: gnucash/gtkbuilder/dialog-fincalc.glade:727
@@ -2464,7 +2464,7 @@ msgstr "ప్రారంభించబడింది"
 #: gnucash/gnome/reconcile-view.c:425
 #: gnucash/gtkbuilder/dialog-payment.glade:473
 #: gnucash/gtkbuilder/dialog-transfer.glade:165
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/register/ledger-core/split-register-model.c:255
 #: gnucash/register/ledger-core/split-register-model.c:275
 #: gnucash/report/reports/standard/general-journal.scm:95
@@ -2554,7 +2554,7 @@ msgid "Only Active?"
 msgstr "క్రియాశీలమైనవి మాత్రమా?"
 
 #: gnucash/gnome/dialog-job.c:577 gnucash/gnome/dialog-job.c:590
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2926
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2929
 #: gnucash/gtkbuilder/dialog-job.glade:204
 #: gnucash/register/ledger-core/split-register-model.c:369
 msgid "Rate"
@@ -2589,7 +2589,7 @@ msgid "Closed"
 msgstr "మూయబడింది"
 
 #: gnucash/gnome/dialog-lot-viewer.c:890
-#: gnucash/gtkbuilder/assistant-acct-period.glade:143
+#: gnucash/gtkbuilder/assistant-acct-period.glade:134
 #: gnucash/report/html-fonts.scm:106
 #: gnucash/report/reports/standard/register.scm:347
 msgid "Title"
@@ -2599,7 +2599,7 @@ msgstr "శీర్షిక"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:854
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3112
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3115
 #: gnucash/register/ledger-core/split-register-model.c:320
 #: gnucash/register/ledger-core/split-register-model.c:484
 #: gnucash/report/reports/standard/account-summary.scm:423
@@ -2712,7 +2712,7 @@ msgstr "బదిలీలు ఖాతాల పోస్ట్‌ విభి
 
 #: gnucash/gnome/dialog-payment.c:1270 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1077
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2783
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2786
 #: gnucash/gtkbuilder/dialog-customer.glade:479
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:151
 #: gnucash/gtkbuilder/dialog-invoice.glade:479
@@ -2731,7 +2731,7 @@ msgstr "ఖాతాదారు"
 
 #: gnucash/gnome/dialog-payment.c:1274 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1109
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2794
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2797
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:168
 #: gnucash/gtkbuilder/dialog-payment.glade:44
 #: gnucash/gtkbuilder/dialog-vendor.glade:475
@@ -2806,7 +2806,7 @@ msgid ""
 "If you continue these splits will be ignored:\n"
 "\n"
 "%s\n"
-"Do you wish to continue and ignore these splits ?"
+"Do you wish to continue and ignore these splits?"
 msgstr ""
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
@@ -2823,16 +2823,16 @@ msgstr "ధరలను తొలగించాలా?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:427
 #: gnucash/gtkbuilder/dialog-invoice.glade:615
-#: gnucash/report/reports/standard/budget-income-statement.scm:124
+#: gnucash/report/reports/standard/budget-income-statement.scm:123
 #: gnucash/report/reports/standard/equity-statement.scm:85
-#: gnucash/report/reports/standard/income-statement.scm:117
+#: gnucash/report/reports/standard/income-statement.scm:116
 #: gnucash/report/reports/standard/trial-balance.scm:91
 msgid "Entries"
 msgstr "నమోదులు"
 
 #: gnucash/gnome/dialog-price-edit-db.c:457
 #, fuzzy
-msgid "Are you sure you want to delete these prices ?"
+msgid "Are you sure you want to delete these prices?"
 msgstr "ఎంపిక చేసుకున్న ధరను తొలగించాలని మీరు తప్పక కోరుకుంటున్నారా?"
 
 #: gnucash/gnome/dialog-price-editor.c:221
@@ -3285,7 +3285,7 @@ msgstr "వర్తకుడిని వెతుకు"
 
 #: gnucash/gnome/gnc-budget-view.c:499
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2951
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2976
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2979
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:70
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:76
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:85
@@ -3294,7 +3294,7 @@ msgstr "వర్తకుడిని వెతుకు"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
 #: gnucash/register/ledger-core/split-register.c:2716
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1088
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1279
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1285
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
@@ -3305,8 +3305,8 @@ msgstr "ఆదాయం"
 #: gnucash/gnome/gnc-budget-view.c:502
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:122
-#: gnucash/report/reports/standard/budget-income-statement.scm:522
-#: gnucash/report/reports/standard/income-statement.scm:512
+#: gnucash/report/reports/standard/budget-income-statement.scm:521
+#: gnucash/report/reports/standard/income-statement.scm:511
 #: gnucash/report/report-utilities.scm:205
 msgid "Expenses"
 msgstr "వ్యయాలు"
@@ -3330,7 +3330,7 @@ msgstr "ప్రస్తుత బడ్జెట్‌ను తెరువ�
 #: gnucash/gnome/gnc-budget-view.c:1652 gnucash/gnome/window-reconcile2.c:1069
 #: gnucash/gnome/window-reconcile.c:1122
 #: gnucash/gnome-utils/gnc-tree-view-account.c:923
-#: gnucash/report/html-acct-table.scm:829 gnucash/report/reports/aging.scm:544
+#: gnucash/report/html-acct-table.scm:800 gnucash/report/reports/aging.scm:544
 #: gnucash/report/reports/aging.scm:831
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:294
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1053
@@ -4203,19 +4203,19 @@ msgstr "తొలగించు"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:454
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1991
-#: gnucash/gnome/gnc-plugin-page-register.c:1964
-#: gnucash/gnome/gnc-plugin-page-register.c:5068
+#: gnucash/gnome/gnc-plugin-page-register.c:1960
+#: gnucash/gnome/gnc-plugin-page-register.c:5064
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:520
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:526
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2829
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2831
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2833
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2835
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2846
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2850
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2832
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2834
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2836
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2838
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2849
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2853
 #: gnucash/gtkbuilder/dialog-preferences.glade:980
 #: gnucash/report/report-core.scm:158
 #: gnucash/report/reports/example/average-balance.scm:92
@@ -4226,16 +4226,16 @@ msgstr ""
 #: gnucash/report/reports/standard/account-summary.scm:85
 #: gnucash/report/reports/standard/advanced-portfolio.scm:163
 #: gnucash/report/reports/standard/balance-forecast.scm:37
-#: gnucash/report/reports/standard/balance-sheet.scm:87
+#: gnucash/report/reports/standard/balance-sheet.scm:86
 #: gnucash/report/reports/standard/balsheet-pnl.scm:81
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:52
 #: gnucash/report/reports/standard/budget-barchart.scm:38
-#: gnucash/report/reports/standard/budget-income-statement.scm:75
+#: gnucash/report/reports/standard/budget-income-statement.scm:74
 #: gnucash/report/reports/standard/cashflow-barchart.scm:45
 #: gnucash/report/reports/standard/category-barchart.scm:75
 #: gnucash/report/reports/standard/equity-statement.scm:68
 #: gnucash/report/reports/standard/income-gst-statement.scm:125
-#: gnucash/report/reports/standard/income-statement.scm:62
+#: gnucash/report/reports/standard/income-statement.scm:61
 #: gnucash/report/reports/standard/net-charts.scm:45
 #: gnucash/report/reports/standard/portfolio.scm:69
 #: gnucash/report/reports/standard/trial-balance.scm:76
@@ -4416,7 +4416,7 @@ msgstr "గమనికలు"
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:227
 #: gnucash/report/reports/standard/budget-flow.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:59
+#: gnucash/report/reports/standard/budget-income-statement.scm:58
 #: gnucash/report/reports/standard/budget.scm:94
 msgid "Budget"
 msgstr "బడ్జెట్‌"
@@ -5555,13 +5555,13 @@ msgstr "సాధారణ సంచిక"
 #. Translators: %s is the name
 #. of the tab page
 #: gnucash/gnome/gnc-plugin-page-register2.c:1620
-#: gnucash/gnome/gnc-plugin-page-register.c:2005
+#: gnucash/gnome/gnc-plugin-page-register.c:2001
 #, c-format
 msgid "Save changes to %s?"
 msgstr "%sకు మార్పులను భద్రపరచాలా?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1624
-#: gnucash/gnome/gnc-plugin-page-register.c:2009
+#: gnucash/gnome/gnc-plugin-page-register.c:2005
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -5571,12 +5571,12 @@ msgstr ""
 "లేదా చర్యను రద్దు చేయాలని కోరుకుంటున్నారా? "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1627
-#: gnucash/gnome/gnc-plugin-page-register.c:2012
+#: gnucash/gnome/gnc-plugin-page-register.c:2008
 msgid "_Discard Transaction"
 msgstr "_లావాదేవీని విసర్జించు"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1631
-#: gnucash/gnome/gnc-plugin-page-register.c:2016
+#: gnucash/gnome/gnc-plugin-page-register.c:2012
 msgid "_Save Transaction"
 msgstr "_లావాదేవీని భద్రపరచు"
 
@@ -5585,35 +5585,35 @@ msgstr "_లావాదేవీని భద్రపరచు"
 #: gnucash/gnome/gnc-plugin-page-register2.c:1707
 #: gnucash/gnome/gnc-plugin-page-register2.c:1730
 #: gnucash/gnome/gnc-plugin-page-register2.c:1778
-#: gnucash/gnome/gnc-plugin-page-register.c:2049
-#: gnucash/gnome/gnc-plugin-page-register.c:2084
-#: gnucash/gnome/gnc-plugin-page-register.c:2097
-#: gnucash/gnome/gnc-plugin-page-register.c:2160
-#: gnucash/gnome/gnc-plugin-page-register.c:2265
-#: gnucash/gnome/gnc-plugin-page-register.c:2403
+#: gnucash/gnome/gnc-plugin-page-register.c:2045
+#: gnucash/gnome/gnc-plugin-page-register.c:2080
+#: gnucash/gnome/gnc-plugin-page-register.c:2093
+#: gnucash/gnome/gnc-plugin-page-register.c:2156
+#: gnucash/gnome/gnc-plugin-page-register.c:2261
+#: gnucash/gnome/gnc-plugin-page-register.c:2399
 msgid "unknown"
 msgstr "తెలియని"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1681
 #: gnucash/gnome/gnc-plugin-page-register2.c:2416
 #: gnucash/gnome/gnc-plugin-page-register.c:906
-#: gnucash/gnome/gnc-plugin-page-register.c:2070
-#: gnucash/gnome/gnc-plugin-page-register.c:3563
+#: gnucash/gnome/gnc-plugin-page-register.c:2066
+#: gnucash/gnome/gnc-plugin-page-register.c:3559
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
 msgstr "సాధారణ సంచిక"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1683
 #: gnucash/gnome/gnc-plugin-page-register2.c:2422
-#: gnucash/gnome/gnc-plugin-page-register.c:2072
-#: gnucash/gnome/gnc-plugin-page-register.c:3569
+#: gnucash/gnome/gnc-plugin-page-register.c:2068
+#: gnucash/gnome/gnc-plugin-page-register.c:3565
 msgid "Portfolio"
 msgstr "పోర్ట్‌ఫోలియో"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1685
 #: gnucash/gnome/gnc-plugin-page-register2.c:2428
-#: gnucash/gnome/gnc-plugin-page-register.c:2074
-#: gnucash/gnome/gnc-plugin-page-register.c:3575
+#: gnucash/gnome/gnc-plugin-page-register.c:2070
+#: gnucash/gnome/gnc-plugin-page-register.c:3571
 msgid "Search Results"
 msgstr "శోధన ఫలితాలు"
 
@@ -5623,17 +5623,17 @@ msgid "General Journal Report"
 msgstr "సాధారణ సంచిక"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2424
-#: gnucash/gnome/gnc-plugin-page-register.c:3571
+#: gnucash/gnome/gnc-plugin-page-register.c:3567
 msgid "Portfolio Report"
 msgstr "పోర్ట్‌ఫోలియో నివేదిక"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2430
-#: gnucash/gnome/gnc-plugin-page-register.c:3577
+#: gnucash/gnome/gnc-plugin-page-register.c:3573
 msgid "Search Results Report"
 msgstr "శోధన ఫలితాల నివేదిక"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2434
-#: gnucash/gnome/gnc-plugin-page-register.c:3581
+#: gnucash/gnome/gnc-plugin-page-register.c:3577
 #: gnucash/gtkbuilder/dialog-preferences.glade:2684
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
@@ -5646,17 +5646,17 @@ msgid "Register Report"
 msgstr "రిజిష్టర్ నివేదిక"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2452
-#: gnucash/gnome/gnc-plugin-page-register.c:3599
+#: gnucash/gnome/gnc-plugin-page-register.c:3595
 msgid "and subaccounts"
 msgstr "మరియు ఉపఖాతాలు"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2484
-#: gnucash/gnome/gnc-plugin-page-register.c:3628
+#: gnucash/gnome/gnc-plugin-page-register.c:3624
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2874
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2893
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2911
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3018
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3023
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3021
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3026
 #: gnucash/gtkbuilder/dialog-payment.glade:312
 #: gnucash/register/ledger-core/split-register.c:2544
 #: gnucash/register/ledger-core/split-register.c:2639
@@ -5671,9 +5671,9 @@ msgid "Credit"
 msgstr "జమ పద్దు"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2487
-#: gnucash/gnome/gnc-plugin-page-register.c:3632
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3099
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3104
+#: gnucash/gnome/gnc-plugin-page-register.c:3628
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3102
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3107
 #: gnucash/gtkbuilder/dialog-payment.glade:296
 #: gnucash/register/ledger-core/split-register.c:2521
 #: gnucash/report/reports/standard/general-journal.scm:82
@@ -5685,12 +5685,12 @@ msgid "Debit"
 msgstr "ఖర్చుపద్దు"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2653
-#: gnucash/gnome/gnc-plugin-page-register.c:3765
+#: gnucash/gnome/gnc-plugin-page-register.c:3761
 msgid "Print checks from multiple accounts?"
 msgstr "బహుళ ఖాతాల నుంచి పరిశీలనలను ముద్రించాలా?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2655
-#: gnucash/gnome/gnc-plugin-page-register.c:3767
+#: gnucash/gnome/gnc-plugin-page-register.c:3763
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
@@ -5699,24 +5699,24 @@ msgstr ""
 "పరిశీలనలను మీరు ముద్రించాలని కోరుకుంటున్నారా?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2665
-#: gnucash/gnome/gnc-plugin-page-register.c:3777
+#: gnucash/gnome/gnc-plugin-page-register.c:3773
 msgid "_Print checks"
 msgstr "_పరిశీలనలను ముద్రించు"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2684
-#: gnucash/gnome/gnc-plugin-page-register.c:3796
+#: gnucash/gnome/gnc-plugin-page-register.c:3792
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr "బ్యాంకు ఖాతా రిజిష్టర్ లేదా శోధన ఫలితాల నుంచి మాత్రమే మీరు పరిశీలనలను ముద్రించగలరు."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2896
-#: gnucash/gnome/gnc-plugin-page-register.c:3993
+#: gnucash/gnome/gnc-plugin-page-register.c:3989
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr "సమన్వితం లేక శుభ్రపరచిన చీలికలతో మీరు లావాదేవీని వ్యర్ధం చేయలేరు"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register2.c:3039
-#: gnucash/gnome/gnc-plugin-page-register.c:4264
+#: gnucash/gnome/gnc-plugin-page-register.c:4260
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2327
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
@@ -5773,98 +5773,98 @@ msgid ""
 "the new register."
 msgstr "కొత్త రిజిష్టర్‌లో ఖాతాను తెరచినప్పుడు పాత రిజిష్టర్‌లో అదే ఖాతాను తెరవడానికి మీరు ప్రయత్నించారు. "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3409
+#: gnucash/gnome/gnc-plugin-page-register.c:3405
 #, fuzzy
 msgid "Filter By:"
 msgstr "ద్వారా వడబోత..."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3423
+#: gnucash/gnome/gnc-plugin-page-register.c:3419
 msgid "Start Date:"
 msgstr "ప్రారంభ తేదీ:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3429
+#: gnucash/gnome/gnc-plugin-page-register.c:3425
 #, fuzzy
 msgid "Show previous number of days:"
 msgstr "వాటాల సంఖ్యను చూపించు"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3436
+#: gnucash/gnome/gnc-plugin-page-register.c:3432
 msgid "End Date:"
 msgstr "ముగింపు తేదీ:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3446
+#: gnucash/gnome/gnc-plugin-page-register.c:3442
 #: gnucash/report/trep-engine.scm:146 gnucash/report/trep-engine.scm:420
 #, fuzzy
 msgid "Unreconciled"
 msgstr "_అసమన్వయం"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3448
+#: gnucash/gnome/gnc-plugin-page-register.c:3444
 #: gnucash/gnome-search/search-reconciled.c:218
 #: gnucash/gnome-utils/gnc-tree-view-account.c:875
 #: gnucash/report/trep-engine.scm:147 gnucash/report/trep-engine.scm:425
 msgid "Cleared"
 msgstr "శుభ్రపరచిన"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3450
+#: gnucash/gnome/gnc-plugin-page-register.c:3446
 #: gnucash/gnome-search/search-reconciled.c:221
 #: gnucash/gnome-utils/gnc-tree-view-account.c:889
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 #: gnucash/import-export/import-match-picker.c:437
 #: gnucash/report/trep-engine.scm:148 gnucash/report/trep-engine.scm:430
 msgid "Reconciled"
 msgstr "సమన్వితం"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3452
+#: gnucash/gnome/gnc-plugin-page-register.c:3448
 #: gnucash/gnome-search/search-reconciled.c:224
 #: gnucash/report/trep-engine.scm:149
 msgid "Frozen"
 msgstr "ఘనీభవ"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3454
+#: gnucash/gnome/gnc-plugin-page-register.c:3450
 #: gnucash/gnome-search/search-reconciled.c:227
 #: gnucash/report/trep-engine.scm:150
 msgid "Voided"
 msgstr "రద్దయిన"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3458
-#: gnucash/gnome/gnc-plugin-page-register.c:3460
+#: gnucash/gnome/gnc-plugin-page-register.c:3454
+#: gnucash/gnome/gnc-plugin-page-register.c:3456
 msgid "Hide:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3460
+#: gnucash/gnome/gnc-plugin-page-register.c:3456
 msgid "Show:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3565
-#: gnucash/gnome/gnc-plugin-page-register.c:3583
+#: gnucash/gnome/gnc-plugin-page-register.c:3561
+#: gnucash/gnome/gnc-plugin-page-register.c:3579
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
 msgstr "లావాదేవీ నివేదిక"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4000
+#: gnucash/gnome/gnc-plugin-page-register.c:3996
 #: gnucash/gnome/gnc-split-reg.c:1160
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:68
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "వ్యాఖ్య: '%s' తో ఈ లావాదేవీ పఠితం మాత్రమే గుర్తు వేయబడింది."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4080
+#: gnucash/gnome/gnc-plugin-page-register.c:4076
 #: gnucash/gnome/gnc-split-reg.c:1131
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1121
 msgid "A reversing entry has already been created for this transaction."
 msgstr "ఈ లావాదేవీకోసం విరుద్ధ నమోదు ఇప్పటికే సృష్టించబడింది."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4087
+#: gnucash/gnome/gnc-plugin-page-register.c:4083
 #, fuzzy
 msgid "Reverse Transaction"
 msgstr "_విరుద్ధం చేస్తున్న లావాదేవీని చేర్చు"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4088
+#: gnucash/gnome/gnc-plugin-page-register.c:4084
 #, fuzzy
 msgid "New Transaction Information"
 msgstr "లావాదేవీ సమాచారం"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:4176
+#: gnucash/gnome/gnc-plugin-page-register.c:4172
 #, c-format
 msgid "Sort %s by..."
 msgstr "తో %s క్రమబద్ధీకరించు..."
@@ -5872,34 +5872,34 @@ msgstr "తో %s క్రమబద్ధీకరించు..."
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.c:4754
+#: gnucash/gnome/gnc-plugin-page-register.c:4750
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4763
+#: gnucash/gnome/gnc-plugin-page-register.c:4759
 #, fuzzy
 #| msgid "Select Account"
 msgid "Select document"
 msgstr "ఖాతా ఎంచుకో"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4764
+#: gnucash/gnome/gnc-plugin-page-register.c:4760
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4765
+#: gnucash/gnome/gnc-plugin-page-register.c:4761
 #: gnucash/gnome-search/dialog-search.c:323
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:172
 msgid "Select"
 msgstr "ఎంచుకో"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4813
+#: gnucash/gnome/gnc-plugin-page-register.c:4809
 #, fuzzy
 #| msgid "Post Date"
 msgid "Go to Date"
 msgstr "నమోదు తేదీ"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:5091
+#: gnucash/gnome/gnc-plugin-page-register.c:5087
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr ""
@@ -6348,8 +6348,8 @@ msgid ""
 "You would be removing a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
 msgstr ""
-"సమన్వయ చీలికను మీరు తొలగించబోతున్నారు! ఇది మీ సమన్వయ నిల్వను లేకుండా చేస్తుంది కాబట్టి దీనిని "
-"సవరించడం మంచి ఆలోచన కాదు."
+"సమన్వయ చీలికను మీరు తొలగించబోతున్నారు! ఇది మీ సమన్వయ నిల్వను లేకుండా చేస్తుంది కాబట్టి దీనిని సవరించడం "
+"మంచి ఆలోచన కాదు."
 
 #: gnucash/gnome/gnc-split-reg.c:917
 #, fuzzy
@@ -6427,8 +6427,8 @@ msgid ""
 "This transaction contains reconciled splits. Modifying it is not a good idea "
 "because that will cause your reconciled balance to be off."
 msgstr ""
-"ఈ లావాదేవీ సమన్వయ చీలికలను కలిగి వుంది. ఇది మీ సమన్వయ నిల్వను లేకుండా చేస్తుంది కాబట్టి దీనిని "
-"సవరించడం మంచి ఆలోచన కాదు. "
+"ఈ లావాదేవీ సమన్వయ చీలికలను కలిగి వుంది. ఇది మీ సమన్వయ నిల్వను లేకుండా చేస్తుంది కాబట్టి దీనిని సవరించడం "
+"మంచి ఆలోచన కాదు. "
 
 #. Translators: This is the confirmation button in a warning dialog
 #: gnucash/gnome/gnc-split-reg.c:1238
@@ -6453,8 +6453,8 @@ msgid ""
 "You would be deleting a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
 msgstr ""
-"సమన్వయ చీలికను మీరు తొలగించబోతున్నారు! ఇది మీ సమన్వయ నిల్వను లేకుండా చేస్తుంది కాబట్టి దీనిని "
-"సవరించడం మంచి ఆలోచన కాదు."
+"సమన్వయ చీలికను మీరు తొలగించబోతున్నారు! ఇది మీ సమన్వయ నిల్వను లేకుండా చేస్తుంది కాబట్టి దీనిని సవరించడం "
+"మంచి ఆలోచన కాదు."
 
 #: gnucash/gnome/gnc-split-reg.c:1444
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:967
@@ -7188,9 +7188,9 @@ msgid ""
 msgstr ""
 "\n"
 "మీరు లోడ్ చేయడానికి ప్రయత్నిస్తున్న ఫైల్ Gnuక్యాష్ పాత వెర్షన్‌కు చెందినది. పాత వెర్షన్లలో ఫైల్ ఫార్మట్ "
-"ఉపయోగిస్తున్న క్యారెక్టర్ ఎన్‌కోడింగ్ సమగ్ర వివరణను కోల్పోయింది. అంటే మీ డేటా ఫైల్‌లోని టెక్స్ట్‌ను అనేక "
-"అస్పష్టమైన మార్గాల్లో చదవవచ్చు. ఈ అస్పష్టతను స్వయంచాలకంగా పరిష్కరించలేరు, కానీ కొత్త Gnuక్యాష్ 2.0.0 "
-"ఫైల్ ఫార్మట్ ఈ దశలో మీరు మళ్లీ వెళ్లాల్సిన అవసరం లేకుండా అవసరమైన వివరణలన్నిటినీ చేర్చుకుని ఉంటుంది.\n"
+"ఉపయోగిస్తున్న క్యారెక్టర్ ఎన్‌కోడింగ్ సమగ్ర వివరణను కోల్పోయింది. అంటే మీ డేటా ఫైల్‌లోని టెక్స్ట్‌ను అనేక అస్పష్టమైన "
+"మార్గాల్లో చదవవచ్చు. ఈ అస్పష్టతను స్వయంచాలకంగా పరిష్కరించలేరు, కానీ కొత్త Gnuక్యాష్ 2.0.0 ఫైల్ ఫార్మట్ "
+"ఈ దశలో మీరు మళ్లీ వెళ్లాల్సిన అవసరం లేకుండా అవసరమైన వివరణలన్నిటినీ చేర్చుకుని ఉంటుంది.\n"
 "\n"
 "Gnuక్యాష్ మీ డేటా ఫైల్‌కు సరైన క్యారెక్టర్ ఎన్‌కోడింగ్‌ను ఊహించేందుకు ప్రయత్నిస్తుంది. తర్వాతి పేజీలో ఈ ఊహను "
 "ఉపయోగించేటప్పుడు దాని ఫలితంగా వచ్చే టెక్స్ట్‌లను Gnuక్యాష్ చూపిస్తుంది. పదాలు అనుకున్నట్టే కనిపిస్తున్నాయా "
@@ -8269,8 +8269,8 @@ msgid ""
 "system, you may not have write permission for the directory or your anti-"
 "virus software is preventing this action."
 msgstr ""
-"%sకు GnuCash రాయలేకపోతోంది. ఆ డేటాబేస్ పఠిత ఫైల్ వ్యవస్థ మీద ఉండవచ్చు లేకుంటే, డైరెక్టరీలో రాసే "
-"అనుమతి మీకు లేకపోవచ్చు. "
+"%sకు GnuCash రాయలేకపోతోంది. ఆ డేటాబేస్ పఠిత ఫైల్ వ్యవస్థ మీద ఉండవచ్చు లేకుంటే, డైరెక్టరీలో రాసే అనుమతి "
+"మీకు లేకపోవచ్చు. "
 
 #: gnucash/gnome-utils/gnc-file.c:385
 #, c-format
@@ -8342,8 +8342,8 @@ msgid ""
 "Could not write to file %s. Check that you have permission to write to this "
 "file and that there is sufficient space to create it."
 msgstr ""
-"ఫైల్ %sకు రాయలేరు. ఈ ఫైల్‌ను రాసేందుకు మీకు అనుమతి ఉందా, దానిని రూపొందించడానికి తగినంత చోటు ఉందా "
-"అని పరిశీలించు. "
+"ఫైల్ %sకు రాయలేరు. ఈ ఫైల్‌ను రాసేందుకు మీకు అనుమతి ఉందా, దానిని రూపొందించడానికి తగినంత చోటు ఉందా అని "
+"పరిశీలించు. "
 
 #: gnucash/gnome-utils/gnc-file.c:473
 #, c-format
@@ -8374,8 +8374,8 @@ msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
 msgstr ""
-"ఈ డేటాబేస్ GnuCash పాత వెర్షన్‌ నుంచి వచ్చింది. ప్రస్తుత రూపాంతరానికి నవీకరించడానికి OK ఎంచుకోవాలి. "
-"దానిని పఠితం మాత్రమే గుర్తు వేసేందుకు రద్దు ఎంచుకో. "
+"ఈ డేటాబేస్ GnuCash పాత వెర్షన్‌ నుంచి వచ్చింది. ప్రస్తుత రూపాంతరానికి నవీకరించడానికి OK ఎంచుకోవాలి. దానిని "
+"పఠితం మాత్రమే గుర్తు వేసేందుకు రద్దు ఎంచుకో. "
 
 #: gnucash/gnome-utils/gnc-file.c:496
 #, fuzzy
@@ -8539,7 +8539,7 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
-"proceed ?"
+"proceed?"
 msgstr "%s ఫైల్ ఇప్పటికే ఉంది. మీరు ఖచ్చితంగా దీన్ని శుభ్రపరిచి రాయాలనుకుంటున్నారా?"
 
 #: gnucash/gnome-utils/gnc-file.c:1699
@@ -9072,7 +9072,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1357
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:477
 #: gnucash/register/ledger-core/split-register.c:624
-#: gnucash/register/register-gnome/datecell-gnome.c:107
+#: gnucash/register/register-gnome/datecell-gnome.c:108
 msgid "Cannot store a transaction at this date"
 msgstr "ఈ తేదీలో లావాదేవీని నిల్వ చేయలేరు"
 
@@ -9206,8 +9206,8 @@ msgid "Teller"
 msgstr "టెల్లర్"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2862
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2970
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3056
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2973
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3059
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:133
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:529
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1093
@@ -9230,8 +9230,8 @@ msgstr "వోచర్"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2915
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2926
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2958
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2965
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3043
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2968
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3046
 #: gnucash/register/ledger-core/split-register.c:2630
 #: gnucash/register/ledger-core/split-register.c:2644
 #: gnucash/register/ledger-core/split-register.c:2680
@@ -9247,8 +9247,8 @@ msgstr "పెంచు"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2916
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2927
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2959
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2958
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3050
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2961
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3053
 #: gnucash/register/ledger-core/split-register.c:2631
 #: gnucash/register/ledger-core/split-register.c:2645
 #: gnucash/register/ledger-core/split-register.c:2681
@@ -9309,7 +9309,7 @@ msgstr "ప్రత్యక్ష ఖర్చుపద్దు"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2933
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2940
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2960
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3068
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3071
 #: gnucash/register/ledger-core/split-register.c:2646
 #: gnucash/register/ledger-core/split-register.c:2650
 #: gnucash/register/ledger-core/split-register.c:2657
@@ -9332,7 +9332,7 @@ msgstr "కొను"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2934
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2941
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2961
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2988
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2991
 #: gnucash/register/ledger-core/split-register.c:2647
 #: gnucash/register/ledger-core/split-register.c:2651
 #: gnucash/register/ledger-core/split-register.c:2662
@@ -9360,7 +9360,7 @@ msgid "ATM Withdraw"
 msgstr "ATM విత్‌డ్రా"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2921
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2981
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2984
 #: gnucash/register/ledger-core/split-register.c:2686
 #: libgnucash/engine/Account.cpp:172
 msgid "Rebate"
@@ -9375,8 +9375,8 @@ msgstr "చెల్లింపు చెక్కు"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:109
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:113
 #: gnucash/register/ledger-core/split-register.c:2700
-#: gnucash/report/reports/standard/balance-sheet.scm:503
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1113
+#: gnucash/report/reports/standard/balance-sheet.scm:502
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1123
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
 #: libgnucash/app-utils/gnc-ui-util.c:1045 libgnucash/engine/Account.cpp:4397
 msgid "Equity"
@@ -9384,9 +9384,9 @@ msgstr "ఈక్విటీ"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2942
 #: gnucash/gnome-utils/gnc-tree-view-price.c:426
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2936
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2939
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:153
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
 #: gnucash/register/ledger-core/split-register.c:2707
 #: gnucash/register/ledger-core/split-register-model.c:402
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1076
@@ -9519,7 +9519,7 @@ msgid "Account Name"
 msgstr "ఖాతా పేరు"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:816
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2916
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2919
 #: gnucash/gtkbuilder/dialog-price.glade:574
 msgid "Commodity"
 msgstr "సరుకు"
@@ -9794,16 +9794,18 @@ msgstr "స్థితి పట్టీ"
 msgid "Imbalance"
 msgstr "అసమతుల్యం"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1487
+#. Translators: currently max 34 (ASCII) chars (= 17 or 8 UTF-8 chars depending on the block)
+#. See "MAX_DATE_LENGTH" in https://code.gnucash.org/docs/MAINT/group__Date.html
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:1490
 msgid " Scheduled "
 msgstr "షెడ్యూల్ చేసినవి"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2314
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2317
 #: gnucash/register/ledger-core/split-register-control.c:1526
 msgid "Save the changed transaction?"
 msgstr "మార్చిన లావాదేవీని భద్రపరచాలా?"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2316
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2319
 msgid ""
 "The current transaction has changed. Would you like to record the changes, "
 "or discard the changes?"
@@ -9811,29 +9813,29 @@ msgstr ""
 "ప్రస్తుత లావాదేవీ మార్చబడింది. మార్పులను మీరు రికార్డు చేయాలని కోరుకుంటున్నారా, లేదంటే మార్పులను "
 "త్యజించాలనుకుంటున్నారా?"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2354
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2357
 #: gnucash/register/ledger-core/split-register-control.c:1541
 msgid "_Discard Changes"
 msgstr "_మార్పులను విసర్జించు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2356
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2359
 #: gnucash/register/ledger-core/split-register-control.c:1543
 msgid "_Record Changes"
 msgstr "_మార్పులను రికార్డ్ చేయి"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2722
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2725
 msgid "Date Entered"
 msgstr "ప్రవేశపెట్టిన తేదీ"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2724
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2727
 msgid "Date Reconciled"
 msgstr "తేదీ రాజీ చేయబడింది"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2726
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2729
 msgid "Date Posted / Entered / Reconciled"
 msgstr "పోస్టు చేసిన/ప్రవేశపెట్టిన/రాజీ చేసిన తేదీ"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2747
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2750
 #: gnucash/gtkbuilder/dialog-order.glade:270
 #: gnucash/gtkbuilder/dialog-order.glade:632
 #: gnucash/report/reports/standard/customer-summary.scm:71
@@ -9844,84 +9846,84 @@ msgstr "పోస్టు చేసిన/ప్రవేశపెట్టి�
 msgid "Reference"
 msgstr "ప్రస్తావన"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2753
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2756
 msgid "Reference / Action"
 msgstr "మార్గదర్శకం/చర్య"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2767
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2770
 msgid "T-Number"
 msgstr "T-సంఖ్య"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2773
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2776
 msgid "Number / Action"
 msgstr "సంఖ్య/చర్య"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2789
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2792
 msgid "Customer / Memo"
 msgstr "వినియోగదారు/మెమో"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2800
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2803
 msgid "Vendor / Memo"
 msgstr "వ్యాపారి/మెమో"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2818
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2821
 msgid "Description / Notes / Memo"
 msgstr "వివరణ/గమనికలు/మెమో"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2848
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2851
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:625
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
 msgid "Void Reason"
 msgstr "చెల్లని కారణం"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2852
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2855
 msgid "Accounts / Void Reason"
 msgstr "ఖాతాలు/ చెల్లని కారణం"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2862
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2865
 msgid "R"
 msgstr "R"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2906
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2909
 msgid "Amount / Value"
 msgstr "మొత్తం/విలువ"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2948
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2951
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 #: libgnucash/engine/Account.cpp:163
 msgid "Withdrawal"
 msgstr "ఉపసంహరణ"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2953
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2956
 #: libgnucash/engine/Account.cpp:164
 msgid "Spend"
 msgstr "ఖర్చు చేయి"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3003
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3010
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3006
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3013
 #: gnucash/report/reports/standard/reconcile-report.scm:89
 #: libgnucash/engine/Account.cpp:162
 msgid "Funds Out"
 msgstr "నిధులు పోక"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3012
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3015
 #: gnucash/register/ledger-core/split-register-model.c:505
 msgid "Credit Formula"
 msgstr "జమ పద్దు సూత్రం"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3033
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3036
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
 #: libgnucash/engine/Account.cpp:143
 msgid "Deposit"
 msgstr "డిపాజిట్"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3038
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3041
 #: libgnucash/engine/Account.cpp:144
 msgid "Receive"
 msgstr "పొందు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3061
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1283
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3064
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1289
 #: gnucash/report/reports/standard/customer-summary.scm:139
 #: gnucash/report/reports/standard/customer-summary.scm:326
 #: gnucash/report/reports/standard/net-charts.scm:367
@@ -9931,114 +9933,114 @@ msgstr "పొందు"
 msgid "Expense"
 msgstr "వ్యయం"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3084
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3091
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3087
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3094
 #: gnucash/report/reports/standard/reconcile-report.scm:86
 #: libgnucash/engine/Account.cpp:142
 msgid "Funds In"
 msgstr "నిధులు రాక"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3093
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3096
 #: gnucash/register/ledger-core/split-register-model.c:498
 msgid "Debit Formula"
 msgstr "ఖర్చు పద్దు సూత్రం"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3163
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3166
 msgid "Enter Due Date"
 msgstr "గడువు తేదీని ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3174
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3177
 msgid "Enter the transaction reference, such as the invoice or check number"
 msgstr "ఇన్వాయిస్‌ లేదా చెక్ సంఖ్య లాంటి లావాదేవీ అన్వయాన్ని ప్రవేశపెట్టు."
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3176
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3183
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3179
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3186
 msgid "Enter the type of transaction, or choose one from the list"
 msgstr "లావాదేవీ రకాన్ని ప్రవేశపెట్టు, లేదా జాబితా నుంచి లావాదేవీని ఎంచుకో"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3181
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3184
 msgid "Enter the transaction number, such as the check number"
 msgstr "చెక్ సంఖ్య లాంటి లావాదేవీ సంఖ్యను ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3193
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3196
 #: gnucash/register/ledger-core/split-register-model.c:1132
 msgid "Enter the name of the Customer"
 msgstr "ఖాతాదారుని పేరు ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3195
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3204
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3213
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3198
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3207
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3216
 #: gnucash/register/ledger-core/split-register-model.c:1169
 msgid "Enter notes for the transaction"
 msgstr "లావాదేవీ గురించి గమనికలు ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3197
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3206
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3215
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3200
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3209
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3218
 #: gnucash/register/ledger-core/split-register-model.c:1330
 msgid "Enter a description of the split"
 msgstr "చీలికలకు చెందిన వివరణను ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3202
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3205
 #: gnucash/register/ledger-core/split-register-model.c:1135
 msgid "Enter the name of the Vendor"
 msgstr "వ్యాపారి పేరు ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3211
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3214
 #: gnucash/register/ledger-core/split-register-model.c:1138
 msgid "Enter a description of the transaction"
 msgstr "లావాదేవీ గురించి వివరణను ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3225
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3229
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3228
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3232
 #: gnucash/register/ledger-core/split-register-model.c:1492
 #: gnucash/register/ledger-core/split-register-model.c:1559
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "బదిలీ చేసేందుకు మొత్తాన్ని ప్రవేశపెట్టు, లేదా జాబితా నుంచి దానిని ఎంచుకో"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3227
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3230
 #: gnucash/register/ledger-core/split-register-model.c:1202
 msgid "Reason the transaction was voided"
 msgstr "లావాదేవీ రద్దు చేసినందుకు కారణం"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3239
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3242
 msgid "Enter the reconcile type"
 msgstr "రాజీ రకాన్ని ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3249
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3252
 msgid "Enter the type of transaction"
 msgstr "లావాదేవీ రకాన్ని ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3259
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3279
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3262
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3282
 msgid "Enter the value of shares bought or sold"
 msgstr "కొనుగోలు చేసిన లేదా అమ్మిన వాటాల విలువను ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3269
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3281
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3272
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3284
 #: gnucash/register/ledger-core/split-register-model.c:1440
 msgid "Enter the number of shares bought or sold"
 msgstr "కొన్న లేదా అమ్మిన వాటాల సంఖ్యను ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3291
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3294
 msgid "* Indicates the transaction Commodity."
 msgstr "* లావాదేవీ సరకును సూచిస్తుంది"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3301
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3304
 msgid "Enter the rate"
 msgstr "రేట్‌ను ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3311
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3314
 #: gnucash/register/ledger-core/split-register-model.c:1404
 msgid "Enter the effective share price"
 msgstr "ప్రభావితమైన వాటా ధరను ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3321
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3324
 #: gnucash/register/ledger-core/split-register-model.c:2385
 msgid "Enter credit formula for real transaction"
 msgstr "వాస్తవ లావాదేవీకి జమ పద్దు సూత్రాన్ని ప్రవేశపెట్టు"
 
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3331
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3334
 #: gnucash/register/ledger-core/split-register-model.c:2351
 msgid "Enter debit formula for real transaction"
 msgstr "వాస్తవ లావాదేవీకి ఖర్చుపద్దు సూత్రాన్ని ప్రవేశపెట్టు"
@@ -10324,7 +10326,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable ?"
+"       Perhaps you need to set the $DISPLAY environment variable?"
 msgstr "దోషం: గ్రాఫికల్ యూజర్ ఇంటర్‌ఫేస్‌ను ప్రారంభించలేదు. ఐచ్చికం ధర-కోట్ల- జోడింపు అమర్చబడలేదు. "
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
@@ -10491,8 +10493,8 @@ msgid ""
 "Otherwise GnuCash does not check for due invoices."
 msgstr ""
 "క్రియాశీలమైతే , ఏదైనా బిల్లులు త్వరలోనే బాకీ పడనుందా అనే విషయాన్ని GnuCash ప్రారంభంలోనే పరిశీలిస్తుంది. "
-"అలాగైతే, అది వాడుకరికి జ్ఞాపిక సంభాషణను సమర్పిస్తుంది. \\”త్వరలో\\” నిర్వచనం \"ముందస్తుగా రోజులు"
-"\" అమరిక ద్వారా నియంత్రించబడుతుంది. లేకుంటే GnuCash బాకీ బిల్లుల కోసం పరిశీలించదు. "
+"అలాగైతే, అది వాడుకరికి జ్ఞాపిక సంభాషణను సమర్పిస్తుంది. \\”త్వరలో\\” నిర్వచనం \"ముందస్తుగా రోజులు\" "
+"అమరిక ద్వారా నియంత్రించబడుతుంది. లేకుంటే GnuCash బాకీ బిల్లుల కోసం పరిశీలించదు. "
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:122
 #, fuzzy
@@ -10540,8 +10542,8 @@ msgid ""
 "If active, each new invoice will be opened in a new window. Otherwise a new "
 "invoice will be opened as a tab in the main window."
 msgstr ""
-"క్రియాశీలమైతే , కొత్త ఇన్వాయిస్‌‌లో ఒక్కో కొత్త విండో తెరవబడుతుంది. లేకుంటే కొత్త ఇన్వాయిస్‌ ప్రధాన విండోలోనే "
-"ట్యాబ్‌గా తెరవబడుతుంది. "
+"క్రియాశీలమైతే , కొత్త ఇన్వాయిస్‌‌లో ఒక్కో కొత్త విండో తెరవబడుతుంది. లేకుంటే కొత్త ఇన్వాయిస్‌ ప్రధాన విండోలోనే ట్యాబ్‌గా "
+"తెరవబడుతుంది. "
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:142
 msgid "Accumulate multiple splits into one"
@@ -10582,8 +10584,8 @@ msgid ""
 "Otherwise GnuCash does not check for due bills."
 msgstr ""
 "క్రియాశీలమైతే , ఏదైనా బిల్లులు త్వరలోనే బాకీ పడనుందా అనే విషయాన్ని GnuCash ప్రారంభంలోనే పరిశీలిస్తుంది. "
-"అలాగైతే, అది వాడుకరికి జ్ఞాపిక సంభాషణను సమర్పిస్తుంది. \\”త్వరలో\\” నిర్వచనం \"ముందస్తుగా రోజులు"
-"\" అమరిక ద్వారా నియంత్రించబడుతుంది. లేకుంటే GnuCash బాకీ బిల్లుల కోసం పరిశీలించదు. "
+"అలాగైతే, అది వాడుకరికి జ్ఞాపిక సంభాషణను సమర్పిస్తుంది. \\”త్వరలో\\” నిర్వచనం \"ముందస్తుగా రోజులు\" "
+"అమరిక ద్వారా నియంత్రించబడుతుంది. లేకుంటే GnuCash బాకీ బిల్లుల కోసం పరిశీలించదు. "
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:164
 msgid "Show bills due within this many days"
@@ -10964,9 +10966,8 @@ msgid ""
 "existing transactions. Otherwise a less sophisticated rule-based matching "
 "mechanism will be used."
 msgstr ""
-"లావాదేవీ సరిపోలికలో SKIP చర్యను చేతనపరచు. చేతనపరిస్తే, పసుపు మండలంలో అత్యుత్తమ సరిపోలిక స్కోర్ "
-"కలిగిన లావాదేవీ (స్వయం-ADD ప్రారంభానికి పైన, స్వయం- CLEAR ప్రారంభానికి కింద) అప్రమేయంతో "
-"దాటవేయబడుతుంది. "
+"లావాదేవీ సరిపోలికలో SKIP చర్యను చేతనపరచు. చేతనపరిస్తే, పసుపు మండలంలో అత్యుత్తమ సరిపోలిక స్కోర్ కలిగిన "
+"లావాదేవీ (స్వయం-ADD ప్రారంభానికి పైన, స్వయం- CLEAR ప్రారంభానికి కింద) అప్రమేయంతో దాటవేయబడుతుంది. "
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:20
 msgid "Minimum score to be displayed"
@@ -10992,8 +10993,8 @@ msgid ""
 "score) will be added to the GnuCash file by default."
 msgstr ""
 "సరిపోలుస్తున్న లావాదేవీ స్వయంచాలకంగా చేర్చేందుకు కనిష్ఠ ప్రారంభాన్ని ఈ క్షేత్రం నిర్దేశిస్తుంది. ఎరుపు "
-"మండలంలో అత్యుత్తమ సరిపోలిక స్కోరును కలిగిన లావాదేవీ (కనిష్ఠ స్కోరు ప్రదర్శనకు పైన, Add మ్యాచ్ "
-"స్కోరుకు దిగువ లేక సమంగా) అప్రమేయంగా GnuCash ఫైల్‌కు చేర్చబడుతుంది."
+"మండలంలో అత్యుత్తమ సరిపోలిక స్కోరును కలిగిన లావాదేవీ (కనిష్ఠ స్కోరు ప్రదర్శనకు పైన, Add మ్యాచ్ స్కోరుకు "
+"దిగువ లేక సమంగా) అప్రమేయంగా GnuCash ఫైల్‌కు చేర్చబడుతుంది."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:30
 msgid "Clear matching transactions above this score"
@@ -11314,8 +11315,8 @@ msgid ""
 "If active, GnuCash shows an explanation of the auto-save feature the first "
 "time that feature is started. Otherwise no extra explanation is shown."
 msgstr ""
-"క్రియాశీలమైతే, GnuCash స్వీయ-భద్రం విశేషాంశం ఆ విశేషాంశం ప్రారంభమైన కాలంలో వివరణను చూపిస్తుంది. "
-"లేకపోతే ఎక్కువ వివరణలను చూపదు."
+"క్రియాశీలమైతే, GnuCash స్వీయ-భద్రం విశేషాంశం ఆ విశేషాంశం ప్రారంభమైన కాలంలో వివరణను చూపిస్తుంది. లేకపోతే "
+"ఎక్కువ వివరణలను చూపదు."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:40
 msgid "Auto-save time interval"
@@ -11430,8 +11431,7 @@ msgstr "లాగ్/బ్యాకప్ ఫైళ్లను తొలగి
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:90
 msgid "Delete old log/backup files after this many days (0 = never)"
-msgstr ""
-"ఇన్ని రోజుల తర్వాత ఈ పాత సమాచార/బ్యాకప్ ఫైళ్ళను తొలగించు (0 =ఎప్పుడూ కాదు)"
+msgstr "ఇన్ని రోజుల తర్వాత ఈ పాత సమాచార/బ్యాకప్ ఫైళ్ళను తొలగించు (0 =ఎప్పుడూ కాదు)"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:91
 msgid ""
@@ -11577,8 +11577,8 @@ msgid ""
 "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr ""
 "కరెన్సీ-ఎంపిక సెటింగ్‌ను \"ఇతరం\"కు అమర్చితే, ఈ సెటింగ్ కొత్త ఖాతాల కోసం ఉపయోగించిన అప్రమేయ కరెన్సీని "
-"పేర్కొంటుంది. ఈ క్షేత్రం కరెన్సీ కోసం మూడు అక్షరాల ISO 4217 కోడ్‌ను కలిగి ఉండాలి. (ఉదా.USD, "
-"GBP, RUB)."
+"పేర్కొంటుంది. ఈ క్షేత్రం కరెన్సీ కోసం మూడు అక్షరాల ISO 4217 కోడ్‌ను కలిగి ఉండాలి. (ఉదా.USD, GBP, "
+"RUB)."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:150
 msgid "Use 24 hour time format"
@@ -11618,8 +11618,8 @@ msgid ""
 "sliding window starting a set number of months backwards in time."
 msgstr ""
 "సంవత్సరం లేకుండా తేదీని ప్రవేశపెట్టినప్పుడు, అది ప్రస్తుత క్యాలెండర్ సంవత్సరం లోపల ఉండేలా లేక సకాలంలో "
-"వెనుక వైపుగా నెలల కూర్పును ప్రారంభించే స్లైడింగ్ విండో మీద ఆధారపడిన ప్రస్తుత తేదీకి దగ్గరగా ఉండేలా "
-"పూర్తి చేయబడగలదు "
+"వెనుక వైపుగా నెలల కూర్పును ప్రారంభించే స్లైడింగ్ విండో మీద ఆధారపడిన ప్రస్తుత తేదీకి దగ్గరగా ఉండేలా పూర్తి "
+"చేయబడగలదు "
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:165
 msgid ""
@@ -11827,8 +11827,8 @@ msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
 msgstr ""
-"క్రియాశీలమైతే, ప్రతి కొత్త రిజిష్టర్ కొత్త విండోలో తెరచుకుంటుంది. లేకపోతే ప్రతి కొత్త రిజిష్టర్ ప్రధాన "
-"విండోలోని టాబ్‌లా తెరచుకుంటుంది."
+"క్రియాశీలమైతే, ప్రతి కొత్త రిజిష్టర్ కొత్త విండోలో తెరచుకుంటుంది. లేకపోతే ప్రతి కొత్త రిజిష్టర్ ప్రధాన విండోలోని "
+"టాబ్‌లా తెరచుకుంటుంది."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:265
 msgid "Color all lines of a transaction the same"
@@ -11840,8 +11840,8 @@ msgid ""
 "color for their background. Otherwise the background colors are alternated "
 "on each line."
 msgstr ""
-"క్రియాశీలమైతే, ఒక లావాదేవీని తయారు చేసే అన్ని వరుసలు వాటి నేపథ్యం కోసం అదే రంగును ఉపయోగిస్తాయి. "
-"లేనిపక్షంలో నేపథ్య రంగులు ప్రతి గీతలోనూ ఆల్టర్నేట్‌గా ఉంటాయి. "
+"క్రియాశీలమైతే, ఒక లావాదేవీని తయారు చేసే అన్ని వరుసలు వాటి నేపథ్యం కోసం అదే రంగును ఉపయోగిస్తాయి. లేనిపక్షంలో "
+"నేపథ్య రంగులు ప్రతి గీతలోనూ ఆల్టర్నేట్‌గా ఉంటాయి. "
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:270
 msgid "Show horizontal borders in a register"
@@ -11853,8 +11853,8 @@ msgid ""
 "between cells will be indicated with a heavy line. Otherwise the border "
 "between cells will not be marked."
 msgstr ""
-"రిజిష్టర్‌లో అడ్డు వరుసల మధ్య సమతల సరిహద్దులను చూపించు. క్రియాశీలమైతే , గడుల మధ్య భారీలైన్‌తో "
-"సరిహద్దు సూచించబడుతుంది. లేకపోతే, గడుల మధ్య సరిహద్దు గుర్తు వేయబడదు. "
+"రిజిష్టర్‌లో అడ్డు వరుసల మధ్య సమతల సరిహద్దులను చూపించు. క్రియాశీలమైతే , గడుల మధ్య భారీలైన్‌తో సరిహద్దు "
+"సూచించబడుతుంది. లేకపోతే, గడుల మధ్య సరిహద్దు గుర్తు వేయబడదు. "
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:275
 msgid "Show vertical borders in a register"
@@ -12085,8 +12085,8 @@ msgstr ""
 "ఈ సెటింగ్ PDF ఎగుమతికి ఫైల్ పేరును ఎంచుకుంటుంది. ఇది మూడు వాదనలతో కూడిన ఒక sprintf(3) "
 "పదంతీగ: \"%1$s\" అనేది \"ఇన్‌వాయిస్\" లాంటి నివేదిక పేరు.\"%2$s\" అనేది నివేదిక సంఖ్య, ఇన్‌వాయిస్ "
 "నివేదికకు ఇన్‌వాయిస్ సంఖ్య.\"%3$s\" అనేది ఫైల్ పేరు- తేదీ-ఫార్మట్ సెటింగ్ ప్రకారం ఫార్మట్ చేసిన నివేదిక తేదీ. "
-"(గమనిక: ఫైల్ పేర్లలో అనుమతించని '/'లాంటి ఏదేని క్యారెక్టర్లు ఫలితంగా వచ్చే ఫైల్ పేరులో అండర్ "
-"స్కోర్లు'_'తో మార్చబడుతాయి.) "
+"(గమనిక: ఫైల్ పేర్లలో అనుమతించని '/'లాంటి ఏదేని క్యారెక్టర్లు ఫలితంగా వచ్చే ఫైల్ పేరులో అండర్ స్కోర్లు'_'తో "
+"మార్చబడుతాయి.) "
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
@@ -12101,9 +12101,9 @@ msgid ""
 "United States style dates."
 msgstr ""
 "PDF ఎగుమతి ఫైల్ పేరులో తేదీలు ఉపయోగిస్తున్న మార్గాన్ని ఈ సెటింగ్ ఎంచుకుంటుంది. సిస్టం స్థానిక సెటింగ్‌ను "
-"ఉపయోగించడానికి ఈ సెటింగ్ కోసం సాధ్యపడే విలువలు \"స్థానికం\"గా ఉంటాయి. ఖండాంతర యురప్ తరహా తేదీలకు "
-"\"ce\"గా, ISO 8601 ప్రామాణిక తేదీలకు \"iso\"గా, బ్రిటన్ తరహా తేదీలకు \"uk\" గా, అమెరికా తరహా "
-"తేదీలకు \"us\"గా ఉంటాయి. "
+"ఉపయోగించడానికి ఈ సెటింగ్ కోసం సాధ్యపడే విలువలు \"స్థానికం\"గా ఉంటాయి. ఖండాంతర యురప్ తరహా తేదీలకు \"ce"
+"\"గా, ISO 8601 ప్రామాణిక తేదీలకు \"iso\"గా, బ్రిటన్ తరహా తేదీలకు \"uk\" గా, అమెరికా తరహా తేదీలకు "
+"\"us\"గా ఉంటాయి. "
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:385
 msgid "Allow file incompatibility with older versions."
@@ -12217,8 +12217,8 @@ msgid ""
 "This dialog is presented when you attempt to duplicate a modified invoice "
 "entry. The changed data must be saved or the duplication canceled."
 msgstr ""
-"సవరించిన ఇన్వాయిస్‌ నమోదును నకిలీ చేసేందుకు మీరు ప్రయత్నించినపుడు ఈ సంభాషణ‌ సమర్పించబడుతుంది. "
-"మార్చిన డేటాను భద్రపరచాలి లేక నకిలీకరణ రద్దు చేయబడుతుంది."
+"సవరించిన ఇన్వాయిస్‌ నమోదును నకిలీ చేసేందుకు మీరు ప్రయత్నించినపుడు ఈ సంభాషణ‌ సమర్పించబడుతుంది. మార్చిన "
+"డేటాను భద్రపరచాలి లేక నకిలీకరణ రద్దు చేయబడుతుంది."
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:29
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:132
@@ -12336,8 +12336,7 @@ msgstr "లావాదేవీ నుంచి చీలికను తొల
 msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
-msgstr ""
-"లావాదేవీ నుంచి చీలికను తొలగించేందుకు మిమ్మల్ని అనుమతించే ముందే ఈ సంభాషణ‌ సమర్పించబడుతుంది. "
+msgstr "లావాదేవీ నుంచి చీలికను తొలగించేందుకు మిమ్మల్ని అనుమతించే ముందే ఈ సంభాషణ‌ సమర్పించబడుతుంది. "
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:74
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:177
@@ -12351,8 +12350,8 @@ msgid ""
 "from a transaction. Doing so will throw off the reconciled value of the "
 "register and can make it hard to perform future reconciliations."
 msgstr ""
-"లావాదేవీనుంచి సమన్వయ చీలికను తొలగించేందుకు మిమ్మల్ని అనుమతించే ముందే ఈ సంభాషణ‌ సమర్పించబడుతుంది. "
-"అలా చేయడం వల్ల రిజిష్టర్ సమన్వయ విలువను ప్రారంభించి దీనికి భవిష్యత్ సమన్వయాలను నిర్వర్తించడాన్ని కష్టతరం "
+"లావాదేవీనుంచి సమన్వయ చీలికను తొలగించేందుకు మిమ్మల్ని అనుమతించే ముందే ఈ సంభాషణ‌ సమర్పించబడుతుంది. అలా "
+"చేయడం వల్ల రిజిష్టర్ సమన్వయ విలువను ప్రారంభించి దీనికి భవిష్యత్ సమన్వయాలను నిర్వర్తించడాన్ని కష్టతరం "
 "చేయగలదు."
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:79
@@ -12419,8 +12418,8 @@ msgid ""
 "This dialog is presented when you attempt to duplicate a modified "
 "transaction. The changed data must be saved or the duplication canceled."
 msgstr ""
-"సవరించిన లావాదేవీని నకిలీ చేసేందుకు మీరు ప్రయత్నించినప్పుడు చేయాలనుకుంటే ఈ సంభాషణ‌ "
-"సమర్పించబడుతుంది. మార్చిన డేటాను భద్రపరచాలి లేక నకిలీకరణ రద్దు చేయబడుతుంది. "
+"సవరించిన లావాదేవీని నకిలీ చేసేందుకు మీరు ప్రయత్నించినప్పుడు చేయాలనుకుంటే ఈ సంభాషణ‌ సమర్పించబడుతుంది. "
+"మార్చిన డేటాను భద్రపరచాలి లేక నకిలీకరణ రద్దు చేయబడుతుంది. "
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:104
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:207
@@ -12530,8 +12529,8 @@ msgid ""
 "end-choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
-"ముగింపు-ఎంపిక సెటింగ్‌ను \"సంపూర్ణం\"కు అమర్చితే, లాభం/నష్టం లెక్కింపుల్లో అమర్చిన ముగింపు తేదీని "
-"ఈ సెటింగ్ నియంత్రిస్తుంది. ఈ క్షేత్రం జనవరి 1, 1970 నుంచి సెకన్లలో లెక్కించినట్టుగా ఉన్న తేదీని కలిగి "
+"ముగింపు-ఎంపిక సెటింగ్‌ను \"సంపూర్ణం\"కు అమర్చితే, లాభం/నష్టం లెక్కింపుల్లో అమర్చిన ముగింపు తేదీని ఈ "
+"సెటింగ్ నియంత్రిస్తుంది. ఈ క్షేత్రం జనవరి 1, 1970 నుంచి సెకన్లలో లెక్కించినట్టుగా ఉన్న తేదీని కలిగి "
 "ఉండాలి. "
 
 #: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:50
@@ -12568,7 +12567,7 @@ msgstr "ఈ కాలమ్ వెడల్పు"
 msgid "This setting stores the width of the given column in pixels."
 msgstr "పిక్సెల్స్‌లో నిర్ణీత కాలమ్ వెడల్పును ఈ సెటింగ్ నిల్వ చేస్తుంది."
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:29
+#: gnucash/gtkbuilder/assistant-acct-period.glade:20
 msgid ""
 "This assistant will help you setup and use accounting periods.\n"
 "\n"
@@ -12581,11 +12580,11 @@ msgstr ""
 "ప్రమాదం:ఈ విశిష్టాంశం ఈ సమయంలో సరిగ్గా పని చేయదు; ఇది ఇంకా అభివృద్ధి దశలోనే ఉంది. బహుశా తిరిగి "
 "సరిచేయలేని విధంగా ఇది మీ డేటాను దెబ్బతీస్తుంది!"
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:36
+#: gnucash/gtkbuilder/assistant-acct-period.glade:27
 msgid "Setup Account Period"
 msgstr "సెటప్ ఖాతా కాలం"
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:50
+#: gnucash/gtkbuilder/assistant-acct-period.glade:41
 msgid ""
 "\n"
 "Select an accounting period and the closing date which must not be in the "
@@ -12599,32 +12598,24 @@ msgstr ""
 "\n"
 "పుస్తకాలు ఎంపిక చేసిన తేదీ అర్థరాత్రి వేళ మూసివేయబడ్డాయి."
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:82
-#: gnucash/gtkbuilder/assistant-acct-period.glade:107
-#: gnucash/gtkbuilder/assistant-acct-period.glade:121
-#: gnucash/gtkbuilder/assistant-acct-period.glade:216
-#: gnucash/gtkbuilder/assistant-acct-period.glade:235
-msgid "xxx"
-msgstr "xxx "
-
-#: gnucash/gtkbuilder/assistant-acct-period.glade:94
+#: gnucash/gtkbuilder/assistant-acct-period.glade:85
 msgid "Book Closing Dates"
 msgstr "పుస్తకం మూసివేసే తేదీలు"
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:208
+#: gnucash/gtkbuilder/assistant-acct-period.glade:214
 #: gnucash/gtkbuilder/dialog-book-close.glade:7
 msgid "Close Book"
 msgstr "పుస్తకం మూయి"
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:222
+#: gnucash/gtkbuilder/assistant-acct-period.glade:228
 msgid "Account Period Finish"
 msgstr "ఖాతా కాలం పూర్తి"
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:249
+#: gnucash/gtkbuilder/assistant-acct-period.glade:255
 msgid "Press 'Close' to Exit."
 msgstr "నిష్క్ర్రమించడానికి 'మూసివేయి'ని నొక్కు. "
 
-#: gnucash/gtkbuilder/assistant-acct-period.glade:260
+#: gnucash/gtkbuilder/assistant-acct-period.glade:266
 msgid "Summary Page"
 msgstr "సారాంశం పేజీ"
 
@@ -13522,7 +13513,7 @@ msgstr ""
 #: gnucash/report/reports/standard/cash-flow.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:69
 #: gnucash/report/reports/standard/equity-statement.scm:65
-#: gnucash/report/reports/standard/income-statement.scm:59
+#: gnucash/report/reports/standard/income-statement.scm:58
 #: gnucash/report/reports/standard/lot-viewer.scm:35
 #: gnucash/report/reports/standard/net-charts.scm:39
 #: gnucash/report/reports/standard/price-scatter.scm:36
@@ -13683,7 +13674,7 @@ msgstr "విస్తృతి:"
 #: gnucash/report/reports/standard/cash-flow.scm:43
 #: gnucash/report/reports/standard/category-barchart.scm:70
 #: gnucash/report/reports/standard/equity-statement.scm:66
-#: gnucash/report/reports/standard/income-statement.scm:60
+#: gnucash/report/reports/standard/income-statement.scm:59
 #: gnucash/report/reports/standard/lot-viewer.scm:36
 #: gnucash/report/reports/standard/net-charts.scm:40
 #: gnucash/report/reports/standard/price-scatter.scm:37
@@ -13732,7 +13723,7 @@ msgid ""
 "changed until you click \"Apply\" at the end of the process.\n"
 "\n"
 "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
-"process. "
+"process."
 msgstr ""
 "Quicken/QuickBooks, MS Money, Moneydance, ఇంకా ఇతర ప్రోగ్రాంలు రాసిన QIF (త్వరిత అంతర్ "
 "మార్పు ఆకృతి) ఫైళ్ళ నుంచి ఆర్థిక డేటాను GnuCash దిగుమతి చేసుకోగలదు.\n"
@@ -13756,8 +13747,8 @@ msgid ""
 "You will have the opportunity to load as many files as you wish, so don't "
 "worry if your data is in multiple files.\n"
 msgstr ""
-"లోడ్ చేసేందుకు దయచేసి ఒక ఫైల్‌ను ఎంపిక చేసుకో. \"ముందుకువెళ్లు\"ను మీరు క్లిక్ చేసినప్పుడు, ఫైల్ "
-"లోడ్ చేయబడి, విశ్లేషించబడుతాయి. ఫైల్‌లో ఖాతా(లు) గురించిన కొన్ని ప్రశ్నలకు మీరు సమాధానం ఇవ్వాల్సి రావచ్చు.\n"
+"లోడ్ చేసేందుకు దయచేసి ఒక ఫైల్‌ను ఎంపిక చేసుకో. \"ముందుకువెళ్లు\"ను మీరు క్లిక్ చేసినప్పుడు, ఫైల్ లోడ్ "
+"చేయబడి, విశ్లేషించబడుతాయి. ఫైల్‌లో ఖాతా(లు) గురించిన కొన్ని ప్రశ్నలకు మీరు సమాధానం ఇవ్వాల్సి రావచ్చు.\n"
 "\n"
 "మీరు కోరుకున్నన్ని ఫైళ్లను లోడ్ చేసేందుకు మీకు అవకాశముంది, కాబట్టి మీ డేటా అనేక ఫైళ్లను కలిగి ఉందని "
 "ఆందోళన చెందనవసరం లేదు.\n"
@@ -13838,7 +13829,7 @@ msgid ""
 "this if you have saved your accounts to separate QIF files.\n"
 "\n"
 "Click \"Next\" to finish loading files and move to the next step of the QIF "
-"import process. "
+"import process."
 msgstr ""
 "ఈసారి మీరు దిగుమతికి ఎక్కువ ఫైళ్లు కలిగి ఉంటే \"మరో ఫైల్ లోడ్‌చేయి\" క్లిక్ చేయి. QIF ఫైళ్ళను వేరు "
 "చేసేందుకు మీ ఖాతాలను మీరు భద్రపరచినప్పుడు దీనిని చేయి. ఫైళ్ళు లోడ్‌చేయడం పూర్తి చేసి, QIF దిగుమతి ప్రోసెస్ "
@@ -13875,8 +13866,8 @@ msgid ""
 msgstr ""
 "తర్వాతి పేజీలో, మీ QIF ఫైళ్ళలో ఖాతాలు, మీరు కలిగిన ఏదైనా స్టాక్‌లు లేక పరస్పర నిధులు GnuCash ఖాతాలతో "
 "సరిపోలిక చేయబడతాయి. GnuCash ఖాతా అదే పేరుతో అప్పటికే ఉంటే లేకుంటే అదే రకమైన పేరు, అనుగుణమైన రకంగా "
-"ఉంటే, ఆ ఖాతా సరిపోలికగా ఉపయోగించబడుతుంది; లేకపోతే, QIF ఖాతాలా అదే పేరు, రకంతో కొత్త ఖాతాను "
-"GnuCash సృష్టిస్తుంది. సూచిత GnuCash ఖాతాను మీరు ఇష్టపడకపోతే, దానిని మార్చడానికి డబుల్ క్లిక్ చేయి.\n"
+"ఉంటే, ఆ ఖాతా సరిపోలికగా ఉపయోగించబడుతుంది; లేకపోతే, QIF ఖాతాలా అదే పేరు, రకంతో కొత్త ఖాతాను GnuCash "
+"సృష్టిస్తుంది. సూచిత GnuCash ఖాతాను మీరు ఇష్టపడకపోతే, దానిని మార్చడానికి డబుల్ క్లిక్ చేయి.\n"
 "\n"
 "మీ ఇతర వ్యక్తిగత ఆర్థిక కార్యక్రమంలో లేని అనేక ఖాతాలను GnuCash సృష్టిస్తుందని తెలుసుకో. ఇందులో మీ "
 "సొంతమైన ప్రతి స్టాక్ కోసం వేరు ఖాతా, బ్రోకరేజ్ కమిషన్ల కోసం వేరు ఖాతాలు, మీ ప్రారంభ నిల్వలు తదితరాల "
@@ -13938,6 +13929,17 @@ msgid "Match QIF categories with GnuCash accounts"
 msgstr "QIF వర్గాలను GnuCash ఖాతాలతో సరిపోల్చు"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:802
+#, fuzzy
+#| msgid ""
+#| "QIF files downloaded from banks and other financial institutions may not "
+#| "have information about Accounts and Categories which would allow them to "
+#| "be correctly assigned to GnuCash accounts.\n"
+#| "\n"
+#| "In the following page, you will see the text that appears in the Payee "
+#| "and Memo fields of transactions with no QIF Account or Category. By "
+#| "default these transactions are assigned to the 'Unspecified' account in "
+#| "GnuCash. If you select a different account, it will be remembered for "
+#| "future QIF files. "
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
@@ -13946,7 +13948,7 @@ msgid ""
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
 "these transactions are assigned to the 'Unspecified' account in GnuCash. If "
-"you select a different account, it will be remembered for future QIF files. "
+"you select a different account, it will be remembered for future QIF files."
 msgstr ""
 "బ్యాంకులు మరియు ఇతర ఆర్థిక సంస్థల నుంచి దిగుమతి చేసిన QIF ఫైళ్లు వాటిని Gnuక్యాష్ ఖాతాలకు సరిగ్గా "
 "కేటాయించడానికి అనుమతించే అకౌంట్లు మరియు కేటగరీల గురించిన సమాచారాన్ని కలిగి ఉండక పోవచ్చు.\n"
@@ -14332,8 +14334,8 @@ msgid ""
 "should be accumulated into a single split by default. This setting can be "
 "changed in the Post dialog."
 msgstr ""
-"ఒకే ఖాతాకు బదిలీ అయ్యే ఇన్వాయిస్‌లోని బహుళ నమోదులు అప్రమేయంతో ఒక చీలికలోకి సంచితం చేయాలా? ఈ అమరిక "
-"పోస్ట్ సంభాషణలో మార్చబడగలదు."
+"ఒకే ఖాతాకు బదిలీ అయ్యే ఇన్వాయిస్‌లోని బహుళ నమోదులు అప్రమేయంతో ఒక చీలికలోకి సంచితం చేయాలా? ఈ అమరిక పోస్ట్ "
+"సంభాషణలో మార్చబడగలదు."
 
 #: gnucash/gtkbuilder/business-prefs.glade:132
 msgid "<b>Invoices</b>"
@@ -16206,10 +16208,10 @@ msgid ""
 msgstr ""
 "ఈ ఇన్వాయిస్‌ కోసం చెల్లించాల్సిన మొత్తం.\n"
 "\n"
-"\\మీరు ఇన్వాయిస్‌ను ఎంచుకుంటే, GnuCash ఆ మొత్తం దీనికోసం బాకీ పడేలా ప్రతిపాదిస్తుంది. పాక్షిక "
-"చెల్లింపు లేక అతి చెల్లింపును సృష్టించడం కోసం మీరు ఈ మొత్తాన్ని మార్చగలరు.\n"
-"\\ అతి చెల్లింపు సందర్భంలోనూ లేక ఇన్వాయిస్‌ ఎంచుకోని స్థితిలోనూ, GnuCash స్వయం చాలకంగా మిగిలిన "
-"మొత్తాన్ని ఈ కంపెనీ కోసం మొదటి చెల్లించని ఇన్వాయిస్‌కు కేటాయిస్తుంది. "
+"\\మీరు ఇన్వాయిస్‌ను ఎంచుకుంటే, GnuCash ఆ మొత్తం దీనికోసం బాకీ పడేలా ప్రతిపాదిస్తుంది. పాక్షిక చెల్లింపు "
+"లేక అతి చెల్లింపును సృష్టించడం కోసం మీరు ఈ మొత్తాన్ని మార్చగలరు.\n"
+"\\ అతి చెల్లింపు సందర్భంలోనూ లేక ఇన్వాయిస్‌ ఎంచుకోని స్థితిలోనూ, GnuCash స్వయం చాలకంగా మిగిలిన మొత్తాన్ని "
+"ఈ కంపెనీ కోసం మొదటి చెల్లించని ఇన్వాయిస్‌కు కేటాయిస్తుంది. "
 
 #: gnucash/gtkbuilder/dialog-payment.glade:411
 msgid "<b>Amount</b>"
@@ -16234,7 +16236,7 @@ msgid "Transaction Details"
 msgstr "లావాదేవీ వివరాలు"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:689
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
 msgid "Transfer Account"
 msgstr "బదిలీ ఖాతా"
 
@@ -16566,6 +16568,8 @@ msgstr "ఎన్ని రోజులు పాత లాగ్/బ్యా�
 #: gnucash/gtkbuilder/dialog-preferences.glade:1474
 #: gnucash/gtkbuilder/dialog-sx.glade:619
 #: gnucash/gtkbuilder/dialog-sx.glade:658
+#: gnucash/gtkbuilder/dialog-sx.glade:965
+#: gnucash/gtkbuilder/dialog-sx.glade:1024
 msgid "days"
 msgstr "రోజులు"
 
@@ -16623,8 +16627,8 @@ msgid ""
 "If active, GnuCash shows a confirmation question each time the auto-save "
 "feature is started. Otherwise no extra explanation is shown."
 msgstr ""
-"క్రియాశీలమైతే , స్వీయ-భద్రం విశేషాంశాన్నిప్రారంభించే ప్రతిసారీ GnuCash నిర్ధారణ ప్రశ్నను చూపిస్తుంది. లేక "
-"పోతే మరే అదనపు వివరాన్ని చూపదు. "
+"క్రియాశీలమైతే , స్వీయ-భద్రం విశేషాంశాన్నిప్రారంభించే ప్రతిసారీ GnuCash నిర్ధారణ ప్రశ్నను చూపిస్తుంది. లేక పోతే "
+"మరే అదనపు వివరాన్ని చూపదు. "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1725
 #: gnucash/gtkbuilder/dialog-sx.glade:1208
@@ -19016,8 +19020,8 @@ msgstr ""
 #, fuzzy
 msgid ""
 "\n"
-"You first need to apply for Online Banking access at your bank. If your "
-"bank decides to grant you electronic access, they will send you a letter "
+"You first need to apply for Online Banking access at your bank. If your bank "
+"decides to grant you electronic access, they will send you a letter "
 "containing:\n"
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
@@ -19064,11 +19068,11 @@ msgstr ""
 "\n"
 "ఏదేని ఆన్‌లైన్ బ్యాంకింగ్ కనెక్షన్‌ను ఇప్పుడు ఏర్పాటు చేయరాదని మీరు కోరుకుంటే \"రద్దు చేయి\"ని నొక్కు.\n"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:76
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:75
 msgid "Initial Online Banking Setup"
 msgstr "ప్రారంభ ఆన్‌లైన్ బ్యాంకింగ్ అమరిక"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:95
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:94
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup Wizard\". Please press the button below to start "
@@ -19077,15 +19081,15 @@ msgstr ""
 "మీ ఆన్‌లైన్ బ్యాంకింగ్ అనుసంధాన అమరికను బయటి ప్రోగ్రాం \"Aqబ్యాంకింగ్ అమరిక విజార్డ్\" నిర్వహిస్తుంటుంది. "
 "ఈ ప్రోగ్రాంను ప్రారంభిండానికి దయచేసి కింది బటన్‌ను నొక్కు. "
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:106
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:105
 msgid "_Start AqBanking Wizard"
 msgstr "_Aqబ్యాంకింగ్ విజార్డ్‌ను ప్రారంభించు"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:123
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:122
 msgid "Start Online Banking Wizard"
 msgstr "ఆన్‌లైన్ బ్యాంకింగ్ సౌలభ్యాన్ని ప్రారంభించు"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:141
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:140
 #, fuzzy
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
@@ -19095,16 +19099,16 @@ msgstr ""
 "Gnuక్యాష్ ఖాతాకు దీనిని సరిచేయాలని మీరు కోరుకుంటే, ఆన్‌లైన్ బ్యాంకింగ్ ఖాతా పేరు వరుస మీద డబుల్ క్లిక్ "
 "చేయగలరు. కోరుకున్న అన్ని ఖాతాలు సరిగ్గా అయితే, \"ఫార్వార్డ్\"ను క్లిక్ చేయి."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:179
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:178
 #, fuzzy
 msgid "_Delete selected matches"
 msgstr "ఎంచుకున్న ఖాతాను తొలగించు"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:202
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:201
 msgid "Match Online accounts with GnuCash accounts"
 msgstr "Gnuక్యాష్ ఖాతాలతో ఆన్‌లైన్ ఖాతాలను సరిచేయి"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:217
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:216
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished. You can now invoke Online Banking actions on those accounts.\n"
@@ -19122,7 +19126,7 @@ msgstr ""
 "\n"
 "ఇక \"వర్తింపచేయి\"ని నొక్కు."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:233
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:232
 msgid "Online Banking Setup Finished"
 msgstr "ఆన్‌లైన్ బ్యాకింగ్ అమరిక పూర్తయింది"
 
@@ -19837,8 +19841,7 @@ msgid_plural ""
 "All %d jobs were executed successfully, but as a precaution please check the "
 "log window for potential errors."
 msgstr[0] ""
-"పని విజయవంతంగా అమలు చేయబడింది కానీ ముందస్తు హెచ్చరికగా, దయచేసి పెద్ద దోషాల కోసం లాగ్ విండోను "
-"పరిశీలించు."
+"పని విజయవంతంగా అమలు చేయబడింది కానీ ముందస్తు హెచ్చరికగా, దయచేసి పెద్ద దోషాల కోసం లాగ్ విండోను పరిశీలించు."
 msgstr[1] ""
 "%d जॉब सफलतापूर्वक निष्पादित हो गया था, लेकिन एक सावधानी के रूप में संभावित त्रुटियों के "
 "लिए कृपया लॉग विंडो को जाँच लें. "
@@ -20417,7 +20420,7 @@ msgid "Rate/Price"
 msgstr "రేట్/ధర వరకు"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
 #, fuzzy
 msgid "Transaction ID"
 msgstr "లావాదేవీ"
@@ -20434,7 +20437,7 @@ msgid "Full Account Name"
 msgstr "పూర్తి ఖాతా పేరును ఉపయోగించు"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:629
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
 #, fuzzy
 msgid "Reconcile Date"
 msgstr "సమన్వయ తేదీ"
@@ -20818,22 +20821,22 @@ msgid "Currency To"
 msgstr "కరెన్సీ:"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:66
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:117
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:211
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:118
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:212
 msgid "Value doesn't appear to contain a valid number."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:79
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:84
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:89
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:130
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:135
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:140
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:131
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:136
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:141
 msgid "Value can't be parsed into a number using the selected currency format."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:121
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:197
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:198
 #, fuzzy
 msgid "Value can't be parsed into a valid commodity."
 msgstr "ఈ సరుకు ధరను లెక్కించు"
@@ -20865,18 +20868,18 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:235
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:243
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:289
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:297
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:508
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:516
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:571
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:579
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:298
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:509
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:517
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:572
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:580
 #, fuzzy
 msgid " could not be understood.\n"
 msgstr "%s నిలువువరుస అర్ధం కావడంలేదు"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:323
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:324
 msgid "No date column."
 msgstr "తేదీ నిలువువరుస లేదు"
 
@@ -20900,66 +20903,66 @@ msgstr "తేదీ నిలువువరుస లేదు"
 msgid "Failed to create price from selected columns."
 msgstr "ఈ అంశాల కోసం ధరలను సృష్టించడం సాధ్యం కాలేదు:"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
 #, fuzzy
 msgid "Transaction Commodity"
 msgstr "లావాదేవీ మొత్తం"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
 #, fuzzy
 msgid "Transfer Action"
 msgstr "బదిలీ ఖాతా"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
 #, fuzzy
 msgid "Transfer Memo"
 msgstr "కు బదిలీ"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
 #, fuzzy
 msgid "Transfer Reconciled"
 msgstr "తేదీ రాజీ చేయబడింది"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:77
 #, fuzzy
 msgid "Transfer Reconcile Date"
 msgstr "చివరి సమన్వయ తేదీ"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:160
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:161
 msgid "Value can't be parsed into a valid reconcile state."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:223
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:224
 #, fuzzy
 msgid "Price can't be parsed into a number."
 msgstr "ఈ సరుకు ధరను లెక్కించు"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:379
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:380
 msgid "Account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:380
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:381
 msgid "Transfer account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:429
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:430
 msgid "Account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:440
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:441
 msgid "Transfer account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:591
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:592
 #, fuzzy
 msgid "No deposit or withdrawal column."
 msgstr "నిల్వ, డిపాజిట్ లేక ఉపసంహరణ నిలువువరుస లేదు. "
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:597
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:598
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:604
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:605
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
@@ -21562,9 +21565,9 @@ msgstr "క్యాపిటల్. లాభం (స్వల్ప) "
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:110
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:114
-#: gnucash/report/reports/standard/balance-sheet.scm:510
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1122
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1137
+#: gnucash/report/reports/standard/balance-sheet.scm:509
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1132
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1147
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.c:954
 msgid "Retained Earnings"
@@ -22444,7 +22447,7 @@ msgid ""
 "following accounts:\n"
 "%s\n"
 "\n"
-"Are you sure you want to continue with this change ?"
+"Are you sure you want to continue with this change?"
 msgstr ""
 "రాజీ చేసిన విభజనకు లంకె వేసిన విభజనను మీరు మార్చబోతున్నారు. ఇలా చేయడం భవిష్యత్ రాజీ చర్యను కష్టతరం "
 "చేస్తుంది! ఈ మార్పుతో కొనసాగించాలనుకుంటున్నారా?"
@@ -22464,7 +22467,7 @@ msgstr ""
 msgid "Chan_ge Transaction"
 msgstr "లావాదేవీని రద్దు_చేయి"
 
-#: gnucash/register/register-gnome/datecell-gnome.c:103
+#: gnucash/register/register-gnome/datecell-gnome.c:104
 #, fuzzy
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
@@ -22482,11 +22485,6 @@ msgstr "జాబితా"
 #, fuzzy, scheme-format
 msgid "Template file \"~a\" can not be read"
 msgstr "టెంప్లేట్‌ ఫైల్‌‌ను \"%s\" చదవలేము"
-
-#: gnucash/report/html-acct-table.scm:636
-#: gnucash/report/reports/standard/trial-balance.scm:279
-msgid "Adjusting Entries"
-msgstr "సర్దుపరిచే నమోదులు"
 
 #: gnucash/report/html-chart.scm:455
 msgid "Load"
@@ -22745,11 +22743,11 @@ msgstr "ఖాతా-ఎంపికను అధిగమించి, అన�
 
 #: gnucash/report/options-utilities.scm:122
 #: gnucash/report/reports/standard/account-summary.scm:87
-#: gnucash/report/reports/standard/balance-sheet.scm:89
+#: gnucash/report/reports/standard/balance-sheet.scm:88
 #: gnucash/report/reports/standard/balsheet-pnl.scm:82
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:54
-#: gnucash/report/reports/standard/budget-income-statement.scm:77
-#: gnucash/report/reports/standard/income-statement.scm:64
+#: gnucash/report/reports/standard/budget-income-statement.scm:76
+#: gnucash/report/reports/standard/income-statement.scm:63
 msgid "Report on these accounts, if display depth allows."
 msgstr "ప్రదర్శన లోతు అనుమతిస్తే, ఈ ఖాతాలపై నివేదించు "
 
@@ -22938,18 +22936,6 @@ msgstr "ఉపఖాతాలను కలిగిన ఎంపిక చేస
 msgid "Do not show any subtotals for parent accounts."
 msgstr "మాతృక ఖాతాల కోసం ఏదేని ఉపమొత్తాలను చూపించకు. "
 
-#: gnucash/report/options-utilities.scm:258
-msgid "Text book style (experimental)"
-msgstr "పాఠ్య పుస్తక శైలి (ప్రయోగాత్మకం)"
-
-#: gnucash/report/options-utilities.scm:259
-msgid ""
-"Show parent account subtotals, indented per accounting text book practice "
-"(experimental)."
-msgstr ""
-"మాతృక ఖాతా ఉపమొత్తాలను చూపించు, అకౌంటింగ్ టెక్స్ట్ బుక్ ప్రాక్సీస్‌కు తగ్గట్టు జాబితా పరచబడింది "
-"(ప్రయోగాత్మకం). "
-
 #: gnucash/report/report-core.scm:149
 msgid "_Assets & Liabilities"
 msgstr "_ఆస్తులు & అప్పులు"
@@ -23034,8 +23020,8 @@ msgid ""
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
-"ఒకానొక మీ నివేదిక నకిలీదైన నివేదిక-గైడ్‌ను కలిగి ఉంది. ఈ నివేదిక-గైడ్‌తో నివేదిక కోసం దయచేసి నివేదిక "
-"వ్యవస్థను, ప్రత్యేకించి మీ భద్రపరచుకున్న నివేదికలను పరిశీలించు"
+"ఒకానొక మీ నివేదిక నకిలీదైన నివేదిక-గైడ్‌ను కలిగి ఉంది. ఈ నివేదిక-గైడ్‌తో నివేదిక కోసం దయచేసి నివేదిక వ్యవస్థను, "
+"ప్రత్యేకించి మీ భద్రపరచుకున్న నివేదికలను పరిశీలించు"
 
 #: gnucash/report/report-core.scm:210
 #, fuzzy
@@ -23096,17 +23082,17 @@ msgstr "వరుస క్రమబద్ధీకరించు "
 #: gnucash/report/reports/standard/account-summary.scm:125
 #: gnucash/report/reports/standard/advanced-portfolio.scm:76
 #: gnucash/report/reports/standard/balance-forecast.scm:44
-#: gnucash/report/reports/standard/balance-sheet.scm:137
+#: gnucash/report/reports/standard/balance-sheet.scm:136
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/balsheet-pnl.scm:119
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:102
 #: gnucash/report/reports/standard/budget-flow.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:116
+#: gnucash/report/reports/standard/budget-income-statement.scm:115
 #: gnucash/report/reports/standard/cashflow-barchart.scm:58
 #: gnucash/report/reports/standard/cash-flow.scm:49
 #: gnucash/report/reports/standard/category-barchart.scm:72
 #: gnucash/report/reports/standard/equity-statement.scm:77
-#: gnucash/report/reports/standard/income-statement.scm:109
+#: gnucash/report/reports/standard/income-statement.scm:108
 #: gnucash/report/reports/standard/net-charts.scm:42
 #: gnucash/report/reports/standard/new-aging.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:54
@@ -23123,17 +23109,17 @@ msgstr "నివేదిక కరెన్సీ"
 #: gnucash/report/reports/standard/account-summary.scm:126
 #: gnucash/report/reports/standard/advanced-portfolio.scm:40
 #: gnucash/report/reports/standard/balance-forecast.scm:45
-#: gnucash/report/reports/standard/balance-sheet.scm:138
+#: gnucash/report/reports/standard/balance-sheet.scm:137
 #: gnucash/report/reports/standard/balsheet-eg.scm:189
 #: gnucash/report/reports/standard/balsheet-pnl.scm:121
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:103
 #: gnucash/report/reports/standard/budget-flow.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:117
+#: gnucash/report/reports/standard/budget-income-statement.scm:116
 #: gnucash/report/reports/standard/cashflow-barchart.scm:59
 #: gnucash/report/reports/standard/cash-flow.scm:50
 #: gnucash/report/reports/standard/category-barchart.scm:73
 #: gnucash/report/reports/standard/equity-statement.scm:78
-#: gnucash/report/reports/standard/income-statement.scm:110
+#: gnucash/report/reports/standard/income-statement.scm:109
 #: gnucash/report/reports/standard/net-charts.scm:43
 #: gnucash/report/reports/standard/new-aging.scm:43
 #: gnucash/report/reports/standard/portfolio.scm:35
@@ -23599,7 +23585,7 @@ msgstr "చరిత్రలో మొత్తం నిల్వను చూ
 #: gnucash/report/reports/example/daily-reports.scm:289
 #: gnucash/report/reports/standard/account-piecharts.scm:546
 #: gnucash/report/reports/standard/balance-forecast.scm:276
-#: gnucash/report/reports/standard/balsheet-pnl.scm:923
+#: gnucash/report/reports/standard/balsheet-pnl.scm:933
 #: gnucash/report/reports/standard/budget.scm:513
 #: gnucash/report/reports/standard/cashflow-barchart.scm:283
 #: gnucash/report/reports/standard/cash-flow.scm:190
@@ -24328,7 +24314,7 @@ msgid "Expense Accounts"
 msgstr "వ్యయం ఖాతాలు"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:61
-#: gnucash/report/reports/standard/balance-sheet.scm:486
+#: gnucash/report/reports/standard/balance-sheet.scm:485
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:665
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:417
@@ -24337,7 +24323,7 @@ msgid "Assets"
 msgstr "ఆస్తులు"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:63
-#: gnucash/report/reports/standard/balance-sheet.scm:387
+#: gnucash/report/reports/standard/balance-sheet.scm:386
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:695
 #: gnucash/report/reports/standard/net-charts.scm:367
 #: gnucash/report/reports/standard/net-charts.scm:417
@@ -24436,67 +24422,67 @@ msgid "Future Scheduled Transactions Summary"
 msgstr "భవిష్యత్ నిర్ధారిత లావాదేవీ సారాంశం"
 
 #: gnucash/report/reports/standard/account-summary.scm:72
-#: gnucash/report/reports/standard/balance-sheet.scm:76
+#: gnucash/report/reports/standard/balance-sheet.scm:75
 #: gnucash/report/reports/standard/balsheet-eg.scm:150
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:42
-#: gnucash/report/reports/standard/budget-income-statement.scm:53
+#: gnucash/report/reports/standard/budget-income-statement.scm:52
 #: gnucash/report/reports/standard/equity-statement.scm:59
-#: gnucash/report/reports/standard/income-statement.scm:53
+#: gnucash/report/reports/standard/income-statement.scm:52
 #: gnucash/report/reports/standard/trial-balance.scm:65
 msgid "Report Title"
 msgstr "నివేదిక శీర్షిక"
 
 #: gnucash/report/reports/standard/account-summary.scm:73
-#: gnucash/report/reports/standard/balance-sheet.scm:77
+#: gnucash/report/reports/standard/balance-sheet.scm:76
 #: gnucash/report/reports/standard/balsheet-eg.scm:151
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:43
-#: gnucash/report/reports/standard/budget-income-statement.scm:54
+#: gnucash/report/reports/standard/budget-income-statement.scm:53
 #: gnucash/report/reports/standard/equity-statement.scm:60
-#: gnucash/report/reports/standard/income-statement.scm:54
+#: gnucash/report/reports/standard/income-statement.scm:53
 #: gnucash/report/reports/standard/trial-balance.scm:66
 msgid "Title for this report."
 msgstr "ఈ నివేదికకు శీర్షిక. "
 
 #: gnucash/report/reports/standard/account-summary.scm:75
-#: gnucash/report/reports/standard/balance-sheet.scm:79
+#: gnucash/report/reports/standard/balance-sheet.scm:78
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:45
-#: gnucash/report/reports/standard/budget-income-statement.scm:56
+#: gnucash/report/reports/standard/budget-income-statement.scm:55
 #: gnucash/report/reports/standard/equity-statement.scm:62
-#: gnucash/report/reports/standard/income-statement.scm:56
+#: gnucash/report/reports/standard/income-statement.scm:55
 #: gnucash/report/reports/standard/trial-balance.scm:68
 msgid "Company name"
 msgstr "కంపెనీ పేరు"
 
 #: gnucash/report/reports/standard/account-summary.scm:76
-#: gnucash/report/reports/standard/balance-sheet.scm:80
+#: gnucash/report/reports/standard/balance-sheet.scm:79
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:57
+#: gnucash/report/reports/standard/budget-income-statement.scm:56
 #: gnucash/report/reports/standard/equity-statement.scm:63
-#: gnucash/report/reports/standard/income-statement.scm:57
+#: gnucash/report/reports/standard/income-statement.scm:56
 #: gnucash/report/reports/standard/trial-balance.scm:69
 msgid "Name of company/individual."
 msgstr "కంపెనీ/వ్యక్తి పేరు"
 
 #: gnucash/report/reports/standard/account-summary.scm:88
-#: gnucash/report/reports/standard/balance-sheet.scm:90
+#: gnucash/report/reports/standard/balance-sheet.scm:89
 #: gnucash/report/reports/standard/balsheet-eg.scm:158
 #: gnucash/report/reports/standard/balsheet-pnl.scm:84
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:55
 #: gnucash/report/reports/standard/budget-barchart.scm:46
-#: gnucash/report/reports/standard/budget-income-statement.scm:78
-#: gnucash/report/reports/standard/income-statement.scm:65
+#: gnucash/report/reports/standard/budget-income-statement.scm:77
+#: gnucash/report/reports/standard/income-statement.scm:64
 #: gnucash/report/reports/standard/trial-balance.scm:79
 msgid "Levels of Subaccounts"
 msgstr "ఉపఖాతాల స్థాయిలు"
 
 #: gnucash/report/reports/standard/account-summary.scm:90
-#: gnucash/report/reports/standard/balance-sheet.scm:92
+#: gnucash/report/reports/standard/balance-sheet.scm:91
 #: gnucash/report/reports/standard/balsheet-eg.scm:159
 #: gnucash/report/reports/standard/balsheet-pnl.scm:85
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:57
 #: gnucash/report/reports/standard/budget-barchart.scm:48
-#: gnucash/report/reports/standard/budget-income-statement.scm:80
-#: gnucash/report/reports/standard/income-statement.scm:67
+#: gnucash/report/reports/standard/budget-income-statement.scm:79
+#: gnucash/report/reports/standard/income-statement.scm:66
 #: gnucash/report/reports/standard/trial-balance.scm:81
 msgid "Maximum number of levels in the account tree displayed."
 msgstr "ఖాతా వృక్షంలో స్థాయిల గరిష్ఠ సంఖ్య ప్రదర్శించబడుతుంది. "
@@ -24510,95 +24496,95 @@ msgid "How to treat accounts which exceed the specified depth limit (if any)."
 msgstr "నిర్ధిష్ఠ లోతు పరిమితిను అధిగమించే ఖాతాలతో (ఏవైనా ఉంటే) ఎలా వ్యవహరించాలనే విధానం"
 
 #: gnucash/report/reports/standard/account-summary.scm:95
-#: gnucash/report/reports/standard/balance-sheet.scm:97
+#: gnucash/report/reports/standard/balance-sheet.scm:96
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:62
-#: gnucash/report/reports/standard/budget-income-statement.scm:85
-#: gnucash/report/reports/standard/income-statement.scm:72
+#: gnucash/report/reports/standard/budget-income-statement.scm:84
+#: gnucash/report/reports/standard/income-statement.scm:71
 msgid "Parent account balances"
 msgstr "మాతృక ఖాతా నిల్వలు"
 
 #: gnucash/report/reports/standard/account-summary.scm:96
-#: gnucash/report/reports/standard/balance-sheet.scm:98
+#: gnucash/report/reports/standard/balance-sheet.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:63
-#: gnucash/report/reports/standard/budget-income-statement.scm:86
-#: gnucash/report/reports/standard/income-statement.scm:73
+#: gnucash/report/reports/standard/budget-income-statement.scm:85
+#: gnucash/report/reports/standard/income-statement.scm:72
 msgid "Parent account subtotals"
 msgstr "మాతృక ఖాతా ఉపమొత్తాలు"
 
 #: gnucash/report/reports/standard/account-summary.scm:98
-#: gnucash/report/reports/standard/balance-sheet.scm:100
+#: gnucash/report/reports/standard/balance-sheet.scm:99
 #: gnucash/report/reports/standard/balsheet-pnl.scm:93
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:65
-#: gnucash/report/reports/standard/budget-income-statement.scm:88
-#: gnucash/report/reports/standard/income-statement.scm:75
+#: gnucash/report/reports/standard/budget-income-statement.scm:87
+#: gnucash/report/reports/standard/income-statement.scm:74
 #: gnucash/report/reports/standard/trial-balance.scm:121
 msgid "Include accounts with zero total balances"
 msgstr "మొత్తం శూన్య నిల్వలతో ఖాతాను కలుపు"
 
 #: gnucash/report/reports/standard/account-summary.scm:100
-#: gnucash/report/reports/standard/balance-sheet.scm:102
+#: gnucash/report/reports/standard/balance-sheet.scm:101
 #: gnucash/report/reports/standard/balsheet-pnl.scm:94
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:67
-#: gnucash/report/reports/standard/budget-income-statement.scm:90
-#: gnucash/report/reports/standard/income-statement.scm:77
+#: gnucash/report/reports/standard/budget-income-statement.scm:89
+#: gnucash/report/reports/standard/income-statement.scm:76
 #: gnucash/report/reports/standard/trial-balance.scm:123
 msgid "Include accounts with zero total (recursive) balances in this report."
 msgstr "ఈ నివేదికలో జీరో మొత్తం (పునరావృత) బ్యాలెన్స్‌లతో ఖాతాలను చేర్చు. "
 
 #: gnucash/report/reports/standard/account-summary.scm:101
-#: gnucash/report/reports/standard/balance-sheet.scm:103
+#: gnucash/report/reports/standard/balance-sheet.scm:102
 #: gnucash/report/reports/standard/balsheet-pnl.scm:96
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:68
-#: gnucash/report/reports/standard/budget-income-statement.scm:91
-#: gnucash/report/reports/standard/income-statement.scm:78
+#: gnucash/report/reports/standard/budget-income-statement.scm:90
+#: gnucash/report/reports/standard/income-statement.scm:77
 msgid "Omit zero balance figures"
 msgstr "శూన్య సమతుల్య అంకెలను వదిలివేయి"
 
 #: gnucash/report/reports/standard/account-summary.scm:103
-#: gnucash/report/reports/standard/balance-sheet.scm:105
+#: gnucash/report/reports/standard/balance-sheet.scm:104
 #: gnucash/report/reports/standard/balsheet-pnl.scm:97
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:70
-#: gnucash/report/reports/standard/budget-income-statement.scm:93
-#: gnucash/report/reports/standard/income-statement.scm:80
+#: gnucash/report/reports/standard/budget-income-statement.scm:92
+#: gnucash/report/reports/standard/income-statement.scm:79
 msgid "Show blank space in place of any zero balances which would be shown."
 msgstr "చూపించిన ఏదేని జీరో బ్యాలెన్స్‌ల స్థానంలో ఖాళీ స్థానాన్ని చూపించు. "
 
 #: gnucash/report/reports/standard/account-summary.scm:105
-#: gnucash/report/reports/standard/balance-sheet.scm:107
+#: gnucash/report/reports/standard/balance-sheet.scm:106
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:72
-#: gnucash/report/reports/standard/budget-income-statement.scm:95
+#: gnucash/report/reports/standard/budget-income-statement.scm:94
 #: gnucash/report/reports/standard/equity-statement.scm:72
-#: gnucash/report/reports/standard/income-statement.scm:82
+#: gnucash/report/reports/standard/income-statement.scm:81
 msgid "Show accounting-style rules"
 msgstr "ఖాతా-శైలి నిబంధలను చూపించు"
 
 #: gnucash/report/reports/standard/account-summary.scm:107
-#: gnucash/report/reports/standard/balance-sheet.scm:109
+#: gnucash/report/reports/standard/balance-sheet.scm:108
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:74
-#: gnucash/report/reports/standard/budget-income-statement.scm:97
+#: gnucash/report/reports/standard/budget-income-statement.scm:96
 #: gnucash/report/reports/standard/equity-statement.scm:74
-#: gnucash/report/reports/standard/income-statement.scm:84
+#: gnucash/report/reports/standard/income-statement.scm:83
 msgid "Use rules beneath columns of added numbers like accountants do."
 msgstr "అకౌంటంట్లు చేసే తరహాలో జోడించిన నెంబర్ల కాలమ్‌ల కింద నిబంధనలను ఉపయోగించు. "
 
 #: gnucash/report/reports/standard/account-summary.scm:109
-#: gnucash/report/reports/standard/balance-sheet.scm:111
+#: gnucash/report/reports/standard/balance-sheet.scm:110
 #: gnucash/report/reports/standard/balsheet-eg.scm:168
 #: gnucash/report/reports/standard/balsheet-pnl.scm:99
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:76
-#: gnucash/report/reports/standard/budget-income-statement.scm:99
-#: gnucash/report/reports/standard/income-statement.scm:86
+#: gnucash/report/reports/standard/budget-income-statement.scm:98
+#: gnucash/report/reports/standard/income-statement.scm:85
 #: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Display accounts as hyperlinks"
 msgstr "ఖాతాలను హైపర్‌లింక్‌లా ప్రదర్శించు"
 
 #: gnucash/report/reports/standard/account-summary.scm:111
-#: gnucash/report/reports/standard/balance-sheet.scm:112
+#: gnucash/report/reports/standard/balance-sheet.scm:111
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/balsheet-pnl.scm:100
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:77
-#: gnucash/report/reports/standard/budget-income-statement.scm:100
-#: gnucash/report/reports/standard/income-statement.scm:87
+#: gnucash/report/reports/standard/budget-income-statement.scm:99
+#: gnucash/report/reports/standard/income-statement.scm:86
 #: gnucash/report/reports/standard/trial-balance.scm:126
 msgid "Shows each account in the table as a hyperlink to its register window."
 msgstr "పట్టికలోని ప్రతి ఖాతాను దాని రిజిష్టర్ విండోకు హైపర్ లింక్‌గా చూపిస్తుంది. "
@@ -24632,59 +24618,59 @@ msgid "Show an account's notes."
 msgstr "ఖాతా యొక్క గమనికలను చూపించు"
 
 #: gnucash/report/reports/standard/account-summary.scm:124
-#: gnucash/report/reports/standard/balance-sheet.scm:136
+#: gnucash/report/reports/standard/balance-sheet.scm:135
 #: gnucash/report/reports/standard/balsheet-eg.scm:195
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:101
-#: gnucash/report/reports/standard/budget-income-statement.scm:115
+#: gnucash/report/reports/standard/budget-income-statement.scm:114
 #: gnucash/report/reports/standard/equity-statement.scm:76
-#: gnucash/report/reports/standard/income-statement.scm:108
+#: gnucash/report/reports/standard/income-statement.scm:107
 #: gnucash/report/reports/standard/trial-balance.scm:128
 msgid "Commodities"
 msgstr "సరుకులు"
 
 #: gnucash/report/reports/standard/account-summary.scm:127
-#: gnucash/report/reports/standard/balance-sheet.scm:139
+#: gnucash/report/reports/standard/balance-sheet.scm:138
 #: gnucash/report/reports/standard/balsheet-eg.scm:190
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:104
-#: gnucash/report/reports/standard/budget-income-statement.scm:118
+#: gnucash/report/reports/standard/budget-income-statement.scm:117
 #: gnucash/report/reports/standard/equity-statement.scm:79
-#: gnucash/report/reports/standard/income-statement.scm:111
+#: gnucash/report/reports/standard/income-statement.scm:110
 #: gnucash/report/reports/standard/trial-balance.scm:131
 msgid "Show Foreign Currencies"
 msgstr "విదేశీ ద్రవ్యాన్ని చూపించు"
 
 #: gnucash/report/reports/standard/account-summary.scm:129
-#: gnucash/report/reports/standard/balance-sheet.scm:141
+#: gnucash/report/reports/standard/balance-sheet.scm:140
 #: gnucash/report/reports/standard/balsheet-eg.scm:192
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:106
-#: gnucash/report/reports/standard/budget-income-statement.scm:120
+#: gnucash/report/reports/standard/budget-income-statement.scm:119
 #: gnucash/report/reports/standard/equity-statement.scm:81
-#: gnucash/report/reports/standard/income-statement.scm:113
+#: gnucash/report/reports/standard/income-statement.scm:112
 #: gnucash/report/reports/standard/trial-balance.scm:133
 msgid "Display any foreign currency amount in an account."
 msgstr "ఖాతాలోకి ఏదేని విదేశీ కరెన్సీ మొత్తాన్ని ప్రదర్శించు. "
 
 #: gnucash/report/reports/standard/account-summary.scm:130
-#: gnucash/report/reports/standard/balance-sheet.scm:142
+#: gnucash/report/reports/standard/balance-sheet.scm:141
 #: gnucash/report/reports/standard/balsheet-pnl.scm:130
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:107
-#: gnucash/report/reports/standard/budget-income-statement.scm:121
+#: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/cash-flow.scm:51
 #: gnucash/report/reports/standard/equity-statement.scm:82
-#: gnucash/report/reports/standard/income-statement.scm:114
+#: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:134
 msgid "Show Exchange Rates"
 msgstr "ఎక్స్‌చేంజ్ రేట్లు చూపించు"
 
 #: gnucash/report/reports/standard/account-summary.scm:131
-#: gnucash/report/reports/standard/balance-sheet.scm:143
+#: gnucash/report/reports/standard/balance-sheet.scm:142
 #: gnucash/report/reports/standard/balsheet-pnl.scm:131
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
-#: gnucash/report/reports/standard/budget-income-statement.scm:122
+#: gnucash/report/reports/standard/budget-income-statement.scm:121
 #: gnucash/report/reports/standard/cash-flow.scm:77
 #: gnucash/report/reports/standard/equity-statement.scm:83
-#: gnucash/report/reports/standard/income-statement.scm:115
+#: gnucash/report/reports/standard/income-statement.scm:114
 #: gnucash/report/reports/standard/trial-balance.scm:135
 msgid "Show the exchange rates used."
 msgstr "ఉపయోగించిన ఎక్స్చేంజి రేట్లను చూపించు. "
@@ -24718,7 +24704,7 @@ msgstr "లోతు పరిమితి కన్నా ఎక్కువ �
 #. Translators: This is part of the report title, which is capitalzed in English, but not all other languages
 #: gnucash/report/reports/standard/account-summary.scm:326
 #: gnucash/report/reports/standard/equity-statement.scm:304
-#: gnucash/report/reports/standard/income-statement.scm:407
+#: gnucash/report/reports/standard/income-statement.scm:406
 #: gnucash/report/reports/standard/trial-balance.scm:413
 #, fuzzy, scheme-format
 msgid "For Period Covering ~a to ~a"
@@ -25000,22 +24986,22 @@ msgstr "ఛార్జీ"
 msgid "Reserve"
 msgstr ""
 
-#: gnucash/report/reports/standard/balance-sheet.scm:72
+#: gnucash/report/reports/standard/balance-sheet.scm:71
 #: gnucash/report/reports/standard/trial-balance.scm:574
 msgid "Balance Sheet"
 msgstr "నిల్వ పత్రం"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:82
+#: gnucash/report/reports/standard/balance-sheet.scm:81
 #: gnucash/report/reports/standard/balsheet-eg.scm:153
 msgid "Balance Sheet Date"
 msgstr "నిల్వ పత్రం తేదీ"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:83
+#: gnucash/report/reports/standard/balance-sheet.scm:82
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:48
 msgid "Single column Balance Sheet"
 msgstr "ఒకే నిలువవరుస నిల్వ పత్రం"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:85
+#: gnucash/report/reports/standard/balance-sheet.scm:84
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:50
 msgid ""
 "Print liability/equity section in the same column under the assets section "
@@ -25024,140 +25010,140 @@ msgstr ""
 "ఆస్తుల సెక్షన్ కుడి వైపున రెండో కాలమ్‌కు వ్యతిరేకంగా ఉండే ఆస్తుల సెక్షన్ కింద అదే కాలమ్‌లో రుణ బాధ్యత/"
 "ఈక్విటీ విభాగాన్ని ముద్రించు. "
 
-#: gnucash/report/reports/standard/balance-sheet.scm:93
+#: gnucash/report/reports/standard/balance-sheet.scm:92
 #: gnucash/report/reports/standard/balsheet-eg.scm:160
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:58
-#: gnucash/report/reports/standard/budget-income-statement.scm:81
+#: gnucash/report/reports/standard/budget-income-statement.scm:80
 #: gnucash/report/reports/standard/budget.scm:90
-#: gnucash/report/reports/standard/income-statement.scm:68
+#: gnucash/report/reports/standard/income-statement.scm:67
 msgid "Flatten list to depth limit"
 msgstr "లోతు పరిమితికి జాబితాను చదును చేయి"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:95
+#: gnucash/report/reports/standard/balance-sheet.scm:94
 #: gnucash/report/reports/standard/balsheet-eg.scm:162
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:60
-#: gnucash/report/reports/standard/budget-income-statement.scm:83
+#: gnucash/report/reports/standard/budget-income-statement.scm:82
 #: gnucash/report/reports/standard/budget.scm:92
-#: gnucash/report/reports/standard/income-statement.scm:70
+#: gnucash/report/reports/standard/income-statement.scm:69
 msgid "Displays accounts which exceed the depth limit at the depth limit."
 msgstr "లోతు పరిమితికి లోతు పరిమితిని దాటిన ఖాతాలను ప్రదర్శిస్తుంది. "
 
-#: gnucash/report/reports/standard/balance-sheet.scm:114
+#: gnucash/report/reports/standard/balance-sheet.scm:113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:79
 msgid "Label the assets section"
 msgstr "ఆస్తుల విభాగానికి లేబుల్‌ వేయి"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:116
+#: gnucash/report/reports/standard/balance-sheet.scm:115
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:81
 msgid "Whether or not to include a label for the assets section."
 msgstr "ఆస్తుల విభాగం కోసం లేబుల్‌ను చేర్చాలా వద్దా."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:117
+#: gnucash/report/reports/standard/balance-sheet.scm:116
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:82
 msgid "Include assets total"
 msgstr "ఆస్తులు మొత్తం కలుపు"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:119
+#: gnucash/report/reports/standard/balance-sheet.scm:118
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:84
 msgid "Whether or not to include a line indicating total assets."
 msgstr "మొత్తం ఆస్తులను సూచించే వరుసను చేర్చాలా వద్దా. "
 
-#: gnucash/report/reports/standard/balance-sheet.scm:120
+#: gnucash/report/reports/standard/balance-sheet.scm:119
 msgid "Use standard US layout"
 msgstr "ప్రామాణిక US లేఅవుట్‌ను ఉపయోగించు"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:122
+#: gnucash/report/reports/standard/balance-sheet.scm:121
 msgid ""
 "Report section order is assets/liabilities/equity (rather than assets/equity/"
 "liabilities)."
 msgstr ""
 "నివేదిక సెక్షన్ క్రమం ఆస్తులు/రుణ బాధ్యతలు/ఈక్విటీలో ఉండాలి (ఆస్తులు/ఈక్విటీ/రుణ బాధ్యతలులో కాదు)."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:123
+#: gnucash/report/reports/standard/balance-sheet.scm:122
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:85
 msgid "Label the liabilities section"
 msgstr "అప్పుల విభాగానికి లేబుల్‌ వేయి"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:125
+#: gnucash/report/reports/standard/balance-sheet.scm:124
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:87
 msgid "Whether or not to include a label for the liabilities section."
 msgstr "రుణబాధ్యతల విభాగం కోసం లేబుల్‌ను చేర్చాలా వద్దా."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:126
+#: gnucash/report/reports/standard/balance-sheet.scm:125
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:88
 msgid "Include liabilities total"
 msgstr "అప్పుల మొత్తాన్ని కలుపు"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:128
+#: gnucash/report/reports/standard/balance-sheet.scm:127
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:90
 msgid "Whether or not to include a line indicating total liabilities."
 msgstr "మొత్త రుణబాధ్యతలను సూచించే వరుసను చేర్చాలా వద్దా. "
 
-#: gnucash/report/reports/standard/balance-sheet.scm:129
+#: gnucash/report/reports/standard/balance-sheet.scm:128
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:91
 msgid "Label the equity section"
 msgstr "ఈక్విటీ విభాగానికి లేబుల్‌ వేయి"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:131
+#: gnucash/report/reports/standard/balance-sheet.scm:130
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:93
 msgid "Whether or not to include a label for the equity section."
 msgstr "ఈక్విటీ విభాగం కోసం లేబుల్‌ను చేర్చాలా వద్దా."
 
-#: gnucash/report/reports/standard/balance-sheet.scm:132
+#: gnucash/report/reports/standard/balance-sheet.scm:131
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:94
 msgid "Include equity total"
 msgstr "ఈక్విటీ మొత్తాన్ని కలుపు"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:134
+#: gnucash/report/reports/standard/balance-sheet.scm:133
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:96
 msgid "Whether or not to include a line indicating total equity."
 msgstr "మొత్తం ఈక్విటీని సూచించే వరుసను చేర్చాలా వద్దా. "
 
-#: gnucash/report/reports/standard/balance-sheet.scm:391
+#: gnucash/report/reports/standard/balance-sheet.scm:390
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:717
 msgid "Total Liabilities"
 msgstr "మొత్తం అప్పులు"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:489
+#: gnucash/report/reports/standard/balance-sheet.scm:488
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:686
 msgid "Total Assets"
 msgstr "మొత్తం ఆస్తులు"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:511
+#: gnucash/report/reports/standard/balance-sheet.scm:510
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:188
 msgid "Retained Losses"
 msgstr "నిలుపుకున్న నష్టాలు"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:515
+#: gnucash/report/reports/standard/balance-sheet.scm:514
 msgid "Trading Gains"
 msgstr "వర్తక లాభాలు"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:516
+#: gnucash/report/reports/standard/balance-sheet.scm:515
 msgid "Trading Losses"
 msgstr "వర్తక నష్టాలు"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:520
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1117
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1132
+#: gnucash/report/reports/standard/balance-sheet.scm:519
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1127
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1142
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:759
 #: gnucash/report/reports/standard/equity-statement.scm:474
 #: gnucash/report/reports/standard/trial-balance.scm:735
 msgid "Unrealized Gains"
 msgstr "గ్రహించని లాభాలు"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:521
+#: gnucash/report/reports/standard/balance-sheet.scm:520
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:760
 #: gnucash/report/reports/standard/equity-statement.scm:475
 #: gnucash/report/reports/standard/trial-balance.scm:736
 msgid "Unrealized Losses"
 msgstr "గ్రహించని నష్టాలు"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:525
+#: gnucash/report/reports/standard/balance-sheet.scm:524
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:775
 msgid "Total Equity"
 msgstr "మొత్తం ఈక్వీటి"
 
-#: gnucash/report/reports/standard/balance-sheet.scm:535
+#: gnucash/report/reports/standard/balance-sheet.scm:534
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:781
 msgid "Total Liabilities & Equity"
 msgstr "మొత్తం అప్పులు & ఈక్వీటి"
@@ -25480,54 +25466,54 @@ msgstr "Qif దిగుమతి సారాంశం"
 msgid "Total For "
 msgstr "కోసం మొత్తం "
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:860
+#: gnucash/report/reports/standard/balsheet-pnl.scm:870
 #, fuzzy
 msgid "missing"
 msgstr "కమిషన్"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1106
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1116
 #: libgnucash/engine/Account.cpp:4389
 msgid "Asset"
 msgstr "ఆస్తి"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1109
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1119
 #: libgnucash/engine/Account.cpp:4391
 msgid "Liability"
 msgstr "అప్పు"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1127
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1137
 #, fuzzy
 msgid "Liability and Equity"
 msgstr "_ బాధ్యత/ఈక్విటి"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1145
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1294
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1155
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1300
 #, fuzzy
 msgid "Exchange Rates"
 msgstr "ఎక్స్‌చేంజ్ రేటు:"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1155
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1165
 #: gnucash/report/reports/standard/budget-barchart.scm:157
 #, fuzzy
 msgid "Barchart"
 msgstr "ఆస్తి పట్టీపత్రం"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1224
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1230
 #, fuzzy
 msgid " to "
 msgstr "%s నుంచి %s వరకు"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1287
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1293
 #: gnucash/report/reports/standard/trial-balance.scm:861
 msgid "Net Income"
 msgstr "నికర ఆదాయం "
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1323
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1329
 #, fuzzy
 msgid "Balance Sheet (Multicolumn)"
 msgstr "నిల్వ పత్రం (పన్ను ఇన్‌వాయిస్)"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1324
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1330
 #, fuzzy
 msgid "Income Statement (Multicolumn)"
 msgstr "ఆదాయం ప్రకటన"
@@ -25549,7 +25535,7 @@ msgstr "బడ్జెట్ దా్వరా ప్రవేశపెట్�
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:111
 #: gnucash/report/reports/standard/budget-barchart.scm:98
 #: gnucash/report/reports/standard/budget-flow.scm:56
-#: gnucash/report/reports/standard/budget-income-statement.scm:60
+#: gnucash/report/reports/standard/budget-income-statement.scm:59
 #: gnucash/report/reports/standard/budget.scm:138
 msgid "Budget to use."
 msgstr "ఉపయోగించడానికి బడ్జెట్"
@@ -25622,7 +25608,7 @@ msgid "Chart Type"
 msgstr "ఛార్జీ రకం"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:50
-#: gnucash/report/reports/standard/budget-income-statement.scm:67
+#: gnucash/report/reports/standard/budget-income-statement.scm:66
 #: gnucash/report/reports/standard/budget.scm:71
 msgid "Range start"
 msgstr "విస్తృతి ప్రారంభం"
@@ -25643,7 +25629,7 @@ msgid "Select exact period that starts the reporting range."
 msgstr "నివేదించిన శ్రేణిని ప్రారంభించే ఖచ్చితమైన కాలాన్ని ఎంపిక చేసుకో. "
 
 #: gnucash/report/reports/standard/budget-barchart.scm:57
-#: gnucash/report/reports/standard/budget-income-statement.scm:71
+#: gnucash/report/reports/standard/budget-income-statement.scm:70
 #: gnucash/report/reports/standard/budget.scm:78
 msgid "Range end"
 msgstr "విస్తృతి ముగింపు"
@@ -25758,137 +25744,137 @@ msgstr "కాలం నెంబర్. "
 msgid "~a: ~a - ~a"
 msgstr ""
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:63
+#: gnucash/report/reports/standard/budget-income-statement.scm:62
 #: gnucash/report/reports/standard/budget.scm:67
 msgid "Report for range of budget periods"
 msgstr "బడ్జెట్ అవధుల విస్తృతి కోసం నివేదిక"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:65
+#: gnucash/report/reports/standard/budget-income-statement.scm:64
 #: gnucash/report/reports/standard/budget.scm:69
 msgid "Create report for a budget period range instead of the entire budget."
 msgstr "మొత్తం బడ్దెట్‌కు బదులు బడ్జెట్ అవధి విస్తృతి కోసం నివేదికను సృష్టించు"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:69
+#: gnucash/report/reports/standard/budget-income-statement.scm:68
 msgid "Select a budget period that begins the reporting range."
 msgstr "నివేదన విస్తృతిని ప్రారంభించే బడ్జెట్ అవధిని ఎంచుకో."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:73
+#: gnucash/report/reports/standard/budget-income-statement.scm:72
 msgid "Select a budget period that ends the reporting range."
 msgstr "నివేదన విస్తృతిని ముగించే బడ్జెట్ అవధిని ఎంచుకో."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:102
-#: gnucash/report/reports/standard/income-statement.scm:89
+#: gnucash/report/reports/standard/budget-income-statement.scm:101
+#: gnucash/report/reports/standard/income-statement.scm:88
 msgid "Label the revenue section"
 msgstr "రెవిన్యూ వర్గానికి లేబుల్‌ వేయి"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:104
-#: gnucash/report/reports/standard/income-statement.scm:91
+#: gnucash/report/reports/standard/budget-income-statement.scm:103
+#: gnucash/report/reports/standard/income-statement.scm:90
 msgid "Whether or not to include a label for the revenue section."
 msgstr "రెవిన్యూ విభాగం కోసం లేబుల్‌ను చేర్చాలా వద్దా."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:105
-#: gnucash/report/reports/standard/income-statement.scm:92
+#: gnucash/report/reports/standard/budget-income-statement.scm:104
+#: gnucash/report/reports/standard/income-statement.scm:91
 msgid "Include revenue total"
 msgstr "రెవిన్యూ మొత్తాన్ని కలుపు"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:107
-#: gnucash/report/reports/standard/income-statement.scm:94
+#: gnucash/report/reports/standard/budget-income-statement.scm:106
+#: gnucash/report/reports/standard/income-statement.scm:93
 msgid "Whether or not to include a line indicating total revenue."
 msgstr "మొత్తం రెవిన్యూను సూచించే వరుసను చేర్చాలా వద్దా. "
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:108
-#: gnucash/report/reports/standard/income-statement.scm:101
+#: gnucash/report/reports/standard/budget-income-statement.scm:107
+#: gnucash/report/reports/standard/income-statement.scm:100
 msgid "Label the expense section"
 msgstr "వ్యయ విభాగానికి లేబుల్‌ వేయి"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:110
-#: gnucash/report/reports/standard/income-statement.scm:103
+#: gnucash/report/reports/standard/budget-income-statement.scm:109
+#: gnucash/report/reports/standard/income-statement.scm:102
 msgid "Whether or not to include a label for the expense section."
 msgstr "ఖర్చులవిభాగం కోసం లేబుల్‌ను చేర్చాలా వద్దా."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:111
-#: gnucash/report/reports/standard/income-statement.scm:104
+#: gnucash/report/reports/standard/budget-income-statement.scm:110
+#: gnucash/report/reports/standard/income-statement.scm:103
 msgid "Include expense total"
 msgstr "వ్యయం మొత్తాన్ని కలుపు"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:113
-#: gnucash/report/reports/standard/income-statement.scm:106
+#: gnucash/report/reports/standard/budget-income-statement.scm:112
+#: gnucash/report/reports/standard/income-statement.scm:105
 msgid "Whether or not to include a line indicating total expense."
 msgstr "మొత్తం ఖర్చులను సూచించే వరుసను చేర్చాలా వద్దా. "
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:126
-#: gnucash/report/reports/standard/income-statement.scm:130
+#: gnucash/report/reports/standard/budget-income-statement.scm:125
+#: gnucash/report/reports/standard/income-statement.scm:129
 msgid "Display as a two column report"
 msgstr "రెండు నిలువువరుసల నివేదికగా ప్రదర్శించు"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:128
-#: gnucash/report/reports/standard/income-statement.scm:132
+#: gnucash/report/reports/standard/budget-income-statement.scm:127
+#: gnucash/report/reports/standard/income-statement.scm:131
 msgid "Divides the report into an income column and an expense column."
 msgstr "నివేదికను రాబడి కాలమ్ మరియు వ్యయ కాలమ్‌లోకి విడదీస్తుంది. "
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:130
-#: gnucash/report/reports/standard/income-statement.scm:134
+#: gnucash/report/reports/standard/budget-income-statement.scm:129
+#: gnucash/report/reports/standard/income-statement.scm:133
 msgid "Display in standard, income first, order"
 msgstr "ప్రామాణికం, ఆదాయం మొదట, క్రమంలో ప్రదర్శించు"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:132
-#: gnucash/report/reports/standard/income-statement.scm:136
+#: gnucash/report/reports/standard/budget-income-statement.scm:131
+#: gnucash/report/reports/standard/income-statement.scm:135
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses."
 msgstr "ఖర్చుల కన్నా ముందు రాబడిని పెట్టేలా , ప్రామాణిక క్రమంలో ప్రదర్శించడానికి నివేదికను కలుగజేస్తుంది, "
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:444
+#: gnucash/report/reports/standard/budget-income-statement.scm:443
 msgid "Reporting range end period cannot be less than start period."
 msgstr "నివేదిత విస్తృతి ముగింపు అవధి ప్రారంభ అవధి కంటే తక్కువగా ఉండరాదు."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:512
-#: gnucash/report/reports/standard/income-statement.scm:505
+#: gnucash/report/reports/standard/budget-income-statement.scm:511
+#: gnucash/report/reports/standard/income-statement.scm:504
 msgid "Revenues"
 msgstr "రెవిన్యూలు"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:515
-#: gnucash/report/reports/standard/income-statement.scm:508
+#: gnucash/report/reports/standard/budget-income-statement.scm:514
+#: gnucash/report/reports/standard/income-statement.scm:507
 msgid "Total Revenue"
 msgstr "మొత్తం రెవిన్యూ"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:525
-#: gnucash/report/reports/standard/income-statement.scm:515
+#: gnucash/report/reports/standard/budget-income-statement.scm:524
+#: gnucash/report/reports/standard/income-statement.scm:514
 msgid "Total Expenses"
 msgstr "మొత్తం వ్యయాలు"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:533
+#: gnucash/report/reports/standard/budget-income-statement.scm:532
 #, fuzzy, scheme-format
 msgid "for Budget ~a"
 msgstr "%s బడ్జెట్ కోసం"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:535
+#: gnucash/report/reports/standard/budget-income-statement.scm:534
 #, fuzzy, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "%s బడ్జెట్ కోసం %u అవధి"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:538
+#: gnucash/report/reports/standard/budget-income-statement.scm:537
 #, fuzzy, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
 msgstr "%s బడ్జెట్ కోసం %u - %u అవధులు"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:566
+#: gnucash/report/reports/standard/budget-income-statement.scm:565
 #: gnucash/report/reports/standard/equity-statement.scm:457
-#: gnucash/report/reports/standard/income-statement.scm:525
+#: gnucash/report/reports/standard/income-statement.scm:524
 msgid "Net income"
 msgstr "నికర ఆదాయం"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:567
+#: gnucash/report/reports/standard/budget-income-statement.scm:566
 #: gnucash/report/reports/standard/equity-statement.scm:458
-#: gnucash/report/reports/standard/income-statement.scm:526
+#: gnucash/report/reports/standard/income-statement.scm:525
 msgid "Net loss"
 msgstr "నికర నష్టం"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:607
+#: gnucash/report/reports/standard/budget-income-statement.scm:606
 msgid "Budget Income Statement"
 msgstr "బడ్జెట్ ఆదాయం ప్రకటన"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:608
+#: gnucash/report/reports/standard/budget-income-statement.scm:607
 msgid "Budget Profit & Loss"
 msgstr "బడ్జెట్ లాభం & నష్టం"
 
@@ -26414,44 +26400,44 @@ msgid "Report only on these accounts."
 msgstr "ఈ ఖాతాలలో మాత్రమే నివేదించు. "
 
 #: gnucash/report/reports/standard/equity-statement.scm:86
-#: gnucash/report/reports/standard/income-statement.scm:118
+#: gnucash/report/reports/standard/income-statement.scm:117
 #: gnucash/report/reports/standard/trial-balance.scm:104
 msgid "Closing Entries pattern"
 msgstr "నమోదుల మాదిరిని మూయడం"
 
 #: gnucash/report/reports/standard/equity-statement.scm:88
-#: gnucash/report/reports/standard/income-statement.scm:120
+#: gnucash/report/reports/standard/income-statement.scm:119
 #: gnucash/report/reports/standard/trial-balance.scm:106
 msgid "Any text in the Description column which identifies closing entries."
 msgstr "ముగింపు ఎంట్రీలను గుర్తించే వివరణ కాలమ్‌లోని ఏదేని టెక్స్ట్. "
 
 #: gnucash/report/reports/standard/equity-statement.scm:90
-#: gnucash/report/reports/standard/income-statement.scm:122
+#: gnucash/report/reports/standard/income-statement.scm:121
 #: gnucash/report/reports/standard/trial-balance.scm:108
 msgid "Closing Entries pattern is case-sensitive"
 msgstr "మూసే నమోదుల మాదిరి అక్షరరూప-సున్నితత్వం కలిగినది"
 
 #: gnucash/report/reports/standard/equity-statement.scm:92
-#: gnucash/report/reports/standard/income-statement.scm:124
+#: gnucash/report/reports/standard/income-statement.scm:123
 #: gnucash/report/reports/standard/trial-balance.scm:110
 msgid "Causes the Closing Entries Pattern match to be case-sensitive."
 msgstr "కేస్-సెన్సిటివ్‌గా ఉండేందుకు ముగింపు ఎంట్రీల విధానాన్ని కలుగజేస్తుంది. "
 
 #: gnucash/report/reports/standard/equity-statement.scm:94
-#: gnucash/report/reports/standard/income-statement.scm:126
+#: gnucash/report/reports/standard/income-statement.scm:125
 #: gnucash/report/reports/standard/trial-balance.scm:112
 msgid "Closing Entries Pattern is regular expression"
 msgstr "మూసివేసే నమోదుల మాదిరి అనేది క్రమ భావప్రకటన"
 
 #: gnucash/report/reports/standard/equity-statement.scm:96
-#: gnucash/report/reports/standard/income-statement.scm:128
+#: gnucash/report/reports/standard/income-statement.scm:127
 #: gnucash/report/reports/standard/trial-balance.scm:114
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression."
 msgstr "నిరంతర భావ వ్యక్తీకరణగా వ్యవహరించడానికి ముగింపు ఎంట్రీల విధానాన్ని కలుగజేస్తుంది. "
 
 #: gnucash/report/reports/standard/equity-statement.scm:425
-#: gnucash/report/reports/standard/income-statement.scm:481
+#: gnucash/report/reports/standard/income-statement.scm:480
 #: gnucash/report/reports/standard/trial-balance.scm:405
 msgid "for Period"
 msgstr "అవధి కోసం"
@@ -26797,39 +26783,39 @@ msgstr "నికర ధర"
 msgid "Tax on Purchases"
 msgstr "పన్ను తరగతి"
 
-#: gnucash/report/reports/standard/income-statement.scm:95
+#: gnucash/report/reports/standard/income-statement.scm:94
 msgid "Label the trading accounts section"
 msgstr "వర్తక ఖాతాల విభాగానికి లేబుల్‌ వేయి"
 
-#: gnucash/report/reports/standard/income-statement.scm:97
+#: gnucash/report/reports/standard/income-statement.scm:96
 msgid "Whether or not to include a label for the trading accounts section."
 msgstr "ట్రేడింగ్ ఖాతాల సెషన్ కోసం లేబుల్‌ను చేర్చాలా లేదా"
 
-#: gnucash/report/reports/standard/income-statement.scm:98
+#: gnucash/report/reports/standard/income-statement.scm:97
 msgid "Include trading accounts total"
 msgstr "వర్తక ఖాతాల మొత్తాన్ని కలుపు"
 
-#: gnucash/report/reports/standard/income-statement.scm:100
+#: gnucash/report/reports/standard/income-statement.scm:99
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance."
 msgstr "ట్రేడింగ్ ఖాతాల మొత్త బ్యాలెన్స్‌ను సూచించే వరుసను చేర్చాలా లేదా"
 
-#: gnucash/report/reports/standard/income-statement.scm:518
+#: gnucash/report/reports/standard/income-statement.scm:517
 #: libgnucash/engine/Account.cpp:4401 libgnucash/engine/Scrub.c:481
 #: libgnucash/engine/Scrub.c:549
 msgid "Trading"
 msgstr "వర్తకం"
 
-#: gnucash/report/reports/standard/income-statement.scm:521
+#: gnucash/report/reports/standard/income-statement.scm:520
 msgid "Total Trading"
 msgstr "మొత్తం వర్తకం"
 
-#: gnucash/report/reports/standard/income-statement.scm:572
+#: gnucash/report/reports/standard/income-statement.scm:571
 #: gnucash/report/reports/standard/trial-balance.scm:573
 msgid "Income Statement"
 msgstr "ఆదాయం ప్రకటన"
 
-#: gnucash/report/reports/standard/income-statement.scm:573
+#: gnucash/report/reports/standard/income-statement.scm:572
 msgid "Profit & Loss"
 msgstr "లాభం & నష్టం"
 
@@ -27759,8 +27745,8 @@ msgid ""
 "All the prices found are equal. This would result in a plot with one "
 "straight line. Unfortunately, the plotting tool can't handle that."
 msgstr ""
-"అన్ని ధరలు సమంగా ఉన్నట్టు కనుగొనబడ్డాయి. ఇది ప్లాట్‌లో నేరు లైన్‌తో ఫలితం చూపిస్తుంది. "
-"దురదృష్టవశాత్తు, ఈ ప్లాట్ సాధనం దానిని నిర్వహించలేదు. "
+"అన్ని ధరలు సమంగా ఉన్నట్టు కనుగొనబడ్డాయి. ఇది ప్లాట్‌లో నేరు లైన్‌తో ఫలితం చూపిస్తుంది. దురదృష్టవశాత్తు, "
+"ఈ ప్లాట్ సాధనం దానిని నిర్వహించలేదు. "
 
 #: gnucash/report/reports/standard/price-scatter.scm:297
 msgid "All Prices at the same date"
@@ -27917,8 +27903,8 @@ msgstr "నివేదికలో ఉపయోగించగల లోగో�
 #, fuzzy
 msgid ""
 "Width of the header logo in CSS format, e.g. 10% or 32px. Leave blank to "
-"display the logo at its natural width. The height of the logo will be "
-"scaled accordingly."
+"display the logo at its natural width. The height of the logo will be scaled "
+"accordingly."
 msgstr ""
 "CSS ఫార్మట్‌లో లోగో వెడల్పు, అంటే 10% లేదా 32పిక్స్. దాని సహజ వెడల్పులో లోగోను ప్రదర్శించడానికి ఖాళీని "
 "విడిచిపెట్టు. లోగో ఎత్తు దానికి తగ్గట్టు స్థాయి పెంచబడుతుంది. "
@@ -27932,8 +27918,8 @@ msgstr "నివేదికలో ఉపయోగించగల లోగో�
 #, fuzzy
 msgid ""
 "Width of the footer logo in CSS format, e.g. 10% or 32px. Leave blank to "
-"display the logo at its natural width. The height of the logo will be "
-"scaled accordingly."
+"display the logo at its natural width. The height of the logo will be scaled "
+"accordingly."
 msgstr ""
 "CSS ఫార్మట్‌లో లోగో వెడల్పు, అంటే 10% లేదా 32పిక్స్. దాని సహజ వెడల్పులో లోగోను ప్రదర్శించడానికి ఖాళీని "
 "విడిచిపెట్టు. లోగో ఎత్తు దానికి తగ్గట్టు స్థాయి పెంచబడుతుంది. "
@@ -28429,6 +28415,10 @@ msgstr "పని పట్టి"
 msgid "Creates a complete end-of-period work sheet"
 msgstr "పూర్తి ముగిం-పు-అవధి పని పట్టీని సృష్టిస్తుంది"
 
+#: gnucash/report/reports/standard/trial-balance.scm:279
+msgid "Adjusting Entries"
+msgstr "సర్దుపరిచే నమోదులు"
+
 #: gnucash/report/reports/standard/trial-balance.scm:571
 msgid "Adjustments"
 msgstr "సర్దుబాట్లు"
@@ -28535,7 +28525,7 @@ msgid "Mutual Funds"
 msgstr "పరస్పర నిధులు"
 
 #: gnucash/report/report-utilities.scm:203
-#: libgnucash/engine/gnc-commodity.h:116
+#: libgnucash/engine/gnc-commodity.h:121
 msgid "Currencies"
 msgstr "ద్రవ్యాలు"
 
@@ -29622,8 +29612,7 @@ msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
 msgstr ""
-"ఖాతాదారుని సంఖ్యలను తయారు చేయడంకోసం ఉపయోగించేందుకు ఆకృతి పదక్రమం. ఇది ప్రింట్ఎఫ్-శైలి ఆకృతి "
-"పదక్రమం"
+"ఖాతాదారుని సంఖ్యలను తయారు చేయడంకోసం ఉపయోగించేందుకు ఆకృతి పదక్రమం. ఇది ప్రింట్ఎఫ్-శైలి ఆకృతి పదక్రమం"
 
 #: libgnucash/app-utils/business-prefs.scm:43
 msgid ""
@@ -29662,8 +29651,7 @@ msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
 msgstr ""
-"ఇన్వాయిస్‌ సంఖ్యలను తయారు చేయడం కోసం ఉపయోగించేందుకు ఆకృతి పదక్రమం. ఇది ప్రింట్ఎఫ్-శైలి ఆకృతి "
-"పదక్రమం"
+"ఇన్వాయిస్‌ సంఖ్యలను తయారు చేయడం కోసం ఉపయోగించేందుకు ఆకృతి పదక్రమం. ఇది ప్రింట్ఎఫ్-శైలి ఆకృతి పదక్రమం"
 
 #: libgnucash/app-utils/business-prefs.scm:51
 msgid ""
@@ -30119,40 +30107,40 @@ msgstr "సంఖ్యా దోషం"
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
 #. They might appear in their editor or in "Since last run".
-#: libgnucash/app-utils/gnc-sx-instance-model.c:990
+#: libgnucash/app-utils/gnc-sx-instance-model.c:991
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1043
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1044
 #, c-format
 msgid "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1097
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1758
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1098
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1759
 #, c-format
 msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1767
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1768
 #, c-format
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:407
+#: libgnucash/app-utils/gnc-ui-balances.c:408
 msgid "Account is already at Auto-Clear Balance."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:451
+#: libgnucash/app-utils/gnc-ui-balances.c:452
 msgid "Too many uncleared splits"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:467
+#: libgnucash/app-utils/gnc-ui-balances.c:468
 msgid "The selected amount cannot be cleared."
 msgstr "ఎంపిక చేసిన మొత్తాన్ని చెరిపి వేయరాదు."
 
-#: libgnucash/app-utils/gnc-ui-balances.c:473
+#: libgnucash/app-utils/gnc-ui-balances.c:474
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr "విభజనలను విశిష్ఠంగా చెరిపివేయలేరు. అనేక అవకాశాలు కనుగొనబడ్డాయి."
 
@@ -30290,60 +30278,60 @@ msgid "Invalid option value"
 msgstr "చెల్లని ఎన్‌కోడింగ్ ఎంచుకోబడింది"
 
 #. Translators: this string refers to a file name that gets renamed
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:647
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:648
 #, fuzzy
 msgid "Renamed to:"
 msgstr "పేజికీ పేరు_మార్చు"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:672
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:673
 msgid "Notice"
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:677
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:678
 msgid "Your gnucash metadata has been migrated."
 msgstr ""
 
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:679
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:680
 #, fuzzy
 msgid "Old location:"
 msgstr "ఫైల్/ప్రదేశాన్ని తెరువు"
 
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:681
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:682
 #, fuzzy
 msgid "New location:"
 msgstr "కొత్త విభజన సమాచారం"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:683
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:684
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:690
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:691
 msgid "In addition:"
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:696
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:697
 #, fuzzy
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "అప్పటికే జాబితాకు ఈ ఎన్‌కోడింగ్ చేర్చబడింది"
 msgstr[1] "అప్పటికే జాబితాకు ఈ ఎన్‌కోడింగ్ చేర్చబడింది"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:700
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:701
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:710
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:711
 msgid "The following file has become obsolete and will be ignored:"
 msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:720
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:721
 #, fuzzy
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
@@ -30407,7 +30395,7 @@ msgid ""
 "been recorded elsewhere."
 msgstr "మరెక్కడా రికార్డ్ చేయబడని సరుకు లేదా వర్తక ఖాతాల నుంచి గ్రహించిన లాభాలు లేదా నష్టాలు "
 
-#: libgnucash/engine/gnc-commodity.h:113
+#: libgnucash/engine/gnc-commodity.h:118
 #, fuzzy
 msgid "All non-currency"
 msgstr "కరెన్సీ ఎంచుకో"
@@ -30637,6 +30625,19 @@ msgstr "లావాదేవీ వ్యర్ధమైంది"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "సహాయం అందుబాటులో లేదు"
+
+#~ msgid "xxx"
+#~ msgstr "xxx "
+
+#~ msgid "Text book style (experimental)"
+#~ msgstr "పాఠ్య పుస్తక శైలి (ప్రయోగాత్మకం)"
+
+#~ msgid ""
+#~ "Show parent account subtotals, indented per accounting text book practice "
+#~ "(experimental)."
+#~ msgstr ""
+#~ "మాతృక ఖాతా ఉపమొత్తాలను చూపించు, అకౌంటింగ్ టెక్స్ట్ బుక్ ప్రాక్సీస్‌కు తగ్గట్టు జాబితా పరచబడింది "
+#~ "(ప్రయోగాత్మకం). "
 
 #~ msgid "Company Name "
 #~ msgstr "కంపెనీ పేరు "
