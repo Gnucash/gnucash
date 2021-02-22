@@ -194,6 +194,26 @@ scm_to_value<const QofInstance*>(SCM new_value)
     return static_cast<const QofInstance*>(ptr);
 }
 
+template <>inline GncOptionAccountList
+scm_to_value<GncOptionAccountList>(SCM new_value)
+{
+    GncOptionAccountList retval{};
+    if (scm_is_false(scm_list_p(new_value)) || scm_is_null(new_value))
+        return retval;
+    auto next{new_value};
+    while (auto node{scm_car(next)})
+    {
+        void* account{};
+        SWIG_ConvertPtr(node, &account, SWIGTYPE_p_Account, 0);
+        if (account)
+            retval.push_back(static_cast<Account*>(account));
+        next = scm_cdr(next);
+        if (scm_is_null(next))
+            break;
+    }
+    return retval;
+}
+
 template <>inline SCM
 scm_from_value<GncOptionAccountList>(GncOptionAccountList value)
 {
@@ -604,7 +624,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                         option.set_value(new_value_str);
                     return;
                 }
-                option.set_value(scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value));
+                auto value{scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value)};  //Can't inline, set_value takes arg by reference.
+                option.set_value(value);
             }, swig_get_option($self));
     }
 };
