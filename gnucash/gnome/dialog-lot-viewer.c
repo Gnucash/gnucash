@@ -234,6 +234,7 @@ lv_show_splits_free (GNCLotViewer *lv)
 
     /* display list */
     gnc_split_viewer_fill(lv, lv->split_free_store, g_list_reverse (filtered_list));
+    g_list_free (filtered_list);
 }
 
 /* ======================================================================== */

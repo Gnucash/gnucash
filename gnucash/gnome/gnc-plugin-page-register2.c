@@ -2677,6 +2677,7 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
             }
         }
         gnc_ui_print_check_dialog_create (window, splits);
+        g_list_free (splits);
     }
     else
     {
@@ -4027,6 +4028,7 @@ gppr_account_destroy_cb (Account *account)
         page = (GncPluginPageRegister2 *)item->data;
         gnc_main_window_close_page(GNC_PLUGIN_PAGE(page));
     }
+    g_list_free (kill);
 }
 
 /** This function is the handler for all event messages from the
