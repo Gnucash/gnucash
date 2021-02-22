@@ -638,7 +638,7 @@ gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList *slist, Accoun
 
     model->number_of_trans_in_full_tlist = g_list_length (priv->full_tlist);
 
-    if (g_list_length (priv->full_tlist) < NUM_OF_TRANS*3)
+    if (model->number_of_trans_in_full_tlist < NUM_OF_TRANS*3)
     {
         // Copy the full_tlist to tlist
         priv->tlist = g_list_copy (priv->full_tlist);
@@ -647,8 +647,11 @@ gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList *slist, Accoun
     {
         if (model->position_of_trans_in_full_tlist < (NUM_OF_TRANS*3))
             gtm_sr_reg_load (model, VIEW_HOME, NUM_OF_TRANS*3);
-        else if (model->position_of_trans_in_full_tlist > g_list_length (priv->full_tlist) - (NUM_OF_TRANS*3))
+
+        else if (model->position_of_trans_in_full_tlist >
+                 model->number_of_trans_in_full_tlist - (NUM_OF_TRANS*3))
             gtm_sr_reg_load (model, VIEW_END, NUM_OF_TRANS*3);
+
         else
             gtm_sr_reg_load (model, VIEW_GOTO, model->position_of_trans_in_full_tlist);
     }
