@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-22 17:34+0100\n"
-"PO-Revision-Date: 2021-02-03 08:41+0000\n"
+"PO-Revision-Date: 2021-02-23 06:50+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,12 +20,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
-msgstr "כל הפריטים הלא-כספיים"
+msgstr "כל הפריטים שאינם מטבעות"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -13627,17 +13627,6 @@ msgstr "סייען יבוא QIF"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:54
-#, fuzzy
-#| msgid ""
-#| "GnuCash can import financial data from QIF (Quicken Interchange Format) "
-#| "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-#| "programs.\n"
-#| "\n"
-#| "The import process has several steps. Your GnuCash accounts will not be "
-#| "changed until you click \"Apply\" at the end of the process.\n"
-#| "\n"
-#| "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
-#| "process. "
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
@@ -13657,7 +13646,7 @@ msgstr ""
 "התהליך.\n"
 "\n"
 "הקשה על 'הבא' כדי להתחיל לטעון את נתוני קובץ ה-QIF, או על 'ביטול' לנטישת "
-"המהלך. "
+"המהלך."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:63
 msgid "Import QIF files"
@@ -13748,13 +13737,6 @@ msgstr "הגדרת שם חשבון QIF ברירת מחדל"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:468
-#, fuzzy
-#| msgid ""
-#| "Click \"Load another file\" if you have more data to import at this time. "
-#| "Do this if you have saved your accounts to separate QIF files.\n"
-#| "\n"
-#| "Click \"Next\" to finish loading files and move to the next step of the "
-#| "QIF import process. "
 msgid ""
 "Click \"Load another file\" if you have more data to import at this time. Do "
 "this if you have saved your accounts to separate QIF files.\n"
@@ -13765,7 +13747,7 @@ msgstr ""
 "הקשה על 'טעינת קובץ אחר' ליבוא נתונים נוספים בשלב זה. יש לבצע פעולה זו במידה "
 "והחשבונות נשמרו בקבצי QIF נפרדים.\n"
 "\n"
-"הקשה על 'הבא' כדי לסיים את טעינת הקבצים ולעבור לשלב הבא של תהליך יבוא QIF. "
+"הקשה על 'הבא' כדי לסיים את טעינת הקבצים ולעבור לשלב הבא של תהליך יבוא QIF."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:487
 msgid "_Unload selected file"
@@ -13858,17 +13840,6 @@ msgid "Match QIF categories with GnuCash accounts"
 msgstr "התאמת קטגוריות QIF לחשבונות גנוקאש"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:802
-#, fuzzy
-#| msgid ""
-#| "QIF files downloaded from banks and other financial institutions may not "
-#| "have information about Accounts and Categories which would allow them to "
-#| "be correctly assigned to GnuCash accounts.\n"
-#| "\n"
-#| "In the following page, you will see the text that appears in the Payee "
-#| "and Memo fields of transactions with no QIF Account or Category. By "
-#| "default these transactions are assigned to the 'Unspecified' account in "
-#| "GnuCash. If you select a different account, it will be remembered for "
-#| "future QIF files. "
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
@@ -13884,7 +13855,7 @@ msgstr ""
 "\n"
 "בעמוד הבא יוצג המלל המופיע בשדות המוטב והמזכר של תנועות ללא חשבון QIF או סוג-"
 "אב. כברירת מחדל תנועות אלו מוקצות לחשבון 'לא מוגדר' בגנוקאש. במידה ויבחר "
-"חשבון אחר, הוא ייזכר עבור קבצי QIF עתידיים. "
+"חשבון אחר, הוא ייזכר עבור קבצי QIF עתידיים."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:815
 msgid "Payees and memos"
