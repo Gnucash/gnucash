@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-22 17:34+0100\n"
-"PO-Revision-Date: 2021-02-14 00:50+0000\n"
+"PO-Revision-Date: 2021-02-23 02:50+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -2850,14 +2850,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: gnucash/gnome/dialog-payment.c:1709
-#, fuzzy, c-format
-#| msgid ""
-#| "The transaction has at least one split in a business account that is not "
-#| "part of a business transaction.\n"
-#| "If you continue these splits will be ignored:\n"
-#| "\n"
-#| "%s\n"
-#| "Do you wish to continue and ignore these splits ?"
+#, c-format
 msgid ""
 "The transaction has at least one split in a business account that is not "
 "part of a business transaction.\n"
@@ -2895,8 +2888,6 @@ msgid "Entries"
 msgstr "Entradas"
 
 #: gnucash/gnome/dialog-price-edit-db.c:457
-#, fuzzy
-#| msgid "Are you sure you want to delete these prices ?"
 msgid "Are you sure you want to delete these prices?"
 msgstr "Tem certeza de que deseja excluir estes preços?"
 
@@ -7664,7 +7655,7 @@ msgstr "Use uma conta já existente"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
 msgid "Use +- keys to increment/decrement number"
-msgstr "Use as teclas +- para aumentar ou diminuir o número"
+msgstr "Use as teclas +- para aumentar/diminuir o número"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
 msgid "Action/Number"
@@ -8617,10 +8608,7 @@ msgstr ""
 "diferente?"
 
 #: gnucash/gnome-utils/gnc-file.c:1691
-#, fuzzy, c-format
-#| msgid ""
-#| "Reverting will discard all unsaved changes to %s. Are you sure you want "
-#| "to proceed ?"
+#, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed?"
@@ -10426,11 +10414,6 @@ msgstr ""
 "linha de comando."
 
 #: gnucash/gnucash.cpp:396
-#, fuzzy
-#| msgid ""
-#| "Error: could not initialize graphical user interface and option add-price-"
-#| "quotes was not set.\n"
-#| "       Perhaps you need to set the $DISPLAY environment variable ?"
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
@@ -14123,17 +14106,6 @@ msgstr "Assistente de importação QIF"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:54
-#, fuzzy
-#| msgid ""
-#| "GnuCash can import financial data from QIF (Quicken Interchange Format) "
-#| "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-#| "programs.\n"
-#| "\n"
-#| "The import process has several steps. Your GnuCash accounts will not be "
-#| "changed until you click \"Apply\" at the end of the process.\n"
-#| "\n"
-#| "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
-#| "process. "
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
@@ -14153,7 +14125,7 @@ msgstr ""
 "serão alteradas até clicar em \"Aplicar\" no final do procedimento.\n"
 "\n"
 "Clique em \"Avançar\" para começar a carregar os seus dados QIF ou em "
-"\"Cancelar\" para abortar o procedimento. "
+"\"Cancelar\" para abortar o procedimento."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:63
 msgid "Import QIF files"
@@ -14252,13 +14224,6 @@ msgstr "Defina o nome de conta padrão do QIF"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:468
-#, fuzzy
-#| msgid ""
-#| "Click \"Load another file\" if you have more data to import at this time. "
-#| "Do this if you have saved your accounts to separate QIF files.\n"
-#| "\n"
-#| "Click \"Next\" to finish loading files and move to the next step of the "
-#| "QIF import process. "
 msgid ""
 "Click \"Load another file\" if you have more data to import at this time. Do "
 "this if you have saved your accounts to separate QIF files.\n"
@@ -14270,7 +14235,7 @@ msgstr ""
 "momento. Faça isso se você salvou as suas contas em arquivos QIF separados.\n"
 "\n"
 "Clique em \"Avançar\" para terminar de carregar os arquivos e passar para a "
-"próxima etapa do processo de importação do QIF. "
+"próxima etapa do processo de importação do QIF."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:487
 msgid "_Unload selected file"
@@ -14372,17 +14337,6 @@ msgid "Match QIF categories with GnuCash accounts"
 msgstr "Pareie as categorias QIF com as contas GnuCash"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:802
-#, fuzzy
-#| msgid ""
-#| "QIF files downloaded from banks and other financial institutions may not "
-#| "have information about Accounts and Categories which would allow them to "
-#| "be correctly assigned to GnuCash accounts.\n"
-#| "\n"
-#| "In the following page, you will see the text that appears in the Payee "
-#| "and Memo fields of transactions with no QIF Account or Category. By "
-#| "default these transactions are assigned to the 'Unspecified' account in "
-#| "GnuCash. If you select a different account, it will be remembered for "
-#| "future QIF files. "
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
@@ -14401,7 +14355,7 @@ msgstr ""
 "memorando das transações sem conta QIF ou categoria. Por padrão, estas "
 "transações são atribuídas à conta 'Não especificada' no GnuCash. Caso "
 "selecione uma conta diferente, ela será lembrada para os futuros arquivos "
-"QIF. "
+"QIF."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:815
 msgid "Payees and memos"
@@ -23025,13 +22979,7 @@ msgid "Change transaction containing a reconciled split?"
 msgstr "Modifique a transação que tenha um desdobramento reconciliado?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2217
-#, fuzzy, c-format
-#| msgid ""
-#| "The transaction you are about to change contains reconciled splits in the "
-#| "following accounts:\n"
-#| "%s\n"
-#| "\n"
-#| "Are you sure you want to continue with this change ?"
+#, c-format
 msgid ""
 "The transaction you are about to change contains reconciled splits in the "
 "following accounts:\n"
