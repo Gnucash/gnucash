@@ -145,6 +145,12 @@ scm_to_value(SCM new_value)
     return ValueType{};
 }
 
+template <> inline bool
+scm_to_value<bool>(SCM new_value)
+{
+    return scm_is_true(new_value);
+}
+
 template <> inline std::string
 scm_to_value<std::string>(SCM new_value)
 {
