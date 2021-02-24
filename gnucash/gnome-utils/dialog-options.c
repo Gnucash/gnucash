@@ -398,7 +398,10 @@ gnc_option_set_ui_value_internal (GNCOption *option, gboolean use_default)
     {
         bad_value = option_def->set_value (option, use_default, widget, value);
         if (bad_value)
-            PERR("bad value\n");
+            PERR("option '%s' bad value '%s'\n",
+                 gnc_option_name (option),
+                 scm_to_locale_string (scm_object_to_string
+                                       (value, scm_c_eval_string ("write"))));
     }
     else
         PERR("Unknown type. Ignoring.\n");
