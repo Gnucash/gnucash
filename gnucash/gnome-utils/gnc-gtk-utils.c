@@ -178,7 +178,6 @@ gnc_cbwe_add_completion (GtkComboBox *cbwe)
     model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbwe));
     gtk_entry_completion_set_model(completion, model);
     gtk_entry_completion_set_text_column(completion, 0);
-    gtk_entry_completion_set_inline_completion(completion, TRUE);
     gtk_entry_set_completion(entry, completion);
     g_object_unref(completion);
 }
