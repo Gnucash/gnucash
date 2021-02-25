@@ -464,7 +464,12 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %typemap(out) GncOption* "$result = ($1) ? scm_from_pointer($1, nullptr) : SCM_BOOL_F;"
 
 %header %{
-    static const SCM reldate_values = scm_c_eval_string(
+    static const SCM get_reldate_values() {
+
+    static SCM reldate_values = SCM_BOOL_F;
+
+    if (scm_is_false(reldate_values))
+        reldate_values = scm_c_eval_string(
         "'((absolute RelativeDatePeriod-ABSOLUTE)"
         "(today RelativeDatePeriod-TODAY)"
         "(one-week-ago RelativeDatePeriod-ONE-WEEK-AGO)"
@@ -626,7 +631,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     {
         if (!$self)
             return;
-        std::visit([new_value](auto& option) {
+        auto reldate_values{get_reldate_values()};
+        std::visit([new_value, reldate_values](auto& option) {
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
                                GncOptionDateValue>)
                 {
