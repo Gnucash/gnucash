@@ -200,7 +200,7 @@
   (let* ((option-db (new-gnc-optiondb))
          (date-opt (gnc-register-date-option option-db "foo" "bar"
                                              "baz" "Phony Option"
-                                             (RelativeDatePeriod-today)))
+                                             (RelativeDatePeriod-TODAY)))
          (a-time (gnc-dmy2time64 11 07 2019)))
     (test-equal (current-time) (gnc-option-value option-db "foo" "bar"))
     (gnc-set-option option-db "foo" "bar" a-time)
@@ -212,14 +212,15 @@
   (let* ((option-db (new-gnc-optiondb))
          (date-opt (gnc-register-date-option-set
                     option-db "foo" "bar" "baz" "Phony Option"
-                    (list (RelativeDatePeriod-today)
-                          (RelativeDatePeriod-start-this-month)
-                          (RelativeDatePeriod-start-prev-month)
-                          (RelativeDatePeriod-start-current-quarter)
-                          (RelativeDatePeriod-start-prev-quarter)
-                          (RelativeDatePeriod-start-cal-year)
-                          (RelativeDatePeriod-start-prev-year)
-                          (RelativeDatePeriod-start-accounting-period)) #t)))
+                    (list (RelativeDatePeriod-TODAY)
+                          (RelativeDatePeriod-START-THIS-MONTH)
+                          (RelativeDatePeriod-START-PREV-MONTH)
+                          (RelativeDatePeriod-START-CURRENT-QUARTER)
+                          (RelativeDatePeriod-START-PREV-QUARTER)
+                          (RelativeDatePeriod-START-CAL-YEAR)
+                          (RelativeDatePeriod-START-CAL-YEAR)
+                          (RelativeDatePeriod-START-PREV-YEAR)
+                          (RelativeDatePeriod-START-ACCOUNTING-PERIOD)) #t)))
     (test-equal (gnc-accounting-period-fiscal-start)
                 (gnc-option-value option-db "foo" "bar")))
   (test-end "test-gnc-test-date-set-option"))
