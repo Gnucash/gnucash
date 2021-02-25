@@ -409,6 +409,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 #include <cassert>
 #include <algorithm>
 #include <array>
+#include <string>
 #include "gnc-option.hpp"
 #include "gnc-option-ui.hpp"
 
@@ -470,38 +471,38 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 
     if (scm_is_false(reldate_values))
         reldate_values = scm_c_eval_string(
-        "'((absolute RelativeDatePeriod-ABSOLUTE)"
-        "(today RelativeDatePeriod-TODAY)"
-        "(one-week-ago RelativeDatePeriod-ONE-WEEK-AGO)"
-        "(one-week-ahead RelativeDatePeriod-ONE-WEEK-AHEAD)"
-        "(one-month-ago RelativeDatePeriod-ONE-MONTH-AGO)"
-        "(one-month-ahead RelativeDatePeriod-ONE-MONTH-AHEAD)"
-        "(three-months-ago RelativeDatePeriod-THREE-MONTHS-AGO)"
-        "(three-months-ahead RelativeDatePeriod-THREE-MONTHS-AHEAD)"
-        "(six-months-ago RelativeDatePeriod-SIX-MONTHS-AGO)"
-        "(six-months-ahead RelativeDatePeriod-SIX-MONTHS-AHEAD)"
-        "(one-year-ago RelativeDatePeriod-ONE-YEAR-AGO)"
-        "(one-year-ahead RelativeDatePeriod-ONE-YEAR-AHEAD)"
-        "(start-this-month RelativeDatePeriod-START-THIS-MONTH)"
-        "(end-this-month RelativeDatePeriod-END-THIS-MONTH)"
-        "(start-prev-month RelativeDatePeriod-START-PREV-MONTH)"
-        "(end-prev-month RelativeDatePeriod-END-PREV-MONTH)"
-        "(start-next-month RelativeDatePeriod-START-NEXT-MONTH)"
-        "(end-next-month RelativeDatePeriod-END-NEXT-MONTH)"
-        "(start-current-quarter RelativeDatePeriod-START-CURRENT-QUARTER)"
-        "(end-current-quarter RelativeDatePeriod-END-CURRENT-QUARTER)"
-        "(start-prev-quarter RelativeDatePeriod-START-PREV-QUARTER)"
-        "(end-prev-quarter RelativeDatePeriod-END-PREV-QUARTER)"
-        "(start-next-quarter RelativeDatePeriod-START-NEXT-QUARTER)"
-        "(end-next-quarter RelativeDatePeriod-END-NEXT-QUARTER)"
-        "(start-cal-year RelativeDatePeriod-START-CAL-YEAR)"
-        "(end-cal-year RelativeDatePeriod-END-CAL-YEAR)"
-        "(start-prev-year RelativeDatePeriod-START-PREV-YEAR)"
-        "(end-prev-year RelativeDatePeriod-END-PREV-YEAR)"
-        "(start-next-year RelativeDatePeriod-START-NEXT-YEAR)"
-        "(end-next-year RelativeDatePeriod-END-NEXT-YEAR)"
-        "(start-accounting-period RelativeDatePeriod-START-ACCOUNTING-PERIOD)"
-        "(end-accounting-period RelativeDatePeriod-END-ACCOUNTING-PERIOD))");
+            "'((absolute RelativeDatePeriod-ABSOLUTE)"
+            "(today RelativeDatePeriod-TODAY)"
+            "(one-week-ago RelativeDatePeriod-ONE-WEEK-AGO)"
+            "(one-week-ahead RelativeDatePeriod-ONE-WEEK-AHEAD)"
+            "(one-month-ago RelativeDatePeriod-ONE-MONTH-AGO)"
+            "(one-month-ahead RelativeDatePeriod-ONE-MONTH-AHEAD)"
+            "(three-months-ago RelativeDatePeriod-THREE-MONTHS-AGO)"
+            "(three-months-ahead RelativeDatePeriod-THREE-MONTHS-AHEAD)"
+            "(six-months-ago RelativeDatePeriod-SIX-MONTHS-AGO)"
+            "(six-months-ahead RelativeDatePeriod-SIX-MONTHS-AHEAD)"
+            "(one-year-ago RelativeDatePeriod-ONE-YEAR-AGO)"
+            "(one-year-ahead RelativeDatePeriod-ONE-YEAR-AHEAD)"
+            "(start-this-month RelativeDatePeriod-START-THIS-MONTH)"
+            "(end-this-month RelativeDatePeriod-END-THIS-MONTH)"
+            "(start-prev-month RelativeDatePeriod-START-PREV-MONTH)"
+            "(end-prev-month RelativeDatePeriod-END-PREV-MONTH)"
+            "(start-next-month RelativeDatePeriod-START-NEXT-MONTH)"
+            "(end-next-month RelativeDatePeriod-END-NEXT-MONTH)"
+            "(start-current-quarter RelativeDatePeriod-START-CURRENT-QUARTER)"
+            "(end-current-quarter RelativeDatePeriod-END-CURRENT-QUARTER)"
+            "(start-prev-quarter RelativeDatePeriod-START-PREV-QUARTER)"
+            "(end-prev-quarter RelativeDatePeriod-END-PREV-QUARTER)"
+            "(start-next-quarter RelativeDatePeriod-START-NEXT-QUARTER)"
+            "(end-next-quarter RelativeDatePeriod-END-NEXT-QUARTER)"
+            "(start-cal-year RelativeDatePeriod-START-CAL-YEAR)"
+            "(end-cal-year RelativeDatePeriod-END-CAL-YEAR)"
+            "(start-prev-year RelativeDatePeriod-START-PREV-YEAR)"
+            "(end-prev-year RelativeDatePeriod-END-PREV-YEAR)"
+            "(start-next-year RelativeDatePeriod-START-NEXT-YEAR)"
+            "(end-next-year RelativeDatePeriod-END-NEXT-YEAR)"
+            "(start-accounting-period RelativeDatePeriod-START-ACCOUNTING-PERIOD)"
+            "(end-accounting-period RelativeDatePeriod-END-ACCOUNTING-PERIOD))");
 
     return reldate_values;
         }
@@ -519,9 +520,9 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             switch (keytype)
             {
                 case KeyType::SYMBOL:
-                return scm_string_to_symbol(scm_str);
+                    return scm_string_to_symbol(scm_str);
                 case KeyType::STRING:
-                return scm_str;
+                    return scm_str;
                 case KeyType::NUMBER:
                     return scm_string_to_number(scm_str,
                                                 scm_from_int(10));
@@ -651,6 +652,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                             option.set_value(scm_to_int64(scm_cdr(new_value)));
                         }
                     }
+                    option.set_value(scm_to_int64(new_value));
                     return;
                 }
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
@@ -668,6 +670,15 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                         new_value_str = scm_to_utf8_string(new_value);
                     if (!new_value_str.empty())
                         option.set_value(new_value_str);
+                    return;
+                }
+                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionRangeValue<int>>)
+                {
+                    if (scm_is_pair(new_value))
+                        option.set_value(scm_to_int(scm_cdr(new_value)));
+                    else
+                        option.set_value(scm_to_int(new_value));
                     return;
                 }
                 auto value{scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value)};  //Can't inline, set_value takes arg by reference.
