@@ -383,6 +383,7 @@ inline void gnc_register_account_sel_limited_option(GncOptionDBPtr& db,
 void gnc_register_multichoice_option(GncOptionDB* db,
                                      const char* section, const char* name,
                                      const char* key, const char* doc_string,
+                                     const char* default_val,
                                      GncMultichoiceOptionChoices&& value);
 
 /**
@@ -391,10 +392,12 @@ void gnc_register_multichoice_option(GncOptionDB* db,
 inline void gnc_register_multichoice_option(GncOptionDBPtr& db,
                                         const char* section, const char* name,
                                         const char* key, const char* doc_string,
+                                        const char* default_val,
                                         GncMultichoiceOptionChoices&& value)
 {
     gnc_register_multichoice_option(db.get(), section, name,
-                                    key, doc_string, std::move(value));
+                                    key, doc_string, default_val,
+                                    std::move(value));
 }
 
 /**

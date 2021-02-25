@@ -949,18 +949,20 @@ TEST_F(GncOptionAccountTest, test_account_list_from_scheme)
     EXPECT_EQ(acclist[1], sel_option.get_value<GncOptionAccountList>()[0]);
 }
 
+using KT = GncOptionMultichoiceKeyType;
 class GncOptionMultichoiceTest : public ::testing::Test
 {
 protected:
     GncOptionMultichoiceTest() :
-        m_option{GncOptionMultichoiceValue{"foo", "bar", "baz",
-                                           "Phony Option", "plugh",
-                                           {
-                                               {"plugh", "xyzzy", "thud"},
-                                               {"waldo", "pepper", "salt"},
-                                               {"pork", "sausage", "links"},
-                                               {"corge", "grault", "garply"}
-                                           }}} {}
+        m_option{GncOptionMultichoiceValue
+                 {"foo", "bar", "baz",
+                  "Phony Option", "plugh",
+                  {
+                      {"plugh", "xyzzy", "thud", KT::STRING},
+                      {"waldo", "pepper", "salt", KT::STRING},
+                      {"pork", "sausage", "links", KT::STRING},
+                      {"corge", "grault", "garply", KT::STRING}
+                  }}} {}
     GncOption m_option;
 };
 
@@ -1052,15 +1054,15 @@ class GncOptionListTest : public ::testing::Test
 {
 protected:
     GncOptionListTest() :
-        m_option{GncOptionMultichoiceValue{"foo", "bar", "baz",
-                                           "Phony Option",
-                                           GncMultichoiceOptionIndexVec{0, 2},
-                                           {
-                                               {"plugh", "xyzzy", "thud"},
-                                               {"waldo", "pepper", "salt"},
-                                               {"pork", "sausage", "links"},
-                                               {"corge", "grault", "garply"}
-                                           }}} {}
+        m_option{GncOptionMultichoiceValue{
+            "foo", "bar", "baz", "Phony Option",
+            GncMultichoiceOptionIndexVec{0, 2},
+            {
+                {"plugh", "xyzzy", "thud", KT::STRING},
+                {"waldo", "pepper", "salt", KT::STRING},
+                {"pork", "sausage", "links", KT::STRING},
+                {"corge", "grault", "garply", KT::STRING}
+            }}} {}
     GncOption m_option;
 };
 

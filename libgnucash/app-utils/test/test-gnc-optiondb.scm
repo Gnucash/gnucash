@@ -23,6 +23,19 @@
 
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))
+
+;; This is a special case where we can't use the exported registration function
+;; because we need to transform the default argument first depending on its
+;; Scheme type.
+(define (gnc:register-multichoice-option options section name key docstring default multichoice)
+  (issue-deprecation-warning "gnc:make-multichoice-option is deprecated. Make and register the option in one command with gnc-register-multichoice-option.")
+  (let ((defval (cond ((symbol? default)
+                       (symbol->string default))
+                      ((number? default)
+                       (number->string default))
+                     (else default))))
+  (gnc-register-multichoice-option options section name key docstring defval multichoice)))
+
 ;; Load the C++ option implementation, avoiding the options.scm ones.
 (eval-when
  (compile load eval expand)
@@ -154,17 +167,17 @@
   (let* ((option-db (new-gnc-optiondb))
          (multilist (list
                        (list "plugh" (cons 'text "xyzzy") (cons 'tip "thud"))
-                       (list "waldo" (cons 'text "pepper") (cons 'tip "salt"))
+                       (list 'waldo (cons 'text "pepper") (cons 'tip "salt"))
                        (list "pork" (cons 'text "sausage") (cons 'tip "links"))
                        (list "corge" (cons 'text "grault") (cons 'tip "garply"))))
          (multichoice (keylist->vectorlist multilist))
-         (multi-opt (gnc-register-multichoice-option option-db "foo" "bar" "baz"
-                                                     "Phony Option" multichoice)))
+         (multi-opt (gnc:register-multichoice-option option-db "foo" "bar" "baz"
+                                                     "Phony Option" 'waldo multichoice)))
 
-    (test-equal "plugh" (gnc-option-value option-db "foo" "bar"))
+    (test-equal 'waldo (gnc-option-value option-db "foo" "bar"))
     (gnc-set-option option-db "foo" "bar" "corge")
     (test-equal "corge" (gnc-option-value option-db "foo" "bar"))
-    (test-equal "plugh" (gnc-option-default-value option-db "foo" "bar")))
+    (test-equal 'waldo (gnc-option-default-value option-db "foo" "bar")))
     (test-end "test-gnc-test-multichoice-option"))
 
 (define (test-gnc-make-list-option)

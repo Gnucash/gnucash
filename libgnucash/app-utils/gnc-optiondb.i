@@ -441,7 +441,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %ignore gnc_register_account_list_limited_option(GncOptionDB*, const char*, const char*, const char*, const char*, const GncOptionAccountList&, GncOptionAccountTypeList&&);
 %ignore gnc_register_account_list_option(GncOptionDB*, const char*, const char*, const char*, const char*, const GncOptionAccountList&);
 %ignore gnc_register_account_sel_limited_option(GncOptionDB*, const char*, const char*, const char*, const char*, const GncOptionAccountList&, GncOptionAccountTypeList&&);
-%ignore gnc_register_multichoice_option(GncOptionDB*, const char*, const char*, const char*, const char*, GncMultichoiceOptionChoices&&);
+%ignore gnc_register_multichoice_option(GncOptionDB*, const char*, const char*, const char*, const char*, const char*, GncMultichoiceOptionChoices&&);
 %ignore gnc_register_list_option(GncOptionDB*, const char*, const char*, const char*, const char*, const char*, GncMultichoiceOptionChoices&&);
 %ignore gnc_register_number_Plot_size_option(GncOptionDB*, const char*, const char*, const char*, const char*, int);
 %ignore gnc_register_query_option(GncOptionDB*, const char*, const char*, const char*, const char*, QofQuery*);
@@ -497,12 +497,16 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         "(end-next-year RelativeDatePeriod-END-NEXT-YEAR)"
         "(start-accounting-period RelativeDatePeriod-START-ACCOUNTING-PERIOD)"
         "(end-accounting-period RelativeDatePeriod-END-ACCOUNTING-PERIOD))");
+
+    return reldate_values;
+        }
     %}
 
 %ignore GncOptionMultichoiceKeyType;
 
 %inline %{
-    SCM get_scm_value(const GncOptionMultichoiceValue& option)
+    inline SCM scm_from_multichoices (const GncMultichoiceOptionIndexVec& indexes,
+                                      const GncOptionMultichoiceValue& option)
     {
         using KeyType = GncOptionMultichoiceKeyType;
         auto scm_value = [](const char* value, KeyType keytype) -> SCM {
@@ -514,15 +518,12 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                 case KeyType::STRING:
                 return scm_str;
                 case KeyType::NUMBER:
-                    return scm_string_to_number(scm_str, scm_from_int(10));
+                    return scm_string_to_number(scm_str,
+                                                scm_from_int(10));
             };
+            return SCM_BOOL_F;
         };
 
-        auto indexes = option.get_multiple();
-        if (indexes.empty())
-            indexes = option.get_default_multiple();
-        if (indexes.empty())
-            return SCM_BOOL_F;
         if (indexes.size() == 1) // FIXME: Should use bool member to decide
             return scm_value(option.permissible_value(indexes[0]),
                              option.get_keytype(indexes[0]));
@@ -536,9 +537,37 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return scm_reverse(values);
     }
 
+
+    SCM get_scm_value(const GncOptionMultichoiceValue& option)
+    {
+
+        auto indexes = option.get_multiple();
+        if (indexes.empty())
+            indexes = option.get_default_multiple();
+        if (indexes.empty())
+            return SCM_BOOL_F;
+        return scm_from_multichoices(indexes, option);
+     }
+
+    SCM get_scm_default_value(const GncOptionMultichoiceValue& option)
+    {
+
+        auto indexes = option.get_default_multiple();
+        if (indexes.empty())
+            return SCM_BOOL_F;
+        return scm_from_multichoices(indexes, option);
+     }
+
     SCM get_scm_value(const GncOptionRangeValue<int>& option)
     {
         auto val{option.get_value()};
+        auto desig{scm_c_eval_string(val > 100 ? "'pixels" : "'percent")};
+        return scm_cons(desig, scm_from_int(val));
+    }
+
+    SCM get_scm_default_value(const GncOptionRangeValue<int>& option)
+    {
+        auto val{option.get_default_value()};
         auto desig{scm_c_eval_string(val > 100 ? "'pixels" : "'percent")};
         return scm_cons(desig, scm_from_int(val));
     }
@@ -581,6 +610,11 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         if (!$self)
             return SCM_BOOL_F;
         return std::visit([](const auto& option)->SCM {
+                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                              GncOptionMultichoiceValue> ||
+                              std::is_same_v<std::decay_t<decltype(option)>,
+                              GncOptionRangeValue<int>>)
+                    return get_scm_default_value(option);
                 auto value{option.get_default_value()};
                 if constexpr (std::is_same_v<std::decay_t<decltype(value)>,
                               SCM>)
@@ -705,14 +739,20 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     GncOption* gnc_make_multichoice_option(const char* section,
                                            const char* name, const char* key,
                                            const char* doc_string,
+                                           const char* default_val,
                                            GncMultichoiceOptionChoices&& choices)
     {
         try {
+            std::string defval{default_val};
+            auto found{std::find_if(choices.begin(), choices.end(),
+                                    [&defval](auto& choice)->bool {
+                                        return defval == std::get<0>(choice);
+                                    })};
+            if (found == choices.end())
+                defval = (choices.empty() ? std::string{"None"} :
+                          std::get<0>(choices.at(0)));
             return new GncOption{GncOptionMultichoiceValue{section, name, key,
-                        doc_string,
-                        choices.empty() ? "None" :
-                        std::get<0>(choices.at(0)).c_str(),
-                        std::move(choices)}};
+                        doc_string, defval.c_str(), std::move(choices)}};
         }
         catch (const std::exception& err)
         {

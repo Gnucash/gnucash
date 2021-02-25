@@ -576,7 +576,7 @@ public:
         if (vec.size() == 1)
             return std::get<0>(m_choices.at(vec[0]));
         else
-            throw std::length_error("Retrieving multiple values from a multichoice isn't implemented.");
+            return c_list_string;
 
     }
     const std::string& get_default_value() const

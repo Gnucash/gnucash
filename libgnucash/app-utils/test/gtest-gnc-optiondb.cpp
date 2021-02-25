@@ -174,15 +174,18 @@ TEST_F(GncOptionDBTest, test_register_account_sel_limited_option_fail_construct)
     EXPECT_FALSE(m_db->find_option("foo", "bar"));
 }
 
+using KT = GncOptionMultichoiceKeyType;
 TEST_F(GncOptionDBTest, test_register_multichoice_option)
 {
     GncMultichoiceOptionChoices choices{
-        { "plugh", "xyzzy", "thud"},
-        { "waldo", "pepper", "salt"},
-        { "pork", "sausage", "links"},
-        { "corge", "grault", "garply"}};
+        { "plugh", "xyzzy", "thud", KT::STRING},
+        { "waldo", "pepper", "salt", KT::STRING},
+        { "pork", "sausage", "links", KT::STRING},
+        { "corge", "grault", "garply", KT::STRING}};
     gnc_register_multichoice_option(m_db, "foo", "bar", "baz",
-                                    "Phony Option", std::move(choices));
+                                    "Phony Option", "waldo",
+                                    std::move(choices));
+    EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "bar").c_str());
     ASSERT_TRUE(m_db->set_option("foo", "bar", std::string{"corge"}));
     EXPECT_STREQ("corge", m_db->lookup_string_option("foo", "bar").c_str());
 }

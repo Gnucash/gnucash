@@ -990,11 +990,19 @@ gnc_register_account_sel_limited_option(GncOptionDB* db,
 void
 gnc_register_multichoice_option(GncOptionDB* db, const char* section,
                                 const char* name, const char* key,
-                                const char* doc_string,
+                                const char* doc_string, const char* default_val,
                                 GncMultichoiceOptionChoices&& choices)
 {
+    std::string defval{default_val};
+    auto found{std::find_if(choices.begin(), choices.end(),
+                            [&defval](auto& choice)->bool {
+                                return defval == std::get<0>(choice);
+                            })};
+    if (found == choices.end())
+        defval = (choices.empty() ? std::string{"None"} :
+                  std::get<0>(choices.at(0)));
     GncOption option{GncOptionMultichoiceValue{section, name, key, doc_string,
-                std::get<0>(choices.at(0)).c_str(), std::move(choices)}};
+                defval.c_str(), std::move(choices)}};
     db->register_option(section, std::move(option));
 }
 
@@ -1471,7 +1479,7 @@ gnc_option_db_lookup_string_value(GncOptionDB* odb, const char* section, const c
 {
     auto value{odb->lookup_string_option(section, name)};
     if (value.empty())
-    return nullptr;
+        return nullptr;
     return strdup(value.c_str());
 }
 
