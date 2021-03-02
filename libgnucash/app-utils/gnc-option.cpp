@@ -517,6 +517,16 @@ GncOption::from_scheme(std::istream& iss)
                       }, *m_option);
 }
 
+GncOption*
+gnc_make_SCM_option(const char* section, const char* name,
+                    const char* key, const char* doc_string,
+                    SCM value, GncOptionUIType ui_type)
+{
+    return new GncOption(section, name, key, doc_string,
+                         reinterpret_cast<SCM>(value), ui_type);
+}
+
+
 /* We must instantiate all of the templates we need here because we don't expose
  * the template implementation in the public header.
  */
