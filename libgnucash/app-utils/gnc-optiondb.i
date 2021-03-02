@@ -59,6 +59,55 @@ SCM scm_init_sw_gnc_optiondb_module(void);
   * resolution is more strict so the overload prefers the exact decltype(value)
   * to implicit conversion candidates.
   */
+
+%typemap (out) QofInstance_s* {
+    if ($1 == nullptr)
+    {
+        $result = SCM_BOOL_F;
+    }
+    else
+    {
+
+        auto ptr{static_cast<void*>(const_cast<QofInstance*>($1))};
+        swig_type_info *type = SWIGTYPE_p_QofInstance_s;
+        if (GNC_IS_COMMODITY($1))
+            type = SWIGTYPE_p_gnc_commodity;
+        else if (GNC_IS_ACCOUNT($1))
+            type = SWIGTYPE_p_Account;
+        else if (GNC_IS_BUDGET($1))
+            type = SWIGTYPE_p_GncBudget;
+        else if (GNC_IS_INVOICE($1))
+            type = SWIGTYPE_p_GncInvoice;
+        else if (GNC_IS_TAXTABLE($1))
+            type = SWIGTYPE_p_GncTaxTable;
+        $result = SWIG_NewPointerObj(ptr, type, FALSE);
+    }
+}
+
+%typemap (in) QofInstance_s* {
+    if (scm_is_true($input))
+    {
+        static const std::array<swig_type_info*, 6> types {
+            SWIGTYPE_p_QofInstance_s, SWIGTYPE_p_gnc_commodity,
+                SWIGTYPE_p_GncBudget, SWIGTYPE_p_GncInvoice,
+                SWIGTYPE_p_GncTaxTable, SWIGTYPE_p_Account
+                };
+        void* ptr{};
+        auto pos = std::find_if(types.begin(), types.end(),
+                                [&$input, &ptr](auto type){
+                                    SWIG_ConvertPtr($input, &ptr, type, 0);
+                                    return ptr != nullptr; });
+        if (pos == types.end())
+            $1 = nullptr;
+        else
+            $1 = static_cast<QofInstance*>(ptr);
+    }
+    else
+    {
+        $1 = nullptr;
+    }
+ }
+
 %inline %{
 template <typename ValueType> inline SCM
     scm_from_value(ValueType value);
@@ -184,7 +233,7 @@ scm_to_value<const QofInstance*>(SCM new_value)
     if (new_value == SCM_BOOL_F)
         return nullptr;
 
-    static const std::array<swig_type_info*, 9> types{
+    static const std::array<swig_type_info*, 6> types{
             SWIGTYPE_p_QofInstance_s, SWIGTYPE_p_gnc_commodity,
             SWIGTYPE_p_GncBudget, SWIGTYPE_p_GncInvoice,
             SWIGTYPE_p_GncTaxTable, SWIGTYPE_p_Account
