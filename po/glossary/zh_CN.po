@@ -1,14 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Theresa Zhang <theresa7qing@sina.com>, 2021.
+# 小高 <2926295173@qq.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-02-19 14:50+0000\n"
-"Last-Translator: Theresa Zhang <theresa7qing@sina.com>\n"
+"PO-Revision-Date: 2021-03-02 15:50+0000\n"
+"Last-Translator: 小高 <2926295173@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -449,7 +450,7 @@ msgstr "复式记账"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "文档链接"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
