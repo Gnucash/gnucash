@@ -652,6 +652,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                             option.set_value(scm_to_int64(scm_cdr(new_value)));
                         }
                     }
+                    else
                     option.set_value(scm_to_int64(new_value));
                     return;
                 }
