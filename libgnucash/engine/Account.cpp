@@ -755,7 +755,7 @@ gnc_account_class_init (AccountClass *klass)
                        "The smallest fraction of the commodity that is "
                        "tracked.  This number is used as the denominator "
                        "value in 1/x, so a value of 100 says that the "
-                       "commodity can be divided into hundreths.  E.G."
+                       "commodity can be divided into hundredths.  E.G."
                        "1 USD can be divided into 100 cents.",
                        0,
                        G_MAXINT32,

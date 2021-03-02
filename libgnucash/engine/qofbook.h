@@ -211,7 +211,7 @@ void qof_book_destroy (QofBook *book);
 /** Close a book to editing.
 
 It is up to the application to check this flag,
-and once marked closed, books cannnot be marked as open.
+and once marked closed, books cannot be marked as open.
 */
 void qof_book_mark_closed (QofBook *book);
 
@@ -224,7 +224,7 @@ void qof_book_mark_closed (QofBook *book);
  *  type.
  *
  *  If the collection doesn't yet exist for the indicated type,
- *  it is created.  Thus, this routine is gaurenteed to return
+ *  it is created.  Thus, this routine is guaranteed to return
  *  a non-NULL value.  (Unless the system malloc failed (out of
  *  memory) in which case what happens??).
  */

@@ -63,7 +63,7 @@ the splits are zero.  If there are only two splits,
 then the value of one must be positive, the other negative: this denotes
 that one account is debited, and another is credited by an equal
 amount.   By forcing the value of the splits to always 'add up' to
-zero, we can gaurentee that the balances of the accounts are always
+zero, we can guarantee that the balances of the accounts are always
 correctly balanced.
 
 The engine does not enforce double-entry accounting, but provides an API
@@ -78,7 +78,7 @@ This feature allows currency-trading accounts to be established.
 Every Split must point to its parent Transaction, and that Transaction
 must in turn include that Split in the Transaction's list of Splits. A
 Split can belong to at most one Transaction. These relationships are
-enforced by the engine. The engine user cannnot accidentally destroy
+enforced by the engine. The engine user cannot accidentally destroy
 this relationship as long as they stick to using the API and never
 access internal structures directly.
 
@@ -231,7 +231,7 @@ The GUID does not, and never will, refer to a GnuCash entity.
 The GUID refers to an Account (@pxref{Accounts}).
 
 @item GNC_ID_TRANS
-The GUID refers to a Transation (@pxref{Transactions}).
+The GUID refers to a Transaction (@pxref{Transactions}).
 
 @item GNC_ID_SPLIT
 The GUID refers to a Split (@pxref{Splits}).
@@ -1015,7 +1015,7 @@ A @code{kvp_value_t} enum must have one of the following values:
 @table @code
 
 @item KVP_TYPE_NONE
-Indicates the abscence of a value in a @code{kvp_frame}.
+Indicates the absence of a value in a @code{kvp_frame}.
 
 @item KVP_TYPE_INT64
 A @code{gint64} value.
@@ -1218,7 +1218,7 @@ this is the 3-letter ISO4217 code (USD, AUD, etc.). For stocks
 this is generally the exchange symbol (RHAT, IBM, etc.).
 
 @item A namespace
-A string identifying the context in which the mnemonic is meaninful.
+A string identifying the context in which the mnemonic is meaningful.
 
 @item A full name
 The `long' name for the commodity, such as "US Dollar" or "IBM Common
@@ -1926,7 +1926,7 @@ Set the share price of @var{split} to @var{price}.
 @deftypefun void xaccSplitSetSharePriceAndAmount (Split * @var{split}, gnc_numeric @var{price}, gnc_numeric @var{amount})
 Set both the share price and share quantity of @var{split}. This routine
 is more efficient than calling @code{xaccSplitSetShareAmount} and
-@code{xaccSplitSetSharePrice} in succesion.
+@code{xaccSplitSetSharePrice} in succession.
 @end deftypefun
 
 @deftypefun void xaccSplitSetValue (Split * @var{split}, gnc_numeric @var{value})
@@ -2341,7 +2341,7 @@ may modify this @code{kvp_frame}, but must not destroy it.
 @end deftypefun
 
 @deftypefun void xaccAccountSetSlots_nc (Account * @var{account}, kvp_frame * @var{frame})
-Set the @code{kvp_frame} associated wih @var{account}. After the call,
+Set the @code{kvp_frame} associated with @var{account}. After the call,
 @var{frame} is owned by @var{account}, so don't destroy it.
 @end deftypefun
 

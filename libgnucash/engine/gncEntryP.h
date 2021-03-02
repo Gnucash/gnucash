@@ -1,5 +1,5 @@
 /********************************************************************\
- * gncEntryP.h -- the Core Busines Entry Interface                  *
+ * gncEntryP.h -- the Core Business Entry Interface                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

@@ -33,7 +33,7 @@ API: \ref BillTerm
 \subsection entry Entry:
 
 \subsection invoice Invoice:
-Pulls together info needed to geenrate an invoice, including addresses,
+Pulls together info needed to generate an invoice, including addresses,
 job, the dates, the billing terms, the amounts, and the accounts
 to be credited.
 
@@ -45,7 +45,7 @@ Derek Atkins <warlord@mit.edu>
 Version of October 2003
 
 The gncTaxTable and gncBillTerm business objects have parent, child,
-refcount, invisible field in thier structures that deserve some
+refcount, invisible field in their structures that deserve some
 explanation:
 
 - a child is a 'frozen' instance of a parent.  For example, the tax

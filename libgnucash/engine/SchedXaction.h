@@ -247,7 +247,7 @@ void xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays );
 SXTmpStateData *gnc_sx_create_temporal_state(const SchedXaction *sx );
 
 /** Calculates the next occurrence of the given SX and stores that
- * occurence in the remporalStateDate. The SX is unchanged. */
+ * occurrence in the remporalStateDate. The SX is unchanged. */
 void gnc_sx_incr_temporal_state(const SchedXaction *sx, SXTmpStateData *stateData );
 
 /** Frees the given stateDate object. */

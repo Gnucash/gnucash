@@ -7,7 +7,7 @@ Main Scheduled Transaction todo list
 
   . As per comment 2004-01-05T16:31, there is an issue when other pieces of
     the system change accounts that SXes depend on.  We have two options:
-    1: handle change at account-deletion time ["remove this acocunt will
+    1: handle change at account-deletion time ["remove this account will
        affect this scheduled transaction ... what to do?"]
     2: break out of SX since-last-run processing ["this account was removed;
        {edit,delete} SX?"].
@@ -105,7 +105,7 @@ X create a template register
       X fixed by removing any ability to change the example calendar.
     X "Inappropriate FreqSpec type" on new-SX editing.
     X "new; weekly: click on day, click off day: GLib-CRITICAL **: file gdate.c: line 1236 (g_date_to_struct_tm): assertion `g_date_valid (d)' failed."
-      . no longer reproducable
+      . no longer reproducible
 
 . SX list
   . add a big calendar [gnome-pim?  evo?] to SXaction List/overview
@@ -162,7 +162,7 @@ X create a template register
   X pull accounts over.
   X pull initial SX name from the Transaction name?
   X need start-date on Make dialog
-    X [initially starts as the next occurance after the created-from SX,
+    X [initially starts as the next occurrence after the created-from SX,
        which may not be the Right Thing]
 
 . need "since-last-run" UI for instanatiation.
@@ -182,7 +182,7 @@ X create a template register
   . fix first/last page issues.
   . bugs 
     . tab-order on variable-entry window isn't always correct.
-    B inital "To-Create Transactions" varbinding table doesn't setup table correctly.
+    B initial "To-Create Transactions" varbinding table doesn't setup table correctly.
     B correct "Back" button behavior in Druid paradigm
     B created SXes are put in GL forever. :(
       B But this is true of manually-created transactions, too ... is this
@@ -348,7 +348,7 @@ X General
 . SX name should be default value for template transaction description
 . loan/repayment SX's
   . integrate "Financial Calculator"
-  . auto-determine number of occurances/end condition from liability
+  . auto-determine number of occurrences/end condition from liability
     account amount.
 . SX since-last-run should be able to sort by Date [conditional on the dialog
   staying around].

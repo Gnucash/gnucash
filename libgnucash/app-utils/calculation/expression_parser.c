@@ -122,7 +122,7 @@
  * 4: free_numeric - this function is responsible for freeing memory
  * used by the internal numeric representation.
  *
- * 5: func_op - this function is repsonsible for handling function calls.
+ * 5: func_op - this function is responsible for handling function calls.
  *
  * I have included the file "numeric_ops.c" containing the above
  * functions for the usual "double" and "int" representation of
@@ -224,7 +224,7 @@
  *
  * The logic recognizes "-" and "123" separately. The '-' unary
  * operator is then applied to negate the numeric. This also has the
- * advanatge that the same logic can be used for
+ * advantage that the same logic can be used for
  *
  *  -123
  *  +123.45
@@ -292,7 +292,7 @@
  *         This function is called by the module/function/whatever to
  *         initialize the parser. The parser returns a pointer to a
  *         structure that contains all relevant information for
- *         parsering strings. The pointer is returned as (void *)
+ *         parsing strings. The pointer is returned as (void *)
  *         since all information is and should remain pertinent only
  *         to the parser. The calling function(s) should never rely on
  *         manipulating any information inside this structure

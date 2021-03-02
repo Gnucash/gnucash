@@ -1155,7 +1155,7 @@ split_apply_exchange_rate (Split *split, GHashTable *bindings,
  * the template_transaction's commodity.
  *
  * Since we're going through the split commodities anyway, check that they all
- * have useable values. If we find an error return NULL as a signal to
+ * have usable values. If we find an error return NULL as a signal to
  * create_each_transaction_helper to bail out.
  */
 

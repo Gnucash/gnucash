@@ -335,7 +335,7 @@ may be the case that the relevant account balance is not actually posted to
 the account at the time of the variable binding.  If we intend to show the
 user an estimation of the IPMT cell value during variable binding, then we
 would need to do something creative about this ... but as it stands, we'll
-leave this as an Excercise for the Reader. :)
+leave this as an Exercise for the Reader. :)
 
 \section loansdruid Druid thoughts...
 
@@ -466,7 +466,7 @@ http://www.interest.com/hugh/calc/mort_links.html
 <Wilddev> <auspex> Wilddev: The strings need review, but there may be other changes to make first.
 <Wilddev> <auspex> Wilddev: "Interest Rate Change Frequency" should perhaps be on the next page?
 <Wilddev> jsled: I dont know if you did another page for this, but shouldn't there be a field for ballon amount too?
-<jsled> Excellent feedback; thanks.  I don't presently handle baloon payments; how do they work?
+<jsled> Excellent feedback; thanks.  I don't presently handle balloon payments; how do they work?
 <Wilddev> I think, from what I've read before, the are an amount you pay at the end of the loan to close it
 <jsled> gnc-account-sel == combo box account selection with pull-down account list [like the register] and auto-completion [hopefully]
 

@@ -121,7 +121,7 @@ public:
      *
      * Accepts integer values in decimal and hexadecimal. Does not accept
      * thousands separators. If the string contains a '/' it is taken to
-     * separate the numerator and denominator; if it conains either a '.' or a
+     * separate the numerator and denominator; if it contains either a '.' or a
      * ',' it is taken as a decimal point and the integers on either side will
      * be combined and a denominator will be the appropriate power of 10. If
      * neither is present the number will be treated as an integer and m_den

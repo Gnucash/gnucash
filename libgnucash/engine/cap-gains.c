@@ -48,7 +48,7 @@
  * lots may have been user-hand-built. These should be left alone.
  *
 ToDo:
- o XXX Need to create a data-integrity scrubber, tht makes sure that
+ o XXX Need to create a data-integrity scrubber, that makes sure that
    the various flags, and pointers & etc. match. See sections marked
    with XXX below for things that might go wrong.
  */
@@ -231,7 +231,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
     /* If this split already belongs to a lot, we are done. */
     if (split->lot) return NULL;
 
-    /* Anomolous situation; except for voided transactions,
+    /* Anomalous situation; except for voided transactions,
      * we don't expect to see splits with no amount ..
      * unless they're gains splits, and we shouldn't see those.
      */
@@ -836,7 +836,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
             {
                 new_gain_split = FALSE;
             }
-            /* If the gain is already recorded corectly do nothing.  This is
+            /* If the gain is already recorded correctly do nothing.  This is
              * more than just an optimization since this may be called during
              * gnc_book_partition_txn and depending on the order in which things
              * happen some splits may be in the wrong book at that time. */

@@ -1620,7 +1620,7 @@ gnc_book_write_to_xml_file_v2 (
 /*
  * Have to pass in the backend as this routine needs the temporary
  * backend for file export, not the real backend which could be
- * postgress or anything else.
+ * postgresql or anything else.
  */
 gboolean
 gnc_book_write_accounts_to_xml_file_v2 (QofBackend* qof_be, QofBook* book,
