@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-22 17:34+0100\n"
-"PO-Revision-Date: 2021-01-16 18:32+0000\n"
+"PO-Revision-Date: 2021-03-02 22:38+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -13947,17 +13947,6 @@ msgstr "Pomoćnik za QIF uvoz"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:54
-#, fuzzy
-#| msgid ""
-#| "GnuCash can import financial data from QIF (Quicken Interchange Format) "
-#| "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
-#| "programs.\n"
-#| "\n"
-#| "The import process has several steps. Your GnuCash accounts will not be "
-#| "changed until you click \"Apply\" at the end of the process.\n"
-#| "\n"
-#| "Click \"Next\" to start loading your QIF data, or \"Cancel\" to abort the "
-#| "process. "
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
@@ -13977,7 +13966,7 @@ msgstr ""
 "promijeniti, sve dok ne klikneš „Primijeni“ na kraju procesa.\n"
 "\n"
 "Klikni „Dalje“ za pokretanje učitavanja tvojih QIF podataka ili „Prekini“ za "
-"prekid procesa. "
+"prekid procesa."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:63
 msgid "Import QIF files"
@@ -14076,13 +14065,6 @@ msgstr "Postavi naziv standardnog QIF konta"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:468
-#, fuzzy
-#| msgid ""
-#| "Click \"Load another file\" if you have more data to import at this time. "
-#| "Do this if you have saved your accounts to separate QIF files.\n"
-#| "\n"
-#| "Click \"Next\" to finish loading files and move to the next step of the "
-#| "QIF import process. "
 msgid ""
 "Click \"Load another file\" if you have more data to import at this time. Do "
 "this if you have saved your accounts to separate QIF files.\n"
@@ -14095,7 +14077,7 @@ msgstr ""
 "datotekama.\n"
 "\n"
 "Klikni „Dalje“ za završavanje učitavanja datoteka i za prelazak na sljedeći "
-"korak procesa uvoza QIF datoteka. "
+"korak procesa uvoza QIF datoteka."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:487
 msgid "_Unload selected file"
@@ -14194,17 +14176,6 @@ msgid "Match QIF categories with GnuCash accounts"
 msgstr "Usporedi QIF kategorije s GnuCash kontima"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:802
-#, fuzzy
-#| msgid ""
-#| "QIF files downloaded from banks and other financial institutions may not "
-#| "have information about Accounts and Categories which would allow them to "
-#| "be correctly assigned to GnuCash accounts.\n"
-#| "\n"
-#| "In the following page, you will see the text that appears in the Payee "
-#| "and Memo fields of transactions with no QIF Account or Category. By "
-#| "default these transactions are assigned to the 'Unspecified' account in "
-#| "GnuCash. If you select a different account, it will be remembered for "
-#| "future QIF files. "
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
@@ -14222,7 +14193,7 @@ msgstr ""
 "Na sljedećoj stranici ćeš vidjeti tekst, koji se pojavljuje u poljima "
 "primaoca i bilježaka transakcija bez QIF konta ili kategorije. Ove se "
 "transakcije standardno dodijeljuju kontu „Neodređeno” u GnuCashu. Ako "
-"odabereš drugi konto, bit će upamćen za buduće QIF datoteke. "
+"odabereš drugi konto, bit će upamćen za buduće QIF datoteke."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:815
 msgid "Payees and memos"
