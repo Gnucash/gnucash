@@ -881,6 +881,36 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
     }
 
+    GncOption* gnc_make_commodity_option(const char* section,
+                                        const char* name, const char* key,
+                                        const char* doc_string,
+                                        gnc_commodity *value)
+    {
+        return new GncOption{GncOptionValue<const QofInstance*>{
+                section, name, key, doc_string, (const QofInstance*)value}};
+    }
+
+    GncOption* gnc_make_commodity_option(const char* section,
+                                        const char* name, const char* key,
+                                        const char* doc_string,
+                                        const char *value)
+    {
+        gnc_commodity* commodity{};
+        const auto book{qof_session_get_book(gnc_get_current_session())};
+        const auto commodity_table{gnc_commodity_table_get_table(book)};
+        const auto namespaces{gnc_commodity_table_get_namespaces(commodity_table)};
+        for (auto node = namespaces; node && commodity == nullptr; node = g_list_next(node))
+            commodity = gnc_commodity_table_lookup(commodity_table,
+                                                   (const char*)(node->data),
+                                                   value);
+
+        if (commodity)
+            return gnc_make_commodity_option(section, name, key, doc_string,
+                                            commodity);
+
+        return nullptr;
+    }
+
     GncOption* gnc_make_currency_option(const char* section,
                                         const char* name, const char* key,
                                         const char* doc_string,
