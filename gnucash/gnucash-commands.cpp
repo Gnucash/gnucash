@@ -182,6 +182,7 @@ scm_run_report (void *data,
     auto check_report_cmd = scm_c_eval_string ("gnc:cmdline-check-report");
     auto get_report_cmd = scm_c_eval_string ("gnc:cmdline-get-report-id");
     auto run_export_cmd = scm_c_eval_string ("gnc:cmdline-template-export");
+    auto run_server_cmd = scm_c_eval_string ("gnc:cmdline-web-server");
     /* We generally insist on using scm_from_utf8_string() throughout GnuCash
      * because all GUI-sourced strings and all file-sourced strings are encoded
      * that way. In this case, though, the input is coming from a shell window
@@ -256,7 +257,7 @@ return a document object with export-string or export-error.") << std::endl;
     }
     else
     {
-        SCM id = scm_call_1(get_report_cmd, report);
+        SCM id = scm_call_0(run_server_cmd);
 
         if (scm_is_false (id))
             scm_cleanup_and_exit_with_failure (nullptr);
@@ -335,8 +336,7 @@ scm_report_list ([[maybe_unused]] void *data,
     scm_c_use_module ("gnucash reports");
     gnc_report_init ();
 
-    scm_call_1 (scm_c_eval_string ("gnc:cmdline-report-list"),
-                scm_current_output_port ());
+    scm_call_0 (scm_c_eval_string ("gnc:cmdline-web-server"));
     gnc_shutdown (0);
     return;
 }

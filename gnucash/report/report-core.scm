@@ -114,6 +114,11 @@
 (export gnc:report-type)
 (export gnc:restore-report-by-guid)
 (export gnc:restore-report-by-guid-with-custom-template)
+(use-modules (sxml simple))
+(use-modules (web server)
+             (web request)
+             (web response)
+             (web uri))
 
 ;; Terminology in this file:
 ;; report-template: a report definition of some form. This can be a report
@@ -835,7 +840,7 @@ not found.")))
       (display "Running export..." (current-error-port))
       (let ((output (export-thunk
                      (gnc-report-find (gnc:make-report report-guid))
-                     (assoc-ref export-types export-type))))
+                     (assoc-ref export-types export-type) #f)))
         (display "done!\n" (current-error-port))
         output)))))
 
@@ -845,18 +850,21 @@ not found.")))
        (lambda (k v p) (if (equal? (gnc:report-template-name v) report) (cons v p) p))
        '() *gnc:_report-templates_*)))
 
+(define (get-all-sorted-reports)
+  (sort (hash-fold
+         (lambda (k v p) (if (gnc:report-template-in-menu? v) (cons v p) p))
+         '() *gnc:_report-templates_*)
+        (lambda (a b)
+          (gnc:string-locale<? (gnc:report-template-name a)
+                               (gnc:report-template-name b)))))
+
 (define-public (gnc:cmdline-report-list port)
   (for-each
    (lambda (template)
      (format port "* ~a ~a\n"
              (if (gnc:report-template-parent-type template) "C" " ")
              (gnc:report-template-name template)))
-   (sort (hash-fold
-          (lambda (k v p) (if (gnc:report-template-in-menu? v) (cons v p) p))
-          '() *gnc:_report-templates_*)
-         (lambda (a b)
-           (gnc:string-locale<? (gnc:report-template-name a)
-                                (gnc:report-template-name b))))))
+   (get-all-sorted-reports)))
 
 (define-public (gnc:cmdline-report-show report port)
   (let ((templates (reportname->templates report)))
@@ -920,3 +928,114 @@ not found.")))
   (match (reportname->templates report)
     ((template) (gnc:make-report (gnc:report-template-report-guid template)))
     (_ (gnc:error report " does not match unique report") #f)))
+
+(define (templatize title body)
+  `(html (head (title ,title))
+         (body ,@body)))
+
+(define* (respond #:optional body #:key
+                  (status 200)
+                  (title "Gnucash Report Server")
+                  (doctype "<!DOCTYPE html>\n")
+                  (content-type-params '((charset . "utf-8")))
+                  (content-type 'text/html)
+                  (extra-headers '())
+                  (sxml (and body (templatize title body))))
+  (values (build-response #:code status
+                          #:headers
+                          `((content-type . (,content-type ,@content-type-params))
+                            ,@extra-headers))
+          (lambda (port)
+            (when sxml
+              (if doctype (display doctype port))
+              (sxml->xml sxml port)))))
+
+(define (report-server request body)
+  (define (template-exists? guid)
+    (hash-ref *gnc:_report-templates_* guid))
+  (match (split-and-decode-uri-path (uri-path (request-uri request)))
+
+    ;; bye bye
+    (("shutdown")
+     (exit))
+
+    ;; run report and return it
+    (("run" (? template-exists? guid))
+     (values (build-response
+              #:code 200
+              #:headers '((content-type text/html (charset . "utf-8"))))
+             (gnc:report-run (gnc:make-report guid))))
+
+    ;; show report parameters
+    (("show" (? template-exists? guid))
+     (respond
+      `((pre ,(call-with-output-string
+                (lambda (port)
+                  (gnc:cmdline-report-show guid port)))))))
+
+    (("export" (? template-exists? guid) export-type)
+     (let ((template (hash-ref *gnc:_report-templates_* guid)))
+       (cond
+        ((template-export guid template export-type #t)
+         (respond
+          `((pre ,(call-with-output-string
+                    (lambda (p)
+                      (let* ((ans (template-export guid template export-type #f))
+                             (export-string (gnc:html-document-export-string ans))
+                             (export-error (gnc:html-document-export-error ans)))
+                        (display (or export-string export-error) p))))))))
+        (else
+         (respond
+          `((meta (@ (http-equiv "refresh") (content "1;/list")))
+            (p "Invalid export type, redirecting to /list...")))))))
+
+    ;; show list of reports
+    (("list" . _)
+     (respond
+      `((h1 "Gnucash Report Server")
+        (a (@ (href "shutdown")) "Shutdown")
+        (table
+         (tr (th "C") (th "Report") (th "Run"))
+         ,@(map (lambda (template)
+                  (define guid (gnc:report-template-report-guid template))
+                  `(tr (td ,(if (gnc:report-template-parent-type template) "C" ""))
+                       (td ,(gnc:report-template-name template))
+                       (td (a (@ (href ,(format #f "show/~a" guid))) "Show"))
+                       (td (a (@ (href ,(format #f "run/~a" guid))) "Run"))
+                       ,@(map
+                          (lambda (export-type)
+                            `(td (a (@ (href ,(format #f "export/~a/~a"
+                                                      guid (car export-type))))
+                                    ,(car export-type))))
+                          (or (gnc:report-template-export-types template) '()))))
+                (get-all-sorted-reports))))))
+
+    (_ (if debug?
+           (debug-page request body)
+           ;; (respond #:status 301
+           ;;          #:extra-headers '((Location . "/list")))
+           (respond
+            `((meta (@ (http-equiv "refresh") (content "1;/list")))
+              (h1 "Gnucash Report Server")
+              (p "Invalid URL, redirecting to /list...")))))))
+
+(define debug? #f)
+
+(define (debug-page request body)
+  ;; use respond helper
+  (respond
+   ;; will be templatized
+   `((h1 "hello world!")
+     (table
+      (tr (th "header") (th "value"))
+      ;; splice in all request headers
+      ,@(map (lambda (pair)
+               `(tr (td (tt ,(with-output-to-string
+                               (lambda () (display (car pair))))))
+                    (td (tt ,(with-output-to-string
+                               (lambda () (write (cdr pair))))))))
+             (request-headers request))))))
+
+(define-public (gnc:cmdline-web-server)
+  (display "Run server on localhost:8080...")
+  (run-server report-server))
