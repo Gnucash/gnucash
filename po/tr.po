@@ -5,14 +5,15 @@
 # Mesutcan Kurt <mesutcank@gmail.com>, 2017.
 # Emin Tufan Çetin <etcetin@gmail.com>, 2018.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2021.
+# Ömer Faruk Çakmak <omerfarukckmk@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.4+\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-22 17:34+0100\n"
-"PO-Revision-Date: 2021-02-11 21:50+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"PO-Revision-Date: 2021-03-05 15:50+0000\n"
+"Last-Translator: Ömer Faruk Çakmak <omerfarukckmk@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
 "Language: tr\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-POOTLE-MTIME: 1497808015.000000\n"
 
@@ -1573,9 +1574,8 @@ msgid "Enter URL like http://www.gnucash.org:"
 msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:205
-#, fuzzy
 msgid "Existing Document Link is"
-msgstr "Mevcut Varlıklar"
+msgstr "Mevcut Belge Bağlantısı:"
 
 #: gnucash/gnome/dialog-doclink.c:461 gnucash/gnome/dialog-doclink.c:506
 msgid "File Found"
@@ -1594,9 +1594,8 @@ msgid "Address Not Found"
 msgstr "Adres Bulunamadı"
 
 #: gnucash/gnome/dialog-doclink.c:528 gnucash/gnome/dialog-imap-editor.c:885
-#, fuzzy
 msgid "Total Entries"
-msgstr "Toplam Fiyat"
+msgstr "Toplam Girdi"
 
 #: gnucash/gnome/dialog-doclink.c:586
 #, fuzzy
@@ -1790,9 +1789,8 @@ msgid "The number of payments cannot be negative."
 msgstr "Ödeme sayısı negatif olamaz."
 
 #: gnucash/gnome/dialog-find-account.c:345
-#, fuzzy
 msgid "Find Account"
-msgstr "Hesap B_ul"
+msgstr "Hesap Bul"
 
 #: gnucash/gnome/dialog-find-account.c:377
 #, fuzzy
@@ -19049,19 +19047,19 @@ msgstr "Azalan şekilde sırala."
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:12
 msgid "day(s)"
-msgstr "gün(ler)"
+msgstr "gün"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:15
 msgid "week(s)"
-msgstr "hafta(lar)"
+msgstr "hafta"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:18
 msgid "month(s)"
-msgstr "ay(lar)"
+msgstr "ay"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:21
 msgid "year(s)"
-msgstr "yıl(lar)"
+msgstr "yıl"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:50
 msgid "Every "
@@ -20663,9 +20661,8 @@ msgid "File exported successfully!\n"
 msgstr "Dosya başarı ile dışa aktarıldı!\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:615
-#, fuzzy
 msgid "Full Category Path"
-msgstr "QIF kategori ismi"
+msgstr "Tam Kategori Yolu"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:616
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:628
@@ -29360,9 +29357,8 @@ msgid "Table for Exporting"
 msgstr "Dışa Aktarılacak Tablo"
 
 #: gnucash/report/trep-engine.scm:109
-#, fuzzy
 msgid "Account Name Filter"
-msgstr "Hesap Adı"
+msgstr "Hesap Adı Süzgeci"
 
 #: gnucash/report/trep-engine.scm:111
 #, fuzzy
@@ -29370,9 +29366,8 @@ msgid "Use regular expressions for account name filter"
 msgstr "İçe aktarma için kullanılan düzenli ifadeyi ayarla"
 
 #: gnucash/report/trep-engine.scm:112
-#, fuzzy
 msgid "Transaction Filter"
-msgstr "İşlem tarihi"
+msgstr "İşlem Süzgeci"
 
 #: gnucash/report/trep-engine.scm:114
 #, fuzzy
@@ -30353,7 +30348,7 @@ msgstr "Bir Hafta Önce."
 
 #: libgnucash/app-utils/date-utilities.scm:1064
 msgid "Three Months Ago"
-msgstr "3 Ay Önce"
+msgstr "Üç Ay Önce"
 
 #: libgnucash/app-utils/date-utilities.scm:1066
 msgid "Three Months Ago."
@@ -30361,7 +30356,7 @@ msgstr "Üç Ay Önce."
 
 #: libgnucash/app-utils/date-utilities.scm:1070
 msgid "Six Months Ago"
-msgstr "6 Ay Önce"
+msgstr "Altı Ay Önce"
 
 #: libgnucash/app-utils/date-utilities.scm:1072
 msgid "Six Months Ago."
@@ -30377,35 +30372,35 @@ msgstr "Bir Yıl Önce."
 
 #: libgnucash/app-utils/date-utilities.scm:1081
 msgid "One Month Ahead"
-msgstr "Bir Gelecek Ay"
+msgstr "Bir Ay Sonra"
 
 #: libgnucash/app-utils/date-utilities.scm:1083
 msgid "One Month Ahead."
-msgstr "Bir Gelecek Ay."
+msgstr "Bir Ay Sonra."
 
 #: libgnucash/app-utils/date-utilities.scm:1087
 msgid "One Week Ahead"
-msgstr "Bir Gelecek Hafta"
+msgstr "Bir Hafta Sonra"
 
 #: libgnucash/app-utils/date-utilities.scm:1089
 msgid "One Week Ahead."
-msgstr "Bir Gelecek Hafta."
+msgstr "Bir Hafta Sonra."
 
 #: libgnucash/app-utils/date-utilities.scm:1093
 msgid "Three Months Ahead"
-msgstr "Üç Gelecek Ay"
+msgstr "Üç Ay Sonra"
 
 #: libgnucash/app-utils/date-utilities.scm:1095
 msgid "Three Months Ahead."
-msgstr "Üç Ay Öncesinde."
+msgstr "Üç Ay Sonra."
 
 #: libgnucash/app-utils/date-utilities.scm:1099
 msgid "Six Months Ahead"
-msgstr "Altı Ay Öncesinde"
+msgstr "Altı Ay Sonra"
 
 #: libgnucash/app-utils/date-utilities.scm:1101
 msgid "Six Months Ahead."
-msgstr "Altı Ay Öncesinde."
+msgstr "Altı Ay Sonra."
 
 #: libgnucash/app-utils/date-utilities.scm:1104
 msgid "One Year Ahead"
@@ -30413,7 +30408,7 @@ msgstr "Bir Yıl Öncesinde"
 
 #: libgnucash/app-utils/date-utilities.scm:1106
 msgid "One Year Ahead."
-msgstr "Bir Yıl Öncesinde."
+msgstr "Bir Yıl Sonra."
 
 #: libgnucash/app-utils/gnc-exp-parser.c:622
 msgid "Illegal variable in expression."
