@@ -91,7 +91,6 @@ protected:
 };
 */
 
-
 static const char* commodity_scm_intro{"'(commodity-scm "};
 #ifndef SWIG
 size_t constexpr classifier_size_max{50};
@@ -129,6 +128,9 @@ public:
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
     void set_value(ValueType new_value) { m_value = new_value; }
+    void set_default_value(ValueType new_value) {
+        m_value = m_default_value = new_value;
+    }
     void reset_default_value() { m_value = m_default_value; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
@@ -180,6 +182,13 @@ public:
     {
         if (this->validate(value))
             m_value = value;
+        else
+            throw std::invalid_argument("Validation failed, value not set.");
+    }
+    void set_default_value(ValueType value)
+    {
+        if (this->validate(value))
+            m_value = m_default_value = value;
         else
             throw std::invalid_argument("Validation failed, value not set.");
     }
@@ -426,6 +435,13 @@ public:
         else
             throw std::invalid_argument("Validation failed, value not set.");
     }
+    void set_default_value(ValueType value)
+    {
+        if (this->validate(value))
+            m_value = m_default_value = value;
+        else
+            throw std::invalid_argument("Validation failed, value not set.");
+    }
     void get_limits(ValueType& upper, ValueType& lower, ValueType& step) const noexcept
     {
         upper = m_max;
@@ -649,6 +665,40 @@ public:
         else
             throw std::invalid_argument("One of the supplied indexes was out of range.");
     }
+    void set_default_value(const std::string& value)
+    {
+        auto index = find_key(value);
+        if (index != size_t_max)
+        {
+            m_value.clear();
+            m_value.push_back(index);
+            m_default_value.clear();
+            m_default_value.push_back(index);
+        }
+        else
+            throw std::invalid_argument("Value not a valid choice.");
+
+    }
+    void set_default_value(size_t index)
+    {
+        if (index < m_choices.size())
+        {
+            m_value.clear();
+            m_value.push_back(index);
+            m_default_value.clear();
+            m_default_value.push_back(index);
+        }
+        else
+            throw std::invalid_argument("Value not a valid choice.");
+
+    }
+    void set_default_multiple(const GncMultichoiceOptionIndexVec& indexes)
+    {
+        if (validate(indexes))
+            m_value = m_default_value = indexes;
+        else
+            throw std::invalid_argument("One of the supplied indexes was out of range.");
+    }
     std::size_t num_permissible_values() const noexcept
     {
         return m_choices.size();
@@ -866,6 +916,11 @@ public:
             //throw!
             m_value = values;
     }
+    void set_default_value (const GncOptionAccountList& values) {
+        if (validate(values))
+            //throw!
+            m_value = m_default_value = values;
+    }
     GList* account_type_list() const noexcept;
     void reset_default_value() { m_value = m_default_value; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
@@ -1039,6 +1094,21 @@ public:
         }
     }
     void set_value(size_t index) noexcept;
+    void set_default_value(RelativeDatePeriod value) {
+        if (validate(value))
+        {
+            m_period = m_default_period = value;
+            m_date = m_default_date = INT64_MAX;
+        }
+    }
+    void set_default_value(time64 time) {
+        if (validate(time))
+        {
+            m_period = m_default_period = RelativeDatePeriod::ABSOLUTE;
+            m_date = m_default_date = time;
+        }
+    }
+    void set_default_value(size_t index) noexcept;
     std::size_t num_permissible_values() const noexcept
     {
         return m_period_set.size();

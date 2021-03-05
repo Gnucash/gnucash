@@ -131,6 +131,15 @@ GncOptionDateValue::set_value(size_t index) noexcept
     m_period = m_period_set[index];
 }
 
+void
+GncOptionDateValue::set_default_value(size_t index) noexcept
+{
+    assert(!m_period_set.empty());
+    assert(index < m_period_set.size());
+    m_date = m_default_date = INT64_MAX;
+    m_period = m_default_period = m_period_set[index];
+}
+
 size_t
 GncOptionDateValue::permissible_value_index(const char* key) const noexcept
 {

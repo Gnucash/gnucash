@@ -88,6 +88,7 @@ public:
               ValueType value,
               GncOptionUIType ui_type = GncOptionUIType::INTERNAL);
     template <typename ValueType> void set_value(ValueType value);
+    template <typename ValueType> void set_default_value(ValueType value);
     template <typename ValueType> ValueType get_default_value() const;
     template <typename ValueType> ValueType get_value() const;
     void reset_default_value();

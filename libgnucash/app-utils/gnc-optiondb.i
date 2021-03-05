@@ -735,6 +735,81 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                 option.set_value(value);
             }, swig_get_option($self));
     }
+
+    void set_default_value_from_scm(SCM new_value)
+    {
+        if (!$self)
+            return;
+        auto reldate_values{get_reldate_values()};
+        std::visit([new_value, reldate_values](auto& option) {
+                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionDateValue>)
+                {
+                    if (scm_is_pair(new_value))
+                    {
+                        auto car{scm_to_utf8_string(scm_symbol_to_string(scm_car(new_value)))};
+                        if (strcmp(car, "relative") == 0)
+                        {
+                            auto lookup{scm_assq_ref(reldate_values,
+                                                     scm_cdr(new_value))};
+                            auto reldate{scm_primitive_eval(lookup)};
+                            option.set_default_value(static_cast<RelativeDatePeriod>(scm_to_int(reldate)));
+                        }
+                        else
+                        {
+                            option.set_value(scm_to_int64(scm_cdr(new_value)));
+                        }
+                    }
+                    else
+                        option.set_default_value(scm_to_int64(new_value));
+                    return;
+                }
+                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionMultichoiceValue>)
+                {
+                    if (scm_is_integer(new_value))
+                    {
+                        option.set_default_value(scm_to_int(new_value));
+                        return;
+                    }
+                    std::string new_value_str{};
+                    if (scm_is_symbol(new_value))
+                        new_value_str = scm_to_utf8_string(scm_symbol_to_string(new_value));
+                    else if (scm_is_string(new_value))
+                        new_value_str = scm_to_utf8_string(new_value);
+                    if (!new_value_str.empty())
+                        option.set_default_value(new_value_str);
+                    return;
+                }
+                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionRangeValue<int>>)
+                {
+                    if (scm_is_pair(new_value))
+                        option.set_default_value(scm_to_int(scm_cdr(new_value)));
+                    else
+                        option.set_default_value(scm_to_int(new_value));
+                    return;
+                }
+                auto value{scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value)};  //Can't inline, set_value takes arg by reference.
+                option.set_default_value(value);
+            }, swig_get_option($self));
+    }
+
+    SCM get_type()
+    {
+        if (!self)
+            return SCM_BOOL_F;
+        return std::visit([](const auto& option)->SCM {
+                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                    GncOptionMultichoiceValue>)
+                    return scm_c_eval_string("'multichoice");
+                else if constexpr (std::is_same_v<decltype(option.get_value()),
+                    bool>)
+                    return scm_c_eval_string("'boolean");
+                else
+                    return SCM_BOOL_F;
+            }, swig_get_option($self));
+    }
 };
 
 %extend GncOptionDB {

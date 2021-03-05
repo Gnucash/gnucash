@@ -126,6 +126,27 @@ GncOption::set_value(ValueType value)
                }, *m_option);
 }
 
+template <typename ValueType> void
+GncOption::set_default_value(ValueType value)
+{
+    std::visit([value](auto& option) {
+                   if constexpr
+                       (std::is_same_v<std::decay_t<decltype(option.get_value())>,
+                        std::decay_t<ValueType>> ||
+                        (std::is_same_v<std::decay_t<decltype(option)>,
+                         GncOptionDateValue> &&
+                         (std::is_same_v<std::decay_t<ValueType>,
+                         RelativeDatePeriod> ||
+                          std::is_same_v<std::decay_t<ValueType>, size_t>)))
+                           option.set_default_value(value);
+                   if constexpr
+                       (std::is_same_v<std::decay_t<decltype(option)>,
+                        GncOptionMultichoiceValue> &&
+                        std::is_same_v<std::decay_t<ValueType>,
+                        GncMultichoiceOptionIndexVec>)
+                       option.set_multiple(value);
+               }, *m_option);
+}
 void
 GncOption::reset_default_value()
 {
@@ -589,6 +610,20 @@ template void GncOption::set_value(size_t);
 template void GncOption::set_value(GncOptionAccountList);
 template void GncOption::set_value(GncMultichoiceOptionIndexVec);
 template void GncOption::set_value(SCM);
+
+template void GncOption::set_default_value(bool);
+template void GncOption::set_default_value(int);
+template void GncOption::set_default_value(int64_t);
+template void GncOption::set_default_value(double);
+template void GncOption::set_default_value(char*);
+template void GncOption::set_default_value(const char*);
+template void GncOption::set_default_value(std::string);
+template void GncOption::set_default_value(const QofInstance*);
+template void GncOption::set_default_value(RelativeDatePeriod);
+template void GncOption::set_default_value(size_t);
+template void GncOption::set_default_value(GncOptionAccountList);
+template void GncOption::set_default_value(GncMultichoiceOptionIndexVec);
+template void GncOption::set_default_value(SCM);
 
 template void GncOption::get_limits(double&, double&, double&) const noexcept;
 template void GncOption::get_limits(int&, int&, int&) const noexcept;
