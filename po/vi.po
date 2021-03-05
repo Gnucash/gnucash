@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-22 17:34+0100\n"
-"PO-Revision-Date: 2021-03-02 03:50+0000\n"
+"PO-Revision-Date: 2021-03-05 11:50+0000\n"
 "Last-Translator: bruh <quangtrung02hn16@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/vi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -431,11 +431,11 @@ msgstr "Giá trị này xác định tiến trình thử iconv nào cần thực
 
 #: borrowed/goffice/go-optionmenu.c:336
 msgid "Menu"
-msgstr "Trình đơn"
+msgstr "Menu"
 
 #: borrowed/goffice/go-optionmenu.c:336
 msgid "The menu of options"
-msgstr "Trình đơn các tùy chọn"
+msgstr "Menu các tùy chọn"
 
 #: doc/tip_of_the_day.list.c:1
 msgid ""
@@ -663,8 +663,8 @@ msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
-"Để mở trình đơn « Tài khoản » trong trường chuyển của trang sổ cái, bấm phím "
-"Menu hay tổ hợp phím Ctrl-Xuống."
+"Để mở menu Tài khoản trong trường chuyển của trang sổ cái, bấm phím Menu "
+"hoặc tổ hợp phím Ctrl-Xuống."
 
 #: doc/tip_of_the_day.list.c:102
 msgid ""
@@ -766,13 +766,13 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:523
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "Congratulations! You are done closing books!\n"
 msgstr ""
 "%s\n"
-"Chúc mừng! Bạn đã đóng thành công các sổ sách."
+"Chúc mừng! Bạn đã đóng xong các sổ sách!\n"
 
 #: gnucash/gnome/assistant-acct-period.c:589
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1274
