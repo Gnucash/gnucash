@@ -20,20 +20,24 @@
  *                                                                  *
 \********************************************************************/
 
+#ifndef _GNC_SCRUBBUDGET_H_
+#define _GNC_SCRUBBUDGET_H_
+
 #include <glib.h>
 #include <qofbook.h>
 
 /* ================================================================ */
 
 /** Fix budget signs
- * A guard is set if we have completed reversal, or there are no
- * budgets in book.
+ * For GnuCash 4.5 onwards - fix budget signs
+ * A feature is set if we have completed reversal.
  *
  * @param book The book to scrub
  *
- * returns NULL if feature is already set
- * returns a newly allocated string describing outcome of scrub.
+ * returns TRUE if budgets were scrubbed
+ * returns FALSE if feature already set, or no budgets.
  */
-gchar * gnc_scrub_budget_signs (QofBook *book);
+gboolean gnc_scrub_budget_signs (QofBook *book);
 
-/* ==================== END OF FILE ==================== */
+
+#endif // _GNC_SCRUBBUDGET_H_

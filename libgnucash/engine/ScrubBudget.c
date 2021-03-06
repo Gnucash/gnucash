@@ -56,8 +56,6 @@ typedef struct
     GncBudget* budget;
 } ProcessData;
 
-static gboolean this_book_needs_fixing;
-
 static void
 process_heuristics_acct (Account * account, gpointer user_data)
 {
@@ -78,7 +76,7 @@ process_heuristics_acct (Account * account, gpointer user_data)
 
     sign = gnc_numeric_compare (total, gnc_numeric_zero ());
     totalstr = gnc_numeric_to_string (total);
-    PWARN ("acct=%s, total=%s, sign=%d",
+    PINFO ("acct=%s, total=%s, sign=%d",
            xaccAccountGetName (account), totalstr, sign);
     g_free (totalstr);
 
@@ -107,25 +105,17 @@ process_heuristics_acct (Account * account, gpointer user_data)
 static SignReversals
 heuristics_on_budget (GncBudget * budget, Account *root)
 {
-    ProcessData heuristics;
+    ProcessData heuristics = {0, 0, 0, 0, 0, 0, budget};
     SignReversals result;
 
     heuristics.num_periods = gnc_budget_get_num_periods(budget);
-    heuristics.budget = budget;
-    heuristics.asset = 0;
-    heuristics.liability = 0;
-    heuristics.income = 0;
-    heuristics.expense = 0;
-    heuristics.equity = 0;
 
     gnc_account_foreach_descendant (root, process_heuristics_acct, &heuristics);
 
-    if (heuristics.expense < 0)           /* budget expenses are mostly negative */
-        result = HEURISTICS_INC_EXP;                         /* conclude inc-exp */
-    else if (heuristics.liability > 0) /* budget liabilities are mostly positive */
-        result = HEURISTICS_NONE;                               /* conclude none */
-    else
-        result = HEURISTICS_CREDIT_ACC;              /* conclude credit-accounts */
+    result =
+        heuristics.expense < 0 ? HEURISTICS_INC_EXP :
+        heuristics.liability > 0 ? HEURISTICS_NONE :
+        HEURISTICS_CREDIT_ACC;
 
     LEAVE ("heuristics_on_budget %s: A(%d) L(%d) Inc(%d) Exp(%d) Eq(%d) = %d",
            gnc_budget_get_name (budget),
@@ -151,7 +141,7 @@ fix_budget_acc_sign (Account *acc, gpointer user_data)
     case HEURISTICS_INC_EXP:
         if ((type != ACCT_TYPE_INCOME) && (type != ACCT_TYPE_EXPENSE))
             return;
-        PWARN ("budget account [%s] is inc/exp. reverse!",
+        PINFO ("budget account [%s] is inc/exp. reverse!",
                xaccAccountGetName(acc));
         break;
     case HEURISTICS_CREDIT_ACC:
@@ -159,7 +149,7 @@ fix_budget_acc_sign (Account *acc, gpointer user_data)
             (type != ACCT_TYPE_EQUITY) &&
             (type != ACCT_TYPE_INCOME))
             return;
-        PWARN ("budget account [%s] is credit-account. reverse!",
+        PINFO ("budget account [%s] is credit-account. reverse!",
                xaccAccountGetName(acc));
         break;
     case HEURISTICS_NONE:
@@ -194,36 +184,22 @@ fix_budget_sign (QofInstance* data, gpointer user_data)
     LEAVE ("completed budget [%s] for reversal", gnc_budget_get_name (budget));
 }
 
-/* For GnuCash 4.4 onwards - fix budget signs */
-/* A guard is set if we have completed reversal, or there are no
-   budgets in book. */
-gchar *
+gboolean
 gnc_scrub_budget_signs (QofBook *book)
 {
     Account* root = gnc_book_get_root_account (book);
     gchar *retval = NULL;
 
     if (gnc_features_check_used (book, GNC_FEATURE_BUDGET_UNREVERSED))
-        return NULL;
+        return FALSE;
 
-    if (gnc_budget_get_default (book))
-    {
-        qof_collection_foreach (qof_book_get_collection (book, GNC_ID_BUDGET),
-                                fix_budget_sign, root);
-        retval = g_strdup ("Please be aware the book now has a feature \
-use unreversed budgets. This means a minimum GnuCash version of 3.8 is \
-needed to open this book. Moreover the signs of internal representation \
-of budgets is now fixed. Please review budgets and amend signs if \
-necessary.");
-    }
-    else
-    {
-        retval = g_strdup ("Please be aware the book now has a feature \
-use unreversed budgets. This means a minimum GnuCash version of 3.8 is \
-needed to open this book.");
-    }
+    if (!gnc_budget_get_default (book))
+        return FALSE;
+
+    qof_collection_foreach (qof_book_get_collection (book, GNC_ID_BUDGET),
+                            fix_budget_sign, root);
 
     gnc_features_set_used (book, GNC_FEATURE_BUDGET_UNREVERSED);
-    return retval;
+    return TRUE;
 }
 /* ==================== END OF FILE ==================== */
