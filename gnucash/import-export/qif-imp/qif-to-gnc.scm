@@ -445,7 +445,7 @@
 
                   ;; rebalance and commit everything
                   (xaccTransCommitEdit gnc-xtn)
-		  (xaccTransRecordPrice gnc-xtn))))
+                  (xaccTransRecordPrice gnc-xtn))))
           (qif-file:xtns qif-file)))
        sorted-qif-files-list)
 

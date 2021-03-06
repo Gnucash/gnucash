@@ -3116,25 +3116,27 @@ record_price(Split *split,
     time64 time;
     gboolean swap;
 
-    account = xaccSplitGetAccount(split);
-    if (!xaccAccountIsPriced(account)) {
+    account = xaccSplitGetAccount (split);
+    if (!xaccAccountIsPriced (account))
+    {
        return;
     }
-    amount = xaccSplitGetAmount(split);
-    if (gnc_numeric_zero_p(amount)) {
+    amount = xaccSplitGetAmount (split);
+    if (gnc_numeric_zero_p (amount))
+    {
        return;
     }
-    trans = xaccSplitGetParent(split);
-    value = gnc_numeric_div(xaccSplitGetValue(split), amount,
-                            GNC_DENOM_AUTO,
-                            GNC_HOW_DENOM_EXACT);
+    trans = xaccSplitGetParent (split);
+    value = gnc_numeric_div (xaccSplitGetValue (split), amount,
+                             GNC_DENOM_AUTO,
+                             GNC_HOW_DENOM_EXACT);
     book = qof_instance_get_book (QOF_INSTANCE (account));
     pricedb = gnc_pricedb_get_db (book);
     comm = xaccAccountGetCommodity (account);
     curr = xaccTransGetCurrency (trans);
     scu = gnc_commodity_get_fraction (curr);
     swap = FALSE;
-    time = xaccTransGetDate(trans);
+    time = xaccTransGetDate (trans);
     price = gnc_pricedb_lookup_day_t64 (pricedb, comm, curr, time);
     if (gnc_commodity_equiv (comm, gnc_price_get_currency (price)))
         swap = TRUE;
@@ -3148,7 +3150,7 @@ record_price(Split *split,
             gnc_price_unref (price);
             return;
         }
-        if (gnc_price_get_source (price) < PRICE_SOURCE_XFER_DLG_VAL)
+        if (gnc_price_get_source (price) < PRICE_SOURCE_SPLIT_IMPORT)
         {
             /* Existing price is preferred over this one. */
             gnc_price_unref (price);
@@ -3188,17 +3190,12 @@ record_price(Split *split,
 void
 xaccTransRecordPrice(Transaction *trans)
 {
-   Split *s;
-   int i = 0;
-
     /* XXX: move this into xaccSplitCommitEdit and other callers of
     * gnc_pricedb_add_price from split-register.c, gnc-imp-props-price.cpp
     * etc.
     */
-   while ((s = xaccTransGetSplit(trans, i)) != NULL) {
-      record_price(s, PRICE_SOURCE_SPLIT_IMPORT);
-      i++;
-   }
+   for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
+      record_price (n->data, PRICE_SOURCE_SPLIT_IMPORT);
 }
 
 /************************ END OF ************************************\
