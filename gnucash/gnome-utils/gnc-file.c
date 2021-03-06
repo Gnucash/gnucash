@@ -701,6 +701,18 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 #define RESPONSE_READONLY 4
 #define RESPONSE_FILE 5
 
+static void
+maybe_scrub_budget_signs (QofBook *book, GtkWindow *parent)
+{
+    /* Fix budget signs */
+    if (gnc_scrub_budget_signs (book))
+    {
+        gnc_info_dialog (parent, "%s", _("This book has budgets. \
+The internal representation of amounts is now fixed. Please review \
+budgets and amend signs if necessary.."));
+    }
+}
+
 static gboolean
 gnc_post_file_open (GtkWindow *parent, const char * filename, gboolean is_readonly)
 {
@@ -1108,14 +1120,7 @@ RESTART:
     // Fix account color slots being set to 'Not Set', should run once on a book
     xaccAccountScrubColorNotSet (gnc_get_current_book());
 
-    /* Fix budget signs */
-    budget_scrubbing_outcome = gnc_scrub_budget_signs (new_book);
-
-    if (budget_scrubbing_outcome)
-    {
-        gnc_info_dialog (GTK_WINDOW (parent), "%s", budget_scrubbing_outcome);
-        g_free (budget_scrubbing_outcome);
-    }
+    maybe_scrub_budget_signs (new_book, parent);
 
     qof_event_resume();
 
