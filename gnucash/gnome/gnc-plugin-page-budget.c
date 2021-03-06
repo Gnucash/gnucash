@@ -42,7 +42,11 @@
 #include <glib/gi18n.h>
 #include "gnc-date-edit.h"
 
+#include "swig-runtime.h"
+#include "libguile.h"
+
 #include "gnc-plugin-page-register.h"
+#include "gnc-plugin-page-report.h"
 #include "gnc-budget.h"
 #include "gnc-features.h"
 
@@ -127,6 +131,8 @@ static void gnc_plugin_page_budget_cmd_refresh (GtkAction *action,
                                                 GncPluginPageBudget *page);
 static void gnc_plugin_page_budget_cmd_budget_note (GtkAction *action,
                                                     GncPluginPageBudget *page);
+static void gnc_plugin_page_budget_cmd_budget_report (GtkAction *action,
+                                                      GncPluginPageBudget *page);
 static void allperiods_budget_helper (GtkTreeModel *model, GtkTreePath *path,
                                       GtkTreeIter *iter, gpointer data);
 
@@ -177,6 +183,12 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
         N_("Edit note for the selected account and period"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_budget_note)
     },
+    {
+        "BudgetReportAction", "system-run", N_("Budget Report"),
+        NULL,
+        N_("Run budget report"),
+        G_CALLBACK (gnc_plugin_page_budget_cmd_budget_report)
+    },
     /* View menu */
     {
         "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
@@ -211,6 +223,7 @@ static action_toolbar_labels toolbar_labels[] =
     { "EstimateBudgetAction",       N_("Estimate") },
     { "AllPeriodsBudgetAction",     N_("All Periods") },
     { "BudgetNoteAction",           N_("Note") },
+    { "BudgetReportAction",         N_("Run Report") },
     { NULL, NULL },
 };
 
@@ -250,6 +263,8 @@ typedef struct GncPluginPageBudgetPrivate
     gnc_numeric allValue;
     allperiods_action action;
 
+    /* the cached reportPage for this budget */
+    GncPluginPage *reportPage;
 } GncPluginPageBudgetPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageBudget, gnc_plugin_page_budget, GNC_TYPE_PLUGIN_PAGE)
@@ -289,6 +304,7 @@ gnc_plugin_page_budget_new (GncBudget *budget)
     priv->budget = budget;
     priv->delete_budget = FALSE;
     priv->key = *gnc_budget_get_guid (budget);
+    priv->reportPage = NULL;
     label = g_strdup_printf ("%s: %s", _("Budget"), gnc_budget_get_name (budget));
     g_object_set (G_OBJECT(plugin_page), "page-name", label, NULL);
     g_free (label);
@@ -1266,6 +1282,38 @@ gnc_plugin_page_budget_cmd_budget_note(GtkAction *action,
     }
     gtk_widget_destroy(dialog);
     g_object_unref(G_OBJECT(builder));
+}
+
+static void
+gnc_plugin_page_budget_cmd_budget_report (GtkAction *action,
+                                          GncPluginPageBudget *page)
+{
+    GncPluginPageBudgetPrivate *priv;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET (page));
+
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE (page);
+
+    if (priv->reportPage && GNC_IS_PLUGIN_PAGE (priv->reportPage))
+        gnc_plugin_page_report_reload (GNC_PLUGIN_PAGE_REPORT (priv->reportPage));
+    else
+    {
+        SCM func = scm_c_eval_string ("gnc:budget-report-create");
+        SCM arg = SWIG_NewPointerObj (priv->budget, SWIG_TypeQuery ("_p_budget_s"), 0);
+        int report_id;
+
+        g_return_if_fail (scm_is_procedure (func));
+
+        arg = scm_apply_0 (func, scm_list_1 (arg));
+        g_return_if_fail (scm_is_exact (arg));
+
+        report_id = scm_to_int (arg);
+        g_return_if_fail (report_id >= 0);
+
+        priv->reportPage = gnc_plugin_page_report_new (report_id);
+    }
+
+    gnc_main_window_open_page (GNC_MAIN_WINDOW (priv->dialog), priv->reportPage);
 }
 
 static void
