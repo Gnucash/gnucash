@@ -40,7 +40,7 @@ bool
 GncOptionAccountValue::validate(const GncOptionAccountList& values) const
 {
     if (values.empty())
-        return false;
+        return true;
     if ((get_ui_type() == GncOptionUIType::ACCOUNT_SEL || !m_multiselect) &&
         values.size() != 1)
         return false;
