@@ -704,12 +704,16 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 static void
 maybe_scrub_budget_signs (QofBook *book, GtkWindow *parent)
 {
+
+    if (gnc_features_check_used (book, GNC_FEATURE_BUDGET_UNREVERSED))
+        return;
+
     /* Fix budget signs */
-    if (gnc_scrub_budget_signs (book))
+    if (gnc_maybe_scrub_all_budget_signs (book))
     {
         gnc_info_dialog (parent, "%s", _("This book has budgets. \
 The internal representation of amounts is now fixed. Please review \
-budgets and amend signs if necessary.."));
+budgets and amend signs if necessary."));
     }
 }
 

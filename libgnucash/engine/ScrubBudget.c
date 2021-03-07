@@ -105,10 +105,9 @@ process_heuristics_acct (Account * account, gpointer user_data)
 static SignReversals
 heuristics_on_budget (GncBudget * budget, Account *root)
 {
-    ProcessData heuristics = {0, 0, 0, 0, 0, 0, budget};
+    ProcessData heuristics = {0, 0, 0, 0, 0, gnc_budget_get_num_periods (budget),
+                              budget};
     SignReversals result;
-
-    heuristics.num_periods = gnc_budget_get_num_periods(budget);
 
     gnc_account_foreach_descendant (root, process_heuristics_acct, &heuristics);
 
@@ -128,7 +127,6 @@ heuristics_on_budget (GncBudget * budget, Account *root)
 static void
 fix_budget_acc_sign (Account *acc, gpointer user_data)
 {
-    gnc_numeric amt;
     ReversalType* reversal = (ReversalType*) user_data;
     GncBudget* budget = reversal->budget;
     guint numperiods = gnc_budget_get_num_periods (budget);
@@ -152,12 +150,14 @@ fix_budget_acc_sign (Account *acc, gpointer user_data)
         PINFO ("budget account [%s] is credit-account. reverse!",
                xaccAccountGetName(acc));
         break;
-    case HEURISTICS_NONE:
+    default:
+        /* shouldn't happen. */
         return;
     }
 
     for (guint i=0; i < numperiods; ++i)
     {
+        gnc_numeric amt;
         if (!gnc_budget_is_account_period_value_set (budget, acc, i))
             continue;
 
@@ -170,13 +170,19 @@ fix_budget_acc_sign (Account *acc, gpointer user_data)
 }
 
 static void
-fix_budget_sign (QofInstance* data, gpointer user_data)
+maybe_scrub_budget (QofInstance* data, gpointer user_data)
 {
     GncBudget* budget = GNC_BUDGET(data);
     Account *root = (Account*) user_data;
     ReversalType reversal;
 
     reversal.policy = heuristics_on_budget (budget, root);
+    if (reversal.policy == HEURISTICS_NONE)
+    {
+        PWARN ("budget [%s] doesn't need reversing", gnc_budget_get_name (budget));
+        return;
+    }
+
     reversal.budget = budget;
 
     ENTER ("processing budget [%s] for reversal", gnc_budget_get_name (budget));
@@ -185,7 +191,7 @@ fix_budget_sign (QofInstance* data, gpointer user_data)
 }
 
 gboolean
-gnc_scrub_budget_signs (QofBook *book)
+gnc_maybe_scrub_all_budget_signs (QofBook *book)
 {
     Account* root = gnc_book_get_root_account (book);
     gchar *retval = NULL;
@@ -197,7 +203,7 @@ gnc_scrub_budget_signs (QofBook *book)
         return FALSE;
 
     qof_collection_foreach (qof_book_get_collection (book, GNC_ID_BUDGET),
-                            fix_budget_sign, root);
+                            maybe_scrub_budget, root);
 
     gnc_features_set_used (book, GNC_FEATURE_BUDGET_UNREVERSED);
     return TRUE;

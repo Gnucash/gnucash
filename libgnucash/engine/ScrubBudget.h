@@ -37,7 +37,7 @@
  * returns TRUE if budgets were scrubbed
  * returns FALSE if feature already set, or no budgets.
  */
-gboolean gnc_scrub_budget_signs (QofBook *book);
+gboolean gnc_maybe_scrub_all_budget_signs (QofBook *book);
 
 
 #endif // _GNC_SCRUBBUDGET_H_
