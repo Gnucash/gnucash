@@ -3101,8 +3101,8 @@ _utest_trans_fill_functions (void)
 }
 
 static void
-record_price(Split *split,
-             PriceSource source)
+record_price (Split *split,
+              PriceSource source)
 {
     Transaction *trans;
     Account *account;
@@ -3150,7 +3150,7 @@ record_price(Split *split,
             gnc_price_unref (price);
             return;
         }
-        if (gnc_price_get_source (price) < PRICE_SOURCE_SPLIT_IMPORT)
+        if (gnc_price_get_source (price) < source)
         {
             /* Existing price is preferred over this one. */
             gnc_price_unref (price);
@@ -3188,14 +3188,14 @@ record_price(Split *split,
 }
 
 void
-xaccTransRecordPrice(Transaction *trans)
+xaccTransRecordPrice (Transaction *trans, PriceSource source)
 {
     /* XXX: move this into xaccSplitCommitEdit and other callers of
     * gnc_pricedb_add_price from split-register.c, gnc-imp-props-price.cpp
     * etc.
     */
    for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
-      record_price (n->data, PRICE_SOURCE_SPLIT_IMPORT);
+      record_price (n->data, source);
 }
 
 /************************ END OF ************************************\

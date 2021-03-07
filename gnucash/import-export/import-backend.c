@@ -897,7 +897,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
         /* Done editing. */
         trans = gnc_import_TransInfo_get_trans (trans_info);
         xaccTransCommitEdit(trans);
-        xaccTransRecordPrice(trans);
+        xaccTransRecordPrice(trans, PRICE_SOURCE_SPLIT_IMPORT);
         return TRUE;
     case GNCImport_UPDATE:
     {

@@ -421,6 +421,7 @@ void qof_book_set_string_option(QofBook* book, const char* opt_name, const char*
     SET_ENUM("PRICE-SOURCE-USER-PRICE");
     SET_ENUM("PRICE-SOURCE-XFER-DLG-VAL");
     SET_ENUM("PRICE-SOURCE-SPLIT-REG");
+    SET_ENUM("PRICE-SOURCE-SPLIT-IMPORT");
     SET_ENUM("PRICE-SOURCE-STOCK-SPLIT");
     SET_ENUM("PRICE-SOURCE-TEMP");
     SET_ENUM("PRICE-SOURCE-INVALID");

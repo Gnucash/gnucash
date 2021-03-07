@@ -146,7 +146,7 @@ xaccTransDestroy (Transaction *trans)
 }
 
 void
-xaccTransRecordPrice (Transaction *trans)
+xaccTransRecordPrice (Transaction *trans, PriceSource source)
 {
     g_return_if_fail(GNC_IS_MOCKTRANSACTION(trans));
     ((MockTransaction*)trans)->recordPrice();

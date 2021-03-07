@@ -1958,6 +1958,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
         }
         unreconcile_splits (reg);
         xaccTransCommitEdit (trans);
+        xaccTransRecordPrice (trans, PRICE_SOURCE_SPLIT_REG);
     }
 
     gnc_table_clear_current_cursor_changes (reg->table);
@@ -2203,79 +2204,6 @@ recalculate_value (Split* split, SplitRegister* reg,
     }
 }
 
-static void
-record_price (SplitRegister* reg, Account* account, gnc_numeric value,
-              PriceSource source)
-{
-    Transaction* trans = gnc_split_register_get_current_trans (reg);
-    QofBook* book = qof_instance_get_book (QOF_INSTANCE (account));
-    GNCPriceDB* pricedb = gnc_pricedb_get_db (book);
-    gnc_commodity* comm = xaccAccountGetCommodity (account);
-    gnc_commodity* curr = xaccTransGetCurrency (trans);
-    GNCPrice* price;
-    gnc_numeric price_value;
-    int scu = gnc_commodity_get_fraction (curr);
-    time64 time;
-    BasicCell* cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
-    gboolean swap = FALSE;
-
-    /* Only record the price for account types that don't have a
-     * "rate" cell. They'll get handled later by
-     * gnc_split_register_handle_exchange.
-     */
-    if (gnc_split_reg_has_rate_cell (reg->type))
-        return;
-    gnc_date_cell_get_date ((DateCell*)cell, &time, TRUE);
-    price = gnc_pricedb_lookup_day_t64 (pricedb, comm, curr, time);
-    if (gnc_commodity_equiv (comm, gnc_price_get_currency (price)))
-        swap = TRUE;
-
-    if (price)
-    {
-        price_value = gnc_price_get_value (price);
-        if (gnc_numeric_equal (swap ? gnc_numeric_invert (value) : value,
-                               price_value))
-        {
-            gnc_price_unref (price);
-            return;
-        }
-        if (gnc_price_get_source (price) < PRICE_SOURCE_XFER_DLG_VAL)
-        {
-            /* Existing price is preferred over this one. */
-            gnc_price_unref (price);
-            return;
-        }
-        if (swap)
-        {
-            value = gnc_numeric_invert (value);
-            scu = gnc_commodity_get_fraction (comm);
-        }
-        value = gnc_numeric_convert (value, scu * COMMODITY_DENOM_MULT,
-                                     GNC_HOW_RND_ROUND_HALF_UP);
-        gnc_price_begin_edit (price);
-        gnc_price_set_time64 (price, time);
-        gnc_price_set_source (price, source);
-        gnc_price_set_typestr (price, PRICE_TYPE_TRN);
-        gnc_price_set_value (price, value);
-        gnc_price_commit_edit (price);
-        gnc_price_unref (price);
-        return;
-    }
-
-    value = gnc_numeric_convert (value, scu * COMMODITY_DENOM_MULT,
-                                 GNC_HOW_RND_ROUND_HALF_UP);
-    price = gnc_price_create (book);
-    gnc_price_begin_edit (price);
-    gnc_price_set_commodity (price, comm);
-    gnc_price_set_currency (price, curr);
-    gnc_price_set_time64 (price, time);
-    gnc_price_set_source (price, source);
-    gnc_price_set_typestr (price, PRICE_TYPE_TRN);
-    gnc_price_set_value (price, value);
-    gnc_pricedb_add_price (pricedb, price);
-    gnc_price_commit_edit (price);
-}
-
 static gboolean
 gnc_split_register_auto_calc (SplitRegister* reg, Split* split)
 {
@@ -2447,14 +2375,6 @@ gnc_split_register_auto_calc (SplitRegister* reg, Split* split)
     if (recalc_value)
         recalculate_value (split, reg, price, amount, shares_changed);
 
-    if (price_changed)
-    {
-        cell = (PriceCell*) gnc_table_layout_get_cell (reg->table->layout,
-                                                       PRIC_CELL);
-        price = gnc_price_cell_get_value (cell);
-        if (gnc_numeric_positive_p (price))
-            record_price (reg, account, price, source);
-    }
     return TRUE;
 }
 

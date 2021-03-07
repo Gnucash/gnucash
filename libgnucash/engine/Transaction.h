@@ -92,6 +92,7 @@ typedef struct _TransactionClass TransactionClass;
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "gnc-pricedb.h"
 #include "Split.h"
 
 #ifdef __cplusplus
@@ -767,10 +768,10 @@ time64 xaccTransGetVoidTime(const Transaction *tr);
 void xaccTransDump (const Transaction *trans, const char *tag);
 #endif
 
-/** The xaccTransRecord() method iterates through the splits and
+/** The xaccTransRecordPrice() method iterates through the splits and
  *  and record the non-currency equivalent prices in the price database.
  */
-void xaccTransRecordPrice (Transaction *trans);
+void xaccTransRecordPrice (Transaction *trans, PriceSource source);
 
 
 #define RECONCILED_MATCH_TYPE	"reconciled-match"
