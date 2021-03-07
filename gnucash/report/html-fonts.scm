@@ -193,5 +193,7 @@
       "td.total-number-cell { " total-number-cell-info " }\n"
       "td.total-label-cell { " total-label-cell-info " }\n"
       "td.centered-label-cell { text-align: center; " centered-label-cell-info " }\n"
+      "sub { top: 0.4em; }\n"
+      "sub, sup { vertical-align: baseline; position: relative; top: -0.4em; }\n"
       "@media print { html, body { height: unset; }}\n"
       (or (gnc:html-document-style-text doc) "")))))
