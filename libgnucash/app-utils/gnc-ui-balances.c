@@ -374,7 +374,7 @@ static void sack_foreach_func(gpointer key, gpointer value, gpointer user_data)
     gnc_numeric reachable_value = gnc_numeric_add_fixed (thisvalue, data->split_value);
 
     data->reachable_list = g_list_prepend
-        (data->reachable_list, g_memdup (&reachable_value, sizeof (gnc_numeric)));
+        (data->reachable_list, g_memdup2 (&reachable_value, sizeof (gnc_numeric)));
 }
 
 GList *
@@ -428,7 +428,7 @@ gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
 
         /* Add the value of the split itself to the reachable_list */
         s_data->reachable_list = g_list_prepend
-            (s_data->reachable_list, g_memdup (&split_value, sizeof (gnc_numeric)));
+            (s_data->reachable_list, g_memdup2 (&split_value, sizeof (gnc_numeric)));
 
         /* Add everything to the sack, looking out for duplicates */
         for (GList *s_node = s_data->reachable_list; s_node; s_node = s_node->next)

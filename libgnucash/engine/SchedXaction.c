@@ -1119,7 +1119,7 @@ SXTmpStateData*
 gnc_sx_clone_temporal_state (SXTmpStateData *tsd)
 {
     SXTmpStateData *toRet;
-    toRet = g_memdup (tsd, sizeof (SXTmpStateData));
+    toRet = g_memdup2 (tsd, sizeof (SXTmpStateData));
     return toRet;
 }
 

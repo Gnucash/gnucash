@@ -60,7 +60,7 @@ style_create_key (SheetBlockStyle *style)
 
     key = style->cursor->num_rows;
 
-    return g_memdup(&key, sizeof(key));
+    return g_memdup2(&key, sizeof(key));
 }
 
 static void
