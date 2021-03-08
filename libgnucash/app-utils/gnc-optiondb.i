@@ -341,7 +341,7 @@ gnc_option_test_book_destroy(QofBook* book)
 %typemap(in) GncMultichoiceOptionChoices&& (GncMultichoiceOptionChoices choices)
 {
     using KeyType = GncOptionMultichoiceKeyType;
-    auto len = scm_to_size_t(scm_length($input));
+    auto len = scm_is_true($input) ? scm_to_size_t(scm_length($input)) : 0;
     for (std::size_t i = 0; i < len; ++i)
     {
         SCM vec = scm_list_ref($input, scm_from_size_t(i));
@@ -375,7 +375,7 @@ gnc_option_test_book_destroy(QofBook* book)
 
 %typemap(in) GncOptionAccountList
 {
-    auto len = scm_to_size_t(scm_length($input));
+    auto len = scm_is_true($input) ? scm_to_size_t(scm_length($input)) : 0;
     for (std::size_t i = 0; i < len; ++i)
     {
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
@@ -387,7 +387,7 @@ gnc_option_test_book_destroy(QofBook* book)
 
 %typemap(in) GncOptionAccountTypeList& (GncOptionAccountTypeList types)
 {
-    auto len = scm_to_size_t(scm_length($input));
+    auto len = scm_is_true($input) ? scm_to_size_t(scm_length($input)) : 0;
     for (std::size_t i = 0; i < len; ++i)
     {
         SCM s_type = scm_list_ref($input, scm_from_size_t(i));
@@ -399,7 +399,7 @@ gnc_option_test_book_destroy(QofBook* book)
 
 %typemap(in) GncOptionAccountTypeList&& (GncOptionAccountTypeList types)
 {
-    auto len = scm_to_size_t(scm_length($input));
+    auto len = scm_is_true($input) ? scm_to_size_t(scm_length($input)) : 0;
     for (std::size_t i = 0; i < len; ++i)
     {
         SCM s_type = scm_list_ref($input, scm_from_size_t(i));
@@ -411,7 +411,7 @@ gnc_option_test_book_destroy(QofBook* book)
 
 %typemap(in) GncOptionAccountList
 {
-    auto len = scm_to_size_t(scm_length($input));
+    auto len = scm_is_true($input) ? scm_to_size_t(scm_length($input)) : 0;
     for (std::size_t i = 0; i < len; ++i)
     {
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
@@ -423,7 +423,7 @@ gnc_option_test_book_destroy(QofBook* book)
 
 %typemap(in) GncOptionAccountList& (GncOptionAccountList acclist)
 {
-    auto len = scm_to_size_t(scm_length($input));
+    auto len = scm_is_true($input) ? scm_to_size_t(scm_length($input)) : 0;
     for (std::size_t i = 0; i < len; ++i)
     {
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
