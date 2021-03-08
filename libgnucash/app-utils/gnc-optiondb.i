@@ -878,6 +878,51 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
     }
 
+    GncOption* gnc_make_date_option(const char* section,
+                                    const char* name, const char* key,
+                                    const char* doc_string,
+                                    const SCM default_val,
+                                    RelativeDatePeriodVec& period_set,
+                                    bool both)
+    {
+
+        try {
+            auto absolute{scm_date_absolute(default_val)};
+            auto ui_type = both ? GncOptionUIType::DATE_BOTH : absolute ?
+                GncOptionUIType::DATE_ABSOLUTE : GncOptionUIType::DATE_RELATIVE;
+            if (!period_set.empty())
+            {
+                auto retval{new GncOption{GncOptionDateValue(section, name, key,
+                                                             doc_string, ui_type,
+                                                             period_set)}};
+                if (absolute)
+                    retval->set_default_value(scm_absolute_date_to_time64(default_val));
+                else
+                    retval->set_default_value(scm_relative_date_get_period(default_val));
+                return retval;
+            }
+
+            if (absolute)
+            {
+                auto value{scm_absolute_date_to_time64(default_val)};
+                auto retval{new GncOption{GncOptionDateValue(section, name, key,
+                                                             doc_string, ui_type,
+                                                             value)}};
+                return retval;
+            }
+            auto value{scm_relative_date_get_period(default_val)};
+            auto retval{new GncOption{GncOptionDateValue(section, name, key,
+                                                         doc_string, ui_type,
+                                                         period_set)}};
+            return retval;
+        }
+        catch (const std::invalid_argument& err)
+        {
+            std::cerr <<"Date Option, value failed validation, option not creted.\n";
+            return nullptr;
+        }
+    }
+
     GncOption* gnc_make_multichoice_option(const char* section,
                                            const char* name, const char* key,
                                            const char* doc_string,
