@@ -329,11 +329,11 @@ gnc_option_test_book_destroy(QofBook* book)
 
 %typemap(in) RelativeDatePeriodVec& (RelativeDatePeriodVec period_set)
 {
-    auto len = scm_to_size_t(scm_length($input));
+    auto len = scm_is_true($input) ? scm_to_size_t(scm_length($input)) : 0;
     for (std::size_t i = 0; i < len; ++i)
     {
         SCM s_reldateperiod = scm_list_ref($input, scm_from_size_t(i));
-        period_set.push_back((RelativeDatePeriod)scm_to_int(s_reldateperiod));
+        period_set.push_back(scm_relative_date_get_period(s_reldateperiod));
     }
     $1 = &period_set;
 }
@@ -517,8 +517,9 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %typemap(out) GncOption* "$result = ($1) ? scm_from_pointer($1, nullptr) : SCM_BOOL_F;"
 
 %header %{
-    static const SCM get_reldate_values() {
 
+    inline static RelativeDatePeriod scm_relative_date_get_period(SCM date)
+    {
     static SCM reldate_values = SCM_BOOL_F;
 
     if (scm_is_false(reldate_values))
@@ -556,8 +557,32 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             "(start-accounting-period RelativeDatePeriod-START-ACCOUNTING-PERIOD)"
             "(end-accounting-period RelativeDatePeriod-END-ACCOUNTING-PERIOD))");
 
-    return reldate_values;
+    auto reldate_scm{scm_is_pair(date) ? scm_cdr(date) : date};
+    auto reldate{scm_primitive_eval(scm_assq_ref(reldate_values,
+                                                 reldate_scm))};
+    return static_cast<RelativeDatePeriod>(scm_to_int(reldate));
+
+    }
+
+    inline static bool scm_date_absolute(SCM date)
+    {
+        if (scm_is_pair(date))
+        {
+            auto car{scm_to_utf8_string(scm_symbol_to_string(scm_car(date)))};
+            if (strcmp(car, "relative") == 0)
+                return false;
         }
+        return true;
+    }
+
+    inline static time64 scm_absolute_date_to_time64(SCM date)
+    {
+        if (scm_date_absolute(date))
+            return scm_to_int64(scm_is_pair(date) ? scm_cdr(date) : date);
+
+        return gnc_relative_date_to_time64(scm_relative_date_get_period(date));
+        }
+
     %}
 
 %ignore GncOptionMultichoiceKeyType;
@@ -684,28 +709,14 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     {
         if (!$self)
             return;
-        auto reldate_values{get_reldate_values()};
-        std::visit([new_value, reldate_values](auto& option) {
+        std::visit([new_value](auto& option) {
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
                                GncOptionDateValue>)
                 {
-                    if (scm_is_pair(new_value))
-                    {
-                        auto car{scm_to_utf8_string(scm_symbol_to_string(scm_car(new_value)))};
-                        if (strcmp(car, "relative") == 0)
-                        {
-                            auto lookup{scm_assq_ref(reldate_values,
-                                                     scm_cdr(new_value))};
-                            auto reldate{scm_primitive_eval(lookup)};
-                            option.set_value(static_cast<RelativeDatePeriod>(scm_to_int(reldate)));
-                        }
-                        else
-                        {
-                            option.set_value(scm_to_int64(scm_cdr(new_value)));
-                        }
-                    }
+                    if (scm_date_absolute(new_value))
+                        option.set_value(scm_absolute_date_to_time64(new_value));
                     else
-                    option.set_value(scm_to_int64(new_value));
+                        option.set_value(scm_relative_date_get_period(new_value));
                     return;
                 }
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
@@ -743,28 +754,14 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     {
         if (!$self)
             return;
-        auto reldate_values{get_reldate_values()};
-        std::visit([new_value, reldate_values](auto& option) {
+        std::visit([new_value](auto& option) {
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
                                GncOptionDateValue>)
                 {
-                    if (scm_is_pair(new_value))
-                    {
-                        auto car{scm_to_utf8_string(scm_symbol_to_string(scm_car(new_value)))};
-                        if (strcmp(car, "relative") == 0)
-                        {
-                            auto lookup{scm_assq_ref(reldate_values,
-                                                     scm_cdr(new_value))};
-                            auto reldate{scm_primitive_eval(lookup)};
-                            option.set_default_value(static_cast<RelativeDatePeriod>(scm_to_int(reldate)));
-                        }
-                        else
-                        {
-                            option.set_value(scm_to_int64(scm_cdr(new_value)));
-                        }
-                    }
+                    if (scm_date_absolute(new_value))
+                        option.set_default_value(scm_absolute_date_to_time64(new_value));
                     else
-                        option.set_default_value(scm_to_int64(new_value));
+                        option.set_default_value(scm_relative_date_get_period(new_value));
                     return;
                 }
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
