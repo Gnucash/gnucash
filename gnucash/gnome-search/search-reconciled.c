@@ -159,7 +159,7 @@ toggle_changed (GtkToggleButton *button, GNCSearchReconciled *fe)
 {
     gboolean is_on = gtk_toggle_button_get_active (button);
     cleared_match_t value =
-        (cleared_match_t) g_object_get_data (G_OBJECT (button), "button-value");
+        (cleared_match_t) ((uint64_t)g_object_get_data (G_OBJECT (button), "button-value") & 0xffffffff); // Binary mask to silence void-pointer-to-enum-cast warning.
 
     if (is_on)
         fe->value |= value;
