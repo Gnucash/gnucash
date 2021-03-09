@@ -25,6 +25,7 @@
 #include <config.h>
 #endif
 
+#include <stdint.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
