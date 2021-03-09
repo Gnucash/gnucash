@@ -372,9 +372,10 @@ static void sack_foreach_func(gpointer key, gpointer value, gpointer user_data)
     sack_foreach_data_t data = (sack_foreach_data_t) user_data;
     gnc_numeric thisvalue = *(gnc_numeric *) key;
     gnc_numeric reachable_value = gnc_numeric_add_fixed (thisvalue, data->split_value);
+    gpointer new_value = g_malloc(sizeof(gnc_numeric));
 
-    data->reachable_list = g_list_prepend
-        (data->reachable_list, g_memdup (&reachable_value, sizeof (gnc_numeric)));
+    memcpy(new_value, &reachable_value, sizeof(gnc_numeric));
+    data->reachable_list = g_list_prepend(data->reachable_list, new_value);
 }
 
 GList *
@@ -418,6 +419,7 @@ gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
     {
         Split *split = (Split *)node->data;
         gnc_numeric split_value = xaccSplitGetAmount (split);
+        gpointer new_value = g_malloc(sizeof(gnc_numeric));
 
         struct _sack_foreach_data_t s_data[1];
         s_data->split_value = split_value;
@@ -427,8 +429,9 @@ gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
         g_hash_table_foreach (sack, sack_foreach_func, s_data);
 
         /* Add the value of the split itself to the reachable_list */
+        memcpy(new_value, &split_value, sizeof(gnc_numeric));
         s_data->reachable_list = g_list_prepend
-            (s_data->reachable_list, g_memdup (&split_value, sizeof (gnc_numeric)));
+            (s_data->reachable_list, new_value);
 
         /* Add everything to the sack, looking out for duplicates */
         for (GList *s_node = s_data->reachable_list; s_node; s_node = s_node->next)
