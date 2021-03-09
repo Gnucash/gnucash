@@ -770,6 +770,9 @@ void xaccTransDump (const Transaction *trans, const char *tag);
 
 /** The xaccTransRecordPrice() method iterates through the splits and
  *  and record the non-currency equivalent prices in the price database.
+ *
+ *  @param trans The transaction whose price is recorded
+ *  @param source The price priority level
  */
 void xaccTransRecordPrice (Transaction *trans, PriceSource source);
 

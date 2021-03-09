@@ -2938,6 +2938,100 @@ xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
     return NULL;
 }
 
+static void
+record_price (Split *split,
+              PriceSource source)
+{
+    Transaction *trans;
+    Account *account;
+    QofBook* book;
+    GNCPriceDB* pricedb;
+    gnc_commodity* comm;
+    gnc_commodity* curr;
+    GNCPrice* price;
+    gnc_numeric price_value, value, amount;
+    int scu;
+    time64 time;
+    gboolean swap;
+
+    account = xaccSplitGetAccount (split);
+    if (!xaccAccountIsPriced (account))
+    {
+       return;
+    }
+    amount = xaccSplitGetAmount (split);
+    if (gnc_numeric_zero_p (amount))
+    {
+       return;
+    }
+    trans = xaccSplitGetParent (split);
+    value = gnc_numeric_div (xaccSplitGetValue (split), amount,
+                             GNC_DENOM_AUTO,
+                             GNC_HOW_DENOM_EXACT);
+    book = qof_instance_get_book (QOF_INSTANCE (account));
+    pricedb = gnc_pricedb_get_db (book);
+    comm = xaccAccountGetCommodity (account);
+    curr = xaccTransGetCurrency (trans);
+    scu = gnc_commodity_get_fraction (curr);
+    swap = FALSE;
+    time = xaccTransGetDate (trans);
+    price = gnc_pricedb_lookup_day_t64 (pricedb, comm, curr, time);
+    if (gnc_commodity_equiv (comm, gnc_price_get_currency (price)))
+        swap = TRUE;
+
+    if (price)
+    {
+        price_value = gnc_price_get_value (price);
+        if (gnc_numeric_equal (swap ? gnc_numeric_invert (value) : value,
+                               price_value))
+        {
+            gnc_price_unref (price);
+            return;
+        }
+        if (gnc_price_get_source (price) < source)
+        {
+            /* Existing price is preferred over this one. */
+            gnc_price_unref (price);
+            return;
+        }
+        if (swap)
+        {
+            value = gnc_numeric_invert (value);
+            scu = gnc_commodity_get_fraction (comm);
+        }
+        value = gnc_numeric_convert (value, scu * COMMODITY_DENOM_MULT,
+                                     GNC_HOW_RND_ROUND_HALF_UP);
+        gnc_price_begin_edit (price);
+        gnc_price_set_time64 (price, time);
+        gnc_price_set_source (price, source);
+        gnc_price_set_typestr (price, PRICE_TYPE_TRN);
+        gnc_price_set_value (price, value);
+        gnc_price_commit_edit (price);
+        gnc_price_unref (price);
+        return;
+    }
+
+    value = gnc_numeric_convert (value, scu * COMMODITY_DENOM_MULT,
+                                 GNC_HOW_RND_ROUND_HALF_UP);
+    price = gnc_price_create (book);
+    gnc_price_begin_edit (price);
+    gnc_price_set_commodity (price, comm);
+    gnc_price_set_currency (price, curr);
+    gnc_price_set_time64 (price, time);
+    gnc_price_set_source (price, source);
+    gnc_price_set_typestr (price, PRICE_TYPE_TRN);
+    gnc_price_set_value (price, value);
+    gnc_pricedb_add_price (pricedb, price);
+    gnc_price_commit_edit (price);
+}
+
+void
+xaccTransRecordPrice (Transaction *trans, PriceSource source)
+{
+   /* XXX: This should have been part of xaccSplitCommitEdit. */
+   for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
+      record_price (n->data, source);
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -3098,104 +3192,6 @@ _utest_trans_fill_functions (void)
     func->xaccTransScrubGainsDate = xaccTransScrubGainsDate;
     func->dupe_trans = dupe_trans;
     return func;
-}
-
-static void
-record_price (Split *split,
-              PriceSource source)
-{
-    Transaction *trans;
-    Account *account;
-    QofBook* book;
-    GNCPriceDB* pricedb;
-    gnc_commodity* comm;
-    gnc_commodity* curr;
-    GNCPrice* price;
-    gnc_numeric price_value, value, amount;
-    int scu;
-    time64 time;
-    gboolean swap;
-
-    account = xaccSplitGetAccount (split);
-    if (!xaccAccountIsPriced (account))
-    {
-       return;
-    }
-    amount = xaccSplitGetAmount (split);
-    if (gnc_numeric_zero_p (amount))
-    {
-       return;
-    }
-    trans = xaccSplitGetParent (split);
-    value = gnc_numeric_div (xaccSplitGetValue (split), amount,
-                             GNC_DENOM_AUTO,
-                             GNC_HOW_DENOM_EXACT);
-    book = qof_instance_get_book (QOF_INSTANCE (account));
-    pricedb = gnc_pricedb_get_db (book);
-    comm = xaccAccountGetCommodity (account);
-    curr = xaccTransGetCurrency (trans);
-    scu = gnc_commodity_get_fraction (curr);
-    swap = FALSE;
-    time = xaccTransGetDate (trans);
-    price = gnc_pricedb_lookup_day_t64 (pricedb, comm, curr, time);
-    if (gnc_commodity_equiv (comm, gnc_price_get_currency (price)))
-        swap = TRUE;
-
-    if (price)
-    {
-        price_value = gnc_price_get_value (price);
-        if (gnc_numeric_equal (swap ? gnc_numeric_invert (value) : value,
-                               price_value))
-        {
-            gnc_price_unref (price);
-            return;
-        }
-        if (gnc_price_get_source (price) < source)
-        {
-            /* Existing price is preferred over this one. */
-            gnc_price_unref (price);
-            return;
-        }
-        if (swap)
-        {
-            value = gnc_numeric_invert (value);
-            scu = gnc_commodity_get_fraction (comm);
-        }
-        value = gnc_numeric_convert (value, scu * COMMODITY_DENOM_MULT,
-                                     GNC_HOW_RND_ROUND_HALF_UP);
-        gnc_price_begin_edit (price);
-        gnc_price_set_time64 (price, time);
-        gnc_price_set_source (price, source);
-        gnc_price_set_typestr (price, PRICE_TYPE_TRN);
-        gnc_price_set_value (price, value);
-        gnc_price_commit_edit (price);
-        gnc_price_unref (price);
-        return;
-    }
-
-    value = gnc_numeric_convert (value, scu * COMMODITY_DENOM_MULT,
-                                 GNC_HOW_RND_ROUND_HALF_UP);
-    price = gnc_price_create (book);
-    gnc_price_begin_edit (price);
-    gnc_price_set_commodity (price, comm);
-    gnc_price_set_currency (price, curr);
-    gnc_price_set_time64 (price, time);
-    gnc_price_set_source (price, source);
-    gnc_price_set_typestr (price, PRICE_TYPE_TRN);
-    gnc_price_set_value (price, value);
-    gnc_pricedb_add_price (pricedb, price);
-    gnc_price_commit_edit (price);
-}
-
-void
-xaccTransRecordPrice (Transaction *trans, PriceSource source)
-{
-    /* XXX: move this into xaccSplitCommitEdit and other callers of
-    * gnc_pricedb_add_price from split-register.c, gnc-imp-props-price.cpp
-    * etc.
-    */
-   for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
-      record_price (n->data, source);
 }
 
 /************************ END OF ************************************\
