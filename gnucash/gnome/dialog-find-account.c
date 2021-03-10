@@ -444,11 +444,13 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
 
     if (facc_dialog->account != NULL)
     {
-        const gchar *sub_label_start = _("Search from ");
+        /* Translators: %s is either a full account name.
+           N.B. This is a label in Search Account from context menu. */
+        const gchar *sub_label_start = _("Search sub-accounts of %s");
         gchar *sub_full_name = gnc_account_get_full_name (facc_dialog->account);
         gchar *sub_label;
 
-        sub_label = g_strconcat (sub_label_start, sub_full_name, NULL);
+        sub_label = g_strdup_printf (sub_label_start, sub_full_name);
         gtk_button_set_label (GTK_BUTTON(facc_dialog->radio_subroot), sub_label);
         g_free (sub_full_name);
         g_free (sub_label);
