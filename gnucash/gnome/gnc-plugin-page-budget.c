@@ -172,7 +172,7 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
         G_CALLBACK(gnc_plugin_page_budget_cmd_allperiods_budget)
     },
     {
-        "BudgetNoteAction", "system-run", N_("Edit Note"),
+        "BudgetNoteAction", "text-x-generic", N_("Edit Note"),
         NULL,
         N_("Edit note for the selected account and period"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_budget_note)
