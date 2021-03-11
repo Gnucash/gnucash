@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-11 07:46+0100\n"
-"PO-Revision-Date: 2021-02-23 06:50+0000\n"
+"PO-Revision-Date: 2021-03-11 12:02+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -1812,10 +1812,9 @@ msgstr "בר מיסוי"
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:458
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "חשבונות ב'%s'"
+msgstr "ח_שבונות-משנה של '%s'"
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -15501,26 +15500,20 @@ msgid "Search the Account List"
 msgstr "חיפוש ברשימת חשבונות"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
-#, fuzzy
-#| msgid "Close on Jump"
 msgid "Close _on Jump"
-msgstr "סגירה בעת דילוג"
+msgstr "סגירה ב_עת דילוג"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
 msgid "_Jump To"
 msgstr "_דילוג אל"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
-#, fuzzy
-#| msgid "All accounts"
 msgid "All _accounts"
-msgstr "כל החשבונות"
+msgstr "כל ה_חשבונות"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " חיפוש "
+msgstr "היקף חיפוש"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 msgid "Account Full Name"
@@ -15532,7 +15525,7 @@ msgstr "חיפוש לא תלוי רישיות זמין לשדה 'שם חשבון
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:258
 msgid "Sea_rch"
-msgstr ""
+msgstr "חי_פוש"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:294
 msgid ""
