@@ -1,7 +1,7 @@
 # Italian translation for GnuCash package (Glossary)
 # Copyright (C) 2020 Giuseppe Foti <foti.giuseppe@gmail.com>.
 # This file is distributed under the same license as the GnuCash package.
-# Giuseppe Foti <foti.giuseppe@gmail.com>, 2020.
+# Giuseppe Foti <foti.giuseppe@gmail.com>, 2020, 2021.
 # Cristian Marchi <cri79@libero.it>, 2008;
 # Lorenzo Cappelletti <lorenzo.cappelletti@email.it>, 2003;
 # Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;
@@ -21,8 +21,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-10 08:02+0000\n"
-"Last-Translator: Alessandro Mandelli <mandelli.alessandro@ngi.it>\n"
+"PO-Revision-Date: 2021-03-11 22:02+0000\n"
+"Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/glossary/"
 "it/>\n"
 "Language: it\n"
@@ -39,7 +39,7 @@ msgstr ""
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr "\"\""
+msgstr "«»"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -59,79 +59,79 @@ msgstr "nome conto"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
 msgid "account type: Active"
-msgstr "tipo conto: attivo, attività"
+msgstr "attivo, attività"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr "tipo conto: attivo, attività"
+msgstr "attivo, attività"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
 msgid "account type: Assets & Liabilities"
-msgstr "tipo conto: Stato patrimoniale"
+msgstr "Stato patrimoniale"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "tipo conto: conto corrente"
+msgstr "conto corrente"
 
 #. "-"
 msgid "account type: currency"
-msgstr "tipo conto: valuta, conto finanziario"
+msgstr "valuta, conto finanziario"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr "tipo conto: capitale, patrimonio netto"
+msgstr "capitale, patrimonio netto"
 
 #. "-"
 msgid "account type: Expense"
-msgstr "tipo conto: uscite"
+msgstr "uscite, costi"
 
 #. "-"
 msgid "account type: Income"
-msgstr "tipo conto: entrate"
+msgstr "entrate"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr "tipo conto: passivo, passività, obbligazione, debito"
+msgstr "passivo, passività, obbligazione, debito"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "tipo conto: mercato monetario"
+msgstr "mercato monetario"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "tipo conto: fondo comune"
+msgstr "fondo comune"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
-msgstr "tipo conto: passivo, passività"
+msgstr "passivo, passività"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr "tipo conto: conto economico"
+msgstr "conto economico"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr "tipo conto: di risparmio"
+msgstr "di risparmio"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "tipo conto: azionario"
+msgstr "azionario, azione, titolo"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
-msgstr "tipo conto: trading"
+msgstr "trading"
 
 #. "-"
 msgid "account: parent account"
-msgstr "conto: conto genitore"
+msgstr "conto genitore"
 
 #. "-"
 msgid "account: subaccount"
-msgstr "conto: sottoconto"
+msgstr "sottoconto"
 
 #. "-"
 msgid "account: top level account"
-msgstr "conto: conto di livello principale"
+msgstr "conto di livello principale"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
@@ -140,29 +140,27 @@ msgstr "Operazione (registro)"
 # Non vorrei che Bancomat fosse uno degli sportelli di prelievo possibili.
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr "operazione: ATM, Bancomat, sportello automatico"
+msgstr "ATM, Bancomat, sportello automatico"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr "operazione: deposito automatico"
+msgstr "deposito automatico"
 
 #. "-"
 msgid "action: buy"
-msgstr "operazione: acquisto, compera, spesa"
+msgstr "acquisto, compera, spesa"
 
 #. "-"
 msgid "action: deposit"
-msgstr "operazione: deposito, versamento"
+msgstr "deposito, versamento"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr ""
-"operazione: RID (Rimessa Interbancaria Diretta), rimessa diretta, addebito "
-"diretto"
+msgstr "RID (Rimessa Interbancaria Diretta), rimessa diretta, addebito diretto"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr "operazione: dist, distribuzione"
+msgstr "dist, distribuzione"
 
 #. "transaction is a dividend"
 msgid "action: div"
@@ -402,7 +400,7 @@ msgstr "collegamento al documento"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr "posta elettronica"
+msgstr "email"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -446,7 +444,7 @@ msgstr "calcolatrice finanziaria: pagamenti"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
 msgid "financial statement"
-msgstr "conto economico"
+msgstr "bilancio, prospetto di bilancio"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
@@ -784,7 +782,7 @@ msgstr "imposta sulle vendite"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr "tipo tassa: GST"
+msgstr "GST"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
