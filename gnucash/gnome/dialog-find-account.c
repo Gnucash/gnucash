@@ -452,13 +452,15 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     if (facc_dialog->account != NULL)
     {
         gchar *sub_full_name = gnc_account_get_full_name (facc_dialog->account);
-        gtk_button_set_label (GTK_BUTTON(facc_dialog->radio_subroot),
-                      /* Translators: %s is a full account name.
-                         This is a label in Search Account from context menu. */
-                              g_strdup_printf (_("Su_b-accounts of '%s'"),
-                              sub_full_name));
+        /* Translators: %s is a full account name.
+           This is a label in Search Account from context menu. */
+        gchar *sub_label = g_strdup_printf (_("Su_b-accounts of '%s'"),
+                                            sub_full_name);
+
+        gtk_button_set_label (GTK_BUTTON(facc_dialog->radio_subroot), sub_label);
 
         g_free (sub_full_name);
+        g_free (sub_label);
 
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(facc_dialog->radio_subroot), TRUE);
     }
