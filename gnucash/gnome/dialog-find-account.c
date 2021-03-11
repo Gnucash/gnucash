@@ -108,7 +108,9 @@ gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data
 }
 
 static gboolean
-gnc_find_account_dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+gnc_find_account_dialog_window_key_press_cb (GtkWidget *widget,
+                                             GdkEventKey *event,
+                                             gpointer user_data)
 {
     FindAccountDialog *facc_dialog = user_data;
 
@@ -375,11 +377,11 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
                       G_CALLBACK(filter_button_cb), (gpointer)facc_dialog);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "jumpto_button"));
-        g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_jump_button_cb), facc_dialog);
+    g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_jump_button_cb), facc_dialog);
     button = GTK_WIDGET(gtk_builder_get_object (builder, "check_button"));
-        g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_check_button_cb), facc_dialog);
+    g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_check_button_cb), facc_dialog);
     button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
-        g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_close_button_cb), facc_dialog);
+    g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_close_button_cb), facc_dialog);
 
     facc_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
     g_signal_connect (facc_dialog->view, "row-activated",
