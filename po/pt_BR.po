@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-11 07:46+0100\n"
-"PO-Revision-Date: 2021-02-23 02:50+0000\n"
+"PO-Revision-Date: 2021-03-11 12:02+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -1861,10 +1861,9 @@ msgstr "Relacionado com os impostos"
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:458
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "As contas em '%s'"
+msgstr "As su_bcontas em '%s'"
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -16058,26 +16057,20 @@ msgid "Search the Account List"
 msgstr "Pesquisar a lista das contas"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
-#, fuzzy
-#| msgid "Close on Jump"
 msgid "Close _on Jump"
-msgstr "Fechar no próximo"
+msgstr "Fechar n_o próximo"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
 msgid "_Jump To"
 msgstr "_Ir Para"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
-#, fuzzy
-#| msgid "All accounts"
 msgid "All _accounts"
-msgstr "Todas as contas"
+msgstr "Todas _as contas"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " Pesquisar "
+msgstr "Pesquise o escopo"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 msgid "Account Full Name"
@@ -16091,7 +16084,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:258
 msgid "Sea_rch"
-msgstr ""
+msgstr "Pes_quise"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:294
 msgid ""
