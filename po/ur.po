@@ -1,21 +1,23 @@
 # Localization for Urdu language.
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Atiur Rahman Khan <ciil_khan@yahoo.co.in>, 2014.
-#
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-11 07:46+0100\n"
-"PO-Revision-Date: 2014-07-14 08:57-0800\n"
-"Last-Translator: Atiur Rahman Khan <ciil_khan@yahoo.co.in>\n"
-"Language-Team: NONE\n"
+"PO-Revision-Date: 2021-03-11 20:02+0000\n"
+"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"Language-Team: Urdu <https://hosted.weblate.org/projects/gnucash/gnucash/ur/>"
+"\n"
 "Language: ur\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -10378,7 +10380,7 @@ msgid ""
 "Set the prefix for gsettings schemas for gsettings queries. This can be "
 "useful to have a different settings tree while debugging."
 msgstr ""
-"جی سیٹینگس سوالات کے لئے gsettings schemas کے لئے پرفیكس ​مقرر کریں.یہ ڈی "
+"جی سیٹینگس سوالات کے لئے gsettings schemas کے لئے پرفیكس مقرر کریں.یہ ڈی "
 "بگینگ كے دوران مختلف ترتیبات ٹری کے لئے مفید ہو سکتے ہیں."
 
 #: gnucash/gnucash-core-app.cpp:531
@@ -14461,7 +14463,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:205
 msgid "New _Price"
-msgstr "نئی ـ قیمت"
+msgstr "نئی قیمت"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:219
 #, fuzzy
@@ -14589,7 +14591,7 @@ msgstr "زائد _ بٹنس كو قابل كرو"
 
 #: gnucash/gtkbuilder/business-prefs.glade:83
 msgid "_Open in new window"
-msgstr "ـ نئے ونڈو میں كھولیے"
+msgstr "نئے ونڈو میں كھولیے"
 
 #: gnucash/gtkbuilder/business-prefs.glade:89
 msgid ""
@@ -16741,7 +16743,7 @@ msgstr "نمونہ "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:796
 msgid "<b>Account Color</b>"
-msgstr "<bاكاؤنٹ رنگ</b>"
+msgstr "<b>اكاؤنٹ رنگ</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:806
 msgid "Show the Account Color as background"
@@ -17480,7 +17482,7 @@ msgstr "_آن لائن كوٹ حاصل كرو "
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
-msgstr "Bid"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:15
 msgid "Ask"
@@ -22247,9 +22249,9 @@ msgid "Have a nice day!"
 msgstr "آپ كا دن اچھا ہو!"
 
 #: gnucash/python/init.py:118
-#, fuzzy, python-format
+#, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "GnuCash میں خوش آمدید ~a !"
+msgstr "GnuCash میں خوش آمدید %s"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -22766,7 +22768,7 @@ msgstr "حوالے"
 
 #: gnucash/register/ledger-core/split-register-model.c:269
 msgid "T-Ref"
-msgstr "T-Ref"
+msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:278
 #: gnucash/report/reports/standard/register.scm:134
@@ -29312,7 +29314,7 @@ msgstr "ذیل كل كی سطروں كے لیے ڈیفالٹ رنگ"
 #: gnucash/report/stylesheets/footer.scm:168
 #: gnucash/report/stylesheets/head-or-tail.scm:215
 msgid "Sub-subheading/total Cell Color"
-msgstr "ذیلی ـ ذیلی عنوان/كُل سیل رنگ "
+msgstr "ذیلی ذیلی عنوان/كُل سیل رنگ"
 
 #: gnucash/report/stylesheets/footer.scm:169
 #: gnucash/report/stylesheets/head-or-tail.scm:216
