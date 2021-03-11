@@ -93,8 +93,10 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_bottom">6</property>
-            <property name="label" translatable="yes">&lt;b&gt;Search the Account List&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
+            <property name="label" translatable="yes">Search the Account List</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -289,7 +291,7 @@
             <property name="can_focus">False</property>
             <property name="margin_top">3</property>
             <property name="margin_bottom">3</property>
-            <property name="label" translatable="yes">Select a row and then press 'jump to' to jump to account in the Account Tree,
+            <property name="label" translatable="yes">Select a row and then press 'jump to' to jump to the account in the Account Tree,
 if account should not be shown, this will be temporarily overridden.</property>
             <property name="justify">center</property>
           </object>
