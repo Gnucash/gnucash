@@ -35,11 +35,12 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkCheckButton" id="check_button">
-                <property name="label" translatable="yes">Close on Jump</property>
+                <property name="label" translatable="yes">Close _on Jump</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
+                <property name="use_underline">True</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -102,40 +103,65 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="hbox-radio">
+          <object class="GtkFrame" id="frame-radio">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="border_width">5</property>
-            <property name="homogeneous">True</property>
+            <property name="halign">start</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
+            <property name="margin_bottom">6</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">in</property>
             <child>
-              <object class="GtkRadioButton" id="radio-root">
-                <property name="label" translatable="yes">Search from Root</property>
+              <object class="GtkBox" id="hbox-radio">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="border_width">5</property>
+                <property name="orientation">vertical</property>
+                <property name="homogeneous">True</property>
+                <child>
+                  <object class="GtkRadioButton" id="radio-root">
+                    <property name="label" translatable="yes">All _accounts</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="radio-subroot">
+                    <property name="label">Su_b-accounts of</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">radio-root</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
             </child>
-            <child>
-              <object class="GtkRadioButton" id="radio-subroot">
-                <property name="label" translatable="yes">Search from Sub Account</property>
+            <child type="label">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">radio-root</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Search scope</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -227,7 +253,7 @@
             </child>
             <child>
               <object class="GtkButton" id="filter-button">
-                <property name="label" translatable="yes">_Search</property>
+                <property name="label" translatable="yes">Sea_rch</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
