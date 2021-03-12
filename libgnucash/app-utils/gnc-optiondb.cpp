@@ -1070,38 +1070,6 @@ gnc_register_internal_option(GncOptionDB* db, const char* section,
             GncOptionUIType::INTERNAL};
     db->register_option(section, std::move(option));
 }
-
-static inline GncOptionUIType
-owner_type_to_ui_type(GncOwnerType type)
-{
-    switch (type)
-    {
-        case GNC_OWNER_NONE:
-        case GNC_OWNER_UNDEFINED:
-        case GNC_OWNER_JOB:
-            return GncOptionUIType::INTERNAL;
-        case GNC_OWNER_CUSTOMER:
-            return GncOptionUIType::CUSTOMER;
-        case GNC_OWNER_VENDOR:
-            return GncOptionUIType::VENDOR;
-        case GNC_OWNER_EMPLOYEE:
-            return GncOptionUIType::EMPLOYEE;
-    }
-    return GncOptionUIType::INTERNAL;
-}
-
-void
-gnc_register_owner_option(GncOptionDB* db, const char* section,
-                          const char* name, const char* key,
-                          const char* doc_string, GncOwner* value,
-                          GncOwnerType type)
-{
-    GncOption option{section, name, key, doc_string,
-                     (const QofInstance*)value->owner.undefined,
-                     owner_type_to_ui_type(type)};
-    db->register_option(section, std::move(option));
-}
-
 void
 gnc_register_invoice_option(GncOptionDB* db, const char* section,
                             const char* name, const char* key,

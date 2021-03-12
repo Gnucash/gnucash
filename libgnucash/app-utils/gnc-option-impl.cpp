@@ -211,8 +211,8 @@ qof_instance_from_guid(GncGUID* guid, GncOptionUIType type)
         case GncOptionUIType::BUDGET:
             qof_type = "Budget";
             break;
-        case GncOptionUIType::OWNER:
-            qof_type = "gncOwner";
+        case GncOptionUIType::JOB:
+            qof_type = "gncJob";
             break;
         case GncOptionUIType::CUSTOMER:
             qof_type = "gncCustomer";

@@ -44,7 +44,6 @@ extern "C"
 #include <gnc-budget.h>
 #include <gnc-commodity.h>
 #include <gncInvoice.h>
-#include <gncOwner.h>
 #include <gncTaxTable.h>
 
 /**

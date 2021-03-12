@@ -51,6 +51,7 @@ enum class GncOptionUIType : unsigned int
     VENDOR,
     EMPLOYEE,
     INVOICE,
+    JOB,
     TAX_TABLE,
     QUERY,
     REPORT_LIST,

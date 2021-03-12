@@ -64,25 +64,33 @@ SCM scm_init_sw_gnc_optiondb_module(void);
   */
 
 %typemap (out) QofInstance_s* {
+    swig_type_info *type = $descriptor(QofInstance_s);
     if ($1 == nullptr)
     {
-        $result = SCM_BOOL_F;
+        $result = SWIG_NewPointerObj(nullptr, type, FALSE);
     }
     else
     {
 
         auto ptr{static_cast<void*>(const_cast<QofInstance*>($1))};
-        swig_type_info *type = SWIGTYPE_p_QofInstance_s;
         if (GNC_IS_COMMODITY($1))
-            type = SWIGTYPE_p_gnc_commodity;
+            type = $descriptor(gnc_commodity*);
         else if (GNC_IS_ACCOUNT($1))
-            type = SWIGTYPE_p_Account;
+            type = $descriptor(Account*);
         else if (GNC_IS_BUDGET($1))
-            type = SWIGTYPE_p_GncBudget;
+            type = $descriptor(GncBudget*);
         else if (GNC_IS_INVOICE($1))
-            type = SWIGTYPE_p_GncInvoice;
+            type = $descriptor(GncInvoice*);
         else if (GNC_IS_TAXTABLE($1))
-            type = SWIGTYPE_p_GncTaxTable;
+            type = $descriptor(GncTaxTable*);
+        else if (GNC_IS_CUSTOMER($1))
+            type = $descriptor(_gncCustomer*);
+        else if (GNC_IS_EMPLOYEE($1))
+            type = $descriptor(_gncEmployee*);
+        else if (GNC_IS_JOB($1))
+            type = $descriptor(_gncJob*);
+        else if (GNC_IS_VENDOR($1))
+            type = $descriptor(_gncVendor*);
         $result = SWIG_NewPointerObj(ptr, type, FALSE);
     }
 }
@@ -90,10 +98,12 @@ SCM scm_init_sw_gnc_optiondb_module(void);
 %typemap (in) QofInstance_s* {
     if (scm_is_true($input))
     {
-        static const std::array<swig_type_info*, 6> types {
-            SWIGTYPE_p_QofInstance_s, SWIGTYPE_p_gnc_commodity,
-                SWIGTYPE_p_GncBudget, SWIGTYPE_p_GncInvoice,
-                SWIGTYPE_p_GncTaxTable, SWIGTYPE_p_Account
+        static const std::array<swig_type_info*, 10> types {
+            $descriptor(QofInstance_s*), $descriptor(gnc_commodity*),
+                $descriptor(GncBudget*), $descriptor(GncInvoice*),
+                $descriptor(GncTaxTable*), $descriptor(Account*),
+                $descriptor(_gncCustomer*), $descriptor(_gncEmployee*),
+                $descriptor(_gncJob*), $descriptor(_gncVendor*)
                 };
         void* ptr{};
         auto pos = std::find_if(types.begin(), types.end(),
@@ -168,10 +178,11 @@ scm_from_value<double>(double value)
 template <> inline SCM
 scm_from_value<const QofInstance*>(const QofInstance* value)
 {
-    if (!value) return SCM_BOOL_F;
+    swig_type_info *type = SWIGTYPE_p_QofInstance_s;
+    if (!value)
+        return SWIG_NewPointerObj(nullptr, type, FALSE);
 
     auto ptr{static_cast<void*>(const_cast<QofInstance*>(value))};
-    swig_type_info *type = SWIGTYPE_p_QofInstance_s;
     if (GNC_IS_COMMODITY(value))
         type = SWIGTYPE_p_gnc_commodity;
     else if (GNC_IS_ACCOUNT(value))
@@ -182,6 +193,14 @@ scm_from_value<const QofInstance*>(const QofInstance* value)
         type = SWIGTYPE_p_GncInvoice;
     else if (GNC_IS_TAXTABLE(value))
         type = SWIGTYPE_p_GncTaxTable;
+    else if (GNC_IS_CUSTOMER(value))
+        type = SWIGTYPE_p__gncCustomer;
+    else if (GNC_IS_EMPLOYEE(value))
+        type = SWIGTYPE_p__gncEmployee;
+    else if (GNC_IS_JOB(value))
+        type = SWIGTYPE_p__gncJob;
+    else if (GNC_IS_VENDOR(value))
+        type = SWIGTYPE_p__gncVendor;
 /* There is no type macro for QofQuery, it's not a GObject.
     else if (GNC_IS_QOFQUERY(value))
         type = SWIGTYPE_p_Query;
@@ -236,10 +255,12 @@ scm_to_value<const QofInstance*>(SCM new_value)
     if (new_value == SCM_BOOL_F)
         return nullptr;
 
-    static const std::array<swig_type_info*, 6> types{
+    static const std::array<swig_type_info*, 10> types{
             SWIGTYPE_p_QofInstance_s, SWIGTYPE_p_gnc_commodity,
             SWIGTYPE_p_GncBudget, SWIGTYPE_p_GncInvoice,
-            SWIGTYPE_p_GncTaxTable, SWIGTYPE_p_Account
+            SWIGTYPE_p_GncTaxTable, SWIGTYPE_p_Account,
+            SWIGTYPE_p__gncCustomer, SWIGTYPE_p__gncEmployee,
+            SWIGTYPE_p__gncJob, SWIGTYPE_p__gncVendor
                 };
     void* ptr{};
     auto pos = std::find_if(types.begin(), types.end(),
@@ -502,7 +523,6 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %ignore gnc_register_internal_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
 %ignore gnc_register_currency_option(GncOptionDB*, const char*, const char*, const char*, const char*, gnc_commodity*);
 %ignore gnc_register_invoice_option(GncOptionDB*, const char*, const char*, const char*, const char*, GncInvoice*);
-%ignore gnc_register_owner_option(GncOptionDB*, const char*, const char*, const char*, const char*, GncOwner*, GncOwnerType);
 %ignore gnc_register_taxtable_option(GncOptionDB*, const char*, const char*, const char*, const char*, GncTaxTable*);
 %ignore gnc_register_counter_option(GncOptionDB*, const char*, const char*, const char*, const char*, double);
 %ignore gnc_register_counter_format_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);

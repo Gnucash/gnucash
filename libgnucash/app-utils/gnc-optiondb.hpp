@@ -37,7 +37,6 @@ extern "C"
 #include <gnc-budget.h>
 #include <gnc-commodity.h>
 #include <gncInvoice.h>
-#include <gncOwner.h>
 #include <gncTaxTable.h>
 }
 #include "gnc-option.hpp"
@@ -618,33 +617,6 @@ inline void gnc_register_invoice_option(const GncOptionDBPtr& db,
 {
     gnc_register_invoice_option(db.get(), section, name, key,
                                 doc_string, value);
-}
-
-/**
- * Create a new owner-type option and register it in the options database.
- *
- * @param db A GncOptionDB* for calling from C. Caller retains ownership.
- * @param section The database section for the option.
- * @param name The option name.
- * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
- * @param value The initial and default value for the option.
- * @param type The Owner-type (Customer, Employee, or Vendor)
- */
-void gnc_register_owner_option(GncOptionDB* db, const char* section,
-                               const char* name, const char* key,
-                               const char* doc_string, GncOwner* value,
-                               GncOwnerType type);
-
-/**
- * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
- */
-inline void gnc_register_owner_option(const GncOptionDBPtr& db,
-                                      const char* section, const char* name,
-                                      const char* key, const char* doc_string,
-                                      GncOwner* value, GncOwnerType type)
-{
-    gnc_register_owner_option(db.get(), section, name, key,
-                              doc_string, value, type);
 }
 
 /**
