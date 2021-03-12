@@ -334,7 +334,12 @@ operator>> <GncOptionValue<bool>>(std::istream& iss,
     opt.set_value(instr == "#t" ? true : false);
     return iss;
 }
-template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionValidatedValue<const QofInstance*>> || std::is_same_v<std::decay_t<OptType>, GncOptionValue<const QofInstance*>>, int> = 0>
+template<class OptType,
+         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
+                                GncOptionValidatedValue<const QofInstance*>> ||
+                                   std::is_same_v<std::decay_t<OptType>,
+                                      GncOptionValue<const QofInstance*>>,
+                                   int> = 0>
 inline std::ostream&
 gnc_option_to_scheme (std::ostream& oss, const OptType& opt)
 {
@@ -363,7 +368,12 @@ gnc_option_to_scheme (std::ostream& oss, const OptType& opt)
     return oss;
 }
 
-template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionValidatedValue<const QofInstance*>> || std::is_same_v<std::decay_t<OptType>, GncOptionValue<const QofInstance*>>, int> = 0>
+template<class OptType,
+         typename std::enable_if_t<
+             std::is_same_v<std::decay_t<OptType>,
+                            GncOptionValidatedValue<const QofInstance*>> ||
+             std::is_same_v<std::decay_t<OptType>,
+                            GncOptionValue<const QofInstance*>>, int> = 0>
 inline std::istream&
 gnc_option_from_scheme (std::istream& iss, OptType& opt)
 {
@@ -791,15 +801,18 @@ operator>> <GncOptionMultichoiceValue>(std::istream& iss,
     return iss;
 }
 
-template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionMultichoiceValue>, int> = 0>
+template<class OptType,
+         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionMultichoiceValue>,
+                                   int> = 0>
 inline std::ostream&
 gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
 {
     auto indexes{opt.get_multiple()};
-    if (indexes.size() > 1)
+    if (indexes.m_vec.size() > 1)
         oss << "'(";
     bool first = true;
-    for (auto index : indexes)
+    for (auto index : indexes.m_vec)
     {
         if (first)
             first = false;
@@ -812,7 +825,10 @@ gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
     return oss;
 }
 
-template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionMultichoiceValue>, int> = 0>
+template<class OptType,
+         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionMultichoiceValue>,
+                                   int> = 0>
 inline std::istream&
 gnc_option_from_scheme(std::istream& iss, OptType& opt)
 {
@@ -971,7 +987,10 @@ operator>> <GncOptionAccountValue>(std::istream& iss,
     return iss;
 }
 
-template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionAccountValue>, int> = 0>
+template<class OptType,
+         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionAccountValue>,
+                                   int> = 0>
 inline std::ostream&
 gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
 {
@@ -990,7 +1009,10 @@ gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
     return oss;
 }
 
-template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionAccountValue>, int> = 0>
+template<class OptType,
+         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionAccountValue>,
+                                   int> = 0>
 inline std::istream&
 gnc_option_from_scheme(std::istream& iss, OptType& opt)
 {
