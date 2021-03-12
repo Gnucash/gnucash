@@ -51,11 +51,8 @@ public:
                              return std::strcmp(old_name, alias.first) == 0;
                          });
         if (alias == c_option_aliases.end())
-        {
-            std::cerr << "No alias for " << old_name << " found.\n";
             return nullptr;
-        }
-        std::cerr << "Found " << alias->second.second << " as alias for " << old_name << ".\n";
+
         return &alias->second;
     }
 };
