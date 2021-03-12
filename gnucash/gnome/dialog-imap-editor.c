@@ -308,7 +308,7 @@ find_invalid_mappings (GtkTreeModel *model, GtkTreePath *path,
         if (((g_strcmp0 (head, "online_id") == 0) && (depth == 1)) || (depth == 2))
         {
              GtkTreeRowReference *rowref = gtk_tree_row_reference_new (model, path);
-             *rowref_list = g_list_append (*rowref_list, rowref);
+             *rowref_list = g_list_prepend (*rowref_list, rowref);
         }
     }
     g_free (head);
@@ -324,9 +324,6 @@ gnc_imap_remove_invalid_maps (ImapDialog *imap_dialog)
     gtk_tree_model_foreach (imap_dialog->model,
                             (GtkTreeModelForeachFunc)find_invalid_mappings,
                             &rr_list);
-
-    // reverse the reference list
-    rr_list = g_list_reverse (rr_list);
 
     // Suspend GUI refreshing
     gnc_suspend_gui_refresh();

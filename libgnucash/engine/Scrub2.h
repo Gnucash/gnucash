@@ -92,12 +92,12 @@ void xaccLotScrubDoubleBalance (GNCLot *lot);
  *    There are two ways to find matching subsplits. The first
  *    way will consider splits to be subsplits only if they
  *    are explicitly marked as such while splitting the original
- *    split. Set strict to TRUE for this matching algorhythm.
+ *    split. Set strict to TRUE for this matching algorithm.
  *
  *    The second way is more relaxed. It will consider any two
  *    splits that happen to be part of the same lot and the
  *    same transaction to be subsplits. Set strict to FALSE for
- *    this matching algorhythm.
+ *    this matching algorithm.
  *
  *    The routine returns TRUE if a merger was performed, else
  *    it returns FALSE.

@@ -533,7 +533,7 @@ ab_account_longname(const GNC_AB_ACCOUNT_SPEC *ab_acc)
     account_number = AB_Account_GetAccountNumber (ab_acc);
 #endif
     /* Translators: Strings are 1. Bank code, 2. Bank name,
-       3. Account Number,  4. Subaccount ID                  */
+       3. Account Number, 4. Subaccount ID                  */
     result = g_strdup_printf(_("Bank code %s (%s), Account %s (%s)"),
                              bankcode,
                              bankname ? bankname : "",

@@ -192,11 +192,10 @@ gsidca_get_contained(GncDenseCalModel *model)
     {
         GncSxInstances *sx_instances = (GncSxInstances*)sxes->data;
         if (xaccSchedXactionGetEnabled(sx_instances->sx))
-        {
-            list = g_list_append(list, GUINT_TO_POINTER(GPOINTER_TO_UINT(sx_instances->sx)));
-        }
+            list = g_list_prepend (list, GUINT_TO_POINTER
+                                   (GPOINTER_TO_UINT (sx_instances->sx)));
     }
-    return list;
+    return g_list_reverse (list);
 }
 
 static gchar*

@@ -1921,7 +1921,7 @@ test_xaccTransReverse (Fixture *fixture, gconstpointer pData)
  * Trivial getter.
  */
 /* xaccTransScrubSplits  C: 1  Local: 0:0:0
- * Trival pass-through.
+ * Trivial pass-through.
  */
 /* xaccTransScrubGainsDate
 static void

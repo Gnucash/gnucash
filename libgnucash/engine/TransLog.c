@@ -42,7 +42,7 @@
 static QofLogModule log_module = "gnc.translog";
 
 /*
- * Some design philosphy that I think would be good to keep in mind:
+ * Some design philosophy that I think would be good to keep in mind:
  * (0) Simplicity and foolproofness are the over-riding design points.
  *     This is supposed to be a fail-safe safety net.   We don't want
  *     our safety net to fail because of some whiz-bang shenanigans.
@@ -179,7 +179,7 @@ xaccOpenLog (void)
     if (!trans_log)
     {
         int norr = errno;
-        printf ("Error: xaccOpenLog(): cannot open journal \n"
+        printf ("Error: xaccOpenLog(): cannot open journal\n"
                 "\t %d %s\n", norr, g_strerror (norr) ? g_strerror (norr) : "");
 
         g_free (filename);

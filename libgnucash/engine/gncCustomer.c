@@ -705,9 +705,9 @@ GList * gncCustomerGetJoblist (const GncCustomer *cust, gboolean show_all)
         {
             GncJob *j = iterator->data;
             if (gncJobGetActive (j))
-                list = g_list_append (list, j);
+                list = g_list_prepend (list, j);
         }
-        return list;
+        return g_list_reverse (list);
     }
 }
 

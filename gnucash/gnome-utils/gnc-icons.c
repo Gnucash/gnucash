@@ -87,6 +87,8 @@ gnc_load_app_icons (void)
             PINFO ("Path %i: %s", i, path[i]);
     }
 
+    g_strfreev (path);
+
     for (i = 0; icon_files[i]; i++)
     {
         gchar *file = icon_files[i];

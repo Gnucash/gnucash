@@ -1,21 +1,27 @@
 ;; -*-scheme-*-
-;; by  Richard -Gilligan- Uschold
-;;
-;; updated by  J. Alex Aycinena, July 2008, October 2009
+;; Tax report, country specific
+;; US version by Richard -Gilligan- Uschold,
+;; updated by J. Alex Aycinena, July 2008, October 2009
 ;;
 ;; This report prints transaction details and account totals for accounts
-;; relevant to United States taxes, sorted by form/schedule, copy, line
-;; and tax code, and exports TXF files for import to TaxCut, TurboTax, etc.
+;; relevant to whatever tax scheme is defined and activated by locale settings,
+;; sorted by form/schedule, copy, line and tax code,
+;; and exports TXF, XML or other files for import into tax software.
+;;
+;; This version is for United States taxes and
+;; exports TXF files for use by TaxCut, TurboTax, etc.
 ;;
 ;; For this to work, the user has to segregate taxable and not taxable
 ;; income to different accounts, as well as deductible and non-
 ;; deductible expenses and the accounts need to be referenced to the tax codes.
-;; However, there is no need to limit tax codes to just one account. For codes
-;; like N286 (Dividend, Ordinary) that can have the "payer" printed on
-;; Schedule B on separate lines, to have amounts from different accounts
-;; summarized together for one "payer" line, the accounts referenced to the
-;; same tax code for a given "payer" need to be adjacent to each other in the
-;; account hierarchy.
+;; However, there is no need to limit tax codes to just one account.
+;;
+;; Tax codes can have contributions from more than one account -- called a 'payer'
+;; (like N286 (Dividend, Ordinary) that can have the "payer" printed on
+;; Schedule B on separate lines).
+;; In order to have amounts from different accounts summarized together for one
+;; "payer" line, the accounts referenced to the same tax code for a given "payer"
+;; need to be adjacent to each other in the account hierarchy.
 ;;
 ;; The user selects the accounts(s) to be printed; if none are specified, all
 ;; are selected. Includes all sub-account levels below selected account, that
@@ -73,7 +79,7 @@
 ;; From prior version:
 ;; NOTE: setting of specific dates is squirly! and seems
 ;; to be current-date dependent!  Actually, time of day dependent!  Just
-;; after midnight gives diffenent dates than just before!  Referencing
+;; after midnight gives different dates than just before!  Referencing
 ;; all times to noon seems to fix this.  Subtracting 1 year sometimes
 ;; subtracts 2!  see "(to-value"
 ;;
@@ -267,11 +273,11 @@
 ;; Render txf information
 (define crlf (string #\return #\newline)) ; TurboTax seems to want these
 
-(define txf-last-payer "")		; if same as current, inc txf-l-count
-					; this only works if different
-					; accounts from the same payer are
-					; grouped in the accounts list
-(define txf-l-count 0)		; count repeated N codes
+(define txf-last-payer "") ; if same as current, inc txf-l-count
+                           ; this only works if different
+                           ; accounts from the same payer are
+                           ; grouped in the accounts list
+(define txf-l-count 0)     ; count repeated N codes
 
 ;; stores invalid txf codes so we can list
 (define txf-invalid-alist '())
@@ -1419,7 +1425,7 @@
                             (gnc:make-html-table-cell/markup
                                          "date-cell"
                                          (gnc-print-time64 trans-date "%Y-%b-%d")))
-                       (gnc:html-table-set-style! num-table "table" 
+                       (gnc:html-table-set-style! num-table "table"
                                           'attribute (list "border" "0")
                                           'attribute (list "cellspacing" "0")
                                           'attribute (list "cellpadding" "0"))
@@ -1679,15 +1685,21 @@
             (get-line-info year (cdr line-list)))
         ((<= (caar line-list) (string->number year)) (cadar line-list)))))
 
-  ;; List of entries, each containing a form, form copy number, form line
-  ;; number, tax-code (as string), account name, account, and, to avoid having
-  ;; to fetch again later, account type and tax-code as symbol. Only accounts
-  ;; that are tax related, with a tax code that is valid for the tax-entity-type
-  ;; and account type are put on list, along with those assigned code N000.
+  ;; List of entries, each containing a
+  ;;
+  ;; form, form copy number, form line number,
+  ;; tax-code (as string), account name, account, and, to avoid having
+  ;; to fetch again later, account type and tax-code as symbol.
+  ;;
+  ;; Only accounts that are tax related,
+  ;; with a tax code that is valid for the tax-entity-type and account type,
+  ;; are put on list, along with those assigned code N000.
+  ;;
   ;; Accounts that are not tax-related and have a tax code or are tax-related
-  ;; and have an invalid tax code are put on an error list. Codes N438 and N440
-  ;; have special processing: if an asset account is assigned to either of these
-  ;; two codes, an additional 'form-line-acct' entry is created for the other
+  ;; and have an invalid tax code are put on an error list.
+  ;; Codes N438 and N440 have special processing:
+  ;; if an asset account is assigned to either of these two codes,
+  ;; an additional 'form-line-acct' entry is created for the other
   ;; code so that either both codes are represented or neither.
   (define (make-form-line-acct-list accounts tax-year)
      (map (lambda (account)

@@ -60,7 +60,7 @@ typedef enum
 void gnc_module_init_backend_xml (void);
 
 #ifndef GNC_NO_LOADABLE_MODULES
-/** This is the standarized initialization function of a qof_backend
+/** This is the standardized initialization function of a qof_backend
  * GModule, but compiling this can be disabled by defining
  * GNC_NO_LOADABLE_MODULES. This one simply calls
  * gnc_module_init_backend_file(). */

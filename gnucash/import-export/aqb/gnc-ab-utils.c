@@ -797,7 +797,7 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
             if (gnc_verify_dialog(
                         GTK_WINDOW (data->parent), FALSE, "%s",
                         _("The backend found an error during the preparation "
-                          "of the job. It is not possible to execute this job. \n"
+                          "of the job. It is not possible to execute this job.\n"
                           "\n"
                           "Most probably the bank does not support your chosen "
                           "job or your Online Banking account does not have the permission "
@@ -1153,7 +1153,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 
         gchar *booked_str = gnc_AB_VALUE_to_readable_string(booked_val);
         gchar *message1 = g_strdup_printf(
-                              _("Result of Online Banking job: \n"
+                              _("Result of Online Banking job:\n"
                                 "Account booked balance is %s"),
                               booked_str);
         gchar *message2 =

@@ -265,9 +265,9 @@ gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data)
     GList *rtn = NULL;
     for (; list != NULL; list = list->next)
     {
-        rtn = g_list_append(rtn, (*fn)(list->data, user_data));
+        rtn = g_list_prepend (rtn, (*fn)(list->data, user_data));
     }
-    return rtn;
+    return g_list_reverse (rtn);
 }
 
 void

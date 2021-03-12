@@ -13,21 +13,12 @@
     <child type="titlebar">
       <placeholder/>
     </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">This assistant will help you setup and use accounting periods. 
- 
+        <property name="label" translatable="yes">This assistant will help you setup and use accounting periods.
+
 Danger: this feature does not work correctly at this time; it is still under development. It will probably damage your data in such a way that it cannot be repaired!</property>
         <property name="wrap">True</property>
       </object>
@@ -79,7 +70,7 @@ Books will be closed at midnight on the selected date.</property>
           <object class="GtkLabel" id="remarks_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">xxx</property>
+            <property name="label">xxx</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
           </object>
@@ -104,7 +95,7 @@ Books will be closed at midnight on the selected date.</property>
           <object class="GtkLabel" id="book_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">xxx</property>
+            <property name="label">xxx</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
           </object>
@@ -118,7 +109,7 @@ Books will be closed at midnight on the selected date.</property>
           <object class="GtkLabel" id="results_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">xxx</property>
+            <property name="label">xxx</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
           </object>
@@ -196,6 +187,21 @@ Books will be closed at midnight on the selected date.</property>
                 <property name="top_attach">0</property>
               </packing>
             </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -213,7 +219,7 @@ Books will be closed at midnight on the selected date.</property>
       <object class="GtkLabel" id="finish_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">xxx</property>
+        <property name="label">xxx</property>
         <property name="justify">center</property>
         <property name="wrap">True</property>
       </object>
@@ -232,7 +238,7 @@ Books will be closed at midnight on the selected date.</property>
           <object class="GtkLabel" id="summary_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">xxx</property>
+            <property name="label">xxx</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
           </object>
@@ -261,21 +267,6 @@ Books will be closed at midnight on the selected date.</property>
         <property name="complete">True</property>
         <property name="has_padding">False</property>
       </packing>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
     <child internal-child="action_area">
       <object class="GtkBox">

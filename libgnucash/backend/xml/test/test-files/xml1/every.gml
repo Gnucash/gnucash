@@ -1283,7 +1283,7 @@
         </date-entered>
         <split>
           <guid>96d4d8f635a24068e09c73e6fb953539</guid>
-          <memo>Begining balance</memo>
+          <memo>Beginning balance</memo>
           <reconcile-state>n</reconcile-state>
           <value>1035/1</value>
           <quantity>103534000/100000</quantity>

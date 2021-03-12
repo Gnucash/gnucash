@@ -776,7 +776,7 @@ GList * gnc_account_get_descendants (const Account *account);
  *
  *  Note: Use this function where the results are intended for display
  *  to the user.  If the results are internal to GnuCash or will be
- *  resorted at som later point in time you should use the
+ *  resorted at some later point in time you should use the
  *  gnc_account_get_descendants() function.
  *
  *  @param account The account whose descendants should be returned.

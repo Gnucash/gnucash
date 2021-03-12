@@ -463,7 +463,7 @@ copy_recursive(const bfs::path& src, const bfs::path& dest)
     }
     catch(const bfs::filesystem_error& ex)
     {
-        g_warning("An error occured while trying to migrate the user configation from\n%s to\n%s"
+        g_warning("An error occurred while trying to migrate the user configation from\n%s to\n%s"
                   "(Error: %s)",
                   src.string().c_str(), gnc_userdata_home_str.c_str(),
                   ex.what());

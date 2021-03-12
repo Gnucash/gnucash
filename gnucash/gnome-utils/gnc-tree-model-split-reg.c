@@ -624,32 +624,21 @@ gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList *slist, Accoun
     if (model->current_trans == NULL)
         model->current_trans = priv->btrans;
 
+    /* Get a list of Unique Transactions from an slist */
+    priv->full_tlist = xaccSplitListGetUniqueTransactionsReversed (slist);
+
+    /* Add the blank transaction to the full_tlist */
+    priv->full_tlist = g_list_prepend (priv->full_tlist, priv->btrans);
+
     if (model->sort_direction == GTK_SORT_ASCENDING)
-    {
-        /* Get a list of Unique Transactions from an slist */
-        priv->full_tlist = xaccSplitListGetUniqueTransactions (slist);
-
-        /* Add the blank transaction to the full_tlist */
-        priv->full_tlist = g_list_append (priv->full_tlist, priv->btrans);
-    }
-    else
-    {
-        /* Get a list of Unique Transactions from an slist */
-        priv->full_tlist = xaccSplitListGetUniqueTransactions (slist);
-
-        /* Add the blank transaction to the full_tlist */
-        priv->full_tlist = g_list_append (priv->full_tlist, priv->btrans);
-
-        /* Reverse the full_tlist */
         priv->full_tlist = g_list_reverse (priv->full_tlist);
-    }
 
     // Update the scrollbar
     gnc_tree_model_split_reg_sync_scrollbar (model);
 
     model->number_of_trans_in_full_tlist = g_list_length (priv->full_tlist);
 
-    if (g_list_length (priv->full_tlist) < NUM_OF_TRANS*3)
+    if (model->number_of_trans_in_full_tlist < NUM_OF_TRANS*3)
     {
         // Copy the full_tlist to tlist
         priv->tlist = g_list_copy (priv->full_tlist);
@@ -658,8 +647,11 @@ gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList *slist, Accoun
     {
         if (model->position_of_trans_in_full_tlist < (NUM_OF_TRANS*3))
             gtm_sr_reg_load (model, VIEW_HOME, NUM_OF_TRANS*3);
-        else if (model->position_of_trans_in_full_tlist > g_list_length (priv->full_tlist) - (NUM_OF_TRANS*3))
+
+        else if (model->position_of_trans_in_full_tlist >
+                 model->number_of_trans_in_full_tlist - (NUM_OF_TRANS*3))
             gtm_sr_reg_load (model, VIEW_END, NUM_OF_TRANS*3);
+
         else
             gtm_sr_reg_load (model, VIEW_GOTO, model->position_of_trans_in_full_tlist);
     }

@@ -10,7 +10,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -61,12 +61,15 @@ extern "C" {
 
 #include <boost/locale.hpp>
 #include <boost/optional.hpp>
+#ifdef __MINGW32__
+#include <boost/nowide/args.hpp>
+#endif
 #include <iostream>
 #include <gnc-locale-utils.hpp>
 
 namespace bl = boost::locale;
 
-/* This static indicates the debugging module that this .o belongs to.  */
+/* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;
 static gchar *userdata_migration_msg = NULL;
 
@@ -387,14 +390,16 @@ int
 main(int argc, char ** argv)
 {
     Gnucash::Gnucash application (argv[0]);
-
+#ifdef __MINGW32__
+    boost::nowide::args a(argc, argv); // Fix arguments - make them UTF-8
+#endif
     /* We need to initialize gtk before looking up all modules */
     if(!gtk_init_check (&argc, &argv))
     {
         std::cerr << bl::format (bl::translate ("Run '{1} --help' to see a full list of available command line options.")) % *argv[0]
         << "\n"
         << bl::translate ("Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
-        "       Perhaps you need to set the $DISPLAY environment variable ?");
+        "       Perhaps you need to set the $DISPLAY environment variable?");
         return 1;
     }
 

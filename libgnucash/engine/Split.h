@@ -359,6 +359,7 @@ Split      * xaccSplitLookup (const GncGUID *guid, QofBook *book);
 
 /*################## Added for Reg2 #################*/
 /* Get a GList of unique transactions containing the given list of Splits. */
+GList *xaccSplitListGetUniqueTransactionsReversed (const GList *splits);
 GList *xaccSplitListGetUniqueTransactions(const GList *splits);
 /*################## Added for Reg2 #################*/
 /** Add a peer split to this split's lot-split list.

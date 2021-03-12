@@ -962,7 +962,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes"> days</property>
+                                <property name="label" translatable="yes">days</property>
                                 <property name="justify">center</property>
                               </object>
                               <packing>
@@ -1021,7 +1021,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes"> days</property>
+                                <property name="label" translatable="yes">days</property>
                                 <property name="justify">center</property>
                               </object>
                               <packing>

@@ -68,7 +68,7 @@ test_object (void)
         do_test (qof_object_lookup (TEST_MODULE_NAME) == &bus_obj,
                  "lookup our installed object");
         do_test (qof_object_lookup ("snm98sn snml say  dyikh9y9ha") == NULL,
-                 "lookup non-existant object object");
+                 "lookup non-existent object object");
 
         do_test (!g_strcmp0 (qof_object_get_type_label (TEST_MODULE_NAME),
                              _(TEST_MODULE_DESC)),

@@ -924,7 +924,8 @@ cleanup:
     if (error)
         g_error_free(error);
     g_free(window_group);
-    gtk_widget_show(GTK_WIDGET(window));
+    if (window)
+        gtk_widget_show (GTK_WIDGET(window));
 }
 
 void
@@ -1405,12 +1406,26 @@ gnc_main_window_quit(GncMainWindow *window)
     }
     if (do_shutdown)
     {
-        GList *w;
+        GList *w, *next;
 
-        for (w = active_windows; w; w = g_list_next (w))
+        /* This is not a typical list iteration. There is a possability
+         * that the window maybe removed from the active_windows list so
+         * we have to cache the 'next' pointer before executing any code
+         * in the loop. */
+        for (w = active_windows; w; w = next)
         {
-            window = w->data;
-            window->window_quitting = TRUE; // set window_quitting on all windows
+            GncMainWindowPrivate *priv;
+            GncMainWindow *wind = w->data;
+
+            next = g_list_next (w);
+
+            wind->window_quitting = TRUE; // set window_quitting on all windows
+
+            priv = GNC_MAIN_WINDOW_GET_PRIVATE(wind);
+
+            // if there are no pages destroy window
+            if (priv->installed_pages == NULL)
+                gtk_widget_destroy (GTK_WIDGET(wind));
         }
         /* remove the preference callbacks from the main window */
         gnc_main_window_remove_prefs (window);
@@ -1522,6 +1537,10 @@ gnc_main_window_event_handler (QofInstance *entity,  QofEventId event_type,
         if (gnc_plugin_page_has_book (page, (QofBook *)entity))
             gnc_main_window_close_page (page);
     }
+
+    if (GTK_IS_WIDGET(window) && window->window_quitting)
+        gtk_widget_destroy (GTK_WIDGET(window));
+
     LEAVE(" ");
 }
 
@@ -1718,40 +1737,41 @@ static gchar *generate_statusbar_lastmodified_message()
     {
         if (gnc_uri_targets_local_fs (uri))
         {
-#ifdef HAVE_SYS_STAT_H
             /* The filename is a true file. */
             gchar *filepath = gnc_uri_get_path ( uri );
             gchar *filename = g_path_get_basename ( filepath );
+            GFile *file = g_file_new_for_uri (uri);
+            GFileInfo *info = g_file_query_info (file,
+                                                 G_FILE_ATTRIBUTE_TIME_MODIFIED,
+                                                 G_FILE_QUERY_INFO_NONE,
+                                                 NULL, NULL);
+
+            if (info && g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_TIME_MODIFIED))
             {
-                // Access the mtime information through stat(2)
-                struct stat statbuf;
-                int r = stat(filepath, &statbuf);
-                if (r == 0)
-                {
-                    /* Translators: This is the date and time that is shown in
-                    the status bar after opening a file: The date and time of
-                    last modification. The string is a format string using
-                    boost::date_time's format flags, see the boost docs for an
-                    explanation of the modifiers. */
-                    char *time_string = gnc_print_time64(statbuf.st_mtime,
-                     _("Last modified on %a, %b %d, %Y at %I:%M %p"));
-                    //g_warning("got time %ld, str=%s\n", mtime, time_string);
-                    /* Translators: This message appears in the status bar after opening the file. */
-                    message = g_strdup_printf(_("File %s opened. %s"),
-                                              filename, time_string);
-                    free(time_string);
-                }
-                else
-                {
-                    g_warning("Unable to read mtime for file %s\n", filepath);
-                    // message is still NULL
-                }
+                guint64 modtime = g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+                /* Translators: This is the date and time that is shown in
+                the status bar after opening a file: The date and time of
+                last modification. The string is a format string using
+                boost::date_time's format flags, see the boost docs for an
+                explanation of the modifiers. */
+                char *time_string = gnc_print_time64 (modtime,
+                 _("Last modified on %a, %b %d, %Y at %I:%M %p"));
+                //g_warning("got time %ld, str=%s\n", mtime, time_string);
+                /* Translators: This message appears in the status bar after opening the file. */
+                message = g_strdup_printf(_("File %s opened. %s"),
+                                          filename, time_string);
+                free(time_string);
+            }
+            else
+            {
+                g_warning("Unable to read mtime for file %s\n", filepath);
+                // message is still NULL
             }
             g_free(filename);
             g_free(filepath);
-#else
-            return NULL;
-#endif
+            g_object_unref (info);
+            g_object_unref (file);
         }
         // If the URI is not a file but a database, we can maybe also show
         // something useful, but I have no idea how to obtain this information.
@@ -3322,14 +3342,9 @@ gnc_main_window_close_page (GncPluginPage *page)
 
             /* remove the preference callbacks from the main window */
             gnc_main_window_remove_prefs (window);
-
-            gtk_widget_destroy (GTK_WIDGET(window));
-            window = NULL;
         }
         if (window && g_list_length (active_windows) > 1)
-        {
             gtk_widget_destroy (GTK_WIDGET(window));
-        }
     }
 }
 

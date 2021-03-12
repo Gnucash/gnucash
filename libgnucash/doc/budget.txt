@@ -61,7 +61,7 @@ here.
 - Ledger The ledger is in effect documentation of the journal, in that
   it describes the meaning of the transactions with respect to the
   balances in the various accounts. In Xacc, this appears also to
-  be known as the register. It isn't clear to me that Xacc maintans
+  be known as the register. It isn't clear to me that Xacc maintains
   the journal and the ledger separately. The ledger could easily be
   expanded to include documentation of the calendar transactions,
   but it is less clear that one would want to include the template
@@ -162,10 +162,10 @@ Where I'm headed for the rest of it is this:
 
 - I expect to point out that the Journal, Calendar and
  Ledger as I have described them are only tangentially
- related to the budget. They are the emperical data and
+ related to the budget. They are the empirical data and
  the Budget and the Schedule are the models. The goal
  would be to have an engine that would allow one to
- measure the deviation of the emperical data from 
+ measure the deviation of the empirical data from 
  the model in various ways.
 - I expect to talk about the task of generating both
  the schedule and the budget. When one prepares this

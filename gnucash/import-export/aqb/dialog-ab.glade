@@ -939,7 +939,7 @@
               <object class="GtkLabel" id="label8877450">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes"> _Name of the new template:</property>
+                <property name="label" translatable="yes">_Name of the new template</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">template_name</property>
               </object>

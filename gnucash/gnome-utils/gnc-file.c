@@ -504,7 +504,7 @@ show_session_error (GtkWindow *parent,
     case ERR_SQL_DB_BUSY:
         fmt = _("The SQL database is in use by other users, "
                 "and the upgrade cannot be performed until they logoff. "
-                "If there are currently no other users, consult the  "
+                "If there are currently no other users, consult the "
                 "documentation to learn how to clear out dangling login "
                 "sessions.");
         gnc_error_dialog (parent, "%s", fmt);
@@ -1688,7 +1688,7 @@ gnc_file_revert (GtkWindow *parent)
 {
     QofSession *session;
     const gchar *fileurl, *filename, *tmp;
-    const gchar *title = _("Reverting will discard all unsaved changes to %s. Are you sure you want to proceed ?");
+    const gchar *title = _("Reverting will discard all unsaved changes to %s. Are you sure you want to proceed?");
 
     if (!gnc_main_window_all_finish_pending())
         return;

@@ -398,7 +398,6 @@ create_children (GNCGeneralSearch *gsl,
     completion = gtk_entry_completion_new();
     gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(list_store));
     gtk_entry_completion_set_text_column(completion, 0);
-    gtk_entry_completion_set_inline_completion(completion, TRUE);
     gtk_entry_set_completion(GTK_ENTRY(gsl->entry), completion);
 
     g_signal_connect (G_OBJECT (completion), "match_selected",

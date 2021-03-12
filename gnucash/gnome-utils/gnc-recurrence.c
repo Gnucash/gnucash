@@ -517,20 +517,15 @@ GList *
 gnc_recurrence_comp_get_list(GncRecurrenceComp *grc)
 {
     GList *rlist = NULL, *children;
-    gint i;
-
 
     children = gtk_container_get_children(GTK_CONTAINER(grc->vbox));
-    for (i = 0; i < g_list_length(children); i++)
+    for (GList *n = children; n; n = n->next)
     {
-        GncRecurrence *gr;
-        const Recurrence *r;
-        gr = GNC_RECURRENCE(g_list_nth_data(children, i));
-        r = gnc_recurrence_get(gr);
-        rlist = g_list_append(rlist, (gpointer)r);
+        const Recurrence *r = gnc_recurrence_get (GNC_RECURRENCE (n->data));
+        rlist = g_list_prepend (rlist, (gpointer)r);
     }
     g_list_free(children);
-    return rlist;
+    return g_list_reverse (rlist);
 }
 
 

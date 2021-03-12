@@ -33,6 +33,6 @@ in src/engine/FileIOP.h)
 	ftp.debian.org:/pub/debian/dists/unstable/main/source/utils/xdelta*.tar.gz
 -# Could monitor how many changes (records altered) the user has made,
    and could prompt for more frequent saves if lots of editing has
-   ocurred...
+   occurred...
 
 */

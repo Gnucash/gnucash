@@ -87,7 +87,7 @@ of a security, which makes it easy to see which online sources your \
 securities use. Click the triangle at the far right of the column \
 headings to change the display.")
 
- N_( "You can pack multiple reports into a single window,  \
+ N_( "You can pack multiple reports into a single window, \
 providing all the financial information you want at a glance. \
 To do so, use the Sample & Custom->\"Custom Multicolumn Report\" \
 report.")

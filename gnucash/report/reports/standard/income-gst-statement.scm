@@ -224,9 +224,6 @@ with *EUGOODS* in the account description."))) #f
   (gnc:option-set-default-value
    (gnc:lookup-option options pagename-sorting "Secondary Key")
    'none)
-  (gnc:option-set-default-value
-   (gnc:lookup-option options pagename-sorting "Secondary Subtotal")
-   'none)
 
   ;; Disable display options not being used anymore
   (gnc:option-make-internal! options gnc:pagename-display "Shares")

@@ -2,14 +2,15 @@
 # Copyright (C) 2020 Free Software Foundation, Inc.
 # Marko Kohtala <marko.kohtala@gmail.com>, 2020.
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
+# Metroseksuaali <timmy.kinnunen@elisanet.fi>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.10\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2020-12-22 08:12+0000\n"
-"Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
+"PO-Revision-Date: 2021-02-25 18:50+0000\n"
+"Last-Translator: Metroseksuaali <timmy.kinnunen@elisanet.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fi/>\n"
 "Language: fi\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -25,7 +26,7 @@ msgstr "Termi (Hyvä kääntäjä: Tämä tiedosto ei näy koskaan käyttäjäll
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -333,7 +334,7 @@ msgstr "Mukautettu"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "Hallintapaneeli"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -385,7 +386,7 @@ msgstr "liittyvä asiakirja"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "Sähköposti"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -435,7 +436,7 @@ msgstr "tuloslaskelma"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "Ilmainen ohjelmisto"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -608,7 +609,7 @@ msgstr "salkku"
 
 #. "Register invoice, voucher in account register"
 msgid "post, to"
-msgstr ""
+msgstr "Rekisteröi lasku"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
@@ -720,7 +721,7 @@ msgstr "Tositteen ajastus"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
-msgstr ""
+msgstr "Pyyhitty"
 
 #. "A document or certificate showing who owns shares"
 msgid "security"
@@ -759,26 +760,24 @@ msgid "tax info"
 msgstr "verotieto"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "tilityyppi: Tulo"
+msgstr "Vero Tyyppi: Tulovero"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "Vero tyyppi: Myyntivero"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "Vero tyyppi: Palvelu vero"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "Vero tyyppi: ALV"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
-msgstr "malline"
+msgstr "pohja"
 
 #. "see: date range"
 msgid "time period"

@@ -84,7 +84,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 #define _GNC_MOD_NAME     GNC_ID_INVOICE
 
 #define GNC_INVOICE_IS_CN "credit-note"
-#define GNC_INVOICE_DOCLINK "assoc_uri" // this is the old name for the document link, kept for compatability
+#define GNC_INVOICE_DOCLINK "assoc_uri" // this is the old name for the document link, kept for compatibility
 
 #define SET_STR(obj, member, str) { \
     char * tmp; \

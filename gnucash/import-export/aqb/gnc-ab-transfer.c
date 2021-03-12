@@ -182,7 +182,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
             if (!gnc_verify_dialog (
                         GTK_WINDOW (parent), FALSE, "%s",
                         _("The backend found an error during the preparation "
-                          "of the job. It is not possible to execute this job. \n"
+                          "of the job. It is not possible to execute this job.\n"
                           "\n"
                           "Most probable the bank does not support your chosen "
                           "job or your Online Banking account does not have the permission "

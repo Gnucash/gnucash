@@ -400,9 +400,10 @@ gncScrubLotDanglingPayments (GNCLot *lot)
         if (gnc_numeric_compare (gnc_numeric_abs (free_val), gnc_numeric_abs (ll_val)) > 0)
             continue;
 
-        filtered_list = g_list_append(filtered_list, free_split);
+        filtered_list = g_list_prepend (filtered_list, free_split);
     }
 
+    filtered_list = g_list_reverse (filtered_list);
     match_list = gncSLFindOffsSplits (filtered_list, ll_val);
     g_list_free (filtered_list);
 
@@ -625,7 +626,7 @@ gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc)
     str = str ? str : "(null)";
 
     ENTER ("(acc=%s)", str);
-    PINFO ("Cleaning up superfluous lot links in account %s \n", str);
+    PINFO ("Cleaning up superfluous lot links in account %s\n", str);
     xaccAccountBeginEdit(acc);
 
     lots = xaccAccountGetLotList(acc);
@@ -679,7 +680,7 @@ gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
     str = str ? str : "(null)";
 
     ENTER ("(acc=%s)", str);
-    PINFO ("Cleaning up superfluous lot links in account %s \n", str);
+    PINFO ("Cleaning up superfluous lot links in account %s\n", str);
     xaccAccountBeginEdit(acc);
 
 restart:

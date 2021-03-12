@@ -1,7 +1,7 @@
 
 /* Test file created by Linas Vepstas <linas@linas.org>
  * Review operation of the gnc-numeric tools by verifying results
- * of vairous operations.
+ * of various operations.
  *
  * June 2004
  */
@@ -797,7 +797,7 @@ check_mult_div (void)
      * 64-bit quantity.  This can be seen from
      * the factorization into primes:
      * 1173888083434299 = 3 * 2283317 * 171371749
-     * (yes, thats a seven and a nine digit prime)
+     * (yes, that's a seven and a nine digit prime)
      * 2222554708930978 = 2 * 1111277354465489
      * (yes, that's a sixteen-digit prime number)
      * 93773 = 79*1187

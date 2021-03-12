@@ -1,22 +1,24 @@
 # Translation of gnucash glossary to Lithuanian.
 # Copyright (C) 2011 Free Software Foundation, Inc.
 # Aurimas Fišeras <aurimas@members.fsf.org>, 2011.
+# Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2011-08-28 20:55+0300\n"
-"Last-Translator: Aurimas Fišeras <aurimas@members.fsf.org>\n"
-"Language-Team: komp_lt@konf.lt\n"
+"PO-Revision-Date: 2021-02-21 11:50+0000\n"
+"Last-Translator: Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/gnucash/"
+"glossary/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Virtaal 0.7.0\n"
+"X-Generator: Weblate 4.5\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -25,7 +27,7 @@ msgstr ""
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "„“"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -44,68 +46,67 @@ msgid "account name"
 msgstr "sąskaitos pavadinimas"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
-#, fuzzy
 msgid "account type: Active"
-msgstr "sąskaitos tipas: Turtas"
+msgstr "Aktyvus"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr "sąskaitos tipas: Turtas"
+msgstr "Turtas"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "sąskaitos tipas: Įsipareigojimas"
+msgstr "Turtas ir Įsipareigojimai"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
+#, fuzzy
 msgid "account type: checking"
 msgstr "sąskaitos tipas: einamoji"
 
 #. "-"
 msgid "account type: currency"
-msgstr "sąskaitos tipas: valiuta"
+msgstr "valiuta"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr "sąskaitos tipas: Nuosavybė"
+msgstr "Nuosavybė"
 
 #. "-"
 msgid "account type: Expense"
-msgstr "sąskaitos tipas: Sąnaudos"
+msgstr "Sąnaudos"
 
 #. "-"
 msgid "account type: Income"
-msgstr "sąskaitos tipas: Pajamos"
+msgstr "Pajamos"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr "sąskaitos tipas: Įsipareigojimas"
+msgstr "Įsipareigojimas"
 
 #. "-"
+#, fuzzy
 msgid "account type: money-market"
 msgstr "sąskaitos tipas: pinigų rinka"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "sąskaitos tipas: Investicinis fondas"
+msgstr "Investicinis fondas"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "sąskaitos tipas: Turtas"
+msgstr "Pasyvus"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "sąskaitos tipas: Turtas"
+msgstr "Pelnas ir Nuostolis"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
+#, fuzzy
 msgid "account type: saving"
 msgstr "sąskaitos tipas: taupomoji"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "sąskaitos tipas: Akcija"
+msgstr "Akcija"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
@@ -129,7 +130,7 @@ msgstr "Veiksmas (registre)"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr "veiksmas: bankomatas"
+msgstr "Bankomatas"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
@@ -137,11 +138,12 @@ msgstr "veiksmas: aut. indėlis"
 
 #. "-"
 msgid "action: buy"
-msgstr "veiksmas: pirkti"
+msgstr "pirkti"
 
 #. "-"
+#, fuzzy
 msgid "action: deposit"
-msgstr "veiksmas: indėlis"
+msgstr "indėlis"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
@@ -389,11 +391,11 @@ msgstr "dvejybinis į́rašas"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "dokumento nuoroda"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "el. paštas"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -788,7 +790,7 @@ msgstr ""
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "mokesčio tipas: PVM"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"

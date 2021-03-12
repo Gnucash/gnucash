@@ -50,7 +50,7 @@ typedef struct
     Account      *account;
     GtkWidget    *view;
 
-    GtkWidget    *radio_hbox;
+    GtkWidget    *radio_frame;
     GtkWidget    *radio_root;
     GtkWidget    *radio_subroot;
 
@@ -68,6 +68,18 @@ typedef struct
 static QofLogModule log_module = GNC_MOD_GUI;
 
 static void close_handler (gpointer user_data);
+
+static gboolean
+gnc_find_account_dialog_window_delete_event_cb (GtkWidget *widget,
+                                                GdkEvent  *event,
+                                                gpointer   user_data)
+{
+    FindAccountDialog *facc_dialog = user_data;
+    // this cb allows the window size to be saved on closing with the X
+    gnc_save_window_size (GNC_PREFS_GROUP,
+                          GTK_WINDOW(facc_dialog->window));
+    return FALSE;
+}
 
 static void
 gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
@@ -88,8 +100,6 @@ gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data
 
     if (facc_dialog->window)
     {
-        gnc_save_window_size (GNC_PREFS_GROUP,
-                              GTK_WINDOW(facc_dialog->window));
         gtk_widget_destroy (facc_dialog->window);
         facc_dialog->window = NULL;
     }
@@ -98,7 +108,9 @@ gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data
 }
 
 static gboolean
-gnc_find_account_dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+gnc_find_account_dialog_window_key_press_cb (GtkWidget *widget,
+                                             GdkEventKey *event,
+                                             gpointer user_data)
 {
     FindAccountDialog *facc_dialog = user_data;
 
@@ -264,6 +276,12 @@ get_account_info (FindAccountDialog *facc_dialog, gboolean use_saved_filter)
 }
 
 static void
+list_type_selected_cb (GtkToggleButton* button, FindAccountDialog *facc_dialog)
+{
+    get_account_info (facc_dialog, FALSE);
+}
+
+static void
 filter_button_cb (GtkButton *button, FindAccountDialog *facc_dialog)
 {
     get_account_info (facc_dialog, FALSE);
@@ -348,19 +366,22 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     facc_dialog->radio_root = GTK_WIDGET(gtk_builder_get_object (builder, "radio-root"));
     facc_dialog->radio_subroot = GTK_WIDGET(gtk_builder_get_object (builder, "radio-subroot"));
 
+    g_signal_connect (facc_dialog->radio_root, "toggled",
+                      G_CALLBACK(list_type_selected_cb), (gpointer)facc_dialog);
+
     facc_dialog->filter_text_entry = GTK_WIDGET(gtk_builder_get_object (builder, "filter-text-entry"));
     facc_dialog->sub_label = GTK_WIDGET(gtk_builder_get_object (builder, "sub-label"));
-    facc_dialog->radio_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "hbox-radio"));
+    facc_dialog->radio_frame = GTK_WIDGET(gtk_builder_get_object (builder, "frame-radio"));
     facc_dialog->filter_button = GTK_WIDGET(gtk_builder_get_object (builder, "filter-button"));
     g_signal_connect (facc_dialog->filter_button, "clicked",
                       G_CALLBACK(filter_button_cb), (gpointer)facc_dialog);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "jumpto_button"));
-        g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_jump_button_cb), facc_dialog);
+    g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_jump_button_cb), facc_dialog);
     button = GTK_WIDGET(gtk_builder_get_object (builder, "check_button"));
-        g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_check_button_cb), facc_dialog);
+    g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_check_button_cb), facc_dialog);
     button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
-        g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_close_button_cb), facc_dialog);
+    g_signal_connect(button, "clicked", G_CALLBACK(gnc_find_account_dialog_close_button_cb), facc_dialog);
 
     facc_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
     g_signal_connect (facc_dialog->view, "row-activated",
@@ -431,6 +452,9 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     g_signal_connect (facc_dialog->window, "destroy",
                       G_CALLBACK(gnc_find_account_dialog_window_destroy_cb), facc_dialog);
 
+    g_signal_connect (facc_dialog->window, "delete-event",
+                      G_CALLBACK(gnc_find_account_dialog_window_delete_event_cb), facc_dialog);
+
     g_signal_connect (facc_dialog->window, "key_press_event",
                       G_CALLBACK(gnc_find_account_dialog_window_key_press_cb), facc_dialog);
 
@@ -444,19 +468,21 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
 
     if (facc_dialog->account != NULL)
     {
-        const gchar *sub_label_start = _("Search from ");
         gchar *sub_full_name = gnc_account_get_full_name (facc_dialog->account);
-        gchar *sub_label;
+        /* Translators: %s is a full account name.
+           This is a label in Search Account from context menu. */
+        gchar *sub_label = g_strdup_printf (_("Su_b-accounts of '%s'"),
+                                            sub_full_name);
 
-        sub_label = g_strconcat (sub_label_start, sub_full_name, NULL);
         gtk_button_set_label (GTK_BUTTON(facc_dialog->radio_subroot), sub_label);
+
         g_free (sub_full_name);
         g_free (sub_label);
 
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(facc_dialog->radio_subroot), TRUE);
     }
     else
-        gtk_widget_hide (facc_dialog->radio_hbox);
+        gtk_widget_hide (facc_dialog->radio_frame);
 
     // Set the filter to Wildcard
     gtk_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
@@ -475,6 +501,8 @@ close_handler (gpointer user_data)
     FindAccountDialog *facc_dialog = user_data;
 
     ENTER(" ");
+    gnc_save_window_size (GNC_PREFS_GROUP,
+                          GTK_WINDOW(facc_dialog->window));
     gtk_widget_destroy (GTK_WIDGET(facc_dialog->window));
     LEAVE(" ");
 }

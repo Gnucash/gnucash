@@ -84,8 +84,8 @@ static const gchar *finish_tree_string = N_(
 
 static const gchar *finish_trans_string = N_(
             /* Translators: %s is the file name string and %u the number of accounts. */
-            "When you click \"Apply\", the transactions will be exported to the file '%s' and"
-            " the number of accounts exported will be %u.\n\n"
+            "When you click \"Apply\", the transactions will be exported to the file '%s' "
+            "and the number of accounts exported will be %u.\n\n"
             "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to abort the export.\n");
 
 static const gchar *finish_trans_search_gl_string = N_(
@@ -95,35 +95,35 @@ static const gchar *finish_trans_search_gl_string = N_(
 
 static const gchar *start_tree_string = N_(
             "This assistant will help you export the Account Tree to a file\n"
-            " with the separator specified below.\n\n"
-            "Select the settings you require for the file and then click \"Next\" to proceed"
-            " or \"Cancel\" to abort the export.\n");
+            "with the separator specified below.\n\n"
+            "Select the settings you require for the file and then click \"Next\" "
+            "to proceed or \"Cancel\" to abort the export.\n");
 
 static const gchar *start_trans_string = N_(
             "This assistant will help you export the Transactions to a file\n"
-            " with the separator specified below.\n\n"
-            "There will be multiple rows for each transaction and may"
-            " require further manipulation to get them in a format you can use.\n\n"
-            "Each Transaction will appear once in the export and will be listed in"
-            " the order the accounts were processed\n\n"
+            "with the separator specified below.\n\n"
+            "There will be multiple rows for each transaction and may "
+            "require further manipulation to get them in a format you can use.\n\n"
+            "Each Transaction will appear once in the export and will be listed in "
+            "the order the accounts were processed\n\n"
             "Price/Rate output format is controlled by the Preference setting,\n"
-            " General->Force Prices to display as decimals\n\n"
-            "Select the settings you require for the file and then click \"Next\" to proceed"
-            " or \"Cancel\" to abort the export.\n");
+            "General->Force Prices to display as decimals\n\n"
+            "Select the settings you require for the file and then click \"Next\" "
+            "to proceed or \"Cancel\" to abort the export.\n");
 
 static const gchar *start_trans_simple_string = N_(
             "This assistant will help you export the Transactions to a file\n"
-            " with the separator specified below.\n\n"
-            "There will be multiple rows for each transaction and may require further"
-            " manipulation to get them in a format you can use. Each Transaction will"
-            " appear once in the export and will be listed in the order the accounts"
-            " were processed\n\n"
+            "with the separator specified below.\n\n"
+            "There will be multiple rows for each transaction and may require further "
+            "manipulation to get them in a format you can use. Each Transaction will "
+            "appear once in the export and will be listed in the order the accounts "
+            "were processed\n\n"
             "Price/Rate output format is controlled by the Preference setting,\n"
-            " General->Force Prices to display as decimals\n\n"
-            "By selecting the simple layout, the output will be equivalent to a single"
-            " row register view and as such some of the transfer detail could be lost.\n\n"
-            "Select the settings you require for the file and then click \"Next\" to proceed"
-            " or \"Cancel\" to abort the export.\n");
+            "General->Force Prices to display as decimals\n\n"
+            "By selecting the simple layout, the output will be equivalent to a single "
+            "row register view and as such some of the transfer detail could be lost.\n\n"
+            "Select the settings you require for the file and then click \"Next\" "
+            "to proceed or \"Cancel\" to abort the export.\n");
 
 
 /**************************************************

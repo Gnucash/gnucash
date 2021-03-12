@@ -55,7 +55,7 @@ This feature allows currency-trading accounts to be established.
 Every Split must point to its parent Transaction, and that Transaction
 must in turn include that Split in the Transaction's list of Splits. A
 Split can belong to at most one Transaction. These relationships are
-enforced by the engine. The engine user cannnot accidentally destroy
+enforced by the engine. The engine user cannot accidentally destroy
 this relationship as long as they stick to using the API and never
 access internal structures directly.
 
@@ -92,6 +92,7 @@ typedef struct _TransactionClass TransactionClass;
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "gnc-pricedb.h"
 #include "Split.h"
 
 #ifdef __cplusplus
@@ -177,7 +178,7 @@ Transaction * xaccTransCloneNoKvp (const Transaction *t);
  *
  * @param check_splits If TRUE, after checking the transaction data
  * structures for equality, also check all splits attached to the
- * transation for equality.
+ * transaction for equality.
  *
  * @param check_balances If TRUE, when checking splits also compare
  * balances between the two splits.  Balances are recalculated
@@ -501,7 +502,7 @@ gboolean xaccTransIsBalanced(const Transaction * trans);
 /** The xaccTransGetAccountValue() method returns the total value applied
  *  to a particular account.  In some cases there may be multiple Splits
  *  in a single Transaction applied to one account (in particular when
- *  trying to balance Lots) -- this function is just a convienience to
+ *  trying to balance Lots) -- this function is just a convenience to
  *  view everything at once.
  */
 gnc_numeric xaccTransGetAccountValue (const Transaction *trans,
@@ -693,7 +694,7 @@ void xaccTransVoid(Transaction *transaction,
 void xaccTransUnvoid(Transaction *transaction);
 
 /** xaccTransReverse creates a Transaction that reverses the given
- *  tranaction by inverting all the numerical values in the given
+ *  transaction by inverting all the numerical values in the given
  *  transaction.  This function cancels out the effect of an earlier
  *  transaction.  This will be needed by write only accounts as a way
  *  to void a previous transaction (since you can't alter the existing
@@ -766,6 +767,15 @@ time64 xaccTransGetVoidTime(const Transaction *tr);
 #ifdef DUMP_FUNCTIONS
 void xaccTransDump (const Transaction *trans, const char *tag);
 #endif
+
+/** The xaccTransRecordPrice() method iterates through the splits and
+ *  and record the non-currency equivalent prices in the price database.
+ *
+ *  @param trans The transaction whose price is recorded
+ *  @param source The price priority level
+ */
+void xaccTransRecordPrice (Transaction *trans, PriceSource source);
+
 
 #define RECONCILED_MATCH_TYPE	"reconciled-match"
 

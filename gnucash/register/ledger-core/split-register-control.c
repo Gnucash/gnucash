@@ -567,7 +567,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
 
     *p_new_virt_loc = new_virt_loc;
 
-    PINFO ("after move %d %d \n",
+    PINFO ("after move %d %d\n",
            new_virt_loc.vcell_loc.virt_row,
            new_virt_loc.vcell_loc.virt_col);
 

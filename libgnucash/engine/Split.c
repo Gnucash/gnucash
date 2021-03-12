@@ -893,21 +893,32 @@ xaccSplitEqual(const Split *sa, const Split *sb,
  * xaccSplitListGetUniqueTransactions
  ********************************************************************/
 GList *
-xaccSplitListGetUniqueTransactions(const GList *splits)
+xaccSplitListGetUniqueTransactionsReversed (const GList *splits)
 {
-    const GList *snode;
+    GHashTable *txn_hash = g_hash_table_new (NULL, NULL);
     GList *transList = NULL;
+    const GList *snode;
 
-    for(snode = splits; snode; snode = snode->next)
+    for (snode = splits; snode; snode = snode->next)
     {
         Transaction *trans = xaccSplitGetParent((Split *)(snode->data));
 
-        GList *item = g_list_find (transList, trans);
-        if (item == NULL)
-            transList = g_list_append (transList, trans);
+        if (g_hash_table_contains (txn_hash, trans))
+            continue;
+
+        g_hash_table_insert (txn_hash, trans, NULL);
+        transList = g_list_prepend (transList, trans);
     }
+    g_hash_table_destroy (txn_hash);
     return transList;
 }
+
+GList *
+xaccSplitListGetUniqueTransactions(const GList *splits)
+{
+    return g_list_reverse (xaccSplitListGetUniqueTransactionsReversed (splits));
+}
+
 /*################## Added for Reg2 #################*/
 
 

@@ -1110,7 +1110,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
         {
             gboolean retval;
             gchar *msg = g_strdup_printf(
-                             _("The PIN needs to be at least %d characters \n"
+                             _("The PIN needs to be at least %d characters\n"
                                "long. Do you want to try again?"), min_len);
             retval = gnc_verify_dialog (GTK_WINDOW (gui->parent), TRUE, "%s", msg);
             g_free(msg);

@@ -3014,13 +3014,15 @@ loan_create_sxes( LoanAssistantData *ldd )
             g_string_free( gstr, TRUE );
             gstr = NULL;
 
-            repaySXes = g_list_append( repaySXes, tcSX );
+            repaySXes = g_list_prepend (repaySXes, tcSX);
 
         }
 
         /* repayment */
         ld_setup_repayment_sx( ldd, rod, paymentSX, tcSX );
     }
+
+    repaySXes = g_list_reverse (repaySXes);
     /* Create the SXes */
     {
         GList *l;

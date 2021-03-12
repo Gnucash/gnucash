@@ -43,7 +43,7 @@ extern "C"
     type, each uniquely identified by a given ID.  QOF Entities
     can be used independently of any other part of the system.
     In particular, Entities can be useful even if one is not using
-    the Query ond Object parts of the QOF system.
+    the Query one Object parts of the QOF system.
 
     Identifiers are globally-unique and permanent, i.e., once
     an entity has been assigned an identifier, it retains that same

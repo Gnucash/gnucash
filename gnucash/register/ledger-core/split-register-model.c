@@ -2215,7 +2215,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
         title = _ ("Change transaction containing a reconciled split?");
         message_format =
             _ ("The transaction you are about to change contains reconciled splits in the following accounts:\n%s"
-               "\n\nAre you sure you want to continue with this change ?");
+               "\n\nAre you sure you want to continue with this change?");
 
         message = g_strdup_printf (message_format, acc_list);
         g_free (acc_list);

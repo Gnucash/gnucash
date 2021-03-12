@@ -336,7 +336,7 @@ gchar *gnc_uri_create_uri (const gchar *scheme,
          * \\myserver\share\path\to\file with space.txt
          * becomes file://\\myserver\share\path\to\file with space.txt
          *
-         * probably they should all be forward slashs and spaces escaped
+         * probably they should all be forward slashes and spaces escaped
          * also with UNC it could be file://myserver/share/path/to/file with space.txt
          */
 

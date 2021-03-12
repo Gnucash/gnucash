@@ -38,6 +38,9 @@ extern "C" {
 
 #include <boost/locale.hpp>
 #include <boost/optional.hpp>
+#ifdef __MINGW32__
+#include <boost/nowide/args.hpp>
+#endif
 #include <iostream>
 
 namespace bl = boost::locale;
@@ -195,7 +198,9 @@ int
 main(int argc, char **argv)
 {
     Gnucash::GnucashCli application (argv[0]);
-
+#ifdef __MINGW32__
+    boost::nowide::args a(argc, argv); // Fix arguments - make them UTF-8
+#endif
     application.parse_command_line (argc, argv);
     application.start (argc, argv);
 
