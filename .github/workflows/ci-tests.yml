@@ -45,12 +45,14 @@ jobs:
       uses: actions/checkout@v2
     - name: Install apt utils
       run: sudo apt-get install -y --no-install-recommends apt-utils
-    - name: Upgrade apt
+    - name: Update apt
       run: |
+        sudo sed -i -e 's/^# deb-src/deb-src/' /etc/apt/sources.list
         sudo apt-get update -y
-        sudo apt-get upgrade -y
     - name: Install additional dependencies
-      run: sudo apt-get install -y cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-3.0-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.0-dev  googletest
+      run: |
+           sudo apt-get build-dep -y gnucash
+           sudo apt-get install ninja-build guile-3.0-dev libboost-program-options-dev
     - name: Install language packs.
       run: sudo apt-get --reinstall install -y language-pack-en language-pack-fr
     - run: |
