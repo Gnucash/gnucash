@@ -40,6 +40,8 @@ extern "C"
 struct OptionClassifier;
 class GncOptionUIItem;
 using GncOptionUIItemPtr = std::unique_ptr<GncOptionUIItem>;
+struct _QofQuery;
+using QofQuery = _QofQuery;
 struct QofInstance_s;
 using QofInstance = QofInstance_s;
 template <typename ValueType> class GncOptionValue;
@@ -53,12 +55,14 @@ using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionValue<bool>,
                                       GncOptionValue<int64_t>,
                                       GncOptionValue<const QofInstance*>,
+                                      GncOptionValue<const QofQuery*>,
                                       GncOptionValue<SCM>,
                                       GncOptionAccountValue,
                                       GncOptionMultichoiceValue,
                                       GncOptionRangeValue<int>,
                                       GncOptionRangeValue<double>,
                                       GncOptionValidatedValue<const QofInstance*>,
+                                      GncOptionValidatedValue<const QofQuery*>,
                                       GncOptionDateValue>;
 
 using GncOptionVariantPtr = std::unique_ptr<GncOptionVariant>;

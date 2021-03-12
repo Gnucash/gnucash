@@ -1157,4 +1157,34 @@ operator>> <GncOptionDateValue>(std::istream& iss,
     return opt.in_stream(iss);
 }
 
+/** QofQuery Options
+ */
+
+inline std::istream&
+gnc_option_from_scheme(std::istream& iss, GncOptionValue<const QofQuery*>& opt)
+{
+//FIXME: Implement or maybe rethink.
+    return iss;
+}
+
+inline std::ostream&
+gnc_option_to_scheme(std::ostream& oss, GncOptionValue<const QofQuery*>& opt)
+{
+//FIXME: Implement or maybe rethink.
+    return oss;
+}
+
+inline std::istream&
+gnc_option_from_scheme(std::istream& iss, GncOptionValidatedValue<const QofQuery*>& opt)
+{
+//FIXME: Implement or maybe rethink.
+    return iss;
+}
+
+inline std::ostream&
+gnc_option_to_scheme(std::ostream& oss, GncOptionValidatedValue<const QofQuery*>& opt)
+{
+//FIXME: Implement or maybe rethink.
+    return oss;
+}
 #endif //GNC_OPTION_IMPL_HPP_

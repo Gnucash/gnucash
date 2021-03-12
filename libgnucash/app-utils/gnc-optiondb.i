@@ -208,6 +208,13 @@ scm_from_value<const QofInstance*>(const QofInstance* value)
     return SWIG_NewPointerObj(ptr, type, FALSE);
 }
 
+template <> inline SCM
+scm_from_value<const QofQuery*>(const QofQuery* value)
+{
+    auto ptr{static_cast<void*>(const_cast<QofQuery*>(value))};
+    return SWIG_NewPointerObj(ptr, SWIGTYPE_p__QofQuery, FALSE);
+}
+
 template <typename ValueType> inline ValueType
 scm_to_value(SCM new_value)
 {
@@ -271,6 +278,16 @@ scm_to_value<const QofInstance*>(SCM new_value)
         return nullptr;
 
     return static_cast<const QofInstance*>(ptr);
+}
+
+template <> inline const QofQuery*
+scm_to_value<const QofQuery*>(SCM new_value)
+{
+    if (new_value == SCM_BOOL_F)
+        return nullptr;
+    void* ptr{};
+    SWIG_ConvertPtr(new_value, &ptr, SWIGTYPE_p__QofQuery, 0);
+    return static_cast<const QofQuery*>(ptr);
 }
 
 template <>inline GncOptionAccountList
@@ -689,6 +706,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %template(gnc_make_bool_option) gnc_make_option<bool>;
 %template(gnc_make_int64_option) gnc_make_option<int64_t>;
 %template(gnc_make_qofinstance_option) gnc_make_option<const QofInstance*>;
+%template(gnc_make_query_option) gnc_make_option<const QofQuery*>;
 
 %extend GncOption {
     SCM get_scm_value()

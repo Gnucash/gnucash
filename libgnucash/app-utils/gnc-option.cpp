@@ -481,7 +481,11 @@ GncOption::from_scheme(std::istream& iss)
                                (std::is_same_v<std::decay_t<decltype(option)>,
                                 GncOptionMultichoiceValue>) ||
                                std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionValue<const QofQuery*>> ||
+                               std::is_same_v<std::decay_t<decltype(option)>,
                                GncOptionValue<const QofInstance*>> ||
+                               std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionValidatedValue<const QofQuery*>> ||
                                std::is_same_v<std::decay_t<decltype(option)>,
                                GncOptionValidatedValue<const QofInstance*>>)
                               gnc_option_from_scheme(iss, option);
@@ -571,6 +575,8 @@ template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, const QofInstance*, GncOptionUIType);
 template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, SCM, GncOptionUIType);
+template GncOption::GncOption(const char*, const char*, const char*,
+                              const char*, const QofQuery*, GncOptionUIType);
 
 template bool GncOption::get_value<bool>() const;
 template int GncOption::get_value<int>() const;
@@ -634,6 +640,7 @@ template bool GncOption::validate(double) const;
 template bool GncOption::validate(const char*) const;
 template bool GncOption::validate(std::string) const;
 template bool GncOption::validate(const QofInstance*) const;
+template bool GncOption::validate(const QofQuery*) const;
 template bool GncOption::validate(RelativeDatePeriod) const;
 template bool GncOption::validate(GncMultichoiceOptionIndexVec) const;
 
