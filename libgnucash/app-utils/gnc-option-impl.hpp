@@ -668,13 +668,6 @@ public:
             throw std::invalid_argument("Value not a valid choice.");
 
     }
-    void set_multiple(const GncMultichoiceOptionIndexVec& indexes)
-    {
-        if (validate(indexes))
-            m_value = indexes;
-        else
-            throw std::invalid_argument("One of the supplied indexes was out of range.");
-    }
     void set_default_value(const std::string& value)
     {
         auto index = find_key(value);
@@ -701,6 +694,13 @@ public:
         else
             throw std::invalid_argument("Value not a valid choice.");
 
+    }
+    void set_multiple(const GncMultichoiceOptionIndexVec& indexes)
+    {
+        if (validate(indexes))
+            m_value = indexes;
+        else
+            throw std::invalid_argument("One of the supplied indexes was out of range.");
     }
     void set_default_multiple(const GncMultichoiceOptionIndexVec& indexes)
     {
