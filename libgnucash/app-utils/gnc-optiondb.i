@@ -623,6 +623,13 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     %}
 
 %ignore GncOptionMultichoiceKeyType;
+%ignore pixels;
+%ignore percent;
+
+%header %{
+    static const SCM pixels{(scm_from_utf8_symbol("pixels"))};
+    static const SCM percent{(scm_from_utf8_symbol("percent"))};
+    %}
 
 %inline %{
     inline SCM scm_from_multichoices (const GncMultichoiceOptionIndexVec& indexes,
@@ -681,14 +688,14 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     SCM get_scm_value(const GncOptionRangeValue<int>& option)
     {
         auto val{option.get_value()};
-        auto desig{scm_c_eval_string(val > 100 ? "'pixels" : "'percent")};
+        auto desig{val > 100 ? pixels : percent};
         return scm_cons(desig, scm_from_int(val));
     }
 
     SCM get_scm_default_value(const GncOptionRangeValue<int>& option)
     {
         auto val{option.get_default_value()};
-        auto desig{scm_c_eval_string(val > 100 ? "'pixels" : "'percent")};
+        auto desig{val > 100 ? pixels : percent};
         return scm_cons(desig, scm_from_int(val));
     }
 
