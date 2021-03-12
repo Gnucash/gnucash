@@ -1108,7 +1108,6 @@ public:
             m_date = m_default_date = time;
         }
     }
-    void set_default_value(size_t index) noexcept;
     std::size_t num_permissible_values() const noexcept
     {
         return m_period_set.size();
