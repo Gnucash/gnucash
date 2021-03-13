@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-13 05:49+0100\n"
-"PO-Revision-Date: 2021-03-11 12:02+0000\n"
+"PO-Revision-Date: 2021-03-13 19:02+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -2456,7 +2456,7 @@ msgstr "תאריך לחיוב"
 #: gnucash/gnome/dialog-invoice.c:3450 gnucash/gnome/dialog-lot-viewer.c:871
 #: gnucash/gnome/dialog-order.c:894
 msgid "Opened"
-msgstr "נפתח"
+msgstr "פתוחים"
 
 #: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:952
 #: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:421
@@ -5316,7 +5316,7 @@ msgstr "עריכת שער המרה לתנועה הנוכחית"
 #: gnucash/gnome/gnc-plugin-page-register2.c:387
 #: gnucash/gnome/gnc-plugin-page-register.c:513
 msgid "_Jump to the other account"
-msgstr "ל_קפוץ לחשבון האחר"
+msgstr "_דילוג לחשבון הנגדי"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:388
 #: gnucash/gnome/gnc-plugin-page-register.c:514
@@ -13254,10 +13254,9 @@ msgstr "<b>תיאור סוג-אב</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:384
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Accounts in %s"
-msgstr "חשבונות ב'%s'"
+msgstr "חשבונות ב- '%s'"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:477
 msgid ""
@@ -13876,8 +13875,8 @@ msgid ""
 "The QIF importer cannot currently handle multi-currency QIF files. All the "
 "accounts you are importing must be denominated in the same currency.\n"
 msgstr ""
-"מנגנון יבוא ה- QIF לא יכול כרגע לטפל בקבצי QIF מרובי מטבעות. יש להגדיר את כל "
-"החשבונות המיובאים לאותו מטבע.\n"
+"מנגנון יבוא QIF לא יכול לטפל כעת בקבצי QIF מרובי מטבעות. יש להגדיר את את "
+"אותו המטבע לכל החשבונות המיובאים.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:947
 msgid "_Select the currency to use for all imported transactions:"
@@ -14894,7 +14893,7 @@ msgstr "בטחונות"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:77
 msgid "Show National Currencies"
-msgstr "הצגת מטבעות לאומיים"
+msgstr "הצגת מטבעות זרים"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:126
 msgid "Add a new commodity."
@@ -16117,8 +16116,7 @@ msgid ""
 "If checked, non-currency commodities will be shown in the summary bar. If "
 "clear, only currencies will be shown."
 msgstr ""
-"במידה ותיבת הסימון סומנה, סחורות לא כספיות יוצגו בסרגל הסיכום. אחרת רק "
-"מטבעות יוצגו."
+"בסימון תיבה זו, סחורות לא כספיות יוצגו בסרגל הסיכום. אחרת רק מטבעות יוצגו."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:390
 msgid "_Relative"
@@ -19850,7 +19848,7 @@ msgstr "חשבונית %s נרשמה.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:896
 #, c-format
 msgid "Invoice %s NOT posted because currencies don't match.\n"
-msgstr "חשבונית %s לא נרשמה מאחר והמטבעות לא תואמות.\n"
+msgstr "חשבונית %s לא נרשמה מאחר והמטבעות לא תואמים.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:902
 #, c-format
@@ -20060,7 +20058,7 @@ msgstr ""
 "מבנה פלט מחיר/שער נשלט מהגדרת העדפות,\n"
 "כללי -> אילוץ הצגת מחירים כמספר עשרוני\n"
 "\n"
-"נא לבחור את ההגדרות הדרושות לקובץ והקשה על 'הבא' כדי להמשיך או 'ביטול' "
+"נא לבחור את ההגדרות הדרושות לקובץ ולהקיש על 'הבא' כדי להמשיך או על 'ביטול' "
 "לנטישת היצוא.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:115
@@ -20094,7 +20092,7 @@ msgstr ""
 "בבחירת פריסה פשוטה, הפלט יוצג כיומן עם שורה בודדת וככזה, חלק מפרטי ההעברה "
 "עלולים לאבוד.\n"
 "\n"
-"נא לבחור את ההגדרות הדרושות לקובץ והקשה על 'הבא' כדי להמשיך או 'ביטול' "
+"נא לבחור את ההגדרות הדרושות לקובץ ולהקיש על 'הבא' כדי להמשיך או על 'ביטול' "
 "לנטישת היצוא.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:762
@@ -20359,7 +20357,7 @@ msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button..."
 msgstr ""
-"כדי לשנות מיפוי, יש להקיש פעמיים על שורה או לבחור שורה והקשה על הלחצן..."
+"כדי לשנות מיפוי, יש להקיש פעמיים על שורה או לבחור שורה ולהקיש על הלחצן..."
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2017
 #, c-format
@@ -22864,7 +22862,8 @@ msgid ""
 "Show multi-currency totals. If not selected, convert all totals to report "
 "currency."
 msgstr ""
-"הצגת סיכומים מרובי מטבעות. במידה ולא נבחר, המרת כל הסיכומים למטבע הדוח."
+"הצגת סיכומים ריבוי מטבעות. במידה ודבר לא נבחר , הסיכומים יומרו ויוצגו במטבע "
+"הדוח."
 
 #: gnucash/report/reports/aging.scm:377
 #: gnucash/report/reports/standard/new-aging.scm:117
@@ -29916,7 +29915,7 @@ msgstr "שימוש בחשבון סחר"
 
 #: libgnucash/engine/qofbookslots.h:67
 msgid "Currency Accounting"
-msgstr "נהול חשבונות מטבעות זרים"
+msgstr "ניהול מטבעות"
 
 #: libgnucash/engine/qofbookslots.h:68
 msgid "Book Currency"
