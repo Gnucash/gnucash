@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 4.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-03-11 07:46+0100\n"
+"POT-Creation-Date: 2021-03-13 05:49+0100\n"
 "PO-Revision-Date: 2021-02-20 04:50+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
@@ -86,7 +86,7 @@ msgstr "Barat"
 
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:969
-#: gnucash/gtkbuilder/dialog-account.glade:1029
+#: gnucash/gtkbuilder/dialog-account.glade:1031
 #: gnucash/report/reports/standard/account-piecharts.scm:488
 #: gnucash/report/reports/standard/category-barchart.scm:542
 msgid "Other"
@@ -818,6 +818,7 @@ msgstr ""
 "Selamat! Anda telah selesai menutup buku!\n"
 
 #: gnucash/gnome/assistant-acct-period.c:589
+#: gnucash/gtkbuilder/dialog-fincalc.glade:637
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1274
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1279
 #: gnucash/report/reports/standard/budget-flow.scm:44
@@ -881,7 +882,7 @@ msgstr "Placeholder"
 #: gnucash/gnome/assistant-hierarchy.c:1352
 #: gnucash/gnome-utils/dialog-account.c:351
 #: gnucash/gnome-utils/gnc-tree-view-account.c:996
-#: gnucash/gtkbuilder/dialog-account.glade:1855
+#: gnucash/gtkbuilder/dialog-account.glade:1861
 #: libgnucash/app-utils/gnc-ui-util.c:1106
 msgid "Opening Balance"
 msgstr "Saldo Awal"
@@ -975,7 +976,7 @@ msgstr "Opsi Angsuran Pinjaman: \"%s\""
 #: gnucash/gtkbuilder/dialog-payment.glade:253
 #: gnucash/gtkbuilder/dialog-payment.glade:374
 #: gnucash/gtkbuilder/dialog-transfer.glade:138
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:522
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:524
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:366
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:148
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
@@ -1026,7 +1027,7 @@ msgstr "Tanggal"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2912
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2996
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3082
-#: gnucash/gtkbuilder/dialog-payment.glade:436
+#: gnucash/gtkbuilder/dialog-payment.glade:438
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:132
 #: gnucash/register/ledger-core/split-register.c:2548
 #: gnucash/register/ledger-core/split-register.c:2589
@@ -1247,7 +1248,7 @@ msgstr ""
 #: gnucash/gnome/dialog-billterms.c:531
 #: gnucash/gnome-utils/gnc-date-delta.c:222
 #: gnucash/gtkbuilder/dialog-billterms.glade:182
-#: gnucash/gtkbuilder/dialog-billterms.glade:767
+#: gnucash/gtkbuilder/dialog-billterms.glade:769
 #: gnucash/gtkbuilder/gnc-frequency.glade:966
 #: gnucash/report/reports/standard/price-scatter.scm:139
 msgid "Days"
@@ -1255,7 +1256,7 @@ msgstr "Hari"
 
 #: gnucash/gnome/dialog-billterms.c:534
 #: gnucash/gtkbuilder/dialog-billterms.glade:368
-#: gnucash/gtkbuilder/dialog-billterms.glade:770
+#: gnucash/gtkbuilder/dialog-billterms.glade:772
 msgid "Proximo"
 msgstr "Pada Bulan Depan"
 
@@ -1349,17 +1350,17 @@ msgstr "Hapus komoditas?"
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:202
 #: gnucash/gtkbuilder/dialog-account.glade:20
 #: gnucash/gtkbuilder/dialog-account.glade:383
-#: gnucash/gtkbuilder/dialog-account.glade:817
-#: gnucash/gtkbuilder/dialog-account.glade:1133
-#: gnucash/gtkbuilder/dialog-account.glade:1918
-#: gnucash/gtkbuilder/dialog-account-picker.glade:174
+#: gnucash/gtkbuilder/dialog-account.glade:819
+#: gnucash/gtkbuilder/dialog-account.glade:1135
+#: gnucash/gtkbuilder/dialog-account.glade:1924
+#: gnucash/gtkbuilder/dialog-account-picker.glade:176
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:39
-#: gnucash/gtkbuilder/dialog-billterms.glade:791
-#: gnucash/gtkbuilder/dialog-billterms.glade:971
+#: gnucash/gtkbuilder/dialog-billterms.glade:793
+#: gnucash/gtkbuilder/dialog-billterms.glade:973
 #: gnucash/gtkbuilder/dialog-book-close.glade:38
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:21
 #: gnucash/gtkbuilder/dialog-commodity.glade:69
-#: gnucash/gtkbuilder/dialog-commodity.glade:669
+#: gnucash/gtkbuilder/dialog-commodity.glade:671
 #: gnucash/gtkbuilder/dialog-customer.glade:64
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:42
 #: gnucash/gtkbuilder/dialog-date-close.glade:23
@@ -1370,7 +1371,7 @@ msgstr "Hapus komoditas?"
 #: gnucash/gtkbuilder/dialog-fincalc.glade:122
 #: gnucash/gtkbuilder/dialog-import.glade:46
 #: gnucash/gtkbuilder/dialog-import.glade:334
-#: gnucash/gtkbuilder/dialog-import.glade:1034
+#: gnucash/gtkbuilder/dialog-import.glade:1036
 #: gnucash/gtkbuilder/dialog-invoice.glade:675
 #: gnucash/gtkbuilder/dialog-invoice.glade:1199
 #: gnucash/gtkbuilder/dialog-job.glade:41
@@ -1389,9 +1390,9 @@ msgstr "Hapus komoditas?"
 #: gnucash/gtkbuilder/dialog-search.glade:67
 #: gnucash/gtkbuilder/dialog-sx.glade:177
 #: gnucash/gtkbuilder/dialog-sx.glade:779
-#: gnucash/gtkbuilder/dialog-sx.glade:1448
+#: gnucash/gtkbuilder/dialog-sx.glade:1452
 #: gnucash/gtkbuilder/dialog-tax-info.glade:28
-#: gnucash/gtkbuilder/dialog-tax-table.glade:315
+#: gnucash/gtkbuilder/dialog-tax-table.glade:317
 #: gnucash/gtkbuilder/dialog-transfer.glade:24
 #: gnucash/gtkbuilder/dialog-userpass.glade:22
 #: gnucash/gtkbuilder/dialog-vendor.glade:65
@@ -1400,20 +1401,20 @@ msgstr "Hapus komoditas?"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:437
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:882
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:30
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:231
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:738
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:233
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:740
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:31
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:582
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:787
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1128
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:789
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1130
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:24
 #: gnucash/gtkbuilder/window-autoclear.glade:22
 #: gnucash/gtkbuilder/window-reconcile.glade:21
 #: gnucash/html/gnc-html-webkit1.c:1197
-#: gnucash/import-export/aqb/dialog-ab.glade:302
-#: gnucash/import-export/aqb/dialog-ab.glade:580
-#: gnucash/import-export/aqb/dialog-ab.glade:894
-#: gnucash/import-export/aqb/dialog-ab.glade:1018
+#: gnucash/import-export/aqb/dialog-ab.glade:304
+#: gnucash/import-export/aqb/dialog-ab.glade:586
+#: gnucash/import-export/aqb/dialog-ab.glade:900
+#: gnucash/import-export/aqb/dialog-ab.glade:1024
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:424
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:378
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2029
@@ -1432,12 +1433,12 @@ msgstr "_Batal"
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:162
 #: gnucash/gnome/window-reconcile2.c:2167 gnucash/gnome/window-reconcile.c:2388
 #: gnucash/gtkbuilder/dialog-account.glade:398
-#: gnucash/gtkbuilder/dialog-billterms.glade:475
+#: gnucash/gtkbuilder/dialog-billterms.glade:477
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:66
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:72
 #: gnucash/gtkbuilder/dialog-report.glade:352
 #: gnucash/gtkbuilder/dialog-report.glade:663
-#: gnucash/gtkbuilder/dialog-tax-table.glade:87
+#: gnucash/gtkbuilder/dialog-tax-table.glade:89
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:828
 msgid "_Delete"
 msgstr "_Hapus"
@@ -1776,7 +1777,8 @@ msgstr "Nama Pengguna"
 #: gnucash/gtkbuilder/dialog-customer.glade:773
 #: gnucash/gtkbuilder/dialog-employee.glade:227
 #: gnucash/gtkbuilder/dialog-sx.glade:235
-#: gnucash/gtkbuilder/dialog-tax-info.glade:112
+#: gnucash/gtkbuilder/dialog-sx.glade:830
+#: gnucash/gtkbuilder/dialog-tax-info.glade:113
 #: gnucash/gtkbuilder/dialog-vendor.glade:245
 #: gnucash/gtkbuilder/gnc-date-format.glade:132
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:130
@@ -1817,36 +1819,36 @@ msgstr "Jumlah pembayaran tidak boleh nol."
 msgid "The number of payments cannot be negative."
 msgstr "Jumlah pembayaran tidak boleh negatif."
 
-#: gnucash/gnome/dialog-find-account.c:349
+#: gnucash/gnome/dialog-find-account.c:363
 msgid "Find Account"
 msgstr "Cari Akun"
 
-#: gnucash/gnome/dialog-find-account.c:384
+#: gnucash/gnome/dialog-find-account.c:398
 msgid "Place Holder"
 msgstr "Placeholder"
 
-#: gnucash/gnome/dialog-find-account.c:395
+#: gnucash/gnome/dialog-find-account.c:409
 #: gnucash/gnome-utils/gnc-tree-view-account.c:980
 #: gnucash/gtkbuilder/dialog-account.glade:322
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "Hidden"
 msgstr "Tersembunyi"
 
-#: gnucash/gnome/dialog-find-account.c:406
+#: gnucash/gnome/dialog-find-account.c:420
 msgid "Not Used"
 msgstr "Tak Digunakan"
 
-#: gnucash/gnome/dialog-find-account.c:417
+#: gnucash/gnome/dialog-find-account.c:431
 msgid "Balance Zero"
 msgstr "Nol Saldo"
 
-#: gnucash/gnome/dialog-find-account.c:428
+#: gnucash/gnome/dialog-find-account.c:442
 msgid "Tax related"
 msgstr "Berhubungan dengan pajak"
 
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
-#: gnucash/gnome/dialog-find-account.c:458
+#: gnucash/gnome/dialog-find-account.c:474
 #, fuzzy, c-format
 #| msgid "Accounts in '%s'"
 msgid "Su_b-accounts of '%s'"
@@ -1895,6 +1897,7 @@ msgstr "Harga Saham"
 #: gnucash/gtkbuilder/assistant-loan.glade:199
 #: gnucash/gtkbuilder/assistant-loan.glade:617
 #: gnucash/gtkbuilder/assistant-loan.glade:764
+#: gnucash/gtkbuilder/dialog-payment.glade:411
 #: gnucash/gtkbuilder/dialog-transfer.glade:112
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:50
 #: gnucash/import-export/import-main-matcher.c:1092
@@ -2028,7 +2031,7 @@ msgstr "Deskripsi, Catatan, atau Memo"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2799
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2801
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2819
-#: gnucash/gtkbuilder/dialog-payment.glade:486
+#: gnucash/gtkbuilder/dialog-payment.glade:488
 #: gnucash/gtkbuilder/dialog-transfer.glade:215
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
@@ -2053,6 +2056,7 @@ msgstr "Memo"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:473
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2817
 #: gnucash/gtkbuilder/assistant-acct-period.glade:146
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:428
 #: gnucash/gtkbuilder/dialog-customer.glade:463
 #: gnucash/gtkbuilder/dialog-invoice.glade:445
 #: gnucash/gtkbuilder/dialog-invoice.glade:1154
@@ -2455,11 +2459,11 @@ msgstr "Catatan Voucer"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2875
 #: gnucash/gtkbuilder/assistant-loan.glade:283
 #: gnucash/gtkbuilder/dialog-doclink.glade:639
-#: gnucash/gtkbuilder/dialog-fincalc.glade:727
+#: gnucash/gtkbuilder/dialog-fincalc.glade:729
 #: gnucash/gtkbuilder/dialog-invoice.glade:145
 #: gnucash/gtkbuilder/dialog-invoice.glade:736
 #: gnucash/gtkbuilder/dialog-payment.glade:280
-#: gnucash/gtkbuilder/dialog-tax-info.glade:127
+#: gnucash/gtkbuilder/dialog-tax-info.glade:128
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:362
@@ -2494,7 +2498,7 @@ msgstr "Dibuka"
 #: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:952
 #: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:421
 #: gnucash/gnome/reconcile-view.c:425
-#: gnucash/gtkbuilder/dialog-payment.glade:473
+#: gnucash/gtkbuilder/dialog-payment.glade:475
 #: gnucash/gtkbuilder/dialog-transfer.glade:165
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/register/ledger-core/split-register-model.c:255
@@ -2749,7 +2753,7 @@ msgstr ""
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2786
 #: gnucash/gtkbuilder/dialog-customer.glade:479
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:151
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:153
 #: gnucash/gtkbuilder/dialog-invoice.glade:479
 #: gnucash/gtkbuilder/dialog-invoice.glade:1058
 #: gnucash/gtkbuilder/dialog-payment.glade:40
@@ -2767,7 +2771,7 @@ msgstr "Pelanggan"
 #: gnucash/gnome/dialog-payment.c:1274 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1109
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2797
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:168
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:170
 #: gnucash/gtkbuilder/dialog-payment.glade:44
 #: gnucash/gtkbuilder/dialog-vendor.glade:475
 #: gnucash/register/ledger-core/split-register-model.c:293
@@ -2958,7 +2962,7 @@ msgid "Custom"
 msgstr "Kustom"
 
 #: gnucash/gnome/dialog-print-check.c:2602
-#: gnucash/gtkbuilder/dialog-preferences.glade:3431
+#: gnucash/gtkbuilder/dialog-preferences.glade:3449
 #: gnucash/gtkbuilder/dialog-print-check.glade:264
 msgid "Top"
 msgstr "Atas"
@@ -3007,12 +3011,12 @@ msgstr "Nama Lembar Gaya"
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:150
 #: gnucash/gnome/window-reconcile2.c:2162 gnucash/gnome/window-reconcile.c:2383
 #: gnucash/gnome-utils/gnc-main-window.c:273
-#: gnucash/gtkbuilder/dialog-billterms.glade:677
-#: gnucash/gtkbuilder/dialog-commodities.glade:155
+#: gnucash/gtkbuilder/dialog-billterms.glade:679
+#: gnucash/gtkbuilder/dialog-commodities.glade:156
 #: gnucash/gtkbuilder/dialog-price.glade:872
 #: gnucash/gtkbuilder/dialog-report.glade:631
-#: gnucash/gtkbuilder/dialog-tax-info.glade:139
-#: gnucash/gtkbuilder/dialog-tax-table.glade:182
+#: gnucash/gtkbuilder/dialog-tax-info.glade:140
+#: gnucash/gtkbuilder/dialog-tax-table.glade:184
 msgid "_Edit"
 msgstr "Sunt_ing"
 
@@ -3207,7 +3211,7 @@ msgid "Created"
 msgstr "Dibuat"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:468
-#: gnucash/gtkbuilder/dialog-preferences.glade:1707
+#: gnucash/gtkbuilder/dialog-preferences.glade:1719
 #: gnucash/report/reports/standard/balsheet-pnl.scm:251
 #: gnucash/report/trep-engine.scm:603
 msgid "Never"
@@ -3242,7 +3246,7 @@ msgid "Transaction"
 msgstr "Transaksi"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1021
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:664
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:666
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:508
 msgid "Status"
 msgstr "Status"
@@ -3269,6 +3273,7 @@ msgid "now"
 msgstr "sekarang"
 
 #: gnucash/gnome/dialog-tax-info.c:1186
+#: gnucash/gtkbuilder/dialog-tax-info.glade:89
 msgid "Income Tax Identity"
 msgstr "Identitas Pajak Pendapatan"
 
@@ -3667,16 +3672,16 @@ msgstr "Pilih Anggaran"
 #: gnucash/gnome-utils/gnc-main-window.c:1464
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:217
 #: gnucash/gtkbuilder/dialog-account.glade:35
-#: gnucash/gtkbuilder/dialog-account.glade:832
-#: gnucash/gtkbuilder/dialog-account.glade:1148
-#: gnucash/gtkbuilder/dialog-account-picker.glade:189
+#: gnucash/gtkbuilder/dialog-account.glade:834
+#: gnucash/gtkbuilder/dialog-account.glade:1150
+#: gnucash/gtkbuilder/dialog-account-picker.glade:191
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:54
-#: gnucash/gtkbuilder/dialog-billterms.glade:809
-#: gnucash/gtkbuilder/dialog-billterms.glade:989
+#: gnucash/gtkbuilder/dialog-billterms.glade:811
+#: gnucash/gtkbuilder/dialog-billterms.glade:991
 #: gnucash/gtkbuilder/dialog-book-close.glade:53
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:36
 #: gnucash/gtkbuilder/dialog-commodity.glade:85
-#: gnucash/gtkbuilder/dialog-commodity.glade:685
+#: gnucash/gtkbuilder/dialog-commodity.glade:687
 #: gnucash/gtkbuilder/dialog-customer.glade:80
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:58
 #: gnucash/gtkbuilder/dialog-date-close.glade:38
@@ -3687,7 +3692,7 @@ msgstr "Pilih Anggaran"
 #: gnucash/gtkbuilder/dialog-import.glade:61
 #: gnucash/gtkbuilder/dialog-import.glade:191
 #: gnucash/gtkbuilder/dialog-import.glade:349
-#: gnucash/gtkbuilder/dialog-import.glade:1050
+#: gnucash/gtkbuilder/dialog-import.glade:1052
 #: gnucash/gtkbuilder/dialog-invoice.glade:691
 #: gnucash/gtkbuilder/dialog-invoice.glade:1214
 #: gnucash/gtkbuilder/dialog-job.glade:57
@@ -3705,9 +3710,9 @@ msgstr "Pilih Anggaran"
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:55
 #: gnucash/gtkbuilder/dialog-sx.glade:25 gnucash/gtkbuilder/dialog-sx.glade:192
 #: gnucash/gtkbuilder/dialog-sx.glade:794
-#: gnucash/gtkbuilder/dialog-sx.glade:1464
+#: gnucash/gtkbuilder/dialog-sx.glade:1468
 #: gnucash/gtkbuilder/dialog-tax-info.glade:58
-#: gnucash/gtkbuilder/dialog-tax-table.glade:330
+#: gnucash/gtkbuilder/dialog-tax-table.glade:332
 #: gnucash/gtkbuilder/dialog-transfer.glade:39
 #: gnucash/gtkbuilder/dialog-userpass.glade:37
 #: gnucash/gtkbuilder/dialog-vendor.glade:81
@@ -3716,18 +3721,18 @@ msgstr "Pilih Anggaran"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:451
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:897
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:45
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:246
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:753
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:248
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:755
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:46
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:597
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:802
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1143
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:804
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1145
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:39
 #: gnucash/gtkbuilder/window-autoclear.glade:38
 #: gnucash/gtkbuilder/window-reconcile.glade:36
-#: gnucash/import-export/aqb/dialog-ab.glade:317
-#: gnucash/import-export/aqb/dialog-ab.glade:595
-#: gnucash/import-export/aqb/dialog-ab.glade:909
+#: gnucash/import-export/aqb/dialog-ab.glade:319
+#: gnucash/import-export/aqb/dialog-ab.glade:601
+#: gnucash/import-export/aqb/dialog-ab.glade:915
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:423
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:481
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:377
@@ -4273,7 +4278,8 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2838
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2849
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2853
-#: gnucash/gtkbuilder/dialog-preferences.glade:980
+#: gnucash/gtkbuilder/assistant-csv-export.glade:277
+#: gnucash/gtkbuilder/dialog-preferences.glade:986
 #: gnucash/report/report-core.scm:158
 #: gnucash/report/reports/example/average-balance.scm:92
 #: gnucash/report/reports/example/average-balance.scm:296
@@ -4446,6 +4452,7 @@ msgstr "Segarkan jendela ini."
 #: gnucash/gnome/gnc-plugin-page-report.c:1137
 #: gnucash/gtkbuilder/assistant-csv-export.glade:107
 #: gnucash/gtkbuilder/dialog-print-check.glade:643
+#: gnucash/gtkbuilder/dialog-sx.glade:892
 msgid "Options"
 msgstr "Opsi"
 
@@ -4576,12 +4583,12 @@ msgstr "Pertahankan pesanan faktur normal"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:248
 #: gnucash/gtkbuilder/assistant-stock-split.glade:123
-#: gnucash/gtkbuilder/dialog-account.glade:1761
+#: gnucash/gtkbuilder/dialog-account.glade:1767
 #: gnucash/gtkbuilder/dialog-price.glade:175
 #: gnucash/gtkbuilder/dialog-print-check.glade:701
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:94
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:647
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:861
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:96
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:649
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:863
 msgid "_Date"
 msgstr "Ta_nggal"
 
@@ -4590,7 +4597,7 @@ msgid "Sort by date"
 msgstr "Urut berdasarkan tanggal"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:249
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:880
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:882
 msgid "Date of _Entry"
 msgstr "Tanggal _Entri"
 
@@ -4620,7 +4627,7 @@ msgid "Sort by price"
 msgstr "Urut berdasarkan harga"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:252
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:975
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:977
 msgid "Descri_ption"
 msgstr "Deskri_psi"
 
@@ -5517,7 +5524,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:458
 #: gnucash/gnome/gnc-plugin-page-register.c:581
-#: gnucash/gtkbuilder/dialog-preferences.glade:2774
+#: gnucash/gtkbuilder/dialog-preferences.glade:2790
 msgid "Transaction _Journal"
 msgstr "_Jurnal Transaksi"
 
@@ -5642,7 +5649,7 @@ msgstr "Laporan Hasil Pencarian"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2434
 #: gnucash/gnome/gnc-plugin-page-register.c:3577
-#: gnucash/gtkbuilder/dialog-preferences.glade:2684
+#: gnucash/gtkbuilder/dialog-preferences.glade:2700
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
@@ -5860,6 +5867,8 @@ msgid "Reverse Transaction"
 msgstr "Transaksi Terbalik"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4085
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:73
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:624
 msgid "New Transaction Information"
 msgstr "Informasi Transaksi Baru"
 
@@ -6114,11 +6123,11 @@ msgid "_Scheduled"
 msgstr "_Terjadwal"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:138
-#: gnucash/gtkbuilder/dialog-billterms.glade:493
-#: gnucash/gtkbuilder/dialog-commodity.glade:654
+#: gnucash/gtkbuilder/dialog-billterms.glade:495
+#: gnucash/gtkbuilder/dialog-commodity.glade:656
 #: gnucash/gtkbuilder/dialog-report.glade:338
 #: gnucash/gtkbuilder/dialog-report.glade:647
-#: gnucash/gtkbuilder/dialog-tax-table.glade:102
+#: gnucash/gtkbuilder/dialog-tax-table.glade:104
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:796
 msgid "_New"
 msgstr "_Baru"
@@ -6152,6 +6161,7 @@ msgid "Delete the selected scheduled transaction"
 msgstr "Hapus transaksi terjadwal yang dipilih"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:385
+#: gnucash/gtkbuilder/dialog-account.glade:554
 #, c-format
 msgid "Transactions"
 msgstr "Transaksi"
@@ -6777,7 +6787,7 @@ msgid "_Reconcile"
 msgstr "_Rekonsiliasi"
 
 #: gnucash/gnome/window-reconcile2.c:2102 gnucash/gnome/window-reconcile.c:2323
-#: gnucash/gtkbuilder/dialog-tax-table.glade:506
+#: gnucash/gtkbuilder/dialog-tax-table.glade:510
 msgid "_Account"
 msgstr "_Akun"
 
@@ -6785,7 +6795,7 @@ msgstr "_Akun"
 #: gnucash/gnome/window-reconcile2.c:2185 gnucash/gnome/window-reconcile.c:2325
 #: gnucash/gnome/window-reconcile.c:2406
 #: gnucash/gnome-utils/gnc-main-window.c:281
-#: gnucash/gtkbuilder/dialog-account.glade:1117
+#: gnucash/gtkbuilder/dialog-account.glade:1119
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:23
 #: gnucash/gtkbuilder/dialog-book-close.glade:22
 #: gnucash/gtkbuilder/dialog-commodity.glade:53
@@ -6793,7 +6803,7 @@ msgstr "_Akun"
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:25
 #: gnucash/gtkbuilder/dialog-custom-report.glade:28
 #: gnucash/gtkbuilder/dialog-employee.glade:23
-#: gnucash/gtkbuilder/dialog-import.glade:1017
+#: gnucash/gtkbuilder/dialog-import.glade:1019
 #: gnucash/gtkbuilder/dialog-invoice.glade:658
 #: gnucash/gtkbuilder/dialog-job.glade:24
 #: gnucash/gtkbuilder/dialog-options.glade:21
@@ -6860,7 +6870,7 @@ msgid "_Check & Repair"
 msgstr "_Periksa & Perbaiki"
 
 #: gnucash/gnome/window-reconcile2.c:2157 gnucash/gnome/window-reconcile.c:2378
-#: gnucash/gtkbuilder/dialog-account.glade:1747
+#: gnucash/gtkbuilder/dialog-account.glade:1753
 msgid "_Balance"
 msgstr "_Saldo"
 
@@ -6957,7 +6967,7 @@ msgstr "Anda harus memilih satu item dari daftar"
 
 #: gnucash/gnome-search/dialog-search.c:702
 #: gnucash/gnome-utils/gnc-recurrence.c:547
-#: gnucash/gtkbuilder/dialog-commodities.glade:137
+#: gnucash/gtkbuilder/dialog-commodities.glade:138
 #: gnucash/gtkbuilder/dialog-doclink.glade:218
 #: gnucash/gtkbuilder/dialog-price.glade:854
 msgid "_Remove"
@@ -6989,7 +6999,7 @@ msgstr "Item baru"
 
 #: gnucash/gnome-search/dialog-search.c:1159
 #: gnucash/gnome-utils/gnc-recurrence.c:544
-#: gnucash/gtkbuilder/dialog-commodities.glade:120
+#: gnucash/gtkbuilder/dialog-commodities.glade:121
 #: gnucash/gtkbuilder/dialog-price.glade:837
 msgid "_Add"
 msgstr "T_ambah"
@@ -7445,8 +7455,8 @@ msgid "(%d) New Accounts"
 msgstr "(%d) Akun Baru"
 
 #: gnucash/gnome-utils/dialog-account.c:1619
-#: gnucash/gtkbuilder/dialog-account.glade:1100
-#: gnucash/gtkbuilder/dialog-account-picker.glade:158
+#: gnucash/gtkbuilder/dialog-account.glade:1102
+#: gnucash/gtkbuilder/dialog-account-picker.glade:160
 msgid "New Account"
 msgstr "Akun Baru"
 
@@ -7532,7 +7542,7 @@ msgid "Select security/currency"
 msgstr "Pilih sekuritas/mata uang"
 
 #: gnucash/gnome-utils/dialog-commodity.c:276
-#: gnucash/gtkbuilder/dialog-account.glade:1257
+#: gnucash/gtkbuilder/dialog-account.glade:1261
 msgid "_Security/currency"
 msgstr "_Sekuritas/mata uang"
 
@@ -7560,8 +7570,8 @@ msgstr "Ma_ta Uang"
 #: gnucash/gnome-utils/gnc-tree-view-price.c:402
 #: gnucash/gtkbuilder/dialog-customer.glade:511
 #: gnucash/gtkbuilder/dialog-employee.glade:610
-#: gnucash/gtkbuilder/dialog-transfer.glade:424
-#: gnucash/gtkbuilder/dialog-transfer.glade:437
+#: gnucash/gtkbuilder/dialog-transfer.glade:428
+#: gnucash/gtkbuilder/dialog-transfer.glade:441
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
 #: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4394
 msgid "Currency"
@@ -7588,6 +7598,7 @@ msgid "New security"
 msgstr "Sekuritas baru"
 
 #: gnucash/gnome-utils/dialog-commodity.c:992
+#: gnucash/gtkbuilder/dialog-commodity.glade:238
 msgid "Security Information"
 msgstr "Informasi Sekuritas"
 
@@ -7661,8 +7672,8 @@ msgstr "_Simpan Sebagai"
 
 #: gnucash/gnome-utils/dialog-options.c:226
 #: gnucash/gnome-utils/gnc-main-window.c:305
-#: gnucash/gtkbuilder/dialog-billterms.glade:729
-#: gnucash/gtkbuilder/dialog-commodities.glade:173
+#: gnucash/gtkbuilder/dialog-billterms.glade:731
+#: gnucash/gtkbuilder/dialog-commodities.glade:174
 #: gnucash/gtkbuilder/dialog-custom-report.glade:45
 #: gnucash/gtkbuilder/dialog-doclink.glade:546
 #: gnucash/gtkbuilder/dialog-fincalc.glade:107
@@ -7678,7 +7689,7 @@ msgstr "_Simpan Sebagai"
 #: gnucash/gtkbuilder/dialog-report.glade:272
 #: gnucash/gtkbuilder/dialog-report.glade:679
 #: gnucash/gtkbuilder/dialog-search.glade:52
-#: gnucash/gtkbuilder/dialog-tax-table.glade:254
+#: gnucash/gtkbuilder/dialog-tax-table.glade:256
 #: gnucash/gtkbuilder/dialog-totd.glade:56
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:736
 #: gnucash/import-export/aqb/dialog-ab.glade:43
@@ -7886,7 +7897,7 @@ msgid "Please enter new name"
 msgstr "Masukkan nama baru"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:635
-#: gnucash/gtkbuilder/dialog-tax-table.glade:72
+#: gnucash/gtkbuilder/dialog-tax-table.glade:74
 msgid "_Rename"
 msgstr "U_bah Nama"
 
@@ -7983,10 +7994,12 @@ msgid "Debit Account"
 msgstr "Akun Debit"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1990
+#: gnucash/gtkbuilder/dialog-transfer.glade:283
 msgid "Transfer From"
 msgstr "Transfer Dari"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1994
+#: gnucash/gtkbuilder/dialog-transfer.glade:344
 msgid "Transfer To"
 msgstr "Transfer Ke"
 
@@ -7995,7 +8008,7 @@ msgid "Debit Amount"
 msgstr "Jumlah Debit"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2056
-#: gnucash/gtkbuilder/dialog-transfer.glade:564
+#: gnucash/gtkbuilder/dialog-transfer.glade:568
 msgid "To Amount"
 msgstr "Jumlah Ke"
 
@@ -8167,10 +8180,10 @@ msgstr "Tanggal: "
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:348
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:147
-#: gnucash/gtkbuilder/dialog-fincalc.glade:739
-#: gnucash/gtkbuilder/dialog-fincalc.glade:752
+#: gnucash/gtkbuilder/dialog-fincalc.glade:741
+#: gnucash/gtkbuilder/dialog-fincalc.glade:754
 #: gnucash/gtkbuilder/dialog-sx.glade:248
-#: gnucash/gtkbuilder/dialog-sx.glade:1371
+#: gnucash/gtkbuilder/dialog-sx.glade:1375
 #: gnucash/gtkbuilder/gnc-frequency.glade:592
 msgid "Frequency"
 msgstr "Frekuensi"
@@ -8186,7 +8199,7 @@ msgid "_Import"
 msgstr "_Impor"
 
 #: gnucash/gnome-utils/gnc-file.c:96 gnucash/gnome-utils/gnc-file.c:335
-#: gnucash/gtkbuilder/dialog-preferences.glade:2268
+#: gnucash/gtkbuilder/dialog-preferences.glade:2282
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:140
 msgid "Import"
 msgstr "Impor"
@@ -8892,6 +8905,7 @@ msgid "Unable to save to database: Book is marked read-only."
 msgstr "Tak dapat menyimpan ke basis data: Buku ditandai hanya-baca."
 
 #: gnucash/gnome-utils/gnc-main-window.c:4318
+#: gnucash/gtkbuilder/assistant-qif-import.glade:975
 msgid "Book Options"
 msgstr "Opsi Buku"
 
@@ -9536,7 +9550,7 @@ msgstr "Diubah"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1144
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1146
-#: gnucash/gtkbuilder/dialog-tax-table.glade:491
+#: gnucash/gtkbuilder/dialog-tax-table.glade:495
 #: gnucash/register/ledger-core/split-register.c:2103
 #: gnucash/register/ledger-core/split-register.c:2106
 msgid "_Value"
@@ -9548,7 +9562,7 @@ msgid "_Recalculate"
 msgstr "_Hitung Ulang"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:805
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1005
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1001
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
@@ -9634,6 +9648,7 @@ msgstr "W"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:954
 #: gnucash/gnome-utils/gnc-tree-view-account.c:957
+#: gnucash/gtkbuilder/dialog-preferences.glade:800
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
 msgid "Account Color"
 msgstr "Warna Akun"
@@ -10083,7 +10098,7 @@ msgid "Enter debit formula for real transaction"
 msgstr "Masukkan rumus debit untuk transaksi sesungguhnya"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:140
-#: gnucash/gtkbuilder/dialog-sx.glade:1041
+#: gnucash/gtkbuilder/dialog-sx.glade:1045
 #: gnucash/report/html-utilities.scm:337
 msgid "Enabled"
 msgstr "Diaktifkan"
@@ -10516,7 +10531,7 @@ msgid "Auto pay when posting."
 msgstr "Bayar otomatis saat mengepos."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:113
-#: gnucash/gtkbuilder/business-prefs.glade:196
+#: gnucash/gtkbuilder/business-prefs.glade:198
 msgid ""
 "At post time, automatically attempt to pay customer documents with "
 "outstanding pre-payments and counter documents. The pre-payments and "
@@ -10565,7 +10580,7 @@ msgid "Enable extra toolbar buttons for business"
 msgstr "Aktifkan tombol ekstra bilah alat untuk bisnis"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:128
-#: gnucash/gtkbuilder/business-prefs.glade:71
+#: gnucash/gtkbuilder/business-prefs.glade:73
 msgid ""
 "If active, extra toolbar buttons for common business functions are shown as "
 "well. Otherwise they are not shown."
@@ -10574,7 +10589,7 @@ msgstr ""
 "ditampilkan. Jika tidak, tombol tersebut tidak ditampilkan."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:132
-#: gnucash/gtkbuilder/business-prefs.glade:318
+#: gnucash/gtkbuilder/business-prefs.glade:320
 msgid "The invoice report to be used for printing."
 msgstr "Laporan faktur untuk digunakan untuk mencetak."
 
@@ -10609,7 +10624,7 @@ msgstr ""
 "ini dapat ditimpa per faktur pada dialog Pos."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:155
-#: gnucash/gtkbuilder/business-prefs.glade:273
+#: gnucash/gtkbuilder/business-prefs.glade:275
 msgid ""
 "At post time, automatically attempt to pay vendor documents with outstanding "
 "pre-payments and counter documents. The pre-payments and documents obviously "
@@ -10996,7 +11011,7 @@ msgid "Enable SKIP transaction action"
 msgstr "Aktifkan tindakan transaksi SKIP"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:6
-#: gnucash/gtkbuilder/dialog-preferences.glade:2032
+#: gnucash/gtkbuilder/dialog-preferences.glade:2044
 msgid ""
 "Enable the SKIP action in the transaction matcher. If enabled, a transaction "
 "whose best match's score is in the yellow zone (above the Auto-ADD threshold "
@@ -11012,7 +11027,7 @@ msgid "Enable UPDATE match action"
 msgstr "Aktifkan tindakan kecocokan UPDATE"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:11
-#: gnucash/gtkbuilder/dialog-preferences.glade:2051
+#: gnucash/gtkbuilder/dialog-preferences.glade:2063
 msgid ""
 "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
 "enabled, a transaction whose best match's score is above the Auto-CLEAR "
@@ -11114,12 +11129,12 @@ msgstr ""
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:40
-#: gnucash/gtkbuilder/dialog-preferences.glade:2242
+#: gnucash/gtkbuilder/dialog-preferences.glade:2256
 msgid "Automatically create new commodities"
 msgstr "Buat komoditas baru secara otomatis"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:41
-#: gnucash/gtkbuilder/dialog-preferences.glade:2248
+#: gnucash/gtkbuilder/dialog-preferences.glade:2262
 msgid ""
 "Enables the automatic creation of new commodities if any unknown commodity "
 "is encountered during import. Otherwise the user will be asked what to do "
@@ -11153,7 +11168,7 @@ msgid "Default status for QIF transaction when not specified in QIF file."
 msgstr "Status transaksi QIF baku ketika tidak ditentukan di dalam berkas QIF."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:15
-#: gnucash/gtkbuilder/dialog-account-picker.glade:56
+#: gnucash/gtkbuilder/dialog-account-picker.glade:58
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as reconciled."
@@ -11166,7 +11181,7 @@ msgid "Show documentation"
 msgstr "Tampilkan dokumentasi"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:33
-#: gnucash/gtkbuilder/dialog-account-picker.glade:37
+#: gnucash/gtkbuilder/dialog-account-picker.glade:39
 msgid "Show some documentation-only pages in QIF Import assistant."
 msgstr "Tampilkan halaman dokumentasi pada asisten Impor QIF."
 
@@ -11189,7 +11204,7 @@ msgid "Prompt for interest charges"
 msgstr "Tanyakan biaya bunga"
 
 #: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:11
-#: gnucash/gtkbuilder/dialog-account.glade:1480
+#: gnucash/gtkbuilder/dialog-account.glade:1484
 msgid ""
 "Prior to reconciling an account which charges or pays interest, prompt the "
 "user to enter a transaction for the interest charge or payment. Currently "
@@ -11325,13 +11340,13 @@ msgstr ""
 "ditampilkan. Jika tidak, dialog tidak ditampilkan."
 
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:5
-#: gnucash/gtkbuilder/dialog-preferences.glade:3614
+#: gnucash/gtkbuilder/dialog-preferences.glade:3632
 msgid "Alpha Vantage API key"
 msgstr "Kunci API Alpha Vantage"
 
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:6
-#: gnucash/gtkbuilder/dialog-preferences.glade:3613
-#: gnucash/gtkbuilder/dialog-preferences.glade:3625
+#: gnucash/gtkbuilder/dialog-preferences.glade:3631
+#: gnucash/gtkbuilder/dialog-preferences.glade:3643
 msgid ""
 "To retrieve online quotes from Alphavantage, this key needs to be set. A key "
 "can be retrieved from the Alpha Vantage website."
@@ -11416,7 +11431,7 @@ msgid "Auto-save time interval"
 msgstr "Selang waktu simpan-otomatis"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:41
-#: gnucash/gtkbuilder/dialog-preferences.glade:1644
+#: gnucash/gtkbuilder/dialog-preferences.glade:1656
 msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
@@ -11425,13 +11440,13 @@ msgstr ""
 "otomatis. Jika nol, penyimpanan tidak dimulai secara otomatis."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:45
-#: gnucash/gtkbuilder/dialog-preferences.glade:1761
+#: gnucash/gtkbuilder/dialog-preferences.glade:1773
 msgid "Enable timeout on \"Save changes on closing\" question"
 msgstr ""
 "Aktifkan waktu habis pada pertanyaan \"Simpan perubahaan saat menutup\""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:46
-#: gnucash/gtkbuilder/dialog-preferences.glade:1765
+#: gnucash/gtkbuilder/dialog-preferences.glade:1777
 msgid ""
 "If enabled, the \"Save changes on closing\" question will only wait a "
 "limited number of seconds for an answer. If the user didn't answer within "
@@ -11448,7 +11463,7 @@ msgid "Time to wait for answer"
 msgstr "Waktu untuk menunggu jawaban"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:51
-#: gnucash/gtkbuilder/dialog-preferences.glade:1800
+#: gnucash/gtkbuilder/dialog-preferences.glade:1812
 msgid ""
 "The number of seconds to wait before the question window will be closed and "
 "the changes saved automatically."
@@ -11490,7 +11505,7 @@ msgid "Force prices to display as decimals even if they must be rounded."
 msgstr "Paksa harga ditampilkan sebagai desimal meskipun harus dibulatkan."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:71
-#: gnucash/gtkbuilder/dialog-preferences.glade:1204
+#: gnucash/gtkbuilder/dialog-preferences.glade:1214
 msgid ""
 "If active, GnuCash will round prices as necessary to display them as "
 "decimals instead of displaying the exact fraction if the fractional part "
@@ -11501,7 +11516,7 @@ msgstr ""
 "ditampilkan secara tepat sebagai desimal."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:75
-#: gnucash/gtkbuilder/dialog-preferences.glade:1713
+#: gnucash/gtkbuilder/dialog-preferences.glade:1725
 msgid "Do not create log/backup files."
 msgstr "Jangan buat berkas log/cadangan."
 
@@ -11523,12 +11538,12 @@ msgstr ""
 "didefinisikan di dalam kunci 'retain-days'"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:80
-#: gnucash/gtkbuilder/dialog-preferences.glade:1731
+#: gnucash/gtkbuilder/dialog-preferences.glade:1743
 msgid "Delete old log/backup files after this many days (0 = never)."
 msgstr "Hapus berkas log/cadangan setelah sejumlah hari ini (0 = tak pernah)."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:85
-#: gnucash/gtkbuilder/dialog-preferences.glade:1749
+#: gnucash/gtkbuilder/dialog-preferences.glade:1761
 msgid "Do not delete log/backup files."
 msgstr "Jangan menghapus berkas log/cadangan."
 
@@ -11545,7 +11560,7 @@ msgstr ""
 "akan dihapus (0 = tak pernah)."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:95
-#: gnucash/gtkbuilder/dialog-preferences.glade:636
+#: gnucash/gtkbuilder/dialog-preferences.glade:640
 msgid "Don't sign reverse any accounts."
 msgstr "Jangan menggunakan tanda terbalik pada akun."
 
@@ -11569,7 +11584,7 @@ msgstr ""
 "saldo."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:100
-#: gnucash/gtkbuilder/dialog-preferences.glade:655
+#: gnucash/gtkbuilder/dialog-preferences.glade:659
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
@@ -11578,7 +11593,7 @@ msgstr ""
 "Pendapatan."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:105
-#: gnucash/gtkbuilder/dialog-preferences.glade:674
+#: gnucash/gtkbuilder/dialog-preferences.glade:678
 msgid "Sign reverse balances on income and expense accounts."
 msgstr "Tandai terbalik saldo pada akun pendapatan dan pengeluaran."
 
@@ -11655,7 +11670,7 @@ msgstr ""
 "dipotong di tengah dan diganti dengan elipsis."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:135
-#: gnucash/gtkbuilder/dialog-preferences.glade:920
+#: gnucash/gtkbuilder/dialog-preferences.glade:926
 msgid "Use the system locale currency for all newly created accounts."
 msgstr "Gunakan mata uang lokal sistem untuk semua akun yang baru dibuat."
 
@@ -11674,7 +11689,7 @@ msgstr ""
 "menggunakan pengaturan yang ditentukan oleh kunci currency-other."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:140
-#: gnucash/gtkbuilder/dialog-preferences.glade:900
+#: gnucash/gtkbuilder/dialog-preferences.glade:906
 msgid "Use the specified currency for all newly created accounts."
 msgstr ""
 "Gunakan mata uang yang telah ditentukan untuk semua akun yang baru dibuat."
@@ -11722,7 +11737,7 @@ msgstr ""
 "Kerajaan Inggris, dan \"us\" untuk gaya tanggal Amerika Serikat."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:160
-#: gnucash/gtkbuilder/dialog-preferences.glade:1098
+#: gnucash/gtkbuilder/dialog-preferences.glade:1108
 msgid "In the current calendar year"
 msgstr "Pada tahun kalender saat ini"
 
@@ -11750,7 +11765,7 @@ msgid "Maximum number of months to go back."
 msgstr "Jumlah maksimum bulan untuk kembali."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:171
-#: gnucash/gtkbuilder/dialog-preferences.glade:1124
+#: gnucash/gtkbuilder/dialog-preferences.glade:1134
 msgid ""
 "Dates will be completed so that they are close to the current date. Enter "
 "the maximum number of months to go backwards in time when completing dates."
@@ -11795,7 +11810,7 @@ msgstr ""
 "tidak, layar splash tidak ditampilkan."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:190
-#: gnucash/gtkbuilder/dialog-preferences.glade:3348
+#: gnucash/gtkbuilder/dialog-preferences.glade:3366
 msgid "Display the notebook tabs at the top of the window."
 msgstr "Tampilkan tab buku catatan pada bagian atas jendela."
 
@@ -11813,22 +11828,22 @@ msgstr ""
 "\"bawah\", dan \"kanan\". Nilai baku adalah \"atas\"."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:195
-#: gnucash/gtkbuilder/dialog-preferences.glade:3367
+#: gnucash/gtkbuilder/dialog-preferences.glade:3385
 msgid "Display the notebook tabs at the bottom of the window."
 msgstr "Tampilkan tab buku catatan pada bagian bawah jendela."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:200
-#: gnucash/gtkbuilder/dialog-preferences.glade:3386
+#: gnucash/gtkbuilder/dialog-preferences.glade:3404
 msgid "Display the notebook tabs at the left of the window."
 msgstr "Tampilkan tab buku catatan pada bagian kiri jendela."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:205
-#: gnucash/gtkbuilder/dialog-preferences.glade:3405
+#: gnucash/gtkbuilder/dialog-preferences.glade:3423
 msgid "Display the notebook tabs at the right of the window."
 msgstr "Tampilkan tab buku catatan pada bagian kanan jendela."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:210
-#: gnucash/gtkbuilder/dialog-preferences.glade:3437
+#: gnucash/gtkbuilder/dialog-preferences.glade:3455
 msgid "Display the summary bar at the top of the page."
 msgstr "Tampilkan bilah ikhtisar pada bagian atas halaman."
 
@@ -11844,12 +11859,12 @@ msgstr ""
 "baku adalah \"bawah\"."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:215
-#: gnucash/gtkbuilder/dialog-preferences.glade:3456
+#: gnucash/gtkbuilder/dialog-preferences.glade:3474
 msgid "Display the summary bar at the bottom of the page."
 msgstr "Tampilkan bilah ikhtisar pada bagian bawah halaman."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:220
-#: gnucash/gtkbuilder/dialog-preferences.glade:3306
+#: gnucash/gtkbuilder/dialog-preferences.glade:3324
 msgid "Closing a tab moves to the most recently visited tab."
 msgstr ""
 "Menutup sebuah tab memindahkannya ke tab yang baru-baru ini dikunjungi."
@@ -11863,7 +11878,7 @@ msgstr ""
 "dikunjungi. Jika tidak, menutup sebuah tab akan memindahkan satu tab ke kiri."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:225
-#: gnucash/gtkbuilder/dialog-preferences.glade:1409
+#: gnucash/gtkbuilder/dialog-preferences.glade:1421
 msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
@@ -11872,7 +11887,7 @@ msgstr ""
 "terpisah untuk bidang \"Num\" pada register/laporan"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:226
-#: gnucash/gtkbuilder/dialog-preferences.glade:1415
+#: gnucash/gtkbuilder/dialog-preferences.glade:1427
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
@@ -12022,7 +12037,7 @@ msgstr ""
 "kosong akan berada di bagian bawah register setelah semua transaksi."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:285
-#: gnucash/gtkbuilder/dialog-preferences.glade:2742
+#: gnucash/gtkbuilder/dialog-preferences.glade:2758
 msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr "Tampilkan semua transaksi dalam satu baris. (Dua pada mode dua baris.)"
 
@@ -12046,7 +12061,7 @@ msgstr ""
 "terekspansi."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
-#: gnucash/gtkbuilder/dialog-preferences.glade:2761
+#: gnucash/gtkbuilder/dialog-preferences.glade:2777
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line. (Two in double line mode.)"
@@ -12056,7 +12071,7 @@ msgstr ""
 "baris.)"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
-#: gnucash/gtkbuilder/dialog-preferences.glade:2780
+#: gnucash/gtkbuilder/dialog-preferences.glade:2796
 msgid "All transactions are expanded to show all splits."
 msgstr "Semua transaksi diekspansi untuk menampilkan semua split."
 
@@ -12101,7 +12116,7 @@ msgid "Show the entered and reconcile dates"
 msgstr "Tampilkan tanggal dimasukkan dan direkonsiliasi"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:311
-#: gnucash/gtkbuilder/dialog-preferences.glade:2924
+#: gnucash/gtkbuilder/dialog-preferences.glade:2940
 msgid ""
 "Show the date when the transaction was entered below the posted date and "
 "reconciled date on split row."
@@ -12114,7 +12129,7 @@ msgid "Show entered and reconciled dates on selection"
 msgstr "Tampilkan tanggal dimasukkan dan direkonsiliasi pada pilihan"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:316
-#: gnucash/gtkbuilder/dialog-preferences.glade:2972
+#: gnucash/gtkbuilder/dialog-preferences.glade:2988
 msgid "Show the entered date and reconciled date on transaction selection."
 msgstr ""
 "Tampilkan tanggal dimasukkan dan direkonsiliasi pada pilihan transaksi."
@@ -12124,7 +12139,7 @@ msgid "Show the calendar buttons"
 msgstr "Tampilkan tombol kalender"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:321
-#: gnucash/gtkbuilder/dialog-preferences.glade:2940
+#: gnucash/gtkbuilder/dialog-preferences.glade:2956
 msgid "Show the calendar buttons Cancel, Today and Select."
 msgstr "Tampilkan tombol kalender Batal, Hari Ini dan Pilih."
 
@@ -12133,7 +12148,7 @@ msgid "Move the selection to the blank split on expand"
 msgstr "Pindahkan pemilihan ke split kosong saat ekspansi"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:326
-#: gnucash/gtkbuilder/dialog-preferences.glade:2956
+#: gnucash/gtkbuilder/dialog-preferences.glade:2972
 msgid ""
 "This will move the selection to the blank split when the transaction is "
 "expanded."
@@ -12145,7 +12160,7 @@ msgid "Number of transactions to show in a register."
 msgstr "Jumlah transaksi yang ditampilkan pada register."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:331
-#: gnucash/gtkbuilder/dialog-preferences.glade:2811
+#: gnucash/gtkbuilder/dialog-preferences.glade:2827
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
@@ -12159,7 +12174,7 @@ msgstr "Jumlah karakter untuk lengkapi otomatis."
 
 #. Register2 feature
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:336
-#: gnucash/gtkbuilder/dialog-preferences.glade:2901
+#: gnucash/gtkbuilder/dialog-preferences.glade:2917
 msgid ""
 "This sets the number of characters before auto complete starts for "
 "description, notes and memo fields."
@@ -12180,7 +12195,7 @@ msgstr ""
 "tidak, laporan baru akan dibuka sebagai tab pada jendela utama."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:348
-#: gnucash/gtkbuilder/dialog-preferences.glade:3175
+#: gnucash/gtkbuilder/dialog-preferences.glade:3193
 msgid "Use the system locale currency for all newly created reports."
 msgstr "Gunakan mata uang lokal sistem untuk semua laporan yang baru dibuat."
 
@@ -12198,7 +12213,7 @@ msgstr ""
 "menggunakan pengaturan yang ditentukan oleh kunci currency-other."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:353
-#: gnucash/gtkbuilder/dialog-preferences.glade:3155
+#: gnucash/gtkbuilder/dialog-preferences.glade:3173
 msgid "Use the specified currency for all newly created reports."
 msgstr ""
 "Gunakan mata uang yang telah ditentukan untuk semua laporan yang baru dibuat."
@@ -12212,7 +12227,7 @@ msgid "Zoom factor to use by default for reports."
 msgstr "Faktor perbesaran yang digunakan secara baku untuk laporan."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:364
-#: gnucash/gtkbuilder/dialog-preferences.glade:3190
+#: gnucash/gtkbuilder/dialog-preferences.glade:3208
 msgid ""
 "On high resolution screens reports tend to be hard to read. This option "
 "allows you to scale reports up by the set factor. For example setting this "
@@ -12892,7 +12907,7 @@ msgid "Import Account Preview, first 10 rows only"
 msgstr "Pratinjau Akun Impor, hanya 10 baris pertama"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:290
-#: gnucash/gtkbuilder/assistant-csv-export.glade:726
+#: gnucash/gtkbuilder/assistant-csv-export.glade:728
 msgid ""
 "Press Apply to create export file.\n"
 "Cancel to abort."
@@ -12905,8 +12920,8 @@ msgid "Import Accounts Now"
 msgstr "Impor Akun Sekarang"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:346
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1071
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1160
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1069
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1156
 msgid "Import Summary"
 msgstr "Ikhtisar Impor"
 
@@ -12962,94 +12977,97 @@ msgstr "Pilih Pengaturan Ekspor"
 msgid "Select the accounts to be exported and date range if required."
 msgstr "Pilih akun yang akan diekspor dan rentang tanggal jika diperlukan."
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:277
-msgid "<b>Accounts</b>"
-msgstr "<b>Akun</b>"
-
-#: gnucash/gtkbuilder/assistant-csv-export.glade:326
-#: gnucash/gtkbuilder/dialog-tax-info.glade:371
+#: gnucash/gtkbuilder/assistant-csv-export.glade:327
+#: gnucash/gtkbuilder/dialog-tax-info.glade:372
 msgid "Accounts Selected:"
 msgstr "Akun Terpilih:"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:373
-#: gnucash/gtkbuilder/dialog-tax-info.glade:417
+#: gnucash/gtkbuilder/assistant-csv-export.glade:374
+#: gnucash/gtkbuilder/dialog-tax-info.glade:418
 msgid "_Select Subaccounts"
 msgstr "Pilih _Sub-akun"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:388
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:622
+#: gnucash/gtkbuilder/assistant-csv-export.glade:389
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:624
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:466
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:432
-msgid "<b>Dates</b>"
-msgstr "<b>Tanggal</b>"
+#: gnucash/gtkbuilder/assistant-csv-export.glade:433
+#: gnucash/gtkbuilder/assistant-loan.glade:1201
+#: gnucash/report/reports/standard/job-report.scm:563
+#: gnucash/report/reports/standard/new-owner-report.scm:1172
+#: gnucash/report/reports/standard/owner-report.scm:795
+msgid "Date Range"
+msgstr "Rentang Tanggal"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:444
-msgid "Sho_w All"
-msgstr "Tampilka_n Semua"
+#: gnucash/gtkbuilder/assistant-csv-export.glade:446
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:264
+#: gnucash/gtkbuilder/dialog-account.glade:892
+#: gnucash/gtkbuilder/dialog-reset-warnings.glade:104
+msgid "_Select All"
+msgstr "Pilih _Semua"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:461
+#: gnucash/gtkbuilder/assistant-csv-export.glade:463
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
 msgid "Select _Range"
 msgstr "Pilih _Rentang"
 
 #. Filter By Dialog, Date Tab, Start section
-#: gnucash/gtkbuilder/assistant-csv-export.glade:488
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:324
+#: gnucash/gtkbuilder/assistant-csv-export.glade:490
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:326
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:168
 msgid "Start"
 msgstr "Mulai"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:497
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:333
+#: gnucash/gtkbuilder/assistant-csv-export.glade:499
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:177
 msgid "_Earliest"
 msgstr "_Paling Lama"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:514
+#: gnucash/gtkbuilder/assistant-csv-export.glade:516
 msgid "Cho_ose Date"
 msgstr "Pilih _Tanggal"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:531
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:365
+#: gnucash/gtkbuilder/assistant-csv-export.glade:533
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:367
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:209
 msgid "Toda_y"
 msgstr "Hari _Ini"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:548
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:382
+#: gnucash/gtkbuilder/assistant-csv-export.glade:550
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:384
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:226
 msgid "_Latest"
 msgstr "Pa_ling Baru"
 
 #. Filter By Dialog, Date Tab, End section
-#: gnucash/gtkbuilder/assistant-csv-export.glade:578
+#: gnucash/gtkbuilder/assistant-csv-export.glade:580
 #: gnucash/gtkbuilder/dialog-fincalc.glade:601
 #: gnucash/gtkbuilder/dialog-sx.glade:424
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:412
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:414
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:256
 msgid "End"
 msgstr "Akhir"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:587
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:421
+#: gnucash/gtkbuilder/assistant-csv-export.glade:589
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:423
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
 msgid "C_hoose Date"
 msgstr "Pili_h Tanggal"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:604
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:438
+#: gnucash/gtkbuilder/assistant-csv-export.glade:606
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:440
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:282
 msgid "_Today"
 msgstr "_Hari Ini"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:691
+#: gnucash/gtkbuilder/assistant-csv-export.glade:693
 msgid "Account Selection"
 msgstr "Pemilihan Akun"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:705
+#: gnucash/gtkbuilder/assistant-csv-export.glade:707
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
@@ -13057,19 +13075,19 @@ msgstr ""
 "\n"
 "Masukkan nama berkas dan lokasi untuk Ekspor...\n"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:718
+#: gnucash/gtkbuilder/assistant-csv-export.glade:720
 msgid "Choose File Name for Export"
 msgstr "Pilih Nama Berkas untuk Ekspor"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:732
+#: gnucash/gtkbuilder/assistant-csv-export.glade:734
 msgid "Export Now..."
 msgstr "Ekspor Sekarang..."
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:740
+#: gnucash/gtkbuilder/assistant-csv-export.glade:742
 msgid "Summary"
 msgstr "Ikhtisar"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:745
+#: gnucash/gtkbuilder/assistant-csv-export.glade:747
 msgid "Export Summary"
 msgstr "Ikhtisar Ekspor"
 
@@ -13217,34 +13235,25 @@ msgstr "Tab"
 msgid "Hyphen (-)"
 msgstr "Tanda penghubung (-)"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:453
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:481
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:448
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:476
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:449
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:462
-msgid "•"
-msgstr "•"
-
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:467
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:462
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:466
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:461
 msgid "Double-click anywhere on the table below to insert a column break"
 msgstr ""
 "Klik dua kali di mana saja pada tabel di bawah untuk menyisipkan pemutus "
 "kolom"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:495
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:490
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:492
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:487
 msgid "Right-click anywhere in a column to modify it (widen, narrow, merge)"
 msgstr ""
 "Klik-kanan di mana saja di kolom untuk memodifikasinya (melebarkan, "
 "mempersempit, menggabungkan)"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:538
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:534
 msgid "Allow existing prices to be over written."
 msgstr "Izinkan menimpa harga yang sudah ada."
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:543
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:539
 msgid ""
 "Normally prices are not over written, select this to change that. This "
 "setting is not saved."
@@ -13252,43 +13261,44 @@ msgstr ""
 "Normalnya harga tidak bisa ditimpa, pilih ini untuk mengubahnya. Pengaturan "
 "ini tidak disimpan."
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:567
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:568
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:563
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:564
 msgid "<b>File Format</b>"
 msgstr "<b>Format Berkas</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:596
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:603
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:592
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:599
+#: gnucash/gtkbuilder/dialog-preferences.glade:1029
 #: gnucash/gtkbuilder/gnc-date-format.glade:39
 msgid "Date Format"
 msgstr "Format Tanggal"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:608
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:615
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:604
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:611
 msgid "Currency Format"
 msgstr "Format Mata Uang"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:620
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:627
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:616
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:623
 msgid "Encoding"
 msgstr "Pengkodean"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:632
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:639
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:628
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:635
 msgid "Leading Lines to Skip"
 msgstr "Baris Terdepan untuk Diabaikan"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:644
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:651
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:640
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:647
 msgid "Trailing Lines to Skip"
 msgstr "Baris Terakhir untuk Diabaikan"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:723
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:789
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:719
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:785
 msgid "Skip alternate lines"
 msgstr "Abaikan baris secara berseling"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:735
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:731
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -13307,35 +13317,36 @@ msgstr ""
 "* Jika 'Baris Terdepan untuk Diabaikan' diatur pada 4, baris pertama untuk "
 "diimpor akan menjadi baris 5. Baris 6, 8, 10, ... akan diabaikan."
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:797
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:809
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:793
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:805
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Lain-lain</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:857
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:853
 msgid "<b>Commodity From</b>"
 msgstr "<b>Komoditas Dari</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:902
-msgid "<b>Currency To</b>"
-msgstr "<b>Mata Uang Ke</b>"
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:898
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
+msgid "Currency To"
+msgstr "Mata Uang Ke"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:967
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:904
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:965
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:900
 msgid "Select the type of each column to import."
 msgstr "Pilih tipe tiap kolom untuk diimpor."
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:989
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:926
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:987
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:922
 msgid "Skip Errors"
 msgstr "Lewati Galat"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1012
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:949
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1010
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:945
 msgid "Import Preview"
 msgstr "Pratinjau Impor"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1028
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1026
 msgid ""
 "<b>Press Apply to add the Prices.\n"
 "Cancel to abort.</b>"
@@ -13343,7 +13354,7 @@ msgstr ""
 "<b>Tekan Terapkan untuk menambahkan Harga.\n"
 "Batal untuk membatalkan.</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1043
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1041
 msgid "Import Prices Now"
 msgstr "Impor Harga Sekarang"
 
@@ -13410,11 +13421,11 @@ msgstr ""
 msgid "Transaction Import Assistant"
 msgstr "Asisten Impor Transaksi"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:534
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:530
 msgid "Multi-split"
 msgstr "Multi-pisah"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:538
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:534
 msgid ""
 "Normally the importer will assume each line in the input file will "
 "correspond to one transaction. Each line can have information for one "
@@ -13443,7 +13454,7 @@ msgstr ""
 "pertama, pengimpor akan menganggap baris ini sebagai bagian dari transaksi "
 "yang sama."
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:771
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:767
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -13462,35 +13473,35 @@ msgstr ""
 "* Jika 'Baris Terdepan untuk Diabaikan' diatur pada 4, baris pertama untuk "
 "diimpor akan menjadi baris 5. Baris 6, 8, 10, ... akan diabaikan."
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:837
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:833
 msgid "<b>Account</b>"
 msgstr "<b>Akun</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:964
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:960
 msgid "Select a row to change the mappings"
 msgstr "Pilih sebuah baris untuk mengubah pemetaan"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:993
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:989
 #: gnucash/import-export/import-account-matcher.c:185
 msgid "Account ID"
 msgstr "ID Akun"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1032
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1028
 msgid "Error text."
 msgstr "Teks galat."
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1042
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1038
 #: gnucash/gtkbuilder/assistant-qif-import.glade:633
 #: gnucash/gtkbuilder/assistant-qif-import.glade:765
 #: gnucash/gtkbuilder/assistant-qif-import.glade:895
 msgid "Change GnuCash _Account..."
 msgstr "Ubah _Akun GnuCash..."
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1065
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1061
 msgid "Match Import and GnuCash accounts"
 msgstr "Cocokkan akun Impor dan GnuCash"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1081
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1077
 msgid ""
 "If you click \"Next\" Gnucash will perform a number of checks.\n"
 "\n"
@@ -13535,11 +13546,11 @@ msgstr ""
 "\n"
 "Informasi lebih lanjut dapat ditampilkan dengan menggunakan tombol bantuan."
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1106
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1102
 msgid "Transaction Information"
 msgstr "Informasi Transaksi"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1133
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1129
 msgid "Match Transactions"
 msgstr "Cocokkan Transaksi"
 
@@ -13595,30 +13606,27 @@ msgstr ""
 "cara yang mungkin akan Anda pakai ketika menggunakan GnuCash. Setiap "
 "kategori yang Anda pilih akan menyebabkan beberapa akun akan dibuat."
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:170
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:169
 msgid "<b>Categories</b>"
 msgstr "<b>Kategori</b>"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:265
-#: gnucash/gtkbuilder/dialog-account.glade:890
-#: gnucash/gtkbuilder/dialog-reset-warnings.glade:104
-msgid "_Select All"
-msgstr "Pilih _Semua"
-
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:281
-#: gnucash/gtkbuilder/dialog-account.glade:906
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:280
+#: gnucash/gtkbuilder/dialog-account.glade:908
 msgid "C_lear All"
 msgstr "_Bersihkan Semua"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:319
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:318
 msgid "<b>Category Description</b>"
 msgstr "<b>Deskripsi Kategori</b>"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:427
-msgid "<b>Notes</b>"
-msgstr "<b>Catatan</b>"
+#. %s is an account template
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:384
+#, fuzzy, c-format
+#| msgid "Accounts in '%s'"
+msgid "Accounts in %s"
+msgstr "Akun di '%s'"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:474
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:477
 msgid ""
 "If not satisfied with the available templates, please read the wiki page "
 "linked below and share your new or improved template."
@@ -13626,7 +13634,7 @@ msgstr ""
 "Jika Anda merasa kurang dengan templat yang tersedia, silakan baca halaman "
 "wiki terkait di bawah ini dan bagikan perbaikan atau templat baru Anda."
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:487
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:490
 msgid ""
 "The selection you make here is only the starting point for your personalized "
 "account hierarchy. Accounts can be added, renamed, moved, or deleted by hand "
@@ -13636,15 +13644,15 @@ msgstr ""
 "pribadi Anda. Akun dapat ditambahkan, diganti namanya, dipindahkan, atau "
 "dihapus sesuai keinginan Anda."
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:504
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:507
 msgid "GnuCash Account Template Wiki"
 msgstr "Wiki Templat Akun GnuCash"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:519
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:522
 msgid "Choose accounts to create"
 msgstr "Pilih akun yang akan dibuat"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:534
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:537
 msgid ""
 "\n"
 "If you would like to change an account's name, click on the row containing "
@@ -13677,11 +13685,11 @@ msgstr ""
 "<b>Catatan:</b> semua akun kecuali Ekuitas dan akun placeholder dapat "
 "memiliki saldo awal.\n"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:572
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:575
 msgid "Setup selected accounts"
 msgstr "Siapkan akun yang dipilih"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:582
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
 "Press `Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
@@ -13697,7 +13705,7 @@ msgstr ""
 "\n"
 "Tekan `Batal' untuk menutup dialog ini tanpa membuat akun baru."
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:591
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:594
 msgid "Finish Account Setup"
 msgstr "Selesai Penyiapan Akun"
 
@@ -13789,6 +13797,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:173
 #: gnucash/gtkbuilder/assistant-loan.glade:1175
+#: gnucash/gtkbuilder/dialog-preferences.glade:363
 #: gnucash/gtkbuilder/dialog-sx.glade:261
 #: gnucash/gtkbuilder/gnc-frequency.glade:604
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:346
@@ -13956,6 +13965,7 @@ msgid "Range"
 msgstr "Rentang"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1187
+#: gnucash/gtkbuilder/dialog-preferences.glade:378
 #: gnucash/gtkbuilder/dialog-sx.glade:333
 #: gnucash/report/reports/example/average-balance.scm:41
 #: gnucash/report/reports/example/daily-reports.scm:53
@@ -13974,13 +13984,6 @@ msgstr "Rentang"
 #: gnucash/report/trep-engine.scm:96
 msgid "End Date"
 msgstr "Tanggal Akhir"
-
-#: gnucash/gtkbuilder/assistant-loan.glade:1201
-#: gnucash/report/reports/standard/job-report.scm:563
-#: gnucash/report/reports/standard/new-owner-report.scm:1172
-#: gnucash/report/reports/standard/owner-report.scm:795
-msgid "Date Range"
-msgstr "Rentang Tanggal"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1243
 msgid "Loan Review"
@@ -14307,11 +14310,7 @@ msgstr ""
 msgid "_Select the currency to use for all imported transactions:"
 msgstr "Pilih mata uang yang digunakan untuk _semua transaksi yang diimpor:"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:975
-msgid "<b>Book Options</b>"
-msgstr "<b>Opsi Buku</b>"
-
-#: gnucash/gtkbuilder/assistant-qif-import.glade:988
+#: gnucash/gtkbuilder/assistant-qif-import.glade:990
 msgid ""
 "Since you are creating a new file, you will next see a dialog for setting "
 "book options. These can affect how GnuCash imports transactions. If you come "
@@ -14326,12 +14325,12 @@ msgstr ""
 "kedua kalinya ketika Anda maju. Anda dapat mengaksesnya secara langsung dari "
 "menu melalui Berkas->Properti."
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:999
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1001
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2642
 msgid "Choose the QIF file currency and select Book Options"
 msgstr "Pilih mata uang berkas QIF dan pilih Opsi Buku"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1020
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1022
 msgid ""
 "Below you are asked to provide information about stocks, mutual funds, and "
 "other investments that appear in the QIF file(s) you are importing. GnuCash "
@@ -14362,34 +14361,35 @@ msgstr ""
 "Jika bursa Anda tidak terdaftar, atau tidak tersedia pilihan yang sesuai, "
 "Anda dapat memasukkan pilihan baru."
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1038
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1040
 msgid "Enter Information about..."
 msgstr "Masukkan Informasi tentang..."
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1064
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1066
 msgid "All fields must be complete to continue..."
 msgstr "Semua bidang harus lengkap untuk melanjutkan..."
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1081
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1083
 msgid "Tradable commodities"
 msgstr "Komoditas dapat diperdagangkan"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1157
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1159
 msgid "_Start Import"
 msgstr "_Mulai Impor"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1172
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1174
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1733
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2986
 msgid "P_ause"
 msgstr "Jed_a"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1227
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1229
+#: gnucash/gtkbuilder/dialog-account-picker.glade:21
 msgid "QIF Import"
 msgstr "Impor QIF"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1241
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1243
 msgid ""
 "\n"
 "If you are importing a QIF file from a bank or other financial institution, "
@@ -14418,23 +14418,23 @@ msgstr ""
 "\n"
 "Klik \"Berikutnya\" untuk meninjau kemungkinan kecocokan."
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1257
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1259
 msgid "Match existing transactions"
 msgstr "Cocokkan transaksi yang ada"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1300
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1302
 msgid "_Imported transactions needing review"
 msgstr "Transaksi yang di_impor perlu diperiksa"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1339
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1341
 msgid "_Possible matches for the selected transaction"
 msgstr "Kecocokan yang mungkin untuk transaksi yang di_pilih"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1360
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1362
 msgid "Select possible duplicates"
 msgstr "Pilih duplikat yang mungkin"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1368
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1370
 msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
@@ -14458,15 +14458,15 @@ msgstr ""
 "\n"
 "Klik \"Batal\" untuk membatalkan proses impor QIF."
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1377
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1379
 msgid "Update your GnuCash accounts"
 msgstr "Perbarui akun GnuCash Anda"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1385
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1387
 msgid "Summary Text"
 msgstr "Teks Ikhtisar"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1390
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1392
 msgid "Qif Import Summary"
 msgstr "Ikhtisar Impor Qif"
 
@@ -14540,13 +14540,13 @@ msgstr ""
 "masukkan detail pembayaran itu di sini. Jika tidak, klik \"Berikutnya\"."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:286
-#: gnucash/import-export/aqb/dialog-ab.glade:1206
+#: gnucash/import-export/aqb/dialog-ab.glade:1212
 msgid "_Amount"
 msgstr "Juml_ah"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:300
 #: gnucash/gtkbuilder/dialog-print-check.glade:1129
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:956
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:958
 msgid "_Memo"
 msgstr "_Memo"
 
@@ -14634,20 +14634,53 @@ msgstr "Preferensi"
 
 #. Preferences Dialog, General Tab
 #: gnucash/gtkbuilder/business-prefs.glade:55
-#: gnucash/gtkbuilder/dialog-preferences.glade:1381
-#: gnucash/gtkbuilder/dialog-preferences.glade:2067
-msgid "<b>General</b>"
-msgstr "<b>Umum</b>"
+#: gnucash/gtkbuilder/dialog-account.glade:1672
+#: gnucash/gtkbuilder/dialog-preferences.glade:1391
+#: gnucash/gtkbuilder/dialog-preferences.glade:2022
+#: gnucash/gtkbuilder/dialog-preferences.glade:2079
+#: gnucash/report/report-core.scm:157
+#: gnucash/report/reports/standard/equity-statement.scm:108
+#: gnucash/report/reports/standard/equity-statement.scm:112
+#: gnucash/report/reports/standard/register.scm:347
+#: gnucash/report/reports/standard/trial-balance.scm:185
+#: gnucash/report/reports/standard/trial-balance.scm:189
+#: gnucash/report/reports/standard/view-column.scm:50
+#: gnucash/report/reports/standard/view-column.scm:76
+#: gnucash/report/stylesheets/css.scm:118
+#: gnucash/report/stylesheets/footer.scm:54
+#: gnucash/report/stylesheets/footer.scm:61
+#: gnucash/report/stylesheets/footer.scm:68
+#: gnucash/report/stylesheets/footer.scm:75
+#: gnucash/report/stylesheets/footer.scm:82
+#: gnucash/report/stylesheets/head-or-tail.scm:52
+#: gnucash/report/stylesheets/head-or-tail.scm:58
+#: gnucash/report/stylesheets/head-or-tail.scm:64
+#: gnucash/report/stylesheets/head-or-tail.scm:70
+#: gnucash/report/stylesheets/head-or-tail.scm:76
+#: gnucash/report/stylesheets/head-or-tail.scm:82
+#: gnucash/report/stylesheets/head-or-tail.scm:88
+#: gnucash/report/stylesheets/head-or-tail.scm:94
+#: gnucash/report/stylesheets/head-or-tail.scm:101
+#: gnucash/report/stylesheets/head-or-tail.scm:107
+#: gnucash/report/stylesheets/head-or-tail.scm:113
+#: gnucash/report/stylesheets/head-or-tail.scm:119
+#: gnucash/report/stylesheets/head-or-tail.scm:125
+#: gnucash/report/stylesheets/head-or-tail.scm:131
+#: gnucash/report/stylesheets/plain.scm:46
+#: gnucash/report/stylesheets/plain.scm:52
+#: gnucash/report/stylesheets/plain.scm:57
+msgid "General"
+msgstr "Umum"
 
-#: gnucash/gtkbuilder/business-prefs.glade:65
+#: gnucash/gtkbuilder/business-prefs.glade:67
 msgid "Enable extra _buttons"
 msgstr "Aktifkan tom_bol ekstra"
 
-#: gnucash/gtkbuilder/business-prefs.glade:83
+#: gnucash/gtkbuilder/business-prefs.glade:85
 msgid "_Open in new window"
 msgstr "_Buka di jendela baru"
 
-#: gnucash/gtkbuilder/business-prefs.glade:89
+#: gnucash/gtkbuilder/business-prefs.glade:91
 msgid ""
 "If checked, each invoice will be opened in its own top level window. If "
 "clear, the invoice will be opened in the current window."
@@ -14655,11 +14688,11 @@ msgstr ""
 "Jika dicentang, setiap faktur akan dibuka pada jendela tingkat atas mereka "
 "sendiri. Jika tidak, faktur akan dibuka pada jendela saat ini."
 
-#: gnucash/gtkbuilder/business-prefs.glade:101
+#: gnucash/gtkbuilder/business-prefs.glade:103
 msgid "_Accumulate splits on post"
 msgstr "_Akumulasikan split saat pos"
 
-#: gnucash/gtkbuilder/business-prefs.glade:107
+#: gnucash/gtkbuilder/business-prefs.glade:109
 msgid ""
 "Whether multiple entries in an invoice which transfer to the same account "
 "should be accumulated into a single split by default. This setting can be "
@@ -14669,28 +14702,28 @@ msgstr ""
 "harus diakumulasikan ke dalam sebuah split tunggal, secara baku. Pengaturan "
 "ini bisa diubah pada dialog Pos."
 
-#: gnucash/gtkbuilder/business-prefs.glade:132
+#: gnucash/gtkbuilder/business-prefs.glade:134
 msgid "<b>Invoices</b>"
 msgstr "<b>Faktur</b>"
 
-#: gnucash/gtkbuilder/business-prefs.glade:142
+#: gnucash/gtkbuilder/business-prefs.glade:144
 msgid "Not_ify when due"
 msgstr "Ber_itahu jika jatuh tempo"
 
-#: gnucash/gtkbuilder/business-prefs.glade:148
-#: gnucash/gtkbuilder/business-prefs.glade:237
+#: gnucash/gtkbuilder/business-prefs.glade:150
+#: gnucash/gtkbuilder/business-prefs.glade:239
 msgid "Whether to display the list of Bills Due at startup."
 msgstr "Apakah menampilkan daftar Tagihan Jatuh Tempo pada saat mulai."
 
-#: gnucash/gtkbuilder/business-prefs.glade:163
+#: gnucash/gtkbuilder/business-prefs.glade:165
 msgid "Report for printing"
 msgstr "Laporan untuk dicetak"
 
-#: gnucash/gtkbuilder/business-prefs.glade:172
+#: gnucash/gtkbuilder/business-prefs.glade:174
 msgid "_Tax included"
 msgstr "_Termasuk pajak"
 
-#: gnucash/gtkbuilder/business-prefs.glade:178
+#: gnucash/gtkbuilder/business-prefs.glade:180
 msgid ""
 "Whether tax is included by default in entries on Bills. This setting is "
 "inherited by new customers and vendors."
@@ -14699,23 +14732,23 @@ msgstr ""
 "diwarisi oleh pelanggan dan vendor baru."
 
 #. See the tooltip "At post time..." for details.
-#: gnucash/gtkbuilder/business-prefs.glade:190
+#: gnucash/gtkbuilder/business-prefs.glade:192
 msgid "_Process payments on posting"
 msgstr "_Proses pembayaran saat mengepos"
 
-#: gnucash/gtkbuilder/business-prefs.glade:221
+#: gnucash/gtkbuilder/business-prefs.glade:223
 msgid "<b>Bills</b>"
 msgstr "<b>Tagihan</b>"
 
-#: gnucash/gtkbuilder/business-prefs.glade:231
+#: gnucash/gtkbuilder/business-prefs.glade:233
 msgid "_Notify when due"
 msgstr "Beritahu jika jatuh te_mpo"
 
-#: gnucash/gtkbuilder/business-prefs.glade:249
+#: gnucash/gtkbuilder/business-prefs.glade:251
 msgid "Ta_x included"
 msgstr "Termasuk _pajak"
 
-#: gnucash/gtkbuilder/business-prefs.glade:255
+#: gnucash/gtkbuilder/business-prefs.glade:257
 msgid ""
 "Whether tax is included by default in entries on Invoices. This setting is "
 "inherited by new customers and vendors."
@@ -14724,27 +14757,27 @@ msgstr ""
 "diwarisi oleh pelanggan dan vendor baru."
 
 #. See the tooltip "At post time..." for details.
-#: gnucash/gtkbuilder/business-prefs.glade:267
+#: gnucash/gtkbuilder/business-prefs.glade:269
 msgid "Pro_cess payments on posting"
 msgstr "Pro_ses pembayaran saat mengepos"
 
-#: gnucash/gtkbuilder/business-prefs.glade:287
+#: gnucash/gtkbuilder/business-prefs.glade:289
 msgid "Days in ad_vance"
 msgstr "_Hari sebelumnya"
 
-#: gnucash/gtkbuilder/business-prefs.glade:302
+#: gnucash/gtkbuilder/business-prefs.glade:304
 msgid "How many days in the future to warn about Bills coming due."
 msgstr ""
 "Berapa hari di masa mendatang untuk memperingatkan tentang Tagihan yang akan "
 "jatuh tempo."
 
-#: gnucash/gtkbuilder/business-prefs.glade:339
+#: gnucash/gtkbuilder/business-prefs.glade:341
 msgid "How many days in the future to warn about Invoices coming due."
 msgstr ""
 "Berapa hari di masa mendatang untuk memperingatkan tentang Faktur yang akan "
 "jatuh tempo."
 
-#: gnucash/gtkbuilder/business-prefs.glade:352
+#: gnucash/gtkbuilder/business-prefs.glade:354
 msgid "_Days in advance"
 msgstr "_Hari sebelumnya"
 
@@ -14769,7 +14802,7 @@ msgid "Enable the sections to Cascade"
 msgstr "Aktifkan bagian untuk menjadi Bertingkat"
 
 #: gnucash/gtkbuilder/dialog-account.glade:199
-#: gnucash/gtkbuilder/dialog-account.glade:1326
+#: gnucash/gtkbuilder/dialog-account.glade:1330
 #: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:293
 #: gnucash/report/stylesheets/plain.scm:232
 msgid "Default"
@@ -14807,21 +14840,17 @@ msgstr "_Pindah ke"
 msgid "Delete the _subaccount"
 msgstr "Hapus _sub-akun"
 
-#: gnucash/gtkbuilder/dialog-account.glade:554
-msgid "<b>Transactions</b>"
-msgstr "<b>Transaksi</b>"
-
-#: gnucash/gtkbuilder/dialog-account.glade:572
-#: gnucash/gtkbuilder/dialog-account.glade:690
+#: gnucash/gtkbuilder/dialog-account.glade:574
+#: gnucash/gtkbuilder/dialog-account.glade:692
 msgid "M_ove to"
 msgstr "P_indah ke"
 
-#: gnucash/gtkbuilder/dialog-account.glade:588
-#: gnucash/gtkbuilder/dialog-account.glade:706
+#: gnucash/gtkbuilder/dialog-account.glade:590
+#: gnucash/gtkbuilder/dialog-account.glade:708
 msgid "Delete all _transactions"
 msgstr "Hapus semua _transaksi"
 
-#: gnucash/gtkbuilder/dialog-account.glade:609
+#: gnucash/gtkbuilder/dialog-account.glade:611
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
@@ -14829,15 +14858,15 @@ msgstr ""
 "Akun ini memiliki beberapa transaksi. Apa yang ingin Anda lakukan dengan "
 "transaksi tersebut?"
 
-#: gnucash/gtkbuilder/dialog-account.glade:623
+#: gnucash/gtkbuilder/dialog-account.glade:625
 msgid "This account contains read-only transactions which may not be deleted."
 msgstr "Akun ini memiliki transaksi hanya-baca yang tidak bisa dihapus."
 
-#: gnucash/gtkbuilder/dialog-account.glade:672
+#: gnucash/gtkbuilder/dialog-account.glade:674
 msgid "<b>Sub-account Transactions</b>"
 msgstr "<b>Transaksi Sub-akun</b>"
 
-#: gnucash/gtkbuilder/dialog-account.glade:727
+#: gnucash/gtkbuilder/dialog-account.glade:729
 msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
 "would you like to do with these transactions?"
@@ -14845,7 +14874,7 @@ msgstr ""
 "Anda akan menghapus sub-akun yang memiliki beberapa transaksi. Apa yang "
 "ingin Anda lakukan dengan transaksi itu?"
 
-#: gnucash/gtkbuilder/dialog-account.glade:741
+#: gnucash/gtkbuilder/dialog-account.glade:743
 msgid ""
 "One or more sub-accounts contain read-only transactions which may not be "
 "deleted."
@@ -14853,86 +14882,89 @@ msgstr ""
 "Satu atau lebih sub-akun memiliki transaksi hanya-baca yang tidak bisa "
 "dihapus."
 
-#: gnucash/gtkbuilder/dialog-account.glade:801
+#: gnucash/gtkbuilder/dialog-account.glade:803
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:8
 #: gnucash/report/trep-engine.scm:69
 msgid "Filter By..."
 msgstr "Filter Berdasar..."
 
-#: gnucash/gtkbuilder/dialog-account.glade:922
+#: gnucash/gtkbuilder/dialog-account.glade:924
 msgid "_Default"
 msgstr "_Baku"
 
-#: gnucash/gtkbuilder/dialog-account.glade:954
+#: gnucash/gtkbuilder/dialog-account.glade:956
 #: gnucash/report/reports/standard/account-summary.scm:117
 msgid "Account Type"
 msgstr "Tipe Akun"
 
-#: gnucash/gtkbuilder/dialog-account.glade:968
+#: gnucash/gtkbuilder/dialog-account.glade:970
 msgid "Show _hidden accounts"
 msgstr "Tampilkan akun _tersembunyi"
 
-#: gnucash/gtkbuilder/dialog-account.glade:972
+#: gnucash/gtkbuilder/dialog-account.glade:974
 msgid "Show accounts which have the option \"Hidden\" checked."
 msgstr "Tampilkan akun yang memiliki opsi \"Tersembunyi\" aktif."
 
-#: gnucash/gtkbuilder/dialog-account.glade:986
+#: gnucash/gtkbuilder/dialog-account.glade:988
 msgid "Show _unused accounts"
 msgstr "Tampilkan ak_un tak terpakai"
 
-#: gnucash/gtkbuilder/dialog-account.glade:990
+#: gnucash/gtkbuilder/dialog-account.glade:992
 msgid "Show accounts which do not have any transactions."
 msgstr "Tampilkan akun yang tidak memiliki transaksi."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1004
+#: gnucash/gtkbuilder/dialog-account.glade:1006
 msgid "Show _zero total accounts"
 msgstr "Tampilkan akun dengan total _nol"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1008
+#: gnucash/gtkbuilder/dialog-account.glade:1010
 msgid "Show accounts which have a zero total value."
 msgstr "Tampilkan akun yang memiliki nilai total nol."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1063
+#: gnucash/gtkbuilder/dialog-account.glade:1065
 msgid "Use Commodity Value"
 msgstr "Gunakan Nilai Komoditas"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1194
-msgid "<b>Identification</b>"
-msgstr "<b>Identifikasi</b>"
+#: gnucash/gtkbuilder/dialog-account.glade:1196
+#: gnucash/gtkbuilder/dialog-customer.glade:213
+#: gnucash/gtkbuilder/dialog-employee.glade:197
+#: gnucash/gtkbuilder/dialog-vendor.glade:215
+msgid "Identification"
+msgstr "Identifikasi"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1214
+#: gnucash/gtkbuilder/dialog-account.glade:1218
 msgid "Account _name"
 msgstr "_Nama akun"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1229
+#: gnucash/gtkbuilder/dialog-account.glade:1233
 msgid "_Account code"
 msgstr "Kode _akun"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1243
+#: gnucash/gtkbuilder/dialog-account.glade:1247
 msgid "_Description"
 msgstr "_Deskripsi"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1283
+#: gnucash/gtkbuilder/dialog-account.glade:1287
 msgid "Smallest _fraction"
 msgstr "_Fraksi terkecil"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1297
+#: gnucash/gtkbuilder/dialog-account.glade:1301
 msgid "Account _Color"
 msgstr "_Warna Akun"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1350
+#: gnucash/gtkbuilder/dialog-account.glade:1354
 msgid "No_tes"
 msgstr "Ca_tatan"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1422
+#: gnucash/gtkbuilder/dialog-account.glade:1426
 msgid "Smallest fraction of this commodity that can be referenced."
 msgstr "Fraksi terkecil dari komoditas ini yang dapat dijadikan acuan."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1444
+#: gnucash/gtkbuilder/dialog-account.glade:1448
 msgid "Placeholde_r"
 msgstr "Placeholde_r"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1448
+#: gnucash/gtkbuilder/dialog-account.glade:1452
 msgid ""
 "This account is present solely as a placeholder in the hierarchy. "
 "Transactions may not be posted to this account, only to sub-accounts of this "
@@ -14941,11 +14973,11 @@ msgstr ""
 "Akun ini disediakan khusus sebagai placeholder pada hierarki. Transaksi "
 "tidak boleh dipos di akun ini, hanya boleh di sub-akun pada akun ini."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1460
+#: gnucash/gtkbuilder/dialog-account.glade:1464
 msgid "H_idden"
 msgstr "T_ersembunyi"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1464
+#: gnucash/gtkbuilder/dialog-account.glade:1468
 msgid ""
 "This account (and any sub-accounts) will be hidden in the account tree and "
 "will not appear in the popup account list in the register. To reset this "
@@ -14959,16 +14991,16 @@ msgstr ""
 "memberi tanda centang pada opsi \"tampilkan akun tersembunyi\". Dengan "
 "melakukan itu, Anda bisa memilih akun dan membuka kembali dialog ini."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1476
+#: gnucash/gtkbuilder/dialog-account.glade:1480
 msgid "Auto _interest transfer"
 msgstr "Transfer bunga otomat_is"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1492
+#: gnucash/gtkbuilder/dialog-account.glade:1496
 msgid "Ta_x related"
 msgstr "Terkait _Pajak"
 
 #. Translators: use the same words here as in 'Ta_x Report Options'.
-#: gnucash/gtkbuilder/dialog-account.glade:1497
+#: gnucash/gtkbuilder/dialog-account.glade:1501
 msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
@@ -14976,11 +15008,11 @@ msgstr ""
 "Gunakan Sunting->Opsi Laporan Pajak untuk menyetel bendera yang terkait "
 "dengan pajak dan menetapkan sebuah kode pajak untuk akun ini."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1509
+#: gnucash/gtkbuilder/dialog-account.glade:1513
 msgid "Opening balance"
 msgstr "Saldo awal"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1513
+#: gnucash/gtkbuilder/dialog-account.glade:1517
 msgid ""
 "This account holds opening balance transactions. Only one account per "
 "commodity can hold opening balance transactions."
@@ -14988,106 +15020,67 @@ msgstr ""
 "Akun ini menyimpan transaksi-transaksi saldo awal. Hanya ada satu akun per "
 "komoditas yang bisa menyimpan transaksi-transaksi saldo awal."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1560
+#: gnucash/gtkbuilder/dialog-account.glade:1564
 msgid "<b>Acco_unt Type</b>"
 msgstr "<b>Tipe Ak_un</b>"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1586
-msgid "<b>_Parent Account</b>"
-msgstr "<b>Akun I_nduk</b>"
+#: gnucash/gtkbuilder/dialog-account.glade:1590
+#: gnucash/gtkbuilder/dialog-tax-info.glade:643
+msgid "_Parent Account"
+msgstr "Akun _Induk"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1666
-#: gnucash/gtkbuilder/dialog-preferences.glade:2010
-#: gnucash/report/report-core.scm:157
-#: gnucash/report/reports/standard/equity-statement.scm:108
-#: gnucash/report/reports/standard/equity-statement.scm:112
-#: gnucash/report/reports/standard/register.scm:347
-#: gnucash/report/reports/standard/trial-balance.scm:185
-#: gnucash/report/reports/standard/trial-balance.scm:189
-#: gnucash/report/reports/standard/view-column.scm:50
-#: gnucash/report/reports/standard/view-column.scm:76
-#: gnucash/report/stylesheets/css.scm:118
-#: gnucash/report/stylesheets/footer.scm:54
-#: gnucash/report/stylesheets/footer.scm:61
-#: gnucash/report/stylesheets/footer.scm:68
-#: gnucash/report/stylesheets/footer.scm:75
-#: gnucash/report/stylesheets/footer.scm:82
-#: gnucash/report/stylesheets/head-or-tail.scm:52
-#: gnucash/report/stylesheets/head-or-tail.scm:58
-#: gnucash/report/stylesheets/head-or-tail.scm:64
-#: gnucash/report/stylesheets/head-or-tail.scm:70
-#: gnucash/report/stylesheets/head-or-tail.scm:76
-#: gnucash/report/stylesheets/head-or-tail.scm:82
-#: gnucash/report/stylesheets/head-or-tail.scm:88
-#: gnucash/report/stylesheets/head-or-tail.scm:94
-#: gnucash/report/stylesheets/head-or-tail.scm:101
-#: gnucash/report/stylesheets/head-or-tail.scm:107
-#: gnucash/report/stylesheets/head-or-tail.scm:113
-#: gnucash/report/stylesheets/head-or-tail.scm:119
-#: gnucash/report/stylesheets/head-or-tail.scm:125
-#: gnucash/report/stylesheets/head-or-tail.scm:131
-#: gnucash/report/stylesheets/plain.scm:46
-#: gnucash/report/stylesheets/plain.scm:52
-#: gnucash/report/stylesheets/plain.scm:57
-msgid "General"
-msgstr "Umum"
-
-#: gnucash/gtkbuilder/dialog-account.glade:1691
+#: gnucash/gtkbuilder/dialog-account.glade:1697
 msgid "<b>Balance Information</b>"
 msgstr "<b>Informasi Saldo</b>"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1705
+#: gnucash/gtkbuilder/dialog-account.glade:1711
 msgid "<b>Initial Balance Transfer</b>"
 msgstr "<b>Transfer Saldo Awal</b>"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1772
+#: gnucash/gtkbuilder/dialog-account.glade:1778
 msgid "_Use equity 'Opening Balances' account"
 msgstr "G_unakan akun 'Saldo Awal' ekuitas"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1789
+#: gnucash/gtkbuilder/dialog-account.glade:1795
 msgid "_Select transfer account"
 msgstr "Pilih akun tran_sfer"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1900
+#: gnucash/gtkbuilder/dialog-account.glade:1906
 msgid "Renumber sub-accounts"
 msgstr "Nomori ulang sub-akun"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1933
+#: gnucash/gtkbuilder/dialog-account.glade:1939
 msgid "_Renumber"
 msgstr "Nomo_ri ulang"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1965
+#: gnucash/gtkbuilder/dialog-account.glade:1971
 msgid "Prefix"
 msgstr "Prefiks"
 
-#: gnucash/gtkbuilder/dialog-account.glade:2003
+#: gnucash/gtkbuilder/dialog-account.glade:2009
 msgid "Examples"
 msgstr "Contoh"
 
-#: gnucash/gtkbuilder/dialog-account.glade:2015
+#: gnucash/gtkbuilder/dialog-account.glade:2021
 #: gnucash/report/reports/standard/balance-forecast.scm:42
 msgid "Interval"
 msgstr "Interval"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:21
-msgid "<b>QIF Import</b>"
-msgstr "<b>Impor QIF</b>"
-
-#: gnucash/gtkbuilder/dialog-account-picker.glade:31
+#: gnucash/gtkbuilder/dialog-account-picker.glade:33
 msgid "_Show documentation"
 msgstr "Tampilkan dokumenta_si"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:50
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:558
+#: gnucash/gtkbuilder/dialog-account-picker.glade:52
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:560
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:402
 msgid "_Reconciled"
 msgstr "Di_rekonsiliasi"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:69
+#: gnucash/gtkbuilder/dialog-account-picker.glade:71
 msgid "_Cleared"
 msgstr "_Klir"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:75
+#: gnucash/gtkbuilder/dialog-account-picker.glade:77
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as cleared."
@@ -15095,11 +15088,11 @@ msgstr ""
 "Ketika status tidak ditentukan di dalam berkas QIF, transaksi akan ditandai "
 "sebagai klir."
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:88
+#: gnucash/gtkbuilder/dialog-account-picker.glade:90
 msgid "_Not cleared"
 msgstr "_Belum klir"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:94
+#: gnucash/gtkbuilder/dialog-account-picker.glade:96
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as not cleared."
@@ -15107,18 +15100,18 @@ msgstr ""
 "Ketika status tidak ditentukan di dalam berkas QIF, transaksi akan ditandai "
 "sebagai belum klir."
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:110
+#: gnucash/gtkbuilder/dialog-account-picker.glade:112
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
 msgstr ""
 "Status baku transaksi (ditimpa oleh status yang diberikan oleh berkas QIF)"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:141
+#: gnucash/gtkbuilder/dialog-account-picker.glade:143
 #: gnucash/gtkbuilder/dialog-import.glade:12
 msgid "Select Account"
 msgstr "Pilih Akun"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:219
+#: gnucash/gtkbuilder/dialog-account-picker.glade:221
 msgid "_Select or add a GnuCash account:"
 msgstr "Pilih atau tambah akun GnuCa_sh:"
 
@@ -15127,6 +15120,7 @@ msgid "Import transactions from text file"
 msgstr "Impor transaksi dari berkas teks"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:123
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
 msgid "1. Choose the file to import"
 msgstr "1. Pilih berkas untuk diimpor"
 
@@ -15143,35 +15137,37 @@ msgid "2. Select import type"
 msgstr "2. Pilih tipe impor"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:216
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:215
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:217
 msgid "Semicolon separated"
 msgstr "Dipisahkan titik koma"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:234
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:232
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:234
 msgid "Comma separated"
 msgstr "Dipisahkan koma"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:252
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:250
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:252
 msgid "Semicolon separated with quotes"
 msgstr "Tanda titik koma dipisahkan dengan tanda petik"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:270
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:268
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:270
 msgid "Comma separated with quotes"
 msgstr "Tanda koma dipisahkan dengan tanda petik"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:288
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:286
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:288
 msgid "Custom regular expression"
 msgstr "Ekspresi reguler tersuai"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:310
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:310
 msgid "3. Select import options"
 msgstr "3. Pilih opsi impor"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:349
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:353
 msgid "4. Preview"
 msgstr "4. Pratinjau"
 
@@ -15264,6 +15260,7 @@ msgid "Table"
 msgstr "Tabel"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:409
+#: gnucash/gtkbuilder/dialog-billterms.glade:434
 #: gnucash/gtkbuilder/dialog-customer.glade:524
 #: gnucash/gtkbuilder/dialog-invoice.glade:336
 #: gnucash/gtkbuilder/dialog-invoice.glade:957
@@ -15271,75 +15268,71 @@ msgstr "Tabel"
 msgid "Terms"
 msgstr "Ketentuan"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:434
-msgid "<b>Terms</b>"
-msgstr "<b>Ketentuan</b>"
-
-#: gnucash/gtkbuilder/dialog-billterms.glade:481
+#: gnucash/gtkbuilder/dialog-billterms.glade:483
 msgid "Delete the current Billing Term"
 msgstr "Hapus Jangka Penagihan saat ini"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:499
+#: gnucash/gtkbuilder/dialog-billterms.glade:501
 msgid "Create a new Billing Term"
 msgstr "Buat Jangka Penagihan baru"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:545
-#: gnucash/gtkbuilder/dialog-billterms.glade:844
-#: gnucash/gtkbuilder/dialog-billterms.glade:1088
+#: gnucash/gtkbuilder/dialog-billterms.glade:547
+#: gnucash/gtkbuilder/dialog-billterms.glade:846
+#: gnucash/gtkbuilder/dialog-billterms.glade:1090
 msgid "<b>Term Definition</b>"
 msgstr "<b>Definisi Jangka</b>"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:572
-#: gnucash/gtkbuilder/dialog-billterms.glade:909
-#: gnucash/gtkbuilder/dialog-billterms.glade:1146
+#: gnucash/gtkbuilder/dialog-billterms.glade:574
+#: gnucash/gtkbuilder/dialog-billterms.glade:911
+#: gnucash/gtkbuilder/dialog-billterms.glade:1148
 msgid "De_scription"
 msgstr "De_skripsi"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:587
-#: gnucash/gtkbuilder/dialog-billterms.glade:924
-#: gnucash/gtkbuilder/dialog-billterms.glade:1161
-#: gnucash/gtkbuilder/dialog-commodity.glade:490
-#: gnucash/gtkbuilder/dialog-commodity.glade:770
+#: gnucash/gtkbuilder/dialog-billterms.glade:589
+#: gnucash/gtkbuilder/dialog-billterms.glade:926
+#: gnucash/gtkbuilder/dialog-billterms.glade:1163
+#: gnucash/gtkbuilder/dialog-commodity.glade:492
+#: gnucash/gtkbuilder/dialog-commodity.glade:772
 #: gnucash/gtkbuilder/dialog-price.glade:203
-#: gnucash/gtkbuilder/dialog-tax-table.glade:476
+#: gnucash/gtkbuilder/dialog-tax-table.glade:480
 msgid "_Type"
 msgstr "_Tipe"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:602
-#: gnucash/gtkbuilder/dialog-billterms.glade:859
-#: gnucash/gtkbuilder/dialog-billterms.glade:1043
+#: gnucash/gtkbuilder/dialog-billterms.glade:604
+#: gnucash/gtkbuilder/dialog-billterms.glade:861
+#: gnucash/gtkbuilder/dialog-billterms.glade:1045
 msgid "The description of the Billing Term, printed on invoices"
 msgstr "Deskripsi Jangka Penagihan, dicetak di faktur"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:683
+#: gnucash/gtkbuilder/dialog-billterms.glade:685
 msgid "Edit the current Billing Term"
 msgstr "Sunting Jangka Penagihan saat ini"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:736
+#: gnucash/gtkbuilder/dialog-billterms.glade:738
 msgid "Close this window"
 msgstr "Tutup jendela ini"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:798
-#: gnucash/gtkbuilder/dialog-billterms.glade:978
+#: gnucash/gtkbuilder/dialog-billterms.glade:800
+#: gnucash/gtkbuilder/dialog-billterms.glade:980
 msgid "Cancel your changes"
 msgstr "Batalkan perubahan Anda"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:816
-#: gnucash/gtkbuilder/dialog-billterms.glade:996
+#: gnucash/gtkbuilder/dialog-billterms.glade:818
+#: gnucash/gtkbuilder/dialog-billterms.glade:998
 msgid "Commit this Billing Term"
 msgstr "Tetapkan Jangka Penagihan ini"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:1025
+#: gnucash/gtkbuilder/dialog-billterms.glade:1027
 msgid "The internal name of the Billing Term."
 msgstr "Nama internal Jangka Penagihan."
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:1074
+#: gnucash/gtkbuilder/dialog-billterms.glade:1076
 msgid "<b>New Billing Term</b>"
 msgstr "<b>Jangka Penagihan Baru</b>"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:1131
+#: gnucash/gtkbuilder/dialog-billterms.glade:1133
 #: gnucash/gtkbuilder/dialog-report.glade:796
-#: gnucash/gtkbuilder/dialog-tax-table.glade:461
+#: gnucash/gtkbuilder/dialog-tax-table.glade:465
 msgid "_Name"
 msgstr "_Nama"
 
@@ -15356,27 +15349,24 @@ msgid "Choose Owner Dialog"
 msgstr "Dialog Pemilihan Pemilik"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:8
+#: gnucash/gtkbuilder/dialog-commodities.glade:27
 #: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
 msgstr "Sekuritas"
 
-#: gnucash/gtkbuilder/dialog-commodities.glade:27
-msgid "<b>Securities</b>"
-msgstr "<b>Sekuritas</b>"
-
-#: gnucash/gtkbuilder/dialog-commodities.glade:76
+#: gnucash/gtkbuilder/dialog-commodities.glade:77
 msgid "Show National Currencies"
 msgstr "Tampilkan Mata Uang Nasional"
 
-#: gnucash/gtkbuilder/dialog-commodities.glade:125
+#: gnucash/gtkbuilder/dialog-commodities.glade:126
 msgid "Add a new commodity."
 msgstr "Tambah komoditas baru."
 
-#: gnucash/gtkbuilder/dialog-commodities.glade:143
+#: gnucash/gtkbuilder/dialog-commodities.glade:144
 msgid "Remove the current commodity."
 msgstr "Buang komoditas saat ini."
 
-#: gnucash/gtkbuilder/dialog-commodities.glade:161
+#: gnucash/gtkbuilder/dialog-commodities.glade:162
 msgid "Edit the current commodity."
 msgstr "Sunting komoditas saat ini."
 
@@ -15428,11 +15418,7 @@ msgstr ""
 msgid "<b>Quote Source Information</b>"
 msgstr "<b>Informasi Sumber Data Harga</b>"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:238
-msgid "<b>Security Information</b>"
-msgstr "<b>Informasi Sekuritas</b>"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:324
+#: gnucash/gtkbuilder/dialog-commodity.glade:326
 msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
@@ -15440,23 +15426,23 @@ msgstr ""
 "Masukkan simbol tampilan. Jika dibiarkan kosong, kode saham atau kode ISO "
 "mata uang akan digunakan."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:340
+#: gnucash/gtkbuilder/dialog-commodity.glade:342
 msgid "Type of quote source"
 msgstr "Tipe sumber data harga"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:353
+#: gnucash/gtkbuilder/dialog-commodity.glade:355
 msgid "_Display symbol"
 msgstr "Simbol _Ditampilkan"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:368
+#: gnucash/gtkbuilder/dialog-commodity.glade:370
 msgid "Time_zone"
 msgstr "_Zona waktu"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:379
+#: gnucash/gtkbuilder/dialog-commodity.glade:381
 msgid "_Unknown"
 msgstr "Tak diketah_ui"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:385
+#: gnucash/gtkbuilder/dialog-commodity.glade:387
 msgid ""
 "These are quote sources that were recently added to F::Q. GnuCash does not "
 "know if these sources retrieve information from a single site or from "
@@ -15466,11 +15452,11 @@ msgstr ""
 "tidak mengetahui jika sumber tersebut mengambil infomrasi dari satu situs "
 "tunggal atau dari beberapa situs di Internet."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:400
+#: gnucash/gtkbuilder/dialog-commodity.glade:402
 msgid "_Multiple"
 msgstr "_Multipel"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:406
+#: gnucash/gtkbuilder/dialog-commodity.glade:408
 msgid ""
 "These are F::Q quote sources that retrieve information from multiple sites "
 "on the internet. If one of the sites is unavailable, F::Q will attempt to "
@@ -15480,11 +15466,11 @@ msgstr ""
 "situs di Internet. Jika salah satu situs tidak tersedia, F::Q akan berusaha "
 "mengambil informasi dari situs yang lain."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:421
+#: gnucash/gtkbuilder/dialog-commodity.glade:423
 msgid "Si_ngle"
 msgstr "Tu_nggal"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:427
+#: gnucash/gtkbuilder/dialog-commodity.glade:429
 msgid ""
 "These are F::Q quote sources that retrieve information from a single site on "
 "the internet. If that site is unavailable, you will not be able to retrieve "
@@ -15494,36 +15480,36 @@ msgstr ""
 "tunggal di Internet. Jika situs tersebut tidak tersedia, Anda tidak bisa "
 "mengambil data harga."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:442
+#: gnucash/gtkbuilder/dialog-commodity.glade:444
 msgid "_Get Online Quotes"
 msgstr "Dapatkan Har_ga Penawaran Daring"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:461
+#: gnucash/gtkbuilder/dialog-commodity.glade:463
 msgid "F_raction traded"
 msgstr "F_raksi diperdagangkan"
 
 #. Again replace CUSIP by your National Securities Identifying Number.
-#: gnucash/gtkbuilder/dialog-commodity.glade:475
+#: gnucash/gtkbuilder/dialog-commodity.glade:477
 msgid "ISIN, CUSI_P or other code"
 msgstr "ISIN, CUSI_P atau kode lain"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:505
+#: gnucash/gtkbuilder/dialog-commodity.glade:507
 msgid "_Symbol/abbreviation"
 msgstr "_Simbol/singkatan"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:520
+#: gnucash/gtkbuilder/dialog-commodity.glade:522
 msgid "_Full name"
 msgstr "Nama _lengkap"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:555
+#: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Peringatan: Finance::Quote tak terpasang dengan benar."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:638
+#: gnucash/gtkbuilder/dialog-commodity.glade:640
 msgid "Select security/currency "
 msgstr "Pilih sekuritas/mata uang "
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:716
+#: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
 msgstr "Pilih informasi pengguna di sini..."
 
@@ -15534,12 +15520,6 @@ msgid ""
 msgstr ""
 "Nomor ID pelanggan. Jika dibiarkan kosong, akan dipilihkan nomor yang masuk "
 "akal"
-
-#: gnucash/gtkbuilder/dialog-customer.glade:213
-#: gnucash/gtkbuilder/dialog-employee.glade:197
-#: gnucash/gtkbuilder/dialog-vendor.glade:215
-msgid "Identification"
-msgstr "Identifikasi"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:256
 #: gnucash/gtkbuilder/dialog-customer.glade:786
@@ -15580,6 +15560,7 @@ msgid "Tax Included"
 msgstr "Termasuk Pajak"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:576
+#: gnucash/gtkbuilder/dialog-tax-table.glade:403
 #: gnucash/gtkbuilder/dialog-vendor.glade:546
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:97
 msgid "Tax Table"
@@ -15614,29 +15595,17 @@ msgstr "Alamat Pengiriman"
 msgid "Import customers or vendors from text file"
 msgstr "Impor pelanggan atau vendor dari berkas teks"
 
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
-msgid "<b>1. Choose the file to import</b>"
-msgstr "<b>1. Pilih berkas untuk diimpor</b>"
-
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:155
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:157
 msgid "For importing customer lists."
 msgstr "Untuk mengimpor daftar pelanggan."
 
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:172
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:174
 msgid "For importing vendor lists."
 msgstr "Untuk mengimpor daftar vendor."
 
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:190
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:192
 msgid "<b>2. Select Import Type</b>"
 msgstr "<b>2. Pilih Tipe Impor</b>"
-
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:308
-msgid "<b>3. Select import options</b>"
-msgstr "<b>3. Pilih opsi impor</b>"
-
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:349
-msgid "<b>4. Preview</b>"
-msgstr "<b>4. Pratinjau</b>"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:51
 msgid "Exit the saved report configurations dialog"
@@ -15962,11 +15931,7 @@ msgstr "Awal"
 msgid "<b>Compounding</b>"
 msgstr "<b>Pemajemukan</b>"
 
-#: gnucash/gtkbuilder/dialog-fincalc.glade:637
-msgid "<b>Period</b>"
-msgstr "<b>Periode</b>"
-
-#: gnucash/gtkbuilder/dialog-fincalc.glade:765
+#: gnucash/gtkbuilder/dialog-fincalc.glade:767
 msgid "When paid"
 msgstr "Ketika dibayar"
 
@@ -16165,87 +16130,104 @@ msgid "Transaction List Help"
 msgstr "Bantuan Daftar Transaksi"
 
 #: gnucash/gtkbuilder/dialog-import.glade:529
-msgid "<b>Colors</b>"
-msgstr "<b>Warna</b>"
+#: gnucash/report/stylesheets/footer.scm:123
+#: gnucash/report/stylesheets/footer.scm:130
+#: gnucash/report/stylesheets/footer.scm:137
+#: gnucash/report/stylesheets/footer.scm:144
+#: gnucash/report/stylesheets/footer.scm:151
+#: gnucash/report/stylesheets/footer.scm:159
+#: gnucash/report/stylesheets/footer.scm:167
+#: gnucash/report/stylesheets/footer.scm:175
+#: gnucash/report/stylesheets/head-or-tail.scm:170
+#: gnucash/report/stylesheets/head-or-tail.scm:177
+#: gnucash/report/stylesheets/head-or-tail.scm:184
+#: gnucash/report/stylesheets/head-or-tail.scm:191
+#: gnucash/report/stylesheets/head-or-tail.scm:198
+#: gnucash/report/stylesheets/head-or-tail.scm:206
+#: gnucash/report/stylesheets/head-or-tail.scm:214
+#: gnucash/report/stylesheets/head-or-tail.scm:222
+#: gnucash/report/stylesheets/plain.scm:62
+msgid "Colors"
+msgstr "Warna"
 
-#: gnucash/gtkbuilder/dialog-import.glade:642
-#: gnucash/gtkbuilder/dialog-preferences.glade:2399
+#: gnucash/gtkbuilder/dialog-import.glade:644
+#: gnucash/gtkbuilder/dialog-preferences.glade:2413
 msgid "<b>Actions</b>"
 msgstr "<b>Aksi</b>"
 
-#: gnucash/gtkbuilder/dialog-import.glade:654
+#: gnucash/gtkbuilder/dialog-import.glade:656
 msgid "\"A\""
 msgstr "\"A\""
 
-#: gnucash/gtkbuilder/dialog-import.glade:665
+#: gnucash/gtkbuilder/dialog-import.glade:667
 msgid "\"U+C\""
 msgstr "\"U+C\""
 
-#: gnucash/gtkbuilder/dialog-import.glade:676
+#: gnucash/gtkbuilder/dialog-import.glade:678
 msgid "\"C\""
 msgstr "\"C\""
 
-#: gnucash/gtkbuilder/dialog-import.glade:688
+#: gnucash/gtkbuilder/dialog-import.glade:690
 msgid "Select \"A\" to add the transaction as new."
 msgstr "Pilih \"A\" untuk menambahkan transaksi sebagai baru."
 
-#: gnucash/gtkbuilder/dialog-import.glade:700
+#: gnucash/gtkbuilder/dialog-import.glade:702
 msgid ""
 "Select \"U+C\" to update a matching transaction and mark it as cleared (c)."
 msgstr ""
 "Pilih \"U+C\" untuk memperbarui transaksi yang cocok dan menandainya sebagai "
 "klir (c)."
 
-#: gnucash/gtkbuilder/dialog-import.glade:712
+#: gnucash/gtkbuilder/dialog-import.glade:714
 msgid "Select \"C\" to mark a matching transaction as cleared (c)."
 msgstr "Pilih \"C\" untuk menandai transaksi yang cocok sebagai klir (c)."
 
-#: gnucash/gtkbuilder/dialog-import.glade:724
+#: gnucash/gtkbuilder/dialog-import.glade:726
 msgid "Select neither to skip the transaction (it won't be imported at all)."
 msgstr ""
 "Jangan pilih satupun untuk melewatkan transaksi (tidak akan diimpor sama "
 "sekali)."
 
-#: gnucash/gtkbuilder/dialog-import.glade:735
+#: gnucash/gtkbuilder/dialog-import.glade:737
 msgid "(none)"
 msgstr "(tidak ada)"
 
-#: gnucash/gtkbuilder/dialog-import.glade:782
+#: gnucash/gtkbuilder/dialog-import.glade:784
 msgid "Red"
 msgstr "Merah"
 
-#: gnucash/gtkbuilder/dialog-import.glade:799
+#: gnucash/gtkbuilder/dialog-import.glade:801
 msgid "Yellow"
 msgstr "Kuning"
 
-#: gnucash/gtkbuilder/dialog-import.glade:816
+#: gnucash/gtkbuilder/dialog-import.glade:818
 msgid "Green"
 msgstr "Hijau"
 
-#: gnucash/gtkbuilder/dialog-import.glade:886
+#: gnucash/gtkbuilder/dialog-import.glade:888
 msgid ""
 "List of downloaded transactions (source split and matched information shown)"
 msgstr ""
 "Daftar transaksi yang diunduh (pemisahan sumber dan informasi yang cocok "
 "ditampilkan)"
 
-#: gnucash/gtkbuilder/dialog-import.glade:929
+#: gnucash/gtkbuilder/dialog-import.glade:931
 msgid "Show _Account column"
 msgstr "Tampilkan kolom _Akun"
 
-#: gnucash/gtkbuilder/dialog-import.glade:945
+#: gnucash/gtkbuilder/dialog-import.glade:947
 msgid "Show _Memo column"
 msgstr "Tampilkan kolom _Memo"
 
-#: gnucash/gtkbuilder/dialog-import.glade:961
+#: gnucash/gtkbuilder/dialog-import.glade:963
 msgid "Show _matched information"
 msgstr "Tampilkan infor_masi yang cocok"
 
-#: gnucash/gtkbuilder/dialog-import.glade:976
+#: gnucash/gtkbuilder/dialog-import.glade:978
 msgid "Reconcile after match"
 msgstr "Rekonsiliasi setelah pencocokan"
 
-#: gnucash/gtkbuilder/dialog-import.glade:999
+#: gnucash/gtkbuilder/dialog-import.glade:1001
 msgid "Generic import transaction matcher"
 msgstr "Pencocokan umum transaksi impor"
 
@@ -16360,38 +16342,40 @@ msgid "Enter a name for the highlighted lot."
 msgstr "Masukkan nama untuk lot yang disorot."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:150
-msgid "<b>_Notes</b>"
-msgstr "<b>Catata_n</b>"
+#: gnucash/gtkbuilder/dialog-print-check.glade:746
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1015
+msgid "_Notes"
+msgstr "Catata_n"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:171
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:173
 msgid "Enter any notes you want to make about this lot."
 msgstr "Masukkan catatan yang ingin Anda buat mengenai lot ini."
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:190
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:192
 msgid "<b>_Title</b>"
 msgstr "<b>_Judul</b>"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:219
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:221
 msgid "<b>_Lots in This Account</b>"
 msgstr "<b>_Lot pada Akun Ini</b>"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:257
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:259
 msgid "Show only open lots"
 msgstr "Tampilkan hanya lot terbuka"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:300
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:302
 msgid "<b>Splits _free</b>"
 msgstr "<B> Berbagi_gratis </ b>"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:355
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:357
 msgid "<b>Splits _in lot</b>"
 msgstr "<b>Spl_it dalam lot</b>"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:392
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:394
 msgid ">>"
 msgstr ">>"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:406
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:408
 msgid "<<"
 msgstr "<<"
 
@@ -16515,12 +16499,12 @@ msgid "Documents"
 msgstr "Dokumen"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:405
-#: gnucash/gtkbuilder/dialog-payment.glade:430
-#: gnucash/gtkbuilder/dialog-payment.glade:454
-#: gnucash/gtkbuilder/dialog-payment.glade:504
-#: gnucash/gtkbuilder/dialog-payment.glade:528
-#: gnucash/gtkbuilder/dialog-payment.glade:574
-#: gnucash/gtkbuilder/dialog-payment.glade:598
+#: gnucash/gtkbuilder/dialog-payment.glade:432
+#: gnucash/gtkbuilder/dialog-payment.glade:456
+#: gnucash/gtkbuilder/dialog-payment.glade:506
+#: gnucash/gtkbuilder/dialog-payment.glade:530
+#: gnucash/gtkbuilder/dialog-payment.glade:576
+#: gnucash/gtkbuilder/dialog-payment.glade:600
 msgid ""
 "The amount to pay for this invoice.\n"
 "\n"
@@ -16542,29 +16526,25 @@ msgstr ""
 "GnuCash akan secara otomatis menetapkan jumlah sisa ke faktur pertama yang "
 "belum dibayar untuk perusahaan ini."
 
-#: gnucash/gtkbuilder/dialog-payment.glade:411
-msgid "<b>Amount</b>"
-msgstr "<b>Jumlah</b>"
-
-#: gnucash/gtkbuilder/dialog-payment.glade:460
+#: gnucash/gtkbuilder/dialog-payment.glade:462
 #: gnucash/report/reports/standard/new-owner-report.scm:298
 msgid "Refund"
 msgstr "Pengembalian Dana"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:614
+#: gnucash/gtkbuilder/dialog-payment.glade:616
 #: gnucash/gtkbuilder/dialog-print-check.glade:299
 msgid "Print Check"
 msgstr "Cetak Cek"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:631
+#: gnucash/gtkbuilder/dialog-payment.glade:633
 msgid "(USD)"
 msgstr "(USD)"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:653
+#: gnucash/gtkbuilder/dialog-payment.glade:655
 msgid "Transaction Details"
 msgstr "Detail Transaksi"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:689
+#: gnucash/gtkbuilder/dialog-payment.glade:691
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
 msgid "Transfer Account"
 msgstr "Akun Transfer"
@@ -16602,7 +16582,7 @@ msgid "_Reset"
 msgstr "_Setel Ulang"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:178
-#: gnucash/gtkbuilder/dialog-preferences.glade:579
+#: gnucash/gtkbuilder/dialog-preferences.glade:583
 msgid "<b>Separator Character</b>"
 msgstr "<b>Karakter Pemisah</b>"
 
@@ -16647,37 +16627,29 @@ msgstr ""
 "Jika dicentang, komoditas yang bukan mata uang akan ditampilkan di bilah "
 "ikhtisar. Jika tidak, hanya mata uang yang akan ditampilkan."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:363
-msgid "<b>Start Date</b>"
-msgstr "<b>Tanggal Mulai</b>"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:376
-msgid "<b>End Date</b>"
-msgstr "<b>Tanggal Akhir</b>"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:386
+#: gnucash/gtkbuilder/dialog-preferences.glade:390
 msgid "_Relative"
 msgstr "_Relatif"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:392
+#: gnucash/gtkbuilder/dialog-preferences.glade:396
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr ""
 "Gunakan tanggal mulai relatif yang ditentukan untuk perhitungan laba/rugi."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:405
+#: gnucash/gtkbuilder/dialog-preferences.glade:409
 msgid "_Absolute"
 msgstr "_Absolut"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:411
+#: gnucash/gtkbuilder/dialog-preferences.glade:415
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr ""
 "Gunakan tanggal mulai absolut yang ditentukan untuk perhitungan laba/rugi."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:424
+#: gnucash/gtkbuilder/dialog-preferences.glade:428
 msgid "Re_lative"
 msgstr "Re_latif"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:430
+#: gnucash/gtkbuilder/dialog-preferences.glade:434
 msgid ""
 "Use the specified relative ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
@@ -16685,11 +16657,11 @@ msgstr ""
 "Gunakan tanggal akhir relatif yang ditentukan untuk perhitungan laba/rugi. "
 "Juga gunakan tanggal ini untuk perhitungan aset bersih."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:443
+#: gnucash/gtkbuilder/dialog-preferences.glade:447
 msgid "Ab_solute"
 msgstr "Ab_solut"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:449
+#: gnucash/gtkbuilder/dialog-preferences.glade:453
 msgid ""
 "Use the specified absolute ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
@@ -16697,78 +16669,74 @@ msgstr ""
 "Gunakan tanggal akhir absolut yang ditentukan untuk perhitungan laba/rugi. "
 "Juga gunakan tanggal ini untuk perhitungan aset bersih."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:560
+#: gnucash/gtkbuilder/dialog-preferences.glade:564
 msgid "Accounting Period"
 msgstr "Periode Akuntansi"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:589
+#: gnucash/gtkbuilder/dialog-preferences.glade:593
 msgid "Use _formal accounting labels"
 msgstr "Gunakan label akuntansi _formal"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:595
+#: gnucash/gtkbuilder/dialog-preferences.glade:599
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
 msgstr "Gunakan hanya 'debit' dan 'kredit' alih-alih sinonim informal."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:610
+#: gnucash/gtkbuilder/dialog-preferences.glade:614
 msgid "<b>Labels</b>"
 msgstr "<b>Label</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:630
+#: gnucash/gtkbuilder/dialog-preferences.glade:634
 #: gnucash/gtkbuilder/dialog-price.glade:447
 msgid "_None"
 msgstr "_Tak ada"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:649
+#: gnucash/gtkbuilder/dialog-preferences.glade:653
 msgid "C_redit accounts"
 msgstr "Akun k_redit"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:668
+#: gnucash/gtkbuilder/dialog-preferences.glade:672
 msgid "_Income & expense"
 msgstr "_Pendapatan & pengeluaran"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:690
+#: gnucash/gtkbuilder/dialog-preferences.glade:694
 msgid "<b>Reverse Balanced Accounts</b>"
 msgstr "<b>Akun dengan Saldo Terbalik</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:723
+#: gnucash/gtkbuilder/dialog-preferences.glade:727
 msgid "<b>Default Currency</b>"
 msgstr "<b>Mata Uang Baku</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:736
-#: gnucash/gtkbuilder/dialog-preferences.glade:3050
+#: gnucash/gtkbuilder/dialog-preferences.glade:740
+#: gnucash/gtkbuilder/dialog-preferences.glade:3066
 msgid "US Dollars (USD)"
 msgstr "Dolar US (USD)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:759
+#: gnucash/gtkbuilder/dialog-preferences.glade:763
 msgid "Character"
 msgstr "Karakter"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:771
+#: gnucash/gtkbuilder/dialog-preferences.glade:775
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
 msgid "Sample"
 msgstr "Sampel"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:796
-msgid "<b>Account Color</b>"
-msgstr "<b>Warna Akun</b>"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:806
+#: gnucash/gtkbuilder/dialog-preferences.glade:812
 msgid "Show the Account Color as background"
 msgstr "Tampilkan Warna Akun sebagai latar belakang"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:812
+#: gnucash/gtkbuilder/dialog-preferences.glade:818
 msgid "Show the Account Color as Account Name Background."
 msgstr "Tampilkan Warna Akun sebagai Latar Belakang Nama Akun."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:834
+#: gnucash/gtkbuilder/dialog-preferences.glade:840
 msgid "Show the Account Color on tabs"
 msgstr "Tampilkan Warna Akun pada tab"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:840
+#: gnucash/gtkbuilder/dialog-preferences.glade:846
 msgid "Show the Account Color as tab background."
 msgstr "Tampilkan Warna Akun sebagai latar belakang tab."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:874
+#: gnucash/gtkbuilder/dialog-preferences.glade:880
 msgid ""
 "The character that will be used between components of an account name. A "
 "legal value is any single character except letters and numbers, or any of "
@@ -16780,51 +16748,48 @@ msgstr ""
 "salah satu dari string berikut: \"titik dua\" \"garis miring\", \"garis "
 "miring terbalik\", \"garis datar\" dan \"titik\"."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:894
-#: gnucash/gtkbuilder/dialog-preferences.glade:3149
+#: gnucash/gtkbuilder/dialog-preferences.glade:900
+#: gnucash/gtkbuilder/dialog-preferences.glade:3167
 msgid "Ch_oose"
 msgstr "P_ilih"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:914
-#: gnucash/gtkbuilder/dialog-preferences.glade:3169
+#: gnucash/gtkbuilder/dialog-preferences.glade:920
+#: gnucash/gtkbuilder/dialog-preferences.glade:3187
 msgid "Loc_ale"
 msgstr "Lok_al"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:998
-msgid "<b>Fancy Date Format</b>"
-msgstr "<b>Format Tanggal Lengkap</b>"
+#: gnucash/gtkbuilder/dialog-preferences.glade:1004
+#: libgnucash/app-utils/business-options.scm:76
+msgid "Fancy Date Format"
+msgstr "Format Tanggal Lengkap"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1021
-msgid "<b>Date Format</b>"
-msgstr "<b>Format Tanggal</b>"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:1034
+#: gnucash/gtkbuilder/dialog-preferences.glade:1044
 msgid "<b>Time Format</b>"
 msgstr "<b>Format Waktu</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1054
+#: gnucash/gtkbuilder/dialog-preferences.glade:1064
 msgid "U_se 24-hour clock"
 msgstr "Gunakan _waktu 24-jam"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1060
+#: gnucash/gtkbuilder/dialog-preferences.glade:1070
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "Gunakan format waktu 24 jam (alih-alih 12 jam)."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1075
+#: gnucash/gtkbuilder/dialog-preferences.glade:1085
 msgid "<b>Date Completion</b>"
 msgstr "<b>Penyempurnaan Tanggal</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1088
+#: gnucash/gtkbuilder/dialog-preferences.glade:1098
 msgid "When a date is entered without year, it should be taken"
 msgstr "Ketika sebuah tanggal dimasukkan tanpa tahun, ini akan digunakan"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1104
+#: gnucash/gtkbuilder/dialog-preferences.glade:1114
 msgid ""
 "Dates will be completed so that they are within the current calendar year."
 msgstr ""
 "Tanggal akan dilengkapi sehingga berada di dalam tahun kalender saat ini."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1117
+#: gnucash/gtkbuilder/dialog-preferences.glade:1127
 msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month"
@@ -16832,132 +16797,132 @@ msgstr ""
 "Dalam jendela geser 12-bulan dimulai dari\n"
 "sebanyak bulan ini sebelum bulan berjalan"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1141
+#: gnucash/gtkbuilder/dialog-preferences.glade:1151
 msgid "Enter number of months."
 msgstr "Masukkan jumlah bulan."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1162
+#: gnucash/gtkbuilder/dialog-preferences.glade:1172
 msgid "Use the date format specified by the system locale."
 msgstr "Gunakan format tanggal yang ditentukan oleh sistem lokal."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1188
+#: gnucash/gtkbuilder/dialog-preferences.glade:1198
 msgid "<b>Numbers</b>"
 msgstr "<b>Nomor</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1198
+#: gnucash/gtkbuilder/dialog-preferences.glade:1208
 msgid "Force P_rices to display as decimals"
 msgstr "Paksa Ha_rga ditampilkan sebagai desimal"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1216
+#: gnucash/gtkbuilder/dialog-preferences.glade:1226
 msgid "Display ne_gative amounts in red"
 msgstr "Tampilkan jumlah ne_gatif dengan warna merah"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1222
+#: gnucash/gtkbuilder/dialog-preferences.glade:1232
 msgid "Display negative amounts in red."
 msgstr "Tampilkan jumlah negatif dengan warna merah."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1234
+#: gnucash/gtkbuilder/dialog-preferences.glade:1244
 msgid "_Automatic decimal point"
 msgstr "Titik desimal otom_atis"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1240
+#: gnucash/gtkbuilder/dialog-preferences.glade:1250
 msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
 msgstr "Sisipkan titik desimal secara otomatis ke nilai yang dimasukkan."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1255
+#: gnucash/gtkbuilder/dialog-preferences.glade:1265
 msgid "_Decimal places"
 msgstr "Tempat _desimal"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1270
+#: gnucash/gtkbuilder/dialog-preferences.glade:1280
 msgid "How many automatic decimal places will be filled in."
 msgstr "Berapa banyak tempat desimal otomatis akan diisi."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1362
+#: gnucash/gtkbuilder/dialog-preferences.glade:1372
 msgid "Numbers, Date, Time"
 msgstr "Nomor, Tanggal, Waktu"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1391
+#: gnucash/gtkbuilder/dialog-preferences.glade:1403
 msgid "Perform account list _setup on new file"
 msgstr "Lakukan penyiapan daftar akun pada berka_s baru"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1397
+#: gnucash/gtkbuilder/dialog-preferences.glade:1409
 msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
 "Tampilkan dialog daftar akun baru ketika Anda memilih Berkas->Berkas Baru."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1428
+#: gnucash/gtkbuilder/dialog-preferences.glade:1440
 msgid "Display \"_tip of the day\" dialog"
 msgstr "Tampilkan dialog \"_tip hari ini\""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1434
+#: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Display hints for using GnuCash at startup."
 msgstr "Tampilkan petunjuk penggunaan GnuCash saat aplikasi dijalankan."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1455
+#: gnucash/gtkbuilder/dialog-preferences.glade:1467
 msgid "How many days to keep old log/backup files."
 msgstr "Berapa hari berkas log/cadangan akan disimpan."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1474
+#: gnucash/gtkbuilder/dialog-preferences.glade:1486
 #: gnucash/gtkbuilder/dialog-sx.glade:619
 #: gnucash/gtkbuilder/dialog-sx.glade:658
-#: gnucash/gtkbuilder/dialog-sx.glade:965
-#: gnucash/gtkbuilder/dialog-sx.glade:1024
+#: gnucash/gtkbuilder/dialog-sx.glade:969
+#: gnucash/gtkbuilder/dialog-sx.glade:1028
 msgid "days"
 msgstr "hari"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1493
+#: gnucash/gtkbuilder/dialog-preferences.glade:1505
 msgid "<b>_Retain log/backup files</b>"
 msgstr "<b>Pe_rtahankan berkas log/cadangan </b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1505
+#: gnucash/gtkbuilder/dialog-preferences.glade:1517
 msgid "Com_press files"
 msgstr "Kom_pres berkas"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1511
+#: gnucash/gtkbuilder/dialog-preferences.glade:1523
 msgid "Compress the data file with gzip when saving it to disk."
 msgstr "Kompres berkas data dengan gzip ketika menyimpannya ke diska."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1526
+#: gnucash/gtkbuilder/dialog-preferences.glade:1538
 msgid "<b>Files</b>"
 msgstr "<b>Berkas</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1559
+#: gnucash/gtkbuilder/dialog-preferences.glade:1571
 msgid "<b>Search Dialog</b>"
 msgstr "<b>Dialog Pencarian</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1572
+#: gnucash/gtkbuilder/dialog-preferences.glade:1584
 msgid "New search _limit"
 msgstr "Ba_tas pencarian baru"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1587
+#: gnucash/gtkbuilder/dialog-preferences.glade:1599
 msgid "Default to 'new search' if fewer than this number of items is returned."
 msgstr ""
 "Kembali secara baku ke 'pencarian baru' jika kurang dari jumlah item ini "
 "yang dikembalikan."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1603
+#: gnucash/gtkbuilder/dialog-preferences.glade:1615
 msgid "Show splash scree_n"
 msgstr "Tampilka_n layar splash"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1609
+#: gnucash/gtkbuilder/dialog-preferences.glade:1621
 msgid "Show splash screen at startup."
 msgstr "Tampilkan layar splash pada saat mulai."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1624
+#: gnucash/gtkbuilder/dialog-preferences.glade:1636
 msgid "Auto-save time _interval"
 msgstr "_Interval waktu simpan-otomatis"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1663
+#: gnucash/gtkbuilder/dialog-preferences.glade:1675
 msgid "minutes"
 msgstr "menit"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1679
+#: gnucash/gtkbuilder/dialog-preferences.glade:1691
 msgid "Show auto-save confirmation _question"
 msgstr "Tampilkan _pertanyaan konfirmasi simpan-otomatis"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1685
+#: gnucash/gtkbuilder/dialog-preferences.glade:1697
 msgid ""
 "If active, GnuCash shows a confirmation question each time the auto-save "
 "feature is started. Otherwise no extra explanation is shown."
@@ -16966,37 +16931,37 @@ msgstr ""
 "simpan-otomatis dimulai. Jika tidak, tak ada penjelasan tambahan yang "
 "ditampilkan."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1725
-#: gnucash/gtkbuilder/dialog-sx.glade:1208
+#: gnucash/gtkbuilder/dialog-preferences.glade:1737
+#: gnucash/gtkbuilder/dialog-sx.glade:1212
 msgid "For"
 msgstr "Untuk"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1743
-#: gnucash/gtkbuilder/dialog-sx.glade:1176
+#: gnucash/gtkbuilder/dialog-preferences.glade:1755
+#: gnucash/gtkbuilder/dialog-sx.glade:1180
 msgid "Forever"
 msgstr "Selamanya"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1782
+#: gnucash/gtkbuilder/dialog-preferences.glade:1794
 msgid "Time to _wait for answer"
 msgstr "_Waktu untuk menunggu jawaban"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1819
+#: gnucash/gtkbuilder/dialog-preferences.glade:1831
 msgid "seconds"
 msgstr "detik"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1847
+#: gnucash/gtkbuilder/dialog-preferences.glade:1859
 msgid "Path head for Linked File Relative Paths"
 msgstr "Tajuk path untuk Path Relatif Berkas Tertaut"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1865
+#: gnucash/gtkbuilder/dialog-preferences.glade:1877
 msgid "Path head for Linked Files Relative Paths"
 msgstr "Tajuk path untuk Path Relatif Berkas Tertaut"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1894
+#: gnucash/gtkbuilder/dialog-preferences.glade:1906
 msgid "Enable horizontal grid lines on table displays"
 msgstr "Aktifkan garis kisi horizontal pada tampilan tabel"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1898
+#: gnucash/gtkbuilder/dialog-preferences.glade:1910
 msgid ""
 "Enable horizontal grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
@@ -17004,11 +16969,11 @@ msgstr ""
 "Aktifkan garis kisi horizontal pada tampilan tabel. Ini terutama akan "
 "menjadi tampilan pohon seperti halaman Akun."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1911
+#: gnucash/gtkbuilder/dialog-preferences.glade:1923
 msgid "Enable vertical grid lines on table displays"
 msgstr "Aktifkan garis kisi vertikal pada tampilan tabel"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1915
+#: gnucash/gtkbuilder/dialog-preferences.glade:1927
 msgid ""
 "Enable vertical grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
@@ -17016,21 +16981,21 @@ msgstr ""
 "Aktifkan garis kisi vertikal pada tampilan tabel. Ini terutama akan menjadi "
 "tampilan pohon seperti halaman Akun."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1931
+#: gnucash/gtkbuilder/dialog-preferences.glade:1943
 msgid "<b>Linked Files</b>"
 msgstr "<b>Berkas Tertaut</b>"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2026
+#: gnucash/gtkbuilder/dialog-preferences.glade:2038
 msgid "Enable skip transaction action"
 msgstr "Aktifkan aksi lewatkan transaksi"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2045
+#: gnucash/gtkbuilder/dialog-preferences.glade:2057
 msgid "Enable update match action"
 msgstr "Aktifkan aksi perbarui kecocokan"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2082
+#: gnucash/gtkbuilder/dialog-preferences.glade:2096
 msgid ""
 "In some places commercial ATMs (not belonging to a financial institution) "
 "are installed in places like convenience stores. These ATMs add their fee "
@@ -17050,7 +17015,7 @@ msgstr ""
 "menetapkan biaya maksimum di daerah Anda (dalam satuan mata uang lokal "
 "Anda), sehingga transaksi akan dikenali sebagai transaksi yang cocok."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2105
+#: gnucash/gtkbuilder/dialog-preferences.glade:2119
 msgid ""
 "A transaction whose best match's score is in the green zone (above or equal "
 "to the Auto-CLEAR threshold) will be CLEARed by default."
@@ -17058,7 +17023,7 @@ msgstr ""
 "Transaksi yang skor kecocokan terbaiknya berada pada zona hijau (di atas "
 "atau sama dengan ambang batas Auto-CLEAR) akan diKLIRkan, secara baku."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2127
+#: gnucash/gtkbuilder/dialog-preferences.glade:2141
 msgid ""
 "A transaction whose best match's score is in the red zone (above the display "
 "threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
@@ -17068,7 +17033,7 @@ msgstr ""
 "ambang batas tampilan tetapi di bawah atau sama dengan ambang batas "
 "TAMBAHKAN-Otomatis) akan diTAMBAHKAN, secara baku."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2149
+#: gnucash/gtkbuilder/dialog-preferences.glade:2163
 msgid ""
 "The minimum score a potential match must have to be displayed in the match "
 "list."
@@ -17077,75 +17042,75 @@ msgstr ""
 "kecocokan."
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2170
+#: gnucash/gtkbuilder/dialog-preferences.glade:2184
 msgid "Commercial ATM _fees threshold"
 msgstr "Ambang _batas biaya ATM komersial"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2184
+#: gnucash/gtkbuilder/dialog-preferences.glade:2198
 msgid "Auto-c_lear threshold"
 msgstr "Ambang batas _klir-otomatis"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2198
+#: gnucash/gtkbuilder/dialog-preferences.glade:2212
 msgid "Auto-_add threshold"
 msgstr "_Ambang batas tambah-otomatis"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2212
+#: gnucash/gtkbuilder/dialog-preferences.glade:2226
 msgid "Match _display threshold"
 msgstr "Ambang batas tampilan _kecocokan"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2223
+#: gnucash/gtkbuilder/dialog-preferences.glade:2237
 msgid "Use _bayesian matching"
 msgstr "Gunakan pencocokan _bayesian"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2229
+#: gnucash/gtkbuilder/dialog-preferences.glade:2243
 msgid ""
 "Use bayesian algorithms to match new transactions with existing accounts."
 msgstr ""
 "Menggunakan algoritma Bayesian untuk mencocokkan transaksi baru dengan akun "
 "yang ada."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2287
+#: gnucash/gtkbuilder/dialog-preferences.glade:2301
 msgid "<b>Checks</b>"
 msgstr "<b>Cek</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2302
+#: gnucash/gtkbuilder/dialog-preferences.glade:2316
 msgid "The default check printing font."
 msgstr "Fonta baku untuk mencetak cek."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2312
+#: gnucash/gtkbuilder/dialog-preferences.glade:2326
 msgid "Print _date format"
 msgstr "Cetak _format tanggal"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2318
+#: gnucash/gtkbuilder/dialog-preferences.glade:2332
 msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr "Di bawah tanggal sebenarnya, cetak format tanggal dalam tipe 8 titik."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2330
+#: gnucash/gtkbuilder/dialog-preferences.glade:2344
 msgid "Print _blocking chars"
 msgstr "Cetak karakter pem_blokir"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2336
+#: gnucash/gtkbuilder/dialog-preferences.glade:2350
 msgid "Print '***' before and after each text field on the check."
 msgstr ""
 "Cetak '***' sebelum dan sesudah masing-masing bidang teks di dalam cek."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2351
+#: gnucash/gtkbuilder/dialog-preferences.glade:2365
 msgid "Default _font"
 msgstr "_Fonta baku"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2380
+#: gnucash/gtkbuilder/dialog-preferences.glade:2394
 msgid "Printing"
 msgstr "Mencetak"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2409
+#: gnucash/gtkbuilder/dialog-preferences.glade:2423
 msgid "'_Enter' moves to blank transaction"
 msgstr "'_Enter' berpindah ke transaksi kosong"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2415
+#: gnucash/gtkbuilder/dialog-preferences.glade:2429
 msgid ""
 "If checked, pressing the 'Enter' key will move to the location of the blank "
 "transaction in the register. If clear, pressing the 'Enter' key will move "
@@ -17155,40 +17120,40 @@ msgstr ""
 "register. Jika tidak dicentang, menekan 'Enter' akan berpindah turun satu "
 "baris."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2427
+#: gnucash/gtkbuilder/dialog-preferences.glade:2441
 msgid "_Auto-raise lists"
 msgstr "N_aikkan daftar secara otomatis"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2433
+#: gnucash/gtkbuilder/dialog-preferences.glade:2447
 msgid "Automatically raise the list of accounts or actions during input."
 msgstr "Menaikkan daftar akun atau aksi secara otomatis pada saat masukan."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2445
+#: gnucash/gtkbuilder/dialog-preferences.glade:2459
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
 msgstr "Urutan tab ter_masuk Transfer pada Transaksi yang Diingat"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2451
+#: gnucash/gtkbuilder/dialog-preferences.glade:2465
 msgid "Move to Transfer field when memorised transaction auto filled."
 msgstr ""
 "Pindah ke bidang Transfer ketika transaksi yang diingat diisi otomatis."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2476
+#: gnucash/gtkbuilder/dialog-preferences.glade:2490
 msgid "<b>Reconciling</b>"
 msgstr "<b>Merekonsiliasi</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2486
+#: gnucash/gtkbuilder/dialog-preferences.glade:2500
 msgid "Check cleared _transactions"
 msgstr "Periksa _transaksi klir"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2492
+#: gnucash/gtkbuilder/dialog-preferences.glade:2506
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr "Pra-periksa transaksi klir saat membuat dialog rekonsiliasi."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2504
+#: gnucash/gtkbuilder/dialog-preferences.glade:2518
 msgid "Automatic credit card _payment"
 msgstr "_Pembayaran kartu kredit otomatis"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2510
+#: gnucash/gtkbuilder/dialog-preferences.glade:2524
 msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
@@ -17196,11 +17161,11 @@ msgstr ""
 "Setelah melakukan rekonsiliasi pernyataan kartu kredit, minta pengguna untuk "
 "memasukkan pembayaran kartu kredit."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2522
+#: gnucash/gtkbuilder/dialog-preferences.glade:2536
 msgid "Always reconcile to t_oday"
 msgstr "Selalu rekonsiliasi ke _hari ini"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2528
+#: gnucash/gtkbuilder/dialog-preferences.glade:2542
 msgid ""
 "Always open the reconcile dialog using today's date for the statement date, "
 "regardless of previous reconciliations."
@@ -17208,15 +17173,15 @@ msgstr ""
 "Selalu membuka dialog rekonsiliasi menggunakan tanggal hari ini untuk "
 "tanggal pernyataan, terlepas dari rekonsiliasi sebelumnya."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2553
+#: gnucash/gtkbuilder/dialog-preferences.glade:2567
 msgid "<b>Graphics</b>"
 msgstr "<b>Grafik</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2563
+#: gnucash/gtkbuilder/dialog-preferences.glade:2577
 msgid "_Use GnuCash built-in color theme"
 msgstr "G_unakan tema warna bawaan GnuCash"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2569
+#: gnucash/gtkbuilder/dialog-preferences.glade:2583
 msgid ""
 "GnuCash uses a yellow/green theme by default for register windows. Uncheck "
 "this if you want to use the system color theme instead."
@@ -17225,11 +17190,11 @@ msgstr ""
 "register. Hapus tanda centang ini jika Anda ingin menggunakan warna tema "
 "sistem."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2581
+#: gnucash/gtkbuilder/dialog-preferences.glade:2595
 msgid "Double _mode colors alternate with transactions"
 msgstr "Warna _mode ganda berseling dengan transaksi"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2587
+#: gnucash/gtkbuilder/dialog-preferences.glade:2601
 msgid ""
 "Alternate the primary and secondary colors by transaction instead of by "
 "alternating by row."
@@ -17237,31 +17202,39 @@ msgstr ""
 "Seling warna primer dan sekunder berdasar transaksi, bukannya bergantian "
 "antar baris."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2599
+#: gnucash/gtkbuilder/dialog-preferences.glade:2613
 msgid "Draw hori_zontal lines between rows"
 msgstr "Tampilkan garis hori_zontal di antara baris"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2605
+#: gnucash/gtkbuilder/dialog-preferences.glade:2619
 msgid "Show horizontal borders on the cells."
 msgstr "Tampilkan garis tepi horizontal di sel."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2617
+#: gnucash/gtkbuilder/dialog-preferences.glade:2631
 msgid "Draw _vertical lines between columns"
 msgstr "Tampilkan garis _vertikal di atara kolom"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2623
+#: gnucash/gtkbuilder/dialog-preferences.glade:2637
 msgid "Show vertical borders on the cells."
 msgstr "Tampilkan garis tepi vertikal di sel."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2648
-msgid "<b>Layout</b>"
-msgstr "<b>Tata Letak</b>"
+#: gnucash/gtkbuilder/dialog-preferences.glade:2662
+#: gnucash/report/reports/standard/invoice.scm:201
+#: gnucash/report/reports/standard/invoice.scm:207
+#: gnucash/report/reports/standard/invoice.scm:348
+#: gnucash/report/reports/standard/invoice.scm:355
+#: gnucash/report/reports/standard/invoice.scm:362
+#: gnucash/report/reports/standard/invoice.scm:369
+#: gnucash/report/reports/standard/invoice.scm:376
+#: gnucash/report/reports/standard/invoice.scm:383
+msgid "Layout"
+msgstr "Tata Letak"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2658
+#: gnucash/gtkbuilder/dialog-preferences.glade:2674
 msgid "_Future transactions after blank transaction"
 msgstr "_Transaksi yang akan datang setelah transaksi kosong"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2664
+#: gnucash/gtkbuilder/dialog-preferences.glade:2680
 msgid ""
 "If checked, transactions with a date in the future will be displayed at the "
 "bottom of the register after the blank transaction. If clear, the blank "
@@ -17272,31 +17245,31 @@ msgstr ""
 "transaksi kosong akan berada di bagian bawah register setelah semua "
 "transaksi."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2703
+#: gnucash/gtkbuilder/dialog-preferences.glade:2719
 msgid "<b>Default Style</b>"
 msgstr "<b>Gaya Baku</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2726
+#: gnucash/gtkbuilder/dialog-preferences.glade:2742
 msgid "<b>Other Defaults</b>"
 msgstr "<b>Pengaturan Baku Lainnya</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2736
+#: gnucash/gtkbuilder/dialog-preferences.glade:2752
 msgid "_Basic ledger"
 msgstr "_Buku besar dasar"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2755
+#: gnucash/gtkbuilder/dialog-preferences.glade:2771
 msgid "_Auto-split ledger"
 msgstr "Buku besar split-otom_atis"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2796
+#: gnucash/gtkbuilder/dialog-preferences.glade:2812
 msgid "Number of _transactions"
 msgstr "Jumlah _transaksi"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2829
+#: gnucash/gtkbuilder/dialog-preferences.glade:2845
 msgid "_Double line mode"
 msgstr "Mode _dua baris"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2835
+#: gnucash/gtkbuilder/dialog-preferences.glade:2851
 msgid ""
 "Show two lines of information for each transaction instead of one. Does not "
 "affect expanded transactions."
@@ -17304,11 +17277,11 @@ msgstr ""
 "Menunjukkan dua baris informasi untuk setiap transaksi, bukan satu. Tidak "
 "mempengaruhi transaksi diekspansi."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2847
+#: gnucash/gtkbuilder/dialog-preferences.glade:2863
 msgid "Register opens in a new _window"
 msgstr "Register terbuka di _jendela baru"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2853
+#: gnucash/gtkbuilder/dialog-preferences.glade:2869
 msgid ""
 "If checked, each register will be opened in its own top level window. If "
 "clear, the register will be opened in the current window."
@@ -17316,11 +17289,11 @@ msgstr ""
 "Jika dicentang, setiap register akan dibuka pada jendela tingkat atas mereka "
 "sendiri. Jika tidak dicentang, register akan dibuka pada jendela saat ini."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2865
+#: gnucash/gtkbuilder/dialog-preferences.glade:2881
 msgid "_Only display leaf account names"
 msgstr "Hanya _tampilkan nama-nama akun daun"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2871
+#: gnucash/gtkbuilder/dialog-preferences.glade:2887
 msgid ""
 "If checked, only the names of the leaf accounts are displayed in the "
 "register and in the account selection popup. The default behaviour is to "
@@ -17333,47 +17306,47 @@ msgstr ""
 "berarti Anda akan menggunakan nama-nama daun yang unik."
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2886
+#: gnucash/gtkbuilder/dialog-preferences.glade:2902
 msgid "Number of _characters for auto complete"
 msgstr "Jumlah _karakter untuk lengkapi otomatis"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2920
+#: gnucash/gtkbuilder/dialog-preferences.glade:2936
 msgid "Show the _entered and reconcile dates"
 msgstr "Tampilkan tanggal dimasukkan dan r_ekonsiliasi"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2936
+#: gnucash/gtkbuilder/dialog-preferences.glade:2952
 msgid "Show the calendar b_uttons"
 msgstr "Tampilkan t_ombol kalender"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2952
+#: gnucash/gtkbuilder/dialog-preferences.glade:2968
 msgid "_Move the selection to the blank split on expand"
 msgstr "Pindah_kan pilihan ke split kosong saat ekspansi"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2968
+#: gnucash/gtkbuilder/dialog-preferences.glade:2984
 msgid "_Show entered and reconciled dates on selection"
 msgstr "Tampilkan tanggal dimasukkan dan rekon_siliasi saat memilih"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3031
+#: gnucash/gtkbuilder/dialog-preferences.glade:3047
 msgid "Register Defaults"
 msgstr "Pengaturan Baku Register"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3062
+#: gnucash/gtkbuilder/dialog-preferences.glade:3078
 msgid "<b>Default Report Currency</b>"
 msgstr "<b>Mata Uang Baku untuk Laporan</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3085
+#: gnucash/gtkbuilder/dialog-preferences.glade:3101
 msgid "<b>Location</b>"
 msgstr "<b>Lokasi</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3095
+#: gnucash/gtkbuilder/dialog-preferences.glade:3111
 msgid "Report opens in a new _window"
 msgstr "Laporan terbuka di _jendela baru"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3101
+#: gnucash/gtkbuilder/dialog-preferences.glade:3117
 msgid ""
 "If checked, each report will be opened in its own top level window. If "
 "clear, the report will be opened in the current window."
@@ -17381,72 +17354,69 @@ msgstr ""
 "Jika dicentang, setiap laporan akan dibuka pada jendela tingkat atas mereka "
 "sendiri. Jika tidak dicentang, laporan akan dibuka pada jendela saat ini."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3129
-msgid "<b>Default zoom level</b>"
-msgstr "<b>Tingkat perbesaran baku</b>"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:3207
+#: gnucash/gtkbuilder/dialog-preferences.glade:3145
+#: gnucash/gtkbuilder/dialog-preferences.glade:3225
 msgid "Default zoom level"
 msgstr "Tingkat perbesaran baku"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3242
+#: gnucash/gtkbuilder/dialog-preferences.glade:3260
 msgid "Reports"
 msgstr "Laporan"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3261
+#: gnucash/gtkbuilder/dialog-preferences.glade:3279
 msgid "<b>Window Geometry</b>"
 msgstr "<b>Geometri Jendela</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3281
+#: gnucash/gtkbuilder/dialog-preferences.glade:3299
 msgid "_Save window size and position"
 msgstr "_Simpan ukuran dan posisi jendela"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3287
+#: gnucash/gtkbuilder/dialog-preferences.glade:3305
 msgid "Save window size and location when it is closed."
 msgstr "Simpan ukuran dan lokasi jendela ketika ditutup."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3300
+#: gnucash/gtkbuilder/dialog-preferences.glade:3318
 msgid "Bring the most _recent tab to the front"
 msgstr "Bawa tab yang paling ba_ru ke depan"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3332
+#: gnucash/gtkbuilder/dialog-preferences.glade:3350
 msgid "<b>Tab Position</b>"
 msgstr "<b>Posisi Tab</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3342
+#: gnucash/gtkbuilder/dialog-preferences.glade:3360
 msgid "To_p"
 msgstr "Ata_s"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3361
+#: gnucash/gtkbuilder/dialog-preferences.glade:3379
 msgid "B_ottom"
 msgstr "B_awah"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3380
+#: gnucash/gtkbuilder/dialog-preferences.glade:3398
 msgid "_Left"
 msgstr "_Kiri"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3399
+#: gnucash/gtkbuilder/dialog-preferences.glade:3417
 msgid "_Right"
 msgstr "Ka_nan"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3421
+#: gnucash/gtkbuilder/dialog-preferences.glade:3439
 msgid "<b>Summary Bar Position</b>"
 msgstr "<b>Posisi Bilah Ringkasan</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3450
+#: gnucash/gtkbuilder/dialog-preferences.glade:3468
 #: gnucash/gtkbuilder/dialog-print-check.glade:270
 msgid "Bottom"
 msgstr "Bawah"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3482
+#: gnucash/gtkbuilder/dialog-preferences.glade:3500
 msgid "<b>Tabs</b>"
 msgstr "<b>Tab</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3492
+#: gnucash/gtkbuilder/dialog-preferences.glade:3510
 msgid "Show close button on _notebook tabs"
 msgstr "Tampilkan tombol tutup pada tab buku catata_n"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3498
+#: gnucash/gtkbuilder/dialog-preferences.glade:3516
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
@@ -17454,7 +17424,7 @@ msgstr ""
 "Tampilkan tombol tutup pada setiap tab buku catatan. Fungsi ini sama dengan "
 "item menu 'Tutup'."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3519
+#: gnucash/gtkbuilder/dialog-preferences.glade:3537
 msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
@@ -17463,23 +17433,20 @@ msgstr ""
 "perkiraan) maka bagian tengah label tab akan dipotong dan diganti dengan "
 "elipsis."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3539
+#: gnucash/gtkbuilder/dialog-preferences.glade:3557
 msgid "characters"
 msgstr "karakter"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3558
+#: gnucash/gtkbuilder/dialog-preferences.glade:3576
 msgid "_Width"
 msgstr "_Lebar"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3595
+#: gnucash/gtkbuilder/dialog-preferences.glade:3613
 msgid "Windows"
 msgstr "Jendela"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3638
-msgid "<b>Online Quotes</b>"
-msgstr "<b>Harga Penawaran Daring</b>"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:3659
+#: gnucash/gtkbuilder/dialog-preferences.glade:3656
+#: gnucash/gtkbuilder/dialog-preferences.glade:3679
 msgid "Online Quotes"
 msgstr "Harga Penawaran Daring"
 
@@ -17765,11 +17732,6 @@ msgstr "Jumlah (_terbilang)"
 #: gnucash/gtkbuilder/dialog-print-check.glade:731
 msgid "Amount (_numbers)"
 msgstr "Jumlah (a_ngka)"
-
-#: gnucash/gtkbuilder/dialog-print-check.glade:746
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1013
-msgid "_Notes"
-msgstr "Catata_n"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:939
 msgid "_Units"
@@ -18088,71 +18050,63 @@ msgstr "Ingatkan s_ebelumnya"
 msgid "Edit Scheduled Transaction"
 msgstr "Sunting Transaksi Terjadwal"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:830
-msgid "<b>Name</b>"
-msgstr "<b>Nama</b>"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:890
-msgid "<b>Options</b>"
-msgstr "<b>Opsi</b>"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:909
+#: gnucash/gtkbuilder/dialog-sx.glade:913
 msgid "Create in advance"
 msgstr "Buat sebelumnya"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:924
+#: gnucash/gtkbuilder/dialog-sx.glade:928
 msgid "Remind in advance"
 msgstr "Ingatkan sebelumnya"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:982
+#: gnucash/gtkbuilder/dialog-sx.glade:986
 msgid "Create automatically"
 msgstr "Buat otomatis"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:986
+#: gnucash/gtkbuilder/dialog-sx.glade:990
 msgid "Conditional on splits not having variables"
 msgstr "Kondisional pada split yang tak memiliki variabel"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1056
+#: gnucash/gtkbuilder/dialog-sx.glade:1060
 msgid "Notify me when created"
 msgstr "Beritahu saya jika dibuat"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1102
+#: gnucash/gtkbuilder/dialog-sx.glade:1106
 msgid "<b>Occurrences</b>"
 msgstr "<b>Kemunculan</b>"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1125
+#: gnucash/gtkbuilder/dialog-sx.glade:1129
 msgid "Last Occurred: "
 msgstr "Terakhir Terjadi: "
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1159
+#: gnucash/gtkbuilder/dialog-sx.glade:1163
 msgid "Repeats:"
 msgstr "Pengulangan:"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1192
+#: gnucash/gtkbuilder/dialog-sx.glade:1196
 msgid "Until"
 msgstr "Hingga"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1227
+#: gnucash/gtkbuilder/dialog-sx.glade:1231
 msgid "occurrences"
 msgstr "kali"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1241
+#: gnucash/gtkbuilder/dialog-sx.glade:1245
 msgid "remaining"
 msgstr "tersisa"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1323
+#: gnucash/gtkbuilder/dialog-sx.glade:1327
 msgid "Overview"
 msgstr "Ikhtisar"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1396
+#: gnucash/gtkbuilder/dialog-sx.glade:1400
 msgid "Template Transaction"
 msgstr "Transaksi Templat"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1430
+#: gnucash/gtkbuilder/dialog-sx.glade:1434
 msgid "Since Last Run..."
 msgstr "Sejak Dijalankan Terakhir..."
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1530
+#: gnucash/gtkbuilder/dialog-sx.glade:1534
 msgid "_Review created transactions"
 msgstr "Tinjau t_ransaksi yang dibuat"
 
@@ -18160,97 +18114,82 @@ msgstr "Tinjau t_ransaksi yang dibuat"
 msgid "Income Tax Information"
 msgstr "Informasi Pajak Pendapatan"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:89
-msgid "<b>Income Tax Identity</b>"
-msgstr "<b>Identitas Pajak Pendapatan</b>"
-
-#: gnucash/gtkbuilder/dialog-tax-info.glade:143
+#: gnucash/gtkbuilder/dialog-tax-info.glade:144
 msgid "Click to change Tax Name and/or Tax Type."
 msgstr "Klik untuk mengubah Nama Pajak dan/atau Tipe Pajak."
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:242
+#: gnucash/gtkbuilder/dialog-tax-info.glade:243
 msgid "<b>_Accounts</b>"
 msgstr "<b>_Akun</b>"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:265
+#: gnucash/gtkbuilder/dialog-tax-info.glade:266
 msgid "_Income"
 msgstr "_Pendapatan"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:281
+#: gnucash/gtkbuilder/dialog-tax-info.glade:282
 msgid "_Expense"
 msgstr "_Pengeluaran"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:297
+#: gnucash/gtkbuilder/dialog-tax-info.glade:298
 msgid "_Asset"
 msgstr "_Aset"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:313
+#: gnucash/gtkbuilder/dialog-tax-info.glade:314
 msgid "_Liability/Equity"
 msgstr "_Liabilitas/Ekuitas"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:467
+#: gnucash/gtkbuilder/dialog-tax-info.glade:468
 msgid "<b>Account Tax Information</b>"
 msgstr "<b>Informasi Pajak Akun</b>"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:478
+#: gnucash/gtkbuilder/dialog-tax-info.glade:479
 msgid "Tax _Related"
 msgstr "Te_rkait Pajak"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:510
+#: gnucash/gtkbuilder/dialog-tax-info.glade:511
 msgid "<b>_TXF Categories</b>"
 msgstr "<b>Kategori _TXF</b>"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:614
+#: gnucash/gtkbuilder/dialog-tax-info.glade:615
 msgid "<b>Payer Name Source</b>"
 msgstr "<b>Sumber Nama Pembayar</b>"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:625
+#: gnucash/gtkbuilder/dialog-tax-info.glade:626
 msgid "C_urrent Account"
 msgstr "Ak_un Saat Ini"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:642
-msgid "_Parent Account"
-msgstr "Akun _Induk"
-
-#: gnucash/gtkbuilder/dialog-tax-info.glade:675
+#: gnucash/gtkbuilder/dialog-tax-info.glade:676
 msgid "<b>Copy Number</b>"
 msgstr "<b>Salin Nomor</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:7
+#: gnucash/gtkbuilder/dialog-tax-table.glade:31
 msgid "Tax Tables"
 msgstr "Tabel Pajak"
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:31
-msgid "<b>Tax Tables</b>"
-msgstr "<b>Tabel Pajak</b>"
-
-#: gnucash/gtkbuilder/dialog-tax-table.glade:141
+#: gnucash/gtkbuilder/dialog-tax-table.glade:143
 msgid "<b>Tax Table Entries</b>"
 msgstr "<b>Entri Tabel Pajak</b>"
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:197
+#: gnucash/gtkbuilder/dialog-tax-table.glade:199
 msgid "De_lete"
 msgstr "Ha_pus"
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:212
+#: gnucash/gtkbuilder/dialog-tax-table.glade:214
 msgid "Ne_w"
 msgstr "Ba_ru"
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:289
+#: gnucash/gtkbuilder/dialog-tax-table.glade:291
 msgid "Value $"
 msgstr "Nilai $"
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:292
+#: gnucash/gtkbuilder/dialog-tax-table.glade:294
 msgid "Percent %"
 msgstr "Persen %"
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:387
+#: gnucash/gtkbuilder/dialog-tax-table.glade:389
 msgid "<b>Tax Table Entry</b>"
 msgstr "<b>Entri Tabel Pajak</b>"
-
-#: gnucash/gtkbuilder/dialog-tax-table.glade:401
-msgid "<b>Tax Table</b>"
-msgstr "<b>Tabel Pajak</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:8
 msgid "GnuCash Tip Of The Day"
@@ -18280,30 +18219,22 @@ msgstr "Dana Transfer"
 msgid "<b>Basic Information</b>"
 msgstr "<b>Informasi Dasar</b>"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:283
-msgid "<b>Transfer From</b>"
-msgstr "<b>Transfer Dari</b>"
-
-#: gnucash/gtkbuilder/dialog-transfer.glade:342
-msgid "<b>Transfer To</b>"
-msgstr "<b>Transfer Ke</b>"
-
-#: gnucash/gtkbuilder/dialog-transfer.glade:447
-#: gnucash/gtkbuilder/dialog-transfer.glade:463
+#: gnucash/gtkbuilder/dialog-transfer.glade:451
+#: gnucash/gtkbuilder/dialog-transfer.glade:467
 #: gnucash/report/reports/standard/net-charts.scm:47
 #: gnucash/report/reports/standard/price-scatter.scm:50
 msgid "Show Income/Expense"
 msgstr "Tampilkan Pendapatan/Pengeluaran"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:496
+#: gnucash/gtkbuilder/dialog-transfer.glade:500
 msgid "<b>Currency Transfer</b>"
 msgstr "<b>Mata Uang Transfer</b>"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:524
+#: gnucash/gtkbuilder/dialog-transfer.glade:528
 msgid "Exchange Rate"
 msgstr "Nilai Tukar"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:605
+#: gnucash/gtkbuilder/dialog-transfer.glade:609
 msgid "_Fetch Rate"
 msgstr "_Dapatkan Suku Bunga"
 
@@ -18320,7 +18251,7 @@ msgid "_Username"
 msgstr "Nama Pengg_una"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:99
-#: gnucash/import-export/aqb/dialog-ab.glade:781
+#: gnucash/import-export/aqb/dialog-ab.glade:787
 msgid "_Password"
 msgstr "Kata _Sandi"
 
@@ -18986,81 +18917,76 @@ msgstr "Masukkan Catatan"
 msgid "Duplicate Transaction"
 msgstr "Gandakan Transaksi"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:73
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:624
-msgid "<b>New Transaction Information</b>"
-msgstr "<b>Informasi Transaksi Baru</b>"
-
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:108
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:661
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:110
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:663
 msgid "_Number"
 msgstr "_Nomor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:146
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:689
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:148
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:691
 msgid "_Transaction Number"
 msgstr "Nomor _Transaksi"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:161
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:719
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:163
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:721
 msgid "Keep Linked Document Entry"
 msgstr "Pertahankan Entri Dokumen Tertaut"
 
 #. Filter register by... Dialog
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:213
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:215
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
 msgid "Filter register by..."
 msgstr "Filter register berdasar..."
 
 #. Filter By Dialog, Date Tab
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:280
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:282
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:80
 msgid "Show _All"
 msgstr "Tampilkan Semu_a"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:296
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:298
 msgid "Select Range:"
 msgstr "Pilih Rentang:"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:349
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:351
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:193
 msgid "Choo_se Date"
 msgstr "Pili_h Tanggal"
 
 #. Filter By Dialog, State Tab
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:542
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:544
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:386
 msgid "_Unreconciled"
 msgstr "Tak-direk_onsiliasi"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:574
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:576
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:418
 msgid "C_leared"
 msgstr "K_lir"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:590
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:592
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:434
 msgid "_Voided"
 msgstr "_Dibatalkan"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:606
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:608
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:450
 msgid "_Frozen"
 msgstr "Di_bekukan"
 
 #. Filter By Dialog, below tabs
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:685
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:687
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:529
 msgid "Sa_ve Filter"
 msgstr "Si_mpan Filter"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:721
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1111
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:723
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1113
 msgid "Void Transaction"
 msgstr "Batalkan Transaksi"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:785
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1175
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:787
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1177
 msgid "Reason for voiding transaction"
 msgstr "Alasan untuk membatalkan transaksi"
 
@@ -19077,90 +19003,90 @@ msgstr ""
 "Jika 0, semua hari sebelumnya akan disertakan"
 
 #. Sort register by Dialog
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:769
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:771
 msgid "Sort register by..."
 msgstr "Urutkan register berdasar..."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:832
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:834
 msgid "_Standard Order"
 msgstr "Urutan _Standar"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:836
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:838
 msgid "Keep normal account order."
 msgstr "Pertahankan urutan akun normal."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:865
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:867
 #: gnucash/report/trep-engine.scm:184
 msgid "Sort by date."
 msgstr "Urutkan berdasar tanggal."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:884
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:886
 msgid "Sort by the date of entry."
 msgstr "Urutkan berdasar tanggal entri."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:899
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:901
 msgid "S_tatement Date"
 msgstr "Tanggal Pernya_taan"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:903
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:905
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr ""
 "Urutkan berdasar tanggal pernyataan (dan kelompokkan berdasar klir, tak-"
 "direkonsiliasi, direkonsiliasi)."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:918
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:920
 msgid "Num_ber"
 msgstr "No_mor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:922
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:924
 msgid "Sort by number."
 msgstr "Urutkan berdasar nomor."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:937
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:939
 msgid "Amo_unt"
 msgstr "J_umlah"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:941
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:943
 #: gnucash/report/trep-engine.scm:230
 msgid "Sort by amount."
 msgstr "Urutkan berdasar jumlah."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:960
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:962
 #: gnucash/report/trep-engine.scm:267
 msgid "Sort by memo."
 msgstr "Urutkan berdasar memo."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:979
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:981
 #: gnucash/report/trep-engine.scm:238
 msgid "Sort by description."
 msgstr "Urutkan berdasar deskripsi."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:994
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:996
 msgid "_Action"
 msgstr "_Aksi"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:998
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1000
 msgid "Sort by action field."
 msgstr "Urutkan berdasar bidang aksi."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1017
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1019
 msgid "Sort by notes field."
 msgstr "Urutkan berdasar bidang catatan."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1048
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1050
 msgid "Sa_ve Sort Order"
 msgstr "Si_mpan Urutan Sortir"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1052
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1054
 msgid "Save the sort order for this register."
 msgstr "Simpan urutan sortir untuk register ini."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1068
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1070
 msgid "_Reverse Order"
 msgstr "Balik U_rutan"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1072
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1074
 msgid "Sort in descending order."
 msgstr "Urutkan secara terbalik."
 
@@ -19496,88 +19422,101 @@ msgid "_Abort"
 msgstr "B_atalkan"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:82
-msgid "<b>Progress</b>"
-msgstr "<b>Kemajuan</b>"
-
-#: gnucash/import-export/aqb/dialog-ab.glade:103
-msgid "Current _Job"
-msgstr "_Tugas Saat Ini"
-
-#: gnucash/import-export/aqb/dialog-ab.glade:145
+#: gnucash/import-export/aqb/dialog-ab.glade:147
 msgid "Progress"
 msgstr "Kemajuan"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:159
+#: gnucash/import-export/aqb/dialog-ab.glade:105
+msgid "Current _Job"
+msgstr "_Tugas Saat Ini"
+
+#: gnucash/import-export/aqb/dialog-ab.glade:161
 msgid "Current _Action"
 msgstr "_Aksi Saat Ini"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:208
+#: gnucash/import-export/aqb/dialog-ab.glade:210
 msgid "<b>_Log Messages</b>"
 msgstr "<b>Pesan _Log</b>"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:251
+#: gnucash/import-export/aqb/dialog-ab.glade:253
 msgid "Close when _finished"
 msgstr "Tutup jika _selesai"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:287
+#: gnucash/import-export/aqb/dialog-ab.glade:289
 msgid "Get Transactions Online"
 msgstr "Dapatkan Transaksi Daring"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:349
+#: gnucash/import-export/aqb/dialog-ab.glade:351
 msgid "Date range of transactions to retrieve:"
 msgstr "Rentang tanggal transaksi yang akan diambil:"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:369
-msgid "<b>From</b>"
-msgstr "<b>Dari</b>"
+#: gnucash/import-export/aqb/dialog-ab.glade:371
+#: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/standard/customer-summary.scm:40
+#: gnucash/report/reports/standard/job-report.scm:365
+#: gnucash/report/reports/standard/job-report.scm:493
+#: gnucash/report/reports/standard/new-owner-report.scm:44
+#: gnucash/report/reports/standard/owner-report.scm:39
+msgid "From"
+msgstr "Dari"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:387
+#: gnucash/import-export/aqb/dialog-ab.glade:391
 msgid "_Earliest possible date"
 msgstr "Tanggal s_eawal mungkin"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:404
+#: gnucash/import-export/aqb/dialog-ab.glade:408
 msgid "_Last retrieval date"
 msgstr "Tangga_l pengambilan terakhir"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:421
+#: gnucash/import-export/aqb/dialog-ab.glade:425
 msgid "E_nter date:"
 msgstr "Masukka_n tanggal:"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:471
-msgid "<b>To</b>"
-msgstr "<b>Ke</b>"
+#: gnucash/import-export/aqb/dialog-ab.glade:475
+#: gnucash/report/reports/aging.scm:37
+#: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/standard/customer-summary.scm:41
+#: gnucash/report/reports/standard/job-report.scm:365
+#: gnucash/report/reports/standard/job-report.scm:496
+#: gnucash/report/reports/standard/new-aging.scm:39
+#: gnucash/report/reports/standard/new-owner-report.scm:45
+#: gnucash/report/reports/standard/owner-report.scm:40
+msgid "To"
+msgstr "Kepada"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:489
+#: gnucash/import-export/aqb/dialog-ab.glade:495
 msgid "Ente_r date:"
 msgstr "Ma_sukkan tanggal:"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:506
+#: gnucash/import-export/aqb/dialog-ab.glade:512
 msgid "No_w"
 msgstr "Seka_rang"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:566
+#: gnucash/import-export/aqb/dialog-ab.glade:572
 msgid "Enter Password"
 msgstr "Masukkan Kata Sandi"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:627
+#: gnucash/import-export/aqb/dialog-ab.glade:633
 msgid "Enter your password"
 msgstr "Masukkan kata sandi Anda"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:646
+#: gnucash/import-export/aqb/dialog-ab.glade:652
 msgid "Bar_width"
 msgstr "Batang_Lebar"
 
 #. TAN generator with flicker interface common in DE only
-#: gnucash/import-export/aqb/dialog-ab.glade:664
+#: gnucash/import-export/aqb/dialog-ab.glade:670
 msgid "Setting the bar width, adapting to the size of the TAN generator."
 msgstr "Mengatur lebar batang, menyesuaikan dengan ukuran generator TAN."
 
-#: gnucash/import-export/aqb/dialog-ab.glade:679
+#: gnucash/import-export/aqb/dialog-ab.glade:685
 msgid "_Delay"
 msgstr "_Menunda"
 
 #. TAN generator with flicker interface common in DE only
-#: gnucash/import-export/aqb/dialog-ab.glade:694
+#: gnucash/import-export/aqb/dialog-ab.glade:700
 msgid ""
 "Setting the delay time, with small values the flicker graphic is repeated "
 "faster."
@@ -19585,7 +19524,7 @@ msgstr ""
 "Mengatur waktu tunda, dengan nilai kecil kedipan grafik terulang lebih cepat."
 
 #. TAN generator with flicker interface common in DE only
-#: gnucash/import-export/aqb/dialog-ab.glade:752
+#: gnucash/import-export/aqb/dialog-ab.glade:758
 msgid ""
 "Hold the TAN generator in front of the animated graphic. The markings "
 "(triangles) on the graphic must match those on the TAN generator."
@@ -19593,15 +19532,15 @@ msgstr ""
 "Tahan generator TAN di depan grafik animasi. Tanda (segitiga) pada grafik "
 "harus cocok dengan yang ada di generator TAN."
 
-#: gnucash/import-export/aqb/dialog-ab.glade:796
+#: gnucash/import-export/aqb/dialog-ab.glade:802
 msgid "Con_firm Password"
 msgstr "Kon_firmasi Kata Sandi"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:836
+#: gnucash/import-export/aqb/dialog-ab.glade:842
 msgid "_Remember the PIN in memory"
 msgstr "_Ingat PIN di memori"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:842
+#: gnucash/import-export/aqb/dialog-ab.glade:848
 msgid ""
 "If active, the PIN for FinTS/AqBanking actions will be remembered in memory "
 "during a session. Otherwise it will have to be entered again each time "
@@ -19611,132 +19550,133 @@ msgstr ""
 "sebuah sesi. Jika tidak, Anda harus memasukkan lagi selama sebuah sesi "
 "setiap kali diperlukan."
 
-#: gnucash/import-export/aqb/dialog-ab.glade:880
+#: gnucash/import-export/aqb/dialog-ab.glade:886
 msgid "Name for new template"
 msgstr "Nama templat baru"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:942
+#: gnucash/import-export/aqb/dialog-ab.glade:948
 msgid "_Name of the new template"
 msgstr "_Nama templat baru"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:956
+#: gnucash/import-export/aqb/dialog-ab.glade:962
 msgid "Enter a unique name for the new template."
 msgstr "Masukkan nama unik untuk templat baru."
 
-#: gnucash/import-export/aqb/dialog-ab.glade:989
+#: gnucash/import-export/aqb/dialog-ab.glade:995
 msgid "Online Transaction"
 msgstr "Transaksi Daring"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1004
+#: gnucash/import-export/aqb/dialog-ab.glade:1010
 msgid "Execute _later (unimpl.)"
 msgstr "Ja_lankan nanti (belum diterapkan)"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1033
+#: gnucash/import-export/aqb/dialog-ab.glade:1039
 msgid "Execute _Now"
 msgstr "Jala_nkan Sekarang"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1041
+#: gnucash/import-export/aqb/dialog-ab.glade:1047
 msgid "Execute this online transaction now"
 msgstr "Jalankan transaksi daring ini sekarang"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1068
+#: gnucash/import-export/aqb/dialog-ab.glade:1074
 msgid "Enter an Online Transaction"
 msgstr "Masukkan sebuah Transaksi Daring"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1104
+#: gnucash/import-export/aqb/dialog-ab.glade:1110
 msgid "Recipient Account _Number"
 msgstr "_Nomor Akun Penerima"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1133
+#: gnucash/import-export/aqb/dialog-ab.glade:1139
 msgid "Recipient _Bank Code"
 msgstr "Kode _Bank Penerima"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1163
+#: gnucash/import-export/aqb/dialog-ab.glade:1169
 msgid "_Recipient Name"
 msgstr "Nama Pene_rima"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1179
-#: gnucash/import-export/aqb/dialog-ab.glade:1279
+#: gnucash/import-export/aqb/dialog-ab.glade:1185
+#: gnucash/import-export/aqb/dialog-ab.glade:1285
 msgid "at Bank"
 msgstr "di Bank"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1192
+#: gnucash/import-export/aqb/dialog-ab.glade:1198
 msgid "(filled in automatically)"
 msgstr "(diisi otomatis)"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1221
+#: gnucash/import-export/aqb/dialog-ab.glade:1227
 msgid "Payment _Purpose (only for recipient)"
 msgstr "Tujuan _Pembayaran (hanya untuk penerima)"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1237
+#: gnucash/import-export/aqb/dialog-ab.glade:1243
 msgid "Payment Purpose continued"
 msgstr "Tujuan Pembayaran lanjutan"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1251
+#: gnucash/import-export/aqb/dialog-ab.glade:1257
 msgid "_Originator Name"
 msgstr "Nama _Originator"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1303
+#: gnucash/import-export/aqb/dialog-ab.glade:1309
 msgid "Originator Account Number"
 msgstr "Nomor Akun Originator"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1327
+#: gnucash/import-export/aqb/dialog-ab.glade:1333
 msgid "Bank Code"
 msgstr "Kode Bank"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1488
+#: gnucash/import-export/aqb/dialog-ab.glade:1494
 msgid "_Add current"
 msgstr "T_ambahkan saat ini"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1494
+#: gnucash/import-export/aqb/dialog-ab.glade:1500
 msgid "Add the current online transaction as a new transaction template"
 msgstr "Tambahkan transaksi daring saat ini sebagai templat transaksi baru"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1506
+#: gnucash/import-export/aqb/dialog-ab.glade:1512
 msgid "_Up"
 msgstr "_Naik"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1512
+#: gnucash/import-export/aqb/dialog-ab.glade:1518
 msgid "Move the selected transaction template one row up"
 msgstr "Pindahkan templat transaksi yang dipilih satu baris ke atas"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1524
+#: gnucash/import-export/aqb/dialog-ab.glade:1530
 msgid "_Down"
 msgstr "_Turun"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1530
+#: gnucash/import-export/aqb/dialog-ab.glade:1536
 msgid "Move the selected transaction template one row down"
 msgstr "Pindahkan templat transaksi yang dipilih satu baris ke bawah"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1542
+#: gnucash/import-export/aqb/dialog-ab.glade:1548
 msgid "_Sort"
 msgstr "_Urutkan"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1548
+#: gnucash/import-export/aqb/dialog-ab.glade:1554
 msgid "Sort the list of transaction templates alphabetically"
 msgstr "Urutkan daftar templat transaksi secara alfabet"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1560
+#: gnucash/import-export/aqb/dialog-ab.glade:1566
 msgid "D_elete"
 msgstr "_Hapus"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1566
+#: gnucash/import-export/aqb/dialog-ab.glade:1572
 msgid "Delete the currently selected transaction template"
 msgstr "Hapus templat transaksi yang dipilih"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1615
+#: gnucash/import-export/aqb/dialog-ab.glade:1621
 msgid "_Templates"
 msgstr "_Templat"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:21
-msgid "<b>Online Banking</b>"
-msgstr "<b>Perbankan Daring</b>"
+#: gnucash/import-export/aqb/gncmod-aqbanking.c:70
+msgid "Online Banking"
+msgstr "Perbankan Daring"
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:31
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:33
 msgid "_Close log window when finished"
 msgstr "_Tutup jendela log ketika selesai"
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:37
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:39
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:16
 msgid ""
 "If active, the window will be closed automatically when you finish the HBCI/"
@@ -19745,11 +19685,11 @@ msgstr ""
 "Jika aktif, jendela akan ditutup secara otomatis ketika Anda menyelesaikan "
 "proses impor HBCI/AqBanking. Jika tidak, jendela akan tetap terbuka."
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:49
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:51
 msgid "Remember the _PIN in memory"
 msgstr "Ingat _PIN di memori"
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:55
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:57
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:21
 msgid ""
 "If active, the PIN for HBCI/AqBanking actions will be remembered in memory "
@@ -19760,21 +19700,21 @@ msgstr ""
 "sebuah sesi. Jika tidak, Anda harus memasukkan lagi selama sebuah sesi "
 "setiap kali diperlukan."
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:67
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:69
 msgid "_Verbose debug messages"
 msgstr "_Pesan awakutu lebih lengkap"
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:73
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:75
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:31
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 msgstr ""
 "Aktifkan pesan awakutu lebih lengkap untuk Perbankan Daring HBCI/AqBanking."
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:85
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:87
 msgid "Use Non-SWIFT _transaction text"
 msgstr "Gunakan teks _transaksi Non-SWIFT"
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:91
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:93
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:26
 msgid ""
 "Some banks place part of transaction description as \"transaction text\" in "
@@ -20224,10 +20164,6 @@ msgid ""
 "The Online Banking job is still running; are you sure you want to cancel?"
 msgstr ""
 "Tugas Perbankan Daring masih berjalan; apakah Anda yakin ingin membatalkan?"
-
-#: gnucash/import-export/aqb/gncmod-aqbanking.c:70
-msgid "Online Banking"
-msgstr "Perbankan Daring"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:92
 msgid "_Online Actions"
@@ -21257,10 +21193,6 @@ msgstr "Dari Simbol"
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 msgid "From Namespace"
 msgstr "Dari Namespace"
-
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
-msgid "Currency To"
-msgstr "Mata Uang Ke"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:66
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:118
@@ -23511,18 +23443,6 @@ msgstr "Pilih sebuah lembar gaya untuk laporan."
 msgid "stylesheet."
 msgstr "lembar gaya."
 
-#: gnucash/report/reports/aging.scm:37
-#: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
-#: gnucash/report/reports/standard/customer-summary.scm:41
-#: gnucash/report/reports/standard/job-report.scm:365
-#: gnucash/report/reports/standard/job-report.scm:496
-#: gnucash/report/reports/standard/new-aging.scm:39
-#: gnucash/report/reports/standard/new-owner-report.scm:45
-#: gnucash/report/reports/standard/owner-report.scm:40
-msgid "To"
-msgstr "Kepada"
-
 #: gnucash/report/reports/aging.scm:38
 #: gnucash/report/reports/standard/new-aging.scm:40
 msgid "Sort By"
@@ -24417,16 +24337,6 @@ msgstr ""
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
 msgstr "Ekspor Laporan Pajak / TXF"
-
-#: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
-#: gnucash/report/reports/standard/customer-summary.scm:40
-#: gnucash/report/reports/standard/job-report.scm:365
-#: gnucash/report/reports/standard/job-report.scm:493
-#: gnucash/report/reports/standard/new-owner-report.scm:44
-#: gnucash/report/reports/standard/owner-report.scm:39
-msgid "From"
-msgstr "Dari"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:151
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:181
@@ -27386,17 +27296,6 @@ msgstr ""
 "String tersuai untuk menggantikan Faktur, Tagihan atau Voucer Pengeluaran."
 
 #: gnucash/report/reports/standard/invoice.scm:201
-#: gnucash/report/reports/standard/invoice.scm:207
-#: gnucash/report/reports/standard/invoice.scm:348
-#: gnucash/report/reports/standard/invoice.scm:355
-#: gnucash/report/reports/standard/invoice.scm:362
-#: gnucash/report/reports/standard/invoice.scm:369
-#: gnucash/report/reports/standard/invoice.scm:376
-#: gnucash/report/reports/standard/invoice.scm:383
-msgid "Layout"
-msgstr "Tata Letak"
-
-#: gnucash/report/reports/standard/invoice.scm:201
 #: gnucash/report/stylesheets/css.scm:118
 #: gnucash/report/stylesheets/css.scm:224
 msgid "CSS"
@@ -29180,26 +29079,6 @@ msgstr "Logo"
 msgid "Company logo image."
 msgstr "Gambar logo perusahaan."
 
-#: gnucash/report/stylesheets/footer.scm:123
-#: gnucash/report/stylesheets/footer.scm:130
-#: gnucash/report/stylesheets/footer.scm:137
-#: gnucash/report/stylesheets/footer.scm:144
-#: gnucash/report/stylesheets/footer.scm:151
-#: gnucash/report/stylesheets/footer.scm:159
-#: gnucash/report/stylesheets/footer.scm:167
-#: gnucash/report/stylesheets/footer.scm:175
-#: gnucash/report/stylesheets/head-or-tail.scm:170
-#: gnucash/report/stylesheets/head-or-tail.scm:177
-#: gnucash/report/stylesheets/head-or-tail.scm:184
-#: gnucash/report/stylesheets/head-or-tail.scm:191
-#: gnucash/report/stylesheets/head-or-tail.scm:198
-#: gnucash/report/stylesheets/head-or-tail.scm:206
-#: gnucash/report/stylesheets/head-or-tail.scm:214
-#: gnucash/report/stylesheets/head-or-tail.scm:222
-#: gnucash/report/stylesheets/plain.scm:62
-msgid "Colors"
-msgstr "Warna"
-
 #: gnucash/report/stylesheets/footer.scm:124
 #: gnucash/report/stylesheets/head-or-tail.scm:171
 msgid "General background color for report."
@@ -30029,10 +29908,6 @@ msgstr "Alamat Email Perusahaan"
 #: libgnucash/app-utils/business-options.scm:75
 msgid "Company Contact Person"
 msgstr "Narahubung Perusahaan"
-
-#: libgnucash/app-utils/business-options.scm:76
-msgid "Fancy Date Format"
-msgstr "Format Tanggal Lengkap"
 
 #: libgnucash/app-utils/business-options.scm:77
 msgid "custom"
@@ -31103,6 +30978,132 @@ msgstr "Transaksi Dibatalkan"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "Tak ada bantuan yang tersedia."
+
+#~ msgid "<b>Accounts</b>"
+#~ msgstr "<b>Akun</b>"
+
+#~ msgid "<b>Dates</b>"
+#~ msgstr "<b>Tanggal</b>"
+
+#~ msgid "Sho_w All"
+#~ msgstr "Tampilka_n Semua"
+
+#~ msgid "•"
+#~ msgstr "•"
+
+#~ msgid "<b>Currency To</b>"
+#~ msgstr "<b>Mata Uang Ke</b>"
+
+#~ msgid "<b>Notes</b>"
+#~ msgstr "<b>Catatan</b>"
+
+#~ msgid "<b>Book Options</b>"
+#~ msgstr "<b>Opsi Buku</b>"
+
+#~ msgid "<b>General</b>"
+#~ msgstr "<b>Umum</b>"
+
+#~ msgid "<b>Transactions</b>"
+#~ msgstr "<b>Transaksi</b>"
+
+#~ msgid "<b>Identification</b>"
+#~ msgstr "<b>Identifikasi</b>"
+
+#~ msgid "<b>_Parent Account</b>"
+#~ msgstr "<b>Akun I_nduk</b>"
+
+#~ msgid "<b>QIF Import</b>"
+#~ msgstr "<b>Impor QIF</b>"
+
+#~ msgid "<b>Terms</b>"
+#~ msgstr "<b>Ketentuan</b>"
+
+#~ msgid "<b>Securities</b>"
+#~ msgstr "<b>Sekuritas</b>"
+
+#~ msgid "<b>Security Information</b>"
+#~ msgstr "<b>Informasi Sekuritas</b>"
+
+#~ msgid "<b>1. Choose the file to import</b>"
+#~ msgstr "<b>1. Pilih berkas untuk diimpor</b>"
+
+#~ msgid "<b>3. Select import options</b>"
+#~ msgstr "<b>3. Pilih opsi impor</b>"
+
+#~ msgid "<b>4. Preview</b>"
+#~ msgstr "<b>4. Pratinjau</b>"
+
+#~ msgid "<b>Period</b>"
+#~ msgstr "<b>Periode</b>"
+
+#~ msgid "<b>Colors</b>"
+#~ msgstr "<b>Warna</b>"
+
+#~ msgid "<b>_Notes</b>"
+#~ msgstr "<b>Catata_n</b>"
+
+#~ msgid "<b>Amount</b>"
+#~ msgstr "<b>Jumlah</b>"
+
+#~ msgid "<b>Start Date</b>"
+#~ msgstr "<b>Tanggal Mulai</b>"
+
+#~ msgid "<b>End Date</b>"
+#~ msgstr "<b>Tanggal Akhir</b>"
+
+#~ msgid "<b>Account Color</b>"
+#~ msgstr "<b>Warna Akun</b>"
+
+#~ msgid "<b>Fancy Date Format</b>"
+#~ msgstr "<b>Format Tanggal Lengkap</b>"
+
+#~ msgid "<b>Date Format</b>"
+#~ msgstr "<b>Format Tanggal</b>"
+
+#~ msgid "<b>Layout</b>"
+#~ msgstr "<b>Tata Letak</b>"
+
+#~ msgid "<b>Default zoom level</b>"
+#~ msgstr "<b>Tingkat perbesaran baku</b>"
+
+#~ msgid "<b>Online Quotes</b>"
+#~ msgstr "<b>Harga Penawaran Daring</b>"
+
+#~ msgid "<b>Name</b>"
+#~ msgstr "<b>Nama</b>"
+
+#~ msgid "<b>Options</b>"
+#~ msgstr "<b>Opsi</b>"
+
+#~ msgid "<b>Income Tax Identity</b>"
+#~ msgstr "<b>Identitas Pajak Pendapatan</b>"
+
+#~ msgid "<b>Tax Tables</b>"
+#~ msgstr "<b>Tabel Pajak</b>"
+
+#~ msgid "<b>Tax Table</b>"
+#~ msgstr "<b>Tabel Pajak</b>"
+
+#~ msgid "<b>Transfer From</b>"
+#~ msgstr "<b>Transfer Dari</b>"
+
+#~ msgid "<b>Transfer To</b>"
+#~ msgstr "<b>Transfer Ke</b>"
+
+#~ msgid "<b>New Transaction Information</b>"
+#~ msgstr "<b>Informasi Transaksi Baru</b>"
+
+#~ msgid "<b>Progress</b>"
+#~ msgstr "<b>Kemajuan</b>"
+
+#~ msgid "<b>From</b>"
+#~ msgstr "<b>Dari</b>"
+
+#~ msgid "<b>To</b>"
+#~ msgstr "<b>Ke</b>"
+
+#~ msgid "<b>Online Banking</b>"
+#~ msgstr "<b>Perbankan Daring</b>"
 
 #~ msgid "Search from "
 #~ msgstr "Cari dari "

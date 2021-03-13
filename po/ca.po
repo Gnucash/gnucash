@@ -44,7 +44,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.6.15\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-03-11 07:46+0100\n"
+"POT-Creation-Date: 2021-03-13 05:49+0100\n"
 "PO-Revision-Date: 2016-12-23 08:34+0100\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -120,7 +120,7 @@ msgstr "Occidental"
 
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:969
-#: gnucash/gtkbuilder/dialog-account.glade:1029
+#: gnucash/gtkbuilder/dialog-account.glade:1031
 #: gnucash/report/reports/standard/account-piecharts.scm:488
 #: gnucash/report/reports/standard/category-barchart.scm:542
 msgid "Other"
@@ -840,6 +840,7 @@ msgstr ""
 "Enhorabona! Heu finalitzat el tancament dels llibres.\n"
 
 #: gnucash/gnome/assistant-acct-period.c:589
+#: gnucash/gtkbuilder/dialog-fincalc.glade:637
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1274
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1279
 #: gnucash/report/reports/standard/budget-flow.scm:44
@@ -903,7 +904,7 @@ msgstr "Contenidor"
 #: gnucash/gnome/assistant-hierarchy.c:1352
 #: gnucash/gnome-utils/dialog-account.c:351
 #: gnucash/gnome-utils/gnc-tree-view-account.c:996
-#: gnucash/gtkbuilder/dialog-account.glade:1855
+#: gnucash/gtkbuilder/dialog-account.glade:1861
 #: libgnucash/app-utils/gnc-ui-util.c:1106
 msgid "Opening Balance"
 msgstr "Saldo d'obertura"
@@ -998,7 +999,7 @@ msgstr "Opció de devolució del préstec: «%s»"
 #: gnucash/gtkbuilder/dialog-payment.glade:253
 #: gnucash/gtkbuilder/dialog-payment.glade:374
 #: gnucash/gtkbuilder/dialog-transfer.glade:138
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:522
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:524
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:366
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:148
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
@@ -1049,7 +1050,7 @@ msgstr "Data"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2912
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2996
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3082
-#: gnucash/gtkbuilder/dialog-payment.glade:436
+#: gnucash/gtkbuilder/dialog-payment.glade:438
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:132
 #: gnucash/register/ledger-core/split-register.c:2548
 #: gnucash/register/ledger-core/split-register.c:2589
@@ -1271,7 +1272,7 @@ msgstr ""
 #: gnucash/gnome/dialog-billterms.c:531
 #: gnucash/gnome-utils/gnc-date-delta.c:222
 #: gnucash/gtkbuilder/dialog-billterms.glade:182
-#: gnucash/gtkbuilder/dialog-billterms.glade:767
+#: gnucash/gtkbuilder/dialog-billterms.glade:769
 #: gnucash/gtkbuilder/gnc-frequency.glade:966
 #: gnucash/report/reports/standard/price-scatter.scm:139
 msgid "Days"
@@ -1279,7 +1280,7 @@ msgstr "Dies"
 
 #: gnucash/gnome/dialog-billterms.c:534
 #: gnucash/gtkbuilder/dialog-billterms.glade:368
-#: gnucash/gtkbuilder/dialog-billterms.glade:770
+#: gnucash/gtkbuilder/dialog-billterms.glade:772
 msgid "Proximo"
 msgstr "El mes següent"
 
@@ -1373,17 +1374,17 @@ msgstr "Voleu suprimir l'acció o divisa?"
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:202
 #: gnucash/gtkbuilder/dialog-account.glade:20
 #: gnucash/gtkbuilder/dialog-account.glade:383
-#: gnucash/gtkbuilder/dialog-account.glade:817
-#: gnucash/gtkbuilder/dialog-account.glade:1133
-#: gnucash/gtkbuilder/dialog-account.glade:1918
-#: gnucash/gtkbuilder/dialog-account-picker.glade:174
+#: gnucash/gtkbuilder/dialog-account.glade:819
+#: gnucash/gtkbuilder/dialog-account.glade:1135
+#: gnucash/gtkbuilder/dialog-account.glade:1924
+#: gnucash/gtkbuilder/dialog-account-picker.glade:176
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:39
-#: gnucash/gtkbuilder/dialog-billterms.glade:791
-#: gnucash/gtkbuilder/dialog-billterms.glade:971
+#: gnucash/gtkbuilder/dialog-billterms.glade:793
+#: gnucash/gtkbuilder/dialog-billterms.glade:973
 #: gnucash/gtkbuilder/dialog-book-close.glade:38
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:21
 #: gnucash/gtkbuilder/dialog-commodity.glade:69
-#: gnucash/gtkbuilder/dialog-commodity.glade:669
+#: gnucash/gtkbuilder/dialog-commodity.glade:671
 #: gnucash/gtkbuilder/dialog-customer.glade:64
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:42
 #: gnucash/gtkbuilder/dialog-date-close.glade:23
@@ -1394,7 +1395,7 @@ msgstr "Voleu suprimir l'acció o divisa?"
 #: gnucash/gtkbuilder/dialog-fincalc.glade:122
 #: gnucash/gtkbuilder/dialog-import.glade:46
 #: gnucash/gtkbuilder/dialog-import.glade:334
-#: gnucash/gtkbuilder/dialog-import.glade:1034
+#: gnucash/gtkbuilder/dialog-import.glade:1036
 #: gnucash/gtkbuilder/dialog-invoice.glade:675
 #: gnucash/gtkbuilder/dialog-invoice.glade:1199
 #: gnucash/gtkbuilder/dialog-job.glade:41
@@ -1413,9 +1414,9 @@ msgstr "Voleu suprimir l'acció o divisa?"
 #: gnucash/gtkbuilder/dialog-search.glade:67
 #: gnucash/gtkbuilder/dialog-sx.glade:177
 #: gnucash/gtkbuilder/dialog-sx.glade:779
-#: gnucash/gtkbuilder/dialog-sx.glade:1448
+#: gnucash/gtkbuilder/dialog-sx.glade:1452
 #: gnucash/gtkbuilder/dialog-tax-info.glade:28
-#: gnucash/gtkbuilder/dialog-tax-table.glade:315
+#: gnucash/gtkbuilder/dialog-tax-table.glade:317
 #: gnucash/gtkbuilder/dialog-transfer.glade:24
 #: gnucash/gtkbuilder/dialog-userpass.glade:22
 #: gnucash/gtkbuilder/dialog-vendor.glade:65
@@ -1424,20 +1425,20 @@ msgstr "Voleu suprimir l'acció o divisa?"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:437
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:882
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:30
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:231
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:738
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:233
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:740
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:31
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:582
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:787
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1128
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:789
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1130
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:24
 #: gnucash/gtkbuilder/window-autoclear.glade:22
 #: gnucash/gtkbuilder/window-reconcile.glade:21
 #: gnucash/html/gnc-html-webkit1.c:1197
-#: gnucash/import-export/aqb/dialog-ab.glade:302
-#: gnucash/import-export/aqb/dialog-ab.glade:580
-#: gnucash/import-export/aqb/dialog-ab.glade:894
-#: gnucash/import-export/aqb/dialog-ab.glade:1018
+#: gnucash/import-export/aqb/dialog-ab.glade:304
+#: gnucash/import-export/aqb/dialog-ab.glade:586
+#: gnucash/import-export/aqb/dialog-ab.glade:900
+#: gnucash/import-export/aqb/dialog-ab.glade:1024
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:424
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:378
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2029
@@ -1456,12 +1457,12 @@ msgstr "_Cancel·la"
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:162
 #: gnucash/gnome/window-reconcile2.c:2167 gnucash/gnome/window-reconcile.c:2388
 #: gnucash/gtkbuilder/dialog-account.glade:398
-#: gnucash/gtkbuilder/dialog-billterms.glade:475
+#: gnucash/gtkbuilder/dialog-billterms.glade:477
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:66
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:72
 #: gnucash/gtkbuilder/dialog-report.glade:352
 #: gnucash/gtkbuilder/dialog-report.glade:663
-#: gnucash/gtkbuilder/dialog-tax-table.glade:87
+#: gnucash/gtkbuilder/dialog-tax-table.glade:89
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:828
 msgid "_Delete"
 msgstr "_Suprimeix"
@@ -1808,7 +1809,8 @@ msgstr "Nom d'usuari"
 #: gnucash/gtkbuilder/dialog-customer.glade:773
 #: gnucash/gtkbuilder/dialog-employee.glade:227
 #: gnucash/gtkbuilder/dialog-sx.glade:235
-#: gnucash/gtkbuilder/dialog-tax-info.glade:112
+#: gnucash/gtkbuilder/dialog-sx.glade:830
+#: gnucash/gtkbuilder/dialog-tax-info.glade:113
 #: gnucash/gtkbuilder/dialog-vendor.glade:245
 #: gnucash/gtkbuilder/gnc-date-format.glade:132
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:130
@@ -1849,17 +1851,17 @@ msgstr "El nombre de pagaments no pot ser zero."
 msgid "The number of payments cannot be negative."
 msgstr "El nombre de pagaments no pot ser negatiu."
 
-#: gnucash/gnome/dialog-find-account.c:349
+#: gnucash/gnome/dialog-find-account.c:363
 #, fuzzy
 msgid "Find Account"
 msgstr "un compte"
 
-#: gnucash/gnome/dialog-find-account.c:384
+#: gnucash/gnome/dialog-find-account.c:398
 #, fuzzy
 msgid "Place Holder"
 msgstr "Contenidor"
 
-#: gnucash/gnome/dialog-find-account.c:395
+#: gnucash/gnome/dialog-find-account.c:409
 #: gnucash/gnome-utils/gnc-tree-view-account.c:980
 #: gnucash/gtkbuilder/dialog-account.glade:322
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
@@ -1867,24 +1869,24 @@ msgstr "Contenidor"
 msgid "Hidden"
 msgstr "_Ocult"
 
-#: gnucash/gnome/dialog-find-account.c:406
+#: gnucash/gnome/dialog-find-account.c:420
 #, fuzzy
 msgid "Not Used"
 msgstr "No planificat"
 
-#: gnucash/gnome/dialog-find-account.c:417
+#: gnucash/gnome/dialog-find-account.c:431
 #, fuzzy
 msgid "Balance Zero"
 msgstr "Saldo (període)"
 
-#: gnucash/gnome/dialog-find-account.c:428
+#: gnucash/gnome/dialog-find-account.c:442
 #, fuzzy
 msgid "Tax related"
 msgstr "Relacionat amb i_mpostos"
 
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
-#: gnucash/gnome/dialog-find-account.c:458
+#: gnucash/gnome/dialog-find-account.c:474
 #, fuzzy, c-format
 #| msgid "Accounts in '%s'"
 msgid "Su_b-accounts of '%s'"
@@ -1933,6 +1935,7 @@ msgstr "Cotització de l'acció"
 #: gnucash/gtkbuilder/assistant-loan.glade:199
 #: gnucash/gtkbuilder/assistant-loan.glade:617
 #: gnucash/gtkbuilder/assistant-loan.glade:764
+#: gnucash/gtkbuilder/dialog-payment.glade:411
 #: gnucash/gtkbuilder/dialog-transfer.glade:112
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:50
 #: gnucash/import-export/import-main-matcher.c:1092
@@ -2066,7 +2069,7 @@ msgstr "Descripció, notes o informe"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2799
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2801
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2819
-#: gnucash/gtkbuilder/dialog-payment.glade:486
+#: gnucash/gtkbuilder/dialog-payment.glade:488
 #: gnucash/gtkbuilder/dialog-transfer.glade:215
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
@@ -2091,6 +2094,7 @@ msgstr "Nota d'abonament"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:473
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2817
 #: gnucash/gtkbuilder/assistant-acct-period.glade:146
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:428
 #: gnucash/gtkbuilder/dialog-customer.glade:463
 #: gnucash/gtkbuilder/dialog-invoice.glade:445
 #: gnucash/gtkbuilder/dialog-invoice.glade:1154
@@ -2495,11 +2499,11 @@ msgstr "Notes del comprovant"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2875
 #: gnucash/gtkbuilder/assistant-loan.glade:283
 #: gnucash/gtkbuilder/dialog-doclink.glade:639
-#: gnucash/gtkbuilder/dialog-fincalc.glade:727
+#: gnucash/gtkbuilder/dialog-fincalc.glade:729
 #: gnucash/gtkbuilder/dialog-invoice.glade:145
 #: gnucash/gtkbuilder/dialog-invoice.glade:736
 #: gnucash/gtkbuilder/dialog-payment.glade:280
-#: gnucash/gtkbuilder/dialog-tax-info.glade:127
+#: gnucash/gtkbuilder/dialog-tax-info.glade:128
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:362
@@ -2534,7 +2538,7 @@ msgstr "Obert"
 #: gnucash/gnome/dialog-invoice.c:3452 gnucash/gnome/dialog-lot-viewer.c:952
 #: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:421
 #: gnucash/gnome/reconcile-view.c:425
-#: gnucash/gtkbuilder/dialog-payment.glade:473
+#: gnucash/gtkbuilder/dialog-payment.glade:475
 #: gnucash/gtkbuilder/dialog-transfer.glade:165
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/register/ledger-core/split-register-model.c:255
@@ -2788,7 +2792,7 @@ msgstr ""
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2786
 #: gnucash/gtkbuilder/dialog-customer.glade:479
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:151
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:153
 #: gnucash/gtkbuilder/dialog-invoice.glade:479
 #: gnucash/gtkbuilder/dialog-invoice.glade:1058
 #: gnucash/gtkbuilder/dialog-payment.glade:40
@@ -2806,7 +2810,7 @@ msgstr "Client"
 #: gnucash/gnome/dialog-payment.c:1274 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1109
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2797
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:168
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:170
 #: gnucash/gtkbuilder/dialog-payment.glade:44
 #: gnucash/gtkbuilder/dialog-vendor.glade:475
 #: gnucash/register/ledger-core/split-register-model.c:293
@@ -2992,7 +2996,7 @@ msgid "Custom"
 msgstr "Personalitzat"
 
 #: gnucash/gnome/dialog-print-check.c:2602
-#: gnucash/gtkbuilder/dialog-preferences.glade:3431
+#: gnucash/gtkbuilder/dialog-preferences.glade:3449
 #: gnucash/gtkbuilder/dialog-print-check.glade:264
 msgid "Top"
 msgstr "A dalt"
@@ -3041,12 +3045,12 @@ msgstr "Nom del full d'estil"
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:150
 #: gnucash/gnome/window-reconcile2.c:2162 gnucash/gnome/window-reconcile.c:2383
 #: gnucash/gnome-utils/gnc-main-window.c:273
-#: gnucash/gtkbuilder/dialog-billterms.glade:677
-#: gnucash/gtkbuilder/dialog-commodities.glade:155
+#: gnucash/gtkbuilder/dialog-billterms.glade:679
+#: gnucash/gtkbuilder/dialog-commodities.glade:156
 #: gnucash/gtkbuilder/dialog-price.glade:872
 #: gnucash/gtkbuilder/dialog-report.glade:631
-#: gnucash/gtkbuilder/dialog-tax-info.glade:139
-#: gnucash/gtkbuilder/dialog-tax-table.glade:182
+#: gnucash/gtkbuilder/dialog-tax-info.glade:140
+#: gnucash/gtkbuilder/dialog-tax-table.glade:184
 msgid "_Edit"
 msgstr "_Edita"
 
@@ -3241,7 +3245,7 @@ msgid "Created"
 msgstr "Creat"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:468
-#: gnucash/gtkbuilder/dialog-preferences.glade:1707
+#: gnucash/gtkbuilder/dialog-preferences.glade:1719
 #: gnucash/report/reports/standard/balsheet-pnl.scm:251
 #: gnucash/report/trep-engine.scm:603
 msgid "Never"
@@ -3276,7 +3280,7 @@ msgid "Transaction"
 msgstr "Asse_ntament"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1021
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:664
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:666
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:508
 msgid "Status"
 msgstr "Estat"
@@ -3303,6 +3307,7 @@ msgid "now"
 msgstr "ara"
 
 #: gnucash/gnome/dialog-tax-info.c:1186
+#: gnucash/gtkbuilder/dialog-tax-info.glade:89
 msgid "Income Tax Identity"
 msgstr "Identidad de l'Impost sobre la Renda"
 
@@ -3713,16 +3718,16 @@ msgstr "Seleccioneu un pressupost"
 #: gnucash/gnome-utils/gnc-main-window.c:1464
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:217
 #: gnucash/gtkbuilder/dialog-account.glade:35
-#: gnucash/gtkbuilder/dialog-account.glade:832
-#: gnucash/gtkbuilder/dialog-account.glade:1148
-#: gnucash/gtkbuilder/dialog-account-picker.glade:189
+#: gnucash/gtkbuilder/dialog-account.glade:834
+#: gnucash/gtkbuilder/dialog-account.glade:1150
+#: gnucash/gtkbuilder/dialog-account-picker.glade:191
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:54
-#: gnucash/gtkbuilder/dialog-billterms.glade:809
-#: gnucash/gtkbuilder/dialog-billterms.glade:989
+#: gnucash/gtkbuilder/dialog-billterms.glade:811
+#: gnucash/gtkbuilder/dialog-billterms.glade:991
 #: gnucash/gtkbuilder/dialog-book-close.glade:53
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:36
 #: gnucash/gtkbuilder/dialog-commodity.glade:85
-#: gnucash/gtkbuilder/dialog-commodity.glade:685
+#: gnucash/gtkbuilder/dialog-commodity.glade:687
 #: gnucash/gtkbuilder/dialog-customer.glade:80
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:58
 #: gnucash/gtkbuilder/dialog-date-close.glade:38
@@ -3733,7 +3738,7 @@ msgstr "Seleccioneu un pressupost"
 #: gnucash/gtkbuilder/dialog-import.glade:61
 #: gnucash/gtkbuilder/dialog-import.glade:191
 #: gnucash/gtkbuilder/dialog-import.glade:349
-#: gnucash/gtkbuilder/dialog-import.glade:1050
+#: gnucash/gtkbuilder/dialog-import.glade:1052
 #: gnucash/gtkbuilder/dialog-invoice.glade:691
 #: gnucash/gtkbuilder/dialog-invoice.glade:1214
 #: gnucash/gtkbuilder/dialog-job.glade:57
@@ -3751,9 +3756,9 @@ msgstr "Seleccioneu un pressupost"
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:55
 #: gnucash/gtkbuilder/dialog-sx.glade:25 gnucash/gtkbuilder/dialog-sx.glade:192
 #: gnucash/gtkbuilder/dialog-sx.glade:794
-#: gnucash/gtkbuilder/dialog-sx.glade:1464
+#: gnucash/gtkbuilder/dialog-sx.glade:1468
 #: gnucash/gtkbuilder/dialog-tax-info.glade:58
-#: gnucash/gtkbuilder/dialog-tax-table.glade:330
+#: gnucash/gtkbuilder/dialog-tax-table.glade:332
 #: gnucash/gtkbuilder/dialog-transfer.glade:39
 #: gnucash/gtkbuilder/dialog-userpass.glade:37
 #: gnucash/gtkbuilder/dialog-vendor.glade:81
@@ -3762,18 +3767,18 @@ msgstr "Seleccioneu un pressupost"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:451
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:897
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:45
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:246
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:753
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:248
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:755
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:46
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:597
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:802
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1143
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:804
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1145
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:39
 #: gnucash/gtkbuilder/window-autoclear.glade:38
 #: gnucash/gtkbuilder/window-reconcile.glade:36
-#: gnucash/import-export/aqb/dialog-ab.glade:317
-#: gnucash/import-export/aqb/dialog-ab.glade:595
-#: gnucash/import-export/aqb/dialog-ab.glade:909
+#: gnucash/import-export/aqb/dialog-ab.glade:319
+#: gnucash/import-export/aqb/dialog-ab.glade:601
+#: gnucash/import-export/aqb/dialog-ab.glade:915
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:423
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:481
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:377
@@ -4328,7 +4333,8 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2838
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2849
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2853
-#: gnucash/gtkbuilder/dialog-preferences.glade:980
+#: gnucash/gtkbuilder/assistant-csv-export.glade:277
+#: gnucash/gtkbuilder/dialog-preferences.glade:986
 #: gnucash/report/report-core.scm:158
 #: gnucash/report/reports/example/average-balance.scm:92
 #: gnucash/report/reports/example/average-balance.scm:296
@@ -4510,6 +4516,7 @@ msgstr "Refresca aquesta finestra"
 #: gnucash/gnome/gnc-plugin-page-report.c:1137
 #: gnucash/gtkbuilder/assistant-csv-export.glade:107
 #: gnucash/gtkbuilder/dialog-print-check.glade:643
+#: gnucash/gtkbuilder/dialog-sx.glade:892
 msgid "Options"
 msgstr "Opcions"
 
@@ -4644,12 +4651,12 @@ msgstr "Manté l'ordre normal de les factures"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:248
 #: gnucash/gtkbuilder/assistant-stock-split.glade:123
-#: gnucash/gtkbuilder/dialog-account.glade:1761
+#: gnucash/gtkbuilder/dialog-account.glade:1767
 #: gnucash/gtkbuilder/dialog-price.glade:175
 #: gnucash/gtkbuilder/dialog-print-check.glade:701
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:94
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:647
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:861
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:96
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:649
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:863
 msgid "_Date"
 msgstr "_Data"
 
@@ -4658,7 +4665,7 @@ msgid "Sort by date"
 msgstr "Ordena per data"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:249
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:880
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:882
 msgid "Date of _Entry"
 msgstr "Data de l'_Assentament"
 
@@ -4688,7 +4695,7 @@ msgid "Sort by price"
 msgstr "Ordena per preu"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:252
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:975
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:977
 msgid "Descri_ption"
 msgstr "Descri_pció"
 
@@ -5634,7 +5641,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:458
 #: gnucash/gnome/gnc-plugin-page-register.c:581
-#: gnucash/gtkbuilder/dialog-preferences.glade:2774
+#: gnucash/gtkbuilder/dialog-preferences.glade:2790
 msgid "Transaction _Journal"
 msgstr "Diari d'a_ssentaments"
 
@@ -5766,7 +5773,7 @@ msgstr "Informe dels resultats de la cerca"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2434
 #: gnucash/gnome/gnc-plugin-page-register.c:3577
-#: gnucash/gtkbuilder/dialog-preferences.glade:2684
+#: gnucash/gtkbuilder/dialog-preferences.glade:2700
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
@@ -5997,6 +6004,8 @@ msgid "Reverse Transaction"
 msgstr "Afegeix l'assentament inve_rs"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4085
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:73
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:624
 #, fuzzy
 msgid "New Transaction Information"
 msgstr "Informació de l'assentament"
@@ -6254,11 +6263,11 @@ msgid "_Scheduled"
 msgstr "_Planificat"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:138
-#: gnucash/gtkbuilder/dialog-billterms.glade:493
-#: gnucash/gtkbuilder/dialog-commodity.glade:654
+#: gnucash/gtkbuilder/dialog-billterms.glade:495
+#: gnucash/gtkbuilder/dialog-commodity.glade:656
 #: gnucash/gtkbuilder/dialog-report.glade:338
 #: gnucash/gtkbuilder/dialog-report.glade:647
-#: gnucash/gtkbuilder/dialog-tax-table.glade:102
+#: gnucash/gtkbuilder/dialog-tax-table.glade:104
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:796
 msgid "_New"
 msgstr "_Nou"
@@ -6292,6 +6301,7 @@ msgid "Delete the selected scheduled transaction"
 msgstr "Suprimeix l'assentament periòdic nou"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:385
+#: gnucash/gtkbuilder/dialog-account.glade:554
 #, c-format
 msgid "Transactions"
 msgstr "Assentaments"
@@ -6935,7 +6945,7 @@ msgid "_Reconcile"
 msgstr "_Concilia"
 
 #: gnucash/gnome/window-reconcile2.c:2102 gnucash/gnome/window-reconcile.c:2323
-#: gnucash/gtkbuilder/dialog-tax-table.glade:506
+#: gnucash/gtkbuilder/dialog-tax-table.glade:510
 msgid "_Account"
 msgstr "_Compte"
 
@@ -6943,7 +6953,7 @@ msgstr "_Compte"
 #: gnucash/gnome/window-reconcile2.c:2185 gnucash/gnome/window-reconcile.c:2325
 #: gnucash/gnome/window-reconcile.c:2406
 #: gnucash/gnome-utils/gnc-main-window.c:281
-#: gnucash/gtkbuilder/dialog-account.glade:1117
+#: gnucash/gtkbuilder/dialog-account.glade:1119
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:23
 #: gnucash/gtkbuilder/dialog-book-close.glade:22
 #: gnucash/gtkbuilder/dialog-commodity.glade:53
@@ -6951,7 +6961,7 @@ msgstr "_Compte"
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:25
 #: gnucash/gtkbuilder/dialog-custom-report.glade:28
 #: gnucash/gtkbuilder/dialog-employee.glade:23
-#: gnucash/gtkbuilder/dialog-import.glade:1017
+#: gnucash/gtkbuilder/dialog-import.glade:1019
 #: gnucash/gtkbuilder/dialog-invoice.glade:658
 #: gnucash/gtkbuilder/dialog-job.glade:24
 #: gnucash/gtkbuilder/dialog-options.glade:21
@@ -7019,7 +7029,7 @@ msgid "_Check & Repair"
 msgstr "_Comprova i repara"
 
 #: gnucash/gnome/window-reconcile2.c:2157 gnucash/gnome/window-reconcile.c:2378
-#: gnucash/gtkbuilder/dialog-account.glade:1747
+#: gnucash/gtkbuilder/dialog-account.glade:1753
 msgid "_Balance"
 msgstr "_Saldo"
 
@@ -7105,7 +7115,7 @@ msgstr "Heu de seleccionar un element de la llista"
 
 #: gnucash/gnome-search/dialog-search.c:702
 #: gnucash/gnome-utils/gnc-recurrence.c:547
-#: gnucash/gtkbuilder/dialog-commodities.glade:137
+#: gnucash/gtkbuilder/dialog-commodities.glade:138
 #: gnucash/gtkbuilder/dialog-doclink.glade:218
 #: gnucash/gtkbuilder/dialog-price.glade:854
 #, fuzzy
@@ -7139,7 +7149,7 @@ msgstr "Element _nou..."
 
 #: gnucash/gnome-search/dialog-search.c:1159
 #: gnucash/gnome-utils/gnc-recurrence.c:544
-#: gnucash/gtkbuilder/dialog-commodities.glade:120
+#: gnucash/gtkbuilder/dialog-commodities.glade:121
 #: gnucash/gtkbuilder/dialog-price.glade:837
 #, fuzzy
 msgid "_Add"
@@ -7602,8 +7612,8 @@ msgid "(%d) New Accounts"
 msgstr "(%d) Comptes nous"
 
 #: gnucash/gnome-utils/dialog-account.c:1619
-#: gnucash/gtkbuilder/dialog-account.glade:1100
-#: gnucash/gtkbuilder/dialog-account-picker.glade:158
+#: gnucash/gtkbuilder/dialog-account.glade:1102
+#: gnucash/gtkbuilder/dialog-account-picker.glade:160
 msgid "New Account"
 msgstr "Compte nou"
 
@@ -7690,7 +7700,7 @@ msgid "Select security/currency"
 msgstr "Seleccioneu un valor/divisa"
 
 #: gnucash/gnome-utils/dialog-commodity.c:276
-#: gnucash/gtkbuilder/dialog-account.glade:1257
+#: gnucash/gtkbuilder/dialog-account.glade:1261
 msgid "_Security/currency"
 msgstr "_Valor/divisa"
 
@@ -7718,8 +7728,8 @@ msgstr "Acció/Di_visa"
 #: gnucash/gnome-utils/gnc-tree-view-price.c:402
 #: gnucash/gtkbuilder/dialog-customer.glade:511
 #: gnucash/gtkbuilder/dialog-employee.glade:610
-#: gnucash/gtkbuilder/dialog-transfer.glade:424
-#: gnucash/gtkbuilder/dialog-transfer.glade:437
+#: gnucash/gtkbuilder/dialog-transfer.glade:428
+#: gnucash/gtkbuilder/dialog-transfer.glade:441
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
 #: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4394
 msgid "Currency"
@@ -7746,6 +7756,7 @@ msgid "New security"
 msgstr "Valor nou"
 
 #: gnucash/gnome-utils/dialog-commodity.c:992
+#: gnucash/gtkbuilder/dialog-commodity.glade:238
 msgid "Security Information"
 msgstr "Informació del valor"
 
@@ -7823,8 +7834,8 @@ msgstr "Anomena i desa..."
 
 #: gnucash/gnome-utils/dialog-options.c:226
 #: gnucash/gnome-utils/gnc-main-window.c:305
-#: gnucash/gtkbuilder/dialog-billterms.glade:729
-#: gnucash/gtkbuilder/dialog-commodities.glade:173
+#: gnucash/gtkbuilder/dialog-billterms.glade:731
+#: gnucash/gtkbuilder/dialog-commodities.glade:174
 #: gnucash/gtkbuilder/dialog-custom-report.glade:45
 #: gnucash/gtkbuilder/dialog-doclink.glade:546
 #: gnucash/gtkbuilder/dialog-fincalc.glade:107
@@ -7840,7 +7851,7 @@ msgstr "Anomena i desa..."
 #: gnucash/gtkbuilder/dialog-report.glade:272
 #: gnucash/gtkbuilder/dialog-report.glade:679
 #: gnucash/gtkbuilder/dialog-search.glade:52
-#: gnucash/gtkbuilder/dialog-tax-table.glade:254
+#: gnucash/gtkbuilder/dialog-tax-table.glade:256
 #: gnucash/gtkbuilder/dialog-totd.glade:56
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:736
 #: gnucash/import-export/aqb/dialog-ab.glade:43
@@ -8049,7 +8060,7 @@ msgid "Please enter new name"
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-tax-table.c:635
-#: gnucash/gtkbuilder/dialog-tax-table.glade:72
+#: gnucash/gtkbuilder/dialog-tax-table.glade:74
 #, fuzzy
 msgid "_Rename"
 msgstr "To_rna a numerar"
@@ -8147,10 +8158,12 @@ msgid "Debit Account"
 msgstr "Compte de deure"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1990
+#: gnucash/gtkbuilder/dialog-transfer.glade:283
 msgid "Transfer From"
 msgstr "Transfereix de"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1994
+#: gnucash/gtkbuilder/dialog-transfer.glade:344
 msgid "Transfer To"
 msgstr "Transfereix a"
 
@@ -8160,7 +8173,7 @@ msgstr "Import del deure"
 
 # FIXME: (dpm)
 #: gnucash/gnome-utils/dialog-transfer.c:2056
-#: gnucash/gtkbuilder/dialog-transfer.glade:564
+#: gnucash/gtkbuilder/dialog-transfer.glade:568
 msgid "To Amount"
 msgstr "A quantitat"
 
@@ -8332,10 +8345,10 @@ msgstr "Data:"
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:348
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:147
-#: gnucash/gtkbuilder/dialog-fincalc.glade:739
-#: gnucash/gtkbuilder/dialog-fincalc.glade:752
+#: gnucash/gtkbuilder/dialog-fincalc.glade:741
+#: gnucash/gtkbuilder/dialog-fincalc.glade:754
 #: gnucash/gtkbuilder/dialog-sx.glade:248
-#: gnucash/gtkbuilder/dialog-sx.glade:1371
+#: gnucash/gtkbuilder/dialog-sx.glade:1375
 #: gnucash/gtkbuilder/gnc-frequency.glade:592
 msgid "Frequency"
 msgstr "Periodicitat"
@@ -8351,7 +8364,7 @@ msgid "_Import"
 msgstr "_Importa"
 
 #: gnucash/gnome-utils/gnc-file.c:96 gnucash/gnome-utils/gnc-file.c:335
-#: gnucash/gtkbuilder/dialog-preferences.glade:2268
+#: gnucash/gtkbuilder/dialog-preferences.glade:2282
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:140
 msgid "Import"
 msgstr "_Importa"
@@ -9075,6 +9088,7 @@ msgstr ""
 "No s'ha pogut desar la base dades: El llibre està marcat com de sols-lectura."
 
 #: gnucash/gnome-utils/gnc-main-window.c:4318
+#: gnucash/gtkbuilder/assistant-qif-import.glade:975
 msgid "Book Options"
 msgstr "Opcions del llibre"
 
@@ -9727,7 +9741,7 @@ msgstr "Canviat"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1144
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1146
-#: gnucash/gtkbuilder/dialog-tax-table.glade:491
+#: gnucash/gtkbuilder/dialog-tax-table.glade:495
 #: gnucash/register/ledger-core/split-register.c:2103
 #: gnucash/register/ledger-core/split-register.c:2106
 msgid "_Value"
@@ -9739,7 +9753,7 @@ msgid "_Recalculate"
 msgstr "_Recalcula"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:805
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1005
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1001
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
@@ -9827,6 +9841,7 @@ msgstr "C"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:954
 #: gnucash/gnome-utils/gnc-tree-view-account.c:957
+#: gnucash/gtkbuilder/dialog-preferences.glade:800
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
 msgid "Account Color"
 msgstr "Color del compte"
@@ -10279,7 +10294,7 @@ msgid "Enter debit formula for real transaction"
 msgstr "Entre la forma de deure per a la transacció actual"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:140
-#: gnucash/gtkbuilder/dialog-sx.glade:1041
+#: gnucash/gtkbuilder/dialog-sx.glade:1045
 #: gnucash/report/html-utilities.scm:337
 msgid "Enabled"
 msgstr "Habilitat"
@@ -10717,7 +10732,7 @@ msgid "Auto pay when posting."
 msgstr "Pagament automàtica quan s'estigui fent un assentament."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:113
-#: gnucash/gtkbuilder/business-prefs.glade:196
+#: gnucash/gtkbuilder/business-prefs.glade:198
 msgid ""
 "At post time, automatically attempt to pay customer documents with "
 "outstanding pre-payments and counter documents. The pre-payments and "
@@ -10770,7 +10785,7 @@ msgid "Enable extra toolbar buttons for business"
 msgstr "Habilita els botons extra de la barra d'eines per a empresa"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:128
-#: gnucash/gtkbuilder/business-prefs.glade:71
+#: gnucash/gtkbuilder/business-prefs.glade:73
 msgid ""
 "If active, extra toolbar buttons for common business functions are shown as "
 "well. Otherwise they are not shown."
@@ -10779,7 +10794,7 @@ msgstr ""
 "funcions empresarials comuns. En cas contrari no es mostren."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:132
-#: gnucash/gtkbuilder/business-prefs.glade:318
+#: gnucash/gtkbuilder/business-prefs.glade:320
 msgid "The invoice report to be used for printing."
 msgstr "L'informe de factura a fer servir per imprimir"
 
@@ -10814,7 +10829,7 @@ msgstr ""
 "Aquest camp es pot cancel·lar per factura al diàleg de Comptabilització."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:155
-#: gnucash/gtkbuilder/business-prefs.glade:273
+#: gnucash/gtkbuilder/business-prefs.glade:275
 msgid ""
 "At post time, automatically attempt to pay vendor documents with outstanding "
 "pre-payments and counter documents. The pre-payments and documents obviously "
@@ -11208,7 +11223,7 @@ msgid "Enable SKIP transaction action"
 msgstr "Habilita l'acció OMET dels assentaments"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:6
-#: gnucash/gtkbuilder/dialog-preferences.glade:2032
+#: gnucash/gtkbuilder/dialog-preferences.glade:2044
 msgid ""
 "Enable the SKIP action in the transaction matcher. If enabled, a transaction "
 "whose best match's score is in the yellow zone (above the Auto-ADD threshold "
@@ -11224,7 +11239,7 @@ msgid "Enable UPDATE match action"
 msgstr "Habilita l'acció d'actualització de la concordança"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:11
-#: gnucash/gtkbuilder/dialog-preferences.glade:2051
+#: gnucash/gtkbuilder/dialog-preferences.glade:2063
 msgid ""
 "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
 "enabled, a transaction whose best match's score is above the Auto-CLEAR "
@@ -11326,12 +11341,12 @@ msgstr ""
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:40
-#: gnucash/gtkbuilder/dialog-preferences.glade:2242
+#: gnucash/gtkbuilder/dialog-preferences.glade:2256
 msgid "Automatically create new commodities"
 msgstr "Crea nous productes de manera automàtica"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:41
-#: gnucash/gtkbuilder/dialog-preferences.glade:2248
+#: gnucash/gtkbuilder/dialog-preferences.glade:2262
 msgid ""
 "Enables the automatic creation of new commodities if any unknown commodity "
 "is encountered during import. Otherwise the user will be asked what to do "
@@ -11366,7 +11381,7 @@ msgstr ""
 "QIF."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:15
-#: gnucash/gtkbuilder/dialog-account-picker.glade:56
+#: gnucash/gtkbuilder/dialog-account-picker.glade:58
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as reconciled."
@@ -11379,7 +11394,7 @@ msgid "Show documentation"
 msgstr "Mostra la documentació"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:33
-#: gnucash/gtkbuilder/dialog-account-picker.glade:37
+#: gnucash/gtkbuilder/dialog-account-picker.glade:39
 msgid "Show some documentation-only pages in QIF Import assistant."
 msgstr ""
 "Mostra algunes pàgines de només documentació en l'assistent d'importació de "
@@ -11404,7 +11419,7 @@ msgid "Prompt for interest charges"
 msgstr "Demana pel càrrec d'interès"
 
 #: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:11
-#: gnucash/gtkbuilder/dialog-account.glade:1480
+#: gnucash/gtkbuilder/dialog-account.glade:1484
 msgid ""
 "Prior to reconciling an account which charges or pays interest, prompt the "
 "user to enter a transaction for the interest charge or payment. Currently "
@@ -11540,13 +11555,13 @@ msgstr ""
 "es mostrarà el diàleg. En cas contrari no es mostrarà."
 
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:5
-#: gnucash/gtkbuilder/dialog-preferences.glade:3614
+#: gnucash/gtkbuilder/dialog-preferences.glade:3632
 msgid "Alpha Vantage API key"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:6
-#: gnucash/gtkbuilder/dialog-preferences.glade:3613
-#: gnucash/gtkbuilder/dialog-preferences.glade:3625
+#: gnucash/gtkbuilder/dialog-preferences.glade:3631
+#: gnucash/gtkbuilder/dialog-preferences.glade:3643
 msgid ""
 "To retrieve online quotes from Alphavantage, this key needs to be set. A key "
 "can be retrieved from the Alpha Vantage website."
@@ -11629,7 +11644,7 @@ msgid "Auto-save time interval"
 msgstr "Temps entre desaments automàtics"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:41
-#: gnucash/gtkbuilder/dialog-preferences.glade:1644
+#: gnucash/gtkbuilder/dialog-preferences.glade:1656
 msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
@@ -11639,12 +11654,12 @@ msgstr ""
 "automàtic."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:45
-#: gnucash/gtkbuilder/dialog-preferences.glade:1761
+#: gnucash/gtkbuilder/dialog-preferences.glade:1773
 msgid "Enable timeout on \"Save changes on closing\" question"
 msgstr "Habilita el temps d'espera a la pregunta «Desa els canvis en tancar»"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:46
-#: gnucash/gtkbuilder/dialog-preferences.glade:1765
+#: gnucash/gtkbuilder/dialog-preferences.glade:1777
 msgid ""
 "If enabled, the \"Save changes on closing\" question will only wait a "
 "limited number of seconds for an answer. If the user didn't answer within "
@@ -11661,7 +11676,7 @@ msgid "Time to wait for answer"
 msgstr "Temps per esperar per una resposta"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:51
-#: gnucash/gtkbuilder/dialog-preferences.glade:1800
+#: gnucash/gtkbuilder/dialog-preferences.glade:1812
 msgid ""
 "The number of seconds to wait before the question window will be closed and "
 "the changes saved automatically."
@@ -11704,7 +11719,7 @@ msgid "Force prices to display as decimals even if they must be rounded."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:71
-#: gnucash/gtkbuilder/dialog-preferences.glade:1204
+#: gnucash/gtkbuilder/dialog-preferences.glade:1214
 msgid ""
 "If active, GnuCash will round prices as necessary to display them as "
 "decimals instead of displaying the exact fraction if the fractional part "
@@ -11712,7 +11727,7 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:75
-#: gnucash/gtkbuilder/dialog-preferences.glade:1713
+#: gnucash/gtkbuilder/dialog-preferences.glade:1725
 msgid "Do not create log/backup files."
 msgstr "No creis fitxers de registre/còpia de seguretat."
 
@@ -11734,13 +11749,13 @@ msgstr ""
 "nombre de dies. El nombre de dies es defineix a la clau 'conserva-dies'"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:80
-#: gnucash/gtkbuilder/dialog-preferences.glade:1731
+#: gnucash/gtkbuilder/dialog-preferences.glade:1743
 msgid "Delete old log/backup files after this many days (0 = never)."
 msgstr ""
 "Esborra els fitxers de registre antics després d'aquest període (0 = mai)."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:85
-#: gnucash/gtkbuilder/dialog-preferences.glade:1749
+#: gnucash/gtkbuilder/dialog-preferences.glade:1761
 msgid "Do not delete log/backup files."
 msgstr "No esborris els fitxers de registre / còpia de seguretat."
 
@@ -11759,7 +11774,7 @@ msgstr ""
 "fitxers de registre / còpia de seguretat s'esborraran (0 = mai)."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:95
-#: gnucash/gtkbuilder/dialog-preferences.glade:636
+#: gnucash/gtkbuilder/dialog-preferences.glade:640
 msgid "Don't sign reverse any accounts."
 msgstr "No inverteixis el signe de cap compte."
 
@@ -11782,7 +11797,7 @@ msgstr ""
 "de cap saldo."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:100
-#: gnucash/gtkbuilder/dialog-preferences.glade:655
+#: gnucash/gtkbuilder/dialog-preferences.glade:659
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
@@ -11791,7 +11806,7 @@ msgstr ""
 "crèdit, creditors, passiu, patrimoni i ingressos"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:105
-#: gnucash/gtkbuilder/dialog-preferences.glade:674
+#: gnucash/gtkbuilder/dialog-preferences.glade:678
 msgid "Sign reverse balances on income and expense accounts."
 msgstr "Inverteix el signe dels saldos en els comptes d'ingressos i despeses."
 
@@ -11871,7 +11886,7 @@ msgstr ""
 "amb una el·lipsi."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:135
-#: gnucash/gtkbuilder/dialog-preferences.glade:920
+#: gnucash/gtkbuilder/dialog-preferences.glade:926
 msgid "Use the system locale currency for all newly created accounts."
 msgstr ""
 "Utilitza la divisa especificada per la localització del sistema per als "
@@ -11892,7 +11907,7 @@ msgstr ""
 "«altre», el GnuCash usarà el paràmetre especificat a la clau altra-divisa."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:140
-#: gnucash/gtkbuilder/dialog-preferences.glade:900
+#: gnucash/gtkbuilder/dialog-preferences.glade:906
 msgid "Use the specified currency for all newly created accounts."
 msgstr "Utilitza la divisa especificada per als comptes nous."
 
@@ -11940,7 +11955,7 @@ msgstr ""
 "«us» per a dates a l'estil dels Estats Units."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:160
-#: gnucash/gtkbuilder/dialog-preferences.glade:1098
+#: gnucash/gtkbuilder/dialog-preferences.glade:1108
 msgid "In the current calendar year"
 msgstr "Dins de l'any natural actual"
 
@@ -11968,7 +11983,7 @@ msgid "Maximum number of months to go back."
 msgstr "Nombre màxim de mesos per anar enrere."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:171
-#: gnucash/gtkbuilder/dialog-preferences.glade:1124
+#: gnucash/gtkbuilder/dialog-preferences.glade:1134
 msgid ""
 "Dates will be completed so that they are close to the current date. Enter "
 "the maximum number of months to go backwards in time when completing dates."
@@ -12018,7 +12033,7 @@ msgstr ""
 "contrari no es mostrarà cap pantalla de benvinguda."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:190
-#: gnucash/gtkbuilder/dialog-preferences.glade:3348
+#: gnucash/gtkbuilder/dialog-preferences.glade:3366
 msgid "Display the notebook tabs at the top of the window."
 msgstr "Mostra les pestanyes a la part de dalt de la finestra."
 
@@ -12036,22 +12051,22 @@ msgstr ""
 "«esquerra«, «inferior» i «dreta». El valor predeterminat és «superior»."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:195
-#: gnucash/gtkbuilder/dialog-preferences.glade:3367
+#: gnucash/gtkbuilder/dialog-preferences.glade:3385
 msgid "Display the notebook tabs at the bottom of the window."
 msgstr "Mostra les pestanyes a la part de sota de la finestra."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:200
-#: gnucash/gtkbuilder/dialog-preferences.glade:3386
+#: gnucash/gtkbuilder/dialog-preferences.glade:3404
 msgid "Display the notebook tabs at the left of the window."
 msgstr "Mostra les pestanyes a l'esquerra de la finestra."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:205
-#: gnucash/gtkbuilder/dialog-preferences.glade:3405
+#: gnucash/gtkbuilder/dialog-preferences.glade:3423
 msgid "Display the notebook tabs at the right of the window."
 msgstr "Mostra les pestanyes a la dreta de la finestra."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:210
-#: gnucash/gtkbuilder/dialog-preferences.glade:3437
+#: gnucash/gtkbuilder/dialog-preferences.glade:3455
 msgid "Display the summary bar at the top of the page."
 msgstr "Mostra la barra de resum a la part de dalt de la pàgina."
 
@@ -12067,12 +12082,12 @@ msgstr ""
 "predeterminat és «inferior»."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:215
-#: gnucash/gtkbuilder/dialog-preferences.glade:3456
+#: gnucash/gtkbuilder/dialog-preferences.glade:3474
 msgid "Display the summary bar at the bottom of the page."
 msgstr "Mostra la barra de resum a la part inferior de la pàgina."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:220
-#: gnucash/gtkbuilder/dialog-preferences.glade:3306
+#: gnucash/gtkbuilder/dialog-preferences.glade:3324
 msgid "Closing a tab moves to the most recently visited tab."
 msgstr "En tancar una pestanya, vés a l'última pestanya visitada."
 
@@ -12086,7 +12101,7 @@ msgstr ""
 "de l'esquerra."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:225
-#: gnucash/gtkbuilder/dialog-preferences.glade:1409
+#: gnucash/gtkbuilder/dialog-preferences.glade:1421
 msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
@@ -12095,7 +12110,7 @@ msgstr ""
 "«acció» per al camp «Num» als registres/informes."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:226
-#: gnucash/gtkbuilder/dialog-preferences.glade:1415
+#: gnucash/gtkbuilder/dialog-preferences.glade:1427
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
@@ -12239,7 +12254,7 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:285
-#: gnucash/gtkbuilder/dialog-preferences.glade:2742
+#: gnucash/gtkbuilder/dialog-preferences.glade:2758
 msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr ""
 "Mostra tots els assentaments en una línia (dues en el mode de doble línia)."
@@ -12264,7 +12279,7 @@ msgstr ""
 "tots els assentaments en forma expandida."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
-#: gnucash/gtkbuilder/dialog-preferences.glade:2761
+#: gnucash/gtkbuilder/dialog-preferences.glade:2777
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line. (Two in double line mode.)"
@@ -12274,7 +12289,7 @@ msgstr ""
 "dues en el mode de línia doble)."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
-#: gnucash/gtkbuilder/dialog-preferences.glade:2780
+#: gnucash/gtkbuilder/dialog-preferences.glade:2796
 msgid "All transactions are expanded to show all splits."
 msgstr ""
 "Tots els assentaments estan ampliats per a mostrar tots els desglossaments."
@@ -12320,7 +12335,7 @@ msgid "Show the entered and reconcile dates"
 msgstr "Mostra les dates entrades i reconciliades"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:311
-#: gnucash/gtkbuilder/dialog-preferences.glade:2924
+#: gnucash/gtkbuilder/dialog-preferences.glade:2940
 msgid ""
 "Show the date when the transaction was entered below the posted date and "
 "reconciled date on split row."
@@ -12333,7 +12348,7 @@ msgid "Show entered and reconciled dates on selection"
 msgstr "Mostra les dates entrades i conciliades a la selecció"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:316
-#: gnucash/gtkbuilder/dialog-preferences.glade:2972
+#: gnucash/gtkbuilder/dialog-preferences.glade:2988
 msgid "Show the entered date and reconciled date on transaction selection."
 msgstr ""
 "Mostra la data entrada i la data reconciliada a la selecció de l'assentament."
@@ -12343,7 +12358,7 @@ msgid "Show the calendar buttons"
 msgstr "Mostra els botons de calendari"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:321
-#: gnucash/gtkbuilder/dialog-preferences.glade:2940
+#: gnucash/gtkbuilder/dialog-preferences.glade:2956
 msgid "Show the calendar buttons Cancel, Today and Select."
 msgstr "Mostra els botons de calendari Cancel·la, Avui i Selecciona."
 
@@ -12352,7 +12367,7 @@ msgid "Move the selection to the blank split on expand"
 msgstr "Mou la selecció al desglossament buit quan s'ampliï"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:326
-#: gnucash/gtkbuilder/dialog-preferences.glade:2956
+#: gnucash/gtkbuilder/dialog-preferences.glade:2972
 msgid ""
 "This will move the selection to the blank split when the transaction is "
 "expanded."
@@ -12365,7 +12380,7 @@ msgid "Number of transactions to show in a register."
 msgstr "Nombre d'assentaments a mostrar en un registre."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:331
-#: gnucash/gtkbuilder/dialog-preferences.glade:2811
+#: gnucash/gtkbuilder/dialog-preferences.glade:2827
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
@@ -12379,7 +12394,7 @@ msgstr "Nombre de caràcters per auto-completar."
 
 #. Register2 feature
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:336
-#: gnucash/gtkbuilder/dialog-preferences.glade:2901
+#: gnucash/gtkbuilder/dialog-preferences.glade:2917
 msgid ""
 "This sets the number of characters before auto complete starts for "
 "description, notes and memo fields."
@@ -12401,7 +12416,7 @@ msgstr ""
 "principal."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:348
-#: gnucash/gtkbuilder/dialog-preferences.glade:3175
+#: gnucash/gtkbuilder/dialog-preferences.glade:3193
 msgid "Use the system locale currency for all newly created reports."
 msgstr ""
 "Utilitza la divisa especificada per la localització del sistema per als "
@@ -12421,7 +12436,7 @@ msgstr ""
 "el paràmetre especificat a la clau altra-divisa."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:353
-#: gnucash/gtkbuilder/dialog-preferences.glade:3155
+#: gnucash/gtkbuilder/dialog-preferences.glade:3173
 msgid "Use the specified currency for all newly created reports."
 msgstr "Utilitza la divisa especificada per a tots els informes nous."
 
@@ -12434,7 +12449,7 @@ msgid "Zoom factor to use by default for reports."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:364
-#: gnucash/gtkbuilder/dialog-preferences.glade:3190
+#: gnucash/gtkbuilder/dialog-preferences.glade:3208
 msgid ""
 "On high resolution screens reports tend to be hard to read. This option "
 "allows you to scale reports up by the set factor. For example setting this "
@@ -13106,7 +13121,7 @@ msgstr ""
 "Previsualització de la importació de comptes, únicament les primeres 10 files"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:290
-#: gnucash/gtkbuilder/assistant-csv-export.glade:726
+#: gnucash/gtkbuilder/assistant-csv-export.glade:728
 msgid ""
 "Press Apply to create export file.\n"
 "Cancel to abort."
@@ -13119,8 +13134,8 @@ msgid "Import Accounts Now"
 msgstr "Importa els comptes ara"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:346
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1071
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1160
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1069
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1156
 msgid "Import Summary"
 msgstr "Resum de la importació"
 
@@ -13177,96 +13192,97 @@ msgstr "Trieu els paràmetres per a l'exportació"
 msgid "Select the accounts to be exported and date range if required."
 msgstr "Seleccioneu els comptes a exportar i el rang de dates si es requereix."
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:277
-#, fuzzy
-msgid "<b>Accounts</b>"
-msgstr "<b>_Comptes</b>"
-
-#: gnucash/gtkbuilder/assistant-csv-export.glade:326
-#: gnucash/gtkbuilder/dialog-tax-info.glade:371
+#: gnucash/gtkbuilder/assistant-csv-export.glade:327
+#: gnucash/gtkbuilder/dialog-tax-info.glade:372
 msgid "Accounts Selected:"
 msgstr "Comptes seleccionats:"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:373
-#: gnucash/gtkbuilder/dialog-tax-info.glade:417
+#: gnucash/gtkbuilder/assistant-csv-export.glade:374
+#: gnucash/gtkbuilder/dialog-tax-info.glade:418
 msgid "_Select Subaccounts"
 msgstr "_Selecciona els subcomptes"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:388
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:622
+#: gnucash/gtkbuilder/assistant-csv-export.glade:389
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:624
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:466
 msgid "Select _All"
 msgstr "_Selecciona-ho tot"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:432
-#, fuzzy
-msgid "<b>Dates</b>"
-msgstr "<b>_Dates</b>"
+#: gnucash/gtkbuilder/assistant-csv-export.glade:433
+#: gnucash/gtkbuilder/assistant-loan.glade:1201
+#: gnucash/report/reports/standard/job-report.scm:563
+#: gnucash/report/reports/standard/new-owner-report.scm:1172
+#: gnucash/report/reports/standard/owner-report.scm:795
+msgid "Date Range"
+msgstr "Interval de dates"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:444
-msgid "Sho_w All"
-msgstr ""
+#: gnucash/gtkbuilder/assistant-csv-export.glade:446
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:264
+#: gnucash/gtkbuilder/dialog-account.glade:892
+#: gnucash/gtkbuilder/dialog-reset-warnings.glade:104
+msgid "_Select All"
+msgstr "_Selecciona'ls tots"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:461
+#: gnucash/gtkbuilder/assistant-csv-export.glade:463
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
 msgid "Select _Range"
 msgstr "Seleccioneu l'interval"
 
 #. Filter By Dialog, Date Tab, Start section
-#: gnucash/gtkbuilder/assistant-csv-export.glade:488
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:324
+#: gnucash/gtkbuilder/assistant-csv-export.glade:490
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:326
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:168
 msgid "Start"
 msgstr "Inici"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:497
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:333
+#: gnucash/gtkbuilder/assistant-csv-export.glade:499
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:177
 msgid "_Earliest"
 msgstr "_El més primerenc"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:514
+#: gnucash/gtkbuilder/assistant-csv-export.glade:516
 msgid "Cho_ose Date"
 msgstr "T_rieu una data"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:531
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:365
+#: gnucash/gtkbuilder/assistant-csv-export.glade:533
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:367
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:209
 msgid "Toda_y"
 msgstr "A_vui"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:548
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:382
+#: gnucash/gtkbuilder/assistant-csv-export.glade:550
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:384
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:226
 msgid "_Latest"
 msgstr "E_l més tard"
 
 #. Filter By Dialog, Date Tab, End section
-#: gnucash/gtkbuilder/assistant-csv-export.glade:578
+#: gnucash/gtkbuilder/assistant-csv-export.glade:580
 #: gnucash/gtkbuilder/dialog-fincalc.glade:601
 #: gnucash/gtkbuilder/dialog-sx.glade:424
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:412
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:414
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:256
 msgid "End"
 msgstr "Al final"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:587
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:421
+#: gnucash/gtkbuilder/assistant-csv-export.glade:589
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:423
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
 msgid "C_hoose Date"
 msgstr "T_rieu una data"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:604
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:438
+#: gnucash/gtkbuilder/assistant-csv-export.glade:606
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:440
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:282
 msgid "_Today"
 msgstr "A_vui"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:691
+#: gnucash/gtkbuilder/assistant-csv-export.glade:693
 msgid "Account Selection"
 msgstr "Selecció de compte"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:705
+#: gnucash/gtkbuilder/assistant-csv-export.glade:707
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
@@ -13274,19 +13290,19 @@ msgstr ""
 "\n"
 "Entreu un nom i localització de fitxer per a l'exportació...\n"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:718
+#: gnucash/gtkbuilder/assistant-csv-export.glade:720
 msgid "Choose File Name for Export"
 msgstr "Trieu un nom de fitxer per a l'exportació"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:732
+#: gnucash/gtkbuilder/assistant-csv-export.glade:734
 msgid "Export Now..."
 msgstr "Exporta ara..."
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:740
+#: gnucash/gtkbuilder/assistant-csv-export.glade:742
 msgid "Summary"
 msgstr "Resum"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:745
+#: gnucash/gtkbuilder/assistant-csv-export.glade:747
 msgid "Export Summary"
 msgstr "Exporta el resum"
 
@@ -13397,76 +13413,68 @@ msgstr "Pestanya"
 msgid "Hyphen (-)"
 msgstr "Guionet (-)"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:453
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:481
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:448
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:476
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:449
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:462
-msgid "•"
-msgstr ""
-
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:467
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:462
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:466
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:461
 msgid "Double-click anywhere on the table below to insert a column break"
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:495
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:490
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:492
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:487
 msgid "Right-click anywhere in a column to modify it (widen, narrow, merge)"
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:538
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:534
 msgid "Allow existing prices to be over written."
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:543
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:539
 msgid ""
 "Normally prices are not over written, select this to change that. This "
 "setting is not saved."
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:567
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:568
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:563
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:564
 #, fuzzy
 msgid "<b>File Format</b>"
 msgstr "<b>Format de l'hora</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:596
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:603
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:592
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:599
+#: gnucash/gtkbuilder/dialog-preferences.glade:1029
 #: gnucash/gtkbuilder/gnc-date-format.glade:39
 msgid "Date Format"
 msgstr "Format de data"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:608
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:615
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:604
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:611
 #, fuzzy
 msgid "Currency Format"
 msgstr "Format de divisa"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:620
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:627
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:616
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:623
 #, fuzzy
 msgid "Encoding"
 msgstr "Codificació: "
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:632
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:639
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:628
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:635
 msgid "Leading Lines to Skip"
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:644
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:651
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:640
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:647
 msgid "Trailing Lines to Skip"
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:723
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:789
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:719
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:785
 #, fuzzy
 msgid "Skip alternate lines"
 msgstr "Sombreja els assentaments alternatius"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:735
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:731
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -13478,40 +13486,41 @@ msgid ""
 "line 5. Lines 6, 8, 10,... will be skipped."
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:797
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:809
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:793
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:805
 #, fuzzy
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Factures</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:857
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:853
 #, fuzzy
 msgid "<b>Commodity From</b>"
 msgstr "<b>De</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:902
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:898
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #, fuzzy
-msgid "<b>Currency To</b>"
-msgstr "<b>Transferència monetària</b>"
+msgid "Currency To"
+msgstr "Divisa: "
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:967
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:904
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:965
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:900
 #, fuzzy
 msgid "Select the type of each column to import."
 msgstr "Seleccioneu el tipus de cada columna de sota"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:989
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:926
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:987
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:922
 msgid "Skip Errors"
 msgstr "Ignora els errors"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1012
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:949
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1010
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:945
 #, fuzzy
 msgid "Import Preview"
 msgstr "Importa els comptes ara"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1028
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1026
 #, fuzzy
 msgid ""
 "<b>Press Apply to add the Prices.\n"
@@ -13520,7 +13529,7 @@ msgstr ""
 "Premeu Aplica per crear el fitxer d'exportació.\n"
 "Cancel·la per avortar."
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1043
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1041
 #, fuzzy
 msgid "Import Prices Now"
 msgstr "Importa els comptes ara"
@@ -13564,12 +13573,12 @@ msgstr ""
 msgid "Transaction Import Assistant"
 msgstr "Importació de transacción CSV"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:534
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:530
 #, fuzzy
 msgid "Multi-split"
 msgstr "Multilínia"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:538
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:534
 msgid ""
 "Normally the importer will assume each line in the input file will "
 "correspond to one transaction. Each line can have information for one "
@@ -13585,7 +13594,7 @@ msgid ""
 "will consider this line part of the same transaction."
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:771
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:767
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -13597,37 +13606,37 @@ msgid ""
 "line 5. Lines 6, 8, 10,... will be skipped."
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:837
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:833
 #, fuzzy
 msgid "<b>Account</b>"
 msgstr "<b>_Comptes</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:964
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:960
 msgid "Select a row to change the mappings"
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:993
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:989
 #: gnucash/import-export/import-account-matcher.c:185
 msgid "Account ID"
 msgstr "Identificador del compte"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1032
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1028
 msgid "Error text."
 msgstr "Text de l'error"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1042
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1038
 #: gnucash/gtkbuilder/assistant-qif-import.glade:633
 #: gnucash/gtkbuilder/assistant-qif-import.glade:765
 #: gnucash/gtkbuilder/assistant-qif-import.glade:895
 msgid "Change GnuCash _Account..."
 msgstr "Canvi_a el compte del GnuCash..."
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1065
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1061
 #, fuzzy
 msgid "Match Import and GnuCash accounts"
 msgstr "Fes concordar els comptes QIF amb els comptes GnuCash"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1081
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1077
 #, fuzzy
 msgid ""
 "If you click \"Next\" Gnucash will perform a number of checks.\n"
@@ -13666,11 +13675,11 @@ msgstr ""
 "\n"
 "Es pot mostrar més informació usant el botó d'ajuda."
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1106
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1102
 msgid "Transaction Information"
 msgstr "Informació de l'assentament"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1133
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1129
 msgid "Match Transactions"
 msgstr "Fes concordar els assentaments"
 
@@ -13719,37 +13728,33 @@ msgid ""
 "several accounts to be created."
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:170
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:169
 msgid "<b>Categories</b>"
 msgstr "<b>Categories</b>"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:265
-#: gnucash/gtkbuilder/dialog-account.glade:890
-#: gnucash/gtkbuilder/dialog-reset-warnings.glade:104
-msgid "_Select All"
-msgstr "_Selecciona'ls tots"
-
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:281
-#: gnucash/gtkbuilder/dialog-account.glade:906
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:280
+#: gnucash/gtkbuilder/dialog-account.glade:908
 msgid "C_lear All"
 msgstr "No en seleccionis _cap"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:319
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:318
 msgid "<b>Category Description</b>"
 msgstr "<b>Descripció de la categoria</b>"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:427
-#, fuzzy
-msgid "<b>Notes</b>"
-msgstr "<b>_Notes</b>"
+#. %s is an account template
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:384
+#, fuzzy, c-format
+#| msgid "Accounts in '%s'"
+msgid "Accounts in %s"
+msgstr "Tipus de comptes a «%s»"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:474
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:477
 msgid ""
 "If not satisfied with the available templates, please read the wiki page "
 "linked below and share your new or improved template."
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:487
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:490
 #, fuzzy
 msgid ""
 "The selection you make here is only the starting point for your personalized "
@@ -13762,16 +13767,16 @@ msgstr ""
 "Seleccioneu les categories que cregueu rellevants. Sempre podreu crear "
 "categories manualment més tard."
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:504
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:507
 #, fuzzy
 msgid "GnuCash Account Template Wiki"
 msgstr "Nom del compte del GnuCash"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:519
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:522
 msgid "Choose accounts to create"
 msgstr "Trieu els comptes a crear"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:534
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:537
 #, fuzzy
 msgid ""
 "\n"
@@ -13806,11 +13811,11 @@ msgstr ""
 "Nota: tots els comptes amb excepció de Patrimoni i comptes marcador han de "
 "tenir un saldo inicial.\n"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:572
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:575
 msgid "Setup selected accounts"
 msgstr "Configuració dels comptes seleccionats"
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:582
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
 "Press `Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
@@ -13826,7 +13831,7 @@ msgstr ""
 "Premeu «Cancel·la» per tancar aquest quadre de diàleg sense crear cap compte "
 "nou."
 
-#: gnucash/gtkbuilder/assistant-hierarchy.glade:591
+#: gnucash/gtkbuilder/assistant-hierarchy.glade:594
 msgid "Finish Account Setup"
 msgstr "Finalització de la configuració dels comptes"
 
@@ -13919,6 +13924,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:173
 #: gnucash/gtkbuilder/assistant-loan.glade:1175
+#: gnucash/gtkbuilder/dialog-preferences.glade:363
 #: gnucash/gtkbuilder/dialog-sx.glade:261
 #: gnucash/gtkbuilder/gnc-frequency.glade:604
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:346
@@ -14087,6 +14093,7 @@ msgid "Range"
 msgstr "Interval: "
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1187
+#: gnucash/gtkbuilder/dialog-preferences.glade:378
 #: gnucash/gtkbuilder/dialog-sx.glade:333
 #: gnucash/report/reports/example/average-balance.scm:41
 #: gnucash/report/reports/example/daily-reports.scm:53
@@ -14105,13 +14112,6 @@ msgstr "Interval: "
 #: gnucash/report/trep-engine.scm:96
 msgid "End Date"
 msgstr "Data final"
-
-#: gnucash/gtkbuilder/assistant-loan.glade:1201
-#: gnucash/report/reports/standard/job-report.scm:563
-#: gnucash/report/reports/standard/new-owner-report.scm:1172
-#: gnucash/report/reports/standard/owner-report.scm:795
-msgid "Date Range"
-msgstr "Interval de dates"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1243
 msgid "Loan Review"
@@ -14423,11 +14423,7 @@ msgstr ""
 msgid "_Select the currency to use for all imported transactions:"
 msgstr "_Seleccioneu la divisa a usar per tots els assentaments importats:"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:975
-msgid "<b>Book Options</b>"
-msgstr "<b>Opcions de llibre</b>"
-
-#: gnucash/gtkbuilder/assistant-qif-import.glade:988
+#: gnucash/gtkbuilder/assistant-qif-import.glade:990
 msgid ""
 "Since you are creating a new file, you will next see a dialog for setting "
 "book options. These can affect how GnuCash imports transactions. If you come "
@@ -14442,12 +14438,12 @@ msgstr ""
 "mostrarà un segon cop quan avanceu. El podeu accedir directament des del "
 "menú mitjançant Fitxer->Propietats."
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:999
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1001
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2642
 msgid "Choose the QIF file currency and select Book Options"
 msgstr "Escolliu el fitxer de divisa QIF i seleccioneu Opcions de Llibre"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1020
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1022
 #, fuzzy
 msgid ""
 "Below you are asked to provide information about stocks, mutual funds, and "
@@ -14479,38 +14475,39 @@ msgstr ""
 "Si no veieu el vostre mercat a la llista, o cap de les opcions disponibles "
 "és apropiada, podeu entrar una nova."
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1038
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1040
 #, fuzzy
 msgid "Enter Information about..."
 msgstr "Introduïu informació sobre"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1064
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1066
 #, fuzzy
 msgid "All fields must be complete to continue..."
 msgstr ""
 "\n"
 "Tots els comptes han de ser comptes vàlids per continuar.\n"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1081
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1083
 msgid "Tradable commodities"
 msgstr "Valors negociables"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1157
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1159
 msgid "_Start Import"
 msgstr "_Inicia la importació"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1172
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1174
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1733
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2986
 msgid "P_ause"
 msgstr ""
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1227
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1229
+#: gnucash/gtkbuilder/dialog-account-picker.glade:21
 msgid "QIF Import"
 msgstr "Importació QIF"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1241
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1243
 #, fuzzy
 msgid ""
 "\n"
@@ -14540,23 +14537,23 @@ msgstr ""
 "\n"
 "Cliqueu \"Endavant\" per revisar possibles concordances."
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1257
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1259
 msgid "Match existing transactions"
 msgstr "Concorda els assentaments existents"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1300
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1302
 msgid "_Imported transactions needing review"
 msgstr "Transaccions _importades que necessiten una revisió"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1339
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1341
 msgid "_Possible matches for the selected transaction"
 msgstr "_Possibles concordances per a l'assentament seleccionat"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1360
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1362
 msgid "Select possible duplicates"
 msgstr "Seleccioneu possibles duplicats"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1368
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1370
 msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
@@ -14580,15 +14577,15 @@ msgstr ""
 "\n"
 "Cliqueu \"Cancel·la\" per avortar el procés d'importació QIF."
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1377
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1379
 msgid "Update your GnuCash accounts"
 msgstr "Actualitzeu els vostres comptes del GnuCash"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1385
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1387
 msgid "Summary Text"
 msgstr "Text de resum"
 
-#: gnucash/gtkbuilder/assistant-qif-import.glade:1390
+#: gnucash/gtkbuilder/assistant-qif-import.glade:1392
 msgid "Qif Import Summary"
 msgstr "Resum d'importació QIF"
 
@@ -14665,14 +14662,14 @@ msgstr ""
 "simplement cliqueu `Endavant'."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:286
-#: gnucash/import-export/aqb/dialog-ab.glade:1206
+#: gnucash/import-export/aqb/dialog-ab.glade:1212
 #, fuzzy
 msgid "_Amount"
 msgstr "_Quantitat:"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:300
 #: gnucash/gtkbuilder/dialog-print-check.glade:1129
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:956
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:958
 msgid "_Memo"
 msgstr "_Nota d'abonament"
 
@@ -14761,20 +14758,53 @@ msgstr "Preferències"
 
 #. Preferences Dialog, General Tab
 #: gnucash/gtkbuilder/business-prefs.glade:55
-#: gnucash/gtkbuilder/dialog-preferences.glade:1381
-#: gnucash/gtkbuilder/dialog-preferences.glade:2067
-msgid "<b>General</b>"
-msgstr "<b>General</b>"
+#: gnucash/gtkbuilder/dialog-account.glade:1672
+#: gnucash/gtkbuilder/dialog-preferences.glade:1391
+#: gnucash/gtkbuilder/dialog-preferences.glade:2022
+#: gnucash/gtkbuilder/dialog-preferences.glade:2079
+#: gnucash/report/report-core.scm:157
+#: gnucash/report/reports/standard/equity-statement.scm:108
+#: gnucash/report/reports/standard/equity-statement.scm:112
+#: gnucash/report/reports/standard/register.scm:347
+#: gnucash/report/reports/standard/trial-balance.scm:185
+#: gnucash/report/reports/standard/trial-balance.scm:189
+#: gnucash/report/reports/standard/view-column.scm:50
+#: gnucash/report/reports/standard/view-column.scm:76
+#: gnucash/report/stylesheets/css.scm:118
+#: gnucash/report/stylesheets/footer.scm:54
+#: gnucash/report/stylesheets/footer.scm:61
+#: gnucash/report/stylesheets/footer.scm:68
+#: gnucash/report/stylesheets/footer.scm:75
+#: gnucash/report/stylesheets/footer.scm:82
+#: gnucash/report/stylesheets/head-or-tail.scm:52
+#: gnucash/report/stylesheets/head-or-tail.scm:58
+#: gnucash/report/stylesheets/head-or-tail.scm:64
+#: gnucash/report/stylesheets/head-or-tail.scm:70
+#: gnucash/report/stylesheets/head-or-tail.scm:76
+#: gnucash/report/stylesheets/head-or-tail.scm:82
+#: gnucash/report/stylesheets/head-or-tail.scm:88
+#: gnucash/report/stylesheets/head-or-tail.scm:94
+#: gnucash/report/stylesheets/head-or-tail.scm:101
+#: gnucash/report/stylesheets/head-or-tail.scm:107
+#: gnucash/report/stylesheets/head-or-tail.scm:113
+#: gnucash/report/stylesheets/head-or-tail.scm:119
+#: gnucash/report/stylesheets/head-or-tail.scm:125
+#: gnucash/report/stylesheets/head-or-tail.scm:131
+#: gnucash/report/stylesheets/plain.scm:46
+#: gnucash/report/stylesheets/plain.scm:52
+#: gnucash/report/stylesheets/plain.scm:57
+msgid "General"
+msgstr "General"
 
-#: gnucash/gtkbuilder/business-prefs.glade:65
+#: gnucash/gtkbuilder/business-prefs.glade:67
 msgid "Enable extra _buttons"
 msgstr "Habilita els _botons extra"
 
-#: gnucash/gtkbuilder/business-prefs.glade:83
+#: gnucash/gtkbuilder/business-prefs.glade:85
 msgid "_Open in new window"
 msgstr "_Obre en una finestra nova"
 
-#: gnucash/gtkbuilder/business-prefs.glade:89
+#: gnucash/gtkbuilder/business-prefs.glade:91
 msgid ""
 "If checked, each invoice will be opened in its own top level window. If "
 "clear, the invoice will be opened in the current window."
@@ -14782,11 +14812,11 @@ msgstr ""
 "Si s'habilita, cada factura s'obrirà en una finestra principal pròpia. Si no "
 "s'habilita, la factura s'obrirà a la finestra actual."
 
-#: gnucash/gtkbuilder/business-prefs.glade:101
+#: gnucash/gtkbuilder/business-prefs.glade:103
 msgid "_Accumulate splits on post"
 msgstr "_Acumula els desglossaments en comptabilitzar"
 
-#: gnucash/gtkbuilder/business-prefs.glade:107
+#: gnucash/gtkbuilder/business-prefs.glade:109
 msgid ""
 "Whether multiple entries in an invoice which transfer to the same account "
 "should be accumulated into a single split by default. This setting can be "
@@ -14797,31 +14827,31 @@ msgstr ""
 "únic desglossament. Podeu canviar aquest paràmetre al diàleg de "
 "comptabilització de la factura."
 
-#: gnucash/gtkbuilder/business-prefs.glade:132
+#: gnucash/gtkbuilder/business-prefs.glade:134
 msgid "<b>Invoices</b>"
 msgstr "<b>Factures</b>"
 
-#: gnucash/gtkbuilder/business-prefs.glade:142
+#: gnucash/gtkbuilder/business-prefs.glade:144
 #, fuzzy
 msgid "Not_ify when due"
 msgstr "_Notifica el venciment de les factures"
 
-#: gnucash/gtkbuilder/business-prefs.glade:148
-#: gnucash/gtkbuilder/business-prefs.glade:237
+#: gnucash/gtkbuilder/business-prefs.glade:150
+#: gnucash/gtkbuilder/business-prefs.glade:239
 msgid "Whether to display the list of Bills Due at startup."
 msgstr ""
 "Si s'ha de mostrar la llista de venciments de factures en iniciar el "
 "programa."
 
-#: gnucash/gtkbuilder/business-prefs.glade:163
+#: gnucash/gtkbuilder/business-prefs.glade:165
 msgid "Report for printing"
 msgstr "Informe per imprimir"
 
-#: gnucash/gtkbuilder/business-prefs.glade:172
+#: gnucash/gtkbuilder/business-prefs.glade:174
 msgid "_Tax included"
 msgstr "_Impostos inclosos?"
 
-#: gnucash/gtkbuilder/business-prefs.glade:178
+#: gnucash/gtkbuilder/business-prefs.glade:180
 msgid ""
 "Whether tax is included by default in entries on Bills. This setting is "
 "inherited by new customers and vendors."
@@ -14830,23 +14860,23 @@ msgstr ""
 "configuració d'aquest paràmetre serà aplicada a clients i proveïdors nous."
 
 #. See the tooltip "At post time..." for details.
-#: gnucash/gtkbuilder/business-prefs.glade:190
+#: gnucash/gtkbuilder/business-prefs.glade:192
 msgid "_Process payments on posting"
 msgstr "_Processa els pagaments en publicar"
 
-#: gnucash/gtkbuilder/business-prefs.glade:221
+#: gnucash/gtkbuilder/business-prefs.glade:223
 msgid "<b>Bills</b>"
 msgstr "<b>Factures</b>"
 
-#: gnucash/gtkbuilder/business-prefs.glade:231
+#: gnucash/gtkbuilder/business-prefs.glade:233
 msgid "_Notify when due"
 msgstr "_Notifica el venciment de les factures"
 
-#: gnucash/gtkbuilder/business-prefs.glade:249
+#: gnucash/gtkbuilder/business-prefs.glade:251
 msgid "Ta_x included"
 msgstr "Impostos _inclosos?"
 
-#: gnucash/gtkbuilder/business-prefs.glade:255
+#: gnucash/gtkbuilder/business-prefs.glade:257
 msgid ""
 "Whether tax is included by default in entries on Invoices. This setting is "
 "inherited by new customers and vendors."
@@ -14855,24 +14885,24 @@ msgstr ""
 "configuració d'aquest paràmetre serà aplicada a clients i proveïdors nous."
 
 #. See the tooltip "At post time..." for details.
-#: gnucash/gtkbuilder/business-prefs.glade:267
+#: gnucash/gtkbuilder/business-prefs.glade:269
 msgid "Pro_cess payments on posting"
 msgstr "Pro_cessa el pagament en publicar"
 
-#: gnucash/gtkbuilder/business-prefs.glade:287
+#: gnucash/gtkbuilder/business-prefs.glade:289
 msgid "Days in ad_vance"
 msgstr "_Dies per endavant"
 
-#: gnucash/gtkbuilder/business-prefs.glade:302
+#: gnucash/gtkbuilder/business-prefs.glade:304
 msgid "How many days in the future to warn about Bills coming due."
 msgstr "Amb quants dies d'antelació s'avisarà del venciment de factures."
 
-#: gnucash/gtkbuilder/business-prefs.glade:339
+#: gnucash/gtkbuilder/business-prefs.glade:341
 #, fuzzy
 msgid "How many days in the future to warn about Invoices coming due."
 msgstr "Amb quants dies d'antelació s'avisarà del venciment de factures."
 
-#: gnucash/gtkbuilder/business-prefs.glade:352
+#: gnucash/gtkbuilder/business-prefs.glade:354
 msgid "_Days in advance"
 msgstr "_Dies per endavant"
 
@@ -14902,7 +14932,7 @@ msgid "Enable the sections to Cascade"
 msgstr "Escolliu els comptes a comparar"
 
 #: gnucash/gtkbuilder/dialog-account.glade:199
-#: gnucash/gtkbuilder/dialog-account.glade:1326
+#: gnucash/gtkbuilder/dialog-account.glade:1330
 #: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:293
 #: gnucash/report/stylesheets/plain.scm:232
 msgid "Default"
@@ -14942,36 +14972,32 @@ msgstr "_Mou a"
 msgid "Delete the _subaccount"
 msgstr "Suprimeix tots els _subcomptes"
 
-#: gnucash/gtkbuilder/dialog-account.glade:554
-msgid "<b>Transactions</b>"
-msgstr "<b>Assentaments</b>"
-
-#: gnucash/gtkbuilder/dialog-account.glade:572
-#: gnucash/gtkbuilder/dialog-account.glade:690
+#: gnucash/gtkbuilder/dialog-account.glade:574
+#: gnucash/gtkbuilder/dialog-account.glade:692
 msgid "M_ove to"
 msgstr "Mou-les a"
 
-#: gnucash/gtkbuilder/dialog-account.glade:588
-#: gnucash/gtkbuilder/dialog-account.glade:706
+#: gnucash/gtkbuilder/dialog-account.glade:590
+#: gnucash/gtkbuilder/dialog-account.glade:708
 msgid "Delete all _transactions"
 msgstr "Esborra totes les _transaccions"
 
-#: gnucash/gtkbuilder/dialog-account.glade:609
+#: gnucash/gtkbuilder/dialog-account.glade:611
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
 msgstr "Aquest compte conté assentaments. Què voleu fer amb aquests?"
 
-#: gnucash/gtkbuilder/dialog-account.glade:623
+#: gnucash/gtkbuilder/dialog-account.glade:625
 msgid "This account contains read-only transactions which may not be deleted."
 msgstr ""
 "Aquest compte conté assentaments de només lectura, que no es poden suprimir."
 
-#: gnucash/gtkbuilder/dialog-account.glade:672
+#: gnucash/gtkbuilder/dialog-account.glade:674
 msgid "<b>Sub-account Transactions</b>"
 msgstr "<b>Assentaments dels subcomptes</b>"
 
-#: gnucash/gtkbuilder/dialog-account.glade:727
+#: gnucash/gtkbuilder/dialog-account.glade:729
 #, fuzzy
 msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
@@ -14980,7 +15006,7 @@ msgstr ""
 "Un o més subcomptes contenen assentaments. Què voleu fer amb aquests "
 "assentaments?"
 
-#: gnucash/gtkbuilder/dialog-account.glade:741
+#: gnucash/gtkbuilder/dialog-account.glade:743
 msgid ""
 "One or more sub-accounts contain read-only transactions which may not be "
 "deleted."
@@ -14988,90 +15014,93 @@ msgstr ""
 "Un o més subcomptes d'aquest compte contenen transaccions de només lectura, "
 "les quals no es poden suprimir."
 
-#: gnucash/gtkbuilder/dialog-account.glade:801
+#: gnucash/gtkbuilder/dialog-account.glade:803
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:8
 #: gnucash/report/trep-engine.scm:69
 msgid "Filter By..."
 msgstr "Filtra per..."
 
-#: gnucash/gtkbuilder/dialog-account.glade:922
+#: gnucash/gtkbuilder/dialog-account.glade:924
 msgid "_Default"
 msgstr "Per _defecte"
 
-#: gnucash/gtkbuilder/dialog-account.glade:954
+#: gnucash/gtkbuilder/dialog-account.glade:956
 #: gnucash/report/reports/standard/account-summary.scm:117
 msgid "Account Type"
 msgstr "Tipus de compte"
 
-#: gnucash/gtkbuilder/dialog-account.glade:968
+#: gnucash/gtkbuilder/dialog-account.glade:970
 msgid "Show _hidden accounts"
 msgstr "Mostra els comptes _ocults"
 
-#: gnucash/gtkbuilder/dialog-account.glade:972
+#: gnucash/gtkbuilder/dialog-account.glade:974
 msgid "Show accounts which have the option \"Hidden\" checked."
 msgstr "Mostra els comptes que han estat marcats amb l'opció \"Ocult\"."
 
-#: gnucash/gtkbuilder/dialog-account.glade:986
+#: gnucash/gtkbuilder/dialog-account.glade:988
 #, fuzzy
 msgid "Show _unused accounts"
 msgstr "Mostra els comptes _ocults"
 
-#: gnucash/gtkbuilder/dialog-account.glade:990
+#: gnucash/gtkbuilder/dialog-account.glade:992
 #, fuzzy
 msgid "Show accounts which do not have any transactions."
 msgstr "El compte %s no permet assentaments."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1004
+#: gnucash/gtkbuilder/dialog-account.glade:1006
 msgid "Show _zero total accounts"
 msgstr "Mostra els comptes amb total _zero"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1008
+#: gnucash/gtkbuilder/dialog-account.glade:1010
 msgid "Show accounts which have a zero total value."
 msgstr "Oculta els comptes que tenen un valor total de zero."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1063
+#: gnucash/gtkbuilder/dialog-account.glade:1065
 msgid "Use Commodity Value"
 msgstr "Usa el valor de l'acció o divisa"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1194
-msgid "<b>Identification</b>"
-msgstr "<b>Identificació</b>"
+#: gnucash/gtkbuilder/dialog-account.glade:1196
+#: gnucash/gtkbuilder/dialog-customer.glade:213
+#: gnucash/gtkbuilder/dialog-employee.glade:197
+#: gnucash/gtkbuilder/dialog-vendor.glade:215
+msgid "Identification"
+msgstr "Identificació"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1214
+#: gnucash/gtkbuilder/dialog-account.glade:1218
 msgid "Account _name"
 msgstr "_Nom del compte"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1229
+#: gnucash/gtkbuilder/dialog-account.glade:1233
 msgid "_Account code"
 msgstr "_Codi del compte"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1243
+#: gnucash/gtkbuilder/dialog-account.glade:1247
 msgid "_Description"
 msgstr "_Descripció"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1283
+#: gnucash/gtkbuilder/dialog-account.glade:1287
 msgid "Smallest _fraction"
 msgstr "_Fracció mínima"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1297
+#: gnucash/gtkbuilder/dialog-account.glade:1301
 #, fuzzy
 msgid "Account _Color"
 msgstr "_Color del compte"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1350
+#: gnucash/gtkbuilder/dialog-account.glade:1354
 msgid "No_tes"
 msgstr "No_tes"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1422
+#: gnucash/gtkbuilder/dialog-account.glade:1426
 msgid "Smallest fraction of this commodity that can be referenced."
 msgstr ""
 "La fracció més petita d'aquesta acció o divisa que pot ser referenciada."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1444
+#: gnucash/gtkbuilder/dialog-account.glade:1448
 msgid "Placeholde_r"
 msgstr "Contenido_r"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1448
+#: gnucash/gtkbuilder/dialog-account.glade:1452
 msgid ""
 "This account is present solely as a placeholder in the hierarchy. "
 "Transactions may not be posted to this account, only to sub-accounts of this "
@@ -15080,11 +15109,11 @@ msgstr ""
 "Aquest compte és només un contenidor a la jerarquia. No és possible "
 "registrar-hi assentaments a aquest compte, únicament en els seus subcomptes."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1460
+#: gnucash/gtkbuilder/dialog-account.glade:1464
 msgid "H_idden"
 msgstr "_Ocult"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1464
+#: gnucash/gtkbuilder/dialog-account.glade:1468
 msgid ""
 "This account (and any sub-accounts) will be hidden in the account tree and "
 "will not appear in the popup account list in the register. To reset this "
@@ -15098,18 +15127,18 @@ msgstr ""
 "per a l'arbre de comptes i marcar l'opció \"mostra els comptes amagats\". Si "
 "ho feu podreu seleccionar el compte i reobrir el diàleg."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1476
+#: gnucash/gtkbuilder/dialog-account.glade:1480
 #, fuzzy
 #| msgid "Automatic _interest transfer"
 msgid "Auto _interest transfer"
 msgstr "Assentament d'_interès automàtic"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1492
+#: gnucash/gtkbuilder/dialog-account.glade:1496
 msgid "Ta_x related"
 msgstr "Relacionat amb i_mpostos"
 
 #. Translators: use the same words here as in 'Ta_x Report Options'.
-#: gnucash/gtkbuilder/dialog-account.glade:1497
+#: gnucash/gtkbuilder/dialog-account.glade:1501
 msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
@@ -15117,119 +15146,80 @@ msgstr ""
 "Useu Edita->Opcions d'informe d'impostos per establir el marcador relacionat "
 "amb impostos i assignar un codi d'impostos a aquest compte."
 
-#: gnucash/gtkbuilder/dialog-account.glade:1509
+#: gnucash/gtkbuilder/dialog-account.glade:1513
 #, fuzzy
 #| msgid "Opening Balance"
 msgid "Opening balance"
 msgstr "Saldo d'obertura"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1513
+#: gnucash/gtkbuilder/dialog-account.glade:1517
 msgid ""
 "This account holds opening balance transactions. Only one account per "
 "commodity can hold opening balance transactions."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-account.glade:1560
+#: gnucash/gtkbuilder/dialog-account.glade:1564
 msgid "<b>Acco_unt Type</b>"
 msgstr "<b>Tipus de _compte</b>"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1586
-msgid "<b>_Parent Account</b>"
-msgstr "<b>Compte _pare</b>"
+#: gnucash/gtkbuilder/dialog-account.glade:1590
+#: gnucash/gtkbuilder/dialog-tax-info.glade:643
+msgid "_Parent Account"
+msgstr "Compte _pare"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1666
-#: gnucash/gtkbuilder/dialog-preferences.glade:2010
-#: gnucash/report/report-core.scm:157
-#: gnucash/report/reports/standard/equity-statement.scm:108
-#: gnucash/report/reports/standard/equity-statement.scm:112
-#: gnucash/report/reports/standard/register.scm:347
-#: gnucash/report/reports/standard/trial-balance.scm:185
-#: gnucash/report/reports/standard/trial-balance.scm:189
-#: gnucash/report/reports/standard/view-column.scm:50
-#: gnucash/report/reports/standard/view-column.scm:76
-#: gnucash/report/stylesheets/css.scm:118
-#: gnucash/report/stylesheets/footer.scm:54
-#: gnucash/report/stylesheets/footer.scm:61
-#: gnucash/report/stylesheets/footer.scm:68
-#: gnucash/report/stylesheets/footer.scm:75
-#: gnucash/report/stylesheets/footer.scm:82
-#: gnucash/report/stylesheets/head-or-tail.scm:52
-#: gnucash/report/stylesheets/head-or-tail.scm:58
-#: gnucash/report/stylesheets/head-or-tail.scm:64
-#: gnucash/report/stylesheets/head-or-tail.scm:70
-#: gnucash/report/stylesheets/head-or-tail.scm:76
-#: gnucash/report/stylesheets/head-or-tail.scm:82
-#: gnucash/report/stylesheets/head-or-tail.scm:88
-#: gnucash/report/stylesheets/head-or-tail.scm:94
-#: gnucash/report/stylesheets/head-or-tail.scm:101
-#: gnucash/report/stylesheets/head-or-tail.scm:107
-#: gnucash/report/stylesheets/head-or-tail.scm:113
-#: gnucash/report/stylesheets/head-or-tail.scm:119
-#: gnucash/report/stylesheets/head-or-tail.scm:125
-#: gnucash/report/stylesheets/head-or-tail.scm:131
-#: gnucash/report/stylesheets/plain.scm:46
-#: gnucash/report/stylesheets/plain.scm:52
-#: gnucash/report/stylesheets/plain.scm:57
-msgid "General"
-msgstr "General"
-
-#: gnucash/gtkbuilder/dialog-account.glade:1691
+#: gnucash/gtkbuilder/dialog-account.glade:1697
 msgid "<b>Balance Information</b>"
 msgstr "<b>Informació del saldo</b>"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1705
+#: gnucash/gtkbuilder/dialog-account.glade:1711
 msgid "<b>Initial Balance Transfer</b>"
 msgstr "<b>Assentament de saldo inicial</b>"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1772
+#: gnucash/gtkbuilder/dialog-account.glade:1778
 msgid "_Use equity 'Opening Balances' account"
 msgstr "_Utilitza el compte patrimonial de «Saldos d'obertura»"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1789
+#: gnucash/gtkbuilder/dialog-account.glade:1795
 msgid "_Select transfer account"
 msgstr "_Seleccioneu el compte de transferència"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1900
+#: gnucash/gtkbuilder/dialog-account.glade:1906
 msgid "Renumber sub-accounts"
 msgstr "Torna a numerar els subcomptes"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1933
+#: gnucash/gtkbuilder/dialog-account.glade:1939
 msgid "_Renumber"
 msgstr "To_rna a numerar"
 
-#: gnucash/gtkbuilder/dialog-account.glade:1965
+#: gnucash/gtkbuilder/dialog-account.glade:1971
 msgid "Prefix"
 msgstr "Prefix"
 
-#: gnucash/gtkbuilder/dialog-account.glade:2003
+#: gnucash/gtkbuilder/dialog-account.glade:2009
 msgid "Examples"
 msgstr "Exemples"
 
-#: gnucash/gtkbuilder/dialog-account.glade:2015
+#: gnucash/gtkbuilder/dialog-account.glade:2021
 #: gnucash/report/reports/standard/balance-forecast.scm:42
 #, fuzzy
 msgid "Interval"
 msgstr "Interval:"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:21
-msgid "<b>QIF Import</b>"
-msgstr "<b>Importació QIF</b>"
-
-#: gnucash/gtkbuilder/dialog-account-picker.glade:31
+#: gnucash/gtkbuilder/dialog-account-picker.glade:33
 msgid "_Show documentation"
 msgstr "_Mostra la documentació"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:50
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:558
+#: gnucash/gtkbuilder/dialog-account-picker.glade:52
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:560
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:402
 msgid "_Reconciled"
 msgstr "_Conciliat"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:69
+#: gnucash/gtkbuilder/dialog-account-picker.glade:71
 msgid "_Cleared"
 msgstr "_Liquidat"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:75
+#: gnucash/gtkbuilder/dialog-account-picker.glade:77
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as cleared."
@@ -15237,11 +15227,11 @@ msgstr ""
 "Quan no s'especifica l'estat en un fitxer QIF, els assentaments es marquen "
 "com netejats."
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:88
+#: gnucash/gtkbuilder/dialog-account-picker.glade:90
 msgid "_Not cleared"
 msgstr "_No liquidat"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:94
+#: gnucash/gtkbuilder/dialog-account-picker.glade:96
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as not cleared."
@@ -15249,19 +15239,19 @@ msgstr ""
 "Quan no s'especifica l'estat en fitxer QIF, els assentaments es marquen com "
 "no netejats."
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:110
+#: gnucash/gtkbuilder/dialog-account-picker.glade:112
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
 msgstr ""
 "Estat predeterminat d'assentaments (cancel·lat per l'estat donat pel fitxer "
 "QIF)"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:141
+#: gnucash/gtkbuilder/dialog-account-picker.glade:143
 #: gnucash/gtkbuilder/dialog-import.glade:12
 msgid "Select Account"
 msgstr "Selecciona el compte"
 
-#: gnucash/gtkbuilder/dialog-account-picker.glade:219
+#: gnucash/gtkbuilder/dialog-account-picker.glade:221
 msgid "_Select or add a GnuCash account:"
 msgstr "_Selecciona o afegeix un compte del GnuCash:"
 
@@ -15270,6 +15260,7 @@ msgid "Import transactions from text file"
 msgstr "Importa els assentaments del fitxer de text"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:123
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
 msgid "1. Choose the file to import"
 msgstr "1. Trieu un fitxer a importar"
 
@@ -15286,35 +15277,37 @@ msgid "2. Select import type"
 msgstr "2. Trieu el tipus d'importació"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:216
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:215
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:217
 msgid "Semicolon separated"
 msgstr "Separat per punt i coma"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:234
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:232
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:234
 msgid "Comma separated"
 msgstr "Separats per coma"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:252
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:250
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:252
 msgid "Semicolon separated with quotes"
 msgstr "Separats per punt i coma amb cometes"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:270
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:268
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:270
 msgid "Comma separated with quotes"
 msgstr "Separats per coma amb cometes"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:288
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:286
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:288
 msgid "Custom regular expression"
 msgstr "Expressió regular personalitzada"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:310
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:310
 msgid "3. Select import options"
 msgstr "3. Trieu les opcions d'importació"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:349
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:353
 msgid "4. Preview"
 msgstr "4. Previsualització"
 
@@ -15411,6 +15404,7 @@ msgid "Table"
 msgstr "Taula"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:409
+#: gnucash/gtkbuilder/dialog-billterms.glade:434
 #: gnucash/gtkbuilder/dialog-customer.glade:524
 #: gnucash/gtkbuilder/dialog-invoice.glade:336
 #: gnucash/gtkbuilder/dialog-invoice.glade:957
@@ -15418,75 +15412,71 @@ msgstr "Taula"
 msgid "Terms"
 msgstr "Condicions"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:434
-msgid "<b>Terms</b>"
-msgstr "<b>Condicions</b>"
-
-#: gnucash/gtkbuilder/dialog-billterms.glade:481
+#: gnucash/gtkbuilder/dialog-billterms.glade:483
 msgid "Delete the current Billing Term"
 msgstr "Esborra la condició de pagament actual"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:499
+#: gnucash/gtkbuilder/dialog-billterms.glade:501
 msgid "Create a new Billing Term"
 msgstr "Crea una nova condició de pagament"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:545
-#: gnucash/gtkbuilder/dialog-billterms.glade:844
-#: gnucash/gtkbuilder/dialog-billterms.glade:1088
+#: gnucash/gtkbuilder/dialog-billterms.glade:547
+#: gnucash/gtkbuilder/dialog-billterms.glade:846
+#: gnucash/gtkbuilder/dialog-billterms.glade:1090
 msgid "<b>Term Definition</b>"
 msgstr "<b>Definició de la condició</b>"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:572
-#: gnucash/gtkbuilder/dialog-billterms.glade:909
-#: gnucash/gtkbuilder/dialog-billterms.glade:1146
+#: gnucash/gtkbuilder/dialog-billterms.glade:574
+#: gnucash/gtkbuilder/dialog-billterms.glade:911
+#: gnucash/gtkbuilder/dialog-billterms.glade:1148
 msgid "De_scription"
 msgstr "De_scripció"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:587
-#: gnucash/gtkbuilder/dialog-billterms.glade:924
-#: gnucash/gtkbuilder/dialog-billterms.glade:1161
-#: gnucash/gtkbuilder/dialog-commodity.glade:490
-#: gnucash/gtkbuilder/dialog-commodity.glade:770
+#: gnucash/gtkbuilder/dialog-billterms.glade:589
+#: gnucash/gtkbuilder/dialog-billterms.glade:926
+#: gnucash/gtkbuilder/dialog-billterms.glade:1163
+#: gnucash/gtkbuilder/dialog-commodity.glade:492
+#: gnucash/gtkbuilder/dialog-commodity.glade:772
 #: gnucash/gtkbuilder/dialog-price.glade:203
-#: gnucash/gtkbuilder/dialog-tax-table.glade:476
+#: gnucash/gtkbuilder/dialog-tax-table.glade:480
 msgid "_Type"
 msgstr "_Tipus"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:602
-#: gnucash/gtkbuilder/dialog-billterms.glade:859
-#: gnucash/gtkbuilder/dialog-billterms.glade:1043
+#: gnucash/gtkbuilder/dialog-billterms.glade:604
+#: gnucash/gtkbuilder/dialog-billterms.glade:861
+#: gnucash/gtkbuilder/dialog-billterms.glade:1045
 msgid "The description of the Billing Term, printed on invoices"
 msgstr "La descripció de les condicions de pagament, impresa a les factures"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:683
+#: gnucash/gtkbuilder/dialog-billterms.glade:685
 msgid "Edit the current Billing Term"
 msgstr "Edita la condició de pagament actual"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:736
+#: gnucash/gtkbuilder/dialog-billterms.glade:738
 msgid "Close this window"
 msgstr "Tanca aquesta finestra"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:798
-#: gnucash/gtkbuilder/dialog-billterms.glade:978
+#: gnucash/gtkbuilder/dialog-billterms.glade:800
+#: gnucash/gtkbuilder/dialog-billterms.glade:980
 msgid "Cancel your changes"
 msgstr "Cancel·la els canvis"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:816
-#: gnucash/gtkbuilder/dialog-billterms.glade:996
+#: gnucash/gtkbuilder/dialog-billterms.glade:818
+#: gnucash/gtkbuilder/dialog-billterms.glade:998
 msgid "Commit this Billing Term"
 msgstr "Confirma aquesta condició de pagament"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:1025
+#: gnucash/gtkbuilder/dialog-billterms.glade:1027
 msgid "The internal name of the Billing Term."
 msgstr "El nom intern de la condició de pagament."
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:1074
+#: gnucash/gtkbuilder/dialog-billterms.glade:1076
 msgid "<b>New Billing Term</b>"
 msgstr "<b>Condició de pagament nova</b>"
 
-#: gnucash/gtkbuilder/dialog-billterms.glade:1131
+#: gnucash/gtkbuilder/dialog-billterms.glade:1133
 #: gnucash/gtkbuilder/dialog-report.glade:796
-#: gnucash/gtkbuilder/dialog-tax-table.glade:461
+#: gnucash/gtkbuilder/dialog-tax-table.glade:465
 msgid "_Name"
 msgstr "_Nom"
 
@@ -15503,27 +15493,24 @@ msgid "Choose Owner Dialog"
 msgstr "Diàleg per a triar el propietari"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:8
+#: gnucash/gtkbuilder/dialog-commodities.glade:27
 #: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
 msgstr "Valors"
 
-#: gnucash/gtkbuilder/dialog-commodities.glade:27
-msgid "<b>Securities</b>"
-msgstr "<b>Valors</b>"
-
-#: gnucash/gtkbuilder/dialog-commodities.glade:76
+#: gnucash/gtkbuilder/dialog-commodities.glade:77
 msgid "Show National Currencies"
 msgstr "Mostra les divises nacionals"
 
-#: gnucash/gtkbuilder/dialog-commodities.glade:125
+#: gnucash/gtkbuilder/dialog-commodities.glade:126
 msgid "Add a new commodity."
 msgstr "Afegeix una nova acció/divisa."
 
-#: gnucash/gtkbuilder/dialog-commodities.glade:143
+#: gnucash/gtkbuilder/dialog-commodities.glade:144
 msgid "Remove the current commodity."
 msgstr "Suprimeix l'acció/divisa actual."
 
-#: gnucash/gtkbuilder/dialog-commodities.glade:161
+#: gnucash/gtkbuilder/dialog-commodities.glade:162
 msgid "Edit the current commodity."
 msgstr "Edita l'acció o divisa actual."
 
@@ -15574,12 +15561,7 @@ msgstr ""
 msgid "<b>Quote Source Information</b>"
 msgstr "<b>Informació de la font de la cotització</b>"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:238
-#, fuzzy
-msgid "<b>Security Information</b>"
-msgstr "Informació del valor"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:324
+#: gnucash/gtkbuilder/dialog-commodity.glade:326
 msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
@@ -15587,23 +15569,23 @@ msgstr ""
 "Entreu un símbol de pantalla. Això es pot deixar en blanc amb seguretat, en "
 "aquest cas s'usarà la clau de pissarra o el codi ISO de la divisa."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:340
+#: gnucash/gtkbuilder/dialog-commodity.glade:342
 msgid "Type of quote source"
 msgstr "Tipus de font de la cotització"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:353
+#: gnucash/gtkbuilder/dialog-commodity.glade:355
 msgid "_Display symbol"
 msgstr "_Mostra el símbol"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:368
+#: gnucash/gtkbuilder/dialog-commodity.glade:370
 msgid "Time_zone"
 msgstr "_Zona horària"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:379
+#: gnucash/gtkbuilder/dialog-commodity.glade:381
 msgid "_Unknown"
 msgstr "Desconeg_uda"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:385
+#: gnucash/gtkbuilder/dialog-commodity.glade:387
 msgid ""
 "These are quote sources that were recently added to F::Q. GnuCash does not "
 "know if these sources retrieve information from a single site or from "
@@ -15613,11 +15595,11 @@ msgstr ""
 "GnuCash no pot determinar si aquestes fonts recuperen informació d'un únic "
 "lloc web o bé de múltiples llocs web a Internet."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:400
+#: gnucash/gtkbuilder/dialog-commodity.glade:402
 msgid "_Multiple"
 msgstr "_Múltiple"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:406
+#: gnucash/gtkbuilder/dialog-commodity.glade:408
 msgid ""
 "These are F::Q quote sources that retrieve information from multiple sites "
 "on the internet. If one of the sites is unavailable, F::Q will attempt to "
@@ -15627,11 +15609,11 @@ msgstr ""
 "web a Internet. Si un d'aquests llocs no està disponible, F::Q intentarà "
 "recuperar la informació d'un altre lloc web."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:421
+#: gnucash/gtkbuilder/dialog-commodity.glade:423
 msgid "Si_ngle"
 msgstr "Ú_nica"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:427
+#: gnucash/gtkbuilder/dialog-commodity.glade:429
 msgid ""
 "These are F::Q quote sources that retrieve information from a single site on "
 "the internet. If that site is unavailable, you will not be able to retrieve "
@@ -15641,36 +15623,36 @@ msgstr ""
 "d'Internet. Si aquest lloc web no està disponible, no podreu recuperar les "
 "cotitzacions."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:442
+#: gnucash/gtkbuilder/dialog-commodity.glade:444
 msgid "_Get Online Quotes"
 msgstr "_Baixa les cotitzacions en línia"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:461
+#: gnucash/gtkbuilder/dialog-commodity.glade:463
 msgid "F_raction traded"
 msgstr "F_racció comercialitzada"
 
 #. Again replace CUSIP by your National Securities Identifying Number.
-#: gnucash/gtkbuilder/dialog-commodity.glade:475
+#: gnucash/gtkbuilder/dialog-commodity.glade:477
 msgid "ISIN, CUSI_P or other code"
 msgstr "Codi ISIN, CUSI_P o altre"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:505
+#: gnucash/gtkbuilder/dialog-commodity.glade:507
 msgid "_Symbol/abbreviation"
 msgstr "_Símbol/abreviació"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:520
+#: gnucash/gtkbuilder/dialog-commodity.glade:522
 msgid "_Full name"
 msgstr "Nom sen_cer"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:555
+#: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Avís: el mòdul Finance::Quote no està instal·lat correctament."
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:638
+#: gnucash/gtkbuilder/dialog-commodity.glade:640
 msgid "Select security/currency "
 msgstr "Escolliu el valor/divisa "
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:716
+#: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
 msgstr "Seleccioneu la informació de l'usuari aquí..."
 
@@ -15681,12 +15663,6 @@ msgid ""
 msgstr ""
 "El número ID del client. Si el deixeu en blanc, el sistema us escollirà un "
 "nombre raonable."
-
-#: gnucash/gtkbuilder/dialog-customer.glade:213
-#: gnucash/gtkbuilder/dialog-employee.glade:197
-#: gnucash/gtkbuilder/dialog-vendor.glade:215
-msgid "Identification"
-msgstr "Identificació"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:256
 #: gnucash/gtkbuilder/dialog-customer.glade:786
@@ -15727,6 +15703,7 @@ msgid "Tax Included"
 msgstr "Impostos inclosos"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:576
+#: gnucash/gtkbuilder/dialog-tax-table.glade:403
 #: gnucash/gtkbuilder/dialog-vendor.glade:546
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:97
 msgid "Tax Table"
@@ -15761,30 +15738,17 @@ msgstr "Adreça d'enviament"
 msgid "Import customers or vendors from text file"
 msgstr "Importa els clients o proveïdors des del fitxer de text"
 
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
-msgid "<b>1. Choose the file to import</b>"
-msgstr "<b> 1. Trieu un fitxer a importar</b>"
-
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:155
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:157
 msgid "For importing customer lists."
 msgstr "Per importar llistes de clients."
 
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:172
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:174
 msgid "For importing vendor lists."
 msgstr "Per importar llistes de proveïdors."
 
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:190
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:192
 msgid "<b>2. Select Import Type</b>"
 msgstr "<b>3. Trieu les opcions d'importació</b>"
-
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:308
-msgid "<b>3. Select import options</b>"
-msgstr "<b>3. Trieu les opcions d'importació</b>"
-
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:349
-#, fuzzy
-msgid "<b>4. Preview</b>"
-msgstr "<b>3. Previsualització</b>"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:51
 msgid "Exit the saved report configurations dialog"
@@ -16116,12 +16080,7 @@ msgstr "A l'inici"
 msgid "<b>Compounding</b>"
 msgstr "<b>Càlcul de l'interès:</b>"
 
-#: gnucash/gtkbuilder/dialog-fincalc.glade:637
-#, fuzzy
-msgid "<b>Period</b>"
-msgstr "<b>Període:</b>"
-
-#: gnucash/gtkbuilder/dialog-fincalc.glade:765
+#: gnucash/gtkbuilder/dialog-fincalc.glade:767
 msgid "When paid"
 msgstr "Pagament"
 
@@ -16323,95 +16282,112 @@ msgid "Transaction List Help"
 msgstr "Ajuda de la llista d'assentaments"
 
 #: gnucash/gtkbuilder/dialog-import.glade:529
-msgid "<b>Colors</b>"
-msgstr "<b>Colors</b>"
+#: gnucash/report/stylesheets/footer.scm:123
+#: gnucash/report/stylesheets/footer.scm:130
+#: gnucash/report/stylesheets/footer.scm:137
+#: gnucash/report/stylesheets/footer.scm:144
+#: gnucash/report/stylesheets/footer.scm:151
+#: gnucash/report/stylesheets/footer.scm:159
+#: gnucash/report/stylesheets/footer.scm:167
+#: gnucash/report/stylesheets/footer.scm:175
+#: gnucash/report/stylesheets/head-or-tail.scm:170
+#: gnucash/report/stylesheets/head-or-tail.scm:177
+#: gnucash/report/stylesheets/head-or-tail.scm:184
+#: gnucash/report/stylesheets/head-or-tail.scm:191
+#: gnucash/report/stylesheets/head-or-tail.scm:198
+#: gnucash/report/stylesheets/head-or-tail.scm:206
+#: gnucash/report/stylesheets/head-or-tail.scm:214
+#: gnucash/report/stylesheets/head-or-tail.scm:222
+#: gnucash/report/stylesheets/plain.scm:62
+msgid "Colors"
+msgstr "Colors"
 
-#: gnucash/gtkbuilder/dialog-import.glade:642
-#: gnucash/gtkbuilder/dialog-preferences.glade:2399
+#: gnucash/gtkbuilder/dialog-import.glade:644
+#: gnucash/gtkbuilder/dialog-preferences.glade:2413
 msgid "<b>Actions</b>"
 msgstr "<b>Accions</b>"
 
 # Títol de la columna «Afegir» de l'importador d'assentaments.
 # «A» indica si l'assentament s'ha d'afegir. (dpm)
-#: gnucash/gtkbuilder/dialog-import.glade:654
+#: gnucash/gtkbuilder/dialog-import.glade:656
 msgid "\"A\""
 msgstr "«A»"
 
-#: gnucash/gtkbuilder/dialog-import.glade:665
+#: gnucash/gtkbuilder/dialog-import.glade:667
 msgid "\"U+C\""
 msgstr ""
 
 # Títol de la columna «Afegir» de l'importador d'assentaments.
 # «A» indica si l'assentament s'ha d'afegir. (dpm)
-#: gnucash/gtkbuilder/dialog-import.glade:676
+#: gnucash/gtkbuilder/dialog-import.glade:678
 #, fuzzy
 msgid "\"C\""
 msgstr "«A»"
 
-#: gnucash/gtkbuilder/dialog-import.glade:688
+#: gnucash/gtkbuilder/dialog-import.glade:690
 msgid "Select \"A\" to add the transaction as new."
 msgstr "Seleccioneu «A» per a afegir l'assentament com a nou."
 
-#: gnucash/gtkbuilder/dialog-import.glade:700
+#: gnucash/gtkbuilder/dialog-import.glade:702
 #, fuzzy
 msgid ""
 "Select \"U+C\" to update a matching transaction and mark it as cleared (c)."
 msgstr ""
 "Seleccioneu \"U+R\" per actualitzar i conciliar un assentament concordant."
 
-#: gnucash/gtkbuilder/dialog-import.glade:712
+#: gnucash/gtkbuilder/dialog-import.glade:714
 #, fuzzy
 msgid "Select \"C\" to mark a matching transaction as cleared (c)."
 msgstr "Seleccioneu «C» per a conciliar un assentament concordant."
 
-#: gnucash/gtkbuilder/dialog-import.glade:724
+#: gnucash/gtkbuilder/dialog-import.glade:726
 msgid "Select neither to skip the transaction (it won't be imported at all)."
 msgstr "No en seleccioneu cap si voleu ometre l'assentament (no s'importarà)."
 
-#: gnucash/gtkbuilder/dialog-import.glade:735
+#: gnucash/gtkbuilder/dialog-import.glade:737
 msgid "(none)"
 msgstr "(cap)"
 
-#: gnucash/gtkbuilder/dialog-import.glade:782
+#: gnucash/gtkbuilder/dialog-import.glade:784
 msgid "Red"
 msgstr "Vermell"
 
-#: gnucash/gtkbuilder/dialog-import.glade:799
+#: gnucash/gtkbuilder/dialog-import.glade:801
 msgid "Yellow"
 msgstr "Groc"
 
-#: gnucash/gtkbuilder/dialog-import.glade:816
+#: gnucash/gtkbuilder/dialog-import.glade:818
 msgid "Green"
 msgstr "Verd"
 
-#: gnucash/gtkbuilder/dialog-import.glade:886
+#: gnucash/gtkbuilder/dialog-import.glade:888
 #, fuzzy
 msgid ""
 "List of downloaded transactions (source split and matched information shown)"
 msgstr ""
 "Llista de transaccions descarregades (es mostra el desglossament de la font):"
 
-#: gnucash/gtkbuilder/dialog-import.glade:929
+#: gnucash/gtkbuilder/dialog-import.glade:931
 #, fuzzy
 msgid "Show _Account column"
 msgstr "Mostra el color del compte a les pestanyes"
 
-#: gnucash/gtkbuilder/dialog-import.glade:945
+#: gnucash/gtkbuilder/dialog-import.glade:947
 #, fuzzy
 msgid "Show _Memo column"
 msgstr "Mostra el color del compte a les pestanyes"
 
-#: gnucash/gtkbuilder/dialog-import.glade:961
+#: gnucash/gtkbuilder/dialog-import.glade:963
 #, fuzzy
 msgid "Show _matched information"
 msgstr "Informació de la factura"
 
-#: gnucash/gtkbuilder/dialog-import.glade:976
+#: gnucash/gtkbuilder/dialog-import.glade:978
 #, fuzzy
 msgid "Reconcile after match"
 msgstr "Concilia la concordança (auto)"
 
-#: gnucash/gtkbuilder/dialog-import.glade:999
+#: gnucash/gtkbuilder/dialog-import.glade:1001
 msgid "Generic import transaction matcher"
 msgstr "Aparellador genèric de transaccions importades"
 
@@ -16530,38 +16506,40 @@ msgid "Enter a name for the highlighted lot."
 msgstr "Entreu un nom per al paquet destacat."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:150
-msgid "<b>_Notes</b>"
-msgstr "<b>_Notes</b>"
+#: gnucash/gtkbuilder/dialog-print-check.glade:746
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1015
+msgid "_Notes"
+msgstr "_Notes"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:171
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:173
 msgid "Enter any notes you want to make about this lot."
 msgstr "Entreu les notes que voleu fer sobre aquest paquet."
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:190
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:192
 msgid "<b>_Title</b>"
 msgstr "<b>_Títol</b>"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:219
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:221
 msgid "<b>_Lots in This Account</b>"
 msgstr "<b>_Paquets en aquest compte</b>"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:257
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:259
 msgid "Show only open lots"
 msgstr "Mostra sols els paquets oberts"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:300
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:302
 msgid "<b>Splits _free</b>"
 msgstr "<b>Desglossament _lliures</b>"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:355
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:357
 msgid "<b>Splits _in lot</b>"
 msgstr "<b>Desglossaments _en paquet</b>"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:392
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:394
 msgid ">>"
 msgstr ">>"
 
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:406
+#: gnucash/gtkbuilder/dialog-lot-viewer.glade:408
 msgid "<<"
 msgstr "<<"
 
@@ -16690,12 +16668,12 @@ msgid "Documents"
 msgstr "Documents"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:405
-#: gnucash/gtkbuilder/dialog-payment.glade:430
-#: gnucash/gtkbuilder/dialog-payment.glade:454
-#: gnucash/gtkbuilder/dialog-payment.glade:504
-#: gnucash/gtkbuilder/dialog-payment.glade:528
-#: gnucash/gtkbuilder/dialog-payment.glade:574
-#: gnucash/gtkbuilder/dialog-payment.glade:598
+#: gnucash/gtkbuilder/dialog-payment.glade:432
+#: gnucash/gtkbuilder/dialog-payment.glade:456
+#: gnucash/gtkbuilder/dialog-payment.glade:506
+#: gnucash/gtkbuilder/dialog-payment.glade:530
+#: gnucash/gtkbuilder/dialog-payment.glade:576
+#: gnucash/gtkbuilder/dialog-payment.glade:600
 msgid ""
 "The amount to pay for this invoice.\n"
 "\n"
@@ -16717,29 +16695,25 @@ msgstr ""
 "assignarà la quantitat restant automàticament a la primera factura impagada "
 "d'aquesta empresa."
 
-#: gnucash/gtkbuilder/dialog-payment.glade:411
-msgid "<b>Amount</b>"
-msgstr "<b>Quantitat</b>"
-
-#: gnucash/gtkbuilder/dialog-payment.glade:460
+#: gnucash/gtkbuilder/dialog-payment.glade:462
 #: gnucash/report/reports/standard/new-owner-report.scm:298
 msgid "Refund"
 msgstr "Devolució"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:614
+#: gnucash/gtkbuilder/dialog-payment.glade:616
 #: gnucash/gtkbuilder/dialog-print-check.glade:299
 msgid "Print Check"
 msgstr "Imprimeix el xec"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:631
+#: gnucash/gtkbuilder/dialog-payment.glade:633
 msgid "(USD)"
 msgstr "(Dòlars americans)"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:653
+#: gnucash/gtkbuilder/dialog-payment.glade:655
 msgid "Transaction Details"
 msgstr "Detalls de la transacció"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:689
+#: gnucash/gtkbuilder/dialog-payment.glade:691
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
 msgid "Transfer Account"
 msgstr "Compte de transferència"
@@ -16779,7 +16753,7 @@ msgid "_Reset"
 msgstr "_CV"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:178
-#: gnucash/gtkbuilder/dialog-preferences.glade:579
+#: gnucash/gtkbuilder/dialog-preferences.glade:583
 msgid "<b>Separator Character</b>"
 msgstr "<b>Caràcter de separació</b>"
 
@@ -16821,39 +16795,31 @@ msgstr ""
 "Si s'habilita, es mostraran els valors que no són divises a la barra de "
 "resum. Si no s'habilita, només es mostraran les divises."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:363
-msgid "<b>Start Date</b>"
-msgstr "<b>Data d'inici</b>"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:376
-msgid "<b>End Date</b>"
-msgstr "<b>Data final</b>"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:386
+#: gnucash/gtkbuilder/dialog-preferences.glade:390
 msgid "_Relative"
 msgstr "_Relativa"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:392
+#: gnucash/gtkbuilder/dialog-preferences.glade:396
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr ""
 "Utilitza la data d'inici relativa especificada per als càlculs dels "
 "beneficis i pèrdues."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:405
+#: gnucash/gtkbuilder/dialog-preferences.glade:409
 msgid "_Absolute"
 msgstr "_Absoluta"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:411
+#: gnucash/gtkbuilder/dialog-preferences.glade:415
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr ""
 "Utilitza la data d'inici absoluta especificada per als càlculs dels "
 "beneficis i pèrdues."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:424
+#: gnucash/gtkbuilder/dialog-preferences.glade:428
 msgid "Re_lative"
 msgstr "Re_lativa"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:430
+#: gnucash/gtkbuilder/dialog-preferences.glade:434
 msgid ""
 "Use the specified relative ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
@@ -16862,11 +16828,11 @@ msgstr ""
 "beneficis i pèrdues. També s'utilitzarà aquesta data per als càlculs del "
 "valor net patrimonial."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:443
+#: gnucash/gtkbuilder/dialog-preferences.glade:447
 msgid "Ab_solute"
 msgstr "Ab_soluta"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:449
+#: gnucash/gtkbuilder/dialog-preferences.glade:453
 msgid ""
 "Use the specified absolute ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
@@ -16875,78 +16841,74 @@ msgstr ""
 "beneficis i pèrdues. També s'utilitzarà aquesta data per als càlculs del "
 "valor net patrimonial."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:560
+#: gnucash/gtkbuilder/dialog-preferences.glade:564
 msgid "Accounting Period"
 msgstr "Període comptable"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:589
+#: gnucash/gtkbuilder/dialog-preferences.glade:593
 msgid "Use _formal accounting labels"
 msgstr "Empra etiquetes de comptabilitat formals"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:595
+#: gnucash/gtkbuilder/dialog-preferences.glade:599
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
 msgstr "Utilitza només «deure» i «haver» en lloc de sinònims informals"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:610
+#: gnucash/gtkbuilder/dialog-preferences.glade:614
 msgid "<b>Labels</b>"
 msgstr "<b>Etiquetes</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:630
+#: gnucash/gtkbuilder/dialog-preferences.glade:634
 #: gnucash/gtkbuilder/dialog-price.glade:447
 msgid "_None"
 msgstr "_Cap"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:649
+#: gnucash/gtkbuilder/dialog-preferences.glade:653
 msgid "C_redit accounts"
 msgstr "Comptes de c_rèdit"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:668
+#: gnucash/gtkbuilder/dialog-preferences.glade:672
 msgid "_Income & expense"
 msgstr "_Ingressos i despeses"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:690
+#: gnucash/gtkbuilder/dialog-preferences.glade:694
 msgid "<b>Reverse Balanced Accounts</b>"
 msgstr "<b>Comptes amb els saldos invertits</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:723
+#: gnucash/gtkbuilder/dialog-preferences.glade:727
 msgid "<b>Default Currency</b>"
 msgstr "<b>Divisa per defecte</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:736
-#: gnucash/gtkbuilder/dialog-preferences.glade:3050
+#: gnucash/gtkbuilder/dialog-preferences.glade:740
+#: gnucash/gtkbuilder/dialog-preferences.glade:3066
 msgid "US Dollars (USD)"
 msgstr "Dòlars EUA (USD)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:759
+#: gnucash/gtkbuilder/dialog-preferences.glade:763
 msgid "Character"
 msgstr "Caràcter"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:771
+#: gnucash/gtkbuilder/dialog-preferences.glade:775
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
 msgid "Sample"
 msgstr "Mostra"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:796
-msgid "<b>Account Color</b>"
-msgstr "<b>_Color del compte</b>"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:806
+#: gnucash/gtkbuilder/dialog-preferences.glade:812
 msgid "Show the Account Color as background"
 msgstr "Mostra el color del compte com a fons"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:812
+#: gnucash/gtkbuilder/dialog-preferences.glade:818
 msgid "Show the Account Color as Account Name Background."
 msgstr "Mostra el color del copte com a fons del nom del compte."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:834
+#: gnucash/gtkbuilder/dialog-preferences.glade:840
 msgid "Show the Account Color on tabs"
 msgstr "Mostra el color del compte a les pestanyes"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:840
+#: gnucash/gtkbuilder/dialog-preferences.glade:846
 msgid "Show the Account Color as tab background."
 msgstr "Mostra el color del compte com a fons de les pestanyes."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:874
+#: gnucash/gtkbuilder/dialog-preferences.glade:880
 msgid ""
 "The character that will be used between components of an account name. A "
 "legal value is any single character except letters and numbers, or any of "
@@ -16958,53 +16920,50 @@ msgstr ""
 "cadenes de text següents: \"dos punts\", \"guionet curt\", \"/\", \"guionet "
 "llarg\" i \"punt\"."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:894
-#: gnucash/gtkbuilder/dialog-preferences.glade:3149
+#: gnucash/gtkbuilder/dialog-preferences.glade:900
+#: gnucash/gtkbuilder/dialog-preferences.glade:3167
 msgid "Ch_oose"
 msgstr "E_lecció"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:914
-#: gnucash/gtkbuilder/dialog-preferences.glade:3169
+#: gnucash/gtkbuilder/dialog-preferences.glade:920
+#: gnucash/gtkbuilder/dialog-preferences.glade:3187
 msgid "Loc_ale"
 msgstr "Loc_ale"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:998
-msgid "<b>Fancy Date Format</b>"
-msgstr "<b>Format de data decorat</b>"
+#: gnucash/gtkbuilder/dialog-preferences.glade:1004
+#: libgnucash/app-utils/business-options.scm:76
+msgid "Fancy Date Format"
+msgstr "Format de data decorat"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1021
-msgid "<b>Date Format</b>"
-msgstr "<b>Format de data</b>"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:1034
+#: gnucash/gtkbuilder/dialog-preferences.glade:1044
 msgid "<b>Time Format</b>"
 msgstr "<b>Format de l'hora</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1054
+#: gnucash/gtkbuilder/dialog-preferences.glade:1064
 msgid "U_se 24-hour clock"
 msgstr "U_tilitza el format horari de 24 hores"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1060
+#: gnucash/gtkbuilder/dialog-preferences.glade:1070
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "Empra un format horari de 24 hores (enlloc d'un de 12)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1075
+#: gnucash/gtkbuilder/dialog-preferences.glade:1085
 msgid "<b>Date Completion</b>"
 msgstr "<b>Terminació de la data</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1088
+#: gnucash/gtkbuilder/dialog-preferences.glade:1098
 #, fuzzy
 msgid "When a date is entered without year, it should be taken"
 msgstr "Quan s'entra una data sense un any, s'hauria d'agafar:"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1104
+#: gnucash/gtkbuilder/dialog-preferences.glade:1114
 msgid ""
 "Dates will be completed so that they are within the current calendar year."
 msgstr ""
 "Les dates es completaran de manera que estiguin dins de l'any calendari "
 "actual."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1117
+#: gnucash/gtkbuilder/dialog-preferences.glade:1127
 #, fuzzy
 msgid ""
 "In a sliding 12-month window starting this\n"
@@ -17013,136 +16972,136 @@ msgstr ""
 "En una finestra mòbil de 12 mesos començant tants\n"
 "mesos abans del mes actual:"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1141
+#: gnucash/gtkbuilder/dialog-preferences.glade:1151
 msgid "Enter number of months."
 msgstr "Entreu el nombre de mesos."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1162
+#: gnucash/gtkbuilder/dialog-preferences.glade:1172
 msgid "Use the date format specified by the system locale."
 msgstr ""
 "Utilitza el format de data especificat per la localització del sistema."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1188
+#: gnucash/gtkbuilder/dialog-preferences.glade:1198
 msgid "<b>Numbers</b>"
 msgstr "<b>Números</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1198
+#: gnucash/gtkbuilder/dialog-preferences.glade:1208
 msgid "Force P_rices to display as decimals"
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1216
+#: gnucash/gtkbuilder/dialog-preferences.glade:1226
 msgid "Display ne_gative amounts in red"
 msgstr "Mostra els imports ne_gatius en vermell"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1222
+#: gnucash/gtkbuilder/dialog-preferences.glade:1232
 msgid "Display negative amounts in red."
 msgstr "Mostra els imports negatius en vermell"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1234
+#: gnucash/gtkbuilder/dialog-preferences.glade:1244
 msgid "_Automatic decimal point"
 msgstr "Coma decimal _automàtica"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1240
+#: gnucash/gtkbuilder/dialog-preferences.glade:1250
 msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
 msgstr ""
 "Insereix automàticament una coma decimal en els valors entrats sense cap"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1255
+#: gnucash/gtkbuilder/dialog-preferences.glade:1265
 #, fuzzy
 msgid "_Decimal places"
 msgstr "_Xifres decimals:"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1270
+#: gnucash/gtkbuilder/dialog-preferences.glade:1280
 msgid "How many automatic decimal places will be filled in."
 msgstr "Quantes xifres de coma decimal s'ompliran de manera automàtica."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1362
+#: gnucash/gtkbuilder/dialog-preferences.glade:1372
 msgid "Numbers, Date, Time"
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1391
+#: gnucash/gtkbuilder/dialog-preferences.glade:1403
 msgid "Perform account list _setup on new file"
 msgstr "Inicia la _configuració d'un arbre de comptes en crear un fitxer nou"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1397
+#: gnucash/gtkbuilder/dialog-preferences.glade:1409
 msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
 "Mostra el diàleg de la llista de comptes nova quan escolliu Fitxer->Fitxer "
 "nou."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1428
+#: gnucash/gtkbuilder/dialog-preferences.glade:1440
 msgid "Display \"_tip of the day\" dialog"
 msgstr "Mostra el diàleg del «Consell del Dia»"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1434
+#: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Display hints for using GnuCash at startup."
 msgstr "Mostra els consells d'utilització del GnuCash a l'inici"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1455
+#: gnucash/gtkbuilder/dialog-preferences.glade:1467
 msgid "How many days to keep old log/backup files."
 msgstr "Quants dies conservar fitxers vells de registre/còpia de seguretat."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1474
+#: gnucash/gtkbuilder/dialog-preferences.glade:1486
 #: gnucash/gtkbuilder/dialog-sx.glade:619
 #: gnucash/gtkbuilder/dialog-sx.glade:658
-#: gnucash/gtkbuilder/dialog-sx.glade:965
-#: gnucash/gtkbuilder/dialog-sx.glade:1024
+#: gnucash/gtkbuilder/dialog-sx.glade:969
+#: gnucash/gtkbuilder/dialog-sx.glade:1028
 msgid "days"
 msgstr "dies"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1493
+#: gnucash/gtkbuilder/dialog-preferences.glade:1505
 #, fuzzy
 msgid "<b>_Retain log/backup files</b>"
 msgstr "_Mantingues els fitxers de registre/còpia de seguretat:"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1505
+#: gnucash/gtkbuilder/dialog-preferences.glade:1517
 msgid "Com_press files"
 msgstr "Comprimeix els fitxers"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1511
+#: gnucash/gtkbuilder/dialog-preferences.glade:1523
 msgid "Compress the data file with gzip when saving it to disk."
 msgstr "Comprimeix el fitxer de dades amb el gzip en desar-lo."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1526
+#: gnucash/gtkbuilder/dialog-preferences.glade:1538
 msgid "<b>Files</b>"
 msgstr "<b>Fitxers</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1559
+#: gnucash/gtkbuilder/dialog-preferences.glade:1571
 msgid "<b>Search Dialog</b>"
 msgstr "<b>Diàleg de cerca</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1572
+#: gnucash/gtkbuilder/dialog-preferences.glade:1584
 msgid "New search _limit"
 msgstr "_Límit de cerca nova"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1587
+#: gnucash/gtkbuilder/dialog-preferences.glade:1599
 msgid "Default to 'new search' if fewer than this number of items is returned."
 msgstr ""
 "Canvia a «Cerca nova» si la cerca retorna menys que aquest nombre d'elements."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1603
+#: gnucash/gtkbuilder/dialog-preferences.glade:1615
 msgid "Show splash scree_n"
 msgstr "Mostra la pantalla de be_nvinguda"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1609
+#: gnucash/gtkbuilder/dialog-preferences.glade:1621
 msgid "Show splash screen at startup."
 msgstr "Mostra la pantalla de benvinguda a l'inici"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1624
+#: gnucash/gtkbuilder/dialog-preferences.glade:1636
 msgid "Auto-save time _interval"
 msgstr "_Interval de temps del desament automàtic"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1663
+#: gnucash/gtkbuilder/dialog-preferences.glade:1675
 msgid "minutes"
 msgstr "minuts"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1679
+#: gnucash/gtkbuilder/dialog-preferences.glade:1691
 msgid "Show auto-save confirmation _question"
 msgstr "Mostra la _pregunta de confirmació de desat automàtic"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1685
+#: gnucash/gtkbuilder/dialog-preferences.glade:1697
 msgid ""
 "If active, GnuCash shows a confirmation question each time the auto-save "
 "feature is started. Otherwise no extra explanation is shown."
@@ -17151,73 +17110,73 @@ msgstr ""
 "la funcionalitat de desat automàtic s'inicia. En cas contrari no es mostra "
 "cap explicació extra."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1725
-#: gnucash/gtkbuilder/dialog-sx.glade:1208
+#: gnucash/gtkbuilder/dialog-preferences.glade:1737
+#: gnucash/gtkbuilder/dialog-sx.glade:1212
 #, fuzzy
 msgid "For"
 msgstr "Formulari"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1743
-#: gnucash/gtkbuilder/dialog-sx.glade:1176
+#: gnucash/gtkbuilder/dialog-preferences.glade:1755
+#: gnucash/gtkbuilder/dialog-sx.glade:1180
 msgid "Forever"
 msgstr "Per sempre"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1782
+#: gnucash/gtkbuilder/dialog-preferences.glade:1794
 msgid "Time to _wait for answer"
 msgstr "Temps d'espera per a la pregunta"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1819
+#: gnucash/gtkbuilder/dialog-preferences.glade:1831
 msgid "seconds"
 msgstr "segons"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1847
+#: gnucash/gtkbuilder/dialog-preferences.glade:1859
 #, fuzzy
 msgid "Path head for Linked File Relative Paths"
 msgstr "Exporta els assentaments a un fitxer CSV"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1865
+#: gnucash/gtkbuilder/dialog-preferences.glade:1877
 #, fuzzy
 msgid "Path head for Linked Files Relative Paths"
 msgstr "Exporta els assentaments a un fitxer CSV"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1894
+#: gnucash/gtkbuilder/dialog-preferences.glade:1906
 #, fuzzy
 msgid "Enable horizontal grid lines on table displays"
 msgstr "Mostra les vores horitzontals de les cel·les."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1898
+#: gnucash/gtkbuilder/dialog-preferences.glade:1910
 msgid ""
 "Enable horizontal grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1911
+#: gnucash/gtkbuilder/dialog-preferences.glade:1923
 msgid "Enable vertical grid lines on table displays"
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1915
+#: gnucash/gtkbuilder/dialog-preferences.glade:1927
 msgid ""
 "Enable vertical grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1931
+#: gnucash/gtkbuilder/dialog-preferences.glade:1943
 #, fuzzy
 #| msgid "<b>Files</b>"
 msgid "<b>Linked Files</b>"
 msgstr "<b>Fitxers</b>"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2026
+#: gnucash/gtkbuilder/dialog-preferences.glade:2038
 msgid "Enable skip transaction action"
 msgstr "Habilita l'acció d'omissió de la transacció"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2045
+#: gnucash/gtkbuilder/dialog-preferences.glade:2057
 msgid "Enable update match action"
 msgstr "Habilita l'acció d'edició de la concordança"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2082
+#: gnucash/gtkbuilder/dialog-preferences.glade:2096
 msgid ""
 "In some places commercial ATMs (not belonging to a financial institution) "
 "are installed in places like convenience stores. These ATMs add their fee "
@@ -17237,7 +17196,7 @@ msgstr ""
 "vigent a la vostra àrea (en unitats de la vostra moneda local), per tal que "
 "l'assentament es reconegui com a quadrat."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2105
+#: gnucash/gtkbuilder/dialog-preferences.glade:2119
 msgid ""
 "A transaction whose best match's score is in the green zone (above or equal "
 "to the Auto-CLEAR threshold) will be CLEARed by default."
@@ -17246,7 +17205,7 @@ msgstr ""
 "zona verda (per sobre de o igual al llindar de neteja automàtica) serà "
 "netejat per defecte."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2127
+#: gnucash/gtkbuilder/dialog-preferences.glade:2141
 msgid ""
 "A transaction whose best match's score is in the red zone (above the display "
 "threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
@@ -17256,7 +17215,7 @@ msgstr ""
 "zona vermella (per sobre de o igual al llindar d'addició automàtica) serà "
 "afegit per defecte."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2149
+#: gnucash/gtkbuilder/dialog-preferences.glade:2163
 msgid ""
 "The minimum score a potential match must have to be displayed in the match "
 "list."
@@ -17265,76 +17224,76 @@ msgstr ""
 "figuri a la llista de concordances."
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2170
+#: gnucash/gtkbuilder/dialog-preferences.glade:2184
 msgid "Commercial ATM _fees threshold"
 msgstr "Llindar per a la _comissió dels caixers automàtics"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2184
+#: gnucash/gtkbuilder/dialog-preferences.glade:2198
 msgid "Auto-c_lear threshold"
 msgstr "Llindar de _neteja automàtica"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2198
+#: gnucash/gtkbuilder/dialog-preferences.glade:2212
 msgid "Auto-_add threshold"
 msgstr "Llindar d'_addició automàtica"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2212
+#: gnucash/gtkbuilder/dialog-preferences.glade:2226
 msgid "Match _display threshold"
 msgstr "Llindar de _visualització de concordances"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2223
+#: gnucash/gtkbuilder/dialog-preferences.glade:2237
 msgid "Use _bayesian matching"
 msgstr "Utilitza concordança _bayesiana"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2229
+#: gnucash/gtkbuilder/dialog-preferences.glade:2243
 msgid ""
 "Use bayesian algorithms to match new transactions with existing accounts."
 msgstr ""
 "Utilitza algorismes bayesians per a fer concordar assentaments nous en "
 "comptes existents."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2287
+#: gnucash/gtkbuilder/dialog-preferences.glade:2301
 msgid "<b>Checks</b>"
 msgstr "<b>Xecs</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2302
+#: gnucash/gtkbuilder/dialog-preferences.glade:2316
 msgid "The default check printing font."
 msgstr "El tipus de lletra per defecte en imprimir un xec"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2312
+#: gnucash/gtkbuilder/dialog-preferences.glade:2326
 msgid "Print _date format"
 msgstr "Format de la _data per a la impressió"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2318
+#: gnucash/gtkbuilder/dialog-preferences.glade:2332
 msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr ""
 "Representa les dates anteriors a l'actual en un tipus de lletra de 8 punts."
 
 # FIXME: a la traducció alemanya fan servir Abschlusszeichen (dpm)
-#: gnucash/gtkbuilder/dialog-preferences.glade:2330
+#: gnucash/gtkbuilder/dialog-preferences.glade:2344
 msgid "Print _blocking chars"
 msgstr "Imprimeix els caràcters de _final de línia"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2336
+#: gnucash/gtkbuilder/dialog-preferences.glade:2350
 msgid "Print '***' before and after each text field on the check."
 msgstr "Imprimeix '***' abans i després de cada camp de text en el xec."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2351
+#: gnucash/gtkbuilder/dialog-preferences.glade:2365
 msgid "Default _font"
 msgstr "Tipus de _lletra per defecte"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2380
+#: gnucash/gtkbuilder/dialog-preferences.glade:2394
 msgid "Printing"
 msgstr "Impressió"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2409
+#: gnucash/gtkbuilder/dialog-preferences.glade:2423
 msgid "'_Enter' moves to blank transaction"
 msgstr "«_Retorn» porta a l'assentament en blanc"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2415
+#: gnucash/gtkbuilder/dialog-preferences.glade:2429
 #, fuzzy
 msgid ""
 "If checked, pressing the 'Enter' key will move to the location of the blank "
@@ -17345,44 +17304,44 @@ msgstr ""
 "al fons del registre. Si no està habilitat, prement la tecla 'Intro' anirà a "
 "una línia més a baix."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2427
+#: gnucash/gtkbuilder/dialog-preferences.glade:2441
 msgid "_Auto-raise lists"
 msgstr "Amplia les llistes _automàticament"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2433
+#: gnucash/gtkbuilder/dialog-preferences.glade:2447
 msgid "Automatically raise the list of accounts or actions during input."
 msgstr "Obre la llista de comptes o accions en començar a introduir dades."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2445
+#: gnucash/gtkbuilder/dialog-preferences.glade:2459
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
 msgstr ""
 "L'ordre de les pestanyes in_clou assentament de transferència i memoritzats"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2451
+#: gnucash/gtkbuilder/dialog-preferences.glade:2465
 msgid "Move to Transfer field when memorised transaction auto filled."
 msgstr ""
 "Desplaça't al camp de transferència quan es completin automàticament els "
 "assentaments memoritzats"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2476
+#: gnucash/gtkbuilder/dialog-preferences.glade:2490
 msgid "<b>Reconciling</b>"
 msgstr "<b>Conciliació</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2486
+#: gnucash/gtkbuilder/dialog-preferences.glade:2500
 msgid "Check cleared _transactions"
 msgstr "Activa els _assentaments liquidats"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2492
+#: gnucash/gtkbuilder/dialog-preferences.glade:2506
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr ""
 "Activa automàticament la casella de verificació dels assentaments liquidats "
 "en obrir el diàleg de conciliació."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2504
+#: gnucash/gtkbuilder/dialog-preferences.glade:2518
 msgid "Automatic credit card _payment"
 msgstr "_Pagament de targeta de crèdit automàtic"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2510
+#: gnucash/gtkbuilder/dialog-preferences.glade:2524
 msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
@@ -17390,11 +17349,11 @@ msgstr ""
 "Demana a l'usuari que introdueixi un pagament de targeta de crèdit després "
 "d'haver conciliat una liquidació de targeta de crèdit."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2522
+#: gnucash/gtkbuilder/dialog-preferences.glade:2536
 msgid "Always reconcile to t_oday"
 msgstr "Concilia sempre a _avui"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2528
+#: gnucash/gtkbuilder/dialog-preferences.glade:2542
 msgid ""
 "Always open the reconcile dialog using today's date for the statement date, "
 "regardless of previous reconciliations."
@@ -17402,16 +17361,16 @@ msgstr ""
 "Obre sempre el diàleg de conciliació usant la data d'avui per a la data de "
 "l'estat de comptes, sense tenir en compte conciliacions prèvies."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2553
+#: gnucash/gtkbuilder/dialog-preferences.glade:2567
 msgid "<b>Graphics</b>"
 msgstr "<b>Gràfics</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2563
+#: gnucash/gtkbuilder/dialog-preferences.glade:2577
 #, fuzzy
 msgid "_Use GnuCash built-in color theme"
 msgstr "No _usis el colors integrats del GnuCash"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2569
+#: gnucash/gtkbuilder/dialog-preferences.glade:2583
 #, fuzzy
 msgid ""
 "GnuCash uses a yellow/green theme by default for register windows. Uncheck "
@@ -17420,11 +17379,11 @@ msgstr ""
 "El GnuCash usa un tema groc/verd de forma predeterminada per registrar "
 "finestres. Marqueu això si en canvi voleu usar el tema de color del sistema."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2581
+#: gnucash/gtkbuilder/dialog-preferences.glade:2595
 msgid "Double _mode colors alternate with transactions"
 msgstr "Els colord del _mode doble s'alternen per assentaments"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2587
+#: gnucash/gtkbuilder/dialog-preferences.glade:2601
 msgid ""
 "Alternate the primary and secondary colors by transaction instead of by "
 "alternating by row."
@@ -17432,64 +17391,72 @@ msgstr ""
 "Alterna els colors primari i secundari per cada assentament en comptes de "
 "per cada fila."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2599
+#: gnucash/gtkbuilder/dialog-preferences.glade:2613
 msgid "Draw hori_zontal lines between rows"
 msgstr "Mostra línies horit_zontals entre les files"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2605
+#: gnucash/gtkbuilder/dialog-preferences.glade:2619
 msgid "Show horizontal borders on the cells."
 msgstr "Mostra les vores horitzontals de les cel·les."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2617
+#: gnucash/gtkbuilder/dialog-preferences.glade:2631
 msgid "Draw _vertical lines between columns"
 msgstr "Mostra línies _verticals entre les columnes"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2623
+#: gnucash/gtkbuilder/dialog-preferences.glade:2637
 msgid "Show vertical borders on the cells."
 msgstr "Mostra les vores verticals de les cel·les."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2648
+#: gnucash/gtkbuilder/dialog-preferences.glade:2662
+#: gnucash/report/reports/standard/invoice.scm:201
+#: gnucash/report/reports/standard/invoice.scm:207
+#: gnucash/report/reports/standard/invoice.scm:348
+#: gnucash/report/reports/standard/invoice.scm:355
+#: gnucash/report/reports/standard/invoice.scm:362
+#: gnucash/report/reports/standard/invoice.scm:369
+#: gnucash/report/reports/standard/invoice.scm:376
+#: gnucash/report/reports/standard/invoice.scm:383
 #, fuzzy
-msgid "<b>Layout</b>"
+msgid "Layout"
 msgstr "<b>Quantitat</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2658
+#: gnucash/gtkbuilder/dialog-preferences.glade:2674
 #, fuzzy
 msgid "_Future transactions after blank transaction"
 msgstr "«_Retorn» porta a l'assentament en blanc"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2664
+#: gnucash/gtkbuilder/dialog-preferences.glade:2680
 msgid ""
 "If checked, transactions with a date in the future will be displayed at the "
 "bottom of the register after the blank transaction. If clear, the blank "
 "transaction will be at the bottom of the register after all transactions."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2703
+#: gnucash/gtkbuilder/dialog-preferences.glade:2719
 msgid "<b>Default Style</b>"
 msgstr "<b>Estil per defecte</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2726
+#: gnucash/gtkbuilder/dialog-preferences.glade:2742
 msgid "<b>Other Defaults</b>"
 msgstr "<b>Altres opcions per defecte</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2736
+#: gnucash/gtkbuilder/dialog-preferences.glade:2752
 msgid "_Basic ledger"
 msgstr "Llibre major _Bàsic"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2755
+#: gnucash/gtkbuilder/dialog-preferences.glade:2771
 msgid "_Auto-split ledger"
 msgstr "Llibre major _autodesglossat"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2796
+#: gnucash/gtkbuilder/dialog-preferences.glade:2812
 msgid "Number of _transactions"
 msgstr "Nombre d'_assentaments"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2829
+#: gnucash/gtkbuilder/dialog-preferences.glade:2845
 msgid "_Double line mode"
 msgstr "Mode de _doble línia"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2835
+#: gnucash/gtkbuilder/dialog-preferences.glade:2851
 msgid ""
 "Show two lines of information for each transaction instead of one. Does not "
 "affect expanded transactions."
@@ -17497,11 +17464,11 @@ msgstr ""
 "Mostra dues línies d'informació per a cada assentament en lloc d'una. Això "
 "no afecta els assentaments ampliats."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2847
+#: gnucash/gtkbuilder/dialog-preferences.glade:2863
 msgid "Register opens in a new _window"
 msgstr "Obre els registres en una _finestra nova"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2853
+#: gnucash/gtkbuilder/dialog-preferences.glade:2869
 msgid ""
 "If checked, each register will be opened in its own top level window. If "
 "clear, the register will be opened in the current window."
@@ -17509,11 +17476,11 @@ msgstr ""
 "Si s'habilita, cada registre s'obrirà en la seva pròpia finestra de nivell "
 "superior. Si no s'habilita, el registre s'obrirà a la finestra actual."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2865
+#: gnucash/gtkbuilder/dialog-preferences.glade:2881
 msgid "_Only display leaf account names"
 msgstr "Mostra sols els noms del comptes fulla"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2871
+#: gnucash/gtkbuilder/dialog-preferences.glade:2887
 msgid ""
 "If checked, only the names of the leaf accounts are displayed in the "
 "register and in the account selection popup. The default behaviour is to "
@@ -17526,47 +17493,47 @@ msgstr ""
 "aquesta opció implica que noms únics per a les fulles."
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2886
+#: gnucash/gtkbuilder/dialog-preferences.glade:2902
 msgid "Number of _characters for auto complete"
 msgstr "Nombre de _caràcter per completar automàticament"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2920
+#: gnucash/gtkbuilder/dialog-preferences.glade:2936
 msgid "Show the _entered and reconcile dates"
 msgstr "Mostra les dates entrades i conciliades"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2936
+#: gnucash/gtkbuilder/dialog-preferences.glade:2952
 msgid "Show the calendar b_uttons"
 msgstr "Mostra els b_otons de calendari"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2952
+#: gnucash/gtkbuilder/dialog-preferences.glade:2968
 msgid "_Move the selection to the blank split on expand"
 msgstr "_Mou la selecció al desglossament en blanc quan s'expandeixi"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2968
+#: gnucash/gtkbuilder/dialog-preferences.glade:2984
 msgid "_Show entered and reconciled dates on selection"
 msgstr "Mo_stra les dates entrades o conciliades quan se seleccioni"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3031
+#: gnucash/gtkbuilder/dialog-preferences.glade:3047
 msgid "Register Defaults"
 msgstr "Valors per defecte del registre"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3062
+#: gnucash/gtkbuilder/dialog-preferences.glade:3078
 msgid "<b>Default Report Currency</b>"
 msgstr "<b>Divisa per defecte en els informes</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3085
+#: gnucash/gtkbuilder/dialog-preferences.glade:3101
 msgid "<b>Location</b>"
 msgstr "<b>Ubicació</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3095
+#: gnucash/gtkbuilder/dialog-preferences.glade:3111
 msgid "Report opens in a new _window"
 msgstr "Obre els informes en una _finestra nova"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3101
+#: gnucash/gtkbuilder/dialog-preferences.glade:3117
 msgid ""
 "If checked, each report will be opened in its own top level window. If "
 "clear, the report will be opened in the current window."
@@ -17574,74 +17541,70 @@ msgstr ""
 "Si s'habilita, cada informe s'obrirà en la seva pròpia finestra de nivell "
 "superior. Si no s'habilita, l'informe s'obrirà a la finestra actual."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3129
-#, fuzzy
-msgid "<b>Default zoom level</b>"
-msgstr "<b>Estil per defecte</b>"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:3207
+#: gnucash/gtkbuilder/dialog-preferences.glade:3145
+#: gnucash/gtkbuilder/dialog-preferences.glade:3225
 #, fuzzy
 msgid "Default zoom level"
 msgstr "<b>Estil per defecte</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3242
+#: gnucash/gtkbuilder/dialog-preferences.glade:3260
 msgid "Reports"
 msgstr "Informes"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3261
+#: gnucash/gtkbuilder/dialog-preferences.glade:3279
 msgid "<b>Window Geometry</b>"
 msgstr "<b>Geometria de les finestres</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3281
+#: gnucash/gtkbuilder/dialog-preferences.glade:3299
 msgid "_Save window size and position"
 msgstr "_Desa la posició i la mida de les finestres"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3287
+#: gnucash/gtkbuilder/dialog-preferences.glade:3305
 msgid "Save window size and location when it is closed."
 msgstr "Desa la posició i la mida de les finestres quan es tanca."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3300
+#: gnucash/gtkbuilder/dialog-preferences.glade:3318
 msgid "Bring the most _recent tab to the front"
 msgstr "Mou el focus a la pestanya més _recent"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3332
+#: gnucash/gtkbuilder/dialog-preferences.glade:3350
 msgid "<b>Tab Position</b>"
 msgstr "<b>Posició de les pestanyes</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3342
+#: gnucash/gtkbuilder/dialog-preferences.glade:3360
 msgid "To_p"
 msgstr "A dal_t"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3361
+#: gnucash/gtkbuilder/dialog-preferences.glade:3379
 msgid "B_ottom"
 msgstr "A _baix"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3380
+#: gnucash/gtkbuilder/dialog-preferences.glade:3398
 msgid "_Left"
 msgstr "_Esquerra"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3399
+#: gnucash/gtkbuilder/dialog-preferences.glade:3417
 msgid "_Right"
 msgstr "D_reta"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3421
+#: gnucash/gtkbuilder/dialog-preferences.glade:3439
 msgid "<b>Summary Bar Position</b>"
 msgstr "<b>Posició de la barra de resum</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3450
+#: gnucash/gtkbuilder/dialog-preferences.glade:3468
 #: gnucash/gtkbuilder/dialog-print-check.glade:270
 msgid "Bottom"
 msgstr "A baix"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3482
+#: gnucash/gtkbuilder/dialog-preferences.glade:3500
 msgid "<b>Tabs</b>"
 msgstr "<b>Pestanyes</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3492
+#: gnucash/gtkbuilder/dialog-preferences.glade:3510
 msgid "Show close button on _notebook tabs"
 msgstr "Mostra el botó per tancar a les _pestanyes"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3498
+#: gnucash/gtkbuilder/dialog-preferences.glade:3516
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
@@ -17649,7 +17612,7 @@ msgstr ""
 "Mostra un botó per a tancar a cada pestanya de llibreta. La seva "
 "funcionalitat és idèntica a la de l'element de menú «Tanca»."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3519
+#: gnucash/gtkbuilder/dialog-preferences.glade:3537
 msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
@@ -17658,24 +17621,20 @@ msgstr ""
 "aproximada) llavor l'etiqueta de la pestanya tindrà el mig tallat i "
 "reemplaçat per una el·lipsi."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3539
+#: gnucash/gtkbuilder/dialog-preferences.glade:3557
 msgid "characters"
 msgstr "caràcters"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3558
+#: gnucash/gtkbuilder/dialog-preferences.glade:3576
 msgid "_Width"
 msgstr "A_mplada"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3595
+#: gnucash/gtkbuilder/dialog-preferences.glade:3613
 msgid "Windows"
 msgstr "Finestres"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3638
-#, fuzzy
-msgid "<b>Online Quotes</b>"
-msgstr "_Baixa les cotitzacions en línia"
-
-#: gnucash/gtkbuilder/dialog-preferences.glade:3659
+#: gnucash/gtkbuilder/dialog-preferences.glade:3656
+#: gnucash/gtkbuilder/dialog-preferences.glade:3679
 #, fuzzy
 msgid "Online Quotes"
 msgstr "_Baixa les cotitzacions en línia"
@@ -17967,11 +17926,6 @@ msgstr "Quantitat (en _lletra)"
 #: gnucash/gtkbuilder/dialog-print-check.glade:731
 msgid "Amount (_numbers)"
 msgstr "Quantitat (en _números)"
-
-#: gnucash/gtkbuilder/dialog-print-check.glade:746
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1013
-msgid "_Notes"
-msgstr "_Notes"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:939
 msgid "_Units"
@@ -18299,72 +18253,64 @@ msgstr "R_ecorda-m'ho per endavant"
 msgid "Edit Scheduled Transaction"
 msgstr "Edita l'assentament periòdic"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:830
-msgid "<b>Name</b>"
-msgstr "<b>Nom</b>"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:890
-msgid "<b>Options</b>"
-msgstr "<b>Opcions</b>"
-
-#: gnucash/gtkbuilder/dialog-sx.glade:909
+#: gnucash/gtkbuilder/dialog-sx.glade:913
 msgid "Create in advance"
 msgstr "Crea per endavant"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:924
+#: gnucash/gtkbuilder/dialog-sx.glade:928
 msgid "Remind in advance"
 msgstr "Recorda-m'ho per endavant"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:982
+#: gnucash/gtkbuilder/dialog-sx.glade:986
 msgid "Create automatically"
 msgstr "Crea automàticament"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:986
+#: gnucash/gtkbuilder/dialog-sx.glade:990
 msgid "Conditional on splits not having variables"
 msgstr "A condició que els desglossaments no tinguin variables"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1056
+#: gnucash/gtkbuilder/dialog-sx.glade:1060
 msgid "Notify me when created"
 msgstr "Notifica-m'ho en crear-lo"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1102
+#: gnucash/gtkbuilder/dialog-sx.glade:1106
 msgid "<b>Occurrences</b>"
 msgstr "<b>Ocurrències</b>"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1125
+#: gnucash/gtkbuilder/dialog-sx.glade:1129
 msgid "Last Occurred: "
 msgstr "Darrera ocurrència: "
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1159
+#: gnucash/gtkbuilder/dialog-sx.glade:1163
 msgid "Repeats:"
 msgstr "Repeticions:"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1192
+#: gnucash/gtkbuilder/dialog-sx.glade:1196
 msgid "Until"
 msgstr "Fins"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1227
+#: gnucash/gtkbuilder/dialog-sx.glade:1231
 msgid "occurrences"
 msgstr "ocurrències"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1241
+#: gnucash/gtkbuilder/dialog-sx.glade:1245
 msgid "remaining"
 msgstr "restants"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1323
+#: gnucash/gtkbuilder/dialog-sx.glade:1327
 msgid "Overview"
 msgstr "Panorama"
 
 # FIXME: Assentament definit? (dpm)
-#: gnucash/gtkbuilder/dialog-sx.glade:1396
+#: gnucash/gtkbuilder/dialog-sx.glade:1400
 msgid "Template Transaction"
 msgstr "Assentament plantilla"
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1430
+#: gnucash/gtkbuilder/dialog-sx.glade:1434
 msgid "Since Last Run..."
 msgstr "Des de la darrera execució..."
 
-#: gnucash/gtkbuilder/dialog-sx.glade:1530
+#: gnucash/gtkbuilder/dialog-sx.glade:1534
 msgid "_Review created transactions"
 msgstr "_Revisa els assentaments creats"
 
@@ -18372,98 +18318,83 @@ msgstr "_Revisa els assentaments creats"
 msgid "Income Tax Information"
 msgstr "Informació dels impostos de la renda"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:89
-msgid "<b>Income Tax Identity</b>"
-msgstr "<b>Identitat del compte d'ingressos</b>"
-
-#: gnucash/gtkbuilder/dialog-tax-info.glade:143
+#: gnucash/gtkbuilder/dialog-tax-info.glade:144
 msgid "Click to change Tax Name and/or Tax Type."
 msgstr "Cliqueu per canviar el nom de l'impost i/o el tipus d'impost."
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:242
+#: gnucash/gtkbuilder/dialog-tax-info.glade:243
 msgid "<b>_Accounts</b>"
 msgstr "<b>_Comptes</b>"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:265
+#: gnucash/gtkbuilder/dialog-tax-info.glade:266
 msgid "_Income"
 msgstr "_Ingrés"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:281
+#: gnucash/gtkbuilder/dialog-tax-info.glade:282
 msgid "_Expense"
 msgstr "D_espesa"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:297
+#: gnucash/gtkbuilder/dialog-tax-info.glade:298
 msgid "_Asset"
 msgstr "_Actiu"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:313
+#: gnucash/gtkbuilder/dialog-tax-info.glade:314
 msgid "_Liability/Equity"
 msgstr "P_assiu"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:467
+#: gnucash/gtkbuilder/dialog-tax-info.glade:468
 msgid "<b>Account Tax Information</b>"
 msgstr "<b>Informació dels impostos dels comptes</b>"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:478
+#: gnucash/gtkbuilder/dialog-tax-info.glade:479
 msgid "Tax _Related"
 msgstr "_Relacionat amb impostos"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:510
+#: gnucash/gtkbuilder/dialog-tax-info.glade:511
 msgid "<b>_TXF Categories</b>"
 msgstr "<b>Categories _TXF</b>"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:614
+#: gnucash/gtkbuilder/dialog-tax-info.glade:615
 msgid "<b>Payer Name Source</b>"
 msgstr "<b>Font del nom del pagador</b>"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:625
+#: gnucash/gtkbuilder/dialog-tax-info.glade:626
 msgid "C_urrent Account"
 msgstr "Compte _actual"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:642
-msgid "_Parent Account"
-msgstr "Compte _pare"
-
-#: gnucash/gtkbuilder/dialog-tax-info.glade:675
+#: gnucash/gtkbuilder/dialog-tax-info.glade:676
 msgid "<b>Copy Number</b>"
 msgstr "<b>Copia el número/b>"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:7
+#: gnucash/gtkbuilder/dialog-tax-table.glade:31
 msgid "Tax Tables"
 msgstr "Taules d'impostos"
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:31
-msgid "<b>Tax Tables</b>"
-msgstr "<b>Taules d'impostos</b>"
-
-#: gnucash/gtkbuilder/dialog-tax-table.glade:141
+#: gnucash/gtkbuilder/dialog-tax-table.glade:143
 msgid "<b>Tax Table Entries</b>"
 msgstr "<b>Entrades de la taula d'impostos</b>"
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:197
+#: gnucash/gtkbuilder/dialog-tax-table.glade:199
 #, fuzzy
 msgid "De_lete"
 msgstr "Suprimeix"
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:212
+#: gnucash/gtkbuilder/dialog-tax-table.glade:214
 msgid "Ne_w"
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:289
+#: gnucash/gtkbuilder/dialog-tax-table.glade:291
 msgid "Value $"
 msgstr "Valor €"
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:292
+#: gnucash/gtkbuilder/dialog-tax-table.glade:294
 msgid "Percent %"
 msgstr "Percentatge %"
 
-#: gnucash/gtkbuilder/dialog-tax-table.glade:387
+#: gnucash/gtkbuilder/dialog-tax-table.glade:389
 msgid "<b>Tax Table Entry</b>"
 msgstr "<b>Entrada de la taula d'impostos</b>"
-
-#: gnucash/gtkbuilder/dialog-tax-table.glade:401
-msgid "<b>Tax Table</b>"
-msgstr "<b>Taula d'impostos</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:8
 msgid "GnuCash Tip Of The Day"
@@ -18495,30 +18426,22 @@ msgstr "Transferència de fons"
 msgid "<b>Basic Information</b>"
 msgstr "<b>Informació bàsica</b>"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:283
-msgid "<b>Transfer From</b>"
-msgstr "<b>Transfereix de </b>"
-
-#: gnucash/gtkbuilder/dialog-transfer.glade:342
-msgid "<b>Transfer To</b>"
-msgstr "<b>Transfereix a</b>"
-
-#: gnucash/gtkbuilder/dialog-transfer.glade:447
-#: gnucash/gtkbuilder/dialog-transfer.glade:463
+#: gnucash/gtkbuilder/dialog-transfer.glade:451
+#: gnucash/gtkbuilder/dialog-transfer.glade:467
 #: gnucash/report/reports/standard/net-charts.scm:47
 #: gnucash/report/reports/standard/price-scatter.scm:50
 msgid "Show Income/Expense"
 msgstr "Mostra ingressos/despeses"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:496
+#: gnucash/gtkbuilder/dialog-transfer.glade:500
 msgid "<b>Currency Transfer</b>"
 msgstr "<b>Transferència monetària</b>"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:524
+#: gnucash/gtkbuilder/dialog-transfer.glade:528
 msgid "Exchange Rate"
 msgstr "Tipus de canvi"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:605
+#: gnucash/gtkbuilder/dialog-transfer.glade:609
 msgid "_Fetch Rate"
 msgstr "_Restableix el tipus de canvi"
 
@@ -18535,7 +18458,7 @@ msgid "_Username"
 msgstr "Nom d'_usuari"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:99
-#: gnucash/import-export/aqb/dialog-ab.glade:781
+#: gnucash/import-export/aqb/dialog-ab.glade:787
 msgid "_Password"
 msgstr "_Contrasenya"
 
@@ -19213,83 +19136,78 @@ msgstr "Notes addicionals"
 msgid "Duplicate Transaction"
 msgstr "Duplica l'assentament"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:73
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:624
-msgid "<b>New Transaction Information</b>"
-msgstr "<b>Informació de l'assentament nou</b>"
-
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:108
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:661
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:110
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:663
 msgid "_Number"
 msgstr "_Número"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:146
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:689
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:148
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:691
 msgid "_Transaction Number"
 msgstr "Número d'assen_tament"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:161
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:719
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:163
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:721
 #, fuzzy
 #| msgid "Delete the current entry"
 msgid "Keep Linked Document Entry"
 msgstr "Esborra l'entrada actual"
 
 #. Filter register by... Dialog
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:213
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:215
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:13
 msgid "Filter register by..."
 msgstr "Filtra el registre per..."
 
 #. Filter By Dialog, Date Tab
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:280
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:282
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:80
 msgid "Show _All"
 msgstr "Mostra-ho _tot"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:296
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:298
 msgid "Select Range:"
 msgstr "Seleccioneu l'interval:"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:349
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:351
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:193
 msgid "Choo_se Date"
 msgstr "Tr_ieu una data"
 
 #. Filter By Dialog, State Tab
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:542
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:544
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:386
 msgid "_Unreconciled"
 msgstr "No _conciliat"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:574
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:576
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:418
 msgid "C_leared"
 msgstr "_Liquidat"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:590
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:592
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:434
 msgid "_Voided"
 msgstr "In_vàlid"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:606
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:608
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:450
 msgid "_Frozen"
 msgstr "Con_gelat"
 
 #. Filter By Dialog, below tabs
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:685
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:687
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:529
 msgid "Sa_ve Filter"
 msgstr "De_sa %s en un fitxer"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:721
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1111
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:723
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1113
 msgid "Void Transaction"
 msgstr "Invalida l'assentament"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:785
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1175
+#: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:787
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1177
 msgid "Reason for voiding transaction"
 msgstr "Raó per a la invalidació de l'assentament"
 
@@ -19305,91 +19223,91 @@ msgid ""
 msgstr ""
 
 #. Sort register by Dialog
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:769
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:771
 msgid "Sort register by..."
 msgstr "Ordena el registre per..."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:832
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:834
 msgid "_Standard Order"
 msgstr "Ordenació e_stàndard"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:836
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:838
 msgid "Keep normal account order."
 msgstr "Mantingues l'ordenació de comptes normal"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:865
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:867
 #: gnucash/report/trep-engine.scm:184
 msgid "Sort by date."
 msgstr "Ordena per data."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:884
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:886
 msgid "Sort by the date of entry."
 msgstr "Ordena per data d'entrada."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:899
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:901
 msgid "S_tatement Date"
 msgstr "Da_ta de l'extracte de compte"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:903
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:905
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr ""
 "Ordena per la data de l'extracte bancari (i agrupa per liquidat, no "
 "reconciliat, reconciliat)."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:918
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:920
 msgid "Num_ber"
 msgstr "Núme_ro"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:922
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:924
 msgid "Sort by number."
 msgstr "Ordena per número."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:937
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:939
 msgid "Amo_unt"
 msgstr "_Quantitat"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:941
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:943
 #: gnucash/report/trep-engine.scm:230
 msgid "Sort by amount."
 msgstr "Ordena per quantitat."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:960
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:962
 #: gnucash/report/trep-engine.scm:267
 msgid "Sort by memo."
 msgstr "Ordena per nota d'abonament."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:979
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:981
 #: gnucash/report/trep-engine.scm:238
 msgid "Sort by description."
 msgstr "Ordena per descripció."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:994
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:996
 msgid "_Action"
 msgstr "A_cció"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:998
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1000
 msgid "Sort by action field."
 msgstr "Ordena pel camp d'acció."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1017
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1019
 msgid "Sort by notes field."
 msgstr "Ordena pel camp de notes."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1048
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1050
 msgid "Sa_ve Sort Order"
 msgstr "Desa l'ordre d'ordenació"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1052
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1054
 msgid "Save the sort order for this register."
 msgstr "Desa l'ordre d'ordenació per a aquest registre."
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1068
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1070
 #, fuzzy
 msgid "_Reverse Order"
 msgstr "Reverteix l'ordre"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1072
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1074
 msgid "Sort in descending order."
 msgstr "Ordena en ordre descendent."
 
@@ -19717,119 +19635,132 @@ msgid "_Abort"
 msgstr "_Quant a"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:82
-msgid "<b>Progress</b>"
-msgstr "<b>Progrés</b>"
+#: gnucash/import-export/aqb/dialog-ab.glade:147
+msgid "Progress"
+msgstr "Progrés"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:103
+#: gnucash/import-export/aqb/dialog-ab.glade:105
 #, fuzzy
 msgid "Current _Job"
 msgstr "Tasca actual"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:145
-msgid "Progress"
-msgstr "Progrés"
-
-#: gnucash/import-export/aqb/dialog-ab.glade:159
+#: gnucash/import-export/aqb/dialog-ab.glade:161
 #, fuzzy
 msgid "Current _Action"
 msgstr "Acció actual"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:208
+#: gnucash/import-export/aqb/dialog-ab.glade:210
 #, fuzzy
 msgid "<b>_Log Messages</b>"
 msgstr "<b>Missatges de registre</b>"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:251
+#: gnucash/import-export/aqb/dialog-ab.glade:253
 #, fuzzy
 msgid "Close when _finished"
 msgstr "Tanca en finalitzar"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:287
+#: gnucash/import-export/aqb/dialog-ab.glade:289
 msgid "Get Transactions Online"
 msgstr "Obté les transaccions en línia"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:349
+#: gnucash/import-export/aqb/dialog-ab.glade:351
 msgid "Date range of transactions to retrieve:"
 msgstr "Interval de dates de les transaccions a recuperar:"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:369
-msgid "<b>From</b>"
-msgstr "<b>De</b>"
+#: gnucash/import-export/aqb/dialog-ab.glade:371
+#: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/standard/customer-summary.scm:40
+#: gnucash/report/reports/standard/job-report.scm:365
+#: gnucash/report/reports/standard/job-report.scm:493
+#: gnucash/report/reports/standard/new-owner-report.scm:44
+#: gnucash/report/reports/standard/owner-report.scm:39
+msgid "From"
+msgstr "De"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:387
+#: gnucash/import-export/aqb/dialog-ab.glade:391
 msgid "_Earliest possible date"
 msgstr "_Des de la data més antiga possible"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:404
+#: gnucash/import-export/aqb/dialog-ab.glade:408
 msgid "_Last retrieval date"
 msgstr "Des de la data de l'última _recuperació"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:421
+#: gnucash/import-export/aqb/dialog-ab.glade:425
 msgid "E_nter date:"
 msgstr "I_ntroduïu la data:"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:471
-msgid "<b>To</b>"
-msgstr "<b>A</b>"
+#: gnucash/import-export/aqb/dialog-ab.glade:475
+#: gnucash/report/reports/aging.scm:37
+#: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
+#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
+#: gnucash/report/reports/standard/customer-summary.scm:41
+#: gnucash/report/reports/standard/job-report.scm:365
+#: gnucash/report/reports/standard/job-report.scm:496
+#: gnucash/report/reports/standard/new-aging.scm:39
+#: gnucash/report/reports/standard/new-owner-report.scm:45
+#: gnucash/report/reports/standard/owner-report.scm:40
+msgid "To"
+msgstr "A"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:489
+#: gnucash/import-export/aqb/dialog-ab.glade:495
 msgid "Ente_r date:"
 msgstr "Int_roduïu la data:"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:506
+#: gnucash/import-export/aqb/dialog-ab.glade:512
 msgid "No_w"
 msgstr ""
 
-#: gnucash/import-export/aqb/dialog-ab.glade:566
+#: gnucash/import-export/aqb/dialog-ab.glade:572
 msgid "Enter Password"
 msgstr "Introduïu la contrasenya"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:627
+#: gnucash/import-export/aqb/dialog-ab.glade:633
 msgid "Enter your password"
 msgstr "Introduïu la vostra contrasenya"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:646
+#: gnucash/import-export/aqb/dialog-ab.glade:652
 #, fuzzy
 #| msgid "_Width"
 msgid "Bar_width"
 msgstr "A_mplada"
 
 #. TAN generator with flicker interface common in DE only
-#: gnucash/import-export/aqb/dialog-ab.glade:664
+#: gnucash/import-export/aqb/dialog-ab.glade:670
 msgid "Setting the bar width, adapting to the size of the TAN generator."
 msgstr ""
 
-#: gnucash/import-export/aqb/dialog-ab.glade:679
+#: gnucash/import-export/aqb/dialog-ab.glade:685
 #, fuzzy
 #| msgid "_Delete"
 msgid "_Delay"
 msgstr "_Suprimeix"
 
 #. TAN generator with flicker interface common in DE only
-#: gnucash/import-export/aqb/dialog-ab.glade:694
+#: gnucash/import-export/aqb/dialog-ab.glade:700
 msgid ""
 "Setting the delay time, with small values the flicker graphic is repeated "
 "faster."
 msgstr ""
 
 #. TAN generator with flicker interface common in DE only
-#: gnucash/import-export/aqb/dialog-ab.glade:752
+#: gnucash/import-export/aqb/dialog-ab.glade:758
 msgid ""
 "Hold the TAN generator in front of the animated graphic. The markings "
 "(triangles) on the graphic must match those on the TAN generator."
 msgstr ""
 
-#: gnucash/import-export/aqb/dialog-ab.glade:796
+#: gnucash/import-export/aqb/dialog-ab.glade:802
 #, fuzzy
 msgid "Con_firm Password"
 msgstr "Confirmeu la contrasenya:"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:836
+#: gnucash/import-export/aqb/dialog-ab.glade:842
 #, fuzzy
 msgid "_Remember the PIN in memory"
 msgstr "Recorda el PIN a la memòria"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:842
+#: gnucash/import-export/aqb/dialog-ab.glade:848
 #, fuzzy
 msgid ""
 "If active, the PIN for FinTS/AqBanking actions will be remembered in memory "
@@ -19840,148 +19771,149 @@ msgstr ""
 "memòria durant una sessió. En cas contrari, s'haurà d'introduir cada vegada "
 "que sigui necessari durant la sessió."
 
-#: gnucash/import-export/aqb/dialog-ab.glade:880
+#: gnucash/import-export/aqb/dialog-ab.glade:886
 msgid "Name for new template"
 msgstr "Nom de la plantilla nova"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:942
+#: gnucash/import-export/aqb/dialog-ab.glade:948
 #, fuzzy
 msgid "_Name of the new template"
 msgstr "Nom de la plantilla nova"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:956
+#: gnucash/import-export/aqb/dialog-ab.glade:962
 #, fuzzy
 msgid "Enter a unique name for the new template."
 msgstr "Introduïu un nom per a la plantilla nova:"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:989
+#: gnucash/import-export/aqb/dialog-ab.glade:995
 msgid "Online Transaction"
 msgstr "Transacció en línia"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1004
+#: gnucash/import-export/aqb/dialog-ab.glade:1010
 #, fuzzy
 msgid "Execute _later (unimpl.)"
 msgstr "Executa-ho més tard (no impl.)"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1033
+#: gnucash/import-export/aqb/dialog-ab.glade:1039
 #, fuzzy
 msgid "Execute _Now"
 msgstr "Executa-la ara"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1041
+#: gnucash/import-export/aqb/dialog-ab.glade:1047
 msgid "Execute this online transaction now"
 msgstr "Executa aquesta transacció en línia ara"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1068
+#: gnucash/import-export/aqb/dialog-ab.glade:1074
 msgid "Enter an Online Transaction"
 msgstr "Introduïu una transacció en línia"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1104
+#: gnucash/import-export/aqb/dialog-ab.glade:1110
 #, fuzzy
 msgid "Recipient Account _Number"
 msgstr "Número de compte del destinatari"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1133
+#: gnucash/import-export/aqb/dialog-ab.glade:1139
 #, fuzzy
 msgid "Recipient _Bank Code"
 msgstr "Codi bancari del destinatari"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1163
+#: gnucash/import-export/aqb/dialog-ab.glade:1169
 #, fuzzy
 msgid "_Recipient Name"
 msgstr "Nom del destinatari"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1179
-#: gnucash/import-export/aqb/dialog-ab.glade:1279
+#: gnucash/import-export/aqb/dialog-ab.glade:1185
+#: gnucash/import-export/aqb/dialog-ab.glade:1285
 msgid "at Bank"
 msgstr "al banc"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1192
+#: gnucash/import-export/aqb/dialog-ab.glade:1198
 msgid "(filled in automatically)"
 msgstr "(omplert automàticament)"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1221
+#: gnucash/import-export/aqb/dialog-ab.glade:1227
 #, fuzzy
 msgid "Payment _Purpose (only for recipient)"
 msgstr "Concepte del pagament (només per al destinatari)"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1237
+#: gnucash/import-export/aqb/dialog-ab.glade:1243
 msgid "Payment Purpose continued"
 msgstr "Concepte del pagament (continuació)"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1251
+#: gnucash/import-export/aqb/dialog-ab.glade:1257
 #, fuzzy
 msgid "_Originator Name"
 msgstr "Nom de l'ordenant"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1303
+#: gnucash/import-export/aqb/dialog-ab.glade:1309
 msgid "Originator Account Number"
 msgstr "Número de compte de l'ordenant"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1327
+#: gnucash/import-export/aqb/dialog-ab.glade:1333
 msgid "Bank Code"
 msgstr "Codi del banc"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1488
+#: gnucash/import-export/aqb/dialog-ab.glade:1494
 #, fuzzy
 msgid "_Add current"
 msgstr "Afegeix l'actual"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1494
+#: gnucash/import-export/aqb/dialog-ab.glade:1500
 msgid "Add the current online transaction as a new transaction template"
 msgstr ""
 "Afegeix la transacció en línia actual com a plantilla de transacció nova"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1506
+#: gnucash/import-export/aqb/dialog-ab.glade:1512
 #, fuzzy
 msgid "_Up"
 msgstr "Amunt"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1512
+#: gnucash/import-export/aqb/dialog-ab.glade:1518
 msgid "Move the selected transaction template one row up"
 msgstr "Mou l'assentament plantilla seleccionat una fila cap amunt"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1524
+#: gnucash/import-export/aqb/dialog-ab.glade:1530
 #, fuzzy
 msgid "_Down"
 msgstr "Avall"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1530
+#: gnucash/import-export/aqb/dialog-ab.glade:1536
 msgid "Move the selected transaction template one row down"
 msgstr "Mou l'assentament plantilla seleccionat una fila cap avall"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1542
+#: gnucash/import-export/aqb/dialog-ab.glade:1548
 #, fuzzy
 msgid "_Sort"
 msgstr "Ordena"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1548
+#: gnucash/import-export/aqb/dialog-ab.glade:1554
 msgid "Sort the list of transaction templates alphabetically"
 msgstr "Ordena la llista de plantilles de transacció alfabèticament"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1560
+#: gnucash/import-export/aqb/dialog-ab.glade:1566
 #, fuzzy
 msgid "D_elete"
 msgstr "Suprimeix"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1566
+#: gnucash/import-export/aqb/dialog-ab.glade:1572
 msgid "Delete the currently selected transaction template"
 msgstr "Suprimeix la plantilla d'assentament seleccionada"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1615
+#: gnucash/import-export/aqb/dialog-ab.glade:1621
 #, fuzzy
 msgid "_Templates"
 msgstr "Plantilles"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:21
-msgid "<b>Online Banking</b>"
-msgstr "<b>Banca electrònica</b>"
+#: gnucash/import-export/aqb/gncmod-aqbanking.c:70
+msgid "Online Banking"
+msgstr "Banca electrònica"
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:31
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:33
 msgid "_Close log window when finished"
 msgstr "Tanca el diàleg del registre en finalitzar"
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:37
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:39
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:16
 msgid ""
 "If active, the window will be closed automatically when you finish the HBCI/"
@@ -19990,12 +19922,12 @@ msgstr ""
 "Si s'habilita, es tancarà automàticament la finestra en finalitzar el procés "
 "d'importació de l'HBCI/AqBanking. En cas contrari, romandrà oberta."
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:49
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:51
 #, fuzzy
 msgid "Remember the _PIN in memory"
 msgstr "Recorda el PIN a la memòria"
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:55
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:57
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:21
 msgid ""
 "If active, the PIN for HBCI/AqBanking actions will be remembered in memory "
@@ -20006,23 +19938,23 @@ msgstr ""
 "memòria durant una sessió. En cas contrari, s'haurà d'introduir cada vegada "
 "que sigui necessari durant la sessió."
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:67
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:69
 msgid "_Verbose debug messages"
 msgstr "Missatges de _depuració detallats"
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:73
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:75
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:31
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 msgstr ""
 "Habilita els missatges de depuració detallats per a la banca electrònica a "
 "través de l'HBCI/AqBanking."
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:85
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:87
 #, fuzzy
 msgid "Use Non-SWIFT _transaction text"
 msgstr "Utilitza un assentament plantilla"
 
-#: gnucash/import-export/aqb/dialog-ab-pref.glade:91
+#: gnucash/import-export/aqb/dialog-ab-pref.glade:93
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:26
 msgid ""
 "Some banks place part of transaction description as \"transaction text\" in "
@@ -20481,10 +20413,6 @@ msgid ""
 msgstr ""
 "La tasca de banca electrònica encara s'està executant; teniu seguretat que "
 "voleu cancel·lar-la?"
-
-#: gnucash/import-export/aqb/gncmod-aqbanking.c:70
-msgid "Online Banking"
-msgstr "Banca electrònica"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:92
 msgid "_Online Actions"
@@ -21457,11 +21385,6 @@ msgstr "Símbol"
 #, fuzzy
 msgid "From Namespace"
 msgstr "Espai de noms"
-
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
-#, fuzzy
-msgid "Currency To"
-msgstr "Divisa: "
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:66
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:118
@@ -23758,18 +23681,6 @@ msgstr "Seleccioneu un full d'estil per a l'informe."
 msgid "stylesheet."
 msgstr "full d'estil."
 
-#: gnucash/report/reports/aging.scm:37
-#: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
-#: gnucash/report/reports/standard/customer-summary.scm:41
-#: gnucash/report/reports/standard/job-report.scm:365
-#: gnucash/report/reports/standard/job-report.scm:496
-#: gnucash/report/reports/standard/new-aging.scm:39
-#: gnucash/report/reports/standard/new-owner-report.scm:45
-#: gnucash/report/reports/standard/owner-report.scm:40
-msgid "To"
-msgstr "A"
-
 #: gnucash/report/reports/aging.scm:38
 #: gnucash/report/reports/standard/new-aging.scm:40
 msgid "Sort By"
@@ -24669,16 +24580,6 @@ msgstr ""
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
 msgstr "Informe d'impostos / Exportar a TXF"
-
-#: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:147
-#: gnucash/report/reports/locale-specific/us/taxtxf.scm:177
-#: gnucash/report/reports/standard/customer-summary.scm:40
-#: gnucash/report/reports/standard/job-report.scm:365
-#: gnucash/report/reports/standard/job-report.scm:493
-#: gnucash/report/reports/standard/new-owner-report.scm:44
-#: gnucash/report/reports/standard/owner-report.scm:39
-msgid "From"
-msgstr "De"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:151
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:181
@@ -27685,18 +27586,6 @@ msgstr ""
 "despesa."
 
 #: gnucash/report/reports/standard/invoice.scm:201
-#: gnucash/report/reports/standard/invoice.scm:207
-#: gnucash/report/reports/standard/invoice.scm:348
-#: gnucash/report/reports/standard/invoice.scm:355
-#: gnucash/report/reports/standard/invoice.scm:362
-#: gnucash/report/reports/standard/invoice.scm:369
-#: gnucash/report/reports/standard/invoice.scm:376
-#: gnucash/report/reports/standard/invoice.scm:383
-#, fuzzy
-msgid "Layout"
-msgstr "<b>Quantitat</b>"
-
-#: gnucash/report/reports/standard/invoice.scm:201
 #: gnucash/report/stylesheets/css.scm:118
 #: gnucash/report/stylesheets/css.scm:224
 msgid "CSS"
@@ -29539,26 +29428,6 @@ msgstr "Logotip"
 msgid "Company logo image."
 msgstr "Imatge de logotip de l'empresa."
 
-#: gnucash/report/stylesheets/footer.scm:123
-#: gnucash/report/stylesheets/footer.scm:130
-#: gnucash/report/stylesheets/footer.scm:137
-#: gnucash/report/stylesheets/footer.scm:144
-#: gnucash/report/stylesheets/footer.scm:151
-#: gnucash/report/stylesheets/footer.scm:159
-#: gnucash/report/stylesheets/footer.scm:167
-#: gnucash/report/stylesheets/footer.scm:175
-#: gnucash/report/stylesheets/head-or-tail.scm:170
-#: gnucash/report/stylesheets/head-or-tail.scm:177
-#: gnucash/report/stylesheets/head-or-tail.scm:184
-#: gnucash/report/stylesheets/head-or-tail.scm:191
-#: gnucash/report/stylesheets/head-or-tail.scm:198
-#: gnucash/report/stylesheets/head-or-tail.scm:206
-#: gnucash/report/stylesheets/head-or-tail.scm:214
-#: gnucash/report/stylesheets/head-or-tail.scm:222
-#: gnucash/report/stylesheets/plain.scm:62
-msgid "Colors"
-msgstr "Colors"
-
 #: gnucash/report/stylesheets/footer.scm:124
 #: gnucash/report/stylesheets/head-or-tail.scm:171
 msgid "General background color for report."
@@ -30417,10 +30286,6 @@ msgstr "Adreça de correu electrònic de l'empresa"
 #: libgnucash/app-utils/business-options.scm:75
 msgid "Company Contact Person"
 msgstr "Persona de contacte a l'empresa"
-
-#: libgnucash/app-utils/business-options.scm:76
-msgid "Fancy Date Format"
-msgstr "Format de data decorat"
 
 #: libgnucash/app-utils/business-options.scm:77
 msgid "custom"
@@ -31501,6 +31366,136 @@ msgstr "Assentament invalidat"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "No hi ha ajuda disponible."
+
+#, fuzzy
+#~ msgid "<b>Accounts</b>"
+#~ msgstr "<b>_Comptes</b>"
+
+#, fuzzy
+#~ msgid "<b>Dates</b>"
+#~ msgstr "<b>_Dates</b>"
+
+#, fuzzy
+#~ msgid "<b>Currency To</b>"
+#~ msgstr "<b>Transferència monetària</b>"
+
+#, fuzzy
+#~ msgid "<b>Notes</b>"
+#~ msgstr "<b>_Notes</b>"
+
+#~ msgid "<b>Book Options</b>"
+#~ msgstr "<b>Opcions de llibre</b>"
+
+#~ msgid "<b>General</b>"
+#~ msgstr "<b>General</b>"
+
+#~ msgid "<b>Transactions</b>"
+#~ msgstr "<b>Assentaments</b>"
+
+#~ msgid "<b>Identification</b>"
+#~ msgstr "<b>Identificació</b>"
+
+#~ msgid "<b>_Parent Account</b>"
+#~ msgstr "<b>Compte _pare</b>"
+
+#~ msgid "<b>QIF Import</b>"
+#~ msgstr "<b>Importació QIF</b>"
+
+#~ msgid "<b>Terms</b>"
+#~ msgstr "<b>Condicions</b>"
+
+#~ msgid "<b>Securities</b>"
+#~ msgstr "<b>Valors</b>"
+
+#, fuzzy
+#~ msgid "<b>Security Information</b>"
+#~ msgstr "Informació del valor"
+
+#~ msgid "<b>1. Choose the file to import</b>"
+#~ msgstr "<b> 1. Trieu un fitxer a importar</b>"
+
+#~ msgid "<b>3. Select import options</b>"
+#~ msgstr "<b>3. Trieu les opcions d'importació</b>"
+
+#, fuzzy
+#~ msgid "<b>4. Preview</b>"
+#~ msgstr "<b>3. Previsualització</b>"
+
+#, fuzzy
+#~ msgid "<b>Period</b>"
+#~ msgstr "<b>Període:</b>"
+
+#~ msgid "<b>Colors</b>"
+#~ msgstr "<b>Colors</b>"
+
+#~ msgid "<b>_Notes</b>"
+#~ msgstr "<b>_Notes</b>"
+
+#~ msgid "<b>Amount</b>"
+#~ msgstr "<b>Quantitat</b>"
+
+#~ msgid "<b>Start Date</b>"
+#~ msgstr "<b>Data d'inici</b>"
+
+#~ msgid "<b>End Date</b>"
+#~ msgstr "<b>Data final</b>"
+
+#~ msgid "<b>Account Color</b>"
+#~ msgstr "<b>_Color del compte</b>"
+
+#~ msgid "<b>Fancy Date Format</b>"
+#~ msgstr "<b>Format de data decorat</b>"
+
+#~ msgid "<b>Date Format</b>"
+#~ msgstr "<b>Format de data</b>"
+
+#, fuzzy
+#~ msgid "<b>Layout</b>"
+#~ msgstr "<b>Quantitat</b>"
+
+#, fuzzy
+#~ msgid "<b>Default zoom level</b>"
+#~ msgstr "<b>Estil per defecte</b>"
+
+#, fuzzy
+#~ msgid "<b>Online Quotes</b>"
+#~ msgstr "_Baixa les cotitzacions en línia"
+
+#~ msgid "<b>Name</b>"
+#~ msgstr "<b>Nom</b>"
+
+#~ msgid "<b>Options</b>"
+#~ msgstr "<b>Opcions</b>"
+
+#~ msgid "<b>Income Tax Identity</b>"
+#~ msgstr "<b>Identitat del compte d'ingressos</b>"
+
+#~ msgid "<b>Tax Tables</b>"
+#~ msgstr "<b>Taules d'impostos</b>"
+
+#~ msgid "<b>Tax Table</b>"
+#~ msgstr "<b>Taula d'impostos</b>"
+
+#~ msgid "<b>Transfer From</b>"
+#~ msgstr "<b>Transfereix de </b>"
+
+#~ msgid "<b>Transfer To</b>"
+#~ msgstr "<b>Transfereix a</b>"
+
+#~ msgid "<b>New Transaction Information</b>"
+#~ msgstr "<b>Informació de l'assentament nou</b>"
+
+#~ msgid "<b>Progress</b>"
+#~ msgstr "<b>Progrés</b>"
+
+#~ msgid "<b>From</b>"
+#~ msgstr "<b>De</b>"
+
+#~ msgid "<b>To</b>"
+#~ msgstr "<b>A</b>"
+
+#~ msgid "<b>Online Banking</b>"
+#~ msgstr "<b>Banca electrònica</b>"
 
 #, fuzzy
 #~ msgid "Search from "
