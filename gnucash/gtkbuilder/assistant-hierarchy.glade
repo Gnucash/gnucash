@@ -121,7 +121,6 @@ Please choose the currency to use for new accounts.</property>
             <property name="margin_start">6</property>
             <property name="margin_end">6</property>
             <property name="label" translatable="yes">Select language and region specific categories that correspond to the ways that you foresee you will use GnuCash. Each category you select will cause several accounts to be created.</property>
-            <property name="use_markup">True</property>
             <property name="wrap">True</property>
             <property name="width_chars">75</property>
           </object>
@@ -382,8 +381,10 @@ Please choose the currency to use for new accounts.</property>
                   <object class="GtkLabel" id="accounts_in_category_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label">&lt;b&gt;Accounts in %s&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes" comments="%s is an account template">Accounts in %s</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -424,8 +425,10 @@ Please choose the currency to use for new accounts.</property>
             <property name="halign">start</property>
             <property name="margin_start">6</property>
             <property name="margin_end">6</property>
-            <property name="label" translatable="yes">&lt;b&gt;Notes&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
+            <property name="label" translatable="yes">Notes</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -446,7 +449,7 @@ Please choose the currency to use for new accounts.</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes">•</property>
+                <property name="label">•</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -459,7 +462,7 @@ Please choose the currency to use for new accounts.</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes">•</property>
+                <property name="label">•</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

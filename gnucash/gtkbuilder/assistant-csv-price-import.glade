@@ -450,8 +450,7 @@ There are two reserved names which can't be used to save custom settings:
                               <object class="GtkLabel" id="label2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">•</property>
-                                <property name="use_markup">True</property>
+                                <property name="label">•</property>
                                 <property name="wrap">True</property>
                               </object>
                               <packing>
@@ -465,7 +464,6 @@ There are two reserved names which can't be used to save custom settings:
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Double-click anywhere on the table below to insert a column break</property>
-                                <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -478,8 +476,7 @@ There are two reserved names which can't be used to save custom settings:
                               <object class="GtkLabel" id="label4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">•</property>
-                                <property name="use_markup">True</property>
+                                <property name="label">•</property>
                                 <property name="wrap">True</property>
                               </object>
                               <packing>
@@ -493,7 +490,6 @@ There are two reserved names which can't be used to save custom settings:
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Right-click anywhere in a column to modify it (widen, narrow, merge)</property>
-                                <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -899,8 +895,10 @@ For example
                   <object class="GtkLabel" id="label8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Currency To&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Currency To</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                 </child>
               </object>

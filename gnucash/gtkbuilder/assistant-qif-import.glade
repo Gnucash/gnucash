@@ -972,9 +972,11 @@ In the following page, you will see the text that appears in the Payee and Memo 
           <object class="GtkLabel" id="book_option_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">&lt;b&gt;Book Options&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
-          </object>
+            <property name="label" translatable="yes">Book Options</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+        </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>

@@ -79,8 +79,10 @@
                   <object class="GtkLabel" id="label8877443">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Progress&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Progress</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -366,8 +368,10 @@
                   <object class="GtkLabel" id="label8877445">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;From&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">From</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -468,8 +472,10 @@
                   <object class="GtkLabel" id="label8877446">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;To&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">To</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
