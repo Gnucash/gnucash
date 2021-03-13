@@ -263,7 +263,9 @@ typedef struct GncPluginPageBudgetPrivate
     gnc_numeric allValue;
     allperiods_action action;
 
-    /* the cached reportPage for this budget */
+    /* the cached reportPage for this budget. note this is not saved
+       into .gcm file therefore the budget editor->report link is lost
+       upon restart. */
     GncPluginPage *reportPage;
 } GncPluginPageBudgetPrivate;
 
@@ -1284,6 +1286,12 @@ gnc_plugin_page_budget_cmd_budget_note(GtkAction *action,
     g_object_unref(G_OBJECT(builder));
 }
 
+/* From the budget editor, open the budget report. This will reuse the
+   budget report if generated from the current budget editor. Note the
+   reuse is lost when GnuCash is restarted. This link may be restored
+   by: scan the current session tabs, identify reports, checking
+   whereby report's report-type matches a budget report, and the
+   report's budget option value matches the current budget. */
 static void
 gnc_plugin_page_budget_cmd_budget_report (GtkAction *action,
                                           GncPluginPageBudget *page)
