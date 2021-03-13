@@ -19,10 +19,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-11 07:46+0100\n"
-"PO-Revision-Date: 2021-03-01 15:08+0000\n"
+"PO-Revision-Date: 2021-03-13 03:02+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -15541,10 +15541,8 @@ msgid "Search the Account List"
 msgstr "勘定科目リストから探す"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
-#, fuzzy
-#| msgid "Close on Jump"
 msgid "Close _on Jump"
-msgstr "ジャンプ時に閉じる"
+msgstr "ジャンプ時に閉じる(_O)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
 msgid "_Jump To"
@@ -15572,7 +15570,7 @@ msgstr "'勘定科目のフルネーム' を大文字小文字区別せずに検
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:258
 msgid "Sea_rch"
-msgstr ""
+msgstr "検索(_R)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:294
 msgid ""
@@ -15590,7 +15588,7 @@ msgstr "インポートマッピングエディター"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:52
 msgid "_Remove Invalid Mappings"
-msgstr ""
+msgstr "無効なマッピングを除去(_R)"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:106
 msgid "<b>What type of information to display?</b>"
