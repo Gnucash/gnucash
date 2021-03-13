@@ -6,6 +6,7 @@
         <menuitem name="AllPeriods" action="AllPeriodsBudgetAction"/>
         <menuitem name="Delete" action="DeleteBudgetAction"/>
         <menuitem name="Note" action="BudgetNoteAction"/>
+        <menuitem name="Report" action="BudgetReportAction"/>
       </placeholder>
       <menuitem name="Options" action="OptionsBudgetAction"/>
     </menu>
@@ -30,6 +31,7 @@
       <toolitem name="AllPeriods" action="AllPeriodsBudgetAction"/>
       <toolitem name="Delete" action="DeleteBudgetAction"/>
       <toolitem name="Note" action="BudgetNoteAction"/>
+      <toolitem name="Report" action="BudgetReportAction"/>
     </placeholder>
   </toolbar>
 </ui>

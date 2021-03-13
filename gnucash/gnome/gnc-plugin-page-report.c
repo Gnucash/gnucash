@@ -1427,6 +1427,12 @@ gnc_plugin_page_report_back_cb( GtkAction *action, GncPluginPageReport *report )
     }
 }
 
+void
+gnc_plugin_page_report_reload (GncPluginPageReport *report)
+{
+    gnc_plugin_page_report_reload_cb (NULL, report);
+}
+
 static void
 gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report )
 {

@@ -37,6 +37,7 @@
 (use-modules (gnucash reports standard new-aging))
 (use-modules (gnucash reports standard new-owner-report))
 
+(export gnc:budget-report-create)
 (export gnc:register-report-create)
 (export gnc:invoice-report-create)
 (export gnc:payables-report-create)
@@ -77,6 +78,15 @@
         ;; Invalid report-template-id, so let's return zero as an invalid report id.
         0
         ))
+
+(define budget-ID "810ed4b25ef0486ea43bbd3dddb32b11")
+(define (gnc:budget-report-create budget)
+  (if (gnc:find-report-template budget-ID)
+      (let* ((options (gnc:make-report-options budget-ID))
+             (bgt-op (gnc:lookup-option options gnc:pagename-general "Budget")))
+        (gnc:option-set-value bgt-op budget)
+        (gnc:make-report budget-ID options))
+      -1))
 
 (define gnc:payables-report-create payables-report-create-internal)
 (define gnc:receivables-report-create receivables-report-create-internal)
