@@ -23,10 +23,6 @@
 
 use strict;
 use English;
-use FileHandle;
-
-# Date::Manip provides ParseDate, ParseDateString, and UnixTime.
-use Date::Manip;
 
 =head1 NAME
 
@@ -112,15 +108,14 @@ non-zero - failure
 
 =cut
 
-# Set a base date with the current time in the current TZ:
-my $base_date = new Date::Manip::Date;
-$base_date->parse("now");
-
 # The methods we know about.  For now we assume they all have the same
 # signature so this works OK.
 
 sub check_modules {
-  my @modules = qw(Finance::Quote Date::Manip);
+
+# Date::Manip provides ParseDate, ParseDateString, and UnixTime.
+
+  my @modules = qw(FileHandle Finance::Quote Date::Manip);
   my @missing;
 
   foreach my $mod (@modules) {
@@ -148,6 +143,13 @@ sub check_modules {
 
   exit 1;
 }
+
+# Check for and load non-standard modules
+check_modules ();
+
+# Set a base date with the current time in the current TZ:
+my $base_date = new Date::Manip::Date;
+$base_date->parse("now");
 
 sub schemify_string {
   my($str) = @_;
@@ -318,9 +320,6 @@ sub parse_input_line {
 
 #---------------------------------------------------------------------------
 # Runtime.
-
-# Check for and load non-standard modules
-check_modules ();
 
 # Create a stockquote object.
 my $quoter = Finance::Quote->new();
