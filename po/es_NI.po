@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: GNUCash 1.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-03-13 05:49+0100\n"
+"POT-Creation-Date: 2021-03-14 22:08+0100\n"
 "PO-Revision-Date: 2001-10-22 14:04-0600\n"
 "Last-Translator: Georg Lehner <Jorge.Lehner@gmx.net>, Juan Manuel García "
 "Molina <juanmagm@mail.com>\n"
@@ -1142,7 +1142,7 @@ msgstr "Factura"
 #: gnucash/gnome/dialog-invoice.c:3548
 #: gnucash/gnome/gnc-plugin-page-invoice.c:570
 #: gnucash/gnome/gnc-plugin-page-register.c:633
-#: gnucash/gnome/gnc-plugin-page-report.c:1853
+#: gnucash/gnome/gnc-plugin-page-report.c:1859
 #: gnucash/gnome-search/dialog-search.c:1089
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2900
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3076
@@ -2691,7 +2691,7 @@ msgstr "Buscar "
 
 #: gnucash/gnome/dialog-lot-viewer.c:814
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:403
-#: gnucash/gnome/gnc-plugin-page-budget.c:208
+#: gnucash/gnome/gnc-plugin-page-budget.c:220
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
 #: gnucash/gnome-utils/gnc-file.c:1139
@@ -4183,7 +4183,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:209
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:220
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:344
-#: gnucash/gnome/gnc-plugin-page-budget.c:140
+#: gnucash/gnome/gnc-plugin-page-budget.c:146
 #, fuzzy
 msgid "Open _Account"
 msgstr "_Abrir cuenta"
@@ -4286,7 +4286,7 @@ msgid "Renumber the children of the selected account"
 msgstr "Reconciliar la cuenta seleccionada"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:290
-#: gnucash/gnome/gnc-plugin-page-budget.c:182
+#: gnucash/gnome/gnc-plugin-page-budget.c:194
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:185
 #: gnucash/gnome/gnc-plugin-page-register2.c:340
 #: gnucash/gnome/gnc-plugin-page-register.c:458
@@ -4296,7 +4296,7 @@ msgid "_Filter By..."
 msgstr "Tipo de Trazo"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:294
-#: gnucash/gnome/gnc-plugin-page-budget.c:186
+#: gnucash/gnome/gnc-plugin-page-budget.c:198
 #: gnucash/gnome/gnc-plugin-page-invoice.c:162
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:189
 #: gnucash/gnome/gnc-plugin-page-register2.c:344
@@ -4444,7 +4444,7 @@ msgid "New"
 msgstr "Nuevo"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:409
-#: gnucash/gnome/gnc-plugin-page-budget.c:209
+#: gnucash/gnome/gnc-plugin-page-budget.c:221
 #: gnucash/gnome/gnc-plugin-page-invoice.c:454
 #: gnucash/gnome/gnc-plugin-page-register2.c:500
 #: gnucash/gnome/gnc-plugin-page-register.c:623
@@ -4574,77 +4574,88 @@ msgstr "Tipo de Cuenta"
 msgid "Are you sure you want to do this?"
 msgstr "¿Está seguro de que desea borrar la cuenta %s?"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:141
+#: gnucash/gnome/gnc-plugin-page-budget.c:147
 #, fuzzy
 msgid "Open the selected account."
 msgstr "Abrir la cuenta seleccionada"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:146
+#: gnucash/gnome/gnc-plugin-page-budget.c:152
 #, fuzzy
 msgid "Open _Subaccounts"
 msgstr "Abrir Subcuentas"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:147
+#: gnucash/gnome/gnc-plugin-page-budget.c:153
 #, fuzzy
 msgid "Open the selected account and all its subaccounts."
 msgstr "Abrir la cuenta seleccionada y todas sus subcuentas"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:153
+#: gnucash/gnome/gnc-plugin-page-budget.c:159
 #, fuzzy
 msgid "_Delete Budget..."
 msgstr "_Borrar Cuenta"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:154
+#: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:158
+#: gnucash/gnome/gnc-plugin-page-budget.c:164
 #, fuzzy
 msgid "Budget _Options..."
 msgstr "Primera Opción"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:159
+#: gnucash/gnome/gnc-plugin-page-budget.c:165
 #, fuzzy
 msgid "Edit this budget's options."
 msgstr "Editar las opciones de la vista de cuentas"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:163
+#: gnucash/gnome/gnc-plugin-page-budget.c:169
 #, fuzzy
 msgid "Esti_mate Budget..."
 msgstr "Balance de Apertura"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:165
+#: gnucash/gnome/gnc-plugin-page-budget.c:171
 #, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions."
 msgstr "Mostrar una tabla de los datos seleccionados."
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:169
+#: gnucash/gnome/gnc-plugin-page-budget.c:175
 #, fuzzy
 msgid "_All Periods..."
 msgstr "Periodo:"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:171
+#: gnucash/gnome/gnc-plugin-page-budget.c:177
 #, fuzzy
 msgid "Edit budget for all periods for the selected accounts."
 msgstr "Editar la cuenta seleccionada"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:175
+#: gnucash/gnome/gnc-plugin-page-budget.c:181
 #, fuzzy
 msgid "Edit Note"
 msgstr "Cuentas de Crédito"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:177
+#: gnucash/gnome/gnc-plugin-page-budget.c:183
 #, fuzzy
-msgid "Edit note for the selected account and period"
+msgid "Edit note for the selected account and period."
 msgstr "Editar la cuenta seleccionada"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
+#: gnucash/report/reports/standard/budget.scm:39
+#, fuzzy
+msgid "Budget Report"
+msgstr "_Informes"
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:189
+#, fuzzy
+msgid "Run the budget report."
+msgstr "Volver a cargar el reporte actual"
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:199
 #, fuzzy
 msgid "Refresh this window."
 msgstr "Cerrar esta ventana de ayuda"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:210
+#: gnucash/gnome/gnc-plugin-page-budget.c:222
 #: gnucash/gnome/gnc-plugin-page-report.c:1137
 #: gnucash/gtkbuilder/assistant-csv-export.glade:107
 #: gnucash/gtkbuilder/dialog-print-check.glade:643
@@ -4652,24 +4663,29 @@ msgstr "Cerrar esta ventana de ayuda"
 msgid "Options"
 msgstr "Opciones"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:211
+#: gnucash/gnome/gnc-plugin-page-budget.c:223
 #, fuzzy
 msgid "Estimate"
 msgstr "Estado"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:212
+#: gnucash/gnome/gnc-plugin-page-budget.c:224
 #, fuzzy
 msgid "All Periods"
 msgstr "Periodo:"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:213
+#: gnucash/gnome/gnc-plugin-page-budget.c:225
 #, fuzzy
 msgid "Note"
 msgstr "Notas"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:292
-#: gnucash/gnome/gnc-plugin-page-budget.c:333
-#: gnucash/gnome/gnc-plugin-page-budget.c:862
+#: gnucash/gnome/gnc-plugin-page-budget.c:226
+#, fuzzy
+msgid "Run Report"
+msgstr "Separador de Cuenta"
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:310
+#: gnucash/gnome/gnc-plugin-page-budget.c:351
+#: gnucash/gnome/gnc-plugin-page-budget.c:880
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:110
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:227
@@ -4679,27 +4695,27 @@ msgstr "Notas"
 msgid "Budget"
 msgstr "Presupuesto"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:912 libgnucash/engine/gnc-budget.c:94
+#: gnucash/gnome/gnc-plugin-page-budget.c:930 libgnucash/engine/gnc-budget.c:94
 #, fuzzy
 msgid "Unnamed Budget"
 msgstr "Presupuesto"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:914
+#: gnucash/gnome/gnc-plugin-page-budget.c:932
 #, fuzzy, c-format
 msgid "Delete %s?"
 msgstr "Borrar"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1010
+#: gnucash/gnome/gnc-plugin-page-budget.c:1028
 #, fuzzy
 msgid "You must select at least one account to estimate."
 msgstr "Debe seleccionar un tipo de cuenta."
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1136
+#: gnucash/gnome/gnc-plugin-page-budget.c:1154
 #, fuzzy
 msgid "You must select at least one account to edit."
 msgstr "Debe seleccionar un tipo de cuenta."
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1234
+#: gnucash/gnome/gnc-plugin-page-budget.c:1252
 #, fuzzy
 msgid "You must select one budget cell to edit."
 msgstr "Debe seleccionar un tipo de cuenta."
@@ -6173,14 +6189,14 @@ msgid "Unreconciled"
 msgstr "reconciliado:y"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3444
-#: gnucash/gnome-search/search-reconciled.c:219
+#: gnucash/gnome-search/search-reconciled.c:224
 #: gnucash/gnome-utils/gnc-tree-view-account.c:875
 #: gnucash/report/trep-engine.scm:147 gnucash/report/trep-engine.scm:425
 msgid "Cleared"
 msgstr "Cancelado"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3446
-#: gnucash/gnome-search/search-reconciled.c:222
+#: gnucash/gnome-search/search-reconciled.c:227
 #: gnucash/gnome-utils/gnc-tree-view-account.c:889
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 #: gnucash/import-export/import-match-picker.c:437
@@ -6190,14 +6206,14 @@ msgid "Reconciled"
 msgstr "Reconciliado:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3448
-#: gnucash/gnome-search/search-reconciled.c:225
+#: gnucash/gnome-search/search-reconciled.c:230
 #: gnucash/report/trep-engine.scm:149
 #, fuzzy
 msgid "Frozen"
 msgstr "congelado:c"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3450
-#: gnucash/gnome-search/search-reconciled.c:228
+#: gnucash/gnome-search/search-reconciled.c:233
 #: gnucash/report/trep-engine.scm:150
 #, fuzzy
 msgid "Voided"
@@ -6415,25 +6431,25 @@ msgid "Cancel outstanding HTML requests"
 msgstr "Cancelar solicitudes HTML pendientes"
 
 # does not need translation
-#: gnucash/gnome/gnc-plugin-page-report.c:1518
-#: gnucash/gnome/gnc-plugin-page-report.c:1551
+#: gnucash/gnome/gnc-plugin-page-report.c:1524
+#: gnucash/gnome/gnc-plugin-page-report.c:1557
 msgid "HTML"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1521
+#: gnucash/gnome/gnc-plugin-page-report.c:1527
 msgid "Choose export format"
 msgstr "Seleccione format de exportación"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1522
+#: gnucash/gnome/gnc-plugin-page-report.c:1528
 msgid "Choose the export format for this report:"
 msgstr "Selecconar el formato para la exportación de este informe:"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1562
+#: gnucash/gnome/gnc-plugin-page-report.c:1568
 #, fuzzy, c-format
 msgid "Save %s To File"
 msgstr "Guardar HTML a archivo"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1591
+#: gnucash/gnome/gnc-plugin-page-report.c:1597
 #, fuzzy, c-format
 msgid ""
 "You cannot save to that filename.\n"
@@ -6441,11 +6457,11 @@ msgid ""
 "%s"
 msgstr "No puede guardar bajo este nombre de archivo."
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1601
+#: gnucash/gnome/gnc-plugin-page-report.c:1607
 msgid "You cannot save to that file."
 msgstr "No puede guardar a este archivo."
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1610
+#: gnucash/gnome/gnc-plugin-page-report.c:1616
 #: gnucash/gnome-utils/gnc-file.c:1319 gnucash/gnome-utils/gnc-file.c:1566
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:741
 #, fuzzy, c-format
@@ -6456,15 +6472,15 @@ msgstr ""
 "ya existe.\n"
 "¿Está seguro de que desea sobreescribirlo?"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1725
-#: gnucash/gnome/gnc-plugin-page-report.c:1749 gnucash/gnucash-commands.cpp:224
+#: gnucash/gnome/gnc-plugin-page-report.c:1731
+#: gnucash/gnome/gnc-plugin-page-report.c:1755 gnucash/gnucash-commands.cpp:224
 #: gnucash/gnucash-commands.cpp:252
 msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1759
+#: gnucash/gnome/gnc-plugin-page-report.c:1765
 #, fuzzy, c-format
 msgid "Could not open the file %s. The error is: %s"
 msgstr ""
@@ -6473,19 +6489,19 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1799
+#: gnucash/gnome/gnc-plugin-page-report.c:1805
 #, fuzzy
 msgid "GnuCash-Report"
 msgstr "Cuartas Opciones"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1845
+#: gnucash/gnome/gnc-plugin-page-report.c:1851
 #: gnucash/gtkbuilder/business-prefs.glade:26
 #: gnucash/report/reports/standard/invoice.scm:903
 #, fuzzy
 msgid "Printable Invoice"
 msgstr "Previsualizar Impresión"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1846
+#: gnucash/gnome/gnc-plugin-page-report.c:1852
 #: gnucash/gtkbuilder/business-prefs.glade:29
 #: gnucash/report/reports/standard/taxinvoice.scm:295
 #: gnucash/report/reports/standard/taxinvoice.scm:297
@@ -6495,14 +6511,14 @@ msgstr "Previsualizar Impresión"
 msgid "Tax Invoice"
 msgstr "Factura"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1847
+#: gnucash/gnome/gnc-plugin-page-report.c:1853
 #: gnucash/gtkbuilder/business-prefs.glade:32
 #: gnucash/report/reports/standard/invoice.scm:912
 #, fuzzy
 msgid "Easy Invoice"
 msgstr "Factura"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1848
+#: gnucash/gnome/gnc-plugin-page-report.c:1854
 #: gnucash/gtkbuilder/business-prefs.glade:35
 #: gnucash/report/reports/standard/invoice.scm:921
 #, fuzzy
@@ -6559,18 +6575,18 @@ msgstr "Borrar la transacción completa"
 msgid "Delete the selected scheduled transaction"
 msgstr "Borrar la transacción completa"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:385
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:382
 #: gnucash/gtkbuilder/dialog-account.glade:554
-#, fuzzy, c-format
+#, fuzzy
 msgid "Transactions"
 msgstr "_Transacción"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:448
-#, fuzzy, c-format
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:442
+#, fuzzy
 msgid "Upcoming Transactions"
 msgstr "Buscar Transacciones"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:805
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:797
 #, fuzzy
 msgid "Do you really want to delete this scheduled transaction?"
 msgstr "¿Está seguro/a de que quiere borrar la transacción actual?"
@@ -7041,12 +7057,12 @@ msgid "Job"
 msgstr ""
 
 #: gnucash/gnome/search-owner.c:231
-#: gnucash/gnome-search/search-reconciled.c:178
+#: gnucash/gnome-search/search-reconciled.c:183
 msgid "is"
 msgstr ""
 
 #: gnucash/gnome/search-owner.c:232
-#: gnucash/gnome-search/search-reconciled.c:179
+#: gnucash/gnome-search/search-reconciled.c:184
 msgid "is not"
 msgstr ""
 
@@ -7560,7 +7576,7 @@ msgstr "Débitos"
 msgid "has credits"
 msgstr "Créditos"
 
-#: gnucash/gnome-search/search-reconciled.c:216
+#: gnucash/gnome-search/search-reconciled.c:221
 #, fuzzy
 msgid "Not Cleared"
 msgstr "Cancelado"
@@ -16616,14 +16632,6 @@ msgstr "Información de balance"
 #, fuzzy
 msgid "<b>Splits _in lot</b>"
 msgstr "Información de balance"
-
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:394
-msgid ">>"
-msgstr ""
-
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:408
-msgid "<<"
-msgstr ""
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:25
 #, fuzzy
@@ -26866,11 +26874,6 @@ msgstr "Diagrama de ingresos"
 #, fuzzy
 msgid "Budget Profit & Loss"
 msgstr "Intervalos de pago"
-
-#: gnucash/report/reports/standard/budget.scm:39
-#, fuzzy
-msgid "Budget Report"
-msgstr "_Informes"
 
 #: gnucash/report/reports/standard/budget.scm:45
 #: gnucash/report/reports/standard/cash-flow.scm:45

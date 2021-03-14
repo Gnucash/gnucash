@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: GnuCash-2.4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-03-13 05:49+0100\n"
+"POT-Creation-Date: 2021-03-14 22:08+0100\n"
 "PO-Revision-Date: 2012-05-13 16:21+0800\n"
 "Last-Translator: Kuang-che Wu <kcwu@csie.org>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -1088,7 +1088,7 @@ msgstr "憑證"
 #: gnucash/gnome/dialog-invoice.c:3548
 #: gnucash/gnome/gnc-plugin-page-invoice.c:570
 #: gnucash/gnome/gnc-plugin-page-register.c:633
-#: gnucash/gnome/gnc-plugin-page-report.c:1853
+#: gnucash/gnome/gnc-plugin-page-report.c:1859
 #: gnucash/gnome-search/dialog-search.c:1089
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2900
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3076
@@ -2549,7 +2549,7 @@ msgstr "尋找工作"
 
 #: gnucash/gnome/dialog-lot-viewer.c:814
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:403
-#: gnucash/gnome/gnc-plugin-page-budget.c:208
+#: gnucash/gnome/gnc-plugin-page-budget.c:220
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
 #: gnucash/gnome-utils/gnc-file.c:1139
@@ -3925,7 +3925,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:209
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:220
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:344
-#: gnucash/gnome/gnc-plugin-page-budget.c:140
+#: gnucash/gnome/gnc-plugin-page-budget.c:146
 msgid "Open _Account"
 msgstr "開啟科目(_A)"
 
@@ -4023,7 +4023,7 @@ msgid "Renumber the children of the selected account"
 msgstr "將所選科目的子科目代碼重新編號"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:290
-#: gnucash/gnome/gnc-plugin-page-budget.c:182
+#: gnucash/gnome/gnc-plugin-page-budget.c:194
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:185
 #: gnucash/gnome/gnc-plugin-page-register2.c:340
 #: gnucash/gnome/gnc-plugin-page-register.c:458
@@ -4032,7 +4032,7 @@ msgid "_Filter By..."
 msgstr "過濾依(_F)..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:294
-#: gnucash/gnome/gnc-plugin-page-budget.c:186
+#: gnucash/gnome/gnc-plugin-page-budget.c:198
 #: gnucash/gnome/gnc-plugin-page-invoice.c:162
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:189
 #: gnucash/gnome/gnc-plugin-page-register2.c:344
@@ -4171,7 +4171,7 @@ msgid "New"
 msgstr "新增"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:409
-#: gnucash/gnome/gnc-plugin-page-budget.c:209
+#: gnucash/gnome/gnc-plugin-page-budget.c:221
 #: gnucash/gnome/gnc-plugin-page-invoice.c:454
 #: gnucash/gnome/gnc-plugin-page-register2.c:500
 #: gnucash/gnome/gnc-plugin-page-register.c:623
@@ -4297,76 +4297,87 @@ msgstr "所有子科目的交易將會被刪除。"
 msgid "Are you sure you want to do this?"
 msgstr "您確定要這麼作嗎？"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:141
+#: gnucash/gnome/gnc-plugin-page-budget.c:147
 #, fuzzy
 msgid "Open the selected account."
 msgstr "開啟選定的科目"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:146
+#: gnucash/gnome/gnc-plugin-page-budget.c:152
 msgid "Open _Subaccounts"
 msgstr "開啟子科目(_S)"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:147
+#: gnucash/gnome/gnc-plugin-page-budget.c:153
 #, fuzzy
 msgid "Open the selected account and all its subaccounts."
 msgstr "開啟選定的科目及其所有的子科目"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:153
+#: gnucash/gnome/gnc-plugin-page-budget.c:159
 #, fuzzy
 msgid "_Delete Budget..."
 msgstr "刪除預算(_D)"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:154
+#: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:158
+#: gnucash/gnome/gnc-plugin-page-budget.c:164
 #, fuzzy
 msgid "Budget _Options..."
 msgstr "預算選項"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:159
+#: gnucash/gnome/gnc-plugin-page-budget.c:165
 #, fuzzy
 msgid "Edit this budget's options."
 msgstr "編輯預算檢視選項"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:163
+#: gnucash/gnome/gnc-plugin-page-budget.c:169
 #, fuzzy
 msgid "Esti_mate Budget..."
 msgstr "估計預算"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:165
+#: gnucash/gnome/gnc-plugin-page-budget.c:171
 #, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions."
 msgstr "根據選定科目過去的交易紀錄估計預算值"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:169
+#: gnucash/gnome/gnc-plugin-page-budget.c:175
 #, fuzzy
 msgid "_All Periods..."
 msgstr "週期"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:171
+#: gnucash/gnome/gnc-plugin-page-budget.c:177
 #, fuzzy
 msgid "Edit budget for all periods for the selected accounts."
 msgstr "編輯選定的科目"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:175
+#: gnucash/gnome/gnc-plugin-page-budget.c:181
 #, fuzzy
 msgid "Edit Note"
 msgstr "貸方科目"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:177
+#: gnucash/gnome/gnc-plugin-page-budget.c:183
 #, fuzzy
-msgid "Edit note for the selected account and period"
+msgid "Edit note for the selected account and period."
 msgstr "編輯選定的科目"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
+#: gnucash/report/reports/standard/budget.scm:39
+msgid "Budget Report"
+msgstr "預算報表"
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:189
+#, fuzzy
+#| msgid "Print the current report"
+msgid "Run the budget report."
+msgstr "列印目前的報表"
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:199
 #, fuzzy
 msgid "Refresh this window."
 msgstr "重新整理此視窗"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:210
+#: gnucash/gnome/gnc-plugin-page-budget.c:222
 #: gnucash/gnome/gnc-plugin-page-report.c:1137
 #: gnucash/gtkbuilder/assistant-csv-export.glade:107
 #: gnucash/gtkbuilder/dialog-print-check.glade:643
@@ -4374,23 +4385,29 @@ msgstr "重新整理此視窗"
 msgid "Options"
 msgstr "選項"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:211
+#: gnucash/gnome/gnc-plugin-page-budget.c:223
 msgid "Estimate"
 msgstr "估計"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:212
+#: gnucash/gnome/gnc-plugin-page-budget.c:224
 #, fuzzy
 msgid "All Periods"
 msgstr "週期"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:213
+#: gnucash/gnome/gnc-plugin-page-budget.c:225
 #, fuzzy
 msgid "Note"
 msgstr "筆記"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:292
-#: gnucash/gnome/gnc-plugin-page-budget.c:333
-#: gnucash/gnome/gnc-plugin-page-budget.c:862
+#: gnucash/gnome/gnc-plugin-page-budget.c:226
+#, fuzzy
+#| msgid "Account Report"
+msgid "Run Report"
+msgstr "科目報表"
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:310
+#: gnucash/gnome/gnc-plugin-page-budget.c:351
+#: gnucash/gnome/gnc-plugin-page-budget.c:880
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:110
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:227
@@ -4400,26 +4417,26 @@ msgstr "筆記"
 msgid "Budget"
 msgstr "預算"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:912 libgnucash/engine/gnc-budget.c:94
+#: gnucash/gnome/gnc-plugin-page-budget.c:930 libgnucash/engine/gnc-budget.c:94
 msgid "Unnamed Budget"
 msgstr "未命名的預算"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:914
+#: gnucash/gnome/gnc-plugin-page-budget.c:932
 #, c-format
 msgid "Delete %s?"
 msgstr "刪除 %s?"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1010
+#: gnucash/gnome/gnc-plugin-page-budget.c:1028
 #, fuzzy
 msgid "You must select at least one account to estimate."
 msgstr "您必須選擇科目類型。"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1136
+#: gnucash/gnome/gnc-plugin-page-budget.c:1154
 #, fuzzy
 msgid "You must select at least one account to edit."
 msgstr "您必須選擇科目類型。"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1234
+#: gnucash/gnome/gnc-plugin-page-budget.c:1252
 #, fuzzy
 msgid "You must select one budget cell to edit."
 msgstr "您必須選擇科目類型。"
@@ -5817,14 +5834,14 @@ msgid "Unreconciled"
 msgstr "未對帳(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3444
-#: gnucash/gnome-search/search-reconciled.c:219
+#: gnucash/gnome-search/search-reconciled.c:224
 #: gnucash/gnome-utils/gnc-tree-view-account.c:875
 #: gnucash/report/trep-engine.scm:147 gnucash/report/trep-engine.scm:425
 msgid "Cleared"
 msgstr "已結清"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3446
-#: gnucash/gnome-search/search-reconciled.c:222
+#: gnucash/gnome-search/search-reconciled.c:227
 #: gnucash/gnome-utils/gnc-tree-view-account.c:889
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 #: gnucash/import-export/import-match-picker.c:437
@@ -5833,13 +5850,13 @@ msgid "Reconciled"
 msgstr "已對帳"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3448
-#: gnucash/gnome-search/search-reconciled.c:225
+#: gnucash/gnome-search/search-reconciled.c:230
 #: gnucash/report/trep-engine.scm:149
 msgid "Frozen"
 msgstr "凍結"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3450
-#: gnucash/gnome-search/search-reconciled.c:228
+#: gnucash/gnome-search/search-reconciled.c:233
 #: gnucash/report/trep-engine.scm:150
 msgid "Voided"
 msgstr "無效"
@@ -6047,25 +6064,25 @@ msgstr "停止"
 msgid "Cancel outstanding HTML requests"
 msgstr "取消未完成的 HTML 要求"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1518
-#: gnucash/gnome/gnc-plugin-page-report.c:1551
+#: gnucash/gnome/gnc-plugin-page-report.c:1524
+#: gnucash/gnome/gnc-plugin-page-report.c:1557
 msgid "HTML"
 msgstr "HTML"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1521
+#: gnucash/gnome/gnc-plugin-page-report.c:1527
 msgid "Choose export format"
 msgstr "選擇匯出格式"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1522
+#: gnucash/gnome/gnc-plugin-page-report.c:1528
 msgid "Choose the export format for this report:"
 msgstr "選擇此報表匯出的格式："
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1562
+#: gnucash/gnome/gnc-plugin-page-report.c:1568
 #, c-format
 msgid "Save %s To File"
 msgstr "儲存 %s 至檔案"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1591
+#: gnucash/gnome/gnc-plugin-page-report.c:1597
 #, c-format
 msgid ""
 "You cannot save to that filename.\n"
@@ -6076,41 +6093,41 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1601
+#: gnucash/gnome/gnc-plugin-page-report.c:1607
 msgid "You cannot save to that file."
 msgstr "您不能儲存此檔案。"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1610
+#: gnucash/gnome/gnc-plugin-page-report.c:1616
 #: gnucash/gnome-utils/gnc-file.c:1319 gnucash/gnome-utils/gnc-file.c:1566
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:741
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "檔案 %s 已存在。您確定要覆蓋它？"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1725
-#: gnucash/gnome/gnc-plugin-page-report.c:1749 gnucash/gnucash-commands.cpp:224
+#: gnucash/gnome/gnc-plugin-page-report.c:1731
+#: gnucash/gnome/gnc-plugin-page-report.c:1755 gnucash/gnucash-commands.cpp:224
 #: gnucash/gnucash-commands.cpp:252
 msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1759
+#: gnucash/gnome/gnc-plugin-page-report.c:1765
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
 msgstr "無法開啟檔案 %s，錯誤：%s"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1799
+#: gnucash/gnome/gnc-plugin-page-report.c:1805
 msgid "GnuCash-Report"
 msgstr "GnuCash-報表"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1845
+#: gnucash/gnome/gnc-plugin-page-report.c:1851
 #: gnucash/gtkbuilder/business-prefs.glade:26
 #: gnucash/report/reports/standard/invoice.scm:903
 msgid "Printable Invoice"
 msgstr "可列印的發票"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1846
+#: gnucash/gnome/gnc-plugin-page-report.c:1852
 #: gnucash/gtkbuilder/business-prefs.glade:29
 #: gnucash/report/reports/standard/taxinvoice.scm:295
 #: gnucash/report/reports/standard/taxinvoice.scm:297
@@ -6119,13 +6136,13 @@ msgstr "可列印的發票"
 msgid "Tax Invoice"
 msgstr "稅務發票"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1847
+#: gnucash/gnome/gnc-plugin-page-report.c:1853
 #: gnucash/gtkbuilder/business-prefs.glade:32
 #: gnucash/report/reports/standard/invoice.scm:912
 msgid "Easy Invoice"
 msgstr "簡單發票"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1848
+#: gnucash/gnome/gnc-plugin-page-report.c:1854
 #: gnucash/gtkbuilder/business-prefs.glade:35
 #: gnucash/report/reports/standard/invoice.scm:921
 msgid "Fancy Invoice"
@@ -6177,18 +6194,18 @@ msgstr "編輯選擇的排程交易"
 msgid "Delete the selected scheduled transaction"
 msgstr "刪除選擇的排程交易"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:385
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:382
 #: gnucash/gtkbuilder/dialog-account.glade:554
-#, fuzzy, c-format
+#, fuzzy
 msgid "Transactions"
 msgstr "交易"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:448
-#, fuzzy, c-format
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:442
+#, fuzzy
 msgid "Upcoming Transactions"
 msgstr "無效的交易"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:805
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:797
 msgid "Do you really want to delete this scheduled transaction?"
 msgstr "您確定要刪除這個排程交易？"
 
@@ -6665,12 +6682,12 @@ msgid "Job"
 msgstr "工作"
 
 #: gnucash/gnome/search-owner.c:231
-#: gnucash/gnome-search/search-reconciled.c:178
+#: gnucash/gnome-search/search-reconciled.c:183
 msgid "is"
 msgstr "是"
 
 #: gnucash/gnome/search-owner.c:232
-#: gnucash/gnome-search/search-reconciled.c:179
+#: gnucash/gnome-search/search-reconciled.c:184
 msgid "is not"
 msgstr "不是"
 
@@ -7148,7 +7165,7 @@ msgstr "包含借方"
 msgid "has credits"
 msgstr "包含貸方"
 
-#: gnucash/gnome-search/search-reconciled.c:216
+#: gnucash/gnome-search/search-reconciled.c:221
 msgid "Not Cleared"
 msgstr "未結清"
 
@@ -15768,16 +15785,6 @@ msgstr "<b>分割資訊</b>"
 #, fuzzy
 msgid "<b>Splits _in lot</b>"
 msgstr "<b>分割資訊</b>"
-
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:394
-#, fuzzy
-msgid ">>"
-msgstr ">"
-
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:408
-#, fuzzy
-msgid "<<"
-msgstr "<"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:25
 #, fuzzy
@@ -25618,10 +25625,6 @@ msgstr "預算損益表"
 msgid "Budget Profit & Loss"
 msgstr "預算損益帳目"
 
-#: gnucash/report/reports/standard/budget.scm:39
-msgid "Budget Report"
-msgstr "預算報表"
-
 #: gnucash/report/reports/standard/budget.scm:45
 #: gnucash/report/reports/standard/cash-flow.scm:45
 msgid "Account Display Depth"
@@ -30475,6 +30478,14 @@ msgstr "交易已無效"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "沒有說明。"
+
+#, fuzzy
+#~ msgid ">>"
+#~ msgstr ">"
+
+#, fuzzy
+#~ msgid "<<"
+#~ msgstr "<"
 
 #, fuzzy
 #~ msgid "<b>Accounts</b>"

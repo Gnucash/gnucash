@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-03-13 05:49+0100\n"
+"POT-Creation-Date: 2021-03-14 22:08+0100\n"
 "PO-Revision-Date: 2014-06-02 10:43+0530\n"
 "Last-Translator: Ritu Panwar <ritup@cdac.in>\n"
 "Language-Team: NONE\n"
@@ -1157,7 +1157,7 @@ msgstr "ವೋಚರ್"
 #: gnucash/gnome/dialog-invoice.c:3548
 #: gnucash/gnome/gnc-plugin-page-invoice.c:570
 #: gnucash/gnome/gnc-plugin-page-register.c:633
-#: gnucash/gnome/gnc-plugin-page-report.c:1853
+#: gnucash/gnome/gnc-plugin-page-report.c:1859
 #: gnucash/gnome-search/dialog-search.c:1089
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2900
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3076
@@ -2619,7 +2619,7 @@ msgstr "ಕೆಲಸವನ್ನು ಹುಡುಕು "
 
 #: gnucash/gnome/dialog-lot-viewer.c:814
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:403
-#: gnucash/gnome/gnc-plugin-page-budget.c:208
+#: gnucash/gnome/gnc-plugin-page-budget.c:220
 #: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
 #: gnucash/gnome-utils/gnc-file.c:1139
@@ -4019,7 +4019,7 @@ msgstr "ಹೊಸ ಖಾತೆಯ ಬಗೆಯ ಗುಂಪುಗಳೊಂದಿ
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:209
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:220
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:344
-#: gnucash/gnome/gnc-plugin-page-budget.c:140
+#: gnucash/gnome/gnc-plugin-page-budget.c:146
 msgid "Open _Account"
 msgstr "ಖಾತೆ ತೆರೆಯಿರಿ (_A)"
 
@@ -4112,7 +4112,7 @@ msgid "Renumber the children of the selected account"
 msgstr "ಆಯ್ದ ಖಾತೆಯಿಂದ ಉತ್ಪತ್ತಿಯಾದವುಗಳ ಸಂಖ್ಯೆಯನ್ನು ಬದಲಿಸಿ"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:290
-#: gnucash/gnome/gnc-plugin-page-budget.c:182
+#: gnucash/gnome/gnc-plugin-page-budget.c:194
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:185
 #: gnucash/gnome/gnc-plugin-page-register2.c:340
 #: gnucash/gnome/gnc-plugin-page-register.c:458
@@ -4121,7 +4121,7 @@ msgid "_Filter By..."
 msgstr "ಹೀಗೆ ಫಿಲ್ಟರ್‌ ಮಾಡು (_F)..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:294
-#: gnucash/gnome/gnc-plugin-page-budget.c:186
+#: gnucash/gnome/gnc-plugin-page-budget.c:198
 #: gnucash/gnome/gnc-plugin-page-invoice.c:162
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:189
 #: gnucash/gnome/gnc-plugin-page-register2.c:344
@@ -4267,7 +4267,7 @@ msgid "New"
 msgstr "ಹೊಸ"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:409
-#: gnucash/gnome/gnc-plugin-page-budget.c:209
+#: gnucash/gnome/gnc-plugin-page-budget.c:221
 #: gnucash/gnome/gnc-plugin-page-invoice.c:454
 #: gnucash/gnome/gnc-plugin-page-register2.c:500
 #: gnucash/gnome/gnc-plugin-page-register.c:623
@@ -4395,76 +4395,87 @@ msgstr "ಎಲ್ಲಾ ಉಪ-ಖಾತೆಗಳ ವ್ಯವಹಾರಗಳನ
 msgid "Are you sure you want to do this?"
 msgstr "ನೀವು ಹೀಗೆ ಮಾಡಲು ಖಚಿತವೆ?"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:141
+#: gnucash/gnome/gnc-plugin-page-budget.c:147
 #, fuzzy
 msgid "Open the selected account."
 msgstr "ಆರಿಸಲಾದ ಖಾತೆಯನ್ನು ತೆರೆಯಿರಿ"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:146
+#: gnucash/gnome/gnc-plugin-page-budget.c:152
 msgid "Open _Subaccounts"
 msgstr "ಉಪಖಾತೆಗಳನ್ನು ತೆರೆಯಿರಿ (_S)"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:147
+#: gnucash/gnome/gnc-plugin-page-budget.c:153
 #, fuzzy
 msgid "Open the selected account and all its subaccounts."
 msgstr "ಆಯ್ದ ಖಾತೆಗಳು ಹಾಗು ಅದರ ಎಲ್ಲಾ ಖಾತೆಗಳನ್ನು ತೆರೆಯಿರಿ"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:153
+#: gnucash/gnome/gnc-plugin-page-budget.c:159
 #, fuzzy
 msgid "_Delete Budget..."
 msgstr "ಮುಂಗಡಪತ್ರವನ್ನು ಅಳಿಸಿ (_D)"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:154
+#: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:158
+#: gnucash/gnome/gnc-plugin-page-budget.c:164
 #, fuzzy
 msgid "Budget _Options..."
 msgstr "ಮುಂಗಡಪತ್ರ ಆಯ್ಕೆಗಳು"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:159
+#: gnucash/gnome/gnc-plugin-page-budget.c:165
 #, fuzzy
 msgid "Edit this budget's options."
 msgstr "ಈ ಮುಂಗಡಪತ್ರ ಆಯ್ಕೆಗಳನ್ನು ಪರಿಷ್ಕರಿಸಿ"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:163
+#: gnucash/gnome/gnc-plugin-page-budget.c:169
 #, fuzzy
 msgid "Esti_mate Budget..."
 msgstr "ಮುಂಗಡಪತ್ರವನ್ನು ಅಂದಾಜುಮಾಡಿ"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:165
+#: gnucash/gnome/gnc-plugin-page-budget.c:171
 #, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions."
 msgstr "ಹಿಂದಿನ ವ್ಯವಹಾರಗಳಿಂದ ಆಯ್ದ ಖಾತೆಗಳಿಗಾಗಿ ಮುಂಗಡಪತ್ರದ ಮೌಲ್ಯವನ್ನು ಅಂದಾಜು ಮಾಡಿ"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:169
+#: gnucash/gnome/gnc-plugin-page-budget.c:175
 #, fuzzy
 msgid "_All Periods..."
 msgstr "ಅವಧಿ"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:171
+#: gnucash/gnome/gnc-plugin-page-budget.c:177
 #, fuzzy
 msgid "Edit budget for all periods for the selected accounts."
 msgstr "ಆರಿಸಲಾದ ಖಾತೆಯನ್ನು ಪರಿಷ್ಕರಿಸಿ "
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:175
+#: gnucash/gnome/gnc-plugin-page-budget.c:181
 #, fuzzy
 msgid "Edit Note"
 msgstr "ಕ್ರೆಡಿಟ್ ನೋಟ್"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:177
+#: gnucash/gnome/gnc-plugin-page-budget.c:183
 #, fuzzy
-msgid "Edit note for the selected account and period"
+msgid "Edit note for the selected account and period."
 msgstr "ಆರಿಸಲಾದ ಖಾತೆಯನ್ನು ಪರಿಷ್ಕರಿಸಿ "
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
+#: gnucash/report/reports/standard/budget.scm:39
+msgid "Budget Report"
+msgstr "ಮುಂಗಡಪತ್ರದ ವರದಿ"
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:189
+#, fuzzy
+#| msgid "Print the current report"
+msgid "Run the budget report."
+msgstr "ಪ್ರಸ್ತುತ ದಸ್ತಾವೇಜನ್ನು ಮುದ್ರಿಸಿ"
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:199
 #, fuzzy
 msgid "Refresh this window."
 msgstr "ಈ ಕಿಟಕಿಯನ್ನು ಪುನಶ್ಚೇತನಗೊಳಿಸಿ"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:210
+#: gnucash/gnome/gnc-plugin-page-budget.c:222
 #: gnucash/gnome/gnc-plugin-page-report.c:1137
 #: gnucash/gtkbuilder/assistant-csv-export.glade:107
 #: gnucash/gtkbuilder/dialog-print-check.glade:643
@@ -4472,23 +4483,29 @@ msgstr "ಈ ಕಿಟಕಿಯನ್ನು ಪುನಶ್ಚೇತನಗೊಳ�
 msgid "Options"
 msgstr "ಆಯ್ಕೆಗಳು"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:211
+#: gnucash/gnome/gnc-plugin-page-budget.c:223
 msgid "Estimate"
 msgstr "ಅಂದಾಜು"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:212
+#: gnucash/gnome/gnc-plugin-page-budget.c:224
 #, fuzzy
 msgid "All Periods"
 msgstr "ಅವಧಿ"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:213
+#: gnucash/gnome/gnc-plugin-page-budget.c:225
 #, fuzzy
 msgid "Note"
 msgstr "ಟಿಪ್ಪಣಿಗಳು"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:292
-#: gnucash/gnome/gnc-plugin-page-budget.c:333
-#: gnucash/gnome/gnc-plugin-page-budget.c:862
+#: gnucash/gnome/gnc-plugin-page-budget.c:226
+#, fuzzy
+#| msgid "Account Report"
+msgid "Run Report"
+msgstr "ಖಾತೆಯ ವರದಿ"
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:310
+#: gnucash/gnome/gnc-plugin-page-budget.c:351
+#: gnucash/gnome/gnc-plugin-page-budget.c:880
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:110
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:227
@@ -4498,25 +4515,25 @@ msgstr "ಟಿಪ್ಪಣಿಗಳು"
 msgid "Budget"
 msgstr "ಮುಂಗಡಪತ್ರ"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:912 libgnucash/engine/gnc-budget.c:94
+#: gnucash/gnome/gnc-plugin-page-budget.c:930 libgnucash/engine/gnc-budget.c:94
 msgid "Unnamed Budget"
 msgstr "ಹೆಸರಿಸದ ಮುಂಗಡಪತ್ರ"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:914
+#: gnucash/gnome/gnc-plugin-page-budget.c:932
 #, c-format
 msgid "Delete %s?"
 msgstr "%s ಅನ್ನು ಅಳಿಸಬೇಕೆ?"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1010
+#: gnucash/gnome/gnc-plugin-page-budget.c:1028
 msgid "You must select at least one account to estimate."
 msgstr "ಅಂದಾಜು ಮಾಡಲು ನೀವು ಕನಿಷ್ಟ ಒಂದು ಖಾತೆಯನ್ನು ಆರಿಸಬೇಕು."
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1136
+#: gnucash/gnome/gnc-plugin-page-budget.c:1154
 #, fuzzy
 msgid "You must select at least one account to edit."
 msgstr "ಅಂದಾಜು ಮಾಡಲು ನೀವು ಕನಿಷ್ಟ ಒಂದು ಖಾತೆಯನ್ನು ಆರಿಸಬೇಕು."
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1234
+#: gnucash/gnome/gnc-plugin-page-budget.c:1252
 #, fuzzy
 msgid "You must select one budget cell to edit."
 msgstr "ಅಂದಾಜು ಮಾಡಲು ನೀವು ಕನಿಷ್ಟ ಒಂದು ಖಾತೆಯನ್ನು ಆರಿಸಬೇಕು."
@@ -5893,14 +5910,14 @@ msgid "Unreconciled"
 msgstr "ಹೊಂದಿಕೆಯಾದ (_U)"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3444
-#: gnucash/gnome-search/search-reconciled.c:219
+#: gnucash/gnome-search/search-reconciled.c:224
 #: gnucash/gnome-utils/gnc-tree-view-account.c:875
 #: gnucash/report/trep-engine.scm:147 gnucash/report/trep-engine.scm:425
 msgid "Cleared"
 msgstr "ಚುಕ್‍ತಗೊಳಿಸಲಾಗಿದೆ"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3446
-#: gnucash/gnome-search/search-reconciled.c:222
+#: gnucash/gnome-search/search-reconciled.c:227
 #: gnucash/gnome-utils/gnc-tree-view-account.c:889
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 #: gnucash/import-export/import-match-picker.c:437
@@ -5909,13 +5926,13 @@ msgid "Reconciled"
 msgstr "ಹೊಂದಿಕೆ ಮಾಡಲಾಗಿದೆ"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3448
-#: gnucash/gnome-search/search-reconciled.c:225
+#: gnucash/gnome-search/search-reconciled.c:230
 #: gnucash/report/trep-engine.scm:149
 msgid "Frozen"
 msgstr "ಸ್ಥಗಿತಗೊಳಿಸಲಾಗಿದೆ"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3450
-#: gnucash/gnome-search/search-reconciled.c:228
+#: gnucash/gnome-search/search-reconciled.c:233
 #: gnucash/report/trep-engine.scm:150
 msgid "Voided"
 msgstr "ಅನೂರ್ಜಿತ"
@@ -6124,25 +6141,25 @@ msgstr "ನಿಲ್ಲಿಸಿ"
 msgid "Cancel outstanding HTML requests"
 msgstr "ಬಾಕಿ ಇರುವ ಎಚ್‌ಟಿಎಮ್‌ಎಲ್ ಮನವಿಗಳನ್ನು ರದ್ದುಗೊಳಿಸಿ"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1518
-#: gnucash/gnome/gnc-plugin-page-report.c:1551
+#: gnucash/gnome/gnc-plugin-page-report.c:1524
+#: gnucash/gnome/gnc-plugin-page-report.c:1557
 msgid "HTML"
 msgstr "ಎಚ್‌ಟಿಎಮ್‌ಎಲ್"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1521
+#: gnucash/gnome/gnc-plugin-page-report.c:1527
 msgid "Choose export format"
 msgstr "ರಫ್ತು ವಿನ್ಯಾಸವನ್ನು ಆರಿಸಿ"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1522
+#: gnucash/gnome/gnc-plugin-page-report.c:1528
 msgid "Choose the export format for this report:"
 msgstr "ಈ ವರದಿಗಾಗಿ ರಫ್ತು ವಿನ್ಯಾಸವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ:"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1562
+#: gnucash/gnome/gnc-plugin-page-report.c:1568
 #, c-format
 msgid "Save %s To File"
 msgstr "%s ಅನ್ನು ಕಡತಕ್ಕೆ ಉಳಿಸಿ"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1591
+#: gnucash/gnome/gnc-plugin-page-report.c:1597
 #, c-format
 msgid ""
 "You cannot save to that filename.\n"
@@ -6153,41 +6170,41 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1601
+#: gnucash/gnome/gnc-plugin-page-report.c:1607
 msgid "You cannot save to that file."
 msgstr "ನೀವು ಆ ಕಡತವನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ."
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1610
+#: gnucash/gnome/gnc-plugin-page-report.c:1616
 #: gnucash/gnome-utils/gnc-file.c:1319 gnucash/gnome-utils/gnc-file.c:1566
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:741
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "%s ಎಂಬ ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ. ನೀವು ನಿಜವಾಗಲೂ ತಿದ್ದಿಬರೆಯಲು ಬಯಸುತ್ತೀರೆ?"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1725
-#: gnucash/gnome/gnc-plugin-page-report.c:1749 gnucash/gnucash-commands.cpp:224
+#: gnucash/gnome/gnc-plugin-page-report.c:1731
+#: gnucash/gnome/gnc-plugin-page-report.c:1755 gnucash/gnucash-commands.cpp:224
 #: gnucash/gnucash-commands.cpp:252
 msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1759
+#: gnucash/gnome/gnc-plugin-page-report.c:1765
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
 msgstr "%s ಕಡತವನ್ನು ತೆರೆಯಲಾಗಿಲ್ಲ. ದೋಷವು ಹೀಗಿದೆ: %s"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1799
+#: gnucash/gnome/gnc-plugin-page-report.c:1805
 msgid "GnuCash-Report"
 msgstr "ಗ್ನುಕ್ಯಾಶ್-ವರದಿ"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1845
+#: gnucash/gnome/gnc-plugin-page-report.c:1851
 #: gnucash/gtkbuilder/business-prefs.glade:26
 #: gnucash/report/reports/standard/invoice.scm:903
 msgid "Printable Invoice"
 msgstr "ಮುದ್ರಿಸಬಹುದಾದ ಬೆಲೆಪಟ್ಟಿ"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1846
+#: gnucash/gnome/gnc-plugin-page-report.c:1852
 #: gnucash/gtkbuilder/business-prefs.glade:29
 #: gnucash/report/reports/standard/taxinvoice.scm:295
 #: gnucash/report/reports/standard/taxinvoice.scm:297
@@ -6196,13 +6213,13 @@ msgstr "ಮುದ್ರಿಸಬಹುದಾದ ಬೆಲೆಪಟ್ಟಿ"
 msgid "Tax Invoice"
 msgstr "ತೆರಿಗೆ ಬೆಲೆಪಟ್ಟಿ"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1847
+#: gnucash/gnome/gnc-plugin-page-report.c:1853
 #: gnucash/gtkbuilder/business-prefs.glade:32
 #: gnucash/report/reports/standard/invoice.scm:912
 msgid "Easy Invoice"
 msgstr "ಸುಲಭ ಬೆಲೆಪಟ್ಟಿ"
 
-#: gnucash/gnome/gnc-plugin-page-report.c:1848
+#: gnucash/gnome/gnc-plugin-page-report.c:1854
 #: gnucash/gtkbuilder/business-prefs.glade:35
 #: gnucash/report/reports/standard/invoice.scm:921
 msgid "Fancy Invoice"
@@ -6250,18 +6267,16 @@ msgstr "ಆಯ್ದ ಅನುಸೂಚಿತ ವ್ಯವಹಾರ 2 ಅನ್�
 msgid "Delete the selected scheduled transaction"
 msgstr "ಆಯ್ದ ಅನುಸೂಚಿತ ವ್ಯವಹಾರವನ್ನು ಅಳಿಸಿ"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:385
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:382
 #: gnucash/gtkbuilder/dialog-account.glade:554
-#, c-format
 msgid "Transactions"
 msgstr "ವ್ಯವಹಾರಗಳು"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:448
-#, c-format
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:442
 msgid "Upcoming Transactions"
 msgstr "ಮುಂಬರುವ ವ್ಯವಹಾರಗಳು"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:805
+#: gnucash/gnome/gnc-plugin-page-sx-list.c:797
 msgid "Do you really want to delete this scheduled transaction?"
 msgstr "ನೀವು ನಿಜವಾಗಿಯೂ ಈ ಅನುಸೂಚಿತ ವ್ಯವಹಾರವನ್ನು ಅಳಿಸಲು ಇಚ್ಛಿಸುತ್ತೀರಾ?"
 
@@ -6764,12 +6779,12 @@ msgid "Job"
 msgstr "ಕೆಲಸ"
 
 #: gnucash/gnome/search-owner.c:231
-#: gnucash/gnome-search/search-reconciled.c:178
+#: gnucash/gnome-search/search-reconciled.c:183
 msgid "is"
 msgstr "ಇದಾಗಿರುವ"
 
 #: gnucash/gnome/search-owner.c:232
-#: gnucash/gnome-search/search-reconciled.c:179
+#: gnucash/gnome-search/search-reconciled.c:184
 msgid "is not"
 msgstr "ಇದಾಗಿರದ"
 
@@ -7242,7 +7257,7 @@ msgstr "ಡೆಬಿಟ್‌ಗಳನ್ನು ಹೊಂದಿದೆ"
 msgid "has credits"
 msgstr "ಕ್ರೆಡಿಟ್‌ಗಳನ್ನು ಹೊಂದಿದೆ"
 
-#: gnucash/gnome-search/search-reconciled.c:216
+#: gnucash/gnome-search/search-reconciled.c:221
 msgid "Not Cleared"
 msgstr "ಚುಕ್‍ತಗೊಳಿಸಲಾಗಿಲ್ಲ"
 
@@ -16388,14 +16403,6 @@ msgstr "<b>ಮುಕ್ತವಾಗಿ ವಿಭಜಿಸು (_f)</b>"
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:357
 msgid "<b>Splits _in lot</b>"
 msgstr "<b>ಲಾಟ್‌ನಲ್ಲಿ ವಿಭಜಿಸು (_i)</b>"
-
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:394
-msgid ">>"
-msgstr ">>"
-
-#: gnucash/gtkbuilder/dialog-lot-viewer.glade:408
-msgid "<<"
-msgstr "<<"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:25
 #, fuzzy
@@ -26302,10 +26309,6 @@ msgstr "ಮುಂಗಡಪತ್ರದ ಆದಾಯದ ವಿವರಣ ಪತ್
 msgid "Budget Profit & Loss"
 msgstr "ಮುಂಗಡಪತ್ರದ ಲಾಭ ಮತ್ತು ನಷ್ಟ"
 
-#: gnucash/report/reports/standard/budget.scm:39
-msgid "Budget Report"
-msgstr "ಮುಂಗಡಪತ್ರದ ವರದಿ"
-
 #: gnucash/report/reports/standard/budget.scm:45
 #: gnucash/report/reports/standard/cash-flow.scm:45
 msgid "Account Display Depth"
@@ -31077,6 +31080,12 @@ msgstr "ವ್ಯವಹಾರವು ಅನೂರ್ಜಿತಗೊಂಡಿದ�
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "ಯಾವುದೆ ನೆರವು ಲಭ್ಯವಿಲ್ಲ."
+
+#~ msgid ">>"
+#~ msgstr ">>"
+
+#~ msgid "<<"
+#~ msgstr "<<"
 
 #, fuzzy
 #~ msgid "<b>Accounts</b>"
