@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-13 05:49+0100\n"
-"PO-Revision-Date: 2021-03-13 19:02+0000\n"
+"PO-Revision-Date: 2021-03-14 12:02+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -16745,7 +16745,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2863
 msgid "Register opens in a new _window"
-msgstr "יומן נפתח בחלון _חדש"
+msgstr "פתיחת יומן בחלון _חדש"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2869
 msgid ""
