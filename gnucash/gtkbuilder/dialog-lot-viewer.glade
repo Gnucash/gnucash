@@ -391,7 +391,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="add_split_to_lot_button">
-                        <property name="label" translatable="yes">&gt;&gt;</property>
+                        <property name="label" comments="Auto-reversed for RTL writing">&gt;&gt;</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -405,7 +405,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="remove_split_from_lot_button">
-                        <property name="label" translatable="yes">&lt;&lt;</property>
+                        <property name="label" comments="Auto-reversed for RTL writing">&lt;&lt;</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
