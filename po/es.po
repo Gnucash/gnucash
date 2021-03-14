@@ -6,14 +6,16 @@
 # Eneko Lacunza <enlar@enlar.net>, 2003, 2004, 2006, 2008.
 # Francisco Javier Serrador <fserrador@gmail.com>, 2018.
 # Carlos Manrique Enguita <UO258425@uniovi.es>, 2021.
+# Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.7.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-13 05:49+0100\n"
-"PO-Revision-Date: 2021-02-12 02:50+0000\n"
-"Last-Translator: Carlos Manrique Enguita <UO258425@uniovi.es>\n"
+"PO-Revision-Date: 2021-03-14 17:02+0000\n"
+"Last-Translator: Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>"
+"\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -21,11 +23,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -1660,9 +1662,8 @@ msgid "Placeholder account selected. Please try again."
 msgstr "Marcador de posición de la cuenta seleccionada. Inténtelo de nuevo."
 
 #: gnucash/gnome/dialog-doclink.c:186
-#, fuzzy
 msgid "Amend URL:"
-msgstr "Amend URL"
+msgstr "Corregir URL:"
 
 #: gnucash/gnome/dialog-doclink.c:190
 msgid "Enter URL like http://www.gnucash.org:"
@@ -2191,7 +2192,7 @@ msgstr "Cuenta distribuída NO encontrada"
 
 #: gnucash/gnome/dialog-imap-editor.c:369
 msgid "(Note, if there is a large number, it may take a while)"
-msgstr ""
+msgstr "(Si hay un número grande, puede tardar un rato)"
 
 #: gnucash/gnome/dialog-imap-editor.c:703
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
@@ -2322,12 +2323,12 @@ msgstr "Anotación Crediticia"
 
 #: gnucash/gnome/dialog-invoice.c:2063
 msgid "PAID"
-msgstr ""
+msgstr "Pagado"
 
 #: gnucash/gnome/dialog-invoice.c:2065
 #: gnucash/report/reports/standard/new-owner-report.scm:583
 msgid "UNPAID"
-msgstr ""
+msgstr "Sin pagar"
 
 #: gnucash/gnome/dialog-invoice.c:2113 gnucash/gnome/dialog-invoice.c:2132
 #: gnucash/gnome/dialog-invoice.c:2151
@@ -2966,7 +2967,7 @@ msgstr "%d precio sustituido"
 
 #: gnucash/gnome/dialog-price-editor.c:233
 msgid "_Replace"
-msgstr ""
+msgstr "_Reemplazar"
 
 #: gnucash/gnome/dialog-price-editor.c:263
 msgid "You must select a Security."
@@ -3731,6 +3732,8 @@ msgid ""
 "Open an existing Budget in a new tab. If none exists a new budget will be "
 "created."
 msgstr ""
+"Abre un Presupuesto existente en una nueva pestaña. SI no existe ninguno, "
+"crea un nuevo presupuesto."
 
 # Menú
 #: gnucash/gnome/gnc-plugin-budget.c:75
