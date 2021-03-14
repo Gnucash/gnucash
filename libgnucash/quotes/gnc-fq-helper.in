@@ -24,6 +24,7 @@
 use strict;
 use English;
 use FileHandle;
+use JSON;
 
 # Date::Manip provides ParseDate, ParseDateString, and UnixTime.
 use Date::Manip;
@@ -316,6 +317,21 @@ sub parse_input_line {
   return \@result;
 }
 
+sub sanitize_hash {
+
+    my (%quotehash) = @_;
+    my %newhash;
+
+    my @oldkeys = sort keys %quotehash;
+
+    foreach my $singlekey (@oldkeys) {
+        my ($symbol, $newkey) = split /\x1c/, $singlekey, 2;
+        $newhash{$symbol}{$newkey} = $quotehash{$singlekey};
+    }
+
+    return %newhash;
+}
+
 #---------------------------------------------------------------------------
 # Runtime.
 
@@ -372,6 +388,9 @@ while(<>) {
   }
 
   if (%quote_data) {
+    my %normalized_quote_data = sanitize_hash(%quote_data);
+    my $jsonval = encode_json \%normalized_quote_data;
+#    print "$jsonval\n";
     print schemify_quotes($symbols, \%quote_data);
   } else {
     print "#f\n";

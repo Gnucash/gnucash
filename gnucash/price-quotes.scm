@@ -23,7 +23,6 @@
 (define-module (gnucash price-quotes))
 
 (export gnc:book-add-quotes) ;; called from gnome/dialog-price-edit-db.c
-(export gnc:price-quotes-install-sources)
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
@@ -32,35 +31,6 @@
 (use-modules (gnucash gnome-utils))
 (use-modules (srfi srfi-11)
              (srfi srfi-1))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define gnc:*finance-quote-check*
-  (string-append (gnc-path-get-bindir) "/gnc-fq-check"))
-
-(define (gnc:fq-check-sources)
-  (let ((program #f))
-
-    (define (start-program)
-      (set! program
-        (gnc-spawn-process-async
-         (list "perl" "-w" gnc:*finance-quote-check*) #t)))
-
-    (define (get-sources)
-      (when program
-        (catch #t
-          (lambda ()
-            (let ((results (read (fdes->inport (gnc-process-get-fd program 1)))))
-              (gnc:debug "gnc:fq-check-sources results: " results)
-              results))
-          (lambda (key . args) key))))
-
-    (define (kill-program)
-      (when program
-        (gnc-detach-process program #t)
-        (set! program #f)))
-
-    (dynamic-wind start-program get-sources kill-program)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -526,13 +496,3 @@ Run 'gnc-fq-update' as root to install them.")))
 
         (when keep-going?
           (book-add-prices! book (filter (negate string?) prices)))))))
-
-(define (gnc:price-quotes-install-sources)
-  (let ((sources (gnc:fq-check-sources)))
-    (cond
-     ((list? sources)
-      ;; Translators: ~A is the version string
-      (format #t (G_ "Found Finance::Quote version ~A.") (car sources))
-      (newline)
-      (gnc:msg "Found Finance::Quote version " (car sources))
-      (gnc-quote-source-set-fq-installed (car sources) (cdr sources))))))

@@ -91,12 +91,12 @@ check_modules ();
 my $quoter = Finance::Quote->new();
 my $prgnam = "gnc-fq-check";
 
+print "$Finance::Quote::VERSION\n";
 my @qsources;
 my @sources = $quoter->sources();
 foreach my $source (@sources) {
-  push(@qsources, "\"$source\"");
+  print "$source\n";
 }
-printf "(\"%s\" %s)\n", $Finance::Quote::VERSION, join(" ", sort(@qsources));
 
 ## Local Variables:
 ## mode: perl

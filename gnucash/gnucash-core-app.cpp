@@ -233,7 +233,7 @@ set_mac_locale()
     {
         lang_str = [locale objectForKey: NSLocaleLanguageCode];
         country_str = [locale objectForKey: NSLocaleCountryCode];
-	locale_str = [[[lang_str stringByAppendingString: @"_"]
+	locale_str = [ [ [lang_str stringByAppendingString: @"_"]
 		      stringByAppendingString: country_str]
                       stringByAppendingString: @".UTF-8"];
     }
@@ -475,7 +475,7 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
     catch (std::exception &e)
     {
         std::cerr << e.what() << "\n\n";
-        std::cerr << *m_opt_desc_display.get() << "\n";
+        std::cerr << *m_opt_desc_display.get() << std::endl;
 
         exit(1);
     }
@@ -490,13 +490,13 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
         else
             std::cout << rel_fmt % gnc_version () << "\n";
 
-        std::cout << bl::translate ("Build ID") << ": " << gnc_build_id () << "\n";
+        std::cout << bl::translate ("Build ID") << ": " << gnc_build_id () << std::endl;
         exit(0);
     }
 
     if (m_show_help)
     {
-        std::cout << *m_opt_desc_display.get() << "\n";
+        std::cout << *m_opt_desc_display.get() << std::endl;
         exit(0);
     }
 
