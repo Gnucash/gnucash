@@ -19,10 +19,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-13 12:02+0000\n"
+"PO-Revision-Date: 2021-03-15 17:03+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
@@ -4379,8 +4379,6 @@ msgid "Edit Note"
 msgstr "備考を編集"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
-#| msgid "Edit note for the selected account and period"
 msgid "Edit note for the selected account and period."
 msgstr "選択した勘定科目の期間の備考を編集します。"
 
@@ -4390,10 +4388,8 @@ msgid "Budget Report"
 msgstr "予算帳票"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report."
-msgstr "現在の帳票を印刷します。"
+msgstr "予算帳票を作成します。"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
 msgid "Refresh this window."
@@ -4420,10 +4416,8 @@ msgid "Note"
 msgstr "備考"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:226
-#, fuzzy
-#| msgid "Account Report"
 msgid "Run Report"
-msgstr "勘定科目帳票"
+msgstr "帳票作成"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:310
 #: gnucash/gnome/gnc-plugin-page-budget.c:351
@@ -10046,13 +10040,12 @@ msgstr ""
 "帳票関連のコマンドを実行する。 次のコマンドをサポート。\n"
 "\n"
 "  list: \t利用可能な帳票を一覧出力する。\n"
-"  show: \t指定の名前の帳票の中で変更されるオプションを詳細表示する。データ"
-"ファイルを指定すると保存されたオプションを詳細表示可能。\n"
-"  run: \t指定の GnuCash データファイルで 指定の名前の帳票を実行する。\n"
+"  show: \t指定の名前の帳票の中で変更されるオプションを詳細表示する。データファイルを指定すると保存されたオプションを詳細表示可能。\n"
+"  run: \t指定の GnuCash データファイルで 指定の名前の帳票を作成する。\n"
 
 #: gnucash/gnucash-cli.cpp:113
 msgid "Name of the report to run\n"
-msgstr "実行する帳票の名前\n"
+msgstr "作成する帳票の名前\n"
 
 #: gnucash/gnucash-cli.cpp:115
 msgid "Specify export type\n"
@@ -13268,10 +13261,9 @@ msgstr "<b>カテゴリーの説明</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:384
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Accounts in %s"
-msgstr "'%s' 内の勘定科目"
+msgstr "%s 内の勘定科目"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:477
 msgid ""
@@ -15531,7 +15523,7 @@ msgstr "対象へジャンプ(_J)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
 msgid "All _accounts"
-msgstr "全勘定科目 (_A)"
+msgstr "全勘定科目(_A)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
 msgid "Search scope"
