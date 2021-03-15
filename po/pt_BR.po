@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-14 17:02+0000\n"
+"PO-Revision-Date: 2021-03-15 01:02+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -4456,10 +4456,8 @@ msgid "Edit Note"
 msgstr "Edite o comentário"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
-#| msgid "Edit note for the selected account and period"
 msgid "Edit note for the selected account and period."
-msgstr "Edite o comentário para a conta e o período selecionado"
+msgstr "Edite o comentário para a conta e o período selecionado."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
@@ -4467,10 +4465,8 @@ msgid "Budget Report"
 msgstr "Relatório do orçamento"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report."
-msgstr "Imprima o relatório atual"
+msgstr "Execute o relatório orçamental."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
 msgid "Refresh this window."
@@ -4497,10 +4493,8 @@ msgid "Note"
 msgstr "Comentários"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:226
-#, fuzzy
-#| msgid "Account Report"
 msgid "Run Report"
-msgstr "Extrato da conta"
+msgstr "Execute o relatório"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:310
 #: gnucash/gnome/gnc-plugin-page-budget.c:351
