@@ -24,7 +24,6 @@
  * @file dialog-bi-import.c
  * @brief core import functions for invoice import plugin
  * @author Copyright (C) 2009 Sebastian Held <sebastian.held@gmx.de>
- * @author Mike Evans <mikee@saxicola.co.uk>
  * @author Rob Laan <rob.laan@chello.nl>
  */
 
@@ -789,8 +788,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         gncEntrySetAction (entry, action);
         value = gnc_numeric_zero(); 
         gnc_exp_parser_parse (quantity, &value, NULL);
-        // Need to set the denom appropriately else we get stupid rounding errors.
-        value = gnc_numeric_convert (value, denom * 100, GNC_HOW_RND_NEVER);
         gncEntrySetQuantity (entry, value);
         acc = gnc_account_lookup_for_register (gnc_get_current_root_account (),
                                                account);
@@ -800,7 +797,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             gncEntrySetBillAccount (entry, acc);
             value = gnc_numeric_zero();
             gnc_exp_parser_parse (price, &value, NULL);
-            value = gnc_numeric_convert (value, denom * 100, GNC_HOW_RND_NEVER);
             gncEntrySetBillPrice (entry, value);
             gncEntrySetBillTaxable (entry, text2bool (taxable));
             gncEntrySetBillTaxIncluded (entry, text2bool (taxincluded));
@@ -813,14 +809,12 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             gncEntrySetInvAccount (entry, acc);
             value = gnc_numeric_zero();
             gnc_exp_parser_parse (price, &value, NULL);
-            value = gnc_numeric_convert (value, denom * 100, GNC_HOW_RND_NEVER);
             gncEntrySetInvPrice (entry, value);
             gncEntrySetInvTaxable (entry, text2bool (taxable));
             gncEntrySetInvTaxIncluded (entry, text2bool (taxincluded));
             gncEntrySetInvTaxTable (entry, gncTaxTableLookupByName (book, tax_table));
             value = gnc_numeric_zero();
             gnc_exp_parser_parse (discount, &value, NULL);
-            value = gnc_numeric_convert (value, denom * 100, GNC_HOW_RND_NEVER);
             gncEntrySetInvDiscount (entry, value);
             gncEntrySetInvDiscountType (entry, text2disc_type (disc_type));
             gncEntrySetInvDiscountHow (entry, text2disc_how (disc_how));
