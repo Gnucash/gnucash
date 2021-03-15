@@ -93,6 +93,7 @@ private:
     int m_cmd_result;
     std::string m_error_msg;
     QofBook *m_book;
+    gnc_commodity *m_dflt_curr;
 };
 
 /* GncQuotes implementation */
@@ -115,6 +116,7 @@ GncQuotesImpl::check (QofBook *book)
     m_error_msg.clear();
     m_cmd_result  = 0;
     m_book = book;
+    m_dflt_curr = gnc_default_currency();
 
     auto perl_executable = bp::search_path("perl");
     auto fq_check = std::string(gnc_path_get_bindir()) + "/gnc-fq-check";
@@ -150,18 +152,17 @@ GncQuotesImpl::fetch (const CommVec& commodities)
 {
     m_comm_vec = commodities;  // Store for later use
 
-    auto dflt_curr = gnc_default_currency();
     bpt::ptree pt, pt_child;
-    pt.put ("defaultcurrency", gnc_commodity_get_mnemonic (dflt_curr));
+    pt.put ("defaultcurrency", gnc_commodity_get_mnemonic (m_dflt_curr));
 
     std::for_each (m_comm_vec.cbegin(), m_comm_vec.cend(),
-        [&pt, &dflt_curr] (auto comm)
+        [this, &pt] (auto comm)
         {
             auto comm_mnemonic = gnc_commodity_get_mnemonic (comm);
             auto comm_ns = std::string("currency");
             if (gnc_commodity_is_currency (comm))
             {
-                if (gnc_commodity_equiv(comm, dflt_curr) ||
+                if (gnc_commodity_equiv(comm, m_dflt_curr) ||
                     (!comm_mnemonic || (strcmp (comm_mnemonic, "XXX") == 0)))
                     return;
             }
@@ -294,15 +295,13 @@ GncQuotesImpl::parse_quotes (const std::string &quotes_str)
                       "Failed to parse quotes results." + "\n";
     }
 
-    auto book = m_book;
-    auto dflt_curr = gnc_default_currency();
     auto pricedb = gnc_pricedb_get_db (m_book);
     std::for_each(m_comm_vec.begin(), m_comm_vec.end(),
-                  [this, &pt, &dflt_curr, &pricedb] (gnc_commodity *comm)
+                  [this, &pt, &pricedb] (gnc_commodity *comm)
                 {
                     auto comm_ns = gnc_commodity_get_namespace (comm);
                     auto comm_mnemonic = gnc_commodity_get_mnemonic (comm);
-                    if (gnc_commodity_equiv(comm, dflt_curr) ||
+                    if (gnc_commodity_equiv(comm, m_dflt_curr) ||
                        (!comm_mnemonic || (strcmp (comm_mnemonic, "XXX") == 0)))
                         return;
                     if (pt.find (comm_mnemonic) == pt.not_found())
