@@ -78,7 +78,7 @@ gnucash/gnome/dialog-lot-viewer.c
 gnucash/gnome/dialog-new-user.c
 gnucash/gnome/dialog-order.c
 gnucash/gnome/dialog-payment.c
-gnucash/gnome/dialog-price-edit-db.c
+gnucash/gnome/dialog-price-edit-db.cpp
 gnucash/gnome/dialog-price-editor.c
 gnucash/gnome/dialog-print-check.c
 gnucash/gnome/dialog-progress.c
