@@ -27,7 +27,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
-#include <libguile.h>
+#include <gnc-quotes.hpp>
 
 extern "C" {
 #include "dialog-transfer.h"
@@ -45,10 +45,7 @@ extern "C" {
 #include "gnc-ui.h"
 #include "Transaction.h"
 #include "Account.h"
-#include "swig-runtime.h"
-#include "guile-mappings.h"
 #include "engine-helpers.h"
-#include "gnc-engine-guile.h"
 #include "QuickFill.h"
 #include <gnc-commodity.h>
 }
@@ -1784,44 +1781,25 @@ gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data)
 void
 gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
 {
-    PriceReq pr;
-    SCM quotes_func;
-    SCM book_scm;
-    SCM scm_window;
-
     g_return_if_fail (xferData);
 
     ENTER(" ");
 
-    quotes_func = scm_c_eval_string ("gnc:book-add-quotes");
-
-    if (!scm_is_procedure (quotes_func))
+    GncQuotes quotes (xferData->book);
+    if (quotes.cmd_result() != 0)
     {
+        if (!quotes.error_msg().empty())
+            PWARN ("%s", quotes.error_msg().c_str());
         LEAVE("quote retrieval failed");
         return;
     }
 
-    book_scm = gnc_book_to_scm (xferData->book);
-    if (scm_is_true (scm_not (book_scm)))
-    {
-        LEAVE("no book");
-        return;
-    }
-
-    scm_window =  SWIG_NewPointerObj(xferData->dialog,
-                                     SWIG_TypeQuery("_p_GtkWindow"), 0);
-
-    if (scm_is_true (scm_not (book_scm)))
-    {
-        LEAVE("no scm window");
-        return;
-    }
-
-    gnc_set_busy_cursor (NULL, TRUE);
-    scm_call_2 (quotes_func, scm_window, book_scm);
-    gnc_unset_busy_cursor (NULL);
+    gnc_set_busy_cursor (nullptr, TRUE);
+    quotes.fetch_all();
+    gnc_unset_busy_cursor (nullptr);
 
     /*the results should be in the price db now, but don't crash if not. */
+    PriceReq pr;
     price_request_from_xferData(&pr, xferData);
     if (lookup_price(&pr, LATEST))
     {

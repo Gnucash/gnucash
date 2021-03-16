@@ -22,6 +22,7 @@
 #ifndef GNC_QUOTES_HPP
 #define GNC_QUOTES_HPP
 
+#include <memory>
 #include <string>
 #include <vector>
 #include <gnc-commodity.hpp>  // For CommVec alias
