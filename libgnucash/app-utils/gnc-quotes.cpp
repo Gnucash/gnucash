@@ -119,8 +119,8 @@ GncQuotesImpl::check (QofBook *book)
     m_dflt_curr = gnc_default_currency();
 
     auto perl_executable = bp::search_path("perl");
-    auto fq_check = std::string(gnc_path_get_bindir()) + "/gnc-fq-check";
-    StrVec args { "-w", fq_check };
+    auto fq_wrapper = std::string(gnc_path_get_bindir()) + "/finance-quote-wrapper";
+    StrVec args { "-w", fq_wrapper, "-v" };
 
     auto cmd_out = run_cmd (perl_executable.string(), args, StrVec());
 
@@ -180,7 +180,7 @@ GncQuotesImpl::fetch (const CommVec& commodities)
 
     auto perl_executable = bp::search_path("perl");
     auto fq_wrapper = std::string(gnc_path_get_bindir()) + "/finance-quote-wrapper";
-    StrVec args { "-w", fq_wrapper };
+    StrVec args { "-w", fq_wrapper, "-f" };
 
     auto cmd_out = run_cmd (perl_executable.string(), args, result.str());
 

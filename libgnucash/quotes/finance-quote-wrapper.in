@@ -72,7 +72,7 @@ non-zero - failure
 =cut
 
 sub check_modules {
-  my @modules = qw(Finance::Quote JSON::Parse);
+  my @modules = qw(Finance::Quote JSON::Parse Getopt::Std);
   my @missing;
 
   foreach my $mod (@modules) {
@@ -99,6 +99,26 @@ sub check_modules {
   print "missing-lib\n";
 
   exit 1;
+}
+
+sub print_version  {
+    my $quoter = Finance::Quote->new();
+    my @sources = $quoter->sources();
+    print "$Finance::Quote::VERSION\n";
+    foreach my $source (@sources) {
+        print "$source\n";
+    }
+    exit 0;
+}
+
+sub print_usage {
+    print STDERR
+"Usage:
+  Check proper installation and version:
+    finance-quote-wrapper -v
+  Fetch quotes (input should be passed as JSON via stdin):
+    finance-quote-wrapper -f
+";
 }
 
 sub sanitize_hash {
@@ -160,6 +180,30 @@ sub parse_commodities {
 
 # Check for and load non-standard modules
 check_modules ();
+
+my %opts;
+my $status = getopts('hvf', \%opts);
+if (!$status)
+{
+    print_usage();
+    exit 1;
+}
+
+if (exists $opts{'v'})
+{
+    print_version();
+}
+elsif (exists $opts{'h'})
+{
+    print_usage();
+    exit 0;
+}
+elsif (!exists $opts{'f'})
+{
+    print_usage();
+    exit 1;
+}
+
 JSON::Parse->import(qw(valid_json parse_json));
 
 my $json_input = do { local $/; <STDIN> };
