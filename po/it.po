@@ -52,10 +52,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gnucash 4.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-03 11:50+0000\n"
+"PO-Revision-Date: 2021-03-16 08:03+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -64,7 +64,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.1-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -1907,10 +1907,9 @@ msgstr "Conto imposte"
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:474
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "Conti in «%s»"
+msgstr "_Sottoconti di «%s»"
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -4533,10 +4532,8 @@ msgstr "Modifica la nota"
 
 # Tooltip
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
-#| msgid "Edit note for the selected account and period"
 msgid "Edit note for the selected account and period."
-msgstr "Modifica la nota relativa al conto selezionato e al periodo"
+msgstr "Modifica la nota relativa al conto selezionato e al periodo."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
@@ -4544,10 +4541,8 @@ msgid "Budget Report"
 msgstr "Resoconto bilancio di previsione"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report."
-msgstr "Stampa il resoconto corrente"
+msgstr "Esegui il resoconto del bilancio di previsione."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
 msgid "Refresh this window."
@@ -4574,10 +4569,8 @@ msgid "Note"
 msgstr "Nota"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:226
-#, fuzzy
-#| msgid "Account Report"
 msgid "Run Report"
-msgstr "Resoconto del conto"
+msgstr "Esegui il resoconto"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:310
 #: gnucash/gnome/gnc-plugin-page-budget.c:351
@@ -14075,10 +14068,9 @@ msgstr "<b>Descrizione della categoria</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:384
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Accounts in %s"
-msgstr "Conti in «%s»"
+msgstr "Conti in %s"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:477
 msgid ""
@@ -14999,7 +14991,7 @@ msgstr "<b>Conto _attività</b>"
 #. Dialog title for the remains of a stock split
 #: gnucash/gtkbuilder/assistant-stock-split.glade:409
 msgid "Cash In Lieu"
-msgstr "Cash In Lieu"
+msgstr "Conguaglio in denaro"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:419
 msgid ""
@@ -16428,26 +16420,20 @@ msgid "Search the Account List"
 msgstr "Cerca nella lista dei conti"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
-#, fuzzy
-#| msgid "Close on Jump"
 msgid "Close _on Jump"
-msgstr "Chiudi dopo «Vai a»"
+msgstr "C_hiudi dopo «Vai a»"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
 msgid "_Jump To"
 msgstr "_Vai a"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
-#, fuzzy
-#| msgid "All accounts"
 msgid "All _accounts"
-msgstr "Tutti i conti"
+msgstr "Tutti i _conti"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " Cerca "
+msgstr "Ambito di ricerca"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 msgid "Account Full Name"
@@ -16461,7 +16447,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:258
 msgid "Sea_rch"
-msgstr ""
+msgstr "Ce_rca"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:294
 msgid ""
@@ -19462,7 +19448,7 @@ msgstr "Visualizza descrizione"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:700
 msgid "Note: Use View->'Filter By...' to control visible accounts."
 msgstr ""
-"Nota: utilizza Visualizza->'Filtra per ...' per controllare i conti visibili."
+"Nota: utilizza Visualizza->«Filtra per...» per controllare i conti visibili."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:721
 msgid "Budget List"
@@ -31564,8 +31550,8 @@ msgid ""
 "options '~a' is not available, fallback to the option '~a'."
 msgstr ""
 "Questo resoconto è stato salvato utilizzando una versione successiva di "
-"GnuCash. Una delle più recenti opzioni ~a '~a' non è disponibile, ripiego "
-"sull'opzione '~a'."
+"GnuCash. Una delle opzioni ~a più recenti, «~a» non è disponibile, ripiego "
+"sull'opzione «~a»."
 
 #: libgnucash/app-utils/option-util.c:1663
 #, c-format
