@@ -500,7 +500,7 @@ namespace DSTRule
 
     Transition::Transition(gregorian_date date) :
 	month(date.month()), dow(date.day_of_week()),
-	week(static_cast<week_num>((7 + date.day() - date.day_of_week()) / 7))
+	week(static_cast<week_num>((6 + date.day() - date.day_of_week()) / 7))
     {}
 
     bool
