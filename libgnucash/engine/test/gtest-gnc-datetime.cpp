@@ -518,7 +518,7 @@ TEST(gnc_datetime_functions, test_date)
     EXPECT_EQ(ymd.day - (12 + atime.offset() / 3600) / 24, 13);
 }
 /* This test works only in the America/LosAngeles time zone and
- * there's no straightforward wat to make it more flexible. It ensures
+ * there's no straightforward way to make it more flexible. It ensures
  * that DST in that timezone transitions correctly for each day of the
  * week in which March begines.
 
