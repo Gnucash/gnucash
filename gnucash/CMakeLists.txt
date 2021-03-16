@@ -267,15 +267,10 @@ foreach(gres_file ${gresource_files})
 endforeach()
 
 
-gnc_add_scheme_targets(price-quotes
-    SOURCES price-quotes.scm
-    OUTPUT_DIR gnucash
-    DEPENDS "scm-engine;scm-app-utils;scm-gnome-utils")
-
 set_local_dist(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
     gnucash.cpp gnucash-commands.cpp gnucash-cli.cpp gnucash-core-app.cpp
     gnucash-locale-macos.mm gnucash-locale-windows.c gnucash.rc.in gnucash-valgrind.in
-    gnucash-gresources.xml ${gresource_files} price-quotes.scm
+    gnucash-gresources.xml ${gresource_files}
     ${gnucash_noinst_HEADERS} ${gnucash_EXTRA_DIST})
 
 set (gnucash_DIST ${gnucash_DIST_local} ${gnome_DIST} ${gnome_search_DIST} ${gnome_utils_DIST}

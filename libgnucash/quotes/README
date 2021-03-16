@@ -2,23 +2,17 @@
 
 This directory contains assorted stock quote scripts.
 
-gnc-fq-check.in:
+finance-quote-wrapper.in:
 
-  Source file for gnc-fq-check which is a perl script that allows
-  gnucash to determine if Finance::Quote is installed properly.  The
-  responses is a scheme form.
+  Source file for finance-quote-wrapper which is a perl script that
+  allows gnucash to communicate with Finance::Quote.
+  The requests and responses are in json format.
 
 gnc-fq-dump.in:
 
   Source file for gnc-fq-dump which is a perl script that retrieves
   a quote from Finance::Quote and dumps the response to the terminal.
   Its useful for determining problems with F::Q.
-
-gnc-fq-helper.in:
-
-  Source file for gnc-fq-helper which is a perl script that
-  allows gnucash to communicate with Finance::Quote over pipes from
-  guile.  The requests and responses are scheme forms.
 
 gnc-fq-update.in:
 

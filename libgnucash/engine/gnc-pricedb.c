@@ -118,7 +118,6 @@ static const char* source_names[(size_t)PRICE_SOURCE_INVALID + 1] =
 {
     /* sync with price_to_gui in dialog-price-editor.c */
     "user:price-editor",
-    /* sync with commidity-tz-quote->price in price-quotes.scm */
     "Finance::Quote",
     "user:price",
     /* String retained for backwards compatibility. */

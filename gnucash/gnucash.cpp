@@ -183,7 +183,6 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
         auto quote_sources = quotes.sources_as_glist();
         gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
         g_list_free (quote_sources);
-        scm_c_use_module("gnucash price-quotes");
     }
     else
     {

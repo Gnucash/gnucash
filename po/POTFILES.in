@@ -374,7 +374,6 @@ gnucash/import-export/qif-imp/qif-parse.scm
 gnucash/import-export/qif-imp/qif-to-gnc.scm
 gnucash/import-export/qif-imp/qif-utils.scm
 gnucash/import-export/qif-imp/string.scm
-gnucash/price-quotes.scm
 gnucash/python/gncmod-python.c
 gnucash/python/init.py
 gnucash/python/pycons/console.py
