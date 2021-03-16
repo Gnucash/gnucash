@@ -27,8 +27,8 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <libguile.h>
 #include <time.h>
+#include <gnc-quotes.hpp>
 
 extern "C" {
 #include "dialog-utils.h"
@@ -47,9 +47,6 @@ extern "C" {
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-warnings.h"
-#include "swig-runtime.h"
-#include "guile-mappings.h"
-#include "gnc-engine-guile.h"
 #include <gnc-glib-utils.h>
 }
 
@@ -560,30 +557,19 @@ void
 gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (data);
-    SCM quotes_func;
-    SCM book_scm;
-    SCM scm_window;
 
     ENTER(" ");
-    quotes_func = scm_c_eval_string ("gnc:book-add-quotes");
-    if (!scm_is_procedure (quotes_func))
+    GncQuotes quotes (pdb_dialog->book);
+    if (quotes.cmd_result() != 0)
     {
-        LEAVE(" no procedure");
+        if (!quotes.error_msg().empty())
+            PWARN ("%s", quotes.error_msg().c_str());
+        LEAVE("quote retrieval failed");
         return;
     }
-
-    book_scm = gnc_book_to_scm (pdb_dialog->book);
-    if (scm_is_true (scm_not (book_scm)))
-    {
-        LEAVE("no book");
-        return;
-    }
-
-    scm_window =  SWIG_NewPointerObj(pdb_dialog->window,
-                                     SWIG_TypeQuery("_p_GtkWindow"), 0);
 
     gnc_set_busy_cursor (NULL, TRUE);
-    scm_call_2 (quotes_func, scm_window, book_scm);
+    quotes.fetch_all();
     gnc_unset_busy_cursor (NULL);
 
     /* Without this, the summary bar on the accounts tab
