@@ -123,8 +123,10 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">&lt;b&gt;1. Choose the file to import&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="label" translatable="yes">1. Choose the file to import</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
@@ -305,8 +307,10 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">&lt;b&gt;3. Select import options&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="label" translatable="yes">3. Select import options</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
@@ -346,8 +350,10 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">&lt;b&gt;4. Preview&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="label" translatable="yes">4. Preview</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>

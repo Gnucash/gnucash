@@ -274,9 +274,10 @@ Select the type of Export required and the separator that will be used.
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Accounts&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                    <property name="use_underline">True</property>
+                    <property name="label" translatable="yes">Accounts</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -429,9 +430,10 @@ Select the type of Export required and the separator that will be used.
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Dates&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                    <property name="use_underline">True</property>
+                    <property name="label" translatable="yes">Date Range</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -441,7 +443,7 @@ Select the type of Export required and the separator that will be used.
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="show_all">
-                    <property name="label" translatable="yes">Sho_w All</property>
+                    <property name="label" translatable="yes">_Select All</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

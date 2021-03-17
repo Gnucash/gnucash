@@ -408,9 +408,11 @@ If you have selected an invoice, GnuCash will propose the amount still due for i
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Amount&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Amount</property>
                         <property name="justify">right</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

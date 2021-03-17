@@ -12,5 +12,4 @@
 
 include (${SRC_DIR}/cmake/version-info2env.cmake)
 versioninfo2env (${VCS_INFO_FILE})
-configure_file(${SRC} ${DST} )
-configure_file(${DST} ${DATADIR_BUILD}/gnucash/${DST} COPYONLY)
+configure_file(${SRC} ${DATADIR_BUILD}/gnucash/${DST} )

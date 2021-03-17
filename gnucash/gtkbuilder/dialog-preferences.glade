@@ -360,8 +360,10 @@ Press 'Close' to return to the preference window
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Start Date&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Start Date</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -373,8 +375,10 @@ Press 'Close' to return to the preference window
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;End Date&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">End Date</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -591,7 +595,7 @@ Press 'Close' to return to the preference window
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Use only &amp;apos;debit&amp;apos; and &amp;apos;credit&amp;apos; instead of informal synonyms.</property>
+                    <property name="tooltip_markup">Use only &apos;debit&apos; and &apos;credit&apos; instead of informal synonyms.</property>
                     <property name="tooltip_text" translatable="yes">Use only 'debit' and 'credit' instead of informal synonyms.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
@@ -632,7 +636,7 @@ Press 'Close' to return to the preference window
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Don&amp;apos;t sign reverse any accounts.</property>
+                    <property name="tooltip_markup">Don&apos;t sign reverse any accounts.</property>
                     <property name="tooltip_text" translatable="yes">Don't sign reverse any accounts.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
@@ -793,8 +797,10 @@ Press 'Close' to return to the preference window
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Account Color&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Account Color</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -995,8 +1001,10 @@ Press 'Close' to return to the preference window
                   <object class="GtkLabel" id="label104">
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Fancy Date Format&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Fancy Date Format</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1018,8 +1026,10 @@ Press 'Close' to return to the preference window
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Date Format&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Date Format</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1378,8 +1388,10 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes" comments="Preferences Dialog, General Tab">&lt;b&gt;General&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes" comments="Preferences Dialog, General Tab">General</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1583,7 +1595,7 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Default to &amp;apos;new search&amp;apos; if fewer than this number of items is returned.</property>
+                    <property name="tooltip_markup">Default to &apos;new search&apos; if fewer than this number of items is returned.</property>
                     <property name="tooltip_text" translatable="yes">Default to 'new search' if fewer than this number of items is returned.</property>
                     <property name="invisible_char">●</property>
                     <property name="text">1</property>
@@ -2028,7 +2040,7 @@ many months before the current month</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match&amp;apos;s score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default.</property>
+                    <property name="tooltip_markup">Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match&apos;s score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default.</property>
                     <property name="tooltip_text" translatable="yes">Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
@@ -2047,7 +2059,7 @@ many months before the current month</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Enable the UPDATE AND RECONCILE action in the transaction matcher. If enabled, a transaction whose best match&amp;apos;s score is above the Auto-CLEAR threshold and has a different date or amount than the matching existing transaction will cause the existing transaction to be updated and cleared by default.</property>
+                    <property name="tooltip_markup">Enable the UPDATE AND RECONCILE action in the transaction matcher. If enabled, a transaction whose best match&apos;s score is above the Auto-CLEAR threshold and has a different date or amount than the matching existing transaction will cause the existing transaction to be updated and cleared by default.</property>
                     <property name="tooltip_text" translatable="yes">Enable the UPDATE AND RECONCILE action in the transaction matcher. If enabled, a transaction whose best match's score is above the Auto-CLEAR threshold and has a different date or amount than the matching existing transaction will cause the existing transaction to be updated and cleared by default.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
@@ -2064,8 +2076,10 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;General&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">General</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -2078,7 +2092,7 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won&amp;apos;t match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
+                    <property name="tooltip_markup">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won&apos;t match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
                     <property name="tooltip_text" translatable="yes">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
                     <property name="invisible_char">●</property>
                     <property name="text">2.00</property>
@@ -2101,7 +2115,7 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">A transaction whose best match&amp;apos;s score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default.</property>
+                    <property name="tooltip_markup">A transaction whose best match&apos;s score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default.</property>
                     <property name="tooltip_text" translatable="yes">A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default.</property>
                     <property name="invisible_char">●</property>
                     <property name="text">6</property>
@@ -2123,7 +2137,7 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">A transaction whose best match&amp;apos;s score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default.</property>
+                    <property name="tooltip_markup">A transaction whose best match&apos;s score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default.</property>
                     <property name="tooltip_text" translatable="yes">A transaction whose best match's score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default.</property>
                     <property name="invisible_char">●</property>
                     <property name="text">1</property>
@@ -2332,7 +2346,7 @@ many months before the current month</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Print &amp;apos;***&amp;apos; before and after each text field on the check.</property>
+                    <property name="tooltip_markup">Print &apos;***&apos; before and after each text field on the check.</property>
                     <property name="tooltip_text" translatable="yes">Print '***' before and after each text field on the check.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
@@ -2411,7 +2425,7 @@ many months before the current month</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">If checked, pressing the &amp;apos;Enter&amp;apos; key will move to the location of the blank transaction in the register. If clear, pressing the &amp;apos;Enter&amp;apos; key will move down one row.</property>
+                    <property name="tooltip_markup">If checked, pressing the &apos;Enter&apos; key will move to the location of the blank transaction in the register. If clear, pressing the &apos;Enter&apos; key will move down one row.</property>
                     <property name="tooltip_text" translatable="yes">If checked, pressing the 'Enter' key will move to the location of the blank transaction in the register. If clear, pressing the 'Enter' key will move down one row.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
@@ -2524,7 +2538,7 @@ many months before the current month</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Always open the reconcile dialog using today&amp;apos;s date for the statement date, regardless of previous reconciliations.</property>
+                    <property name="tooltip_markup">Always open the reconcile dialog using today&apos;s date for the statement date, regardless of previous reconciliations.</property>
                     <property name="tooltip_text" translatable="yes">Always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
@@ -2645,8 +2659,10 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Layout&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Layout</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -3126,8 +3142,10 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Default zoom level&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Default zoom level</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -3494,7 +3512,7 @@ many months before the current month</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Show a close button on each notebook tab. These function identically to the &amp;apos;Close&amp;apos; menu item.</property>
+                    <property name="tooltip_markup">Show a close button on each notebook tab. These function identically to the &apos;Close&apos; menu item.</property>
                     <property name="tooltip_text" translatable="yes">Show a close button on each notebook tab. These function identically to the 'Close' menu item.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
@@ -3635,8 +3653,10 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Online Quotes&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Online Quotes</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

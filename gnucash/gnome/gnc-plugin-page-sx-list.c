@@ -360,8 +360,6 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     GtkWidget *vbox;
     GtkWidget *label;
     GtkWidget *swin;
-    char *markup;
-    char *text;
 
     page = GNC_PLUGIN_PAGE_SX_LIST(plugin_page);
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
@@ -381,12 +379,9 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
     gtk_paned_pack1( GTK_PANED(widget), vbox, TRUE, FALSE);
 
-    label = gtk_label_new(NULL);
-    text = g_strdup_printf(_("Transactions"));
-    markup = g_markup_printf_escaped ("<b> %s</b>", text);
-    gtk_label_set_markup (GTK_LABEL (label), markup);
-    g_free (markup);
-    g_free (text);
+    label = gtk_label_new (_("Transactions"));
+    gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-strong");
+    gtk_widget_set_margin_start (GTK_WIDGET(label), 6);
     gnc_label_set_alignment (label, 0.0, 0);
     gtk_widget_show (label);
     gtk_box_pack_start ( GTK_BOX(vbox), label, FALSE, FALSE, 0);
@@ -444,12 +439,9 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
     gtk_paned_pack2( GTK_PANED(widget), vbox, TRUE, FALSE);
 
-    label = gtk_label_new(NULL);
-    text = g_strdup_printf(_("Upcoming Transactions"));
-    markup = g_markup_printf_escaped ("<b> %s</b>", text);
-    gtk_label_set_markup (GTK_LABEL (label), markup);
-    g_free (markup);
-    g_free (text);
+    label = gtk_label_new (_("Upcoming Transactions"));
+    gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-strong");
+    gtk_widget_set_margin_start (GTK_WIDGET(label), 6);
     gnc_label_set_alignment (label, 0.0, 0);
     gtk_widget_show (label);
 

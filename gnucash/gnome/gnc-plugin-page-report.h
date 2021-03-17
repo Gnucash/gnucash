@@ -75,6 +75,8 @@ GType gnc_plugin_page_report_get_type( void );
  */
 GncPluginPage *gnc_plugin_page_report_new( int reportId );
 
+void gnc_plugin_page_report_reload (GncPluginPageReport *report);
+
 // entry-point from scm menu-extension callback [gnc:menu-extension].
 void       gnc_main_window_open_report (int report_id, GncMainWindow *window);
 // directly called through from above

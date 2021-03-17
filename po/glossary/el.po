@@ -3,14 +3,15 @@
 # Simos Xenitellis <simos@hellug.gr>, 2001.
 # THANOS SIOURDAKIS <siourdakisthanos@gmail.com>, 2020.
 # giorgos georgopoulakis <huskyaek@gmail.com>, 2021.
+# Katerina <katerina.gakou@hotmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-01-24 18:32+0000\n"
-"Last-Translator: giorgos georgopoulakis <huskyaek@gmail.com>\n"
+"PO-Revision-Date: 2021-03-17 15:18+0000\n"
+"Last-Translator: Katerina <katerina.gakou@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
 "Language: el\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -146,14 +147,12 @@ msgid "action: direct debit"
 msgstr "Ενέργεια: Άμεση ανάληψη"
 
 #. "transaction is a distribution (???)"
-#, fuzzy
 msgid "action: dist"
-msgstr "Λίστα Εικονιδίων"
+msgstr "ενέργεια: κατανομή"
 
 #. "transaction is a dividend"
-#, fuzzy
 msgid "action: div"
-msgstr "Τοποθεσία: "
+msgstr "ενέργεια: μέρισμα"
 
 #. "-"
 msgid "action: fee"
@@ -166,19 +165,16 @@ msgstr "Τοποθεσία: "
 
 # # FIX check!
 #. "-"
-#, fuzzy
 msgid "action: loan"
-msgstr "Νήσος του Ασεντιόν"
+msgstr "ενέργεια: δάνειο"
 
 #. "see: payment 1."
-#, fuzzy
 msgid "action: payment"
-msgstr "Ο_νόματα Συναρτήσεων"
+msgstr "ενέργεια: πληρωμή"
 
 #. "Point of sale"
-#, fuzzy
 msgid "action: POS"
-msgstr "Τοποθεσία: "
+msgstr "ενέργεια: POS"
 
 #. "-"
 #, fuzzy
@@ -186,19 +182,16 @@ msgid "action: rebate"
 msgstr "Aλλαγή τμήματος"
 
 #. "-"
-#, fuzzy
 msgid "action: sell"
-msgstr "Τοποθεσία: "
+msgstr "ενέργεια: πώληση"
 
 #. "-"
-#, fuzzy
 msgid "action: Teller"
-msgstr "Επιλογέας Συναρτήσεων"
+msgstr "ενέργεια: Ταμείο"
 
 #. "see: transfer 2. (=credit transfer)"
-#, fuzzy
 msgid "action: transfer"
-msgstr "Βάση ενεργειών"
+msgstr "ενέργεια: μεταφορά"
 
 #. "-"
 #, fuzzy
@@ -238,23 +231,20 @@ msgid "balance c/f"
 msgstr "Ισορροπία"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
-#, fuzzy
 msgid "balance sheet"
-msgstr "ενεργό φύλλο"
+msgstr "ισολογισμός"
 
 #. "To arrange for income and spending to be equal"
-#, fuzzy
 msgid "balance, to"
-msgstr "Ισορροπία"
+msgstr "ισοζυγίζω"
 
 #. "-"
-#, fuzzy
 msgid "bank"
-msgstr "Βαθμός"
+msgstr "τράπεζα"
 
 #. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
-msgstr ""
+msgstr "απόδειξη"
 
 #. "see invoice owner"
 msgid "bill owner"
@@ -262,51 +252,46 @@ msgstr ""
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
-msgstr ""
+msgstr "όροι πληρωμής"
 
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
-msgstr ""
+msgstr "Βιβλίο"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr ""
+msgstr "κλείσιμο βιβλίου"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr ""
+msgstr "Προϋπολογισμός"
 
 #. "-"
 msgid "business (adjective)"
-msgstr ""
+msgstr "επαγγελματικός"
 
 #
 #. "as Menu Item: Headline for features that are related to small business accounting"
-#, fuzzy
 msgid "business (noun)"
-msgstr "Μεταφορά"
+msgstr "επιχείρηση"
 
 #. "Profits made from the sale of investments or property"
-#, fuzzy
 msgid "capital gains"
-msgstr "Μερικώς παγωμένο χιόνι"
+msgstr "κεφαλαιακά κέρδη"
 
 #. "Distinguishing the uppercase and lowercase letters"
-#, fuzzy
 msgid "case sensitive"
-msgstr "Πεζά/κεφαλαία διαφέρουν"
+msgstr "διαφοροποίηση κεφαλαίων / πεζών"
 
 #
 #. "Money in coins or notes"
-#, fuzzy
 msgid "cash"
-msgstr "Απορρίματα"
+msgstr "μετρητά"
 
 #
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
-#, fuzzy
 msgid "check"
-msgstr "Έλεγχος"
+msgstr "επιταγή"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"

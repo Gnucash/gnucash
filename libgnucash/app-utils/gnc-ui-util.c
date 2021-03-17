@@ -51,7 +51,6 @@
 #include "Transaction.h"
 #include "gnc-engine.h"
 #include "gnc-features.h"
-#include "gnc-euro.h"
 #include "gnc-hooks.h"
 #include "gnc-locale-tax.h"
 #include "gnc-session.h"
@@ -1130,51 +1129,6 @@ gnc_account_create_opening_balance (Account *account,
     return TRUE;
 }
 
-#if 0 /* Not Used */
-static void
-gnc_lconv_set_utf8 (char **p_value, char *default_value)
-{
-    char *value = *p_value;
-    *p_value = NULL;
-
-    if ((value == NULL) || (value[0] == 0))
-        value = default_value;
-
-#ifdef G_OS_WIN32
-    {
-        /* get number of resulting wide characters */
-        size_t count = mbstowcs (NULL, value, 0);
-        if (count > 0)
-        {
-            /* malloc and convert */
-            wchar_t *wvalue = g_malloc ((count + 1) * sizeof(wchar_t));
-            count = mbstowcs (wvalue, value, count + 1);
-            if (count > 0)
-            {
-                *p_value = g_utf16_to_utf8 (wvalue, -1, NULL, NULL, NULL);
-            }
-            g_free (wvalue);
-        }
-    }
-#else /* !G_OS_WIN32 */
-    *p_value = g_locale_to_utf8 (value, -1, NULL, NULL, NULL);
-#endif
-
-    if (*p_value == NULL)
-    {
-        // The g_locale_to_utf8 conversion failed. FIXME: Should we rather
-        // use an empty string instead of the default_value? Not sure.
-        *p_value = default_value;
-    }
-}
-
-static void
-gnc_lconv_set_char (char *p_value, char default_value)
-{
-    if ((p_value != NULL) && (*p_value == CHAR_MAX))
-        *p_value = default_value;
-}
-#endif /* Not Used */
 
 gnc_commodity *
 gnc_locale_default_currency_nodefault (void)
@@ -1187,13 +1141,6 @@ gnc_locale_default_currency_nodefault (void)
     code = gnc_locale_default_iso_currency_code ();
 
     currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, code);
-
-    /* Some very old locales (notably on win32) still announce a euro
-       currency as default, although it has been replaced by EUR in
-       2001. We use EUR as default in that case, but the user can always
-       override from gsettings. */
-    if (gnc_is_euro_currency (currency))
-        currency = gnc_get_euro();
 
     return (currency ? currency : NULL);
 }
@@ -1238,8 +1185,6 @@ gnc_default_currency_common (gchar *requested_currency,
     if (currency)
     {
         mnemonic = requested_currency;
-// ??? Does anyone know what this is supposed to be doing?
-//        requested_currency = g_strdup(gnc_commodity_get_mnemonic(currency));
         g_free(mnemonic);
     }
     return currency;

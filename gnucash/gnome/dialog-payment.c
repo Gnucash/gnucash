@@ -1004,6 +1004,7 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 
             gnc_xfer_dialog_select_to_account(xfer, pw->xfer_acct);
             gnc_xfer_dialog_set_amount(xfer, pw->amount_tot);
+            gnc_xfer_dialog_set_date (xfer, t);
 
             /* All we want is the exchange rate so prevent the user from thinking
                it makes sense to mess with other stuff */
@@ -1012,7 +1013,9 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
             gnc_xfer_dialog_hide_from_account_tree(xfer);
             gnc_xfer_dialog_hide_to_account_tree(xfer);
             gnc_xfer_dialog_is_exchange_dialog(xfer, &exch);
-            gnc_xfer_dialog_run_until_done(xfer);
+
+            if (!gnc_xfer_dialog_run_until_done(xfer))
+                return; /* If the user cancels, return to the payment dialog without changes */
         }
 
         /* Perform the payment */

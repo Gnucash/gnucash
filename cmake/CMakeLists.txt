@@ -10,5 +10,5 @@ endif()
 
 set_dist_list(cmake_DIST CMakeLists.txt README_CMAKE.txt cmake_uninstall.cmake.in
     configure-appdata.cmake configure-gnucash-desktop.cmake configure-manpage.cmake
-    git2version-info.cmake version-info2env.cmake
+    configure-totd.cmake git2version-info.cmake version-info2env.cmake
 )

@@ -818,6 +818,9 @@ dist_add_generated (${BUILDING_FROM_VCS} ChangeLog)
 ############################ BEGIN MAKE DIST #################
 
 set(PACKAGE_PREFIX "${PROJECT_NAME}-${PROJECT_VERSION}")
+if (PROJECT_DESCRIPTION)
+  string(APPEND PACKAGE_PREFIX "-${PROJECT_DESCRIPTION}")
+endif()
 set(DIST_FILE "${PACKAGE_PREFIX}.tar")
 
 set(toplvl_DIST_local ${gnucash_DOCS}

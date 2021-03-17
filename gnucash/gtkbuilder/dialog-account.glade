@@ -551,8 +551,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Transactions&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Transactions</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1191,8 +1193,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Identification&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Identification</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1583,8 +1587,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">&lt;b&gt;_Parent Account&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">_Parent Account</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>

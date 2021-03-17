@@ -233,7 +233,7 @@ set_mac_locale()
     {
         lang_str = [locale objectForKey: NSLocaleLanguageCode];
         country_str = [locale objectForKey: NSLocaleCountryCode];
-	locale_str = [[[lang_str stringByAppendingString: @"_"]
+	locale_str = [ [ [lang_str stringByAppendingString: @"_"]
 		      stringByAppendingString: country_str]
                       stringByAppendingString: @".UTF-8"];
     }
