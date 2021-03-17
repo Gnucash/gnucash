@@ -111,6 +111,15 @@ engine-common.i */
 %include "qoflog.h"
 
 %inline %{
+static void gnc_log_warn(const char *msg)
+{ g_log("gnc.scm", G_LOG_LEVEL_WARNING, "%s", msg); }
+static void gnc_log_error(const char *msg)
+{ g_log("gnc.scm", G_LOG_LEVEL_CRITICAL, "%s", msg); }
+static void gnc_log_msg(const char *msg)
+{ g_log("gnc.scm", G_LOG_LEVEL_MESSAGE, "%s", msg); }
+static void gnc_log_debug(const char *msg)
+{ g_log("gnc.scm", G_LOG_LEVEL_DEBUG, "%s", msg); }
+
 static const GncGUID * gncPriceGetGUID(GNCPrice *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
 static const GncGUID * gncBudgetGetGUID(GncBudget *x)

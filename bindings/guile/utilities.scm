@@ -40,17 +40,17 @@
   (string-join (map (lambda (x) (format #f "~A" x)) items) ""))
 
 (define (gnc:warn . items)
-  (gnc-scm-log-warn (strify items)))
+  (gnc-log-warn (strify items)))
 
 (define (gnc:error . items)
-  (gnc-scm-log-error (strify items )))
+  (gnc-log-error (strify items )))
 
 (define (gnc:msg . items)
-  (gnc-scm-log-msg (strify items)))
+  (gnc-log-msg (strify items)))
 
 (define (gnc:debug . items)
   (when (qof-log-check "gnc.scm" QOF-LOG-DEBUG)
-    (gnc-scm-log-debug (strify items))))
+    (gnc-log-debug (strify items))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; the following functions are initialized to log message to tracefile

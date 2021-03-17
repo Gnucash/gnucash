@@ -90,11 +90,6 @@ gchar * gnc_build_stdreports_path(const gchar *);
 %newobject gnc_build_reports_path;
 gchar * gnc_build_reports_path(const gchar *);
 
-void gnc_scm_log_warn(const gchar *);
-void gnc_scm_log_error(const gchar *);
-void gnc_scm_log_msg(const gchar *);
-void gnc_scm_log_debug(const gchar *);
-
 %newobject gnc_utf8_strip_invalid_strdup;
 gchar * gnc_utf8_strip_invalid_strdup(const gchar *);
 
