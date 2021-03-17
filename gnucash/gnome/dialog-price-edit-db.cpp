@@ -139,7 +139,7 @@ gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer data)
 void
 gnc_prices_dialog_help_cb (GtkDialog *dialog, gpointer data)
 {
-    PricesDialog *pdb_dialog = data;
+    auto pdb_dialog{static_cast<PricesDialog*>(data)};
 
     gnc_gnome_help (GTK_WINDOW (pdb_dialog->window), HF_HELP, HL_PRICE_DB);
 }

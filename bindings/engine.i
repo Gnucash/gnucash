@@ -248,34 +248,8 @@ SplitList * qof_query_run_subquery (QofQuery *q, const QofQuery *q);
 time64 time64CanonicalDayTime(time64 t);
 
 %include <gnc-budget.h>
-
-%typemap(in) GList * {
-  SCM path_scm = $input;
-  GList *path = NULL;
-
-  while (!scm_is_null (path_scm))
-  {
-    SCM key_scm = SCM_CAR (path_scm);
-    char *key;
-    if (!scm_is_string (key_scm))
-      break;
-
-    key = scm_to_locale_string (key_scm);
-    path = g_list_prepend (path, key);
-
-    path_scm = SCM_CDR (path_scm);
-  }
-
-  $1 = g_list_reverse (path);
-}
-
 %typemap (freearg) GList * "g_list_free_full ($1, g_free);"
 
-void gnc_quote_source_set_fq_installed (const char* version_string,
-                                        GList *sources_list);
-%clear GList *;
-%ignore gnc_quote_source_set_fq_installed;
-%ignore gnc_commodity_table_get_quotable_commodities;
 %include <gnc-commodity.h>
 
 void gnc_hook_add_scm_dangler (const gchar *name, SCM proc);
@@ -475,8 +449,3 @@ void qof_book_set_string_option(QofBook* book, const char* opt_name, const char*
     }
     $1 = g_list_reverse (path);
 }
-Process *gnc_spawn_process_async(GList *argl, const gboolean search_path);
-%clear GList *;
-
-gint gnc_process_get_fd(const Process *proc, const guint std_fd);
-void gnc_detach_process(Process *proc, const gboolean kill_it);
