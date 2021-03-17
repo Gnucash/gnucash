@@ -32,14 +32,15 @@
 # giorgos georgopoulakis <huskyaek@gmail.com>, 2021.
 # Michalis <michalisntovas@yahoo.gr>, 2021.
 # Ζωή Καίσα <kaisazoe@gmail.com>, 2021.
+# Katerina <katerina.gakou@hotmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-02-24 21:50+0000\n"
-"Last-Translator: Ζωή Καίσα <kaisazoe@gmail.com>\n"
+"PO-Revision-Date: 2021-03-17 15:18+0000\n"
+"Last-Translator: Katerina <katerina.gakou@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
 "Language: el\n"
@@ -47,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -262,7 +263,7 @@ msgstr "Αγγλικά"
 
 #: borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Φάρσι (MacFarsi)"
 
 #: borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
@@ -286,7 +287,7 @@ msgstr "Gujarati (MacGujarati)"
 
 #: borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Γκουρμούχι (MacGurmukhi)"
 
 #: borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
