@@ -1785,7 +1785,7 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
 
     ENTER(" ");
 
-    GncQuotes quotes (xferData->book);
+    GncQuotes quotes;
     if (quotes.cmd_result() != 0)
     {
         if (!quotes.error_msg().empty())
@@ -1795,7 +1795,7 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
     }
 
     gnc_set_busy_cursor (nullptr, TRUE);
-    quotes.fetch();
+    quotes.fetch (xferData->book);
     gnc_unset_busy_cursor (nullptr);
 
     /*the results should be in the price db now, but don't crash if not. */

@@ -341,7 +341,7 @@ Gnucash::add_quotes (const bo_str& uri)
     if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
         cleanup_and_exit_with_failure (session);
 
-    GncQuotes quotes (qof_session_get_book(session));
+    GncQuotes quotes;
     if (quotes.cmd_result() == 0)
     {
         std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << std::endl;
@@ -356,7 +356,7 @@ Gnucash::add_quotes (const bo_str& uri)
         std::cerr << bl::translate ("Error message:") << std::endl;
         std::cerr << quotes.error_msg() << std::endl;
     }
-    quotes.fetch ();
+    quotes.fetch (qof_session_get_book(session));
 
     qof_session_save(session, NULL);
     if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)

@@ -66,7 +66,7 @@ public:
     GncQuotesImpl ();
     GncQuotesImpl (QofBook *book);
 
-    void fetch ();
+    void fetch (QofBook *book);
     void fetch (CommVec& commodities);
     void fetch (gnc_commodity *comm);
 
@@ -101,22 +101,11 @@ private:
 
 GncQuotesImpl::GncQuotesImpl ()
 {
-    check (nullptr);
-}
-
-GncQuotesImpl::GncQuotesImpl (QofBook *book)
-{
-    check (book);
-}
-
-void
-GncQuotesImpl::check (QofBook *book)
-{
     m_version.clear();
     m_sources.clear();
     m_error_msg.clear();
     m_cmd_result  = 0;
-    m_book = book;
+    m_book = nullptr;
     m_dflt_curr = gnc_default_currency();
 
     auto perl_executable = bp::search_path("perl");
@@ -151,7 +140,11 @@ GncQuotesImpl::sources_as_glist()
 void
 GncQuotesImpl::fetch (CommVec& commodities)
 {
+    if (commodities.empty())
+        return;
+
     m_comm_vec = std::move (commodities);  // Store for later use
+    m_book = qof_instance_get_book (m_comm_vec[0]);
 
     bpt::ptree pt, pt_child;
     pt.put ("defaultcurrency", gnc_commodity_get_mnemonic (m_dflt_curr));
@@ -206,11 +199,16 @@ GncQuotesImpl::fetch (CommVec& commodities)
 
 
 void
-GncQuotesImpl::fetch ()
+GncQuotesImpl::fetch (QofBook *book)
 {
+    if (!book)
+    {
+        m_cmd_result = 1;
+        m_error_msg = "No book set\n";
+        return;
+    }
     auto commodities = gnc_quotes_get_quotable_commodities (
-        gnc_commodity_table_get_table (m_book));
-
+        gnc_commodity_table_get_table (book));
     fetch (commodities);
 }
 
@@ -219,7 +217,6 @@ void
 GncQuotesImpl::fetch (gnc_commodity *comm)
 {
     auto commodities = CommVec {comm};
-
     fetch (commodities);
 }
 
@@ -533,15 +530,10 @@ GncQuotes::GncQuotes ()
     m_impl = std::make_unique<GncQuotesImpl> ();
 }
 
-GncQuotes::GncQuotes (QofBook *book)
-{
-    m_impl = std::make_unique<GncQuotesImpl> (book);
-}
-
 void
-GncQuotes::fetch (void)
+GncQuotes::fetch (QofBook *book)
 {
-    m_impl->fetch ();
+    m_impl->fetch (book);
 }
 
 void GncQuotes::fetch (CommVec& commodities)

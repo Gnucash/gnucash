@@ -45,11 +45,10 @@ class GncQuotes
 public:
     // Constructor - checks for presence of Finance::Quote and import version and quote sources
     GncQuotes ();
-    GncQuotes (QofBook *book);
     ~GncQuotes ();
 
     // Fetch quotes for all commodities in our db that have a quote source set
-    void fetch (void);
+    void fetch (QofBook *book);
     // Only fetch quotes for the commodities passed that have a quote source  set
     void fetch (CommVec& commodities);
     // Fetch quote for the commodity if it has a quote source  set
