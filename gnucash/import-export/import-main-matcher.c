@@ -393,7 +393,6 @@ static void
 resolve_conflicts (GNCImportMainMatcher *info)
 {
     GtkTreeModel* model = gtk_tree_view_get_model (info->view);
-    GtkListStore* store = GTK_LIST_STORE(model);
     GtkTreeIter import_iter, best_import;
     gint best_match = 0;
 
