@@ -66,8 +66,9 @@ public:
     GncQuotesImpl ();
     GncQuotesImpl (QofBook *book);
 
-    void fetch_all ();
-    void fetch (const CommVec& commodities);
+    void fetch ();
+    void fetch (CommVec& commodities);
+    void fetch (gnc_commodity *comm);
 
     const int cmd_result() noexcept { return m_cmd_result; }
     const std::string& error_msg() noexcept { return m_error_msg; }
@@ -148,9 +149,9 @@ GncQuotesImpl::sources_as_glist()
 
 
 void
-GncQuotesImpl::fetch (const CommVec& commodities)
+GncQuotesImpl::fetch (CommVec& commodities)
 {
-    m_comm_vec = commodities;  // Store for later use
+    m_comm_vec = std::move (commodities);  // Store for later use
 
     bpt::ptree pt, pt_child;
     pt.put ("defaultcurrency", gnc_commodity_get_mnemonic (m_dflt_curr));
@@ -205,10 +206,19 @@ GncQuotesImpl::fetch (const CommVec& commodities)
 
 
 void
-GncQuotesImpl::fetch_all ()
+GncQuotesImpl::fetch ()
 {
     auto commodities = gnc_quotes_get_quotable_commodities (
         gnc_commodity_table_get_table (m_book));
+
+    fetch (commodities);
+}
+
+
+void
+GncQuotesImpl::fetch (gnc_commodity *comm)
+{
+    auto commodities = CommVec {comm};
 
     fetch (commodities);
 }
@@ -529,14 +539,19 @@ GncQuotes::GncQuotes (QofBook *book)
 }
 
 void
-GncQuotes::fetch_all ()
+GncQuotes::fetch (void)
 {
-    m_impl->fetch_all ();
+    m_impl->fetch ();
 }
 
-void GncQuotes::fetch (const CommVec& commodities)
+void GncQuotes::fetch (CommVec& commodities)
 {
     m_impl->fetch (commodities);
+}
+
+void GncQuotes::fetch (gnc_commodity *comm)
+{
+    m_impl->fetch (comm);
 }
 
 const int GncQuotes::cmd_result() noexcept

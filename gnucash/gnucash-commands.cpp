@@ -356,7 +356,7 @@ Gnucash::add_quotes (const bo_str& uri)
         std::cerr << bl::translate ("Error message:") << std::endl;
         std::cerr << quotes.error_msg() << std::endl;
     }
-    quotes.fetch_all ();
+    quotes.fetch ();
 
     qof_session_save(session, NULL);
     if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)

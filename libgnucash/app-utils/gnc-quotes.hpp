@@ -26,9 +26,9 @@
 #include <string>
 #include <vector>
 #include <gnc-commodity.hpp>  // For CommVec alias
+#include <glib.h>
 
 extern  "C" {
-#include <glib.h>
 #include <qofbook.h>
 }
 
@@ -48,8 +48,12 @@ public:
     GncQuotes (QofBook *book);
     ~GncQuotes ();
 
-    void fetch_all ();
-    void fetch (const CommVec& commodities);
+    // Fetch quotes for all commodities in our db that have a quote source set
+    void fetch (void);
+    // Only fetch quotes for the commodities passed that have a quote source  set
+    void fetch (CommVec& commodities);
+    // Fetch quote for the commodity if it has a quote source  set
+    void fetch (gnc_commodity *comm);
 
     const int cmd_result() noexcept;
     const std::string& error_msg() noexcept;

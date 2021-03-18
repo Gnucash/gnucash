@@ -569,7 +569,7 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
     }
 
     gnc_set_busy_cursor (NULL, TRUE);
-    quotes.fetch_all();
+    quotes.fetch();
     gnc_unset_busy_cursor (NULL);
 
     /* Without this, the summary bar on the accounts tab
