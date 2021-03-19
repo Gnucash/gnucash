@@ -4363,62 +4363,61 @@ gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_edit_cut (GtkAction *action, GncMainWindow *window)
 {
-    GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-    GtkTextBuffer *text_buffer;
-    GtkClipboard *clipboard;
-    gboolean editable;
+    GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW(window));
 
-    if (GTK_IS_EDITABLE (widget))
+    if (GTK_IS_EDITABLE(widget))
     {
-        gtk_editable_cut_clipboard (GTK_EDITABLE (widget));
+        gtk_editable_cut_clipboard (GTK_EDITABLE(widget));
     }
-    else if (GTK_IS_TEXT_VIEW (widget))
+    else if (GTK_IS_TEXT_VIEW(widget))
     {
-        text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
-        clipboard = gtk_widget_get_clipboard (GTK_WIDGET(text_buffer),
-                                              GDK_SELECTION_CLIPBOARD);
-        editable = gtk_text_view_get_editable (GTK_TEXT_VIEW (widget));
-        gtk_text_buffer_cut_clipboard (text_buffer, clipboard, editable);
+        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
+        GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(widget),
+                                                            GDK_SELECTION_CLIPBOARD);
+        gboolean editable = gtk_text_view_get_editable (GTK_TEXT_VIEW(widget));
+
+        if (clipboard)
+            gtk_text_buffer_cut_clipboard (text_buffer, clipboard, editable);
     }
 }
 
 static void
 gnc_main_window_cmd_edit_copy (GtkAction *action, GncMainWindow *window)
 {
-    GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-    GtkTextBuffer *text_buffer;
-    GtkClipboard *clipboard;
+    GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW(window));
 
-    if (GTK_IS_EDITABLE (widget))
+    if (GTK_IS_EDITABLE(widget))
     {
-        gtk_editable_copy_clipboard (GTK_EDITABLE (widget));
+        gtk_editable_copy_clipboard (GTK_EDITABLE(widget));
     }
-    else if (GTK_IS_TEXT_VIEW (widget))
+    else if (GTK_IS_TEXT_VIEW(widget))
     {
-        text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
-        clipboard = gtk_widget_get_clipboard (GTK_WIDGET(text_buffer),
-                                              GDK_SELECTION_CLIPBOARD);
-        gtk_text_buffer_copy_clipboard (text_buffer, clipboard);
+        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
+        GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(widget),
+                                                            GDK_SELECTION_CLIPBOARD);
+        if (clipboard)
+            gtk_text_buffer_copy_clipboard (text_buffer, clipboard);
     }
 }
 
 static void
 gnc_main_window_cmd_edit_paste (GtkAction *action, GncMainWindow *window)
 {
-    GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-    GtkTextBuffer *text_buffer;
-    GtkClipboard *clipboard;
+    GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW(window));
 
-    if (GTK_IS_EDITABLE (widget))
+    if (GTK_IS_EDITABLE(widget))
     {
-        gtk_editable_paste_clipboard (GTK_EDITABLE (widget));
+        gtk_editable_paste_clipboard (GTK_EDITABLE(widget));
     }
-    else if (GTK_IS_TEXT_VIEW (widget))
+    else if (GTK_IS_TEXT_VIEW(widget))
     {
-        text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
-        clipboard = gtk_widget_get_clipboard (GTK_WIDGET(text_buffer),
-                                              GDK_SELECTION_CLIPBOARD);
-        gtk_text_buffer_paste_clipboard (text_buffer, clipboard, NULL, FALSE);
+        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
+        GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(widget),
+                                                            GDK_SELECTION_CLIPBOARD);
+        gboolean editable = gtk_text_view_get_editable (GTK_TEXT_VIEW(widget));
+
+        if (clipboard)
+            gtk_text_buffer_paste_clipboard (text_buffer, clipboard, NULL, editable);
     }
 }
 
