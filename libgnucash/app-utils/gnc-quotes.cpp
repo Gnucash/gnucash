@@ -85,7 +85,8 @@ private:
     // Will also set m_cmd_result
     template <typename BufferT> CmdOutput run_cmd (const bfs::path &cmd_name, StrVec args, BufferT input);
 
-    void parse_quotes (const std::string &quotes);
+    void query_fq (void);
+    void parse_quotes (void);
 
 
     CommVec m_comm_vec;
@@ -93,6 +94,7 @@ private:
     QuoteSources m_sources;
     int m_cmd_result;
     std::string m_error_msg;
+    std::string m_fq_answer;
     QofBook *m_book;
     gnc_commodity *m_dflt_curr;
 };
@@ -138,6 +140,28 @@ GncQuotesImpl::sources_as_glist()
 
 
 void
+GncQuotesImpl::fetch (QofBook *book)
+{
+    if (!book)
+    {
+        m_cmd_result = 1;
+        m_error_msg = _("No book set");
+        m_error_msg += "\n";
+        return;
+    }
+    auto commodities = gnc_quotes_get_quotable_commodities (
+        gnc_commodity_table_get_table (book));
+    fetch (commodities);
+}
+
+void
+GncQuotesImpl::fetch (gnc_commodity *comm)
+{
+    auto commodities = CommVec {comm};
+    fetch (commodities);
+}
+
+void
 GncQuotesImpl::fetch (CommVec& commodities)
 {
     if (commodities.empty())
@@ -146,78 +170,9 @@ GncQuotesImpl::fetch (CommVec& commodities)
     m_comm_vec = std::move (commodities);  // Store for later use
     m_book = qof_instance_get_book (m_comm_vec[0]);
 
-    bpt::ptree pt, pt_child;
-    pt.put ("defaultcurrency", gnc_commodity_get_mnemonic (m_dflt_curr));
-
-    std::for_each (m_comm_vec.cbegin(), m_comm_vec.cend(),
-        [this, &pt] (auto comm)
-        {
-            auto comm_mnemonic = gnc_commodity_get_mnemonic (comm);
-            auto comm_ns = std::string("currency");
-            if (gnc_commodity_is_currency (comm))
-            {
-                if (gnc_commodity_equiv(comm, m_dflt_curr) ||
-                    (!comm_mnemonic || (strcmp (comm_mnemonic, "XXX") == 0)))
-                    return;
-            }
-            else
-                comm_ns = gnc_quote_source_get_internal_name (gnc_commodity_get_quote_source (comm));
-
-            auto key = comm_ns + "." + comm_mnemonic;
-            pt.put (key, "");
-        }
-    );
-
-    std::ostringstream result;
-    bpt::write_json(result, pt);
-    //std::cerr << "GncQuotes fetch_all - resulting json object\n" << result.str() << std::endl;
-
-    auto perl_executable = bp::search_path("perl");
-    auto fq_wrapper = std::string(gnc_path_get_bindir()) + "/finance-quote-wrapper";
-    StrVec args { "-w", fq_wrapper, "-f" };
-
-    auto cmd_out = run_cmd (perl_executable.string(), args, result.str());
-
+    query_fq ();
     if (m_cmd_result == 0)
-    {
-        std::string resultstr;
-        for (auto line : cmd_out.first)
-            resultstr.append(std::move(line) + "\n");
-        parse_quotes (resultstr);
-    }
-    else
-        for (auto line : cmd_out.second)
-            m_error_msg.append(std::move(line) + "\n");
-
-    for (auto line : cmd_out.first)
-        std::cerr << "Output line retrieved from wrapper:\n" << line << std::endl;
-
-    for (auto line : cmd_out.second)
-        std::cerr << "Error line retrieved from wrapper:\n" << line << std::endl;
-
-}
-
-
-void
-GncQuotesImpl::fetch (QofBook *book)
-{
-    if (!book)
-    {
-        m_cmd_result = 1;
-        m_error_msg = "No book set\n";
-        return;
-    }
-    auto commodities = gnc_quotes_get_quotable_commodities (
-        gnc_commodity_table_get_table (book));
-    fetch (commodities);
-}
-
-
-void
-GncQuotesImpl::fetch (gnc_commodity *comm)
-{
-    auto commodities = CommVec {comm};
-    fetch (commodities);
+        parse_quotes ();
 }
 
 static const std::vector <std::string>
@@ -234,7 +189,7 @@ GncQuotesImpl::run_cmd (const bfs::path &cmd_name, StrVec args, BufferT input)
 
     auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
     if (!av_key)
-        std::cerr << "No AlphaVantage API key set, currency quotes and other AlphaVantage based quotes won't work." << std::endl;
+        std::cerr << "No Alpha Vantage API key set, currency quotes and other AlphaVantage based quotes won't work.\n";
 
     try
     {
@@ -280,10 +235,60 @@ GncQuotesImpl::run_cmd (const bfs::path &cmd_name, StrVec args, BufferT input)
 }
 
 void
-GncQuotesImpl::parse_quotes (const std::string &quotes_str)
+GncQuotesImpl::query_fq (void)
+{
+    bpt::ptree pt, pt_child;
+    pt.put ("defaultcurrency", gnc_commodity_get_mnemonic (m_dflt_curr));
+
+    std::for_each (m_comm_vec.cbegin(), m_comm_vec.cend(),
+                   [this, &pt] (auto comm)
+                   {
+                       auto comm_mnemonic = gnc_commodity_get_mnemonic (comm);
+                       auto comm_ns = std::string("currency");
+                       if (gnc_commodity_is_currency (comm))
+                       {
+                           if (gnc_commodity_equiv(comm, m_dflt_curr) ||
+                               (!comm_mnemonic || (strcmp (comm_mnemonic, "XXX") == 0)))
+                               return;
+                       }
+                       else
+                           comm_ns = gnc_quote_source_get_internal_name (gnc_commodity_get_quote_source (comm));
+
+                       auto key = comm_ns + "." + comm_mnemonic;
+                       pt.put (key, "");
+                   }
+    );
+
+    std::ostringstream result;
+    bpt::write_json(result, pt);
+
+    auto perl_executable = bp::search_path("perl");
+    auto fq_wrapper = std::string(gnc_path_get_bindir()) + "/finance-quote-wrapper";
+    StrVec args { "-w", fq_wrapper, "-f" };
+
+    auto cmd_out = run_cmd (perl_executable.string(), args, result.str());
+
+    m_fq_answer.clear();
+    if (m_cmd_result == 0)
+        for (auto line : cmd_out.first)
+            m_fq_answer.append(std::move(line) + "\n");
+    else
+        for (auto line : cmd_out.second)
+            m_error_msg.append(std::move(line) + "\n");
+
+//     for (auto line : cmd_out.first)
+//         std::cerr << "Output line retrieved from wrapper:\n" << line << std::endl;
+//
+//     for (auto line : cmd_out.second)
+//         std::cerr << "Error line retrieved from wrapper:\n" << line << std::endl;
+
+}
+
+void
+GncQuotesImpl::parse_quotes (void)
 {
     bpt::ptree pt;
-    std::istringstream ss {quotes_str};
+    std::istringstream ss {m_fq_answer};
 
     try
     {
