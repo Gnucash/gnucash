@@ -7,15 +7,15 @@
 # Francisco Javier Serrador <fserrador@gmail.com>, 2018.
 # Carlos Manrique Enguita <UO258425@uniovi.es>, 2021.
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
+# Guille <willelopz+weblate@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.7.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-14 17:02+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail."
-"net>\n"
+"PO-Revision-Date: 2021-03-18 22:18+0000\n"
+"Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -26,8 +26,8 @@ msgstr ""
 "X-Generator: Weblate 4.5.2-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -4506,7 +4506,7 @@ msgstr "_Borrar presupuesto"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
-msgstr ""
+msgstr "Seleccionar éste u otro presupuesto y eliminarlo."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:164
 #, fuzzy
@@ -26867,7 +26867,7 @@ msgstr "Enseñar la diferencia como presupuesto - efectiva."
 
 #: gnucash/report/reports/standard/budget.scm:58
 msgid "Use accumulated amounts"
-msgstr ""
+msgstr "Usar cantidades acumuladas"
 
 #: gnucash/report/reports/standard/budget.scm:59
 msgid "Values are accumulated across periods."
@@ -27128,7 +27128,7 @@ msgstr "Transacciones Inválidas"
 
 #: gnucash/report/reports/standard/category-barchart.scm:291
 msgid "Start date must be earlier than End date"
-msgstr ""
+msgstr "La fecha de inicio debe ser anterior a la fecha de fin"
 
 #: gnucash/report/reports/standard/category-barchart.scm:329
 msgid "Daily Average"
@@ -27588,6 +27588,7 @@ msgstr ""
 #: gnucash/report/reports/standard/income-gst-statement.scm:71
 msgid "This message will be removed when tax accounts are specified."
 msgstr ""
+"Este mensaje desaparecerá cuando las cuentas impositivas sean especificadas."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:110
 msgid "Individual sales columns"
@@ -27854,7 +27855,7 @@ msgstr "Dibujo Ubicativo"
 
 #: gnucash/report/reports/standard/invoice.scm:207
 msgid "Location for Picture"
-msgstr ""
+msgstr "Ubicación para Imagen"
 
 #: gnucash/report/reports/standard/invoice.scm:213
 #: gnucash/report/reports/standard/register.scm:354
@@ -29509,6 +29510,8 @@ msgstr "Hasta"
 #: gnucash/report/stylesheets/css.scm:119
 msgid "CSS code. This field specifies the CSS code for styling reports."
 msgstr ""
+"Código CSS. Este campo especifica el código CSS para dar estilo a los "
+"reportes."
 
 #: gnucash/report/stylesheets/css.scm:209
 msgid "&lt;/style is disallowed in CSS. Using default CSS."
