@@ -297,14 +297,16 @@ GncQuotesImpl::parse_quotes (void)
     catch (bpt::json_parser_error &e) {
         m_cmd_result = -1;
         m_error_msg = m_error_msg +
-                      "Failed to parse quotes results." + "\n" +
-                      "Error message:" + "\n" +
-                      e.what() + "\n";
+                      _("Failed to parse result returned by Finance::Quote.") + "\n" +
+                      _("Error message:") + "\n" +
+                       e.what() + "\n";
+        return;
     }
     catch (...) {
         m_cmd_result = -1;
         m_error_msg = m_error_msg +
-                      "Failed to parse quotes results." + "\n";
+                      _("Failed to parse result returned by Finance::Quote.") + "\n";
+        return;
     }
 
     auto pricedb = gnc_pricedb_get_db (m_book);
@@ -323,9 +325,9 @@ GncQuotesImpl::parse_quotes (void)
                     }
 
                     std::string key = comm_mnemonic;
-                    boost::optional<bool> success = pt.get_optional<bool> (key + ".success");
+                    auto success = pt.get_optional<bool> (key + ".success");
                     std::string price_type = "last";
-                    boost::optional<std::string> price_str = pt.get_optional<std::string> (key + "." + price_type);
+                    auto price_str = pt.get_optional<std::string> (key + "." + price_type);
                     if (!price_str)
                     {
                         price_type = "nav";
@@ -340,11 +342,11 @@ GncQuotesImpl::parse_quotes (void)
                         price_type = "unknown";
                     }
 
-                    boost::optional<bool> inverted_tmp = pt.get_optional<bool> (key + ".inverted");
-                    bool inverted = inverted_tmp ? *inverted_tmp : false;
-                    boost::optional<std::string> date_str = pt.get_optional<std::string> (key + ".date");
-                    boost::optional<std::string> time_str = pt.get_optional<std::string> (key + ".time");
-                    boost::optional<std::string> currency_str = pt.get_optional<std::string> (key + ".currency");
+                    auto inverted_tmp = pt.get_optional<bool> (key + ".inverted");
+                    auto inverted = inverted_tmp ? *inverted_tmp : false;
+                    auto date_str = pt.get_optional<std::string> (key + ".date");
+                    auto time_str = pt.get_optional<std::string> (key + ".time");
+                    auto currency_str = pt.get_optional<std::string> (key + ".currency");
 
 
                     std::cout << "Commodity: " << comm_mnemonic << "\n";
@@ -356,7 +358,7 @@ GncQuotesImpl::parse_quotes (void)
 
                     if (!success || !*success)
                     {
-                        boost::optional<std::string> errmsg = pt.get_optional<std::string> (key + ".errormsg");
+                        auto errmsg = pt.get_optional<std::string> (key + ".errormsg");
                         std::cerr << "Skipped " << comm_ns << ":" << comm_mnemonic << " - Finance::Quote returned fetch failure.\n";
                         std::cerr << "Reason: " << (errmsg ? *errmsg : "unknown") << "\n";
                         return;
@@ -416,7 +418,7 @@ GncQuotesImpl::parse_quotes (void)
                     catch (...)
                     {
                         std::cerr << "Warning: failed to parse quote date and time '" << iso_date_str << "' for " << comm_ns << ":" << comm_mnemonic << " - will use today\n";
-                        return;
+                        can_convert = false;
                     }
 
                     /*  Bit of an odd construct: GncDateTimes can't be copied,
