@@ -39,7 +39,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-17 15:18+0000\n"
+"PO-Revision-Date: 2021-03-18 22:18+0000\n"
 "Last-Translator: Katerina <katerina.gakou@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
@@ -2925,7 +2925,7 @@ msgstr "χρήστης"
 #: gnucash/gtkbuilder/dialog-print-check.glade:293
 #: gnucash/gtkbuilder/gnc-date-format.glade:30
 msgid "Custom"
-msgstr "Προσαρμοσμένο"
+msgstr "Εξατομικευμένος"
 
 #: gnucash/gnome/dialog-print-check.c:2602
 #: gnucash/gtkbuilder/dialog-preferences.glade:3449
@@ -30600,7 +30600,7 @@ msgstr ""
 
 #: libgnucash/engine/Account.cpp:4390
 msgid "Credit Card"
-msgstr "Πιστωτική κάρτα"
+msgstr "Πιστωτική Κάρτα"
 
 #: libgnucash/engine/Account.cpp:4392
 msgid "Stock"
