@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-18 22:18+0000\n"
+"PO-Revision-Date: 2021-03-19 19:18+0000\n"
 "Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -2183,7 +2183,7 @@ msgstr[1] "La distribución impositiva %s no existe. ¿Quiere crearla?"
 #: gnucash/gnome/dialog-imap-editor.c:367
 #, c-format
 msgid "To see the invalid mappings, use a filter of '%s'"
-msgstr ""
+msgstr "Para ver las asociaciones inválidas, use un filtro de '%s'"
 
 #: gnucash/gnome/dialog-imap-editor.c:367
 #: gnucash/gnome/dialog-imap-editor.c:604
@@ -4366,6 +4366,8 @@ msgstr "Borrar"
 #: gnucash/gnome/gnc-plugin-page-register.c:5065
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr ""
+"'Comprobar y reparar' está siendo ejecutado en este momento, ¿Desea abortar "
+"la operación?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:520
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:526
@@ -9144,7 +9146,7 @@ msgstr "Cerrar _sin guardar"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1452
 msgid "This window is closing and will not be restored."
-msgstr ""
+msgstr "Esta ventana se cerrará y no será restaurada."
 
 #: gnucash/gnome-utils/gnc-main-window.c:1458
 #, fuzzy
@@ -10503,7 +10505,7 @@ msgstr ""
 
 #: gnucash/gnucash-cli.cpp:185
 msgid "Unknown report command '{1}'"
-msgstr ""
+msgstr "Comando de informe desconocido '{1}'"
 
 #: gnucash/gnucash-cli.cpp:191
 #, fuzzy
@@ -10562,7 +10564,7 @@ msgstr "Opciones del Libro"
 
 #: gnucash/gnucash-core-app.cpp:517
 msgid "Show this help message"
-msgstr ""
+msgstr "Mostrar este mensaje de ayuda"
 
 #: gnucash/gnucash-core-app.cpp:519
 msgid "Show GnuCash version"
@@ -12709,7 +12711,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:14
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:117
 msgid "Confirm Window Close"
-msgstr ""
+msgstr "Confirme el cierre de la ventana"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:118
@@ -13980,6 +13982,9 @@ msgid ""
 "If not satisfied with the available templates, please read the wiki page "
 "linked below and share your new or improved template."
 msgstr ""
+"En caso de no estar satisfecho con las plantillas disponibles, lea por favor "
+"la página de la wiki enlazada debajo y comparta sus plantillas nuevas o "
+"mejoradas."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:490
 #, fuzzy
@@ -15387,6 +15392,8 @@ msgid ""
 "This account holds opening balance transactions. Only one account per "
 "commodity can hold opening balance transactions."
 msgstr ""
+"Esta cuenta contiene las transacciones de los saldo de apertura. Únicamente "
+"una cuenta por cada valor puede contener transacciones de saldo de apertura."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1564
 msgid "<b>Acco_unt Type</b>"
@@ -16039,6 +16046,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-doclink.glade:178
 msgid "Note: Only Document Links that are not read-only will be changed."
 msgstr ""
+"Nota: Únicamente los enlaces a documentos que no son de solo lectura serán "
+"modificados."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:279
 #, fuzzy
@@ -16053,7 +16062,7 @@ msgstr "Dibujo Ubicativo"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:380
 msgid "Enter URL like http://www.gnucash.org"
-msgstr ""
+msgstr "Introduzca URL como http://www.gnucash.org"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:425
 #, fuzzy
@@ -16981,6 +16990,9 @@ msgid ""
 "window\n"
 "Press 'Close' to return to the preference window\n"
 msgstr ""
+"Pulse 'Reset' para usar el separador de cuentas original y cerrar la ventana "
+"de preferencias\n"
+"Pulse 'Cerrar' para regresar a la ventana de preferencias\n"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:240
 msgid "GnuCash Preferences"
@@ -17238,7 +17250,7 @@ msgstr "Cuantos dígitos decimales automáticos se rellenarán."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1372
 msgid "Numbers, Date, Time"
-msgstr ""
+msgstr "Números, Fecha, Hora"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1403
 msgid "Perform account list _setup on new file"
@@ -19216,7 +19228,7 @@ msgstr "Periodo del presupuesto último"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:116
 msgid "Replace"
-msgstr ""
+msgstr "Reemplazar"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:120
 msgid ""
@@ -26288,6 +26300,8 @@ msgid ""
 "Selecting this option enables full account name instead, and disables "
 "indenting account names."
 msgstr ""
+"Seleccionar esta opción habilita el nombre de cuenta completo y deshabilita "
+"los nombres de cuentas indentados."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:87
 #, fuzzy
@@ -26871,7 +26885,7 @@ msgstr "Usar cantidades acumuladas"
 
 #: gnucash/report/reports/standard/budget.scm:59
 msgid "Values are accumulated across periods."
-msgstr ""
+msgstr "Los valores son acumulados a través de los períodos."
 
 #: gnucash/report/reports/standard/budget.scm:60
 msgid "Show Column with Totals"
@@ -31203,6 +31217,8 @@ msgid ""
 "This report was saved using a later version of GnuCash. One of the newer ~a "
 "options '~a' is not available, fallback to the option '~a'."
 msgstr ""
+"Este informe fue guardado usando una versión más reciente de GnuCash. Una de "
+"las nuevas ~a opciones '~a' no está disponible, revertir a la opción '~a'."
 
 #: libgnucash/app-utils/option-util.c:1663
 #, c-format
