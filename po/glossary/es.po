@@ -7,15 +7,15 @@
 # Gabriel Ortiz Severino <gabrielortizseverino@gmail.com>, 2021.
 # Pablo <ppicapietra@gmail.com>, 2021.
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
+# Guille <willelopz+weblate@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-14 17:02+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>"
-"\n"
+"PO-Revision-Date: 2021-03-20 00:18+0000\n"
+"Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "es/>\n"
 "Language: es\n"
@@ -465,7 +465,7 @@ msgstr "importar"
 
 #. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
 msgid "income statement"
-msgstr ""
+msgstr "declaración de ingresos"
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
@@ -566,7 +566,7 @@ msgstr "beneficio neta"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr ""
+msgstr "patrimonio neto"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
