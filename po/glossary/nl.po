@@ -1,7 +1,7 @@
 # Dutch translation of GNUCash glossary.
 # Copyright (C) 2006 Free Software Foundation, Inc.
 # Bernard Meens <meensb@xs4all.nl>, 2006.
-# Geert Janssens <geert@kobaltwit.be>, 2020
+# Geert Janssens <geert@kobaltwit.be>, 2020, 2021.
 # eol <joshua.de.clercq@gmail.com>, 2021.
 msgid ""
 msgstr ""
@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-01-24 21:32+0000\n"
-"Last-Translator: eol <joshua.de.clercq@gmail.com>\n"
+"PO-Revision-Date: 2021-03-19 16:18+0000\n"
+"Last-Translator: Geert Janssens <geert@kobaltwit.be>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/glossary/"
 "nl/>\n"
 "Language: nl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -314,7 +314,7 @@ msgstr "Credit"
 
 #. "-"
 msgid "Credit Card"
-msgstr "Credit Card"
+msgstr "Creditcard"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
@@ -454,7 +454,7 @@ msgstr "inkomensverklaring"
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
-msgstr "interest"
+msgstr "intrest"
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
@@ -598,7 +598,7 @@ msgstr "betaling"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr "verzamelboek"
+msgstr "verzamelrekening"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
@@ -638,7 +638,7 @@ msgstr "winst"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "Winst & Verlies"
+msgstr "Winst-en verliesrekening"
 
 #. "-"
 msgid "quick-fill"
@@ -698,7 +698,7 @@ msgstr "rapport vorm: vertikaal"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "Winst reserves"
+msgstr "Ingehouden winst"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
