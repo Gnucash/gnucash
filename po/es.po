@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-20 00:18+0000\n"
+"PO-Revision-Date: 2021-03-20 22:04+0000\n"
 "Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -4421,13 +4421,12 @@ msgstr ""
 "¿Seguro que quiere hacer esto?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1437
-#, fuzzy
 msgid "_Pick another account"
-msgstr "_Seleccionar cuenta de transferencia"
+msgstr "_Seleccionar otra cuenta"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
 msgid "_Do it anyway"
-msgstr ""
+msgstr "_Hacerlo de todos modos"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1521
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1657
@@ -4826,11 +4825,11 @@ msgstr "Cuenta No Enlazada"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
 msgid "_Use as Default Layout for Customer Documents"
-msgstr ""
+msgstr "_Usar como diseño por defecto para documentos de cliente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:311
 msgid "_Reset Default Layout for Customer Documents"
-msgstr ""
+msgstr "_Reestablecer diseño por defecto para documentos de cliente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
 #, fuzzy
@@ -4869,11 +4868,11 @@ msgstr "Liquidar Recibo"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:331
 msgid "_Use as Default Layout for Vendor Documents"
-msgstr ""
+msgstr "_Usar como diseño por defecto para documentos de proveedor"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:332
 msgid "_Reset Default Layout for Vendor Documents"
-msgstr ""
+msgstr "_Reestablecer diseño por defecto para documentos de proveedor"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:338
 #, fuzzy
@@ -4912,11 +4911,11 @@ msgstr "Comprobante"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:352
 msgid "_Use as Default Layout for Employee Documents"
-msgstr ""
+msgstr "_Usar como diseño por defecto para documentos de empleado"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:353
 msgid "_Reset Default Layout for Employee Documents"
-msgstr ""
+msgstr "_Reestablecer diseño por defecto para documentos de empleado"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:359
 #, fuzzy
@@ -5008,6 +5007,8 @@ msgstr "Cuenta No Enlazada"
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
 msgstr ""
+"Usar el diseño actual como predeterminado para todas las facturas de cliente "
+"y notas de crédito"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:389
 msgid ""
@@ -5063,6 +5064,8 @@ msgstr "Abre un boletín de sociedad para el titular de esta Factura"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
 msgid "Use the current layout as default for all vendor bills and credit notes"
 msgstr ""
+"Usar el diseño actual como predeterminado para todas las facturas de "
+"proveedor y notas de crédito"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:410
 msgid ""
@@ -6093,6 +6096,8 @@ msgstr "Seleccionar Cuenta"
 #: gnucash/gnome/gnc-plugin-page-register.c:4761
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr ""
+"Varios documentos están conectados con esta transacción. Por favor, escoja "
+"uno:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4762
 #: gnucash/gnome-search/dialog-search.c:323
@@ -6845,7 +6850,7 @@ msgstr "Guión"
 
 #: gnucash/gnome/report-menus.scm:118
 msgid "A basic dashboard for your accounting data"
-msgstr ""
+msgstr "Un tablero básico para sus datos de contabilidad"
 
 #: gnucash/gnome/search-owner.c:136
 msgid "You have not selected an owner"
@@ -7190,6 +7195,8 @@ msgid ""
 "This may cause issues for future reconciliation actions on this account. "
 "Please double-check this is the date you intended."
 msgstr ""
+"Esto puede causar problemas con acciones de reconciliación futuras en esta "
+"cuenta. Por favor, compruebe que ésta sea la fecha deseada."
 
 #: gnucash/gnome/window-reconcile.c:1852
 msgid ""
@@ -7689,7 +7696,7 @@ msgstr ""
 #: gnucash/gnome-utils/dialog-account.c:1328
 msgid ""
 "An account with opening balance already exists for the desired currency."
-msgstr ""
+msgstr "Ya existe una cuenta con saldos iniciales para la moneda deseada."
 
 #: gnucash/gnome-utils/dialog-account.c:1329
 #, fuzzy
@@ -7913,7 +7920,7 @@ msgstr "Emplear Existente"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
 msgid "Use +- keys to increment/decrement number"
-msgstr ""
+msgstr "Use las teclas +- para incrementar /reducir el número"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
 msgid "Action/Number"
@@ -8166,7 +8173,7 @@ msgstr "nombre"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:634
 msgid "Please enter new name"
-msgstr ""
+msgstr "Introduzca un nuevo nombre, por favor"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:635
 #: gnucash/gtkbuilder/dialog-tax-table.glade:74

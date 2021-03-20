@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-20 00:18+0000\n"
+"PO-Revision-Date: 2021-03-20 22:04+0000\n"
 "Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "es/>\n"
@@ -198,7 +198,7 @@ msgstr "acción: transferencia"
 
 #. "-"
 msgid "action: wire"
-msgstr ""
+msgstr "acción: transferir"
 
 #. "-"
 msgid "action: withdraw"
@@ -371,7 +371,7 @@ msgstr "Debe (columna en el libro), Cargo"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
-msgstr "defecto"
+msgstr "predeterminado/a"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
@@ -506,9 +506,8 @@ msgid "Lost Accounts"
 msgstr "Cuentas perdidas"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
-#, fuzzy
 msgid "Lot"
-msgstr "Tot."
+msgstr "Lote"
 
 #. "Combine two books into one (see book)."
 #, fuzzy
