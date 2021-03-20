@@ -796,12 +796,12 @@ gnc_invoice_window_print_invoice(GtkWindow *parent, GncInvoice *invoice)
     const char *reportname = gnc_plugin_business_get_invoice_printreport();
     GncPluginPage *reportPage = NULL;
 
-    g_return_if_fail (invoice);
+    g_return_val_if_fail (invoice, NULL);
     if (!reportname)
         reportname = "5123a759ceb9483abf2182d01c140e8d"; // fallback if the option lookup failed
 
     func = scm_c_eval_string ("gnc:invoice-report-create");
-    g_return_if_fail (scm_is_procedure (func));
+    g_return_val_if_fail (scm_is_procedure (func), NULL);
 
     arg = SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p__gncInvoice"), 0);
     arg2 = scm_from_utf8_string(reportname);
@@ -810,7 +810,7 @@ gnc_invoice_window_print_invoice(GtkWindow *parent, GncInvoice *invoice)
     /* scm_gc_protect_object(func); */
 
     arg = scm_apply (func, args, SCM_EOL);
-    g_return_if_fail (scm_is_exact (arg));
+    g_return_val_if_fail (scm_is_exact (arg), NULL);
     report_id = scm_to_int (arg);
 
     /* scm_gc_unprotect_object(func); */
