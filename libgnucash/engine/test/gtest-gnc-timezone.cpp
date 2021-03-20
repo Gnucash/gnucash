@@ -61,6 +61,11 @@ TEST(gnc_timezone_constructors, test_pacific_time_constructor)
     EXPECT_EQ(3, tz->dst_local_start_time (2017).date().month());
     EXPECT_EQ(5, tz->dst_local_end_time (2017).date().day());
     EXPECT_EQ(11, tz->dst_local_end_time (2017).date().month());
+//Check some post-2038 dates to make sure that it works even on macOS.
+    EXPECT_EQ(10, tz->dst_local_start_time (2052).date().day());
+    EXPECT_EQ(3, tz->dst_local_start_time (2052).date().month());
+    EXPECT_EQ(3, tz->dst_local_end_time (2052).date().day());
+    EXPECT_EQ(11, tz->dst_local_end_time (2052).date().month());
 }
 
 #if !PLATFORM(WINDOWS)

@@ -52,6 +52,7 @@ static const char* log_module = "gnc.engine";
 
 #define N_(string) string //So that xgettext will find it
 
+using PTZ = boost::local_time::posix_time_zone;
 using Date = boost::gregorian::date;
 using Month = boost::gregorian::greg_month;
 using PTime = boost::posix_time::ptime;
@@ -169,49 +170,97 @@ LDT_from_unix_local(const time64 time)
         throw(std::invalid_argument("Time value is outside the supported year range."));
     }
 }
+/* If a date-time falls in a DST transition the LDT constructor will
+ * fail because either the date-time doesn't exist (when starting DST
+ * because the transition skips an hour) or is ambiguous (when ending
+ * because the transition hour is repeated). We try again an hour
+ * later to be outside the DST transition. When starting DST that's
+ * now the correct time but at the end of DST we need to set the
+ * returned time back an hour.
+ */
+static LDT
+LDT_with_pushup(const Date& tdate, const Duration& tdur, const TZ_Ptr tz,
+                 bool putback)
+{
+    static const boost::posix_time::hours pushup{1};
+    LDT ldt{tdate, tdur + pushup, tz, LDTBase::NOT_DATE_TIME_ON_ERROR};
+    if (ldt.is_special())
+    {
+        std::string error{"Couldn't create a valid datetime at "};
+        error += to_simple_string(tdate) + " ";
+        error += to_simple_string(tdur) + " TZ ";
+        error += tz->std_zone_abbrev();
+        throw(std::invalid_argument{error});
+    }
+    if (putback)
+        ldt -= pushup;
+    return ldt;
+}
 
 static LDT
-LDT_from_struct_tm(const struct tm tm)
+LDT_from_date_time(const Date& tdate, const Duration& tdur, const TZ_Ptr tz)
 {
-    Date tdate;
-    Duration tdur;
-    TZ_Ptr tz;
 
     try
     {
-        tdate = boost::gregorian::date_from_tm(tm);
-        tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
-                                                 tm.tm_sec, 0);
-        tz = tzp->get(tdate.year());
         LDT ldt(tdate, tdur, tz, LDTBase::EXCEPTION_ON_ERROR);
         return ldt;
     }
+    catch (const boost::local_time::time_label_invalid& err)
+    {
+        return LDT_with_pushup(tdate, tdur, tz, false);
+    }
+
+    catch (const boost::local_time::ambiguous_result& err)
+    {
+        return LDT_with_pushup(tdate, tdur, tz, true);
+    }
+
     catch(boost::gregorian::bad_year&)
     {
         throw(std::invalid_argument("Time value is outside the supported year range."));
     }
-    catch(boost::local_time::time_label_invalid&)
+
+}
+
+static LDT
+LDT_from_date_daypart(const Date& date, DayPart part, const TZ_Ptr tz)
+{
+    using hours = boost::posix_time::hours;
+
+    static const Duration day_begin{0, 0, 0};
+    static const Duration day_neutral{10, 59, 0};
+    static const Duration day_end{23, 59, 59};
+
+
+    switch (part)
     {
-        throw(std::invalid_argument("Struct tm does not resolve to a valid time."));
-    }
-    catch(boost::local_time::ambiguous_result&)
-    {
-        /* We plunked down in the middle of a DST change. Try constructing the
-         * LDT three hours later to get a valid result then back up those three
-         * hours to have the time we want.
-         */
-        using boost::posix_time::hours;
-        auto hour = tm.tm_hour;
-        tdur += hours(3);
-        LDT ldt(tdate, tdur, tz, LDTBase::NOT_DATE_TIME_ON_ERROR);
-        if (ldt.is_special())
-            throw(std::invalid_argument("Couldn't create a valid datetime."));
-        ldt -= hours(3);
-        return ldt;
+    case DayPart::start:
+        return LDT_from_date_time(date, day_begin, tz);
+    case DayPart::end:
+        return LDT_from_date_time(date, day_end, tz);
+    default: // To stop gcc from emitting a control reaches end of non-void function.
+    case DayPart::neutral:
+        PTime pt{date, day_neutral};
+        LDT lt{pt, tz};
+        auto offset = lt.local_time() - lt.utc_time();
+        if (offset < hours(-10))
+            lt -= hours(offset.hours() + 10);
+        if (offset > hours(13))
+            lt += hours(13 - offset.hours());
+        return lt;
     }
 }
 
-using TD = boost::posix_time::time_duration;
+static LDT
+LDT_from_struct_tm(const struct tm tm)
+{
+    Date tdate{boost::gregorian::date_from_tm(tm)};
+    Duration tdur{boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
+                                                  tm.tm_sec, 0)};
+    TZ_Ptr tz{tzp->get(tdate.year())};
+    return LDT_from_date_time(tdate, tdur, tz);
+}
 
 void
 _set_tzp(TimeZoneProvider& new_tzp)
@@ -248,10 +297,8 @@ public:
     static std::string timestamp();
 private:
     LDT m_time;
-    static const TD time_of_day[3];
 };
 
-const TD GncDateTimeImpl::time_of_day[3] = {TD(0, 0, 0), TD(10, 59, 0), TD(23, 59, 59)};
 /** Private implementation of GncDate. See the documentation for that class.
  */
 class GncDateImpl
@@ -281,49 +328,15 @@ private:
     friend bool operator!=(const GncDateImpl&, const GncDateImpl&);
 };
 
+/* Needs to be separately defined so that the friend decl can grant
+ * access to date.m_greg.
+ */
+GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
+    m_time{LDT_from_date_daypart(date.m_greg, part,
+                                 tzp->get(date.m_greg.year()))} {}
+
 /* Member function definitions for GncDateTimeImpl.
  */
-
-GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
-    m_time(date.m_greg, time_of_day[part], tzp->get(date.m_greg.year()),
-                     LDT::NOT_DATE_TIME_ON_ERROR)
-{
-    using boost::posix_time::hours;
-    if (m_time.is_not_a_date_time())
-    {
-        try
-        {
-            auto t_o_d = time_of_day[part] + hours(3);
-            LDT time(date.m_greg, t_o_d, tzp->get(date.m_greg.year()),
-                     LDT::EXCEPTION_ON_ERROR);
-            m_time = time - hours(3);
-        }
-        catch(boost::gregorian::bad_year&)
-        {
-            throw(std::invalid_argument("Time value is outside the supported year range."));
-        }
-    }
-
-    if (part == DayPart::neutral)
-    {
-        try
-        {
-            auto offset = m_time.local_time() - m_time.utc_time();
-            m_time = LDT(date.m_greg, time_of_day[part], utc_zone,
-                         LDT::EXCEPTION_ON_ERROR);
-            if (offset < hours(-10))
-                m_time -= hours(offset.hours() + 10);
-            if (offset > hours(13))
-                m_time += hours(13 - offset.hours());
-        }
-        catch(boost::gregorian::bad_year&)
-        {
-            throw(std::invalid_argument("Time value is outside the supported year range."));
-        }
-    }
-}
-
-using PTZ = boost::local_time::posix_time_zone;
 
 static TZ_Ptr
 tz_from_string(std::string str)
@@ -368,8 +381,7 @@ GncDateTimeImpl::GncDateTimeImpl(std::string str) :
         if (sm[2].matched)
             tzstr += sm[2];
         tzptr = tz_from_string(tzstr);
-        m_time = LDT(pdt.date(), pdt.time_of_day(), tzptr,
-                         LDTBase::NOT_DATE_TIME_ON_ERROR);
+        m_time = LDT_from_date_time(pdt.date(), pdt.time_of_day(), tzptr);
     }
     catch(boost::gregorian::bad_year&)
     {

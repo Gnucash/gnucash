@@ -37,10 +37,10 @@ typedef struct
     int day; //1-31
 } ymd;
 
-enum DayPart : int {
-    start,  // 00:00
-    neutral,  // 10:59
-    end,  // 23:59
+enum class DayPart {
+    start,    // 00:00 local
+    neutral,  // 10:59 UTC
+    end,      // 23:59 local
 };
 
 class GncDateTimeImpl;
