@@ -668,7 +668,7 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
         {
             // Oops - the user didn't select an Account column *and* we didn't get a default value either!
             // Note if you get here this suggests a bug in the code!
-            error_message = _("No account column selected and no default account specified either.\n"
+            error_message = _("No account column selected and no base account specified either.\n"
                                        "This should never happen. Please report this as a bug.");
             PINFO("User warning: %s", error_message.c_str());
             throw std::invalid_argument(error_message);
