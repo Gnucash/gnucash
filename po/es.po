@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-19 22:49+0000\n"
-"Last-Translator: Carlos Manrique Enguita <UO258425@uniovi.es>\n"
+"PO-Revision-Date: 2021-03-20 00:18+0000\n"
+"Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -519,7 +519,8 @@ msgid ""
 msgstr ""
 "Las listas de correo son el método de comunicación preferido por la "
 "comunidad de GnuCash. Para los anuncios de nuevas versiones, grupos de "
-"usuarios etc, mira la tabla en https://wiki.gnucash.org/wiki/Mailing_Lists"
+"usuarios etc, consulta la tabla en https://wiki.gnucash.org/wiki/"
+"Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
@@ -1670,7 +1671,7 @@ msgstr "Corregir URL:"
 
 #: gnucash/gnome/dialog-doclink.c:190
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr ""
+msgstr "Introducir URL tipo http://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-doclink.c:205
 #, fuzzy
@@ -4409,13 +4410,15 @@ msgid "Accounts"
 msgstr "Cuentas"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1429
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
 "transactions from.\n"
 "Are you sure you want to do this?"
 msgstr ""
-"Va a sobrescribir una transacción existente. ¿Seguro que quiere hacer esto?"
+"La cuenta %s no usa la misma moneda que la cuenta desde la que está moviendo "
+"la transacción.\n"
+"¿Seguro que quiere hacer esto?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1437
 #, fuzzy
@@ -4491,9 +4494,8 @@ msgid "Are you sure you want to do this?"
 msgstr "¿Seguro que quiere hacer esto?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:147
-#, fuzzy
 msgid "Open the selected account."
-msgstr "Abre la cuenta seleccionada"
+msgstr "Abrir la cuenta seleccionada."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:152
 msgid "Open _Subaccounts"
@@ -20899,12 +20901,13 @@ msgstr ""
 #: gnucash/import-export/bi-import/dialog-bi-import.c:534
 #, c-format
 msgid "Error(s) in invoice %s, all rows of this invoice ignored.\n"
-msgstr ""
+msgstr "Error(es) en factura %s, ignoradas todas las filas de esta factura.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:540
 #, c-format
 msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr ""
+"Error(es) en factura sin id, ignoradas todas las filas de esta factura.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:648
 #, fuzzy, c-format
@@ -22391,7 +22394,7 @@ msgstr "¿Coteja?"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3886
 msgid "QIF import requires guile with regex support."
-msgstr ""
+msgstr "Importación QIF requiere guile con soporte para regex."
 
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:235
 msgid "Enter a name for the account"
@@ -22642,6 +22645,8 @@ msgstr ""
 #, scheme-format
 msgid "ERROR: ALPHAVANTAGE_API_KEY must be set for currency and quotes; see ~A"
 msgstr ""
+"ERROR: ALPHAVANTAGE_API_KEY tiene que ser establecida para monedas y "
+"cotizaciones; ver ~A"
 
 #: gnucash/price-quotes.scm:460
 msgid "There was a system error while retrieving the price quotes."
@@ -22672,7 +22677,7 @@ msgstr "¿Añado cotizaciones óptimas restantes?"
 #: gnucash/price-quotes.scm:535
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
-msgstr ""
+msgstr "Encontrado Finance::Quote versión ~A."
 
 #: gnucash/python/init.py:18
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:49
@@ -25888,7 +25893,7 @@ msgstr "Mostrar distribución"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:62
 msgid "Target amount above reserve"
-msgstr ""
+msgstr "Cantidad objetivo sobre la reserva"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:63
 msgid ""
@@ -25914,7 +25919,7 @@ msgstr "Cargo"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:266
 msgid "Reserve"
-msgstr ""
+msgstr "Reserva"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:71
 #: gnucash/report/reports/standard/trial-balance.scm:574
@@ -26276,7 +26281,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:72
 msgid "Disable amount indenting"
-msgstr ""
+msgstr "Deshabilitar indentación de cantidades"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:73
 msgid ""
@@ -26296,7 +26301,7 @@ msgstr "Añadir resumen de opciones."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:78
 msgid "Account full name instead of indenting"
-msgstr ""
+msgstr "Nombre completo de cuenta en lugar de indentación"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:79
 msgid ""
