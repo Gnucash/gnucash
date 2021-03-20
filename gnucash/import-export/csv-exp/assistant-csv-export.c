@@ -94,36 +94,31 @@ static const gchar *finish_trans_search_gl_string = N_(
             "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to abort the export.\n");
 
 static const gchar *start_tree_string = N_(
-            "This assistant will help you export the Account Tree to a file\n"
+            "This assistant will help you export the Account Tree to a file"
             "with the separator specified below.\n\n"
             "Select the settings you require for the file and then click \"Next\" "
             "to proceed or \"Cancel\" to abort the export.\n");
 
-static const gchar *start_trans_string = N_(
-            "This assistant will help you export the Transactions to a file\n"
+static const gchar *start_trans_common_string = N_(
+            "This assistant will help you export the Transactions to a file "
             "with the separator specified below.\n\n"
-            "There will be multiple rows for each transaction and may "
-            "require further manipulation to get them in a format you can use.\n\n"
-            "Each Transaction will appear once in the export and will be listed in "
-            "the order the accounts were processed\n\n"
+            "%s\n\n"
+            "While a transaction may have splits in several of the selected accounts "
+            "it will only be exported once. It will appear under the first processed "
+            "account it has a split in.\n\n"
             "Price/Rate output format is controlled by the Preference setting,\n"
-            "General->Force Prices to display as decimals\n\n"
+            "Numbers, Date, Time->Force Prices to display as decimals\n\n"
             "Select the settings you require for the file and then click \"Next\" "
             "to proceed or \"Cancel\" to abort the export.\n");
+
+static const gchar *start_trans__multi_string = N_(
+            "There will be multiple rows for each transaction with each row "
+            "representing one split.\n\n");
 
 static const gchar *start_trans_simple_string = N_(
-            "This assistant will help you export the Transactions to a file\n"
-            "with the separator specified below.\n\n"
-            "There will be multiple rows for each transaction and may require further "
-            "manipulation to get them in a format you can use. Each Transaction will "
-            "appear once in the export and will be listed in the order the accounts "
-            "were processed\n\n"
-            "Price/Rate output format is controlled by the Preference setting,\n"
-            "General->Force Prices to display as decimals\n\n"
-            "By selecting the simple layout, the output will be equivalent to a single "
-            "row register view and as such some of the transfer detail could be lost.\n\n"
-            "Select the settings you require for the file and then click \"Next\" "
-            "to proceed or \"Cancel\" to abort the export.\n");
+            "There will be one row for each transaction, equivalent to a single row "
+            "in a register in 'Basic Ledger' mode. As such some transfer detail "
+            "could be lost.\n\n");
 
 
 /**************************************************
@@ -668,16 +663,22 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
 {
     CsvExportInfo *info = user_data;
 
+
+
     /* Set Start page text */
     if (info->export_type == XML_EXPORT_TREE)
         gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_tree_string));
     else
     {
+        gchar *label_string = NULL;
         /* General Journal and search registers are always multi-line exported */
         if ((info->export_type == XML_EXPORT_REGISTER) && (info->account == NULL))
-            gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_trans_string));
+            label_string = g_strdup_printf (_(start_trans_common_string), _(start_trans__multi_string));
         else
-            gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_trans_simple_string));
+            label_string = g_strdup_printf (_(start_trans_common_string), _(start_trans_simple_string));
+
+        gtk_label_set_text (GTK_LABEL(info->start_label), label_string);
+        g_free (label_string);
     }
 
     /* Enable the Assistant Buttons */
