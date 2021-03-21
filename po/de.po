@@ -13923,9 +13923,10 @@ msgstr ""
 "<b>Anmerkung:</b> Alle Konten außer Eigenkapital und Platzhaltern können "
 "Anfangsbestände enthalten.\n"
 
+# FE: Todo: better "fine tune"
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:575
 msgid "Setup selected accounts"
-msgstr "Ausgewähltes Konto einrichten"
+msgstr "Ausgewählte Konten feinabstimmen"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
