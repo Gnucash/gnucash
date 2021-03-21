@@ -517,8 +517,7 @@ GncDateTimeImpl::format_zulu(const char* format) const
     return win_date_format(sformat, utc_tm());
 #else
     using Facet = boost::local_time::local_time_facet;
-    auto offset = m_time.local_time() - m_time.utc_time();
-    auto zulu_time = m_time - offset;
+    auto zulu_time = LDT{m_time.utc_time(), utc_zone};
     auto output_facet(new Facet(normalize_format(format).c_str()));
     std::stringstream ss;
     ss.imbue(std::locale(gnc_get_locale(), output_facet));
