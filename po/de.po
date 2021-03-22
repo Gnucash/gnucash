@@ -12,7 +12,7 @@
 # quazgar <quazgar@posteo.de> 2017.
 # Rolf Leggewie, 2008.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
-# Christian Meyer <chrisime@gnome.org>, 2000, 2001.
+# Christian Meyer <chrisime@gnome.org>, 2000-2001.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
 # Manuel Bichler <felseninsel@hotmail.com>, 2020.
 # K. Herbert <herbert.ka@mailo.com>, 2020.
@@ -9103,8 +9103,14 @@ msgstr "Finanzverwaltung für Privatanwender und Kleinbetriebe."
 #: gnucash/gnome-utils/gnc-main-window.c:4733
 msgid "translator-credits"
 msgstr ""
-"Christian Stimming, 2001-2020\n"
-"Frank H. Ellenberger, 2007, 2009-2020\n"
+"Christian Stimming, 2001-2021\n"
+"Frank H. Ellenberger, 2007, 2009-2021\n"
+"Christian Wehling, 2020-2021\n"
+"Alois Spitzbart, 2020-2021\n"
+"Marco Zietzling, 2020\n"
+"Milo Ivir, 2020\n"
+"K. Herbert, 2020\n"
+"Manuel Bichler, 2020\n"
 "Andreas Hentze, 2019\n"
 "Joachim Wetzig, 2019\n"
 "Dmitriy Mangul, 2017-2018\n"
