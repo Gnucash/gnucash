@@ -22,10 +22,9 @@ extern "C"
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "test-engine-stuff.h"
 }
 
+#include "test-engine-stuff.h"
 #include "io-gncxml-v2.h"
 #include "test-file-stuff.h"
 #include "test-stuff.h"

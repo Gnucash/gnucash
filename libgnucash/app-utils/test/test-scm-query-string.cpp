@@ -22,11 +22,10 @@
 #include <glib.h>
 #include "guile-mappings.h"
 #include <libguile.h>
-#include "gnc-engine-guile.h"
 
 extern "C"
 {
-
+#include "gnc-engine-guile.h"
 #include "gnc-guile-utils.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"

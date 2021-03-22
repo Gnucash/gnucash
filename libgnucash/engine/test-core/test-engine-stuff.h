@@ -24,11 +24,11 @@
 
 #ifndef TEST_ENGINE_STUFF_H
 #define TEST_ENGINE_STUFF_H
+#include <glib.h>
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-#include <glib.h>
 #include <stdlib.h>
 #include <stdint.h>
 
