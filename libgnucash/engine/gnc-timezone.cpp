@@ -418,7 +418,7 @@ namespace IANAParser
 	auto isgmt_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.ttisgmtcnt)));
 	auto isstd_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.ttisstdcnt)));
 	auto leap_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.leapcnt)));
-	if ((tzh.version == '2' || tzh.version == '3') && sizeof(time_t) == sizeof(int64_t))
+	if ((tzh.version == '2' || tzh.version == '3'))
 	{
 	    fb_index = (sizeof(tzh) +
 			(sizeof(uint32_t) + sizeof(uint8_t)) * time_count +
