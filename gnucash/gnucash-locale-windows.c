@@ -32,7 +32,7 @@
  * it is set both the Windows and POSIX locales to that. If not
  * retrieve the Windows locale and set POSIX to match.
  */
-char *void
+char *
 set_platform_locale()
 {
     WCHAR lpLocaleName[LOCALE_NAME_MAX_LENGTH];
