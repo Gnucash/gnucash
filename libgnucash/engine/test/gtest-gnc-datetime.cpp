@@ -453,17 +453,21 @@ TEST(gnc_datetime_constructors, test_create_in_transition)
     EXPECT_EQ(gncdt1.format_zulu("%Y-%m-%d %H:%M:%S %Z"), "2018-11-04 03:00:00 UTC");
     EXPECT_EQ(gncdt1.format("%Y-%m-%d %H:%M:%S %Z"), "2018-11-04 01:00:00 -02");
     /* End of day, end of DST. We want one second before midnight in
-     * std time, i.e. -03. Unfortunately clang yields the still-in-DST time.
+     * std time, i.e. -03. Unfortunately sometimes boost::date_time
+     * decides that it's still DST and returns the first one.
      */
     GncDate date2{"2018-02-17", "y-m-d"};
     GncDateTime gncdt2{date2, DayPart::end};
-#ifdef __clang__
-    EXPECT_EQ(gncdt2.format_zulu("%Y-%m-%d %H:%M:%S %Z"), "2018-02-18 01:59:59 UTC");
-    EXPECT_EQ(gncdt2.format("%Y-%m-%d %H:%M:%S %Z"), "2018-02-17 23:59:59 -02");
-#else
-    EXPECT_EQ(gncdt2.format_zulu("%Y-%m-%d %H:%M:%S %Z"), "2018-02-18 02:59:59 UTC");
-    EXPECT_EQ(gncdt2.format("%Y-%m-%d %H:%M:%S %Z"), "2018-02-17 23:59:59 -03");
-#endif
+    if (gncdt2.offset() == -7200)
+    {
+        EXPECT_EQ(gncdt2.format_zulu("%Y-%m-%d %H:%M:%S %Z"), "2018-02-18 01:59:59 UTC");
+        EXPECT_EQ(gncdt2.format("%Y-%m-%d %H:%M:%S %Z"), "2018-02-17 23:59:59 -02");
+    }
+    else
+    {
+        EXPECT_EQ(gncdt2.format_zulu("%Y-%m-%d %H:%M:%S %Z"), "2018-02-18 02:59:59 UTC");
+        EXPECT_EQ(gncdt2.format("%Y-%m-%d %H:%M:%S %Z"), "2018-02-17 23:59:59 -03");
+    }
    /* After February 2019 Sao Paulo discontinued Daylight
      * Savings. This test checks to ensure that GncTimeZone doesn't
      * try to project 2018's rule forward.
