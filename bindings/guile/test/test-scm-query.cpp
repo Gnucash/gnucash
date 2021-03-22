@@ -18,12 +18,12 @@
  *                                                                  *
 \********************************************************************/
 
+#include <config.h>
 #include <libguile.h>
+#include <glib.h>
 
 extern "C"
 {
-#include <config.h>
-#include <glib.h>
 
 #include "gnc-engine-guile.h"
 #include "test-engine-stuff.h"
