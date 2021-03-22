@@ -22,11 +22,12 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 #include <kvp-frame.hpp>
-#include <gmp.h> 
-extern "C"
-{
+#include <gmp.h>
 #include <config.h>
 #include <glib.h>
+
+extern "C"
+{
 #include <unittest-support.h>
 #include <qofbookslots.h>
 #include "test-engine-stuff.h"

@@ -18,11 +18,12 @@
  *                                                                  *
 \********************************************************************/
 
+#include <config.h>
+#include <glib.h>
+
 extern "C"
 {
-#include <config.h>
 #include <stdlib.h>
-#include <glib.h>
 #include "SX-book.h"
 #include "gnc-date.h"
 #include "gnc-sx-instance-model.h"
