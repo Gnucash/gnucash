@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-20 22:04+0000\n"
+"PO-Revision-Date: 2021-03-21 13:29+0000\n"
 "Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -1711,7 +1711,7 @@ msgstr "El fichero de entrada no puede abrirse."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
 msgid "Manage Document Link"
-msgstr ""
+msgstr "Gestionar enlace de documento"
 
 #: gnucash/gnome/dialog-doclink.c:690
 #, fuzzy
@@ -4017,7 +4017,7 @@ msgstr "Abre “Encontrar Comprobante de Gasto” como diálogo"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr ""
+msgstr "Documentos enlazados con negocios"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
 #, fuzzy
@@ -4808,7 +4808,7 @@ msgstr "_Liquidar factura"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:366
 #: gnucash/gnome/gnc-plugin-page-register.c:300
 msgid "_Manage Document Link..."
-msgstr ""
+msgstr "_Gestionar enlace de documento..."
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -5176,7 +5176,7 @@ msgstr "Abre un boletín de sociedad para el titular de esta Factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:445
 msgid "Manage Document Link..."
-msgstr ""
+msgstr "Gestionar enlace de documento..."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
 #: gnucash/gnome/gnc-plugin-page-register2.c:498
@@ -6085,7 +6085,7 @@ msgstr "Ordenar %s por…"
 #: gnucash/gnome/gnc-plugin-page-register.c:4751
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
-msgstr ""
+msgstr "%s %s de %s, contabilizado el %s, monto %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4760
 #, fuzzy
