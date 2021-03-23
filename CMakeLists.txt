@@ -788,6 +788,7 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.cmake.in ${CONFIG_H}
 add_subdirectory (borrowed)
 add_subdirectory (data)
 add_subdirectory (doc)
+# Note: po should be processed before gnucash - it provides LINGUAS, used to generate desktop and appdata files
 add_subdirectory (po)
 add_subdirectory (common)
 add_subdirectory (libgnucash)
