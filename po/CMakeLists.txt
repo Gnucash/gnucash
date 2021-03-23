@@ -21,6 +21,7 @@ foreach (lingua ${ALL_LINGUAS})
   list (APPEND po_SOURCES ${lingua}.po)
 
   set (_LOCALE_DIR ${DATADIR_BUILD}/locale/${lingua}/LC_MESSAGES)
+  file (MAKE_DIRECTORY "${_LOCALE_DIR}") # Unix Makefiles won't do this automatically, ninja does
   set (_MO_FILE ${_LOCALE_DIR}/gnucash.mo)
   list (APPEND CATALOGS ${_MO_FILE})
 

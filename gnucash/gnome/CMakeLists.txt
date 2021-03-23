@@ -196,7 +196,7 @@ endif()
 
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml
-    DEPENDS ${GNC_APPDATA_IN} ${VCS_INFO_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.releases.xml
+    DEPENDS ${GNC_APPDATA_IN} gnc-vcs-info ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.releases.xml
     COMMAND ${CMAKE_COMMAND} -D SRC=${GNC_APPDATA_IN}
                              -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml
                              -D VCS_INFO_FILE=${VCS_INFO_FILE}
@@ -223,7 +223,7 @@ add_custom_command (
 
 add_custom_command (
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop
-    DEPENDS ${GNC_DESKTOP_IN} ${VCS_INFO_FILE}
+    DEPENDS ${GNC_DESKTOP_IN} gnc-vcs-info
     COMMAND ${CMAKE_COMMAND} -D SRC=${GNC_DESKTOP_IN}
                              -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop
                              -D VCS_INFO_FILE=${VCS_INFO_FILE}

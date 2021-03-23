@@ -38,7 +38,7 @@ install(FILES ${DATADIR_BUILD}/gnucash/tip_of_the_day.list DESTINATION ${CMAKE_I
 
 foreach (manpage gnucash gnucash-cli)
     add_custom_command(OUTPUT ${DATADIR_BUILD}/gnucash/${manpage}.1
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${manpage}.1.in ${VCS_INFO_FILE}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${manpage}.1.in gnc-vcs-info
         COMMAND ${CMAKE_COMMAND}
             -D SRC=${CMAKE_CURRENT_SOURCE_DIR}/${manpage}.1.in
             -D DST=${manpage}.1
