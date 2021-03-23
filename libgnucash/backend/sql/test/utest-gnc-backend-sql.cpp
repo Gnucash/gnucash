@@ -275,7 +275,7 @@ test_gnc_sql_commit_edit (void)
 {
     QofInstance* inst;
     guint dirty_called = 0;
-    GncMockSqlConnection conn;
+    auto conn{new GncMockSqlConnection};
     const char* msg1 =
         "[GncSqlBackend::commit()] Unknown object type 'null'\n";
     GLogLevelFlags loglevel = static_cast<decltype (loglevel)>
@@ -293,8 +293,7 @@ test_gnc_sql_commit_edit (void)
 
     qof_object_initialize ();
     auto book = qof_book_new();
-    auto sql_be = new GncMockSqlBackend
-        (&conn, book);
+    auto sql_be = new GncMockSqlBackend{conn, book};
     inst  = static_cast<decltype (inst)> (g_object_new (QOF_TYPE_INSTANCE, NULL));
     qof_instance_init_data (inst, QOF_ID_NULL, book);
     qof_book_set_dirty_cb (book, test_dirty_cb, &dirty_called);

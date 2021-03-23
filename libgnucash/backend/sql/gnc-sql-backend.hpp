@@ -66,7 +66,7 @@ class GncSqlBackend : public QofBackend
 {
 public:
     GncSqlBackend(GncSqlConnection *conn, QofBook* book);
-    virtual ~GncSqlBackend() = default;
+    virtual ~GncSqlBackend();
     /**
      * Load the contents of an SQL database into a book.
      *

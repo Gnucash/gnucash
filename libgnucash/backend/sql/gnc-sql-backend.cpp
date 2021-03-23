@@ -88,6 +88,11 @@ GncSqlBackend::GncSqlBackend(GncSqlConnection *conn, QofBook* book) :
         connect (conn);
 }
 
+GncSqlBackend::~GncSqlBackend()
+{
+    connect(nullptr);
+}
+
 void
 GncSqlBackend::connect(GncSqlConnection *conn) noexcept
 {

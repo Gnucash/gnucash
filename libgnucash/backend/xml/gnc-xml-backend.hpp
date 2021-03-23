@@ -34,7 +34,7 @@ public:
     GncXmlBackend operator=(const GncXmlBackend&) = delete;
     GncXmlBackend(const GncXmlBackend&&) = delete;
     GncXmlBackend operator=(const GncXmlBackend&&) = delete;
-    ~GncXmlBackend() = default;
+    ~GncXmlBackend();
     void session_begin(QofSession* session, const char* new_uri,
                        SessionOpenMode mode) override;
     void session_end() override;
