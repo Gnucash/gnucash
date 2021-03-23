@@ -71,11 +71,18 @@ gcrtv_editing_done (GtkCellEditable         *editable,
     gchar       *path;
     const gchar *new_text;
 
-    if (GNC_CELL_VIEW (editable)->focus_out_id > 0)
+    if (GNC_CELL_VIEW(editable)->focus_out_id > 0)
     {
         g_signal_handler_disconnect (GNC_CELL_VIEW(editable)->text_view,
                                      GNC_CELL_VIEW(editable)->focus_out_id);
         GNC_CELL_VIEW(editable)->focus_out_id = 0;
+    }
+
+    if (GNC_CELL_VIEW(editable)->populate_popup_id > 0)
+    {
+        g_signal_handler_disconnect (GNC_CELL_VIEW(editable)->text_view,
+                                     GNC_CELL_VIEW(editable)->populate_popup_id);
+        GNC_CELL_VIEW(editable)->populate_popup_id = 0;
     }
 
     if (GNC_CELL_VIEW(editable)->editing_canceled)
@@ -120,9 +127,8 @@ gcrtv_start_editing (GtkCellRenderer      *cell,
     g_object_get (G_OBJECT(cell_tv), "editable", &iseditable, NULL);
 
     /* If the cell isn't editable we return NULL. */
-    if (iseditable == FALSE) {
+    if (iseditable == FALSE)
         return NULL;
-    }
 
     editable = g_object_new (GNC_TYPE_CELL_VIEW, NULL);
 

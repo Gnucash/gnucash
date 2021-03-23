@@ -43,7 +43,9 @@ struct _GncCellView
     GtkTextBuffer *buffer;
 
     gulong         focus_out_id;
+    gulong         populate_popup_id;
     guint          tooltip_id;
+    gboolean       in_popup_menu;
     gboolean       editing_canceled;
 };
 

@@ -81,6 +81,7 @@ gnc_cell_view_init (GncCellView *cv)
     gtk_widget_show (cv->text_view);
 
     cv->focus_out_id = 0;
+    cv->populate_popup_id = 0;
     cv->tooltip_id = 0;
 
     gtk_widget_set_can_focus (GTK_WIDGET(cv->text_view), TRUE);
@@ -167,15 +168,39 @@ gtk_cell_editable_key_press_event (GtkTextView   *text_view,
     return FALSE;
 }
 
+static void
+gcv_popup_unmap (GtkMenu *menu, GncCellView *cv)
+{
+  cv->in_popup_menu = FALSE;
+}
+
+static void
+gcv_populate_popup (GtkTextView *text_view,
+                    GtkWidget   *popup,
+                    GncCellView *cv)
+{
+    cv->in_popup_menu = TRUE;
+    g_signal_connect (popup, "unmap",
+                      G_CALLBACK (gcv_popup_unmap), cv);
+}
+
 static gboolean
 gcv_focus_out_event (GtkWidget *widget, GdkEvent *event, GncCellView *cv)
 {
+    if (cv->in_popup_menu)
+        return FALSE;
+
     cv->editing_canceled = TRUE;
 
     if (cv->focus_out_id > 0)
     {
         g_signal_handler_disconnect (cv->text_view, cv->focus_out_id);
         cv->focus_out_id = 0;
+    }
+    if (cv->populate_popup_id > 0)
+    {
+        g_signal_handler_disconnect (cv->text_view, cv->populate_popup_id);
+        cv->populate_popup_id = 0;
     }
     gtk_cell_editable_editing_done (GTK_CELL_EDITABLE(cv));
     gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE(cv));
@@ -217,6 +242,11 @@ gcv_start_editing (GtkCellEditable *cell_editable,
     cv->focus_out_id = g_signal_connect (G_OBJECT(cv->text_view),
                                          "focus-out-event",
                                          G_CALLBACK(gcv_focus_out_event), cv);
+
+    cv->populate_popup_id = g_signal_connect (G_OBJECT(cv->text_view),
+                                              "populate-popup",
+                                              G_CALLBACK(gcv_populate_popup),
+                                              cv);
 }
 
 static void
