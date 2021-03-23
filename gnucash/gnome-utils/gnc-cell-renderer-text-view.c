@@ -89,6 +89,8 @@ gcrtv_editing_done (GtkCellEditable         *editable,
 
     new_text = gnc_cell_view_get_text (GNC_CELL_VIEW(editable));
 
+    gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE(editable));
+
     g_signal_emit_by_name (cell_tv, "edited", path, new_text);
 }
 

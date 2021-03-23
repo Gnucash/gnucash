@@ -43,6 +43,7 @@ struct _GncCellView
     GtkTextBuffer *buffer;
 
     gulong         focus_out_id;
+    guint          tooltip_id;
     gboolean       editing_canceled;
 };
 
