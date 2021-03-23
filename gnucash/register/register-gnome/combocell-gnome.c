@@ -916,7 +916,9 @@ popup_get_height (G_GNUC_UNUSED GtkWidget* widget,
     {
         gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
                                         GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
-        return height;
+        // if the list is empty height would be 0 so return 1 instead to
+        // satisfy the check_popup_height_is_true function
+        return height ? height : 1;
     }
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -973,6 +975,7 @@ gnc_combo_cell_enter (BasicCell* bcell,
 {
     ComboCell* cell = (ComboCell*) bcell;
     PopBox* box = bcell->gui_private;
+    PopupToggle popup_toggle;
     GList* find = NULL;
 
     if (bcell->value)
@@ -998,6 +1001,12 @@ gnc_combo_cell_enter (BasicCell* bcell,
     }
     gnc_item_list_select (box->item_list, bcell->value);
     unblock_list_signals (cell);
+
+    popup_toggle = box->item_edit->popup_toggle;
+
+    // if the list is empty disable the toggle button
+    gtk_widget_set_sensitive (GTK_WIDGET(popup_toggle.tbutton),
+                              gnc_item_list_num_entries (box->item_list));
 
     combo_connect_signals (cell);
 
