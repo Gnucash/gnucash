@@ -158,7 +158,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
   (gnc:register-option
    options
    (gnc:make-multichoice-callback-option
-    pagename-format (N_ "Report format")
+    pagename-format (N_ "Report Format")
     "a" (G_ "Report Format") 'default
     (list (vector 'default
                   (G_ "Default Format")
