@@ -74,7 +74,7 @@ set(gnucash_cli_SOURCES
     )
 
 if (MINGW)
-  list(APPEND gnucash_cli_SOURCES "gnucash-locale-locale.c")
+  list(APPEND gnucash_cli_SOURCES "gnucash-locale-windows.c")
 elseif (MAC_INTEGRATION)
     list(APPEND gnucash_cli_SOURCES "gnucash-locale-macos.mm")
 endif()
