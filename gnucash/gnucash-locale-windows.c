@@ -33,7 +33,7 @@
  * retrieve the Windows locale and set POSIX to match.
  */
 char *
-set_platform_locale()
+set_platform_locale(void)
 {
     WCHAR lpLocaleName[LOCALE_NAME_MAX_LENGTH];
     char *locale = NULL;
@@ -68,4 +68,5 @@ set_platform_locale()
         setlocale (LC_ALL, locale);
         return locale;
     }
+    return g_strdup("C");
 }

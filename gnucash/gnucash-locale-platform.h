@@ -25,6 +25,6 @@
 #ifndef GNUCASH_LOCALE_PLATFORM_H
 #define GNUCASH_LOCALE_PLATFORM_H
 
-char *set_platform_locale();
+char *set_platform_locale(void);
 
 #endif
