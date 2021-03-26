@@ -1,0 +1,6464 @@
+2020-12-20 Frank H. Ellenberger 
+
+	* Fix indentation of accounts/de_AT/common (HEAD)
+
+2020-12-31 Avi Markovitz 
+
+	* Translation update  by Avi Markovitz <avi.markovitz@gmail.com> using Weblate
+
+2020-12-31 Allan Nordhøy 
+
+	* Translation update  by Allan Nordhøy <epost@anotheragency.no> using Weblate
+
+2020-12-31 Yaron Shahrabani 
+
+	* Translation update  by Yaron Shahrabani <sh.yaron@gmail.com> using Weblate
+
+2020-12-31 An's Page 
+
+	* L10N:bg:  po/glossary/bg.po:89.2%
+
+2020-12-31 Frank H. Ellenberger 
+
+	* L10N:de:  po/glossary/de.po:99.5%
+
+2020-12-31 SebastianL 
+
+	* L10N:de:  po/glossary/de.po:99.5%
+
+2020-12-30 Frank H. Ellenberger 
+
+	* L10N:de: Glossary convert terms in brackets in comments
+
+2020-12-30 Frank H. Ellenberger 
+
+	* I18N: Glossary: new terms and conventions
+
+2020-12-29 Marco Zietzling 
+
+	* L10N:de_CH:  po/glossary/de_CH.po:93.9%
+
+2020-12-29 Giuseppe Foti 
+
+	* L10N:it: po/it.po:100.0%
+
+2020-12-29 Christopher Lam 
+
+	* L10N:fr: po/fr.po:69.4%
+
+2020-12-29 Milo Ivir 
+
+	* L10N:de:  po/glossary/de.po:100.0%
+
+2020-12-29 Christian Wehling 
+
+	* L10N:de: po/de.po:99.5%
+
+2020-12-28 John Ralls 
+
+	* Release GnuCash 4.4. (tag: 4.4)
+
+2020-12-28 Frank H. Ellenberger 
+
+	* Merge branch 'PR_850' into maint
+
+2020-12-28 John Ralls 
+
+	* Bug 798063 - Crash when opening SX Editor
+
+2020-12-27 Giuseppe Foti 
+
+	* L10N:it: po/it.po:100.0%
+
+2020-12-27 YOSHINO Yoshihito 
+
+	* L10N:ja: po/ja.po:92.8%
+
+2020-12-28 Frank H. Ellenberger 
+
+	* Bug 798038 - Incorrect spelling in german account templates 'common' and 'full' part 2: AT
+
+2020-12-28 b4r3t 
+
+	* L10:de: fix "Einkommensteuer"
+
+2020-12-27 Christopher Lam 
+
+	* [account.cpp][API] deprecate xaccAccountCountSplits
+
+2020-12-27 Christopher Lam 
+
+	* [dialog-account] don't use xaccAccountCountSplits
+
+2020-12-26 Christopher Lam 
+
+	* [html-table][API] deprecate gnc:html-table-append-column!
+
+2020-12-26 Christopher Lam 
+
+	* Reports: don't use gnc:html-table-append-column!
+
+2020-12-26 John Ralls 
+
+	* Release GnuCash 4.3 (tag: 4.3)
+
+2020-12-26 John Ralls 
+
+	* Add test_autoclear_SOURCES to the dist list for inclusion in the tarball.
+
+2020-12-27 Frank H. Ellenberger 
+
+	* L10N:hu:  po/glossary/hu.po:87.4%
+
+2020-12-27 Alois Spitzbart 
+
+	* L10N:de: po/de.po:99.4%
+
+2020-12-26 John Ralls 
+
+	* Fix test-gnc-timezone failure caused by latest zoneinfo release.
+
+2020-12-26 Frank H. Ellenberger 
+
+	* ja left the Translation Project
+
+2020-12-26 Frank H. Ellenberger 
+
+	* L10N:nb: Fix format error
+
+2020-12-26 YOSHINO Yoshihito 
+
+	* L10N:ja: po/ja.po:92.8%
+
+2020-12-26 Frank H. Ellenberger 
+
+	* L10N:de: po/de.po:99.4%
+
+2020-12-26 Takuro Onoue 
+
+	* L10N:ja: po/ja.po:92.8%
+
+2020-12-26 YOSHINO Yoshihito 
+
+	* L10N:ja: po/ja.po:92.7%
+
+2020-12-26 Giuseppe Foti 
+
+	* L10N:it:  po/glossary/it.po:100.0%
+
+2020-12-26 Takuro Onoue 
+
+	* L10N:ja: po/ja.po:92.5%
+
+2020-12-26 YOSHINO Yoshihito 
+
+	* L10N:ja: po/ja.po:92.5%
+
+2020-12-26 Takuro Onoue 
+
+	* L10N:ja: po/ja.po:92.4%
+
+2020-12-26 YOSHINO Yoshihito 
+
+	* L10N:ja: po/ja.po:92.2%
+
+2020-12-26 Milo Ivir 
+
+	* L10N:hr: po/hr.po:100.0%
+
+2020-12-25 Frank H. Ellenberger 
+
+	* Merge weblate-maint into maint
+
+2020-12-25 Allan Nordhøy 
+
+	* L10N:nb: po/nb.po:51.3%
+
+2020-12-25 YOSHINO Yoshihito 
+
+	* L10N:ja: po/ja.po:92.0%
+
+2020-12-25 Frank H. Ellenberger 
+
+	* L10N:de: Glossary/po/glossary/de.po
+
+2020-12-25 Takuro Onoue 
+
+	* L10N:ja: po/ja.po:91.9%
+
+2020-12-25 Manuel Bichler 
+
+	* L10N:de: Glossary/po/glossary/de.po
+
+2020-12-25 Milo Ivir 
+
+	* L10N:de: Glossary/po/glossary/de.po
+
+2020-12-25 Yaron Shahrabani 
+
+	* L10N:he: Glossary/po/glossary/he.po
+
+2020-12-25 YOSHINO Yoshihito 
+
+	* L10N:ja: po/ja.po:91.9%
+
+2020-12-25 Marko Kohtala 
+
+	* L10N:fi: Glossary/po/glossary/fi.po
+
+2020-12-25 K. Herbert 
+
+	* L10N:de: Glossary/po/glossary/de.po
+
+2020-12-25 THANOS SIOURDAKIS 
+
+	* L10N:el: Glossary/po/glossary/el.po
+
+2020-12-25 Manuel Bichler 
+
+	* L10N:de: Glossary/po/glossary/de.po
+
+2020-12-25 LL Magical 
+
+	* Translated using Weblate (Portuguese (Brazil))
+
+2020-12-25 Giuseppe Foti 
+
+	* L10N:it: po/it.po:100.0%
+
+2020-12-25 Milo Ivir 
+
+	* Translated using Weblate (Croatian)
+
+2020-12-25 Frank H. Ellenberger 
+
+	* Translated using Weblate (German)
+
+2020-12-25 LL Magical 
+
+	* Translated using Weblate (Portuguese (Brazil))
+
+2020-12-25 Giuseppe Foti 
+
+	* L10N:it: po/it.po:100.0%
+
+2020-12-25 Milo Ivir 
+
+	* Translated using Weblate (Croatian)
+
+2020-12-25 Frank H. Ellenberger 
+
+	* Translated using Weblate (German)
+
+2020-12-25 Christopher Lam 
+
+	* [new-owner-report] use translatable strings (tag: 4.2-post-string-freeze)
+
+2020-12-24 Christopher Lam 
+
+	* [app-utils] fix dependency chain
+
+2020-12-24 Christopher Lam 
+
+	* [c-interface] internal defines must be declared first
+
+2020-12-23 Christopher Lam 
+
+	* [c-interface] Deprecate gnc:make-string-database
+
+2020-12-22 Christopher Lam 
+
+	* [account-piecharts.scm] mark string as translatable
+
+2020-12-20 Frank H. Ellenberger 
+
+	* Merge branch PR #844 into maint
+
+2020-12-20 Geert Janssens 
+
+	* Bug 798038 - Incorrect spelling in german account templates 'common' and 'full'
+
+2020-12-19 Jyri-Petteri Paloposki 
+
+	* Some more grammar errors, splits and other small fixables.
+
+2020-12-19 Jyri-Petteri Paloposki 
+
+	* One more split to fix
+
+2020-12-19 Jyri-Petteri Paloposki 
+
+	* Change the wording regarding linked documents; revert the changes regarding the placeholder term for now due to debate on the term.
+
+2020-12-19 Robert Fewell 
+
+	* Realign the flicker_data function to 4 spaces
+
+2020-12-16 Robert Fewell 
+
+	* Free the char 'code' in gnc-flicker-gui.c
+
+2020-12-19 Jyri-Petteri Paloposki 
+
+	* Some more fixes to the Finnish translation based on the feedback.
+
+2020-12-17 LL Magical 
+
+	* Translated using Weblate (Portuguese (Brazil))
+
+2020-12-17 Giuseppe Foti 
+
+	* Translated using Weblate (Italian)
+
+2020-12-15 Pedro Albuquerque 
+
+	* Translated using Weblate (Portuguese)
+
+2020-12-15 K. Herbert 
+
+	* Translated using Weblate (French)
+
+2020-12-15 Frank H. Ellenberger 
+
+	* Translated using Weblate (German)
+
+2020-12-17 LL Magical 
+
+	* Translated using Weblate (Portuguese (Brazil))
+
+2020-12-16 Allan Nordhøy 
+
+	* Translated using Weblate (Norwegian Bokmål)
+
+2020-12-16 K. Herbert 
+
+	* Translated using Weblate (German)
+
+2020-12-16 Christopher Lam 
+
+	* Translated using Weblate (French)
+
+2020-12-15 Geert Janssens 
+
+	* Translated using Weblate (Dutch)
+
+2020-12-15 Allan Nordhøy 
+
+	* Translated using Weblate (Norwegian Bokmål)
+
+2020-12-15 Frank H. Ellenberger 
+
+	* Translated using Weblate (German)
+
+2020-12-14 J. Lavoie 
+
+	* Translated using Weblate (Italian)
+
+2020-12-14 J. Lavoie 
+
+	* Translated using Weblate (French)
+
+2020-12-14 J. Lavoie 
+
+	* Translated using Weblate (German)
+
+2020-12-16 Giuseppe Foti 
+
+	* L10N:it:glossario aggiornato.
+
+2020-12-17 Giuseppe Foti 
+
+	* L10N:it:5545 messaggi tradotti.
+
+2020-12-17 Frank H. Ellenberger 
+
+	* Merge branch 'PR_842' into maint
+
+2020-12-17 Jyri-Petteri Paloposki 
+
+	* Update the Finnish translation file to fix some typos and add missing translations.
+
+2020-12-17 Christopher Lam 
+
+	* [view-column] refactor to remove reference to gnc:last-captured-error
+
+2020-12-16 Giuseppe Foti 
+
+	* L10N:it:5545 messaggi tradotti.
+
+2020-12-16 Frank H. Ellenberger 
+
+	* I18N: Improve Translator comments about CUSIP
+
+2020-12-15 Christopher Lam 
+
+	* Merge branch 'maint-modularisation-hint' into maint #836
+
+2020-12-15 Frank H. Ellenberger 
+
+	* Merge PR #837 into maint
+
+2020-12-14 CWehli 
+
+	* L10N:de Übersetzung Flicker GUI
+
+2020-12-14 Frank H. Ellenberger 
+
+	* L10N:uk: 100% translation for 4.3 from TP
+
+2020-12-14 Frank H. Ellenberger 
+
+	* L10N:pt: 100% translation for 4.3 from TP
+
+2020-12-14 John Ralls 
+
+	* Remove Travis CI.
+
+2020-12-13 Christopher Lam 
+
+	* [core-utils] use custom unbound-variable exception printer
+
+2020-12-13 John Ralls 
+
+	* Add MAKE_LINKS to app-utils and qif-import scheme targets.
+
+2020-12-13 John Ralls 
+
+	* Revert bumping version in CMakeLists.txt. Not quite time.
+
+2020-12-13 John Ralls 
+
+	* Force scheme to make links before any builds.
+
+2020-12-14 Christopher Lam 
+
+	* Bug 798050 - error using Reports->Experimental->Income Statement (Multicolumn)
+
+2020-12-14 Christopher Lam 
+
+	* Fix format warnings by importing (ice-9 format), bis
+
+2020-12-14 Christopher Lam 
+
+	* Fix format warnings by importing (ice-9 format)
+
+2020-12-13 John Ralls 
+
+	* AQB Flicker: Replace malloc with g_malloc0.
+
+2020-12-13 Frank H. Ellenberger 
+
+	* L10N: Merge 4.3 pot
+
+2020-12-13 John Ralls 
+
+	* Echo into CMakeLists.txt rename of gmock-qofqury to fake-qofquery.
+
+2020-12-13 John Ralls 
+
+	* Change non-standard and non-Gnome uint to guint. (tag: 4.3-string-freeze)
+
+2020-12-13 Christopher Lam 
+
+	* [trep-engine] move currency options into their own section, ter
+
+2020-12-13 Christopher Lam 
+
+	* [advanced-portfolio] typo set!
+
+2020-12-12 John Ralls 
+
+	* Fix stray merge conflict marker.
+
+2020-12-12 John Ralls 
+
+	* Merge Christian Wehling's 'gnucash-flicker' into maint.
+
+2020-12-12 John Ralls 
+
+	* Bug 798047 - Crash on delete account.
+
+2020-12-13 Christopher Lam 
+
+	* [test-balsheet-pnl] tests reverse-chrono option
+
+2020-12-13 Christopher Lam 
+
+	* Merge branch 'maint-balsheet-pnl-reverse-chrono' into maint #834
+
+2020-12-13 Christopher Lam 
+
+	* [trep-engine] move currency options into their own section, ter
+
+2020-11-15 CWehli 
+
+	* Bug 667490 - Support chipTAN optical "Flicker code"
+
+2020-12-09 Christopher Lam 
+
+	* [balsheet-pnl] show most recent period first by default
+
+2020-12-12 Christopher Lam 
+
+	* [trep-engine] move currency options into their own section, bis
+
+2020-12-12 Christopher Lam 
+
+	* Bug 798039 - Using 'Consolidate Transactions' option on Consolidate Transaction Report returns Error
+
+2020-12-11 Robert Fewell 
+
+	* Bug 798041 - Open invoices in new window does not work
+
+2020-12-10 John Ralls 
+
+	* Rename github action jobs for consistency.
+
+2020-12-10 John Ralls 
+
+	* Run github actions on PR commits.
+
+2020-12-06 Robert Fewell 
+
+	* Change register page icon to a padlock if read only
+
+2020-12-03 Robert Fewell 
+
+	* When a resister is read only make whole sheet insensitive.
+
+2020-11-29 Robert Fewell 
+
+	* Bug 355496 - Indication of Read Only Register
+
+2020-11-29 Robert Fewell 
+
+	* Read-Only register warning non specific
+
+2020-11-24 Robert Fewell 
+
+	* Change the way the help button is setup for dialog-commodity
+
+2020-11-24 Robert Fewell 
+
+	* Add parent widget to gnc_gnome_help function
+
+2020-11-22 Robert Fewell 
+
+	* Bug 128772 - Account Help Button does not work
+
+2020-12-09 Christopher Lam 
+
+	* [API][eguile-html-utilities] use font-name-to-style-info-eguile
+
+2020-12-09 Christopher Lam 
+
+	* [options.scm] use srfi-1
+
+2020-12-08 John Ralls 
+
+	* Merge Chris Lam's 'guile-modularisation' into maint
+
+2020-12-04 Christopher Lam 
+
+	* [modularise] (gnucash reports) (guile-modularisation)
+
+2020-12-05 Christopher Lam 
+
+	* [modularise] (gnucash eguile)
+
+2020-12-09 Christopher Lam 
+
+	* [modularise] (gnucash report)
+
+2020-12-09 Christopher Lam 
+
+	* [report-utilities] don't use (ice-9 match) until guile-3.0 minimum
+
+2020-12-05 Christopher Lam 
+
+	* [modularise] (gnucash gnome-utils)
+
+2020-12-03 Christopher Lam 
+
+	* [modularise] (gnucash qif-import)
+
+2020-12-05 Christopher Lam 
+
+	* [modularise] (gnucash locale)
+
+2020-12-03 Christopher Lam 
+
+	* [modularise] (gnucash app-utils)
+
+2020-12-03 Christopher Lam 
+
+	* [modularise] (gnucash engine)
+
+2020-12-03 Christopher Lam 
+
+	* [modularise] (gnucash core-utils)
+
+2020-12-02 Christopher Lam 
+
+	* [modularise] (gnucash utilities)
+
+2020-12-09 Christopher Lam 
+
+	* Merge branch 'maint-improve-test-report-utilities' into maint
+
+2020-12-08 Christopher Lam 
+
+	* [options.scm] move gnc:options-fancy-date to business-options.scm
+
+2020-12-08 Christopher Lam 
+
+	* [test-report-utilities] add 4th txn to bank1 as originally written
+
+2020-12-07 Christopher Lam 
+
+	* [test-report-utilities] modify test to use unique amounts
+
+2020-12-08 Robert Fewell 
+
+	* Bug 309943 - Change previous fix commit
+
+2020-12-07 Robert Fewell 
+
+	* Move flag to indicate report loaded to before gnc_html_show_url
+
+2020-12-07 Christopher Lam 
+
+	* [category-barchart] don't drill down after acct lvl 6
+
+2020-12-06 Frank H. Ellenberger 
+
+	* I18N:glossary: add mortgage terms ARM, APR, FRM
+
+2020-12-06 Frank H. Ellenberger 
+
+	* I18N: another translatable flag removed
+
+2020-12-06 Frank H. Ellenberger 
+
+	* I18N: remove translatable flag from several numbers in glade files
+
+2020-12-05 Christopher Lam 
+
+	* [report-utilities] centralise gnc:not-all-zeros
+
+2020-12-05 Christopher Lam 
+
+	* [report-utilities] test gnc:not-all-zeros
+
+2020-12-05 Christopher Lam 
+
+	* [eguile-utilities] typo fix
+
+2020-12-04 Christopher Lam 
+
+	* [html-utilities] bugfix deprecated function
+
+2020-12-04 Christopher Lam 
+
+	* [piechart|scatter] define gnc:not-all-zeros locally
+
+2020-12-04 Christopher Lam 
+
+	* [utilities] simplify addto!
+
+2020-12-04 Christopher Lam 
+
+	* [options.scm] typo ref -> list-ref
+
+2020-12-04 Christopher Lam 
+
+	* [core-utils] N_ is identity function
+
+2020-12-04 Christopher Lam 
+
+	* Use proper format syntax
+
+2020-12-04 Christopher Lam 
+
+	* [balsheet-eg] instead of before, use macros after definition
+
+2020-12-01 John Ralls 
+
+	* Use guile-3.0 on Ubuntu-20.04 github-action CI tests.
+
+2020-12-02 Christopher Lam 
+
+	* [trep-engine] move currency options into their own section
+
+2020-12-02 Christopher Lam 
+
+	* Bug 798036 - Transaction Report should offer price source
+
+2020-12-01 Frank H. Ellenberger 
+
+	* L10N:hr: merge a fresh pot into po
+
+2020-12-01 Frank H. Ellenberger 
+
+	* Merge branch 'maint' into PR #828
+
+2020-11-30 milotype 
+
+	* Update Croatian translation
+
+2020-12-01 Frank H. Ellenberger 
+
+	* I18N: Remove date strings from pot
+
+2020-11-30 milotype 
+
+	* Update Croatian glossary file
+
+2020-11-30 John Ralls 
+
+	* [github-actions] Update the Ubuntu 18.04 apt repositories before running.
+
+2020-11-30 pmraps 
+
+	* L10N:pt: glossary (PR #827)
+
+2020-11-29 John Ralls 
+
+	* Fix missing space in warning message.
+
+2020-11-29 John Ralls 
+
+	* Bug 794807 - Calendar widget current month shown as (null).
+
+2020-11-29 John Ralls 
+
+	* Merge  Pedro Alvarez's Portugues updates into maint.
+
+2020-11-29 pmraps 
+
+	* Translation Update pt
+
+2020-11-29 Robert Fewell 
+
+	* Bug 798031 - Date goes to prior year with mm/dd
+
+2020-11-29 Robert Fewell 
+
+	* Change the mnemonic of '_Open Read-Only' to 'Open _Read-Only'
+
+2020-11-28 Robert Fewell 
+
+	* Change the mnemonic of '_Open with No File' to 'Open with _No File' to fix conflict.
+
+2020-11-28 Robert Fewell 
+
+	* Bug 343647 - Keep scrolled report location
+
+2020-11-22 Robert Fewell 
+
+	* Change the icons used for the file lock message
+
+2020-11-22 Robert Fewell 
+
+	* Bug 309943 - When unable to obtain a lock, no option to open another file
+
+2020-11-27 Frank H. Ellenberger 
+
+	* Move pt translation to Translation Project
+
+2020-11-26 Frank H. Ellenberger 
+
+	* L10N: Update Glossaries to commit 3d7e66d
+
+2020-11-24 John Ralls 
+
+	* Register: Don't double-delete when typing over a selection.
+
+2020-11-23 Christopher Lam 
+
+	* [gnc_scm_to_numeric] create NaN gnc_numeric instead of runtime error
+
+2020-11-23 Christopher Lam 
+
+	* [gnc-engine-guile.c] return #f when gnc_numeric has error
+
+2020-11-22 Christopher Lam 
+
+	* Bug 798015 - cash flow numerical-overflow
+
+2020-11-22 Christopher Lam 
+
+	* Revert "[date-utilities] Convert reldate list into srfi-9 records"
+
+2020-11-22 Christopher Lam 
+
+	* Revert "[c-interface] deprecate gnc:make-string-database"
+
+2020-11-22 Christopher Lam 
+
+	* [c-interface] deprecate gnc:make-string-database
+
+2020-11-21 Christopher Lam 
+
+	* [date-utilities] Convert reldate list into srfi-9 records
+
+2020-11-22 Robert Fewell 
+
+	* Bug 330930 - Financial Calculator resets payment period to zero
+
+2020-11-22 Robert Fewell 
+
+	* Bug 106746 - Selecting New account in Loan Assistant
+
+2020-11-22 Robert Fewell 
+
+	* Change source files gnc-account-sel.* for space and tabs
+
+2020-11-22 Robert Fewell 
+
+	* GNCAccountSel with a New button
+
+2020-11-22 Robert Fewell 
+
+	* Bug 355498 - When there is only one result from a 'Find', select it.
+
+2020-11-22 Robert Fewell 
+
+	* Bug 720564 - Search in General Ledger
+
+2020-11-21 Triyan W. Nugroho 
+
+	* Update Indonesian translation for GnuCash.
+
+2020-11-17 John Ralls 
+
+	* Merge branch 'github-action' into maint; adds macOS unit tests.
+
+2020-11-17 John Ralls 
+
+	* Implement Github-actions tests on macOS.
+
+2020-11-16 John Ralls 
+
+	* Merge Ralf Habacker's add-opening-balance-accounts into maint.
+
+2020-10-28 Ralf Habacker 
+
+	* Add feature GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE
+
+2020-10-23 Ralf Habacker 
+
+	* Update opening balance account on adding, editing and deleting accounts
+
+2020-10-23 Ralf Habacker 
+
+	* Do not create additional opening balance account on creating new gnucash file
+
+2020-09-19 Ralf Habacker 
+
+	* Add support for the opening balance accounts flag
+
+2020-09-15 Ralf Habacker 
+
+	* Add slot "equity-type" with value "opening-balance" to account templates
+
+2020-07-06 Ralf Habacker 
+
+	* Add script to add slots with key 'equity-type' and value 'opening-balance' to detected opening balance accounts
+
+2020-11-11 Robert Fewell 
+
+	* Change source files gnucash-sheet/header.* for space and tabs
+
+2020-11-11 Robert Fewell 
+
+	* Bug 644242 - Register Panning Problem
+
+2020-11-15 Robert Fewell 
+
+	* Bug 797901 - File History not updated
+
+2020-11-15 Christopher Lam 
+
+	* Remove debugging statement
+
+2020-11-15 Christopher Lam 
+
+	* Bug 798005 - Import of QIF file sets expenses to zero, deposits are fine
+
+2020-11-13 Geert Janssens 
+
+	* Bug 798008 - Option '--log' cannot be specified more than once
+
+2020-11-12 John Ralls 
+
+	* Merge branch 'github-action' into maint
+
+2020-11-12 John Ralls 
+
+	* Implement CI tests on ArchLinux via docker container.
+
+2020-11-12 John Ralls 
+
+	* Merge branch 'github-action' into maint
+
+2020-11-09 John Ralls 
+
+	* Fix typo in .gitattributes, text not test.
+
+2020-11-09 John Ralls 
+
+	* Use LTDL_LIBRARY_PATH instead of (DY)LD_LIBRARY_PATH
+
+2020-11-12 John Ralls 
+
+	* Add Ubuntu-20 tests.
+
+2020-11-09 John Ralls 
+
+	* Setup Github Actions with CI testing for Ubuntu 18.04
+
+2020-11-10 Robert Fewell 
+
+	* Windows Build failure in dialog-dup-trans.c
+
+2020-10-29 Frank H. Ellenberger 
+
+	* I18N: Ammend intro of autoclear window
+
+2020-10-14 Cristian Klein 
+
+	* Document complexity in UI
+
+2020-11-07 Frank H. Ellenberger 
+
+	* Add a few more CSS classes for labels
+
+2020-11-09 John Ralls 
+
+	* Fix typo in .gitattributes, text not test.
+
+2020-11-09 John Ralls 
+
+	* Use LTDL_LIBRARY_PATH instead of (DY)LD_LIBRARY_PATH
+
+2020-11-09 Christopher Lam 
+
+	* Revert "[auto-clear] provide live feedback when a valid end_amount is input"
+
+2020-11-08 John Ralls 
+
+	* Merge Christian Gruber's 'test_import_backend' into maint.
+
+2020-11-08 John Ralls 
+
+	* Merge Christian Klein's 'auto-clear-tests' into maint.
+
+2020-11-08 Robert Fewell 
+
+	* Change source files dialog-dup-trans.* for space and tabs
+
+2020-11-08 Robert Fewell 
+
+	* Bug 645379 - Problem with Number field when duplicating a transaction
+
+2020-11-08 Cristian Klein 
+
+	* [auto-tests] Stick to CodingStandard for member variables
+
+2020-11-08 Cristian Klein 
+
+	* [auto-tests] Fix misspelling
+
+2020-11-07 John Ralls 
+
+	* Fix exception when converting to decimal values that reduce to N/1.
+
+2020-11-07 John Ralls 
+
+	* Remove redundant and incorrectly named constant.
+
+2020-11-06 John Ralls 
+
+	* Fix timezone transition times.
+
+2020-10-28 Robert Fewell 
+
+	* Add confirmation of Main Window close when more than one
+
+2020-10-27 Robert Fewell 
+
+	* Add two key combinations to the main notebook
+
+2020-10-26 Robert Fewell 
+
+	* Intercept the Ctrl+Alt+PgUp/Down for a report page
+
+2020-10-26 Robert Fewell 
+
+	* Fix report page focus
+
+2020-10-26 Robert Fewell 
+
+	* Bug 797944 - Crash when opening new file from existing one
+
+2020-11-06 Robert Fewell 
+
+	* Change down arrow to align more with existing widgets
+
+2020-11-06 Robert Fewell 
+
+	* Bug 688917 - Edit style sheet help button not working
+
+2020-11-06 Robert Fewell 
+
+	* Fix some incorrect links to the help file
+
+2020-11-06 Robert Fewell 
+
+	* Section help on windows not working
+
+2020-11-01 Christopher Lam 
+
+	* [auto-clear] provide live feedback when a valid end_amount is input
+
+2020-10-28 Cristian Klein 
+
+	* Add auto-clear to register page
+
+2020-11-04 Christopher Lam 
+
+	* [autoclear] show cleared splits is optional
+
+2020-11-03 Christopher Lam 
+
+	* [html-text] compact gnc:html-markup-img
+
+2020-11-03 Robert Fewell 
+
+	* Set the visibility of the account column in import-main-matcher
+
+2020-11-03 Robert Fewell 
+
+	* Change source files import-main-matcher.* for space and tabs
+
+2020-11-03 Robert Fewell 
+
+	* Add option to hide memo column on import-main-matcher
+
+2020-11-03 Robert Fewell 
+
+	* Factor out the common code for import-main-matcher
+
+2020-11-03 Robert Fewell 
+
+	* Fix for OFX import
+
+2020-11-03 Robert Fewell 
+
+	* Fix GdkDisplay error in trace file
+
+2020-11-03 Robert Fewell 
+
+	* Import matcher tooltip for columns update
+
+2020-11-03 Robert Fewell 
+
+	* Change source file dialog-preferences.c for space and tabs
+
+2020-11-03 Robert Fewell 
+
+	* Change Preference dialog account separator validation
+
+2020-11-02 Frank H. Ellenberger 
+
+	* Merge branch 'PR_806' into maint
+
+2020-11-02 Frank H. Ellenberger 
+
+	* L10N:de: Anpassungen an "Wechselkurse" an aktuellen Code
+
+2020-11-02 Frank H. Ellenberger 
+
+	* L10N:de: merge pot
+
+2020-10-27 Christopher Lam 
+
+	* Use gnc:ngettext to pluralise strings
+
+2020-10-27 Christopher Lam 
+
+	* Expose ngettext as gnc:ngettext
+
+2020-11-02 Christopher Lam 
+
+	* Merge branch 'maint-797989' into maint #807
+
+2020-11-01 John Ralls 
+
+	* Bug 797994 - Account type-ahead search doesn't match accented...
+
+2020-11-01 Christopher Lam 
+
+	* [dialog-tax-table.c] free GList after use
+
+2020-10-27 Christopher Lam 
+
+	* Bug 797989 - Sorting columns by alphabet with non-ASCII characters
+
+2020-10-30 Christopher Lam 
+
+	* 3/3 [engine.scm] deprecate scheme utility functions
+
+2020-10-30 Christopher Lam 
+
+	* 2/3 [taxtxf] inline single-use scheme function from engine.scm
+
+2020-10-30 Christopher Lam 
+
+	* 1/3 [report-utilities][API] copy funcs engine.scm to report-utilities.scm
+
+2020-10-28 Christopher Lam 
+
+	* [core-utils.scm][API] gnc:string-locale<? gnc:string-locale>?
+
+2020-11-01 Christopher Lam 
+
+	* Addendum to 0446dca54, fix currency bug
+
+2020-10-30 Christopher Lam 
+
+	* Bug 797993 - Reverse balance option does not apply to an Account Report
+
+2020-10-30 Christopher Lam 
+
+	* [register.scm] some cleanups
+
+2020-10-28 Cristian Klein 
+
+	* Add auto-clear to register page
+
+2020-10-28 Cristian Klein 
+
+	* [auto-clear] Make test more future-proof with GoogleTest
+
+2020-10-26 Cristian Klein 
+
+	* [auto-clear] Fix test with googletest 1.8
+
+2020-10-26 Cristian Klein 
+
+	* [auto-clear] Improve #include style
+
+2020-10-26 Cristian Klein 
+
+	* [auto-clear] Address feedback
+
+2020-10-23 Cristian Klein 
+
+	* [auto-clear] Include test for ambiguous cases
+
+2020-10-23 Cristian Klein 
+
+	* [auto-clear] Fix test: Add xaccAccountBeginEdit / xaccAccountCommitEdit
+
+2020-10-23 Cristian Klein 
+
+	* [auto-clear] Avoid testing ambigous auto-clear
+
+2020-10-23 Cristian Klein 
+
+	* [auto-clear] Fix model
+
+2020-10-23 Cristian Klein 
+
+	* [auto-clear] Add tests
+
+2020-10-30 McLayn 
+
+	* fix CZK partname to nominative singular
+
+2020-10-29 Robert Fewell 
+
+	* Fix GtkLabel error for autoclear status_label
+
+2020-10-27 Christian Stimming 
+
+	* Add tooltip in import matcher window for description and memo column.
+
+2020-10-27 Christian Stimming 
+
+	* L10N:de: Minor improvements in German translation
+
+2020-10-27 Frank H. Ellenberger 
+
+	* L10N:de: Berichtige "Ausgleichskonto" zu "Anfangsbestand"
+
+2020-10-23 John Ralls 
+
+	* Put Macs back on WebKit2.
+
+2020-10-27 Christopher Lam 
+
+	* Bug 797982 - exchange rates' decimal places (bis)
+
+2020-10-27 Frank H. Ellenberger 
+
+	* CMake: Mute guile-2.2 again
+
+2020-10-26 John Ralls 
+
+	* HTML fonts: Parse additional values of font-weight from the pango font name.
+
+2020-10-26 John Ralls 
+
+	* Extract font-stretch when converting pango font names to CSS.
+
+2020-10-26 John Ralls 
+
+	* [macOS] Replace bogus font name from pango.
+
+2020-10-25 John Ralls 
+
+	* [macOS] Fix Fontconfig unable to find conf.d.
+
+2020-10-26 Christopher Lam 
+
+	* Merge branch 'maint-797982' into maint #802
+
+2020-10-21 Christopher Lam 
+
+	* [html-utilities.scm] deprecate gnc:html-make-exchangerates
+
+2020-10-19 Christopher Lam 
+
+	* Bug 797982 - exchange rates' decimal places
+
+2020-10-20 Christopher Lam 
+
+	* [html-style-info.scm] price-renderer does not convert to decimal
+
+2020-10-20 Christopher Lam 
+
+	* [commodity-utils.scm][api] gnc:html-make-rates-table with price-fn
+
+2020-10-26 Christopher Lam 
+
+	* [utest-gnc-pricedb.c] test: gnc_pricedb_get_[latest|nearest]_price
+
+2020-10-19 Christopher Lam 
+
+	* [gnc-pricedb.c][api] pull out composite pricedb price retriever
+
+2020-10-25 Frank H. Ellenberger 
+
+	* L10N:de: Fix typo of last commit
+
+2020-10-23 Frank H. Ellenberger 
+
+	* L10N:de: Verbesserung translator-credits (von it.po)
+
+2020-10-19 Christopher Lam 
+
+	* [gnc-pricedb.c] copy convert_amount to convert_price
+
+2020-10-19 Christopher Lam 
+
+	* [gnc-pricedb.c] refactor amount converters, use common code
+
+2020-10-14 Christopher Lam 
+
+	* [window-autoclear.c] cleanup, optimize, prevent UI lag
+
+2020-10-23 Frank H. Ellenberger 
+
+	* Merge branch 'it.po' into maint
+
+2020-10-22 Giuseppe Foti 
+
+	* L10N:it: Updated Italian translation; 5528 translated messagges.
+
+2020-10-22 Robert Fewell 
+
+	* Change source files option-util.* for spaces and tabs
+
+2020-10-22 Robert Fewell 
+
+	* Change source files dialog-options.* for spaces and tabs
+
+2020-10-22 Robert Fewell 
+
+	* Bug 345924 - Conditionally change Options dialog cancel button
+
+2020-10-22 Robert Fewell 
+
+	* Bug 345924 - Report options 'Reset Button' always flags changes
+
+2020-10-20 Robert Fewell 
+
+	* Bug 797984 - Infinite loop while Check&Repair AR and AP accounts
+
+2020-10-20 Robert Fewell 
+
+	* Change Registers abort_scrub to use gnc_*_abort_scrub functions
+
+2020-10-20 Robert Fewell 
+
+	* Allow the Check&Repair to be cancellable on a Register page
+
+2020-10-20 Robert Fewell 
+
+	* Add some additional places where Check&Repair can be aborted
+
+2020-10-20 Robert Fewell 
+
+	* Allow the Check&Repair routine to be cancellable from CoA
+
+2020-10-18 John Ralls 
+
+	* Bug 797983 - v4.2 report numbers change over gnucash restarts;...
+
+2020-10-18 John Ralls 
+
+	* Make the price database list obey the force-prices-to-decimal preference.
+
+2020-10-15 Robert Fewell 
+
+	* Bug 797971 - Inserting description text behaves oddly
+
+2020-10-14 Bill Nottingham 
+
+	* Fix warning about misleading indentation from recent gcc.
+
+2020-10-14 Christopher Lam 
+
+	* [auto-clear] default to cleared balance, select end_value
+
+2020-10-14 Cristian Klein 
+
+	* [auto-clear] Respect account balance reversal
+
+2020-10-13 Cristian Klein 
+
+	* [auto-clear] Better explain the feature
+
+2020-10-13 Cristian Klein 
+
+	* [auto-clear] Automatically add current balance
+
+2020-10-14 Frank H. Ellenberger 
+
+	* L10N: patch on "Cash en lieu"
+
+2020-10-14 Frank H. Ellenberger 
+
+	* L10N: Merge recent pot in all po files
+
+2020-10-13 Frank H. Ellenberger 
+
+	* I18N: Add translator comments and fix capitalization for "Cash In Lieu"
+
+2020-10-14 Frank H. Ellenberger 
+
+	* L10N:fr: administrative clean up
+
+2020-10-14 Frank H. Ellenberger 
+
+	* Merge branch 'typo' into maint
+
+2020-10-14 Frank H. Ellenberger 
+
+	* I18N: Redo the typo fix in gnc-plugin-page-register
+
+2020-10-14 Christopher Lam 
+
+	* [fr.po] remove last-translator
+
+2020-09-28 Frank H. Ellenberger 
+
+	* Fix some errors found by i18nspector in po files
+
+2020-10-13 John Ralls 
+
+	* Bug 797959 - "Exception" when value greater than one million with...
+
+2020-10-11 Christopher Lam 
+
+	* [window-autoclear.c] don't use g_str_hash on a double
+
+2020-10-11 Christopher Lam 
+
+	* [window-autoclear.c] prepend instead of append
+
+2020-10-11 Christopher Lam 
+
+	* Bug 797972 - Crash on export report CSV
+
+2020-10-11 Robert Fewell 
+
+	* Tax Report Options appeared twice on menu for Chart of Accounts
+
+2020-10-11 Robert Fewell 
+
+	* Some dialogs do not close with Escape key
+
+2020-10-10 Geert Janssens 
+
+	* Make gnc-html's link libraries private
+
+2020-10-10 Geert Janssens 
+
+	* Drop as dependency from gnc-module
+
+2020-10-08 Robert Fewell 
+
+	* Change source files dialog-report-style-sheet.* for spaces and tabs
+
+2020-10-08 Robert Fewell 
+
+	* Bug 797956 - Dialog Report Style sheet not work well on Windows
+
+2020-10-07 Christopher Lam 
+
+	* [general-journal.scm] allow General/Title to render document title.
+
+2020-10-07 Christopher Lam 
+
+	* [general-journal.scm] fix whitespace
+
+2020-10-07 Christopher Lam 
+
+	* Merge branch 'maint-owner-report-doclinks' into maint #795
+
+2020-10-04 Christopher Lam 
+
+	* [balsheet-pnl] use vector instead of list for report-dates
+
+2020-10-04 Christopher Lam 
+
+	* [html-chart] use vector manipulation
+
+2020-10-06 Christopher Lam 
+
+	* [options.scm] rename new-owner-report "Links" to "Transaction Links"
+
+2020-10-05 Christopher Lam 
+
+	* [new-owner-report] enable doclink links
+
+2020-10-05 Christian Gruber 
+
+	* fixup! Simplify type checking for GObject mockups
+
+2020-10-05 Christian Gruber 
+
+	* Fix xaccTransSetNotes()
+
+2020-10-05 Christopher Lam 
+
+	* [html-utilities][API] add gnc:html-invoice-doclink-anchor
+
+2020-10-05 Christopher Lam 
+
+	* [top-level] handle invoice-doclink-guid=InvoiceGUID urls
+
+2020-10-05 Robert Fewell 
+
+	* Correction to fix for Business 'Open Linked Document' sensitivity
+
+2020-10-05 Robert Fewell 
+
+	* Bug 797967 - Manage Document Link errors
+
+2020-09-30 RollingRusty 
+
+	* Update de.po
+
+2020-10-04 Robert Fewell 
+
+	* Fix missing 'Business Linked Documents' menu action.
+
+2020-10-04 Christopher Lam 
+
+	* Merge branch 'disable-report-animation' into maint #794
+
+2020-10-01 John Ralls 
+
+	* Ensure exposed-generator report files are linked in builddir.
+
+2020-10-01 Philipp Matthias Schaefer 
+
+	* Disable initial report animation
+
+2020-10-01 Christopher Lam 
+
+	* [invoice.scm] Use full header for initial screen
+
+2020-09-30 Christopher Lam 
+
+	* minor optimisations, g_list_prepend then g_list_sort separately
+
+2020-09-30 Christopher Lam 
+
+	* deprecate xaccAccountCountSplits with include_children = TRUE
+
+2020-09-30 Christopher Lam 
+
+	* deprecate xaccAccountCountSplits with include_children = FALSE
+
+2020-09-30 Christopher Lam 
+
+	* [Account.cpp] add gnc_account_and_descendants_empty (acc)
+
+2020-09-29 Christopher Lam 
+
+	* No more auto interest transfer label. Remove associated code.
+
+2020-09-29 Christopher Lam 
+
+	* Further merge GtkCheckButton with GtkLabel
+
+2020-09-29 Christopher Lam 
+
+	* Merge branch 'maint-merge-checkbox-label' into maint #792
+
+2020-09-29 Christopher Lam 
+
+	* Merge GtkCheckButton with GtkLabel
+
+2020-09-29 Robert Fewell 
+
+	* Bug 797953 - Add 'Filter By...' to CoA right mouse menu
+
+2020-09-29 Robert Fewell 
+
+	* Select account if Tax Options dialog opened from Register
+
+2020-09-29 Robert Fewell 
+
+	* Remove tabs and change spacing in dialog-sx-since-last-run.* files
+
+2020-09-28 Robert Fewell 
+
+	* Bug 571697 - SLR Transaction Status needs to look clickable
+
+2020-09-28 Frank H. Ellenberger 
+
+	* L10N:hr: merge a fresh pot
+
+2020-09-28 Yuri Chornoivan 
+
+	* Fix typo: the the -> the
+
+2020-09-27 milotype 
+
+	* Update hr.po
+
+2020-09-27 John Ralls 
+
+	* Add new languages Estonian and Indonesian to GC_LINGUAS.
+
+2020-09-26 John Ralls 
+
+	* Release GnuCash 4.2 (tag: 4.2)
+
+2020-09-26 John Ralls 
+
+	* Fix adding Scheme tests to check target.
+
+2020-09-26 Frank H. Ellenberger 
+
+	* L10N:de: update
+
+2020-09-25 Frank H. Ellenberger 
+
+	* L10N:de: merge fresh gnucash.pot
+
+2020-09-26 Frank H. Ellenberger 
+
+	* I18N: explain "Australia BAS" in income-gst-statement.scm
+
+2020-09-26 John Ralls 
+
+	* Set the program name for --help-gtk.
+
+2020-09-27 Christopher Lam 
+
+	* Merge branch 'maint-797893' into maint #789
+
+2020-09-26 Frank H. Ellenberger 
+
+	* I18N: enable an already translated message in gnucash.cpp
+
+2020-09-26 Christopher Lam 
+
+	* [html-chart] use gensym instead of guid
+
+2020-09-26 Christopher Lam 
+
+	* Bug 797893 - Unable to change font size in charts
+
+2020-09-26 Christopher Lam 
+
+	* [reports] use h3 instead of h2 for report-title
+
+2020-09-25 John Ralls 
+
+	* Update Ukrainian translation for the Translation Project.
+
+2020-09-25 John Ralls 
+
+	* Fix some return of ptr-to-temporary errors
+
+2020-09-25 John Ralls 
+
+	* Fix unnecessary copy in range-for loop
+
+2020-09-25 John Ralls 
+
+	* Fix ptr-comparison-to-string-literal error
+
+2020-09-25 Robert Fewell 
+
+	* Update the assistant glade files to clear padding error in trace file.
+
+2020-09-24 John Ralls 
+
+	* Bug 797514 - Changing transaction unreconciles a split inconsistently
+
+2020-09-24 Robert Fewell 
+
+	* Update to previous commit for Tax Options Dialog
+
+2020-09-24 Robert Fewell 
+
+	* Bug 554391 - Select account if Tax Options dialog opened from CoA
+
+2020-09-24 Robert Fewell 
+
+	* Bug 554391 - Add Apply button to Tax Options dialog
+
+2020-09-24 Robert Fewell 
+
+	* Bug 797897 - Cannot select multiple accounts in Tax Report Options
+
+2020-09-23 Christian Gruber 
+
+	* Add missing C linkage statements
+
+2020-09-22 Christian Gruber 
+
+	* Remove unecessary include
+
+2020-09-22 Christian Gruber 
+
+	* Mock methods should not neccessarily return mock objects
+
+2020-09-22 Christian Gruber 
+
+	* Relax runtime type checks
+
+2020-09-22 John Ralls 
+
+	* Bug 797898 - [reconciliation] calculated balance amount per...
+
+2020-09-22 Christian Gruber 
+
+	* Add missing _get_type() functions of all mocked GObject classes
+
+2020-09-22 John Ralls 
+
+	* Update version in README, add Boost::program_options to dependencies.
+
+2020-09-20 Christopher Lam 
+
+	* [report-utilities] further deprecations
+
+2020-09-21 Christian Gruber 
+
+	* Add missing comment
+
+2020-09-21 Christian Gruber 
+
+	* Simplify type checking for GObject mockups
+
+2020-09-20 Christian Gruber 
+
+	* Use MOCK_CONST_METHODn() macro instead of MOCK_METHODn() macro if necessary
+
+2020-09-20 Christian Gruber 
+
+	* Rename GObject type names of mock classes
+
+2020-09-20 Christian Stimming 
+
+	* [HBCI] Fix crashing aqbanking balance download and import
+
+2020-09-19 Christian Stimming 
+
+	* i18n - Update German translation
+
+2020-09-19 Christian Stimming 
+
+	* i18n - Update de.po with latest gnucash.pot template
+
+2020-09-18 Christopher Lam 
+
+	* [new-owner-report] fix unlocalizable string
+
+2020-09-19 Christopher Lam 
+
+	* [report-utilities] compact functions
+
+2020-09-18 Robert Fewell 
+
+	* Fix some spaces on blank lines is source files
+
+2020-09-18 Robert Fewell 
+
+	* Bug 797945 - Imap bayes conversion runs many times
+
+2020-09-18 Robert Fewell 
+
+	* Bug 797857 - Preference Dialog to large so buttons unreachable
+
+2020-09-17 John Ralls 
+
+	* Merge Dean Jagels's bug-102787 into maint.
+
+2020-09-17 John Ralls 
+
+	* Bug 797895 - Hang for a long time (9 minutes per account) importing...
+
+2020-09-17 Geert Janssens 
+
+	* i18n - Update Dutch translation
+
+2020-09-16 Geert Janssens 
+
+	* Small fixes for various translation issues
+
+2020-09-16 Geert Janssens 
+
+	* Expose C_ function (gettext with context string) to guile code
+
+2020-09-16 Geert Janssens 
+
+	* Slightly modify recently added warning messages
+
+2020-09-16 Geert Janssens 
+
+	* i18n - Drop obsolete Dutch translations
+
+2020-09-17 Frank H. Ellenberger 
+
+	* Merge PR #787 into maint
+
+2020-09-17 Frank H. Ellenberger 
+
+	* L10N:id: Internal fixes
+
+2020-09-17 triyanwn 
+
+	* L10N:id: Update Indonesian translation
+
+2020-09-17 Christopher Lam 
+
+	* Inline gnc:query-set-match-non-voids-only!
+
+2020-09-16 Robert Fewell 
+
+	* Update required gtk version in glade files part 2
+
+2020-09-16 Robert Fewell 
+
+	* Update required gtk version in glade files part 1
+
+2020-09-15 Christopher Lam 
+
+	* [reports] pulse progress bar in common html-object renderer code
+
+2020-09-15 Christopher Lam 
+
+	* [trep-engine] test void status without merging another query
+
+2020-09-15 Christopher Lam 
+
+	* [engine.i] swigify CLEARED-ALL
+
+2020-09-13 John Ralls 
+
+	* Fix wayward indentation and remove stray comment mark.
+
+2020-09-13 John Ralls 
+
+	* Populate and display the match list in the CSV Importer.
+
+2020-09-13 John Ralls 
+
+	* Bug 797896 - [HBCI] crash when downloading transactions
+
+2020-09-13 Robert Fewell 
+
+	* Complete the change from using associate in the source files
+
+2020-09-13 Robert Fewell 
+
+	* Change the document link KVP symbol to original name
+
+2020-09-12 Christopher Lam 
+
+	* [reports] rendering is more responsive by pulsing progressbar
+
+2020-09-12 Christopher Lam 
+
+	* [register] reduce tempo of updating progressbar
+
+2020-09-12 Robert Fewell 
+
+	* Bug 797874 - new account UI error from register
+
+2020-09-12 Frank H. Ellenberger 
+
+	* Merge L10N_et into maint ...
+
+2020-09-11 Frank H. Ellenberger 
+
+	* Merge Siim Sellis' pull request about L10N:et
+
+2020-09-11 John Ralls 
+
+	* Merge John Ralls's 'assoc_title' into maint.
+
+2020-09-11 John Ralls 
+
+	* Merge Frank Ellenbergers 'assoc_title' into John Ralls's 'assoc_title.
+
+2020-09-11 John Ralls 
+
+	* Fix the horizontal scrollbar in the linked docs window.
+
+2020-08-15 John Ralls 
+
+	* Rename all Transaction and Invoice Association identifiers to DocLink.
+
+2020-08-15 John Ralls 
+
+	* Rename Transaction and Invoice Associations to Document Links.
+
+2020-09-11 Dean Jagels 
+
+	* Bug 102787: Allow entry completion on currency selection
+
+2020-09-11 Robert Fewell 
+
+	* Bug 797935 - Strange formal register headers
+
+2020-09-11 Robert Fewell 
+
+	* Bug 797936 - Lot viewer notes field too narrow
+
+2020-09-11 Christopher Lam 
+
+	* [register.scm] prevent crash on running report on empty book
+
+2020-09-11 Christopher Lam 
+
+	* [register.scm] show progressbar when building report
+
+2020-09-11 Frank H. Ellenberger 
+
+	* Fix a typo in a translator comment
+
+2020-09-11 Frank H. Ellenberger 
+
+	* Merge branch PR #783 into maint
+
+2020-09-11 Frank H. Ellenberger 
+
+	* L10N:id: Fix copyright line
+
+2020-09-11 Frank H. Ellenberger 
+
+	* Fix help_label of dialog-doclink.glade
+
+2020-09-10 Geert Janssens 
+
+	* I18n - Update nl.po header file based on suggestions received by Frank Ellenberger
+
+2020-09-09 Geert Janssens 
+
+	* I18n - Dutch translation update
+
+2020-08-27 Geert Janssens 
+
+	* I18n - deduplicate translatable strings
+
+2020-08-27 Geert Janssens 
+
+	* I18n - Uppercase option name to align with other option names
+
+2020-09-08 Christopher Lam 
+
+	* Improve responsiveness of register scrub
+
+2020-08-15 John Ralls 
+
+	* Rename all Transaction and Invoice Association identifiers to DocLink.
+
+2020-08-15 John Ralls 
+
+	* Rename Transaction and Invoice Associations to Document Links.
+
+2020-09-07 Christopher Lam 
+
+	* Don't overwrite gnc_window_show_progress if message is empty string
+
+2020-09-06 John Ralls 
+
+	* Merge G4js's missing-sentinels into maint.
+
+2020-09-06 Christopher Lam 
+
+	* [Scrub.c] improve responsiveness of progressbar during scrub
+
+2020-09-06 Christopher Lam 
+
+	* [gnc-main-window] enable show_text for progressbar
+
+2020-09-06 Christopher Lam 
+
+	* Set parent window properly to gnc_verify_dialog, and i18n string
+
+2020-09-06 Gaming4JC 
+
+	* Fix warnings: missing sentinel in function calls
+
+2020-09-05 John Ralls 
+
+	* macOS: Give GnuCash time to shut down gracefully.
+
+2020-09-05 John Ralls 
+
+	* Merge Jean Laroche's '797900_check_repair_crash' into maint.
+
+2020-09-05 triyanwn 
+
+	* Indonesian translation for GnuCash
+
+2020-09-05 triyanwn 
+
+	* Indonesian translation for GnuCash
+
+2020-09-04 Frank H. Ellenberger 
+
+	* I18N: Allign glossary to gnucash.pot
+
+2020-09-04 Christopher Lam 
+
+	* Bug 476114 - Goto register by date feature req (bis)
+
+2020-09-04 Frank H. Ellenberger 
+
+	* I18N: Add copyright-holder - improve wording
+
+2020-08-29 Frank H. Ellenberger 
+
+	* I18N: Add copyright-holder
+
+2020-09-02 Christopher Lam 
+
+	* Bug 476114 - Goto register by date feature req
+
+2020-08-29 Christopher Lam 
+
+	* [gnc-plugin-page-report] use gnc_print_time64
+
+2020-08-29 Christopher Lam 
+
+	* [reports] use gnc-print-time64
+
+2020-08-29 Christopher Lam 
+
+	* [dialog-file-access] handle close-dialog with <ESC>
+
+2020-08-29 Christopher Lam 
+
+	* g_free strings allocated with gnc_prefs_get_string
+
+2020-09-01 siimsellis 
+
+	* Update et.po
+
+2020-08-28 Frank H. Ellenberger 
+
+	* L10N:et: Create Estonian translation
+
+2020-08-28 John Ralls 
+
+	* Bug 797924 - Crash when searching for customer to process payment.
+
+2020-08-27 jean 
+
+	* Fix reversed logic in gnc_quartz_should_quit
+
+2020-08-22 jean 
+
+	* Bug 797900  - Crash caused by Quitting while Check and Repair All is running
+
+2020-08-26 Christopher Lam 
+
+	* Bug 797923 - Running employee report results in "Unbound variable: txn"
+
+2020-08-24 Christian Gruber 
+
+	* Use /* ... */ for multi-line comments
+
+2020-07-10 Christian Gruber 
+
+	* Add doxygen documentation to QofFakeQuery and QofFakeQueryPool
+
+2020-08-19 Christopher Lam 
+
+	* [report-utilities] more dump data functions
+
+2020-08-22 John Ralls 
+
+	* Fix Windows build.
+
+2020-08-19 Christopher Lam 
+
+	* Merge branch 'maint-797852-bis' into maint #776
+
+2020-08-18 Christopher Lam 
+
+	* [test-engine-extras] Use more efficient gnc:list-flatten
+
+2020-08-18 Geert Janssens 
+
+	* Update Dutch glossary
+
+2020-08-18 Christopher Lam 
+
+	* Bug 797852 - Error in Accounts Payable Aging re cut off dates
+
+2020-08-15 Christopher Lam 
+
+	* [business-urls] link to owner report with enddate
+
+2020-08-15 Christopher Lam 
+
+	* [dialog-invoice] gnc_business_call_owner_report_with_enddate
+
+2020-08-17 Christopher Lam 
+
+	* [aging] call owner-report-text with end-date
+
+2020-08-15 Christopher Lam 
+
+	* [new-aging] create owner report with end-date
+
+2020-08-15 Christopher Lam 
+
+	* [html-utilities] gnc:owner-report-text can accepts enddate
+
+2020-08-15 Christopher Lam 
+
+	* [new-owner-report][api] owner-report-create-with-enddate
+
+2020-08-18 Geert Janssens 
+
+	* Mark Dutch translation as non-TP managed
+
+2020-08-18 Geert Janssens 
+
+	* Rename report option for consistency
+
+2020-08-18 triyanwn 
+
+	* L10N:id: New glossary for Bahasa Indonesia
+
+2020-08-18 Frank H. Ellenberger 
+
+	* Merge branch 'pr_773' into maint
+
+2020-08-18 Frank H. Ellenberger 
+
+	* I18N:nb: Merge recent pot
+
+2020-08-17 John Erling Blad 
+
+	* L10N: nb: partial updated translation
+
+2020-08-17 Christopher Lam 
+
+	* [net-charts] CSV export uses ISO dates
+
+2020-08-17 Christopher Lam 
+
+	* [category-barchart] add CSV export for table data
+
+2020-08-17 Christopher Lam 
+
+	* [category-barchart] simplify table constructor
+
+2020-08-17 Christopher Lam 
+
+	* [price-scatter] compact code, add more interval options
+
+2020-08-16 John Ralls 
+
+	* Reduce random transactions and iterations on test-lots.cpp.
+
+2020-08-16 Hong Xu 
+
+	* Etype might have not been initialized when used
+
+2020-08-16 John Erling Blad 
+
+	* L10N:nb: update glossary for norwegian bokmal
+
+2020-08-16 Christopher Lam 
+
+	* [trep-engine] export gnc:lists->csv properly
+
+2020-08-16 Christopher Lam 
+
+	* [net-charts] export table as CSV
+
+2020-08-16 Christopher Lam 
+
+	* [trep-engine] export gnc:lists->csv
+
+2020-08-16 Christopher Lam 
+
+	* [gnc-plugin-page-register.c] sanity check invoices_from_transaction
+
+2020-08-16 Christopher Lam 
+
+	* [Transaction.c] sanity check xaccTransGetAPARAcctSplitList
+
+2020-08-16 Christopher Lam 
+
+	* Merge branch 'maint-C-exports' into maint #768
+
+2020-08-16 Christopher Lam 
+
+	* [gnc-plugin-page-report] handle invalid renderer output
+
+2020-08-16 Christopher Lam 
+
+	* [gnucash-commands] handle invalid renderer return
+
+2020-08-16 Christopher Lam 
+
+	* Merge branch 'maint-797852' into maint #760
+
+2020-08-15 Giuseppe Foti 
+
+	* L10Nit 5551 messaggi tradotti.
+
+2020-08-15 Christopher Lam 
+
+	* [business-urls] parse enddate=time64-number
+
+2020-08-15 Christopher Lam 
+
+	* [gnc-plugin-page-report] remove compatibility path
+
+2020-08-15 Christopher Lam 
+
+	* [gnucash-commands] remove compatibility path
+
+2020-08-15 Christopher Lam 
+
+	* [report-core] remove output-file in gnc:cmdline-* fns
+
+2020-08-15 Christopher Lam 
+
+	* [income-gst-statement] deprecate file-name argument in renderer
+
+2020-08-15 Christopher Lam 
+
+	* [trep-engine] deprecate #:filename argument in renderer
+
+2020-08-15 Christopher Lam 
+
+	* [business-urls] macro common code
+
+2020-07-25 Christopher Lam 
+
+	* [business-urls] slightly better url query parsing
+
+2020-08-15 Christopher Lam 
+
+	* Addendum previous: rename "invoice"->"document"
+
+2020-06-28 Christopher Lam 
+
+	* Bug 787295 - Allow UI jump from Business accounts to their relevant invoice/bill/voucher
+
+2020-08-12 Christopher Lam 
+
+	* [gnucash-commands] use export-string/error
+
+2020-08-10 Christopher Lam 
+
+	* [gnc-plugin-page-report] use export-string/error
+
+2020-08-10 Christopher Lam 
+
+	* [taxtxf_de] set export-string for export-type='csv
+
+2020-08-10 Christopher Lam 
+
+	* [taxtxf] set export-string for export-type='csv
+
+2020-08-10 Christopher Lam 
+
+	* [trep-engine] set export-string or export-error for export-type 'csv
+
+2020-08-12 Christopher Lam 
+
+	* [report-core] don't barf when output-file is #false
+
+2020-08-14 Christopher Lam 
+
+	* [html-document] add export-string|error fields in html-document
+
+2020-08-14 Christopher Lam 
+
+	* [gnc-plugin-page-report.c] set dialog parent properly
+
+2020-08-14 Christopher Lam 
+
+	* don't crash if objects are built with invalid fieldnames
+
+2020-08-12 Geert Janssens 
+
+	* Dutch translation update
+
+2020-08-12 Geert Janssens 
+
+	* Apply most recent pot file to nl.po
+
+2020-08-12 Geert Janssens 
+
+	* Tweak a few strings to reuse translations
+
+2020-08-09 Christopher Lam 
+
+	* [gnucash-commands.cpp] fix guile error handling
+
+2020-08-09 Christopher Lam 
+
+	* [report-core] better documentation and handle ambiguous reportnames
+
+2020-08-08 John Ralls 
+
+	* gnc:cmdline-check-report should return #t if everything passes.
+
+2020-08-08 John Ralls 
+
+	* Use scm_from_locale_string for converting command-line input.
+
+2020-08-06 John Ralls 
+
+	* Bug 797880 - [gnucash-cli] encoding and font differing from...
+
+2020-08-08 Frank H. Ellenberger 
+
+	* I18N: Fix a typo in the glossary
+
+2020-08-08 Christopher Lam 
+
+	* [price-quotes.scm] ensure missing-alphavantage message can show on console
+
+2020-08-08 Christopher Lam 
+
+	* [report-core] handle export properly
+
+2020-08-08 Christopher Lam 
+
+	* [taxtxf.scm] compact, allow error to console
+
+2020-08-05 Christopher Lam 
+
+	* [budget.scm] fix report crash on books with unreversed budgets
+
+2020-08-05 Christopher Lam 
+
+	* Merge branch 'maint-show-report-with-datafile' into maint #755
+
+2020-07-12 Christopher Lam 
+
+	* [gnucash-cli] -R show should accept & try load datafile
+
+2020-08-04 John Ralls 
+
+	* Refactor gnc_gen_trans_list_create_matches
+
+2020-08-03 John Ralls 
+
+	* Bug 797839 - Auto-complete prevents entering non-ASCII transaction descriptions
+
+2020-08-03 Christopher Lam 
+
+	* Addendnum to ad20f859c -- _ must be exported
+
+2020-08-02 Christopher Lam 
+
+	* [core-utils] define _ for guile-2.2
+
+2020-08-02 John Ralls 
+
+	* Restore call to resolve_conflicts().
+
+2020-08-02 John Ralls 
+
+	* Add new python example file to POTFILES.in.
+
+2020-08-02 John Ralls 
+
+	* Merge Hong Xu's 'potential_matches' into maint.
+
+2020-08-02 Hong Xu 
+
+	* Variable name correction: "import_trans_account" --> split_account
+
+2020-08-02 John Ralls 
+
+	* Merge Jean Laroche's '797730_matcher_match_many_to_one' into maint.
+
+2020-08-02 John Ralls 
+
+	* Merge Jean Laroche's  'improve_ofx_import_speed' into maint.
+
+2020-08-02 John Ralls 
+
+	* Merge Hong Xu's 'export-account' into maint.
+
+2020-08-02 Christopher Lam 
+
+	* [job-report] clarify deprecation warning.
+
+2020-07-21 jean 
+
+	* Add a flag to the account structure to defer balance computation
+
+2020-07-21 jean 
+
+	* Fix FOO and move deletion where it should be
+
+2020-07-19 jean 
+
+	* To further increase the import speed, it's necessary to prevent any account commit to happen until the very end of the import (OK or Cancel), because account commits trigger very lengthy balance computations. For this, I call xaccAccountBeginEdit on all the accounts involved in the import, keeping a list of them so BeginEdit is called only once. At the end of the import, commit is called on all the accounts in the list. Note that when the user selects a target account for an imported transaction, xaccAccountBeginEdit is called on the target account, and it is added to the list.
+
+2020-07-17 jean 
+
+	* Instead of saving the imported transaction into the treeview, which takes more time I now save them into a temporary list. A single query is done for all imported transactions and the resulting register splits are put into a hash table of lists with accounts as key, which will speed things up when multiple accounts are found. My tests of large imports on large accounts seems to ate that most of the time is spent verifying whether the imported transactions has already been imported, then computing the balance repeatedly for each imported transaction (!)  when the user clicks OK to add all the transactions to the account. So there's still room for improvement here!
+
+2020-05-11 jean 
+
+	* Speeds up the import of ofx files by only doing one query at the end.
+
+2020-07-31 Hong Xu 
+
+	* Add Python example export_account_totals.py
+
+2020-08-01 Christopher Lam 
+
+	* [advanced-portfolio] use G_ for guile-3.0
+
+2020-08-01 Christopher Lam 
+
+	* [advanced-portfolio] restore to original 4.0 state
+
+2020-07-03 Ralf Habacker 
+
+	* Fix API doc of gnc_account_lookup_by_code()
+
+2020-07-31 John Ralls 
+
+	* Bug 797889 - editing amounts in dr / cr behaving oddly
+
+2020-07-31 Christopher Lam 
+
+	* Bug 797883 - [Transaction Report] non-localized string
+
+2020-07-31 Robert Fewell 
+
+	* Realign the UI source files so they are consistent.
+
+2020-07-31 Robert Fewell 
+
+	* Fix some text alignment for duplicate transaction dialog
+
+2020-07-30 Christopher Lam 
+
+	* Bug 797878 - Pie chart displays fractions and long decimal representations
+
+2020-05-07 jean 
+
+	*  Bug 797730 - Transaction matching can match multiple imported transactions to the same existing one
+
+2020-07-29 Christian Stimming 
+
+	* Fix broken month in aqbanking<6 import
+
+2020-07-07 Christian Stimming 
+
+	* [I18n] Minor update in German translation
+
+2020-07-27 Christopher Lam 
+
+	* [job-report] deprecate old report.
+
+2020-07-27 Christopher Lam 
+
+	* [advanced-portfolio] bugfix. move functions top-level
+
+2020-07-25 John Ralls 
+
+	* Release GnuCash 4.1. (tag: 4.1)
+
+2020-07-25 John Ralls 
+
+	* [git-release-notes.pl] html-escape strings in the html output.
+
+2020-07-25 John Ralls 
+
+	* [I18n]: Another update for the Japanese translation.
+
+2020-07-25 Christopher Lam 
+
+	* [html-style-info] round amounts in price-render
+
+2020-07-25 Frank H. Ellenberger 
+
+	* Bug 775582 - Change "Petrol" (or Gas if seen in USA) to "Fuel"
+
+2020-07-25 Robert Fewell 
+
+	* Bug 797873 - New Account Hierarchy selects en_US
+
+2020-07-24 John Ralls 
+
+	* Update translations from the Translation Project.
+
+2020-07-22 Robert Fewell 
+
+	* Bug 797842 - Empty Entry widgets not showing insertion cursor
+
+2020-07-22 Robert Fewell 
+
+	* Add missing LEAVE macro to gnc-tree-model-account.c
+
+2020-07-22 Robert Fewell 
+
+	* Bug 797787 - Create new plugin page next to current page
+
+2020-07-20 John Ralls 
+
+	* Warn against using xaccTransGetSplit for iteration.
+
+2020-07-19 John Ralls 
+
+	* Quickfill cells: Remove the selection after a delete.
+
+2020-07-19 John Ralls 
+
+	* Bug 797845 - Backspace key produces incorrect result
+
+2020-07-19 John Ralls 
+
+	* Bug 797844 - Typing account number to select account fails
+
+2020-07-19 John Ralls 
+
+	* Accommodate AQBanking < 6 use of GWEN_TIME instead of GWEN_DATE.
+
+2020-07-19 Christopher Lam 
+
+	* ensure averaging-multipler returns exact numbers rather than floats
+
+2020-07-19 Christopher Lam 
+
+	* Bug 797861 - Yearly / Monthly average reporting displays zeros
+
+2020-07-18 John Ralls 
+
+	* Bug 797858 - Transaction date is one day too early from...
+
+2020-07-18 John Ralls 
+
+	* Bug 797834 - Ctrl+A in account register fields chimes after any...
+
+2020-07-18 Christopher Lam 
+
+	* [gnucash-cli] improve "-R show" to describe report
+
+2020-07-13 Mike Alexander 
+
+	* Free the libofx contexts that gnc_file_ofx_import_process_file gets.
+
+2020-07-17 John Ralls 
+
+	* Merge Jean Laroche's '797854_global_interest_pay_bug1' into maint.
+
+2020-07-14 jean 
+
+	* Make the edit dialog refresh the auto-interest flag display based on pref
+
+2020-07-16 Jean Laroche 
+
+	*  Bug 797847 - Best match probability calculation on import is too pessimistic
+
+2020-07-16 John Ralls 
+
+	* Merge Jean Laroche's '797759_no_highlight' into maint.
+
+2020-07-16 avma 
+
+	* Hebrew .po for ver 4.0
+
+2020-07-14 Christopher Lam 
+
+	* [README] document support for guile-3.0
+
+2020-07-14 Christopher Lam 
+
+	* [CmakeLists] Find and link guile-3.0
+
+2020-07-14 Christopher Lam 
+
+	* [test-html-fonts] load-from-path instead of load
+
+2020-07-14 Christopher Lam 
+
+	* [libguile] use scm_list_N instead of SCM_LISTN
+
+2020-07-13 Christopher Lam 
+
+	* [gnucash-pot] Add G_ as gettext keyword
+
+2020-07-13 Christopher Lam 
+
+	* [gnc-numeric] use srfi-9 records for :gnc-monetary
+
+2020-07-14 Christopher Lam 
+
+	* [html-table] fix copy-and-paste error in f9b3b105d
+
+2020-07-11 jean 
+
+	* Bug 797854 - Global Register Preference to prompt for interest payment is not being honored.
+
+2020-07-11 jean 
+
+	* Remove global preference for auto-interest-transfer
+
+2020-07-12 Christopher Lam 
+
+	* [html-html/pie/bar/linechart] use symbol for make-record-type
+
+2020-07-12 Christopher Lam 
+
+	* [aging] use srfi-9 records for :company-info
+
+2020-07-12 Christopher Lam 
+
+	* [guile-3] change _ to G_
+
+2020-07-12 Christopher Lam 
+
+	* addendum to 86f7e3329
+
+2020-07-12 Christopher Lam 
+
+	* [html-text] use srfi-9 records for <html-text>
+
+2020-07-12 Christopher Lam 
+
+	* [html-table] use srfi-9 records for <html-table> and <html-table-cell>
+
+2020-07-12 Christopher Lam 
+
+	* [html-anytag] use srfi-9 records for <html-anytag>
+
+2020-07-12 Christopher Lam 
+
+	* [html-style-sheet] combine 2 similar functions
+
+2020-07-12 Christopher Lam 
+
+	* [html-style-sheet] use srfi-9 records for <html-style-sheet-template> and <html-style-sheet>
+
+2020-07-12 Christopher Lam 
+
+	* [html-style-info] use srfi-9 records for <html-style-table>
+
+2020-07-11 John Ralls 
+
+	* Bug 797827 - 4.0.1 gnucash-cli seg faults on macOS Catalina
+
+2020-07-11 John Ralls 
+
+	* Bug 797831 - Printer not found
+
+2020-07-11 John Ralls 
+
+	* Let  override AppleLanguages on Macs.
+
+2020-07-12 Christopher Lam 
+
+	* [html-style-info] use srfi-9 records for <html-data-style-info>
+
+2020-07-12 Christopher Lam 
+
+	* [html-style-info] use srfi-9 records for <html-markup-style-info>
+
+2020-07-11 Christopher Lam 
+
+	* [html-document] use srfi-9 records for <html-object>
+
+2020-07-11 Christopher Lam 
+
+	* [html-document] use srfi-9 records for <html-document>
+
+2020-07-11 Christopher Lam 
+
+	* [html-chart] use srfi-9 records for <html-chart>
+
+2020-07-11 Christopher Lam 
+
+	* [report-core] use srfi-9 records for <report>
+
+2020-07-11 Christopher Lam 
+
+	* [report-core] use srfi-9 records for <report-template>
+
+2020-07-11 Christopher Lam 
+
+	* [balsheet-eg] remove unused functions
+
+2020-07-11 Christopher Lam 
+
+	* [balsheet-eg] modernize accrec to use srfi-9 record
+
+2020-07-11 Christopher Lam 
+
+	* [eguile reports] eradicate pythonic for loops, use for-each instead
+
+2020-07-11 Christopher Lam 
+
+	* Bug 797840 - Regression: Invoices printed to PDF generate an extra blank page
+
+2020-07-11 Christopher Lam 
+
+	* typo fix edd7efd95 book->!book bail out
+
+2020-07-11 Frank H. Ellenberger 
+
+	* Merge PR #752 into maint
+
+2020-07-10 John Ralls 
+
+	* Bug 797853 - Crash on 'Save As' in MacOS Mojave and Gnucash 4
+
+2020-07-11 Frank H. Ellenberger 
+
+	* Merge PR #751 into maint
+
+2020-07-10 Giuseppe Foti 
+
+	* L10N:it: 5551 messaggi tradotti.
+
+2020-07-10 John Ralls 
+
+	* Bug 797843 - Quickfill broken with Cyrillic input language
+
+2020-07-10 milotype 
+
+	* Croatian correction of 3 errors
+
+2020-07-10 Christian Gruber 
+
+	* Add a comment on using empty ctor for mock classes derived from GObjects
+
+2020-07-10 milotype 
+
+	* Updated Croatian (hr) translation
+
+2020-07-09 Christian Gruber 
+
+	* Rename all class methods using snake_case instead of camelCase
+
+2020-06-15 Christian Gruber 
+
+	* Cleanup some comments
+
+2020-06-15 Christian Gruber 
+
+	* Correct comments on fake functions of the test application
+
+2020-06-15 Christian Gruber 
+
+	* Use typed queries
+
+2020-06-15 Christian Gruber 
+
+	* Replace query factory by a query pool
+
+2020-06-14 Christian Gruber 
+
+	* Remove unnecessary inclusion of qofquery-p.h
+
+2020-06-10 Christian Gruber 
+
+	* Rename class QofMockQuery to QofFakeQuery
+
+2020-06-10 Christian Gruber 
+
+	* Rename gmock-qofquery to fake-qofquery
+
+2020-06-10 Christian Gruber 
+
+	* Check pointer to preferences backend before using it
+
+2020-06-10 Christian Gruber 
+
+	* Replace singleton class MockPrefsBackend by an ordinary class
+
+2020-07-09 Christopher Lam 
+
+	* [account.cpp] prevent crash in gnc_account_get_currency_or_parent
+
+2020-07-08 Christopher Lam 
+
+	* CMakeLists: mark deprecation of .scm files
+
+2020-07-04 Christopher Lam 
+
+	* [lot-viewer] lot accumulator uses hashtable avoiding O(N^2)
+
+2020-07-07 John Ralls 
+
+	* Merge branch 'maint'
+
+2020-06-23 Christopher Lam 
+
+	* [eguile-utilities] fmtnumeric displays decimal instead of fraction
+
+2020-07-07 John Ralls 
+
+	* Bug 797850 - Account register credit/debit column headings untranslated
+
+2020-07-07 John Ralls 
+
+	* Add python/deprecation.py to POTFILES.
+
+2020-07-06 John Ralls 
+
+	* Merge Christoph Holtermann's 'python-sessionOpenMode' into master.
+
+2020-07-06 John Ralls 
+
+	* Link with libm.so on those platforms that require it.
+
+2020-07-05 John Ralls 
+
+	* Merge Jean Laroche's 'bug_797825_ofx_invest_crash' onto master.
+
+2020-07-05 Frank H. Ellenberger 
+
+	* I18N: update LINGUAS
+
+2020-07-04 c-holtermann 
+
+	* use same order in comment as in definition of SessionOpenMode enum
+
+2020-07-04 c-holtermann 
+
+	* fix SessionOpenMode explanation for SESSION_NORMAL_OPEN
+
+2020-07-04 c-holtermann 
+
+	* fix SessionOpenMode explanation for SESSION_NEW_OVERWRITE
+
+2020-07-04 Christopher Lam 
+
+	* [account-piecharts] round account->balance to report-currency SCU
+
+2020-07-04 Christopher Lam 
+
+	* Merge branch 'master-no-coll-rounding' #740
+
+2020-07-03 YOSHINO Yoshihito 
+
+	* L12N:ja: Update from translation project
+
+2020-07-02 Christopher Lam 
+
+	* Merge branch 'master-797828'
+
+2020-07-01 jean 
+
+	* Remove created commodities code as it does nothing
+
+2020-06-30 Christopher Lam 
+
+	* Bug 797828 - Budget Barchart was not upgraded
+
+2020-07-01 Christopher Lam 
+
+	* Bug 797835 - Zero Crossing in 4.0 that wasn't in 3.10
+
+2020-06-30 Christopher Lam 
+
+	* [balsheet-pnl] remove monetary-less
+
+2020-06-30 Christopher Lam 
+
+	* Bug 797830 - Expense over time has extra empty row
+
+2020-06-30 Christopher Lam 
+
+	* [budget-barchart] reindent/delete-trailing-whitespace/untabify
+
+2020-06-29 Christopher Lam 
+
+	* [advanced-portfolio] fix report warnings flags
+
+2020-06-28 jean 
+
+	* Bug 797825 - OFX import crashes on import of investment transaction
+
+2020-06-25 Christopher Lam 
+
+	* [advanced-portfolio] move table-add-stock-rows toplevel
+
+2020-06-24 Christopher Lam 
+
+	* [advanced-portfolio] simplify basis functions
+
+2020-06-24 Christopher Lam 
+
+	* [advanced-portfolio] simplify basis-builder
+
+2020-06-27 John Ralls 
+
+	* Release GnuCash 4.0 (tag: 4.0)
+
+2020-06-26 John Ralls 
+
+	* Release GnuCash 3.11
+
+2020-06-26 John Ralls 
+
+	* Release GnuCash 3.11 (tag: 3.11)
+
+2020-06-26 Christian Stimming 
+
+	* L12N: Update German translation
+
+2020-06-26 Christian Stimming 
+
+	* L12N: merge recent gnucash.pot in de.po file
+
+2020-06-26 Geert Janssens 
+
+	* I18n - fix quote unification
+
+2020-06-26 Geert Janssens 
+
+	* I18n - update Dutch translation
+
+2020-06-26 Geert Janssens 
+
+	* I18n - Drop a few numbers from translation.
+
+2020-06-25 Geert Janssens 
+
+	* I18n - Unify two similar translatable strings
+
+2020-06-26 Geert Janssens 
+
+	* Bug 787295 - Allow UI jump from Business accounts to their relevant invoice/bill/voucher
+
+2020-06-26 Robert Fewell 
+
+	* Revert the changes made to save Register default layouts as discussed in PR #743
+
+2020-06-26 Robert Fewell 
+
+	* Setting a sheet column width to 1 when resizing by dragging
+
+2020-06-26 Robert Fewell 
+
+	* Move the menu options for saving Business layouts
+
+2020-06-26 Robert Fewell 
+
+	* Disable showing glyphs for associations on MacOS
+
+2020-06-26 Frank H. Ellenberger 
+
+	* Merge PR #744
+
+2020-06-25 Christian Stimming 
+
+	* i18n: Fix missing context in single-character translated strings
+
+2020-06-25 Geert Janssens 
+
+	* Bug 787295 - Allow UI jump from Business accounts to their relevant invoice/bill/voucher
+
+2020-06-24 Christopher Lam 
+
+	* [test-portfolios] 100% coverage for advanced-portfolio helper fns
+
+2020-06-24 Christopher Lam 
+
+	* [advanced-portfolio] move helper functions to toplevel for testing
+
+2020-06-23 Christopher Lam 
+
+	* [eguile-utilities] fmtnumeric displays decimal instead of fraction
+
+2020-06-22 Geert Janssens 
+
+	* Bug 797815 - Obsolete gnucash-launcher.cmd still shipped
+
+2020-06-22 Christopher Lam 
+
+	* [html-utilities] use ice-9 match
+
+2020-06-22 Christopher Lam 
+
+	* deprecations: remove functions deprecated in 3.x
+
+2020-06-22 Christopher Lam 
+
+	* deprecations: clarify functions deprecated in 4.x.
+
+2020-06-21 Christian Stimming 
+
+	* i18n: very minor string improvement: Match string to another existing one
+
+2020-06-21 Christian Stimming 
+
+	* L12N:de update translation
+
+2020-06-21 Geert Janssens 
+
+	* Build depedency fix - build backend libararies before the guile bindings
+
+2020-06-21 Geert Janssens 
+
+	* Drop code to attach output to console on Windows
+
+2020-06-20 c-holtermann 
+
+	* better display for doxygen, typo and consistent naming
+
+2020-06-20 c-holtermann 
+
+	* use urllib.parse.urlparse to check for xml on python Session init
+
+2020-06-11 c-holtermann 
+
+	* add some unittests for python Session
+
+2020-06-19 c-holtermann 
+
+	* reformat two python example scripts with black
+
+2020-06-19 c-holtermann 
+
+	* decorate Session.begin with default mode argument
+
+2020-06-19 c-holtermann 
+
+	* enable Session.__init__() to be provided with existing instance or book
+
+2020-06-19 c-holtermann 
+
+	* add unittests for function_class
+
+2020-06-19 c-holtermann 
+
+	* enable keyword arguments for default_arguments_decorator
+
+2020-06-19 c-holtermann 
+
+	* add method decorate_method to function_class.py
+
+2020-06-12 c-holtermann 
+
+	* update example scripts to SessionOpenMode
+
+2020-06-11 c-holtermann 
+
+	* allow keyword arguments for function_class.py
+
+2020-06-21 Frank H. Ellenberger 
+
+	* L12N: merge recent messages into all po files
+
+2020-06-21 Frank H. Ellenberger 
+
+	* Merge branch 'maint'
+
+2020-06-21 Frank H. Ellenberger 
+
+	* L12N:uk: remove duplicate message block
+
+2020-06-20 John Ralls 
+
+	* Release GnuCash 3.906 (tag: 3.906)
+
+2020-06-20 John Ralls 
+
+	* Updated Ukrainian translation from the Translation Project.
+
+2020-06-20 John Ralls 
+
+	* Merge branch 'maint'
+
+2020-06-20 John Ralls 
+
+	* Merge new Ukrainian translation into maint.
+
+2020-06-20 John Ralls 
+
+	* Updated Ukrainian Translation from the Translation Project.
+
+2020-06-09 c-holtermann 
+
+	* adapt to use of sessionOpenMode in qof_session_begin
+
+2020-06-11 c-holtermann 
+
+	* make SessionOpenMode enum available for python
+
+2020-06-19 c-holtermann 
+
+	* introduce python submodule deprecation
+
+2020-06-20 Christopher Lam 
+
+	* [report-utilities] ensure commodity-collector doesn't round amounts
+
+2020-06-19 John Ralls 
+
+	* Bug 797811 - GnuCash crashes with segfault when saving to mysql...
+
+2020-06-19 Robert Fewell 
+
+	* Bug 797808 - Caps Lock Breaks Almost Everything
+
+2020-06-18 Frank H. Ellenberger 
+
+	* Merge branch 'maint'
+
+2020-06-17 Frank H. Ellenberger 
+
+	* Add missing #includes into gnc-imp-settings-csv-price.cpp
+
+2020-06-17 Christopher Lam 
+
+	* [business-core] string-hash doesn't not guarantee unique hash
+
+2020-06-07 Christian Gruber 
+
+	* Fix typo
+
+2020-06-07 Christian Gruber 
+
+	* Add glib-object.h to includes
+
+2020-06-07 Christian Gruber 
+
+	* Remove unnecessary type check
+
+2020-06-07 Christian Gruber 
+
+	* Replace g_return_if_fail() and g_return_val_if_fail() by ASSERT_TRUE and EXPECT_TRUE
+
+2020-06-03 Christian Gruber 
+
+	* Pass std::vector arguments by reference instead of by value
+
+2020-06-03 Christian Gruber 
+
+	* State comment on unused GObject instance init function more precisely
+
+2020-06-03 Christian Gruber 
+
+	* Remove todo comments on replacement of std::vector by std::list
+
+2020-06-02 Christian Gruber 
+
+	* Use std::vector of const char* instead of std::string where meaningful
+
+2020-06-13 John Ralls 
+
+	* Release GnuCash 3.905. (tag: 3.905)
+
+2020-06-14 Robert Fewell 
+
+	* Bug 797804 - Another misbehaving text cursor in register.
+
+2020-06-14 Robert Fewell 
+
+	* Error in trace file for Dialog Options
+
+2020-06-13 Frank H. Ellenberger 
+
+	* L12N: merge recent gnucash.pot in po files
+
+2020-06-13 John Ralls 
+
+	* Merge Chris Good's 'gnc-fq-dumpMas' into master.
+
+2020-06-13 Frank H. Ellenberger 
+
+	* Merge branch 'pr734'
+
+2020-06-08 Jannick 
+
+	* de.po: fixes for the Account Import Assistant
+
+2020-06-14 Christopher Lam 
+
+	* [html-utilities] fix gnc:html-render-options-changed
+
+2020-06-13 Christopher Lam 
+
+	* [html-utilities] gnc:html-render-options-changed shows subreports
+
+2020-06-13 Christopher Lam 
+
+	* [eguile] compact eguile processor
+
+2020-06-13 Christopher Lam 
+
+	* [eguile-utilities] compact & simplify
+
+2020-06-13 Christopher Lam 
+
+	* [balsheet-pnl] fix balsheet->networth barchart link
+
+2020-06-13 Christopher Lam 
+
+	* [balsheet-pnl] use (ice-9 match) forms
+
+2020-06-13 Christopher Lam 
+
+	* [balsheet-pnl] value-collector doesn't need to ignore closing
+
+2020-06-13 Christopher Lam 
+
+	* [trep-engine] don't create intermediate cells object
+
+2020-06-13 Christopher Lam 
+
+	* [gnucash-cli] --report show/list outputs to stdout
+
+2020-06-12 John Ralls 
+
+	* Can't set target link options until we've defined the target.
+
+2020-06-12 Geert Janssens 
+
+	* Bug 797800 - [help screen items] clarification welcome
+
+2020-06-12 goodvibes2 
+
+	* Bug 796993 - Get Quotes: Err msg if Alpha Vantage API key needed
+
+2020-06-12 goodvibes2 
+
+	* gnc-fq-dump: Err msg if AlphaVantage API Key is needed but missing
+
+2020-06-12 goodvibes2 
+
+	* gnc-fq-dump: add examples to synopsis + remove tabs
+
+2020-06-12 Frank H. Ellenberger 
+
+	* Merge branch 'maint'
+
+2020-06-12 Frank H. Ellenberger 
+
+	* Merge remote-tracking branch 'origin/HEAD'
+
+2020-06-12 Frank H. Ellenberger 
+
+	* L12N:de 3. Update header
+
+2020-06-12 Frank H. Ellenberger 
+
+	* L12N:de 2 Tagestips & 1 Tippfehler
+
+2020-06-12 Frank H. Ellenberger 
+
+	* L12N:de 1.msgmerge
+
+2020-06-12 Frank H. Ellenberger 
+
+	* Fix a typo in my previous commit
+
+2020-06-11 Fred Bone 
+
+	* Bug 797799 - Add Tip of the Day for "Notes" field
+
+2020-06-11 Frank H. Ellenberger 
+
+	* Merge branch 'maint'
+
+2020-06-11 Frank H. Ellenberger 
+
+	* I18N: Improve tooltip about double-line-mode
+
+2020-06-11 Geert Janssens 
+
+	* Bug 797791 - [Windows] list of command line options after 'gnucash.exe --help'?
+
+2020-06-11 Geert Janssens 
+
+	* Revert "Make gnucash-cli a console application on Windows"
+
+2020-06-11 Geert Janssens 
+
+	* Make gnucash-cli a console application on Windows
+
+2020-06-11 Frank H. Ellenberger 
+
+	* doxygen: PERL_PATH has become obsolete in 1.8.0 (25-02-2012)
+
+2020-06-11 Frank H. Ellenberger 
+
+	* tip_of_the_day.c: Revert unintended change from commit 0cfb40e
+
+2020-06-10 Robert Fewell 
+
+	* Bug 797531 - Improve jumps to filtered registers
+
+2020-06-09 Geert Janssens 
+
+	* Drop unused boost::locale::generator instantiations
+
+2020-06-09 Geert Janssens 
+
+	* Fix translations using boost::locale::translate
+
+2020-06-09 Christopher Lam 
+
+	* Revert guid-dance "balance-sheet/income-statement{-pnl}: swap guids"
+
+2020-06-09 Robert Fewell 
+
+	* Add some top / bottom margin to the existing association label
+
+2020-06-09 Robert Fewell 
+
+	* Bug 797790 - Set the default folder for Associations
+
+2020-06-09 Christopher Lam 
+
+	* [test-cash-flow] include new dependency cash-flow-calc
+
+2020-06-09 Christopher Lam 
+
+	* Bug 797786: [balsheet-pnl] balance sheet includes closing entries
+
+2020-06-09 Mike Alexander 
+
+	* Don't reference undefined variable if price is not set.
+
+2020-06-08 John Ralls 
+
+	* Improve comments explaining exposed generators.
+
+2020-06-08 John Ralls 
+
+	* Extract cash-flow-calc-money-in-out to its own module.
+
+2020-06-08 John Ralls 
+
+	* Fix report dependencies that caused Xcode build failure.
+
+2020-06-08 Robert Fewell 
+
+	* Update Schedule Transaction Template dialog status bar
+
+2020-06-08 Robert Fewell 
+
+	* Add the Register width menu options to the Scheduled  Transaction Template dialog.
+
+2020-06-08 Christopher Lam 
+
+	* Bug 797786: [balsheet-pnl] show trading-accounts if set
+
+2020-06-08 Christopher Lam 
+
+	* Bug 797786: [balsheet-pnl] add liability&equity section in bs
+
+2020-06-08 Christopher Lam 
+
+	* Bug 797786: [balsheet-pnl] retained earnings include closing entries
+
+2020-06-08 Christopher Lam 
+
+	* [balance-sheet] hide trading-accounts if use-trading-accts? is unset
+
+2020-06-07 John Ralls 
+
+	* Bug 797746 - [reports] German umlauts not escaped
+
+2020-06-07 John Ralls 
+
+	* Release 3.904 (tag: 3.904)
+
+2020-06-06 John Ralls 
+
+	* Update translations from the translation project.
+
+2020-06-07 Geert Janssens 
+
+	* Drop superfluous check for threads library
+
+2020-06-06 John Ralls 
+
+	* One more misbehaving text cursor in register.
+
+2020-06-06 Christopher Lam 
+
+	* Merge branch 'master-cli-report-upgrades' #733
+
+2020-06-06 Christopher Lam 
+
+	* [cli-reports] implement --report show
+
+2020-06-06 Christopher Lam 
+
+	* [cli-reports] implement --report list
+
+2020-06-06 Robert Fewell 
+
+	* Bug 797775 - Rate/Price displayed as fractional in CSV Export
+
+2020-06-06 Robert Fewell 
+
+	* Bug 797774 - Bill/Invoice due reminder confusion on CN?
+
+2020-06-06 Robert Fewell 
+
+	* Add a tooltip for the 'C' column in the Chart of Accounts
+
+2020-06-06 Robert Fewell 
+
+	* Fix g_signal_handler_disconnect: assertion in trace file
+
+2020-06-05 John Ralls 
+
+	* Bug 797781 - Num Field Regression - characters in wrong order when typed.
+
+2020-06-05 John Ralls 
+
+	* Gnucash-sheet: Add debug statements for tracking selection.
+
+2020-06-05 Geert Janssens 
+
+	* Add first version of gnucash-cli manpage
+
+2020-06-05 Geert Janssens 
+
+	* First version of a gnucash-cli man page
+
+2020-06-05 Geert Janssens 
+
+	* Convert '--run-report' to '--report run' to accomodate for additonal report commands
+
+2020-06-05 Geert Janssens 
+
+	* Convert command line option '--add-price-quotes' to '--quotes get'
+
+2020-06-05 Geert Janssens 
+
+	* Rework command line option parsing to store values directly in class member variables
+
+2020-06-05 Christopher Lam 
+
+	* [cli-reports] modify to open session readonly
+
+2020-06-05 Robert Fewell 
+
+	* Fix a missing mode == in 'Replace the three bool parameters to qof_session_begin to an enum'.
+
+2020-06-04 John Ralls 
+
+	* Don't try to unlock the GncDbiSqlConnection when it was connected read-only.
+
+2020-06-04 John Ralls 
+
+	* Replace the three bool parameters to qof_session_begin to an enum.
+
+2020-06-04 John Ralls 
+
+	* Extract function template drop_database.
+
+2020-06-02 John Ralls 
+
+	* QofSession, QofBackend: Change book_id to uri.
+
+2020-06-02 John Ralls 
+
+	* Delete QOF_STDOUT.
+
+2020-06-03 Christopher Lam 
+
+	* Bug 797739 - Tweak Transaction Report Column Defaults
+
+2020-06-02 Yuri Chornoivan 
+
+	* I18N: Fix typo Exsiting -> Existing
+
+2020-06-01 John Ralls 
+
+	* Add scm-core-utils as dependency of scm-engine-1.
+
+2020-06-01 John Ralls 
+
+	* Include gnucash-windows-locale.c in the dist. (tag: 3.903)
+
+2020-05-31 John Ralls 
+
+	* Release 3.903.
+
+2020-05-31 Geert Janssens 
+
+	* Make gnucash-cli report errors to stderr by default.
+
+2020-05-31 John Ralls 
+
+	* Provide an error message for ERR_BACKEND_LOCKED.
+
+2020-05-31 Frank H. Ellenberger 
+
+	* Merge branch 'maint'
+
+2020-05-31 John Ralls 
+
+	* Put command logging back to logging.
+
+2020-05-31 John Ralls 
+
+	* Merge branch 'maint'
+
+2020-05-30 John Ralls 
+
+	* New Ukrainian translation for 4.x from the translation project.
+
+2020-05-30 John Ralls 
+
+	* Add gnucash-windows-locale.c to POTFILES.in
+
+2020-05-31 Christopher Lam 
+
+	* [gnucash-commands] don't force open a locked datafile
+
+2020-05-31 Christopher Lam 
+
+	* [gnucash-commands] fprintf instead of g_warning
+
+2020-05-30 Frank H. Ellenberger 
+
+	* Update description of gnc_gnome_help and gnc_launch_assoc
+
+2020-05-30 John Ralls 
+
+	* Prevent libstdc++ copysign declaration error on Win32.
+
+2020-05-30 John Ralls 
+
+	* Don't try to build gnucash-windows-locale.c on non-Windows OSes.
+
+2020-05-30 John Ralls 
+
+	* Extract set_win32_thread_locale() to a new C file gnucash-windows-locale.c
+
+2020-05-30 John Ralls 
+
+	* gi18n.h, binreloc.h, and gnc-engine.h have C linkage.
+
+2020-05-30 Christopher Lam 
+
+	* cli-reports: if run-report matches multiple, offer choices
+
+2020-05-30 Geert Janssens 
+
+	* A few translation tweaks in gnucash and gnucash-cli
+
+2020-05-29 Geert Janssens 
+
+	* C++ tweaks
+
+2020-05-30 Geert Janssens 
+
+	* Small tweaks that got left out by mistake
+
+2020-05-29 Geert Janssens 
+
+	* Move saved report loading to report initialization code
+
+2020-05-29 Christopher Lam 
+
+	* Check all known report templates instead of just custom reports.
+
+2020-05-29 John Ralls 
+
+	* Convert args passed to run reports to const std::string&.
+
+2020-05-29 John Ralls 
+
+	* gnucash-cli: Actually run the report.
+
+2020-05-29 John Ralls 
+
+	* Make run-report member variable names consistent.
+
+2020-05-29 Christopher Lam 
+
+	* instead of saved-reports only, dump in-menu? reports alphabetically
+
+2020-05-29 Christopher Lam 
+
+	* [cli-reports] run reports from cli
+
+2020-05-29 Geert Janssens 
+
+	* Use common input file parameter for gnucash-cli --add-price-quotes
+
+2020-05-29 Geert Janssens 
+
+	* Fix log initialization
+
+2020-05-29 Geert Janssens 
+
+	* Rework gnucash startup code to be a Gnucash class member function
+
+2020-05-29 Geert Janssens 
+
+	* Factor out common quotes retrieval code into a new file gnucash-commands.cpp
+
+2020-05-29 Geert Janssens 
+
+	* Return from main instead of exiting
+
+2020-05-29 Geert Janssens 
+
+	* Catch unrecognized command line options
+
+2020-05-29 Geert Janssens 
+
+	* Make options that don't take arguments bool_switch type
+
+2020-05-29 Geert Janssens 
+
+	* Pass argc and argv by value instead of by reference
+
+2020-05-28 Geert Janssens 
+
+	* Port command line option handling to boost::program_options
+
+2020-05-23 Geert Janssens 
+
+	* Only offer gtk options for gnucash, not for gnucash-cli
+
+2020-05-28 John Ralls 
+
+	* MacOS Build Fixes
+
+2020-05-29 Geert Janssens 
+
+	* Rename Gnucash::Base to Gnucash::CoreApp
+
+2020-05-23 Geert Janssens 
+
+	* Reformat Objective C code to work around a KDevelop bug.
+
+2020-05-29 Geert Janssens 
+
+	* Switch to using boost::locale::format and iostream for printing messages
+
+2020-05-22 Geert Janssens 
+
+	* Further cleanup in gnucash and gnucash-cli
+
+2020-05-29 Geert Janssens 
+
+	* Extract common setup bits from gnucash and gnucash-cli into a separate class Gnucash::Base
+
+2020-05-29 Geert Janssens 
+
+	* Introduce new executable 'gnucash-cli'
+
+2020-05-19 Geert Janssens 
+
+	* Build gnucash main file as C++
+
+2020-05-18 Geert Janssens 
+
+	* Rename main source file from gnucash-bin.c to gnucash.c
+
+2020-05-22 Geert Janssens 
+
+	* Fix build depencency hiccup
+
+2020-05-29 Geert Janssens 
+
+	* Add files omitted in previous commit
+
+2020-05-29 Frank H. Ellenberger 
+
+	* Merge PR #727
+
+2020-05-29 Geert Janssens 
+
+	* Add mock sources and import-export test to dist
+
+2020-05-29 Frank H. Ellenberger 
+
+	* L12N:de Ammend last commit about Python messages
+
+2020-05-29 Christopher Lam 
+
+	* Use gnc:split->owner instead of gnc:owner-from-split
+
+2020-05-29 Christopher Lam 
+
+	* Upgrade split->owner to gnc:split->owner
+
+2020-05-29 Christopher Lam 
+
+	* Bugfix new reports
+
+2020-05-29 Christopher Lam 
+
+	* deprecate old reports
+
+2020-05-29 Christopher Lam 
+
+	* Merge branch 'master-guid-dance' #706
+
+2020-05-29 c-holtermann 
+
+	* updates for python gettext
+
+2020-05-29 c-holtermann 
+
+	* update with recent gnucash.pot
+
+2020-05-28 John Ralls 
+
+	* Merge Christoph Holterman's python-gettext-localize into master.
+
+2020-05-28 John Ralls 
+
+	* python-gettext-localize: Additional POTFILES.in changes.
+
+2020-05-28 c-holtermann 
+
+	* remove translation test
+
+2020-05-28 c-holtermann 
+
+	* locale is not needed anymore (debug)
+
+2020-05-28 c-holtermann 
+
+	* remove debug stuff
+
+2020-05-28 c-holtermann 
+
+	* test info
+
+2020-05-28 c-holtermann 
+
+	* remove global gettext import
+
+2020-05-28 c-holtermann 
+
+	* remove debug info
+
+2020-04-28 c-holtermann 
+
+	* remove debug stuff (temporarily)
+
+2020-04-28 c-holtermann 
+
+	* further debugging
+
+2020-04-28 c-holtermann 
+
+	* further debugging
+
+2020-04-27 c-holtermann 
+
+	* debug on travis
+
+2020-04-08 c-holtermann 
+
+	* add test for gettext
+
+2020-04-10 c-holtermann 
+
+	* install gettext
+
+2020-03-01 c-holtermann 
+
+	* add translatable python files
+
+2020-02-29 c-holtermann 
+
+	* localize strings for python
+
+2020-02-29 c-holtermann 
+
+	* implement gettext localization for python
+
+2020-05-18 Robert Fewell 
+
+	* Add opening the transaction association from register sheet.
+
+2020-05-18 Robert Fewell 
+
+	* Bug 796531 - Display the Transaction Association link
+
+2020-05-18 Robert Fewell 
+
+	* Add a total entries label to the Association dialogue
+
+2020-05-18 Robert Fewell 
+
+	* Change Associations list dialog for Business
+
+2020-05-18 Robert Fewell 
+
+	* Add an Invoice section to dialog-utils for when the  path head changes
+
+2020-05-18 Robert Fewell 
+
+	* Allow Associations to be added to invoices
+
+2020-05-18 Robert Fewell 
+
+	* Replace tabs with spaces in gncInvoice.c/h
+
+2020-05-18 Robert Fewell 
+
+	* Add KVP Association property to GncInvoice
+
+2020-05-18 Robert Fewell 
+
+	* Change register sheet associations tooltip to use  dialog-assoc-utils functions
+
+2020-05-18 Robert Fewell 
+
+	* Display glyphs for Transaction Associations
+
+2020-05-18 Robert Fewell 
+
+	* Add a new cell type for Transaction associations that  supports the use of glyphs
+
+2020-05-18 Robert Fewell 
+
+	* Change the File dialogue for associations
+
+2020-05-18 Robert Fewell 
+
+	* Change gnc_launch_assoc function
+
+2020-05-18 Robert Fewell 
+
+	* Change dialog-assoc functions to use ones from dialog-assoc-utils
+
+2020-05-18 Robert Fewell 
+
+	* Add option to change associations when path head changes
+
+2020-05-18 Robert Fewell 
+
+	* Allow the Transaction Association to be updated from list
+
+2020-05-18 Robert Fewell 
+
+	* Bug 797185 - Add Reload button for Transaction associations
+
+2020-05-18 Robert Fewell 
+
+	* Bug 797185 - Allow sorting on all Transaction Association columns
+
+2020-05-18 Robert Fewell 
+
+	* Move the transaction association dialog to dialog-assoc.c/h
+
+2020-05-18 Robert Fewell 
+
+	* Minor text changes to reflect associated file name changes
+
+2020-04-01 Robert Fewell 
+
+	* Rename the trans associate files
+
+2020-05-28 Robert Fewell 
+
+	* Delete Account: Short circuit checks if no transactions or subaccounts
+
+2020-05-28 Robert Fewell 
+
+	* Add file name to dialog used in ofx import
+
+2020-05-28 Robert Fewell 
+
+	* Rename a couple of functions used in multiple OFX file import
+
+2020-05-28 Robert Fewell 
+
+	* Set the reconcile after close button in import-main-matcher
+
+2020-05-28 Robert Fewell 
+
+	* Merge Jean Laroche's branch 'add_multi_ofx_import_master' PR 697 to master
+
+2020-05-28 Christopher Lam 
+
+	* typo fix
+
+2020-05-27 John Ralls 
+
+	* Delete Account: Use subaccount commodity for subaccount splits.
+
+2020-05-27 John Ralls 
+
+	* Delete Account: Short circuit checks if no transactions or subaccounts.
+
+2020-05-27 John Ralls 
+
+	* Delete account: Rename and reflow helper functions.
+
+2020-05-27 John Ralls 
+
+	* Extract function account_delete_dialog.
+
+2020-05-27 John Ralls 
+
+	* Delete Account: Abstract the disposition adopters into a struct.
+
+2020-05-27 John Ralls 
+
+	* Delete Account: Modify strings for single subaccount.
+
+2020-05-27 John Ralls 
+
+	* gnc-plugin-page-account-tree.c: delete_account_next fix leaks and whitespace.
+
+2020-05-27 John Ralls 
+
+	* Plugin-page-account: Extract function commodity_mismatch_dialog.
+
+2020-05-27 John Ralls 
+
+	* Merge Jean Laroche's '797220_delete_account_wrong_currency' into master.
+
+2020-05-27 John Ralls 
+
+	* Fix printf arg mismatch, windows build failure.
+
+2020-05-10 Frank H. Ellenberger 
+
+	* HIG, I18N: Improve Budget menu entries and tooltips
+
+2020-05-27 Robert Fewell 
+
+	* Change the position the register pop up so it aligns better
+
+2020-05-27 Robert Fewell 
+
+	* Fix the alignment of the Notes label in Transfer dialog
+
+2020-05-27 Robert Fewell 
+
+	* Set horizontal paned position in Lot viewer
+
+2020-05-27 Robert Fewell 
+
+	* Set the expanding column in the lot viewer
+
+2020-05-27 Robert Fewell 
+
+	* Change the alignment of the numeric values in the lot viewer
+
+2020-05-27 Robert Fewell 
+
+	* Bug 797768 - View Lots sorting numbers not right.
+
+2020-05-25 Christopher Lam 
+
+	* Bug 797770 - Reconciliation report does not consider credit transactions
+
+2020-05-26 John Ralls 
+
+	* gnucash-item-edit.c: Small whitespace fixup.
+
+2020-05-26 John Ralls 
+
+	* Place the cursor after the preedit.
+
+2020-05-25 John Ralls 
+
+	* Remove obsolete documentation files.
+
+2020-05-25 John Ralls 
+
+	* Move the Windows README files to gnucash-on-windows where they belong.
+
+2020-05-25 John Ralls 
+
+	* Fix binreloc compile error with gcc.
+
+2020-05-25 Mike Alexander 
+
+	* Don't call gnc_path_get_localedir vefore binreloc is initialized.
+
+2020-05-25 Mike Alexander 
+
+	* CLean up the binreloc code a bit.  It is won't work pervectly, but it's better.
+
+2020-05-24 John Ralls 
+
+	* Exclude mock files from translation.
+
+2020-05-24 John Ralls 
+
+	* Make static gnucash_sheet_cursor_get, used only internally.
+
+2020-05-24 John Ralls 
+
+	* Delete unused function gnucashsh_sheet_get_text_cursor_position.
+
+2020-05-24 John Ralls 
+
+	* Merge Bob Fewell's 'gnc-edit-changes' into master.
+
+2020-05-23 Christopher Lam 
+
+	* [dashboard] enable Dashboard report properly
+
+2020-05-23 Christopher Lam 
+
+	* [new-aging] speed up split->owner
+
+2020-05-22 Robert Fewell 
+
+	* Drop gnucash-scrolled-window.c in POTFILES.in as it has  been removed.
+
+2020-05-22 Robert Fewell 
+
+	* Remove extra vbox in gnc_item_edit.c
+
+2020-05-22 Robert Fewell 
+
+	* Change the way the sheet popup treeview height is obtained.
+
+2020-05-22 Robert Fewell 
+
+	* Move setting up of the sheet popup size-allocate callback
+
+2020-05-22 Robert Fewell 
+
+	* Error for g_signal_handler_disconnect in trace file
+
+2020-05-22 Robert Fewell 
+
+	* Fix combocell when using action field
+
+2020-05-20 John Ralls 
+
+	* Merge Christian Gruber's 'test_import_backend' into master.
+
+2020-05-20 John Ralls 
+
+	* Recalculate type-ahead search when deleting.
+
+2020-05-20 John Ralls 
+
+	* gnc_combo_cell: Remove the vertical scrollbar if the list store is small.
+
+2020-05-20 John Ralls 
+
+	* Get rid of GncScrolledWindow.
+
+2020-05-19 John Ralls 
+
+	* gnc_item_list_num_entries: Count the GtkListStore in use.
+
+2020-05-19 John Ralls 
+
+	* Connect to the popup's size-allocate signal only once.
+
+2020-05-19 jean 
+
+	* Bug 797759 - Some transactions are not highlighted in the matching window
+
+2020-05-19 John Ralls 
+
+	* Use correct type of 0 for char* return value.
+
+2020-05-19 Robert Fewell 
+
+	* Bug 797754 - Account Register scrolling stops working
+
+2020-05-18 Robert Fewell 
+
+	* Reselect the transaction rows in import-main-matcher
+
+2020-05-18 John Ralls 
+
+	* Bug 797760 - Broken register split activity...
+
+2020-05-18 John Ralls 
+
+	* combocell_gnome: Prevent starting off in type-ahead mode on entry
+
+2020-05-18 John Ralls 
+
+	* combocell_gnome: Block signals for all list deletes.
+
+2020-05-18 John Ralls 
+
+	* combocell-gnome: Process deletes and inserts before performing matching.
+
+2020-05-18 Geert Janssens 
+
+	* Drop unrelated source file from POTFILES.in
+
+2020-05-18 Geert Janssens 
+
+	* add-price-quotes doesn't use modules, so don't load them
+
+2020-05-18 Christopher Lam 
+
+	* Bug 797761 - Customer report beta: opening balance tax column shows garbage string
+
+2020-05-13 Geert Janssens 
+
+	* Fix crash in case filter is less than 4 parameters
+
+2020-05-17 John Ralls 
+
+	* Ensure gnc_item_list's temp_store is NULL when list store is in use.
+
+2020-05-17 John Ralls 
+
+	* Remove redundant use of gtk_accelerator_get_default_mod_mask().
+
+2020-05-17 John Ralls 
+
+	* Initialize the bounds variables in gnucash_sheet_insert_cb.
+
+2020-05-17 John Ralls 
+
+	* Fix delete ignores selection in register cells.
+
+2020-05-16 John Ralls 
+
+	* Remove actions on the control, shift, and alt keys.
+
+2020-05-17 Robert Fewell 
+
+	* Change the Options Checkbox
+
+2020-05-16 Christopher Lam 
+
+	* [html-chart] add z-index:999 to anchor
+
+2020-04-05 Christopher Lam 
+
+	* [receipt.eguile] simplify
+
+2020-04-05 Christopher Lam 
+
+	* [taxinvoice] remove dead code, simplify
+
+2020-04-05 Christopher Lam 
+
+	* [taxinvoice.eguile] simplify
+
+2020-05-15 John Ralls 
+
+	* Fix abort in qof_log_check.
+
+2020-05-15 John Ralls 
+
+	* Bug 797750 - SIGSEV in swig-engine.c
+
+2020-05-14 jean 
+
+	* Implement multiple-ofx import with reconcile
+
+2020-05-14 John Ralls 
+
+	* Restore AQBanking to operation.
+
+2020-05-14 Christopher Lam 
+
+	* Merge branch 'speedup-aging' #638
+
+2020-05-14 Christopher Lam 
+
+	* [register] display $0.00 for zero-value splits
+
+2020-05-14 Christopher Lam 
+
+	* Merge branch 'master-796932'
+
+2020-05-14 Christopher Lam 
+
+	* [register] price shown in transaction currency rather than account's parent currency
+
+2020-05-14 Robert Fewell 
+
+	* Remove some spaces and tabs from dialog-options.c
+
+2020-05-14 Robert Fewell 
+
+	* Enable the Options Checkbox label to be used to toggle
+
+2020-05-02 Robert Fewell 
+
+	* Complete the move of saving register filter/sort to .gcm
+
+2020-05-02 Robert Fewell 
+
+	* Remove the setting of a comment for registers
+
+2020-05-02 Robert Fewell 
+
+	* Remove the state key file comment for Account filter
+
+2020-05-02 Robert Fewell 
+
+	* Add option to save Layout for Register items
+
+2020-05-02 Robert Fewell 
+
+	* Add enum SplitRegisterTypeGroup to group registers
+
+2020-05-02 Robert Fewell 
+
+	* Change state_section parameter for gnc_table_save_state
+
+2020-05-02 Robert Fewell 
+
+	* Add option to save Layout for Business items
+
+2020-03-02 Robert Fewell 
+
+	* Test for a valid register state comment before trying  to add it
+
+2020-05-13 John Ralls 
+
+	* Bug 797748 - missing header "algorithm"
+
+2020-05-13 Christopher Lam 
+
+	* Bug 796932 - Invoices order when assigning payments
+
+2020-05-13 Christopher Lam 
+
+	* [register] show number columns right-aligned
+
+2020-05-13 Christopher Lam 
+
+	* Merge branch 'maint-797743' #720 price renderers
+
+2020-05-13 Christopher Lam 
+
+	* [register] [bugfix] use new price renderer
+
+2020-05-13 Christopher Lam 
+
+	* [trep-engine] use new price renderer
+
+2020-05-13 Christopher Lam 
+
+	* [advanced-portfolio] use new price renderer
+
+2020-05-13 Christopher Lam 
+
+	* [balsheet-eg.eguile] use new price renderer
+
+2020-05-13 Christopher Lam 
+
+	* [balsheet-pnl] use new price renderer
+
+2020-05-13 Christopher Lam 
+
+	* [html-utilities] use new price renderer for exchange-rate table
+
+2020-05-13 Christopher Lam 
+
+	* [html-style-info] export gnc:default-price-renderer
+
+2020-05-13 Christopher Lam 
+
+	* [gnc-ui-util] add gnc_price_print_info
+
+2020-05-11 Christopher Lam 
+
+	* Bug 797743 - Monetary amounts are occasionally rendered in fractions
+
+2020-05-12 John Ralls 
+
+	* Use std::unique_ptr instead of std::shared_ptr.
+
+2020-05-12 John Ralls 
+
+	* Fix incorrecly logging all possible messages regardless of log level.
+
+2020-05-12 Christopher Lam 
+
+	* Merge branch 'maint-trep-case-insensitive' PR #719
+
+2020-05-12 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2020-05-12 Geert Janssens 
+
+	* Bug 797717 - Summary bar changes height when opening a menu or scrolling over an option
+
+2020-05-12 Robert Fewell 
+
+	* Bug 797745 - Unable to change default report currency
+
+2020-05-11 John Ralls 
+
+	* Fix wrong Boost library variable names.
+
+2020-05-11 John Ralls 
+
+	* Don't use g_return_value_if_fail in qof_log_check.
+
+2020-05-11 Christopher Lam 
+
+	* [trep-engine] "Transaction Filter is case insensitive"
+
+2020-05-10 John Ralls 
+
+	* Fix clang error about type mismatch GtkWidget* != void* aka gpointer
+
+2020-05-10 John Ralls 
+
+	* Reports dependency fixes.
+
+2020-05-10 John Ralls 
+
+	* Two more test directories needing G_LOG_DOMAIN defined.
+
+2020-05-10 Christopher Lam 
+
+	* Merge branch 'maint'
+
+2020-05-10 Frank H. Ellenberger 
+
+	* HIG, I18N: Improve Budget menu entries
+
+2020-05-09 Christopher Lam 
+
+	* [c-interface] compact code, use (ice-9 match)
+
+2020-05-09 John Ralls 
+
+	* Fix undeclared std::find_if.
+
+2020-05-09 John Ralls 
+
+	* Merge Jean Laroches '797737_match_previously_matched_trans' into maint.
+
+2020-05-09 Frank H. Ellenberger 
+
+	* I18N: fix translator comments in window-reconcile.c
+
+2020-05-09 Frank H. Ellenberger 
+
+	* I18N: Fix several issuse with 'Help not found' strings
+
+2019-01-22 John Ralls 
+
+	* [QofLog] Replace hashtable with tree of vectors.
+
+2019-01-22 John Ralls 
+
+	* Make qof_log_set_file static.
+
+2019-01-22 John Ralls 
+
+	* Move QofLogModule typedef to qoflog.h where it belongs.
+
+2020-05-09 Christopher Lam 
+
+	* [balsheet-eg] don't use safe-cadr and safe-cdr
+
+2020-05-09 Christopher Lam 
+
+	* [balsheet-eg] reindent process-acc-list-r
+
+2020-05-09 Christopher Lam 
+
+	* [eguile-utilities] deprecate single-use function
+
+2020-04-05 Christopher Lam 
+
+	* [balsheet-eg] use "foreign" css class correctly
+
+2020-04-05 Christopher Lam 
+
+	* [eguile-gnc] don't catch errors in eguile-gnc
+
+2020-05-08 John Ralls 
+
+	* Don't ask to save a non-existant book.
+
+2020-05-08 John Ralls 
+
+	* Remove duplicate decl.
+
+2018-06-17 John Ralls 
+
+	* Decouple QofBook creation from QofSession.
+
+2020-01-09 Mike Alexander 
+
+	* Initially select the last account chosen in the account picker dialogs.
+
+2020-05-03 Mike Alexander 
+
+	* Remove some globals by moving them into the struct passed to callbacks. No functional changes.
+
+2017-04-04 Mike Alexander 
+
+	* Define log_module in gnc-sx-instance-model.c.
+
+2018-10-16 Mike Alexander 
+
+	* Add a newline to the GNC_DBD_DIR line in the environment file.
+
+2020-05-08 jean 
+
+	* Bug 797737 - Import matching can match an imported transaction to an existing, previously matched transaction
+
+2020-05-08 Robert Fewell 
+
+	* Transaction matcher dialogue was not closing when changing book.
+
+2020-05-08 Robert Fewell 
+
+	* Correct parent widget for import new account dialog.
+
+2020-05-08 Robert Fewell 
+
+	* Change layout of source file dialog-billterms.c
+
+2020-05-08 Robert Fewell 
+
+	* No Selection on load for Bill Terms
+
+2020-05-08 Robert Fewell 
+
+	* Bug 797689 - Change the Bill Terms Table dialogue to be based on a  GtkWindow
+
+2020-05-08 Robert Fewell 
+
+	* Change layout of source file dialog-tax-tables.c
+
+2020-05-08 Robert Fewell 
+
+	* Change the Tax Table dialogue to be based on a GtkWindow
+
+2020-05-08 Robert Fewell 
+
+	* Align the import matcher help button
+
+2020-05-02 Christopher Lam 
+
+	* Bug 797659 - Liabilities in budget report no longer calculate correctly
+
+2020-05-07 John Ralls 
+
+	* Merge branch 'maint'
+
+2020-05-07 John Ralls 
+
+	* Fix LIBDBI_DRIVERS_DIR generation.
+
+2020-05-07 John Ralls 
+
+	* Don't mutate the cached global account list store.
+
+2020-05-07 John Ralls 
+
+	* Clean up some leftover noise from the ime-fix branch.
+
+2020-05-06 jean 
+
+	* Refactor, breaking large function. - gnc_plugin_page_account_tree_cmd_delete_account() is still too long but would be messy to break - rename the _int function and break it further - remove passing of account name - simplify some of the code by reversing if(...) to if(!...)
+
+2020-05-06 Frank H. Ellenberger 
+
+	* Use more precise strings in gnc-split-reg.c
+
+2020-05-05 Thomas Schärli 
+
+	* L10N:de: "Für" klein in "Ergebnisrechnung für Periode" etc.
+
+2020-05-05 Frank H. Ellenberger 
+
+	* I18N: Msgmerge recent changes
+
+2020-05-05 Frank H. Ellenberger 
+
+	* I18N: Hotfix for bug 797725
+
+2020-05-05 Thomas Schärli 
+
+	* L10N:de_CH: Ein weiterer Tippfehler im Kontenrahmen KMU
+
+2020-05-04 John Ralls 
+
+	* Fix build  on Ubuntu-18.04.
+
+2020-05-04 John Ralls 
+
+	* Merge John Ralls's 'ime-fix' into master.
+
+2020-05-03 John Ralls 
+
+	* Bug 797052 - Autofill Selection is Corrupted After Clicking Description
+
+2020-05-02 John Ralls 
+
+	* Use the GtkEntry's GtkIMContext instead of creating one for the sheet.
+
+2020-05-02 John Ralls 
+
+	* Extract functions make_new_text, delete_text, insert_text, normalize_bounds
+
+2020-05-05 Christopher Lam 
+
+	* [test-stress-options] fix combinatorics testing
+
+2020-05-04 Christopher Lam 
+
+	* [Account.cpp] more xaccAccountTypeGetFundamental types
+
+2020-05-04 Christopher Lam 
+
+	* Merge branch 'maint'
+
+2020-05-02 John Ralls 
+
+	* Extract function pass_to_entry_handler.
+
+2020-05-02 John Ralls 
+
+	* Extract function process_motion_keys.
+
+2020-04-23 John Ralls 
+
+	* Extract several functions for managing GtkEntry position and selection
+
+2020-05-01 Christopher Lam 
+
+	* [balsheet-pnl] multichoice option uses symbol instead of #f
+
+2020-04-25 Christopher Lam 
+
+	* [reports] use new module names
+
+2020-04-25 Christopher Lam 
+
+	* balance-sheet/income-statement{-pnl}: swap guids
+
+2020-04-25 Christopher Lam 
+
+	* {new-}owner-report: swap guids, hook to new-owner-report
+
+2020-04-25 Christopher Lam 
+
+	* {new-}aging: swap guids, hook to new-aging
+
+2020-05-03 Robert Fewell 
+
+	* Merge Chris Good's branch 'bug797688RecAddSubAcct', PR #709 into master
+
+2020-05-03 Robert Fewell 
+
+	* Merge Chris Good's branch 'bug797236RecMas', PR #707 into master
+
+2020-05-03 Robert Fewell 
+
+	* Merge Chris Good's branch 'bug797648Rec-2', PR #713 into maint
+
+2020-05-03 Robert Fewell 
+
+	* Merge Jean Laroche's branch 'fix_seg_fault_in_matcher'  into maint
+
+2020-05-02 jean 
+
+	* Fix the crash that occurs when opening a new book when the transaction-matching dialog has been opened then closed.
+
+2020-05-03 Christopher Lam 
+
+	* Bug 797707 - CSV Transaction Export: custom dates should be insensitive by default
+
+2020-04-27 jean 
+
+	* Split long function into two sub-functions. Prevent deleting accounts with more than 1 subaccount. Verify currency match for sub-account when it is to be moved or its transactions are to be moved
+
+2020-05-02 John Ralls 
+
+	* Fix test failure for timezones west of the prime meridian.
+
+2020-04-23 John Ralls 
+
+	* Relocate some static functions to avoid pre-declaring them.
+
+2020-04-23 John Ralls 
+
+	* Extract Function gnucash_sheet_set_entry_value.
+
+2020-05-02 Geert Janssens 
+
+	* Display report zoom factor with one decimal space.
+
+2020-05-02 goodvibes2 
+
+	* Bug 797648 Redo - Reconciliation - Treat each split independently
+
+2020-05-02 goodvibes2 
+
+	* Revert "Bug 797648 - Fix problem reconciling multiple splits in a transaction"
+
+2020-05-02 goodvibes2 
+
+	* Revert "Use Doxygen format for function comment"
+
+2020-05-02 goodvibes2 
+
+	* Fix 2 comment typos in gnucash/gnome/window-reconcile.c
+
+2020-05-02 goodvibes2 
+
+	* Reconcile window - Retain position in split list after deletion
+
+2020-05-02 goodvibes2 
+
+	* Bug 797236 - Reconciliation - Retain visibility of selected split.
+
+2020-04-23 John Ralls 
+
+	* No need for a separate decl and def of a static inline function.
+
+2020-04-23 John Ralls 
+
+	* Shut up a cmake policy warning.
+
+2020-05-01 Christopher Lam 
+
+	* Merge chris 'UK-VAT and AU-GST' branch
+
+2019-07-27 Christopher Lam 
+
+	* [test-income-gst] add uk-vat and au-bas tests
+
+2019-07-26 Christopher Lam 
+
+	* [income-gst-statement] add UK VAT and AU GST rules
+
+2020-05-01 Robert Fewell 
+
+	* Change occurrences of gdk_display_get_default
+
+2020-05-01 Robert Fewell 
+
+	* Remove some Gtk version checks in code
+
+2020-05-01 Robert Fewell 
+
+	* Remove some Gtk version checks for CSS
+
+2020-04-30 John Ralls 
+
+	* Fix transaction post_date being set to midnight local.
+
+2020-01-20 Christopher Lam 
+
+	* [gnc-lot.c] speed up gncInvoiceGetInvoiceFromLot by caching invoice
+
+2020-04-26 jean 
+
+	* Bug 797220 - delete account allows move of all transactions to account having non-matching currency
+
+2020-04-29 John Ralls 
+
+	* Respect the environment LD_LIBRARY_PATH for loading Scheme modules and tests.
+
+2020-04-28 John Ralls 
+
+	* Fix libgnc-app-utils.dylib install_name_dir.
+
+2020-04-28 Frank H. Ellenberger 
+
+	* Add a tip about announcements and other mailing lists
+
+2020-04-27 John Ralls 
+
+	* Change the release to 3.902 after fixing all of the build problems. (tag: 3.902)
+
+2020-04-27 John Ralls 
+
+	* Fix two more Scheme dependency errors that broke builds on flathub and Win32.
+
+2020-04-27 goodvibes2 
+
+	* Bug 797388 - Add watch for ea subacct of the acct to be reconciled
+
+2020-04-26 John Ralls 
+
+	* Merge branch 'maint'
+
+2020-04-25 John Ralls 
+
+	* Update Ukrainian translation fro the translation project.
+
+2020-04-25 John Ralls 
+
+	* Release GnuCash 3.901. (tag: 3.901)
+
+2020-04-25 John Ralls 
+
+	* Update Ukrainian translation fro the translation project.
+
+2020-04-25 John Ralls 
+
+	* Merge Jean Laroche's 'add_reconcile_after_ofx_import_master' into master.
+
+2020-04-25 John Ralls 
+
+	* Merge branch 'maint'
+
+2020-04-25 John Ralls 
+
+	* Merge Jean Laroche's '797351_zombie_transaction' into maint.
+
+2020-04-25 John Ralls 
+
+	* Remove leftover webkit2 conditional.
+
+2020-04-25 John Ralls 
+
+	* Merge Jean Laroche's 'Fix-3-SX-Problems' into maint
+
+2020-04-13 jean 
+
+	* Fix 3 problems with the scheduled transactions calculations
+
+2020-04-25 John Ralls 
+
+	* Merge Jean Laroche's '797670_Xtran_editor_crash' into maint.
+
+2020-04-25 John Ralls 
+
+	* Merge Christoph Holtermann's 'python-shell-output-improved' into maint.
+
+2020-04-25 John Ralls 
+
+	* Merge Christoph Holtermann's 'python-app-utils-2' into maint.
+
+2020-04-25 John Ralls 
+
+	* Add POTFILES.in change from 'account-notes' merge.
+
+2020-04-25 John Ralls 
+
+	* Merge Bob Fewell's 'account-notes' into master.
+
+2020-04-25 John Ralls 
+
+	* Merge Bob Fewell's 'css-changes' into master.
+
+2020-04-25 John Ralls 
+
+	* Fix qif-import dependency failure.
+
+2020-04-18 jean 
+
+	* Added same code to transaction matcher
+
+2020-04-18 jean 
+
+	* Bug 797670 - scheduled transaction editor can remain open when switching file, which causes seg fault when later closed
+
+2020-04-24 jean 
+
+	* Bug 797351 - General ledger register transaction becomes "zombie" after deletion
+
+2020-04-24 John Ralls 
+
+	* Fix build on ubuntu 18.04.
+
+2020-04-25 Christopher Lam 
+
+	* Bug 797605 - RFE: Customer/Vendor/Employee Overview should also have "Process Payment" toolbar
+
+2020-04-24 John Ralls 
+
+	* Update dependencies for 3.901 release.
+
+2020-04-24 John Ralls 
+
+	* Remove support on Linux/BSD for ancient versions of WebKitGtk.
+
+2020-04-24 John Ralls 
+
+	* Merge branch 'maint'
+
+2020-04-24 Geert Janssens 
+
+	* Drop several test-link type tests
+
+2020-04-24 Geert Janssens 
+
+	* Drop all gnc-module dependencies and includes from compilation units that no longer use it
+
+2020-04-24 Geert Janssens 
+
+	* Drop the gnc-module wrapper around the test-engine library
+
+2020-04-24 Geert Janssens 
+
+	* Convert gncmod-report into an ordinary library
+
+2020-04-24 Geert Janssens 
+
+	* Convert gncmod-bi/customer-import into ordinary libraries
+
+2020-04-24 Geert Janssens 
+
+	* Convert gncmod-log-replay into an ordinary library
+
+2020-04-25 Christopher Lam 
+
+	* Revert "Bug 797605 - RFE: Customer/Vendor/Employee Overview should also have "Process Payment" toolbar"
+
+2020-04-24 Geert Janssens 
+
+	* Convert gncmod-csv-import/export into ordinary libraries
+
+2020-04-24 Geert Janssens 
+
+	* Convert gncmod-qif-import into an ordinary library
+
+2020-04-24 Geert Janssens 
+
+	* Convert gncmod-register-gnome into an ordinary library
+
+2020-04-24 Geert Janssens 
+
+	* Convert gncmod-gnome-search into an ordinary library
+
+2020-04-24 Geert Janssens 
+
+	* Convert gncmod-gnome-utils into an ordinary library
+
+2020-04-24 Geert Janssens 
+
+	* Convert several gnc-modules to ordinary shared libraries
+
+2020-04-24 Frank H. Ellenberger 
+
+	* Merge 'Update Croatian po and glossary files' by Milo Ivir
+
+2020-04-20 c-holtermann 
+
+	* improve output and explain code for python shell
+
+2020-04-21 jean 
+
+	* Make the reconcile window close when the session closes, use full version of free
+
+2020-04-19 jean 
+
+	* Add detection of account type to handle balance sign
+
+2020-04-18 jean 
+
+	* Add reconcile immediately after ofx import, based on statement
+
+2020-04-22 John Ralls 
+
+	* Bug 797697 - Enable DEP and ASLR for the Windows build
+
+2020-04-21 milotype 
+
+	* Update Croatian hr.po file
+
+2020-04-21 milotype 
+
+	* Update Croatian glossary file
+
+2020-04-21 Christopher Lam 
+
+	* [fin.scm] return #f instead of -1 if n is out of range
+
+2020-04-21 Christopher Lam 
+
+	* Merge branch 'patch-1' of git://github.com/thetedmunds/gnucash into maint
+
+2020-04-20 Frank H. Ellenberger 
+
+	* Merge PR #693 into maint
+
+2020-04-20 c-holtermann 
+
+	* restructure info so that python help will display it
+
+2020-04-20 c-holtermann 
+
+	* utilize app_utils wrapper
+
+2020-04-20 c-holtermann 
+
+	* app_utils needs to be imported to module gnucash to be accessible
+
+2020-04-05 Christopher Lam 
+
+	* [receipt] remove dead code
+
+2020-04-14 Marko Kohtala 
+
+	* L10N:fi: Update translations and add glossary
+
+2020-04-19 Geert Janssens 
+
+	* CMake - use configure_file instead of file(COPY ) wherever possible
+
+2020-04-19 Geert Janssens 
+
+	* Drop unused module file in xml backend
+
+2020-04-19 Geert Janssens 
+
+	* Convert gncmod-generic-import module into ordinary shared library gnc-generic-import
+
+2020-04-18 Geert Janssens 
+
+	* Convert gncmod-html module into ordinary shared library gnc-html
+
+2020-04-18 Geert Janssens 
+
+	* Drop stray inclusion of (gnucash gnc-module)
+
+2020-04-17 Christopher Lam 
+
+	* Adds "Delete Budget" menu item
+
+2020-04-16 Christopher Lam 
+
+	* Bug 782455 - Modify Add Reversing Transaction feature
+
+2020-04-16 Christopher Lam 
+
+	* [dialog-dup-trans] add&expose gnc_dup_time64_dialog
+
+2020-04-18 John Ralls 
+
+	* Set CONFIGURATIONS property on tests only for Xcode.
+
+2020-04-18 Frank H. Ellenberger 
+
+	* Merge PR #699 - Hebrew Translation Update for ver 3.10
+
+2020-04-18 Robert Fewell 
+
+	* Merge Jean Laroche's branch 'set_focus_to_filter_in_search' into maint
+
+2020-04-18 avma 
+
+	* Hebrew Translation Update for ver 3.10
+
+2020-04-15 John Ralls 
+
+	* Bug 797684 - GTK_DEBUG=interactive - Bail out - gdk_window_set_cursor_internal
+
+2020-04-15 Christopher Lam 
+
+	* Merge branch 'maint-strengthen-exp-parser' into maint
+
+2020-04-14 John Ralls 
+
+	* Bug 797677 - Price Database Saving Wrong Price for Foreign Currency
+
+2020-04-14 John Ralls 
+
+	* No gnucash/gettext scm module anymore, the translation defs are in core-utils.
+
+2020-04-14 Christopher Lam 
+
+	* [gnc-exp-parser] don't crash when gnc:fn returns non-number
+
+2020-04-14 John Ralls 
+
+	* Merge Jeff Law's 'lto-fix' into master.
+
+2020-04-14 jean 
+
+	* Add code to make tree expand when user starts typing when selecting accounts
+
+2020-04-14 thetedmunds 
+
+	* Adding lines missing from fix for Bug 797196
+
+2020-04-13 Bill Nottingham 
+
+	* Fix building with link-time-optimization.
+
+2020-04-14 Christopher Lam 
+
+	* Merge branch 'maint-refactor-reconcile-renderers' into maint
+
+2020-04-13 Christopher Lam 
+
+	* Bug 797605 - RFE: Customer/Vendor/Employee Overview should also have "Process Payment" toolbar
+
+2020-03-21 Christopher Lam 
+
+	* [window-reconcile] refactor common actions into WidgetSetAmount
+
+2020-04-13 John Ralls 
+
+	* Merge Jean Laroche's '797114_Delet_Account' into maint.
+
+2020-04-13 John Ralls 
+
+	* Merge branch 'maint'
+
+2020-04-12 John Ralls 
+
+	* Force WITH_PYTHON=YES for distcheck.
+
+2020-04-12 John Ralls 
+
+	* Fix failed build of python tests and failed test in 3.10 tarball.
+
+2020-04-12 John Ralls 
+
+	* Fix typo. Really fixes 797674.
+
+2020-04-12 jean 
+
+	* Bug 797114 - Fixing an SX due to deleted account stuck in an error loop
+
+2020-04-11 John Ralls 
+
+	* Release GnuCash 3.10 (tag: 3.10)
+
+2020-04-11 John Ralls 
+
+	* Bug 797674 - 3.9: test-gnc-path-util failed on Debian amd64
+
+2020-04-11 John Ralls 
+
+	* Update latest translation from the Translation project.
+
+2020-04-09 Christopher Lam 
+
+	* [window-reconcile] when reconciling, warn splits recndate>statement_date
+
+2020-04-09 Christopher Lam 
+
+	* [window-reconcile] when inputing statement_date, warn if after today
+
+2020-04-08 Christopher Lam 
+
+	* [find-transactions] add search for reconciled date
+
+2020-04-10 John Ralls 
+
+	* Show transaction value, not amount, for registers with subaccounts.
+
+2020-04-10 John Ralls 
+
+	* Bug 797676 - Register displays amount in transaction currency...
+
+2020-04-10 Christopher Lam 
+
+	* Revert "Bug 797659 - Liabilities in budget report no longer calculate correctly"
+
+2020-04-10 Christopher Lam 
+
+	* Revert "Bug 797640 - The Reconciliation Window starting balance calculator needs to ignore splits after statement date"
+
+2020-04-08 Christian Gruber 
+
+	* Add first test using fixture ImportBackendBayesTest
+
+2020-04-08 Christian Gruber 
+
+	* Add second fixture for testing bayesian import matching
+
+2020-04-08 Christian Gruber 
+
+	* Add first test for creation of transaction info
+
+2020-04-08 Christian Gruber 
+
+	* Add further required mock functions
+
+2020-04-08 Christian Gruber 
+
+	* Add mock classes for prefs and qofquery
+
+2020-04-08 Christian Gruber 
+
+	* Add test-import-backend to CMakeLists.txt
+
+2020-04-08 Christian Gruber 
+
+	* Initial test setup
+
+2020-04-08 Christian Gruber 
+
+	* Add mock classes for book, account, transaction and split
+
+2020-04-06 John Ralls 
+
+	* Merge Christoph Holtermann's 'python-app-utils' into maint.
+
+2020-04-06 John Ralls 
+
+	* Merge Christoph Holtermann's 'python-session-instance-constructor' into maint.
+
+2020-04-06 John Ralls 
+
+	* Make python console less noisy without --debug.
+
+2020-04-06 John Ralls 
+
+	* Merge Christoph Holtermann's 'python-shell-access-outer-variables' into maint.
+
+2020-04-06 Robert Fewell 
+
+	* Fix issue when editing the account tree view notes field
+
+2020-04-02 c-holtermann 
+
+	* high level python wrappers for app-utils
+
+2020-04-06 c-holtermann 
+
+	* remove whitespace in parentheses (PEP 8)
+
+2020-04-03 c-holtermann 
+
+	* include gnucash_core of python bindings in python swig app-utils
+
+2020-04-03 c-holtermann 
+
+	* tests for session
+
+2020-04-02 c-holtermann 
+
+	* don't allow instance=None for wrapper objects
+
+2020-04-04 c-holtermann 
+
+	* provide locals and globals of calling context to shell on shell init
+
+2020-04-05 John Ralls 
+
+	* Merge Jean Laroche's '797006_subaccounts' into maint.
+
+2020-04-05 John Ralls 
+
+	* Merge Chris Mayo's iPython-fixes into maint.
+
+2020-04-05 John Ralls 
+
+	* Merge Jean Laroche's '797318_MRO' into maint.
+
+2020-04-05 John Ralls 
+
+	* Bug 797666 - libgnucash/engine/test/test-recurrence.c: In function 'check_valid': 'result' may be used uninitialized
+
+2020-04-05 Robert Fewell 
+
+	* Update the gtk-3.0.css example file
+
+2020-04-05 Robert Fewell 
+
+	* Remove old version for adding style classes to widgets
+
+2020-04-05 Robert Fewell 
+
+	* Change CSS class and names set via g_object
+
+2020-04-05 Robert Fewell 
+
+	* Change CSS class and names used for Business
+
+2020-04-05 Robert Fewell 
+
+	* Change CSS class and names used in Assistants
+
+2020-04-05 Robert Fewell 
+
+	* Change CSS class and names used in Search dialogs
+
+2020-04-05 Robert Fewell 
+
+	* Change CSS class and names used plugin pages
+
+2020-04-05 Robert Fewell 
+
+	* Change CSS class and names used for Accounts
+
+2020-04-05 Robert Fewell 
+
+	* Change CSS class and names used in Matcher Help
+
+2020-04-05 Robert Fewell 
+
+	* Change CSS class and names used in gnome
+
+2020-04-05 Robert Fewell 
+
+	* Fix the alignment of the month header
+
+2020-04-05 Robert Fewell 
+
+	* Change CSS class and names used in gnome-utils
+
+2020-04-05 Robert Fewell 
+
+	* Change CSS class and names used for the Register
+
+2020-04-04 jean 
+
+	* 797318 - Amounts ending in zero displayed as fractions
+
+2020-04-05 Christopher Lam 
+
+	* [eguile-utilities] prevent crash in balsheet-eg.scm
+
+2020-04-04 Christopher Lam 
+
+	* [eguile] escape-html -> gnc:html-string-sanitize
+
+2020-04-04 Christopher Lam 
+
+	* [qif-to-gnc] properly mark intra-QIF internal transfers.
+
+2020-04-03 Chris Mayo 
+
+	* Make pycons/ishell.py compatible with Python 3 and current IPython
+
+2020-04-02 jean 
+
+	* Add check to display warning dialog for mismatched commodities
+
+2020-04-02 jean 
+
+	* Replicate changes in *2 files
+
+2020-04-02 jean 
+
+	* Apply astyle to modified files
+
+2020-04-02 jean 
+
+	* Bug 797006 - Balance is misleading in open subaccounts when different currencies are involved
+
+2020-04-02 c-holtermann 
+
+	* add instance argument to Session constructor
+
+2020-04-02 Christopher Lam 
+
+	* Bug 797659 - Liabilities in budget report no longer calculate correctly
+
+2020-04-01 Christopher Lam 
+
+	* Bug 620848 - Transfer Funds window - add Notes field
+
+2020-04-01 Christopher Lam 
+
+	* [price-quotes] import (gnucash engine)
+
+2020-03-31 Frank H. Ellenberger 
+
+	* Merge branch PR #675 into maint
+
+2020-03-30 Yuri Chornoivan 
+
+	* Fix minor typos
+
+2020-03-30 Thomas Schärli 
+
+	* L12N:de_CH: 3 Typos in KMU
+
+2020-03-19 Geert Janssens 
+
+	* Cmake - rework gnc_add_scheme_deprecated_module to use keyword parameters
+
+2020-03-15 Geert Janssens 
+
+	* Combine the two scheme target generation functions
+
+2020-03-15 Geert Janssens 
+
+	* Document the two primary functions for adding scheme targets
+
+2020-03-14 Geert Janssens 
+
+	* Use new keyword parameters for all calls to gnc_add_scheme_test_targets
+
+2020-03-08 Geert Janssens 
+
+	* Use new keyword parameters for all calls to gnc_add_scheme_targets
+
+2020-03-08 Geert Janssens 
+
+	* Rework SchemeTargets module to use keyword parameters
+
+2020-03-14 Geert Janssens 
+
+	* CMake - Drop oldstyle endfunction invocations
+
+2020-03-29 John Ralls 
+
+	* Merge Jean Laroche's 'fix_autocompletion_master' into master.
+
+2020-03-29 John Ralls 
+
+	* Merge branch 'maint'
+
+2020-03-29 Geert Janssens 
+
+	* Follow-up for ofx file selection filter
+
+2020-03-28 jean 
+
+	* run astyle on modified files
+
+2020-03-28 jean 
+
+	* Finish removing preference, re-nice the code
+
+2020-03-28 Frank H. Ellenberger 
+
+	* L12N:de: 5423 übersetzte Meldungen. (tag: 3.9)
+
+2020-03-28 John Ralls 
+
+	* Merge a more latest gnucash.pot into all of the translation files.
+
+2020-03-28 John Ralls 
+
+	* Merge the latest gnucash.pot into all of the translation files.
+
+2020-03-26 jean 
+
+	* Make the two search coexist Add support for : in type-ahead search
+
+2020-03-28 Geert Janssens 
+
+	* Bug 797133 - CSV Import of multicurrency transaction export in multiline form
+
+2020-03-28 John Ralls 
+
+	* Release GnuCash 3.9
+
+2020-03-28 John Ralls 
+
+	* ChangeLog.2019
+
+2020-03-28 Geert Janssens 
+
+	* Bug 797084 - Provide an option to leave edited transactions reconciled
+
+2020-03-28 Frank H. Ellenberger 
+
+	* I18N: Redo Merge latest gnucash.pot into all of the translation files.
+
+2020-03-28 Frank H. Ellenberger 
+
+	* I18N: trep-engine: another translator comment
+
+2020-03-28 Frank H. Ellenberger 
+
+	* I18N: *owner-reports: Unify 'a' vs. 'the' in tooltips
+
+2020-03-28 Christopher Lam 
+
+	* Bug 797583 - gnc:book-add-quotes crashes when there are no quotes
+
+2020-03-28 Christopher Lam 
+
+	* Bug 797656 - Immediate crash when retrieving quotes
+
+2020-03-27 John Ralls 
+
+	* Bug 797481 - crash on close of unsaved tabs by pressing [X]
+
+2020-03-27 Frank H. Ellenberger 
+
+	* L12N:de: 1 fuzzy translation
+
+2020-03-27 Frank H. Ellenberger 
+
+	* I18N:Glossary: add "balance b/f" & "balance c/f"
+
+2020-03-27 Frank H. Ellenberger 
+
+	* I18N:Glossary: add notes about not distributed files in CMakeLists.txt
+
+2020-03-27 John Ralls 
+
+	* Merge the latest gnucash.pot into all of the translation files.
+
+2020-03-27 John Ralls 
+
+	* Update translations from the Translation Project.
+
+2020-03-27 Frank H. Ellenberger 
+
+	* L12N:de: Update de.po
+
+2020-03-26 Frank H. Ellenberger 
+
+	* L12N:de: merge fresh pot
+
+2020-03-27 Christopher Lam 
+
+	* [trep-engine] add translator note for balance b/f
+
+2020-03-26 John Ralls 
+
+	* Bug 797638 - SIGSEGV editing transaction after closing Find Accounts dialog.
+
+2020-03-24 Christopher Lam 
+
+	* [report-utilities] fix gnc:account-accumulate-at-dates sorting & operator
+
+2020-03-22 jean 
+
+	* Move new search function to an external function
+
+2020-03-23 John Ralls 
+
+	* Improve test building with the Xcode generator.
+
+2020-03-13 Jean Laroche 
+
+	* Implement look-ahead account name completion
+
+2020-03-22 John Ralls 
+
+	* Merge Jean Laroche's 'import-ofx-only' into maint.
+
+2020-03-22 John Ralls 
+
+	* Merge Jean Laroche's 'select_ofx_files_only_maint' into maint.
+
+2020-03-22 John Ralls 
+
+	* Merge Jean Laroche's 'fix-recurrence' into maint
+
+2020-03-22 jean 
+
+	* When selecting a file for OFX import, restrict the files listed to .OFX (or .QFX)
+
+2020-03-22 jean 
+
+	* Move the weekend adjust code in its own function
+
+2020-03-22 jean 
+
+	* Make test-recurrence handle wadj
+
+2020-03-21 jean 
+
+	* Bug 685102 - Scheduled Transactions don't always respect weekends for first occurrence
+
+2020-03-22 John Ralls 
+
+	* Merge Chris Good's 'fixpaths' into maint.
+
+2020-03-22 John Ralls 
+
+	* Merge Jean Laroche's 'fix_797042_ofx_return' into maint.
+
+2020-03-22 John Ralls 
+
+	* Merge Chris Good's 'bug797648' into maint.
+
+2020-03-22 goodvibes2 
+
+	* Remove bad paths from CMakeLists.txt files
+
+2020-03-22 goodvibes2 
+
+	* Use Doxygen format for function comment
+
+2020-03-22 goodvibes2 
+
+	* Fix path errors in CMakeLists.txt files
+
+2020-03-20 goodvibes2 
+
+	* Bug 797648 - Fix problem reconciling multiple splits in a transaction
+
+2020-03-19 John Ralls 
+
+	* Fix crash when changing account-separator.
+
+2020-03-19 John Ralls 
+
+	* Fix crash on completion of OFX download.
+
+2020-03-16 Robert Fewell 
+
+	* Add ability to show HBCI Online Account matches to 'Import Map Editor'
+
+2020-03-16 Robert Fewell 
+
+	* Merge Peter Zimmer's 'pkzw_bug797636' into maint
+
+2020-03-16 Robert Fewell 
+
+	* Change the default focus to search entry for 'Find Account'
+
+2020-03-15 John Ralls 
+
+	* Merge Peter Zimmer's 'pkzw_bug797631' into maint.
+
+2020-03-15 jean 
+
+	* Add code to delay showing dialog until we know we have transactions to show
+
+2020-03-15 jean 
+
+	* Add display of number of transactions processed
+
+2020-03-14 jean 
+
+	* More code cleanup
+
+2020-03-14 jean 
+
+	* Fix formatting/code issues with previous commit
+
+2020-03-12 Jean Laroche 
+
+	* Bug 797042 - OK button in OFX importer doesn't work if nothing is imported.
+
+2020-03-15 Dr. Peter Zimmerer 
+
+	* Bug 797631 - Superfluous account selection dialog on first online retrieval
+
+2020-03-15 Dr. Peter Zimmerer 
+
+	* Rename function create_online_id and make it externally callable
+
+2020-03-13 Christopher Lam 
+
+	* [account.cpp] refactor GetBalanceAsOfDate
+
+2020-03-13 Christopher Lam 
+
+	* [account.cpp] refactor xaccAccountGetPresentBalance
+
+2020-03-05 Christopher Lam 
+
+	* Bug 797640 - The Reconciliation Window starting balance calculator needs to ignore splits after statement date
+
+2020-03-05 Christopher Lam 
+
+	* [gnc-ui-balances] add and expose gnc_ui_account_get_reconciled_balance_as_of_date
+
+2020-03-05 Christopher Lam 
+
+	* [account] add and expose xaccAccountGetReconciledBalanceAsOfDate
+
+2020-03-14 John Ralls 
+
+	* Merge Ferran Pallarès's CSV price-rounding fix into maint.
+
+2020-03-14 John Ralls 
+
+	* Merge branch 'bug797432bis' into maint.
+
+2020-03-14 John Ralls 
+
+	* Remove disabled code copied from utest-Account.c into utest-Budget.c.
+
+2020-03-14 John Ralls 
+
+	* Add more tests for neutral time.
+
+2020-03-14 Christopher Lam 
+
+	* Merge remote-tracking branch 'upstream/maint'
+
+2020-03-14 Christopher Lam 
+
+	* Bug 797139 - test-report-utilities failure after 10-march in travis
+
+2020-03-13 Frank H. Ellenberger 
+
+	* gnc-fq-dump: fix warning on argv
+
+2020-03-13 Frank H. Ellenberger 
+
+	* Apply @PERL@ -w substitution on gnc-fq-dump, too
+
+2020-03-01 Robert Fewell 
+
+	* Only show invalid mappings dialog once
+
+2020-03-01 Robert Fewell 
+
+	* Bug 797612 - Add a dialog to the imap_dialog to show invalid maps
+
+2020-03-01 Robert Fewell 
+
+	* Add the model to the imap_dialog structure for convenience
+
+2020-03-11 Christopher Lam 
+
+	* [job-report] remove dead code
+
+2020-03-01 Christopher Lam 
+
+	* [trep-engine] subtotals when cells have monetary only
+
+2020-03-11 Frank H. Ellenberger 
+
+	* gnucash.desktop: bugzilla and help file moved
+
+2020-03-09 shastry 
+
+	* Remove unwanted space from xmlns sodipodi URI.
+
+2020-03-08 Mike Alexander 
+
+	* Fix a typo in commit 4318f7a: gnc.scm, not gcc:scm
+
+2020-03-06 Mike Alexander 
+
+	* Revert "completion redefine gnc:debug" and fix some bugs in it
+
+2020-03-07 Geert Janssens 
+
+	* Readd report scm files to dist
+
+2020-03-04 Frank H. Ellenberger 
+
+	* L12N:de_DE: SKR04: Do not hide accounts in templates
+
+2020-02-27 Frank H. Ellenberger 
+
+	* L12N:de_DE: SKR04: Part 2 of Bug 513000
+
+2020-02-25 Frank H. Ellenberger 
+
+	* L12N:de_DE: SKR04: Add a few missing placeholder flags, fix a typo
+
+2020-02-19 Frank H. Ellenberger 
+
+	* L12N:de_DE: Remove some redundant slots from SKR04
+
+2020-03-02 Dr. Peter Zimmerer 
+
+	* Bug 797636 - Incorrect Online account matches cannot be deleted
+
+2020-03-01 Christopher Lam 
+
+	* Merge remote-tracking branch 'upstream/maint'
+
+2020-03-01 Geert Janssens 
+
+	* quality-of-life improvements for python bindings
+
+2020-03-01 Christopher Lam 
+
+	* [qif-to-gnc] centralize arithmetic functions
+
+2020-03-01 Christopher Lam 
+
+	* [trep-engine] when Running Balance is shown, print "Balance b/f"
+
+2020-02-29 Christopher Lam 
+
+	* [qif-to-gnc] Bug 796579 - Cannot go forward with empty duplicates screen
+
+2020-02-29 Christopher Lam 
+
+	* [qif-to-gnc] use (ice-9 match), and compact functions
+
+2020-02-29 Christopher Lam 
+
+	* [qif-guess-map] use (ice-9 match), and compact functions
+
+2020-02-29 Christopher Lam 
+
+	* [qif-merge-groups] Move gnc:account-tree-get-transactions to qif-to-gnc.scm
+
+2020-02-22 andygoblins 
+
+	* context manager examples
+
+2020-02-09 andygoblins 
+
+	* make Session a context manager
+
+2020-02-09 andygoblins 
+
+	* fix __eq__ in Split and Transaction
+
+2020-02-29 Ferran Pallarès 
+
+	* Fix rounding precision when importing prices from CSV
+
+2020-02-29 Geert Janssens 
+
+	* Bug 797613 Due Invoices Reminder shows Job Name instead of Company Name
+
+2020-02-29 Rob Laan 
+
+	* Bug 797613  Due Invoices Reminder shows Job Name instead of Company Name
+
+2020-02-29 Geert Janssens 
+
+	* Travis - don't try to copy the removed afterfailure file to the test container
+
+2020-02-29 Geert Janssens 
+
+	* Travis - use ctest built-in feature to verbosely log test failures
+
+2020-02-28 John Ralls 
+
+	* Merge Christian Gruber's 'fix_bug_797587' into maint.
+
+2020-02-28 Geert Janssens 
+
+	* Housekeeping - clarify the use of the word backend in a warning message
+
+2020-02-28 Geert Janssens 
+
+	* Remove stub files from translation catalog
+
+2020-02-28 Geert Janssens 
+
+	* Build order - reports.scm depends on 4 standard reports and other standard reports depend on reports.scm
+
+2020-02-28 Geert Janssens 
+
+	* Fix build order of dependencies for tax sources
+
+2020-02-28 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2020-02-28 Geert Janssens 
+
+	* Move lot viewer to business-reports
+
+2020-02-25 Geert Janssens 
+
+	* Bug 797624 - Wrong Decimal for Vietnam currencies
+
+2020-02-24 Geert Janssens 
+
+	* Fix travis - needs gwenhywfar gtk3 devel package
+
+2020-02-24 Geert Janssens 
+
+	* Drop our local copy of pkg_check_modules
+
+2020-02-24 Geert Janssens 
+
+	* Moderately bump aqbanking and gwenhywfar versions
+
+2020-02-23 John Ralls 
+
+	* Bug 797540 - Mapping of aqbanking accounts to gnucash accounts doesn't work
+
+2020-02-22 Dr. Peter Zimmerer 
+
+	* Clear hbci KVP from accounts no longer associated with an online one
+
+2020-02-22 Dr. Peter Zimmerer 
+
+	* Using equality check from commit 2f38095 for removal of unassigned GC accounts
+
+2020-02-22 Dr. Peter Zimmerer 
+
+	* New callback functions for matching online accounts with GnuCash accounts
+
+2020-02-19 Frank H. Ellenberger 
+
+	* Merge PR #635 into maint
+
+2020-02-18 Frank H. Ellenberger 
+
+	* L12N:de_CH: Several fixes on KMU template
+
+2020-02-18 Christopher Lam 
+
+	* [utilities] deprecate gnc:substring-replace-from-to
+
+2020-02-18 Christopher Lam 
+
+	* [report-core] don't need to remove jquery anymore
+
+2019-08-15 David Cousens 
+
+	* Bug 797338 - Change "U+R" and "R" labels to "U+C" and "C" in Import matcher
+
+2020-02-18 Geert Janssens 
+
+	* Merge PR#640
+
+2020-02-17 Christopher Lam 
+
+	* [html-chart] compact, use (ice-9 match)
+
+2020-02-18 Christopher Lam 
+
+	* [report-core] compact, use (ice-9 match)
+
+2020-02-18 Christopher Lam 
+
+	* [jqplot] bye bye jqplot
+
+2020-02-17 Christian Gruber 
+
+	* Simplify function build_bayes()
+
+2020-02-17 Christian Gruber 
+
+	* Remove unused template of function for_each_slot_prefix()
+
+2020-02-17 Christian Gruber 
+
+	* Avoid copying local instance of AccountTokenCount
+
+2020-02-02 Christian Gruber 
+
+	* Fix tokenize_string()
+
+2020-02-17 Robert Fewell 
+
+	* Bug 797489 - No option to use account codes in Budget View - Part2
+
+2020-02-17 Robert Fewell 
+
+	* Change the negative numbers CSS class name to new format
+
+2020-02-17 Robert Fewell 
+
+	* Rename dialog-utils get_negative_color
+
+2020-02-17 Geert Janssens 
+
+	* Tweak appdata file generation some more
+
+2020-02-17 Robert Fewell 
+
+	* Use a cached value for preference 'use red for negative' in budgets
+
+2020-02-17 Robert Fewell 
+
+	* Change some additional spacing in source files gnc-budget-view.*
+
+2020-02-17 Robert Fewell 
+
+	* Bug797486 - Add dialog to cascade placeholder and hidden
+
+2020-02-17 Robert Fewell 
+
+	* Bug 797485 - Show account hidden column on CoA.
+
+2020-02-17 Robert Fewell 
+
+	* Realign text in dialog-billterms.glade
+
+2020-02-17 Robert Fewell 
+
+	* Merge branch 'maint'
+
+2020-02-16 Geert Janssens 
+
+	* Use GNUCASH_BUILD_ID in the gnucash appdata file
+
+2020-02-16 Robert Fewell 
+
+	* Reformat source files gnc-plugin-page.*
+
+2020-02-16 Robert Fewell 
+
+	* Add the 'page_changed' signal to GncEmbeddedWindow
+
+2020-02-16 Robert Fewell 
+
+	* Reports were not being loaded
+
+2020-02-16 Christopher Lam 
+
+	* [stylesheet-css] reflect recent changes to default CSS
+
+2020-02-15 Christopher Lam 
+
+	* Merge branch 'maint'
+
+2020-02-15 Christopher Lam 
+
+	* [new-owner-report] revert highlight trigger to onclick
+
+2020-02-09 Christopher Lam 
+
+	* compact, use (ice-9 match)
+
+2020-02-13 Robert Fewell 
+
+	* New budgets save state information with no changes
+
+2020-02-13 Robert Fewell 
+
+	* Bug 796911 - Minimum window width to large.
+
+2020-02-05 Robert Fewell 
+
+	* Follow up to previous commit 94cb965
+
+2020-02-02 Christian Gruber 
+
+	* Rework key prefix matching
+
+2020-02-09 Christopher Lam 
+
+	* [gnc-module] clean up deprecation warnings
+
+2020-02-09 Christopher Lam 
+
+	* Merge branch 'maint'
+
+2020-02-09 Christopher Lam 
+
+	* [new-owner-report] change highlight trigger: onclick to onmousedown
+
+2020-02-09 Christopher Lam 
+
+	* [test-new-owner-report] refine test to target exact table row
+
+2020-02-09 Christopher Lam 
+
+	* [new-owner-report] clarify payment-txn processor
+
+2020-02-09 Christopher Lam 
+
+	* [new-owner-report] if Payment amount is negative, label "Refund"
+
+2020-02-09 Christopher Lam 
+
+	* [new-owner-report] fix comment for non-document accumulator
+
+2020-02-08 Christopher Lam 
+
+	* Bug 797419 - equity-statement unrealized-gain calculator uses weighted-average
+
+2020-02-08 Christopher Lam 
+
+	* [new-owner-report] LHS invoice->payment LINK/PAYMENT merge
+
+2020-02-08 Christopher Lam 
+
+	* [test-new-owner-report] add tests for "$120 to partially repay"
+
+2020-02-08 Christopher Lam 
+
+	* [test-new-owner-report] import reports to allow testing
+
+2020-02-08 Christopher Lam 
+
+	* [new-owner-report] use engine's debit/credit string functions
+
+2020-02-08 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2020-02-08 Geert Janssens 
+
+	* CMake - drop LC_ALL=C for generation of appdata and desktop files
+
+2020-02-08 Geert Janssens 
+
+	* Rework appdata and desktop file generation
+
+2020-02-07 Geert Janssens 
+
+	* Rework our gettext tests
+
+2020-02-08 Geert Janssens 
+
+	* Fix dist after renaming account directory hu_HU to hu
+
+2020-02-07 Christopher Lam 
+
+	* [test-new-owner-report] initial commit
+
+2020-02-08 Christopher Lam 
+
+	* [new-owner-report] negate RHS inv amounts if credit-note.
+
+2020-02-06 Geert Janssens 
+
+	* Lower gettext version again until a better solution is found
+
+2020-02-06 Geert Janssens 
+
+	* Fix tests for previous commit
+
+2020-02-06 Geert Janssens 
+
+	* Update lot-viewer report for master's guile refactoring
+
+2020-02-06 Geert Janssens 
+
+	* CMake - remove parameter repetition in else() and endif() statements
+
+2020-02-06 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2020-02-06 Geert Janssens 
+
+	* CMake - remove parameter repetition in else() and endif() statements - part 2
+
+2020-02-06 Christopher Lam 
+
+	* Merge branch 'maint-fix-budget-totals' into maint
+
+2020-02-05 Christopher Lam 
+
+	* [eguile-gnc] show error after stacktrace
+
+2020-02-05 Geert Janssens 
+
+	* Merge branch 'patch-1' of https://github.com/pau4o/gnucash into maint
+
+2020-02-05 Geert Janssens 
+
+	* Budget Treeview - reshuffle totals logic
+
+2020-01-30 Geert Janssens 
+
+	* CMake - remove parameter repetition in else() and endif() statements
+
+2020-02-05 Christopher Lam 
+
+	* Bug 797609 - Backtraces for eguile report errors strips wrong part of stack
+
+2020-02-05 Christopher Lam 
+
+	* [eguile-utilities] compact code, use (ice-9 match)
+
+2020-02-05 Christopher Lam 
+
+	* [commodity-utilities] compact code, use (ice-9 match)
+
+2020-02-05 Christopher Lam 
+
+	* [report-utilities] compact code, use (ice-9 match)
+
+2020-02-02 Christopher Lam 
+
+	* [lot-viewer] show lot guid in headers
+
+2020-02-05 Christopher Lam 
+
+	* fix budget totals for unreversed budgets books
+
+2020-02-03 Kamen Naydenov 
+
+	* Fix white text on white background
+
+2020-02-02 Alex Aycinena 
+
+	* Update US Income Tax information for more 2019 changes
+
+2020-02-02 gnucash-dev 
+
+	* Correct double-counting of accounts in some cases in US Income Tax Report.
+
+2020-01-27 Christian Gruber 
+
+	* Fix calculation of token info to find exactly matching tokens only
+
+2020-01-27 Christian Gruber 
+
+	* Change behaviour of KvpFrame::for_each_slot_prefix()
+
+2020-01-27 Christian Gruber 
+
+	* Add test cases to check for exact token matching
+
+2020-02-02 Christopher Lam 
+
+	* Merge branch 'maint-202001-budget-editor-summaries' into maint
+
+2020-02-01 Christopher Lam 
+
+	* [report-utilities] streamline (match) use
+
+2020-02-01 Christopher Lam 
+
+	* [new-owner-report] handle LINK txns as normal payments
+
+2020-01-21 Christopher Lam 
+
+	* [new-owner-report] simplify build-column-used
+
+2020-01-04 Christopher Lam 
+
+	* Bug 797551 - Budget totals line missing in 3.8
+
+2020-02-01 Frank H. Ellenberger 
+
+	* Merge PR #639
+
+2020-01-29 Frank H. Ellenberger 
+
+	* Add a warning for gettext < 0.20
+
+2020-01-30 Rob Laan 
+
+	* Bug 797570 Import Customers/Vendors, Bills/Invoices: dialog with not imported rows does not expand with window size
+
+2020-01-30 Christopher Lam 
+
+	* Merge branch 'maint'
+
+2020-01-28 Christopher Lam 
+
+	* [lot-viewer.scm] initial commit
+
+2020-01-29 Christopher Lam 
+
+	* [new-owner-report] remove unused code
+
+2020-01-29 Christopher Lam 
+
+	* [new-owner-report] inline single-use invoice accessors
+
+2020-01-29 Christopher Lam 
+
+	* [new-owner-report] LHS invoice->RHS payments rewritten
+
+2020-01-26 Christopher Lam 
+
+	* [new-owner-report] RHS Pre-Payment and UNPAID get link-id highlights
+
+2020-01-29 Christopher Lam 
+
+	* [new-owner-report] payment-info has 3 components now
+
+2020-01-27 Geert Janssens 
+
+	* Add guile function to extract a lot's guid
+
+2020-01-27 Christopher Lam 
+
+	* [report-utilities] fix overpayments calc
+
+2020-01-29 Frank H. Ellenberger 
+
+	* Merge branch 'PR609' into maint
+
+2020-01-26 Christopher Lam 
+
+	* [report-utilities] add gnc:dump-lot
+
+2020-01-25 Christopher Lam 
+
+	* [new-owner-report] refine payment->description
+
+2020-01-25 Christopher Lam 
+
+	* [new-owner-report] add interactivity to highlight linked rows
+
+2020-01-25 Christopher Lam 
+
+	* [new-owner-report] add invoice/txn link-id to tag via javascript
+
+2020-01-25 Christopher Lam 
+
+	* [new-owner-report] LHS payments have no invoice details. remove code.
+
+2020-01-25 Christopher Lam 
+
+	* [new-owner-report] LHS handle split->anchor differently
+
+2020-01-25 Christopher Lam 
+
+	* [new-owner-report] compact code
+
+2020-01-25 Christopher Lam 
+
+	* [new-owner-report] RHS invoice amount links to invoice posting
+
+2019-12-06 Robert Fewell 
+
+	* Bug 797472 - Add option to choose account templates
+
+2020-01-11 Robert Fewell 
+
+	* Bug 797522 - Focus after reconcile jumps to a different account
+
+2020-01-11 Robert Fewell 
+
+	* Change the way the focus is added to plugin_pages
+
+2020-01-11 Robert Fewell 
+
+	* Bug 797566 - Crash on use of context menu in importer
+
+2020-01-24 Christopher Lam 
+
+	* [new-owner-report] RHS invoice amount links APAR instead of transfer
+
+2020-01-24 Christopher Lam 
+
+	* [new-owner-report] RHS payments with >1 non-APAR splits all shown
+
+2020-01-24 Christopher Lam 
+
+	* [new-owner-report] RHS partial amount/amount separated
+
+2020-01-23 Christopher Lam 
+
+	* [new-owner-report] LHS invoice->RHS payments show partial amounts
+
+2020-01-23 Christopher Lam 
+
+	* [new-owner-report] LHS payment->RHS invoices show partial amounts
+
+2020-01-24 Christopher Lam 
+
+	* Merge branch 'master-jqplot-redirect'
+
+2020-01-23 Christopher Lam 
+
+	* [new-owner-report] refactor. separate LHS inv/pmt processing.
+
+2020-01-23 Geert Janssens 
+
+	* Merge branch 'bugs_ibi' of https://github.com/ekinonnakapito/gnucash into maint
+
+2020-01-23 Geert Janssens 
+
+	* Merge branch 'maint' of https://github.com/loftx/gnucash into maint
+
+2020-01-22 Geert Janssens 
+
+	* Bug 794916 - Fails to find environment file at startup when installation prefix is '/opt'
+
+2020-01-22 Geert Janssens 
+
+	* Fix binreloc test for all install paths inside prefix
+
+2020-01-19 Christopher Lam 
+
+	* [new-aging] speedup/cleanup. delay txn type filtering of splits
+
+2020-01-19 Christopher Lam 
+
+	* Bug 797591 - multiperiod b/s and PnL reports: add style sheet 'easy'
+
+2020-01-20 gnucash-dev 
+
+	* Update US Income Tax information for 2019.
+
+2020-01-20 loftx 
+
+	* Add Invoice.Unpost() to Python Bindings
+
+2020-01-19 John Ralls 
+
+	* Bug 797588 - Gnucash segfaults when using mysql backend with empty password
+
+2020-01-19 John Ralls 
+
+	* Fix up indentation in gnc-keyring.c.
+
+2020-01-19 Robert Fewell 
+
+	* The clear cached account model should be after the test  for book and root account
+
+2020-01-19 Robert Fewell 
+
+	* Fix some account template issues
+
+2020-01-19 Christopher Lam 
+
+	* Bug 797584 - New-owner - bill amount field links to wrong account
+
+2020-01-18 Christopher Lam 
+
+	* [new-aging] speed up by skipping several loops
+
+2020-01-18 Christopher Lam 
+
+	* [new-aging] replace split->lot->split->lot with split->lot
+
+2020-01-17 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2020-01-17 Geert Janssens 
+
+	* Drop useless ifdefs
+
+2020-01-17 Geert Janssens 
+
+	* Housekeeping - reduce the number of PACKAGE and VERSION related cmake variables
+
+2020-01-17 Mike Alexander 
+
+	* Remove the old XCode project.  It is obsolete and CMake can create one
+
+2020-01-15 Geert Janssens 
+
+	* Bug 797569 - Swedish account templates not accessible
+
+2020-01-15 Christopher Lam 
+
+	* Bug 797572 - part 2 - swap Debits/Credits, can show informal headers
+
+2020-01-15 Christopher Lam 
+
+	* Bug 797572 - part 1 - don't accumulate Dr/Cr totals unless printed
+
+2020-01-15 Christopher Lam 
+
+	* Bug 797576 - xaccAccountOrder shouldn't sort account codes as base-36
+
+2020-01-15 Christopher Lam 
+
+	* [core-utils.i] declare prefs as ENUMs
+
+2020-01-15 Geert Janssens 
+
+	* Define SET_ENUM in core-utils.i as well
+
+2020-01-15 Christopher Lam 
+
+	* [category-barchart] reinstate match-lambda
+
+2020-01-13 Christopher Lam 
+
+	* Bug 797573 - Incorrect value of securities in the Asset Chart
+
+2020-01-14 Frank H. Ellenberger 
+
+	* Minor adjustments of ch/kmu 2013 based on emails
+
+2019-11-24 Marco Blind 
+
+	* L12N:de_CH: Kontenplan für KMU, gültig seit 2013, Teil 1
+
+2020-01-14 Frank H. Ellenberger 
+
+	* L12N:sv_AX Add Windows' name "Swedish_Åland Islands"
+
+2020-01-14 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2020-01-13 Geert Janssens 
+
+	* Bug 797569 - Swedish account templates not accessible
+
+2020-01-12 Christopher Lam 
+
+	* Bug 797548 - multicolumn income statement: some closing entries are not ignored when within reporting period
+
+2020-01-12 Christopher Lam 
+
+	* [new-aging] reuse string
+
+2020-01-12 Christopher Lam 
+
+	* [new-aging] reinstate sort-by choices
+
+2020-01-12 Christopher Lam 
+
+	* [new-owner-report] reuse string
+
+2020-01-12 Christopher Lam 
+
+	* [new-owner-report] splits->desc will show 1 memo per line
+
+2020-01-11 Christopher Lam 
+
+	* [category-barchart] simplify report definitions
+
+2020-01-10 Christopher Lam 
+
+	* [income-gst-statement] no need to reverse report amounts
+
+2020-01-06 John Ralls 
+
+	* Account matching: Test for full and partial online-id matches.
+
+2020-01-06 John Ralls 
+
+	* Test the online-id matching of gnc_import_select_account.
+
+2020-01-09 Robert Fewell 
+
+	* Bug 797550 - Crash when changing register tab position
+
+2020-01-09 Robert Fewell 
+
+	* Change some spacing in source files account-quickfill.*
+
+2020-01-09 Robert Fewell 
+
+	* Bug 797546 - Autocomplete not updated when account names changed
+
+2020-01-07 Frank H. Ellenberger 
+
+	* L12N:hu Remove region code from account templates directory
+
+2020-01-05 John Ralls 
+
+	* Small whitespace fixup.
+
+2020-01-01 Christopher Lam 
+
+	* [new-owner-report] fix LHS and RHS description
+
+2020-01-06 Christopher Lam 
+
+	* [trep-engine] upgrade to include 'balance brought forward'
+
+2020-01-05 Frank H. Ellenberger 
+
+	* Unify menu separator to "->"
+
+2020-01-04 John Ralls 
+
+	* Fix misspelling.
+
+2019-12-31 John Ralls 
+
+	* Restrict gnucash.pot comment collection to ones beginning with Translators.
+
+2019-12-06 Robert Fewell 
+
+	* Bug 797472 - Add option to choose account templates
+
+2020-01-03 John Ralls 
+
+	* Merge Dave Dittman's missing whitespace into maint
+
+2020-01-03 John Ralls 
+
+	* Bug 797481 - crash on close of unsaved tabs by pressing [X]
+
+2020-01-03 Ordtrogen 
+
+	* L12N:sv_SE: Update account hierarchies according to BAS 2019
+
+2020-01-03 Frank H. Ellenberger 
+
+	* Amend PR #629: Menu separator in text is "->" [I18N]
+
+2020-01-02 John Ralls 
+
+	* Bug 797549 - Reconcile window shows S_tatement Date rather than...
+
+2020-01-02 Jannick 
+
+	* reports: bug fixes in translation strings
+
+2020-01-02 Daniel Dittmann 
+
+	* test_gnc_setlocale: use trailing whitespaces
+
+2020-01-02 Frank H. Ellenberger 
+
+	* Merge PR #623 into maint
+
+2019-12-30 Daniel Dittmann 
+
+	* create a more consistent aqbanking online_id
+
+2020-01-02 Frank H. Ellenberger 
+
+	* Merge PR #626 into maint
+
+2020-01-01 milotype 
+
+	* L12N:hr: update croatian translation with pot file 3.8
+
+2020-01-02 Frank H. Ellenberger 
+
+	* Merge branch 'pr627' into maint
+
+2019-12-28 Christopher Lam 
+
+	* [new-owner-report] add double-header
+
+2019-12-27 Christopher Lam 
+
+	* [html-table][API] html-table can have multirow-col-headers
+
+2019-12-28 Christopher Lam 
+
+	* [new-owner-report] style monetary sale/tax cols with number-cell
+
+2020-01-02 Frank H. Ellenberger 
+
+	* L12N:pl: Merge a fresh template
+
+2020-01-02 Frank H. Ellenberger 
+
+	* L12N:pl: Recover translator credits from git history
+
+2020-01-02 Jannick 
+
+	* po/de.po: amend translation about eguile reports
+
+2020-01-02 Jannick 
+
+	* po/de.po: fix translation bug
+
