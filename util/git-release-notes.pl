@@ -72,7 +72,7 @@ my $repo = Git->repository(Directory => getcwd);
 $repo->command('describe') =~ m/(^[.\d]+)/;
 my $tag = $1 or die "Unable to determine tag";
 
-my (@bugs, @improves);
+my (@bugs, @improves, %l10n);
 my ($revs, $c) = $repo->command_output_pipe('log', '--topo-order', '--format=%s<|>%b<|>%N<{}>', "$tag..HEAD");
 my $item = "";
 while(<$revs>) {
@@ -85,12 +85,22 @@ while(<$revs>) {
         if ($item =~ m/^[\s\[]*[Bb]ug[\]\s:\-\#]*[0-9]+/) {
             $item =~ s/^[\s\[]*[Bb]ug[\]\s:\-\#]*([0-9]+)[ -]*/Bug $1 - /;
             push @bugs, $item;
+        } elsif ($item =~ m/^[Ll]10[Nn]:([a-z]{2}(?:[-_][A-Z]{2})?)/) {
+            $l10n{$1}++ unless ($item =~ /glossary/i);
+        }elsif ($item =~ m/^Translation/) {
+            if ($item =~ m[GnuCash/Program \(([[:alpha:] ]+)\)]) {
+                $l10n{$1}++;
+            }
+        } elsif ($item =~ m/^(?:Merge|[Ll]1[08][Nn]|[Ii]1[08][Nn])/) {
+            my ($sum, $desc, $notes) = split('\<\|\>', $item);
+            push @improves, $item if ($desc || $notes);
         } else {
             push @improves, $item;
         }
         $item = '';
     }
 }
+
 $repo->command_close_pipe($revs, $c);
 
 print "\nThe following bugs have been fixed:\n";
@@ -103,6 +113,8 @@ foreach my $other (@improves) {
     text_format($other, '    ', '      ');
 }
 
+print "\nNew and Updated Translations: ", join(", ", keys(%l10n)), "\n\n";
+
 print "*****HTML OUTPUT*****\n\n";
 print "<h6>Between $tag and XXX, the following bugfixes were accomplished:</h6>\n<ul>\n";
 foreach my $bug (sort @bugs) {
@@ -113,3 +125,4 @@ foreach my $other (@improves) {
     html_format_other($other);
 }
 print "</ul>\n";
+print "<p>New and Updated Translations: ", join(", ", sort(keys(%l10n))), "</p>\n";
