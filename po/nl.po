@@ -17,8 +17,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-25 18:29+0000\n"
-"Last-Translator: Geert Janssens <info@kobaltwit.be>\n"
+"PO-Revision-Date: 2021-03-27 08:58+0000\n"
+"Last-Translator: Geert Janssens <geert@kobaltwit.be>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
 "Language: nl\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 
@@ -2115,7 +2115,7 @@ msgstr "Datum van afstemming"
 
 #. Translators: This is a ngettext(3) message, %d is the number of maps missing
 #: gnucash/gnome/dialog-imap-editor.c:362
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There is %d invalid mapping,\n"
 "\n"
@@ -2124,8 +2124,14 @@ msgid_plural ""
 "There are %d invalid mappings,\n"
 "\n"
 "Would you like to remove them now?"
-msgstr[0] "Belastingtarief %s bestaat niet. Wilt u dit aanmaken?"
-msgstr[1] "Belastingtarief %s bestaat niet. Wilt u dit aanmaken?"
+msgstr[0] ""
+"Er is %d ongeldige associatie.\n"
+"\n"
+"Wilt u deze nu verwijderen ?"
+msgstr[1] ""
+"Er zijn %d ongeldige associaties.\n"
+"\n"
+"Wilt u deze nu verwijderen ?"
 
 #: gnucash/gnome/dialog-imap-editor.c:367
 #, c-format
@@ -4084,7 +4090,7 @@ msgstr "De geselecteerde rekening verwijderen"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:257
 msgid "_Cascade Account Properties..."
-msgstr "Rekeningeigenschappen trapsgewijs toepassen..."
+msgstr "Rekeningeigenschappen _trapsgewijs toepassen..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
 msgid "Cascade selected properties for account"
@@ -5441,7 +5447,7 @@ msgstr "De wisselkoers voor de huidige boeking bewerken"
 #: gnucash/gnome/gnc-plugin-page-register2.c:387
 #: gnucash/gnome/gnc-plugin-page-register.c:513
 msgid "_Jump to the other account"
-msgstr "Naar andere rekening springen"
+msgstr "Naar andere rekening _springen"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:388
 #: gnucash/gnome/gnc-plugin-page-register.c:514
@@ -6203,7 +6209,7 @@ msgstr "Weet u zeker dat u deze vaste journaalpost wilt verwijderen?"
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
 msgid "_General Journal"
-msgstr "Grootboek"
+msgstr "_Grootboek"
 
 #: gnucash/gnome/gnc-plugin-register2.c:58
 msgid "Open a general journal window"
@@ -13064,7 +13070,7 @@ msgstr "Alles _selecteren"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:463
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
 msgid "Select _Range"
-msgstr "Bereik selecteren"
+msgstr "_Bereik selecteren"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:490
@@ -14977,7 +14983,7 @@ msgstr "Automatische _renteoverboeking"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1496
 msgid "Ta_x related"
-msgstr "Fiscaal relevant"
+msgstr "_Fiscaal relevant"
 
 #. Translators: use the same words here as in 'Ta_x Report Options'.
 #: gnucash/gtkbuilder/dialog-account.glade:1501
@@ -15672,7 +15678,7 @@ msgstr "_Herladen"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:532
 msgid "_Locate Linked Documents"
-msgstr "Gekoppelde bestanden opsporen"
+msgstr "Gekoppelde bestanden _opsporen"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:572
 msgid "All Linked Documents"
@@ -16589,7 +16595,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:342
 msgid "Include _non-currency totals"
-msgstr "Niet-monetaire totalen weergeven"
+msgstr "_Niet-monetaire totalen weergeven"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:348
 msgid ""
@@ -16822,7 +16828,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1403
 msgid "Perform account list _setup on new file"
-msgstr "Bij aanmaken nieuw bestand rekeningschema instellen"
+msgstr "Bij aanmaken nieuw bestand rekeningschema _instellen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1409
 msgid "Present the new account list dialog when you choose File->New File."
@@ -16832,7 +16838,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1440
 msgid "Display \"_tip of the day\" dialog"
-msgstr "‘Tip van de dag’-venster weergeven"
+msgstr "‘_Tip van de dag’-venster weergeven"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Display hints for using GnuCash at startup."
@@ -16852,7 +16858,7 @@ msgstr "dagen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1505
 msgid "<b>_Retain log/backup files</b>"
-msgstr "<b>Log-/backupbestanden vasthouden</b>"
+msgstr "<b>Log-/backupbestanden _vasthouden</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1517
 msgid "Com_press files"
@@ -17171,7 +17177,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2595
 msgid "Double _mode colors alternate with transactions"
-msgstr "Kleuren per boeking laten verspringen (in tweeregelige modus)"
+msgstr "Kleuren per _boeking laten verspringen (in tweeregelige modus)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2601
 msgid ""
@@ -17211,7 +17217,7 @@ msgstr "Layout"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2674
 msgid "_Future transactions after blank transaction"
-msgstr "Toekomstige boekingen na de lege boeking"
+msgstr "_Toekomstige boekingen na de lege boeking"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2680
 msgid ""
@@ -17629,7 +17635,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:244
 msgid "Inches"
-msgstr "Inches"
+msgstr "Duim"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:247
 msgid "Centimeters"
@@ -19140,10 +19146,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "Coupure"
+msgstr "Opgelet!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
@@ -20772,7 +20776,7 @@ msgstr "De boekingen naar een CSV-bestand exporteren"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:64
 msgid "Export A_ctive Register to CSV..."
-msgstr "_Actieve journaal als _CSV exporteren..."
+msgstr "_Actieve journaal als CSV exporteren..."
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:66
 msgid "Export the Active Register to a CSV file"
@@ -21344,7 +21348,7 @@ msgstr "Boekingen uit een CSV-bestand importeren"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
 msgid "Import _Prices from a CSV file..."
-msgstr "Koersen uit een CSV-bestand importeren..."
+msgstr "_Koersen uit een CSV-bestand importeren..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
 msgid "Import Prices from a CSV file"
@@ -22053,9 +22057,9 @@ msgid "Parse ambiguity between formats"
 msgstr "Niet-eenduidige opmaak verwerken"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:1059
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Value '~a' could be ~a or ~a."
-msgstr "Waarde ‘%s’ kan zowel %s als %s zijn."
+msgstr "De waarde van ‘~a’ kan zowel ~a als ~a zijn."
 
 #: gnucash/import-export/qif-imp/qif-merge-groups.scm:105
 msgid "Finding duplicate transactions"
@@ -23322,7 +23326,7 @@ msgstr "E_xperimenteel"
 
 #: gnucash/report/report-core.scm:155
 msgid "_Multicolumn"
-msgstr "Multi-kolom"
+msgstr "_Multi-kolom"
 
 #: gnucash/report/report-core.scm:156
 msgid "_Custom"
