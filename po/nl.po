@@ -22059,27 +22059,27 @@ msgstr "Niet-eenduidige opmaak verwerken"
 #: gnucash/import-export/qif-imp/qif-file.scm:1059
 #, scheme-format
 msgid "Value '~a' could be ~a or ~a."
-msgstr "De waarde van ‘~a’ kan zowel ~a als ~a zijn."
+msgstr "Waarde van ‘~a’ kan zowel ~a als ~a zijn."
 
 #: gnucash/import-export/qif-imp/qif-merge-groups.scm:105
 msgid "Finding duplicate transactions"
 msgstr "Aan het zoeken naar dubbele transacties"
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:172
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized account type '~s'. Defaulting to Bank."
-msgstr "Niet-herkende rekeningsoort ‘%s’. In plaats daarvan ‘Bank’ gebruikt."
+msgstr "Niet-herkende rekeningsoort ‘~s’. In plaats daarvan ‘Bank’ gebruikt."
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:235
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized action '~a'."
-msgstr "Niet-herkende actie ‘%s’."
+msgstr "Niet-herkende actie ‘~a’."
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:254
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized status '~a'. Defaulting to uncleared."
 msgstr ""
-"Niet-herkende status ‘%s’. In plaats daarvan ‘niet goedgekeurd’ gebruikt."
+"Niet-herkende status ‘~a’. In plaats daarvan ‘niet goedgekeurd’ gebruikt."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."
@@ -22172,9 +22172,9 @@ msgid "Have a nice day!"
 msgstr "Nog een prettige dag!"
 
 #: gnucash/python/init.py:118
-#, fuzzy, python-format
+#, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Welkom bij GnuCash ~a !"
+msgstr "Welkom bij GnuCash %s opdrachtregel !"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -22934,12 +22934,11 @@ msgid "Can't save style sheet"
 msgstr "Kan opmaaksjabloon niet opslaan"
 
 #: gnucash/report/html-utilities.scm:274 gnucash/report/html-utilities.scm:291
-#, fuzzy
 #| msgid "Exchange rate"
 msgid "Exchange rate"
 msgid_plural "Exchange rates"
 msgstr[0] "Wisselkoers"
-msgstr[1] "Wisselkoers"
+msgstr[1] "Wisselkoersen"
 
 #: gnucash/report/html-utilities.scm:304
 msgid "No budgets exist. You must create at least one budget."
@@ -23526,7 +23525,7 @@ msgid ""
 "Transactions relating to '~a' contain more than one currency. This report is "
 "not designed to cope with this possibility."
 msgstr ""
-"Boekingen die betrekking hebben op ‘%s’ bevatten meerdere valuta. Dit "
+"Boekingen die betrekking hebben op ‘~a’ bevatten meerdere valuta. Dit "
 "rapport is niet op die mogelijkheid toegerust."
 
 #: gnucash/report/reports/aging.scm:345
@@ -27368,7 +27367,7 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:277
 #, fuzzy
 msgid "Please make all checks payable to"
-msgstr "Gelieve het bedrag over te maken op rekening xxxx.xxx.xxx ten name van"
+msgstr "Gelieve het bedrag over te maken op rekening ... ten name van"
 
 #: gnucash/report/reports/standard/invoice.scm:281
 msgid "Company contact"
@@ -27494,9 +27493,8 @@ msgstr "Regel 3 Rechts"
 
 #: gnucash/report/reports/standard/invoice.scm:436
 #: gnucash/report/reports/standard/job-report.scm:239
-#, fuzzy
 msgid "Payment, thank you!"
-msgstr "Betaling, waarvoor dank"
+msgstr "Betaling, waarvoor dank!"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
 #: gnucash/report/reports/standard/invoice.scm:491
@@ -28287,9 +28285,8 @@ msgstr "%e %B %Y, %k:%M"
 
 #: gnucash/report/reports/standard/receipt.scm:140
 #: gnucash/report/reports/standard/taxinvoice.scm:198
-#, fuzzy
 msgid "Payment received, thank you!"
-msgstr "Bedankt voor uw betaling"
+msgstr "Bedankt voor uw betaling!"
 
 #: gnucash/report/reports/standard/receipt.scm:144
 msgid "Notes added at end of invoice -- may contain HTML markup"
