@@ -23520,7 +23520,7 @@ msgid "Address Email"
 msgstr "E-mail adres"
 
 #: gnucash/report/reports/aging.scm:205
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "Transactions relating to '~a' contain more than one currency. This report is "
 "not designed to cope with this possibility."
@@ -27365,7 +27365,6 @@ msgstr ""
 "Het tekstfragment dat aangeeft aan wie betalingen moeten worden gedaan."
 
 #: gnucash/report/reports/standard/invoice.scm:277
-#, fuzzy
 msgid "Please make all checks payable to"
 msgstr "Gelieve het bedrag over te maken op rekening ... ten name van"
 
