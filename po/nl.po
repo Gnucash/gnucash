@@ -22934,7 +22934,6 @@ msgid "Can't save style sheet"
 msgstr "Kan opmaaksjabloon niet opslaan"
 
 #: gnucash/report/html-utilities.scm:274 gnucash/report/html-utilities.scm:291
-#| msgid "Exchange rate"
 msgid "Exchange rate"
 msgid_plural "Exchange rates"
 msgstr[0] "Wisselkoers"
