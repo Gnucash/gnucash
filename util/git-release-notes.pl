@@ -1,11 +1,13 @@
 #!/usr/bin/env perl
+use 5.012;
 use warnings;
 use strict;
 
+use Encode;
 use Git;
 use Cwd qq(getcwd);
 use Text::Wrap;
-
+binmode(STDOUT, ":utf8");
 
 sub print_notes {
     my $notes = shift;
@@ -76,7 +78,7 @@ my (@bugs, @improves, %l10n);
 my ($revs, $c) = $repo->command_output_pipe('log', '--topo-order', '--format=%s<|>%b<|>%N<{}>', "$tag..HEAD");
 my $item = "";
 while(<$revs>) {
-    my $rev = $_;
+    my $rev = decode('UTF-8', $_);
     chomp($rev);
     $item .= ' ' if $item;
     $item .= $rev;
@@ -88,9 +90,7 @@ while(<$revs>) {
         } elsif ($item =~ m/^[Ll]10[Nn]:([a-z]{2}(?:[-_][A-Z]{2})?)/) {
             $l10n{$1}++ unless ($item =~ /glossary/i);
         }elsif ($item =~ m/^Translation/) {
-            if ($item =~ m[GnuCash/Program \(([[:alpha:] ]+)\)]) {
-                $l10n{$1}++;
-            }
+            map { $l10n{$_}++ } $item =~ m/GnuCash\/Program \(([[:alpha:][:punct:][:space:]]+)\)/g;
         } elsif ($item =~ m/^(?:Merge|[Ll]1[08][Nn]|[Ii]1[08][Nn])/) {
             my ($sum, $desc, $notes) = split('\<\|\>', $item);
             push @improves, $item if ($desc || $notes);
