@@ -6,7 +6,7 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.14.0)
 endif()
 
 project (gnucash
-    VERSION 4.4
+    VERSION 4.5
 )
 
 enable_testing()
@@ -652,6 +652,7 @@ set(gnucash_DOCS
     ChangeLog.2017
     ChangeLog.2018
     ChangeLog.2019
+    ChangeLog.2020
     DOCUMENTERS
     HACKING
     LICENSE

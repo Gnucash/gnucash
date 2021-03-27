@@ -1,5 +1,200 @@
 Version history:
 ------- -------
+4.5  - 28 March 2021
+The sixth release of the 4.x stable series.
+
+Between 4.4 and 4.5, the following bugfixes were accomplished:
+    Bug 783283 - Multi-Currency payments use wrong date
+        Also properly handles the user clicking the cancel button on the
+        transfer dialog. It will now just return to the payment window,
+        waiting for further user input.
+    Bug 797621 - GnuCash freezes temporarily and sometimes crashes when
+        selecting Sales Tax Table in Invoices
+    Bug 797630 - Check for missing dependencies of 'Get Quotes' to avoid
+        Gnucash crash.
+    Bug 797906 - GnuCash data file is locked after a "save-as" to mysql
+        database.
+        It's more general, any save-as to a different backend type, i.e.
+        xml->sql or sql->xml, left the previous book locked.
+    Bug 797924 - Crash when searching for customer to process payment.
+    Bug 797997 - File gnucash could note be found
+        On Microsoft Windows when run from a CMD shell and passing a path
+        that contains non-ASCII characters.
+    Bug 798019 - Currency rates in OFX file are ignored
+        Use currency_rate information from OFX file if available. Requires
+        LibOFX v 0.10.0 or later.
+    Bug 798044 - Adding splits to a lot is extremely slow
+    Bug 798060 - Invoices are missing on Customer report after upgrade
+    Bug 798070 - Opening balance does not update when creating account from
+        Account Hierarchy
+    Bug 798078 - Report 'Income Chart' prints stacktrace when end date before
+        start date
+    Bug 798085 - Incorrect transactions import of entires with large number
+        amount
+        Quicken 2005 introduces U amount which sometimes differs from T amount.
+        U amount has larger range, and must override T amount whenever they're
+        not equal.
+    Bug 798093 - Changing the symbol/abbreviation of a security after the
+        trading account was created breaks GnuCash.
+        Makes it possible for the user to rename trading accounts or securities
+        independent of each other.
+    Bug 798096 - can't duplicate TX previous to red line threshold
+    Bug 798098 - Crash popup show when have 3 Windows in OSX
+    Bug 798100 - Equity totals calculating incorrectly
+        Prevents creation of non-currency opening balance accounts.
+    Bug 798101 - Do not #undef __STRICT_ANSI__
+        Remove defines and undefines for Windows, they were needed with
+        MinGW classic but are not with MinGW-w64.
+    Bug 798104 - Menu item for "Import Account" is wrong in danish
+    Bug 798112 - An error occurred while processing mysql ...
+        A "Feature" of MYSQL is that it allows C-style backslash escapes in
+        string constants and replaces them with the actual character (e.g. \n
+        is converted to 0x0a). This causes round trip problems if the escape
+        is one of the allowed ones and a MYSQL error if it isn't.  Disable the
+        feature so that MYSQL follows the SQL standard.
+    Bug 798132 - Invoice Importing crashes when importing low quantity values.
+    Bug 798135 - GtkEntry text with search list: shows selected entry again
+        for no reason
+    Bug 798147 - Notes entry crashes program
+    Bug 798149 - CSV transaction Import setting loses account name if it is
+        changed after setting is memorized
+        Account guid is saved as well as the full account name and when
+        recalled the account is looked up first by guid, if this fails the
+        full account name is checked which if successful immediately updates
+        the saved base account setting with the account guid for future use.
+        If unsuccessful the account combo is blank with a error message as
+        before. When save CSV settings button is used, both the Guid and full
+        paths are saved so previous versions can still use the full path as
+        before.
+    Bug 798150 - Error on report over time
+        Caused by incorrect handling of Daylight Savings beginning at midnight.
+    Bug 798154 - Tooltips wrong when multiple charts in one report
+
+The following fixes and improvements were not associated with bug reports:
+    Fix building based on unix makefiles
+    Make the chart on the report page icon larger to align better with the
+        account page icon.
+    Allow the context menu when GncCellRendererTextView is in edit mode.
+    Restructure early locale initialization
+        * Move macOS specific bits to its own source file. As this is
+          objective-c use .mm extension
+        * Use common function signature for macOS and Windows init function
+          and include via common header file
+    Fix GncDateTime::format_zulu to emit the UTC timezone instead of the
+        GncDateTime's timezone with the UTC timestamp.
+    Fix the implementations of gnc_foo_get_day_neutral. As implemented these
+        returned 10:59 AM local on the day but neutral time is 10:59 UTC.
+    gnc_invoice_window_print_invoice return NULL if invoice is NULL.
+    [dialog-invoice] invoice editor reuses invoice report tab.
+    Allow for Header Bar use in CSV transaction Assistant
+        There are a couple of action buttons that are added to the CSV
+        transaction assistant with added alignment based on the action area
+        being a GtkBox which causes errors if the header bar is used so test
+        for the action area type and use appropriate specific functions.
+    Drop default locale currency special case for euro
+        The condition mentioned in the comment no longer applies. All European
+        locales on Windows (MingW64) properly present EUR as currency these
+        days.
+    Fix fencepost error in calculating the week_num for POSIX timezone rules.
+    Include the contents of PROJECT_DESCRIPTION in the PACKAGE_PREFIX.
+        If it's defined. PACKAGE_PREFIX is used to name tarballs and set their
+        base directory. The translation project has requested that we name
+        freeze-string tarballs with a pre1 suffix; this makes that possible.
+    Update python/gnucash_business.py to reflect rename of gncOwnerApplyPayment.
+    I18N: don't mark "<<", ">>" translatable
+        They get properly reversed for RTL writing
+    From Budget editor, add toolbar and Edit menu to run budget report
+        This parallels the invoice editor "Print Invoice" functionality.
+        Runs the budget report using current budget.
+    [gnc-plugin-page-budget] change note icon to a note page
+    Allow the find account dialog position to be saved when using 'X'
+    Update price database for imported transactions.
+    Replace g_memdup by memcpy
+        GLib is deprecating g_memdup and will immediately remove it in the
+        next micro-release because of a CVE.
+    [html-fonts] Prevent sup/sub from affecting baseline
+        Source: https://css-tricks.com/snippets/css/prevent-superscripts-and-subscripts-from-affecting-line-height/
+        Previously <sup> and <sub> would cause the baseline to move vertically.
+    Replace stat calls with GFile to retrieve last modified info
+        Avoids code-page problems with non-ASCII characters on Microsoft
+        Windows.
+    [gnc-tree-model-split-reg.c] use xaccSplitListGetUniqueTransactionsReversed
+        which is then reversed if required. this removes the need for double
+        reversal.
+    [Split.c]New function xaccSplitListGetUniqueTransactionsReversed
+        Same as xaccSplitListGetUniqueTransactions but doesn't reverse the
+        list prior to returning. To be used by gnc-tree-model-split-reg.c
+        Several optimizations
+           * doesn't call g_list_find and g_list_append for every iteration
+           * uses g_hash_table to cache list of txns already added instead of
+             g_list_find
+           * does not reverse the result, thereby returning a reversed list.
+    [gnc-recurrence.c] avoid O(N^2) children traversal
+    Ensure that any GncMainWindows containing no tabs are destroyed at shutdown.
+    I18N: drop translatable flag from "xxx" dummies and remove trailing spaces
+        from translatable strings
+    Update Form/Schedule line references for 2020 for the US Income Tax Report.
+    Fix build with glib2 2.67.x.
+        glib headers should not be included with 'extern "C"'.
+    [balsheet-pnl] Use last day of the month prices instead of first day of
+        next month.
+    [options.scm API] Remove canonically-tabbed parent-subtotal-mode
+        This mode had been marked experimental for 17 years and was never
+        improved. Any saved reports with this option will be switched to
+        parent-subtotal-mode enabled.
+    Accommodate Gwenhywfar 5.5.0 signature change for some GUI callbacks.
+        This is a breaking change that matters only in Win32. No ifdeffing
+        because Win32 builds and dependencies are well synchronized.
+    L10N: Move translation authority for Turkish from the GNU Translation
+        Project to Weblate.
+    Make prototypes static for autoclear unit test, fixes build on Debian
+        Buster.
+    [income-gst-statement] trep-engine currency section moved
+        From "General" to "Currency".  Missed out in 854c11782 commit
+    [test-scm-utilities] test-end properly so that test failures set the exit
+        code correctly
+    Create opening balance accounts only when there are opening balances.
+    [qif-file.scm] Don't use match as an identifier
+        It is a (ice-9 match) keyword.
+    Change the CSV export account tree header line
+        Change the headings of the CSV account export header line to be more
+        friendly which uses existing translations.
+    [new-owner-report] Don't create empty rows on report when splits have no
+        entry in the memo field.
+    [gnc-report] dump backtrace to console when report crashes
+        Because gnc:backtrace-if-exception, not used anymore, would dump
+        guile backtrace to console. restore this behaviour.
+    [report-core] remove 2.6/2.4 compatibility code
+    [gnucash-commands.cpp] display report errors to stderr
+
+New API:
+    [report-core.scm] create and expose gnc:render-report
+        similar to gnc:report-run but *always* returns a 2-element list
+        containing data OR captured_error
+    [report-core.scm] create and expose gnc:render-report
+        similar to gnc:report-run but *always* returns a 2-element list
+        containing data OR captured_error
+    [gnc-plugin-page-report] add gnc_plugin_page_report_reload
+        refreshes the report
+
+Deprecations:
+    [c-interface.scm] deprecate gnc:last-captured-error
+    [report-core] deprecate gnc:restore-report-by-guid
+    gnc:get-three-months-ago
+    gnc:get-six-months-ago
+    gnc:get-one-year-ago
+    gnc:get-three-months-ahead
+    gnc:get-six-months-ahead
+    gnc:get-one-year-ahead
+    traverse-list->vec
+    traverse-vec->list
+
+New and Updated Translations: Bodo, Croatian, Danish, Dutch,
+    English (United Kingdom), Finnish, French, German, Greek, Hebrew, Hindi,
+    Indonesian, Italian, Japanese, Lithuanian, Norwegian Bokmål, Polish,
+    Portuguese, Portuguese (Brazil), Russian, Spanish, Turkish, Ukrainian,
+    Urdu, Vietnamese
+
 4.4  - 28 December 2020
 The fifth release of the 4.x stable series, a snap release to fix bug 798063.
 
@@ -293,7 +488,7 @@ The following fixes and improvements were not associated with bug reports:
     [account-piecharts] round account->balance to report-currency SCU
     [report-utilities] ensure commodity-collector doesn't round amounts
     [advanced-portfolio] simplify basis functions
-    [advanced-portfolio] simplify basis-builderand use scheme division which is more accurate than gnc_numeric_div. tests need to change slightly. 
+    [advanced-portfolio] simplify basis-builderand use scheme division which is more accurate than gnc_numeric_div. tests need to change slightly.
     [git-release-notes.pl] html-escape strings in the html output.
 
 
@@ -763,7 +958,7 @@ Between 3.10 and 3.901, the following bugfixes were accomplished:
   Remove some Gtk version checks in code
   Remove some Gtk version checks for CSS
   Fix libgnc-app-utils.dylib install_name_dir. The install location changed as
-    part of expunging libgnc-module. 
+    part of expunging libgnc-module.
 
 Updated Translations: German, Swiss German, Ukrainian
 
@@ -1027,7 +1222,7 @@ Other repairs or enhancements not marked as bugs:
     [report-utilities] bugfix: aging-list was incorrect. off-by-1 error.
     [report-utilities] bugfix: overpayment works for AP accounts.
     Swap the buttons around on the Budget Open dialogue
-      Swap the OK and Cancel buttons so they conform to the normal layout. 
+      Swap the OK and Cancel buttons so they conform to the normal layout.
     [report-utilities] bugfix: fix overpayment detection
       For 1 payment to >1 invoices, previously would miscalculate
       overpayment.
@@ -1070,7 +1265,7 @@ Other repairs or enhancements not marked as bugs:
       Owner: [None:] Transaction:Txn<d:28/10/19> Splits are:
       Split<d:28/10/19,acc:Current,amt:$150.00,val:£150.00>
       Split<d:28/10/19,acc:AR,amt:$0.00,val:-£150.00> Transaction
-      Currency:GBP Client Currency:AUD 
+      Currency:GBP Client Currency:AUD
     Fixed German IBAN error message
     Allow edit of some fields for posted invoice
       Allow editing of some fields for posted invoice. For reasons, see bug
@@ -1081,14 +1276,14 @@ Other repairs or enhancements not marked as bugs:
       and QR) inside the enter TAN dialogue.
     [budget] fixcrash: fix crasher for some periods
       eg. the following combo would previously crash: - periods from next
-      to current - use accumulated amounts 
+      to current - use accumulated amounts
     [budget] fixcrash: prevent crash if periods start > end
       It's silly to input start-period > end-period. Nevertheless handle it
       by swapping them instead of crashing. i.e. report budget periods from
-      end to start. 
+      end to start.
     [budget-flow] fixcrash: exchange-fn needs to specify exchange date
       because some exchange-fn *do* require date eg. pricedb-nearest. use
-      the period end-date for the exchange date. 
+      the period end-date for the exchange date.
     [portfolio report] There's no report-currency. Use currency.
     [window-report] show backtrace when report crashes
       * exposes a SCM string last-captured-error containing last backtrace
@@ -1237,7 +1432,7 @@ Deprecated API:
     gnc:sum-collector-stocks - Unreachable
 
 
-Updated Translations: German, Hebrew, Ukrainian, 
+Updated Translations: German, Hebrew, Ukrainian,
 New Account Templates: Hebrew-Israel
 
 3.6 - 30 June 2019
@@ -5150,7 +5345,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
          source repository and put it into the downloads directory of
          your gnucash build area.
 
-       * Updated AqBanking on Win32.</li>
+       * Updated AqBanking on Win32.
 
  2.3.0 - 14 May 2009
  	 o Welcome to GnuCash 2.3.0 the first of several unstable releases of
