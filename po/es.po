@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-21 13:29+0000\n"
+"PO-Revision-Date: 2021-03-28 22:29+0000\n"
 "Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
@@ -24844,19 +24844,19 @@ msgstr "Muestra"
 
 #: gnucash/report/reports/example/sample-graphs.scm:142
 msgid "Pie:"
-msgstr ""
+msgstr "Circular:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:147
 msgid "Bar, normal:"
-msgstr ""
+msgstr "Barras, normal:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:152
 msgid "Bar, stacked:"
-msgstr ""
+msgstr "Barras, superpuestas:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:157
 msgid "Scatter:"
-msgstr ""
+msgstr "Dispersión:"
 
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:41
 #, scheme-format
@@ -25890,7 +25890,7 @@ msgstr "Cantidad remitida"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:56
 msgid "The reserve amount is set to a minimum balance desired"
-msgstr ""
+msgstr "La cantidad de reserva se fija al balance mínimo deseado"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:59
 #: gnucash/report/reports/standard/balance-forecast.scm:60
@@ -25907,6 +25907,8 @@ msgid ""
 "The target is used to plan for a future large purchase, which will be added "
 "as a line above the reserve amount."
 msgstr ""
+"El objetivo se usa para planificar una gran compra en el futuro, y será "
+"añadido como una línea sobre la cantidad de reserva."
 
 #: gnucash/report/reports/standard/balance-forecast.scm:67
 #, fuzzy
@@ -26275,7 +26277,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:65
 #: gnucash/report/reports/standard/balsheet-pnl.scm:66
 msgid "Period order is most recent first"
-msgstr ""
+msgstr "El orden de los perîodos es el más reciente primero"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:68
 #, fuzzy
@@ -26284,7 +26286,7 @@ msgstr "Columnas de ventas individuales"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:69
 msgid "Selecting this option will enable double-column reporting."
-msgstr ""
+msgstr "Seleccionar esta opción habilita el reportar en doble columna."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:72
 msgid "Disable amount indenting"
@@ -26295,6 +26297,8 @@ msgid ""
 "Selecting this option will disable amount indenting, and condense amounts "
 "into a single column."
 msgstr ""
+"Seleccionar esta opción deshabilitará la indentación de cantidades, y "
+"condensará las cantidades en una única columna."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:75
 #: gnucash/report/trep-engine.scm:98
@@ -26402,6 +26406,8 @@ msgid ""
 "If several profit & loss period columns are shown, also show overall period "
 "profit & loss."
 msgstr ""
+"En caso de que se muestren varias columnas de períodos de ganancias y "
+"pérdidas, mostrar también las ganancias y pérdidas globales."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:248
 #: gnucash/report/trep-engine.scm:600
@@ -29544,7 +29550,7 @@ msgstr ""
 
 #: gnucash/report/stylesheets/css.scm:209
 msgid "&lt;/style is disallowed in CSS. Using default CSS."
-msgstr ""
+msgstr "&lt;/style no está permitido en CSS. Usando CSS predeterminado."
 
 #: gnucash/report/stylesheets/css.scm:228
 #, fuzzy
@@ -30002,7 +30008,7 @@ msgstr "Emplear expresión regular para filtrar transacción"
 
 #: gnucash/report/trep-engine.scm:116
 msgid "Transaction Filter excludes matched strings"
-msgstr ""
+msgstr "El filtro de transacciones excluye las cadenas de texto coincidentes"
 
 #: gnucash/report/trep-engine.scm:118
 #, fuzzy
@@ -31098,7 +31104,7 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-ui-balances.c:455
 msgid "Too many uncleared splits"
-msgstr ""
+msgstr "Demasiadas divisiones no compensadas"
 
 #: libgnucash/app-utils/gnc-ui-balances.c:471
 msgid "The selected amount cannot be cleared."
