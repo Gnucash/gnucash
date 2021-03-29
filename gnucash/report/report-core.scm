@@ -214,11 +214,11 @@
 (define (gui-error str)
   (if (gnucash-ui-is-running)
       (gnc-error-dialog '() str)
-      (gnc:error "report-impl.scm error: " str)))
+      (gnc:error "report-core.scm error: " str)))
 (define (gui-warning str)
   (if (gnucash-ui-is-running)
       (gnc-warning-dialog '() str)
-      (gnc:warn "report-impl.scm warning: " str)))
+      (gnc:warn "report-core.scm warning: " str)))
 (define (gui-error-missing-template template-name)
   (gui-error
    (string-append
