@@ -692,7 +692,7 @@ developing over time"))
      'menu-tip menutip
      'options-generator (lambda () (options-generator account-types inc-exp?))
      'export-types '(("CSV" . csv))
-     'export-thunk (lambda (report-obj export-type filename)
+     'export-thunk (lambda (report-obj export-type)
                      (category-barchart-renderer
                       report-obj reportname uuid account-types inc-exp? reverse-bal?
                       export-type))

@@ -456,8 +456,7 @@
 (define (generate-tax-or-txf report-name
                              report-description
                              report-obj
-                             tax-mode?
-                             file-name)
+                             tax-mode?)
 
   (define (get-option pagename optname)
     (gnc:option-value
@@ -861,14 +860,12 @@ Gehen Sie zu Bearbeiten -> Optionen Steuerbericht, um Konten entsprechend einzur
               (G_ "This report shows your Taxable Income and \
 Deductible Expenses.")
               report-obj
-              #t
-              #f))
+              #t))
  'export-types (list (cons (G_ "XML") 'txf))
- 'export-thunk (lambda (report-obj choice file-name)
+ 'export-thunk (lambda (report-obj choice)
                  (generate-tax-or-txf
                   (G_ "Taxable Income / Deductible Expenses")
                   (G_ "This page shows your Taxable Income and \
 Deductible Expenses.")
                   report-obj
-                  #f
-                  file-name)))
+                  #f)))

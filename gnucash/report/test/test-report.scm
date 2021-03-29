@@ -160,7 +160,7 @@
    'report-guid test-uuid
    'options-generator gnc:new-options
    'export-types (list (cons "text" 'txt))
-   'export-thunk (lambda (report-obj export-type file-name)
+   'export-thunk (lambda (report-obj export-type)
                    "exported-string")
    'renderer (lambda (obj)
                (let ((options (gnc:report-options obj)))
@@ -177,7 +177,7 @@
       (gnc:report-export-types report))
     (test-equal "gnc:report-export-thunk"
       "exported-string"
-      ((gnc:report-export-thunk report) report 'csv "/tmp/file.txt"))
+      ((gnc:report-export-thunk report) report 'csv))
     (test-equal "gnc:report-menu-name"
       "basic report"
       (gnc:report-menu-name report))

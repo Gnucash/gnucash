@@ -70,7 +70,7 @@ accounts may be tagged with *EUGOODS* in the account description."))
    (gnc:html-markup-p
     (G_ "This message will be removed when tax accounts are specified."))))
 
-(define* (gst-statement-renderer rpt #:optional export-type file-name)
+(define* (gst-statement-renderer rpt #:optional export-type)
   (define (opt-val section name)
     (gnc:option-value
      (gnc:lookup-option (gnc:report-options rpt) section name)))
@@ -83,10 +83,6 @@ accounts may be tagged with *EUGOODS* in the account description."))
      #:custom-source-accounts sales-purch-accounts
      #:custom-split-filter gst-custom-split-filter
      #:export-type export-type))
-  (when file-name
-    (issue-deprecation-warning "gst-statement-renderer filename is \
-obsolete, and not supported for exports. please set html-document \
-export-string instead. this warning will be removed in GnuCash 5.0"))
   (when (null? (opt-val "Accounts" "Tax Accounts"))
     (gnc:html-document-add-object! document TAX-SETUP-DESC))
   document)
