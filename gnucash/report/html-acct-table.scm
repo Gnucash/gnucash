@@ -506,9 +506,11 @@
 
 ;; some useful predicates to export
 (define (gnc:account-code-less-p a b)
+  (issue-deprecation-warning "gnc:account-code-less-p is unused.")
   (gnc:string-locale<? (xaccAccountGetCode a)
                        (xaccAccountGetCode b)))
 (define (gnc:account-name-less-p a b)
+  (issue-deprecation-warning "gnc:account-name-less-p is unused.")
   (gnc:string-locale<? (xaccAccountGetName a)
                        (xaccAccountGetName b)))
 (define (gnc:account-path-less-p a b)
