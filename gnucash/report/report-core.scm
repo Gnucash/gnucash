@@ -210,8 +210,7 @@
   (G_ "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: "))
 (define rpterr-guid1 (G_ "Wrong report definition: "))
 (define rpterr-guid2 (G_ " Report is missing a GUID."))
-(define rptwarn-legacy
-  (G_ "Some reports stored in a legacy format were found. This format is not supported anymore so these reports may not have been restored properly."))
+
 (define (gui-error str)
   (if (gnucash-ui-is-running)
       (gnc-error-dialog '() str)
