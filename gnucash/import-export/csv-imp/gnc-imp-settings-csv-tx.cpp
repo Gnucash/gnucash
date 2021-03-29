@@ -51,6 +51,7 @@ constexpr auto group_prefix = "Import csv,transaction - ";
 #define CSV_COL_TYPES    "ColumnTypes"
 
 #define CSV_ACCOUNT      "BaseAccount"
+#define CSV_ACCOUNT_GUID "BaseAccountGuid"
 #define CSV_MULTI_SPLIT  "MultiSplit"
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
@@ -170,9 +171,42 @@ CsvTransImpSettings::load (void)
     m_multi_split = g_key_file_get_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, &key_error);
     m_load_error |= handle_load_error (&key_error, group);
 
-    gchar *key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ACCOUNT, &key_error);
+    gchar *key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ACCOUNT_GUID, &key_error);
     if (key_char && *key_char != '\0')
-        m_base_account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), key_char);
+    {
+        QofBook* book = gnc_get_current_book ();
+        GncGUID guid;
+
+        if (string_to_guid (key_char, &guid)) // find account by guid first
+            m_base_account = xaccAccountLookup (&guid, book);
+    }
+    m_load_error |= handle_load_error (&key_error, group);
+    if (key_char)
+        g_free (key_char);
+
+    key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ACCOUNT, &key_error);
+    if (key_char && *key_char != '\0')
+    {
+        if (m_base_account == nullptr)
+        {
+            m_base_account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), key_char);
+
+            if (m_base_account) // save the account as guid, introduced in version 4.5
+            {
+                gchar acct_guid[GUID_ENCODING_LENGTH + 1];
+                guid_to_string_buff (xaccAccountGetGUID (m_base_account), acct_guid);
+                g_key_file_set_string (keyfile, group.c_str(), CSV_ACCOUNT_GUID, acct_guid);
+            }
+        }
+        else // check to see if saved full name is the same and save if not
+        {
+            gchar *full_name = gnc_account_get_full_name (m_base_account);
+
+            if (g_strcmp0 (key_char, full_name) != 0)
+                g_key_file_set_string (keyfile, group.c_str(), CSV_ACCOUNT, full_name);
+            g_free (full_name);
+        }
+    }
     m_load_error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
@@ -240,8 +274,16 @@ CsvTransImpSettings::save (void)
 
     g_key_file_set_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, m_multi_split);
 
-    if (m_base_account)
-        g_key_file_set_string (keyfile, group.c_str(), CSV_ACCOUNT, gnc_account_get_full_name(m_base_account));
+    if (m_base_account) // also save account guid introduced in version 4.5
+    {
+        gchar acct_guid[GUID_ENCODING_LENGTH + 1];
+        guid_to_string_buff (xaccAccountGetGUID (m_base_account), acct_guid);
+        g_key_file_set_string (keyfile, group.c_str(), CSV_ACCOUNT_GUID, acct_guid);
+
+        gchar *full_name = gnc_account_get_full_name (m_base_account);
+        g_key_file_set_string (keyfile, group.c_str(), CSV_ACCOUNT, full_name);
+        g_free (full_name);
+    }
 
     std::vector<const char*> col_types_str;
     for (auto col_type : m_column_types)

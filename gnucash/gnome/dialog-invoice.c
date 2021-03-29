@@ -70,6 +70,7 @@
 
 #include "gnc-plugin-business.h"
 #include "gnc-plugin-page-invoice.h"
+#include "gnc-plugin-page-report.h"
 #include "gnc-main-window.h"
 #include "gnc-state.h"
 
@@ -210,6 +211,11 @@ struct _invoice_window
 
     GncOwner     proj_cust;
     GncOwner     proj_job;
+
+    /* the cached reportPage for this invoice. note this is not saved
+       into .gcm file therefore the invoice editor->report link is lost
+       upon restart. */
+    GncPluginPage *reportPage;
 
     /* for Unposting */
     gboolean     reset_tax_tables;
@@ -781,20 +787,21 @@ gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data)
     }
 }
 
-static void
+static GncPluginPage *
 gnc_invoice_window_print_invoice(GtkWindow *parent, GncInvoice *invoice)
 {
     SCM func, arg, arg2;
     SCM args = SCM_EOL;
     int report_id;
     const char *reportname = gnc_plugin_business_get_invoice_printreport();
+    GncPluginPage *reportPage = NULL;
 
-    g_return_if_fail (invoice);
+    g_return_val_if_fail (invoice, NULL);
     if (!reportname)
         reportname = "5123a759ceb9483abf2182d01c140e8d"; // fallback if the option lookup failed
 
     func = scm_c_eval_string ("gnc:invoice-report-create");
-    g_return_if_fail (scm_is_procedure (func));
+    g_return_val_if_fail (scm_is_procedure (func), NULL);
 
     arg = SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p__gncInvoice"), 0);
     arg2 = scm_from_utf8_string(reportname);
@@ -803,18 +810,37 @@ gnc_invoice_window_print_invoice(GtkWindow *parent, GncInvoice *invoice)
     /* scm_gc_protect_object(func); */
 
     arg = scm_apply (func, args, SCM_EOL);
-    g_return_if_fail (scm_is_exact (arg));
+    g_return_val_if_fail (scm_is_exact (arg), NULL);
     report_id = scm_to_int (arg);
 
     /* scm_gc_unprotect_object(func); */
     if (report_id >= 0)
-        reportWindow (report_id, parent);
+    {
+        reportPage = gnc_plugin_page_report_new (report_id);
+        gnc_main_window_open_page (GNC_MAIN_WINDOW (parent), reportPage);
+    }
+
+    return reportPage;
 }
+
+/* From the invoice editor, open the invoice report. This will reuse the
+   invoice report if generated from the current invoice editor. Note the
+   link is lost when GnuCash is restarted. This link may be restored
+   by: scan the current session tabs, identify reports, checking
+   whereby report's report-type matches an invoice report, and the
+   report's invoice option value matches the current invoice. */
 void
 gnc_invoice_window_printCB (GtkWindow* parent, gpointer data)
 {
     InvoiceWindow *iw = data;
-    gnc_invoice_window_print_invoice (parent, iw_get_invoice (iw));
+
+    if (iw->reportPage && GNC_IS_PLUGIN_PAGE (iw->reportPage))
+        gnc_plugin_page_report_reload (GNC_PLUGIN_PAGE_REPORT (iw->reportPage));
+    else
+        iw->reportPage = gnc_invoice_window_print_invoice
+            (parent, iw_get_invoice (iw));
+
+    gnc_main_window_open_page (GNC_MAIN_WINDOW (iw->dialog), iw->reportPage);
 }
 
 static gboolean
@@ -2895,6 +2921,7 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
                                       iw);
 
     /* Setup initial values */
+    iw->reportPage = NULL;
     iw->invoice_guid = *gncInvoiceGetGUID (invoice);
     iw->is_credit_note = gncInvoiceGetIsCreditNote (invoice);
 

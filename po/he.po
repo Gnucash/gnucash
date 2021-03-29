@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-17 08:18+0000\n"
+"PO-Revision-Date: 2021-03-28 11:29+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -1459,7 +1459,7 @@ msgstr "הצגת/עריכת לקוח"
 
 #: gnucash/gnome/dialog-customer.c:911
 msgid "Customer's Jobs"
-msgstr "מטלות של הלקוח"
+msgstr "ריכוזי לקוח"
 
 #: gnucash/gnome/dialog-customer.c:913
 msgid "Customer's Invoices"
@@ -1575,7 +1575,7 @@ msgstr "נא להזין פורטן כגון http://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-doclink.c:205
 msgid "Existing Document Link is"
-msgstr "קישור המסמך הקיים הוא"
+msgstr "הקישור למסמך הוא"
 
 #: gnucash/gnome/dialog-doclink.c:461 gnucash/gnome/dialog-doclink.c:506
 msgid "File Found"
@@ -1608,7 +1608,7 @@ msgstr "לא ניתן לערוך פריט עיסקי."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
 msgid "Manage Document Link"
-msgstr "ניהול קישור מסמכים"
+msgstr "ניהול קישור מסמך"
 
 #: gnucash/gnome/dialog-doclink.c:690
 msgid "Transaction can not be modified."
@@ -1674,13 +1674,13 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"יש ללחוץ לחיצה כפולה על עמודת המזהה כדי לעבור אל הפריט העסקי.\n"
-"יש ללחוץ לחיצה כפולה על עמודת הקישור כדי לפתוח את המסמך המקושר.\n"
-"יש ללחוץ לחיצה כפולה על עמודת זמינות כדי לשנות את קישור המסמך."
+"הקשה כפולה על עמודת המזהה כדי לעבור אל הפריט העסקי.\n"
+"הקשה כפולה על עמודת הקישור כדי לפתוח את המסמך המקושר.\n"
+"הקשה כפולה על עמודת זמינות כדי לשנות את קישור המסמך."
 
 #: gnucash/gnome/dialog-doclink.c:1033
 msgid "Business Document Links"
-msgstr "קישורים עסקיים"
+msgstr "קישורי מסמכים עסקיים"
 
 #: gnucash/gnome/dialog-employee.c:199
 msgid "You must enter a username."
@@ -2370,7 +2370,7 @@ msgstr "הערות לחשבונית"
 #: gnucash/gtkbuilder/dialog-job.glade:217
 #: gnucash/report/reports/standard/invoice.scm:317
 msgid "Billing ID"
-msgstr "מזהה חשבונית ספק"
+msgstr "מזהה אמצעי תשלום לספק"
 
 #: gnucash/gnome/dialog-invoice.c:3342 gnucash/gnome/dialog-invoice.c:3376
 #: gnucash/gnome/dialog-invoice.c:3410
@@ -3263,7 +3263,7 @@ msgstr "הצגת/עריכת ספק"
 
 #: gnucash/gnome/dialog-vendor.c:716
 msgid "Vendor's Jobs"
-msgstr "מטלות של הספק"
+msgstr "ריכוזי ספק"
 
 #: gnucash/gnome/dialog-vendor.c:718
 msgid "Vendor's Bills"
@@ -4377,7 +4377,7 @@ msgstr "אפשרויות"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:223
 msgid "Estimate"
-msgstr "הערך"
+msgstr "הערכה"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:224
 msgid "All Periods"
@@ -4414,7 +4414,7 @@ msgstr "למחוק %s?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:1028
 msgid "You must select at least one account to estimate."
-msgstr "נא לבחור לפחות חשבון אחד להערכה."
+msgstr "נא לבחור לפחות חשבון אחד לבצועה הערכה."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:1154
 msgid "You must select at least one account to edit."
@@ -4595,7 +4595,7 @@ msgstr "_תשלום חשבון"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:366
 #: gnucash/gnome/gnc-plugin-page-register.c:300
 msgid "_Manage Document Link..."
-msgstr "_ניהול קישורי מסמך…"
+msgstr "_ניהול קישור מסמך…"
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -5064,7 +5064,7 @@ msgstr "לקוחות"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:631
 msgid "Jobs"
-msgstr "מטלות"
+msgstr "ריכוזים"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:636
 msgid "Vendors"
@@ -6321,7 +6321,7 @@ msgstr "_הסרת פיצולים"
 
 #: gnucash/gnome/gnc-split-reg.c:1299
 msgid "Change a Transaction Linked Document"
-msgstr "שינוי קישור מסמך תנועה"
+msgstr "שינוי קישור למסמך המקושר לתנועה"
 
 #: gnucash/gnome/gnc-split-reg.c:1440
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:963
@@ -7599,7 +7599,7 @@ msgstr "מטבע ספרים"
 
 #: gnucash/gnome-utils/dialog-options.c:1320
 msgid "Default lot tracking policy"
-msgstr "מדיניות מעקב דבוקה ברירת מחדל"
+msgstr "מדיניות מעקב דבוקת ברירת מחדל"
 
 #: gnucash/gnome-utils/dialog-options.c:1343
 msgid "Default gain/loss account"
@@ -14069,9 +14069,9 @@ msgid ""
 "for the share distribution. You can also enter a description of the "
 "transaction, or accept the default one."
 msgstr ""
-"הזנת התאריך ומספר המניות שנוספו או נגרעו מתוצאת מפיצול או מיזוג מניות. "
+"נא להזין תאריך ומספר המניות שנוספו או נגרעו כתוצאה מפיצול או מיזוג מניות. "
 "למיזוג מניות (פיצולים שליליים) נא להשתמש בערך שלילי בהתפלגות המניה. ניתן גם "
-"להזין תיאור תנועה או לקבל את את ברירת המחדל."
+"להזין תיאור תנועה או לקבל את תאור ברירת המחדל."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:151
 msgid "Desc_ription"
@@ -15185,7 +15185,7 @@ msgid ""
 "Existing relative file path links will be converted to absolute ones by "
 "combining them with the existing path head unless box unticked."
 msgstr ""
-"נתיב יחסי לקישורי קובצים יומרו לנתיב מוחלט על ידי שילובם עם הנתיב הראשי "
+"נתיב יחסי לקישורי קבצים יומרו לנתיב מוחלט על ידי שילובם עם הנתיב הראשי "
 "הקיים, אלה אם הוסר הסימון בתיבת הסימון."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:140
@@ -15256,9 +15256,9 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"יש ללחוץ לחיצה כפולה על עמודת התיאור כדי לקפוץ אל העסקה.\n"
-"יש ללחוץ לחיצה כפולה על עמודת הקישור כדי לפתוח את המסמך המקושר.\n"
-"יש ללחוץ לחיצה כפולה על עמודת הזמינות כדי לשנות את קישור המסמך."
+"הקשה כפולה על עמודת התיאור כדי לדילוג אל העסקה.\n"
+"הקשה כפולה על עמודת הקישור כדי לפתוח את המסמך המקושר.\n"
+"הקשה כפולה על עמודת הזמינות כדי לשנות את קישור המסמך."
 
 #: gnucash/gtkbuilder/dialog-employee.glade:166
 msgid ""
@@ -15846,7 +15846,7 @@ msgstr "_ניקוי"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:61
 msgid "Scrub the highlighted lot"
-msgstr "סגירת הדבוקה המודגשת"
+msgstr "ניקוי הדבוקה המודגשת"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:78
 msgid "Delete the highlighted lot"
@@ -18272,7 +18272,7 @@ msgstr "הכפלת תקציב נוכחי לכל תקופה ב'ערך'"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:177
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:316
 msgid "The number of leading digits to keep when rounding"
-msgstr "מספר ספרות מובילות לשמירה בעת עגול ספרות"
+msgstr "מספר ספרות אחרי הנקודה העשרונית אותן יש לשמור בעת עגול ספרות"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:196
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:334
@@ -18295,7 +18295,7 @@ msgstr "שימוש בערך ממוצע מכל התקופות 'בפועל', עב�
 msgid ""
 "GnuCash will estimate budget values for the selected accounts from past "
 "transactions."
-msgstr "גנוקאש יעריך את ערכי תקציב לחשבונות שנבחרו לפי תנועות העבר."
+msgstr "גנוקאש תבצעה אמדן ערכי תקציב לחשבונות שנבחרו על פי תנועות העבר."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:389
 msgid "Use Average"
@@ -19874,7 +19874,7 @@ msgstr "מזהה נמען"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:145
 msgid "Billing-ID"
-msgstr "מזהה חשבונית ספק"
+msgstr "מזהה אמצעי תשלום לספק"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:152
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:92
@@ -24188,7 +24188,7 @@ msgstr "שימוש בקווים מתחת לעמודות מספרים מסוכמ�
 #: gnucash/report/reports/standard/income-statement.scm:85
 #: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Display accounts as hyperlinks"
-msgstr "הצגת חשבונות כהיפר קישורים"
+msgstr "הצגת חשבונות כהיפר-קישורים"
 
 #: gnucash/report/reports/standard/account-summary.scm:111
 #: gnucash/report/reports/standard/balance-sheet.scm:111
@@ -24992,7 +24992,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:102
 msgid "Display amounts as hyperlinks"
-msgstr "הצגת סכומים כהיפר קישורים"
+msgstr "הצגת סכומים כהיפר-קישורים"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:103
 msgid "Shows each amounts in the table as a hyperlink to a register or report."
@@ -25551,9 +25551,7 @@ msgstr "הכללת תקופות מכווצות לפני הבחירה."
 msgid ""
 "Include in report previous periods as single collapsed column (one for all "
 "periods before starting)"
-msgstr ""
-"הכללת תקופות קודמות בדוח כעמודה מכווצת אחת (אחת לכל התקופות הקודמות כעמודה "
-"ראשונה)"
+msgstr "הכללת תקופות קודמות בדוח בעמודה בודדת (עמודה אחת לכל התקופות הקודמות)"
 
 #: gnucash/report/reports/standard/budget.scm:87
 msgid "Include collapsed periods after selected."
@@ -25564,7 +25562,7 @@ msgid ""
 "Include in report further periods as single collapsed column (one for all "
 "periods after ending and to the end of budget range)"
 msgstr ""
-"הכללת תקופות עתידיות בדוח כעמודה מכווצת אחת (אחת לכל התקופות העתידיות בסוף "
+"הכללת תקופות עתידיות בדוח בעמודה בודדת (עמודה אחת לכל התקופות העתידיות בסוף "
 "הדוח ולאחר טווח התקציב)"
 
 #. Translators: Abbreviation for "Budget" amount
@@ -26418,7 +26416,8 @@ msgstr "פרטי חשבונית"
 #: gnucash/report/reports/standard/invoice.scm:121
 msgid "Invoice date, due date, billing ID, terms, job details"
 msgstr ""
-"תאריך חשבונית, תאריך פרעון, מזהה חשבונית ספק, תנאי תשלום, פרטי מרכז חיובים"
+"תאריך חשבונית, תאריך פרעון, מזהה אמצעי תשלום לספק, תנאי תשלום, פרטי מרכז "
+"חיובים"
 
 #: gnucash/report/reports/standard/invoice.scm:123
 #: gnucash/report/reports/standard/invoice.scm:124
@@ -27255,7 +27254,7 @@ msgid ""
 "with one straight line. Unfortunately, the plotting tool can't handle that."
 msgstr ""
 "כל המחירים שנמצאו הם מאותו תאריך. מה שיוביל לתרשים עם קו ישר אחד. למרבה "
-"הצער, הכלי התרשים לא יכול להתמודד עם זה."
+"הצער, כלי התרשים לא יכול להתמודד עם זה."
 
 #: gnucash/report/reports/standard/price-scatter.scm:330
 msgid "Price Scatterplot"
@@ -28096,7 +28095,7 @@ msgstr "אפשור קישורים"
 #: gnucash/report/stylesheets/head-or-tail.scm:96
 #: gnucash/report/stylesheets/plain.scm:58
 msgid "Enable hyperlinks in reports."
-msgstr "אפשור היפרקישורים בדוחות."
+msgstr "אפשור היפר-קישורים בדוחות."
 
 #: gnucash/report/stylesheets/footer.scm:83
 #: gnucash/report/stylesheets/footer.scm:431
@@ -28807,9 +28806,9 @@ msgid ""
 "expense accounts to equity, and must usually be excluded from periodic "
 "reporting."
 msgstr ""
-"כברירת מחדל, לרוב לא נדרש לכלול תנועות סגירה בדוח תנועות. תנועות סגירה הן "
-"יתרות שעברו מחשבונות הכנסות והוצאות לחשבון הון העצמי, בדרך כלל יש להחריג "
-"תנועות סגירה מדיווח תקופתי."
+"על פי רוב לא נדרש לכלול תנועות סגירה בדוח תנועות. תנועות סגירה הן יתרות "
+"שעברו מחשבונות הכנסות והוצאות לחשבון הון העצמי, בדרך כלל יש להחריג תנועות "
+"סגירה מדיווח תקופתי."
 
 #: gnucash/report/trep-engine.scm:700
 msgid "Filter on these accounts."
@@ -28937,7 +28936,7 @@ msgstr "לא מוצג סכום."
 
 #: gnucash/report/trep-engine.scm:1057
 msgid "Enable hyperlinks in amounts."
-msgstr "אפשור היפרקישורים בסכומים."
+msgstr "אפשור היפר-קישורים בסכומים."
 
 #: gnucash/report/trep-engine.scm:1062
 msgid "Reverse amount display for certain account types."
@@ -29906,7 +29905,7 @@ msgstr "עלות ממוצעת של דבוקות פתוחות."
 
 #: libgnucash/engine/policy.c:62
 msgid "Manually select lots."
-msgstr "בחירת דבוקות ידנית."
+msgstr "בחירת דבוקות באופן ידני."
 
 #: libgnucash/engine/qofbookslots.h:66
 msgid "Use Trading Accounts"
@@ -29998,7 +29997,7 @@ msgstr ""
 #: libgnucash/engine/ScrubBusiness.c:616
 #, c-format
 msgid "Checking business lots in account %s: %u of %u"
-msgstr "בדיקת דבוקות עסקיות בחשבון %s: %u מ %u"
+msgstr "בדיקת דבוקות עסקיות בחשבון %s: %u מ- %u"
 
 #: libgnucash/engine/ScrubBusiness.c:670
 #, c-format

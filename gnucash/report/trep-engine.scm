@@ -116,7 +116,7 @@
   (N_ "Transaction Filter excludes matched strings"))
 (define optname-transaction-matcher-caseinsensitive
   (N_ "Transaction Filter is case insensitive"))
-(define optname-reconcile-status (N_ "Reconcile Status"))
+(define optname-reconcile-status (N_ "Reconciled Status"))
 (define optname-void-transactions (N_ "Void Transactions"))
 (define optname-closing-transactions (N_ "Closing transactions"))
 

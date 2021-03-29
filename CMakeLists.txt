@@ -652,6 +652,7 @@ set(gnucash_DOCS
     ChangeLog.2017
     ChangeLog.2018
     ChangeLog.2019
+    ChangeLog.2020
     DOCUMENTERS
     HACKING
     LICENSE
@@ -788,6 +789,7 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.cmake.in ${CONFIG_H}
 add_subdirectory (borrowed)
 add_subdirectory (data)
 add_subdirectory (doc)
+# Note: po should be processed before gnucash - it provides LINGUAS, used to generate desktop and appdata files
 add_subdirectory (po)
 add_subdirectory (common)
 add_subdirectory (libgnucash)
@@ -806,7 +808,7 @@ add_subdirectory(cmake)
 
 if (BUILDING_FROM_VCS)
     add_custom_target(ChangeLog ALL
-        COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2020-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
+        COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2021-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     )
     install(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})

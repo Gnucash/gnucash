@@ -60,7 +60,7 @@ the remainder of the transaction as it was last entered.")
 Transfer register column, and GnuCash will complete the name from \
 your list of accounts. For subaccounts, type the first letter(s) \
 of the parent account, followed by ':' and the first letter(s) of \
-the subaccount (e.g. A:C for Assets:Cash.)")
+the subaccount (e.g. A:C for Assets:Cash).")
 
  N_( "Want to see all your subaccount transactions in one register? \
 From the Accounts tab in the main window, highlight the parent account \

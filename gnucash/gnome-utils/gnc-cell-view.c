@@ -53,9 +53,14 @@ G_DEFINE_TYPE_WITH_CODE (GncCellView, gnc_cell_view, GTK_TYPE_EVENT_BOX,
                          gnc_cell_view_editable_init))
 
 static void
-gnc_cell_view_finalize (GObject *gobject)
+gnc_cell_view_dispose (GObject *gobject)
 {
-    G_OBJECT_CLASS (gnc_cell_view_parent_class)->finalize (gobject);
+    if (GNC_CELL_VIEW(gobject)->tooltip_id > 0)
+    {
+        g_source_remove (GNC_CELL_VIEW(gobject)->tooltip_id);
+        GNC_CELL_VIEW(gobject)->tooltip_id = 0;
+    }
+    G_OBJECT_CLASS (gnc_cell_view_parent_class)->dispose (gobject);
 }
 
 static void
@@ -75,6 +80,10 @@ gnc_cell_view_init (GncCellView *cv)
     gtk_container_add (GTK_CONTAINER(cv), GTK_WIDGET(cv->text_view));
     gtk_widget_show (cv->text_view);
 
+    cv->focus_out_id = 0;
+    cv->populate_popup_id = 0;
+    cv->tooltip_id = 0;
+
     gtk_widget_set_can_focus (GTK_WIDGET(cv->text_view), TRUE);
     gtk_widget_add_events (GTK_WIDGET(cv), GDK_KEY_PRESS_MASK);
     gtk_widget_add_events (GTK_WIDGET(cv), GDK_KEY_RELEASE_MASK);
@@ -86,7 +95,7 @@ gnc_cell_view_class_init (GncCellViewClass *klass)
     GObjectClass  *gobject_class = G_OBJECT_CLASS(klass);
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
-    gobject_class->finalize = gnc_cell_view_finalize;
+    gobject_class->dispose = gnc_cell_view_dispose;
 
     gobject_class->set_property = gnc_cell_view_set_property;
     gobject_class->get_property = gnc_cell_view_get_property;
@@ -144,11 +153,9 @@ gtk_cell_editable_key_press_event (GtkTextView   *text_view,
     if (key_event->keyval == GDK_KEY_Escape)
     {
         cv->editing_canceled = TRUE;
+
         gtk_cell_editable_editing_done (GTK_CELL_EDITABLE(cv));
-
-        if (GTK_IS_CELL_EDITABLE(cv))
-            gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE(cv));
-
+        gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE(cv));
         return TRUE;
     }
 
@@ -156,24 +163,44 @@ gtk_cell_editable_key_press_event (GtkTextView   *text_view,
          && (key_event->state & GDK_SHIFT_MASK))
     {
         gtk_cell_editable_editing_done (GTK_CELL_EDITABLE(cv));
-
-        if (GTK_IS_CELL_EDITABLE(cv))
-            gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE(cv));
-
         return TRUE;
     }
     return FALSE;
 }
 
+static void
+gcv_popup_unmap (GtkMenu *menu, GncCellView *cv)
+{
+  cv->in_popup_menu = FALSE;
+}
+
+static void
+gcv_populate_popup (GtkTextView *text_view,
+                    GtkWidget   *popup,
+                    GncCellView *cv)
+{
+    cv->in_popup_menu = TRUE;
+    g_signal_connect (popup, "unmap",
+                      G_CALLBACK (gcv_popup_unmap), cv);
+}
+
 static gboolean
 gcv_focus_out_event (GtkWidget *widget, GdkEvent *event, GncCellView *cv)
 {
+    if (cv->in_popup_menu)
+        return FALSE;
+
     cv->editing_canceled = TRUE;
 
     if (cv->focus_out_id > 0)
     {
         g_signal_handler_disconnect (cv->text_view, cv->focus_out_id);
         cv->focus_out_id = 0;
+    }
+    if (cv->populate_popup_id > 0)
+    {
+        g_signal_handler_disconnect (cv->text_view, cv->populate_popup_id);
+        cv->populate_popup_id = 0;
     }
     gtk_cell_editable_editing_done (GTK_CELL_EDITABLE(cv));
     gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE(cv));
@@ -184,8 +211,11 @@ gcv_focus_out_event (GtkWidget *widget, GdkEvent *event, GncCellView *cv)
 static gboolean
 gcv_remove_tooltip (GncCellView *cv)
 {
-    if (GTK_IS_WIDGET(cv->text_view))
+    if (cv->tooltip_id > 0)
+    {
         gtk_widget_set_tooltip_text (GTK_WIDGET(cv->text_view), NULL);
+        cv->tooltip_id = 0;
+    }
     return FALSE;
 }
 
@@ -196,8 +226,8 @@ gcv_start_editing (GtkCellEditable *cell_editable,
     GncCellView *cv = GNC_CELL_VIEW(cell_editable);
     GtkTextIter siter, eiter;
 
-    // Remove the text_view tooltip after 5secs
-    g_timeout_add (5000, (GSourceFunc) gcv_remove_tooltip, cv);
+    // Remove the text_view tooltip after 5secs to stop it recuring
+    cv->tooltip_id = g_timeout_add (5000, (GSourceFunc) gcv_remove_tooltip, cv);
 
     gtk_text_buffer_get_bounds (cv->buffer, &siter, &eiter);
     gtk_text_buffer_select_range (cv->buffer, &eiter, &siter);
@@ -212,6 +242,11 @@ gcv_start_editing (GtkCellEditable *cell_editable,
     cv->focus_out_id = g_signal_connect (G_OBJECT(cv->text_view),
                                          "focus-out-event",
                                          G_CALLBACK(gcv_focus_out_event), cv);
+
+    cv->populate_popup_id = g_signal_connect (G_OBJECT(cv->text_view),
+                                              "populate-popup",
+                                              G_CALLBACK(gcv_populate_popup),
+                                              cv);
 }
 
 static void

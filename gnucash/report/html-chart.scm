@@ -357,7 +357,7 @@ function tooltipLabel(tooltipItem,data) {
 }
 
 function tooltipTitle(array,data) {
-  return chartjsoptions.data.labels[array[0].index]; }
+  return data.labels[array[0].index]; }
 
 // draw the background color
 Chart.pluginService.register({

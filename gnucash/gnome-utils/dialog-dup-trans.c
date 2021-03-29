@@ -145,7 +145,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
 {
     GtkWidget *dialog;
     GtkBuilder  *builder;
-    const gchar *tt = _("Use +- keys to increment/decrement number");
+    const gchar *tt = _("Use +- keys to increment/decrement number.");
 
     builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "num_adjustment");

@@ -7,15 +7,15 @@
 # Gabriel Ortiz Severino <gabrielortizseverino@gmail.com>, 2021.
 # Pablo <ppicapietra@gmail.com>, 2021.
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
+# Guille <willelopz+weblate@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-14 17:02+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>"
-"\n"
+"PO-Revision-Date: 2021-03-20 22:04+0000\n"
+"Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "es/>\n"
 "Language: es\n"
@@ -198,7 +198,7 @@ msgstr "acción: transferencia"
 
 #. "-"
 msgid "action: wire"
-msgstr ""
+msgstr "acción: transferir"
 
 #. "-"
 msgid "action: withdraw"
@@ -371,7 +371,7 @@ msgstr "Debe (columna en el libro), Cargo"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
-msgstr "defecto"
+msgstr "predeterminado/a"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
@@ -465,7 +465,7 @@ msgstr "importar"
 
 #. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
 msgid "income statement"
-msgstr ""
+msgstr "declaración de ingresos"
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
@@ -506,9 +506,8 @@ msgid "Lost Accounts"
 msgstr "Cuentas perdidas"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
-#, fuzzy
 msgid "Lot"
-msgstr "Tot."
+msgstr "Lote"
 
 #. "Combine two books into one (see book)."
 #, fuzzy
@@ -566,7 +565,7 @@ msgstr "beneficio neta"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr ""
+msgstr "patrimonio neto"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"

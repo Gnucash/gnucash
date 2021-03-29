@@ -399,7 +399,7 @@ main(int argc, char ** argv)
         std::cerr << bl::format (bl::translate ("Run '{1} --help' to see a full list of available command line options.")) % *argv[0]
         << "\n"
         << bl::translate ("Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
-        "       Perhaps you need to set the $DISPLAY environment variable?");
+        "Perhaps you need to set the $DISPLAY environment variable?");
         return 1;
     }
 

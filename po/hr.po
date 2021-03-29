@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-02 22:38+0000\n"
+"PO-Revision-Date: 2021-03-25 12:29+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -1844,10 +1844,9 @@ msgstr "Odnosi se na porez"
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:474
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "Konti u „%s“"
+msgstr "Po_dkonta od „%s”"
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -4336,8 +4335,8 @@ msgid ""
 "of another account"
 msgstr ""
 "Popis prikazuje objekte, koji koriste konto koji želiš izbrisati.\n"
-"Prije brisanja, objekte moraš obrisati ili promijeniti, tako da koriste "
-"jedan drugi konto"
+"Prije brisanja, objekte moraš izbrisati ili promijeniti, tako da\n"
+"koriste jedan drugi konto"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
@@ -4429,10 +4428,8 @@ msgid "Edit Note"
 msgstr "Uredi zabilješku"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
-#| msgid "Edit note for the selected account and period"
 msgid "Edit note for the selected account and period."
-msgstr "Uredi zabilješku za odabrani račun i razdoblje"
+msgstr "Uredi zabilješku za odabrani konto i razdoblje."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
@@ -4440,10 +4437,8 @@ msgid "Budget Report"
 msgstr "Proračunski izvještaj"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report."
-msgstr "Ispiši trenutačni izvještaj"
+msgstr "Pokreni proračunski izvještaj."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
 msgid "Refresh this window."
@@ -4470,10 +4465,8 @@ msgid "Note"
 msgstr "Napomena"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:226
-#, fuzzy
-#| msgid "Account Report"
 msgid "Run Report"
-msgstr "Izvještaj o kontu"
+msgstr "Pokreni izvještaj"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:310
 #: gnucash/gnome/gnc-plugin-page-budget.c:351
@@ -13587,10 +13580,9 @@ msgstr "<b>Opis kategorije</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:384
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Accounts in %s"
-msgstr "Konti u „%s“"
+msgstr "Konta u %s"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:477
 msgid ""
@@ -15866,26 +15858,20 @@ msgid "Search the Account List"
 msgstr "Pretraži popis konta"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
-#, fuzzy
-#| msgid "Close on Jump"
 msgid "Close _on Jump"
-msgstr "Zatvori prilikom prelaska"
+msgstr "_Zatvori prilikom prelaska"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
 msgid "_Jump To"
 msgstr "_Prijeđi na"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
-#, fuzzy
-#| msgid "All accounts"
 msgid "All _accounts"
-msgstr "Svi konti"
+msgstr "_Sva konta"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " Traži "
+msgstr "Opseg pretraživanja"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 msgid "Account Full Name"
@@ -15899,7 +15885,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:258
 msgid "Sea_rch"
-msgstr ""
+msgstr "Tr_aži"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:294
 msgid ""
@@ -15908,7 +15894,7 @@ msgid ""
 "if account should not be shown, this will be temporarily overridden."
 msgstr ""
 "Odaberi redak i klikni „Prijeđi na”, za prijelaz na konto u kontnom planu.\n"
-"Ukoliko se konto ne prikaže, ovo će biti privremeno prepisano."
+"Ukoliko se konto ne prikaže, ovo će se privremeno prepisati."
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:35
 msgid "Import Map Editor"
@@ -21961,7 +21947,7 @@ msgstr "Neprepoznata radnja „~a”."
 #: gnucash/import-export/qif-imp/qif-parse.scm:254
 #, scheme-format
 msgid "Unrecognized status '~a'. Defaulting to uncleared."
-msgstr "Neprepoznati status „~s”. Upotrijebit će se „nepotvrđeno”."
+msgstr "Neprepoznato stanje „~a”. Koristit će se „nepotvrđeno”."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."

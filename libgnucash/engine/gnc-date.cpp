@@ -1269,6 +1269,14 @@ gnc_tm_get_day_start (struct tm *tm, time64 time_val)
     gnc_tm_set_day_start(tm);
 }
 
+void
+gnc_tm_set_day_neutral (struct tm *tm)
+{
+    auto time_val{gnc_dmy2time64_internal(tm->tm_mday, tm->tm_mon + 1,
+                                          tm->tm_year + 1900, DayPart::neutral)};
+    gnc_localtime_r(&time_val, tm);
+}
+
 static void
 gnc_tm_get_day_neutral (struct tm *tm, time64 time_val)
 {
@@ -1302,11 +1310,9 @@ time64
 gnc_time64_get_day_neutral (time64 time_val)
 {
     struct tm tm;
-    time64 new_time;
-
-    gnc_tm_get_day_neutral(&tm, time_val);
-    new_time = gnc_mktime(&tm);
-    return new_time;
+    gnc_localtime_r(&time_val, &tm);
+    return gnc_dmy2time64_internal(tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900,
+                                   DayPart::neutral);
 }
 
 time64

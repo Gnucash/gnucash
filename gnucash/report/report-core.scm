@@ -32,6 +32,7 @@
 (use-modules (ice-9 match))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-9))
+(use-modules (srfi srfi-26))
 (use-modules (gnucash report report-register-hooks))
 (use-modules (gnucash report html-style-sheet))
 (use-modules (gnucash report html-document))
@@ -781,6 +782,17 @@ not found.")))
 ;; gnucash-cli helper and exported functions
 ;;
 
+(define (show-selected-reports pred? port)
+  (for-each
+   (lambda (template)
+     (format port "* ~a ~a\n"
+             (if (gnc:report-template-parent-type template) "C" " ")
+             (gnc:report-template-name template)))
+   (sort (hash-fold (lambda (k v p) (if (pred? v) (cons v p) p)) '()
+                    *gnc:_report-templates_*)
+         (lambda (a b) (gnc:string-locale<? (gnc:report-template-name a)
+                                            (gnc:report-template-name b))))))
+
 (define (stderr-log tmpl . args)
   (apply format (current-error-port) tmpl args)
   #f)
@@ -795,7 +807,11 @@ not found.")))
          (export-types (gnc:report-template-export-types template)))
 
     (cond
-     ((not export-thunk) (stderr-log "Report ~s has no export code\n" report))
+     ((not export-thunk)
+      (stderr-log "Only the following reports have export code:\n")
+      (show-selected-reports (cut gnc:report-template-export-thunk <>)
+                             (current-error-port))
+      (stderr-log "Use -R show to describe report\n"))
      ((not export-types) (stderr-log "Report ~s has no export-types\n" report))
      ((not (assoc export-type export-types))
       (stderr-log "Export-type disallowed: ~a. Allowed types: ~a\n"
@@ -816,17 +832,7 @@ not found.")))
        '() *gnc:_report-templates_*)))
 
 (define-public (gnc:cmdline-report-list port)
-  (for-each
-   (lambda (template)
-     (format port "* ~a ~a\n"
-             (if (gnc:report-template-parent-type template) "C" " ")
-             (gnc:report-template-name template)))
-   (sort (hash-fold
-          (lambda (k v p) (if (gnc:report-template-in-menu? v) (cons v p) p))
-          '() *gnc:_report-templates_*)
-         (lambda (a b)
-           (gnc:string-locale<? (gnc:report-template-name a)
-                                (gnc:report-template-name b))))))
+  (show-selected-reports gnc:report-template-in-menu? port))
 
 (define-public (gnc:cmdline-report-show report port)
   (let ((templates (reportname->templates report)))

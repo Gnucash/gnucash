@@ -34,6 +34,7 @@ endif()
 set(gnucash_noinst_HEADERS
     gnucash-commands.hpp
     gnucash-core-app.hpp
+    gnucash-locale-platform.h
 )
 
 set (gnucash_SOURCES
@@ -45,7 +46,9 @@ set (gnucash_SOURCES
   )
 
 if (MINGW)
-  list(APPEND gnucash_SOURCES "gnucash-windows-locale.c")
+  list(APPEND gnucash_SOURCES "gnucash-locale-windows.c")
+elseif (MAC_INTEGRATION)
+    list(APPEND gnucash_SOURCES "gnucash-locale-macos.mm")
 endif()
 
 add_executable (gnucash
@@ -71,7 +74,9 @@ set(gnucash_cli_SOURCES
     )
 
 if (MINGW)
-  list(APPEND gnucash_cli_SOURCES "gnucash-windows-locale.c")
+  list(APPEND gnucash_cli_SOURCES "gnucash-locale-windows.c")
+elseif (MAC_INTEGRATION)
+    list(APPEND gnucash_cli_SOURCES "gnucash-locale-macos.mm")
 endif()
 
 add_executable (gnucash-cli
@@ -266,7 +271,7 @@ gnc_add_scheme_targets(price-quotes
 
 set_local_dist(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
     gnucash.cpp gnucash-commands.cpp gnucash-cli.cpp gnucash-core-app.cpp
-    gnucash-windows-locale.c gnucash.rc.in gnucash-valgrind.in
+    gnucash-locale-macos.mm gnucash-locale-windows.c gnucash.rc.in gnucash-valgrind.in
     gnucash-gresources.xml ${gresource_files} price-quotes.scm
     ${gnucash_noinst_HEADERS} ${gnucash_EXTRA_DIST})
 

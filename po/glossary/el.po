@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-17 15:18+0000\n"
+"PO-Revision-Date: 2021-03-20 14:18+0000\n"
 "Last-Translator: Katerina <katerina.gakou@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
@@ -177,9 +177,8 @@ msgid "action: POS"
 msgstr "ενέργεια: POS"
 
 #. "-"
-#, fuzzy
 msgid "action: rebate"
-msgstr "Aλλαγή τμήματος"
+msgstr "ενέργεια: έκπτωση"
 
 #. "-"
 msgid "action: sell"
@@ -194,41 +193,36 @@ msgid "action: transfer"
 msgstr "ενέργεια: μεταφορά"
 
 #. "-"
-#, fuzzy
 msgid "action: wire"
-msgstr "Ώρα δημιουργίας"
+msgstr "ενέργεια: τραπεζικό έμβασμα"
 
 #. "-"
 msgid "action: withdraw"
-msgstr ""
+msgstr "ενέργεια: ανάληψη"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "χρονολογική κατάσταση"
 
 #. "A sum of money"
-#, fuzzy
 msgid "amount"
-msgstr "μήνας"
+msgstr "ποσό"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
-#, fuzzy
 msgid "average"
-msgstr "Μέσος"
+msgstr "μέσος όρος"
 
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
-msgstr ""
+msgstr "υπόλοιπο λογαριασμού"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "Ισορροπία"
+msgstr "υπόλοιπο εκ μεταφοράς"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "Ισορροπία"
+msgstr "υπόλοιπο σε μεταφορά"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -248,7 +242,7 @@ msgstr "απόδειξη"
 
 #. "see invoice owner"
 msgid "bill owner"
-msgstr ""
+msgstr "εκδότης τιμολογίου"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -304,9 +298,8 @@ msgstr "Κλείσιμο καταγραφών"
 
 #
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
-#, fuzzy
 msgid "commodity"
-msgstr "Διάπραξη"
+msgstr "προϊόν"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
@@ -345,14 +338,13 @@ msgid "credit note"
 msgstr "Ο χρήστης διέκοψε την μεταφορά"
 
 #. "The system of money used in a country"
-#, fuzzy
 msgid "currency"
-msgstr "_Νόμισμα"
+msgstr "νόμισμα"
 
 # Translation of "custom" sucks!  ("kata paraggelia"???  nah!)
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
-msgstr "Προσαρμοσμένο"
+msgstr "Εξατομικευμένος"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
@@ -365,35 +357,31 @@ msgstr "βάση δεδομένων"
 #
 #. "A specific numbered day of the month"
 msgid "Date"
-msgstr "Ημ/νία"
+msgstr "Ημερομηνία"
 
 #. "DD/MM/YY or MM/DD/YY or something else"
-#, fuzzy
 msgid "date format"
-msgstr "Μορφή Ημ/νίας"
+msgstr "μορφή ημερομηνίας"
 
 #. "A range in time that is delimited by two distinct dates."
-#, fuzzy
 msgid "date range"
-msgstr "ημερομηνία αλλαγής"
+msgstr "εύρος ημερομηνιών"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
 msgstr ""
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
-#, fuzzy
 msgid "default"
-msgstr "Εξ' ορισμού"
+msgstr "προεπιλογή"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
 msgstr ""
 
 #. "The process of something becoming less valuable"
-#, fuzzy
 msgid "depreciation"
-msgstr "Έντονη ατμοσφαιρική κατακρήμνιση"
+msgstr "μείωση της αξίας"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 #, fuzzy
@@ -401,36 +389,32 @@ msgid "Description (column in register)"
 msgstr "Η περιγραφή περιέχει"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
-#, fuzzy
 msgid "discount"
-msgstr "λογαριασμός"
+msgstr "έκπτωση"
 
 #. "Important Buzzword :)"
-#, fuzzy
 msgid "double entry"
-msgstr "διπλό"
+msgstr "διπλή καταχώρηση"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "σύνδεσμος προς το αρχείο"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
 msgstr ""
 
 #. "a person who works for somebody or a company in return for wages"
-#, fuzzy
 msgid "employee"
-msgstr "Πρότυπο"
+msgstr "υπάλληλος"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
-#, fuzzy
 msgid "equity"
-msgstr "Ασφάλεια"
+msgstr "ίδια κεφάλαια"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
-msgstr ""
+msgstr "κατάσταση μεταβολών ιδίων κεφαλαίων"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 #, fuzzy
@@ -438,23 +422,20 @@ msgid "escrow (account)"
 msgstr "προσωρινά"
 
 #. "The relation in value between the money used in different countries"
-#, fuzzy
 msgid "exchange rate"
-msgstr "Εναλλαγή Κεφαλαία-Μικρά"
+msgstr "τιμή συναλλάγματος"
 
 #. "in the account creation dialog??"
-#, fuzzy
 msgid "field"
-msgstr "Πεδίο"
+msgstr "πεδίο"
 
 #. "Any piece of information (text, graphics, executable) put together and given a name. All the information you have on the hard drive is arranged as a collection of  files."
 msgid "file"
 msgstr "αρχείο"
 
 #. "-"
-#, fuzzy
 msgid "file type"
-msgstr "Τύπος αρχείου:"
+msgstr "τύπος αρχείου"
 
 #. "-"
 msgid "financial calculator: interest rate"
@@ -471,12 +452,11 @@ msgstr "Ο_νόματα Συναρτήσεων"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "ελεύθερο λογισμικό"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
-#, fuzzy
 msgid "gain"
-msgstr "Βροχή"
+msgstr "κέρδος"
 
 #. "Name of an automatically created account to get imbalanced transactions back in balance"
 #, fuzzy
@@ -499,9 +479,8 @@ msgid "interest"
 msgstr "Δίκτυο"
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
-#, fuzzy
 msgid "invoice"
-msgstr "αρχάριος"
+msgstr "τιμολόγιο"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
@@ -518,20 +497,17 @@ msgid "liabilities/equity"
 msgstr ""
 
 #. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
-#, fuzzy
 msgid "loan"
-msgstr "Κορεάτικα"
+msgstr "δάνειο"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
 msgid "loan: APR"
-msgstr "Κορεάτικα"
+msgstr "δάνειο: ΣΕΠΕ"
 
 #
 #. "The money lost in business activity"
-#, fuzzy
 msgid "loss"
-msgstr "Κλείσιμο"
+msgstr "χασούρα"
 
 #. "name of an automatically created account"
 #, fuzzy

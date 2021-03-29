@@ -109,8 +109,6 @@
         PyDateTime_IMPORT;
         struct tm t;
         gnc_localtime_r(&$1, &t);
-        printf("\nConverting %d hours and %d minutes in zone %ld %s to python local time\n",
-               t.tm_hour, t.tm_min, t.tm_gmtoff/3600, t.tm_isdst ? "DST" : "STD");
         $result = PyDateTime_FromDateAndTime(t.tm_year + 1900, t.tm_mon + 1,
                                              t.tm_mday, t.tm_hour, t.tm_min,
                                              t.tm_sec, 0);

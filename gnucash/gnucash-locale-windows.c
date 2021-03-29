@@ -1,7 +1,8 @@
 /*
- * gnucash-core-app.cpp -- Basic application object for gnucash binaries
+ * gnucash-locale-windows.c -- Windows specific locale handling
  *
  * Copyright (C) 2020 John Ralls <jralls@ceridwen.us>
+ * Copyright (C) 2021 Geert Janssens <geert@kobaltwit.be>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,17 +25,15 @@
 #include <Windows.h>
 #include <fcntl.h>
 #include <glib/gi18n.h>
-
-//sacrificial prototype
-void set_win32_thread_locale(char **sys_locale);
+#include "gnucash-locale-platform.h"
 
 /* If one of the Unix locale variables LC_ALL, LC_MESSAGES, or LANG is
  * set in the environment check to see if it's a valid locale and if
  * it is set both the Windows and POSIX locales to that. If not
  * retrieve the Windows locale and set POSIX to match.
  */
-void
-set_win32_thread_locale(char **sys_locale)
+char *
+set_platform_locale(void)
 {
     WCHAR lpLocaleName[LOCALE_NAME_MAX_LENGTH];
     char *locale = NULL;
@@ -43,31 +42,31 @@ set_win32_thread_locale(char **sys_locale)
       ((locale = getenv ("LC_MESSAGES")) != NULL && locale[0] != '\0') ||
       ((locale = getenv ("LANG")) != NULL && locale[0] != '\0'))
     {
-	gunichar2* wlocale = NULL;
-	int len = 0;
-	len = strchr(locale, '.') - locale;
-	locale[2] = '-';
-	wlocale = g_utf8_to_utf16 (locale, len, NULL, NULL, NULL);
-	if (IsValidLocaleName(wlocale))
-	{
-	    LCID lcid = LocaleNameToLCID(wlocale, LOCALE_ALLOW_NEUTRAL_NAMES);
-	    SetThreadLocale(lcid);
-	    locale[2] = '_';
-	    setlocale (LC_ALL, locale);
-	    *sys_locale = g_strdup (locale);
-	    g_free(wlocale);
-	    return;
-	}
-	g_free(locale);
-	g_free(wlocale);
+        gunichar2* wlocale = NULL;
+        int len = 0;
+        len = strchr(locale, '.') - locale;
+        locale[2] = '-';
+        wlocale = g_utf8_to_utf16 (locale, len, NULL, NULL, NULL);
+        if (IsValidLocaleName(wlocale))
+        {
+            LCID lcid = LocaleNameToLCID(wlocale, LOCALE_ALLOW_NEUTRAL_NAMES);
+            SetThreadLocale(lcid);
+            locale[2] = '_';
+            setlocale (LC_ALL, locale);
+            g_free(wlocale);
+            return g_strdup (locale);
+        }
+        g_free(locale);
+        g_free(wlocale);
     }
     if (GetUserDefaultLocaleName(lpLocaleName, LOCALE_NAME_MAX_LENGTH))
     {
-	*sys_locale = g_utf16_to_utf8((gunichar2*)lpLocaleName,
-				     LOCALE_NAME_MAX_LENGTH,
-				     NULL, NULL, NULL);
-	(*sys_locale)[2] = '_';
-	setlocale (LC_ALL, *sys_locale);
-	return;
+        locale = g_utf16_to_utf8((gunichar2*)lpLocaleName,
+                                 LOCALE_NAME_MAX_LENGTH,
+                                 NULL, NULL, NULL);
+        (locale)[2] = '_';
+        setlocale (LC_ALL, locale);
+        return locale;
     }
+    return g_strdup("C");
 }

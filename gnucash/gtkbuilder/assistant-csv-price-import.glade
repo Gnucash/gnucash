@@ -72,7 +72,7 @@ Examples are "FTSE","RR.L","21/11/2016",5.345,"GBP" and CURRENCY;USD;2016-11-21;
 
 There is an option for specifying the start row, end row and an option to skip alternate rows beginning from the start row which can be used if you have some header text. Also there is an option to over write existing prices for that day if required.
 
-Lastly, for repeated imports the preview page has buttons to Load and Save the settings. To save the settings, tweak the settings to your preferences (optionally starting from an existing preset), then (optionally change the settings name and press the Save Settings button. Note you can't save to built-in presets.
+Lastly, for repeated imports the preview page has buttons to Load and Save the settings. To save the settings, tweak the settings to your preferences (optionally) starting from an existing preset), then (optionally change the settings name and press the Save Settings button. Note you can't save to built-in presets.
 
 This operation is not reversible, so make sure you have a working backup.
 
@@ -1023,8 +1023,8 @@ For example
           <object class="GtkLabel" id="finish_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">&lt;b&gt;Press Apply to add the Prices.
-Cancel to abort.&lt;/b&gt;</property>
+            <property name="label" translatable="yes">&lt;b&gt;Press "Apply" to add the Prices.
+"Cancel" to abort.&lt;/b&gt;</property>
             <property name="use_markup">True</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>

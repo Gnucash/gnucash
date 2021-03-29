@@ -2028,6 +2028,14 @@ CsvImpTransAssist::assist_doc_page_prepare ()
     /* Add the Cancel button for the matcher */
     cancel_button = gtk_button_new_with_mnemonic (_("_Cancel"));
     gtk_assistant_add_action_widget (csv_imp_asst, cancel_button);
+    auto button_area = gtk_widget_get_parent (cancel_button);
+
+    if (GTK_IS_HEADER_BAR(button_area))
+        gtk_container_child_set (GTK_CONTAINER(button_area),
+                                 cancel_button,
+                                 "pack-type", GTK_PACK_START,
+                                 nullptr);
+
     g_signal_connect (cancel_button, "clicked",
                      G_CALLBACK(csv_tximp_assist_close_cb), this);
     gtk_widget_show (GTK_WIDGET(cancel_button));
@@ -2064,14 +2072,26 @@ CsvImpTransAssist::assist_match_page_prepare ()
     /* Add the help button for the matcher */
     help_button = gtk_button_new_with_mnemonic (_("_Help"));
     gtk_assistant_add_action_widget (csv_imp_asst, help_button);
+    auto button_area = gtk_widget_get_parent (help_button);
+
+    if (GTK_IS_HEADER_BAR(button_area))
+    {
+        gtk_container_child_set (GTK_CONTAINER(button_area),
+                                 help_button,
+                                 "pack-type", GTK_PACK_START,
+                                 nullptr);
+    }
+    else
+    {
+        // align the help button on the left side
+        gtk_widget_set_halign (GTK_WIDGET(button_area), GTK_ALIGN_FILL);  
+        gtk_widget_set_hexpand (GTK_WIDGET(button_area), TRUE);
+        gtk_box_set_child_packing (GTK_BOX(button_area), help_button,
+                                   FALSE, FALSE, 0, GTK_PACK_START);
+    }
     g_signal_connect (help_button, "clicked",
                      G_CALLBACK(on_matcher_help_clicked), gnc_csv_importer_gui);
 
-    // align the help button on the left side
-    auto action_box = gtk_widget_get_parent (help_button);
-    gtk_widget_set_halign (GTK_WIDGET(action_box), GTK_ALIGN_FILL);  
-    gtk_widget_set_hexpand (GTK_WIDGET(action_box), TRUE);
-    gtk_box_set_child_packing (GTK_BOX(action_box), help_button, FALSE, FALSE, 0, GTK_PACK_START);
     gtk_widget_show (GTK_WIDGET(help_button));
 
     /* Copy all of the transactions to the importer GUI. */

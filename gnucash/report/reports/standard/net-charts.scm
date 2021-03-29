@@ -487,7 +487,7 @@
  'options-generator (lambda () (options-generator #f #f))
  'renderer (lambda (report-obj) (net-renderer report-obj #f #f #f))
  'export-types '(("CSV" . csv))
- 'export-thunk (lambda (report-obj export-type filename)
+ 'export-thunk (lambda (report-obj export-type)
                  (net-renderer report-obj #f #f export-type)))
 
 (gnc:define-report
@@ -499,7 +499,7 @@
  'options-generator (lambda () (options-generator #t #f))
  'renderer (lambda (report-obj) (net-renderer report-obj #t #f #f))
  'export-types '(("CSV" . csv))
- 'export-thunk (lambda (report-obj export-type filename)
+ 'export-thunk (lambda (report-obj export-type)
                  (net-renderer report-obj #t #f export-type)))
 
 (gnc:define-report
@@ -510,7 +510,7 @@
  'options-generator (lambda () (options-generator #f #t))
  'renderer (lambda (report-obj) (net-renderer report-obj #f #t #f))
  'export-types '(("CSV" . csv))
- 'export-thunk (lambda (report-obj export-type filename)
+ 'export-thunk (lambda (report-obj export-type)
                  (net-renderer report-obj #f #t export-type)))
 
 ;; Not sure if a line chart makes sense for Income & Expense
@@ -524,5 +524,5 @@
  'options-generator (lambda () (options-generator #t #t))
  'renderer (lambda (report-obj) (net-renderer report-obj #t #t #f))
  'export-types '(("CSV" . csv))
- 'export-thunk (lambda (report-obj export-type filename)
+ 'export-thunk (lambda (report-obj export-type)
                  (net-renderer report-obj #t #t export-type)))

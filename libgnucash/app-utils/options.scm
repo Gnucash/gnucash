@@ -1824,6 +1824,7 @@ the option '~a'."))
       ("Common Currency" "Currency" "Common Currency")
       ("Show original currency amount" "Currency" "Show original currency amount")
       ("Report's currency" "Currency" "Report's currency")
+      ("Reconcile Status" #f "Reconciled Status")
       ;; new-owner-report.scm, renamed Oct 2020 to differentiate with
       ;; Document Links:
       ("Links" #f "Transaction Links")
@@ -1831,6 +1832,7 @@ the option '~a'."))
       ("Individual Taxes" #f "Use Detailed Tax Summary")
       ;; income-gst-statement.scm
       ("default format" #f "Default Format")
+      ("Report format" #f "Report Format")
       ))
 
   (define (lookup-option section name)

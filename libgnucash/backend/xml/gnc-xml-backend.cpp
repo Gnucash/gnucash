@@ -49,6 +49,11 @@ extern "C"
 #define FILE_URI_PREFIX "file://"
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
+GncXmlBackend::~GncXmlBackend()
+{
+    session_end();
+};
+
 bool
 GncXmlBackend::check_path (const char* fullpath, bool create)
 {
