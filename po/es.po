@@ -8,14 +8,15 @@
 # Carlos Manrique Enguita <UO258425@uniovi.es>, 2021.
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
 # Guille <willelopz+weblate@gmail.com>, 2021.
+# Guille Lopez <willelopz@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.7.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-28 22:29+0000\n"
-"Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
+"PO-Revision-Date: 2021-03-29 22:26+0000\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -1674,9 +1675,8 @@ msgid "Enter URL like http://www.gnucash.org:"
 msgstr "Introducir URL tipo http://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-doclink.c:205
-#, fuzzy
 msgid "Existing Document Link is"
-msgstr "Asociación Existente es "
+msgstr "La asociación de archivo existente es"
 
 #: gnucash/gnome/dialog-doclink.c:461 gnucash/gnome/dialog-doclink.c:506
 msgid "File Found"
@@ -1714,14 +1714,12 @@ msgid "Manage Document Link"
 msgstr "Gestionar enlace de documento"
 
 #: gnucash/gnome/dialog-doclink.c:690
-#, fuzzy
 msgid "Transaction can not be modified."
-msgstr "Transacción Mercantil"
+msgstr "La transacción no puede ser modificada."
 
 #: gnucash/gnome/dialog-doclink.c:751 libgnucash/engine/gncOwner.c:215
-#, fuzzy
 msgid "Undefined"
-msgstr "Usuario Definido"
+msgstr "No definido"
 
 #. Translators: This is the label of a dialog box that lists all of the
 #. transaction that have files or URIs linked with them.
@@ -1786,9 +1784,8 @@ msgstr ""
 "de la columna Descripción o Asociación para abrir la Asociación"
 
 #: gnucash/gnome/dialog-doclink.c:1033
-#, fuzzy
 msgid "Business Document Links"
-msgstr "Asociaciones de Transacción"
+msgstr "Documentos asociados de negocios"
 
 #: gnucash/gnome/dialog-employee.c:199
 msgid "You must enter a username."
@@ -2220,9 +2217,8 @@ msgid "Online Id"
 msgstr "Id de conexión"
 
 #: gnucash/gnome/dialog-imap-editor.c:790
-#, fuzzy
 msgid "Online HBCI"
-msgstr "Id de conexión"
+msgstr "HBCI Online"
 
 #. Translators: In this context,
 #. 'Billing information' maps to the
@@ -2392,10 +2388,8 @@ msgid "View Expense Voucher"
 msgstr "Vista Comprobante de Gasto"
 
 #: gnucash/gnome/dialog-invoice.c:2484
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "Open Linked Document:"
-msgstr "Cuenta No Enlazada"
+msgstr "Abrir documento asociado:"
 
 #: gnucash/gnome/dialog-invoice.c:2598 gnucash/gnome/dialog-invoice.c:2823
 msgid "Bill Information"
@@ -2960,14 +2954,12 @@ msgid "Are you sure you want to delete these prices?"
 msgstr "¿Seguro que quiere borrar estos precios?"
 
 #: gnucash/gnome/dialog-price-editor.c:221
-#, fuzzy
 msgid "Are you sure you want to replace the existing price?"
-msgstr "¿Seguro que quiere borrar estos precios?"
+msgstr "¿Está seguro de que quiere reemplazar el precio existente?"
 
 #: gnucash/gnome/dialog-price-editor.c:227
-#, fuzzy
 msgid "Replace price?"
-msgstr "%d precio sustituido"
+msgstr "Sobreescribir precio?"
 
 #: gnucash/gnome/dialog-price-editor.c:233
 msgid "_Replace"
@@ -3468,9 +3460,8 @@ msgid "Transfer"
 msgstr "Transferencia"
 
 #: gnucash/gnome/gnc-budget-view.c:508
-#, fuzzy
 msgid "Remaining to Budget"
-msgstr "Abre un presupuesto existente"
+msgstr "Restante a presupuestar"
 
 #: gnucash/gnome/gnc-budget-view.c:1652 gnucash/gnome/window-reconcile2.c:1069
 #: gnucash/gnome/window-reconcile.c:1122
@@ -3668,22 +3659,16 @@ msgid "_Import Map Editor"
 msgstr "_Importar editor de distribución"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
-#, fuzzy
-#| msgid "View and Delete Bayesian and Non Bayesian information"
 msgid "View and Delete Bayesian and non-Bayesian information"
 msgstr "Ver y Eliminar información Bayesiana y No Bayesiana"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
-#, fuzzy
-#| msgid "Transaction amount"
 msgid "_Transaction Linked Documents"
-msgstr "Cantidad de transacción"
+msgstr "_Documentos asociados a transacción"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
-#, fuzzy
-#| msgid "View all Transaction Associations"
 msgid "View all Transaction Linked Documents"
-msgstr "Ver todas las Asociaciones Transaccionales"
+msgstr "Ver todos los documentos asociados a transacciones"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
@@ -3716,9 +3701,8 @@ msgstr[1] ""
 
 # Menú
 #: gnucash/gnome/gnc-plugin-budget.c:63
-#, fuzzy
 msgid "_New Budget"
-msgstr "Crear Presupuesto"
+msgstr "_Nuevo presupuesto"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
 #, fuzzy
@@ -3727,9 +3711,8 @@ msgstr "Crea un presupuesto nuevo"
 
 # Menú
 #: gnucash/gnome/gnc-plugin-budget.c:69
-#, fuzzy
 msgid "_Open Budget"
-msgstr "Abrir presupuesto"
+msgstr "_Abrir presupuesto"
 
 #: gnucash/gnome/gnc-plugin-budget.c:70
 msgid ""
@@ -3741,23 +3724,20 @@ msgstr ""
 
 # Menú
 #: gnucash/gnome/gnc-plugin-budget.c:75
-#, fuzzy
 msgid "_Copy Budget"
-msgstr "Copiar Presupuesto"
+msgstr "_Copiar Presupuesto"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
-#, fuzzy
 msgid "Copy an existing Budget."
-msgstr "Copia un Presupuesto existente"
+msgstr "Copia un presupuesto existente."
 
 #: gnucash/gnome/gnc-plugin-budget.c:80
 msgid "_Delete Budget"
 msgstr "_Borrar presupuesto"
 
 #: gnucash/gnome/gnc-plugin-budget.c:81
-#, fuzzy
 msgid "Delete an existing Budget."
-msgstr "Abre un presupuesto existente"
+msgstr "Borra un presupuesto existente."
 
 #: gnucash/gnome/gnc-plugin-budget.c:288
 msgid "Select a Budget"
@@ -4020,9 +4000,8 @@ msgid "Business Linked Documents"
 msgstr "Documentos enlazados con negocios"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
-#, fuzzy
 msgid "View all Linked Business Documents"
-msgstr "Ver todas las Asociaciones Transaccionales"
+msgstr "Ver todos los documentos de negocio asociados"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
@@ -4469,14 +4448,14 @@ msgid "All transactions in this account will be deleted."
 msgstr "Todas las transacciones en esta cuenta serán eliminadas."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1753
-#, fuzzy, c-format
+#, c-format
 msgid "Its sub-account will be moved to the account %s."
-msgstr "Todas sus subcuentas se van a trasladar a la cuenta %s."
+msgstr "Sus subcuentas se moverán a la cuenta %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1759
-#, fuzzy, c-format
+#, c-format
 msgid "Its subaccount will be deleted."
-msgstr "Todas sus subcuentas serán eliminadas."
+msgstr "Sus subcuentas serán eliminadas."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1763
 #, c-format
@@ -4501,14 +4480,12 @@ msgid "Open _Subaccounts"
 msgstr "Abrir _subcuentas"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
-#, fuzzy
 msgid "Open the selected account and all its subaccounts."
-msgstr "Abre las cuentas seleccionadas y todas sus subcuentas"
+msgstr "Abre la cuenta seleccionada y todas sus subcuentas."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
-#, fuzzy
 msgid "_Delete Budget..."
-msgstr "_Borrar presupuesto"
+msgstr "_Borrar presupuesto..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
@@ -4520,9 +4497,8 @@ msgid "Budget _Options..."
 msgstr "Opciones del Presupuesto"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
-#, fuzzy
 msgid "Edit this budget's options."
-msgstr "Edita estas opciones presupuestarias"
+msgstr "Edita las opciones de este presupuesto."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:169
 #, fuzzy
@@ -5015,6 +4991,9 @@ msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
+"Reestablecer el diseño por defecto a los valores incorporados en GnuCash "
+"para todas las facturas de cliente y notas de crédito, y actualizar la "
+"página actual de acorde a ello"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:394
 #, fuzzy
@@ -5122,6 +5101,8 @@ msgstr "Abre un boletín de sociedad para el titular de esta Factura"
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
+"Usar el diseño actual como predeterminado para todos los vales de empleado y "
+"notas de crédito"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:431
 msgid ""
@@ -5952,7 +5933,7 @@ msgstr "Asocia una localización con la transacción efectiva"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:320
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr ""
+msgstr "Ir a la cuenta, factura o vale asociado"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:409
 msgid "Remo_ve Other Splits"
@@ -8396,6 +8377,8 @@ msgstr "Hoy"
 #: gnucash/gnome-utils/gnc-cell-view.c:73
 msgid "Use Shift combined with Return or Keypad Enter to finish editing"
 msgstr ""
+"Use la tecla Shift junto con Enter or Enter del teclado numérico para "
+"finalizar la edición"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:224
 #: gnucash/report/reports/standard/price-scatter.scm:140
@@ -9962,7 +9945,7 @@ msgstr "Info. Imposición"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:981
 msgctxt "Column header for 'Hidden'"
 msgid "H"
-msgstr ""
+msgstr "O"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:997
 #, fuzzy
@@ -10414,7 +10397,7 @@ msgstr "Activado"
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:141
 msgctxt "Single-character short column-title form of 'Enabled'"
 msgid "E"
-msgstr ""
+msgstr "H"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:152
 msgid "Last Occur"
@@ -10454,7 +10437,7 @@ msgstr "Beneficios:"
 
 #: gnucash/gnucash-cli.cpp:94
 msgid "Price Quotes Retrieval Options"
-msgstr ""
+msgstr "Opciones de recuperación de precios de cotización"
 
 #: gnucash/gnucash-cli.cpp:97
 msgid ""
@@ -10486,6 +10469,13 @@ msgid ""
 "be specified to describe some saved options.\n"
 "  run: \tRun the named report in the given GnuCash datafile.\n"
 msgstr ""
+"Ejecuta comandos relacionados con los informes. Los siguientes comandos "
+"están soportados.\n"
+"\n"
+"list:\tLista los informes disponibles.\n"
+"show: \tDescribe las opciones modificadas en el informe. Un archivo de datos "
+"puede ser especificado para describir algunas opciones guardadas.\n"
+"run: \tEjecuta el informe sobre el archivo GnuCash proporcionado.\n"
 
 #: gnucash/gnucash-cli.cpp:113
 #, fuzzy
@@ -10509,11 +10499,11 @@ msgstr ""
 #: gnucash/gnucash-cli.cpp:139 gnucash/gnucash-cli.cpp:153
 #: gnucash/gnucash.cpp:367
 msgid "Missing data file parameter"
-msgstr ""
+msgstr "Falta el parámetro del archivo de datos"
 
 #: gnucash/gnucash-cli.cpp:177
 msgid "Missing --name parameter"
-msgstr ""
+msgstr "Falta el parámetro --name"
 
 #: gnucash/gnucash-cli.cpp:185
 msgid "Unknown report command '{1}'"
@@ -13557,6 +13547,12 @@ msgid ""
 "- No settings\n"
 "- Gnucash default export format"
 msgstr ""
+"Borrar opciones\n"
+"Borra las opciones guardadas bajo el nombre introducido en el campo de texto "
+"adyacente.\n"
+"Hay dos nombres reservados que no pueden ser borrados nunca:\n"
+"- No settings\n"
+"- Gnucash default export format"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:173
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:164
@@ -13568,6 +13564,13 @@ msgid ""
 "- No settings\n"
 "- Gnucash default export format"
 msgstr ""
+"Guardar opciones\n"
+"Guarda las opciones actuales con el nombre introducido en el campo de texto "
+"adyacente.\n"
+"Hay dos nombres reservados que no pueden ser usados para guardar opciones "
+"personalizadas:\n"
+"- No settings\n"
+"- Gnucash default export format"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:201
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:191
@@ -16108,9 +16111,8 @@ msgid "Id"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:654
-#, fuzzy
 msgid "Linked Document"
-msgstr "Detalles del Préstamo"
+msgstr "Documento enlazado"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:671
 msgid "Available"
@@ -17798,7 +17800,7 @@ msgstr "<b>Nivel de zoom Prederminado</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3260
 msgid "Reports"
-msgstr "Reporte"
+msgstr "Informes"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3279
 msgid "<b>Window Geometry</b>"
