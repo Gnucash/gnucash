@@ -885,14 +885,4 @@ HTML Document Title</title></head><body></body>\n\
             "Income" "Income-GBP" "Expenses" "Equity")
           (sxml->table-row-col sxml 1 #f 1))))
 
-    (let* ((table (gnc:make-html-table))
-           (acct-table (gnc:make-html-acct-table/env/accts
-                        '((balance-mode pre-adjusting)
-                          (display-tree-depth 9))
-                        accounts)))
-      (gnc:html-table-add-account-balances table acct-table '())
-      (let ((sxml (table->sxml table "basic - combo 3")))
-        (test-equal "gnc:make-html-acct-table/env/accts combo 3"
-          '("Root" "Asset" "Bank" "GBP Bank" "Wallet" "Liabilities"
-            "Income" "Income-GBP" "Expenses" "Equity")
-          (sxml->table-row-col sxml 1 #f 1))))))
+    ))
