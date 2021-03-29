@@ -90,8 +90,8 @@ static const gchar *start_trans_common_string = N_(
             "While a transaction may have splits in several of the selected accounts "
             "it will only be exported once. It will appear under the first processed "
             "account it has a split in.\n\n"
-            "Price/Rate output format is controlled by the Preference setting,\n"
-            "Numbers, Date, Time->Force Prices to display as decimals\n\n"
+            "The Price/Rate output format is controlled by the preference\n"
+            "\"Numbers, Date, Time\"->\"Force Prices to display as decimals\".\n\n"
             "Select the settings you require for the file and then click \"Next\" "
             "to proceed or \"Cancel\" to abort the export.\n");
 
