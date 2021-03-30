@@ -76,49 +76,49 @@ void csv_export_end_date_cb (GtkWidget *radio, gpointer user_data);
 void csv_export_file_chooser_file_activated_cb (GtkFileChooser *chooser, CsvExportInfo *info);
 void csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExportInfo *info);
 
-/* Fixme: Can we simplify the work of translators by splitting in invariant and variant paragraphs? */
-static const gchar *finish_tree_string = N_(
-            /* Translators: %s is the file name string. */
-            "The account tree will be exported to the file '%s' when you click \"Apply\".\n\n"
-            "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to abort the export.\n");
-
-static const gchar *finish_trans_string = N_(
-            /* Translators: %s is the file name string and %u the number of accounts. */
-            "When you click \"Apply\", the transactions will be exported to the file '%s' "
-            "and the number of accounts exported will be %u.\n\n"
-            "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to abort the export.\n");
-
-static const gchar *finish_trans_search_gl_string = N_(
-            /* Translators: %s is the file name string. */
-            "When you click \"Apply\", the transactions will be exported to the file '%s'.\n\n"
-            "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to abort the export.\n");
-
 static const gchar *start_tree_string = N_(
-            "This assistant will help you export the Account Tree to a file"
+            "This assistant will help you export the Account Tree to a file "
             "with the separator specified below.\n\n"
             "Select the settings you require for the file and then click \"Next\" "
             "to proceed or \"Cancel\" to abort the export.\n");
 
 static const gchar *start_trans_common_string = N_(
+            /* Translators: %s is one of the following paragraphs about rows/transaction. */
             "This assistant will help you export the Transactions to a file "
             "with the separator specified below.\n\n"
             "%s\n\n"
             "While a transaction may have splits in several of the selected accounts "
             "it will only be exported once. It will appear under the first processed "
             "account it has a split in.\n\n"
-            "Price/Rate output format is controlled by the Preference setting,\n"
-            "Numbers, Date, Time->Force Prices to display as decimals\n\n"
+            "The Price/Rate output format is controlled by the preference\n"
+            "\"Numbers, Date, Time\"->\"Force Prices to display as decimals\".\n\n"
             "Select the settings you require for the file and then click \"Next\" "
             "to proceed or \"Cancel\" to abort the export.\n");
 
 static const gchar *start_trans__multi_string = N_(
             "There will be multiple rows for each transaction with each row "
-            "representing one split.\n\n");
+            "representing one split.");
 
 static const gchar *start_trans_simple_string = N_(
             "There will be one row for each transaction, equivalent to a single row "
             "in a register in 'Basic Ledger' mode. As such some transfer detail "
-            "could be lost.\n\n");
+            "could be lost.");
+
+static const gchar *finish_tree_string = N_(
+            /* Translators: %s is the file name. */
+            "The account tree will be exported to the file '%s' when you click \"Apply\".\n\n"
+            "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to abort the export.\n");
+
+static const gchar *finish_trans_string = N_(
+            /* Translators: %s is the file name and %u the number of accounts. */
+            "When you click \"Apply\", the transactions will be exported to the file '%s' "
+            "and the number of accounts exported will be %u.\n\n"
+            "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to abort the export.\n");
+
+static const gchar *finish_trans_search_gl_string = N_(
+            /* Translators: %s is the file name. */
+            "When you click \"Apply\", the transactions will be exported to the file '%s'.\n\n"
+            "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to abort the export.\n");
 
 
 /**************************************************
