@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-29 22:26+0000\n"
+"PO-Revision-Date: 2021-03-30 23:26+0000\n"
 "Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -22198,7 +22198,7 @@ msgstr ""
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1242
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
-msgstr ""
+msgstr "Abrir/Quicken Financial Exchange file (*.ofx, *.qfx)"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1247
 #, fuzzy
@@ -23402,7 +23402,7 @@ msgstr "El fichero de la plantilla «~a» no puede leerse"
 
 #: gnucash/report/html-chart.scm:455
 msgid "Load"
-msgstr ""
+msgstr "Cargar"
 
 #: gnucash/report/html-fonts.scm:105 gnucash/report/html-fonts.scm:110
 #: gnucash/report/html-fonts.scm:115 gnucash/report/html-fonts.scm:120

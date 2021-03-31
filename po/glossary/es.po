@@ -8,14 +8,15 @@
 # Pablo <ppicapietra@gmail.com>, 2021.
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
 # Guille <willelopz+weblate@gmail.com>, 2021.
+# Guille Lopez <willelopz@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-20 22:04+0000\n"
-"Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
+"PO-Revision-Date: 2021-03-30 23:26+0000\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "es/>\n"
 "Language: es\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -94,14 +95,12 @@ msgid "account type: Mutual fund"
 msgstr "tipo de cuenta: Fondo de Inversión"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "tipo de cuenta: Activo"
+msgstr "tipo de cuenta: Pasivo"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "tipo de cuenta: Activo"
+msgstr "tipo de cuenta: Ganancias & pérdidas"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -316,9 +315,8 @@ msgid "commodity option: Symbol"
 msgstr "opción de valor: Símbolo"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "interés"
+msgstr "interés compuesto"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -333,9 +331,8 @@ msgid "credit transfer"
 msgstr "transferencia (bancaria)"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
-#, fuzzy
 msgid "credit note"
-msgstr "transferencia (bancaria)"
+msgstr "nota de crédito"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -386,9 +383,8 @@ msgid "Description (column in register)"
 msgstr "Descripción"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
-#, fuzzy
 msgid "discount"
-msgstr "cuenta"
+msgstr "descuento"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -510,9 +506,8 @@ msgid "Lot"
 msgstr "Lote"
 
 #. "Combine two books into one (see book)."
-#, fuzzy
 msgid "merge, to"
-msgstr "recargar"
+msgstr "unir"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
@@ -784,10 +779,8 @@ msgid "tax info"
 msgstr "información sobre impuestos"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "tipo de cuenta: Ingresos"
+msgstr "tipo de cuenta: impuesto sobre la renta"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
