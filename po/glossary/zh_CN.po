@@ -3,14 +3,15 @@
 # Theresa Zhang <theresa7qing@sina.com>, 2021.
 # 小高 <2926295173@qq.com>, 2021.
 # jane <allfortestingwork@outlook.com>, 2021.
+# TianXing Yi <duguqiubailee@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-13 03:02+0000\n"
-"Last-Translator: jane <allfortestingwork@outlook.com>\n"
+"PO-Revision-Date: 2021-03-30 14:26+0000\n"
+"Last-Translator: TianXing Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 # 翻译人员好，这个是不会被最终用户所见的。这是为了您，也就是翻译人员所提供的一个工具。GnuCash 是一个个人或小型企业理财的软件，是一个会计专业性比较强的软件，其中包含了很多的术语。而这里就是针对很多术语的解释。
 # 请大家务必在翻译前先浏览此文件，否则很容易出现翻译不一致的地方。如果有必须修正的术语错误，也请先修改这个文件，然后再修改软件的 po，这样后来的翻译人员就不会犯同样的出错了。请大家在翻译术语的时候，尽量参考国内会计行业术语，以方便专业人士使用。谢谢！
@@ -100,7 +101,7 @@ msgstr "科目类型：投资基金"
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
-msgstr "科目类型：被动"
+msgstr "科目类型：固定"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
@@ -111,7 +112,7 @@ msgstr "科目类型：收益和损耗"
 # 2. (英国) 任何比现金流账户或存款账户利息更高的银行账户
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr "科目类型：储蓄存款"
+msgstr "科目类型：定期存款"
 
 #. "-"
 msgid "account type: Stock"
@@ -201,7 +202,7 @@ msgstr "操作：回扣"
 
 #. "-"
 msgid "action: sell"
-msgstr "操作：出售"
+msgstr "操作：销售"
 
 #. "-"
 msgid "action: Teller"
@@ -218,7 +219,7 @@ msgstr "操作：电汇"
 
 #. "-"
 msgid "action: withdraw"
-msgstr "操作：取款"
+msgstr "操作：提现"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
@@ -276,7 +277,7 @@ msgstr "账单所有人"
 # http://en.wikipedia.org/wiki/Net_30
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
-msgstr "结算条款"
+msgstr "帐期"
 
 # 包含了 GnuCash 中所有的实体结合(科目等)的数据集。是对一个企业的财务会计工作的书面记录。
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
@@ -340,17 +341,17 @@ msgstr "商品"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr "商品上市"
+msgstr "商品清单"
 
 # 交易的最小量(如1/100美元，又如对大多数股票而言的一股)
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr "商品期权：最小单位"
+msgstr "商品选项：最小单位"
 
 # 如，USD、DEM
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr "商品期权：代码"
+msgstr "商品选项：符号"
 
 # 借钱的费用，或者对某人的投资所支付的费用
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
@@ -376,7 +377,7 @@ msgstr "转账"
 # 直接从一个银行账户转到另一个银行账户，而不使用支票。
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
 msgid "credit note"
-msgstr "信用证"
+msgstr "信用票据"
 
 # 一个国家内使用的金钱
 #. "The system of money used in a country"
@@ -599,7 +600,6 @@ msgstr "标记"
 
 # 散点图用于标记每一个数据点的东西
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
 msgstr "标记"
 
@@ -622,18 +622,14 @@ msgstr "抵押贷款"
 # (a) 从银行借钱用于买房或其它的财产，并且财产被抵押的协议。
 # (b) 用此种方式借钱的数额
 #. "Adjustable Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "抵押贷款"
+msgstr "浮动利率抵押贷款"
 
 # (a) 从银行借钱用于买房或其它的财产，并且财产被抵押的协议。
 # (b) 用此种方式借钱的数额
 #. "Fixed Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "抵押贷款"
+msgstr "固定利率抵押贷款"
 
 # 如 USD, DEM, CNY, 见货币
 #. "e.g. USD, DEM, see Currency."
@@ -697,7 +693,7 @@ msgstr "孤立的"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "所有者"
 
 # 用于访问用户账户所需要知道的秘密用语。
 #. "A secret phrase that one needs to know in order to get access to a user account "
@@ -737,9 +733,8 @@ msgstr "投资组合"
 
 # 结束应用程序与一个打开文件的关系，这样应用程序除非再次打开它，否则将不能够访问文件内容。
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "关闭"
+msgstr "归档"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
@@ -747,9 +742,8 @@ msgstr "首选项"
 
 # 见：支付一
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "操作：支付"
+msgstr "支付本金"
 
 # 用以购买或出售某物的金额
 #. "An amount of money for which sth may be bought or sold"
@@ -805,7 +799,7 @@ msgstr "账簿"
 # 将交易拆分成两个或多个部分
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "账簿条目：拆分交易(拆分成子交易)"
+msgstr "账簿条目：拆分交易"
 
 #. "-"
 msgid "register entry: stock split"
@@ -838,11 +832,11 @@ msgstr "重新加载"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "报表：双栏报表"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "报表：单栏报表"
 
 # 一个所有者权益科目的名字，以区别开期初余额。“留存收益包括盈余公积和未分配利润 ” -- http://www.hudong.com/wiki/%E7%95%99%E5%AD%98%E6%94%B6%E7%9B%8A
 # Retained Losses = Accumulated losses, 所以翻译为累积亏损。
@@ -857,7 +851,7 @@ msgstr "反向交易至 (账簿中的操作)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "营业额"
 
 # 写入数据(通常是一个文件)到存储介质，比如磁盘或磁带。
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
@@ -911,9 +905,8 @@ msgstr "小计"
 
 # 科目的一个字段
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "税务信息"
+msgstr "税务编号"
 
 # 科目的一个字段
 #. "field of an account"
@@ -921,10 +914,8 @@ msgid "tax info"
 msgstr "税务信息"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "科目类型：收入"
+msgstr "税务类型：所得税"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
@@ -932,7 +923,7 @@ msgstr "税务类型：销售税"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "商品及服务税"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
@@ -1025,7 +1016,7 @@ msgstr "价格(在子交易中)"
 # 在小型公司会计中：一个销售物品并提供货物的人或公司
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
-msgstr "厂商"
+msgstr "供应商"
 
 # 在 GnuCash 中，术语“凭证”和“支出凭证”是可以替换使用的。实际上，“支出凭证”有一点用词不当，在 GnuCash 中更像“支出报表”。这个意思是由雇员开支的一个支出清单，并且公司将会报销它们。
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
