@@ -39,7 +39,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-29 14:26+0000\n"
+"PO-Revision-Date: 2021-03-30 14:26+0000\n"
 "Last-Translator: Katerina <katerina.gakou@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
@@ -253,21 +253,20 @@ msgid "Ukrainian (KOI8-U)"
 msgstr "Ουκρανικά (KOI8-U)"
 
 #: borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (Ουκρανικά)"
+msgstr "Ουκρανικά (MacUkrainian)"
 
 #: borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr "Αγγλικά"
+msgstr "Αγγλικά (ASCII)"
 
 #: borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr "Φάρσι (MacFarsi)"
+msgstr "Φαρσί (MacFarsi)"
 
 #: borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr "Γεωργιανή (GEOSTD8)"
+msgstr "Γεωργιανά (GEOSTD8)"
 
 #: borrowed/goffice/go-charmap-sel.c:167
 msgid "Greek (ISO-8859-7)"

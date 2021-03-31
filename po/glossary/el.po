@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-29 14:26+0000\n"
+"PO-Revision-Date: 2021-03-30 14:26+0000\n"
 "Last-Translator: Katerina <katerina.gakou@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
@@ -414,9 +414,8 @@ msgid "equity statement"
 msgstr "κατάσταση μεταβολών ιδίων κεφαλαίων"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
-#, fuzzy
 msgid "escrow (account)"
-msgstr "προσωρινά"
+msgstr "μεσεγγύηση (λογαριασμός)"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -594,9 +593,8 @@ msgid "opening balance"
 msgstr "Σφάλμα ανοίγματος αρχείου"
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
-#, fuzzy
 msgid "options"
-msgstr "επιλογές:\n"
+msgstr "επιλογές"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
@@ -613,26 +611,23 @@ msgstr ""
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
-msgstr ""
+msgstr "φράση πρόσβασης"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
 msgstr ""
 
 #. "A person to whom sth is paid"
-#, fuzzy
 msgid "payee"
-msgstr "σελίδα"
+msgstr "δικαιούχος"
 
 #. "A person who pays or who has to pay for sth"
-#, fuzzy
 msgid "payer"
-msgstr "Στρώμα"
+msgstr "πληρωτής"
 
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
-#, fuzzy
 msgid "payment"
-msgstr "πατρικά"
+msgstr "πληρωμή"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
@@ -765,18 +760,16 @@ msgstr "Η περιγραφή περιέχει"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "πωλήσεις"
 
 #
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
-#, fuzzy
 msgid "save, to (to a file)"
-msgstr "Αποθήκευση της αναφοράς σε αρχείο"
+msgstr "αποθήκευση (σε αρχείο)"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
-#, fuzzy
 msgid "Scheduled Transaction"
-msgstr "Διενέργειες"
+msgstr "Προγραμματισμένη Συναλλαγή"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
