@@ -10,8 +10,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-31 04:26+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2021-03-31 14:26+0000\n"
+"Last-Translator: TianXing Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -106,7 +106,7 @@ msgstr "科目类型：固定"
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr "科目类型：收益和损耗"
+msgstr "科目类型：损益"
 
 # 1. (美国) 任何赚取利息的账户类型
 # 2. (英国) 任何比现金流账户或存款账户利息更高的银行账户
@@ -271,7 +271,7 @@ msgstr "账单"
 # http://en.wikipedia.org/wiki/Net_30
 #. "see invoice owner"
 msgid "bill owner"
-msgstr "账单所有人"
+msgstr "账单所有者"
 
 # 支付款额的条件。发票和账单都有结算条款。比如，您可以有“条款”：“Net-30”，既账单30天后到期。
 # http://en.wikipedia.org/wiki/Net_30
@@ -461,7 +461,7 @@ msgstr "电子邮件"
 # 为某个人或者某个公司工作并且赚取薪金的人
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr "雇员"
+msgstr "职员"
 
 # "equity" 翻译为 "所有者权益"。这个词我找不到中文合适的意思，大家可以帮忙想一下。它的定义可以参考[http://www.investopedia.com/terms/e/equity.asp] 以及[http://en.wikipedia.org/wiki/Ownership_equity]。它不是专指投资中的净资产，它在 GnuCash 中包含了一个"期初余额"的子科目，用以记录账目开始时的各个账上的余额。我最后选择了[http://www.chinesetax.com.cn/acc/gedikuaijizixun/200508/243623.html]中所说的 "所有者权益类账户"的翻译。也许不对，如果有懂会计的，可以告知一下国内的术语是什么？
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
@@ -512,7 +512,7 @@ msgstr "财务报表"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr "免费软件"
+msgstr "开源软件"
 
 # 财富的增长；利润；利益 (见：资本收益)
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
@@ -550,7 +550,7 @@ msgstr "发票"
 # 在商业会计中：任务是一个你可以将同一个客户或厂商的多个发票或账单合起来的一种机制。任务描述了订购过程中一(大)块工作或任务，会处理它的一个或多个发票或账单。
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
-msgstr "任务"
+msgstr "项目"
 
 # 银行、商业公司等中的账本，用以记录其财务账目
 #. "A book in which a bank, business firm, etc. records its financial accounts"
@@ -570,7 +570,7 @@ msgstr "贷款"
 # 从银行借的钱的数额。
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
 msgid "loan: APR"
-msgstr "年百分利率"
+msgstr "年利率"
 
 # 在商业活动中损失的资金
 #. "The money lost in business activity"
@@ -734,7 +734,7 @@ msgstr "投资组合"
 # 结束应用程序与一个打开文件的关系，这样应用程序除非再次打开它，否则将不能够访问文件内容。
 #. "Register invoice, voucher in account register"
 msgid "post, to"
-msgstr "归档"
+msgstr "入帐"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
@@ -861,7 +861,7 @@ msgstr "保存"
 # 在某个特定的时间可以自动执行的一笔交易或一笔交易的提醒。它可以执行一次、或者按照固定间隔执行多次。
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 msgid "Scheduled Transaction"
-msgstr "计划的交易"
+msgstr "计划交易"
 
 # 【已废弃】在一个科目树中修复不平衡的交易和孤立的子交易。任何借方不等于贷方的交易，会得到一个用于平衡的子交易(指向一个特殊的新科目，名为“不平衡”)。任何子交易如果没有所属科目都会被放进另一个特殊的科目，名为“孤立的”。
 # 现已废弃，使用术语“检查和修复”。
@@ -919,7 +919,7 @@ msgstr "税务类型：所得税"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr "税务类型：销售税"
+msgstr "税务类型：营业税"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
@@ -927,7 +927,7 @@ msgstr "商品及服务税"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr "税务类型：增值税（VAT）"
+msgstr "税务类型：增值税"
 
 # 如果您创建一个新样式表，您可以从模板开始。
 #. "If you create a new e.g. style sheet, you can start from a template."
