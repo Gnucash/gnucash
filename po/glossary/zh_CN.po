@@ -10,8 +10,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-30 14:26+0000\n"
-"Last-Translator: TianXing Yi <duguqiubailee@gmail.com>\n"
+"PO-Revision-Date: 2021-03-31 04:26+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1034,3 +1034,21 @@ msgstr "取款 (在对账对话框)"
 #, fuzzy
 #~ msgid "invoice owner"
 #~ msgstr "发票"
+
+msgid "Open SubAccount"
+msgstr "打开子账户"
+
+msgid "Find Account"
+msgstr "查找科目"
+
+msgid "Invoices Due Reminder"
+msgstr "应收到期提醒"
+
+msgid "Employees Overview"
+msgstr "职员纵览"
+
+msgid "Vendors Overview"
+msgstr "供应商纵览"
+
+msgid "Customers Overview"
+msgstr "客户纵览"
