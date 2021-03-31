@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-30 14:26+0000\n"
+"PO-Revision-Date: 2021-03-31 14:26+0000\n"
 "Last-Translator: Katerina <katerina.gakou@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
@@ -514,9 +514,8 @@ msgstr "παρτίδα"
 
 #
 #. "Combine two books into one (see book)."
-#, fuzzy
 msgid "merge, to"
-msgstr "Ανανέωση"
+msgstr "συγχώνευση"
 
 #. "The thing that the scatter plot uses to mark each data point"
 #, fuzzy
@@ -645,9 +644,8 @@ msgstr "Κλείσιμο καταγραφών"
 
 #
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
-#, fuzzy
 msgid "preferences"
-msgstr "Προτιμήσεις"
+msgstr "προτιμήσεις"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
 #, fuzzy
@@ -659,9 +657,8 @@ msgid "price (in a split)"
 msgstr ""
 
 #. "An ask is an offer to sell, and the price you want to sell at."
-#, fuzzy
 msgid "price type: ask"
-msgstr "Τύπος αρχείου:"
+msgstr "είδος τιμής: ελάχιστη τιμή προσφοράς"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 #, fuzzy
@@ -785,14 +782,12 @@ msgid "Share Balance (register)"
 msgstr ""
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
-#, fuzzy
 msgid "shares"
-msgstr "Διαμοιραζόμενα"
+msgstr "μετοχές"
 
 #. "(often: of a quote) A place from which something comes or is obtained."
-#, fuzzy
 msgid "source"
-msgstr "Πόρος"
+msgstr "πηγή"
 
 #. "One of the two or several parts a transaction is divided into"
 #, fuzzy
@@ -830,23 +825,20 @@ msgstr ""
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "είδος φόρου: ΦΠΑ"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
-#, fuzzy
 msgid "template"
-msgstr "Πρότυπο"
+msgstr "πρότυπο"
 
 #. "see: date range"
-#, fuzzy
 msgid "time period"
-msgstr "ώρα"
+msgstr "χρονική περίοδος"
 
 #
 #. "as abbreviation for Total"
-#, fuzzy
 msgid "Tot"
-msgstr "Πρoς"
+msgstr "Σύνολο"
 
 #. "The full number or amount: total of some balances, of any account's running balance etc."
 msgid "total"
