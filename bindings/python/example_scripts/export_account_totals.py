@@ -52,7 +52,7 @@ def to_string_with_decimal_point_placed(number: GncNumeric):
     if len(nominator) <= point_place:  # prepending zeros if the nominator is too short
         nominator = '0' * (point_place - len(nominator)) + nominator
 
-    return '.'.join([nominator[:-point_place - 1], nominator[-point_place:]])
+    return '.'.join([nominator[:-point_place], nominator[-point_place:]])
 
 
 if __name__ == '__main__':
