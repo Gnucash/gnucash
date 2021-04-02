@@ -110,7 +110,6 @@
 (define gnc:html-document-set-headline! html-document-set-headline)
 (define gnc:html-document-headline html-document-headline)
 (define gnc:html-document-set-style-sheet! html-document-set-style-sheet)
-(define gnc:html-document-set-style-sheet! html-document-set-style-sheet)
 (define gnc:html-document-style-sheet html-document-style-sheet)
 (define gnc:html-document-set-style-stack! html-document-set-style-stack)
 (define gnc:html-document-style-stack html-document-style-stack)

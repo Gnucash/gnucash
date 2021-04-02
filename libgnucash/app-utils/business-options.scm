@@ -93,14 +93,6 @@
   ;; Access fancy date info from key-value pairs for current book
  (gnc:option-get-value book gnc:*business-label* (list gnc:*fancy-date-label* key)))
 
-
-
-(define (gnc:options-fancy-date book)
-  (let ((date-format (gnc:fancy-date-info book gnc:*fancy-date-format*)))
-    (if (boolean? date-format) ;; date-format does not exist
-        (qof-date-format-get-string (qof-date-format-get))
-       date-format)))
-
 (define (gnc:make-invoice-option
 	 section
 	 name
