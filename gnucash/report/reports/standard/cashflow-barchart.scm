@@ -152,7 +152,6 @@
                                optname-accounts))
          (include-trading-accounts (get-option gnc:pagename-accounts
                                                optname-include-trading-accounts))
-         (row-num 0)
          (work-done 0)
          (work-to-do 0)
          (report-currency (get-option gnc:pagename-general
@@ -188,16 +187,11 @@
                                    gnc:optname-reportname))
 
          (doc (gnc:make-html-document))
-         (table (gnc:make-html-table))
-         (txt (gnc:make-html-text))
          (chart (gnc:make-html-chart))
          (non-zeros #f))
 
     (if (not (null? accounts))
-        (let* ((money-diff-collector (gnc:make-commodity-collector))
-               (account-disp-list '())
-               (time-exchange-fn #f)
-               (commodity-list (gnc:accounts-get-commodities
+        (let* ((commodity-list (gnc:accounts-get-commodities
                                 accounts
                                 report-currency))
                ;; Get an exchange function that will convert each transaction using the
@@ -209,7 +203,6 @@
                (date-string-list (map (lambda (date-list-item)       ; date-list-item is (start . end)
                                         (qof-print-date (car date-list-item)))
                                       dates-list))
-               (results-by-date '())
                (in-list '())
                (out-list '())
                (net-list '())

@@ -401,8 +401,7 @@
               (let ((barchart (gnc:make-html-chart))
                     (height (get-option gnc:pagename-display optname-plot-height))
                     (width (get-option gnc:pagename-display optname-plot-width))
-                    (col-labels '())
-                    (col-colors '()))
+                    (col-labels '()))
                 (if (memq 'AvgBalPlot plot-type)
                     (let
                         ((number-data
@@ -455,7 +454,6 @@
                        barchart (gnc-commodity-get-nice-symbol report-currency))
 
                       (gnc:html-chart-set-data-labels! barchart col-labels)
-                      ;; (gnc:html-barchart-set-col-colors! barchart col-colors)
                       (gnc:html-chart-set-data-labels! barchart (map car data))
                       ;; (gnc:html-chart-set-row-labels-rotated?! barchart #t)
                       (gnc:html-chart-set-width! barchart width)

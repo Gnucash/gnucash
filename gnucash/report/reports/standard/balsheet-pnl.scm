@@ -179,7 +179,6 @@ also show overall period profit & loss."))
 ;; options generator
 (define (multicol-report-options-generator report-type)
   (let* ((options (gnc:new-options))
-         (book (gnc-get-current-book))
          (add-option
           (lambda (new-option)
             (gnc:register-option options new-option))))
@@ -1193,8 +1192,6 @@ also show overall period profit & loss."))
                 (let ((datepair (col-idx->datepair col-idx))
                       (show-orig? (and common-currency #t))
                       (curr (or common-currency book-main-currency))
-                      (delta (or (not (eq? incr 'disabled)) 'MonthDelta))
-                      (price (or price-source 'pricedb-nearest))
                       (accts (if (pair? account) account (list account))))
                   (gnc:make-report-anchor
                    trep-uuid report-obj

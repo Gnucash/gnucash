@@ -46,7 +46,6 @@
 (define optname-show-subaccounts (N_ "Always show sub-accounts"))
 (define optname-accounts (N_ "Account"))
 
-(define optname-select-columns (N_ "Select Columns"))
 (define optname-show-budget (N_ "Show Budget"))
 (define opthelp-show-budget (N_ "Display a column for the budget values."))
 (define optname-show-notes (N_ "Show Budget Notes"))

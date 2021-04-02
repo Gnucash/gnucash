@@ -39,8 +39,6 @@
 (define optname-to-date (N_ "To"))
 (define optname-sort-by (N_ "Sort By"))
 (define optname-sort-order (N_ "Sort Order"))
-(define optname-report-currency (N_ "Report's currency"))
-(define optname-price-source (N_ "Price Source"))
 (define optname-show-zeros (N_ "Show zero balance items"))
 (define optname-date-driver (N_ "Due or Post Date"))
 

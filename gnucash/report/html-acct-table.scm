@@ -777,8 +777,6 @@
                (display-depth (get-val orig-env 'display-depth))
                (depth-limit (get-val orig-env 'display-tree-depth))
                (indent (get-val orig-env 'initial-indent))
-               (indented-depth (get-val orig-env 'indented-depth))
-               (subtotal-mode (get-val orig-env 'parent-account-subtotal-mode))
                (label-cols (+ disp-depth-reached 1))
                ;; these parameters *should* always, by now, be set...
                (new-env
@@ -954,7 +952,6 @@
 		  (logical-cols (get-val env 'logical-cols))
 		  (display-depth (get-val env 'display-depth))
 		  (display-tree-depth (get-val env 'display-tree-depth))
-		  (subtotal-mode (get-val env 'subtotal-mode))
 		  (row-type (get-val env 'row-type))
 		  (rule-mode (and (equal? row-type 'subtotal-row)
 				  (get-val env 'rule-mode)))
