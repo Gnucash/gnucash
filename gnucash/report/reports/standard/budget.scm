@@ -236,7 +236,7 @@
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-notes
-      "s15" opthelp-show-budget #t))
+      "s15" opthelp-show-notes #t))
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-actual
