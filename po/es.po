@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-30 23:26+0000\n"
+"PO-Revision-Date: 2021-04-02 23:26+0000\n"
 "Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -3705,9 +3705,8 @@ msgid "_New Budget"
 msgstr "_Nuevo presupuesto"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
-#, fuzzy
 msgid "Create a new Budget."
-msgstr "Crea un presupuesto nuevo"
+msgstr "Crear un presupuesto nuevo"
 
 # Menú
 #: gnucash/gnome/gnc-plugin-budget.c:69
@@ -4506,12 +4505,11 @@ msgid "Esti_mate Budget..."
 msgstr "Estimar Presupuesto"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
-#, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions."
 msgstr ""
-"Estimar la cantidad a presupuestar para las cuentas seleccionadas desde "
-"transacciones anteriores"
+"Estimar la cantidad a presupuestar para las cuentas seleccionadas a partir "
+"de transacciones anteriores."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
 #, fuzzy
@@ -4519,19 +4517,17 @@ msgid "_All Periods..."
 msgstr "Periodo"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
-#, fuzzy
 msgid "Edit budget for all periods for the selected accounts."
-msgstr "Edita la cuenta seleccionada"
+msgstr ""
+"Editar el presupuesto para todos los períodos de las cuentas seleccionadas."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:181
-#, fuzzy
 msgid "Edit Note"
-msgstr "Anotación Crediticia"
+msgstr "Editar nota"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
 msgid "Edit note for the selected account and period."
-msgstr "Edita la cuenta seleccionada"
+msgstr "Editar nota para la cuenta y período seleccionados."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
@@ -4539,15 +4535,12 @@ msgid "Budget Report"
 msgstr "Boletín Presupuestario"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report."
-msgstr "Escribe el boletín efectivo"
+msgstr "Ejecutar el informe de presupuesto."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
-#, fuzzy
 msgid "Refresh this window."
-msgstr "Actualizar esta ventana"
+msgstr "Actualizar esta ventana."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:222
 #: gnucash/gnome/gnc-plugin-page-report.c:1137
@@ -4562,9 +4555,8 @@ msgid "Estimate"
 msgstr "Estimar"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:224
-#, fuzzy
 msgid "All Periods"
-msgstr "Periodo"
+msgstr "Todos los períodos"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:225
 #, fuzzy
@@ -4572,10 +4564,8 @@ msgid "Note"
 msgstr "Anotaciones"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:226
-#, fuzzy
-#| msgid "Account Report"
 msgid "Run Report"
-msgstr "Boletín de Cuenta"
+msgstr "Ejecutar informe"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:310
 #: gnucash/gnome/gnc-plugin-page-budget.c:351
@@ -4603,14 +4593,12 @@ msgid "You must select at least one account to estimate."
 msgstr "Debe seleccionar al menos una cuenta a estimar."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:1154
-#, fuzzy
 msgid "You must select at least one account to edit."
-msgstr "Debe seleccionar al menos una cuenta a estimar."
+msgstr "Debe seleccionar al menos una cuenta a editar."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:1252
-#, fuzzy
 msgid "You must select one budget cell to edit."
-msgstr "Debe seleccionar al menos una cuenta a estimar."
+msgstr "Debe seleccionar al menos una celda del presupuesto a editar."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:109
 msgid "Sort _Order"
@@ -4996,9 +4984,8 @@ msgstr ""
 "página actual de acorde a ello"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:394
-#, fuzzy
 msgid "Make a printable bill"
-msgstr "Crea una factura escribible"
+msgstr "Crear una factura imprimible"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:395
 #, fuzzy
@@ -5111,14 +5098,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:436
-#, fuzzy
 msgid "Make a printable credit note"
-msgstr "Crea una factura escribible"
+msgstr "Crear una nota de crédito imprimible"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:437
-#, fuzzy
 msgid "Edit this credit note"
-msgstr "Editar Anotación Crediticia"
+msgstr "Editar esta nota de crédito"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:438
 #, fuzzy
@@ -10493,8 +10478,9 @@ msgid "Output file for report\n"
 msgstr "Mosaico de fondo para boletines."
 
 #: gnucash/gnucash-cli.cpp:132
+#, fuzzy
 msgid "Unknown quotes command '{1}'"
-msgstr ""
+msgstr "Comando de «quotes» desconocido '{1}'"
 
 #: gnucash/gnucash-cli.cpp:139 gnucash/gnucash-cli.cpp:153
 #: gnucash/gnucash.cpp:367
@@ -10510,9 +10496,8 @@ msgid "Unknown report command '{1}'"
 msgstr "Comando de informe desconocido '{1}'"
 
 #: gnucash/gnucash-cli.cpp:191
-#, fuzzy
 msgid "Missing command or option"
-msgstr "Esta es una opción de color."
+msgstr "Falta un comando u opción"
 
 #: gnucash/gnucash-commands.cpp:91
 #, fuzzy
@@ -10555,9 +10540,8 @@ msgid "GnuCash {1}"
 msgstr "GnuCash "
 
 #: gnucash/gnucash-core-app.cpp:486
-#, fuzzy
 msgid "GnuCash {1} development version"
-msgstr "GnuCash %s versión de desarrollo"
+msgstr "GnuCash {1}, versión de desarrollo"
 
 #: gnucash/gnucash-core-app.cpp:514
 #, fuzzy
@@ -13574,9 +13558,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:201
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:191
-#, fuzzy
 msgid "<b>Load and Save Settings</b>"
-msgstr "<b>Cargar y Guardar Opciones</b>"
+msgstr "<b>Cargar y guardar ajustes</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:249
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:238
@@ -13987,10 +13970,9 @@ msgstr "<b>Descripción de la categoría</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:384
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Accounts in %s"
-msgstr "Cuentas en «%s»"
+msgstr "Cuentas en %s"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:477
 msgid ""
@@ -14017,9 +13999,8 @@ msgstr ""
 "renombradas, movidas o eliminadas a mano en cualquier momento."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:507
-#, fuzzy
 msgid "GnuCash Account Template Wiki"
-msgstr "Nombre de Cuenta GnuCash"
+msgstr "Wiki de plantillas de cuentas de Gnucash"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:522
 msgid "Choose accounts to create"
@@ -18655,9 +18636,8 @@ msgid "_Next"
 msgstr "Siguiente"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:95
-#, fuzzy
 msgid "<b>Tip of the Day</b>"
-msgstr "<b>Consejo del día:</b>"
+msgstr "<b>Consejo del día</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:145
 msgid "_Show tips at startup"
@@ -21083,9 +21063,8 @@ msgstr ""
 "importación. Modifíquelo de acuerdo a sus necesidades.\n"
 
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:58
-#, fuzzy
 msgid "Import Bills & _Invoices..."
-msgstr "Importar Recibos y Facturas…"
+msgstr "Importar Recibos y _Facturas…"
 
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:58
 msgid "Import bills and invoices from a CSV text file"
@@ -22195,6 +22174,8 @@ msgstr "Cuenta OFX de inversión desconocida"
 msgid ""
 "OFX file '%s' imported, %d transactions processed, no transactions to match"
 msgstr ""
+"El archivo OFX '%s' fue importado, %d transacciones procesadas, no hay "
+"transacciones coincidentes"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1242
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -23142,10 +23123,9 @@ msgstr "12/12/2000"
 #: gnucash/register/ledger-core/split-register-layout.c:671
 msgctxt "sample"
 msgid "99999"
-msgstr ""
+msgstr "99999"
 
 #: gnucash/register/ledger-core/split-register-layout.c:679
-#, fuzzy
 msgctxt "sample"
 msgid "Description of a transaction"
 msgstr "Descripción de una transacción"
@@ -24840,9 +24820,8 @@ msgid "A sample report with examples."
 msgstr "Un boletín de muestra con varios ejemplos."
 
 #: gnucash/report/reports/example/sample-graphs.scm:42
-#, fuzzy
 msgid "Sample Graphs"
-msgstr "Muestra"
+msgstr "Gráficos de ejemplo"
 
 #: gnucash/report/reports/example/sample-graphs.scm:142
 msgid "Pie:"
@@ -25854,9 +25833,8 @@ msgid "** this commodity has no price and a price of 1 has been used."
 msgstr "** esta mercancía no tiene precio y un precio de 1 ha sido utilizado."
 
 #: gnucash/report/reports/standard/balance-forecast.scm:35
-#, fuzzy
 msgid "Balance Forecast"
-msgstr "Balance a ~a"
+msgstr "Previsión de balance"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:38
 #: gnucash/report/reports/standard/budget-barchart.scm:134
@@ -25886,9 +25864,8 @@ msgid "Show reserve line"
 msgstr "Mostrar informe de receptor"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:55
-#, fuzzy
 msgid "Reserve amount"
-msgstr "Cantidad remitida"
+msgstr "Cantidad reservada"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:56
 msgid "The reserve amount is set to a minimum balance desired"
@@ -26268,13 +26245,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:62
-#, fuzzy
 msgid "Period duration"
-msgstr "Inicio de período"
+msgstr "Duración del periodo"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:63
 msgid "Duration between time periods"
-msgstr ""
+msgstr "Duración entre períodos de tiempo"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:65
 #: gnucash/report/reports/standard/balsheet-pnl.scm:66
@@ -26338,9 +26314,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:102
-#, fuzzy
 msgid "Display amounts as hyperlinks"
-msgstr "Enseñar cuentas como hipervínculos"
+msgstr "Mostrar cantidades como hipervínculos"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:103
 #, fuzzy
@@ -26454,9 +26429,8 @@ msgstr "_Pasivo/Patrimonio"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1155
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1300
-#, fuzzy
 msgid "Exchange Rates"
-msgstr "Tipo de cambio:"
+msgstr "Tipos de cambio"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1165
 #: gnucash/report/reports/standard/budget-barchart.scm:157
@@ -27158,10 +27132,8 @@ msgid "Maximum number of stacks in the chart."
 msgstr "Número máximo de pilas en el diagrama."
 
 #: gnucash/report/reports/standard/category-barchart.scm:290
-#, fuzzy
-#| msgid "Invalid Transactions"
 msgid "Invalid dates"
-msgstr "Transacciones Inválidas"
+msgstr "Fechas inválidas"
 
 #: gnucash/report/reports/standard/category-barchart.scm:291
 msgid "Start date must be earlier than End date"
@@ -27184,9 +27156,8 @@ msgstr "Saldo"
 
 #: gnucash/report/reports/standard/category-barchart.scm:676
 #: gnucash/report/reports/standard/net-charts.scm:466
-#, fuzzy
 msgid "No exportable data"
-msgstr "Boletín de Ejercicio"
+msgstr "Sin datos exportables"
 
 #: gnucash/report/reports/standard/customer-summary.scm:52
 msgid "The income accounts where the sales and income was recorded."
@@ -27706,20 +27677,17 @@ msgstr ""
 "tipo PASIVO para imposiciones recogidas en ventas."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:161
-#, fuzzy
 msgid "Report format"
-msgstr "Escojaformato de exportación"
+msgstr "Formato del informe"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:162
-#, fuzzy
 msgid "Report Format"
-msgstr "Comunicar error"
+msgstr "Formato del informe"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:164
 #: gnucash/report/reports/standard/income-gst-statement.scm:165
-#, fuzzy
 msgid "Default Format"
-msgstr "Tipo de _letra predeterminada"
+msgstr "Formato predeterminado"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:167
 msgid "Australia BAS"
@@ -27885,6 +27853,9 @@ msgid ""
 "CSS code. This field specifies the CSS code for styling the invoice. Please "
 "see the exported report for the CSS class names."
 msgstr ""
+"Código CSS. Este campo especifica el código CSS que da estilo a la factura. "
+"Por favor, inspeccione el informe exportado para encontrar los nombres de "
+"las clases CSS."
 
 #: gnucash/report/reports/standard/invoice.scm:207
 msgid "Picture Location"
@@ -28344,14 +28315,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/new-aging.scm:111
-#, fuzzy
 msgid "Alphabetical order"
-msgstr "Alfabético"
+msgstr "Orden alfabético"
 
 #: gnucash/report/reports/standard/new-aging.scm:112
-#, fuzzy
 msgid "Reverse alphabetical order"
-msgstr "_Revertir operación"
+msgstr "Invertir orden alfabético"
 
 #: gnucash/report/reports/standard/new-aging.scm:343
 #: gnucash/report/reports/standard/new-owner-report.scm:546
@@ -28362,7 +28331,7 @@ msgstr "Rango de fechas de transacciones a obtener:"
 #: gnucash/report/reports/standard/new-aging.scm:376
 #, scheme-format
 msgid "Invalid Txn Type ~a"
-msgstr ""
+msgstr "Tipo TXN inválido ~a"
 
 #: gnucash/report/reports/standard/new-aging.scm:386
 #, fuzzy
@@ -28466,7 +28435,7 @@ msgstr "Enlace a lote"
 #: gnucash/report/reports/standard/new-owner-report.scm:349
 #, scheme-format
 msgid "~a History"
-msgstr ""
+msgstr "Historial de ~a"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:351
 #, fuzzy
@@ -28511,9 +28480,8 @@ msgid "Display a running balance?"
 msgstr "¿Enseñar un balance efectivo?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:947
-#, fuzzy
 msgid "Show linked transactions"
-msgstr "Mostrar únicamente transacciones vacías."
+msgstr "Mostrar transacciones asociadas"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:950
 #, fuzzy
@@ -28555,9 +28523,8 @@ msgid "This report requires a valid AP/AR account to be available."
 msgstr "Este boletín requiere una cuenta válida para ser seleccionada."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1111
-#, fuzzy
 msgid "No transactions found."
-msgstr "No se han encontrado transacciones cotejadas"
+msgstr "No se han encontrado transacciones."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1112
 #: gnucash/report/trep-engine.scm:130
@@ -28664,10 +28631,8 @@ msgid "Quarters"
 msgstr "Trimestre"
 
 #: gnucash/report/reports/standard/price-scatter.scm:144
-#, fuzzy
-#| msgid "Half Year"
 msgid "Half Years"
-msgstr "Semestre"
+msgstr "Semestres"
 
 #: gnucash/report/reports/standard/price-scatter.scm:239
 msgid "Identical commodities"
@@ -29555,9 +29520,8 @@ msgid "&lt;/style is disallowed in CSS. Using default CSS."
 msgstr "&lt;/style no está permitido en CSS. Usando CSS predeterminado."
 
 #: gnucash/report/stylesheets/css.scm:228
-#, fuzzy
 msgid "CSS-based stylesheet (experimental)"
-msgstr "Estilo de texto del libro (experimental)"
+msgstr "Hoja de estilo basada en CSS (experimental)"
 
 #: gnucash/report/stylesheets/footer.scm:55
 #: gnucash/report/stylesheets/head-or-tail.scm:53
@@ -30310,12 +30274,16 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:647
 msgid "If this option is selected, transactions matching filter are excluded."
 msgstr ""
+"Si selecciona esta opción, los filtros de coincidencia de transacciones "
+"serán excluidos."
 
 #: gnucash/report/trep-engine.scm:654
 msgid ""
 "If this option is selected, transactions matching filter is not case "
 "sensitive."
 msgstr ""
+"Si selecciona esta opción, el filtro de coincidencia de transacciones no es "
+"sensible a mayúsculas y minúsculas."
 
 #: gnucash/report/trep-engine.scm:660
 msgid "Filter by reconcile status."
