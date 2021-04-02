@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-04-01 07:26+0000\n"
+"PO-Revision-Date: 2021-04-02 09:26+0000\n"
 "Last-Translator: TianXing Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
@@ -337,21 +337,21 @@ msgstr "关闭"
 # 一种是购买和出售的物品。是关于账上一直跟踪的东西的最常用的词语。比如货币或股票。
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "商品"
+msgstr "货币"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr "商品清单"
+msgstr "货币清单"
 
 # 交易的最小量(如1/100美元，又如对大多数股票而言的一股)
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr "商品选项：最小单位"
+msgstr "货币选项：最小单位"
 
 # 如，USD、DEM
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr "商品选项：符号"
+msgstr "货币选项：符号"
 
 # 借钱的费用，或者对某人的投资所支付的费用
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
