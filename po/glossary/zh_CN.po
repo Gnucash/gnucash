@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-04-02 09:26+0000\n"
+"PO-Revision-Date: 2021-04-03 15:26+0000\n"
 "Last-Translator: TianXing Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
@@ -634,7 +634,7 @@ msgstr "固定利率抵押贷款"
 # 如 USD, DEM, CNY, 见货币
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
-msgstr "国家货币"
+msgstr "本位币"
 
 # 刨去所有将要支出的剩下的(资金)。
 #. "(of money) remaining when nothing more is to be taken away"
@@ -649,22 +649,22 @@ msgstr "净资产"
 # 对某一段时间内的收入合计减去支出合计。
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
-msgstr "纯利润"
+msgstr "净利润"
 
 # 您的资本净值是指您的资本减去您的负债。如果您的科目已结帐，您的资本净值应等于您的所有者权益加上您的净利润。
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr "资本净值"
+msgstr "资产净值"
 
 # 每个记录都有的一个文本字段，用以放说明交易的信息。
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
-msgstr "说明"
+msgstr "说明（交易事项）"
 
 # 编号；交易中的一个字段。如果这笔交易是通过支票的，那么支票编号应该记在这个区域里。
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr "编号 (账簿中的一栏)"
+msgstr "编号 (交易事项)"
 
 # 进行访问
 #. "to make accessible"
@@ -703,7 +703,7 @@ msgstr "密码"
 # 必须支付的金额 或 应该受到但是现在还没收到的金额
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
-msgstr "应付账款/应收账款"
+msgstr "应付/应收"
 
 # 支付给的某人
 #. "A person to whom sth is paid"
@@ -748,17 +748,17 @@ msgstr "支付本金"
 # 用以购买或出售某物的金额
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
-msgstr "价格 (在子交易中)"
+msgstr "金额"
 
 # 开价是对要出售的物品报出价格，既你希望销售的价位
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
-msgstr "价格类型：开价"
+msgstr "价格类型：问价"
 
 # 出价是对要购买的物品报出价格，既你希望购买的价位
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr "价格类型：出价"
+msgstr "价格类型：投标"
 
 # 网上报价。既一个关于股票、商品的当前价格的表
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
@@ -847,7 +847,7 @@ msgstr "留存收益"
 # 创建一个新交易，它与老的交易正好相反。当您把两个交易加在一起的时候，它们会完全抵消。账目中这么使用，而不是使交易无效，通常是因为前一个月已经结帐了，不能够再进行任何修改了，或者会计系统为“只可写入，不可修改”类型。
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
-msgstr "反向交易至 (账簿中的操作)"
+msgstr "红冲(交易事项中的操作)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
@@ -876,7 +876,7 @@ msgstr "证券"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "股份结余 (账簿)"
+msgstr "股份结余 (交易事项)"
 
 # 一个商业公司的资金被分割为多个等份，任何这一部分会赋予持有者获得利益的一部分。
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
@@ -906,7 +906,7 @@ msgstr "小计"
 # 科目的一个字段
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"
-msgstr "税务编号"
+msgstr "税法"
 
 # 科目的一个字段
 #. "field of an account"
@@ -915,19 +915,19 @@ msgstr "税务信息"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 msgid "tax type: income tax"
-msgstr "税务类型：所得税"
+msgstr "税种：所得税"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr "税务类型：营业税"
+msgstr "税种：营业税"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr "商品及服务税"
+msgstr "税种：商品及服务税"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr "税务类型：增值税"
+msgstr "税种：增值税"
 
 # 如果您创建一个新样式表，您可以从模板开始。
 #. "If you create a new e.g. style sheet, you can start from a template."
@@ -937,7 +937,7 @@ msgstr "模板"
 # 见：日期范围
 #. "see: date range"
 msgid "time period"
-msgstr "时间范围"
+msgstr "时间段"
 
 #. "as abbreviation for Total"
 msgid "Tot"
@@ -957,7 +957,7 @@ msgstr "交易"
 # 一个金额已经被移动的交易。这个词汇来自于支票：一张支票开出了，但是在银行账户实际收到钱之前，还必须做一些事情。银行收到钱的时刻，就被称为交易(支票)已结清了。
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "交易状态：已结清"
+msgstr "交易状态：已结算"
 
 #. "-"
 msgid "transaction state: frozen"
@@ -971,7 +971,7 @@ msgstr "交易状态：已对账"
 # 交易是无效的，既不在有效了。
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr "交易状态：无效"
+msgstr "交易状态：作废"
 
 # 1. 传输某种东西
 # 2. 见：银行转帐
@@ -982,17 +982,17 @@ msgstr "转账 (名词)"
 # 转帐金额接收的科目
 #. "The account where an amount is transferred to"
 msgid "transfer account"
-msgstr "转账科目"
+msgstr "收款帐户"
 
 # 将资金从一个科目转到另一个科目。将会创建一个交易。
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr "转账 (账簿工具栏)"
+msgstr "转账 (交易事项表)"
 
 # 试算表是一个工作表，在上面您列出所有您的总分类账科目与它们的借、贷余额。这是一个用于对您账簿中的错误报警的工具。它的总借方必须等于总贷方。如果它们不等，您知道您有一个错误必须追踪修正。
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr "试算表 (报表)"
+msgstr "试算表"
 
 # 具有共同特征的一类事物。科目类型、商业类型等。
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
@@ -1011,7 +1011,7 @@ msgstr "URL"
 # 以资金或其它商品方式体现的某物的价值，因此它可以进行交换。
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr "价格(在子交易中)"
+msgstr "价值"
 
 # 在小型公司会计中：一个销售物品并提供货物的人或公司
 #. "In small business accounting: A person or company that sells items and is supplying goods"
@@ -1025,7 +1025,7 @@ msgstr "凭证"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr "取款 (在对账对话框)"
+msgstr "撤回 (在对账对话框)"
 
 # 一个销售的物品或提供的服务含收费价格的列表。
 # 见：账单
@@ -1036,7 +1036,7 @@ msgstr "取款 (在对账对话框)"
 #~ msgstr "发票"
 
 msgid "Open SubAccount"
-msgstr "打开子账户"
+msgstr "打开交易日记账（只读）"
 
 msgid "Find Account"
 msgstr "查找科目"
