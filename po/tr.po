@@ -9,10 +9,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.4+\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-05 15:50+0000\n"
+"PO-Revision-Date: 2021-04-04 17:26+0000\n"
 "Last-Translator: Ömer Faruk Çakmak <omerfarukckmk@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
@@ -21,13 +21,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.1-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-POOTLE-MTIME: 1497808015.000000\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
-msgstr "TÜM PARABİRİMİ-OLMAYAN"
+msgstr "BÜTÜN PARABİRİMİ-OLMAYAN"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -441,7 +441,7 @@ msgstr "Menü"
 
 #: borrowed/goffice/go-optionmenu.c:336
 msgid "The menu of options"
-msgstr "Seçenek menüsü."
+msgstr "Seçenek menüsü"
 
 #: doc/tip_of_the_day.list.c:1
 msgid ""
@@ -838,7 +838,7 @@ msgstr "sıfır"
 
 #: gnucash/gnome/assistant-hierarchy.c:1116
 msgid "existing account"
-msgstr "varolan hesap"
+msgstr "mevcut hesap"
 
 #: gnucash/gnome/assistant-hierarchy.c:1255
 #: gnucash/gnome/business-gnome-utils.c:564
