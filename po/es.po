@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-04-04 23:26+0000\n"
+"PO-Revision-Date: 2021-04-05 08:26+0000\n"
 "Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -19884,7 +19884,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:802
 msgid "Con_firm Password"
-msgstr "Confirmar contraseña"
+msgstr "Con_firmar contraseña"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:842
 msgid "_Remember the PIN in memory"
