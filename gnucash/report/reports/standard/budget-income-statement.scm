@@ -120,7 +120,6 @@
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define opthelp-show-rates (N_ "Show the exchange rates used."))
 
-(define pagename-entries (N_ "Entries"))
 (define optname-two-column
   (N_ "Display as a two column report"))
 (define opthelp-two-column
@@ -416,10 +415,6 @@
 	 table (* tree-depth 2) "primary-subheading" #f label 0 1 "total-label-cell"
 	 (gnc:sum-collector-commodity balance report-commodity exchange-fn)
 	 (1- (* tree-depth 2)) 1 "total-number-cell")))
-    
-    ;; wrapper around gnc:html-table-append-ruler!
-    (define (add-rule table)
-      (gnc:html-table-append-ruler! table (* 2 tree-depth)))
 
     (cond
      ((null? accounts)

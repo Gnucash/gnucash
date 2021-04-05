@@ -42,7 +42,6 @@
 
 ;; let's define a name for the report-guid's, much prettier
 (define customer-report-guid "4166a20981985fd2b07ff8cb3b7d384e")
-(define owner-report-guid "c146317be32e4948a561ec7fc89d15c1")
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -65,13 +64,6 @@
 (define opthelp-show-column-expense (N_ "Show the column with the expenses per customer."))
 (define optname-show-own-address (N_ "Show Company Address"))
 (define opthelp-show-own-address (N_ "Show your own company's address and the date of printing."))
-
-(define pagename-columndisplay (N_ "Display Columns"))
-(define date-header (N_ "Date"))
-(define reference-header (N_ "Reference"))
-(define type-header (N_ "Type"))
-(define desc-header (N_ "Description"))
-(define amount-header (N_ "Amount"))
 
 ;; The line break in the next expression will suppress above comments as translator comments.
 

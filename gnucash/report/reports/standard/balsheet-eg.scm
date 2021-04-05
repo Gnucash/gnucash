@@ -44,16 +44,6 @@
 (use-modules (srfi srfi-13)) ; for extra string functions
 (use-modules (srfi srfi-9))
 
-(define debugging? #f)
-
-(define (debug . args)
-  (when debugging?
-    (for-each
-     (lambda (arg)
-       (display (if (string? arg) arg (dump arg)))
-       (display " "))
-     args)))
-
 (define (hrule cols) ; in fact just puts in an empty row for spacing
   (display "<tr valign=\"center\"><td colspan=\"")
   (display cols)
