@@ -82,6 +82,13 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="likely_day_threshold">
+    <property name="lower">1</property>
+    <property name="upper">30</property>
+    <property name="value">4</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="match_adj">
     <property name="upper">6</property>
     <property name="step_increment">1</property>
@@ -232,6 +239,13 @@ Press 'Close' to return to the preference window
     <property name="lower">1</property>
     <property name="upper">100</property>
     <property name="value">30</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="unlikely_day_threshold">
+    <property name="lower">1</property>
+    <property name="upper">50</property>
+    <property name="value">14</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -2107,7 +2121,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">7</property>
+                    <property name="top_attach">9</property>
                   </packing>
                 </child>
                 <child>
@@ -2187,7 +2201,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">7</property>
+                    <property name="top_attach">9</property>
                   </packing>
                 </child>
                 <child>
@@ -2265,8 +2279,78 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">8</property>
+                    <property name="top_attach">10</property>
                     <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label26">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Likely match _day threshold</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label27">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">_Unlikely match day threshold</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pref/dialogs.import.generic/match-date-threshold">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">A transaction whose date is within the threshold is likely to be a match. Default is 4 days.</property>
+                    <property name="tooltip_text" translatable="yes">A transaction whose date is within the threshold is likely to be a match. Default is 4 days.</property>
+                    <property name="invisible_char">●</property>
+                    <property name="text">6</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="adjustment">likely_day_threshold</property>
+                    <property name="climb_rate">1</property>
+                    <property name="snap_to_ticks">True</property>
+                    <property name="numeric">True</property>
+                    <property name="value">4</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pref/dialogs.import.generic/match-date-not-threshold">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">A transaction whose date is outside the threshold is unlikely to be a match. Default is 14 days.</property>
+                    <property name="tooltip_text" translatable="yes">A transaction whose date is outside the threshold is unlikely to be a match. Default is 14 days.</property>
+                    <property name="invisible_char">●</property>
+                    <property name="text">6</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="adjustment">unlikely_day_threshold</property>
+                    <property name="climb_rate">1</property>
+                    <property name="snap_to_ticks">True</property>
+                    <property name="numeric">True</property>
+                    <property name="value">14</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">8</property>
                   </packing>
                 </child>
               </object>

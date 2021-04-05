@@ -74,11 +74,17 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
  *
  * @param display_threshold Minimum match score to include split in the list of matches.
  *
+ * @param date_threshold Maximum number of days a match considered likely.
+ *
+ * @param date_not_threshold Minimum number of days a match is considered unlikely.
+ *
  * @param fuzzy_amount_difference Maximum amount difference to consider the match good.
  */
 void split_find_match (GNCImportTransInfo * trans_info,
                        Split * split,
                        gint display_threshold,
+                       gint date_threshold,
+                       gint date_not_threshold,
                        double fuzzy_amount_difference);
 
 /** Iterates through all splits of the originating account of

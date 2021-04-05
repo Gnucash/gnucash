@@ -52,6 +52,10 @@ struct _genimportsettings
     gboolean action_add_enabled;
     gboolean action_clear_enabled;
 
+    /**Transaction who's date is within threshold is likely match */
+    int date_threshold;
+    /**Transaction who's date is outside threshold is an unlikely match */
+    int date_not_threshold;
     /**Transaction who's best match probability is equal or higher than
        this will reconcile their best match by default */
     int clear_threshold;
@@ -94,7 +98,10 @@ gnc_import_Settings_new (void)
         (int)gnc_prefs_get_float (GNC_PREFS_GROUP_IMPORT, GNC_PREF_AUTO_ADD_THRESHOLD);
     settings->display_threshold =
         (int)gnc_prefs_get_float (GNC_PREFS_GROUP_IMPORT, GNC_PREF_MATCH_THRESHOLD);
-
+    settings->date_threshold =
+        (int)gnc_prefs_get_float (GNC_PREFS_GROUP_IMPORT, GNC_PREF_MATCH_DATE_THRESHOLD);
+    settings->date_not_threshold =
+        (int)gnc_prefs_get_float (GNC_PREFS_GROUP_IMPORT, GNC_PREF_MATCH_DATE_NOT_THRESHOLD);
     settings->fuzzy_amount =
         gnc_prefs_get_float (GNC_PREFS_GROUP_IMPORT, GNC_PREF_ATM_FEE_THRESHOLD);
 
@@ -160,11 +167,24 @@ gint gnc_import_Settings_get_display_threshold (GNCImportSettings *settings)
     return settings->display_threshold;
 };
 
+gint gnc_import_Settings_get_date_threshold (GNCImportSettings *settings)
+{
+    g_assert (settings);
+    return settings->date_threshold;
+}
+
+gint gnc_import_Settings_get_date_not_threshold (GNCImportSettings *settings)
+{
+    g_assert (settings);
+    return settings->date_not_threshold;
+}
+
 void gnc_import_Settings_set_match_date_hardlimit (GNCImportSettings *s, gint m)
 {
     g_assert(s);
     s->match_date_hardlimit = m;
 }
+
 gint gnc_import_Settings_get_match_date_hardlimit (const GNCImportSettings *s)
 {
     g_assert(s);
