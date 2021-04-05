@@ -397,6 +397,15 @@ void gnc_ui_util_init (void);
 
 void gnc_ui_util_remove_registered_prefs (void);
 
+/** Returns the incoming text removed of control characters
+ *
+ * @param incoming_text The text to filter
+ *
+ * @return The incoming text filtered of control characters to be
+ *         freed by the caller.
+*/
+gchar * gnc_filter_text_for_control_chars (const gchar *incoming_text);
+
 #endif
 /** @} */
 /** @} */

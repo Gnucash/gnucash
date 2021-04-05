@@ -2663,3 +2663,67 @@ gnc_ui_util_remove_registered_prefs (void)
                                  GNC_PREF_AUTO_DECIMAL_PLACES,
                                  gnc_set_auto_decimal_places, NULL);
 }
+
+static gboolean
+unichar_is_cntrl (gunichar uc)
+{
+    if (uc < 0x20 || (uc > 0x7e && uc < 0xa0))
+        return TRUE;
+    else
+        return FALSE;
+}
+
+gchar *
+gnc_filter_text_for_control_chars (const gchar *text)
+{
+    gchar *normal_text, *nt;
+    GString *filtered;
+    gboolean cntrl = FALSE;
+    gboolean text_found = FALSE;
+
+    if (!text)
+        return NULL;
+
+    if (!g_utf8_validate (text, -1, NULL))
+        return NULL;
+
+    normal_text = g_utf8_normalize (text, -1, G_NORMALIZE_ALL_COMPOSE);
+
+    filtered = g_string_sized_new (strlen (normal_text) + 1);
+
+    nt = normal_text;
+
+    while (*nt)
+    {
+        gunichar uc = g_utf8_get_char (nt);
+
+        // check for starting with control characters
+        if (unichar_is_cntrl (uc) && !text_found)
+        {
+            nt = g_utf8_next_char (nt);
+            continue;
+        }
+        // check for alpha, num and punctuation
+        if (!unichar_is_cntrl (uc))
+        {
+            filtered = g_string_append_unichar (filtered, uc);
+            text_found = TRUE;
+        }
+        // check for control characters after text
+        if (unichar_is_cntrl (uc))
+            cntrl = TRUE;
+
+        nt = g_utf8_next_char (nt);
+
+        if (cntrl) // if control characters in text replace with space
+        {
+            gunichar uc2 = g_utf8_get_char (nt);
+
+            if (!unichar_is_cntrl (uc2))
+                filtered = g_string_append_unichar (filtered, ' ');
+        }
+        cntrl = FALSE;
+    }
+    g_free (normal_text);
+    return g_string_free (filtered, FALSE);
+}
