@@ -2663,3 +2663,52 @@ gnc_ui_util_remove_registered_prefs (void)
                                  GNC_PREF_AUTO_DECIMAL_PLACES,
                                  gnc_set_auto_decimal_places, NULL);
 }
+
+gchar *
+gnc_filter_text_for_control_chars (const gchar *text)
+{
+    GString *filtered;
+    gboolean cntrl = FALSE;
+    gboolean text_found = FALSE;
+
+    if (!text)
+        return NULL;
+
+    if (!g_utf8_validate (text, -1, NULL))
+        return g_strdup (text);
+
+    filtered = g_string_new ("");
+
+    while (*text)
+    {
+        gunichar uc = g_utf8_get_char (text);
+
+        // check for starting with control characters
+        if (g_unichar_iscntrl (uc) && !text_found)
+        {
+            text = g_utf8_next_char (text);
+            continue;
+        }
+        // check for alpha, num and punctuation
+        if (g_unichar_isprint (uc))
+        {
+            filtered = g_string_append_unichar (filtered, uc);
+            text_found = TRUE;
+        }
+        // check for control characters after text
+        if (g_unichar_iscntrl (uc))
+            cntrl = TRUE;
+
+        text = g_utf8_next_char (text);
+
+        if (cntrl) // if control characters in text replace with space
+        {
+            gunichar uc2 = g_utf8_get_char (text);
+
+            if (g_unichar_validate (uc2) && !g_unichar_iscntrl (uc2))
+                filtered = g_string_append_unichar (filtered, ' ');
+        }
+        cntrl = FALSE;
+    }
+    return g_string_free (filtered, FALSE);
+}

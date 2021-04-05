@@ -40,6 +40,7 @@
 #include "gnucash-sheetP.h"
 #include "gnucash-style.h"
 
+#include "gnc-ui-util.h"
 
 /* The arguments we take */
 enum
@@ -398,7 +399,55 @@ gnc_item_edit_copy_clipboard (GncItemEdit *item_edit)
 void
 gnc_item_edit_paste_clipboard (GncItemEdit *item_edit)
 {
-    gtk_editable_paste_clipboard(GTK_EDITABLE(item_edit->editor));
+    GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(item_edit->editor),
+                                                        GDK_SELECTION_CLIPBOARD);
+    gchar *text = gtk_clipboard_wait_for_text (clipboard);
+
+    if (text)
+    {
+        gchar *filtered_text = gnc_filter_text_for_control_chars (text);
+        gchar *existing = gtk_editable_get_chars (GTK_EDITABLE(item_edit->editor), 0, -1);
+        gint start_pos, end_pos;
+        gint position;
+
+        if (!filtered_text)
+        {
+            g_free (text);
+            g_free (existing);
+            return;
+        }
+
+        position = gtk_editable_get_position (GTK_EDITABLE(item_edit->editor));
+
+        if (gtk_editable_get_selection_bounds (GTK_EDITABLE(item_edit->editor),
+                                               &start_pos, &end_pos))
+        {
+            gint old_len = g_utf8_strlen (existing, -1);
+            gchar *begin = g_utf8_substring (existing, 0, start_pos);
+            gchar *end = g_utf8_substring (existing, end_pos, old_len);
+            gchar *changed_text = g_strdup_printf ("%s%s%s", begin, filtered_text, end);
+
+            gtk_editable_delete_text (GTK_EDITABLE(item_edit->editor), 0, -1);
+
+            gtk_editable_insert_text (GTK_EDITABLE(item_edit->editor),
+                                      changed_text, -1, &position);
+
+            position = start_pos + g_utf8_strlen (filtered_text, -1);
+
+            g_free (begin);
+            g_free (end);
+            g_free (changed_text);
+        }
+        else
+            gtk_editable_insert_text (GTK_EDITABLE(item_edit->editor),
+                                      filtered_text, -1, &position);
+
+        gtk_editable_set_position (GTK_EDITABLE(item_edit->editor), position);
+
+        g_free (text);
+        g_free (existing);
+        g_free (filtered_text);
+    }
 }
 
 
