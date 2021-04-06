@@ -4,14 +4,15 @@
 # 小高 <2926295173@qq.com>, 2021.
 # jane <allfortestingwork@outlook.com>, 2021.
 # TianXing Yi <duguqiubailee@gmail.com>, 2021.
+# TianXing_Yi <duguqiubailee@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-04-05 06:26+0000\n"
-"Last-Translator: TianXing Yi <duguqiubailee@gmail.com>\n"
+"PO-Revision-Date: 2021-04-06 14:26+0000\n"
+"Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -452,7 +453,7 @@ msgstr "复式记账"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr "文档链接"
+msgstr "文件链接"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -799,11 +800,11 @@ msgstr "账簿"
 # 将交易拆分成两个或多个部分
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "账簿条目：拆分交易"
+msgstr "交易事项：拆分交易"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr "账簿条目：股票拆分"
+msgstr "交易事项：拆分股票"
 
 # 账簿的一种形式
 #. "one form of register"
@@ -876,7 +877,7 @@ msgstr "证券"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "股份结余 (交易事项)"
+msgstr "股份结余 (账簿)"
 
 # 一个商业公司的资金被分割为多个等份，任何这一部分会赋予持有者获得利益的一部分。
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
@@ -957,7 +958,7 @@ msgstr "交易"
 # 一个金额已经被移动的交易。这个词汇来自于支票：一张支票开出了，但是在银行账户实际收到钱之前，还必须做一些事情。银行收到钱的时刻，就被称为交易(支票)已结清了。
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "交易状态：已结算"
+msgstr "交易状态：结算"
 
 #. "-"
 msgid "transaction state: frozen"
@@ -966,7 +967,7 @@ msgstr "交易状态：冻结"
 # 交易已经和银行账单对上帐了。
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr "交易状态：已对账"
+msgstr "交易状态：对账"
 
 # 交易是无效的，既不在有效了。
 #. "A transaction that is void i.e. not valid (anymore)."
