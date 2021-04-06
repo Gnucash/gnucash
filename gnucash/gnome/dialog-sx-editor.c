@@ -128,6 +128,7 @@ struct _GncSxEditorDialog
     GtkToggleButton *optEndDate;
     GtkToggleButton *optEndNone;
     GtkToggleButton *optEndCount;
+    EndType end_type;
     GtkEntry *endCountSpin;
     GtkEntry *endRemainSpin;
     GNCDateEdit *endDateEntry;
@@ -1010,43 +1011,63 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
     gnc_sx_commit_edit (sxed->sx);
 }
 
+static void
+update_sensitivity (GncSxEditorDialog *sxed)
+{
+    gboolean enabled = gtk_toggle_button_get_active (sxed->enabledOpt);
+    gboolean autocreate = gtk_toggle_button_get_active (sxed->autocreateOpt);
+    gboolean advance = gtk_toggle_button_get_active (sxed->advanceOpt);
+    gboolean remind = gtk_toggle_button_get_active (sxed->remindOpt);
+    gboolean type_date = (sxed->end_type == END_DATE);
+    gboolean type_occur = (sxed->end_type == END_OCCUR);
+
+    gnc_suspend_gui_refresh ();
+
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->autocreateOpt), enabled);
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->notifyOpt), enabled && autocreate);
+
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->advanceOpt), enabled);
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->advanceSpin), enabled && advance);
+
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->remindOpt), enabled);
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->remindSpin), enabled && remind);
+
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->optEndNone), enabled);
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->optEndDate), enabled);
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->optEndCount), enabled);
+
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->endDateEntry), enabled && type_date);
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->endCountSpin), enabled && type_occur);
+    gtk_widget_set_sensitive (GTK_WIDGET (sxed->endRemainSpin), enabled && type_occur);
+
+    gtk_widget_set_sensitive (gtk_notebook_get_nth_page (sxed->notebook, 1), enabled);
+    gtk_widget_set_sensitive (gtk_notebook_get_nth_page (sxed->notebook, 2), enabled);
+
+    gnc_resume_gui_refresh ();
+}
 
 static void
 enabled_toggled_cb (GtkToggleButton *o, GncSxEditorDialog *sxed)
 {
-    return;
+    update_sensitivity (sxed);
 }
-
 
 static void
 autocreate_toggled_cb (GtkToggleButton *o, GncSxEditorDialog *sxed)
 {
-    if (!gtk_toggle_button_get_active (o))
-    {
-        gtk_toggle_button_set_active (sxed->notifyOpt, FALSE);
-    }
-    gtk_widget_set_sensitive (GTK_WIDGET (sxed->notifyOpt),
-                              gtk_toggle_button_get_active (o));
+    update_sensitivity (sxed);
 }
-
 
 static void
 advance_toggled_cb (GtkButton *o, GncSxEditorDialog *sxed)
 {
-
-    gtk_widget_set_sensitive (GTK_WIDGET (sxed->advanceSpin),
-                              gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (sxed->advanceOpt)));
-    gtk_editable_set_editable (GTK_EDITABLE (sxed->advanceSpin), TRUE);
+    update_sensitivity (sxed);
 }
-
 
 static void
 remind_toggled_cb (GtkButton *o, GncSxEditorDialog *sxed)
 {
-
-    gtk_widget_set_sensitive (GTK_WIDGET (sxed->remindSpin),
-                              gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (sxed->remindOpt)));
-    gtk_editable_set_editable (GTK_EDITABLE (sxed->remindSpin), TRUE);
+    update_sensitivity (sxed);
 }
 
 
@@ -1497,9 +1518,8 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
 static void
 set_endgroup_toggle_states (GncSxEditorDialog *sxed, EndType type)
 {
-    gtk_widget_set_sensitive (GTK_WIDGET (sxed->endDateEntry), (type == END_DATE));
-    gtk_widget_set_sensitive (GTK_WIDGET (sxed->endCountSpin), (type == END_OCCUR));
-    gtk_widget_set_sensitive (GTK_WIDGET (sxed->endRemainSpin), (type == END_OCCUR));
+    sxed->end_type = type;
+    update_sensitivity (sxed);
 }
 
 
