@@ -377,9 +377,9 @@ function tooltipTitle(array,data) {
 
 // copy font info from css into chartjs.
 bodyStyle = window.getComputedStyle (document.querySelector ('body'));
-Chart.defaults.global.defaultFontSize = parseInt (bodyStyle.fontSize);
-Chart.defaults.global.defaultFontFamily = bodyStyle.fontFamily;
-Chart.defaults.global.defaultFontStyle = bodyStyle.fontStyle;
+Chart.defaults.defaultFontSize = parseInt (bodyStyle.fontSize);
+Chart.defaults.defaultFontFamily = bodyStyle.fontFamily;
+Chart.defaults.defaultFontStyle = bodyStyle.fontStyle;
 
 titleStyle = window.getComputedStyle (document.querySelector ('h3'));
 chartjsoptions.options.title.fontSize = parseInt (titleStyle.fontSize);
@@ -387,7 +387,7 @@ chartjsoptions.options.title.fontFamily = titleStyle.fontFamily;
 chartjsoptions.options.title.fontStyle = titleStyle.fontStyle;
 
 document.getElementById(chartid).onclick = function(evt) {
-  var activepoints = myChart.getElementAtEvent(evt);
+  var activepoints = myChart.getElementsAtEventForMode (evt, 'nearest', { intersect: true }, false);
   var anchor = document.getElementById(jumpid);
   switch (activepoints.length)  {
     case 0:
