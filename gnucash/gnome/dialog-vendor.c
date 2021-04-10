@@ -218,15 +218,15 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Make sure we have an address */
-    if (check_entry_nonempty (vw->addr1_entry, NULL) &&
-            check_entry_nonempty (vw->addr2_entry, NULL) &&
-            check_entry_nonempty (vw->addr3_entry, NULL) &&
-            check_entry_nonempty (vw->addr4_entry, NULL))
-    {
-        const char *msg = _("You must enter a payment address.");
-        gnc_error_dialog (gnc_ui_get_gtk_window (widget), "%s", msg);
-        return;
-    }
+    //if (check_entry_nonempty (vw->addr1_entry, NULL) &&
+    //        check_entry_nonempty (vw->addr2_entry, NULL) &&
+    //        check_entry_nonempty (vw->addr3_entry, NULL) &&
+    //        check_entry_nonempty (vw->addr4_entry, NULL))
+    //{
+    //    const char *msg = _("You must enter a payment address.");
+    //    gnc_error_dialog (gnc_ui_get_gtk_window (widget), "%s", msg);
+    //    return;
+    //}
 
     /* Check for valid id and set one if necessary */
     if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (vw->id_entry)), "") == 0)
