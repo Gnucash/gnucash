@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-04-08 05:27+0000\n"
+"PO-Revision-Date: 2021-04-11 03:26+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
@@ -35,7 +35,7 @@ msgstr "“”"
 # 关于资金如何支出与收入的细节记录，简称为科目。财会账簿中，Account 将翻译为科目，而有关银行的 Account 将翻译为账户。
 #. "A detailed record of money spent and received"
 msgid "account"
-msgstr "会计科目"
+msgstr "科目"
 
 #. "An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
 msgid "account code"
@@ -43,11 +43,11 @@ msgstr "科目编号"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
-msgstr "科目"
+msgstr "账簿"
 
 #. "-"
 msgid "account name"
-msgstr "科目名称"
+msgstr "科目名"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
@@ -140,7 +140,7 @@ msgstr "科目：顶级科目"
 # 导致一笔交易发生的事情的过程
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
-msgstr "操作 (账簿)"
+msgstr "操作（交易）"
 
 #. "Automated teller machine"
 msgid "action: ATM"
@@ -364,7 +364,7 @@ msgstr "复利"
 # (c) 向一个银行账户存钱的状态
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr "贷方 (账簿中的栏)"
+msgstr "贷方（交易界面的一栏）"
 
 #. "-"
 msgid "Credit Card"
@@ -418,7 +418,7 @@ msgstr "日期范围"
 # (b) 从一个科目取款的和
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr "借方 (账簿中的栏)"
+msgstr "借方（交易界面的一栏）"
 
 # 软件安装后，每个选项都会有一个默认值，直到用户修改配置。
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
@@ -428,7 +428,7 @@ msgstr "默认"
 # 见存款
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr "存款 (在对账对话框)"
+msgstr "存款（在对账对话框）"
 
 # 某物价值逐渐降低的过程
 #. "The process of something becoming less valuable"
@@ -439,12 +439,12 @@ msgstr "折旧"
 # 2. 每个科目的一个文本区域。这个稍微长一些，一般是要用1-5句话来描述这个科目是关于什么的。
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
-msgstr "描述 (账簿中的一栏)"
+msgstr "描述（交易界面的一栏）"
 
 # 关于资金如何支出与收入的细节记录，简称为科目。财会账簿中，Account 将翻译为科目，而有关银行的 Account 将翻译为账户。
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
 msgid "discount"
-msgstr "贴现"
+msgstr "折扣"
 
 # 嗯，GnuCash的卖点
 #. "Important Buzzword :)"
@@ -462,7 +462,7 @@ msgstr "电子邮件"
 # 为某个人或者某个公司工作并且赚取薪金的人
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr "职员"
+msgstr "员工"
 
 # "equity" 翻译为 "所有者权益"。这个词我找不到中文合适的意思，大家可以帮忙想一下。它的定义可以参考[http://www.investopedia.com/terms/e/equity.asp] 以及[http://en.wikipedia.org/wiki/Ownership_equity]。它不是专指投资中的净资产，它在 GnuCash 中包含了一个"期初余额"的子科目，用以记录账目开始时的各个账上的余额。我最后选择了[http://www.chinesetax.com.cn/acc/gedikuaijizixun/200508/243623.html]中所说的 "所有者权益类账户"的翻译。也许不对，如果有懂会计的，可以告知一下国内的术语是什么？
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
@@ -476,7 +476,7 @@ msgstr "所有者权益表"
 # 在交易结束前持有付款或存款的可信任的第三方。在美国，许多抵押贷款公司会在您取得贷款时设立一个中介账户。您每月支付给这个账户，然后他们从这个账户支付灾害保险和财产税。所以，他们“在托管账户”中持有资金以完成交易(支付保险和税)。托管账户[银行及金融机构的，所以account是账户，而不是会计科目。
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
-msgstr "托管账户 (科目)"
+msgstr "托管账户"
 
 # 不同国家货币之间的价值关系
 #. "The relation in value between the money used in different countries"
@@ -660,12 +660,12 @@ msgstr "资产净值"
 # 每个记录都有的一个文本字段，用以放说明交易的信息。
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
-msgstr "说明（交易事项）"
+msgstr "说明（交易界面的一栏）"
 
 # 编号；交易中的一个字段。如果这笔交易是通过支票的，那么支票编号应该记在这个区域里。
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr "编号 (交易事项)"
+msgstr "编号（交易界面的一栏）"
 
 # 进行访问
 #. "to make accessible"
@@ -800,11 +800,11 @@ msgstr "账簿"
 # 将交易拆分成两个或多个部分
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "交易事项：拆分交易"
+msgstr "交易：拆分交易"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr "交易事项：拆分股票"
+msgstr "交易：拆分股票"
 
 # 账簿的一种形式
 #. "one form of register"
@@ -877,7 +877,7 @@ msgstr "证券"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "股份结余 (账簿)"
+msgstr "股份结余（账簿）"
 
 # 一个商业公司的资金被分割为多个等份，任何这一部分会赋予持有者获得利益的一部分。
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
@@ -1026,7 +1026,7 @@ msgstr "凭证"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr "撤回 (在对账对话框)"
+msgstr "撤回（在对账对话框）"
 
 # 一个销售的物品或提供的服务含收费价格的列表。
 # 见：账单
@@ -1037,7 +1037,7 @@ msgstr "撤回 (在对账对话框)"
 #~ msgstr "发票"
 
 msgid "Open SubAccount"
-msgstr "打开交易日记账（只读）"
+msgstr "打开子科目"
 
 msgid "Find Account"
 msgstr "查找科目"
@@ -1046,10 +1046,10 @@ msgid "Invoices Due Reminder"
 msgstr "应收到期提醒"
 
 msgid "Employees Overview"
-msgstr "职员纵览"
+msgstr "员工概览"
 
 msgid "Vendors Overview"
-msgstr "供应商纵览"
+msgstr "供应商概览"
 
 msgid "Customers Overview"
-msgstr "客户纵览"
+msgstr "客户概览"

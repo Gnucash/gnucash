@@ -10,23 +10,24 @@
 # Tao Wang <dancefire@gmail.com>, 2010
 # Monson Shao <holymonson@gmail.com>, 2018
 # Boyuan Yang <073plan@gmail.com>, 2018, 2019
-#
+# TianXing_Yi <duguqiubailee@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 3.7\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2019-12-25 22:26-0500\n"
-"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
-"Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
+"PO-Revision-Date: 2021-04-10 18:26+0000\n"
+"Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
+"gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Weblate 4.6-dev\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -428,7 +429,7 @@ msgstr "西欧语 (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr "区域："
+msgstr "区域： "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 msgid "Conversion Direction"
@@ -436,7 +437,7 @@ msgstr "转换方向"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr "该值决定执行哪一种 iconv 文本编码测试。"
+msgstr "此值确定要执行的iconv测试。"
 
 #: borrowed/goffice/go-optionmenu.c:336
 msgid "Menu"
@@ -450,7 +451,7 @@ msgstr "选项菜单"
 msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
-msgstr "GnuCash 在线手册中有许多有用的信息。您可以在“帮助”菜单下找到此手册。"
+msgstr "GnuCash在线手册有很多实用信息，请参见“帮助”菜单。"
 
 #. Translators: You can replace the link, if a translated page exists.
 #: doc/tip_of_the_day.list.c:5
@@ -459,68 +460,55 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"GnuCash社区首选的交流方式是邮件。新版本、用户组等公告，请参见https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
 "The GnuCash developers are easy to contact. As well as several mailing "
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
-msgstr ""
-"联系 GnuCash 开发者很容易。不但有许多通信论坛，还可以在 IRC 跟他们聊天！请在 "
-"irc.gnome.org 的 #gnucash 频道联系他们"
+msgstr "联系GnuCash开发者很容易，除了写邮件，还可以IRC实时聊天，在irc.gnome.org#gnucash"
 
 #: doc/tip_of_the_day.list.c:13
-#, fuzzy
 msgid ""
 "You can easily import your existing financial data from Quicken, MS Money or "
 "other programs that export QIF files or OFX files. In the File menu, click "
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"您可以简单地导入您现有来自 Quicken、 MS Money、或其它导出 QIF 文件或 OFX 文件"
-"的程序的金融数据。点选“文件”菜单的“导入”功能，选择 QIF 或 OFX 格式，接下来跟"
-"随提供的指示即可。"
+"从Quicken、MS Money或其他QIF/OFX文件导入现有财务数据。“文件”->“导入”，导入QIF或OFX/"
+"QFX文件，然后，按照说明进行下一步操作。"
 
 #: doc/tip_of_the_day.list.c:18
-#, fuzzy
 msgid ""
 "If you are familiar with other financial programs such as Quicken, note that "
 "GnuCash uses accounts instead of categories to track income and expenses. "
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
-msgstr ""
-"如果您熟悉其它像 Quicken 这类理财软件，那注意 GnuCash 使用科目而非类别来跟踪"
-"收入与支出。需要更多关于收入与支出科目的信息，请查看 GnuCash 在线手册。"
+msgstr "和Quicken 这类财务软件不同，GnuCash 使用科目而非类别来跟踪收入与支出。收入与支出科目的更多信息，请查看GnuCash在线手册。"
 
 #: doc/tip_of_the_day.list.c:23
 msgid ""
 "It is possible to change which columns display in the Chart of Accounts. "
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
-msgstr ""
+msgstr "自定义科目表显示栏，标签栏最右三角形，单击查看所有可用选项。"
 
 #: doc/tip_of_the_day.list.c:27
-#, fuzzy
 msgid ""
 "Click the right mouse button (control-click in Mac OS X) in the Accounts tab "
 "of the main window to bring up the account menu options. Within each "
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
-msgstr ""
-"在主窗口中单击鼠标右键会出现科目菜单选项。在每个账簿中单击鼠标右键则会出现交"
-"易菜单选项。"
+msgstr "在科目和交易事项右键会有弹出菜单。"
 
 #: doc/tip_of_the_day.list.c:32
-#, fuzzy
 msgid ""
 "Create new accounts by clicking the New button in the main window tool bar. "
 "This will bring up a dialog box where you can enter account details. For "
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
-msgstr ""
-"单击主窗口工具栏的新增按钮以创建新科目。这样会出现可以让您输入科目详细数据的"
-"对话框。需要更多关于选择科目类型或创建会计科目表的信息，请查看 GnuCash 在线手"
-"册。"
+msgstr "工具栏 \"新建 \"，会弹出一个对话框，请输入科目详细信息。科目类型或科目表的更多信息，请参见GnuCash在线手册。"
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -1180,14 +1168,14 @@ msgstr "折扣天数不能多于到期天数。"
 
 #: gnucash/gnome/dialog-billterms.c:324
 msgid "You must provide a name for this Billing Term."
-msgstr "您必须输入此结算条款的名称。"
+msgstr "请给此账期命名。"
 
 #: gnucash/gnome/dialog-billterms.c:331
 #, c-format
 msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
-msgstr "您必须为这个结算条款提供一个独一无二的名称。您的选择“%s”已经被使用了。"
+msgstr "帐期名称不能重复，已经有“%s”了。"
 
 #: gnucash/gnome/dialog-billterms.c:531
 #: gnucash/gnome-utils/gnc-date-delta.c:222
@@ -1216,15 +1204,15 @@ msgid "Unknown"
 msgstr "未知"
 
 #: gnucash/gnome/dialog-billterms.c:672
-#, fuzzy, c-format
+#, c-format
 msgid "Term \"%s\" is in use. You cannot delete it."
-msgstr "期限“%s”正在使用中。您不能删除它。"
+msgstr "帐期“%s”正在使用，无法删除。"
 
 #: gnucash/gnome/dialog-billterms.c:678
 #: gnucash/gnome-utils/dialog-tax-table.c:673
 #, c-format
 msgid "Are you sure you want to delete \"%s\"?"
-msgstr "您确定要删除“%s”吗？"
+msgstr "确定要删除“%s”？"
 
 #: gnucash/gnome/dialog-choose-owner.c:78
 #, fuzzy
@@ -2900,7 +2888,7 @@ msgstr "用户"
 #: gnucash/gtkbuilder/dialog-print-check.glade:293
 #: gnucash/gtkbuilder/gnc-date-format.glade:30
 msgid "Custom"
-msgstr "定制"
+msgstr "自定义"
 
 #: gnucash/gnome/dialog-print-check.c:2602
 #: gnucash/gtkbuilder/dialog-preferences.glade:3449
@@ -3668,7 +3656,6 @@ msgid "_Customer"
 msgstr "客户(_C)"
 
 #: gnucash/gnome/gnc-plugin-business.c:160
-#, fuzzy
 msgid "Customers Overview"
 msgstr "客户概览"
 
@@ -3746,7 +3733,6 @@ msgid "Open the Process Payment dialog"
 msgstr "打开处理付款对话框"
 
 #: gnucash/gnome/gnc-plugin-business.c:202
-#, fuzzy
 msgid "Vendors Overview"
 msgstr "供应商概览"
 
@@ -3794,7 +3780,6 @@ msgid "Open the Find Bill dialog"
 msgstr "打开查找账单对话框"
 
 #: gnucash/gnome/gnc-plugin-business.c:245
-#, fuzzy
 msgid "Employees Overview"
 msgstr "员工概览"
 
@@ -27166,11 +27151,11 @@ msgstr "是否显示发票参照？"
 
 #: gnucash/report/reports/standard/invoice.scm:312
 msgid "Billing Terms"
-msgstr "结算条款"
+msgstr "账期"
 
 #: gnucash/report/reports/standard/invoice.scm:313
 msgid "Display the invoice billing terms?"
-msgstr "显示发票结算条款？"
+msgstr "显示发票账期？"
 
 #: gnucash/report/reports/standard/invoice.scm:318
 msgid "Display the billing id?"
@@ -30819,7 +30804,7 @@ msgstr "无效的交易事项"
 
 #: libgnucash/engine/Transaction.c:2719
 msgid "Transaction Voided"
-msgstr "交易事项已无效"
+msgstr "作废交易"
 
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
