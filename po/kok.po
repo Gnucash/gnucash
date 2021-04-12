@@ -577,11 +577,11 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "हस्तांतर नोंदवही स्तंभान सद्याच्या खाते नावाचे पयले अक्षर बरयात, GnuCash तुमच्या खात्यांच्या "
 "वळेरेतल्यान नाव पुराय करतले. उपखात्यांखातीर, पालक खात्याचे पयले अक्षर बरयात,फाटल्यान ':' "
-"आणि उपखात्याचे पयले अक्षर (देखिक A:C एसेट्स:कॅश खातीर.)"
+"आणि उपखात्याचे पयले अक्षर (देखिक A:C एसेट्स:कॅश खातीर)."
 
 #: doc/tip_of_the_day.list.c:65
 #, fuzzy
@@ -5975,22 +5975,20 @@ msgid "Make Pdf"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1196
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
-"सद्याच्या अहवालाची जतनाय केल्ली संरचनाय सुदारात. अहवालाची ~/.gnucash/saved-"
-"reports-2.4 फायलीन जतनाय जातली."
+"सद्याच्या अहवालाची जतनाय केल्ली संरचनाय सुदारात. अहवालाची %s फायलीन जतनाय जातली."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
-#, fuzzy, c-format
+#, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"सद्याच्या अहवालाची संरचनाय `जतनाय केल्ल्या अहवालाची संरचनाय' मेनून जोडात. अहवालाची ~/."
-"gnucash/saved-reports-2.4 फायलीन जतनाय जातली."
+"सद्याच्या अहवालाची संरचनाय 'जतनाय केल्ल्या अहवालाची संरचनाय' मेनून जोडात. अहवालाची %s फायलीन जतनाय जातली."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -7345,7 +7343,7 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr "%d डिकोड करपाक मेळनाशिल्ले शब्द आसात. मात्शे एनकोडींग्ज जोडात."
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -7984,8 +7982,8 @@ msgid "You must enter a valid price."
 msgstr "तुमी वैध दर दिवपाक जाय."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
-msgstr "तुमी वैध `कडेन' संख्या दिवपाक जाय."
+msgid "You must enter a valid 'to' amount."
+msgstr "तुमी वैध 'कडेन' संख्या दिवपाक जाय."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
 msgid "You must enter an amount to transfer."
@@ -10366,7 +10364,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "एरर: ग्राफिकल युजर इंटरफेस सुरू करपाक जाले ना आणि विकल्प - जोड - दर - कोटस् थारांवक ना."
 
@@ -12129,15 +12127,15 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 "हे स्थापित PDF निर्याताखातीर फायलनाव निवडटा. ही तीन युक्तिवादांसंयत sprintf(3) "
 "स्ट्रिंग आसा: \"%1$s\" अहवालाचे नाव देखीक \"ईनव्हॉयस\". \"%2$s\" अहवालाचो क्रमांक, "
 "जो ईनव्हॉयस अहवालाखातीर ईनव्हॉयस क्रमांक आसा. \"%3$s\" अहवालाची तारीक, फायलनाव-"
-"तारीक-स्वरूप स्थापितान स्वरूपण केल्ली. (टीप: फायलनावांनी परवानगी नाशिल्ली खंयचीय "
-"अक्षरां, देखीक '/', निमण्या फायलनावान अंडरस्कोरान बदल्ली वतली '_'.)"
+"तारीक-स्वरूप स्थापितान स्वरूपण केल्ली. टीप: फायलनावांनी परवानगी नाशिल्ली खंयचीय "
+"अक्षरां, देखीक '/', निमण्या फायलनावान अंडरस्कोरान बदल्ली वतली '_'."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
@@ -12959,7 +12957,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13437,19 +13435,19 @@ msgstr "निवडील्ली खात्यांचो सेटअप 
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"तुमची नवी खातीं तयार करपाक `लागू करात' दामात. तुमी मागीर तांची फायलीन वो डेटाबेसिन "
+"तुमची नवी खातीं तयार करपाक 'लागू करात' दामात. तुमी मागीर तांची फायलीन वो डेटाबेसिन "
 "जतनाय करपाक शकतले.\n"
 "\n"
-"तुमीच्यो निवडी परत पळोवपाक `फाटी' दामात.\n"
+"तुमीच्यो निवडी परत पळोवपाक 'फाटी' दामात.\n"
 "\n"
-"खंयचीच नवी खातीं तयार करीनास्तना हो संवाद बंद करपाक `रद्द करात' दामात."
+"खंयचीच नवी खातीं तयार करीनास्तना हो संवाद बंद करपाक 'रद्द करात' दामात."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:594
 msgid "Finish Account Setup"
@@ -20501,7 +20499,7 @@ msgstr "निर्यात स्थापितां वापरात"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952

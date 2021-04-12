@@ -629,7 +629,7 @@ msgid ""
 msgstr ""
 "Mientras introduce cantidades en el registro, puede usar la calculadora de "
 "GnuCash para sumar, restar, multiplicar y dividir. Simplemente teclee el "
-"primer valor, después seleccione `+', `-', `*' o '/'. Teclee el segundo "
+"primer valor, después seleccione '+', '-', '*' o '/'. Teclee el segundo "
 "valor y pulse «Entrar» para registrar la cantidad calculada."
 
 #: doc/tip_of_the_day.list.c:54
@@ -650,13 +650,13 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "Teclee la(s) primera(s) letra(s) de una cuenta existente en la columna "
 "«Transferir a/desde» y GnuCash completará el nombre desde su listado de "
 "cuentas. Para subcuentas, pulse la(s) primera(s) letra(s) de la cuenta "
 "precedente, seguido de «:» y la(s) primera(s) letra(s) de la subcuenta (p.e. "
-"A:M para Activos:Efectivo.)"
+"A:E para Activos:Efectivo)."
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -2869,7 +2869,7 @@ msgid ""
 "\" before you continue to process this payment. Perhaps you want to create "
 "an Invoice or Bill first?"
 msgstr ""
-"No tiene cuentas `Contabilizar Destino´ válidas. Por favor, cree una cuenta "
+"No tiene cuentas 'Contabilizar Destino´ válidas. Por favor, cree una cuenta "
 "del tipo «%s» antes de continuar procesando esta liquidación. ¿Quizá quiera "
 "crear primero una Factura o un Recibo?"
 
@@ -6084,19 +6084,19 @@ msgstr "Crear PDF"
 #, fuzzy, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
 "Moderniza la configuración guardada del boletín efectivo. El boletín será "
-"guardado en el fichero %s. "
+"guardado en el fichero %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, fuzzy, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
 "Añade la configuración efectiva del boletín al menú 'Configuraciones del "
-"Boletín Guardada'. El boletín se guardará dentro del fichero %s. "
+"Boletín Guardada'. El boletín se guardará dentro del fichero %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -7518,7 +7518,7 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr "Hay %d palabras no descodificables. Por favor añada codificaciones."
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -8178,8 +8178,8 @@ msgid "You must enter a valid price."
 msgstr "Debe introducir un precio válido."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
-msgstr "Debe introducir una cantidad `a´ válida."
+msgid "You must enter a valid 'to' amount."
+msgstr "Debe introducir una cantidad 'a´ válida."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
 msgid "You must enter an amount to transfer."
@@ -10599,11 +10599,10 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "Error: no pude inicializar el interfaz gráfico de usuario y la opción ‘add-"
-"price-quotes’ no fue\n"
-"       establecida.\n"
+"price-quotes’ no fue establecida.\n"
 "¿Quizá necesita establecer la variable del entorno $DISPLAY?"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
@@ -12516,17 +12515,17 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 "Esta opción elige el nombre del fichero para exportar como PDF. Esto es una "
 "cadena sprint(3) con tres argumentos: \"%1$s\" es el nombre del boletín como "
 "«Factura». «%2$s» es el número del boletín, al cual para un boletín "
 "facturante es el número de la factura. «%3$s» es la fecha del boletín, "
-"formateado de acuerdo a la opción de nombre-fichero-fecha-formato. (Nota: "
+"formateado de acuerdo a la opción de nombre-fichero-fecha-formato. Nota: "
 "cualquier carácter que sea no permitido en nombres de ficheros, como '/', "
-"serán remplazados con guiones bajos '_' en el nombre del fichero resultante.)"
+"serán remplazados con guiones bajos '_' en el nombre del fichero resultante."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
@@ -13385,7 +13384,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13860,7 +13859,7 @@ msgstr ""
 "capaz de añadir subcuentas, ya sea como trasladar cuentas (a lo largo de sus "
 "subcuentas) desde uno precedente a otro.\n"
 "\n"
-"Pulse `Cancelar´ si no quiere crear ninguna cuenta nueva ahora."
+"Pulse 'Cancelar´ si no quiere crear ninguna cuenta nueva ahora."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:39
 msgid "New Account Hierarchy Setup"
@@ -13978,12 +13977,12 @@ msgstr "Configurar cuentas seleccionadas"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
 "Pulse «Aplicar» para crear sus cuentas nuevas. A continuación, podrá "
 "guardarlos en un fichero o\n"
@@ -19652,7 +19651,7 @@ msgstr ""
 "* El ID del usuario que le identifica a usted para su banco\n"
 "* La dirección de Internet de su servidor de Conexión Bancaria\n"
 "* El HBCI de Conexión Bancaria, información sobre la clave de criptografía "
-"pública de su banco (`ini-Letter´).\n"
+"pública de su banco ('ini-Letter´).\n"
 "\n"
 "Esta información se necesitará en lo siguiente. Pulse «Avanzar» ahora.\n"
 "\n"
@@ -21208,7 +21207,7 @@ msgstr "Borra las Opciones de Importación."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr "Establecer el nombre ya existe, ¿sobrescribo?"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952
@@ -24706,7 +24705,7 @@ msgstr "Emplee origen - destino"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
 msgid "Use From - To period."
-msgstr "Emplee periodo `Origen - Destino´."
+msgstr "Emplee periodo 'Origen - Destino´."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185

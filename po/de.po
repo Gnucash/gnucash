@@ -613,7 +613,7 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "Wenn Sie im Kontobuch die ersten Buchstaben eines Kontennamen eingeben, kann "
 "GnuCash den Namen anhand Ihrer Kontenliste vervollständigen. Für Unterkonten "
@@ -6039,16 +6039,16 @@ msgstr "PDF erstellen"
 #, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
 "Gespeicherte Konfiguration des aktuellen Berichts aktualisieren. Der Bericht "
-"wird in der Datei %s gespeichert. "
+"wird in der Datei %s gespeichert."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
 "Konfiguration des aktuellen Berichts zum Menü »Berichte->Gespeicherte "
 "Berichtskonfigurationen« hinzufügen. Der Bericht wird in der Datei %s "
@@ -7447,7 +7447,7 @@ msgstr ""
 "aus."
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -8108,7 +8108,7 @@ msgid "You must enter a valid price."
 msgstr "Sie müssen einen gültigen Preis angeben."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
+msgid "You must enter a valid 'to' amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
@@ -10592,11 +10592,11 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "Fehler: Die graphische Benutzerschnittstelle konnte nicht initialisiert "
 "werden, obwohl die Option »add-price-quotes« nicht gesetzt war.\n"
-"       Möglicherweise müssen Sie die Umgebungsvariable $DISPLAY setzen?"
+"Möglicherweise müssen Sie die Umgebungsvariable $DISPLAY setzen?"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:32
@@ -12463,17 +12463,17 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 "Diese Einstellung bestimmt den Dateinamen für den PDF-Export. Dies ist eine "
 "»sprintf(3)« Zeichenkette mit drei Argumenten: »%1$s« ist der Berichtsname "
 "wie etwa »Rechnung«. »%2$s« ist die Nummer des Berichts, welche bei einer "
 "Rechnung die Rechnungsnummer ist. »%3$s« ist das Datum des Berichts, "
-"formatiert entsprechend der »filename-date-format«-Einstellung. (Anmerkung: "
+"formatiert entsprechend der »filename-date-format«-Einstellung. Anmerkung: "
 "Sämtliche Zeichen, die in Dateinamen nicht erlaubt sind, wie z.B. '/', "
-"werden durch Unterstriche »_« im resultierenden Dateinamen ersetzt.)"
+"werden durch Unterstriche »_« im resultierenden Dateinamen ersetzt."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
@@ -13323,7 +13323,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13915,12 +13915,12 @@ msgstr "Ausgewählte Konten feinabstimmen"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
 "Drücken Sie »Anwenden«, um die neuen Konten zu erstellen. Sie können die "
 "Daten anschließend in eine Datei oder Datenbank speichern.\n"
@@ -21149,7 +21149,7 @@ msgstr "Löschen der Import-Einstellungen"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr "Der Name existiert bereits, überschreiben?"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952

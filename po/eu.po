@@ -583,7 +583,7 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "Idatzi kontu-izen baten lehen letra(k) 'Transferitu' erregistro-\n"
 "-zutabean, eta GnuCash-ek kontu-izena osatuko du kontu-zerrendatik.\n"
@@ -6256,14 +6256,14 @@ msgstr ""
 #, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
@@ -7658,7 +7658,7 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr ""
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -8345,8 +8345,8 @@ msgid "You must enter a valid price."
 msgstr "Baliozko prezio bat sartu behar duzu."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
-msgstr "Baliozko `nora' zenbateko bat sartu behar duzu."
+msgid "You must enter a valid 'to' amount."
+msgstr "Baliozko 'nora' zenbateko bat sartu behar duzu."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
 msgid "You must enter an amount to transfer."
@@ -10898,7 +10898,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
@@ -12549,9 +12549,9 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
@@ -13346,7 +13346,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13805,18 +13805,18 @@ msgstr "Ezabatu hautatutako kontua"
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 #, fuzzy
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"Kontu berriak sortzeko, sakatu `Amaitu'.\n"
+"Kontu berriak sortzeko, sakatu 'Amaitu'.\n"
 "\n"
-"Aukeratu duzuna berrikusteko, sakatu `Atzera'.\n"
+"Aukeratu duzuna berrikusteko, sakatu 'Atzera'.\n"
 "\n"
-"Konturik sortu gabe elkarrizketa-koadro hau ixteko, sakatu `Utzi'."
+"Konturik sortu gabe elkarrizketa-koadro hau ixteko, sakatu 'Utzi'."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:594
 msgid "Finish Account Setup"
@@ -14630,7 +14630,7 @@ msgid ""
 "the details of that payment here. Otherwise, just click \"Next\"."
 msgstr ""
 "Akzio-zatitzearen ondorioz dirurik kobratu baduzu, idatzi xehetasunak\n"
-"hemen. Bestela, egin klik `Hurrengoa'n."
+"hemen. Bestela, egin klik 'Hurrengoa'n."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:286
 #: gnucash/import-export/aqb/dialog-ab.glade:1212
@@ -14671,8 +14671,8 @@ msgid ""
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
-"Akzio-zatitzea edo -batzea sortzen amaitu baduzu, sakatu `Amaitu'.\n"
-"Bestela, sakatu `Atzera' egindako aukerak berrikusteko, edo `Utzi'\n"
+"Akzio-zatitzea edo -batzea sortzen amaitu baduzu, sakatu 'Amaitu'.\n"
+"Bestela, sakatu 'Atzera' egindako aukerak berrikusteko, edo 'Utzi'\n"
 "aldaketarik egin gabe irteteko."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:424
@@ -21137,7 +21137,7 @@ msgstr "Hautatu inportatzeko ekintza"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952

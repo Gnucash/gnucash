@@ -571,7 +571,7 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "Uzrakstiet eksoša konta nosaukuma pirmo burtu(s) reģistra kolonnā "
 "Pārskaitīt, un GnuCash pabeigs vārdu no jūsu kontu saraksta. Subkontiem "
@@ -6010,22 +6010,22 @@ msgid "Make Pdf"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1196
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
 "Atjaunot tekošā pārskata saglabātos iestatījumus. Pārskats tiks saglabāts "
-"failā ~/.gnucash/saved-reports-2.4. "
+"failā %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
-#, fuzzy, c-format
+#, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
 "Pievienot tekošā pārskata iestatījumus 'Saglabātie pārskati' izvēlnē. "
-"Pārskats tiks saglabāts failā file ~/.gnucash/saved-reports-2.4. "
+"Pārskats tiks saglabāts failā file %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -7388,7 +7388,7 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr "Ir %d neatšifrēti vārdi. Pievienojiet kodus."
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -8038,8 +8038,8 @@ msgid "You must enter a valid price."
 msgstr "Ievadiet derīgu cenu."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
-msgstr "Ievadiet derīgu `uz' summu."
+msgid "You must enter a valid 'to' amount."
+msgstr "Ievadiet derīgu 'uz' summu."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
 msgid "You must enter an amount to transfer."
@@ -8399,7 +8399,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:397
 #, c-format
 msgid "You do not have permission to access %s."
-msgstr "Jums nav atļauta pieeja %s. "
+msgstr "Jums nav atļauta pieeja %s."
 
 #: gnucash/gnome-utils/gnc-file.c:402
 #: gnucash/register/register-core/formulacell.c:118
@@ -10473,15 +10473,15 @@ msgstr ""
 #| msgid ""
 #| "Error: could not initialize graphical user interface and option add-price-"
 #| "quotes was not set.\n"
-#| "       Perhaps you need to set the $DISPLAY environment variable ?"
+#| "Perhaps you need to set the $DISPLAY environment variable ?"
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "Kļūda: neizdevās inicializēt grafisko lietotāja saskarni un iespēja add-"
 "price-quotes netika ieslēgta.\n"
-"       Iespējams, jums nepieciešams norādīt $DISPLAY vides mainīgo."
+"Iespējams, jums nepieciešams norādīt $DISPLAY vides mainīgo."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:32
@@ -12291,16 +12291,16 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 "Šajā iestatījumā norāda eksportējamā PDF faila nosaukumu. Tā ir sprintf(3) "
 "simbolu virkne ar trijiem argumentiem: \"%1$s\" ir pārskata nosaumums, "
 "piemēram \"Rēķins\". \"%2$s\" ir pārskata numurs, kas rēķina gadījumā ir "
 "rēķina numurs. \"%3$s\" ir pārskata datums, noformēts saskaņā ar filename-"
-"date-format iestatījumiem. (Piezīme: Visas faila nosaukumā neatļautās "
-"rakstzīmes, piemēram '/', tiks aizstātas ar pasvītrojuma zīmi '_'.)"
+"date-format iestatījumiem. Piezīme: Visas faila nosaukumā neatļautās "
+"rakstzīmes, piemēram '/', tiks aizstātas ar pasvītrojuma zīmi '_'."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
@@ -13138,7 +13138,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13669,12 +13669,12 @@ msgstr "Iestatīt izvēlētos kontus"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
 "Spiediet 'Pielietot', lai izveidotu jaunus kontus. Pēc tam tos varēsiet "
 "saglabāt failā vai datu bāzē.\n"
@@ -20862,7 +20862,7 @@ msgstr "Dzēst importa iestatījumus."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr "Jau pastāv iestatījumi ar šādu nosaukumu. Pārrakstīt?"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952

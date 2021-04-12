@@ -612,7 +612,7 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "Saisissez la ou les première(s) lettre(s) d'un nom de compte existant dans "
 "la colonne virement du registre, et GnuCash complétera le nom à partir de "
@@ -6755,7 +6755,7 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
 "Ajoute la configuration du rapport courant dans le menu « Rapports pré-"
 "configurés ». Le rapport sera enregistré dans le fichier ~/.gnucash/saved-"
@@ -6764,8 +6764,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, fuzzy, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
 "Ajoute la configuration du rapport courant dans le menu « Rapports pré-"
 "configurés ». Le rapport sera enregistré dans le fichier ~/.gnucash/saved-"
@@ -8297,7 +8297,7 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr "Il y a %d mots non décodés . Ajoutez un encodage."
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -9018,7 +9018,7 @@ msgstr "Vous devez saisir un prix valide."
 
 # messages-i18n.c:13
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
+msgid "You must enter a valid 'to' amount."
 msgstr "Vous devez saisir un montant brut \"vers\" valide."
 
 # messages-i18n.c:21
@@ -11701,7 +11701,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "Erreur: l’interface utilisateur graphique n’a pas pu être initialisée et "
 "l’option « add-price-quotes » n’a pas été utilisée."
@@ -13641,9 +13641,9 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:191 src/gnome/glade-gnc-dialogs.c:1194
@@ -14574,7 +14574,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -15102,12 +15102,12 @@ msgstr "Définition des comptes sélectionnés"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
 "Cliquez sur \"Appliquer\" pour créer vos nouveaux comptes. Vous serez alors "
 "capable de les enregistrer dans un fichier ou une base de données.\n"
@@ -22923,7 +22923,7 @@ msgstr "Choisir les réglages d’exportation"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952

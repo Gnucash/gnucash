@@ -585,12 +585,12 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "লৈরিবা একাউন্ত মমিংগী অহানবা ময়েক অদু ত্রান্সফর রেজিস্তর কলমদা তাইপ তৌবিয়ু, অদুগা "
 "GnuCash না অদোমগী একাউন্তগী পরিং অদুদগী মমিং অদু মপুং পাহনগনি. "
 "সবএকাউন্তশিংগীদমক্তদি, পেরেন্ত একাউন্তগী অহানবা ময়েক অদুগা ':' অমসুং সবএকাউন্তগী "
-"অহানবা ময়েক অদু তৌবিয়ু (খুদম ওইনা, Assets:Cash কীদমক A:C.)"
+"অহানবা ময়েক অদু তৌবিয়ু (খুদম ওইনা, Assets:Cash কীদমক A:C)."
 
 #: doc/tip_of_the_day.list.c:65
 #, fuzzy
@@ -6061,22 +6061,21 @@ msgid "Make Pdf"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1196
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
-"হৌজিক্কী রিপোর্ত অসিগী সেভ তৌরবা কনফিগুরেসন অদু অপদেত তৌ। রিপোর্ত অদু ফাইল ~/."
-"gnucash/saved-reports-2.4 অদুদা সেভ তৌরগনি।"
+"হৌজিক্কী রিপোর্ত অসিগী সেভ তৌরবা কনফিগুরেসন অদু অপদেত তৌ। রিপোর্ত অদু ফাইল %s অদুদা সেভ তৌরগনি।"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
-#, fuzzy, c-format
+#, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
 "হৌজিক্কী রিপোর্তকী কনফিগুরেসন অদু 'সেভ তৌরবা রিপোর্ত কনফিগুরেসনসিং' অদুদা হাপচিল্লু। "
-"রিপোর্ত অদু ফাইল ~/.gnucash/saved-reports-2.4দা সেভ তৌরগনি।"
+"রিপোর্ত অদু ফাইল %s দা সেভ তৌরগনি।"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -7447,7 +7446,7 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr "%d দিকোদ তৌবা য়াদবা ৱাহৈশিং লৈ. এনকোদিংশিং হাপচিনবিয়ু."
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -8092,8 +8091,8 @@ msgid "You must enter a valid price."
 msgstr "অদোম্না অচুমবা মমল চঙশিনগদবনি."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
-msgstr "অদোম্না অচুমবা `...দা' অমাউন্ত চঙশিনগদবনি."
+msgid "You must enter a valid 'to' amount."
+msgstr "অদোম্না অচুমবা '...দা' অমাউন্ত চঙশিনগদবনি."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
 msgid "You must enter an amount to transfer."
@@ -10518,7 +10517,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "অসোয়বা: গ্রাফিকেল য়ুজর ইন্তরফেস ইনিসিএলাইজ তৌবা ঙমদ্রে অমসুং এদ-প্রাইস-ক্যুওতস হায়বা "
 "ওপসন অদু সেত তৌখিদ্রে।"
@@ -12327,16 +12326,16 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 "সেত্তিং অসিনা PDF এক্সপোর্তকী ফাইল মমীং অদু খল্লি। মসি আরগ্যুমেন্ত অহুমগা লোয়নবা "
 "sprintf(3) স্ত্রিং অমনি: \"%1$s\" অসি \"ইনভোইস\"কুম্বা রিপোর্ত মমীং অদুনি। \"%2$s"
 "\" অসি রিপোর্ত অদুগী মসিংনি, ইনভোইস রিপোর্ত অমগী ওইনদি ইনভোইস মসিং অদুনি। \"%3$s"
 "\" অসি ফাইল মমীং-তারিখ-ফোর্মেত সেত্তিংগী মতুংইন্না ফোর্মেত তৌরবা, রিপোর্তকী "
-"তারিখনি। (খংজিনগদবা: ফাইল মমীংসিংদা য়াউবা য়াদবা কেরেক্তর অমহেক্তা, '/' "
-"অসিগুম্বসি, সেম্লক্লিবা ফাইল মমীং অদুদা অন্দরস্কোরসিংনা '_' মহুৎ সিনখিগনি।) "
+"তারিখনি। খংজিনগদবা: ফাইল মমীংসিংদা য়াউবা য়াদবা কেরেক্তর অমহেক্তা, '/' "
+"অসিগুম্বসি, সেম্লক্লিবা ফাইল মমীং অদুদা অন্দরস্কোরসিংনা '_' মহুৎ সিনখিগনি।"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
@@ -13176,7 +13175,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13661,12 +13660,12 @@ msgstr "খল্লবা একাউন্তশিং সেতঅপ তৌ
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
 "নহাক্কী অনৌবা একাউন্তসিং সেম্নবগীদমক 'এপ্লাই' নম্মু। মদুগী মতুংদা নহাক্না মখোয়বু ফাইল "
 "নত্ত্রগা দেতাবেজ অমদা সেভ তৌবা য়াগনি।\n"
@@ -14489,7 +14488,7 @@ msgid ""
 "the details of that payment here. Otherwise, just click \"Next\"."
 msgstr ""
 "অদোম্না স্তোক খায়দোকপগী মহৈ ওইনা শেল পীরকপদূ ফংলবদি, মফম অসিদা পেমেন্তগী "
-"মচাখায়বা অদু চঙশিনবিয়ু. মসি নত্রগনা `ফোরৱার্দ' ক্লিক তৌবিয়ু."
+"মচাখায়বা অদু চঙশিনবিয়ু. মসি নত্রগনা 'ফোরৱার্দ' ক্লিক তৌবিয়ু."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:286
 #: gnucash/import-export/aqb/dialog-ab.glade:1212
@@ -14528,8 +14527,8 @@ msgid ""
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
-"অদোম্না স্তোক খায়দোকপা নত্রগা পুনশিনবা লোইরবদি, `শিজিন্নবা' নম্মো. অদোমগী অপাম্বা "
-"রিভিউ তৌনবগীদমক `মতুং' নম্বা নত্রগা অহোংবা অমত্তা তৌদনা থোকখিনবা `ককথৎপা' নম্বসু "
+"অদোম্না স্তোক খায়দোকপা নত্রগা পুনশিনবা লোইরবদি, 'শিজিন্নবা' নম্মো. অদোমগী অপাম্বা "
+"রিভিউ তৌনবগীদমক 'মতুং' নম্বা নত্রগা অহোংবা অমত্তা তৌদনা থোকখিনবা 'ককথৎপা' নম্বসু "
 "য়াই."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:424
@@ -20845,7 +20844,7 @@ msgstr "এক্সপোর্ত সেত্তিংস খল্লু"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952

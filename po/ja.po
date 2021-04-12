@@ -592,12 +592,12 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "記録簿の資金移動列で既存の勘定科目名の最初の文字を入力すると、GnuCash は勘定"
 "科目リストから名前を補完します。子勘定科目についても、親勘定科目の最初の文字"
-"に続いて、':' と、子勘定科目の最初の文字を入力してください。（例: Assets:"
-"Cash の場合は A:C）"
+"に続いて、':' と、子勘定科目の最初の文字を入力してください（例: Assets:"
+"Cash の場合は A:C）。"
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -5879,17 +5879,17 @@ msgstr ""
 #, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
 "現在の保存済み帳票設定を更新します。帳票設定はファイル %s 内に保存されます。"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"現在の帳票設定を `帳票->保存済み帳票設定' メニューに追加します。帳票設定は"
+"現在の帳票設定を '帳票->保存済み帳票設定' メニューに追加します。帳票設定は"
 "ファイル %s 内に保存されます。"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
@@ -7232,7 +7232,7 @@ msgstr ""
 "デコードできない単語が %d 個あります。エンコーディングを加えてください。"
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -7871,7 +7871,7 @@ msgid "You must enter a valid price."
 msgstr "有効な価格を入力してください。"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
+msgid "You must enter a valid 'to' amount."
 msgstr "有効な資金移動先金額を入力してください"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
@@ -10242,11 +10242,11 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "エラー: グラフィカルユーザーインターフェースを初期化できませんでした。また、"
 "オプション add-price-quotes が指定されませんでした。\n"
-"       おそらく $DISPLAY 環境変数の設定が必要でしょうか?"
+"おそらく $DISPLAY 環境変数の設定が必要でしょうか?"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:32
@@ -11990,9 +11990,9 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
@@ -12768,7 +12768,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13329,19 +13329,19 @@ msgstr "選択された勘定科目をセットアップする"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"新しい勘定科目を作成するには `適用' を押してください。するとファイルまたは"
+"新しい勘定科目を作成するには '適用' を押してください。するとファイルまたは"
 "データベースに保存できるようになります。\n"
 "\n"
-"選択した項目を確認するには `戻る' を押してください。\n"
+"選択した項目を確認するには '戻る' を押してください。\n"
 "\n"
-"新しい勘定科目を作成せずにダイアログを閉じるには `キャンセル' を押してくださ"
+"新しい勘定科目を作成せずにダイアログを閉じるには 'キャンセル' を押してくださ"
 "い。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:594
@@ -20312,7 +20312,7 @@ msgstr "インポート設定を削除します。"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr "設定名が既に存在しますが、上書きしますか?"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952
@@ -32951,25 +32951,25 @@ msgstr "ヘルプが利用できません。"
 #~ msgstr "併合時の競合を解決してください"
 
 #~ msgid ""
-#~ "Press `Apply' to merge your QSF data into the current GnuCash file.\n"
+#~ "Press 'Apply' to merge your QSF data into the current GnuCash file.\n"
 #~ "\n"
-#~ "Press `Back' to review your selections.\n"
+#~ "Press 'Back' to review your selections.\n"
 #~ "\n"
-#~ "Press `Cancel' to close this dialog without changing your current data "
+#~ "Press 'Cancel' to close this dialog without changing your current data "
 #~ "file.\n"
 #~ "\n"
 #~ "REMEMBER: There is no way to undo this final operation! Make sure you "
 #~ "have a backup before clicking 'Apply'."
 #~ msgstr ""
-#~ "QSFデータを現在の GnuCash ファイルに併合する場合は`適用'を押してくださ"
+#~ "QSFデータを現在の GnuCash ファイルに併合する場合は'適用'を押してくださ"
 #~ "い。\n"
 #~ "\n"
-#~ "選択した項目を確認するためには`戻る'を押してください。\n"
+#~ "選択した項目を確認するためには'戻る'を押してください。\n"
 #~ "\n"
-#~ "現在のデータを変更せずにダイアログを閉じるには`キャンセル'を押してくださ"
+#~ "現在のデータを変更せずにダイアログを閉じるには'キャンセル'を押してくださ"
 #~ "い。\n"
 #~ "\n"
-#~ "注意: この最後の操作を取り消すことはできません! `適用'をクリックする前に確"
+#~ "注意: この最後の操作を取り消すことはできません! '適用'をクリックする前に確"
 #~ "実にバックアップを取ってください。"
 
 #~ msgid "QSF Data Import Setup"

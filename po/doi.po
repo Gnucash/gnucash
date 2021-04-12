@@ -588,7 +588,7 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "तबादला रजिस्टर स्तंभ च मजूदा खाता-नांऽ दे पैह्‌ले अक्खर(रें) गी टाइप करो, ते GnuCash तुंऱदे "
 "खातें दी सूची चा नांऽ गी पूरा करी देग. उप-खातें लेई, मूल खाते दे पैह्‌ले अक्खर(रें) गी टाइप "
@@ -6085,7 +6085,7 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
 "मजूदा रिपोट गी बाद च इस्तेमाल करने आस्तै ' कस्टम’ मेन्यु थमां जोड़ो' रिपोट गी बचाइयै फ़ाइल "
 "च रक्खी लैता जाह्‌ग. एह् GnuCash दे अगले स्टार्ट-अप च रिपोट मेन्यु च मेन्यु प्रविष्टि दे रूप च "
@@ -6094,8 +6094,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, fuzzy, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
 "मजूदा रिपोट गी बाद च इस्तेमाल करने आस्तै ' कस्टम’ मेन्यु थमां जोड़ो' रिपोट गी बचाइयै फ़ाइल "
 "च रक्खी लैता जाह्‌ग. एह् GnuCash दे अगले स्टार्ट-अप च रिपोट मेन्यु च मेन्यु प्रविष्टि दे रूप च "
@@ -7477,7 +7477,7 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr "इस च %d डीकोड नेईं करने जोग शब्द मौजूद न . कृपा करियै कोडिङां जोड़ो. "
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -8128,7 +8128,7 @@ msgid "You must enter a valid price."
 msgstr "तुसें कोई मान्य कीमत प्रविश्ट करनी होग. "
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
+msgid "You must enter a valid 'to' amount."
 msgstr "तुसें कोई मान्य ‘गी’ रकम प्रविश्ट करनी होग.. "
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
@@ -10562,7 +10562,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
@@ -12356,9 +12356,9 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
@@ -13220,7 +13220,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13684,12 +13684,12 @@ msgstr "चुनिंदा खाते सैट्ट करो "
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 #, fuzzy
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
 "अपने नमें खाते बनाने आस्तै 'अप्लाई’ गी दबाओ. उसदे बाद तुस उऱनेंगी इक फ़ाइल जां डैटाबेस च "
 "बचाइयै रक्खने दे काबल होई जाह्‌गेओ.\n"
@@ -20998,7 +20998,7 @@ msgstr "बरामद फार्मैट चुनो "
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952
@@ -24388,12 +24388,12 @@ msgstr ""
 #: gnucash/report/reports/example/hello-world.scm:358
 #, fuzzy, scheme-format
 msgid "The current time is ~a."
-msgstr "चालू समां ऐ %s. "
+msgstr "चालू समां ऐ  ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:363
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The boolean option is ~a."
-msgstr "बूलियन आप्शन ऐ %s. "
+msgstr "बूलियन आप्शन ऐ  ~a. "
 
 #: gnucash/report/reports/example/hello-world.scm:364
 msgid "true"
@@ -24406,47 +24406,47 @@ msgstr "गल्त "
 #: gnucash/report/reports/example/hello-world.scm:368
 #, fuzzy, scheme-format
 msgid "The radio button option is ~a."
-msgstr "लड़ी आप्शन ऐ %s. "
+msgstr "लड़ी आप्शन ऐ  ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:373
 #, fuzzy, scheme-format
 msgid "The multi-choice option is ~a."
-msgstr "बहु-विकल्प आप्शन ऐ %s. "
+msgstr "बहु-विकल्प आप्शन ऐ  ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:378
 #, fuzzy, scheme-format
 msgid "The string option is ~a."
-msgstr "लड़ी आप्शन ऐ %s. "
+msgstr "लड़ी आप्शन ऐ  ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:383
 #, fuzzy, scheme-format
 msgid "The date option is ~a."
-msgstr "तरीक आप्शन ऐ %s. "
+msgstr "तरीक आप्शन ऐ  ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:388
 #, fuzzy, scheme-format
 msgid "The date and time option is ~a."
-msgstr "तरीक ते समां आप्शन ऐ %s. "
+msgstr "तरीक ते समां आप्शन ऐ ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:393
 #, fuzzy, scheme-format
 msgid "The relative date option is ~a."
-msgstr "सरबंधत तरीक आप्शन ऐ %s. "
+msgstr "सरबंधत तरीक आप्शन ऐ  ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:398
 #, fuzzy, scheme-format
 msgid "The combination date option is ~a."
-msgstr "संयुक्त तरीक आप्शन ऐ %s. "
+msgstr "संयुक्त तरीक आप्शन ऐ  ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:403
 #, fuzzy, scheme-format
 msgid "The number option is ~a."
-msgstr "नंबर आप्शन ऐ %s. "
+msgstr "नंबर आप्शन ऐ ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:414
 #, fuzzy, scheme-format
 msgid "The number option formatted as currency is ~a."
-msgstr "करंसी दे रूप च निर्मत नंबर आप्शन ऐ %s. "
+msgstr "करंसी दे रूप च निर्मत नंबर आप्शन ऐ  ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:426
 msgid "Items you selected:"

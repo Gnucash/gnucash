@@ -583,12 +583,12 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "বদলি পঞ্জীয়ন স্তম্ভটোত এটা বৰ্তি থকা একাউন্ট নামৰ প্ৰথম আখৰটো (বোৰ) টাইপ কৰক, আৰু "
 "আপোনাৰ একাউন্টবোৰৰ তালিকাৰ পৰা GnuCash য়ে নামবোৰ সম্পূৰ্ণ কৰিব. উপ-একাউন্টবোৰৰ "
 "কাৰণে, মূখ্য একাউন্টটোৰ প্ৰথম আখৰটো (বোৰ) ৰ পিছত ':' আৰু উপ-একাউন্টটোৰ প্ৰথম আখৰটো "
-"(বোৰ) (e.g. সম্পত্তিবোৰ:নগদ কৰণে A:C .) টাইপ কৰক"
+"(বোৰ) (e.g. সম্পত্তিবোৰ:নগদ কৰণে A:C ). টাইপ কৰক"
 
 #: doc/tip_of_the_day.list.c:65
 #, fuzzy
@@ -6031,17 +6031,17 @@ msgstr ""
 #, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
 "চলিত ৰিপোৰ্টটোৰ ছেভ কৰা ৰূপৰেখাটো আপডেট কৰক. ৰিপোৰ্টটো %s ফাইলটোত ছেভ কৰা হব."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"`ছেভ কৰা ৰিপোৰ্ট ৰূপৰেখাবোৰ' মেনুটোলৈ চলিত ৰিপোৰ্টৰ ৰূপৰেখাটো যোগ কৰক. ৰিপোৰ্টটো "
+"'ছেভ কৰা ৰিপোৰ্ট ৰূপৰেখাবোৰ' মেনুটোলৈ চলিত ৰিপোৰ্টৰ ৰূপৰেখাটো যোগ কৰক. ৰিপোৰ্টটো "
 "%s ফাইলটোত ছেভ কৰা হব. "
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
@@ -7415,7 +7415,7 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr "%d ডিকোড নোহোৱা শব্দবোৰ আছে. অনুগ্ৰহ কৰি এনকোডিংবোৰ যোগ কৰক."
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -8062,8 +8062,8 @@ msgid "You must enter a valid price."
 msgstr "আপুনি এটা বৈধ দাম ভৰাওক."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
-msgstr "আপুনি এটা বৈধ `লৈ' পৰিমাণ ভৰোৱাটো অপৰিহাৰ্য্য."
+msgid "You must enter a valid 'to' amount."
+msgstr "আপুনি এটা বৈধ 'লৈ' পৰিমাণ ভৰোৱাটো অপৰিহাৰ্য্য."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
 msgid "You must enter an amount to transfer."
@@ -10469,7 +10469,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "ভুল: গ্ৰাফিকেল ব্যৱহাৰকৰ্তা ইন্টাৰফেছ ইনিশ্বিয়েলাইজ কৰিব পৰা নগল আৰু মূল্যৰ-উদ্ধৃতি-যোগ "
 "কৰা বিকল্পটো ছেট কৰা নাছিল."
@@ -12273,16 +12273,16 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 "এই ছেটিংটোৱে PDF ৰপ্তানিৰ বাবে ফাইল নামটো নিৰ্বাচন কৰে. এইটো হল তিনিটা যুক্তিৰ "
 "সৈতে এটা sprintf(3) ষ্ট্ৰিং: \"%1$s\" হল \"Invoice\" ৰ দৰে ৰিপোৰ্ট নামটো. \"%2$s"
 "\" হল ৰিপোৰ্টটোৰ সংখ্যা, যি এটা ইনভইছ ৰিপোৰ্টৰ বাবে ইনভইছ সংখ্যাটো. \"%3$s\" হল "
-"ৰিপোৰ্টটোৰ তাৰিখ, ফাইলনাম-তাৰিখ-ফৰমেট ছেটিংটোৰ মতে ফৰমেট কৰা হল. (টোকা: '/' ৰ "
+"ৰিপোৰ্টটোৰ তাৰিখ, ফাইলনাম-তাৰিখ-ফৰমেট ছেটিংটোৰ মতে ফৰমেট কৰা হল. টোকা: '/' ৰ "
 "দৰে, ফাইলনামবোৰত অনুমোদন নকৰা যিকোনো আখৰ, ফলাফলৰ ফাইল নামটোত '_' "
-"আণ্ডাৰস্কোৰবোৰৰ দ্বাৰা প্ৰতিস্থাপন কৰা হব.)"
+"আণ্ডাৰস্কোৰবোৰৰ দ্বাৰা প্ৰতিস্থাপন কৰা হব."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
@@ -13123,7 +13123,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13608,19 +13608,19 @@ msgstr "নিৰ্বাচিত একাউন্টবোৰ ছেটআ�
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"আপোনাৰ নতুন একাউন্ট তৈয়াৰ কৰিবলৈ `প্ৰয়োগ কৰক' ত প্ৰেছ কৰক. আপুনি তেতিয়া সেইবোৰ "
+"আপোনাৰ নতুন একাউন্ট তৈয়াৰ কৰিবলৈ 'প্ৰয়োগ কৰক' ত প্ৰেছ কৰক. আপুনি তেতিয়া সেইবোৰ "
 "ফাইল বা ডাটাবেছ এখনলৈ ছেভ কৰিবলৈ সক্ষম হব.\n"
 "\n"
-"আপোনাৰ নিৰ্বাচনবোৰ পুনৰবিবেচনা কৰিবলৈ `উভতি যাওক' ত ক্লিক কৰক.\n"
+"আপোনাৰ নিৰ্বাচনবোৰ পুনৰবিবেচনা কৰিবলৈ 'উভতি যাওক' ত ক্লিক কৰক.\n"
 "\n"
-"যিকোনো নতুন একাউন্ট তৈয়াৰ নকৰাকৈ সংলাপটো বন্ধন কৰিবলৈ `বাতিল কৰক' ত ক্লিক কৰক."
+"যিকোনো নতুন একাউন্ট তৈয়াৰ নকৰাকৈ সংলাপটো বন্ধন কৰিবলৈ 'বাতিল কৰক' ত ক্লিক কৰক."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:594
 msgid "Finish Account Setup"
@@ -14429,7 +14429,7 @@ msgid ""
 "the details of that payment here. Otherwise, just click \"Next\"."
 msgstr ""
 "ষ্টকৰ স্প্লিটটোৰ ফলাফলৰ কৰণে যদি আপুনি এটা নগদ বিতৰণ গ্ৰহণ কৰে, ইয়াত সেই "
-"পৰিশোধটোৰ সম্পূৰ্ণ বিৱৰণ ভৰাওক. অথবা মাত্ৰ `আগলৈ' ক্লিক কৰক. "
+"পৰিশোধটোৰ সম্পূৰ্ণ বিৱৰণ ভৰাওক. অথবা মাত্ৰ 'আগলৈ' ক্লিক কৰক. "
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:286
 #: gnucash/import-export/aqb/dialog-ab.glade:1212
@@ -14468,9 +14468,9 @@ msgid ""
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
-"যদি আপুনি ষ্টকৰ স্প্লিট বা একত্ৰীভবনটো সৃষ্টি কৰা শেষ কৰে, `প্ৰয়োগ' প্ৰেছ কৰক. আপোনাৰ "
-"পছন্দবোৰ পুনৰ নিৰীক্ষণ কৰিবলৈ আপুনি `পিছলৈ' প্ৰেছ কৰিব পাৰে বা কোনো সলনি নকৰাকৈ "
-"ওলাই যাবলৈ `বাতিল' প্ৰেছ কৰিব পাৰে."
+"যদি আপুনি ষ্টকৰ স্প্লিট বা একত্ৰীভবনটো সৃষ্টি কৰা শেষ কৰে, 'প্ৰয়োগ' প্ৰেছ কৰক. আপোনাৰ "
+"পছন্দবোৰ পুনৰ নিৰীক্ষণ কৰিবলৈ আপুনি 'পিছলৈ' প্ৰেছ কৰিব পাৰে বা কোনো সলনি নকৰাকৈ "
+"ওলাই যাবলৈ 'বাতিল' প্ৰেছ কৰিব পাৰে."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:424
 msgid "Stock Split Finish"
@@ -20789,7 +20789,7 @@ msgstr "ৰপ্তানি ছেটিংবোৰ নিৰ্বাচন 
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952

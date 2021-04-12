@@ -583,12 +583,12 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "ٹرانسفر رجسٹر كالم میں موجودہ اكاؤنٹ نام كے پہلے حرف (وں) كو ٹائپ كریں، اور "
 "GnuCash آپ كے اكاؤنٹس كی فہرست سے نام كو پورا كر دے گا۔ سب اكاؤنٹ كے لیے، "
 "پیرینٹ اكاؤنٹ كے پہلے حرف(وں) كو ٹائپ كریں، اُس كے بعد ':' اور سب اكاؤنٹ كے "
-"پہلے حرف(وں) (مثلاً : اسیٹس : كیش كے لیے A:C ۔ ) كو ٹائپ كریں۔"
+"پہلے حرف(وں) (مثلاً : اسیٹس : كیش كے لیے A:C) كو ٹائپ كریں۔"
 
 #: doc/tip_of_the_day.list.c:65
 #, fuzzy
@@ -6032,22 +6032,21 @@ msgid "Make Pdf"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1196
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
-"موجودہ رپورٹ کے محفوظ ترتیب کو اپ ڈیٹ کریں. رپورٹ file ~/.gnucash/saved-"
-"reports-2.4 میں محفوظ کی جائے گی."
+"موجودہ رپورٹ کے محفوظ ترتیب کو اپ ڈیٹ کریں. رپورٹ file %s میں محفوظ کی جائے گی."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
-#, fuzzy, c-format
+#, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
 "'محفوظ شدہ رپورٹ كانفگریشنس' مینو میں حالیہ رپورٹ كانفگریشن ملائیں ۔ رپورٹ "
-"فائل میں محفوظ ہوجائے گی۔~/.gnucash/saved-reports-2.4. "
+"فائل میں محفوظ ہوجائے گی۔%s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -7418,7 +7417,7 @@ msgstr ""
 "جمع كرو۔"
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -8064,7 +8063,7 @@ msgid "You must enter a valid price."
 msgstr "آپ كو ایك معتبر قیمت درج كرنی چاہیے۔"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
+msgid "You must enter a valid 'to' amount."
 msgstr "آپ كو ایك معتبر 'كو' رقم درج كرنی چاہیے۔"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
@@ -10484,7 +10483,7 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "خامی : گرافیكل صارف انٹر فیس ابتدائ نہیں كرسكے اور آپشن ایڈ۔پرائس۔كوٹس سیٹ "
 "نہیں كیا گیا تھا۔"
@@ -12309,17 +12308,17 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 "یہ ترتیب پی ڈی ایف برآمد كرنے کے لئے فائل کے نام کا انتخاب کرتے ہیں. یہ ایک "
 "sprintf تین اسٹرینگ تین ارگیومنٹ كے ساتھ :\"%1$s\" یہ ایك رپورٹ نام ہے جیسے "
 "\"انوائس \" \"%2$s\" ایک رپورٹ کا نمبر ہے جس كے لئے اِنوائس رپورٹ، رپورٹ، کی "
 "تعداد ہے. \"%3$s\" رپورٹ كی تاریخ ہے ، فائل کا نام تاریخ فارمیٹ کی ترتیب کے "
-"مطابق فارمیٹ كیا گیا ہے۔ ( نوٹ: كو ئی بھی حروف جس كی فائل نام میں اجازت "
+"مطابق فارمیٹ كیا گیا ہے۔ نوٹ: كو ئی بھی حروف جس كی فائل نام میں اجازت "
 "نہیں ، جیسے '/' جس كو اَنڈر اسكور '_' كے جگہ پر تبدیل كیا جائے گا نتیجے میں "
-"فائل کے نام میں.)"
+"فائل کے نام میں."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
@@ -13173,7 +13172,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13660,17 +13659,17 @@ msgstr "منتخب اكاؤنٹس كا سیٹ اپ"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
 "آپ كا نیا اکاؤنٹ تخلیق کرنے کے لئے 'لاگو كریں' پریس کریں. اس کے بعد آپ ایک "
 "فائل یا ڈاٹا بیس کے لئے ان کو محفوظ كرنے کے لئے قابل ہو جائے گے\n"
 "\n"
-"اپنے انتخابات کا جائزہ لینے كے لیے`بیك' پر پریس كریں.\n"
+"اپنے انتخابات کا جائزہ لینے كے لیے'بیك' پر پریس كریں.\n"
 "\n"
 "كوئی بھی نیا اکاؤنٹ بنائے بغیر اس ڈائیلاگ کو بند کرنے کے لئے 'منسوخ کریں' پر "
 "پریس كریں۔ "
@@ -20897,7 +20896,7 @@ msgstr "برآمد ترتیبیں انتخاب كریں"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952

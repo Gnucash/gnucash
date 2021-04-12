@@ -578,12 +578,12 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "הקלדת האות הראשונה של שם חשבון קיים בעמודה ביומן ההעברות, וגנוקאש תשלים את "
 "השם מרשימת החשבונות הקיימים. לחשבונות משנה, יש להקליד את האות הראשונה של "
 "חשבון האב, ואחריו ':' ואת האות הראשונה של חשבון המשנה (לדוגמה, ר:מ עבור "
-"רכוש: מזומנים.)"
+"רכוש: מזומנים)."
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -5843,17 +5843,17 @@ msgstr "יצירת PDF"
 #, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
-msgstr "עדכון תצורת הדוח השמור הנוכחי. הגדרות הדוח יישמרו בקובץ %s. "
+"will be saved in the file %s."
+msgstr "עדכון תצורת הדוח השמור הנוכחי. הגדרות הדוח יישמרו בקובץ %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
 "הוספת תצורת הדוח הנוכחי לתפריט 'תצורות דוחות שנשמרו'. הגדרות הדוח יישמרו "
-"בקובץ %s. "
+"בקובץ %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -7196,7 +7196,7 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr "קיימות %d מילים שאינן ניתנות לפענוח. נא להוסיף קידודים."
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -7829,7 +7829,7 @@ msgid "You must enter a valid price."
 msgstr "נא להזין מחיר תקין."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
+msgid "You must enter a valid 'to' amount."
 msgstr "נא להזין סכום 'ל' תקין."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
@@ -10200,10 +10200,10 @@ msgstr "הרצת '{1} --help' ‏לצפייה ברשימה מלאה של פקו�
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "שגיאה: לא היתה אפשרות לאתחל ממשק משתמש גרפי והאפשרות הוספה-שערים לא הוגדרה.\n"
-"       ייתכן ונידרש להגדיר את משתנה הסביבה של DISPLAY$?"
+"ייתכן ונידרש להגדיר את משתנה הסביבה של DISPLAY$?"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:32
@@ -11965,15 +11965,15 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 "הגדרה זו קובעת את שם קובץ ה PDF שייוצא. זוהי מחרוזת מסוג sprintf(3) בעלת "
 "שלושה משתנים: '%1$s' הוא שם הדוח, כגון 'חשבונית'. '%2$s' הוא מספר הדוח, "
 "שעבור דוח חשבוניות הוא מספר החשבונית. '%3$s' הוא התאריך הדוח, המעוצב לפי "
-"הגדרת מבנה-קובץ-תאריך. (הערה: תווים לא מותרים בשמות קבצים, כגון '/', יוחלפו "
-"במקפים תחתונים ' _ ' בשם הקובץ שיוצר.)"
+"הגדרת מבנה-קובץ-תאריך. הערה: תווים לא מותרים בשמות קבצים, כגון '/', יוחלפו "
+"במקפים תחתונים ' _ ' בשם הקובץ שיוצר."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
@@ -12783,7 +12783,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13332,12 +13332,12 @@ msgstr "הגדרת החשבון שנבחר"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
 "הקשה על 'בצוע' ליצרת חשבונות חדשים.\n"
 "\n"
@@ -20253,7 +20253,7 @@ msgstr "מחיקת הגדרות היבוא."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr "שם הגדרה קיים, האם לדרוס?"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952

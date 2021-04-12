@@ -585,12 +585,12 @@ msgid ""
 "register column, and GnuCash will complete the name from your list of "
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
-"Assets:Cash.)"
+"Assets:Cash)."
 msgstr ""
 "Ketik huruf pertama dari nama akun yang sudah ada pada kolom register "
 "Transfer, dan GnuCash akan melengkapi nama itu dari daftar akun Anda. Untuk "
 "sub-akun, ketik huruf pertama dari akun utama, diikuti dengan ':' dan huruf "
-"pertama dari sub-akun (misal A:K untuk Aset:Kas.)"
+"pertama dari sub-akun (misal A:K untuk Aset:Kas)."
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -5965,19 +5965,19 @@ msgstr "Buat PDF"
 #, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
-"will be saved in the file %s. "
+"will be saved in the file %s."
 msgstr ""
 "Perbarui konfigurasi tersimpan untuk laporan saat ini. Konfigurasi laporan "
-"akan disimpan pada berkas %s. "
+"akan disimpan pada berkas %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
 #, c-format
 msgid ""
-"Add the current report's configuration to the `Reports->Saved Report "
-"Configurations' menu. The report configuration will be saved in the file %s. "
+"Add the current report's configuration to the 'Reports->Saved Report "
+"Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"Tambahkan konfigurasi laporan saat ini ke menu `Laporan->Konfigurasi Laporan "
-"Tersimpan'. Konfigurasi laporan akan disimpan pada berkas %s. "
+"Tambahkan konfigurasi laporan saat ini ke menu 'Laporan->Konfigurasi Laporan "
+"Tersimpan'. Konfigurasi laporan akan disimpan pada berkas %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -7349,7 +7349,7 @@ msgid "There are %d undecodable words. Please add encodings."
 msgstr "Terdapat %d kata yang tak dapat dikodekan. Silakan tambah pengkodean."
 
 #. Translators: Please insert encodings here that are typically used in your
-#. locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+#. locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
 #. for assistance with spelling.
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1010
 msgid "ISO-8859-1 KOI8-U"
@@ -7995,7 +7995,7 @@ msgid "You must enter a valid price."
 msgstr "Anda harus memasukkan harga yang valid."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1494
-msgid "You must enter a valid `to' amount."
+msgid "You must enter a valid 'to' amount."
 msgstr "Anda harus memasukkan jumlah 'ke' yang valid."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1722
@@ -10406,11 +10406,11 @@ msgstr ""
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
-"       Perhaps you need to set the $DISPLAY environment variable?"
+"Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
 "Galat: tak dapat menginisialiasi antarmuka grafis dan opsi add-price-quotes "
 "tidak disetel.\n"
-"       Mungkin Anda perlu menyetel variabel lingkungan $DISPLAY?"
+"Mungkin Anda perlu menyetel variabel lingkungan $DISPLAY?"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:32
@@ -12267,17 +12267,17 @@ msgid ""
 "string with three arguments: \"%1$s\" is the report name such as \"Invoice"
 "\". \"%2$s\" is the number of the report, which for an invoice report is the "
 "invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. (Note: Any characters that are not allowed "
+"the filename-date-format setting. Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name.)"
+"resulting file name."
 msgstr ""
 "Pengaturan ini memilih nama berkas untuk ekspor PDF. Ini adalah string "
 "sprintf(3) dengan tiga argumen: \"%1$s\" adalah nama laporan seperti \"Faktur"
 "\". \"%2$s\" adalah nomor laporan, yang untuk laporan faktur adalah nomor "
 "faktur. \"%3$s\" adalah tanggal laporan, diformat sesuai dengan pengaturan "
-"filename-date-format. (Catatan: Setiap karakter yang tidak diperbolehkan "
+"filename-date-format. Catatan: Setiap karakter yang tidak diperbolehkan "
 "dalam nama berkas, seperti '/', akan diganti dengan garis bawah '_' dalam "
-"nama berkas yang dihasilkan.)"
+"nama berkas yang dihasilkan."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:378
 msgid "PDF export file name date format choice"
@@ -13132,7 +13132,7 @@ msgid ""
 "\n"
 "There is an option for specifying the start row, end row and an option to "
 "skip alternate rows beginning from the start row which can be used if you "
-"have some header text. Also there is an option to over write existing prices "
+"have some header text. Also there is an option to overwrite existing prices "
 "for that day if required.\n"
 "\n"
 "Lastly, for repeated imports the preview page has buttons to Load and Save "
@@ -13709,19 +13709,19 @@ msgstr "Siapkan akun yang dipilih"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
-"Press `Apply' to create your new accounts. You will then be able to save "
+"Press 'Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
-"Press `Back' to review your selections.\n"
+"Press 'Back' to review your selections.\n"
 "\n"
-"Press `Cancel' to close this dialog without creating any new accounts."
+"Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"Tekan `Terapkan' untuk membuat akun baru Anda. Anda kemudian akan dapat "
+"Tekan 'Terapkan' untuk membuat akun baru Anda. Anda kemudian akan dapat "
 "menyimpannya ke sebuah berkas atau basis data.\n"
 "\n"
-"Tekan `Kembali' untuk meninjau pilihan Anda.\n"
+"Tekan 'Kembali' untuk meninjau pilihan Anda.\n"
 "\n"
-"Tekan `Batal' untuk menutup dialog ini tanpa membuat akun baru."
+"Tekan 'Batal' untuk menutup dialog ini tanpa membuat akun baru."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:594
 msgid "Finish Account Setup"
@@ -20899,7 +20899,7 @@ msgstr "Hapus Pengaturan Impor."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
-msgid "Setting name already exists, over write?"
+msgid "Setting name already exists, overwrite?"
 msgstr "Nama pengaturan sudah ada, timpa nama pengaturan?"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:952
