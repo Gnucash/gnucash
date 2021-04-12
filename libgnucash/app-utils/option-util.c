@@ -95,7 +95,6 @@ struct _Getters
     SCM value_validator;
     SCM option_data;
     SCM index_to_name;
-    SCM index_to_description;
     SCM index_to_value;
     SCM value_to_index;
     SCM number_of_indices;
@@ -552,8 +551,6 @@ initialize_getters(void)
         scm_c_eval_string ("gnc:option-value-validator");
     getters.option_data = scm_c_eval_string ("gnc:option-data");
     getters.index_to_name = scm_c_eval_string ("gnc:option-index-get-name");
-    getters.index_to_description =
-        scm_c_eval_string ("gnc:option-index-get-description");
     getters.number_of_indices = scm_c_eval_string ("gnc:option-number-of-indices");
     getters.index_to_value = scm_c_eval_string ("gnc:option-index-get-value");
     getters.value_to_index = scm_c_eval_string ("gnc:option-value-get-index");
@@ -913,36 +910,6 @@ gnc_option_permissible_value_name (GNCOption *option, int index)
         return NULL;
 
     return gnc_scm_to_utf8_string (name);
-}
-
-/********************************************************************\
- * gnc_option_permissible_value_description                         *
- *   returns the malloc'd description of the indexth permissible    *
- *   value in the option, or NULL if the index was out of range or  *
- *   there are no values available.                                 *
- *                                                                  *
- * Args: option - the GNCOption                                     *
- *       index  - the index of the permissible value                *
- * Returns: malloc'd description of permissible value or NULL       *
-\********************************************************************/
-char *
-gnc_option_permissible_value_description (GNCOption *option, int index)
-{
-    SCM help;
-
-    if (index < 0)
-        return NULL;
-
-    initialize_getters ();
-
-    help = scm_call_2 (getters.index_to_description, option->guile_option,
-                       scm_from_int (index));
-    if (help == SCM_UNDEFINED)
-        return NULL;
-    if (!scm_is_string (help))
-        return NULL;
-
-    return gnc_scm_to_utf8_string (help);
 }
 
 /********************************************************************\
