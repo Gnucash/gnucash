@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-04-10 18:26+0000\n"
+"PO-Revision-Date: 2021-04-11 17:26+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -492,7 +492,7 @@ msgid ""
 "It is possible to change which columns display in the Chart of Accounts. "
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
-msgstr "自定义科目表显示栏，标签栏最右三角形，单击查看所有可用选项。"
+msgstr "自定义主窗格标签，标签栏最右三角形，查看所有可用选项。"
 
 #: doc/tip_of_the_day.list.c:27
 msgid ""
@@ -500,7 +500,7 @@ msgid ""
 "of the main window to bring up the account menu options. Within each "
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
-msgstr "在科目和交易事项右键会有弹出菜单。"
+msgstr "选中科目或交易，右键会弹窗菜单。"
 
 #: doc/tip_of_the_day.list.c:32
 msgid ""
@@ -508,7 +508,7 @@ msgid ""
 "This will bring up a dialog box where you can enter account details. For "
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
-msgstr "工具栏 \"新建 \"，会弹出一个对话框，请输入科目详细信息。科目类型或科目表的更多信息，请参见GnuCash在线手册。"
+msgstr "工具栏 \"新建 \"，在弹窗录入科目详细信息。科目类型或科目表的更多资料，请参见GnuCash在线手册。"
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -697,7 +697,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
-msgstr "结账成功。"
+msgstr "顺利结账。"
 
 #. Translators: %s is a date string. %d is the number of books
 #. that will be created. This is a ngettext(3) message (but
@@ -758,9 +758,8 @@ msgstr "会计期间"
 
 #: gnucash/gnome/assistant-acct-period.c:590
 #: gnucash/gtkbuilder/dialog-book-close.glade:85
-#, fuzzy
 msgid "Closing Date"
-msgstr "结账日期："
+msgstr "结账日期"
 
 #: gnucash/gnome/assistant-hierarchy.c:755
 msgid "Selected"
@@ -769,7 +768,7 @@ msgstr "已选中"
 #: gnucash/gnome/assistant-hierarchy.c:767
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2367
 msgid "Account Types"
-msgstr "会计科目类型"
+msgstr "科目类型"
 
 #. Translators: '%s' is the name of the selected account hierarchy template.
 #: gnucash/gnome/assistant-hierarchy.c:868
@@ -835,7 +834,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-hierarchy.c:1491
 msgid "Please choose the currency to use for new accounts."
-msgstr "请选择用于新科目的货币。"
+msgstr "请选择新科目的货币。"
 
 #: gnucash/gnome/assistant-hierarchy.c:1536
 #: gnucash/gnome/assistant-hierarchy.c:1555
@@ -1036,7 +1035,7 @@ msgstr "添加价格时发生错误。"
 #: gnucash/report/reports/standard/register.scm:378
 #: gnucash/report/trep-engine.scm:1252
 msgid "Account"
-msgstr "会计科目"
+msgstr "科目"
 
 #: gnucash/gnome/assistant-stock-split.c:579
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
@@ -1140,7 +1139,7 @@ msgstr "使用全局设置"
 #: gnucash/gnome/top-level.c:258
 #, c-format
 msgid "Badly formed URL %s"
-msgstr "错误形式的 URL %s"
+msgstr "格式错误的 URL %s"
 
 #: gnucash/gnome/business-urls.c:74 gnucash/gnome/top-level.c:99
 #, c-format
@@ -1175,7 +1174,7 @@ msgstr "请给此账期命名。"
 msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
-msgstr "帐期名称不能重复，已经有“%s”了。"
+msgstr "帐期名称不能重复，已有“%s”。"
 
 #: gnucash/gnome/dialog-billterms.c:531
 #: gnucash/gnome-utils/gnc-date-delta.c:222
@@ -1215,24 +1214,22 @@ msgid "Are you sure you want to delete \"%s\"?"
 msgstr "确定要删除“%s”？"
 
 #: gnucash/gnome/dialog-choose-owner.c:78
-#, fuzzy
 msgid ""
 "This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
-msgstr "需要给这笔交易事项指定一个客户。请于下方选择客户。"
+msgstr "此交易需要指定一个客户，请于下方选择。"
 
 #: gnucash/gnome/dialog-choose-owner.c:85
-#, fuzzy
 msgid ""
 "This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
-msgstr "需要给这笔交易指定一个供应商。请于下方选择供应商。"
+msgstr "此交易需要指定一个供应商，请于下方选择。"
 
 #: gnucash/gnome/dialog-commodities.c:183
 msgid ""
 "That commodity is currently used by at least one of your accounts. You may "
 "not delete it."
-msgstr "此商品当前正被至少一个您的科目使用。您不能将它删除。"
+msgstr "此商品当前被至少一个科目使用，不能删除。"
 
 #: gnucash/gnome/dialog-commodities.c:197
 msgid ""
@@ -1382,21 +1379,21 @@ msgstr ""
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "You must enter a billing address."
-msgstr "您必须输入一个账单地址。"
+msgstr "账单地址不能为空。"
 
 #: gnucash/gnome/dialog-customer.c:351
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr "折扣的百分比必须介于 0-100 或者保持空白。"
+msgstr "折扣必须介于 0-100%之间或为空。"
 
 #: gnucash/gnome/dialog-customer.c:356
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr "信用必须是正数或者保持空白。"
+msgstr "信用额必须是正数或为空。"
 
 #: gnucash/gnome/dialog-customer.c:433 gnucash/gnome/dialog-employee.c:288
 #: gnucash/gnome/dialog-job.c:243 gnucash/gnome/dialog-vendor.c:300
 #: gnucash/gnome-utils/dialog-account.c:1572
 msgid "<No name>"
-msgstr "<没有名称>"
+msgstr "<无名>"
 
 #: gnucash/gnome/dialog-customer.c:440
 msgid "Edit Customer"
@@ -1406,7 +1403,7 @@ msgstr "编辑客户"
 #: gnucash/gnome-search/dialog-search.c:1079
 #: gnucash/gtkbuilder/dialog-customer.glade:31
 msgid "New Customer"
-msgstr "新建客户"
+msgstr "新增客户"
 
 #: gnucash/gnome/dialog-customer.c:910
 msgid "View/Edit Customer"
@@ -1414,11 +1411,11 @@ msgstr "查看/编辑客户"
 
 #: gnucash/gnome/dialog-customer.c:911
 msgid "Customer's Jobs"
-msgstr "客户的工作"
+msgstr "客户项目"
 
 #: gnucash/gnome/dialog-customer.c:913
 msgid "Customer's Invoices"
-msgstr "客户的发票"
+msgstr "客户发票"
 
 #: gnucash/gnome/dialog-customer.c:914 gnucash/gnome/dialog-employee.c:695
 #: gnucash/gnome/dialog-invoice.c:3300 gnucash/gnome/dialog-invoice.c:3309
@@ -1432,11 +1429,11 @@ msgstr "处理付款"
 
 #: gnucash/gnome/dialog-customer.c:924
 msgid "Shipping Contact"
-msgstr "送货联系人"
+msgstr "送货师傅"
 
 #: gnucash/gnome/dialog-customer.c:926 gnucash/gnome/dialog-vendor.c:729
 msgid "Billing Contact"
-msgstr "付款联系人"
+msgstr "账单联系人"
 
 #: gnucash/gnome/dialog-customer.c:928
 msgid "Customer ID"
@@ -1478,9 +1475,9 @@ msgid "Find Customer"
 msgstr "查找客户"
 
 #: gnucash/gnome/dialog-custom-report.c:319
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete %s?"
-msgstr "您确定要删除“%s”吗？"
+msgstr "确定要删除“%s”吗？"
 
 #: gnucash/gnome/dialog-custom-report.c:424
 #, fuzzy
