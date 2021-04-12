@@ -1149,7 +1149,6 @@ gnc_option_create_radiobutton_widget (char *name, GNCOption *option)
     GtkWidget *widget = NULL;
     int num_values;
     char *label;
-    char *tip;
     int i;
 
     num_values = gnc_option_num_permissible_values (option);
@@ -1168,7 +1167,6 @@ gnc_option_create_radiobutton_widget (char *name, GNCOption *option)
     for (i = 0; i < num_values; i++)
     {
         label = gnc_option_permissible_value_name (option, i);
-        tip = gnc_option_permissible_value_description (option, i);
 
         widget =
             gtk_radio_button_new_with_label_from_widget (widget ?
@@ -1177,15 +1175,13 @@ gnc_option_create_radiobutton_widget (char *name, GNCOption *option)
                     label && *label ? _(label) : "");
         g_object_set_data (G_OBJECT(widget), "gnc_radiobutton_index",
                            GINT_TO_POINTER (i));
-        gtk_widget_set_tooltip_text (widget, tip && *tip ? _(tip) : "");
+
         g_signal_connect (G_OBJECT(widget), "toggled",
                           G_CALLBACK(gnc_option_radiobutton_cb), option);
         gtk_box_pack_start (GTK_BOX(box), widget, FALSE, FALSE, 0);
 
         if (label)
             free (label);
-        if (tip)
-            free (tip);
     }
     return frame;
 }
@@ -1222,11 +1218,10 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
     for (i = 0; i < num_values; i++)
     {
         char *label;
-        char *tip;
+        char *tip = NULL;
         GtkWidget *table = NULL;
 
         label = gnc_option_permissible_value_name (option, i);
-        tip = gnc_option_permissible_value_description (option, i);
 
         widget =
             gtk_radio_button_new_with_label_from_widget (widget ?
@@ -1252,7 +1247,6 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
         default:
             break;
         }
-        gtk_widget_set_tooltip_text (widget, tip && *tip ? _(tip) : "");
         if (g_strcmp0 (gnc_option_permissible_value_name (option, i),
                                                     "Use a Book Currency") == 0)
         {

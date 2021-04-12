@@ -179,15 +179,9 @@
       (N_ "Hello Again") (N_ "A list option")
       "h" (N_ "This is a list option.")
       '(good)
-      (list (vector 'good
-                    (N_ "The Good")
-                    (N_ "Good option."))
-            (vector 'bad
-                    (N_ "The Bad")
-                    (N_ "Bad option."))
-            (vector 'ugly
-                    (N_ "The Ugly")
-                    (N_ "Ugly option.")))))
+      (list (vector 'good (N_ "The Good"))
+            (vector 'bad (N_ "The Bad"))
+            (vector 'ugly (N_ "The Ugly")))))
     
     ;; This option is for testing. When true, the report generates
     ;; an exception.
