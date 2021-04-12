@@ -993,6 +993,14 @@ the option '~a'."))
         (rpterror-earlier "multichoice" item (car full-lst))
         0)))
 
+(define (check-ok-values ok-values fn)
+  (for-each
+   (lambda (ok-value)
+     (when (> (vector-length ok-value) 2)
+       (issue-deprecation-warning
+        (format #f "~a: the tooltip in ~a is not supported anymore. Please remove." fn ok-value))))
+   ok-values))
+
 ;; multichoice options use the option-data as a list of vectors.
 ;; Each vector contains a permissible value (scheme symbol), a
 ;; name, and a description string.
@@ -1041,6 +1049,8 @@ the option '~a'."))
         '()
         (cons (vector-ref (car p-vals) 1)
               (multichoice-strings (cdr p-vals)))))
+
+  (check-ok-values ok-values "gnc:make-multichoice-[callback-]option")
 
   (let* ((value default-value)
          (value->string (lambda ()
@@ -1196,6 +1206,8 @@ the option '~a'."))
         '()
         (cons (vector-ref (car p-vals) 1)
               (list-strings (cdr p-vals)))))
+
+  (check-ok-values ok-values "gnc:make-list-option")
 
   (let* ((value default-value)
          (value->string (lambda ()
