@@ -68,7 +68,7 @@ balance at a given time"))
 (define optname-price-source (N_ "Price Source"))
 
 (define optname-accounts (N_ "Accounts"))
-(define optname-levels (N_ "Show Accounts until level"))
+(define optname-levels (N_ "Levels of Subaccounts"))
 
 (define optname-fullname (N_ "Show long names"))
 (define optname-show-total (N_ "Show Totals"))
@@ -114,21 +114,10 @@ balance at a given time"))
           gnc:pagename-general optname-averaging
           "f" opthelp-averaging
           'None
-          (list (vector 'None
-                        (N_ "No Averaging")
-                        (N_ "Just show the amounts, without any averaging."))
-                (vector 'YearDelta
-                        (N_ "Yearly")
-                        (N_ "Show the average yearly amount during the reporting period."))
-                (vector 'MonthDelta
-                        (N_ "Monthly")
-                        (N_ "Show the average monthly amount during the reporting period."))
-                (vector 'WeekDelta
-                        (N_ "Weekly")
-                        (N_ "Show the average weekly amount during the reporting period."))
-                )
-          ))
-        )
+          (list (vector 'None (N_ "No Averaging"))
+                (vector 'YearDelta (N_ "Yearly"))
+                (vector 'MonthDelta (N_ "Monthly"))
+                (vector 'WeekDelta (N_ "Weekly"))))))
 
     (add-option
      (gnc:make-account-list-option
@@ -149,7 +138,7 @@ balance at a given time"))
     (if depth-based?
       (gnc:options-add-account-levels!
        options gnc:pagename-accounts optname-levels "b"
-       (N_ "Show accounts to this depth and not further.")
+       (N_ "Maximum number of levels in the account tree displayed.")
        2))
 
     (add-option

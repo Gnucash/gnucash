@@ -77,16 +77,9 @@
       pagename-price optname-price-source
       "f" (N_ "The source of price information.") 
       'actual-transactions
-      (list (vector 'weighted-average 
-                    (N_ "Weighted Average")
-                    (N_ "The weighted average of all currency transactions of the past."))
-            (vector 'actual-transactions
-                    (N_ "Actual Transactions")
-                    (N_ "The instantaneous price of actual currency transactions in the past."))
-            (vector 'pricedb
-                    (N_ "Price Database")
-                    (N_ "The recorded prices."))
-            )))
+      (list (vector 'weighted-average (N_ "Weighted Average"))
+            (vector 'actual-transactions (N_ "Actual Transactions"))
+            (vector 'pricedb (N_ "Price Database")))))
 
     (add-option
      (gnc:make-simple-boolean-option

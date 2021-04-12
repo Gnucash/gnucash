@@ -66,18 +66,10 @@
      (gnc:make-multichoice-option
       (N_ "Hello, World!") (N_ "Multi Choice Option")
       "b" (N_ "This is a multi choice option.") 'third
-      (list (vector 'first
-                    (N_ "First Option")
-                    (N_ "Help for first option."))
-            (vector 'second
-                    (N_ "Second Option")
-                    (N_ "Help for second option."))
-            (vector 'third
-                    (N_ "Third Option")
-                    (N_ "Help for third option."))
-            (vector 'fourth
-                    (N_ "Fourth Options")
-                    (N_ "The fourth option rules!")))))
+      (list (vector 'first (N_ "First Option"))
+            (vector 'second (N_ "Second Option"))
+            (vector 'third (N_ "Third Option"))
+            (vector 'fourth (N_ "Fourth Options")))))
     
     ;; This is a string option. Users can type anything they want
     ;; as a value. The default value is "Hello, World". This is

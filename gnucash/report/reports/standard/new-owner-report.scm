@@ -944,17 +944,18 @@
   (gnc:register-inv-option
    (gnc:make-multichoice-option
     (N_ "Display Columns") linked-txns-header
-    "hc" (N_ "Show linked transactions") 'none
-    (list (vector 'none
-                  (N_ "Disabled")
-                  (N_ "Linked transactions are hidden."))
-          (vector 'simple
-                  (N_ "Simple")
-                  (N_ "Invoices show if paid, payments show invoice numbers."))
-          (vector 'detailed
-                  (N_ "Detailed")
-                  (N_ "Invoices show list of payments, payments show list of \
-invoices and amounts.")))))
+    "hc"
+    (string-join
+     (list
+      (G_ "Show linked transactions")
+      (G_ "Linked transactions are hidden.")
+      (G_ "Invoices show if paid, payments show invoice numbers.")
+      (G_ "Invoices show list of payments, payments show list of invoices and amounts."))
+      "\n* ")
+    'none
+    (list (vector 'none (N_ "Disabled"))
+          (vector 'simple (N_ "Simple"))
+          (vector 'detailed (N_ "Detailed")))))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -966,14 +967,8 @@ invoices and amounts.")))))
     gnc:pagename-general optname-date-driver "k"
     (N_ "Leading date.") 'duedate
     (list
-     ;; Should be using standard label for due date?
-     (vector 'duedate
-             (N_ "Due Date")
-             (N_ "Due date is leading."))
-     ;; Should be using standard label for post date?
-     (vector 'postdate
-             (N_ "Post Date")
-             (N_ "Post date is leading.")))))
+     (vector 'duedate (N_ "Due Date"))
+     (vector 'postdate (N_ "Post Date")))))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 

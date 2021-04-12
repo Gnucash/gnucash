@@ -55,7 +55,7 @@
 (define optname-price-source (N_ "Price Source"))
 
 (define optname-accounts (N_ "Accounts"))
-(define optname-levels (N_ "Show Accounts until level"))
+(define optname-levels (N_ "Levels of Subaccounts"))
 (define optname-subacct (N_ "Include Sub-Accounts"))
 
 (define optname-show-total (N_ "Show Totals"))

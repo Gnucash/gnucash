@@ -79,28 +79,16 @@ by preventing negative stock balances.<br/>")
      (gnc:make-multichoice-option
       gnc:pagename-general optname-price-source
       "d" (N_ "The source of price information.") 'pricedb-nearest
-      (list (vector 'pricedb-latest
-		    (N_ "Most recent")
-		    (N_ "The most recent recorded price."))
-	    (vector 'pricedb-nearest
-		    (N_ "Nearest in time")
-		    (N_ "The price recorded nearest in time to the report date."))
-	    )))
+      (list (vector 'pricedb-latest (N_ "Most recent"))
+            (vector 'pricedb-nearest (N_ "Nearest to report date")))))
 
     (add-option
      (gnc:make-multichoice-option
       gnc:pagename-general optname-basis-method
       "e" (N_ "Basis calculation method.") 'average-basis
-      (list (vector 'average-basis
-		    (N_ "Average")
-		    (N_ "Use average cost of all shares for basis."))
-	    (vector 'fifo-basis
-		    (N_ "FIFO")
-		    (N_ "Use first-in first-out method for basis."))
-	    (vector 'filo-basis
-		    (N_ "LIFO")
-		    (N_ "Use last-in first-out method for basis."))
-	    )))
+      (list (vector 'average-basis (N_ "Average cost of all shares"))
+            (vector 'fifo-basis (N_ "First-in first-out"))
+            (vector 'filo-basis (N_ "Last-in first-out")))))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -112,16 +100,9 @@ by preventing negative stock balances.<br/>")
      (gnc:make-multichoice-option
       gnc:pagename-general optname-brokerage-fees
       "g" (N_ "How to report commissions and other brokerage fees.") 'include-in-basis
-      (list (vector 'include-in-basis
-                    (N_ "Include in basis")
-                    (N_ "Include brokerage fees in the basis for the asset."))
-            (vector 'include-in-gain
-                    (N_ "Include in gain")
-                    (N_  "Include brokerage fees in the gain and loss but not in the basis."))
-            (vector 'ignore-brokerage
-                    (N_ "Ignore")
-                    (N_ "Ignore brokerage fees entirely."))
-            )))
+      (list (vector 'include-in-basis (N_ "Include in basis"))
+            (vector 'include-in-gain (N_ "Include in gain/loss"))
+            (vector 'ignore-brokerage (N_ "Omit from report")))))
 
     (gnc:register-option
       options

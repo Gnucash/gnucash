@@ -318,21 +318,21 @@
                  (cons   60 (get-acct "Purchases VAT"))))
 
     (let ((options (default-testing-options)))
-      (set-option! options "Format" "Report format" 'default)
+      (set-option! options "Format" "Report Format" 'default)
       (let ((sxml (options->sxml options "ukvat-default-format")))
         (test-equal "ukvat-default-format"
           '("Grand Total" "$1,735.00" "$1,475.00" "$260.00"
             "$654.00" "$545.00" "$109.00")
           (sxml->table-row-col sxml 1 -1 #f)))
 
-      (set-option! options "Format" "Report format" 'uk-vat)
+      (set-option! options "Format" "Report Format" 'uk-vat)
       (let ((sxml (options->sxml options "ukvat-return-format")))
         (test-equal "ukvat-return-format"
           '("Grand Total" "$220.00" "$40.00" "$260.00" "$109.00"
             "$151.00" "$1,475.00" "$545.00" "$100.00" "$200.00")
           (sxml->table-row-col sxml 1 -1 #f)))
 
-      (set-option! options "Format" "Report format" 'au-bas)
+      (set-option! options "Format" "Report Format" 'au-bas)
       (let ((sxml (options->sxml options "aubas-return-format")))
         (test-equal "aubas-return-format"
           '("Grand Total" "$1,735.00" "$260.00" "$109.00")

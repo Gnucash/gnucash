@@ -345,9 +345,9 @@ more than one currency. This report is not designed to cope with this possibilit
       (N_ "Sort companies by.")
       'name
       (list 
-       (vector 'name (N_ "Name") (N_ "Name of the company."))
-       (vector 'total (N_ "Total Owed") (N_ "Total amount owed to/from Company."))
-       (vector 'oldest-bracket (N_ "Bracket Total Owed") (N_ "Amount owed in oldest bracket - if same go to next oldest.")))))
+       (vector 'name (N_ "Name of the company"))
+       (vector 'total (N_ "Total amount owed to/from Company"))
+       (vector 'oldest-bracket (N_ "Bracket Total Owed")))))
 
     (add-option 
      (gnc:make-multichoice-option
@@ -357,8 +357,8 @@ more than one currency. This report is not designed to cope with this possibilit
        (N_ "Sort order.")
        'increasing
        (list
-        (vector 'increasing (N_ "Ascending") (N_ "0 .. 999,999.99, A .. Z."))
-        (vector 'decreasing (N_ "Descending") (N_ "999,999.99 .. 0, Z .. A.")))))
+        (vector 'increasing (N_ "Ascending"))
+        (vector 'decreasing (N_ "Descending")))))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -385,8 +385,8 @@ totals to report currency.")
        (N_ "Leading date.")
        'duedate
        (list
-         (vector 'duedate (N_ "Due Date") (N_ "Due date is leading.")) ;; Should be using standard label for due date?
-         (vector 'postdate (N_ "Post Date") (N_ "Post date is leading."))))) ;; Should be using standard label for post date?
+         (vector 'duedate (N_ "Due Date"))
+         (vector 'postdate (N_ "Post Date")))))
 
 	  ;; display tab options
 

@@ -243,12 +243,8 @@ also show overall period profit & loss."))
       gnc:pagename-general optname-options-summary
       "d" opthelp-options-summary
       'never
-      (list (vector 'always
-                    (G_ "Always")
-                    (G_ "Always display summary."))
-            (vector 'never
-                    (G_ "Never")
-                    (G_ "Disable report summary.")))))
+      (list (vector 'always (G_ "Always"))
+            (vector 'never (G_ "Never")))))
 
     ;; accounts to work on
     (add-option

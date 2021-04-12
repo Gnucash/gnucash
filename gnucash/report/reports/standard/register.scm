@@ -399,8 +399,8 @@
     "ia" (N_ "Display the amount?")
     'double
     (list
-     (vector 'single (N_ "Single") (N_ "Single Column Display."))
-     (vector 'double (N_ "Double") (N_ "Two Column Display.")))))
+     (vector 'single (N_ "Single Column"))
+     (vector 'double (N_ "Two Columns")))))
 
   (gnc:register-reg-option
    (gnc:make-simple-boolean-option

@@ -609,8 +609,8 @@
     (N_ "Leading date.") 
     'duedate 
     (list 
-     (vector 'duedate (N_ "Due Date") (N_ "Due date is leading.")) ;; Should be using standard label for due date? 
-     (vector 'postdate (N_ "Post Date") (N_ "Post date is leading."))))) ;; Should be using standard label for post date? 
+     (vector 'duedate (N_ "Due Date"))
+     (vector 'postdate (N_ "Post Date")))))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 

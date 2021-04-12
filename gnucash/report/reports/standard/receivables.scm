@@ -65,8 +65,8 @@
         (N_ "Address source.")
         'billing
         (list
-         (vector 'billing (N_ "Billing") (N_ "Address fields from billing address."))
-         (vector 'shipping (N_ "Shipping") (N_ "Address fields from shipping address.")))))
+         (vector 'billing (N_ "Billing address"))
+         (vector 'shipping (N_ "Shipping address")))))
 
     (aging-options-generator options)))
 

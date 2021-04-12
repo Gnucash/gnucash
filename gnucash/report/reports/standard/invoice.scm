@@ -109,26 +109,14 @@
       (gnc:make-gnc-monetary currency numeric)))
 
 (define layout-key-list
-  ;; Translators: "Their details" refer to the invoice 'other party' details i.e. client/vendor name/address/ID
-  (list (cons 'client (list (cons 'text (G_ "Their details"))
-                            (cons 'tip (G_ "Client or vendor name, address and ID"))))
+  (list (cons 'client (list (cons 'text (G_ "Client or vendor name, address and ID"))))
+        (cons 'company (list (cons 'text (G_ "Company name, address and tax-ID"))))
+        (cons 'invoice (list (cons 'text (G_ "Invoice date, due date, billing ID, terms, job details"))))
+        (cons 'today (list (cons 'text (G_ "Today's date"))))
+        (cons 'picture (list (cons 'text (G_ "Picture"))))
 
-        ;; Translators: "Our details" refer to the book owner's details i.e. name/address/tax-ID
-        (cons 'company (list (cons 'text (G_ "Our details"))
-                             (cons 'tip (G_ "Company name, address and tax-ID"))))
-
-        (cons 'invoice (list (cons 'text (G_ "Invoice details"))
-                             (cons 'tip (G_ "Invoice date, due date, billing ID, terms, job details"))))
-
-        (cons 'today (list (cons 'text (G_ "Today's date"))
-                           (cons 'tip (G_ "Today's date"))))
-
-        (cons 'picture (list (cons 'text (G_ "Picture"))
-                             (cons 'tip (G_ "Picture"))))
-
-        ;; Translators: "(empty)" refers to invoice header section being left blank
-        (cons 'none (list (cons 'text (G_ "(empty)"))
-                          (cons 'tip (G_ "Empty space"))))))
+        ;; Translators: "Empty space" refers to invoice header section being left blank
+        (cons 'none (list (cons 'text (G_ "Empty space"))))))
 
 (define variant-list
   (list
@@ -172,8 +160,7 @@
    (lambda (item)
      (vector
       (car item)
-      (keylist-get-info keylist (car item) 'text)
-      (keylist-get-info keylist (car item) 'tip)))
+      (keylist-get-info keylist (car item) 'text)))
    keylist))
 
 (define (multiline-to-html-text str)

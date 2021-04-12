@@ -151,14 +151,10 @@
     (add-option
      (gnc:make-multichoice-option
       gnc:pagename-display optname-chart-type "b"
-      (N_ "This is a multi choice option.") 'bars
+      (N_ "Select which chart type to use.") 'bars
       (list
-       (vector 'bars
-               (N_ "Barchart")
-               (N_ "Show the report as a bar chart."))
-       (vector 'lines
-               (N_ "Linechart")
-               (N_ "Show the report as a line chart.")))))
+       (vector 'bars (N_ "Bar Chart"))
+       (vector 'lines (N_ "Line Chart")))))
 
     (gnc:options-add-plot-size!
      options gnc:pagename-display
