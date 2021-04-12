@@ -33,14 +33,15 @@
 # Michalis <michalisntovas@yahoo.gr>, 2021.
 # Ζωή Καίσα <kaisazoe@gmail.com>, 2021.
 # Katerina <katerina.gakou@hotmail.com>, 2021.
+# Eugenia Russell <eugenia.russell2019@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-03-30 14:26+0000\n"
-"Last-Translator: Katerina <katerina.gakou@hotmail.com>\n"
+"PO-Revision-Date: 2021-04-11 13:26+0000\n"
+"Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
 "Language: el\n"
@@ -282,7 +283,7 @@ msgstr "Ελληνική (Windows-1253)"
 
 #: borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr "Gujarati (MacGujarati)"
+msgstr "Γκουτζαράτι (ΜακΓκουτζαράτι)"
 
 #: borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
@@ -451,7 +452,7 @@ msgstr "Δυτική (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr "Σύστημα:"
+msgstr "Περιοχή "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 #, fuzzy
@@ -460,7 +461,7 @@ msgstr "Η μετατροπή ολοκληρώθηκε"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Αυτή η τιμή καθορίζει ποια δοκιμή iconv θα εκτελεστεί."
 
 #: borrowed/goffice/go-optionmenu.c:336
 msgid "Menu"
@@ -717,7 +718,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
-msgstr "Το βιβλίο έκλεισε με επιτυχία"
+msgstr "Το βιβλίο έκλεισε με επιτυχία."
 
 #. Translators: %s is a date string. %d is the number of books
 #. that will be created. This is a ngettext(3) message (but
@@ -762,13 +763,13 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:523
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "Congratulations! You are done closing books!\n"
 msgstr ""
 "%s\n"
-"Συγχαρτήρια! Έγινε το κλείσιμο των βιβλίων!"
+"Συγχαρητήρια! Τελειώσατε με το κλείσιμο βιβλίων!\n"
 
 #: gnucash/gnome/assistant-acct-period.c:589
 #: gnucash/gtkbuilder/dialog-fincalc.glade:637
@@ -1192,13 +1193,13 @@ msgid "You must provide a name for this Billing Term."
 msgstr "Πρέπει να δώσετε ένα όνομα σε αυτόν τον Όρο Συναλλαγής."
 
 #: gnucash/gnome/dialog-billterms.c:331
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Πρέπει να δώσετε ένα μοναδικό όνομα σε αυτό τον Πίνακα Φόρου.\n"
-"Η επιλογή σας \"%s\" χρησιμοποιείται ήδη."
+"Πρέπει να δώσετε ένα μοναδικό όνομα σε αυτό τον Πίνακα Φόρου. Η επιλογή σας "
+"\"%s\" χρησιμοποιείται ήδη."
 
 #: gnucash/gnome/dialog-billterms.c:531
 #: gnucash/gnome-utils/gnc-date-delta.c:222
@@ -1260,7 +1261,7 @@ msgid ""
 "not delete it."
 msgstr ""
 "Η αξία χρησιμοποιείται αυτή την στιγμή το λιγότερο σε ένα από τους "
-"λογαριασμούς σας. Δεν μπορείτε να την διαγράψετε. "
+"λογαριασμούς σας. Δεν μπορείτε να την διαγράψετε."
 
 #: gnucash/gnome/dialog-commodities.c:197
 msgid ""
@@ -1424,7 +1425,7 @@ msgstr ""
 msgid "Credit must be a positive amount or you must leave it blank."
 msgstr ""
 "Η πίστωση πρέπει να είναι ένα ποσό με θετικό πρόσημο αλλιώς πρέπει να το "
-"αφήσετε κενό"
+"αφήσετε κενό."
 
 #: gnucash/gnome/dialog-customer.c:433 gnucash/gnome/dialog-employee.c:288
 #: gnucash/gnome/dialog-job.c:243 gnucash/gnome/dialog-vendor.c:300
@@ -1609,9 +1610,8 @@ msgid "Manage Document Link"
 msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:690
-#, fuzzy
 msgid "Transaction can not be modified."
-msgstr "Ποσό συναλλαγής"
+msgstr "Η συναλλαγή δεν μπορεί να τροποποιηθεί."
 
 #: gnucash/gnome/dialog-doclink.c:751 libgnucash/engine/gncOwner.c:215
 #, fuzzy
@@ -2017,7 +2017,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:1121 gnucash/report/trep-engine.scm:1242
 #: gnucash/report/trep-engine.scm:1243
 msgid "Memo"
-msgstr "Υπόμνηση"
+msgstr "Υπόμνημα"
 
 #: gnucash/gnome/dialog-find-transactions2.c:155
 #: gnucash/gnome/dialog-find-transactions.c:155
@@ -2170,9 +2170,8 @@ msgid "Post to Account"
 msgstr "Καταχώρηση σε λογαριασμό"
 
 #: gnucash/gnome/dialog-invoice.c:839
-#, fuzzy
 msgid "Accumulate Splits?"
-msgstr "Αυτόματο Σπλιτ"
+msgstr "Συσσώρευση διαχωρισμών;"
 
 #: gnucash/gnome/dialog-invoice.c:931
 msgid "The Invoice must have at least one Entry."
@@ -2286,10 +2285,8 @@ msgid "View Expense Voucher"
 msgstr "Εμφάνιση παραστατικού εξόδου"
 
 #: gnucash/gnome/dialog-invoice.c:2484
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "Open Linked Document:"
-msgstr "Δεν υπάρχει συνδεδεμένος λογαριασμός"
+msgstr "Άνοιγμα συνδεδεμένου εγγράφου:"
 
 #: gnucash/gnome/dialog-invoice.c:2598 gnucash/gnome/dialog-invoice.c:2823
 msgid "Bill Information"
@@ -2647,11 +2644,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/dialog-order.c:309
-#, fuzzy
 msgid "Do you really want to close the order?"
-msgstr ""
-"Είστε σίγουρος για την διαγραφή της\n"
-"τρέχουσας τιμής;"
+msgstr "Θέλετε πραγματικά να κλείσετε την παραγγελία;"
 
 #: gnucash/gnome/dialog-order.c:310
 msgid "Close Date"
@@ -3008,9 +3002,9 @@ msgid ""
 msgstr "Αυτή η ΠΣ έχει αλλάξει, είστε σίγουρος για την ακύρωση;"
 
 #: gnucash/gnome/dialog-sx-editor2.c:635
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
-msgstr "Εισάγετε σημειώσεις για την συναλλαγή"
+msgstr "Δεν ήταν δυνατή η ανάλυση του πιστωτικού τύπου για διαχωρισμό \"%s\"."
 
 #: gnucash/gnome/dialog-sx-editor2.c:657
 #, c-format
@@ -3019,12 +3013,12 @@ msgstr ""
 
 #: gnucash/gnome/dialog-sx-editor2.c:690 gnucash/gnome/dialog-sx-editor.c:874
 #: gnucash/gnome/dialog-sx-from-trans.c:261
-#, fuzzy
 msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
 msgstr ""
-"Δημιουργία Προγραμματισμένης Συναλλαγής με την τρέχουσα συναλλαγή ως πρότυπο"
+"Ο Επεξεργαστής προγραμματισμένων συναλλαγών δεν μπορεί να εξισορροπήσει "
+"αυτόματα αυτή τη συναλλαγή. Θα πρέπει να καταχωρηθεί;"
 
 #: gnucash/gnome/dialog-sx-editor2.c:711 gnucash/gnome/dialog-sx-editor.c:493
 msgid "Please name the Scheduled Transaction."
@@ -21504,7 +21498,7 @@ msgstr "Απόδοση κεφ. (βραχυπρόθεσμη)"
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.c:954
 msgid "Retained Earnings"
-msgstr "Κέρδη εις νέο"
+msgstr "Διατηρούμενα Κέρδη"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:118
 msgid "Commissions"
@@ -26981,7 +26975,7 @@ msgstr "Κατάσταση εσόδων εξόδων"
 
 #: gnucash/report/reports/standard/income-statement.scm:572
 msgid "Profit & Loss"
-msgstr "Κέρδος και ζημιά"
+msgstr "Κέρδος & Ζημία"
 
 #: gnucash/report/reports/standard/invoice.scm:102
 #: gnucash/report/reports/standard/invoice.scm:247
