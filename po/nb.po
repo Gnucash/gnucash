@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-01-11 12:32+0000\n"
+"PO-Revision-Date: 2021-04-12 22:26+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -6768,9 +6768,9 @@ msgid "R"
 msgstr "A"
 
 #: gnucash/gnome/report-menus.scm:57
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Display the ~a report"
-msgstr "Vis %s-rapporten"
+msgstr "Vis ~a-rapporten"
 
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
@@ -22064,9 +22064,9 @@ msgid "Unrecognized account type '~s'. Defaulting to Bank."
 msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:235
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized action '~a'."
-msgstr "Urealisert fortjeneste"
+msgstr "Ikke gjenkjent handling «~a»"
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:254
 #, scheme-format
@@ -22853,9 +22853,9 @@ msgid "List"
 msgstr "Liste"
 
 #: gnucash/report/eguile.scm:150
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Template file \"~a\" can not be read"
-msgstr "Finner ikke filen %s."
+msgstr "Kan ikke lese malfilen «~a»"
 
 #: gnucash/report/html-chart.scm:455
 msgid "Load"
@@ -23571,12 +23571,12 @@ msgid "Address Email"
 msgstr "Adresse: "
 
 #: gnucash/report/reports/aging.scm:205
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "Transactions relating to '~a' contain more than one currency. This report is "
 "not designed to cope with this possibility."
 msgstr ""
-"Transaksjoner som angår firmaet %d inneholder mer enn en valuta. Denne "
+"Transaksjoner som angår firmaet «~a» inneholder mer enn én valuta. Denne "
 "rapporten tar ikke høyde for dette."
 
 #: gnucash/report/reports/aging.scm:345
@@ -24241,13 +24241,13 @@ msgstr ""
 "utvidelser til eksisterende rapporter."
 
 #: gnucash/report/reports/example/hello-world.scm:348
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
 "For hjelp med rapportskriving, eller for å bidra med din nye og stilige "
-"rapport, kontakt mailinglisten %s."
+"rapport, kontakt e-postlisten «~a»."
 
 #: gnucash/report/reports/example/hello-world.scm:353
 #, fuzzy
@@ -24264,14 +24264,14 @@ msgid ""
 msgstr "Du kan lære mer om scheme ved å bruke denne %s."
 
 #: gnucash/report/reports/example/hello-world.scm:358
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The current time is ~a."
-msgstr "Gjeldende tid er %s."
+msgstr "Gjeldende tid er «~a»."
 
 #: gnucash/report/reports/example/hello-world.scm:363
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The boolean option is ~a."
-msgstr "Det bolske alternativet er %s."
+msgstr "Det bolske alternativet er ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:364
 msgid "true"
@@ -24284,47 +24284,47 @@ msgstr "usann"
 #: gnucash/report/reports/example/hello-world.scm:368
 #, fuzzy, scheme-format
 msgid "The radio button option is ~a."
-msgstr "Tekstalternativet er %s."
+msgstr "Valgknappsalternativet er ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:373
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The multi-choice option is ~a."
-msgstr "Flervalgalternativet er %s."
+msgstr "Flervalgalternativet er ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:378
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The string option is ~a."
-msgstr "Tekstalternativet er %s."
+msgstr "Strengalternativet er ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:383
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The date option is ~a."
-msgstr "Datoalternativet er %s."
+msgstr "Datoalternativet er ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:388
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The date and time option is ~a."
-msgstr "Dato og klokkeslett-alternativet er %s."
+msgstr "Dato og klokkeslett-alternativet er ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:393
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The relative date option is ~a."
-msgstr "Relativ dato-alternativet er %s."
+msgstr "Alternativet for relativ dato er ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:398
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The combination date option is ~a."
-msgstr "Kombinasjonsdatoalternativet er %s."
+msgstr "Kombinasjonsdatoalternativet er ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:403
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option is ~a."
-msgstr "Nummeralternativet er %s"
+msgstr "Nummeralternativet er ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:414
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option formatted as currency is ~a."
-msgstr "Nummeralternativet formatert som valuta er %s."
+msgstr "Nummeralternativet formatert som valuta er ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:426
 msgid "Items you selected:"
@@ -24379,12 +24379,12 @@ msgstr ""
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:41
 #, fuzzy, scheme-format
 msgid "Welcome to GnuCash ~a !"
-msgstr "Velkommen til GnuCash"
+msgstr "Velkommen til GnuCash ~a"
 
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:44
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "GnuCash ~a has lots of nice features. Here are a few."
-msgstr "GnuCash 2.0 har mange nyttige funksjoner. Her er noen av dem."
+msgstr "GnuCash ~a har mange nyttige funksjoner. Her er noen av dem."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
@@ -24555,9 +24555,9 @@ msgstr ""
 "koder med betalingskilder kan repeteres."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:817
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Period from ~a to ~a"
-msgstr "Periode fra %s til %s"
+msgstr "Periode fra ~a til ~a"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:854
 msgid "Tax Report & XML Export"
@@ -24888,9 +24888,9 @@ msgid "Weekly Average"
 msgstr "Vektlagt gjennomsnitt"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:550
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Balance at ~a"
-msgstr "Balanse den %s"
+msgstr "Balanse den ~a"
 
 #: gnucash/report/reports/standard/account-summary.scm:69
 msgid "Account Summary"
@@ -25208,9 +25208,9 @@ msgstr "Overse fullstendig kontoer dypere enn dybdegrensen"
 #: gnucash/report/reports/standard/equity-statement.scm:304
 #: gnucash/report/reports/standard/income-statement.scm:406
 #: gnucash/report/reports/standard/trial-balance.scm:413
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "For Period Covering ~a to ~a"
-msgstr "for perioden som dekker %s til %s"
+msgstr "for perioden som dekker ~a til ~a"
 
 #: gnucash/report/reports/standard/account-summary.scm:411
 msgid "Account title"
@@ -26418,9 +26418,9 @@ msgid "Total Expenses"
 msgstr "Sum kostnader"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:532
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a"
-msgstr "Budsjett"
+msgstr "for budsjett ~a"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:534
 #, fuzzy, scheme-format
@@ -26428,9 +26428,9 @@ msgid "for Budget ~a Period ~d"
 msgstr "Budsjettperiode:"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:537
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
-msgstr "Budsjettperiode:"
+msgstr "for budsjett ~a perioder ~a - ~a"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:565
 #: gnucash/report/reports/standard/equity-statement.scm:457
@@ -26663,14 +26663,14 @@ msgid "Show full account names (including parent accounts)."
 msgstr "Vis fullstendige kontonavn (inkludert overordnede kontoer)"
 
 #: gnucash/report/reports/standard/cash-flow.scm:205
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~a and subaccounts"
-msgstr "og underkontoer"
+msgstr "~a og underkontoer"
 
 #: gnucash/report/reports/standard/cash-flow.scm:206
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~a and selected subaccounts"
-msgstr "%s og valgte underkontoer"
+msgstr "~a og valgte underkontoer"
 
 #: gnucash/report/reports/standard/cash-flow.scm:270
 msgid "Money into selected accounts comes from"
@@ -26792,9 +26792,9 @@ msgid "Daily Average"
 msgstr "Gjennomsnitt"
 
 #: gnucash/report/reports/standard/category-barchart.scm:520
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Balances ~a to ~a"
-msgstr "saldoer fra %s til %s"
+msgstr "saldoer fra ~a til ~a"
 
 #: gnucash/report/reports/standard/category-barchart.scm:641
 #: gnucash/report/reports/standard/category-barchart.scm:662
@@ -29196,14 +29196,14 @@ msgid "Credit Lines"
 msgstr "Kredittlinjer"
 
 #: gnucash/report/report-utilities.scm:712
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Building '~a' report ..."
-msgstr "Bygger «%s» rapport ..."
+msgstr "Bygger «~a» rapport ..."
 
 #: gnucash/report/report-utilities.scm:718
 #, fuzzy, scheme-format
 msgid "Rendering '~a' report ..."
-msgstr "Gjengir «%s» rapport ..."
+msgstr "Gjengir «~a-rapport ..."
 
 #: gnucash/report/report-utilities.scm:720
 #, fuzzy
@@ -30221,9 +30221,9 @@ msgstr ""
 
 #. Translators: Both ~a's are dates
 #: gnucash/report/trep-engine.scm:2270
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "From ~a to ~a"
-msgstr "Fra %s til %s"
+msgstr "Fra ~a til ~a"
 
 #: libgnucash/app-utils/business-options.scm:69
 msgid "Company Address"
