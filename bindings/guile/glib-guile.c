@@ -267,7 +267,7 @@ gnc_spawn_process_async (GList *argl, const gboolean search_path)
     }
     else
     {
-        g_warning ("Could not spawn %s: %s", *argv ? *argv : "(null)",
+        PWARN ("Could not spawn %s: %s", *argv ? *argv : "(null)",
                    error->message ? error->message : "(null)");
         g_free (proc);
         proc = NULL;
@@ -293,7 +293,7 @@ gnc_process_get_fd (const Process *proc, const gint std_fd)
         g_return_val_if_reached (-1);
 
     if (*retptr == -1)
-        g_warning ("Pipe to child's file descriptor %d is -1", std_fd);
+        PWARN ("Pipe to child's file descriptor %d is -1", std_fd);
     return *retptr;
 }
 
@@ -306,21 +306,21 @@ gnc_detach_process (Process *proc, const gboolean kill_it)
     close (proc->fd_stdin);
     if (errno)
     {
-        g_message ("Close of child's stdin (%d) failed: %s", proc->fd_stdin,
+        PINFO ("Close of child's stdin (%d) failed: %s", proc->fd_stdin,
                    g_strerror (errno));
         errno = 0;
     }
     close (proc->fd_stdout);
     if (errno)
     {
-        g_message ("Close of child's stdout (%d) failed: %s", proc->fd_stdout,
+        PINFO ("Close of child's stdout (%d) failed: %s", proc->fd_stdout,
                    g_strerror(errno));
         errno = 0;
     }
     close (proc->fd_stderr);
     if (errno)
     {
-        g_message ("Close of child's stderr (%d) failed: %s", proc->fd_stderr,
+        PINFO ("Close of child's stderr (%d) failed: %s", proc->fd_stderr,
                    g_strerror(errno));
         errno = 0;
     }
