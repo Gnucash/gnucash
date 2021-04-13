@@ -70,7 +70,7 @@ Various options exist for specifying the delimiter as well as a fixed width opti
 
 Examples are "FTSE","RR.L","21/11/2016",5.345,"GBP" and CURRENCY;USD;2016-11-21;1.56;GBP
 
-There is an option for specifying the start row, end row and an option to skip alternate rows beginning from the start row which can be used if you have some header text. Also there is an option to over write existing prices for that day if required.
+There is an option for specifying the start row, end row and an option to skip alternate rows beginning from the start row which can be used if you have some header text. Also there is an option to overwrite existing prices for that day if required.
 
 Lastly, for repeated imports the preview page has buttons to Load and Save the settings. To save the settings, tweak the settings to your preferences (optionally) starting from an existing preset), then (optionally change the settings name and press the Save Settings button. Note you can't save to built-in presets.
 
