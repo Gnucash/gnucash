@@ -943,6 +943,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">start</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkSpinButton" id="remind_days">
                                 <property name="visible">True</property>
@@ -1002,6 +1003,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">start</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkSpinButton" id="advance_days">
                                 <property name="visible">True</property>
@@ -1063,6 +1065,8 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="halign">start</property>
+                            <property name="margin_start">12</property>
+                            <property name="margin_end">12</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -1173,6 +1177,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_start">12</property>
+                            <property name="margin_end">12</property>
                             <property name="row_spacing">3</property>
                             <property name="column_spacing">6</property>
                             <child>
@@ -1240,8 +1245,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="margin_start">6</property>
-                                <property name="margin_end">6</property>
                                 <property name="label" translatable="yes">remaining</property>
                               </object>
                               <packing>
