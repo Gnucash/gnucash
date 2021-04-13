@@ -582,11 +582,11 @@ If you would like an account to have an opening balance, click on the row contai
         <property name="can_focus">False</property>
         <property name="margin_start">6</property>
         <property name="margin_end">6</property>
-        <property name="label" translatable="yes">Press `Apply' to create your new accounts. You will then be able to save them to a file or database.
+        <property name="label" translatable="yes">Press 'Apply' to create your new accounts. You will then be able to save them to a file or database.
 
-Press `Back' to review your selections.
+Press 'Back' to review your selections.
 
-Press `Cancel' to close this dialog without creating any new accounts.</property>
+Press 'Cancel' to close this dialog without creating any new accounts.</property>
         <property name="wrap">True</property>
       </object>
       <packing>
