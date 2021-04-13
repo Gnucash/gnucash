@@ -1168,6 +1168,9 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog
 
             gtk_tree_view_set_cursor (app_dialog->instance_view, variable_path, variable_col, start_editing);
 
+            gtk_tree_view_scroll_to_cell (app_dialog->instance_view, variable_path, variable_col,
+                                          TRUE, 0.5, 0.5);
+
             gtk_tree_path_free (variable_path);
             g_list_foreach (unbound_variables, (GFunc)g_free, NULL);
             g_list_free (unbound_variables);
