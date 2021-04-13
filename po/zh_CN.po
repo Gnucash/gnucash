@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-04-11 17:26+0000\n"
+"PO-Revision-Date: 2021-04-13 02:26+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -437,7 +437,7 @@ msgstr "转换方向"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr "此值确定要执行的iconv测试。"
+msgstr "此值确定要执行哪个iconv测试。"
 
 #: borrowed/goffice/go-optionmenu.c:336
 msgid "Menu"
@@ -460,14 +460,14 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
-"GnuCash社区首选的交流方式是邮件。新版本、用户组等公告，请参见https://wiki.gnucash.org/wiki/Mailing_Lists"
+"邮件是GnuCash社区首选的交流方式。新版本、用户组等公告，请参见https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
 "The GnuCash developers are easy to contact. As well as several mailing "
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
-msgstr "联系GnuCash开发者很容易，除了写邮件，还可以IRC实时聊天，在irc.gnome.org#gnucash"
+msgstr "联系开发者很容易，除了写邮件，还可以IRC实时聊天，在irc.gnome.org#gnucash"
 
 #: doc/tip_of_the_day.list.c:13
 msgid ""
@@ -485,7 +485,7 @@ msgid ""
 "GnuCash uses accounts instead of categories to track income and expenses. "
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
-msgstr "和Quicken 这类财务软件不同，GnuCash 使用科目而非类别来跟踪收入与支出。收入与支出科目的更多信息，请查看GnuCash在线手册。"
+msgstr "和Quicken这类财务软件不同，GnuCash使用科目而非类别来跟踪收入与支出。更多相关信息，请查看GnuCash在线手册。"
 
 #: doc/tip_of_the_day.list.c:23
 msgid ""
@@ -519,6 +519,11 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"交易有“说明”字段，可以在这里录入有用信息。\n"
+"\n"
+"为使其可见\n"
+"菜单栏“查看”，选择“双行”或\n"
+"“首选项”->“账簿默认值”->“其他默认值”->“双行模式”。"
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -526,32 +531,25 @@ msgid ""
 "deductions, click the Split button in the tool bar. Alternatively, in the "
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
-msgstr ""
-"要输入，像具有多项扣除额的薪金这类，含有多笔分录，可单击工具栏中的分录按钮。"
-"或者，您可以在查看->样式菜单中选择账簿样式自动拆分分类账或交易日记账。"
+msgstr "录入拆分的交易，如多次扣款的工资单，点击工具栏“分录”按钮。另外，“查看”菜单，可以选择自动拆分或交易日志。"
 
 #: doc/tip_of_the_day.list.c:49
-#, fuzzy
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
 "add, subtract, multiply and divide. Simply type the first value, then select "
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
 msgstr ""
-"当您在账簿中输入总数时，您可以使用 GnuCash计算机来加、减、乘、除。只要输入第"
-"一个值，然后选择 “+”、“-”、“*” 或“/”。再输入第二个值并按 Enter就可以记录计算"
-"后的总数。"
+"在交易借方或贷方录入金额时，可以使用GnuCash计算器，只需第一个数，\"+\"、\"-\"、\"*\"或\"/\""
+"，第二个数，然后Enter（不需要=号）。"
 
 #: doc/tip_of_the_day.list.c:54
-#, fuzzy
 msgid ""
 "Quick-fill makes it easy to enter common transactions. When you type the "
 "first letter(s) of a common transaction description, then press the Tab key, "
 "GnuCash will automatically complete the remainder of the transaction as it "
 "was last entered."
-msgstr ""
-"“快速填字”让输入常用交易更简单。当您输入常用交易描述的前几个字时，然后按 Tab "
-"键，GnuCash 会自动根据过去输入的结果自动按照上次输入的内容补全其剩余的部分。"
+msgstr "快速填写可以轻松登记相同的交易。录入描述的第一个文字，然后一直Tab，GnuCash将匹配最近的那笔相同交易。"
 
 #: doc/tip_of_the_day.list.c:59
 msgid ""
@@ -561,45 +559,36 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash.)"
 msgstr ""
-"在转账账簿一栏中输入现存科目名称的前几个字时，GnuCash 会根据您的科目列表完成"
-"科目名称。以子科目为例，输入父科目的前几个字，接着输入 “:”，再输入子科目的前"
-"几个字 (例 A:C 即 Assets:Cash。)"
+"转帐列录入已有科目首字，GnuCash将下拉筛选。子科目，录入父科目首字，后跟\":\""
+"（半角）和子科目首字（例如，对于Assets:Cash，为A:C。）"
 
 #: doc/tip_of_the_day.list.c:65
-#, fuzzy
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
-msgstr ""
-"想在账簿中看到您子科目的所有交易事项？在主菜单中反白父科目并且从菜单中选择科"
-"目->打开子科目。"
+msgstr "查看所有子科目交易？主窗格选中父科目，“编辑”->“打开子科目”（或右键->“打开子科目”）。"
 
 #: doc/tip_of_the_day.list.c:69
 msgid ""
 "When entering dates, you can type '+' or '-' to increment or decrement the "
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
-msgstr ""
-"在输入日期时，您可以按“+”或“-”来递增或递减选择的日期。您同样可以使"
-"用“+”和“-”来递增或递减支票号码。"
+msgstr "录入交易时，'+'/'-'（半角）可以递增/递减日期和编号。"
 
 #: doc/tip_of_the_day.list.c:73
 #, fuzzy
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
-msgstr "要在主窗口中多个标签页中切换，请按 Ctrl+Alt+Page Up/Down。"
+msgstr "主窗格多个标签页切换，请Control+Page Up/Down。"
 
 #: doc/tip_of_the_day.list.c:76
-#, fuzzy
 msgid ""
 "In the reconcile window, you can press the spacebar to mark transactions as "
 "reconciled. You can also press Tab and Shift-Tab to move between deposits "
 "and withdrawals."
-msgstr ""
-"在对账窗口中，您可以按空格键把交易事项标记为已对账。您也可以按 Tab 与 Shift-"
-"Tab 在存款与提款间移动。"
+msgstr "对账界面，空格键标记交易为已对账。Tab与Shift-Tab在借方与贷方间切换，接着up/down（方向键）选中交易。"
 
 #: doc/tip_of_the_day.list.c:80
 msgid ""
@@ -607,9 +596,7 @@ msgid ""
 "Transfer button in the register toolbar, select the accounts, and the "
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
-msgstr ""
-"要在使用不同货币的科目间转账资金，按下账簿工具栏的转账按钮，选择科目和货币转"
-"账选项，它可以让您输入汇率或其它货币金额。"
+msgstr "不同币种科目间的转账，交易界面->工具栏->转账（或直接录入），选择科目，设置汇率、金额和其他。"
 
 #: doc/tip_of_the_day.list.c:85
 msgid ""
@@ -624,9 +611,7 @@ msgid ""
 "You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
-msgstr ""
-"您可以把多个报表集合到单一窗口中，让您一眼看到所有您要的金融信息。要这幺做，"
-"使用 样本 & 自定义->“自定义多栏报表”报表。"
+msgstr "多报表同时显示，一目了然地提供您想要的所有财务信息，在“报表”->“多列报表”->“自定义”设置。"
 
 #: doc/tip_of_the_day.list.c:95
 #, fuzzy
@@ -688,12 +673,10 @@ msgid ""
 "\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
-"有一个理论指出，如果有人发现了宇宙的本质以及它存在的原因，宇宙便将瞬间消失，"
-"并被另一个更不寻常、更难理解的事物替代。\n"
+"有一个理论指出，如果有人发现了宇宙的本质以及它存在的原因，宇宙便将瞬间消失，并被另一个更不寻常、更难理解的事物替代。\n"
 "另一个理论指出，这一切都早已发生。\n"
 "\n"
-"道格拉斯‧亚当斯，“宇宙尽头的餐厅”\n"
-"(Douglas Adams, \"The Restaurant at the End of the Universe\")"
+"道格拉斯‧亚当斯，“宇宙尽头的餐厅”"
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
@@ -790,7 +773,7 @@ msgstr "零"
 
 #: gnucash/gnome/assistant-hierarchy.c:1116
 msgid "existing account"
-msgstr "已存在的科目"
+msgstr "现有科目"
 
 #: gnucash/gnome/assistant-hierarchy.c:1255
 #: gnucash/gnome/business-gnome-utils.c:564
@@ -2028,7 +2011,7 @@ msgstr "对账日期"
 
 #. Translators: This is a ngettext(3) message, %d is the number of maps missing
 #: gnucash/gnome/dialog-imap-editor.c:362
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There is %d invalid mapping,\n"
 "\n"
@@ -2037,7 +2020,10 @@ msgid_plural ""
 "There are %d invalid mappings,\n"
 "\n"
 "Would you like to remove them now?"
-msgstr[0] "税率表 %s 不存在。您想要创建它吗？"
+msgstr[0] ""
+"有%d无效的映射，\n"
+"\n"
+"现在删除它们吗？"
 
 #: gnucash/gnome/dialog-imap-editor.c:367
 #, c-format
@@ -3845,7 +3831,7 @@ msgstr "结算条款编辑器"
 
 #: gnucash/gnome/gnc-plugin-business.c:289
 msgid "View and edit the list of Billing Terms"
-msgstr "查看并编辑结算条款列表"
+msgstr "查看并编辑帐期"
 
 #: gnucash/gnome/gnc-plugin-business.c:293
 msgid "Bills _Due Reminder"
@@ -15398,9 +15384,8 @@ msgid "Payment Address"
 msgstr "付款地址"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:456
-#, fuzzy
 msgid "Language"
-msgstr "语言："
+msgstr "语言"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:494
 msgid "Interface"
@@ -17809,7 +17794,7 @@ msgstr "有关税务的"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:511
 msgid "<b>_TXF Categories</b>"
-msgstr "<b>TXF 分类(_T)</b>"
+msgstr "<b>TXF(_T)分类</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:615
 msgid "<b>Payer Name Source</b>"
@@ -30797,7 +30782,7 @@ msgstr "分录"
 
 #: libgnucash/engine/Transaction.c:2707
 msgid "Voided transaction"
-msgstr "无效的交易事项"
+msgstr "无效交易"
 
 #: libgnucash/engine/Transaction.c:2719
 msgid "Transaction Voided"
@@ -30805,7 +30790,7 @@ msgstr "作废交易"
 
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
-msgstr "没有可用帮助。"
+msgstr "没有帮助。"
 
 #, fuzzy
 #~ msgid ">>"
