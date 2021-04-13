@@ -1800,9 +1800,9 @@ gnc_split_reg_focus_on_sheet (GNCSplitReg *gsr)
     GnucashRegister *reg = gsr->reg;
     GnucashSheet *sheet = gnucash_register_get_sheet (reg);
 
-    // Make sure the sheet is the focus
-    if (!gtk_widget_has_focus(GTK_WIDGET (sheet)))
-        gtk_widget_grab_focus (GTK_WIDGET (sheet));
+    // Make sure the sheet is the focus only when it is realized
+    if (!gtk_widget_has_focus(GTK_WIDGET(sheet)) && gtk_widget_get_realized (GTK_WIDGET(sheet)))
+        gtk_widget_grab_focus (GTK_WIDGET(sheet));
 }
 
 void
