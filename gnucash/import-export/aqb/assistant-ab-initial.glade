@@ -44,22 +44,22 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">
-You first need to apply for Online Banking access at your bank. If your bank decides to grant you electronic access, they will send you a letter containing:
-* The bank code of your bank
-* The user ID that identifies you to your bank
-* The Internet address of your bank's Online Banking server
-* For HBCI Online Banking, information about the cryptographic public key of your bank ("Ini-Letter").
+            <property name="label" translatable="yes" comments="See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.">
+The requirements for Online Banking vary between the different supported AqBanking backends, but usually you will need:
+* Your bank needs to grant you online access. See on their website or ask their customer service for how to obtain it.
+They should also tell you:
+* Your user ID that identifies you to their server, often your base account number;
+* The URL of their Online Banking server;
+* In some cases the routing number of your bank's branch is useful in this assistant;
+* Authentication methods vary by backend and choosen method:
+ * FinTS PIN/TAN: Some methods require a specific gadget like a card reader or a mobile;
+ * FinTS HBCI: You have to exchange the public parts of asymmetric keys with your bank ("Ini-Letter").
+ * PayPal: registered email address, password, API signature;
 
-This information will be needed in the following.
+See https://wiki.gnucash.org/wiki/AqBanking for more details.
 
-NOTE: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online Banking server. You should not rely on time-critical transfers through Online Banking, because sometimes the bank does not give you correct feedback when a transfer is rejected.
-
-Lastly, for repeated imports the preview page has buttons to Load and Save the settings. To save the settings, tweak the settings to your preferences (optionally starting from an existing preset), then (optionally) change the settings name and press the Save Settings button. Note you can't save to built-in presets.
-
-This operation is not reversible, so make sure you have a working backup.
-
-Click on "Next" to proceed or "Cancel" if you don not wish to setup any online banking connection now.</property>
+Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online Banking server. You should not rely on time-critical transfers through Online Banking, because sometimes the bank does not give you correct feedback when a transfer is rejected.
+</property>
             <property name="wrap">True</property>
           </object>
           <packing>
@@ -89,7 +89,10 @@ Click on "Next" to proceed or "Cancel" if you don not wish to setup any online b
           <object class="GtkLabel" id="wizard_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">The Setup of your Online Banking connection is handled by the external program "AqBanking Setup Wizard". Please press the button below to start this program.</property>
+            <property name="label" translatable="yes">The Setup of your Online Banking connection is handled by the external program "AqBanking Setup Wizard".
+You have to set up at least one connection before you can continue.
+
+Please press the button below to start it.</property>
             <property name="wrap">True</property>
           </object>
           <packing>
