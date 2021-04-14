@@ -359,25 +359,27 @@ function tooltipLabel(tooltipItem,data) {
 function tooltipTitle(array,data) {
   return data.labels[array[0].index]; }
 
+// disabled for chartJS 3.0.0
+//
 // draw the background color
-Chart.pluginService.register({
-  beforeDraw: function (chart, easing) {
-    if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
-      var ctx = chart.chart.ctx;
-      var chartArea = chart.chartArea;
-      ctx.save();
-      ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
-      ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
-      ctx.restore();
-    }
-  }
-})
+// Chart.plugins.register({
+//   beforeDraw: function (chart, easing) {
+//     if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
+//       var ctx = chart.chart.ctx;
+//       var chartArea = chart.chartArea;
+//       ctx.save();
+//       ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
+//       ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
+//       ctx.restore();
+//     }
+//   }
+// })
 
 // copy font info from css into chartjs.
 bodyStyle = window.getComputedStyle (document.querySelector ('body'));
-Chart.defaults.global.defaultFontSize = parseInt (bodyStyle.fontSize);
-Chart.defaults.global.defaultFontFamily = bodyStyle.fontFamily;
-Chart.defaults.global.defaultFontStyle = bodyStyle.fontStyle;
+Chart.defaults.defaultFontSize = parseInt (bodyStyle.fontSize);
+Chart.defaults.defaultFontFamily = bodyStyle.fontFamily;
+Chart.defaults.defaultFontStyle = bodyStyle.fontStyle;
 
 titleStyle = window.getComputedStyle (document.querySelector ('h3'));
 chartjsoptions.options.title.fontSize = parseInt (titleStyle.fontSize);
@@ -385,7 +387,7 @@ chartjsoptions.options.title.fontFamily = titleStyle.fontFamily;
 chartjsoptions.options.title.fontStyle = titleStyle.fontStyle;
 
 document.getElementById(chartid).onclick = function(evt) {
-  var activepoints = myChart.getElementAtEvent(evt);
+  var activepoints = myChart.getElementsAtEventForMode (evt, 'nearest', { intersect: true }, false);
   var anchor = document.getElementById(jumpid);
   switch (activepoints.length)  {
     case 0:
@@ -437,7 +439,9 @@ document.getElementById(chartid).onclick = function(evt) {
          (id (symbol->string (gensym "chart"))))
 
     (push (gnc:html-js-include
-           (gnc-path-find-localized-html-file "chartjs/Chart.bundle.min.js")))
+           (gnc-path-find-localized-html-file "chartjs/chart.js")))
+    (push (gnc:html-js-include
+           (gnc-path-find-localized-html-file "chartjs/chartjs-chart-sankey.js")))
 
     ;; the following hidden h3 is used to query style and copy onto chartjs
     (push "<h3 style='display:none'></h3>")
