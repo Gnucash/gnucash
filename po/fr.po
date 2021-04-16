@@ -29,8 +29,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-04-15 15:26+0000\n"
-"Last-Translator: Diego Marin <alterne@gmail.com>\n"
+"PO-Revision-Date: 2021-04-16 17:26+0000\n"
+"Last-Translator: Thomas Jungers <thomasjungers@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -565,8 +565,7 @@ msgstr ""
 "Pour le rendre visible\n"
 "sélectionner \"Affichage\" dans la barre de menu et cliquer sur \"Double "
 "ligne\" ou\n"
-"cocher \"Mode Double ligne\" dans Préférences : Valeurs par défaut du "
-"registre."
+"cocher \"Mode Double ligne\" dans Préférences : Défauts du registre."
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -5464,14 +5463,13 @@ msgstr ""
 "clients et les notes de crédit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:389
-#, fuzzy
 msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
 "Réinitialiser la mise en page par défaut, pour toutes les factures aux "
-"clients et les notes de crédits, à celle par défaut et mettre à jour la page "
-"actuelle en fonction"
+"clients et les notes de crédits, à celle intégrée par défaut et mettre à "
+"jour la page actuelle en fonction"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:394
 #, fuzzy
@@ -5531,14 +5529,13 @@ msgstr ""
 "fournisseurs et les notes de crédit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:410
-#, fuzzy
 msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
 "Réinitialiser la mise en page par défaut, pour toutes les factures des "
-"fournisseurs et les notes de crédits, à celle par défaut et mettre à jour la "
-"page actuelle en fonction"
+"fournisseurs et les notes de crédits, à celle intégrée par défaut et mettre "
+"à jour la page actuelle en fonction"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:415
 #, fuzzy
@@ -12834,7 +12831,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:50
 msgid "Time to wait for answer"
-msgstr ""
+msgstr "Temps d’attente pour une réponse"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:51
 #: gnucash/gtkbuilder/dialog-preferences.glade:1812
@@ -14559,6 +14556,7 @@ msgstr "Importation de transactions CSV"
 
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:65
+#, fuzzy
 msgid ""
 "This assistant will help you import Prices from a CSV file.\n"
 "\n"
@@ -14589,6 +14587,40 @@ msgid ""
 "\n"
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgstr ""
+"Cet assistant vous aidera à importer des Prix à partir d'un fichier CSV.\n"
+"\n"
+"Un nombre minimal de colonnes doivent être présentes pour que l'importation "
+"réussisse : il s'agit de Date, Montant, Espace de nom d'origine, Symbole "
+"d'origine et Devise de destination. Si toutes les entrées sont pour le même "
+"Produit /  Devise, vous pouvez les sélectionner et les colonnes seront Date "
+"et Montant.\n"
+"\n"
+"Plusieurs options existent pour spécifier le délimiteur ainsi qu'une option "
+"de largeur fixe. Avec l'option largeur fixe, double-cliquez sur les lignes "
+"affichées pour définir la largeur de la colonne, puis faites un clic-droit "
+"pour la modifier si nécessaire.\n"
+"\n"
+"Exemples : \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" and "
+"CURRENCY;USD;2016-11-21;1.56;GBP\n"
+"\n"
+"Une option permet de définir la ligne de début, la ligne de fin ainsi que "
+"d'ignorer une ligne sur deux à partir de la ligne de début, si vous avez du "
+"texte d'en-tête. Il y a aussi une option pour écraser des prix existants "
+"pour cette journée, si besoin.\n"
+"\n"
+"Finalement, pour des importations répétées, la page de prévisualisation "
+"possède des boutons Charger et Enregistrer les paramètres. Pour enregistrer "
+"les paramètres, modifiez les paramètres dans vos Préférences (éventuellement "
+"en partant d'une pré-sélection existante), puis changez éventuellement le "
+"nom des paramètres et appuyez sur le bouton Enregistrer les paramètres. "
+"Notez que vous ne pouvez pas enregistrer par-dessus les paramètres intégrés "
+"par défaut.\n"
+"\n"
+"Cette opération est irréversible : assurez-vous d'avoir une sauvegarde "
+"fonctionnelle.\n"
+"\n"
+"Cliquez sur \"Suivant\" pour continuer ou \"Annuler\" pour annuler "
+"l'importation."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:84
 #, fuzzy
@@ -17206,7 +17238,7 @@ msgstr "Associer un emplacement"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:380
 msgid "Enter URL like http://www.gnucash.org"
-msgstr ""
+msgstr "Entrer une URL telle que http://www.gnucash.org"
 
 # messages-i18n.c:82
 #: gnucash/gtkbuilder/dialog-doclink.glade:425
@@ -18608,7 +18640,7 @@ msgstr "Indéfiniment"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1794
 msgid "Time to _wait for answer"
-msgstr "Temps d’attente pour une réponse "
+msgstr "Temps d’_attente pour une réponse"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1831
 msgid "seconds"
