@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-04-11 03:26+0000\n"
+"PO-Revision-Date: 2021-04-14 13:27+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
@@ -43,7 +43,7 @@ msgstr "科目编号"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
-msgstr "账簿"
+msgstr "多层科目"
 
 #. "-"
 msgid "account name"
@@ -338,21 +338,21 @@ msgstr "关闭"
 # 一种是购买和出售的物品。是关于账上一直跟踪的东西的最常用的词语。比如货币或股票。
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "货币"
+msgstr "币种"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr "货币清单"
+msgstr "币种清单"
 
 # 交易的最小量(如1/100美元，又如对大多数股票而言的一股)
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr "货币选项：最小单位"
+msgstr "币种选项：最小单位"
 
 # 如，USD、DEM
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr "货币选项：符号"
+msgstr "币种选项：符号"
 
 # 借钱的费用，或者对某人的投资所支付的费用
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
@@ -439,7 +439,7 @@ msgstr "折旧"
 # 2. 每个科目的一个文本区域。这个稍微长一些，一般是要用1-5句话来描述这个科目是关于什么的。
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
-msgstr "描述（交易界面的一栏）"
+msgstr "备注（交易界面的一栏）"
 
 # 关于资金如何支出与收入的细节记录，简称为科目。财会账簿中，Account 将翻译为科目，而有关银行的 Account 将翻译为账户。
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
@@ -1007,7 +1007,7 @@ msgstr "单位"
 
 #. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"
-msgstr "URL"
+msgstr "网址"
 
 # 以资金或其它商品方式体现的某物的价值，因此它可以进行交换。
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
