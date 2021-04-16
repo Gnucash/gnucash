@@ -8,14 +8,15 @@
 # Un Anonyme <vehrzafk1@gmail.com>, 2021.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2021.
 # ayiniho <ayiniho@tedomum.net>, 2021.
+# Thomas Jungers <thomasjungers@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-03 14:50+0000\n"
-"Last-Translator: ayiniho <ayiniho@tedomum.net>\n"
+"PO-Revision-Date: 2021-04-13 13:26+0000\n"
+"Last-Translator: Thomas Jungers <thomasjungers@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.5.1-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -389,7 +390,9 @@ msgstr "entrée double"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr "lien du document"
+msgstr ""
+"lien du document\n"
+"document lié"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"

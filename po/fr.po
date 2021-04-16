@@ -18,17 +18,18 @@
 # Laurent DÉRÉDEC <images-ld@gmx.fr>, 2021.
 # Julien Humbert <julroy67@gmail.com>, 2021.
 # Un Anonyme <vehrzafk1@gmail.com>, 2021.
+# Thomas Jungers <thomasjungers@gmail.com>, 2021.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-02-09 05:50+0000\n"
-"Last-Translator: Christopher Lam <christopher.lck@gmail.com>\n"
+"PO-Revision-Date: 2021-04-13 18:26+0000\n"
+"Last-Translator: Thomas Jungers <thomasjungers@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -36,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -549,7 +550,6 @@ msgstr ""
 "tableau de comptes, consultez le manuel en ligne de GnuCash."
 
 #: doc/tip_of_the_day.list.c:38
-#, fuzzy
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -558,13 +558,14 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
-"Toute transaction à un champs \"Notes\" où il est possible de mettre un "
+"Toute transaction a un champ \"Notes\" où il est possible de mettre une "
 "information utile.\n"
 "\n"
 "Pour le rendre visible\n"
-"sélectionner \"view\" dans la barre de de menu et cliquer sur \"Double ligne"
-"\" ou\n"
-"cocher \"Mode Double ligne\" dans les préférences : Défauts du registre."
+"sélectionner \"Affichage\" dans la barre de menu et cliquer sur \"Double "
+"ligne\" ou\n"
+"cocher \"Mode Double ligne\" dans Préférences : Valeurs par défaut du "
+"registre."
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -805,7 +806,7 @@ msgstr[1] ""
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:369
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have asked for a book to be created. This book will contain all "
 "transactions up to midnight %s (for a total of %d transactions spread over "
@@ -938,6 +939,10 @@ msgid ""
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
+"Vous avez sélectionné une devise pour le livre ; celle-ci sera utilisée pour "
+"\n"
+"tout nouveau compte. Les comptes dans d'autres devises doivent être \n"
+"ajoutés manuellement."
 
 # po/guile_strings.txt:200
 #: gnucash/gnome/assistant-hierarchy.c:1491
@@ -1702,8 +1707,9 @@ msgid "Amend URL:"
 msgstr "Valider"
 
 #: gnucash/gnome/dialog-doclink.c:190
+#, fuzzy
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr ""
+msgstr "Entrez une URL telle que http://www.gnucash.org :"
 
 #: gnucash/gnome/dialog-doclink.c:205
 #, fuzzy
@@ -1711,8 +1717,9 @@ msgid "Existing Document Link is"
 msgstr "Actifs existants"
 
 #: gnucash/gnome/dialog-doclink.c:461 gnucash/gnome/dialog-doclink.c:506
+#, fuzzy
 msgid "File Found"
-msgstr ""
+msgstr "Fichier trouvé"
 
 #: gnucash/gnome/dialog-doclink.c:463
 msgid "File Not Found"
@@ -1744,14 +1751,15 @@ msgstr "Le fichier d'entrée n'a pas pu être ouvert."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:424
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
+#, fuzzy
 msgid "Manage Document Link"
-msgstr ""
+msgstr "Gérer le lien vers un document"
 
 # messages-i18n.c:346
 #: gnucash/gnome/dialog-doclink.c:690
 #, fuzzy
 msgid "Transaction can not be modified."
-msgstr "Montant brut de la transaction"
+msgstr "La transaction ne peut pas être modifiée."
 
 #: gnucash/gnome/dialog-doclink.c:751 libgnucash/engine/gncOwner.c:215
 #, fuzzy
@@ -1921,7 +1929,7 @@ msgid ""
 "valid expression."
 msgstr ""
 "GnuCash ne peut pas déterminer la valeur de l'un des champs. Vous devez "
-"saisir une expression valide"
+"saisir une expression valide."
 
 #: gnucash/gnome/dialog-fincalc.c:373
 msgid "The interest rate cannot be zero."
@@ -1941,7 +1949,6 @@ msgid "Find Account"
 msgstr "_Chercher le compte"
 
 #: gnucash/gnome/dialog-find-account.c:398
-#, fuzzy
 msgid "Place Holder"
 msgstr "Virtuel"
 
@@ -2415,12 +2422,12 @@ msgstr "Avoir"
 
 #: gnucash/gnome/dialog-invoice.c:2063
 msgid "PAID"
-msgstr ""
+msgstr "PAYÉ"
 
 #: gnucash/gnome/dialog-invoice.c:2065
 #: gnucash/report/reports/standard/new-owner-report.scm:583
 msgid "UNPAID"
-msgstr ""
+msgstr "NON PAYÉ"
 
 # po/guile_strings.txt:89
 #: gnucash/gnome/dialog-invoice.c:2113 gnucash/gnome/dialog-invoice.c:2132
@@ -2527,10 +2534,13 @@ msgid "Date of duplicated entries"
 msgstr "Date des entrées dupliquées"
 
 #: gnucash/gnome/dialog-invoice.c:3217
+#, fuzzy
 msgid ""
 "One or more selected invoices have already been posted.\n"
 "Re-check your selection."
 msgstr ""
+"Une ou plusieurs facture(s) sélectionnée(s) ont déjà été publiées.\n"
+"Revérifiez votre sélection."
 
 # messages-i18n.c:56
 #: gnucash/gnome/dialog-invoice.c:3221
@@ -3134,7 +3144,7 @@ msgstr "Les cours enregistrés"
 
 #: gnucash/gnome/dialog-price-editor.c:233
 msgid "_Replace"
-msgstr ""
+msgstr "_Remplacer"
 
 # src/gnome/dialog-qif-import.c:314
 #: gnucash/gnome/dialog-price-editor.c:263
@@ -3420,9 +3430,9 @@ msgid "Couldn't parse %s for split \"%s\"."
 msgstr "Impossible de traiter la formule de débit pour la répartition \"%s\"."
 
 #: gnucash/gnome/dialog-sx-editor.c:739
-#, c-format
+#, c-format, fuzzy
 msgid "Split with memo %s has an invalid account."
-msgstr ""
+msgstr "La répartition avec le mémo %s possède un compte invalide."
 
 #: gnucash/gnome/dialog-sx-editor.c:742
 #, fuzzy
@@ -3430,18 +3440,23 @@ msgid "Invalid Account in Split"
 msgstr "Inclure le total des mouvements des comptes"
 
 #: gnucash/gnome/dialog-sx-editor.c:754
-#, c-format
+#, c-format, fuzzy
 msgid "Split with memo %s has an unparseable Credit Formula."
 msgstr ""
+"La répartition avec le mémo %s possède une Formule de Crédit qui ne peut pas "
+"être analysée."
 
 #: gnucash/gnome/dialog-sx-editor.c:757 gnucash/gnome/dialog-sx-editor.c:773
+#, fuzzy
 msgid "Unparsable Formula in Split"
-msgstr ""
+msgstr "Formule non analysable dans la répartition"
 
 #: gnucash/gnome/dialog-sx-editor.c:770
-#, c-format
+#, c-format, fuzzy
 msgid "Split with memo %s has an unparseable Debit Formula."
 msgstr ""
+"La répartition avec le mémo %s possède une Formule de Débit qui ne peut pas "
+"être analysée."
 
 #: gnucash/gnome/dialog-sx-from-trans.c:557
 msgid ""
@@ -3567,7 +3582,7 @@ msgstr "Identification des taxes sur le revenu"
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
 #: gnucash/gtkbuilder/dialog-tax-info.glade:43
 msgid "_Apply"
-msgstr ""
+msgstr "_Appliquer"
 
 #: gnucash/gnome/dialog-tax-info.c:1241
 msgid ""
@@ -3895,12 +3910,14 @@ msgid "Close the Book at the end of the Period"
 msgstr "Clôture le livre à la fin de la période"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:211
+#, fuzzy
 msgid "_Import Map Editor"
-msgstr ""
+msgstr "_Importer un Éditeur de Correspondance"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
+#, fuzzy
 msgid "View and Delete Bayesian and non-Bayesian information"
-msgstr ""
+msgstr "Afficher et Supprimer des informations bayésiennes et non bayésiennes"
 
 # messages-i18n.c:346
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
@@ -3967,6 +3984,8 @@ msgid ""
 "Open an existing Budget in a new tab. If none exists a new budget will be "
 "created."
 msgstr ""
+"Ouvrir un Budget existant dans un nouvel onglet. Si aucun budget n'existe, "
+"un nouveau sera créé."
 
 # messages-i18n.c:147
 #: gnucash/gnome/gnc-plugin-budget.c:75
@@ -4068,7 +4087,7 @@ msgstr "_Selectionner un budget"
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:385
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:442
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: gnucash/gnome/gnc-plugin-business.c:155
 #: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:162
@@ -4687,8 +4706,9 @@ msgstr "Supprimer"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1991
 #: gnucash/gnome/gnc-plugin-page-register.c:1960
 #: gnucash/gnome/gnc-plugin-page-register.c:5065
+#, fuzzy
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr ""
+msgstr "\"Vérifier & Réparer\" est en cours ; voulez-vous l'interrompre ?"
 
 # messages-i18n.c:237 src/gnome/glade-gnc-dialogs.c:361
 # src/gnome/glade-gnc-dialogs.c:521
@@ -4746,8 +4766,9 @@ msgid "_Pick another account"
 msgstr "Depuis le compte _sélectionné"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
+#, fuzzy
 msgid "_Do it anyway"
-msgstr ""
+msgstr "Le _faire tout de même"
 
 # messages-i18n.c:305 src/gnome/print-session.c:108
 # src/gnome/print-session.c:197
@@ -4764,6 +4785,7 @@ msgid "Deleting account %s"
 msgstr "Suppression du compte %s"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1647
+#, fuzzy
 msgid ""
 "The list below shows objects which make use of the account which you want to "
 "delete.\n"
@@ -4771,6 +4793,11 @@ msgid ""
 "modify them so they make use\n"
 "of another account"
 msgstr ""
+"La liste ci-dessous montre des objets qui utilisent le compte que vous "
+"voulez supprimer.\n"
+"Avant de le supprimer, vous devez soit supprimer ces objets, soit les "
+"modifier pour qu'ils utilisent\n"
+"un autre compte"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
@@ -4841,8 +4868,9 @@ msgid "_Delete Budget..."
 msgstr "_Supprimer ce budget"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:160
+#, fuzzy
 msgid "Select this or another budget and delete it."
-msgstr ""
+msgstr "Sélectionner ce budget ou un autre et le supprimer."
 
 # po/guile_strings.txt:221
 #: gnucash/gnome/gnc-plugin-page-budget.c:164
@@ -5202,7 +5230,7 @@ msgstr "Recevoir _paiement de la facture"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:366
 #: gnucash/gnome/gnc-plugin-page-register.c:300
 msgid "_Manage Document Link..."
-msgstr ""
+msgstr "_Gérer le Document Lié..."
 
 # messages-i18n.c:190
 #. Translators: This is a menu item that opens an external file or URI that may
@@ -5218,12 +5246,14 @@ msgid "_Open Linked Document"
 msgstr "Nouveau compte"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
+#, fuzzy
 msgid "_Use as Default Layout for Customer Documents"
-msgstr ""
+msgstr "_Utiliser comme Mise en Page par défaut pour les Documents Clients"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:311
+#, fuzzy
 msgid "_Reset Default Layout for Customer Documents"
-msgstr ""
+msgstr "_Réinitialiser la Mise en Page par défaut pour les Documents Clients"
 
 # messages-i18n.c:317 src/gnome/glade-gnc-dialogs.c:971
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
@@ -5266,12 +5296,15 @@ msgid "_Pay Bill"
 msgstr "Payer une facture"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:331
+#, fuzzy
 msgid "_Use as Default Layout for Vendor Documents"
-msgstr ""
+msgstr "Utiliser comme Mise en Page par défaut pour les Documents Fournisseurs"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:332
+#, fuzzy
 msgid "_Reset Default Layout for Vendor Documents"
 msgstr ""
+"_Réinitialiser la Mise en Page par défaut pour les Documents Fournisseurs"
 
 # src/gnome/glade-gnc-dialogs.c:1149
 #: gnucash/gnome/gnc-plugin-page-invoice.c:338
@@ -5314,12 +5347,14 @@ msgid "_Pay Voucher"
 msgstr "Bon"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:352
+#, fuzzy
 msgid "_Use as Default Layout for Employee Documents"
-msgstr ""
+msgstr "_Utiliser comme Mise en Page par défaut pour les Documents Employés"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:353
+#, fuzzy
 msgid "_Reset Default Layout for Employee Documents"
-msgstr ""
+msgstr "_Réinitialiser la Mise en Page par défaut pour les Documents Employés"
 
 # po/guile_strings.txt:127
 #: gnucash/gnome/gnc-plugin-page-invoice.c:359
@@ -5420,15 +5455,22 @@ msgid "Open Linked Document"
 msgstr "Nouveau compte"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:388
+#, fuzzy
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
 msgstr ""
+"Utiliser par défaut la mise en page actuelle pour toutes les factures aux "
+"clients et les notes de crédit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:389
+#, fuzzy
 msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
+"Réinitialiser la mise en page par défaut, pour toutes les factures aux "
+"clients et les notes de crédits, à celle par défaut et mettre à jour la page "
+"actuelle en fonction"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:394
 #, fuzzy
@@ -5481,14 +5523,21 @@ msgstr ""
 "Ouvre une fenêtre de rapport société pour le destinataire de cette facture"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
+#, fuzzy
 msgid "Use the current layout as default for all vendor bills and credit notes"
 msgstr ""
+"Utiliser par défaut la mise en page actuelle pour toutes les factures des "
+"fournisseurs et les notes de crédit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:410
+#, fuzzy
 msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
+"Réinitialiser la mise en page par défaut, pour toutes les factures des "
+"fournisseurs et les notes de crédits, à celle par défaut et mettre à jour la "
+"page actuelle en fonction"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:415
 #, fuzzy
@@ -27566,9 +27615,9 @@ msgstr "Ne pas tenir compte des compte au delà de la limite choisie."
 #: gnucash/report/reports/standard/equity-statement.scm:304
 #: gnucash/report/reports/standard/income-statement.scm:406
 #: gnucash/report/reports/standard/trial-balance.scm:413
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "For Period Covering ~a to ~a"
-msgstr "Pour la période du %s au %s"
+msgstr "Pour la période du ~a au ~a"
 
 # messages-i18n.c:165 po/guile_strings.txt:7
 #: gnucash/report/reports/standard/account-summary.scm:411
