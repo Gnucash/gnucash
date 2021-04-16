@@ -17,8 +17,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-04-15 18:26+0000\n"
-"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
+"PO-Revision-Date: 2021-04-16 14:12+0000\n"
+"Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -451,7 +451,7 @@ msgstr "选项菜单"
 msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
-msgstr "GnuCash 在线手册有很多实用信息，请参见“帮助”菜单。"
+msgstr "GnuCash 在线手册有很多实用信息，请见“帮助”。"
 
 #. Translators: You can replace the link, if a translated page exists.
 #: doc/tip_of_the_day.list.c:5
@@ -460,7 +460,7 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
-"邮件是 GnuCash 社区首选的交流方式。新版本、用户组等公告，请参见 https://wiki.gnucash.org/wiki/"
+"邮件是 GnuCash 社区首选的交流方式。新版本、用户组等公告，请见 https://wiki.gnucash.org/wiki/"
 "Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
@@ -468,7 +468,7 @@ msgid ""
 "The GnuCash developers are easy to contact. As well as several mailing "
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
-msgstr "联系开发者很容易，除了写邮件，还可以 IRC 实时聊天，在 irc.gnome.org#gnucash"
+msgstr "联系开发者，除了写邮件，还可以 IRC 聊天，在 irc.gnome.org#gnucash"
 
 #: doc/tip_of_the_day.list.c:13
 msgid ""
@@ -486,14 +486,14 @@ msgid ""
 "GnuCash uses accounts instead of categories to track income and expenses. "
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
-msgstr "和 Quicken 这类财务软件不同，GnuCash 使用科目而非类别来跟踪收入与支出。更多相关信息，请查看 GnuCash 在线手册。"
+msgstr "和 Quicken 这类软件不同，GnuCash 使用科目而非类别跟踪收入支出；更多信息，请查看 GnuCash 在线手册。"
 
 #: doc/tip_of_the_day.list.c:23
 msgid ""
 "It is possible to change which columns display in the Chart of Accounts. "
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
-msgstr "自定义主窗格标签，标签栏最右三角形，查看所有可用选项。"
+msgstr "显示主窗格其他标签，标签栏最右下拉三角形，查看并设置。"
 
 #: doc/tip_of_the_day.list.c:27
 msgid ""
@@ -509,7 +509,7 @@ msgid ""
 "This will bring up a dialog box where you can enter account details. For "
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
-msgstr "工具栏 \"新建 \"，在弹窗录入科目详细信息。科目类型或科目表的更多资料，请参见 GnuCash 在线手册。"
+msgstr "工具栏“新建”，登记新科目信息；科目类型和科目表的更多资料，请见 GnuCash 在线手册。"
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -520,9 +520,9 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
-"交易有“说明”字段，可以在这里录入有用信息。\n"
+"交易“说明”字段，可以录入备忘信息。\n"
 "\n"
-"为使其可见\n"
+"使其可见\n"
 "菜单栏“查看”，选择“双行”或\n"
 "“首选项”->“账簿默认值”->“其他默认值”->“双行模式”。"
 
@@ -532,7 +532,7 @@ msgid ""
 "deductions, click the Split button in the tool bar. Alternatively, in the "
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
-msgstr "录入拆分的交易，如多次扣款的工资单，点击工具栏“分录”按钮。另外，“查看”菜单，可以选择自动拆分或交易日志。"
+msgstr "录入拆分的交易，如多次扣款的工资单，点击工具栏“分录”；另外，“查看”菜单，选择自动拆分或交易日志。"
 
 #: doc/tip_of_the_day.list.c:49
 msgid ""
@@ -540,7 +540,7 @@ msgid ""
 "add, subtract, multiply and divide. Simply type the first value, then select "
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
-msgstr "在借方或贷方录入金额时，使用计算器，只需第一个数，\"+\"、\"-\"、\"*\"或\"/\"，第二个数，然后 Enter。"
+msgstr "借方/贷方字段，支持\"+\"、\"-\"、\"*\"、\"/\"运算，注：不需要 = 号。"
 
 #: doc/tip_of_the_day.list.c:54
 msgid ""
@@ -548,7 +548,7 @@ msgid ""
 "first letter(s) of a common transaction description, then press the Tab key, "
 "GnuCash will automatically complete the remainder of the transaction as it "
 "was last entered."
-msgstr "快速填写可以轻松登记相同的交易。录入备注的第一个文字，然后一直 Tab，将匹配最近的那笔相同交易。"
+msgstr "快速登记相同的交易：录入备注的第一个文字，然后一直 Tab，将匹配最近的那笔相同交易。"
 
 #: doc/tip_of_the_day.list.c:59
 msgid ""
@@ -557,15 +557,14 @@ msgid ""
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash.)"
-msgstr ""
-"转帐字段录入已有科目首字，将下拉筛选。子科目，录入父科目首字，后跟\":\"（半角）和子科目首字（例如，对 Assets:Cash，为 A:C。）"
+msgstr "转账字段下拉筛选：父科目，直接录入首字；子科目，先父科目首字，跟\":\"（半角），再子科目首字（例如，Assets:Cash，为 A:C。）"
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
-msgstr "查看所有子科目交易？主窗格选中父科目，“编辑”->“打开子科目”（或右键->“打开子科目”）。"
+msgstr "查看所有子科目交易？选中父科目，“编辑”->“打开子科目”（或右键->“打开子科目”）。"
 
 #: doc/tip_of_the_day.list.c:69
 msgid ""
@@ -593,7 +592,7 @@ msgid ""
 "Transfer button in the register toolbar, select the accounts, and the "
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
-msgstr "不同币种科目间的转账，交易界面->工具栏->转账（或直接录入），选择科目，设置汇率、金额和其他。"
+msgstr "不同币种科目间的转账，交易界面->工具栏->转账（或直接录入），选择科目，设置汇率、金额等。"
 
 #: doc/tip_of_the_day.list.c:85
 msgid ""
@@ -608,14 +607,14 @@ msgid ""
 "You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
-msgstr "多报表同时显示，一目了然地提供您想要的财务信息，在“报表”->“多列报表”->“自定义”。"
+msgstr "多报表同时显示，直观地了解财务信息，“报表”->“多列报表”->“自定义”。"
 
 #: doc/tip_of_the_day.list.c:95
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
 "report as a report option, and use the Edit->Style Sheets menu to customize "
 "style sheets."
-msgstr "报表基于样式表，选择合适的样式表，“编辑”->“样式表”自定义。"
+msgstr "报表基于样式表，选择合适的样式表，“编辑”->“样式表”。"
 
 #: doc/tip_of_the_day.list.c:99
 #, fuzzy
@@ -637,7 +636,7 @@ msgid ""
 "To schedule a transaction every year you can choose the monthly basic "
 "frequency and then set 'Every 12 months'."
 msgstr ""
-"计划交易编辑器可以灵活地设置频率，日、周和月，并且高度自定义，例：\n"
+"计划交易编辑器可以灵活地设置频率，日、周和月，并能高度自定义，例：\n"
 "\n"
 "每三周，频率：周，频次：3。\n"
 "\n"
@@ -655,14 +654,14 @@ msgid ""
 "To search through all your transactions, start a search (Edit->Find...) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
-msgstr "搜索所有交易，请从顶层科目开始（编辑->查找...）；搜索单个科目，选择该科目开始。"
+msgstr "搜索交易，“编辑”->“查找...”；搜索科目，“编辑”->“查找科目”。"
 
 #: doc/tip_of_the_day.list.c:119
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
-msgstr ""
+msgstr "在主窗口比较2个标签页，“查看”->新科目页\"。"
 
 #: doc/tip_of_the_day.list.c:123
 msgid ""
@@ -673,10 +672,11 @@ msgid ""
 "\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
-"有一个理论指出，如果有人发现了宇宙的本质以及它存在的原因，宇宙便将瞬间消失，并被另一个更不寻常、更难理解的事物替代。\n"
-"另一个理论指出，这一切都早已发生。\n"
+"一种理论认为，如果有人发现了宇宙是什么，为什么会出现在这里，那么它就会立刻消失，取而代之的是更加诡异和莫名其妙的东西。\n"
+"还有一种说法，这事情已经发生了。\n"
 "\n"
-"道格拉斯‧亚当斯，“宇宙尽头的餐厅”"
+"\n"
+"道格拉斯-亚当斯，“宇宙尽头的餐厅”"
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
@@ -1918,7 +1918,7 @@ msgstr "交易事项编号"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:623
 #: gnucash/report/trep-engine.scm:252
 msgid "Number"
-msgstr "编号"
+msgstr "数值"
 
 #: gnucash/gnome/dialog-find-transactions2.c:149
 #: gnucash/gnome/dialog-find-transactions.c:149
@@ -11322,7 +11322,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:55
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:56
 msgid "Display negative amounts in red"
-msgstr "负值以红色显示"
+msgstr "负数红色(_G)"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:60
 msgid "Automatically insert a decimal point"
@@ -11349,7 +11349,7 @@ msgstr "这区域指定自动小数功能所填入的位数多寡。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
-msgstr ""
+msgstr "即使汇率得四舍五入，也要强制显示小数。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:71
 #: gnucash/gtkbuilder/dialog-preferences.glade:1214
@@ -11535,7 +11535,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:150
 msgid "Use 24 hour time format"
-msgstr "使用 24 小时时间格式"
+msgstr "24 小时制"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:151
 msgid ""
@@ -12605,21 +12605,16 @@ msgid "Number of rows for the Header"
 msgstr "Header 行数"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:156
-#, fuzzy
 msgid "Comma Separated"
-msgstr "分开的"
+msgstr "逗号"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:172
-#, fuzzy
 msgid "Semicolon Separated"
-msgstr "分开的"
+msgstr "分号"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:188
-#, fuzzy
 msgid "Custom regular Expression"
-msgstr ""
-"错误发生于正则表达式“%s”：\n"
-"%s"
+msgstr "自定义正则表达式"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:204
 #, fuzzy
@@ -12986,7 +12981,7 @@ msgstr "<b>时间格式</b>"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1029
 #: gnucash/gtkbuilder/gnc-date-format.glade:39
 msgid "Date Format"
-msgstr "日期格式"
+msgstr "日期"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:604
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:611
@@ -13057,9 +13052,8 @@ msgstr "错误"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1010
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:945
-#, fuzzy
 msgid "Import Preview"
-msgstr "导入 QIF 文件"
+msgstr "导入预览"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1026
 msgid ""
@@ -14743,51 +14737,43 @@ msgid "Import invoice CSV data"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:191
-#, fuzzy
 msgid "2. Select import type"
-msgstr "选择折扣类型"
+msgstr "类型"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:216
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:217
-#, fuzzy
 msgid "Semicolon separated"
-msgstr "分开的"
+msgstr "分号"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:234
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:234
-#, fuzzy
 msgid "Comma separated"
-msgstr "分开的"
+msgstr "逗号"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:252
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:252
 msgid "Semicolon separated with quotes"
-msgstr ""
+msgstr "分号与引号"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:270
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:270
 msgid "Comma separated with quotes"
-msgstr ""
+msgstr "逗号与引号"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:288
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:288
-#, fuzzy
 msgid "Custom regular expression"
-msgstr ""
-"错误发生于正则表达式“%s”：\n"
-"%s"
+msgstr "自定义正则表达式"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:310
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:310
-#, fuzzy
 msgid "3. Select import options"
-msgstr "编辑报表选项"
+msgstr "选项"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:349
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:353
-#, fuzzy
 msgid "4. Preview"
-msgstr "回顾"
+msgstr "预览"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:374
 msgid "Open imported documents in tabs"
@@ -16226,7 +16212,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:240
 msgid "GnuCash Preferences"
-msgstr "GnuCash 首选项"
+msgstr "GnuCash"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:314
 msgid "<b>Summarybar Content</b>"
@@ -16394,7 +16380,7 @@ msgstr "精美的日期格式"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1044
 msgid "<b>Time Format</b>"
-msgstr "<b>时间格式</b>"
+msgstr "<b>时间</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1064
 msgid "U_se 24-hour clock"
@@ -16402,12 +16388,11 @@ msgstr "使用24小时时钟(_S)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1070
 msgid "Use a 24 hour (instead of a 12 hour) time format."
-msgstr "使用 24 小时制(代替 12 小时制)时间。"
+msgstr "使用 24 小时制(代替 12 小时制)。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1085
-#, fuzzy
 msgid "<b>Date Completion</b>"
-msgstr "<b>数据库连接</b>"
+msgstr "<b>截止日期</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1098
 msgid "When a date is entered without year, it should be taken"
@@ -16446,7 +16431,7 @@ msgstr "以红色显示负值(_G)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1232
 msgid "Display negative amounts in red."
-msgstr "将负值显示为红色。"
+msgstr "以红色显示负数。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1244
 msgid "_Automatic decimal point"
@@ -16456,12 +16441,11 @@ msgstr "自动插入小数点(_A)"
 msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
-msgstr "在输入的数据没有一个“.”的情况下自动加上一个小数点"
+msgstr "整数将自动插入小数点。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1265
-#, fuzzy
 msgid "_Decimal places"
-msgstr "小数点位置(_D)："
+msgstr "小数位数(_D)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1280
 msgid "How many automatic decimal places will be filled in."
@@ -16469,7 +16453,7 @@ msgstr "自动小数会填入的位数多寡。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1372
 msgid "Numbers, Date, Time"
-msgstr ""
+msgstr "数值，日期，时间"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1403
 msgid "Perform account list _setup on new file"
@@ -22441,7 +22425,7 @@ msgstr "常规数字单元格的字体信息"
 
 #: gnucash/report/html-fonts.scm:121
 msgid "Negative Values in Red"
-msgstr "用红色显示负数"
+msgstr "负值红色(_G)"
 
 #: gnucash/report/html-fonts.scm:121
 msgid "Display negative values in red."
