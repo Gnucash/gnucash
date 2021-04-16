@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.3.2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-04-16 21:24+0200\n"
+"POT-Creation-Date: 2021-04-16 23:36+0200\n"
 "PO-Revision-Date: 2009-07-15 11:40+0900\n"
 "Last-Translator: Jin-Hwan Jeong <yongdoria@gmail.com>\n"
 "Language-Team:\n"
@@ -18547,7 +18547,6 @@ msgstr ""
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
 msgid ""
-"\n"
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
 "* Your bank needs to grant you online access. See on their website or ask "
@@ -18570,14 +18569,14 @@ msgid ""
 "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online "
 "Banking server. You should not rely on time-critical transfers through "
 "Online Banking, because sometimes the bank does not give you correct "
-"feedback when a transfer is rejected.\n"
+"feedback when a transfer is rejected."
 msgstr ""
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:73
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
 msgstr "초기 온라인 뱅킹 설정"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:92
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:90
 #, fuzzy
 #| msgid ""
 #| "The Setup of your Online Banking connection is handled by the external "
@@ -18593,15 +18592,15 @@ msgstr ""
 "온라인 뱅킹 연결 설정을 외부 프로그램 \"Aq뱅킹 설정 마법사\"에 의해 제어됩니"
 "다. 이 프로그램을 시작하기 위하여 아래 단추를 눌러 주세요."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:106
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 msgid "_Start AqBanking Wizard"
 msgstr "Aq뱅킹 마법사 시작(_S)"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:123
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:121
 msgid "Start Online Banking Wizard"
 msgstr "온라인 뱅킹 마법사 시작"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:141
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:139
 #, fuzzy
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
@@ -18611,17 +18610,17 @@ msgstr ""
 "그것을 GnuCash 계정과 일치시킨다면 온라인 뱅킹 계정명의 라인을 클릭. 전체 원"
 "하는 계정을 일치시킨 후 \"앞으로\" 클릭"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:179
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:177
 #, fuzzy
 msgid "_Delete selected matches"
 msgstr "선택된 계정의 삭제"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:202
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:200
 #, fuzzy
 msgid "Match Online accounts with GnuCash accounts"
 msgstr "온라인 뱅킹 계정과 GnuCash계정 일치"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:217
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:215
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished. You can now invoke Online Banking actions on those accounts.\n"
@@ -18632,7 +18631,7 @@ msgid ""
 "Press \"Apply\" now."
 msgstr ""
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:233
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:231
 msgid "Online Banking Setup Finished"
 msgstr "온라인 뱅킹 설정 종료"
 

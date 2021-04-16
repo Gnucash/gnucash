@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash 4.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-04-16 21:24+0200\n"
+"POT-Creation-Date: 2021-04-16 23:36+0200\n"
 "PO-Revision-Date: 2020-07-01 19:19+0200\n"
 "Last-Translator: Daniel Șerbănescu <daniel@serbanescu.dk>\n"
 "Language-Team: Romanian <translation-team-ro@lists.sourceforge.net>\n"
@@ -19933,7 +19933,6 @@ msgstr ""
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
 msgid ""
-"\n"
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
 "* Your bank needs to grant you online access. See on their website or ask "
@@ -19956,14 +19955,14 @@ msgid ""
 "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online "
 "Banking server. You should not rely on time-critical transfers through "
 "Online Banking, because sometimes the bank does not give you correct "
-"feedback when a transfer is rejected.\n"
+"feedback when a transfer is rejected."
 msgstr ""
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:73
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
 msgstr "Instalare inițială Bancă online"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:92
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:90
 #, fuzzy
 #| msgid ""
 #| "The Setup of your Online Banking connection is handled by the external "
@@ -19980,15 +19979,15 @@ msgstr ""
 "programul extern \"Vrăjitorul de instalare al AqBanking\". Te rog apasă "
 "butonul de mai jos pentru a porni acest program."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:106
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 msgid "_Start AqBanking Wizard"
 msgstr "_Start vrăjitor AqBanking"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:123
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:121
 msgid "Start Online Banking Wizard"
 msgstr "Start vrăjitor Bancă online"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:141
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:139
 #, fuzzy
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
@@ -19999,18 +19998,18 @@ msgstr ""
 "cu un cont GnuCash. Fă clic pe \"Înainte\" când toate conturile dorite sunt "
 "echilibrate."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:179
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:177
 #, fuzzy
 #| msgid "Delete selected account"
 msgid "_Delete selected matches"
 msgstr "Șterge contul selectat"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:202
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:200
 #, fuzzy
 msgid "Match Online accounts with GnuCash accounts"
 msgstr "Potrivire conturi Bancă online cu conturi GnuCash"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:217
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:215
 #, fuzzy
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
@@ -20030,7 +20029,7 @@ msgstr ""
 "\n"
 "Acum apasă \"Aplică\"."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:233
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:231
 msgid "Online Banking Setup Finished"
 msgstr "Sfârșit instalare Bancă online"
 

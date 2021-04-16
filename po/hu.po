@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-04-16 21:24+0200\n"
+"POT-Creation-Date: 2021-04-16 23:36+0200\n"
 "PO-Revision-Date: 2011-07-30 16:57+0100\n"
 "Last-Translator: Takó Kornél <takokornel@gmail.com>\n"
 "Language-Team: Hungarian\n"
@@ -19157,7 +19157,6 @@ msgstr ""
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
 msgid ""
-"\n"
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
 "* Your bank needs to grant you online access. See on their website or ask "
@@ -19180,14 +19179,14 @@ msgid ""
 "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online "
 "Banking server. You should not rely on time-critical transfers through "
 "Online Banking, because sometimes the bank does not give you correct "
-"feedback when a transfer is rejected.\n"
+"feedback when a transfer is rejected."
 msgstr ""
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:73
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
 msgstr "Online Banking kezdő beállítása"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:92
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:90
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup Wizard\".\n"
@@ -19196,32 +19195,32 @@ msgid ""
 "Please press the button below to start it."
 msgstr ""
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:106
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 msgid "_Start AqBanking Wizard"
 msgstr "_Start AqBanking Wizard"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:123
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:121
 msgid "Start Online Banking Wizard"
 msgstr ""
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:141
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:139
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
 "match it to a GnuCash account or select incorrect matches and click \"Delete "
 "selected matches\". Click \"Next\" when all desired accounts are matching."
 msgstr ""
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:179
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:177
 #, fuzzy
 msgid "_Delete selected matches"
 msgstr "A kiválasztott folyószámlák törlése"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:202
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:200
 #, fuzzy
 msgid "Match Online accounts with GnuCash accounts"
 msgstr "Online Banking és GnuCash számlák összevetése"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:217
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:215
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished. You can now invoke Online Banking actions on those accounts.\n"
@@ -19240,7 +19239,7 @@ msgstr ""
 "\n"
 "Kattintson az \"Alkalmazás\" -ra."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:233
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:231
 msgid "Online Banking Setup Finished"
 msgstr "Online Banking beállítása kész"
 

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash 4.5-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-04-16 21:24+0200\n"
+"POT-Creation-Date: 2021-04-16 23:36+0200\n"
 "PO-Revision-Date: 2021-03-15 17:14+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -19488,7 +19488,6 @@ msgstr ""
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
 msgid ""
-"\n"
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
 "* Your bank needs to grant you online access. See on their website or ask "
@@ -19511,14 +19510,14 @@ msgid ""
 "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online "
 "Banking server. You should not rely on time-critical transfers through "
 "Online Banking, because sometimes the bank does not give you correct "
-"feedback when a transfer is rejected.\n"
+"feedback when a transfer is rejected."
 msgstr ""
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:73
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
 msgstr "Початкове налаштування інтернет-банкінгу"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:92
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:90
 #, fuzzy
 #| msgid ""
 #| "The Setup of your Online Banking connection is handled by the external "
@@ -19535,15 +19534,15 @@ msgstr ""
 "допомогою зовнішньої програми «AqBanking Setup Wizard». Будь ласка, "
 "натисніть кнопку нижче для запуску цієї програми."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:106
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 msgid "_Start AqBanking Wizard"
 msgstr "_Запустити майстер AqBanking"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:123
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:121
 msgid "Start Online Banking Wizard"
 msgstr "Запустити помічник інтернет-банкінгу"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:141
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:139
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
 "match it to a GnuCash account or select incorrect matches and click \"Delete "
@@ -19554,15 +19553,15 @@ msgstr ""
 "відповідники і натисніть «Вилучити позначені відповідники». Коли всі "
 "відповідності встановлені, натисніть «Далі»."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:179
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:177
 msgid "_Delete selected matches"
 msgstr "Ви_лучити позначені відповідники"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:202
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:200
 msgid "Match Online accounts with GnuCash accounts"
 msgstr "Відповідність рахунків інтернет-банкінгу рахункам GnuCash"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:217
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:215
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished. You can now invoke Online Banking actions on those accounts.\n"
@@ -19581,7 +19580,7 @@ msgstr ""
 "\n"
 "Тепер, натисніть «Застосувати»."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:233
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:231
 msgid "Online Banking Setup Finished"
 msgstr "Налаштовування інтернет-банкінгу завершено"
 

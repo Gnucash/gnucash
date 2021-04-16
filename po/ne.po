@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-04-16 21:24+0200\n"
+"POT-Creation-Date: 2021-04-16 23:36+0200\n"
 "PO-Revision-Date: 2006-08-21 17:18+0545\n"
 "Last-Translator: Shiva Prasad Pokharel <pokharelshiva@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -19252,7 +19252,6 @@ msgstr ""
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
 msgid ""
-"\n"
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
 "* Your bank needs to grant you online access. See on their website or ask "
@@ -19275,15 +19274,15 @@ msgid ""
 "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online "
 "Banking server. You should not rely on time-critical transfers through "
 "Online Banking, because sometimes the bank does not give you correct "
-"feedback when a transfer is rejected.\n"
+"feedback when a transfer is rejected."
 msgstr ""
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:73
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 #, fuzzy
 msgid "Initial Online Banking Setup"
 msgstr "प्रारम्भिक एच बि सि आइ सेटअप गर्नुहोस्"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:92
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:90
 #, fuzzy
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
@@ -19295,17 +19294,17 @@ msgstr ""
 "तपाईँको एच बी सी आइ जडानको सेटअप आन्तरिक कार्यक्रम \"AqHBCI सेटअप विजार्ड\" द्वारा "
 "हेन्डल गरिएको छ। यो कार्यक्रम सुरु गर्न कृपया तल बटन थिच्नुहोस्।\t"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:106
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 #, fuzzy
 msgid "_Start AqBanking Wizard"
 msgstr "Aqएच बि सि आइ विजार्ड सुरु गर्नुहोस्"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:123
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:121
 #, fuzzy
 msgid "Start Online Banking Wizard"
 msgstr "Aqएच बि सि आइ विजार्ड सुरु गर्नुहोस्"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:141
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:139
 #, fuzzy
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
@@ -19315,17 +19314,17 @@ msgstr ""
 "यदि तपाईँ त्यसलाई जिएनयुक्यास खातामा मिलाउन चाहनुहुन्छ भने एच बि सि आइ खाता नामको "
 "लाइनमा क्लिक गर्नुहोस्। जब सबै चाहिएको खाताहरू मिल्छ \"अगाडि\" क्लिक गर्नुहोस्।"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:179
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:177
 #, fuzzy
 msgid "_Delete selected matches"
 msgstr "चयन गरिएको खाता मेटनुहोस्"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:202
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:200
 #, fuzzy
 msgid "Match Online accounts with GnuCash accounts"
 msgstr "जिएनयुक्यास खाताहरूसँग एच बि सि आइ खाताहरू जोडा मिलाउनुहोस्"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:217
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:215
 #, fuzzy
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
@@ -19344,7 +19343,7 @@ msgstr ""
 "\n"
 "अहिले \"लागू गर्नुहोस्\" थिच्नुहोस्।"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:233
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:231
 #, fuzzy
 msgid "Online Banking Setup Finished"
 msgstr "एच बि सि आइ सेटअप समाप्त गरिएको"

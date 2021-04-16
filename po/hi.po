@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 4.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-04-16 21:24+0200\n"
+"POT-Creation-Date: 2021-04-16 23:36+0200\n"
 "PO-Revision-Date: 2021-02-20 06:50+0000\n"
 "Last-Translator: Hindi and Sanskrit Speaker <ifiotsbywzpamtrbbk@wqcefp.com>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/gnucash/gnucash/hi/"
@@ -19104,7 +19104,6 @@ msgstr ""
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
 msgid ""
-"\n"
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
 "* Your bank needs to grant you online access. See on their website or ask "
@@ -19127,14 +19126,14 @@ msgid ""
 "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online "
 "Banking server. You should not rely on time-critical transfers through "
 "Online Banking, because sometimes the bank does not give you correct "
-"feedback when a transfer is rejected.\n"
+"feedback when a transfer is rejected."
 msgstr ""
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:73
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
 msgstr "प्रारंभिक ऑनलाइन बैंकिंग सेटअप"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:92
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:90
 #, fuzzy
 #| msgid ""
 #| "The Setup of your Online Banking connection is handled by the external "
@@ -19150,15 +19149,15 @@ msgstr ""
 "आपके ऑनलाइन बैंकिंग संपर्क के सेटअप को बाहरी प्रोग्राम \"AqBanking सेटअप विजार्ड\" द्वारा "
 "नियंत्रित किया जाता है. इस प्रोग्राम को शुरू करने के लिए कृपया नीचे के बटन को दबाएं. "
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:106
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 msgid "_Start AqBanking Wizard"
 msgstr "_ AqBanking विजार्ड को शुरू करें"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:123
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:121
 msgid "Start Online Banking Wizard"
 msgstr "ऑनलाइन बैंकिंग विजार्ड को स्टार्ट करें"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:141
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:139
 #, fuzzy
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
@@ -19168,16 +19167,16 @@ msgstr ""
 "ऑनलाइन बैंकिंग खाता नाम की पंक्ति पर डबल क्लिक करें अगर आप GnuCash खाते से इसका मिलान "
 "करना चाहते हैं. सभी वांछित खातों का मिलान होने पर \"Forward\" पर क्लिक करें."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:179
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:177
 #, fuzzy
 msgid "_Delete selected matches"
 msgstr "चयनित खाते को मिटाएं "
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:202
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:200
 msgid "Match Online accounts with GnuCash accounts"
 msgstr "GnuCash खातों के साथ ऑनलाइन खातों का मिलान करें"
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:217
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:215
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished. You can now invoke Online Banking actions on those accounts.\n"
@@ -19195,7 +19194,7 @@ msgstr ""
 "\n"
 "अब \"Apply\" दबाएं."
 
-#: gnucash/import-export/aqb/assistant-ab-initial.glade:233
+#: gnucash/import-export/aqb/assistant-ab-initial.glade:231
 msgid "Online Banking Setup Finished"
 msgstr "ऑनलाइन बैंकिंग सेटअप पूरा हो गया "
 

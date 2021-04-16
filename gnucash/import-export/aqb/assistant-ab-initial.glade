@@ -44,8 +44,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes" comments="See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.">
-The requirements for Online Banking vary between the different supported AqBanking backends, but usually you will need:
+            <property name="label" translatable="yes" comments="See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.">The requirements for Online Banking vary between the different supported AqBanking backends, but usually you will need:
 * Your bank needs to grant you online access. See on their website or ask their customer service for how to obtain it.
 They should also tell you:
 * Your user ID that identifies you to their server, often your base account number;
@@ -58,8 +57,7 @@ They should also tell you:
 
 See https://wiki.gnucash.org/wiki/AqBanking for more details.
 
-Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online Banking server. You should not rely on time-critical transfers through Online Banking, because sometimes the bank does not give you correct feedback when a transfer is rejected.
-</property>
+Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online Banking server. You should not rely on time-critical transfers through Online Banking, because sometimes the bank does not give you correct feedback when a transfer is rejected.</property>
             <property name="wrap">True</property>
           </object>
           <packing>
