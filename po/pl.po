@@ -1,13 +1,14 @@
 # Michał Ciołek <michalciolek@gmail.com>, 2020
 # Adithya K <adithyak04@gmail.com>, 2021.
+# Maciej Błędkowski <mble@tuta.io>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-02-20 14:50+0000\n"
-"Last-Translator: Adithya K <adithyak04@gmail.com>\n"
+"PO-Revision-Date: 2021-04-14 10:26+0000\n"
+"Last-Translator: Maciej Błędkowski <mble@tuta.io>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
@@ -16,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Poedit-Bookmarks: 2255,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
-msgstr ""
+msgstr "WSZYSTKO NIE-WALUTOWE"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -452,6 +453,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"Listy mailingowe są preferowaną formą komunikacji w społeczności GnuCash. "
+"Informacje o nowych wydaniach, grupach użytkowników itp. można znaleźć w "
+"tabeli pod adresem https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
@@ -526,6 +530,13 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"Każda transakcja posiada pole \"Notatki\", w którym możesz umieścić "
+"przydatne informacje.\n"
+"\n"
+"Aby było ono widoczne\n"
+"wybierz \"Widok\" z paska menu i zaznacz \"Podwójna linia\" lub\n"
+"zaznacz opcję \"Tryb podwójnej linii\" w Preferencjach: Domyślne ustawienia "
+"rejestru."
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -675,6 +686,17 @@ msgid ""
 "To schedule a transaction every year you can choose the monthly basic "
 "frequency and then set 'Every 12 months'."
 msgstr ""
+"Edytor zaplanowanych transakcji wyposażony jest w bardzo elastyczny "
+"konfigurator częstotliwości wykonywanych transakcji. Podstawowe "
+"częstotliwości do zaplanowania transakcji to dzienna, tygodniowa i "
+"miesięczna. Ale bardziej zaawansowane schematy mogą być również ustawione. "
+"Kilka przykładów:\n"
+"\n"
+"Aby zaplanować transakcję co trzy tygodnie, można wybrać tygodniową "
+"częstotliwość podstawową, a następnie ustawić \"Co 3 tygodnie\".\n"
+"\n"
+"Aby zaplanować transakcję co rok, możesz wybrać miesięczną częstotliwość "
+"podstawową, a następnie ustawić 'Co 12 miesięcy'."
 
 #: doc/tip_of_the_day.list.c:111
 msgid ""
@@ -682,6 +704,9 @@ msgid ""
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
 msgstr ""
+"Jeśli pracujesz w nocy, powinieneś zamknąć i ponownie otworzyć swoje "
+"rejestry robocze po północy, aby nowa data stała się domyślną dla nowych "
+"transakcji. Nie jest konieczne ponowne uruchomienie programu GnuCash."
 
 #: doc/tip_of_the_day.list.c:115
 msgid ""
@@ -689,6 +714,9 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
+"Aby przeszukać wszystkie transakcje, rozpocznij wyszukiwanie "
+"(Edycja->Znajdź...) na stronie głównej hierarchii rachunków. Aby ograniczyć "
+"wyszukiwanie do jednego konta, rozpocznij wyszukiwanie z rejestru konta."
 
 #: doc/tip_of_the_day.list.c:119
 msgid ""
@@ -696,6 +724,9 @@ msgid ""
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
 msgstr ""
+"Aby wizualnie porównać zawartość 2 zakładek na ekranie, w jednej z nich "
+"wybierz z menu Okno->Nowe Okno ze stroną z menu, aby zduplikować tą zakładkę "
+"w nowym oknie."
 
 #: doc/tip_of_the_day.list.c:123
 msgid ""
@@ -766,6 +797,8 @@ msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
+"Książka zostanie utworzona z tytułem %s po kliknięciu \"Zastosuj\". Kliknij "
+"\"Wróć\", aby zmienić lub \"Anuluj\", aby nie tworzyć żadnej książki."
 
 #: gnucash/gnome/assistant-acct-period.c:523
 #, c-format
