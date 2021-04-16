@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-04-12 01:26+0000\n"
+"PO-Revision-Date: 2021-04-15 15:26+0000\n"
 "Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
@@ -799,7 +799,7 @@ msgstr "τύπος φόρου: φόρος επί των πωλήσεων"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "είδος φόρου: GST"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
@@ -857,11 +857,11 @@ msgstr "λογαριασμός μεταφοράς"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr ""
+msgstr "μεταφορά, σε (γραμμή εργαλείων καταχώρησης)"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr ""
+msgstr "δοκιμαστικό ισοζύγιο (έκθεση)"
 
 #
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
@@ -869,9 +869,8 @@ msgid "type"
 msgstr "είδος"
 
 #. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
-#, fuzzy
 msgid "units"
-msgstr "&Μονάδες:"
+msgstr "μονάδες"
 
 #. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"
@@ -879,16 +878,15 @@ msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr ""
+msgstr "τιμή (σε διάσπαση)"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
 msgstr "προμηθευτής"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
-#, fuzzy
 msgid "voucher"
-msgstr "Πόρος"
+msgstr "κουπόνι"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
