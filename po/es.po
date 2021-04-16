@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-04-12 22:26+0000\n"
+"PO-Revision-Date: 2021-04-15 23:26+0000\n"
 "Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -3705,7 +3705,7 @@ msgstr "_Nuevo presupuesto"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
 msgid "Create a new Budget."
-msgstr "Crear un presupuesto nuevo"
+msgstr "Crear un presupuesto nuevo."
 
 # Menú
 #: gnucash/gnome/gnc-plugin-budget.c:69
@@ -5019,7 +5019,6 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:415
-#, fuzzy
 msgid "Make a printable voucher"
 msgstr "Crear un vale imprimible"
 
@@ -5605,11 +5604,12 @@ msgstr "Línea _doble"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:425
 #: gnucash/gnome/gnc-plugin-page-register.c:554
-#, fuzzy
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Document\" for "
 "each transaction."
-msgstr "Muestra dos líneas de información para cada transacción"
+msgstr ""
+"Muestra una línea adicional con \"Acción\", \"Notas\" y \"Documento "
+"asociado\" para cada transacción."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:430
 msgid "Show _Extra Dates"
@@ -6007,7 +6007,6 @@ msgstr "Añadir transacción de _reversión"
 #: gnucash/gnome/gnc-plugin-page-register.c:4085
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:73
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:624
-#, fuzzy
 msgid "New Transaction Information"
 msgstr "Nueva información de transacción"
 
@@ -15522,7 +15521,6 @@ msgstr ""
 "contabilizante."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:210
-#, fuzzy
 msgid "Due Day"
 msgstr "Día de vencimiento"
 
@@ -27594,7 +27592,7 @@ msgstr "Declaración Ingresante"
 
 #: gnucash/report/reports/standard/income-statement.scm:572
 msgid "Profit & Loss"
-msgstr "Beneficio y Pérdidas"
+msgstr "Ganancias y Pérdidas"
 
 #: gnucash/report/reports/standard/invoice.scm:102
 #: gnucash/report/reports/standard/invoice.scm:247
@@ -31107,7 +31105,7 @@ msgstr ""
 
 #: libgnucash/engine/Account.cpp:4390
 msgid "Credit Card"
-msgstr "Tarjeta Crediticia"
+msgstr "Tarjeta de crédito"
 
 #: libgnucash/engine/Account.cpp:4392
 msgid "Stock"
