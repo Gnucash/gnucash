@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-03-14 22:08+0100\n"
-"PO-Revision-Date: 2021-04-16 14:12+0000\n"
+"PO-Revision-Date: 2021-04-16 17:26+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -680,7 +680,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
-msgstr "结账成功。"
+msgstr "顺利结账。"
 
 #. Translators: %s is a date string. %d is the number of books
 #. that will be created. This is a ngettext(3) message (but
@@ -693,7 +693,7 @@ msgid ""
 msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
-msgstr[0] "账簿最早的交易日期是 %s，基于上面的选择，此账簿会拆分成 %d 个。"
+msgstr[0] "最早的交易日期是 %s，基于上面的选择，此账簿会拆分成 %d 个。"
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:369
@@ -5780,7 +5780,7 @@ msgstr "显示股份数额："
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3432
 msgid "End Date:"
-msgstr "结束日期："
+msgstr "截止日期："
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3442
 #: gnucash/report/trep-engine.scm:146 gnucash/report/trep-engine.scm:420
@@ -8875,22 +8875,22 @@ msgstr "上月初"
 
 #: gnucash/gnome-utils/gnc-period-select.c:73
 msgid "Start of this quarter"
-msgstr "本季起点"
+msgstr "本季初"
 
 #: gnucash/gnome-utils/gnc-period-select.c:74
 #: libgnucash/app-utils/date-utilities.scm:1024
 msgid "Start of previous quarter"
-msgstr "上季度开头"
+msgstr "上季初"
 
 #: gnucash/gnome-utils/gnc-period-select.c:75
 #: libgnucash/app-utils/date-utilities.scm:912
 msgid "Start of this year"
-msgstr "今年起点"
+msgstr "今年初"
 
 #: gnucash/gnome-utils/gnc-period-select.c:76
 #: libgnucash/app-utils/date-utilities.scm:926
 msgid "Start of previous year"
-msgstr "前一年起点"
+msgstr "去年初"
 
 #: gnucash/gnome-utils/gnc-period-select.c:79
 #, fuzzy
@@ -8913,22 +8913,22 @@ msgstr "上月末"
 
 #: gnucash/gnome-utils/gnc-period-select.c:89
 msgid "End of this quarter"
-msgstr "本季终点"
+msgstr "本季末"
 
 #: gnucash/gnome-utils/gnc-period-select.c:90
 #: libgnucash/app-utils/date-utilities.scm:1031
 msgid "End of previous quarter"
-msgstr "上季度末尾"
+msgstr "上季末"
 
 #: gnucash/gnome-utils/gnc-period-select.c:91
 #: libgnucash/app-utils/date-utilities.scm:919
 msgid "End of this year"
-msgstr "今年的终点"
+msgstr "今年底"
 
 #: gnucash/gnome-utils/gnc-period-select.c:92
 #: libgnucash/app-utils/date-utilities.scm:933
 msgid "End of previous year"
-msgstr "前一年终点"
+msgstr "去年底"
 
 #: gnucash/gnome-utils/gnc-period-select.c:95
 #, fuzzy
@@ -12374,7 +12374,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:6
 msgid ""
 "Show a grand total of all accounts converted to the default report currency"
-msgstr "显示转换为默认报表货币的所有科目的总计"
+msgstr "显示转换为默认报表货币的所有科目总计"
 
 #: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:10
 msgid "Show non currency commodities"
@@ -13621,7 +13621,7 @@ msgstr "范围："
 #: gnucash/report/reports/standard/price-scatter.scm:37
 #: gnucash/report/trep-engine.scm:96
 msgid "End Date"
-msgstr "结束日期"
+msgstr "截止日期"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1243
 #, fuzzy
@@ -16216,45 +16216,42 @@ msgstr "GnuCash"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:314
 msgid "<b>Summarybar Content</b>"
-msgstr "<b>概要条内容</b>"
+msgstr "<b>摘要栏</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:324
 msgid "Include _grand total"
-msgstr "显示总计(_G)"
+msgstr "包含总计(_G)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:330
 msgid ""
 "Show a grand total of all accounts converted to the default report currency."
-msgstr "显示转换到默认报表货币的所有科目的总计。"
+msgstr "显示转换为默认报表货币的所有科目总计。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:342
 msgid "Include _non-currency totals"
-msgstr "包括非货币合计(_N)"
+msgstr "包含非货币总计(_N)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:348
-#, fuzzy
 msgid ""
 "If checked, non-currency commodities will be shown in the summary bar. If "
 "clear, only currencies will be shown."
-msgstr "如果选中，将会在摘要栏中显示非货币商品；否则，只会显示货币。"
+msgstr "如果选中，摘要栏将显示非货币商品，否则，只显示货币。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:390
-#, fuzzy
 msgid "_Relative"
-msgstr "相对(_R)："
+msgstr "相对(_R)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:396
 msgid "Use the specified relative starting date for profit/loss calculations."
-msgstr "为损益计算使用指定的相对起始日期。"
+msgstr "使用指定的相对起始日期计算损益。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:409
-#, fuzzy
 msgid "_Absolute"
-msgstr "绝对的(_A)："
+msgstr "绝对(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:415
 msgid "Use the specified absolute starting date for profit/loss calculations."
-msgstr "为损益计算使用指定的绝对起始日期。"
+msgstr "使用指定的绝对起始日期计算损益。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:428
 #, fuzzy
@@ -16262,11 +16259,10 @@ msgid "Re_lative"
 msgstr "相对(_L)："
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:434
-#, fuzzy
 msgid ""
 "Use the specified relative ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
-msgstr "为损益计算使用指定的相对期末日期。净资产计算时也使用这个日期。"
+msgstr "使用指定的相对截止日期计算损益，净资产计算也使用这个日期。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:447
 #, fuzzy
@@ -16274,15 +16270,14 @@ msgid "Ab_solute"
 msgstr "绝对(_S)："
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:453
-#, fuzzy
 msgid ""
 "Use the specified absolute ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
-msgstr "为损益计算使用指定的绝对期末日期。净资产计算时也使用这个日期。"
+msgstr "使用指定的绝对截止日期计算损益，净资产计算也使用这个日期。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:564
 msgid "Accounting Period"
-msgstr "会计期"
+msgstr "会计期间"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:593
 msgid "Use _formal accounting labels"
@@ -30521,9 +30516,8 @@ msgid ""
 msgstr "来自商品或贸易科目的实际损益没有被记录在其它地方。"
 
 #: libgnucash/engine/gnc-commodity.h:118
-#, fuzzy
 msgid "All non-currency"
-msgstr "选择货币"
+msgstr "所有非货币"
 
 #: libgnucash/engine/gnc-date.cpp:79
 msgid "%B %#d, %Y"
