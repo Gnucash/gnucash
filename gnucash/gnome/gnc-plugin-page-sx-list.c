@@ -95,6 +95,7 @@ typedef struct GncPluginPageSxListPrivate
 
     GncSxInstanceModel* instances;
     GtkTreeView* tree_view;
+    GList *selected_list;
 
 } GncPluginPageSxListPrivate;
 
@@ -351,6 +352,64 @@ gppsl_selection_changed_cb(GtkTreeSelection *selection, gpointer user_data)
 }
 
 
+static void
+gppsl_update_selected_list (GncPluginPageSxList *page, gboolean reset, SchedXaction *sx)
+{
+    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+
+    if (reset && priv->selected_list)
+    {
+        g_list_free (priv->selected_list);
+        priv->selected_list = NULL;
+    }
+    if (sx)
+        priv->selected_list = g_list_prepend (priv->selected_list, sx);
+}
+
+
+static void
+gppsl_model_populated_cb (GtkTreeModel *tree_model, GncPluginPageSxList *page)
+{
+    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(priv->tree_view));
+    gboolean found = FALSE;
+
+    if (priv->selected_list)
+    {
+        // walk the list to see if we can reselect the sx
+        for (GList *list = priv->selected_list; list != NULL; list = list->next)
+        {
+            SchedXaction *sx = list->data;
+            GtkTreePath *path = gtk_tree_path_new_first ();
+
+            // loop through the model trying to find selected sx's
+            while (gnc_tree_view_path_is_valid (GNC_TREE_VIEW(priv->tree_view), path))
+            {
+                SchedXaction *sx_tmp = gnc_tree_view_sx_list_get_sx_from_path (
+                                           GNC_TREE_VIEW_SX_LIST(priv->tree_view), path);
+                if (sx_tmp == sx)
+                {
+                    found = TRUE;
+                    break;
+                }
+                gtk_tree_path_next (path);
+            }
+            if (found)
+                gtk_tree_selection_select_path (selection, path);
+
+            gtk_tree_path_free (path);
+        }
+    }
+    // this could be on load or if sx is deleted
+    if (!found)
+    {
+        GtkTreePath *path = gtk_tree_path_new_first ();
+        gtk_tree_selection_select_path (selection, path);
+        gtk_tree_path_free (path);
+    }
+}
+
+
 static GtkWidget *
 gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 {
@@ -420,6 +479,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
     {
         GtkTreeSelection *selection;
+        GtkTreePath *path = gtk_tree_path_new_first ();
 
         priv->tree_view = GTK_TREE_VIEW(gnc_tree_view_sx_list_new(priv->instances));
         g_object_set(G_OBJECT(priv->tree_view),
@@ -430,8 +490,13 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
         selection = gtk_tree_view_get_selection(priv->tree_view);
         gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
+        gtk_tree_selection_select_path (selection, path);
+        gtk_tree_path_free (path);
+
         g_signal_connect(G_OBJECT(selection), "changed", (GCallback)gppsl_selection_changed_cb, (gpointer)page);
         g_signal_connect(G_OBJECT(priv->tree_view), "row-activated", (GCallback)gppsl_row_activated_cb, (gpointer)page);
+        g_signal_connect (G_OBJECT(gtk_tree_view_get_model (GTK_TREE_VIEW(priv->tree_view))),
+                          "model-populated", (GCallback)gppsl_model_populated_cb, (gpointer)page);
     }
 
     /* Add vbox and label */
@@ -502,6 +567,9 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
         g_object_unref(G_OBJECT(priv->widget));
         priv->widget = NULL;
     }
+
+    if (priv->selected_list)
+        g_list_free (priv->selected_list);
 
     if (priv->gnc_component_id)
     {
@@ -611,6 +679,7 @@ gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
         gnc_sx_set_schedule(new_sx, schedule);
     }
     gnc_ui_scheduled_xaction_editor_dialog_create(window, new_sx, new_sx_flag);
+    gppsl_update_selected_list (page, TRUE, new_sx);
 }
 
 #ifdef REGISTER2_ENABLED
@@ -696,6 +765,14 @@ gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
     to_edit = gnc_g_list_map(selected_paths,
                              (GncGMapFunc)_argument_reorder_fn,
                              priv->tree_view);
+
+    gppsl_update_selected_list (page, TRUE, NULL);
+    for (GList *list = to_edit; list != NULL; list = list->next)
+    {
+        g_debug("to-edit [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
+        gppsl_update_selected_list (page, FALSE, list->data);
+    }
+
     g_list_foreach(to_edit, (GFunc)_edit_sx, window);
     g_list_free(to_edit);
     g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
@@ -744,6 +821,7 @@ gppsl_row_activated_cb(GtkTreeView *tree_view,
 
     SchedXaction *sx = gnc_tree_view_sx_list_get_sx_from_path(GNC_TREE_VIEW_SX_LIST(priv->tree_view), path);
     gnc_ui_scheduled_xaction_editor_dialog_create(window, sx, FALSE);
+    gppsl_update_selected_list (page, TRUE, sx);
 }
 
 
@@ -769,6 +847,8 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
     GList *selected_paths, *to_delete = NULL;
     GtkTreeModel *model;
     GtkWindow *window;
+    gchar *message = NULL;
+    gint length;
 
     selection = gtk_tree_view_get_selection(priv->tree_view);
     selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
@@ -781,24 +861,28 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
     to_delete = gnc_g_list_map(selected_paths,
                                (GncGMapFunc)_argument_reorder_fn,
                                priv->tree_view);
-    {
-        GList *list;
-        for (list = to_delete; list != NULL; list = list->next)
-        {
-            g_debug("to-delete [%s]\n", xaccSchedXactionGetName((SchedXaction*)list->data));
-        }
-    }
 
     window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
-    /* FIXME: Does this always refer to only one transaction? Or could
-       multiple SXs be deleted as well? Ideally, the number of
-       to-be-deleted SXs should be mentioned here; see
-       dialog-sx-since-last-run.c:807 */
-    if (gnc_verify_dialog (window, FALSE, "%s", _("Do you really want to delete this scheduled transaction?")))
+
+    length = g_list_length (to_delete);
+
+    /* Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted */
+    message = g_strdup_printf (ngettext ("Do you really want to delete this scheduled transaction?",
+                                         "Do you really want to delete %d scheduled transactions?",
+                                          length), length);
+
+    if (gnc_verify_dialog (window, FALSE, "%s", message))
     {
+        gppsl_update_selected_list (page, TRUE, NULL);
+        for (GList *list = to_delete; list != NULL; list = list->next)
+        {
+            g_debug("to-delete [%s]\n", xaccSchedXactionGetName((SchedXaction*)list->data));
+            gppsl_update_selected_list (page, FALSE, list->data);
+        }
         g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);
     }
 
+    g_free (message);
     g_list_free(to_delete);
     g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
     g_list_free(selected_paths);

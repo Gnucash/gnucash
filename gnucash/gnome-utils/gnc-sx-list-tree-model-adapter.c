@@ -52,6 +52,16 @@ struct _GncSxListTreeModelAdapter
 struct _GncSxListTreeModelAdapterClass
 {
     GObjectClass parent;
+
+    /* This signal is emitted when the model is populated */
+    void (*model_populated) (GncSxListTreeModelAdapter *model, gpointer user_data);
+};
+
+/* Signal codes */
+enum
+{
+    MODEL_POPULATED,
+    LAST_SIGNAL
 };
 
 static GObjectClass *parent_class = NULL;
@@ -62,6 +72,8 @@ static void gsltma_tree_sortable_interface_init(gpointer g_iface, gpointer iface
 static void gnc_sx_list_tree_model_adapter_init(GTypeInstance *instance, gpointer klass);
 static void gnc_sx_list_tree_model_adapter_dispose(GObject *obj);
 static void gnc_sx_list_tree_model_adapter_finalize(GObject *obj);
+
+static guint gnc_sx_list_tree_model_adapter_signals[LAST_SIGNAL] = {0};
 
 static GncSxInstances* gsltma_get_sx_instances_from_orig_iter(GncSxListTreeModelAdapter *model, GtkTreeIter *orig_iter);
 
@@ -119,6 +131,16 @@ gnc_sx_list_tree_model_adapter_class_init(GncSxListTreeModelAdapterClass *klass)
     obj_class->dispose = gnc_sx_list_tree_model_adapter_dispose;
     obj_class->finalize = gnc_sx_list_tree_model_adapter_finalize;
 
+    gnc_sx_list_tree_model_adapter_signals[MODEL_POPULATED] =
+        g_signal_new("model_populated",
+                     G_TYPE_FROM_CLASS (obj_class),
+                     G_SIGNAL_RUN_LAST,
+                     G_STRUCT_OFFSET (GncSxListTreeModelAdapterClass, model_populated),
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__VOID,
+                     G_TYPE_NONE, 0);
+
+    klass->model_populated = NULL;
 }
 
 static GtkTreeModelFlags
@@ -525,6 +547,7 @@ gsltma_populate_tree_store(GncSxListTreeModelAdapter *model)
                            -1);
         g_free(frequency_str);
     }
+    g_signal_emit_by_name (model, "model_populated");
 }
 
 static void
