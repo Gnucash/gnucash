@@ -22,6 +22,11 @@
       <summary>Show "since last run" notification dialog when a file is opened.</summary>
       <description>This setting controls whether the scheduled transactions notification-only "since last run" dialog is shown when a data file is opened (if "since last run" processing is enabled on file open).  This includes the initial opening of the data file when GnuCash starts.  If this setting is active, show the dialog, otherwise it is not shown.</description>
     </key>
+    <key name="review-transactions" type="b">
+      <default>false</default>
+      <summary>Set "Review Created Transactions" as the default for the "since last run" dialog.</summary>
+      <description>This setting controls whether as default the "review created transactions" is set for the "since last run" dialog.</description>
+    </key>
   </schema>
 
   <schema id="org.gnucash.dialogs.sxs.transaction-editor" path="/org/gnucash/dialogs/scheduled-trans/transaction-editor/">
