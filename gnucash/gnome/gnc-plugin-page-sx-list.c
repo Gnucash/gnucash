@@ -100,7 +100,7 @@ typedef struct GncPluginPageSxListPrivate
 } GncPluginPageSxListPrivate;
 
 #define GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(o)  \
-   ((GncPluginPageSxListPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE_SX_LIST))
+   ((GncPluginPageSxListPrivate*)g_type_instance_get_private ((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE_SX_LIST))
 
 static GObjectClass *parent_class = NULL;
 
@@ -110,25 +110,25 @@ static GObjectClass *parent_class = NULL;
 /* Plugin Actions */
 static void gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass);
 static void gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page);
-static void gnc_plugin_page_sx_list_dispose(GObject *object);
-static void gnc_plugin_page_sx_list_finalize(GObject *object);
+static void gnc_plugin_page_sx_list_dispose (GObject *object);
+static void gnc_plugin_page_sx_list_finalize (GObject *object);
 
 static GtkWidget *gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
 static GncPluginPage *gnc_plugin_page_sx_list_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 
-static void gppsl_row_activated_cb(GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column, gpointer user_data);
+static void gppsl_row_activated_cb (GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column, gpointer user_data);
 
-static void gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page);
-static void gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page);
+static void gnc_plugin_page_sx_list_cmd_new (GtkAction *action, GncPluginPageSxList *page);
+static void gnc_plugin_page_sx_list_cmd_edit (GtkAction *action, GncPluginPageSxList *page);
 #ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
-static void gnc_plugin_page_sx_list_cmd_new2(GtkAction *action, GncPluginPageSxList *page);
-static void gnc_plugin_page_sx_list_cmd_edit2(GtkAction *action, GncPluginPageSxList *page);
+static void gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page);
+static void gnc_plugin_page_sx_list_cmd_edit2 (GtkAction *action, GncPluginPageSxList *page);
 /*################## Added for Reg2 #################*/
 #endif
-static void gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page);
+static void gnc_plugin_page_sx_list_cmd_delete (GtkAction *action, GncPluginPageSxList *page);
 static void gnc_plugin_page_sx_list_cmd_refresh (GtkAction *action, GncPluginPageSxList *page);
 
 /* Command callbacks */
@@ -168,11 +168,11 @@ static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
 
     {
         "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
-        N_("Refresh this window"), G_CALLBACK (gnc_plugin_page_sx_list_cmd_refresh)
+        N_("Refresh this window"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_refresh)
     },
 };
 /** The number of actions provided by this plugin. */
-static guint gnc_plugin_page_sx_list_n_actions = G_N_ELEMENTS (gnc_plugin_page_sx_list_actions);
+static guint gnc_plugin_page_sx_list_n_actions = G_N_ELEMENTS(gnc_plugin_page_sx_list_actions);
 
 GncPluginPage *
 gnc_plugin_page_sx_list_new (void)
@@ -255,40 +255,40 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
                  NULL);
 #endif
 
-    gnc_plugin_page_add_book(parent, gnc_get_current_book());
+    gnc_plugin_page_add_book (parent, gnc_get_current_book());
     action_group =
-        gnc_plugin_page_create_action_group(parent,
-                                            "GncPluginPageSxListActions");
-    gtk_action_group_add_actions(action_group,
-                                 gnc_plugin_page_sx_list_actions,
-                                 gnc_plugin_page_sx_list_n_actions,
-                                 plugin_page);
+        gnc_plugin_page_create_action_group (parent,
+                                             "GncPluginPageSxListActions");
+    gtk_action_group_add_actions (action_group,
+                                  gnc_plugin_page_sx_list_actions,
+                                  gnc_plugin_page_sx_list_n_actions,
+                                  plugin_page);
     /* gnc_plugin_init_short_names (action_group, toolbar_labels); */
 }
 
 
 static void
-gnc_plugin_page_sx_list_dispose(GObject *object)
+gnc_plugin_page_sx_list_dispose (GObject *object)
 {
     GncPluginPageSxList *page;
     GncPluginPageSxListPrivate *priv;
 
-    page = GNC_PLUGIN_PAGE_SX_LIST (object);
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_SX_LIST (page));
+    page = GNC_PLUGIN_PAGE_SX_LIST(object);
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST(page));
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
-    g_return_if_fail(priv != NULL);
+    g_return_if_fail (priv != NULL);
 
-    g_return_if_fail(!priv->disposed);
+    g_return_if_fail (!priv->disposed);
     priv->disposed = TRUE;
 
-    g_object_unref(G_OBJECT(priv->dense_cal_model));
+    g_object_unref (G_OBJECT(priv->dense_cal_model));
     priv->dense_cal_model = NULL;
-    g_object_unref(GTK_WIDGET(priv->gdcal));
+    g_object_unref (GTK_WIDGET(priv->gdcal));
     priv->gdcal = NULL;
-    g_object_unref(G_OBJECT(priv->instances));
+    g_object_unref (G_OBJECT(priv->instances));
     priv->instances = NULL;
 
-    G_OBJECT_CLASS (parent_class)->dispose(object);
+    G_OBJECT_CLASS(parent_class)->dispose (object);
 }
 
 
@@ -298,12 +298,12 @@ gnc_plugin_page_sx_list_finalize (GObject *object)
     GncPluginPageSxList *page;
     GncPluginPageSxListPrivate *priv;
 
-    page = GNC_PLUGIN_PAGE_SX_LIST (object);
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_SX_LIST (page));
+    page = GNC_PLUGIN_PAGE_SX_LIST(object);
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST(page));
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
-    g_return_if_fail(priv != NULL);
+    g_return_if_fail (priv != NULL);
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS(parent_class)->finalize (object);
 }
 
 
@@ -314,14 +314,14 @@ gnc_plugin_page_sx_list_refresh_cb (GHashTable *changes, gpointer user_data)
     GncPluginPageSxList *page = user_data;
     GncPluginPageSxListPrivate *priv;
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_SX_LIST(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST(page));
 
     /* We're only looking for forced updates here. */
     if (changes)
         return;
 
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
-    gtk_widget_queue_draw(priv->widget);
+    gtk_widget_queue_draw (priv->widget);
 }
 
 
@@ -329,26 +329,26 @@ static void
 gnc_plugin_page_sx_list_close_cb (gpointer user_data)
 {
     GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(user_data);
-    gnc_main_window_close_page(plugin_page);
+    gnc_main_window_close_page (plugin_page);
 }
 
 
 static void
-gppsl_selection_changed_cb(GtkTreeSelection *selection, gpointer user_data)
+gppsl_selection_changed_cb (GtkTreeSelection *selection, gpointer user_data)
 {
     GncPluginPage *page;
     GtkAction *edit_action, *delete_action;
     gboolean selection_state = TRUE;
 
     page = GNC_PLUGIN_PAGE(user_data);
-    edit_action = gnc_plugin_page_get_action(page, "SxListEditAction");
-    delete_action = gnc_plugin_page_get_action(page, "SxListDeleteAction");
+    edit_action = gnc_plugin_page_get_action (page, "SxListEditAction");
+    delete_action = gnc_plugin_page_get_action (page, "SxListDeleteAction");
     selection_state
-    = gtk_tree_selection_count_selected_rows(selection) == 0
+    = gtk_tree_selection_count_selected_rows (selection) == 0
       ? FALSE
       : TRUE;
-    gtk_action_set_sensitive(edit_action, selection_state);
-    gtk_action_set_sensitive(delete_action, selection_state);
+    gtk_action_set_sensitive (edit_action, selection_state);
+    gtk_action_set_sensitive (delete_action, selection_state);
 }
 
 
@@ -435,74 +435,74 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
     /* Add vbox and label */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
-    gtk_paned_pack1( GTK_PANED(widget), vbox, TRUE, FALSE);
+    gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
+    gtk_paned_pack1 (GTK_PANED(widget), vbox, TRUE, FALSE);
 
     label = gtk_label_new (_("Transactions"));
     gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-strong");
     gtk_widget_set_margin_start (GTK_WIDGET(label), 6);
     gnc_label_set_alignment (label, 0.0, 0);
     gtk_widget_show (label);
-    gtk_box_pack_start ( GTK_BOX(vbox), label, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 0);
     gtk_widget_show (vbox);
 
     /* Create scrolled window for top area */
-    swin = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
+    swin = gtk_scrolled_window_new (NULL, NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(swin),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
-    gtk_box_pack_start ( GTK_BOX(vbox), swin, TRUE, TRUE, 5);
+    gtk_box_pack_start (GTK_BOX(vbox), swin, TRUE, TRUE, 5);
     gtk_widget_show (swin);
 
     {
         // gint half_way;
         // half_way = plugin_page->notebook_page->allocation.height * 0.5;
         // fixme; get a real value:
-        gtk_paned_set_position(GTK_PANED(priv->widget), 160);
+        gtk_paned_set_position (GTK_PANED(priv->widget), 160);
     }
 
     {
         GDate end;
-        g_date_clear(&end, 1);
+        g_date_clear (&end, 1);
         gnc_gdate_set_today (&end);
-        g_date_add_years(&end, 1);
-        priv->instances = GNC_SX_INSTANCE_MODEL(gnc_sx_get_instances(&end, TRUE));
+        g_date_add_years (&end, 1);
+        priv->instances = GNC_SX_INSTANCE_MODEL(gnc_sx_get_instances (&end, TRUE));
     }
 
     {
         GtkAction *edit_action, *delete_action;
-        edit_action = gnc_plugin_page_get_action(GNC_PLUGIN_PAGE(page), "SxListEditAction");
-        delete_action = gnc_plugin_page_get_action(GNC_PLUGIN_PAGE(page), "SxListDeleteAction");
-        gtk_action_set_sensitive(edit_action, FALSE);
-        gtk_action_set_sensitive(delete_action, FALSE);
+        edit_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SxListEditAction");
+        delete_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SxListDeleteAction");
+        gtk_action_set_sensitive (edit_action, FALSE);
+        gtk_action_set_sensitive (delete_action, FALSE);
     }
 
     {
         GtkTreeSelection *selection;
         GtkTreePath *path = gtk_tree_path_new_first ();
 
-        priv->tree_view = GTK_TREE_VIEW(gnc_tree_view_sx_list_new(priv->instances));
-        g_object_set(G_OBJECT(priv->tree_view),
-                     "state-section", STATE_SECTION,
-                     "show-column-menu", TRUE,
-                     NULL);
-        gtk_container_add(GTK_CONTAINER( swin ), GTK_WIDGET(priv->tree_view));
+        priv->tree_view = GTK_TREE_VIEW(gnc_tree_view_sx_list_new (priv->instances));
+        g_object_set (G_OBJECT(priv->tree_view),
+                      "state-section", STATE_SECTION,
+                      "show-column-menu", TRUE,
+                      NULL);
+        gtk_container_add (GTK_CONTAINER( swin ), GTK_WIDGET(priv->tree_view));
 
-        selection = gtk_tree_view_get_selection(priv->tree_view);
-        gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
+        selection = gtk_tree_view_get_selection (priv->tree_view);
+        gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
         gtk_tree_selection_select_path (selection, path);
         gtk_tree_path_free (path);
 
-        g_signal_connect(G_OBJECT(selection), "changed", (GCallback)gppsl_selection_changed_cb, (gpointer)page);
-        g_signal_connect(G_OBJECT(priv->tree_view), "row-activated", (GCallback)gppsl_row_activated_cb, (gpointer)page);
+        g_signal_connect (G_OBJECT(selection), "changed", (GCallback)gppsl_selection_changed_cb, (gpointer)page);
+        g_signal_connect (G_OBJECT(priv->tree_view), "row-activated", (GCallback)gppsl_row_activated_cb, (gpointer)page);
         g_signal_connect (G_OBJECT(gtk_tree_view_get_model (GTK_TREE_VIEW(priv->tree_view))),
                           "model-populated", (GCallback)gppsl_model_populated_cb, (gpointer)page);
     }
 
     /* Add vbox and label */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
-    gtk_paned_pack2( GTK_PANED(widget), vbox, TRUE, FALSE);
+    gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
+    gtk_paned_pack2 (GTK_PANED(widget), vbox, TRUE, FALSE);
 
     label = gtk_label_new (_("Upcoming Transactions"));
     gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-strong");
@@ -510,34 +510,34 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gnc_label_set_alignment (label, 0.0, 0);
     gtk_widget_show (label);
 
-    gtk_box_pack_start ( GTK_BOX(vbox), label, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 0);
     gtk_widget_show (vbox);
 
     /* Create scrolled window for bottom area */
-    swin = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
+    swin = gtk_scrolled_window_new (NULL, NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(swin),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
-    gtk_box_pack_start ( GTK_BOX(vbox), swin, TRUE, TRUE, 5);
+    gtk_box_pack_start (GTK_BOX(vbox), swin, TRUE, TRUE, 5);
     gtk_widget_show (swin);
 
     {
-        priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new(GNC_SX_INSTANCE_MODEL(priv->instances));
-        priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
-        g_object_ref_sink(priv->gdcal);
+        priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new (GNC_SX_INSTANCE_MODEL(priv->instances));
+        priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model (GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
+        g_object_ref_sink (priv->gdcal);
 
-        gnc_dense_cal_set_months_per_col(priv->gdcal, 4);
-        gnc_dense_cal_set_num_months(priv->gdcal, 12);
+        gnc_dense_cal_set_months_per_col (priv->gdcal, 4);
+        gnc_dense_cal_set_num_months (priv->gdcal, 12);
 
         gtk_container_add (GTK_CONTAINER(swin), GTK_WIDGET(priv->gdcal));
     }
 
-    priv->gnc_component_id = gnc_register_gui_component("plugin-page-sx-list",
+    priv->gnc_component_id = gnc_register_gui_component ("plugin-page-sx-list",
                              gnc_plugin_page_sx_list_refresh_cb,
                              gnc_plugin_page_sx_list_close_cb,
                              page);
     gnc_gui_component_set_session (priv->gnc_component_id,
-                                   gnc_get_current_session());
+                                   gnc_get_current_session ());
 
     g_signal_connect (G_OBJECT(plugin_page), "inserted",
                       G_CALLBACK(gnc_plugin_page_inserted_cb),
@@ -553,7 +553,7 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
     GncPluginPageSxList *page;
     GncPluginPageSxListPrivate *priv;
 
-    page = GNC_PLUGIN_PAGE_SX_LIST (plugin_page);
+    page = GNC_PLUGIN_PAGE_SX_LIST(plugin_page);
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
 
     // Remove the page_changed signal callback
@@ -564,7 +564,7 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
 
     if (priv->widget)
     {
-        g_object_unref(G_OBJECT(priv->widget));
+        g_object_unref (G_OBJECT(priv->widget));
         priv->widget = NULL;
     }
 
@@ -573,7 +573,7 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
 
     if (priv->gnc_component_id)
     {
-        gnc_unregister_gui_component(priv->gnc_component_id);
+        gnc_unregister_gui_component (priv->gnc_component_id);
         priv->gnc_component_id = 0;
     }
 }
@@ -594,18 +594,18 @@ gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page,
     GncPluginPageSxList *page;
     GncPluginPageSxListPrivate *priv;
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_SX_LIST(plugin_page));
-    g_return_if_fail(key_file != NULL);
-    g_return_if_fail(group_name != NULL);
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST(plugin_page));
+    g_return_if_fail (key_file != NULL);
+    g_return_if_fail (group_name != NULL);
 
     page = GNC_PLUGIN_PAGE_SX_LIST(plugin_page);
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
 
-    g_key_file_set_integer(key_file, group_name, "dense_cal_num_months",
-                           gnc_dense_cal_get_num_months(priv->gdcal));
+    g_key_file_set_integer (key_file, group_name, "dense_cal_num_months",
+                            gnc_dense_cal_get_num_months (priv->gdcal));
 
-    g_key_file_set_integer(key_file, group_name, "paned_position",
-                           gtk_paned_get_position(GTK_PANED(priv->widget)));
+    g_key_file_set_integer (key_file, group_name, "paned_position",
+                            gtk_paned_get_position (GTK_PANED(priv->widget)));
 }
 
 
@@ -625,33 +625,33 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
     GncPluginPageSxList *page;
     GncPluginPageSxListPrivate *priv;
 
-    g_return_val_if_fail(key_file, NULL);
-    g_return_val_if_fail(group_name, NULL);
+    g_return_val_if_fail (key_file, NULL);
+    g_return_val_if_fail (group_name, NULL);
 
     /* Create the new page. */
-    page = GNC_PLUGIN_PAGE_SX_LIST(gnc_plugin_page_sx_list_new());
+    page = GNC_PLUGIN_PAGE_SX_LIST(gnc_plugin_page_sx_list_new ());
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
 
     /* Install it now so we can them manipulate the created widget */
-    gnc_main_window_open_page(GNC_MAIN_WINDOW(window), GNC_PLUGIN_PAGE(page));
+    gnc_main_window_open_page (GNC_MAIN_WINDOW(window), GNC_PLUGIN_PAGE(page));
 
     {
         GError *err = NULL;
-        gint num_months = g_key_file_get_integer(key_file, group_name, "dense_cal_num_months", &err);
+        gint num_months = g_key_file_get_integer (key_file, group_name, "dense_cal_num_months", &err);
         if (err == NULL)
-            gnc_dense_cal_set_num_months(priv->gdcal, num_months);
+            gnc_dense_cal_set_num_months (priv->gdcal, num_months);
         else
-            g_error_free(err);
+            g_error_free (err);
     }
 
     {
         GError *err = NULL;
-        gint paned_position = g_key_file_get_integer(key_file, group_name,
+        gint paned_position = g_key_file_get_integer (key_file, group_name,
                               "paned_position", &err);
         if (err == NULL)
-            gtk_paned_set_position(GTK_PANED(priv->widget), paned_position);
+            gtk_paned_set_position (GTK_PANED(priv->widget), paned_position);
         else
-            g_error_free(err);
+            g_error_free (err);
     }
 
     return GNC_PLUGIN_PAGE(page);
@@ -659,35 +659,9 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
 
 
 static void
-gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
+gnc_plugin_page_sx_list_cmd_new (GtkAction *action, GncPluginPageSxList *page)
 {
-    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
-    SchedXaction *new_sx;
-    gboolean new_sx_flag = TRUE;
-
-    new_sx = xaccSchedXactionMalloc(gnc_get_current_book());
-    {
-        GDate now;
-        Recurrence *r = g_new0(Recurrence, 1);
-        GList *schedule;
-
-        g_date_clear(&now, 1);
-        gnc_gdate_set_today (&now);
-        recurrenceSet(r, 1, PERIOD_MONTH, &now, WEEKEND_ADJ_NONE);
-        schedule = gnc_sx_get_schedule(new_sx);
-        schedule = g_list_append(schedule, r);
-        gnc_sx_set_schedule(new_sx, schedule);
-    }
-    gnc_ui_scheduled_xaction_editor_dialog_create(window, new_sx, new_sx_flag);
-    gppsl_update_selected_list (page, TRUE, new_sx);
-}
-
-#ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
-static void
-gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page)
-{
-    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
+    GtkWindow *window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
     SchedXaction *new_sx;
     gboolean new_sx_flag = TRUE;
 
@@ -699,7 +673,33 @@ gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page)
 
         g_date_clear (&now, 1);
         gnc_gdate_set_today (&now);
-        recurrenceSet(r, 1, PERIOD_MONTH, &now, WEEKEND_ADJ_NONE);
+        recurrenceSet (r, 1, PERIOD_MONTH, &now, WEEKEND_ADJ_NONE);
+        schedule = gnc_sx_get_schedule (new_sx);
+        schedule = g_list_append (schedule, r);
+        gnc_sx_set_schedule (new_sx, schedule);
+    }
+    gnc_ui_scheduled_xaction_editor_dialog_create (window, new_sx, new_sx_flag);
+    gppsl_update_selected_list (page, TRUE, new_sx);
+}
+
+#ifdef REGISTER2_ENABLED
+/*################## Added for Reg2 #################*/
+static void
+gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page)
+{
+    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
+    SchedXaction *new_sx;
+    gboolean new_sx_flag = TRUE;
+
+    new_sx = xaccSchedXactionMalloc (gnc_get_current_book());
+    {
+        GDate now;
+        Recurrence *r = g_new0 (Recurrence, 1);
+        GList *schedule;
+
+        g_date_clear (&now, 1);
+        gnc_gdate_set_today (&now);
+        recurrenceSet (r, 1, PERIOD_MONTH, &now, WEEKEND_ADJ_NONE);
         schedule = gnc_sx_get_schedule (new_sx);
         schedule = g_list_append (schedule, r);
         gnc_sx_set_schedule (new_sx, schedule);
@@ -723,7 +723,7 @@ gnc_plugin_page_sx_list_cmd_refresh (GtkAction *action, GncPluginPageSxList *pag
 static void
 _edit_sx(gpointer data, gpointer user_data)
 {
-    gnc_ui_scheduled_xaction_editor_dialog_create(GTK_WINDOW(user_data),
+    gnc_ui_scheduled_xaction_editor_dialog_create (GTK_WINDOW(user_data),
         (SchedXaction*)data, FALSE);
 }
 
@@ -739,44 +739,44 @@ _edit_sx2 (gpointer data, gpointer user_data)
 #endif
 
 static SchedXaction*
-_argument_reorder_fn(GtkTreePath* list_path_data, GncTreeViewSxList* user_tree_view)
+_argument_reorder_fn (GtkTreePath* list_path_data, GncTreeViewSxList* user_tree_view)
 {
-    return gnc_tree_view_sx_list_get_sx_from_path(user_tree_view, list_path_data);
+    return gnc_tree_view_sx_list_get_sx_from_path (user_tree_view, list_path_data);
 }
 
 
 static void
-gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
+gnc_plugin_page_sx_list_cmd_edit (GtkAction *action, GncPluginPageSxList *page)
 {
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
-    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
+    GtkWindow *window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
     GtkTreeSelection *selection;
     GList *selected_paths, *to_edit;
     GtkTreeModel *model;
 
-    selection = gtk_tree_view_get_selection(priv->tree_view);
-    selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
-    if (g_list_length(selected_paths) == 0)
+    selection = gtk_tree_view_get_selection (priv->tree_view);
+    selected_paths = gtk_tree_selection_get_selected_rows (selection, &model);
+    if (g_list_length (selected_paths) == 0)
     {
-        g_warning("no selection edit.");
+        g_warning ("no selection edit.");
         return;
     }
 
-    to_edit = gnc_g_list_map(selected_paths,
-                             (GncGMapFunc)_argument_reorder_fn,
-                             priv->tree_view);
+    to_edit = gnc_g_list_map (selected_paths,
+                              (GncGMapFunc)_argument_reorder_fn,
+                              priv->tree_view);
 
     gppsl_update_selected_list (page, TRUE, NULL);
     for (GList *list = to_edit; list != NULL; list = list->next)
     {
-        g_debug("to-edit [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
+        g_debug ("to-edit [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
         gppsl_update_selected_list (page, FALSE, list->data);
     }
 
-    g_list_foreach(to_edit, (GFunc)_edit_sx, window);
-    g_list_free(to_edit);
-    g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
-    g_list_free(selected_paths);
+    g_list_foreach (to_edit, (GFunc)_edit_sx, window);
+    g_list_free (to_edit);
+    g_list_foreach (selected_paths, (GFunc)gtk_tree_path_free, NULL);
+    g_list_free (selected_paths);
 }
 
 #ifdef REGISTER2_ENABLED
@@ -784,8 +784,8 @@ gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
 static void
 gnc_plugin_page_sx_list_cmd_edit2 (GtkAction *action, GncPluginPageSxList *page)
 {
-    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE (page);
-    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
+    GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+    GtkWindow *window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
     GtkTreeSelection *selection;
     GList *selected_paths, *to_edit;
     GtkTreeModel *model;
@@ -800,8 +800,8 @@ gnc_plugin_page_sx_list_cmd_edit2 (GtkAction *action, GncPluginPageSxList *page)
 
     to_edit = gnc_g_list_map (selected_paths,
                              (GncGMapFunc)_argument_reorder_fn,
-                             priv->tree_view);
-    g_list_foreach(to_edit, (GFunc)_edit_sx2, window);
+                              priv->tree_view);
+    g_list_foreach (to_edit, (GFunc)_edit_sx2, window);
     g_list_free (to_edit);
     g_list_foreach (selected_paths, (GFunc)gtk_tree_path_free, NULL);
     g_list_free (selected_paths);
@@ -810,17 +810,18 @@ gnc_plugin_page_sx_list_cmd_edit2 (GtkAction *action, GncPluginPageSxList *page)
 #endif
 
 static void
-gppsl_row_activated_cb(GtkTreeView *tree_view,
-                       GtkTreePath *path,
-                       GtkTreeViewColumn *column,
-                       gpointer user_data)
+gppsl_row_activated_cb (GtkTreeView *tree_view,
+                        GtkTreePath *path,
+                        GtkTreeViewColumn *column,
+                        gpointer user_data)
 {
     GncPluginPageSxList *page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
-    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
+    GtkWindow *window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
 
-    SchedXaction *sx = gnc_tree_view_sx_list_get_sx_from_path(GNC_TREE_VIEW_SX_LIST(priv->tree_view), path);
-    gnc_ui_scheduled_xaction_editor_dialog_create(window, sx, FALSE);
+    SchedXaction *sx = gnc_tree_view_sx_list_get_sx_from_path (
+                           GNC_TREE_VIEW_SX_LIST(priv->tree_view), path);
+    gnc_ui_scheduled_xaction_editor_dialog_create (window, sx, FALSE);
     gppsl_update_selected_list (page, TRUE, sx);
 }
 
@@ -831,16 +832,16 @@ _destroy_sx(gpointer data, gpointer user_data)
     SchedXactions *sxes;
     SchedXaction *sx = (SchedXaction*)data;
     QofBook *book;
-    book = gnc_get_current_book();
-    sxes = gnc_book_get_schedxactions(book);
-    gnc_sxes_del_sx(sxes, sx);
-    gnc_sx_begin_edit(sx);
-    xaccSchedXactionDestroy(sx);
+    book = gnc_get_current_book ();
+    sxes = gnc_book_get_schedxactions (book);
+    gnc_sxes_del_sx (sxes, sx);
+    gnc_sx_begin_edit (sx);
+    xaccSchedXactionDestroy (sx);
 }
 
 
 static void
-gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
+gnc_plugin_page_sx_list_cmd_delete (GtkAction *action, GncPluginPageSxList *page)
 {
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
     GtkTreeSelection *selection;
@@ -850,19 +851,19 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
     gchar *message = NULL;
     gint length;
 
-    selection = gtk_tree_view_get_selection(priv->tree_view);
-    selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
-    if (g_list_length(selected_paths) == 0)
+    selection = gtk_tree_view_get_selection (priv->tree_view);
+    selected_paths = gtk_tree_selection_get_selected_rows (selection, &model);
+    if (g_list_length (selected_paths) == 0)
     {
-        g_warning("no selection for delete.");
+        g_warning ("no selection for delete.");
         return;
     }
 
-    to_delete = gnc_g_list_map(selected_paths,
-                               (GncGMapFunc)_argument_reorder_fn,
-                               priv->tree_view);
+    to_delete = gnc_g_list_map (selected_paths,
+                                (GncGMapFunc)_argument_reorder_fn,
+                                 priv->tree_view);
 
-    window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
+    window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
 
     length = g_list_length (to_delete);
 
@@ -876,16 +877,16 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
         gppsl_update_selected_list (page, TRUE, NULL);
         for (GList *list = to_delete; list != NULL; list = list->next)
         {
-            g_debug("to-delete [%s]\n", xaccSchedXactionGetName((SchedXaction*)list->data));
+            g_debug("to-delete [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
             gppsl_update_selected_list (page, FALSE, list->data);
         }
-        g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);
+        g_list_foreach (to_delete, (GFunc)_destroy_sx, NULL);
     }
 
     g_free (message);
-    g_list_free(to_delete);
-    g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
-    g_list_free(selected_paths);
+    g_list_free (to_delete);
+    g_list_foreach (selected_paths, (GFunc)gtk_tree_path_free, NULL);
+    g_list_free (selected_paths);
 }
 
 /** @} */

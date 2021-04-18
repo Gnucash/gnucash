@@ -55,11 +55,11 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_PAGE_SX_LIST            (gnc_plugin_page_sx_list_get_type ())
-#define GNC_PLUGIN_PAGE_SX_LIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_PAGE_SX_LIST, GncPluginPageSxList))
-#define GNC_PLUGIN_PAGE_SX_LIST_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN_PAGE_SX_LIST, GncPluginPageSxListClass))
-#define GNC_IS_PLUGIN_PAGE_SX_LIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_PLUGIN_PAGE_SX_LIST))
-#define GNC_IS_PLUGIN_PAGE_SX_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_PAGE_SX_LIST))
-#define GNC_PLUGIN_PAGE_SX_LIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_PAGE_SX_LIST, GncPluginPageSxListClass))
+#define GNC_PLUGIN_PAGE_SX_LIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GNC_TYPE_PLUGIN_PAGE_SX_LIST, GncPluginPageSxList))
+#define GNC_PLUGIN_PAGE_SX_LIST_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GNC_TYPE_PLUGIN_PAGE_SX_LIST, GncPluginPageSxListClass))
+#define GNC_IS_PLUGIN_PAGE_SX_LIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GNC_TYPE_PLUGIN_PAGE_SX_LIST))
+#define GNC_IS_PLUGIN_PAGE_SX_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GNC_TYPE_PLUGIN_PAGE_SX_LIST))
+#define GNC_PLUGIN_PAGE_SX_LIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GNC_TYPE_PLUGIN_PAGE_SX_LIST, GncPluginPageSxListClass))
 
 #define GNC_PLUGIN_PAGE_SX_LIST_NAME "GncPluginPageSxList"
 
@@ -80,12 +80,12 @@ typedef struct
  * Retrieve the type number for an "sx list" plugin page.
  * @return The type number.
  */
-GType gnc_plugin_page_sx_list_get_type(void);
+GType gnc_plugin_page_sx_list_get_type (void);
 
 /**
  * @return The newly created plugin page.
  **/
-GncPluginPage *gnc_plugin_page_sx_list_new(void);
+GncPluginPage *gnc_plugin_page_sx_list_new (void);
 
 G_END_DECLS
 
