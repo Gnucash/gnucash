@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-03-25 21:29+0000\n"
+"PO-Revision-Date: 2021-04-17 17:27+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -4855,11 +4855,9 @@ msgid "Enter a payment for the owner of this invoice"
 msgstr "Registra um pagamento para o proprietário desta fatura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:381
-#, fuzzy
-#| msgid "Open a company report window for the owner of this invoice"
 msgid "Open a customer report window for the owner of this invoice"
 msgstr ""
-"Abra uma janela do relatório da empresa para o proprietário desta fatura"
+"Abra uma janela do relatório do consumidor para o proprietário desta fatura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:383
 #: gnucash/gnome/gnc-plugin-page-invoice.c:404
@@ -4917,11 +4915,9 @@ msgid "Enter a payment for the owner of this bill"
 msgstr "Registre um pagamento para o proprietário desta conta"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:402
-#, fuzzy
-#| msgid "Open a company report window for the owner of this bill"
 msgid "Open a vendor report window for the owner of this bill"
 msgstr ""
-"Abra uma janela do relatório da empresa para o proprietário desta conta"
+"Abra uma janela do relatório do fornecedor para o proprietário desta conta"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
 msgid "Use the current layout as default for all vendor bills and credit notes"
@@ -4970,11 +4966,10 @@ msgid "Enter a payment for the owner of this voucher"
 msgstr "Registre um pagamento para o proprietário deste comprovante"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:423
-#, fuzzy
-#| msgid "Open a company report window for the owner of this voucher"
 msgid "Open a employee report window for the owner of this voucher"
 msgstr ""
-"Abra uma janela do relatório da empresa para o proprietário deste comprovante"
+"Abra uma janela do relatório do funcionário para o proprietário deste "
+"comprovante"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:430
 msgid ""
@@ -7681,10 +7676,8 @@ msgid "Existing"
 msgstr "Use uma conta já existente"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
-#, fuzzy
-#| msgid "Use +- keys to increment/decrement number"
 msgid "You can type '+' or '-' to increment or decrement the number."
-msgstr "Use as teclas +- para aumentar/diminuir o número"
+msgstr "Você pode usar as teclas '+' ou '-' para aumentar ou reduzir o número."
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
 msgid "Action/Number"
@@ -12134,10 +12127,10 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:285
 #: gnucash/gtkbuilder/dialog-preferences.glade:2758
-#, fuzzy
-#| msgid "Show all transactions on one line. (Two in double line mode.)"
 msgid "Show all transactions on one line or in double line mode on two."
-msgstr "Mostre todas as transações numa linha. (Dois em modo de linha dupla.)"
+msgstr ""
+"Mostre todas as transações numa linha ou dois em modo de linha dupla nos "
+"dois."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:286
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:291
@@ -12161,17 +12154,13 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
 #: gnucash/gtkbuilder/dialog-preferences.glade:2777
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line. (Two in double line mode.)"
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
 msgstr ""
 "Expanda automaticamente a transação atual para mostrar todos os "
-"desdobramentos. Todas as outras transações são mostradas numa linha. (Dois "
-"em modo de linha dupla.)"
+"desdobramentos. Todas as outras transações são mostradas numa linha ou em "
+"modo de linha dupla nos dois."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
 #: gnucash/gtkbuilder/dialog-preferences.glade:2796
@@ -13209,38 +13198,6 @@ msgstr "Importação do preço por CSV"
 
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:65
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import Prices from a CSV file.\n"
-#| "\n"
-#| "There is a minimum number of columns that have to be present for a "
-#| "successful import, these are Date, Amount, From Namespace, From Symbol "
-#| "and Currency To. If all entries are for the same Commodity / Currency "
-#| "then you can select them and then the columns will be Date and Amount.\n"
-#| "\n"
-#| "Various options exist for specifying the delimiter as well as a fixed "
-#| "width option. With the fixed width option, double click on the table of "
-#| "rows displayed to set a column width, then right mouse to change if "
-#| "required.\n"
-#| "\n"
-#| "Examples are \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" and CURRENCY;"
-#| "USD;2016-11-21;1.56;GBP\n"
-#| "\n"
-#| "There is an option for specifying the start row, end row and an option to "
-#| "skip alternate rows beginning from the start row which can be used if you "
-#| "have some header text. Also there is an option to overwrite existing "
-#| "prices for that day if required.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. To save the settings, tweak the settings to your "
-#| "preferences (optionally starting from an existing preset), then "
-#| "(optionally change the settings name and press the Save Settings button. "
-#| "Note you can't save to built-in presets.\n"
-#| "\n"
-#| "This operation is not reversible, so make sure you have a working "
-#| "backup.\n"
-#| "\n"
-#| "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgid ""
 "This assistant will help you import Prices from a CSV file.\n"
 "\n"
@@ -13283,20 +13240,20 @@ msgstr ""
 "tabela exibida para definir a largura da coluna e em seguida, com o botão "
 "direito do mouse para alterar caso seja necessário.\n"
 "\n"
-"Os exemplos são \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" e MOEDA;"
-"USD;2016-11-21;1.56;GBP\n"
+"Os exemplos são \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" e "
+"MOEDA;USD;2016-11-21;1.56;GBP\n"
 "\n"
 "Existe uma opção para definir a linha inicial, a linha final e uma opção "
 "para pular as linhas alternativas começando na primeira linha que pode ser "
 "usada caso tenha algum cabeçalho texto. Também existe a opção de substituir "
 "os preços existentes para aquele dia caso seja necessário.\n"
 "\n"
-"Por último, para as importações repetidas, a página de visualização possui "
-"botões para Carregar e Salvar as configurações. Para salvar as "
-"configurações, ajuste-as de acordo com as suas preferências (opcionalmente, "
-"começando a partir de uma predefinição já existente) e (opcionalmente, "
-"altere o nome das configurações e pressione o botão Salvar. Observe que você "
-"não pode salvar nas predefinições já integradas.\n"
+"Por último, no caso das importações repetidas, a página de visualização "
+"possui botões para Carregar e Salvar as configurações. É possível salvar as "
+"configurações ajustadas ou reutilizá-las em importações posteriores. Após a "
+"leitura das suas configurações, também é possível ajustá-las novamente nas "
+"importações semelhantes e salvá-las depois com um outro nome. Observe que "
+"você não pode salvar nas predefinições já integradas.\n"
 "\n"
 "Esta operação não é reversível, portanto, certifique-se de ter um backup "
 "funcionando.\n"
@@ -13497,16 +13454,12 @@ msgid "Import Preview"
 msgstr "Visualização da importação"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1026
-#, fuzzy
-#| msgid ""
-#| "<b>Press Apply to add the Prices.\n"
-#| "Cancel to abort.</b>"
 msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
 msgstr ""
-"<b>Pressione Aplicar para adicionar os preços.\n"
-"Ou em cancelar para abortar.</b>"
+"<b>Pressione \"Aplicar\" para adicionar os preços.\n"
+"Ou em \"Cancelar\" para abortar.</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1041
 msgid "Import Prices Now"
@@ -13517,34 +13470,6 @@ msgid "CSV Transaction Import"
 msgstr "Relatório de Importação CSV de Transações"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:56
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import a delimited file containing a list of "
-#| "transactions. It supports both token separated files (such as comma "
-#| "separated or semi-colon separated) and fixed width data.\n"
-#| "\n"
-#| "For a successful import three columns have to be available in the import "
-#| "data:\n"
-#| "• a Date column\n"
-#| "• a Description column\n"
-#| "• a Deposit or Withdrawal column\n"
-#| "\n"
-#| "If there is no Account data available, a base account can be selected to "
-#| "which all data will be imported.\n"
-#| "\n"
-#| "Apart from a choice of delimiter, there are several options to tweak the "
-#| "importer. For example a number of lines can be skipped at the start or "
-#| "the end of the data, as well as odd rows. Several date and number formats "
-#| "are supported. The file encoding can be defined.\n"
-#| "\n"
-#| "The importer can handle files where transactions are split over multiple "
-#| "lines, with each line representing one split.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. To save the settings, tweak the settings to your "
-#| "preferences (optionally starting from an existing preset), then "
-#| "(optionally change the settings name and press the Save Settings button. "
-#| "Note you can't save to built-in presets."
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions. It supports both token separated files (such as comma "
@@ -13595,12 +13520,11 @@ msgstr ""
 "O importador pode manipular arquivos onde as transações são divididas em "
 "várias linhas, com cada linha representando uma divisão.\n"
 "\n"
-"Por último, para as importações repetidas, a página de visualização possui "
-"botões para Carregar e Salvar as configurações. Para salvar as "
-"configurações, ajuste-as de acordo com as suas preferências (opcionalmente, "
-"começando a partir de uma predefinição já existente) e (opcionalmente, "
-"altere o nome das configurações e pressione o botão Salvar. Observe que você "
-"não pode salvar nas predefinições já integradas."
+"Por último, no caso das importações repetidas, a página de visualização "
+"possui botões para Carregar e Salvar as configurações. É possível salvar as "
+"configurações ajustadas ou reutilizá-las em importações posteriores. Após a "
+"leitura das suas configurações, também é possível ajustá-las novamente nas "
+"importações semelhantes e salvá-las depois com um outro nome."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:74
 msgid "Transaction Import Assistant"
@@ -15832,10 +15756,8 @@ msgid "Linked _Location"
 msgstr "Localização do _vínculo"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:349
-#, fuzzy
-#| msgid "(none)"
 msgid "(None)"
-msgstr "(nada)"
+msgstr "(Nenhum)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:412
 msgid "Enter URL like http://www.gnucash.org"
@@ -19475,17 +19397,36 @@ msgid ""
 "Online Banking, because sometimes the bank does not give you correct "
 "feedback when a transfer is rejected."
 msgstr ""
+"Os requisitos para o Online Banking variam entre os diferentes backends "
+"compatíveis com o AqBanking, no geral você precisará:\n"
+"* O seu banco precisa de lhe conceder um acesso online. Veja no site deles "
+"ou pergunte ao seu serviço de atendimento ao cliente como obtê-lo.\n"
+"Eles também devem lhe dizer:\n"
+"* O seu ID que o identifique no servidor deles, muitas vezes o número da sua "
+"conta principal;\n"
+"* O URL do servidor do seu Banco Online;\n"
+"* Em alguns casos, o número de encaminhamento da agência do seu banco, "
+"também é útil para este assistente;\n"
+"* Os métodos de autenticação variam de acordo com o backend e o método "
+"escolhido:\n"
+"* PIN/TAN: Alguns métodos requerem um gadget específico como um leitor de "
+"cartões ou um celular;\n"
+"* FinTS HBCI: É preciso trocar as partes públicas das chaves assimétricas "
+"com o seu banco (\"Ini-Letter\").\n"
+"* PayPal: O endereço de e-mail registrado, a senha e a assinatura da API;\n"
+"\n"
+"Consulte https://wiki.gnucash.org/wiki/AqBanking para obter mais detalhes.\n"
+"\n"
+"Nota: SEM GARANTIAS DE NADA. Alguns bancos têm um servidor de Banco Online "
+"mal implementado. Você não deve confiar em transferências críticas de tempo "
+"através do Banco Online, porque às vezes o banco não lhe dá o feedback "
+"correto quando uma transferência é rejeitada."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
 msgstr "Configuração Inicial do Banco via Internet"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:90
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\". Please press the button below to "
-#| "start this program."
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup Wizard\".\n"
@@ -19494,8 +19435,10 @@ msgid ""
 "Please press the button below to start it."
 msgstr ""
 "A configuração da sua conexão ao Internet Banking é efetuada por um programa "
-"externo \"AqBanking Setup Wizard\". Pressione o botão abaixo para iniciar "
-"este programa."
+"externo \"AqBanking Setup Wizard\".\n"
+"Para continuar, é preciso que você configure pelo menos uma conexão.\n"
+"\n"
+"Pressione o botão abaixo para iniciar."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 msgid "_Start AqBanking Wizard"
@@ -20727,13 +20670,6 @@ msgid "Import bills and invoices from a CSV text file"
 msgstr "Importe as contas e as faturas a partir de um arquivo em formato CSV"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:80
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you export the Account Tree to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
 msgid ""
 "This assistant will help you export the Account Tree to a file with the "
 "separator specified below.\n"
@@ -20742,30 +20678,14 @@ msgid ""
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
 "Este assistente irá ajudá-lo a exportar a ramificação da conta para um "
-"arquivo\n"
-"com o separador definido abaixo.\n"
+"arquivo com o separador definido abaixo.\n"
 "\n"
-"Selecione as configurações necessárias para o arquivo e clique em \"Avançar"
-"\" para prosseguir ou em \"Cancelar\" para interromper a exportação.\n"
+"Selecione as configurações necessárias para o arquivo e clique em \"Avançar\""
+" para prosseguir ou em \"Cancelar\" para interromper a exportação.\n"
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
-#, fuzzy, c-format
-#| msgid ""
-#| "This assistant will help you export the Transactions to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "There will be multiple rows for each transaction and may require further "
-#| "manipulation to get them in a format you can use.\n"
-#| "\n"
-#| "Each Transaction will appear once in the export and will be listed in the "
-#| "order the accounts were processed\n"
-#| "\n"
-#| "Price/Rate output format is controlled by the Preference setting,\n"
-#| "General->Force Prices to display as decimals\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
+#, c-format
 msgid ""
 "This assistant will help you export the Transactions to a file with the "
 "separator specified below.\n"
@@ -20782,33 +20702,38 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"Este assistente irá ajudá-lo a exportar as transações para um arquivo\n"
-"com o separador definido abaixo.\n"
+"Este assistente irá ajudá-lo a exportar as transações para um arquivo com o "
+"separador definido abaixo.\n"
 "\n"
-"Haverá várias linhas para cada transação e pode ser necessário futuras "
-"manipulações para colocá-las em um formato que você possa usar.\n"
+"%s\n"
 "\n"
-"Cada transação aparecerá uma vez na exportação e será listada na ordem em "
-"que as contas foram processadas\n"
+"Enquanto uma transação pode ter divisões em várias das contas selecionadas, "
+"ela só será exportada uma vez. Ela aparecerá sob a primeira conta processada "
+"em que tiver uma divisão.\n"
 "\n"
-"O formato da saída de preço/taxa é controlado pela preferência da "
-"configuração,\n"
-"Geral-> Imponha os preços que serão exibidos como decimais\n"
+"O formato da saída de preço/taxa é controlado através da opção Preferência\n"
+"\"Números, data, hora\" -> \"Imponha os preços que serão exibidos como "
+"decimais\".\n"
 "\n"
-"Selecione as configurações necessárias para o arquivo e clique em \"Avançar"
-"\" para prosseguir ou em \"Cancelar\" para abortar a exportação.\n"
+"Selecione as configurações necessárias para o arquivo e clique em \"Avançar\""
+" para prosseguir ou em \"Cancelar\" para abortar a exportação.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:99
 msgid ""
 "There will be multiple rows for each transaction with each row representing "
 "one split."
 msgstr ""
+"Haverá várias linhas para cada transação com cada linha representando uma "
+"divisão."
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "There will be one row for each transaction, equivalent to a single row in a "
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
 msgstr ""
+"Haverá uma linha para cada transação, equivalente a uma única linha em um "
+"registro no modo 'Registro contábil básico'. Como tal, alguns detalhes da "
+"transferência podem ser perdidos."
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
@@ -21313,15 +21238,11 @@ msgstr ""
 "relacionadas à transferência."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
-#, fuzzy
-#| msgid ""
-#| "No account column selected and no default account specified either.\n"
-#| "This should never happen. Please report this as a bug."
 msgid ""
 "No account column selected and no base account specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Nenhuma coluna da conta foi selecionada e nenhuma conta padrão foi "
+"Nenhuma coluna da conta foi selecionada e nenhuma conta principal foi "
 "definida.\n"
 "Isso nunca deveria acontecer. Relate isso como um erro."
 
@@ -21390,10 +21311,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:520
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:575
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:583
-#, fuzzy
-#| msgid " could not be understood.\n"
 msgid "Column '{1}' could not be understood.\n"
-msgstr " não pôde ser compreendido.\n"
+msgstr "A coluna '{1}' não pôde ser compreendida.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:328
