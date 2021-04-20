@@ -888,7 +888,7 @@ gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
     GtkEditable *editable;
     Table *table = sheet->table;
     VirtualLocation virt_loc;
-    int new_text_len;
+    int new_text_len = 0;
     const char *retval;
     int cursor_position, start_sel, end_sel;
 
@@ -905,7 +905,8 @@ gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
     cursor_position = gtk_editable_get_position (editable);
     gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
 
-    new_text_len = strlen (new_text);
+    if (new_text)
+         new_text_len = strlen (new_text);
 
     retval = gnc_table_modify_update (table, virt_loc,
                                       new_text, new_text_len,
