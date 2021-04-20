@@ -27,6 +27,10 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an ordinary Unix filesystem file.
  */
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+
 extern "C"
 {
 #include <config.h>
@@ -72,10 +76,6 @@ extern "C"
 # include "strptime.h"
 #endif
 }
-
-#include <glib.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
 
 #include <gnc-backend-prov.hpp>
 #include "gnc-backend-xml.h"

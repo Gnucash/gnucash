@@ -22,6 +22,8 @@
  *                                                                  *
  *******************************************************************/
 
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
@@ -34,7 +36,6 @@ extern "C"
 #include "qof.h"
 }
 
-#include <glib.h>
 #include <stdint.h>
 #include <boost/regex.hpp>
 #include <boost/locale/encoding_utf.hpp>

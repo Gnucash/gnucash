@@ -32,6 +32,7 @@
  * Copyright (c) 2000 Dave Peticolas
  * Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
+#include <glib.h>
 
 extern "C"
 {
@@ -49,7 +50,6 @@ extern "C"
 
 }
 
-#include <glib.h>
 #include "qof.h"
 #include "qofevent-p.h"
 #include "qofbackend.h"

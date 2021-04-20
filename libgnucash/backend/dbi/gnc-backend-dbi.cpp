@@ -25,6 +25,9 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db using libdbi
  */
+#include <glib.h>
+#include <glib/gstdio.h>
+
 extern "C"
 {
 #include "config.h"
@@ -58,9 +61,6 @@ extern "C"
 #endif
 
 }
-
-#include <glib.h>
-#include <glib/gstdio.h>
 
 #include <boost/regex.hpp>
 #include <string>

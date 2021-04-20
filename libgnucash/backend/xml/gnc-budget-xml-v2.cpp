@@ -20,6 +20,7 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
+#include <glib.h>
 
 extern "C"
 {
@@ -27,8 +28,6 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 }
-
-#include <glib.h>
 
 #include "gnc-xml-helper.h"
 #include "sixtp.h"

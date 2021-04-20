@@ -20,6 +20,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+#include <glib.h>
 
 extern "C"
 {
@@ -31,7 +32,6 @@ extern "C"
 #include <string.h>
 }
 
-#include <glib.h>
 #include "qof.h"
 #include "qof-backend.hpp"
 #include "qofbook-p.h"

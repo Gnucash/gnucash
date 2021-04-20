@@ -21,6 +21,9 @@
  *                                                                  *
 \********************************************************************/
 
+#include <glib.h>
+#include <glib/gi18n.h>
+
 extern "C" {
 #include <platform.h>
 #if PLATFORM(WINDOWS)
@@ -30,9 +33,6 @@ extern "C" {
 #include "engine-helpers.h"
 #include "gnc-ui-util.h"
 }
-
-#include <glib.h>
-#include <glib/gi18n.h>
 
 #include <exception>
 #include <map>

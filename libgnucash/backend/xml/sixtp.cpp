@@ -20,6 +20,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
+#include <glib.h>
+#include <glib/gstdio.h>
+
 extern "C"
 {
 #include <config.h>
@@ -33,9 +36,6 @@ extern "C"
 # define g_fopen fopen
 #endif
 }
-
-#include <glib.h>
-#include <glib/gstdio.h>
 
 #include "sixtp.h"
 #include "sixtp-parsers.h"

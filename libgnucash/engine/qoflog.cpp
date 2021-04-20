@@ -24,6 +24,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301,  USA
  */
+#include <glib.h>
+#include <glib/gstdio.h>
 
 extern "C"
 {
@@ -48,8 +50,6 @@ extern "C"
 
 }
 
-#include <glib.h>
-#include <glib/gstdio.h>
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "qof.log"
 #include "qof.h"

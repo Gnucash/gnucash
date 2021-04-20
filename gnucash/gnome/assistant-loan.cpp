@@ -23,6 +23,10 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+
 extern "C"
 {
 #include <config.h>
@@ -50,9 +54,6 @@ extern "C"
 #endif
 }
 
-#include <glib.h>
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
 #include <gnc-locale-utils.hpp>
 #include <boost/locale.hpp>
 #include <string>
