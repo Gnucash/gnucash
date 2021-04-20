@@ -17,8 +17,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-17 19:26+0000\n"
-"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
+"PO-Revision-Date: 2021-04-20 16:29+0000\n"
+"Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -565,9 +565,7 @@ msgid ""
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
-msgstr ""
-"转账字段下拉筛选：父科目，直接录入首字；子科目，先父科目首字，跟\":\"（半"
-"角），再子科目首字（例如，Assets:Cash，为 A:C)。"
+msgstr "转账字段筛选：父科目，直接录入首字；子科目，先父科目首字，跟\":\"（半角），再子科目首字（例如，Assets:Cash，为 A:C)。"
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -3815,7 +3813,7 @@ msgstr "查找支出凭证(_V)..."
 
 #: gnucash/gnome/gnc-plugin-business.c:267
 msgid "Open the Find Expense Voucher dialog"
-msgstr "打开查找支出凭证对话框"
+msgstr "打开查找支出凭证对话框(_V)"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
@@ -6096,7 +6094,7 @@ msgstr "GnuCash 选项"
 #: gnucash/gtkbuilder/business-prefs.glade:26
 #: gnucash/report/reports/standard/invoice.scm:903
 msgid "Printable Invoice"
-msgstr "可打印的发票"
+msgstr "直接"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1852
 #: gnucash/gtkbuilder/business-prefs.glade:29
@@ -6105,19 +6103,19 @@ msgstr "可打印的发票"
 #: gnucash/report/reports/standard/taxinvoice.scm:309
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:423
 msgid "Tax Invoice"
-msgstr "税务发票"
+msgstr "税务"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1853
 #: gnucash/gtkbuilder/business-prefs.glade:32
 #: gnucash/report/reports/standard/invoice.scm:912
 msgid "Easy Invoice"
-msgstr "简易发票"
+msgstr "简洁"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1854
 #: gnucash/gtkbuilder/business-prefs.glade:35
 #: gnucash/report/reports/standard/invoice.scm:921
 msgid "Fancy Invoice"
-msgstr "精美的发票"
+msgstr "精美"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:136
 msgid "_Scheduled"
@@ -10511,12 +10509,12 @@ msgstr "在工具条按钮上的标签"
 msgid ""
 "If active, extra toolbar buttons for common business functions are shown as "
 "well. Otherwise they are not shown."
-msgstr ""
+msgstr "勾选，工具栏添加额外的发票按钮，否则隐藏。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:132
 #: gnucash/gtkbuilder/business-prefs.glade:320
 msgid "The invoice report to be used for printing."
-msgstr ""
+msgstr "打印发票时所使用的样式。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:133
 msgid "The name of the report to be used for invoice printing."
@@ -14278,26 +14276,22 @@ msgid "General"
 msgstr "常规"
 
 #: gnucash/gtkbuilder/business-prefs.glade:67
-#, fuzzy
 msgid "Enable extra _buttons"
-msgstr "启用编辑匹配操作"
+msgstr "“新建发票”(_B)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:85
 msgid "_Open in new window"
-msgstr "在新窗口中打开(_O)"
+msgstr "新窗口打开(_O)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:91
-#, fuzzy
 msgid ""
 "If checked, each invoice will be opened in its own top level window. If "
 "clear, the invoice will be opened in the current window."
-msgstr ""
-"如果选中，每个发票将会在它们自己的顶级窗口中打开。如果不选中，发票将会在当前"
-"窗口中打开。"
+msgstr "勾选，发票将在新顶级窗口打开；否则在当前窗口打开。"
 
 #: gnucash/gtkbuilder/business-prefs.glade:103
 msgid "_Accumulate splits on post"
-msgstr "在入账时累积分录(_A)"
+msgstr ""
 
 #: gnucash/gtkbuilder/business-prefs.glade:109
 msgid ""
@@ -14320,12 +14314,11 @@ msgstr "到期时提示(_N)"
 #: gnucash/gtkbuilder/business-prefs.glade:150
 #: gnucash/gtkbuilder/business-prefs.glade:239
 msgid "Whether to display the list of Bills Due at startup."
-msgstr "是否于启动时显示账单到期列表。"
+msgstr "启动时显示到期发票或账单。"
 
 #: gnucash/gtkbuilder/business-prefs.glade:165
-#, fuzzy
 msgid "Report for printing"
-msgstr "将要打印的报告："
+msgstr "发票样式"
 
 #: gnucash/gtkbuilder/business-prefs.glade:174
 msgid "_Tax included"
@@ -14335,7 +14328,7 @@ msgstr "含税(_T)"
 msgid ""
 "Whether tax is included by default in entries on Bills. This setting is "
 "inherited by new customers and vendors."
-msgstr "账单中的交易事项是否默认含税。这个设置是继承自新客户和供应商。"
+msgstr "账单是否默认含税，适用于新客户和供应商。"
 
 #. See the tooltip "At post time..." for details.
 #: gnucash/gtkbuilder/business-prefs.glade:192
@@ -14349,7 +14342,7 @@ msgstr "<b>账单</b>"
 
 #: gnucash/gtkbuilder/business-prefs.glade:233
 msgid "_Notify when due"
-msgstr "到期时提示(_N)"
+msgstr "到期提醒(_N)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:251
 msgid "Ta_x included"
@@ -14382,9 +14375,8 @@ msgid "How many days in the future to warn about Invoices coming due."
 msgstr "在多少天前警告账单即将到期。"
 
 #: gnucash/gtkbuilder/business-prefs.glade:354
-#, fuzzy
 msgid "_Days in advance"
-msgstr "提前天数(_D)："
+msgstr "提前天数(_D)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
 #, fuzzy
@@ -15190,9 +15182,8 @@ msgstr "信贷限额："
 
 #: gnucash/gtkbuilder/dialog-customer.glade:563
 #: gnucash/gtkbuilder/dialog-vendor.glade:533
-#, fuzzy
 msgid "Tax Included"
-msgstr "含税："
+msgstr "含税"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:576
 #: gnucash/gtkbuilder/dialog-tax-table.glade:403
@@ -16355,15 +16346,15 @@ msgstr "主窗格"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:818
 msgid "Show the Account Color as Account Name Background."
-msgstr "颜色设为科目背景。"
+msgstr "主窗格显示科目颜色。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:840
 msgid "Show the Account Color on tabs"
-msgstr "标签"
+msgstr "标签页"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:846
 msgid "Show the Account Color as tab background."
-msgstr "颜色设为标签背景。"
+msgstr "标签页显示科目颜色。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:880
 msgid ""
