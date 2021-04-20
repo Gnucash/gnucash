@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-10 18:26+0000\n"
+"PO-Revision-Date: 2021-04-17 17:27+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -2974,7 +2974,7 @@ msgstr ""
 #. * gnucash application.
 #: gnucash/gnome/dialog-print-check.c:1565
 msgid "application"
-msgstr "application"
+msgstr "*"
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by a
@@ -4749,10 +4749,8 @@ msgid "Enter a payment for the owner of this invoice"
 msgstr "נא להזין תשלום לנמען חשבונית זו"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:381
-#, fuzzy
-#| msgid "Open a company report window for the owner of this invoice"
 msgid "Open a customer report window for the owner of this invoice"
-msgstr "פתיחת חלון דוח ספק עבור נמען חשבונית זו"
+msgstr "פתיחת חלון דוח לקוח עבור נמען חשבונית זו"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:383
 #: gnucash/gnome/gnc-plugin-page-invoice.c:404
@@ -4808,8 +4806,6 @@ msgid "Enter a payment for the owner of this bill"
 msgstr "נא להזין תשלום לנמען חשבונית ספק זו"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:402
-#, fuzzy
-#| msgid "Open a company report window for the owner of this bill"
 msgid "Open a vendor report window for the owner of this bill"
 msgstr "פתיחת חלון דוח ספק עבור נמען חשבונית ספק זו"
 
@@ -4858,10 +4854,8 @@ msgid "Enter a payment for the owner of this voucher"
 msgstr "נא להזין תשלום לנמען שובר הוצאה זה"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:423
-#, fuzzy
-#| msgid "Open a company report window for the owner of this voucher"
 msgid "Open a employee report window for the owner of this voucher"
-msgstr "פתיחת חלון דוח ספק עבור נמען שובר הוצאה זה"
+msgstr "פתיחת חלון דוח עובד עבור נמען שובר הוצאה זה"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:430
 msgid ""
@@ -7498,10 +7492,8 @@ msgid "Existing"
 msgstr "קיים"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
-#, fuzzy
-#| msgid "Use +- keys to increment/decrement number"
 msgid "You can type '+' or '-' to increment or decrement the number."
-msgstr "נא להשתמש במקשים +- כדי להגדיל/להקטין את המספר"
+msgstr "ניתן להקיש על '+' או '-' כדי להגדיל/להקטין את המספר."
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
 msgid "Action/Number"
@@ -8768,7 +8760,7 @@ msgstr "חשבונאות לאנשים פרטיים ועסקים קטנים."
 #: gnucash/gnome-utils/gnc-main-window.c:4732
 msgid "translator-credits"
 msgstr ""
-"אבי מרקוביץ - avi.markovitz@gmail.com\n"
+"אבי מרקוביץ 2021, 2020, 2019 avi.markovitz@gmail.com\n"
 "אורי הוך 2006"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4735
@@ -11772,10 +11764,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:285
 #: gnucash/gtkbuilder/dialog-preferences.glade:2758
-#, fuzzy
-#| msgid "Show all transactions on one line. (Two in double line mode.)"
 msgid "Show all transactions on one line or in double line mode on two."
-msgstr "הצגת כל התנועות בשורה אחת. (שניים במצב שורה כפולה.)"
+msgstr "הצגת כל התנועות בשורה אחת או בשתיים, במצב שורה כפולה."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:286
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:291
@@ -11796,16 +11786,12 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
 #: gnucash/gtkbuilder/dialog-preferences.glade:2777
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line. (Two in double line mode.)"
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
 msgstr ""
 "הרחבת התנועה הנוכחית אוטומטית להצגת כל הפיצולים. כל שאר התנועות יוצגו בשורה "
-"אחת. (שניים במצב שורה כפולה.)"
+"אחת או בשתיים, במצב שורה כפולה."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
 #: gnucash/gtkbuilder/dialog-preferences.glade:2796
@@ -12776,38 +12762,6 @@ msgstr "CSV יבוא מחיר"
 
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:65
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import Prices from a CSV file.\n"
-#| "\n"
-#| "There is a minimum number of columns that have to be present for a "
-#| "successful import, these are Date, Amount, From Namespace, From Symbol "
-#| "and Currency To. If all entries are for the same Commodity / Currency "
-#| "then you can select them and then the columns will be Date and Amount.\n"
-#| "\n"
-#| "Various options exist for specifying the delimiter as well as a fixed "
-#| "width option. With the fixed width option, double click on the table of "
-#| "rows displayed to set a column width, then right mouse to change if "
-#| "required.\n"
-#| "\n"
-#| "Examples are \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" and CURRENCY;"
-#| "USD;2016-11-21;1.56;GBP\n"
-#| "\n"
-#| "There is an option for specifying the start row, end row and an option to "
-#| "skip alternate rows beginning from the start row which can be used if you "
-#| "have some header text. Also there is an option to overwrite existing "
-#| "prices for that day if required.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. To save the settings, tweak the settings to your "
-#| "preferences (optionally starting from an existing preset), then "
-#| "(optionally change the settings name and press the Save Settings button. "
-#| "Note you can't save to built-in presets.\n"
-#| "\n"
-#| "This operation is not reversible, so make sure you have a working "
-#| "backup.\n"
-#| "\n"
-#| "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgid ""
 "This assistant will help you import Prices from a CSV file.\n"
 "\n"
@@ -12838,27 +12792,27 @@ msgid ""
 "\n"
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgstr ""
-"סייען זה יסייע ביבוא מחירים מקובץ CSV.\n"
+"סייען ליבוא מחירים מקובץ CSV.\n"
 "\n"
-"ישנו מספר מזערי של עמודות הכרחיות לפעולת יבוא מוצלחת והן: תאריך, סכום, מוצר "
-"מ ומטבע ל. אם כל הערכים הם עבור אותו מוצר / מטבע, ניתן לבחור אותם ולהסתפק "
-"בעמודות הכרחיות נוספות, ' תאריך' ו 'סכום'.\n"
+"קיימים מספר עמודות מזערי הנדרשות לפעולת יבוא מוצלחת והן: תאריך, סכום, מוצר מ-"
+" ומטבע ל-. במידה וכל הערכים הם עבור אותו מוצר / מטבע, ניתן לבחור אותם "
+"ולהסתפק בעמודות הנדרשות הנוספות, ' תאריך' ו 'סכום'.\n"
 "\n"
 "קיימות אפשרויות שונות לקביעת מפריד בין הערכים, לרבות רוחב קבוע. להגדרת רוחב "
 "קבוע, יש להקיש הקשה כפולה על טבלת השורות המוצגות להגדרת רוחב העמודה, ולאחר "
 "מכן לחיצת עכבר ימני כדי לשנות ככל שנדרש.\n"
 "\n"
-"דוגמאות: 'FTSE','RR.L','21/11/2016',5.345,'GBP' ו CURRENCY;"
-"USD;2016-11-21;1.56;GBP\n"
+"דוגמאות: 'FTSE','RR.L','21/11/2016',5.345,'GBP' ו CURRENCY;USD;2016-11-21;1."
+"56;GBP\n"
 "\n"
 "קיימת אפשרות לקביעת שורת ההתחלה, שורת הסיום ואפשרות לדלג על שורות חלופיות "
 "החל משורת ההתחלה שבה ניתן להשתמש אם הוגדר מלל כותרת כל שהוא. כמו כן ניתן "
-"לדרוס מחירים קיימים לאותו יום ככל שידרש.\n"
+"לדרוס מחירים קיימים לאותו יום ככל שיידרש.\n"
 "\n"
 "לסיום, ליבוא חוזר של דף התצוגה המקדימה קיימים לחצנים לטעינת ולשמירת ההגדרות. "
-"כדי לשמור את ההגדרות, ניתן לצרף את ההגדרות למועדפים (באופן חלופי להגדרה "
-"שהוגדרה מראש), ואז לשנות (ככל שנדרש) את שם ההגדרה ושמירתה. הערה לא ניתן "
-"לשמור להגדרות קבועות מראש מובנות.\n"
+"ניתן לשמור את ההגדרות המותאמות כדי להשתמש בהן שוב בפעולת ייבוא עתידית. לאחר "
+"טעינת ההגדרות, ניתן לשנות אותן שוב, כך שיתאימו לייבוא דומה ואז לשמור אותן "
+"פעם נוספת, בשם אחר.\n"
 "\n"
 "פעולה זו אינה ניתנת להסגה, לכן יש לוודא קיום גיבוי תקין.\n"
 "\n"
@@ -13046,16 +13000,12 @@ msgid "Import Preview"
 msgstr "תצוגה מקדימה יבוא"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1026
-#, fuzzy
-#| msgid ""
-#| "<b>Press Apply to add the Prices.\n"
-#| "Cancel to abort.</b>"
 msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
 msgstr ""
-"<b>הקשה על החלה להוספת מחירים.\n"
-"ביטול לנטישה.</b>"
+"<b>הקשה על 'החלה' להוספת מחירים.\n"
+"'ביטול' לנטישה.</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1041
 msgid "Import Prices Now"
@@ -13066,34 +13016,6 @@ msgid "CSV Transaction Import"
 msgstr "CSV יבוא תנועות"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:56
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import a delimited file containing a list of "
-#| "transactions. It supports both token separated files (such as comma "
-#| "separated or semi-colon separated) and fixed width data.\n"
-#| "\n"
-#| "For a successful import three columns have to be available in the import "
-#| "data:\n"
-#| "• a Date column\n"
-#| "• a Description column\n"
-#| "• a Deposit or Withdrawal column\n"
-#| "\n"
-#| "If there is no Account data available, a base account can be selected to "
-#| "which all data will be imported.\n"
-#| "\n"
-#| "Apart from a choice of delimiter, there are several options to tweak the "
-#| "importer. For example a number of lines can be skipped at the start or "
-#| "the end of the data, as well as odd rows. Several date and number formats "
-#| "are supported. The file encoding can be defined.\n"
-#| "\n"
-#| "The importer can handle files where transactions are split over multiple "
-#| "lines, with each line representing one split.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. To save the settings, tweak the settings to your "
-#| "preferences (optionally starting from an existing preset), then "
-#| "(optionally change the settings name and press the Save Settings button. "
-#| "Note you can't save to built-in presets."
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions. It supports both token separated files (such as comma "
@@ -13121,16 +13043,16 @@ msgid ""
 "imports. After loading your settings you can also tweak them again for "
 "similar imports and save them under another name."
 msgstr ""
-"סייען זה יעזור ביבוא קובץ מופרד המכיל רשימת תנועות. הוא תומך גם בקבצים "
-"המופרדים בתו (כגון פסיק או נקודתיים) וגם בהפרדה ברוחב קבוע.\n"
+"סייען ליבוא קובץ מופרד המכיל רשימת תנועות. הסייען תומך גם בקבצים המופרדים "
+"בתו (כגון פסיק או נקודתיים) וגם בהפרדה ברוחב קבוע.\n"
 "\n"
 "ליבוא מוצלח, על שלוש עמודות להיות זמינות בנתוני היבוא:\n"
 "• עמודת תאריך\n"
 "• עמודת תיאור\n"
 "• עמודת הפקדה או משיכה\n"
 "\n"
-"במידה ואין נתוני חשבון זמינים, ניתן לבחור חשבון בסיס אליו ייובאו כל "
-"הנתונים.\n"
+"במידה ואין נתוני חשבון זמינים, ניתן לבחור חשבון בסיס אליו ייובאו כל הנתונים."
+"\n"
 "\n"
 "מלבד הבחירה במפריד, ישנן מספר אפשרויות להגדיר את מנגנון היבוא. לדוגמה, ניתן "
 "לדלג על מספר שורות בתחילת הנתונים או בסופם, כמו גם שורות לא זוגיות. נתמכות "
@@ -13139,10 +13061,9 @@ msgstr ""
 "מנגנון היבוא יכול לטפל בקבצים שבהם התנועות מפוצלות על מספר שורות, כאשר כל "
 "שורה מייצגת פיצול אחד.\n"
 "\n"
-"לבסוף, בייבוא חוזר יש בעמוד התצוגה המקדימה לחצנים לטעינת ושמירת ההגדרות. כדי "
-"לשמור את ההגדרות, יש לשנות את ההגדרות לפי הצרכים (לחלופין, להתחיל מהגדרות "
-"קיימות שנקבעו מראש), ואז (לחלופין, לשנות את שם ההגדרה ולהקיש על לחצן שמירת "
-"הגדרות. לתשומת לב, לא ניתן לדרוש בשמירה הגדרות קבועות מראש מובנות."
+"לבסוף, בייבוא חוזר יש בעמוד התצוגה המקדימה לחצנים לטעינת ושמירת ההגדרות. "
+"ניתן לשמור את ההגדרות המותאמות כדי להשתמש בהן שוב בפעולת ייבוא עתידית. לאחר "
+"טעינת ההגדרות ניתן לשנות אותן כך שיתאימו לייבוא דומה ולשמור אותן בשם אחר."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:74
 msgid "Transaction Import Assistant"
@@ -13959,8 +13880,8 @@ msgid ""
 "The QIF importer cannot currently handle multi-currency QIF files. All the "
 "accounts you are importing must be denominated in the same currency.\n"
 msgstr ""
-"מנגנון יבוא QIF לא יכול לטפל כעת בקבצי QIF מרובי-מטבעות. יש להגדיר את את "
-"אותו המטבע לכל החשבונות המיובאים.\n"
+"מנגנון יבוא QIF לא יכול לטפל כעת בקבצי QIF מרובי-מטבעות. יש להגדיר את אותו "
+"המטבע לכל החשבונות המיובאים.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:947
 msgid "_Select the currency to use for all imported transactions:"
@@ -15282,8 +15203,6 @@ msgid "Linked _Location"
 msgstr "מיקום _מקושר"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:349
-#, fuzzy
-#| msgid "(none)"
 msgid "(None)"
 msgstr "(ללא)"
 
@@ -18125,11 +18044,11 @@ msgstr "שבת ראשונה"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:343
 msgid "1st Sun"
-msgstr "יום ראשון, ראשון"
+msgstr "יום ראשון, הראשון"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:346
 msgid "2nd Mon"
-msgstr "יום שני, שני"
+msgstr "יום שני, השני"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:349
 msgid "2nd Tue"
@@ -18161,7 +18080,7 @@ msgstr "שני שלישי"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:370
 msgid "3rd Tue"
-msgstr "יום שלישי, שלישי"
+msgstr "יום שלישי, השלישי"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:373
 msgid "3rd Wed"
@@ -18193,7 +18112,7 @@ msgstr "שלישי רביעי"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:394
 msgid "4th Wed"
-msgstr "יום רביעי, רביעי"
+msgstr "יום רביעי, הרביעי"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:397
 msgid "4th Thu"
@@ -18825,17 +18744,33 @@ msgid ""
 "Online Banking, because sometimes the bank does not give you correct "
 "feedback when a transfer is rejected."
 msgstr ""
+"הדרישות לבנקאות מקוונת משתנות בין שרתי אייקיובאנקינג השונים הנתמכים, אך בדרך "
+"כלל יהיה צורך ב:\n"
+"* הבנק צריך לספק גישה מקוונת. נא עיינו באתר המרשתת של הבנק או שניתן לפנות "
+"לשירות הלקוחות של הבנק על מנת לברר כיצד ניתן לקבל גישה מקוונת.\n"
+"הבנק אמור לספק:\n"
+"* מזהה המשתמש לשרת הבנק, לרוב יהיה מספר חשבון הבנק, אך לא בהכרח;\n"
+"* כתובת ה- URL של שרת הבנקאות המקוונת;\n"
+"* במקרים מסוימים מספר הניתוב של סניף הבנק יכול להיות שימושי בסייען זה;\n"
+"* שיטות האימות משתנות לפי שרת ושיטת ההתחברות שנבחרה:\n"
+"* PIN / TAN של FinTS: בחלק משיטות החיבור יהיה צורך בגאדג'ט מסויים כמו קורא "
+"כרטיסים או מכשיר נייד;\n"
+"* FinTS HBCI: דורש החלפת החלקים הציבוריים של מפתחות אסימטריים עם הבנק (\"Ini-"
+"Letter\").\n"
+"* PayPal: כתובת דוא\"ל רשומה, סיסמה, חתימת API;\n"
+"\n"
+"לפרטים נוספים, ראו https://wiki.gnucash.org/wiki/AqBanking.\n"
+"\n"
+"הערה: אין כל אחריות לדבר כלשהו. בנקים מסוימים מנהלים שרת בנקאות מקוונת "
+"שהוטמעה בצורה גרועה. לכן, בפעולות קריטיות תלויות זמן, אין להסתמך על העברות "
+"באמצעות בנקאות מקוונת, כי לפעמים הבנק לא מספק משוב עדכני או מדויק כאשר העברה "
+"שבוצעה נדחית."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
 msgstr "הגדרות ראשוניות לבנקאות מקוונת"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:90
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\". Please press the button below to "
-#| "start this program."
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup Wizard\".\n"
@@ -18844,7 +18779,10 @@ msgid ""
 "Please press the button below to start it."
 msgstr ""
 "התקנת חיבור הבנקאות המקוונת מטופלת על ידי התוכנית החיצונית 'אשף הגדרת "
-"איקיובנקינג'. נא להקיש על הלחצן מטה לאתחול תכנית זו."
+"איקיובנקינג'.\n"
+"יש להגדיר חיבור אחד לפחות לפני שניתן יהיה להמשיך.\n"
+"\n"
+"נא להקיש על הלחצן מטה להפעלה."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 msgid "_Start AqBanking Wizard"
@@ -20029,13 +19967,6 @@ msgid "Import bills and invoices from a CSV text file"
 msgstr "יבוא חיובים וחשבוניות מקובץ מלל CSV"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:80
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you export the Account Tree to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
 msgid ""
 "This assistant will help you export the Account Tree to a file with the "
 "separator specified below.\n"
@@ -20043,30 +19974,14 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"סייען זה יעזור ליצא את תרשים החשבונות לקובץ\n"
-"השדות יופרדו בתו מפריד שנקבע להלן.\n"
+"סייען לייצוא תרשים החשבונות לקובץ. השדות יופרדו בתו מפריד שנקבע להלן.\n"
 "\n"
 "נא לבחור את ההגדרות הדרושות לקובץ והקשה על 'הבא' כדי להמשיך או 'ביטול', "
 "לנטישת היצוא.\n"
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
-#, fuzzy, c-format
-#| msgid ""
-#| "This assistant will help you export the Transactions to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "There will be multiple rows for each transaction and may require further "
-#| "manipulation to get them in a format you can use.\n"
-#| "\n"
-#| "Each Transaction will appear once in the export and will be listed in the "
-#| "order the accounts were processed\n"
-#| "\n"
-#| "Price/Rate output format is controlled by the Preference setting,\n"
-#| "General->Force Prices to display as decimals\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
+#, c-format
 msgid ""
 "This assistant will help you export the Transactions to a file with the "
 "separator specified below.\n"
@@ -20083,16 +19998,15 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"סייען זה יעזור לייצא את התנועות לקובץ\n"
-"השדות יופרדו בתו מפריד שנקבע להלן.\n"
+"סייען לייצא את התנועות לקובץ. השדות יופרדו בתו מפריד שנקבע להלן.\n"
 "\n"
+"%s\n"
 "\n"
-"לכל תנועה יהיו מספר שורות שעשויות לדרוש מניפולציה נוספת בכדי להביא אותן "
-"למבנה בה ניתן להשתמש.\n"
+"בעוד שתנועה עשויה להכיל פיצולים בכמה מהחשבונות שנבחרו, היא תיוצא פעם אחת "
+"בלבד. היא תופיע בחשבון הראשון שעובד ושעבורו קיים פיצול.\n"
 "\n"
-"כל תנועה תופיע פעם אחת בייצוא, בסדר עיבוד החשבונות\n"
-"מבנה פלט מחיר/שער נשלט מהגדרת העדפות,\n"
-"כללי -> אילוץ הצגת מחירים כמספר עשרוני\n"
+"תבנית פלט מחיר/שער נשלט מתפריט ההעדפות,\n"
+"'כללי' ->'העדפות'->'מספרים, תאריך, שעה'->' אילוץ הצגת מחירים כמספר עשרוני'.\n"
 "\n"
 "נא לבחור את ההגדרות הדרושות לקובץ ולהקיש על 'הבא' כדי להמשיך או על 'ביטול' "
 "לנטישת היצוא.\n"
@@ -20101,13 +20015,15 @@ msgstr ""
 msgid ""
 "There will be multiple rows for each transaction with each row representing "
 "one split."
-msgstr ""
+msgstr "לכל תנועה יהיו מספר שורות כאשר כל שורה מייצגת פיצול אחד."
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "There will be one row for each transaction, equivalent to a single row in a "
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
 msgstr ""
+"לכל תנועה תהיה שורה אחת , שווה ערך לשורה אחת ביומן במצב 'ספר חשבונות בסיסי'. "
+"במצב זה, כמה מפרטי ההעברה עלולים לאובד."
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
@@ -20579,15 +20495,11 @@ msgid ""
 msgstr "נא לבחור עמודת חשבון להעברה או להסיר את עמודת החשבון הנגדי להעברה."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
-#, fuzzy
-#| msgid ""
-#| "No account column selected and no default account specified either.\n"
-#| "This should never happen. Please report this as a bug."
 msgid ""
 "No account column selected and no base account specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"לא נבחרה עמודת חשבון וגם לא נקבע חשבון ברירת מחדל.\n"
+"לא נבחרה עמודת חשבון וגם לא נקבע חשבון בסיס.\n"
 "זה לא היה אמור לקרות. נא לדווח על תקל."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:55
@@ -20650,10 +20562,8 @@ msgstr "הערך נפרס למטבע לא חוקי לסוג עמודת מטבע.
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:520
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:575
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:583
-#, fuzzy
-#| msgid " could not be understood.\n"
 msgid "Column '{1}' could not be understood.\n"
-msgstr " לא מובן.\n"
+msgstr "עמודה '{1}' לא מובן.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:328
@@ -28831,8 +28741,8 @@ msgid ""
 "reporting."
 msgstr ""
 "על פי רוב לא נדרש לכלול תנועות סגירה בדוח תנועות. תנועות סגירה הן יתרות "
-"שעברו מחשבונות הכנסות והוצאות לחשבון הון העצמי, בדרך כלל יש להחריג תנועות "
-"סגירה מדיווח תקופתי."
+"שעברו מחשבונות הכנסות והוצאות לחשבון הון העצמי ובדרך כלל, תנועות סגירה "
+"מוחרגות מדוחות תקופתיים."
 
 #: gnucash/report/trep-engine.scm:700
 msgid "Filter on these accounts."
