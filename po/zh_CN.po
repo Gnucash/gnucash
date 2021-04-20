@@ -14,10 +14,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 3.7\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-16 17:26+0000\n"
+"PO-Revision-Date: 2021-04-17 17:27+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -7838,7 +7838,7 @@ msgstr "百分比"
 #: gnucash/gnome-utils/dialog-preferences.c:166
 #, c-format
 msgid "Income%sSalary%sTaxable"
-msgstr "收入%s工资%s是否应税"
+msgstr "收入%s工资%s应税"
 
 #: gnucash/gnome-utils/dialog-preferences.c:899
 msgid "Path does not exist, "
@@ -9582,7 +9582,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-preferences.glade:800
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
 msgid "Account Color"
-msgstr "科目颜色"
+msgstr "颜色"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:967
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
@@ -11414,9 +11414,8 @@ msgstr "此设置指定了将会删除多少天前旧的日志、备份 (0 = 永
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:95
 #: gnucash/gtkbuilder/dialog-preferences.glade:640
-#, fuzzy
 msgid "Don't sign reverse any accounts."
-msgstr "不要对任何科目改变符号。"
+msgstr "不反转任何科目余额。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:96
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:101
@@ -11439,12 +11438,12 @@ msgstr ""
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
-msgstr "为下列科目改变余额符号：信用卡、应付账款、负债、所有者权益和收入。"
+msgstr "以下科目余额显示为相反数：信用卡、应付账款、负债、所有者权益和收入。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:105
 #: gnucash/gtkbuilder/dialog-preferences.glade:678
 msgid "Sign reverse balances on income and expense accounts."
-msgstr "在收入、支出账户中改变余额符号。"
+msgstr "收入、支出科目余额显示为相反数。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:110
 msgid "Use account colors in the account hierarchy"
@@ -11471,7 +11470,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:120
 msgid "Use formal account labels"
-msgstr "使用会计卷标"
+msgstr "正式会计标签"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:121
 msgid ""
@@ -11513,7 +11512,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:135
 #: gnucash/gtkbuilder/dialog-preferences.glade:926
 msgid "Use the system locale currency for all newly created accounts."
-msgstr "对于所有新建科目使用系统本地区域货币。"
+msgstr "新科目使用系统默认币种。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:136
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:141
@@ -11532,7 +11531,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:906
 msgid "Use the specified currency for all newly created accounts."
-msgstr "所有新建的科目使用此货币。"
+msgstr "新科目使用此币种。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:145
 msgid "Default currency for new accounts"
@@ -13253,7 +13252,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:108
 msgid "Choose Currency"
-msgstr "选择货币"
+msgstr "选择币种"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:123
 msgid ""
@@ -16213,7 +16212,7 @@ msgstr "ISO"
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:59
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:56
 msgid "Locale"
-msgstr ""
+msgstr "默认"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:133
 #, fuzzy
@@ -16224,7 +16223,7 @@ msgstr "恢复(_R)"
 #: gnucash/gtkbuilder/dialog-preferences.glade:178
 #: gnucash/gtkbuilder/dialog-preferences.glade:583
 msgid "<b>Separator Character</b>"
-msgstr "<b>分隔字符</b>"
+msgstr "<b>分隔符</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:204
 msgid ""
@@ -16304,11 +16303,11 @@ msgstr "会计期间"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:593
 msgid "Use _formal accounting labels"
-msgstr "使用会计卷标(_F)"
+msgstr "会计标签(_F)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:599
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
-msgstr "仅使用“借方”与”贷方”来代替口语中的同义字。"
+msgstr "使用“借方”和“贷方”代替非正式的同义词。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:614
 msgid "<b>Labels</b>"
@@ -16329,11 +16328,11 @@ msgstr "收入和支出(_I)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:694
 msgid "<b>Reverse Balanced Accounts</b>"
-msgstr "<b>反向结算科目类型</b>"
+msgstr "<b>反转余额</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:727
 msgid "<b>Default Currency</b>"
-msgstr "<b>默认货币</b>"
+msgstr "<b>币种</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:740
 #: gnucash/gtkbuilder/dialog-preferences.glade:3066
@@ -16347,37 +16346,34 @@ msgstr "角色："
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:775
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
-#, fuzzy
 msgid "Sample"
-msgstr "样本："
+msgstr "示范"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:812
-#, fuzzy
 msgid "Show the Account Color as background"
-msgstr "显示“报价标记”栏"
+msgstr "主窗格"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:818
 msgid "Show the Account Color as Account Name Background."
-msgstr ""
+msgstr "颜色设为科目背景。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:840
 msgid "Show the Account Color on tabs"
-msgstr ""
+msgstr "标签"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:846
 msgid "Show the Account Color as tab background."
-msgstr ""
+msgstr "颜色设为标签背景。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:880
-#, fuzzy
 msgid ""
 "The character that will be used between components of an account name. A "
 "legal value is any single character except letters and numbers, or any of "
 "the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and "
 "\"period\"."
 msgstr ""
-"会计科目名称不同部分间用于分隔的字符。合法的字符应该是一个除字母和数字外的单"
-"字符，或任何下列字符：“colon”、“slash”、“backslash”、“dash”和“period”。"
+"父科目、子科目间的分隔符号：除字母和数字外的任何单个字符，或以下任意一种：\"colon [冒号]\"、\"slash [斜线]\"、"
+"\"backslash [反斜线]\"、\"period [破折号]\"和 \"period [句号]\"。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:900
 #: gnucash/gtkbuilder/dialog-preferences.glade:3167
@@ -17044,7 +17040,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3557
 msgid "characters"
-msgstr "字符"
+msgstr "符号"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3576
 #, fuzzy
