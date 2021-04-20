@@ -26,11 +26,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-16 17:26+0000\n"
-"Last-Translator: Thomas Jungers <thomasjungers@gmail.com>\n"
+"PO-Revision-Date: 2021-04-17 17:26+0000\n"
+"Last-Translator: Diego Marin <alterne@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -2352,7 +2352,7 @@ msgstr "Compte introuvable"
 
 #: gnucash/gnome/dialog-imap-editor.c:369
 msgid "(Note, if there is a large number, it may take a while)"
-msgstr ""
+msgstr "(Note, si beaucoup de données, cette opération peut prendre du temps)"
 
 #: gnucash/gnome/dialog-imap-editor.c:703
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
@@ -3061,6 +3061,8 @@ msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
 msgstr ""
+"Aucun document n'a été sélectionné pour ce payement. Ceci peut créer un "
+"payement sans lien."
 
 # messages-i18n.c:312
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1330
@@ -3141,6 +3143,8 @@ msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
+"La transaction sélectionnée n'a pas de répartition qui peut être rattachée à "
+"un payement"
 
 #: gnucash/gnome/dialog-payment.c:1593
 msgid ""
@@ -3149,6 +3153,11 @@ msgid ""
 "Please select one, the others will be ignored.\n"
 "\n"
 msgstr ""
+"Cette transaction a plusieurs répartitions qui peuvent être considérées \n"
+"comme \"payement\", gnucash ne peut en considérer qu'une.\n"
+"Sélectionner s'il vous plaît une répartition, les autres\n"
+"seront ignorées.\n"
+"\n"
 
 #: gnucash/gnome/dialog-payment.c:1596
 #, fuzzy
