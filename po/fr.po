@@ -20,6 +20,7 @@
 # Un Anonyme <vehrzafk1@gmail.com>, 2021.
 # Thomas Jungers <thomasjungers@gmail.com>, 2021.
 # Diego Marin <alterne@gmail.com>, 2021.
+# Pascal HUE <pascal.hue35@gmail.com>, 2021.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
@@ -30,7 +31,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
 "PO-Revision-Date: 2021-04-17 17:26+0000\n"
-"Last-Translator: Diego Marin <alterne@gmail.com>\n"
+"Last-Translator: Pascal HUE <pascal.hue35@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -828,14 +829,14 @@ msgid "Period %s - %s"
 msgstr "Période du %s au %s"
 
 #: gnucash/gnome/assistant-acct-period.c:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
 "Le livre sera créé avec le titre %s quand vous cliquerez sur \"Appliquer\". "
-"Cliquez sur \"Retour\" pour ajuster, ou sur \"Annuler\" pour ne pas créer de "
-"livre."
+"Cliquez sur \"Retour\" pour modifier, ou sur \"Annuler\" pour ne pas créer "
+"de livre."
 
 #: gnucash/gnome/assistant-acct-period.c:523
 #, c-format
