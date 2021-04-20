@@ -17,8 +17,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-17 17:27+0000\n"
-"Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
+"PO-Revision-Date: 2021-04-17 19:26+0000\n"
+"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3835,7 +3835,7 @@ msgstr "查看并编辑销售税率表的列表"
 
 #: gnucash/gnome/gnc-plugin-business.c:288
 msgid "_Billing Terms Editor"
-msgstr "结算条款编辑器"
+msgstr "结算条款编辑器(_B)"
 
 #: gnucash/gnome/gnc-plugin-business.c:289
 msgid "View and edit the list of Billing Terms"
@@ -15619,7 +15619,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:258
 msgid "Sea_rch"
-msgstr ""
+msgstr "搜索(_R)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:294
 msgid ""
@@ -15630,7 +15630,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:35
 msgid "Import Map Editor"
-msgstr ""
+msgstr "导入地图编辑器"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:52
 msgid "_Remove Invalid Mappings"
@@ -15638,7 +15638,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:106
 msgid "<b>What type of information to display?</b>"
-msgstr ""
+msgstr "<b>要显示什么类型的信息？</b>"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:139
 msgid "Non-Bayesian"
@@ -16777,7 +16777,7 @@ msgstr "信用卡账单对账后，提示用户输入信用卡付款。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2536
 msgid "Always reconcile to t_oday"
-msgstr "总是对账到今天"
+msgstr "总是对账到今天(_O)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2542
 msgid ""
@@ -17766,11 +17766,11 @@ msgstr "<b>科目税务信息</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:479
 msgid "Tax _Related"
-msgstr "有关税务的"
+msgstr "税务相关(_R)"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:511
 msgid "<b>_TXF Categories</b>"
-msgstr "<b>TXF(_T)分类</b>"
+msgstr "<b>_TXF 分类</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:615
 msgid "<b>Payer Name Source</b>"
@@ -17794,13 +17794,12 @@ msgid "<b>Tax Table Entries</b>"
 msgstr "<b>税率表项</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:199
-#, fuzzy
 msgid "De_lete"
-msgstr "删除"
+msgstr "删除(_L)"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:214
 msgid "Ne_w"
-msgstr ""
+msgstr "新建(_W)"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:291
 #, fuzzy
