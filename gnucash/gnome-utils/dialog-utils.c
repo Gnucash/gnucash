@@ -431,6 +431,7 @@ gnc_gdate_in_valid_range (GDate *test_date, gboolean warn)
 
     if (warn && !ret)
     {
+            // Transators: Use your locale date format here!
         gchar *dialog_msg = _("The entered date is out of the range "
                   "01/01/1400 - 31/12/9999, resetting to this year");
         gchar *dialog_title = _("Date out of range");
