@@ -3623,7 +3623,7 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
     book = gnc_account_get_book (acc);
     pdb = gnc_pricedb_get_db (book);
 
-    balance = gnc_pricedb_convert_balance_nearest_price_t64(
+    balance = gnc_pricedb_convert_balance_nearest_before_price_t64 (
                   pdb, balance, balance_currency, new_currency, date);
 
     return balance;

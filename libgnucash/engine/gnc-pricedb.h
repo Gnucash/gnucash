@@ -559,6 +559,19 @@ PriceList * gnc_pricedb_lookup_latest_before_any_currency_t64(GNCPriceDB *db,
                                                          const gnc_commodity *c,
                                                               time64 t);
 
+/** @brief Retrieve the price one currency to another using the price
+ * nearest to before the given time.
+ * @param pdb The pricedb
+ * @param orig_currency The commodity in which the balance is currently
+ * expressed
+ * @param new_currency The commodity to which the balance should be converted
+ * @param t The time to be used for for comparison 
+ * @return A price, or gnc_numeric_zero if no price is available.
+ */
+gnc_numeric gnc_pricedb_get_nearest_before_price (GNCPriceDB *pdb,
+                                                  const gnc_commodity *orig_currency,
+                                                  const gnc_commodity *new_currency,
+                                                  const time64 t);
 
 /** @brief Retrieve the price one currency to another at specified date
  * @param pdb The pricedb
@@ -609,6 +622,23 @@ gnc_pricedb_convert_balance_nearest_price_t64(GNCPriceDB *pdb,
                                               const gnc_commodity *balance_currency,
                                               const gnc_commodity *new_currency,
                                               time64 t);
+
+/** @brief Convert a balance from one currency to another using the price
+ * nearest to before the given time.
+ * @param pdb The pricedb
+ * @param balance The balance to be converted
+ * @param balance_currency The commodity in which the balance is currently
+ * expressed
+ * @param new_currency The commodity to which the balance should be converted
+ * @param t The time in which the last price before it should be used.
+ * @return A new balance or gnc_numeric_zero if no price is available.
+ */
+gnc_numeric
+gnc_pricedb_convert_balance_nearest_before_price_t64 (GNCPriceDB *pdb,
+                                                     gnc_numeric balance,
+                                                     const gnc_commodity *balance_currency,
+                                                     const gnc_commodity *new_currency,
+                                                     time64 t);
 
 typedef gboolean (*GncPriceForeachFunc)(GNCPrice *p, gpointer user_data);
 
