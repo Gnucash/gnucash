@@ -2024,8 +2024,8 @@ PriceList *
 gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
                                        const gnc_commodity *commodity)
 {
-    return gnc_pricedb_lookup_latest_before_any_currency_t64(db, commodity,
-                                                         gnc_time(NULL));
+    return gnc_pricedb_lookup_nearest_before_any_currency_t64(db, commodity,
+                                                              gnc_time(NULL));
 }
 
 PriceList *
@@ -2049,9 +2049,9 @@ gnc_pricedb_lookup_nearest_in_time_any_currency_t64(GNCPriceDB *db,
 }
 
 PriceList *
-gnc_pricedb_lookup_latest_before_any_currency_t64(GNCPriceDB *db,
-                                                  const gnc_commodity *commodity,
-                                                  time64 t)
+gnc_pricedb_lookup_nearest_before_any_currency_t64(GNCPriceDB *db,
+                                                   const gnc_commodity *commodity,
+                                                   time64 t)
 {
     GList *prices = NULL, *result;
     UsesCommodity helper = {&prices, commodity, t};
@@ -2405,10 +2405,10 @@ gnc_pricedb_lookup_nearest_in_time64(GNCPriceDB *db,
 
 
 GNCPrice *
-gnc_pricedb_lookup_latest_before_t64 (GNCPriceDB *db,
-                                      gnc_commodity *c,
-                                      gnc_commodity *currency,
-                                      time64 t)
+gnc_pricedb_lookup_nearest_before_t64 (GNCPriceDB *db,
+                                       gnc_commodity *c,
+                                       gnc_commodity *currency,
+                                       time64 t)
 {
     GList *price_list;
     GNCPrice *current_price = NULL;
@@ -2533,9 +2533,9 @@ indirect_price_conversion (GNCPriceDB *db, const gnc_commodity *from,
     }
     else if (before_date)
     {
-        from_prices = gnc_pricedb_lookup_latest_before_any_currency_t64 (db, from, t);
+        from_prices = gnc_pricedb_lookup_nearest_before_any_currency_t64 (db, from, t);
         if (from_prices)
-            to_prices = gnc_pricedb_lookup_latest_before_any_currency_t64 (db, to, t);
+            to_prices = gnc_pricedb_lookup_nearest_before_any_currency_t64 (db, to, t);
     }
     else
     {
@@ -2566,7 +2566,7 @@ direct_price_conversion (GNCPriceDB *db, const gnc_commodity *from,
     if (t == INT64_MAX)
         price = gnc_pricedb_lookup_latest(db, from, to);
     else if (before_date)
-        price = gnc_pricedb_lookup_latest_before_t64(db, (gnc_commodity*)from, (gnc_commodity*)to, t);
+        price = gnc_pricedb_lookup_nearest_before_t64(db, (gnc_commodity*)from, (gnc_commodity*)to, t);
     else
         price = gnc_pricedb_lookup_nearest_in_time64(db, from, to, t);
 

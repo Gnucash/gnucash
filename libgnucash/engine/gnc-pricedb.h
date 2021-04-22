@@ -527,7 +527,7 @@ PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency_t64(GNCPriceDB *db,
         const gnc_commodity *c,
         time64 t);
 
-/** @brief Return the latest price between the given commodities before the
+/** @brief Return the nearest price between the given commodities before the
  * given time.
  *
  * The returned GNCPrice may be in either direction so check to ensure that its
@@ -538,12 +538,12 @@ PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency_t64(GNCPriceDB *db,
  * @param t The time before which to find the price
  * @return A GNCPrice or NULL if no prices are found before t.
  */
-GNCPrice * gnc_pricedb_lookup_latest_before_t64(GNCPriceDB *db,
-                                                gnc_commodity *c,
-                                                gnc_commodity *currency,
-                                                time64 t);
+GNCPrice * gnc_pricedb_lookup_nearest_before_t64 (GNCPriceDB *db,
+                                                  gnc_commodity *c,
+                                                  gnc_commodity *currency,
+                                                  time64 t);
 
-/** @brief Return the latest price between the given commodity and any other
+/** @brief Return the nearest price between the given commodity and any other
  * before the given time.
  *
  * The returned GNCPrice may be in either direction so check to ensure that its
@@ -553,9 +553,9 @@ GNCPrice * gnc_pricedb_lookup_latest_before_t64(GNCPriceDB *db,
  * @param t The time before which to find prices
  * @return A PriceList of prices for each commodity found or NULL if none are.
  */
-PriceList * gnc_pricedb_lookup_latest_before_any_currency_t64(GNCPriceDB *db,
-                                                         const gnc_commodity *c,
-                                                              time64 t);
+PriceList * gnc_pricedb_lookup_nearest_before_any_currency_t64 (GNCPriceDB *db,
+                                                                const gnc_commodity *c,
+                                                                time64 t);
 
 /** @brief Retrieve the price one currency to another using the price
  * nearest to before the given time.
