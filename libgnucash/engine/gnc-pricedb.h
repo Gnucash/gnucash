@@ -539,8 +539,8 @@ PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency_t64(GNCPriceDB *db,
  * @return A GNCPrice or NULL if no prices are found before t.
  */
 GNCPrice * gnc_pricedb_lookup_nearest_before_t64 (GNCPriceDB *db,
-                                                  gnc_commodity *c,
-                                                  gnc_commodity *currency,
+                                                  const gnc_commodity *c,
+                                                  const gnc_commodity *currency,
                                                   time64 t);
 
 /** @brief Return the nearest price between the given commodity and any other

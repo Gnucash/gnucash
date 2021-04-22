@@ -3609,8 +3609,8 @@ xaccAccountConvertBalanceToCurrency(const Account *acc, /* for book */
 gnc_numeric
 xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
         gnc_numeric balance,
-        gnc_commodity *balance_currency,
-        gnc_commodity *new_currency,
+        const gnc_commodity *balance_currency,
+        const gnc_commodity *new_currency,
         time64 date)
 {
     QofBook *book;
@@ -3667,7 +3667,7 @@ xaccAccountGetXxxBalanceAsOfDateInCurrency(Account *acc, time64 date,
 
     priv = GET_PRIVATE(acc);
     return xaccAccountConvertBalanceToCurrencyAsOfDate(
-               acc, fn(acc, date), priv->commodity, (gnc_commodity*)report_commodity, date);
+               acc, fn(acc, date), priv->commodity, report_commodity, date);
 }
 
 /*
@@ -3769,7 +3769,7 @@ xaccAccountGetXxxBalanceInCurrencyRecursive (const Account *acc,
 static gnc_numeric
 xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
     Account *acc, time64 date, xaccGetBalanceAsOfDateFn fn,
-    gnc_commodity *report_commodity, gboolean include_children)
+    const gnc_commodity *report_commodity, gboolean include_children)
 {
     gnc_numeric balance;
 
@@ -3843,7 +3843,7 @@ xaccAccountGetPresentBalanceInCurrency (const Account *acc,
 {
     return xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
                (Account*)acc, gnc_time64_get_today_end (), xaccAccountGetBalanceAsOfDate,
-               (gnc_commodity*)report_commodity,
+               report_commodity,
                include_children);
 }
 

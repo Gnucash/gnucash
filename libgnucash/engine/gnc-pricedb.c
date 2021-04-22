@@ -2406,8 +2406,8 @@ gnc_pricedb_lookup_nearest_in_time64(GNCPriceDB *db,
 
 GNCPrice *
 gnc_pricedb_lookup_nearest_before_t64 (GNCPriceDB *db,
-                                       gnc_commodity *c,
-                                       gnc_commodity *currency,
+                                       const gnc_commodity *c,
+                                       const gnc_commodity *currency,
                                        time64 t)
 {
     GList *price_list;
@@ -2566,7 +2566,7 @@ direct_price_conversion (GNCPriceDB *db, const gnc_commodity *from,
     if (t == INT64_MAX)
         price = gnc_pricedb_lookup_latest(db, from, to);
     else if (before_date)
-        price = gnc_pricedb_lookup_nearest_before_t64(db, (gnc_commodity*)from, (gnc_commodity*)to, t);
+        price = gnc_pricedb_lookup_nearest_before_t64(db, from, to, t);
     else
         price = gnc_pricedb_lookup_nearest_in_time64(db, from, to, t);
 

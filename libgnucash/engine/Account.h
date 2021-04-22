@@ -584,8 +584,8 @@ gnc_numeric xaccAccountConvertBalanceToCurrency(
     const gnc_commodity *new_currency);
 gnc_numeric xaccAccountConvertBalanceToCurrencyAsOfDate(
     const Account *account, /* for book */
-    gnc_numeric balance, gnc_commodity *balance_currency,
-    gnc_commodity *new_currency, time64 date);
+    gnc_numeric balance, const gnc_commodity *balance_currency,
+    const gnc_commodity *new_currency, time64 date);
 
 /* These functions get some type of balance in the desired commodity.
    'report_commodity' may be NULL to use the account's commodity. */
