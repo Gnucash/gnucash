@@ -144,6 +144,7 @@
     (list (vector 'average-cost (N_ "Average cost of purchases by volume-weighted"))
           (vector 'weighted-average (N_ "Weighted average of all past currency transactions"))
           (vector 'pricedb-latest (N_ "Most recent"))
+          (vector 'pricedb-before (N_ "Nearest before report date"))
           (vector 'pricedb-nearest (N_ "Nearest to report date"))))))
 
 ;; The width- and height- options for charts
