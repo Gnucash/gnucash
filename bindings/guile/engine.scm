@@ -31,10 +31,20 @@
                    (gnucash engine commodity-table)
                    (gnucash engine gnc-numeric))
 
+(export gnc-pricedb-lookup-latest-before-t64)
+(export gnc-pricedb-lookup-latest-before-any-currency-t64)
 (export gnc:account-map-descendants)
 (export gnc:account-map-children)
 (export account-full-name<?)
 (export accounts-get-children-depth)
+
+(define (gnc-pricedb-lookup-latest-before-t64 . args)
+  (issue-deprecation-warning "gnc-pricedb-lookup-latest-before-t64 has been renamed to gnc-pricedb-lookup-nearest-before-t64")
+  (apply gnc-pricedb-lookup-nearest-before-t64 args))
+
+(define (gnc-pricedb-lookup-latest-before-any-currency-t64 . args)
+  (issue-deprecation-warning "gnc-pricedb-lookup-latest-before-any-currency-t64 has been renamed to gnc-pricedb-lookup-nearest-before-any-currency-t64")
+  (apply gnc-pricedb-lookup-nearest-before-any-currency-t64 args))
 
 ;; A few account related utility functions which used to be in engine-utilities.scm
 (define (gnc:account-map-descendants thunk account)
