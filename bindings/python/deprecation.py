@@ -8,6 +8,31 @@
 # @ingroup python_bindings
 
 from functools import wraps
+import inspect
+from warnings import warn_explicit, warn
+
+# General purpose deprecation decorator. Lifted from
+# https://gist.github.com/kgriffs/8202106
+
+def deprecated(message):
+    '''
+    Flags a method as deprecated.
+    param message: Text emitted as part of warning. Include instructions to replace the deprecated function e.g. "use waldo_pepper() isnstead."
+    '''
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            warning_msg = 'Call to deprecated function {}. {}'.format(
+                func.__name__, message)
+            frame = inspect.current_frame().f_back
+
+            warn_explicit(message,
+                          category=DeprecationWarnig,
+                          filename=inspect.getfile(frame.f_code),
+                          lineno=frame.f_lineno)
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
 
 # use of is_new, force_new and ignore_lock is deprecated, use mode instead
 # the following decorators enable backward compatibility for the deprecation period
@@ -30,8 +55,7 @@ def deprecated_args_session(ignore_lock_or_mode=None, is_new=None,
 
     if deprecation:
         # if any(item in ("is_new", "ignore_lock", "force_new") for item in kwargs):
-        import warnings
-        warnings.warn(
+        warn(
             "Use of ignore_lock, is_new or force_new arguments is deprecated. Use mode argument instead. Have a look at gnucash.SessionOpenMode.",
             category=DeprecationWarning,
             stacklevel=3
@@ -65,4 +89,3 @@ def deprecated_args_session_begin(original_function):
         mode = deprecated_args_session(ignore_lock_or_mode, is_new, force_new, mode, ignore_lock)
         return(original_function(self, new_uri=new_uri, mode=mode))
     return new_function
-

@@ -53,7 +53,8 @@ from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn
 from gnucash.deprecation import (
     deprecated_args_session,
     deprecated_args_session_init,
-    deprecated_args_session_begin
+    deprecated_args_session_begin,
+    deprecated
 )
 
 try:
@@ -502,6 +503,14 @@ class GncPriceDB(GnuCashCoreClass):
     See also https://code.gnucash.org/docs/head/gnc-pricedb_8h.html
     '''
 
+@deprecated("Use gnc_pricedb_latest_before_t64")
+def gnc_pricedb_lookup_latest_before_t64(self, commodity, currency, date):
+    return self.lookup_nearest_before_t64(commodit, currency,date)
+
+GncPriceDB.add_method('gnc_pricedb_lookup_latest_before_t64', 'lookup_latest_before_t64')
+
+GncPriceDB.lookup_latest_before_t64 = method_function_returns_instance(GncPriceDB.lookup_latest_before_t64, GncPrice)
+
 GncPriceDB.add_methods_with_prefix('gnc_pricedb_')
 PriceDB_dict =  {
                 'lookup_latest' : GncPrice,
@@ -513,7 +522,6 @@ PriceDB_dict =  {
 methods_return_instance(GncPriceDB,PriceDB_dict)
 GncPriceDB.get_prices = method_function_returns_instance_list(
     GncPriceDB.get_prices, GncPrice )
-
 
 class GncCommodity(GnuCashCoreClass): pass
 
