@@ -11,14 +11,15 @@
 # Monson Shao <holymonson@gmail.com>, 2018
 # Boyuan Yang <073plan@gmail.com>, 2018, 2019, 2021.
 # TianXing_Yi <duguqiubailee@gmail.com>, 2021.
+# Sean Guan <guanshangkang@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 3.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-20 16:29+0000\n"
-"Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
+"PO-Revision-Date: 2021-04-23 09:32+0000\n"
+"Last-Translator: Sean Guan <guanshangkang@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2113,7 +2114,7 @@ msgstr[0] ""
 #: gnucash/gnome/dialog-imap-editor.c:367
 #, c-format
 msgid "To see the invalid mappings, use a filter of '%s'"
-msgstr ""
+msgstr "查看无效映射，请使用\"%s\"的过滤器"
 
 #: gnucash/gnome/dialog-imap-editor.c:367
 #: gnucash/gnome/dialog-imap-editor.c:604
@@ -2123,12 +2124,12 @@ msgstr "映射科目不存在"
 
 #: gnucash/gnome/dialog-imap-editor.c:369
 msgid "(Note, if there is a large number, it may take a while)"
-msgstr ""
+msgstr "(注意，如果有大量数字，可能需要一些时间)"
 
 #: gnucash/gnome/dialog-imap-editor.c:703
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
 msgid "Bayesian"
-msgstr ""
+msgstr "贝叶斯"
 
 #: gnucash/gnome/dialog-imap-editor.c:718
 #, fuzzy
@@ -2324,9 +2325,8 @@ msgid "View Expense Voucher"
 msgstr "查看支出凭证"
 
 #: gnucash/gnome/dialog-invoice.c:2510
-#, fuzzy
 msgid "Open Linked Document:"
-msgstr "新建科目"
+msgstr "新建科目："
 
 #: gnucash/gnome/dialog-invoice.c:2624 gnucash/gnome/dialog-invoice.c:2849
 msgid "Bill Information"
@@ -2881,13 +2881,12 @@ msgid "Are you sure you want to replace the existing price?"
 msgstr "您确定希望删除%d个选中的价格吗？"
 
 #: gnucash/gnome/dialog-price-editor.c:227
-#, fuzzy
 msgid "Replace price?"
-msgstr "记录的价格"
+msgstr "替换价格？"
 
 #: gnucash/gnome/dialog-price-editor.c:233
 msgid "_Replace"
-msgstr ""
+msgstr "替换(R)"
 
 #: gnucash/gnome/dialog-price-editor.c:263
 #, fuzzy
@@ -3133,7 +3132,7 @@ msgstr "无法解析分录“%s”。"
 #: gnucash/gnome/dialog-sx-editor.c:738
 #, c-format
 msgid "Split with memo %s has an invalid account."
-msgstr ""
+msgstr "带有备注%s的子交易有一个无效的科目。"
 
 #: gnucash/gnome/dialog-sx-editor.c:741
 msgid "Invalid Account in Split"
@@ -3142,7 +3141,7 @@ msgstr "分录中有无效的科目"
 #: gnucash/gnome/dialog-sx-editor.c:753
 #, c-format
 msgid "Split with memo %s has an unparseable Credit Formula."
-msgstr ""
+msgstr "带有备注%s的子交易有一个无法解析的信用公式。"
 
 #: gnucash/gnome/dialog-sx-editor.c:756 gnucash/gnome/dialog-sx-editor.c:772
 msgid "Unparsable Formula in Split"
@@ -3555,7 +3554,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
 msgid "View and Delete Bayesian and non-Bayesian information"
-msgstr ""
+msgstr "查看和删除贝叶斯和非贝叶斯的信息"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
 #, fuzzy
@@ -4300,7 +4299,7 @@ msgstr "删除预算(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
-msgstr ""
+msgstr "选择这个或另一个预算并删除它。"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:164
 #, fuzzy
@@ -6289,10 +6288,9 @@ msgid "This account register is read-only."
 msgstr "这个科目账簿是只读的。"
 
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2448
-#, fuzzy, c-format
-#| msgid "This account register is read-only."
+#, c-format
 msgid "The '%s' account register is read-only."
-msgstr "这个科目账簿是只读的。"
+msgstr "这个'%s'科目账簿是只读的。"
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 #, fuzzy
@@ -6395,9 +6393,8 @@ msgid "_Cut Split"
 msgstr "剪切分录(_t)"
 
 #: gnucash/gnome/gnc-split-reg.c:990
-#, fuzzy
 msgid "Cut the current transaction?"
-msgstr "编辑当前交易事项"
+msgstr "编辑当前交易？"
 
 #: gnucash/gnome/gnc-split-reg.c:991
 #, fuzzy
@@ -6619,9 +6616,9 @@ msgid "R"
 msgstr "对账"
 
 #: gnucash/gnome/report-menus.scm:57
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Display the ~a report"
-msgstr "显示 %s 报表"
+msgstr "显示 ~a 报表"
 
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
@@ -7178,7 +7175,6 @@ msgid "Match case"
 msgstr "匹配？"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:178
-#, fuzzy
 msgid ""
 "\n"
 "The file you are trying to load is from an older version of GnuCash. The "
@@ -7200,17 +7196,16 @@ msgid ""
 "Press \"Next\" now to select the correct character encoding for your data "
 "file.\n"
 msgstr ""
-"您正在加载的文件是来自于 GnuCash 的早期版本。早期版本的文件格式缺少了描述字符"
-"编码的细节信息。这意味着您数据文件中的文本可能会以各种不明确的方式读取。这种"
-"不明确无法自动解决，但是新的 GnuCash 2.0.0 文件结构将会包含所有需要的信息，这"
-"样您就不需要再这么处理一遍了。\n"
 "\n"
-"GnuCash 将会猜测您的数据文件的字符编码。在下一页，GnuCash 会显示使用猜测的编"
-"码解析的文本。您需要检查这些文字是否是期望的文字。如果一切看起来正常，您可以"
-"简单的按“前进”即可。否则，如果文字中包含了一些乱码，您应该选择不同的字符编码"
-"来看看不同的结果。您可能会需要通过点击相应的按钮来编辑编码列表。\n"
+"您正在加载的文件是来自于 GnuCash "
+"的早期版本。早期版本的文件格式缺少了描述字符编码的细节信息。这意味着您数据文件中的文本可能会以各种不明确的方式读取。这种不明确无法自动解决，但是新的 "
+"GnuCash 2.0.0 文件结构将会包含所有需要的信息，这样您就不需要再这么处理一遍了。\n"
 "\n"
-"请您现在选择您数据文件的正确的字符编码，然后点击“前进”。"
+"GnuCash 将会猜测您的数据文件的字符编码。在下一页，GnuCash 会显示使用猜测的编码解析的文本。您需要检查这些文字是否是期望的文字。如果一切看起"
+"来正常，您可以简单的按“前进”即可。否则，如果文字中包含了一些乱码，您应该选择不同的字符编码来看看不同的结果。您可能会需要通过点击相应的按钮来编辑编码列表"
+"。\n"
+"\n"
+"请您现在选择您数据文件的正确的字符编码，然后点击“前进”。\n"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:198
 msgid "Ambiguous character encoding"
@@ -7883,9 +7878,9 @@ msgid "_Rename"
 msgstr "重新编号(_R)"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:641
-#, fuzzy, c-format
+#, c-format
 msgid "Tax table name \"%s\" already exists."
-msgstr "该商品已经存在。"
+msgstr "税表名称\"%s \"已经存在。"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:665
 #, fuzzy, c-format
@@ -8792,10 +8787,8 @@ msgid "This window is closing and will not be restored."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.c:1458
-#, fuzzy
-#| msgid "Close this window"
 msgid "Close Window?"
-msgstr "关闭此窗口"
+msgstr "关闭此窗口？"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
@@ -12940,9 +12933,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:201
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:191
-#, fuzzy
 msgid "<b>Load and Save Settings</b>"
-msgstr "储蓄"
+msgstr "<b>储蓄</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:249
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:238
@@ -13070,11 +13062,12 @@ msgid "Import Preview"
 msgstr "导入预览"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1026
-#, fuzzy
 msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
-msgstr "点击“应用”来创建这些交易事项。"
+msgstr ""
+"<b>点击“应用”来创建这些交易事项。\n"
+"点击“取消”中止。</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1041
 #, fuzzy
@@ -13286,17 +13279,13 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:490
-#, fuzzy
 msgid ""
 "The selection you make here is only the starting point for your personalized "
 "account hierarchy. Accounts can be added, renamed, moved, or deleted by hand "
 "later at any time."
 msgstr ""
-"\n"
-"选择对应于您将使用 GnuCash 的类别。您选择的每个类别将会导致创建一些科目。选择"
-"与您相关的类别。您也可以之后手动创建额外的科目。\n"
-"<b>注意：</b> 您在此处所做的选择只是您的个性化科目层次结构的起点。之后您可以"
-"随时手动添加，重命名，移动或删除科目。"
+"选择对应于您将使用 GnuCash 的类别。您选择的每个类别将会导致创建一些科目。选择与您相关的类别。您也可以之后手动创建额外的科目。\n"
+"<b>注意：</b> 您在此处所做的选择只是您的个性化科目层次结构的起点。之后您可以随时手动添加，重命名，移动或删除科目。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:507
 #, fuzzy
@@ -15594,10 +15583,8 @@ msgid "All _accounts"
 msgstr "所有科目"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " 搜索 "
+msgstr "搜索范围"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 #, fuzzy
@@ -18518,9 +18505,8 @@ msgstr "预算期间："
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:634
 #: gnucash/report/reports/standard/general-ledger.scm:126
 #: gnucash/report/trep-engine.scm:83 gnucash/report/trep-engine.scm:1129
-#, fuzzy
 msgid "Show Account Code"
-msgstr "显示科目代码？"
+msgstr "显示科目编号"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:658
 #, fuzzy
@@ -20055,11 +20041,13 @@ msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:647
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Processing...\n"
-msgstr "处理付款(_P)..."
+msgstr ""
+"\n"
+"处理付款(_P)...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:716
 #, fuzzy, c-format
@@ -20764,10 +20752,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:520
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:575
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:583
-#, fuzzy
-#| msgid " could not be understood.\n"
 msgid "Column '{1}' could not be understood.\n"
-msgstr " 无法识别。\n"
+msgstr "列'{1}'无法被识别。\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:328
@@ -25476,9 +25462,8 @@ msgid "Barchart"
 msgstr "资产柱状图"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1227
-#, fuzzy
 msgid " to "
-msgstr "%s 到 %s"
+msgstr " 到 "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1290
 #: gnucash/report/reports/standard/trial-balance.scm:861
@@ -26795,7 +26780,7 @@ msgstr "损益表"
 
 #: gnucash/report/reports/standard/income-statement.scm:572
 msgid "Profit & Loss"
-msgstr "收益&亏损"
+msgstr "损益表"
 
 #: gnucash/report/reports/standard/invoice.scm:102
 #: gnucash/report/reports/standard/invoice.scm:247
