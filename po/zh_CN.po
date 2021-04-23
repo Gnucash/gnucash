@@ -18,8 +18,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-23 09:32+0000\n"
-"Last-Translator: Sean Guan <guanshangkang@gmail.com>\n"
+"PO-Revision-Date: 2021-04-23 19:32+0000\n"
+"Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2251,9 +2251,8 @@ msgstr "费用合计："
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:793
 #: libgnucash/engine/gncInvoice.c:1088
-#, fuzzy
 msgid "Credit Note"
-msgstr "信用凭证"
+msgstr "预付"
 
 #: gnucash/gnome/dialog-invoice.c:2089
 msgid "PAID"
@@ -2266,9 +2265,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-invoice.c:2139 gnucash/gnome/dialog-invoice.c:2158
 #: gnucash/gnome/dialog-invoice.c:2177
-#, fuzzy
 msgid "New Credit Note"
-msgstr "新建信用凭证"
+msgstr "新建"
 
 #: gnucash/gnome/dialog-invoice.c:2140
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:292
@@ -2279,9 +2277,8 @@ msgstr "新建发票"
 
 #: gnucash/gnome/dialog-invoice.c:2145 gnucash/gnome/dialog-invoice.c:2164
 #: gnucash/gnome/dialog-invoice.c:2183
-#, fuzzy
 msgid "Edit Credit Note"
-msgstr "编辑信用凭证"
+msgstr "编辑"
 
 #: gnucash/gnome/dialog-invoice.c:2146
 msgid "Edit Invoice"
@@ -2289,9 +2286,8 @@ msgstr "编辑发票"
 
 #: gnucash/gnome/dialog-invoice.c:2149 gnucash/gnome/dialog-invoice.c:2168
 #: gnucash/gnome/dialog-invoice.c:2187
-#, fuzzy
 msgid "View Credit Note"
-msgstr "查看信用凭证"
+msgstr "查看"
 
 #: gnucash/gnome/dialog-invoice.c:2150
 msgid "View Invoice"
@@ -2375,7 +2371,7 @@ msgstr "查看/编辑发票"
 #: gnucash/gnome/gnc-plugin-page-register2.c:501
 #: gnucash/gnome/gnc-plugin-page-register.c:624
 msgid "Duplicate"
-msgstr "创建副本"
+msgstr "复制"
 
 #: gnucash/gnome/dialog-invoice.c:3329 gnucash/gnome/dialog-invoice.c:3338
 #: gnucash/gnome/dialog-invoice.c:3349
@@ -4472,7 +4468,7 @@ msgstr "创建条目副本(_L)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:200
 msgid "Make a copy of the current entry"
-msgstr "制作当前条目的副本"
+msgstr "复制当前交易"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:204
 #, fuzzy
@@ -4570,9 +4566,8 @@ msgid "_Edit Invoice"
 msgstr "编辑发票(_E)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:298
-#, fuzzy
 msgid "_Duplicate Invoice"
-msgstr "创建发票副本(_D)"
+msgstr "复制(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:299
 msgid "_Post Invoice"
@@ -4632,9 +4627,8 @@ msgid "_Edit Bill"
 msgstr "编辑账单"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:319
-#, fuzzy
 msgid "_Duplicate Bill"
-msgstr "创建副本"
+msgstr "复制(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
 #, fuzzy
@@ -4675,9 +4669,8 @@ msgid "_Edit Voucher"
 msgstr "查看/编辑支出凭证"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:340
-#, fuzzy
 msgid "_Duplicate Voucher"
-msgstr "创建发票副本(_D)"
+msgstr "复制(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:341
 #, fuzzy
@@ -4708,39 +4701,32 @@ msgid "_Reset Default Layout for Employee Documents"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:359
-#, fuzzy
 msgid "_Print Credit Note"
-msgstr "编辑信用凭证"
+msgstr "打印(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:360
-#, fuzzy
 msgid "_Edit Credit Note"
-msgstr "编辑信用凭证"
+msgstr "编辑(_E)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:361
-#, fuzzy
 msgid "_Duplicate Credit Note"
-msgstr "编辑信用凭证"
+msgstr "复制(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:362
-#, fuzzy
 msgid "_Post Credit Note"
-msgstr "编辑信用凭证"
+msgstr "入账(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:363
-#, fuzzy
 msgid "_Unpost Credit Note"
-msgstr "编辑信用凭证"
+msgstr "取消入账(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:364
-#, fuzzy
 msgid "New _Credit Note"
-msgstr "新建信用凭证"
+msgstr "新建(_C)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:365
-#, fuzzy
 msgid "_Pay Credit Note"
-msgstr "信用凭证"
+msgstr "退款(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:373
 msgid "Make a printable invoice"
@@ -4752,7 +4738,7 @@ msgstr "编辑该发票"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:375
 msgid "Create a new invoice as a duplicate of the current one"
-msgstr "用此发票创建一个副本"
+msgstr "复制此发票"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:376
 #, fuzzy
@@ -4815,9 +4801,8 @@ msgid "Edit this bill"
 msgstr "编辑该发票"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:396
-#, fuzzy
 msgid "Create a new bill as a duplicate of the current one"
-msgstr "用此发票创建一个副本"
+msgstr "复制此账单"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:397
 #, fuzzy
@@ -4870,9 +4855,8 @@ msgid "Edit this voucher"
 msgstr "编辑该发票"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:417
-#, fuzzy
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "用此发票创建一个副本"
+msgstr "复制此凭证"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:418
 #, fuzzy
@@ -4926,9 +4910,8 @@ msgid "Edit this credit note"
 msgstr "编辑信用凭证"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:438
-#, fuzzy
 msgid "Create a new credit note as a duplicate of the current one"
-msgstr "用此发票创建一个副本"
+msgstr "复制此预付"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:439
 #, fuzzy
@@ -5230,7 +5213,7 @@ msgstr "从剪贴板中粘贴交易事项"
 #: gnucash/gnome/gnc-plugin-page-register2.c:207
 #: gnucash/gnome/gnc-plugin-page-register.c:316
 msgid "Make a copy of the current transaction"
-msgstr "复制当前的交易事项"
+msgstr "复制当前交易"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:208
 #: gnucash/gnome/gnc-plugin-page-register.c:317
@@ -5257,9 +5240,8 @@ msgstr "从剪贴板中粘贴交易事项"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:212
 #: gnucash/gnome/gnc-plugin-page-register.c:324
-#, fuzzy
 msgid "Make a copy of the current split"
-msgstr "制作当前分录的副本"
+msgstr "复制当前分录"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:213
 #: gnucash/gnome/gnc-plugin-page-register.c:325
@@ -10458,7 +10440,7 @@ msgid ""
 "documents obviously have to be against the same customer. Counter documents "
 "are documents with opposite sign. For example for an invoice, customer "
 "credit notes and negative invoices are considered counter documents."
-msgstr ""
+msgstr "客户若有预付款，入账时直接抵扣。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:117
 #, fuzzy
@@ -10546,7 +10528,7 @@ msgid ""
 "have to be against the same vendor. Counter documents are documents with "
 "opposite sign. For example for a bill, vendor credit notes and negative "
 "bills are considered counter documents."
-msgstr ""
+msgstr "若在供应商有预付款，入账时亦直接抵扣。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:159
 msgid "Show bills due reminder at startup"
@@ -11199,7 +11181,7 @@ msgstr "下一个要显示的小技巧。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:17
 msgid "Show \"Tip Of The Day\" at GnuCash start"
-msgstr "在 GnuCash 启动时显示“每日提示”"
+msgstr "程序启动时显示“葵花宝典”"
 
 #: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:18
 msgid ""
@@ -11619,7 +11601,7 @@ msgstr "如果选中，启动时将显示启动画面。否则就不会显示启
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:185
 msgid "Show splash screen"
-msgstr "显示欢迎画面"
+msgstr "欢迎界面(_N)"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:186
 msgid ""
@@ -14317,13 +14299,12 @@ msgstr "含税(_T)"
 msgid ""
 "Whether tax is included by default in entries on Bills. This setting is "
 "inherited by new customers and vendors."
-msgstr "账单是否默认含税，适用于新客户和供应商。"
+msgstr "发票是否默认含税，适用于新客户和供应商。"
 
 #. See the tooltip "At post time..." for details.
 #: gnucash/gtkbuilder/business-prefs.glade:192
-#, fuzzy
 msgid "_Process payments on posting"
-msgstr "处理付款"
+msgstr "入帐抵扣"
 
 #: gnucash/gtkbuilder/business-prefs.glade:223
 msgid "<b>Bills</b>"
@@ -14341,7 +14322,7 @@ msgstr "含税(_X)"
 msgid ""
 "Whether tax is included by default in entries on Invoices. This setting is "
 "inherited by new customers and vendors."
-msgstr "发票中的交易是否默认含税。这个设置是继承自新客户和供应商。"
+msgstr "账单是否默认含税，适用于新客户和供应商。"
 
 #. See the tooltip "At post time..." for details.
 #: gnucash/gtkbuilder/business-prefs.glade:269
@@ -16449,20 +16430,19 @@ msgstr "数值，日期，时间"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1403
 msgid "Perform account list _setup on new file"
-msgstr "对新文件执行科目列表设置(_S)"
+msgstr "新文件执行科目列表设置(_S)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1409
-#, fuzzy
 msgid "Present the new account list dialog when you choose File->New File."
-msgstr "当您从“文件”菜单选择“新文件”的时候，显示新科目列表对话框。"
+msgstr "“文件”->“新文件”，进入新科目列表设置对话框。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1440
 msgid "Display \"_tip of the day\" dialog"
-msgstr "显示“每日提示”对话框(_T)"
+msgstr "葵花宝典(_T)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Display hints for using GnuCash at startup."
-msgstr "在启动时显示 GnuCash 的使用提示。"
+msgstr "程序启动时会提醒一些小知识。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1467
 msgid "How many days to keep old log/backup files."
@@ -16512,7 +16492,7 @@ msgstr "显示启动画面(_N)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1621
 msgid "Show splash screen at startup."
-msgstr "启动时显示启动画面。"
+msgstr "程序启动时显示欢迎界面。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1636
 #, fuzzy

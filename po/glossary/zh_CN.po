@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-04-18 09:26+0000\n"
+"PO-Revision-Date: 2021-04-23 16:32+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hans/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 # 翻译人员好，这个是不会被最终用户所见的。这是为了您，也就是翻译人员所提供的一个工具。GnuCash 是一个个人或小型企业理财的软件，是一个会计专业性比较强的软件，其中包含了很多的术语。而这里就是针对很多术语的解释。
 # 请大家务必在翻译前先浏览此文件，否则很容易出现翻译不一致的地方。如果有必须修正的术语错误，也请先修改这个文件，然后再修改软件的 po，这样后来的翻译人员就不会犯同样的出错了。请大家在翻译术语的时候，尽量参考国内会计行业术语，以方便专业人士使用。谢谢！
@@ -378,7 +378,7 @@ msgstr "转账"
 # 直接从一个银行账户转到另一个银行账户，而不使用支票。
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
 msgid "credit note"
-msgstr "信用票据"
+msgstr "预付"
 
 # 一个国家内使用的金钱
 #. "The system of money used in a country"
