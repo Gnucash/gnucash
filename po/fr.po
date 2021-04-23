@@ -30,7 +30,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-22 09:32+0000\n"
+"PO-Revision-Date: 2021-04-23 19:32+0000\n"
 "Last-Translator: Thomas Jungers <thomasjungers@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -859,7 +859,6 @@ msgstr "Période"
 # messages-i18n.c:261
 #: gnucash/gnome/assistant-acct-period.c:590
 #: gnucash/gtkbuilder/dialog-book-close.glade:85
-#, fuzzy
 msgid "Closing Date"
 msgstr "Date de clôture"
 
@@ -1130,7 +1129,6 @@ msgstr "Paiement sous séquestre"
 #: gnucash/gnome/assistant-stock-split.c:382
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2946
 #: gnucash/register/ledger-core/split-register.c:2639
-#, fuzzy
 msgctxt "Action Column"
 msgid "Split"
 msgstr "Répartition"
@@ -1647,51 +1645,44 @@ msgstr "Chercher un client"
 
 # messages-i18n.c:17
 #: gnucash/gnome/dialog-custom-report.c:319
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete %s?"
-msgstr "Confirmez-vous la suppression de \"%s\" ?"
+msgstr "Êtes-vous sûr·e de vouloir supprimer %s ?"
 
 # src/gnome/dialog-qif-import.c:314
 #: gnucash/gnome/dialog-custom-report.c:424
-#, fuzzy
 msgid "You must select a report configuration to load."
-msgstr "Vous devez sélectionner un rapport à exécuter."
+msgstr "Vous devez sélectionner un rapport préconfiguré à charger."
 
 # messages-i18n.c:21
 #: gnucash/gnome/dialog-custom-report.c:437
-#, fuzzy
 msgid "You must select a report configuration to delete."
-msgstr "Vous devez sélectionne un rapport à supprimer."
+msgstr "Vous devez sélectionner un rapport préconfiguré à supprimer."
 
 #: gnucash/gnome/dialog-custom-report.c:449
-#, fuzzy
 msgid "Unable to change report configuration name."
-msgstr "Impossible de changer le nom du rapport."
+msgstr "Impossible de changer le nom du rapport préconfiguré."
 
 #: gnucash/gnome/dialog-custom-report.c:461
-#, fuzzy
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
 msgstr ""
-"Un rapport personnalisé avec ce nom existe déja. Veuillez choisir un autre "
+"Un rapport préconfiguré avec ce nom existe déjà. Veuillez choisir un autre "
 "nom."
 
 #: gnucash/gnome/dialog-custom-report.c:487
-#, fuzzy
 msgid "Load report configuration"
-msgstr "Modifier le nom de la configuration"
+msgstr "Charger le rapport préconfiguré"
 
 #: gnucash/gnome/dialog-custom-report.c:489
-#, fuzzy
 msgid "Edit report configuration name"
-msgstr "Modifier le nom de la configuration"
+msgstr "Modifier le nom du rapport préconfiguré"
 
 # messages-i18n.c:80
 #: gnucash/gnome/dialog-custom-report.c:491
-#, fuzzy
 msgid "Delete report configuration"
-msgstr "Supprimer le rapport pré-configuré"
+msgstr "Supprimer le rapport préconfiguré"
 
 #: gnucash/gnome/dialog-date-close.c:75
 msgid "No Account selected. Please try again."
@@ -1704,10 +1695,8 @@ msgstr "Le compte sélectionné est virtuel. Essayez à nouveau."
 # src/gnome/glade-gnc-dialogs.c:506
 #: gnucash/gnome/dialog-doclink.c:161
 #: gnucash/gnome/gnc-plugin-page-register.c:4760
-#, fuzzy
-#| msgid "Select Account"
 msgid "Select document"
-msgstr "Sélectionner un compte"
+msgstr "Sélectionner un document"
 
 #: gnucash/gnome/dialog-doclink.c:164 gnucash/gnome/gnc-plugin-budget.c:290
 #: gnucash/gnome-search/search-account.c:238
@@ -1786,22 +1775,18 @@ msgid "_OK"
 msgstr "_OK"
 
 #: gnucash/gnome/dialog-doclink.c:238
-#, fuzzy
 msgid "Amend URL:"
-msgstr "Valider"
+msgstr "Modifier l'URL :"
 
 #: gnucash/gnome/dialog-doclink.c:242
-#, fuzzy
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr "Entrez une URL telle que http://www.gnucash.org :"
+msgstr "Entrer une URL telle que http://www.gnucash.org :"
 
 #: gnucash/gnome/dialog-doclink.c:256
-#, fuzzy
 msgid "Existing Document Link is"
-msgstr "Actifs existants"
+msgstr "Le Document lié existant est"
 
 #: gnucash/gnome/dialog-doclink.c:525 gnucash/gnome/dialog-doclink.c:570
-#, fuzzy
 msgid "File Found"
 msgstr "Fichier trouvé"
 
@@ -1821,13 +1806,12 @@ msgstr "Adresse non trouvée"
 #: gnucash/gnome/dialog-doclink.c:592 gnucash/gnome/dialog-imap-editor.c:882
 #, fuzzy
 msgid "Total Entries"
-msgstr "Prix total"
+msgstr "Nombre d'entrées total"
 
 # messages-i18n.c:37
 #: gnucash/gnome/dialog-doclink.c:650
-#, fuzzy
 msgid "Business item can not be modified."
-msgstr "Le fichier d'entrée n'a pas pu être ouvert."
+msgstr "L'élément ne peut être modifié."
 
 #: gnucash/gnome/dialog-doclink.c:659 gnucash/gnome/dialog-doclink.c:760
 #: gnucash/gnome/gnc-plugin-page-invoice.c:382
@@ -1835,29 +1819,24 @@ msgstr "Le fichier d'entrée n'a pas pu être ouvert."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:424
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
-#, fuzzy
 msgid "Manage Document Link"
-msgstr "Gérer le lien vers un document"
+msgstr "Gérer le Lien vers un Document"
 
 # messages-i18n.c:346
 #: gnucash/gnome/dialog-doclink.c:754
-#, fuzzy
 msgid "Transaction can not be modified."
 msgstr "La transaction ne peut pas être modifiée."
 
 #: gnucash/gnome/dialog-doclink.c:815 libgnucash/engine/gncOwner.c:215
-#, fuzzy
 msgid "Undefined"
-msgstr "Défini par l'utilisateur"
+msgstr "Non défini"
 
 # messages-i18n.c:346
 #. Translators: This is the label of a dialog box that lists all of the
 #. transaction that have files or URIs linked with them.
 #: gnucash/gnome/dialog-doclink.c:1074
-#, fuzzy
-#| msgid "Transaction Details"
 msgid "Transaction Document Links"
-msgstr "Détails de la transaction"
+msgstr "Transactions avec un Lien vers un Document"
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: gnucash/gnome/dialog-doclink.c:1077
@@ -1912,9 +1891,8 @@ msgstr ""
 
 # messages-i18n.c:231
 #: gnucash/gnome/dialog-doclink.c:1097
-#, fuzzy
 msgid "Business Document Links"
-msgstr "Liens de documents commerciaux"
+msgstr "Liens vers des Documents commerciaux"
 
 # messages-i18n.c:21
 #: gnucash/gnome/dialog-employee.c:199
@@ -2061,10 +2039,9 @@ msgstr "_Imposable"
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:474
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "Comptes en \"%s\""
+msgstr "So_us-comptes de \"%s\""
 
 # src/gnome/dialog-account-picker.c:93
 #: gnucash/gnome/dialog-find-transactions2.c:107
@@ -2245,9 +2222,8 @@ msgstr "Numéro"
 
 #: gnucash/gnome/dialog-find-transactions2.c:149
 #: gnucash/gnome/dialog-find-transactions.c:149
-#, fuzzy
 msgid "Description, Notes, or Memo"
-msgstr "Description, Notes, ou Mémo"
+msgstr "Description, Notes ou Mémo"
 
 # messages-i18n.c:302 po/guile_strings.txt:26
 #: gnucash/gnome/dialog-find-transactions2.c:153
@@ -2343,7 +2319,7 @@ msgstr[1] "La table de taxation %s n'existe pas. Voulez-vous la créer ?"
 #: gnucash/gnome/dialog-imap-editor.c:367
 #, c-format
 msgid "To see the invalid mappings, use a filter of '%s'"
-msgstr ""
+msgstr "Pour voir les correspondances non valides, utiliser le filtre \"%s\""
 
 # messages-i18n.c:164
 #: gnucash/gnome/dialog-imap-editor.c:367
@@ -2586,9 +2562,8 @@ msgstr "Afficher le bon de dépense"
 
 # messages-i18n.c:190
 #: gnucash/gnome/dialog-invoice.c:2510
-#, fuzzy
 msgid "Open Linked Document:"
-msgstr "Nouveau compte"
+msgstr "Ouvrir le Document lié :"
 
 # messages-i18n.c:231
 #: gnucash/gnome/dialog-invoice.c:2624 gnucash/gnome/dialog-invoice.c:2849
@@ -4010,16 +3985,13 @@ msgstr "Afficher et Supprimer des informations bayésiennes et non bayésiennes"
 
 # messages-i18n.c:346
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
-#, fuzzy
-#| msgid "Transaction amount"
 msgid "_Transaction Linked Documents"
-msgstr "Montant brut de la transaction"
+msgstr "_Documents Liés à des Transactions"
 
 # messages-i18n.c:231
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
-#, fuzzy
 msgid "View all Transaction Linked Documents"
-msgstr "Information de transaction"
+msgstr "Afficher toutes les Transactions avec des Documents liés"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
@@ -4318,13 +4290,12 @@ msgstr "Ouvrir la boîte de dialogue de recherche d'un bon de dépense"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr ""
+msgstr "Documents commerciaux liés"
 
 # messages-i18n.c:231
 #: gnucash/gnome/gnc-plugin-business.c:279
-#, fuzzy
 msgid "View all Linked Business Documents"
-msgstr "Information de transaction"
+msgstr "Afficher tous les Documents commerciaux liés"
 
 # po/guile_strings.txt:264
 #: gnucash/gnome/gnc-plugin-business.c:283
@@ -5243,7 +5214,7 @@ msgstr "Recevoir _paiement de la facture"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:366
 #: gnucash/gnome/gnc-plugin-page-register.c:300
 msgid "_Manage Document Link..."
-msgstr "_Gérer le Document Lié..."
+msgstr "_Gérer le Lien vers un Document..."
 
 # messages-i18n.c:190
 #. Translators: This is a menu item that opens an external file or URI that may
@@ -5254,9 +5225,8 @@ msgstr "_Gérer le Document Lié..."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:346
 #: gnucash/gnome/gnc-plugin-page-invoice.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:304
-#, fuzzy
 msgid "_Open Linked Document"
-msgstr "Nouveau compte"
+msgstr "_Ouvrir le Document lié"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
 #, fuzzy
@@ -5463,9 +5433,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.c:425
 #: gnucash/gnome/gnc-plugin-page-invoice.c:446
 #: gnucash/gnome/gnc-plugin-page-register.c:632
-#, fuzzy
 msgid "Open Linked Document"
-msgstr "Nouveau compte"
+msgstr "Ouvrir le Document lié"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:388
 #, fuzzy
@@ -6758,24 +6727,22 @@ msgid "Make Pdf"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1196
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
 "will be saved in the file %s."
 msgstr ""
-"Ajoute la configuration du rapport courant dans le menu « Rapports pré-"
-"configurés ». Le rapport sera enregistré dans le fichier ~/.gnucash/saved-"
-"reports-2.4. "
+"Met à jour le rapport préconfiguré avec les paramètres du rapport actuel. Le "
+"rapport préconfiguré sera enregistré dans le fichier %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1199
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"Ajoute la configuration du rapport courant dans le menu « Rapports pré-"
-"configurés ». Le rapport sera enregistré dans le fichier ~/.gnucash/saved-"
-"reports-2.4. "
+"Ajoute la configuration du rapport actuel dans le menu « Rapports -> "
+"Rapports préconfigurés ». Le rapport sera enregistré dans le fichier %s."
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
@@ -6800,14 +6767,12 @@ msgstr "Exporte le rapport courant dans un document PDF"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: gnucash/gnome/gnc-plugin-page-report.c:1236
-#, fuzzy
 msgid "Save _Report Configuration"
-msgstr "Enregistrer le _rapport"
+msgstr "Enregistrer le _Rapport préconfiguré"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
-#, fuzzy
 msgid "Save Report Configuration As..."
-msgstr "Enregistrer le rapport sous..."
+msgstr "Enregistrer le Rapport préconfiguré sous..."
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
@@ -7536,14 +7501,12 @@ msgstr "Afficher le rapport ~s"
 # po/guile_strings.txt:138
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
-#, fuzzy
 msgid "Saved Report Configurations"
-msgstr "Options du rapport de ta_xe"
+msgstr "Rapports préconfigurés"
 
 #: gnucash/gnome/report-menus.scm:92
-#, fuzzy
 msgid "Manage and run saved report configurations"
-msgstr "Gère et exécute des rapports personnalisés"
+msgstr "Gère et exécute des rapports préconfigurés"
 
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:52
@@ -11493,15 +11456,13 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:113
-#, fuzzy
 msgid "Name of the report to run\n"
-msgstr "Nom de la société."
+msgstr "Nom du rapport à générer\n"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: gnucash/gnucash-cli.cpp:115
-#, fuzzy
 msgid "Specify export type\n"
-msgstr "2. Sélectionner le type d'importation"
+msgstr "Sélectionner le type d'exportation\n"
 
 # po/guile_strings.txt:70
 #: gnucash/gnucash-cli.cpp:117
@@ -14607,7 +14568,7 @@ msgstr ""
 "Un nombre minimal de colonnes doivent être présentes pour que l'importation "
 "réussisse : il s'agit de Date, Montant, Espace de nom d'origine, Symbole "
 "d'origine et Devise de destination. Si toutes les entrées sont pour le même "
-"Produit /  Devise, vous pouvez les sélectionner et les colonnes seront Date "
+"Produit / Devise, vous pouvez les sélectionner et les colonnes seront Date "
 "et Montant.\n"
 "\n"
 "Plusieurs options existent pour spécifier le délimiteur ainsi qu'une option "
@@ -17193,9 +17154,8 @@ msgstr "<b>2. Seléctionner le type d’importation</b>"
 
 # messages-i18n.c:85
 #: gnucash/gtkbuilder/dialog-custom-report.glade:51
-#, fuzzy
 msgid "Exit the saved report configurations dialog"
-msgstr "Quitter la boîte de dialogue du rapport personnalisé"
+msgstr "Quitter la boîte de dialogue du rapport préconfiguré"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:99
 msgid ""
@@ -17211,6 +17171,11 @@ msgid ""
 "Configuration\" from\n"
 "the Reports menu or tool bar."
 msgstr ""
+"Les rapports préconfigurés sont créés en ouvrant un rapport dans le menu "
+"Rapports, \n"
+"puis en modifiant les options du rapport à votre goût et choisissant « "
+"Enregistrer le rapport préconfiguré » dans \n"
+"le menu Rapports ou la barre d'outils."
 
 # po/guile_strings.txt:46
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
@@ -24275,9 +24240,9 @@ msgid "Have a nice day!"
 msgstr "Bonne journée !"
 
 #: gnucash/python/init.py:118
-#, fuzzy, python-format
+#, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Bienvenue sur GnuCash ~a !"
+msgstr "Bienvenue dans la console GnuCash %s !"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -25688,9 +25653,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/report-core.scm:211
-#, fuzzy
 msgid "Wrong report definition: "
-msgstr "Modifier le nom de la configuration"
+msgstr "Définition de rapport incorrecte : "
 
 #: gnucash/report/report-core.scm:212
 msgid " Report is missing a GUID."
