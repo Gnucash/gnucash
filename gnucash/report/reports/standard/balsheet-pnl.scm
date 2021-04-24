@@ -134,40 +134,6 @@ also show overall period profit & loss."))
 (define networth-barchart-uuid "cbba1696c8c24744848062c7f1cf4a72")
 (define pnl-barchart-uuid "80769921e87943adade887b9835a7685")
 
-(define periodlist
-  (list
-   (list 'disabled
-         (cons 'text (G_ "Disabled")))
-
-   (list 'YearDelta
-         (cons 'text (G_ "Year")))
-
-   (list 'HalfYearDelta
-         (cons 'text (G_ "Half Year")))
-
-   (list 'QuarterDelta
-         (cons 'text (G_ "Quarter")))
-
-   (list 'MonthDelta
-         (cons 'text (G_ "Month")))
-
-   (list 'TwoWeekDelta
-         (cons 'text (G_ "2Week")))
-
-   (list 'WeekDelta
-         (cons 'text (G_ "Week")))))
-
-(define (keylist->vectorlist keylist)
-  (map
-   (lambda (item)
-     (vector
-      (car item)
-      (keylist-get-info keylist (car item) 'text)))
-   keylist))
-
-(define (keylist-get-info keylist key info)
-  (assq-ref (assq-ref keylist key) info))
-
 ;; options generator
 (define (multicol-report-options-generator report-type)
   (let* ((options (gnc:new-options))
@@ -184,7 +150,14 @@ also show overall period profit & loss."))
       gnc:pagename-general optname-period
       "c2" opthelp-period
       'disabled
-      (keylist->vectorlist periodlist)
+      (list
+       (vector 'disabled (G_ "Disabled"))
+       (vector 'YearDelta (G_ "Year"))
+       (vector 'HalfYearDelta (G_ "Half Year"))
+       (vector 'QuarterDelta (G_ "Quarter"))
+       (vector 'MonthDelta (G_ "Month"))
+       (vector 'TwoWeekDelta (G_ "2Week"))
+       (vector 'WeekDelta (G_ "Week")))
       #f
       (lambda (x)
         (let ((x (not (eq? x 'disabled))))
