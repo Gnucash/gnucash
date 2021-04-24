@@ -137,40 +137,32 @@ also show overall period profit & loss."))
 (define periodlist
   (list
    (list 'disabled
-         (cons 'text (G_ "Disabled"))
-         (cons 'tip (G_ "Disabled")))
+         (cons 'text (G_ "Disabled")))
 
    (list 'YearDelta
-         (cons 'text (G_ "Year"))
-         (cons 'tip (G_ "One Year.")))
+         (cons 'text (G_ "Year")))
 
    (list 'HalfYearDelta
-         (cons 'text (G_ "Half Year"))
-         (cons 'tip (G_ "Half Year.")))
+         (cons 'text (G_ "Half Year")))
 
    (list 'QuarterDelta
-         (cons 'text (G_ "Quarter"))
-         (cons 'tip (G_ "One Quarter.")))
+         (cons 'text (G_ "Quarter")))
 
    (list 'MonthDelta
-         (cons 'text (G_ "Month"))
-         (cons 'tip (G_ "One Month.")))
+         (cons 'text (G_ "Month")))
 
    (list 'TwoWeekDelta
-         (cons 'text (G_ "2Week"))
-         (cons 'tip (G_ "Two Weeks.")))
+         (cons 'text (G_ "2Week")))
 
    (list 'WeekDelta
-         (cons 'text (G_ "Week"))
-         (cons 'tip (G_ "One Week.")))))
+         (cons 'text (G_ "Week")))))
 
 (define (keylist->vectorlist keylist)
   (map
    (lambda (item)
      (vector
       (car item)
-      (keylist-get-info keylist (car item) 'text)
-      (keylist-get-info keylist (car item) 'tip)))
+      (keylist-get-info keylist (car item) 'text)))
    keylist))
 
 (define (keylist-get-info keylist key info)

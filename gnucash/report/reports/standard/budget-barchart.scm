@@ -62,24 +62,12 @@
   (N_ "Select exact period that ends the reporting range."))
 
 (define period-options
-  (list (vector 'first
-                (N_ "First")
-                (N_ "The first period of the budget"))
-        (vector 'previous
-                (N_ "Previous")
-                (N_ "Budget period was before current period, according to report evaluation date"))
-        (vector 'current
-                (N_ "Current")
-                (N_ "Current period, according to report evaluation date"))
-        (vector 'next
-                (N_ "Next")
-                (N_ "Next period, according to report evaluation date"))
-        (vector 'last
-                (N_ "Last")
-                (N_ "Last budget period"))
-        (vector 'manual
-                (N_ "Manual period selection")
-                (N_ "Explicitly select period value with spinner below"))))
+  (list (vector 'first (N_ "First budget period"))
+        (vector 'previous (N_ "Previous budget period"))
+        (vector 'current (N_ "Current budget period"))
+        (vector 'next (N_ "Next budget period"))
+        (vector 'last (N_ "Last budget period"))
+        (vector 'manual (N_ "Manual period selection"))))
 
 (define (options-generator)
   (let ((options (gnc:new-options))
