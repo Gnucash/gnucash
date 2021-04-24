@@ -20,6 +20,9 @@
  *                                                                  *
 \********************************************************************/
 
+#include <glib.h>
+#include <glib/gi18n.h>
+
 extern "C" {
 #include <platform.h>
 #if PLATFORM(WINDOWS)
@@ -36,9 +39,6 @@ extern "C" {
 #include <gnc-exp-parser.h>
 
 }
-
-#include <glib.h>
-#include <glib/gi18n.h>
 
 #include <algorithm>
 #include <exception>

@@ -3609,8 +3609,8 @@ xaccAccountConvertBalanceToCurrency(const Account *acc, /* for book */
 gnc_numeric
 xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
         gnc_numeric balance,
-        gnc_commodity *balance_currency,
-        gnc_commodity *new_currency,
+        const gnc_commodity *balance_currency,
+        const gnc_commodity *new_currency,
         time64 date)
 {
     QofBook *book;
@@ -3623,7 +3623,7 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
     book = gnc_account_get_book (acc);
     pdb = gnc_pricedb_get_db (book);
 
-    balance = gnc_pricedb_convert_balance_nearest_price_t64(
+    balance = gnc_pricedb_convert_balance_nearest_before_price_t64 (
                   pdb, balance, balance_currency, new_currency, date);
 
     return balance;
@@ -3666,8 +3666,8 @@ xaccAccountGetXxxBalanceAsOfDateInCurrency(Account *acc, time64 date,
     g_return_val_if_fail(GNC_IS_COMMODITY(report_commodity), gnc_numeric_zero());
 
     priv = GET_PRIVATE(acc);
-    return xaccAccountConvertBalanceToCurrency(
-               acc, fn(acc, date), priv->commodity, report_commodity);
+    return xaccAccountConvertBalanceToCurrencyAsOfDate(
+               acc, fn(acc, date), priv->commodity, report_commodity, date);
 }
 
 /*
@@ -3769,7 +3769,7 @@ xaccAccountGetXxxBalanceInCurrencyRecursive (const Account *acc,
 static gnc_numeric
 xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
     Account *acc, time64 date, xaccGetBalanceAsOfDateFn fn,
-    gnc_commodity *report_commodity, gboolean include_children)
+    const gnc_commodity *report_commodity, gboolean include_children)
 {
     gnc_numeric balance;
 
@@ -3841,8 +3841,9 @@ xaccAccountGetPresentBalanceInCurrency (const Account *acc,
                                         const gnc_commodity *report_commodity,
                                         gboolean include_children)
 {
-    return xaccAccountGetXxxBalanceInCurrencyRecursive (
-               acc, xaccAccountGetPresentBalance, report_commodity,
+    return xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
+               (Account*)acc, gnc_time64_get_today_end (), xaccAccountGetBalanceAsOfDate,
+               report_commodity,
                include_children);
 }
 

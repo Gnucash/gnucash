@@ -39,8 +39,6 @@
 (define optname-to-date (N_ "To"))
 (define optname-sort-by (N_ "Sort By"))
 (define optname-sort-order (N_ "Sort Order"))
-(define optname-report-currency (N_ "Report's currency"))
-(define optname-price-source (N_ "Price Source"))
 (define optname-show-zeros (N_ "Show zero balance items"))
 (define optname-date-driver (N_ "Due or Post Date"))
 
@@ -94,22 +92,16 @@ exist but have no suitable transactions."))
      (gnc:make-multichoice-option
       gnc:pagename-general optname-sort-by "i" (N_ "Sort companies by.") 'name
       (list
-       (vector 'name
-               (N_ "Name")
-               (N_ "Name of the company."))
-       (vector 'total
-               (N_ "Total Owed")
-               (N_ "Total amount owed to/from Company."))
-       (vector 'oldest-bracket
-               (N_ "Bracket Total Owed")
-               (N_ "Amount owed in oldest bracket - if same go to next oldest.")))))
+       (vector 'name (N_ "Name of the company"))
+       (vector 'total (N_ "Total amount owed to/from Company"))
+       (vector 'oldest-bracket (N_ "Bracket Total Owed")))))
 
     (add-option
      (gnc:make-multichoice-option
       gnc:pagename-general optname-sort-order "ia" (N_ "Sort order.") 'increasing
       (list
-       (vector 'increasing (N_ "Ascending") (N_ "Alphabetical order"))
-       (vector 'decreasing (N_ "Descending") (N_ "Reverse alphabetical order")))))
+       (vector 'increasing (N_ "Ascending"))
+       (vector 'decreasing (N_ "Descending")))))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -121,14 +113,8 @@ exist but have no suitable transactions."))
      (gnc:make-multichoice-option
       gnc:pagename-general optname-date-driver "k" (N_ "Leading date.") 'duedate
       (list
-       ;; Should be using standard label for due date?
-       (vector 'duedate
-               (N_ "Due Date")
-               (N_ "Due date is leading."))
-       ;; Should be using standard label for post date?
-       (vector 'postdate
-               (N_ "Post Date")
-               (N_ "Post date is leading.")))))
+       (vector 'duedate (N_ "Due Date"))
+       (vector 'postdate (N_ "Post Date")))))
 
     (gnc:options-set-default-section options "General")
 
@@ -415,12 +401,8 @@ exist but have no suitable transactions."))
      (gnc:make-multichoice-option
       gnc:pagename-display optname-addr-source "a" (N_ "Address source.") 'billing
       (list
-       (vector 'billing
-               (N_ "Billing")
-               (N_ "Address fields from billing address."))
-       (vector 'shipping
-               (N_ "Shipping")
-               (N_ "Address fields from shipping address.")))))
+       (vector 'billing (N_ "Billing address"))
+       (vector 'shipping (N_ "Shipping address")))))
     options))
 
 (define (payables-renderer report-obj)

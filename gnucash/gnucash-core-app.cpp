@@ -80,9 +80,9 @@ gnc_print_unstable_message(void)
 
     std::cerr << bl::translate ("This is a development version. It may or may not work.") << "\n"
               << bl::translate ("Report bugs and other problems to gnucash-devel@gnucash.org") << "\n"
-              /* Translators: {1} will be replaced with a URL*/
+              /* Translators: {1} will be replaced with an URL*/
               << bl::format (bl::translate ("You can also lookup and file bug reports at {1}")) % PACKAGE_BUGREPORT << "\n"
-              /* Translators: {1} will be replaced with a URL*/
+              /* Translators: {1} will be replaced with an URL*/
               << bl::format (bl::translate ("To find the last stable version, please refer to {1}")) % PACKAGE_URL << "\n";
 }
 

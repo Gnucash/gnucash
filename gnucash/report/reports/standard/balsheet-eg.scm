@@ -44,16 +44,6 @@
 (use-modules (srfi srfi-13)) ; for extra string functions
 (use-modules (srfi srfi-9))
 
-(define debugging? #f)
-
-(define (debug . args)
-  (when debugging?
-    (for-each
-     (lambda (arg)
-       (display (if (string? arg) arg (dump arg)))
-       (display " "))
-     args)))
-
 (define (hrule cols) ; in fact just puts in an empty row for spacing
   (display "<tr valign=\"center\"><td colspan=\"")
   (display cols)
@@ -151,9 +141,9 @@
 (define opthelp-report-title (N_ "Title for this report."))
 
 (define optname-date    (N_ "Balance Sheet Date"))
-(define optname-columns (N_ "1- or 2-column report"))
+(define optname-columns (N_ "Report format"))
 (define opthelp-columns
-  (N_ "The balance sheet can be displayed with either 1 or 2 columns. 'auto' means that the layout will be adjusted to fit the width of the page."))
+  (N_ "The balance sheet can be displayed with either 1 or 2 columns."))
 
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
 (define opthelp-depth-limit (N_ "Maximum number of levels in the account tree displayed."))
@@ -225,24 +215,15 @@
     (add-option (gnc:make-multichoice-option
                   display-page optname-columns
                   "a" opthelp-columns 'onecol
-                  (list (vector 'autocols
-                                (N_ "Auto")
-                                (N_ "Adjust the layout to fit the width of the screen or page."))
-                        (vector 'onecol
-                                (N_ "One")
-                                (N_ "Display liabilities and equity below assets."))
-                        (vector 'twocols
-                                (N_ "Two")
-                                (N_ "Display assets on the left, liabilities and equity on the right.")))))
+                  (list (vector 'autocols (N_ "Adjust the layout to fit the width of the screen or page"))
+                        (vector 'onecol (N_ "Display liabilities and equity below assets"))
+                        (vector 'twocols (N_ "Display assets on the left, liabilities and equity on the right")))))
     (add-option (gnc:make-multichoice-option
                   display-page optname-neg-format
                   "b" opthelp-neg-format 'negsign
-                  (list (vector 'negsign
-                                (N_ "Sign")
-                                (N_ "Prefix negative amounts with a minus sign, e.g. -$10.00."))
-                        (vector 'negbrackets
-                                (N_ "Brackets")
-                                (N_ "Surround negative amounts with brackets, e.g. ($100.00).")))))
+                  (list (vector 'negsign (N_ "Sign: -$10.00"))
+                        (vector 'negbrackets (N_ "Brackets: ($10.00)")))))
+
     (add-option (gnc:make-string-option display-page optname-font-family "c"
                                         opthelp-font-family "sans"))
     (add-option (gnc:make-string-option display-page optname-font-size "d"

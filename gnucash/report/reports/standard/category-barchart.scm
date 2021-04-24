@@ -73,7 +73,7 @@ developing over time"))
 (define optname-price-source (N_ "Price Source"))
 
 (define optname-accounts (N_ "Accounts"))
-(define optname-levels (N_ "Show Accounts until level"))
+(define optname-levels (N_ "Levels of Subaccounts"))
 
 (define optname-fullname (N_ "Show long account names"))
 
@@ -116,18 +116,10 @@ developing over time"))
           gnc:pagename-general optname-averaging
           "e" opthelp-averaging
           'None
-          (list (vector 'None
-                        (N_ "No Averaging")
-                        (N_ "Just show the amounts, without any averaging."))
-                (vector 'MonthDelta
-                        (N_ "Monthly")
-                        (N_ "Show the average monthly amount during the reporting period."))
-                (vector 'WeekDelta
-                        (N_ "Weekly")
-                        (N_ "Show the average weekly amount during the reporting period."))
-                (vector 'DayDelta
-                        (N_ "Daily")
-                        (N_ "Show the average daily amount during the reporting period."))))))
+          (list (vector 'None (N_ "No Averaging"))
+                (vector 'MonthDelta (N_ "Monthly"))
+                (vector 'WeekDelta (N_ "Weekly"))
+                (vector 'DayDelta (N_ "Daily"))))))
 
 
     ;; Accounts tab
@@ -147,7 +139,7 @@ developing over time"))
 
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-levels "c"
-     (N_ "Show accounts to this depth and not further.")
+     (N_ "Maximum number of levels in the account tree displayed.")
      2)
 
     ;; Display tab
@@ -159,14 +151,10 @@ developing over time"))
     (add-option
      (gnc:make-multichoice-option
       gnc:pagename-display optname-chart-type
-      "b" "Select which chart type to use"
+      "b" "Select which chart type to use."
       'barchart
-      (list (vector 'barchart
-                    (N_ "Bar Chart")
-                    (N_ "Use bar charts."))
-            (vector 'linechart
-                    (N_ "Line Chart")
-                    (N_ "Use line charts.")))))
+      (list (vector 'barchart (N_ "Bar Chart"))
+            (vector 'linechart (N_ "Line Chart")))))
 
     (add-option
      (gnc:make-simple-boolean-option

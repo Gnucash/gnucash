@@ -134,52 +134,9 @@ also show overall period profit & loss."))
 (define networth-barchart-uuid "cbba1696c8c24744848062c7f1cf4a72")
 (define pnl-barchart-uuid "80769921e87943adade887b9835a7685")
 
-(define periodlist
-  (list
-   (list 'disabled
-         (cons 'text (G_ "Disabled"))
-         (cons 'tip (G_ "Disabled")))
-
-   (list 'YearDelta
-         (cons 'text (G_ "Year"))
-         (cons 'tip (G_ "One Year.")))
-
-   (list 'HalfYearDelta
-         (cons 'text (G_ "Half Year"))
-         (cons 'tip (G_ "Half Year.")))
-
-   (list 'QuarterDelta
-         (cons 'text (G_ "Quarter"))
-         (cons 'tip (G_ "One Quarter.")))
-
-   (list 'MonthDelta
-         (cons 'text (G_ "Month"))
-         (cons 'tip (G_ "One Month.")))
-
-   (list 'TwoWeekDelta
-         (cons 'text (G_ "2Week"))
-         (cons 'tip (G_ "Two Weeks.")))
-
-   (list 'WeekDelta
-         (cons 'text (G_ "Week"))
-         (cons 'tip (G_ "One Week.")))))
-
-(define (keylist->vectorlist keylist)
-  (map
-   (lambda (item)
-     (vector
-      (car item)
-      (keylist-get-info keylist (car item) 'text)
-      (keylist-get-info keylist (car item) 'tip)))
-   keylist))
-
-(define (keylist-get-info keylist key info)
-  (assq-ref (assq-ref keylist key) info))
-
 ;; options generator
 (define (multicol-report-options-generator report-type)
   (let* ((options (gnc:new-options))
-         (book (gnc-get-current-book))
          (add-option
           (lambda (new-option)
             (gnc:register-option options new-option))))
@@ -193,7 +150,14 @@ also show overall period profit & loss."))
       gnc:pagename-general optname-period
       "c2" opthelp-period
       'disabled
-      (keylist->vectorlist periodlist)
+      (list
+       (vector 'disabled (G_ "Disabled"))
+       (vector 'YearDelta (G_ "Year"))
+       (vector 'HalfYearDelta (G_ "Half Year"))
+       (vector 'QuarterDelta (G_ "Quarter"))
+       (vector 'MonthDelta (G_ "Month"))
+       (vector 'TwoWeekDelta (G_ "2Week"))
+       (vector 'WeekDelta (G_ "Week")))
       #f
       (lambda (x)
         (let ((x (not (eq? x 'disabled))))
@@ -244,12 +208,8 @@ also show overall period profit & loss."))
       gnc:pagename-general optname-options-summary
       "d" opthelp-options-summary
       'never
-      (list (vector 'always
-                    (G_ "Always")
-                    (G_ "Always display summary."))
-            (vector 'never
-                    (G_ "Never")
-                    (G_ "Disable report summary.")))))
+      (list (vector 'always (G_ "Always"))
+            (vector 'never (G_ "Never")))))
 
     ;; accounts to work on
     (add-option
@@ -1193,8 +1153,6 @@ also show overall period profit & loss."))
                 (let ((datepair (col-idx->datepair col-idx))
                       (show-orig? (and common-currency #t))
                       (curr (or common-currency book-main-currency))
-                      (delta (or (not (eq? incr 'disabled)) 'MonthDelta))
-                      (price (or price-source 'pricedb-nearest))
                       (accts (if (pair? account) account (list account))))
                   (gnc:make-report-anchor
                    trep-uuid report-obj

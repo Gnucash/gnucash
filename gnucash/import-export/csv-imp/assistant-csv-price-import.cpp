@@ -162,7 +162,7 @@ private:
     GtkWidget       *skip_errors_button;            /**< The widget for Skip error rows*/
     GtkWidget       *csv_button;                    /**< The widget for the CSV button */
     GtkWidget       *fixed_button;                  /**< The widget for the Fixed Width button */
-    GtkWidget       *over_write_cbutton;            /**< The widget for Price Over Write */
+    GtkWidget       *over_write_cbutton;            /**< The widget for Price Overwrite */
     GtkWidget       *commodity_selector;            /**< The widget for commodity combo box */
     GtkWidget       *currency_selector;             /**< The widget for currency combo box */
     GOCharmapSel    *encselector;                   /**< The widget for selecting the encoding */
@@ -935,7 +935,7 @@ CsvImpPriceAssist::preview_settings_save ()
             {
                 auto response = gnc_ok_cancel_dialog (GTK_WINDOW(csv_imp_asst),
                         GTK_RESPONSE_OK,
-                        "%s", _("Setting name already exists, over write?"));
+                        "%s", _("Setting name already exists, overwrite?"));
                 if (response != GTK_RESPONSE_OK)
                     return;
 
@@ -999,7 +999,7 @@ void CsvImpPriceAssist::preview_update_skipped_rows ()
     preview_refresh_table ();
 }
 
-/* Callback triggered when user clicks on Over Write option
+/* Callback triggered when user clicks on Overwrite option
  */
 void CsvImpPriceAssist::preview_over_write (bool over)
 {

@@ -34,6 +34,7 @@
 #define GNC_PREFS_GROUP_STARTUP "dialogs.sxs.since-last-run"
 #define GNC_PREF_RUN_AT_FOPEN   "show-at-file-open"
 #define GNC_PREF_SHOW_AT_FOPEN  "show-notify-window-at-file-open"
+#define GNC_PREF_SET_REVIEW     "review-transactions"
 
 typedef struct _GncSxSlrTreeModelAdapter GncSxSlrTreeModelAdapter;
 typedef struct _GncSxSinceLastRunDialog GncSxSinceLastRunDialog;

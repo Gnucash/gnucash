@@ -22,6 +22,8 @@
  *                                                                  *
  *******************************************************************/
 
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
@@ -30,7 +32,6 @@ extern "C"
 #include "SchedXaction.h"
 #include "FreqSpec.h"
 }
-#include <glib.h>
 
 #include "gnc-xml-helper.h"
 #include "sixtp.h"

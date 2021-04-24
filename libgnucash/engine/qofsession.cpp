@@ -31,6 +31,7 @@
  @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
  @author Copyright (c) 2016 Aaron Laws
    */
+#include <glib.h>
 
 extern "C"
 {
@@ -54,7 +55,6 @@ extern "C"
 static QofLogModule log_module = QOF_MOD_SESSION;
 } //extern 'C'
 
-#include <glib.h>
 #include "qofbook-p.h"
 #include "qof-backend.hpp"
 #include "qofsession.hpp"

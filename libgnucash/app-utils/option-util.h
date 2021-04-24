@@ -107,7 +107,6 @@ int    gnc_option_num_permissible_values (GNCOption *option);
 int    gnc_option_permissible_value_index (GNCOption *option, SCM value);
 SCM    gnc_option_permissible_value (GNCOption *option, int index);
 char * gnc_option_permissible_value_name (GNCOption *option, int index);
-char * gnc_option_permissible_value_description (GNCOption *option, int index);
 
 gboolean gnc_option_show_time (GNCOption *option);
 

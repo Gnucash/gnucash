@@ -1,17 +1,18 @@
 # Greek translation of gnucash-glossary.
 # Copyright (C) 2001 Free Software Foundation.
 # Simos Xenitellis <simos@hellug.gr>, 2001.
-# THANOS SIOURDAKIS <siourdakisthanos@gmail.com>, 2020.
+# THANOS SIOURDAKIS <siourdakisthanos@gmail.com>, 2020, 2021.
 # giorgos georgopoulakis <huskyaek@gmail.com>, 2021.
 # Katerina <katerina.gakou@hotmail.com>, 2021.
+# Eugenia Russell <eugenia.russell2019@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-29 14:26+0000\n"
-"Last-Translator: Katerina <katerina.gakou@hotmail.com>\n"
+"PO-Revision-Date: 2021-04-15 15:26+0000\n"
+"Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
 "Language: el\n"
@@ -159,9 +160,8 @@ msgid "action: fee"
 msgstr "Ενέργεια: πρόστιμο"
 
 #. "transaction comes from interest"
-#, fuzzy
 msgid "action: int"
-msgstr "Τοποθεσία: "
+msgstr "δράση: int"
 
 # # FIX check!
 #. "-"
@@ -289,7 +289,7 @@ msgstr "επιταγή"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
-msgstr ""
+msgstr "έλεγχος και επισκευή, για να"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
 #, fuzzy
@@ -303,16 +303,15 @@ msgstr "προϊόν"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr ""
+msgstr "λίστα εμπορευμάτων"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
-#, fuzzy
 msgid "commodity option: fraction"
-msgstr "άδεια θέση στη βάση"
+msgstr "επιλογή εμπορευμάτων: κλάσμα"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr ""
+msgstr "επιλογή εμπορευμάτων: Σύμβολο"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
 msgid "compound interests"
@@ -320,7 +319,7 @@ msgstr "σύνθετοι τόκοι"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr ""
+msgstr "Πίστωση (στήλη στο μητρώο)"
 
 #. "-"
 msgid "Credit Card"
@@ -366,7 +365,7 @@ msgstr "εύρος ημερομηνιών"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr ""
+msgstr "Χρέωση (στήλη στο μητρώο)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
@@ -374,16 +373,15 @@ msgstr "προεπιλογή"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr ""
+msgstr "κατάθεση (στο παράθυρο διαλόγου συμφωνίας)"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
 msgstr "μείωση της αξίας"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
-#, fuzzy
 msgid "Description (column in register)"
-msgstr "Η περιγραφή περιέχει"
+msgstr "Περιγραφή (στήλη στο μητρώο)"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
 msgid "discount"
@@ -399,7 +397,7 @@ msgstr "σύνδεσμος προς το αρχείο"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "Ηλεκτρονικό Ταχυδρομείο"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -414,9 +412,8 @@ msgid "equity statement"
 msgstr "κατάσταση μεταβολών ιδίων κεφαλαίων"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
-#, fuzzy
 msgid "escrow (account)"
-msgstr "προσωρινά"
+msgstr "μεσεγγύηση (λογαριασμός)"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -436,11 +433,11 @@ msgstr "τύπος αρχείου"
 
 #. "-"
 msgid "financial calculator: interest rate"
-msgstr ""
+msgstr "οικονομικός υπολογιστής: επιτόκιο"
 
 #. "see: payment"
 msgid "financial calculator: payments"
-msgstr ""
+msgstr "οικονομικός υπολογιστής: πληρωμές"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
 msgid "financial statement"
@@ -455,9 +452,8 @@ msgid "gain"
 msgstr "κέρδος"
 
 #. "Name of an automatically created account to get imbalanced transactions back in balance"
-#, fuzzy
 msgid "imbalance"
-msgstr "Ισορροπία"
+msgstr "Χωρίς ισοζύγιο"
 
 #
 #. "Process of extracting data from a non-Gnucash format into a Gnucash file. E.g. QIF Import."
@@ -478,17 +474,16 @@ msgstr "τιμολόγιο"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
-msgstr ""
+msgstr "εργασία"
 
 #
 #. "A book in which a bank, business firm, etc. records its financial accounts"
-#, fuzzy
 msgid "ledger"
-msgstr "Επικεφαλίδα"
+msgstr "Λογιστικό βιβλίο"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
-msgstr ""
+msgstr "υποχρεώσεις/ίδια κεφάλαια"
 
 #. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 msgid "loan"
@@ -504,9 +499,8 @@ msgid "loss"
 msgstr "χασούρα"
 
 #. "name of an automatically created account"
-#, fuzzy
 msgid "Lost Accounts"
-msgstr "Λογαριασμοί"
+msgstr "Χαμένοι λογαριασμοί"
 
 #
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
@@ -515,51 +509,45 @@ msgstr "παρτίδα"
 
 #
 #. "Combine two books into one (see book)."
-#, fuzzy
 msgid "merge, to"
-msgstr "Ανανέωση"
+msgstr "συγχώνευση"
 
 #. "The thing that the scatter plot uses to mark each data point"
-#, fuzzy
 msgid "marker"
-msgstr "Μεγαλύτερο"
+msgstr "δείκτης"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
-msgstr "Μεγαλύτερο"
+msgstr "σήμανση"
 
 #
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
-#, fuzzy
 msgid "MDI modus"
-msgstr "Ρυθμίσεις MDI"
+msgstr "Λειτουργία MDI"
 
 #. "One textfield per split that should help you remember what this split was about."
-#, fuzzy
 msgid "Memo"
-msgstr "Μνήμη"
+msgstr "Υπόμνημα"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
-msgstr ""
+msgstr "Υποθήκη"
 
 #. "Adjustable Rate Mortgage"
 msgid "mortgage: ARM"
-msgstr ""
+msgstr "υποθήκη: ARM"
 
 #. "Fixed Rate Mortgage"
 msgid "mortgage: FRM"
-msgstr ""
+msgstr "υποθήκη: FRM"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
 msgstr "εθνικό νόμισμα"
 
 #. "(of money) remaining when nothing more is to be taken away"
-#, fuzzy
 msgid "net"
-msgstr "επόμενο"
+msgstr "καθαρά"
 
 #. "net total of all assets"
 msgid "net assets"
@@ -575,32 +563,28 @@ msgid "net worth"
 msgstr "καθαρή θέση"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
-#, fuzzy
 msgid "notes (register)"
-msgstr "Δεν ήταν δυνατή η εγγραφή στο OAF"
+msgstr "σημειώσεις (μητρώο)"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr ""
+msgstr "Αριθμός (στήλη στο μητρώο)"
 
 #. "to make accessible"
-#, fuzzy
 msgid "open, to"
-msgstr "Άνοιγμα αρχείου καταγραφών"
+msgstr "ανοιχτός σε"
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
-#, fuzzy
 msgid "opening balance"
-msgstr "Σφάλμα ανοίγματος αρχείου"
+msgstr "ισολογισμός έναρξης"
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
-#, fuzzy
 msgid "options"
-msgstr "επιλογές:\n"
+msgstr "επιλογές"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
-msgstr "Παραγγελία"
+msgstr "παραγγελία"
 
 #. "Name of an automatically created account that holds splits that have no account."
 #, fuzzy
@@ -609,64 +593,56 @@ msgstr "Κορεάτικα"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "ιδιοκτήτης (λογαριασμού, τιμολογίου ή κουπονιού εξόδων)"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
-msgstr ""
+msgstr "φράση πρόσβασης"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
-msgstr ""
+msgstr "Υποχρεώσεις / Απαιτήσεις"
 
 #. "A person to whom sth is paid"
-#, fuzzy
 msgid "payee"
-msgstr "σελίδα"
+msgstr "δικαιούχος"
 
 #. "A person who pays or who has to pay for sth"
-#, fuzzy
 msgid "payer"
-msgstr "Στρώμα"
+msgstr "πληρωτής"
 
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
-#, fuzzy
 msgid "payment"
-msgstr "πατρικά"
+msgstr "πληρωμή"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr ""
+msgstr "Σύμβολο κράτησης θέσης"
 
 #. "A set of investments owned by a person"
-#, fuzzy
 msgid "portfolio"
-msgstr "Εξαγωγή καταγραφών"
+msgstr "χαρτοφυλάκιο"
 
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "Κλείσιμο καταγραφών"
+msgstr "δημοσίευση, σε"
 
 #
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
-#, fuzzy
 msgid "preferences"
-msgstr "Προτιμήσεις"
+msgstr "προτιμήσεις"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "Ο_νόματα Συναρτήσεων"
+msgstr "κύρια πληρωμή"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
-msgstr ""
+msgstr "τιμή (σε διάσπαση)"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
-#, fuzzy
 msgid "price type: ask"
-msgstr "Τύπος αρχείου:"
+msgstr "είδος τιμής: ελάχιστη τιμή προσφοράς"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 #, fuzzy
@@ -674,42 +650,37 @@ msgid "price type: bid"
 msgstr "Τύπος αρχείου:"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
-#, fuzzy
 msgid "price: quotes"
-msgstr "Απόκρυψη Σημειώματων"
+msgstr "τιμή: προσφορές"
 
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
-#, fuzzy
 msgid "profit"
-msgstr "στιγμή"
+msgstr "κέρδος"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr ""
+msgstr "Κέρδος & Ζημία"
 
 #. "-"
 msgid "quick-fill"
-msgstr ""
+msgstr "γρήγορη πλήρωση"
 
 #
 #. "-"
-#, fuzzy
 msgid "rebalance, to (a transaction)"
-msgstr "Εκκίνηση νέας διενέργειας"
+msgstr "επανεξισορρόπηση, σε (συναλλαγή)"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
-msgstr ""
+msgstr "να συμφωνήσουν με"
 
 #. "-"
-#, fuzzy
 msgid "record keeping"
-msgstr "Σε ηχογράφηση"
+msgstr "τήρηση αρχείων"
 
 #. "A list of items; a book containing such a list"
-#, fuzzy
 msgid "register"
-msgstr "Εγγραφή"
+msgstr "μητρώο"
 
 #
 #. "A transaction that is divided into two or more parts"
@@ -719,19 +690,19 @@ msgstr "Εκκίνηση νέας διενέργειας"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr ""
+msgstr "καταχώρηση μητρώου: διαχωρισμός αποθεμάτων"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr ""
+msgstr "μητρώο: καθολικό αυτόματης διαίρεσης"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr ""
+msgstr "μητρώο: βασικό καθολικό"
 
 #. "another form of register"
 msgid "register: general ledger"
-msgstr ""
+msgstr "μητρώο: γενικό καθολικό"
 
 #
 #. "another form of register"
@@ -754,9 +725,8 @@ msgid "report form: Vertical Form"
 msgstr ""
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
-#, fuzzy
 msgid "Retained Earnings"
-msgstr "Απομένουν"
+msgstr "Διατηρούμενα Κέρδη"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 #, fuzzy
@@ -765,18 +735,16 @@ msgstr "Η περιγραφή περιέχει"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "πωλήσεις"
 
 #
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
-#, fuzzy
 msgid "save, to (to a file)"
-msgstr "Αποθήκευση της αναφοράς σε αρχείο"
+msgstr "αποθήκευση (σε αρχείο)"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
-#, fuzzy
 msgid "Scheduled Transaction"
-msgstr "Διενέργειες"
+msgstr "Προγραμματισμένη Συναλλαγή"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
@@ -792,14 +760,12 @@ msgid "Share Balance (register)"
 msgstr ""
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
-#, fuzzy
 msgid "shares"
-msgstr "Διαμοιραζόμενα"
+msgstr "μετοχές"
 
 #. "(often: of a quote) A place from which something comes or is obtained."
-#, fuzzy
 msgid "source"
-msgstr "Πόρος"
+msgstr "πηγή"
 
 #. "One of the two or several parts a transaction is divided into"
 #, fuzzy
@@ -825,87 +791,77 @@ msgstr "φορολογική ενημερότητα"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 msgid "tax type: income tax"
-msgstr ""
+msgstr "είδος φόρου: φόρος εισοδήματος"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "τύπος φόρου: φόρος επί των πωλήσεων"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "είδος φόρου: GST"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "είδος φόρου: ΦΠΑ"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
-#, fuzzy
 msgid "template"
-msgstr "Πρότυπο"
+msgstr "πρότυπο"
 
 #. "see: date range"
-#, fuzzy
 msgid "time period"
-msgstr "ώρα"
+msgstr "χρονική περίοδος"
 
 #
 #. "as abbreviation for Total"
-#, fuzzy
 msgid "Tot"
-msgstr "Πρoς"
+msgstr "Σύνολο"
 
 #. "The full number or amount: total of some balances, of any account's running balance etc."
 msgid "total"
 msgstr "σύνολο"
 
 #. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
-#, fuzzy
 msgid "transaction"
-msgstr "Διενέργειες"
+msgstr "Συναλλαγή"
 
 #
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
-#, fuzzy
 msgid "transaction state: cleared"
-msgstr "Έναρξη διενέργειας"
+msgstr "κατάσταση συναλλαγής: εκκαθαρισμένο"
 
 #
 #. "-"
-#, fuzzy
 msgid "transaction state: frozen"
-msgstr "Έναρξη διενέργειας"
+msgstr "κατάσταση συναλλαγής: παγωμένη"
 
 #
 #. "A transaction that was reconciled with the bank's statement."
-#, fuzzy
 msgid "transaction state: reconciled"
-msgstr "Έναρξη διενέργειας"
+msgstr "κατάσταση συναλλαγής: συμφωνία"
 
 #
 #. "A transaction that is void i.e. not valid (anymore)."
-#, fuzzy
 msgid "transaction state: voided"
-msgstr "Έναρξη διενέργειας"
+msgstr "κατάσταση συναλλαγής: ακυρωμένη"
 
 #
 #. "1. The action of transferring sth. 2. see: credit transfer"
-#, fuzzy
 msgid "transfer (noun)"
-msgstr "Μεταφορά"
+msgstr "μεταφορά"
 
 #. "The account where an amount is transferred to"
-#, fuzzy
 msgid "transfer account"
-msgstr "προσωρινά"
+msgstr "λογαριασμός μεταφοράς"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr ""
+msgstr "μεταφορά, σε (γραμμή εργαλείων καταχώρησης)"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr ""
+msgstr "δοκιμαστικό ισοζύγιο (έκθεση)"
 
 #
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
@@ -913,9 +869,8 @@ msgid "type"
 msgstr "είδος"
 
 #. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
-#, fuzzy
 msgid "units"
-msgstr "&Μονάδες:"
+msgstr "μονάδες"
 
 #. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"
@@ -923,20 +878,19 @@ msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr ""
+msgstr "τιμή (σε διάσπαση)"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
-msgstr ""
+msgstr "προμηθευτής"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
-#, fuzzy
 msgid "voucher"
-msgstr "Πόρος"
+msgstr "κουπόνι"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr ""
+msgstr "απόσυρση (στο παράθυρο διαλόγου συμφωνίας)"
 
 #, fuzzy
 #~ msgid "invoice owner"

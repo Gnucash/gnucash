@@ -155,7 +155,6 @@ in the Options panel."))
   ;;  'sortkey             - sort parameter sent via qof-query
   ;;  'split-sortvalue     - function retrieves number/string for comparing splits
   ;;  'text                - text displayed in Display tab
-  ;;  'tip                 - tooltip displayed in Display tab
   ;;  'renderer-fn         - helper function to select subtotal/subheading renderer
   ;;       behaviour varies according to sortkey.
   ;;       account-types converts split->account
@@ -167,28 +166,24 @@ in the Options panel."))
               (cons 'split-sortvalue
                     (compose gnc-account-get-full-name xaccSplitGetAccount))
               (cons 'text (G_ "Account Name"))
-              (cons 'tip (G_ "Sort & subtotal by account name."))
               (cons 'renderer-fn xaccSplitGetAccount))
 
         (list 'account-code
               (cons 'sortkey (list SPLIT-ACCOUNT ACCOUNT-CODE-))
               (cons 'split-sortvalue (compose xaccAccountGetCode xaccSplitGetAccount))
               (cons 'text (G_ "Account Code"))
-              (cons 'tip (G_ "Sort & subtotal by account code."))
               (cons 'renderer-fn xaccSplitGetAccount))
 
         (list 'date
               (cons 'sortkey (list SPLIT-TRANS TRANS-DATE-POSTED))
               (cons 'split-sortvalue (compose xaccTransGetDate xaccSplitGetParent))
               (cons 'text (G_ "Date"))
-              (cons 'tip (G_ "Sort by date."))
               (cons 'renderer-fn #f))
 
         (list 'reconciled-date
               (cons 'sortkey (list SPLIT-DATE-RECONCILED))
               (cons 'split-sortvalue xaccSplitGetDateReconciled)
               (cons 'text (G_ "Reconciled Date"))
-              (cons 'tip (G_ "Sort by the Reconciled Date."))
               (cons 'renderer-fn #f))
 
         (list 'reconciled-status
@@ -197,7 +192,6 @@ in the Options panel."))
                                        (length (memv (xaccSplitGetReconcile s)
                                                      (map car reconcile-list)))))
               (cons 'text (G_ "Reconciled Status"))
-              (cons 'tip (G_ "Sort by the Reconciled Status"))
               (cons 'renderer-fn (lambda (s)
                                    (assv-ref reconcile-list
                                              (xaccSplitGetReconcile s)))))
@@ -206,28 +200,24 @@ in the Options panel."))
               (cons 'sortkey (list QUERY-DEFAULT-SORT))
               (cons 'split-sortvalue #f)
               (cons 'text (G_ "Register Order"))
-              (cons 'tip (G_ "Sort as in the register."))
               (cons 'renderer-fn #f))
 
         (list 'corresponding-acc-name
               (cons 'sortkey (list SPLIT-CORR-ACCT-NAME))
               (cons 'split-sortvalue xaccSplitGetCorrAccountFullName)
               (cons 'text (G_ "Other Account Name"))
-              (cons 'tip (G_ "Sort by account transferred from/to's name."))
               (cons 'renderer-fn (compose xaccSplitGetAccount xaccSplitGetOtherSplit)))
 
         (list 'corresponding-acc-code
               (cons 'sortkey (list SPLIT-CORR-ACCT-CODE))
               (cons 'split-sortvalue xaccSplitGetCorrAccountCode)
               (cons 'text (G_ "Other Account Code"))
-              (cons 'tip (G_ "Sort by account transferred from/to's code."))
               (cons 'renderer-fn (compose xaccSplitGetAccount xaccSplitGetOtherSplit)))
 
         (list 'amount
               (cons 'sortkey (list SPLIT-VALUE))
               (cons 'split-sortvalue xaccSplitGetValue)
               (cons 'text (G_ "Amount"))
-              (cons 'tip (G_ "Sort by amount."))
               (cons 'renderer-fn #f))
 
         (list 'description
@@ -235,7 +225,6 @@ in the Options panel."))
               (cons 'split-sortvalue (compose xaccTransGetDescription
                                               xaccSplitGetParent))
               (cons 'text (G_ "Description"))
-              (cons 'tip (G_ "Sort by description."))
               (cons 'renderer-fn (compose xaccTransGetDescription xaccSplitGetParent)))
 
         (if split-action?
@@ -243,42 +232,36 @@ in the Options panel."))
                   (cons 'sortkey (list SPLIT-ACTION))
                   (cons 'split-sortvalue xaccSplitGetAction)
                   (cons 'text (G_ "Number/Action"))
-                  (cons 'tip (G_ "Sort by check number/action."))
                   (cons 'renderer-fn #f))
 
             (list 'number
                   (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
                   (cons 'split-sortvalue (compose xaccTransGetNum xaccSplitGetParent))
                   (cons 'text (G_ "Number"))
-                  (cons 'tip (G_ "Sort by check/transaction number."))
                   (cons 'renderer-fn #f)))
 
         (list 't-number
               (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
               (cons 'split-sortvalue (compose xaccTransGetNum xaccSplitGetParent))
               (cons 'text (G_ "Transaction Number"))
-              (cons 'tip (G_ "Sort by transaction number."))
               (cons 'renderer-fn #f))
 
         (list 'memo
               (cons 'sortkey (list SPLIT-MEMO))
               (cons 'split-sortvalue xaccSplitGetMemo)
               (cons 'text (G_ "Memo"))
-              (cons 'tip (G_ "Sort by memo."))
               (cons 'renderer-fn xaccSplitGetMemo))
 
         (list 'notes
               (cons 'sortkey #f)
               (cons 'split-sortvalue (compose xaccTransGetNotes xaccSplitGetParent))
               (cons 'text (G_ "Notes"))
-              (cons 'tip (G_ "Sort by transaction notes."))
               (cons 'renderer-fn (compose xaccTransGetNotes xaccSplitGetParent)))
 
         (list 'none
               (cons 'sortkey '())
               (cons 'split-sortvalue #f)
               (cons 'text (G_ "None"))
-              (cons 'tip (G_ "Do not sort."))
               (cons 'renderer-fn #f))))
 
 (define (time64-year t64)
@@ -302,7 +285,6 @@ in the Options panel."))
   ;; Defines the different date sorting keys, as an association-list. Each entry:
   ;;  'split-sortvalue     - func retrieves number/string used for comparing splits
   ;;  'text                - text displayed in Display tab
-  ;;  'tip                 - tooltip displayed in Display tab
   ;;  'renderer-fn         - func retrieves string for subtotal/subheading renderer
   ;;         #f means the date sortkey is not grouped
   ;;         otherwise it converts split->string
@@ -311,21 +293,18 @@ in the Options panel."))
          (cons 'split-sortvalue #f)
          (cons 'date-sortvalue #f)
          (cons 'text (G_ "None"))
-         (cons 'tip (G_ "None."))
          (cons 'renderer-fn #f))
 
    (list 'daily
          (cons 'split-sortvalue (lambda (s) (time64-day (split->time64 s))))
          (cons 'date-sortvalue time64-day)
          (cons 'text (G_ "Daily"))
-         (cons 'tip (G_ "Daily."))
          (cons 'renderer-fn (lambda (s) (qof-print-date (split->time64 s)))))
 
    (list 'weekly
          (cons 'split-sortvalue (lambda (s) (time64-week (split->time64 s))))
          (cons 'date-sortvalue time64-week)
          (cons 'text (G_ "Weekly"))
-         (cons 'tip (G_ "Weekly."))
          (cons 'renderer-fn (compose gnc:date-get-week-year-string
                                      gnc-localtime
                                      split->time64)))
@@ -334,7 +313,6 @@ in the Options panel."))
          (cons 'split-sortvalue (lambda (s) (time64-month (split->time64 s))))
          (cons 'date-sortvalue time64-month)
          (cons 'text (G_ "Monthly"))
-         (cons 'tip (G_ "Monthly."))
          (cons 'renderer-fn (compose gnc:date-get-month-year-string
                                      gnc-localtime
                                      split->time64)))
@@ -343,7 +321,6 @@ in the Options panel."))
          (cons 'split-sortvalue (lambda (s) (time64-quarter (split->time64 s))))
          (cons 'date-sortvalue time64-quarter)
          (cons 'text (G_ "Quarterly"))
-         (cons 'tip (G_ "Quarterly."))
          (cons 'renderer-fn (compose gnc:date-get-quarter-year-string
                                      gnc-localtime
                                      split->time64)))
@@ -352,7 +329,6 @@ in the Options panel."))
          (cons 'split-sortvalue (lambda (s) (time64-year (split->time64 s))))
          (cons 'date-sortvalue time64-year)
          (cons 'text (G_ "Yearly"))
-         (cons 'tip (G_ "Yearly."))
          (cons 'renderer-fn (compose gnc:date-get-year-string
                                      gnc-localtime
                                      split->time64)))))
@@ -360,49 +336,40 @@ in the Options panel."))
 (define filter-list
   (list
    (list 'none
-         (cons 'text (G_ "None"))
-         (cons 'tip (G_ "Do not do any filtering.")))
+         (cons 'text (G_ "Do not do any filtering")))
 
    (list 'include
-         (cons 'text (G_ "Include Transactions to/from Filter Accounts"))
-         (cons 'tip (G_ "Include transactions to/from filter accounts only.")))
+         (cons 'text (G_ "Include Transactions to/from Filter Accounts")))
 
    (list 'exclude
-         (cons 'text (G_ "Exclude Transactions to/from Filter Accounts"))
-         (cons 'tip (G_ "Exclude transactions to/from all filter accounts.")))))
+         (cons 'text (G_ "Exclude Transactions to/from Filter Accounts")))))
 
 (define show-void-list
   (list
    (list 'non-void-only
          (cons 'how (logand CLEARED-ALL (lognot CLEARED-VOIDED)))
-         (cons 'text (G_ "Non-void only"))
-         (cons 'tip (G_ "Show only non-voided transactions.")))
+         (cons 'text (G_ "Non-void only")))
 
    (list 'void-only
          (cons 'how CLEARED-VOIDED)
-         (cons 'text (G_ "Void only"))
-         (cons 'tip (G_ "Show only voided transactions.")))
+         (cons 'text (G_ "Void only")))
 
    (list 'both
          (cons 'how CLEARED-ALL)
-         (cons 'text (G_ "Both"))
-         (cons 'tip (G_ "Show both (and include void transactions in totals).")))))
+         (cons 'text (G_ "Both (and include void transactions in totals)")))))
 
 (define show-closing-list
   (list
    (list 'exclude-closing
          (cons 'text (G_ "Exclude closing transactions"))
-         (cons 'tip (G_ "Exclude closing transactions from report."))
          (cons 'closing-match #f))
 
    (list 'include-both
          (cons 'text (G_ "Show both closing and regular transactions"))
-         (cons 'tip (G_ "Show both (and include closing transactions in totals)."))
          (cons 'closing-match 'both))
 
    (list 'closing-only
          (cons 'text (G_ "Show closing transactions only"))
-         (cons 'tip (G_ "Show only closing transactions."))
          (cons 'closing-match #t))))
 
 (define reconcile-status-list
@@ -412,53 +379,42 @@ in the Options panel."))
   ;;      (logior CLEARED-NO CLEARED-CLEARED) for unreconciled & cleared
   (list
    (list 'all
-         (cons 'text (G_ "All"))
-         (cons 'tip (G_ "Show All Transactions"))
+         (cons 'text (G_ "Show All Transactions"))
          (cons 'filter-types CLEARED-ALL))
 
    (list 'unreconciled
-         (cons 'text (G_ "Unreconciled"))
-         (cons 'tip (G_ "Unreconciled only"))
+         (cons 'text (G_ "Unreconciled only"))
          (cons 'filter-types CLEARED-NO))
 
    (list 'cleared
-         (cons 'text (G_ "Cleared"))
-         (cons 'tip (G_ "Cleared only"))
+         (cons 'text (G_ "Cleared only"))
          (cons 'filter-types CLEARED-CLEARED))
 
    (list 'reconciled
-         (cons 'text (G_ "Reconciled"))
-         (cons 'tip (G_ "Reconciled only"))
+         (cons 'text (G_ "Reconciled only"))
          (cons 'filter-types CLEARED-RECONCILED))))
 
 
 (define ascending-list
   (list
    (list 'ascend
-         (cons 'text (G_ "Ascending"))
-         (cons 'tip (G_ "Smallest to largest, earliest to latest.")))
+         (cons 'text (G_ "Ascending")))
    (list 'descend
-         (cons 'text (G_ "Descending"))
-         (cons 'tip (G_ "Largest to smallest, latest to earliest.")))))
+         (cons 'text (G_ "Descending")))))
 
 (define sign-reverse-list
   (list
    (list 'global
          (cons 'text (G_ "Use Global Preference"))
-         (cons 'tip (G_ "Use reversing option specified in global preference."))
          (cons 'acct-types #f))
    (list 'none
-         (cons 'text (G_ "None"))
-         (cons 'tip (G_ "Don't change any displayed amounts."))
+         (cons 'text (G_ "Don't change any displayed amounts"))
          (cons 'acct-types '()))
    (list 'income-expense
          (cons 'text (G_ "Income and Expense"))
-         (cons 'tip (G_ "Reverse amount display for Income and Expense Accounts."))
          (cons 'acct-types (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)))
    (list 'credit-accounts
          (cons 'text (G_ "Credit Accounts"))
-         (cons 'tip (G_ "Reverse amount display for Liability, Payable, Equity, \
-Credit Card, and Income accounts."))
          (cons 'acct-types (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE
                                  ACCT-TYPE-EQUITY ACCT-TYPE-CREDIT
                                  ACCT-TYPE-INCOME)))))
@@ -471,8 +427,7 @@ Credit Card, and Income accounts."))
    (lambda (item)
      (vector
       (car item)
-      (keylist-get-info keylist (car item) 'text)
-      (keylist-get-info keylist (car item) 'tip)))
+      (keylist-get-info keylist (car item) 'text)))
    keylist))
 
 (define (SUBTOTAL-ENABLED? sortkey split-action?)
@@ -593,15 +548,9 @@ Credit Card, and Income accounts."))
     ;; This is an alist of conditions for displaying the infobox
     ;; 'no-match for empty-report
     ;; 'match for generated report
-    (list (vector 'no-match
-                  (G_ "If no transactions matched")
-                  (G_ "Display summary if no transactions were matched."))
-          (vector 'always
-                  (G_ "Always")
-                  (G_ "Always display summary."))
-          (vector 'never
-                  (G_ "Never")
-                  (G_ "Disable report summary.")))))
+    (list (vector 'no-match (G_ "If no transactions matched"))
+          (vector 'always (G_ "Always"))
+          (vector 'never (G_ "Never")))))
 
   ;; Filtering Options
 
@@ -1026,12 +975,8 @@ be excluded from periodic reporting.")
       gnc:pagename-display optname-detail-level
       "h" (G_ "Amount of detail to display per transaction.")
       disp-detail-level?
-      (list (vector 'multi-line
-                    (G_ "Multi-Line")
-                    (G_ "Display all splits in a transaction on a separate line."))
-            (vector 'single
-                    (G_ "Single")
-                    (G_ "Display one line per transaction, merging multiple splits where required.")))
+      (list (vector 'multi-line (G_ "One split per line"))
+            (vector 'single (G_ "One transaction per line")))
       #f
       (lambda (x)
         (set! disp-detail-level? x)
@@ -1043,9 +988,9 @@ be excluded from periodic reporting.")
       "m" (G_ "Display the amount?")
       amount-value
       (list
-       (vector 'none   (G_ "None") (G_ "No amount display."))
-       (vector 'single (G_ "Single") (G_ "Single Column Display."))
-       (vector 'double (G_ "Double") (G_ "Two Column Display.")))
+       (vector 'none   (G_ "Hide"))
+       (vector 'single (G_ "Single Column"))
+       (vector 'double (G_ "Two Columns")))
       #f
       (lambda (x)
         (set! amount-value x)

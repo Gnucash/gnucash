@@ -126,9 +126,9 @@
       gnc:pagename-display (N_ "Plot Type")
       "c" (N_ "The type of graph to generate.") (list 'AvgBalPlot)
       (list 
-       (vector 'AvgBalPlot (N_ "Average") (N_ "Average Balance."))
-       (vector 'GainPlot (N_ "Profit") (N_ "Profit (Gain minus Loss)."))
-       (vector 'GLPlot (N_ "Gain/Loss") (N_ "Gain And Loss.")))))
+       (vector 'AvgBalPlot (N_ "Average"))
+       (vector 'GainPlot (N_ "Profit"))
+       (vector 'GLPlot (N_ "Gain/Loss")))))
 
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 
@@ -401,8 +401,7 @@
               (let ((barchart (gnc:make-html-chart))
                     (height (get-option gnc:pagename-display optname-plot-height))
                     (width (get-option gnc:pagename-display optname-plot-width))
-                    (col-labels '())
-                    (col-colors '()))
+                    (col-labels '()))
                 (if (memq 'AvgBalPlot plot-type)
                     (let
                         ((number-data

@@ -97,7 +97,7 @@
     (set-option income-options gnc:pagename-general "Price Source" 'pricedb-nearest)
     (set-option income-options gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
     (set-option income-options gnc:pagename-accounts "Accounts" (list my-income-account))
-    (set-option income-options gnc:pagename-accounts "Show Accounts until level"  'all)
+    (set-option income-options gnc:pagename-accounts "Levels of Subaccounts"  'all)
 
     (let ((sxml (gnc:options->sxml uuid income-options "test-standard-category-report"
                                    "single-txn-test" #:strip-tag "script")))
@@ -140,7 +140,7 @@
     (set-option income-options gnc:pagename-general "Price Source" 'pricedb-nearest)
     (set-option income-options gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
     (set-option income-options gnc:pagename-accounts "Accounts" (list my-income-account))
-    (set-option income-options gnc:pagename-accounts "Show Accounts until level"  'all)
+    (set-option income-options gnc:pagename-accounts "Levels of Subaccounts"  'all)
 
     (test-begin "multiplier test")
     (set-option income-options gnc:pagename-general "Show Average" 'WeekDelta)
@@ -230,7 +230,7 @@
     (set-option expense-options gnc:pagename-general "Price Source" 'pricedb-nearest)
     (set-option expense-options gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
     (set-option expense-options gnc:pagename-accounts "Accounts" leaf-expense-accounts)
-    (set-option expense-options gnc:pagename-accounts "Show Accounts until level" 2)
+    (set-option expense-options gnc:pagename-accounts "Levels of Subaccounts" 2)
     (let ((sxml (gnc:options->sxml expense-report-uuid expense-options "test-standard-category-report"
                                    "multi--test" #:strip-tag "script")))
       (test-begin "multi-acct-test")
@@ -267,7 +267,7 @@
       (set-option asset-options gnc:pagename-general "Price Source" 'pricedb-nearest)
       (set-option asset-options gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
       (set-option asset-options gnc:pagename-accounts "Accounts" (list my-asset-account))
-      (set-option asset-options gnc:pagename-accounts "Show Accounts until level"  'all)
+      (set-option asset-options gnc:pagename-accounts "Levels of Subaccounts"  'all)
       (let ((sxml (gnc:options->sxml uuid asset-options "test-standard-category-report"
                                      "asset-test" #:strip-tag "script")))
         (test-begin "asset-renderer")
@@ -309,7 +309,7 @@
     (set-option liability-options gnc:pagename-general "Price Source" 'pricedb-nearest)
     (set-option liability-options gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
     (set-option liability-options gnc:pagename-accounts "Accounts" (list liabil-acc))
-    (set-option liability-options gnc:pagename-accounts "Show Accounts until level"  'all)
+    (set-option liability-options gnc:pagename-accounts "Levels of Subaccounts"  'all)
 
     (let ((sxml (gnc:options->sxml uuid liability-options "test-standard-category-report"
                                    "liability-test" #:strip-tag "script")))

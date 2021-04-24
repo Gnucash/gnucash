@@ -992,6 +992,9 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
     dialog->editing_model = gnc_sx_slr_tree_model_adapter_new (sx_instances);
     dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "review_txn_toggle"));
 
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(dialog->review_created_txns_toggle),
+                                  gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SET_REVIEW));
+
     dialog->created_txns = auto_created_txn_guids;
 
     {
@@ -1167,6 +1170,9 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog
             variable_col = gtk_tree_view_get_column (app_dialog->instance_view, variable_view_column);
 
             gtk_tree_view_set_cursor (app_dialog->instance_view, variable_path, variable_col, start_editing);
+
+            gtk_tree_view_scroll_to_cell (app_dialog->instance_view, variable_path, variable_col,
+                                          TRUE, 0.5, 0.5);
 
             gtk_tree_path_free (variable_path);
             g_list_foreach (unbound_variables, (GFunc)g_free, NULL);

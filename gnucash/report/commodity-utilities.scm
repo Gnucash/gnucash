@@ -741,6 +741,18 @@
              (gnc:gnc-monetary-commodity foreign)
              domestic (time64CanonicalDayTime date))))))
 
+(define (gnc:exchange-by-pricedb-nearest-before foreign domestic date)
+  (and (gnc:gnc-monetary? foreign) date
+       (or (gnc:exchange-by-euro foreign domestic date)
+           (gnc:exchange-if-same foreign domestic)
+           (gnc:make-gnc-monetary
+            domestic
+            (gnc-pricedb-convert-balance-nearest-before-price-t64
+             (gnc-pricedb-get-db (gnc-get-current-book))
+             (gnc:gnc-monetary-amount foreign)
+             (gnc:gnc-monetary-commodity foreign)
+             domestic (time64CanonicalDayTime date))))))
+
 ;; Exchange by the nearest price from pricelist. This function takes
 ;; the <gnc-monetary> 'foreign' amount, the <gnc:commodity*>
 ;; 'domestic' commodity, a <gnc:time64> 'date' and the
@@ -783,6 +795,7 @@
                          (gnc:make-exchange-alist
                           report-currency to-date-tp)))
     ((pricedb-latest) gnc:exchange-by-pricedb-latest)
+    ((pricedb-before) (cut gnc:exchange-by-pricedb-nearest-before <> <> to-date-tp))
     ((pricedb-nearest) (lambda (foreign domestic)
                          (gnc:exchange-by-pricedb-nearest
                           foreign domestic to-date-tp)))
@@ -805,6 +818,8 @@
   (case source
     ((pricedb-nearest) (cut gnc-pricedb-get-nearest-price pdb <> target-curr
                             (time64CanonicalDayTime date)))
+    ((pricedb-before) (cut gnc-pricedb-get-nearest-before-price pdb <> target-curr
+                           (time64CanonicalDayTime date)))
     ((pricedb-latest)  (cut gnc-pricedb-get-latest-price pdb <> target-curr))
     (else
      (lambda (commodity)
@@ -848,6 +863,7 @@
                           (lambda (foreign domestic date)
                             (gnc:exchange-by-pricealist-nearest
                              pricealist foreign domestic date))))
+    ((pricedb-before) gnc:exchange-by-pricedb-nearest-before)
     ((pricedb-latest) (lambda (foreign domestic date)
                         (gnc:exchange-by-pricedb-latest foreign domestic)))
     ((pricedb-nearest) gnc:exchange-by-pricedb-nearest)

@@ -89,7 +89,6 @@
 (export gnc:option-generate-restore-form)
 (export gnc:option-get-value)
 (export gnc:option-getter)
-(export gnc:option-index-get-description)
 (export gnc:option-index-get-name)
 (export gnc:option-index-get-value)
 (export gnc:option-kvp->scm)
@@ -204,8 +203,7 @@ the option '~a'."))
          ;; Function 3: taking one argument, a non-negative integer,
          ;; that returns the string matching the nth choice
          ;;
-         ;; Function 4: takes one argument and returns the description
-         ;; containing the nth choice
+         ;; Function 4: #f, this was the individual tool tip and not used now
          ;;
          ;; Function 5: giving a possible value and returning the index
          ;; if an option doesn't use these,  this should just be a #f
@@ -296,11 +294,6 @@ the option '~a'."))
 (define (gnc:option-index-get-name option index)
   (let* ((option-data-fns (gnc:option-data-fns option))
          (name-fn (vector-ref option-data-fns 2)))
-    (name-fn index)))
-
-(define (gnc:option-index-get-description option index)
-  (let* ((option-data-fns (gnc:option-data-fns option))
-         (name-fn (vector-ref option-data-fns 3)))
     (name-fn index)))
 
 (define (gnc:option-index-get-value option index)
@@ -1000,6 +993,14 @@ the option '~a'."))
         (rpterror-earlier "multichoice" item (car full-lst))
         0)))
 
+(define (check-ok-values ok-values fn)
+  (for-each
+   (lambda (ok-value)
+     (when (> (vector-length ok-value) 2)
+       (issue-deprecation-warning
+        (format #f "~a: the tooltip in ~a is not supported anymore. Please remove." fn ok-value))))
+   ok-values))
+
 ;; multichoice options use the option-data as a list of vectors.
 ;; Each vector contains a permissible value (scheme symbol), a
 ;; name, and a description string.
@@ -1047,8 +1048,9 @@ the option '~a'."))
     (if (null? p-vals)
         '()
         (cons (vector-ref (car p-vals) 1)
-              (cons (vector-ref (car p-vals) 2)
-                    (multichoice-strings (cdr p-vals))))))
+              (multichoice-strings (cdr p-vals)))))
+
+  (check-ok-values ok-values "gnc:make-multichoice-[callback-]option")
 
   (let* ((value default-value)
          (value->string (lambda ()
@@ -1084,7 +1086,7 @@ the option '~a'."))
      (vector (lambda () (length ok-values))
              (lambda (x) (vector-ref (list-ref ok-values x) 0))
              (lambda (x) (vector-ref (list-ref ok-values x) 1))
-             (lambda (x) (vector-ref (list-ref ok-values x) 2))
+             #f                         ;old tooltip
              (lambda (x)
                (gnc:multichoice-list-lookup ok-values x)))
      (lambda () (multichoice-strings ok-values)) 
@@ -1139,8 +1141,7 @@ the option '~a'."))
     (if (null? p-vals)
         '()
         (cons (vector-ref (car p-vals) 1)
-              (cons (vector-ref (car p-vals) 2)
-                    (radiobutton-strings (cdr p-vals))))))
+              (radiobutton-strings (cdr p-vals)))))
 
   (let* ((value default-value)
          (value->string (lambda ()
@@ -1170,7 +1171,7 @@ the option '~a'."))
      (vector (lambda () (length ok-values))
              (lambda (x) (vector-ref (list-ref ok-values x) 0))
              (lambda (x) (vector-ref (list-ref ok-values x) 1))
-             (lambda (x) (vector-ref (list-ref ok-values x) 2))
+             #f                         ;old tooltip
              (lambda (x)
                (gnc:multichoice-list-lookup ok-values x)))
      (lambda () (radiobutton-strings ok-values)) 
@@ -1204,8 +1205,9 @@ the option '~a'."))
     (if (null? p-vals)
         '()
         (cons (vector-ref (car p-vals) 1)
-              (cons (vector-ref (car p-vals) 2)
-                    (list-strings (cdr p-vals))))))
+              (list-strings (cdr p-vals)))))
+
+  (check-ok-values ok-values "gnc:make-list-option")
 
   (let* ((value default-value)
          (value->string (lambda ()
@@ -1242,7 +1244,7 @@ the option '~a'."))
      (vector (lambda () (length ok-values))
              (lambda (x) (vector-ref (list-ref ok-values x) 0))
              (lambda (x) (vector-ref (list-ref ok-values x) 1))
-             (lambda (x) (vector-ref (list-ref ok-values x) 2))
+             #f                         ;old tooltip
              (lambda (x) (gnc:multichoice-list-lookup ok-values x)))
      (lambda () (list-strings ok-values)) #f)))
 

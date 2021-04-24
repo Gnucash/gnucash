@@ -55,15 +55,12 @@
 (define optname-price-source (N_ "Price Source"))
 
 (define optname-accounts (N_ "Accounts"))
-(define optname-levels (N_ "Show Accounts until level"))
+(define optname-levels (N_ "Levels of Subaccounts"))
 (define optname-subacct (N_ "Include Sub-Accounts"))
 
-(define optname-fullname (N_ "Show long account names"))
 (define optname-show-total (N_ "Show Totals"))
-(define optname-slices (N_ "Maximum Slices"))
 (define optname-plot-width (N_ "Plot Width"))
 (define optname-plot-height (N_ "Plot Height"))
-(define optname-sort-method (N_ "Sort Method"))
 
 ;; The option-generator. The only dependence on the type of piechart
 ;; is the list of account types that the account selection option
@@ -106,11 +103,6 @@
                accounts)))
       #t))
 
-    (gnc:options-add-account-levels! 
-     options gnc:pagename-accounts optname-levels "b" 
-     (N_ "Show accounts to this depth and not further.") 
-     2)
-
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-total
@@ -150,7 +142,6 @@
                                      optname-from-date))))
          (accounts (get-option gnc:pagename-accounts optname-accounts))
          (dosubs? (get-option gnc:pagename-accounts optname-subacct))
-         (account-levels (get-option gnc:pagename-accounts optname-levels))
          (report-currency (get-option gnc:pagename-general
                                       optname-report-currency))
          (price-source (get-option gnc:pagename-general
@@ -163,15 +154,8 @@
          (width (get-option gnc:pagename-display optname-plot-width))
          (commodity-list #f)
          (exchange-fn #f)
-         (print-info (gnc-commodity-print-info report-currency #t))
-         (beforebegindate (gnc:time64-end-day-time
-                           (gnc:time64-previous-day from-date)))
          (document (gnc:make-html-document))
-         (chart (gnc:make-html-chart))
-         (topl-accounts (gnc:filter-accountlist-type
-                         account-types
-                         (gnc-account-get-children-sorted
-                          (gnc-get-current-root-account)))))
+         (chart (gnc:make-html-chart)))
 
     (define (monetary->amount foreign-monetary date)
       (gnc:gnc-monetary-amount

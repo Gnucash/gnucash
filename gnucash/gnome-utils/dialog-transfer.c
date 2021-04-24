@@ -1491,7 +1491,7 @@ check_edit(XferDialog *xferData)
             (GTK_TOGGLE_BUTTON(xferData->amount_radio)))
         {
             gnc_parse_error_dialog (xferData,
-                                    _("You must enter a valid `to' amount."));
+                                    _("You must enter a valid 'to' amount."));
             LEAVE("invalid to amount");
             return FALSE;
         }

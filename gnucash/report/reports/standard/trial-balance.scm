@@ -200,15 +200,9 @@
       gnc:pagename-general optname-report-variant
       "d" opthelp-report-variant
       'current
-      (list (vector 'current
-                    (N_ "Current Trial Balance")
-                    (N_ "Uses the exact balances in the general journal"))
-            (vector 'pre-adj
-                    (N_ "Pre-adjustment Trial Balance")
-                    (N_ "Ignores Adjusting/Closing entries"))
-            (vector 'work-sheet
-                    (N_ "Work Sheet")
-                    (N_ "Creates a complete end-of-period work sheet")))))
+      (list (vector 'current (N_ "General journal exact balances"))
+            (vector 'pre-adj (N_ "No adjusting/closing entries"))
+            (vector 'work-sheet (N_ "Full end-of-period work sheet")))))
 
     ;; accounts to work on
     (add-option

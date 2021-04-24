@@ -1004,27 +1004,27 @@ test_gnc_pricedb_lookup_nearest_in_time_any_currency_t64 (PriceDBFixture *fixtur
 }
 
 // Not Used
-/* gnc_pricedb_lookup_latest_before_any_currency_t64
+/* gnc_pricedb_lookup_nearest_before_any_currency_t64
 PriceList *
-gnc_pricedb_lookup_latest_before_any_currency_t64(GNCPriceDB *db,// Local: 0:0:0
+gnc_pricedb_lookup_nearest_before_any_currency_t64(GNCPriceDB *db,// Local: 0:0:0
 */
 static void
-test_gnc_pricedb_lookup_latest_before_any_currency_t64 (PriceDBFixture *fixture,
-                                                    gconstpointer pData)
+test_gnc_pricedb_lookup_nearest_before_any_currency_t64 (PriceDBFixture *fixture,
+                                                         gconstpointer pData)
 {
     time64 t1 = gnc_dmy2time64(31, 7, 2013);
     time64 t2 = gnc_dmy2time64(5, 8, 2013);
     PriceList *prices =
-        gnc_pricedb_lookup_latest_before_any_currency_t64(fixture->pricedb,
-                                                        fixture->com->usd, t1);
+        gnc_pricedb_lookup_nearest_before_any_currency_t64 (fixture->pricedb,
+                                                            fixture->com->usd, t1);
     g_assert_cmpint(g_list_length(prices), ==, 4);
     prices = g_list_sort(prices, compare_price_commodities);
     g_assert_cmpstr(GET_COM_NAME(prices->next->data), ==, "AUD");
     g_assert_cmpstr(GET_CUR_NAME(prices->next->data), ==, "USD");
     gnc_price_list_destroy(prices);
     prices =
-        gnc_pricedb_lookup_latest_before_any_currency_t64(fixture->pricedb,
-                                                        fixture->com->usd, t2);
+        gnc_pricedb_lookup_nearest_before_any_currency_t64 (fixture->pricedb,
+                                                            fixture->com->usd, t2);
     g_assert_cmpint(g_list_length(prices), ==, 4);
     prices = g_list_sort(prices, compare_price_commodities);
     g_assert_cmpstr(GET_CUR_NAME(prices->next->data), ==, "AUD");
@@ -1120,20 +1120,51 @@ test_gnc_pricedb_lookup_nearest_in_time64 (PriceDBFixture *fixture, gconstpointe
         gnc_pricedb_lookup_nearest_in_time64(fixture->pricedb,
                                              fixture->com->usd,
                                              fixture->com->aud, t1);
+    gnc_numeric result = gnc_price_get_value (price);
+    g_assert_cmpint(result.num, ==, 103415);
+    g_assert_cmpint(result.denom, ==, 100000);
     g_assert_cmpstr(GET_COM_NAME(price), ==, "AUD");
     g_assert_cmpstr(GET_CUR_NAME(price), ==, "USD");
     price =
         gnc_pricedb_lookup_nearest_in_time64(fixture->pricedb,
                                              fixture->com->usd,
                                              fixture->com->aud, t2);
-    g_assert_cmpstr(GET_CUR_NAME(price), ==, "AUD");
+    result = gnc_price_get_value (price);
+    g_assert_cmpint(result.num, ==, 111878);
+    g_assert_cmpint(result.denom, ==, 100000);
     g_assert_cmpstr(GET_COM_NAME(price), ==, "USD");
+    g_assert_cmpstr(GET_CUR_NAME(price), ==, "AUD");
 }
-// Not Used
-/* gnc_pricedb_lookup_latest_before_t64
+
+/* gnc_pricedb_lookup_nearest_before_t64
 GNCPrice *
-gnc_pricedb_lookup_latest_before_t64 (GNCPriceDB *db,// Local: 0:0:0
+gnc_pricedb_lookup_nearest_before_t64 (GNCPriceDB *db,// Local: 0:0:0
 */
+static void
+test_gnc_pricedb_lookup_nearest_before_t64 (PriceDBFixture *fixture, gconstpointer pData)
+{
+    time64 t1 = gnc_dmy2time64(16, 11, 2012);
+    time64 t2 = gnc_dmy2time64(17, 11, 2012);
+    GNCPrice *price =
+        gnc_pricedb_lookup_nearest_before_t64(fixture->pricedb,
+                                             fixture->com->usd,
+                                             fixture->com->aud, t1);
+    gnc_numeric result = gnc_price_get_value (price);
+    g_assert_cmpint(result.num, ==, 106480);
+    g_assert_cmpint(result.denom, ==, 100000);
+    g_assert_cmpstr(GET_COM_NAME(price), ==, "AUD");
+    g_assert_cmpstr(GET_CUR_NAME(price), ==, "USD");
+    price =
+        gnc_pricedb_lookup_nearest_before_t64(fixture->pricedb,
+                                             fixture->com->usd,
+                                             fixture->com->aud, t2);
+    result = gnc_price_get_value (price);
+    g_assert_cmpint(result.num, ==, 103415);
+    g_assert_cmpint(result.denom, ==, 100000);
+    g_assert_cmpstr(GET_COM_NAME(price), ==, "AUD");
+    g_assert_cmpstr(GET_CUR_NAME(price), ==, "USD");
+
+}
 /* direct_balance_conversion
 static gnc_numeric
 direct_balance_conversion (GNCPriceDB *db, gnc_numeric bal,// Local: 2:0:0
@@ -1250,6 +1281,48 @@ test_gnc_pricedb_convert_balance_nearest_price_t64 (PriceDBFixture *fixture, gco
 }
 
 static void
+test_gnc_pricedb_convert_balance_nearest_before_price_t64 (PriceDBFixture *fixture, gconstpointer pData)
+{
+    time64 t = gnc_dmy2time64(16, 11, 2012);
+    gnc_numeric from = gnc_numeric_create(10000, 100);
+    gnc_numeric result =
+        gnc_pricedb_convert_balance_nearest_before_price_t64(fixture->pricedb, from,
+                                                            fixture->com->usd,
+                                                            fixture->com->aud, t);
+    g_assert_cmpint(result.num, ==, 9391);
+    g_assert_cmpint(result.denom, ==, 100);
+    result = gnc_pricedb_convert_balance_nearest_before_price_t64(fixture->pricedb,
+                                                                 from,
+                                                                 fixture->com->usd,
+                                                                 fixture->com->gbp,
+                                                                 t);
+    g_assert_cmpint(result.num, ==, 6223);
+    g_assert_cmpint(result.denom, ==, 100);
+    result = gnc_pricedb_convert_balance_nearest_before_price_t64(fixture->pricedb,
+                                                                 from,
+                                                                 fixture->com->usd,
+                                                                 fixture->com->eur,
+                                                                 t);
+    g_assert_cmpint(result.num, ==, 7720);
+    g_assert_cmpint(result.denom, ==, 100);
+    result = gnc_pricedb_convert_balance_nearest_before_price_t64(fixture->pricedb,
+                                                                 from,
+                                                                 fixture->com->gbp,
+                                                                 fixture->com->dkk,
+                                                                 t);
+    g_assert_cmpint(result.num, ==, 83960);
+    g_assert_cmpint(result.denom, ==, 100);
+    result = gnc_pricedb_convert_balance_nearest_before_price_t64(fixture->pricedb,
+                                                                 from,
+                                                                 fixture->com->amzn,
+                                                                 fixture->com->aud,
+                                                                 t);
+    g_assert_cmpint(result.num, ==, 2089782);
+    g_assert_cmpint(result.denom, ==, 100);
+
+}
+
+static void
 test_gnc_pricedb_get_latest_price (PriceDBFixture *fixture, gconstpointer pData)
 {
     gnc_numeric result;
@@ -1326,6 +1399,46 @@ test_gnc_pricedb_get_nearest_price (PriceDBFixture *fixture, gconstpointer pData
     g_assert_cmpint(result.denom, ==, 1331);
 }
 
+static void
+test_gnc_pricedb_get_nearest_before_price (PriceDBFixture *fixture, gconstpointer pData)
+{
+    time64 t = gnc_dmy2time64(16, 11, 2012);
+    gnc_numeric result;
+
+    result = gnc_pricedb_get_nearest_before_price (fixture->pricedb,
+                                                   fixture->com->usd,
+                                                   fixture->com->aud, t);
+    g_assert_cmpint(result.num, ==, 1250);
+    g_assert_cmpint(result.denom, ==, 1331);
+
+    result = gnc_pricedb_get_nearest_before_price (fixture->pricedb,
+                                                   fixture->com->usd,
+                                                   fixture->com->gbp,
+                                                   t);
+    g_assert_cmpint(result.num, ==, 20000);
+    g_assert_cmpint(result.denom, ==, 32141);
+
+    result = gnc_pricedb_get_nearest_before_price (fixture->pricedb,
+                                                   fixture->com->usd,
+                                                   fixture->com->eur,
+                                                   t);
+    g_assert_cmpint(result.num, ==, 124072);
+    g_assert_cmpint(result.denom, ==, 160705);
+
+    result = gnc_pricedb_get_nearest_before_price (fixture->pricedb,
+                                                   fixture->com->gbp,
+                                                   fixture->com->dkk,
+                                                   t);
+    g_assert_cmpint(result.num, ==, 16792033309);
+    g_assert_cmpint(result.denom, ==, 2000000000);
+
+    result = gnc_pricedb_get_nearest_before_price (fixture->pricedb,
+                                                   fixture->com->amzn,
+                                                   fixture->com->aud,
+                                                   t);
+    g_assert_cmpint(result.num, ==, 278150);
+    g_assert_cmpint(result.denom, ==, 1331);
+}
 /* pricedb_foreach_pricelist
 static void
 pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)// Local: 0:1:0
@@ -1569,21 +1682,24 @@ test_suite_gnc_pricedb (void)
 // GNC_TEST_ADD (suitename, "nearest to", Fixture, NULL, setup, test_nearest_to, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb lookup latest any currency", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_latest_any_currency, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb lookup nearest in time any currency", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_nearest_in_time_any_currency_t64, teardown);
-    GNC_TEST_ADD (suitename, "gnc pricedb lookup latest before any currency", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_latest_before_any_currency_t64, teardown);
+    GNC_TEST_ADD (suitename, "gnc pricedb lookup nearest before any currency", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_nearest_before_any_currency_t64, teardown);
 // GNC_TEST_ADD (suitename, "hash values helper", PriceDBFixture, NULL, setup, test_hash_values_helper, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb has prices", PriceDBFixture, NULL, setup, test_gnc_pricedb_has_prices, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb get prices", PriceDBFixture, NULL, setup, test_gnc_pricedb_get_prices, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb lookup day", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_day_t64, teardown);
 // GNC_TEST_ADD (suitename, "lookup nearest in time", Fixture, NULL, setup, test_lookup_nearest_in_time, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb lookup nearest in time", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_nearest_in_time64, teardown);
+    GNC_TEST_ADD (suitename, "gnc pricedb lookup nearest before in time", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_nearest_before_t64, teardown);
 // GNC_TEST_ADD (suitename, "direct balance conversion", Fixture, NULL, setup, test_direct_balance_conversion, teardown);
 // GNC_TEST_ADD (suitename, "extract common prices", Fixture, NULL, setup, test_extract_common_prices, teardown);
 // GNC_TEST_ADD (suitename, "convert balance", Fixture, NULL, setup, test_convert_balance, teardown);
 // GNC_TEST_ADD (suitename, "indirect balance conversion", Fixture, NULL, setup, test_indirect_balance_conversion, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb convert balance latest price", PriceDBFixture, NULL, setup, test_gnc_pricedb_convert_balance_latest_price, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb convert balance nearest price", PriceDBFixture, NULL, setup, test_gnc_pricedb_convert_balance_nearest_price_t64, teardown);
+    GNC_TEST_ADD (suitename, "gnc pricedb convert balance nearest before price", PriceDBFixture, NULL, setup, test_gnc_pricedb_convert_balance_nearest_before_price_t64, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb get latest price", PriceDBFixture, NULL, setup, test_gnc_pricedb_get_latest_price, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb get nearest price", PriceDBFixture, NULL, setup, test_gnc_pricedb_get_nearest_price, teardown);
+    GNC_TEST_ADD (suitename, "gnc pricedb get nearest before price", PriceDBFixture, NULL, setup, test_gnc_pricedb_get_nearest_before_price, teardown);
 // GNC_TEST_ADD (suitename, "pricedb foreach pricelist", Fixture, NULL, setup, test_pricedb_foreach_pricelist, teardown);
 // GNC_TEST_ADD (suitename, "pricedb foreach currencies hash", Fixture, NULL, setup, test_pricedb_foreach_currencies_hash, teardown);
 // GNC_TEST_ADD (suitename, "unstable price traversal", Fixture, NULL, setup, test_unstable_price_traversal, teardown);

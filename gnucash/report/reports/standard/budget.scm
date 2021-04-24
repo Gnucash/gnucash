@@ -46,7 +46,6 @@
 (define optname-show-subaccounts (N_ "Always show sub-accounts"))
 (define optname-accounts (N_ "Account"))
 
-(define optname-select-columns (N_ "Select Columns"))
 (define optname-show-budget (N_ "Show Budget"))
 (define opthelp-show-budget (N_ "Display a column for the budget values."))
 (define optname-show-notes (N_ "Show Budget Notes"))
@@ -109,24 +108,12 @@
           (lambda (new-option)
             (gnc:register-option options new-option)))
          (period-options
-          (list (vector 'first
-                        (N_ "First")
-                        (N_ "The first period of the budget"))
-                (vector 'previous
-                        (N_ "Previous")
-                        (N_ "Budget period was before current period, according to report evaluation date"))
-                (vector 'current
-                        (N_ "Current")
-                        (N_ "Current period, according to report evaluation date"))
-                (vector 'next
-                        (N_ "Next")
-                        (N_ "Next period, according to report evaluation date"))
-                (vector 'last
-                        (N_ "Last")
-                        (N_ "Last budget period"))
-                (vector 'manual
-                        (N_ "Manual period selection")
-                        (N_ "Explicitly select period value with spinner below"))))
+          (list (vector 'first (N_ "First budget period"))
+                (vector 'previous (N_ "Previous budget period"))
+                (vector 'current (N_ "Current budget period"))
+                (vector 'next (N_ "Next budget period"))
+                (vector 'last (N_ "Last budget period"))
+                (vector 'manual (N_ "Manual period selection"))))
          (ui-use-periods #f)
          (ui-start-period-type 'current)
          (ui-end-period-type 'next))
@@ -237,7 +224,7 @@
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-notes
-      "s15" opthelp-show-budget #t))
+      "s15" opthelp-show-notes #t))
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-actual

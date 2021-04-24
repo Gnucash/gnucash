@@ -902,7 +902,7 @@ CsvImpTransAssist::preview_settings_save ()
             {
                 auto response = gnc_ok_cancel_dialog (GTK_WINDOW (csv_imp_asst),
                         GTK_RESPONSE_OK,
-                        "%s", _("Setting name already exists, over write?"));
+                        "%s", _("Setting name already exists, overwrite?"));
                 if (response != GTK_RESPONSE_OK)
                     return;
 
@@ -2084,7 +2084,7 @@ CsvImpTransAssist::assist_match_page_prepare ()
     else
     {
         // align the help button on the left side
-        gtk_widget_set_halign (GTK_WIDGET(button_area), GTK_ALIGN_FILL);  
+        gtk_widget_set_halign (GTK_WIDGET(button_area), GTK_ALIGN_FILL);
         gtk_widget_set_hexpand (GTK_WIDGET(button_area), TRUE);
         gtk_box_set_child_packing (GTK_BOX(button_area), help_button,
                                    FALSE, FALSE, 0, GTK_PACK_START);

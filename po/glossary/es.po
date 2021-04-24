@@ -8,14 +8,15 @@
 # Pablo <ppicapietra@gmail.com>, 2021.
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
 # Guille <willelopz+weblate@gmail.com>, 2021.
+# Guille Lopez <willelopz@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-03-20 22:04+0000\n"
-"Last-Translator: Guille <willelopz+weblate@gmail.com>\n"
+"PO-Revision-Date: 2021-04-15 23:26+0000\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "es/>\n"
 "Language: es\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -94,14 +95,12 @@ msgid "account type: Mutual fund"
 msgstr "tipo de cuenta: Fondo de Inversión"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "tipo de cuenta: Activo"
+msgstr "tipo de cuenta: Pasivo"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "tipo de cuenta: Activo"
+msgstr "tipo de cuenta: Ganancias & pérdidas"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -112,9 +111,8 @@ msgid "account type: Stock"
 msgstr "tipo de cuenta: Existencias"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "tipo de cuenta: cuenta de ahorro"
+msgstr "tipo de cuenta: operaciones"
 
 #. "-"
 msgid "account: parent account"
@@ -206,7 +204,7 @@ msgstr "acción: reintegro"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "antigüedad"
 
 #. "A sum of money"
 msgid "amount"
@@ -221,14 +219,12 @@ msgid "balance (noun)"
 msgstr "saldo"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "saldar"
+msgstr "saldo arrastrado"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "saldar"
+msgstr "saldo arrastrado"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -261,7 +257,7 @@ msgstr "Libro"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr ""
+msgstr "cierre de libro"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
@@ -316,9 +312,8 @@ msgid "commodity option: Symbol"
 msgstr "opción de valor: Símbolo"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "interés"
+msgstr "interés compuesto"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -333,9 +328,8 @@ msgid "credit transfer"
 msgstr "transferencia (bancaria)"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
-#, fuzzy
 msgid "credit note"
-msgstr "transferencia (bancaria)"
+msgstr "nota de crédito"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -386,9 +380,8 @@ msgid "Description (column in register)"
 msgstr "Descripción"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
-#, fuzzy
 msgid "discount"
-msgstr "cuenta"
+msgstr "descuento"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -396,7 +389,7 @@ msgstr "partida doble"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "vínculo al documento"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
@@ -412,11 +405,11 @@ msgstr "patrimonio"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
-msgstr ""
+msgstr "declaración de capital"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
-msgstr ""
+msgstr "garantía (cuenta)"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -443,9 +436,8 @@ msgid "financial calculator: payments"
 msgstr "calculadora financiera: pagos"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
 msgid "financial statement"
-msgstr "acción: pago"
+msgstr "declaración financiera"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
@@ -492,10 +484,8 @@ msgid "loan"
 msgstr "préstamo"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "préstamo"
+msgstr "préstamo: TAE"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -510,9 +500,8 @@ msgid "Lot"
 msgstr "Lote"
 
 #. "Combine two books into one (see book)."
-#, fuzzy
 msgid "merge, to"
-msgstr "recargar"
+msgstr "unir"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
@@ -536,16 +525,12 @@ msgid "Mortgage"
 msgstr "Hipoteca"
 
 #. "Adjustable Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "Hipoteca"
+msgstr "hipoteca: tipo variable"
 
 #. "Fixed Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "Hipoteca"
+msgstr "hipoteca: tipo fijo"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -659,11 +644,11 @@ msgstr "precio: cotizaciones"
 
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
-msgstr "beneficio"
+msgstr "ganancia"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "Cuenta de Pérdidas y Ganancias"
+msgstr "Ganancias y Pérdidas"
 
 #. "-"
 msgid "quick-fill"
@@ -784,18 +769,16 @@ msgid "tax info"
 msgstr "información sobre impuestos"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "tipo de cuenta: Ingresos"
+msgstr "tipo de impuesto: impuesto sobre la renta"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "tipo de impuesto: impuesto sobre ventas"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "tipo de impuesto: IVA"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
@@ -850,9 +833,8 @@ msgid "transfer, to (register toolbar)"
 msgstr "transferir"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
-#, fuzzy
 msgid "trial balance (report)"
-msgstr "saldo"
+msgstr "balance general (informe)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
@@ -875,9 +857,8 @@ msgid "vendor"
 msgstr "proveedor"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
-#, fuzzy
 msgid "voucher"
-msgstr "fuente"
+msgstr "vale"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"

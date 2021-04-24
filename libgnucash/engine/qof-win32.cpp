@@ -22,13 +22,14 @@
  */
 
 #ifdef __cplusplus
+#include <glib.h>
+
 extern "C"
 {
 #endif
 
 #include <config.h>
 
-#include <glib.h>
 #include "gnc-date-p.h"
 #include "strptime.h"
 #include <windows.h>

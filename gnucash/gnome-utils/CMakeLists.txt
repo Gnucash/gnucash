@@ -54,7 +54,6 @@ set (gnome_utils_SOURCES
   gnc-cell-renderer-text-flag.c
   gnc-cell-renderer-text-view.c
   gnc-cell-view.c
-  gnc-combott.c
   gnc-commodity-edit.c
   gnc-component-manager.c
   gnc-currency-edit.c
@@ -145,7 +144,6 @@ set (gnome_utils_HEADERS
   gnc-cell-renderer-text-flag.h
   gnc-cell-renderer-text-view.h
   gnc-cell-view.h
-  gnc-combott.h
   gnc-commodity-edit.h
   gnc-component-manager.h
   gnc-currency-edit.h

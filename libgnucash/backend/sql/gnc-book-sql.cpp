@@ -25,6 +25,8 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
  */
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
@@ -39,8 +41,6 @@ extern "C"
 #include "splint-defs.h"
 #endif
 }
-
-#include <glib.h>
 
 #include "gnc-sql-connection.hpp"
 #include "gnc-sql-backend.hpp"

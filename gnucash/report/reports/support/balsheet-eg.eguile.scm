@@ -199,14 +199,6 @@
              (> (accrec-treedepth accrec-ie) 1))
       (set! rshift-ie 1))
 
-   (if debugging?
-     (begin
-      (display "<p>Assets: ") (display accrec-as)
-      (display "<p>Liabilities: ") (display accrec-li)
-      (display "<p>Equities: ") (display accrec-eq)
-      (display "<p>Trading: ") (display accrec-tr)
-      (display "<p>Profit and loss: ") (display accrec-ie)))
-
 ?>
 <table border="0" class="outer"><tr valign="top"><td valign="top"> <!-- outer table to control columns -->
 <table border="0" class="accounts" align="left">

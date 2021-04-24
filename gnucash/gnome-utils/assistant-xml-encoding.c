@@ -1005,7 +1005,7 @@ gxi_check_file (GncXmlImportData *data)
         }
 
         /* Translators: Please insert encodings here that are typically used in your
-           locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+           locale, separated by spaces. No need for ASCII or UTF-8, check 'locale -m'
            for assistance with spelling. */
         enc_array = g_strsplit (_("ISO-8859-1 KOI8-U"), " ", 0);
 

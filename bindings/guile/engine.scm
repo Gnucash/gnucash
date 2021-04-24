@@ -30,4 +30,3 @@
                    (gnucash engine business-core)
                    (gnucash engine commodity-table)
                    (gnucash engine gnc-numeric))
-

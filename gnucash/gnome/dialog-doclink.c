@@ -130,17 +130,70 @@ location_ok_cb (GtkEditable *editable, gpointer user_data)
 }
 
 static void
-file_set_cb (GtkFileChooserButton *button, GtkWidget *ok_button)
+file_ok_cb (GtkButton *button, GtkWidget *ok_button)
 {
-    gchar *file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(button));
+    const gchar *uri = g_object_get_data (G_OBJECT(button), "uri");
     gboolean file_true = FALSE;
 
-    /* Test for a valid filename and not a directory */
-    if (file_name && !g_file_test (file_name, G_FILE_TEST_IS_DIR))
-        file_true = TRUE;
+    if (uri)
+    {
+        gchar *full_filename = gnc_uri_get_path (uri);
 
+        /* Test for a valid filename and not a directory */
+        if (full_filename && !g_file_test (full_filename, G_FILE_TEST_IS_DIR))
+            file_true = TRUE;
+
+        g_free (full_filename);
+    }
     gtk_widget_set_sensitive (ok_button, file_true);
-    g_free (file_name);
+}
+
+static void
+fcb_clicked_cb (GtkButton *button, GtkWidget *ok_button)
+{
+    GtkWidget *dialog = gtk_widget_get_toplevel (GTK_WIDGET(button));
+    GtkWidget *label = g_object_get_data (G_OBJECT(button), "fcb_label");
+    const gchar *path_head = g_object_get_data (G_OBJECT(button), "path_head");
+    const gchar *uri = g_object_get_data (G_OBJECT(button), "uri");
+    GtkFileChooserNative *native;
+    gint res;
+
+    native = gtk_file_chooser_native_new (_("Select document"),
+                                          GTK_WINDOW(dialog),
+                                          GTK_FILE_CHOOSER_ACTION_OPEN,
+                                          _("_OK"),
+                                          _("_Cancel"));
+
+    if (uri && *uri)
+    {
+        gchar *full_filename = gnc_uri_get_path (uri);
+        gchar *path = g_path_get_dirname (full_filename);
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(native), path);
+        g_free (full_filename);
+        g_free (path);
+    }
+    else if (path_head)
+        gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER(native), path_head);
+
+    res = gtk_native_dialog_run (GTK_NATIVE_DIALOG(native));
+    if (res == GTK_RESPONSE_ACCEPT)
+    {
+        gchar *uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER(native));
+
+        if (uri && *uri)
+        {
+            gchar *filename = g_path_get_basename (uri);
+            gtk_label_set_text (GTK_LABEL(label), filename);
+
+            DEBUG("Native file uri is '%s'", uri);
+
+            g_object_set_data_full (G_OBJECT(button), "uri", g_strdup (uri), g_free);
+            g_free (uri);
+            g_free (filename);
+        }
+        file_ok_cb (button, ok_button);
+    }
+    g_object_unref (native);
 }
 
 static void
@@ -161,11 +214,10 @@ uri_type_selected_cb (GtkToggleButton *button, GtkWidget *widget)
                              GTK_BUILDABLE(parent_hbox)), "location_hbox") == 0)
             location_ok_cb (GTK_EDITABLE(widget), ok_button);
         else
-            file_set_cb (GTK_FILE_CHOOSER_BUTTON(widget), ok_button);
+            file_ok_cb (GTK_BUTTON(widget), ok_button);
 
         gtk_window_resize (GTK_WINDOW(top), 600, 10); // width, height
     }
-    gtk_widget_grab_focus (GTK_WIDGET(widget));
 }
 
 static void
@@ -191,20 +243,18 @@ setup_location_dialog (GtkBuilder *builder, GtkWidget *button_loc, const gchar *
 }
 
 static void
-setup_file_dialog (GtkBuilder *builder, GtkFileChooserButton *fcb,
-                   const gchar *path_head, const gchar *uri, gchar *scheme)
+setup_file_dialog (GtkBuilder *builder, const gchar *path_head, const gchar *uri, gchar *scheme)
 {
+    GtkWidget *fcb = GTK_WIDGET(gtk_builder_get_object (builder, "file_chooser_button"));
     gchar *display_uri = gnc_doclink_get_unescape_uri (path_head, uri, scheme);
 
     if (display_uri)
     {
-        GtkWidget *label;
         GtkWidget *existing_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "existing_hbox"));
         GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
         gchar     *use_uri = gnc_doclink_get_use_uri (path_head, uri, scheme);
         gchar     *uri_label = g_strdup_printf ("%s '%s'", _("Existing Document Link is"), display_uri);
-
-        label = gtk_label_new (uri_label);
+        GtkWidget *label = gtk_label_new (uri_label);
 
         if (g_file_test (display_uri, G_FILE_TEST_EXISTS))
             gtk_box_pack_start (GTK_BOX(existing_hbox), label, FALSE, TRUE, 0);
@@ -220,12 +270,13 @@ setup_file_dialog (GtkBuilder *builder, GtkFileChooserButton *fcb,
 
         // Set the style context for this label so it can be easily manipulated with css
         gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-highlight");
-        gtk_file_chooser_set_uri (GTK_FILE_CHOOSER(fcb), use_uri);
         gtk_widget_show_all (existing_hbox);
 
         g_free (uri_label);
         g_free (use_uri);
     }
+    g_object_set_data_full (G_OBJECT(fcb), "path_head", g_strdup (path_head), g_free);
+    gtk_widget_grab_focus (GTK_WIDGET(fcb));
     g_free (display_uri);
 }
 
@@ -250,7 +301,8 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
     GtkBuilder *builder;
     gboolean uri_is_file, have_uri = FALSE;
     GtkEntry *entry;
-    GtkFileChooserButton *fcb;
+    GtkWidget *fcb;
+    GtkWidget *fcb_label;
     GtkWidget *head_label;
     int result;
     gchar *ret_uri = NULL;
@@ -278,9 +330,11 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
     head_label = GTK_WIDGET(gtk_builder_get_object (builder, "path_head_label"));
     ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
 
-    fcb = GTK_FILE_CHOOSER_BUTTON(gtk_builder_get_object (builder, "file_chooser_button"));
+    fcb = GTK_WIDGET(gtk_builder_get_object (builder, "file_chooser_button"));
+    fcb_label = GTK_WIDGET(gtk_builder_get_object (builder, "file_chooser_button_label"));
+    g_object_set_data (G_OBJECT(fcb), "fcb_label", fcb_label);
     g_object_set_data (G_OBJECT(fcb), "okbut", ok_button);
-    g_signal_connect (fcb, "file-set", G_CALLBACK(file_set_cb), ok_button);
+    g_signal_connect (fcb, "clicked", G_CALLBACK(fcb_clicked_cb), ok_button);
 
     button_file = GTK_WIDGET(gtk_builder_get_object (builder, "linked_file"));
     g_signal_connect (button_file, "toggled", G_CALLBACK(uri_type_selected_cb), fcb);
@@ -321,12 +375,23 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
     if (have_uri)
     {
         if (uri_is_file) // file
-            setup_file_dialog (builder, fcb, path_head, uri, scheme);
+        {
+            gchar *filename = g_path_get_basename (uri);
+
+            g_object_set_data_full (G_OBJECT(fcb), "uri", g_strdup (uri), g_free);
+
+            if (filename)
+            {
+                gtk_label_set_text (GTK_LABEL(fcb_label), filename);
+                g_free (filename);
+            }
+            setup_file_dialog (builder, path_head, uri, scheme);
+        }
         else // location
             setup_location_dialog (builder, button_loc, uri);
     }
     else
-        gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER(fcb), path_head);
+        g_object_set_data_full (G_OBJECT(fcb), "path_head", g_strdup (path_head), g_free);
 
     g_free (scheme);
     g_object_unref (G_OBJECT(builder));
@@ -345,7 +410,7 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
         }
         else // file
         {
-            gchar *dialog_uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER(fcb));
+            const gchar *dialog_uri = g_object_get_data (G_OBJECT(fcb), "uri");
 
             PINFO("Dialog File URI: '%s', Path head: '%s'", dialog_uri, path_head);
 
@@ -358,8 +423,7 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
             else
                 ret_uri = g_strdup (dialog_uri);
 
-            PINFO("Dialog File URI: '%s'", ret_uri);
-            g_free (dialog_uri);
+            DEBUG("Dialog File URI: '%s'", ret_uri);
         }
     }
     else if (result == GTK_RESPONSE_REJECT) // remove button

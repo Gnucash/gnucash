@@ -239,8 +239,6 @@
                                       optname-report-commodity))
          (price-source (get-option pagename-commodities
                                    optname-price-source))
-         (show-fcur? (get-option pagename-commodities
-                                 optname-show-foreign))
          (show-rates? (get-option pagename-commodities
                                   optname-show-rates))
          (use-rules? (get-option gnc:pagename-display

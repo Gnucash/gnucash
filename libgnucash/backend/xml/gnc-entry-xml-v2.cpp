@@ -21,6 +21,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+#include <glib.h>
+
 extern "C"
 {
 #include <config.h>
@@ -32,8 +34,6 @@ extern "C"
 #include "gncInvoiceP.h"
 #include "gncTaxTableP.h"
 }
-
-#include <glib.h>
 
 #include "gnc-xml-helper.h"
 #include "sixtp.h"

@@ -352,6 +352,8 @@ gnc_item_list_key_event (GtkWidget* widget, GdkEventKey* event, gpointer data)
     {
     case GDK_KEY_Return:
         string = gnc_item_list_get_selection (item_list);
+        if (!string) // Nothing selected, might be new value
+             break;  // Let the sheet deal with it.
         g_signal_emit (G_OBJECT (item_list),
                        gnc_item_list_signals[ACTIVATE_ITEM],
                        0,

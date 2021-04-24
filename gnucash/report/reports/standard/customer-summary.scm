@@ -42,7 +42,6 @@
 
 ;; let's define a name for the report-guid's, much prettier
 (define customer-report-guid "4166a20981985fd2b07ff8cb3b7d384e")
-(define owner-report-guid "c146317be32e4948a561ec7fc89d15c1")
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -66,17 +65,9 @@
 (define optname-show-own-address (N_ "Show Company Address"))
 (define opthelp-show-own-address (N_ "Show your own company's address and the date of printing."))
 
-(define pagename-columndisplay (N_ "Display Columns"))
-(define date-header (N_ "Date"))
-(define reference-header (N_ "Reference"))
-(define type-header (N_ "Type"))
-(define desc-header (N_ "Description"))
-(define amount-header (N_ "Amount"))
-
 ;; The line break in the next expression will suppress above comments as translator comments.
 
-(define optname-show-zero-lines
-  (N_ "Show Lines with All Zeros"))
+(define optname-show-zero-lines (N_ "Show Lines with All Zeros"))
 (define opthelp-show-zero-lines (N_ "Show the table lines with customers which did not have any transactions in the reporting period, hence would show all zeros in the columns."))
 (define optname-show-inactive (N_ "Show Inactive Customers"))
 (define opthelp-show-inactive (N_ "Include customers that have been marked inactive."))
@@ -84,7 +75,7 @@
 (define optname-sortkey (N_ "Sort Column"))
 (define opthelp-sortkey (N_ "Choose the column by which the result table is sorted."))
 (define optname-sortascending (N_ "Sort Order"))
-(define opthelp-sortascending (N_ "Choose the ordering of the column sort: Either ascending or descending."))
+(define opthelp-sortascending (N_ "Choose the ordering of the column sort."))
 
 
 (define (options-generator)
@@ -122,22 +113,11 @@
     "a" opthelp-sortkey
     'customername
     (list
-     (vector 'customername
-             (N_ "Customer Name")
-             (N_ "Sort alphabetically by customer name."))
-     (vector 'profit
-             (N_ "Profit")
-             (N_ "Sort by profit amount."))
-     (vector 'markup
-             ;; Translators: "Markup" is profit amount divided by sales amount
-             (N_ "Markup")
-             (N_ "Sort by markup (which is profit amount divided by sales)."))
-     (vector 'sales
-             (N_ "Sales")
-             (N_ "Sort by sales amount."))
-     (vector 'expense
-             (N_ "Expense")
-             (N_ "Sort by expense amount.")))))
+     (vector 'customername (N_ "Customer Name"))
+     (vector 'profit (N_ "Profit"))
+     (vector 'markup (N_ "Markup (which is profit amount divided by sales)"))
+     (vector 'sales (N_ "Sales"))
+     (vector 'expense (N_ "Expense")))))
 
   (add-option
    (gnc:make-multichoice-option
@@ -145,12 +125,8 @@
     "b" opthelp-sortascending
     'ascend
     (list
-     (vector 'ascend
-             (N_ "Ascending")
-             (N_ "A to Z, smallest to largest."))
-     (vector 'descend
-             (N_ "Descending")
-             (N_ "Z to A, largest to smallest.")))))
+     (vector 'ascend (N_ "Ascending"))
+     (vector 'descend (N_ "Descending")))))
 
   (add-option
    (gnc:make-simple-boolean-option

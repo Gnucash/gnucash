@@ -293,9 +293,7 @@ not found.")))
            (lambda (ss)
              (vector
               (string->symbol (gnc:html-style-sheet-name ss))
-              (gnc:html-style-sheet-name ss)
-              (string-append (gnc:html-style-sheet-name ss)
-                             " " (G_ "stylesheet."))))
+              (gnc:html-style-sheet-name ss)))
            (gnc:get-html-style-sheets)))))
 
     (let ((options (if (procedure? generator)

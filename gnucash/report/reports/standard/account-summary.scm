@@ -90,8 +90,13 @@
   (N_ "Maximum number of levels in the account tree displayed."))
 (define optname-bottom-behavior (N_ "Depth limit behavior"))
 (define opthelp-bottom-behavior
-  (N_ "How to treat accounts which exceed the specified depth limit (if any)."))
-
+    (string-join
+     (list
+      (G_ "How to treat accounts which exceed the specified depth limit (if any).")
+      (G_ "Show the total balance, including balances in subaccounts, of any account at the depth limit.")
+      (G_ "Raise accounts deeper than the depth limit to the depth limit.")
+      (G_ "Omit any accounts deeper than the depth limit."))
+      "\n* "))
 (define optname-parent-balance-mode (N_ "Parent account balances"))
 (define optname-parent-total-mode (N_ "Parent account subtotals"))
 
@@ -186,15 +191,9 @@
       gnc:pagename-accounts optname-bottom-behavior
       "c" opthelp-bottom-behavior 'summarize
       (list
-       (vector 'summarize
-               (N_ "Recursive Balance")
-               (N_ "Show the total balance, including balances in subaccounts, of any account at the depth limit."))
-       (vector 'flatten
-               (N_ "Raise Accounts")
-               (N_ "Shows accounts deeper than the depth limit at the depth limit."))
-       (vector 'truncate
-               (N_ "Omit Accounts")
-               (N_ "Disregard completely any accounts deeper than the depth limit.")))))
+       (vector 'summarize (N_ "Recursive Balance"))
+       (vector 'flatten (N_ "Raise Accounts"))
+       (vector 'truncate (N_ "Omit Accounts")))))
 
     ;; all about currencies
     (gnc:options-add-currency!

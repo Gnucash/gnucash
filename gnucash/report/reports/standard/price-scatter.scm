@@ -43,16 +43,6 @@
 (define optname-price-source (N_ "Price Source"))
 (define optname-invert (N_ "Invert prices"))
 
-;;      (optname-accounts (N_ "Accounts"))
-;; The line break in the next expression will suppress above comment as translator comment.
-
-(define optname-inc-exp
-  (N_ "Show Income/Expense"))
-(define optname-show-profit (N_ "Show Net Profit"))
-
-(define optname-sep-bars (N_ "Show Asset & Liability bars"))
-(define optname-net-bars (N_ "Show Net Worth bars"))
-
 (define optname-marker (N_ "Marker"))
 (define optname-markercolor (N_ "Marker Color"))
 (define optname-plot-width (N_ "Plot Width"))
@@ -87,16 +77,9 @@
       pagename-price optname-price-source
       "f" (N_ "The source of price information.") 
       'actual-transactions
-      (list (vector 'weighted-average 
-                    (N_ "Weighted Average")
-                    (N_ "The weighted average of all currency transactions of the past."))
-            (vector 'actual-transactions
-                    (N_ "Actual Transactions")
-                    (N_ "The instantaneous price of actual currency transactions in the past."))
-            (vector 'pricedb
-                    (N_ "Price Database")
-                    (N_ "The recorded prices."))
-            )))
+      (list (vector 'weighted-average (N_ "Weighted Average"))
+            (vector 'actual-transactions (N_ "Actual Transactions"))
+            (vector 'pricedb (N_ "Price Database")))))
 
     (add-option
      (gnc:make-simple-boolean-option
