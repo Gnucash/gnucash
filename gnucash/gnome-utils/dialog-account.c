@@ -589,7 +589,7 @@ make_children_compatible (AccountWindow *aw)
     account = aw_get_account (aw);
     g_return_if_fail (account);
 
-    if (xaccAccountTypesCompatible (xaccAccountGetType (account), aw->type))
+    if (xaccAccountTypesCompatible (aw->type, xaccAccountGetType (account)))
         return;
 
     set_children_types (account, aw->type);
@@ -709,7 +709,7 @@ verify_children_compatible (AccountWindow *aw)
     if (!account)
         return FALSE;
 
-    if (xaccAccountTypesCompatible (xaccAccountGetType (account), aw->type))
+    if (xaccAccountTypesCompatible (aw->type, xaccAccountGetType (account)))
         return TRUE;
 
     if (gnc_account_n_children(account) == 0)

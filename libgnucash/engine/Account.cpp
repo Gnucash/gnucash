@@ -4509,8 +4509,17 @@ gboolean
 xaccAccountTypesCompatible (GNCAccountType parent_type,
                             GNCAccountType child_type)
 {
-    return ((xaccParentAccountTypesCompatibleWith (parent_type) &
-             (1 << child_type))
+    /* ACCT_TYPE_NONE isn't compatible with anything, even ACCT_TYPE_NONE. */
+    if (parent_type == ACCT_TYPE_NONE || child_type == ACCT_TYPE_NONE)
+        return FALSE;
+
+    /* ACCT_TYPE_ROOT can't have a parent account, and asking will raise
+     * an error. */
+    if (child_type == ACCT_TYPE_ROOT)
+        return FALSE;
+
+    return ((xaccParentAccountTypesCompatibleWith (child_type) &
+             (1 << parent_type))
             != 0);
 }
 
