@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-23 19:32+0000\n"
+"PO-Revision-Date: 2021-04-24 17:32+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -1996,9 +1996,8 @@ msgstr "动作"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:614
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:623
 #: gnucash/report/trep-engine.scm:259
-#, fuzzy
 msgid "Transaction Number"
-msgstr "交易事项编号"
+msgstr "交易编号"
 
 #: gnucash/gnome/dialog-find-transactions2.c:137
 #: gnucash/gnome/dialog-find-transactions2.c:172
@@ -2085,7 +2084,7 @@ msgstr "说明"
 #: gnucash/gnome/dialog-find-transactions.c:229
 #: gnucash/gnome-search/dialog-search.c:1482
 msgid "Find Transaction"
-msgstr "寻找交易事项"
+msgstr "寻找交易"
 
 #: gnucash/gnome/dialog-find-transactions.c:129
 #: gnucash/report/reports/standard/general-ledger.scm:67
@@ -2882,7 +2881,7 @@ msgstr "替换价格？"
 
 #: gnucash/gnome/dialog-price-editor.c:233
 msgid "_Replace"
-msgstr "替换(R)"
+msgstr "替换(_R)"
 
 #: gnucash/gnome/dialog-price-editor.c:263
 #, fuzzy
@@ -5632,12 +5631,12 @@ msgstr "搜索结果报告"
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
-msgstr "账簿"
+msgstr "交易"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2436
 #: gnucash/report/reports/standard/register.scm:349
 msgid "Register Report"
-msgstr "账簿报表"
+msgstr "交易报表"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2452
 #: gnucash/gnome/gnc-plugin-page-register.c:3595
@@ -7782,7 +7781,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-fincalc.glade:299
 #: gnucash/gtkbuilder/dialog-fincalc.glade:314
 msgid "Clear"
-msgstr "取消选择"
+msgstr "清空"
 
 #: gnucash/gnome-utils/dialog-options.c:2898
 msgid "Clear any selected image file."
@@ -9812,9 +9811,8 @@ msgid "Reference / Action"
 msgstr "参考"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2770
-#, fuzzy
 msgid "T-Number"
-msgstr "编号"
+msgstr "T-编号"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2776
 #, fuzzy
@@ -10892,7 +10890,7 @@ msgstr "如果返回条目数少于此数目，就默认去“新搜索”"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:5
 msgid "Enable SKIP transaction action"
-msgstr "启用“跳过”交易操作"
+msgstr "“跳过”交易"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:2044
@@ -11267,13 +11265,11 @@ msgstr "显示自动保存的解释"
 msgid ""
 "If active, GnuCash shows an explanation of the auto-save feature the first "
 "time that feature is started. Otherwise no extra explanation is shown."
-msgstr ""
-"如果选中，GnuCash 在自动保存功能开始时，显示一个自动保存功能的解释。否则不会"
-"显示额外信息。"
+msgstr "若勾选，GnuCash 首次自动保存时会有解释，否则直接保存。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:40
 msgid "Auto-save time interval"
-msgstr "自动保存时间间隔"
+msgstr "自动保存周期"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:41
 #: gnucash/gtkbuilder/dialog-preferences.glade:1656
@@ -11285,7 +11281,7 @@ msgstr "距自动开始保存文件到磁盘上的分钟数。如果为0，将�
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:45
 #: gnucash/gtkbuilder/dialog-preferences.glade:1773
 msgid "Enable timeout on \"Save changes on closing\" question"
-msgstr ""
+msgstr "“关闭时保存”超时"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:46
 #: gnucash/gtkbuilder/dialog-preferences.glade:1777
@@ -11294,7 +11290,7 @@ msgid ""
 "limited number of seconds for an answer. If the user didn't answer within "
 "that time, the changes will be saved automatically and the question window "
 "closed."
-msgstr ""
+msgstr "勾选，“关闭时保存”会等待几秒，若用户未有其他操作，文件将保存并关闭。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:50
 msgid "Time to wait for answer"
@@ -11337,7 +11333,7 @@ msgstr "这区域指定自动小数功能所填入的位数多寡。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
-msgstr "即使汇率得四舍五入，也要强制显示小数。"
+msgstr "汇率以小数显示。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:71
 #: gnucash/gtkbuilder/dialog-preferences.glade:1214
@@ -11345,13 +11341,12 @@ msgid ""
 "If active, GnuCash will round prices as necessary to display them as "
 "decimals instead of displaying the exact fraction if the fractional part "
 "cannot be exactly represented as a decimal."
-msgstr ""
+msgstr "若勾选，精确的分数将转换为小数，当然会四舍五入。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:75
 #: gnucash/gtkbuilder/dialog-preferences.glade:1725
-#, fuzzy
 msgid "Do not create log/backup files."
-msgstr "要保留日志、备份文件多少天。"
+msgstr "不创建日志/备份。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:76
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:81
@@ -11367,17 +11362,16 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1743
 msgid "Delete old log/backup files after this many days (0 = never)."
-msgstr "经过这个日数之后删除旧的记录/备份文件案(0 = 永不)。"
+msgstr "日志/备份保留多少天（0 = 从不）。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:85
 #: gnucash/gtkbuilder/dialog-preferences.glade:1761
-#, fuzzy
 msgid "Do not delete log/backup files."
-msgstr "要保留日志、备份文件多少天。"
+msgstr "永久保留日志/备份。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:90
 msgid "Delete old log/backup files after this many days (0 = never)"
-msgstr "经过这个日数之后删除旧的记录/备份文件案(0 = 永不)。"
+msgstr "日志/备份保留多少天（0 = 从不）"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:91
 msgid ""
@@ -11546,9 +11540,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:160
 #: gnucash/gtkbuilder/dialog-preferences.glade:1108
-#, fuzzy
 msgid "In the current calendar year"
-msgstr "日历年度的末尾"
+msgstr "本年"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:161
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:166
@@ -11573,7 +11566,7 @@ msgstr ""
 msgid ""
 "Dates will be completed so that they are close to the current date. Enter "
 "the maximum number of months to go backwards in time when completing dates."
-msgstr ""
+msgstr "录入月份和本月差值在限额内（小于等于），即本年；超出（大于）为明年。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:175
 #, fuzzy
@@ -11679,7 +11672,7 @@ msgstr ""
 msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
-msgstr ""
+msgstr "新账簿，双行模式，分录栏显示“T-编号”"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:226
 #: gnucash/gtkbuilder/dialog-preferences.glade:1427
@@ -11690,7 +11683,7 @@ msgid ""
 "visible in single line mode). Otherwise, the default book option for new "
 "files is set so that the 'Num' cell on registers shows/updates the "
 "transaction 'num' field."
-msgstr ""
+msgstr "若勾选，新账簿双行模式，交易分录栏显示“T-编号”；否则，显示“操作”。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:235
 #, fuzzy
@@ -11731,13 +11724,12 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:250
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:251
-#, fuzzy
 msgid "Automatically raise the list of accounts or actions during input"
-msgstr "输入时自动提高科目或操作列表"
+msgstr "输入时自动提升科目或动作列表"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:255
 msgid "Move to Transfer field when memorised transaction auto filled"
-msgstr "在自动填入了记忆中的交易事项后，转到转账字段"
+msgstr "记忆填充交易后，跳转账字段"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:256
 msgid ""
@@ -12969,7 +12961,7 @@ msgstr "<b>时间格式</b>"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1029
 #: gnucash/gtkbuilder/gnc-date-format.glade:39
 msgid "Date Format"
-msgstr "日期"
+msgstr "日期格式"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:604
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:611
@@ -14304,7 +14296,7 @@ msgstr "发票是否默认含税，适用于新客户和供应商。"
 #. See the tooltip "At post time..." for details.
 #: gnucash/gtkbuilder/business-prefs.glade:192
 msgid "_Process payments on posting"
-msgstr "入帐抵扣"
+msgstr "入帐抵扣(_P)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:223
 msgid "<b>Bills</b>"
@@ -15755,7 +15747,7 @@ msgstr "颜色"
 #: gnucash/gtkbuilder/dialog-import.glade:644
 #: gnucash/gtkbuilder/dialog-preferences.glade:2413
 msgid "<b>Actions</b>"
-msgstr "<b>动作</b>"
+msgstr "<b>操作</b>"
 
 #: gnucash/gtkbuilder/dialog-import.glade:656
 msgid "\"A\""
@@ -16171,7 +16163,7 @@ msgstr "ISO"
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:59
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:56
 msgid "Locale"
-msgstr "默认"
+msgstr "本地"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:133
 #, fuzzy
@@ -16353,7 +16345,7 @@ msgstr "精美的日期格式"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1044
 msgid "<b>Time Format</b>"
-msgstr "<b>时间</b>"
+msgstr "<b>时间格式</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1064
 msgid "U_se 24-hour clock"
@@ -16361,20 +16353,20 @@ msgstr "使用24小时时钟(_S)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1070
 msgid "Use a 24 hour (instead of a 12 hour) time format."
-msgstr "使用 24 小时制(代替 12 小时制)。"
+msgstr "使用 24 小时（而非 12 小时）的时间格式。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1085
 msgid "<b>Date Completion</b>"
-msgstr "<b>截止日期</b>"
+msgstr "<b>日期补全</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1098
 msgid "When a date is entered without year, it should be taken"
-msgstr ""
+msgstr "输入的日期没有年份时，其应属于"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1114
 msgid ""
 "Dates will be completed so that they are within the current calendar year."
-msgstr ""
+msgstr "日期年份补全为本年。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1127
 msgid ""
@@ -16392,7 +16384,7 @@ msgstr "使用系统本地区域设置的日期格式。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1198
 msgid "<b>Numbers</b>"
-msgstr "<b>编号</b>"
+msgstr "<b>数值</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1208
 msgid "Force P_rices to display as decimals"
@@ -16408,7 +16400,7 @@ msgstr "以红色显示负数。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1244
 msgid "_Automatic decimal point"
-msgstr "自动插入小数点(_A)"
+msgstr "自动小数点(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1250
 msgid ""
@@ -16457,17 +16449,16 @@ msgid "days"
 msgstr "天"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1505
-#, fuzzy
 msgid "<b>_Retain log/backup files</b>"
-msgstr "<b>保留日志/备份文件(_R)：</b>"
+msgstr "<b>日志/备份(_R)</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1517
 msgid "Com_press files"
-msgstr "压缩文件(_P)"
+msgstr "压缩(_P)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1523
 msgid "Compress the data file with gzip when saving it to disk."
-msgstr "在保存数据文件时用 gzip 压缩。"
+msgstr "数据保存时用 gzip 压缩。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1538
 msgid "<b>Files</b>"
@@ -16475,12 +16466,11 @@ msgstr "<b>文件</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1571
 msgid "<b>Search Dialog</b>"
-msgstr "<b>搜索对话框</b>"
+msgstr "<b>搜索框</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1584
-#, fuzzy
 msgid "New search _limit"
-msgstr "新建搜索上限(_L)："
+msgstr "新搜索限数(_L)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1599
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -16495,9 +16485,8 @@ msgid "Show splash screen at startup."
 msgstr "程序启动时显示欢迎界面。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1636
-#, fuzzy
 msgid "Auto-save time _interval"
-msgstr "自动保存时间间隔(_I)："
+msgstr "自动保存周期(_I)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1675
 msgid "minutes"
@@ -16505,15 +16494,13 @@ msgstr "分钟"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1691
 msgid "Show auto-save confirmation _question"
-msgstr "显示自动保存确认提问(_Q)"
+msgstr "自动保存提醒(_Q)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1697
 msgid ""
 "If active, GnuCash shows a confirmation question each time the auto-save "
 "feature is started. Otherwise no extra explanation is shown."
-msgstr ""
-"如果选中，GnuCash 会在每次自动保存功能开始的时候显示一个确认提示。否则，不会"
-"显示任何额外信息。"
+msgstr "若勾选，GnuCash 自动保存时需要确认，否则直接保存。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1737
 #: gnucash/gtkbuilder/dialog-sx.glade:1217
@@ -16524,7 +16511,7 @@ msgstr "表单"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
 #: gnucash/gtkbuilder/dialog-sx.glade:1185
 msgid "Forever"
-msgstr "永远"
+msgstr "永久"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1794
 msgid "Time to _wait for answer"
@@ -16532,39 +16519,36 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1831
 msgid "seconds"
-msgstr ""
+msgstr "秒钟"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1859
 #: gnucash/gtkbuilder/dialog-preferences.glade:1877
-#, fuzzy
 msgid "Path head for Linked Files Relative Paths"
-msgstr "关联文件"
+msgstr "文件位置"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1906
 msgid "Enable horizontal grid lines on table displays"
-msgstr "为表格视图启用水平网格线"
+msgstr "水平网格线"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1910
 msgid ""
 "Enable horizontal grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
-msgstr ""
+msgstr "主窗格显示水平网格线。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1923
 msgid "Enable vertical grid lines on table displays"
-msgstr ""
+msgstr "垂直网格线"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1927
 msgid ""
 "Enable vertical grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
-msgstr ""
+msgstr "主窗格显示垂直网格线。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1943
-#, fuzzy
-#| msgid "<b>Files</b>"
 msgid "<b>Linked Files</b>"
-msgstr "<b>文件</b>"
+msgstr "<b>链接文件</b>"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2038
@@ -16658,42 +16642,38 @@ msgstr "默认支票打印字体。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2326
 msgid "Print _date format"
-msgstr "打印日期格式(_D)"
+msgstr "日期格式(_D)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2332
 msgid "Below the actual date, print the format of that date in 8 point type."
-msgstr "在日期之下以 8 点字印出所用的日期格式"
+msgstr "在实际日期下方，用 8 号字体打印该日期。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2344
 msgid "Print _blocking chars"
-msgstr "打印分块字符串(_B)"
+msgstr "分隔符(_B)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2350
 msgid "Print '***' before and after each text field on the check."
-msgstr "在支票每个文本字段的前后打印“***”。"
+msgstr "在支票每段文本前后打印“***”。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2365
-#, fuzzy
 msgid "Default _font"
-msgstr "默认字体(_F)："
+msgstr "默认字体(_F)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2394
 msgid "Printing"
-msgstr "正在打印"
+msgstr "打印"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2423
 msgid "'_Enter' moves to blank transaction"
-msgstr "按“回车”移至空白交易事项(_E)"
+msgstr "“回车”移至空白交易(_E)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2429
-#, fuzzy
 msgid ""
 "If checked, pressing the 'Enter' key will move to the location of the blank "
 "transaction in the register. If clear, pressing the 'Enter' key will move "
 "down one row."
-msgstr ""
-"如果选中，按“回车”将会移动到账簿底部的空白交易事项处；否则，按“回车”将会到下"
-"一行。"
+msgstr "勾选，“回车”将移动光标至交易界面底部空白处；否则，移到下一行。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2441
 msgid "_Auto-raise lists"
@@ -16701,11 +16681,11 @@ msgstr "自动提升列表(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2447
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr "自动将科目列表或运行输入操作者抬至上层。"
+msgstr "输入时自动提升科目或动作列表。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2459
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
-msgstr "Tab 命令还包括在记住的交易事项中的转账(_C)"
+msgstr "记忆填充时，Tab 包含转账字段(_C)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2465
 msgid "Move to Transfer field when memorised transaction auto filled."
@@ -17011,9 +16991,8 @@ msgstr "窗口"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3656
 #: gnucash/gtkbuilder/dialog-preferences.glade:3679
-#, fuzzy
 msgid "Online Quotes"
-msgstr "获取网上报价(_G)"
+msgstr "网上报价"
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
@@ -22180,7 +22159,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-model.c:278
 #: gnucash/report/reports/standard/register.scm:134
 msgid "T-Num"
-msgstr ""
+msgstr "T-编号"
 
 #: gnucash/register/ledger-core/split-register-model.c:404
 msgid "Exch. Rate"
@@ -24042,14 +24021,12 @@ msgid "Show TXF export parameters for each TXF code/account on report."
 msgstr "在报表上为每个 TXF 代码/科目显示 TXF 输出参数"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:239
-#, fuzzy
 msgid "Do not print T-Num:Memo data"
-msgstr "不打印“操作：备注”数据"
+msgstr "不打印 T-编号：备注"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:240
-#, fuzzy
 msgid "Do not print T-Num:Memo data for transactions."
-msgstr "不打印交易事项的“操作：备注”数据"
+msgstr "不打印交易的 T-编号：备注。"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:243
 msgid "Do not print Action:Memo data"
@@ -29564,7 +29541,7 @@ msgstr "反转某些科目类型的金额显示"
 
 #: gnucash/report/trep-engine.scm:1213
 msgid "Num/T-Num"
-msgstr ""
+msgstr "编号/T-编号"
 
 #: gnucash/report/trep-engine.scm:1262
 msgid "Transfer from/to"
