@@ -1890,7 +1890,8 @@ xaccTransOrder_num_action (const Transaction *ta, const char *actna,
                             const Transaction *tb, const char *actnb)
 {
     char *da, *db;
-    int na, nb, retval;
+    long long int na, nb;
+    int retval;
 
     if ( ta && !tb ) return -1;
     if ( !ta && tb ) return +1;
@@ -1907,19 +1908,27 @@ xaccTransOrder_num_action (const Transaction *ta, const char *actna,
             return (ta_is_closing - tb_is_closing);
     }
 
-    /* otherwise, sort on number string */
-    if (actna && actnb) /* split action string, if not NULL */
+    /* otherwise, sort on split action string, if not NULL */
+    if (actna && actnb)
     {
-        na = atoi(actna);
-        nb = atoi(actnb);
+        retval = g_strcmp0(actna, actna);
+        if (retval)
+            return retval;
     }
-    else                /* else transaction num string */
+
+    /* otherwise, sort on number string in integer compare, if it's "short" */
+    if (strlen(ta->num) <= 18 && strlen(tb->num) <= 18)
     {
-        na = atoi(ta->num);
-        nb = atoi(tb->num);
+        na = atoll(ta->num);
+        nb = atoll(tb->num);
+        if (na < nb) return -1;
+        if (na > nb) return +1;
     }
-    if (na < nb) return -1;
-    if (na > nb) return +1;
+
+    /* otherwise, sort on number string in string compare */
+    retval = g_strcmp0(ta->num, tb->num);
+    if (retval)
+        return retval;
 
     if (ta->date_entered != tb->date_entered)
         return (ta->date_entered > tb->date_entered) - (ta->date_entered < tb->date_entered);
