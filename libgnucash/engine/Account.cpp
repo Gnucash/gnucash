@@ -3127,16 +3127,34 @@ gnc_account_lookup_by_type_and_commodity (Account* root,
                                           gnc_commodity* commodity)
 {
     auto rpriv{GET_PRIVATE(root)};
+    if (rpriv->type == acctype &&
+        gnc_commodity_equiv(rpriv->commodity, commodity))
+    {
+        if (name)
+        {
+            if (strcmp(name, rpriv->accountName) == 0)
+                return root;
+        }
+        else
+        {
+            return root;
+        }
+    }
+
+    /* Nope. Make sure the types are compatible */
+    if (!xaccAccountTypesCompatible(rpriv->type, acctype))
+        return nullptr;
+
+    /* Recurse */
     for (auto node = rpriv->children; node; node = node->next)
     {
         auto account{static_cast<Account*>(node->data)};
-        if (xaccAccountGetType (account) == acctype &&
-            gnc_commodity_equiv(xaccAccountGetCommodity (account), commodity))
         {
-            if (name && strcmp(name, xaccAccountGetName(account)))
-                continue; //name doesn't match so skip this one
-
-            return account;
+            auto child{gnc_account_lookup_by_type_and_commodity(account, name,
+                                                                acctype,
+                                                                commodity)};
+            if (child)
+                return child;
         }
     }
     return nullptr;
