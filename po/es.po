@@ -12,10 +12,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.7.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-15 23:26+0000\n"
+"PO-Revision-Date: 2021-04-25 22:33+0000\n"
 "Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -24,11 +24,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -2878,6 +2878,8 @@ msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
 msgstr ""
+"No se ha seleccionado ningún documento para asociar a este pago. Esto podría "
+"crear un pago sin adjuntar."
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1330
 #: gnucash/report/reports/standard/new-aging.scm:192
@@ -6214,6 +6216,8 @@ msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
+"Este informe debe de ser actualizado para devolver un objeto de documento "
+"con export-string o export-error."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1765
 #, c-format
@@ -6640,6 +6644,9 @@ msgid ""
 "have mismatched commodities or currencies.\n"
 "You need to open each account individually to edit transactions."
 msgstr ""
+"Las transacciones de esta cuenta no pueden ser editadas porque sus "
+"subcuentas tienen materias primas o monedas no coincidentes.\n"
+"Es necesario abrir cada cuenta individualmente para editar las transacciones."
 
 #: gnucash/gnome/gnc-split-reg.c:2524
 #, fuzzy
@@ -7100,16 +7107,16 @@ msgstr "Abre la ventana de ayuda de GnuCash"
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "La fecha del extracto es %d día posterior a hoy."
+msgstr[1] "La fecha del extracto es %d días posterior a hoy."
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:364
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "La fecha del extracto seleccionada se encuentra %d día en el futuro."
+msgstr[1] "La fecha del extracto seleccionada se encuentra %d días en el futuro."
 
 #: gnucash/gnome/window-reconcile.c:369
 msgid ""
@@ -7124,6 +7131,8 @@ msgid ""
 "WARNING! Account contains splits whose reconcile date is after statement "
 "date. Reconciliation may be difficult."
 msgstr ""
+"¡ATENCIÓN! La cuenta contiene desgloses cuya fecha de conciliación es "
+"posterior a la fecha del extracto. La conciliación puede ser difícil."
 
 #: gnucash/gnome/window-reconcile.c:1856
 msgid ""
@@ -7132,6 +7141,10 @@ msgid ""
 "the case, you may use Find Transactions to find them, unreconcile, and re-"
 "reconcile."
 msgstr ""
+"Esta cuenta contiene desgloses cuya fecha de conciliación es posterior a la "
+"fecha del extracto. Estos desgloses pueden hacer la conciliación difícil. Si "
+"éste es el caso, se puede usar la búsqueda de transacciones para "
+"encontrarlos, des-conciliarlos y re-conciliarlos."
 
 #: gnucash/gnome/window-report.c:115
 msgid "Set the report options you want using this dialog."
@@ -7828,7 +7841,7 @@ msgstr "Cabecera de ruta no existe, "
 #: gnucash/gnome-utils/dialog-doclink-utils.c:242
 #, c-format
 msgid "Path head not set, using '%s' for relative paths"
-msgstr ""
+msgstr "Cabecera de la ruta no establecida, usando '%s' para rutas relativas"
 
 # menú
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
@@ -10567,6 +10580,10 @@ msgid ""
 "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
 "Please use 'gnucash-cli --quotes get <datafile>' instead."
 msgstr ""
+"Añadir cotización de precios a un archivo de datos de GnuCash determinado.\n"
+"Nota: esta opción se ha marcado como obsoleta y será eliminada en GnuCash 5."
+"0.\n"
+"Por favor, use 'gnucash-cli --quotes get <datafile>' en su lugar."
 
 #: gnucash/gnucash.cpp:346
 msgid ""
@@ -10576,6 +10593,12 @@ msgid ""
 "Please use 'gnucash-cli --quotes get --namespace <namespace> <datafile>' "
 "instead."
 msgstr ""
+"Expresión regular definiendo qué productos de espacio de nombres se "
+"recuperarán.\n"
+"Nota: esta opción se ha marcado como obsoleta y será eliminada en GnuCash 5."
+"0.\n"
+"Por favor, use 'gnucash-cli --quotes get --namespace <namespace> <datafile>' "
+"en su lugar."
 
 #: gnucash/gnucash.cpp:363
 msgid ""
@@ -10583,6 +10606,9 @@ msgid ""
 "removed in GnuCash 5.0. Please use 'gnucash-cli --quotes get <datafile>' "
 "instead."
 msgstr ""
+"La opción '--add-price-quotes' de gnucash se ha marcado como obsoleta y será "
+"eliminada en GnuCash 5.0. Por favor, use 'gnucash-cli --quotes get "
+"<datafile>' en su lugar."
 
 #: gnucash/gnucash.cpp:399
 #, fuzzy
@@ -19150,6 +19176,8 @@ msgid ""
 "Replace the budget for all periods with new 'value'. Use empty value to "
 "unset budget for the accounts."
 msgstr ""
+"Reemplazar el presupuesto para todos los periodos con un nuevo 'valor'. "
+"Dejar el valor vacío para quitar el presupuesto de las cuentas."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:133
 msgid "Add"
@@ -19179,7 +19207,7 @@ msgstr "Dígitos significativos"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:208
 msgid "Use a fixed value or apply transformation for all periods."
-msgstr ""
+msgstr "Usar un valor fijo o aplicar transformación a todos los periodos."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:240
 msgid "Estimate Budget Values"
@@ -19524,6 +19552,9 @@ msgid ""
 "than approximately 20. In that case please clear at least some of them "
 "manually."
 msgstr ""
+"Esta herramienta puede ser lenta o abortar si el número de desgloses no "
+"compensados es mayor que aproximadamente 20. En ese caso, compense algunos "
+"de manera manual."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:138
 #: gnucash/gtkbuilder/window-reconcile.glade:117
@@ -19539,6 +19570,8 @@ msgstr "_Revisar transacciones creadas"
 #: gnucash/gtkbuilder/window-autoclear.glade:181
 msgid "Select this option to open a register tab with newly cleared splits."
 msgstr ""
+"Seleccione esta opción para abrir una pestaña de libro de cuentas con "
+"desgloses recién compensados."
 
 #: gnucash/gtkbuilder/window-reconcile.glade:71
 msgid "<b>Reconcile Information</b>"
@@ -19630,6 +19663,8 @@ msgid ""
 "This assistant helps you setting up your Online Banking connection with your "
 "bank."
 msgstr ""
+"Este asistente le ayuda a establecer la conexión bancaria online con su "
+"banco."
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
@@ -19808,7 +19843,7 @@ msgstr "_Introducir fecha:"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:512
 msgid "No_w"
-msgstr ""
+msgstr "A_hora"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:572
 msgid "Enter Password"
@@ -19825,7 +19860,7 @@ msgstr "A_nchura de la Barra"
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:670
 msgid "Setting the bar width, adapting to the size of the TAN generator."
-msgstr ""
+msgstr "Definir el ancho de la barra, adaptando al tamaño del generador TAN."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:685
 msgid "_Delay"
@@ -20571,6 +20606,7 @@ msgstr "Importar _MT940"
 msgid ""
 "Import an end-of-day account statement in SWIFT MT940 format into GnuCash."
 msgstr ""
+"Importar un extracto de cuenta fin-de-día con formato SWIFT MT940 a GnuCash."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:138
 msgid "Import MT94_2"
@@ -20579,6 +20615,7 @@ msgstr "Importar MT94_2"
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:139
 msgid "Import an interim account statement in SWIFT MT942 format into GnuCash."
 msgstr ""
+"Importar un extracto provisional de cuenta en formato SWIFT MT942 a GnuCash."
 
 #. Translators: DTAUS is a traditional german exchange format.
 #. https://de.wikipedia.org/wiki/Datentr%C3%A4geraustauschverfahren
@@ -20886,6 +20923,15 @@ msgid ""
 "- invoices created: %u\n"
 "- invoices updated: %u"
 msgstr ""
+"Importación:\n"
+"- filas ignoradas: %i\n"
+"- filas importadas: %i\n"
+"\n"
+"Validación & procesamiento:\n"
+"- filas corregidas: %u\n"
+"- filas ignoradas: %u\n"
+"- facturas creadas: %u\n"
+"- facturas actualizadas: %u"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:229
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:205
@@ -25696,6 +25742,8 @@ msgid ""
 "The future minimum will add, for each date point, a projected minimum "
 "balance including scheduled transactions."
 msgstr ""
+"El mínimo futuro añadirá, para cada fecha, un balance proyectado mínimo "
+"incluyendo transacciones programadas."
 
 #: gnucash/report/reports/standard/balance-forecast.scm:256
 msgid "Target"
