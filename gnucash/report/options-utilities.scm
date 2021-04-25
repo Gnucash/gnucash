@@ -141,11 +141,11 @@
    (gnc:make-multichoice-option
     pagename optname
     sort-tag (N_ "The source of price information.") default
-    (list (vector 'average-cost (N_ "Average cost of purchases by volume-weighted"))
+    (list (vector 'average-cost (N_ "Average cost of purchases weighted by volume"))
           (vector 'weighted-average (N_ "Weighted average of all past currency transactions"))
-          (vector 'pricedb-latest (N_ "Most recent"))
-          (vector 'pricedb-before (N_ "Nearest before report date"))
-          (vector 'pricedb-nearest (N_ "Nearest to report date"))))))
+          (vector 'pricedb-before (N_ "Last up to report date"))
+          (vector 'pricedb-nearest (N_ "Closest to report date"))
+          (vector 'pricedb-latest (N_ "Most recent"))))))
 
 ;; The width- and height- options for charts
 (define (gnc:options-add-plot-size!
