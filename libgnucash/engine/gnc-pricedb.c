@@ -1878,16 +1878,6 @@ price_list_scan_any_currency(GList *price_list, gpointer data)
     return TRUE;
 }
 
-static gboolean
-is_in_list (GList *list, const gnc_commodity *c)
-{
-    GList *node;
-    for (node = list; node != NULL; node = g_list_next(node))
-        if ((gnc_commodity*)node->data == c)
-            return TRUE;
-    return FALSE;
-}
-
 /* This operates on the principal that the prices are sorted by date and that we
  * want only the first one before the specified time containing both the target
  * and some other commodity. */
@@ -1901,17 +1891,17 @@ latest_before (PriceList *prices, const gnc_commodity* target, time64 t)
         gnc_commodity *com = gnc_price_get_commodity(price);
         gnc_commodity *cur = gnc_price_get_currency(price);
         time64 price_t = gnc_price_get_time64(price);
+
         if (t < price_t ||
-            (com == target && is_in_list(found_coms, cur)) ||
-            (cur == target && is_in_list(found_coms, com)))
+            (com == target && g_list_find (found_coms, cur)) ||
+            (cur == target && g_list_find (found_coms, com)))
             continue;
-        else
-        {
-            gnc_price_ref(price);
-            retval = g_list_prepend(retval, price);
-            found_coms = g_list_prepend(found_coms, com == target ? cur : com);
-        }
+
+        gnc_price_ref (price);
+        retval = g_list_prepend (retval, price);
+        found_coms = g_list_prepend (found_coms, com == target ? cur : com);
     }
+    g_list_free (found_coms);
     return g_list_reverse(retval);
 }
 
