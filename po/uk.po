@@ -23208,8 +23208,8 @@ msgid "Day"
 msgstr "День"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "Один день."
+msgid "One Day"
+msgstr "Один день"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -23218,8 +23218,8 @@ msgstr "Тиждень"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "Один тиждень."
+msgid "One Week"
+msgstr "Один тиждень"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -23228,8 +23228,8 @@ msgstr "2 тижні"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "Два тижні."
+msgid "Two Weeks"
+msgstr "Два тижні"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -23238,8 +23238,8 @@ msgstr "Місяць"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "Один місяць."
+msgid "One Month"
+msgstr "Один місяць"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -23248,18 +23248,13 @@ msgstr "Квартал"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "Один квартал."
+msgid "One Quarter"
+msgstr "Один квартал"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "Пів року"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "Пів року."
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -23268,8 +23263,8 @@ msgstr "Рік"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "Один рік."
+msgid "One Year"
+msgstr "Один рік"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23449,20 +23444,20 @@ msgid "Choose the method for sorting accounts."
 msgstr "Виберіть спосіб впорядковування рахунків."
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "За кодом рахунку, за абеткою."
+msgid "Alphabetical by account code"
+msgstr "За кодом рахунку, за абеткою"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "За алфавітом"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "За назвою рахунку, за абеткою."
+msgid "Alphabetical by account name"
+msgstr "За назвою рахунку, за абеткою"
 
 #: gnucash/report/options-utilities.scm:214
-msgid "By amount, largest to smallest."
-msgstr "За сумою, від більшої до меншої."
+msgid "By amount, largest to smallest"
+msgstr "За сумою, від більшої до меншої"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "How to show the balances of parent accounts."

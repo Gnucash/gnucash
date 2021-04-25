@@ -23078,8 +23078,8 @@ msgid "Day"
 msgstr "Dia"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "Um dia."
+msgid "One Day"
+msgstr "Um dia"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -23088,8 +23088,8 @@ msgstr "Semana"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "Uma semana."
+msgid "One Week"
+msgstr "Uma semana"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -23098,8 +23098,8 @@ msgstr "2Semanas"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "Duas semanas."
+msgid "Two Weeks"
+msgstr "Duas semanas"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -23108,8 +23108,8 @@ msgstr "Mês"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "Um mês."
+msgid "One Month"
+msgstr "Um mês"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -23118,18 +23118,14 @@ msgstr "Trimestre"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "Um quarto."
+msgid "One Quarter"
+msgstr "Um quarto"
 
+# "Meio ano"?
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "Semestre"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "Meio ano."
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -23138,8 +23134,8 @@ msgstr "Ano"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "Um ano."
+msgid "One Year"
+msgstr "Um ano"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23323,20 +23319,20 @@ msgid "Choose the method for sorting accounts."
 msgstr "Selecione o método para ordenar as contas."
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "Em ordem alfabética pelo código da conta."
+msgid "Alphabetical by account code"
+msgstr "Em ordem alfabética pelo código da conta"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "Alfabético"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "Em ordem alfabética pelo nome da conta."
+msgid "Alphabetical by account name"
+msgstr "Em ordem alfabética pelo nome da conta"
 
 #: gnucash/report/options-utilities.scm:214
-msgid "By amount, largest to smallest."
-msgstr "Por quantidade, do maior para o menor."
+msgid "By amount, largest to smallest"
+msgstr "Por quantidade, do maior para o menor"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "How to show the balances of parent accounts."

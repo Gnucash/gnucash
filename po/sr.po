@@ -22960,8 +22960,8 @@ msgid "Day"
 msgstr "Дан"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "Један дан."
+msgid "One Day"
+msgstr "Један дан"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -22970,8 +22970,8 @@ msgstr "Недеља"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "Једна недеља."
+msgid "One Week"
+msgstr "Једна недеља"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -22980,8 +22980,8 @@ msgstr "2 недеље"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "Две недеље."
+msgid "Two Weeks"
+msgstr "Две недеље"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -22990,8 +22990,8 @@ msgstr "Месец"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "Један месец."
+msgid "One Month"
+msgstr "Један месец"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -23000,18 +23000,13 @@ msgstr "Тромесечје"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "Једно тромесечје."
+msgid "One Quarter"
+msgstr "Једно тромесечје"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "Пола године"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "Пола године."
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -23020,8 +23015,8 @@ msgstr "Година"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "Једна година."
+msgid "One Year"
+msgstr "Једна година"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23201,20 +23196,20 @@ msgid "Choose the method for sorting accounts."
 msgstr "Изаберите начин за ређање налога."
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "Азбучним редом према шифри налога."
+msgid "Alphabetical by account code"
+msgstr "Азбучним редом према шифри налога"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "Азбучним редом"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "Азбучним редом према називу налога."
+msgid "Alphabetical by account name"
+msgstr "Азбучним редом према називу налога"
 
 #: gnucash/report/options-utilities.scm:214
-msgid "By amount, largest to smallest."
-msgstr "Према износу, од већег ка мањем."
+msgid "By amount, largest to smallest"
+msgstr "Према износу, од већег ка мањем"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "How to show the balances of parent accounts."

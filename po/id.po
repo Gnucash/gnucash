@@ -23090,8 +23090,8 @@ msgid "Day"
 msgstr "Hari"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "Satu Hari."
+msgid "One Day"
+msgstr "Satu Hari"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -23100,8 +23100,8 @@ msgstr "Minggu"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "Satu Minggu."
+msgid "One Week"
+msgstr "Satu Minggu"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -23110,8 +23110,8 @@ msgstr "2Minggu"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "Dua Minggu."
+msgid "Two Weeks"
+msgstr "Dua Minggu"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -23120,8 +23120,8 @@ msgstr "Bulan"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "Satu Bulan."
+msgid "One Month"
+msgstr "Satu Bulan"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -23130,18 +23130,13 @@ msgstr "Kuartal"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "Satu Kuartal."
+msgid "One Quarter"
+msgstr "Satu Kuartal"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "Semester"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "Semester."
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -23150,8 +23145,8 @@ msgstr "Tahun"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "Satu Tahun."
+msgid "One Year"
+msgstr "Satu Tahun"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23331,20 +23326,20 @@ msgid "Choose the method for sorting accounts."
 msgstr "Pilih metode mengurutkan akun."
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "Alfabetis menurut kode akun."
+msgid "Alphabetical by account code"
+msgstr "Alfabetis menurut kode akun"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "Alfabetis"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "Alfabetis menurut nama akun."
+msgid "Alphabetical by account name"
+msgstr "Alfabetis menurut nama akun"
 
 #: gnucash/report/options-utilities.scm:214
 msgid "By amount, largest to smallest."
-msgstr "Menurut jumlah, terbesar ke terkecil."
+msgstr "Menurut jumlah, terbesar ke terkecil"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "How to show the balances of parent accounts."

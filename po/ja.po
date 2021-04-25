@@ -22458,8 +22458,8 @@ msgid "Day"
 msgstr "日"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "1 日です。"
+msgid "One Day"
+msgstr "1 日です"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -22468,8 +22468,8 @@ msgstr "週"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "1 週間です。"
+msgid "One Week"
+msgstr "1 週間です"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -22478,8 +22478,8 @@ msgstr "2 週"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "2 週間です。"
+msgid "Two Weeks"
+msgstr "2 週間です"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -22488,8 +22488,8 @@ msgstr "月"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "1 ヶ月です。"
+msgid "One Month"
+msgstr "1 ヶ月です"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -22498,18 +22498,13 @@ msgstr "四半期"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "3 ヶ月です。"
+msgid "One Quarte"
+msgstr "3 ヶ月です"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "半年"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "半年です。"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -22518,8 +22513,8 @@ msgstr "年"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "1 年です。"
+msgid "One Year"
+msgstr "1 年です"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -22699,20 +22694,20 @@ msgid "Choose the method for sorting accounts."
 msgstr "勘定科目のソート方法を選択してください。"
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "勘定科目コードのアルファベット順です。"
+msgid "Alphabetical by account code"
+msgstr "勘定科目コードのアルファベット順です"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "アルファベット順"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "勘定科目名のアルファベット順です。"
+msgid "Alphabetical by account name"
+msgstr "勘定科目名のアルファベット順です"
 
 #: gnucash/report/options-utilities.scm:214
-msgid "By amount, largest to smallest."
-msgstr "金額の降順です。"
+msgid "By amount, largest to smallest"
+msgstr "金額の降順です"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "How to show the balances of parent accounts."

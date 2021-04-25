@@ -23393,7 +23393,7 @@ msgid "Day"
 msgstr "Día"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
+msgid "One Day"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:67
@@ -23404,7 +23404,7 @@ msgstr "Semana"
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
 #, fuzzy
-msgid "One Week."
+msgid "One Week"
 msgstr "Hace una semana"
 
 #: gnucash/report/options-utilities.scm:68
@@ -23414,8 +23414,7 @@ msgstr "2Semanas"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-#, fuzzy
-msgid "Two Weeks."
+msgid "Two Weeks"
 msgstr "Dos Semanas"
 
 #: gnucash/report/options-utilities.scm:69
@@ -23426,7 +23425,7 @@ msgstr "Mes"
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
 #, fuzzy
-msgid "One Month."
+msgid "One Month"
 msgstr "Hace un mes"
 
 #: gnucash/report/options-utilities.scm:70
@@ -23437,18 +23436,12 @@ msgstr "Trimestre"
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
 #, fuzzy
-msgid "One Quarter."
+msgid "One Quarter"
 msgstr "Trimestre"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
-msgstr "Semestre"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-#, fuzzy
-msgid "Half Year."
 msgstr "Semestre"
 
 #: gnucash/report/options-utilities.scm:72
@@ -23459,7 +23452,7 @@ msgstr "Año"
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
 #, fuzzy
-msgid "One Year."
+msgid "One Year"
 msgstr "Hace un año"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
@@ -23658,7 +23651,7 @@ msgstr "Moneda por defecto para cuentas nuevas"
 
 #: gnucash/report/options-utilities.scm:212
 #, fuzzy
-msgid "Alphabetical by account code."
+msgid "Alphabetical by account code"
 msgstr "Ordenar y subtotal por código de cuenta"
 
 #: gnucash/report/options-utilities.scm:213
@@ -23667,12 +23660,12 @@ msgstr ""
 
 #: gnucash/report/options-utilities.scm:213
 #, fuzzy
-msgid "Alphabetical by account name."
+msgid "Alphabetical by account name"
 msgstr "Ordenar y subtotal por nombre de cuenta"
 
 #: gnucash/report/options-utilities.scm:214
 #, fuzzy
-msgid "By amount, largest to smallest."
+msgid "By amount, largest to smallest"
 msgstr "mayor al menor, obsoleto a reciente"
 
 #: gnucash/report/options-utilities.scm:230
@@ -24616,14 +24609,14 @@ msgid ""
 msgstr "Puede aprender mas sobre programación en scheme usando el libro %s."
 
 #: gnucash/report/reports/example/hello-world.scm:358
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The current time is ~a."
-msgstr "El tiempo actual es %s."
+msgstr "El tiempo actual es ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:363
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The boolean option is ~a."
-msgstr "La opción booleana es %s."
+msgstr "La opción booleana es ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:364
 msgid "true"
@@ -24634,49 +24627,49 @@ msgid "false"
 msgstr "falso"
 
 #: gnucash/report/reports/example/hello-world.scm:368
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The radio button option is ~a."
-msgstr "La opción de cadena es %s."
+msgstr "La opción de cadena es ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:373
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The multi-choice option is ~a."
-msgstr "La opción multiseleccionada es %s."
+msgstr "La opción multiseleccionada es ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:378
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The string option is ~a."
-msgstr "La opción de cadena es %s."
+msgstr "La opción de cadena es ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:383
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The date option is ~a."
-msgstr "La opción de fecha es %s."
+msgstr "La opción de fecha es ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:388
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The date and time option is ~a."
-msgstr "La opción de fecha y hora es %s."
+msgstr "La opción de fecha y hora es ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:393
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The relative date option is ~a."
-msgstr "La opción de fecha relativa es %s."
+msgstr "La opción de fecha relativa es ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:398
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The combination date option is ~a."
-msgstr "La opción de fecha combinada es %s."
+msgstr "La opción de fecha combinada es ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:403
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option is ~a."
-msgstr "La opción de número es %s."
+msgstr "La opción de número es ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:414
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option formatted as currency is ~a."
-msgstr "La opción de número formateado como moneda es %s."
+msgstr "La opción de número formateado como moneda es ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:426
 msgid "Items you selected:"
@@ -24700,9 +24693,8 @@ msgid "Display help"
 msgstr "Mostrar"
 
 #: gnucash/report/reports/example/hello-world.scm:512
-#, fuzzy
 msgid "Sample Report with Examples"
-msgstr "Un informe muestra con ejemplos."
+msgstr "Un informe muestra con ejemplos"
 
 #: gnucash/report/reports/example/hello-world.scm:516
 msgid "A sample report with examples."

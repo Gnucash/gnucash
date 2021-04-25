@@ -1652,7 +1652,6 @@ msgid "Amend URL:"
 msgstr "Legg til URL:"
 
 #: gnucash/gnome/dialog-doclink.c:242
-#, fuzzy
 msgid "Enter URL like http://www.gnucash.org:"
 msgstr "Skriv inn en nettadresse, som f.eks. https://www.gnucash.org:"
 
@@ -22966,7 +22965,7 @@ msgid "Day"
 msgstr "Dag"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
+msgid "One Day"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:67
@@ -22976,8 +22975,8 @@ msgstr "Uke"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "En uke."
+msgid "One Week"
+msgstr "En uke"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -22986,8 +22985,8 @@ msgstr "2 uker"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "To uker."
+msgid "Two Weeks"
+msgstr "To uker"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -22996,8 +22995,8 @@ msgstr "Måned"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "En måned siden."
+msgid "One Month"
+msgstr "En måned"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -23006,18 +23005,13 @@ msgstr "Kvartal"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "Ett kvartal."
+msgid "One Quarter"
+msgstr "Ett kvartal"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "Halvår"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "Halvår."
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -23026,8 +23020,8 @@ msgstr "År"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "Et år."
+msgid "One Year"
+msgstr "Et år"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23212,8 +23206,7 @@ msgid "Choose the method for sorting accounts."
 msgstr "Velg sorteringsmetode for kontoene."
 
 #: gnucash/report/options-utilities.scm:212
-#, fuzzy
-msgid "Alphabetical by account code."
+msgid "Alphabetical by account code"
 msgstr "Alfabetisk etter kontokode"
 
 #: gnucash/report/options-utilities.scm:213
@@ -23221,19 +23214,16 @@ msgid "Alphabetical"
 msgstr "Alfabetisk"
 
 #: gnucash/report/options-utilities.scm:213
-#, fuzzy
-msgid "Alphabetical by account name."
+msgid "Alphabetical by account name"
 msgstr "Alfabetisk etter kontonavn"
 
 #: gnucash/report/options-utilities.scm:214
-#, fuzzy
-msgid "By amount, largest to smallest."
+msgid "By amount, largest to smallest"
 msgstr "Etter beløp, størst til minst"
 
 #: gnucash/report/options-utilities.scm:230
-#, fuzzy
 msgid "How to show the balances of parent accounts."
-msgstr "Hvordan saldoer for overordnede kontoer vises"
+msgstr "Hvordan saldoer for overordnede kontoer vises."
 
 #: gnucash/report/options-utilities.scm:233
 #: gnucash/report/reports/standard/account-summary.scm:113
@@ -23241,20 +23231,18 @@ msgid "Account Balance"
 msgstr "Kontosaldo"
 
 #: gnucash/report/options-utilities.scm:234
-#, fuzzy
 msgid "Show only the balance in the parent account, excluding any subaccounts."
 msgstr ""
 "Vis bare saldoen for den overordnede kontoen, eksluder eventuelle "
-"underkontoer"
+"underkontoer."
 
 #: gnucash/report/options-utilities.scm:237
-#, fuzzy
 msgid ""
 "Calculate the subtotal for this parent account and all of its subaccounts, "
 "and show this as the parent account balance."
 msgstr ""
 "Beregn delsum for denne overordnede kontoen og alle dens underkontoer, og "
-"vis dette som den overordnende kontoens saldo"
+"vis dette som den overordnende kontoens saldo."
 
 #: gnucash/report/options-utilities.scm:239
 #: gnucash/report/options-utilities.scm:254
@@ -23262,28 +23250,24 @@ msgid "Do not show"
 msgstr "Ikke vis"
 
 #: gnucash/report/options-utilities.scm:240
-#, fuzzy
 msgid "Do not show any balances of parent accounts."
-msgstr "Ikke vis saldi for overordnede kontoer"
+msgstr "Ikke vis saldi for overordnede kontoer."
 
 #: gnucash/report/options-utilities.scm:248
-#, fuzzy
 msgid "How to show account subtotals for parent accounts."
-msgstr "Hvordan kontodelsummer vises for overordnede kontoer"
+msgstr "Hvordan kontodelsummer vises for overordnede kontoer."
 
 #: gnucash/report/options-utilities.scm:251
 msgid "Show subtotals"
 msgstr "Vis delsummer"
 
 #: gnucash/report/options-utilities.scm:252
-#, fuzzy
 msgid "Show subtotals for selected parent accounts which have subaccounts."
-msgstr "Vis delsummer for valgte overordnede kontoer som har underkontoer"
+msgstr "Vis delsummer for valgte overordnede kontoer som har underkontoer."
 
 #: gnucash/report/options-utilities.scm:255
-#, fuzzy
 msgid "Do not show any subtotals for parent accounts."
-msgstr "Ikke vis delsummer for overordnede kontoer"
+msgstr "Ikke vis delsummer for overordnede kontoer."
 
 #: gnucash/report/report-core.scm:150
 msgid "_Assets & Liabilities"
@@ -24187,7 +24171,7 @@ msgid "false"
 msgstr "usann"
 
 #: gnucash/report/reports/example/hello-world.scm:368
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The radio button option is ~a."
 msgstr "Valgknappsalternativet er ~a."
 
@@ -24282,9 +24266,9 @@ msgid "Scatter:"
 msgstr ""
 
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:41
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Welcome to GnuCash ~a !"
-msgstr "Velkommen til GnuCash ~a"
+msgstr "Velkommen til GnuCash ~a!"
 
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:44
 #, scheme-format
@@ -26343,7 +26327,7 @@ msgid "for Budget ~a"
 msgstr "for budsjett ~a"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:529
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "for budsjett ~a Periode ~d"
 

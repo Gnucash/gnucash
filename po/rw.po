@@ -23843,7 +23843,7 @@ msgid "Day"
 msgstr "Umunsi"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
+msgid "One Day"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:67
@@ -23853,8 +23853,7 @@ msgstr "Icyumweru"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-#, fuzzy
-msgid "One Week."
+msgid "One Week"
 msgstr "Icyumweru"
 
 #: gnucash/report/options-utilities.scm:68
@@ -23866,7 +23865,7 @@ msgstr ""
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
 #, fuzzy
-msgid "Two Weeks."
+msgid "Two Weeks"
 msgstr "IBYUMWERU"
 
 #: gnucash/report/options-utilities.scm:69
@@ -23877,7 +23876,7 @@ msgstr "Ukwezi"
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
 #, fuzzy
-msgid "One Month."
+msgid "One Month"
 msgstr "Ukwezi"
 
 #: gnucash/report/options-utilities.scm:70
@@ -23887,17 +23886,12 @@ msgstr ""
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
+msgid "One Quarter"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
-msgstr ""
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:72
@@ -23908,7 +23902,7 @@ msgstr "Umwaka"
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
 #, fuzzy
-msgid "One Year."
+msgid "One Year"
 msgstr "Umwaka"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
@@ -24118,7 +24112,7 @@ msgstr "i Uburyo kugirango Ishungura Konti"
 
 #: gnucash/report/options-utilities.scm:212
 #, fuzzy
-msgid "Alphabetical by account code."
+msgid "Alphabetical by account code"
 msgstr "ku Aderesi ITEGEKONGENGA"
 
 #: gnucash/report/options-utilities.scm:213
@@ -24127,12 +24121,12 @@ msgstr ""
 
 #: gnucash/report/options-utilities.scm:213
 #, fuzzy
-msgid "Alphabetical by account name."
-msgstr "ku Aderesi Izina:"
+msgid "Alphabetical by account name"
+msgstr "ku Aderesi Izina"
 
 #: gnucash/report/options-utilities.scm:214
 #, fuzzy
-msgid "By amount, largest to smallest."
+msgid "By amount, largest to smallest"
 msgstr "Igiteranyo Kinini Kuri Gitoya"
 
 #: gnucash/report/options-utilities.scm:230

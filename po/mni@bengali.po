@@ -6740,9 +6740,9 @@ msgid "R"
 msgstr "R"
 
 #: gnucash/gnome/report-menus.scm:57
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Display the ~a report"
-msgstr "%s রিপোর্ত উৎলি"
+msgstr "~a রিপোর্ত উৎলি"
 
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
@@ -10366,14 +10366,14 @@ msgstr "বগসিং অমসুং অতোপ্পা প্রোব্
 #, fuzzy
 msgid "You can also lookup and file bug reports at {1}"
 msgstr ""
-"নহাক্না https://bugs.gnucash.orgদা বগ রিপোর্তসিং থীবা অমসুং ফাইল সেম্বসু য়াই"
+"নহাক্না {1} দা বগ রিপোর্তসিং থীবা অমসুং ফাইল সেম্বসু য়াই"
 
 #. Translators: {1} will be replaced with a URL
 #: gnucash/gnucash-core-app.cpp:86
 #, fuzzy
 msgid "To find the last stable version, please refer to {1}"
 msgstr ""
-"অরোয়বা তং-তাবা ভর্সন ফংনবগীদমক্তা, চানবীদুনা http://www.gnucash.orgদা য়েংবীয়ু"
+"অরোয়বা তং-তাবা ভর্সন ফংনবগীদমক্তা, চানবীদুনা {1} দা য়েংবীয়ু"
 
 #: gnucash/gnucash-core-app.cpp:268
 #, fuzzy
@@ -21989,28 +21989,28 @@ msgid "Parse ambiguity between formats"
 msgstr "ফোর্মেতশিংগী মনুংদা এম্বিগুইতি পার্স তৌরো"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:1059
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Value '~a' could be ~a or ~a."
-msgstr "ভেল্যু '%s' অসি %s নত্রগা %s ওইগনি."
+msgstr "ভেল্যু '~a' অসি ~a নত্রগা ~a ওইগনি."
 
 #: gnucash/import-export/qif-imp/qif-merge-groups.scm:105
 msgid "Finding duplicate transactions"
 msgstr "দুপ্লিকেত ত্রান্সেকসনশিং থিদোকপা"
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:172
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized account type '~s'. Defaulting to Bank."
-msgstr "রিকগনাইজ তৌদবা একাউন্ত মখল '%s'. বেঙ্কতা দিফোল্ত তৌরি"
+msgstr "রিকগনাইজ তৌদবা একাউন্ত মখল '~a'. বেঙ্কতা দিফোল্ত তৌরি"
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:235
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized action '~a'."
-msgstr "রিকগনাইজ তৌদবা এক্সন '%s'."
+msgstr "রিকগনাইজ তৌদবা এক্সন '~a'."
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:254
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized status '~a'. Defaulting to uncleared."
-msgstr "রিকগনাইজ তৌদবা স্তেতস '%s'. অক্লিয়রদা দিফোল্ত তৌরি."
+msgstr "রিকগনাইজ তৌদবা স্তেতস '~a'. অক্লিয়রদা দিফোল্ত তৌরি."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."
@@ -22100,7 +22100,7 @@ msgstr "অফবা নুমিৎ ওইরো!"
 #: gnucash/python/init.py:118
 #, fuzzy, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "GnuCash ~aদা লেংসিনবীরকসি!"
+msgstr "GnuCash %s দা লেংসিনবীরকসি!"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -22787,9 +22787,9 @@ msgid "List"
 msgstr "পরিং"
 
 #: gnucash/report/eguile.scm:150
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Template file \"~a\" can not be read"
-msgstr "তেমপ্লেত ফাইল \"%s\" পাবা ঙম্মোই"
+msgstr "তেমপ্লেত ফাইল \"~a\" পাবা ঙম্মোই"
 
 #: gnucash/report/html-chart.scm:455
 msgid "Load"
@@ -22943,8 +22943,8 @@ msgstr "নুমিৎ"
 
 # the later is informal.
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "নোংমা/ নুমিৎ অমা ।"
+msgid "One Day"
+msgstr "নোংমা/ নুমিৎ অমা"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -22953,8 +22953,8 @@ msgstr "চয়োল"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "চয়োল অমা।"
+msgid "One Week"
+msgstr "চয়োল অমা"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -22963,8 +22963,8 @@ msgstr "চয়োল2"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "চয়োল অনি।"
+msgid "Two Weeks"
+msgstr "চয়োল অনি"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -22973,8 +22973,8 @@ msgstr "থা"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "থা অমা ।"
+msgid "One Month"
+msgstr "থা অমা"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -22983,19 +22983,13 @@ msgstr "ক্বার্তর (থা অহুম অহুমগী)"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "ক্বাতর অমা ।"
+msgid "One Quarter"
+msgstr "ক্বাতর অমা"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "চহী তঙ্খায়"
-
-# one of the both can be used.
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "চহি মখায়/ চহি তংখায়"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -23004,8 +22998,8 @@ msgstr "চহী"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "চহি অমা।"
+msgid "One Year"
+msgstr "চহি অমা"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23186,19 +23180,19 @@ msgid "Choose the method for sorting accounts."
 msgstr "একাউন্তস সোর্তিং তৌবগী মেথদ খল্লো."
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "একাউন্ত কোদকী এলফাবেতকী মতুংইন্না।"
+msgid "Alphabetical by account code"
+msgstr "একাউন্ত কোদকী এলফাবেতকী মতুংইন্না"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "অলফাবেতকী মতুংইন্না"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "একাউন্ত মমীংগী এলফাবেতকী মতুংইন্না।"
+msgid "Alphabetical by account name"
+msgstr "একাউন্ত মমীংগী এলফাবেতকী মতুংইন্না"
 
 #: gnucash/report/options-utilities.scm:214
-msgid "By amount, largest to smallest."
+msgid "By amount, largest to smallest"
 msgstr "খ্বাইদগী অচৌবদগী খ্বাইদগী অপিকপা, এমাউন্তকী মতুংইন্না"
 
 #: gnucash/report/options-utilities.scm:230
@@ -23461,12 +23455,12 @@ msgid "Address Email"
 msgstr "লৈফম 1"
 
 #: gnucash/report/reports/aging.scm:205
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "Transactions relating to '~a' contain more than one currency. This report is "
 "not designed to cope with this possibility."
 msgstr ""
-"'%s'গা মরি লৈনবা ত্রাঞ্জেক্সনসিংদা করেন্সি অমদগী হেন্না য়াউই। ওইথোকপা য়াবা অসি "
+"'~a'গা মরি লৈনবা ত্রাঞ্জেক্সনসিংদা করেন্সি অমদগী হেন্না য়াউই। ওইথোকপা য়াবা অসি "
 "মায়পাক্না মপুং ফাহন্নবগীদমক রিপোর্ত অসি সেমখিবা নত্তে।"
 
 #: gnucash/report/reports/aging.scm:345
@@ -24081,41 +24075,39 @@ msgstr ""
 "শাদোকহনবিয়ু."
 
 #: gnucash/report/reports/example/hello-world.scm:348
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
 "রিপোর্ত ইবগী মতেংগীদমক, নত্রগা অদোমগী পুক্নিং হুনিংঙাই ওইবা অনৌবা, মপুং ফানা অফবা "
-"রিপোর্ত শেমবদা শরুক য়ানবা মেইল থাফমগী পরিং %s দা তান্নবিয়ু."
+"রিপোর্ত শেমবদা শরুক য়ানবা মেইল থাফমগী পরিং ~a দা তান্নবিয়ু."
 
 #: gnucash/report/reports/example/hello-world.scm:353
-#, fuzzy
 msgid ""
 "For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
 msgstr ""
-"পরিং অসিদা সবস্ক্রাইব তৌবগী মচাখায়বশিং &lt;http://www.gnucash.org/&gt; দা "
+"পরিং অসিদা সবস্ক্রাইব তৌবগী মচাখায়বশিং &lt;https://www.gnucash.org/&gt; দা "
 "য়েংবিয়ু."
 
 #: gnucash/report/reports/example/hello-world.scm:354
-#, fuzzy
 msgid ""
 "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/"
 "&gt;."
 msgstr ""
-"অদোম্না ইবগী স্কিমগী মরমদা অহেনবা &lt;http://www.scheme.com/tspl2d/&gt; দগী "
+"অদোম্না ইবগী স্কিমগী মরমদা অহেনবা &lt;https://www.scheme.com/tspl2d/&gt; দগী "
 "তমবা য়াগনি."
 
 #: gnucash/report/reports/example/hello-world.scm:358
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The current time is ~a."
-msgstr "চৎলিবা মতম অসি %s নি."
+msgstr "চৎলিবা মতম অসি ~a নি."
 
 #: gnucash/report/reports/example/hello-world.scm:363
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The boolean option is ~a."
-msgstr "বুলিয়ন ওপসন অসি %s নি."
+msgstr "বুলিয়ন ওপসন অসি ~a নি."
 
 #: gnucash/report/reports/example/hello-world.scm:364
 msgid "true"
@@ -24128,47 +24120,47 @@ msgstr "অরানবা"
 #: gnucash/report/reports/example/hello-world.scm:368
 #, fuzzy, scheme-format
 msgid "The radio button option is ~a."
-msgstr "স্ত্রিং ওপসন অসি %s নি."
+msgstr "স্ত্রিং ওপসন অসি ~a নি."
 
 #: gnucash/report/reports/example/hello-world.scm:373
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The multi-choice option is ~a."
-msgstr "কয়ামরুম খনবগী ওপসন অসি %s নি."
+msgstr "কয়ামরুম খনবগী ওপসন অসি ~a নি."
 
 #: gnucash/report/reports/example/hello-world.scm:378
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The string option is ~a."
-msgstr "স্ত্রিং ওপসন অসি %s নি."
+msgstr "স্ত্রিং ওপসন অসি ~a নি."
 
 #: gnucash/report/reports/example/hello-world.scm:383
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The date option is ~a."
-msgstr "তাংগী ওপসন অসি %s নি."
+msgstr "তাংগী ওপসন অসি ~a নি."
 
 #: gnucash/report/reports/example/hello-world.scm:388
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The date and time option is ~a."
-msgstr "তাং অমসুং মতমগী ওপসন অসি %s নি."
+msgstr "তাং অমসুং মতমগী ওপসন অসি ~a নি."
 
 #: gnucash/report/reports/example/hello-world.scm:393
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The relative date option is ~a."
-msgstr "মরি লৈনবা তাংগী ওপসন অসি %s নি."
+msgstr "মরি লৈনবা তাংগী ওপসন অসি ~a নি."
 
 #: gnucash/report/reports/example/hello-world.scm:398
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The combination date option is ~a."
-msgstr "পুনশিনবগী তাংগী ওপসন অসি %s নি."
+msgstr "পুনশিনবগী তাংগী ওপসন অসি ~a নি."
 
 #: gnucash/report/reports/example/hello-world.scm:403
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option is ~a."
-msgstr "নম্বর ওপসন অসি %s নি."
+msgstr "নম্বর ওপসন অসি ~a নি."
 
 #: gnucash/report/reports/example/hello-world.scm:414
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option formatted as currency is ~a."
-msgstr "করেন্সি ওইনা ফোর্মেত তৌরবা নম্বর ওপসন অসি %s নি."
+msgstr "করেন্সি ওইনা ফোর্মেত তৌরবা নম্বর ওপসন অসি ~a নি."
 
 #: gnucash/report/reports/example/hello-world.scm:426
 msgid "Items you selected:"
@@ -24386,9 +24378,9 @@ msgstr ""
 "TXF কোদতমক হনজিনবা য়াই."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:816
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Period from ~a to ~a"
-msgstr "%s দগী %s ফাওবগী পেরিওদ"
+msgstr "~a দগী ~a ফাওবগী পেরিওদ"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:853
 msgid "Tax Report & XML Export"
@@ -24698,9 +24690,9 @@ msgid "Weekly Average"
 msgstr "চয়োলগী ওইবা চাংচৎ"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:550
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Balance at ~a"
-msgstr "%s দা বেলেন্স"
+msgstr "~a দা বেলেন্স"
 
 #: gnucash/report/reports/standard/account-summary.scm:69
 msgid "Account Summary"
@@ -24999,9 +24991,9 @@ msgstr "দেপথ লিমিত অদুদগী হেন্না ল�
 #: gnucash/report/reports/standard/equity-statement.scm:302
 #: gnucash/report/reports/standard/income-statement.scm:406
 #: gnucash/report/reports/standard/trial-balance.scm:413
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "For Period Covering ~a to ~a"
-msgstr "%s দগী %s ফাওবা পেরিওদকী"
+msgstr "~a দগী ~a ফাওবা পেরিওদকী"
 
 #: gnucash/report/reports/standard/account-summary.scm:411
 msgid "Account title"
@@ -25211,7 +25203,7 @@ msgstr "** কোম্মোদিতি অসিগী প্রাইস অ
 #: gnucash/report/reports/standard/balance-forecast.scm:35
 #, fuzzy
 msgid "Balance Forecast"
-msgstr "%s দা বেলেন্স"
+msgstr "~a দা বেলেন্স"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:38
 #: gnucash/report/reports/standard/budget-barchart.scm:134
@@ -25806,9 +25798,8 @@ msgid "Barchart"
 msgstr "লন-থুমগী বারচার্ত"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1227
-#, fuzzy
 msgid " to "
-msgstr "%s দা %s"
+msgstr " দা "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1290
 #: gnucash/report/reports/standard/trial-balance.scm:861
@@ -26156,19 +26147,19 @@ msgid "Total Expenses"
 msgstr "অপুনবা চাদিং"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:527
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a"
-msgstr "বজেত %s কী"
+msgstr "বজেত ~a কী"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:529
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Period ~d"
-msgstr "বজেত %s পেরিওদ %u কী"
+msgstr "বজেত ~a পেরিওদ ~d কী"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:532
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
-msgstr "বজেত %s পেরিওদ %u - %u কী"
+msgstr "বজেত ~a পেরিওদ ~d - ~d কী"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:560
 #: gnucash/report/reports/standard/equity-statement.scm:455
@@ -26394,14 +26385,14 @@ msgid "Show full account names (including parent accounts)."
 msgstr "মপুংফাবা একাউন্ত মমীংসিং উৎলু (পেরেন্ত একাউন্তসিং য়াউনা)।"
 
 #: gnucash/report/reports/standard/cash-flow.scm:205
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~a and subaccounts"
-msgstr "অমসুং সবএকাউন্তস"
+msgstr "~a অমসুং সবএকাউন্তস"
 
 #: gnucash/report/reports/standard/cash-flow.scm:206
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~a and selected subaccounts"
-msgstr "%s অমসুং খল্লবা সবএকাউন্তশিং"
+msgstr "~a অমসুং খল্লবা সবএকাউন্তশিং"
 
 #: gnucash/report/reports/standard/cash-flow.scm:270
 msgid "Money into selected accounts comes from"
@@ -26528,9 +26519,9 @@ msgid "Daily Average"
 msgstr "নোংমগী ওইবা চাংচৎ"
 
 #: gnucash/report/reports/standard/category-barchart.scm:520
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Balances ~a to ~a"
-msgstr "বেলেন্সেস %s দগী %s দা"
+msgstr "বেলেন্সেস ~a দগী ~a দা"
 
 #: gnucash/report/reports/standard/category-barchart.scm:641
 #: gnucash/report/reports/standard/category-barchart.scm:662
@@ -27586,7 +27577,7 @@ msgstr "চৎনবা য়াবা এমপ্লোয়ি অমত্তা
 #, fuzzy
 msgid "Click on the \"Options\" button to select a company."
 msgstr ""
-"চৎনবা য়াবা %s অমত্তা খন্দে। কম্পনি অমা খন্ননবগীদমক ওপসনস বত্তন অদুদা ক্লিক তৌ।"
+"চৎনবা য়াবা ~a অমত্তা খন্দে। কম্পনি অমা খন্ননবগীদমক ওপসনস বত্তন অদুদা ক্লিক তৌ।"
 
 #: gnucash/report/reports/standard/lot-viewer.scm:60
 #, fuzzy
@@ -28873,14 +28864,14 @@ msgid "Credit Lines"
 msgstr "ক্রেদিত লাইনস"
 
 #: gnucash/report/report-utilities.scm:712
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Building '~a' report ..."
-msgstr "'%s' রিপোর্ত শেমগৎ-শাগৎপা ..."
+msgstr "'~a' রিপোর্ত শেমগৎ-শাগৎপা ..."
 
 #: gnucash/report/report-utilities.scm:718
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Rendering '~a' report ..."
-msgstr "'%s' রিপোর্ত পীরি..."
+msgstr "'~a' রিপোর্ত পীরি..."
 
 #: gnucash/report/report-utilities.scm:720
 #, fuzzy
@@ -29862,9 +29853,9 @@ msgstr ""
 
 #. Translators: Both ~a's are dates
 #: gnucash/report/trep-engine.scm:2270
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "From ~a to ~a"
-msgstr "%s দগী %s দা"
+msgstr "~a দগী ~a দা"
 
 #: libgnucash/app-utils/business-options.scm:69
 msgid "Company Address"

@@ -23129,7 +23129,7 @@ msgid "Day"
 msgstr "Dzień"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
+msgid "One Day"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:67
@@ -23139,9 +23139,8 @@ msgstr "Tydzień"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-#, fuzzy
-msgid "One Week."
-msgstr "Tydzień temu"
+msgid "One Week"
+msgstr "Jeden tydzień"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -23150,8 +23149,7 @@ msgstr "2Tygodnie"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-#, fuzzy
-msgid "Two Weeks."
+msgid "Two Weeks"
 msgstr "Dwa tygodnie"
 
 #: gnucash/report/options-utilities.scm:69
@@ -23161,9 +23159,8 @@ msgstr "Miesiąc"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-#, fuzzy
-msgid "One Month."
-msgstr "Miesiąc temu"
+msgid "One Month"
+msgstr "Jeden miesiąc"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -23172,19 +23169,12 @@ msgstr "Kwartał"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-#, fuzzy
-msgid "One Quarter."
+msgid "One Quarter"
 msgstr "Kwartał"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
-msgstr "Półrocze"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-#, fuzzy
-msgid "Half Year."
 msgstr "Półrocze"
 
 #: gnucash/report/options-utilities.scm:72
@@ -23195,7 +23185,7 @@ msgstr "Rok"
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
 #, fuzzy
-msgid "One Year."
+msgid "One Year"
 msgstr "Rok temu"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
@@ -23388,8 +23378,7 @@ msgid "Choose the method for sorting accounts."
 msgstr "Wybierz metodę uporządkowywania kont."
 
 #: gnucash/report/options-utilities.scm:212
-#, fuzzy
-msgid "Alphabetical by account code."
+msgid "Alphabetical by account code"
 msgstr "Alfabetycznie według kodu konta"
 
 #: gnucash/report/options-utilities.scm:213
@@ -23397,19 +23386,16 @@ msgid "Alphabetical"
 msgstr "Alfabetycznie"
 
 #: gnucash/report/options-utilities.scm:213
-#, fuzzy
-msgid "Alphabetical by account name."
+msgid "Alphabetical by account name"
 msgstr "Alfabetycznie wg nazwy konta"
 
 #: gnucash/report/options-utilities.scm:214
-#, fuzzy
-msgid "By amount, largest to smallest."
+msgid "By amount, largest to smallest"
 msgstr "Według kwoty, od największej do najmniejszej"
 
 #: gnucash/report/options-utilities.scm:230
-#, fuzzy
 msgid "How to show the balances of parent accounts."
-msgstr "W jaki sposób prezentować bilanse kont nadrzędnych"
+msgstr "W jaki sposób prezentować bilanse kont nadrzędnych."
 
 #: gnucash/report/options-utilities.scm:233
 #: gnucash/report/reports/standard/account-summary.scm:113
@@ -23417,19 +23403,17 @@ msgid "Account Balance"
 msgstr "Bilans konta"
 
 #: gnucash/report/options-utilities.scm:234
-#, fuzzy
 msgid "Show only the balance in the parent account, excluding any subaccounts."
 msgstr ""
-"Pokaż tylko bilans konta nadrzędnego, wyłączając wszystkie konta podrzędne"
+"Pokaż tylko bilans konta nadrzędnego, wyłączając wszystkie konta podrzędne."
 
 #: gnucash/report/options-utilities.scm:237
-#, fuzzy
 msgid ""
 "Calculate the subtotal for this parent account and all of its subaccounts, "
 "and show this as the parent account balance."
 msgstr ""
 "Policz sumę częściową dla tego konta nadrzędnego oraz jego wszystkich kont "
-"podrzędnych i pokaż ją jako bilans konta nadrzędnego"
+"podrzędnych i pokaż ją jako bilans konta nadrzędnego."
 
 #: gnucash/report/options-utilities.scm:239
 #: gnucash/report/options-utilities.scm:254

@@ -21831,7 +21831,7 @@ msgid "Day"
 msgstr "Gün"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
+msgid "One Day"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:67
@@ -21843,7 +21843,7 @@ msgstr "Həftə"
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
 #, fuzzy
-msgid "One Week."
+msgid "One Week"
 msgstr "Həftə"
 
 #: gnucash/report/options-utilities.scm:68
@@ -21854,7 +21854,7 @@ msgstr ""
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
 #, fuzzy
-msgid "Two Weeks."
+msgid "Two Weeks"
 msgstr "Həftələr"
 
 #: gnucash/report/options-utilities.scm:69
@@ -21866,7 +21866,7 @@ msgstr "Ay"
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
 #, fuzzy
-msgid "One Month."
+msgid "One Month"
 msgstr "Ay"
 
 #: gnucash/report/options-utilities.scm:70
@@ -21876,17 +21876,12 @@ msgstr ""
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
+msgid "One Quarter"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
-msgstr ""
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:72
@@ -21898,7 +21893,7 @@ msgstr "İl"
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
 #, fuzzy
-msgid "One Year."
+msgid "One Year"
 msgstr "İl"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
@@ -22079,20 +22074,19 @@ msgid "Choose the method for sorting accounts."
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:212
-#, fuzzy
-msgid "Alphabetical by account code."
-msgstr "Bu dialoqu sonra da göstər"
+msgid "Alphabetical by account code"
+msgstr ""
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
+msgid "Alphabetical by account name"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:214
-msgid "By amount, largest to smallest."
+msgid "By amount, largest to smallest"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:230

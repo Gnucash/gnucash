@@ -22933,7 +22933,7 @@ msgid "Day"
 msgstr "Day"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
+msgid "One Day"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:67
@@ -22944,7 +22944,7 @@ msgstr "Week"
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
 #, fuzzy
-msgid "One Week."
+msgid "One Week"
 msgstr "One Week Ago"
 
 #: gnucash/report/options-utilities.scm:68
@@ -22954,8 +22954,7 @@ msgstr "2Week"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-#, fuzzy
-msgid "Two Weeks."
+msgid "Two Weeks"
 msgstr "Two Weeks"
 
 #: gnucash/report/options-utilities.scm:69
@@ -22966,7 +22965,7 @@ msgstr "Month"
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
 #, fuzzy
-msgid "One Month."
+msgid "One Month"
 msgstr "One Month Ago"
 
 #: gnucash/report/options-utilities.scm:70
@@ -22977,18 +22976,12 @@ msgstr "Quarter"
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
 #, fuzzy
-msgid "One Quarter."
+msgid "One Quarter"
 msgstr "Quarter"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
-msgstr "Half Year"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-#, fuzzy
-msgid "Half Year."
 msgstr "Half Year"
 
 #: gnucash/report/options-utilities.scm:72
@@ -22999,7 +22992,7 @@ msgstr "Year"
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
 #, fuzzy
-msgid "One Year."
+msgid "One Year"
 msgstr "One Year Ago"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
@@ -23192,8 +23185,7 @@ msgid "Choose the method for sorting accounts."
 msgstr "Choose the method for sorting accounts."
 
 #: gnucash/report/options-utilities.scm:212
-#, fuzzy
-msgid "Alphabetical by account code."
+msgid "Alphabetical by account code"
 msgstr "Alphabetically by account code"
 
 #: gnucash/report/options-utilities.scm:213
@@ -23201,19 +23193,16 @@ msgid "Alphabetical"
 msgstr "Alphabetically"
 
 #: gnucash/report/options-utilities.scm:213
-#, fuzzy
-msgid "Alphabetical by account name."
+msgid "Alphabetical by account name"
 msgstr "Alphabetically by account name"
 
 #: gnucash/report/options-utilities.scm:214
-#, fuzzy
-msgid "By amount, largest to smallest."
+msgid "By amount, largest to smallest"
 msgstr "By amount, largest to smallest"
 
 #: gnucash/report/options-utilities.scm:230
-#, fuzzy
 msgid "How to show the balances of parent accounts."
-msgstr "How to show the balances of parent accounts"
+msgstr "How to show the balances of parent accounts."
 
 #: gnucash/report/options-utilities.scm:233
 #: gnucash/report/reports/standard/account-summary.scm:113
@@ -23221,18 +23210,16 @@ msgid "Account Balance"
 msgstr "Account Balance"
 
 #: gnucash/report/options-utilities.scm:234
-#, fuzzy
 msgid "Show only the balance in the parent account, excluding any subaccounts."
-msgstr "Show only the balance in the parent account, excluding any subaccounts"
+msgstr "Show only the balance in the parent account, excluding any subaccounts."
 
 #: gnucash/report/options-utilities.scm:237
-#, fuzzy
 msgid ""
 "Calculate the subtotal for this parent account and all of its subaccounts, "
 "and show this as the parent account balance."
 msgstr ""
 "Calculate the subtotal for this parent account and all of its subaccounts, "
-"and show this as the parent account balance"
+"and show this as the parent account balance."
 
 #: gnucash/report/options-utilities.scm:239
 #: gnucash/report/options-utilities.scm:254
@@ -24130,26 +24117,24 @@ msgstr ""
 "report, consult the mailing list %s."
 
 #: gnucash/report/reports/example/hello-world.scm:353
-#, fuzzy
 msgid ""
 "For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
 msgstr ""
-"For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
+"For details on subscribing to that list, see &lt;https://www.gnucash.org/&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:354
-#, fuzzy
 msgid ""
 "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/"
 "&gt;."
 msgstr ""
-"You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/"
+"You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/"
 "&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:358
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The current time is ~a."
-msgstr "The current time is %s."
+msgstr "The current time is ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:363
 #, fuzzy, scheme-format

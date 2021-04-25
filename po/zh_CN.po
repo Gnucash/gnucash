@@ -21654,8 +21654,8 @@ msgid "Day"
 msgstr "天"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "一天。"
+msgid "One Day"
+msgstr "一天"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -21664,8 +21664,8 @@ msgstr "周"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "一周。"
+msgid "One Week"
+msgstr "一周"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -21674,8 +21674,8 @@ msgstr "2周"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "两周。"
+msgid "Two Weeks"
+msgstr "两周"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -21684,8 +21684,8 @@ msgstr "月"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "一个月。"
+msgid "One Month"
+msgstr "一个月"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -21702,11 +21702,6 @@ msgstr "一个季度。"
 msgid "Half Year"
 msgstr "半年"
 
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "半年。"
-
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
 msgid "Year"
@@ -21714,8 +21709,8 @@ msgstr "年"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "一年。"
+msgid "One Year"
+msgstr "一年"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"

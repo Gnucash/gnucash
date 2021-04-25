@@ -23045,7 +23045,7 @@ msgid "Day"
 msgstr "Ngày"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
+msgid "One Day"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:67
@@ -23055,9 +23055,8 @@ msgstr "Tuần"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-#, fuzzy
-msgid "One Week."
-msgstr "1 tuần trước"
+msgid "One Week"
+msgstr "1 tuần"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -23066,8 +23065,7 @@ msgstr "2Tuần"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-#, fuzzy
-msgid "Two Weeks."
+msgid "Two Weeks"
 msgstr "Hai tuần"
 
 #: gnucash/report/options-utilities.scm:69
@@ -23077,9 +23075,8 @@ msgstr "Tháng"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-#, fuzzy
-msgid "One Month."
-msgstr "1 tháng trước"
+msgid "One Month"
+msgstr "1 tháng"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -23089,18 +23086,12 @@ msgstr "Quý"
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
 #, fuzzy
-msgid "One Quarter."
+msgid "One Quarter"
 msgstr "Quý"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
-msgstr "Nửa năm"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-#, fuzzy
-msgid "Half Year."
 msgstr "Nửa năm"
 
 #: gnucash/report/options-utilities.scm:72
@@ -23110,9 +23101,8 @@ msgstr "Năm"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-#, fuzzy
-msgid "One Year."
-msgstr "1 năm trước"
+msgid "One Year"
+msgstr "1 năm"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23307,8 +23297,7 @@ msgid "Choose the method for sorting accounts."
 msgstr "Chọn phương pháp để sắp xếp các tài khoản."
 
 #: gnucash/report/options-utilities.scm:212
-#, fuzzy
-msgid "Alphabetical by account code."
+msgid "Alphabetical by account code"
 msgstr "Thứ tự abc, theo mã tài khoản"
 
 #: gnucash/report/options-utilities.scm:213
@@ -23316,13 +23305,12 @@ msgid "Alphabetical"
 msgstr "Thứ tự abc"
 
 #: gnucash/report/options-utilities.scm:213
-#, fuzzy
-msgid "Alphabetical by account name."
+msgid "Alphabetical by account name"
 msgstr "Thứ tự abc, theo tên tài khoản"
 
 #: gnucash/report/options-utilities.scm:214
 #, fuzzy
-msgid "By amount, largest to smallest."
+msgid "By amount, largest to smallest"
 msgstr "Theo số tiền, tăng dần"
 
 #: gnucash/report/options-utilities.scm:230

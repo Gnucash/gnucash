@@ -23395,8 +23395,8 @@ msgid "Day"
 msgstr "Día"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "Un día."
+msgid "One Day"
+msgstr "Un día"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -23405,8 +23405,8 @@ msgstr "Semana"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "Una semana."
+msgid "One Week"
+msgstr "Una semana"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -23415,8 +23415,8 @@ msgstr "Quincena"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "Quincenal."
+msgid "Two Weeks"
+msgstr "Quincenal"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -23425,8 +23425,8 @@ msgstr "Mes"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "Un mes."
+msgid "One Month"
+msgstr "Un mes"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -23435,18 +23435,13 @@ msgstr "Trimestre"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "Un trimestre."
+msgid "One Quarter"
+msgstr "Un trimestre"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "Semestre"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "Semestre."
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -23455,8 +23450,8 @@ msgstr "Año"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "Un año."
+msgid "One Year"
+msgstr "Un año"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23640,20 +23635,20 @@ msgid "Choose the method for sorting accounts."
 msgstr "Escoja el método para ordenar las cuentas."
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "Alfabético por código de cuenta."
+msgid "Alphabetical by account code"
+msgstr "Alfabético por código de cuenta"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "Alfabético"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "Alfabético por nombre de cuenta."
+msgid "Alphabetical by account name"
+msgstr "Alfabético por nombre de cuenta"
 
 #: gnucash/report/options-utilities.scm:214
 msgid "By amount, largest to smallest."
-msgstr "Por cantidad, de mayor a menor."
+msgstr "Por cantidad, de mayor a menor"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "How to show the balances of parent accounts."
@@ -24538,21 +24533,19 @@ msgstr ""
 "nuevos y totalmente fabulosos boletines, consulte la lista de correo ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:353
-#, fuzzy
 msgid ""
 "For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
 msgstr ""
-"Para detalles sobre suscribirse a ese listado, vea &lt;http://www.gnucash."
+"Para detalles sobre suscribirse a ese listado, vea &lt;https://www.gnucash."
 "org/&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:354
-#, fuzzy
 msgid ""
 "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/"
 "&gt;."
 msgstr ""
-"Puede aprender más acerca de escribir scheme en &lt;http://www.scheme.com/"
+"Puede aprender más acerca de escribir scheme en &lt;https://www.scheme.com/"
 "tspl2d/&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:358

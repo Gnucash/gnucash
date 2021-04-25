@@ -21314,8 +21314,8 @@ msgid "Day"
 msgstr "Päivä"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "Yksi päivä."
+msgid "One Day"
+msgstr "Yksi päivä"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -21324,8 +21324,8 @@ msgstr "Viikko"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "Yksi viikko."
+msgid "One Week"
+msgstr "Yksi viikko"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -21334,8 +21334,8 @@ msgstr ""
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "Kaksi viikkoa."
+msgid "Two Weeks"
+msgstr "Kaksi viikkoa"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -21344,8 +21344,8 @@ msgstr "Kuukausi"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "Yksi kuukausi."
+msgid "One Month"
+msgstr "Yksi kuukausi"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -21354,18 +21354,13 @@ msgstr "Neljännes"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "Yksi neljännes."
+msgid "One Quarter"
+msgstr "Yksi neljännes"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "Puoli vuotta"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "Puoli vuotta."
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -21374,8 +21369,8 @@ msgstr "Vuosi"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "Yksi vuosi."
+msgid "One Year"
+msgstr "Yksi vuosi"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -21553,19 +21548,19 @@ msgid "Choose the method for sorting accounts."
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "Aakkostettu tilinumeron mukaan."
+msgid "Alphabetical by account code"
+msgstr "Aakkostettu tilinumeron mukaan"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
+msgid "Alphabetical by account name"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:214
-msgid "By amount, largest to smallest."
+msgid "By amount, largest to smallest"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:230

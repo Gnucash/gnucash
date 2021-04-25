@@ -6683,9 +6683,9 @@ msgid "R"
 msgstr "R"
 
 #: gnucash/gnome/report-menus.scm:57
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Display the ~a report"
-msgstr "Rādīt %s pārskatu"
+msgstr "Rādīt ~a pārskatu"
 
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
@@ -22050,28 +22050,28 @@ msgid "Parse ambiguity between formats"
 msgstr "Analizēt divdomību starp formātiem"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:1059
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Value '~a' could be ~a or ~a."
-msgstr "Vērtība '%s' varētu būt %s vai %s."
+msgstr "Vērtība '~a' varētu būt ~a vai ~a."
 
 #: gnucash/import-export/qif-imp/qif-merge-groups.scm:105
 msgid "Finding duplicate transactions"
 msgstr "Meklēt dublētus grāmatojumus"
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:172
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized account type '~s'. Defaulting to Bank."
-msgstr "Neatpazīts konta veids '%s'. Nomainīts uz Banka."
+msgstr "Neatpazīts konta veids '~a'. Nomainīts uz Banka."
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:235
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized action '~a'."
-msgstr "Neatpazīta darbība '%s'."
+msgstr "Neatpazīta darbība '~a'."
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:254
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized status '~a'. Defaulting to uncleared."
-msgstr "Neatpazīts statuss '%s'. Nomainīts uz nenokārtots."
+msgstr "Neatpazīts statuss '~a'. Nomainīts uz nenokārtots."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."
@@ -22161,7 +22161,7 @@ msgstr "Lai jums jauka diena!"
 #: gnucash/python/init.py:118
 #, fuzzy, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Sveicināti GnuCash ~a!"
+msgstr "Sveicināti GnuCash %s!"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
@@ -22850,7 +22850,7 @@ msgstr "Saraksts"
 #: gnucash/report/eguile.scm:150
 #, fuzzy, scheme-format
 msgid "Template file \"~a\" can not be read"
-msgstr "Veidnes fails %s nav atrodams."
+msgstr "Veidnes fails ~a nav atrodams."
 
 #: gnucash/report/html-chart.scm:455
 msgid "Load"
@@ -23003,8 +23003,8 @@ msgid "Day"
 msgstr "Diena"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "Viena diena."
+msgid "One Day"
+msgstr "Viena diena"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -23013,8 +23013,8 @@ msgstr "Nedēļa"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "Viena nedēļa."
+msgid "One Week"
+msgstr "Viena nedēļa"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -23023,8 +23023,8 @@ msgstr "2nedēļa"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "Divas nedēļas."
+msgid "Two Weeks"
+msgstr "Divas nedēļas"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -23033,8 +23033,8 @@ msgstr "Mēnesis"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "Viens mēnesis."
+msgid "One Month"
+msgstr "Viens mēnesis"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -23043,18 +23043,13 @@ msgstr "Ceturksnis"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "Viens ceturksnis."
+msgid "One Quarter"
+msgstr "Viens ceturksnis"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "Pusgads"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "Pusgads."
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -23063,8 +23058,8 @@ msgstr "Gads"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "Viens gads."
+msgid "One Year"
+msgstr "Viens gads"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23242,20 +23237,20 @@ msgid "Choose the method for sorting accounts."
 msgstr "Izvēlēties kontu kārtošanas metodi"
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "Alfabēta secībā pēc kontu kodiem."
+msgid "Alphabetical by account code"
+msgstr "Alfabēta secībā pēc kontu kodiem"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "Alfabēta secība"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "Alfabēta secībā pēc konta nosaukumiem."
+msgid "Alphabetical by account name"
+msgstr "Alfabēta secībā pēc konta nosaukumiem"
 
 #: gnucash/report/options-utilities.scm:214
-msgid "By amount, largest to smallest."
-msgstr "Pēc summas, no lielākās uz mazāko."
+msgid "By amount, largest to smallest"
+msgstr "Pēc summas, no lielākās uz mazāko"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "How to show the balances of parent accounts."
@@ -23513,12 +23508,12 @@ msgid "Address Email"
 msgstr "Adreses e-pasts"
 
 #: gnucash/report/reports/aging.scm:205
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "Transactions relating to '~a' contain more than one currency. This report is "
 "not designed to cope with this possibility."
 msgstr ""
-"Grāmatojumi saistībā ar '%s' izmanto vairāk par vienu valūtu. Ar šādu "
+"Grāmatojumi saistībā ar '~a' izmanto vairāk par vienu valūtu. Ar šādu "
 "pārskatu šī iespēja nav atbalstīta."
 
 #: gnucash/report/reports/aging.scm:345
@@ -24127,41 +24122,39 @@ msgstr ""
 "paplašināt esošo, skatīt guile (scheme) pirmkodu scm/report mapē."
 
 #: gnucash/report/reports/example/hello-world.scm:348
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
 "Lai iegūtu palīdzība par to, kā izveidot savu superīgo pārskatu, "
-"konsultēties pa e-pastu %s."
+"konsultēties pa e-pastu ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:353
-#, fuzzy
 msgid ""
 "For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
 msgstr ""
-"Vairāk par to, kā reģistrētais šim sarakstam, skatīt &lt;http://www.gnucash."
+"Vairāk par to, kā reģistrētais šim sarakstam, skatīt &lt;https://www.gnucash."
 "org/&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:354
-#, fuzzy
 msgid ""
 "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/"
 "&gt;."
 msgstr ""
-"Jūs varat uzzināt vairāk par sheme valodu &lt;http://www.scheme.com/tspl2d/"
+"Jūs varat uzzināt vairāk par sheme valodu &lt;https://www.scheme.com/tspl2d/"
 "&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:358
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The current time is ~a."
-msgstr "Pareizs laiks ir %s."
+msgstr "Pareizs laiks ir ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:363
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The boolean option is ~a."
-msgstr "Būla izteiksme ir %s."
+msgstr "Būla izteiksme ir ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:364
 msgid "true"
@@ -24174,47 +24167,47 @@ msgstr "nepatiesa"
 #: gnucash/report/reports/example/hello-world.scm:368
 #, fuzzy, scheme-format
 msgid "The radio button option is ~a."
-msgstr "Teksta izvēlne ir %s."
+msgstr "Teksta izvēlne ir ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:373
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The multi-choice option is ~a."
-msgstr "Daudzveidīga izvēlne ir %s."
+msgstr "Daudzveidīga izvēlne ir ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:378
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The string option is ~a."
-msgstr "Teksta izvēlne ir %s."
+msgstr "Teksta izvēlne ir ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:383
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The date option is ~a."
-msgstr "Datuma izvēlne ir %s."
+msgstr "Datuma izvēlne ir ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:388
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The date and time option is ~a."
-msgstr "Datuma un laika izvēlne ir %s."
+msgstr "Datuma un laika izvēlne ir ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:393
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The relative date option is ~a."
-msgstr "Relatīvā datuma izvēlne ir %s."
+msgstr "Relatīvā datuma izvēlne ir ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:398
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The combination date option is ~a."
-msgstr "Kombinētā datuma izvēlne ir %s."
+msgstr "Kombinētā datuma izvēlne ir ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:403
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option is ~a."
-msgstr "Skaitļu izvēlne ir %s."
+msgstr "Skaitļu izvēlne ir ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:414
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option formatted as currency is ~a."
-msgstr "Skaitļu izvēlne noformēta kā valūta ir %s."
+msgstr "Skaitļu izvēlne noformēta kā valūta ir ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:426
 msgid "Items you selected:"
@@ -24432,9 +24425,9 @@ msgstr ""
 "kopēt tikai TXF kodus ar maksātāja pirmsākumu."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:816
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Period from ~a to ~a"
-msgstr "Periods no %s līdz %s"
+msgstr "Periods no ~a līdz ~a"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:853
 msgid "Tax Report & XML Export"
@@ -24747,9 +24740,9 @@ msgid "Weekly Average"
 msgstr "Nedēļas vidējais"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:550
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Balance at ~a"
-msgstr "Bilance uz %s"
+msgstr "Bilance uz ~a"
 
 #: gnucash/report/reports/standard/account-summary.scm:69
 msgid "Account Summary"
@@ -25048,9 +25041,9 @@ msgstr "Ignorēt jebkurus kontus, kas dziļāki par dziļuma ierobežojumu."
 #: gnucash/report/reports/standard/equity-statement.scm:302
 #: gnucash/report/reports/standard/income-statement.scm:406
 #: gnucash/report/reports/standard/trial-balance.scm:413
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "For Period Covering ~a to ~a"
-msgstr "Laikposmam no %s līdz %s"
+msgstr "Laikposmam no ~a līdz ~a"
 
 #: gnucash/report/reports/standard/account-summary.scm:411
 msgid "Account title"
@@ -25258,7 +25251,7 @@ msgstr "** šīm akcijām nav cenas un tiek izmantota cena 1."
 #: gnucash/report/reports/standard/balance-forecast.scm:35
 #, fuzzy
 msgid "Balance Forecast"
-msgstr "Bilance uz %s"
+msgstr "Bilance uz ~a"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:38
 #: gnucash/report/reports/standard/budget-barchart.scm:134
@@ -25827,19 +25820,18 @@ msgstr "Aktīvi"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1118
 #: libgnucash/engine/Account.cpp:4391
+#, fuzzy
 msgid "Liability"
 msgstr "Pasīvi"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1136
-#, fuzzy
 msgid "Liability and Equity"
-msgstr "_Pasīvi"
+msgstr "Pasīvi"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1154
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1297
-#, fuzzy
 msgid "Exchange Rates"
-msgstr "Valūtas kurss:"
+msgstr "Valūtu kursi"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1164
 #: gnucash/report/reports/standard/budget-barchart.scm:157
@@ -25847,9 +25839,8 @@ msgid "Barchart"
 msgstr "Joslas diagramma"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1227
-#, fuzzy
 msgid " to "
-msgstr "%s līdz %s"
+msgstr " līdz "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1290
 #: gnucash/report/reports/standard/trial-balance.scm:861
@@ -26190,19 +26181,19 @@ msgid "Total Expenses"
 msgstr "Izdevumi kopā"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:527
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a"
-msgstr "budžeta %s"
+msgstr "budžeta ~a"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:529
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Period ~d"
-msgstr "Budžeta %s periods %u"
+msgstr "Budžeta ~a periods ~d"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:532
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
-msgstr "Budžeta %s periodi %u - %u"
+msgstr "Budžeta ~a periodi ~d - ~d"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:560
 #: gnucash/report/reports/standard/equity-statement.scm:455
@@ -26422,14 +26413,14 @@ msgid "Show full account names (including parent accounts)."
 msgstr "Rādīt pilnus kontu nosaukumus (ieskaitot vecāku kontus)."
 
 #: gnucash/report/reports/standard/cash-flow.scm:205
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~a and subaccounts"
-msgstr "un subkontus"
+msgstr "~a un subkontus"
 
 #: gnucash/report/reports/standard/cash-flow.scm:206
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~a and selected subaccounts"
-msgstr "%s un izvēlētie subkonti"
+msgstr "~a un izvēlētie subkonti"
 
 #: gnucash/report/reports/standard/cash-flow.scm:270
 msgid "Money into selected accounts comes from"
@@ -26553,9 +26544,9 @@ msgid "Daily Average"
 msgstr "Dienas vidējais"
 
 #: gnucash/report/reports/standard/category-barchart.scm:520
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Balances ~a to ~a"
-msgstr "Bilances %s līdz %s"
+msgstr "Bilances ~a līdz ~a"
 
 #: gnucash/report/reports/standard/category-barchart.scm:641
 #: gnucash/report/reports/standard/category-barchart.scm:662
@@ -28859,14 +28850,14 @@ msgid "Credit Lines"
 msgstr "Kredītlīnijas"
 
 #: gnucash/report/report-utilities.scm:712
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Building '~a' report ..."
-msgstr "Veido '%s' pārskatu ..."
+msgstr "Veido '~a' pārskatu ..."
 
 #: gnucash/report/report-utilities.scm:718
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Rendering '~a' report ..."
-msgstr "Atveido '%s' pārskatu ..."
+msgstr "Atveido '~a' pārskatu ..."
 
 #: gnucash/report/report-utilities.scm:720
 #, fuzzy
@@ -29826,9 +29817,9 @@ msgstr ""
 
 #. Translators: Both ~a's are dates
 #: gnucash/report/trep-engine.scm:2270
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "From ~a to ~a"
-msgstr "No %s Uz %s"
+msgstr "No ~a Uz ~a"
 
 #: libgnucash/app-utils/business-options.scm:69
 msgid "Company Address"

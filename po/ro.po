@@ -23711,7 +23711,7 @@ msgid "Day"
 msgstr "Zi"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
+msgid "One Day"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:67
@@ -23722,7 +23722,7 @@ msgstr "Săptămână"
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
 #, fuzzy
-msgid "One Week."
+msgid "One Week"
 msgstr "Cu o săptămână în urmă"
 
 #: gnucash/report/options-utilities.scm:68
@@ -23732,8 +23732,7 @@ msgstr "2 săptămâni"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-#, fuzzy
-msgid "Two Weeks."
+msgid "Two Weeks"
 msgstr "Două săptămâni"
 
 #: gnucash/report/options-utilities.scm:69
@@ -23743,9 +23742,8 @@ msgstr "Lună"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-#, fuzzy
-msgid "One Month."
-msgstr "Cu o lună în urmă"
+msgid "One Month"
+msgstr "O luna"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -23755,18 +23753,12 @@ msgstr "Trimestru"
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
 #, fuzzy
-msgid "One Quarter."
+msgid "One Quarter"
 msgstr "Trimestru"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
-msgstr "Semestru"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-#, fuzzy
-msgid "Half Year."
 msgstr "Semestru"
 
 #: gnucash/report/options-utilities.scm:72
@@ -23776,9 +23768,8 @@ msgstr "An"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-#, fuzzy
-msgid "One Year."
-msgstr "Cu un an în urmă"
+msgid "One Year"
+msgstr "Un an"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23973,8 +23964,7 @@ msgid "Choose the method for sorting accounts."
 msgstr "Alege metoda de sortare a conturilor."
 
 #: gnucash/report/options-utilities.scm:212
-#, fuzzy
-msgid "Alphabetical by account code."
+msgid "Alphabetical by account code"
 msgstr "Alfabetic după codul contului"
 
 #: gnucash/report/options-utilities.scm:213
@@ -23982,13 +23972,11 @@ msgid "Alphabetical"
 msgstr "Alfabetic"
 
 #: gnucash/report/options-utilities.scm:213
-#, fuzzy
-msgid "Alphabetical by account name."
+msgid "Alphabetical by account name"
 msgstr "Alfabetic după numele contului"
 
 #: gnucash/report/options-utilities.scm:214
-#, fuzzy
-msgid "By amount, largest to smallest."
+msgid "By amount, largest to smallest"
 msgstr "După sumă, de la cea mai mare la cea mai mică"
 
 #: gnucash/report/options-utilities.scm:230

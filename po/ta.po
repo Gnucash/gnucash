@@ -22924,8 +22924,8 @@ msgid "Day"
 msgstr "நாள்"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "ஒரு நாள்."
+msgid "One Day"
+msgstr "ஒரு நாள்"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -22934,8 +22934,8 @@ msgstr "வாரம்"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "ஒரு வாரம்."
+msgid "One Week"
+msgstr "ஒரு வாரம்"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -22944,8 +22944,8 @@ msgstr "2வாரம்"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "இரு வாரங்கள்."
+msgid "Two Weeks"
+msgstr "இரு வாரங்கள்"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -22954,8 +22954,8 @@ msgstr "மாதம்"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "ஒரு மாதம்."
+msgid "One Month"
+msgstr "ஒரு மாதம்"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -22964,18 +22964,13 @@ msgstr "காலாண்டு"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "ஒரு காலாண்டு."
+msgid "One Quarter"
+msgstr "ஒரு காலாண்டு"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "அரை வருடம்"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "அரை வருடம்."
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -22984,8 +22979,8 @@ msgstr "வருடம்"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "ஒரு வருடம்."
+msgid "One Year"
+msgstr "ஒரு வருடம்"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23165,20 +23160,20 @@ msgid "Choose the method for sorting accounts."
 msgstr "கணக்குகளை வரிசைப்படுத்துவதற்கான முறையைத் தேர்ந்தெடு."
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "கணக்கு குறியீடுபடி அகரவரிசையில்."
+msgid "Alphabetical by account code"
+msgstr "கணக்கு குறியீடுபடி அகரவரிசையில்"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "அகரவரிசை"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "கணக்கு பெயர்படி அகரவரிசையில்."
+msgid "Alphabetical by account name"
+msgstr "கணக்கு பெயர்படி அகரவரிசையில்"
 
 #: gnucash/report/options-utilities.scm:214
-msgid "By amount, largest to smallest."
-msgstr "தொகையின் படி, பெரியதிலிருந்து சிறியது வரை."
+msgid "By amount, largest to smallest"
+msgstr "தொகையின் படி, பெரியதிலிருந்து சிறியது வரை"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "How to show the balances of parent accounts."

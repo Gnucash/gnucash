@@ -21855,8 +21855,8 @@ msgid "Day"
 msgstr "Dag"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "En dag."
+msgid "One Day"
+msgstr "En dag"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -21865,8 +21865,8 @@ msgstr "Vecka"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "En vecka."
+msgid "One Week"
+msgstr "En vecka"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -21875,8 +21875,8 @@ msgstr "2 veckor"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "Två veckor."
+msgid "Two Weeks"
+msgstr "Två veckor"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -21885,8 +21885,8 @@ msgstr "Månad"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "En månad."
+msgid "One Month"
+msgstr "En månad"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -21895,18 +21895,13 @@ msgstr "Kvartal"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "Ett kvartal."
+msgid "One Quarter"
+msgstr "Ett kvartal"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "Halvår"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "Halvår."
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -21915,8 +21910,8 @@ msgstr "År"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "Ett år."
+msgid "One Year"
+msgstr "Ett år"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -22094,20 +22089,20 @@ msgid "Choose the method for sorting accounts."
 msgstr "Välj sorteringsordning för konton."
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "Bokstavsordning efter kontokod."
+msgid "Alphabetical by account code"
+msgstr "Bokstavsordning efter kontokod"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "Bokstavsordning"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "Bokstavsordning efter kontonamn."
+msgid "Alphabetical by account name"
+msgstr "Bokstavsordning efter kontonamn"
 
 #: gnucash/report/options-utilities.scm:214
-msgid "By amount, largest to smallest."
-msgstr "Efter summa, fallande."
+msgid "By amount, largest to smallest"
+msgstr "Efter summa, fallande"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "How to show the balances of parent accounts."

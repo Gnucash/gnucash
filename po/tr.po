@@ -22856,8 +22856,8 @@ msgid "Day"
 msgstr "Gün"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
-msgstr "Bir Gün."
+msgid "One Day"
+msgstr "Bir Gün"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:164
@@ -22866,8 +22866,8 @@ msgstr "Hafta"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "Bir Hafta."
+msgid "One Week"
+msgstr "Bir Hafta"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
@@ -22876,8 +22876,8 @@ msgstr "2Hafta"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
-msgstr "İki Hafta."
+msgid "Two Weeks"
+msgstr "İki Hafta"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -22886,8 +22886,8 @@ msgstr "Ay"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
-msgstr "Bir Ay."
+msgid "One Month"
+msgstr "Bir Ay"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:152
@@ -22896,18 +22896,13 @@ msgstr "3 ay"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "Bir Çeyrek."
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:148
-msgid "Half Year"
-msgstr "6 ay"
+msgid "One Quarter"
+msgstr "Bir Çeyrek"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "Yarı Yıl."
+msgid "Half Year"
+msgstr "Yarı Yıl"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -22916,8 +22911,8 @@ msgstr "Yıl"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
-msgstr "Bir Yıl."
+msgid "One Year"
+msgstr "Bir Yıl"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
 msgid "All"
@@ -23098,20 +23093,20 @@ msgid "Choose the method for sorting accounts."
 msgstr "Hesapları sıralamak için yöntem seç."
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "Hesap koduna göre alfabetik."
+msgid "Alphabetical by account code"
+msgstr "Hesap koduna göre alfabetik"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "Alfabetik"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "Hesap adına göre alfabetik."
+msgid "Alphabetical by account name"
+msgstr "Hesap adına göre alfabetik"
 
 #: gnucash/report/options-utilities.scm:214
 msgid "By amount, largest to smallest."
-msgstr "Miktara göre, büyükten küçüğe."
+msgstr "Miktara göre, büyükten küçüğe"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "How to show the balances of parent accounts."

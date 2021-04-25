@@ -24263,7 +24263,7 @@ msgid "Parse ambiguity between formats"
 msgstr "Analyse des ambiguités entre les formats"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:1059
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Value '~a' could be ~a or ~a."
 msgstr "La valeur '~a' peut être ~a ou ~a."
 
@@ -24273,7 +24273,7 @@ msgid "Finding duplicate transactions"
 msgstr "Recherche en cours des transactions en doublon"
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:172
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized account type '~s'. Defaulting to Bank."
 msgstr "Type de compte ~s inconnu. Par défaut, devient \"Banque\""
 
@@ -25326,7 +25326,7 @@ msgid "Day"
 msgstr "Jour"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
+msgid "One Day"
 msgstr ""
 
 # po/guile_strings.txt:113
@@ -25338,7 +25338,7 @@ msgstr "Semaine"
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
 #, fuzzy
-msgid "One Week."
+msgid "One Week"
 msgstr "Il y a une semaine"
 
 # po/guile_strings.txt:270
@@ -25350,8 +25350,7 @@ msgstr "2 semaines"
 # po/guile_strings.txt:191
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-#, fuzzy
-msgid "Two Weeks."
+msgid "Two Weeks"
 msgstr "Deux semaines"
 
 # po/guile_strings.txt:184
@@ -25363,7 +25362,7 @@ msgstr "Mois"
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
 #, fuzzy
-msgid "One Month."
+msgid "One Month"
 msgstr "Il y a un mois"
 
 #: gnucash/report/options-utilities.scm:70
@@ -25374,20 +25373,13 @@ msgstr "Trimestriel"
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
 #, fuzzy
-msgid "One Quarter."
+msgid "One Quarter"
 msgstr "Trimestriel"
 
 # po/guile_strings.txt:182
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
-msgstr "Semestriel"
-
-# po/guile_strings.txt:182
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-#, fuzzy
-msgid "Half Year."
 msgstr "Semestriel"
 
 # po/guile_strings.txt:182
@@ -25399,7 +25391,7 @@ msgstr "Année"
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
 #, fuzzy
-msgid "One Year."
+msgid "One Year"
 msgstr "Il y a un an"
 
 # src/gnome/glade-gnc-dialogs.c:869
@@ -25612,8 +25604,7 @@ msgstr "Choisissez la méthode de tri pour les comptes."
 
 # po/guile_strings.txt:261
 #: gnucash/report/options-utilities.scm:212
-#, fuzzy
-msgid "Alphabetical by account code."
+msgid "Alphabetical by account code"
 msgstr "Alphabétique par code de compte"
 
 #: gnucash/report/options-utilities.scm:213
@@ -25622,20 +25613,17 @@ msgstr "Alphabétique"
 
 # po/guile_strings.txt:261
 #: gnucash/report/options-utilities.scm:213
-#, fuzzy
-msgid "Alphabetical by account name."
+msgid "Alphabetical by account name"
 msgstr "Alphabétique par nom de compte"
 
 #: gnucash/report/options-utilities.scm:214
-#, fuzzy
-msgid "By amount, largest to smallest."
+msgid "By amount, largest to smallest"
 msgstr "Par montant brut, plus grands d'abord"
 
 # messages-i18n.c:53
 #: gnucash/report/options-utilities.scm:230
-#, fuzzy
 msgid "How to show the balances of parent accounts."
-msgstr "Comment afficher le solde des comptes parents"
+msgstr "Comment afficher le solde des comptes parents."
 
 # messages-i18n.c:165 po/guile_strings.txt:7
 #: gnucash/report/options-utilities.scm:233
@@ -25644,13 +25632,11 @@ msgid "Account Balance"
 msgstr "Solde du compte"
 
 #: gnucash/report/options-utilities.scm:234
-#, fuzzy
 msgid "Show only the balance in the parent account, excluding any subaccounts."
 msgstr ""
 "Afficher seulement le solde du compte parent, sans aucun de ses sous-comptes."
 
 #: gnucash/report/options-utilities.scm:237
-#, fuzzy
 msgid ""
 "Calculate the subtotal for this parent account and all of its subaccounts, "
 "and show this as the parent account balance."
@@ -25665,14 +25651,12 @@ msgstr "Ne pas afficher"
 
 # messages-i18n.c:53
 #: gnucash/report/options-utilities.scm:240
-#, fuzzy
 msgid "Do not show any balances of parent accounts."
-msgstr "Ne pas afficher le solde de comptes parents"
+msgstr "Ne pas afficher le solde de comptes parents."
 
 #: gnucash/report/options-utilities.scm:248
-#, fuzzy
 msgid "How to show account subtotals for parent accounts."
-msgstr "Méthode d'affichage des sous-totaux des comptes parents"
+msgstr "Méthode d'affichage des sous-totaux des comptes parents."
 
 # messages-i18n.c:218
 #: gnucash/report/options-utilities.scm:251
@@ -25683,13 +25667,12 @@ msgstr "Afficher les sous-totaux"
 #: gnucash/report/options-utilities.scm:252
 #, fuzzy
 msgid "Show subtotals for selected parent accounts which have subaccounts."
-msgstr "Afficher les sous-totaux pour les comptes parents"
+msgstr "Afficher les sous-totaux pour les comptes parents."
 
 # messages-i18n.c:53
 #: gnucash/report/options-utilities.scm:255
-#, fuzzy
 msgid "Do not show any subtotals for parent accounts."
-msgstr "Ne pas afficher les sous-totaux pour les comptes parents"
+msgstr "Ne pas afficher les sous-totaux pour les comptes parents."
 
 # messages-i18n.c:298 po/guile_strings.txt:165
 # src/gnome/glade-gnc-dialogs.c:632
@@ -26654,21 +26637,19 @@ msgstr ""
 "cool rapport, consultez la liste de diffusion ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:353
-#, fuzzy
 msgid ""
 "For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
 msgstr ""
-"Pour les détails pour l'abonnement à la liste, consultez &lt;http://www."
+"Pour les détails pour l'abonnement à la liste, consultez &lt;https://www."
 "gnucash.org/&gt;."
 
 #: gnucash/report/reports/example/hello-world.scm:354
-#, fuzzy
 msgid ""
 "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/"
 "&gt;."
 msgstr ""
-"Vous pouvez apprendre à écrire en langage scheme sur &lt;http://www.scheme."
+"Vous pouvez apprendre à écrire en langage scheme sur &lt;https://www.scheme."
 "com/tspl2d/&gt;."
 
 # po/guile_strings.txt:18
@@ -33221,7 +33202,7 @@ msgstr ""
 
 #. Translators: Both ~a's are dates
 #: gnucash/report/trep-engine.scm:2270
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "From ~a to ~a"
 msgstr "Du ~a au ~a"
 

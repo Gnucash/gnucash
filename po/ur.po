@@ -22993,7 +22993,7 @@ msgid "Day"
 msgstr "دن"
 
 #: gnucash/report/options-utilities.scm:66
-msgid "One Day."
+msgid "One Day"
 msgstr "ایك دن"
 
 #: gnucash/report/options-utilities.scm:67
@@ -23003,17 +23003,17 @@ msgstr "ہفتہ"
 
 #: gnucash/report/options-utilities.scm:67
 #: gnucash/report/reports/standard/balsheet-pnl.scm:165
-msgid "One Week."
-msgstr "ایک ہفتہ "
+msgid "One Week"
+msgstr "ایک ہفتہ"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:160
 msgid "2Week"
-msgstr "2 ہفتہ "
+msgstr "2 ہفتہ"
 
 #: gnucash/report/options-utilities.scm:68
 #: gnucash/report/reports/standard/balsheet-pnl.scm:161
-msgid "Two Weeks."
+msgid "Two Weeks"
 msgstr "دو ہفتے"
 
 #: gnucash/report/options-utilities.scm:69
@@ -23023,7 +23023,7 @@ msgstr "مہینہ"
 
 #: gnucash/report/options-utilities.scm:69
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-msgid "One Month."
+msgid "One Month"
 msgstr "ایك ماہ"
 
 #: gnucash/report/options-utilities.scm:70
@@ -23033,18 +23033,13 @@ msgstr "تین ماہ"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:153
-msgid "One Quarter."
-msgstr "ایک چوتھائی."
+msgid "One Quarter"
+msgstr "ایک چوتھائی"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:148
 msgid "Half Year"
 msgstr "چھ ماہ"
-
-#: gnucash/report/options-utilities.scm:71
-#: gnucash/report/reports/standard/balsheet-pnl.scm:149
-msgid "Half Year."
-msgstr "ڈیڑھ سال."
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:144
@@ -23053,7 +23048,7 @@ msgstr "سال"
 
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:145
-msgid "One Year."
+msgid "One Year"
 msgstr "ایك سال"
 
 #: gnucash/report/options-utilities.scm:85 gnucash/report/trep-engine.scm:415
@@ -23233,20 +23228,20 @@ msgid "Choose the method for sorting accounts."
 msgstr "اكاؤنٹس كو ترتیب دینے كے لیے طریقہ كا انتخاب كرو"
 
 #: gnucash/report/options-utilities.scm:212
-msgid "Alphabetical by account code."
-msgstr "اکاؤنٹ كوڈ کے ذریعے سے حروف تہجی."
+msgid "Alphabetical by account code"
+msgstr "اکاؤنٹ كوڈ کے ذریعے سے حروف تہجی"
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Alphabetical"
 msgstr "الفابیٹیكل"
 
 #: gnucash/report/options-utilities.scm:213
-msgid "Alphabetical by account name."
-msgstr "اکاؤنٹ نام کے ذریعے سے حروف تہجی."
+msgid "Alphabetical by account name"
+msgstr "اکاؤنٹ نام کے ذریعے سے حروف تہجی"
 
 #: gnucash/report/options-utilities.scm:214
-msgid "By amount, largest to smallest."
-msgstr "رقم كے ذریعے سے، سب سے بڑا سے سب سے چھوٹا."
+msgid "By amount, largest to smallest"
+msgstr "رقم كے ذریعے سے، سب سے بڑا سے سب سے چھوٹا"
 
 #: gnucash/report/options-utilities.scm:230
 msgid "How to show the balances of parent accounts."
