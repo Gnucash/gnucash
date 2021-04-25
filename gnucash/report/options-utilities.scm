@@ -67,7 +67,7 @@
           (vector 'WeekDelta (N_ "One Week"))
           (vector 'TwoWeekDelta (N_ "Two Weeks"))
           (vector 'MonthDelta (N_ "One Month"))
-          (vector 'QuarterDelta (N_ "One Quarter"))
+          (vector 'QuarterDelta (N_ "Quarter Year"))
           (vector 'HalfYearDelta (N_ "Half Year"))
           (vector 'YearDelta (N_ "One Year"))))))
 
