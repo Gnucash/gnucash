@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-24 17:32+0000\n"
+"PO-Revision-Date: 2021-04-25 18:32+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -11088,7 +11088,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:20
 msgid "Always reconcile to today"
-msgstr "总是对账到今天"
+msgstr "总是对账到今天(_O)"
 
 #: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:21
 msgid ""
@@ -11806,10 +11806,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:285
 #: gnucash/gtkbuilder/dialog-preferences.glade:2758
-#, fuzzy
-#| msgid "Show all transactions on one line. (Two in double line mode.)"
 msgid "Show all transactions on one line or in double line mode on two."
-msgstr "所有交易事项显示一行。(双行模式时显示两行。)"
+msgstr "一行显示所有交易，或双行模式显示两行。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:286
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:291
@@ -11918,16 +11916,15 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:330
-#, fuzzy
 msgid "Number of transactions to show in a register."
-msgstr "在一个账簿中显示的交易事项数量。"
+msgstr "交易界面显示的数量。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:331
 #: gnucash/gtkbuilder/dialog-preferences.glade:2827
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
-msgstr "在账簿中显示那么多交易事项，0 表示显示所有交易事项。"
+msgstr "交易界面显示此值项交易，0 表示所有。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:335
 msgid "Number of characters for auto complete."
@@ -11990,7 +11987,7 @@ msgid ""
 "On high resolution screens reports tend to be hard to read. This option "
 "allows you to scale reports up by the set factor. For example setting this "
 "to 2.0 will display reports at twice their typical size."
-msgstr ""
+msgstr "高分辨率显示器上，往往难以阅读报表，此选项将其按设定的系数放大；例如，设 2.0，报表将是正常尺寸的两倍大小。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:373
 msgid "PDF export file name format"
@@ -16697,21 +16694,21 @@ msgstr "<b>对账</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2500
 msgid "Check cleared _transactions"
-msgstr "检查已结清的交易事项(_T)"
+msgstr "检查已结清交易(_T)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2506
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
-msgstr "当创建一个对账对话框的时候预查已结清的交易事项。"
+msgstr "创建对账对话框时，预先检查已结清的交易。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2518
 msgid "Automatic credit card _payment"
-msgstr "自动信用卡付款(_P)"
+msgstr "信用卡智能还款(_P)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2524
 msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
-msgstr "信用卡账单对账后，提示用户输入信用卡付款。"
+msgstr "信用卡对账确认后，提示还款。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2536
 msgid "Always reconcile to t_oday"
@@ -16729,39 +16726,39 @@ msgstr "<b>图形</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2577
 msgid "_Use GnuCash built-in color theme"
-msgstr ""
+msgstr "使用 GnuCash 内置的颜色主题(_U)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2583
 msgid ""
 "GnuCash uses a yellow/green theme by default for register windows. Uncheck "
 "this if you want to use the system color theme instead."
-msgstr ""
+msgstr "交易界面默认使用黄/绿间隔色，若你想用系统颜色，请取消勾选。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2595
 msgid "Double _mode colors alternate with transactions"
-msgstr "交易事项以两种模式的颜色交替表示(_M)"
+msgstr "双行模式，颜色按交易区分(_M)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2601
 msgid ""
 "Alternate the primary and secondary colors by transaction instead of by "
 "alternating by row."
-msgstr "以每一笔交易事项为单位交替使用主要与次要颜色，而不是每一列。"
+msgstr "以交易为单位交替使用主色与从色，而不是每行一个颜色。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2613
 msgid "Draw hori_zontal lines between rows"
-msgstr "在行之间画水平线(_Z)"
+msgstr "水平分隔线(_Z)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2619
 msgid "Show horizontal borders on the cells."
-msgstr "为每个单元显示水平边界。"
+msgstr "交易界面单元格显示水平分隔线(_Z)。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2631
 msgid "Draw _vertical lines between columns"
-msgstr "在列之间画垂直线(_V)"
+msgstr "垂直分隔线(_V)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2637
 msgid "Show vertical borders on the cells."
-msgstr "为每个单元显示垂直边界。"
+msgstr "交易界面单元格显示垂直分隔线(_V)。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2662
 #: gnucash/report/reports/standard/invoice.scm:201
@@ -16772,29 +16769,27 @@ msgstr "为每个单元显示垂直边界。"
 #: gnucash/report/reports/standard/invoice.scm:369
 #: gnucash/report/reports/standard/invoice.scm:376
 #: gnucash/report/reports/standard/invoice.scm:383
-#, fuzzy
 msgid "Layout"
-msgstr "<b>到</b>"
+msgstr "<b>布局</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2674
-#, fuzzy
 msgid "_Future transactions after blank transaction"
-msgstr "按“回车”移至空白交易事项(_E)"
+msgstr "未来交易间隔一行(_F)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2680
 msgid ""
 "If checked, transactions with a date in the future will be displayed at the "
 "bottom of the register after the blank transaction. If clear, the blank "
 "transaction will be at the bottom of the register after all transactions."
-msgstr ""
+msgstr "勾选，未来交易将显示在界面底部，隔一行；否则，无间隔。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2719
 msgid "<b>Default Style</b>"
-msgstr "<b>默认风格</b>"
+msgstr "<b>默认样式</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2742
 msgid "<b>Other Defaults</b>"
-msgstr "<b>其它默认值</b>"
+msgstr "<b>其它选项</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2752
 msgid "_Basic ledger"
@@ -16805,36 +16800,32 @@ msgid "_Auto-split ledger"
 msgstr "自动拆分分类账(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2812
-#, fuzzy
 msgid "Number of _transactions"
-msgstr "交易事项数量(_T)："
+msgstr "交易数量(_T)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2845
 msgid "_Double line mode"
 msgstr "双行模式(_D)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2851
-#, fuzzy
 msgid ""
 "Show two lines of information for each transaction instead of one. Does not "
 "affect expanded transactions."
-msgstr "每个交易事项显示两行信息，而不是一行。不影响扩展的交易事项。"
+msgstr "每笔交易以两行显示，而非一行；但不影响扩展的交易。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2863
 msgid "Register opens in a new _window"
-msgstr "在新窗口中打开账簿(_W)"
+msgstr "新窗口打开交易界面(_W)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2869
-#, fuzzy
 msgid ""
 "If checked, each register will be opened in its own top level window. If "
 "clear, the register will be opened in the current window."
-msgstr ""
-"如果选中，每个账簿会在它自己的顶级窗口打开；否则，账簿会在当前窗口打开。"
+msgstr "勾选，交易界面将在新窗口打开；否则，当前窗口。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2881
 msgid "_Only display leaf account names"
-msgstr "只显示末级科目名称(_O)"
+msgstr "只显示末级科目(_O)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2887
 msgid ""
@@ -16842,9 +16833,7 @@ msgid ""
 "register and in the account selection popup. The default behaviour is to "
 "display the full name, including the path in the account tree. Checking this "
 "option implies that you use unique leaf names."
-msgstr ""
-"如果选中，只会在账簿和弹出科目选择中显示末级科目。默认行为是显示全名，包括科"
-"目表的路径。选中这个选项意味着您使用唯一的末级名称。"
+msgstr "勾选，转账字段只显示末级科目；默认显示所有科目；此选项意味着末级科目必需唯一。"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2902
@@ -16876,11 +16865,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3047
 msgid "Register Defaults"
-msgstr "账簿默认值"
+msgstr "交易界面"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3078
 msgid "<b>Default Report Currency</b>"
-msgstr "<b>默认报表货币</b>"
+msgstr "<b>默认币种</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3101
 msgid "<b>Location</b>"
@@ -16888,20 +16877,18 @@ msgstr "<b>位置</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3111
 msgid "Report opens in a new _window"
-msgstr "在新窗口中打开报表(_W)"
+msgstr "新窗口打开报表(_W)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3117
-#, fuzzy
 msgid ""
 "If checked, each report will be opened in its own top level window. If "
 "clear, the report will be opened in the current window."
-msgstr "如果选中，每个报表会在自己的顶级窗口打开；否则，报表会在当前窗口打开。"
+msgstr "勾选，报表将在新窗口打开；否则，当前窗口。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3145
 #: gnucash/gtkbuilder/dialog-preferences.glade:3225
-#, fuzzy
 msgid "Default zoom level"
-msgstr "<b>默认风格</b>"
+msgstr "默认缩放等级"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3260
 msgid "Reports"
@@ -17540,9 +17527,8 @@ msgid "Number of Occurrences"
 msgstr "发生次数："
 
 #: gnucash/gtkbuilder/dialog-sx.glade:512
-#, fuzzy
 msgid "<b>Since Last Run</b>"
-msgstr "<b>自上次运行后对话框</b>"
+msgstr "<b>自上次运行</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:535
 msgid "<b>Transaction Editor Defaults</b>"
