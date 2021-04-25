@@ -17,6 +17,7 @@
 .cproject
 .project
 .scm-links
+.vscode/
 ChangeLog
 Makefile
 Makefile.in
