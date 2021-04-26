@@ -24,6 +24,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <math.h>
 
 #include "gnc-gnome-utils.h"
 #include "gnc-splash.h"
@@ -168,13 +169,19 @@ gnc_update_splash_screen (const gchar *string, double percentage)
         }
     }
 
-    if (progress_bar)
+    if (progress_bar )
     {
-        if (percentage < 0)
+         double curr_fraction =
+              round(gtk_progress_bar_get_fraction(GTK_PROGRESS_BAR(progress_bar)) * 100.0);
+         if (percentage >= 0 && percentage <= 100.0 &&
+             round(percentage) == curr_fraction)
+              return; // No change so don't wast time running the main loop
+
+        if (percentage <= 0)
         {
             gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress_bar), 0.0);
         }
-        else
+        else 
         {
             if (percentage <= 100)
             {
