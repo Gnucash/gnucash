@@ -142,8 +142,8 @@
     pagename optname
     sort-tag (N_ "The source of price information.") default
     (list (vector 'average-cost (N_ "Average cost of purchases weighted by volume"))
-          (vector 'weighted-average (N_ "Weighted average of all past currency transactions"))
-          (vector 'pricedb-before (N_ "Last up to report date"))
+          (vector 'weighted-average (N_ "Weighted average of all transactions in the past"))
+          (vector 'pricedb-before (N_ "Last up through report date"))
           (vector 'pricedb-nearest (N_ "Closest to report date"))
           (vector 'pricedb-latest (N_ "Most recent"))))))
 
