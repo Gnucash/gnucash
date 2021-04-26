@@ -52,10 +52,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gnucash 4.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-04 23:26+0000\n"
+"PO-Revision-Date: 2021-04-26 08:32+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -64,7 +64,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -4939,10 +4939,9 @@ msgstr ""
 "Contabilizza un pagamento per l'intestatario di questo documento di vendita"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:381
-#, fuzzy
-#| msgid "Open a company report window for the owner of this invoice"
 msgid "Open a customer report window for the owner of this invoice"
-msgstr "Apri un resoconto per l'intestatario di questo documento di vendita"
+msgstr ""
+"Apri un resoconto cliente per l'intestatario di questo documento di vendita"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:383
 #: gnucash/gnome/gnc-plugin-page-invoice.c:404
@@ -5003,10 +5002,10 @@ msgstr ""
 "Contabilizza un pagamento per l'intestatario di questo documento di acquisto"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:402
-#, fuzzy
-#| msgid "Open a company report window for the owner of this bill"
 msgid "Open a vendor report window for the owner of this bill"
-msgstr "Apri un resoconto per l'intestatario di questo documento di acquisto"
+msgstr ""
+"Apri un resoconto fornitore per l'intestatario di questo documento di "
+"acquisto"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
 msgid "Use the current layout as default for all vendor bills and credit notes"
@@ -5056,10 +5055,8 @@ msgid "Enter a payment for the owner of this voucher"
 msgstr "Contabilizza un pagamento per l'intestatario di questa nota spese"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:423
-#, fuzzy
-#| msgid "Open a company report window for the owner of this voucher"
 msgid "Open a employee report window for the owner of this voucher"
-msgstr "Apri un resoconto sull'intestatario di questa nota spese"
+msgstr "Apri un resoconto dipendente sull'intestatario di questa nota spese"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:430
 msgid ""
@@ -7817,10 +7814,8 @@ msgid "Existing"
 msgstr "Esistente"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
-#, fuzzy
-#| msgid "Use +- keys to increment/decrement number"
 msgid "You can type '+' or '-' to increment or decrement the number."
-msgstr "Usa i tasti +- per aumentare/diminuire il numero"
+msgstr "Puoi digitare «+» o «-» per aumentare o diminuire il numero."
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
 msgid "Action/Number"
@@ -12439,12 +12434,10 @@ msgstr ""
 # Tooltip
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:285
 #: gnucash/gtkbuilder/dialog-preferences.glade:2758
-#, fuzzy
-#| msgid "Show all transactions on one line. (Two in double line mode.)"
 msgid "Show all transactions on one line or in double line mode on two."
 msgstr ""
-"Visualizza tutte le transazioni su una riga (due nella modalità a riga "
-"doppia)"
+"Visualizza tutte le transazioni su una riga o su due nella modalità a riga "
+"doppia."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:286
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:291
@@ -14218,10 +14211,10 @@ msgid ""
 "\n"
 "Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"Fai clic su «Applica» per creare i nuovi conti; sarà poi possibile salvarli "
-"in un file o in un database.\n"
+"Fai clic su «Applica» per creare i nuovi conti. Successivamente potrai "
+"salvarli in un file o in un database.\n"
 "\n"
-"Fai clic su «Indietro» per modificare le impostazioni.\n"
+"Fai clic su «Indietro» per rivedere le impostazioni.\n"
 "\n"
 "Fai clic su «Annulla» per chiudere questa finestra senza creare alcun conto."
 
