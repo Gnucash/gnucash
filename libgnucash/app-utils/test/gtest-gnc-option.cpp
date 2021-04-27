@@ -936,6 +936,7 @@ TEST_F(GncOptionAccountTest, test_account_list_from_scheme)
                                                GncOptionAccountTypeList{ACCT_TYPE_BANK}}};
     GncOptionAccountList acclistbad{list_of_types({ACCT_TYPE_STOCK})};
     acc_guids = make_account_list_SCM_str(acclistbad);
+    iss.clear();
     iss.str(acc_guids);
     sel_option.from_scheme(iss);
     EXPECT_EQ(accsel, sel_option.get_value<GncOptionAccountList>());
