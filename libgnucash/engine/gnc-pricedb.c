@@ -2439,7 +2439,7 @@ extract_common_prices (PriceList *from_prices, PriceList *to_prices,
 {
     PriceTuple retval = {NULL, NULL};
     GList *from_node = NULL, *to_node = NULL;
-    GNCPrice *from_price, *to_price;
+    GNCPrice *from_price = NULL, *to_price = NULL;
 
     for (from_node = from_prices; from_node != NULL;
          from_node = g_list_next(from_node))
