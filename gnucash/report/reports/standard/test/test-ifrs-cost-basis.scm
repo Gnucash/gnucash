@@ -1,7 +1,7 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash app-utils))
 (use-modules (tests test-engine-extras))
-(use-modules (gnucash reports standard average-cost-basis))
+(use-modules (gnucash reports standard ifrs-cost-basis))
 (use-modules (gnucash report stylesheets plain))
 (use-modules (gnucash report))
 (use-modules (tests test-report-extras))
@@ -10,7 +10,7 @@
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
 
-;; This is implementation testing for both the AVERAGE-COST-BASIS Tool
+;; This is implementation testing for both the IFRS-COST-BASIS Tool
 (define uuid "15d5b744176c4625a703720338725291")
 
 ;; Explicitly set locale to make the report output predictable
@@ -20,7 +20,7 @@
   (test-runner-factory gnc:test-runner)
   (test-begin "test-ifrs-cost-basis.scm")
   (null-test)
-  (average-cost-basis-tests)
+  (ifrs-cost-basis-tests)
   (test-end "test-ifrs-cost-basis.scm"))
 
 (define (options->sxml uuid options test-title)
@@ -51,7 +51,7 @@
     (gnc-commodity-table-insert comm-table new-comm)
     new-comm))
 
-(define (create-average-cost-basis-test-data)
+(define (create-ifrs-cost-basis-test-data)
   (define book (gnc-get-current-book))
   (define env (create-test-env))
   (define USD (mnemonic->commodity "USD"))
@@ -242,9 +242,9 @@
 
   account-alist)
 
-(define (average-cost-basis-tests)
-  (test-group-with-cleanup "average-cost-basis-tests"
-    (let* ((account-alist (create-average-cost-basis-test-data))
+(define (ifrs-cost-basis-tests)
+  (test-group-with-cleanup "ifrs-cost-basis-tests"
+    (let* ((account-alist (create-ifrs-cost-basis-test-data))
            (options (gnc:make-report-options uuid)))
       ;; (set-option! options "General" "Price Source" 'pricedb-latest)
       (set-option! options "General" "Report's currency" (mnemonic->commodity "CAD"))
