@@ -38,6 +38,7 @@ set (reports_standard_SCHEME
     standard/equity-statement.scm
     standard/general-journal.scm
     standard/general-ledger.scm
+    standard/ifrs-cost-basis.scm
     standard/income-gst-statement.scm
     standard/income-statement.scm
     standard/lot-viewer.scm

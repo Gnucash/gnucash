@@ -1206,7 +1206,7 @@ query instead.")
 
 (define-public (gnc:dump-split s show-acc?)
   (define txn (xaccSplitGetParent s))
-  (format #t "~a Split ~a: ~a~a Amt<~a> ~a~a~a\n"
+  (format #t "~a Split ~a: ~a~a Amt<~a> Val<~a> ~a~a~a\n"
           (xaccSplitGetReconcile s)
           (string-take (gncSplitGetGUID s) 8)
           (qof-print-date (xaccTransGetDate txn))
@@ -1220,10 +1220,12 @@ query instead.")
             (xaccTransGetCurrency txn)
             (xaccSplitGetValue s)))
           (maybe-str 'Desc (xaccTransGetDescription txn))
+          (maybe-str 'Action (xaccSplitGetAction s))
           (maybe-str 'Memo (xaccSplitGetMemo s))))
 
 (define-public (gnc:dump-all-transactions)
   (define query (qof-query-create-for-splits))
+  (define (split-has-no-account? split) (null? (xaccSplitGetAccount split)))
   (display "\n(gnc:dump-all-transactions)\n")
   (qof-query-set-book query (gnc-get-current-book))
   (qof-query-set-sort-order query (list SPLIT-TRANS TRANS-DATE-POSTED) '() '())
@@ -1232,6 +1234,7 @@ query instead.")
     (newline)
     (match splits
       (() (qof-query-destroy query))
+      (((? split-has-no-account?) . rest) (lp rest))
       ((split . rest)
        (let ((trans (xaccSplitGetParent split)))
          (format #t "  Trans ~a: ~a Curr ~a ~a~a\n"
