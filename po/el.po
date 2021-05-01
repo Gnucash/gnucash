@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-28 20:32+0000\n"
+"PO-Revision-Date: 2021-05-01 13:32+0000\n"
 "Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
@@ -311,7 +311,7 @@ msgstr "Εβραϊκή (Windows-1255)"
 
 #: borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Χίντι (ΜακΝτεβαναγκάρι)"
 
 #: borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
@@ -406,9 +406,8 @@ msgid "Unicode (UTF-32LE)"
 msgstr "Unicode (UTF-32LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Όνομα χρήστη"
+msgstr "Ορισμένο από το χρήστη"
 
 #: borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
@@ -455,9 +454,8 @@ msgid "Locale: "
 msgstr "Περιοχή "
 
 #: borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Η μετατροπή ολοκληρώθηκε"
+msgstr "Κατεύθυνση μετατροπής"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
@@ -476,6 +474,8 @@ msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
 msgstr ""
+"Το ηλεκτρονικό εγχειρίδιο του GnuCash περιέχει πολλές χρήσιμες πληροφορίες. "
+"Μπορείτε να αποκτήσετε πρόσβαση στο εγχειρίδιο από το μενού Βοήθεια."
 
 #. Translators: You can replace the link, if a translated page exists.
 #: doc/tip_of_the_day.list.c:5
