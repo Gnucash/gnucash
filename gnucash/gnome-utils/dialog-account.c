@@ -879,7 +879,7 @@ gnc_common_ok (AccountWindow *aw)
     }
 
     /* check whether the types of child and parent are compatible */
-    if (!xaccAccountTypesCompatible (aw->type, xaccAccountGetType (parent)))
+    if (!xaccAccountTypesCompatible (xaccAccountGetType (parent), aw->type))
     {
         const char *message = _("The selected account type is incompatible with "
                                 "the one of the selected parent.");
