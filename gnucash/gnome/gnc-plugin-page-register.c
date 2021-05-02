@@ -510,7 +510,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 /* Translators: This is a menu item that will open a register tab for the
    account of the first other account in the current transaction's split list
    with focus on the current transaction's entry in that register. */
-        "JumpTransactionAction", GNC_ICON_JUMP_TO, N_ ("_Jump to the other account"), NULL,
+        "JumpTransactionAction", GNC_ICON_JUMP_TO, N_ ("_Jump to the other account"), "<primary>j",
         N_ ("Open a new register tab for the other account with focus on this transaction."),
         G_CALLBACK (gnc_plugin_page_register_cmd_jump)
     },
@@ -556,7 +556,7 @@ static GtkToggleActionEntry toggle_entries[] =
     },
 
     {
-        "SplitTransactionAction", GNC_ICON_SPLIT_TRANS, N_ ("S_plit Transaction"), NULL,
+        "SplitTransactionAction", GNC_ICON_SPLIT_TRANS, N_ ("S_plit Transaction"), "<primary>k",
         N_ ("Show all splits in the current transaction"),
         G_CALLBACK (gnc_plugin_page_register_cmd_expand_transaction), FALSE
     },
