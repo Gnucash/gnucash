@@ -189,10 +189,10 @@
          (list-op (gnc-register-list-option option-db "foo" "bar" "baz"
                                             "Phony Option" "AvgBalPlot"
                                             value-list)))
-    (test-equal "AvgBalPlot" (gnc-option-value option-db "foo" "bar"))
-    (gnc-set-option option-db "foo" "bar" "GLPlot")
-    (test-equal "GLPlot" (gnc-option-value option-db "foo" "bar"))
-    (test-equal "AvgBalPlot" (gnc-option-default-value option-db "foo" "bar")))
+    (test-equal '("AvgBalPlot") (gnc-option-value option-db "foo" "bar"))
+    (gnc-set-option option-db "foo" "bar" '("GainPlot" "GLPlot"))
+    (test-equal '("GainPlot" "GLPlot") (gnc-option-value option-db "foo" "bar"))
+    (test-equal '("AvgBalPlot") (gnc-option-default-value option-db "foo" "bar")))
   (test-end "test-gnc-test-list-option"))
 
 (define (test-gnc-make-date-option)
