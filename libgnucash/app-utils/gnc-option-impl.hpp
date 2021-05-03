@@ -283,7 +283,8 @@ template<class OptType,
 std::istream& operator>>(std::istream& iss, OptType& opt)
 {
     std::decay_t<decltype(opt.get_value())> value;
-    if constexpr (std::is_same_v<std::decay_t<decltype(opt.get_value())>, SCM>)
+    if constexpr (std::is_same_v<std::decay_t<decltype(opt.get_value())>, SCM> ||
+                  std::is_same_v<std::decay_t<decltype(opt.get_value())>, const _QofQuery*>)
         return iss;
     else
     {
@@ -809,10 +810,10 @@ inline std::ostream&
 gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
 {
     auto indexes{opt.get_multiple()};
-    if (indexes.m_vec.size() > 1)
+    if (indexes.size() > 1)
         oss << "'(";
     bool first = true;
-    for (auto index : indexes.m_vec)
+    for (auto index : indexes)
     {
         if (first)
             first = false;

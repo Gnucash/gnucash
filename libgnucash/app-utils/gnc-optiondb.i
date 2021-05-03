@@ -376,6 +376,21 @@ gnc_option_test_book_destroy(QofBook* book)
     $1 = &period_set;
 }
 
+%typemap(in) GncMultichoiceOptionIndexVec (GncMultichoiceOptionIndexVec indexes)
+{
+    if (scm_is_true($input))
+    {
+        auto len{scm_to_size_t(scm_length($input))};
+        for (std::size_t i = 0; i < len; ++i)
+        {
+            auto val{scm_list_ref($input, scm_from_size_t(i))};
+            if (scm_is_unsigned_integer(val, 0, UINT_MAX))
+                indexes.push_back(scm_to_unsigned_integer(val, 0, UINT_MAX));
+        }
+    }
+    $1 = indexes;
+}
+
 %typemap(in) GncMultichoiceOptionChoices&& (GncMultichoiceOptionChoices choices)
 {
     using KeyType = GncOptionMultichoiceKeyType;
@@ -618,22 +633,54 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             return scm_to_int64(scm_is_pair(date) ? scm_cdr(date) : date);
 
         return gnc_relative_date_to_time64(scm_relative_date_get_period(date));
-        }
+    }
 
     %}
 
 %ignore GncOptionMultichoiceKeyType;
-%ignore pixels;
-%ignore percent;
-
-%header %{
-    static const SCM pixels{(scm_from_utf8_symbol("pixels"))};
-    static const SCM percent{(scm_from_utf8_symbol("percent"))};
-    %}
 
 %inline %{
-    inline SCM scm_from_multichoices (const GncMultichoiceOptionIndexVec& indexes,
-                                      const GncOptionMultichoiceValue& option)
+    inline GncMultichoiceOptionIndexVec
+    scm_to_multichoices(const SCM new_value,
+                        const GncOptionMultichoiceValue& option)
+    {
+        static const auto size_t_max = std::numeric_limits<std::size_t>::max();
+        static const char* empty{""};
+        auto scm_to_str = [](auto item)->const char* {
+                if (scm_is_integer(item))
+                    scm_number_to_string(item, scm_from_uint(10u));
+                if (scm_is_symbol(item))
+                    return scm_to_utf8_string(scm_symbol_to_string(item));
+                else if (scm_is_string(item))
+                    return scm_to_utf8_string(item);
+                else return empty;
+            };
+        GncMultichoiceOptionIndexVec vec;
+        auto choice_is_list{option.get_ui_type() == GncOptionUIType::LIST}; 
+        if (scm_is_list(new_value))
+        {
+            if (!choice_is_list)
+              throw std::invalid_argument{"Attempt to set multichoice with a list of values."};
+            auto len{scm_to_size_t(scm_length(new_value))};
+            for (std::size_t i = 0; i < len; ++i)
+            {
+                auto item{scm_list_ref(new_value, scm_from_size_t(i))};
+                auto index{option.permissible_value_index(scm_to_str(item))};
+                if (index < size_t_max)
+                    vec.push_back(index);
+            }
+        }
+        else
+        {
+            auto index{option.permissible_value_index(scm_to_str(new_value))};
+            if (index < size_t_max)
+                vec.push_back(index);
+        }
+        return vec;
+    }
+
+    inline SCM scm_from_multichoices(const GncMultichoiceOptionIndexVec& indexes,
+                                     const GncOptionMultichoiceValue& option)
     {
         using KeyType = GncOptionMultichoiceKeyType;
         auto scm_value = [](const char* value, KeyType keytype) -> SCM {
@@ -651,19 +698,21 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             return SCM_BOOL_F;
         };
 
-        if (indexes.size() == 1) // FIXME: Should use bool member to decide
+        if (option.get_ui_type() == GncOptionUIType::MULTICHOICE)
             return scm_value(option.permissible_value(indexes[0]),
                              option.get_keytype(indexes[0]));
-        auto values{scm_list_1(SCM_UNDEFINED)};
+        auto values{SCM_BOOL_F};
         for(auto index : indexes)
         {
             auto val{scm_list_1(scm_value(option.permissible_value(index),
                                           option.get_keytype(index)))};
-            values = scm_append(scm_list_2(val, values));
+            if (scm_is_true(values))
+                values = scm_append(scm_list_2(val, values));
+            else
+                values = val;
         }
         return scm_reverse(values);
     }
-
 
     SCM get_scm_value(const GncOptionMultichoiceValue& option)
     {
@@ -688,14 +737,14 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     SCM get_scm_value(const GncOptionRangeValue<int>& option)
     {
         auto val{option.get_value()};
-        auto desig{val > 100 ? pixels : percent};
+        auto desig{scm_c_eval_string(val > 100 ? "'pixels" : "'percent")};
         return scm_cons(desig, scm_from_int(val));
     }
 
     SCM get_scm_default_value(const GncOptionRangeValue<int>& option)
     {
         auto val{option.get_default_value()};
-        auto desig{val > 100 ? pixels : percent};
+        auto desig{scm_c_eval_string(val > 100 ? "'pixels" : "'percent")};
         return scm_cons(desig, scm_from_int(val));
     }
 
@@ -764,23 +813,14 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                         option.set_value(scm_relative_date_get_period(new_value));
                     return;
                 }
+
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
                                GncOptionMultichoiceValue>)
                 {
-                    if (scm_is_integer(new_value))
-                    {
-                        option.set_value(scm_to_int(new_value));
-                        return;
-                    }
-                    std::string new_value_str{};
-                    if (scm_is_symbol(new_value))
-                        new_value_str = scm_to_utf8_string(scm_symbol_to_string(new_value));
-                    else if (scm_is_string(new_value))
-                        new_value_str = scm_to_utf8_string(new_value);
-                    if (!new_value_str.empty())
-                        option.set_value(new_value_str);
+                    option.set_multiple(scm_to_multichoices(new_value, option));
                     return;
                 }
+
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
                                GncOptionRangeValue<int>>)
                 {
@@ -790,6 +830,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                         option.set_value(scm_to_int(new_value));
                     return;
                 }
+
                 auto value{scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value)};  //Can't inline, set_value takes arg by reference.
                 option.set_value(value);
             }, swig_get_option($self));
@@ -812,18 +853,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
                                GncOptionMultichoiceValue>)
                 {
-                    if (scm_is_integer(new_value))
-                    {
-                        option.set_default_value(scm_to_int(new_value));
-                        return;
-                    }
-                    std::string new_value_str{};
-                    if (scm_is_symbol(new_value))
-                        new_value_str = scm_to_utf8_string(scm_symbol_to_string(new_value));
-                    else if (scm_is_string(new_value))
-                        new_value_str = scm_to_utf8_string(new_value);
-                    if (!new_value_str.empty())
-                        option.set_default_value(new_value_str);
+                    option.set_default_multiple(scm_to_multichoices(new_value,
+                                                                    option));
                     return;
                 }
                 if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
@@ -984,7 +1015,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                 defval = (choices.empty() ? std::string{"None"} :
                           std::get<0>(choices.at(0)));
             return new GncOption{GncOptionMultichoiceValue{section, name, key,
-                        doc_string, defval.c_str(), std::move(choices)}};
+                        doc_string, defval.c_str(), std::move(choices),
+                        GncOptionUIType::MULTICHOICE}};
         }
         catch (const std::exception& err)
         {
@@ -995,12 +1027,13 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 
     GncOption* gnc_make_list_option(const char* section,
                                     const char* name, const char* key,
-                                    const char* doc_string, const char* value,
+                                    const char* doc_string,
+                                    GncMultichoiceOptionIndexVec indexes,
                                     GncMultichoiceOptionChoices&& list)
     {
         try {
             return new GncOption{GncOptionMultichoiceValue{section, name, key,
-                        doc_string, value,  std::move(list),
+                        doc_string, std::move(indexes), std::move(list),
                         GncOptionUIType::LIST}};
         }
         catch (const std::exception& err)
