@@ -212,15 +212,15 @@
   (let* ((option-db (new-gnc-optiondb))
          (date-opt (gnc-register-date-option-set
                     option-db "foo" "bar" "baz" "Phony Option"
-                    (list (RelativeDatePeriod-TODAY)
-                          (RelativeDatePeriod-START-THIS-MONTH)
-                          (RelativeDatePeriod-START-PREV-MONTH)
-                          (RelativeDatePeriod-START-CURRENT-QUARTER)
-                          (RelativeDatePeriod-START-PREV-QUARTER)
-                          (RelativeDatePeriod-START-CAL-YEAR)
-                          (RelativeDatePeriod-START-CAL-YEAR)
-                          (RelativeDatePeriod-START-PREV-YEAR)
-                          (RelativeDatePeriod-START-ACCOUNTING-PERIOD)) #t)))
+                    `(today
+                          start-this-month
+                          start-prev-month
+                          start-current-quarter
+                          start-prev-quarter
+                          start-cal-year
+                          start-cal-year
+                          start-prev-year
+                          start-accounting-period) #t)))
     (test-equal (gnc-accounting-period-fiscal-start)
                 (gnc-option-value option-db "foo" "bar")))
   (test-end "test-gnc-test-date-set-option"))
