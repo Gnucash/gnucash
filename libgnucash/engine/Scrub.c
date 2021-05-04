@@ -51,6 +51,7 @@
 #include "TransactionP.h"
 #include "gnc-commodity.h"
 #include "qofinstance-p.h"
+#include "gnc-session.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.scrub"
@@ -442,43 +443,46 @@ get_balance_split (Transaction *trans, Account *root, Account *account,
     return balance_split;
 }
 
+static gnc_commodity*
+find_root_currency(void)
+{
+    QofSession *sess = gnc_get_current_session ();
+    Account *root = gnc_book_get_root_account (qof_session_get_book (sess));
+    gnc_commodity *root_currency = xaccAccountGetCommodity (root);
+
+    /* Some older books may not have a currency set on the root
+     * account. In that case find the first top-level INCOME account
+     * and use its currency. */
+    if (!root_currency)
+    {
+         GList *children = gnc_account_get_children (root);
+         for (GList *node = children; node && !root_currency;
+              node = g_list_next (node))
+         {
+              Account *child = GNC_ACCOUNT (node->data);
+              if (xaccAccountGetType (child) == ACCT_TYPE_INCOME)
+                   root_currency = xaccAccountGetCommodity (child);
+         }
+         g_free (children);
+    }
+    return root_currency;
+}
+
 /* Get the trading split for a given commodity, creating it (and the
-   necessary accounts) if it doesn't exist. */
+   necessary parent accounts) if it doesn't exist. */
 static Split *
-get_trading_split (Transaction *trans, Account *root,
+get_trading_split (Transaction *trans, Account *base,
                    gnc_commodity *commodity)
 {
     Split *balance_split;
     Account *trading_account;
     Account *ns_account;
     Account *account;
-    gnc_commodity *default_currency = NULL;
-
-    if (!root)
-    {
-        root = gnc_book_get_root_account (xaccTransGetBook (trans));
-        if (NULL == root)
-        {
-            /* This can't occur, things should be in books */
-            PERR ("Bad data corruption, no root account in book");
-            return NULL;
-        }
-    }
-
-    /* Get the default currency.  This is harder than it seems.  It's not
-       possible to call gnc_default_currency() since it's a UI function.  One
-       might think that the currency of the root account would do, but the root
-       account has no currency.  Instead look for the Income placeholder account
-       and use its currency.  */
-    default_currency = xaccAccountGetCommodity(gnc_account_lookup_by_name(root,
-                                                                          _("Income")));
-    if (! default_currency)
-    {
-        default_currency = commodity;
-    }
+    Account* root = gnc_book_get_root_account (xaccTransGetBook (trans));
+    gnc_commodity *root_currency = find_root_currency ();
 
     trading_account = xaccScrubUtilityGetOrMakeAccount (root,
-                                                        default_currency,
+                                                        NULL,
                                                         _("Trading"),
                                                         ACCT_TYPE_TRADING,
                                                         TRUE, FALSE);
@@ -489,7 +493,7 @@ get_trading_split (Transaction *trans, Account *root,
     }
 
     ns_account = xaccScrubUtilityGetOrMakeAccount (trading_account,
-                                                   default_currency,
+                                                   NULL,
                                                    gnc_commodity_get_namespace(commodity),
                                                    ACCT_TYPE_TRADING,
                                                    TRUE, TRUE);
@@ -1451,42 +1455,91 @@ xaccAccountScrubColorNotSet (QofBook *book)
 
 /* ================================================================ */
 
+static Account*
+construct_account (Account *root, gnc_commodity *currency, const char *accname,
+                   GNCAccountType acctype, gboolean placeholder)
+{
+    gnc_commodity* root_currency = find_root_currency ();
+    Account *acc = xaccMallocAccount(gnc_account_get_book (root));
+    xaccAccountBeginEdit (acc);
+    if (accname && *accname)
+         xaccAccountSetName (acc, accname);
+    if (currency || root_currency)
+         xaccAccountSetCommodity (acc, currency ? currency : root_currency);
+    xaccAccountSetType (acc, acctype);
+    xaccAccountSetPlaceholder (acc, placeholder);
+
+    /* Hang the account off the root. */
+    gnc_account_append_child (root, acc);
+    xaccAccountCommitEdit (acc);
+    return acc;
+}
+
+static Account*
+find_root_currency_account_in_list (GList *acc_list)
+{
+    gnc_commodity* root_currency = find_root_currency();
+    for (GList *node = acc_list; node; node = g_list_next (node))
+    {
+        Account *acc = GNC_ACCOUNT (node->data);
+        gnc_commodity *acc_commodity = NULL;
+        if (G_UNLIKELY (!acc)) continue;
+        acc_commodity = xaccAccountGetCommodity(acc);
+        if (gnc_commodity_equiv (acc_commodity, root_currency))
+            return acc;
+    }
+
+    return NULL;
+}
+
+static Account*
+find_account_matching_name_in_list (GList *acc_list, const char* accname)
+{
+    for (GList* node = acc_list; node; node = g_list_next(node))
+    {
+        Account *acc = GNC_ACCOUNT (node->data);
+        if (G_UNLIKELY (!acc)) continue;
+        if (g_strcmp0 (accname, xaccAccountGetName(acc)))
+        {
+            g_list_free (acc_list);
+            return acc;
+        }
+    }
+    return NULL;
+}
+
 Account *
 xaccScrubUtilityGetOrMakeAccount (Account *root, gnc_commodity * currency,
                                   const char *accname, GNCAccountType acctype,
                                   gboolean placeholder, gboolean checkname)
 {
-    Account * acc;
+    GList* acc_list;
+    Account *acc = NULL;
 
     g_return_val_if_fail (root, NULL);
 
-    /* build the account name */
-    if (!currency)
+    acc_list =
+        gnc_account_lookup_by_type_and_commodity (root,
+                                                  checkname ? accname : NULL,
+                                                  acctype, currency);
+
+    if (!acc_list)
+        return construct_account (root, currency, accname,
+                                  acctype, placeholder);
+
+    if (g_list_next(acc_list))
     {
-        PERR ("No currency specified!");
-        return NULL;
+        if (!currency)
+            acc = find_root_currency_account_in_list (acc_list);
+
+        if (!acc)
+            acc = find_account_matching_name_in_list (acc_list, accname);
     }
 
-    /* See if we've got one of these going already ... */
-    acc = gnc_account_lookup_by_type_and_commodity (root,
-                                                    checkname ? accname : NULL,
-                                                    acctype, currency);
+    if (!acc)
+        acc = GNC_ACCOUNT (acc_list->data);
 
-    if (acc == NULL)
-    {
-        /* Guess not. We'll have to build one. */
-        acc = xaccMallocAccount(gnc_account_get_book (root));
-        xaccAccountBeginEdit (acc);
-        xaccAccountSetName (acc, accname);
-        xaccAccountSetCommodity (acc, currency);
-        xaccAccountSetType (acc, acctype);
-        xaccAccountSetPlaceholder (acc, placeholder);
-
-        /* Hang the account off the root. */
-        gnc_account_append_child (root, acc);
-        xaccAccountCommitEdit (acc);
-    }
-
+    g_list_free (acc_list);
     return acc;
 }
 
