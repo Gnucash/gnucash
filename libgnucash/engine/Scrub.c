@@ -110,6 +110,7 @@ TransScrubOrphansFast (Transaction *trans, Account *root)
 
     if (!trans) return;
     g_return_if_fail (root);
+    g_return_if_fail (trans->common_currency);
 
     for (node = trans->splits; node; node = node->next)
     {
