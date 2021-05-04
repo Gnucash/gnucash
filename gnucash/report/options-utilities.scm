@@ -202,7 +202,7 @@
     (list
      (vector 'acct-code (N_ "Alphabetical by account code"))
      (vector 'alphabetical (N_ "Alphabetical by account name"))
-     (vector 'amount (N_ "Amount, largest to smallest"))))))
+     (vector 'amount (N_ "Numerical by descending amount"))))))
 
 
 ;; These control the calculation and view mode of subtotal balances
