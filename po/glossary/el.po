@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-04-29 23:09+0000\n"
+"PO-Revision-Date: 2021-05-03 11:32+0000\n"
 "Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
@@ -645,9 +645,8 @@ msgid "price type: ask"
 msgstr "είδος τιμής: ελάχιστη τιμή προσφοράς"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
-#, fuzzy
 msgid "price type: bid"
-msgstr "Τύπος αρχείου:"
+msgstr "τύπος τιμής: προσφορά"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
@@ -712,9 +711,8 @@ msgstr "Εκκίνηση νέας διενέργειας"
 
 #
 #. "reload the current document"
-#, fuzzy
 msgid "reload, to"
-msgstr "Ανανέωση"
+msgstr "επαναφόρτωση, για να"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
@@ -767,7 +765,6 @@ msgid "source"
 msgstr "πηγή"
 
 #. "One of the two or several parts a transaction is divided into"
-#, fuzzy
 msgid "split"
 msgstr "Διαίρεση"
 
@@ -776,9 +773,8 @@ msgid "style sheet"
 msgstr "επίστρωμα ύφους"
 
 #. "The total of a set of figures that are part of a larger group of figures"
-#, fuzzy
 msgid "subtotal"
-msgstr "%d συνολικά"
+msgstr "υποσύνολο"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"
