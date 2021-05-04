@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-05-01 10:32+0000\n"
+"PO-Revision-Date: 2021-05-02 17:32+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "sv/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgstr ""
+msgstr "Term"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
@@ -57,9 +57,8 @@ msgid "account type: Asset"
 msgstr "kontotyp: Tillgång"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "kontotyp: Skuld"
+msgstr "kontotyp: Tillgångar & Skulder"
 
 # src/prefs.c:210
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
@@ -112,13 +111,12 @@ msgid "account type: Stock"
 msgstr "kontotyp: aktie"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "kontotyp: spar"
+msgstr "kontotyp: handel"
 
 #. "-"
 msgid "account: parent account"
-msgstr "konto: förälderkonto"
+msgstr "konto: överliggande konto"
 
 #. "-"
 msgid "account: subaccount"
@@ -315,9 +313,8 @@ msgid "commodity option: Symbol"
 msgstr "varualterativ: Symbol"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "ränta"
+msgstr "ränta på ränta"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -346,7 +343,7 @@ msgstr "Anpassat"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "översikt"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -410,11 +407,11 @@ msgstr "eget kapital"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
-msgstr ""
+msgstr "förteckning över eget kapital"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
-msgstr ""
+msgstr "depositionskonto"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -441,9 +438,8 @@ msgid "financial calculator: payments"
 msgstr "finansiell miniräknare: betalningar"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
 msgid "financial statement"
-msgstr "händelse: betalning"
+msgstr "kontoutdrag"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
@@ -463,7 +459,7 @@ msgstr "import"
 
 #. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
 msgid "income statement"
-msgstr ""
+msgstr "resultaträkning"
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
@@ -492,10 +488,8 @@ msgstr "lån"
 
 # src/languages.h:184
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "lån"
+msgstr "lån: årsränta"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -518,9 +512,8 @@ msgid "marker"
 msgstr "markering"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
-msgstr "markering"
+msgstr "marginal"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -535,16 +528,12 @@ msgid "Mortgage"
 msgstr "Inteckning"
 
 #. "Adjustable Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "Inteckning"
+msgstr "inteckning: rörlig ränta"
 
 #. "Fixed Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "Inteckning"
+msgstr "inteckning: fast ränta"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -628,18 +617,16 @@ msgid "portfolio"
 msgstr "portfölj"
 
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "stänga, att"
+msgstr "registrera, att"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "inställningar"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "händelse: betalning"
+msgstr "amortering"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -663,7 +650,7 @@ msgstr "vinst"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "Vinst och förlust"
+msgstr "Vinst & Förlust"
 
 #. "-"
 msgid "quick-fill"
@@ -715,11 +702,11 @@ msgstr "läs om, att"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "rapportform: T-kontoform"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "rapportform: Vertikalt format"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -727,7 +714,7 @@ msgstr "Balanserade vinstmedel"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
-msgstr ""
+msgstr "återbetalning (Åtgärd i registret)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
@@ -784,14 +771,12 @@ msgid "tax info"
 msgstr "skatteinformation"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "kontotyp: Inkomst"
+msgstr "skattetyp: inkomstskatt"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "skattetyp: försäljningsskatt"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
@@ -852,7 +837,7 @@ msgstr "överföra, att (registerverktygsrad)"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr ""
+msgstr "råbalans (rapport)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
@@ -876,7 +861,7 @@ msgstr "leverantör"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr ""
+msgstr "traktamente"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
