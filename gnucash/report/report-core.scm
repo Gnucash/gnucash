@@ -237,6 +237,7 @@ not found.")))
   (define report-rec (make-report-template))
   (define allowable-fields (record-type-fields <report-template>))
   (define (not-a-field? fld) (not (memq fld allowable-fields)))
+  (define (xor . args) (fold (lambda (a b) (if a (if b #f a) b)) #f args))
 
   (let loop ((args args))
     (match args
@@ -251,6 +252,11 @@ not found.")))
           ;; dupe: report-guid is a duplicate
           ((hash-ref *gnc:_report-templates_* report-guid)
            (gui-error (string-append rpterr-dupe report-guid)))
+
+          ;; has export-type but no export-thunk. or vice versa.
+          ((xor (gnc:report-template-export-thunk report-rec)
+                (gnc:report-template-export-types report-rec))
+           (gui-error (format #f "Export needs both thunk and types: ~a" report-guid)))
 
           ;; good: new report definition, store into report-templates hash
           (else
@@ -836,10 +842,8 @@ not found.")))
     (cond
      ((not export-thunk)
       (stderr-log "Only the following reports have export code:\n")
-      (show-selected-reports (cut gnc:report-template-export-thunk <>)
-                             (current-error-port))
+      (show-selected-reports gnc:report-template-export-thunk (current-error-port))
       (stderr-log "Use -R show to describe report\n"))
-     ((not export-types) (stderr-log "Report ~s has no export-types\n" report))
      ((not (assoc export-type export-types))
       (stderr-log "Export-type disallowed: ~a. Allowed types: ~a\n"
                   export-type (string-join (map car export-types) ", ")))
