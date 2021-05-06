@@ -13,8 +13,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-05-02 17:32+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2021-05-06 03:32+0000\n"
+"Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "sv/>\n"
 "Language: sv\n"
@@ -218,14 +218,12 @@ msgid "balance (noun)"
 msgstr "saldo (substantiv)"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "balansera, att"
+msgstr "saldo ing"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "balansera, att"
+msgstr "saldo utg"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -760,9 +758,8 @@ msgid "subtotal"
 msgstr "delsumma"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "skatteinformation"
+msgstr "skattelagstiftning"
 
 #. "field of an account"
 msgid "tax info"
@@ -778,11 +775,11 @@ msgstr "skattetyp: försäljningsskatt"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "skattetyp: GST"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "skattetyp: mervärdesskatt (moms)"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
