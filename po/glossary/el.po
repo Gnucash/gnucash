@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-05-03 11:32+0000\n"
+"PO-Revision-Date: 2021-05-07 16:32+0000\n"
 "Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
@@ -292,7 +292,6 @@ msgid "check and repair, to"
 msgstr "έλεγχος και επισκευή, για να"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
-#, fuzzy
 msgid "close, to"
 msgstr "Κλείσιμο καταγραφών"
 
@@ -683,9 +682,8 @@ msgstr "μητρώο"
 
 #
 #. "A transaction that is divided into two or more parts"
-#, fuzzy
 msgid "register entry: split transaction"
-msgstr "Εκκίνηση νέας διενέργειας"
+msgstr "καταχώρηση μητρώου: διαχωρισμός συναλλαγής"
 
 #. "-"
 msgid "register entry: stock split"
@@ -705,9 +703,8 @@ msgstr "μητρώο: γενικό καθολικό"
 
 #
 #. "another form of register"
-#, fuzzy
 msgid "register: transaction journal"
-msgstr "Εκκίνηση νέας διενέργειας"
+msgstr "μητρώο: ημερολόγιο συναλλαγών"
 
 #
 #. "reload the current document"
@@ -745,12 +742,11 @@ msgstr "Προγραμματισμένη Συναλλαγή"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
-msgstr ""
+msgstr "να κάνω καθαρισμό"
 
 #. "A document or certificate showing who owns shares"
-#, fuzzy
 msgid "security"
-msgstr "Ασφάλεια"
+msgstr "ασφάλεια"
 
 #. "-"
 msgid "Share Balance (register)"
