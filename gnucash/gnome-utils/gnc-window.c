@@ -25,6 +25,7 @@
 #include <config.h>
 
 #include <gtk/gtk.h>
+#include <math.h>
 
 #include "gnc-engine.h"
 #include "gnc-plugin-page.h"
@@ -167,6 +168,7 @@ gnc_window_show_progress (const char *message, double percentage)
 {
     GncWindow *window;
     GtkWidget *progressbar;
+    double curr_fraction;
 
     window = progress_bar_hack_window;
     if (window == NULL)
@@ -178,6 +180,13 @@ gnc_window_show_progress (const char *message, double percentage)
         DEBUG( "no progressbar in hack-window" );
         return;
     }
+
+    curr_fraction =
+         round(gtk_progress_bar_get_fraction(GTK_PROGRESS_BAR(progressbar)) * 100.0);
+
+    if (percentage >= 0 && percentage <= 100 &&
+        round(percentage) == curr_fraction)
+         return; // No change, so don't waste time running the main loop.
 
     gnc_update_splash_screen(message, percentage);
 
@@ -192,13 +201,13 @@ gnc_window_show_progress (const char *message, double percentage)
     {
         if (message && *message)
             gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), message);
-        if ((percentage == 0) &&
+        if ((percentage == 0.0) &&
                 (GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive != NULL))
             GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive(window, FALSE);
-        if (percentage <= 100)
+        if (percentage <= 100.0)
         {
             gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar),
-                                          percentage / 100);
+                                          percentage / 100.0);
         }
         else
         {

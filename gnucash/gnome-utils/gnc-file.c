@@ -25,6 +25,8 @@
 #include <glib/gi18n.h>
 #include <errno.h>
 #include <string.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "dialog-utils.h"
 #include "assistant-xml-encoding.h"
@@ -1101,6 +1103,8 @@ RESTART:
         gnc_warning_dialog(parent, "%s", message);
         g_free ( message );
     }
+
+    scm_call_0(scm_c_eval_string("gnc:load-book-custom-templates"));
 
     // Fix account color slots being set to 'Not Set', should run once on a book
     qof_event_suspend();

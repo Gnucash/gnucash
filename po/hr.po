@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-03-25 12:29+0000\n"
+"PO-Revision-Date: 2021-04-24 17:32+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -4826,10 +4826,8 @@ msgid "Enter a payment for the owner of this invoice"
 msgstr "Upiši plaćanje za vlasnika ovog izlaznog računa"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:381
-#, fuzzy
-#| msgid "Open a company report window for the owner of this invoice"
 msgid "Open a customer report window for the owner of this invoice"
-msgstr "Otvori prozor izvještaja o poduzeću za vlasnika ovog izlaznog računa"
+msgstr "Otvori prozor izvještaja o kupcu za vlasnika ovog izlaznog računa"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:383
 #: gnucash/gnome/gnc-plugin-page-invoice.c:404
@@ -4887,10 +4885,8 @@ msgid "Enter a payment for the owner of this bill"
 msgstr "Upiši plaćanje za vlasnika ovog ulaznog računa"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:402
-#, fuzzy
-#| msgid "Open a company report window for the owner of this bill"
 msgid "Open a vendor report window for the owner of this bill"
-msgstr "Otvori prozor izvještaja o poduzeću za vlasnika ovog ulaznog računa"
+msgstr "Otvori prozor izvještaja o kupcu za vlasnika ovog ulaznog računa"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
 msgid "Use the current layout as default for all vendor bills and credit notes"
@@ -4939,10 +4935,8 @@ msgid "Enter a payment for the owner of this voucher"
 msgstr "Upiši plaćanje za vlasnika ovog vaučera"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:423
-#, fuzzy
-#| msgid "Open a company report window for the owner of this voucher"
 msgid "Open a employee report window for the owner of this voucher"
-msgstr "Otvori prozor izvještaja o poduzeću za vlasnika ovog vaučera"
+msgstr "Otvori prozor izvještaja o zaposleniku za vlasnika ovog vaučera"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:430
 msgid ""
@@ -7628,10 +7622,8 @@ msgid "Existing"
 msgstr "Postojeće"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
-#, fuzzy
-#| msgid "Use +- keys to increment/decrement number"
 msgid "You can type '+' or '-' to increment or decrement the number."
-msgstr "Koristi tipke + i - za povećavanje/smanjivanje broja"
+msgstr "Za povećavanje ili smanjivanje broja možeš koristiti tipke „+” i „-”."
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
 msgid "Action/Number"
@@ -12031,11 +12023,9 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:285
 #: gnucash/gtkbuilder/dialog-preferences.glade:2758
-#, fuzzy
-#| msgid "Show all transactions on one line. (Two in double line mode.)"
 msgid "Show all transactions on one line or in double line mode on two."
 msgstr ""
-"Prikaži sve transakcije u jednom retku. (U dva retka, u dvorednom prikazu.)"
+"Prikaži sve transakcije u jednom retku ili u dva retka u dvorednom prikazu."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:286
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:291
@@ -12057,16 +12047,12 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
 #: gnucash/gtkbuilder/dialog-preferences.glade:2777
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line. (Two in double line mode.)"
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
 msgstr ""
 "Automatski rasklopi trenutačnu transakciju za prikaz svih stavaka. Sve druge "
-"transakcije se prikazuju u jednom retku. (U dva retka, u dvorednom prikazu.)"
+"transakcije prikazuju se u jednom retku ili u dva retka u dvorednom prikazu."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
 #: gnucash/gtkbuilder/dialog-preferences.glade:2796
@@ -13075,38 +13061,6 @@ msgstr "Uvoz CSV cijena"
 
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:65
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import Prices from a CSV file.\n"
-#| "\n"
-#| "There is a minimum number of columns that have to be present for a "
-#| "successful import, these are Date, Amount, From Namespace, From Symbol "
-#| "and Currency To. If all entries are for the same Commodity / Currency "
-#| "then you can select them and then the columns will be Date and Amount.\n"
-#| "\n"
-#| "Various options exist for specifying the delimiter as well as a fixed "
-#| "width option. With the fixed width option, double click on the table of "
-#| "rows displayed to set a column width, then right mouse to change if "
-#| "required.\n"
-#| "\n"
-#| "Examples are \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" and CURRENCY;"
-#| "USD;2016-11-21;1.56;GBP\n"
-#| "\n"
-#| "There is an option for specifying the start row, end row and an option to "
-#| "skip alternate rows beginning from the start row which can be used if you "
-#| "have some header text. Also there is an option to overwrite existing "
-#| "prices for that day if required.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. To save the settings, tweak the settings to your "
-#| "preferences (optionally starting from an existing preset), then "
-#| "(optionally change the settings name and press the Save Settings button. "
-#| "Note you can't save to built-in presets.\n"
-#| "\n"
-#| "This operation is not reversible, so make sure you have a working "
-#| "backup.\n"
-#| "\n"
-#| "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgid ""
 "This assistant will help you import Prices from a CSV file.\n"
 "\n"
@@ -13156,11 +13110,10 @@ msgstr ""
 "zaglavlju tablice. Moguće je i prepisati postojeće cijene za taj dan, ako je "
 "to potrebno.\n"
 "\n"
-"I na kraju, za ponavljanje uvoza, pregled stranice ima gumbe za učitavanje i "
-"spremanje postavaka. Za spremanje postavaka, namjesti postavke po želji "
-"(počevši sa zadanim postavkama), a zatim (opcionalno) promijeni naziv "
-"postavke i klikni „Spremi postavke”. Napomena: Spremati se može čak i u "
-"ugrađene postavke.\n"
+"I na kraju, za ponavljanje uvoza, stranica pregleda ima gumbove za "
+"učitavanje i spremanje postavaka. Prilagođene postavke možeš spremiti za "
+"ponovnu upotrebu za kasnije uvoze. Nakon učitavanja postavki možeš ih ponovo "
+"podesiti za sličan uvoz i spremiti ih pod drugim imenom.\n"
 "\n"
 "Ovo je nepovratna radnja, stoga imaj sigurnosnu kopiju pri ruci.\n"
 "\n"
@@ -13353,10 +13306,6 @@ msgid "Import Preview"
 msgstr "Uvezi pregled"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1026
-#, fuzzy
-#| msgid ""
-#| "<b>Press Apply to add the Prices.\n"
-#| "Cancel to abort.</b>"
 msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
@@ -13373,34 +13322,6 @@ msgid "CSV Transaction Import"
 msgstr "Uvoz CSV transakcije"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:56
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import a delimited file containing a list of "
-#| "transactions. It supports both token separated files (such as comma "
-#| "separated or semi-colon separated) and fixed width data.\n"
-#| "\n"
-#| "For a successful import three columns have to be available in the import "
-#| "data:\n"
-#| "• a Date column\n"
-#| "• a Description column\n"
-#| "• a Deposit or Withdrawal column\n"
-#| "\n"
-#| "If there is no Account data available, a base account can be selected to "
-#| "which all data will be imported.\n"
-#| "\n"
-#| "Apart from a choice of delimiter, there are several options to tweak the "
-#| "importer. For example a number of lines can be skipped at the start or "
-#| "the end of the data, as well as odd rows. Several date and number formats "
-#| "are supported. The file encoding can be defined.\n"
-#| "\n"
-#| "The importer can handle files where transactions are split over multiple "
-#| "lines, with each line representing one split.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. To save the settings, tweak the settings to your "
-#| "preferences (optionally starting from an existing preset), then "
-#| "(optionally change the settings name and press the Save Settings button. "
-#| "Note you can't save to built-in presets."
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions. It supports both token separated files (such as comma "
@@ -13449,10 +13370,9 @@ msgstr ""
 "više redaka, pri čemu svaki radak prikazuje jednu stavku.\n"
 "\n"
 "I na kraju, za ponavljanje uvoza, pregled stranice ima gumbe za učitavanje i "
-"spremanje postavaka. Za spremanje postavaka, namjesti postavke po želji "
-"(počevši s ugrađenim postavkama), a zatim (opcionalno) promijeni naziv "
-"postavke i klikni „Spremi postavke”. Napomena: Spremati se može čak i u "
-"ugrađene postavke."
+"spremanje postavaka. Prilagođene postavke možeš spremiti za ponovnu upotrebu "
+"za kasnije uvoze. Nakon učitavanja postavki možeš ih ponovo podesiti za "
+"sličan uvoz i spremiti ih pod drugim imenom."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:74
 msgid "Transaction Import Assistant"
@@ -14445,7 +14365,7 @@ msgstr ""
 "uvoza.\n"
 "\n"
 "Klikni „Natrag“ za pregledavanje poklapanja tvojih konta i kategorija, za "
-"mijenjenje postavaka za valute i vrijednosne papire novih konta ili za "
+"mijenjanje postavaka za valute i vrijednosne papire novih konta ili za "
 "dodavanje daljnjih datoteka na područje za izvođenje.\n"
 "\n"
 "Klikni „Prekini“ za prekid procesa QIF uvoza."
@@ -15662,10 +15582,8 @@ msgid "Linked _Location"
 msgstr "Povezano _mjesto"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:349
-#, fuzzy
-#| msgid "(none)"
 msgid "(None)"
-msgstr "(bez)"
+msgstr "(Ništa)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:412
 msgid "Enter URL like http://www.gnucash.org"
@@ -19289,11 +19207,6 @@ msgid "Initial Online Banking Setup"
 msgstr "Postavljanje internet bankarstva"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:90
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\". Please press the button below to "
-#| "start this program."
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup Wizard\".\n"
@@ -19302,7 +19215,10 @@ msgid ""
 "Please press the button below to start it."
 msgstr ""
 "Postavkama veze tvog internet bankarstva upravlja vanjski program „Čarobnjak "
-"za postavljanje AqBanking“. Klikni donji gumb za pokretanje ovog programa."
+"za postavljanje AqBanking“.\n"
+"Za nastavljanje moraš postaviti barem jednu vezu.\n"
+"\n"
+"Klikni donji gumb za pokretanje."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 msgid "_Start AqBanking Wizard"
@@ -20525,13 +20441,6 @@ msgid "Import bills and invoices from a CSV text file"
 msgstr "Uvezi ulazne i izlazne račune iz tekstualne CSV datoteke"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:80
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you export the Account Tree to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
 msgid ""
 "This assistant will help you export the Account Tree to a file with the "
 "separator specified below.\n"
@@ -20539,30 +20448,15 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"Ovaj pomoćnik pomaže pri izvozu kontnog plana u datoteku\n"
-"s dolje određenim znakom razdvajanja.\n"
+"Ovaj pomoćnik pomaže pri izvozu kontnog plana u datoteku s dolje određenim "
+"znakom razdvajanja.\n"
 "\n"
 "Odaberi potrebne postavke za datoteku, a zatim klikni „Dalje“ za nastavak "
 "ili „Prekini“ za prekid izvoza.\n"
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
-#, fuzzy, c-format
-#| msgid ""
-#| "This assistant will help you export the Transactions to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "There will be multiple rows for each transaction and may require further "
-#| "manipulation to get them in a format you can use.\n"
-#| "\n"
-#| "Each Transaction will appear once in the export and will be listed in the "
-#| "order the accounts were processed\n"
-#| "\n"
-#| "Price/Rate output format is controlled by the Preference setting,\n"
-#| "General->Force Prices to display as decimals\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
+#, c-format
 msgid ""
 "This assistant will help you export the Transactions to a file with the "
 "separator specified below.\n"
@@ -20579,17 +20473,17 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"Ovaj pomoćnik pomaže izvesti transakcije u datoteku\n"
-"s dolje navedenim znakom razdvajanja.\n"
+"Ovaj pomoćnik pomaže izvesti transakcije u datoteku s dolje navedenim znakom "
+"razdvajanja.\n"
 "\n"
-"Za svaku transakciju postojat će više redaka i možda će biti potrebno "
-"dodatno ih obraditi u formatu koji možeš koristiti.\n"
+"%s\n"
 "\n"
-"Svaka transakcija pojavit će se jednom u izvozu i navest će se redoslijedom "
-"obrade računa\n"
+"Mada transakcija možda ima stavke u nekoliko odabranih računa, ona će se "
+"izvesti samo jednom. Pojavit će se pod prvim obrađenim računom u kojem "
+"sadrži stavku.\n"
 "\n"
-"Formatom rezultata cijene/stope upravlja se u postavkama,\n"
-"Opće→Prisili decimalni prikaz cijena\n"
+"Formatom rezultata cijene/stope upravlja se u postavkama\n"
+"„Brojevi, datum, vrijeme”→„Prisili decimalni prikaz cijena”\n"
 "\n"
 "Odaberi potrebne postavke za datoteku, a zatim pritisni „Dalje” za nastavak "
 "ili „Prekini” za prekid izvoza.\n"
@@ -20599,12 +20493,17 @@ msgid ""
 "There will be multiple rows for each transaction with each row representing "
 "one split."
 msgstr ""
+"Svaka transakcija će sadržavati više redaka, a svaki redak predstavlja jednu "
+"stavku."
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "There will be one row for each transaction, equivalent to a single row in a "
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
 msgstr ""
+"Za svaku transakciju koristit će se jedan redak, što odgovara jednom retku u "
+"registru u modusu „Glavna knjiga”. Kao takva, neki detalji prijenosa će se "
+"možda izgubiti."
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
@@ -21095,16 +20994,12 @@ msgstr ""
 "Odaberi stupac konta prijenosa ili ukloni ostale stupce konta prijenosa."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
-#, fuzzy
-#| msgid ""
-#| "No account column selected and no default account specified either.\n"
-#| "This should never happen. Please report this as a bug."
 msgid ""
 "No account column selected and no base account specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Niti je odabran stupac konta, niti standardni konto.\n"
-"Ovo se nikada ne bi trebalo dogoditi. Molimo te, da prijaviš ovu grešku."
+"Niti je odabran stupac konta, niti osnovni konto.\n"
+"Ovo se nikada ne bi trebalo dogoditi. Molimo te da prijaviš ovu grešku."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:55
 msgid "From Symbol"
@@ -21167,10 +21062,8 @@ msgstr "Vrijednost je obrađena u neispravnu valutu za vrstu stupca valute."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:520
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:575
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:583
-#, fuzzy
-#| msgid " could not be understood.\n"
 msgid "Column '{1}' could not be understood.\n"
-msgstr " nije razumljivo.\n"
+msgstr "Nije bilo moguće razumjeti stupac „{1}”.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:328

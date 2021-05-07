@@ -3181,7 +3181,7 @@ gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
     }
 
     name = gtk_buildable_get_name (GTK_BUILDABLE (radio));
-    active = (g_strcmp0 (name, g_strdup ("start_date_choose")) == 0 ? 1 : 0);
+    active = !g_strcmp0 (name, "start_date_choose");
     gtk_widget_set_sensitive (priv->fd.start_date, active);
     get_filter_times (page);
     gnc_ppr_update_date_query (page);
@@ -3229,7 +3229,7 @@ gnc_plugin_page_register_filter_end_cb (GtkWidget* radio,
     }
 
     name = gtk_buildable_get_name (GTK_BUILDABLE (radio));
-    active = (g_strcmp0 (name, g_strdup ("end_date_choose")) == 0 ? 1 : 0);
+    active = !g_strcmp0 (name, "end_date_choose");
     gtk_widget_set_sensitive (priv->fd.end_date, active);
     get_filter_times (page);
     gnc_ppr_update_date_query (page);

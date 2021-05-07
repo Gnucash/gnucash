@@ -2251,9 +2251,8 @@ test_xaccAccountType_Compatibility (void)
     auto check2 = test_error_struct_new(logdomain, loglevel, msg2);
     gint loghandler;
 
-    for (type = ACCT_TYPE_BANK; type < NUM_ACCOUNT_TYPES; type = ++type)
+    for (type = ACCT_TYPE_BANK; type < NUM_ACCOUNT_TYPES; ++type)
     {
-        GNCAccountType child;
         if (type == ACCT_TYPE_ROOT)
         {
             loghandler = g_log_set_handler (logdomain, loglevel,
@@ -2278,11 +2277,11 @@ test_xaccAccountType_Compatibility (void)
             g_assert_cmpint (compat, == , equity_compat);
         else if (type == ACCT_TYPE_TRADING)
             g_assert_cmpint (compat, == , trading_compat);
-        for (child = ACCT_TYPE_NONE; child < ACCT_TYPE_LAST; child = ++child)
-            if (1 << child & compat)
-                g_assert (xaccAccountTypesCompatible (type, child));
+        for (auto parent = ACCT_TYPE_NONE; parent < ACCT_TYPE_LAST; ++parent)
+            if (1 << parent & compat)
+                g_assert (xaccAccountTypesCompatible (parent, type));
             else
-                g_assert (!xaccAccountTypesCompatible (type, child));
+                g_assert (!xaccAccountTypesCompatible (parent, type));
 
         compat = xaccAccountTypesCompatibleWith (type);
         if (type <= ACCT_TYPE_LIABILITY ||

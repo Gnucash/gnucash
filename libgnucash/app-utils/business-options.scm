@@ -148,7 +148,15 @@
 	       (set! option v)
 	       (set! option-set #t)))))
      validator
-     #f #f #f #f)))
+     #f #f #f #f
+     (lambda ()
+       (convert-to-guid option))
+     (lambda (str)
+       (let* ((invoice (if (string-null? str)
+                           (default-getter)
+                           (convert-to-invoice str))))
+         (set! option (convert-to-guid invoice))
+         (set! option-set #t))))))
 
 ;; Internally, values are always a guid. Externally, both guids and
 ;; customer pointers may be used to set the value of the option. The
@@ -251,8 +259,17 @@
 		 (set! option (cons (string->symbol t) v))
 		 (set! option-set #t)))))
        validator
-       owner-type #f #f #f))))
-
+       owner-type #f #f #f
+       (lambda ()
+         (let ((p (convert-to-pair option)))
+           (vector (car p) (cdr p))))
+       (lambda (x)
+         (set! option
+           (if (null? x)
+               (default-getter)
+               (convert-to-owner (cons (vector-ref x 0)
+                                       (vector-ref x 1)))))
+         (set! option-set #t))))))
 
 ;; Internally, values are always a guid. Externally, both guids and
 ;; taxtable pointers may be used to set the value of the option. The
@@ -313,7 +330,19 @@
 	       (set! option v)
 	       (set! option-set #t)))))
      validator
-     #f #f #f #f)))
+     #f #f #f #f
+     (lambda () option)
+     (lambda (taxtable)
+       (if (null? taxtable) (set! taxtable (default-getter)))
+       (set! taxtable (convert-to-taxtable taxtable))
+       (let* ((result (validator taxtable))
+	      (valid (car result))
+	      (value (cadr result)))
+	 (if valid
+	     (begin
+	       (set! option (convert-to-guid value))
+	       (set! option-set #t))
+	     (gnc:error "Illegal taxtable value set")))))))
 
 ;; This defines an option to set a counter value. This is a slightly
 ;; different kind of option: Unlike all other options, the values edited

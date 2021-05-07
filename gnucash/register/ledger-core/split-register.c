@@ -1778,6 +1778,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
             PINFO ("committing trans (%p)", trans);
             unreconcile_splits (reg);
             xaccTransCommitEdit (trans);
+            xaccTransRecordPrice (trans, PRICE_SOURCE_SPLIT_REG);
 
             gnc_resume_gui_refresh ();
         }
@@ -1830,6 +1831,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
             g_warning ("Impossible? committing pending %p", pending_trans);
             unreconcile_splits (reg);
             xaccTransCommitEdit (pending_trans);
+            xaccTransRecordPrice (trans, PRICE_SOURCE_SPLIT_REG);
         }
         else if (pending_trans)
         {

@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-17 17:27+0000\n"
+"PO-Revision-Date: 2021-04-28 11:32+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -1688,7 +1688,7 @@ msgstr "לא ניתן לערוך פריט עיסקי."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
 msgid "Manage Document Link"
-msgstr "ניהול קישור מסמך"
+msgstr "ניהול מסמכים מקושרים"
 
 #: gnucash/gnome/dialog-doclink.c:754
 msgid "Transaction can not be modified."
@@ -4595,7 +4595,7 @@ msgstr "_תשלום חשבון"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:366
 #: gnucash/gnome/gnc-plugin-page-register.c:300
 msgid "_Manage Document Link..."
-msgstr "_ניהול קישור מסמך…"
+msgstr "_ניהול מסמכים מקושרים…"
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4908,7 +4908,7 @@ msgstr "פתיחת חלון דוח ספק עבור נמען הודעת זיכו�
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:445
 msgid "Manage Document Link..."
-msgstr "ניהול קישור מסמך…"
+msgstr "ניהול מסמכים מקושרים…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
 #: gnucash/gnome/gnc-plugin-page-register2.c:498
@@ -15196,11 +15196,11 @@ msgstr "הערה: רק קישורי קבצים שאינם לקריאה בלבד 
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:279
 msgid "Linked _File"
-msgstr "קבצים _מקושרים"
+msgstr "קישור _קבצים"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:295
 msgid "Linked _Location"
-msgstr "מיקום _מקושר"
+msgstr "קישור _מיקום"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:349
 msgid "(None)"
@@ -16462,7 +16462,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1943
 msgid "<b>Linked Files</b>"
-msgstr "<b>קבצים מקושרים</b>"
+msgstr "<b>קישור קובים</b>"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2038

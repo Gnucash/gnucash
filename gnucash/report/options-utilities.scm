@@ -67,7 +67,7 @@
           (vector 'WeekDelta (N_ "One Week"))
           (vector 'TwoWeekDelta (N_ "Two Weeks"))
           (vector 'MonthDelta (N_ "One Month"))
-          (vector 'QuarterDelta (N_ "One Quarter"))
+          (vector 'QuarterDelta (N_ "Quarter Year"))
           (vector 'HalfYearDelta (N_ "Half Year"))
           (vector 'YearDelta (N_ "One Year"))))))
 
@@ -141,11 +141,11 @@
    (gnc:make-multichoice-option
     pagename optname
     sort-tag (N_ "The source of price information.") default
-    (list (vector 'average-cost (N_ "Average cost of purchases by volume-weighted"))
-          (vector 'weighted-average (N_ "Weighted average of all past currency transactions"))
-          (vector 'pricedb-latest (N_ "Most recent"))
-          (vector 'pricedb-before (N_ "Nearest before report date"))
-          (vector 'pricedb-nearest (N_ "Nearest to report date"))))))
+    (list (vector 'average-cost (N_ "Average cost of purchases weighted by volume"))
+          (vector 'weighted-average (N_ "Weighted average of all transactions in the past"))
+          (vector 'pricedb-before (N_ "Last up through report date"))
+          (vector 'pricedb-nearest (N_ "Closest to report date"))
+          (vector 'pricedb-latest (N_ "Most recent"))))))
 
 ;; The width- and height- options for charts
 (define (gnc:options-add-plot-size!
@@ -202,7 +202,7 @@
     (list
      (vector 'acct-code (N_ "Alphabetical by account code"))
      (vector 'alphabetical (N_ "Alphabetical by account name"))
-     (vector 'amount (N_ "Amount, largest to smallest"))))))
+     (vector 'amount (N_ "Numerical by descending amount"))))))
 
 
 ;; These control the calculation and view mode of subtotal balances
