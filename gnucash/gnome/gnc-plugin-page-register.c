@@ -1414,6 +1414,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
 
     {
         gchar** filter;
+        gchar * filter_str;
         guint filtersize = 0;
         /* Set the sort order for the split register and status of save order button */
         priv->sd.save_order = FALSE;
@@ -1440,9 +1441,10 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         /* Set the filter for the split register and status of save filter button */
         priv->fd.save_filter = FALSE;
 
-        filter = g_strsplit (gnc_plugin_page_register_get_filter (plugin_page), ",",
-                             -1);
+        filter_str = gnc_plugin_page_register_get_filter (plugin_page);
+        filter = g_strsplit (filter_str, ",", -1);
         filtersize = g_strv_length (filter);
+        g_free (filter_str);
 
         PINFO ("Loaded Filter Status is %s", filter[0]);
 
@@ -1974,7 +1976,7 @@ gnc_plugin_page_register_finish_pending (GncPluginPage* page)
     GncPluginPageRegister* reg_page;
     SplitRegister* reg;
     GtkWidget* dialog, *window;
-    const gchar* name;
+    gchar* name;
     gint response;
 
     if (is_scrubbing && show_abort_verify)
@@ -1999,6 +2001,7 @@ gnc_plugin_page_register_finish_pending (GncPluginPage* page)
                                      /* Translators: %s is the name
                                         of the tab page */
                                      _ ("Save changes to %s?"), name);
+    g_free (name);
     gtk_message_dialog_format_secondary_text
     (GTK_MESSAGE_DIALOG (dialog),
      "%s",
@@ -2042,7 +2045,7 @@ gnc_plugin_page_register_get_tab_name (GncPluginPage* plugin_page)
     Account* leader;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page),
-                          _ ("unknown"));
+                          g_strdup (_("unknown")));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
     ld = priv->ledger;
@@ -2090,7 +2093,7 @@ gnc_plugin_page_register_get_tab_color (GncPluginPage* plugin_page)
     const char* color;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page),
-                          _ ("unknown"));
+                          g_strdup (_("unknown")));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
     ld = priv->ledger;
@@ -2116,7 +2119,7 @@ gnc_plugin_page_register_check_for_empty_group (GKeyFile *state_file, const gcha
     g_strfreev (keys);
 }
 
-static const gchar*
+static gchar*
 gnc_plugin_page_register_get_filter_gcm (Account* leader)
 {
     GKeyFile* state_file = gnc_state_get_current();
@@ -2124,7 +2127,7 @@ gnc_plugin_page_register_get_filter_gcm (Account* leader)
     gchar* filter_text;
     gchar acct_guid[GUID_ENCODING_LENGTH + 1];
     GError* error = NULL;
-    const char* filter = NULL;
+    char* filter = NULL;
 
     // get the filter from the .gcm file
     guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
@@ -2135,11 +2138,8 @@ gnc_plugin_page_register_get_filter_gcm (Account* leader)
     if (error)
         g_clear_error (&error);
     else
-    {
-        filter_text = g_strdelimit (filter_text, ";", ',');
-        filter = g_strdup (filter_text);
-        g_free (filter_text);
-    }
+        filter = g_strdelimit (filter_text, ";", ',');
+
     g_free (state_section);
     return filter;
 }
@@ -2150,10 +2150,10 @@ gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page)
     GncPluginPageRegisterPrivate* priv;
     GNCLedgerDisplayType ledger_type;
     Account* leader;
-    const char* filter = NULL;
+    char* filter = NULL;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page),
-                          _ ("unknown"));
+                          g_strdup (_("unknown")));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
 
@@ -2163,9 +2163,11 @@ gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page)
     // load from gcm file
     filter = gnc_plugin_page_register_get_filter_gcm (leader);
 
-    return filter ? g_strdup (filter) : g_strdup_printf ("%s,%s,%s,%s",
-                                                         DEFAULT_FILTER,
-                                                         "0", "0", get_filter_default_num_of_days (ledger_type));
+    if (filter)
+        return filter;
+
+    return g_strdup_printf ("%s,%s,%s,%s", DEFAULT_FILTER,
+                            "0", "0", get_filter_default_num_of_days (ledger_type));
 }
 
 static void
@@ -2223,7 +2225,7 @@ gnc_plugin_page_register_set_filter (GncPluginPage* plugin_page,
     return;
 }
 
-static const gchar*
+static gchar*
 gnc_plugin_page_register_get_sort_order_gcm (Account* leader)
 {
     GKeyFile* state_file = gnc_state_get_current();
@@ -2231,7 +2233,7 @@ gnc_plugin_page_register_get_sort_order_gcm (Account* leader)
     gchar* sort_text;
     gchar acct_guid[GUID_ENCODING_LENGTH + 1];
     GError* error = NULL;
-    const char* sort_order = NULL;
+    char* sort_order = NULL;
 
     // get the sort_order from the .gcm file
     guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
@@ -2255,7 +2257,7 @@ gnc_plugin_page_register_get_sort_order (GncPluginPage* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
     Account* leader;
-    const char* sort_order = NULL;
+    char* sort_order = NULL;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page),
                           _ ("unknown"));
@@ -2267,7 +2269,8 @@ gnc_plugin_page_register_get_sort_order (GncPluginPage* plugin_page)
     // load from gcm file
     sort_order = gnc_plugin_page_register_get_sort_order_gcm (leader);
 
-    return g_strdup (sort_order ? sort_order : DEFAULT_SORT_ORDER);
+
+    return sort_order ? sort_order : g_strdup (DEFAULT_SORT_ORDER);
 }
 
 static void
