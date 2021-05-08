@@ -109,6 +109,7 @@ enum
 #define GNC_PREF_TAB_COLOR            "show-account-color-tabs"
 #define GNC_PREF_SAVE_CLOSE_EXPIRES   "save-on-close-expires"
 #define GNC_PREF_SAVE_CLOSE_WAIT_TIME "save-on-close-wait-time"
+#define GNC_PREF_TAB_OPEN_ADJACENT    "tab-open-adjacent"
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 
@@ -3015,7 +3016,10 @@ gnc_main_window_connect (GncMainWindow *window,
     page->window = GTK_WIDGET(window);
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     notebook = GTK_NOTEBOOK (priv->notebook);
-    current_position = g_list_index (priv->installed_pages, priv->current_page) + 1;
+
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_OPEN_ADJACENT))
+        current_position = g_list_index (priv->installed_pages, priv->current_page) + 1;
+
     priv->installed_pages = g_list_insert (priv->installed_pages, page, current_position);
     priv->usage_order = g_list_prepend (priv->usage_order, page);
     gtk_notebook_insert_page_menu (notebook, page->notebook_page,
