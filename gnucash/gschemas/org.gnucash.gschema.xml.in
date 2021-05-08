@@ -130,6 +130,11 @@
       <summary>Width of notebook tabs</summary>
       <description>This key specifies the maximum width of notebook tabs. If the text in the tab is longer than this value (the test is approximate) then the tab label will have the middle cut and replaced with an ellipsis.</description>
     </key>
+    <key name="tab-open-adjacent" type="b">
+      <default>true</default>
+      <summary>Opens new tab adjacent to current tab instead of at the end</summary>
+      <description>If active, new tabs are opened adjacent to current tab. If inactive, the new tabs are opened instead at the end.</description>
+    </key>
     <key name="currency-choice-locale" type="b">
       <default>true</default>
       <summary>Use the system locale currency for all newly created accounts.</summary>
