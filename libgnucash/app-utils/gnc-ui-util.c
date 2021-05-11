@@ -1071,19 +1071,18 @@ gnc_find_or_create_equity_account (Account *root,
 gboolean
 gnc_account_create_opening_balance (Account *account,
                                     gnc_numeric balance,
+                                    gnc_commodity *commodity,
                                     time64 date,
                                     QofBook *book)
 {
     Account *equity_account;
     Transaction *trans;
     Split *split;
-    gnc_commodity *commodity;
 
     if (gnc_numeric_zero_p (balance))
         return TRUE;
 
     g_return_val_if_fail (account != NULL, FALSE);
-    commodity = xaccAccountGetCommodity (account);
     g_return_val_if_fail (gnc_commodity_is_currency (commodity), FALSE);
 
     equity_account =

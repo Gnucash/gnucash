@@ -526,7 +526,8 @@ gnc_ui_to_account(AccountWindow *aw)
 
     if (use_equity)
     {
-        if (!gnc_account_create_opening_balance (account, balance, date, aw->book))
+        commodity = gnc_account_get_currency_or_parent (account);
+        if (!gnc_account_create_opening_balance (account, balance, commodity, date, aw->book))
         {
             const char *message = _("Could not create opening balance.");
             gnc_error_dialog (GTK_WINDOW (aw->dialog), "%s", message);

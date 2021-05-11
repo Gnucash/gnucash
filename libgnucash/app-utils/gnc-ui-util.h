@@ -228,7 +228,7 @@ Account * gnc_find_or_create_equity_account (Account *root,
         GNCEquityType equity_type,
         gnc_commodity *currency);
 gboolean gnc_account_create_opening_balance (Account *account,
-        gnc_numeric balance,
+        gnc_numeric balance, gnc_commodity *commodity,
         time64 date,
         QofBook *book);
 

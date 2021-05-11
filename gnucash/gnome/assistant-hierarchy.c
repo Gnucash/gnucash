@@ -1404,13 +1404,17 @@ static void
 starting_balance_helper (Account *account, hierarchy_data *data)
 {
     gnc_numeric balance;
+    gnc_commodity *commodity;
 
     balance = get_final_balance (data->balance_hash, account);
     if (gnc_reverse_balance(account))
         balance = gnc_numeric_neg(balance);
-    if (!gnc_numeric_zero_p (balance) &&
-        gnc_commodity_is_currency (xaccAccountGetCommodity (account)))
-        gnc_account_create_opening_balance (account, balance, gnc_time (NULL),
+    if (gnc_numeric_zero_p (balance))
+        return;
+
+    commodity = gnc_account_get_currency_or_parent (account);
+    if (gnc_commodity_is_currency (commodity))
+        gnc_account_create_opening_balance (account, balance, commodity, gnc_time (NULL),
                                             gnc_get_current_book ());
 }
 
