@@ -3120,44 +3120,31 @@ gnc_account_lookup_by_full_name (const Account *any_acc,
     return found;
 }
 
-Account*
+GList*
 gnc_account_lookup_by_type_and_commodity (Account* root,
                                           const char* name,
                                           GNCAccountType acctype,
                                           gnc_commodity* commodity)
 {
+    GList *retval{};
     auto rpriv{GET_PRIVATE(root)};
-    if (rpriv->type == acctype &&
-        gnc_commodity_equiv(rpriv->commodity, commodity))
-    {
-        if (name)
-        {
-            if (strcmp(name, rpriv->accountName) == 0)
-                return root;
-        }
-        else
-        {
-            return root;
-        }
-    }
-
-    /* Nope. Make sure the types are compatible */
-    if (!xaccAccountTypesCompatible(rpriv->type, acctype))
-        return nullptr;
-
-    /* Recurse */
     for (auto node = rpriv->children; node; node = node->next)
     {
         auto account{static_cast<Account*>(node->data)};
+        if (xaccAccountGetType (account) == acctype)
         {
-            auto child{gnc_account_lookup_by_type_and_commodity(account, name,
-                                                                acctype,
-                                                                commodity)};
-            if (child)
-                return child;
+            if (commodity &&
+                !gnc_commodity_equiv(xaccAccountGetCommodity (account),
+                                     commodity))
+                continue;
+
+            if (name && strcmp(name, xaccAccountGetName(account)))
+                continue;
+
+            retval = g_list_prepend(retval, account);
         }
     }
-    return nullptr;
+    return retval;
 }
 
 void
