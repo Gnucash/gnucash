@@ -92,7 +92,7 @@ gnc_doclink_get_unescape_uri (const gchar *path_head, const gchar *uri, gchar *u
         g_free (file_path);
 
 #ifdef G_OS_WIN32 // make path look like a traditional windows path
-        display_str = g_strdelimit (display_str, "/", '\\');
+        g_strdelimit (display_str, "/", '\\');
 #endif
     }
     DEBUG("Return display string is '%s'", display_str);
