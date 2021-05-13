@@ -428,8 +428,8 @@ gsr_move_sort_and_filter_to_state_file (GNCSplitReg *gsr, GKeyFile* state_file, 
         if (kvp_filter)
         {
             gchar *temp_filter_text = g_strdup (kvp_filter);
-            temp_filter_text = g_strdelimit (temp_filter_text, ",",
-                                             ';'); // make it conform to .gcm file list
+            // make it conform to .gcm file list
+            g_strdelimit (temp_filter_text, ",", ';');
             g_key_file_set_string (state_file, state_section, KEY_PAGE_FILTER,
                                    temp_filter_text);
             g_free (temp_filter_text);
