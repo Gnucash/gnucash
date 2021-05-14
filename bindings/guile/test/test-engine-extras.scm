@@ -182,6 +182,7 @@
           num              ; string: num field   (def = null)
           notes            ; string: notes       (def = null)
           memo             ; string: memo        (def = null)
+          currency         ; commodity           (def = commodity of 1st split)
           )
   (env-create-multisplit-transaction
    env
@@ -193,6 +194,7 @@
    #:reconcile reconcile
    #:num num
    #:memo memo
+   #:currency currency
    #:notes notes))
 
 (define* (env-transfer
@@ -239,42 +241,46 @@
           (pricedb? #t)    ; boolean: add pricedb entry?
           void-reason      ; string: void-reason (def = not-voided)
           reconcile        ; pair  : (cons reconciled reconciled-date)
+          currency         ; currency
           num              ; string: num field   (def = null)
           notes            ; string: notes       (def = null)
           memo)            ; string: memo        (def = null)
   (and (pair? list-of-splits)
        (let* ((book (gnc-get-current-book))
               (txn (xaccMallocTransaction book))
-              (first-split (vector-ref (car list-of-splits) 0)))
+              (first-split (vector-ref (car list-of-splits) 0))
+              (txn-curr (or currency (xaccAccountGetCommodity first-split))))
          (xaccTransBeginEdit txn)
          (xaccTransSetDescription txn (or description (env-string env "ponies")))
-         (xaccTransSetCurrency txn (xaccAccountGetCommodity first-split))
+         (xaccTransSetCurrency txn txn-curr)
          (xaccTransSetDate txn DD MM YY)
          (for-each
           (lambda (split)
             (let ((acc (vector-ref split 0))
                   (val (vector-ref split 1))
                   (amt (vector-ref split 2))
+                  (action (and (> (vector-length split) 3)
+                               (vector-ref split 3)))
                   (newsplit (xaccMallocSplit book)))
               (xaccSplitSetParent newsplit txn)
               (xaccSplitSetAccount newsplit acc)
               (xaccSplitSetValue newsplit val)
               (xaccSplitSetAmount newsplit amt)
-              (if num (gnc-set-num-action txn newsplit num num))
-              (if memo (xaccSplitSetMemo newsplit memo))
+              (if memo   (xaccSplitSetMemo newsplit memo))
+              (if action (xaccSplitSetAction newsplit action))
               (when reconcile
                 (xaccSplitSetReconcile newsplit (car reconcile))
                 (xaccSplitSetDateReconciledSecs newsplit (cdr reconcile)))
               (if (and pricedb?
                        (not (zero? amt))
                        (not (gnc-commodity-equiv
-                             (xaccAccountGetCommodity first-split)
-                             (xaccAccountGetCommodity acc))))
-                  (gnc-pricedb-create (xaccAccountGetCommodity first-split)
+                             txn-curr (xaccAccountGetCommodity acc))))
+                  (gnc-pricedb-create txn-curr
                                       (xaccAccountGetCommodity acc)
                                       (gnc-dmy2time64 DD MM YY)
                                       (/ val amt)))))
           list-of-splits)
+         (if num    (xaccTransSetNum txn num))
          (if void-reason (xaccTransVoid txn void-reason))
          (if notes (xaccTransSetNotes txn notes))
          (xaccTransCommitEdit txn)

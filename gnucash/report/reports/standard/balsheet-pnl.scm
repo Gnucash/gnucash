@@ -152,12 +152,12 @@ also show overall period profit & loss."))
       'disabled
       (list
        (vector 'disabled (G_ "Disabled"))
-       (vector 'YearDelta (G_ "Year"))
+       (vector 'YearDelta (G_ "One Year"))
        (vector 'HalfYearDelta (G_ "Half Year"))
-       (vector 'QuarterDelta (G_ "Quarter"))
-       (vector 'MonthDelta (G_ "Month"))
-       (vector 'TwoWeekDelta (G_ "2Week"))
-       (vector 'WeekDelta (G_ "Week")))
+       (vector 'QuarterDelta (G_ "Quarter Year"))
+       (vector 'MonthDelta (G_ "One Month"))
+       (vector 'TwoWeekDelta (G_ "Two Weeks"))
+       (vector 'WeekDelta (G_ "One Week")))
       #f
       (lambda (x)
         (let ((x (not (eq? x 'disabled))))

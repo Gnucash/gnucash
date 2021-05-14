@@ -327,13 +327,7 @@ gnc_combo_cell_destroy (BasicCell* bcell)
             box->qf = NULL;
         }
 
-        for (node = box->ignore_strings; node; node = node->next)
-        {
-            g_free (node->data);
-            node->data = NULL;
-        }
-
-        g_list_free (box->ignore_strings);
+        g_list_free_full (box->ignore_strings, g_free);
         box->ignore_strings = NULL;
 
         g_free (box);
@@ -462,7 +456,6 @@ void
 gnc_combo_cell_add_account_menu_item (ComboCell* cell, char* menustr)
 {
     PopBox* box;
-    gchar* menu_copy, *value_copy;
 
     if (cell == NULL)
         return;
@@ -478,9 +471,10 @@ gnc_combo_cell_add_account_menu_item (ComboCell* cell, char* menustr)
         gnc_item_list_append (box->item_list, menustr);
         if (cell->cell.value)
         {
-            menu_copy = g_strdelimit (g_strdup (menustr), "-:/\\.", ' ');
-            value_copy =
-                g_strdelimit (g_strdup (cell->cell.value), "-:/\\.", ' ');
+            gchar* menu_copy = g_strdup (menustr);
+            gchar* value_copy = g_strdup (cell->cell.value);
+            g_strdelimit (menu_copy, "-:/\\.", ' ');
+            g_strdelimit (value_copy, "-:/\\.", ' ');
             if (strcmp (menu_copy, value_copy) == 0)
             {
                 gnc_combo_cell_set_value (cell, menustr);

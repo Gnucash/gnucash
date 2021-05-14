@@ -6,14 +6,15 @@
 # Emin Tufan Çetin <etcetin@gmail.com>, 2018.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2021.
 # Ömer Faruk Çakmak <omerfarukckmk@protonmail.com>, 2021.
+# udo pton <udopton@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.4+\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-04 17:26+0000\n"
-"Last-Translator: Ömer Faruk Çakmak <omerfarukckmk@protonmail.com>\n"
+"PO-Revision-Date: 2021-05-06 13:32+0000\n"
+"Last-Translator: udo pton <udopton@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
 "Language: tr\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-POOTLE-MTIME: 1497808015.000000\n"
 
@@ -458,6 +459,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"Posta listeleri GnuCash topluluğunda tercih edilen iletişim şeklidir. Yeni "
+"sürümlerin duyuruları, kullanıcı grupları vb için bknz .https://wiki.gnucash."
+"org/wiki/Mailing_Lists."
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
@@ -498,6 +502,9 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
+"Hesap Planında hangi sütunların görüntüleneceğini değiştirmek mümkündür. "
+"Sütun başlıklarının en sağındaki üçgeni bulun ve mevcut farklı sütunları "
+"görmek için tıklayın."
 
 #: doc/tip_of_the_day.list.c:27
 msgid ""
@@ -532,6 +539,13 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"Her işlemin için yararlı bilgiler girebileceğiniz bir \"Notlar\" alanı "
+"vardır.\n"
+"\n"
+"Görünür kılmak için\n"
+"menü çubuğunda \"Görünüm\" ü seçin ve \"Çift Hat\" ı işaretleyin veya\n"
+"Tercihler: Varsayılanları Kaydet bölümünde \"Çift Hat Modu\" seçeneğini "
+"işaretleyin."
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -632,12 +646,17 @@ msgstr ""
 "para biriminin miktarı kullanılabilir olacaktır."
 
 #: doc/tip_of_the_day.list.c:85
+#, fuzzy
 msgid ""
 "You can set the Security Editor screen to display the Quote Source of a "
 "security, which makes it easy to see which online sources your securities "
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
+"Güvenlik Düzenleyicisi ekranını bir menkul kıymetin Teklif Kaynağını "
+"görüntüleyecek şekilde ayarlayabilirsiniz, bu da menkul kıymetlerinizin "
+"hangi çevrimiçi kaynakları kullandığını görmenizi kolaylaştırır. Görüntüyü "
+"değiştirmek için sütun başlıklarının en sağındaki üçgeni tıklayın."
 
 #: doc/tip_of_the_day.list.c:90
 msgid ""
@@ -876,6 +895,9 @@ msgid ""
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
+"Bir Defter para birimi seçtiniz ve bu yeni hesaplar\n"
+"için kullanılacak. Diğer para birimlerindeki hesaplar,\n"
+"manuel olarak eklendi."
 
 #: gnucash/gnome/assistant-hierarchy.c:1491
 msgid "Please choose the currency to use for new accounts."
@@ -1654,7 +1676,7 @@ msgstr "URL gir:"
 
 #: gnucash/gnome/dialog-doclink.c:242
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr ""
+msgstr "Http://www.gnucash.org gibi bir URL girin:"
 
 #: gnucash/gnome/dialog-doclink.c:256
 msgid "Existing Document Link is"
@@ -1692,7 +1714,7 @@ msgstr "Girdi dosyası açılamıyor."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
 msgid "Manage Document Link"
-msgstr ""
+msgstr "Belge Bağlantısını Yönetin"
 
 #: gnucash/gnome/dialog-doclink.c:754
 #, fuzzy
@@ -1755,12 +1777,17 @@ msgid "Description"
 msgstr "Açıklama"
 
 #: gnucash/gnome/dialog-doclink.c:1088
+#, fuzzy
 msgid ""
 "Double click on the entry in the Id column to jump to the Business Item.\n"
 "Double click on the entry in the Link column to open the Linked Document.\n"
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
+"İş Öğesine atlamak için Kimlik sütunundaki girişi çift tıklayın.\n"
+"Bağlantılı Belgeyi açmak için Bağlantı sütunundaki girişe çift tıklayın.\n"
+"Belge bağlantısını değiştirmek için Kullanılabilir sütunundaki girişe çift "
+"tıklayın."
 
 #: gnucash/gnome/dialog-doclink.c:1097
 #, fuzzy
@@ -2168,7 +2195,7 @@ msgstr[0] ""
 #: gnucash/gnome/dialog-imap-editor.c:367
 #, c-format
 msgid "To see the invalid mappings, use a filter of '%s'"
-msgstr ""
+msgstr "Geçersiz eşlemeleri görmek için bir '%s' filtresi kullanın"
 
 #: gnucash/gnome/dialog-imap-editor.c:367
 #: gnucash/gnome/dialog-imap-editor.c:604
@@ -2178,12 +2205,12 @@ msgstr "Hesap Kodu"
 
 #: gnucash/gnome/dialog-imap-editor.c:369
 msgid "(Note, if there is a large number, it may take a while)"
-msgstr ""
+msgstr "(Not, çok sayıda varsa, biraz zaman alabilir)"
 
 #: gnucash/gnome/dialog-imap-editor.c:703
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
 msgid "Bayesian"
-msgstr ""
+msgstr "Bayes"
 
 #: gnucash/gnome/dialog-imap-editor.c:718
 msgid "Description Field"
@@ -2309,12 +2336,12 @@ msgstr "Kredi Notu"
 
 #: gnucash/gnome/dialog-invoice.c:2089
 msgid "PAID"
-msgstr ""
+msgstr "Ödendi"
 
 #: gnucash/gnome/dialog-invoice.c:2091
 #: gnucash/report/reports/standard/new-owner-report.scm:583
 msgid "UNPAID"
-msgstr ""
+msgstr "Ödenmedi"
 
 #: gnucash/gnome/dialog-invoice.c:2139 gnucash/gnome/dialog-invoice.c:2158
 #: gnucash/gnome/dialog-invoice.c:2177
@@ -2787,6 +2814,8 @@ msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
 msgstr ""
+"Bu ödemenin atanacağı belge seçilmedi. Bu, ekli olmayan bir ödeme "
+"oluşturabilir."
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1330
 #: gnucash/report/reports/standard/new-aging.scm:192
@@ -2863,15 +2892,21 @@ msgstr ""
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
-msgstr ""
+msgstr "Seçili işlem, ödeme olarak atanabilecek bölmelere sahip değil"
 
 #: gnucash/gnome/dialog-payment.c:1593
+#, fuzzy
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', gnucash only knows how to handle one.\n"
 "Please select one, the others will be ignored.\n"
 "\n"
 msgstr ""
+"Bu işlemin dikkate alınabilecek birden fazla bölünmesi olsa da\n"
+"\"ödeme bölümü\" olarak, gnucash yalnızca birini nasıl idare edeceğini bilir."
+"\n"
+"Lütfen birini seçin, diğerleri göz ardı edilecektir.\n"
+"\n"
 
 #: gnucash/gnome/dialog-payment.c:1596
 msgid "Warning"

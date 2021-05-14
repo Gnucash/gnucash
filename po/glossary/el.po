@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-04-15 15:26+0000\n"
+"PO-Revision-Date: 2021-05-07 16:32+0000\n"
 "Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
 "el/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -292,7 +292,6 @@ msgid "check and repair, to"
 msgstr "έλεγχος και επισκευή, για να"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
-#, fuzzy
 msgid "close, to"
 msgstr "Κλείσιμο καταγραφών"
 
@@ -645,9 +644,8 @@ msgid "price type: ask"
 msgstr "είδος τιμής: ελάχιστη τιμή προσφοράς"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
-#, fuzzy
 msgid "price type: bid"
-msgstr "Τύπος αρχείου:"
+msgstr "τύπος τιμής: προσφορά"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
@@ -684,9 +682,8 @@ msgstr "μητρώο"
 
 #
 #. "A transaction that is divided into two or more parts"
-#, fuzzy
 msgid "register entry: split transaction"
-msgstr "Εκκίνηση νέας διενέργειας"
+msgstr "καταχώρηση μητρώου: διαχωρισμός συναλλαγής"
 
 #. "-"
 msgid "register entry: stock split"
@@ -706,32 +703,29 @@ msgstr "μητρώο: γενικό καθολικό"
 
 #
 #. "another form of register"
-#, fuzzy
 msgid "register: transaction journal"
-msgstr "Εκκίνηση νέας διενέργειας"
+msgstr "μητρώο: ημερολόγιο συναλλαγών"
 
 #
 #. "reload the current document"
-#, fuzzy
 msgid "reload, to"
-msgstr "Ανανέωση"
+msgstr "επαναφόρτωση, για να"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "έντυπο αναφοράς: Φόρμα λογαριασμού T"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "έντυπο αναφοράς: Κάθετη φόρμα"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
 msgstr "Διατηρούμενα Κέρδη"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
-#, fuzzy
 msgid "reverse transaction, to (Action in the register)"
-msgstr "Η περιγραφή περιέχει"
+msgstr "αντίστροφη συναλλαγή, προς (ενέργεια στο μητρώο)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
@@ -748,16 +742,15 @@ msgstr "Προγραμματισμένη Συναλλαγή"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
-msgstr ""
+msgstr "να κάνω καθαρισμό"
 
 #. "A document or certificate showing who owns shares"
-#, fuzzy
 msgid "security"
-msgstr "Ασφάλεια"
+msgstr "ασφάλεια"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr ""
+msgstr "Υπόλοιπο μετοχών (μητρώο)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
@@ -768,7 +761,6 @@ msgid "source"
 msgstr "πηγή"
 
 #. "One of the two or several parts a transaction is divided into"
-#, fuzzy
 msgid "split"
 msgstr "Διαίρεση"
 
@@ -777,9 +769,8 @@ msgid "style sheet"
 msgstr "επίστρωμα ύφους"
 
 #. "The total of a set of figures that are part of a larger group of figures"
-#, fuzzy
 msgid "subtotal"
-msgstr "%d συνολικά"
+msgstr "υποσύνολο"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"

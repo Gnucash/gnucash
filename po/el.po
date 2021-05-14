@@ -37,10 +37,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-11 13:26+0000\n"
+"PO-Revision-Date: 2021-05-07 16:32+0000\n"
 "Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
@@ -49,7 +49,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -311,7 +311,7 @@ msgstr "Εβραϊκή (Windows-1255)"
 
 #: borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Χίντι (ΜακΝτεβαναγκάρι)"
 
 #: borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
@@ -406,9 +406,8 @@ msgid "Unicode (UTF-32LE)"
 msgstr "Unicode (UTF-32LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Όνομα χρήστη"
+msgstr "Ορισμένο από το χρήστη"
 
 #: borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
@@ -455,9 +454,8 @@ msgid "Locale: "
 msgstr "Περιοχή "
 
 #: borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Η μετατροπή ολοκληρώθηκε"
+msgstr "Κατεύθυνση μετατροπής"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
@@ -476,6 +474,8 @@ msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
 msgstr ""
+"Το ηλεκτρονικό εγχειρίδιο του GnuCash περιέχει πολλές χρήσιμες πληροφορίες. "
+"Μπορείτε να αποκτήσετε πρόσβαση στο εγχειρίδιο από το μενού Βοήθεια."
 
 #. Translators: You can replace the link, if a translated page exists.
 #: doc/tip_of_the_day.list.c:5
@@ -621,7 +621,6 @@ msgid ""
 msgstr ""
 
 #: doc/tip_of_the_day.list.c:80
-#, fuzzy
 msgid ""
 "To transfer funds between accounts with different currencies, click on the "
 "Transfer button in the register toolbar, select the accounts, and the "
@@ -631,7 +630,7 @@ msgstr ""
 "Για να μεταφέρετε κεφάλαια μεταξύ λογαριασμών διαφορετικού νομίσματος, "
 "Πατήστε το κουμπί Μεταφορά που βρίσκεται την εργαλειοθήκη του μητρώου, "
 "επιλέξτε του λογαριασμούς και τις επιλογές μεταφοράς για να εισάγετε την "
-"ισοτιμία η το αλλο ποσό"
+"ισοτιμία η το αλλο ποσό."
 
 #: doc/tip_of_the_day.list.c:85
 msgid ""
@@ -685,6 +684,10 @@ msgid ""
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
 msgstr ""
+"Εάν εργάζεστε κατά τη διάρκεια της νύχτας, θα πρέπει να κλείσετε και να "
+"ανοίξετε ξανά τα μητρώα εργασίας σας μετά τα μεσάνυχτα, για να λάβετε τη νέα "
+"ημερομηνία ως προεπιλογή για τις νέες συναλλαγές. Δεν είναι απαραίτητο να "
+"επανεκκινήσετε το GnuCash."
 
 #: doc/tip_of_the_day.list.c:115
 msgid ""
@@ -701,7 +704,6 @@ msgid ""
 msgstr ""
 
 #: doc/tip_of_the_day.list.c:123
-#, fuzzy
 msgid ""
 "There is a theory that if ever anyone discovers what the Universe is for and "
 "why it is here, it will instantly disappear and be replaced with something "
@@ -712,9 +714,10 @@ msgid ""
 msgstr ""
 "Υπάρχει η θεωρία που λέει ότι αν μια μέρα κάποιος ανακαλύψει το λόγο ύπαρξης "
 "του σύμπαντος, αυτό θα εξαφανιστεί ακαριαία και θα αντικατασταθεί από κάτι "
-"πιο αλλόκοτο και ακατανόητο. Υπάρχει επίσης και κάποια άλλη θεωρία που λέει "
-"ότι αυτό έχει ήδη συμβεί. Douglas Adams, \"Το Εστιατόριο στην Άκρη του "
-"Σύμπαντος\""
+"πιο αλλόκοτο και ακατανόητο. \n"
+"Υπάρχει επίσης και κάποια άλλη θεωρία που λέει ότι αυτό έχει ήδη συμβεί. \n"
+"\n"
+"Douglas Adams, \"Το Εστιατόριο στην Άκρη του Σύμπαντος\""
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
@@ -736,7 +739,7 @@ msgstr[1] ""
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:369
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have asked for a book to be created. This book will contain all "
 "transactions up to midnight %s (for a total of %d transactions spread over "
@@ -747,8 +750,10 @@ msgid ""
 msgstr ""
 "Ζητήσατε να δημιουργηθεί ένα βιβλίο. Αυτό το βιβλίο θα περιέχει όλες τις "
 "συναλλαγές μέχρι τα μεσάνυχτα στις %s (για ένα σύνολο %d συναλλαγών από %d "
-"λογαριασμούς). Πατήστε 'Μπροστά' για να δημιουργηθεί το βιβλίο. Πατήστε "
-"'Πίσω' για να αλλάξετε τις ημερομηνίες."
+"λογαριασμούς).\n"
+"\n"
+"Πατήστε 'Μπροστά' για να δημιουργηθεί το βιβλίο.\n"
+"Πατήστε 'Πίσω' για να αλλάξετε τις ημερομηνίες."
 
 #: gnucash/gnome/assistant-acct-period.c:386
 #, c-format
@@ -1400,16 +1405,16 @@ msgid "_Delete"
 msgstr "_Διαγραφή"
 
 #: gnucash/gnome/dialog-customer.c:329
-#, fuzzy
 msgid ""
 "You must enter a company name. If this customer is an individual (and not a "
 "company) you should enter the same value for:\n"
 "Identification - Company Name, and\n"
 "Payment Address - Name."
 msgstr ""
-"Πρέπει να εισάγετε ένα όνομα εταιρείας. Αν αυτός ο πελάτης είναι ιδιώτης "
-"(και όχι εταιρεία) τότε πρέπει να ορίσετε \"company name\" και \"contact "
-"name|\" να είναι ίδια."
+"Πρέπει να εισάγετε ένα όνομα εταιρείας. Αν αυτός ο πελάτης είναι ιδιώτης ("
+"και όχι εταιρεία) τότε πρέπει να ορίσετε\n"
+"\"company name\" και \"contact name|\" \n"
+"να είναι ίδια."
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "You must enter a billing address."
@@ -30755,9 +30760,9 @@ msgstr "%s: %s - %s"
 
 #. Translators: %d is the number of Recurrences in the list.
 #: libgnucash/engine/Recurrence.c:727
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown, %d-size list."
-msgstr "Άγνωστος τύπος αρχείου"
+msgstr "Άγνωστος %d-τύπος αρχείου."
 
 #: libgnucash/engine/ScrubBusiness.c:549
 msgid ""

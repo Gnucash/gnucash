@@ -3120,26 +3120,31 @@ gnc_account_lookup_by_full_name (const Account *any_acc,
     return found;
 }
 
-Account*
+GList*
 gnc_account_lookup_by_type_and_commodity (Account* root,
                                           const char* name,
                                           GNCAccountType acctype,
                                           gnc_commodity* commodity)
 {
+    GList *retval{};
     auto rpriv{GET_PRIVATE(root)};
     for (auto node = rpriv->children; node; node = node->next)
     {
         auto account{static_cast<Account*>(node->data)};
-        if (xaccAccountGetType (account) == acctype &&
-            gnc_commodity_equiv(xaccAccountGetCommodity (account), commodity))
+        if (xaccAccountGetType (account) == acctype)
         {
-            if (name && strcmp(name, xaccAccountGetName(account)))
-                continue; //name doesn't match so skip this one
+            if (commodity &&
+                !gnc_commodity_equiv(xaccAccountGetCommodity (account),
+                                     commodity))
+                continue;
 
-            return account;
+            if (name && strcmp(name, xaccAccountGetName(account)))
+                continue;
+
+            retval = g_list_prepend(retval, account);
         }
     }
-    return nullptr;
+    return retval;
 }
 
 void
@@ -4488,8 +4493,17 @@ gboolean
 xaccAccountTypesCompatible (GNCAccountType parent_type,
                             GNCAccountType child_type)
 {
-    return ((xaccParentAccountTypesCompatibleWith (parent_type) &
-             (1 << child_type))
+    /* ACCT_TYPE_NONE isn't compatible with anything, even ACCT_TYPE_NONE. */
+    if (parent_type == ACCT_TYPE_NONE || child_type == ACCT_TYPE_NONE)
+        return FALSE;
+
+    /* ACCT_TYPE_ROOT can't have a parent account, and asking will raise
+     * an error. */
+    if (child_type == ACCT_TYPE_ROOT)
+        return FALSE;
+
+    return ((xaccParentAccountTypesCompatibleWith (child_type) &
+             (1 << parent_type))
             != 0);
 }
 

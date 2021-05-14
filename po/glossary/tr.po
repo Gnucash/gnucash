@@ -5,14 +5,15 @@
 #
 # Muha Aliss <muhaaliss@pm.me>, 2021.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2021.
+# udo pton <udopton@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-09 01:51+0100\n"
-"PO-Revision-Date: 2021-02-11 21:50+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"PO-Revision-Date: 2021-05-06 13:32+0000\n"
+"Last-Translator: udo pton <udopton@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "tr/>\n"
 "Language: tr\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -794,31 +795,31 @@ msgstr ""
 
 #. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
-msgstr ""
+msgstr "işlem"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr ""
+msgstr "işlem durumu: temizlendi"
 
 #. "-"
 msgid "transaction state: frozen"
-msgstr ""
+msgstr "işlem durumu: dondurulmuş"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr ""
+msgstr "işlem durumu: mutabakat sağlanmıştır"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr ""
+msgstr "işlem durumu: geçersiz"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
-msgstr ""
+msgstr "transfer (isim)"
 
 #. "The account where an amount is transferred to"
 msgid "transfer account"
-msgstr ""
+msgstr "transfer hesabı"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"

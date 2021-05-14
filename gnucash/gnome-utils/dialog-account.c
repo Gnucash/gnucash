@@ -589,7 +589,7 @@ make_children_compatible (AccountWindow *aw)
     account = aw_get_account (aw);
     g_return_if_fail (account);
 
-    if (xaccAccountTypesCompatible (xaccAccountGetType (account), aw->type))
+    if (xaccAccountTypesCompatible (aw->type, xaccAccountGetType (account)))
         return;
 
     set_children_types (account, aw->type);
@@ -709,7 +709,7 @@ verify_children_compatible (AccountWindow *aw)
     if (!account)
         return FALSE;
 
-    if (xaccAccountTypesCompatible (xaccAccountGetType (account), aw->type))
+    if (xaccAccountTypesCompatible (aw->type, xaccAccountGetType (account)))
         return TRUE;
 
     if (gnc_account_n_children(account) == 0)
@@ -879,7 +879,7 @@ gnc_common_ok (AccountWindow *aw)
     }
 
     /* check whether the types of child and parent are compatible */
-    if (!xaccAccountTypesCompatible (aw->type, xaccAccountGetType (parent)))
+    if (!xaccAccountTypesCompatible (xaccAccountGetType (parent), aw->type))
     {
         const char *message = _("The selected account type is incompatible with "
                                 "the one of the selected parent.");
