@@ -51,8 +51,8 @@
   (gnc:options->sxml uuid options "test-trial-balance" test-title))
 
 (define (test-trial-balance)
-  (let* ((options (gnc:make-report-options uuid))
-         (account-alist (create-test-data))
+  (let* ((account-alist (create-test-data))
+         (options (gnc:make-report-options uuid))
          (gbp-bank (assoc-ref account-alist "GBP Bank"))
          (usd-bank (assoc-ref account-alist "Bank"))
          (expense (assoc-ref account-alist "Expenses"))
