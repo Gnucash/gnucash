@@ -21,7 +21,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
 "PO-Revision-Date: 2021-05-12 16:07+0000\n"
-"Last-Translator: 峡州仙士 <c@cjh0613.com>\n"
+"Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1088,7 +1088,7 @@ msgstr "账单"
 #: gnucash/gnome/dialog-invoice.c:2631 gnucash/gnome/dialog-invoice.c:2857
 #: gnucash/gnome/dialog-invoice.c:2858
 msgid "Voucher"
-msgstr "凭证"
+msgstr "报销单"
 
 #: gnucash/gnome/business-gnome-utils.c:225 gnucash/gnome/dialog-doclink.c:812
 #: gnucash/gnome/dialog-invoice.c:3575
@@ -1740,7 +1740,7 @@ msgstr "查看/编辑"
 
 #: gnucash/gnome/dialog-employee.c:694
 msgid "Expense Vouchers"
-msgstr "报销"
+msgstr "报销单"
 
 #: gnucash/gnome/dialog-employee.c:704
 msgid "Employee ID"
@@ -2434,7 +2434,7 @@ msgstr "账单说明"
 
 #: gnucash/gnome/dialog-invoice.c:3428
 msgid "Voucher Owner"
-msgstr "报销所有者"
+msgstr "报销者"
 
 #: gnucash/gnome/dialog-invoice.c:3431
 msgid "Voucher Notes"
@@ -2512,7 +2512,7 @@ msgstr "查找报销"
 #: gnucash/gnome-search/dialog-search.c:1085
 #: gnucash/report/reports/standard/invoice.scm:789
 msgid "Expense Voucher"
-msgstr "报销"
+msgstr "报销单"
 
 #: gnucash/gnome/dialog-invoice.c:3574
 msgid "Find Invoice"
@@ -4788,7 +4788,7 @@ msgstr "编辑报销"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:417
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "复制此报销"
+msgstr "复制此报销单"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:418
 msgid "Post this voucher to your Chart of Accounts"
