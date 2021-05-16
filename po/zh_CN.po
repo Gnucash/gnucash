@@ -21,7 +21,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
 "PO-Revision-Date: 2021-05-11 11:28+0000\n"
-"Last-Translator: chokore <byt2ooo@163.com>\n"
+"Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -27329,7 +27329,7 @@ msgstr "选择了无效的编码"
 
 #: gnucash/report/reports/standard/owner-report.scm:91
 msgid "This report requires a company to be selected."
-msgstr "请为该报表选择一个公司。"
+msgstr "这个报表需要有选定的科目。"
 
 #: gnucash/report/reports/standard/owner-report.scm:107
 #, fuzzy
