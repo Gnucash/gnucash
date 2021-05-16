@@ -406,7 +406,7 @@
                     <property name="halign">start</property>
                     <property name="margin-top">3</property>
                     <property name="margin-bottom">3</property>
-                    <property name="label" translatable="yes">Enter URL like http://www.gnucash.org</property>
+                    <property name="label" translatable="yes">Enter an URL like "https://www.gnucash.org"</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

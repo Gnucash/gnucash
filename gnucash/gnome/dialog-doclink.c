@@ -238,11 +238,11 @@ setup_location_dialog (GtkBuilder *builder, GtkWidget *button_loc, const gchar *
     // update label and set entry text if required
     if (uri)
     {
-        gtk_label_set_text (location_label, _("Amend URL:"));
+        gtk_label_set_text (location_label, _("Amend the URL"));
         gtk_entry_set_text (entry, uri);
     }
     else
-        gtk_label_set_text (location_label, _("Enter URL like http://www.gnucash.org:"));
+        gtk_label_set_text (location_label, _("Enter an URL like \"https://www.gnucash.org\""));
 }
 
 static void
@@ -256,7 +256,7 @@ setup_file_dialog (GtkBuilder *builder, const gchar *path_head, const gchar *uri
         GtkWidget *existing_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "existing_hbox"));
         GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
         gchar     *use_uri = gnc_doclink_get_use_uri (path_head, uri, scheme);
-        gchar     *uri_label = g_strdup_printf ("%s '%s'", _("Existing Document Link is"), display_uri);
+        gchar     *uri_label = g_strdup_printf ("%s \"%s\"", _("Existing Document Link is"), display_uri);
         GtkWidget *label = gtk_label_new (uri_label);
 
         if (g_file_test (display_uri, G_FILE_TEST_EXISTS))
