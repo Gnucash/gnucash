@@ -20859,7 +20859,7 @@ msgstr "Kumul-Zeilen"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:198
 msgid "Import Bills or Invoices from csv"
-msgstr "Rechnungen oder Lieferantenrechnungen aus CSV-Datei importieren"
+msgstr "Rechnungen von Lieferanten oder an Kunden aus CSV-Datei importieren"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:226
 #, c-format
