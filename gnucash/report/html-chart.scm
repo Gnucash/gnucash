@@ -53,7 +53,16 @@
 (export gnc:html-chart-set-currency-symbol!)
 (export gnc:html-chart-render)
 (export gnc:html-chart-set-custom-x-axis-ticks?!)
+(export gnc:html-chart-set-title!)
+(export gnc:html-chart-set-data-labels!)
+(export gnc:html-chart-set-axes-display!)
 (export gnc:html-chart-set-custom-y-axis-ticks?!)
+(export gnc:html-chart-clear-data-series!)
+(export gnc:html-chart-set-x-axis-label!)
+(export gnc:html-chart-set-stacking?!)
+(export gnc:html-chart-set-grid?!)
+(export gnc:html-chart-set-y-axis-label!)
+(export gnc:html-chart-add-data-series!)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -258,17 +267,16 @@
 (define (gnc:html-chart-title chart)
   (gnc:html-chart-get chart '(options title text)))
 
-(define-public (gnc:html-chart-set-title! chart title)
+(define (gnc:html-chart-set-title! chart title)
   (gnc:html-chart-set! chart '(options title text) title))
 
-(define-public (gnc:html-chart-set-data-labels! chart labels)
+(define (gnc:html-chart-set-data-labels! chart labels)
   (gnc:html-chart-set! chart '(data labels) labels))
 
-(define-public (gnc:html-chart-set-axes-display! chart display?)
+(define (gnc:html-chart-set-axes-display! chart display?)
   (gnc:html-chart-set! chart '(options scales xAxes (0) display) display?)
   (gnc:html-chart-set! chart '(options scales yAxes (0) display) display?))
 
-(export gnc:html-chart-add-data-series!)
 ;; e.g.:
 ;; (gnc:html-chart-add-data-series! chart "label" list-of-numbers color
 ;;  'fill #t
@@ -301,21 +309,21 @@
             (gnc:html-chart-set! chart '(data datasets) new-vec)))
       ((key val . rest) (loop rest (assq-set! newseries key (list-to-vec val)))))))
 
-(define-public (gnc:html-chart-clear-data-series! chart)
+(define (gnc:html-chart-clear-data-series! chart)
   (gnc:html-chart-set! chart '(data datasets) #()))
 
-(define-public (gnc:html-chart-set-x-axis-label! chart label)
+(define (gnc:html-chart-set-x-axis-label! chart label)
   (gnc:html-chart-set! chart '(options scales xAxes (0) scaleLabel labelString) label))
 
-(define-public (gnc:html-chart-set-stacking?! chart stack?)
+(define (gnc:html-chart-set-stacking?! chart stack?)
   (gnc:html-chart-set! chart '(options scales xAxes (0) stacked) stack?)
   (gnc:html-chart-set! chart '(options scales yAxes (0) stacked) stack?))
 
-(define-public (gnc:html-chart-set-grid?! chart grid?)
+(define (gnc:html-chart-set-grid?! chart grid?)
   (gnc:html-chart-set! chart '(options scales xAxes (0) gridLines display) grid?)
   (gnc:html-chart-set! chart '(options scales yAxes (0) gridLines display) grid?))
 
-(define-public (gnc:html-chart-set-y-axis-label! chart label)
+(define (gnc:html-chart-set-y-axis-label! chart label)
   (gnc:html-chart-set! chart '(options scales yAxes (0) scaleLabel labelString) label))
 
 (define (gnc:html-chart-get chart path)
