@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-05-16 02:33+0000\n"
+"PO-Revision-Date: 2021-05-16 12:33+0000\n"
 "Last-Translator: 峡州仙士 <c@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -6695,7 +6695,7 @@ msgstr "科目(_A)"
 #: gnucash/gtkbuilder/dialog-vendor.glade:47
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2073
 msgid "_Help"
-msgstr "求助(_H)"
+msgstr "帮助(_H)"
 
 #: gnucash/gnome/window-reconcile2.c:2109 gnucash/gnome/window-reconcile.c:2330
 msgid "_Reconcile Information..."
@@ -8402,16 +8402,14 @@ msgid "View..."
 msgstr "查看..."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:70
-#, fuzzy
 msgid "GnuCash could not find the files of the help documentation."
-msgstr "GnuCash 无法找到求助文档文件。"
+msgstr "GnuCash 无法找到帮助文件。"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:72
-#, fuzzy
 msgid ""
 "This is likely because the \"gnucash-docs\" package is not properly "
 "installed."
-msgstr "GnuCash 无法找到求助文档。这很可能是因为没有安装“gnucash-docs”这个包。"
+msgstr "GnuCash 无法找到帮助文件。这很可能是因为没有安装“gnucash-docs”这个包。"
 
 #. Translators: URI of missing help files
 #: gnucash/gnome-utils/gnc-gnome-utils.c:74
@@ -8560,7 +8558,7 @@ msgstr "内容(_C)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:390
 msgid "Open the GnuCash Help"
-msgstr "打开 GnuCash 求助信息"
+msgstr "打开 GnuCash 帮助文件"
 
 #: gnucash/gnome-utils/gnc-main-window.c:394
 msgid "_About"
@@ -11124,10 +11122,8 @@ msgstr ""
 "Unicode 字符，或下列字符串：“colon”、“slash”、“backslash”、“dash”和“period”。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:25
-#, fuzzy
-#| msgid "Transaction List Help"
 msgid "Transaction Linked Files head path"
-msgstr "交易事项列表求助"
+msgstr "交易链接文件的起始路径"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:26
 msgid ""
@@ -15568,7 +15564,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:480
 msgid "Transaction List Help"
-msgstr "交易事项列表求助"
+msgstr "交易事项列表帮助"
 
 #: gnucash/gtkbuilder/dialog-import.glade:529
 #: gnucash/report/stylesheets/footer.scm:123
