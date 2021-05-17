@@ -216,7 +216,7 @@ sx_id_handler (xmlNodePtr node, gpointer sx_pdata)
 
     g_return_val_if_fail (tmp, FALSE);
     xaccSchedXactionSetGUID (sx, tmp);
-    g_free (tmp);
+    guid_free (tmp);
 
     return TRUE;
 }
