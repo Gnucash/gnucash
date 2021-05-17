@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-05-16 12:33+0000\n"
+"PO-Revision-Date: 2021-05-17 04:32+0000\n"
 "Last-Translator: 峡州仙士 <c@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -15336,9 +15336,8 @@ msgid "Clear the entry."
 msgstr "结清事项。"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:331
-#, fuzzy
 msgid "Precision"
-msgstr "版本"
+msgstr "精度"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:361
 msgid "Calculate"
@@ -15353,9 +15352,8 @@ msgid "<b>Payment Options</b>"
 msgstr "<b>付款选项</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:523
-#, fuzzy
 msgid "Payment Total"
-msgstr "支付合计："
+msgstr "付款总额"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:553
 msgid "Discrete"
@@ -15372,12 +15370,12 @@ msgstr "开始"
 #: gnucash/gtkbuilder/dialog-fincalc.glade:622
 #, fuzzy
 msgid "<b>Compounding</b>"
-msgstr "<b>复利：</b>"
+msgstr "<b>复利</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:767
 #, fuzzy
 msgid "When paid"
-msgstr "何时支付："
+msgstr "何时支付 /  支付时"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:25
 #: gnucash/gtkbuilder/dialog-find-account.glade:96
@@ -19069,9 +19067,8 @@ msgid "Delete the currently selected transaction template"
 msgstr "删除当前选中的交易事项模板"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1621
-#, fuzzy
 msgid "_Templates"
-msgstr "模板"
+msgstr "模板(_T)"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:21
 #: gnucash/import-export/aqb/gncmod-aqbanking.c:70
@@ -19079,9 +19076,8 @@ msgid "Online Banking"
 msgstr "网上银行"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:33
-#, fuzzy
 msgid "_Close log window when finished"
-msgstr "完成后关闭对话框"
+msgstr "完成后关闭对话框(_C)"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:39
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:16
@@ -20561,8 +20557,9 @@ msgid "Account value can't be mapped back to an account."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:385
+#, fuzzy
 msgid "Transfer account value can't be mapped back to an account."
-msgstr ""
+msgstr "收款帐户的值无法映射回一个帐户。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:434
 msgid "Account value can't be empty."
@@ -21466,8 +21463,9 @@ msgid "This account should usually be of type income."
 msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:192
+#, fuzzy
 msgid "This account should usually be of type expense or asset."
-msgstr ""
+msgstr "这个账户通常应该是费用或资产类型。"
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:760
 #, c-format
@@ -24615,7 +24613,7 @@ msgstr "不平衡的金额"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:56
 msgid "The reserve amount is set to a minimum balance desired"
-msgstr ""
+msgstr "储备金额被设定为所需的最低余额"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:59
 #: gnucash/report/reports/standard/balance-forecast.scm:60
@@ -25924,7 +25922,7 @@ msgstr "工作报告"
 
 #: gnucash/report/reports/standard/customer-summary.scm:51
 msgid "The income accounts where the sales and income was recorded."
-msgstr ""
+msgstr "收入帐户记录了销售和收入。"
 
 #: gnucash/report/reports/standard/customer-summary.scm:61
 msgid ""
@@ -25949,7 +25947,7 @@ msgstr "公司地址"
 
 #: gnucash/report/reports/standard/customer-summary.scm:66
 msgid "Show your own company's address and the date of printing."
-msgstr ""
+msgstr "显示您自己公司的地址和打印日期。"
 
 #: gnucash/report/reports/standard/customer-summary.scm:71
 msgid "Show Lines with All Zeros"
@@ -25978,7 +25976,7 @@ msgstr "选择栏"
 
 #: gnucash/report/reports/standard/customer-summary.scm:77
 msgid "Choose the column by which the result table is sorted."
-msgstr ""
+msgstr "选择对结果表进行排序的列。"
 
 #: gnucash/report/reports/standard/customer-summary.scm:79
 #, fuzzy
@@ -26008,7 +26006,7 @@ msgstr "利润率"
 
 #: gnucash/report/reports/standard/customer-summary.scm:126
 msgid "Sort by markup (which is profit amount divided by sales)."
-msgstr ""
+msgstr "按标价（即利润额除以销售额）排序。"
 
 #: gnucash/report/reports/standard/customer-summary.scm:128
 #: gnucash/report/reports/standard/customer-summary.scm:316
@@ -26308,7 +26306,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:71
 msgid "This message will be removed when tax accounts are specified."
-msgstr ""
+msgstr "指定税收帐户后，此消息将被删除。"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:106
 #, fuzzy
@@ -26405,7 +26403,7 @@ msgstr ""
 msgid ""
 "Australia Business Activity Statement. Specify sales, purchase and tax "
 "accounts."
-msgstr ""
+msgstr "澳大利亚商业活动报表。指定销售、采购和税收账户。"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:167
 #, fuzzy
@@ -27087,7 +27085,7 @@ msgstr ""
 #: gnucash/report/reports/standard/new-aging.scm:64
 msgid ""
 "A/Payable or A/Receivable accounts exist but have no suitable transactions."
-msgstr ""
+msgstr "存在 A/应付或 A/应收账款，但没有合适的交易。"
 
 #: gnucash/report/reports/standard/new-aging.scm:109
 #, fuzzy
@@ -29085,7 +29083,7 @@ msgstr ""
 
 #: gnucash/report/trep-engine.scm:647
 msgid "If this option is selected, transactions matching filter are excluded."
-msgstr ""
+msgstr "如果选择了这个选项，匹配过滤器的交易将被排除。"
 
 #: gnucash/report/trep-engine.scm:654
 msgid ""
