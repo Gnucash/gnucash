@@ -178,6 +178,7 @@ static void gnc_plugin_page_report_stop_cb(GtkAction *action, GncPluginPageRepor
 static void gnc_plugin_page_report_save_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_save_as_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_export_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_open_external_browser_cb (GtkAction *action, GncPluginPageReport *report);
 static void gnc_plugin_page_report_options_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_print_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_exportpdf_cb(GtkAction *action, GncPluginPageReport *rep);
@@ -1142,6 +1143,7 @@ static action_toolbar_labels toolbar_labels[] =
        to be used as toolbar button label. */
     { "ReportSaveAsAction", N_("Save Config As...") },
     { "FilePrintPDFAction", N_("Make Pdf") },
+    { "OpenExternalBrowserAction", N_("External") },
     { NULL, NULL },
 };
 
@@ -1205,6 +1207,11 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
             "FilePrintAction", "document-print", N_("_Print Report..."), "<primary>p",
             N_("Print the current report"),
             G_CALLBACK(gnc_plugin_page_report_print_cb)
+        },
+        {
+            "OpenExternalBrowserAction", "emblem-web",
+            N_("Open in _external browser..."), NULL, N_("Open in external browser"),
+            G_CALLBACK(gnc_plugin_page_report_open_external_browser_cb)
         },
         {
             "FilePrintPDFAction", GNC_ICON_PDF_EXPORT, N_("Export as P_DF..."), NULL,
@@ -1941,6 +1948,19 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
 #endif
 
     g_free (job_name);
+}
+
+static void
+gnc_plugin_page_report_open_external_browser_cb (GtkAction *action,
+                                                 GncPluginPageReport *report)
+{
+    GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+    GError *error = NULL;
+    if (!gnc_html_open_external_browser (priv->html, &error))
+    {
+        PWARN ("Failed to open uri: %s", error->message);
+        g_error_free (error);
+    }
 }
 
 static void

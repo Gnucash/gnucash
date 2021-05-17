@@ -195,6 +195,15 @@ void gnc_html_reload( GncHtml* html, gboolean view );
 void gnc_html_copy_to_clipboard( GncHtml* html );
 
 /**
+ * Launches external browser and load html
+ *
+ * @param html GncHtml object
+ * @param GError object
+ * @return TRUE if successful, FALSE if unsuccessful
+ */
+gboolean gnc_html_open_external_browser (GncHtml *html, GError **error);
+
+/**
  * Exports the html to an external file.
  *
  * @param html GncHtml object
