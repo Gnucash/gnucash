@@ -2124,7 +2124,6 @@ gnc_plugin_page_register_get_filter_gcm (Account* leader)
 {
     GKeyFile* state_file = gnc_state_get_current();
     gchar* state_section;
-    gchar* filter_text;
     gchar acct_guid[GUID_ENCODING_LENGTH + 1];
     GError* error = NULL;
     char* filter = NULL;
@@ -2132,13 +2131,13 @@ gnc_plugin_page_register_get_filter_gcm (Account* leader)
     // get the filter from the .gcm file
     guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
     state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
-    filter_text = g_key_file_get_string (state_file, state_section,
-                                         KEY_PAGE_FILTER, &error);
+    filter = g_key_file_get_string (state_file, state_section,
+                                    KEY_PAGE_FILTER, &error);
 
     if (error)
         g_clear_error (&error);
     else
-        g_strdelimit (filter_text, ";", ',');
+        g_strdelimit (filter, ";", ',');
 
     g_free (state_section);
     return filter;
