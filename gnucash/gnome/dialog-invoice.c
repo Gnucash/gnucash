@@ -823,6 +823,12 @@ gnc_invoice_window_print_invoice(GtkWindow *parent, GncInvoice *invoice)
     return reportPage;
 }
 
+static gboolean
+equal_fn (gpointer find_data, gpointer elt_data)
+{
+    return (find_data && (find_data == elt_data));
+}
+
 /* From the invoice editor, open the invoice report. This will reuse the
    invoice report if generated from the current invoice editor. Note the
    link is lost when GnuCash is restarted. This link may be restored
@@ -834,7 +840,8 @@ gnc_invoice_window_printCB (GtkWindow* parent, gpointer data)
 {
     InvoiceWindow *iw = data;
 
-    if (iw->reportPage && GNC_IS_PLUGIN_PAGE (iw->reportPage))
+    if (gnc_find_first_gui_component (WINDOW_REPORT_CM_CLASS, equal_fn,
+                                      iw->reportPage))
         gnc_plugin_page_report_reload (GNC_PLUGIN_PAGE_REPORT (iw->reportPage));
     else
         iw->reportPage = gnc_invoice_window_print_invoice
