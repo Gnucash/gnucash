@@ -123,7 +123,7 @@ typedef struct
     GNCOptionWin *optionwin;
 
     GncHierarchyAssistantFinishedCallback when_completed;
-
+    int number_opening_balance_accounts;
 } hierarchy_data;
 
 void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
@@ -1228,6 +1228,71 @@ placeholder_cell_toggled (GtkCellRendererToggle *cell_renderer,
 }
 
 static void
+opa_cell_data_func (GtkTreeViewColumn *tree_column,
+                    GtkCellRenderer *cell,
+                    GtkTreeModel *model,
+                    GtkTreeIter *iter,
+                    gpointer user_data)
+{
+    Account *account, *root;
+    gboolean willbe_opa = FALSE;
+    GncAccountMergeDisposition disp;
+    hierarchy_data *data = (hierarchy_data*) user_data;
+
+    g_return_if_fail (GTK_TREE_MODEL (model));
+    account = gnc_tree_view_account_get_account_from_iter (model, iter);
+    root = gnc_book_get_root_account(gnc_get_current_book());
+    disp = determine_merge_disposition(root, account);
+    switch (disp)
+    {
+    case GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING:
+    {
+        /* find the existing account, do whatever it is. */
+        gchar *full_name;
+        Account *existing_acct;
+        full_name = gnc_account_get_full_name(account);
+        existing_acct = gnc_account_lookup_by_full_name(root, full_name);
+        willbe_opa = xaccAccountGetIsOpeningBalance(existing_acct);
+        g_free(full_name);
+    }
+    break;
+    case GNC_ACCOUNT_MERGE_DISPOSITION_CREATE_NEW:
+        willbe_opa = xaccAccountGetIsOpeningBalance(account);
+        break;
+    }
+    gtk_cell_renderer_toggle_set_active(GTK_CELL_RENDERER_TOGGLE(cell), willbe_opa);
+}
+
+static void
+opa_cell_toggled (GtkCellRendererToggle *cell_renderer,
+                  gchar *path, gpointer user_data)
+{
+    gboolean state;
+    Account *account;
+    GtkTreePath  *treepath;
+    hierarchy_data *data = (hierarchy_data *)user_data;
+
+    g_return_if_fail(data != NULL);
+
+    treepath = gtk_tree_path_new_from_string (path);
+
+    account = gnc_tree_view_account_get_account_from_path (data->final_account_tree, treepath);
+
+    state = gtk_cell_renderer_toggle_get_active (cell_renderer);
+
+    if (account)
+        xaccAccountSetIsOpeningBalance (account, !state);
+
+    // if opening balance account set, set balance to zero
+    if (!state)
+    {
+        set_final_balance (data->balance_hash, account, gnc_numeric_zero());
+        qof_event_gen (QOF_INSTANCE(account), QOF_EVENT_MODIFY, NULL);
+    }
+    gtk_tree_path_free (treepath);
+}
+
+static void
 use_existing_account_data_func(GtkTreeViewColumn *tree_column,
                                GtkCellRenderer *cell,
                                GtkTreeModel *tree_model,
@@ -1340,6 +1405,24 @@ on_final_account_prepare (hierarchy_data  *data)
         gnc_tree_view_append_column (GNC_TREE_VIEW(tree_view), column);
     }
 
+    {
+        renderer = gtk_cell_renderer_toggle_new();
+        g_object_set(G_OBJECT (renderer),
+                     "activatable", TRUE,
+                     "sensitive", TRUE,
+                     NULL);
+
+        g_signal_connect (G_OBJECT (renderer), "toggled",
+                          G_CALLBACK (opa_cell_toggled),
+                          data);
+
+        column = gtk_tree_view_column_new_with_attributes(_("Opening Balance Account"),
+                 renderer, NULL);
+        gtk_tree_view_column_set_cell_data_func (column, renderer,
+                opa_cell_data_func,
+                (gpointer)data, NULL);
+        gnc_tree_view_append_column (GNC_TREE_VIEW(tree_view), column);
+    }
 
     {
         renderer = gtk_cell_renderer_text_new ();
@@ -1401,6 +1484,13 @@ on_cancel (GtkAssistant      *gtkassistant,
 }
 
 static void
+opening_balance_account_check (Account *account, hierarchy_data *data)
+{
+    if (xaccAccountGetIsOpeningBalance (account))
+        data->number_opening_balance_accounts++;
+}
+
+static void
 starting_balance_helper (Account *account, hierarchy_data *data)
 {
     gnc_numeric balance;
@@ -1426,6 +1516,29 @@ on_finish (GtkAssistant  *gtkassistant,
 
     if (data->our_account_tree)
     {
+        // check number of opening balance accounts
+        data->number_opening_balance_accounts = 0;
+        gnc_account_foreach_descendant (data->our_account_tree,
+                                        (AccountCb)opening_balance_account_check,
+                                        data);
+
+        if (data->number_opening_balance_accounts > 1) {
+            gchar *dialog_title = _("Multiple opening balance accounts found");
+            gchar *dialog_msg = _("Please go back to and make sure that only one account is selected.");
+            GtkWidget *dialog = gtk_message_dialog_new (NULL,
+                                                        0,
+                                                        GTK_MESSAGE_WARNING,
+                                                        GTK_BUTTONS_CANCEL,
+                                                        "%s", dialog_title);
+            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                                                      "%s", dialog_msg);
+            gtk_dialog_run (GTK_DIALOG(dialog));
+            gtk_widget_destroy (dialog);
+
+            LEAVE ("multiple opening balance accounts");
+            return;
+        }
+
         gnc_account_foreach_descendant (data->our_account_tree,
                                         (AccountCb)starting_balance_helper,
                                         data);

@@ -421,6 +421,7 @@ gnc_tree_model_account_get_column_type (GtkTreeModel *tree_model, int index)
     case GNC_TREE_MODEL_ACCOUNT_COL_HIDDEN:
     case GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER:
     case GNC_TREE_MODEL_ACCOUNT_COL_OPENING_BALANCE:
+    case GNC_TREE_MODEL_ACCOUNT_COL_OPENING_BALANCE_ACCOUNT:
         return G_TYPE_BOOLEAN;
 
     default:
