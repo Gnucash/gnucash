@@ -1977,7 +1977,8 @@ gnc_ui_edit_account_window(GtkWindow *parent, Account *account)
     gnc_resume_gui_refresh ();
 
     gtk_widget_show_all (aw->dialog);
-    gtk_widget_hide (aw->opening_balance_page);
+    if (xaccAccountGetSplitList (account) != NULL)
+        gtk_widget_hide (aw->opening_balance_page);
 
     parent_acct = gnc_account_get_parent (account);
     if (parent_acct == NULL)
