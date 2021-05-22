@@ -213,7 +213,7 @@ gnc_account_opening_balance_button_update (AccountWindow *aw, gnc_commodity *com
     Account *ob_account = gnc_account_lookup_by_opening_balance (gnc_book_get_root_account (aw->book), commodity);
     gboolean has_splits = (xaccAccountGetSplitList (account) != NULL);
 
-    if (xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
+    if (aw->type != ACCT_TYPE_EQUITY)
     {
         gtk_widget_set_sensitive (aw->opening_balance_button, FALSE);
         return;
