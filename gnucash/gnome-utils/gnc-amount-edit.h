@@ -37,6 +37,8 @@
 #define GNC_AMOUNT_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST(klass, GNC_TYPE_AMOUNT_EDIT, GNCAmountEditClass)
 #define GNC_IS_AMOUNT_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE(obj, GNC_TYPE_AMOUNT_EDIT)
 
+#define ERROR_POSITION_BASE 1000
+
 typedef struct
 {
     GtkEntry entry;
@@ -143,7 +145,8 @@ double gnc_amount_edit_get_damount (GNCAmountEdit *gae);
  * Return *  0 if the parsing was successful (note that if !empty_ok,
  *             an empty field will parse to 0)
  *        * -1 if the field is empty and that's ok (empty_ok)
- *        * error position if there was a parsing error
+ *        * error position if there was a parsing error which is offset
+ *          by ERROR_POSITION_BASE
  */
 gint gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae,
                                     gnc_numeric *amount,

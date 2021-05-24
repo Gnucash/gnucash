@@ -286,7 +286,7 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
 
     /* Not ok */
     if (error_loc != NULL)
-        return  error_loc - string;
+        return (error_loc - string) + ERROR_POSITION_BASE;
     else
         return 1;
 }
@@ -325,7 +325,7 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
     }
 
     /* Parse error */
-    gtk_editable_set_position (GTK_EDITABLE(gae), result);
+    gtk_editable_set_position (GTK_EDITABLE(gae), result - ERROR_POSITION_BASE);
     return FALSE;
 }
 
