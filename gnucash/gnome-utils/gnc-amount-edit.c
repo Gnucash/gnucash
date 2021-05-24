@@ -257,6 +257,45 @@ gnc_amount_edit_new (void)
     return GTK_WIDGET(gae);
 }
 
+static gint
+get_original_error_position (const gchar *string, const gchar *symbol,
+                             gint error_pos)
+{
+    gchar **split_text;
+    gint split_text_len;
+    gint temp = 0;
+    gint ret = 0;
+    gint x = 0;
+    gboolean found = FALSE;
+
+    if (error_pos == 0)
+        return ret;
+
+    split_text = g_strsplit (string, symbol, -1);
+    split_text_len = g_strv_length (split_text);
+
+    for (x; x < split_text_len; x++)
+    {
+         gint s_len = g_utf8_strlen (split_text[x], -1);
+
+         temp = temp + s_len;
+
+         if (error_pos <= temp)
+         {
+             found = TRUE;
+             break;
+         }
+    }
+
+    if (found)
+       ret = error_pos + (x * g_utf8_strlen (symbol, -1));
+    else
+       ret = g_utf8_strlen (string, -1) - 1;
+
+    g_strfreev (split_text);
+    return ret;
+}
+
 gint
 gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
                                gboolean empty_ok)
@@ -264,12 +303,21 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
     const char *string;
     char *error_loc;
     gboolean ok;
+    const gnc_commodity *comm;
+    char *filtered_string;
+    gint error_position;
+    const gchar *symbol;
 
     g_return_val_if_fail (gae != NULL, -1);
     g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), -1);
 
     string = gtk_entry_get_text (GTK_ENTRY(gae));
-    if (!string || *string == '\0')
+
+    comm = gae->print_info.commodity;
+
+    filtered_string = gnc_filter_text_for_currency_commodity (comm, string, &symbol);
+
+    if (!filtered_string || *filtered_string == '\0')
     {
         *amount = gnc_numeric_zero ();
         if (empty_ok)
@@ -279,16 +327,26 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
     }
 
     error_loc = NULL;
-    ok = gnc_exp_parser_parse (string, amount, &error_loc);
+    ok = gnc_exp_parser_parse (filtered_string, amount, &error_loc);
 
     if (ok)
+    {
+        g_free (filtered_string);
         return 0;
+    }
 
     /* Not ok */
     if (error_loc != NULL)
-        return (error_loc - string) + ERROR_POSITION_BASE;
+    {
+        gint filtered_error = get_original_error_position (string, symbol,
+                                                          (error_loc - filtered_string));
+        error_position = filtered_error + ERROR_POSITION_BASE;
+    }
     else
-        return 1;
+        error_position = 1;
+
+    g_free (filtered_string);
+    return error_position;
 }
 
 gboolean
@@ -320,6 +378,8 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
 
         if (!gnc_numeric_equal (amount, old_amount))
             g_signal_emit (gae, amount_edit_signals [AMOUNT_CHANGED], 0);
+
+        gtk_editable_set_position (GTK_EDITABLE(gae), -1);
 
         return TRUE;
     }

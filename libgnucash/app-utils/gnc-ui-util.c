@@ -2737,3 +2737,31 @@ gnc_filter_text_for_currency_symbol (const gchar *symbol,
     g_strfreev (split);
     return ret_text;
 }
+
+gchar *
+gnc_filter_text_for_currency_commodity (const gnc_commodity *comm,
+                                        const gchar *incoming_text,
+                                        const gchar **symbol)
+{
+    if (!incoming_text)
+    {
+        *symbol = NULL;
+        return NULL;
+    }
+
+    if (!gnc_commodity_is_currency (comm))
+    {
+        *symbol = NULL;
+        return g_strdup (incoming_text);
+    }
+
+    if (comm)
+        *symbol = gnc_commodity_get_nice_symbol (comm);
+    else
+        *symbol = gnc_commodity_get_nice_symbol (gnc_default_currency ());
+
+    if (g_strrstr (incoming_text, *symbol) == NULL)
+        return g_strdup (incoming_text);
+
+    return gnc_filter_text_for_currency_symbol (*symbol, incoming_text);
+}
