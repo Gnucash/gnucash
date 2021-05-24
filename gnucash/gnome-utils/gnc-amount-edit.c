@@ -27,6 +27,7 @@
 #include <config.h>
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "gnc-amount-edit.h"
@@ -44,6 +45,8 @@
 /* Signal codes */
 enum
 {
+    ACTIVATE,
+    CHANGED,
     AMOUNT_CHANGED,
     LAST_SIGNAL
 };
@@ -54,39 +57,47 @@ static void gnc_amount_edit_init (GNCAmountEdit *gae);
 static void gnc_amount_edit_class_init (GNCAmountEditClass *klass);
 static void gnc_amount_edit_changed (GtkEditable *gae,
                                      gpointer user_data);
-static void gnc_amount_edit_paste_clipboard (GNCAmountEdit *gae,
+static void gnc_amount_edit_paste_clipboard (GtkEntry *entry,
                                              gpointer user_data);
 static gint gnc_amount_edit_key_press (GtkWidget   *widget,
-                                       GdkEventKey *event);
+                                       GdkEventKey *event,
+                                       gpointer user_data);
 
-static GtkEntryClass *parent_class;
+#define GNC_AMOUNT_EDIT_PATH "gnc-amount-edit-path"
 
-GType
-gnc_amount_edit_get_type (void)
+G_DEFINE_TYPE (GNCAmountEdit, gnc_amount_edit, GTK_TYPE_BOX)
+
+static void
+gnc_amount_edit_finalize (GObject *object)
 {
-    static GType amount_edit_type = 0;
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(object));
 
-    if (amount_edit_type == 0)
-    {
-        GTypeInfo amount_edit_info =
-        {
-            sizeof (GNCAmountEditClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_amount_edit_class_init,
-            NULL,
-            NULL,
-            sizeof (GNCAmountEdit),
-            0,
-            (GInstanceInitFunc) gnc_amount_edit_init
-        };
+    G_OBJECT_CLASS (gnc_amount_edit_parent_class)->finalize (object);
+}
 
-        amount_edit_type = g_type_register_static (GTK_TYPE_ENTRY,
-                                                   "GNCAmountEdit",
-                                                    &amount_edit_info,
-                                                    0);
-    }
-    return amount_edit_type;
+static void
+gnc_amount_edit_dispose (GObject *object)
+{
+    GNCAmountEdit *gae;
+
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(object));
+
+    gae = GNC_AMOUNT_EDIT(object);
+
+    if (gae->disposed)
+        return;
+
+    gae->disposed = TRUE;
+
+    gtk_widget_destroy (GTK_WIDGET(gae->entry));
+    gae->entry = NULL;
+
+    gtk_widget_destroy (GTK_WIDGET(gae->image));
+    gae->image = NULL;
+
+    G_OBJECT_CLASS (gnc_amount_edit_parent_class)->dispose (object);
 }
 
 static void
@@ -94,10 +105,31 @@ gnc_amount_edit_class_init (GNCAmountEditClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
- /* GtkEditableClass *editable_class = GTK_EDITABLE_CLASS(g_type_interface_peek
-                                                         (klass, GTK_TYPE_EDITABLE)); */
 
-    parent_class = g_type_class_peek_parent (klass);
+    object_class->dispose = gnc_amount_edit_dispose;
+    object_class->finalize = gnc_amount_edit_finalize;
+
+    amount_edit_signals [ACTIVATE] =
+        g_signal_new ("activate",
+                      G_OBJECT_CLASS_TYPE(object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET(GNCAmountEditClass, activate),
+                      NULL,
+                      NULL,
+                      g_cclosure_marshal_VOID__VOID,
+                      G_TYPE_NONE,
+                      0);
+
+    amount_edit_signals [CHANGED] =
+        g_signal_new ("changed",
+                      G_OBJECT_CLASS_TYPE(object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET(GNCAmountEditClass, changed),
+                      NULL,
+                      NULL,
+                      g_cclosure_marshal_VOID__VOID,
+                      G_TYPE_NONE,
+                      0);
 
     amount_edit_signals [AMOUNT_CHANGED] =
         g_signal_new ("amount_changed",
@@ -109,54 +141,69 @@ gnc_amount_edit_class_init (GNCAmountEditClass *klass)
                       g_cclosure_marshal_VOID__VOID,
                       G_TYPE_NONE,
                       0);
-
-    widget_class->key_press_event = gnc_amount_edit_key_press;
-
- /* editable_class->changed = gnc_amount_edit_changed; */
 }
 
 static void
 gnc_amount_edit_init (GNCAmountEdit *gae)
 {
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gae),
+                                    GTK_ORIENTATION_HORIZONTAL);
+
+    gae->entry = GTK_ENTRY(gtk_entry_new());
     gae->need_to_parse = FALSE;
     gae->amount = gnc_numeric_zero ();
     gae->print_info = gnc_default_print_info (FALSE);
     gae->fraction = 0;
     gae->evaluate_on_enter = FALSE;
+    gae->validate_on_change = FALSE;
     gae->block_changed = FALSE;
+    gae->error_position = -1;
+    gae->show_warning_symbol = TRUE;
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(gae), "gnc-id-amount-edit");
 
-    g_signal_connect (G_OBJECT(gae), "changed",
+    g_signal_connect (G_OBJECT(gae->entry), "key-press-event",
+                      G_CALLBACK(gnc_amount_edit_key_press), gae);
+
+    g_signal_connect (G_OBJECT(gae->entry), "changed",
                       G_CALLBACK(gnc_amount_edit_changed), gae);
 
-    g_signal_connect (G_OBJECT(gae), "paste-clipboard",
-                      G_CALLBACK(gnc_amount_edit_paste_clipboard), NULL);
+    g_signal_connect (G_OBJECT(gae->entry), "paste-clipboard",
+                      G_CALLBACK(gnc_amount_edit_paste_clipboard), gae);
 }
 
 static void
 gnc_amount_edit_changed (GtkEditable *editable, gpointer user_data)
 {
     GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
-     /*GTK_EDITABLE_CLASS(parent_class)->changed(editable);*/
-    if (gae->block_changed)
-        g_signal_stop_emission_by_name (G_OBJECT(gae), "changed");
 
-    GNC_AMOUNT_EDIT(editable)->need_to_parse = TRUE;
+    gae->need_to_parse = TRUE;
+
+    if (gae->block_changed)
+        return;
+
+    if (gae->validate_on_change)
+    {
+        gnc_numeric amount;
+        gnc_amount_edit_expr_is_valid (gae, &amount, TRUE);
+    }
+
+    g_signal_emit (gae, amount_edit_signals [CHANGED], 0);
 }
 
 static void
-gnc_amount_edit_paste_clipboard (GNCAmountEdit *gae, gpointer user_data)
+gnc_amount_edit_paste_clipboard (GtkEntry *entry, gpointer user_data)
 {
-    GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(gae),
+    GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
+    GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(entry),
                                                         GDK_SELECTION_CLIPBOARD);
     gchar *text = gtk_clipboard_wait_for_text (clipboard);
 
     if (text)
     {
         gchar *filtered_text = gnc_filter_text_for_control_chars (text);
-        gchar *existing = gtk_editable_get_chars (GTK_EDITABLE(gae), 0, -1);
+        gchar *existing = gtk_editable_get_chars (GTK_EDITABLE(entry), 0, -1);
         gint start_pos, end_pos;
         gint position;
 
@@ -167,9 +214,15 @@ gnc_amount_edit_paste_clipboard (GNCAmountEdit *gae, gpointer user_data)
             return;
         }
 
-        position = gtk_editable_get_position (GTK_EDITABLE(gae));
+        if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
+        {
+            gtk_widget_hide (GTK_WIDGET(gae->image));
+            gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
+        }
 
-        if (gtk_editable_get_selection_bounds (GTK_EDITABLE(gae),
+        position = gtk_editable_get_position (GTK_EDITABLE(entry));
+
+        if (gtk_editable_get_selection_bounds (GTK_EDITABLE(entry),
                                                &start_pos, &end_pos))
         {
             gint old_len = g_utf8_strlen (existing, -1);
@@ -178,10 +231,10 @@ gnc_amount_edit_paste_clipboard (GNCAmountEdit *gae, gpointer user_data)
             gchar *changed_text = g_strdup_printf ("%s%s%s", begin, filtered_text, end);
 
             gae->block_changed = TRUE;
-            gtk_editable_delete_text (GTK_EDITABLE(gae), 0, -1);
+            gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
             gae->block_changed = FALSE;
 
-            gtk_editable_insert_text (GTK_EDITABLE(gae),
+            gtk_editable_insert_text (GTK_EDITABLE(entry),
                                       changed_text, -1, &position);
 
             position = start_pos + g_utf8_strlen (filtered_text, -1);
@@ -191,12 +244,12 @@ gnc_amount_edit_paste_clipboard (GNCAmountEdit *gae, gpointer user_data)
             g_free (changed_text);
         }
         else
-            gtk_editable_insert_text (GTK_EDITABLE(gae),
+            gtk_editable_insert_text (GTK_EDITABLE(entry),
                                       filtered_text, -1, &position);
 
-        gtk_editable_set_position (GTK_EDITABLE(gae), position);
+        gtk_editable_set_position (GTK_EDITABLE(entry), position);
 
-        g_signal_stop_emission_by_name (G_OBJECT(gae), "paste-clipboard");
+        g_signal_stop_emission_by_name (G_OBJECT(entry), "paste-clipboard");
 
         g_free (text);
         g_free (existing);
@@ -205,10 +258,16 @@ gnc_amount_edit_paste_clipboard (GNCAmountEdit *gae, gpointer user_data)
 }
 
 static gint
-gnc_amount_edit_key_press (GtkWidget *widget, GdkEventKey *event)
+gnc_amount_edit_key_press (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-    GNCAmountEdit *gae = GNC_AMOUNT_EDIT(widget);
+    GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
     gint result;
+
+    if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
+    {
+        gtk_widget_hide (GTK_WIDGET(gae->image));
+        gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
+    }
 
 #ifdef G_OS_WIN32
     /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
@@ -225,17 +284,21 @@ gnc_amount_edit_key_press (GtkWidget *widget, GdkEventKey *event)
         }
     }
 
-    result = (* GTK_WIDGET_CLASS(parent_class)->key_press_event)(widget, event);
+    result = (* GTK_WIDGET_GET_CLASS(widget)->key_press_event)(widget, event);
 
     switch (event->keyval)
     {
     case GDK_KEY_Return:
         if (gae->evaluate_on_enter)
             break;
+        else
+            g_signal_emit (gae, amount_edit_signals [ACTIVATE], 0);
         if (event->state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
             break;
         return result;
     case GDK_KEY_KP_Enter:
+        if (!gae->evaluate_on_enter)
+            g_signal_emit (gae, amount_edit_signals [ACTIVATE], 0);
         break;
     default:
         return result;
@@ -243,16 +306,23 @@ gnc_amount_edit_key_press (GtkWidget *widget, GdkEventKey *event)
 
     gnc_amount_edit_evaluate (gae);
 
+    g_signal_emit (gae, amount_edit_signals [ACTIVATE], 0);
+
     return TRUE;
 }
 
 GtkWidget *
 gnc_amount_edit_new (void)
 {
-    GNCAmountEdit *gae;
+    GNCAmountEdit *gae = g_object_new (GNC_TYPE_AMOUNT_EDIT, NULL);
 
-    gae = g_object_new (GNC_TYPE_AMOUNT_EDIT, NULL);
-    gtk_widget_show (GTK_WIDGET(gae));
+    gtk_box_pack_start (GTK_BOX(gae), GTK_WIDGET(gae->entry), TRUE, TRUE, 0);
+    gtk_entry_set_width_chars (GTK_ENTRY(gae->entry), 12);
+    gae->image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
+    gtk_box_pack_start (GTK_BOX(gae), GTK_WIDGET(gae->image), FALSE, FALSE, 6);
+    gtk_widget_set_no_show_all (GTK_WIDGET(gae->image), TRUE);
+    gtk_widget_hide (GTK_WIDGET(gae->image));
+    gtk_widget_show_all (GTK_WIDGET(gae));
 
     return GTK_WIDGET(gae);
 }
@@ -270,6 +340,12 @@ get_original_error_position (const gchar *string, const gchar *symbol,
 
     if (error_pos == 0)
         return ret;
+
+    if (!symbol)
+        return error_pos;
+
+    if (g_strrstr (string, symbol) == NULL)
+        return error_pos;
 
     split_text = g_strsplit (string, symbol, -1);
     split_text_len = g_strv_length (split_text);
@@ -306,14 +382,22 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
     const gnc_commodity *comm;
     char *filtered_string;
     gint error_position;
-    const gchar *symbol;
+    const gchar *symbol = NULL;
 
     g_return_val_if_fail (gae != NULL, -1);
     g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), -1);
 
-    string = gtk_entry_get_text (GTK_ENTRY(gae));
+    string = gtk_entry_get_text (GTK_ENTRY(gae->entry));
+
+    if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
+    {
+        gtk_widget_hide (GTK_WIDGET(gae->image));
+        gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
+    }
 
     comm = gae->print_info.commodity;
+
+    gae->error_position = -1;
 
     filtered_string = gnc_filter_text_for_currency_commodity (comm, string, &symbol);
 
@@ -340,13 +424,22 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
     {
         gint filtered_error = get_original_error_position (string, symbol,
                                                           (error_loc - filtered_string));
-        error_position = filtered_error + ERROR_POSITION_BASE;
+        gae->error_position = filtered_error + ERROR_POSITION_BASE;
     }
     else
-        error_position = 1;
+        gae->error_position = 1;
+
+    if (gae->show_warning_symbol)
+    {
+        gchar *err_msg = gnc_amount_edit_get_error_message (gae);
+        gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), err_msg);
+        gtk_widget_show (GTK_WIDGET(gae->image));
+        gtk_widget_queue_resize (GTK_WIDGET(gae->entry));
+        g_free (err_msg);
+    }
 
     g_free (filtered_string);
-    return error_position;
+    return gae->error_position;
 }
 
 gboolean
@@ -379,13 +472,13 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
         if (!gnc_numeric_equal (amount, old_amount))
             g_signal_emit (gae, amount_edit_signals [AMOUNT_CHANGED], 0);
 
-        gtk_editable_set_position (GTK_EDITABLE(gae), -1);
+        gtk_editable_set_position (GTK_EDITABLE(gae->entry), -1);
 
         return TRUE;
     }
 
     /* Parse error */
-    gtk_editable_set_position (GTK_EDITABLE(gae), result - ERROR_POSITION_BASE);
+    gtk_editable_set_position (GTK_EDITABLE(gae->entry), result - ERROR_POSITION_BASE);
     return FALSE;
 }
 
@@ -420,9 +513,15 @@ gnc_amount_edit_set_amount (GNCAmountEdit *gae, gnc_numeric amount)
     g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
     g_return_if_fail (!gnc_numeric_check (amount));
 
+    if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
+    {
+        gtk_widget_hide (GTK_WIDGET(gae->image));
+        gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
+    }
+
     /* Update the display. */
     amount_string = xaccPrintAmount (amount, gae->print_info);
-    gtk_entry_set_text (GTK_ENTRY(gae), amount_string);
+    gtk_entry_set_text (GTK_ENTRY(gae->entry), amount_string);
 
     gae->amount = amount;
     gae->need_to_parse = FALSE;
@@ -475,7 +574,7 @@ gnc_amount_edit_gtk_entry (GNCAmountEdit *gae)
     g_return_val_if_fail (gae != NULL, NULL);
     g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), NULL);
 
-    return GTK_WIDGET(gae);
+    return GTK_WIDGET(gae->entry);
 }
 
 void
@@ -486,4 +585,52 @@ gnc_amount_edit_set_evaluate_on_enter (GNCAmountEdit *gae,
     g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
 
     gae->evaluate_on_enter = evaluate_on_enter;
+}
+
+void
+gnc_amount_edit_set_validate_on_change (GNCAmountEdit *gae,
+                                        gboolean validate_on_change)
+{
+    g_return_if_fail (gae != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
+
+    gae->validate_on_change = validate_on_change;
+}
+
+void
+gnc_amount_edit_select_region (GNCAmountEdit *gae,
+                               gint start_pos,
+                               gint end_pos)
+{
+    g_return_if_fail (gae != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
+
+    gtk_editable_select_region (GTK_EDITABLE(gae->entry),
+                                start_pos,
+                                end_pos);
+}
+
+gchar *
+gnc_amount_edit_get_error_message (GNCAmountEdit *gae)
+{
+    g_return_val_if_fail (gae != NULL, NULL);
+
+    if (gae->error_position <= 0) // no error
+        return NULL;
+    else if (gae->error_position == 1) // error but no error position
+        return g_strdup_printf (_("An error occurred while processing '%s'"),
+                                gtk_entry_get_text (GTK_ENTRY(gae->entry)));
+    else // error and position of error
+        return g_strdup_printf (_("An error occurred while processing '%s' at position %d"),
+                                gtk_entry_get_text (GTK_ENTRY(gae->entry)),
+                                gae->error_position - ERROR_POSITION_BASE);
+}
+
+void
+gnc_amount_edit_show_warning_symbol (GNCAmountEdit *gae, gboolean show)
+{
+    g_return_if_fail (gae != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
+
+    gae->show_warning_symbol = show;
 }
