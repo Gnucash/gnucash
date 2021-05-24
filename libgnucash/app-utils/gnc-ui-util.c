@@ -1414,6 +1414,7 @@ gnc_default_share_print_info (void)
     if (!got_it)
     {
         info = gnc_default_print_info_helper (5);
+        info.monetary = 0;
         got_it = TRUE;
     }
 
