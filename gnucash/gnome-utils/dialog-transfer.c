@@ -529,6 +529,8 @@ gnc_xfer_dialog_from_tree_selection_changed_cb (GtkTreeSelection *selection,
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->amount_edit),
                                   xaccAccountGetCommoditySCU (account));
 
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit));
+
     gnc_xfer_dialog_curr_acct_activate(xferData);
 
     /* Reload the xferDialog quickfill if it is based on the from account */
@@ -560,6 +562,8 @@ gnc_xfer_dialog_to_tree_selection_changed_cb (GtkTreeSelection *selection, gpoin
                                     print_info);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->to_amount_edit),
                                   xaccAccountGetCommoditySCU (account));
+
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
 
     gnc_xfer_dialog_curr_acct_activate(xferData);
 
