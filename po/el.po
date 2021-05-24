@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-05-16 19:01+0000\n"
+"PO-Revision-Date: 2021-05-24 23:33+0000\n"
 "Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
@@ -1201,7 +1201,7 @@ msgstr "Ο τύπος αντικειμένου δεν ταιριάζει με %s
 
 #: gnucash/gnome/dialog-billterms.c:270
 msgid "Discount days cannot be more than due days."
-msgstr ""
+msgstr "Οι ημέρες έκπτωσης δεν μπορούν να υπερβαίνουν τις προθεσμίες."
 
 #: gnucash/gnome/dialog-billterms.c:324
 msgid "You must provide a name for this Billing Term."
@@ -1544,13 +1544,15 @@ msgstr "Πρέπει να επιλέξετε μια αναφορά για δια
 
 #: gnucash/gnome/dialog-custom-report.c:449
 msgid "Unable to change report configuration name."
-msgstr ""
+msgstr "Δεν είναι δυνατή η αλλαγή του ονόματος ρύθμισης παραμέτρων αναφοράς."
 
 #: gnucash/gnome/dialog-custom-report.c:461
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
 msgstr ""
+"Υπάρχει ήδη μια αποθηκευμένη διαμόρφωση αναφοράς με αυτό το όνομα, "
+"παρακαλούμε επιλέξτε ένα διαφορετικό όνομα."
 
 #: gnucash/gnome/dialog-custom-report.c:487
 #, fuzzy
@@ -1705,7 +1707,7 @@ msgstr "Το αρχείο δεν μπόρεσε να ανοιχτεί ξανά."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1361
 #: gnucash/gnome/gnc-plugin-page-register.c:631
 msgid "Manage Document Link"
-msgstr ""
+msgstr "Διαχείριση συνδέσμου εγγράφου"
 
 #: gnucash/gnome/dialog-doclink.c:754
 msgid "Transaction can not be modified."
@@ -2087,7 +2089,7 @@ msgstr "Αριθμός"
 #: gnucash/gnome/dialog-find-transactions2.c:149
 #: gnucash/gnome/dialog-find-transactions.c:149
 msgid "Description, Notes, or Memo"
-msgstr ""
+msgstr "Περιγραφή, Σημειώσεις ή Υπόμνημα"
 
 #: gnucash/gnome/dialog-find-transactions2.c:153
 #: gnucash/gnome/dialog-find-transactions.c:153
@@ -2179,6 +2181,7 @@ msgstr[1] "Ο πίνακας φόρου %s δεν υπάρχει. Θέλετε �
 #, c-format
 msgid "To see the invalid mappings, use a filter of '%s'"
 msgstr ""
+"Για να δείτε τις μη έγκυρες αντιστοιχίσεις, χρησιμοποιήστε ένα φίλτρο \"%s\""
 
 #: gnucash/gnome/dialog-imap-editor.c:367
 #: gnucash/gnome/dialog-imap-editor.c:604
@@ -2188,7 +2191,7 @@ msgstr "Κωδικός λογαριασμού"
 
 #: gnucash/gnome/dialog-imap-editor.c:369
 msgid "(Note, if there is a large number, it may take a while)"
-msgstr ""
+msgstr "(Σημείωση, εάν ο αριθμός είναι μεγάλος, μπορεί να πάρει λίγο χρόνο)"
 
 #: gnucash/gnome/dialog-imap-editor.c:703
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
@@ -2201,7 +2204,7 @@ msgstr "Πεδίο περιγραφής"
 
 #: gnucash/gnome/dialog-imap-editor.c:721
 msgid "Memo Field"
-msgstr ""
+msgstr "Πεδίο υπομνημάτων"
 
 #: gnucash/gnome/dialog-imap-editor.c:724
 #, fuzzy
@@ -30808,7 +30811,6 @@ msgid "Looking for imbalances in account %s: %u of %u"
 msgstr ""
 
 #: libgnucash/engine/Split.c:1636
-#, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"
