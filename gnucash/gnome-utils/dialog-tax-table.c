@@ -97,6 +97,38 @@ typedef struct _new_taxtable
 } NewTaxTable;
 
 static gboolean
+new_tax_table_check_entry (NewTaxTable *ntt)
+{
+    GNCPrintAmountInfo print_info;
+    gnc_numeric value;
+    gint result;
+
+    if (ntt->type == GNC_AMT_TYPE_VALUE)
+    {
+        Account *acc = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(ntt->acct_tree));
+        gnc_commodity *currency = xaccAccountGetCommodity (acc);
+        print_info = gnc_commodity_print_info (currency, FALSE);
+        gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT(ntt->amount_entry),
+                                      gnc_commodity_get_fraction (currency));
+    }
+    else
+    {
+        print_info = gnc_integral_print_info ();
+        print_info.max_decimal_places = 5;
+        gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (ntt->amount_entry), 100000);
+    }
+
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT(ntt->amount_entry), print_info);
+
+    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(ntt->amount_entry), &value, TRUE);
+
+    if (result >= 1)
+        return FALSE;
+
+    return TRUE;
+}
+
+static gboolean
 new_tax_table_ok_cb (NewTaxTable *ntt)
 {
     TaxTableWindow *ttw;
@@ -129,6 +161,15 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
             g_free (message);
             return FALSE;
         }
+    }
+
+    /* test for valid value */
+    if (!new_tax_table_check_entry (ntt))
+    {
+        message = gnc_amount_edit_get_error_message (GNC_AMOUNT_EDIT(ntt->amount_entry));
+        gnc_error_dialog (GTK_WINDOW(ntt->dialog), "%s", message);
+        g_free (message);
+        return FALSE;
     }
 
     /* verify the amount. Note that negative values are allowed (required for European tax rules) */
@@ -204,6 +245,15 @@ combo_changed (GtkWidget *widget, NewTaxTable *ntt)
 
     index = gtk_combo_box_get_active (GTK_COMBO_BOX(widget));
     ntt->type = index + 1;
+
+    new_tax_table_check_entry (ntt);
+}
+
+static void
+tax_table_account_selection_changed_cb (GtkTreeSelection *treeselection,
+                                        NewTaxTable *ntt)
+{
+    new_tax_table_check_entry (ntt);
 }
 
 static GncTaxTable *
@@ -216,6 +266,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     GtkWidget *box, *widget, *combo;
     gboolean done;
     gint response, index;
+    GtkTreeSelection *selection;
 
     if (!ttw) return NULL;
     if (new_table && entry) return NULL;
@@ -262,6 +313,10 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     ntt->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
     gtk_container_add (GTK_CONTAINER(box), ntt->acct_tree);
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ntt->acct_tree), FALSE);
+
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(ntt->acct_tree));
+    g_signal_connect (G_OBJECT(selection), "changed",
+                      G_CALLBACK(tax_table_account_selection_changed_cb), ntt);
 
     /* Make 'enter' do the right thing */
     gtk_entry_set_activates_default (GTK_ENTRY(gnc_amount_edit_gtk_entry

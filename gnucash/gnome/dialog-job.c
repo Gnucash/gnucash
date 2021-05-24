@@ -151,6 +151,14 @@ gnc_job_verify_ok (JobWindow *jw)
         return FALSE;
     }
 
+    /* Check for valid rate */
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(jw->rate_entry)))
+    {
+        const char *message = _("The rate amount must be valid or you must leave it blank.");
+        gnc_error_dialog (GTK_WINDOW (jw->dialog), "%s", message);
+        return FALSE;
+    }
+
     /* Set a valid id if one was not created */
     res = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
     if (g_strcmp0 (res, "") == 0)

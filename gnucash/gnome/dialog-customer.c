@@ -323,6 +323,8 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
     CustomerWindow *cw = data;
     gnc_numeric min, max;
     gchar *string;
+    gnc_commodity *currency;
+    GNCPrintAmountInfo print_info;
 
     /* Check for valid company name */
     if (check_entry_nonempty (cw->company_entry,
@@ -351,6 +353,12 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
                            _("Discount percentage must be between 0-100 "
                              "or you must leave it blank.")))
         return;
+
+    currency = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(cw->currency_edit));
+    print_info = gnc_commodity_print_info (currency, FALSE);
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (cw->credit_amount), print_info);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (cw->credit_amount),
+                                  gnc_commodity_get_fraction (currency));
 
     if (check_edit_amount (cw->credit_amount, &min, NULL,
                            _("Credit must be a positive amount or "

@@ -193,6 +193,8 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
 {
     EmployeeWindow *ew = data;
     gchar *string;
+    GNCPrintAmountInfo print_info;
+    gnc_commodity *currency;
 
     /* Check for valid username */
     if (check_entry_nonempty (ew->username_entry,
@@ -222,6 +224,20 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
         gtk_entry_set_text (GTK_ENTRY (ew->id_entry), string);
         g_free(string);
     }
+
+    /* Check for valid workday amount */
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(ew->workday_amount)))
+        return;
+
+    currency = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(ew->currency_edit));
+    print_info = gnc_commodity_print_info (currency, FALSE);
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (ew->rate_amount), print_info);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (ew->rate_amount),
+                                  gnc_commodity_get_fraction (currency));
+
+    /* Check for valid rate amount */
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(ew->rate_amount)))
+        return;
 
     /* Now save it off */
     {
