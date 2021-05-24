@@ -30,6 +30,7 @@
 
 #include "gnc-amount-edit.h"
 #include "qof.h"
+#include "gnc-gui-query.h"
 
 #include "search-double.h"
 #include "search-core-utils.h"
@@ -148,12 +149,21 @@ static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
     GNCSearchDouble *fi = (GNCSearchDouble *)fe;
+    GNCSearchDoublePrivate *priv;
     gboolean valid = TRUE;
 
     g_return_val_if_fail (fi, FALSE);
     g_return_val_if_fail (IS_GNCSEARCH_DOUBLE (fi), FALSE);
 
-    /* XXX */
+    priv = _PRIVATE(fi);
+
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(priv->gae)))
+    {
+        gchar *err_msg = gnc_amount_edit_get_error_message (GNC_AMOUNT_EDIT(priv->gae));
+        gnc_error_dialog (GTK_WINDOW(priv->parent), "%s", err_msg);
+        valid = FALSE;
+        g_free (err_msg);
+    }
 
     return valid;
 }
