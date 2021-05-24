@@ -406,6 +406,17 @@ void gnc_ui_util_remove_registered_prefs (void);
 */
 gchar * gnc_filter_text_for_control_chars (const gchar *incoming_text);
 
+/** Returns the incoming text removed of a currency symbol
+ *
+ * @param symbol to remove
+ *
+ * @param incoming_text The text to filter
+ *
+ * @return The incoming text with symbol removed to be freed by the caller
+*/
+gchar * gnc_filter_text_for_currency_symbol (const gchar *symbol,
+                                             const gchar *incoming_text);
+
 #endif
 /** @} */
 /** @} */

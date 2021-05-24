@@ -83,17 +83,31 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
     const char *toks = "+-*/=()_";
     gunichar decimal_point;
     gunichar thousands_sep;
-    char *new_newval = g_strdup (newval);
+    gchar *filtered_newval;
+    const gchar *symbol = NULL;
+    gchar *tokens;
 
     if (cell->print_info.monetary)
+    {
+        const gnc_commodity *comm = cell->print_info.commodity;
+
         decimal_point = g_utf8_get_char(lc->mon_decimal_point);
-    else
-        decimal_point = g_utf8_get_char(lc->decimal_point);
-
-    if (cell->print_info.monetary)
         thousands_sep = g_utf8_get_char(lc->mon_thousands_sep);
+
+        if (comm)
+            symbol = gnc_commodity_get_nice_symbol (comm);
+        else
+            symbol = gnc_commodity_get_nice_symbol (gnc_default_currency ());
+
+        tokens = g_strconcat (toks, symbol, NULL);
+    }
     else
+    {
+        decimal_point = g_utf8_get_char(lc->decimal_point);
         thousands_sep = g_utf8_get_char(lc->thousands_sep);
+
+        tokens = g_strdup (toks);
+    }
 
     for (const char *c = change; c && *c; c = g_utf8_next_char (c))
     {
@@ -103,12 +117,18 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
             !g_unichar_isalpha (uc) &&
             (decimal_point != uc) &&
             (thousands_sep != uc) &&
-            (g_utf8_strchr (toks, -1, uc) == NULL))
+            (g_utf8_strchr (tokens, -1, uc) == NULL))
+        {
+            g_free (tokens);
             return;
+        }
     }
 
-    gnc_basic_cell_set_value_internal (_cell, new_newval);
-    g_free (new_newval);
+    filtered_newval = gnc_filter_text_for_currency_symbol (symbol, newval);
+    gnc_basic_cell_set_value_internal (_cell, filtered_newval);
+    g_free (filtered_newval);
+    g_free (tokens);
+
     *end_selection = *start_selection = *cursor_position;
     cell->need_to_parse = TRUE;
 }
@@ -169,8 +189,9 @@ gnc_price_cell_leave (BasicCell *_cell)
     error_position = gnc_price_cell_parse (cell, TRUE);
     if (error_position != -1)
     {
-        gnc_warning_dialog(NULL, _("An error occurred while processing %s."),
-                           cell->cell.value);
+        gnc_warning_dialog (gnc_ui_get_main_window (NULL),
+                            _("An error occurred while processing '%s' at position %d"),
+                            cell->cell.value, error_position);
     }
 
 }

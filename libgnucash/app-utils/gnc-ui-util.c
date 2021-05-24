@@ -2712,3 +2712,27 @@ gnc_filter_text_for_control_chars (const gchar *text)
     }
     return g_string_free (filtered, FALSE);
 }
+
+gchar *
+gnc_filter_text_for_currency_symbol (const gchar *symbol,
+                                     const gchar *incoming_text)
+{
+    gchar *ret_text = NULL;
+    gchar **split;
+
+    if (!incoming_text)
+        return NULL;
+
+    if (!symbol)
+       return g_strdup (incoming_text);
+
+    if (g_strrstr (incoming_text, symbol) == NULL)
+        return g_strdup (incoming_text);
+
+    split = g_strsplit (incoming_text, symbol, -1);
+
+    ret_text = g_strjoinv (NULL, split);
+
+    g_strfreev (split);
+    return ret_text;
+}

@@ -115,8 +115,10 @@ gnc_formula_cell_leave(BasicCell *_cell)
                 && strlen(str) != 0
                 && !gnc_exp_parser_parse(str, &amount, &error_location))
         {
-            gnc_warning_dialog(NULL, _("An error occurred while processing %s."),
-                               str);//, (error_location - str));
+            gint error_position = error_location - str;
+            gnc_warning_dialog (gnc_ui_get_main_window (NULL),
+                                _("An error occurred while processing '%s' at position %d"),
+                                str, error_position);
         }
     }
 
@@ -142,6 +144,10 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
     const char *c;
     gunichar uc;
 
+    gchar *filtered_newval;
+    const gchar *symbol = NULL;
+    gchar *tokens;
+
     g_debug("%s, %d, %s, %d, %d, %d, %d",
             change ? (gchar *)change : "(null)", change_len,
             newval ? (gchar *)newval : "(null)", newval_len,
@@ -157,30 +163,48 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
     }
 
     if (cell->print_info.monetary)
-        decimal_point = g_utf8_get_char(lc->mon_decimal_point);
-    else
-        decimal_point = g_utf8_get_char(lc->decimal_point);
+    {
+        const gnc_commodity *comm = cell->print_info.commodity;
 
-    if (cell->print_info.monetary)
+        decimal_point = g_utf8_get_char(lc->mon_decimal_point);
         thousands_sep = g_utf8_get_char(lc->mon_thousands_sep);
+
+        if (comm)
+            symbol = gnc_commodity_get_nice_symbol (comm);
+        else
+            symbol = gnc_commodity_get_nice_symbol (gnc_default_currency ());
+
+        tokens = g_strconcat (toks, symbol, NULL);
+    }
     else
+    {
+        decimal_point = g_utf8_get_char(lc->decimal_point);
         thousands_sep = g_utf8_get_char(lc->thousands_sep);
+
+        tokens = g_strdup (toks);
+    }
 
     c = change;
     while (*c)
     {
         uc = g_utf8_get_char (c);
         if (!g_unichar_isdigit (uc) &&
-                !g_unichar_isspace (uc) &&
-                !g_unichar_isalpha (uc) &&
-                (decimal_point != uc) &&
-                (thousands_sep != uc) &&
-                (g_utf8_strchr (toks, -1, uc) == NULL))
+            !g_unichar_isspace (uc) &&
+            !g_unichar_isalpha (uc) &&
+            (decimal_point != uc) &&
+            (thousands_sep != uc) &&
+            (g_utf8_strchr (tokens, -1, uc) == NULL))
+         {
+            g_free (tokens);
             return;
+         }
         c = g_utf8_next_char (c);
     }
 
-    gnc_basic_cell_set_value_internal( &cell->cell, newval );
+    filtered_newval = gnc_filter_text_for_currency_symbol (symbol, newval);
+    gnc_basic_cell_set_value_internal (&cell->cell, filtered_newval);
+    g_free (filtered_newval);
+    g_free (tokens);
 }
 
 static
