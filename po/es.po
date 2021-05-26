@@ -9,14 +9,15 @@
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
 # Guille <willelopz+weblate@gmail.com>, 2021.
 # Guille Lopez <willelopz@gmail.com>, 2021.
+# Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.7.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-25 22:33+0000\n"
-"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
+"PO-Revision-Date: 2021-05-25 17:33+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -1623,7 +1624,7 @@ msgstr "Encontrar Cliente"
 #: gnucash/gnome/dialog-custom-report.c:319
 #, c-format
 msgid "Are you sure you want to delete %s?"
-msgstr "¿Seguro que quiere borrar %s?"
+msgstr "¿Confirma que quiere eliminar %s?"
 
 #: gnucash/gnome/dialog-custom-report.c:424
 msgid "You must select a report configuration to load."
@@ -1659,7 +1660,7 @@ msgstr "Borrar configuración boletinada"
 
 #: gnucash/gnome/dialog-date-close.c:75
 msgid "No Account selected. Please try again."
-msgstr "Sin Cuenta seleccionada. Inténtelo otra vez."
+msgstr "No se seleccionó ninguna cuenta. Inténtelo otra vez."
 
 #: gnucash/gnome/dialog-date-close.c:82
 msgid "Placeholder account selected. Please try again."
@@ -1794,7 +1795,7 @@ msgstr "Gestionar enlace de documento"
 
 #: gnucash/gnome/dialog-doclink.c:754
 msgid "Transaction can not be modified."
-msgstr "La transacción no puede ser modificada."
+msgstr "La transacción no puede modificarse."
 
 #: gnucash/gnome/dialog-doclink.c:815 libgnucash/engine/gncOwner.c:215
 msgid "Undefined"
@@ -1803,10 +1804,8 @@ msgstr "No definido"
 #. Translators: This is the label of a dialog box that lists all of the
 #. transaction that have files or URIs linked with them.
 #: gnucash/gnome/dialog-doclink.c:1074
-#, fuzzy
-#| msgid "Transaction Details"
 msgid "Transaction Document Links"
-msgstr "Detalles de Transacción"
+msgstr "Enlaces de documento de transacción"
 
 #: gnucash/gnome/dialog-doclink.c:1077
 #: gnucash/gnome/dialog-find-transactions2.c:157
@@ -1999,15 +1998,14 @@ msgstr "Imposición relativa"
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:474
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "Cuentas en «%s»"
+msgstr "Su_bcuentas de «%s»"
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
 msgid "All Accounts"
-msgstr "Todas las Cuentas"
+msgstr "Todas las cuentas"
 
 #: gnucash/gnome/dialog-find-transactions2.c:114
 #: gnucash/gnome/dialog-find-transactions.c:112
@@ -2279,11 +2277,11 @@ msgstr "Bayesiano"
 
 #: gnucash/gnome/dialog-imap-editor.c:718
 msgid "Description Field"
-msgstr "Campo Descriptivo"
+msgstr "Campo descriptivo"
 
 #: gnucash/gnome/dialog-imap-editor.c:721
 msgid "Memo Field"
-msgstr "Campo Memorandum"
+msgstr "Campo memorándum"
 
 #: gnucash/gnome/dialog-imap-editor.c:724
 msgid "CSV Account Map"
@@ -4341,7 +4339,7 @@ msgstr "Crear"
 #: gnucash/gnome/gnc-plugin-page-register2.c:500
 #: gnucash/gnome/gnc-plugin-page-register.c:623
 msgid "Delete"
-msgstr "Borrar"
+msgstr "Eliminar"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:454
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1991
@@ -4349,8 +4347,7 @@ msgstr "Borrar"
 #: gnucash/gnome/gnc-plugin-page-register.c:5065
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr ""
-"'Comprobar y reparar' está siendo ejecutado en este momento, ¿Desea abortar "
-"la operación?"
+"«Comprobar y reparar» está en ejecución. ¿Quiere interrumpir la operación?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:520
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:526
@@ -5673,10 +5670,8 @@ msgstr "Desglosar"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:503
 #: gnucash/gnome/gnc-plugin-page-register.c:626
-#, fuzzy
-#| msgid "_Jump"
 msgid "Jump"
-msgstr "_Omitir"
+msgstr "Saltar"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:504
 #: gnucash/gnome/gnc-plugin-page-register.c:627
@@ -5707,7 +5702,7 @@ msgstr "Diario Común"
 #: gnucash/gnome/gnc-plugin-page-register.c:2001
 #, c-format
 msgid "Save changes to %s?"
-msgstr "¿Guardar cambios a %s?"
+msgstr "¿Quiere guardar los cambios efectuados en %s?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1624
 #: gnucash/gnome/gnc-plugin-page-register.c:2005
@@ -6066,13 +6061,13 @@ msgstr "Exportar"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr "Guardar Configuración"
+msgstr "Guardar configuración"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1143
 msgid "Save Config As..."
-msgstr "Guardar Configuración Como…"
+msgstr "Guardar configuración como…"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1144
 msgid "Make Pdf"
@@ -6418,7 +6413,7 @@ msgstr "Este registro de cuenta es de sólo lectura."
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2448
 #, c-format
 msgid "The '%s' account register is read-only."
-msgstr "El registro de la cuenta '%s' es de sólo lectura."
+msgstr "El registro de la cuenta «%s» es de solo lectura."
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 msgid ""
@@ -7668,13 +7663,13 @@ msgstr ""
 "código de cuenta de cada subcuenta con un código generado."
 
 #: gnucash/gnome-utils/dialog-account.c:2285
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
 msgstr ""
-"Establecer el color de la cuenta para la cuenta «%s» incluyendo todas las "
-"sub-cuentas al color seleccionado:"
+"Establecer el color de la cuenta «%s», incluidas todas las subcuentas, al "
+"color seleccionado"
 
 #: gnucash/gnome-utils/dialog-account.c:2312
 #, fuzzy, c-format
@@ -7841,7 +7836,9 @@ msgstr "Cabecera de ruta no existe, "
 #: gnucash/gnome-utils/dialog-doclink-utils.c:242
 #, c-format
 msgid "Path head not set, using '%s' for relative paths"
-msgstr "Cabecera de la ruta no establecida, usando '%s' para rutas relativas"
+msgstr ""
+"No se estableció la cabecera de la ruta; se utiliza «%s» en las rutas "
+"relativas"
 
 # menú
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
@@ -7919,7 +7916,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-options.c:704
 msgid "Select no account"
-msgstr "No seleccione ninguna cuenta"
+msgstr "No seleccionar ninguna cuenta"
 
 #: gnucash/gnome-utils/dialog-options.c:737
 #: gnucash/gnome-utils/gnc-tree-view-account.c:989
@@ -7964,7 +7961,7 @@ msgstr "Cuenta ganancias/pérdicas predeterminada"
 #: gnucash/gnome-utils/dialog-options.c:1513
 #: gnucash/gnome-utils/dialog-options.c:1657
 msgid "Select All"
-msgstr "Seleccionar Todo"
+msgstr "Seleccionar todo"
 
 #: gnucash/gnome-utils/dialog-options.c:1515
 msgid "Select all accounts."
@@ -16304,17 +16301,15 @@ msgstr "Liquidado el"
 #: gnucash/gtkbuilder/dialog-find-account.glade:25
 #: gnucash/gtkbuilder/dialog-find-account.glade:96
 msgid "Search the Account List"
-msgstr "Buscar Lista de Cuentas"
+msgstr "Buscar lista de cuentas"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
-#, fuzzy
-#| msgid "Close on Jump"
 msgid "Close _on Jump"
-msgstr "Cerrar al Omitir"
+msgstr "Cerrar al sal_tar"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
 msgid "_Jump To"
-msgstr "_Omitir a"
+msgstr "_Saltar a"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
 msgid "All _accounts"
@@ -16344,9 +16339,9 @@ msgid ""
 "Tree,\n"
 "if account should not be shown, this will be temporarily overridden."
 msgstr ""
-"Seleccione una fila y después pulse 'omitir a' para omitir a cuenta dentro "
-"del Árbol de Cuenta,\n"
-"si la cuenta no debería ser mostrada, esto será sobrescrito temporalmente."
+"Seleccione una fila y, a continuación, pulse en «Saltar a» para ir a la "
+"cuenta en el árbol de cuentas.\n"
+"Si no se debe mostrar la cuenta, esto se invalidará temporalmente."
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:35
 msgid "Import Map Editor"
@@ -16358,11 +16353,11 @@ msgstr "_Eliminar mapeos inválidos"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:106
 msgid "<b>What type of information to display?</b>"
-msgstr "<b>¿Qué familia de información para enseñar?</b>"
+msgstr "<b>¿Qué tipo de información quiere mostrar?</b>"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:139
 msgid "Non-Bayesian"
-msgstr "No Bayesiano"
+msgstr "No bayesiano"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:193
 msgid "Source Account Name"
@@ -16937,12 +16932,12 @@ msgstr "Local"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:133
 msgid "_Reset"
-msgstr "_Reestablecer"
+msgstr "_Restablecer"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:178
 #: gnucash/gtkbuilder/dialog-preferences.glade:583
 msgid "<b>Separator Character</b>"
-msgstr "<b>Carácter de Separación</b>"
+msgstr "<b>Carácter de separación</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:204
 msgid ""
@@ -16956,7 +16951,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:240
 msgid "GnuCash Preferences"
-msgstr "Preferencias GnuCash"
+msgstr "Preferencias de GnuCash"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:314
 msgid "<b>Summarybar Content</b>"
