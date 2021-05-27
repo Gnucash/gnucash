@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-05-26 14:34+0000\n"
+"PO-Revision-Date: 2021-05-27 01:35+0000\n"
 "Last-Translator: 峡州仙士 <c@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -14714,7 +14714,8 @@ msgid ""
 "the Reports menu or tool bar."
 msgstr ""
 "保存报表配置的方法是：首先从报表菜单中打开一个报表。\n"
-"改变报表的选项，然后从报表菜单或工具栏中选择 \"保存配置\"。"
+"改变报表的选项，然后从报表菜单或工具栏中选择 \n"
+"\"保存配置\"。"
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:263
@@ -16647,7 +16648,10 @@ msgid ""
 "Check format must have an\n"
 "ADDRESS item defined in order\n"
 "to print an address on the check."
-msgstr "要在支票上打印地址，支票格式必须定义“地址”项。"
+msgstr ""
+"要在支票上打印地址，\n"
+"支票格式必须定义\n"
+"“地址”项。"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:535
 #: gnucash/gtkbuilder/dialog-print-check.glade:1084
@@ -28751,7 +28755,7 @@ msgstr "解析SX[%s]键[%s]=公式[%s]在[%s]处出现错误。%s."
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1760
 #, c-format
 msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
-msgstr "在SX[%s]最终gnc_numeric值中出现错误%d，用0代替。"
+msgstr "出现错误%d：在SX[%s]最终gnc_numeric值中，用0代替。"
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1769
 #, c-format
