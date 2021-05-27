@@ -406,6 +406,33 @@ void gnc_ui_util_remove_registered_prefs (void);
 */
 gchar * gnc_filter_text_for_control_chars (const gchar *incoming_text);
 
+/** Updates cursor_position after removal of currency symbols
+ *
+ * @param incoming_text The text to filter
+ *
+ * @param symbol to remove
+ *
+ * @param cursor_position the posistion of cursor in the incoming text
+ *
+ * @return nothing
+*/
+void gnc_filter_text_set_cursor_position (const gchar *incoming_text,
+                                          const gchar *symbol,
+                                          gint *cursor_position);
+
+/** Returns the incoming text removed of a currency symbol
+ *
+ * @param incoming_text The text to filter
+ *
+ * @param symbol to remove
+ *
+ * @param cursor_position the posistion of cursor in the incoming text
+ *
+ * @return The incoming text with symbol removed to be freed by the caller
+*/
+gchar * gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
+                                             const gchar *symbol);
+
 #endif
 /** @} */
 /** @} */

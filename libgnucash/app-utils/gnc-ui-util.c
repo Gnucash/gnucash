@@ -2727,3 +2727,59 @@ gnc_filter_text_for_control_chars (const gchar *text)
     g_free (normal_text);
     return g_string_free (filtered, FALSE);
 }
+
+void
+gnc_filter_text_set_cursor_position (const gchar *incoming_text,
+                                     const gchar *symbol,
+                                     gint *cursor_position)
+{
+    gint text_len;
+    gint num = 0;
+
+    if (*cursor_position == 0)
+        return;
+
+    if (!incoming_text || !symbol)
+        return;
+
+    if (g_strrstr (incoming_text, symbol) == NULL)
+        return;
+
+    text_len = g_utf8_strlen (incoming_text, -1);
+
+    for (gint x = 0; x < text_len; x++)
+    {
+        gchar *temp = g_utf8_offset_to_pointer (incoming_text, x);
+
+        if (g_str_has_prefix (temp, symbol))
+            num++;
+
+        if (g_strrstr (temp, symbol) == NULL)
+            break;
+    }
+    *cursor_position = *cursor_position - (num * g_utf8_strlen (symbol, -1));
+}
+
+gchar *
+gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
+                                     const gchar *symbol)
+{
+    gchar *ret_text = NULL;
+    gchar **split;
+
+    if (!incoming_text)
+        return NULL;
+
+    if (!symbol)
+       return g_strdup (incoming_text);
+
+    if (g_strrstr (incoming_text, symbol) == NULL)
+        return g_strdup (incoming_text);
+
+    split = g_strsplit (incoming_text, symbol, -1);
+
+    ret_text = g_strjoinv (NULL, split);
+
+    g_strfreev (split);
+    return ret_text;
+}
