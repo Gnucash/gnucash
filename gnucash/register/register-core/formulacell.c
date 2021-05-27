@@ -24,7 +24,6 @@
 #include <glib/gi18n.h>
 
 #include "gnc-exp-parser.h"
-#include "gnc-locale-utils.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -134,19 +133,11 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
                                 int newval_len,
                                 int *cursor_position,
                                 int *start_selection,
-                                int *end_selection )
+                                int *end_selection)
 {
-    FormulaCell *cell = (FormulaCell *)_cell;
-    struct lconv *lc = gnc_localeconv ();
+    FormulaCell *fc = (FormulaCell *)_cell;
     const char *toks = "+-*/=()_:";
-    gunichar decimal_point;
-    gunichar thousands_sep;
-    const char *c;
-    gunichar uc;
-
-    gchar *filtered_newval;
-    const gchar *symbol = NULL;
-    gchar *tokens;
+    char *validated_newval = NULL;
 
     g_debug("%s, %d, %s, %d, %d, %d, %d",
             change ? (gchar *)change : "(null)", change_len,
@@ -156,55 +147,21 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
     /* accept the newval string if user action was delete */
     if (change == NULL)
     {
-        gnc_basic_cell_set_value_internal( &cell->cell, newval );
+        gnc_basic_cell_set_value_internal (&fc->cell, newval);
         // Remove any selection.
         *end_selection = *start_selection = *cursor_position;
         return;
     }
 
-    if (cell->print_info.monetary)
-    {
-        const gnc_commodity *comm = cell->print_info.commodity;
+    validated_newval = gnc_basic_cell_validate (_cell, fc->print_info,
+                                                change, newval, toks,
+                                                cursor_position);
 
-        decimal_point = g_utf8_get_char(lc->mon_decimal_point);
-        thousands_sep = g_utf8_get_char(lc->mon_thousands_sep);
+    if (!validated_newval)
+        return;
 
-        if (comm)
-            symbol = gnc_commodity_get_nice_symbol (comm);
-        else
-            symbol = gnc_commodity_get_nice_symbol (gnc_default_currency ());
-
-        tokens = g_strconcat (toks, symbol, NULL);
-    }
-    else
-    {
-        decimal_point = g_utf8_get_char(lc->decimal_point);
-        thousands_sep = g_utf8_get_char(lc->thousands_sep);
-
-        tokens = g_strdup (toks);
-    }
-
-    c = change;
-    while (*c)
-    {
-        uc = g_utf8_get_char (c);
-        if (!g_unichar_isdigit (uc) &&
-            !g_unichar_isspace (uc) &&
-            !g_unichar_isalpha (uc) &&
-            (decimal_point != uc) &&
-            (thousands_sep != uc) &&
-            (g_utf8_strchr (tokens, -1, uc) == NULL))
-         {
-            g_free (tokens);
-            return;
-         }
-        c = g_utf8_next_char (c);
-    }
-    gnc_filter_text_set_cursor_position (newval, symbol, cursor_position);
-    filtered_newval = gnc_filter_text_for_currency_symbol (newval, symbol);
-    gnc_basic_cell_set_value_internal (&cell->cell, filtered_newval);
-    g_free (filtered_newval);
-    g_free (tokens);
+    gnc_basic_cell_set_value_internal (_cell, validated_newval);
+    g_free (validated_newval);
 }
 
 static

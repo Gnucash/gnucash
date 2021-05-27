@@ -36,7 +36,10 @@
 #include <config.h>
 
 #include <stdlib.h>
+#include <locale.h>
 #include <string.h>
+
+#include "gnc-locale-utils.h"
 
 #include "basiccell.h"
 #include "gnc-engine.h"
@@ -273,4 +276,58 @@ gnc_basic_cell_set_value_internal (BasicCell *cell, const char *value)
     g_free (cell->value);
     cell->value = g_strdup (value);
     cell->value_chars = g_utf8_strlen(value, -1);
+}
+
+char *
+gnc_basic_cell_validate (BasicCell *cell, GNCPrintAmountInfo print_info,
+                         const char *change, const char *newval,
+                         const char *toks, gint *cursor_position)
+{
+    struct lconv *lc = gnc_localeconv ();
+    gunichar decimal_point;
+    gunichar thousands_sep;
+    const char *symbol = NULL;
+    char *tokens;
+
+    if (print_info.monetary)
+    {
+        const gnc_commodity *comm = print_info.commodity;
+
+        decimal_point = g_utf8_get_char (lc->mon_decimal_point);
+        thousands_sep = g_utf8_get_char (lc->mon_thousands_sep);
+
+        if (comm)
+            symbol = gnc_commodity_get_nice_symbol (comm);
+        else
+            symbol = gnc_commodity_get_nice_symbol (gnc_default_currency ());
+
+        tokens = g_strconcat (toks, symbol, NULL);
+    }
+    else
+    {
+        decimal_point = g_utf8_get_char (lc->decimal_point);
+        thousands_sep = g_utf8_get_char (lc->thousands_sep);
+
+        tokens = g_strdup (toks);
+    }
+
+    for (const char *c = change; c && *c; c = g_utf8_next_char (c))
+    {
+        gunichar uc = g_utf8_get_char (c);
+        if (!g_unichar_isdigit (uc) &&
+            !g_unichar_isspace (uc) &&
+            !g_unichar_isalpha (uc) &&
+            (decimal_point != uc) &&
+            (thousands_sep != uc) &&
+            (g_utf8_strchr (tokens, -1, uc) == NULL))
+        {
+            g_free (tokens);
+            return NULL;
+        }
+    }
+    g_free (tokens);
+
+    gnc_filter_text_set_cursor_position (newval, symbol, cursor_position);
+
+    return gnc_filter_text_for_currency_symbol (newval, symbol);
 }

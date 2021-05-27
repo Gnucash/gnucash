@@ -36,11 +36,9 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <locale.h>
 #include <string.h>
 
 #include "gnc-exp-parser.h"
-#include "gnc-locale-utils.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -79,55 +77,23 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
                               int *end_selection)
 {
     PriceCell *cell = (PriceCell *) _cell;
-    struct lconv *lc = gnc_localeconv ();
     const char *toks = "+-*/=()_";
-    gunichar decimal_point;
-    gunichar thousands_sep;
-    gchar *filtered_newval;
-    const gchar *symbol = NULL;
-    gchar *tokens;
+    char *validated_newval = NULL;
 
-    if (cell->print_info.monetary)
-    {
-        const gnc_commodity *comm = cell->print_info.commodity;
+    g_debug("%s, %d, %s, %d, %d, %d, %d",
+            change ? (gchar *)change : "(null)", change_len,
+            newval ? (gchar *)newval : "(null)", newval_len,
+            *cursor_position, *start_selection, *end_selection);
 
-        decimal_point = g_utf8_get_char(lc->mon_decimal_point);
-        thousands_sep = g_utf8_get_char(lc->mon_thousands_sep);
+    validated_newval = gnc_basic_cell_validate (_cell, cell->print_info,
+                                                change, newval, toks,
+                                                cursor_position);
 
-        if (comm)
-            symbol = gnc_commodity_get_nice_symbol (comm);
-        else
-            symbol = gnc_commodity_get_nice_symbol (gnc_default_currency ());
+    if (!validated_newval)
+        return;
 
-        tokens = g_strconcat (toks, symbol, NULL);
-    }
-    else
-    {
-        decimal_point = g_utf8_get_char(lc->decimal_point);
-        thousands_sep = g_utf8_get_char(lc->thousands_sep);
-
-        tokens = g_strdup (toks);
-    }
-
-    for (const char *c = change; c && *c; c = g_utf8_next_char (c))
-    {
-        gunichar uc = g_utf8_get_char (c);
-        if (!g_unichar_isdigit (uc) &&
-            !g_unichar_isspace (uc) &&
-            !g_unichar_isalpha (uc) &&
-            (decimal_point != uc) &&
-            (thousands_sep != uc) &&
-            (g_utf8_strchr (tokens, -1, uc) == NULL))
-        {
-            g_free (tokens);
-            return;
-        }
-    }
-    gnc_filter_text_set_cursor_position (newval, symbol, cursor_position);
-    filtered_newval = gnc_filter_text_for_currency_symbol (newval, symbol);
-    gnc_basic_cell_set_value_internal (_cell, filtered_newval);
-    g_free (filtered_newval);
-    g_free (tokens);
+    gnc_basic_cell_set_value_internal (_cell, validated_newval);
+    g_free (validated_newval);
 
     *end_selection = *start_selection = *cursor_position;
     cell->need_to_parse = TRUE;
