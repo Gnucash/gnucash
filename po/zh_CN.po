@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-05-27 01:35+0000\n"
+"PO-Revision-Date: 2021-05-28 01:35+0000\n"
 "Last-Translator: 峡州仙士 <c@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -27037,7 +27037,7 @@ msgstr "参考 "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:316
 msgid "Engagement: "
-msgstr ""
+msgstr "约定： "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:322
 #: gnucash/report/reports/standard/taxinvoice.scm:324
@@ -28850,7 +28850,7 @@ msgstr "(涉税子科目：%d)"
 #: libgnucash/app-utils/gnc-ui-util.c:871
 msgctxt "Reconciled flag 'not cleared'"
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #: libgnucash/app-utils/gnc-ui-util.c:873
 msgctxt "Reconciled flag 'cleared'"
@@ -28865,7 +28865,7 @@ msgstr "y"
 #: libgnucash/app-utils/gnc-ui-util.c:877
 msgctxt "Reconciled flag 'frozen'"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: libgnucash/app-utils/gnc-ui-util.c:879
 msgctxt "Reconciled flag 'void'"
@@ -28880,7 +28880,7 @@ msgstr "w"
 #: libgnucash/app-utils/gnc-ui-util.c:921
 msgctxt "Document Link flag for 'file'"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: libgnucash/app-utils/gnc-ui-util.c:950
 msgid "Opening Balances"
