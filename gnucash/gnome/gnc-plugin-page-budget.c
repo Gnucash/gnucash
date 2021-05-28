@@ -1286,6 +1286,12 @@ gnc_plugin_page_budget_cmd_budget_note(GtkAction *action,
     g_object_unref(G_OBJECT(builder));
 }
 
+static gboolean
+equal_fn (gpointer find_data, gpointer elt_data)
+{
+    return (find_data && (find_data == elt_data));
+}
+
 /* From the budget editor, open the budget report. This will reuse the
    budget report if generated from the current budget editor. Note the
    reuse is lost when GnuCash is restarted. This link may be restored
@@ -1302,7 +1308,8 @@ gnc_plugin_page_budget_cmd_budget_report (GtkAction *action,
 
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE (page);
 
-    if (priv->reportPage && GNC_IS_PLUGIN_PAGE (priv->reportPage))
+    if (gnc_find_first_gui_component (WINDOW_REPORT_CM_CLASS, equal_fn,
+                                      priv->reportPage))
         gnc_plugin_page_report_reload (GNC_PLUGIN_PAGE_REPORT (priv->reportPage));
     else
     {

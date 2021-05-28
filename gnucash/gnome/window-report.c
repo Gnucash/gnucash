@@ -44,9 +44,6 @@
 
 #include "gnc-plugin-page-report.h"
 
-#define WINDOW_REPORT_CM_CLASS "window-report"
-#define MDI_CHILD_CONFIG "mdi_child_config"
-
 /********************************************************************
  *
  ********************************************************************/

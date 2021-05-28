@@ -49,6 +49,8 @@ G_BEGIN_DECLS
 
 #define GNC_PLUGIN_PAGE_REPORT_NAME "GncPluginPageReport"
 
+#define WINDOW_REPORT_CM_CLASS "window-report"
+
 /* typedefs & structures */
 typedef struct
 {

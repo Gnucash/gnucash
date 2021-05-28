@@ -213,7 +213,7 @@ gnc_account_opening_balance_button_update (AccountWindow *aw, gnc_commodity *com
     Account *ob_account = gnc_account_lookup_by_opening_balance (gnc_book_get_root_account (aw->book), commodity);
     gboolean has_splits = (xaccAccountGetSplitList (account) != NULL);
 
-    if (xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
+    if (aw->type != ACCT_TYPE_EQUITY)
     {
         gtk_widget_set_sensitive (aw->opening_balance_button, FALSE);
         return;
@@ -1977,7 +1977,8 @@ gnc_ui_edit_account_window(GtkWindow *parent, Account *account)
     gnc_resume_gui_refresh ();
 
     gtk_widget_show_all (aw->dialog);
-    gtk_widget_hide (aw->opening_balance_page);
+    if (xaccAccountGetSplitList (account) != NULL)
+        gtk_widget_hide (aw->opening_balance_page);
 
     parent_acct = gnc_account_get_parent (account);
     if (parent_acct == NULL)
