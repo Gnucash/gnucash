@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-05-28 01:35+0000\n"
+"PO-Revision-Date: 2021-05-29 00:44+0000\n"
 "Last-Translator: 峡州仙士 <c@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -4849,7 +4849,7 @@ msgstr "从高到低"
 #: gnucash/gnome/gnc-plugin-page-register2.c:505
 #: gnucash/gnome/gnc-plugin-page-register.c:628
 msgid "Blank"
-msgstr "空白"
+msgstr "空白项"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:460
 msgid "Unpost"
