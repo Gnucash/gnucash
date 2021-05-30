@@ -188,7 +188,10 @@ static const char * get_date_entry (VirtualLocation virt_loc,
     GncEntryLedger *ledger = user_data;
     GncEntry *entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
     time64 time = gncEntryGetDate (entry);
-    return qof_print_date(time);
+    static gchar dateBuff [MAX_DATE_LENGTH+1];
+    memset (dateBuff, 0, sizeof (dateBuff));
+    qof_print_date_buff (dateBuff, MAX_DATE_LENGTH, time);
+    return dateBuff;
 }
 
 static const char * get_desc_entry (VirtualLocation virt_loc,
