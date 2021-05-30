@@ -321,9 +321,11 @@ dom_tree_to_list_kvp_value (xmlNodePtr node)
         new_val = dom_tree_to_kvp_value (mark);
         if (new_val)
         {
-            list = g_list_append (list, (gpointer)new_val);
+            list = g_list_prepend (list, (gpointer)new_val);
         }
     }
+
+    list = g_list_reverse (list);
 
     ret = new KvpValue {list};
 
