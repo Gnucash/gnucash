@@ -152,16 +152,19 @@ dom_tree_to_boolean (xmlNodePtr node, gboolean* b)
     if (g_ascii_strncasecmp (text, "true", 4) == 0)
     {
         *b = TRUE;
+        g_free (text);
         return TRUE;
     }
     else if (g_ascii_strncasecmp (text, "false", 5) == 0)
     {
         *b = FALSE;
+        g_free (text);
         return TRUE;
     }
     else
     {
         *b = FALSE;
+        g_free (text);
         return FALSE;
     }
 }
