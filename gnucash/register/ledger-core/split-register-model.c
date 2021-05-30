@@ -924,6 +924,7 @@ gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
     Split* split;
     gboolean is_current;
     char type;
+    static gchar dateBuff [MAX_DATE_LENGTH+1];
 
     is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
                                       virt_loc.vcell_loc);
@@ -960,7 +961,9 @@ gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
 
     //PWARN ("returning valid due_date entry");
 
-    return qof_print_date (xaccTransRetDateDue (trans));
+    memset (dateBuff, 0, sizeof (dateBuff));
+    qof_print_date_buff (dateBuff, MAX_DATE_LENGTH, xaccTransRetDateDue (trans));
+    return dateBuff;
 }
 
 static const char*
@@ -972,12 +975,16 @@ gnc_split_register_get_date_entry (VirtualLocation virt_loc,
     SplitRegister* reg = user_data;
     Transaction* trans;
     Split* split;
+    static gchar dateBuff [MAX_DATE_LENGTH+1];
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     trans = xaccSplitGetParent (split);
     if (!trans)
         return NULL;
-    return qof_print_date (xaccTransRetDatePosted (trans));
+
+    memset (dateBuff, 0, sizeof (dateBuff));
+    qof_print_date_buff (dateBuff, MAX_DATE_LENGTH, xaccTransRetDatePosted (trans));
+    return dateBuff;
 }
 
 static char*
