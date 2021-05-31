@@ -283,7 +283,7 @@ static gboolean check_edit_amount (GtkWidget *amount,
                                    gnc_numeric *min, gnc_numeric *max,
                                    const char * error_message)
 {
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (amount)))
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (amount), NULL))
     {
         if (error_message)
             gnc_error_dialog (gnc_ui_get_gtk_window (amount), "%s", error_message);

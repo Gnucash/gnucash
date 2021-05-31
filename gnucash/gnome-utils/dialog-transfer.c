@@ -991,7 +991,7 @@ gnc_xfer_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
     XferDialog * xferData = data;
     g_return_val_if_fail (xferData != NULL, FALSE);
 
-    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit));
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit), NULL);
 
     gnc_xfer_update_to_amount (xferData);
 
@@ -1027,7 +1027,7 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
         scu = gnc_commodity_get_fraction(xferData->to_commodity);
 
     /* Determine the amount to transfer. */
-    if (!gnc_amount_edit_evaluate(price_edit) ||
+    if (!gnc_amount_edit_evaluate(price_edit, NULL) ||
         gnc_numeric_zero_p(price_value = gnc_amount_edit_get_amount(price_edit)))
         to_amount = gnc_numeric_zero();
     else
@@ -1075,7 +1075,7 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
     XferDialog *xferData = data;
     gnc_numeric price_value;
 
-    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit), NULL);
     price_value = gnc_xfer_dialog_compute_price_value(xferData);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
                                price_value);
@@ -1474,7 +1474,7 @@ check_accounts  (XferDialog* xferData, Account* from_account,
 static gboolean
 check_edit(XferDialog *xferData)
 {
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->price_edit)))
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->price_edit), NULL))
     {
         if (gtk_toggle_button_get_active
             (GTK_TOGGLE_BUTTON(xferData->price_radio)))
@@ -1485,7 +1485,7 @@ check_edit(XferDialog *xferData)
         }
     }
 
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit)))
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit), NULL))
     {
         if (gtk_toggle_button_get_active
             (GTK_TOGGLE_BUTTON(xferData->amount_radio)))
@@ -1708,7 +1708,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
         !check_accounts(xferData, from_account, to_account))
         return;
 
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit), NULL))
     {
         gnc_parse_error_dialog (xferData, _("You must enter a valid amount."));
         LEAVE("no amount");

@@ -350,7 +350,7 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value, int *error_item)
             /* treat PAYMENT_PERIODS as a plain GtkEntry */
             if (i != PAYMENT_PERIODS)
             {
-                if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (fcd->amounts[i])))
+                if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (fcd->amounts[i]), NULL))
                 {
                     *error_item = i;
                     return bad_exp;

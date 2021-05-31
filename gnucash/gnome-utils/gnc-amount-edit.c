@@ -28,6 +28,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include <glib/gi18n.h>
 
 #include "gnc-amount-edit.h"
 #include "gnc-exp-parser.h"
@@ -229,7 +230,7 @@ gnc_amount_edit_key_press (GtkWidget *widget, GdkEventKey *event)
         return result;
     }
 
-    gnc_amount_edit_evaluate (gae);
+    gnc_amount_edit_evaluate (gae, NULL);
 
     return TRUE;
 }
@@ -245,13 +246,21 @@ gnc_amount_edit_new (void)
     return GTK_WIDGET(gae);
 }
 
+static inline GQuark
+exp_validate_quark (void)
+{
+    return g_quark_from_static_string ("exp_validate");
+}
+
 gint
 gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
-                               gboolean empty_ok)
+                               gboolean empty_ok, GError **error)
 {
     const char *string;
     char *error_loc;
     gboolean ok;
+    gchar *err_msg = NULL;
+    gint err_code;
 
     g_return_val_if_fail (gae != NULL, -1);
     g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), -1);
@@ -274,25 +283,39 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
 
     /* Not ok */
     if (error_loc != NULL)
-        return  error_loc - string;
+    {
+        err_code = error_loc - string;
+        err_msg = g_strdup_printf (_("An error occurred while processing '%s' at position %d"),
+                                   string, err_code);
+    }
     else
-        return 1;
+    {
+        err_code = 1000;
+        err_msg = g_strdup_printf (_("An error occurred while processing '%s'"),
+                                   string);
+    }
+
+    if (error)
+        g_set_error_literal (error, exp_validate_quark(), err_code, err_msg);
+
+    g_free (err_msg);
+    return 1;
 }
 
 gboolean
-gnc_amount_edit_evaluate (GNCAmountEdit *gae)
+gnc_amount_edit_evaluate (GNCAmountEdit *gae, GError **error)
 {
     gint result;
     gnc_numeric amount;
+    GError *tmp_error = NULL;
 
     g_return_val_if_fail (gae != NULL, FALSE);
     g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), FALSE);
 
-
     if (!gae->need_to_parse)
         return TRUE;
 
-    result = gnc_amount_edit_expr_is_valid (gae, &amount, FALSE);
+    result = gnc_amount_edit_expr_is_valid (gae, &amount, FALSE, &tmp_error);
 
     if (result == -1)  /* field was empty and may remain so */
         return TRUE;
@@ -313,7 +336,16 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
     }
 
     /* Parse error */
-    gtk_editable_set_position (GTK_EDITABLE(gae), result);
+    if (tmp_error)
+    {
+        if (tmp_error->code < 1000)
+            gtk_editable_set_position (GTK_EDITABLE(gae), tmp_error->code);
+
+        if (error)
+            g_propagate_error (error, tmp_error);
+        else
+            g_error_free (tmp_error);
+    }
     return FALSE;
 }
 
@@ -323,7 +355,7 @@ gnc_amount_edit_get_amount (GNCAmountEdit *gae)
     g_return_val_if_fail (gae != NULL, gnc_numeric_zero ());
     g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), gnc_numeric_zero ());
 
-    gnc_amount_edit_evaluate (gae);
+    gnc_amount_edit_evaluate (gae, NULL);
 
     return gae->amount;
 }
@@ -334,7 +366,7 @@ gnc_amount_edit_get_damount (GNCAmountEdit *gae)
     g_return_val_if_fail (gae != NULL, 0.0);
     g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), 0.0);
 
-    gnc_amount_edit_evaluate (gae);
+    gnc_amount_edit_evaluate (gae, NULL);
 
     return gnc_numeric_to_double (gae->amount);
 }

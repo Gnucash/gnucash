@@ -317,7 +317,7 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
 {
     gnc_numeric value;
 
-    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(data->end_value));
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(data->end_value), NULL);
 
     value = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(data->end_value));
     data->user_set_value = !gnc_numeric_equal(value, data->original_value);

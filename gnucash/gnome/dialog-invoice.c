@@ -1364,7 +1364,7 @@ static gboolean
 gnc_invoice_window_leave_to_charge_cb (GtkWidget *widget, GdkEventFocus *event,
                                        gpointer data)
 {
-    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (widget));
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (widget), NULL);
     return FALSE;
 }
 
@@ -1761,7 +1761,7 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
     if (iw->to_charge_edit)
     {
-        gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (iw->to_charge_edit));
+        gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (iw->to_charge_edit), NULL);
         to_charge_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(iw->to_charge_edit));
     }
 

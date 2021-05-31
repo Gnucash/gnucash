@@ -274,7 +274,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
     type = type_index_to_string
            (gtk_combo_box_get_active (GTK_COMBO_BOX (pedit_dialog->type_combobox)));
 
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (pedit_dialog->price_edit)))
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (pedit_dialog->price_edit), NULL))
         return _("You must enter a valid amount.");
 
     value = gnc_amount_edit_get_amount

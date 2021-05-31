@@ -277,14 +277,14 @@ gnc_stock_split_assistant_details_complete (GtkAssistant *assistant,
     gnc_numeric amount;
     gint result;
 
-    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->distribution_edit), &amount, TRUE);
+    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->distribution_edit), &amount, TRUE, NULL);
     if ( result != 0)
         return FALSE; /* Parsing error or field is empty */
 
     if (gnc_numeric_zero_p (amount))
         return FALSE; /* field value is 0 */
 
-    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->price_edit), &amount, TRUE);
+    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->price_edit), &amount, TRUE, NULL);
     if (result == -1)
         return TRUE; /* Optional field is empty */
     else if ( result > 0)
@@ -305,7 +305,7 @@ gnc_stock_split_assistant_cash_complete (GtkAssistant *assistant,
     gint result;
     Account *account;
 
-    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->cash_edit), &amount, TRUE);
+    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->cash_edit), &amount, TRUE, NULL);
     if (result == -1)
         return TRUE; /* Optional field is empty */
     else if ( result > 0)

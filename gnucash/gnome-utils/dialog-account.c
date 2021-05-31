@@ -947,7 +947,7 @@ gnc_new_account_ok (AccountWindow *aw)
         return;
     }
 
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (aw->opening_balance_edit)))
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (aw->opening_balance_edit), NULL))
     {
         const char *message = _("You must enter a valid opening balance "
                                 "or leave it blank.");

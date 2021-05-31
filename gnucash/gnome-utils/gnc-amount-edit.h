@@ -135,7 +135,9 @@ double gnc_amount_edit_get_damount (GNCAmountEdit *gae);
  * @amount: parameter to hold the value of the parsed expression
  * @empty_ok: if true, an empty field is skipped, otherwise an empty field
  *            parses as 0
- *
+ * @error: if error location information is available it will be stored 
+ *         in this variable. Set it to NULL if you don't want the error.
+ * 
  * If needed, parse the expression in the amount entry. If there's no
  * parsing error, it returns the amount, otherwise it returns the
  * position in the expression where the error occurred.
@@ -143,15 +145,18 @@ double gnc_amount_edit_get_damount (GNCAmountEdit *gae);
  * Return *  0 if the parsing was successful (note that if !empty_ok,
  *             an empty field will parse to 0)
  *        * -1 if the field is empty and that's ok (empty_ok)
- *        * error position if there was a parsing error
+ *        *  1 parsing failed
  */
 gint gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae,
                                     gnc_numeric *amount,
-                                    gboolean empty_ok);
+                                    gboolean empty_ok,
+                                    GError **error);
 
 /**
  * gnc_amount_edit_evaluate
  * @gae: The GNCAmountEdit widget
+ * @error: if error location information is available it will be stored 
+ *         in this variable. Set it to NULL if you don't want the error.
  *
  * If needed, parse the expression in the amount entry
  * and replace the expression with the result of evaluation.
@@ -160,7 +165,7 @@ gint gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae,
  *
  * Return TRUE if parsing was successful or there was no need to parse.
  */
-gboolean gnc_amount_edit_evaluate (GNCAmountEdit *gae);
+gboolean gnc_amount_edit_evaluate (GNCAmountEdit *gae, GError **error);
 
 /**
  * gnc_amount_edit_set_print_flags:
