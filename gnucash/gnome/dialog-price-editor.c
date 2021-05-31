@@ -246,6 +246,7 @@ pedit_dialog_replace_found_price (PriceEditDialog *pedit_dialog,
 static const char *
 gui_to_price (PriceEditDialog *pedit_dialog)
 {
+    GNCPrintAmountInfo print_info;
     gnc_commodity *commodity;
     gnc_commodity *currency;
     gchar         *name_space;
@@ -273,6 +274,11 @@ gui_to_price (PriceEditDialog *pedit_dialog)
 
     type = type_index_to_string
            (gtk_combo_box_get_active (GTK_COMBO_BOX (pedit_dialog->type_combobox)));
+
+    print_info = gnc_commodity_print_info (currency, FALSE);
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (pedit_dialog->price_edit), print_info);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (pedit_dialog->price_edit),
+                                  gnc_commodity_get_fraction (currency));
 
     if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (pedit_dialog->price_edit), NULL))
         return _("You must enter a valid amount.");
@@ -521,16 +527,17 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     w = gnc_amount_edit_new ();
     pedit_dialog->price_edit = w;
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
+    entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (w));
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (w), TRUE);
-    print_info = gnc_default_price_print_info (gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT (pedit_dialog->currency_edit)));
+    print_info = gnc_default_price_print_info (gnc_currency_edit_get_currency
+                                              (GNC_CURRENCY_EDIT (pedit_dialog->currency_edit)));
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (w), print_info);
-    gtk_entry_set_activates_default(GTK_ENTRY(w), TRUE);
+    gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
     gtk_widget_show (w);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "price_label"));
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), w);
 
-    entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (w));
-    g_signal_connect (G_OBJECT (entry), "changed",
+    g_signal_connect (G_OBJECT (w), "changed",
                       G_CALLBACK (pedit_data_changed_cb), pedit_dialog);
 
     w = GTK_WIDGET(gtk_builder_get_object (builder, "pd_cancel_button"));
