@@ -39,7 +39,11 @@
 
 typedef struct
 {
-    GtkEntry entry;
+    GtkBox    box;
+    GtkEntry *entry;
+    GtkWidget *image;
+ 
+    gboolean disposed;
 
     gboolean need_to_parse;
 
@@ -52,14 +56,19 @@ typedef struct
     int fraction;
 
     gboolean evaluate_on_enter;
+    gboolean validate_on_change;
+
+    gboolean show_warning_symbol;
 
 } GNCAmountEdit;
 
 typedef struct
 {
-    GtkEntryClass parent_class;
+    GtkBoxClass parent_class;
 
     /* Signals for notification/filtering of changes */
+    void (*activate) (GNCAmountEdit *gae);
+    void (*changed) (GNCAmountEdit *gae);
     void (*amount_changed) (GNCAmountEdit *gae);
 } GNCAmountEditClass;
 
@@ -68,7 +77,7 @@ typedef struct
  *
  * Returns the GType for the GNCAmountEdit widget
  */
-GType gnc_amount_edit_get_type (void);
+GType gnc_amount_edit_get_type (void) G_GNUC_CONST;
 
 /**
  * gnc_amount_edit_new:
@@ -195,4 +204,36 @@ void gnc_amount_edit_set_fraction (GNCAmountEdit *gae, int fraction);
  */
 void gnc_amount_edit_set_evaluate_on_enter (GNCAmountEdit *gae,
                                             gboolean evaluate_on_enter);
+
+/**
+ * gnc_amount_edit_set_validate_on_change:
+ * @gae: The GNCAmountEdit widget
+ * @validate_on_change: The flag value to set
+ *
+ * Returns nothing.
+ */
+void gnc_amount_edit_set_validate_on_change (GNCAmountEdit *gae,
+                                             gboolean validate_on_change);
+
+/**
+ * gnc_amount_edit_select_region:
+ * @gae: The GNCAmountEdit widget
+ * @start_pos: start of region
+ * @end_pos: end of region
+ *
+ * Returns nothing.
+ */
+void gnc_amount_edit_select_region (GNCAmountEdit *gae,
+                                    gint start_pos,
+                                    gint end_pos);
+
+/**
+ * gnc_amount_edit_show_warning_symbol:
+ * @gae: The GNCAmountEdit widget
+ * @show: default is TRUE to show warning symbol, FALSE to not.
+ *
+ * Returns nothing.
+ */
+void gnc_amount_edit_show_warning_symbol (GNCAmountEdit *gae, gboolean show);
+
 #endif
