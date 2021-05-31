@@ -433,6 +433,20 @@ void gnc_filter_text_set_cursor_position (const gchar *incoming_text,
 gchar * gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
                                              const gchar *symbol);
 
+/** Returns the incoming text removed of currency symbol
+ * 
+ * @param comm commodity of entry if known
+ * 
+ * @param incoming_text The text to filter
+ *
+ * @param symbol return the symbol used
+ *
+ * @return The incoming text with symbol removed to be freed by the caller
+*/
+gchar * gnc_filter_text_for_currency_commodity (const gnc_commodity *comm,
+                                                const gchar *incoming_text,
+                                                const gchar **symbol);
+
 #endif
 /** @} */
 /** @} */

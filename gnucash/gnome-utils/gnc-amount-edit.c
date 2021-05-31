@@ -246,6 +246,45 @@ gnc_amount_edit_new (void)
     return GTK_WIDGET(gae);
 }
 
+static gint
+get_original_error_position (const gchar *string, const gchar *symbol,
+                             gint error_pos)
+{
+    gint original_error_pos = error_pos;
+    gint text_len;
+    gint symbol_len;
+
+    if (error_pos == 0)
+        return 0;
+
+    if (!string || !symbol)
+        return error_pos;
+
+    if (g_strrstr (string, symbol) == NULL)
+        return error_pos;
+
+    if (!g_utf8_validate (string, -1, NULL))
+        return error_pos;
+
+    text_len = g_utf8_strlen (string, -1);
+    symbol_len = g_utf8_strlen (symbol, -1);
+
+    for (gint x = 0; x < text_len; x++)
+    {
+        gchar *temp = g_utf8_offset_to_pointer (string, x);
+
+        if (g_str_has_prefix (temp, symbol))
+            original_error_pos = original_error_pos + symbol_len;
+
+        if (x >= original_error_pos)
+            break;
+
+        if (g_strrstr (temp, symbol) == NULL)
+            break;
+    }
+    return original_error_pos;
+}
+
 static inline GQuark
 exp_validate_quark (void)
 {
@@ -261,12 +300,20 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
     gboolean ok;
     gchar *err_msg = NULL;
     gint err_code;
+    const gnc_commodity *comm;
+    char *filtered_string;
+    const gchar *symbol;
 
     g_return_val_if_fail (gae != NULL, -1);
     g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), -1);
 
     string = gtk_entry_get_text (GTK_ENTRY(gae));
-    if (!string || *string == '\0')
+
+    comm = gae->print_info.commodity;
+
+    filtered_string = gnc_filter_text_for_currency_commodity (comm, string, &symbol);
+
+    if (!filtered_string || *filtered_string == '\0')
     {
         *amount = gnc_numeric_zero ();
         if (empty_ok)
@@ -276,15 +323,20 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
     }
 
     error_loc = NULL;
-    ok = gnc_exp_parser_parse (string, amount, &error_loc);
+    ok = gnc_exp_parser_parse (filtered_string, amount, &error_loc);
 
     if (ok)
+    {
+        g_free (filtered_string);
         return 0;
+    }
 
     /* Not ok */
     if (error_loc != NULL)
     {
-        err_code = error_loc - string;
+        err_code = get_original_error_position (string, symbol,
+                                               (error_loc - filtered_string));
+
         err_msg = g_strdup_printf (_("An error occurred while processing '%s' at position %d"),
                                    string, err_code);
     }
@@ -298,6 +350,7 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
     if (error)
         g_set_error_literal (error, exp_validate_quark(), err_code, err_msg);
 
+    g_free (filtered_string);
     g_free (err_msg);
     return 1;
 }
@@ -332,6 +385,7 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae, GError **error)
         if (!gnc_numeric_equal (amount, old_amount))
             g_signal_emit (gae, amount_edit_signals [AMOUNT_CHANGED], 0);
 
+        gtk_editable_set_position (GTK_EDITABLE(gae), -1);
         return TRUE;
     }
 
