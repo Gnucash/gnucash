@@ -283,10 +283,11 @@ static gboolean check_edit_amount (GtkWidget *amount,
                                    gnc_numeric *min, gnc_numeric *max,
                                    const char * error_message)
 {
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (amount), NULL))
+    GError *error = NULL;
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (amount), &error))
     {
-        if (error_message)
-            gnc_error_dialog (gnc_ui_get_gtk_window (amount), "%s", error_message);
+        gnc_error_dialog (gnc_ui_get_gtk_window (amount), "%s", error->message);
+        g_error_free (error);
         return TRUE;
     }
     /* We've got a valid-looking number; check mix/max */
@@ -323,6 +324,8 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
     CustomerWindow *cw = data;
     gnc_numeric min, max;
     gchar *string;
+    gnc_commodity *currency;
+    GNCPrintAmountInfo print_info;
 
     /* Check for valid company name */
     if (check_entry_nonempty (cw->company_entry,
@@ -351,6 +354,12 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
                            _("Discount percentage must be between 0-100 "
                              "or you must leave it blank.")))
         return;
+
+    currency = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(cw->currency_edit));
+    print_info = gnc_commodity_print_info (currency, FALSE);
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (cw->credit_amount), print_info);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (cw->credit_amount),
+                                  gnc_commodity_get_fraction (currency));
 
     if (check_edit_amount (cw->credit_amount, &min, NULL,
                            _("Credit must be a positive amount or "

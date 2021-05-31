@@ -1364,7 +1364,7 @@ static gboolean
 gnc_invoice_window_leave_to_charge_cb (GtkWidget *widget, GdkEventFocus *event,
                                        gpointer data)
 {
-    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (widget), NULL);
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(data), NULL);
     return FALSE;
 }
 
@@ -2552,7 +2552,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 
         g_signal_connect(G_OBJECT(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(edit))),
                          "focus-out-event",
-                         G_CALLBACK(gnc_invoice_window_leave_to_charge_cb), iw);
+                         G_CALLBACK(gnc_invoice_window_leave_to_charge_cb), edit);
         g_signal_connect(G_OBJECT(edit), "amount_changed",
                          G_CALLBACK(gnc_invoice_window_changed_to_charge_cb), iw);
     }
