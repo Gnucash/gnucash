@@ -35,6 +35,7 @@
 #include "gnc-ui-util.h"
 #include "qof.h"
 #include "dialog-utils.h"
+#include "gnc-ui.h"
 
 #ifdef G_OS_WIN32
 # include <gdk/gdkwin32.h>
@@ -53,6 +54,8 @@ static void gnc_amount_edit_init (GNCAmountEdit *gae);
 static void gnc_amount_edit_class_init (GNCAmountEditClass *klass);
 static void gnc_amount_edit_changed (GtkEditable *gae,
                                      gpointer user_data);
+static void gnc_amount_edit_paste_clipboard (GNCAmountEdit *gae,
+                                             gpointer user_data);
 static gint gnc_amount_edit_key_press (GtkWidget   *widget,
                                        GdkEventKey *event);
 
@@ -120,20 +123,73 @@ gnc_amount_edit_init (GNCAmountEdit *gae)
     gae->print_info = gnc_default_print_info (FALSE);
     gae->fraction = 0;
     gae->evaluate_on_enter = FALSE;
+    gae->block_changed = FALSE;
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(gae), "gnc-id-amount-edit");
 
     g_signal_connect (G_OBJECT(gae), "changed",
-                      G_CALLBACK(gnc_amount_edit_changed), NULL);
+                      G_CALLBACK(gnc_amount_edit_changed), gae);
+
+    g_signal_connect (G_OBJECT(gae), "paste-clipboard",
+                      G_CALLBACK(gnc_amount_edit_paste_clipboard), NULL);
 }
 
 static void
 gnc_amount_edit_changed (GtkEditable *editable, gpointer user_data)
 {
-    /*GTK_EDITABLE_CLASS(parent_class)->changed(editable);*/
+    GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
+     /*GTK_EDITABLE_CLASS(parent_class)->changed(editable);*/
+    if (gae->block_changed)
+        g_signal_stop_emission_by_name (G_OBJECT(gae), "changed");
 
     GNC_AMOUNT_EDIT(editable)->need_to_parse = TRUE;
+}
+
+static void
+gnc_amount_edit_paste_clipboard (GNCAmountEdit *gae, gpointer user_data)
+{
+    GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(gae),
+                                                        GDK_SELECTION_CLIPBOARD);
+    gchar *text = gtk_clipboard_wait_for_text (clipboard);
+    gchar *filtered_text;
+    gint start_pos, end_pos;
+    gint position;
+
+    if (!text)
+        return;
+
+    filtered_text = gnc_filter_text_for_control_chars (text);
+
+    if (!filtered_text)
+    {
+        g_free (text);
+        return;
+    }
+
+    position = gtk_editable_get_position (GTK_EDITABLE(gae));
+
+    if (gtk_editable_get_selection_bounds (GTK_EDITABLE(gae),
+                                           &start_pos, &end_pos))
+    {
+        position = start_pos;
+
+        gae->block_changed = TRUE;
+        gtk_editable_delete_selection (GTK_EDITABLE(gae));
+        gae->block_changed = FALSE;
+        gtk_editable_insert_text (GTK_EDITABLE(gae),
+                                  filtered_text, -1, &position);
+    }
+    else
+        gtk_editable_insert_text (GTK_EDITABLE(gae),
+                                  filtered_text, -1, &position);
+
+    gtk_editable_set_position (GTK_EDITABLE(gae), position);
+
+    g_signal_stop_emission_by_name (G_OBJECT(gae), "paste-clipboard");
+
+    g_free (text);
+    g_free (filtered_text);
 }
 
 static gint

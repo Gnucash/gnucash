@@ -45,6 +45,8 @@ typedef struct
 
     GNCPrintAmountInfo print_info;
 
+    gboolean block_changed;
+
     gnc_numeric amount;
 
     int fraction;
