@@ -274,17 +274,27 @@ gnc_stock_split_assistant_details_complete (GtkAssistant *assistant,
         gpointer user_data)
 {
     StockSplitInfo *info = user_data;
+    GNCPrintAmountInfo print_info;
+    gnc_commodity *currency;
     gnc_numeric amount;
     gint result;
 
-    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->distribution_edit), &amount, TRUE, NULL);
+    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->distribution_edit),
+                                            &amount, TRUE, NULL);
     if ( result != 0)
         return FALSE; /* Parsing error or field is empty */
 
     if (gnc_numeric_zero_p (amount))
         return FALSE; /* field value is 0 */
 
-    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->price_edit), &amount, TRUE, NULL);
+    currency = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(info->price_currency_edit));
+    print_info = gnc_commodity_print_info (currency, FALSE);
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (info->price_edit), print_info);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (info->price_edit),
+                                  gnc_commodity_get_fraction (currency));
+
+    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(info->price_edit),
+                                            &amount, TRUE, NULL);
     if (result == -1)
         return TRUE; /* Optional field is empty */
     else if ( result > 0)
@@ -640,6 +650,8 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(info->price_currency_edit), gnc_default_currency());
         gtk_widget_show (info->price_currency_edit);
         gtk_grid_attach (GTK_GRID(table), info->price_currency_edit, 1, 6, 1, 1);
+        g_signal_connect (info->price_currency_edit, "changed",
+                          G_CALLBACK (gnc_stock_split_details_valid_cb), info);
     }
 
     /* Cash page Widgets */

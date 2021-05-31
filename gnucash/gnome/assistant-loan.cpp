@@ -618,6 +618,9 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
             gtk_widget_set_hexpand (GTK_WIDGET(ldd->prmOrigPrincGAE), FALSE);
             g_object_set (GTK_WIDGET(ldd->prmOrigPrincGAE), "margin", 2, nullptr);
 
+            g_signal_connect (G_OBJECT(ldd->prmOrigPrincGAE), "changed",
+                              G_CALLBACK(loan_info_page_valid_cb), ldd);
+
             for ( i = 0; gas_data[i].loc != NULL; i++ )
             {
                 GNCAccountSel *gas = GNC_ACCOUNT_SEL(gnc_account_sel_new());
@@ -1061,10 +1064,26 @@ gboolean
 loan_info_page_complete( GtkAssistant *assistant, gpointer user_data )
 {
     LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
+    GNCPrintAmountInfo print_info;
+    gnc_commodity *currency;
+    gint result;
+    gnc_numeric value;
 
     ldd->ld.primaryAcct = gnc_account_sel_get_account( ldd->prmAccountGAS );
     /* Test for valid Account */
     if ( ldd->ld.primaryAcct == NULL )
+        return FALSE;
+
+    /* Test for loan amount */
+    currency = xaccAccountGetCommodity (ldd->ld.primaryAcct);
+    print_info = gnc_commodity_print_info (currency, FALSE);
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT(ldd->prmOrigPrincGAE), print_info);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT(ldd->prmOrigPrincGAE),
+                                  gnc_commodity_get_fraction (currency));
+
+    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(ldd->prmOrigPrincGAE),
+                                            &value, FALSE, nullptr);
+    if (result == 1)
         return FALSE;
 
     return TRUE;
