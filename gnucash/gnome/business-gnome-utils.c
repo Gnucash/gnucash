@@ -580,6 +580,7 @@ gnc_simple_combo_get_value (GtkComboBox *cbox)
     GtkTreeIter iter;
     GtkTreeModel *model;
     GValue value = { 0 };
+    gpointer retval;
 
     if (!cbox) return NULL;
 
@@ -587,7 +588,9 @@ gnc_simple_combo_get_value (GtkComboBox *cbox)
     if (!gtk_combo_box_get_active_iter (cbox, &iter))
         return NULL;
     gtk_tree_model_get_value (model, &iter, 1, &value);
-    return g_value_get_pointer (&value);
+    retval = g_value_get_pointer (&value);
+    g_value_unset (&value);
+    return retval;
 }
 
 /** Find the item in the combo box whose value is "data"
@@ -615,6 +618,7 @@ gnc_simple_combo_set_value (GtkComboBox *cbox, gpointer data)
             if ((lsd->is_equal)(g_value_get_pointer(&value), data))
             {
                 gtk_combo_box_set_active_iter (cbox, &iter);
+                g_value_unset (&value);
                 return;
             }
         }
@@ -623,9 +627,11 @@ gnc_simple_combo_set_value (GtkComboBox *cbox, gpointer data)
             if (g_value_get_pointer(&value) == data)
             {
                 gtk_combo_box_set_active_iter (cbox, &iter);
+                g_value_unset (&value);
                 return;
             }
         }
+        g_value_unset (&value);
         valid_iter = gtk_tree_model_iter_next (model, &iter);
     }
 }
