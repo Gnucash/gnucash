@@ -9,16 +9,16 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Bid</col>
+        <col id="0" translatable="yes" context="Price">Bid</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Ask</col>
+        <col id="0" translatable="yes" context="Price">Ask</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Last</col>
+        <col id="0" translatable="yes" context="Price">Last</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Net Asset Value</col>
+        <col id="0" translatable="yes" context="Price">Net Asset Value</col>
       </row>
       <row>
         <col id="0" translatable="yes">Unknown</col>
