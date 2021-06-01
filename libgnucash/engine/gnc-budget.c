@@ -534,6 +534,7 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
         g_value_init (&v, GNC_TYPE_NUMERIC);
         g_value_set_boxed (&v, &val);
         qof_instance_set_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
+        g_value_unset (&v);
     }
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
@@ -621,6 +622,7 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
         g_value_set_string (&v, note);
 
         qof_instance_set_kvp (QOF_INSTANCE (budget), &v, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
+        g_value_unset (&v);
     }
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
