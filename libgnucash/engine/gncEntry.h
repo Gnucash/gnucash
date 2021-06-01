@@ -270,8 +270,8 @@ gnc_numeric gncEntryGetBalDiscountValue (GncEntry *entry, gboolean round, gboole
  *
  *  The return values are NOT rounded.
  *
- * The tax_values list is owned by the entry and will be
- * destroyed automatically, so use it quickly.
+ * If the tax_values list is owned by the entry, it will be destroyed
+ * automatically. Otherwise use gncAccountValueDestroy to free it.
  */
 void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
                            const GncTaxTable *tax_table, gboolean tax_included,
