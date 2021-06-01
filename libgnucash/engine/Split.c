@@ -1115,6 +1115,7 @@ xaccSplitDetermineGainStatus (Split *split)
         other = (Split *) qof_collection_lookup_entity (col, guid);
         split->gains_split = other;
     }
+    g_value_unset (&v);
 }
 
 /********************************************************************\
@@ -1993,6 +1994,7 @@ xaccSplitMakeStockSplit(Split *s)
     mark_split(s);
     qof_instance_set_dirty(QOF_INSTANCE(s));
     xaccTransCommitEdit(s->parent);
+    g_value_unset (&v);
 }
 
 void
@@ -2124,11 +2126,14 @@ xaccSplitVoidFormerAmount(const Split *split)
 {
     GValue v = G_VALUE_INIT;
     gnc_numeric *num = NULL;
+    gnc_numeric retval;
     g_return_val_if_fail(split, gnc_numeric_zero());
     qof_instance_get_kvp (QOF_INSTANCE (split), &v, 1, void_former_amt_str);
     if (G_VALUE_HOLDS_BOXED (&v))
         num = (gnc_numeric*)g_value_get_boxed (&v);
-    return num ? *num : gnc_numeric_zero();
+    retval = num ? *num : gnc_numeric_zero();
+    g_value_unset (&v);
+    return retval;
 }
 
 gnc_numeric
@@ -2136,11 +2141,14 @@ xaccSplitVoidFormerValue(const Split *split)
 {
     GValue v = G_VALUE_INIT;
     gnc_numeric *num = NULL;
+    gnc_numeric retval;
     g_return_val_if_fail(split, gnc_numeric_zero());
     qof_instance_get_kvp (QOF_INSTANCE (split), &v, 1, void_former_val_str);
     if (G_VALUE_HOLDS_BOXED (&v))
         num = (gnc_numeric*)g_value_get_boxed (&v);
-    return num ? *num : gnc_numeric_zero();
+    retval = num ? *num : gnc_numeric_zero();
+    g_value_unset (&v);
+    return retval;
 }
 
 void
@@ -2153,6 +2161,7 @@ xaccSplitVoid(Split *split)
     num =  xaccSplitGetAmount(split);
     g_value_set_boxed (&v, &num);
     qof_instance_set_kvp (QOF_INSTANCE (split), &v, 1, void_former_amt_str);
+    g_value_reset (&v);
     num =  xaccSplitGetValue(split);
     g_value_set_boxed (&v, &num);
     qof_instance_set_kvp (QOF_INSTANCE (split), &v, 1, void_former_val_str);
@@ -2161,6 +2170,7 @@ xaccSplitVoid(Split *split)
     xaccSplitSetAmount (split, zero);
     xaccSplitSetValue (split, zero);
     xaccSplitSetReconcile(split, VREC);
+    g_value_unset (&v);
 }
 
 void
