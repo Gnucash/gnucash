@@ -2083,7 +2083,7 @@ Kann Verbindlichkeiten enthalten.</slot:value>
   <act:parent type="guid">9b9ec8f3d837eea8bdc4fecf5e65c339</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>0675 Gegenkonto 0653-0654, 0661-0664, 0670-0672, 0675-0679, 0687-0689, 0697-0699 bei Aufteilung Debitorenkonto</act:name>
+  <act:name>0674 Gegenkonto 0653-0654, 0661-0664, 0670-0672, 0675-0679, 0687-0689, 0697-0699 bei Aufteilung Debitorenkonto</act:name>
   <act:id type="new">72be9beb785ec5d68fea58b35aa2912b</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
@@ -2091,7 +2091,7 @@ Kann Verbindlichkeiten enthalten.</slot:value>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:code>0675</act:code>
+  <act:code>0674</act:code>
   <act:description>Gegenkonto 0653-0654, 0661-0664, 0670-0672, 0675-0679, 0687-0689, 0697-0699 bei Aufteilung Debitorenkonto</act:description>
   <act:parent type="guid">9b9ec8f3d837eea8bdc4fecf5e65c339</act:parent>
 </gnc:account>
