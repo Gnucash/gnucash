@@ -4697,14 +4697,18 @@ static GncInvoice* invoice_from_split (Split* split)
 GList* invoices_from_transaction (Transaction* trans)
 {
     GList *invoices = NULL;
+    GList *apar_splits;
     if (!trans) return NULL;
 
-    for (GList *node = xaccTransGetAPARAcctSplitList(trans, TRUE); node;
-         node = node->next)
+    apar_splits = xaccTransGetAPARAcctSplitList (trans, TRUE);
+    if (!apar_splits) return NULL;
+
+    for (GList *node = apar_splits; node; node = node->next)
     {
         GncInvoice* inv = invoice_from_split ((Split*) node->data);
         if (inv) invoices = g_list_prepend (invoices, inv);
     }
+    g_list_free (apar_splits);
     return invoices;
 }
 
