@@ -18062,19 +18062,6 @@ ertragsteuerfrei, jedoch umsatzsteuerpflichtig</slot:value>
   <act:parent type="guid">03e4b03c2e99d8f15e997a46f772e11c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>5490 Abschreibungen auf Umlaufvermögen, unüblich hoch</act:name>
-  <act:id type="new">0467d26561464460851449d59cb02696</act:id>
-  <act:type>EXPENSE</act:type>
-  <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>EUR</cmdty:id>
-  </act:commodity>
-  <act:commodity-scu>100</act:commodity-scu>
-  <act:code>5490</act:code>
-  <act:description>Abschreibungen auf Umlaufvermögen, unüblich hoch</act:description>
-  <act:parent type="guid">0cc4ddb17d312a53651dd636d0c89826</act:parent>
-</gnc:account>
-<gnc:account version="2.0.0">
   <act:name>5280-5299 Materialaufwand</act:name>
   <act:id type="new">9d6b4331751a944b5be9028820a002bb</act:id>
   <act:type>EXPENSE</act:type>
