@@ -1688,6 +1688,8 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
         }
     }
 
+    g_list_free (post_splits);
+
     /* If the txn has both APAR splits linked to a business lot and
      * splits that are not, issue a warning some will be discarded.
      */
@@ -1725,6 +1727,8 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
         gtk_widget_destroy (dialog);
         g_free (split_str);
     }
+
+    g_list_free (no_lot_post_splits);
 
     return txn_lots;
 }
