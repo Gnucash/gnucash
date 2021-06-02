@@ -1844,6 +1844,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
             else if (other_invoice)
                 qof_event_gen (QOF_INSTANCE(other_invoice), QOF_EVENT_MODIFY, NULL);
         }
+        g_list_free (lot_list);
     }
     g_list_free (lot_split_list);
 
