@@ -17143,6 +17143,7 @@ zusammengefaßt mit 4100 (ehemals „Einnahmen aus Vermögensverwaltung“)</slo
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4500-4504</act:code>
   <act:description>Abschreibungen</act:description>
   <act:slots>
     <slot>
