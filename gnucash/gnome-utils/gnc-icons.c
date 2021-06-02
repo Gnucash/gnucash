@@ -64,7 +64,7 @@ void
 gnc_load_app_icons (void)
 {
     GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
-    const gchar *default_path;
+    gchar *default_path;
     gchar* pkgdatadir = gnc_path_get_pkgdatadir ();
     gchar* datadir = gnc_path_get_datadir ();
     gchar **path;
@@ -72,8 +72,10 @@ gnc_load_app_icons (void)
 
     default_path = g_build_filename (pkgdatadir, "icons", NULL);
     gtk_icon_theme_append_search_path (icon_theme, default_path);
+    g_free (default_path);
     default_path = g_build_filename (datadir, "icons", NULL);
     gtk_icon_theme_append_search_path (icon_theme, default_path);
+    g_free (default_path);
     g_free (pkgdatadir);
     g_free (datadir);
 
