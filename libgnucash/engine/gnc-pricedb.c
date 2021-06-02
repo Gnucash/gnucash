@@ -2534,7 +2534,11 @@ indirect_price_conversion (GNCPriceDB *db, const gnc_commodity *from,
             to_prices = gnc_pricedb_lookup_nearest_in_time_any_currency_t64 (db, to, t);
     }
     if (!from_prices || !to_prices)
+    {
+        gnc_price_list_destroy (from_prices);
+        gnc_price_list_destroy (to_prices);
         return zero;
+    }
     tuple = extract_common_prices (from_prices, to_prices, from, to);
     gnc_price_list_destroy (from_prices);
     gnc_price_list_destroy (to_prices);
