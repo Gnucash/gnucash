@@ -547,6 +547,9 @@ gnc_plugin_page_finalize (GObject *object)
     if (priv->page_name)
         g_free (priv->page_name);
 
+    if (priv->page_long_name)
+        g_free (priv->page_long_name);
+
     if (priv->page_color)
         g_free (priv->page_color);
 
