@@ -4082,6 +4082,12 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
     split = gnc_split_register_get_current_split (reg);
     account = xaccSplitGetAccount (split);
 
+    if (!account)
+    {
+        LEAVE ("shouldn't try to reverse the blank transaction...");
+        return;
+    }
+
     if (!gnc_dup_time64_dialog (window, _("Reverse Transaction"),
                                 _("New Transaction Information"), &date))
     {
