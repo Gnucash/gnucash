@@ -1,14 +1,15 @@
 # Michał Ciołek <michalciolek@gmail.com>, 2020
 # Adithya K <adithyak04@gmail.com>, 2021.
 # Maciej Błędkowski <mble@tuta.io>, 2021.
+# Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-04-14 10:26+0000\n"
-"Last-Translator: Maciej Błędkowski <mble@tuta.io>\n"
+"PO-Revision-Date: 2021-06-02 22:33+0000\n"
+"Last-Translator: Henio Szewczyk <henryk.szewczyk09@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Poedit-Bookmarks: 2255,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -59,7 +60,7 @@ msgstr "Indyjskie"
 
 #: borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr "Japoński"
+msgstr "japoński"
 
 #: borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
@@ -3200,7 +3201,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:245
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:251
 msgid "Scheduled Transactions"
-msgstr "Transakcje zaplanowane"
+msgstr "Zaplanowane transakcje"
 
 #: gnucash/gnome/dialog-sx-editor.c:615
 msgid ""
@@ -3479,7 +3480,7 @@ msgstr "Otwórz istniejący budżet"
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1961
 msgid "Total"
-msgstr "Razem"
+msgstr "Suma"
 
 #: gnucash/gnome/gnc-plugin-account-tree.c:59
 msgid "New Accounts _Page"
@@ -22029,7 +22030,7 @@ msgstr "Zysk kap. (kr.)"
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.c:953
 msgid "Retained Earnings"
-msgstr "Zyski zatrzymane"
+msgstr "Dochody zatrzymane"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:118
 msgid "Commissions"
@@ -25596,7 +25597,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:71
 #: gnucash/report/reports/standard/trial-balance.scm:574
 msgid "Balance Sheet"
-msgstr "Arkusz bilansowy"
+msgstr "Bilans"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:81
 #: gnucash/report/reports/standard/balsheet-eg.scm:143
@@ -27449,7 +27450,7 @@ msgstr "Wyciąg z przychodów"
 
 #: gnucash/report/reports/standard/income-statement.scm:572
 msgid "Profit & Loss"
-msgstr "Zyski i straty"
+msgstr "Zyski i Straty"
 
 #: gnucash/report/reports/standard/invoice.scm:102
 #: gnucash/report/reports/standard/invoice.scm:247

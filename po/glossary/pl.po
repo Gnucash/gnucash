@@ -2,28 +2,33 @@
 # Copyright (C) 2005 Free Software Foundation, Inc.
 # A. Tokarski <szczur@malinablue.punkt.pl>, 2005.
 # Updated to 2.2.x by nowak2000@poczta.onet.pl
-#
+# Henio Szewczyk <henryk.szewczyk09@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.2.x\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2010-09-06 12:20+0200\n"
-"Last-Translator: Radzisław Galler <rgaller@gazeta.pl>\n"
-"Language-Team: Polish <translators@gnomepl.org>\n"
+"PO-Revision-Date: 2021-06-02 22:33+0000\n"
+"Last-Translator: Henio Szewczyk <henryk.szewczyk09@gmail.com>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/glossary/"
+"pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
 msgstr ""
+"Termin (Drogi tłumaczu: Ten plik nigdy nie będzie widoczny dla użytkownika!)"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -42,18 +47,16 @@ msgid "account name"
 msgstr "nazwa konta"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
-#, fuzzy
 msgid "account type: Active"
-msgstr "typ konta: Aktywa"
+msgstr "typ konta: Aktywne"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
 msgstr "typ konta: Aktywa"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "typ konta: Zobowiązania"
+msgstr "typ konta: Aktywa i Zobowiązania"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -88,14 +91,12 @@ msgid "account type: Mutual fund"
 msgstr "typ konta: Fundusz wzajemny"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "typ konta: Aktywa"
+msgstr "typ konta: Nieaktywne"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "typ konta: Aktywa"
+msgstr "typ konta: Zysk i Strata"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -106,9 +107,8 @@ msgid "account type: Stock"
 msgstr "typ konta: Giełda"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "typ konta: oszczędności"
+msgstr "typ konta: Handlowy"
 
 #. "-"
 msgid "account: parent account"
@@ -200,7 +200,7 @@ msgstr "akcja: wypłać"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "starzenie się"
 
 #. "A sum of money"
 msgid "amount"
@@ -215,14 +215,12 @@ msgid "balance (noun)"
 msgstr "saldo"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "zbilansuj"
+msgstr "saldo b/f"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "zbilansuj"
+msgstr "saldo c/f"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -241,9 +239,8 @@ msgid "bill"
 msgstr "rachunek"
 
 #. "see invoice owner"
-#, fuzzy
 msgid "bill owner"
-msgstr "warunki płatności"
+msgstr "właściciel rachunku"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -310,9 +307,8 @@ msgid "commodity option: Symbol"
 msgstr "opcja środków: Symbol"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "odsetki"
+msgstr "odsetki składane"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -327,9 +323,8 @@ msgid "credit transfer"
 msgstr "przelew bankowy"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
-#, fuzzy
 msgid "credit note"
-msgstr "przelew bankowy"
+msgstr "nota kredytowa"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -341,7 +336,7 @@ msgstr "Własne"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "deska rozdzielcza"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -380,9 +375,8 @@ msgid "Description (column in register)"
 msgstr "Opis"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
-#, fuzzy
 msgid "discount"
-msgstr "konto"
+msgstr "zniżka"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -390,11 +384,11 @@ msgstr "podwójny zapis"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "link do dokumentu"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "e-mail"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -437,14 +431,12 @@ msgid "financial calculator: payments"
 msgstr "kalkulator finansowy: płatności"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
-#| msgid "income statement"
 msgid "financial statement"
 msgstr "zestawienie przychodów"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "darmowe oprogramowanie"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -487,10 +479,8 @@ msgid "loan"
 msgstr "pożyczka"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "pożyczka"
+msgstr "pożyczka: APR"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -502,7 +492,7 @@ msgstr "Zgubione konta"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr "partia"
+msgstr "Partia"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -513,9 +503,8 @@ msgid "marker"
 msgstr "znacznik"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
-msgstr "znacznik"
+msgstr "narzut"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -530,16 +519,12 @@ msgid "Mortgage"
 msgstr "Hipoteka"
 
 #. "Adjustable Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "Hipoteka"
+msgstr "hipoteka: ARM"
 
 #. "Fixed Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "Hipoteka"
+msgstr "hipoteka: FRM"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -587,11 +572,11 @@ msgstr "polecenie"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr "osierocone"
+msgstr "osierocenie"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "właściciel (rachunku, faktury lub bonu wydatków)"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -622,18 +607,16 @@ msgid "portfolio"
 msgstr "portfel inwestycji"
 
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "zakmnij"
+msgstr "post, do"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "ustawienia"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "akcja: płatność"
+msgstr "spłata kapitału"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -709,11 +692,11 @@ msgstr "przeładuj"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "formularz raportu: Formularz konta T"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "formularz raportu: Forma pionowa"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -725,7 +708,7 @@ msgstr "odwróć transakcję"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "sprzedaż"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -768,31 +751,28 @@ msgid "subtotal"
 msgstr "podsuma"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "informacja o podatku"
+msgstr "kod podatkowy"
 
 #. "field of an account"
 msgid "tax info"
 msgstr "informacja o podatku"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "typ konta: Przychody"
+msgstr "rodzaj podatku: podatek dochodowy"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "rodzaj podatku: podatek od sprzedaży"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "rodzaj podatku: GST"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "rodzaj podatku: VAT"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
