@@ -266,7 +266,7 @@ static void free_members (QofQuery *q)
     free_sort (&(q->secondary_sort));
     free_sort (&(q->tertiary_sort));
 
-    g_list_free(q->terms);
+    g_list_free_full (q->terms, g_free);
     q->terms = NULL;
 
     g_list_free(q->books);
