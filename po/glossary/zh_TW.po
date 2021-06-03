@@ -3,14 +3,15 @@
 # Chao-Hsiung Liao <pesder@seed.net.tw>, 2002.
 # Kuang-che Wu <kcwu@csie.org>, 2007, 2011.
 # 01qwasa10 <a090889eric@gmail.com>, 2021.
+# Brian Hsu <brianhsu.hsu@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-01-24 14:32+0000\n"
-"Last-Translator: 01qwasa10 <a090889eric@gmail.com>\n"
+"PO-Revision-Date: 2021-06-02 12:10+0000\n"
+"Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -45,18 +46,16 @@ msgid "account name"
 msgstr "科目名稱"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
-#, fuzzy
 msgid "account type: Active"
-msgstr "科目類型：資產"
+msgstr "科目類型：流動"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
 msgstr "科目類型：資產"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "科目類型：負債"
+msgstr "科目類型：資產 & 負債"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -91,14 +90,12 @@ msgid "account type: Mutual fund"
 msgstr "科目類型：共同基金"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "科目類型：資產"
+msgstr "科目類型：固定"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "科目類型：資產"
+msgstr "科目類型：獲利 & 虧損"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -109,9 +106,8 @@ msgid "account type: Stock"
 msgstr "科目類型：股票"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "科目類型：儲蓄"
+msgstr "科目類型：交易"
 
 #. "-"
 msgid "account: parent account"
@@ -151,7 +147,7 @@ msgstr "動作：直接借記"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr "動作：分佈"
+msgstr "動作：分配"
 
 #. "transaction is a dividend"
 msgid "action: div"
@@ -203,7 +199,7 @@ msgstr "動作：提款"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "帳齡"
 
 #. "A sum of money"
 msgid "amount"
@@ -218,14 +214,12 @@ msgid "balance (noun)"
 msgstr "結餘"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "使收支平衡"
+msgstr "餘額承前"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "使收支平衡"
+msgstr "餘額轉移"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -244,9 +238,8 @@ msgid "bill"
 msgstr "帳單"
 
 #. "see invoice owner"
-#, fuzzy
 msgid "bill owner"
-msgstr "支付條款"
+msgstr "帳單所有人"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -254,11 +247,11 @@ msgstr "支付條款"
 
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
-msgstr ""
+msgstr "帳本"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr ""
+msgstr "關帳"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
@@ -270,15 +263,15 @@ msgstr "商務的"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
-msgstr ""
+msgstr "商務"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
-msgstr "資本盈利"
+msgstr "資本利得"
 
 #. "Distinguishing the uppercase and lowercase letters"
 msgid "case sensitive"
-msgstr "大小寫視為相異"
+msgstr "區分大小寫"
 
 #. "Money in coins or notes"
 msgid "cash"
@@ -313,9 +306,8 @@ msgid "commodity option: Symbol"
 msgstr "商品選項：代號"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "利息"
+msgstr "複利"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -330,9 +322,8 @@ msgid "credit transfer"
 msgstr "銀行轉帳"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
-#, fuzzy
 msgid "credit note"
-msgstr "銀行轉帳"
+msgstr "貸項通知單"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -344,7 +335,7 @@ msgstr "自訂"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "儀表板"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -392,15 +383,15 @@ msgstr "複式簿記"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "文件連結"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "電子郵件"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr "僱員"
+msgstr "員工"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
@@ -439,14 +430,12 @@ msgid "financial calculator: payments"
 msgstr "金融計算機：付款"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
-#| msgid "income statement"
 msgid "financial statement"
-msgstr "損益表"
+msgstr "財務報表"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "自由軟體"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -474,7 +463,7 @@ msgstr "發票"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
-msgstr ""
+msgstr "工作"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
@@ -489,10 +478,8 @@ msgid "loan"
 msgstr "貸款"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
-#, fuzzy
-#| msgid "loan"
 msgid "loan: APR"
-msgstr "貸款"
+msgstr "貸款：年度百分率"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -504,7 +491,7 @@ msgstr "迷失科目"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr "Lot"
+msgstr "批次"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -515,9 +502,8 @@ msgid "marker"
 msgstr "標記"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
-msgstr "標記"
+msgstr "利潤率"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -532,16 +518,12 @@ msgid "Mortgage"
 msgstr "抵押"
 
 #. "Adjustable Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "抵押"
+msgstr "抵押：機動利率"
 
 #. "Fixed Rate Mortgage"
-#, fuzzy
-#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "抵押"
+msgstr "抵押：固定利率"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -585,7 +567,7 @@ msgstr "選項"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
-msgstr ""
+msgstr "訂單"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
@@ -593,7 +575,7 @@ msgstr "無主的"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "(帳單,發票,消費憑證) 所有者"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -617,25 +599,23 @@ msgstr "付款"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr ""
+msgstr "佔位符號"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
 msgstr "投資組合"
 
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "關閉"
+msgstr "張貼"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "設定偏好"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "動作：付款"
+msgstr "償還本金"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -643,11 +623,11 @@ msgstr "價格(在分割中)"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
-msgstr "價格類型：索價"
+msgstr "價格類型：委賣價"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr "價格類型：出價"
+msgstr "價格類型：委買價"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
@@ -711,11 +691,11 @@ msgstr "重新載入"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "報表型式：T 型科目型式"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "報表型式：T 型科目型式"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -723,11 +703,11 @@ msgstr "保留收入"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
-msgstr "反轉交易(登記簿中的操作)"
+msgstr "反向交易(登記簿中的操作)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "銷售額"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -739,7 +719,7 @@ msgstr "已排程的交易"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
-msgstr "消除"
+msgstr "清掃"
 
 #. "A document or certificate showing who owns shares"
 msgid "security"
@@ -770,31 +750,28 @@ msgid "subtotal"
 msgstr "小計"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "稅務資訊"
+msgstr "稅務號碼"
 
 #. "field of an account"
 msgid "tax info"
 msgstr "稅務資訊"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "科目類型：收入"
+msgstr "稅別：所得稅"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "稅別：營業稅"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "稅別：商品和服務稅"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "稅別：加值稅"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
