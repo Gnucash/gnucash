@@ -297,6 +297,9 @@ gnc_budget_view_finalize (GObject *object)
 
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
+    g_list_free (priv->period_col_list);
+    g_list_free (priv->totals_col_list);
+
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_HORIZONTAL,
                                  gbv_treeview_update_grid_lines, priv->totals_tree_view);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_VERTICAL,
