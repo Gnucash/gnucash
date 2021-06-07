@@ -639,6 +639,7 @@ gnc_budget_view_restore (GncBudgetView *budget_view, GKeyFile *key_file, const g
     GncGUID guid;
     GncBudget *bgt;
     QofBook *book;
+    gboolean has_guid;
 
     g_return_val_if_fail (key_file, FALSE);
     g_return_val_if_fail (group_name, FALSE);
@@ -655,7 +656,10 @@ gnc_budget_view_restore (GncBudgetView *budget_view, GKeyFile *key_file, const g
         error = NULL;
         return FALSE;
     }
-    if (!string_to_guid (guid_str, &guid))
+    has_guid = string_to_guid (guid_str, &guid);
+    g_free (guid_str);
+
+    if (!has_guid)
     {
         return FALSE;
     }
