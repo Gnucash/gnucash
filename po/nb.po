@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-06-04 02:33+0000\n"
+"PO-Revision-Date: 2021-06-04 23:34+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -13459,7 +13459,7 @@ msgstr "Feil"
 #: gnucash/gtkbuilder/assistant-qif-import.glade:765
 #: gnucash/gtkbuilder/assistant-qif-import.glade:895
 msgid "Change GnuCash _Account..."
-msgstr "Endre GnuCash-konto …"
+msgstr "Endre GnuCash-_konto …"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1061
 #, fuzzy
