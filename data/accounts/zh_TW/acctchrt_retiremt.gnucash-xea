@@ -90,6 +90,12 @@
   </act:commodity>
   <act:description>退休金</act:description>
   <act:parent type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>勞工退休金</act:name>

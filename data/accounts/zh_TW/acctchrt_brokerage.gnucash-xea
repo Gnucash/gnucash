@@ -195,6 +195,12 @@
   </act:commodity>
   <act:description>利息收入</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>債券利息</act:name>
@@ -245,6 +251,12 @@
   </act:commodity>
   <act:description>金融服務手續費</act:description>
   <act:parent type="new">6de23244232785031501171abcc1d4aa</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>股票、基金手續費</act:name>
@@ -267,6 +279,12 @@
   </act:commodity>
   <act:description>稅費</act:description>
   <act:parent type="new">6de23244232785031501171abcc1d4aa</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>證券交易稅</act:name>
