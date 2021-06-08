@@ -1347,15 +1347,19 @@ gnc_gen_trans_list_run (GNCImportMainMatcher *info)
     return result;
 }
 
-static gchar*
+static const gchar*
 get_required_color (const gchar *class_name)
 {
     GdkRGBA color;
+    static gchar *strbuf = NULL;
     GtkWidget *label = gtk_label_new ("Color");
     GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
     gtk_style_context_add_class (context, class_name);
     gnc_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &color);
-    return gdk_rgba_to_string (&color);
+    if (strbuf)
+        g_free (strbuf);
+    strbuf = gdk_rgba_to_string (&color);
+    return strbuf;
 }
 
 static void
@@ -1414,8 +1418,8 @@ refresh_model_row (GNCImportMainMatcher *gui,
 {
     GtkTreeStore *store;
     GtkTreeSelection *selection;
-    gchar *tmp, *imbalance, *text, *color;
-    const gchar *ro_text;
+    gchar *tmp, *imbalance, *text;
+    const gchar *ro_text, *color = NULL;
     gchar *int_required_class, *int_prob_required_class, *int_not_required_class;
     gchar *class_extension = NULL;
     gboolean show_pixbuf = TRUE;
@@ -1470,7 +1474,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     /*Actions*/
 
     /* Action information */
-    ro_text = text = color = NULL;
+    ro_text = text = NULL;
     switch (gnc_import_TransInfo_get_action (info))
     {
     case GNCImport_ADD:
