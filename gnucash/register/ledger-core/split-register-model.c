@@ -993,7 +993,6 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 {
     SplitRegister* reg = user_data;
     BasicCell* cell;
-    const char* date_string;
     time64 cell_time;
 
     cell = gnc_table_get_cell (reg->table, virt_loc);
@@ -1004,9 +1003,7 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 
     /* Translators: This is a date format, see i.e.
        https://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html */
-    date_string = gnc_print_time64 (cell_time, _ ("%A %d %B %Y"));
-
-    return g_strdup (date_string);
+    return gnc_print_time64 (cell_time, _("%A %d %B %Y"));
 }
 
 static const char*
