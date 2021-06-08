@@ -368,6 +368,7 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
     Split* split;
     Table* table;
     GList* node;
+    gnc_commodity *account_comm = NULL;
 
     gboolean start_primary_color = TRUE;
     gboolean found_pending = FALSE;
@@ -407,14 +408,24 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                      gnc_get_current_book());
 
+    if (default_account)
+        account_comm = gnc_account_get_currency_or_parent (default_account);
+
+    if (!account_comm)
+        account_comm = gnc_default_currency ();
+
     /* Bug 742089: Set the debit and credit cells' print_info to the account */
     gnc_price_cell_set_print_info
     ((PriceCell*) gnc_table_layout_get_cell (table->layout, DEBT_CELL),
-     gnc_account_print_info (default_account, FALSE));
+     gnc_commodity_print_info (account_comm, FALSE));
 
     gnc_price_cell_set_print_info
     ((PriceCell*) gnc_table_layout_get_cell (table->layout, CRED_CELL),
-     gnc_account_print_info (default_account, FALSE));
+     gnc_commodity_print_info (account_comm, FALSE));
+
+    gnc_price_cell_set_print_info
+    ((PriceCell*) gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
+     gnc_commodity_print_info (account_comm, FALSE));
 
     gnc_doclink_cell_set_use_glyphs
     ((Doclinkcell *) gnc_table_layout_get_cell (table->layout, DOCLINK_CELL));

@@ -1414,6 +1414,7 @@ gnc_default_share_print_info (void)
     if (!got_it)
     {
         info = gnc_default_print_info_helper (5);
+        info.monetary = 0;
         got_it = TRUE;
     }
 
@@ -2662,4 +2663,149 @@ gnc_ui_util_remove_registered_prefs (void)
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_AUTO_DECIMAL_PLACES,
                                  gnc_set_auto_decimal_places, NULL);
+}
+
+static gboolean
+unichar_is_cntrl (gunichar uc)
+{
+    if (uc < 0x20 || (uc > 0x7e && uc < 0xa0))
+        return TRUE;
+    else
+        return FALSE;
+}
+
+gchar *
+gnc_filter_text_for_control_chars (const gchar *text)
+{
+    gchar *normal_text, *nt;
+    GString *filtered;
+    gboolean cntrl = FALSE;
+    gboolean text_found = FALSE;
+
+    if (!text)
+        return NULL;
+
+    if (!g_utf8_validate (text, -1, NULL))
+        return NULL;
+
+    normal_text = g_utf8_normalize (text, -1, G_NORMALIZE_ALL_COMPOSE);
+
+    filtered = g_string_sized_new (strlen (normal_text) + 1);
+
+    nt = normal_text;
+
+    while (*nt)
+    {
+        gunichar uc = g_utf8_get_char (nt);
+
+        // check for starting with control characters
+        if (unichar_is_cntrl (uc) && !text_found)
+        {
+            nt = g_utf8_next_char (nt);
+            continue;
+        }
+        // check for alpha, num and punctuation
+        if (!unichar_is_cntrl (uc))
+        {
+            filtered = g_string_append_unichar (filtered, uc);
+            text_found = TRUE;
+        }
+        // check for control characters after text
+        if (unichar_is_cntrl (uc))
+            cntrl = TRUE;
+
+        nt = g_utf8_next_char (nt);
+
+        if (cntrl) // if control characters in text replace with space
+        {
+            gunichar uc2 = g_utf8_get_char (nt);
+
+            if (!unichar_is_cntrl (uc2))
+                filtered = g_string_append_unichar (filtered, ' ');
+        }
+        cntrl = FALSE;
+    }
+    g_free (normal_text);
+    return g_string_free (filtered, FALSE);
+}
+
+void
+gnc_filter_text_set_cursor_position (const gchar *incoming_text,
+                                     const gchar *symbol,
+                                     gint *cursor_position)
+{
+    gint text_len;
+    gint num = 0;
+
+    if (*cursor_position == 0)
+        return;
+
+    if (!incoming_text || !symbol)
+        return;
+
+    if (g_strrstr (incoming_text, symbol) == NULL)
+        return;
+
+    text_len = g_utf8_strlen (incoming_text, -1);
+
+    for (gint x = 0; x < text_len; x++)
+    {
+        gchar *temp = g_utf8_offset_to_pointer (incoming_text, x);
+
+        if (g_str_has_prefix (temp, symbol))
+            num++;
+
+        if (g_strrstr (temp, symbol) == NULL)
+            break;
+    }
+    *cursor_position = *cursor_position - (num * g_utf8_strlen (symbol, -1));
+}
+
+gchar *
+gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
+                                     const gchar *symbol)
+{
+    gchar *ret_text = NULL;
+    gchar **split;
+
+    if (!incoming_text)
+        return NULL;
+
+    if (!symbol)
+       return g_strdup (incoming_text);
+
+    if (g_strrstr (incoming_text, symbol) == NULL)
+        return g_strdup (incoming_text);
+
+    split = g_strsplit (incoming_text, symbol, -1);
+
+    ret_text = g_strjoinv (NULL, split);
+
+    g_strfreev (split);
+    return ret_text;
+}
+
+gchar *
+gnc_filter_text_for_currency_commodity (const gnc_commodity *comm,
+                                        const gchar *incoming_text,
+                                        const gchar **symbol)
+{
+    if (!incoming_text)
+    {
+        *symbol = NULL;
+        return NULL;
+    }
+
+    if (!gnc_commodity_is_currency (comm))
+    {
+        *symbol = NULL;
+        return g_strdup (incoming_text);
+    }
+
+    if (comm)
+        *symbol = gnc_commodity_get_nice_symbol (comm);
+    else
+        *symbol = gnc_commodity_get_nice_symbol (gnc_default_currency ());
+
+    return gnc_filter_text_for_currency_symbol (incoming_text, *symbol);
 }

@@ -161,6 +161,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
+#include "gnc-ui-util.h"
 
 typedef struct basic_cell BasicCell;
 
@@ -276,6 +277,13 @@ void         gnc_basic_cell_set_conditionally_changed (BasicCell *cell,
 /* for sub-class use only */
 void         gnc_basic_cell_set_value_internal (BasicCell *bcell,
         const char *value);
+
+char * gnc_basic_cell_validate (BasicCell *bcell, 
+                                GNCPrintAmountInfo print_info,
+                                const char *change,
+                                const char *newval,
+                                const char *toks,
+                                gint *cursor_position);
 
 /** @} @} */
 #endif /* BASIC_CELL_H */

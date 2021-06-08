@@ -306,11 +306,20 @@ gnc_start_recn2_update_cb (GtkWidget *widget, GdkEventFocus *event,
                          startRecnWindowData *data)
 {
     gnc_numeric value;
+    gint result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(data->end_value),
+                                                 &value, TRUE, NULL);
 
-    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (data->end_value));
+    data->user_set_value = FALSE;
 
-    value = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (data->end_value));
-    data->user_set_value = !gnc_numeric_equal (value, data->original_value);
+    if (result < 1) // OK
+    {
+        if (result == -1) // blank entry is valid
+        {
+            gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(data->end_value), value);
+            gnc_amount_edit_select_region (GNC_AMOUNT_EDIT(data->end_value), 0, -1);
+        }
+        data->user_set_value = !gnc_numeric_equal (value, data->original_value);
+    }
     return FALSE;
 }
 
@@ -335,6 +344,8 @@ gnc_start_recn2_date_changed (GtkWidget *widget, startRecnWindowData *data)
     /* update the amount edit with the amount */
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value),
                                 new_balance);
+
+    gnc_start_recn2_update_cb (GTK_WIDGET(data->end_value), NULL, data);
 }
 
 
@@ -616,8 +627,10 @@ startRecnWindow (GtkWidget *parent, Account *account,
     gboolean auto_interest_xfer_option;
     GNCPrintAmountInfo print_info;
     gnc_numeric ending;
+    GtkWidget *entry;
     char *title;
-    int result;
+    int result = -6;
+    gulong fo_handler_id;
 
     /* Initialize the data structure that will be used for several callbacks
      * throughout this file with the relevant info.  Some initialization is
@@ -665,7 +678,7 @@ startRecnWindow (GtkWidget *parent, Account *account,
 
     {
         GtkWidget *start_value, *box;
-        GtkWidget *entry, *label;
+        GtkWidget *label;
         GtkWidget *interest = NULL;
 
         start_value = GTK_WIDGET (gtk_builder_get_object (builder, "start_value"));
@@ -709,8 +722,9 @@ startRecnWindow (GtkWidget *parent, Account *account,
 
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (end_value));
         gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
-        g_signal_connect (G_OBJECT (entry), "focus-out-event",
-                         G_CALLBACK (gnc_start_recn2_update_cb), (gpointer) &data);
+        fo_handler_id = g_signal_connect (G_OBJECT(entry), "focus-out-event",
+                                          G_CALLBACK(gnc_start_recn2_update_cb),
+                                          (gpointer) &data);
         gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 
         /* if it's possible to enter an interest payment or charge for this
@@ -749,7 +763,16 @@ startRecnWindow (GtkWidget *parent, Account *account,
         gnc_reconcile_interest_xfer_run (&data);
     }
 
-    result = gtk_dialog_run (GTK_DIALOG (dialog));
+    while (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+    {
+        /* If response is OK but end_value not valid, try again */
+        if (gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(end_value), NULL))
+        {
+            result = GTK_RESPONSE_OK;
+            break;
+        }
+    }
+
     if (result == GTK_RESPONSE_OK)
     {
         *new_ending = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (end_value));
@@ -762,6 +785,8 @@ startRecnWindow (GtkWidget *parent, Account *account,
 
         gnc_save_reconcile_interval (account, *statement_date);
     }
+    // must remove the focus-out handler
+    g_signal_handler_disconnect (G_OBJECT(entry), fo_handler_id);
     gtk_widget_destroy (dialog);
     g_object_unref (G_OBJECT (builder));
 
@@ -893,7 +918,7 @@ gnc_reconcile_window_button_press_cb (GtkWidget *widget,
 
         /* Get tree path for row that was clicked */
         gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (qview),
-                                             (gint) event->x, 
+                                             (gint) event->x,
                                              (gint) event->y,
                                              &path, NULL, NULL, NULL);
 
