@@ -567,7 +567,6 @@ static char * get_date_help (VirtualLocation virt_loc, gpointer user_data)
 {
     GncEntryLedger *ledger = user_data;
     BasicCell *cell;
-    const char *date_string;
     time64 cell_time;
 
     cell = gnc_table_get_cell (ledger->table, virt_loc);
@@ -575,10 +574,7 @@ static char * get_date_help (VirtualLocation virt_loc, gpointer user_data)
         return NULL;
 
     gnc_date_cell_get_date ((DateCell *) cell, &cell_time, FALSE);
-
-    date_string = gnc_print_time64 (cell_time, _("%A %d %B %Y"));
-
-    return g_strdup (date_string);
+    return gnc_print_time64 (cell_time, _("%A %d %B %Y"));
 }
 
 static char * get_desc_help (VirtualLocation virt_loc, gpointer user_data)
