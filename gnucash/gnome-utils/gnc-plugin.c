@@ -235,10 +235,7 @@ gnc_plugin_init_short_names (GtkActionGroup *action_group,
                              action_toolbar_labels *toolbar_labels)
 {
     GtkAction *action;
-    GValue value = { 0, };
     gint i;
-
-    g_value_init (&value, G_TYPE_STRING);
 
     for (i = 0; toolbar_labels[i].action_name; i++)
     {
@@ -306,6 +303,7 @@ gnc_plugin_update_actions (GtkActionGroup *action_group,
                       g_list_length(gtk_action_group_list_actions(action_group)));
         }
     }
+    g_value_unset (&gvalue);
 }
 
 

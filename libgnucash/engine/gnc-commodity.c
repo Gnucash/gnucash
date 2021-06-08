@@ -1118,13 +1118,15 @@ static gboolean
 gnc_commodity_get_auto_quote_control_flag(const gnc_commodity *cm)
 {
     GValue v = G_VALUE_INIT;
+    gboolean retval = TRUE;
 
     if (!cm) return FALSE;
     qof_instance_get_kvp (QOF_INSTANCE (cm), &v, 1, "auto_quote_control");
     if (G_VALUE_HOLDS_STRING (&v) &&
         strcmp(g_value_get_string (&v), "false") == 0)
-        return FALSE;
-    return TRUE;
+        retval = FALSE;
+    g_value_unset (&v);
+    return retval;
 }
 
 /********************************************************************
@@ -1360,6 +1362,7 @@ gnc_commodity_set_auto_quote_control_flag(gnc_commodity *cm,
         g_value_set_string (&v, "false");
         qof_instance_set_kvp (QOF_INSTANCE (cm), &v, 1, "auto_quote_control");
     }
+    g_value_unset (&v);
     mark_commodity_dirty(cm);
     gnc_commodity_commit_edit(cm);
     LEAVE("");
@@ -1494,6 +1497,7 @@ gnc_commodity_set_user_symbol(gnc_commodity * cm, const char * user_symbol)
         g_value_init (&v, G_TYPE_STRING);
         g_value_set_string (&v, user_symbol);
         qof_instance_set_kvp (QOF_INSTANCE(cm), &v, 1, "user_symbol");
+        g_value_unset (&v);
     }
     else
         qof_instance_set_kvp (QOF_INSTANCE(cm), NULL, 1, "user_symbol");

@@ -373,6 +373,7 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
         g_object_set_property (G_OBJECT(action), "visible", &gvalue);
     }
 
+    g_value_unset (&gvalue);
     LEAVE("new %s tree page %p", gncOwnerTypeToQofIdType(owner_type), plugin_page);
     return GNC_PLUGIN_PAGE(plugin_page);
 }
