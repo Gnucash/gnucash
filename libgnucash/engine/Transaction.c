@@ -1881,12 +1881,43 @@ xaccTransOrder (const Transaction *ta, const Transaction *tb)
     return xaccTransOrder_num_action (ta, NULL, tb, NULL);
 }
 
+/* Order a pair of potentially numeric string as numbers if both
+ * strings begin with numbers, ordering the remainder of the string
+ * lexically if the numeric parts are equal, and the whole strings
+ * lexically otherwise.
+ *
+ * Note that this won't work well for numbers > 10^18 and that
+ * negative numbers are treated as strings and will cause the pair to
+ * be ordered lexically.
+ */
+
+static int
+order_by_int64_or_string (const char* a, const char* b)
+{
+     char *end_a = NULL, *end_b = NULL;
+     int cmp = 0;
+     uint64_t na = strtoull(a, &end_a, 10);
+     uint64_t nb = strtoull(b, &end_b, 10);
+     if (na && nb)
+     {
+          if (na != nb)
+               return na < nb ? -1 : 1;
+          cmp = g_utf8_collate(end_a, end_b);
+     }
+     else
+     {
+          cmp = g_utf8_collate(a, b);
+     }
+     return cmp < 0 ? -1 : cmp > 0 ? 1 : 0;
+}
+
 int
 xaccTransOrder_num_action (const Transaction *ta, const char *actna,
                             const Transaction *tb, const char *actnb)
 {
     char *da, *db;
-    int na, nb, retval;
+    int retval;
+    int64_t na, nb;
 
     if ( ta && !tb ) return -1;
     if ( !ta && tb ) return +1;
@@ -1906,16 +1937,14 @@ xaccTransOrder_num_action (const Transaction *ta, const char *actna,
     /* otherwise, sort on number string */
     if (actna && actnb) /* split action string, if not NULL */
     {
-        na = atoi(actna);
-        nb = atoi(actnb);
+         retval = order_by_int64_or_string (actna, actnb);
     }
     else                /* else transaction num string */
     {
-        na = atoi(ta->num);
-        nb = atoi(tb->num);
+         retval = order_by_int64_or_string (ta->num, tb->num);
     }
-    if (na < nb) return -1;
-    if (na > nb) return +1;
+    if (retval)
+         return retval;
 
     if (ta->date_entered != tb->date_entered)
         return (ta->date_entered > tb->date_entered) - (ta->date_entered < tb->date_entered);
