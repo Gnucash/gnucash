@@ -9,11 +9,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-03-21 17:29+0000\n"
-"Last-Translator: Syahmin Sukhairi <syahmin@gmail.com>\n"
+"PO-Revision-Date: 2021-06-09 03:33+0000\n"
+"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
 "Language: id\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -30829,9 +30829,8 @@ msgstr ""
 "fitur-fitur berikut:"
 
 #: libgnucash/engine/gncInvoice.c:1696
-#, fuzzy
 msgid "Extra to Charge Card"
-msgstr "Ekstra untuk Mengisi Kartu"
+msgstr "Ekstra untuk Menagih Kartu"
 
 #: libgnucash/engine/gncInvoice.c:1735
 msgid "Generated from an invoice. Try unposting the invoice."
