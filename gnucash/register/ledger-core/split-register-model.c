@@ -366,7 +366,7 @@ static const char*
 gnc_split_register_get_rate_label (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
-    return _ ("Rate");
+    return C_("In register", "Rate");
 }
 
 static const char*

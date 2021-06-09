@@ -9,19 +9,19 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes" context="Price">Bid</col>
+        <col id="0" translatable="yes" context="In commoditiy quote dialog">Bid</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="Price">Ask</col>
+        <col id="0" translatable="yes" context="In commoditiy quote dialog">Ask</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="Price">Last</col>
+        <col id="0" translatable="yes" context="In commoditiy quote dialog">Last</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="Price">Net Asset Value</col>
+        <col id="0" translatable="yes" context="In commoditiy quote dialog">Net Asset Value</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Unknown</col>
+        <col id="0" translatable="yes" context="In commoditiy quote dialog">Unknown</col>
       </row>
     </data>
   </object>
