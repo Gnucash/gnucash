@@ -58,8 +58,14 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
  *   Constants, should ideally be defined a user preference dialog  *
 \********************************************************************/
 
-static const int MATCH_DATE_THRESHOLD = 4; /*within 4 days*/
-static const int MATCH_DATE_NOT_THRESHOLD = 14;
+/* If the date matches within 4 days, it's probably the same transaction */
+static const int MATCH_DATE_THRESHOLD = 4;
+
+/* If the date is apart of more than a month, it's very likely not the same
+ * transaction. Some credit card companies delay things by a month, so having
+ * less than a month here would cause issues with matching transactions for
+ * these users */
+static const int MATCH_DATE_NOT_THRESHOLD = 40;
 
 /********************************************************************\
  *   Forward declared prototypes                                    *
