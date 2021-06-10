@@ -3009,6 +3009,7 @@ record_price (Split *split,
 
     if (price)
     {
+        PriceSource oldsource = gnc_price_get_source (price);
         price_value = gnc_price_get_value (price);
         if (gnc_numeric_equal (swap ? gnc_numeric_invert (value) : value,
                                price_value))
@@ -3016,7 +3017,9 @@ record_price (Split *split,
             gnc_price_unref (price);
             return;
         }
-        if (gnc_price_get_source (price) < source)
+        if (oldsource < source &&
+            !(oldsource == PRICE_SOURCE_XFER_DLG_VAL &&
+             source == PRICE_SOURCE_SPLIT_REG))
         {
             /* Existing price is preferred over this one. */
             gnc_price_unref (price);
