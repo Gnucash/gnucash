@@ -1453,19 +1453,6 @@ xaccScrubUtilityGetOrMakeAccount (Account *root, gnc_commodity * currency,
 
     g_return_val_if_fail (root, NULL);
 
-    /* If we're looking for a name, search the whole hierarchy for the name */
-
-    if (checkname)
-    {
-        if (!accname)
-            return NULL;
-        acc = gnc_account_lookup_by_name (root, accname);
-        return acc ? acc :  construct_account (root, currency, accname,
-                                               acctype, placeholder);
-    }
-    /* Otherwise search just the current level. This is used to build
-     * a hierarchy directly under the root account for trading accounts.
-     */
     acc_list =
         gnc_account_lookup_by_type_and_commodity (root,
                                                   checkname ? accname : NULL,

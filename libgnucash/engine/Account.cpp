@@ -3145,6 +3145,18 @@ gnc_account_lookup_by_type_and_commodity (Account* root,
             retval = g_list_prepend(retval, account);
         }
     }
+
+    if (!retval) // Recurse through the children
+        for (auto node = rpriv->children; node; node = node->next)
+        {
+            auto account{static_cast<Account*>(node->data)};
+            auto result = gnc_account_lookup_by_type_and_commodity(account,
+                                                                   name,
+                                                                   acctype,
+                                                                   commodity);
+            if (result)
+                retval = g_list_concat(result, retval);
+        }
     return retval;
 }
 
