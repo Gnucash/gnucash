@@ -85,6 +85,10 @@ gint gnc_import_Settings_get_add_threshold (GNCImportSettings *settings);
 */
 gint gnc_import_Settings_get_display_threshold (GNCImportSettings *settings);
 
+gint gnc_import_Settings_get_date_threshold (GNCImportSettings *settings);
+
+gint gnc_import_Settings_get_date_not_threshold (GNCImportSettings *settings);
+
 /** @param match_date_hardlimit The number of days that a matching
  * split may differ from the given transaction before it is discarded
  * immediately. In other words, any split that is more distant from

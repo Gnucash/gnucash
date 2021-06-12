@@ -20,6 +20,16 @@
       <summary>Minimum score to be displayed</summary>
       <description>This field specifies the minimum matching score a potential matching transaction must have to be displayed in the match list.</description>
     </key>
+    <key name="match-date-threshold" type="d">
+      <default>4.0</default>
+      <summary>Likely matching transaction within these days</summary>
+      <description>This field specifies the maximum number of days a transaction is likely to be a match in the list.</description>
+    </key>
+    <key name="match-date-not-threshold" type="d">
+      <default>14.0</default>
+      <summary>UnLikely matching a transaction outside of these days</summary>
+      <description>This field specifies the minimum number of days a transaction is unlikely to be a match in the list.</description>
+    </key>
     <key name="auto-add-threshold" type="d">
       <default>3.0</default>
       <summary>Add matching transactions below this score</summary>

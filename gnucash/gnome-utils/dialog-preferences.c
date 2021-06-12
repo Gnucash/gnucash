@@ -1360,6 +1360,8 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "auto_add_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "auto_clear_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "match_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "likely_day_threshold");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "unlikely_day_threshold");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "gnucash_preferences_dialog");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_preferences_dialog"));
