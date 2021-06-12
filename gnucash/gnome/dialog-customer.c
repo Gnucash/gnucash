@@ -329,8 +329,8 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
 
     /* Check for valid company name */
     if (check_entry_nonempty (cw->company_entry,
-                              _("The Company Name field cannot be left blank,\n"
-                                "enter a company name or personal.")))
+                              _("The Company Name field cannot be left blank, please "
+                                "enter a company name or a person's name.")))
         return;
 
     /* Verify terms, discount, and credit are valid (or empty) */
