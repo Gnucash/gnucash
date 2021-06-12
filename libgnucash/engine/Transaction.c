@@ -676,24 +676,20 @@ Transaction *
 xaccTransClone (const Transaction *from)
 {
     Transaction *to = xaccTransCloneNoKvp (from);
-    GList *lfrom, *lto;
+
+    if (g_list_length (to->splits) != g_list_length (from->splits))
+    {
+        PERR ("Cloned transaction has different number of splits from original");
+        xaccTransDestroy (to);
+        return NULL;
+    }
 
     xaccTransBeginEdit (to);
     qof_instance_copy_kvp (QOF_INSTANCE (to), QOF_INSTANCE (from));
-    g_return_val_if_fail (g_list_length (to->splits) == g_list_length (from->splits),
-                          NULL);
 
-    lfrom = from->splits;
-    lto = to->splits;
-
-    /* lfrom and lto are known to be of equal length via above
-       g_return_val_if_fail */
-    while (lfrom != NULL)
-    {
+    for (GList* lfrom = from->splits, *lto = to->splits; lfrom && lto;
+         lfrom = g_list_next (lfrom), lto = g_list_next (lto))
         xaccSplitCopyKvp (lfrom->data, lto->data);
-        lfrom = lfrom->next;
-        lto = lto->next;
-    }
 
     xaccTransCommitEdit (to);
     return to;
@@ -2818,7 +2814,15 @@ xaccTransReverse (Transaction *orig)
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(orig, NULL);
 
+    /* First edit, dirty, and commit orig to ensure that any trading
+     * splits are correctly balanced.
+     */
+    xaccTransBeginEdit (orig);
+    qof_instance_set_dirty (QOF_INSTANCE (orig));
+    xaccTransCommitEdit (orig);
+
     trans = xaccTransClone(orig);
+    g_return_val_if_fail (trans, NULL);
     xaccTransBeginEdit(trans);
 
     /* Reverse the values on each split. Clear per-split info. */
