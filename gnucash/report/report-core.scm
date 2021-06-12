@@ -38,7 +38,8 @@
 (use-modules (gnucash report html-document))
 (use-modules (gnucash report html-utilities))
 
-(load-and-reexport (sw_report))
+(load-and-reexport (sw_report)
+                   (sw_engine))
 
 (export <report>)
 (export gnc:all-report-template-guids)
