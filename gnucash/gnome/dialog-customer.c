@@ -329,22 +329,9 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
 
     /* Check for valid company name */
     if (check_entry_nonempty (cw->company_entry,
-                              _("You must enter a company name. "
-                                "If this customer is an individual (and not a company) "
-                                "you should enter the same value for:\nIdentification "
-                                "- Company Name, and\nPayment Address - Name.")))
+                              _("The Company Name field cannot be left blank, please "
+                                "enter a company name or a person's name.")))
         return;
-
-    /* Make sure we have an address */
-    if (check_entry_nonempty (cw->addr1_entry, NULL) &&
-            check_entry_nonempty (cw->addr2_entry, NULL) &&
-            check_entry_nonempty (cw->addr3_entry, NULL) &&
-            check_entry_nonempty (cw->addr4_entry, NULL))
-    {
-        const char *msg = _("You must enter a billing address.");
-        gnc_error_dialog (gnc_ui_get_gtk_window (widget), "%s", msg);
-        return;
-    }
 
     /* Verify terms, discount, and credit are valid (or empty) */
     min = gnc_numeric_zero ();

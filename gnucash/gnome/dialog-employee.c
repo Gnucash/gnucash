@@ -208,26 +208,11 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
     GNCPrintAmountInfo print_info;
     gnc_commodity *currency;
 
-    /* Check for valid username */
-    if (check_entry_nonempty (ew->username_entry,
-                              _("You must enter a username.")))
-        return;
-
-    /* Check for valid username */
+    /* Check for valid employeename */
     if (check_entry_nonempty (ew->name_entry,
-                              _("You must enter the employee's name.")))
+                              _("You must enter a Payment-Address Name.")))
         return;
 
-    /* Make sure we have an address */
-    if (check_entry_nonempty (ew->addr1_entry, NULL) &&
-            check_entry_nonempty (ew->addr2_entry, NULL) &&
-            check_entry_nonempty (ew->addr3_entry, NULL) &&
-            check_entry_nonempty (ew->addr4_entry, NULL))
-    {
-        const char *msg = _("You must enter an address.");
-        gnc_error_dialog (gnc_ui_get_gtk_window (widget), "%s", msg);
-        return;
-    }
 
     /* Set the employee id if one has not been chosen */
     if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0)
