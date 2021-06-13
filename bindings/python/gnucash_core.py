@@ -505,7 +505,7 @@ class GncPriceDB(GnuCashCoreClass):
 
 @deprecated("Use gnc_pricedb_latest_before_t64")
 def gnc_pricedb_lookup_latest_before_t64(self, commodity, currency, date):
-    return self.lookup_nearest_before_t64(commodit, currency,date)
+    return self.lookup_nearest_before_t64(commodity, currency, date)
 
 GncPriceDB.add_method('gnc_pricedb_lookup_latest_before_t64', 'lookup_latest_before_t64')
 
