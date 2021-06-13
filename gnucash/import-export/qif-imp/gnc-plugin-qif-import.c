@@ -45,7 +45,7 @@ static void gnc_plugin_qif_import_cmd_new_qif_import (GtkAction *action, GncMain
 static GtkActionEntry gnc_plugin_actions [] =
 {
     {
-        "QIFImportAction", "go-previous", N_("Import _QIF..."), NULL,
+        "QIFImportAction", "go-previous", N_("Import _QIF"), NULL,
         N_("Import a Quicken QIF file"),
         G_CALLBACK (gnc_plugin_qif_import_cmd_new_qif_import)
     },

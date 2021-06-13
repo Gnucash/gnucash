@@ -45,7 +45,7 @@ static void gnc_plugin_log_replay_cmd_new_log_replay (GtkAction *action, GncMain
 static GtkActionEntry gnc_plugin_actions [] =
 {
     {
-        "LogReplayAction", "go-previous", N_("_Replay GnuCash .log file..."), NULL,
+        "LogReplayAction", "go-previous", N_("_Replay GnuCash .log file"), NULL,
         N_("Replay a GnuCash log file after a crash. This cannot be undone."),
         G_CALLBACK (gnc_plugin_log_replay_cmd_new_log_replay)
     },

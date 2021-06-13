@@ -770,9 +770,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
          */
         interest = GTK_WIDGET(gtk_builder_get_object (builder, "interest_button"));
         if ( account_type_has_auto_interest_payment( data.account_type ) )
-            gtk_button_set_label(GTK_BUTTON(interest), _("Enter _Interest Payment...") );
+            gtk_button_set_label(GTK_BUTTON(interest), _("Enter _Interest Payment") );
         else if ( account_type_has_auto_interest_charge( data.account_type ) )
-            gtk_button_set_label(GTK_BUTTON(interest), _("Enter _Interest Charge...") );
+            gtk_button_set_label(GTK_BUTTON(interest), _("Enter _Interest Charge") );
         else
         {
             gtk_widget_destroy(interest);
@@ -2352,7 +2352,7 @@ static GtkActionEntry recnWindow_actions [] =
     /* Reconcile menu */
 
     {
-        "RecnChangeInfoAction", NULL, N_("_Reconcile Information..."),  NULL,
+        "RecnChangeInfoAction", NULL, N_("_Reconcile Information"),  NULL,
         N_("Change the reconcile information "
         "including statement date and ending balance."),
         G_CALLBACK (gnc_ui_reconcile_window_change_cb)
@@ -2386,7 +2386,7 @@ static GtkActionEntry recnWindow_actions [] =
         G_CALLBACK(gnc_recn_edit_account_cb)
     },
     {
-        "AccountTransferAction", NULL, N_("_Transfer..."), NULL,
+        "AccountTransferAction", NULL, N_("_Transfer"), NULL,
         N_("Transfer funds from one account to another"),
         G_CALLBACK(gnc_recn_xfer_cb)
     },

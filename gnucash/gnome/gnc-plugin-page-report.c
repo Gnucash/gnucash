@@ -1140,7 +1140,7 @@ static action_toolbar_labels toolbar_labels[] =
     { "ReportSaveAction", N_("Save Config") },
     /* Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
        to be used as toolbar button label. */
-    { "ReportSaveAsAction", N_("Save Config As...") },
+    { "ReportSaveAsAction", N_("Save Config As") },
     { "FilePrintPDFAction", N_("Make Pdf") },
     { NULL, NULL },
 };
@@ -1202,12 +1202,12 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
     GtkActionEntry report_actions[] =
     {
         {
-            "FilePrintAction", "document-print", N_("_Print Report..."), "<primary>p",
+            "FilePrintAction", "document-print", N_("_Print Report"), "<primary>p",
             N_("Print the current report"),
             G_CALLBACK(gnc_plugin_page_report_print_cb)
         },
         {
-            "FilePrintPDFAction", GNC_ICON_PDF_EXPORT, N_("Export as P_DF..."), NULL,
+            "FilePrintPDFAction", GNC_ICON_PDF_EXPORT, N_("Export as P_DF"), NULL,
             N_("Export the current report as a PDF document"),
             G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
         },
@@ -1237,7 +1237,7 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
             report_save_str, G_CALLBACK(gnc_plugin_page_report_save_cb)
         },
         {
-            "ReportSaveAsAction", "document-save-as", N_("Save Report Configuration As..."), "<primary><alt><shift>s",
+            "ReportSaveAsAction", "document-save-as", N_("Save Report Configuration As"), "<primary><alt><shift>s",
             report_saveas_str, G_CALLBACK(gnc_plugin_page_report_save_as_cb)
         },
         {

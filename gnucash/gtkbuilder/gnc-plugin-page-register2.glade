@@ -212,7 +212,7 @@
   <object class="GtkDialog" id="filter_by_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Filter register by...</property>
+    <property name="title" translatable="yes">Filter register by</property>
     <property name="resizable">False</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>

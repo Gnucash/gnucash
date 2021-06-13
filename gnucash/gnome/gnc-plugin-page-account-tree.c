@@ -195,12 +195,12 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
 
     /* File menu */
     {
-        "FileNewAccountAction", GNC_ICON_NEW_ACCOUNT, N_("New _Account..."), NULL,
+        "FileNewAccountAction", GNC_ICON_NEW_ACCOUNT, N_("New _Account"), NULL,
         N_("Create a new Account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_new_account)
     },
     {
-        "FileAddAccountHierarchyAssistantAction", GNC_ICON_NEW_ACCOUNT, N_("New Account _Hierarchy..."), NULL,
+        "FileAddAccountHierarchyAssistantAction", GNC_ICON_NEW_ACCOUNT, N_("New Account _Hierarchy"), NULL,
         N_("Extend the current book by merging with new account type categories"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_file_new_hierarchy)
     },
@@ -249,12 +249,12 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account)
     },
     {
-        "EditDeleteAccountAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete Account..."), "Delete",
+        "EditDeleteAccountAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete Account"), "Delete",
         N_("Delete selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account)
     },
     {
-        "EditCascadeAccountAction", NULL, N_("_Cascade Account Properties..."), NULL,
+        "EditCascadeAccountAction", NULL, N_("_Cascade Account Properties"), NULL,
         N_("Cascade selected properties for account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_cascade_account_properties)
     },
@@ -269,7 +269,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_find_account_popup)
     },
     {
-        "EditRenumberSubaccountsAction", NULL, N_("_Renumber Subaccounts..."), NULL,
+        "EditRenumberSubaccountsAction", NULL, N_("_Renumber Subaccounts"), NULL,
         N_("Renumber the children of the selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_renumber_accounts)
     },
@@ -287,7 +287,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
     },
     /* View menu */
     {
-        "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
+        "ViewFilterByAction", NULL, N_("_Filter By"), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_filter_by)
     },
     {
@@ -298,27 +298,27 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
 
     /* Actions menu */
     {
-        "ActionsReconcileAction", NULL, N_("_Reconcile..."), NULL,
+        "ActionsReconcileAction", NULL, N_("_Reconcile"), NULL,
         N_("Reconcile the selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_reconcile)
     },
     {
-        "ActionsAutoClearAction", NULL, N_("_Auto-clear..."), NULL,
+        "ActionsAutoClearAction", NULL, N_("_Auto-clear"), NULL,
         N_("Automatically clear individual transactions, given a cleared amount"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_autoclear)
     },
     {
-        "ActionsTransferAction", NULL, N_("_Transfer..."), "<primary>t",
+        "ActionsTransferAction", NULL, N_("_Transfer"), "<primary>t",
         N_("Transfer funds from one account to another"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_transfer)
     },
     {
-        "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
+        "ActionsStockSplitAction", NULL, N_("Stoc_k Split"), NULL,
         N_("Record a stock split or a stock merger"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_stock_split)
     },
     {
-        "ActionsLotsAction", NULL, N_("View _Lots..."), NULL,
+        "ActionsLotsAction", NULL, N_("View _Lots"), NULL,
         N_("Bring up the lot viewer/editor window"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_lots)
     },

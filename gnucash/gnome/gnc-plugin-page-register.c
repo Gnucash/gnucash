@@ -297,7 +297,7 @@ static GList* invoices_from_transaction (Transaction* trans);
 /* Translators: This is a menu item that opens a dialog for linking an
    external file or URL with the bill, invoice, transaction, or voucher or
    removing such an link. */
-#define LINK_TRANSACTION_LABEL           N_("_Manage Document Link...")
+#define LINK_TRANSACTION_LABEL           N_("_Manage Document Link")
 /* Translators: This is a menu item that opens an external file or URI that may
    be linked to the current bill, invoice, transaction, or voucher using
    the operating system's default application for the file or URI mime type. */
@@ -329,7 +329,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* File menu */
 
     {
-        "FilePrintAction", "document-print", N_ ("_Print Checks..."), "<primary>p", NULL,
+        "FilePrintAction", "document-print", N_ ("_Print Checks"), "<primary>p", NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_print_check)
     },
 
@@ -361,7 +361,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_find_account)
     },
     {
-        "EditFindTransactionsAction", "edit-find", N_ ("_Find..."), "<primary>f",
+        "EditFindTransactionsAction", "edit-find", N_ ("_Find"), "<primary>f",
         N_ ("Find transactions with a search"),
         G_CALLBACK (gnc_plugin_page_register_cmd_find_transactions)
     },
@@ -451,11 +451,11 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* View menu */
 
     {
-        "ViewSortByAction", NULL, N_ ("_Sort By..."), NULL, NULL,
+        "ViewSortByAction", NULL, N_ ("_Sort By"), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_view_sort_by)
     },
     {
-        "ViewFilterByAction", NULL, N_ ("_Filter By..."), NULL, NULL,
+        "ViewFilterByAction", NULL, N_ ("_Filter By"), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_view_filter_by)
     },
     {
@@ -467,27 +467,27 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* Actions menu */
 
     {
-        "ActionsTransferAction", GNC_ICON_TRANSFER, N_ ("_Transfer..."), "<primary>t",
+        "ActionsTransferAction", GNC_ICON_TRANSFER, N_ ("_Transfer"), "<primary>t",
         N_ ("Transfer funds from one account to another"),
         G_CALLBACK (gnc_plugin_page_register_cmd_transfer)
     },
     {
-        "ActionsReconcileAction", "edit-select-all", N_ ("_Reconcile..."), NULL,
+        "ActionsReconcileAction", "edit-select-all", N_ ("_Reconcile"), NULL,
         N_ ("Reconcile the selected account"),
         G_CALLBACK (gnc_plugin_page_register_cmd_reconcile)
     },
     {
-        "ActionsAutoClearAction", "edit-select-all", N_ ("_Auto-clear..."), NULL,
+        "ActionsAutoClearAction", "edit-select-all", N_ ("_Auto-clear"), NULL,
         N_ ("Automatically clear individual transactions, so as to reach a certain cleared amount"),
         G_CALLBACK (gnc_plugin_page_register_cmd_autoclear)
     },
     {
-        "ActionsStockSplitAction", NULL, N_ ("Stoc_k Split..."), NULL,
+        "ActionsStockSplitAction", NULL, N_ ("Stoc_k Split"), NULL,
         N_ ("Record a stock split or a stock merger"),
         G_CALLBACK (gnc_plugin_page_register_cmd_stock_split)
     },
     {
-        "ActionsLotsAction", NULL, N_ ("View _Lots..."), NULL,
+        "ActionsLotsAction", NULL, N_ ("View _Lots"), NULL,
         N_ ("Bring up the lot viewer/editor window"),
         G_CALLBACK (gnc_plugin_page_register_cmd_lots)
     },
@@ -515,7 +515,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_jump)
     },
     {
-        "ScheduleTransactionAction", GNC_ICON_SCHEDULE, N_ ("Sche_dule..."), NULL,
+        "ScheduleTransactionAction", GNC_ICON_SCHEDULE, N_ ("Sche_dule"), NULL,
         N_ ("Create a Scheduled Transaction with the current transaction as a template"),
         G_CALLBACK (gnc_plugin_page_register_cmd_schedule)
     },
@@ -4084,7 +4084,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
 
     if (!account)
     {
-        LEAVE ("shouldn't try to reverse the blank transaction...");
+        LEAVE ("shouldn't try to reverse the blank transaction");
         return;
     }
 
@@ -4177,7 +4177,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction* action,
     gtk_window_set_transient_for (GTK_WINDOW (dialog),
                                   gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window)));
     /* Translators: The %s is the name of the plugin page */
-    title = g_strdup_printf (_ ("Sort %s by..."),
+    title = g_strdup_printf (_ ("Sort %s by"),
                              gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE (page)));
     gtk_window_set_title (GTK_WINDOW (dialog), title);
     g_free (title);
@@ -4265,7 +4265,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction* action,
                                   gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window)));
 
     /* Translators: The %s is the name of the plugin page */
-    title = g_strdup_printf (_ ("Filter %s by..."),
+    title = g_strdup_printf (_ ("Filter %s by"),
                              gnc_plugin_page_get_page_name (GNC_PLUGIN_PAGE (page)));
     gtk_window_set_title (GTK_WINDOW (dialog), title);
     g_free (title);

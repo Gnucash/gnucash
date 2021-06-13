@@ -451,7 +451,7 @@ gnc_account_sel_set_new_account_ability (GNCAccountSel *gas,
     }
 
     /* create the button. */
-    gas->newAccountButton = gtk_button_new_with_label (_("New..."));
+    gas->newAccountButton = gtk_button_new_with_label (_("New"));
     g_signal_connect (gas->newAccountButton,
                       "clicked",
                       G_CALLBACK(gas_new_account_click),

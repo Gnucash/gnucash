@@ -709,13 +709,13 @@ query instead.")
 
 (define (gnc:report-starting report-name)
   (gnc-window-show-progress (format #f
-				     (G_ "Building '~a' report ...")
+				     (G_ "Building '~a' report ")
 				     (G_ report-name))
 			    0))
 
 (define (gnc:report-render-starting report-name)
   (gnc-window-show-progress (format #f
-				     (G_ "Rendering '~a' report ...")
+				     (G_ "Rendering '~a' report ")
 				     (if (string-null? report-name)
 					 (G_ "Untitled")
 					 (G_ report-name)))

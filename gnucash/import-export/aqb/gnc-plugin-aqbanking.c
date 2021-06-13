@@ -93,7 +93,7 @@ static GtkActionEntry gnc_plugin_actions [] =
 
     /* Menu Items */
     {
-        "ABSetupAction", NULL, N_("_Online Banking Setup..."), NULL,
+        "ABSetupAction", NULL, N_("_Online Banking Setup"), NULL,
         N_("Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using AqBanking)"),
         G_CALLBACK(gnc_plugin_ab_cmd_setup)
     },
@@ -103,24 +103,24 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK(gnc_plugin_ab_cmd_get_balance)
     },
     {
-        "ABGetTransAction", NULL, N_("Get _Transactions..."), NULL,
+        "ABGetTransAction", NULL, N_("Get _Transactions"), NULL,
         N_("Get the transactions online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_get_transactions)
     },
     {
         "ABIssueSepaTransAction", NULL,
 		/* Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area */
-		N_("Issue _SEPA Transaction..."), NULL,
+		N_("Issue _SEPA Transaction"), NULL,
         N_("Issue a new international European (SEPA) transaction online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_sepatransaction)
     },
     {
-        "ABIssueIntTransAction", NULL, N_("_Internal Transaction..."), NULL,
+        "ABIssueIntTransAction", NULL, N_("_Internal Transaction"), NULL,
         N_("Issue a new bank-internal transaction online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_inttransaction)
     },
     {
-        "ABIssueSepaDirectDebitAction", NULL, N_("Issue SEPA Direct _Debit..."), NULL,
+        "ABIssueSepaDirectDebitAction", NULL, N_("Issue SEPA Direct _Debit"), NULL,
         N_("Issue a new international European (SEPA) direct debit note online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_sepa_direct_debit)
     },
@@ -156,7 +156,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     /*       G_CALLBACK(gnc_plugin_ab_cmd_csv_importsend) }, */
     /* #endif */
     {
-        "DtausImportSendAction", "go-previous", N_("Import DTAUS and _send..."), NULL,
+        "DtausImportSendAction", "go-previous", N_("Import DTAUS and _send"), NULL,
         N_("Import a DTAUS file into GnuCash and transmit its orders by Online Banking."),
         G_CALLBACK(gnc_plugin_ab_cmd_dtaus_importsend)
     },

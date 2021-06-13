@@ -87,7 +87,7 @@ Lastly, for repeated imports the preview page has buttons to Load and Save the s
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">
-Select location and file name for the Import, then click "OK"...
+Select location and file name for the Import, then click "OK"
 </property>
             <property name="wrap">True</property>
           </object>
@@ -1035,7 +1035,7 @@ For example
             </child>
             <child>
               <object class="GtkButton" id="account_match_change">
-                <property name="label" translatable="yes">Change GnuCash _Account...</property>
+                <property name="label" translatable="yes">Change GnuCash _Account</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

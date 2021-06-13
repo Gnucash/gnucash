@@ -300,14 +300,14 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     switch ( type )
     {
     case FILE_ACCESS_OPEN:
-        gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Open..."));
+        gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Open"));
         button_label = _("_Open");
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_OPEN;
         settings_section = GNC_PREFS_GROUP_OPEN_SAVE;
         break;
 
     case FILE_ACCESS_SAVE_AS:
-        gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Save As..."));
+        gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Save As"));
         button_label = _("_Save As");
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
         settings_section = GNC_PREFS_GROUP_OPEN_SAVE;

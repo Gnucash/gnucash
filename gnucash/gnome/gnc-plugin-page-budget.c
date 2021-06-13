@@ -156,23 +156,23 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
 
     /* Edit menu */
     {
-        "DeleteBudgetAction", GNC_ICON_DELETE_BUDGET, N_("_Delete Budget..."),
+        "DeleteBudgetAction", GNC_ICON_DELETE_BUDGET, N_("_Delete Budget"),
         NULL, N_("Select this or another budget and delete it."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_delete_budget)
     },
     {
-        "OptionsBudgetAction", "document-properties", N_("Budget _Options..."),
+        "OptionsBudgetAction", "document-properties", N_("Budget _Options"),
         NULL, N_("Edit this budget's options."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_view_options)
     },
     {
-        "EstimateBudgetAction", "system-run", N_("Esti_mate Budget..."),
+        "EstimateBudgetAction", "system-run", N_("Esti_mate Budget"),
         NULL,
         N_("Estimate a budget value for the selected accounts from past transactions."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_estimate_budget)
     },
     {
-        "AllPeriodsBudgetAction", "system-run", N_("_All Periods..."),
+        "AllPeriodsBudgetAction", "system-run", N_("_All Periods"),
         NULL,
         N_("Edit budget for all periods for the selected accounts."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_allperiods_budget)
@@ -191,7 +191,7 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
     },
     /* View menu */
     {
-        "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
+        "ViewFilterByAction", NULL, N_("_Filter By"), NULL, NULL,
         G_CALLBACK(gnc_plugin_page_budget_cmd_view_filter_by)
     },
     {
