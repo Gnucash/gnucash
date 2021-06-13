@@ -20,8 +20,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-05-29 00:44+0000\n"
-"Last-Translator: 峡州仙士 <c@cjh0613.com>\n"
+"PO-Revision-Date: 2021-06-13 11:33+0000\n"
+"Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -481,7 +481,7 @@ msgid ""
 "follow the instructions provided."
 msgstr ""
 "从 Quicken、MS Money 或其他 QIF/OFX 文件导入现有财务数据。“文件”->“导入”，导入 QIF 或 OFX/"
-"QFX，然后按照说明进行下一步操作。"
+"QFX，然后按照说明进行下一步。"
 
 #: doc/tip_of_the_day.list.c:18
 msgid ""
@@ -527,7 +527,7 @@ msgid ""
 msgstr ""
 "交易“说明”字段，可以录入备忘信息。\n"
 "\n"
-"使其可见\n"
+"为使其可见\n"
 "菜单栏“查看”，选择“双行”或\n"
 "“首选项”->“账簿默认值”->“其他默认值”->“双行模式”。"
 
@@ -588,7 +588,7 @@ msgstr "录入交易时，'+'/'-'（半角）可以递增/递减日期和编号�
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
-msgstr "主窗口标签页切换，Control+Alt+Page Up/Down。"
+msgstr "主窗口标签页切换，Control+Alt+Page Up/Down（Win10）。"
 
 #: doc/tip_of_the_day.list.c:76
 msgid ""
@@ -634,10 +634,11 @@ msgid ""
 msgstr "报表基于样式表，选择合适的样式表，“编辑”->“样式表”。"
 
 #: doc/tip_of_the_day.list.c:99
+#, fuzzy
 msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
-msgstr "在交易界面转账字段调出科目菜单，请按菜单键或Ctrl-Down组合键。"
+msgstr "在交易界面转账字段调出科目菜单，请按菜单键或Ctrl-Down组合键。（这功能没测试成功，不知为何）"
 
 #: doc/tip_of_the_day.list.c:102
 msgid ""
@@ -829,7 +830,7 @@ msgid ""
 msgstr ""
 "账簿设置了默认币种，新科目将与其一致，\n"
 "但是，\n"
-"亦可以自定义。"
+"亦可自定义。"
 
 #: gnucash/gnome/assistant-hierarchy.c:1491
 msgid "Please choose the currency to use for new accounts."
@@ -864,7 +865,7 @@ msgstr "私人按揭保险"
 
 #: gnucash/gnome/assistant-loan.cpp:130
 msgid "PMI Payment"
-msgstr "PMI付款"
+msgstr "PMI 付款"
 
 #: gnucash/gnome/assistant-loan.cpp:131
 msgid "Other Expense"
@@ -1425,11 +1426,11 @@ msgstr "付款"
 
 #: gnucash/gnome/dialog-customer.c:924
 msgid "Shipping Contact"
-msgstr "送货联系人"
+msgstr "送货信息"
 
 #: gnucash/gnome/dialog-customer.c:926 gnucash/gnome/dialog-vendor.c:729
 msgid "Billing Contact"
-msgstr "付款联系人"
+msgstr "账单信息"
 
 #: gnucash/gnome/dialog-customer.c:928
 msgid "Customer ID"
@@ -1511,7 +1512,7 @@ msgstr "没有选择任何科目，请重试。"
 
 #: gnucash/gnome/dialog-date-close.c:82
 msgid "Placeholder account selected. Please try again."
-msgstr "选择了父科目（占位符），请重试。"
+msgstr "选择了父科目，请重试。"
 
 #: gnucash/gnome/dialog-doclink.c:161
 #: gnucash/gnome/gnc-plugin-page-register.c:4760
@@ -1600,7 +1601,7 @@ msgstr "修改网址："
 
 #: gnucash/gnome/dialog-doclink.c:242
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr "输入网址，如http://www.gnucash.org："
+msgstr "输入网址，如 http://www.gnucash.org："
 
 #: gnucash/gnome/dialog-doclink.c:256
 msgid "Existing Document Link is"
@@ -1624,11 +1625,11 @@ msgstr "未找到网址"
 
 #: gnucash/gnome/dialog-doclink.c:592 gnucash/gnome/dialog-imap-editor.c:882
 msgid "Total Entries"
-msgstr "文件总数"
+msgstr "凭证总数"
 
 #: gnucash/gnome/dialog-doclink.c:650
 msgid "Business item can not be modified."
-msgstr "业务项目无法修改。"
+msgstr "商业项目无法修改。"
 
 #: gnucash/gnome/dialog-doclink.c:659 gnucash/gnome/dialog-doclink.c:760
 #: gnucash/gnome/gnc-plugin-page-invoice.c:382
@@ -1641,7 +1642,7 @@ msgstr "管理凭证链接"
 
 #: gnucash/gnome/dialog-doclink.c:754
 msgid "Transaction can not be modified."
-msgstr "无法修改交易。"
+msgstr "交易无法修改。"
 
 #: gnucash/gnome/dialog-doclink.c:815 libgnucash/engine/gncOwner.c:215
 msgid "Undefined"
@@ -1702,13 +1703,13 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"双击“Id”列中的条目，跳转到“业务项目”。\n"
-"双击“链接”列中的条目以打开关联的凭证。\n"
-"双击“可用”列中的条目以修改凭证链接。"
+"双击“ID”，跳转到原始商业凭证；\n"
+"双击“文件名”，打开。\n"
+"双击“可用”，修改。"
 
 #: gnucash/gnome/dialog-doclink.c:1097
 msgid "Business Document Links"
-msgstr "业务凭证链接"
+msgstr "商业凭证链接"
 
 #: gnucash/gnome/dialog-employee.c:199
 msgid "You must enter a username."
@@ -1790,13 +1791,13 @@ msgstr "查找"
 msgid ""
 "This program can only calculate one value at a time. You must enter values "
 "for all but one quantity."
-msgstr "这个程序一次只能计算一个值，您必须输入一个值。"
+msgstr "本程序一次只计算一个值，请输入。"
 
 #: gnucash/gnome/dialog-fincalc.c:330
 msgid ""
 "GnuCash cannot determine the value in one of the fields. You must enter a "
 "valid expression."
-msgstr "GnuCash无法识别其中一个字段的值，请输入一个有效的表达式。"
+msgstr "GnuCash 无法识别其中一个字段的值，请输入一个有效的表达式。"
 
 #: gnucash/gnome/dialog-fincalc.c:373
 msgid "The interest rate cannot be zero."
@@ -1804,11 +1805,11 @@ msgstr "利率不能为零。"
 
 #: gnucash/gnome/dialog-fincalc.c:401
 msgid "The number of payments cannot be zero."
-msgstr "付款数额不能为零。"
+msgstr "付款金额不能为零。"
 
 #: gnucash/gnome/dialog-fincalc.c:406
 msgid "The number of payments cannot be negative."
-msgstr "付款数字不能为负数。"
+msgstr "付款金额不能为负数。"
 
 #: gnucash/gnome/dialog-find-account.c:363
 msgid "Find Account"
@@ -1831,7 +1832,7 @@ msgstr "尚未使用"
 
 #: gnucash/gnome/dialog-find-account.c:431
 msgid "Balance Zero"
-msgstr "余额 (会计期间)"
+msgstr "余额为零"
 
 #: gnucash/gnome/dialog-find-account.c:442
 msgid "Tax related"
@@ -1847,7 +1848,7 @@ msgstr "“%s”的子科目(_B)"
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
 msgid "All Accounts"
-msgstr "全部会计科目"
+msgstr "所有科目"
 
 #: gnucash/gnome/dialog-find-transactions2.c:114
 #: gnucash/gnome/dialog-find-transactions.c:112
@@ -2074,7 +2075,7 @@ msgstr "说明"
 #: gnucash/gnome/dialog-find-transactions.c:229
 #: gnucash/gnome-search/dialog-search.c:1482
 msgid "Find Transaction"
-msgstr "寻找交易"
+msgstr "查找交易"
 
 #: gnucash/gnome/dialog-find-transactions.c:129
 #: gnucash/report/reports/standard/general-ledger.scm:67
@@ -2121,7 +2122,7 @@ msgstr "贝叶斯"
 
 #: gnucash/gnome/dialog-imap-editor.c:718
 msgid "Description Field"
-msgstr "描述字段"
+msgstr "描述"
 
 #: gnucash/gnome/dialog-imap-editor.c:721
 msgid "Memo Field"
@@ -2129,7 +2130,7 @@ msgstr "备注"
 
 #: gnucash/gnome/dialog-imap-editor.c:724
 msgid "CSV Account Map"
-msgstr "CSV科目类型映射"
+msgstr "CSV 科目映射"
 
 #: gnucash/gnome/dialog-imap-editor.c:764
 msgid "Online Id"
@@ -7773,17 +7774,15 @@ msgid_plural ""
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
-"为保存您的更改，需要将您的数据文件保存至硬盘。GnuCash 具有每隔 %d 分钟自动保"
-"存文件的功能，就像人工按下“保存”按钮一样。\n"
+"保存变更的数据，GnuCash 每隔 %d 分钟会自动保存文件，就像按下“保存”按钮。\n"
 "\n"
-"您可以在“编辑”->“首选项”->“常规”->“自动保存时间间隔”下更改时间间隔，或是关闭"
-"这个功能。\n"
+"“编辑”->“首选项”->“常规”->“自动保存时间”更改间隔，或是关闭。\n"
 "\n"
-"是否启用定时自动保存文件功能？"
+"启用自动保存功能？"
 
 #: gnucash/gnome-utils/gnc-autosave.c:121
 msgid "_Yes, this time"
-msgstr "这次是 (_Y)"
+msgstr "本次(_Y)"
 
 #: gnucash/gnome-utils/gnc-autosave.c:122
 msgid "Yes, _always"
@@ -7795,7 +7794,7 @@ msgstr "从不 (_E)"
 
 #: gnucash/gnome-utils/gnc-autosave.c:124
 msgid "_No, not this time"
-msgstr "这次不 (_N)"
+msgstr "再说(_N)"
 
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:166
 #: gnucash/gnome-utils/gnc-period-select.c:70
@@ -12448,14 +12447,13 @@ msgid ""
 "\n"
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgstr ""
-"这个助手将帮助你从CSV文件中导入价格。\n"
+"本助手将帮你从 CSV 文件导入汇率。\n"
 "\n"
-"要成功导入，必须有最低数量的列，这些列是日期、金额、从名称空间、从符号和货币到。如果所有条目都是针对同一商品/货币，那么你可以选择它们，然后列将是日期和金"
-"额。\n"
+"要想成功，文件列项得合规：日期、汇率、类别、币种和目标币种。若针对同一币种，那么可以选择它们，列将是日期和汇率。\n"
 "\n"
-"有各种选项用于指定分隔符以及固定宽度选项。在固定宽度选项下，双击显示的行表来设置列宽，如果需要的话，可以用鼠标右键改变。\n"
+"多种选项用于指定分隔符及宽度；固定宽度下，双击行表设置列宽，若需要，亦可右键调整。\n"
 "\n"
-"例如：\"FTSE\", \"RR.L\", \"21/11/2016\",5.345, \"GBP \"和CURRENCY"
+"例：\"FTSE\", \"RR.L\", \"21/11/2016\",5.345, \"GBP \"和CURRENCY"
 ";USD;2016-11-21;1.56;GBP\n"
 "\n"
 "有一个选项可以指定开始行、结束行，还有一个选项可以跳过从开始行开始的备用行，如果你有一些标题文本，可以使用这个选项。此外，如果需要，还有一个选项可以覆盖当"
@@ -12464,9 +12462,9 @@ msgstr ""
 "最后，对于重复输入，预览页面有加载和保存设置的按钮。你可以保存你调整过的设置，以便在以后的导入中重复使用。在加载你的设置后，你也可以为类似的导入再次调整它"
 "们，并以另一个名字保存它们。注意你不能保存到内置的预设中。\n"
 "\n"
-"这个操作是不可逆的，所以要确保你有一个有效的备份。\n"
+"此操作不可逆，请提前做好备份。\n"
 "\n"
-"点击 \"下一步 \"继续，或点击 \"取消 \"中止导入。"
+"“下一步”继续，或“取消”中止。"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:84
 msgid "Price Import Assistant"
@@ -13550,7 +13548,7 @@ msgstr "暂停(_A)"
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1229
 #: gnucash/gtkbuilder/dialog-account-picker.glade:21
 msgid "QIF Import"
-msgstr "导入QIF格式文件"
+msgstr "导入 QIF 文件"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1243
@@ -14227,7 +14225,7 @@ msgstr "选择或添加一个 GnuCash 科目(_S)："
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:7
 msgid "Import transactions from text file"
-msgstr "发票账单"
+msgstr "从 TEXT 文件导入交易"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:123
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
@@ -14679,7 +14677,7 @@ msgstr "送货地址"
 #. Title of dialog
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:9
 msgid "Import customers or vendors from text file"
-msgstr "客户或供应商"
+msgstr "从 TEXT 文件导入客户或供应商"
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:157
 msgid "For importing customer lists."
@@ -15118,7 +15116,7 @@ msgstr "您可以选择多行。按DELETE按钮删除它。"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
-msgstr "请选择或创建适当的 GnuCash 科目给："
+msgstr "请选择或创建合适的科目："
 
 #: gnucash/gtkbuilder/dialog-import.glade:99
 msgid "Online account ID here..."
@@ -15284,7 +15282,7 @@ msgstr "对账(自动)匹配"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1001
 msgid "Generic import transaction matcher"
-msgstr "通用导入交易事项匹配器"
+msgstr "通用导入交易匹配器"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:119
 msgid "Posted Account"
@@ -18944,7 +18942,7 @@ msgstr "选择要导入的文件"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:140
 msgid "Import module for DTAUS import not found."
-msgstr "未找到DTAUS导入模块。"
+msgstr "未找到 DTAUS 导入模块。"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:295
 #, c-format
@@ -19086,7 +19084,7 @@ msgstr "DTAUS (_D)"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:147
 msgid "Import a traditional german DTAUS file into GnuCash."
-msgstr "将传统的德文DTAUS文件导入GnuCash。"
+msgstr "导入传统的德国 DTAUS 文件。"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:159
 msgid "Import DTAUS and _send..."
@@ -19348,7 +19346,7 @@ msgstr "多行"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:198
 msgid "Import Bills or Invoices from csv"
-msgstr "从 CSV 导入账单或发票"
+msgstr "从 CSV 文件导入发票或帐单"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:226
 #, c-format
@@ -19404,7 +19402,7 @@ msgstr "发票账单(_I)..."
 
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:58
 msgid "Import bills and invoices from a CSV text file"
-msgstr "从 CSV 文本文件导入账单和发票"
+msgstr "从 CSV 文件导入发票和帐单"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:80
 msgid ""
@@ -19556,27 +19554,27 @@ msgstr "对账日期"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."
-msgstr "科目 [CSV 文件] (_T)..."
+msgstr "科目(_R)「CSV 文件」..."
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:55
 msgid "Export the Account Tree to a CSV file"
-msgstr "导出科目体系至新的 GnuCash 数据文件"
+msgstr "将科目树导出为 CSV 文件"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:59
 msgid "Export _Transactions to CSV..."
-msgstr "交易 [CSV 文件] (_T)..."
+msgstr "交易(_T)「CSV 文件」..."
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:60
 msgid "Export the Transactions to a CSV file"
-msgstr "导出交易事项到CSV文件"
+msgstr "将交易导出到 CSV 文件"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:64
 msgid "Export A_ctive Register to CSV..."
-msgstr "当前界面交易 [CSV 文件] (_C)..."
+msgstr "当前界面交易(_C)「CSV 文件」..."
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:66
 msgid "Export the Active Register to a CSV file"
-msgstr "将有效注册表导出为CSV文件"
+msgstr "将当前界面的交易导出到 CSV 文件"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:71
 #, c-format
@@ -19727,9 +19725,9 @@ msgid ""
 "- %s\n"
 "- %s"
 msgstr ""
-"价格是从文件'%s'中导入的。\n"
+"汇率是从文件'%s'导入的。\n"
 "\n"
-"导入摘要。\n"
+"摘要：\n"
 "- %s\n"
 "- %s\n"
 "- %s"
@@ -20077,7 +20075,7 @@ msgstr "GnuCash导出格式"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:50
 msgid "Import _Accounts from CSV..."
-msgstr "科目 [CSV 文件] (_A)..."
+msgstr "科目(_A)「CSV 文件」..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:51
 msgid "Import Accounts from a CSV file"
@@ -20085,7 +20083,7 @@ msgstr "从 CSV 文件导入科目"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:55
 msgid "Import _Transactions from CSV..."
-msgstr "交易 [CSV 文件] (_T)..."
+msgstr "交易(_T)「CSV 文件」..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:56
 msgid "Import Transactions from a CSV file"
@@ -20093,11 +20091,11 @@ msgstr "从 CSV 文件导入交易"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
 msgid "Import _Prices from a CSV file..."
-msgstr "汇率 [CSV 文件] (_P)..."
+msgstr "汇率(_P)「CSV 文件」..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
 msgid "Import Prices from a CSV file"
-msgstr "从CSV文件中导入价格"
+msgstr "从 CSV 文件导入汇率"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:139
 msgid "Shipping Name"
@@ -20133,7 +20131,7 @@ msgstr "送货联系人"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:176
 msgid "Import Customers from csv"
-msgstr "将客户导出到 XML"
+msgstr "从 CSV 文件导入客户"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:192
 msgid "customers"
@@ -20345,7 +20343,7 @@ msgstr "GnuCash.log 文件(_R)..."
 
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:49
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
-msgstr "在崩溃后应用 GnuCash 日志文件。这一操作不可撤销。"
+msgstr "程序崩溃后应用日志文件，此操作不可逆。"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:647
 #, c-format
@@ -20401,7 +20399,7 @@ msgstr "打开/ Quicken Financial Exchange文件（* .ofx，* .qfx）"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1247
 msgid "Select one or multiple OFX/QFX file(s) to process"
-msgstr "选择一个要处理的 OFX/QFX 文件"
+msgstr "选择一个或多个要处理的 OFX/QFX 文件"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.c:46
 msgid "Import _OFX/QFX..."
@@ -20409,7 +20407,7 @@ msgstr "OFX/QFX 文件(_O)..."
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.c:47
 msgid "Process an OFX/QFX response file"
-msgstr "处理 OFX/QFX 回应文件"
+msgstr "处理 OFX/QFX 响应文件"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:556
 msgid "GnuCash account name"
