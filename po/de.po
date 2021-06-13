@@ -33,8 +33,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 21:24+0200\n"
-"PO-Revision-Date: 2021-04-16 21:44+0000\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2021-06-12 20:39+0000\n"
+"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -42,7 +42,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -13168,7 +13168,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:73
 msgid "Use Quotes"
-msgstr "Kurse benutzen"
+msgstr "Anführungszeichen verwenden"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:88
 msgid "Simple Layout"
