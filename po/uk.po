@@ -1,4 +1,4 @@
-# Translation of 'gnucash' messages to Ukrainian.
+# Translation of `gnucash' messages to Ukrainian.
 # Copyright (C) 2000 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnucash package.
 # The last version has some new strings translated and some mistakes fixed.
@@ -8,11 +8,11 @@
 # Maksym Kobieliev <maximaximums@gmail.com>, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 4.5-pre1\n"
+"Project-Id-Version: gnucash 4.6-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-03-15 17:14+0200\n"
+"POT-Creation-Date: 2021-06-13 14:59-0700\n"
+"PO-Revision-Date: 2021-06-14 13:47+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.11.70\n"
+"X-Generator: Lokalize 20.12.0\n"
 "X-Project-Style: default\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -597,7 +597,7 @@ msgstr ""
 "Введіть перші літери назви наявного рахунка у стовпчику реєстру переказів, і "
 "GnuCash доповнить назву на основі списку ваших рахунків. Щоб вказати "
 "субрахунок, введіть перші літери назви батьківського рахунка, далі «:» і "
-"перші літери субрахунка (наприклад, П:Г для субрахунка «Прибутки:Готівка»)."
+"перші літери субрахунка (наприклад, П:Г для субрахунка «Прибутки:Готівка».)"
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -1457,6 +1457,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
+"Вміст поля «Назва компанії» не може бути порожнім. Будь ласка, вкажіть у "
+"ньому назву компанії або ім'я особи."
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -1798,10 +1800,8 @@ msgid "Business Document Links"
 msgstr "Прив'язки до бізнес-документів"
 
 #: gnucash/gnome/dialog-employee.c:213
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
-msgstr "Потрібно вказати назву платежу."
+msgstr "Вам слід вказати назву адреси сплати."
 
 #: gnucash/gnome/dialog-employee.c:308
 msgid "Edit Employee"
@@ -2647,12 +2647,8 @@ msgid "You must choose an owner for this job."
 msgstr "Потрібно вибрати власника цієї роботи."
 
 #: gnucash/gnome/dialog-job.c:157
-#, fuzzy
-#| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr ""
-"Кредит має бути додатнім числом,\n"
-"або треба залишити це поле порожнім."
+msgstr "Відсоткова ставка має бути коректною або порожньою."
 
 #: gnucash/gnome/dialog-job.c:258
 msgid "Edit Job"
@@ -2813,10 +2809,8 @@ msgid "You must select a company for payment processing."
 msgstr "Потрібно вибрати організацію для обробки платежу."
 
 #: gnucash/gnome/dialog-payment.c:256
-#, fuzzy
-#| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
-msgstr "Під час імпортування виникли проблеми."
+msgstr "Проблема із сумою сплати або відшкодування."
 
 #: gnucash/gnome/dialog-payment.c:277
 msgid "You must select a transfer account from the account tree."
@@ -4851,10 +4845,8 @@ msgid "Enter a payment for the owner of this invoice"
 msgstr "Введіть платіж для власника цього рахунку-фактури"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:381
-#, fuzzy
-#| msgid "Open a company report window for the owner of this invoice"
 msgid "Open a customer report window for the owner of this invoice"
-msgstr "Відкрити вікно звіту про фірму для власника цього рахунку-фактури"
+msgstr "Відкрити вікно звіту про клієнта для власника цього рахунку-фактури"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:383
 #: gnucash/gnome/gnc-plugin-page-invoice.c:404
@@ -4912,10 +4904,8 @@ msgid "Enter a payment for the owner of this bill"
 msgstr "Введіть платіж для власника цього рахунку"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:402
-#, fuzzy
-#| msgid "Open a company report window for the owner of this bill"
 msgid "Open a vendor report window for the owner of this bill"
-msgstr "Відкрити вікно звіту про фірму для власника цього рахунку"
+msgstr "Відкрити вікно звіту про постачальника для власника цього рахунку"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
 msgid "Use the current layout as default for all vendor bills and credit notes"
@@ -4964,10 +4954,9 @@ msgid "Enter a payment for the owner of this voucher"
 msgstr "Введіть платіж для власника цієї розписки"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:423
-#, fuzzy
-#| msgid "Open a company report window for the owner of this voucher"
 msgid "Open a employee report window for the owner of this voucher"
-msgstr "Відкрити вікно звіту про фірму для власника цієї розписки"
+msgstr ""
+"Відкрити вікно звіту про найманого працівника для власника цієї розписки"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:430
 msgid ""
@@ -6198,13 +6187,12 @@ msgstr "Майбутні транзакції"
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:871
-#, fuzzy, c-format
-#| msgid "Do you really want to delete this scheduled transaction?"
+#, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
-msgstr[0] "Ви справді хочете вилучити вибрану заплановану транзакцію?"
-msgstr[1] "Ви справді хочете вилучити вибрану заплановану транзакцію?"
-msgstr[2] "Ви справді хочете вилучити вибрану заплановану транзакцію?"
+msgstr[0] "Ви справді хочете вилучити вибрану %d заплановану транзакцію?"
+msgstr[1] "Ви справді хочете вилучити вибрані %d заплановані транзакції?"
+msgstr[2] "Ви справді хочете вилучити вибрані %d запланованих транзакцій?"
 msgstr[3] "Ви справді хочете вилучити вибрану заплановану транзакцію?"
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
@@ -7682,10 +7670,8 @@ msgid "Existing"
 msgstr "Наявний"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
-#, fuzzy
-#| msgid "Use +- keys to increment/decrement number"
 msgid "You can type '+' or '-' to increment or decrement the number."
-msgstr "Скористайтеся клавішами +/- для збільшення або зменшення числа"
+msgstr "Скористайтеся клавішами +/- для збільшення або зменшення числа."
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
 msgid "Action/Number"
@@ -8025,7 +8011,7 @@ msgstr "Необхідно ввести правильну ціну."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1498
 msgid "You must enter a valid 'to' amount."
-msgstr "Необхідно ввести правильну суму у полі «Куди»"
+msgstr "Слід ввести правильну суму у полі «Куди»."
 
 #: gnucash/gnome-utils/dialog-transfer.c:1726
 msgid "You must enter an amount to transfer."
@@ -8095,17 +8081,15 @@ msgstr "Створити…"
 #: gnucash/gnome-utils/gnc-amount-edit.c:413
 #: gnucash/register/register-core/formulacell.c:119
 #: gnucash/register/register-core/pricecell.c:159
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s' at position %d"
-msgstr "Помилка під час обробки %s."
+msgstr "Помилка під час обробки «%s» у позиції %d"
 
 # c-format
 #: gnucash/gnome-utils/gnc-amount-edit.c:419
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s'"
-msgstr "Помилка під час обробки %s."
+msgstr "Помилка під час обробки «%s»."
 
 #: gnucash/gnome-utils/gnc-autosave.c:99
 msgid "Save file automatically?"
@@ -11176,42 +11160,29 @@ msgstr ""
 "відповідників."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:25
-#, fuzzy
-#| msgid "Add matching transactions below this score"
 msgid "Likely matching transaction within these days"
-msgstr "Додати відповідні транзакції нижче цієї риски"
+msgstr "У цьому діапазоні днів вважати відповідність транзакцій ймовірною"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:26
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
 msgstr ""
-"Це поле визначає мінімальне значення оцінки потенційної відповідності "
-"транзакції для того, щоб запис транзакції було показано у списку "
-"відповідників."
+"Це поле визначає максимальну різницю у днях для визнання транзакції ймовірно "
+"відповідною у списку."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:30
-#, fuzzy
-#| msgid "Clear matching transactions above this score"
 msgid "UnLikely matching a transaction outside of these days"
-msgstr "Очистити відповідні транзакції вище цієї риски"
+msgstr ""
+"Поза цим діапазоном днів вважати відповідність транзакцій малоймовірною"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:31
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the minimum number of days a transaction is unlikely to "
 "be a match in the list."
 msgstr ""
-"Це поле визначає мінімальне значення оцінки потенційної відповідності "
-"транзакції для того, щоб запис транзакції було показано у списку "
-"відповідників."
+"Це поле визначає мінімальну різницю у днях для визнання транзакції "
+"малоймовірно відповідною у списку."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
@@ -11434,12 +11405,16 @@ msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
 msgstr ""
+"Типово встановити режим «Перевіряти створені транзакції» у вікні «З моменту "
+"останнього запуску»."
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
+"Цей параметр визначає, чи буде типово встановлено режим «Перевіряти створені "
+"транзакції» у діалоговому вікні «З моменту останнього запуску»."
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
@@ -11845,12 +11820,16 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
 msgstr ""
+"Відкриває нову вкладку поруч із поточною вкладкою, а не у кінці панелі "
+"вкладок"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:136
 msgid ""
 "If active, new tabs are opened adjacent to current tab. If inactive, the new "
 "tabs are opened instead at the end."
 msgstr ""
+"Якщо позначено, нові вкладки відкриватимуться поруч із поточною вкладкою. "
+"Якщо не позначено, нові вкладки відкриватимуться у кінці панелі вкладок."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:940
@@ -12230,12 +12209,10 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
 #: gnucash/gtkbuilder/dialog-preferences.glade:2842
-#, fuzzy
-#| msgid "Show all transactions on one line. (Two in double line mode.)"
 msgid "Show all transactions on one line or in double line mode on two."
 msgstr ""
-"Показувати усі транзакції в одному рядку (Або двох, у режимі з подвійним "
-"рядком.)"
+"Показувати усі транзакції в одному рядку або двох у режимі з подвійним "
+"рядком."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:291
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:296
@@ -12257,17 +12234,13 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
 #: gnucash/gtkbuilder/dialog-preferences.glade:2861
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line. (Two in double line mode.)"
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
 msgstr ""
 "Автоматично розгортати поточну транзакцію для показу усіх дроблень. Усі інші "
-"транзакції буде показано у один рядок. (У два рядки, якщо увімкнено режим "
-"подвійних рядків.)"
+"транзакції буде показано у один рядок. У два рядки, якщо увімкнено режим "
+"подвійних рядків."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:300
 #: gnucash/gtkbuilder/dialog-preferences.glade:2880
@@ -13298,38 +13271,6 @@ msgstr "Імпортування цін з CSV"
 
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:65
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import Prices from a CSV file.\n"
-#| "\n"
-#| "There is a minimum number of columns that have to be present for a "
-#| "successful import, these are Date, Amount, From Namespace, From Symbol "
-#| "and Currency To. If all entries are for the same Commodity / Currency "
-#| "then you can select them and then the columns will be Date and Amount.\n"
-#| "\n"
-#| "Various options exist for specifying the delimiter as well as a fixed "
-#| "width option. With the fixed width option, double click on the table of "
-#| "rows displayed to set a column width, then right mouse to change if "
-#| "required.\n"
-#| "\n"
-#| "Examples are \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" and CURRENCY;"
-#| "USD;2016-11-21;1.56;GBP\n"
-#| "\n"
-#| "There is an option for specifying the start row, end row and an option to "
-#| "skip alternate rows beginning from the start row which can be used if you "
-#| "have some header text. Also there is an option to overwrite existing "
-#| "prices for that day if required.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. To save the settings, tweak the settings to your "
-#| "preferences (optionally starting from an existing preset), then "
-#| "(optionally change the settings name and press the Save Settings button. "
-#| "Note you can't save to built-in presets.\n"
-#| "\n"
-#| "This operation is not reversible, so make sure you have a working "
-#| "backup.\n"
-#| "\n"
-#| "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgid ""
 "This assistant will help you import Prices from a CSV file.\n"
 "\n"
@@ -13383,11 +13324,10 @@ msgstr ""
 "цін на відповідний день.\n"
 "\n"
 "Нарешті, для регулярних дій з імпортування на сторінці попереднього "
-"перегляду передбачено кнопки для завантаження та збереження параметрів. Щоб "
-"зберегти параметри, налаштуйте усе так, як вам потрібно (якщо хочете, можете "
-"розпочати з наявного набору параметрів), далі (якщо хочете, можете змінити "
-"назву набору параметрів) натисніть кнопку «Зберегти параметри». Зауважте, що "
-"ви не можете замінювати вбудовані набори параметрів.\n"
+"перегляду передбачено кнопки для завантаження та збереження параметрів. "
+"Після завантаження ваших параметрів ви знову зможете їх скоригувати для "
+"подібних операцій з імпортування і зберегти результат із новою назвою. "
+"Зауважте, що ви не можете замінювати вбудовані набори параметрів.\n"
 "\n"
 "Наслідки виконання цієї дії не можна скасувати, тому, якщо маєте сумніви, "
 "створіть резервну копію даних.\n"
@@ -13587,10 +13527,6 @@ msgid "Import Preview"
 msgstr "Перегляд імпортування"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1026
-#, fuzzy
-#| msgid ""
-#| "<b>Press Apply to add the Prices.\n"
-#| "Cancel to abort.</b>"
 msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
@@ -13607,34 +13543,6 @@ msgid "CSV Transaction Import"
 msgstr "Імпортування транзакцій у CSV"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:56
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import a delimited file containing a list of "
-#| "transactions. It supports both token separated files (such as comma "
-#| "separated or semi-colon separated) and fixed width data.\n"
-#| "\n"
-#| "For a successful import three columns have to be available in the import "
-#| "data:\n"
-#| "• a Date column\n"
-#| "• a Description column\n"
-#| "• a Deposit or Withdrawal column\n"
-#| "\n"
-#| "If there is no Account data available, a base account can be selected to "
-#| "which all data will be imported.\n"
-#| "\n"
-#| "Apart from a choice of delimiter, there are several options to tweak the "
-#| "importer. For example a number of lines can be skipped at the start or "
-#| "the end of the data, as well as odd rows. Several date and number formats "
-#| "are supported. The file encoding can be defined.\n"
-#| "\n"
-#| "The importer can handle files where transactions are split over multiple "
-#| "lines, with each line representing one split.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. To save the settings, tweak the settings to your "
-#| "preferences (optionally starting from an existing preset), then "
-#| "(optionally change the settings name and press the Save Settings button. "
-#| "Note you can't save to built-in presets."
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions. It supports both token separated files (such as comma "
@@ -13687,11 +13595,11 @@ msgstr ""
 "\n"
 "Нарешті, для регулярного імпортування даних із однаковим форматуванням на "
 "сторінці попереднього перегляду передбачено кнопки для завантаження та "
-"збереження параметрів імпортування. Щоб зберегти параметри, налаштуйте усе "
-"відповідним чином (можете почати із наявного набору налаштувань), а потім, "
-"якщо хочете, змініть назву параметрів і натисніть кнопку «Зберегти "
-"параметри». Зауважте, що ви не зможете перезаписати вбудовані набори "
-"параметрів."
+"збереження параметрів імпортування. Ви можете зберегти скориговані "
+"параметри, щоб потім користуватися ними під час наступних сеансів "
+"імпортування. Після завантаження ваших параметрів ви знову зможете їх "
+"скоригувати для подібних операцій з імпортування і зберегти результат із "
+"новою назвою."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:74
 msgid "Transaction Import Assistant"
@@ -15924,10 +15832,8 @@ msgid "Linked _Location"
 msgstr "Пов'язана _адреса"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:349
-#, fuzzy
-#| msgid "(none)"
 msgid "(None)"
-msgstr "(немає)"
+msgstr "(Немає)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:412
 msgid "Enter URL like http://www.gnucash.org"
@@ -17334,29 +17240,29 @@ msgstr ""
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2291
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "Likely match _day threshold"
-msgstr "Поріг відп_овідності для показу"
+msgstr "Поріг ймовірної відп_овідності у днях"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2304
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "_Unlikely match day threshold"
-msgstr "Поріг відп_овідності для показу"
+msgstr "Поріг невідп_овідності у днях"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2318
 msgid ""
 "A transaction whose date is within the threshold is likely to be a match. "
 "Default is 4 days."
 msgstr ""
+"Транзакція, чия дата лежить у пороговому діапазоні, ймовірно, є відповідною. "
+"Типовим пороговим значенням є 4 днів."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2340
 msgid ""
 "A transaction whose date is outside the threshold is unlikely to be a match. "
 "Default is 14 days."
 msgstr ""
+"Транзакція, чия дата лежить поза пороговим діапазоном, навряд чи є "
+"відповідною. Типовим пороговим значенням є 14 днів."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2385
 msgid "<b>Checks</b>"
@@ -17729,11 +17635,13 @@ msgstr "_Ширина"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3671
 msgid "Open new tabs _adjacent to current tab"
-msgstr ""
+msgstr "Відкривати нові вкладки пору_ч із поточною вкладкою"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3677
 msgid "Opens new tab adjacent to current tab instead of at the end."
 msgstr ""
+"Відкриває нову вкладку поруч із поточною вкладкою, а не у кінці панелі "
+"вкладок."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3716
 msgid "Windows"
@@ -18336,16 +18244,16 @@ msgid "R_emind in advance"
 msgstr "На_гадувати заздалегідь"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Set 'Re_view Created Transactions' as default"
-msgstr "Перевіряти створені _транзакції"
+msgstr "Типово встановити «Перевіряти створені _транзакції»"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
 msgid ""
 "Set 'Review Created Transactions' as the default in the 'Since Last Run' "
 "dialog."
 msgstr ""
+"Типово встановити режим «Перевіряти створені транзакції» у вікні «З моменту "
+"останнього запуску»."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:765
 msgid "Edit Scheduled Transaction"
@@ -19612,17 +19520,38 @@ msgid ""
 "Online Banking, because sometimes the bank does not give you correct "
 "feedback when a transfer is rejected."
 msgstr ""
+"Вимоги щодо інтернет-банкінгу є різними для різних підтримуваних модулів "
+"обробки AqBanking, але зазвичай вимоги є такими:\n"
+"* Ваш банк має надавати вам інтернет-доступ до даних. Подробиці можна "
+"дізнатися з сайта банку або за допомогою служби підтримки.\n"
+"Також вам мають бути відомі:\n"
+"* Ваш ідентифікатор користувача, який засвідчує вашу ідентичність для "
+"сервера банку, часто це номер вашого базового рахунка;\n"
+"* Адреса сервера інтернет-банкінгу;\n"
+"* У певних випадках у цій допоміжній програмі може бути корисним номер "
+"маршрутизації гілки вашого банку;\n"
+"* Методи розпізнавання є різними для різних модулів обробки і вибраних "
+"способів:\n"
+" * FinTS PIN/TAN: для реалізації деяких методів потрібен певний гаджет, "
+"зокрема зчитувач карток або мобільний телефон;\n"
+" * FinTS HBCI: вам слід обмінятися відкритими частинами асиметричних ключів "
+"із вашим банком («Ini-лист»).\n"
+" * PayPal: зареєстрована адреса електронної пошти, пароль, підпис до "
+"програмного інтерфейсу;\n"
+"\n"
+"Щоб дізнатися більше, див. https://wiki.gnucash.org/wiki/AqBanking\n"
+"\n"
+"Зауваження: ЖОДНИХ ГАРАНТІЙ З БУДЬ-ЯКИХ ПИТАНЬ. Реалізація сервера інтернет-"
+"банкінгу у деяких банках є дуже неякісною. Вам не слід покладатися на "
+"перекази інтернет-банкінгу, якщо критичним параметром у них є час, оскільки "
+"іноді сервер банку не відповідає належним чином, якщо у переказі було "
+"відмовлено."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
 msgstr "Початкове налаштування інтернет-банкінгу"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:90
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\". Please press the button below to "
-#| "start this program."
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup Wizard\".\n"
@@ -19630,9 +19559,11 @@ msgid ""
 "\n"
 "Please press the button below to start it."
 msgstr ""
-"Налаштування Вашого з'єднання для інтернет-банкінгу здійснюватиметься за "
-"допомогою зовнішньої програми «AqBanking Setup Wizard». Будь ласка, "
-"натисніть кнопку нижче для запуску цієї програми."
+"Налаштування вашого з'єднання для інтернет-банкінгу здійснюватиметься за "
+"допомогою зовнішньої програми «AqBanking Setup Wizard».\n"
+"Вам слід налаштувати принаймні одне з'єднання, перш ніж продовжувати.\n"
+"\n"
+"Будь ласка, натисніть кнопку нижче, щоб розпочати налаштовування."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 msgid "_Start AqBanking Wizard"
@@ -20884,13 +20815,6 @@ msgid "Import bills and invoices from a CSV text file"
 msgstr "Імпортувати рахунки і рахунки-фактури з текстового файла CSV"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:80
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you export the Account Tree to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
 msgid ""
 "This assistant will help you export the Account Tree to a file with the "
 "separator specified below.\n"
@@ -20898,8 +20822,8 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"Цей помічник допоможе вам експортувати ієрархію рахунків до файла\n"
-"із вказаним нижче роздільником.\n"
+"Цей помічник допоможе вам експортувати ієрархію рахунків до файла із "
+"вказаним нижче роздільником.\n"
 "\n"
 "Виберіть параметри для файла і натисніть кнопку «Далі», щоб продовжити "
 "процедуру експортування, або натисніть кнопку «Скасувати», щоб скасувати "
@@ -20907,22 +20831,7 @@ msgstr ""
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
-#, fuzzy, c-format
-#| msgid ""
-#| "This assistant will help you export the Transactions to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "There will be multiple rows for each transaction and may require further "
-#| "manipulation to get them in a format you can use.\n"
-#| "\n"
-#| "Each Transaction will appear once in the export and will be listed in the "
-#| "order the accounts were processed\n"
-#| "\n"
-#| "Price/Rate output format is controlled by the Preference setting,\n"
-#| "General->Force Prices to display as decimals\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
+#, c-format
 msgid ""
 "This assistant will help you export the Transactions to a file with the "
 "separator specified below.\n"
@@ -20939,18 +20848,18 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"Цей помічник допоможе вам експортувати транзакції до файла\n"
-" із вказаним нижче роздільником.\n"
+"Цей помічник допоможе вам експортувати транзакції до файла із вказаним нижче "
+"роздільником.\n"
 "\n"
-"Для кожної транзакції буде декілька рядків. Крім того, можливо, потрібні "
-"будуть певні дії для приведення даних до формату, яким ви можете "
-"скористатися.\n"
+"%s\n"
 "\n"
-"Кожній транзакції у експортованих даних буде присвячено лише один запис. "
-"Транзакції буде упорядковано за порядком рахунків під час обробки.\n"
+"Хоча транзакція може мати поділи у декількох із вибраних рахунків, її буде "
+"експортовано лише один раз. Її пункт буде додано до запису першого "
+"обробленого рахунка, у якому є поділ.\n"
 "\n"
-"Формат виведення цін або курсів визначається параметром налаштувань,\n"
-"«Загальне -> Примусово показувати ціни як десяткові дроби.\n"
+"Формат виведення даних цін та ставок можна визначити за допомогою пункту "
+"налаштувань\n"
+"«Числа, дата, час -> Примусово показувати ціни як десяткові дроби.\n"
 "\n"
 "Виберіть параметри для файла і натисніть кнопку «Далі», щоб продовжити "
 "процедуру експортування, або натисніть кнопку «Скасувати», щоб скасувати "
@@ -20961,12 +20870,17 @@ msgid ""
 "There will be multiple rows for each transaction with each row representing "
 "one split."
 msgstr ""
+"Для кожної транзакції буде показано декілька рядків, кожен з яких "
+"відповідатиме одному поділу."
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "There will be one row for each transaction, equivalent to a single row in a "
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
 msgstr ""
+"Для кожної транзакції буде відведено один рядок, еквівалентний до єдиного "
+"рядка у бухгалтерській книзі у режимі «Основна книга». У такому режимі деякі "
+"подробиці щодо переказу може бути втрачено."
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
@@ -21480,15 +21394,11 @@ msgstr ""
 "із переказом стовпчики."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
-#, fuzzy
-#| msgid ""
-#| "No account column selected and no default account specified either.\n"
-#| "This should never happen. Please report this as a bug."
 msgid ""
 "No account column selected and no base account specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Не вибрано стовпчик рахунку і не вказано типовий рахунок.\n"
+"Не вибрано стовпчик рахунку і не вказано базовий рахунок.\n"
 "Такого не мало статися. Будь ласка, повідомте про це розробникам як про ваду."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:55
@@ -21553,10 +21463,8 @@ msgstr "Дані оброблено до некоректної валюти д�
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:520
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:575
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:583
-#, fuzzy
-#| msgid " could not be understood.\n"
 msgid "Column '{1}' could not be understood.\n"
-msgstr " не вдалося розібрати.\n"
+msgstr "Не вдалося обробити стовпчик «{1}».\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:328
@@ -23081,8 +22989,8 @@ msgstr ""
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
-"Ця транзакція розділена на кілька частин. Натисніть кнопку 'Показати "
-"частини', щоб побачити усі частини транзакції."
+"Ця транзакція розділена на кілька частин. Натисніть кнопку `Показати "
+"частини`, щоб побачити усі частини транзакції."
 
 #: gnucash/register/ledger-core/split-register-model.c:1579
 msgid ""
@@ -23321,8 +23229,6 @@ msgstr "Один місяць"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-#, fuzzy
-#| msgid "Quarter"
 msgid "Quarter Year"
 msgstr "Квартал"
 
@@ -23373,25 +23279,19 @@ msgstr "Джерело інформації про ціни."
 
 #: gnucash/report/options-utilities.scm:144
 msgid "Average cost of purchases weighted by volume"
-msgstr ""
+msgstr "Середня вартість закупівлі, зважена за об'ємом"
 
 #: gnucash/report/options-utilities.scm:145
-#, fuzzy
-#| msgid "The weighted average of all currency transactions of the past."
 msgid "Weighted average of all transactions in the past"
-msgstr "Середньозважене значення всіх валютних транзакцій у минулому."
+msgstr "Середньозважене значення всіх попередніх транзакцій"
 
 #: gnucash/report/options-utilities.scm:146
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Last up through report date"
-msgstr "Використовувати дату, найближчу до дати звіту."
+msgstr "Остання протягом дат звіту"
 
 #: gnucash/report/options-utilities.scm:147
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Closest to report date"
-msgstr "Використовувати дату, найближчу до дати звіту."
+msgstr "Найближчий до дати звіту"
 
 #: gnucash/report/options-utilities.scm:148
 #: gnucash/report/reports/standard/advanced-portfolio.scm:82
@@ -23460,18 +23360,15 @@ msgstr "За назвою рахунку, за абеткою"
 
 #: gnucash/report/options-utilities.scm:205
 msgid "Numerical by descending amount"
-msgstr ""
+msgstr "За числовим значенням, за спаданням суми"
 
 #: gnucash/report/options-utilities.scm:223
 msgid "How to show the balances of parent accounts."
 msgstr "Показувати сальдо для батьківських рахунків."
 
 #: gnucash/report/options-utilities.scm:224
-#, fuzzy
-#| msgid ""
-#| "Show only the balance in the parent account, excluding any subaccounts."
 msgid "Account Balance in the parent account, excluding any subaccounts."
-msgstr "Показувати лише баланс у батьківському рахунку, виключаючи субрахунки."
+msgstr "Баланс у батьківському рахунку, виключаючи субрахунки."
 
 #: gnucash/report/options-utilities.scm:225
 msgid "Do not show any balances of parent accounts."
@@ -23483,10 +23380,8 @@ msgid "Account Balance"
 msgstr "Сальдо рахунку"
 
 #: gnucash/report/options-utilities.scm:229
-#, fuzzy
-#| msgid "Calculate"
 msgid "Calculate Subtotal"
-msgstr "Обчислити"
+msgstr "Обчислити проміжний підсумок"
 
 #: gnucash/report/options-utilities.scm:230
 #: gnucash/report/options-utilities.scm:246
@@ -23727,17 +23622,13 @@ msgstr "Критерій упорядковування компаній."
 
 #: gnucash/report/reports/aging.scm:348
 #: gnucash/report/reports/standard/new-aging.scm:95
-#, fuzzy
-#| msgid "Name of the company."
 msgid "Name of the company"
-msgstr "Назва компанії."
+msgstr "Назва компанії"
 
 #: gnucash/report/reports/aging.scm:349
 #: gnucash/report/reports/standard/new-aging.scm:96
-#, fuzzy
-#| msgid "Total amount owed to/from Company."
 msgid "Total amount owed to/from Company"
-msgstr "Загальна сума боргу компанії/перед компанією."
+msgstr "Загальна сума боргу компанії/перед компанією"
 
 #: gnucash/report/reports/aging.scm:350
 #: gnucash/report/reports/standard/new-aging.scm:97
@@ -24435,34 +24326,26 @@ msgstr "Використовувати Від - До"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
-#, fuzzy
-#| msgid "1st Est Tax Quarter"
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
-msgstr "Перший квартал Est Tax"
+msgstr "Перший квартал Est Tax (1 січня — 31 березня)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
-#, fuzzy
-#| msgid "2nd Est Tax Quarter"
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "Другий квартал Est Tax"
+msgstr "Другий квартал Est Tax (1 квітня — 31 травня)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
-#, fuzzy
-#| msgid "3rd Est Tax Quarter"
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
-msgstr "Третій квартал Est Tax"
+msgstr "Третій квартал Est Tax (1 червня — 31 серпня)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
-#, fuzzy
-#| msgid "4th Est Tax Quarter"
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
-msgstr "Четвертий квартал Est Tax"
+msgstr "Четвертий квартал Est Tax (1 вересня — 31 грудня)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
@@ -24471,34 +24354,26 @@ msgstr "Останній рік"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
-#, fuzzy
-#| msgid "Last Yr 1st Est Tax Qtr"
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
-msgstr "Перший квартал Est Tax минулого року"
+msgstr "Перший квартал Est Tax минулого року (1 січня — 31 березня)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
-#, fuzzy
-#| msgid "Last Yr 2nd Est Tax Qtr"
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr "Другий квартал Est Tax минулого року"
+msgstr "Другий квартал Est Tax минулого року (1 квітня — 31 травня)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
-#, fuzzy
-#| msgid "Last Yr 3rd Est Tax Qtr"
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr "Третій квартал Est Tax минулого року"
+msgstr "Третій квартал Est Tax минулого року (1 червня — 31 серпня)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
-#, fuzzy
-#| msgid "Last Yr 4th Est Tax Qtr"
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
-msgstr "Четвертий квартал Est Tax минулого року"
+msgstr "Четвертий квартал Est Tax минулого року (1 вересня — 31 грудня)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:203
@@ -24645,17 +24520,13 @@ msgid "Select date to use for PriceDB lookups."
 msgstr "Виберіть дату для використання під час пошуку в базі даних цін."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:254
-#, fuzzy
-#| msgid "Nearest transaction date"
 msgid "Nearest to transaction date"
-msgstr "Дата найближчої транзакції"
+msgstr "Найближча до дати транзакції"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 #: gnucash/report/reports/standard/advanced-portfolio.scm:83
-#, fuzzy
-#| msgid "Nearest report date"
 msgid "Nearest to report date"
-msgstr "Дата найближча до звіту"
+msgstr "Найближча до дати звіту"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3326
 msgid "Tax Schedule Report & TXF Export"
@@ -24914,16 +24785,12 @@ msgstr ""
 "рахунку на глибину обмеження."
 
 #: gnucash/report/reports/standard/account-summary.scm:97
-#, fuzzy
-#| msgid "Shows accounts deeper than the depth limit at the depth limit."
 msgid "Raise accounts deeper than the depth limit to the depth limit."
-msgstr "Показати рахунки глибші ніж глибина обмеження."
+msgstr "Підняти рахунки, глибші ніж глибина обмеження."
 
 #: gnucash/report/reports/standard/account-summary.scm:98
-#, fuzzy
-#| msgid "Disregard completely any accounts deeper than the depth limit."
 msgid "Omit any accounts deeper than the depth limit."
-msgstr "Не зважати на рахунки глибші ніж глибина обмеження."
+msgstr "Не брати до уваги рахунки, глибші ніж глибина обмеження."
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
@@ -25181,20 +25048,14 @@ msgid "Basis calculation method."
 msgstr "Метод розрахунку бази."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:89
-#, fuzzy
-#| msgid "Use average cost of all shares for basis."
 msgid "Average cost of all shares"
-msgstr "Використовувати середню вартість усіх акцій для бази."
+msgstr "Середня вартість усіх акцій"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:90
-#, fuzzy
-#| msgid "First In, First Out"
 msgid "First-in first-out"
 msgstr "Першими поставлено — першими вибувають"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:91
-#, fuzzy
-#| msgid "Last In, First Out"
 msgid "Last-in first-out"
 msgstr "Останніми поставлено — першими вибувають"
 
@@ -25211,16 +25072,12 @@ msgid "Include in basis"
 msgstr "Включити у базову"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:104
-#, fuzzy
-#| msgid "Include in gain"
 msgid "Include in gain/loss"
-msgstr "Включити у прибутки"
+msgstr "Включити у прибутки/витрати"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:105
-#, fuzzy
-#| msgid "Title for this report."
 msgid "Omit from report"
-msgstr "Заголовок цього звіту."
+msgstr "Виключити зі звіту"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:111
 msgid "Display the ticker symbols."
@@ -25567,14 +25424,8 @@ msgid "Report format"
 msgstr "Формат звіту"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:146
-#, fuzzy
-#| msgid ""
-#| "The balance sheet can be displayed with either 1 or 2 columns. 'auto' "
-#| "means that the layout will be adjusted to fit the width of the page."
 msgid "The balance sheet can be displayed with either 1 or 2 columns."
-msgstr ""
-"Баланс може бути показано у один або два стовпчики. «auto» означає, що "
-"компонування буде скориговано так, щоб вписатися у ширину сторінки."
+msgstr "Баланс може бути показано у один або два стовпчики."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:154
 msgid "Exclude accounts with zero total balances"
@@ -25658,32 +25509,24 @@ msgstr ""
 "Примітки, додані наприкінці рахунку-фактури — можуть містити розмітку HTML."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:218
-#, fuzzy
-#| msgid "Adjust the layout to fit the width of the screen or page."
 msgid "Adjust the layout to fit the width of the screen or page"
-msgstr "Скоригувати компонування за шириною екрана або сторінки."
+msgstr "Скоригувати компонування за шириною екрана або сторінки"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:219
-#, fuzzy
-#| msgid "Display liabilities and equity below assets."
 msgid "Display liabilities and equity below assets"
-msgstr "Показувати зобов'язані і власні кошти під активами."
+msgstr "Показувати зобов'язані і власні кошти під активами"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:220
-#, fuzzy
-#| msgid "Display assets on the left, liabilities and equity on the right."
 msgid "Display assets on the left, liabilities and equity on the right"
-msgstr "Показувати активи ліворуч, зобов'язання і власні кошти — праворуч."
+msgstr "Показувати активи ліворуч, зобов'язання і власні кошти — праворуч"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:224
 msgid "Sign: -$10.00"
-msgstr ""
+msgstr "Знак: -$10.00"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
-#, fuzzy
-#| msgid "Brackets"
 msgid "Brackets: ($10.00)"
-msgstr "Дужки"
+msgstr "Дужки: ($10.00)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:244
 msgid ""
@@ -26040,36 +25883,28 @@ msgstr "Вибрати точний період, який завершує ді
 
 #: gnucash/report/reports/standard/budget-barchart.scm:65
 #: gnucash/report/reports/standard/budget.scm:111
-#, fuzzy
-#| msgid "Last budget period"
 msgid "First budget period"
-msgstr "Останні бюджетний період"
+msgstr "Перший бюджетний період"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:66
 #: gnucash/report/reports/standard/budget.scm:112
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Previous budget period"
-msgstr "Останні бюджетний період"
+msgstr "Попередній бюджетний період"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:67
 #: gnucash/report/reports/standard/budget.scm:113
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Current budget period"
-msgstr "Останні бюджетний період"
+msgstr "Поточний бюджетний період"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:68
 #: gnucash/report/reports/standard/budget.scm:114
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Next budget period"
-msgstr "Останні бюджетний період"
+msgstr "Наступний бюджетний період"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:69
 #: gnucash/report/reports/standard/budget.scm:115
 msgid "Last budget period"
-msgstr "Останні бюджетний період"
+msgstr "Останній бюджетний період"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:70
 #: gnucash/report/reports/standard/budget.scm:116
@@ -26082,7 +25917,7 @@ msgstr "Обчислити як поточну суму?"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:142
 msgid "Select which chart type to use."
-msgstr ""
+msgstr "Виберіть тип діаграми."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:144
 #: gnucash/report/reports/standard/category-barchart.scm:156
@@ -26613,22 +26448,16 @@ msgid "Choose the column by which the result table is sorted."
 msgstr "Виберіть стовпчик, за яким буде упорядковано таблицю результатів."
 
 #: gnucash/report/reports/standard/customer-summary.scm:78
-#, fuzzy
-#| msgid ""
-#| "Choose the ordering of the column sort: Either ascending or descending."
 msgid "Choose the ordering of the column sort."
-msgstr "Виберіть порядок сортування: за зростанням або за спаданням."
+msgstr "Виберіть порядок сортування."
 
 #: gnucash/report/reports/standard/customer-summary.scm:116
 msgid "Customer Name"
 msgstr "Ім'я клієнта"
 
 #: gnucash/report/reports/standard/customer-summary.scm:118
-#, fuzzy
-#| msgid "Sort by markup (which is profit amount divided by sales)."
 msgid "Markup (which is profit amount divided by sales)"
-msgstr ""
-"Упорядкувати за націнкою (сумою прибутків, поділеною на об'єм продажу)."
+msgstr "Націнка (сума прибутків, поділена на об'єм продажу)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:119
 #: gnucash/report/reports/standard/customer-summary.scm:300
@@ -27665,15 +27494,11 @@ msgstr "Джерело адреси."
 
 #: gnucash/report/reports/standard/new-aging.scm:404
 #: gnucash/report/reports/standard/receivables.scm:68
-#, fuzzy
-#| msgid "Billing Address"
 msgid "Billing address"
-msgstr "Адреса платника"
+msgstr "Адреса рахунку"
 
 #: gnucash/report/reports/standard/new-aging.scm:405
 #: gnucash/report/reports/standard/receivables.scm:69
-#, fuzzy
-#| msgid "Shipping Address"
 msgid "Shipping address"
 msgstr "Адреса отримувача"
 
@@ -28245,17 +28070,13 @@ msgstr "Показати кількість?"
 
 #: gnucash/report/reports/standard/register.scm:402
 #: gnucash/report/trep-engine.scm:992
-#, fuzzy
-#| msgid "Single Column Display."
 msgid "Single Column"
-msgstr "Показ у один стовпчик."
+msgstr "В один стовпчик"
 
 #: gnucash/report/reports/standard/register.scm:403
 #: gnucash/report/trep-engine.scm:993
-#, fuzzy
-#| msgid "Two Column Display."
 msgid "Two Columns"
-msgstr "Показ у два стовпчики."
+msgstr "У два стовпчики"
 
 #: gnucash/report/reports/standard/register.scm:408
 msgid "Display the value in transaction currency?"
@@ -28601,22 +28422,16 @@ msgid ""
 msgstr "Вказує на те, що взірець коригування записів є формальним виразом."
 
 #: gnucash/report/reports/standard/trial-balance.scm:203
-#, fuzzy
-#| msgid "General Journal Report"
 msgid "General journal exact balances"
-msgstr "Загальний звіт щодо журналу"
+msgstr "Точні баланси загального журналу"
 
 #: gnucash/report/reports/standard/trial-balance.scm:204
-#, fuzzy
-#| msgid "Ignores Adjusting/Closing entries"
 msgid "No adjusting/closing entries"
-msgstr "Ігнорує запис коригування/закриття"
+msgstr "Без записів коригування/закриття"
 
 #: gnucash/report/reports/standard/trial-balance.scm:205
-#, fuzzy
-#| msgid "Creates a complete end-of-period work sheet"
 msgid "Full end-of-period work sheet"
-msgstr "Створює повний робочий аркуш на кінець періоду"
+msgstr "Повний робочий аркуш на кінець періоду"
 
 #: gnucash/report/reports/standard/trial-balance.scm:273
 msgid "Adjusting Entries"
@@ -29243,10 +29058,8 @@ msgid "Register Order"
 msgstr "Журнал замовлень"
 
 #: gnucash/report/trep-engine.scm:339
-#, fuzzy
-#| msgid "Do not do any filtering."
 msgid "Do not do any filtering"
-msgstr "Не виконувати ніякого фільтрування."
+msgstr "Не виконувати ніякого фільтрування"
 
 #: gnucash/report/trep-engine.scm:342
 msgid "Include Transactions to/from Filter Accounts"
@@ -29265,10 +29078,8 @@ msgid "Void only"
 msgstr "Лише порожні"
 
 #: gnucash/report/trep-engine.scm:359
-#, fuzzy
-#| msgid "Show both (and include void transactions in totals)."
 msgid "Both (and include void transactions in totals)"
-msgstr "Показувати обидві (і включити порожні транзакції у підсумок)."
+msgstr "Обидві (і включити порожні транзакції у підсумок)"
 
 #: gnucash/report/trep-engine.scm:364
 msgid "Exclude closing transactions"
@@ -29303,10 +29114,8 @@ msgid "Use Global Preference"
 msgstr "Використовувати загальні налаштування"
 
 #: gnucash/report/trep-engine.scm:411
-#, fuzzy
-#| msgid "Don't change any displayed amounts."
 msgid "Don't change any displayed amounts"
-msgstr "Не змінювати показані суми."
+msgstr "Не змінювати показані суми"
 
 #: gnucash/report/trep-engine.scm:414
 msgid "Income and Expense"
@@ -29523,19 +29332,15 @@ msgstr "Обсяг подробиць, які слід показувати дл
 
 #: gnucash/report/trep-engine.scm:978
 msgid "One split per line"
-msgstr ""
+msgstr "Один поділ на рядок"
 
 #: gnucash/report/trep-engine.scm:979
-#, fuzzy
-#| msgid "Get Transactions Online"
 msgid "One transaction per line"
-msgstr "Отримати транзакцію через Інтернет"
+msgstr "Одна транзакція на рядок"
 
 #: gnucash/report/trep-engine.scm:991
-#, fuzzy
-#| msgid "Hide:"
 msgid "Hide"
-msgstr "Приховати:"
+msgstr "Приховати"
 
 #: gnucash/report/trep-engine.scm:1002
 msgid "Enable hyperlinks in amounts."
@@ -30713,6 +30518,114 @@ msgstr "Немає довідки."
 #~ "Ідентифікація — Назва фірми та\n"
 #~ "Адреса отримувача — Ім'я."
 
+#~ msgid "Path head for Linked File Relative Paths"
+#~ msgstr "Базовий шлях для відносних шляхів пов'язаного файла"
+
+#~ msgid ""
+#~ "\n"
+#~ "You first need to apply for Online Banking access at your bank. If your "
+#~ "bank decides to grant you electronic access, they will send you a letter "
+#~ "containing:\n"
+#~ "* The bank code of your bank\n"
+#~ "* The user ID that identifies you to your bank\n"
+#~ "* The Internet address of your bank's Online Banking server\n"
+#~ "* For HBCI Online Banking, information about the cryptographic public key "
+#~ "of your bank (\"Ini-Letter\").\n"
+#~ "\n"
+#~ "This information will be needed in the following. Press \"Next\" now.\n"
+#~ "\n"
+#~ "NOTE: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented "
+#~ "Online Banking server. You should not rely on time-critical transfers "
+#~ "through Online Banking, because sometimes the bank does not give you "
+#~ "correct feedback when a transfer is rejected.\n"
+#~ "\n"
+#~ "Press \"Cancel\" if you do not wish to setup any Online Banking "
+#~ "connection now.\n"
+#~ "\n"
+#~ "Lastly, for repeated imports the preview page has buttons to Load and "
+#~ "Save the settings. To save the settings, tweak the settings to your "
+#~ "preferences (optionally starting from an existing preset), then "
+#~ "(optionally change the settings name and press the Save Settings button. "
+#~ "Note you can't save to built-in presets.\n"
+#~ "\n"
+#~ "This operation is not reversible, so make sure you have a working "
+#~ "backup.\n"
+#~ "\n"
+#~ "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
+#~ msgstr ""
+#~ "\n"
+#~ "Спершу вам потрібно подати заявку на доступ до інтернет-банкінгу до "
+#~ "Вашого банку. Якщо Ваш банк вирішить надати Вам електронний доступ, ви "
+#~ "отримаєте лист, що містить\n"
+#~ "* Код вашого банку\n"
+#~ "* Ідентифікатор користувача, за яким банк вас розпізнаватиме\n"
+#~ "* Інтернет-адресу сервера інтернет-банкінгу вашого банку\n"
+#~ "* Для інтернет-банкінгу HBCI, інформацію про криптографічний публічний "
+#~ "ключ вашого банку («Ini-лист»).\n"
+#~ "\n"
+#~ "Ця інформація буде потрібна для того, щоб продовжити. Якщо Ви її вже "
+#~ "маєте, натисніть «Далі».\n"
+#~ "\n"
+#~ "УВАГА: МИ НЕ НАДАЄМО ЖОДНИХ ГАРАНТІЙ. Деякі банки мають низькоякісні "
+#~ "сервери інтернет-банкінгу. Вам не слід покладатися на платежі, що "
+#~ "вимагають часової точності, через сервіс інтернет-банкінгу, оскільки "
+#~ "часом банк не надає адекватного зворотнього зв'язку у випадку "
+#~ "нездійсненого платежу.\n"
+#~ "\n"
+#~ "Натисніть «Скасувати», якщо Ви не хочете налаштовувати з'єднання для "
+#~ "інтернет-банкінгу зараз.\n"
+#~ "\n"
+#~ "Нарешті, для регулярних дій з імпортування на сторінці попереднього "
+#~ "перегляду передбачено кнопки для завантаження та збереження параметрів. "
+#~ "Щоб зберегти параметри, налаштуйте усе так, як вам потрібно (якщо хочете, "
+#~ "можете розпочати з наявного набору параметрів), далі (якщо хочете, можете "
+#~ "змінити назву набору параметрів) натисніть кнопку «Зберегти параметри». "
+#~ "Зауважте, що ви не можете замінювати вбудовані набори параметрів.\n"
+#~ "\n"
+#~ "Наслідки виконання цієї дії не можна скасувати, тому, якщо маєте сумніви, "
+#~ "створіть резервну копію даних.\n"
+#~ "\n"
+#~ "Натисніть кнопку «Далі», щоб продовжити, або кнопку «Скасувати», щоб "
+#~ "перервати імпортування."
+
+#~ msgid ""
+#~ "This assistant will help you export the Transactions to a file\n"
+#~ "with the separator specified below.\n"
+#~ "\n"
+#~ "There will be multiple rows for each transaction and may require further "
+#~ "manipulation to get them in a format you can use. Each Transaction will "
+#~ "appear once in the export and will be listed in the order the accounts "
+#~ "were processed\n"
+#~ "\n"
+#~ "Price/Rate output format is controlled by the Preference setting,\n"
+#~ "General->Force Prices to display as decimals\n"
+#~ "\n"
+#~ "By selecting the simple layout, the output will be equivalent to a single "
+#~ "row register view and as such some of the transfer detail could be lost.\n"
+#~ "\n"
+#~ "Select the settings you require for the file and then click \"Next\" to "
+#~ "proceed or \"Cancel\" to abort the export.\n"
+#~ msgstr ""
+#~ "Цей помічник допоможе вам експортувати транзакції до файла\n"
+#~ " із вказаним нижче роздільником.\n"
+#~ "\n"
+#~ "Для кожної транзакції буде декілька рядків. Крім того, можливо, потрібні "
+#~ "будуть певні дії для приведення даних до формату, яким ви можете "
+#~ "скористатися. Кожній транзакції у експортованих даних буде присвячено "
+#~ "лише один запис. Транзакції буде упорядковано за порядком рахунків під "
+#~ "час обробки.\n"
+#~ "\n"
+#~ "Якщо буде вибрано просте компонування, виведені дані будуть еквівалентні "
+#~ "даним, показаним у режимі однорядкового реєстру, отже певні подробиці "
+#~ "щодо переказів буде втрачено.\n"
+#~ "\n"
+#~ "Формат виведення цін або курсів визначається параметром налаштувань,\n"
+#~ "«Загальне -> Примусово показувати ціни як десяткові дроби.\n"
+#~ "\n"
+#~ "Виберіть параметр для файла і натисніть кнопку «Далі», щоб продовжити "
+#~ "процедуру експортування, або натисніть кнопку «Скасувати», щоб скасувати "
+#~ "експортування.\n"
+
 #~ msgid "Day"
 #~ msgstr "День"
 
@@ -30725,8 +30638,11 @@ msgstr "Немає довідки."
 #~ msgid "Month"
 #~ msgstr "Місяць"
 
-#~ msgid "One Quarter"
-#~ msgstr "Один квартал"
+#~ msgid "One Quarter."
+#~ msgstr "Один квартал."
+
+#~ msgid "Half Year."
+#~ msgstr "Пів року."
 
 #~ msgid "Year"
 #~ msgstr "Рік"
@@ -30788,8 +30704,8 @@ msgstr "Немає довідки."
 #~ msgid "Alphabetical"
 #~ msgstr "За алфавітом"
 
-#~ msgid "By amount, largest to smallest"
-#~ msgstr "За сумою, від більшої до меншої"
+#~ msgid "By amount, largest to smallest."
+#~ msgstr "За сумою, від більшої до меншої."
 
 #~ msgid ""
 #~ "Calculate the subtotal for this parent account and all of its "
@@ -30797,6 +30713,14 @@ msgstr "Немає довідки."
 #~ msgstr ""
 #~ "Обчислити проміжний підсумок для цього рахунку та усіх дочірніх рахунків "
 #~ "і показати як баланс батьківського рахунку."
+
+#~ msgid ""
+#~ "Some reports stored in a legacy format were found. This format is not "
+#~ "supported anymore so these reports may not have been restored properly."
+#~ msgstr ""
+#~ "Виявлено деякі звіти, які зберігаються у застарілому форматі. Підтримки "
+#~ "цього формату більше не передбачено, отже такі звіти, можливо, не "
+#~ "вдасться належним чином відновити."
 
 #~ msgid "stylesheet."
 #~ msgstr "таблиця стилів."
@@ -30832,6 +30756,9 @@ msgstr "Немає довідки."
 
 #~ msgid "Show Accounts until level"
 #~ msgstr "Показувати рахунки лише до рівня"
+
+#~ msgid "Show accounts to this depth and not further."
+#~ msgstr "Показувати рахунки для цієї глибини вкладеності та не далі."
 
 #~ msgid "Help for first option."
 #~ msgstr "Довідка про перший параметр."
@@ -30889,9 +30816,6 @@ msgstr "Немає довідки."
 
 #~ msgid "Show the average weekly amount during the reporting period."
 #~ msgstr "Показувати середню тижневу суму під час звітного періоду."
-
-#~ msgid "Show accounts to this depth and not further."
-#~ msgstr "Показувати рахунки для цієї глибини вкладеності та не далі."
 
 #~ msgid "FIFO"
 #~ msgstr "FIFO"
@@ -30986,6 +30910,9 @@ msgstr "Немає довідки."
 #~ msgid "Show the report as a line chart."
 #~ msgstr "Показати звіт у форматі графіка."
 
+#~ msgid "Select Columns"
+#~ msgstr "Вибір стовпчиків"
+
 #~ msgid "Show the average daily amount during the reporting period."
 #~ msgstr "Показувати середню денну суму під час звітного періоду."
 
@@ -31043,6 +30970,12 @@ msgstr "Немає довідки."
 #~ msgid "Address fields from shipping address."
 #~ msgstr "Поля адреси з адреси надсилання."
 
+#~ msgid "Show Asset & Liability bars"
+#~ msgstr "Показувати стовпчики активів та заборгованості"
+
+#~ msgid "Show Net Worth bars"
+#~ msgstr "Показувати стовпчики чистої вартості"
+
 #~ msgid "The instantaneous price of actual currency transactions in the past."
 #~ msgstr "Миттєва ціна фактичної валютної транзакції у минулому."
 
@@ -31075,6 +31008,9 @@ msgstr "Немає довідки."
 
 #~ msgid "Align the banner to the right."
 #~ msgstr "Вирівняти банер праворуч."
+
+#~ msgid "Reconcile Status"
+#~ msgstr "Стан узгодження"
 
 #~ msgid "Sort & subtotal by account name."
 #~ msgstr "Упорядковувати та виводити проміжний підсумок для назви рахунку."
@@ -31191,134 +31127,6 @@ msgstr "Немає довідки."
 
 #~ msgid "No amount display."
 #~ msgstr "Показувати без сум."
-
-#~ msgid "Path head for Linked File Relative Paths"
-#~ msgstr "Базовий шлях для відносних шляхів пов'язаного файла"
-
-#~ msgid ""
-#~ "\n"
-#~ "You first need to apply for Online Banking access at your bank. If your "
-#~ "bank decides to grant you electronic access, they will send you a letter "
-#~ "containing:\n"
-#~ "* The bank code of your bank\n"
-#~ "* The user ID that identifies you to your bank\n"
-#~ "* The Internet address of your bank's Online Banking server\n"
-#~ "* For HBCI Online Banking, information about the cryptographic public key "
-#~ "of your bank (\"Ini-Letter\").\n"
-#~ "\n"
-#~ "This information will be needed in the following. Press \"Next\" now.\n"
-#~ "\n"
-#~ "NOTE: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented "
-#~ "Online Banking server. You should not rely on time-critical transfers "
-#~ "through Online Banking, because sometimes the bank does not give you "
-#~ "correct feedback when a transfer is rejected.\n"
-#~ "\n"
-#~ "Press \"Cancel\" if you do not wish to setup any Online Banking "
-#~ "connection now.\n"
-#~ "\n"
-#~ "Lastly, for repeated imports the preview page has buttons to Load and "
-#~ "Save the settings. To save the settings, tweak the settings to your "
-#~ "preferences (optionally starting from an existing preset), then "
-#~ "(optionally change the settings name and press the Save Settings button. "
-#~ "Note you can't save to built-in presets.\n"
-#~ "\n"
-#~ "This operation is not reversible, so make sure you have a working "
-#~ "backup.\n"
-#~ "\n"
-#~ "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
-#~ msgstr ""
-#~ "\n"
-#~ "Спершу вам потрібно подати заявку на доступ до інтернет-банкінгу до "
-#~ "Вашого банку. Якщо Ваш банк вирішить надати Вам електронний доступ, ви "
-#~ "отримаєте лист, що містить\n"
-#~ "* Код вашого банку\n"
-#~ "* Ідентифікатор користувача, за яким банк вас розпізнаватиме\n"
-#~ "* Інтернет-адресу сервера інтернет-банкінгу вашого банку\n"
-#~ "* Для інтернет-банкінгу HBCI, інформацію про криптографічний публічний "
-#~ "ключ вашого банку («Ini-лист»).\n"
-#~ "\n"
-#~ "Ця інформація буде потрібна для того, щоб продовжити. Якщо Ви її вже "
-#~ "маєте, натисніть «Далі».\n"
-#~ "\n"
-#~ "УВАГА: МИ НЕ НАДАЄМО ЖОДНИХ ГАРАНТІЙ. Деякі банки мають низькоякісні "
-#~ "сервери інтернет-банкінгу. Вам не слід покладатися на платежі, що "
-#~ "вимагають часової точності, через сервіс інтернет-банкінгу, оскільки "
-#~ "часом банк не надає адекватного зворотнього зв'язку у випадку "
-#~ "нездійсненого платежу.\n"
-#~ "\n"
-#~ "Натисніть «Скасувати», якщо Ви не хочете налаштовувати з'єднання для "
-#~ "інтернет-банкінгу зараз.\n"
-#~ "\n"
-#~ "Нарешті, для регулярних дій з імпортування на сторінці попереднього "
-#~ "перегляду передбачено кнопки для завантаження та збереження параметрів. "
-#~ "Щоб зберегти параметри, налаштуйте усе так, як вам потрібно (якщо хочете, "
-#~ "можете розпочати з наявного набору параметрів), далі (якщо хочете, можете "
-#~ "змінити назву набору параметрів) натисніть кнопку «Зберегти параметри». "
-#~ "Зауважте, що ви не можете замінювати вбудовані набори параметрів.\n"
-#~ "\n"
-#~ "Наслідки виконання цієї дії не можна скасувати, тому, якщо маєте сумніви, "
-#~ "створіть резервну копію даних.\n"
-#~ "\n"
-#~ "Натисніть кнопку «Далі», щоб продовжити, або кнопку «Скасувати», щоб "
-#~ "перервати імпортування."
-
-#~ msgid ""
-#~ "This assistant will help you export the Transactions to a file\n"
-#~ "with the separator specified below.\n"
-#~ "\n"
-#~ "There will be multiple rows for each transaction and may require further "
-#~ "manipulation to get them in a format you can use. Each Transaction will "
-#~ "appear once in the export and will be listed in the order the accounts "
-#~ "were processed\n"
-#~ "\n"
-#~ "Price/Rate output format is controlled by the Preference setting,\n"
-#~ "General->Force Prices to display as decimals\n"
-#~ "\n"
-#~ "By selecting the simple layout, the output will be equivalent to a single "
-#~ "row register view and as such some of the transfer detail could be lost.\n"
-#~ "\n"
-#~ "Select the settings you require for the file and then click \"Next\" to "
-#~ "proceed or \"Cancel\" to abort the export.\n"
-#~ msgstr ""
-#~ "Цей помічник допоможе вам експортувати транзакції до файла\n"
-#~ " із вказаним нижче роздільником.\n"
-#~ "\n"
-#~ "Для кожної транзакції буде декілька рядків. Крім того, можливо, потрібні "
-#~ "будуть певні дії для приведення даних до формату, яким ви можете "
-#~ "скористатися. Кожній транзакції у експортованих даних буде присвячено "
-#~ "лише один запис. Транзакції буде упорядковано за порядком рахунків під "
-#~ "час обробки.\n"
-#~ "\n"
-#~ "Якщо буде вибрано просте компонування, виведені дані будуть еквівалентні "
-#~ "даним, показаним у режимі однорядкового реєстру, отже певні подробиці "
-#~ "щодо переказів буде втрачено.\n"
-#~ "\n"
-#~ "Формат виведення цін або курсів визначається параметром налаштувань,\n"
-#~ "«Загальне -> Примусово показувати ціни як десяткові дроби.\n"
-#~ "\n"
-#~ "Виберіть параметр для файла і натисніть кнопку «Далі», щоб продовжити "
-#~ "процедуру експортування, або натисніть кнопку «Скасувати», щоб скасувати "
-#~ "експортування.\n"
-
-#~ msgid ""
-#~ "Some reports stored in a legacy format were found. This format is not "
-#~ "supported anymore so these reports may not have been restored properly."
-#~ msgstr ""
-#~ "Виявлено деякі звіти, які зберігаються у застарілому форматі. Підтримки "
-#~ "цього формату більше не передбачено, отже такі звіти, можливо, не "
-#~ "вдасться належним чином відновити."
-
-#~ msgid "Select Columns"
-#~ msgstr "Вибір стовпчиків"
-
-#~ msgid "Show Asset & Liability bars"
-#~ msgstr "Показувати стовпчики активів та заборгованості"
-
-#~ msgid "Show Net Worth bars"
-#~ msgstr "Показувати стовпчики чистої вартості"
-
-#~ msgid "Reconcile Status"
-#~ msgstr "Стан узгодження"
 
 #~ msgid "Search from "
 #~ msgstr "Шукати з "
