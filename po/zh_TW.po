@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash-2.4.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-06-07 14:23+0800\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2021-06-14 22:07+0200\n"
 "PO-Revision-Date: 2021-06-08 16:35+0000\n"
 "Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -710,10 +710,12 @@ msgid ""
 "\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
-"有個理論指出如果有人發現了宇宙的本質與其存在的理由，宇宙會馬上消失並且以另一個更不尋常且令人難以理解的方式出現。\n"
+"有個理論指出如果有人發現了宇宙的本質與其存在的理由，宇宙會馬上消失並且以另一"
+"個更不尋常且令人難以理解的方式出現。\n"
 "還有另一個理論指出這都已發生 ---\n"
 "\n"
-"道格拉斯‧亞當斯(Douglas Adams)，《宇宙盡頭的餐廳(The Restaurant at the End of the Universe)》"
+"道格拉斯‧亞當斯(Douglas Adams)，《宇宙盡頭的餐廳(The Restaurant at the End "
+"of the Universe)》"
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
@@ -748,7 +750,8 @@ msgid ""
 "Amend the Title and Notes or Click on \"Next\" to proceed.\n"
 "Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
-"您要求建立一本帳簿。這本帳簿會包含至 %s 午夜為止的所有交易，其中包含 %d 筆交易，分佈在 %d 個科目中。\n"
+"您要求建立一本帳簿。這本帳簿會包含至 %s 午夜為止的所有交易，其中包含 %d 筆交"
+"易，分佈在 %d 個科目中。\n"
 "\n"
 "修改標是或筆記，或按下「下一步」繼續。\n"
 "按下「返回」調整日期或選則「取消」。"
@@ -777,7 +780,7 @@ msgstr ""
 "恭喜！您已成功關帳！\n"
 
 #: gnucash/gnome/assistant-acct-period.c:589
-#: gnucash/gtkbuilder/dialog-fincalc.glade:637
+#: gnucash/gtkbuilder/dialog-fincalc.glade:642
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1232
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1237
 #: gnucash/report/reports/standard/budget-flow.scm:44
@@ -904,30 +907,30 @@ msgstr "其他付款"
 
 #. Translators: %s is "Taxes",
 #. "Insurance", or similar.
-#: gnucash/gnome/assistant-loan.cpp:767
+#: gnucash/gnome/assistant-loan.cpp:770
 #, c-format
 msgid "... pay \"%s\"?"
 msgstr "... 付「%s」？"
 
-#: gnucash/gnome/assistant-loan.cpp:779
+#: gnucash/gnome/assistant-loan.cpp:782
 msgid "via Escrow account?"
 msgstr "透過代管科目？"
 
-#: gnucash/gnome/assistant-loan.cpp:926
+#: gnucash/gnome/assistant-loan.cpp:929
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2894
-#: gnucash/register/ledger-core/split-register.c:2589
+#: gnucash/register/ledger-core/split-register.c:2587
 msgid "Loan"
 msgstr "貸款"
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
-#: gnucash/gnome/assistant-loan.cpp:1461
+#: gnucash/gnome/assistant-loan.cpp:1480
 #, c-format
 msgid "Loan Repayment Option: \"%s\""
 msgstr "貸款償還選項：「%s」"
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
-#: gnucash/gnome/assistant-loan.cpp:1863 gnucash/gnome/dialog-lot-viewer.c:942
+#: gnucash/gnome/assistant-loan.cpp:1882 gnucash/gnome/dialog-lot-viewer.c:942
 #: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:429
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
 #: gnucash/gtkbuilder/dialog-doclink.glade:644
@@ -976,8 +979,8 @@ msgstr "貸款償還選項：「%s」"
 msgid "Date"
 msgstr "日期"
 
-#: gnucash/gnome/assistant-loan.cpp:1869 gnucash/gnome/assistant-loan.cpp:2848
-#: gnucash/gnome/assistant-loan.cpp:2910 gnucash/gnome/assistant-loan.cpp:2923
+#: gnucash/gnome/assistant-loan.cpp:1888 gnucash/gnome/assistant-loan.cpp:2867
+#: gnucash/gnome/assistant-loan.cpp:2929 gnucash/gnome/assistant-loan.cpp:2942
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2855
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2896
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2901
@@ -986,10 +989,10 @@ msgstr "日期"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3082
 #: gnucash/gtkbuilder/dialog-payment.glade:438
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:132
-#: gnucash/register/ledger-core/split-register.c:2550
-#: gnucash/register/ledger-core/split-register.c:2591
-#: gnucash/register/ledger-core/split-register.c:2596
-#: gnucash/register/ledger-core/split-register.c:2607
+#: gnucash/register/ledger-core/split-register.c:2548
+#: gnucash/register/ledger-core/split-register.c:2589
+#: gnucash/register/ledger-core/split-register.c:2594
+#: gnucash/register/ledger-core/split-register.c:2605
 #: gnucash/report/reports/standard/new-owner-report.scm:298
 #: gnucash/report/reports/standard/owner-report.scm:357
 #: libgnucash/engine/Account.cpp:145 libgnucash/engine/Account.cpp:153
@@ -999,11 +1002,11 @@ msgstr "日期"
 msgid "Payment"
 msgstr "付款"
 
-#: gnucash/gnome/assistant-loan.cpp:1875 gnucash/gnome/assistant-loan.cpp:2943
+#: gnucash/gnome/assistant-loan.cpp:1894 gnucash/gnome/assistant-loan.cpp:2962
 msgid "Principal"
 msgstr "本金"
 
-#: gnucash/gnome/assistant-loan.cpp:1881 gnucash/gnome/assistant-loan.cpp:2963
+#: gnucash/gnome/assistant-loan.cpp:1900 gnucash/gnome/assistant-loan.cpp:2982
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2850
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2887
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2895
@@ -1011,31 +1014,31 @@ msgstr "本金"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2911
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2938
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:77
-#: gnucash/register/ledger-core/split-register.c:2545
-#: gnucash/register/ledger-core/split-register.c:2582
-#: gnucash/register/ledger-core/split-register.c:2590
-#: gnucash/register/ledger-core/split-register.c:2597
-#: gnucash/register/ledger-core/split-register.c:2606
-#: gnucash/register/ledger-core/split-register.c:2633
+#: gnucash/register/ledger-core/split-register.c:2543
+#: gnucash/register/ledger-core/split-register.c:2580
+#: gnucash/register/ledger-core/split-register.c:2588
+#: gnucash/register/ledger-core/split-register.c:2595
+#: gnucash/register/ledger-core/split-register.c:2604
+#: gnucash/register/ledger-core/split-register.c:2631
 msgid "Interest"
 msgstr "利息"
 
-#: gnucash/gnome/assistant-loan.cpp:2849
+#: gnucash/gnome/assistant-loan.cpp:2868
 msgid "Escrow Payment"
 msgstr "託管費"
 
-#: gnucash/gnome/assistant-stock-split.c:382
+#: gnucash/gnome/assistant-stock-split.c:392
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2946
-#: gnucash/register/ledger-core/split-register.c:2641
+#: gnucash/register/ledger-core/split-register.c:2639
 msgctxt "Action Column"
 msgid "Split"
 msgstr "分割"
 
-#: gnucash/gnome/assistant-stock-split.c:408
+#: gnucash/gnome/assistant-stock-split.c:418
 msgid "Error adding price."
 msgstr "加入價格時發生錯誤。"
 
-#: gnucash/gnome/assistant-stock-split.c:573
+#: gnucash/gnome/assistant-stock-split.c:583
 #: gnucash/gnome/dialog-find-transactions2.c:111
 #: gnucash/gnome/dialog-find-transactions.c:109
 #: gnucash/import-export/aqb/gnc-ab-utils.c:541
@@ -1061,7 +1064,7 @@ msgstr "加入價格時發生錯誤。"
 msgid "Account"
 msgstr "科目"
 
-#: gnucash/gnome/assistant-stock-split.c:579
+#: gnucash/gnome/assistant-stock-split.c:589
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
 #: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1045
@@ -1069,7 +1072,7 @@ msgstr "科目"
 msgid "Symbol"
 msgstr "代號"
 
-#: gnucash/gnome/assistant-stock-split.c:585
+#: gnucash/gnome/assistant-stock-split.c:595
 #: gnucash/gnome/dialog-find-transactions.c:122
 #: gnucash/register/ledger-core/split-register-model.c:419
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1053
@@ -1083,7 +1086,7 @@ msgstr "代號"
 msgid "Shares"
 msgstr "股數"
 
-#: gnucash/gnome/assistant-stock-split.c:776
+#: gnucash/gnome/assistant-stock-split.c:788
 msgid "You don't have any stock accounts with balances!"
 msgstr "您沒有任何結算的股票科目！"
 
@@ -1106,7 +1109,7 @@ msgstr "編輯..."
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3001
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
 #: gnucash/report/reports/standard/invoice.scm:774
-#: libgnucash/engine/Account.cpp:173 libgnucash/engine/gncInvoice.c:1082
+#: libgnucash/engine/Account.cpp:173 libgnucash/engine/gncInvoice.c:1085
 msgid "Bill"
 msgstr "帳單"
 
@@ -1129,7 +1132,7 @@ msgstr "憑證"
 #: gnucash/gtkbuilder/dialog-invoice.glade:205
 #: gnucash/gtkbuilder/dialog-invoice.glade:816
 #: gnucash/gtkbuilder/dialog-invoice.glade:840
-#: gnucash/register/ledger-core/split-register.c:2595
+#: gnucash/register/ledger-core/split-register.c:2593
 #: gnucash/report/reports/standard/invoice.scm:763
 #: gnucash/report/reports/standard/invoice.scm:782
 #: gnucash/report/reports/standard/job-report.scm:403
@@ -1137,7 +1140,7 @@ msgstr "憑證"
 #: gnucash/report/reports/standard/taxinvoice.scm:173
 #: gnucash/report/reports/support/receipt.eguile.scm:91
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
-#: libgnucash/engine/Account.cpp:154 libgnucash/engine/gncInvoice.c:1080
+#: libgnucash/engine/Account.cpp:154 libgnucash/engine/gncInvoice.c:1083
 msgid "Invoice"
 msgstr "發票"
 
@@ -1217,7 +1220,7 @@ msgstr "下個月的"
 
 #: gnucash/gnome/dialog-billterms.c:537 gnucash/gnome/dialog-doclink.c:577
 #: gnucash/gnome/dialog-doclink.c:831 gnucash/gnome/dialog-doclink.c:875
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:622
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:623
 #: gnucash/gtkbuilder/dialog-price.glade:24
 #: gnucash/report/reports/standard/job-report.scm:240
 #: gnucash/report/reports/standard/new-owner-report.scm:300
@@ -1232,7 +1235,7 @@ msgid "Term \"%s\" is in use. You cannot delete it."
 msgstr "條款「%s」正在使用中。您不能刪除它。"
 
 #: gnucash/gnome/dialog-billterms.c:678
-#: gnucash/gnome-utils/dialog-tax-table.c:673
+#: gnucash/gnome-utils/dialog-tax-table.c:737
 #, c-format
 msgid "Are you sure you want to delete \"%s\"?"
 msgstr "您確定要刪除「%s」？"
@@ -1275,19 +1278,19 @@ msgstr "刪除商品？"
 #: gnucash/gnome/gnc-plugin-budget.c:289
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1789
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1111
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1112
 #: gnucash/gnome/gnc-plugin-page-register2.c:1630
 #: gnucash/gnome/gnc-plugin-page-register.c:2014
 #: gnucash/gnome/gnc-split-reg.c:975 gnucash/gnome/gnc-split-reg.c:1013
 #: gnucash/gnome/gnc-split-reg.c:1235 gnucash/gnome/gnc-split-reg.c:1503
-#: gnucash/gnome/gnc-split-reg.c:1543 gnucash/gnome/window-reconcile2.c:2125
-#: gnucash/gnome/window-reconcile.c:2346
+#: gnucash/gnome/gnc-split-reg.c:1543 gnucash/gnome/window-reconcile2.c:2150
+#: gnucash/gnome/window-reconcile.c:2371
 #: gnucash/gnome-search/search-account.c:237
 #: gnucash/gnome-utils/dialog-account.c:722
 #: gnucash/gnome-utils/dialog-options.c:223
-#: gnucash/gnome-utils/dialog-tax-table.c:603
+#: gnucash/gnome-utils/dialog-tax-table.c:667
 #: gnucash/gnome-utils/gnc-file.c:118 gnucash/gnome-utils/gnc-file.c:366
-#: gnucash/gnome-utils/gnc-file.c:663 gnucash/gnome-utils/gnc-gui-query.c:300
+#: gnucash/gnome-utils/gnc-file.c:664 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-main-window.c:1309
 #: gnucash/gnome-utils/gnc-main-window.c:1464
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:886
@@ -1376,9 +1379,9 @@ msgstr "取消(_C)"
 #: gnucash/gnome/dialog-price-edit-db.c:207
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1790
 #: gnucash/gnome/gnc-plugin-page-invoice.c:189
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1112
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1113
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:163
-#: gnucash/gnome/window-reconcile2.c:2167 gnucash/gnome/window-reconcile.c:2388
+#: gnucash/gnome/window-reconcile2.c:2192 gnucash/gnome/window-reconcile.c:2413
 #: gnucash/gtkbuilder/dialog-account.glade:398
 #: gnucash/gtkbuilder/dialog-billterms.glade:477
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:66
@@ -1390,80 +1393,72 @@ msgstr "取消(_C)"
 msgid "_Delete"
 msgstr "刪除(_D)"
 
-#: gnucash/gnome/dialog-customer.c:329
+#: gnucash/gnome/dialog-customer.c:332 gnucash/gnome/dialog-vendor.c:214
 msgid ""
-"You must enter a company name. If this customer is an individual (and not a "
-"company) you should enter the same value for:\n"
-"Identification - Company Name, and\n"
-"Payment Address - Name."
+"The Company Name field cannot be left blank, please enter a company name or "
+"a person's name."
 msgstr ""
-"您必須輸入公司名稱。若客戶是個人而非公司，請在「識別 - 公司名稱」跟「連絡地"
-"址 - 名稱」填相同的名字。"
 
 #: gnucash/gnome/dialog-customer.c:341
-msgid "You must enter a billing address."
-msgstr "您必須輸入帳單地址。"
-
-#: gnucash/gnome/dialog-customer.c:351
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
 msgstr "折扣的百分比必須介於 0-100 或者保持空白。"
 
-#: gnucash/gnome/dialog-customer.c:356
+#: gnucash/gnome/dialog-customer.c:352
 msgid "Credit must be a positive amount or you must leave it blank."
 msgstr "信用必須是正數或者保持空白。"
 
-#: gnucash/gnome/dialog-customer.c:433 gnucash/gnome/dialog-employee.c:288
-#: gnucash/gnome/dialog-job.c:243 gnucash/gnome/dialog-vendor.c:300
+#: gnucash/gnome/dialog-customer.c:429 gnucash/gnome/dialog-employee.c:301
+#: gnucash/gnome/dialog-job.c:251 gnucash/gnome/dialog-vendor.c:287
 #: gnucash/gnome-utils/dialog-account.c:1572
 msgid "<No name>"
 msgstr "<沒有名稱>"
 
-#: gnucash/gnome/dialog-customer.c:440
+#: gnucash/gnome/dialog-customer.c:436
 msgid "Edit Customer"
 msgstr "編輯客戶"
 
-#: gnucash/gnome/dialog-customer.c:442
+#: gnucash/gnome/dialog-customer.c:438
 #: gnucash/gnome-search/dialog-search.c:1079
 #: gnucash/gtkbuilder/dialog-customer.glade:31
 msgid "New Customer"
 msgstr "新增客戶"
 
-#: gnucash/gnome/dialog-customer.c:910
+#: gnucash/gnome/dialog-customer.c:906
 msgid "View/Edit Customer"
 msgstr "檢視/編輯客戶"
 
-#: gnucash/gnome/dialog-customer.c:911
+#: gnucash/gnome/dialog-customer.c:907
 msgid "Customer's Jobs"
 msgstr "客戶的工作"
 
-#: gnucash/gnome/dialog-customer.c:913
+#: gnucash/gnome/dialog-customer.c:909
 msgid "Customer's Invoices"
 msgstr "客戶的發票"
 
-#: gnucash/gnome/dialog-customer.c:914 gnucash/gnome/dialog-employee.c:695
+#: gnucash/gnome/dialog-customer.c:910 gnucash/gnome/dialog-employee.c:708
 #: gnucash/gnome/dialog-invoice.c:3335 gnucash/gnome/dialog-invoice.c:3344
 #: gnucash/gnome/dialog-invoice.c:3355 gnucash/gnome/dialog-invoice.c:3610
-#: gnucash/gnome/dialog-invoice.c:3616 gnucash/gnome/dialog-job.c:562
+#: gnucash/gnome/dialog-invoice.c:3616 gnucash/gnome/dialog-job.c:570
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:237
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:296
 #: gnucash/gtkbuilder/dialog-payment.glade:61
 msgid "Process Payment"
 msgstr "處理付款"
 
-#: gnucash/gnome/dialog-customer.c:924
+#: gnucash/gnome/dialog-customer.c:920
 msgid "Shipping Contact"
 msgstr "出貨連絡人"
 
-#: gnucash/gnome/dialog-customer.c:926 gnucash/gnome/dialog-vendor.c:729
+#: gnucash/gnome/dialog-customer.c:922 gnucash/gnome/dialog-vendor.c:716
 msgid "Billing Contact"
 msgstr "帳單連絡人"
 
-#: gnucash/gnome/dialog-customer.c:928
+#: gnucash/gnome/dialog-customer.c:924
 msgid "Customer ID"
 msgstr "客戶 ID"
 
-#: gnucash/gnome/dialog-customer.c:930 gnucash/gnome/dialog-invoice.c:3392
-#: gnucash/gnome/dialog-invoice.c:3426 gnucash/gnome/dialog-vendor.c:733
+#: gnucash/gnome/dialog-customer.c:926 gnucash/gnome/dialog-invoice.c:3392
+#: gnucash/gnome/dialog-invoice.c:3426 gnucash/gnome/dialog-vendor.c:720
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:352
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:360
 #: gnucash/gtkbuilder/dialog-customer.glade:145
@@ -1473,13 +1468,13 @@ msgstr "客戶 ID"
 msgid "Company Name"
 msgstr "公司名稱"
 
-#: gnucash/gnome/dialog-customer.c:937 gnucash/gnome/dialog-vendor.c:740
+#: gnucash/gnome/dialog-customer.c:933 gnucash/gnome/dialog-vendor.c:727
 msgid "Contact"
 msgstr "連絡人"
 
-#: gnucash/gnome/dialog-customer.c:939 gnucash/gnome/dialog-invoice.c:3480
-#: gnucash/gnome/dialog-invoice.c:3634 gnucash/gnome/dialog-job.c:592
-#: gnucash/gnome/dialog-order.c:889 gnucash/gnome/dialog-vendor.c:742
+#: gnucash/gnome/dialog-customer.c:935 gnucash/gnome/dialog-invoice.c:3480
+#: gnucash/gnome/dialog-invoice.c:3634 gnucash/gnome/dialog-job.c:600
+#: gnucash/gnome/dialog-order.c:889 gnucash/gnome/dialog-vendor.c:729
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:129
 #: gnucash/report/reports/aging.scm:538
 #: gnucash/report/reports/standard/new-aging.scm:179
@@ -1487,13 +1482,13 @@ msgstr "連絡人"
 msgid "Company"
 msgstr "公司"
 
-#: gnucash/gnome/dialog-customer.c:941 gnucash/gnome/dialog-employee.c:717
-#: gnucash/gnome/dialog-job.c:596 gnucash/gnome/dialog-vendor.c:744
+#: gnucash/gnome/dialog-customer.c:937 gnucash/gnome/dialog-employee.c:730
+#: gnucash/gnome/dialog-job.c:604 gnucash/gnome/dialog-vendor.c:731
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:349
 msgid "ID #"
 msgstr "ID #"
 
-#: gnucash/gnome/dialog-customer.c:964
+#: gnucash/gnome/dialog-customer.c:960
 msgid "Find Customer"
 msgstr "尋找客戶"
 
@@ -1737,56 +1732,50 @@ msgstr ""
 msgid "Business Document Links"
 msgstr "商務文件連結"
 
-#: gnucash/gnome/dialog-employee.c:199
-msgid "You must enter a username."
-msgstr "您必須輸入使用者名稱。"
-
-#: gnucash/gnome/dialog-employee.c:204
-msgid "You must enter the employee's name."
-msgstr "您必須輸入員工名稱。"
-
 #: gnucash/gnome/dialog-employee.c:213
-msgid "You must enter an address."
-msgstr "您必須輸入地址。"
+#, fuzzy
+#| msgid "You must enter a payment address."
+msgid "You must enter a Payment-Address Name."
+msgstr "您必須輸入付款地址。"
 
-#: gnucash/gnome/dialog-employee.c:295
+#: gnucash/gnome/dialog-employee.c:308
 msgid "Edit Employee"
 msgstr "編輯員工"
 
-#: gnucash/gnome/dialog-employee.c:297
+#: gnucash/gnome/dialog-employee.c:310
 #: gnucash/gnome-search/dialog-search.c:1083
 #: gnucash/gtkbuilder/dialog-employee.glade:7
 msgid "New Employee"
 msgstr "新增員工"
 
-#: gnucash/gnome/dialog-employee.c:693
+#: gnucash/gnome/dialog-employee.c:706
 msgid "View/Edit Employee"
 msgstr "檢視/編輯員工"
 
-#: gnucash/gnome/dialog-employee.c:694
+#: gnucash/gnome/dialog-employee.c:707
 msgid "Expense Vouchers"
 msgstr "消費憑證"
 
-#: gnucash/gnome/dialog-employee.c:704
+#: gnucash/gnome/dialog-employee.c:717
 msgid "Employee ID"
 msgstr "員工 ID"
 
-#: gnucash/gnome/dialog-employee.c:706
+#: gnucash/gnome/dialog-employee.c:719
 msgid "Employee Username"
 msgstr "員工使用者名稱"
 
-#: gnucash/gnome/dialog-employee.c:708 gnucash/gnome/dialog-invoice.c:3460
+#: gnucash/gnome/dialog-employee.c:721 gnucash/gnome/dialog-invoice.c:3460
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:364
 msgid "Employee Name"
 msgstr "員工名稱"
 
-#: gnucash/gnome/dialog-employee.c:715
+#: gnucash/gnome/dialog-employee.c:728
 #: gnucash/gtkbuilder/dialog-employee.glade:121
 #: gnucash/gtkbuilder/dialog-file-access.glade:196
 msgid "Username"
 msgstr "使用者名稱"
 
-#: gnucash/gnome/dialog-employee.c:719 gnucash/gnome/dialog-sx-editor2.c:1754
+#: gnucash/gnome/dialog-employee.c:732 gnucash/gnome/dialog-sx-editor2.c:1754
 #: gnucash/gnome/dialog-sx-editor.c:1816 gnucash/gnome/dialog-tax-info.c:1201
 #: gnucash/gnome-utils/gnc-dense-cal.c:347
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
@@ -1807,31 +1796,31 @@ msgstr "使用者名稱"
 msgid "Name"
 msgstr "名稱"
 
-#: gnucash/gnome/dialog-employee.c:741
+#: gnucash/gnome/dialog-employee.c:754
 msgid "Find Employee"
 msgstr "尋找員工"
 
-#: gnucash/gnome/dialog-fincalc.c:328
+#: gnucash/gnome/dialog-fincalc.c:335
 msgid ""
 "This program can only calculate one value at a time. You must enter values "
 "for all but one quantity."
 msgstr "此程式一次只能計算一個數值，您必須輸入除了某個數值以外的所有數值。"
 
-#: gnucash/gnome/dialog-fincalc.c:330
+#: gnucash/gnome/dialog-fincalc.c:337
 msgid ""
 "GnuCash cannot determine the value in one of the fields. You must enter a "
 "valid expression."
 msgstr "GnuCash 無法求出其中一個欄位的值，您得輸入有效的運算式。"
 
-#: gnucash/gnome/dialog-fincalc.c:373
+#: gnucash/gnome/dialog-fincalc.c:381
 msgid "The interest rate cannot be zero."
 msgstr "利率不能為零。"
 
-#: gnucash/gnome/dialog-fincalc.c:401
+#: gnucash/gnome/dialog-fincalc.c:408
 msgid "The number of payments cannot be zero."
 msgstr "付款的數量不能為零。"
 
-#: gnucash/gnome/dialog-fincalc.c:406
+#: gnucash/gnome/dialog-fincalc.c:413
 msgid "The number of payments cannot be negative."
 msgstr "付款的數量不能為負的。"
 
@@ -1882,7 +1871,7 @@ msgstr "結算"
 
 #: gnucash/gnome/dialog-find-transactions2.c:117
 #: gnucash/gnome/dialog-find-transactions.c:115
-#: gnucash/report/html-acct-table.scm:567
+#: gnucash/report/html-acct-table.scm:615
 #: gnucash/report/reports/standard/equity-statement.scm:169
 #: gnucash/report/reports/standard/income-statement.scm:267
 #: gnucash/report/reports/standard/trial-balance.scm:285
@@ -1893,7 +1882,7 @@ msgstr "結帳分錄"
 #: gnucash/gnome/dialog-find-transactions.c:118
 #: gnucash/gnome/gnc-plugin-page-register2.c:506
 #: gnucash/gnome/gnc-plugin-page-register.c:629
-#: gnucash/gnome/window-reconcile2.c:1245 gnucash/gnome/window-reconcile.c:1386
+#: gnucash/gnome/window-reconcile2.c:1270 gnucash/gnome/window-reconcile.c:1411
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:616
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:629
 msgid "Reconcile"
@@ -2257,10 +2246,10 @@ msgstr "合計現金："
 msgid "Total Charge:"
 msgstr "合計收費："
 
-#: gnucash/gnome/dialog-invoice.c:1901 gnucash/gnome/dialog-payment.c:1335
+#: gnucash/gnome/dialog-invoice.c:1901 gnucash/gnome/dialog-payment.c:1374
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:780
-#: libgnucash/engine/gncInvoice.c:1088
+#: libgnucash/engine/gncInvoice.c:1091
 msgid "Credit Note"
 msgstr "貸項通知單"
 
@@ -2412,7 +2401,7 @@ msgstr "發票備註"
 
 #: gnucash/gnome/dialog-invoice.c:3374 gnucash/gnome/dialog-invoice.c:3408
 #: gnucash/gnome/dialog-invoice.c:3442 gnucash/gnome/dialog-invoice.c:3471
-#: gnucash/gnome/dialog-job.c:575 gnucash/gnome/dialog-job.c:588
+#: gnucash/gnome/dialog-job.c:583 gnucash/gnome/dialog-job.c:596
 #: gnucash/gnome/dialog-order.c:887 gnucash/gtkbuilder/dialog-invoice.glade:310
 #: gnucash/gtkbuilder/dialog-invoice.glade:944
 #: gnucash/gtkbuilder/dialog-job.glade:217
@@ -2470,7 +2459,7 @@ msgstr "憑證備註"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2875
 #: gnucash/gtkbuilder/assistant-loan.glade:283
 #: gnucash/gtkbuilder/dialog-doclink.glade:671
-#: gnucash/gtkbuilder/dialog-fincalc.glade:729
+#: gnucash/gtkbuilder/dialog-fincalc.glade:734
 #: gnucash/gtkbuilder/dialog-invoice.glade:145
 #: gnucash/gtkbuilder/dialog-invoice.glade:736
 #: gnucash/gtkbuilder/dialog-payment.glade:280
@@ -2574,58 +2563,64 @@ msgstr "您必須給工作一個名稱。"
 msgid "You must choose an owner for this job."
 msgstr "您必須選擇這個工作的所有者。"
 
-#: gnucash/gnome/dialog-job.c:250
+#: gnucash/gnome/dialog-job.c:157
+#, fuzzy
+#| msgid "Credit must be a positive amount or you must leave it blank."
+msgid "The rate amount must be valid or you must leave it blank."
+msgstr "信用必須是正數或者保持空白。"
+
+#: gnucash/gnome/dialog-job.c:258
 msgid "Edit Job"
 msgstr "編輯工作"
 
-#: gnucash/gnome/dialog-job.c:252 gnucash/gnome-search/dialog-search.c:1095
+#: gnucash/gnome/dialog-job.c:260 gnucash/gnome-search/dialog-search.c:1095
 msgid "New Job"
 msgstr "新增工作"
 
-#: gnucash/gnome/dialog-job.c:560
+#: gnucash/gnome/dialog-job.c:568
 msgid "View/Edit Job"
 msgstr "檢視/編輯工作"
 
-#: gnucash/gnome/dialog-job.c:561
+#: gnucash/gnome/dialog-job.c:569
 msgid "View Invoices"
 msgstr "檢視發票"
 
-#: gnucash/gnome/dialog-job.c:571
+#: gnucash/gnome/dialog-job.c:579
 msgid "Owner's Name"
 msgstr "所有者姓名"
 
-#: gnucash/gnome/dialog-job.c:573
+#: gnucash/gnome/dialog-job.c:581
 msgid "Only Active?"
 msgstr "只有作用中的？"
 
-#: gnucash/gnome/dialog-job.c:577 gnucash/gnome/dialog-job.c:590
+#: gnucash/gnome/dialog-job.c:585 gnucash/gnome/dialog-job.c:598
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2929
 #: gnucash/gtkbuilder/dialog-job.glade:204
 #: gnucash/register/ledger-core/split-register-model.c:369
 msgid "Rate"
 msgstr "比率"
 
-#: gnucash/gnome/dialog-job.c:579 gnucash/gnome-utils/gnc-tree-view-owner.c:357
+#: gnucash/gnome/dialog-job.c:587 gnucash/gnome-utils/gnc-tree-view-owner.c:357
 #: gnucash/gtkbuilder/dialog-job.glade:102
 msgid "Job Number"
 msgstr "工作編號"
 
-#: gnucash/gnome/dialog-job.c:581 gnucash/gnome/dialog-job.c:594
+#: gnucash/gnome/dialog-job.c:589 gnucash/gnome/dialog-job.c:602
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:356
 #: gnucash/gtkbuilder/dialog-job.glade:115
 msgid "Job Name"
 msgstr "工作名稱"
 
-#: gnucash/gnome/dialog-job.c:645
+#: gnucash/gnome/dialog-job.c:653
 msgid "Find Job"
 msgstr "尋找工作"
 
 #: gnucash/gnome/dialog-lot-viewer.c:814
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:403
 #: gnucash/gnome/gnc-plugin-page-budget.c:220
-#: gnucash/gnome/window-reconcile2.c:1634 gnucash/gnome/window-reconcile.c:1790
+#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1815
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
-#: gnucash/gnome-utils/gnc-file.c:1139
+#: gnucash/gnome-utils/gnc-file.c:1140
 msgid "Open"
 msgstr "開啟"
 
@@ -2723,38 +2718,44 @@ msgstr "訂單 ID"
 msgid "Find Order"
 msgstr "尋找訂單"
 
-#: gnucash/gnome/dialog-payment.c:231
+#: gnucash/gnome/dialog-payment.c:233
 msgid "You must enter a valid account name for posting."
 msgstr "您必須輸入有效的科目名稱來過帳。"
 
-#: gnucash/gnome/dialog-payment.c:240
+#: gnucash/gnome/dialog-payment.c:242
 msgid "You must select a company for payment processing."
 msgstr "您必須選擇用於付款處理的公司。"
 
-#: gnucash/gnome/dialog-payment.c:262
+#: gnucash/gnome/dialog-payment.c:256
+#, fuzzy
+#| msgid "There was a problem with the import."
+msgid "There is a problem with the Payment or Refund amount."
+msgstr "匯入時發生問題。"
+
+#: gnucash/gnome/dialog-payment.c:277
 msgid "You must select a transfer account from the account tree."
 msgstr "您必須自科目體系選擇轉帳科目。"
 
-#: gnucash/gnome/dialog-payment.c:273
+#: gnucash/gnome/dialog-payment.c:288
 msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
 msgstr "沒有選擇此支付的相關文件，這可能會導至建立沒有建立起關聯的支付。"
 
-#: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1330
+#: gnucash/gnome/dialog-payment.c:544 gnucash/gnome/dialog-payment.c:1369
 #: gnucash/report/reports/standard/new-aging.scm:180
 #: gnucash/report/reports/standard/new-owner-report.scm:321
 #: gnucash/report/reports/standard/new-owner-report.scm:719
 msgid "Pre-Payment"
 msgstr "預付款"
 
-#: gnucash/gnome/dialog-payment.c:1000
+#: gnucash/gnome/dialog-payment.c:1015
 msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
 msgstr "轉帳跟入帳的科目採用不同的貨幣。請指定轉換匯率。"
 
-#: gnucash/gnome/dialog-payment.c:1273 gnucash/gnome/search-owner.c:211
+#: gnucash/gnome/dialog-payment.c:1304 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2786
 #: gnucash/gtkbuilder/dialog-customer.glade:479
@@ -2773,7 +2774,7 @@ msgstr "轉帳跟入帳的科目採用不同的貨幣。請指定轉換匯率。
 msgid "Customer"
 msgstr "客戶"
 
-#: gnucash/gnome/dialog-payment.c:1277 gnucash/gnome/search-owner.c:212
+#: gnucash/gnome/dialog-payment.c:1308 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1109
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2797
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:170
@@ -2787,7 +2788,7 @@ msgstr "客戶"
 msgid "Vendor"
 msgstr "廠商"
 
-#: gnucash/gnome/dialog-payment.c:1281 gnucash/gnome/search-owner.c:213
+#: gnucash/gnome/dialog-payment.c:1312 gnucash/gnome/search-owner.c:213
 #: gnucash/gnome-search/dialog-search.c:1081
 #: gnucash/gtkbuilder/dialog-employee.glade:510
 #: gnucash/gtkbuilder/dialog-payment.glade:48
@@ -2799,7 +2800,7 @@ msgstr "廠商"
 msgid "Employee"
 msgstr "員工"
 
-#: gnucash/gnome/dialog-payment.c:1426
+#: gnucash/gnome/dialog-payment.c:1465
 #, c-format
 msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type \"%s"
@@ -2809,13 +2810,13 @@ msgstr ""
 "您沒有有效的「應收付」科目。在繼續處理此支付前，請先建立「%s」類型的科目。也"
 "許您想要先建立「發票」或「帳單」？"
 
-#: gnucash/gnome/dialog-payment.c:1579
+#: gnucash/gnome/dialog-payment.c:1618
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr "所選擇的交易沒有可以被指定成付款的分割"
 
-#: gnucash/gnome/dialog-payment.c:1593
+#: gnucash/gnome/dialog-payment.c:1632
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', gnucash only knows how to handle one.\n"
@@ -2827,15 +2828,15 @@ msgstr ""
 "請選擇其中一個，其他的會被忽略。\n"
 "\n"
 
-#: gnucash/gnome/dialog-payment.c:1596
+#: gnucash/gnome/dialog-payment.c:1635
 msgid "Warning"
 msgstr "警告"
 
-#: gnucash/gnome/dialog-payment.c:1599 gnucash/gnome/dialog-payment.c:1719
+#: gnucash/gnome/dialog-payment.c:1638 gnucash/gnome/dialog-payment.c:1758
 msgid "Continue"
 msgstr "繼續"
 
-#: gnucash/gnome/dialog-payment.c:1600
+#: gnucash/gnome/dialog-payment.c:1639
 #: gnucash/gnome/gnc-plugin-page-invoice.c:453
 #: gnucash/gnome/gnc-plugin-page-register2.c:499
 #: gnucash/gnome/gnc-plugin-page-register.c:622
@@ -2843,7 +2844,7 @@ msgstr "繼續"
 msgid "Cancel"
 msgstr "取消"
 
-#: gnucash/gnome/dialog-payment.c:1714
+#: gnucash/gnome/dialog-payment.c:1753
 #, c-format
 msgid ""
 "The transaction has at least one split in a business account that is not "
@@ -2895,16 +2896,16 @@ msgstr "取代價格？"
 msgid "_Replace"
 msgstr "取代(_R)"
 
-#: gnucash/gnome/dialog-price-editor.c:263
+#: gnucash/gnome/dialog-price-editor.c:264
 msgid "You must select a Security."
 msgstr "您必須選擇證券。"
 
-#: gnucash/gnome/dialog-price-editor.c:268
+#: gnucash/gnome/dialog-price-editor.c:269
 msgid "You must select a Currency."
 msgstr "您必須選擇貨幣。"
 
-#: gnucash/gnome/dialog-price-editor.c:278
-#: gnucash/gnome-utils/dialog-transfer.c:1713
+#: gnucash/gnome/dialog-price-editor.c:284
+#: gnucash/gnome-utils/dialog-transfer.c:1717
 msgid "You must enter a valid amount."
 msgstr "您必須輸入有效的數量。"
 
@@ -2961,7 +2962,7 @@ msgid "Custom"
 msgstr "自訂"
 
 #: gnucash/gnome/dialog-print-check.c:2602
-#: gnucash/gtkbuilder/dialog-preferences.glade:3449
+#: gnucash/gtkbuilder/dialog-preferences.glade:3533
 #: gnucash/gtkbuilder/dialog-print-check.glade:264
 msgid "Top"
 msgstr "上方"
@@ -3008,7 +3009,7 @@ msgstr "樣式表名稱"
 
 #: gnucash/gnome/dialog-sx-editor2.c:164 gnucash/gnome/dialog-sx-editor.c:166
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:151
-#: gnucash/gnome/window-reconcile2.c:2162 gnucash/gnome/window-reconcile.c:2383
+#: gnucash/gnome/window-reconcile2.c:2187 gnucash/gnome/window-reconcile.c:2408
 #: gnucash/gnome-utils/gnc-main-window.c:274
 #: gnucash/gtkbuilder/dialog-billterms.glade:679
 #: gnucash/gtkbuilder/dialog-commodities.glade:156
@@ -3020,7 +3021,7 @@ msgid "_Edit"
 msgstr "編輯(_E)"
 
 #: gnucash/gnome/dialog-sx-editor2.c:165 gnucash/gnome/dialog-sx-editor.c:167
-#: gnucash/gnome/window-reconcile2.c:2103 gnucash/gnome/window-reconcile.c:2324
+#: gnucash/gnome/window-reconcile2.c:2128 gnucash/gnome/window-reconcile.c:2349
 msgid "_Transaction"
 msgstr "交易(_T)"
 
@@ -3188,7 +3189,7 @@ msgid "Created"
 msgstr "已建立"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:468
-#: gnucash/gtkbuilder/dialog-preferences.glade:1719
+#: gnucash/gtkbuilder/dialog-preferences.glade:1733
 #: gnucash/report/reports/standard/balsheet-pnl.scm:212
 #: gnucash/report/trep-engine.scm:553
 msgid "Never"
@@ -3269,48 +3270,36 @@ msgstr ""
 msgid "Form"
 msgstr "表單"
 
-#: gnucash/gnome/dialog-vendor.c:214
-msgid ""
-"You must enter a company name. If this vendor is an individual (and not a "
-"company) you should enter the same value for:\n"
-"Identification - Company Name, and\n"
-"Payment Address - Name."
-msgstr "您必須輸入公司名稱。若廠商是個人而非公司，請在「識別 - 公司名稱」跟「付款地址 - 名稱」填相同的名字。"
-
-#: gnucash/gnome/dialog-vendor.c:226
-msgid "You must enter a payment address."
-msgstr "您必須輸入付款地址。"
-
-#: gnucash/gnome/dialog-vendor.c:307
+#: gnucash/gnome/dialog-vendor.c:294
 msgid "Edit Vendor"
 msgstr "編輯廠商"
 
-#: gnucash/gnome/dialog-vendor.c:309 gnucash/gnome-search/dialog-search.c:1111
+#: gnucash/gnome/dialog-vendor.c:296 gnucash/gnome-search/dialog-search.c:1111
 #: gnucash/gtkbuilder/dialog-vendor.glade:31
 msgid "New Vendor"
 msgstr "新增廠商"
 
-#: gnucash/gnome/dialog-vendor.c:715
+#: gnucash/gnome/dialog-vendor.c:702
 msgid "View/Edit Vendor"
 msgstr "檢視/編輯廠商"
 
-#: gnucash/gnome/dialog-vendor.c:716
+#: gnucash/gnome/dialog-vendor.c:703
 msgid "Vendor's Jobs"
 msgstr "廠商的工作"
 
-#: gnucash/gnome/dialog-vendor.c:718
+#: gnucash/gnome/dialog-vendor.c:705
 msgid "Vendor's Bills"
 msgstr "廠商的帳單"
 
-#: gnucash/gnome/dialog-vendor.c:719
+#: gnucash/gnome/dialog-vendor.c:706
 msgid "Pay Bill"
 msgstr "付帳單"
 
-#: gnucash/gnome/dialog-vendor.c:731
+#: gnucash/gnome/dialog-vendor.c:718
 msgid "Vendor ID"
 msgstr "廠商 ID"
 
-#: gnucash/gnome/dialog-vendor.c:766
+#: gnucash/gnome/dialog-vendor.c:753
 msgid "Find Vendor"
 msgstr "尋找廠商"
 
@@ -3323,13 +3312,13 @@ msgstr "尋找廠商"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:91
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:97
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
-#: gnucash/register/ledger-core/split-register.c:2638
+#: gnucash/register/ledger-core/split-register.c:2636
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1069
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1243
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:204 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4401
+#: libgnucash/engine/Account.cpp:4421
 msgid "Income"
 msgstr "收入"
 
@@ -3346,7 +3335,7 @@ msgstr "支出"
 #: gnucash/gnome/gnc-plugin-page-register2.c:497
 #: gnucash/gnome/gnc-plugin-page-register.c:620
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2868
-#: gnucash/register/ledger-core/split-register.c:2563
+#: gnucash/register/ledger-core/split-register.c:2561
 #: gnucash/register/ledger-core/split-register-layout.c:719
 #: gnucash/register/ledger-core/split-register-model.c:348
 #: gnucash/report/reports/standard/register.scm:144
@@ -3357,10 +3346,10 @@ msgstr "轉帳"
 msgid "Remaining to Budget"
 msgstr "剩餘預算"
 
-#: gnucash/gnome/gnc-budget-view.c:1655 gnucash/gnome/window-reconcile2.c:1069
-#: gnucash/gnome/window-reconcile.c:1122
+#: gnucash/gnome/gnc-budget-view.c:1659 gnucash/gnome/window-reconcile2.c:1094
+#: gnucash/gnome/window-reconcile.c:1147
 #: gnucash/gnome-utils/gnc-tree-view-account.c:923
-#: gnucash/report/html-acct-table.scm:753 gnucash/report/reports/aging.scm:544
+#: gnucash/report/html-acct-table.scm:802 gnucash/report/reports/aging.scm:544
 #: gnucash/report/reports/aging.scm:831
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:286
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1034
@@ -3406,7 +3395,7 @@ msgid "Open an existing GnuCash file"
 msgstr "開啟已存在的 GnuCash 檔案"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:121
-#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:665
+#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
 #: gnucash/gnome-utils/gnc-main-window.c:1310
 #: gnucash/html/gnc-html-webkit1.c:1198
 msgid "_Save"
@@ -3501,7 +3490,7 @@ msgid "Setup scheduled transactions for repayment of a loan"
 msgstr "設定用於貸款償還的排程交易"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:180
-#: gnucash/report/report-core.scm:152
+#: gnucash/report/report-core.scm:153
 msgid "B_udget"
 msgstr "預算(_U)"
 
@@ -3625,7 +3614,7 @@ msgid "Select a Budget"
 msgstr "選擇預算"
 
 #: gnucash/gnome/gnc-plugin-business.c:155
-#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:163
+#: gnucash/gnome/gnc-plugin-business.c:305 gnucash/report/report-core.scm:164
 msgid "_Business"
 msgstr "商務(_B)"
 
@@ -4036,14 +4025,14 @@ msgstr "給定結清金額，自動結清個別交易"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:311
 #: gnucash/gnome/gnc-plugin-page-register2.c:352
 #: gnucash/gnome/gnc-plugin-page-register.c:470
-#: gnucash/gnome/window-reconcile2.c:2143 gnucash/gnome/window-reconcile.c:2364
+#: gnucash/gnome/window-reconcile2.c:2168 gnucash/gnome/window-reconcile.c:2389
 msgid "_Transfer..."
 msgstr "轉帳(_T)..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:312
 #: gnucash/gnome/gnc-plugin-page-register2.c:353
 #: gnucash/gnome/gnc-plugin-page-register.c:471
-#: gnucash/gnome/window-reconcile2.c:2144 gnucash/gnome/window-reconcile.c:2365
+#: gnucash/gnome/window-reconcile2.c:2169 gnucash/gnome/window-reconcile.c:2390
 msgid "Transfer funds from one account to another"
 msgstr "從一個科目匯兌資金至另一個科目"
 
@@ -4076,7 +4065,7 @@ msgid "Check & Repair A_ccount"
 msgstr "檢查&修復科目(_C)"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:327
-#: gnucash/gnome/window-reconcile2.c:2149 gnucash/gnome/window-reconcile.c:2370
+#: gnucash/gnome/window-reconcile2.c:2174 gnucash/gnome/window-reconcile.c:2395
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -4150,8 +4139,8 @@ msgstr "「檢查和修復」正在執行中，您確定要中斷嗎？"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2849
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2853
 #: gnucash/gtkbuilder/assistant-csv-export.glade:277
-#: gnucash/gtkbuilder/dialog-preferences.glade:986
-#: gnucash/report/report-core.scm:159
+#: gnucash/gtkbuilder/dialog-preferences.glade:1000
+#: gnucash/report/report-core.scm:160
 #: gnucash/report/reports/example/average-balance.scm:92
 #: gnucash/report/reports/example/average-balance.scm:296
 #: gnucash/report/reports/example/daily-reports.scm:57
@@ -4197,7 +4186,7 @@ msgstr "不管，總之繼續(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1521
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1657
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1094
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1095
 msgid "(no name)"
 msgstr "(未命名)"
 
@@ -4952,7 +4941,7 @@ msgstr "建立新消費憑證"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:211
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:294
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:928
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:929
 msgid "Vendor Listing"
 msgstr "廠商列表"
 
@@ -4962,7 +4951,7 @@ msgstr "顯示所有廠商的總覽表"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:216
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:295
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:934
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:935
 msgid "Customer Listing"
 msgstr "客戶列表"
 
@@ -5004,27 +4993,27 @@ msgstr "顯示員工報表"
 msgid "New Voucher"
 msgstr "新消費憑證"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:445
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:446
 msgid "Owners"
 msgstr "所有者"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:626
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:627
 msgid "Customers"
 msgstr "客戶"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:631
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:632
 msgid "Jobs"
 msgstr "工作"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:636
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:637
 msgid "Vendors"
 msgstr "廠商"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:641
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:642
 msgid "Employees"
 msgstr "員工"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1102
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1103
 #, c-format
 msgid ""
 "The owner %s will be deleted.\n"
@@ -5382,7 +5371,7 @@ msgstr "以一或兩行顯示交易並展開目前的交易"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:458
 #: gnucash/gnome/gnc-plugin-page-register.c:581
-#: gnucash/gtkbuilder/dialog-preferences.glade:2790
+#: gnucash/gtkbuilder/dialog-preferences.glade:2874
 msgid "Transaction _Journal"
 msgstr "交易日記帳(_J)"
 
@@ -5504,7 +5493,7 @@ msgstr "搜尋結果報表"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2434
 #: gnucash/gnome/gnc-plugin-page-register.c:3578
-#: gnucash/gtkbuilder/dialog-preferences.glade:2700
+#: gnucash/gtkbuilder/dialog-preferences.glade:2784
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
@@ -5528,10 +5517,10 @@ msgstr "及子科目"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3021
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3026
 #: gnucash/gtkbuilder/dialog-payment.glade:312
-#: gnucash/register/ledger-core/split-register.c:2466
-#: gnucash/register/ledger-core/split-register.c:2561
-#: gnucash/register/ledger-core/split-register.c:2580
-#: gnucash/register/ledger-core/split-register.c:2598
+#: gnucash/register/ledger-core/split-register.c:2464
+#: gnucash/register/ledger-core/split-register.c:2559
+#: gnucash/register/ledger-core/split-register.c:2578
+#: gnucash/register/ledger-core/split-register.c:2596
 #: gnucash/report/reports/standard/general-journal.scm:83
 #: gnucash/report/reports/standard/register.scm:343
 #: gnucash/report/reports/standard/trial-balance.scm:590
@@ -5545,7 +5534,7 @@ msgstr "貸方"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3102
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3107
 #: gnucash/gtkbuilder/dialog-payment.glade:296
-#: gnucash/register/ledger-core/split-register.c:2443
+#: gnucash/register/ledger-core/split-register.c:2441
 #: gnucash/report/reports/standard/general-journal.scm:82
 #: gnucash/report/reports/standard/register.scm:341
 #: gnucash/report/reports/standard/trial-balance.scm:587
@@ -5908,7 +5897,7 @@ msgid "You cannot save to that file."
 msgstr "您不能儲存此檔案。"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1616
-#: gnucash/gnome-utils/gnc-file.c:1319 gnucash/gnome-utils/gnc-file.c:1566
+#: gnucash/gnome-utils/gnc-file.c:1320 gnucash/gnome-utils/gnc-file.c:1567
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:742
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -6132,7 +6121,9 @@ msgid ""
 "This account may not be edited. If you want to edit transactions in this "
 "register, please open the account options and turn off the placeholder "
 "checkbox."
-msgstr "這個科目不能被編輯。如果您要編輯這個登記簿的交易，請開啟科目選項並且關閉佔位符號核取方塊。"
+msgstr ""
+"這個科目不能被編輯。如果您要編輯這個登記簿的交易，請開啟科目選項並且關閉佔位"
+"符號核取方塊。"
 
 #: gnucash/gnome/gnc-split-reg2.c:1010
 msgid ""
@@ -6141,7 +6132,8 @@ msgid ""
 "off the placeholder checkbox. You may also open an individual account "
 "instead of a set of accounts."
 msgstr ""
-"選擇的子科目中有一個不能被編輯。如果您要編輯這個登記簿的交易，請開啟子科目選項並且關閉佔位符號核取方塊。您也可以開啟個別的科目而不是一次一組科目。"
+"選擇的子科目中有一個不能被編輯。如果您要編輯這個登記簿的交易，請開啟子科目選"
+"項並且關閉佔位符號核取方塊。您也可以開啟個別的科目而不是一次一組科目。"
 
 #: gnucash/gnome/gnc-split-reg.c:679
 msgid "Standard Order"
@@ -6151,8 +6143,8 @@ msgstr "標準順序"
 msgid "Date of Entry"
 msgstr "登錄資料的日期"
 
-#: gnucash/gnome/gnc-split-reg.c:688 gnucash/gnome/window-reconcile2.c:1759
-#: gnucash/gnome/window-reconcile.c:1952
+#: gnucash/gnome/gnc-split-reg.c:688 gnucash/gnome/window-reconcile2.c:1784
+#: gnucash/gnome/window-reconcile.c:1977
 msgid "Statement Date"
 msgstr "結帳日期"
 
@@ -6519,101 +6511,101 @@ msgstr "商務"
 msgid "Cleared Transactions"
 msgstr "已結清的交易"
 
-#: gnucash/gnome/window-reconcile2.c:417 gnucash/gnome/window-reconcile.c:458
+#: gnucash/gnome/window-reconcile2.c:428 gnucash/gnome/window-reconcile.c:469
 msgid "Interest Payment"
 msgstr "利息付款"
 
-#: gnucash/gnome/window-reconcile2.c:420 gnucash/gnome/window-reconcile.c:461
+#: gnucash/gnome/window-reconcile2.c:431 gnucash/gnome/window-reconcile.c:472
 msgid "Interest Charge"
 msgstr "利息收費"
 
-#: gnucash/gnome/window-reconcile2.c:428 gnucash/gnome/window-reconcile.c:469
+#: gnucash/gnome/window-reconcile2.c:439 gnucash/gnome/window-reconcile.c:480
 #: gnucash/gtkbuilder/dialog-vendor.glade:660
 #: gnucash/gtkbuilder/dialog-vendor.glade:682
 msgid "Payment Information"
 msgstr "付款資訊"
 
-#: gnucash/gnome/window-reconcile2.c:438 gnucash/gnome/window-reconcile.c:479
+#: gnucash/gnome/window-reconcile2.c:449 gnucash/gnome/window-reconcile.c:490
 #: gnucash/gtkbuilder/assistant-loan.glade:578
 #: gnucash/gtkbuilder/assistant-loan.glade:777
 msgid "Payment From"
 msgstr "付款自"
 
-#: gnucash/gnome/window-reconcile2.c:444 gnucash/gnome/window-reconcile2.c:454
-#: gnucash/gnome/window-reconcile.c:485 gnucash/gnome/window-reconcile.c:495
+#: gnucash/gnome/window-reconcile2.c:455 gnucash/gnome/window-reconcile2.c:465
+#: gnucash/gnome/window-reconcile.c:496 gnucash/gnome/window-reconcile.c:506
 msgid "Reconcile Account"
 msgstr "對帳科目"
 
-#: gnucash/gnome/window-reconcile2.c:459 gnucash/gnome/window-reconcile.c:500
+#: gnucash/gnome/window-reconcile2.c:470 gnucash/gnome/window-reconcile.c:511
 #: gnucash/gtkbuilder/assistant-loan.glade:829
 msgid "Payment To"
 msgstr "付款到"
 
-#: gnucash/gnome/window-reconcile2.c:472
+#: gnucash/gnome/window-reconcile2.c:483
 msgid "No Auto Interest Payments for this Account"
 msgstr "沒有用於此科目的自動利息付款"
 
-#: gnucash/gnome/window-reconcile2.c:473
+#: gnucash/gnome/window-reconcile2.c:484
 msgid "No Auto Interest Charges for this Account"
 msgstr "沒有用於此科目的自動利息收費"
 
-#: gnucash/gnome/window-reconcile2.c:722 gnucash/gnome/window-reconcile.c:759
+#: gnucash/gnome/window-reconcile2.c:736 gnucash/gnome/window-reconcile.c:773
 #: gnucash/gtkbuilder/window-reconcile.glade:214
 msgid "Enter _Interest Payment..."
 msgstr "輸入利息付款(_I)..."
 
-#: gnucash/gnome/window-reconcile2.c:724 gnucash/gnome/window-reconcile.c:761
+#: gnucash/gnome/window-reconcile2.c:738 gnucash/gnome/window-reconcile.c:775
 msgid "Enter _Interest Charge..."
 msgstr "輸入利息收費(_I)..."
 
-#: gnucash/gnome/window-reconcile2.c:1200 gnucash/gnome/window-reconcile.c:1333
+#: gnucash/gnome/window-reconcile2.c:1225 gnucash/gnome/window-reconcile.c:1358
 msgid "Are you sure you want to delete the selected transaction?"
 msgstr "您確定要刪除選擇的交易？"
 
-#: gnucash/gnome/window-reconcile2.c:1769 gnucash/gnome/window-reconcile.c:1962
+#: gnucash/gnome/window-reconcile2.c:1794 gnucash/gnome/window-reconcile.c:1987
 #: gnucash/gtkbuilder/window-reconcile.glade:105
 msgid "Starting Balance"
 msgstr "期初餘額"
 
-#: gnucash/gnome/window-reconcile2.c:1779 gnucash/gnome/window-reconcile.c:1972
+#: gnucash/gnome/window-reconcile2.c:1804 gnucash/gnome/window-reconcile.c:1997
 msgid "Ending Balance"
 msgstr "結束結餘"
 
-#: gnucash/gnome/window-reconcile2.c:1789 gnucash/gnome/window-reconcile.c:1982
+#: gnucash/gnome/window-reconcile2.c:1814 gnucash/gnome/window-reconcile.c:2007
 msgid "Reconciled Balance"
 msgstr "已對帳的結餘"
 
-#: gnucash/gnome/window-reconcile2.c:1799 gnucash/gnome/window-reconcile.c:1992
+#: gnucash/gnome/window-reconcile2.c:1824 gnucash/gnome/window-reconcile.c:2017
 #: gnucash/report/reports/standard/cash-flow.scm:312
 msgid "Difference"
 msgstr "差額"
 
-#: gnucash/gnome/window-reconcile2.c:1888 gnucash/gnome/window-reconcile.c:2109
+#: gnucash/gnome/window-reconcile2.c:1913 gnucash/gnome/window-reconcile.c:2134
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
 msgstr "您已經在此對帳視窗中做過變更。您確定要取消？"
 
-#: gnucash/gnome/window-reconcile2.c:2006 gnucash/gnome/window-reconcile.c:2227
+#: gnucash/gnome/window-reconcile2.c:2031 gnucash/gnome/window-reconcile.c:2252
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr "此科目尚未結算。您確定要結束？"
 
-#: gnucash/gnome/window-reconcile2.c:2063 gnucash/gnome/window-reconcile.c:2284
+#: gnucash/gnome/window-reconcile2.c:2088 gnucash/gnome/window-reconcile.c:2309
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr "您想要延遲此次對帳留到稍後才完成？"
 
-#: gnucash/gnome/window-reconcile2.c:2101 gnucash/gnome/window-reconcile.c:2322
+#: gnucash/gnome/window-reconcile2.c:2126 gnucash/gnome/window-reconcile.c:2347
 msgid "_Reconcile"
 msgstr "對帳(_R)"
 
-#: gnucash/gnome/window-reconcile2.c:2102 gnucash/gnome/window-reconcile.c:2323
+#: gnucash/gnome/window-reconcile2.c:2127 gnucash/gnome/window-reconcile.c:2348
 #: gnucash/gtkbuilder/dialog-tax-table.glade:510
 msgid "_Account"
 msgstr "科目(_A)"
 
-#: gnucash/gnome/window-reconcile2.c:2104
-#: gnucash/gnome/window-reconcile2.c:2185 gnucash/gnome/window-reconcile.c:2325
-#: gnucash/gnome/window-reconcile.c:2406
+#: gnucash/gnome/window-reconcile2.c:2129
+#: gnucash/gnome/window-reconcile2.c:2210 gnucash/gnome/window-reconcile.c:2350
+#: gnucash/gnome/window-reconcile.c:2431
 #: gnucash/gnome-utils/gnc-main-window.c:282
 #: gnucash/gtkbuilder/dialog-account.glade:1119
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:23
@@ -6629,7 +6621,7 @@ msgstr "科目(_A)"
 #: gnucash/gtkbuilder/dialog-options.glade:21
 #: gnucash/gtkbuilder/dialog-order.glade:25
 #: gnucash/gtkbuilder/dialog-order.glade:441
-#: gnucash/gtkbuilder/dialog-preferences.glade:258
+#: gnucash/gtkbuilder/dialog-preferences.glade:272
 #: gnucash/gtkbuilder/dialog-print-check.glade:316
 #: gnucash/gtkbuilder/dialog-search.glade:21
 #: gnucash/gtkbuilder/dialog-sx.glade:780
@@ -6638,95 +6630,95 @@ msgstr "科目(_A)"
 msgid "_Help"
 msgstr "說明(_H)"
 
-#: gnucash/gnome/window-reconcile2.c:2109 gnucash/gnome/window-reconcile.c:2330
+#: gnucash/gnome/window-reconcile2.c:2134 gnucash/gnome/window-reconcile.c:2355
 msgid "_Reconcile Information..."
 msgstr "對帳資訊(_R)..."
 
-#: gnucash/gnome/window-reconcile2.c:2110 gnucash/gnome/window-reconcile.c:2331
+#: gnucash/gnome/window-reconcile2.c:2135 gnucash/gnome/window-reconcile.c:2356
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr "變更包含結帳日期與結束結餘的對帳資訊。"
 
-#: gnucash/gnome/window-reconcile2.c:2115 gnucash/gnome/window-reconcile.c:2336
+#: gnucash/gnome/window-reconcile2.c:2140 gnucash/gnome/window-reconcile.c:2361
 msgid "_Finish"
 msgstr "完成(_F)"
 
-#: gnucash/gnome/window-reconcile2.c:2116 gnucash/gnome/window-reconcile.c:2337
+#: gnucash/gnome/window-reconcile2.c:2141 gnucash/gnome/window-reconcile.c:2362
 msgid "Finish the reconciliation of this account"
 msgstr "結束此科目的對帳"
 
-#: gnucash/gnome/window-reconcile2.c:2120 gnucash/gnome/window-reconcile.c:2341
+#: gnucash/gnome/window-reconcile2.c:2145 gnucash/gnome/window-reconcile.c:2366
 msgid "_Postpone"
 msgstr "延遲(_P)"
 
-#: gnucash/gnome/window-reconcile2.c:2121 gnucash/gnome/window-reconcile.c:2342
+#: gnucash/gnome/window-reconcile2.c:2146 gnucash/gnome/window-reconcile.c:2367
 msgid "Postpone the reconciliation of this account"
 msgstr "延遲此科目的對帳"
 
-#: gnucash/gnome/window-reconcile2.c:2126 gnucash/gnome/window-reconcile.c:2347
+#: gnucash/gnome/window-reconcile2.c:2151 gnucash/gnome/window-reconcile.c:2372
 msgid "Cancel the reconciliation of this account"
 msgstr "取消此科目的對帳"
 
-#: gnucash/gnome/window-reconcile2.c:2133 gnucash/gnome/window-reconcile.c:2354
+#: gnucash/gnome/window-reconcile2.c:2158 gnucash/gnome/window-reconcile.c:2379
 msgid "_Open Account"
 msgstr "開啟科目(_O)"
 
-#: gnucash/gnome/window-reconcile2.c:2134 gnucash/gnome/window-reconcile.c:2355
+#: gnucash/gnome/window-reconcile2.c:2159 gnucash/gnome/window-reconcile.c:2380
 msgid "Open the account"
 msgstr "開啟科目"
 
-#: gnucash/gnome/window-reconcile2.c:2138 gnucash/gnome/window-reconcile.c:2359
+#: gnucash/gnome/window-reconcile2.c:2163 gnucash/gnome/window-reconcile.c:2384
 msgid "_Edit Account"
 msgstr "編輯科目(_E)"
 
-#: gnucash/gnome/window-reconcile2.c:2139 gnucash/gnome/window-reconcile.c:2360
+#: gnucash/gnome/window-reconcile2.c:2164 gnucash/gnome/window-reconcile.c:2385
 msgid "Edit the main account for this register"
 msgstr "編輯此登記簿的主科目"
 
-#: gnucash/gnome/window-reconcile2.c:2148 gnucash/gnome/window-reconcile.c:2369
+#: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2394
 #: gnucash/gnome-utils/gnc-main-window.c:357
 msgid "_Check & Repair"
 msgstr "檢查&修復(_C)"
 
-#: gnucash/gnome/window-reconcile2.c:2157 gnucash/gnome/window-reconcile.c:2378
+#: gnucash/gnome/window-reconcile2.c:2182 gnucash/gnome/window-reconcile.c:2403
 #: gnucash/gtkbuilder/dialog-account.glade:1753
 msgid "_Balance"
 msgstr "結餘(_B)"
 
-#: gnucash/gnome/window-reconcile2.c:2158 gnucash/gnome/window-reconcile.c:2379
+#: gnucash/gnome/window-reconcile2.c:2183 gnucash/gnome/window-reconcile.c:2404
 msgid "Add a new balancing entry to the account"
 msgstr "增加一筆新的平衡分錄至此科目"
 
-#: gnucash/gnome/window-reconcile2.c:2163 gnucash/gnome/window-reconcile.c:2384
+#: gnucash/gnome/window-reconcile2.c:2188 gnucash/gnome/window-reconcile.c:2409
 msgid "Edit the current transaction"
 msgstr "編輯目前的交易"
 
-#: gnucash/gnome/window-reconcile2.c:2168 gnucash/gnome/window-reconcile.c:2389
+#: gnucash/gnome/window-reconcile2.c:2193 gnucash/gnome/window-reconcile.c:2414
 msgid "Delete the selected transaction"
 msgstr "刪除選定的交易"
 
-#: gnucash/gnome/window-reconcile2.c:2172 gnucash/gnome/window-reconcile.c:2393
+#: gnucash/gnome/window-reconcile2.c:2197 gnucash/gnome/window-reconcile.c:2418
 msgid "_Reconcile Selection"
 msgstr "標為已對帳(_R)"
 
-#: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2394
+#: gnucash/gnome/window-reconcile2.c:2198 gnucash/gnome/window-reconcile.c:2419
 msgid "Reconcile the selected transactions"
 msgstr "將選擇的交易標成已對帳"
 
-#: gnucash/gnome/window-reconcile2.c:2177 gnucash/gnome/window-reconcile.c:2398
+#: gnucash/gnome/window-reconcile2.c:2202 gnucash/gnome/window-reconcile.c:2423
 msgid "_Unreconcile Selection"
 msgstr "標為未對帳(_U)"
 
-#: gnucash/gnome/window-reconcile2.c:2178 gnucash/gnome/window-reconcile.c:2399
+#: gnucash/gnome/window-reconcile2.c:2203 gnucash/gnome/window-reconcile.c:2424
 msgid "Unreconcile the selected transactions"
 msgstr "將選擇的交易標為未對帳"
 
-#: gnucash/gnome/window-reconcile2.c:2186 gnucash/gnome/window-reconcile.c:2407
+#: gnucash/gnome/window-reconcile2.c:2211 gnucash/gnome/window-reconcile.c:2432
 msgid "Open the GnuCash help window"
 msgstr "開啟 GnuCash 說明視窗"
 
 #. Translators: %d is the number of days in the future
-#: gnucash/gnome/window-reconcile.c:357
+#: gnucash/gnome/window-reconcile.c:366
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
@@ -6734,27 +6726,27 @@ msgstr[0] "結帳日期比今天晚 %d 天。"
 msgstr[1] "結帳日期比今天晚 %d 天。"
 
 #. Translators: %d is the number of days in the future
-#: gnucash/gnome/window-reconcile.c:364
+#: gnucash/gnome/window-reconcile.c:373
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
 msgstr[0] "您選則的結帳日期，比今天的日期晚 %d 天。"
 msgstr[1] "您選則的結帳日期，比今天的日期晚 %d 天。"
 
-#: gnucash/gnome/window-reconcile.c:369
+#: gnucash/gnome/window-reconcile.c:378
 msgid ""
 "This may cause issues for future reconciliation actions on this account. "
 "Please double-check this is the date you intended."
 msgstr ""
 "這可能會造成未來對帳此科目時有問題，請再次確認這個日期是您想選擇的日期。"
 
-#: gnucash/gnome/window-reconcile.c:1852
+#: gnucash/gnome/window-reconcile.c:1877
 msgid ""
 "WARNING! Account contains splits whose reconcile date is after statement "
 "date. Reconciliation may be difficult."
 msgstr "警告！此科目含有對帳日比結帳日晚的分割。對帳可能會很困難。"
 
-#: gnucash/gnome/window-reconcile.c:1856
+#: gnucash/gnome/window-reconcile.c:1881
 msgid ""
 "This account has splits whose Reconciled Date is after this reconciliation "
 "statement date. These splits may make reconciliation difficult. If this is "
@@ -6880,76 +6872,76 @@ msgstr "晚於"
 msgid "is on or after"
 msgstr "剛好或晚於"
 
-#: gnucash/gnome-search/search-double.c:175
-#: gnucash/gnome-search/search-int64.c:177
-#: gnucash/gnome-search/search-numeric.c:208
+#: gnucash/gnome-search/search-double.c:185
+#: gnucash/gnome-search/search-int64.c:187
+#: gnucash/gnome-search/search-numeric.c:217
 msgid "is less than"
 msgstr "小於"
 
-#: gnucash/gnome-search/search-double.c:176
-#: gnucash/gnome-search/search-int64.c:178
-#: gnucash/gnome-search/search-numeric.c:212
+#: gnucash/gnome-search/search-double.c:186
+#: gnucash/gnome-search/search-int64.c:188
+#: gnucash/gnome-search/search-numeric.c:221
 msgid "is less than or equal to"
 msgstr "小於或等於"
 
-#: gnucash/gnome-search/search-double.c:177
-#: gnucash/gnome-search/search-int64.c:179
-#: gnucash/gnome-search/search-numeric.c:215
+#: gnucash/gnome-search/search-double.c:187
+#: gnucash/gnome-search/search-int64.c:189
+#: gnucash/gnome-search/search-numeric.c:224
 #: gnucash/gnome-search/search-string.c:243
 msgid "equals"
 msgstr "等於"
 
-#: gnucash/gnome-search/search-double.c:178
-#: gnucash/gnome-search/search-int64.c:180
-#: gnucash/gnome-search/search-numeric.c:218
+#: gnucash/gnome-search/search-double.c:188
+#: gnucash/gnome-search/search-int64.c:190
+#: gnucash/gnome-search/search-numeric.c:227
 msgid "does not equal"
 msgstr "不等於"
 
-#: gnucash/gnome-search/search-double.c:179
-#: gnucash/gnome-search/search-int64.c:181
-#: gnucash/gnome-search/search-numeric.c:221
+#: gnucash/gnome-search/search-double.c:189
+#: gnucash/gnome-search/search-int64.c:191
+#: gnucash/gnome-search/search-numeric.c:230
 msgid "is greater than"
 msgstr "大於"
 
-#: gnucash/gnome-search/search-double.c:180
-#: gnucash/gnome-search/search-int64.c:182
-#: gnucash/gnome-search/search-numeric.c:225
+#: gnucash/gnome-search/search-double.c:190
+#: gnucash/gnome-search/search-int64.c:192
+#: gnucash/gnome-search/search-numeric.c:234
 msgid "is greater than or equal to"
 msgstr "大於或等於"
 
-#: gnucash/gnome-search/search-numeric.c:208
+#: gnucash/gnome-search/search-numeric.c:217
 msgid "less than"
 msgstr "小於"
 
-#: gnucash/gnome-search/search-numeric.c:211
+#: gnucash/gnome-search/search-numeric.c:220
 msgid "less than or equal to"
 msgstr "小於或等於"
 
-#: gnucash/gnome-search/search-numeric.c:215
+#: gnucash/gnome-search/search-numeric.c:224
 msgid "equal to"
 msgstr "等於"
 
-#: gnucash/gnome-search/search-numeric.c:218
+#: gnucash/gnome-search/search-numeric.c:227
 msgid "not equal to"
 msgstr "不等於"
 
-#: gnucash/gnome-search/search-numeric.c:221
+#: gnucash/gnome-search/search-numeric.c:230
 msgid "greater than"
 msgstr "大於"
 
-#: gnucash/gnome-search/search-numeric.c:224
+#: gnucash/gnome-search/search-numeric.c:233
 msgid "greater than or equal to"
 msgstr "大於或等於"
 
-#: gnucash/gnome-search/search-numeric.c:241
+#: gnucash/gnome-search/search-numeric.c:250
 msgid "has credits or debits"
 msgstr "包含貸方或借方"
 
-#: gnucash/gnome-search/search-numeric.c:242
+#: gnucash/gnome-search/search-numeric.c:251
 msgid "has debits"
 msgstr "包含借方"
 
-#: gnucash/gnome-search/search-numeric.c:243
+#: gnucash/gnome-search/search-numeric.c:252
 msgid "has credits"
 msgstr "包含貸方"
 
@@ -7036,7 +7028,8 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on \"Back\"."
 msgstr ""
-"此檔案已被成功讀取。如果您按下「套用」，他將會被儲存並且重新讀取到主程式中。透過這個方式，您也會在同個資料夾中有可以正常使用的備份檔案。\n"
+"此檔案已被成功讀取。如果您按下「套用」，他將會被儲存並且重新讀取到主程式中。"
+"透過這個方式，您也會在同個資料夾中有可以正常使用的備份檔案。\n"
 "\n"
 "您也可以按下「返回」回到上一個步驟，再次確認您的選擇。"
 
@@ -7154,7 +7147,7 @@ msgid "There was an error parsing the file."
 msgstr "解析此檔案時發生錯誤。"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1408 gnucash/gnome-utils/gnc-file.c:1647
+#: gnucash/gnome-utils/gnc-file.c:1409 gnucash/gnome-utils/gnc-file.c:1648
 msgid "Writing file..."
 msgstr "寫入檔案中..."
 
@@ -7362,7 +7355,7 @@ msgstr "貨幣(_R)"
 #: gnucash/gtkbuilder/dialog-transfer.glade:415
 #: gnucash/gtkbuilder/dialog-transfer.glade:428
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4400
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4420
 msgid "Currency"
 msgstr "貨幣"
 
@@ -7469,8 +7462,8 @@ msgstr "另存新檔(_S)"
 #: gnucash/gtkbuilder/dialog-import.glade:496
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:89
 #: gnucash/gtkbuilder/dialog-order.glade:42
-#: gnucash/gtkbuilder/dialog-preferences.glade:147
-#: gnucash/gtkbuilder/dialog-preferences.glade:274
+#: gnucash/gtkbuilder/dialog-preferences.glade:154
+#: gnucash/gtkbuilder/dialog-preferences.glade:288
 #: gnucash/gtkbuilder/dialog-price.glade:939
 #: gnucash/gtkbuilder/dialog-query-view.glade:22
 #: gnucash/gtkbuilder/dialog-report.glade:272
@@ -7488,7 +7481,9 @@ msgid ""
 "Because no accounts have been set up yet, you will need to return to this "
 "dialog (via File->Properties), after account setup, if you want to set a "
 "default gain/loss account."
-msgstr "由於目前您並未設定任何科目，如果您想要設定預設的獲利/虧損科目，需要在設定好科目後，重新回到這個對話盒（透過檔案->內容選單）。"
+msgstr ""
+"由於目前您並未設定任何科目，如果您想要設定預設的獲利/虧損科目，需要在設定好科"
+"目後，重新回到這個對話盒（透過檔案->內容選單）。"
 
 #: gnucash/gnome-utils/dialog-options.c:701
 msgid "Select no account"
@@ -7600,7 +7595,7 @@ msgid "Page"
 msgstr "頁"
 
 #: gnucash/gnome-utils/dialog-options.c:2876
-#: gnucash/gnome-utils/dialog-preferences.c:1465
+#: gnucash/gnome-utils/dialog-preferences.c:1467
 #: gnucash/gtkbuilder/dialog-fincalc.glade:254
 #: gnucash/gtkbuilder/dialog-fincalc.glade:269
 #: gnucash/gtkbuilder/dialog-fincalc.glade:284
@@ -7645,15 +7640,15 @@ msgid "Path does not exist, "
 msgstr "路徑不存在， "
 
 #: gnucash/gnome-utils/dialog-preferences.c:955
-#: gnucash/gnome-utils/dialog-preferences.c:1462
+#: gnucash/gnome-utils/dialog-preferences.c:1464
 msgid "Select a folder"
 msgstr "選擇資料夾"
 
-#: gnucash/gnome-utils/dialog-tax-table.c:119
+#: gnucash/gnome-utils/dialog-tax-table.c:159
 msgid "You must provide a name for this Tax Table."
 msgstr "您必須提供這個稅金表格的名稱。"
 
-#: gnucash/gnome-utils/dialog-tax-table.c:126
+#: gnucash/gnome-utils/dialog-tax-table.c:166
 #, c-format
 msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
@@ -7661,77 +7656,77 @@ msgid ""
 msgstr ""
 "您必須為這個稅金表格提供一個獨一無二的名稱。您的選擇「%s」已經被使用了。"
 
-#: gnucash/gnome-utils/dialog-tax-table.c:140
+#: gnucash/gnome-utils/dialog-tax-table.c:190
 msgid "Percentage amount must be between -100 and 100."
 msgstr "百分比必須介於 -100 和 100 之間。"
 
-#: gnucash/gnome-utils/dialog-tax-table.c:149
+#: gnucash/gnome-utils/dialog-tax-table.c:199
 msgid "You must choose a Tax Account."
 msgstr "您必須選擇稅金科目。"
 
-#: gnucash/gnome-utils/dialog-tax-table.c:633
+#: gnucash/gnome-utils/dialog-tax-table.c:697
 msgid "Rename"
 msgstr "重新命名"
 
-#: gnucash/gnome-utils/dialog-tax-table.c:634
+#: gnucash/gnome-utils/dialog-tax-table.c:698
 msgid "Please enter new name"
 msgstr "請輸入新的名稱"
 
-#: gnucash/gnome-utils/dialog-tax-table.c:635
+#: gnucash/gnome-utils/dialog-tax-table.c:699
 #: gnucash/gtkbuilder/dialog-tax-table.glade:74
 msgid "_Rename"
 msgstr "重新命名(_R)"
 
-#: gnucash/gnome-utils/dialog-tax-table.c:641
+#: gnucash/gnome-utils/dialog-tax-table.c:705
 #, c-format
 msgid "Tax table name \"%s\" already exists."
 msgstr "稅金表格「%s」已經存在。"
 
-#: gnucash/gnome-utils/dialog-tax-table.c:665
+#: gnucash/gnome-utils/dialog-tax-table.c:729
 #, c-format
 msgid "Tax table \"%s\" is in use. You cannot delete it."
 msgstr "稅金表格「%s」正在使用中。您不能刪除它。"
 
-#: gnucash/gnome-utils/dialog-tax-table.c:713
+#: gnucash/gnome-utils/dialog-tax-table.c:777
 msgid ""
 "You cannot remove the last entry from the tax table. Try deleting the tax "
 "table if you want to do that."
 msgstr "您不能從稅金表格移除最後一個項目。如果您想要的話可以改試刪除稅金表格。"
 
-#: gnucash/gnome-utils/dialog-tax-table.c:720
+#: gnucash/gnome-utils/dialog-tax-table.c:784
 msgid "Are you sure you want to delete this entry?"
 msgstr "您確定要刪除這個項目？"
 
-#: gnucash/gnome-utils/dialog-transfer.c:599
+#: gnucash/gnome-utils/dialog-transfer.c:603
 msgid "Show the income and expense accounts"
 msgstr "顯示收入與支出科目"
 
-#: gnucash/gnome-utils/dialog-transfer.c:703
+#: gnucash/gnome-utils/dialog-transfer.c:707
 #: gnucash/report/trep-engine.scm:2108 gnucash/report/trep-engine.scm:2114
 msgid "Error"
 msgstr "錯誤"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1321
+#: gnucash/gnome-utils/dialog-transfer.c:1325
 msgid ""
 "Retrieve the current online quote. This will fail if there is a manually-"
 "created price for today."
 msgstr "取得目前的線上報價。如果已經手動輸入今日假格，則此動作會失敗。"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1325
+#: gnucash/gnome-utils/dialog-transfer.c:1329
 msgid "Finance::Quote must be installed to enable this button."
 msgstr "需要安裝 Finance::Quote 以啟用此按鈕。"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1427
+#: gnucash/gnome-utils/dialog-transfer.c:1431
 msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
 msgstr "您必須為此交易指定轉帳科目的來源、目標、或兩者。否則不會被記錄。"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1437
+#: gnucash/gnome-utils/dialog-transfer.c:1441
 msgid "You can't transfer from and to the same account!"
 msgstr "轉帳的來源與目的不能為同一個科目！"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1448
+#: gnucash/gnome-utils/dialog-transfer.c:1452
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1958
 #: gnucash/register/ledger-core/gncEntryLedger.c:85
 #: gnucash/register/ledger-core/split-register.c:1979
@@ -7739,7 +7734,7 @@ msgstr "轉帳的來源與目的不能為同一個科目！"
 msgid "The account %s does not allow transactions."
 msgstr "此科目 %s 不接受交易。"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1464
+#: gnucash/gnome-utils/dialog-transfer.c:1468
 msgid ""
 "You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
@@ -7747,42 +7742,42 @@ msgstr ""
 "您不能從一個非貨幣科目轉帳。試試看把「從」和「到」兩個科目對調，並且把「總"
 "額」設為負數。"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1482
+#: gnucash/gnome-utils/dialog-transfer.c:1486
 msgid "You must enter a valid price."
 msgstr "您必須輸入有效的價格。"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1494
+#: gnucash/gnome-utils/dialog-transfer.c:1498
 msgid "You must enter a valid 'to' amount."
 msgstr "您必須輸入有效的「目的」數量。"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1722
+#: gnucash/gnome-utils/dialog-transfer.c:1726
 msgid "You must enter an amount to transfer."
 msgstr "您必須輸入要轉帳過去的科目。"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1968
+#: gnucash/gnome-utils/dialog-transfer.c:1972
 #: gnucash/gtkbuilder/dialog-employee.glade:623
 msgid "Credit Account"
 msgstr "貸方科目"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1972
+#: gnucash/gnome-utils/dialog-transfer.c:1976
 msgid "Debit Account"
 msgstr "借方科目"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1990
+#: gnucash/gnome-utils/dialog-transfer.c:1994
 #: gnucash/gtkbuilder/dialog-transfer.glade:270
 msgid "Transfer From"
 msgstr "轉帳自"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1994
+#: gnucash/gnome-utils/dialog-transfer.c:1998
 #: gnucash/gtkbuilder/dialog-transfer.glade:331
 msgid "Transfer To"
 msgstr "轉帳到"
 
-#: gnucash/gnome-utils/dialog-transfer.c:2051
+#: gnucash/gnome-utils/dialog-transfer.c:2055
 msgid "Debit Amount"
 msgstr "借方金額"
 
-#: gnucash/gnome-utils/dialog-transfer.c:2056
+#: gnucash/gnome-utils/dialog-transfer.c:2060
 #: gnucash/gtkbuilder/dialog-transfer.glade:555
 msgid "To Amount"
 msgstr "金額"
@@ -7816,6 +7811,20 @@ msgstr "在這個工作階段中別再告訴我(_S)。"
 #: gnucash/gnome-utils/gnc-account-sel.c:454
 msgid "New..."
 msgstr "新增..."
+
+#: gnucash/gnome-utils/gnc-amount-edit.c:413
+#: gnucash/register/register-core/formulacell.c:119
+#: gnucash/register/register-core/pricecell.c:159
+#, fuzzy, c-format
+#| msgid "An error occurred while processing %s."
+msgid "An error occurred while processing '%s' at position %d"
+msgstr "在處理 %s 時發生錯誤。"
+
+#: gnucash/gnome-utils/gnc-amount-edit.c:419
+#, fuzzy, c-format
+#| msgid "An error occurred while processing %s."
+msgid "An error occurred while processing '%s'"
+msgstr "在處理 %s 時發生錯誤。"
 
 #: gnucash/gnome-utils/gnc-autosave.c:99
 msgid "Save file automatically?"
@@ -7951,8 +7960,8 @@ msgstr "日期： "
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:348
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:147
-#: gnucash/gtkbuilder/dialog-fincalc.glade:741
-#: gnucash/gtkbuilder/dialog-fincalc.glade:754
+#: gnucash/gtkbuilder/dialog-fincalc.glade:746
+#: gnucash/gtkbuilder/dialog-fincalc.glade:759
 #: gnucash/gtkbuilder/dialog-sx.glade:248
 #: gnucash/gtkbuilder/dialog-sx.glade:1395
 #: gnucash/gtkbuilder/gnc-frequency.glade:592
@@ -7970,13 +7979,13 @@ msgid "_Import"
 msgstr "匯入(_I)"
 
 #: gnucash/gnome-utils/gnc-file.c:96 gnucash/gnome-utils/gnc-file.c:335
-#: gnucash/gtkbuilder/dialog-preferences.glade:2282
+#: gnucash/gtkbuilder/dialog-preferences.glade:2366
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:140
 msgid "Import"
 msgstr "匯入"
 
 #: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:343
-#: gnucash/gnome-utils/gnc-file.c:1193 gnucash/gnome-utils/gnc-file.c:1465
+#: gnucash/gnome-utils/gnc-file.c:1194 gnucash/gnome-utils/gnc-file.c:1466
 msgid "Save"
 msgstr "儲存檔案"
 
@@ -8097,8 +8106,6 @@ msgid "You do not have permission to access %s."
 msgstr "您沒有權限存取 %s。"
 
 #: gnucash/gnome-utils/gnc-file.c:402
-#: gnucash/register/register-core/formulacell.c:118
-#: gnucash/register/register-core/pricecell.c:172
 #, c-format
 msgid "An error occurred while processing %s."
 msgstr "在處理 %s 時發生錯誤。"
@@ -8245,11 +8252,11 @@ msgstr ""
 msgid "An unknown I/O error (%d) occurred."
 msgstr "發生未知的輸入/輸出錯誤(%d)。"
 
-#: gnucash/gnome-utils/gnc-file.c:642
+#: gnucash/gnome-utils/gnc-file.c:643
 msgid "Save changes to the file?"
 msgstr "將變更存到檔案中？"
 
-#: gnucash/gnome-utils/gnc-file.c:655
+#: gnucash/gnome-utils/gnc-file.c:656
 #: gnucash/gnome-utils/gnc-main-window.c:1303
 #, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
@@ -8258,23 +8265,23 @@ msgid_plural ""
 msgstr[0] "如果您不存檔，或去 %d 分鐘的變更將會被丟棄。"
 msgstr[1] "如果您不存檔，或去 %d 分鐘的變更將會被丟棄。"
 
-#: gnucash/gnome-utils/gnc-file.c:659
+#: gnucash/gnome-utils/gnc-file.c:660
 msgid "Continue _Without Saving"
 msgstr "不存檔，繼續操作(_W)"
 
-#: gnucash/gnome-utils/gnc-file.c:821
+#: gnucash/gnome-utils/gnc-file.c:822
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GnuCash 無法鎖定 %s。"
 
-#: gnucash/gnome-utils/gnc-file.c:823
+#: gnucash/gnome-utils/gnc-file.c:824
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
 msgstr ""
 "可能有其他使用者在使用此資料庫，在此情形下您不應該開啟它。您想要怎麼做？"
 
-#: gnucash/gnome-utils/gnc-file.c:826
+#: gnucash/gnome-utils/gnc-file.c:827
 msgid ""
 "That database may be on a read-only file system, you may not have write "
 "permission for the directory, or your anti-virus software is preventing this "
@@ -8284,40 +8291,40 @@ msgstr ""
 "這個資料庫可能放在唯讀的檔案系統，或是您沒有該目錄的寫入權限，或是您的防毒軟"
 "體阻檔了這個動作。您若繼續操作，可能會無法存下任何資料修改。您想要怎麼做？"
 
-#: gnucash/gnome-utils/gnc-file.c:849
+#: gnucash/gnome-utils/gnc-file.c:850
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
 msgstr "以唯讀模式打開(_R)"
 
-#: gnucash/gnome-utils/gnc-file.c:852
+#: gnucash/gnome-utils/gnc-file.c:853
 msgid "Create _New File"
 msgstr "建立新檔案(_N)"
 
-#: gnucash/gnome-utils/gnc-file.c:855
+#: gnucash/gnome-utils/gnc-file.c:856
 msgid "Open _Anyway"
 msgstr "無論如何都開啟(_A)"
 
-#: gnucash/gnome-utils/gnc-file.c:858
+#: gnucash/gnome-utils/gnc-file.c:859
 msgid "Open _Folder"
 msgstr "打開資料夾(_F)"
 
-#: gnucash/gnome-utils/gnc-file.c:864 gnucash/gnome-utils/gnc-main-window.c:311
+#: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:311
 msgid "_Quit"
 msgstr "離開(_Q)"
 
-#: gnucash/gnome-utils/gnc-file.c:950 gnucash/gnome-utils/gnc-file.c:970
+#: gnucash/gnome-utils/gnc-file.c:951 gnucash/gnome-utils/gnc-file.c:971
 msgid "Loading user data..."
 msgstr "載入使用者資料..."
 
-#: gnucash/gnome-utils/gnc-file.c:986
+#: gnucash/gnome-utils/gnc-file.c:987
 msgid "Re-saving user data..."
 msgstr "重新儲存使用者資料..."
 
-#: gnucash/gnome-utils/gnc-file.c:1348
+#: gnucash/gnome-utils/gnc-file.c:1349
 msgid "Exporting file..."
 msgstr "匯出檔案中..."
 
-#: gnucash/gnome-utils/gnc-file.c:1361
+#: gnucash/gnome-utils/gnc-file.c:1362
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -8328,20 +8335,20 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome-utils/gnc-file.c:1396
+#: gnucash/gnome-utils/gnc-file.c:1397
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
 msgstr "資料庫是以唯讀模式開啟。您想要存檔到不同的地方嗎？"
 
-#: gnucash/gnome-utils/gnc-file.c:1691
+#: gnucash/gnome-utils/gnc-file.c:1692
 #, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed?"
 msgstr "還原會讓所有 %s 未儲存的變更遺失。您確定要繼續嗎？"
 
-#: gnucash/gnome-utils/gnc-file.c:1699
+#: gnucash/gnome-utils/gnc-file.c:1700
 #: gnucash/gnome-utils/gnc-main-window.c:1271
 msgid "<unknown>"
 msgstr "<未知>"
@@ -8957,36 +8964,36 @@ msgid "New top level account"
 msgstr "新增頂端層級科目"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2847
-#: gnucash/register/ledger-core/split-register.c:2542
+#: gnucash/register/ledger-core/split-register.c:2540
 msgctxt "Action Column"
 msgid "Deposit"
 msgstr "存款"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2848
-#: gnucash/register/ledger-core/split-register.c:2543
+#: gnucash/register/ledger-core/split-register.c:2541
 msgid "Withdraw"
 msgstr "提款"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2849
-#: gnucash/register/ledger-core/split-register.c:2544
+#: gnucash/register/ledger-core/split-register.c:2542
 msgid "Check"
 msgstr "支票"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2851
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2882
-#: gnucash/register/ledger-core/split-register.c:2546
-#: gnucash/register/ledger-core/split-register.c:2577
+#: gnucash/register/ledger-core/split-register.c:2544
+#: gnucash/register/ledger-core/split-register.c:2575
 msgid "ATM Deposit"
 msgstr "ATM 存款"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2852
-#: gnucash/register/ledger-core/split-register.c:2547
-#: gnucash/register/ledger-core/split-register.c:2578
+#: gnucash/register/ledger-core/split-register.c:2545
+#: gnucash/register/ledger-core/split-register.c:2576
 msgid "ATM Draw"
 msgstr "ATM 提款"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2853
-#: gnucash/register/ledger-core/split-register.c:2548
+#: gnucash/register/ledger-core/split-register.c:2546
 msgid "Teller"
 msgstr "出納員"
 
@@ -8996,13 +9003,13 @@ msgstr "出納員"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:133
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:532
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1096
-#: gnucash/register/ledger-core/split-register.c:2549
+#: gnucash/register/ledger-core/split-register.c:2547
 #: libgnucash/engine/Account.cpp:151 libgnucash/engine/Account.cpp:165
 msgid "Charge"
 msgstr "索價"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2856
-#: gnucash/register/ledger-core/split-register.c:2551
+#: gnucash/register/ledger-core/split-register.c:2549
 #: gnucash/report/reports/standard/receipt.scm:208
 #: gnucash/report/reports/standard/receipt.scm:210
 #: gnucash/report/reports/support/receipt.eguile.scm:278
@@ -9017,11 +9024,11 @@ msgstr "收據"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2950
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2968
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3046
-#: gnucash/register/ledger-core/split-register.c:2552
-#: gnucash/register/ledger-core/split-register.c:2566
-#: gnucash/register/ledger-core/split-register.c:2602
-#: gnucash/register/ledger-core/split-register.c:2613
-#: gnucash/register/ledger-core/split-register.c:2645
+#: gnucash/register/ledger-core/split-register.c:2550
+#: gnucash/register/ledger-core/split-register.c:2564
+#: gnucash/register/ledger-core/split-register.c:2600
+#: gnucash/register/ledger-core/split-register.c:2611
+#: gnucash/register/ledger-core/split-register.c:2643
 #: libgnucash/engine/Account.cpp:146 libgnucash/engine/Account.cpp:167
 #: libgnucash/engine/Account.cpp:175 libgnucash/engine/Account.cpp:176
 msgid "Increase"
@@ -9034,18 +9041,18 @@ msgstr "增加"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2951
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2961
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3053
-#: gnucash/register/ledger-core/split-register.c:2553
-#: gnucash/register/ledger-core/split-register.c:2567
-#: gnucash/register/ledger-core/split-register.c:2603
-#: gnucash/register/ledger-core/split-register.c:2614
-#: gnucash/register/ledger-core/split-register.c:2646
+#: gnucash/register/ledger-core/split-register.c:2551
+#: gnucash/register/ledger-core/split-register.c:2565
+#: gnucash/register/ledger-core/split-register.c:2601
+#: gnucash/register/ledger-core/split-register.c:2612
+#: gnucash/register/ledger-core/split-register.c:2644
 #: libgnucash/engine/Account.cpp:147 libgnucash/engine/Account.cpp:155
 #: libgnucash/engine/Account.cpp:156 libgnucash/engine/Account.cpp:166
 msgid "Decrease"
 msgstr "減少"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2860
-#: gnucash/register/ledger-core/split-register.c:2555
+#: gnucash/register/ledger-core/split-register.c:2553
 msgid "POS"
 msgstr "收銀機"
 
@@ -9056,7 +9063,7 @@ msgstr "收銀機"
 #: gnucash/gtkbuilder/dialog-employee.glade:253
 #: gnucash/gtkbuilder/dialog-vendor.glade:271
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:135
-#: gnucash/register/ledger-core/split-register.c:2556
+#: gnucash/register/ledger-core/split-register.c:2554
 #: gnucash/report/reports/aging.scm:692
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:175
 msgid "Phone"
@@ -9065,23 +9072,23 @@ msgstr "電話"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2862
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2888
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:156
-#: gnucash/register/ledger-core/split-register.c:2557
-#: gnucash/register/ledger-core/split-register.c:2583
+#: gnucash/register/ledger-core/split-register.c:2555
+#: gnucash/register/ledger-core/split-register.c:2581
 msgid "Online"
 msgstr "線上交易"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
-#: gnucash/register/ledger-core/split-register.c:2559
+#: gnucash/register/ledger-core/split-register.c:2557
 msgid "AutoDep"
 msgstr "自動存款"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2865
-#: gnucash/register/ledger-core/split-register.c:2560
+#: gnucash/register/ledger-core/split-register.c:2558
 msgid "Wire"
 msgstr "電報"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2867
-#: gnucash/register/ledger-core/split-register.c:2562
+#: gnucash/register/ledger-core/split-register.c:2560
 msgid "Direct Debit"
 msgstr "直接債務備註"
 
@@ -9095,14 +9102,14 @@ msgstr "直接債務備註"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2932
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2952
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3071
-#: gnucash/register/ledger-core/split-register.c:2568
-#: gnucash/register/ledger-core/split-register.c:2572
-#: gnucash/register/ledger-core/split-register.c:2579
-#: gnucash/register/ledger-core/split-register.c:2587
-#: gnucash/register/ledger-core/split-register.c:2604
-#: gnucash/register/ledger-core/split-register.c:2615
-#: gnucash/register/ledger-core/split-register.c:2620
-#: gnucash/register/ledger-core/split-register.c:2647
+#: gnucash/register/ledger-core/split-register.c:2566
+#: gnucash/register/ledger-core/split-register.c:2570
+#: gnucash/register/ledger-core/split-register.c:2577
+#: gnucash/register/ledger-core/split-register.c:2585
+#: gnucash/register/ledger-core/split-register.c:2602
+#: gnucash/register/ledger-core/split-register.c:2613
+#: gnucash/register/ledger-core/split-register.c:2618
+#: gnucash/register/ledger-core/split-register.c:2645
 #: libgnucash/engine/Account.cpp:148 libgnucash/engine/Account.cpp:149
 #: libgnucash/engine/Account.cpp:150
 msgid "Buy"
@@ -9118,14 +9125,14 @@ msgstr "買"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2933
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2953
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2991
-#: gnucash/register/ledger-core/split-register.c:2569
-#: gnucash/register/ledger-core/split-register.c:2573
-#: gnucash/register/ledger-core/split-register.c:2584
-#: gnucash/register/ledger-core/split-register.c:2588
-#: gnucash/register/ledger-core/split-register.c:2605
-#: gnucash/register/ledger-core/split-register.c:2616
-#: gnucash/register/ledger-core/split-register.c:2621
-#: gnucash/register/ledger-core/split-register.c:2648
+#: gnucash/register/ledger-core/split-register.c:2567
+#: gnucash/register/ledger-core/split-register.c:2571
+#: gnucash/register/ledger-core/split-register.c:2582
+#: gnucash/register/ledger-core/split-register.c:2586
+#: gnucash/register/ledger-core/split-register.c:2603
+#: gnucash/register/ledger-core/split-register.c:2614
+#: gnucash/register/ledger-core/split-register.c:2619
+#: gnucash/register/ledger-core/split-register.c:2646
 #: libgnucash/engine/Account.cpp:168 libgnucash/engine/Account.cpp:169
 #: libgnucash/engine/Account.cpp:170
 msgid "Sell"
@@ -9134,9 +9141,9 @@ msgstr "賣"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2879
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2886
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2935
-#: gnucash/register/ledger-core/split-register.c:2574
-#: gnucash/register/ledger-core/split-register.c:2581
-#: gnucash/register/ledger-core/split-register.c:2630
+#: gnucash/register/ledger-core/split-register.c:2572
+#: gnucash/register/ledger-core/split-register.c:2579
+#: gnucash/register/ledger-core/split-register.c:2628
 msgid "Fee"
 msgstr "費用"
 
@@ -9146,24 +9153,24 @@ msgstr "ATM 提款"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2913
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2984
-#: gnucash/register/ledger-core/split-register.c:2608
+#: gnucash/register/ledger-core/split-register.c:2606
 #: libgnucash/engine/Account.cpp:172
 msgid "Rebate"
 msgstr "折扣"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2914
-#: gnucash/register/ledger-core/split-register.c:2609
+#: gnucash/register/ledger-core/split-register.c:2607
 msgid "Paycheck"
 msgstr "薪水"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2927
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:109
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:113
-#: gnucash/register/ledger-core/split-register.c:2622
+#: gnucash/register/ledger-core/split-register.c:2620
 #: gnucash/report/reports/standard/balance-sheet.scm:502
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1083
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4403
+#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4423
 msgid "Equity"
 msgstr "財產淨值"
 
@@ -9172,7 +9179,7 @@ msgstr "財產淨值"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2939
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:153
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
-#: gnucash/register/ledger-core/split-register.c:2629
+#: gnucash/register/ledger-core/split-register.c:2627
 #: gnucash/register/ledger-core/split-register-model.c:402
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1057
 #: gnucash/report/reports/standard/general-journal.scm:99
@@ -9191,29 +9198,29 @@ msgid "Price"
 msgstr "價格"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2937
-#: gnucash/register/ledger-core/split-register.c:2632
+#: gnucash/register/ledger-core/split-register.c:2630
 msgid "Dividend"
 msgstr "股利"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2940
-#: gnucash/register/ledger-core/split-register.c:2635
+#: gnucash/register/ledger-core/split-register.c:2633
 msgid "LTCG"
 msgstr "長期資本利得"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2942
-#: gnucash/register/ledger-core/split-register.c:2637
+#: gnucash/register/ledger-core/split-register.c:2635
 msgid "STCG"
 msgstr "短期資本利得"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2945
-#: gnucash/register/ledger-core/split-register.c:2640
+#: gnucash/register/ledger-core/split-register.c:2638
 msgid "Dist"
 msgstr "分配"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
 #: gnucash/import-export/import-main-matcher.c:1396
 #: gnucash/report/reports/standard/register.scm:218
-#: libgnucash/engine/Split.c:1603 libgnucash/engine/Split.c:1620
+#: libgnucash/engine/Split.c:1604 libgnucash/engine/Split.c:1621
 msgid "-- Split Transaction --"
 msgstr "-- 分割交易 --"
 
@@ -9373,7 +9380,7 @@ msgstr "顏色"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:954
 #: gnucash/gnome-utils/gnc-tree-view-account.c:957
-#: gnucash/gtkbuilder/dialog-preferences.glade:800
+#: gnucash/gtkbuilder/dialog-preferences.glade:814
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
 msgid "Account Color"
 msgstr "科目顏色"
@@ -9702,8 +9709,8 @@ msgstr "收到"
 #: gnucash/report/reports/standard/customer-summary.scm:302
 #: gnucash/report/reports/standard/net-charts.scm:367
 #: gnucash/report/reports/standard/net-charts.scm:416
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4402
-#: libgnucash/engine/gncInvoice.c:1084
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4422
+#: libgnucash/engine/gncInvoice.c:1087
 msgid "Expense"
 msgstr "支出"
 
@@ -10089,8 +10096,8 @@ msgid ""
 "removed in GnuCash 5.0. Please use 'gnucash-cli --quotes get <datafile>' "
 "instead."
 msgstr ""
-"'--add-price-quotes' 的選項已經被棄用，並且會在 GnuCash 5.0 中移除。 請改用 'gnucash-cli --"
-"quotes get <datafile>'。"
+"'--add-price-quotes' 的選項已經被棄用，並且會在 GnuCash 5.0 中移除。 請改用 "
+"'gnucash-cli --quotes get <datafile>'。"
 
 #: gnucash/gnucash.cpp:399
 msgid "Run '{1} --help' to see a full list of available command line options."
@@ -10135,9 +10142,9 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:265
 #: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:275
 #: gnucash/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:51
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:66
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:61
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:76
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:86
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:20
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:41
 #: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:25
@@ -10179,9 +10186,9 @@ msgstr "視窗最後所在的位置及大小"
 #: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:266
 #: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:276
 #: gnucash/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in:6
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:52
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:67
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:62
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:77
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:87
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:21
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:26
@@ -10693,7 +10700,7 @@ msgid "Enable SKIP transaction action"
 msgstr "啟用略過交易的動作"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:6
-#: gnucash/gtkbuilder/dialog-preferences.glade:2044
+#: gnucash/gtkbuilder/dialog-preferences.glade:2058
 msgid ""
 "Enable the SKIP action in the transaction matcher. If enabled, a transaction "
 "whose best match's score is in the yellow zone (above the Auto-ADD threshold "
@@ -10707,7 +10714,7 @@ msgid "Enable UPDATE match action"
 msgstr "啟用配對更新"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:11
-#: gnucash/gtkbuilder/dialog-preferences.glade:2063
+#: gnucash/gtkbuilder/dialog-preferences.glade:2077
 msgid ""
 "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
 "enabled, a transaction whose best match's score is above the Auto-CLEAR "
@@ -10743,10 +10750,42 @@ msgid ""
 msgstr "此欄位指定了一筆可能交易配對，要顯示在配對清單中的最低分數。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:25
-msgid "Add matching transactions below this score"
+#, fuzzy
+#| msgid "Add matching transactions below this score"
+msgid "Likely matching transaction within these days"
 msgstr "新增低於這個分數的交易配對"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:26
+#, fuzzy
+#| msgid ""
+#| "This field specifies the minimum matching score a potential matching "
+#| "transaction must have to be displayed in the match list."
+msgid ""
+"This field specifies the maximum number of days a transaction is likely to "
+"be a match in the list."
+msgstr "此欄位指定了一筆可能交易配對，要顯示在配對清單中的最低分數。"
+
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:30
+#, fuzzy
+#| msgid "Clear matching transactions above this score"
+msgid "UnLikely matching a transaction outside of these days"
+msgstr "將超過此配對分數的交易結清"
+
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:31
+#, fuzzy
+#| msgid ""
+#| "This field specifies the minimum matching score a potential matching "
+#| "transaction must have to be displayed in the match list."
+msgid ""
+"This field specifies the minimum number of days a transaction is unlikely to "
+"be a match in the list."
+msgstr "此欄位指定了一筆可能交易配對，要顯示在配對清單中的最低分數。"
+
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:35
+msgid "Add matching transactions below this score"
+msgstr "新增低於這個分數的交易配對"
+
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:36
 msgid ""
 "This field specifies the threshold below which a matching transaction will "
 "be added automatically. A transaction whose best match's score is in the red "
@@ -10756,11 +10795,11 @@ msgstr ""
 "此欄位指定了交易配對會被自動加入的門檻值。任何在紅色區域(高於最低顯示分數但低"
 "於或等於新增分數)的交易，會預設新增至 GnuCash 檔案。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:40
 msgid "Clear matching transactions above this score"
 msgstr "將超過此配對分數的交易結清"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:31
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:41
 msgid ""
 "This field specifies the threshold above which a matching transaction will "
 "be cleared by default. A transaction whose best match's score is in the "
@@ -10770,11 +10809,11 @@ msgstr ""
 "此欄位指定了交易配對會被自動結清的門檻值。任何在綠色區域(等於或高於自動結清門"
 "檻)的交易，會預設為已結清。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:45
 msgid "Maximum ATM fee amount in your area"
 msgstr "您所在的地區 ATM 手續費最高金額"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:46
 msgid ""
 "This field specifies the extra fee that is taken into account when matching "
 "imported transactions. In some places commercial ATMs (not belonging to a "
@@ -10794,13 +10833,13 @@ msgstr ""
 "識別為相符。"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:40
-#: gnucash/gtkbuilder/dialog-preferences.glade:2256
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:50
+#: gnucash/gtkbuilder/dialog-preferences.glade:2270
 msgid "Automatically create new commodities"
 msgstr "自動建立新的商品"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:41
-#: gnucash/gtkbuilder/dialog-preferences.glade:2262
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:51
+#: gnucash/gtkbuilder/dialog-preferences.glade:2276
 msgid ""
 "Enables the automatic creation of new commodities if any unknown commodity "
 "is encountered during import. Otherwise the user will be asked what to do "
@@ -10809,11 +10848,11 @@ msgstr ""
 "啟用後如果在匯入的過程中有未知的商品，會自動建立商品。不然的話使用者會被針對"
 "未知的商品，一個一個詢問要如何處理。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:58
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:68
 msgid "Display or hide reconciled matches"
 msgstr "顯示或隱藏已對帳的配對"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:59
+#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:69
 msgid ""
 "Shows or hides transactions from the match picker which are already of some "
 "reconciled state."
@@ -10998,13 +11037,13 @@ msgstr ""
 "對話盒。"
 
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:5
-#: gnucash/gtkbuilder/dialog-preferences.glade:3651
+#: gnucash/gtkbuilder/dialog-preferences.glade:3735
 msgid "Alpha Vantage API key"
 msgstr "Alpha Vantage API 金鑰"
 
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:6
-#: gnucash/gtkbuilder/dialog-preferences.glade:3650
-#: gnucash/gtkbuilder/dialog-preferences.glade:3662
+#: gnucash/gtkbuilder/dialog-preferences.glade:3734
+#: gnucash/gtkbuilder/dialog-preferences.glade:3746
 msgid ""
 "To retrieve online quotes from Alphavantage, this key needs to be set. A key "
 "can be retrieved from the Alpha Vantage website."
@@ -11086,7 +11125,7 @@ msgid "Auto-save time interval"
 msgstr "自動存檔的時間間隔"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:41
-#: gnucash/gtkbuilder/dialog-preferences.glade:1656
+#: gnucash/gtkbuilder/dialog-preferences.glade:1670
 msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
@@ -11094,12 +11133,12 @@ msgstr ""
 "在自動存檔功能開始儲存檔案到硬碟前等待幾分鐘。如果設定成零，則不會自動存檔。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:45
-#: gnucash/gtkbuilder/dialog-preferences.glade:1773
+#: gnucash/gtkbuilder/dialog-preferences.glade:1787
 msgid "Enable timeout on \"Save changes on closing\" question"
 msgstr "啟動「關閉檔案時儲存」詢問窗視的的自動倒數"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:46
-#: gnucash/gtkbuilder/dialog-preferences.glade:1777
+#: gnucash/gtkbuilder/dialog-preferences.glade:1791
 msgid ""
 "If enabled, the \"Save changes on closing\" question will only wait a "
 "limited number of seconds for an answer. If the user didn't answer within "
@@ -11114,7 +11153,7 @@ msgid "Time to wait for answer"
 msgstr "等待多久"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:51
-#: gnucash/gtkbuilder/dialog-preferences.glade:1812
+#: gnucash/gtkbuilder/dialog-preferences.glade:1826
 msgid ""
 "The number of seconds to wait before the question window will be closed and "
 "the changes saved automatically."
@@ -11153,7 +11192,7 @@ msgid "Force prices to display as decimals even if they must be rounded."
 msgstr "就算價格必須四捨五入，也強制使用小數點方式顯示。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:71
-#: gnucash/gtkbuilder/dialog-preferences.glade:1214
+#: gnucash/gtkbuilder/dialog-preferences.glade:1228
 msgid ""
 "If active, GnuCash will round prices as necessary to display them as "
 "decimals instead of displaying the exact fraction if the fractional part "
@@ -11163,7 +11202,7 @@ msgstr ""
 "捨五入，而非以分數的方式顯示。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:75
-#: gnucash/gtkbuilder/dialog-preferences.glade:1725
+#: gnucash/gtkbuilder/dialog-preferences.glade:1739
 msgid "Do not create log/backup files."
 msgstr "不要建立日誌/備份檔案。"
 
@@ -11177,16 +11216,17 @@ msgid ""
 "keep old files for a number of days. How many days is defined in key 'retain-"
 "days'"
 msgstr ""
-"此設定指定了要如何處理舊的日誌 / 備份檔案。「forever」代表保留所有舊檔案。「never」代表不保留舊的日誌 / "
-"備份檔，每次存檔時舊版的檔案都會被刪除。「days」代表將舊檔保留幾天，保留的天數由「retain-days」此鍵定義"
+"此設定指定了要如何處理舊的日誌 / 備份檔案。「forever」代表保留所有舊檔案。"
+"「never」代表不保留舊的日誌 / 備份檔，每次存檔時舊版的檔案都會被刪除。"
+"「days」代表將舊檔保留幾天，保留的天數由「retain-days」此鍵定義"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:80
-#: gnucash/gtkbuilder/dialog-preferences.glade:1743
+#: gnucash/gtkbuilder/dialog-preferences.glade:1757
 msgid "Delete old log/backup files after this many days (0 = never)."
 msgstr "經過這個日數之後刪除舊的日誌 / 備份檔案（0 = 永不）。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:85
-#: gnucash/gtkbuilder/dialog-preferences.glade:1761
+#: gnucash/gtkbuilder/dialog-preferences.glade:1775
 msgid "Do not delete log/backup files."
 msgstr "不要刪除日誌 / 備份檔案。"
 
@@ -11201,7 +11241,7 @@ msgid ""
 msgstr "此設定指定經過多久之後刪除舊的日誌 / 備份檔案（0 = 永不）。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:95
-#: gnucash/gtkbuilder/dialog-preferences.glade:640
+#: gnucash/gtkbuilder/dialog-preferences.glade:654
 msgid "Don't sign reverse any accounts."
 msgstr "不要改變任何科目的正負號。"
 
@@ -11221,14 +11261,14 @@ msgstr ""
 "狀態的使用者，可以使用「credit」選項。「none」選項則不更動任何正負號。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:100
-#: gnucash/gtkbuilder/dialog-preferences.glade:659
+#: gnucash/gtkbuilder/dialog-preferences.glade:673
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
 msgstr "改變以下科目結餘的正負號：信用卡、應付、負債、資產淨值與收入科目。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:105
-#: gnucash/gtkbuilder/dialog-preferences.glade:678
+#: gnucash/gtkbuilder/dialog-preferences.glade:692
 msgid "Sign reverse balances on income and expense accounts."
 msgstr "改變收入與支出科目結餘的正負號。"
 
@@ -11309,7 +11349,7 @@ msgid ""
 msgstr "如果啟用，頁籤會緊接在目前頁籤旁開啟。否則的話，會在最後側開啟。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:140
-#: gnucash/gtkbuilder/dialog-preferences.glade:926
+#: gnucash/gtkbuilder/dialog-preferences.glade:940
 msgid "Use the system locale currency for all newly created accounts."
 msgstr "針對所有新建立的科目，使用系統的地區設定裡的貨幣。"
 
@@ -11327,7 +11367,7 @@ msgstr ""
 "「currency-other」此鍵中所指定的貨幣。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:145
-#: gnucash/gtkbuilder/dialog-preferences.glade:906
+#: gnucash/gtkbuilder/dialog-preferences.glade:920
 msgid "Use the specified currency for all newly created accounts."
 msgstr "新開的科目使用此貨幣。"
 
@@ -11369,7 +11409,7 @@ msgstr ""
 "英式風格的日期，而「us」則是美式風格的日期。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:165
-#: gnucash/gtkbuilder/dialog-preferences.glade:1108
+#: gnucash/gtkbuilder/dialog-preferences.glade:1122
 msgid "In the current calendar year"
 msgstr "用今年"
 
@@ -11394,7 +11434,7 @@ msgid "Maximum number of months to go back."
 msgstr "最多可往回推算幾個月。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:176
-#: gnucash/gtkbuilder/dialog-preferences.glade:1134
+#: gnucash/gtkbuilder/dialog-preferences.glade:1148
 msgid ""
 "Dates will be completed so that they are close to the current date. Enter "
 "the maximum number of months to go backwards in time when completing dates."
@@ -11432,7 +11472,7 @@ msgid ""
 msgstr "如果啟用，則啟動時會顯示啟動畫面。否則的話不會顯示啟動畫面。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:195
-#: gnucash/gtkbuilder/dialog-preferences.glade:3366
+#: gnucash/gtkbuilder/dialog-preferences.glade:3450
 msgid "Display the notebook tabs at the top of the window."
 msgstr "在視窗上方顯示頁籤。"
 
@@ -11449,22 +11489,22 @@ msgstr ""
 "及\"right\"。預設的值為 \"top\"。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:200
-#: gnucash/gtkbuilder/dialog-preferences.glade:3385
+#: gnucash/gtkbuilder/dialog-preferences.glade:3469
 msgid "Display the notebook tabs at the bottom of the window."
 msgstr "在視窗下方顯示頁籤。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:205
-#: gnucash/gtkbuilder/dialog-preferences.glade:3404
+#: gnucash/gtkbuilder/dialog-preferences.glade:3488
 msgid "Display the notebook tabs at the left of the window."
 msgstr "在視窗左方顯示頁籤。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:210
-#: gnucash/gtkbuilder/dialog-preferences.glade:3423
+#: gnucash/gtkbuilder/dialog-preferences.glade:3507
 msgid "Display the notebook tabs at the right of the window."
 msgstr "在視窗右方顯示頁籤。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:215
-#: gnucash/gtkbuilder/dialog-preferences.glade:3455
+#: gnucash/gtkbuilder/dialog-preferences.glade:3539
 msgid "Display the summary bar at the top of the page."
 msgstr "於頁籤最上方顯示摘要列。"
 
@@ -11479,12 +11519,12 @@ msgstr ""
 "\"。預設值是 \"bottom\"。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:220
-#: gnucash/gtkbuilder/dialog-preferences.glade:3474
+#: gnucash/gtkbuilder/dialog-preferences.glade:3558
 msgid "Display the summary bar at the bottom of the page."
 msgstr "於頁籤最下方顯示摘要列。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:225
-#: gnucash/gtkbuilder/dialog-preferences.glade:3324
+#: gnucash/gtkbuilder/dialog-preferences.glade:3408
 msgid "Closing a tab moves to the most recently visited tab."
 msgstr "關閉頁籤時移動到最近使用的頁籤。"
 
@@ -11497,7 +11537,7 @@ msgstr ""
 "籤。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:230
-#: gnucash/gtkbuilder/dialog-preferences.glade:1421
+#: gnucash/gtkbuilder/dialog-preferences.glade:1435
 msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
@@ -11505,7 +11545,7 @@ msgstr ""
 "設定開檔檔案時，將帳簿設定為在登記簿/報表中，「號碼」欄位顯示分割中的「動作」"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:231
-#: gnucash/gtkbuilder/dialog-preferences.glade:1427
+#: gnucash/gtkbuilder/dialog-preferences.glade:1441
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
@@ -11641,7 +11681,7 @@ msgstr ""
 "易之後。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
-#: gnucash/gtkbuilder/dialog-preferences.glade:2758
+#: gnucash/gtkbuilder/dialog-preferences.glade:2842
 msgid "Show all transactions on one line or in double line mode on two."
 msgstr "以一行顯示全部交易，或在雙行模式中以兩行顯示。"
 
@@ -11662,7 +11702,7 @@ msgstr ""
 "「journal」會將所有交易以全部展開的方式顯示。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
-#: gnucash/gtkbuilder/dialog-preferences.glade:2777
+#: gnucash/gtkbuilder/dialog-preferences.glade:2861
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
@@ -11671,7 +11711,7 @@ msgstr ""
 "行模式下以兩行來顯示。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:300
-#: gnucash/gtkbuilder/dialog-preferences.glade:2796
+#: gnucash/gtkbuilder/dialog-preferences.glade:2880
 msgid "All transactions are expanded to show all splits."
 msgstr "展開顯示全部分割交易。"
 
@@ -11712,7 +11752,7 @@ msgid "Show the entered and reconcile dates"
 msgstr "顯示輸入與對帳日期"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:316
-#: gnucash/gtkbuilder/dialog-preferences.glade:2940
+#: gnucash/gtkbuilder/dialog-preferences.glade:3024
 msgid ""
 "Show the date when the transaction was entered below the posted date and "
 "reconciled date on split row."
@@ -11723,7 +11763,7 @@ msgid "Show entered and reconciled dates on selection"
 msgstr "於所選擇的項目上顯示輸入與對帳日期"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:321
-#: gnucash/gtkbuilder/dialog-preferences.glade:2988
+#: gnucash/gtkbuilder/dialog-preferences.glade:3072
 msgid "Show the entered date and reconciled date on transaction selection."
 msgstr "在選定的交易上顯示輸入日期與對帳日期。"
 
@@ -11732,7 +11772,7 @@ msgid "Show the calendar buttons"
 msgstr "顯示日曆按鈕"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:326
-#: gnucash/gtkbuilder/dialog-preferences.glade:2956
+#: gnucash/gtkbuilder/dialog-preferences.glade:3040
 msgid "Show the calendar buttons Cancel, Today and Select."
 msgstr "在日曆中顯示「取消」、「今天」、「選擇」按鈕。"
 
@@ -11741,7 +11781,7 @@ msgid "Move the selection to the blank split on expand"
 msgstr "展開交易時移至空白分割"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:331
-#: gnucash/gtkbuilder/dialog-preferences.glade:2972
+#: gnucash/gtkbuilder/dialog-preferences.glade:3056
 msgid ""
 "This will move the selection to the blank split when the transaction is "
 "expanded."
@@ -11752,7 +11792,7 @@ msgid "Number of transactions to show in a register."
 msgstr "登記簿中所顯示的交易數量。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:336
-#: gnucash/gtkbuilder/dialog-preferences.glade:2827
+#: gnucash/gtkbuilder/dialog-preferences.glade:2911
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
@@ -11764,7 +11804,7 @@ msgstr "自動補齊前所需的字元數。"
 
 #. Register2 feature
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:341
-#: gnucash/gtkbuilder/dialog-preferences.glade:2917
+#: gnucash/gtkbuilder/dialog-preferences.glade:3001
 msgid ""
 "This sets the number of characters before auto complete starts for "
 "description, notes and memo fields."
@@ -11783,7 +11823,7 @@ msgstr ""
 "始。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:353
-#: gnucash/gtkbuilder/dialog-preferences.glade:3193
+#: gnucash/gtkbuilder/dialog-preferences.glade:3277
 msgid "Use the system locale currency for all newly created reports."
 msgstr "針對新建立的報表，使用系統的地區設定裡的貨幣。"
 
@@ -11800,7 +11840,7 @@ msgstr ""
 "「currency-other」此鍵中所指定的貨幣。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:358
-#: gnucash/gtkbuilder/dialog-preferences.glade:3173
+#: gnucash/gtkbuilder/dialog-preferences.glade:3257
 msgid "Use the specified currency for all newly created reports."
 msgstr "新產生的報表使用此貨幣。"
 
@@ -11813,7 +11853,7 @@ msgid "Zoom factor to use by default for reports."
 msgstr "報表預設的縮放比例。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:369
-#: gnucash/gtkbuilder/dialog-preferences.glade:3208
+#: gnucash/gtkbuilder/dialog-preferences.glade:3292
 msgid ""
 "On high resolution screens reports tend to be hard to read. This option "
 "allows you to scale reports up by the set factor. For example setting this "
@@ -12572,7 +12612,7 @@ msgstr "去年(_L)"
 
 #. Filter By Dialog, Date Tab, End section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:580
-#: gnucash/gtkbuilder/dialog-fincalc.glade:601
+#: gnucash/gtkbuilder/dialog-fincalc.glade:606
 #: gnucash/gtkbuilder/dialog-sx.glade:424
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:414
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:256
@@ -12657,20 +12697,24 @@ msgid ""
 msgstr ""
 "這個精靈將會協助您從 CSV 檔中匯入價格。\n"
 "\n"
-"若要成功匯入，須要以下這些必填的欄位：日期、金額、商品命名空間、商品代號與報價貨幣別。如果所有項目都是針對同一個商品 / "
-"報價貨幣別，則您可以從下拉選單中選取它們，且必填欄位會是日期與金額。\n"
+"若要成功匯入，須要以下這些必填的欄位：日期、金額、商品命名空間、商品代號與報"
+"價貨幣別。如果所有項目都是針對同一個商品 / 報價貨幣別，則您可以從下拉選單中選"
+"取它們，且必填欄位會是日期與金額。\n"
 "\n"
-"可以選擇使用不同的選擇來指定分隔符號，也可以選擇使用固定寬度的欄位。當選擇使用固定寬度欄位的選擇時，在表格上的資料列點兩下將可以設定欄位寬度，並且點選滑鼠"
-"右鍵可以在需要時修改他們。\n"
+"可以選擇使用不同的選擇來指定分隔符號，也可以選擇使用固定寬度的欄位。當選擇使"
+"用固定寬度欄位的選擇時，在表格上的資料列點兩下將可以設定欄位寬度，並且點選滑"
+"鼠右鍵可以在需要時修改他們。\n"
 "\n"
-"範例：\"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" 或 CURRENCY;USD;2016-11-21;1"
-".56;GBP\n"
+"範例：\"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" 或 CURRENCY;"
+"USD;2016-11-21;1.56;GBP\n"
 "\n"
-"有選項可以指定要跳過檔案開頭和結尾多少列，或是略過檔案中的交替行數，這可以在您的檔案有標頭時使用。此外若有需要，也有選項可以讓您選擇覆蓋掉某日已存在的價格"
-"。\n"
+"有選項可以指定要跳過檔案開頭和結尾多少列，或是略過檔案中的交替行數，這可以在"
+"您的檔案有標頭時使用。此外若有需要，也有選項可以讓您選擇覆蓋掉某日已存在的價"
+"格。\n"
 "\n"
-"最後，對於重複的匯入，在預覽頁中有載入和儲存設定按鈕。您可以儲存調整過後的設定並且在之後的匯入中使用。另外在載入您的設定之後，您也可以針對相似的匯入進行微"
-"調並以其他名稱儲存。注意您無法儲存至預設的設定。\n"
+"最後，對於重複的匯入，在預覽頁中有載入和儲存設定按鈕。您可以儲存調整過後的設"
+"定並且在之後的匯入中使用。另外在載入您的設定之後，您也可以針對相似的匯入進行"
+"微調並以其他名稱儲存。注意您無法儲存至預設的設定。\n"
 "\n"
 "這個操作無法還原，請確認您有可用的備份。\n"
 "\n"
@@ -12779,7 +12823,7 @@ msgstr "<b>檔案格式</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:592
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:599
-#: gnucash/gtkbuilder/dialog-preferences.glade:1029
+#: gnucash/gtkbuilder/dialog-preferences.glade:1043
 #: gnucash/gtkbuilder/gnc-date-format.glade:39
 msgid "Date Format"
 msgstr "日期格式"
@@ -13061,9 +13105,11 @@ msgid ""
 "\n"
 "Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
-"這個精靈會協助您建立一組 GnuCash 科目，包括您的資產(像是投資、支票或儲蓄帳號)、負債(像是貸款)與您可能會有的各種不同的收入和支出。\n"
+"這個精靈會協助您建立一組 GnuCash 科目，包括您的資產(像是投資、支票或儲蓄帳"
+"號)、負債(像是貸款)與您可能會有的各種不同的收入和支出。\n"
 "\n"
-"您可以在這邊選擇看起來和您需要相近的科目。當此精靈完成時，您可以在之後任何的時間新增、重新命名、修改或刪除科目。您也可以建立子科目，或者移動目科(包含其子"
+"您可以在這邊選擇看起來和您需要相近的科目。當此精靈完成時，您可以在之後任何的"
+"時間新增、重新命名、修改或刪除科目。您也可以建立子科目，或者移動目科(包含其子"
 "科目)到其他母科目中。\n"
 "\n"
 "如果您現在不希望建立任何新科目，點選「取消」。"
@@ -13274,7 +13320,7 @@ msgstr "輸入貸款詳情，最少需要選擇一個有效的貸款科目以及
 
 #: gnucash/gtkbuilder/assistant-loan.glade:173
 #: gnucash/gtkbuilder/assistant-loan.glade:1175
-#: gnucash/gtkbuilder/dialog-preferences.glade:363
+#: gnucash/gtkbuilder/dialog-preferences.glade:377
 #: gnucash/gtkbuilder/dialog-sx.glade:261
 #: gnucash/gtkbuilder/gnc-frequency.glade:604
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:346
@@ -13439,7 +13485,7 @@ msgid "Range"
 msgstr "範圍"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1187
-#: gnucash/gtkbuilder/dialog-preferences.glade:378
+#: gnucash/gtkbuilder/dialog-preferences.glade:392
 #: gnucash/gtkbuilder/dialog-sx.glade:333
 #: gnucash/report/reports/example/average-balance.scm:41
 #: gnucash/report/reports/example/daily-reports.scm:53
@@ -14032,10 +14078,10 @@ msgstr "偏好設定"
 #. Preferences Dialog, General Tab
 #: gnucash/gtkbuilder/business-prefs.glade:55
 #: gnucash/gtkbuilder/dialog-account.glade:1672
-#: gnucash/gtkbuilder/dialog-preferences.glade:1391
-#: gnucash/gtkbuilder/dialog-preferences.glade:2022
-#: gnucash/gtkbuilder/dialog-preferences.glade:2079
-#: gnucash/report/report-core.scm:158
+#: gnucash/gtkbuilder/dialog-preferences.glade:1405
+#: gnucash/gtkbuilder/dialog-preferences.glade:2036
+#: gnucash/gtkbuilder/dialog-preferences.glade:2093
+#: gnucash/report/report-core.scm:159
 #: gnucash/report/reports/standard/equity-statement.scm:108
 #: gnucash/report/reports/standard/equity-statement.scm:112
 #: gnucash/report/reports/standard/register.scm:347
@@ -14191,7 +14237,7 @@ msgstr "勾選要一併更動所選科目和子科目的設定相目"
 
 #: gnucash/gtkbuilder/dialog-account.glade:199
 #: gnucash/gtkbuilder/dialog-account.glade:1330
-#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:299
+#: gnucash/report/html-style-sheet.scm:259 gnucash/report/report-core.scm:300
 #: gnucash/report/stylesheets/plain.scm:232
 msgid "Default"
 msgstr "預設值"
@@ -15262,31 +15308,31 @@ msgstr "計算"
 msgid "Recalculate the (single) blank entry in the above fields."
 msgstr "重新計算上述某個留白的欄位。"
 
-#: gnucash/gtkbuilder/dialog-fincalc.glade:503
+#: gnucash/gtkbuilder/dialog-fincalc.glade:508
 msgid "<b>Payment Options</b>"
 msgstr "<b>付款選項</b>"
 
-#: gnucash/gtkbuilder/dialog-fincalc.glade:523
+#: gnucash/gtkbuilder/dialog-fincalc.glade:528
 msgid "Payment Total"
 msgstr "付款總額"
 
-#: gnucash/gtkbuilder/dialog-fincalc.glade:553
+#: gnucash/gtkbuilder/dialog-fincalc.glade:558
 msgid "Discrete"
 msgstr "離散"
 
-#: gnucash/gtkbuilder/dialog-fincalc.glade:570
+#: gnucash/gtkbuilder/dialog-fincalc.glade:575
 msgid "Continuous"
 msgstr "連續"
 
-#: gnucash/gtkbuilder/dialog-fincalc.glade:586
+#: gnucash/gtkbuilder/dialog-fincalc.glade:591
 msgid "Beginning"
 msgstr "開始"
 
-#: gnucash/gtkbuilder/dialog-fincalc.glade:622
+#: gnucash/gtkbuilder/dialog-fincalc.glade:627
 msgid "<b>Compounding</b>"
 msgstr "<b>複利：</b>"
 
-#: gnucash/gtkbuilder/dialog-fincalc.glade:767
+#: gnucash/gtkbuilder/dialog-fincalc.glade:772
 msgid "When paid"
 msgstr "何時支付"
 
@@ -15492,7 +15538,7 @@ msgid "Colors"
 msgstr "顏色"
 
 #: gnucash/gtkbuilder/dialog-import.glade:644
-#: gnucash/gtkbuilder/dialog-preferences.glade:2413
+#: gnucash/gtkbuilder/dialog-preferences.glade:2497
 msgid "<b>Actions</b>"
 msgstr "<b>動作</b>"
 
@@ -15892,16 +15938,16 @@ msgstr "ISO"
 msgid "Locale"
 msgstr "系統地區設定"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:133
+#: gnucash/gtkbuilder/dialog-preferences.glade:140
 msgid "_Reset"
 msgstr "重設(_R)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:178
-#: gnucash/gtkbuilder/dialog-preferences.glade:583
+#: gnucash/gtkbuilder/dialog-preferences.glade:185
+#: gnucash/gtkbuilder/dialog-preferences.glade:597
 msgid "<b>Separator Character</b>"
 msgstr "<b>分隔字元</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:204
+#: gnucash/gtkbuilder/dialog-preferences.glade:211
 msgid ""
 "Press 'Reset' to use the original account separator and close the preference "
 "window\n"
@@ -15910,28 +15956,28 @@ msgstr ""
 "按下「重設」按鈕以使用原來的科目分隔字元並關閉此對話盒\n"
 "按下「關閉」按鈕回到偏好設定視窗\n"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:240
+#: gnucash/gtkbuilder/dialog-preferences.glade:254
 msgid "GnuCash Preferences"
 msgstr "GnuCash 偏好設定"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:314
+#: gnucash/gtkbuilder/dialog-preferences.glade:328
 msgid "<b>Summarybar Content</b>"
 msgstr "<b>摘要列內容</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:324
+#: gnucash/gtkbuilder/dialog-preferences.glade:338
 msgid "Include _grand total"
 msgstr "包含總合(_G)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:330
+#: gnucash/gtkbuilder/dialog-preferences.glade:344
 msgid ""
 "Show a grand total of all accounts converted to the default report currency."
 msgstr "顯示所有科目的總和，都會換算成預設報表貨幣。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:342
+#: gnucash/gtkbuilder/dialog-preferences.glade:356
 msgid "Include _non-currency totals"
 msgstr "包含非貨幣的總合(_N)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:348
+#: gnucash/gtkbuilder/dialog-preferences.glade:362
 msgid ""
 "If checked, non-currency commodities will be shown in the summary bar. If "
 "clear, only currencies will be shown."
@@ -15939,110 +15985,110 @@ msgstr ""
 "如果勾選，則非貨幣類型的商品會顯示在摘要列中。如果沒有勾選，則只有貨幣會被顯"
 "示在摘要列中。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:390
+#: gnucash/gtkbuilder/dialog-preferences.glade:404
 msgid "_Relative"
 msgstr "相對(_R)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:396
+#: gnucash/gtkbuilder/dialog-preferences.glade:410
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr "使用指定的相對起始時間來計算盈餘/虧損。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:409
+#: gnucash/gtkbuilder/dialog-preferences.glade:423
 msgid "_Absolute"
 msgstr "絕對的(_A)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:415
+#: gnucash/gtkbuilder/dialog-preferences.glade:429
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr "使用指定的絕對開始時間來計算盈餘/虧損。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:428
+#: gnucash/gtkbuilder/dialog-preferences.glade:442
 msgid "Re_lative"
 msgstr "相對(_L)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:434
+#: gnucash/gtkbuilder/dialog-preferences.glade:448
 msgid ""
 "Use the specified relative ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
 msgstr "使用指定的相對結束時間來計算盈餘/虧損。此外也會使用此日期來計算淨值。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:447
+#: gnucash/gtkbuilder/dialog-preferences.glade:461
 msgid "Ab_solute"
 msgstr "絕對(_S)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:453
+#: gnucash/gtkbuilder/dialog-preferences.glade:467
 msgid ""
 "Use the specified absolute ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
 msgstr "使用指定的絕對結束時間來計算盈餘/虧損。此外也會使用此日期來計算淨值。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:564
+#: gnucash/gtkbuilder/dialog-preferences.glade:578
 msgid "Accounting Period"
 msgstr "會計週期"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:593
+#: gnucash/gtkbuilder/dialog-preferences.glade:607
 msgid "Use _formal accounting labels"
 msgstr "使用會計名詞標籤(_F)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:599
+#: gnucash/gtkbuilder/dialog-preferences.glade:613
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
 msgstr "只使用「借方」與「貸方」來代替口語的同義字。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:614
+#: gnucash/gtkbuilder/dialog-preferences.glade:628
 msgid "<b>Labels</b>"
 msgstr "<b>標籤</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:634
+#: gnucash/gtkbuilder/dialog-preferences.glade:648
 #: gnucash/gtkbuilder/dialog-price.glade:447
 msgid "_None"
 msgstr "無(_N)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:653
+#: gnucash/gtkbuilder/dialog-preferences.glade:667
 msgid "C_redit accounts"
 msgstr "信用科目(_R)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:672
+#: gnucash/gtkbuilder/dialog-preferences.glade:686
 msgid "_Income & expense"
 msgstr "收入 & 支出(_I)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:694
+#: gnucash/gtkbuilder/dialog-preferences.glade:708
 msgid "<b>Reverse Balanced Accounts</b>"
 msgstr "<b>反向結算科目類型</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:727
+#: gnucash/gtkbuilder/dialog-preferences.glade:741
 msgid "<b>Default Currency</b>"
 msgstr "<b>預設貨幣</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:740
-#: gnucash/gtkbuilder/dialog-preferences.glade:3066
+#: gnucash/gtkbuilder/dialog-preferences.glade:754
+#: gnucash/gtkbuilder/dialog-preferences.glade:3150
 msgid "US Dollars (USD)"
 msgstr "美元 (USD)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:763
+#: gnucash/gtkbuilder/dialog-preferences.glade:777
 msgid "Character"
 msgstr "字元"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:775
+#: gnucash/gtkbuilder/dialog-preferences.glade:789
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
 msgid "Sample"
 msgstr "範例"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:812
+#: gnucash/gtkbuilder/dialog-preferences.glade:826
 msgid "Show the Account Color as background"
 msgstr "以科目顏色做為科目的背景顏色"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:818
+#: gnucash/gtkbuilder/dialog-preferences.glade:832
 msgid "Show the Account Color as Account Name Background."
 msgstr "以科目顏色做為科目名稱的背景顏色。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:840
+#: gnucash/gtkbuilder/dialog-preferences.glade:854
 msgid "Show the Account Color on tabs"
 msgstr "在頁籤上顯示科目顏色"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:846
+#: gnucash/gtkbuilder/dialog-preferences.glade:860
 msgid "Show the Account Color as tab background."
 msgstr "在頁籤上以科目的顏色做為背景色。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:880
+#: gnucash/gtkbuilder/dialog-preferences.glade:894
 msgid ""
 "The character that will be used between components of an account name. A "
 "legal value is any single character except letters and numbers, or any of "
@@ -16053,47 +16099,47 @@ msgstr ""
 "是下列任何一個字串：\"colon\", \"slash\", \"backslash\", \"dash\" 以及 "
 "\"period\"。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:900
-#: gnucash/gtkbuilder/dialog-preferences.glade:3167
+#: gnucash/gtkbuilder/dialog-preferences.glade:914
+#: gnucash/gtkbuilder/dialog-preferences.glade:3251
 msgid "Ch_oose"
 msgstr "自選(_O)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:920
-#: gnucash/gtkbuilder/dialog-preferences.glade:3187
+#: gnucash/gtkbuilder/dialog-preferences.glade:934
+#: gnucash/gtkbuilder/dialog-preferences.glade:3271
 msgid "Loc_ale"
 msgstr "本地(_A)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1004
+#: gnucash/gtkbuilder/dialog-preferences.glade:1018
 #: libgnucash/app-utils/business-options.scm:76
 msgid "Fancy Date Format"
 msgstr "精美的日期格式"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1044
+#: gnucash/gtkbuilder/dialog-preferences.glade:1058
 msgid "<b>Time Format</b>"
 msgstr "<b>時間格式</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1064
+#: gnucash/gtkbuilder/dialog-preferences.glade:1078
 msgid "U_se 24-hour clock"
 msgstr "使用 24 小時制時間(_S)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1070
+#: gnucash/gtkbuilder/dialog-preferences.glade:1084
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "使用 24 小時制(而不是 12 小時制)時間格式。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1085
+#: gnucash/gtkbuilder/dialog-preferences.glade:1099
 msgid "<b>Date Completion</b>"
 msgstr "<b>日期自動補完</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1098
+#: gnucash/gtkbuilder/dialog-preferences.glade:1112
 msgid "When a date is entered without year, it should be taken"
 msgstr "當輸入日期只有日月，該如何決定年份"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1114
+#: gnucash/gtkbuilder/dialog-preferences.glade:1128
 msgid ""
 "Dates will be completed so that they are within the current calendar year."
 msgstr "日期的部份，會使用今年來補完。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1127
+#: gnucash/gtkbuilder/dialog-preferences.glade:1141
 msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month"
@@ -16101,73 +16147,73 @@ msgstr ""
 "用 12 個月的區間，\n"
 "自本月往前多久開始計算"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1151
+#: gnucash/gtkbuilder/dialog-preferences.glade:1165
 msgid "Enter number of months."
 msgstr "輸入幾個月。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1172
+#: gnucash/gtkbuilder/dialog-preferences.glade:1186
 msgid "Use the date format specified by the system locale."
 msgstr "使用系統區域化設定的日期格式。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1198
+#: gnucash/gtkbuilder/dialog-preferences.glade:1212
 msgid "<b>Numbers</b>"
 msgstr "<b>數字</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1208
+#: gnucash/gtkbuilder/dialog-preferences.glade:1222
 msgid "Force P_rices to display as decimals"
 msgstr "強制使用小數點顯示價格(_R)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1226
+#: gnucash/gtkbuilder/dialog-preferences.glade:1240
 msgid "Display ne_gative amounts in red"
 msgstr "負數以紅色顯示(_G)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1232
+#: gnucash/gtkbuilder/dialog-preferences.glade:1246
 msgid "Display negative amounts in red."
 msgstr "負數以紅色顯示。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1244
+#: gnucash/gtkbuilder/dialog-preferences.glade:1258
 msgid "_Automatic decimal point"
 msgstr "自動小數點(_A)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1250
+#: gnucash/gtkbuilder/dialog-preferences.glade:1264
 msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
 msgstr "自動為不足 1 的數值插入小數點。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1265
+#: gnucash/gtkbuilder/dialog-preferences.glade:1279
 msgid "_Decimal places"
 msgstr "自動小數位數(_D)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1280
+#: gnucash/gtkbuilder/dialog-preferences.glade:1294
 msgid "How many automatic decimal places will be filled in."
 msgstr "自動小數會填入的位數多寡。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1372
+#: gnucash/gtkbuilder/dialog-preferences.glade:1386
 msgid "Numbers, Date, Time"
 msgstr "數字、日期、時間"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1403
+#: gnucash/gtkbuilder/dialog-preferences.glade:1417
 msgid "Perform account list _setup on new file"
 msgstr "新增檔案時使用科目列表設定(_S)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1409
+#: gnucash/gtkbuilder/dialog-preferences.glade:1423
 msgid "Present the new account list dialog when you choose File->New File."
 msgstr "當您自「檔案」選單選擇「新增檔案」時跳出新科目列表對話盒。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1440
+#: gnucash/gtkbuilder/dialog-preferences.glade:1454
 msgid "Display \"_tip of the day\" dialog"
 msgstr "顯示「每日一訣」對話盒(_T)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1446
+#: gnucash/gtkbuilder/dialog-preferences.glade:1460
 msgid "Display hints for using GnuCash at startup."
 msgstr "啟動時顯示關於使用 GnuCash 的建。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1467
+#: gnucash/gtkbuilder/dialog-preferences.glade:1481
 msgid "How many days to keep old log/backup files."
 msgstr "記錄檔/備份檔保留幾天。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1486
+#: gnucash/gtkbuilder/dialog-preferences.glade:1500
 #: gnucash/gtkbuilder/dialog-sx.glade:619
 #: gnucash/gtkbuilder/dialog-sx.glade:658
 #: gnucash/gtkbuilder/dialog-sx.glade:987
@@ -16175,121 +16221,121 @@ msgstr "記錄檔/備份檔保留幾天。"
 msgid "days"
 msgstr "天"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1505
+#: gnucash/gtkbuilder/dialog-preferences.glade:1519
 msgid "<b>_Retain log/backup files</b>"
 msgstr "<b>保留日誌 / 備份檔(_R)</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1517
+#: gnucash/gtkbuilder/dialog-preferences.glade:1531
 msgid "Com_press files"
 msgstr "壓縮資料檔案(_P)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1523
+#: gnucash/gtkbuilder/dialog-preferences.glade:1537
 msgid "Compress the data file with gzip when saving it to disk."
 msgstr "當存檔時，使用 gzip 進行壓縮。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1538
+#: gnucash/gtkbuilder/dialog-preferences.glade:1552
 msgid "<b>Files</b>"
 msgstr "<b>檔案</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1571
+#: gnucash/gtkbuilder/dialog-preferences.glade:1585
 msgid "<b>Search Dialog</b>"
 msgstr "<b>搜尋對話盒</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1584
+#: gnucash/gtkbuilder/dialog-preferences.glade:1598
 msgid "New search _limit"
 msgstr "重新搜尋限制(_L)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1599
+#: gnucash/gtkbuilder/dialog-preferences.glade:1613
 msgid "Default to 'new search' if fewer than this number of items is returned."
 msgstr "預設如果傳回的項目少於這個數字時進行「重新搜尋」。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1615
+#: gnucash/gtkbuilder/dialog-preferences.glade:1629
 msgid "Show splash scree_n"
 msgstr "顯示軟體啟動資訊畫面(_N)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1621
+#: gnucash/gtkbuilder/dialog-preferences.glade:1635
 msgid "Show splash screen at startup."
 msgstr "在程式啟動時顯示軟體啟動資訊畫面。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1636
+#: gnucash/gtkbuilder/dialog-preferences.glade:1650
 msgid "Auto-save time _interval"
 msgstr "自動存檔時間間隔(_I)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1675
+#: gnucash/gtkbuilder/dialog-preferences.glade:1689
 msgid "minutes"
 msgstr "分鐘"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1691
+#: gnucash/gtkbuilder/dialog-preferences.glade:1705
 msgid "Show auto-save confirmation _question"
 msgstr "顯示確認自動存檔的詢問(_Q)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1697
+#: gnucash/gtkbuilder/dialog-preferences.glade:1711
 msgid ""
 "If active, GnuCash shows a confirmation question each time the auto-save "
 "feature is started. Otherwise no extra explanation is shown."
 msgstr ""
 "如果勾選，GnuCash 會在每一次進行自動存檔時進行詢問。否則不會有另外的訊息。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1737
+#: gnucash/gtkbuilder/dialog-preferences.glade:1751
 #: gnucash/gtkbuilder/dialog-sx.glade:1234
 msgid "For"
 msgstr "指定"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1755
+#: gnucash/gtkbuilder/dialog-preferences.glade:1769
 #: gnucash/gtkbuilder/dialog-sx.glade:1202
 msgid "Forever"
 msgstr "永遠"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1794
+#: gnucash/gtkbuilder/dialog-preferences.glade:1808
 msgid "Time to _wait for answer"
 msgstr "等待多久(_W)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1831
+#: gnucash/gtkbuilder/dialog-preferences.glade:1845
 msgid "seconds"
 msgstr "秒"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1859
-#: gnucash/gtkbuilder/dialog-preferences.glade:1877
+#: gnucash/gtkbuilder/dialog-preferences.glade:1873
+#: gnucash/gtkbuilder/dialog-preferences.glade:1891
 msgid "Path head for Linked Files Relative Paths"
 msgstr "連結的檔案的預設路徑的開頭"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1906
+#: gnucash/gtkbuilder/dialog-preferences.glade:1920
 msgid "Enable horizontal grid lines on table displays"
 msgstr "在表格上顯示水平線"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1910
+#: gnucash/gtkbuilder/dialog-preferences.glade:1924
 msgid ""
 "Enable horizontal grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
 msgstr ""
 "在表格上顯示水平線。這主要會影響像是「科目」頁籤這類中的樹狀顯示的畫面。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1923
+#: gnucash/gtkbuilder/dialog-preferences.glade:1937
 msgid "Enable vertical grid lines on table displays"
 msgstr "在表格上顯示垂直線"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1927
+#: gnucash/gtkbuilder/dialog-preferences.glade:1941
 msgid ""
 "Enable vertical grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
 msgstr ""
 "在表格上顯示垂直線。這主要會影響像是「科目」頁籤這類中的樹狀顯示的畫面。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:1943
+#: gnucash/gtkbuilder/dialog-preferences.glade:1957
 msgid "<b>Linked Files</b>"
 msgstr "<b>連結檔案</b>"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2038
+#: gnucash/gtkbuilder/dialog-preferences.glade:2052
 msgid "Enable skip transaction action"
 msgstr "啟用略過交易的動作"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2057
+#: gnucash/gtkbuilder/dialog-preferences.glade:2071
 msgid "Enable update match action"
 msgstr "啟用更新配對動作"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2096
+#: gnucash/gtkbuilder/dialog-preferences.glade:2110
 msgid ""
 "In some places commercial ATMs (not belonging to a financial institution) "
 "are installed in places like convenience stores. These ATMs add their fee "
@@ -16306,13 +16352,13 @@ msgstr ""
 "額將會不符。您應該要把這個數值設為您所處地區對這種收費的最大值（以您當地貨幣"
 "的單位），這樣一來交易便會識別為吻合。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2119
+#: gnucash/gtkbuilder/dialog-preferences.glade:2133
 msgid ""
 "A transaction whose best match's score is in the green zone (above or equal "
 "to the Auto-CLEAR threshold) will be CLEARed by default."
 msgstr "其最高配對分數在綠色區（高於或等於自動結清門檻）的交易會預設為已結清。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2141
+#: gnucash/gtkbuilder/dialog-preferences.glade:2155
 msgid ""
 "A transaction whose best match's score is in the red zone (above the display "
 "threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
@@ -16321,79 +16367,105 @@ msgstr ""
 "其最高配對分數在紅色區（高於顯示門檻但低於或等於自動新增門檻）的交易會預設為"
 "已加入。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2163
+#: gnucash/gtkbuilder/dialog-preferences.glade:2177
 msgid ""
 "The minimum score a potential match must have to be displayed in the match "
 "list."
 msgstr "可能的配對可被顯示在配對清單中的最低分數。"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2184
+#: gnucash/gtkbuilder/dialog-preferences.glade:2198
 msgid "Commercial ATM _fees threshold"
 msgstr "商用 ATM 費用門檻(_F)"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2198
+#: gnucash/gtkbuilder/dialog-preferences.glade:2212
 msgid "Auto-c_lear threshold"
 msgstr "自動結清門檻(_L)"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2212
+#: gnucash/gtkbuilder/dialog-preferences.glade:2226
 msgid "Auto-_add threshold"
 msgstr "自動新增門檻(_A)"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2226
+#: gnucash/gtkbuilder/dialog-preferences.glade:2240
 msgid "Match _display threshold"
 msgstr "配對顯示門檻(_D)"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gtkbuilder/dialog-preferences.glade:2237
+#: gnucash/gtkbuilder/dialog-preferences.glade:2251
 msgid "Use _bayesian matching"
 msgstr "使用貝氏(_bayesian)比對"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2243
+#: gnucash/gtkbuilder/dialog-preferences.glade:2257
 msgid ""
 "Use bayesian algorithms to match new transactions with existing accounts."
 msgstr "使用貝氏(bayesian)演算法進行新交易與現有科目的配對。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2301
+#. Preferences->Online Banking:Generic
+#: gnucash/gtkbuilder/dialog-preferences.glade:2291
+#, fuzzy
+#| msgid "Match _display threshold"
+msgid "Likely match _day threshold"
+msgstr "配對顯示門檻(_D)"
+
+#. Preferences->Online Banking:Generic
+#: gnucash/gtkbuilder/dialog-preferences.glade:2304
+#, fuzzy
+#| msgid "Match _display threshold"
+msgid "_Unlikely match day threshold"
+msgstr "配對顯示門檻(_D)"
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2318
+msgid ""
+"A transaction whose date is within the threshold is likely to be a match. "
+"Default is 4 days."
+msgstr ""
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2340
+msgid ""
+"A transaction whose date is outside the threshold is unlikely to be a match. "
+"Default is 14 days."
+msgstr ""
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2385
 msgid "<b>Checks</b>"
 msgstr "<b>支票</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2316
+#: gnucash/gtkbuilder/dialog-preferences.glade:2400
 msgid "The default check printing font."
 msgstr "預設列印支票時所使用的字型。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2326
+#: gnucash/gtkbuilder/dialog-preferences.glade:2410
 msgid "Print _date format"
 msgstr "列印日期格式(_D)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2332
+#: gnucash/gtkbuilder/dialog-preferences.glade:2416
 msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr "在日期之下以 8 點字印出所用的日期格式。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2344
+#: gnucash/gtkbuilder/dialog-preferences.glade:2428
 msgid "Print _blocking chars"
 msgstr "列印阻檔字元(_B)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2350
+#: gnucash/gtkbuilder/dialog-preferences.glade:2434
 msgid "Print '***' before and after each text field on the check."
 msgstr "在支票的每欄文字的開頭和結尾，印上「***」。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2365
+#: gnucash/gtkbuilder/dialog-preferences.glade:2449
 msgid "Default _font"
 msgstr "預設字型(_F)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2394
+#: gnucash/gtkbuilder/dialog-preferences.glade:2478
 msgid "Printing"
 msgstr "列印"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2423
+#: gnucash/gtkbuilder/dialog-preferences.glade:2507
 msgid "'_Enter' moves to blank transaction"
 msgstr "「_Enter」移至空白交易"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2429
+#: gnucash/gtkbuilder/dialog-preferences.glade:2513
 msgid ""
 "If checked, pressing the 'Enter' key will move to the location of the blank "
 "transaction in the register. If clear, pressing the 'Enter' key will move "
@@ -16401,63 +16473,63 @@ msgid ""
 msgstr ""
 "選擇此項時，在使用者按下「Enter」後會移至空白交易。否則，則會往下移一列。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2441
+#: gnucash/gtkbuilder/dialog-preferences.glade:2525
 msgid "_Auto-raise lists"
 msgstr "自動出現列表(_A)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2447
+#: gnucash/gtkbuilder/dialog-preferences.glade:2531
 msgid "Automatically raise the list of accounts or actions during input."
 msgstr "在輸入時自動跳出科目列表或動作列表。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2459
+#: gnucash/gtkbuilder/dialog-preferences.glade:2543
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
 msgstr "Tab 的跳轉順序包括被記憶的轉帳欄位(_C)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2465
+#: gnucash/gtkbuilder/dialog-preferences.glade:2549
 msgid "Move to Transfer field when memorised transaction auto filled."
 msgstr "當依過往記憶自動補齊「轉帳」欄位時，TAB 鍵仍會移到轉帳欄位上。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2490
+#: gnucash/gtkbuilder/dialog-preferences.glade:2574
 msgid "<b>Reconciling</b>"
 msgstr "<b>對帳</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2500
+#: gnucash/gtkbuilder/dialog-preferences.glade:2584
 msgid "Check cleared _transactions"
 msgstr "核對已結清的交易(_T)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2506
+#: gnucash/gtkbuilder/dialog-preferences.glade:2590
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr "當對帳時預先自動勾選已結清的交易。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2518
+#: gnucash/gtkbuilder/dialog-preferences.glade:2602
 msgid "Automatic credit card _payment"
 msgstr "自動信用卡付款(_P)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2524
+#: gnucash/gtkbuilder/dialog-preferences.glade:2608
 msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
 msgstr "在信用卡帳款對帳後，提示使用者輸入信用卡付款交易。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2536
+#: gnucash/gtkbuilder/dialog-preferences.glade:2620
 msgid "Always reconcile to t_oday"
 msgstr "總是對帳到今天(_O)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2542
+#: gnucash/gtkbuilder/dialog-preferences.glade:2626
 msgid ""
 "Always open the reconcile dialog using today's date for the statement date, "
 "regardless of previous reconciliations."
 msgstr "在開啟對帳視窗時，總是使用今天的日期做為結帳日期，而不管上一次的對帳。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2567
+#: gnucash/gtkbuilder/dialog-preferences.glade:2651
 msgid "<b>Graphics</b>"
 msgstr "<b>圖形</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2577
+#: gnucash/gtkbuilder/dialog-preferences.glade:2661
 msgid "_Use GnuCash built-in color theme"
 msgstr "使用 GnuCash 內建的顏色主題(_U)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2583
+#: gnucash/gtkbuilder/dialog-preferences.glade:2667
 msgid ""
 "GnuCash uses a yellow/green theme by default for register windows. Uncheck "
 "this if you want to use the system color theme instead."
@@ -16465,33 +16537,33 @@ msgstr ""
 "GnuCash 預設使用黃色/綠色做為登記簿的顏色主題。如果您想使用系統預設的顏色主"
 "題，取消勾選此選項。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2595
+#: gnucash/gtkbuilder/dialog-preferences.glade:2679
 msgid "Double _mode colors alternate with transactions"
 msgstr "交易以兩種模式的顏色交替表示(_M)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2601
+#: gnucash/gtkbuilder/dialog-preferences.glade:2685
 msgid ""
 "Alternate the primary and secondary colors by transaction instead of by "
 "alternating by row."
 msgstr "以每一筆交易為單位交替使用主要與次要顏色，而不是每一列。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2613
+#: gnucash/gtkbuilder/dialog-preferences.glade:2697
 msgid "Draw hori_zontal lines between rows"
 msgstr "在每列之間畫橫線(_Z)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2619
+#: gnucash/gtkbuilder/dialog-preferences.glade:2703
 msgid "Show horizontal borders on the cells."
 msgstr "顯示細格的水平邊線。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2631
+#: gnucash/gtkbuilder/dialog-preferences.glade:2715
 msgid "Draw _vertical lines between columns"
 msgstr "在每行之間畫直線(_V)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2637
+#: gnucash/gtkbuilder/dialog-preferences.glade:2721
 msgid "Show vertical borders on the cells."
 msgstr "顯示細格的垂直邊線。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2662
+#: gnucash/gtkbuilder/dialog-preferences.glade:2746
 #: gnucash/report/reports/standard/invoice.scm:188
 #: gnucash/report/reports/standard/invoice.scm:194
 #: gnucash/report/reports/standard/invoice.scm:335
@@ -16503,11 +16575,11 @@ msgstr "顯示細格的垂直邊線。"
 msgid "Layout"
 msgstr "排版"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2674
+#: gnucash/gtkbuilder/dialog-preferences.glade:2758
 msgid "_Future transactions after blank transaction"
 msgstr "未來的交易排在空排交易之後(_F)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2680
+#: gnucash/gtkbuilder/dialog-preferences.glade:2764
 msgid ""
 "If checked, transactions with a date in the future will be displayed at the "
 "bottom of the register after the blank transaction. If clear, the blank "
@@ -16516,41 +16588,41 @@ msgstr ""
 "如果勾選，則日期為未來的交易，將會顯示在登記簿的最下方，空白交易之後。如果沒"
 "有勾選，則空白交易會在登記簿的最下方，所有交易之後。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2719
+#: gnucash/gtkbuilder/dialog-preferences.glade:2803
 msgid "<b>Default Style</b>"
 msgstr "<b>預設樣式</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2742
+#: gnucash/gtkbuilder/dialog-preferences.glade:2826
 msgid "<b>Other Defaults</b>"
 msgstr "<b>其他預設值</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2752
+#: gnucash/gtkbuilder/dialog-preferences.glade:2836
 msgid "_Basic ledger"
 msgstr "基本分類帳(_B)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2771
+#: gnucash/gtkbuilder/dialog-preferences.glade:2855
 msgid "_Auto-split ledger"
 msgstr "自動分割分類帳(_A)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2812
+#: gnucash/gtkbuilder/dialog-preferences.glade:2896
 msgid "Number of _transactions"
 msgstr "交易數量(_T)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2845
+#: gnucash/gtkbuilder/dialog-preferences.glade:2929
 msgid "_Double line mode"
 msgstr "兩行模式(_D)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2851
+#: gnucash/gtkbuilder/dialog-preferences.glade:2935
 msgid ""
 "Show two lines of information for each transaction instead of one. Does not "
 "affect expanded transactions."
 msgstr "每個交易顯示兩行資訊。不會影響被展開的交易。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2863
+#: gnucash/gtkbuilder/dialog-preferences.glade:2947
 msgid "Register opens in a new _window"
 msgstr "在新視窗中開啟登記簿(_W)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2869
+#: gnucash/gtkbuilder/dialog-preferences.glade:2953
 msgid ""
 "If checked, each register will be opened in its own top level window. If "
 "clear, the register will be opened in the current window."
@@ -16558,11 +16630,11 @@ msgstr ""
 "如果勾選，則每個登錄簿會在新視窗中開啟。如果沒有勾選，則登錄簿會在目前的視窗"
 "中開啟。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2881
+#: gnucash/gtkbuilder/dialog-preferences.glade:2965
 msgid "_Only display leaf account names"
 msgstr "只顯示最底層的科目名稱(_O)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2887
+#: gnucash/gtkbuilder/dialog-preferences.glade:2971
 msgid ""
 "If checked, only the names of the leaf accounts are displayed in the "
 "register and in the account selection popup. The default behaviour is to "
@@ -16574,47 +16646,47 @@ msgstr ""
 "有科目名稱，都必須是不同的。"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2902
+#: gnucash/gtkbuilder/dialog-preferences.glade:2986
 msgid "Number of _characters for auto complete"
 msgstr "自動補齊前所需的字元數(_C)"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2936
+#: gnucash/gtkbuilder/dialog-preferences.glade:3020
 msgid "Show the _entered and reconcile dates"
 msgstr "顯示輸入與對帳日期(_E)"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2952
+#: gnucash/gtkbuilder/dialog-preferences.glade:3036
 msgid "Show the calendar b_uttons"
 msgstr "顯示日曆按鈕(_U)"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2968
+#: gnucash/gtkbuilder/dialog-preferences.glade:3052
 msgid "_Move the selection to the blank split on expand"
 msgstr "在展開交易時自動移至空白的分割(_M)"
 
 #. Register2 feature
-#: gnucash/gtkbuilder/dialog-preferences.glade:2984
+#: gnucash/gtkbuilder/dialog-preferences.glade:3068
 msgid "_Show entered and reconciled dates on selection"
 msgstr "於所選擇的項目上顯示輸入與對帳日期(_S)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3047
+#: gnucash/gtkbuilder/dialog-preferences.glade:3131
 msgid "Register Defaults"
 msgstr "登記簿預設值"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3078
+#: gnucash/gtkbuilder/dialog-preferences.glade:3162
 msgid "<b>Default Report Currency</b>"
 msgstr "<b>預設報表貨幣</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3101
+#: gnucash/gtkbuilder/dialog-preferences.glade:3185
 msgid "<b>Location</b>"
 msgstr "<b>位置</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3111
+#: gnucash/gtkbuilder/dialog-preferences.glade:3195
 msgid "Report opens in a new _window"
 msgstr "在新視窗中開啟報表(_W)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3117
+#: gnucash/gtkbuilder/dialog-preferences.glade:3201
 msgid ""
 "If checked, each report will be opened in its own top level window. If "
 "clear, the report will be opened in the current window."
@@ -16622,75 +16694,75 @@ msgstr ""
 "如果勾選，則報表會在新的視窗中被開啟。如果沒有勾選，則報表會在使用中的視窗裡"
 "開啟。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3145
-#: gnucash/gtkbuilder/dialog-preferences.glade:3225
+#: gnucash/gtkbuilder/dialog-preferences.glade:3229
+#: gnucash/gtkbuilder/dialog-preferences.glade:3309
 msgid "Default zoom level"
 msgstr "預設縮放等級"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3260
+#: gnucash/gtkbuilder/dialog-preferences.glade:3344
 msgid "Reports"
 msgstr "報表"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3279
+#: gnucash/gtkbuilder/dialog-preferences.glade:3363
 msgid "<b>Window Geometry</b>"
 msgstr "<b>視窗座標</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3299
+#: gnucash/gtkbuilder/dialog-preferences.glade:3383
 msgid "_Save window size and position"
 msgstr "儲存視窗大小與位置(_S)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3305
+#: gnucash/gtkbuilder/dialog-preferences.glade:3389
 msgid "Save window size and location when it is closed."
 msgstr "在關閉視窗時，儲存視窗大小與位置。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3318
+#: gnucash/gtkbuilder/dialog-preferences.glade:3402
 msgid "Bring the most _recent tab to the front"
 msgstr "把最近的頁籤放到前面(_R)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3350
+#: gnucash/gtkbuilder/dialog-preferences.glade:3434
 msgid "<b>Tab Position</b>"
 msgstr "<b>頁籤(Tab)位置</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3360
+#: gnucash/gtkbuilder/dialog-preferences.glade:3444
 msgid "To_p"
 msgstr "上(_P)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3379
+#: gnucash/gtkbuilder/dialog-preferences.glade:3463
 msgid "B_ottom"
 msgstr "下(_O)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3398
+#: gnucash/gtkbuilder/dialog-preferences.glade:3482
 msgid "_Left"
 msgstr "左(_L)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3417
+#: gnucash/gtkbuilder/dialog-preferences.glade:3501
 msgid "_Right"
 msgstr "右(_R)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3439
+#: gnucash/gtkbuilder/dialog-preferences.glade:3523
 msgid "<b>Summary Bar Position</b>"
 msgstr "<b>摘要列位置</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3468
+#: gnucash/gtkbuilder/dialog-preferences.glade:3552
 #: gnucash/gtkbuilder/dialog-print-check.glade:270
 msgid "Bottom"
 msgstr "下方"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3500
+#: gnucash/gtkbuilder/dialog-preferences.glade:3584
 msgid "<b>Tabs</b>"
 msgstr "<b>頁籤(Tab)</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3510
+#: gnucash/gtkbuilder/dialog-preferences.glade:3594
 msgid "Show close button on _notebook tabs"
 msgstr "在頁籤上顯示關閉按鈕(_N)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3516
+#: gnucash/gtkbuilder/dialog-preferences.glade:3600
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
 msgstr "在每個頁籤上顯示關閉按鈕，這個按鈕的功能和選單上的「關閉」是相同的。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3537
+#: gnucash/gtkbuilder/dialog-preferences.glade:3621
 msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
@@ -16698,28 +16770,28 @@ msgstr ""
 "如果頁籤中的文字長度超過這個數值(使用近似值)，則該頁籤的標籤將會被截斷並且以"
 "省略符號代替。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3557
+#: gnucash/gtkbuilder/dialog-preferences.glade:3641
 msgid "characters"
 msgstr "字元"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3576
+#: gnucash/gtkbuilder/dialog-preferences.glade:3660
 msgid "_Width"
 msgstr "寬度(_W)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3587
+#: gnucash/gtkbuilder/dialog-preferences.glade:3671
 msgid "Open new tabs _adjacent to current tab"
 msgstr "將新頁籤開啟在目前的頁籤旁邊(_A)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3593
+#: gnucash/gtkbuilder/dialog-preferences.glade:3677
 msgid "Opens new tab adjacent to current tab instead of at the end."
 msgstr "在目前的頁籤旁開啟新頁籤，而非在最後端開啟。"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3632
+#: gnucash/gtkbuilder/dialog-preferences.glade:3716
 msgid "Windows"
 msgstr "視窗"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3675
-#: gnucash/gtkbuilder/dialog-preferences.glade:3698
+#: gnucash/gtkbuilder/dialog-preferences.glade:3759
+#: gnucash/gtkbuilder/dialog-preferences.glade:3782
 msgid "Online Quotes"
 msgstr "線上報價"
 
@@ -19179,7 +19251,7 @@ msgid "Unspecified"
 msgstr "未指定的"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4393
+#: gnucash/report/report-utilities.scm:196 libgnucash/engine/Account.cpp:4413
 msgid "Bank"
 msgstr "銀行"
 
@@ -21413,7 +21485,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1094
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4394
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4414
 msgid "Cash"
 msgstr "現金"
 
@@ -22212,35 +22284,35 @@ msgstr "不顯示母科目的小計。"
 msgid "Show subtotals"
 msgstr "顯示小計"
 
-#: gnucash/report/report-core.scm:150
+#: gnucash/report/report-core.scm:151
 msgid "_Assets & Liabilities"
 msgstr "資產 & 負債(_A)"
 
-#: gnucash/report/report-core.scm:151
+#: gnucash/report/report-core.scm:152
 msgid "_Income & Expense"
 msgstr "收入 & 支出(_I)"
 
-#: gnucash/report/report-core.scm:153
+#: gnucash/report/report-core.scm:154
 msgid "_Taxes"
 msgstr "稅務(_T)"
 
-#: gnucash/report/report-core.scm:154
+#: gnucash/report/report-core.scm:155
 msgid "E_xamples"
 msgstr "範例(_X)"
 
-#: gnucash/report/report-core.scm:155
+#: gnucash/report/report-core.scm:156
 msgid "_Experimental"
 msgstr "實驗中(_E)"
 
-#: gnucash/report/report-core.scm:156
+#: gnucash/report/report-core.scm:157
 msgid "_Multicolumn"
 msgstr "多欄報表(_M)"
 
-#: gnucash/report/report-core.scm:157
+#: gnucash/report/report-core.scm:158
 msgid "_Custom"
 msgstr "自訂(_C)"
 
-#: gnucash/report/report-core.scm:160
+#: gnucash/report/report-core.scm:161
 #: gnucash/report/reports/standard/invoice.scm:244
 #: gnucash/report/reports/standard/invoice.scm:249
 #: gnucash/report/reports/standard/invoice.scm:254
@@ -22275,19 +22347,19 @@ msgstr "自訂(_C)"
 msgid "Display"
 msgstr "顯示"
 
-#: gnucash/report/report-core.scm:161
+#: gnucash/report/report-core.scm:162
 msgid "Report name"
 msgstr "報表名稱"
 
-#: gnucash/report/report-core.scm:162
+#: gnucash/report/report-core.scm:163
 msgid "Stylesheet"
 msgstr "樣式表"
 
-#: gnucash/report/report-core.scm:164
+#: gnucash/report/report-core.scm:165
 msgid "Invoice Number"
 msgstr "發票號碼"
 
-#: gnucash/report/report-core.scm:210
+#: gnucash/report/report-core.scm:211
 msgid ""
 "One of your reports has a report-guid that is a duplicate. Please check the "
 "report system, especially your saved reports, for a report with this report-"
@@ -22296,19 +22368,19 @@ msgstr ""
 "您的其中一份報表具有重覆的 report-guid。請檢查您的報表系統（特別是您儲中的報"
 "表中）有以下 report-guid 的報表： "
 
-#: gnucash/report/report-core.scm:211
+#: gnucash/report/report-core.scm:212
 msgid "Wrong report definition: "
 msgstr "錯誤的報表定義： "
 
-#: gnucash/report/report-core.scm:212
+#: gnucash/report/report-core.scm:213
 msgid " Report is missing a GUID."
 msgstr " 報表中沒有 GUID。"
 
-#: gnucash/report/report-core.scm:293
+#: gnucash/report/report-core.scm:294
 msgid "Enter a descriptive name for this report."
 msgstr "為此報表輸入敘述名稱。"
 
-#: gnucash/report/report-core.scm:298
+#: gnucash/report/report-core.scm:299
 msgid "Select a stylesheet for the report."
 msgstr "選擇用於此報表的樣式表。"
 
@@ -24457,12 +24529,12 @@ msgid "missing"
 msgstr "不明"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1076
-#: libgnucash/engine/Account.cpp:4395
+#: libgnucash/engine/Account.cpp:4415
 msgid "Asset"
 msgstr "資產"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1079
-#: libgnucash/engine/Account.cpp:4397
+#: libgnucash/engine/Account.cpp:4417
 msgid "Liability"
 msgstr "負債"
 
@@ -24907,7 +24979,9 @@ msgstr "包含所選定的週期範圍之前的匯總資料。"
 msgid ""
 "Include in report previous periods as single collapsed column (one for all "
 "periods before starting)"
-msgstr "在報表中包括將之前的週期（後預算開始後直到所選的開始週期的第一個週期）收合成一欄的欄位"
+msgstr ""
+"在報表中包括將之前的週期（後預算開始後直到所選的開始週期的第一個週期）收合成"
+"一欄的欄位"
 
 #: gnucash/report/reports/standard/budget.scm:86
 msgid "Include collapsed periods after selected."
@@ -24917,7 +24991,9 @@ msgstr "包含所選定的週期範圍之後的匯總資料。"
 msgid ""
 "Include in report further periods as single collapsed column (one for all "
 "periods after ending and to the end of budget range)"
-msgstr "在報表中包括將未來的週期（結束週期後，直到預算結束的範圍內的所有預算週期）收合成一欄的欄位"
+msgstr ""
+"在報表中包括將未來的週期（結束週期後，直到預算結束的範圍內的所有預算週期）收"
+"合成一欄的欄位"
 
 #. Translators: Abbreviation for "Budget" amount
 #: gnucash/report/reports/standard/budget.scm:524
@@ -25623,7 +25699,7 @@ msgid ""
 msgstr "是否在報表中包括交易科目結餘。"
 
 #: gnucash/report/reports/standard/income-statement.scm:517
-#: libgnucash/engine/Account.cpp:4407 libgnucash/engine/Scrub.c:486
+#: libgnucash/engine/Account.cpp:4427 libgnucash/engine/Scrub.c:486
 msgid "Trading"
 msgstr "交易"
 
@@ -26702,7 +26778,7 @@ msgstr "對帳報表"
 
 #: gnucash/report/reports/standard/register.scm:148
 #: gnucash/report/reports/standard/register.scm:388
-#: libgnucash/engine/gnc-lot.c:779
+#: libgnucash/engine/gnc-lot.c:781
 msgid "Lot"
 msgstr "分批"
 
@@ -28811,40 +28887,40 @@ msgstr ""
 "下方為這些科目的列表：\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4396
+#: libgnucash/engine/Account.cpp:4416
 msgid "Credit Card"
 msgstr "信用卡"
 
-#: libgnucash/engine/Account.cpp:4398
+#: libgnucash/engine/Account.cpp:4418
 msgid "Stock"
 msgstr "股票"
 
-#: libgnucash/engine/Account.cpp:4399
+#: libgnucash/engine/Account.cpp:4419
 msgid "Mutual Fund"
 msgstr "共同基金"
 
-#: libgnucash/engine/Account.cpp:4404
+#: libgnucash/engine/Account.cpp:4424
 msgid "A/Receivable"
 msgstr "A/應收"
 
-#: libgnucash/engine/Account.cpp:4405
+#: libgnucash/engine/Account.cpp:4425
 msgid "A/Payable"
 msgstr "A/應付"
 
-#: libgnucash/engine/Account.cpp:4406
+#: libgnucash/engine/Account.cpp:4426
 msgid "Root"
 msgstr "根"
 
-#: libgnucash/engine/Account.cpp:4857
+#: libgnucash/engine/Account.cpp:4893
 msgid "Orphaned Gains"
 msgstr "無主的獲利"
 
-#: libgnucash/engine/Account.cpp:4871 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4907 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "已實現獲利 / 虧損"
 
-#: libgnucash/engine/Account.cpp:4873
+#: libgnucash/engine/Account.cpp:4909
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -28883,15 +28959,15 @@ msgstr "d-m"
 msgid "m-d"
 msgstr "m-d"
 
-#: libgnucash/engine/gnc-datetime.cpp:565
+#: libgnucash/engine/gnc-datetime.cpp:572
 msgid "Unknown date format specifier passed as argument."
 msgstr "傳入的參數是未知的日期格式。"
 
-#: libgnucash/engine/gnc-datetime.cpp:570
+#: libgnucash/engine/gnc-datetime.cpp:577
 msgid "Value can't be parsed into a date using the selected date format."
 msgstr "無法使用指定的日期格式將輸入的值轉換成日期。"
 
-#: libgnucash/engine/gnc-datetime.cpp:575
+#: libgnucash/engine/gnc-datetime.cpp:582
 msgid "Value appears to contain a year while the selected format forbids this."
 msgstr "輸入的值包含年份，但指定的日期格式不允許年份。"
 
@@ -28904,15 +28980,15 @@ msgstr ""
 "此資料檔包含了這個版本的 GnuCash 所不支援的功能。您需要使用舊新版的 GnuCash "
 "來支援以下的功能："
 
-#: libgnucash/engine/gncInvoice.c:1696
+#: libgnucash/engine/gncInvoice.c:1699
 msgid "Extra to Charge Card"
 msgstr "額外的簽帳卡"
 
-#: libgnucash/engine/gncInvoice.c:1735
+#: libgnucash/engine/gncInvoice.c:1738
 msgid "Generated from an invoice. Try unposting the invoice."
 msgstr "從發票產生。試著取消過帳此發票。"
 
-#: libgnucash/engine/gncInvoice.c:2159
+#: libgnucash/engine/gncInvoice.c:2162
 msgid " (posted)"
 msgstr " (已過帳)"
 
@@ -29059,20 +29135,50 @@ msgstr "檢查科目 %s 中的無主交易：%u / %u"
 msgid "Looking for imbalances in account %s: %u of %u"
 msgstr "檢查科目 %s 的失衡：%u / %u"
 
-#: libgnucash/engine/Split.c:1636
+#: libgnucash/engine/Split.c:1637
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"
 msgstr "分割"
 
-#: libgnucash/engine/Transaction.c:2707
+#: libgnucash/engine/Transaction.c:2715
 msgid "Voided transaction"
 msgstr "無效的交易"
 
-#: libgnucash/engine/Transaction.c:2719
+#: libgnucash/engine/Transaction.c:2728
 msgid "Transaction Voided"
 msgstr "交易已無效"
 
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "沒有說明。"
+
+#~ msgid ""
+#~ "You must enter a company name. If this customer is an individual (and not "
+#~ "a company) you should enter the same value for:\n"
+#~ "Identification - Company Name, and\n"
+#~ "Payment Address - Name."
+#~ msgstr ""
+#~ "您必須輸入公司名稱。若客戶是個人而非公司，請在「識別 - 公司名稱」跟「連絡"
+#~ "地址 - 名稱」填相同的名字。"
+
+#~ msgid "You must enter a billing address."
+#~ msgstr "您必須輸入帳單地址。"
+
+#~ msgid "You must enter a username."
+#~ msgstr "您必須輸入使用者名稱。"
+
+#~ msgid "You must enter the employee's name."
+#~ msgstr "您必須輸入員工名稱。"
+
+#~ msgid "You must enter an address."
+#~ msgstr "您必須輸入地址。"
+
+#~ msgid ""
+#~ "You must enter a company name. If this vendor is an individual (and not a "
+#~ "company) you should enter the same value for:\n"
+#~ "Identification - Company Name, and\n"
+#~ "Payment Address - Name."
+#~ msgstr ""
+#~ "您必須輸入公司名稱。若廠商是個人而非公司，請在「識別 - 公司名稱」跟「付款"
+#~ "地址 - 名稱」填相同的名字。"
