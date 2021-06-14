@@ -50,7 +50,7 @@ They should also tell you:
 * Your user ID that identifies you to their server, often your base account number;
 * The URL of their Online Banking server;
 * In some cases the routing number of your bank's branch is useful in this assistant;
-* Authentication methods vary by backend and choosen method:
+* Authentication methods vary by backend and chosen method:
  * FinTS PIN/TAN: Some methods require a specific gadget like a card reader or a mobile;
  * FinTS HBCI: You have to exchange the public parts of asymmetric keys with your bank ("Ini-Letter").
  * PayPal: registered email address, password, API signature;
