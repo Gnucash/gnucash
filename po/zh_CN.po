@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-04-16 23:36+0200\n"
-"PO-Revision-Date: 2021-06-13 11:33+0000\n"
+"PO-Revision-Date: 2021-06-14 17:34+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -1703,7 +1703,7 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"双击“ID”，跳转到原始商业凭证；\n"
+"双击“ID”，跳转到商业凭证。\n"
 "双击“文件名”，打开。\n"
 "双击“可用”，修改。"
 
@@ -3428,7 +3428,7 @@ msgstr "通过搜索寻找交易事项"
 #: gnucash/gnome/gnc-plugin-page-register2.c:263
 #: gnucash/gnome/gnc-plugin-page-register.c:372
 msgid "Ta_x Report Options"
-msgstr "税务报表选项(_X)"
+msgstr "税务表选项(_X)"
 
 #. Translators: currently implemented are
 #. US: income tax and
@@ -3463,7 +3463,7 @@ msgstr "创建自上次运行后的计划交易"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:176
 msgid "_Mortgage & Loan Repayment..."
-msgstr "抵押和贷款还款(_M)..."
+msgstr "按揭和贷款偿还(_M)..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:177
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -3556,7 +3556,7 @@ msgstr[0] "此时没有输入的计划交易。(自动创建了 %d 笔交易事�
 
 #: gnucash/gnome/gnc-plugin-budget.c:63
 msgid "_New Budget"
-msgstr "新预算(_N)"
+msgstr "新建(_N)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
 msgid "Create a new Budget."
@@ -3564,7 +3564,7 @@ msgstr "创建一个新预算。"
 
 #: gnucash/gnome/gnc-plugin-budget.c:69
 msgid "_Open Budget"
-msgstr "打开预算(_O)"
+msgstr "打开(_O)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:70
 msgid ""
@@ -3574,7 +3574,7 @@ msgstr "在一个新的标签中打开现有的预算。如果不存在，将创
 
 #: gnucash/gnome/gnc-plugin-budget.c:75
 msgid "_Copy Budget"
-msgstr "复制预算(_C)"
+msgstr "复制(_C)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
 msgid "Copy an existing Budget."
@@ -3582,7 +3582,7 @@ msgstr "复制一个已有的预算。"
 
 #: gnucash/gnome/gnc-plugin-budget.c:80
 msgid "_Delete Budget"
-msgstr "删除预算(_D)"
+msgstr "删除(_D)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:81
 msgid "Delete an existing Budget."
@@ -3824,11 +3824,11 @@ msgstr "初始化测试数据"
 
 #: gnucash/gnome/gnc-plugin-business.c:326
 msgid "Assign as payment..."
-msgstr "指定成付款..."
+msgstr "转为应收应付..."
 
 #: gnucash/gnome/gnc-plugin-business.c:327
 msgid "Assign the selected transaction as payment"
-msgstr "指定选中的交易事项成付款"
+msgstr "将选定的交易调整为走应收应付"
 
 #: gnucash/gnome/gnc-plugin-business.c:331
 msgid "Edit payment..."
@@ -4019,7 +4019,7 @@ msgstr "将资金从一个科目转移到另一个科目"
 #: gnucash/gnome/gnc-plugin-page-register2.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:485
 msgid "Stoc_k Split..."
-msgstr "股票拆分(_K)..."
+msgstr "股票分拆(_K)..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:317
 #: gnucash/gnome/gnc-plugin-page-register2.c:368
@@ -4031,7 +4031,7 @@ msgstr "记录一次股票拆分或合并"
 #: gnucash/gnome/gnc-plugin-page-register2.c:372
 #: gnucash/gnome/gnc-plugin-page-register.c:490
 msgid "View _Lots..."
-msgstr "批次显示（_L）......"
+msgstr "查看批次(_L)..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:322
 #: gnucash/gnome/gnc-plugin-page-register2.c:373
@@ -4239,7 +4239,7 @@ msgstr "打开选中的科目以及其子科目。"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
 msgid "_Delete Budget..."
-msgstr "删除预算(_D)…"
+msgstr "删除预算(_D)..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
@@ -4682,7 +4682,7 @@ msgstr "打开此发票所有者的公司报表窗口"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:446
 #: gnucash/gnome/gnc-plugin-page-register.c:632
 msgid "Open Linked Document"
-msgstr "新建科目"
+msgstr "打开关联的凭证"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:388
 msgid ""
@@ -5021,14 +5021,14 @@ msgstr "粘贴交易(_P)"
 #: gnucash/gnome/gnc-plugin-page-register2.c:197
 #: gnucash/gnome/gnc-plugin-page-register.c:295
 msgid "Dup_licate Transaction"
-msgstr "创建交易事项副本(_L)"
+msgstr "创建交易副本(_L)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:198
 #: gnucash/gnome/gnc-plugin-page-register.c:296
 #: gnucash/gnome/gnc-split-reg.c:1544
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1064
 msgid "_Delete Transaction"
-msgstr "删除交易事项(_D)"
+msgstr "删除交易(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:199
 #: gnucash/gnome/gnc-plugin-page-register.c:308
@@ -5159,7 +5159,7 @@ msgstr "删除当前交易事项中的所有部分"
 #: gnucash/gnome/gnc-plugin-page-register2.c:305
 #: gnucash/gnome/gnc-plugin-page-register.c:414
 msgid "_Enter Transaction"
-msgstr "输入一笔交易事项(_E)"
+msgstr "确认交易(_E)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:306
 #: gnucash/gnome/gnc-plugin-page-register.c:415
@@ -5169,7 +5169,7 @@ msgstr "记录当前交易事项"
 #: gnucash/gnome/gnc-plugin-page-register2.c:310
 #: gnucash/gnome/gnc-plugin-page-register.c:419
 msgid "Ca_ncel Transaction"
-msgstr "取消交易事项(_N)"
+msgstr "取消交易(_N)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:311
 #: gnucash/gnome/gnc-plugin-page-register.c:420
@@ -5179,17 +5179,17 @@ msgstr "取消当前交易事项"
 #: gnucash/gnome/gnc-plugin-page-register2.c:315
 #: gnucash/gnome/gnc-plugin-page-register.c:424
 msgid "_Void Transaction"
-msgstr "使交易事项无效(_V)"
+msgstr "作废交易(_V)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:319
 #: gnucash/gnome/gnc-plugin-page-register.c:428
 msgid "_Unvoid Transaction"
-msgstr "取消使交易事项无效(_U)"
+msgstr "复原交易(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:323
 #: gnucash/gnome/gnc-plugin-page-register.c:432
 msgid "Add _Reversing Transaction"
-msgstr "添加反向交易事项(_R)"
+msgstr "对冲交易(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:327
 msgid "Move Transaction _Up"
@@ -5222,7 +5222,7 @@ msgstr "只要达到一定的结清金额，就自动结清独立的交易事项
 #: gnucash/gnome/gnc-plugin-page-register2.c:377
 #: gnucash/gnome/gnc-plugin-page-register.c:495
 msgid "_Blank Transaction"
-msgstr "空白交易事项(_B)"
+msgstr "空白交易(_B)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:378
 #: gnucash/gnome/gnc-plugin-page-register.c:496
@@ -5318,7 +5318,7 @@ msgstr "显示登记日期和对账日期"
 #: gnucash/gnome/gnc-plugin-page-register2.c:436
 #: gnucash/gnome/gnc-plugin-page-register.c:559
 msgid "S_plit Transaction"
-msgstr "交易分录(_P)"
+msgstr "显示分录(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:437
 #: gnucash/gnome/gnc-plugin-page-register.c:560
@@ -5328,7 +5328,7 @@ msgstr "显示当前交易事项的所有部分"
 #: gnucash/gnome/gnc-plugin-page-register2.c:448
 #: gnucash/gnome/gnc-plugin-page-register.c:571
 msgid "_Basic Ledger"
-msgstr "基本分类账(_B)"
+msgstr "基本分类科目(_B)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:449
 #: gnucash/gnome/gnc-plugin-page-register.c:572
@@ -5338,7 +5338,7 @@ msgstr "用一行或两行显示交易事项"
 #: gnucash/gnome/gnc-plugin-page-register2.c:453
 #: gnucash/gnome/gnc-plugin-page-register.c:576
 msgid "_Auto-Split Ledger"
-msgstr "自动拆分分类账(_A)"
+msgstr "自动拆分科目(_A)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:454
 #: gnucash/gnome/gnc-plugin-page-register.c:577
@@ -5350,7 +5350,7 @@ msgstr "用一行或两行显示交易事项并展开当前交易事项"
 #: gnucash/gnome/gnc-plugin-page-register.c:581
 #: gnucash/gtkbuilder/dialog-preferences.glade:2790
 msgid "Transaction _Journal"
-msgstr "交易日记账(_J)"
+msgstr "交易日志(_J)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:459
 #: gnucash/gnome/gnc-plugin-page-register.c:582
@@ -5559,7 +5559,7 @@ msgstr "过滤 %s..."
 #. that is posted to the current transaction if there is one.
 #: gnucash/gnome/gnc-plugin-page-register.c:307
 msgid "Jump to Invoice"
-msgstr "编辑发票"
+msgstr "转至发票"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:318
 msgid "Add, change, or unlink the document linked with the current transaction"
@@ -5567,11 +5567,11 @@ msgstr "编辑当前交易事项的汇率"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:319
 msgid "Open the linked document for the current transaction"
-msgstr "记录当前交易事项"
+msgstr "打开当前交易关联的凭证"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:320
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr "跳转到链接的账单、发票或凭证"
+msgstr "转至关联的发票、账单或报销单"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:409
 msgid "Remo_ve Other Splits"
@@ -6651,7 +6651,7 @@ msgstr "删除选定的交易事项"
 
 #: gnucash/gnome/window-reconcile2.c:2172 gnucash/gnome/window-reconcile.c:2393
 msgid "_Reconcile Selection"
-msgstr "对账已选交易(_R)"
+msgstr "核实已选交易(_R)"
 
 #: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2394
 msgid "Reconcile the selected transactions"
@@ -8282,7 +8282,7 @@ msgstr "GnuCash 无法获得 %s 的锁。"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:580
 msgid "GnuCash could not open the linked document:"
-msgstr "GnuCash 无法打开关联的 URI："
+msgstr "GnuCash 无法打开关联的凭证："
 
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes
@@ -8302,7 +8302,7 @@ msgstr "文件(_F)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:276
 msgid "Tra_nsaction"
-msgstr "交易事项(_N)"
+msgstr "交易(_N)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:277
 msgid "_Reports"
@@ -8434,7 +8434,7 @@ msgstr "在此窗口中显示/隐藏工具栏"
 
 #: gnucash/gnome-utils/gnc-main-window.c:412
 msgid "Su_mmary Bar"
-msgstr "汇总栏(_M)"
+msgstr "摘要栏"
 
 #: gnucash/gnome-utils/gnc-main-window.c:413
 msgid "Show/hide the summary bar on this window"
@@ -16231,11 +16231,11 @@ msgstr "<b>其它选项</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2752
 msgid "_Basic ledger"
-msgstr "基本分类账(_B)"
+msgstr "基本分类科目(_B)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2771
 msgid "_Auto-split ledger"
-msgstr "自动拆分分类账(_A)"
+msgstr "自动拆分科目(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2812
 msgid "Number of _transactions"
@@ -17841,7 +17841,7 @@ msgstr "输入备注"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:13
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:565
 msgid "Duplicate Transaction"
-msgstr "复制交易事项"
+msgstr "创建交易副本"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:110
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:663
