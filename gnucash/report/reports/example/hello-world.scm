@@ -194,6 +194,11 @@ Your reports probably shouldn't have an \
 option like this.") 
       #f))
 
+    (add-option
+     (gnc:make-simple-boolean-option
+      (N_ "Testing") (N_ "Add deprecation warning")
+      "b" "Logs a deprecation warning" #f))
+
     ;; This is a Radio Button option. The user can only select one 
     ;; value from the list of buttons.
     (add-option
@@ -246,9 +251,13 @@ option like this.")
         (list-val     (op-value "Hello Again"   "A list option"))
         (radio-val    (op-value "Hello Again"   "A Radio Button option"))
         (crash-val    (op-value "Testing"       "Crash the report"))
+        (deprecation  (op-value "Testing"       "Add deprecation warning"))
         
         ;; document will be the HTML document that we return.
         (document (gnc:make-html-document)))
+
+    (when deprecation
+      (gnc:issue-deprecation-warning "This is a deprecation warning"))
 
     ;; Crash if asked to.
     (if crash-val (string-length #f)) ;; string-length needs a string
