@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-04-17 17:27+0000\n"
+"PO-Revision-Date: 2021-06-15 13:33+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -1798,8 +1798,6 @@ msgid "Business Document Links"
 msgstr "Os links dos documentos comerciais"
 
 #: gnucash/gnome/dialog-employee.c:213
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
 msgstr "Você precisa inserir um endereço para o pagamento."
 
@@ -2636,10 +2634,9 @@ msgid "You must choose an owner for this job."
 msgstr "Você deve escolher um proprietário para esse serviço."
 
 #: gnucash/gnome/dialog-job.c:157
-#, fuzzy
-#| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr "O crédito deve ser uma quantia positiva ou deixe o campo em branco."
+msgstr ""
+"O valor da tarifa deve ser válido ou também é possível deixá-lo em branco."
 
 #: gnucash/gnome/dialog-job.c:258
 msgid "Edit Job"
@@ -2800,10 +2797,8 @@ msgid "You must select a company for payment processing."
 msgstr "Para processar o pagamento, escolha uma empresa."
 
 #: gnucash/gnome/dialog-payment.c:256
-#, fuzzy
-#| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
-msgstr "Houve um problema com a importação."
+msgstr "Houve um problema com a quantidade do pagamento ou do reembolso."
 
 #: gnucash/gnome/dialog-payment.c:277
 msgid "You must select a transfer account from the account tree."
@@ -6176,12 +6171,11 @@ msgstr "Transações futuras"
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:871
-#, fuzzy, c-format
-#| msgid "Do you really want to delete this scheduled transaction?"
+#, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgstr[0] "Você realmente deseja excluir essa transação programada?"
-msgstr[1] "Você realmente deseja excluir essa transação programada?"
+msgstr[1] "Você realmente deseja excluir %d transações programadas?"
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
@@ -8064,16 +8058,14 @@ msgstr "Nova..."
 #: gnucash/gnome-utils/gnc-amount-edit.c:413
 #: gnucash/register/register-core/formulacell.c:119
 #: gnucash/register/register-core/pricecell.c:159
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s' at position %d"
-msgstr "Um erro ocorreu durante o processamento de %s."
+msgstr "Ocorreu um erro durante o processamento de '%s' na posição %d"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:419
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s'"
-msgstr "Um erro ocorreu durante o processamento de %s."
+msgstr "Um erro ocorreu durante o processamento de '%s'"
 
 #: gnucash/gnome-utils/gnc-autosave.c:99
 msgid "Save file automatically?"
@@ -11132,42 +11124,28 @@ msgstr ""
 "de correspondências."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:25
-#, fuzzy
-#| msgid "Add matching transactions below this score"
 msgid "Likely matching transaction within these days"
-msgstr "Adicionar transações encontradas abaixo desta pontuação"
+msgstr "Prováveis transações coincidentes dentro destes dias"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:26
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
 msgstr ""
-"Esse campo especifica a pontuação mínima de correspondência que uma "
-"transação potencialmente correspondente deve ter para ser exibida na lista "
-"de correspondências."
+"Este campo determina a quantidade máxima de dias onde uma transação na lista "
+"seja susceptível de ser compatível."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:30
-#, fuzzy
-#| msgid "Clear matching transactions above this score"
 msgid "UnLikely matching a transaction outside of these days"
-msgstr "Limpe as transações encontradas acima desta pontuação"
+msgstr "Uma transação que não corresponde à dos dias de hoje"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:31
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the minimum number of days a transaction is unlikely to "
 "be a match in the list."
 msgstr ""
-"Esse campo especifica a pontuação mínima de correspondência que uma "
-"transação potencialmente correspondente deve ter para ser exibida na lista "
-"de correspondências."
+"Este campo determina a quantidade mínima de dias onde seja improvável que "
+"uma transação na lista seja compatível."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
@@ -17208,17 +17186,13 @@ msgstr ""
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2291
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "Likely match _day threshold"
-msgstr "Limite para a _exibição das correspondência"
+msgstr "Provavelmente iguala ao limiar do _dia"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2304
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "_Unlikely match day threshold"
-msgstr "Limite para a _exibição das correspondência"
+msgstr "_Provavelmente não iguala ao limiar do dia"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2318
 msgid ""
@@ -18216,10 +18190,8 @@ msgid "R_emind in advance"
 msgstr "Lemb_re com antecedência"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Set 'Re_view Created Transactions' as default"
-msgstr "_Revisar transações criadas"
+msgstr "Defina 'Re_vise as transações criadas' como padrão"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
 msgid ""
@@ -23185,10 +23157,8 @@ msgstr "Um mês"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-#, fuzzy
-#| msgid "Quarter"
 msgid "Quarter Year"
-msgstr "Trimestre"
+msgstr "Trimestre do ano"
 
 # "Meio ano"?
 #: gnucash/report/options-utilities.scm:71
@@ -23243,22 +23213,16 @@ msgid "Average cost of purchases weighted by volume"
 msgstr ""
 
 #: gnucash/report/options-utilities.scm:145
-#, fuzzy
-#| msgid "The weighted average of all currency transactions of the past."
 msgid "Weighted average of all transactions in the past"
-msgstr "A média mensurada de todas as transações cambiais do passado."
+msgstr "Média mensurada de todas as transações anteriores"
 
 #: gnucash/report/options-utilities.scm:146
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Last up through report date"
-msgstr "Use o mais próximo para a data do relatório."
+msgstr "Última atualização até a data do relatório"
 
 #: gnucash/report/options-utilities.scm:147
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Closest to report date"
-msgstr "Use o mais próximo para a data do relatório."
+msgstr "Data mais próxima do relatório"
 
 #: gnucash/report/options-utilities.scm:148
 #: gnucash/report/reports/standard/advanced-portfolio.scm:82
@@ -23335,13 +23299,8 @@ msgid "How to show the balances of parent accounts."
 msgstr "Como exibir os saldos das contas principais."
 
 #: gnucash/report/options-utilities.scm:224
-#, fuzzy
-#| msgid ""
-#| "Show only the balance in the parent account, excluding any subaccounts."
 msgid "Account Balance in the parent account, excluding any subaccounts."
-msgstr ""
-"Exibe somente o saldo na conta principal, excluindo quaisquer outras "
-"subcontas."
+msgstr "Saldo da conta na conta principal, excluindo quaisquer subcontas."
 
 #: gnucash/report/options-utilities.scm:225
 msgid "Do not show any balances of parent accounts."
@@ -23353,10 +23312,8 @@ msgid "Account Balance"
 msgstr "Saldo da conta"
 
 #: gnucash/report/options-utilities.scm:229
-#, fuzzy
-#| msgid "Calculate"
 msgid "Calculate Subtotal"
-msgstr "Calcular"
+msgstr "Calcule o subtotal"
 
 #: gnucash/report/options-utilities.scm:230
 #: gnucash/report/options-utilities.scm:246
@@ -23598,17 +23555,13 @@ msgstr "Classifique as empresas por."
 
 #: gnucash/report/reports/aging.scm:348
 #: gnucash/report/reports/standard/new-aging.scm:95
-#, fuzzy
-#| msgid "Name of the company."
 msgid "Name of the company"
-msgstr "Nome da empresa."
+msgstr "Nome da empresa"
 
 #: gnucash/report/reports/aging.scm:349
 #: gnucash/report/reports/standard/new-aging.scm:96
-#, fuzzy
-#| msgid "Total amount owed to/from Company."
 msgid "Total amount owed to/from Company"
-msgstr "Total das dívidas a pagar/a receber de uma Empresa."
+msgstr "Total das dívidas a pagar/a receber de uma Empresa"
 
 # FIXME: bracket
 #: gnucash/report/reports/aging.scm:350
@@ -24308,34 +24261,26 @@ msgstr "Utilizar De - Até"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
-#, fuzzy
-#| msgid "1st Est Tax Quarter"
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
-msgstr "Imposto estimado do 1º trimestre"
+msgstr "Est. do 1º Trimestre Fiscal (1 Jan - 31 Mar)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
-#, fuzzy
-#| msgid "2nd Est Tax Quarter"
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "Imposto estimado do 2º trimestre"
+msgstr "Est. do 2º Trimestre Fiscal (1 Abr - 31 Mai)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
-#, fuzzy
-#| msgid "3rd Est Tax Quarter"
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
-msgstr "Imposto estimado do 3º trimestre"
+msgstr "Est. do 3º Trimestre Fiscal (1 de Junho - 31 de Agosto)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
-#, fuzzy
-#| msgid "4th Est Tax Quarter"
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
-msgstr "Imposto estimado do 4º trimestre"
+msgstr "Est. do 4º Trimestre fiscal (1 de setembro - 31 de dezembro)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
@@ -24344,34 +24289,27 @@ msgstr "Ano anterior"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
-#, fuzzy
-#| msgid "Last Yr 1st Est Tax Qtr"
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
-msgstr "Imposto estimado do 1º trimestre do ano anterior"
+msgstr "Último ano, est. do 1º trimestre fiscal (1º de janeiro - 31 de março)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
-#, fuzzy
-#| msgid "Last Yr 2nd Est Tax Qtr"
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr "Imposto estimado do 2º trimestre do ano anterior"
+msgstr "Último ano, est. do 2º trimestre fiscal (1º de abril - 31 de maio)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
-#, fuzzy
-#| msgid "Last Yr 3rd Est Tax Qtr"
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr "Imposto estimado do 3º trimestre do ano anterior"
+msgstr "Último ano, est. do 3º trimestre fiscal (1º de junho - 31 de agosto)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
-#, fuzzy
-#| msgid "Last Yr 4th Est Tax Qtr"
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
-msgstr "Imposto estimado do 4º trimestre do ano anterior"
+msgstr ""
+"Último ano, est. do 4º trimestre fiscal (1 de setembro - 31 de dezembro)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:203
@@ -24517,17 +24455,13 @@ msgid "Select date to use for PriceDB lookups."
 msgstr "Selecione a data que será usada para as pesquisas PriceDB."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:254
-#, fuzzy
-#| msgid "Nearest transaction date"
 msgid "Nearest to transaction date"
-msgstr "Data mais próxima da transação"
+msgstr "Data mais próxima para a data do transação"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 #: gnucash/report/reports/standard/advanced-portfolio.scm:83
-#, fuzzy
-#| msgid "Nearest report date"
 msgid "Nearest to report date"
-msgstr "Data mais próxima do relatório"
+msgstr "Data mais próxima para a data do relatório"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3326
 msgid "Tax Schedule Report & TXF Export"
@@ -24786,12 +24720,10 @@ msgstr ""
 "limite da profundidade."
 
 #: gnucash/report/reports/standard/account-summary.scm:97
-#, fuzzy
-#| msgid "Shows accounts deeper than the depth limit at the depth limit."
 msgid "Raise accounts deeper than the depth limit to the depth limit."
 msgstr ""
-"Veja as contas mais profundas do que o limite de profundidade no limite de "
-"profundidade."
+"Levante as contas mais profundas do que o limite de profundidade para o "
+"limite de profundidade."
 
 #: gnucash/report/reports/standard/account-summary.scm:98
 #, fuzzy
@@ -25056,10 +24988,8 @@ msgid "Basis calculation method."
 msgstr "Método do cálculo base."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:89
-#, fuzzy
-#| msgid "Use average cost of all shares for basis."
 msgid "Average cost of all shares"
-msgstr "Use o custo médio de todas as ações como base."
+msgstr "Custo médio de todas as ações"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:90
 #, fuzzy
@@ -25094,10 +25024,8 @@ msgid "Include in gain/loss"
 msgstr "Inclua no ganho"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:105
-#, fuzzy
-#| msgid "Title for this report."
 msgid "Omit from report"
-msgstr "Um título para este relatório."
+msgstr "Omita do relatório"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:111
 msgid "Display the ticker symbols."
@@ -25545,22 +25473,16 @@ msgid "Notes added at end of invoice -- may contain HTML markup."
 msgstr "Notas adicionadas no final da fatura - podem conter marcação HTML."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:218
-#, fuzzy
-#| msgid "Adjust the layout to fit the width of the screen or page."
 msgid "Adjust the layout to fit the width of the screen or page"
-msgstr "Ajuste o layout para caber na largura da tela ou da página."
+msgstr "Ajuste o layout para caber na largura da tela ou da página"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:219
-#, fuzzy
-#| msgid "Display liabilities and equity below assets."
 msgid "Display liabilities and equity below assets"
-msgstr "Veja abaixo os patrimônios passivos e o patrimônio líquido dos ativos."
+msgstr "Veja abaixo os patrimônios passivos e o patrimônio líquido dos ativos"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:220
-#, fuzzy
-#| msgid "Display assets on the left, liabilities and equity on the right."
 msgid "Display assets on the left, liabilities and equity on the right"
-msgstr "Veja os ativos à esquerda, os passivos e patrimônio líquido à direita."
+msgstr "Veja os ativos à esquerda, os passivos e patrimônio líquido à direita"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:224
 msgid "Sign: -$10.00"
@@ -26533,12 +26455,8 @@ msgid "Customer Name"
 msgstr "Nome do cliente"
 
 #: gnucash/report/reports/standard/customer-summary.scm:118
-#, fuzzy
-#| msgid "Sort by markup (which is profit amount divided by sales)."
 msgid "Markup (which is profit amount divided by sales)"
-msgstr ""
-"Classifique pelo preço de venda (que é o valor do lucro dividido pelas "
-"vendas)."
+msgstr "Markup (é o valor do lucro dividido pelas vendas)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:119
 #: gnucash/report/reports/standard/customer-summary.scm:300
@@ -28165,17 +28083,13 @@ msgstr "Exibir a quantia?"
 
 #: gnucash/report/reports/standard/register.scm:402
 #: gnucash/report/trep-engine.scm:992
-#, fuzzy
-#| msgid "Single Column Display."
 msgid "Single Column"
-msgstr "Exibição em coluna única."
+msgstr "Coluna única"
 
 #: gnucash/report/reports/standard/register.scm:403
 #: gnucash/report/trep-engine.scm:993
-#, fuzzy
-#| msgid "Two Column Display."
 msgid "Two Columns"
-msgstr "Exibição em duas colunas."
+msgstr "Duas colunas"
 
 #: gnucash/report/reports/standard/register.scm:408
 msgid "Display the value in transaction currency?"
@@ -29175,10 +29089,8 @@ msgid "Register Order"
 msgstr "Ordem do cadastro"
 
 #: gnucash/report/trep-engine.scm:339
-#, fuzzy
-#| msgid "Do not do any filtering."
 msgid "Do not do any filtering"
-msgstr "Não faça nenhuma filtragem."
+msgstr "Não faça nenhuma filtragem"
 
 #: gnucash/report/trep-engine.scm:342
 msgid "Include Transactions to/from Filter Accounts"
@@ -29197,10 +29109,8 @@ msgid "Void only"
 msgstr "Apenas as anuladas"
 
 #: gnucash/report/trep-engine.scm:359
-#, fuzzy
-#| msgid "Show both (and include void transactions in totals)."
 msgid "Both (and include void transactions in totals)"
-msgstr "Mostre ambos (e inclua as transações anuladas no fechamento)."
+msgstr "Ambos (e inclua as transações anuladas no fechamento)"
 
 #: gnucash/report/trep-engine.scm:364
 msgid "Exclude closing transactions"
@@ -29235,10 +29145,8 @@ msgid "Use Global Preference"
 msgstr "Use a preferência global"
 
 #: gnucash/report/trep-engine.scm:411
-#, fuzzy
-#| msgid "Don't change any displayed amounts."
 msgid "Don't change any displayed amounts"
-msgstr "Não altere a quantidade dos valores exibidos."
+msgstr "Não altere a quantidade dos valores exibidos"
 
 #: gnucash/report/trep-engine.scm:414
 msgid "Income and Expense"
@@ -29463,10 +29371,8 @@ msgid "One transaction per line"
 msgstr "Obter as transações on-line"
 
 #: gnucash/report/trep-engine.scm:991
-#, fuzzy
-#| msgid "Hide:"
 msgid "Hide"
-msgstr "Oculte:"
+msgstr "Oculte"
 
 #: gnucash/report/trep-engine.scm:1002
 msgid "Enable hyperlinks in amounts."
