@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-15 06:59+0000\n"
+"PO-Revision-Date: 2021-06-15 13:33+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -22348,10 +22348,8 @@ msgstr "חודש אחד"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-#, fuzzy
-#| msgid "Quarter"
 msgid "Quarter Year"
-msgstr "רבעון"
+msgstr "רבע שנה"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -22401,22 +22399,16 @@ msgid "Average cost of purchases weighted by volume"
 msgstr "עלות רכישות ממוצעת משוקללת לפי נפח"
 
 #: gnucash/report/options-utilities.scm:145
-#, fuzzy
-#| msgid "The weighted average of all currency transactions of the past."
 msgid "Weighted average of all transactions in the past"
-msgstr "הממוצע המשוקלל של כל תנועות המטבע מהעבר."
+msgstr "ממוצע משוקלל של כל תנועות העבר"
 
 #: gnucash/report/options-utilities.scm:146
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Last up through report date"
-msgstr "שימוש בתאריך הקרוב ביותר לדיווח."
+msgstr "האחרון עד תאריך הדוח"
 
 #: gnucash/report/options-utilities.scm:147
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Closest to report date"
-msgstr "שימוש בתאריך הקרוב ביותר לדיווח."
+msgstr "הראשון עד תאריך הדוח"
 
 #: gnucash/report/options-utilities.scm:148
 #: gnucash/report/reports/standard/advanced-portfolio.scm:82
@@ -22492,11 +22484,8 @@ msgid "How to show the balances of parent accounts."
 msgstr "כיצד להציג יתרות חשבונות אב."
 
 #: gnucash/report/options-utilities.scm:224
-#, fuzzy
-#| msgid ""
-#| "Show only the balance in the parent account, excluding any subaccounts."
 msgid "Account Balance in the parent account, excluding any subaccounts."
-msgstr "הצגת היתרה בחשבון האב בלבד, החרגת כל חשבונות המשנה."
+msgstr "יתרת חשבון בחשבון־האב, החרגת כל חשבונות המשנה."
 
 #: gnucash/report/options-utilities.scm:225
 msgid "Do not show any balances of parent accounts."
@@ -22508,10 +22497,8 @@ msgid "Account Balance"
 msgstr "יתרת חשבון"
 
 #: gnucash/report/options-utilities.scm:229
-#, fuzzy
-#| msgid "Calculate"
 msgid "Calculate Subtotal"
-msgstr "חישוב"
+msgstr "חישוב סכום ביניים"
 
 #: gnucash/report/options-utilities.scm:230
 #: gnucash/report/options-utilities.scm:246
@@ -22750,17 +22737,13 @@ msgstr "מיון חברות לפי."
 
 #: gnucash/report/reports/aging.scm:348
 #: gnucash/report/reports/standard/new-aging.scm:95
-#, fuzzy
-#| msgid "Name of the company."
 msgid "Name of the company"
-msgstr "שם החברה."
+msgstr "שם החברה"
 
 #: gnucash/report/reports/aging.scm:349
 #: gnucash/report/reports/standard/new-aging.scm:96
-#, fuzzy
-#| msgid "Total amount owed to/from Company."
 msgid "Total amount owed to/from Company"
-msgstr "הסכום שמגיע ל/מהחברה."
+msgstr "הסכום שמגיע ל/מחברה"
 
 #: gnucash/report/reports/aging.scm:350
 #: gnucash/report/reports/standard/new-aging.scm:97
@@ -23447,34 +23430,26 @@ msgstr "שימוש ב מ ל"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
-#, fuzzy
-#| msgid "1st Est Tax Quarter"
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
-msgstr "רבעון מס תחזית ראשונה"
+msgstr "תחזית־מס רבעון ראשון (1 ינואר - 31 מרץ)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
-#, fuzzy
-#| msgid "2nd Est Tax Quarter"
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "רבעון מס תחזית שני"
+msgstr "תחזית־מס רבעון שני (1 אפריל - 30 יוני)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
-#, fuzzy
-#| msgid "3rd Est Tax Quarter"
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
-msgstr "רבעון מס תחזית שלישית"
+msgstr "תחזית־מס רבעון שלישי (1 יולי - 30 ספטמבר)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
-#, fuzzy
-#| msgid "4th Est Tax Quarter"
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
-msgstr "רבעון מס תחזית רביעי"
+msgstr "תחזית־מס רבעון רביעי (1 אוקטובר - 31 דצמבר)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
@@ -23483,34 +23458,26 @@ msgstr "שנה קודמת"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
-#, fuzzy
-#| msgid "Last Yr 1st Est Tax Qtr"
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
-msgstr "רבעון מס הערכה 1 שנה שעברה"
+msgstr "תחזית־מס שנה קודמת רבעון ראשון (1 ינואר - 31 במרץ)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
-#, fuzzy
-#| msgid "Last Yr 2nd Est Tax Qtr"
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr "רבעון מס הערכה 2 שנה שעברה"
+msgstr "תחזית־מס שנה קודמת רבעון שני (1 אפריל - 30 ביוני)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
-#, fuzzy
-#| msgid "Last Yr 3rd Est Tax Qtr"
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr "רבעון מס הערכה 3 שנה שעברה"
+msgstr "תחזית־מס שנה קודמת רבעון שלישי (1 יולי - 30 בבספטמבר)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
-#, fuzzy
-#| msgid "Last Yr 4th Est Tax Qtr"
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
-msgstr "רבעון מס הערכה 4 שנה שעברה"
+msgstr "תחזית־מס שנה קודמת רבעון רביעי (1 אוקטובר - 31 בדצמבר)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:203
@@ -23650,17 +23617,13 @@ msgid "Select date to use for PriceDB lookups."
 msgstr "בחירת תאריך לחיפוש ב PriceDB."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:254
-#, fuzzy
-#| msgid "Nearest transaction date"
 msgid "Nearest to transaction date"
-msgstr "תאריך תנועה קרוב ביותר"
+msgstr "קרוב ביותר לתאריך התנועה"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 #: gnucash/report/reports/standard/advanced-portfolio.scm:83
-#, fuzzy
-#| msgid "Nearest report date"
 msgid "Nearest to report date"
-msgstr "תאריך דיווח קרוב ביותר"
+msgstr "קרוב ביותר לתאריך דיווח"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3326
 msgid "Tax Schedule Report & TXF Export"
@@ -23909,16 +23872,12 @@ msgstr ""
 "החשבונות."
 
 #: gnucash/report/reports/standard/account-summary.scm:97
-#, fuzzy
-#| msgid "Shows accounts deeper than the depth limit at the depth limit."
 msgid "Raise accounts deeper than the depth limit to the depth limit."
-msgstr "הצגת חשבונות עמוק יותר ממגבלת העומק במגבלת העומק."
+msgstr "העלאת חשבונות הנמוכים יותר ממגבלת החוב, למגבלת החוב."
 
 #: gnucash/report/reports/standard/account-summary.scm:98
-#, fuzzy
-#| msgid "Disregard completely any accounts deeper than the depth limit."
 msgid "Omit any accounts deeper than the depth limit."
-msgstr "להתעלם לחלוטין מחשבונות שחרגו ממגבלת החוב."
+msgstr "השמטת כל החשבונות שחרגו ממגבלת החוב."
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
@@ -24172,20 +24131,14 @@ msgid "Basis calculation method."
 msgstr "שיטת חישוב בסיס."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:89
-#, fuzzy
-#| msgid "Use average cost of all shares for basis."
 msgid "Average cost of all shares"
-msgstr "שימוש בעלות ממוצעת כבסיס לכל המניות."
+msgstr "עלות ממוצעת של כל המניות"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:90
-#, fuzzy
-#| msgid "First In, First Out"
 msgid "First-in first-out"
 msgstr "ראשון נכנס, ראשון יוצא"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:91
-#, fuzzy
-#| msgid "Last In, First Out"
 msgid "Last-in first-out"
 msgstr "אחרון נכנס, ראשון יוצא"
 
@@ -24202,16 +24155,12 @@ msgid "Include in basis"
 msgstr "כלול בבסיס"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:104
-#, fuzzy
-#| msgid "Include in gain"
 msgid "Include in gain/loss"
-msgstr "כלול ברווח"
+msgstr "הכללה ברווח/הפסד"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:105
-#, fuzzy
-#| msgid "Title for this report."
 msgid "Omit from report"
-msgstr "כותרת דוח זה."
+msgstr "השמטה מדוח"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:111
 msgid "Display the ticker symbols."
@@ -24556,14 +24505,8 @@ msgid "Report format"
 msgstr "תבניות דוח"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:146
-#, fuzzy
-#| msgid ""
-#| "The balance sheet can be displayed with either 1 or 2 columns. 'auto' "
-#| "means that the layout will be adjusted to fit the width of the page."
 msgid "The balance sheet can be displayed with either 1 or 2 columns."
-msgstr ""
-"ניתן להציג את המאזן בעמודה אחת או שתיים. 'אוטו' פירושו שהפריסה תותאם לרוחב "
-"העמוד."
+msgstr "ניתן להציג את המאזן בעמודה אחת או שתיים."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:154
 msgid "Exclude accounts with zero total balances"
@@ -24644,32 +24587,24 @@ msgid "Notes added at end of invoice -- may contain HTML markup."
 msgstr "הערות בתחתית החשבונית -- עשוי להכיל תווי HTML."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:218
-#, fuzzy
-#| msgid "Adjust the layout to fit the width of the screen or page."
 msgid "Adjust the layout to fit the width of the screen or page"
-msgstr "התאמת הפריסה לרוחב המסך או העמוד."
+msgstr "התאמת הפריסה לרוחב המסך או העמוד"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:219
-#, fuzzy
-#| msgid "Display liabilities and equity below assets."
 msgid "Display liabilities and equity below assets"
-msgstr "הצגת התחייבויות והון מתחת לנכסים."
+msgstr "הצגת התחייבויות והון מתחת לנכסים"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:220
-#, fuzzy
-#| msgid "Display assets on the left, liabilities and equity on the right."
 msgid "Display assets on the left, liabilities and equity on the right"
-msgstr "הצגת נכסים בצד ימין, התחייבויות והון בצד שמאל."
+msgstr "הצגת נכסים בצד ימין, התחייבויות והון בצד שמאל"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:224
 msgid "Sign: -$10.00"
 msgstr "סימן: 10.00- ₪"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
-#, fuzzy
-#| msgid "Brackets"
 msgid "Brackets: ($10.00)"
-msgstr "סוגריים"
+msgstr "סוגריים: (10.00 ₪)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:244
 msgid ""
@@ -25018,31 +24953,23 @@ msgstr "בחירת תקופה לסיום טווח הדוח."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:65
 #: gnucash/report/reports/standard/budget.scm:111
-#, fuzzy
-#| msgid "Last budget period"
 msgid "First budget period"
-msgstr "תקופת התקציב אחרונה"
+msgstr "תקופת תקציב ראשונה"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:66
 #: gnucash/report/reports/standard/budget.scm:112
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Previous budget period"
-msgstr "תקופת התקציב אחרונה"
+msgstr "תקופת תקציב קודמת"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:67
 #: gnucash/report/reports/standard/budget.scm:113
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Current budget period"
-msgstr "תקופת התקציב אחרונה"
+msgstr "תקופת תקציב נוכחית"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:68
 #: gnucash/report/reports/standard/budget.scm:114
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Next budget period"
-msgstr "תקופת התקציב אחרונה"
+msgstr "תקופת תקציב הבאה"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:69
 #: gnucash/report/reports/standard/budget.scm:115
@@ -25584,21 +25511,16 @@ msgid "Choose the column by which the result table is sorted."
 msgstr "בחירת העמודה לפיה תמוין לשונית התוצאה."
 
 #: gnucash/report/reports/standard/customer-summary.scm:78
-#, fuzzy
-#| msgid ""
-#| "Choose the ordering of the column sort: Either ascending or descending."
 msgid "Choose the ordering of the column sort."
-msgstr "בחירת סדר מיון עמודות: נא להזין עולה או יורד."
+msgstr "בחירת סדר מיון עמודות."
 
 #: gnucash/report/reports/standard/customer-summary.scm:116
 msgid "Customer Name"
 msgstr "שם לקוח"
 
 #: gnucash/report/reports/standard/customer-summary.scm:118
-#, fuzzy
-#| msgid "Sort by markup (which is profit amount divided by sales)."
 msgid "Markup (which is profit amount divided by sales)"
-msgstr "מיון לפי מרווח (שהוא היחס בין רווח מחולק למכירות)."
+msgstr "מרווח (היחס בין, רווח חלקי מכירות)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:119
 #: gnucash/report/reports/standard/customer-summary.scm:300
@@ -25617,7 +25539,7 @@ msgstr "לא נמצא לקוח תקין."
 
 #: gnucash/report/reports/standard/customer-summary.scm:299
 msgid "Markup"
-msgstr "אחוז הרווח"
+msgstr "מרווח"
 
 #: gnucash/report/reports/standard/customer-summary.scm:378
 msgid "No Customer"
@@ -26618,15 +26540,11 @@ msgstr "מקור כתובת."
 
 #: gnucash/report/reports/standard/new-aging.scm:404
 #: gnucash/report/reports/standard/receivables.scm:68
-#, fuzzy
-#| msgid "Billing Address"
 msgid "Billing address"
 msgstr "כתובת חשבונית ספק"
 
 #: gnucash/report/reports/standard/new-aging.scm:405
 #: gnucash/report/reports/standard/receivables.scm:69
-#, fuzzy
-#| msgid "Shipping Address"
 msgid "Shipping address"
 msgstr "כתובת משלוח"
 
@@ -27178,17 +27096,13 @@ msgstr "הצגת הסכום?"
 
 #: gnucash/report/reports/standard/register.scm:402
 #: gnucash/report/trep-engine.scm:992
-#, fuzzy
-#| msgid "Single Column Display."
 msgid "Single Column"
-msgstr "מצג עמודה בודדת."
+msgstr "עמודה בודדת"
 
 #: gnucash/report/reports/standard/register.scm:403
 #: gnucash/report/trep-engine.scm:993
-#, fuzzy
-#| msgid "Two Column Display."
 msgid "Two Columns"
-msgstr "מצג שתי עמודת."
+msgstr "שתי עמודת"
 
 #: gnucash/report/reports/standard/register.scm:408
 msgid "Display the value in transaction currency?"
@@ -27525,22 +27439,16 @@ msgid ""
 msgstr "גורם למבנה רשומות תאום להיות מטופלות כביטוי רגיל."
 
 #: gnucash/report/reports/standard/trial-balance.scm:203
-#, fuzzy
-#| msgid "General Journal Report"
 msgid "General journal exact balances"
-msgstr "דוח יומן כללי"
+msgstr "יתרות יומן כללי"
 
 #: gnucash/report/reports/standard/trial-balance.scm:204
-#, fuzzy
-#| msgid "Ignores Adjusting/Closing entries"
 msgid "No adjusting/closing entries"
-msgstr "המערכת תתעלם מתנועות תאום/סגירה"
+msgstr "ללא תנועות תאום/סגירה"
 
 #: gnucash/report/reports/standard/trial-balance.scm:205
-#, fuzzy
-#| msgid "Creates a complete end-of-period work sheet"
 msgid "Full end-of-period work sheet"
-msgstr "יצירת גיליון עבודה סוף תקופה מלא"
+msgstr "גיליון עבודה סוף תקופה מלא"
 
 #: gnucash/report/reports/standard/trial-balance.scm:273
 msgid "Adjusting Entries"
@@ -28162,10 +28070,8 @@ msgid "Register Order"
 msgstr "סדר יומן"
 
 #: gnucash/report/trep-engine.scm:339
-#, fuzzy
-#| msgid "Do not do any filtering."
 msgid "Do not do any filtering"
-msgstr "לא לסנן."
+msgstr "ללא סינון"
 
 #: gnucash/report/trep-engine.scm:342
 msgid "Include Transactions to/from Filter Accounts"
@@ -28184,10 +28090,8 @@ msgid "Void only"
 msgstr "מבוטלים בלבד"
 
 #: gnucash/report/trep-engine.scm:359
-#, fuzzy
-#| msgid "Show both (and include void transactions in totals)."
 msgid "Both (and include void transactions in totals)"
-msgstr "הצגת שניהם (והכללת חשבונות מבוטלים בסך הכל)."
+msgstr "שניהם (והכללת סך־הכל של תנועות מבוטלות )"
 
 #: gnucash/report/trep-engine.scm:364
 msgid "Exclude closing transactions"
@@ -28222,10 +28126,8 @@ msgid "Use Global Preference"
 msgstr "שימוש בהגדרה גלובלית"
 
 #: gnucash/report/trep-engine.scm:411
-#, fuzzy
-#| msgid "Don't change any displayed amounts."
 msgid "Don't change any displayed amounts"
-msgstr "לא לשנות סכומים מוצגים."
+msgstr "לא לשנות סכומים מוצגים"
 
 #: gnucash/report/trep-engine.scm:414
 msgid "Income and Expense"
@@ -28315,7 +28217,7 @@ msgid ""
 "expense accounts to equity, and must usually be excluded from periodic "
 "reporting."
 msgstr ""
-"על פי רוב לא נדרש לכלול תנועות סגירה בדוח תנועות. תנועות סגירה הן יתרות "
+"על פי רוב לא נדרש לכלול תנועות סגירה בדוח תנועות. תנועות־סגירה הן יתרות "
 "שעברו מחשבונות הכנסות והוצאות לחשבון הון העצמי ובדרך כלל, תנועות סגירה "
 "מוחרגות מדוחות תקופתיים."
 
@@ -28431,16 +28333,12 @@ msgid "One split per line"
 msgstr "פתיחת פיצול לכל שורה"
 
 #: gnucash/report/trep-engine.scm:979
-#, fuzzy
-#| msgid "Get Transactions Online"
 msgid "One transaction per line"
-msgstr "קבלת תנועות מקוונות"
+msgstr "תנועה אחת לשורה"
 
 #: gnucash/report/trep-engine.scm:991
-#, fuzzy
-#| msgid "Hide:"
 msgid "Hide"
-msgstr "הסתרה:"
+msgstr "הסתרה"
 
 #: gnucash/report/trep-engine.scm:1002
 msgid "Enable hyperlinks in amounts."
