@@ -15070,7 +15070,7 @@ msgstr "_Largura"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3671
 msgid "Open new tabs _adjacent to current tab"
-msgstr "Abrir novos separadores após o actual"
+msgstr "Abrir novos separadores _após o actual"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3677
 msgid "Opens new tab adjacent to current tab instead of at the end."
@@ -21110,7 +21110,7 @@ msgstr "1º trimestre de impostos (1 Jan - 31 Mar)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "2º trimestre de impostos (1 Abr - 31 Mai)"
+msgstr "2º trimestre de impostos (1 Abr - 30 Jun)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -21118,12 +21118,12 @@ msgstr "2º trimestre de impostos (1 Abr - 31 Mai)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
-msgstr "3º trimestre de impostos (1 Jun - 31 Ago)"
+msgstr "3º trimestre de impostos (1 Jul - 30 Set)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
-msgstr "4º trimestre de impostos (1 Set - 31 Dez)"
+msgstr "4º trimestre de impostos (1 Out - 31 Dez)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
@@ -21138,7 +21138,7 @@ msgstr "1º trim. imp. últ. ano (1 Jan - 31 Mar)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr "2º trim. imp. últ. ano (1 Abr - 31 Mai)"
+msgstr "2º trim. imp. últ. ano (1 Abr - 30 Jun)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -21146,12 +21146,12 @@ msgstr "2º trim. imp. últ. ano (1 Abr - 31 Mai)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr "3º trim. imp. últ. ano (1 Jun - 31 Ago)"
+msgstr "3º trim. imp. últ. ano (1 Jul - 30 Set)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
-msgstr "4º trim. imp. últ. ano (1 Set - 31 Dez)"
+msgstr "4º trim. imp. últ. ano (1 Out - 31 Dez)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:203
