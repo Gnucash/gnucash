@@ -66,3 +66,57 @@ const int gnc_gnucash_major_version(void)
 {
     return PROJECT_VERSION_MAJOR;
 }
+
+static GList * developer_log = NULL;
+
+gboolean gnc_developer_log_empty (void)
+{
+    return (!developer_log);
+}
+
+void gnc_add_developer_log_entry (gchar *str)
+{
+    developer_log = g_list_prepend (developer_log, g_strdup (str));
+}
+
+void gnc_clear_developer_log (void)
+{
+    g_list_free_full (developer_log, g_free);
+    developer_log = NULL;
+}
+
+static char * mystrcat (char* dest, const char* src)
+{
+     while (*dest) dest++;
+     while ((*dest++ = *src++));
+     return --dest;
+}
+
+static gchar * string_join (GList *strings, const gchar *sep)
+{
+    gchar *outstr, *p;
+    gint len = 1, seplen = strlen (sep);
+
+    for (GList *n = strings; n; n = n->next)
+        len += strlen (n->data) + seplen;
+
+    if (len > 4000)
+        return g_strdup ("Devlog exceeds 4Kb.");
+
+    outstr = g_new0 (gchar, len);
+    p = outstr;
+
+    for (GList *n = strings; n; n = n->next)
+    {
+        p = mystrcat (p, n->data);
+        if (n->next)
+            p = mystrcat (p, sep);
+    }
+
+    return outstr;
+}
+
+gchar * gnc_get_developer_log (void)
+{
+    return string_join (g_list_reverse (developer_log), "\n");
+}

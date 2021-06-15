@@ -38,6 +38,7 @@
 #ifndef GNC_VERSION_H
 #define GNC_VERSION_H
 #include "gnc-vcs-info.h"
+#include <glib.h>
 
 /** Parse <prefix>/etc/gnucash/environment and set environment variables
  *  based on the contents of that file. Read the comments in
@@ -49,6 +50,11 @@ const char *gnc_build_id(void);
 const char *gnc_vcs_rev(void);
 const char *gnc_vcs_rev_date(void);
 const int gnc_gnucash_major_version(void);
+
+gboolean gnc_developer_log_empty (void);
+void gnc_add_developer_log_entry (gchar *str);
+void gnc_clear_developer_log (void);
+gchar * gnc_get_developer_log (void);
 
 #endif /* GNC_VERSION_H */
 

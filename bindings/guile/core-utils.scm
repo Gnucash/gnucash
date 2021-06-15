@@ -41,6 +41,7 @@
 (export gnc:string-locale<?)
 (export gnc:string-locale>?)
 (export gnc:version)
+(export gnc:issue-deprecation-warning)
 
 ;; loads modules and re-exports all its public interface into the
 ;; current module
@@ -75,6 +76,10 @@
 
 (define gnc:string-locale<? string-locale<?)
 (define gnc:string-locale>? string-locale>?)
+
+(define (gnc:issue-deprecation-warning str)
+  (issue-deprecation-warning str)
+  (gnc-add-developer-log-entry str))
 
 ;; Custom unbound-variable exception printer: instead of generic "In
 ;; procedure module-lookup: Unbound variable: varname", it will first
