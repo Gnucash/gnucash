@@ -157,6 +157,7 @@ static void gnc_main_window_cmd_page_setup (GtkAction *action, GncMainWindow *wi
 static void gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_dev_log (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_cut (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_copy (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_paste (GtkAction *action, GncMainWindow *window);
@@ -311,6 +312,11 @@ static GtkActionEntry gnc_menu_actions [] =
         "FileQuitAction", "application-exit", N_("_Quit"), "<primary>Q",
         N_("Quit this application"),
         G_CALLBACK (gnc_main_window_cmd_file_quit)
+    },
+    {
+        "DevLogAction", NULL, N_("_Developer Log"), NULL,
+        N_("Show developer log"),
+        G_CALLBACK (gnc_main_window_cmd_dev_log)
     },
 
     /* Edit menu */
@@ -4354,6 +4360,23 @@ gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window)
     page = priv->current_page;
     gnc_main_window_close_page(page);
 }
+
+static void
+gnc_main_window_cmd_dev_log (GtkAction *action, GncMainWindow *window)
+{
+    gchar *logstr;
+    if (gnc_developer_log_empty ())
+    {
+        PWARN ("devlog empty. this button should be disabled.");
+        return;
+    }
+
+    logstr = gnc_get_developer_log ();
+    if (gnc_verify_dialog (NULL, TRUE, "Dev Log\n\n%s\n\nYes to clear", logstr))
+        gnc_clear_developer_log ();
+    g_free (logstr);
+}
+
 
 static void
 gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)

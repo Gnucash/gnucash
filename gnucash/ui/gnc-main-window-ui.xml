@@ -133,6 +133,7 @@
   <toolbar name="DefaultToolbar">
     <placeholder name="ToolbarSavePlaceholder"/>
     <toolitem name="ToolbarClose" action="FileCloseAction"/>
+    <toolitem name="ToolbarDevLog" action="DevLogAction"/>
     <separator name="ToolbarSep1"/>
     <placeholder name="DefaultToolbarPlaceholder"/>
   </toolbar>
