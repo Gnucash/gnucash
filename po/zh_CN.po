@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-16 12:40+0000\n"
+"PO-Revision-Date: 2021-06-16 16:33+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -3986,7 +3986,7 @@ msgstr "对选中的科目进行对账"
 #: gnucash/gnome/gnc-plugin-page-register2.c:362
 #: gnucash/gnome/gnc-plugin-page-register.c:480
 msgid "_Auto-clear..."
-msgstr "自动审核(_A)..."
+msgstr "自动核实(_A)..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:307
 msgid "Automatically clear individual transactions, given a cleared amount"
@@ -5323,7 +5323,7 @@ msgstr "显示当前交易事项的所有部分"
 #: gnucash/gnome/gnc-plugin-page-register2.c:448
 #: gnucash/gnome/gnc-plugin-page-register.c:571
 msgid "_Basic Ledger"
-msgstr "基本分类模式(_B)"
+msgstr "基本模式(_B)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:449
 #: gnucash/gnome/gnc-plugin-page-register.c:572
@@ -5333,7 +5333,7 @@ msgstr "用一行或两行显示交易事项"
 #: gnucash/gnome/gnc-plugin-page-register2.c:453
 #: gnucash/gnome/gnc-plugin-page-register.c:576
 msgid "_Auto-Split Ledger"
-msgstr "自动分录模式(_A)"
+msgstr "分录模式(_A)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:454
 #: gnucash/gnome/gnc-plugin-page-register.c:577
@@ -5345,7 +5345,7 @@ msgstr "用一行或两行显示交易事项并展开当前交易事项"
 #: gnucash/gnome/gnc-plugin-page-register.c:581
 #: gnucash/gtkbuilder/dialog-preferences.glade:2874
 msgid "Transaction _Journal"
-msgstr "交易日志模式(_J)"
+msgstr "日志模式(_J)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:459
 #: gnucash/gnome/gnc-plugin-page-register.c:582
@@ -5405,12 +5405,12 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register2.c:1627
 #: gnucash/gnome/gnc-plugin-page-register.c:2011
 msgid "_Discard Transaction"
-msgstr "放弃交易事项(_D)"
+msgstr "放弃交易(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1631
 #: gnucash/gnome/gnc-plugin-page-register.c:2015
 msgid "_Save Transaction"
-msgstr "保存交易事项(_S)"
+msgstr "保存交易(_S)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1660
 #: gnucash/gnome/gnc-plugin-page-register2.c:1695
@@ -5583,7 +5583,7 @@ msgstr "排序(_S)..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:500
 msgid "_Go to Date"
-msgstr "转到日期(_G)"
+msgstr "转至日期(_G)"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:501
 msgid "Move to the split at the specified date"
@@ -5922,7 +5922,7 @@ msgstr "精美发票"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:137
 msgid "_Scheduled"
-msgstr "已计划(_S)"
+msgstr "计划(_S)"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:139
 #: gnucash/gtkbuilder/dialog-billterms.glade:495
@@ -5940,7 +5940,7 @@ msgstr "新建一笔计划交易"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:145
 msgid "_New 2"
-msgstr "新增 2(_N)"
+msgstr "新建 2(_N)"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:146
 msgid "Create a new scheduled transaction 2"
@@ -5981,7 +5981,7 @@ msgstr[0] "您确信您要删除 %d 这笔计划交易？"
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
 msgid "_General Journal"
-msgstr "日常流水(_G)"
+msgstr "交易流水(_G)"
 
 #: gnucash/gnome/gnc-plugin-register2.c:58
 msgid "Open a general journal window"
@@ -5994,7 +5994,7 @@ msgstr "注册2 开立GL账户"
 
 #: gnucash/gnome/gnc-plugin-register.c:54
 msgid "Old St_yle General Journal"
-msgstr "旧式日常流水(_Y)"
+msgstr "旧式交易流水(_Y)"
 
 #: gnucash/gnome/gnc-plugin-register.c:55
 msgid "Open an old style general journal window"
@@ -6191,7 +6191,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:1014
 msgid "_Cut Transaction"
-msgstr "剪切交易事项(_C)"
+msgstr "剪切交易(_C)"
 
 #: gnucash/gnome/gnc-split-reg.c:1158
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:66
@@ -6521,11 +6521,11 @@ msgstr "没有用于此科目的自动利息收费"
 #: gnucash/gnome/window-reconcile2.c:736 gnucash/gnome/window-reconcile.c:773
 #: gnucash/gtkbuilder/window-reconcile.glade:214
 msgid "Enter _Interest Payment..."
-msgstr "输入利息付款(_I)..."
+msgstr "存款利息(_I)..."
 
 #: gnucash/gnome/window-reconcile2.c:738 gnucash/gnome/window-reconcile.c:775
 msgid "Enter _Interest Charge..."
-msgstr "输入利息收费(_I)..."
+msgstr "欠款利息(_I)..."
 
 #: gnucash/gnome/window-reconcile2.c:1225 gnucash/gnome/window-reconcile.c:1358
 msgid "Are you sure you want to delete the selected transaction?"
@@ -6652,7 +6652,7 @@ msgstr "检查修复(_C)"
 #: gnucash/gnome/window-reconcile2.c:2182 gnucash/gnome/window-reconcile.c:2403
 #: gnucash/gtkbuilder/dialog-account.glade:1753
 msgid "_Balance"
-msgstr "余额(_B)"
+msgstr "平衡(_B)"
 
 #: gnucash/gnome/window-reconcile2.c:2183 gnucash/gnome/window-reconcile.c:2404
 msgid "Add a new balancing entry to the account"
@@ -6668,7 +6668,7 @@ msgstr "删除选定的交易事项"
 
 #: gnucash/gnome/window-reconcile2.c:2197 gnucash/gnome/window-reconcile.c:2418
 msgid "_Reconcile Selection"
-msgstr "核实已选交易(_R)"
+msgstr "核实(_R)"
 
 #: gnucash/gnome/window-reconcile2.c:2198 gnucash/gnome/window-reconcile.c:2419
 msgid "Reconcile the selected transactions"
@@ -6676,7 +6676,7 @@ msgstr "删除选定的交易事项"
 
 #: gnucash/gnome/window-reconcile2.c:2202 gnucash/gnome/window-reconcile.c:2423
 msgid "_Unreconcile Selection"
-msgstr "未对账(_U)"
+msgstr "有待核实(_U)"
 
 #: gnucash/gnome/window-reconcile2.c:2203 gnucash/gnome/window-reconcile.c:2424
 msgid "Unreconcile the selected transactions"
@@ -7292,7 +7292,7 @@ msgstr "选择证券/货币"
 #: gnucash/gnome-utils/dialog-commodity.c:276
 #: gnucash/gtkbuilder/dialog-account.glade:1261
 msgid "_Security/currency"
-msgstr "证券/货币(_S)"
+msgstr "证券/币种(_S)"
 
 #: gnucash/gnome-utils/dialog-commodity.c:280
 msgid "Select security"
@@ -7310,7 +7310,7 @@ msgstr "选择货币"
 #: gnucash/gnome-utils/dialog-commodity.c:286
 #: gnucash/gtkbuilder/dialog-price.glade:161
 msgid "Cu_rrency"
-msgstr "货币(_R)"
+msgstr "币种(_R)"
 
 #: gnucash/gnome-utils/dialog-commodity.c:760
 #: gnucash/gnome-utils/dialog-options.c:717
@@ -7759,19 +7759,19 @@ msgstr "日期超出范围"
 
 #: gnucash/gnome-utils/dialog-utils.c:765
 msgid "Remember and don't _ask me again."
-msgstr "记住了并不要再问我(_A)。"
+msgstr "记住并不再询问(_A)。"
 
 #: gnucash/gnome-utils/dialog-utils.c:766
 msgid "Don't _tell me again."
-msgstr "不要再告诉我了(_T)。"
+msgstr "请勿再通知(_T)。"
 
 #: gnucash/gnome-utils/dialog-utils.c:769
 msgid "Remember and don't ask me again this _session."
-msgstr "记住了并不要在本回话中再问我(_S)。"
+msgstr "记住，本会话不再询问(_S)。"
 
 #: gnucash/gnome-utils/dialog-utils.c:770
 msgid "Don't tell me again this _session."
-msgstr "不要在本会话中再告诉我了(_S)。"
+msgstr "本会话不再通知(_S)。"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:454
 msgid "New..."
@@ -8250,15 +8250,15 @@ msgstr "只读打开(_R)"
 
 #: gnucash/gnome-utils/gnc-file.c:853
 msgid "Create _New File"
-msgstr "创建新文件(_N)"
+msgstr "新建文件(_N)"
 
 #: gnucash/gnome-utils/gnc-file.c:856
 msgid "Open _Anyway"
-msgstr "仍要打开(_A)"
+msgstr "强行打开(_A)"
 
 #: gnucash/gnome-utils/gnc-file.c:859
 msgid "Open _Folder"
-msgstr "打开文件夹（_F)"
+msgstr "打开文件夹(_F)"
 
 #: gnucash/gnome-utils/gnc-file.c:865 gnucash/gnome-utils/gnc-main-window.c:311
 msgid "_Quit"
@@ -8443,7 +8443,7 @@ msgstr "新建一个顶级 GnuCash 窗口。"
 
 #: gnucash/gnome-utils/gnc-main-window.c:377
 msgid "New Window with _Page"
-msgstr "将当前科目弹出新窗口(_P)"
+msgstr "新建页面窗口(_P)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:378
 msgid "Move the current page to a new top-level GnuCash window."
@@ -8451,7 +8451,7 @@ msgstr "将当前页移动到新建的顶级 GnuCash 窗口。"
 
 #: gnucash/gnome-utils/gnc-main-window.c:385
 msgid "Tutorial and Concepts _Guide"
-msgstr "教程和概念指南(_G)"
+msgstr "教程概念(_G)"
 
 #: gnucash/gnome-utils/gnc-main-window.c:386
 msgid "Open the GnuCash Tutorial"
@@ -8750,7 +8750,7 @@ msgstr "当前交易事项已被修改。您想在复制这个交易事项前保
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:897
 #: gnucash/register/ledger-core/split-register.c:474
 msgid "_Record"
-msgstr "录制(_R)"
+msgstr "记录(_R)"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:185
 msgid "This transaction is being edited in a different register."
@@ -8769,12 +8769,12 @@ msgstr "当前交易事项还未结算。"
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:287
 #: gnucash/register/ledger-core/split-register-control.c:138
 msgid "Balance it _manually"
-msgstr "手动结算(_M)"
+msgstr "人工平衡(_M)"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:289
 #: gnucash/register/ledger-core/split-register-control.c:140
 msgid "Let GnuCash _add an adjusting split"
-msgstr "让 GnuCash 添加一个调整分录 (_A)"
+msgstr "让程序添加一个调整分录 (_A)"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:294
 #: gnucash/register/ledger-core/split-register-control.c:145
@@ -8789,7 +8789,7 @@ msgstr "调整其它科目分录合计(_O)"
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:311
 #: gnucash/register/ledger-core/split-register-control.c:162
 msgid "_Rebalance"
-msgstr "重新结算(_R)"
+msgstr "重建平衡(_R)"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:405
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:413
@@ -11900,7 +11900,7 @@ msgstr "当只读账簿被打开时会显示这个对话框。"
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:19
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:122
 msgid "Commit changes to a invoice entry"
-msgstr "提交修改到 invoice_entry"
+msgstr "提交对发票条目的修改"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:20
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:123
@@ -11914,7 +11914,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:24
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:127
 msgid "Duplicating a changed invoice entry"
-msgstr "正在复制一个修改的 invoice_entry"
+msgstr "为已修改的发票条目创建副本"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:25
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:128
