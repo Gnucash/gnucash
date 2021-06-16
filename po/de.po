@@ -30,10 +30,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-12 20:39+0000\n"
+"PO-Revision-Date: 2021-06-16 16:33+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -21012,7 +21012,7 @@ msgstr "_Rechnungen importieren..."
 
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:58
 msgid "Import bills and invoices from a CSV text file"
-msgstr "Importiert Kunden- oder Lieferantenrechnungen aus CSV-Datei."
+msgstr "Kunden- oder Lieferantenrechnungen aus CSV-Datei importieren."
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:80
 #, fuzzy
