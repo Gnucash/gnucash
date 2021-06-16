@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash-2.4.3\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-08 16:35+0000\n"
+"PO-Revision-Date: 2021-06-16 04:33+0000\n"
 "Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hant/>\n"
@@ -1397,7 +1397,7 @@ msgstr "刪除(_D)"
 msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
-msgstr ""
+msgstr "公司名稱不能空白，請輸入公司或個人名稱。"
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -1733,10 +1733,8 @@ msgid "Business Document Links"
 msgstr "商務文件連結"
 
 #: gnucash/gnome/dialog-employee.c:213
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
-msgstr "您必須輸入付款地址。"
+msgstr "您必須輸入付款地址名稱。"
 
 #: gnucash/gnome/dialog-employee.c:308
 msgid "Edit Employee"
@@ -2564,10 +2562,8 @@ msgid "You must choose an owner for this job."
 msgstr "您必須選擇這個工作的所有者。"
 
 #: gnucash/gnome/dialog-job.c:157
-#, fuzzy
-#| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr "信用必須是正數或者保持空白。"
+msgstr "比率必須是有效的數值或者保持空白。"
 
 #: gnucash/gnome/dialog-job.c:258
 msgid "Edit Job"
@@ -2727,10 +2723,8 @@ msgid "You must select a company for payment processing."
 msgstr "您必須選擇用於付款處理的公司。"
 
 #: gnucash/gnome/dialog-payment.c:256
-#, fuzzy
-#| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
-msgstr "匯入時發生問題。"
+msgstr "付款或退款金額有誤。"
 
 #: gnucash/gnome/dialog-payment.c:277
 msgid "You must select a transfer account from the account tree."
@@ -7815,16 +7809,14 @@ msgstr "新增..."
 #: gnucash/gnome-utils/gnc-amount-edit.c:413
 #: gnucash/register/register-core/formulacell.c:119
 #: gnucash/register/register-core/pricecell.c:159
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s' at position %d"
-msgstr "在處理 %s 時發生錯誤。"
+msgstr "在處理「%s」（位置 %d）時發生錯誤"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:419
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s'"
-msgstr "在處理 %s 時發生錯誤。"
+msgstr "在處理「%s」時發生錯誤"
 
 #: gnucash/gnome-utils/gnc-autosave.c:99
 msgid "Save file automatically?"
@@ -10750,10 +10742,8 @@ msgid ""
 msgstr "此欄位指定了一筆可能交易配對，要顯示在配對清單中的最低分數。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:25
-#, fuzzy
-#| msgid "Add matching transactions below this score"
 msgid "Likely matching transaction within these days"
-msgstr "新增低於這個分數的交易配對"
+msgstr "可能會與下列日期的交易匹配"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:26
 #, fuzzy
