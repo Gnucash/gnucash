@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-12 15:13+0000\n"
+"PO-Revision-Date: 2021-06-16 12:40+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -1438,6 +1438,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
+"Polje imena poduzeća ne smije ostati prazno. Upiši ime poduzeća ili ime "
+"osobe."
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -1779,10 +1781,8 @@ msgid "Business Document Links"
 msgstr "Poveznice poslovnih dokumenata"
 
 #: gnucash/gnome/dialog-employee.c:213
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
-msgstr "Moraš upisati adresu za plaćanje."
+msgstr "Moraš upisati ime za adresu za plaćanje."
 
 #: gnucash/gnome/dialog-employee.c:308
 msgid "Edit Employee"
@@ -2621,10 +2621,8 @@ msgid "You must choose an owner for this job."
 msgstr "Moraš odabrati vlasnika za ovaj nalog."
 
 #: gnucash/gnome/dialog-job.c:157
-#, fuzzy
-#| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr "Potražuje mora imati pozitivan iznos ili ga ostavi praznim."
+msgstr "Iznos stope mora biti valjan ili ga ostavi praznim."
 
 #: gnucash/gnome/dialog-job.c:258
 msgid "Edit Job"
@@ -2785,10 +2783,8 @@ msgid "You must select a company for payment processing."
 msgstr "Moraš odabrati poduzeće za obradu plaćanja."
 
 #: gnucash/gnome/dialog-payment.c:256
-#, fuzzy
-#| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
-msgstr "Došlo je do problema prilikom uvoza."
+msgstr "Postoji problem s iznosom plaćanja ili povrata novca."
 
 #: gnucash/gnome/dialog-payment.c:277
 msgid "You must select a transfer account from the account tree."
@@ -6137,13 +6133,12 @@ msgstr "Nadolazeće transakcije"
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:871
-#, fuzzy, c-format
-#| msgid "Do you really want to delete this scheduled transaction?"
+#, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgstr[0] "Stvarno želiš izbrisati ovu terminiranu transakciju?"
-msgstr[1] "Stvarno želiš izbrisati ovu terminiranu transakciju?"
-msgstr[2] "Stvarno želiš izbrisati ovu terminiranu transakciju?"
+msgstr[1] "Stvarno želiš izbrisati %d terminirane transakcije?"
+msgstr[2] "Stvarno želiš izbrisati %d terminiranih transakcija?"
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
@@ -8010,16 +8005,14 @@ msgstr "Novi …"
 #: gnucash/gnome-utils/gnc-amount-edit.c:413
 #: gnucash/register/register-core/formulacell.c:119
 #: gnucash/register/register-core/pricecell.c:159
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s' at position %d"
-msgstr "Došlo je do greške prilikom obrade „%s“."
+msgstr "Došlo je do greške prilikom obrade „%s“ na poziciji %d"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:419
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s'"
-msgstr "Došlo je do greške prilikom obrade „%s“."
+msgstr "Došlo je do greške prilikom obrade „%s“"
 
 #: gnucash/gnome-utils/gnc-autosave.c:99
 msgid "Save file automatically?"
@@ -11043,40 +11036,28 @@ msgstr ""
 "transakcija mora imati, da bi se prikazala u popisu."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:25
-#, fuzzy
-#| msgid "Add matching transactions below this score"
 msgid "Likely matching transaction within these days"
-msgstr "Dodaj poklapajuće transakcije ispod ove razine"
+msgstr "Vjerojatno poklapajuća transakcija unutar ovih dana"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:26
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
 msgstr ""
-"Ovo polje određuje najmanju razinu poklapanja koju moguća poklapajuća "
-"transakcija mora imati, da bi se prikazala u popisu."
+"Ovo polje određuje najveći broj dana u kojima se transakcija u popisu "
+"vjerojatno poklapa."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:30
-#, fuzzy
-#| msgid "Clear matching transactions above this score"
 msgid "UnLikely matching a transaction outside of these days"
-msgstr "Potvrdi poklapajuće transakcije iznad ove razine"
+msgstr "Vjerojatno nepoklapajuća transakcija izvan ovih dana"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:31
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the minimum number of days a transaction is unlikely to "
 "be a match in the list."
 msgstr ""
-"Ovo polje određuje najmanju razinu poklapanja koju moguća poklapajuća "
-"transakcija mora imati, da bi se prikazala u popisu."
+"Ovo polje određuje najmanji broj dana u kojima se transakcija u popisu "
+"vjerojatno ne poklapa."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
@@ -11295,12 +11276,16 @@ msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
 msgstr ""
+"Postavi „Pregledaj stvorene transakcije” kao standardno za dijalog „Od "
+"zadnjeg pokretanja”."
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
+"Ova postavka određuje je li opcija „Pregledaj stvorene transakcije” "
+"postavljena kao standardna za dijalog „Od zadnjeg pokretanja”."
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
@@ -11698,13 +11683,15 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
-msgstr ""
+msgstr "Otvara novu karticu pored trenutačne kartice umjesto na kraju"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:136
 msgid ""
 "If active, new tabs are opened adjacent to current tab. If inactive, the new "
 "tabs are opened instead at the end."
 msgstr ""
+"Ako je aktivirano, nove kartice se otvaraju pored trenutačne kartice. Ako je "
+"deaktivirano, nove kartice se otvaraju na kraju."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:940
@@ -17025,29 +17012,29 @@ msgstr ""
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2291
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "Likely match _day threshold"
-msgstr "Prag za _prikaz poklapanja"
+msgstr "Prag za _dane vjerojatnog poklapanja"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2304
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "_Unlikely match day threshold"
-msgstr "Prag za _prikaz poklapanja"
+msgstr "Prag za dane _vjerojatnog nepoklapanja"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2318
 msgid ""
 "A transaction whose date is within the threshold is likely to be a match. "
 "Default is 4 days."
 msgstr ""
+"Transakcija čiji se datum nalazi unutar praga vjerojatno će se poklapati. "
+"Standardno je 4 dana."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2340
 msgid ""
 "A transaction whose date is outside the threshold is unlikely to be a match. "
 "Default is 14 days."
 msgstr ""
+"Transakcija čiji se datum nalazi izvan praga vjerojatno se neće poklapati. "
+"Standardno je 4 dana."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2385
 msgid "<b>Checks</b>"
@@ -17417,11 +17404,11 @@ msgstr "_Širina"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3671
 msgid "Open new tabs _adjacent to current tab"
-msgstr ""
+msgstr "Otvori nove k_artice pored trenutačne kartice"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3677
 msgid "Opens new tab adjacent to current tab instead of at the end."
-msgstr ""
+msgstr "Otvara novu karticu pored trenutačne kartice umjesto na kraju."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3716
 msgid "Windows"
@@ -18025,16 +18012,16 @@ msgid "R_emind in advance"
 msgstr "_Podsjeti unaprijed"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Set 'Re_view Created Transactions' as default"
-msgstr "_Pregledaj stvorene transakcije"
+msgstr "Postavi „Pregledaj stvorene transakcije” kao standardno"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
 msgid ""
 "Set 'Review Created Transactions' as the default in the 'Since Last Run' "
 "dialog."
 msgstr ""
+"Postavi „Pregledaj stvorene transakcije” kao standardno u dijalogu „Od "
+"zadnjeg pokretanja”."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:765
 msgid "Edit Scheduled Transaction"
@@ -22929,10 +22916,8 @@ msgstr "Jedan mjesec"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-#, fuzzy
-#| msgid "Quarter"
 msgid "Quarter Year"
-msgstr "Kvartal"
+msgstr "Kvartal godine"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -22979,30 +22964,24 @@ msgstr "Izvor podataka za cijene."
 
 #: gnucash/report/options-utilities.scm:144
 msgid "Average cost of purchases weighted by volume"
-msgstr ""
+msgstr "Prosječni trošak kupnja ponderiran po količini"
 
 #: gnucash/report/options-utilities.scm:145
-#, fuzzy
-#| msgid "The weighted average of all currency transactions of the past."
 msgid "Weighted average of all transactions in the past"
-msgstr "Određeni prosjek svih transakcija u prošlosti."
+msgstr "Ponderirani prosjek svih transakcija u prošlosti"
 
 #: gnucash/report/options-utilities.scm:146
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Last up through report date"
-msgstr "Koristi najbliži datumu izvještaja."
+msgstr "Do datuma izvještaja"
 
 #: gnucash/report/options-utilities.scm:147
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Closest to report date"
-msgstr "Koristi najbliži datumu izvještaja."
+msgstr "Najbliži datumu izvještaja"
 
 #: gnucash/report/options-utilities.scm:148
 #: gnucash/report/reports/standard/advanced-portfolio.scm:82
 msgid "Most recent"
-msgstr "Najnovija"
+msgstr "Najnoviji"
 
 #: gnucash/report/options-utilities.scm:160
 msgid "Width of plot in pixels."
@@ -23058,26 +23037,23 @@ msgstr "Odaberi metodu za razvrstavanje konta."
 
 #: gnucash/report/options-utilities.scm:203
 msgid "Alphabetical by account code"
-msgstr "Abecednim redom, po šifri konta"
+msgstr "Abecednim redom po šifri konta"
 
 #: gnucash/report/options-utilities.scm:204
 msgid "Alphabetical by account name"
-msgstr "Abecednim redom, po nazivu konta"
+msgstr "Abecednim redom po nazivu konta"
 
 #: gnucash/report/options-utilities.scm:205
 msgid "Numerical by descending amount"
-msgstr ""
+msgstr "Numerički od većih prema manjim iznosima"
 
 #: gnucash/report/options-utilities.scm:223
 msgid "How to show the balances of parent accounts."
 msgstr "Kako prikazati salda matičnih konta."
 
 #: gnucash/report/options-utilities.scm:224
-#, fuzzy
-#| msgid ""
-#| "Show only the balance in the parent account, excluding any subaccounts."
 msgid "Account Balance in the parent account, excluding any subaccounts."
-msgstr "Prikaži samo salda u matičnom kontu, isključujući salda svih podkonta."
+msgstr "Saldo računa u matičnom kontu, isključujući sva podkonta."
 
 #: gnucash/report/options-utilities.scm:225
 msgid "Do not show any balances of parent accounts."
@@ -23089,10 +23065,8 @@ msgid "Account Balance"
 msgstr "Saldo konta"
 
 #: gnucash/report/options-utilities.scm:229
-#, fuzzy
-#| msgid "Calculate"
 msgid "Calculate Subtotal"
-msgstr "Izračunaj"
+msgstr "Izračunaj podzbroj"
 
 #: gnucash/report/options-utilities.scm:230
 #: gnucash/report/options-utilities.scm:246
@@ -23333,17 +23307,13 @@ msgstr "Razvrstaj poduzeća prema."
 
 #: gnucash/report/reports/aging.scm:348
 #: gnucash/report/reports/standard/new-aging.scm:95
-#, fuzzy
-#| msgid "Name of the company."
 msgid "Name of the company"
-msgstr "Ime poduzeća."
+msgstr "Ime poduzeća"
 
 #: gnucash/report/reports/aging.scm:349
 #: gnucash/report/reports/standard/new-aging.scm:96
-#, fuzzy
-#| msgid "Total amount owed to/from Company."
 msgid "Total amount owed to/from Company"
-msgstr "Ukupni iznos dugovanja poduzeću/dugovanja poduzeća."
+msgstr "Ukupni iznos dugovanja poduzeću/dugovanja poduzeća"
 
 #: gnucash/report/reports/aging.scm:350
 #: gnucash/report/reports/standard/new-aging.scm:97
@@ -24037,34 +24007,26 @@ msgstr "Koristi „od – do”"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
-#, fuzzy
-#| msgid "1st Est Tax Quarter"
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
-msgstr "Procijenjeni porez 1. kvartala"
+msgstr "Procijenjeni porez 1. kvartala (1. siječanj – 31. ožujak)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
-#, fuzzy
-#| msgid "2nd Est Tax Quarter"
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "Procijenjeni porez 2. kvartala"
+msgstr "Procijenjeni porez 2. kvartala (1. travanj – 31. svibanj)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
-#, fuzzy
-#| msgid "3rd Est Tax Quarter"
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
-msgstr "Procijenjeni porez 3. kvartala"
+msgstr "Procijenjeni porez 3. kvartala (1. lipanj – 31. kolovoz)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
-#, fuzzy
-#| msgid "4th Est Tax Quarter"
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
-msgstr "Procijenjeni porez 4. kvartala"
+msgstr "Procijenjeni porez 4. kvartala (1. rujan – 31. prosinac)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
@@ -24073,34 +24035,26 @@ msgstr "Prošle godine"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
-#, fuzzy
-#| msgid "Last Yr 1st Est Tax Qtr"
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
-msgstr "Procijenjeni porez 1. kvartala prošle godine"
+msgstr "Procijenjeni porez 1. kvartala prošle godine (1. siječanj – 31. ožujak)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
-#, fuzzy
-#| msgid "Last Yr 2nd Est Tax Qtr"
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr "Procijenjeni porez 2. kvartala prošle godine"
+msgstr "Procijenjeni porez 2. kvartala prošle godine (1. travanj – 31. svibanj)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
-#, fuzzy
-#| msgid "Last Yr 3rd Est Tax Qtr"
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr "Procijenjeni porez 3. kvartala prošle godine"
+msgstr "Procijenjeni porez 3. kvartala prošle godine (1. lipanj – 31. kolovoz)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
-#, fuzzy
-#| msgid "Last Yr 4th Est Tax Qtr"
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
-msgstr "Procijenjeni porez 4. kvartala prošle godine"
+msgstr "Procijenjeni porez 4. kvartala prošle godine (1. rujan – 31. prosinac)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:203
@@ -24240,17 +24194,13 @@ msgid "Select date to use for PriceDB lookups."
 msgstr "Odaberi datum za pretraživanje baze podataka cijena."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:254
-#, fuzzy
-#| msgid "Nearest transaction date"
 msgid "Nearest to transaction date"
-msgstr "Najbliži datum transakcije"
+msgstr "Najbliži datumu transakcije"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 #: gnucash/report/reports/standard/advanced-portfolio.scm:83
-#, fuzzy
-#| msgid "Nearest report date"
 msgid "Nearest to report date"
-msgstr "Najbliži datum izvještaja"
+msgstr "Najbliži datumu izvještaja"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3326
 msgid "Tax Schedule Report & TXF Export"
@@ -24506,16 +24456,14 @@ msgstr ""
 "podkontima."
 
 #: gnucash/report/reports/standard/account-summary.scm:97
-#, fuzzy
-#| msgid "Shows accounts deeper than the depth limit at the depth limit."
 msgid "Raise accounts deeper than the depth limit to the depth limit."
-msgstr "Prikaži konta, koji se nalaze dublje od ograničene dubine."
+msgstr ""
+"Nadigni konta koja se nalaze dublje od ograničenja dubine na ograničenje "
+"dubine."
 
 #: gnucash/report/reports/standard/account-summary.scm:98
-#, fuzzy
-#| msgid "Disregard completely any accounts deeper than the depth limit."
 msgid "Omit any accounts deeper than the depth limit."
-msgstr "Zanemari u potpunosti sva konta, dublje od ograničenja dubine."
+msgstr "Izostavi sva konta koja se nalaze dublje od ograničenja dubine."
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
@@ -24773,20 +24721,14 @@ msgid "Basis calculation method."
 msgstr "Način izračunavanja osnove."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:89
-#, fuzzy
-#| msgid "Use average cost of all shares for basis."
 msgid "Average cost of all shares"
-msgstr "Koristi prosječno koštanje svih dionica kao osnovu."
+msgstr "Prosječno koštanje svih dionica"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:90
-#, fuzzy
-#| msgid "First In, First Out"
 msgid "First-in first-out"
 msgstr "Prvi-nutra, prvi-van"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:91
-#, fuzzy
-#| msgid "Last In, First Out"
 msgid "Last-in first-out"
 msgstr "Zadnji-nutra, prvi-van"
 
@@ -24806,16 +24748,12 @@ msgid "Include in basis"
 msgstr "Uključi u osnovu"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:104
-#, fuzzy
-#| msgid "Include in gain"
 msgid "Include in gain/loss"
-msgstr "Uključi u dobit"
+msgstr "Uključi u dobit/gubitak"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:105
-#, fuzzy
-#| msgid "Title for this report."
 msgid "Omit from report"
-msgstr "Naslov za ovaj izvještaj."
+msgstr "Izostavi iz izvještaja"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:111
 msgid "Display the ticker symbols."
@@ -24968,8 +24906,8 @@ msgid ""
 "The target is used to plan for a future large purchase, which will be added "
 "as a line above the reserve amount."
 msgstr ""
-"Namjena se koristi za planiranje kupovine u budućnosti, za koju su potrebna "
-"veća sredstva. Bit će dodan u retku iznad iznosa rezerve."
+"Namjena se koristi za planiranje kupnje u budućnosti za koju su potrebna "
+"veća sredstva. Dodat će se u retku iznad iznosa rezerve."
 
 #: gnucash/report/reports/standard/balance-forecast.scm:67
 msgid "Show future minimum"
@@ -25163,14 +25101,8 @@ msgid "Report format"
 msgstr "Format izvještaja"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:146
-#, fuzzy
-#| msgid ""
-#| "The balance sheet can be displayed with either 1 or 2 columns. 'auto' "
-#| "means that the layout will be adjusted to fit the width of the page."
 msgid "The balance sheet can be displayed with either 1 or 2 columns."
-msgstr ""
-"Bilanca se može prikazati jednstupčano ili dvostupčano. „Automatski“ znači, "
-"da će raspored biti podešen, kako bi se ispunila širina stranice."
+msgstr "Bilanca se može prikazati u jednom stupcu ili u dva stupca."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:154
 msgid "Exclude accounts with zero total balances"
@@ -25255,32 +25187,24 @@ msgid "Notes added at end of invoice -- may contain HTML markup."
 msgstr "Napomene dodane na kraj izlaznog računa; mogu sadržati HTML oznake."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:218
-#, fuzzy
-#| msgid "Adjust the layout to fit the width of the screen or page."
 msgid "Adjust the layout to fit the width of the screen or page"
-msgstr "Podesi raspored stranice, tako da ispuni širinu ekrana ili stranice."
+msgstr "Podesi raspored tako da ispuni širinu ekrana ili stranice"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:219
-#, fuzzy
-#| msgid "Display liabilities and equity below assets."
 msgid "Display liabilities and equity below assets"
-msgstr "Prikaži obveze i kapital ispod imovine."
+msgstr "Prikaži obveze i kapital ispod imovine"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:220
-#, fuzzy
-#| msgid "Display assets on the left, liabilities and equity on the right."
 msgid "Display assets on the left, liabilities and equity on the right"
-msgstr "Prikaži imovinu na lijevoj strani, obveze i kapital na desnoj."
+msgstr "Prikaži imovinu na lijevoj strani, obveze i kapital na desnoj"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:224
 msgid "Sign: -$10.00"
-msgstr ""
+msgstr "Znak: -10,00 kn"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
-#, fuzzy
-#| msgid "Brackets"
 msgid "Brackets: ($10.00)"
-msgstr "Zagrade"
+msgstr "Zagrade: (10,00 kn)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:244
 msgid ""
@@ -25643,31 +25567,23 @@ msgstr "Odaberi trenutak s kojim završava razdoblje izvještavanja."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:65
 #: gnucash/report/reports/standard/budget.scm:111
-#, fuzzy
-#| msgid "Last budget period"
 msgid "First budget period"
-msgstr "Zadnje razdoblje proračuna"
+msgstr "Prvo razdoblje proračuna"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:66
 #: gnucash/report/reports/standard/budget.scm:112
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Previous budget period"
-msgstr "Zadnje razdoblje proračuna"
+msgstr "Prethodno razdoblje proračuna"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:67
 #: gnucash/report/reports/standard/budget.scm:113
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Current budget period"
-msgstr "Zadnje razdoblje proračuna"
+msgstr "Trenutačno razdoblje proračuna"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:68
 #: gnucash/report/reports/standard/budget.scm:114
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Next budget period"
-msgstr "Zadnje razdoblje proračuna"
+msgstr "Sljedeće razdoblje proračuna"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:69
 #: gnucash/report/reports/standard/budget.scm:115
@@ -25685,7 +25601,7 @@ msgstr "Izračunati kao tekući zbroj?"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:142
 msgid "Select which chart type to use."
-msgstr ""
+msgstr "Odaberi vrstu dijagrama."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:144
 #: gnucash/report/reports/standard/category-barchart.scm:156
@@ -26221,21 +26137,16 @@ msgid "Choose the column by which the result table is sorted."
 msgstr "Odaberi stupac, prema kojem se razvrstava rezultirajuća tablica."
 
 #: gnucash/report/reports/standard/customer-summary.scm:78
-#, fuzzy
-#| msgid ""
-#| "Choose the ordering of the column sort: Either ascending or descending."
 msgid "Choose the ordering of the column sort."
-msgstr "Odaberi redoslijed razvrstavanja u stupcu: uzlazno ili silazno."
+msgstr "Odaberi redoslijed razvrstavanja u stupcu."
 
 #: gnucash/report/reports/standard/customer-summary.scm:116
 msgid "Customer Name"
 msgstr "Ime kupca"
 
 #: gnucash/report/reports/standard/customer-summary.scm:118
-#, fuzzy
-#| msgid "Sort by markup (which is profit amount divided by sales)."
 msgid "Markup (which is profit amount divided by sales)"
-msgstr "Razvrstaj prema marži (to je iznos dobiti, podijeljen s prometom)."
+msgstr "Marža (to je iznos dobiti podijeljen s prometom)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:119
 #: gnucash/report/reports/standard/customer-summary.scm:300
@@ -26536,11 +26447,11 @@ msgstr "Prikaži stupce prometa pojedinačno, umjesto ukupno"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:108
 msgid "Individual purchases columns"
-msgstr "Pojedinačni stupci kupovine"
+msgstr "Pojedinačni stupci kupnja"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:109
 msgid "Display individual purchases columns rather than their sum"
-msgstr "Prikaži stupce kupovine pojedinačno, umjesto ukupno"
+msgstr "Prikaži stupce kupnja pojedinačno, umjesto ukupno"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:110
 msgid "Individual tax columns"
@@ -26557,7 +26468,7 @@ msgstr "Bruto saldo"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:113
 msgid "Display the gross balance (gross sales - gross purchases)"
-msgstr "Prikaži bruto saldo (bruto promet − bruto kupovina)"
+msgstr "Prikaži bruto saldo (bruto promet − bruto kupnja)"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:114
 #: gnucash/report/reports/standard/income-gst-statement.scm:360
@@ -26566,7 +26477,7 @@ msgstr "Neto saldo"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:115
 msgid "Display the net balance (sales without tax - purchases without tax)"
-msgstr "Prikaži neto saldo (promet bez PDV-a − kupovina bez PDV-a)"
+msgstr "Prikaži neto saldo (promet bez PDV-a − kupnja bez PDV-a)"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:117
 #: gnucash/report/reports/standard/income-gst-statement.scm:367
@@ -26575,11 +26486,11 @@ msgstr "Porezna dugovanja"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:118
 msgid "Display the tax payable (tax on sales - tax on purchases)"
-msgstr "Prikaži porezna dugovanja (PDV na promet − PDV na kupovinu)"
+msgstr "Prikaži porezna dugovanja (PDV na promet − PDV na kupnje)"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:137
 msgid "Purchases"
-msgstr "Kupnja"
+msgstr "Kupnje"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:146
 msgid "Tax Accounts"
@@ -26652,15 +26563,15 @@ msgstr "PDV na promet"
 #. GST/VAT on Purchase
 #: gnucash/report/reports/standard/income-gst-statement.scm:330
 msgid "Gross Purchases"
-msgstr "Bruto kupovina"
+msgstr "Bruto kupnja"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:338
 msgid "Net Purchases"
-msgstr "Neto kupovina"
+msgstr "Neto kupnja"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:346
 msgid "Tax on Purchases"
-msgstr "PDV na kupovinu"
+msgstr "PDV na kupnje"
 
 #: gnucash/report/reports/standard/income-statement.scm:94
 msgid "Label the trading accounts section"
@@ -27268,17 +27179,13 @@ msgstr "Izvor adrese."
 
 #: gnucash/report/reports/standard/new-aging.scm:404
 #: gnucash/report/reports/standard/receivables.scm:68
-#, fuzzy
-#| msgid "Billing Address"
 msgid "Billing address"
-msgstr "Adresa za račune"
+msgstr "Adresa za plaćanje"
 
 #: gnucash/report/reports/standard/new-aging.scm:405
 #: gnucash/report/reports/standard/receivables.scm:69
-#, fuzzy
-#| msgid "Shipping Address"
 msgid "Shipping address"
-msgstr "Isporuka, adresa"
+msgstr "Adresa za isporuku"
 
 #: gnucash/report/reports/standard/new-aging.scm:419
 msgid "Payable Aging"
@@ -27838,17 +27745,13 @@ msgstr "Prikazati iznos?"
 
 #: gnucash/report/reports/standard/register.scm:402
 #: gnucash/report/trep-engine.scm:992
-#, fuzzy
-#| msgid "Single Column Display."
 msgid "Single Column"
-msgstr "Prikaz u jednoj stupcu."
+msgstr "Jedan stupac"
 
 #: gnucash/report/reports/standard/register.scm:403
 #: gnucash/report/trep-engine.scm:993
-#, fuzzy
-#| msgid "Two Column Display."
 msgid "Two Columns"
-msgstr "Prikaz u dva stupca."
+msgstr "Dva stupca"
 
 #: gnucash/report/reports/standard/register.scm:408
 msgid "Display the value in transaction currency?"
@@ -28190,22 +28093,16 @@ msgid ""
 msgstr "Ovime će se uzorak za podešavajuće unose obraditi kao regularni izraz."
 
 #: gnucash/report/reports/standard/trial-balance.scm:203
-#, fuzzy
-#| msgid "General Journal Report"
 msgid "General journal exact balances"
-msgstr "Izvještaj o općem dnevniku"
+msgstr "Opći dnevnik točna slada"
 
 #: gnucash/report/reports/standard/trial-balance.scm:204
-#, fuzzy
-#| msgid "Ignores Adjusting/Closing entries"
 msgid "No adjusting/closing entries"
-msgstr "Zanemaruje podešavajuće/zaključne unose"
+msgstr "Bez podešavajućih/zaključnih unosa"
 
 #: gnucash/report/reports/standard/trial-balance.scm:205
-#, fuzzy
-#| msgid "Creates a complete end-of-period work sheet"
 msgid "Full end-of-period work sheet"
-msgstr "Stvori potpuni radni list za kraj razdoblja"
+msgstr "Potpun radni list za kraj razdoblja"
 
 #: gnucash/report/reports/standard/trial-balance.scm:273
 msgid "Adjusting Entries"
@@ -28833,10 +28730,8 @@ msgid "Register Order"
 msgstr "Redoslijed registra"
 
 #: gnucash/report/trep-engine.scm:339
-#, fuzzy
-#| msgid "Do not do any filtering."
 msgid "Do not do any filtering"
-msgstr "Nemoj ništa filtrirati."
+msgstr "Nemoj ništa filtrirati"
 
 #: gnucash/report/trep-engine.scm:342
 msgid "Include Transactions to/from Filter Accounts"
@@ -28855,10 +28750,8 @@ msgid "Void only"
 msgstr "Samo stornirane"
 
 #: gnucash/report/trep-engine.scm:359
-#, fuzzy
-#| msgid "Show both (and include void transactions in totals)."
 msgid "Both (and include void transactions in totals)"
-msgstr "Prikaži obje (i uključi stornirane transakcije u ukupne iznose)."
+msgstr "Obje (i uključi stornirane transakcije u ukupne iznose)"
 
 #: gnucash/report/trep-engine.scm:364
 msgid "Exclude closing transactions"
@@ -28893,10 +28786,8 @@ msgid "Use Global Preference"
 msgstr "Koristi globalne postavke"
 
 #: gnucash/report/trep-engine.scm:411
-#, fuzzy
-#| msgid "Don't change any displayed amounts."
 msgid "Don't change any displayed amounts"
-msgstr "Ne mijenjaj predznak prikazanih iznosa."
+msgstr "Ne mijenjaj prikazane iznose"
 
 #: gnucash/report/trep-engine.scm:414
 msgid "Income and Expense"
@@ -29109,23 +29000,19 @@ msgstr "Detaljiziranost prikaza transakcija."
 
 #: gnucash/report/trep-engine.scm:978
 msgid "One split per line"
-msgstr ""
+msgstr "Jedna stavka po retku"
 
 #: gnucash/report/trep-engine.scm:979
-#, fuzzy
-#| msgid "Get Transactions Online"
 msgid "One transaction per line"
-msgstr "Preuzmi transakcije preko interneta"
+msgstr "Jedna transakcija po retku"
 
 #: gnucash/report/trep-engine.scm:991
-#, fuzzy
-#| msgid "Hide:"
 msgid "Hide"
-msgstr "Sakrij:"
+msgstr "Sakrij"
 
 #: gnucash/report/trep-engine.scm:1002
 msgid "Enable hyperlinks in amounts."
-msgstr "Uključi hiperpoveznice za iznose."
+msgstr "Uključi poveznice za iznose."
 
 #: gnucash/report/trep-engine.scm:1007
 msgid "Reverse amount display for certain account types."
