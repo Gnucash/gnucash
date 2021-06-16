@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnucash-4.6-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-13 14:59-0700\n"
-"PO-Revision-Date: 2021-06-15 06:44+0100\n"
+"PO-Revision-Date: 2021-06-16 16:50+0100\n"
 "Last-Translator: Pedro Albuquerque <pmra@protonmail.com>\n"
 "Language-Team: Portuguese <translation-team-pt@lists.sourceforge.net>\n"
 "Language: pt\n"
@@ -23108,7 +23108,7 @@ msgstr "Nome do cliente"
 
 #: gnucash/report/reports/standard/customer-summary.scm:118
 msgid "Markup (which is profit amount divided by sales)"
-msgstr "Marcação (que é o lucro a dividir pelas vendas)."
+msgstr "Margem (que é o lucro a dividir pelas vendas)."
 
 #: gnucash/report/reports/standard/customer-summary.scm:119
 #: gnucash/report/reports/standard/customer-summary.scm:300
@@ -23127,7 +23127,7 @@ msgstr "Nenhum cliente válido."
 
 #: gnucash/report/reports/standard/customer-summary.scm:299
 msgid "Markup"
-msgstr "Marcação"
+msgstr "Margem"
 
 #: gnucash/report/reports/standard/customer-summary.scm:378
 msgid "No Customer"
