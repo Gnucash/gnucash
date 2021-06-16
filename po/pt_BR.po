@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-15 13:33+0000\n"
+"PO-Revision-Date: 2021-06-16 04:33+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -1459,6 +1459,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
+"O campo Nome da empresa não pode ser deixado em branco, insira o nome de uma "
+"empresa ou o nome de uma pessoa."
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -11367,12 +11369,16 @@ msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
 msgstr ""
+"Defina \"Revise as transações criadas\" como o padrão para o diálogo \"desde "
+"a última execução\"."
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
+"Esta configuração controla se, como padrão, \"revise as transações criadas\" "
+"é definida para o diálogo \"desde a última execução\"."
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
@@ -11778,13 +11784,15 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
-msgstr ""
+msgstr "Abre uma nova guia adjacente à aba atual em vez de abri-la no final"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:136
 msgid ""
 "If active, new tabs are opened adjacent to current tab. If inactive, the new "
 "tabs are opened instead at the end."
 msgstr ""
+"Se ativo, novas guias serão abertas adjacentes à guia atual. Se inativo, as "
+"novas guias serão abertas no final."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:940
@@ -17199,6 +17207,8 @@ msgid ""
 "A transaction whose date is within the threshold is likely to be a match. "
 "Default is 4 days."
 msgstr ""
+"Uma transação cuja data está dentro do limite é provável que tenha "
+"correspondência. O padrão são 4 dias."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2340
 msgid ""
@@ -18261,7 +18271,7 @@ msgstr "Desde a última execução..."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1554
 msgid "_Review created transactions"
-msgstr "_Revisar transações criadas"
+msgstr "_Revise as transações criadas"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:13
 msgid "Income Tax Information"
