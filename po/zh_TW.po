@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-16 04:33+0000\n"
+"PO-Revision-Date: 2021-06-17 14:32+0000\n"
 "Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hant/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -10746,30 +10746,20 @@ msgid "Likely matching transaction within these days"
 msgstr "可能會與下列日期的交易匹配"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:26
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
-msgstr "此欄位指定了一筆可能交易配對，要顯示在配對清單中的最低分數。"
+msgstr "此欄位定義了在列表中的交易比較有可能被配對到的日期區間的最大日數。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:30
-#, fuzzy
-#| msgid "Clear matching transactions above this score"
 msgid "UnLikely matching a transaction outside of these days"
-msgstr "將超過此配對分數的交易結清"
+msgstr "在這個日數範圍外「不太可能」有符合配對的交易"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:31
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the minimum number of days a transaction is unlikely to "
 "be a match in the list."
-msgstr "此欄位指定了一筆可能交易配對，要顯示在配對清單中的最低分數。"
+msgstr "此欄位定義了在列表中的交易比較不可能被配對到的日期區間的最小日數。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
@@ -16395,29 +16385,25 @@ msgstr "使用貝氏(bayesian)演算法進行新交易與現有科目的配對�
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2291
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "Likely match _day threshold"
-msgstr "配對顯示門檻(_D)"
+msgstr "較可能配對的天數閾值(_D)"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2304
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "_Unlikely match day threshold"
-msgstr "配對顯示門檻(_D)"
+msgstr "較「不可能」配對的日數閾值(_U)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2318
 msgid ""
 "A transaction whose date is within the threshold is likely to be a match. "
 "Default is 4 days."
-msgstr ""
+msgstr "在這個日數閾值內的交易比較「有可能」是符合的配對。預設值是 4 天。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2340
 msgid ""
 "A transaction whose date is outside the threshold is unlikely to be a match. "
 "Default is 14 days."
-msgstr ""
+msgstr "超過這個日數閾值外的交易比較「不可能」是符合的配對。預設值是 14 天。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2385
 msgid "<b>Checks</b>"
