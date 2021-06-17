@@ -34,7 +34,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-17 22:32+0000\n"
+"PO-Revision-Date: 2021-06-17 22:44+0000\n"
 "Last-Translator: Christoph Franzen <christoph@alte-pflasterei.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -24918,7 +24918,7 @@ msgstr "Aktiva"
 #: gnucash/report/reports/standard/net-charts.scm:417
 #: gnucash/report/report-utilities.scm:200
 msgid "Liabilities"
-msgstr "Verbindlichkeit"
+msgstr "Fremdkapital"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:73
 msgid "Show long names"
