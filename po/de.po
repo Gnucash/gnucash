@@ -22,6 +22,7 @@
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020.
 # Christian Stimming <christian@cstimming.de>, 2021.
 # Julian Heinzel <jeinzi@gmx.de>, 2021.
+# Christoph Franzen <christoph@alte-pflasterei.de>, 2021.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -33,8 +34,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-16 16:33+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"PO-Revision-Date: 2021-06-17 22:32+0000\n"
+"Last-Translator: Christoph Franzen <christoph@alte-pflasterei.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -42,7 +43,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -6244,14 +6245,14 @@ msgstr "Bevorstehende Buchungen"
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:871
-#, fuzzy, c-format
-#| msgid "Do you really want to delete this scheduled transaction?"
+#, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgstr[0] ""
 "Sind Sie sicher, dass Sie die ausgewählte Terminierte Buchung löschen wollen?"
 msgstr[1] ""
-"Sind Sie sicher, dass Sie die ausgewählte Terminierte Buchung löschen wollen?"
+"Sind Sie sicher, dass Sie die ausgewählten Terminierten Buchungen löschen "
+"wollen?"
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
@@ -27066,11 +27067,11 @@ msgid ""
 "g. Income:Sales -$1000, A/Receivable $1100, Liability:GST on Sales -$100."
 msgstr ""
 "Dieser Bericht unterstützt die Berechnung regelmäßiger geschäftlicher\n"
-"Steuerzahlungen und -erstattungen.  Wählen Sie unter\n"
+"Steuerzahlungen und -erstattungen. Wählen Sie unter\n"
 "»Berichtsoptionen« Ihre Geschäftskonten für Einnahmen und Ausgaben.\n"
 "Ihre Buchungen können zusätzlich zu den Teilbuchungen nach Konten für\n"
 "offene Forderungen oder Verbindlichkeiten und Bankkonten,\n"
-"Teilbuchungen nach Steuerkonten enthalten, z. Bsp. 'Erträge:Verkäufe\n"
+"Teilbuchungen nach Steuerkonten enthalten, z. Bsp.: 'Erträge:Verkäufe\n"
 "-1.000; Verbindlichkeiten:Steuer -190; Aktiva:Bank 1.190"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:56
