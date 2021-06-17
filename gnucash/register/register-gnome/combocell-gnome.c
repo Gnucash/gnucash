@@ -629,6 +629,7 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
         if (change == NULL || *cursor_position < _cell->value_chars)
         {
             gnc_basic_cell_set_value_internal (_cell, newval);
+            *start_selection = *end_selection = *cursor_position;
             return;
         }
         match_str = quickfill_match (box->qf, newval);
