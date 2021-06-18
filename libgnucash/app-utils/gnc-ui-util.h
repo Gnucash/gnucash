@@ -378,7 +378,6 @@ xaccParseAmountPosSign (const char * in_str, gboolean monetary, gnc_numeric *res
  * xaccParseAmountExtended is just like xaccParseAmount except the
  * caller must provide all the locale-specific information.
  *
- * Note: if group is NULL, no group-size verification will take place.
  * ignore_list is a list of characters that are completely ignored
  * while processing the input string.  If ignore_list is NULL, nothing
  * is ignored.
@@ -386,7 +385,7 @@ xaccParseAmountPosSign (const char * in_str, gboolean monetary, gnc_numeric *res
 gboolean
 xaccParseAmountExtended (const char * in_str, gboolean monetary,
                          gunichar negative_sign, gunichar decimal_point,
-                         gunichar group_separator, const char *group, const char *ignore_list,
+                         gunichar group_separator, const char *ignore_list,
                          gnc_numeric *result, char **endstr);
 
 /* Initialization ***************************************************/
