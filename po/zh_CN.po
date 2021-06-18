@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-17 15:52+0000\n"
+"PO-Revision-Date: 2021-06-18 07:33+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -12522,7 +12522,7 @@ msgstr "今天(_Y)"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:384
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:226
 msgid "_Latest"
-msgstr "最新(_L)"
+msgstr "最近(_L)"
 
 #. Filter By Dialog, Date Tab, End section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:580
@@ -14968,11 +14968,11 @@ msgstr "备注：只更改只读文档链接。"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:279
 msgid "Linked _File"
-msgstr "链接的文件(_F)"
+msgstr "关联的文件(_F)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:295
 msgid "Linked _Location"
-msgstr "关联位置(_L)"
+msgstr "关联的地址(_L)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:349
 msgid "(None)"
@@ -14996,7 +14996,7 @@ msgstr "刷新(_R)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:564
 msgid "_Locate Linked Documents"
-msgstr "定位链接的文件(_L)"
+msgstr "定位关联的文件(_L)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:604
 msgid "All Linked Documents"
@@ -15246,11 +15246,11 @@ msgstr "搜索账户列表"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
 msgid "Close _on Jump"
-msgstr "跳跃时关闭(_O)"
+msgstr "跳转时关闭(_O)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
 msgid "_Jump To"
-msgstr "跳转到(_J)"
+msgstr "跳转(_J)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
 msgid "All _accounts"
@@ -15325,7 +15325,7 @@ msgstr "过滤器可以应用于“会议字符串”和“映射客户名称”
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:335
 msgid "_Filter"
-msgstr "文件(_F)"
+msgstr "筛选(_F)"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:349
 msgid "_Expand All"
@@ -15600,10 +15600,12 @@ msgid "_New Lot"
 msgstr "新建批次(_N)"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:40
+#, fuzzy
 msgid "Scrub _Account"
 msgstr "检查和修复科目(_A)"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:55
+#, fuzzy
 msgid "_Scrub"
 msgstr "检查和修复(_S)"
 
@@ -16062,7 +16064,7 @@ msgstr "强制汇率显示小数(_R)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1240
 msgid "Display ne_gative amounts in red"
-msgstr "以红色显示负值(_G)"
+msgstr "负数标红(_G)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1246
 msgid "Display negative amounts in red."
@@ -16100,7 +16102,7 @@ msgstr "“文件”->“新文件”，进入新科目列表设置对话框。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1454
 msgid "Display \"_tip of the day\" dialog"
-msgstr "葵花宝典(_T)"
+msgstr "显示“每日提示”对话框(_T)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1460
 msgid "Display hints for using GnuCash at startup."
@@ -16124,7 +16126,7 @@ msgstr "<b>日志/备份(_R)</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1531
 msgid "Com_press files"
-msgstr "压缩(_P)"
+msgstr "压缩文件(_P)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1537
 msgid "Compress the data file with gzip when saving it to disk."
@@ -16140,7 +16142,7 @@ msgstr "<b>搜索框</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1598
 msgid "New search _limit"
-msgstr "新搜索限数(_L)"
+msgstr "搜索框数量限制(_L)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1613
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -16156,7 +16158,7 @@ msgstr "程序启动时显示欢迎界面。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1650
 msgid "Auto-save time _interval"
-msgstr "自动保存周期(_I)"
+msgstr "自动保存时间(_I)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1689
 msgid "minutes"
@@ -16164,7 +16166,7 @@ msgstr "分钟"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1705
 msgid "Show auto-save confirmation _question"
-msgstr "自动保存提醒(_Q)"
+msgstr "自动保存确认提醒(_Q)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1711
 msgid ""
@@ -16184,7 +16186,7 @@ msgstr "永久"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1808
 msgid "Time to _wait for answer"
-msgstr "等待答案（_W）"
+msgstr "等待回复时间(_W)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1845
 msgid "seconds"
@@ -16359,7 +16361,7 @@ msgstr "打印"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2507
 msgid "'_Enter' moves to blank transaction"
-msgstr "“回车”移至空白交易(_E)"
+msgstr "“回车”移至新建交易(_E)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2513
 msgid ""
@@ -16390,7 +16392,7 @@ msgstr "<b>对账</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2584
 msgid "Check cleared _transactions"
-msgstr "检查已结清交易(_T)"
+msgstr "检查已核实交易(_T)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2590
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
@@ -16432,7 +16434,7 @@ msgstr "交易界面默认使用黄/绿间隔色，若你想用系统颜色，�
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2679
 msgid "Double _mode colors alternate with transactions"
-msgstr "双行模式，颜色按交易区分(_M)"
+msgstr "交易以两种背景色交替显示(_M)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2685
 msgid ""
@@ -16489,13 +16491,14 @@ msgstr "<b>其它选项</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2836
 msgid "_Basic ledger"
-msgstr "基本分类科目(_B)"
+msgstr "基本模式(_B)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2855
 msgid "_Auto-split ledger"
-msgstr "自动拆分科目(_A)"
+msgstr "分录模式(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2896
+#, fuzzy
 msgid "Number of _transactions"
 msgstr "交易数量(_T)"
 
@@ -16541,12 +16544,12 @@ msgstr "自动补全字符数(_C)"
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3020
 msgid "Show the _entered and reconcile dates"
-msgstr "显示收益和费用科目(_E)"
+msgstr "显示输入和对账日期(_E)"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3036
 msgid "Show the calendar b_uttons"
-msgstr "显示名称列(_U)"
+msgstr "显示日历按钮(_U)"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3052
