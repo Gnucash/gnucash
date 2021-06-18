@@ -235,11 +235,13 @@ gboolean gnc_account_create_opening_balance (Account *account,
 /* Locale functions *************************************************/
 
 
-/* Returns the default currency of the current locale, or NULL if no
+/**
+ * Returns the default currency of the current locale, or NULL if no
  * sensible currency could be identified from the locale. */
 gnc_commodity * gnc_locale_default_currency_nodefault (void);
 
-/* Returns the default currency of the current locale. WATCH OUT: If
+/**
+ * Returns the default currency of the current locale. WATCH OUT: If
  * no currency could be identified from the locale, this one returns
  * "USD", but this will have nothing to do with the actual locale. */
 gnc_commodity * gnc_locale_default_currency (void);
@@ -288,18 +290,6 @@ gnc_commodity * gnc_default_report_currency (void);
 
 /* Amount printing and parsing **************************************/
 
-/*
- * The xaccPrintAmount() and xaccSPrintAmount() routines provide
- *    i18n'ed convenience routines for printing gnc_numerics.
- *    amounts. Both routines take a gnc_numeric argument and
- *    a printing information object.
- *
- * The xaccPrintAmount() routine returns a pointer to a statically
- *    allocated buffer, and is therefore not thread-safe.
- *
- * The xaccSPrintAmount() routine accepts a pointer to the buffer to be
- *    printed to.  It returns the length of the printed string.
- */
 
 typedef struct _GNCPrintAmountInfo
 {
@@ -340,14 +330,37 @@ GNCPrintAmountInfo gnc_integral_print_info (void);
 /* WARNING: Garbage in, garbage out.  You must check the validity of
    the supplied gnc_numeric.  If it's invalid, the returned string
    could point to ANYTHING. */
+/*
+ * The xaccPrintAmount() and xaccSPrintAmount() routines provide
+ *    i18n'ed convenience routines for printing gnc_numerics.
+ *    amounts. Both routines take a gnc_numeric argument and
+ *    a printing information object.
+ *
+ * The xaccPrintAmount() routine returns a pointer to a statically
+ *    allocated buffer, and is therefore not thread-safe.
+ *
+ * The xaccSPrintAmount() routine accepts a pointer to the buffer to be
+ *    printed to.  It returns the length of the printed string.
+ */
+/**
+ * Make a string representation of a gnc_numeric.  Warning, the
+ * gnc_numeric is not checked for validity and the returned char* may
+ * point to random garbage.
+ */
 const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
+/**
+ * Make a string representation of a gnc_numeric.  Warning, the
+ * gnc_numeric is not checked for validity and the contents of the
+ * buffer will be unchanged. It is up to the calling function to
+ * ensure that buf is large enough for the results.
+ */
 int xaccSPrintAmount (char *buf, gnc_numeric val, GNCPrintAmountInfo info);
 
 const gchar *printable_value(gdouble val, gint denom);
 gchar *number_to_words(gdouble val, gint64 denom);
 gchar *numeric_to_words(gnc_numeric val);
 
-/* xaccParseAmount parses in_str to obtain a numeric result. The
+/**  Parses in_str to obtain a numeric result. The
  *   routine will parse as much of in_str as it can to obtain a single
  *   number. The number is parsed using the current locale information
  *   and the 'monetary' flag. The routine will return TRUE if it
@@ -361,22 +374,22 @@ gchar *numeric_to_words(gnc_numeric val);
 gboolean xaccParseAmount (const char * in_str, gboolean monetary,
                           gnc_numeric *result, char **endstr);
 
-/*
- * xaccParseAmountPosSign is just like xaccParseAmount except the
- * caller can choose whether the locale's positive sign (or in absence
- * the '+') character is ignored. Setting skip to TRUE will cause
- * the function to ignore any positive sign. Setting it to FALSE,
- * and positive signs will be treated as unrecognized characters.
- * xaccParseAmount will run as if skip is FALSE for compatibility
- * reasons (gnc-expression-parser depends on this behaviour).
+/**
+ * Parses in_str to a gnc_numeric, with a flag to indicate whether the
+ * locale's positive sign (or in absence the '+') character is
+ * ignored. Setting skip to TRUE will cause the function to ignore any
+ * positive sign. Setting it to FALSE, and positive signs will be
+ * treated as unrecognized characters.  xaccParseAmount will run as if
+ * skip is FALSE for compatibility reasons (gnc-expression-parser
+ * depends on this behaviour).
  */
 gboolean
 xaccParseAmountPosSign (const char * in_str, gboolean monetary, gnc_numeric *result,
                         char **endstr, gboolean skip);
 
-/*
- * xaccParseAmountExtended is just like xaccParseAmount except the
- * caller must provide all the locale-specific information.
+/**
+ * Converts a string to a gnc_numeric. The caller must provide all the
+ * locale-specific information.
  *
  * ignore_list is a list of characters that are completely ignored
  * while processing the input string.  If ignore_list is NULL, nothing
