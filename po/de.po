@@ -29439,7 +29439,7 @@ msgstr "Buchungsfilter blendet passende Zeichenketten aus"
 
 #: gnucash/report/trep-engine.scm:118
 msgid "Transaction Filter is case insensitive"
-msgstr "Buchungsfilter beachtet Groß-/Kleinschreibung"
+msgstr "Buchungsfilter ignoriert Groß-/Kleinschreibung"
 
 #: gnucash/report/trep-engine.scm:119 gnucash/report/trep-engine.scm:194
 msgid "Reconciled Status"
