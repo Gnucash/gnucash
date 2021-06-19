@@ -1336,7 +1336,9 @@ commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
                                  "%s", dialog_msg);
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
+            g_signal_handlers_block_by_func (gsl, commodity_changed_cb, data);
             gnc_general_select_set_selected (gsl, xaccAccountGetCommodity (account));
+            g_signal_handlers_unblock_by_func (gsl, commodity_changed_cb, data);
             return;
         }
     }
