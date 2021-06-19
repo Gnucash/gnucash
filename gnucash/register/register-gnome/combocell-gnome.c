@@ -633,16 +633,22 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
             return;
         }
         match_str = quickfill_match (box->qf, newval);
+
+        if (match_str != NULL) // Do we have a quickfill match
+        {
+            *start_selection = newval_chars;
+            *end_selection = -1;
+            *cursor_position += change_chars;
+            box_str = match_str;
+
+            block_list_signals (cell); // Prevent recursion
+            gnc_item_list_select (box->item_list, match_str);
+            unblock_list_signals (cell);
+        }
     }
 
-    if (match_str != NULL)
-    {
-        *start_selection = newval_chars;
-        *end_selection = -1;
-        *cursor_position += change_chars;
-        box_str = match_str;
-    }
-    else if (cell->shared_store)
+    // Try using type-ahead
+    if (match_str == NULL && cell->shared_store)
     {
         // No start-of-name match, try type-ahead search, we match any substring of the full account name.
         GtkListStore *store = cell->shared_store;
@@ -650,23 +656,23 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
         *start_selection = newval_chars;
         *end_selection = -1;
         *cursor_position = newval_chars;
+
         // Do not change the string in the type-in box.
         box_str = newval;
     }
 
+    // No type-ahead / quickfill entry found
     if (match_str == NULL)
     {
+        block_list_signals (cell); // Prevent recursion
         if (cell->shared_store && gnc_item_list_using_temp (box->item_list))
         {
-            block_list_signals (cell); //Prevent recursion
             gnc_item_list_set_temp_store (box->item_list, NULL);
             gtk_list_store_clear (box->tmp_store);
-            unblock_list_signals (cell);
         }
-        gnc_basic_cell_set_value_internal (_cell, newval);
-        block_list_signals (cell);
         gnc_item_list_select (box->item_list, NULL);
         unblock_list_signals (cell);
+        gnc_basic_cell_set_value_internal (_cell, newval);
         *cursor_position = *start_selection = newval_chars;
         *end_selection = -1;
         return;
@@ -676,13 +682,6 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
     {
         gnc_item_edit_show_popup (box->item_edit);
         box->list_popped = TRUE;
-    }
-
-    if (!gnc_item_list_using_temp (box->item_list))
-    {
-        block_list_signals (cell);
-        gnc_item_list_select (box->item_list, match_str);
-        unblock_list_signals (cell);
     }
 
     gnc_basic_cell_set_value_internal (_cell, box_str);
