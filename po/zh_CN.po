@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-18 07:33+0000\n"
+"PO-Revision-Date: 2021-06-19 03:33+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -16380,7 +16380,7 @@ msgstr "输入时自动提升科目或动作列表。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2543
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
-msgstr "记忆填充时，Tab 包含转账字段(_C)"
+msgstr "自动补全时，Tab 切换包含转账字段(_C)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2549
 msgid "Move to Transfer field when memorised transaction auto filled."
@@ -16400,7 +16400,7 @@ msgstr "创建对账对话框时，预先检查已结清的交易。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2602
 msgid "Automatic credit card _payment"
-msgstr "信用卡智能还款(_P)"
+msgstr "信用卡自动还款(_P)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2608
 msgid ""
@@ -16553,11 +16553,13 @@ msgstr "显示日历按钮(_U)"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3052
+#, fuzzy
 msgid "_Move the selection to the blank split on expand"
-msgstr "在展开时将选区移至空白分割处(_M)"
+msgstr "展开时将选区移至空白分割处(_M)"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3068
+#, fuzzy
 msgid "_Show entered and reconciled dates on selection"
 msgstr "在选择上显示输入和调节的日期(_S)"
 
@@ -16763,6 +16765,7 @@ msgstr ""
 "留下日期之前的每个会计期间的最后价格 会计期间从会计期间的结束日期开始计算。"
 
 #: gnucash/gtkbuilder/dialog-price.glade:533
+#, fuzzy
 msgid "_Scaled"
 msgstr "规模(_S)"
 
@@ -16797,7 +16800,7 @@ msgstr "如果指定，价格包含在金融::报价中添加的价格。"
 
 #: gnucash/gtkbuilder/dialog-price.glade:681
 msgid "Include manually _Entered prices"
-msgstr "删除手动输入的价格(_E)"
+msgstr "包括人工录入的汇率(_E)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:685
 msgid "If activated, include manually entered prices."
@@ -16823,7 +16826,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:752
 msgid "Before _Date"
-msgstr "日期(_D)"
+msgstr "日期之前(_D)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:795
 #: gnucash/report/reports/standard/price-scatter.scm:82
@@ -16912,6 +16915,7 @@ msgid "Check _format"
 msgstr "检查格式(_F)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:401
+#, fuzzy
 msgid "Check po_sition"
 msgstr "检查位置(_S)"
 
@@ -16964,7 +16968,7 @@ msgstr "单位(_U)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:970
 msgid "_Translation"
-msgstr "交易事项(_T)"
+msgstr "交易(_T)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:985
 msgid "_Rotation"
@@ -17056,11 +17060,11 @@ msgstr "输入报表跨列/栏"
 
 #: gnucash/gtkbuilder/dialog-report.glade:550
 msgid "_Row span"
-msgstr "行间距(_R)"
+msgstr "行距(_R)"
 
 #: gnucash/gtkbuilder/dialog-report.glade:565
 msgid "_Column span"
-msgstr "列宽度(_C)"
+msgstr "列宽(_C)"
 
 #: gnucash/gtkbuilder/dialog-report.glade:594
 msgid "Select HTML Style Sheet"
@@ -17093,7 +17097,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:120
 msgid "_Unselect All"
-msgstr "全部不选(_U)"
+msgstr "取消全选(_U)"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:146
 msgid "No warnings to reset."
@@ -17214,7 +17218,7 @@ msgstr "<b>默认交易编辑器</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:545
 msgid "_Run when data file opened"
-msgstr "文件打开时运行(_R)"
+msgstr "打开文件时运行(_R)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:549
 msgid "Run the \"since last run\" process when a file is opened."
@@ -17248,7 +17252,7 @@ msgstr "在生效日前这么多天创建交易。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
 msgid "_Notify before transactions are created "
-msgstr "新交易创建前提醒(_N) "
+msgstr "新建交易前提醒(_N) "
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -17263,10 +17267,8 @@ msgid "R_emind in advance"
 msgstr "提前提醒(_E)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Set 'Re_view Created Transactions' as default"
-msgstr "核对已创建的交易事项(_R)"
+msgstr "默认核实已创建交易(_R)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
 msgid ""
@@ -17336,7 +17338,7 @@ msgstr "自上次运行后..."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1554
 msgid "_Review created transactions"
-msgstr "核对已创建的交易事项(_R)"
+msgstr "核实已创建交易(_R)"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:13
 msgid "Income Tax Information"
@@ -17437,7 +17439,7 @@ msgstr "<b>每日提示：</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:145
 msgid "_Show tips at startup"
-msgstr "启动时显示每日提示对话框(_S)"
+msgstr "启动时显示每日提示(_S)"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:8
 msgid "Transfer Funds"
@@ -17463,7 +17465,7 @@ msgstr "汇率"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:596
 msgid "_Fetch Rate"
-msgstr "取得汇率(_F)"
+msgstr "获取率(_F)"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:7
 msgid "Username and Password"
@@ -18143,7 +18145,7 @@ msgstr "编号(_N)"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:148
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:691
 msgid "_Transaction Number"
-msgstr "交易事项编号(_T)"
+msgstr "交易编号(_T)"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:163
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:721
@@ -18180,7 +18182,7 @@ msgstr "未对账(_U)"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:576
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:418
 msgid "C_leared"
-msgstr "已结清(_L)"
+msgstr "已核实(_L)"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:592
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:434
@@ -18276,7 +18278,7 @@ msgstr "按描述排序。"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:996
 msgid "_Action"
-msgstr "动作(_A)"
+msgstr "属性(_A)"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1000
 msgid "Sort by action field."
@@ -18390,8 +18392,9 @@ msgid "_Ending Balance"
 msgstr "期末余额(_E)"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:177
+#, fuzzy
 msgid "_Review cleared splits"
-msgstr "核对已创建的交易事项(_R)"
+msgstr "复查已核实分录(_R)"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:181
 msgid "Select this option to open a register tab with newly cleared splits."
@@ -18545,7 +18548,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 msgid "_Start AqBanking Wizard"
-msgstr "开始 AqBanking 向导(_S)"
+msgstr "启动 AqBanking 向导(_S)"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:121
 msgid "Start Online Banking Wizard"
