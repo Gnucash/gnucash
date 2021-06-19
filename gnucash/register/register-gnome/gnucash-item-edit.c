@@ -1082,6 +1082,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     // set the popup arrow direction up
     item_edit->popup_toggle.arrow_down = FALSE;
+    item_edit->show_popup = TRUE;
 
     if (item_edit->popup_set_focus)
         item_edit->popup_set_focus (item_edit->popup_item,
