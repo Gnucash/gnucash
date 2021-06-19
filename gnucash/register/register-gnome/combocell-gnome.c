@@ -678,9 +678,12 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
         box->list_popped = TRUE;
     }
 
-    block_list_signals (cell);
-    gnc_item_list_select (box->item_list, match_str);
-    unblock_list_signals (cell);
+    if (!gnc_item_list_using_temp (box->item_list))
+    {
+        block_list_signals (cell);
+        gnc_item_list_select (box->item_list, match_str);
+        unblock_list_signals (cell);
+    }
 
     gnc_basic_cell_set_value_internal (_cell, box_str);
     g_free (match_str);
