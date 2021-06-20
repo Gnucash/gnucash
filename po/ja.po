@@ -16,6 +16,7 @@
 # Yasuaki Taniguchi <yasuakit@gmail.com>, 2009-2017.
 # YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2018, 2020, 2021.
 # Takuro Onoue <kusanaginoturugi@gmail.com>, 2020, 2021.
+# TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.0\n"
@@ -23,7 +24,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
 "PO-Revision-Date: 2021-06-20 03:13+0000\n"
-"Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
+"Last-Translator: TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
 "Language: ja\n"
@@ -5988,6 +5989,7 @@ msgstr "ファイル %s はすでに存在します。本当に上書きして�
 #: gnucash/gnome/gnc-plugin-page-report.c:1731
 #: gnucash/gnome/gnc-plugin-page-report.c:1755 gnucash/gnucash-commands.cpp:224
 #: gnucash/gnucash-commands.cpp:252
+#, fuzzy
 msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
