@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-19 03:33+0000\n"
+"PO-Revision-Date: 2021-06-20 11:34+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -1936,7 +1936,7 @@ msgstr "入账日期"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
 #: gnucash/report/trep-engine.scm:234
 msgid "Number/Action"
-msgstr "编号/操作"
+msgstr "编号/属性"
 
 #: gnucash/gnome/dialog-find-transactions2.c:133
 #: gnucash/gnome/dialog-find-transactions2.c:170
@@ -1960,7 +1960,7 @@ msgstr "编号/操作"
 #: gnucash/report/reports/standard/invoice.scm:92
 #: gnucash/report/reports/standard/invoice.scm:209
 msgid "Action"
-msgstr "操作"
+msgstr "属性"
 
 #: gnucash/gnome/dialog-find-transactions2.c:136
 #: gnucash/gnome/dialog-find-transactions2.c:173
@@ -4379,7 +4379,7 @@ msgstr "删除当前的条目"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:194
 msgid "_Blank"
-msgstr "新行(_B)"
+msgstr "添加(_B)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:199
 msgid "Dup_licate Entry"
@@ -4523,11 +4523,11 @@ msgstr "打开关联的凭证(_O)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
 msgid "_Use as Default Layout for Customer Documents"
-msgstr "设为发票默认布局(_U)"
+msgstr "保存布局(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:311
 msgid "_Reset Default Layout for Customer Documents"
-msgstr "重置发票默认布局(_R)"
+msgstr "重置布局(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
 msgid "_Print Bill"
@@ -4559,23 +4559,23 @@ msgstr "付款(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:331
 msgid "_Use as Default Layout for Vendor Documents"
-msgstr "设为账单默认布局(_U)"
+msgstr "保存布局(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:332
 msgid "_Reset Default Layout for Vendor Documents"
-msgstr "重置账单默认布局(_R)"
+msgstr "重置布局(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:338
 msgid "_Print Voucher"
-msgstr "打印报销(_P)"
+msgstr "打印凭证(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:339
 msgid "_Edit Voucher"
-msgstr "编辑报销(_E)"
+msgstr "编辑凭证(_E)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:340
 msgid "_Duplicate Voucher"
-msgstr "报销副本(_D)"
+msgstr "凭证副本(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:341
 msgid "_Post Voucher"
@@ -4587,7 +4587,7 @@ msgstr "取消入账(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:343
 msgid "New _Voucher"
-msgstr "新增报销(_V)"
+msgstr "新建报销(_V)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:344
 msgid "_Pay Voucher"
@@ -4595,11 +4595,11 @@ msgstr "付款(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:352
 msgid "_Use as Default Layout for Employee Documents"
-msgstr "设为报销默认布局(_U)"
+msgstr "保存布局(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:353
 msgid "_Reset Default Layout for Employee Documents"
-msgstr "重置报销默认布局(_R)"
+msgstr "重置布局(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:359
 msgid "_Print Credit Note"
@@ -4903,7 +4903,7 @@ msgstr "新建一张发票"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:206
 msgid "New _Voucher..."
-msgstr "新增凭证(_V)..."
+msgstr "新建凭证(_V)..."
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:207
 msgid "Create a new voucher"
@@ -5215,12 +5215,12 @@ msgstr "只要达到一定的结清金额，就自动结清独立的交易事项
 #: gnucash/gnome/gnc-plugin-page-register2.c:377
 #: gnucash/gnome/gnc-plugin-page-register.c:495
 msgid "_Blank Transaction"
-msgstr "空白交易(_B)"
+msgstr "添加交易(_B)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:378
 #: gnucash/gnome/gnc-plugin-page-register.c:496
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr "移动到账簿底部的空白交易事项"
+msgstr "移至交易界面底部的新增位置"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:382
 #: gnucash/gnome/gnc-plugin-page-register.c:505
@@ -6388,7 +6388,7 @@ msgstr "执行贷款偿还等各种财务计算"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:33
 msgid "GnuCash Project"
-msgstr "GnuCash 首选项"
+msgstr "GnuCash 项目"
 
 #: gnucash/gnome/gnucash.desktop.in.in:7
 msgid "Finance Management"
@@ -8767,7 +8767,7 @@ msgstr "当前交易事项还未结算。"
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:287
 #: gnucash/register/ledger-core/split-register-control.c:138
 msgid "Balance it _manually"
-msgstr "人工平衡(_M)"
+msgstr "手动平衡(_M)"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:289
 #: gnucash/register/ledger-core/split-register-control.c:140
@@ -9066,7 +9066,7 @@ msgstr "直接借记"
 #: libgnucash/engine/Account.cpp:148 libgnucash/engine/Account.cpp:149
 #: libgnucash/engine/Account.cpp:150
 msgid "Buy"
-msgstr "购买"
+msgstr "采购"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2874
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2878
@@ -9089,7 +9089,7 @@ msgstr "购买"
 #: libgnucash/engine/Account.cpp:168 libgnucash/engine/Account.cpp:169
 #: libgnucash/engine/Account.cpp:170
 msgid "Sell"
-msgstr "出售"
+msgstr "销售"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2879
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2886
@@ -14321,7 +14321,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1480
 msgid "Auto _interest transfer"
-msgstr "自动利息转换(_I)"
+msgstr "自动生成利息(_I)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1496
 msgid "Ta_x related"
@@ -15532,6 +15532,7 @@ msgstr "打开文档链接"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:535
 #: gnucash/gtkbuilder/dialog-invoice.glade:1113
+#, fuzzy
 msgid "Default Chargeback Project"
 msgstr "默认退单方案"
 
@@ -21209,7 +21210,7 @@ msgstr "欢迎使用 GnuCash %s Shell"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
-msgstr "小时"
+msgstr "工时"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:251
 msgid "Project"
