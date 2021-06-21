@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-17 14:32+0000\n"
+"PO-Revision-Date: 2021-06-21 04:32+0000\n"
 "Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hant/>\n"
@@ -2594,7 +2594,7 @@ msgstr "只有作用中的？"
 #: gnucash/gtkbuilder/dialog-job.glade:204
 #: gnucash/register/ledger-core/split-register-model.c:369
 msgid "Rate"
-msgstr "比率"
+msgstr "費率"
 
 #: gnucash/gnome/dialog-job.c:587 gnucash/gnome-utils/gnc-tree-view-owner.c:357
 #: gnucash/gtkbuilder/dialog-job.glade:102
@@ -26614,7 +26614,7 @@ msgstr "數量"
 #: gnucash/report/reports/standard/taxinvoice.scm:112
 #: gnucash/report/reports/standard/taxinvoice.scm:181
 msgid "Discount Rate"
-msgstr "折扣比例"
+msgstr "折扣率"
 
 #: gnucash/report/reports/standard/receipt.scm:57
 #: gnucash/report/reports/standard/receipt.scm:125
