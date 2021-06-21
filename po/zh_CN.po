@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-20 11:34+0000\n"
+"PO-Revision-Date: 2021-06-21 09:31+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -4523,7 +4523,7 @@ msgstr "打开关联的凭证(_O)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:310
 msgid "_Use as Default Layout for Customer Documents"
-msgstr "保存布局(_U)"
+msgstr "记录布局(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:311
 msgid "_Reset Default Layout for Customer Documents"
@@ -4559,7 +4559,7 @@ msgstr "付款(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:331
 msgid "_Use as Default Layout for Vendor Documents"
-msgstr "保存布局(_U)"
+msgstr "记录布局(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:332
 msgid "_Reset Default Layout for Vendor Documents"
@@ -4595,7 +4595,7 @@ msgstr "付款(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:352
 msgid "_Use as Default Layout for Employee Documents"
-msgstr "保存布局(_U)"
+msgstr "记录布局(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:353
 msgid "_Reset Default Layout for Employee Documents"
@@ -15246,7 +15246,7 @@ msgstr "搜索账户列表"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
 msgid "Close _on Jump"
-msgstr "跳转时关闭(_O)"
+msgstr "跳转并关闭(_O)"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
 msgid "_Jump To"
@@ -15650,7 +15650,7 @@ msgstr "<b>自由分录(_F)</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:357
 msgid "<b>Splits _in lot</b>"
-msgstr "<b>批次分录(_I)</b>"
+msgstr "<b>集束分录(_I)</b>"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:25
 msgid "_No"
@@ -15927,7 +15927,7 @@ msgstr "会计期间"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:607
 msgid "Use _formal accounting labels"
-msgstr "会计标签(_F)"
+msgstr "正式标签(_F)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:613
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
@@ -16020,7 +16020,7 @@ msgstr "<b>时间格式</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1078
 msgid "U_se 24-hour clock"
-msgstr "使用24小时时钟(_S)"
+msgstr "24小时制(_S)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1084
 msgid "Use a 24 hour (instead of a 12 hour) time format."
@@ -16095,7 +16095,7 @@ msgstr "数值，日期，时间"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1417
 msgid "Perform account list _setup on new file"
-msgstr "新文件执行科目列表设置(_S)"
+msgstr "新文件设置科目列表(_S)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1423
 msgid "Present the new account list dialog when you choose File->New File."
@@ -16103,7 +16103,7 @@ msgstr "“文件”->“新文件”，进入新科目列表设置对话框。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1454
 msgid "Display \"_tip of the day\" dialog"
-msgstr "显示“每日提示”对话框(_T)"
+msgstr "打开“每日提示”(_T)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1460
 msgid "Display hints for using GnuCash at startup."
@@ -16143,7 +16143,7 @@ msgstr "<b>搜索框</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1598
 msgid "New search _limit"
-msgstr "搜索框数量限制(_L)"
+msgstr "新建搜索限数(_L)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1613
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -16167,7 +16167,7 @@ msgstr "分钟"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1705
 msgid "Show auto-save confirmation _question"
-msgstr "自动保存确认提醒(_Q)"
+msgstr "自动保存确认(_Q)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1711
 msgid ""
@@ -16295,7 +16295,7 @@ msgstr "匹配显示阈值(_D)"
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2251
 msgid "Use _bayesian matching"
-msgstr "使用贝叶斯(_Bayesian)匹配"
+msgstr "使用贝叶斯匹配(_B)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2257
 msgid ""
@@ -16362,7 +16362,7 @@ msgstr "打印"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2507
 msgid "'_Enter' moves to blank transaction"
-msgstr "“回车”移至新建交易(_E)"
+msgstr "“回车”添加交易(_E)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2513
 msgid ""
@@ -16425,7 +16425,7 @@ msgstr "<b>图形</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2661
 msgid "_Use GnuCash built-in color theme"
-msgstr "使用 GnuCash 内置的颜色主题(_U)"
+msgstr "GnuCash 内置颜色主题(_U)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2667
 msgid ""
@@ -16435,7 +16435,7 @@ msgstr "交易界面默认使用黄/绿间隔色，若你想用系统颜色，�
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2679
 msgid "Double _mode colors alternate with transactions"
-msgstr "交易以两种背景色交替显示(_M)"
+msgstr "两种颜色交替标示交易(_M)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2685
 msgid ""
@@ -16601,7 +16601,7 @@ msgstr "<b>窗口形状</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3383
 msgid "_Save window size and position"
-msgstr "保存大小和位置(_S)"
+msgstr "记录窗口布局(_S)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3389
 msgid "Save window size and location when it is closed."
@@ -17253,7 +17253,7 @@ msgstr "在生效日前这么多天创建交易。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
 msgid "_Notify before transactions are created "
-msgstr "新建交易前提醒(_N) "
+msgstr "创建交易前提醒(_N) "
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -19991,7 +19991,7 @@ msgstr "选择了无效的编码"
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1304
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1228
 msgid "Merge with column on _left"
-msgstr "与左侧的列合并(_L)"
+msgstr "与左侧列合并(_L)"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1308
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1232
