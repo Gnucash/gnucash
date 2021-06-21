@@ -214,6 +214,19 @@ gnc_item_edit_tb_new (GnucashSheet *sheet)
     return GTK_WIDGET(item_edit_tb);
 }
 
+static gboolean
+tb_button_press_cb (G_GNUC_UNUSED GtkWidget *widget, GdkEventButton *event,
+                    G_GNUC_UNUSED gpointer *user_data)
+{
+    /* Ignore double-clicks and triple-clicks */
+    if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    {
+        // block a right click
+        return TRUE;
+    }
+    return FALSE;
+}
+
 /*
  * Returns the coordinates for the editor bounding box
  */
@@ -883,14 +896,19 @@ gnc_item_edit_get_button_width (GncItemEdit *item_edit)
 static gboolean
 button_press_cb (GtkWidget *widget, GdkEventButton *event, gpointer *pointer)
 {
-    GnucashSheet *sheet = GNUCASH_SHEET(pointer);
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(pointer);
+    GnucashSheet *sheet = item_edit->sheet;
 
     /* Ignore double-clicks and triple-clicks */
     if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
     {
-        // This is a right click event so over ride entry menu and
-        // display main register popup menu.
-        g_signal_emit_by_name (sheet->reg, "show_popup_menu");
+        if (!item_edit->show_popup)
+        {
+            // This is a right click event so over ride entry menu and
+            // display main register popup menu if no item_edit popup
+            // is showing.
+            g_signal_emit_by_name (sheet->reg, "show_popup_menu");
+        }
         return TRUE;
     }
     return FALSE;
@@ -945,7 +963,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
     // This call back intercepts the mouse button event so the main
     // register popup menu can be displayed instead of the entry one.
     g_signal_connect (item_edit->editor, "button-press-event",
-                      G_CALLBACK(button_press_cb), sheet);
+                      G_CALLBACK(button_press_cb), item_edit);
 
     /* Create the popup button
        It will only be displayed when the cell being edited provides
@@ -959,6 +977,11 @@ gnc_item_edit_new (GnucashSheet *sheet)
     g_object_ref (item_edit->popup_toggle.ebox);
     gtk_container_add (GTK_CONTAINER(item_edit->popup_toggle.ebox),
                        item_edit->popup_toggle.tbutton);
+
+    // This call back intercepts the right mouse button event to stop the
+    // gnucash_sheet_button_press_event from running.
+    g_signal_connect (item_edit->popup_toggle.ebox, "button-press-event",
+                      G_CALLBACK(tb_button_press_cb), NULL);
 
     gtk_box_pack_start (GTK_BOX(item_edit), item_edit->popup_toggle.ebox, FALSE, FALSE, 0);
     gtk_widget_show_all (GTK_WIDGET(item_edit));
