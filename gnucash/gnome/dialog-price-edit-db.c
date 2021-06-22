@@ -522,6 +522,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
     }
     gnc_gui_refresh_all ();
     gtk_widget_destroy (pdb_dialog->remove_dialog);
+    g_object_unref (G_OBJECT (builder));
     LEAVE(" ");
 }
 

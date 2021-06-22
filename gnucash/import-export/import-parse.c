@@ -252,10 +252,10 @@ gnc_import_parse_numeric(const char* str, GncImportFormat fmt, gnc_numeric *val)
     switch (fmt)
     {
     case GNCIF_NUM_PERIOD:
-        return xaccParseAmountExtended(str, TRUE, '-', '.', ',', NULL, "$+",
+        return xaccParseAmountExtended(str, TRUE, '-', '.', ',', "$+",
                                        val, NULL);
     case GNCIF_NUM_COMMA:
-        return xaccParseAmountExtended(str, TRUE, '-', ',', '.', NULL, "$+",
+        return xaccParseAmountExtended(str, TRUE, '-', ',', '.', "$+",
                                        val, NULL);
     default:
         PERR("invalid format: %d", fmt);

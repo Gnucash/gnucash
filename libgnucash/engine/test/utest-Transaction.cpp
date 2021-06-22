@@ -1763,8 +1763,14 @@ test_xaccTransOrder_num_action (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (xaccTransOrder_num_action (txnA, NULL, txnB, NULL), ==, -1);
     txnB->num = static_cast<char*>(CACHE_INSERT ("101"));
     g_assert_cmpint (xaccTransOrder_num_action (txnA, NULL, txnB, NULL), ==, 1);
-    txnB->num = static_cast<char*>(CACHE_INSERT ("one-oh-one"));
+    txnA->num = static_cast<char*>(CACHE_INSERT ("12a"));
+    g_assert_cmpint (xaccTransOrder_num_action (txnA, NULL, txnB, NULL), ==, -1);
+    txnB->num = static_cast<char*>(CACHE_INSERT ("12c"));
+    g_assert_cmpint (xaccTransOrder_num_action (txnA, NULL, txnB, NULL), ==, -1);
+    txnB->num = static_cast<char*>(CACHE_INSERT ("12"));
     g_assert_cmpint (xaccTransOrder_num_action (txnA, NULL, txnB, NULL), ==, 1);
+    txnB->num = static_cast<char*>(CACHE_INSERT ("one-oh-one"));
+    g_assert_cmpint (xaccTransOrder_num_action (txnA, NULL, txnB, NULL), ==, -1);
     g_assert_cmpint (xaccTransOrder_num_action (txnA, "24", txnB, "42"), ==, -1);
     txnB->date_posted -= 1;
     g_assert_cmpint (xaccTransOrder_num_action (txnA, "24", txnB, "42"), ==, 1);

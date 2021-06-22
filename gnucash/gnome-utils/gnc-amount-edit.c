@@ -1,41 +1,34 @@
-/*
- * gnc-amount-edit.c -- Amount editor widget
- *
- * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>
- * All rights reserved.
- *
- * Gnucash is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Library General Public License as
- * published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- *
- * Gnucash is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, contact:
- *
- * Free Software Foundation           Voice:  +1-617-542-5942
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
- * Boston, MA  02110-1301,  USA       gnu@gnu.org
- *
- */
+/********************************************************************\
+ * gnc-amount-edit.h -- amount editor widget                        *
+ *                                                                  *
+ * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+\********************************************************************/
 /*
   @NOTATION@
- */
-
-/*
- * Amount editor widget
- *
- * Authors: Dave Peticolas <dave@krondo.com>
  */
 
 #include <config.h>
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include <glib/gi18n.h>
 
 #include "gnc-amount-edit.h"
 #include "gnc-exp-parser.h"
@@ -43,6 +36,7 @@
 #include "gnc-ui-util.h"
 #include "qof.h"
 #include "dialog-utils.h"
+#include "gnc-ui.h"
 
 #ifdef G_OS_WIN32
 # include <gdk/gdkwin32.h>
@@ -51,115 +45,216 @@
 /* Signal codes */
 enum
 {
+    ACTIVATE,
+    CHANGED,
     AMOUNT_CHANGED,
     LAST_SIGNAL
 };
 
-
 static guint amount_edit_signals [LAST_SIGNAL] = { 0 };
 
+static void gnc_amount_edit_init (GNCAmountEdit *gae);
+static void gnc_amount_edit_class_init (GNCAmountEditClass *klass);
+static void gnc_amount_edit_changed (GtkEditable *gae,
+                                     gpointer user_data);
+static void gnc_amount_edit_paste_clipboard (GtkEntry *entry,
+                                             gpointer user_data);
+static gint gnc_amount_edit_key_press (GtkWidget   *widget,
+                                       GdkEventKey *event,
+                                       gpointer user_data);
 
-static void gnc_amount_edit_init         (GNCAmountEdit      *gae);
-static void gnc_amount_edit_class_init   (GNCAmountEditClass *klass);
-static void gnc_amount_edit_changed      (GtkEditable        *gae, gpointer data);
-static gint gnc_amount_edit_key_press    (GtkWidget          *widget,
-        GdkEventKey        *event);
+#define GNC_AMOUNT_EDIT_PATH "gnc-amount-edit-path"
 
+G_DEFINE_TYPE (GNCAmountEdit, gnc_amount_edit, GTK_TYPE_BOX)
 
-static GtkEntryClass *parent_class;
-
-/**
- * gnc_amount_edit_get_type:
- *
- * Returns the GType for the GNCAmountEdit widget
- */
-GType
-gnc_amount_edit_get_type (void)
+static void
+gnc_amount_edit_finalize (GObject *object)
 {
-    static GType amount_edit_type = 0;
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(object));
 
-    if (amount_edit_type == 0)
-    {
-        GTypeInfo amount_edit_info =
-        {
-            sizeof (GNCAmountEditClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_amount_edit_class_init,
-            NULL,
-            NULL,
-            sizeof (GNCAmountEdit),
-            0,
-            (GInstanceInitFunc) gnc_amount_edit_init
-        };
+    G_OBJECT_CLASS (gnc_amount_edit_parent_class)->finalize (object);
+}
 
-        amount_edit_type = g_type_register_static (GTK_TYPE_ENTRY,
-                           "GNCAmountEdit",
-                           &amount_edit_info,
-                           0);
-    }
+static void
+gnc_amount_edit_dispose (GObject *object)
+{
+    GNCAmountEdit *gae;
 
-    return amount_edit_type;
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(object));
+
+    gae = GNC_AMOUNT_EDIT(object);
+
+    if (gae->disposed)
+        return;
+
+    gae->disposed = TRUE;
+
+    gtk_widget_destroy (GTK_WIDGET(gae->entry));
+    gae->entry = NULL;
+
+    gtk_widget_destroy (GTK_WIDGET(gae->image));
+    gae->image = NULL;
+
+    G_OBJECT_CLASS (gnc_amount_edit_parent_class)->dispose (object);
 }
 
 static void
 gnc_amount_edit_class_init (GNCAmountEditClass *klass)
 {
-    GObjectClass *object_class;
-    GtkWidgetClass *widget_class;
-    /* GtkEditableClass *editable_class; */
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
-    object_class = G_OBJECT_CLASS (klass);
-    widget_class = GTK_WIDGET_CLASS (klass);
-    /* editable_class = GTK_EDITABLE_CLASS (g_type_interface_peek (klass, GTK_TYPE_EDITABLE)); */
+    object_class->dispose = gnc_amount_edit_dispose;
+    object_class->finalize = gnc_amount_edit_finalize;
 
-    parent_class = g_type_class_peek_parent (klass);
-
-    amount_edit_signals [AMOUNT_CHANGED] =
-        g_signal_new ("amount_changed",
-                      G_OBJECT_CLASS_TYPE (object_class),
+    amount_edit_signals [ACTIVATE] =
+        g_signal_new ("activate",
+                      G_OBJECT_CLASS_TYPE(object_class),
                       G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET (GNCAmountEditClass, amount_changed),
+                      G_STRUCT_OFFSET(GNCAmountEditClass, activate),
                       NULL,
                       NULL,
                       g_cclosure_marshal_VOID__VOID,
                       G_TYPE_NONE,
                       0);
 
-    widget_class->key_press_event = gnc_amount_edit_key_press;
+    amount_edit_signals [CHANGED] =
+        g_signal_new ("changed",
+                      G_OBJECT_CLASS_TYPE(object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET(GNCAmountEditClass, changed),
+                      NULL,
+                      NULL,
+                      g_cclosure_marshal_VOID__VOID,
+                      G_TYPE_NONE,
+                      0);
 
-    /* editable_class->changed = gnc_amount_edit_changed; */
+    amount_edit_signals [AMOUNT_CHANGED] =
+        g_signal_new ("amount_changed",
+                      G_OBJECT_CLASS_TYPE(object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET(GNCAmountEditClass, amount_changed),
+                      NULL,
+                      NULL,
+                      g_cclosure_marshal_VOID__VOID,
+                      G_TYPE_NONE,
+                      0);
 }
 
 static void
 gnc_amount_edit_init (GNCAmountEdit *gae)
 {
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gae),
+                                    GTK_ORIENTATION_HORIZONTAL);
+
+    gae->entry = GTK_ENTRY(gtk_entry_new());
     gae->need_to_parse = FALSE;
     gae->amount = gnc_numeric_zero ();
     gae->print_info = gnc_default_print_info (FALSE);
     gae->fraction = 0;
     gae->evaluate_on_enter = FALSE;
+    gae->validate_on_change = FALSE;
+    gae->block_changed = FALSE;
+    gae->show_warning_symbol = TRUE;
+    gae->disposed = FALSE;
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(gae), "gnc-id-amount-edit");
 
-    g_signal_connect (G_OBJECT (gae), "changed",
-                      G_CALLBACK (gnc_amount_edit_changed), NULL);
+    g_signal_connect (G_OBJECT(gae->entry), "key-press-event",
+                      G_CALLBACK(gnc_amount_edit_key_press), gae);
+
+    g_signal_connect (G_OBJECT(gae->entry), "changed",
+                      G_CALLBACK(gnc_amount_edit_changed), gae);
+
+    g_signal_connect (G_OBJECT(gae->entry), "paste-clipboard",
+                      G_CALLBACK(gnc_amount_edit_paste_clipboard), gae);
 }
 
 static void
-gnc_amount_edit_changed (GtkEditable *editable, gpointer data)
+gnc_amount_edit_changed (GtkEditable *editable, gpointer user_data)
 {
-    /*GTK_EDITABLE_CLASS (parent_class)->changed(editable);*/
+    GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
 
-    GNC_AMOUNT_EDIT(editable)->need_to_parse = TRUE;
+    gae->need_to_parse = TRUE;
+
+    if (gae->block_changed)
+        return;
+
+    if (gae->validate_on_change)
+    {
+        gnc_numeric amount;
+        gnc_amount_edit_expr_is_valid (gae, &amount, TRUE, NULL);
+    }
+    g_signal_emit (gae, amount_edit_signals [CHANGED], 0);
+}
+
+static void
+gnc_amount_edit_paste_clipboard (GtkEntry *entry, gpointer user_data)
+{
+    GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
+    GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(entry),
+                                                        GDK_SELECTION_CLIPBOARD);
+    gchar *text = gtk_clipboard_wait_for_text (clipboard);
+    gchar *filtered_text;
+    gint start_pos, end_pos;
+    gint position;
+
+    if (!text)
+        return;
+
+    if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
+    {
+        gtk_widget_hide (GTK_WIDGET(gae->image));
+        gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
+    }
+
+    filtered_text = gnc_filter_text_for_control_chars (text);
+
+    if (!filtered_text)
+    {
+        g_free (text);
+        return;
+    }
+
+    position = gtk_editable_get_position (GTK_EDITABLE(entry));
+
+    if (gtk_editable_get_selection_bounds (GTK_EDITABLE(entry),
+                                           &start_pos, &end_pos))
+    {
+        position = start_pos;
+
+        gae->block_changed = TRUE;
+        gtk_editable_delete_selection (GTK_EDITABLE(entry));
+        gae->block_changed = FALSE;
+        gtk_editable_insert_text (GTK_EDITABLE(entry),
+                                  filtered_text, -1, &position);
+    }
+    else
+        gtk_editable_insert_text (GTK_EDITABLE(entry),
+                                  filtered_text, -1, &position);
+
+    gtk_editable_set_position (GTK_EDITABLE(entry), position);
+
+    g_signal_stop_emission_by_name (G_OBJECT(entry), "paste-clipboard");
+
+    g_free (text);
+    g_free (filtered_text);
 }
 
 static gint
-gnc_amount_edit_key_press(GtkWidget *widget, GdkEventKey *event)
+gnc_amount_edit_key_press (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-    GNCAmountEdit *gae = GNC_AMOUNT_EDIT(widget);
+    GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
     gint result;
+
+    if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
+    {
+        gtk_widget_hide (GTK_WIDGET(gae->image));
+        gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
+    }
 
 #ifdef G_OS_WIN32
     /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
@@ -176,78 +271,124 @@ gnc_amount_edit_key_press(GtkWidget *widget, GdkEventKey *event)
         }
     }
 
-    result = (* GTK_WIDGET_CLASS (parent_class)->key_press_event)(widget, event);
+    result = (* GTK_WIDGET_GET_CLASS(widget)->key_press_event)(widget, event);
 
     switch (event->keyval)
     {
     case GDK_KEY_Return:
         if (gae->evaluate_on_enter)
             break;
+        else
+            g_signal_emit (gae, amount_edit_signals [ACTIVATE], 0);
         if (event->state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
             break;
         return result;
     case GDK_KEY_KP_Enter:
+        if (!gae->evaluate_on_enter)
+            g_signal_emit (gae, amount_edit_signals [ACTIVATE], 0);
         break;
     default:
         return result;
     }
 
-    gnc_amount_edit_evaluate (gae);
+    gnc_amount_edit_evaluate (gae, NULL);
+    g_signal_emit (gae, amount_edit_signals [ACTIVATE], 0);
 
     return TRUE;
 }
 
-/**
- * gnc_amount_edit_new:
- *
- * Creates a new GNCAmountEdit widget which can be used to provide
- * an easy to use way for entering amounts, allowing the user to
- * enter and evaluate expressions.
- *
- * Returns a GNCAmountEdit widget.
- */
 GtkWidget *
 gnc_amount_edit_new (void)
 {
-    GNCAmountEdit *gae;
+    GNCAmountEdit *gae = g_object_new (GNC_TYPE_AMOUNT_EDIT, NULL);
 
-    gae = g_object_new (GNC_TYPE_AMOUNT_EDIT, NULL);
-    gtk_widget_show (GTK_WIDGET(gae));
+    gtk_box_pack_start (GTK_BOX(gae), GTK_WIDGET(gae->entry), TRUE, TRUE, 0);
+    gtk_entry_set_width_chars (GTK_ENTRY(gae->entry), 12);
+    gae->image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
+    gtk_box_pack_start (GTK_BOX(gae), GTK_WIDGET(gae->image), FALSE, FALSE, 6);
+    gtk_widget_set_no_show_all (GTK_WIDGET(gae->image), TRUE);
+    gtk_widget_hide (GTK_WIDGET(gae->image));
+    gtk_widget_show_all (GTK_WIDGET(gae));
 
-    return GTK_WIDGET (gae);
+    return GTK_WIDGET(gae);
 }
 
-/**
- * gnc_amount_edit_expr_is_valid
- * @gae: The GNCAmountEdit widget
- * @amount: parameter to hold the value of the parsed expression
- * @empty_ok: if true, an empty field is skipped, otherwise an empty field
- *            parses as 0
- *
- * If needed, parse the expression in the amount entry. If there's no
- * parsing error, it returns the amount, otherwise it returns the
- * position in the expression where the error occurred.
- *
- * Return *  0 if the parsing was successful (note that if !empty_ok,
- *             an empty field will parse to 0)
- *        * -1 if the field is empty and that's ok (empty_ok)
- *        * error position if there was a parsing error
- */
+static gint
+get_original_error_position (const gchar *string, const gchar *symbol,
+                             gint error_pos)
+{
+    gint original_error_pos = error_pos;
+    gint text_len;
+    gint symbol_len;
+
+    if (error_pos == 0)
+        return 0;
+
+    if (!string || !symbol)
+        return error_pos;
+
+    if (g_strrstr (string, symbol) == NULL)
+        return error_pos;
+
+    if (!g_utf8_validate (string, -1, NULL))
+        return error_pos;
+
+    text_len = g_utf8_strlen (string, -1);
+    symbol_len = g_utf8_strlen (symbol, -1);
+
+    for (gint x = 0; x < text_len; x++)
+    {
+        gchar *temp = g_utf8_offset_to_pointer (string, x);
+
+        if (g_str_has_prefix (temp, symbol))
+            original_error_pos = original_error_pos + symbol_len;
+
+        if (x >= original_error_pos)
+            break;
+
+        if (g_strrstr (temp, symbol) == NULL)
+            break;
+    }
+    return original_error_pos;
+}
+
+static inline GQuark
+exp_validate_quark (void)
+{
+    return g_quark_from_static_string ("exp_validate");
+}
+
 gint
 gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
-                               gboolean empty_ok)
+                               gboolean empty_ok, GError **error)
 {
     const char *string;
     char *error_loc;
     gboolean ok;
+    gchar *err_msg = NULL;
+    gint err_code;
+    const gnc_commodity *comm;
+    char *filtered_string;
+    const gchar *symbol = NULL;
 
-    g_return_val_if_fail(gae != NULL, -1);
-    g_return_val_if_fail(GNC_IS_AMOUNT_EDIT(gae), -1);
+    g_return_val_if_fail (gae != NULL, -1);
+    g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), -1);
 
-    string = gtk_entry_get_text(GTK_ENTRY(gae));
-    if (!string || *string == '\0')
+    string = gtk_entry_get_text (GTK_ENTRY(gae->entry));
+
+    if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
     {
-        *amount = gnc_numeric_zero();
+        gtk_widget_hide (GTK_WIDGET(gae->image));
+        gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
+    }
+
+    comm = gae->print_info.commodity;
+
+    filtered_string = gnc_filter_text_for_currency_commodity (comm, string, &symbol);
+
+    if (!filtered_string || *filtered_string == '\0')
+    {
+        *amount = gnc_numeric_zero ();
         if (empty_ok)
             return -1; /* indicate an empty field */
         else
@@ -255,44 +396,59 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
     }
 
     error_loc = NULL;
-    ok = gnc_exp_parser_parse (string, amount, &error_loc);
+    ok = gnc_exp_parser_parse (filtered_string, amount, &error_loc);
 
     if (ok)
+    {
+        g_free (filtered_string);
         return 0;
+    }
 
     /* Not ok */
     if (error_loc != NULL)
-        return  error_loc - string;
+    {
+        err_code = get_original_error_position (string, symbol,
+                                               (error_loc - filtered_string));
+
+        err_msg = g_strdup_printf (_("An error occurred while processing '%s' at position %d"),
+                                   string, err_code);
+    }
     else
-        return 1;
+    {
+        err_code = 1000;
+        err_msg = g_strdup_printf (_("An error occurred while processing '%s'"),
+                                   string);
+    }
+
+    if (error)
+        g_set_error_literal (error, exp_validate_quark(), err_code, err_msg);
+
+    if (gae->show_warning_symbol)
+    {
+        gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), err_msg);
+        gtk_widget_show (GTK_WIDGET(gae->image));
+        gtk_widget_queue_resize (GTK_WIDGET(gae->entry));
+    }
+
+    g_free (filtered_string);
+    g_free (err_msg);
+    return 1;
 }
 
-
-/**
- * gnc_amount_edit_evaluate
- * @gae: The GNCAmountEdit widget
- *
- * If needed, parse the expression in the amount entry
- * and replace the expression with the result of evaluation.
- * If there is a parsing error, don't change the expression entry,
- * but do put the cursor at the point of the error.
- *
- * Return TRUE if parsing was successful or there was no need to parse.
- */
 gboolean
-gnc_amount_edit_evaluate (GNCAmountEdit *gae)
+gnc_amount_edit_evaluate (GNCAmountEdit *gae, GError **error)
 {
     gint result;
     gnc_numeric amount;
+    GError *tmp_error = NULL;
 
-    g_return_val_if_fail(gae != NULL, FALSE);
-    g_return_val_if_fail(GNC_IS_AMOUNT_EDIT(gae), FALSE);
-
+    g_return_val_if_fail (gae != NULL, FALSE);
+    g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), FALSE);
 
     if (!gae->need_to_parse)
         return TRUE;
 
-    result = gnc_amount_edit_expr_is_valid (gae, &amount, FALSE);
+    result = gnc_amount_edit_expr_is_valid (gae, &amount, FALSE, &tmp_error);
 
     if (result == -1)  /* field was empty and may remain so */
         return TRUE;
@@ -309,94 +465,77 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
         if (!gnc_numeric_equal (amount, old_amount))
             g_signal_emit (gae, amount_edit_signals [AMOUNT_CHANGED], 0);
 
+        gtk_editable_set_position (GTK_EDITABLE(gae->entry), -1);
         return TRUE;
     }
 
     /* Parse error */
-    gtk_editable_set_position (GTK_EDITABLE(gae), result);
+    if (tmp_error)
+    {
+        if (tmp_error->code < 1000)
+            gtk_editable_set_position (GTK_EDITABLE(gae->entry), tmp_error->code);
+
+        if (error)
+            g_propagate_error (error, tmp_error);
+        else
+            g_error_free (tmp_error);
+    }
     return FALSE;
 }
 
-
-/**
- * gnc_amount_edit_get_amount:
- * @gae: The GNCAmountEdit widget
- *
- * Returns the amount entered in the GNCAmountEdit widget,
- * parsing the expression if necessary. The result of parsing
- * replaces the expression.
- */
 gnc_numeric
 gnc_amount_edit_get_amount (GNCAmountEdit *gae)
 {
-    g_return_val_if_fail(gae != NULL, gnc_numeric_zero ());
-    g_return_val_if_fail(GNC_IS_AMOUNT_EDIT(gae), gnc_numeric_zero ());
+    g_return_val_if_fail (gae != NULL, gnc_numeric_zero ());
+    g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), gnc_numeric_zero ());
 
-    gnc_amount_edit_evaluate (gae);
+    gnc_amount_edit_evaluate (gae, NULL);
 
     return gae->amount;
 }
 
-
-/**
- * gnc_amount_edit_get_amount:
- * @gae: The GNCAmountEdit widget
- *
- * Returns the amount entered in the GNCAmountEdit widget,
- * parsing the expression if necessary. The result of parsing
- * replaces the expression.
- */
 double
 gnc_amount_edit_get_damount (GNCAmountEdit *gae)
 {
-    g_return_val_if_fail(gae != NULL, 0.0);
-    g_return_val_if_fail(GNC_IS_AMOUNT_EDIT(gae), 0.0);
+    g_return_val_if_fail (gae != NULL, 0.0);
+    g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), 0.0);
 
-    gnc_amount_edit_evaluate (gae);
+    gnc_amount_edit_evaluate (gae, NULL);
 
     return gnc_numeric_to_double (gae->amount);
 }
 
-
-/**
- * gnc_amount_edit_set_amount:
- * @gae: The GNCAmountEdit widget
- * @amount: The amount to set
- *
- * Returns nothing.
- */
 void
 gnc_amount_edit_set_amount (GNCAmountEdit *gae, gnc_numeric amount)
 {
     const char * amount_string;
 
-    g_return_if_fail(gae != NULL);
-    g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
-    g_return_if_fail(!gnc_numeric_check (amount));
+    g_return_if_fail (gae != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
+    g_return_if_fail (!gnc_numeric_check (amount));
+
+    if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
+    {
+        gtk_widget_hide (GTK_WIDGET(gae->image));
+        gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
+    }
 
     /* Update the display. */
     amount_string = xaccPrintAmount (amount, gae->print_info);
-    gtk_entry_set_text (GTK_ENTRY(gae), amount_string);
+    gtk_entry_set_text (GTK_ENTRY(gae->entry), amount_string);
 
     gae->amount = amount;
     gae->need_to_parse = FALSE;
 }
 
-/**
- * gnc_amount_edit_set_amount:
- * @gae: The GNCAmountEdit widget
- * @amount: The amount to set
- *
- * Returns nothing.
- */
 void
 gnc_amount_edit_set_damount (GNCAmountEdit *gae, double damount)
 {
     gnc_numeric amount;
     int fraction;
 
-    g_return_if_fail(gae != NULL);
-    g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
+    g_return_if_fail (gae != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
 
     if (gae->fraction > 0)
         fraction = gae->fraction;
@@ -408,73 +547,75 @@ gnc_amount_edit_set_damount (GNCAmountEdit *gae, double damount)
     gnc_amount_edit_set_amount (gae, amount);
 }
 
-/**
- * gnc_amount_edit_set_print_flags:
- * @gae: The GNCAmountEdit widget
- * @print_flags: The print flags to set
- *
- * Returns nothing.
- */
 void
 gnc_amount_edit_set_print_info (GNCAmountEdit *gae,
                                 GNCPrintAmountInfo print_info)
 {
-    g_return_if_fail(gae != NULL);
-    g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
+    g_return_if_fail (gae != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
 
     gae->print_info = print_info;
     gae->print_info.use_symbol = 0;
 }
 
-
-/**
- * gnc_amount_edit_set_fraction:
- * @gae: The GNCAmountEdit widget
- * @fraction: The fraction to set
- *
- * Returns nothing.
- */
 void
 gnc_amount_edit_set_fraction (GNCAmountEdit *gae, int fraction)
 {
-    g_return_if_fail(gae != NULL);
-    g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
+    g_return_if_fail (gae != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
 
     fraction = MAX (0, fraction);
 
     gae->fraction = fraction;
 }
 
-
-/**
- * gnc_amount_edit_gtk_entry:
- * @gae: The GNCAmountEdit widget
- *
- * Returns the gtk entry of the widget..
- */
 GtkWidget *
 gnc_amount_edit_gtk_entry (GNCAmountEdit *gae)
 {
-    g_return_val_if_fail(gae != NULL, NULL);
-    g_return_val_if_fail(GNC_IS_AMOUNT_EDIT(gae), NULL);
+    g_return_val_if_fail (gae != NULL, NULL);
+    g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), NULL);
 
-    return (GtkWidget *)gae;
+    return GTK_WIDGET(gae->entry);
 }
 
-
-/**
- * gnc_amount_edit_set_evaluate_on_enter:
- * @gae: The GNCAmountEdit widget
- * @evaluate_on_enter: The flag value to set
- *
- * Returns nothing.
- */
 void
 gnc_amount_edit_set_evaluate_on_enter (GNCAmountEdit *gae,
                                        gboolean evaluate_on_enter)
 {
-    g_return_if_fail(gae != NULL);
-    g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
+    g_return_if_fail (gae != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
 
     gae->evaluate_on_enter = evaluate_on_enter;
+}
+
+void
+gnc_amount_edit_set_validate_on_change (GNCAmountEdit *gae,
+                                        gboolean validate_on_change)
+{
+    g_return_if_fail (gae != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
+
+    gae->validate_on_change = validate_on_change;
+}
+
+void
+gnc_amount_edit_select_region (GNCAmountEdit *gae,
+                               gint start_pos,
+                               gint end_pos)
+{
+    g_return_if_fail (gae != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
+
+    gtk_editable_select_region (GTK_EDITABLE(gae->entry),
+                                start_pos,
+                                end_pos);
+}
+
+void
+gnc_amount_edit_show_warning_symbol (GNCAmountEdit *gae, gboolean show)
+{
+    g_return_if_fail (gae != NULL);
+    g_return_if_fail (GNC_IS_AMOUNT_EDIT(gae));
+
+    gae->show_warning_symbol = show;
 }

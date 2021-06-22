@@ -120,6 +120,15 @@
 ;;         accounts displayed. this is merely a convenience.  the
 ;;         default initial-indent is 0.
 ;; 
+;;     account-less-p: binary_predicate #t #f
+;;
+;;         used for sorting accounts, below each parent account, into
+;;         the order in which they will be displayed.  the function
+;;         must take two Account arguments and represent a total
+;;         ordering on Account-space.  #t means to use the default
+;;         sorting function.  #f means to perform no sorting.  the
+;;         default sorting function is gnc:account-code-less-p.
+;;
 ;;     start-date: time64
 ;; 
 ;;         the starting date of the reporting period over which to
@@ -179,6 +188,17 @@
 ;;         the html-acct-table object without crashing.  Just don't
 ;;         count on meaningful report-comm-{account|recursive}-bal
 ;;         values (they'll also be #f).]
+;;
+;;     column-header: html-table-header-cell #f #t
+;;
+;;          the table column header cell (TH tag) with which to head
+;;          the columns containing the account tree.  if supplied, the
+;;          header cell may contain style information.  if #f, no
+;;          column header cell will be used.  if #t, a default header
+;;          cell (reading "Account") will be used.  the colspan of any
+;;          header cell will be automatically set appropriately. this
+;;          is for convenience only; gnc:html-acct-table does not use
+;;          this data.
 ;; 
 ;;     account-label-mode: 'name 'anchor
 ;; 
@@ -258,6 +278,12 @@
 ;;         the name of the account is "Assets:Current Assets:Cash",
 ;;         the value will be "Assets:Current Assets:Cash".
 ;; 
+;;     account-name: string
+;;
+;;         the "basename" of the account in the current row. i.e., if
+;;         the name of the account is "Assets:Current Assets:Cash",
+;;         the value will be "Cash".
+;;
 ;;     account-code: string
 ;; 
 ;;         the account of the account in the current row, as returned
@@ -284,6 +310,14 @@
 ;;         unlike in gnc:html-build-acct-table, the first level of
 ;;         accounts is level 0.
 ;; 
+;;     logical-depth: integer
+;;
+;;         the depth at which the account in the current row resides
+;;         in the effective account tree.  this is the depth the
+;;         account tree when ignoring unselected parent accounts.
+;;         note that this may differ from account-depth when a
+;;         selected account has an unselected ancestor.
+;;
 ;;     display-depth: integer
 ;; 
 ;;         the depth at which the account in the current row resides
@@ -305,6 +339,13 @@
 ;; 
 ;;         the number of columns in which account labels were placed.
 ;; 
+;;     label-cols: integer
+;;
+;;         the number of columns in the group of account columns to
+;;         which a row was assigned.  also one more than the maximum
+;;         column depth at which rows were positioned in the
+;;         table.
+;;
 ;;     account-cols: integer
 ;; 
 ;;         the number of columns in the group of account columns.  if
@@ -549,6 +590,8 @@
                         (and (number? lim) lim)))
 	 (limit-behavior (or (get-val env 'depth-limit-behavior) 'summarize))
 	 (indent (or (get-val env 'initial-indent) 0))
+	 (less-p (let ((pred (get-val env 'account-less-p)))
+		   (if (eq? pred #t) gnc:account-code-less-p pred)))
 	 (start-date (get-val env 'start-date))
 	 (end-date (or (get-val env 'end-date)
 		       (gnc:get-today)))
@@ -558,8 +601,13 @@
          ;; someone was thinking price-source?
 	 (exchange-fn (get-val env 'exchange-fn))
          (get-balance-fn (get-val env 'get-balance-fn))
+	 (column-header (let ((cell (get-val env 'column-header)))
+			  (if (eq? cell #t)
+			      (gnc:make-html-table-cell "Account name")
+			      cell)))
 	 (subtotal-mode (get-val env 'parent-account-subtotal-mode))
-	 (zero-mode (get-val env 'zero-balance-mode))
+	 (zero-mode (let ((mode (get-val env 'zero-balance-mode)))
+		      (if (boolean? mode) 'show-leaf-acct mode)))
 	 (label-mode (or (get-val env 'account-label-mode) 'anchor))
 	 (balance-mode (or (get-val env 'balance-mode) 'post-closing))
 	 (closing-pattern (or (get-val env 'closing-pattern)
@@ -651,7 +699,7 @@
            (gnc:accounts-and-all-descendants (list account)))
           this-collector))
 
-      (let lp ((accounts accts)
+      (let lp ((accounts (if less-p (sort accts less-p) accts))
                (row-added? #f)
                (disp-depth (if (integer? depth-limit)
                                (min (1- depth-limit) logi-depth)
@@ -681,6 +729,7 @@
                   (cons*
                    (list 'initial-indent indent)
                    (list 'account acct)
+                   (list 'account-name (xaccAccountGetName acct))
                    (list 'account-code (xaccAccountGetCode acct))
                    (list 'account-type (xaccAccountGetType acct))
                    (list 'account-type-string (xaccAccountGetTypeStr
@@ -946,10 +995,13 @@
 		  (acct (get-val env 'account))
 		  (children (get-val env 'account-children))
 		  (label (get-val env 'account-label))
+		  (acct-name (get-val env 'account-name)) ;; for diagnostics...
 		  (report-commodity  (get-val env 'report-commodity))
 		  (exchange-fn (get-val env 'exchange-fn))
 		  (account-cols (get-val env 'account-cols))
 		  (logical-cols (get-val env 'logical-cols))
+		  (label-cols (get-val env 'label-cols))
+		  (logical-depth (get-val env 'logical-depth))
 		  (display-depth (get-val env 'display-depth))
 		  (display-tree-depth (get-val env 'display-tree-depth))
 		  (row-type (get-val env 'row-type))
@@ -976,7 +1028,8 @@
                          ((not (null? children)) parent-acct-bal-mode)
                          (else 'immediate-bal)))
 
-                  (zero-mode (get-val env 'zero-balance-display-mode))
+                  (zero-mode (let ((mode (get-val env 'zero-balance-display-mode)))
+                               (if (boolean? mode) 'show-balance mode)))
 
                   (amt (and-let* ((bal-syms '((immediate-bal . account-bal)
                                               (recursive-bal . recursive-bal)

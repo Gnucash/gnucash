@@ -1347,15 +1347,19 @@ gnc_gen_trans_list_run (GNCImportMainMatcher *info)
     return result;
 }
 
-static gchar*
+static const gchar*
 get_required_color (const gchar *class_name)
 {
     GdkRGBA color;
+    static gchar *strbuf = NULL;
     GtkWidget *label = gtk_label_new ("Color");
     GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
     gtk_style_context_add_class (context, class_name);
     gnc_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &color);
-    return gdk_rgba_to_string (&color);
+    if (strbuf)
+        g_free (strbuf);
+    strbuf = gdk_rgba_to_string (&color);
+    return strbuf;
 }
 
 static void
@@ -1414,8 +1418,8 @@ refresh_model_row (GNCImportMainMatcher *gui,
 {
     GtkTreeStore *store;
     GtkTreeSelection *selection;
-    gchar *tmp, *imbalance, *text, *color;
-    const gchar *ro_text;
+    gchar *tmp, *imbalance, *text;
+    const gchar *ro_text, *color = NULL;
     gchar *int_required_class, *int_prob_required_class, *int_not_required_class;
     gchar *class_extension = NULL;
     gboolean show_pixbuf = TRUE;
@@ -1470,7 +1474,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     /*Actions*/
 
     /* Action information */
-    ro_text = text = color = NULL;
+    ro_text = text = NULL;
     switch (gnc_import_TransInfo_get_action (info))
     {
     case GNCImport_ADD:
@@ -1802,6 +1806,8 @@ typedef struct _match_struct
 {
     GNCImportTransInfo* transaction_info;
     gint display_threshold;
+    gint date_threshold;
+    gint date_not_threshold;
     double fuzzy_amount;
 } match_struct;
 
@@ -1809,7 +1815,10 @@ static void
 match_helper (Split* data, match_struct* s)
 {
     split_find_match (s->transaction_info, data,
-                      s->display_threshold, s->fuzzy_amount);
+                      s->display_threshold, 
+                      s->date_threshold,
+                      s->date_not_threshold,
+                      s->fuzzy_amount);
 }
 
 /* Iterate through the imported transactions selecting matches from the
@@ -1823,6 +1832,10 @@ perform_matching (GNCImportMainMatcher *gui, GHashTable *account_hash)
     GtkTreeModel* model = gtk_tree_view_get_model (gui->view);
     gint display_threshold =
         gnc_import_Settings_get_display_threshold (gui->user_settings);
+    gint date_threshold =
+        gnc_import_Settings_get_date_threshold (gui->user_settings);
+    gint date_not_threshold =
+        gnc_import_Settings_get_date_not_threshold (gui->user_settings);
     double fuzzy_amount =
         gnc_import_Settings_get_fuzzy_amount (gui->user_settings);
 
@@ -1834,7 +1847,7 @@ perform_matching (GNCImportMainMatcher *gui, GHashTable *account_hash)
         gboolean match_selected_manually;
         GNCImportTransInfo* txn_info = imported_txn->data;
         Account *importaccount = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (txn_info));
-        match_struct s = {txn_info, display_threshold, fuzzy_amount};
+        match_struct s = {txn_info, display_threshold, date_threshold, date_not_threshold, fuzzy_amount};
 
         g_slist_foreach (g_hash_table_lookup (account_hash, importaccount),
                          (GFunc) match_helper, &s);

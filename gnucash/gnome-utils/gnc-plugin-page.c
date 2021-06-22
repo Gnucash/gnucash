@@ -544,8 +544,15 @@ gnc_plugin_page_finalize (GObject *object)
     page = GNC_PLUGIN_PAGE(object);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+
+    if (priv->ui_description)
+        g_free (priv->ui_description);
+
     if (priv->page_name)
         g_free (priv->page_name);
+
+    if (priv->page_long_name)
+        g_free (priv->page_long_name);
 
     if (priv->page_color)
         g_free (priv->page_color);

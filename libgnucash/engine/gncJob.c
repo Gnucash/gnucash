@@ -317,6 +317,7 @@ void gncJobSetRate (GncJob *job, gnc_numeric rate)
         g_value_init (&v, GNC_TYPE_NUMERIC);
         g_value_set_boxed (&v, &rate);
         qof_instance_set_kvp (QOF_INSTANCE (job), &v, 1, GNC_JOB_RATE);
+        g_value_unset (&v);
     }
     else
     {
@@ -453,13 +454,14 @@ gnc_numeric gncJobGetRate (const GncJob *job)
 {
     GValue v = G_VALUE_INIT;
     gnc_numeric *rate = NULL;
+    gnc_numeric retval;
     if (!job) return gnc_numeric_zero ();
     qof_instance_get_kvp (QOF_INSTANCE (job), &v, 1, GNC_JOB_RATE);
     if (G_VALUE_HOLDS_BOXED (&v))
         rate = (gnc_numeric*)g_value_get_boxed (&v);
-    if (rate)
-        return *rate;
-    return gnc_numeric_zero();
+    retval = rate ? *rate : gnc_numeric_zero ();
+    g_value_unset (&v);
+    return retval;
 }
 
 GncOwner * gncJobGetOwner (GncJob *job)

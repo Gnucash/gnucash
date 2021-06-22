@@ -361,6 +361,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     qof_instance_get_kvp (QOF_INSTANCE (from), &v, 1, GNC_INVOICE_IS_CN);
     if (G_VALUE_HOLDS_INT64 (&v))
          qof_instance_set_kvp (QOF_INSTANCE (invoice), &v, 1, GNC_INVOICE_IS_CN);
+    g_value_unset (&v);
 
     invoice->terms = from->terms;
     gncBillTermIncRef (invoice->terms);
@@ -550,6 +551,7 @@ void gncInvoiceSetDocLink (GncInvoice *invoice, const char *doclink)
         g_value_init (&v, G_TYPE_STRING);
         g_value_set_string (&v, doclink);
         qof_instance_set_kvp (QOF_INSTANCE (invoice), &v, 1, GNC_INVOICE_DOCLINK);
+        g_value_unset (&v);
     }
     qof_instance_set_dirty (QOF_INSTANCE(invoice));
     gncInvoiceCommitEdit (invoice);
@@ -573,6 +575,7 @@ void gncInvoiceSetIsCreditNote (GncInvoice *invoice, gboolean credit_note)
     g_value_init (&v, G_TYPE_INT64);
     g_value_set_int64 (&v, credit_note ? 1 : 0);
     qof_instance_set_kvp (QOF_INSTANCE (invoice), &v, 1, GNC_INVOICE_IS_CN);
+    g_value_unset (&v);
     mark_invoice (invoice);
     gncInvoiceCommitEdit (invoice);
 
@@ -1131,12 +1134,12 @@ gboolean gncInvoiceGetActive (const GncInvoice *invoice)
 gboolean gncInvoiceGetIsCreditNote (const GncInvoice *invoice)
 {
     GValue v = G_VALUE_INIT;
+    gboolean retval;
     if (!invoice) return FALSE;
     qof_instance_get_kvp (QOF_INSTANCE(invoice), &v, 1, GNC_INVOICE_IS_CN);
-    if (G_VALUE_HOLDS_INT64(&v) && g_value_get_int64 (&v))
-        return TRUE;
-    else
-        return FALSE;
+    retval = G_VALUE_HOLDS_INT64(&v) && g_value_get_int64 (&v);
+    g_value_unset (&v);
+    return retval;
 }
 
 
@@ -1844,6 +1847,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
             else if (other_invoice)
                 qof_event_gen (QOF_INSTANCE(other_invoice), QOF_EVENT_MODIFY, NULL);
         }
+        g_list_free (lot_list);
     }
     g_list_free (lot_split_list);
 

@@ -24,7 +24,6 @@
 #include <glib/gi18n.h>
 
 #include "gnc-exp-parser.h"
-#include "gnc-locale-utils.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -115,8 +114,10 @@ gnc_formula_cell_leave(BasicCell *_cell)
                 && strlen(str) != 0
                 && !gnc_exp_parser_parse(str, &amount, &error_location))
         {
-            gnc_warning_dialog(NULL, _("An error occurred while processing %s."),
-                               str);//, (error_location - str));
+            gint error_position = error_location - str;
+            gnc_warning_dialog (gnc_ui_get_main_window (NULL),
+                                _("An error occurred while processing '%s' at position %d"),
+                                str, error_position);
         }
     }
 
@@ -132,15 +133,11 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
                                 int newval_len,
                                 int *cursor_position,
                                 int *start_selection,
-                                int *end_selection )
+                                int *end_selection)
 {
-    FormulaCell *cell = (FormulaCell *)_cell;
-    struct lconv *lc = gnc_localeconv ();
+    FormulaCell *fc = (FormulaCell *)_cell;
     const char *toks = "+-*/=()_:";
-    gunichar decimal_point;
-    gunichar thousands_sep;
-    const char *c;
-    gunichar uc;
+    char *validated_newval = NULL;
 
     g_debug("%s, %d, %s, %d, %d, %d, %d",
             change ? (gchar *)change : "(null)", change_len,
@@ -150,37 +147,21 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
     /* accept the newval string if user action was delete */
     if (change == NULL)
     {
-        gnc_basic_cell_set_value_internal( &cell->cell, newval );
+        gnc_basic_cell_set_value_internal (&fc->cell, newval);
         // Remove any selection.
         *end_selection = *start_selection = *cursor_position;
         return;
     }
 
-    if (cell->print_info.monetary)
-        decimal_point = g_utf8_get_char(lc->mon_decimal_point);
-    else
-        decimal_point = g_utf8_get_char(lc->decimal_point);
+    validated_newval = gnc_basic_cell_validate (_cell, fc->print_info,
+                                                change, newval, toks,
+                                                cursor_position);
 
-    if (cell->print_info.monetary)
-        thousands_sep = g_utf8_get_char(lc->mon_thousands_sep);
-    else
-        thousands_sep = g_utf8_get_char(lc->thousands_sep);
+    if (!validated_newval)
+        return;
 
-    c = change;
-    while (*c)
-    {
-        uc = g_utf8_get_char (c);
-        if (!g_unichar_isdigit (uc) &&
-                !g_unichar_isspace (uc) &&
-                !g_unichar_isalpha (uc) &&
-                (decimal_point != uc) &&
-                (thousands_sep != uc) &&
-                (g_utf8_strchr (toks, -1, uc) == NULL))
-            return;
-        c = g_utf8_next_char (c);
-    }
-
-    gnc_basic_cell_set_value_internal( &cell->cell, newval );
+    gnc_basic_cell_set_value_internal (_cell, validated_newval);
+    g_free (validated_newval);
 }
 
 static

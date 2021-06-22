@@ -2481,6 +2481,7 @@ set_kvp_string_tag (Account *acc, const char *tag, const char *value)
             g_value_init (&v, G_TYPE_STRING);
             g_value_set_string (&v, tmp);
             qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {tag});
+            g_value_unset (&v);
         }
         else
             qof_instance_set_path_kvp (QOF_INSTANCE (acc), NULL, {tag});
@@ -3144,6 +3145,18 @@ gnc_account_lookup_by_type_and_commodity (Account* root,
             retval = g_list_prepend(retval, account);
         }
     }
+
+    if (!retval) // Recurse through the children
+        for (auto node = rpriv->children; node; node = node->next)
+        {
+            auto account{static_cast<Account*>(node->data)};
+            auto result = gnc_account_lookup_by_type_and_commodity(account,
+                                                                   name,
+                                                                   acctype,
+                                                                   commodity);
+            if (result)
+                retval = g_list_concat(result, retval);
+        }
     return retval;
 }
 
@@ -4015,21 +4028,24 @@ set_boolean_key (Account *acc, std::vector<std::string> const & path, gboolean o
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, path);
     mark_account (acc);
     xaccAccountCommitEdit (acc);
+    g_value_unset (&v);
 }
 
 static gboolean
 boolean_from_key (const Account *acc, std::vector<std::string> const & path)
 {
     GValue v = G_VALUE_INIT;
+    gboolean retval = FALSE;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, path);
     if (G_VALUE_HOLDS_INT64 (&v))
-        return g_value_get_int64 (&v) != 0;
+        retval = (g_value_get_int64 (&v) != 0);
     if (G_VALUE_HOLDS_BOOLEAN (&v))
-         return g_value_get_boolean (&v);
+        retval = (g_value_get_boolean (&v));
     if (G_VALUE_HOLDS_STRING (&v))
-         return strcmp (g_value_get_string (&v), "true") == 0;
-    return FALSE;
+        retval = !strcmp (g_value_get_string (&v), "true");
+    g_value_unset (&v);
+    return retval;
 }
 
 /********************************************************************\
@@ -4069,6 +4085,7 @@ xaccAccountSetTaxUSCode (Account *acc, const char *code)
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"tax-US", "code"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
+    g_value_unset (&v);
 }
 
 const char *
@@ -4092,6 +4109,7 @@ xaccAccountSetTaxUSPayerNameSource (Account *acc, const char *source)
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"tax-US", "payer-name-source"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
+    g_value_unset (&v);
 }
 
 gint64
@@ -4104,6 +4122,7 @@ xaccAccountGetTaxUSCopyNumber (const Account *acc)
     if (G_VALUE_HOLDS_INT64 (&v))
         copy_number = g_value_get_int64 (&v);
 
+    g_value_unset (&v);
     return (copy_number == 0) ? 1 : copy_number;
 }
 
@@ -4118,6 +4137,7 @@ xaccAccountSetTaxUSCopyNumber (Account *acc, gint64 copy_number)
         g_value_init (&v, G_TYPE_INT64);
         g_value_set_int64 (&v, copy_number);
         qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"tax-US", "copy-number"});
+        g_value_unset (&v);
     }
     else
     {
@@ -4606,18 +4626,21 @@ xaccAccountGetReconcileLastDate (const Account *acc, time64 *last_date)
 {
     gint64 date = 0;
     GValue v = G_VALUE_INIT;
+    gboolean retval = FALSE;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {KEY_RECONCILE_INFO, "last-date"});
     if (G_VALUE_HOLDS_INT64 (&v))
         date = g_value_get_int64 (&v);
 
+    g_value_unset (&v);
     if (date)
     {
         if (last_date)
             *last_date = date;
-        return TRUE;
+        retval = TRUE;
     }
-    return FALSE;
+    g_value_unset (&v);
+    return retval;
 }
 
 /********************************************************************\
@@ -4635,6 +4658,7 @@ xaccAccountSetReconcileLastDate (Account *acc, time64 last_date)
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {KEY_RECONCILE_INFO, "last-date"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
+    g_value_unset (&v);
 }
 
 /********************************************************************\
@@ -4646,6 +4670,7 @@ xaccAccountGetReconcileLastInterval (const Account *acc,
 {
     GValue v1 = G_VALUE_INIT, v2 = G_VALUE_INIT;
     int64_t m = 0, d = 0;
+    gboolean retval = FALSE;
 
     if (!acc) return FALSE;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
@@ -4663,9 +4688,11 @@ xaccAccountGetReconcileLastInterval (const Account *acc,
             *months = m;
         if (days)
             *days = d;
-        return TRUE;
+        retval = TRUE;
     }
-    return FALSE;
+    g_value_unset (&v1);
+    g_value_unset (&v2);
+    return retval;
 }
 
 /********************************************************************\
@@ -4688,6 +4715,8 @@ xaccAccountSetReconcileLastInterval (Account *acc, int months, int days)
             {KEY_RECONCILE_INFO, "last-interval", "days"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
+    g_value_unset (&v1);
+    g_value_unset (&v2);
 }
 
 /********************************************************************\
@@ -4697,6 +4726,7 @@ gboolean
 xaccAccountGetReconcilePostponeDate (const Account *acc, time64 *postpone_date)
 {
     gint64 date = 0;
+    gboolean retval = FALSE;
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v,
@@ -4708,9 +4738,10 @@ xaccAccountGetReconcilePostponeDate (const Account *acc, time64 *postpone_date)
     {
         if (postpone_date)
             *postpone_date = date;
-        return TRUE;
+        retval = TRUE;
     }
-    return FALSE;
+    g_value_unset (&v);
+    return retval;
 }
 
 /********************************************************************\
@@ -4729,6 +4760,7 @@ xaccAccountSetReconcilePostponeDate (Account *acc, time64 postpone_date)
             {KEY_RECONCILE_INFO, KEY_POSTPONE, "date"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
+    g_value_unset (&v);
 }
 
 /********************************************************************\
@@ -4740,20 +4772,22 @@ xaccAccountGetReconcilePostponeBalance (const Account *acc,
 {
     gnc_numeric bal = gnc_numeric_zero ();
     GValue v = G_VALUE_INIT;
+    gboolean retval = FALSE;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v,
             {KEY_RECONCILE_INFO, KEY_POSTPONE, "balance"});
-    if (!G_VALUE_HOLDS_INT64 (&v))
-        return FALSE;
-
-    bal = *(gnc_numeric*)g_value_get_boxed (&v);
-    if (!bal.denom)
-        return FALSE;
-
-    if (balance)
-        *balance = bal;
-
-    return TRUE;
+    if (G_VALUE_HOLDS_INT64 (&v))
+    {
+        bal = *(gnc_numeric*)g_value_get_boxed (&v);
+        if (bal.denom)
+        {
+            if (balance)
+                *balance = bal;
+            retval = TRUE;
+        }
+    }
+    g_value_unset (&v);
+    return retval;
 }
 
 /********************************************************************\
@@ -4772,6 +4806,7 @@ xaccAccountSetReconcilePostponeBalance (Account *acc, gnc_numeric balance)
             {KEY_RECONCILE_INFO, KEY_POSTPONE, "balance"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
+    g_value_unset (&v);
 }
 
 /********************************************************************\
@@ -4816,6 +4851,7 @@ xaccAccountSetLastNum (Account *acc, const char *num)
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"last-num"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
+    g_value_unset (&v);
 }
 
 static Account *
@@ -4888,6 +4924,7 @@ xaccAccountGainsAccount (Account *acc, gnc_commodity *curr)
              g_value_set_boxed (&vr, guid);
              qof_instance_set_path_kvp (QOF_INSTANCE (acc), &vr, path);
              qof_instance_set_dirty (QOF_INSTANCE (acc));
+             g_value_unset (&vr);
         }
         xaccAccountCommitEdit (acc);
     }
@@ -4895,6 +4932,7 @@ xaccAccountGainsAccount (Account *acc, gnc_commodity *curr)
         gains_account = xaccAccountLookup (guid,
                                            qof_instance_get_book(acc));
 
+    g_value_unset (&v);
     return gains_account;
 }
 
@@ -4915,6 +4953,7 @@ dxaccAccountSetPriceSrc(Account *acc, const char *src)
             g_value_init (&v, G_TYPE_STRING);
             g_value_set_string (&v, src);
             qof_instance_set_path_kvp (QOF_INSTANCE(acc), &v, {"old-price-source"});
+            g_value_unset (&v);
         }
         else
             qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, {"old-price-source"});
@@ -4989,6 +5028,7 @@ xaccAccountSetReconcileChildrenStatus(Account *acc, gboolean status)
             {KEY_RECONCILE_INFO, KEY_INCLUDE_CHILDREN});
     mark_account(acc);
     xaccAccountCommitEdit (acc);
+    g_value_unset (&v);
 }
 
 /********************************************************************\
@@ -5002,10 +5042,13 @@ xaccAccountGetReconcileChildrenStatus(const Account *acc)
      * the default behaviour
      */
     GValue v = G_VALUE_INIT;
+    gboolean retval;
     if (!acc) return FALSE;
     qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v,
             {KEY_RECONCILE_INFO, KEY_INCLUDE_CHILDREN});
-    return G_VALUE_HOLDS_INT64 (&v) ? g_value_get_int64 (&v) : FALSE;
+    retval = G_VALUE_HOLDS_INT64 (&v) ? g_value_get_int64 (&v) : FALSE;
+    g_value_unset (&v);
+    return retval;
 }
 
 /********************************************************************\
@@ -5378,6 +5421,7 @@ gnc_account_imap_find_account (GncImportMatchMap *imap,
 {
     GValue v = G_VALUE_INIT;
     GncGUID * guid = NULL;
+    Account *retval;
     if (!imap || !key) return NULL;
     std::vector<std::string> path {IMAP_FRAME};
     if (category)
@@ -5386,7 +5430,9 @@ gnc_account_imap_find_account (GncImportMatchMap *imap,
     qof_instance_get_path_kvp (QOF_INSTANCE (imap->acc), &v, path);
     if (G_VALUE_HOLDS_BOXED (&v))
         guid = (GncGUID*)g_value_get_boxed (&v);
-    return xaccAccountLookup (guid, imap->book);
+    retval = xaccAccountLookup (guid, imap->book);
+    g_value_unset (&v);
+    return retval;
 }
 
 /* Store an Account in the map */
@@ -5408,6 +5454,7 @@ gnc_account_imap_add_account (GncImportMatchMap *imap,
     qof_instance_set_path_kvp (QOF_INSTANCE (imap->acc), &v, path);
     qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
     xaccAccountCommitEdit (imap->acc);
+    g_value_unset (&v);
 }
 
 /* Remove a reference to an Account in the map */
@@ -5777,6 +5824,7 @@ change_imap_entry (GncImportMatchMap *imap, std::string const & path, int64_t to
     // Add or Update the entry based on guid
     qof_instance_set_path_kvp (QOF_INSTANCE (imap->acc), &value, {path});
     gnc_features_set_used (imap->book, GNC_FEATURE_GUID_FLAT_BAYESIAN);
+    g_value_unset (&value);
 }
 
 /** Updates the imap for a given account using a list of tokens */
@@ -5947,6 +5995,7 @@ gnc_account_get_map_entry (Account *acc, const char *head, const char *category)
             text = g_strdup (string);
         }
     }
+    g_value_unset (&v);
     return text;
 }
 

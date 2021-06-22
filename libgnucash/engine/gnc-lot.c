@@ -469,6 +469,7 @@ gnc_lot_set_title (GNCLot *lot, const char *str)
     qof_instance_set_kvp (QOF_INSTANCE (lot), &v, 1, "title");
     qof_instance_set_dirty(QOF_INSTANCE(lot));
     gnc_lot_commit_edit(lot);
+    g_value_unset (&v);
 }
 
 void
@@ -482,6 +483,7 @@ gnc_lot_set_notes (GNCLot *lot, const char *str)
     qof_instance_set_kvp (QOF_INSTANCE (lot), &v, 1, "notes");
     qof_instance_set_dirty(QOF_INSTANCE(lot));
     gnc_lot_commit_edit(lot);
+    g_value_unset (&v);
 }
 
 /* ============================================================= */

@@ -142,7 +142,6 @@ gnc_html_webkit_webview_new (void)
       const PangoFontDescription *font =
            (const PangoFontDescription*)g_value_get_boxed (&val);
       default_font_family = pango_font_description_get_family (font);
-      g_value_unset (&val);
      }
 /* Set default webkit settings */
      webkit_settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (view));
@@ -162,6 +161,7 @@ gnc_html_webkit_webview_new (void)
           g_object_set (G_OBJECT (webkit_settings),
               "default-font-family", default_font_family, NULL);
      }
+     g_value_unset (&val);
      return view;
 }
 

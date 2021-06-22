@@ -534,6 +534,7 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
         g_value_init (&v, GNC_TYPE_NUMERIC);
         g_value_set_boxed (&v, &val);
         qof_instance_set_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
+        g_value_unset (&v);
     }
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
@@ -562,6 +563,7 @@ gnc_budget_is_account_period_value_set(const GncBudget *budget,
     qof_instance_get_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
     if (G_VALUE_HOLDS_BOXED (&v))
         ptr = g_value_get_boxed (&v);
+    g_value_unset (&v);
     return (ptr != NULL);
 }
 
@@ -571,6 +573,7 @@ gnc_budget_get_account_period_value(const GncBudget *budget,
                                     guint period_num)
 {
     gnc_numeric *numeric = NULL;
+    gnc_numeric retval;
     gchar path_part_one [GUID_ENCODING_LENGTH + 1];
     gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
     GValue v = G_VALUE_INIT;
@@ -583,9 +586,9 @@ gnc_budget_get_account_period_value(const GncBudget *budget,
     if (G_VALUE_HOLDS_BOXED (&v))
         numeric = (gnc_numeric*)g_value_get_boxed (&v);
 
-    if (numeric)
-        return *numeric;
-    return gnc_numeric_zero();
+    retval = numeric ? *numeric : gnc_numeric_zero ();
+    g_value_unset (&v);
+    return retval;
 }
 
 
@@ -619,6 +622,7 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
         g_value_set_string (&v, note);
 
         qof_instance_set_kvp (QOF_INSTANCE (budget), &v, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
+        g_value_unset (&v);
     }
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);

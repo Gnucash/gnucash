@@ -438,11 +438,18 @@ find_component_directory (const gchar *default_dir, const gchar* compiled_dir)
 
     prefix = gnc_gbr_find_prefix (NULL);
     if (prefix == NULL)
+    {
+        g_free (subdir);
         return g_strdup (default_dir ? default_dir : compiled_dir);
+    }
     if (!g_getenv("GNC_UNINSTALLED"))
     {
         if (!g_strcmp0 (prefix, PREFIX))
+        {
+            g_free (subdir);
+            g_free (prefix);
             return g_strdup (compiled_dir);
+        }
 
         if (g_strcmp0 (compiled_dir, subdir) == 0)
         {

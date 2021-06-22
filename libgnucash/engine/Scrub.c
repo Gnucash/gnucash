@@ -463,7 +463,7 @@ find_root_currency(void)
               if (xaccAccountGetType (child) == ACCT_TYPE_INCOME)
                    root_currency = xaccAccountGetCommodity (child);
          }
-         g_free (children);
+         g_list_free (children);
     }
     return root_currency;
 }
@@ -1341,6 +1341,7 @@ xaccAccountScrubKvp (Account *account)
         (G_VALUE_HOLDS_BOOLEAN (&v) && ! g_value_get_boolean (&v)))
         qof_instance_slot_delete (QOF_INSTANCE (account), "placeholder");
 
+    g_value_unset (&v);
     qof_instance_slot_delete_if_empty (QOF_INSTANCE (account), "hbci");
     scrub_depth--;
 }
@@ -1351,11 +1352,16 @@ void
 xaccAccountScrubColorNotSet (QofBook *book)
 {
     GValue value_s = G_VALUE_INIT;
+    gboolean already_scrubbed;
 
     // get the run-once value
     qof_instance_get_kvp (QOF_INSTANCE (book), &value_s, 1, "remove-color-not-set-slots");
 
-    if (G_VALUE_HOLDS_STRING (&value_s) && (strcmp(g_value_get_string (&value_s), "true") == 0))
+    already_scrubbed = (G_VALUE_HOLDS_STRING (&value_s) &&
+                        !g_strcmp0 (g_value_get_string (&value_s), "true"));
+    g_value_unset (&value_s);
+
+    if (already_scrubbed)
         return;
     else
     {
@@ -1378,6 +1384,7 @@ xaccAccountScrubColorNotSet (QofBook *book)
 
         // set the run-once value
         qof_instance_set_kvp (QOF_INSTANCE (book),  &value_b, 1, "remove-color-not-set-slots");
+        g_value_unset (&value_b);
     }
 }
 

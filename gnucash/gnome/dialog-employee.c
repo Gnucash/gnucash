@@ -188,32 +188,31 @@ static gboolean check_entry_nonempty (GtkWidget *entry,
     return FALSE;
 }
 
+static gboolean check_edit_amount (GtkWidget *amount)
+{
+    GError *error = NULL;
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(amount), &error))
+    {
+        gnc_error_dialog (gnc_ui_get_gtk_window (amount), "%s", error->message);
+        g_error_free (error);
+        return TRUE;
+    }
+    return FALSE;
+}
+
 void
 gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
 {
     EmployeeWindow *ew = data;
     gchar *string;
+    GNCPrintAmountInfo print_info;
+    gnc_commodity *currency;
 
-    /* Check for valid username */
-    if (check_entry_nonempty (ew->username_entry,
-                              _("You must enter a username.")))
-        return;
-
-    /* Check for valid username */
+    /* Check for valid employeename */
     if (check_entry_nonempty (ew->name_entry,
-                              _("You must enter the employee's name.")))
+                              _("You must enter a Payment-Address Name.")))
         return;
 
-    /* Make sure we have an address */
-    if (check_entry_nonempty (ew->addr1_entry, NULL) &&
-            check_entry_nonempty (ew->addr2_entry, NULL) &&
-            check_entry_nonempty (ew->addr3_entry, NULL) &&
-            check_entry_nonempty (ew->addr4_entry, NULL))
-    {
-        const char *msg = _("You must enter an address.");
-        gnc_error_dialog (gnc_ui_get_gtk_window (widget), "%s", msg);
-        return;
-    }
 
     /* Set the employee id if one has not been chosen */
     if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0)
@@ -222,6 +221,20 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
         gtk_entry_set_text (GTK_ENTRY (ew->id_entry), string);
         g_free(string);
     }
+
+    /* Check for valid workday amount */
+    if (check_edit_amount (GTK_WIDGET(ew->workday_amount)))
+        return;
+
+    currency = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(ew->currency_edit));
+    print_info = gnc_commodity_print_info (currency, FALSE);
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (ew->rate_amount), print_info);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (ew->rate_amount),
+                                  gnc_commodity_get_fraction (currency));
+
+    /* Check for valid rate amount */
+    if (check_edit_amount (GTK_WIDGET(ew->rate_amount)))
+        return;
 
     /* Now save it off */
     {

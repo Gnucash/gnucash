@@ -243,6 +243,7 @@ sx_enabled_handler (xmlNodePtr node, gpointer sx_pdata)
     gchar* tmp = dom_tree_to_text (node);
 
     sx->enabled = (g_strcmp0 (tmp, "y") == 0 ? TRUE : FALSE);
+    g_free (tmp);
 
     return TRUE;
 }
@@ -255,6 +256,7 @@ sx_autoCreate_handler (xmlNodePtr node, gpointer sx_pdata)
     gchar* tmp = dom_tree_to_text (node);
 
     sx->autoCreateOption = (g_strcmp0 (tmp, "y") == 0 ? TRUE : FALSE);
+    g_free (tmp);
 
     return TRUE;
 }
@@ -267,6 +269,7 @@ sx_notify_handler (xmlNodePtr node, gpointer sx_pdata)
     gchar* tmp = dom_tree_to_text (node);
 
     sx->autoCreateNotify = (g_strcmp0 (tmp, "y") == 0 ? TRUE : FALSE);
+    g_free (tmp);
 
     return TRUE;
 }

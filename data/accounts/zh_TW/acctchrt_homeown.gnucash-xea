@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+    <gnc-act:title>
+      住宅費用
+    </gnc-act:title>
+    <gnc-act:short-description>
+      與住宅相關的費用與稅金
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      如果您有自己的房子，您可能會想要選擇這組科目。這個範本提供了一組科目（保險、稅金、修繕）供您記錄關於住宅的開支。
+    </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>根科目</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>支出</act:name>
+  <act:id type="new">84732f5fdd27b6463d75bf958e3a4b06</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>TWD</cmdty:id>
+  </act:commodity>
+  <act:description>支出</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>房屋修繕</act:name>
+  <act:id type="new">fa27de57090e107fa99fe1db53790f23</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>TWD</cmdty:id>
+  </act:commodity>
+  <act:description>房屋修繕</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>保險</act:name>
+  <act:id type="new">4677fe36914ebcf23758f3bf20686b4a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>TWD</cmdty:id>
+  </act:commodity>
+  <act:description>保險</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>住宅保險</act:name>
+  <act:id type="new">3b5909f31bda0e0f76149fd600e0cb1d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>TWD</cmdty:id>
+  </act:commodity>
+  <act:description>住宅保險</act:description>
+  <act:parent type="new">4677fe36914ebcf23758f3bf20686b4a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>稅費</act:name>
+  <act:id type="new">a931b8ffe2917ff9a069333623da96ca</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>TWD</cmdty:id>
+  </act:commodity>
+  <act:description>稅費</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>住宅稅</act:name>
+  <act:id type="new">3994b8f5a6a8b2a0a48126fa955e03f7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>TWD</cmdty:id>
+  </act:commodity>
+  <act:description>住宅稅</act:description>
+  <act:parent type="new">a931b8ffe2917ff9a069333623da96ca</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>地價稅</act:name>
+  <act:id type="new">5294c62357bf437ab477972fb7074262</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>TWD</cmdty:id>
+  </act:commodity>
+  <act:description>地價稅</act:description>
+  <act:parent type="new">a931b8ffe2917ff9a069333623da96ca</act:parent>
+</gnc:account>
+
+</gnc-account-example>

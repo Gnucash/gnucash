@@ -36,11 +36,9 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <locale.h>
 #include <string.h>
 
 #include "gnc-exp-parser.h"
-#include "gnc-locale-utils.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -79,36 +77,24 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
                               int *end_selection)
 {
     PriceCell *cell = (PriceCell *) _cell;
-    struct lconv *lc = gnc_localeconv ();
     const char *toks = "+-*/=()_";
-    gunichar decimal_point;
-    gunichar thousands_sep;
-    char *new_newval = g_strdup (newval);
+    char *validated_newval = NULL;
 
-    if (cell->print_info.monetary)
-        decimal_point = g_utf8_get_char(lc->mon_decimal_point);
-    else
-        decimal_point = g_utf8_get_char(lc->decimal_point);
+    g_debug("%s, %d, %s, %d, %d, %d, %d",
+            change ? (gchar *)change : "(null)", change_len,
+            newval ? (gchar *)newval : "(null)", newval_len,
+            *cursor_position, *start_selection, *end_selection);
 
-    if (cell->print_info.monetary)
-        thousands_sep = g_utf8_get_char(lc->mon_thousands_sep);
-    else
-        thousands_sep = g_utf8_get_char(lc->thousands_sep);
+    validated_newval = gnc_basic_cell_validate (_cell, cell->print_info,
+                                                change, newval, toks,
+                                                cursor_position);
 
-    for (const char *c = change; c && *c; c = g_utf8_next_char (c))
-    {
-        gunichar uc = g_utf8_get_char (c);
-        if (!g_unichar_isdigit (uc) &&
-            !g_unichar_isspace (uc) &&
-            !g_unichar_isalpha (uc) &&
-            (decimal_point != uc) &&
-            (thousands_sep != uc) &&
-            (g_utf8_strchr (toks, -1, uc) == NULL))
-            return;
-    }
+    if (!validated_newval)
+        return;
 
-    gnc_basic_cell_set_value_internal (_cell, new_newval);
-    g_free (new_newval);
+    gnc_basic_cell_set_value_internal (_cell, validated_newval);
+    g_free (validated_newval);
+
     *end_selection = *start_selection = *cursor_position;
     cell->need_to_parse = TRUE;
 }
@@ -169,8 +155,9 @@ gnc_price_cell_leave (BasicCell *_cell)
     error_position = gnc_price_cell_parse (cell, TRUE);
     if (error_position != -1)
     {
-        gnc_warning_dialog(NULL, _("An error occurred while processing %s."),
-                           cell->cell.value);
+        gnc_warning_dialog (gnc_ui_get_main_window (NULL),
+                            _("An error occurred while processing '%s' at position %d"),
+                            cell->cell.value, error_position);
     }
 
 }

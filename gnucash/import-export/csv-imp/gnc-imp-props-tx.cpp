@@ -136,12 +136,12 @@ GncNumeric parse_amount (const std::string &str, int currency_format)
         break;
     case 1:
         /* Currency decimal period */
-        if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', '.', ',', "\003\003", "$+", &val, &endptr)))
+        if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', '.', ',', "$+", &val, &endptr)))
             throw std::invalid_argument (_("Value can't be parsed into a number using the selected currency format."));
         break;
     case 2:
         /* Currency decimal comma */
-        if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', ',', '.', "\003\003", "$+", &val, &endptr)))
+        if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', ',', '.', "$+", &val, &endptr)))
             throw std::invalid_argument (_("Value can't be parsed into a number using the selected currency format."));
         break;
     }

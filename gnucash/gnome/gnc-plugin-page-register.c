@@ -4082,6 +4082,12 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
     split = gnc_split_register_get_current_split (reg);
     account = xaccSplitGetAccount (split);
 
+    if (!account)
+    {
+        LEAVE ("shouldn't try to reverse the blank transaction...");
+        return;
+    }
+
     if (!gnc_dup_time64_dialog (window, _("Reverse Transaction"),
                                 _("New Transaction Information"), &date))
     {
@@ -4697,14 +4703,18 @@ static GncInvoice* invoice_from_split (Split* split)
 GList* invoices_from_transaction (Transaction* trans)
 {
     GList *invoices = NULL;
+    GList *apar_splits;
     if (!trans) return NULL;
 
-    for (GList *node = xaccTransGetAPARAcctSplitList(trans, TRUE); node;
-         node = node->next)
+    apar_splits = xaccTransGetAPARAcctSplitList (trans, TRUE);
+    if (!apar_splits) return NULL;
+
+    for (GList *node = apar_splits; node; node = node->next)
     {
         GncInvoice* inv = invoice_from_split ((Split*) node->data);
         if (inv) invoices = g_list_prepend (invoices, inv);
     }
+    g_list_free (apar_splits);
     return invoices;
 }
 

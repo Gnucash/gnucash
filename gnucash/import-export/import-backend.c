@@ -46,20 +46,13 @@
 
 #define GNCIMPORT_DESC    "desc"
 #define GNCIMPORT_MEMO    "memo"
-#define GNCIMPORT_PAYEE    "payee"
+#define GNCIMPORT_PAYEE   "payee"
 
 /********************************************************************\
  *   Constants                                                      *
 \********************************************************************/
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
-
-/********************************************************************\
- *   Constants, should ideally be defined a user preference dialog  *
-\********************************************************************/
-
-static const int MATCH_DATE_THRESHOLD = 4; /*within 4 days*/
-static const int MATCH_DATE_NOT_THRESHOLD = 14;
 
 /********************************************************************\
  *   Forward declared prototypes                                    *
@@ -622,6 +615,8 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 void split_find_match (GNCImportTransInfo * trans_info,
                               Split * split,
                               gint display_threshold,
+                              gint date_threshold,
+                              gint date_not_threshold,
                               double fuzzy_amount_difference)
 {
     /* DEBUG("Begin"); */
@@ -691,12 +686,12 @@ void split_find_match (GNCImportTransInfo * trans_info,
             prob = prob + 3;
             /*DEBUG("heuristics:  probability + 3 (date)");*/
         }
-        else if (datediff_day <= MATCH_DATE_THRESHOLD)
+        else if (datediff_day <= date_threshold)
         {
             prob = prob + 2;
             /*DEBUG("heuristics:  probability + 2 (date)");*/
         }
-        else if (datediff_day > MATCH_DATE_NOT_THRESHOLD)
+        else if (datediff_day > date_not_threshold)
         {
             /* Extra penalty if that split lies awfully far away from
                the given one. */

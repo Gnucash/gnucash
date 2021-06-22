@@ -246,15 +246,7 @@ gnc_customer_import_fix_customers (GtkListStore *store, guint *fixed, guint *del
             }
         }
         
-        // At least one of the address fields must have a value.
-        // If not, then delete the row.
-        if (strlen(addr1) == 0 && strlen(addr2) == 0 && strlen(addr3) == 0 && strlen(addr4) == 0)
-        {
-            valid = gtk_list_store_remove (store, &iter);
-            (*deleted)++;
-            continue;
-        }
-        
+
         g_free (company);
         g_free (name);
         g_free (addr1);

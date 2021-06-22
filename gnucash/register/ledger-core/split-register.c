@@ -2223,7 +2223,6 @@ gnc_split_register_auto_calc (SplitRegister* reg, Split* split)
     Account* account;
     int denom;
     int choice;
-    PriceSource source = PRICE_SOURCE_USER_PRICE;
 
     if (STOCK_REGISTER    != reg->type &&
         CURRENCY_REGISTER != reg->type &&
@@ -2372,7 +2371,6 @@ gnc_split_register_auto_calc (SplitRegister* reg, Split* split)
     {
         recalculate_price (split, reg, value, amount);
         price_changed = TRUE;
-        source = PRICE_SOURCE_SPLIT_REG;
     }
     if (recalc_value)
         recalculate_value (split, reg, price, amount, shares_changed);

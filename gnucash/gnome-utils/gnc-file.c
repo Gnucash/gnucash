@@ -572,6 +572,7 @@ gnc_add_history (QofSession * session)
         file = gnc_uri_normalize_uri ( url, FALSE ); /* Note that the password is not saved in history ! */
 
     gnc_history_add_file (file);
+    g_free (file);
 }
 
 static void

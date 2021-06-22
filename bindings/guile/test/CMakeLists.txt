@@ -49,16 +49,16 @@ gnc_add_scheme_test_targets(scm-test-engine
 add_dependencies(check scm-test-engine)
 gnc_add_scheme_tests("${engine_test_SCHEME}")
 
+set (scm_tests_with_srfi64_SOURCES
+  test-business-core.scm
+  test-scm-engine.scm
+  )
+
 if (HAVE_SRFI64)
     gnc_add_scheme_test_targets (scm-srfi64-extras
         SOURCES "srfi64-extras.scm"
         OUTPUT_DIR "tests"
         DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras")
-
-    set (scm_tests_with_srfi64_SOURCES
-        test-business-core.scm
-        test-scm-engine.scm
-        )
 
     gnc_add_scheme_test_targets (scm-test-with-srfi64
         SOURCES "${scm_tests_with_srfi64_SOURCES}"
@@ -96,6 +96,7 @@ endif()
 set(test_engine_SCHEME_DIST
     srfi64-extras.scm
     ${bindings_test_SCHEME}
+    ${scm_tests_with_srfi64_SOURCES}
     test-engine-extras.scm
     test-scm-query-import.scm
     test-business-core.scm

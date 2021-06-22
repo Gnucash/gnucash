@@ -561,11 +561,11 @@ gnc_numeric xaccAccountGetClearedBalance (const Account *account);
 gnc_numeric xaccAccountGetReconciledBalance (const Account *account);
 gnc_numeric xaccAccountGetPresentBalance (const Account *account);
 gnc_numeric xaccAccountGetProjectedMinimumBalance (const Account *account);
-/** Get the balance of the account as of the date specified */
+/** Get the balance of the account at the end of the day before the date specified. */
 gnc_numeric xaccAccountGetBalanceAsOfDate (Account *account,
         time64 date);
 
-/** Get the reconciled balance of the account as of the date specified */
+/** Get the reconciled balance of the account at the end of the day of the date specified. */
 gnc_numeric xaccAccountGetReconciledBalanceAsOfDate (Account *account, time64 date);
 
 /* These two functions convert a given balance from one commodity to
@@ -605,13 +605,13 @@ gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (
     const Account *account, const gnc_commodity *report_commodity,
     gboolean include_children);
 
-/* This function gets the balance as of the given date, ignoring
-   closing entries, in the desired commodity. */
+/** This function gets the balance at the end of the given date, ignoring
+    closing entries, in the desired commodity. */
 gnc_numeric xaccAccountGetNoclosingBalanceAsOfDateInCurrency(
     Account *acc, time64 date, gnc_commodity *report_commodity,
     gboolean include_children);
-/* This function gets the balance as of the given date in the desired
-   commodity. */
+/** This function gets the balance at the end of the given date in the desired
+    commodity. */
 gnc_numeric xaccAccountGetBalanceAsOfDateInCurrency(
     Account *account, time64 date, gnc_commodity *report_commodity,
     gboolean include_children);

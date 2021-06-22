@@ -1414,6 +1414,7 @@ gnc_default_share_print_info (void)
     if (!got_it)
     {
         info = gnc_default_print_info_helper (5);
+        info.monetary = 0;
         got_it = TRUE;
     }
 
@@ -2047,9 +2048,7 @@ typedef enum
 {
     START_ST,       /* Parsing initial whitespace */
     NEG_ST,         /* Parsed a negative sign or a left paren */
-    PRE_GROUP_ST,   /* Parsing digits before grouping and decimal characters */
-    START_GROUP_ST, /* Start of a digit group encountered (possibly) */
-    IN_GROUP_ST,    /* Within a digit group */
+    NUMER_ST,   /* Parsing digits before grouping and decimal characters */
     FRAC_ST,        /* Parsing the fractional portion of a number */
     DONE_ST,        /* Finished, number is correct module grouping constraints */
     NO_NUM_ST       /* Finished, number was malformed */
@@ -2105,20 +2104,17 @@ xaccParseAmountPosSign (const char * in_str, gboolean monetary, gnc_numeric *res
     gunichar group_separator;
     gchar *ignore = NULL;
     char *plus_sign = "+";
-    char *group;
 
     negative_sign = g_utf8_get_char(lc->negative_sign);
     if (monetary)
     {
         group_separator = g_utf8_get_char(lc->mon_thousands_sep);
         decimal_point = g_utf8_get_char(lc->mon_decimal_point);
-        group = lc->mon_grouping;
     }
     else
     {
         group_separator = g_utf8_get_char(lc->thousands_sep);
         decimal_point = g_utf8_get_char(lc->decimal_point);
-        group = lc->grouping;
     }
 
     if (skip)
@@ -2131,27 +2127,23 @@ xaccParseAmountPosSign (const char * in_str, gboolean monetary, gnc_numeric *res
             ignore = plus_sign;
     }
 
-    return xaccParseAmountExtended(in_str, monetary, negative_sign, decimal_point,
-                                   group_separator, group, ignore, result, endstr);
+    return xaccParseAmountExtended(in_str, monetary, negative_sign,
+                                   decimal_point, group_separator,
+                                   ignore, result, endstr);
 }
 
-/* Note: xaccParseAmountExtended causes test-print-parse-amount
-to fail if QOF_SCANF_LLD is simply replaced by G_GINT64_FORMAT. Why?
-A: Because scanf and printf use different symbols for 64-bit numbers.
-*/
 gboolean
 xaccParseAmountExtended (const char * in_str, gboolean monetary,
                          gunichar negative_sign, gunichar decimal_point,
-                         gunichar group_separator, const char *group, const char *ignore_list,
+                         gunichar group_separator, const char *ignore_list,
                          gnc_numeric *result, char **endstr)
 {
     gboolean is_negative;
     gboolean got_decimal;
     gboolean need_paren;
-    GList * group_data;
     long long int numer;
     long long int denom;
-    int count, group_count;
+    int count;
 
     ParseState state;
 
@@ -2184,8 +2176,6 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
     is_negative = FALSE;
     got_decimal = FALSE;
     need_paren = FALSE;
-    group_data = NULL;
-    group_count = 0;
     numer = 0;
     denom = 1;
 
@@ -2217,7 +2207,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
                 count = g_unichar_to_utf8(uc, out);
                 out += count; /* we record the digits themselves in out_str
                          * for later conversion by libc routines */
-                next_state = PRE_GROUP_ST;
+                next_state = NUMER_ST;
             }
             else if (uc == decimal_point)
             {
@@ -2251,7 +2241,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
             {
                 count = g_unichar_to_utf8(uc, out);
                 out += count;
-                next_state = PRE_GROUP_ST;
+                next_state = NUMER_ST;
             }
             else if (uc == decimal_point)
             {
@@ -2267,9 +2257,9 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 
             break;
 
-            /* PRE_GROUP_ST means we have started parsing the number, but
-             * have not encountered a decimal point or a grouping character. */
-        case PRE_GROUP_ST:
+            /* NUMER_ST means we have started parsing the number, but
+             * have not encountered a decimal separator. */
+        case NUMER_ST:
             if (g_unichar_isdigit(uc))
             {
                 count = g_unichar_to_utf8(uc, out);
@@ -2281,85 +2271,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
             }
             else if (uc == group_separator)
             {
-                next_state = START_GROUP_ST;
-            }
-            else if (uc == ')' && need_paren)
-            {
-                next_state = DONE_ST;
-                need_paren = FALSE;
-            }
-            else
-            {
-                next_state = DONE_ST;
-            }
-
-            break;
-
-            /* START_GROUP_ST means we have just parsed a group character.
-             * Note that group characters might be whitespace!!! In general,
-             * if a decimal point or a group character is whitespace, we
-             * try to interpret it in the fashion that will allow parsing
-             * of the current number to continue. */
-        case START_GROUP_ST:
-            if (g_unichar_isdigit(uc))
-            {
-                count = g_unichar_to_utf8(uc, out);
-                out += count;
-                group_count++; /* We record the number of digits
-                          * in the group for later checking. */
-                next_state = IN_GROUP_ST;
-            }
-            else if (uc == decimal_point)
-            {
-                /* If we now get a decimal point, and both the decimal
-                 * and the group separator are also whitespace, assume
-                 * the last group separator was actually whitespace and
-                 * stop parsing. Otherwise, there's a problem. */
-                if (g_unichar_isspace(group_separator) &&
-                        g_unichar_isspace(decimal_point))
-                    next_state = DONE_ST;
-                else
-                    next_state = NO_NUM_ST;
-            }
-            else if (uc == ')' && need_paren)
-            {
-                if (g_unichar_isspace(group_separator))
-                {
-                    next_state = DONE_ST;
-                    need_paren = FALSE;
-                }
-                else
-                    next_state = NO_NUM_ST;
-            }
-            else
-            {
-                /* If the last group separator is also whitespace,
-                 * assume it was intended as such and stop parsing.
-                 * Otherwise, there is a problem. */
-                if (g_unichar_isspace(group_separator))
-                    next_state = DONE_ST;
-                else
-                    next_state = NO_NUM_ST;
-            }
-            break;
-
-            /* IN_GROUP_ST means we are in the middle of parsing
-             * a group of digits. */
-        case IN_GROUP_ST:
-            if (g_unichar_isdigit(uc))
-            {
-                count = g_unichar_to_utf8(uc, out);
-                out += count;
-                group_count++; /* We record the number of digits
-                          * in the group for later checking. */
-            }
-            else if (uc == decimal_point)
-            {
-                next_state = FRAC_ST;
-            }
-            else if (uc == group_separator)
-            {
-                next_state = START_GROUP_ST;
+                 ; //ignore it
             }
             else if (uc == ')' && need_paren)
             {
@@ -2394,11 +2306,9 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
             {
                 /* If a subsequent group separator is also whitespace,
                  * assume it was intended as such and stop parsing.
-                 * Otherwise, there is a problem. */
+                 * Otherwise ignore it. */
                 if (g_unichar_isspace(group_separator))
                     next_state = DONE_ST;
-                else
-                    next_state = NO_NUM_ST;
             }
             else if (uc == ')' && need_paren)
             {
@@ -2416,13 +2326,6 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
             PERR("bad state");
             g_assert_not_reached();
             break;
-        }
-
-        /* If we're moving out of the IN_GROUP_ST, record data for the group */
-        if ((state == IN_GROUP_ST) && (next_state != IN_GROUP_ST))
-        {
-            group_data = g_list_prepend(group_data, GINT_TO_POINTER(group_count));
-            group_count = 0;
         }
 
         /* If we're moving into the FRAC_ST or out of the machine
@@ -2457,55 +2360,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
     if (need_paren || (state == NO_NUM_ST))
     {
         g_free(out_str);
-        g_list_free(group_data);
         return FALSE;
-    }
-
-    /* If there were groups, validate them */
-    if (group_data != NULL)
-    {
-        gboolean good_grouping = TRUE;
-        GList *node;
-
-        /* The groups were built in reverse order. This
-         * is the easiest order to verify them in. */
-        for (node = group_data; group && node; node = node->next)
-        {
-            /* Verify group size */
-            if (*group != GPOINTER_TO_INT(node->data))
-            {
-                good_grouping = FALSE;
-                break;
-            }
-
-            /* Peek ahead at the next group code */
-            switch (group[1])
-            {
-                /* A null char means repeat the last group indefinitely */
-            case '\0':
-                break;
-                /* CHAR_MAX means no more grouping allowed */
-            case CHAR_MAX:
-                if (node->next != NULL)
-                    good_grouping = FALSE;
-                break;
-                /* Anything else means another group size */
-            default:
-                group++;
-                break;
-            }
-
-            if (!good_grouping)
-                break;
-        }
-
-        g_list_free(group_data);
-
-        if (!good_grouping)
-        {
-            g_free(out_str);
-            return FALSE;
-        }
     }
 
     /* Cap the end of the fraction string, if any */
@@ -2662,4 +2517,149 @@ gnc_ui_util_remove_registered_prefs (void)
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_AUTO_DECIMAL_PLACES,
                                  gnc_set_auto_decimal_places, NULL);
+}
+
+static gboolean
+unichar_is_cntrl (gunichar uc)
+{
+    if (uc < 0x20 || (uc > 0x7e && uc < 0xa0))
+        return TRUE;
+    else
+        return FALSE;
+}
+
+gchar *
+gnc_filter_text_for_control_chars (const gchar *text)
+{
+    gchar *normal_text, *nt;
+    GString *filtered;
+    gboolean cntrl = FALSE;
+    gboolean text_found = FALSE;
+
+    if (!text)
+        return NULL;
+
+    if (!g_utf8_validate (text, -1, NULL))
+        return NULL;
+
+    normal_text = g_utf8_normalize (text, -1, G_NORMALIZE_ALL_COMPOSE);
+
+    filtered = g_string_sized_new (strlen (normal_text) + 1);
+
+    nt = normal_text;
+
+    while (*nt)
+    {
+        gunichar uc = g_utf8_get_char (nt);
+
+        // check for starting with control characters
+        if (unichar_is_cntrl (uc) && !text_found)
+        {
+            nt = g_utf8_next_char (nt);
+            continue;
+        }
+        // check for alpha, num and punctuation
+        if (!unichar_is_cntrl (uc))
+        {
+            filtered = g_string_append_unichar (filtered, uc);
+            text_found = TRUE;
+        }
+        // check for control characters after text
+        if (unichar_is_cntrl (uc))
+            cntrl = TRUE;
+
+        nt = g_utf8_next_char (nt);
+
+        if (cntrl) // if control characters in text replace with space
+        {
+            gunichar uc2 = g_utf8_get_char (nt);
+
+            if (!unichar_is_cntrl (uc2))
+                filtered = g_string_append_unichar (filtered, ' ');
+        }
+        cntrl = FALSE;
+    }
+    g_free (normal_text);
+    return g_string_free (filtered, FALSE);
+}
+
+void
+gnc_filter_text_set_cursor_position (const gchar *incoming_text,
+                                     const gchar *symbol,
+                                     gint *cursor_position)
+{
+    gint text_len;
+    gint num = 0;
+
+    if (*cursor_position == 0)
+        return;
+
+    if (!incoming_text || !symbol)
+        return;
+
+    if (g_strrstr (incoming_text, symbol) == NULL)
+        return;
+
+    text_len = g_utf8_strlen (incoming_text, -1);
+
+    for (gint x = 0; x < text_len; x++)
+    {
+        gchar *temp = g_utf8_offset_to_pointer (incoming_text, x);
+
+        if (g_str_has_prefix (temp, symbol))
+            num++;
+
+        if (g_strrstr (temp, symbol) == NULL)
+            break;
+    }
+    *cursor_position = *cursor_position - (num * g_utf8_strlen (symbol, -1));
+}
+
+gchar *
+gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
+                                     const gchar *symbol)
+{
+    gchar *ret_text = NULL;
+    gchar **split;
+
+    if (!incoming_text)
+        return NULL;
+
+    if (!symbol)
+       return g_strdup (incoming_text);
+
+    if (g_strrstr (incoming_text, symbol) == NULL)
+        return g_strdup (incoming_text);
+
+    split = g_strsplit (incoming_text, symbol, -1);
+
+    ret_text = g_strjoinv (NULL, split);
+
+    g_strfreev (split);
+    return ret_text;
+}
+
+gchar *
+gnc_filter_text_for_currency_commodity (const gnc_commodity *comm,
+                                        const gchar *incoming_text,
+                                        const gchar **symbol)
+{
+    if (!incoming_text)
+    {
+        *symbol = NULL;
+        return NULL;
+    }
+
+    if (!gnc_commodity_is_currency (comm))
+    {
+        *symbol = NULL;
+        return g_strdup (incoming_text);
+    }
+
+    if (comm)
+        *symbol = gnc_commodity_get_nice_symbol (comm);
+    else
+        *symbol = gnc_commodity_get_nice_symbol (gnc_default_currency ());
+
+    return gnc_filter_text_for_currency_symbol (incoming_text, *symbol);
 }

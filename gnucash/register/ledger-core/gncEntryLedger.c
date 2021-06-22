@@ -788,6 +788,7 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
 
     /* return the tax value */
     taxes_unrounded = gncAccountValueTotal (taxes);
+    gncAccountValueDestroy (taxes);
     if (tax_value)
         *tax_value = gnc_numeric_convert (taxes_unrounded, denom,
                                           GNC_HOW_RND_ROUND_HALF_UP);

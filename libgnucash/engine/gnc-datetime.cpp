@@ -255,11 +255,18 @@ LDT_from_date_daypart(const Date& date, DayPart part, const TZ_Ptr tz)
 static LDT
 LDT_from_struct_tm(const struct tm tm)
 {
-    Date tdate{boost::gregorian::date_from_tm(tm)};
-    Duration tdur{boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
-                                                  tm.tm_sec, 0)};
-    TZ_Ptr tz{tzp->get(tdate.year())};
-    return LDT_from_date_time(tdate, tdur, tz);
+    try
+    {
+        Date tdate{boost::gregorian::date_from_tm(tm)};
+        Duration tdur{boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
+                                                       tm.tm_sec, 0)};
+        TZ_Ptr tz{tzp->get(tdate.year())};
+        return LDT_from_date_time(tdate, tdur, tz);
+    }
+    catch(const boost::gregorian::bad_year&)
+    {
+        throw(std::invalid_argument{"Time value is outside the supported year range."});
+    }
 }
 
 void

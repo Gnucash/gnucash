@@ -122,28 +122,41 @@ void
 gnc_autoclear_window_ok_cb (GtkWidget *widget,
                             AutoClearWindow *data)
 {
-    GList *toclear_list;
+    GList *toclear_list = NULL;
     gnc_numeric toclear_value;
     gchar *errmsg = NULL;
+    GError* error = NULL;
 
     g_return_if_fail (widget && data);
 
-    toclear_value = gnc_amount_edit_get_amount(data->end_value);
+    /* test for valid value */
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(data->end_value), &error))
+    {
+        errmsg = g_strdup (error->message);
+        g_error_free (error);
+    }
+    else
+    {
+        toclear_value = gnc_amount_edit_get_amount(data->end_value);
 
-    if (gnc_reverse_balance(data->account))
-        toclear_value = gnc_numeric_neg (toclear_value);
+        if (gnc_reverse_balance(data->account))
+            toclear_value = gnc_numeric_neg (toclear_value);
 
-    toclear_value = gnc_numeric_convert
-        (toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_HOW_RND_ROUND);
+        toclear_value = gnc_numeric_convert
+            (toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_HOW_RND_ROUND);
 
-    toclear_list = gnc_account_get_autoclear_splits
-        (data->account, toclear_value, &errmsg);
+        toclear_list = gnc_account_get_autoclear_splits
+            (data->account, toclear_value, &errmsg);
+    }
 
     if (errmsg)
     {
+        GtkWidget *entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT(data->end_value));
         gtk_label_set_text (data->status_label, errmsg);
-        gnc_amount_edit_set_amount (data->end_value, toclear_value);
-        gtk_editable_select_region (GTK_EDITABLE (data->end_value), 0, -1);
+        if (gnc_numeric_check (toclear_value) == 0)
+            gnc_amount_edit_set_amount (data->end_value, toclear_value);
+        gtk_widget_grab_focus (GTK_WIDGET(entry));
+        gnc_amount_edit_select_region (GNC_AMOUNT_EDIT(data->end_value), 0, -1);
         g_free (errmsg);
     }
     else
@@ -197,6 +210,8 @@ autoClearWindow (GtkWidget *parent, Account *account)
     AutoClearWindow *data;
     char *title;
     gnc_numeric after;
+    GNCPrintAmountInfo print_info;
+    gnc_commodity *currency;
 
     data = g_new0 (AutoClearWindow, 1);
     data->account = account;
@@ -217,6 +232,13 @@ autoClearWindow (GtkWidget *parent, Account *account)
 
     /* Add amount edit box */
     data->end_value = GNC_AMOUNT_EDIT(gnc_amount_edit_new());
+
+    currency = xaccAccountGetCommodity (account);
+    print_info = gnc_commodity_print_info (currency, FALSE);
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT(data->end_value), print_info);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT(data->end_value),
+                                  gnc_commodity_get_fraction (currency));
+
     g_signal_connect(GTK_WIDGET(data->end_value), "activate",
                      G_CALLBACK(gnc_autoclear_window_ok_cb), data);
 
@@ -232,7 +254,7 @@ autoClearWindow (GtkWidget *parent, Account *account)
         after = gnc_numeric_neg(after);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), after);
     gtk_widget_grab_focus(GTK_WIDGET(data->end_value));
-    gtk_editable_select_region (GTK_EDITABLE (data->end_value), 0, -1);
+    gnc_amount_edit_select_region (GNC_AMOUNT_EDIT (data->end_value), 0, -1);
 
     data->status_label = GTK_LABEL(gtk_builder_get_object (builder, "status_label"));
 

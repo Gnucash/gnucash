@@ -24,23 +24,20 @@
 
 #include <glib.h>
 
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cstdint>
+#include <sstream>
+#include <boost/regex.hpp>
+#include <boost/locale/encoding_utf.hpp>
+
 extern "C"
 {
 #include <config.h>
-
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "qof.h"
 }
-
-#include <stdint.h>
-#include <boost/regex.hpp>
-#include <boost/locale/encoding_utf.hpp>
-#include <sstream>
-#include <cstdlib>
 
 #include "gnc-numeric.hpp"
 #include "gnc-rational.hpp"

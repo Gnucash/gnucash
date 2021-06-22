@@ -1164,6 +1164,8 @@ void gnc_tree_view_save_state (GncTreeView *view)
         else if (g_key_file_has_key (state_file, priv->state_section, STATE_KEY_COLUMN_ORDER, NULL))
             g_key_file_remove_key (state_file, priv->state_section, STATE_KEY_COLUMN_ORDER, NULL);
 
+        g_strfreev (col_order);
+
 
         // ENTER("view %p, wanted %s", view, wanted);
         column_list = gtk_tree_view_get_columns (GTK_TREE_VIEW(view));

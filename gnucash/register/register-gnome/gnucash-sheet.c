@@ -1549,6 +1549,10 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
 void
 gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet)
 {
+    GtkStyleContext *stylectxt;
+    GncItemEdit *item_edit;
+    GList *classes = NULL;
+
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
@@ -1558,6 +1562,26 @@ gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet)
                                                       GNC_PREF_DRAW_HOR_LINES);
     sheet->use_vertical_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
                                                     GNC_PREF_DRAW_VERT_LINES);
+
+    item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+
+    stylectxt = gtk_widget_get_style_context (GTK_WIDGET(item_edit->editor));
+
+    // Get the CSS classes for the editor
+    classes = gtk_style_context_list_classes (stylectxt);
+
+    for (GList *l = classes; l; l = l->next)
+    {
+        if (g_str_has_prefix (l->data, "gnc-class-"))
+            gtk_style_context_remove_class (stylectxt, l->data);
+    }
+    g_list_free (classes);
+
+    gtk_style_context_remove_class (stylectxt, GTK_STYLE_CLASS_VIEW);
+
+    // Note: COLOR_PRIMARY_ACTIVE, COLOR_SECONDARY_ACTIVE, COLOR_SPLIT_ACTIVE
+    // all equate to *-cursor style class used for the editor
+    gnucash_get_style_classes (sheet, stylectxt, COLOR_PRIMARY_ACTIVE, FALSE);
 }
 
 static gboolean

@@ -453,6 +453,7 @@ delete_template_trans(SchedXaction *sx)
                    sxprivTransMapDelete,
                    NULL);
 
+    g_list_free (templ_acct_transactions);
     return;
 }
 

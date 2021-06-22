@@ -107,6 +107,7 @@ GncXmlBackend::check_path (const char* fullpath, bool create)
         g_free(dirname);
         return false;
     }
+    g_free(dirname);
     return true;
 }
 
