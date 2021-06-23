@@ -37,6 +37,7 @@ set (engine_HEADERS
   Scrub2.h
   ScrubBusiness.h
   Scrub3.h
+  ScrubBudget.h
   Split.h
   TransLog.h
   Transaction.h
@@ -133,6 +134,7 @@ set (engine_SOURCES
   Scrub2.c
   Scrub3.c
   ScrubBusiness.c
+  ScrubBudget.c
   Split.c
   TransLog.c
   Transaction.c

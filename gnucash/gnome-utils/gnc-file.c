@@ -46,6 +46,7 @@
 #include "gnc-plugin-file-history.h"
 #include "qof.h"
 #include "Scrub.h"
+#include "ScrubBudget.h"
 #include "TransLog.h"
 #include "gnc-session.h"
 #include "gnc-state.h"
@@ -701,6 +702,22 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 #define RESPONSE_READONLY 4
 #define RESPONSE_FILE 5
 
+static void
+maybe_scrub_budget_signs (QofBook *book, GtkWindow *parent)
+{
+
+    if (gnc_features_check_used (book, GNC_FEATURE_BUDGET_UNREVERSED))
+        return;
+
+    /* Fix budget signs */
+    if (gnc_maybe_scrub_all_budget_signs (book))
+    {
+        gnc_info_dialog (parent, "%s", _("This book has budgets. \
+The internal representation of amounts is now fixed. Please review \
+budgets and amend signs if necessary."));
+    }
+}
+
 static gboolean
 gnc_post_file_open (GtkWindow *parent, const char * filename, gboolean is_readonly)
 {
@@ -717,7 +734,7 @@ gnc_post_file_open (GtkWindow *parent, const char * filename, gboolean is_readon
     gchar *password = NULL;
     gchar *path = NULL;
     gint32 port = 0;
-
+    gchar *budget_scrubbing_outcome;
 
     ENTER("filename %s", filename);
 RESTART:
@@ -1103,9 +1120,13 @@ RESTART:
         g_free ( message );
     }
 
-    // Fix account color slots being set to 'Not Set', should run once on a book
     qof_event_suspend();
+
+    // Fix account color slots being set to 'Not Set', should run once on a book
     xaccAccountScrubColorNotSet (gnc_get_current_book());
+
+    maybe_scrub_budget_signs (new_book, parent);
+
     qof_event_resume();
 
     return TRUE;
