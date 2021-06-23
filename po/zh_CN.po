@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-21 09:31+0000\n"
+"PO-Revision-Date: 2021-06-23 10:33+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.7.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -5354,7 +5354,7 @@ msgstr "显示展开的交易事项，包含所有分录"
 #: gnucash/gnome/gnc-plugin-page-register.c:625
 #: gnucash/gnome-search/dialog-search.c:1105
 msgid "Split"
-msgstr "子交易"
+msgstr "多重"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:503
 #: gnucash/gnome/gnc-plugin-page-register.c:626
@@ -6943,7 +6943,7 @@ msgstr "不匹配正则表达式"
 
 #: gnucash/gnome-search/search-string.c:322
 msgid "Match case"
-msgstr "匹配"
+msgstr "区分大小写"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:178
 msgid ""
@@ -15242,7 +15242,7 @@ msgstr "何时支付 / 支付时"
 #: gnucash/gtkbuilder/dialog-find-account.glade:25
 #: gnucash/gtkbuilder/dialog-find-account.glade:96
 msgid "Search the Account List"
-msgstr "搜索账户列表"
+msgstr "搜索列表"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
 msgid "Close _on Jump"
@@ -15262,11 +15262,11 @@ msgstr "搜索范围"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 msgid "Account Full Name"
-msgstr "科目全称"
+msgstr "科目全名"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:215
 msgid "Case insensitive searching is available on 'Account Full Name'."
-msgstr "在大写情况下，您可以搜索“帐户的全名”。"
+msgstr "搜索不区分大小写。"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:258
 msgid "Sea_rch"
@@ -15278,8 +15278,8 @@ msgid ""
 "Tree,\n"
 "if account should not be shown, this will be temporarily overridden."
 msgstr ""
-"选择一行并按跳转到目标以跳转到帐户树中的帐户。\n"
-"未显示的帐户也会暂时覆盖并显示它。"
+"选择科目，并跳转至科目树相应位置。\n"
+"隐藏科目也会显现。"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:35
 msgid "Import Map Editor"
