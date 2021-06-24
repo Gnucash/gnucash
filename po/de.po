@@ -24,6 +24,7 @@
 # Julian Heinzel <jeinzi@gmx.de>, 2021.
 # Christoph Franzen <christoph@alte-pflasterei.de>, 2021.
 # Thomas <warrel040@gmx.de>, 2021.
+# Thomas Kriegel <warrel040@gmx.de>, 2021.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -35,8 +36,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-22 22:33+0000\n"
-"Last-Translator: Thomas <warrel040@gmx.de>\n"
+"PO-Revision-Date: 2021-06-24 23:32+0000\n"
+"Last-Translator: Thomas Kriegel <warrel040@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -2832,10 +2833,8 @@ msgid "You must select a company for payment processing."
 msgstr "Sie müssen eine Firma für die Zahlungsverarbeitung auswählen."
 
 #: gnucash/gnome/dialog-payment.c:256
-#, fuzzy
-#| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
-msgstr "Es ist während des Importes ein Problem aufgetreten."
+msgstr "Es gibt ein Problem mit dem Zahlungs- oder Erstattungsbetrag."
 
 #: gnucash/gnome/dialog-payment.c:277
 msgid "You must select a transfer account from the account tree."
@@ -4883,10 +4882,8 @@ msgid "Enter a payment for the owner of this invoice"
 msgstr "Geben Sie eine Zahlung für den Mandanten dieser Rechnung ein"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:381
-#, fuzzy
-#| msgid "Open a company report window for the owner of this invoice"
 msgid "Open a customer report window for the owner of this invoice"
-msgstr "Einen Firmenbericht für den Mandanten dieser Rechnung öffnen"
+msgstr "Öffnen eines Kundenberichtsfenster für den Empfänger dieser Rechnung"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:383
 #: gnucash/gnome/gnc-plugin-page-invoice.c:404
@@ -4947,10 +4944,9 @@ msgid "Enter a payment for the owner of this bill"
 msgstr "Geben Sie eine Zahlung für den Mandanten dieser Rechnung ein"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:402
-#, fuzzy
-#| msgid "Open a company report window for the owner of this bill"
 msgid "Open a vendor report window for the owner of this bill"
-msgstr "Einen Firmenbericht für den Mandanten dieser Rechnung öffnen"
+msgstr ""
+"Öffnen eines Lieferantenberichtsfensters für den Mandanten dieser Rechnung"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
 msgid "Use the current layout as default for all vendor bills and credit notes"
@@ -5002,10 +4998,10 @@ msgid "Enter a payment for the owner of this voucher"
 msgstr "Geben Sie eine Zahlung für den Mandanten dieser Auslagenerstattung ein"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:423
-#, fuzzy
-#| msgid "Open a company report window for the owner of this voucher"
 msgid "Open a employee report window for the owner of this voucher"
-msgstr "Einen Firmenbericht für den Mandanten dieser Auslagenerstattung öffnen"
+msgstr ""
+"Öffnen einen Mitarbeiterbericht-Fensters für den Empfänger dieser "
+"Auslagenerstattung"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:430
 msgid ""
@@ -7757,10 +7753,9 @@ msgid "Existing"
 msgstr "Existierend"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
-#, fuzzy
-#| msgid "Use +- keys to increment/decrement number"
 msgid "You can type '+' or '-' to increment or decrement the number."
-msgstr "Verwenden Sie die Tasten »+«/»-«, um die Zahl zu erhöhen/verringern."
+msgstr ""
+"Drücken Sie die Tasten »+« oder »-«, um die Zahl zu erhöhen oder verringern."
 
 # Todo: Im Dialog noch überprüfen
 #: gnucash/gnome-utils/dialog-dup-trans.c:297
@@ -8175,10 +8170,9 @@ msgid "An error occurred while processing '%s' at position %d"
 msgstr "Fehler aufgetreten beim Verarbeiten von »%s« an der Position %d."
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:419
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s'"
-msgstr "Fehler aufgetreten beim Verarbeiten von »%s«."
+msgstr "Fehler aufgetreten beim Verarbeiten von »%s«"
 
 #: gnucash/gnome-utils/gnc-autosave.c:99
 msgid "Save file automatically?"
@@ -11290,42 +11284,29 @@ msgstr ""
 "angezeigt wird."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:25
-#, fuzzy
-#| msgid "Add matching transactions below this score"
 msgid "Likely matching transaction within these days"
-msgstr "Buchungen unterhalb dieser Schwelle hinzufügen"
+msgstr "Wahrscheinlich passende Transaktion innerhalb dieser Tage"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:26
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
 msgstr ""
-"Minimal notwendige Bewertung, damit eine mögliche Zuordnung zu einer "
-"existierenden Buchung im Buchungs-Import überhaupt berücksichtigt und "
-"angezeigt wird."
+"Dieses Feld gibt die maximale Anzahl von Tagen an, innerhalb derer eine "
+"Transaktion zu einem Treffer in der Liste führen kann."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:30
-#, fuzzy
-#| msgid "Clear matching transactions above this score"
 msgid "UnLikely matching a transaction outside of these days"
-msgstr "Buchungen oberhalb dieser Schwelle abgleichen"
+msgstr ""
+"Unwahrscheinlich, dass eine Transaktion außerhalb dieser Tage übereinstimmt"
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:31
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the minimum number of days a transaction is unlikely to "
 "be a match in the list."
 msgstr ""
-"Minimal notwendige Bewertung, damit eine mögliche Zuordnung zu einer "
-"existierenden Buchung im Buchungs-Import überhaupt berücksichtigt und "
-"angezeigt wird."
+"Dieses Feld gibt die Mindestanzahl von Tagen an, ab der eine Transaktion "
+"nicht mehr zu einem Treffer in der Liste führen soll."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
@@ -12327,12 +12308,9 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
 #: gnucash/gtkbuilder/dialog-preferences.glade:2842
-#, fuzzy
-#| msgid "Show all transactions on one line. (Two in double line mode.)"
 msgid "Show all transactions on one line or in double line mode on two."
 msgstr ""
-"Alle Buchungssätze einzeilig anzeigen. (Zweizeilig, wenn die Bemerkung "
-"angezeigt wird.)"
+"Alle Buchungssätze einzeilig oder im Zweizeilenmodus in zwei Zeilen anzeigen."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:291
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:296
@@ -12351,17 +12329,13 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:295
 #: gnucash/gtkbuilder/dialog-preferences.glade:2861
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line. (Two in double line mode.)"
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
 msgstr ""
 "Aktuelle Buchung automatisch ausklappen, um alle Buchungsteile zu zeigen. "
-"Alle anderen Buchungen werden einzeilig angezeigt. (Bzw. zweizeilig, wenn "
-"die Bemerkung angezeigt werden soll.)"
+"Alle anderen Buchungen werden einzeilig oder im Zweizeilenmodus in zwei "
+"Zeilen angezeigt."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:300
 #: gnucash/gtkbuilder/dialog-preferences.glade:2880
@@ -13390,38 +13364,6 @@ msgstr "CSV-Kurs Import"
 # Fixme quote multiword names
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:65
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you import Prices from a CSV file.\n"
-#| "\n"
-#| "There is a minimum number of columns that have to be present for a "
-#| "successful import, these are Date, Amount, From Namespace, From Symbol "
-#| "and Currency To. If all entries are for the same Commodity / Currency "
-#| "then you can select them and then the columns will be Date and Amount.\n"
-#| "\n"
-#| "Various options exist for specifying the delimiter as well as a fixed "
-#| "width option. With the fixed width option, double click on the table of "
-#| "rows displayed to set a column width, then right mouse to change if "
-#| "required.\n"
-#| "\n"
-#| "Examples are \"FTSE\",\"RR.L\",\"21/11/2016\",5.345,\"GBP\" and CURRENCY;"
-#| "USD;2016-11-21;1.56;GBP\n"
-#| "\n"
-#| "There is an option for specifying the start row, end row and an option to "
-#| "skip alternate rows beginning from the start row which can be used if you "
-#| "have some header text. Also there is an option to overwrite existing "
-#| "prices for that day if required.\n"
-#| "\n"
-#| "Lastly, for repeated imports the preview page has buttons to Load and "
-#| "Save the settings. To save the settings, tweak the settings to your "
-#| "preferences (optionally starting from an existing preset), then "
-#| "(optionally change the settings name and press the Save Settings button. "
-#| "Note you can't save to built-in presets.\n"
-#| "\n"
-#| "This operation is not reversible, so make sure you have a working "
-#| "backup.\n"
-#| "\n"
-#| "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgid ""
 "This assistant will help you import Prices from a CSV file.\n"
 "\n"
@@ -13452,8 +13394,8 @@ msgid ""
 "\n"
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgstr ""
-"Dieser Assistent hilft Ihnen beim Import von Kurswerten aus einer CSV "
-"Datei.\n"
+"Dieser Assistent hilft Ihnen beim Import von Kurswerten aus einer CSV Datei."
+"\n"
 "\n"
 "Für einen erfolgreichen Import müssen mindestens Spalten vorhanden sein für "
 "»Datum«, »Betrag«, »Von Wertpapier/Devise« und »Zu Währung«.\n"
@@ -13470,17 +13412,17 @@ msgstr ""
 "oder \"EUR\",\"2019-04-18\",1.125,\"USD\"\n"
 "\n"
 "Es gibt eine Option zur Auswahl der Startzeile, der Endzeile sowie zur Wahl, "
-"wie viele Zeilen, ausgehend von der Startzeile, übersprungen werden sollen "
-"(z.B. für den Fall, dass Ihre Datei einen Block mit Kopfzeilen enthält). "
-"Eine weitere Option ist, bereits vorhandene Preise für den Tag zu "
-"überschreiben.\n"
+"wie viele Zeilen, ausgehend von der Startzeile, übersprungen werden sollen ("
+"z.B. für den Fall, dass Ihre Datei einen Block mit Kopfzeilen enthält). Eine "
+"weitere Option ist, bereits vorhandene Preise für den Tag zu überschreiben.\n"
 "\n"
 "Zu guter Letzt hat die Vorschauseite für weitere Importe Knöpfe zum "
-"Speichern und Laden der Einstellungen. Passen Sie die Einstellungen nach "
-"Ihren Wünschen (ggf. ausgehend von einem vorherigen Zustand) an, geben Sie "
-"ggf. einen neuen Namen ein und drücken Sie den »Einstellungen speichern« "
-"Knopf. Bitte beachten Sie, dass Sie nicht unter dem Namen der vorgegebenen "
-"Einstellungen speichern können.\n"
+"Speichern und Laden der Einstellungen. Sie können Ihre angepassten "
+"Einstellungen speichern, um sie bei späteren Importen wieder zu verwenden. "
+"Nachdem Sie Ihre Einstellungen geladen haben, können Sie sie auch für "
+"ähnliche Importe erneut anpassen und unter einem anderen Namen speichern. "
+"Bitte beachten Sie, dass Sie diese nicht unter dem Namen der integrierten "
+"Voreinstellungen speichern können.\n"
 "\n"
 "Diese Aktion kann nicht zurückgenommen werden, also erstellen Sie bitte "
 "vorher eine Sicherungskopie.\n"
@@ -13681,10 +13623,6 @@ msgid "Import Preview"
 msgstr "Importvorschau"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1026
-#, fuzzy
-#| msgid ""
-#| "<b>Press Apply to add the Prices.\n"
-#| "Cancel to abort.</b>"
 msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
@@ -15153,7 +15091,7 @@ msgstr "Versteckt-Eigenschaft in Unterkonten vererben"
 msgid "Enable the sections to Cascade"
 msgstr ""
 "Wählen Sie die Eigenschaften, die vom Hauptkonto in die Unterkonten vererbt "
-"werden sollen."
+"werden sollen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:199
 #: gnucash/gtkbuilder/dialog-account.glade:1330
@@ -16017,9 +15955,9 @@ msgid ""
 "Existing relative file path links will be converted to absolute ones by "
 "combining them with the existing path head unless box unticked."
 msgstr ""
-"Vorhandene Verknüpfungen mit relativen Pfaden werden zu absoluten Pfaden "
-"umgewandelt, indem der Pfad-Anfang vorangestellt wird, außer das folgende "
-"Kästchen ist aktiviert."
+"Vorhandene relative Dateipfadverweise werden in absolute umgewandelt, indem "
+"der Pfadkopf vorangestellt wird, sofern das Kontrollkästchen nicht aktiviert "
+"ist."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:140
 msgid ""
@@ -16044,10 +15982,8 @@ msgid "Linked _Location"
 msgstr "Verknüpfter _Hyperlink"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:349
-#, fuzzy
-#| msgid "(none)"
 msgid "(None)"
-msgstr "(keine)"
+msgstr "(Keine)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:412
 msgid "Enter URL like http://www.gnucash.org"
@@ -17153,7 +17089,7 @@ msgstr "<b>Datum vervollständigen</b>"
 msgid "When a date is entered without year, it should be taken"
 msgstr ""
 "Wenn ein Datum ohne Jahreszahl eingegeben wird, soll folgendermaßen "
-"vervollständigt werden:"
+"vervollständigt werden"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1128
 msgid ""
@@ -17168,7 +17104,7 @@ msgid ""
 "many months before the current month"
 msgstr ""
 "In einem Zwölf-Monats-Zeitfenster, welches diese\n"
-"Anzahl Monate vor dem aktuellen Monat beginnt:"
+"Anzahl Monate vor dem aktuellen Monat beginnt"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1165
 msgid "Enter number of months."
@@ -19762,17 +19698,38 @@ msgid ""
 "Online Banking, because sometimes the bank does not give you correct "
 "feedback when a transfer is rejected."
 msgstr ""
+"Die Anforderungen für Online-Banking variieren zwischen den verschiedenen "
+"unterstützten AqBanking-Backends, aber in der Regel benötigen Sie:\n"
+"* Ihre Bank muss Ihnen einen Online-Zugang gewähren. Sehen Sie auf der Bank-"
+"Website nach oder fragen Sie Ihren Kundenservice, wie Sie diesen Zugang "
+"erhalten.\n"
+"Sie sollten Ihnen auch mitteilen:\n"
+"* Ihre Benutzerkennung, die Sie gegenüber dem Bank-Server identifiziert, oft "
+"Ihre Basiskontonummer;\n"
+"* Die URL Ihres Online Banking-Servers;\n"
+"* In manchen Fällen ist die Routing-Nummer der Filiale Ihrer Bank für diesen "
+"Assistenten nützlich;\n"
+"* Authentifizierungsmethoden variieren je nach Backend und gewählter Methode:"
+"\n"
+" * FinTS PIN/TAN: Einige Methoden erfordern ein spezielles Gerät wie einen "
+"Kartenlesegerät oder ein Smartphone;\n"
+" * FinTS HBCI: Sie müssen die öffentlichen Teile der asymmetrischen "
+"Schlüssel mit Ihrer Bank austauschen (\"Ini-Letter\").\n"
+" * PayPal: registrierte E-Mail-Adresse, Passwort, API-Signatur;\n"
+"\n"
+"Siehe https://wiki.gnucash.org/wiki/AqBanking für weitere Details.\n"
+"\n"
+"Hinweis: KEINE GARANTIE FÜR IRGENDWAS. Einige Banken betreiben einen "
+"schlecht implementierten Online Banking Server. Sie sollten sich nicht auf "
+"zeitkritische Überweisungen über Online Banking verlassen, da die Bank Ihnen "
+"manchmal keine korrekte Rückmeldung gibt, wenn eine Überweisung abgelehnt "
+"wird."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
 msgstr "Grundlegende Online-Banking Einrichtung"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:90
-#, fuzzy
-#| msgid ""
-#| "The Setup of your Online Banking connection is handled by the external "
-#| "program \"AqBanking Setup Wizard\". Please press the button below to "
-#| "start this program."
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup Wizard\".\n"
@@ -19781,8 +19738,11 @@ msgid ""
 "Please press the button below to start it."
 msgstr ""
 "Die Einrichtung Ihrer Onlinebanking-Verbindung (HBCI) wird von dem externen "
-"Programm »AqBanking Einrichtungs-Assistent« durchgeführt. Bitte klicken Sie "
-"den Knopf, um dieses Programm zu starten."
+"Programm »AqBanking Einrichtungs-Assistent« durchgeführt. \n"
+"Sie müssen mindestens eine Verbindung aufbauen, bevor Sie fortfahren können."
+"\n"
+"\n"
+"Bitte klicken Sie den Knopf, um dieses Programm zu starten."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:104
 msgid "_Start AqBanking Wizard"
@@ -21033,13 +20993,6 @@ msgid "Import bills and invoices from a CSV text file"
 msgstr "Kunden- oder Lieferantenrechnungen aus CSV-Datei importieren."
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:80
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you export the Account Tree to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
 msgid ""
 "This assistant will help you export the Account Tree to a file with the "
 "separator specified below.\n"
@@ -21047,8 +21000,8 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"Dieser Assistent hilft Ihnen, Ihren Kontenplan in eine Datei exportieren.\n"
-"Das Trennzeichen geben Sie unten an.\n"
+"Dieser Assistent hilft Ihnen, Ihren Kontenplan in eine Datei zu exportieren, "
+"wobei das unten angegebene Trennzeichen verwendet wird\n"
 "\n"
 "Wählen Sie die Einstellungen für die Datei und klicken Sie »Weiter«. Mit "
 "»Abbrechen« können Sie den Export abbrechen.\n"
@@ -21056,22 +21009,7 @@ msgstr ""
 # fixMe: I18N: Space, Pref path [FE]
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
-#, fuzzy, c-format
-#| msgid ""
-#| "This assistant will help you export the Transactions to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "There will be multiple rows for each transaction and may require further "
-#| "manipulation to get them in a format you can use.\n"
-#| "\n"
-#| "Each Transaction will appear once in the export and will be listed in the "
-#| "order the accounts were processed\n"
-#| "\n"
-#| "Price/Rate output format is controlled by the Preference setting,\n"
-#| "General->Force Prices to display as decimals\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
+#, c-format
 msgid ""
 "This assistant will help you export the Transactions to a file with the "
 "separator specified below.\n"
@@ -21088,18 +21026,18 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"Dieser Assistent hilft Ihnen die Buchungen in eine Datei mit den unten\n"
+"Dieser Assistent hilft Ihnen die Buchungen in eine Datei mit dem unten "
 "angegebenen Trennzeichen zu exportieren.\n"
 "\n"
-"Jede Buchung wird mehrere Zeilen ergeben und Sie werden möglicherweise "
-"nacharbeiten müssen, um den Export in ein für Sie nützliches Format zu "
-"bringen.\n"
+"%s\n"
 "\n"
-"Jede Buchung taucht nur ein Mal im Export auf und zwar in der Reihenfolge, "
-"in der die Kontenblätter verarbeitet werden.\n"
+"Obwohl eine Transaktion Teilbuchungen in mehreren der ausgewählten Konten "
+"haben kann, wird sie nur einmal exportiert. Sie wird unter dem ersten "
+"verarbeiteten Konto angezeigt, in dem sie eine Teilbuchung hat.\n"
 "\n"
-"Das Ausgabeformat von »Kurs/Preis« wird von »Bearbeiten->Einstellungen-"
-">Zahl, Datum, Zeit->Preise immer als Dezimalstellen anzeigen« bestimmt.\n"
+"Das Ausgabeformat von »Kurs/Preis« wird von \n"
+"»Bearbeiten->Einstellungen->Zahl, Datum, Zeit->Preise immer als "
+"Dezimalstellen anzeigen« bestimmt.\n"
 "\n"
 "Wählen Sie die gewünschten Einstellungen für die Datei aus und klicken Sie "
 "dann auf »Weiter«, um fortzufahren, oder auf »Abbrechen«, um den Export "
@@ -21110,12 +21048,17 @@ msgid ""
 "There will be multiple rows for each transaction with each row representing "
 "one split."
 msgstr ""
+"Für jede Transaktion gibt es mehrere Zeilen, wobei jede Zeile eine "
+"Teilbuchung darstellt."
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "There will be one row for each transaction, equivalent to a single row in a "
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
 msgstr ""
+"Für jede Transaktion gibt es eine Zeile, was einer einzelnen Zeile in einem "
+"Register im Modus \"einzeilige Darstellung\" entspricht. Daher können einige "
+"Übertragungsdetails verloren gehen."
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
@@ -21630,15 +21573,11 @@ msgstr ""
 "Spalten."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
-#, fuzzy
-#| msgid ""
-#| "No account column selected and no default account specified either.\n"
-#| "This should never happen. Please report this as a bug."
 msgid ""
 "No account column selected and no base account specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Weder wurde eine Kontenspalte ausgewählt noch ein Standardkonto angegeben.\n"
+"Weder wurde eine Kontenspalte ausgewählt noch ein Basiskonto angegeben.\n"
 "Dies sollte niemals passieren. Bitte berichten Sie dies als Fehler."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:55
@@ -23554,16 +23493,12 @@ msgid "Weighted average of all transactions in the past"
 msgstr "Der gewichtete Durchschnitt aller vergangenen Buchungen"
 
 #: gnucash/report/options-utilities.scm:146
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Last up through report date"
-msgstr "Verwende das dem Berichtsdatum nächste Datum."
+msgstr "Zuletzt bis zum Berichtsdatum"
 
 #: gnucash/report/options-utilities.scm:147
-#, fuzzy
-#| msgid "Use nearest to report date."
 msgid "Closest to report date"
-msgstr "Verwende das dem Berichtsdatum nächste Datum."
+msgstr "Am nächsten zum Berichtsdatum"
 
 #: gnucash/report/options-utilities.scm:148
 #: gnucash/report/reports/standard/advanced-portfolio.scm:82
@@ -23639,13 +23574,8 @@ msgid "How to show the balances of parent accounts."
 msgstr "Bestimmt die Anzeige der Salden von Konten mit Unterkonten."
 
 #: gnucash/report/options-utilities.scm:224
-#, fuzzy
-#| msgid ""
-#| "Show only the balance in the parent account, excluding any subaccounts."
 msgid "Account Balance in the parent account, excluding any subaccounts."
-msgstr ""
-"Zeige nur den unmittelbaren Saldo vom übergeordneten Konto an und schließe "
-"dabei jegliche Unterkonten aus."
+msgstr "Saldo auf dem übergeordneten Konto, ohne jegliche Unterkonten."
 
 #: gnucash/report/options-utilities.scm:225
 msgid "Do not show any balances of parent accounts."
@@ -24538,7 +24468,7 @@ msgstr "Ausgewählte Punkte:"
 
 #: gnucash/report/reports/example/hello-world.scm:423
 msgid "List items selected"
-msgstr "Ausgewählte Listeneinträge:"
+msgstr "Ausgewählte Listeneinträge"
 
 #: gnucash/report/reports/example/hello-world.scm:428
 msgid "(You selected no list items.)"
@@ -24603,7 +24533,7 @@ msgstr "Abwechselnde Perioden"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:182
 msgid "Override or modify From: & To:."
-msgstr "Überschreiben oder modifizieren des Von: & An:"
+msgstr "Überschreiben oder modifizieren des Von: & Bis:"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
@@ -24612,15 +24542,11 @@ msgstr "Benutzen Sie Von - Bis"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
-#, fuzzy
-#| msgid "1st Est Tax Quarter"
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
 msgstr "Steuerschätzung 1. Quartal"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
-#, fuzzy
-#| msgid "2nd Est Tax Quarter"
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
 msgstr "Steuerschätzung 2. Quartal"
 
@@ -24629,15 +24555,11 @@ msgstr "Steuerschätzung 2. Quartal"
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
-#, fuzzy
-#| msgid "3rd Est Tax Quarter"
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
 msgstr "Steuerschätzung 3. Quartal"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
-#, fuzzy
-#| msgid "4th Est Tax Quarter"
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
 msgstr "Steuerschätzung 4. Quartal"
 
@@ -24648,15 +24570,11 @@ msgstr "Letztes Jahr"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
-#, fuzzy
-#| msgid "Last Yr 1st Est Tax Qtr"
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
 msgstr "Steuerschätzung 1. Quartal des letzten Jahres"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
-#, fuzzy
-#| msgid "Last Yr 2nd Est Tax Qtr"
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
 msgstr "Steuerschätzung 2. Quartal des letzten Jahres"
 
@@ -24665,15 +24583,11 @@ msgstr "Steuerschätzung 2. Quartal des letzten Jahres"
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
-#, fuzzy
-#| msgid "Last Yr 3rd Est Tax Qtr"
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
 msgstr "Steuerschätzung 3. Quartal des letzten Jahres"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
-#, fuzzy
-#| msgid "Last Yr 4th Est Tax Qtr"
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
 msgstr "Steuerschätzung 4. Quartal des letzten Jahres"
 
@@ -24820,17 +24734,13 @@ msgid "Select date to use for PriceDB lookups."
 msgstr "Wähle Datum für die Suche in der Kursdatenbank."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:254
-#, fuzzy
-#| msgid "Nearest transaction date"
 msgid "Nearest to transaction date"
-msgstr "zeitlich nächstes Buchungsdatum"
+msgstr "Am nächsten zum Transaktionsdatum"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:256
 #: gnucash/report/reports/standard/advanced-portfolio.scm:83
-#, fuzzy
-#| msgid "Nearest report date"
 msgid "Nearest to report date"
-msgstr "Zeitlich nächstes zum Bericht"
+msgstr "Am nächsten zum Berichtsdatum"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3326
 msgid "Tax Schedule Report & TXF Export"
@@ -25082,17 +24992,15 @@ msgstr ""
 "Tiefenlimit an."
 
 #: gnucash/report/reports/standard/account-summary.scm:97
-#, fuzzy
-#| msgid "Shows accounts deeper than the depth limit at the depth limit."
 msgid "Raise accounts deeper than the depth limit to the depth limit."
-msgstr "Zeige Konten an, die in der Baumstruktur unter dem Tiefenlimit liegen"
+msgstr ""
+"Alle Konten, die in der Baumstruktur unter dem Tiefenlimit liegen, auf das "
+"Tiefenlimit heben."
 
 #: gnucash/report/reports/standard/account-summary.scm:98
-#, fuzzy
-#| msgid "Disregard completely any accounts deeper than the depth limit."
 msgid "Omit any accounts deeper than the depth limit."
 msgstr ""
-"Ignorieren Konten, die in der Baumstruktur unter dem Tiefenlimit liegen."
+"Alle Konten auslassen, die in der Baumstruktur unter dem Tiefenlimit liegen."
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
@@ -25353,14 +25261,10 @@ msgid "Average cost of all shares"
 msgstr "Durchschnittlicher Kaufpreis aller Anteile"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:90
-#, fuzzy
-#| msgid "First In, First Out"
 msgid "First-in first-out"
 msgstr "First in, First out"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:91
-#, fuzzy
-#| msgid "Last In, First Out"
 msgid "Last-in first-out"
 msgstr "Last in, First out"
 
@@ -25381,16 +25285,12 @@ msgid "Include in basis"
 msgstr "In Bemessungsgrundlage einschließen"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:104
-#, fuzzy
-#| msgid "Include in gain"
 msgid "Include in gain/loss"
-msgstr "Im Ertrag berücksichtigen"
+msgstr "Im Ertrag/Verlust berücksichtigen"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:105
-#, fuzzy
-#| msgid "Title for this report."
 msgid "Omit from report"
-msgstr "Der Titel des Berichts."
+msgstr "Im Bericht auslassen"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:111
 msgid "Display the ticker symbols."
@@ -25845,13 +25745,11 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:224
 msgid "Sign: -$10.00"
-msgstr ""
+msgstr "Vorzeichen: -10,00 €"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
-#, fuzzy
-#| msgid "Brackets"
 msgid "Brackets: ($10.00)"
-msgstr "Klammern"
+msgstr "Klammern: (10,00 €)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:244
 msgid ""
@@ -26213,31 +26111,23 @@ msgstr "Wählen Sie das Ende der Budgetperiode, mit welcher der Bericht endet."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:65
 #: gnucash/report/reports/standard/budget.scm:111
-#, fuzzy
-#| msgid "Last budget period"
 msgid "First budget period"
-msgstr "Letzte Budget Periode"
+msgstr "Erste Budgetperiode"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:66
 #: gnucash/report/reports/standard/budget.scm:112
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Previous budget period"
-msgstr "Letzte Budget Periode"
+msgstr "Vorherige Budgetperiode"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:67
 #: gnucash/report/reports/standard/budget.scm:113
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Current budget period"
-msgstr "Letzte Budget Periode"
+msgstr "Aktuelle Budgetperiode"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:68
 #: gnucash/report/reports/standard/budget.scm:114
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Next budget period"
-msgstr "Letzte Budget Periode"
+msgstr "Nächste Budgetperiode"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:69
 #: gnucash/report/reports/standard/budget.scm:115
@@ -27858,15 +27748,11 @@ msgstr "Art der Anschrift."
 
 #: gnucash/report/reports/standard/new-aging.scm:404
 #: gnucash/report/reports/standard/receivables.scm:68
-#, fuzzy
-#| msgid "Billing Address"
 msgid "Billing address"
 msgstr "Rechnungsadresse"
 
 #: gnucash/report/reports/standard/new-aging.scm:405
 #: gnucash/report/reports/standard/receivables.scm:69
-#, fuzzy
-#| msgid "Shipping Address"
 msgid "Shipping address"
 msgstr "Lieferadresse"
 
@@ -28804,10 +28690,8 @@ msgid "General journal exact balances"
 msgstr "Hauptbuch Journal Bericht"
 
 #: gnucash/report/reports/standard/trial-balance.scm:204
-#, fuzzy
-#| msgid "Ignores Adjusting/Closing entries"
 msgid "No adjusting/closing entries"
-msgstr "Anpassungsbuchungen und Abschlussbuchungen ignorieren"
+msgstr "Keine Anpassungs- und Abschlussbuchungen"
 
 #: gnucash/report/reports/standard/trial-balance.scm:205
 msgid "Full end-of-period work sheet"
@@ -29725,7 +29609,7 @@ msgstr "Detaillierungsgrad, der pro Transaktion angezeigt werden soll."
 
 #: gnucash/report/trep-engine.scm:978
 msgid "One split per line"
-msgstr ""
+msgstr "Eine Teilbuchung pro Zeile"
 
 #: gnucash/report/trep-engine.scm:979
 msgid "One transaction per line"
