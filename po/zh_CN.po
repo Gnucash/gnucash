@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-23 10:33+0000\n"
+"PO-Revision-Date: 2021-06-24 08:32+0000\n"
 "Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -5354,7 +5354,7 @@ msgstr "显示展开的交易事项，包含所有分录"
 #: gnucash/gnome/gnc-plugin-page-register.c:625
 #: gnucash/gnome-search/dialog-search.c:1105
 msgid "Split"
-msgstr "多重"
+msgstr "分录"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:503
 #: gnucash/gnome/gnc-plugin-page-register.c:626
@@ -8393,7 +8393,7 @@ msgstr "编辑当前文件的属性"
 
 #: gnucash/gnome-utils/gnc-main-window.c:307
 msgid "Close the currently active page"
-msgstr "关闭当前活跃页面"
+msgstr "关闭当前页面"
 
 #: gnucash/gnome-utils/gnc-main-window.c:312
 msgid "Quit this application"
