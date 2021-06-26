@@ -26,6 +26,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <libguile.h>
 #include <stdlib.h>
 
 #include "TransLog.h"
@@ -402,6 +403,23 @@ gnc_save_all_state (gpointer session, gpointer unused)
     LEAVE("");
 }
 
+static void
+add_invoice_reports (void)
+{
+    SCM reports = scm_c_eval_string ("(gnc:available-invoice-reports)");
+
+    for (SCM iter = reports; !scm_is_null (iter); iter = scm_cdr (iter))
+    {
+        int idx = scm_to_int (scm_caar (iter));
+        gchar *guid = scm_to_utf8_string (scm_cadar (iter));
+        gchar *title = scm_to_utf8_string (scm_caddar (iter));
+
+        printf ("at idx %d, report %s, guid %s\n", idx, title, guid);
+        g_free (guid);
+        g_free (title);
+    }
+}
+
 void
 gnc_main_gui_init (void)
 {
@@ -466,6 +484,7 @@ gnc_main_gui_init (void)
     gnc_preferences_add_page("business-prefs.glade", "liststore_printinvoice,days_in_adj,cust_days_in_adj,business_prefs",
                             _("Business"));
 
+    add_invoice_reports ();
     LEAVE(" ");
     return;
 }
