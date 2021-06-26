@@ -131,3 +131,11 @@
 
 ;; Add hooks when this module is loaded
 (gnc-hook-add-scm-dangler HOOK-SAVE-OPTIONS gnc:save-style-sheet-options)
+
+;; some available invoice reports.
+(define-public (gnc:available-invoice-reports)
+ (list
+  (list 0 "5123a759ceb9483abf2182d01c140e8d" "Printable Invoice")
+  (list 2 "67112f318bef4fc496bdc27d106bbda4" "Easy Invoice")
+  (list 1 "0769e242be474010b4acf264a5512e6e" "Tax Invoice")
+  (list 3 "3ce293441e894423a2425d7a22dd1ac6" "Fancy Invoice")))
