@@ -1,5 +1,173 @@
 Version history:
 ------- -------
+4.7  - 7 March 2021
+The seventh release of the 4.x stable series.
+Between 4.5 and 4.6, the following bugfixes were accomplished:
+
+    Bug 648335 - Display Created Transactions setting
+        Add a preference for the 'Review Created Transactions' setting in
+        the 'Sinse Last Run' dialog so that the default can be specified.
+    Bug 743753 - Nearest in time security price selection is incorrect in
+                 reports
+         Add new price source - 'nearest before report date' will ignore
+         prices *after* report date.
+    Bug 743999 - Deleting a digit from an existing number greater than four
+                 digits in length generates an error message.
+         Because the grouping is off. Checking grouping on input is pointless
+         so just ignore the grouping separator when parsing number input.
+    Bug 753283 - Current Selection Highlight Lost After Transaction Edit in
+                 Scheduled Transaction Window
+    Bug 787813 - Price change from editing a transaction not reflected in
+                 pricedb.
+    Bug 794877 - Intro text of "Online Banking Setup" is outdated
+    Bug 795804 - Extremely slow save
+        Only update the status bar when the percentage changes by at least
+        1% because running the mainloop is expensive on macOS and Microsoft
+        Windows. This speeds up all operations that run the progress bar with
+        overly-fine resolution.
+    Bug 796761 - Newline (char(10)) is inserted into the end of the string if
+                 copy & paste text from excel into the description field of
+                 transaction
+    Bug 797787 - Feature request: preference setting to open new tabs adjacent
+                 to currently active tab
+        Tests preference; if enabled then new tab inserted after current. if
+        disabled then new tab is at the end.
+    Bug 797928 - Since last run asks for security price when no shares traded
+    Bug 798093 - Changing the symbol/abbreviation of a security after the
+                 trading account was created breaks GnuCash.(Reopened)
+    Bug 798133 - Gnucash crash when any custom action is entered
+    Bug 798144 - Reconciliation uses different number than entered
+        If a number was pasted into the balance end value with a currency
+        symbol the number would silently fail on evaluate and cause the wrong
+        value to be used. With previous changes to the GNCAmountEdit widget
+        a warning symbol will indicate a validation error and prevents going
+        forward.
+    Bug 798148 - "Accounts" page Present (USD) column uses future prices
+    Bug 798151 - Value entry box not tied to associated transaction in Since
+                 Last Run assistant
+    Bug 798156 - glib 2.68.0 breaks gnucash
+    Bug 798159 - Keyboard shortcut bug in 'manage document link'
+    Bug 798162 - Type Ahead Initialization Problem
+    Bug 798170 - Unbound variable: gnc-budget-lookup when running saved report
+                 Budget Report via gnucash-cli
+    Bug 798177 - Price of new stock transactions not saved in price database
+    Bug 798186 - Incorrect result editting account in register when
+                 overtyping a part selection.
+    Bug 798188 - The Invoice Editor -> Printable Invoice toolbar button
+                 crashes on Windows
+    Bug 798196 - not building with Boost 1.76
+    Bug 798199 - Pasting invalid value in date column crashes GnuCash
+    Bug 798202 - Register input ignores theme on KDE rendering black text on
+                 black background
+    Bug 798203 - g_assert fault while reversing transaction
+    Bug 798204 - Creation of Imbalance Accounts
+    Bug 798212 - right-click the down-arrow in the date register changes
+                 focus to first split
+
+The following fixes and improvements were not associated with bug reports:
+
+    Improve transaction sorting on effective num field so that alpha
+        charachters and numbers larger than 1 billion will be ordered. Ordering
+        is now numeric for leading numbers (so that 9 sorts before 10) and
+        lexical beginning with the first non-numeric character. Note that if
+        one of the values begins with an alpha character ordering will be
+        entirely lexical. Lexical sorting is localized; as in the rest of
+        GnuCash only standard ASCII numbers (codepoints U+0030 - U+0039) are
+        treated as numbers.
+    Add import preferences for the difference in time considered when matching
+        an existing transaction to an imported one. A difference less than the
+        matching-date-threshold raises the score of the match; a difference
+        greater than match-date-not-threshold lowers the score.
+    Add experimental report "IFRS weighted-average cost basis report". This is
+        a work-in-progress to help calculate the cost basis of securities
+        priced in a foreign currency.
+    [income-gst-statement] amend headers post Brexit. UK left EU, therefore
+        VAT headers have now changed.
+    Plug a bunch of memory leaks.
+    Change how the print_info is obtained for the register: Currently the
+        register sets up some 'print_info' values using the default account
+        but if the register is a stock register they should be obtained from a
+        parent account with a currency.
+    Change monetary value for gnc_default_share_print_info: Share values are
+        not currencies so set the monetary value to 0 for the GNCPrintAmountInfo
+    Parse the register monetary cells for a currency symbol: Add the ability to
+        strip the currency symbol from a registry monetary cell if it is pasted
+        with one so it can be validated.
+    SKR-49 Account Template: Add codes 4500-4504, drop a duplicate, correct
+        code 0674.
+    [gnc-plugin-page-register] Disable reverse on blank split
+    Make balancing transactions with trading accounts easier by removing and
+        recalculating all trading splits. This ensures that there will be only
+        one trading split pair per exchange and relieves the user of having to
+        adjust the trading splits to match the accounting splits.
+    Don't bother scrubbing for orphans if there's no transaction currency. If
+        it found one it would try to create an orphan account with no currency
+        which will crash later.
+    [chartjs] upgrade chartjs to 2.9.4. Fixes CVE-2020-7746
+    [report-core] disallow define-report with incomplete export info. If
+        exporting is allowed, 'export-types and 'export-thunk must both be
+        defined.
+    [test-engine-extras] augment book data generators
+    ignore .vscode folder
+    Reorder and relabel price source list for better coherence
+    Python Bindings: Provide a deprecated GncPriceDB.lookup_latest_before_t64
+        to avoid breaking user scripts.
+    Update gnucash_core.py with gnc-pricedb function name change
+    Change some functions to use const gnc_commodity for gnc_pricedb
+    Reformat schedule transaction source files for white space
+    Add depreciation warnings for the removal of individual option tool tips
+    Remove individual tool tips from radio button options
+    Removes the function gnc_option_permissible_value_description
+    ESC key was not working on load of Scheduled Transaction Editor
+    [budget.scm] show correct tooltip for report option
+    [html-acct-table] Remove unused 'pre-adjusting balances option
+    Bugfix: export-code for category-barchart reports would fail.
+        This stems from trying to handle file-name when calling export code.
+        Export code no longer require file-name, The export-code returns a
+        string in the html-document object instead. Remove all file-name
+        handling in reports. No backward compatibility issues because most
+        users would not copy a GnuCash >=4.6 report code onto a <4.5
+        installation.
+    [gnucash-cli] improve discoverability of export-type. Formerly, selecting
+        --export-type EXT would dump the cryptic "Report REPORTNAME has no
+        export code". Modify to hint the user on acceptable reports with
+        export-code.
+
+New API
+
+    [report-utilities] Functions to dump splits in whole book:
+        gnc:dump-book - splits grouped by account
+        gnc:dump-all-transactions - splits grouped by transaction
+        gnc:dump-split - dumps single split
+
+    Rename a couple of gnc-pricedb functions that have not been used:
+        gnc_pricedb_lookup_latest_before_t64 to
+            gnc_pricedb_lookup_nearest_before_t64
+        gnc_pricedb_lookup_latest_before_any_currency_t64 to
+            gnc_pricedb_lookup_nearest_before_any_currency_t64
+    Add retrieval functions for price before the date given:
+        gnc_pricedb_convert_balance_nearest_before_price_t64 that retrieves
+            the balance using the last price dated before a specified date
+            like today for the preset value.
+        gnc_pricedb_get_nearest_before_price does the retrieval.
+
+Deprecations
+
+    gnc:get-start-next-year
+    gnc:get-end-next-year
+    gnc:get-start-next-month
+    gnc:get-end-next-month
+    gnc:get-start-next-quarter
+    nc:get-end-next-quarter
+    gnc:get-one-month-ago
+    gnc:get-one-month-ahead
+    gnc:account-code-less-p
+    gnc:account-name-less-p
+
+Chinese (Simplified) translation moved from the Gnu Translation Project to weblate
+
+New and Updated Translations: Catalan, Chinese (Simplified), Chinese (Traditional), Croatian, Dutch, French, German, Greek, Hebrew, Indonesian, Italian, Japanese, Norwegian Bokmål, Polish, Portuguese, Portuguese (Brazil), Spanish, Turkish, Ukrainian
+
 4.5  - 28 March 2021
 The sixth release of the 4.x stable series.
 
