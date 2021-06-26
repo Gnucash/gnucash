@@ -14,14 +14,15 @@
 # Sean Guan <guanshangkang@gmail.com>, 2021.
 # 峡州仙士 <c@cjh0613.com>, 2021.
 # chokore <byt2ooo@163.com>, 2021.
+# TianXing_Yi <ytx.cash@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 3.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-24 08:32+0000\n"
-"Last-Translator: TianXing_Yi <duguqiubailee@gmail.com>\n"
+"PO-Revision-Date: 2021-06-26 17:32+0000\n"
+"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -8639,7 +8640,7 @@ msgstr ""
 "Aron Xu <happyaron.xu@gmail.com>, 2010\n"
 "Tao Wang <dancefire@gmail.com>, 2010\n"
 "Boyuan Yang <073plan@gmail.com>, 2019\n"
-"TianXing_Yi <duguqiubailee@gmail.com>, 2021"
+"TianXing_Yi <ytx.cash@gmail.com>, 2021"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4739
 msgid "Visit the GnuCash website."
