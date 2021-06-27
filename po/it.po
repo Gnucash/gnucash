@@ -55,7 +55,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-16 10:33+0000\n"
+"PO-Revision-Date: 2021-06-22 10:33+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -64,7 +64,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7.1-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -24125,13 +24125,13 @@ msgstr "Ordina le imprese per."
 #: gnucash/report/reports/aging.scm:348
 #: gnucash/report/reports/standard/new-aging.scm:95
 msgid "Name of the company"
-msgstr "Nome dell'impresa"
+msgstr "Nome dell'azienda"
 
 # tooltip
 #: gnucash/report/reports/aging.scm:349
 #: gnucash/report/reports/standard/new-aging.scm:96
 msgid "Total amount owed to/from Company"
-msgstr "Importo totale dovuto alla/dalla società"
+msgstr "Importo totale dovuto alla/dall'azienda"
 
 #: gnucash/report/reports/aging.scm:350
 #: gnucash/report/reports/standard/new-aging.scm:97
@@ -25333,9 +25333,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/account-summary.scm:97
 msgid "Raise accounts deeper than the depth limit to the depth limit."
-msgstr ""
-"Riporta i conti più profondi del limite di profondità, al limite di "
-"profondità."
+msgstr "Riporta i conti più in profondità del limite, al limite di profondità."
 
 #: gnucash/report/reports/standard/account-summary.scm:98
 msgid "Omit any accounts deeper than the depth limit."
@@ -25635,7 +25633,7 @@ msgstr "Includi nel guadagno/perdita"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:105
 msgid "Omit from report"
-msgstr "Ometti dal resoconto"
+msgstr "Escludi dal resoconto"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:111
 msgid "Display the ticker symbols."
@@ -26115,11 +26113,11 @@ msgstr "Visualizza a sinistra l'attivo e a destra passivo e patrimonio netto"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:224
 msgid "Sign: -$10.00"
-msgstr "Segno: -$10.00"
+msgstr "Segno: -€10.00"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
 msgid "Brackets: ($10.00)"
-msgstr "Parentesi: ($10.00)"
+msgstr "Parentesi: (€10.00)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:244
 msgid ""

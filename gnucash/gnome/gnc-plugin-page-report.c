@@ -1722,7 +1722,7 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
     if (scm_is_pair (choice))
     {
         SCM type = scm_cdr (choice);
-        SCM document = scm_call_3 (export_thunk, priv->cur_report, type, SCM_BOOL_F);
+        SCM document = scm_call_2 (export_thunk, priv->cur_report, type);
         SCM query_result = scm_c_eval_string ("gnc:html-document?");
         SCM get_export_string = scm_c_eval_string ("gnc:html-document-export-string");
         SCM get_export_error = scm_c_eval_string ("gnc:html-document-export-error");
