@@ -25,6 +25,7 @@
 (define-module (gnucash reports standard taxinvoice))
 
 (use-modules (ice-9 local-eval))  ; for the-environment
+(use-modules (ice-9 match))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
@@ -45,29 +46,20 @@
   ;; depending on how complicated the tax table is.
   ;; (When called from within the eguile template, anything
   ;; (display)ed becomes part of the HTML string.)
-  (cond
-   ((or (not taxable) (eq? taxtable '()))
-    (display "&nbsp;"))
-   (else
-    (let* ((amttot  (gnc:make-commodity-collector))
-           (pctot   (gnc:make-value-collector))
-           (entries (gncTaxTableGetEntries taxtable))
-           (amt?    #f)  ; becomes #t if any entries are amounts
-           (pc?     #f)) ; becomes #t if any entries are percentages
-      (for-each
-       (lambda (entry)
-         (cond
-          ((eqv? (gncTaxTableEntryGetType entry) GNC-AMT-TYPE-VALUE)
-           (set! amt? #t)
-           (amttot 'add curr (gncTaxTableEntryGetAmount entry)))
-          (else
-           (set! pc? #t)
-           (pctot 'add (gncTaxTableEntryGetAmount entry)))))
-       entries)
-      (if pc? (format #t "~a%" (pctot 'total #f)))
-      (if (and amt? pc?) (display " +&nbsp;"))
-      (if amt? (display-comm-coll-total amttot #f))
-      (if (equal? amt? pc? #f) (display (G_ "n/a")))))))
+  (define (amt-type? entry)
+    (eqv? (gncTaxTableEntryGetType entry) GNC-AMT-TYPE-VALUE))
+  (let lp ((entries (if taxable (gncTaxTableGetEntries taxtable) '())) (acc '()))
+    (match entries
+      (() (display (if (null? acc)
+                       (G_ "n/a")
+                       (string-join (reverse acc) "&nbsp;+&nbsp;"))))
+      (((and (? amt-type?) (= gncTaxTableEntryGetAmount amt)) . rest)
+       (lp rest (cons (gnc:default-html-gnc-monetary-renderer
+                       (gnc:make-gnc-monetary curr amt) #f) acc)))
+      (((= gncTaxTableEntryGetAmount percent) . rest)
+       (lp rest
+           (cons (string-append (gnc:default-html-number-renderer percent #f) "%")
+                 acc))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Define all the options
