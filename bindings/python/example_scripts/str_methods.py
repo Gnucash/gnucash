@@ -65,7 +65,7 @@ def ya_add_method(_class, function, method_name=None, clsmethod=False, noinstanc
 
     setattr(gnucash.gnucash_core_c,function.__name__,function)
     if clsmethod:
-      mf=_class.ya_add_classmethod(function.__name__,method_name)
+      mf=_class.add_classmethod(function.__name__,method_name)
     elif noinstance:
       mf=_class.add_method(function.__name__,method_name)
     else:

@@ -87,7 +87,7 @@ class ClassFromFunctions(object):
 
     @classmethod
     def add_method(cls, function_name, method_name):
-        """! Add the function, method_name to this class as a method named name
+        """! Add the function, function_name to this class as a method named method_name
 
         arguments:
         @param cls Class: class to add methods to
@@ -116,8 +116,8 @@ class ClassFromFunctions(object):
         return method_function
 
     @classmethod
-    def ya_add_classmethod(cls, function_name, method_name):
-        """! Add the function, method_name to this class as a classmethod named name
+    def add_classmethod(cls, function_name, method_name):
+        """! Add the function, function_name to this class as a classmethod named method_name
 
         Taken from function_class and modified from add_method() to add classmethod
         instead of method and not to turn self argument to self.instance.
@@ -129,17 +129,16 @@ class ClassFromFunctions(object):
 
         function will be wrapped by method_function"""
 
-        def method_function(self, *meth_func_args, **meth_func_kargs):
+        def method_function(cls, *meth_func_args, **meth_func_kargs):
             """! wrapper method for function
 
             arguments:
-            @param self: FunctionClass instance.
+            @param cls: FunctionClass.
             @param *meth_func_args: arguments to be passed to function. All FunctionClass
                 objects will be turned to their respective instances.
             @param **meth_func_kargs: keyword arguments to be passed to function. All
                 FunctionClass objects will be turned to their respective instances."""
-            return getattr(self._module, function_name)(
-                self,
+            return getattr(cls._module, function_name)(
                 *process_list_convert_to_instance(meth_func_args),
                 **process_dict_convert_to_instance(meth_func_kargs)
             )
@@ -238,6 +237,26 @@ def method_function_returns_instance(method_function, cls):
         else:
             return cls( **kargs_cls )
 
+    return new_function
+
+def classmethod_function_returns_instance(method_function, cls):
+    """A function decorator that is used to decorate classmethod functions that
+    return instance data, to return instances instead.
+
+    You can't use this decorator with @, because this function has a second
+    argument.
+    """
+    assert( 'instance' == INSTANCE_ARGUMENT )
+    # Will get a class in arguement list,
+    # use static so we don't add another here. 
+    @staticmethod
+    def new_function(*args, **kargs):
+        kargs_cls = { INSTANCE_ARGUMENT : method_function(*args, **kargs) }
+        if kargs_cls['instance'] == None:
+            return None
+        else:
+            return cls( **kargs_cls )
+    
     return new_function
 
 def method_function_returns_instance_list(method_function, cls):

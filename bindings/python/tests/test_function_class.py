@@ -41,6 +41,10 @@ def other_function(self, arg=None):
     return self, arg
 
 
+def class_other_function(arg=None):
+    return arg
+
+
 class TestClass(ClassFromFunctions):
     _module = sys.modules[__name__]
 
@@ -78,6 +82,17 @@ class TestFunctionClass(TestCase):
         obj, arg = self.t.other_method(self.t)
         self.assertIsInstance(arg, Instance)
         obj, arg = self.t.other_method(arg=self.t)
+        self.assertIsInstance(arg, Instance)
+
+    def test_add_classmethod(self):
+        """test if add_classmethod adds method and if in case of FunctionClass
+        Instance instances get returned instead of FunctionClass instances"""
+        TestClass.add_constructor_and_methods_with_prefix("prefix_", "new_function")
+        TestClass.add_classmethod("class_other_function", "other_method")
+        self.t = TestClass()
+        arg = TestClass.other_method(self.t)
+        self.assertIsInstance(arg, Instance)
+        arg = TestClass.other_method(arg=self.t)
         self.assertIsInstance(arg, Instance)
 
     def test_default_arguments_decorator(self):
