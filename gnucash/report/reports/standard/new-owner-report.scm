@@ -1265,7 +1265,7 @@
 
   (let* ((owner (gnc:split->owner split))
          (res (if (gncOwnerIsValid owner)
-                  (owner-report-create owner account)
+                  (owner-report-create-with-enddate owner account #f)
                   -1)))
     (gnc:split->owner #f)
     res))
