@@ -42,7 +42,7 @@
 (export gnc:invoice-report-create)
 (export gnc:payables-report-create)
 (export gnc:receivables-report-create)
-(export gnc:owner-report-create)
+(export gnc:owner-report-create)        ;deprecate
 (export gnc:owner-report-create-with-enddate)
 
 (let ((loc-spec (if (string-prefix? "de_DE" (gnc-locale-name)) 'de_DE 'us)))
@@ -90,5 +90,5 @@
 
 (define gnc:payables-report-create payables-report-create-internal)
 (define gnc:receivables-report-create receivables-report-create-internal)
-(define gnc:owner-report-create owner-report-create)
+(define gnc:owner-report-create owner-report-create) ;deprecated
 (define gnc:owner-report-create-with-enddate owner-report-create-with-enddate)
