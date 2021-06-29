@@ -21,7 +21,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-14 22:07+0200\n"
-"PO-Revision-Date: 2021-06-26 17:32+0000\n"
+"PO-Revision-Date: 2021-06-29 04:12+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -3354,7 +3354,7 @@ msgstr "新建(_F)"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:112
 msgid "Create a new file"
-msgstr "创建一个新文件"
+msgstr "新建一个账簿"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:116
 msgid "_Open..."
@@ -6439,7 +6439,7 @@ msgstr "您尚未选择所有者"
 #: gnucash/report/reports/standard/new-owner-report.scm:99
 #: libgnucash/engine/gncOwner.c:219
 msgid "Job"
-msgstr "任务"
+msgstr "项目"
 
 #: gnucash/gnome/search-owner.c:231
 #: gnucash/gnome-search/search-reconciled.c:183
@@ -8207,7 +8207,7 @@ msgstr "发生未知的输入/输出错误(%d)。"
 
 #: gnucash/gnome-utils/gnc-file.c:643
 msgid "Save changes to the file?"
-msgstr "将更改存到文件中？"
+msgstr "保存更改？"
 
 #: gnucash/gnome-utils/gnc-file.c:656
 #: gnucash/gnome-utils/gnc-main-window.c:1303
@@ -8230,7 +8230,7 @@ msgstr "GnuCash 无法获得 %s 的锁。"
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
-msgstr "数据库正被其它用户访问，因此您不应该打开此数据库。您想做什么？"
+msgstr "数据库可能正被其他用户使用，理论不应再打开；要做点什么？"
 
 #: gnucash/gnome-utils/gnc-file.c:827
 msgid ""
@@ -11076,7 +11076,7 @@ msgstr "勾选，“关闭时保存”会等待几秒，若用户未有其他操
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:50
 msgid "Time to wait for answer"
-msgstr "等待答复的时间"
+msgstr "等待时间"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:51
 #: gnucash/gtkbuilder/dialog-preferences.glade:1826
@@ -14583,11 +14583,11 @@ msgstr "表"
 #: gnucash/gtkbuilder/dialog-invoice.glade:957
 #: gnucash/gtkbuilder/dialog-vendor.glade:520
 msgid "Terms"
-msgstr "条款"
+msgstr "账期"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:483
 msgid "Delete the current Billing Term"
-msgstr "删除当前结算条款"
+msgstr "删除当前账期"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:501
 msgid "Create a new Billing Term"
@@ -14597,7 +14597,7 @@ msgstr "新建一个账期"
 #: gnucash/gtkbuilder/dialog-billterms.glade:846
 #: gnucash/gtkbuilder/dialog-billterms.glade:1090
 msgid "<b>Term Definition</b>"
-msgstr "<b>条款定义</b>"
+msgstr "<b>账期定义</b>"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:574
 #: gnucash/gtkbuilder/dialog-billterms.glade:911
@@ -14623,7 +14623,7 @@ msgstr "发票上关于账期的描述"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:685
 msgid "Edit the current Billing Term"
-msgstr "编辑当前结算条款"
+msgstr "编辑当前账期"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:738
 msgid "Close this window"
@@ -14637,11 +14637,11 @@ msgstr "放弃您的修改"
 #: gnucash/gtkbuilder/dialog-billterms.glade:818
 #: gnucash/gtkbuilder/dialog-billterms.glade:998
 msgid "Commit this Billing Term"
-msgstr "提交该结算条款"
+msgstr "提交该账期"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:1027
 msgid "The internal name of the Billing Term."
-msgstr "结算条款的内部名称。"
+msgstr "账期的内部名称。"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:1076
 msgid "<b>New Billing Term</b>"
@@ -16008,7 +16008,7 @@ msgstr "选择(_O)"
 #: gnucash/gtkbuilder/dialog-preferences.glade:934
 #: gnucash/gtkbuilder/dialog-preferences.glade:3271
 msgid "Loc_ale"
-msgstr "区域(_A)"
+msgstr "默认(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1018
 #: libgnucash/app-utils/business-options.scm:76
@@ -16096,11 +16096,11 @@ msgstr "数值，日期，时间"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1417
 msgid "Perform account list _setup on new file"
-msgstr "新文件设置科目列表(_S)"
+msgstr "设置新账簿科目树(_S)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1423
 msgid "Present the new account list dialog when you choose File->New File."
-msgstr "“文件”->“新文件”，进入新科目列表设置对话框。"
+msgstr "“文件”->“新建”，进入新科目树设置对话框。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1454
 msgid "Display \"_tip of the day\" dialog"
@@ -16188,7 +16188,7 @@ msgstr "永久"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1808
 msgid "Time to _wait for answer"
-msgstr "等待回复时间(_W)"
+msgstr "等待时间(_W)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1845
 msgid "seconds"
@@ -16197,7 +16197,7 @@ msgstr "秒钟"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1873
 #: gnucash/gtkbuilder/dialog-preferences.glade:1891
 msgid "Path head for Linked Files Relative Paths"
-msgstr "文件位置"
+msgstr "路径"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1920
 msgid "Enable horizontal grid lines on table displays"
@@ -16221,7 +16221,7 @@ msgstr "主窗格显示垂直网格线。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1957
 msgid "<b>Linked Files</b>"
-msgstr "<b>链接文件</b>"
+msgstr "<b>关联文件</b>"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2052
@@ -16470,7 +16470,7 @@ msgstr "交易界面单元格显示垂直分隔线。"
 #: gnucash/report/reports/standard/invoice.scm:363
 #: gnucash/report/reports/standard/invoice.scm:370
 msgid "Layout"
-msgstr "<b>布局</b>"
+msgstr "布局"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2758
 msgid "_Future transactions after blank transaction"
@@ -16571,7 +16571,7 @@ msgstr "交易界面"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3162
 msgid "<b>Default Report Currency</b>"
-msgstr "<b>默认币种</b>"
+msgstr "<b>币种</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3185
 msgid "<b>Location</b>"
@@ -16590,7 +16590,7 @@ msgstr "勾选，报表将在新窗口打开；否则，当前窗口。"
 #: gnucash/gtkbuilder/dialog-preferences.glade:3229
 #: gnucash/gtkbuilder/dialog-preferences.glade:3309
 msgid "Default zoom level"
-msgstr "默认缩放等级"
+msgstr "缩放等级"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3344
 msgid "Reports"
