@@ -289,7 +289,7 @@ filter_button_cb (GtkButton *button, FindAccountDialog *facc_dialog)
     if (facc_dialog->saved_filter_text)
         g_free (facc_dialog->saved_filter_text);
 
-    // save the filter incase of an account event
+    // save the filter in case of an account event
     facc_dialog->saved_filter_text = g_strdup (gtk_entry_get_text
                                      (GTK_ENTRY(facc_dialog->filter_text_entry)));
 

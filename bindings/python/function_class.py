@@ -267,7 +267,7 @@ def default_arguments_decorator(function, *args, **kargs):
     a keyword argument default will be overwritten by a positional argument at the
     actual function call
 
-    this function modifies the docstring of the wrapped funtion to reflect
+    this function modifies the docstring of the wrapped function to reflect
     the defaults.
 
     You can't use this decorator with @, because this function has more

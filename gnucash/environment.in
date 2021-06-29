@@ -81,7 +81,7 @@ LTDL_LIBRARY_PATH={SYS_LIB};{GNC_LIB}
 # Linux - follows the freedesktop xdg data home specification
 # Windows - uses the user's AppData(Roaming)\GnuCash
 # OS X/Quarz - uses the value of NSApplicationSupportDirectory/GnuCash
-# If these are not what you want, you can override it in enviromnent.local
+# If these are not what you want, you can override it in environment.local
 # GNC_DATA_HOME=
 
 # Similarly you can override the default location for AqBanking's settings.

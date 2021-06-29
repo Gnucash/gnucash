@@ -86,7 +86,7 @@ from datetime import date
 
 OPENING_DATE = (1, 1, 2011) # day, month, year
 
-# possible acccount types of interest for opening balances
+# possible account types of interest for opening balances
 ACCOUNT_TYPES_TO_OPEN = set( (
         ACCT_TYPE_BANK,
         ACCT_TYPE_CASH,
@@ -152,7 +152,7 @@ def record_opening_balance(original_account, new_account, new_book,
             # if there is a new currency type, associate with the currency
             # a Transaction which will be the opening transaction for that
             # currency and a GncNumeric value which will be the opening
-            # balance acccount amount
+            # balance account amount
             if commodity_tuple not in opening_balance_per_currency:
                 trans = Transaction(new_book)
                 trans.BeginEdit()

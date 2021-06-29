@@ -616,7 +616,7 @@ gnc_finish_ok (AccountWindow *aw)
         Account *account;
         GtkTreeSelection *selection;
 
-        /* Drop the old parent_tree so we can update it with an upto date one */
+        /* Drop the old parent_tree so we can update it with an up to date one */
         gtk_container_remove (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
         aw->parent_tree = gnc_tree_view_account_new (TRUE);
         gtk_container_add (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));

@@ -231,7 +231,7 @@ gnc_add_css_file (void)
 }
 
 /* This function fixes an issue with yelp that it does not work with the
- * ?anchor varient, see https://gitlab.gnome.org/GNOME/yelp/issues/116
+ * ?anchor variant, see https://gitlab.gnome.org/GNOME/yelp/issues/116
  */
 static gchar *
 gnc_gnome_help_yelp_anchor_fix (GtkWindow *parent, const char *file_name, const char *anchor)

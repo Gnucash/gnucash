@@ -58,7 +58,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Define an account record for cacheing information about all the accounts
+;; Define an account record for caching information about all the accounts
 
 (define-record-type <accrec>
   (newaccrec-full account code placeholder? namelink commodity balance-num depth
