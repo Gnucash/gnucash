@@ -458,7 +458,7 @@ gnc_split_reg2_raise (GNCSplitReg2 *gsr)
 
 
 /**
- * Duplicate-code reduction function; retreives, formats and updates the
+ * Duplicate-code reduction function; retrieves, formats and updates the
  * GtkLabel with the given amount.
  **/
 static

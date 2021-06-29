@@ -30,7 +30,7 @@
  *
  *  @param parent The GtkWindow for the parent widget
  *  @param title The dialog title to be used for the dialog
- *  @param uri The old uri to be ammended in the dialog
+ *  @param uri The old uri to be amended in the dialog
  *
  *  @return The ammeded uri, can be NULL if deletion required.
  */

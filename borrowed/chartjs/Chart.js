@@ -5709,7 +5709,7 @@ var controller_doughnut = core_datasetController.extend({
 	},
 
 	/**
-	 * Returns the sum of all visibile data set weights.  This value can be 0.
+	 * Returns the sum of all visible data set weights.  This value can be 0.
 	 * @private
 	 */
 	_getVisibleDatasetWeightTotal: function() {
@@ -6758,7 +6758,7 @@ function getIntersectItems(chart, position) {
 }
 
 /**
- * Helper function to get the items nearest to the event position considering all visible items in teh chart
+ * Helper function to get the items nearest to the event position considering all visible items in the chart
  * @param {Chart} chart - the chart to look at elements from
  * @param {object} position - the point to be nearest to
  * @param {boolean} intersect - if true, only consider items that intersect the position
@@ -7230,7 +7230,7 @@ var core_layouts = {
 	 * Register a box to a chart.
 	 * A box is simply a reference to an object that requires layout. eg. Scales, Legend, Title.
 	 * @param {Chart} chart - the chart to use
-	 * @param {ILayoutItem} item - the item to add to be layed out
+	 * @param {ILayoutItem} item - the item to add to be laid out
 	 */
 	addBox: function(chart, item) {
 		if (!chart.boxes) {
@@ -10977,7 +10977,7 @@ helpers$1.extend(DateAdapter.prototype, /** @lends DateAdapter */ {
 	/**
 	 * Returns the number of `unit` between the given timestamps.
 	 * @param {number} max - the input timestamp (reference)
-	 * @param {number} min - the timestamp to substract
+	 * @param {number} min - the timestamp to subtract
 	 * @param {Unit} unit - the unit as string
 	 * @return {number}
 	 * @function

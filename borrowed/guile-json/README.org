@@ -106,7 +106,7 @@ the module:
 A /json-invalid/ exception is thrown if an error is found during the
 JSON parsing. Since version 0.2.0, the /json-invalid/ exception has a
 single parser argument (see predicate and accessors below). The line or
-column where the error occured can be easily obtained from the parser
+column where the error occurred can be easily obtained from the parser
 port (calling /port-line/ or /port-column/ on the port).
 
 - (*json-parser?* parser) : Tells whether the given argument is a JSON
