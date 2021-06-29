@@ -844,7 +844,10 @@
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
-             (orig-value (xaccTransGetAccountAmount txn acc))
+             (orig-value
+              (fold (lambda (a b)
+                      (if (equal? txn (xaccSplitGetParent a))
+                          (+ b (xaccSplitGetAmount a)) b)) 0 splits))
              (value (AP-negate orig-value)))
 
         (add-row
