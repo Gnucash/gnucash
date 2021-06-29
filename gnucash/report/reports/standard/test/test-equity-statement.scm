@@ -99,7 +99,7 @@
         (sxml->table-row-col sxml 1 5 #f))
 
       (test-equal "unrealized"
-        '("Unrealized Losses" "$1.00")
+        '("Unrealized Losses for Period" "$1.00")
         (sxml->table-row-col sxml 1 6 #f))
 
       (test-equal "inc/dec in capital"
