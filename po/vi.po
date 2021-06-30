@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.2.2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-06-14 22:07+0200\n"
+"POT-Creation-Date: 2021-06-30 07:34+0200\n"
 "PO-Revision-Date: 2021-03-05 11:50+0000\n"
 "Last-Translator: bruh <quangtrung02hn16@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/gnucash/"
@@ -1416,7 +1416,7 @@ msgstr "Bên có phải là số tiền dương, hoặc bỏ trống."
 
 #: gnucash/gnome/dialog-customer.c:429 gnucash/gnome/dialog-employee.c:301
 #: gnucash/gnome/dialog-job.c:251 gnucash/gnome/dialog-vendor.c:287
-#: gnucash/gnome-utils/dialog-account.c:1572
+#: gnucash/gnome-utils/dialog-account.c:1574
 msgid "<No name>"
 msgstr "<Không tên>"
 
@@ -1906,7 +1906,7 @@ msgstr "Cân bằng"
 #: gnucash/gnome/dialog-find-transactions2.c:117
 #: gnucash/gnome/dialog-find-transactions.c:115
 #: gnucash/report/html-acct-table.scm:615
-#: gnucash/report/reports/standard/equity-statement.scm:169
+#: gnucash/report/reports/standard/equity-statement.scm:170
 #: gnucash/report/reports/standard/income-statement.scm:267
 #: gnucash/report/reports/standard/trial-balance.scm:285
 msgid "Closing Entries"
@@ -2911,7 +2911,7 @@ msgstr "Xoá giá ?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:427
 #: gnucash/gtkbuilder/dialog-invoice.glade:615
-#: gnucash/report/reports/standard/equity-statement.scm:85
+#: gnucash/report/reports/standard/equity-statement.scm:86
 #: gnucash/report/reports/standard/income-statement.scm:116
 #: gnucash/report/reports/standard/trial-balance.scm:91
 msgid "Entries"
@@ -4273,7 +4273,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:74
 #: gnucash/report/reports/standard/cashflow-barchart.scm:45
 #: gnucash/report/reports/standard/category-barchart.scm:75
-#: gnucash/report/reports/standard/equity-statement.scm:68
+#: gnucash/report/reports/standard/equity-statement.scm:69
 #: gnucash/report/reports/standard/income-gst-statement.scm:121
 #: gnucash/report/reports/standard/income-statement.scm:61
 #: gnucash/report/reports/standard/net-charts.scm:45
@@ -7553,29 +7553,29 @@ msgstr ""
 msgid "Cannot change currency"
 msgstr "Thôi thu mục nhập hiện tại"
 
-#: gnucash/gnome-utils/dialog-account.c:1416
+#: gnucash/gnome-utils/dialog-account.c:1418
 #, fuzzy
 msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
 msgstr "Tài khoản này chứa giao dịch chỉ đọc nên không thể xoá."
 
-#: gnucash/gnome-utils/dialog-account.c:1606
+#: gnucash/gnome-utils/dialog-account.c:1608
 msgid "Edit Account"
 msgstr "Sửa tài khoản"
 
-#: gnucash/gnome-utils/dialog-account.c:1609
+#: gnucash/gnome-utils/dialog-account.c:1611
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Tài khoản mới"
 
-#: gnucash/gnome-utils/dialog-account.c:1619
+#: gnucash/gnome-utils/dialog-account.c:1621
 #: gnucash/gtkbuilder/dialog-account.glade:1102
 #: gnucash/gtkbuilder/dialog-account-picker.glade:160
 msgid "New Account"
 msgstr "Tài khoản mới"
 
-#: gnucash/gnome-utils/dialog-account.c:2181
+#: gnucash/gnome-utils/dialog-account.c:2183
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s? This will replace the account "
@@ -7584,20 +7584,20 @@ msgstr ""
 "Đánh số lại các tài khoản con ngay của %s không? Hành động này sẽ thay thế "
 "trường mã tài khoản của mỗi tài khoản con bằng mã mới tạo."
 
-#: gnucash/gnome-utils/dialog-account.c:2286
+#: gnucash/gnome-utils/dialog-account.c:2288
 #, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-account.c:2313
+#: gnucash/gnome-utils/dialog-account.c:2315
 #, fuzzy, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
 msgstr "Hiển thị chỉ số dư trong tài khoản cha, loại trừ tài khoản con nào"
 
-#: gnucash/gnome-utils/dialog-account.c:2327
+#: gnucash/gnome-utils/dialog-account.c:2329
 #, fuzzy, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
@@ -9305,7 +9305,7 @@ msgid "_Unreconcile"
 msgstr "_Hủy chỉnh hợp"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2233
+#: gnucash/register/ledger-core/split-register-model.c:2230
 msgid "Change reconciled split?"
 msgstr "Thay đổi sự phân tách đã chinh hợp không?"
 
@@ -9332,7 +9332,7 @@ msgstr ""
 "khó việc chỉnh hợp sau. Vẫn còn tiếp tục không?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2257
+#: gnucash/register/ledger-core/split-register-model.c:2254
 msgid "Chan_ge Split"
 msgstr "Đổ_i sự phân tách"
 
@@ -9392,7 +9392,7 @@ msgstr "Thâu ngân viên"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3059
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:133
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:532
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:1096
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:1092
 #: gnucash/register/ledger-core/split-register.c:2547
 #: libgnucash/engine/Account.cpp:151 libgnucash/engine/Account.cpp:165
 msgid "Charge"
@@ -9612,7 +9612,7 @@ msgid "Dist"
 msgstr "Phân phối"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
-#: gnucash/import-export/import-main-matcher.c:1396
+#: gnucash/import-export/import-main-matcher.c:1400
 #: gnucash/report/reports/standard/register.scm:218
 #: libgnucash/engine/Split.c:1604 libgnucash/engine/Split.c:1621
 msgid "-- Split Transaction --"
@@ -9626,8 +9626,8 @@ msgstr "Chia nhỏ chứng khoán"
 #. Translators: This is a date format, see i.e.
 #. https://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:436
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:579
-#: gnucash/register/ledger-core/split-register-model.c:1007
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:577
+#: gnucash/register/ledger-core/split-register-model.c:1006
 msgid "%A %d %B %Y"
 msgstr ""
 
@@ -10167,44 +10167,44 @@ msgid "Enter the transaction number, such as the check number"
 msgstr "Hãy gõ số hiệu giao dịch, v.d. số hiệu séc"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3196
-#: gnucash/register/ledger-core/split-register-model.c:1139
+#: gnucash/register/ledger-core/split-register-model.c:1136
 msgid "Enter the name of the Customer"
 msgstr "Hãy gõ tên của Khách hàng"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3198
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3207
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3216
-#: gnucash/register/ledger-core/split-register-model.c:1176
+#: gnucash/register/ledger-core/split-register-model.c:1173
 msgid "Enter notes for the transaction"
 msgstr "Hãy ghi chú về giao dịch"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3200
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3209
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3218
-#: gnucash/register/ledger-core/split-register-model.c:1337
+#: gnucash/register/ledger-core/split-register-model.c:1334
 msgid "Enter a description of the split"
 msgstr "Hãy gõ mô tả của sự phân tách"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3205
-#: gnucash/register/ledger-core/split-register-model.c:1142
+#: gnucash/register/ledger-core/split-register-model.c:1139
 msgid "Enter the name of the Vendor"
 msgstr "Hãy gõ tên của Nhà sản xuất"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3214
-#: gnucash/register/ledger-core/split-register-model.c:1145
+#: gnucash/register/ledger-core/split-register-model.c:1142
 msgid "Enter a description of the transaction"
 msgstr "Hãy gõ mô tả của giao dịch"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3228
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3232
-#: gnucash/register/ledger-core/split-register-model.c:1499
-#: gnucash/register/ledger-core/split-register-model.c:1566
+#: gnucash/register/ledger-core/split-register-model.c:1496
+#: gnucash/register/ledger-core/split-register-model.c:1563
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr ""
 "Hãy gõ tài khoản từ đó cần chuyển, hoặc chọn một tài khoản trong danh sách"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3230
-#: gnucash/register/ledger-core/split-register-model.c:1209
+#: gnucash/register/ledger-core/split-register-model.c:1206
 msgid "Reason the transaction was voided"
 msgstr "Sở dĩ giao dịch bị bãi bỏ"
 
@@ -10226,7 +10226,7 @@ msgstr "Hãy gõ số các chứng khoán được mua hay bán"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3272
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3284
-#: gnucash/register/ledger-core/split-register-model.c:1447
+#: gnucash/register/ledger-core/split-register-model.c:1444
 msgid "Enter the number of shares bought or sold"
 msgstr "Hãy gõ số các chứng khoán được mua hay bán"
 
@@ -10241,17 +10241,17 @@ msgid "Enter the rate"
 msgstr "Lãi suất"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3314
-#: gnucash/register/ledger-core/split-register-model.c:1411
+#: gnucash/register/ledger-core/split-register-model.c:1408
 msgid "Enter the effective share price"
 msgstr "Hãy gõ giá chứng khoán hiệu dụng"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3324
-#: gnucash/register/ledger-core/split-register-model.c:2392
+#: gnucash/register/ledger-core/split-register-model.c:2389
 msgid "Enter credit formula for real transaction"
 msgstr "Hãy gõ công thức bên có cho giao dịch thật"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3334
-#: gnucash/register/ledger-core/split-register-model.c:2358
+#: gnucash/register/ledger-core/split-register-model.c:2355
 msgid "Enter debit formula for real transaction"
 msgstr "Hãy gõ công thức bên nợ cho giao dịch thật"
 
@@ -13862,7 +13862,7 @@ msgstr ""
 #: gnucash/report/reports/standard/cashflow-barchart.scm:55
 #: gnucash/report/reports/standard/cash-flow.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:69
-#: gnucash/report/reports/standard/equity-statement.scm:65
+#: gnucash/report/reports/standard/equity-statement.scm:66
 #: gnucash/report/reports/standard/ifrs-cost-basis.scm:53
 #: gnucash/report/reports/standard/income-statement.scm:58
 #: gnucash/report/reports/standard/lot-viewer.scm:35
@@ -14020,7 +14020,7 @@ msgstr "Phạm vi: "
 #: gnucash/report/reports/standard/cashflow-barchart.scm:56
 #: gnucash/report/reports/standard/cash-flow.scm:43
 #: gnucash/report/reports/standard/category-barchart.scm:70
-#: gnucash/report/reports/standard/equity-statement.scm:66
+#: gnucash/report/reports/standard/equity-statement.scm:67
 #: gnucash/report/reports/standard/ifrs-cost-basis.scm:54
 #: gnucash/report/reports/standard/income-statement.scm:59
 #: gnucash/report/reports/standard/lot-viewer.scm:36
@@ -14664,8 +14664,8 @@ msgstr "Tùy thích"
 #: gnucash/gtkbuilder/dialog-preferences.glade:2036
 #: gnucash/gtkbuilder/dialog-preferences.glade:2093
 #: gnucash/report/report-core.scm:159
-#: gnucash/report/reports/standard/equity-statement.scm:108
-#: gnucash/report/reports/standard/equity-statement.scm:112
+#: gnucash/report/reports/standard/equity-statement.scm:109
+#: gnucash/report/reports/standard/equity-statement.scm:113
 #: gnucash/report/reports/standard/register.scm:347
 #: gnucash/report/reports/standard/trial-balance.scm:185
 #: gnucash/report/reports/standard/trial-balance.scm:189
@@ -21582,54 +21582,54 @@ msgstr "Thông tin"
 msgid "Additional Comments"
 msgstr "Phụ vào Thẻ:"
 
-#: gnucash/import-export/import-main-matcher.c:1479
+#: gnucash/import-export/import-main-matcher.c:1483
 msgid "New, already balanced"
 msgstr "Mới, đã cân bằng"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1505
+#: gnucash/import-export/import-main-matcher.c:1509
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Mới, chuyển %s cho « %s » (bằng tay)"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1513
+#: gnucash/import-export/import-main-matcher.c:1517
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Mới, chuyển %s cho « %s » (tự động)"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:1524
+#: gnucash/import-export/import-main-matcher.c:1528
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Mới, CHƯA CÂN BẰNG (cần tài khoản chuyển %s)"
 
-#: gnucash/import-export/import-main-matcher.c:1541
+#: gnucash/import-export/import-main-matcher.c:1545
 msgid "Reconcile (manual) match"
 msgstr "Chỉnh hợp sự khớp (bằng tay)"
 
-#: gnucash/import-export/import-main-matcher.c:1545
+#: gnucash/import-export/import-main-matcher.c:1549
 msgid "Reconcile (auto) match"
 msgstr "Chỉnh hợp sự khớp (tự động)"
 
-#: gnucash/import-export/import-main-matcher.c:1552
-#: gnucash/import-export/import-main-matcher.c:1578
+#: gnucash/import-export/import-main-matcher.c:1556
+#: gnucash/import-export/import-main-matcher.c:1582
 msgid "Match missing!"
 msgstr "Thiếu sự khớp !"
 
-#: gnucash/import-export/import-main-matcher.c:1567
+#: gnucash/import-export/import-main-matcher.c:1571
 #, fuzzy
 msgid "Update and reconcile (manual) match"
 msgstr "Chỉnh hợp sự khớp (bằng tay)"
 
-#: gnucash/import-export/import-main-matcher.c:1571
+#: gnucash/import-export/import-main-matcher.c:1575
 #, fuzzy
 msgid "Update and reconcile (auto) match"
 msgstr "Chỉnh hợp sự khớp (tự động)"
 
-#: gnucash/import-export/import-main-matcher.c:1586
+#: gnucash/import-export/import-main-matcher.c:1590
 msgid "Do not import (no action selected)"
 msgstr "Đừng nhập khẩu (chưa chọn hành động)"
 
@@ -22448,7 +22448,7 @@ msgstr ">"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:1094
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
 #: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4414
 msgid "Cash"
 msgstr "Tiền mặt"
@@ -22520,107 +22520,107 @@ msgstr ""
 msgid "Enter the type of Entry"
 msgstr "Gõ kiểu mục nhập"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:591
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:587
 msgid "Enter the Entry Description"
 msgstr "Gõ mô tả mục nhập"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:607
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:603
 msgid "Enter the Discount Amount"
 msgstr "Gõ số tiền bớt giá"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:610
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:606
 msgid "Enter the Discount Percent"
 msgstr "Gõ phần trăm bớt giá"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:613
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:609
 msgid "Enter the Discount ... unknown type"
 msgstr "Gõ tiền bớt ... không rõ kiểu"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:631
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:627
 msgid "Discount Type: Monetary Value"
 msgstr "Kiểu tiền bớt: giá trị tiền tệ"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:634
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:630
 msgid "Discount Type: Percent"
 msgstr "Kiểu tiền bớt: phần trăm"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:637
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:633
 msgid "Select the Discount Type"
 msgstr "Chọn kiểu tiền bớt"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:654
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:650
 msgid "Tax computed after discount is applied"
 msgstr "Thuế được tính sau khi bớt giá"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:657
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:653
 msgid "Discount and tax both applied on pretax value"
 msgstr "Cả hai tiền bớt và tiền thuế được tính với giá trị trước khi đánh thuế"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:660
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:656
 msgid "Discount computed after tax is applied"
 msgstr "Tiền bớt được tính sau khi đánh thuế"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:663
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:659
 msgid "Select how to compute the Discount and Taxes"
 msgstr "Chọn cách tính Tiền Bớt và Tiền Thuế"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:676
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:672
 msgid "Enter the unit-Price for this Entry"
 msgstr "Gõ giá từng mục cho mục nhập này"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:688
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:684
 msgid "Enter the Quantity of units for this Entry"
 msgstr "Gõ số lượng các mục cho mục nhập này"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:700
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:696
 msgid "Enter the Tax Table to apply to this entry"
 msgstr "Gõ Bảng Thuế cần áp dụng cho mục nhập này"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:709
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:705
 msgid "Is this entry taxable?"
 msgstr "Mục nhập này có thể đánh thuế được không?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:718
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:714
 msgid "Is the tax already included in the price of this entry?"
 msgstr "Giá của mục này có gồm thuế chưa?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:736
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:732
 #, fuzzy
 msgid "Is this entry invoiced?"
 msgstr "Mục nhập này đã được lập danh đơn chưa?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:742
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:738
 #, fuzzy
 msgid "Is this entry credited?"
 msgstr "Mục nhập này đã được lập danh đơn chưa?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:746
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:742
 msgid "Include this entry on this invoice?"
 msgstr "Gồm có mục nhập này trong đơn hàng gửi này không?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:750
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:746
 #, fuzzy
 msgid "Include this entry on this credit note?"
 msgstr "Gồm có mục nhập này trong đơn hàng gửi này không?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:753
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:749
 msgid "Unknown EntryLedger Type"
 msgstr "Không rõ kiểu Mục Sổ Cái"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:766
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
 msgid "The subtotal value of this entry "
 msgstr "Giá trị tổng phụ của mục nhập này "
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:778
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
 msgstr "Tổng thuế của mục nhập này "
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:787
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:783
 msgid "Is this entry billable to a customer or job?"
 msgstr ""
 "Mục nhập này có thể làm hoá đơn cho một khách hay công việc riêng không?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:796
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:792
 msgid "How did you pay for this item?"
 msgstr "Bạn đã trả giá của mục này như thế nào?"
 
@@ -22827,11 +22827,11 @@ msgstr "Tổng chứng khoán"
 msgid "Reconciled on %s"
 msgstr "Đã chỉnh hợp"
 
-#: gnucash/register/ledger-core/split-register-model.c:1020
+#: gnucash/register/ledger-core/split-register-model.c:1017
 msgid "Scheduled"
 msgstr "Lập lịch"
 
-#: gnucash/register/ledger-core/split-register-model.c:1069
+#: gnucash/register/ledger-core/split-register-model.c:1066
 #, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
@@ -22839,7 +22839,7 @@ msgid ""
 msgstr ""
 "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
-#: gnucash/register/ledger-core/split-register-model.c:1071
+#: gnucash/register/ledger-core/split-register-model.c:1068
 #, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
@@ -22847,21 +22847,21 @@ msgid ""
 msgstr ""
 "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
-#: gnucash/register/ledger-core/split-register-model.c:1076
+#: gnucash/register/ledger-core/split-register-model.c:1073
 #, fuzzy
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
 msgstr ""
 "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
-#: gnucash/register/ledger-core/split-register-model.c:1078
+#: gnucash/register/ledger-core/split-register-model.c:1075
 #, fuzzy
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
 msgstr ""
 "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
-#: gnucash/register/ledger-core/split-register-model.c:1099
+#: gnucash/register/ledger-core/split-register-model.c:1096
 #, fuzzy
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
@@ -22869,19 +22869,19 @@ msgid ""
 msgstr ""
 "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
-#: gnucash/register/ledger-core/split-register-model.c:1103
+#: gnucash/register/ledger-core/split-register-model.c:1100
 #, fuzzy
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
 msgstr ""
 "Hãy gõ cái chỉ đến giao dịch, v.d. số hiệu đơn hàng gửi hay số hiệu séc"
 
-#: gnucash/register/ledger-core/split-register-model.c:1308
+#: gnucash/register/ledger-core/split-register-model.c:1305
 #, fuzzy
 msgid "Enter an action type, or choose one from the list"
 msgstr "Hãy gõ kiểu của giao dịch, hoặc chọn một kiểu trong danh sách"
 
-#: gnucash/register/ledger-core/split-register-model.c:1309
+#: gnucash/register/ledger-core/split-register-model.c:1306
 #, fuzzy
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
@@ -22890,20 +22890,20 @@ msgstr ""
 "Hãy gõ tài khoản thu nhập/phí tổn cho mục nhập này, hoặc chọn một điều trong "
 "danh sách."
 
-#: gnucash/register/ledger-core/split-register-model.c:1576
+#: gnucash/register/ledger-core/split-register-model.c:1573
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 "Giao dịch này có nhiều sự phân tách: bấm cái nút « Phân tách » để xem tất cả"
 
-#: gnucash/register/ledger-core/split-register-model.c:1579
+#: gnucash/register/ledger-core/split-register-model.c:1576
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
 "Giao dịch này là sự phân tách chứng khoán: bấm cái nút « Phân tách » để xem "
 "chi tiết"
 
-#: gnucash/register/ledger-core/split-register-model.c:2098
+#: gnucash/register/ledger-core/split-register-model.c:2095
 #, c-format
 msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
@@ -22916,12 +22916,12 @@ msgstr ""
 "\n"
 "« %s »"
 
-#: gnucash/register/ledger-core/split-register-model.c:2222
+#: gnucash/register/ledger-core/split-register-model.c:2219
 #, fuzzy
 msgid "Change transaction containing a reconciled split?"
 msgstr "Thay đổi sự phân tách đã chinh hợp không?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2224
+#: gnucash/register/ledger-core/split-register-model.c:2221
 #, fuzzy, c-format
 msgid ""
 "The transaction you are about to change contains reconciled splits in the "
@@ -22933,7 +22933,7 @@ msgstr ""
 "Bạn sắp thay đổi một sự phân tách đã chỉnh hợp. Hành động này có thể làm cho "
 "khó việc chỉnh hợp sau. Vẫn còn tiếp tục không?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2235
+#: gnucash/register/ledger-core/split-register-model.c:2232
 #, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
@@ -22943,7 +22943,7 @@ msgstr ""
 "Bạn sắp thay đổi một sự phân tách đã chỉnh hợp. Hành động này có thể làm cho "
 "khó việc chỉnh hợp sau. Vẫn còn tiếp tục không?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2260
+#: gnucash/register/ledger-core/split-register-model.c:2257
 #, fuzzy
 msgid "Chan_ge Transaction"
 msgstr "Thô_i giao dịch"
@@ -23470,7 +23470,7 @@ msgstr "Thứ tự sắp xếp"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:58
 #: gnucash/report/reports/standard/cash-flow.scm:49
 #: gnucash/report/reports/standard/category-barchart.scm:72
-#: gnucash/report/reports/standard/equity-statement.scm:77
+#: gnucash/report/reports/standard/equity-statement.scm:78
 #: gnucash/report/reports/standard/income-statement.scm:108
 #: gnucash/report/reports/standard/net-charts.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:54
@@ -23496,7 +23496,7 @@ msgstr "Tiền tệ của báo cáo"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:59
 #: gnucash/report/reports/standard/cash-flow.scm:50
 #: gnucash/report/reports/standard/category-barchart.scm:73
-#: gnucash/report/reports/standard/equity-statement.scm:78
+#: gnucash/report/reports/standard/equity-statement.scm:79
 #: gnucash/report/reports/standard/income-statement.scm:109
 #: gnucash/report/reports/standard/net-charts.scm:43
 #: gnucash/report/reports/standard/portfolio.scm:35
@@ -24754,7 +24754,7 @@ msgstr "Giao dịch đã định thời"
 #: gnucash/report/reports/standard/balsheet-eg.scm:140
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:42
 #: gnucash/report/reports/standard/budget-income-statement.scm:52
-#: gnucash/report/reports/standard/equity-statement.scm:59
+#: gnucash/report/reports/standard/equity-statement.scm:60
 #: gnucash/report/reports/standard/income-statement.scm:52
 #: gnucash/report/reports/standard/trial-balance.scm:65
 msgid "Report Title"
@@ -24765,7 +24765,7 @@ msgstr "Tên báo cáo"
 #: gnucash/report/reports/standard/balsheet-eg.scm:141
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:43
 #: gnucash/report/reports/standard/budget-income-statement.scm:53
-#: gnucash/report/reports/standard/equity-statement.scm:60
+#: gnucash/report/reports/standard/equity-statement.scm:61
 #: gnucash/report/reports/standard/income-statement.scm:53
 #: gnucash/report/reports/standard/trial-balance.scm:66
 #, fuzzy
@@ -24776,7 +24776,7 @@ msgstr "Tựa đề cho báo cáo này"
 #: gnucash/report/reports/standard/balance-sheet.scm:78
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:45
 #: gnucash/report/reports/standard/budget-income-statement.scm:55
-#: gnucash/report/reports/standard/equity-statement.scm:62
+#: gnucash/report/reports/standard/equity-statement.scm:63
 #: gnucash/report/reports/standard/income-statement.scm:55
 #: gnucash/report/reports/standard/trial-balance.scm:68
 msgid "Company name"
@@ -24786,7 +24786,7 @@ msgstr "Tên công ty"
 #: gnucash/report/reports/standard/balance-sheet.scm:79
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:46
 #: gnucash/report/reports/standard/budget-income-statement.scm:56
-#: gnucash/report/reports/standard/equity-statement.scm:63
+#: gnucash/report/reports/standard/equity-statement.scm:64
 #: gnucash/report/reports/standard/income-statement.scm:56
 #: gnucash/report/reports/standard/trial-balance.scm:69
 #, fuzzy
@@ -24881,7 +24881,7 @@ msgstr "Hiển thị khoảng trắng thay cho số dư số không có xảy ra
 #: gnucash/report/reports/standard/balance-sheet.scm:106
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:72
 #: gnucash/report/reports/standard/budget-income-statement.scm:94
-#: gnucash/report/reports/standard/equity-statement.scm:72
+#: gnucash/report/reports/standard/equity-statement.scm:73
 #: gnucash/report/reports/standard/income-statement.scm:81
 msgid "Show accounting-style rules"
 msgstr "Hiện thước kiểu kế toán"
@@ -24890,7 +24890,7 @@ msgstr "Hiện thước kiểu kế toán"
 #: gnucash/report/reports/standard/balance-sheet.scm:108
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:74
 #: gnucash/report/reports/standard/budget-income-statement.scm:96
-#: gnucash/report/reports/standard/equity-statement.scm:74
+#: gnucash/report/reports/standard/equity-statement.scm:75
 #: gnucash/report/reports/standard/income-statement.scm:83
 #, fuzzy
 msgid "Use rules beneath columns of added numbers like accountants do."
@@ -24962,7 +24962,7 @@ msgstr "Hiển thị bản ghi chú của tài khoả"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:101
 #: gnucash/report/reports/standard/budget-income-statement.scm:114
-#: gnucash/report/reports/standard/equity-statement.scm:76
+#: gnucash/report/reports/standard/equity-statement.scm:77
 #: gnucash/report/reports/standard/income-statement.scm:107
 #: gnucash/report/reports/standard/trial-balance.scm:128
 msgid "Commodities"
@@ -24973,7 +24973,7 @@ msgstr "Hàng hoá"
 #: gnucash/report/reports/standard/balsheet-eg.scm:180
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:104
 #: gnucash/report/reports/standard/budget-income-statement.scm:117
-#: gnucash/report/reports/standard/equity-statement.scm:79
+#: gnucash/report/reports/standard/equity-statement.scm:80
 #: gnucash/report/reports/standard/income-statement.scm:110
 #: gnucash/report/reports/standard/trial-balance.scm:131
 msgid "Show Foreign Currencies"
@@ -24984,7 +24984,7 @@ msgstr "Hiện tiền tệ nước ngoài"
 #: gnucash/report/reports/standard/balsheet-eg.scm:182
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:106
 #: gnucash/report/reports/standard/budget-income-statement.scm:119
-#: gnucash/report/reports/standard/equity-statement.scm:81
+#: gnucash/report/reports/standard/equity-statement.scm:82
 #: gnucash/report/reports/standard/income-statement.scm:112
 #: gnucash/report/reports/standard/trial-balance.scm:133
 #, fuzzy
@@ -24997,7 +24997,7 @@ msgstr "Hiển thị bất cứ số tiền tệ nước ngoài nào trong tài 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:107
 #: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/cash-flow.scm:51
-#: gnucash/report/reports/standard/equity-statement.scm:82
+#: gnucash/report/reports/standard/equity-statement.scm:83
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:134
 msgid "Show Exchange Rates"
@@ -25009,7 +25009,7 @@ msgstr "Hiện tỷ lệ hội suất"
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
 #: gnucash/report/reports/standard/budget-income-statement.scm:121
 #: gnucash/report/reports/standard/cash-flow.scm:77
-#: gnucash/report/reports/standard/equity-statement.scm:83
+#: gnucash/report/reports/standard/equity-statement.scm:84
 #: gnucash/report/reports/standard/income-statement.scm:114
 #: gnucash/report/reports/standard/trial-balance.scm:135
 #, fuzzy
@@ -25030,7 +25030,7 @@ msgstr "Bỏ quên tài khoản"
 
 #. Translators: This is part of the report title, which is capitalzed in English, but not all other languages
 #: gnucash/report/reports/standard/account-summary.scm:325
-#: gnucash/report/reports/standard/equity-statement.scm:302
+#: gnucash/report/reports/standard/equity-statement.scm:303
 #: gnucash/report/reports/standard/income-statement.scm:406
 #: gnucash/report/reports/standard/trial-balance.scm:407
 #, fuzzy, scheme-format
@@ -25459,14 +25459,12 @@ msgstr "Lỗ giữ lại"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1087
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1102
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:759
-#: gnucash/report/reports/standard/equity-statement.scm:472
 #: gnucash/report/reports/standard/trial-balance.scm:729
 msgid "Unrealized Gains"
 msgstr "Lợi vốn chưa thu từ tài sản"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:520
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:760
-#: gnucash/report/reports/standard/equity-statement.scm:473
 #: gnucash/report/reports/standard/trial-balance.scm:730
 msgid "Unrealized Losses"
 msgstr "Lỗ chưa xảy ra"
@@ -26185,13 +26183,13 @@ msgid "for Budget ~a Periods ~d - ~d"
 msgstr "Kỳ ngân sách:"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:560
-#: gnucash/report/reports/standard/equity-statement.scm:455
+#: gnucash/report/reports/standard/equity-statement.scm:457
 #: gnucash/report/reports/standard/income-statement.scm:524
 msgid "Net income"
 msgstr "Thu nhập ròng"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:561
-#: gnucash/report/reports/standard/equity-statement.scm:456
+#: gnucash/report/reports/standard/equity-statement.scm:458
 #: gnucash/report/reports/standard/income-statement.scm:525
 msgid "Net loss"
 msgstr "Lỗ ròng"
@@ -26654,48 +26652,49 @@ msgstr "Khách mới"
 msgid "Customer Summary"
 msgstr "Số khách: "
 
-#: gnucash/report/reports/standard/equity-statement.scm:55
+#. Translators: This statement is about a range of time
+#: gnucash/report/reports/standard/equity-statement.scm:56
 msgid "Equity Statement"
 msgstr "Bảng kê cổ phần"
 
-#: gnucash/report/reports/standard/equity-statement.scm:70
+#: gnucash/report/reports/standard/equity-statement.scm:71
 #, fuzzy
 msgid "Report only on these accounts."
 msgstr "Báo cáo chỉ về những báo cáo này"
 
-#: gnucash/report/reports/standard/equity-statement.scm:86
+#: gnucash/report/reports/standard/equity-statement.scm:87
 #: gnucash/report/reports/standard/income-statement.scm:117
 #: gnucash/report/reports/standard/trial-balance.scm:104
 msgid "Closing Entries pattern"
 msgstr "Mẫu đóng mục nhập"
 
-#: gnucash/report/reports/standard/equity-statement.scm:88
+#: gnucash/report/reports/standard/equity-statement.scm:89
 #: gnucash/report/reports/standard/income-statement.scm:119
 #: gnucash/report/reports/standard/trial-balance.scm:106
 #, fuzzy
 msgid "Any text in the Description column which identifies closing entries."
 msgstr "Bất cứ văn bản nào trong cột « Mô tả » mà nhận diện mục nhập đóng"
 
-#: gnucash/report/reports/standard/equity-statement.scm:90
+#: gnucash/report/reports/standard/equity-statement.scm:91
 #: gnucash/report/reports/standard/income-statement.scm:121
 #: gnucash/report/reports/standard/trial-balance.scm:108
 msgid "Closing Entries pattern is case-sensitive"
 msgstr "Mẫu đóng mục nhập cũng phân biệt chữ hoa và chữ thường"
 
-#: gnucash/report/reports/standard/equity-statement.scm:92
+#: gnucash/report/reports/standard/equity-statement.scm:93
 #: gnucash/report/reports/standard/income-statement.scm:123
 #: gnucash/report/reports/standard/trial-balance.scm:110
 #, fuzzy
 msgid "Causes the Closing Entries Pattern match to be case-sensitive."
 msgstr "Gây ra mẫu đóng mục nhập phân biệt chữ hoa và chữ thường"
 
-#: gnucash/report/reports/standard/equity-statement.scm:94
+#: gnucash/report/reports/standard/equity-statement.scm:95
 #: gnucash/report/reports/standard/income-statement.scm:125
 #: gnucash/report/reports/standard/trial-balance.scm:112
 msgid "Closing Entries Pattern is regular expression"
 msgstr "Mẫu đóng mục nhập là biểu thức chính quy"
 
-#: gnucash/report/reports/standard/equity-statement.scm:96
+#: gnucash/report/reports/standard/equity-statement.scm:97
 #: gnucash/report/reports/standard/income-statement.scm:127
 #: gnucash/report/reports/standard/trial-balance.scm:114
 #, fuzzy
@@ -26703,30 +26702,42 @@ msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression."
 msgstr "Gây ra mẫu đóng mục nhập được xử lý như biểu thức chính quy"
 
-#: gnucash/report/reports/standard/equity-statement.scm:423
+#: gnucash/report/reports/standard/equity-statement.scm:425
 #: gnucash/report/reports/standard/income-statement.scm:480
 #: gnucash/report/reports/standard/trial-balance.scm:399
 msgid "for Period"
 msgstr "trong kỳ"
 
-#: gnucash/report/reports/standard/equity-statement.scm:450
-#: gnucash/report/reports/standard/equity-statement.scm:486
+#: gnucash/report/reports/standard/equity-statement.scm:452
+#: gnucash/report/reports/standard/equity-statement.scm:488
 msgid "Capital"
 msgstr "Vốn"
 
-#: gnucash/report/reports/standard/equity-statement.scm:461
+#: gnucash/report/reports/standard/equity-statement.scm:463
 msgid "Investments"
 msgstr "Đầu tư"
 
-#: gnucash/report/reports/standard/equity-statement.scm:466
+#: gnucash/report/reports/standard/equity-statement.scm:468
 msgid "Withdrawals"
 msgstr "Rút vốn"
 
-#: gnucash/report/reports/standard/equity-statement.scm:479
+#: gnucash/report/reports/standard/equity-statement.scm:474
+#, fuzzy
+#| msgid "Unrealized Gains"
+msgid "Unrealized Gains for Period"
+msgstr "Lợi vốn chưa thu từ tài sản"
+
+#: gnucash/report/reports/standard/equity-statement.scm:475
+#, fuzzy
+#| msgid "Unrealized Losses"
+msgid "Unrealized Losses for Period"
+msgstr "Lỗ chưa xảy ra"
+
+#: gnucash/report/reports/standard/equity-statement.scm:481
 msgid "Increase in capital"
 msgstr "Tăng vốn"
 
-#: gnucash/report/reports/standard/equity-statement.scm:480
+#: gnucash/report/reports/standard/equity-statement.scm:482
 msgid "Decrease in capital"
 msgstr "Giảm vốn"
 
@@ -30826,11 +30837,11 @@ msgctxt ""
 msgid "Split"
 msgstr "Phân tách"
 
-#: libgnucash/engine/Transaction.c:2715
+#: libgnucash/engine/Transaction.c:2744
 msgid "Voided transaction"
 msgstr "Giao dịch bị bãi bỏ"
 
-#: libgnucash/engine/Transaction.c:2728
+#: libgnucash/engine/Transaction.c:2757
 msgid "Transaction Voided"
 msgstr "Giao dịch bị bãi bỏ"
 
