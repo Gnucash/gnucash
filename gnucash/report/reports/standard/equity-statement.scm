@@ -52,6 +52,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 
+;; Translators: This statement is about a range of time
 (define reportname (N_ "Equity Statement"))
 
 ;; define all option's names and help text so that they are properly
