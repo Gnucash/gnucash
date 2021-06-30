@@ -26705,7 +26705,7 @@ msgstr "Kundenüber_sicht"
 
 #: gnucash/report/reports/standard/equity-statement.scm:55
 msgid "Equity Statement"
-msgstr "Eigenkapitalbilanz"
+msgstr "Eigenkapital-Entwicklung"
 
 #: gnucash/report/reports/standard/equity-statement.scm:70
 msgid "Report only on these accounts."
