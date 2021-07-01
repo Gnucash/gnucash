@@ -169,7 +169,7 @@
                  (#f #f #f ,@(map lot->guid lots) #f)))
 
         (gnc:html-table-append-row!
-         table `(#f "Document" #f ,@(map lot->document lots)))
+         table `(#f "Document" #f ,@(map lot->document lots) #f))
 
         (for-each
          (lambda (txn)
@@ -192,7 +192,7 @@
          (sort transactions (lambda (a b) (< (xaccTransOrder a b) 0))))
 
         (gnc:html-table-append-row!
-         table `(#f "Balance" #f ,@(map lot->balance lots)))
+         table `(#f "Balance" #f ,@(map lot->balance lots) #f))
 
         (gnc:html-document-add-object! document table))))
 
