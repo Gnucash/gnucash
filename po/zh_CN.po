@@ -15,14 +15,15 @@
 # 峡州仙士 <c@cjh0613.com>, 2021.
 # chokore <byt2ooo@163.com>, 2021.
 # TianXing_Yi <ytx.cash@gmail.com>, 2021.
+# cjh <cjh@cjh0613.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 3.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-01 13:33+0000\n"
-"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
+"PO-Revision-Date: 2021-07-01 17:32+0000\n"
+"Last-Translator: cjh <cjh@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -17788,20 +17789,23 @@ msgstr "每半月"
 #: gnucash/gtkbuilder/gnc-frequency.glade:191
 #: gnucash/gtkbuilder/gnc-frequency.glade:417
 #: gnucash/gtkbuilder/gnc-frequency.glade:559
+#, fuzzy
 msgid "No change"
-msgstr "净变动"
+msgstr "不变"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:194
 #: gnucash/gtkbuilder/gnc-frequency.glade:420
 #: gnucash/gtkbuilder/gnc-frequency.glade:562
+#, fuzzy
 msgid "Use previous weekday"
-msgstr "前一年终点"
+msgstr "前一个工作日"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:197
 #: gnucash/gtkbuilder/gnc-frequency.glade:423
 #: gnucash/gtkbuilder/gnc-frequency.glade:565
+#, fuzzy
 msgid "Use next weekday"
-msgstr "相同的周和日子"
+msgstr "下个工作日"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:325
 msgid "1st Mon"
