@@ -844,10 +844,14 @@
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
-             (orig-value
-              (fold (lambda (a b)
-                      (if (equal? txn (xaccSplitGetParent a))
-                          (+ b (xaccSplitGetAmount a)) b)) 0 splits))
+             (amt/next-pair
+              (let lp1 ((splits splits) (acc 0) (non-txn '()))
+                (match splits
+                  (() (cons acc (reverse non-txn)))
+                  (((? (lambda (s) (equal? (xaccSplitGetParent s) txn)) head) . tail)
+                   (lp1 tail (+ (xaccSplitGetAmount head) acc) non-txn))
+                  ((head . tail) (lp1 tail acc (cons head non-txn))))))
+             (orig-value (car amt/next-pair))
              (value (AP-negate orig-value)))
 
         (add-row
@@ -866,7 +870,7 @@
            ((detailed) (make-payment->payee-table txn))
            (else '(()))))
 
-        (lp printed? (not odd-row?) (cdr splits) invalid-splits (+ total value)
+        (lp printed? (not odd-row?) (cdr amt/next-pair) invalid-splits (+ total value)
             (if (< 0 orig-value) (+ debit orig-value) debit)
             (if (< 0 orig-value) credit (- credit orig-value))
             tax
