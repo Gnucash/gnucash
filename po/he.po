@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-06-21 09:31+0000\n"
+"PO-Revision-Date: 2021-07-01 07:59+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -8747,7 +8747,7 @@ msgstr "חשבונאות לאנשים פרטיים ועסקים קטנים."
 #: gnucash/gnome-utils/gnc-main-window.c:4736
 msgid "translator-credits"
 msgstr ""
-"אבי מרקוביץ 2021, 2020, 2019 avi.markovitz@gmail.com\n"
+"אבי מרקוביץ avi.markovitz@gmail.com 2021, 2020, 2019\n"
 "אורי הוך 2006"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4739
@@ -25615,16 +25615,12 @@ msgid "Withdrawals"
 msgstr "משיכות"
 
 #: gnucash/report/reports/standard/equity-statement.scm:474
-#, fuzzy
-#| msgid "Unrealized Gains"
 msgid "Unrealized Gains for Period"
-msgstr "רווחים לא ממומשים"
+msgstr "רווחים לא ממומשים לתקופה"
 
 #: gnucash/report/reports/standard/equity-statement.scm:475
-#, fuzzy
-#| msgid "Unrealized Losses"
 msgid "Unrealized Losses for Period"
-msgstr "הפסדים בלתי ממומשים"
+msgstr "הפסדים לא ממומשים לתקופה"
 
 #: gnucash/report/reports/standard/equity-statement.scm:481
 msgid "Increase in capital"
@@ -28203,7 +28199,7 @@ msgid ""
 msgstr ""
 "כברירת מחדל, מסנן התנועות יחפש מחרוזת משנה בלבד. הגדרה כ־true תאפשר יכולות "
 "מלאות לביטוי רגיל של POSIX. '#עבודה|'#משפחה' יאחזרו תוצאות לשני התגים מתוך "
-"שדה התיאור, ההערות או התזכיר. "
+"שדה התיאור, ההערות או המזכר. "
 
 #: gnucash/report/trep-engine.scm:596
 msgid "If this option is selected, transactions matching filter are excluded."
