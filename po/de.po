@@ -33,10 +33,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-06-29 16:32+0000\n"
+"PO-Revision-Date: 2021-07-01 19:33+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.1-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -13145,11 +13145,11 @@ msgstr "Anzahl der Kopfzeilen"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:156
 msgid "Comma Separated"
-msgstr "Komma-getrennt"
+msgstr "Komma (,)"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:172
 msgid "Semicolon Separated"
-msgstr "Semikolon-getrennt"
+msgstr "Semikolon (;)"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:188
 msgid "Custom regular Expression"
@@ -13157,7 +13157,7 @@ msgstr "Benutzerdefinierter regulärer Ausdruck"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:204
 msgid "Colon Separated"
-msgstr "Punkt-getrennt"
+msgstr "Doppelpunkt (:)"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:230
 msgid "Select Separator Type"
@@ -17763,7 +17763,7 @@ msgstr "_Breite"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3671
 msgid "Open new tabs _adjacent to current tab"
-msgstr ""
+msgstr "Den neuen Reiter neben dem _aktuellen Reiter öffnen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3677
 msgid "Opens new tab adjacent to current tab instead of at the end."
@@ -21717,7 +21717,7 @@ msgstr "Wählen Sie das Export-Format"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:50
 msgid "Import _Accounts from CSV..."
-msgstr "_Konten importieren"
+msgstr "_Kontenhierarchie importieren aus CSV..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:51
 msgid "Import Accounts from a CSV file"
