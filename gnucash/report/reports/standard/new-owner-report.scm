@@ -630,8 +630,7 @@
                 (lambda (posting-split)
                   (let* ((lot-txn-split (car lot-txn-splits))
                          (posting-txn (xaccSplitGetParent posting-split))
-                         (document (gncInvoiceGetInvoiceFromTxn posting-txn))
-                         (neg (gncInvoiceGetIsCreditNote document)))
+                         (document (gncInvoiceGetInvoiceFromTxn posting-txn)))
                     (lp1 (cdr lot-txn-splits)
                          non-document
                          (cons (make-link-data
@@ -639,8 +638,8 @@
                                 (split->reference posting-split)
                                 (split->type-str posting-split payable?)
                                 (splits->desc (list posting-split))
-                                (gnc:make-html-text (split->anchor lot-split neg))
-                                (gnc:make-html-text (split->anchor posting-split neg))
+                                (gnc:make-html-text (split->anchor lot-split #f))
+                                (gnc:make-html-text (split->anchor posting-split #f))
                                 (gncInvoiceReturnGUID document))
                                result)))))
 
