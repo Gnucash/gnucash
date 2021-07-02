@@ -314,13 +314,6 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_plugin_business_cmd_test_init_data)
     },
 
-    /* Toolbar */
-    {
-        "ToolbarNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice..."), NULL,
-        N_("Open the New Invoice dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_customer_new_invoice)
-    },
-
     /* Register popup menu */
     {
         "RegisterAssignPayment", NULL, N_("Assign as payment..."), NULL,
