@@ -375,7 +375,15 @@
       (test-equal "aging-table"
         '("$0.00" "$6.75" "$1.00" "$8.50" "$7.50" "$8.00" "$31.75")
         ((sxpath `(// (table 3) // (tr -1) // table // tbody // tr // *text*))
-         sxml)))
+         sxml))
+
+      (test-equal "dr/cr headers"
+        '("Date" "Due Date" "Reference" "Type" "Description"
+          "Debits" "Credits" "Balance" "Date" "Reference" "Type"
+          "Description" "Partial Amount" "Amount")
+        ((sxpath `(// (table 3) // thead // (tr 2) // *text*))
+         sxml))
+      )
     (test-end "new-customer-report")
 
     (display "job-report tests:\n")

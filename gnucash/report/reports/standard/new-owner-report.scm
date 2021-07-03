@@ -200,10 +200,8 @@
               desc-header sale-header tax-header debit-header credit-header
               balance-header doclink-header))))
 
-(define (make-heading-list column-vector link-option acct-type)
-  (let ((heading-list '())
-        (formal? (gnc-prefs-get-bool GNC-PREFS-GROUP-GENERAL
-                                     GNC-PREF-ACCOUNTING-LABELS)))
+(define (make-heading-list column-vector link-option)
+  (let ((heading-list '()))
     (if (date-col column-vector)
         (addto! heading-list (G_ date-header)))
     (if (date-due-col column-vector)
@@ -221,15 +219,9 @@
     (if (tax-col column-vector)
         (addto! heading-list (G_ tax-header)))
     (if (debit-col column-vector)
-        (addto! heading-list
-                (if formal?
-                    (G_ debit-header)
-                    (gnc-account-get-debit-string acct-type))))
+        (addto! heading-list (G_ debit-header)))
     (if (credit-col column-vector)
-        (addto! heading-list
-                (if formal?
-                    (G_ credit-header)
-                    (gnc-account-get-credit-string acct-type))))
+        (addto! heading-list (G_ credit-header)))
     (if (bal-col column-vector)
         (addto! heading-list (G_ balance-header)))
     (case link-option
@@ -1098,7 +1090,7 @@ and do not match the transaction."))))))))
          (document (gnc:make-html-document))
          (table (gnc:make-html-table))
          (section-headings (make-section-heading-list used-columns owner-descr))
-         (headings (make-heading-list used-columns link-option acct-type))
+         (headings (make-heading-list used-columns link-option))
          (report-title (string-append (G_ owner-descr) " " (G_ "Report"))))
 
     (cond
