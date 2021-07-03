@@ -63,24 +63,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/enable-toolbuttons">
-            <property name="label" translatable="yes">Enable extra _buttons</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
-            <property name="tooltip_text" translatable="yes">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
-            <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.invoice/use-new-window">
             <property name="label" translatable="yes">_Open in new window</property>
             <property name="visible">True</property>
