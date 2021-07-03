@@ -610,9 +610,9 @@ and do not match the transaction."))))))))
                                (split->reference lot-split)
                                (split->type-str lot-split payable?)
                                (splits->desc non-document)
-                               (gnc:make-html-text (split->anchor lot-split #t))
+                               (gnc:make-html-text (split->anchor lot-split #f))
                                (list->cell
-                                (map (lambda (s) (split->anchor s #f)) non-document))
+                                (map (lambda (s) (split->anchor s #t)) non-document))
                                (gncTransGetGUID lot-txn))
                               result))))
 
