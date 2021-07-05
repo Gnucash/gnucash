@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-02 16:34+0000\n"
+"PO-Revision-Date: 2021-07-04 05:31+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -5369,7 +5369,7 @@ msgstr "您试图在新寄存器中打开一个帐户，而在旧寄存器中打
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:755
 msgid "General Journal2"
-msgstr "日常流水 2"
+msgstr "交易日志 2"
 
 #. Translators: %s is the name
 #. of the tab page
@@ -5420,7 +5420,7 @@ msgstr "未知"
 #: gnucash/gnome/gnc-plugin-page-register.c:3560
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
-msgstr "日常流水"
+msgstr "交易日志"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1683
 #: gnucash/gnome/gnc-plugin-page-register2.c:2422
@@ -5438,7 +5438,7 @@ msgstr "搜索结果"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2418
 msgid "General Journal Report"
-msgstr "日常流水报表"
+msgstr "交易日志报表"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2424
 #: gnucash/gnome/gnc-plugin-page-register.c:3568
@@ -5968,11 +5968,11 @@ msgstr[0] "您确信您要删除 %d 这笔计划交易？"
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
 msgid "_General Journal"
-msgstr "交易流水(_G)"
+msgstr "交易日志(_G)"
 
 #: gnucash/gnome/gnc-plugin-register2.c:58
 msgid "Open a general journal window"
-msgstr "开启日常流水窗口"
+msgstr "开启交易日志窗口"
 
 #: gnucash/gnome/gnc-plugin-register2.c:66
 #: gnucash/gnome/gnc-plugin-register2.c:67
@@ -5981,15 +5981,15 @@ msgstr "注册2 开立GL账户"
 
 #: gnucash/gnome/gnc-plugin-register.c:54
 msgid "Old St_yle General Journal"
-msgstr "旧式交易流水(_Y)"
+msgstr "旧式交易日志(_Y)"
 
 #: gnucash/gnome/gnc-plugin-register.c:55
 msgid "Open an old style general journal window"
-msgstr "打开旧式日常流水窗口"
+msgstr "打开旧式交易日志窗口"
 
 #: gnucash/gnome/gnc-plugin-register.c:59
 msgid "Open general journal window"
-msgstr "打开日常流水窗口"
+msgstr "打开交易日志窗口"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:57
 msgid "St_yle Sheets"
@@ -8897,7 +8897,7 @@ msgstr "科目 %s 不存在。您想要创建它吗？"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:2121
 msgid "You can not paste from the general journal to a register."
-msgstr "您无法从一般期刊粘贴到一般期刊。"
+msgstr "无法从交易日志复制到标签页。"
 
 #: gnucash/gnome-utils/gnc-tree-model-account.c:754
 msgid "New top level account"
@@ -11499,7 +11499,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:255
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:256
 msgid "Automatically raise the list of accounts or actions during input"
-msgstr "输入时自动提升科目或动作列表"
+msgstr "输入时自动提升科目或属性列表"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:260
 msgid "Move to Transfer field when memorised transaction auto filled"
@@ -14579,7 +14579,7 @@ msgstr "新建一个账期"
 #: gnucash/gtkbuilder/dialog-billterms.glade:846
 #: gnucash/gtkbuilder/dialog-billterms.glade:1090
 msgid "<b>Term Definition</b>"
-msgstr "<b>账期定义</b>"
+msgstr "<b>定义</b>"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:574
 #: gnucash/gtkbuilder/dialog-billterms.glade:911
@@ -15931,7 +15931,7 @@ msgstr "信用科目(_R)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:686
 msgid "_Income & expense"
-msgstr "收入和支出(_I)"
+msgstr "收入支出(_I)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:708
 msgid "<b>Reverse Balanced Accounts</b>"
@@ -16360,7 +16360,7 @@ msgstr "自动提升列表(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2531
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr "输入时自动提升科目或动作列表。"
+msgstr "输入时自动提升科目或属性列表。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2543
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
@@ -18698,7 +18698,7 @@ msgstr "确认密码(_F)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:842
 msgid "_Remember the PIN in memory"
-msgstr "在内存中记住 PIN 码(_R)"
+msgstr "记录 PIN 密码(_R)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:848
 msgid ""
@@ -18846,7 +18846,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:51
 msgid "Remember the _PIN in memory"
-msgstr "在内存中记住密码(_P)"
+msgstr "记录 PIN 密码(_P)"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:57
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:21
@@ -19402,7 +19402,7 @@ msgstr "完成后关闭对话框"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:20
 msgid "Remember the PIN in memory"
-msgstr "在内存中记住密码"
+msgstr "记录 PIN 密码"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:25
 msgid "Put the transaction text in front of the purpose of a transaction."
@@ -23741,7 +23741,7 @@ msgstr "科目名称"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:38
 msgid "Advanced Portfolio"
-msgstr "高级投资组合"
+msgstr "高阶投资组合"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:41
 #: gnucash/report/reports/standard/portfolio.scm:36
@@ -25040,12 +25040,12 @@ msgstr "支出图"
 #: gnucash/report/reports/standard/category-barchart.scm:43
 #: gnucash/report/reports/standard/net-charts.scm:363
 msgid "Asset Chart"
-msgstr "资产堆积柱形图"
+msgstr "资产柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:44
 #: gnucash/report/reports/standard/net-charts.scm:384
 msgid "Liability Chart"
-msgstr "负债堆积柱形图"
+msgstr "负债柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:49
 msgid "Shows a chart with the Income per interval developing over time"
@@ -25057,7 +25057,7 @@ msgstr "显示支出随时间变化的柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:55
 msgid "Shows a chart with the Assets developing over time"
-msgstr "显示资产随时间变化的堆积柱形图"
+msgstr "显示资产随时间变化的柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:57
 msgid "Shows a chart with the Liabilities developing over time"
@@ -25073,7 +25073,7 @@ msgstr "支出对时间变化图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:65
 msgid "Assets Over Time"
-msgstr "资产对时间变化图"
+msgstr "资产柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:66
 msgid "Liabilities Over Time"
@@ -25335,7 +25335,7 @@ msgstr "合计"
 
 #: gnucash/report/reports/standard/general-ledger.scm:39
 msgid "General Ledger"
-msgstr "总分类账"
+msgstr "总账"
 
 #: gnucash/report/reports/standard/general-ledger.scm:50
 #: gnucash/report/reports/standard/income-gst-statement.scm:40
@@ -26168,7 +26168,7 @@ msgstr "资产净值"
 
 #: gnucash/report/reports/standard/net-charts.scm:484
 msgid "Net Worth Barchart"
-msgstr "资产净值簇状柱形图"
+msgstr "净资产柱状图"
 
 #: gnucash/report/reports/standard/net-charts.scm:495
 msgid "Income/Expense Chart"
@@ -27126,7 +27126,7 @@ msgstr "导致调整条目模式被当作一个正则表达式处理。"
 #, fuzzy
 #| msgid "General Journal Report"
 msgid "General journal exact balances"
-msgstr "日常流水报表"
+msgstr "交易日志精确余额"
 
 #: gnucash/report/reports/standard/trial-balance.scm:204
 #, fuzzy
@@ -28322,7 +28322,7 @@ msgid ""
 "cannot be edited anymore. This threshold is marked by a red line in the "
 "account register windows. If zero, all transactions can be edited and none "
 "are read-only."
-msgstr "非零，表示可编辑距今多少天内的交易，之前均被保护、只读，由红线分隔。零，无保护、均可编辑。"
+msgstr "可编辑距今多少天内的交易，之前均被锁定，红线分隔；零值，无锁定、均可编辑。"
 
 #: libgnucash/app-utils/business-prefs.scm:153
 msgid ""
@@ -28330,7 +28330,7 @@ msgid ""
 "of transaction number; transaction number shown as 'T-Num' on second line of "
 "register. Has corresponding effect on business features, reporting and "
 "imports/exports."
-msgstr "交易界面、查看双行，“属性”字段改为“T-编号”；对商业特性、报表、导入导出有相应的影响。"
+msgstr "标签页，\"查看 -> 双行\"，\"属性\"字段设为\"T-编号\"；对商业特性、报表、导入导出有相应的影响。"
 
 #: libgnucash/app-utils/business-prefs.scm:159
 #, fuzzy
@@ -29003,11 +29003,11 @@ msgstr "新科目的默认货币"
 
 #: libgnucash/engine/qofbookslots.h:71
 msgid "Day Threshold for Read-Only Transactions (red line)"
-msgstr "只读模式的天数阈值"
+msgstr "锁定"
 
 #: libgnucash/engine/qofbookslots.h:72
 msgid "Use Split Action Field for Number"
-msgstr "属性字段作为分录编号"
+msgstr "\"属性\"字段设为\"T-编号\""
 
 #: libgnucash/engine/qofbookslots.h:74
 msgid "Budgeting"
