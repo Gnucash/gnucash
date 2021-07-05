@@ -22,8 +22,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-04 05:31+0000\n"
-"Last-Translator: cjh <cjh@cjh0613.com>\n"
+"PO-Revision-Date: 2021-07-05 12:33+0000\n"
+"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -583,7 +583,7 @@ msgid ""
 "When entering dates, you can type '+' or '-' to increment or decrement the "
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
-msgstr "交易录入时，'+'/'-'（半角）可以递增/递减日期和编号。"
+msgstr "录入时，'+'/'-'（半角）可以递增/递减日期和编号。"
 
 #: doc/tip_of_the_day.list.c:73
 msgid ""
@@ -664,21 +664,21 @@ msgid ""
 "If you work overnight, you should close and reopen your working registers "
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
-msgstr "通宵工作，应在零时后重启交易界面，以更新日期，并不需要重启 GnuCash。"
+msgstr "通宵工作，应在零时后重启标签页，以更新日期，并不需重启 GnuCash。"
 
 #: doc/tip_of_the_day.list.c:115
 msgid ""
 "To search through all your transactions, start a search (Edit->Find...) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
-msgstr "搜索交易，“编辑”->“查找...”；搜索科目，“编辑”->“查找科目”。"
+msgstr "搜索交易，Ctrl + F；搜索科目，Ctrl + i。"
 
 #: doc/tip_of_the_day.list.c:119
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
-msgstr "在主窗口比较2个标签页，“查看”->新科目页\"。"
+msgstr "主窗口比较2个标签页，“查看”-> 账簿多开\"。"
 
 #: doc/tip_of_the_day.list.c:123
 msgid ""
@@ -1700,7 +1700,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:1097
 msgid "Business Document Links"
-msgstr "关联的商业凭证"
+msgstr "商业关联的凭证"
 
 #: gnucash/gnome/dialog-employee.c:213
 msgid "You must enter a Payment-Address Name."
@@ -1845,7 +1845,7 @@ msgstr "平衡"
 #: gnucash/report/reports/standard/trial-balance.scm:285
 #, fuzzy
 msgid "Closing Entries"
-msgstr "关闭的条目"
+msgstr "关闭条目"
 
 #: gnucash/gnome/dialog-find-transactions2.c:120
 #: gnucash/gnome/dialog-find-transactions.c:118
@@ -2230,7 +2230,7 @@ msgstr "未支付"
 #: gnucash/gnome/dialog-invoice.c:2147 gnucash/gnome/dialog-invoice.c:2166
 #: gnucash/gnome/dialog-invoice.c:2185
 msgid "New Credit Note"
-msgstr "新增预付"
+msgstr "新建预付"
 
 #: gnucash/gnome/dialog-invoice.c:2148
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:292
@@ -2959,7 +2959,7 @@ msgstr "HTML 样式表格内容：%s"
 
 #: gnucash/gnome/dialog-report-style-sheet.c:269
 msgid "You must provide a name for the new style sheet."
-msgstr "您必须提供这个税率表的名称。"
+msgstr "请命名新样式表。"
 
 #: gnucash/gnome/dialog-report-style-sheet.c:520
 msgid "Style Sheet Name"
@@ -3175,7 +3175,7 @@ msgstr[0] "此时没有输入的计划交易。(自动创建了 %d 笔交易事�
 #: gnucash/gnome/dialog-sx-since-last-run.c:1008
 #: gnucash/gnome-search/dialog-search.c:1101
 msgid "Transaction"
-msgstr "交易事项"
+msgstr "交易"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1024
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:666
@@ -3185,7 +3185,7 @@ msgstr "状态"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1118
 msgid "Created Transactions"
-msgstr "已创建的交易事项"
+msgstr "新建交易"
 
 #: gnucash/gnome/dialog-tax-info.c:289
 msgid "Last Valid Year: "
@@ -3207,7 +3207,7 @@ msgstr "现在"
 #: gnucash/gnome/dialog-tax-info.c:1186
 #: gnucash/gtkbuilder/dialog-tax-info.glade:89
 msgid "Income Tax Identity"
-msgstr "税种"
+msgstr "标识"
 
 #: gnucash/gnome/dialog-tax-info.c:1192
 #: gnucash/gtkbuilder/dialog-options.glade:55
@@ -3302,7 +3302,7 @@ msgstr "转账"
 
 #: gnucash/gnome/gnc-budget-view.c:511
 msgid "Remaining to Budget"
-msgstr "打开一个已有的预算"
+msgstr "剩余"
 
 #: gnucash/gnome/gnc-budget-view.c:1659 gnucash/gnome/window-reconcile2.c:1094
 #: gnucash/gnome/window-reconcile.c:1147
@@ -3406,7 +3406,7 @@ msgstr "通过搜索寻找交易事项"
 #: gnucash/gnome/gnc-plugin-page-register2.c:263
 #: gnucash/gnome/gnc-plugin-page-register.c:372
 msgid "Ta_x Report Options"
-msgstr "税务表(_X)"
+msgstr "所得税(_X)"
 
 #. Translators: currently implemented are
 #. US: income tax and
@@ -3748,11 +3748,11 @@ msgstr "打开查找报销对话框"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr "关联的商业凭证"
+msgstr "商业关联的凭证"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
 msgid "View all Linked Business Documents"
-msgstr "查看所有关联的商业凭证"
+msgstr "查看所有商业关联的凭证"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
@@ -4070,7 +4070,7 @@ msgstr "编辑"
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:290
 #: gnucash/gnome-utils/dialog-doclink-utils.c:427
 msgid "New"
-msgstr "新增"
+msgstr "新建"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:409
 #: gnucash/gnome/gnc-plugin-page-budget.c:221
@@ -4197,7 +4197,7 @@ msgstr "将所有子科目中的交易事项转移到科目 %s 中。"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1770
 #, c-format
 msgid "All sub-account transactions will be deleted."
-msgstr "删除所有子科目中的交易事项。"
+msgstr "所有子科目交易将被删除。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1776
 msgid "Are you sure you want to do this?"
@@ -4238,7 +4238,7 @@ msgstr "评估预算(_M)..."
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions."
-msgstr "从过去的交易事项中为选中的科目评估预算。"
+msgstr "从过去的交易估计选定科目的预算。"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
 msgid "_All Periods..."
@@ -4259,7 +4259,7 @@ msgstr "编辑所选科目和期间的注释。"
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #: gnucash/report/reports/standard/budget.scm:39
 msgid "Budget Report"
-msgstr "年度"
+msgstr "预算报表"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
 msgid "Run the budget report."
@@ -4888,7 +4888,7 @@ msgstr "新建一个账单"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:202
 msgid "Create a new invoice"
-msgstr "为当前客户新增一张发票"
+msgstr "为当前客户新建一张发票"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:206
 msgid "New _Voucher..."
@@ -4962,7 +4962,7 @@ msgstr "客户"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:632
 msgid "Jobs"
-msgstr "工作"
+msgstr "项目"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:637
 msgid "Vendors"
@@ -5006,7 +5006,7 @@ msgstr "交易副本(_L)"
 #: gnucash/gnome/gnc-split-reg.c:1544
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1064
 msgid "_Delete Transaction"
-msgstr "删除交易(_D)"
+msgstr "删除(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:199
 #: gnucash/gnome/gnc-plugin-page-register.c:308
@@ -5038,7 +5038,7 @@ msgstr "删除分录(_D)"
 #: gnucash/gnome/gnc-plugin-page-register2.c:204
 #: gnucash/gnome/gnc-plugin-page-register.c:313
 msgid "Cut the selected transaction into clipboard"
-msgstr "将选中的交易事项剪切到剪贴板"
+msgstr "剪切选定的交易"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:205
 #: gnucash/gnome/gnc-plugin-page-register.c:314
@@ -5063,7 +5063,7 @@ msgstr "删除当前交易"
 #: gnucash/gnome/gnc-plugin-page-register2.c:209
 #: gnucash/gnome/gnc-plugin-page-register.c:321
 msgid "Cut the selected split into clipboard"
-msgstr "将选中的交易事项剪切到剪贴板"
+msgstr "剪切选定的分录"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:210
 #: gnucash/gnome/gnc-plugin-page-register.c:322
@@ -5102,7 +5102,7 @@ msgstr "剪切(_T)"
 #: gnucash/gnome/gnc-plugin-page-report.c:1217
 #: gnucash/gnome-utils/gnc-main-window.c:320
 msgid "Cut the current selection and copy it to clipboard"
-msgstr "将当前选中内容剪切到剪贴板"
+msgstr "剪切选定的内容"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:235
 #: gnucash/gnome/gnc-plugin-page-register.c:344
@@ -5377,7 +5377,7 @@ msgstr "交易日志 2"
 #: gnucash/gnome/gnc-plugin-page-register.c:2003
 #, c-format
 msgid "Save changes to %s?"
-msgstr "将修改保存到 %s 么？"
+msgstr "保存对 %s 的更改？"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1624
 #: gnucash/gnome/gnc-plugin-page-register.c:2008
@@ -5385,19 +5385,17 @@ msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
 "operation?"
-msgstr ""
-"这个账簿有一笔正在等候修改的交易事项。您愿意对这笔交易事项保存修改、忽略、还"
-"是取消操作？"
+msgstr "此标签页有一个待处理的交易，保存更改、取消操作、还是放弃交易？"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1627
 #: gnucash/gnome/gnc-plugin-page-register.c:2011
 msgid "_Discard Transaction"
-msgstr "放弃交易(_D)"
+msgstr "放弃(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1631
 #: gnucash/gnome/gnc-plugin-page-register.c:2015
 msgid "_Save Transaction"
-msgstr "保存交易(_S)"
+msgstr "保存(_S)"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:1660
 #: gnucash/gnome/gnc-plugin-page-register2.c:1695
@@ -5721,13 +5719,13 @@ msgstr "导出"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr "保存配置"
+msgstr "保存模板"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1143
 msgid "Save Config As..."
-msgstr "将配置另存为..."
+msgstr "另存模板..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1144
 msgid "Make Pdf"
@@ -5767,11 +5765,11 @@ msgstr "将当前报告导出为 PDF 文档"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1236
 msgid "Save _Report Configuration"
-msgstr "保存报表配置(_R)"
+msgstr "保存报表模板(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1240
 msgid "Save Report Configuration As..."
-msgstr "设置配置路径..."
+msgstr "另存报表模板..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1244
 msgid "Export _Report"
@@ -5899,7 +5897,7 @@ msgstr "税务发票"
 #: gnucash/gtkbuilder/business-prefs.glade:32
 #: gnucash/report/reports/standard/invoice.scm:899
 msgid "Easy Invoice"
-msgstr "简易发票"
+msgstr "简洁发票"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1854
 #: gnucash/gtkbuilder/business-prefs.glade:35
@@ -5993,11 +5991,11 @@ msgstr "打开交易日志窗口"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:57
 msgid "St_yle Sheets"
-msgstr "样式表(_Y)"
+msgstr "报表风格(_Y)"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:58
 msgid "Edit report style sheets"
-msgstr "编辑报表样式表单"
+msgstr "编辑样式表"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:148
 #: gnucash/report/reports/standard/view-column.scm:127
@@ -6398,11 +6396,11 @@ msgstr "显示 ~a 报表"
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
 msgid "Saved Report Configurations"
-msgstr "已保存的自定义报表"
+msgstr "已保存报表模板"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
-msgstr "管理和运行已保存的自定义报表"
+msgstr "管理和运行已保存的报表模板"
 
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:52
@@ -7330,7 +7328,7 @@ msgstr "编辑证券"
 
 #: gnucash/gnome-utils/dialog-commodity.c:991
 msgid "New security"
-msgstr "新增证券"
+msgstr "新建证券"
 
 #: gnucash/gnome-utils/dialog-commodity.c:992
 #: gnucash/gtkbuilder/dialog-commodity.glade:238
@@ -7651,7 +7649,7 @@ msgstr "您确实要删除这笔事项？"
 
 #: gnucash/gnome-utils/dialog-transfer.c:603
 msgid "Show the income and expense accounts"
-msgstr "显示收益和费用科目"
+msgstr "显示收入和支出科目"
 
 #: gnucash/gnome-utils/dialog-transfer.c:707
 #: gnucash/report/trep-engine.scm:2108 gnucash/report/trep-engine.scm:2114
@@ -7746,15 +7744,16 @@ msgstr "日期超出范围"
 
 #: gnucash/gnome-utils/dialog-utils.c:765
 msgid "Remember and don't _ask me again."
-msgstr "记住并不再询问(_A)。"
+msgstr "请记住，不要再询问。"
 
 #: gnucash/gnome-utils/dialog-utils.c:766
 msgid "Don't _tell me again."
 msgstr "请勿再通知(_T)。"
 
 #: gnucash/gnome-utils/dialog-utils.c:769
+#, fuzzy
 msgid "Remember and don't ask me again this _session."
-msgstr "记住，本会话不再询问(_S)。"
+msgstr "请记住，此类操作不再询问(_S)。"
 
 #: gnucash/gnome-utils/dialog-utils.c:770
 msgid "Don't tell me again this _session."
@@ -8525,7 +8524,7 @@ msgstr "窗口 0 (_0)"
 #: gnucash/gnome-utils/gnc-main-window.c:1255
 #, c-format
 msgid "Save changes to file %s before closing?"
-msgstr "在关闭前将修改保存到文件 %s 中？"
+msgstr "关闭前将修改保存到文件 %s ？"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1258
 #, c-format
@@ -9502,7 +9501,7 @@ msgstr "活跃"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:479
 msgctxt "Column letter for 'Active'"
 msgid "A"
-msgstr "新增"
+msgstr "A"
 
 #: gnucash/gnome-utils/gnc-tree-view-price.c:396
 msgid "Security"
@@ -9527,7 +9526,7 @@ msgstr " 计划的 "
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2317
 #: gnucash/register/ledger-core/split-register-control.c:1526
 msgid "Save the changed transaction?"
-msgstr "保存更改过的交易事项？"
+msgstr "保存更改后的交易？"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2319
 msgid ""
@@ -9538,12 +9537,12 @@ msgstr "当前交易事项已被改变。您想保存这些改变么？"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2357
 #: gnucash/register/ledger-core/split-register-control.c:1541
 msgid "_Discard Changes"
-msgstr "放弃修改(_D)"
+msgstr "放弃(_D)"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2359
 #: gnucash/register/ledger-core/split-register-control.c:1543
 msgid "_Record Changes"
-msgstr "记录更改(_R)"
+msgstr "保存(_R)"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2725
 msgid "Date Entered"
@@ -10955,7 +10954,7 @@ msgstr "在 GnuCash 启动时启用“每日提示”。如果选中，将会显
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:5
 #: gnucash/gtkbuilder/dialog-preferences.glade:3735
 msgid "Alpha Vantage API key"
-msgstr "Alpha Vantage的API密钥"
+msgstr "Alpha Vantage API 密钥"
 
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:3734
@@ -11647,7 +11646,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:315
 msgid "Show the entered and reconcile dates"
-msgstr "显示收益和费用科目"
+msgstr "显示输入和核对的日期"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:316
 #: gnucash/gtkbuilder/dialog-preferences.glade:3024
@@ -12063,12 +12062,12 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:89
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:192
 msgid "Delete a transaction"
-msgstr "删除一笔交易事项"
+msgstr "删除交易"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:90
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:193
 msgid "This dialog is presented before allowing you to delete a transaction."
-msgstr "在删除一笔交易事项前会显示此对话框。"
+msgstr "删除一笔交易前会显示此对话框。"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:94
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:197
@@ -12445,7 +12444,7 @@ msgstr "请选择要导出的帐户。如有必要，请选择日期范围。"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:327
 #: gnucash/gtkbuilder/dialog-tax-info.glade:372
 msgid "Accounts Selected:"
-msgstr "选中的科目："
+msgstr "已选科目："
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:374
 #: gnucash/gtkbuilder/dialog-tax-info.glade:418
@@ -14898,7 +14897,7 @@ msgstr "<b>通用导入器</b>"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:51
 msgid "Exit the saved report configurations dialog"
-msgstr "退出“已保存的自定义报表”对话框"
+msgstr "退出“已保存报表模板”对话框"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:99
 msgid ""
@@ -14916,9 +14915,9 @@ msgid ""
 "Configuration\" from\n"
 "the Reports menu or tool bar."
 msgstr ""
-"保存报表配置的方法是：首先从报表菜单中打开一个报表。\n"
-"改变报表的选项，然后从报表菜单或工具栏中选择 \n"
-"\"保存配置\"。"
+"保存报表模板：首先打开一个报表，\n"
+"调整报表选项，然后从报表菜单或工具栏中选择\n"
+"\"保存模板\"。"
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:263
@@ -17027,7 +17026,7 @@ msgstr "HTML 样式表"
 
 #: gnucash/gtkbuilder/dialog-report.glade:306
 msgid "<b>Available style sheets</b>"
-msgstr "<b>可用的样式表</b>"
+msgstr "<b>可用样式表</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:386
 msgid "<b>Style sheet options</b>"
@@ -17051,7 +17050,7 @@ msgstr "列宽(_C)"
 
 #: gnucash/gtkbuilder/dialog-report.glade:594
 msgid "Select HTML Style Sheet"
-msgstr "选择 HTML 样式表"
+msgstr "报表风格"
 
 #: gnucash/gtkbuilder/dialog-report.glade:720
 msgid "New Style Sheet"
@@ -17059,7 +17058,7 @@ msgstr "新建样式表"
 
 #: gnucash/gtkbuilder/dialog-report.glade:776
 msgid "<b>New style sheet info</b>"
-msgstr "<b>新增样式表格信息</b>"
+msgstr "<b>新样式表信息</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:811
 msgid "_Template"
@@ -17067,7 +17066,7 @@ msgstr "模板(_T)"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
-msgstr "重置警告信息"
+msgstr "重置警告"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:86
 msgid ""
@@ -19868,11 +19867,11 @@ msgstr "将交易导出到 CSV 文件"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:64
 msgid "Export A_ctive Register to CSV..."
-msgstr "当前界面交易(_C)「CSV 文件」..."
+msgstr "标签页交易(_C)「CSV 文件」..."
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:66
 msgid "Export the Active Register to a CSV file"
-msgstr "将当前界面的交易导出到 CSV 文件"
+msgstr "将标签页交易导出到 CSV 文件"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:71
 #, c-format
@@ -20525,7 +20524,7 @@ msgstr "您必须自科目表选择转账科目。"
 #: gnucash/import-export/import-main-matcher.c:1094
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
-msgstr "新增"
+msgstr "A"
 
 #: gnucash/import-export/import-main-matcher.c:1097
 msgctxt "Column header for 'Updating plus Clearing transaction'"
@@ -21577,9 +21576,7 @@ msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
 "to the changed transaction?"
-msgstr ""
-"当前的交易事项已被修改。您想在移到新的交易事项前保存修改、忽略修改，还是返回"
-"已改变的交易事项？"
+msgstr "当前交易已更改，新交易前，保存更改、取消操作、放弃更改？"
 
 #. Translators: The 'sample:' items are
 #. strings which are not displayed, but only
@@ -21903,7 +21900,7 @@ msgstr "居中的标签单元的字体信息。"
 
 #: gnucash/report/html-style-sheet.scm:149
 msgid "Can't save style sheet"
-msgstr "不能保存样式表格"
+msgstr "不能保存样式表"
 
 #: gnucash/report/html-utilities.scm:274 gnucash/report/html-utilities.scm:291
 msgid "Exchange rate"
@@ -22168,7 +22165,7 @@ msgstr "资产负债(_A)"
 
 #: gnucash/report/report-core.scm:152
 msgid "_Income & Expense"
-msgstr "收益和费用(_I)"
+msgstr "收入支出(_I)"
 
 #: gnucash/report/report-core.scm:154
 msgid "_Taxes"
@@ -22180,7 +22177,7 @@ msgstr "示例(_X)"
 
 #: gnucash/report/report-core.scm:156
 msgid "_Experimental"
-msgstr "实验阶段(_E)"
+msgstr "测试(_E)"
 
 #: gnucash/report/report-core.scm:157
 msgid "_Multicolumn"
@@ -22260,7 +22257,7 @@ msgstr "为该报告输入一个描述性的名称。"
 
 #: gnucash/report/report-core.scm:299
 msgid "Select a stylesheet for the report."
-msgstr "选择用于此报表的样式表格。"
+msgstr "为报表选择一个样式表。"
 
 #: gnucash/report/reports/aging.scm:38
 #: gnucash/report/reports/standard/new-aging.scm:40
@@ -23306,11 +23303,11 @@ msgstr "这个页面显示所得税相关科目的交易事项明细。"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
-msgstr "收入扇形图"
+msgstr "收入饼图"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:37
 msgid "Expense Piechart"
-msgstr "支出扇形图"
+msgstr "支出饼图"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:38
 msgid "Asset Piechart"
@@ -23318,7 +23315,7 @@ msgstr "资产饼图"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:39
 msgid "Security Piechart"
-msgstr "资产饼图"
+msgstr "证券饼图"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:40
 msgid "Liability Piechart"
@@ -23326,11 +23323,11 @@ msgstr "负债饼图"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
-msgstr "显示每个时间间隔的收入圆饼图"
+msgstr "显示每个时间间隔的收入饼图"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:47
 msgid "Shows a piechart with the Expenses per given time interval"
-msgstr "显示每个时间间隔的支出圆饼图"
+msgstr "显示每个时间间隔的支出饼图"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:49
 msgid "Shows a piechart with the Assets balance at a given time"
@@ -24223,7 +24220,7 @@ msgstr ""
 #: gnucash/report/reports/standard/receipt.scm:46
 #: gnucash/report/reports/standard/taxinvoice.scm:104
 msgid "CSS stylesheet file"
-msgstr "样式表文件"
+msgstr "CSS 样式表文件"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:174
 msgid ""
@@ -24468,7 +24465,7 @@ msgstr "汇率"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1125
 msgid "Barchart"
-msgstr "资产柱状图"
+msgstr "柱状图"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1188
 msgid " to "
@@ -24489,7 +24486,7 @@ msgstr "收支表（多列）"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
-msgstr "资产负债预算"
+msgstr "资产负债表"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:97
 msgid "Include new/existing totals"
@@ -24563,7 +24560,7 @@ msgstr "新建所有者权益"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:36
 msgid "Budget Chart"
-msgstr "柱状图预算"
+msgstr "柱状图"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:41
 msgid "Running Sum"
@@ -24685,7 +24682,7 @@ msgstr "实际"
 
 #: gnucash/report/reports/standard/budget-flow.scm:36
 msgid "Budget Flow"
-msgstr "流水"
+msgstr "现金流"
 
 #: gnucash/report/reports/standard/budget-flow.scm:70
 msgid "Period number."
@@ -24927,7 +24924,7 @@ msgstr "预算"
 #. Translators: Abbreviation for "Actual" amount
 #: gnucash/report/reports/standard/budget.scm:529
 msgid "Act"
-msgstr "动作"
+msgstr "实际"
 
 #. Translators: Abbreviation for "Difference" amount
 #: gnucash/report/reports/standard/budget.scm:534
@@ -24944,7 +24941,7 @@ msgstr "解析科目"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:40
 msgid "Cash Flow Barchart"
-msgstr "现金流量"
+msgstr "现金流柱状图"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
@@ -24995,11 +24992,11 @@ msgstr "概览："
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:368
 msgid "Shows a barchart with cash flow over time"
-msgstr "显示资产随时间变化条状图"
+msgstr "显示现金随时间变化的柱状图"
 
 #: gnucash/report/reports/standard/cash-flow.scm:38
 msgid "Cash Flow"
-msgstr "现金流量"
+msgstr "现金流"
 
 #: gnucash/report/reports/standard/cash-flow.scm:52
 msgid "Show Full Account Names"
@@ -25030,12 +25027,12 @@ msgstr "金钱流出到所选的科目"
 #: gnucash/report/reports/standard/category-barchart.scm:41
 #: gnucash/report/reports/standard/net-charts.scm:362
 msgid "Income Chart"
-msgstr "收入图"
+msgstr "收入柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:42
 #: gnucash/report/reports/standard/net-charts.scm:383
 msgid "Expense Chart"
-msgstr "支出图"
+msgstr "支出柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:43
 #: gnucash/report/reports/standard/net-charts.scm:363
@@ -25065,11 +25062,11 @@ msgstr "显示负债随时间变化柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:63
 msgid "Income Over Time"
-msgstr "收入对时间变化图"
+msgstr "收入柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:64
 msgid "Expense Over Time"
-msgstr "支出对时间变化图"
+msgstr "支出柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:65
 msgid "Assets Over Time"
@@ -25077,7 +25074,7 @@ msgstr "资产柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:66
 msgid "Liabilities Over Time"
-msgstr "负债对时间变化图"
+msgstr "负债柱状图"
 
 #: gnucash/report/reports/standard/category-barchart.scm:78
 msgid "Show long account names"
@@ -25221,12 +25218,12 @@ msgstr "新建客户"
 
 #: gnucash/report/reports/standard/customer-summary.scm:492
 msgid "Customer Summary"
-msgstr "客户概况"
+msgstr "客户汇总"
 
 #. Translators: This statement is about a range of time
 #: gnucash/report/reports/standard/equity-statement.scm:56
 msgid "Equity Statement"
-msgstr "所有者权益变动表"
+msgstr "所有者权益表"
 
 #: gnucash/report/reports/standard/equity-statement.scm:71
 msgid "Report only on these accounts."
@@ -25314,7 +25311,7 @@ msgstr "资本减少"
 #: gnucash/report/reports/standard/register.scm:359
 #: gnucash/report/trep-engine.scm:918 gnucash/report/trep-engine.scm:1042
 msgid "Num/Action"
-msgstr "动作"
+msgstr "编号/属性"
 
 #: gnucash/report/reports/standard/general-journal.scm:102
 #: gnucash/report/reports/standard/general-ledger.scm:82
@@ -25436,7 +25433,7 @@ msgstr "次要排序顺序"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:39
 msgid "Income and GST Statement"
-msgstr "损益表"
+msgstr "收入和消费税报表"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:41
 #: gnucash/report/trep-engine.scm:108
@@ -25652,7 +25649,7 @@ msgstr "收益合计"
 #: gnucash/report/reports/standard/income-statement.scm:571
 #: gnucash/report/reports/standard/trial-balance.scm:567
 msgid "Income Statement"
-msgstr "损益表"
+msgstr "收支表"
 
 #: gnucash/report/reports/standard/income-statement.scm:572
 msgid "Profit & Loss"
@@ -26122,7 +26119,7 @@ msgstr "显示资产负债"
 
 #: gnucash/report/reports/standard/net-charts.scm:51
 msgid "Show Net Worth"
-msgstr "显示净值"
+msgstr "显示净资产"
 
 #: gnucash/report/reports/standard/net-charts.scm:56
 msgid "Line Width"
@@ -26150,7 +26147,7 @@ msgstr "显示收益净额？"
 
 #: gnucash/report/reports/standard/net-charts.scm:127
 msgid "Show a Net Worth bar?"
-msgstr "显示净值栏？"
+msgstr "显示净资产栏？"
 
 #: gnucash/report/reports/standard/net-charts.scm:153
 msgid "Add grid lines."
@@ -26164,7 +26161,7 @@ msgstr "净利"
 #: gnucash/report/reports/standard/net-charts.scm:389
 #: gnucash/report/reports/standard/net-charts.scm:422
 msgid "Net Worth"
-msgstr "资产净值"
+msgstr "净资产"
 
 #: gnucash/report/reports/standard/net-charts.scm:484
 msgid "Net Worth Barchart"
@@ -26172,20 +26169,20 @@ msgstr "净资产柱状图"
 
 #: gnucash/report/reports/standard/net-charts.scm:495
 msgid "Income/Expense Chart"
-msgstr "收入/支出图表"
+msgstr "收入/支出柱状图"
 
 #: gnucash/report/reports/standard/net-charts.scm:497
 msgid "Income & Expense Barchart"
-msgstr "收入和支出图"
+msgstr "收入和支出柱状图"
 
 #: gnucash/report/reports/standard/net-charts.scm:507
 msgid "Net Worth Linechart"
-msgstr "资产净值堆积折线图"
+msgstr "净资产折线图"
 
 #: gnucash/report/reports/standard/net-charts.scm:520
 #: gnucash/report/reports/standard/net-charts.scm:522
 msgid "Income & Expense Linechart"
-msgstr "收入和支出图"
+msgstr "收入和支出折线图"
 
 #: gnucash/report/reports/standard/new-aging.scm:61
 msgid ""
@@ -26524,7 +26521,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/price-scatter.scm:313
 msgid "Price Scatterplot"
-msgstr "价格散布图"
+msgstr "价格散点图"
 
 #: gnucash/report/reports/standard/receipt.scm:36
 #: gnucash/report/reports/standard/taxinvoice.scm:76
@@ -27015,15 +27012,15 @@ msgstr "单位"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:311
 msgid "GST Rate"
-msgstr "税率"
+msgstr "消费税税率"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:312
 msgid "GST Amount"
-msgstr "转出金额"
+msgstr "消费税金额"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:313
 msgid "Amount Due (inc GST)"
-msgstr "到期金额"
+msgstr "应付金额（含消费税）"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:314
 msgid "Invoice #: "
@@ -27305,7 +27302,7 @@ msgstr "＆lt; /风格不能用于CSS。使用默认的CSS。"
 
 #: gnucash/report/stylesheets/css.scm:228
 msgid "CSS-based stylesheet (experimental)"
-msgstr "文本账簿风格 (实验性的)"
+msgstr "CSS 风格（测试）"
 
 #: gnucash/report/stylesheets/footer.scm:55
 #: gnucash/report/stylesheets/head-or-tail.scm:53
@@ -27563,7 +27560,7 @@ msgstr "制作对象： "
 #: gnucash/report/stylesheets/footer.scm:413
 #: gnucash/report/stylesheets/footer.scm:429
 msgid "Easy"
-msgstr "简单"
+msgstr "简洁"
 
 #: gnucash/report/stylesheets/footer.scm:419
 msgid "Fancy"
@@ -27571,7 +27568,7 @@ msgstr "精美的"
 
 #: gnucash/report/stylesheets/footer.scm:430
 msgid "Technicolor"
-msgstr "鲜明色彩"
+msgstr "鲜明"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:71
 msgid "Show receiver info"
@@ -27666,7 +27663,7 @@ msgstr "GnuCash "
 #: gnucash/report/stylesheets/head-or-tail.scm:566
 #: gnucash/report/stylesheets/head-or-tail.scm:570
 msgid "Head or Tail"
-msgstr "头或尾"
+msgstr "清晰"
 
 #: gnucash/report/stylesheets/plain.scm:47
 msgid "Background color for reports."
