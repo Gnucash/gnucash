@@ -22,8 +22,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-05 12:33+0000\n"
-"Last-Translator: cjh <cjh@cjh0613.com>\n"
+"PO-Revision-Date: 2021-07-05 15:33+0000\n"
+"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -482,7 +482,8 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"从 Quicken、MS Money 或其他 QIF/OFX 文件导入现有财务数据。「文件 -> 导入 -> QIF 文件 或 OFX/QFX 文件」。"
+"从 Quicken、MS Money 或其他 QIF/OFX 文件导入现有财务数据。\"文件 -> 导入 -> QIF 文件 或 OFX/QFX 文件\""
+"。"
 
 #: doc/tip_of_the_day.list.c:18
 msgid ""
@@ -515,7 +516,7 @@ msgid ""
 "This will bring up a dialog box where you can enter account details. For "
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
-msgstr "工具栏「新建」，新建一个科目；更多相关资料，请见 GnuCash 在线手册。"
+msgstr "工具栏\"新建\"，新建一个科目；更多相关资料，请见 GnuCash 在线手册。"
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -526,11 +527,11 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
-"交易「说明」字段，录入实用信息。\n"
+"交易\"说明\"字段，录入实用信息。\n"
 "\n"
 "打开方式\n"
-"「查看 -> 双行」，或\n"
-"「编辑 -> 首选项 -> 交易界面 -> 其他选项 -> 双行」。"
+"\"查看 -> 双行\"，或\n"
+"\"编辑 -> 首选项 -> 标签页默认选项 -> 其他 -> 双行\"。"
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -538,7 +539,7 @@ msgid ""
 "deductions, click the Split button in the tool bar. Alternatively, in the "
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
-msgstr "录入拆分的交易，如多次扣款的工资单，工具栏「分录」；另外，「查看」选择自动拆分或交易日志。"
+msgstr "录入拆分的交易，如多次扣款的工资单，工具栏\"分录\"；另外，\"查看\"选择\"分录模式\"或\"日志模式\"。"
 
 #: doc/tip_of_the_day.list.c:49
 msgid ""
@@ -546,7 +547,7 @@ msgid ""
 "add, subtract, multiply and divide. Simply type the first value, then select "
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
-msgstr "「借方/贷方」字段，支持 +、-、*、/ 运算，注：不需要 = 号。"
+msgstr "标签页借方/贷方字段，支持 \"+、-、*、/\" 运算，注：不需 = 号。"
 
 #: doc/tip_of_the_day.list.c:54
 msgid ""
@@ -574,9 +575,7 @@ msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
-msgstr ""
-"查看所有子科目交易？选中父科目，“编辑”->“打开子科目”（或右键->“打开子科"
-"目”）。"
+msgstr "查看所有子科目交易？选中父科目，\"编辑 -> 打开子科目\"（或右键 -> 打开子科目）。"
 
 #: doc/tip_of_the_day.list.c:69
 msgid ""
@@ -604,7 +603,7 @@ msgid ""
 "Transfer button in the register toolbar, select the accounts, and the "
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
-msgstr "不同币种科目转账，「转账」（或直接录入），设置科目、汇率、金额等。"
+msgstr "不同币种科目转账，\"转账\"（或正常录入），设置科目、汇率、金额等。"
 
 #: doc/tip_of_the_day.list.c:85
 msgid ""
@@ -678,7 +677,7 @@ msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
-msgstr "主窗口比较2个标签页，“查看”-> 账簿多开\"。"
+msgstr "主窗口比较2个标签页，\"查看 -> 账簿多开\"。"
 
 #: doc/tip_of_the_day.list.c:123
 msgid ""
@@ -1367,7 +1366,7 @@ msgstr "删除(_D)"
 msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
-msgstr ""
+msgstr "公司名称一栏不能留空，请输入公司名或人名。"
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -1704,7 +1703,7 @@ msgstr "商业关联的凭证"
 
 #: gnucash/gnome/dialog-employee.c:213
 msgid "You must enter a Payment-Address Name."
-msgstr "您必须输入一个付款地址。"
+msgstr "请输入\"收款信息 -> 名称\"。"
 
 #: gnucash/gnome/dialog-employee.c:308
 msgid "Edit Employee"
@@ -15021,7 +15020,7 @@ msgstr "员工编号。如果保持空白则会为您选择一个合理的号码
 #: gnucash/gtkbuilder/dialog-employee.glade:422
 #: gnucash/gtkbuilder/dialog-vendor.glade:416
 msgid "Payment Address"
-msgstr "付款地址"
+msgstr "收款信息"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:456
 msgid "Language"
