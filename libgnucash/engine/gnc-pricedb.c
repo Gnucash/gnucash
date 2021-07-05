@@ -1075,7 +1075,6 @@ add_price(GNCPriceDB *db, GNCPrice *p)
     gnc_commodity *commodity;
     gnc_commodity *currency;
     GHashTable *currency_hash;
-    GNCPrice *old_price;
 
     if (!db || !p) return FALSE;
     ENTER ("db=%p, pr=%p dirty=%d destroying=%d",
@@ -1112,17 +1111,20 @@ add_price(GNCPriceDB *db, GNCPrice *p)
  * add this one. If this price is of equal or better precedence than the old
  * one, copy this one over the old one.
  */
-    old_price = gnc_pricedb_lookup_day_t64 (db, p->commodity, p->currency,
-                                        p->tmspec);
-    if (!db->bulk_update && old_price != NULL)
+    if (!db->bulk_update)
     {
-        if (p->source > old_price->source)
+        GNCPrice *old_price = gnc_pricedb_lookup_day_t64(db, p->commodity,
+                                                         p->currency, p->tmspec);
+        if (old_price != NULL)
         {
-            gnc_price_unref(p);
-            LEAVE ("Better price already in DB.");
-            return FALSE;
+            if (p->source > old_price->source)
+            {
+                gnc_price_unref(p);
+                LEAVE ("Better price already in DB.");
+                return FALSE;
+            }
+            gnc_pricedb_remove_price(db, old_price);
         }
-        gnc_pricedb_remove_price(db, old_price);
     }
 
     currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
