@@ -39,12 +39,17 @@
         (coverage-data->lcov data port)
         (close port)))))
 
+(define (teardown)
+  (gnc-clear-current-session))
+
 (define (run-test-proper)
   (let ((saved-format (qof-date-format-get)))
     (qof-date-format-set QOF-DATE-FORMAT-ISO)
     (test-runner-factory gnc:test-runner)
     (test-begin "test-owner-report")
-    (owner-tests)
+    (test-group-with-cleanup "test-owner-report"
+      (owner-tests)
+      (teardown))
     (qof-date-format-set saved-format)
     (test-end "test-owner-report")))
 
