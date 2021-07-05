@@ -23,7 +23,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
 "PO-Revision-Date: 2021-07-04 05:31+0000\n"
-"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
+"Last-Translator: cjh <cjh@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -26180,7 +26180,7 @@ msgstr "收入和支出图"
 
 #: gnucash/report/reports/standard/net-charts.scm:507
 msgid "Net Worth Linechart"
-msgstr "资产净值堆积拆线图"
+msgstr "资产净值堆积折线图"
 
 #: gnucash/report/reports/standard/net-charts.scm:520
 #: gnucash/report/reports/standard/net-charts.scm:522
