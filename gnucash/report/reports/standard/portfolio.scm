@@ -61,7 +61,7 @@
      (gnc:make-number-range-option
       gnc:pagename-general optname-shares-digits
       "e" (N_ "The number of decimal places to use for share numbers.") 2
-      0 6 0 1))
+      0 9 0 1))
 
     ;; Account tab
     (add-option
