@@ -100,6 +100,7 @@ gnc_copy_split_onto_split (Split* from, Split* to, gboolean use_cut_semantics)
         return;
 
     gnc_float_split_to_split (fs, to);
+    gnc_float_split_free (fs);
 }
 
 void
@@ -117,6 +118,7 @@ gnc_copy_trans_onto_trans (Transaction* from, Transaction* to,
         return;
 
     gnc_float_txn_to_txn (ft, to, do_commit);
+    gnc_float_txn_free (ft);
 }
 
 static int
@@ -819,9 +821,9 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
 
     /* unprotect the old object, if any */
     if (copied_item.ftype == GNC_TYPE_SPLIT)
-        g_free (copied_item.fs);
+        gnc_float_split_free (copied_item.fs);
     if (copied_item.ftype == GNC_TYPE_TRANSACTION)
-        g_free (copied_item.ft);
+        gnc_float_txn_free (copied_item.ft);
     copied_item.ftype = 0;
 
     if (new_fs)

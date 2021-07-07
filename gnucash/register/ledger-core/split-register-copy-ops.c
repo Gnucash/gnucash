@@ -103,13 +103,13 @@ void gnc_float_split_set_transaction (FloatingSplit *fs, Transaction *transactio
 void gnc_float_split_set_memo (FloatingSplit *fs, const char *memo)
 {
     g_return_if_fail (fs);
-    fs->m_memo = memo;
+    CACHE_REPLACE (fs->m_memo, memo);
 };
 
 void gnc_float_split_set_action (FloatingSplit *fs, const char *action)
 {
     g_return_if_fail (fs);
-    fs->m_action = action;
+    CACHE_REPLACE (fs->m_action, action);
 };
 
 void gnc_float_split_set_reconcile_state (FloatingSplit *fs, char reconcile_state)
@@ -152,8 +152,8 @@ FloatingSplit *gnc_split_to_float_split (Split *split)
     fs->m_split = split;
     fs->m_account = xaccSplitGetAccount (split);
     fs->m_transaction = xaccSplitGetParent (split);
-    fs->m_memo = xaccSplitGetMemo (split);
-    fs->m_action = xaccSplitGetAction (split);
+    fs->m_memo = CACHE_INSERT (xaccSplitGetMemo (split));
+    fs->m_action = CACHE_INSERT (xaccSplitGetAction (split));
     fs->m_reconcile_state = xaccSplitGetReconcile (split);
     fs->m_reconcile_date = xaccSplitGetDateReconciled (split);
     fs->m_amount = xaccSplitGetAmount (split);
@@ -184,6 +184,15 @@ void gnc_float_split_to_split (const FloatingSplit *fs, Split *split)
         xaccSplitSetAccount (split, fs->m_account);
         xaccAccountCommitEdit (fs->m_account);
     }
+}
+
+void gnc_float_split_free (FloatingSplit *fs)
+{
+    g_return_if_fail (fs);
+
+    CACHE_REMOVE (fs->m_memo);
+    CACHE_REMOVE (fs->m_action);
+    g_free (fs);
 }
 
 /* accessors */
@@ -294,25 +303,25 @@ void gnc_float_txn_set_date_posted (FloatingTxn *ft, time64 date_posted)
 void gnc_float_txn_set_num (FloatingTxn *ft, const char *num)
 {
     g_return_if_fail (ft);
-    ft->m_num = num;
+    CACHE_REPLACE (ft->m_num, num);
 };
 
 void gnc_float_txn_set_description (FloatingTxn *ft, const char *description)
 {
     g_return_if_fail (ft);
-    ft->m_description = description;
+    CACHE_REPLACE (ft->m_description, description);
 };
 
 void gnc_float_txn_set_notes (FloatingTxn *ft, const char *notes)
 {
     g_return_if_fail (ft);
-    ft->m_notes = notes;
+    CACHE_REPLACE (ft->m_notes, notes);
 };
 
 void gnc_float_txn_set_doclink (FloatingTxn *ft, const char *doclink)
 {
     g_return_if_fail (ft);
-    ft->m_doclink = doclink;
+    CACHE_REPLACE (ft->m_doclink, doclink);
 };
 
 void gnc_float_txn_set_splits (FloatingTxn *ft, SplitList *splits)
@@ -342,11 +351,11 @@ FloatingTxn *gnc_txn_to_float_txn (Transaction *txn, gboolean use_cut_semantics)
     if (use_cut_semantics)
     {
         ft->m_date_posted = xaccTransGetDate (txn);
-        ft->m_num = xaccTransGetNum (txn);
+        ft->m_num = CACHE_INSERT (xaccTransGetNum (txn));
     }
-    ft->m_description = xaccTransGetDescription (txn);
-    ft->m_notes = xaccTransGetNotes (txn);
-    ft->m_doclink = xaccTransGetDocLink (txn);
+    ft->m_description = CACHE_INSERT (xaccTransGetDescription (txn));
+    ft->m_notes = CACHE_INSERT (xaccTransGetNotes (txn));
+    ft->m_doclink = CACHE_INSERT (xaccTransGetDocLink (txn));
 
     for (iter = xaccTransGetSplitList (txn); iter ; iter = iter->next)
     {
@@ -426,4 +435,16 @@ void gnc_float_txn_to_txn_swap_accounts (const FloatingTxn *ft, Transaction *txn
     /* close the transaction */
     if (do_commit)
         xaccTransCommitEdit (txn);
+}
+
+void gnc_float_txn_free (FloatingTxn *ft)
+{
+    g_return_if_fail (ft);
+
+    CACHE_REMOVE (ft->m_num);
+    CACHE_REMOVE (ft->m_description);
+    CACHE_REMOVE (ft->m_notes);
+    CACHE_REMOVE (ft->m_doclink);
+    g_list_free_full (ft->m_splits, (GDestroyNotify)gnc_float_split_free);
+    g_free (ft);
 }
