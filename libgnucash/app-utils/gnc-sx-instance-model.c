@@ -412,14 +412,22 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
 
     {
         int instance_i_value;
-        gnc_numeric i_num;
+        gnc_numeric num_value;
         GncSxVariable *as_var;
+        gchar* var_name = NULL;
 
+        var_name = "i";
         instance_i_value = gnc_sx_get_instance_count(rtn->parent->sx, rtn->temporal_state);
-        i_num = gnc_numeric_create(instance_i_value, 1);
-        as_var = gnc_sx_variable_new_full("i", i_num, FALSE);
-
-        g_hash_table_insert(rtn->variable_bindings, g_strdup("i"), as_var);
+        num_value = gnc_numeric_create(instance_i_value, 1);
+        as_var = gnc_sx_variable_new_full(var_name, num_value, FALSE);
+        g_hash_table_insert(rtn->variable_bindings, g_strdup(var_name), as_var);
+        
+        /* This variable can be used in a formula, it will contain the balance of liability account.
+         * For now it needs to be created with an arbitrary value. */
+        var_name = "balance";
+        num_value = gnc_numeric_create(0, 1);
+        as_var = gnc_sx_variable_new_full(var_name, num_value, FALSE);
+        g_hash_table_insert(rtn->variable_bindings, g_strdup(var_name), as_var);
     }
 
     return rtn;
@@ -1248,6 +1256,8 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     SchedXaction *sx = creation_data->instance->parent->sx;
     gnc_commodity *txn_cmdty = get_transaction_currency (creation_data,
                                                          sx, template_txn);
+    GncSxVariable *as_var = NULL;
+    gnc_numeric balance = gnc_numeric_zero();
 
     /* No txn_cmdty means there was a defective split. Bail. */
     if (txn_cmdty == NULL)
@@ -1295,12 +1305,37 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     }
     xaccTransSetCurrency(new_txn, txn_cmdty);
 
+    // Find the first liability account among the splits, use that to set the balance
     for (;
          txn_splits && template_splits;
          txn_splits = txn_splits->next, template_splits = template_splits->next)
     {
         const Split *template_split;
-        Account *split_acct;
+        Account *split_acct = NULL;
+        GNCAccountType acct_type;
+        template_split = (Split*)template_splits->data;
+        _get_template_split_account(sx, template_split, &split_acct,creation_data->creation_errors);
+        acct_type = xaccAccountGetType (split_acct);
+        if(acct_type == ACCT_TYPE_LIABILITY)
+        {
+            balance = xaccAccountGetBalance(split_acct);
+            // Update the balance variable
+            balance = xaccAccountGetBalanceAsOfDate(split_acct, xaccTransRetDatePosted(new_txn));
+            // The balance is a negative number for a liability account, but it's easier to present it as a positive number.
+            as_var = gnc_sx_variable_new_full("balance", gnc_numeric_neg(balance), FALSE);
+            g_hash_table_insert(creation_data->instance->variable_bindings, g_strdup("balance"), as_var);
+            break;
+        }
+    }
+    
+    template_splits = xaccTransGetSplitList(template_txn);
+    txn_splits = xaccTransGetSplitList(new_txn);
+    for (;
+         txn_splits && template_splits;
+         txn_splits = txn_splits->next, template_splits = template_splits->next)
+    {
+        const Split *template_split;
+        Account *split_acct = NULL;
         gnc_commodity *split_cmdty = NULL;
 
         /* FIXME: Ick.  This assumes that the split lists will be ordered
@@ -1374,6 +1409,24 @@ create_transactions_for_instance(GncSxInstance *instance, GList **created_txn_gu
     qof_event_resume();
 }
 
+// A temporary structure used to date-sort transations
+typedef struct aux_struct_tag
+{
+    GncSxInstances *instances;
+    GncSxInstance *inst;
+} aux_struct;
+
+// Function used to compare two scheduled transactions's dates.
+static int
+compare_func(GList* first, GList* second)
+{
+    aux_struct* i1 = (aux_struct*) first;
+    aux_struct* i2 = (aux_struct*) second;
+    GncSxInstance *inst1 = (GncSxInstance*) i1->inst;
+    GncSxInstance *inst2 = (GncSxInstance*) i2->inst;
+    return g_date_compare(&inst1->date,&inst2->date);
+}
+
 void
 gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
                                     gboolean auto_create_only,
@@ -1381,102 +1434,117 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
                                     GList **creation_errors)
 {
     GList *iter;
+    GList* aux_list = NULL;
 
     if (qof_book_is_readonly(gnc_get_current_book()))
     {
         /* Is the book read-only? Then don't change anything here. */
         return;
     }
-
+    /* There are two nested loops: one over the scheduled transactions and one over each date for each scheduled transaction.
+    *  We must turn that into a single loop, so that loop can be sorted in increasing dates.
+    * The scheduled transactions must be date-sorted so the balance is computed accurately as some of the transactions may need to use the updated value. */
     for (iter = model->sx_instance_list; iter != NULL; iter = iter->next)
     {
         GList *instance_iter;
         GncSxInstances *instances = (GncSxInstances*)iter->data;
-        GDate *last_occur_date;
-        gint instance_count = 0;
-        gint remain_occur_count = 0;
 
         // If there are no instances, then skip; specifically, skip
         // re-setting SchedXaction fields, which will dirty the book
         // spuriously.
         if (g_list_length(instances->instance_list) == 0)
             continue;
-
-        last_occur_date = (GDate*) xaccSchedXactionGetLastOccurDate(instances->sx);
-        instance_count = gnc_sx_get_instance_count(instances->sx, NULL);
-        remain_occur_count = xaccSchedXactionGetRemOccur(instances->sx);
-
         for (instance_iter = instances->instance_list; instance_iter != NULL; instance_iter = instance_iter->next)
         {
             GncSxInstance *inst = (GncSxInstance*)instance_iter->data;
-            gboolean sx_is_auto_create;
-            GList *instance_errors = NULL;
+            aux_struct* _struct = g_new (aux_struct,1);
+            _struct->instances = instances;
+            _struct->inst = inst;
+            aux_list = g_list_append(aux_list,_struct);
+        }
+    }
+    
+    // List created, sort the list in increasing dates.
+    aux_list = g_list_sort (aux_list, (GCompareFunc) compare_func);
+    
+    // Now go through all transactions
+    for (iter = aux_list; iter != NULL; iter = iter->next)
+    {
+        // Recover instances and inst from the aux struct
+        aux_struct* aux = (aux_struct*) iter->data;
+        GncSxInstances *instances = aux->instances;
+        GncSxInstance *inst = aux->inst;
+        gboolean sx_is_auto_create;
+        GList *instance_errors = NULL;
+        GDate *last_occur_date = (GDate*) xaccSchedXactionGetLastOccurDate(instances->sx);
+        gint instance_count = gnc_sx_get_instance_count(instances->sx, NULL);
+        gint remain_occur_count = xaccSchedXactionGetRemOccur(instances->sx);
 
-            xaccSchedXactionGetAutoCreate(inst->parent->sx, &sx_is_auto_create, NULL);
-            if (auto_create_only && !sx_is_auto_create)
+        xaccSchedXactionGetAutoCreate(inst->parent->sx, &sx_is_auto_create, NULL);
+        if (auto_create_only && !sx_is_auto_create)
+        {
+            if (inst->state != SX_INSTANCE_STATE_TO_CREATE)
             {
-                if (inst->state != SX_INSTANCE_STATE_TO_CREATE)
-                {
-                    break;
-                }
-                continue;
+                break;
             }
-
-            if (inst->orig_state == SX_INSTANCE_STATE_POSTPONED
-                && inst->state != SX_INSTANCE_STATE_POSTPONED)
-            {
-                // remove from postponed list
-                g_assert(inst->temporal_state != NULL);
-                gnc_sx_remove_defer_instance(inst->parent->sx,
-                                             inst->temporal_state);
-            }
-
-            switch (inst->state)
-            {
-                case SX_INSTANCE_STATE_CREATED:
-                    // nop: we've already processed this.
-                    break;
-                case SX_INSTANCE_STATE_IGNORED:
-                    increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
-                    break;
-                case SX_INSTANCE_STATE_POSTPONED:
-                    if (inst->orig_state != SX_INSTANCE_STATE_POSTPONED)
-                    {
-                        gnc_sx_add_defer_instance(instances->sx,
-                                                  gnc_sx_clone_temporal_state (inst->temporal_state));
-                    }
-                    increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
-                    break;
-                case SX_INSTANCE_STATE_TO_CREATE:
-                    create_transactions_for_instance (inst,
-                                                      created_transaction_guids,
-                                                      &instance_errors);
-                    if (instance_errors == NULL)
-                    {
-                        increment_sx_state (inst, &last_occur_date,
-                                            &instance_count,
-                                            &remain_occur_count);
-                        gnc_sx_instance_model_change_instance_state
-                            (model, inst, SX_INSTANCE_STATE_CREATED);
-                    }
-                    else
-                        *creation_errors = g_list_concat (*creation_errors,
-                                                          instance_errors);
-                    break;
-                case SX_INSTANCE_STATE_REMINDER:
-                    // do nothing
-                    // assert no non-remind instances after this?
-                    break;
-                default:
-                    g_assert_not_reached();
-                    break;
-            }
+            continue;
         }
 
+        if (inst->orig_state == SX_INSTANCE_STATE_POSTPONED
+            && inst->state != SX_INSTANCE_STATE_POSTPONED)
+        {
+            // remove from postponed list
+            g_assert(inst->temporal_state != NULL);
+            gnc_sx_remove_defer_instance(inst->parent->sx,
+                                         inst->temporal_state);
+        }
+
+        switch (inst->state)
+        {
+            case SX_INSTANCE_STATE_CREATED:
+                // nop: we've already processed this.
+                break;
+            case SX_INSTANCE_STATE_IGNORED:
+                increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
+                break;
+            case SX_INSTANCE_STATE_POSTPONED:
+                if (inst->orig_state != SX_INSTANCE_STATE_POSTPONED)
+                {
+                    gnc_sx_add_defer_instance(instances->sx,
+                                              gnc_sx_clone_temporal_state (inst->temporal_state));
+                }
+                increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
+                break;
+            case SX_INSTANCE_STATE_TO_CREATE:
+                create_transactions_for_instance (inst,
+                                                  created_transaction_guids,
+                                                  &instance_errors);
+                if (instance_errors == NULL)
+                {
+                    increment_sx_state (inst, &last_occur_date,
+                                        &instance_count,
+                                        &remain_occur_count);
+                    gnc_sx_instance_model_change_instance_state
+                        (model, inst, SX_INSTANCE_STATE_CREATED);
+                }
+                else
+                    *creation_errors = g_list_concat (*creation_errors,
+                                                      instance_errors);
+                break;
+            case SX_INSTANCE_STATE_REMINDER:
+                // do nothing
+                // assert no non-remind instances after this?
+                break;
+            default:
+                g_assert_not_reached();
+                break;
+        }
         xaccSchedXactionSetLastOccurDate(instances->sx, last_occur_date);
         gnc_sx_set_instance_count(instances->sx, instance_count);
         xaccSchedXactionSetRemOccur(instances->sx, remain_occur_count);
     }
+    // Deallocate the List
+    g_list_free_full (aux_list, g_free);
 }
 
 void
