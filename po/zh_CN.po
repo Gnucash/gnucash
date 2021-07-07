@@ -22,8 +22,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-06 15:32+0000\n"
-"Last-Translator: cjh <cjh@cjh0613.com>\n"
+"PO-Revision-Date: 2021-07-07 13:33+0000\n"
+"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -768,7 +768,7 @@ msgstr "已选中"
 #: gnucash/gnome/assistant-hierarchy.c:767
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2367
 msgid "Account Types"
-msgstr "科目类型"
+msgstr "类型"
 
 #. Translators: '%s' is the name of the selected account hierarchy template.
 #: gnucash/gnome/assistant-hierarchy.c:868
@@ -1703,7 +1703,7 @@ msgstr "商业关联的凭证"
 
 #: gnucash/gnome/dialog-employee.c:213
 msgid "You must enter a Payment-Address Name."
-msgstr "请输入\"收款信息 -> 名称\"。"
+msgstr "请输入\"信息 -> 名称\"。"
 
 #: gnucash/gnome/dialog-employee.c:308
 msgid "Edit Employee"
@@ -2127,7 +2127,7 @@ msgstr "在线 HBCI"
 #. invoiced.
 #: gnucash/gnome/dialog-invoice.c:476 gnucash/gnome/dialog-order.c:181
 msgid "You need to supply Billing Information."
-msgstr "您需要提供账单信息。"
+msgstr "您需要提供财务资料。"
 
 #: gnucash/gnome/dialog-invoice.c:732
 msgid "Are you sure you want to delete the selected entry?"
@@ -5358,7 +5358,7 @@ msgstr "计划"
 #: gnucash/gnome/gnc-plugin-page-register.c:630
 #: gnucash/gnome/window-autoclear.c:88
 msgid "Auto-clear"
-msgstr "自动结算"
+msgstr "自动核实"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:681
 msgid ""
@@ -5536,7 +5536,7 @@ msgstr "不能作废已对账或已核实分录的交易。"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
 msgid "Filter %s by..."
-msgstr "过滤 %s..."
+msgstr "筛选 %s..."
 
 #. Translators: This is a menu item that will open the bill, invoice, or voucher
 #. that is posted to the current transaction if there is one.
@@ -6019,7 +6019,7 @@ msgstr "混乱的报表编号：%s"
 
 #: gnucash/gnome/gnc-split-reg2.c:632 gnucash/gnome/gnc-split-reg.c:1865
 msgid "Balancing entry from reconciliation"
-msgstr "从对账中结算交易事项"
+msgstr "对账时录入的余额"
 
 #: gnucash/gnome/gnc-split-reg2.c:802 gnucash/gnome/gnc-split-reg.c:2356
 msgid "Present:"
@@ -6101,7 +6101,7 @@ msgstr "条目日期"
 #: gnucash/gnome/gnc-split-reg.c:688 gnucash/gnome/window-reconcile2.c:1784
 #: gnucash/gnome/window-reconcile.c:1977
 msgid "Statement Date"
-msgstr "财务报告日期"
+msgstr "日期"
 
 #: gnucash/gnome/gnc-split-reg.c:711 gnucash/report/reports/aging.scm:361
 #: gnucash/report/reports/standard/customer-summary.scm:129
@@ -6213,7 +6213,7 @@ msgstr "删除分录(_R)"
 
 #: gnucash/gnome/gnc-split-reg.c:1299
 msgid "Change a Transaction Linked Document"
-msgstr "查看所有交易事项关联"
+msgstr "管理关联的凭证"
 
 #: gnucash/gnome/gnc-split-reg.c:1440
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:963
@@ -6385,7 +6385,7 @@ msgstr "财务管理"
 #: gnucash/register/ledger-core/split-register-model.c:312
 msgctxt "Column header for 'Reconciled'"
 msgid "R"
-msgstr "对账"
+msgstr "核实"
 
 #: gnucash/gnome/report-menus.scm:57
 #, scheme-format
@@ -6476,7 +6476,7 @@ msgstr "利息收费"
 #: gnucash/gtkbuilder/dialog-vendor.glade:660
 #: gnucash/gtkbuilder/dialog-vendor.glade:682
 msgid "Payment Information"
-msgstr "信息"
+msgstr "财务资料"
 
 #: gnucash/gnome/window-reconcile2.c:449 gnucash/gnome/window-reconcile.c:490
 #: gnucash/gtkbuilder/assistant-loan.glade:578
@@ -6526,12 +6526,12 @@ msgstr "期末余额"
 
 #: gnucash/gnome/window-reconcile2.c:1814 gnucash/gnome/window-reconcile.c:2007
 msgid "Reconciled Balance"
-msgstr "已对账的余额"
+msgstr "已核实金额"
 
 #: gnucash/gnome/window-reconcile2.c:1824 gnucash/gnome/window-reconcile.c:2017
 #: gnucash/report/reports/standard/cash-flow.scm:312
 msgid "Difference"
-msgstr "差值"
+msgstr "差额"
 
 #: gnucash/gnome/window-reconcile2.c:1913 gnucash/gnome/window-reconcile.c:2134
 msgid ""
@@ -6585,7 +6585,7 @@ msgstr "帮助(_H)"
 
 #: gnucash/gnome/window-reconcile2.c:2134 gnucash/gnome/window-reconcile.c:2355
 msgid "_Reconcile Information..."
-msgstr "对账信息(_R)..."
+msgstr "信息(_R)..."
 
 #: gnucash/gnome/window-reconcile2.c:2135 gnucash/gnome/window-reconcile.c:2356
 msgid ""
@@ -6598,7 +6598,7 @@ msgstr "完成(_F)"
 
 #: gnucash/gnome/window-reconcile2.c:2141 gnucash/gnome/window-reconcile.c:2362
 msgid "Finish the reconciliation of this account"
-msgstr "结束这个科目的对账"
+msgstr "完成此科目的对账"
 
 #: gnucash/gnome/window-reconcile2.c:2145 gnucash/gnome/window-reconcile.c:2366
 msgid "_Postpone"
@@ -6606,11 +6606,11 @@ msgstr "推迟(_P)"
 
 #: gnucash/gnome/window-reconcile2.c:2146 gnucash/gnome/window-reconcile.c:2367
 msgid "Postpone the reconciliation of this account"
-msgstr "推迟这个科目的对账"
+msgstr "推迟此科目的对账"
 
 #: gnucash/gnome/window-reconcile2.c:2151 gnucash/gnome/window-reconcile.c:2372
 msgid "Cancel the reconciliation of this account"
-msgstr "取消这个科目的对账"
+msgstr "取消此科目的对账"
 
 #: gnucash/gnome/window-reconcile2.c:2158 gnucash/gnome/window-reconcile.c:2379
 msgid "_Open Account"
@@ -6639,16 +6639,17 @@ msgid "_Balance"
 msgstr "余额(_B)"
 
 #: gnucash/gnome/window-reconcile2.c:2183 gnucash/gnome/window-reconcile.c:2404
+#, fuzzy
 msgid "Add a new balancing entry to the account"
-msgstr "添加一个新的结算条目到科目"
+msgstr "科目增加一笔新的交易，以达平衡"
 
 #: gnucash/gnome/window-reconcile2.c:2188 gnucash/gnome/window-reconcile.c:2409
 msgid "Edit the current transaction"
-msgstr "编辑当前交易事项"
+msgstr "编辑选中的交易"
 
 #: gnucash/gnome/window-reconcile2.c:2193 gnucash/gnome/window-reconcile.c:2414
 msgid "Delete the selected transaction"
-msgstr "删除选定的交易事项"
+msgstr "删除选定的交易"
 
 #: gnucash/gnome/window-reconcile2.c:2197 gnucash/gnome/window-reconcile.c:2418
 msgid "_Reconcile Selection"
@@ -7307,7 +7308,7 @@ msgstr "币种(_R)"
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
 #: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4420
 msgid "Currency"
-msgstr "货币"
+msgstr "币种"
 
 #: gnucash/gnome-utils/dialog-commodity.c:855
 msgid "Use local time"
@@ -7315,7 +7316,7 @@ msgstr "使用当地时间格式"
 
 #: gnucash/gnome-utils/dialog-commodity.c:985
 msgid "Edit currency"
-msgstr "编辑货币"
+msgstr "编辑币种"
 
 #: gnucash/gnome-utils/dialog-commodity.c:986
 msgid "Currency Information"
@@ -7710,7 +7711,7 @@ msgstr "贷方科目"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1976
 msgid "Debit Account"
-msgstr "借方金额"
+msgstr "借方科目"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1994
 #: gnucash/gtkbuilder/dialog-transfer.glade:270
@@ -11277,7 +11278,7 @@ msgstr "新科目使用此币种。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:150
 msgid "Default currency for new accounts"
-msgstr "新科目的默认货币"
+msgstr "新科目的默认币种"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:151
 msgid ""
@@ -14146,11 +14147,11 @@ msgstr "<b>子科目</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:470
 msgid "This account has a sub-account. What would you like to do with it?"
-msgstr "该科目含有子科目。您希望对这些子科目作些什么？"
+msgstr "该科目含有子科目，要怎么处理？"
 
 #: gnucash/gtkbuilder/dialog-account.glade:481
 msgid "_Move to"
-msgstr "移动到(_M)"
+msgstr "移至(_M)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:499
 msgid "Delete the _subaccount"
@@ -14159,7 +14160,7 @@ msgstr "删除所有子科目(_S)"
 #: gnucash/gtkbuilder/dialog-account.glade:574
 #: gnucash/gtkbuilder/dialog-account.glade:692
 msgid "M_ove to"
-msgstr "移动到(_O)"
+msgstr "移至(_O)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:590
 #: gnucash/gtkbuilder/dialog-account.glade:708
@@ -14170,7 +14171,7 @@ msgstr "删除所有交易(_T)"
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
-msgstr "该科目含有交易事项。您希望对这些交易事项作些什么？"
+msgstr "该科目含有交易，要怎么处理？"
 
 #: gnucash/gtkbuilder/dialog-account.glade:625
 msgid "This account contains read-only transactions which may not be deleted."
@@ -14178,13 +14179,13 @@ msgstr "该科目含有无法删除的只读交易事项。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:674
 msgid "<b>Sub-account Transactions</b>"
-msgstr "<b>子科目交易事项</b>"
+msgstr "<b>子科目交易</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:729
 msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
 "would you like to do with these transactions?"
-msgstr "一个或多个子科目包含交易事项。您想对这些交易事项做些什么？"
+msgstr "删除的子科目含有交易，要怎么处理？"
 
 #: gnucash/gtkbuilder/dialog-account.glade:743
 msgid ""
@@ -14221,15 +14222,15 @@ msgstr "显示未使用科目(_U)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:992
 msgid "Show accounts which do not have any transactions."
-msgstr "此科目 %s 不接受交易事项。"
+msgstr "显示没有任何交易的科目。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1006
 msgid "Show _zero total accounts"
-msgstr "显示合计为零的科目(_Z)"
+msgstr "显示零值科目(_Z)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1010
 msgid "Show accounts which have a zero total value."
-msgstr "隐藏价值合计为零的科目。"
+msgstr "显示合计为零的科目。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1065
 msgid "Use Commodity Value"
@@ -14823,7 +14824,7 @@ msgstr "邮件"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:420
 msgid "Billing Address"
-msgstr "账单地址"
+msgstr "信息"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:537
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:156
@@ -14835,7 +14836,7 @@ msgstr "折扣"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:550
 msgid "Credit Limit"
-msgstr "信贷限额"
+msgstr "信用额度"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:563
 #: gnucash/gtkbuilder/dialog-vendor.glade:533
@@ -14863,11 +14864,11 @@ msgstr "覆盖全局的税率表？"
 #: gnucash/gtkbuilder/dialog-order.glade:310
 #: gnucash/gtkbuilder/dialog-order.glade:661
 msgid "Billing Information"
-msgstr "对方资料"
+msgstr "财务资料"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:950
 msgid "Shipping Information"
-msgstr "送货信息"
+msgstr "信息"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:969
 msgid "Shipping Address"
@@ -15016,7 +15017,7 @@ msgstr "员工编号。如果保持空白则会为您选择一个合理的号码
 #: gnucash/gtkbuilder/dialog-employee.glade:422
 #: gnucash/gtkbuilder/dialog-vendor.glade:416
 msgid "Payment Address"
-msgstr "收款信息"
+msgstr "信息"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:456
 msgid "Language"
@@ -15028,11 +15029,11 @@ msgstr "界面"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:584
 msgid "Default Hours per Day"
-msgstr "默认每日小时数"
+msgstr "每日工时"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:597
 msgid "Default Rate"
-msgstr "默认费率"
+msgstr "时薪"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:716
 msgid "Access Control List"
@@ -17420,11 +17421,11 @@ msgstr "启动时显示每日提示(_S)"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:8
 msgid "Transfer Funds"
-msgstr "资金转账"
+msgstr "转账"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:79
 msgid "<b>Basic Information</b>"
-msgstr "<b>基本信息</b>"
+msgstr "<b>信息</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:438
 #: gnucash/gtkbuilder/dialog-transfer.glade:454
@@ -17442,7 +17443,7 @@ msgstr "汇率"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:596
 msgid "_Fetch Rate"
-msgstr "获取率(_F)"
+msgstr "获取汇率(_F)"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:7
 msgid "Username and Password"
@@ -18339,7 +18340,7 @@ msgstr "显示零余额的所有者(_Z)"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:71
 msgid "About Auto-Clear"
-msgstr "关于自动结算"
+msgstr "关于自动核实"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:86
 msgid ""
@@ -18378,7 +18379,7 @@ msgstr "选择此选项可打开新清除的拆分录制输出选项卡。"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:71
 msgid "<b>Reconcile Information</b>"
-msgstr "<b>对账信息</b>"
+msgstr "<b>信息</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:92
 msgid "Statement _Date"
@@ -21042,7 +21043,7 @@ msgstr "科目预算金额"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:712
 msgid "Credit limit"
-msgstr "信贷限额"
+msgstr "信用额度"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:725
 msgid "Parsing categories"
@@ -26211,15 +26212,11 @@ msgstr "地址来源。"
 
 #: gnucash/report/reports/standard/new-aging.scm:404
 #: gnucash/report/reports/standard/receivables.scm:68
-#, fuzzy
-#| msgid "Billing Address"
 msgid "Billing address"
-msgstr "账单地址"
+msgstr "信息"
 
 #: gnucash/report/reports/standard/new-aging.scm:405
 #: gnucash/report/reports/standard/receivables.scm:69
-#, fuzzy
-#| msgid "Shipping Address"
 msgid "Shipping address"
 msgstr "送货地址"
 
@@ -28610,8 +28607,9 @@ msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr "SX[%s]中没有%s->%s的汇率，数值为零。"
 
 #: libgnucash/app-utils/gnc-ui-balances.c:409
+#, fuzzy
 msgid "Account is already at Auto-Clear Balance."
-msgstr "账户已经是自动清算余额。"
+msgstr "科目已经自动核实余额。"
 
 #: libgnucash/app-utils/gnc-ui-balances.c:455
 msgid "Too many uncleared splits"
