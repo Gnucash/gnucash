@@ -66,7 +66,7 @@
 
 ;;Accounts
 (define optname-accounts (N_ "Accounts"))
-(define optname-filterby (N_ "Filter By..."))
+(define optname-filterby (N_ "Filter By"))
 (define optname-filtertype (N_ "Filter Type"))
 
 ;;Display

@@ -76,7 +76,7 @@ Click on "Next" to proceed or "Cancel" to Abort Import.
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">
-Enter file name and location for the Import...
+Enter file name and location for the Import
 </property>
             <property name="wrap">True</property>
           </object>

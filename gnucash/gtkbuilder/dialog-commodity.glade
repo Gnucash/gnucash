@@ -715,7 +715,7 @@
               <object class="GtkLabel" id="select_user_prompt">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Select user information here...</property>
+                <property name="label" translatable="yes">Select user information here</property>
                 <property name="justify">center</property>
               </object>
               <packing>

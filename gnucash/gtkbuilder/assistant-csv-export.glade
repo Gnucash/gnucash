@@ -705,7 +705,7 @@ Select the type of Export required and the separator that will be used.
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">
-Enter file name and location for the Export...
+Enter file name and location for the Export
 </property>
             <property name="wrap">True</property>
           </object>
@@ -731,7 +731,7 @@ Cancel to abort.</property>
       </object>
       <packing>
         <property name="page_type">confirm</property>
-        <property name="title" translatable="yes">Export Now...</property>
+        <property name="title" translatable="yes">Export Now</property>
         <property name="has_padding">False</property>
       </packing>
     </child>

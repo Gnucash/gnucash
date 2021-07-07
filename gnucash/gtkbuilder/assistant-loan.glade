@@ -457,7 +457,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
             <property name="halign">center</property>
             <property name="margin_bottom">12</property>
             <property name="label" translatable="yes">
-Do you utilise an escrow account, if so an account must be specified...</property>
+Do you utilise an escrow account, if so an account must be specified</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
           </object>

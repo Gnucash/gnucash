@@ -110,7 +110,7 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 
     /* File menu */
     {
-        "FileNewAccountAction", GNC_ICON_NEW_ACCOUNT, N_("New _Account..."), NULL,
+        "FileNewAccountAction", GNC_ICON_NEW_ACCOUNT, N_("New _Account"), NULL,
         N_("Create a new account"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_account)
     },
@@ -218,7 +218,7 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_invoice)
     },
     {
-        "BusinessLinkAction", NULL, "_Manage Document Link...", NULL,
+        "BusinessLinkAction", NULL, "_Manage Document Link", NULL,
         "Manage link of an external document to this item.",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_link)
     },
@@ -300,7 +300,7 @@ static action_toolbar_labels invoice_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Invoice")},
     {"BusinessNewInvoiceAction", N_("New _Invoice")},
     {"ToolsProcessPaymentAction", N_("_Pay Invoice")},
-    {"BusinessLinkAction", N_("_Manage Document Link...")},
+    {"BusinessLinkAction", N_("_Manage Document Link")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
@@ -321,7 +321,7 @@ static action_toolbar_labels bill_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Bill")},
     {"BusinessNewInvoiceAction", N_("New _Bill")},
     {"ToolsProcessPaymentAction", N_("_Pay Bill")},
-    {"BusinessLinkAction", N_("_Manage Document Link...")},
+    {"BusinessLinkAction", N_("_Manage Document Link")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
@@ -342,7 +342,7 @@ static action_toolbar_labels voucher_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Voucher")},
     {"BusinessNewInvoiceAction", N_("New _Voucher")},
     {"ToolsProcessPaymentAction", N_("_Pay Voucher")},
-    {"BusinessLinkAction", N_("_Manage Document Link...")},
+    {"BusinessLinkAction", N_("_Manage Document Link")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
@@ -363,7 +363,7 @@ static action_toolbar_labels creditnote_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Credit Note")},
     {"BusinessNewInvoiceAction", N_("New _Credit Note")},
     {"ToolsProcessPaymentAction", N_("_Pay Credit Note")},
-    {"BusinessLinkAction", N_("_Manage Document Link...")},
+    {"BusinessLinkAction", N_("_Manage Document Link")},
     {"BusinessLinkOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
@@ -442,7 +442,7 @@ static action_toolbar_labels creditnote_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the credit note")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this credit note") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") },
-    {"BusinessLinkAction", N_("Manage Document Link...")},
+    {"BusinessLinkAction", N_("Manage Document Link")},
     {"BusinessLinkOpenAction", N_("Open Linked Document")},
     {NULL, NULL},
 };
@@ -1155,13 +1155,13 @@ gnc_plugin_page_invoice_cmd_sort_changed (GtkAction *action,
 
     ENTER("(action %p, radio action %p, plugin_page %p)",
           action, current, plugin_page);
-    LEAVE("g_return testing...");
+    LEAVE("g_return testing");
 
     g_return_if_fail(GTK_IS_ACTION(action));
     g_return_if_fail(GTK_IS_RADIO_ACTION(current));
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
 
-    ENTER("...passed (action %p, radio action %p, plugin_page %p)",
+    ENTER("passed (action %p, radio action %p, plugin_page %p)",
           action, current, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
     value = gtk_radio_action_get_current_value(current);

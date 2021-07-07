@@ -157,17 +157,17 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
-        "OTNewVendorAction", GNC_ICON_NEW_ACCOUNT, N_("_New Vendor..."), NULL,
+        "OTNewVendorAction", GNC_ICON_NEW_ACCOUNT, N_("_New Vendor"), NULL,
         N_("Create a new vendor"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
     {
-        "OTNewCustomerAction", GNC_ICON_NEW_ACCOUNT, N_("_New Customer..."), NULL,
+        "OTNewCustomerAction", GNC_ICON_NEW_ACCOUNT, N_("_New Customer"), NULL,
         N_("Create a new customer"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
     {
-        "OTNewEmployeeAction", GNC_ICON_NEW_ACCOUNT, N_("_New Employee..."), NULL,
+        "OTNewEmployeeAction", GNC_ICON_NEW_ACCOUNT, N_("_New Employee"), NULL,
         N_("Create a new employee"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
@@ -182,7 +182,7 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
 
     /* View menu */
     {
-        "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
+        "ViewFilterByAction", NULL, N_("_Filter By"), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_view_filter_by)
     },
     {
@@ -193,17 +193,17 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
 
     /* Business menu */
     {
-        "OTNewBillAction", GNC_ICON_INVOICE_NEW, N_("New _Bill..."), NULL,
+        "OTNewBillAction", GNC_ICON_INVOICE_NEW, N_("New _Bill"), NULL,
         N_("Create a new bill"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },
     {
-        "OTNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice..."), NULL,
+        "OTNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice"), NULL,
         N_("Create a new invoice"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },
     {
-        "OTNewVoucherAction", GNC_ICON_INVOICE_NEW, N_("New _Voucher..."), NULL,
+        "OTNewVoucherAction", GNC_ICON_INVOICE_NEW, N_("New _Voucher"), NULL,
         N_("Create a new voucher"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },

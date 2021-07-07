@@ -599,7 +599,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                      1 2 (gnc:make-html-span/markup
                                           "invoice-in-progress"
                                           (gnc:make-html-text
-                                           (G_ "Invoice in progress..."))))))
+                                           (G_ "Invoice in progress"))))))
 
     (if (opt-val "Display" "Billing ID")
         (let ((billing-id (gncInvoiceGetBillingID invoice)))

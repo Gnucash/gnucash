@@ -111,7 +111,7 @@ You will have the opportunity to load as many files as you wish, so don't worry 
             </child>
             <child>
               <object class="GtkButton" id="button71">
-                <property name="label" translatable="yes">_Select...</property>
+                <property name="label" translatable="yes">_Select</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -630,7 +630,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
             </child>
             <child>
               <object class="GtkButton" id="account_page_change">
-                <property name="label" translatable="yes">Change GnuCash _Account...</property>
+                <property name="label" translatable="yes">Change GnuCash _Account</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
@@ -762,7 +762,7 @@ If you change your mind later, you can reorganize the account structure safely w
             </child>
             <child>
               <object class="GtkButton" id="category_page_change">
-                <property name="label" translatable="yes">Change GnuCash _Account...</property>
+                <property name="label" translatable="yes">Change GnuCash _Account</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
@@ -892,7 +892,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
             </child>
             <child>
               <object class="GtkButton" id="memo_page_change">
-                <property name="label" translatable="yes">Change GnuCash _Account...</property>
+                <property name="label" translatable="yes">Change GnuCash _Account</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
@@ -1037,7 +1037,7 @@ If you don't see your exchange listed, or none of the available choices are appr
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Enter Information about...</property>
+                <property name="label" translatable="yes">Enter Information about</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1063,7 +1063,7 @@ If you don't see your exchange listed, or none of the available choices are appr
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">All fields must be complete to continue...</property>
+                <property name="label" translatable="yes">All fields must be complete to continue</property>
               </object>
               <packing>
                 <property name="expand">False</property>
