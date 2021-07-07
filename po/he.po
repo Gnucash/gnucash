@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-06 08:32+0000\n"
+"PO-Revision-Date: 2021-07-07 07:33+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -752,8 +752,8 @@ msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
-"תאריך העסקה המוקדם ביותר בספרים הוא %s. בהתבסס על הבחירה שנעשתה לעיל, ספר "
-"החשבונות יפוצל לספר אחד."
+"תאריך התנועה המוקדם ביותר בספרים הוא %s. בהתבסס על הבחירה שנעשתה לעיל, ספר "
+"החשבונות יפוצל לספר %d."
 msgstr[1] ""
 "תאריך התנועה המוקדם ביותר בספרים הוא %s. בהתבסס על הבחירה שנעשתה לעיל, ספר "
 "החשבונות יפוצל ל־%d ספרים."
@@ -5759,7 +5759,7 @@ msgstr "%s %s מאת %s, פורסם ב־%s, סכום %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4772
 msgid "Several documents are linked with this transaction. Please choose one:"
-msgstr "מגוון מסמכים מקושרים לעסקה הזו. נא לבחור אחד מהם:"
+msgstr "מגוון מסמכים מקושרים לתנועה הזו. נא לבחור אחד מהם:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4773
 #: gnucash/gnome-search/dialog-search.c:323
@@ -6367,7 +6367,7 @@ msgid ""
 "have mismatched commodities or currencies.\n"
 "You need to open each account individually to edit transactions."
 msgstr ""
-"התנועה בחשבון זה עשויה שלא לאפשר עריכה שכן המטבע או המוצר באחד מחשבונות "
+"התנועה בחשבון זה עשויה שלא לאפשר עריכה שכן המטבע או הסחורה באחד מחשבונות "
 "המשנה אינם תואמים לאלו של חשבון האב.\n"
 "לעריכה, נא לפתוח כל חשבון משנה בנפרד."
 
@@ -12824,9 +12824,9 @@ msgid ""
 msgstr ""
 "סייען ליבוא מחירים מקובץ CSV.\n"
 "\n"
-"קיימות מספר עמודות מזערי הנדרשות לפעולת יבוא מוצלחת והן: תאריך, סכום, מוצר מ־"
-"ומטבע ל־. במידה וכל הערכים הם עבור אותו מוצר / מטבע, ניתן לבחור אותם ולהסתפק "
-"בעמודות הנדרשות הנוספות, ' תאריך' ו־'סכום'.\n"
+"קיימות מספר עמודות מזערי הנדרשות לפעולת יבוא מוצלחת והן: תאריך, סכום, סחורה "
+"מ־ ומטבע ל־. במידה וכל הערכים הם עבור אותה סחורה / מטבע, ניתן לבחור אותם "
+"ולהסתפק בעמודות הנדרשות הנוספות, 'תאריך' ו'סכום'.\n"
 "\n"
 "קיימות אפשרויות שונות לקביעת מפריד בין הערכים, לרבות רוחב קבוע. להגדרת רוחב "
 "קבוע, יש להקיש הקשה כפולה על טבלת השורות המוצגות להגדרת רוחב העמודה, ולאחר "
@@ -13007,12 +13007,12 @@ msgstr "<b>שונות</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:853
 msgid "<b>Commodity From</b>"
-msgstr "<b>סחורה מ</b>"
+msgstr "<b>סחורה מ־</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:898
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:57
 msgid "Currency To"
-msgstr "מטבע ל"
+msgstr "מטבע ל־"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:965
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:900
@@ -14599,7 +14599,7 @@ msgid ""
 "This account holds opening balance transactions. Only one account per "
 "commodity can hold opening balance transactions."
 msgstr ""
-"חשבון זה מחזיק עסקאות יתרת פתיחה. רק חשבון אחד לכל סחורה יכול להחזיק עסקאות "
+"חשבון זה מכיל תנועות יתרת פתיחה. רק חשבון אחד לכל סחורה יכול לכלול תנועות "
 "יתרת פתיחה."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1564
@@ -14983,7 +14983,7 @@ msgid ""
 "Enter the smallest fraction of the commodity which can be traded. For stocks "
 "which can only be traded in whole numbers, enter 1."
 msgstr ""
-"הזנת החלק המזערי של הסחורה הניתנת למסחור. למניות הנסחרות ביחידות שלמות, יש "
+"הזנת השבר המזערי של הסחורה הניתנת למסחור. למניות הנסחרות ביחידות שלמות, יש "
 "להזין 1."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:224
@@ -15287,7 +15287,7 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"הקשה כפולה על עמודת התיאור כדי לדילוג אל העסקה.\n"
+"הקשה כפולה על עמודת התיאור כדי לדילוג אל התנועה.\n"
 "הקשה כפולה על עמודת הקישור כדי לפתוח את המסמך המקושר.\n"
 "הקשה כפולה על עמודת הזמינות כדי לשנות את קישור המסמך."
 
@@ -17111,11 +17111,11 @@ msgid ""
 "are able to correctly report values so removing them may make this less "
 "reliable."
 msgstr ""
-"במידה והאפשרות הופעלה, יכללו מחירים שנוספו על־ידי היישום.\n"
+"הכללת מחירים שנוספו על־ידי היישום, אם אופשר.\n"
 "\n"
-"מחירים אלה נאספים כך שתמיד יהיה המחיר 'הקרוב ביותר בזמן' עבור תנועות מרובת "
-"סחורות, כך שעמוד החשבון והדוחות יציגו ערכים בצורה נכונה, לכן הסרתם עשויה "
-"לפגום במהימנותם."
+"מחירים אלה נוספו על מנת שהמחיר 'הקרוב ביותר בזמן' לתנועה מרובת סחורות, יהיו "
+"זמינים תמיד, ובכך, דף החשבון והדוחות יציגו ערכים נכונים, לכן הסרתם עשויה "
+"לפגום במהימנות הדוחות."
 
 #: gnucash/gtkbuilder/dialog-price.glade:752
 msgid "Before _Date"
@@ -20487,20 +20487,20 @@ msgstr ""
 msgid ""
 "Please select a 'From Symbol' column or set a Commodity in the 'Commodity "
 "From' field."
-msgstr "נא לבחור את עמודת 'מסמל' או להגדיר סחורה בשדה 'סחורה מ'."
+msgstr "נא לבחור את עמודת מ'סמל' או להגדיר סחורה בשדה 'סחורה מ־'."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:474
 msgid ""
 "Please select a 'From Namespace' column or set a Commodity in the 'Commodity "
 "From' field."
-msgstr "נא לבחור את עמודת 'ממרחב שם' או להגדיר סחורה בשדה 'סחורה מ'."
+msgstr "נא לבחור את עמודת 'ממרחב שם' או להגדיר סחורה בשדה 'סחורה מ־'."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:482
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:188
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:210
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:288
 msgid "'Commodity From' can not be the same as 'Currency To'."
-msgstr "'סחורה מ' לא יכול להיות זהה ל 'מטבע ל'."
+msgstr "'סחורה מ־' לא יכול להיות זהה ל 'מטבע ל־'."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:502
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:524
@@ -20531,7 +20531,7 @@ msgid ""
 "No 'Currency to' column selected and no selected Currency specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"לא נבחרה עמודת 'מטבע ל' וגם לא נבחר מטבע.\n"
+"לא נבחרה עמודת 'מטבע ל־' וגם לא נבחר מטבע.\n"
 "זה לא היה אמור לקרות. נא לדווח על תקל."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:597
@@ -20540,7 +20540,7 @@ msgid ""
 "From specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"לא נבחרו עמודות 'ממרחב שם/מסמל' וגם לא נקבעה 'סחורה מ' שנבחרה.\n"
+"לא נבחרו עמודות מ'מרחב שם/מסמל' וגם לא נקבעה 'סחורה מ־' שנבחרה.\n"
 "זה לא אמור לקרות. נא לדווח זאת כתקל."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:480
@@ -20620,7 +20620,7 @@ msgstr "מ'מרחב שם' לא יכול להישאר ריק."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:223
 msgid "'Currency To' can not be the same as 'Commodity From'."
-msgstr "'מטבע ל' לא יכול להיות זהה ל 'סחורה מ'."
+msgstr "'מטבע ל־' לא יכול להיות זהה ל 'סחורה מ־'."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:225
 msgid "Value parsed into an invalid currency for a currency column type."
@@ -20648,11 +20648,11 @@ msgstr "אין עמודת סכום."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:284
 msgid "No 'Currency to'."
-msgstr "אין 'מטבע ל'."
+msgstr "אין 'מטבע ל־'."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:286
 msgid "No 'Commodity from'."
-msgstr "אין 'סחורה מ'."
+msgstr "אין 'סחורה מ־'."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:356
 msgid "Failed to create price from selected columns."
@@ -28310,7 +28310,7 @@ msgstr "הצגת קוד החשבון הנגדי?"
 
 #: gnucash/report/trep-engine.scm:929
 msgid "Display the transaction linked document"
-msgstr "להציג את המסמך שמקושר לעסקה"
+msgstr "להציג את המסמך שמקושר לתנועה"
 
 #: gnucash/report/trep-engine.scm:932
 msgid "Display a subtotal summary table."
