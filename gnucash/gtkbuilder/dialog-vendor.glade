@@ -242,7 +242,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Name</property>
+                            <property name="label" translatable="yes">Contact</property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
