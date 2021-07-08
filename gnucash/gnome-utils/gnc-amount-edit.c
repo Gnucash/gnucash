@@ -276,17 +276,14 @@ gnc_amount_edit_key_press (GtkWidget *widget, GdkEventKey *event, gpointer user_
     switch (event->keyval)
     {
     case GDK_KEY_Return:
+        if (event->state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
+            break;
+    case GDK_KEY_KP_Enter:
         if (gae->evaluate_on_enter)
             break;
         else
             g_signal_emit (gae, amount_edit_signals [ACTIVATE], 0);
-        if (event->state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
-            break;
         return result;
-    case GDK_KEY_KP_Enter:
-        if (!gae->evaluate_on_enter)
-            g_signal_emit (gae, amount_edit_signals [ACTIVATE], 0);
-        break;
     default:
         return result;
     }
