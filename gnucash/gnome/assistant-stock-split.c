@@ -290,8 +290,7 @@ gnc_stock_split_assistant_details_complete (GtkAssistant *assistant,
     currency = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(info->price_currency_edit));
     print_info = gnc_commodity_print_info (currency, FALSE);
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (info->price_edit), print_info);
-    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (info->price_edit),
-                                  gnc_commodity_get_fraction (currency));
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (info->price_edit), 0);
 
     result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(info->price_edit),
                                             &amount, TRUE, NULL);
