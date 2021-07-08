@@ -130,13 +130,6 @@
   (make-link-blank)
   link-blank?)
 
-(define-record-type :payment-info
-  (make-payment-info invoices opposing-splits overpayment)
-  payment-info?
-  (invoices payment-info-invoices)
-  (opposing-splits payment-info-opposing-splits)
-  (overpayment payment-info-overpayment))
-
 ;; Names in Option panel (Untranslated! Because it is used for option
 ;; naming and lookup only, and the display of the option name will be
 ;; translated somewhere else.)
@@ -659,7 +652,7 @@ and do not match the transaction."))))))))
              (overpayment 0)
              (opposing-splits '()))
       (match splits
-        (() (make-payment-info invoices opposing-splits overpayment))
+        (() (vector invoices opposing-splits overpayment))
         (((? not-APAR? split) . rest)
          (lp rest invoices (+ overpayment (xaccSplitGetAmount split))
              opposing-splits))
@@ -703,12 +696,12 @@ and do not match the transaction."))))))))
        (map
         (lambda (inv-split-pair)
           (invoice->anchor (car inv-split-pair)))
-        (payment-info-invoices (payment-txn->payment-info txn)))))))
+        (vector-ref (gnc:payment-txn->payment-info txn) 0))))))
 
   (define (make-payment->payee-table txn payable?)
 
-    (define (invoices-list payment-info)
-      (let lp ((invoice-split-pairs (payment-info-invoices payment-info))
+    (define (invoices-list invoice-split-pairs)
+      (let lp ((invoice-split-pairs invoice-split-pairs)
                (result '()))
         (match invoice-split-pairs
           (() (reverse result))
@@ -725,8 +718,8 @@ and do not match the transaction."))))))))
                         (gncInvoiceReturnGUID inv))
                        result)))))))
 
-    (define (payments-list payment-info)
-      (let lp1 ((opposing-splits (payment-info-opposing-splits payment-info))
+    (define (payments-list opposing-splits)
+      (let lp1 ((opposing-splits opposing-splits)
                 (pmt-list '()))
         (match opposing-splits
           (() (reverse pmt-list))
@@ -750,8 +743,7 @@ and do not match the transaction."))))))))
                   (gncTransGetGUID (xaccSplitGetParent s)))
                  pmt-list))))))
 
-    (define (overpayment-list payment-info)
-      (define overpayment (payment-info-overpayment payment-info))
+    (define (overpayment-list overpayment)
       (if (zero? overpayment)
           '()
           (list (make-link-desc-amount
@@ -763,9 +755,9 @@ and do not match the transaction."))))))))
                  (gncTransGetGUID txn)))))
 
     (let* ((payment-info (payment-txn->payment-info txn))
-           (invoices-result (invoices-list payment-info))
-           (payment-result (payments-list payment-info))
-           (overpayment-result (overpayment-list payment-info)))
+           (invoices-result (invoices-list (vector-ref payment-info 0)))
+           (payment-result (payments-list (vector-ref payment-info 1)))
+           (overpayment-result (overpayment-list (vector-ref payment-info 2))))
       (append invoices-result payment-result overpayment-result)))
 
   (define (amount->anchor split amount)
