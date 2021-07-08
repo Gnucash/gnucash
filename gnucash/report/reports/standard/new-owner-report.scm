@@ -705,14 +705,13 @@ and do not match the transaction."))))))))
           (invoice->anchor (car inv-split-pair)))
         (payment-info-invoices (payment-txn->payment-info txn)))))))
 
-  (define (make-payment->payee-table txn lhs-amount payable?)
+  (define (make-payment->payee-table txn payable?)
 
-    (define (invoices-list payment-info lhs-amount)
+    (define (invoices-list payment-info)
       (let lp ((invoice-split-pairs (payment-info-invoices payment-info))
-               (result '())
-               (lhs-amount lhs-amount))
+               (result '()))
         (match invoice-split-pairs
-          (() (cons lhs-amount result))
+          (() (reverse result))
           (((inv . APAR-split) . rest)
            (let* ((posting-split (lot-split->posting-split APAR-split)))
              (lp rest
@@ -724,26 +723,15 @@ and do not match the transaction."))))))))
                         (gnc:make-html-text (split->anchor APAR-split #t))
                         (gnc:make-html-text (split->anchor posting-split #f))
                         (gncInvoiceReturnGUID inv))
-                       result)
-                 (- lhs-amount (xaccSplitGetAmount APAR-split))))))))
+                       result)))))))
 
-    (define (payments-list payment-info invoices-list-result)
+    (define (payments-list payment-info)
       (let lp1 ((opposing-splits (payment-info-opposing-splits payment-info))
-                (pmt-list (cdr invoices-list-result)))
+                (pmt-list '()))
         (match opposing-splits
-          (() (reverse
-               (if (zero? (payment-info-overpayment payment-info))
-                   pmt-list
-                   (cons (make-link-desc-amount
-                          (G_ "Pre-Payment")
-                          (gnc:make-html-text
-                           (gnc:monetary->string
-                            (gnc:make-gnc-monetary
-                             currency ((if payable? + -) (payment-info-overpayment payment-info)))))
-                          (gncTransGetGUID txn))
-                         pmt-list))))
-          (((s partial-amount paid?). rest)
-           (unless paid?
+          (() (reverse pmt-list))
+          (((s partial-amount derived?). rest)
+           (when derived?
              (set! add-derived-amounts-disclaimer? #t))
            (lp1 rest
                 (cons
@@ -753,7 +741,7 @@ and do not match the transaction."))))))))
                   (split->type-str s payable?)
                   (splits->desc (list s))
                   (gnc:make-html-text
-                   (if paid? "" "* ")
+                   (if derived? "* " "")
                    (gnc:html-markup-anchor
                     (gnc:split-anchor-text s)
                     (gnc:monetary->string
@@ -762,9 +750,23 @@ and do not match the transaction."))))))))
                   (gncTransGetGUID (xaccSplitGetParent s)))
                  pmt-list))))))
 
+    (define (overpayment-list payment-info)
+      (define overpayment (payment-info-overpayment payment-info))
+      (if (zero? overpayment)
+          '()
+          (list (make-link-desc-amount
+                 (G_ "Pre-Payment")
+                 (gnc:make-html-text
+                  (gnc:monetary->string
+                   (gnc:make-gnc-monetary
+                    currency ((if payable? + -) overpayment))))
+                 (gncTransGetGUID txn)))))
+
     (let* ((payment-info (payment-txn->payment-info txn))
-           (invoices-list-result (invoices-list payment-info lhs-amount)))
-      (payments-list payment-info invoices-list-result)))
+           (invoices-result (invoices-list payment-info))
+           (payment-result (payments-list payment-info))
+           (overpayment-result (overpayment-list payment-info)))
+      (append invoices-result payment-result overpayment-result)))
 
   (define (amount->anchor split amount)
     (gnc:make-html-text
@@ -898,7 +900,7 @@ and do not match the transaction."))))))))
          link-option
          (case link-option
            ((simple) (make-payment->invoices-list txn))
-           ((detailed) (make-payment->payee-table txn orig-value payable?))
+           ((detailed) (make-payment->payee-table txn payable?))
            (else '(()))))
 
         (lp printed? (not odd-row?) (cdr amt/next-pair) invalid-splits (+ total value)
