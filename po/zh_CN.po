@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-07 13:33+0000\n"
+"PO-Revision-Date: 2021-07-08 14:32+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -1129,7 +1129,7 @@ msgstr "无"
 
 #: gnucash/gnome/business-gnome-utils.c:568
 msgid "Use Global"
-msgstr "使用全局设置"
+msgstr "全局设置"
 
 #: gnucash/gnome/business-urls.c:69 gnucash/gnome/business-urls.c:179
 #: gnucash/gnome/top-level.c:258
@@ -1416,11 +1416,11 @@ msgstr "收付"
 
 #: gnucash/gnome/dialog-customer.c:920
 msgid "Shipping Contact"
-msgstr "送货信息"
+msgstr "送货联系人"
 
 #: gnucash/gnome/dialog-customer.c:922 gnucash/gnome/dialog-vendor.c:716
 msgid "Billing Contact"
-msgstr "账单信息"
+msgstr "联系人"
 
 #: gnucash/gnome/dialog-customer.c:924
 msgid "Customer ID"
@@ -1455,7 +1455,7 @@ msgstr "公司"
 #: gnucash/gnome/dialog-job.c:604 gnucash/gnome/dialog-vendor.c:731
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:349
 msgid "ID #"
-msgstr "编号 #"
+msgstr "编号"
 
 #: gnucash/gnome/dialog-customer.c:960
 msgid "Find Customer"
@@ -1615,7 +1615,7 @@ msgstr "未找到网址"
 
 #: gnucash/gnome/dialog-doclink.c:592 gnucash/gnome/dialog-imap-editor.c:882
 msgid "Total Entries"
-msgstr "凭证总数"
+msgstr "总数"
 
 #: gnucash/gnome/dialog-doclink.c:650
 msgid "Business item can not be modified."
@@ -2323,7 +2323,7 @@ msgstr "您确定要入账这些发票吗？"
 
 #: gnucash/gnome/dialog-invoice.c:3334 gnucash/gnome/dialog-invoice.c:3615
 msgid "View/Edit Invoice"
-msgstr "查看/编辑发票"
+msgstr "查看/编辑"
 
 #: gnucash/gnome/dialog-invoice.c:3336 gnucash/gnome/dialog-invoice.c:3345
 #: gnucash/gnome/dialog-invoice.c:3356
@@ -2346,7 +2346,7 @@ msgstr "可打印报表"
 
 #: gnucash/gnome/dialog-invoice.c:3343 gnucash/gnome/dialog-invoice.c:3609
 msgid "View/Edit Bill"
-msgstr "查看/编辑账单"
+msgstr "查看/编辑"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
@@ -2499,7 +2499,7 @@ msgstr "查找发票"
 #, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] "%d 位供应商应付到期："
+msgstr[0] "%d 份到期应付："
 
 #: gnucash/gnome/dialog-invoice.c:3720
 msgid "Due Bills Reminder"
@@ -2511,7 +2511,7 @@ msgstr "应付到期提醒"
 #, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] "%d 位客户应收到期："
+msgstr[0] "%d 份到期应收："
 
 #: gnucash/gnome/dialog-invoice.c:3731
 msgid "Due Invoices Reminder"
@@ -2519,7 +2519,7 @@ msgstr "应收到期提醒"
 
 #: gnucash/gnome/dialog-job.c:139
 msgid "The Job must be given a name."
-msgstr "工作必须要给个名字。"
+msgstr "必须给项目起个名字。"
 
 #: gnucash/gnome/dialog-job.c:149
 msgid "You must choose an owner for this job."
@@ -3238,19 +3238,19 @@ msgstr "新增供应商"
 
 #: gnucash/gnome/dialog-vendor.c:702
 msgid "View/Edit Vendor"
-msgstr "查看/编辑供应商"
+msgstr "查看/编辑"
 
 #: gnucash/gnome/dialog-vendor.c:703
 msgid "Vendor's Jobs"
-msgstr "供应商的工作"
+msgstr "项目"
 
 #: gnucash/gnome/dialog-vendor.c:705
 msgid "Vendor's Bills"
-msgstr "供应商的账单"
+msgstr "账单"
 
 #: gnucash/gnome/dialog-vendor.c:706
 msgid "Pay Bill"
-msgstr "付账单"
+msgstr "收付"
 
 #: gnucash/gnome/dialog-vendor.c:718
 msgid "Vendor ID"
@@ -7277,7 +7277,7 @@ msgstr "选择证券/货币"
 #: gnucash/gnome-utils/dialog-commodity.c:276
 #: gnucash/gtkbuilder/dialog-account.glade:1261
 msgid "_Security/currency"
-msgstr "证券/币种(_S)"
+msgstr "币种/证券(_S)"
 
 #: gnucash/gnome-utils/dialog-commodity.c:280
 msgid "Select security"
@@ -8594,7 +8594,7 @@ msgstr "账簿选项"
 #: gnucash/gnome-utils/gnc-main-window.c:4706
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
-msgstr "Copyright © 1997-%s The GnuCash contributors."
+msgstr "版权 © 1997-%s GnuCash 贡献者。"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4718
 #: gnucash/gnome-utils/gnc-splash.c:98
@@ -8608,7 +8608,7 @@ msgstr "构建 ID"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4727
 msgid "Accounting for personal and small business finance."
-msgstr "个人及小企业融资账务。"
+msgstr "个人及小企业财务软件。"
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. Enter your name or that of your team and an email contact for feedback.
@@ -8630,7 +8630,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.c:4739
 msgid "Visit the GnuCash website."
-msgstr "访问 GnuCash 官方网站。"
+msgstr "访问官方网站。"
 
 #: gnucash/gnome-utils/gnc-period-select.c:71
 #: libgnucash/app-utils/date-utilities.scm:976
@@ -9426,17 +9426,17 @@ msgstr "时区"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:353
 #: gnucash/gtkbuilder/dialog-customer.glade:132
 msgid "Customer Number"
-msgstr "客户编号"
+msgstr "编号"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:133
 msgid "Vendor Number"
-msgstr "供应商编号"
+msgstr "编号"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:108
 msgid "Employee Number"
-msgstr "员工编号"
+msgstr "编号"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:417
 #: gnucash/report/reports/aging.scm:48 gnucash/report/reports/aging.scm:682
@@ -11581,7 +11581,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
 #: gnucash/gtkbuilder/dialog-preferences.glade:2842
 msgid "Show all transactions on one line or in double line mode on two."
-msgstr "一行显示所有交易，或双行模式显示两行。"
+msgstr "所有交易一行显示，或两行（双行）。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:291
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:296
@@ -11604,9 +11604,7 @@ msgstr ""
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
-msgstr ""
-"自动扩展当前交易，以显示所有分叉。所有其他交易都显示在一行上，或在双行模式下"
-"显示在两行上。"
+msgstr "自动展开当前交易、显示所有分录；其他交易均一行显示，或两行（双行）。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:300
 #: gnucash/gtkbuilder/dialog-preferences.glade:2880
@@ -11721,7 +11719,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:353
 #: gnucash/gtkbuilder/dialog-preferences.glade:3277
 msgid "Use the system locale currency for all newly created reports."
-msgstr "对于所有新建报表使用系统本地区域货币。"
+msgstr "所有新建报表使用系统本地币种。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:354
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:364
@@ -11738,7 +11736,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:358
 #: gnucash/gtkbuilder/dialog-preferences.glade:3257
 msgid "Use the specified currency for all newly created reports."
-msgstr "新产生的报表使用此货币。"
+msgstr "新建报表，使用指定的币种。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:363
 msgid "Default currency for new reports"
@@ -14234,7 +14232,7 @@ msgstr "显示合计为零的科目。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1065
 msgid "Use Commodity Value"
-msgstr "使用商品价格"
+msgstr "默认：1/100"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1196
 #: gnucash/gtkbuilder/dialog-customer.glade:213
@@ -14257,7 +14255,7 @@ msgstr "描述(_D)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1287
 msgid "Smallest _fraction"
-msgstr "最小分数(_F)"
+msgstr "最小单位(_F)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1301
 msgid "Account _Color"
@@ -14269,7 +14267,7 @@ msgstr "说明(_T)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1426
 msgid "Smallest fraction of this commodity that can be referenced."
-msgstr "此商品能被参照的最小单位。"
+msgstr "此科目币种/证券的最小单位。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1448
 msgid "Placeholde_r"
@@ -14864,7 +14862,7 @@ msgstr "覆盖全局的税率表？"
 #: gnucash/gtkbuilder/dialog-order.glade:310
 #: gnucash/gtkbuilder/dialog-order.glade:661
 msgid "Billing Information"
-msgstr "财务资料"
+msgstr "财务"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:950
 msgid "Shipping Information"
@@ -14872,7 +14870,7 @@ msgstr "信息"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:969
 msgid "Shipping Address"
-msgstr "送货地址"
+msgstr "送货"
 
 #. Title of dialog
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:9
@@ -14978,7 +14976,7 @@ msgstr "复核(_L)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:604
 msgid "All Linked Documents"
-msgstr "全部凭证"
+msgstr "全部"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:658
 msgid "Id"
@@ -14990,7 +14988,7 @@ msgstr "凭证"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:703
 msgid "Available"
-msgstr "可有账单"
+msgstr "可用"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:718
 msgid "Relative"
@@ -16340,14 +16338,14 @@ msgstr "打印"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2507
 msgid "'_Enter' moves to blank transaction"
-msgstr "“回车”添加交易(_E)"
+msgstr "“回车”等效空白(_E)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2513
 msgid ""
 "If checked, pressing the 'Enter' key will move to the location of the blank "
 "transaction in the register. If clear, pressing the 'Enter' key will move "
 "down one row."
-msgstr "勾选，“回车”将移动光标至交易界面底部空白处；否则，移到下一行。"
+msgstr "“回车”将在标签页末尾添加空白交易；否则，移至下一行。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2525
 msgid "_Auto-raise lists"
@@ -16395,7 +16393,7 @@ msgstr "总是对账到今天(_O)"
 msgid ""
 "Always open the reconcile dialog using today's date for the statement date, "
 "regardless of previous reconciliations."
-msgstr "总是使用今天作为声明日期来打开对账对话框，而不管之前的对账时间。"
+msgstr "对账日期自动设为今天。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2651
 msgid "<b>Graphics</b>"
@@ -17107,7 +17105,7 @@ msgstr "范围"
 
 #: gnucash/gtkbuilder/dialog-search.glade:228
 msgid "<b>Match all entries</b>"
-msgstr "<b>匹配所有条目</b>"
+msgstr "<b>全部匹配项</b>"
 
 #: gnucash/gtkbuilder/dialog-search.glade:298
 msgid "Search Criteria"
@@ -19581,7 +19579,7 @@ msgstr "没有什么需要处理的。\n"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:142
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:128
 msgid "ID"
-msgstr "编号 #"
+msgstr "编号"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:144
 msgid "Owner-ID"
@@ -22220,11 +22218,11 @@ msgstr "显示"
 
 #: gnucash/report/report-core.scm:162
 msgid "Report name"
-msgstr "报表名称"
+msgstr "名称"
 
 #: gnucash/report/report-core.scm:163
 msgid "Stylesheet"
-msgstr "样式表"
+msgstr "风格"
 
 #: gnucash/report/report-core.scm:165
 msgid "Invoice Number"
@@ -25181,7 +25179,7 @@ msgstr "选择列排序的顺序。无论是升序还是降序。"
 
 #: gnucash/report/reports/standard/customer-summary.scm:116
 msgid "Customer Name"
-msgstr "客户编号"
+msgstr "客户名称"
 
 #: gnucash/report/reports/standard/customer-summary.scm:118
 #, fuzzy
