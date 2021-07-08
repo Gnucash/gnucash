@@ -47,15 +47,15 @@ static void empl_handle_qof_events (QofInstance *entity, QofEventId event_type,
 struct _gncEmployee
 {
     QofInstance     inst;
-    char *          id;
-    char *          username;
+    const char *    id;
+    const char *    username;
     GncAddress *    addr;
     gnc_commodity * currency;
     gboolean        active;
     gnc_numeric *   balance;
 
-    char *          language;
-    char *          acl;
+    const char *    language;
+    const char *    acl;
     gnc_numeric     workday;
     gnc_numeric     rate;
 
@@ -481,13 +481,9 @@ static void gncEmployeeFree (GncEmployee *employee)
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
-        char * tmp; \
-        \
         if (!g_strcmp0 (member, str)) return; \
         gncEmployeeBeginEdit (obj); \
-        tmp = CACHE_INSERT (str); \
-        CACHE_REMOVE (member); \
-        member = tmp; \
+        CACHE_REPLACE (member, str); \
         }
 
 void gncEmployeeSetID (GncEmployee *employee, const char *id)

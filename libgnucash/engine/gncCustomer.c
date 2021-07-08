@@ -53,9 +53,9 @@ struct _gncCustomer
     QofInstance     inst;
 
     /* The following fields are identical to 'vendor' */
-    char *          id;
-    char *          name;
-    char *          notes;
+    const char *    id;
+    const char *    name;
+    const char *    notes;
     GncBillTerm *   terms;
     GncAddress *    addr;
     gnc_commodity * currency;
@@ -371,13 +371,9 @@ static void gncCustomerFree (GncCustomer *cust)
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
-        char * tmp; \
-        \
         if (!g_strcmp0 (member, str)) return; \
         gncCustomerBeginEdit (obj); \
-        tmp = CACHE_INSERT (str); \
-        CACHE_REMOVE (member); \
-        member = tmp; \
+        CACHE_REPLACE(member, str); \
         }
 
 void gncCustomerSetID (GncCustomer *cust, const char *id)

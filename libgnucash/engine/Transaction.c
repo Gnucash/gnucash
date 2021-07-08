@@ -1699,7 +1699,8 @@ xaccTransCommitEdit (Transaction *trans)
     LEAVE ("(trans=%p)", trans);
 }
 
-#define SWAP(a, b) do { gpointer tmp = (a); (a) = (b); (b) = tmp; } while (0);
+#define SWAP_STR(a, b) do { const char *tmp = (a); (a) = (b); (b) = tmp; } while (0);
+#define SWAP(a, b)     do { gpointer tmp = (a); (a) = (b); (b) = tmp; } while (0);
 
 /* Ughhh. The Rollback function is terribly complex, and, what's worse,
  * it only rolls back the basics.  The TransCommit functions did a bunch
@@ -1738,8 +1739,8 @@ xaccTransRollbackEdit (Transaction *trans)
     /* copy the original values back in. */
 
     orig = trans->orig;
-    SWAP(trans->num, orig->num);
-    SWAP(trans->description, orig->description);
+    SWAP_STR(trans->num, orig->num);
+    SWAP_STR(trans->description, orig->description);
     trans->date_entered = orig->date_entered;
     trans->date_posted = orig->date_posted;
     SWAP(trans->common_currency, orig->common_currency);
@@ -1766,8 +1767,8 @@ xaccTransRollbackEdit (Transaction *trans)
             Split *so = onode->data;
 
             xaccSplitRollbackEdit(s);
-            SWAP(s->action, so->action);
-            SWAP(s->memo, so->memo);
+            SWAP_STR(s->action, so->action);
+            SWAP_STR(s->memo, so->memo);
 	    qof_instance_copy_kvp (QOF_INSTANCE (s), QOF_INSTANCE (so));
             s->reconciled = so->reconciled;
             s->amount = so->amount;
@@ -1915,7 +1916,7 @@ int
 xaccTransOrder_num_action (const Transaction *ta, const char *actna,
                             const Transaction *tb, const char *actnb)
 {
-    char *da, *db;
+    const char *da, *db;
     int retval;
     int64_t na, nb;
 

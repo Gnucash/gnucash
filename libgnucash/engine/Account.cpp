@@ -317,9 +317,9 @@ gnc_account_init(Account* acc)
     priv->parent   = NULL;
     priv->children = NULL;
 
-    priv->accountName = static_cast<char*>(qof_string_cache_insert(""));
-    priv->accountCode = static_cast<char*>(qof_string_cache_insert(""));
-    priv->description = static_cast<char*>(qof_string_cache_insert(""));
+    priv->accountName = qof_string_cache_insert("");
+    priv->accountCode = qof_string_cache_insert("");
+    priv->description = qof_string_cache_insert("");
 
     priv->type = ACCT_TYPE_NONE;
 
@@ -1265,9 +1265,9 @@ xaccCloneAccount(const Account *from, QofBook *book)
      * Also let caller issue the generate_event (EVENT_CREATE) */
     priv->type = from_priv->type;
 
-    priv->accountName = static_cast<char*>(qof_string_cache_insert(from_priv->accountName));
-    priv->accountCode = static_cast<char*>(qof_string_cache_insert(from_priv->accountCode));
-    priv->description = static_cast<char*>(qof_string_cache_insert(from_priv->description));
+    priv->accountName = qof_string_cache_replace(priv->accountName, from_priv->accountName);
+    priv->accountCode = qof_string_cache_replace(priv->accountCode, from_priv->accountCode);
+    priv->description = qof_string_cache_replace(priv->description, from_priv->description);
 
     qof_instance_copy_kvp (QOF_INSTANCE (ret), QOF_INSTANCE (from));
 
@@ -2327,7 +2327,7 @@ int
 xaccAccountOrder (const Account *aa, const Account *ab)
 {
     AccountPrivate *priv_aa, *priv_ab;
-    char *da, *db;
+    const char *da, *db;
     char *endptr = NULL;
     int ta, tb, result;
     long la, lb;
@@ -3264,7 +3264,7 @@ gnc_account_get_full_name(const Account *account)
     AccountPrivate *priv;
     const Account *a;
     char *fullname;
-    gchar **names;
+    const gchar **names;
     int level;
 
     /* So much for hardening the API. Too many callers to this function don't
@@ -3291,7 +3291,7 @@ gnc_account_get_full_name(const Account *account)
 
     /* Get all the pointers in the right order. The root node "entry"
      * becomes the terminating NULL pointer for the array of strings. */
-    names = (gchar **)g_malloc(level * sizeof(gchar *));
+    names = (const gchar **)g_malloc(level * sizeof(gchar *));
     names[--level] = NULL;
     for (a = account; level > 0; a = priv->parent)
     {
@@ -3300,7 +3300,7 @@ gnc_account_get_full_name(const Account *account)
     }
 
     /* Build the full name */
-    fullname =  g_strjoinv(account_separator, names);
+    fullname = g_strjoinv(account_separator, (gchar **)names);
     g_free(names);
 
     return fullname;

@@ -52,9 +52,9 @@ struct _gncVendor
 {
     QofInstance     inst;
 
-    char *          id;
-    char *          name;
-    char *          notes;
+    const char *    id;
+    const char *    name;
+    const char *    notes;
     GncBillTerm *   terms;
     GncAddress *    addr;
     gnc_commodity * currency;
@@ -512,13 +512,9 @@ static void gncVendorFree (GncVendor *vendor)
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
-        char * tmp; \
-        \
         if (!g_strcmp0 (member, str)) return; \
         gncVendorBeginEdit (obj); \
-        tmp = CACHE_INSERT (str); \
-        CACHE_REMOVE (member); \
-        member = tmp; \
+        CACHE_REPLACE (member, str); \
         }
 
 void gncVendorSetID (GncVendor *vendor, const char *id)
