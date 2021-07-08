@@ -1434,11 +1434,8 @@ find_account_matching_name_in_list (GList *acc_list, const char* accname)
     {
         Account *acc = GNC_ACCOUNT (node->data);
         if (G_UNLIKELY (!acc)) continue;
-        if (g_strcmp0 (accname, xaccAccountGetName(acc)))
-        {
-            g_list_free (acc_list);
+        if (g_strcmp0 (accname, xaccAccountGetName (acc)) == 0)
             return acc;
-        }
     }
     return NULL;
 }
