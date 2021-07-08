@@ -736,7 +736,7 @@
                           ;; compatible with the QIF type?
                           (and (string=? s (caddr elt))
                                (not (and (string? qif-type)
-                                         (string=? GNC_COMMODITY_NS_MUTUAL
+                                         (string=? (GNC-COMMODITY-NS-MUTUAL)
                                                    (cadr elt))
                                          (or (string-ci=? qif-type "stock")
                                              (string-ci=? qif-type "etf"))))))
@@ -747,27 +747,15 @@
           (pref-match
            (cadr pref-match))
 
-          ;; Guess NYSE for symbols of 1-3 characters.
-          ((< l 4)
-           GNC_COMMODITY_NS_NYSE)
-
-          ;; Guess NYSE for symbols of 1-3 characters
-          ;; followed by a dot and 1-2 characters.
-          ((and d
-                (< l 7)
-                (< 0 d 4)
-                (<= 2 (- l d) 3))
-           GNC_COMMODITY_NS_NYSE)
-
-          ;; Guess NASDAQ for symbols of 4 characters.
-          ((= l 4)
-           GNC_COMMODITY_NS_NASDAQ)
+          ;; Guess SHARE for symbols of 1-4 characters.
+          ((<= l 4)
+           (GNC-COMMODITY-NS-SHARE))
 
           ;; Otherwise it's probably a fund.
           (else
-           GNC_COMMODITY_NS_MUTUAL)))
+           (GNC-COMMODITY-NS-MUTUAL))))
       ;; There's no symbol. Default to a fund.
-      GNC_COMMODITY_NS_MUTUAL))
+      (GNC-COMMODITY-NS-MUTUAL)))
 
   ;; Was a QIF type given?
   (if (string? qif-type)
@@ -775,12 +763,12 @@
      (cond
        ;; Mutual fund
        ((string-ci=? qif-type "mutual fund")
-        GNC_COMMODITY_NS_MUTUAL)
+        (GNC-COMMODITY-NS-MUTUAL))
 
        ;; Index
        ((string-ci=? qif-type "index")
         ;; This QIF type must be wrong; indexes aren't tradable!
-        GNC_COMMODITY_NS_MUTUAL)
+        (GNC-COMMODITY-NS-MUTUAL))
 
        (else
         (guess-by-symbol qif-symbol)))
