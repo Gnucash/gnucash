@@ -714,11 +714,11 @@ gnc_employee_search (GtkWindow *parent, GncEmployee *start, QofBook *book)
     /* Build parameter list in reverse order */
     if (params == NULL)
     {
-        params = gnc_search_param_prepend (params, _("Employee ID"), NULL, type,
-                                           EMPLOYEE_ID, NULL);
-        params = gnc_search_param_prepend (params, _("Employee Username"), NULL,
+        params = gnc_search_param_prepend (params, _("Username"), NULL,
                                            type, EMPLOYEE_USERNAME, NULL);
-        params = gnc_search_param_prepend (params, _("Employee Name"), NULL,
+        params = gnc_search_param_prepend (params, _("Employee Number"), NULL, type,
+                                           EMPLOYEE_ID, NULL);
+        params = gnc_search_param_prepend (params, _("Payment Name"), NULL,
                                            type, EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
     }
 
@@ -727,9 +727,9 @@ gnc_employee_search (GtkWindow *parent, GncEmployee *start, QofBook *book)
     {
         columns = gnc_search_param_prepend (columns, _("Username"), NULL, type,
                                             EMPLOYEE_USERNAME, NULL);
-        columns = gnc_search_param_prepend (columns, _("ID #"), NULL, type,
+        columns = gnc_search_param_prepend (columns, _("Employee Number"), NULL, type,
                                             EMPLOYEE_ID, NULL);
-        columns = gnc_search_param_prepend (columns, _("Name"), NULL, type,
+        columns = gnc_search_param_prepend (columns, _("Payment Name"), NULL, type,
                                             EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
     }
 

@@ -713,9 +713,9 @@ gnc_vendor_search (GtkWindow *parent, GncVendor *start, QofBook *book)
     /* Build parameter list in reverse order */
     if (params == NULL)
     {
-        params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,
+        params = gnc_search_param_prepend (params, _("Payment Contact"), NULL, type,
                                            VENDOR_ADDR, ADDRESS_NAME, NULL);
-        params = gnc_search_param_prepend (params, _("Vendor ID"), NULL, type,
+        params = gnc_search_param_prepend (params, _("Vendor Number"), NULL, type,
                                            VENDOR_ID, NULL);
         params = gnc_search_param_prepend (params, _("Company Name"), NULL, type,
                                            VENDOR_NAME, NULL);
@@ -724,11 +724,11 @@ gnc_vendor_search (GtkWindow *parent, GncVendor *start, QofBook *book)
     /* Build the column list in reverse order */
     if (columns == NULL)
     {
-        columns = gnc_search_param_prepend (columns, _("Contact"), NULL, type,
+        columns = gnc_search_param_prepend (columns, _("Payment Contact"), NULL, type,
                                             VENDOR_ADDR, ADDRESS_NAME, NULL);
-        columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
+        columns = gnc_search_param_prepend (columns, _("Company Name"), NULL, type,
                                             VENDOR_NAME, NULL);
-        columns = gnc_search_param_prepend (columns, _("ID #"), NULL, type,
+        columns = gnc_search_param_prepend (columns, _("Vendor Number"), NULL, type,
                                             VENDOR_ID, NULL);
     }
 

@@ -921,7 +921,7 @@ gnc_customer_search (GtkWindow *parent, GncCustomer *start, QofBook *book)
                                            CUSTOMER_SHIPADDR, ADDRESS_NAME, NULL);
         params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,
                                            CUSTOMER_ADDR, ADDRESS_NAME, NULL);
-        params = gnc_search_param_prepend (params, _("Customer ID"), NULL, type,
+        params = gnc_search_param_prepend (params, _("Customer Number"), NULL, type,
                                            CUSTOMER_ID, NULL);
         params = gnc_search_param_prepend (params, _("Company Name"), NULL, type,
                                            CUSTOMER_NAME, NULL);
@@ -930,11 +930,11 @@ gnc_customer_search (GtkWindow *parent, GncCustomer *start, QofBook *book)
     /* Build the column list in reverse order */
     if (columns == NULL)
     {
-        columns = gnc_search_param_prepend (columns, _("Contact"), NULL, type,
+        columns = gnc_search_param_prepend (columns, _("Billing Contact"), NULL, type,
                                             CUSTOMER_ADDR, ADDRESS_NAME, NULL);
-        columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
+        columns = gnc_search_param_prepend (columns, _("Company Name"), NULL, type,
                                             CUSTOMER_NAME, NULL);
-        columns = gnc_search_param_prepend (columns, _("ID #"), NULL, type,
+        columns = gnc_search_param_prepend (columns, _("Customer Number"), NULL, type,
                                             CUSTOMER_ID, NULL);
     }
 
