@@ -642,52 +642,6 @@ and do not match the transaction."))))))))
                      (cons (car lot-txn-splits) non-document)
                      result))))))))))
 
-
-  (define (not-APAR? s)
-    (not (xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount s)))))
-
-  (define (payment-txn->payment-info txn)
-    (let lp ((splits (xaccTransGetSplitList txn))
-             (invoices '())
-             (overpayment 0)
-             (opposing-splits '()))
-      (match splits
-        (() (vector invoices opposing-splits overpayment))
-        (((? not-APAR? split) . rest)
-         (lp rest invoices (+ overpayment (xaccSplitGetAmount split))
-             opposing-splits))
-        ((split . rest)
-         (let ((lot (xaccSplitGetLot split)))
-           (define (equal-to-split? s) (equal? s split))
-           (match (gncInvoiceGetInvoiceFromLot lot)
-             (() (let lp1 ((lot-splits (gnc-lot-get-split-list lot))
-                           (overpayment overpayment)
-                           (opposing-splits opposing-splits))
-                   (match lot-splits
-                     (() (lp rest invoices overpayment opposing-splits))
-                     (((? equal-to-split?) . tail)
-                      (lp1 tail overpayment opposing-splits))
-                     ((s . tail)
-                      (let* ((s-lot (xaccSplitGetLot s))
-                             (sum
-                              (fold
-                               (lambda (a b)
-                                 (if (equal? s a) b (+ b (xaccSplitGetAmount a))))
-                               0 (gnc-lot-get-split-list s-lot)))
-                             (lot-bal (gnc-lot-get-balance s-lot))
-                             (lot-bal (if (sign-equal? lot-bal (xaccSplitGetAmount s))
-                                          0 lot-bal))
-                             (partial-amount (- sum lot-bal))
-                             (derived? (not (zero? lot-bal))))
-                        (lp1 tail (+ overpayment partial-amount)
-                             (cons (list s partial-amount derived?)
-                                   opposing-splits)))))))
-             (inv
-              (lp rest
-                  (cons (cons inv split) invoices)
-                  (+ overpayment (xaccSplitGetAmount split))
-                  opposing-splits))))))))
-
   (define (make-payment->invoices-list txn)
     (list
      (list
@@ -754,7 +708,7 @@ and do not match the transaction."))))))))
                     currency ((if payable? + -) overpayment))))
                  (gncTransGetGUID txn)))))
 
-    (let* ((payment-info (payment-txn->payment-info txn))
+    (let* ((payment-info (gnc:payment-txn->payment-info txn))
            (invoices-result (invoices-list (vector-ref payment-info 0)))
            (payment-result (payments-list (vector-ref payment-info 1)))
            (overpayment-result (overpayment-list (vector-ref payment-info 2))))

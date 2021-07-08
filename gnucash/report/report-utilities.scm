@@ -97,6 +97,7 @@
 (export gnc:select-assoc-account-balance)
 (export gnc:get-assoc-account-balances-total)
 (export gnc:multiline-to-html-text)
+(export gnc:payment-txn->payment-info)
 (export make-file-url)
 (export gnc:strify)
 (export gnc:pk)
@@ -982,6 +983,59 @@ query instead.")
 
 ;; ***************************************************************************
 ;; Business Functions
+
+(define (sign-equal? a b) (or (= 0 a b) (< 0 (* a b))))
+(define (not-APAR? s)
+  (not (xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount s)))))
+;; analyse a payment transaction and return a 3-element vector:
+;; (vector invoices opposing-splits overpayment)
+;;
+;; invoices: a list of (cons invoice inv-APAR-split)
+;; opposing-splits: a list of (list pmt-APAR-split partial-amount derived?)
+;;                 partial-amount is a number, derived? is #true if the partial
+;;                 amount does not match the transaction amount
+;; overpayment: a number indicating overpayment amount
+(define (gnc:payment-txn->payment-info txn)
+  (let lp ((splits (xaccTransGetSplitList txn))
+           (invoices '())
+           (overpayment 0)
+           (opposing-splits '()))
+    (match splits
+      (() (vector invoices opposing-splits overpayment))
+      (((? not-APAR? split) . rest)
+       (lp rest invoices (+ overpayment (xaccSplitGetAmount split))
+           opposing-splits))
+      ((split . rest)
+       (let ((lot (xaccSplitGetLot split)))
+         (define (equal-to-split? s) (equal? s split))
+         (match (gncInvoiceGetInvoiceFromLot lot)
+           (() (let lp1 ((lot-splits (gnc-lot-get-split-list lot))
+                         (overpayment overpayment)
+                         (opposing-splits opposing-splits))
+                 (match lot-splits
+                   (() (lp rest invoices overpayment opposing-splits))
+                   (((? equal-to-split?) . tail)
+                    (lp1 tail overpayment opposing-splits))
+                   ((s . tail)
+                    (let* ((s-lot (xaccSplitGetLot s))
+                           (sum
+                            (fold
+                             (lambda (a b)
+                               (if (equal? s a) b (+ b (xaccSplitGetAmount a))))
+                             0 (gnc-lot-get-split-list s-lot)))
+                           (lot-bal (gnc-lot-get-balance s-lot))
+                           (lot-bal (if (sign-equal? lot-bal (xaccSplitGetAmount s))
+                                        0 lot-bal))
+                           (partial-amount (- sum lot-bal))
+                           (derived? (not (zero? lot-bal))))
+                      (lp1 tail (+ overpayment partial-amount)
+                           (cons (list s partial-amount derived?)
+                                 opposing-splits)))))))
+           (inv
+            (lp rest
+                (cons (cons inv split) invoices)
+                (+ overpayment (xaccSplitGetAmount split))
+                opposing-splits))))))))
 
 ;; create a stepped list, then add a date in the infinite future for
 ;; the "current" bucket
