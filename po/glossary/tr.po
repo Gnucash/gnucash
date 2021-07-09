@@ -6,14 +6,15 @@
 # Muha Aliss <muhaaliss@pm.me>, 2021.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2021.
 # udo pton <udopton@gmail.com>, 2021.
+# T. E. Kalaycı <tekrei@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-09 01:51+0100\n"
-"PO-Revision-Date: 2021-05-06 13:32+0000\n"
-"Last-Translator: udo pton <udopton@gmail.com>\n"
+"PO-Revision-Date: 2021-07-09 13:33+0000\n"
+"Last-Translator: T. E. Kalaycı <tekrei@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "tr/>\n"
 "Language: tr\n"
@@ -21,11 +22,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgstr ""
+msgstr "Terim (Sayın çevirmen: Bu dosya kullanıcı tarafından görülmeyecektir!)"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
@@ -93,7 +94,7 @@ msgstr "account type: Yatırım fonu"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
-msgstr ""
+msgstr "account type: Pasif"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
@@ -105,7 +106,7 @@ msgstr "account type: birikim"
 
 #. "-"
 msgid "account type: Stock"
-msgstr ""
+msgstr "account type: Hisse"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
