@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-08 14:32+0000\n"
+"PO-Revision-Date: 2021-07-09 09:33+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -763,7 +763,7 @@ msgstr "结账日期"
 
 #: gnucash/gnome/assistant-hierarchy.c:755
 msgid "Selected"
-msgstr "已选中"
+msgstr "已选"
 
 #: gnucash/gnome/assistant-hierarchy.c:767
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2367
@@ -774,7 +774,7 @@ msgstr "类型"
 #: gnucash/gnome/assistant-hierarchy.c:868
 #, c-format
 msgid "Accounts in '%s'"
-msgstr "“%s”的科目"
+msgstr "“%s”"
 
 #: gnucash/gnome/assistant-hierarchy.c:876
 msgid "No description provided."
@@ -834,13 +834,13 @@ msgstr ""
 
 #: gnucash/gnome/assistant-hierarchy.c:1491
 msgid "Please choose the currency to use for new accounts."
-msgstr "请选择新科目的币种。"
+msgstr "请选择新账簿的币种。"
 
 #: gnucash/gnome/assistant-hierarchy.c:1536
 #: gnucash/gnome/assistant-hierarchy.c:1555
 #: gnucash/gnome-utils/dialog-utils.c:809
 msgid "New Book Options"
-msgstr "新账簿选项"
+msgstr "账簿选项"
 
 #: gnucash/gnome/assistant-loan.cpp:128
 msgid "Taxes"
@@ -12510,7 +12510,7 @@ msgstr "最近(_L)"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:414
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:256
 msgid "End"
-msgstr "未端"
+msgstr "截止"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:589
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:423
@@ -13021,12 +13021,11 @@ msgid ""
 "Select language and region specific categories that correspond to the ways "
 "that you foresee you will use GnuCash. Each category you select will cause "
 "several accounts to be created."
-msgstr ""
-"选择所需GNucash应用程序的语言和区域类别。如果选择每个类别，将创建一些帐户。"
+msgstr "选择程序的区域和语言，这将创建一些相应的科目。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:169
 msgid "<b>Categories</b>"
-msgstr "<b>分类</b>"
+msgstr "<b>模板</b>"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:280
 #: gnucash/gtkbuilder/dialog-account.glade:908
@@ -13035,7 +13034,7 @@ msgstr "全部清除(_L)"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:318
 msgid "<b>Category Description</b>"
-msgstr "<b>分类描述</b>"
+msgstr "<b>描述</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:384
@@ -13047,26 +13046,22 @@ msgstr "“%s”的科目"
 msgid ""
 "If not satisfied with the available templates, please read the wiki page "
 "linked below and share your new or improved template."
-msgstr ""
-"如果你对现有的模板不满意，请阅读下面链接的维基页面，并分享你的新模板或改进的"
-"模板。"
+msgstr "如果对现有模板不满意，请阅读下面的维基页面，分享或改进模板。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:490
 msgid ""
 "The selection you make here is only the starting point for your personalized "
 "account hierarchy. Accounts can be added, renamed, moved, or deleted by hand "
 "later at any time."
-msgstr ""
-"您在此处所做的选择只是您的个性化科目层次结构的起点。之后您可以随时手动添加，"
-"重命名，移动或删除科目。"
+msgstr "此处仅为科目树的初始设置，后面随时可以添加，重命名，移动或删除科目。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:507
 msgid "GnuCash Account Template Wiki"
-msgstr "GnuCash 科目名"
+msgstr "科目树模板"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:522
 msgid "Choose accounts to create"
-msgstr "选择要创建的科目"
+msgstr "选择科目"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:537
 msgid ""
@@ -13087,20 +13082,17 @@ msgid ""
 "opening balance.\n"
 msgstr ""
 "\n"
-"如果您想修改科目名，点击含有该科目名的行，然后点击科目名并且修改它。\n"
+"双击科目名称以修改。\n"
 "\n"
-"一些科目被标记为“占位符”。占位科目是用于创建科目层次用的，通常不会含有交易事"
-"项或期初余额。如果您希望一个科目是一个占位科目，只需要点击相应科目的选择"
-"框。\n"
+"“占位符”用来创建父科目，正常不会有交易或期初余额，点击复选框以设定。\n"
 "\n"
-"如果您希望一个科目有期初余额，点击该科目中的一行，然后点击科目名，并且输入一"
-"个开始时的余额。\n"
+"选中科目，点击期初余额行，为此科目输入一个开始时的余额。\n"
 "\n"
-"<b>注意</b>：除了所有者权益科目和占位科目外，所有科目都可以有期初余额。\n"
+"<b>注意</b>：除所有者权益和占位符科目，其他科目都可以有期初余额。\n"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:575
 msgid "Setup selected accounts"
-msgstr "设置选中的科目"
+msgstr "设置科目"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
@@ -13111,15 +13103,15 @@ msgid ""
 "\n"
 "Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"点击“应用”将创建新科目。\n"
+"“应用”创建新账簿。\n"
 "\n"
-"点击“后退”将复查您的选项。\n"
+"“后退”复查选项。\n"
 "\n"
-"点击“取消”将关闭本对话框且不创建任何新科目。"
+"“取消”关闭对话框且不创建任何账簿。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:594
 msgid "Finish Account Setup"
-msgstr "科目设定完成"
+msgstr "完成"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:26
 msgid "Current Year"
@@ -15729,7 +15721,7 @@ msgstr "与此付款相关的公司。"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:167
 msgid "Partner"
-msgstr "供应商"
+msgstr "对象"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:204
 msgid "Post To"
@@ -17375,7 +17367,7 @@ msgstr "税率表"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:143
 msgid "<b>Tax Table Entries</b>"
-msgstr "<b>税率表项</b>"
+msgstr "<b>税务科目</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:199
 msgid "De_lete"
@@ -17387,11 +17379,11 @@ msgstr "新建(_W)"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:291
 msgid "Value $"
-msgstr "值"
+msgstr "数值"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:294
 msgid "Percent %"
-msgstr "百分之百"
+msgstr "百分比"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:389
 msgid "<b>Tax Table Entry</b>"
@@ -22262,7 +22254,7 @@ msgstr "排序"
 #: gnucash/report/reports/standard/customer-summary.scm:77
 #: gnucash/report/reports/standard/new-aging.scm:41
 msgid "Sort Order"
-msgstr "排序顺序"
+msgstr "顺序"
 
 #: gnucash/report/reports/aging.scm:40
 #: gnucash/report/reports/example/average-balance.scm:43
@@ -25130,7 +25122,7 @@ msgstr "它是一种成本账户，记录扣除从销售中获利的成本。"
 
 #: gnucash/report/reports/standard/customer-summary.scm:63
 msgid "Show Expense Column"
-msgstr "显示名称列"
+msgstr "显示支出"
 
 #: gnucash/report/reports/standard/customer-summary.scm:64
 msgid "Show the column with the expenses per customer."
@@ -25146,7 +25138,7 @@ msgstr "显示您自己公司的地址和打印日期。"
 
 #: gnucash/report/reports/standard/customer-summary.scm:70
 msgid "Show Lines with All Zeros"
-msgstr "一切都显示一排0"
+msgstr "显示全部为零的客户"
 
 #: gnucash/report/reports/standard/customer-summary.scm:71
 msgid ""
@@ -25156,7 +25148,7 @@ msgstr "显示在报告期内没有任何交易的客户的行。 因此，这�
 
 #: gnucash/report/reports/standard/customer-summary.scm:72
 msgid "Show Inactive Customers"
-msgstr "只在活跃条目中搜索"
+msgstr "显示不活跃客户"
 
 #: gnucash/report/reports/standard/customer-summary.scm:73
 msgid "Include customers that have been marked inactive."
@@ -25164,7 +25156,7 @@ msgstr "显示被标记为隐藏的科目。"
 
 #: gnucash/report/reports/standard/customer-summary.scm:75
 msgid "Sort Column"
-msgstr "选择栏"
+msgstr "排序"
 
 #: gnucash/report/reports/standard/customer-summary.scm:76
 msgid "Choose the column by which the result table is sorted."
