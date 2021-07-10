@@ -1276,6 +1276,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                      g_date_get_month(&creation_data->instance->date),
                      g_date_get_year(&creation_data->instance->date));
 
+    xaccTransSetDateEnteredSecs(new_txn, gnc_time(NULL));
     template_splits = xaccTransGetSplitList(template_txn);
     txn_splits = xaccTransGetSplitList(new_txn);
     if ((template_splits == NULL) || (txn_splits == NULL))
