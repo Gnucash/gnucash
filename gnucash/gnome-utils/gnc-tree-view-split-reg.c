@@ -2926,7 +2926,7 @@ gtv_sr_titles (GncTreeViewSplitReg *view, RowDepth depth)
             {
             default: //FIXME These if statements may not be required
                 if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
-                    gtk_tree_view_column_set_title (tvc, _("Rate"));
+                    gtk_tree_view_column_set_title (tvc, C_("In register", "Rate"));
                 break;
             }
             break;

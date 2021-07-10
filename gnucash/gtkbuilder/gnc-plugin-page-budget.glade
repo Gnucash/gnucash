@@ -75,7 +75,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Value</property>
+                <property name="label" translatable="yes" context="In edit all budget peroids dialog">Value</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
