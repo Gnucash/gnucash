@@ -509,6 +509,28 @@ gnc_html_copy_to_clipboard( GncHtml* self )
     }
 }
 
+gboolean
+gnc_html_open_external_browser (GncHtml *self, GError **error)
+{
+    static gchar *template = "gnc-report-XXXXXX.html";
+    gchar *filename = g_build_filename (g_get_tmp_dir(), template, NULL);
+
+#ifdef G_OS_WIN32
+    gchar *uri = g_strdup_printf ("file:///%s", filename);
+#else
+    gchar *uri = g_strdup_printf ("file://%s", filename);
+#endif
+
+    gboolean retval = gnc_html_export_to_file (self, filename);
+
+    if (retval)
+        retval = g_app_info_launch_default_for_uri (uri, NULL, error);
+
+    g_free (uri);
+    g_free (filename);
+    return retval;
+}
+
 /**************************************************************
  * gnc_html_export_to_file : wrapper around the builtin function in gtkhtml
  **************************************************************/

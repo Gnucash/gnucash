@@ -45,6 +45,7 @@
       <toolitem name="ReportToolbarExport" action="ReportExportAction"/>
       <toolitem name="ReportToolbarPrint" action="FilePrintAction" />
       <toolitem name="ReportToolbarExportPDF" action="FilePrintPDFAction"/>
+      <toolitem name="ReportToolbarExternal" action="OpenExternalBrowserAction"/>
     </placeholder>
   </toolbar>
 </ui>
