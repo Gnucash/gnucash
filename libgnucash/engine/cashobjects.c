@@ -73,8 +73,8 @@ cashobjects_register(void)
     g_return_val_if_fail(xaccAccountRegister(), FALSE);
     g_return_val_if_fail ( xaccTransRegister(), FALSE);
     g_return_val_if_fail ( xaccSplitRegister(), FALSE);
-    g_return_val_if_fail ( SXRegister (),       FALSE);
     g_return_val_if_fail ( gnc_sxtt_register(), FALSE);
+    g_return_val_if_fail ( SXRegister (),       FALSE);
     g_return_val_if_fail(gnc_pricedb_register(), FALSE);
     g_return_val_if_fail (gnc_budget_register(), FALSE);
     g_return_val_if_fail ( gnc_lot_register (), FALSE);
