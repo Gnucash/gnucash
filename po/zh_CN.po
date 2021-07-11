@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-09 09:33+0000\n"
+"PO-Revision-Date: 2021-07-11 11:33+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -1435,7 +1435,7 @@ msgstr "编号"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
 #: libgnucash/app-utils/business-options.scm:68
 msgid "Company Name"
-msgstr "公司名称"
+msgstr "名称"
 
 #: gnucash/gnome/dialog-customer.c:933 gnucash/gnome/dialog-vendor.c:727
 msgid "Contact"
@@ -7481,7 +7481,7 @@ msgstr "删除科目 %s"
 #: gnucash/gnome-utils/dialog-options.c:1492
 #: gnucash/gnome-utils/dialog-options.c:1636
 msgid "Select All"
-msgstr "选择全部"
+msgstr "全选"
 
 #: gnucash/gnome-utils/dialog-options.c:1494
 msgid "Select all accounts."
@@ -7490,7 +7490,7 @@ msgstr "选择所有科目。"
 #: gnucash/gnome-utils/dialog-options.c:1499
 #: gnucash/gnome-utils/dialog-options.c:1643
 msgid "Clear All"
-msgstr "全部取消选择"
+msgstr "取消全选"
 
 #: gnucash/gnome-utils/dialog-options.c:1501
 msgid "Clear the selection and unselect all accounts."
@@ -8070,9 +8070,9 @@ msgid ""
 "\n"
 "The file is in the history list, do you want to remove it?"
 msgstr ""
-"找不到文件/链接 %s。\n"
+"无法找到文件/URI %s。\n"
 "\n"
-"此文件在打开文件历史中，是否要从文件历史中移除它？"
+"该文件在历史列表中，删除它吗？"
 
 #: gnucash/gnome-utils/gnc-file.c:440
 #, c-format
@@ -9442,7 +9442,7 @@ msgstr "编号"
 #: gnucash/report/reports/aging.scm:48 gnucash/report/reports/aging.scm:682
 #: gnucash/report/reports/standard/new-aging.scm:49
 msgid "Address Name"
-msgstr "地址名称"
+msgstr "名称"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:422
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:131
@@ -13002,7 +13002,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:39
 msgid "New Account Hierarchy Setup"
-msgstr "新建账簿"
+msgstr "新建科目树"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:53
 msgid ""
@@ -14814,7 +14814,7 @@ msgstr "邮件"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:420
 msgid "Billing Address"
-msgstr "信息"
+msgstr "联络"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:537
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:156
@@ -14858,7 +14858,7 @@ msgstr "财务"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:950
 msgid "Shipping Information"
-msgstr "信息"
+msgstr "送货"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:969
 msgid "Shipping Address"
@@ -14952,7 +14952,7 @@ msgstr "输入网址，例如 http://www.gnucash.org"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:457
 msgid "Location does not start with a valid scheme"
-msgstr "地点不以有效的计划开始"
+msgstr "网址未以\"http://\"、\"https://\"开始"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:536
 msgid "Reload and Locate Linked Documents"
@@ -22280,7 +22280,7 @@ msgstr "顺序"
 #: gnucash/report/reports/standard/trial-balance.scm:129
 #: gnucash/report/trep-engine.scm:105
 msgid "Report's currency"
-msgstr "报表的货币"
+msgstr "币种"
 
 #: gnucash/report/reports/aging.scm:41
 #: gnucash/report/reports/example/average-balance.scm:44
@@ -22333,17 +22333,17 @@ msgstr "地址"
 #: gnucash/report/reports/aging.scm:53
 #: gnucash/report/reports/standard/new-aging.scm:56
 msgid "Address Phone"
-msgstr "地址电话"
+msgstr "电话"
 
 #: gnucash/report/reports/aging.scm:54
 #: gnucash/report/reports/standard/new-aging.scm:57
 msgid "Address Fax"
-msgstr "地址传真"
+msgstr "传真"
 
 #: gnucash/report/reports/aging.scm:55
 #: gnucash/report/reports/standard/new-aging.scm:58
 msgid "Address Email"
-msgstr "地址电子邮件"
+msgstr "邮箱"
 
 #: gnucash/report/reports/aging.scm:205
 #, scheme-format
@@ -22360,15 +22360,16 @@ msgstr "按以下方式对公司进行排序。"
 #: gnucash/report/reports/aging.scm:348
 #: gnucash/report/reports/standard/new-aging.scm:95
 msgid "Name of the company"
-msgstr "公司的名称"
+msgstr "公司名称"
 
 #: gnucash/report/reports/aging.scm:349
 #: gnucash/report/reports/standard/new-aging.scm:96
 msgid "Total amount owed to/from Company"
-msgstr "欠公司的总金额"
+msgstr "欠款总额"
 
 #: gnucash/report/reports/aging.scm:350
 #: gnucash/report/reports/standard/new-aging.scm:97
+#, fuzzy
 msgid "Bracket Total Owed"
 msgstr "欠款合计档次"
 
@@ -23541,7 +23542,7 @@ msgstr "父科目小计"
 #: gnucash/report/reports/standard/income-statement.scm:74
 #: gnucash/report/reports/standard/trial-balance.scm:121
 msgid "Include accounts with zero total balances"
-msgstr "包括合计余额为零的科目"
+msgstr "包含零余额科目"
 
 #: gnucash/report/reports/standard/account-summary.scm:105
 #: gnucash/report/reports/standard/balance-sheet.scm:101
@@ -23551,7 +23552,7 @@ msgstr "包括合计余额为零的科目"
 #: gnucash/report/reports/standard/income-statement.scm:76
 #: gnucash/report/reports/standard/trial-balance.scm:123
 msgid "Include accounts with zero total (recursive) balances in this report."
-msgstr "在此报告中包括总余额为零（递归）的账户。"
+msgstr "此报表包含合计余额为零（递归）的科目。"
 
 #: gnucash/report/reports/standard/account-summary.scm:106
 #: gnucash/report/reports/standard/balance-sheet.scm:102
@@ -23560,7 +23561,7 @@ msgstr "在此报告中包括总余额为零（递归）的账户。"
 #: gnucash/report/reports/standard/budget-income-statement.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:77
 msgid "Omit zero balance figures"
-msgstr "跳过零余额的数值"
+msgstr "排除零余额科目"
 
 #: gnucash/report/reports/standard/account-summary.scm:108
 #: gnucash/report/reports/standard/balance-sheet.scm:104
@@ -26203,7 +26204,7 @@ msgstr "地址来源。"
 #: gnucash/report/reports/standard/new-aging.scm:404
 #: gnucash/report/reports/standard/receivables.scm:68
 msgid "Billing address"
-msgstr "信息"
+msgstr "联络"
 
 #: gnucash/report/reports/standard/new-aging.scm:405
 #: gnucash/report/reports/standard/receivables.scm:69
