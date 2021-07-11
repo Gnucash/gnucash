@@ -602,8 +602,8 @@ dupe_trans (const Transaction *from)
 
     to = g_object_new (GNC_TYPE_TRANSACTION, NULL);
 
-    to->num         = CACHE_INSERT (from->num);
-    to->description = CACHE_INSERT (from->description);
+    CACHE_REPLACE (to->num, from->num);
+    CACHE_REPLACE (to->description, from->description);
 
     to->splits = g_list_copy (from->splits);
     for (node = to->splits; node; node = node->next)
@@ -647,8 +647,8 @@ xaccTransCloneNoKvp (const Transaction *from)
 
     to->date_entered    = from->date_entered;
     to->date_posted     = from->date_posted;
-    to->num             = CACHE_INSERT (from->num);
-    to->description     = CACHE_INSERT (from->description);
+    CACHE_REPLACE (to->num, from->num);
+    CACHE_REPLACE (to->description, from->description);
     to->common_currency = from->common_currency;
     qof_instance_copy_version(to, from);
     qof_instance_copy_version_check(to, from);
