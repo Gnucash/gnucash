@@ -331,6 +331,19 @@ for styling the invoice. Please see the exported report for the CSS class names.
     (G_ "Thank you for your patronage!")))
 
   (gnc:register-inv-option
+   (gnc:make-multichoice-callback-option
+    (N_ "Display") (N_ "QR Code")
+    "te" "QR Code"
+    'none
+    (list
+     (vector 'none (N_ "None") (N_ "None"))
+     (vector 'epc  (N_ "EPC QR Code") (N_ "EPC QR Code")))
+    #f
+    (lambda _
+      (gnc-option-db-set-option-selectable-by-name
+       gnc:*report-options* "Display" "QR Code" (gnc-qrcode-available)))))
+
+  (gnc:register-inv-option
    (gnc:make-multichoice-option
     (N_ "Layout") (N_ "Row 1 Left")
     "1a" "1st row, left"
@@ -781,6 +794,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                (else
                                 (G_ "Invoice"))))
                (title (if (string-null? custom-title) default-title custom-title))
+               (opt-qrcode (opt-val "Display" "QR Code"))
                ;; Translators: This is the format of the invoice title.
                ;; The first ~a is "Invoice", "Credit Note"... and the second the number.
                ;; Replace " #" by whatever is common as number abbreviation, i.e. "~a Nr. ~a"
@@ -868,6 +882,17 @@ for styling the invoice. Please see the exported report for the CSS class names.
                         "invoice-footer-company-contact"
                         (multiline-to-html-text
                          (string-append contact-str  ": " contact)))))))
+
+            (cond
+             ((eq? opt-qrcode 'none) #f)
+             ((not (gnc-qrcode-available))
+              (gnc:warn "invoice QR: libqrencode not available"))
+             ((eq? opt-qrcode 'epc)
+              (gnc:html-table-append-row!
+               main-table
+               (gnc:make-html-table-cell/size
+                1 2 (apply gnc:make-html-div/markup (gnc:make-epc-qrcode invoice)))))
+             (else (gnc:warn "QR option invalid")))
 
             (gnc:html-table-append-row! main-table
                                         (gnc:make-html-table-cell/size
