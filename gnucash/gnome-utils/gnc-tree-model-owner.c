@@ -192,6 +192,9 @@ gnc_tree_model_owner_finalize (GObject *object)
     model = GNC_TREE_MODEL_OWNER (object);
     priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
 
+    if (priv->owner_list)
+        g_list_free_full (priv->owner_list, (GDestroyNotify) gncOwnerFree);
+
     priv->book       = NULL;
     priv->owner_list = NULL;
 
@@ -976,6 +979,9 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
         /* Tell the filters/views where the new owner was added. */
         DEBUG("add owner %p (%s)", &owner, gncOwnerGetName(&owner));
         /* First update our copy of the owner list. This isn't done automatically */
+        if (priv->owner_list)
+            g_list_free_full (priv->owner_list, (GDestroyNotify) gncOwnerFree);
+
         priv->owner_list = gncBusinessGetOwnerList (priv->book,
                            gncOwnerTypeToQofIdType(priv->owner_type), TRUE);
         increment_stamp(model);
