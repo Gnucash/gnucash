@@ -77,6 +77,8 @@ declarations in the header files, some of which are included by
 engine-common.i */
 
 %newobject gnc_account_get_full_name;
+%newobject xaccTransGetAPARAcctSplitList;
+%newobject xaccTransGetPaymentAcctSplitList;
 
 %include "engine-common.i"
 
