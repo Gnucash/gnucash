@@ -1301,6 +1301,8 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
             c = gnc_commodity_new(book, fullname, name_space, mnemonic, code, fraction);
             w->edit_commodity = c;
             gnc_commodity_begin_edit(c);
+
+            gnc_commodity_set_user_symbol(c, user_symbol);
         }
         else
         {
