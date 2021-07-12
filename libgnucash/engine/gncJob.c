@@ -41,9 +41,9 @@
 struct _gncJob
 {
     QofInstance inst;
-    char *        id;
-    char *        name;
-    char *        desc;
+    const char *  id;
+    const char *  name;
+    const char *  desc;
     GncOwner      owner;
     gboolean      active;
 };
@@ -269,13 +269,9 @@ static void gncJobFree (GncJob *job)
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
-        char * tmp; \
-        \
         if (!g_strcmp0 (member, str)) return; \
         gncJobBeginEdit (obj); \
-        tmp = CACHE_INSERT (str); \
-        CACHE_REMOVE (member); \
-        member = tmp; \
+        CACHE_REPLACE (member, str); \
         }
 
 void gncJobSetID (GncJob *job, const char *id)

@@ -84,7 +84,7 @@ qof_string_cache_destroy (void)
 void
 qof_string_cache_remove(const char * key)
 {
-    if (key)
+    if (key && key[0] != 0)
     {
         GHashTable* cache = qof_get_string_cache();
         gpointer value;
@@ -106,11 +106,16 @@ qof_string_cache_remove(const char * key)
 
 /* If the key exists in the cache, increment the refcount.  Otherwise,
  * add it with a refcount of 1. */
-char *
+const char *
 qof_string_cache_insert(const char * key)
 {
     if (key)
     {
+        if (key[0] == 0)
+        {
+            return "";
+        }
+
         GHashTable* cache = qof_get_string_cache();
         gpointer value;
         gpointer cache_key;
@@ -132,10 +137,10 @@ qof_string_cache_insert(const char * key)
     return NULL;
 }
 
-char *
+const char *
 qof_string_cache_replace(char const * dst, char const * src)
 {
-    char * tmp {qof_string_cache_insert (src)};
+    const char * tmp {qof_string_cache_insert (src)};
     qof_string_cache_remove (dst);
     return tmp;
 }

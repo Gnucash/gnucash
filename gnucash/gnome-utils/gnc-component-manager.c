@@ -241,9 +241,9 @@ add_event_type (ComponentEventInfo *cei, QofIdTypeConst entity_type,
     mask = g_hash_table_lookup (cei->event_masks, entity_type);
     if (!mask)
     {
-        char * key = qof_string_cache_insert ((gpointer) entity_type);
+        const char * key = qof_string_cache_insert ((gpointer) entity_type);
         mask = g_new0 (QofEventId, 1);
-        g_hash_table_insert (cei->event_masks, key, mask);
+        g_hash_table_insert (cei->event_masks, (gpointer)key, mask);
     }
 
     if (or_in)

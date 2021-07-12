@@ -40,7 +40,7 @@ struct gnc_price_s
     gnc_commodity *currency;
     time64 tmspec;
     PriceSource source;
-    char *type;
+    const char *type;
     gnc_numeric value;
 
     /* 'private' object management fields */

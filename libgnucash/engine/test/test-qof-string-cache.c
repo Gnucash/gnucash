@@ -55,10 +55,10 @@ test_qof_string_cache( void )
     /* Strings added to the cache should always return the same string address
      * as long as the refcount > 0. */
     gchar str[100];
-    gchar* str1_1;
-    gchar* str1_2;
-    gchar* str1_3;
-    gchar* str1_4;
+    const gchar* str1_1;
+    const gchar* str1_2;
+    const gchar* str1_3;
+    const gchar* str1_4;
 
     strncpy(str, "str1", sizeof(str));
     str1_1 = qof_string_cache_insert(str);      /* Refcount = 1 */

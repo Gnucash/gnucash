@@ -50,11 +50,11 @@ struct _gncInvoice
 {
     QofInstance   inst;
 
-    char          *id;
-    char          *notes;
+    const char    *id;
+    const char    *notes;
     gboolean      active;
 
-    char          *billing_id;
+    const char    *billing_id;
     char          *printname;
     GncBillTerm   *terms;
     GList         *entries;
@@ -87,13 +87,9 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 #define GNC_INVOICE_DOCLINK "assoc_uri" // this is the old name for the document link, kept for compatibility
 
 #define SET_STR(obj, member, str) { \
-    char * tmp; \
-    \
     if (!g_strcmp0 (member, str)) return; \
     gncInvoiceBeginEdit (obj); \
-    tmp = CACHE_INSERT (str); \
-    CACHE_REMOVE (member); \
-    member = tmp; \
+    CACHE_REPLACE (member, str); \
     }
 
 static void mark_invoice (GncInvoice *invoice);

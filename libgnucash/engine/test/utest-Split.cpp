@@ -79,8 +79,8 @@ setup (Fixture *fixture, gconstpointer pData)
     xaccSplitSetParent (fixture->split, txn);
     xaccTransCommitEdit (txn);
     gnc_lot_set_account (lot, acc);
-    fixture->split->action = static_cast<char*>(CACHE_INSERT ("foo"));
-    fixture->split->memo = static_cast<char*>(CACHE_INSERT ("bar"));
+    fixture->split->action = CACHE_INSERT ("foo");
+    fixture->split->memo = CACHE_INSERT ("bar");
     fixture->split->acc = acc;
     fixture->split->lot = lot;
     fixture->split->parent = txn;

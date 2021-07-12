@@ -84,11 +84,11 @@ void qof_string_cache_remove(const char * key);
 /** You can use this function with g_hash_table_insert(), for the key
    (or value), as long as you use the destroy notifier above.
 */
-char * qof_string_cache_insert(const char * key);
+const char * qof_string_cache_insert(const char * key);
 
 /** Same as CACHE_REPLACE below, but safe to call from C++.
  */
-char * qof_string_cache_replace(const char * dst, const char * src);
+const char * qof_string_cache_replace(const char * dst, const char * src);
 
 #define CACHE_INSERT(str) qof_string_cache_insert((str))
 #define CACHE_REMOVE(str) qof_string_cache_remove((str))
@@ -101,7 +101,7 @@ char * qof_string_cache_replace(const char * dst, const char * src);
  * It avoids unnecessary ejection by doing INSERT before REMOVE.
 */
 #define CACHE_REPLACE(dst, src) do {          \
-        gpointer tmp = CACHE_INSERT((src));   \
+        const char *tmp = CACHE_INSERT((src));   \
         CACHE_REMOVE((dst));                  \
         (dst) = tmp;                          \
     } while (0)

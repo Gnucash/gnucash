@@ -37,7 +37,7 @@
 struct _gncTaxTable
 {
     QofInstance     inst;
-    char *          name;
+    const char *    name;
     GncTaxTableEntryList*  entries;
     time64          modtime;      /* internal date of last modtime */
 
@@ -136,13 +136,9 @@ gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type)
 #define _GNC_MOD_NAME        GNC_ID_TAXTABLE
 
 #define SET_STR(obj, member, str) { \
-        char * tmp; \
-        \
         if (!g_strcmp0 (member, str)) return; \
         gncTaxTableBeginEdit (obj); \
-        tmp = CACHE_INSERT (str); \
-        CACHE_REMOVE (member); \
-        member = tmp; \
+        CACHE_REPLACE (member, str); \
         }
 
 static inline void

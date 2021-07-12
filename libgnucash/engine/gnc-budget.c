@@ -61,10 +61,10 @@ typedef struct
 typedef struct GncBudgetPrivate
 {
     /* The name is an arbitrary string assigned by the user. */
-    gchar* name;
+    const gchar *name;
 
     /* The description is an arbitrary string assigned by the user. */
-    gchar* description;
+    const gchar *description;
 
     /* Recurrence (period info) for the budget */
     Recurrence recurrence;

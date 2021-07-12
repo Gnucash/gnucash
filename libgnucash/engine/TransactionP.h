@@ -82,12 +82,12 @@ struct transaction_s
      * It is intended to store a short id number, typically the check number,
      * deposit number, invoice number or other tracking number.
      */
-    char * num;
+    const char *num;
 
     /* The description field is an arbitrary user-assigned value.
      * It is meant to be a short descriptive phrase.
      */
-    char * description;
+    const char *description;
 
     /* The common_currency field is the balancing common currency for
      * all the splits in the transaction.  Alternate, better(?) name:

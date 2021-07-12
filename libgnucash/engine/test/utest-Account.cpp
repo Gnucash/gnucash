@@ -305,8 +305,8 @@ setup (Fixture *fixture, gconstpointer pData)
     auto accts = g_hash_table_new (g_str_hash, g_str_equal);
     guint ind;
 
-    auto root_str = static_cast<char*>(CACHE_INSERT("root"));
-    g_hash_table_insert (accts, root_str, root);
+    auto root_str = CACHE_INSERT("root");
+    g_hash_table_insert (accts, (gpointer)root_str, root);
     fixture->func = _utest_account_fill_functions ();
     if (parms == NULL)
     {

@@ -613,7 +613,7 @@ qof_book_get_collection (const QofBook *book, QofIdType entity_type)
         col = qof_collection_new (entity_type);
         g_hash_table_insert(
             book->hash_of_collections,
-            qof_string_cache_insert(entity_type), col);
+            (gpointer)qof_string_cache_insert(entity_type), col);
     }
     return col;
 }

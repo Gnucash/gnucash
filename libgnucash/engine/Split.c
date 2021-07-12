@@ -1495,7 +1495,7 @@ xaccSplitOrder (const Split *sa, const Split *sb)
 {
     int retval;
     int comp;
-    char *da, *db;
+    const char *da, *db;
     gboolean action_for_num;
 
     if (sa == sb) return 0;

@@ -50,7 +50,7 @@ KvpFrameImpl::KvpFrameImpl(const KvpFrameImpl & rhs) noexcept
     std::for_each(rhs.m_valuemap.begin(), rhs.m_valuemap.end(),
         [this](const map_type::value_type & a)
         {
-            auto key = static_cast<char *>(qof_string_cache_insert(a.first));
+            auto key = qof_string_cache_insert(a.first);
             auto val = new KvpValueImpl(*a.second);
             this->m_valuemap.insert({key,val});
         }
