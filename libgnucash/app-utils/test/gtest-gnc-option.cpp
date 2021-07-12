@@ -959,10 +959,10 @@ protected:
                  {"foo", "bar", "baz",
                   "Phony Option", "plugh",
                   {
-                      {"plugh", "xyzzy", "thud", KT::STRING},
-                      {"waldo", "pepper", "salt", KT::STRING},
-                      {"pork", "sausage", "links", KT::STRING},
-                      {"corge", "grault", "garply", KT::STRING}
+                      {"plugh", "xyzzy", KT::STRING},
+                      {"waldo", "pepper", KT::STRING},
+                      {"pork", "sausage", KT::STRING},
+                      {"corge", "grault", KT::STRING}
                   }}} {}
     GncOption m_option;
 };
@@ -1003,14 +1003,10 @@ TEST_F(GncMultichoiceOption, test_permissible_value_stuff)
             EXPECT_EQ(3U, m_option.permissible_value_index("corge"));
             EXPECT_STREQ("waldo", m_option.permissible_value(1));
             EXPECT_STREQ("sausage", m_option.permissible_value_name(2));
-            EXPECT_STREQ("thud",
-                         m_option.permissible_value_description(0));
         });
     EXPECT_THROW({ auto result = m_option.permissible_value(7); },
                  std::out_of_range);
     EXPECT_THROW({ auto result = m_option.permissible_value_name(9); },
-        std::out_of_range);
-    EXPECT_THROW({ auto result = m_option.permissible_value_description(4); },
         std::out_of_range);
     EXPECT_EQ(std::numeric_limits<std::size_t>::max(),
               m_option.permissible_value_index("xyzzy"));
@@ -1059,10 +1055,10 @@ protected:
             "foo", "bar", "baz", "Phony Option",
             GncMultichoiceOptionIndexVec{0, 2},
             {
-                {"plugh", "xyzzy", "thud", KT::STRING},
-                {"waldo", "pepper", "salt", KT::STRING},
-                {"pork", "sausage", "links", KT::STRING},
-                {"corge", "grault", "garply", KT::STRING}
+                {"plugh", "xyzzy", KT::STRING},
+                {"waldo", "pepper", KT::STRING},
+                {"pork", "sausage", KT::STRING},
+                {"corge", "grault", KT::STRING}
             }}} {}
     GncOption m_option;
 };

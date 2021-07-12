@@ -46,7 +46,6 @@ extern "C"
 #include "glib-guile.h"
 #include "gnc-account-sel.h"
 #include "gnc-tree-view-account.h"
-#include "gnc-combott.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-general-select.h"
@@ -1180,15 +1179,12 @@ create_multichoice_widget(GncOption& option)
     {
         GtkTreeIter iter;
         auto itemstring = option.permissible_value_name(i);
-        auto description = option.permissible_value_description(i);
         gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0,
-                            (itemstring && *itemstring) ? _(itemstring) : "", 1,
-                            (description && *description) ? _(description) : "", -1);
+        gtk_list_store_set(store, &iter, 0,
+                           (itemstring && *itemstring) ? _(itemstring) : "", 1);
     }
     /* Create the new Combo with tooltip and add the store */
-    auto widget = GTK_WIDGET(gnc_combott_new());
-    g_object_set( G_OBJECT( widget ), "model", GTK_TREE_MODEL(store), NULL );
+    auto widget{GTK_WIDGET(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)))};
     g_object_unref(store);
 
     g_signal_connect(G_OBJECT(widget), "changed",
@@ -1204,13 +1200,13 @@ public:
         GncOptionGtkUIItem{widget, GncOptionUIType::MULTICHOICE} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        auto widget{GNC_COMBOTT(get_widget())};
-        gnc_combott_set_active(widget, option.get_value<size_t>());
+        auto widget{GTK_COMBO_BOX(get_widget())};
+        gtk_combo_box_set_active(widget, option.get_value<size_t>());
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto widget{GNC_COMBOTT(get_widget())};
-        option.set_value<size_t>(gnc_combott_get_active(widget));
+        auto widget{GTK_COMBO_BOX(get_widget())};
+        option.set_value<size_t>(gtk_combo_box_get_active(widget));
     }
 };
 
@@ -1300,9 +1296,7 @@ private:
 };
 
 
-RelativeDateEntry::RelativeDateEntry(GncOption& option) :
-    m_entry{GTK_WIDGET(gnc_combott_new())}
-
+RelativeDateEntry::RelativeDateEntry(GncOption& option)
 {
 
     /* GtkComboBox still does not support per-item tooltips, so have
@@ -1319,12 +1313,11 @@ RelativeDateEntry::RelativeDateEntry(GncOption& option) :
         GtkTreeIter  iter;
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter, 0,
-                            option.permissible_value_name(index), 1,
-                            option.permissible_value_description(index), -1);
+                            option.permissible_value_name(index), 1);
     }
 
     /* Create the new Combo with tooltip and add the store */
-    g_object_set( G_OBJECT(m_entry), "model", GTK_TREE_MODEL(store), nullptr);
+    m_entry = GTK_WIDGET(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)));
     g_object_unref(store);
 
     g_signal_connect(G_OBJECT(m_entry), "changed",
@@ -1334,13 +1327,13 @@ RelativeDateEntry::RelativeDateEntry(GncOption& option) :
 void
 RelativeDateEntry::set_entry_from_option(GncOption& option)
 {
-    gnc_combott_set_active(GNC_COMBOTT(m_entry), option.get_value<size_t>());
+    gtk_combo_box_set_active(GTK_COMBO_BOX(m_entry), option.get_value<size_t>());
 }
 
 void
 RelativeDateEntry::set_option_from_entry(GncOption& option)
 {
-    option.set_value<size_t>(gnc_combott_get_active(GNC_COMBOTT(m_entry)));
+    option.set_value<size_t>(gtk_combo_box_get_active(GTK_COMBO_BOX(m_entry)));
 }
 
 using AbsoluteDateEntryPtr = std::unique_ptr<AbsoluteDateEntry>;
@@ -2465,7 +2458,6 @@ create_radiobutton_widget(char *name, GncOption& option)
     for (decltype(num_values) i = 0; i < num_values; i++)
     {
         auto label = option.permissible_value_name(i);
-        auto tip = option.permissible_value_description(i);
 
         widget =
             gtk_radio_button_new_with_label_from_widget (widget ?
@@ -2474,7 +2466,6 @@ create_radiobutton_widget(char *name, GncOption& option)
                     label && *label ? _(label) : "");
         g_object_set_data (G_OBJECT (widget), "gnc_radiobutton_index",
                            GINT_TO_POINTER (i));
-        gtk_widget_set_tooltip_text(widget, tip && *tip ? _(tip) : "");
         g_signal_connect(G_OBJECT(widget), "toggled",
                          G_CALLBACK(radiobutton_set_cb), &option);
         gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);

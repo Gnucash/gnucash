@@ -419,8 +419,7 @@ gnc_option_test_book_destroy(QofBook* book)
             throw std::invalid_argument("Unsupported key type in multichoice option.");
         std::string key{scm_to_utf8_string(keyval)};
         std::string name{scm_to_utf8_string(SCM_SIMPLE_VECTOR_REF(vec, 1))};
-        std::string desc{scm_to_utf8_string(SCM_SIMPLE_VECTOR_REF(vec, 2))};
-        choices.push_back({std::move(key), std::move(name), std::move(desc), keytype});
+        choices.push_back({std::move(key), std::move(name), keytype});
     }
     $1 = &choices;
  }

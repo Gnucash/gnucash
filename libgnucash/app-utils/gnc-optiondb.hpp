@@ -50,7 +50,6 @@ using GncOptionAccountList = std::vector<const Account*>;
 using GncOptionAccountTypeList = std::vector<GNCAccountType>;
 using GncMultichoiceOptionEntry = std::tuple<const std::string,
                                              const std::string,
-                                             const std::string,
                                              GncOptionMultichoiceKeyType>;
 using GncMultichoiceOptionChoices = std::vector<GncMultichoiceOptionEntry>;
 

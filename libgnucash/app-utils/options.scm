@@ -90,9 +90,8 @@
         (retval '()))
     (do ((i 0 (1+ i))) ((>= i num-values))
       (let ((value (GncOption-permissible-value option i))
-            (name (GncOption-permissible-value-name option i))
-            (desc (GncOption-permissible-value-description option i)))
-        (set! retval (cons retval (vector value name desc)))))
+            (name (GncOption-permissible-value-name option i)))
+        (set! retval (cons retval (vector value name)))))
     retval))
 
 (define-public (gnc:new-options)

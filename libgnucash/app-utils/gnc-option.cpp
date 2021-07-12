@@ -361,20 +361,6 @@ GncOption::permissible_value_name(std::size_t index) const
                       }, *m_option);
 }
 
-const char*
-GncOption::permissible_value_description(std::size_t index) const
-{
-    return std::visit([index] (const auto& option) -> const char* {
-                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionMultichoiceValue>  ||
-                                        std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionDateValue>)
-                                           return option.permissible_value_description(index);
-                          else
-                              return "";
-                      }, *m_option);
-}
-
 GList*
 GncOption::account_type_list() const noexcept
 {

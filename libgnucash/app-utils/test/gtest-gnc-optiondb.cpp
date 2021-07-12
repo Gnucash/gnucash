@@ -178,10 +178,10 @@ using KT = GncOptionMultichoiceKeyType;
 TEST_F(GncOptionDBTest, test_register_multichoice_option)
 {
     GncMultichoiceOptionChoices choices{
-        { "plugh", "xyzzy", "thud", KT::STRING},
-        { "waldo", "pepper", "salt", KT::STRING},
-        { "pork", "sausage", "links", KT::STRING},
-        { "corge", "grault", "garply", KT::STRING}};
+        { "plugh", "xyzzy", KT::STRING},
+        { "waldo", "pepper", KT::STRING},
+        { "pork", "sausage", KT::STRING},
+        { "corge", "grault", KT::STRING}};
     gnc_register_multichoice_option(m_db, "foo", "bar", "baz",
                                     "Phony Option", "waldo",
                                     std::move(choices));
