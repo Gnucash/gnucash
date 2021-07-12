@@ -1788,9 +1788,6 @@ static gchar *generate_statusbar_lastmodified_message()
             g_free(filepath);
             g_object_unref (info);
             g_object_unref (file);
-#else
-            return nullptr;
-#endif
         }
         // If the URI is not a file but a database, we can maybe also show
         // something useful, but I have no idea how to obtain this information.
