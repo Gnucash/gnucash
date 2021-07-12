@@ -319,9 +319,8 @@ qof_instance_dispose (GObject *instp)
     QofInstance* inst = QOF_INSTANCE(instp);
 
     priv = GET_PRIVATE(instp);
-    if (!priv->collection)
-        return;
-    qof_collection_remove_entity(inst);
+    if (priv->collection)
+        qof_collection_remove_entity(inst);
 
     CACHE_REMOVE(inst->e_type);
     inst->e_type = NULL;
