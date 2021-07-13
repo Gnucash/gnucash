@@ -76,13 +76,13 @@ const OptionAliases Aliases::c_option_aliases
     {"Sign Reverses?", {nullptr, "Sign Reverses"}},
     {"To", {nullptr, "End Date"}},
     {"Charge Type", {nullptr, "Action"}}, // easy-invoice.scm, renamed June 2018
-        // the following 4 options in income-gst-statement.scm renamed Dec 2018
+    // the following 4 options in income-gst-statement.scm renamed Dec 2018
     {"Individual income columns", {nullptr, "Individual sales columns"}},
     {"Individual expense columns",
         {nullptr, "Individual purchases columns"}},
     {"Remittance amount", {nullptr, "Gross Balance"}},
     {"Net Income", {nullptr, "Net Balance"}},
-        // transaction.scm:
+    // transaction.scm:
     {"Use Full Account Name?", {nullptr, "Use Full Account Name"}},
     {"Use Full Other Account Name?",
         {nullptr, "Use Full Other Account Name"}},
@@ -90,10 +90,20 @@ const OptionAliases Aliases::c_option_aliases
     {"Void Transactions", {"Filter", "Void Transactions"}},
     {"Account Substring", {"Filter", "Account Name Filter"}},
     {"Enable links", {nullptr, "Enable Links"}},
-        // invoice.scm, renamed November 2018
+    // trep-engine: moved currency options to own tab
+    {"Common Currency", {"Currency", "Common Currency"}},
+    {"Show original currency amount",
+        {"Currency", "Show original currency amount"}},
+    {"Report's currency", {"Currency", "Report's currency"}},
+    {"Reconcile Status", {nullptr, "Reconciled Status"}},
+    // new-owner-report.scm, renamed Oct 2020 to differentiate with
+    // Document Links:
+    {"Links", {nullptr, "Transaction Links"}},
+    // invoice.scm, renamed November 2018
     {"Individual Taxes", {nullptr, "Use Detailed Tax Summary"}},
-        // income-gst-statement.scm
-    {"default format", {nullptr, "Default Format"}}
+    // income-gst-statement.scm
+    {"default format", {nullptr, "Default Format"}},
+    {"Report format", {nullptr, "Report Format"}},
 };
 
 static bool
