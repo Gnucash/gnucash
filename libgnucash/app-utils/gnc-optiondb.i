@@ -514,6 +514,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 #include <algorithm>
 #include <array>
 #include <string>
+#include <sstream>
 #include "gnc-option.hpp"
 #include "gnc-option-ui.hpp"
 
@@ -530,7 +531,12 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
  * overloads. The latter isn't useful to SWIG, ignore it.
  */
 %ignore GncOptionDB::register_option(const char*, GncOption&&);
-
+/* GncOptionDB::save_to_scheme takes and returns a std::stream. Good luck
+ * converting *that* to anything useful!
+ */
+%ignore GncOptionDB::save_to_scheme(std::ostream&, const char*);
+%ignore GncOptionDB::save_option_scheme(std::ostream&, const char*, const std::string&, const std::string&);
+%ignore GncOptionDB::load_option_scheme(std::itream&);
 /* The following functions are overloaded in gnc-optiondb.hpp to provide both
  * GncOptionDB* and GncOptionDBPtr& versions. That confuses SWIG so ignore the
  * raw-ptr version.
@@ -1231,6 +1237,14 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                         scm_call_1(thunk, scm_opt);
                     });
             });
+    }
+
+    std::string
+    gnc_optiondb_save_to_scheme(GncOptionDBPtr& odb, const char* prolog)
+    {
+        std::ostringstream oss;
+        odb->save_to_scheme(oss, prolog);
+        return oss.str();
     }
 %}
 

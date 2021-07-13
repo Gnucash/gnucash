@@ -35,6 +35,10 @@
 (define-public (gnc:value->string value)
   (format #f "~s" value))
 
+(define-public (gnc:generate-restore-forms options name)
+  (let ((optiondb (options 'generate-restore-forms)))
+    (gnc-optiondb-save-to-scheme optiondb name)))
+
 (define-public (gnc:lookup-option options section name)
   (if options
       (gnc-lookup-option (options 'lookup) section name)
