@@ -254,7 +254,7 @@ GncOption::set_option_from_ui_item()
 void
 GncOption::make_internal()
 {
-    if (!m_ui_item)
+    if (m_ui_item)
     {
         PERR("Option %s:%s has a UI Element, can't be INTERNAL.",
              get_section().c_str(), get_name().c_str());
