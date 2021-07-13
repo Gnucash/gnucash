@@ -1316,7 +1316,7 @@ xaccFreeAccount (Account *acc)
         PERR (" instead of calling xaccFreeAccount(), please call\n"
               " xaccAccountBeginEdit(); xaccAccountDestroy();\n");
 
-        /* First, recursively free children */
+        /* First, recursively free children, also frees list */
         xaccFreeAccountChildren(acc);
     }
 
@@ -5992,13 +5992,31 @@ gnc_account_delete_all_bayes_maps (Account *acc)
 /* QofObject function implementation and registration */
 
 static void
+destroy_all_child_accounts (Account *acc, gpointer data)
+{
+    xaccAccountBeginEdit (acc);
+    xaccAccountDestroy (acc);
+}
+
+static void
 gnc_account_book_end(QofBook* book)
 {
-    Account *root_account = gnc_book_get_root_account(book);
+    Account *root_account = gnc_book_get_root_account (book);
+    GList *accounts;
+
     if (!root_account)
         return;
-    xaccAccountBeginEdit(root_account);
-    xaccAccountDestroy(root_account);
+
+    accounts = gnc_account_get_descendants (root_account);
+
+    if (accounts)
+    {
+        accounts = g_list_reverse (accounts);
+        g_list_foreach (accounts, (GFunc)destroy_all_child_accounts, nullptr);
+        g_list_free (accounts);
+    }
+    xaccAccountBeginEdit (root_account);
+    xaccAccountDestroy (root_account);
 }
 
 #ifdef _MSC_VER
