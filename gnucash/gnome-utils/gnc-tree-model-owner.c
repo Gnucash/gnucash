@@ -1010,6 +1010,12 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
             DEBUG("can't generate path");
             break;
         }
+
+        g_assert_not_reached ();
+        /* above disables. untested; removing an owner is not allowed
+           in UI */
+        priv->owner_list = g_list_remove (priv->owner_list, &owner);
+        gncOwnerFree (&owner);
         increment_stamp(model);
         gtk_tree_path_append_index (path, ed->idx);
         gtk_tree_model_row_deleted (GTK_TREE_MODEL(model), path);
