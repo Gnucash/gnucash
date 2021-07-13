@@ -231,6 +231,18 @@ GncJob *gncJobCreate (QofBook *book)
     return job;
 }
 
+static void free_job_list (GncJob *job)
+{
+    gncJobBeginEdit (job);
+    gncJobDestroy (job);
+}
+
+void gncJobFreeList (GList *jobs)
+{
+    GList *job_list = g_list_copy (jobs);
+    g_list_free_full (job_list, (GDestroyNotify)free_job_list);
+}
+
 void gncJobDestroy (GncJob *job)
 {
     if (!job) return;
