@@ -32,6 +32,7 @@
 
 #include "Account.h"
 #include "SX-book.h"
+#include "SX-book-p.h"
 #include "SX-ttinfo.h"
 #include "SchedXaction.h"
 #include "Transaction.h"
@@ -510,7 +511,11 @@ xaccSchedXactionFree( SchedXaction *sx )
         g_list_free( sx->deferredList );
         sx->deferredList = NULL;
     }
-
+    if ( sx->schedule )
+    {
+        g_list_free( sx->schedule );
+        sx->schedule = NULL;
+    }
     /* qof_instance_release (&sx->inst); */
     g_object_unref( sx );
 }
@@ -1208,6 +1213,9 @@ gnc_sx_book_end(QofBook* book)
 
     col = qof_book_get_collection(book, GNC_ID_SCHEDXACTION);
     qof_collection_foreach(col, destroy_sx_on_book_close, NULL);
+
+    // Now destroy the template root account
+    gnc_book_set_template_root (book, NULL);
 }
 
 #ifdef _MSC_VER
