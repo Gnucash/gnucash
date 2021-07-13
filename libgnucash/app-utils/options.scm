@@ -37,7 +37,7 @@
 
 (define-public (gnc:lookup-option options section name)
   (if options
-      (gnc-lookup-option options section name)
+      (gnc-lookup-option (options 'lookup) section name)
       #f))
 
 (define-public (gnc:option-setter option)
@@ -78,7 +78,7 @@
   (qof-book-get-option book (acc category key)))
 
 (define-public (gnc:option-make-internal! options section name)
-  (let ((option (gnc-lookup-option options section name)))
+  (let ((option (gnc-lookup-option (options 'lookup) section name)))
     (and option (GncOption-make-internal option))))
 
 (define-public (gnc:option-type option)
@@ -94,14 +94,18 @@
         (set! retval (cons retval (vector value name)))))
     retval))
 
+;; Create the database and return a dispatch function.
 (define-public (gnc:new-options)
-  (new-gnc-optiondb))
+  (let ((optiondb (new-gnc-optiondb)))
+    (define (dispatch key)
+      optiondb)
+  dispatch))
 
 (define-public (gnc:options-set-default-section optiondb section)
-  (GncOptionDB-set-default-section (GncOptionDBPtr-get optiondb) section))
+  (GncOptionDB-set-default-section (GncOptionDBPtr-get (optiondb 'set-default-section)) section))
 
 (define-public (gnc:options-for-each func optdb)
-  (gnc-optiondb-foreach optdb func))
+  (gnc-optiondb-foreach (optdb 'foreach) func))
 
 ;; Copies all values from src-options to dest-options, that is, it
 ;; copies the values of all options from src which exist in dest to
@@ -121,18 +125,18 @@
 
 ;; FIXME: Fake callback functions for boolean-complex and multichoice-callback
 
-(define-public (gnc:options-register-callback section name callback options) 1)
-(define-public (gnc:options-register-c-callback section name callback data options) 1)
-(define-public (gnc:options-unregister-callback-id id) 0 options)
+(define-public (gnc:options-register-callback section name callback options) (options 'register-callback) 1)
+(define-public (gnc:options-register-c-callback section name callback data options) (options 'register-c-callback) 1)
+(define-public (gnc:options-unregister-callback-id id) 0 (options 'unregister-callback-id))
 
 ;; The following implement the old API that separated creation from registration.
 (define-public (gnc:register-option optdb opt)
   (issue-deprecation-warning "gnc:register-option is deprecated. Use gnc-register-foo-option instead.")
-  (GncOptionDB-register-option (GncOptionDBPtr-get optdb)
+  (GncOptionDB-register-option (GncOptionDBPtr-get (optdb 'register-option))
                                (GncOption-get-section opt) opt))
 
 (define-public (gnc:unregister-option optdb section name)
-  (GncOptionDB-unregister-option (GncOptionDBPtr-get optdb) section name))
+  (GncOptionDB-unregister-option (GncOptionDBPtr-get (optdb 'unregister-option)) section name))
 
 (define-public (gnc:make-string-option section name key docstring default)
   (issue-deprecation-warning "gnc:make-string-option is deprecated. Make and register the option in one command with gnc-register-string-option.")
@@ -256,12 +260,12 @@
     (gnc-make-date-option section name key docstring default relative-date-list both)))
 
 (define-public (gnc:options-make-end-date! optiondb pagename optname sort-tag docstring)
-  (gnc-register-end-date-option optiondb pagename optname sort-tag docstring))
+  (gnc-register-end-date-option (optiondb 'make-option) pagename optname sort-tag docstring))
 
 (define-public (gnc:options-make-date-interval! optiondb pagename name-from info-from name-to info-to sort-tag)
-  (gnc-register-start-date-option optiondb pagename name-from
+  (gnc-register-start-date-option (optiondb 'make-option) pagename name-from
                                   (string-append sort-tag "a") info-from)
-  (gnc-register-end-date-option optiondb pagename name-to
+  (gnc-register-end-date-option (optiondb 'make-option) pagename name-to
                                 (string-append sort-tag "b") info-to))
 (define-public (gnc:date-option-absolute-time option-value)
   (if (pair? option-value)
