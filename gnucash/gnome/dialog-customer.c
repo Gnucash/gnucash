@@ -930,6 +930,8 @@ gnc_customer_search (GtkWindow *parent, GncCustomer *start, QofBook *book)
     /* Build the column list in reverse order */
     if (columns == NULL)
     {
+        columns = gnc_search_param_prepend (columns, _("Shipping Contact"), NULL, type,
+                                            CUSTOMER_SHIPADDR, ADDRESS_NAME, NULL);
         columns = gnc_search_param_prepend (columns, _("Contact"), NULL, type,
                                             CUSTOMER_ADDR, ADDRESS_NAME, NULL);
         columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
