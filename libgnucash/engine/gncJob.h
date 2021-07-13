@@ -57,6 +57,7 @@ GType gnc_job_get_type(void);
 
 GncJob *gncJobCreate (QofBook *book);
 void gncJobDestroy (GncJob *job);
+void gncJobFreeList (GList *jobs);
 
 /** \name Set Functions
 @{

@@ -353,6 +353,8 @@ static void gncCustomerFree (GncCustomer *cust)
     gncAddressDestroy (cust->addr);
     gncAddressBeginEdit (cust->shipaddr);
     gncAddressDestroy (cust->shipaddr);
+
+    gncJobFreeList (cust->jobs);
     g_list_free (cust->jobs);
     g_free (cust->balance);
 
