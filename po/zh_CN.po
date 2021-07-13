@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-11 11:33+0000\n"
+"PO-Revision-Date: 2021-07-13 15:32+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -840,7 +840,7 @@ msgstr "请选择新账簿的币种。"
 #: gnucash/gnome/assistant-hierarchy.c:1555
 #: gnucash/gnome-utils/dialog-utils.c:809
 msgid "New Book Options"
-msgstr "账簿选项"
+msgstr "属性"
 
 #: gnucash/gnome/assistant-loan.cpp:128
 msgid "Taxes"
@@ -1416,11 +1416,11 @@ msgstr "收付"
 
 #: gnucash/gnome/dialog-customer.c:920
 msgid "Shipping Contact"
-msgstr "送货联系人"
+msgstr "仓管"
 
 #: gnucash/gnome/dialog-customer.c:922 gnucash/gnome/dialog-vendor.c:716
 msgid "Billing Contact"
-msgstr "联系人"
+msgstr "姓名"
 
 #: gnucash/gnome/dialog-customer.c:924
 msgid "Customer ID"
@@ -2499,7 +2499,7 @@ msgstr "查找发票"
 #, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] "%d 份到期应付："
+msgstr[0] "%d 份到期应付"
 
 #: gnucash/gnome/dialog-invoice.c:3720
 msgid "Due Bills Reminder"
@@ -2511,7 +2511,7 @@ msgstr "应付到期提醒"
 #, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] "%d 份到期应收："
+msgstr[0] "%d 份到期应收"
 
 #: gnucash/gnome/dialog-invoice.c:3731
 msgid "Due Invoices Reminder"
@@ -2692,7 +2692,7 @@ msgstr "付款或退款金额有问题。"
 
 #: gnucash/gnome/dialog-payment.c:277
 msgid "You must select a transfer account from the account tree."
-msgstr "您必须自科目表选择转账科目。"
+msgstr "请选择转账科目。"
 
 #: gnucash/gnome/dialog-payment.c:288
 msgid ""
@@ -5536,7 +5536,7 @@ msgstr "不能作废已对账或已核实分录的交易。"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
 msgid "Filter %s by..."
-msgstr "筛选 %s..."
+msgstr "筛选 %s"
 
 #. Translators: This is a menu item that will open the bill, invoice, or voucher
 #. that is posted to the current transaction if there is one.
@@ -5670,7 +5670,7 @@ msgstr "新交易信息"
 #: gnucash/gnome/gnc-plugin-page-register.c:4180
 #, c-format
 msgid "Sort %s by..."
-msgstr "排序 %s..."
+msgstr "排序 %s"
 
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
@@ -6476,7 +6476,7 @@ msgstr "利息收费"
 #: gnucash/gtkbuilder/dialog-vendor.glade:660
 #: gnucash/gtkbuilder/dialog-vendor.glade:682
 msgid "Payment Information"
-msgstr "财务资料"
+msgstr "财务"
 
 #: gnucash/gnome/window-reconcile2.c:449 gnucash/gnome/window-reconcile.c:490
 #: gnucash/gtkbuilder/assistant-loan.glade:578
@@ -7290,7 +7290,7 @@ msgstr "证券(_S)"
 
 #: gnucash/gnome-utils/dialog-commodity.c:285
 msgid "Select currency"
-msgstr "选择货币"
+msgstr "选择币种"
 
 #: gnucash/gnome-utils/dialog-commodity.c:286
 #: gnucash/gtkbuilder/dialog-price.glade:161
@@ -8588,7 +8588,7 @@ msgstr "无法保存在数据库中：这本书是只读的。"
 #: gnucash/gnome-utils/gnc-main-window.c:4322
 #: gnucash/gtkbuilder/assistant-qif-import.glade:975
 msgid "Book Options"
-msgstr "账簿选项"
+msgstr "属性"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.c:4706
@@ -13014,7 +13014,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:108
 msgid "Choose Currency"
-msgstr "选择币种"
+msgstr "币种"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:123
 msgid ""
@@ -13061,7 +13061,7 @@ msgstr "科目树模板"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:522
 msgid "Choose accounts to create"
-msgstr "选择科目"
+msgstr "科目"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:537
 msgid ""
@@ -13092,7 +13092,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:575
 msgid "Setup selected accounts"
-msgstr "设置科目"
+msgstr "设置"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:585
 msgid ""
@@ -14858,11 +14858,11 @@ msgstr "财务"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:950
 msgid "Shipping Information"
-msgstr "送货"
+msgstr "仓库"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:969
 msgid "Shipping Address"
-msgstr "送货"
+msgstr "仓库"
 
 #. Title of dialog
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:9
@@ -17503,28 +17503,28 @@ msgstr "日期格式"
 #: gnucash/gtkbuilder/gnc-frequency.glade:434
 #: libgnucash/engine/Recurrence.c:667
 msgid "1st"
-msgstr "一天"
+msgstr "1 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:43
 #: gnucash/gtkbuilder/gnc-frequency.glade:211
 #: gnucash/gtkbuilder/gnc-frequency.glade:437
 #: libgnucash/engine/Recurrence.c:667
 msgid "2nd"
-msgstr "未端"
+msgstr "2 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:46
 #: gnucash/gtkbuilder/gnc-frequency.glade:214
 #: gnucash/gtkbuilder/gnc-frequency.glade:440
 #: libgnucash/engine/Recurrence.c:667
 msgid "3rd"
-msgstr "3天"
+msgstr "3 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:49
 #: gnucash/gtkbuilder/gnc-frequency.glade:217
 #: gnucash/gtkbuilder/gnc-frequency.glade:443
 #: libgnucash/engine/Recurrence.c:667
 msgid "4th"
-msgstr "四天"
+msgstr "4 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:52
 #: gnucash/gtkbuilder/gnc-frequency.glade:220
@@ -17626,19 +17626,19 @@ msgstr "20世纪"
 #: gnucash/gtkbuilder/gnc-frequency.glade:268
 #: gnucash/gtkbuilder/gnc-frequency.glade:494
 msgid "21st"
-msgstr "二十天"
+msgstr "21 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:103
 #: gnucash/gtkbuilder/gnc-frequency.glade:271
 #: gnucash/gtkbuilder/gnc-frequency.glade:497
 msgid "22nd"
-msgstr "第22个"
+msgstr "22 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:106
 #: gnucash/gtkbuilder/gnc-frequency.glade:274
 #: gnucash/gtkbuilder/gnc-frequency.glade:500
 msgid "23rd"
-msgstr "第23次"
+msgstr "23 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:109
 #: gnucash/gtkbuilder/gnc-frequency.glade:277
@@ -17686,7 +17686,7 @@ msgstr "30天"
 #: gnucash/gtkbuilder/gnc-frequency.glade:298
 #: gnucash/gtkbuilder/gnc-frequency.glade:524
 msgid "31st"
-msgstr "31."
+msgstr "31 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:133
 #: gnucash/gtkbuilder/gnc-frequency.glade:301
@@ -17767,15 +17767,15 @@ msgstr "下一个工作日"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:325
 msgid "1st Mon"
-msgstr "第一周一"
+msgstr "第一个星期一"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:328
 msgid "1st Tue"
-msgstr "星期二"
+msgstr "第一个星期二"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:331
 msgid "1st Wed"
-msgstr "星期三"
+msgstr "第一个星期三"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:334
 msgid "1st Thu"
@@ -17795,31 +17795,31 @@ msgstr "第一个星期天"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:346
 msgid "2nd Mon"
-msgstr "第二周一"
+msgstr "第二个星期一"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:349
 msgid "2nd Tue"
-msgstr "星期二第二"
+msgstr "第二个星期二"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:352
 msgid "2nd Wed"
-msgstr "第二周三"
+msgstr "第二个星期三"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:355
 msgid "2nd Thu"
-msgstr "第二周四"
+msgstr "第二个星期四"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:358
 msgid "2nd Fri"
-msgstr "第二周五"
+msgstr "第二个星期五"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:361
 msgid "2nd Sat"
-msgstr "第二周六"
+msgstr "第二个星期六"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:364
 msgid "2nd Sun"
-msgstr "第二周日"
+msgstr "第二个星期日"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:367
 msgid "3rd Mon"
@@ -17827,7 +17827,7 @@ msgstr "第三个星期一"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:370
 msgid "3rd Tue"
-msgstr "星期二第3"
+msgstr "第三个星期二"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:373
 msgid "3rd Wed"
@@ -17835,11 +17835,11 @@ msgstr "第三个星期三"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:376
 msgid "3rd Thu"
-msgstr "星期四星期四"
+msgstr "第三个星期四"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:379
 msgid "3rd Fri"
-msgstr "第3周五"
+msgstr "第三个星期五"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:382
 msgid "3rd Sat"
@@ -17958,7 +17958,7 @@ msgstr "首先于"
 #: gnucash/gtkbuilder/gnc-frequency.glade:1186
 #: gnucash/gtkbuilder/gnc-frequency.glade:1356
 msgid "except on weekends"
-msgstr "除了周末"
+msgstr "关于周末"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1153
 msgid "then on the"
@@ -17976,7 +17976,7 @@ msgstr "月。"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1323
 msgid "On the"
-msgstr "于"
+msgstr "在"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:15
 msgid "Edit budget for all periods"
@@ -18262,7 +18262,7 @@ msgstr "保存排序(_V)"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1054
 msgid "Save the sort order for this register."
-msgstr "保存此账簿的排序顺序。"
+msgstr "保存此科目的排列顺序。"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1070
 msgid "_Reverse Order"
@@ -18270,7 +18270,7 @@ msgstr "反向排序(_R)"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1074
 msgid "Sort in descending order."
-msgstr "按照降序排序。"
+msgstr "反方向排序。"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:12
 msgid "day(s)"
@@ -20384,7 +20384,7 @@ msgstr "从 CSV 文件导入汇率"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:139
 msgid "Shipping Name"
-msgstr "送货联系人"
+msgstr "姓名"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:140
 msgid "Shipping Address 1"
@@ -23050,34 +23050,26 @@ msgstr "使用 从 - 到"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
-#, fuzzy
-#| msgid "1st Est Tax Quarter"
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
-msgstr "第一税季"
+msgstr "第一税季（1月1日至3月31日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
-#, fuzzy
-#| msgid "2nd Est Tax Quarter"
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "第二税季"
+msgstr "第二税季（4月1日至6月30日）"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
-#, fuzzy
-#| msgid "3rd Est Tax Quarter"
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
-msgstr "第三税季"
+msgstr "第三税季（7月1日至9月30日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
-#, fuzzy
-#| msgid "4th Est Tax Quarter"
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
-msgstr "第四税季"
+msgstr "第四税季（10月1日至12月31日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
@@ -23086,34 +23078,26 @@ msgstr "去年"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
-#, fuzzy
-#| msgid "Last Yr 1st Est Tax Qtr"
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
-msgstr "去年第一税季"
+msgstr "去年第一税季（1月1日至3月31日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
-#, fuzzy
-#| msgid "Last Yr 2nd Est Tax Qtr"
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr "去年第二税季"
+msgstr "去年第二税季（4月1日至6月30日）"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
 #. tax-qtr-real-qtr-year variable above.
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
-#, fuzzy
-#| msgid "Last Yr 3rd Est Tax Qtr"
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr "去年第三税季"
+msgstr "去年第三税季（7月1日至9月30日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
-#, fuzzy
-#| msgid "Last Yr 4th Est Tax Qtr"
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
-msgstr "去年第四税季"
+msgstr "去年第四税季（10月1日至12月31日）"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:203
