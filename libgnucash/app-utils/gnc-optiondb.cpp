@@ -227,7 +227,7 @@ GncOptionDB::find_option(const std::string& section, const char* name) const
      * nullptr. GncOptionSection::find_option already checked if the alias
      * should have been in the same section.
      */
-    if (alias && alias->first)
+    if (alias && alias->first && section != alias->first)
         return find_option(alias->first, alias->second);
     return nullptr;
 }
