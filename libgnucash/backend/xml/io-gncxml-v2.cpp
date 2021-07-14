@@ -699,6 +699,7 @@ qof_session_load_from_xml_file_v2_full (
     QofBookFileType type)
 {
     Account* root;
+    Account* template_root;
     sixtp_gdv2* gd;
     sixtp* top_parser;
     sixtp* main_parser;
@@ -851,12 +852,18 @@ qof_session_load_from_xml_file_v2_full (
     /* commit all groups, this completes the BeginEdit started when the
      * account_end_handler finished reading the account.
      */
+    template_root = gnc_book_get_template_root (book);
     gnc_account_foreach_descendant (root,
                                     (AccountCb) xaccAccountCommitEdit,
                                     NULL);
-    gnc_account_foreach_descendant (gnc_book_get_template_root (book),
+    gnc_account_foreach_descendant (template_root,
                                     (AccountCb) xaccAccountCommitEdit,
                                     NULL);
+    /* if these exist in the XML file then they will be uncommitted */
+    if (qof_instance_get_editlevel(root) != 0)
+        xaccAccountCommitEdit(root);
+    if (qof_instance_get_editlevel(template_root) != 0)
+        xaccAccountCommitEdit(template_root);
 
     /* start logging again */
     xaccLogEnable ();

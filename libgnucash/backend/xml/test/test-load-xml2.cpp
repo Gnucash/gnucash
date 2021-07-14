@@ -108,6 +108,9 @@ test_load_file (const char* filename)
     do_test (gnc_account_get_book (root) == book,
              "book and root account don't match");
 
+    do_test (qof_instance_get_editlevel(root) == 0,
+             "root account editlevel is not 0");
+
     do_test_args (qof_session_get_error (session) == ERR_BACKEND_NO_ERR,
                   "session load xml2", __FILE__, __LINE__,
                   "qof error=%d for file [%s]",
