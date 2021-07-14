@@ -85,7 +85,6 @@ gnc_add_scheme_targets(scm-core-utils
     DEPENDS "${GUILE_DEPENDS}")
 
 set (engine_SCHEME_0
-    commodity-table.scm
     gnc-numeric.scm
     business-core.scm
 )

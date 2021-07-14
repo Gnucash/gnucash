@@ -28,7 +28,6 @@
 
 (load-and-reexport (sw_engine)
                    (gnucash engine business-core)
-                   (gnucash engine commodity-table)
                    (gnucash engine gnc-numeric))
 
 (export gnc-pricedb-lookup-latest-before-t64)
