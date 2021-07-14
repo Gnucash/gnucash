@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-13 15:32+0000\n"
+"PO-Revision-Date: 2021-07-14 09:32+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -1416,11 +1416,11 @@ msgstr "收付"
 
 #: gnucash/gnome/dialog-customer.c:920
 msgid "Shipping Contact"
-msgstr "仓管"
+msgstr "仓库名称"
 
 #: gnucash/gnome/dialog-customer.c:922 gnucash/gnome/dialog-vendor.c:716
 msgid "Billing Contact"
-msgstr "姓名"
+msgstr "联络名称"
 
 #: gnucash/gnome/dialog-customer.c:924
 msgid "Customer ID"
@@ -3254,7 +3254,7 @@ msgstr "收付"
 
 #: gnucash/gnome/dialog-vendor.c:718
 msgid "Vendor ID"
-msgstr "供应商编号"
+msgstr "编号"
 
 #: gnucash/gnome/dialog-vendor.c:753
 msgid "Find Vendor"
@@ -9928,7 +9928,7 @@ msgstr "GnuCash %s 开发版本"
 
 #: gnucash/gnucash-core-app.cpp:327
 msgid "Common Options"
-msgstr "账簿选项"
+msgstr "普通选项"
 
 #: gnucash/gnucash-core-app.cpp:330
 msgid "Show this help message"
@@ -15007,7 +15007,7 @@ msgstr "员工编号。如果保持空白则会为您选择一个合理的号码
 #: gnucash/gtkbuilder/dialog-employee.glade:422
 #: gnucash/gtkbuilder/dialog-vendor.glade:416
 msgid "Payment Address"
-msgstr "信息"
+msgstr "联络"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:456
 msgid "Language"
@@ -15828,7 +15828,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:254
 msgid "GnuCash Preferences"
-msgstr "GnuCash"
+msgstr "首选项"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:328
 msgid "<b>Summarybar Content</b>"
@@ -16146,7 +16146,7 @@ msgstr "选择，GnuCash 自动保存时需要确认，否则直接保存。"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1751
 #: gnucash/gtkbuilder/dialog-sx.glade:1234
 msgid "For"
-msgstr "范围"
+msgstr "延续"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1769
 #: gnucash/gtkbuilder/dialog-sx.glade:1202
@@ -17530,97 +17530,97 @@ msgstr "4 号"
 #: gnucash/gtkbuilder/gnc-frequency.glade:220
 #: gnucash/gtkbuilder/gnc-frequency.glade:446
 msgid "5th"
-msgstr "5天"
+msgstr "5 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:55
 #: gnucash/gtkbuilder/gnc-frequency.glade:223
 #: gnucash/gtkbuilder/gnc-frequency.glade:449
 msgid "6th"
-msgstr "6日"
+msgstr "6 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:58
 #: gnucash/gtkbuilder/gnc-frequency.glade:226
 #: gnucash/gtkbuilder/gnc-frequency.glade:452
 msgid "7th"
-msgstr "7日"
+msgstr "7 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:61
 #: gnucash/gtkbuilder/gnc-frequency.glade:229
 #: gnucash/gtkbuilder/gnc-frequency.glade:455
 msgid "8th"
-msgstr "8日"
+msgstr "8 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:64
 #: gnucash/gtkbuilder/gnc-frequency.glade:232
 #: gnucash/gtkbuilder/gnc-frequency.glade:458
 msgid "9th"
-msgstr "第9个"
+msgstr "9 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:67
 #: gnucash/gtkbuilder/gnc-frequency.glade:235
 #: gnucash/gtkbuilder/gnc-frequency.glade:461
 msgid "10th"
-msgstr "十分之一"
+msgstr "10 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:70
 #: gnucash/gtkbuilder/gnc-frequency.glade:238
 #: gnucash/gtkbuilder/gnc-frequency.glade:464
 msgid "11th"
-msgstr "11天"
+msgstr "11 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:73
 #: gnucash/gtkbuilder/gnc-frequency.glade:241
 #: gnucash/gtkbuilder/gnc-frequency.glade:467
 msgid "12th"
-msgstr "12."
+msgstr "12 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:76
 #: gnucash/gtkbuilder/gnc-frequency.glade:244
 #: gnucash/gtkbuilder/gnc-frequency.glade:470
 msgid "13th"
-msgstr "13日"
+msgstr "13 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:79
 #: gnucash/gtkbuilder/gnc-frequency.glade:247
 #: gnucash/gtkbuilder/gnc-frequency.glade:473
 msgid "14th"
-msgstr "14"
+msgstr "14 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:82
 #: gnucash/gtkbuilder/gnc-frequency.glade:250
 #: gnucash/gtkbuilder/gnc-frequency.glade:476
 msgid "15th"
-msgstr "15天"
+msgstr "15 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:85
 #: gnucash/gtkbuilder/gnc-frequency.glade:253
 #: gnucash/gtkbuilder/gnc-frequency.glade:479
 msgid "16th"
-msgstr "16天"
+msgstr "16 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:88
 #: gnucash/gtkbuilder/gnc-frequency.glade:256
 #: gnucash/gtkbuilder/gnc-frequency.glade:482
 msgid "17th"
-msgstr "17"
+msgstr "17 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:91
 #: gnucash/gtkbuilder/gnc-frequency.glade:259
 #: gnucash/gtkbuilder/gnc-frequency.glade:485
 msgid "18th"
-msgstr "18"
+msgstr "18 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:94
 #: gnucash/gtkbuilder/gnc-frequency.glade:262
 #: gnucash/gtkbuilder/gnc-frequency.glade:488
 msgid "19th"
-msgstr "一"
+msgstr "19 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:97
 #: gnucash/gtkbuilder/gnc-frequency.glade:265
 #: gnucash/gtkbuilder/gnc-frequency.glade:491
 msgid "20th"
-msgstr "20世纪"
+msgstr "20 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:100
 #: gnucash/gtkbuilder/gnc-frequency.glade:268
@@ -17644,43 +17644,43 @@ msgstr "23 号"
 #: gnucash/gtkbuilder/gnc-frequency.glade:277
 #: gnucash/gtkbuilder/gnc-frequency.glade:503
 msgid "24th"
-msgstr "24日"
+msgstr "24 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:112
 #: gnucash/gtkbuilder/gnc-frequency.glade:280
 #: gnucash/gtkbuilder/gnc-frequency.glade:506
 msgid "25th"
-msgstr "25天"
+msgstr "25 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:115
 #: gnucash/gtkbuilder/gnc-frequency.glade:283
 #: gnucash/gtkbuilder/gnc-frequency.glade:509
 msgid "26th"
-msgstr "26"
+msgstr "26 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:118
 #: gnucash/gtkbuilder/gnc-frequency.glade:286
 #: gnucash/gtkbuilder/gnc-frequency.glade:512
 msgid "27th"
-msgstr "27"
+msgstr "27 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:121
 #: gnucash/gtkbuilder/gnc-frequency.glade:289
 #: gnucash/gtkbuilder/gnc-frequency.glade:515
 msgid "28th"
-msgstr "第28天"
+msgstr "28 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:124
 #: gnucash/gtkbuilder/gnc-frequency.glade:292
 #: gnucash/gtkbuilder/gnc-frequency.glade:518
 msgid "29th"
-msgstr "在29."
+msgstr "29 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:127
 #: gnucash/gtkbuilder/gnc-frequency.glade:295
 #: gnucash/gtkbuilder/gnc-frequency.glade:521
 msgid "30th"
-msgstr "30天"
+msgstr "30 号"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:130
 #: gnucash/gtkbuilder/gnc-frequency.glade:298
@@ -20404,7 +20404,7 @@ msgstr "送货地址"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:144
 msgid "Shipping Phone"
-msgstr "送货联系人"
+msgstr "送货名称"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:145
 msgid "Shipping Fax"
