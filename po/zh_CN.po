@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-14 09:32+0000\n"
+"PO-Revision-Date: 2021-07-15 16:32+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -1185,7 +1185,7 @@ msgstr "天"
 #: gnucash/gtkbuilder/dialog-billterms.glade:368
 #: gnucash/gtkbuilder/dialog-billterms.glade:772
 msgid "Proximo"
-msgstr "下个月的"
+msgstr "次月"
 
 #: gnucash/gnome/dialog-billterms.c:537 gnucash/gnome/dialog-doclink.c:577
 #: gnucash/gnome/dialog-doclink.c:831 gnucash/gnome/dialog-doclink.c:875
@@ -1439,7 +1439,7 @@ msgstr "名称"
 
 #: gnucash/gnome/dialog-customer.c:933 gnucash/gnome/dialog-vendor.c:727
 msgid "Contact"
-msgstr "联系人"
+msgstr "联络名称"
 
 #: gnucash/gnome/dialog-customer.c:935 gnucash/gnome/dialog-invoice.c:3480
 #: gnucash/gnome/dialog-invoice.c:3634 gnucash/gnome/dialog-job.c:600
@@ -1693,9 +1693,9 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"双击“ID”，跳转到商业凭证。\n"
-"双击“文件名”，打开。\n"
-"双击“可用”，修改。"
+"双击“ID”，跳转。\n"
+"双击“凭证”，打开。\n"
+"双击“状态”，修改。"
 
 #: gnucash/gnome/dialog-doclink.c:1097
 msgid "Business Document Links"
@@ -2289,21 +2289,21 @@ msgstr "打开关联的凭证："
 
 #: gnucash/gnome/dialog-invoice.c:2632 gnucash/gnome/dialog-invoice.c:2857
 msgid "Bill Information"
-msgstr "账单信息"
+msgstr "信息"
 
 #: gnucash/gnome/dialog-invoice.c:2634 gnucash/gnome/dialog-invoice.c:2860
 #: gnucash/gnome/dialog-invoice.c:3430
 msgid "Bill ID"
-msgstr "账单编号"
+msgstr "编号"
 
 #: gnucash/gnome/dialog-invoice.c:2638 gnucash/gnome/dialog-invoice.c:2864
 msgid "Voucher Information"
-msgstr "报销信息"
+msgstr "信息"
 
 #: gnucash/gnome/dialog-invoice.c:2640 gnucash/gnome/dialog-invoice.c:2867
 #: gnucash/gnome/dialog-invoice.c:3464
 msgid "Voucher ID"
-msgstr "报销编号"
+msgstr "编号"
 
 #: gnucash/gnome/dialog-invoice.c:3197
 msgid "Date of duplicated entries"
@@ -2371,7 +2371,7 @@ msgstr "发票说明"
 #: gnucash/gtkbuilder/dialog-job.glade:217
 #: gnucash/report/reports/standard/invoice.scm:304
 msgid "Billing ID"
-msgstr "账单编号"
+msgstr "编号"
 
 #: gnucash/gnome/dialog-invoice.c:3377 gnucash/gnome/dialog-invoice.c:3411
 #: gnucash/gnome/dialog-invoice.c:3445
@@ -2503,7 +2503,7 @@ msgstr[0] "%d 份到期应付"
 
 #: gnucash/gnome/dialog-invoice.c:3720
 msgid "Due Bills Reminder"
-msgstr "应付到期提醒"
+msgstr "到期应付提醒"
 
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
@@ -2515,7 +2515,7 @@ msgstr[0] "%d 份到期应收"
 
 #: gnucash/gnome/dialog-invoice.c:3731
 msgid "Due Invoices Reminder"
-msgstr "应收到期提醒"
+msgstr "到期应收提醒"
 
 #: gnucash/gnome/dialog-job.c:139
 msgid "The Job must be given a name."
@@ -3771,19 +3771,19 @@ msgstr "查看并编辑帐期"
 
 #: gnucash/gnome/gnc-plugin-business.c:293
 msgid "Bills _Due Reminder"
-msgstr "应付到期提醒(_D)"
+msgstr "到期应付提醒(_D)"
 
 #: gnucash/gnome/gnc-plugin-business.c:294
 msgid "Open the Bills Due Reminder dialog"
-msgstr "打开应付到期提醒对话框"
+msgstr "打开到期应付提醒对话框"
 
 #: gnucash/gnome/gnc-plugin-business.c:298
 msgid "Invoices _Due Reminder"
-msgstr "应收到期提醒(_D)"
+msgstr "到期应收提醒(_D)"
 
 #: gnucash/gnome/gnc-plugin-business.c:299
 msgid "Open the Invoices Due Reminder dialog"
-msgstr "打开应收到期提醒对话框"
+msgstr "打开到期应收提醒对话框"
 
 #: gnucash/gnome/gnc-plugin-business.c:302
 msgid "E_xport"
@@ -3827,7 +3827,7 @@ msgstr "新建一个科目"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:203
 msgid "New Account _Hierarchy..."
-msgstr "新建层级科目(_H)..."
+msgstr "新建科目树(_H)..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:204
 msgid "Extend the current book by merging with new account type categories"
@@ -4399,7 +4399,7 @@ msgstr "公司报表(_C)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:247
 msgid "_Standard"
-msgstr "标准顺序(_S)"
+msgstr "标准(_S)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:247
 msgid "Keep normal invoice order"
@@ -4423,11 +4423,11 @@ msgstr "按日期排序"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:249
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:882
 msgid "Date of _Entry"
-msgstr "条目日期(_E)"
+msgstr "录入日期(_E)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:249
 msgid "Sort by the date of entry"
-msgstr "按条目的日期排序"
+msgstr "按录入日期排序"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:250
 msgid "_Quantity"
@@ -6092,16 +6092,16 @@ msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:679
 msgid "Standard Order"
-msgstr "标准顺序"
+msgstr "标准"
 
 #: gnucash/gnome/gnc-split-reg.c:685
 msgid "Date of Entry"
-msgstr "条目日期"
+msgstr "录入日期"
 
 #: gnucash/gnome/gnc-split-reg.c:688 gnucash/gnome/window-reconcile2.c:1784
 #: gnucash/gnome/window-reconcile.c:1977
 msgid "Statement Date"
-msgstr "日期"
+msgstr "声明日期"
 
 #: gnucash/gnome/gnc-split-reg.c:711 gnucash/report/reports/aging.scm:361
 #: gnucash/report/reports/standard/customer-summary.scm:129
@@ -10198,7 +10198,7 @@ msgstr "客户若有预付款，入账时直接抵扣。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:117
 msgid "Show invoices due reminder at startup"
-msgstr "启动时显示应收到期提醒"
+msgstr "启动时显示到期应收提醒"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:118
 msgid ""
@@ -10280,7 +10280,7 @@ msgstr "若在供应商有预付款，入账时亦直接抵扣。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:159
 msgid "Show bills due reminder at startup"
-msgstr "启动时显示应付到期提醒"
+msgstr "启动时显示到期应付提醒"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:160
 msgid ""
@@ -14980,7 +14980,7 @@ msgstr "凭证"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:703
 msgid "Available"
-msgstr "可用"
+msgstr "状态"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:718
 msgid "Relative"
@@ -15488,7 +15488,7 @@ msgstr "入账科目"
 #: gnucash/gtkbuilder/dialog-invoice.glade:231
 #: gnucash/gtkbuilder/dialog-invoice.glade:890
 msgid "Invoice Information"
-msgstr "发票信息"
+msgstr "信息"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:258
 msgid "(owner)"
@@ -15500,9 +15500,8 @@ msgstr "打开凭证"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:535
 #: gnucash/gtkbuilder/dialog-invoice.glade:1113
-#, fuzzy
 msgid "Default Chargeback Project"
-msgstr "默认退单方案"
+msgstr "供给客户"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:562
 msgid "Additional to Card"
@@ -17298,7 +17297,7 @@ msgstr "概览"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1420
 msgid "Template Transaction"
-msgstr "交易模板"
+msgstr "模板"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1454
 msgid "Since Last Run..."
@@ -18139,7 +18138,7 @@ msgstr "选择范围："
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:351
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:193
 msgid "Choo_se Date"
-msgstr "选择日期(_S)"
+msgstr "择日(_S)"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:544
@@ -18155,7 +18154,7 @@ msgstr "已核实(_L)"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:592
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:434
 msgid "_Voided"
-msgstr "无效的(_V)"
+msgstr "无效(_V)"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:608
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:450
@@ -18197,7 +18196,7 @@ msgstr "账簿排序按照..."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:834
 msgid "_Standard Order"
-msgstr "标准顺序(_S)"
+msgstr "标准(_S)"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:838
 msgid "Keep normal account order."
@@ -18209,7 +18208,7 @@ msgstr "按日期排序。"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:886
 msgid "Sort by the date of entry."
-msgstr "按交易事项的日期排序。"
+msgstr "按录入的日期排序。"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:901
 msgid "S_tatement Date"
@@ -18373,7 +18372,7 @@ msgstr "<b>信息</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:92
 msgid "Statement _Date"
-msgstr "日期(_D)"
+msgstr "声明日期(_D)"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:127
 msgid "Include _subaccounts"
@@ -23026,7 +23025,7 @@ msgstr "欢迎使用 GnuCash ~a！"
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:44
 #, scheme-format
 msgid "GnuCash ~a has lots of nice features. Here are a few."
-msgstr "GnuCash ~a 有许多优秀的功能。这里是其中一部分。"
+msgstr "GnuCash ~a 有很多不错的功能，下面是其中的一些。"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
@@ -27267,7 +27266,7 @@ msgstr "＆lt; /风格不能用于CSS。使用默认的CSS。"
 
 #: gnucash/report/stylesheets/css.scm:228
 msgid "CSS-based stylesheet (experimental)"
-msgstr "CSS 风格（测试）"
+msgstr "基于 CSS（测试）"
 
 #: gnucash/report/stylesheets/footer.scm:55
 #: gnucash/report/stylesheets/head-or-tail.scm:53
