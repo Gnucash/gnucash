@@ -497,17 +497,8 @@ xaccSchedXactionFree( SchedXaction *sx )
 
     delete_template_trans( sx );
 
-    /*
-     * xaccAccountDestroy removes the account from
-     * its group for us AFAICT.  If shutting down,
-     * the account is being deleted separately.
-     */
-
-    if (!qof_book_shutting_down(qof_instance_get_book(sx)))
-    {
-        xaccAccountBeginEdit(sx->template_acct);
-        xaccAccountDestroy(sx->template_acct);
-    }
+    xaccAccountBeginEdit( sx->template_acct );
+    xaccAccountDestroy( sx->template_acct );
 
     for ( l = sx->deferredList; l; l = l->next )
     {

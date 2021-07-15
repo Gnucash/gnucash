@@ -496,6 +496,8 @@ static void gncVendorFree (GncVendor *vendor)
     CACHE_REMOVE (vendor->notes);
     gncAddressBeginEdit (vendor->addr);
     gncAddressDestroy (vendor->addr);
+
+    gncJobFreeList (vendor->jobs);
     g_list_free (vendor->jobs);
     g_free (vendor->balance);
 

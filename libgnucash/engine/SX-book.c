@@ -124,9 +124,34 @@ sxtg_book_begin (QofBook *book)
     gnc_book_set_template_root (book, root);
 }
 
+
+static void
+destroy_child_template_accounts (Account *acc, gpointer data)
+{
+    /* only destroy accounts with no splits,
+       others will be destroyed with transactions */
+    if (xaccAccountGetSplitList(acc) == NULL)
+    {
+        xaccAccountBeginEdit (acc);
+        xaccAccountDestroy (acc);
+    }
+}
+
 static void
 sxtg_book_end (QofBook *book)
 {
+//    Account *tr_account = gnc_book_get_template_root (book);
+
+//    if (tr_account)
+//    {
+//        GList *tt_accounts = gnc_account_get_children (tr_account);
+
+//        if (tt_accounts)
+//        {
+//            g_list_foreach (tt_accounts, (GFunc)destroy_child_template_accounts, NULL);
+//            g_list_free (tt_accounts);
+//        }
+//    }
 //    gnc_book_set_template_root (book, NULL);
 }
 
@@ -180,7 +205,7 @@ static QofObject sxtg_object_def =
 {
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) GNC_ID_SXTG,
-    DI(.type_label        = ) "Scheduled Transaction Templates",
+    DI(.type_label        = ) "Scheduled Transaction Group",
     DI(.create            = ) NULL,
     DI(.book_begin        = ) sxtg_book_begin,
     DI(.book_end          = ) sxtg_book_end,
@@ -281,6 +306,7 @@ book_sxes_end(QofBook* book)
     sxes = qof_collection_get_data(col);
     if (sxes != NULL)
     {
+        g_list_free(sxes->sx_list);
         g_object_unref(sxes);
         qof_collection_set_data(col, NULL);
     }
