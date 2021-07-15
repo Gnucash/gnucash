@@ -703,7 +703,7 @@ startRecnWindow (GtkWidget *parent, Account *account,
         box = GTK_WIDGET (gtk_builder_get_object (builder, "ending_value_box"));
         gtk_box_pack_start (GTK_BOX (box), end_value, TRUE, TRUE, 0);
         label = GTK_WIDGET (gtk_builder_get_object (builder, "end_label"));
-        gtk_label_set_mnemonic_widget (GTK_LABEL (label), end_value);
+        gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(end_value), label);
 
         gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, &data);
 

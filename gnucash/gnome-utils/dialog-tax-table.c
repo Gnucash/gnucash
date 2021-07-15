@@ -334,7 +334,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 
     /* Fix mnemonics for generated target widgets */
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "value_label"));
-    gtk_label_set_mnemonic_widget (GTK_LABEL(widget), ntt->amount_entry);
+    gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(ntt->amount_entry), widget);
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "account_label"));
     gtk_label_set_mnemonic_widget (GTK_LABEL(widget), ntt->acct_tree);
 

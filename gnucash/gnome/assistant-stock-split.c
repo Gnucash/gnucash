@@ -630,7 +630,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         info->distribution_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "distribution_label"));
-        gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
+        gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(amount), label);
 
         amount = gnc_amount_edit_new ();
         gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (amount),
@@ -643,7 +643,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         info->price_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "price_label"));
-        gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
+        gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(amount), label);
 
         info->price_currency_edit = gnc_currency_edit_new();
         gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(info->price_currency_edit), gnc_default_currency());

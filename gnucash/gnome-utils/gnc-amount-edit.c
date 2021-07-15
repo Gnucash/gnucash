@@ -616,3 +616,12 @@ gnc_amount_edit_show_warning_symbol (GNCAmountEdit *gae, gboolean show)
 
     gae->show_warning_symbol = show;
 }
+
+void
+gnc_amount_edit_make_mnemonic_target (GNCAmountEdit *gae, GtkWidget *label)
+{
+    if (!gae)
+        return;
+
+    gtk_label_set_mnemonic_widget (GTK_LABEL(label), GTK_WIDGET(gae->entry));
+}

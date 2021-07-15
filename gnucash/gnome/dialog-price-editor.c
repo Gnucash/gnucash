@@ -539,7 +539,7 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
     gtk_widget_show (w);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "price_label"));
-    gtk_label_set_mnemonic_widget (GTK_LABEL(label), w);
+    gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(w), label);
 
     g_signal_connect (G_OBJECT (w), "changed",
                       G_CALLBACK (pedit_data_changed_cb), pedit_dialog);

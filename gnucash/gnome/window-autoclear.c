@@ -205,7 +205,7 @@ AutoClearWindow *
 autoClearWindow (GtkWidget *parent, Account *account)
 {
     GtkBox *box;
-    GtkLabel *label;
+    GtkWidget *label;
     GtkBuilder *builder;
     AutoClearWindow *data;
     char *title;
@@ -245,8 +245,8 @@ autoClearWindow (GtkWidget *parent, Account *account)
     box   = GTK_BOX(gtk_builder_get_object (builder, "end_value_box"));
     gtk_box_pack_start(box, GTK_WIDGET(data->end_value), TRUE, TRUE, 0);
 
-    label = GTK_LABEL(gtk_builder_get_object (builder, "end_label"));
-    gtk_label_set_mnemonic_widget(label, GTK_WIDGET(data->end_value));
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "end_label"));
+    gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(data->end_value), label);
 
     /* pre-fill with current balance */
     after = xaccAccountGetClearedBalance (data->account);
