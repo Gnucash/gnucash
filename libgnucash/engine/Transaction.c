@@ -1769,7 +1769,7 @@ xaccTransRollbackEdit (Transaction *trans)
             xaccSplitRollbackEdit(s);
             SWAP_STR(s->action, so->action);
             SWAP_STR(s->memo, so->memo);
-	    qof_instance_copy_kvp (QOF_INSTANCE (s), QOF_INSTANCE (so));
+            qof_instance_copy_kvp (QOF_INSTANCE (s), QOF_INSTANCE (so));
             s->reconciled = so->reconciled;
             s->amount = so->amount;
             s->value = so->value;
@@ -1778,7 +1778,6 @@ xaccTransRollbackEdit (Transaction *trans)
             //SET_GAINS_A_VDIRTY(s);
             s->date_reconciled = so->date_reconciled;
             qof_instance_mark_clean(QOF_INSTANCE(s));
-            xaccFreeSplit(so);
         }
         else
         {
@@ -1805,6 +1804,10 @@ xaccTransRollbackEdit (Transaction *trans)
         }
     }
     g_list_free(slist);
+
+    // orig->splits may still have duped splits so free them
+    for (node = orig->splits; node; node = node->next)
+        xaccFreeSplit(node->data);
     g_list_free(orig->splits);
     orig->splits = NULL;
 
