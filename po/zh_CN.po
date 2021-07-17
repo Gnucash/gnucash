@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-15 16:32+0000\n"
+"PO-Revision-Date: 2021-07-17 02:33+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -834,7 +834,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-hierarchy.c:1491
 msgid "Please choose the currency to use for new accounts."
-msgstr "请选择新账簿的币种。"
+msgstr "请选择新科目树的币种。"
 
 #: gnucash/gnome/assistant-hierarchy.c:1536
 #: gnucash/gnome/assistant-hierarchy.c:1555
@@ -1595,7 +1595,7 @@ msgstr "输入网址，如 http://www.gnucash.org："
 
 #: gnucash/gnome/dialog-doclink.c:256
 msgid "Existing Document Link is"
-msgstr "现有的凭证链接是"
+msgstr "现在关联的凭证是"
 
 #: gnucash/gnome/dialog-doclink.c:525 gnucash/gnome/dialog-doclink.c:570
 msgid "File Found"
@@ -1734,7 +1734,7 @@ msgstr "用户名"
 #: gnucash/gnome/dialog-employee.c:721 gnucash/gnome/dialog-invoice.c:3460
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:364
 msgid "Employee Name"
-msgstr "姓名"
+msgstr "联络名称"
 
 #: gnucash/gnome/dialog-employee.c:728
 #: gnucash/gtkbuilder/dialog-employee.glade:121
@@ -3918,11 +3918,11 @@ msgstr "查找一个科目"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:272
 msgid "_Renumber Subaccounts..."
-msgstr "为子科目重新编号(_R)..."
+msgstr "重新编码子科目(_R)..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:273
 msgid "Renumber the children of the selected account"
-msgstr "为选中的科目的子科目重新编号"
+msgstr "为选中科目的子科目重新编码"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:290
 #: gnucash/gnome/gnc-plugin-page-budget.c:194
@@ -4166,7 +4166,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
 msgid "The account %s will be deleted."
-msgstr "科目 %s 将被删除。"
+msgstr "将删除 %s，"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1737
 #, c-format
@@ -4186,7 +4186,7 @@ msgstr "将它的所有子科目转移到科目 %s 中。"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1759
 #, c-format
 msgid "Its subaccount will be deleted."
-msgstr "删除所有子科目。"
+msgstr "同时删除所有子科目，"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1763
 #, c-format
@@ -4200,7 +4200,7 @@ msgstr "所有子科目交易将被删除。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1776
 msgid "Are you sure you want to do this?"
-msgstr "您确定要执行此操作吗？"
+msgstr "确定？"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:147
 msgid "Open the selected account."
@@ -6064,12 +6064,12 @@ msgstr ""
 
 #: gnucash/gnome/gnc-split-reg2.c:937 gnucash/gnome/gnc-split-reg.c:2447
 msgid "This account register is read-only."
-msgstr "这个科目账簿是只读的。"
+msgstr "此科目是只读的。"
 
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2448
 #, c-format
 msgid "The '%s' account register is read-only."
-msgstr "这个'%s'科目账簿是只读的。"
+msgstr "'%s'科目只读"
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 msgid ""
@@ -7202,22 +7202,20 @@ msgstr "新建科目"
 msgid ""
 "Renumber the immediate sub-accounts of %s? This will replace the account "
 "code field of each child account with a newly generated code."
-msgstr ""
-"是否对 %s 的直接子科目重新编号？这将会用新产生的编号来替换每一个子科目中的科"
-"目代码字段。"
+msgstr "是否重新编码 %s 的子科目？以替换原有子科目编码。"
 
 #: gnucash/gnome-utils/dialog-account.c:2288
 #, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
-msgstr "将账户'%s'包括所有子账户的账户颜色设置为所选颜色"
+msgstr "将科目'%s'及其子科目颜色设为所选"
 
 #: gnucash/gnome-utils/dialog-account.c:2315
 #, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
-msgstr "为科目'%s'及其所有子科目设置占位符"
+msgstr "将科目'%s'及其子科目设为占位符"
 
 #: gnucash/gnome-utils/dialog-account.c:2329
 #, c-format
@@ -7751,9 +7749,8 @@ msgid "Don't _tell me again."
 msgstr "请勿再通知(_T)。"
 
 #: gnucash/gnome-utils/dialog-utils.c:769
-#, fuzzy
 msgid "Remember and don't ask me again this _session."
-msgstr "请记住，此类操作不再询问(_S)。"
+msgstr "请记住，不要再询问，暂存(_S)。"
 
 #: gnucash/gnome-utils/dialog-utils.c:770
 msgid "Don't tell me again this _session."
@@ -9527,7 +9524,7 @@ msgstr " 计划的 "
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2317
 #: gnucash/register/ledger-core/split-register-control.c:1526
 msgid "Save the changed transaction?"
-msgstr "保存更改后的交易？"
+msgstr "保存交易？"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2319
 msgid ""
@@ -12098,7 +12095,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:104
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:207
 msgid "Commit changes to a transaction"
-msgstr "提交更改的交易事项"
+msgstr "更改交易"
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:208
@@ -12991,18 +12988,15 @@ msgid ""
 "\n"
 "Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
-"这个助手将帮助你为你的资产（如投资、支票或储蓄账户）、负债（如贷款）以及你可"
-"能拥有的不同种类的收入和支出创建一套GnuCash账户。\n"
+"为资产（如投资、支票或储蓄）、负债（如贷款）及收入和支出创建一套 GnuCash 账簿。\n"
 "\n"
-"你可以在这里挑选一套看起来接近你需求的账户。在助理完成后，你将能够添加、重命"
-"名、修改和删除账户，在以后的任何时候。你还可以添加子账户，以及将账户（连同其"
-"子账户）从一个父账户移到另一个母账户。\n"
+"选择最接近需求的模板，完成后，可以随时添加、修改、转移或删除科目。\n"
 "\n"
-"如果您现在不想创建任何新账户，请点击 \"取消\"。"
+"若不想创建，请\"取消\"。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:39
 msgid "New Account Hierarchy Setup"
-msgstr "新建科目树"
+msgstr "新建"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:53
 msgid ""
@@ -13053,7 +13047,7 @@ msgid ""
 "The selection you make here is only the starting point for your personalized "
 "account hierarchy. Accounts can be added, renamed, moved, or deleted by hand "
 "later at any time."
-msgstr "此处仅为科目树的初始设置，后面随时可以添加，重命名，移动或删除科目。"
+msgstr "此处仅为科目树的初始设置，后面随时可以添加，重命名，移动或删除。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:507
 msgid "GnuCash Account Template Wiki"
@@ -13103,11 +13097,11 @@ msgid ""
 "\n"
 "Press 'Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"“应用”创建新账簿。\n"
+"“应用”创建新科目树。\n"
 "\n"
 "“后退”复查选项。\n"
 "\n"
-"“取消”关闭对话框且不创建任何账簿。"
+"“取消”关闭对话框且不创建任何科目树。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:594
 msgid "Finish Account Setup"
@@ -14092,19 +14086,19 @@ msgstr "提前天数(_D)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
 msgid "Cascade Account Values"
-msgstr "级联科目颜色"
+msgstr "递归科目属性"
 
 #: gnucash/gtkbuilder/dialog-account.glade:69
 msgid "Enable Cascading Account Color"
-msgstr "级联科目颜色"
+msgstr "颜色属性"
 
 #: gnucash/gtkbuilder/dialog-account.glade:104
 msgid "Enable Cascading Account Placeholder"
-msgstr "级联科目颜色"
+msgstr "占位符属性"
 
 #: gnucash/gtkbuilder/dialog-account.glade:129
 msgid "Enable Cascading Account Hidden"
-msgstr "网上银行科目名"
+msgstr "隐藏属性"
 
 #: gnucash/gtkbuilder/dialog-account.glade:151
 msgid "Enable the sections to Cascade"
@@ -14121,11 +14115,11 @@ msgstr "默认"
 msgid ""
 "If any account has an existing color it will not be replaced unless the "
 "following is ticked."
-msgstr "除非检查，否则具有配置颜色的帐户不会替换。"
+msgstr "勾选，以替换科目现有颜色。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:232
 msgid "Replace any existing account colors"
-msgstr "删除科目 %s"
+msgstr "替换颜色"
 
 #: gnucash/gtkbuilder/dialog-account.glade:364
 msgid "Delete Account"
@@ -14339,11 +14333,11 @@ msgstr "选择科目(_S)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1906
 msgid "Renumber sub-accounts"
-msgstr "重新编号子科目"
+msgstr "重新编码子科目"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1939
 msgid "_Renumber"
-msgstr "重新编号(_R)"
+msgstr "确认(_R)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1971
 msgid "Prefix"
@@ -14481,11 +14475,11 @@ msgstr "窗口 1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:72
 msgid "Due Days"
-msgstr "到期日数"
+msgstr "到期天数"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:85
 msgid "Discount Days"
-msgstr "折扣日数"
+msgstr "折扣天数"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:98
 #: gnucash/gtkbuilder/dialog-billterms.glade:236
@@ -14508,11 +14502,11 @@ msgstr "在入账日期之后支付此账单的日数。"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:210
 msgid "Due Day"
-msgstr "到期日数"
+msgstr "到期天数"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:223
 msgid "Discount Day"
-msgstr "折扣日数"
+msgstr "折扣天数"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:249
 msgid "Cutoff Day"
@@ -16329,7 +16323,7 @@ msgstr "打印"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2507
 msgid "'_Enter' moves to blank transaction"
-msgstr "“回车”等效空白(_E)"
+msgstr "“回车”等效\"空白\"(_E)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2513
 msgid ""
@@ -17058,9 +17052,7 @@ msgid ""
 "You have requested that the following warning dialogs not be presented. To "
 "re-enable any of these dialogs, select the check box next to the dialog, "
 "then click OK."
-msgstr ""
-"您要求下列对话框不会被显示。要重新启用这些对话框，选择对话框旁的复选框，然后"
-"点击“确定”。"
+msgstr "下列对话框不会显示，选择需重置的警告，应用。"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:120
 msgid "_Unselect All"
@@ -17068,15 +17060,15 @@ msgstr "取消全选(_U)"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:146
 msgid "No warnings to reset."
-msgstr "没有要重置的警告。"
+msgstr "没有需要重置的警告。"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:164
 msgid "Permanent Warnings"
-msgstr "常驻警告"
+msgstr "永久"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:205
 msgid "Temporary Warnings"
-msgstr "临时警告"
+msgstr "暂存"
 
 #: gnucash/gtkbuilder/dialog-search.glade:37
 msgid "_New item..."
@@ -17703,7 +17695,7 @@ msgstr "星期一"
 #: gnucash/gtkbuilder/gnc-frequency.glade:307
 #: gnucash/gtkbuilder/gnc-frequency.glade:533
 msgid "Last Tuesday"
-msgstr "星期二"
+msgstr "上个星期二"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:142
 #: gnucash/gtkbuilder/gnc-frequency.glade:310
@@ -17733,7 +17725,7 @@ msgstr "星期六"
 #: gnucash/gtkbuilder/gnc-frequency.glade:322
 #: gnucash/gtkbuilder/gnc-frequency.glade:548
 msgid "Last Sunday"
-msgstr "星期日"
+msgstr "上个星期天"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:168
 #: gnucash/gtkbuilder/gnc-frequency.glade:691
@@ -17818,7 +17810,7 @@ msgstr "第二个星期六"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:364
 msgid "2nd Sun"
-msgstr "第二个星期日"
+msgstr "第二个星期天"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:367
 msgid "3rd Mon"
@@ -17850,11 +17842,11 @@ msgstr "第三个星期天"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:388
 msgid "4th Mon"
-msgstr "第四周一"
+msgstr "第四个星期一"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:391
 msgid "4th Tue"
-msgstr "星期二"
+msgstr "第四个星期二"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:394
 msgid "4th Wed"
@@ -17862,7 +17854,7 @@ msgstr "第四个星期三"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:397
 msgid "4th Thu"
-msgstr "第四周四"
+msgstr "第四个星期四"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:400
 msgid "4th Fri"
@@ -17870,7 +17862,7 @@ msgstr "第四个星期五"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:403
 msgid "4th Sat"
-msgstr "星期六"
+msgstr "第四个星期六"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:406
 msgid "4th Sun"
@@ -17927,7 +17919,7 @@ msgstr "星期四"
 #: gnucash/gtkbuilder/gnc-frequency.glade:911
 #: gnucash/report/reports/example/daily-reports.scm:174
 msgid "Sunday"
-msgstr "星期日"
+msgstr "星期天"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:926
 #: gnucash/report/reports/example/daily-reports.scm:174
@@ -19249,7 +19241,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:348
 msgid "No jobs to be sent."
-msgstr "没有需要解决的冲突。"
+msgstr "没有需要发送的项目。"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:354
 #, c-format
@@ -21561,7 +21553,7 @@ msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
 "to the changed transaction?"
-msgstr "当前交易已更改，新交易前，保存更改、取消操作、放弃更改？"
+msgstr "当前交易已更改，保存更改、取消操作、放弃更改？"
 
 #. Translators: The 'sample:' items are
 #. strings which are not displayed, but only
