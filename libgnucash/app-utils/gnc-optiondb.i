@@ -41,7 +41,6 @@ namespace std {
 %typemap(in) std::size_t "$1 = scm_to_ulong($input);";
 %typemap(out) std::size_t "$result = scm_from_ulong($1);";
 
- //%module sw_gnc_optiondb
 %{
 #include "gnc-optiondb.h"
 #include "gnc-optiondb.hpp"
@@ -53,6 +52,13 @@ SCM scm_init_sw_gnc_optiondb_module(void);
 
 %include <std_string.i>
 %import <base-typemaps.i>
+%import (module="sw_engine") <gnc-budget.h>
+%import (module="sw_engine") <gncCustomer.h>
+%import (module="sw_engine") <gncEmployee.h>
+%import (module="sw_engine") <gncVendor.h>
+%import (module="sw_engine") <gncTaxTable.h>
+%import (module="sw_engine") <gncInvoice.h>
+%import (module="sw_engine") <gncJob.h>
 
  /* Implementation Note: Plain overloads failed to compile because
   *    auto value{option.get_value()};
@@ -134,18 +140,6 @@ scm_from_value<SCM>(SCM value)
 }
 
 template <> inline SCM
-scm_from_value<QofQuery*>(QofQuery* value)
-{
-        return SCM_BOOL_F;
-}
-
-template <> inline SCM
-scm_from_value<QofInstance*>(QofInstance* value)
-{
-        return SCM_BOOL_F;
-}
-
-template <> inline SCM
 scm_from_value<std::string>(std::string value)
 {
     return scm_from_utf8_string(value.c_str());
@@ -188,11 +182,11 @@ scm_from_value<const QofInstance*>(const QofInstance* value)
     else if (GNC_IS_ACCOUNT(value))
         type = SWIGTYPE_p_Account;
     else if (GNC_IS_BUDGET(value))
-        type = SWIGTYPE_p_GncBudget;
+        type = SWIGTYPE_p_budget_s;
     else if (GNC_IS_INVOICE(value))
-        type = SWIGTYPE_p_GncInvoice;
+        type = SWIGTYPE_p__gncInvoice;
     else if (GNC_IS_TAXTABLE(value))
-        type = SWIGTYPE_p_GncTaxTable;
+        type = SWIGTYPE_p__gncTaxTable;
     else if (GNC_IS_CUSTOMER(value))
         type = SWIGTYPE_p__gncCustomer;
     else if (GNC_IS_EMPLOYEE(value))
@@ -213,6 +207,18 @@ scm_from_value<const QofQuery*>(const QofQuery* value)
 {
     auto ptr{static_cast<void*>(const_cast<QofQuery*>(value))};
     return SWIG_NewPointerObj(ptr, SWIGTYPE_p__QofQuery, FALSE);
+}
+
+template <> inline SCM
+scm_from_value<QofQuery*>(QofQuery* value)
+{
+    return scm_from_value<const QofQuery*>(value);
+}
+
+template <> inline SCM
+scm_from_value<QofInstance*>(QofInstance* value)
+{
+    return scm_from_value<const QofInstance*>(value);
 }
 
 template <typename ValueType> inline ValueType
@@ -261,11 +267,13 @@ scm_to_value<const QofInstance*>(SCM new_value)
 {
     if (new_value == SCM_BOOL_F)
         return nullptr;
+    
+    auto info = SWIG_PointerType(new_value);
 
     static const std::array<swig_type_info*, 10> types{
             SWIGTYPE_p_QofInstance_s, SWIGTYPE_p_gnc_commodity,
-            SWIGTYPE_p_GncBudget, SWIGTYPE_p_GncInvoice,
-            SWIGTYPE_p_GncTaxTable, SWIGTYPE_p_Account,
+            SWIGTYPE_p_budget_s, SWIGTYPE_p__gncInvoice,
+            SWIGTYPE_p__gncTaxTable, SWIGTYPE_p_Account,
             SWIGTYPE_p__gncCustomer, SWIGTYPE_p__gncEmployee,
             SWIGTYPE_p__gncJob, SWIGTYPE_p__gncVendor
                 };
