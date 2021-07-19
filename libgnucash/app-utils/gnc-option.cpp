@@ -40,8 +40,9 @@ template <typename ValueType,
 GncOption::GncOption(const char* section, const char* name,
                      const char* key, const char* doc_string,
                      ValueType value, GncOptionUIType ui_type) :
-    m_option{std::make_unique<GncOptionVariant>(GncOptionValue<ValueType> {
-            section, name, key, doc_string, value, ui_type})}
+    m_option{std::make_unique<GncOptionVariant>(
+            std::in_place_type<GncOptionValue<ValueType>>,
+            section, name, key, doc_string, value, ui_type)}
 {
 }
 
