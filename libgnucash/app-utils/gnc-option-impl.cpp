@@ -268,3 +268,105 @@ qof_instance_to_string(const QofInstance* inst)
     gnc::GUID guid{*qof_instance_get_guid(inst)};
     return guid.to_string();
 }
+
+template <typename ValueType> void
+GncOptionValue<ValueType>::set_value(ValueType new_value)
+{
+    m_value = new_value;
+}
+
+template <typename ValueType> void
+GncOptionValue<ValueType>::set_default_value(ValueType new_value)
+{
+    m_value = m_default_value = new_value;
+}
+
+template <typename ValueType> void
+GncOptionValue<ValueType>::reset_default_value()
+{
+    m_value = m_default_value;
+}
+
+template <> void
+GncOptionValue<SCM>::set_value(SCM new_value)
+{
+    if (m_value)
+        scm_gc_unprotect_object(m_value);
+    m_value = new_value;
+    scm_gc_protect_object(m_value);
+}
+
+template <> void
+GncOptionValue<SCM>::set_default_value(SCM new_value)
+{
+    if (m_value)
+        scm_gc_unprotect_object(m_value);
+    if (m_default_value)
+        scm_gc_unprotect_object(m_default_value);
+    m_value = m_default_value = new_value;
+    scm_gc_protect_object(m_value);
+    scm_gc_protect_object(m_default_value);
+}
+
+template <> void
+GncOptionValue<SCM>::reset_default_value()
+{
+    if (m_value)
+        scm_gc_unprotect_object(m_value);
+    m_value = m_default_value;
+    scm_gc_protect_object(m_value);
+}
+
+template GncOptionValue<bool>::GncOptionValue(const GncOptionValue<bool>&);
+template GncOptionValue<int>::GncOptionValue(const GncOptionValue<int>&);
+template GncOptionValue<int64_t>::GncOptionValue(const GncOptionValue<int64_t>&);
+template GncOptionValue<double>::GncOptionValue(const GncOptionValue<double>&);
+template GncOptionValue<char*>::GncOptionValue(const GncOptionValue<char*>&);
+template GncOptionValue<const char*>::GncOptionValue(const GncOptionValue<const char*>&);
+template GncOptionValue<std::string>::GncOptionValue(const GncOptionValue<std::string>&);
+template GncOptionValue<const QofInstance*>::GncOptionValue(const GncOptionValue<const QofInstance*>&);
+template GncOptionValue<const QofQuery*>::GncOptionValue(const GncOptionValue<const QofQuery*>&);
+template GncOptionValue<RelativeDatePeriod>::GncOptionValue(const GncOptionValue<RelativeDatePeriod>&);
+template GncOptionValue<size_t>::GncOptionValue(const GncOptionValue<size_t>&);
+template GncOptionValue<GncOptionAccountList>::GncOptionValue(const GncOptionValue<GncOptionAccountList>&);
+template GncOptionValue<GncMultichoiceOptionIndexVec>::GncOptionValue(const GncOptionValue<GncMultichoiceOptionIndexVec>&);
+template GncOptionValue<SCM>::GncOptionValue(const GncOptionValue<SCM>&);
+template void GncOptionValue<bool>::set_value(bool);
+template void GncOptionValue<int>::set_value(int);
+template void GncOptionValue<int64_t>::set_value(int64_t);
+template void GncOptionValue<double>::set_value(double);
+template void GncOptionValue<char*>::set_value(char*);
+template void GncOptionValue<const char*>::set_value(const char*);
+template void GncOptionValue<std::string>::set_value(std::string);
+template void GncOptionValue<const QofInstance*>::set_value(const QofInstance*);
+template void GncOptionValue<const QofQuery*>::set_value(const QofQuery*);
+template void GncOptionValue<RelativeDatePeriod>::set_value(RelativeDatePeriod);
+template void GncOptionValue<size_t>::set_value(size_t);
+template void GncOptionValue<GncOptionAccountList>::set_value(GncOptionAccountList);
+template void GncOptionValue<GncMultichoiceOptionIndexVec>::set_value(GncMultichoiceOptionIndexVec);
+template void GncOptionValue<bool>::set_default_value(bool);
+template void GncOptionValue<int>::set_default_value(int);
+template void GncOptionValue<int64_t>::set_default_value(int64_t);
+template void GncOptionValue<double>::set_default_value(double);
+template void GncOptionValue<char*>::set_default_value(char*);
+template void GncOptionValue<const char*>::set_default_value(const char*);
+template void GncOptionValue<std::string>::set_default_value(std::string);
+template void GncOptionValue<const QofInstance*>::set_default_value(const QofInstance*);
+template void GncOptionValue<const QofQuery*>::set_default_value(const QofQuery*);
+template void GncOptionValue<RelativeDatePeriod>::set_default_value(RelativeDatePeriod);
+template void GncOptionValue<size_t>::set_default_value(size_t);
+template void GncOptionValue<GncOptionAccountList>::set_default_value(GncOptionAccountList);
+template void GncOptionValue<GncMultichoiceOptionIndexVec>::set_default_value(GncMultichoiceOptionIndexVec);
+template void GncOptionValue<bool>::reset_default_value();
+template void GncOptionValue<int>::reset_default_value();
+template void GncOptionValue<int64_t>::reset_default_value();
+template void GncOptionValue<double>::reset_default_value();
+template void GncOptionValue<char*>::reset_default_value();
+template void GncOptionValue<const char*>::reset_default_value();
+template void GncOptionValue<std::string>::reset_default_value();
+template void GncOptionValue<const QofInstance*>::reset_default_value();
+template void GncOptionValue<const QofQuery*>::reset_default_value();
+template void GncOptionValue<RelativeDatePeriod>::reset_default_value();
+template void GncOptionValue<size_t>::reset_default_value();
+template void GncOptionValue<GncOptionAccountList>::reset_default_value();
+template void GncOptionValue<GncMultichoiceOptionIndexVec>::reset_default_value();
