@@ -159,7 +159,10 @@
   (gnc-make-string-option section name key docstring color-str (GncOptionUIType-COLOR))))
 (define-public (gnc:make-budget-option section name key docstring)
   (issue-deprecation-warning "gnc:make-budget-option is deprecated. Make and register the option in one command with gnc-register-color-option.")
-  (gnc-make-qofinstance-option section name key docstring #f (GncOptionUIType-BUDGET)))
+  (let ((option (gnc-make-qofinstance-option section name key docstring #f (GncOptionUIType-BUDGET))))
+    (gnc:option-set-value option
+                          (gnc-budget-get-default (gnc-get-current-book)))
+    option))
 (define-public (gnc:make-commodity-option section name key docstring default)
   (issue-deprecation-warning "gnc:make-commodity-option is deprecated. Make and register the option in one command with gnc-register-commodity-option.")
   (gnc-make-commodity-option section name key docstring default))
