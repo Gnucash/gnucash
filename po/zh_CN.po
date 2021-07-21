@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-18 08:32+0000\n"
+"PO-Revision-Date: 2021-07-20 16:33+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -17697,7 +17697,7 @@ msgstr "上周二"
 #: gnucash/gtkbuilder/gnc-frequency.glade:310
 #: gnucash/gtkbuilder/gnc-frequency.glade:536
 msgid "Last Wednesday"
-msgstr "星期三"
+msgstr "上周三"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:145
 #: gnucash/gtkbuilder/gnc-frequency.glade:313
