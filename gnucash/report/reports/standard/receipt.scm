@@ -41,7 +41,6 @@
 (define generalpage  gnc:pagename-general)
 ; option names
 (define optname-report-title   (N_ "Report title"))
-(define optname-invoice-number (N_ "Invoice number"))
 (define optname-template-file  (N_ "Template file"))
 (define optname-css-file       (N_ "CSS stylesheet file"))
 (define optname-heading-font   (N_ "Heading font"))
@@ -73,7 +72,7 @@
 
   (add-option
     (gnc:make-invoice-option ; defined in gnucash/scm/business-options.scm
-      generalpage optname-invoice-number
+      generalpage gnc:optname-invoice-number
       "a" "" (lambda () '()) #f))
 
   ;; Display options
@@ -164,7 +163,7 @@
 
   ; Get all the options
   (let* ((document                  (gnc:make-html-document))
-         (opt-invoice               (opt-value generalpage  optname-invoice-number))
+         (opt-invoice               (opt-value generalpage gnc:optname-invoice-number))
          (opt-template-file         (find-template
                                       (opt-value displaypage optname-template-file)))
          (opt-css-file              (find-stylesheet
