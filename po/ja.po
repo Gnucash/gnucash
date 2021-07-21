@@ -20,10 +20,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 4.0\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-06-20 03:13+0000\n"
+"PO-Revision-Date: 2021-07-21 02:34+0000\n"
 "Last-Translator: TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -1797,7 +1797,7 @@ msgstr "従業員ID"
 
 #: gnucash/gnome/dialog-employee.c:719
 msgid "Employee Username"
-msgstr "従業員ユーザ名"
+msgstr "従業員ユーザー名"
 
 #: gnucash/gnome/dialog-employee.c:721 gnucash/gnome/dialog-invoice.c:3460
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:364
@@ -1808,7 +1808,7 @@ msgstr "従業員名"
 #: gnucash/gtkbuilder/dialog-employee.glade:121
 #: gnucash/gtkbuilder/dialog-file-access.glade:196
 msgid "Username"
-msgstr "ユーザ名"
+msgstr "ユーザー名"
 
 #: gnucash/gnome/dialog-employee.c:732 gnucash/gnome/dialog-sx-editor2.c:1754
 #: gnucash/gnome/dialog-sx-editor.c:1816 gnucash/gnome/dialog-tax-info.c:1201
@@ -3227,7 +3227,7 @@ msgstr "作成予定"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:404
 msgid "Reminder"
-msgstr "リマインダ"
+msgstr "通知"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:405
 #: gnucash/gnome/gnc-plugin-budget.c:168
@@ -5854,7 +5854,7 @@ msgstr "設定を別名保存..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1144
 msgid "Make Pdf"
-msgstr ""
+msgstr "PDFにエクスポート"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1196
 #, c-format
@@ -8127,7 +8127,7 @@ msgstr "URL %s の解析ができません"
 #: gnucash/gnome-utils/gnc-file.c:295
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
-msgstr "%s に接続できません。ホスト名、ユーザ名、またはパスワードが違います。"
+msgstr "%s に接続できません。ホスト名、ユーザー名、またはパスワードが違います。"
 
 #: gnucash/gnome-utils/gnc-file.c:301
 #, c-format
@@ -8155,9 +8155,8 @@ msgid ""
 "another user, in which case you should not open the database. Do you want to "
 "proceed with opening the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユーザ"
-"に使用されている可能性があり、その場合、データベースを開くべきではありませ"
-"ん。このままデータベースを開きますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別のユーザーに使用されている可能性があり、その場合、データベースを開くべきで"
+"はありません。このままデータベースを開きますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:336
 #, c-format
@@ -8166,9 +8165,8 @@ msgid ""
 "another user, in which case you should not import the database. Do you want "
 "to proceed with importing the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユーザ"
-"に使用されている可能性があり、その場合、データベースをインポートするべきでは"
-"ありません。このままデータベースをインポートしますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別のユーザーに使用されている可能性があり、その場合、データベースをインポート"
+"するべきではありません。このままデータベースをインポートしますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:344
 #, c-format
@@ -8177,9 +8175,8 @@ msgid ""
 "another user, in which case you should not save the database. Do you want to "
 "proceed with saving the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユーザ"
-"に使用されている可能性があり、その場合、データベースを保存するべきではありま"
-"せん。このままデータベースを保存しますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別のユーザーに使用されている可能性があり、その場合、データベースを保存するべ"
+"きではありません。このままデータベースを保存しますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:352
 #, c-format
@@ -8188,9 +8185,8 @@ msgid ""
 "another user, in which case you should not export the database. Do you want "
 "to proceed with exporting the database?"
 msgstr ""
-"GnuCashは %s をロックすることができませんでした。このデータベースは別のユーザ"
-"に使用されている可能性があり、その場合、データベースをエクスポートするべきで"
-"はありません。このままデータベースをエクスポートしますか?"
+"GnuCashは %s をロックすることができませんでした。このデータベースは別のユーザーに使用されている可能性があり、その場合、データベースをエクスポー"
+"トするべきではありません。このままデータベースをエクスポートしますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:377
 #, c-format
@@ -8322,9 +8318,8 @@ msgid ""
 "performed until they logoff. If there are currently no other users, consult "
 "the documentation to learn how to clear out dangling login sessions."
 msgstr ""
-"SQL データベースが他のユーザに利用されており、彼らがログオフするまで更新は実"
-"行できません。もし現在他にユーザがいないとすれば、邪魔なログインセッションの"
-"消去方法についてドキュメントを調べてください。"
+"SQL データベースが他のユーザーに利用されており、彼らがログオフするまで更新は実行できません。もし現在他にユーザーがいないとすれば、邪魔なログインセッシ"
+"ョンの消去方法についてドキュメントを調べてください。"
 
 #: gnucash/gnome-utils/gnc-file.c:515
 msgid ""
@@ -8394,9 +8389,7 @@ msgstr "GnuCash は %s をロックすることができませんでした。"
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
-msgstr ""
-"このデータベースは別のユーザに使用されている可能性があり、その場合は、データ"
-"ベースを開くべきではありません。どうしますか?"
+msgstr "このデータベースは別のユーザーに使用されている可能性があり、その場合は、データベースを開くべきではありません。どうしますか?"
 
 #: gnucash/gnome-utils/gnc-file.c:827
 msgid ""
@@ -11312,8 +11305,7 @@ msgid ""
 "that time, the changes will be saved automatically and the question window "
 "closed."
 msgstr ""
-"選択した場合、ファイルを閉じる時に保存するかの質問は回答を制限した秒数までし"
-"か待ちません。利用者がこの時間内に回答をしないと、変更は自動的に保存され、質"
+"選択した場合、ファイルを閉じる時に保存するかの質問は回答を制限した秒数までしか待ちません。ユーザーがこの時間内に回答をしないと、変更は自動的に保存され、質"
 "問のウィンドウは閉じられます。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:50
@@ -15214,7 +15206,7 @@ msgstr "証券/通貨を選択 "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
-msgstr "ここでユーザ情報を選択してください..."
+msgstr "ここでユーザー情報を選択してください..."
 
 #: gnucash/gtkbuilder/dialog-customer.glade:185
 msgid ""
@@ -16845,9 +16837,7 @@ msgstr "自動クレジットカード支払(_P)"
 msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
-msgstr ""
-"クレジットカード明細の照合の後で、ユーザがクレジットカード支払を入力するよう"
-"促します。"
+msgstr "クレジットカード明細の照合の後で、ユーザーがクレジットカード支払を入力するよう促します。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2620
 msgid "Always reconcile to t_oday"
@@ -17311,7 +17301,7 @@ msgstr "古い項目を除去(_O)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:895
 msgid "Remove prices older than a user-entered date."
-msgstr "ユーザが入力した日付より古い価格を削除します。"
+msgstr "ユーザーが入力した日付より古い価格を削除します。"
 
 #: gnucash/gtkbuilder/dialog-price.glade:907
 msgid "_Get Quotes"
@@ -17936,15 +17926,15 @@ msgstr "相場を取得(_F)"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:7
 msgid "Username and Password"
-msgstr "ユーザ名とパスワード"
+msgstr "ユーザー名とパスワード"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:63
 msgid "Enter your username and password"
-msgstr "ユーザ名とパスワードを入力してください"
+msgstr "ユーザー名とパスワードを入力してください"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:84
 msgid "_Username"
-msgstr "ユーザ名(_U)"
+msgstr "ユーザー名(_U)"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:99
 #: gnucash/import-export/aqb/dialog-ab.glade:787
@@ -24742,11 +24732,11 @@ msgstr "欠損金"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:514
 msgid "Trading Gains"
-msgstr "交易利得"
+msgstr "通貨取引利得"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:515
 msgid "Trading Losses"
-msgstr "交易損失"
+msgstr "通貨取引損失"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:519
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1087
@@ -25591,7 +25581,7 @@ msgstr "キャッシュフロー棒グラフ"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
 msgid "Include Trading Accounts in report"
-msgstr "投機勘定科目を帳票に含める"
+msgstr "通貨取引勘定科目を帳票に含める"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:48
 msgid "Show Money In"
@@ -25612,7 +25602,7 @@ msgstr "表を表示する"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:100
 #: gnucash/report/reports/standard/cash-flow.scm:102
 msgid "Include transfers to and from Trading Accounts in the report."
-msgstr "投機勘定科目との間の資金移動を帳票に含めます。"
+msgstr "通貨取引勘定科目との間の資金移動を帳票に含めます。"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:107
 msgid "Show money in?"
@@ -26271,29 +26261,29 @@ msgstr "税金のクラス"
 
 #: gnucash/report/reports/standard/income-statement.scm:94
 msgid "Label the trading accounts section"
-msgstr "投機勘定科目の部にラベルをつける"
+msgstr "通貨取引勘定科目の部にラベルをつける"
 
 #: gnucash/report/reports/standard/income-statement.scm:96
 msgid "Whether or not to include a label for the trading accounts section."
-msgstr "投機勘定科目の部のラベルを含めるかどうかを指定します。"
+msgstr "通貨取引勘定科目の部のラベルを含めるかどうかを指定します。"
 
 #: gnucash/report/reports/standard/income-statement.scm:97
 msgid "Include trading accounts total"
-msgstr "投機勘定科目の部合計を含める"
+msgstr "通貨取引勘定科目の部合計を含める"
 
 #: gnucash/report/reports/standard/income-statement.scm:99
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance."
-msgstr "投機勘定科目の部合計を表す行を含めるかどうかを指定します。"
+msgstr "通貨取引勘定科目の部合計を表す行を含めるかどうかを指定します。"
 
 #: gnucash/report/reports/standard/income-statement.scm:517
 #: libgnucash/engine/Account.cpp:4427 libgnucash/engine/Scrub.c:486
 msgid "Trading"
-msgstr "投機"
+msgstr "通貨取引"
 
 #: gnucash/report/reports/standard/income-statement.scm:520
 msgid "Total Trading"
-msgstr "投機の部合計"
+msgstr "通貨取引の部合計"
 
 #: gnucash/report/reports/standard/income-statement.scm:571
 #: gnucash/report/reports/standard/trial-balance.scm:567
@@ -27867,11 +27857,11 @@ msgstr "純資産勘定科目"
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:182
 #: gnucash/report/report-utilities.scm:213
 msgid "Trading Accounts"
-msgstr "投機勘定科目"
+msgstr "通貨取引勘定科目"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:241
 msgid "Total Equity, Trading, and Liabilities"
-msgstr "合計純資産、投機、および負債"
+msgstr "合計純資産、通貨取引、および負債"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:250
 msgid "Imbalance Amount"
@@ -29061,9 +29051,7 @@ msgstr ""
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
-msgstr ""
-"2 種類以上の通貨・商品を含む取引のためには投機勘定科目を使用する必要がありま"
-"す。その場合に選択してください。"
+msgstr "2 種類以上の通貨・商品を含む取引のためには通貨取引勘定科目を使用する必要があります。その場合に選択してください。"
 
 #: libgnucash/app-utils/business-prefs.scm:167
 msgid "Budget to be used when none has been otherwise specified."
@@ -29614,7 +29602,7 @@ msgstr "実現損益"
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
-msgstr "どこにも記録されていない商品勘定科目または投機勘定科目からの実現損益。"
+msgstr "どこにも記録されていない商品勘定科目または通貨取引勘定科目からの実現損益。"
 
 #: libgnucash/engine/gnc-commodity.h:118
 msgid "All non-currency"
@@ -29723,7 +29711,7 @@ msgstr "手動でロットを選択します。"
 
 #: libgnucash/engine/qofbookslots.h:66
 msgid "Use Trading Accounts"
-msgstr "投機勘定科目を使用"
+msgstr "通貨取引勘定科目を使用"
 
 #: libgnucash/engine/qofbookslots.h:67
 #, fuzzy
