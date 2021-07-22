@@ -1836,6 +1836,7 @@ the option '~a'."))
       ("Invoice number" #f "Invoice Number")
       ;; receipt.scm and taxinvoice.scm, renamed July 2021
       ("Report title" #f "Report Title")
+      ("Extra notes" #f "Extra Notes")
       ;; income-gst-statement.scm
       ("default format" #f "Default Format")
       ("Report format" #f "Report Format")

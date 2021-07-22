@@ -61,7 +61,7 @@
 (define optname-subtotal       (N_ "Sub-total"))
 (define optname-amount-due     (N_ "Amount Due"))
 (define optname-payment-recd   (N_ "Payment received text"))
-(define optname-extra-notes    (N_ "Extra notes"))
+(define optname-extra-notes    (N_ "Extra Notes"))
 (define optname-date-format    (N_ "Today date format"))
 
 (define (options-generator)
