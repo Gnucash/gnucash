@@ -1834,6 +1834,8 @@ the option '~a'."))
       ("Individual Taxes" #f "Use Detailed Tax Summary")
       ;; receipt.scm, renamed July 2021
       ("Invoice number" #f "Invoice Number")
+      ;; receipt.scm and taxinvoice.scm, renamed July 2021
+      ("Report title" #f "Report Title")
       ;; income-gst-statement.scm
       ("default format" #f "Default Format")
       ("Report format" #f "Report Format")

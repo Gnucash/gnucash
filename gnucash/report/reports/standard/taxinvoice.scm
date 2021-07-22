@@ -91,7 +91,7 @@
 (define optname-border-color-th		(N_ "table-header-border-color"))
 (define optname-border-color-td		(N_ "table-cell-border-color"))
 (define optname-extra-css		(N_ "Embedded CSS"))
-(define optname-report-title		(N_ "Report title"))
+(define optname-report-title		(N_ "Report Title"))
 (define optname-template-file		(N_ "Template file"))
 (define optname-css-file	        (N_ "CSS stylesheet file"))
 (define optname-heading-font		(N_ "Heading font"))
