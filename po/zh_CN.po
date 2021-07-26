@@ -23,8 +23,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-26 04:33+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-07-26 13:34+0000\n"
+"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -16251,7 +16251,7 @@ msgstr "使用贝叶斯(Bayesian)演算法进行新交易事项与现有科目�
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2291
 msgid "Likely match _day threshold"
-msgstr "可能的匹配日阈值"
+msgstr "可能的匹配日阈值(_D)"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2304
