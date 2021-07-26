@@ -30,6 +30,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash gnome-utils))
 (use-modules (ice-9 match))
+(use-modules (ice-9 sandbox))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-9))
 (use-modules (srfi srfi-26))
@@ -748,7 +749,10 @@ not found.")))
 ;; where captured-error is the error string.
 (define (gnc:render-report report)
   (define (get-report) (gnc:report-render-html report #t))
-  (gnc:apply-with-error-handling get-report '()))
+  (call-with-time-limit
+   10
+   (lambda () (gnc:apply-with-error-handling get-report '()))
+   (lambda () (list #f "Report exceeds time limit. Aborted."))))
 
 ;; "thunk" should take the report-type and the report template record
 (define (gnc:report-templates-for-each thunk)
