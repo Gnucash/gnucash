@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-20 16:33+0000\n"
+"PO-Revision-Date: 2021-07-25 08:33+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -620,16 +620,14 @@ msgid ""
 "You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
-msgstr ""
-"多个报表同时显示，直观地了解财务信息，使用方式：“报表”->“多列报表”->“自定"
-"义”。"
+msgstr "多报表同时显示，直观地了解财务信息，方式：\"报表 -> 多列报表 -> 自定义\"。"
 
 #: doc/tip_of_the_day.list.c:95
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
 "report as a report option, and use the Edit->Style Sheets menu to customize "
 "style sheets."
-msgstr "报表基于样式表，选择合适的样式表，“编辑”->“样式表”。"
+msgstr "报表基于样式表，选择合适的样式表，\"编辑 -> 样式表\"。"
 
 #: doc/tip_of_the_day.list.c:99
 msgid ""
@@ -1642,7 +1640,7 @@ msgstr "未定义"
 #. transaction that have files or URIs linked with them.
 #: gnucash/gnome/dialog-doclink.c:1074
 msgid "Transaction Document Links"
-msgstr "交易凭证链接"
+msgstr "交易关联的凭证"
 
 #: gnucash/gnome/dialog-doclink.c:1077
 #: gnucash/gnome/dialog-find-transactions2.c:157
@@ -1693,9 +1691,9 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"双击“ID”，跳转。\n"
-"双击“凭证”，打开。\n"
-"双击“状态”，修改。"
+"双击\"编号\"，跳转。\n"
+"双击\"凭证\"，打开。\n"
+"双击\"状态\"，修改。"
 
 #: gnucash/gnome/dialog-doclink.c:1097
 msgid "Business Document Links"
@@ -2954,7 +2952,7 @@ msgstr "列"
 #: gnucash/gnome/dialog-report-style-sheet.c:172
 #, c-format
 msgid "HTML Style Sheet Properties: %s"
-msgstr "HTML 样式表格内容：%s"
+msgstr "HTML 样式表：%s"
 
 #: gnucash/gnome/dialog-report-style-sheet.c:269
 msgid "You must provide a name for the new style sheet."
@@ -4485,7 +4483,7 @@ msgstr "新建发票(_I)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:302
 msgid "_Pay Invoice"
-msgstr "收款(_P)"
+msgstr "收付(_P)"
 
 #. Translators: This is a menu item that opens a dialog for linking an
 #. external file or URL with the bill, invoice, transaction, or voucher or
@@ -7221,7 +7219,7 @@ msgstr "将科目'%s'及其子科目设为占位符"
 #, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
-msgstr "为科目'%s'及其所有子科目设置隐藏"
+msgstr "将科目'%s'及其子科目设为隐藏"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -9224,7 +9222,7 @@ msgstr "修改了"
 #: gnucash/register/ledger-core/split-register.c:2105
 #: gnucash/register/ledger-core/split-register.c:2108
 msgid "_Value"
-msgstr "明度(_V)"
+msgstr "税率(_V)"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1166
 #: gnucash/register/ledger-core/split-register.c:2117
@@ -10958,9 +10956,7 @@ msgstr "Alpha Vantage API 密钥"
 msgid ""
 "To retrieve online quotes from Alphavantage, this key needs to be set. A key "
 "can be retrieved from the Alpha Vantage website."
-msgstr ""
-"要从Alphavantage检索在线报价，需要设置这个密钥。可以从Alpha Vantage网站申请到"
-"密钥。"
+msgstr "从 Alpha Vantage 网站申请密钥，以便检索在线报价。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:10
 msgid "The version of these settings"
@@ -12304,19 +12300,17 @@ msgid ""
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import.\n"
 msgstr ""
 "\n"
-"此助手将帮助您从文件导入帐户。\n"
+"从 CSV 文件导入科目。\n"
 "\n"
-"文件必须与导出相同。这是一个“导出的计数器层次结构导出CSV”导出菜单可选格式修复"
-"功能。\n"
+"属于固定格式导入，此文件必须与导出格式相同，即\"导出 -> 科目「CSV 文件」\"。\n"
 "\n"
-"如果没有帐户，则会添加它，如果您根据该图表的全名指定，则会添加它。如果有一个"
-"帐户，则更新四个字段：电源线，描述，备注，颜色。\n"
+"若科目不存在，根据完整的科目名称，只要指定的币种/证券存在，就会添加缺失的科目；若科目存在，将更新这四个字段：编码、描述、说明和颜色。\n"
 "\n"
-"单击“Go”执行处理。单击“取消”取消导入。\n"
+"\"下一步 \"继续，或\"取消 \"中止。\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:63
 msgid "Import Account Assistant"
-msgstr "报表科目"
+msgstr "导入科目"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:78
 msgid ""
@@ -12328,11 +12322,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:91
 msgid "Choose File to Import"
-msgstr "选择要导入的文件"
+msgstr "选择文件"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:111
 msgid "Number of rows for the Header"
-msgstr "Header 行数"
+msgstr "标题行数"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:156
 msgid "Comma Separated"
@@ -12352,7 +12346,7 @@ msgstr "分开的"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:230
 msgid "Select Separator Type"
-msgstr "选择折扣类型"
+msgstr "分隔符"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:268
 msgid "Preview"
@@ -12360,7 +12354,7 @@ msgstr "预览"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:281
 msgid "Import Account Preview, first 10 rows only"
-msgstr "预览要导入的帐户（只有10条领先行）"
+msgstr "预览科目（仅前 10 行）"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:290
 #: gnucash/gtkbuilder/assistant-csv-export.glade:728
@@ -12373,7 +12367,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:296
 msgid "Import Accounts Now"
-msgstr "立即导入科目"
+msgstr "立即导入"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:346
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1069
@@ -13002,7 +12996,7 @@ msgid ""
 "Please choose the currency to use for new accounts."
 msgstr ""
 "\n"
-"请选择用于新科目的货币。"
+"请选择用于新科目的币种。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:108
 msgid "Choose Currency"
@@ -13074,11 +13068,11 @@ msgid ""
 "opening balance.\n"
 msgstr ""
 "\n"
-"双击科目名称以修改。\n"
+"双击科目名以修改。\n"
 "\n"
-"“占位符”用来创建父科目，正常不会有交易或期初余额，点击复选框以设定。\n"
+"“占位符”表示父科目，正常不允许有交易或期初余额，点击复选框设定。\n"
 "\n"
-"选中科目，点击期初余额行，为此科目输入一个开始时的余额。\n"
+"期初余额，为此科目输入一个开始时的余额。\n"
 "\n"
 "<b>注意</b>：除所有者权益和占位符科目，其他科目都可以有期初余额。\n"
 
@@ -13099,7 +13093,7 @@ msgstr ""
 "\n"
 "“后退”复查选项。\n"
 "\n"
-"“取消”关闭对话框且不创建任何科目树。"
+"“取消”关闭对话框、不做任何更改。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:594
 msgid "Finish Account Setup"
@@ -14100,7 +14094,7 @@ msgstr "隐藏属性"
 
 #: gnucash/gtkbuilder/dialog-account.glade:151
 msgid "Enable the sections to Cascade"
-msgstr "选择要比较的科目"
+msgstr "列表"
 
 #: gnucash/gtkbuilder/dialog-account.glade:199
 #: gnucash/gtkbuilder/dialog-account.glade:1330
@@ -14113,11 +14107,11 @@ msgstr "默认"
 msgid ""
 "If any account has an existing color it will not be replaced unless the "
 "following is ticked."
-msgstr "勾选，以替换科目现有颜色。"
+msgstr "是否替换科目现有颜色。"
 
 #: gnucash/gtkbuilder/dialog-account.glade:232
 msgid "Replace any existing account colors"
-msgstr "替换颜色"
+msgstr "替换"
 
 #: gnucash/gtkbuilder/dialog-account.glade:364
 msgid "Delete Account"
@@ -14396,12 +14390,12 @@ msgstr "选择或添加一个 GnuCash 科目(_S)："
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:7
 msgid "Import transactions from text file"
-msgstr "从 TEXT 文件导入交易"
+msgstr "导入发票账单"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:123
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
 msgid "1. Choose the file to import"
-msgstr "1.选择文件"
+msgstr "文件"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:153
 msgid "Import bill CSV data"
@@ -14452,19 +14446,19 @@ msgstr "预览"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:374
 msgid "Open imported documents in tabs"
-msgstr "在标签上打开导入的文档"
+msgstr "标签页打开导入的文档"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
 msgid "Open not yet posted documents in tabs "
-msgstr "在标签上打开UNED-Book文档 "
+msgstr "标签页打开尚未入账的文档 "
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
-msgstr "不要在标签上打开导入的文件"
+msgstr "不打开导入的文档"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:432
 msgid "5. Afterwards"
-msgstr "之后"
+msgstr "最后"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:48
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:8
@@ -14960,11 +14954,11 @@ msgstr "复核(_L)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:604
 msgid "All Linked Documents"
-msgstr "全部"
+msgstr "列表"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:658
 msgid "Id"
-msgstr "ID"
+msgstr "编号"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:686
 msgid "Linked Document"
@@ -14986,9 +14980,9 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"双击项目描述列以跳转到事务。\n"
-"双击项目的链接列以打开链接文档。\n"
-"您可以通过双击项目的可用列来更改文档链接。"
+"双击\"描述\"，跳转。\n"
+"双击\"凭证\"，打开。\n"
+"双击\"状态\"，修改。"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:166
 msgid ""
@@ -17374,7 +17368,7 @@ msgstr "百分比"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:389
 msgid "<b>Tax Table Entry</b>"
-msgstr "<b>税表条目</b>"
+msgstr "<b>定义</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:8
 msgid "GnuCash Tip Of The Day"
