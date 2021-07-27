@@ -1715,16 +1715,11 @@ gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui, Transaction
     g_assert (gui);
     g_assert (trans);
 
-    if (gnc_import_exists_online_id (trans, gui->acct_id_hash))
-        return;
-    else
-    {
-        transaction_info = gnc_import_TransInfo_new (trans, NULL);
-        gnc_import_TransInfo_set_ref_id (transaction_info, ref_id);
-        // It's much faster to gather the imported transactions into a GSList than directly into the
-        // treeview.
-        gui->temp_trans_list = g_slist_prepend (gui->temp_trans_list, transaction_info);
-    }
+    transaction_info = gnc_import_TransInfo_new (trans, NULL);
+    gnc_import_TransInfo_set_ref_id (transaction_info, ref_id);
+    // It's much faster to gather the imported transactions into a GSList than directly into the
+    // treeview.
+    gui->temp_trans_list = g_slist_prepend (gui->temp_trans_list, transaction_info);
     return;
 }
 
