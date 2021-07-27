@@ -76,7 +76,6 @@ struct _main_matcher_info
     gboolean add_toggled;     // flag to indicate that add has been toggled to stop selection
     gint id;
     GSList* temp_trans_list;  // Temporary list of imported transactions
-    GHashTable* acct_id_hash; // Hash table, per account, of list of transaction IDs.
     GSList* edited_accounts;  // List of accounts currently edited.
 };
 
@@ -144,14 +143,6 @@ static gboolean query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
                                             gpointer user_data);
 /* end local prototypes */
 
-static
-gboolean delete_hash (gpointer key, gpointer value, gpointer user_data)
-{
-    // Value is a hash table that needs to be destroyed.
-    g_hash_table_destroy (value);
-    return TRUE;
-}
-
 static void
 update_all_balances (GNCImportMainMatcher *info)
 {
@@ -218,8 +209,6 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     // We've deferred balance computations on many accounts. Let's do it now that we're done.
     update_all_balances (info);
 
-    g_hash_table_foreach_remove (info->acct_id_hash, delete_hash, NULL);
-    info->acct_id_hash = NULL;
     g_free (info);
 }
 
@@ -1133,8 +1122,6 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                       G_CALLBACK(gnc_gen_trans_onButtonPressed_cb), info);
     g_signal_connect (view, "popup-menu",
                       G_CALLBACK(gnc_gen_trans_onPopupMenu_cb), info);
-
-    info->acct_id_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 static void

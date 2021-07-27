@@ -57,15 +57,6 @@ typedef enum _action
 /** @name Non-GUI Functions */
 /*@{*/
 
-/** Checks whether the given transaction's online_id already exists in
- * its parent account. The given transaction has to be open for
- * editing. If a matching online_id exists, the transaction is
- * destroyed (!) and TRUE is returned, otherwise FALSE is returned.
- *
- * @param trans The transaction for which to check for an existing
- * online_id. */
-gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_hash);
-
 /** Evaluates the match between trans_info and split using the provided parameters.
  *
  * @param trans_info The TransInfo for the imported transaction
