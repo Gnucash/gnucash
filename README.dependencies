@@ -57,7 +57,7 @@ Libraries/Deps
   cmake                 3.10                    Build system manager
   glib2                 2.56.1
   gtk+3                 3.22.30
-  guile                 3.0, 2.2 or 2.0.9       Must be built with regex
+  guile                 3.0, 2.2.1              Must be built with regex
                                                 support enabled
   libxml2               2.9.4
   gettext               0.20                    Required to build gnucash.pot,
