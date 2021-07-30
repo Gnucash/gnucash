@@ -78,9 +78,16 @@ gchar * gnc_build_userdata_path(const gchar *);
 %newobject gnc_file_path_absolute;
 gchar *gnc_file_path_absolute (const gchar *, const gchar *);
 
+%newobject gnc_build_scm_path;
 gchar * gnc_build_scm_path(const gchar *);
+
+%newobject gnc_build_report_path;
 gchar * gnc_build_report_path(const gchar *);
+
+%newobject gnc_build_stdreports_path;
 gchar * gnc_build_stdreports_path(const gchar *);
+
+%newobject gnc_build_reports_path;
 gchar * gnc_build_reports_path(const gchar *);
 
 void gnc_scm_log_warn(const gchar *);
