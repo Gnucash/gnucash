@@ -40,6 +40,10 @@ extern "C"
 struct OptionClassifier;
 class GncOptionUIItem;
 using GncOptionUIItemPtr = std::unique_ptr<GncOptionUIItem>;
+#ifndef SWIG //SWIG pulls in GncOwner from swig-engine.
+struct _gncOwner;
+using GncOwner = _gncOwner;
+#endif
 struct _QofQuery;
 using QofQuery = _QofQuery;
 struct QofInstance_s;
@@ -56,6 +60,7 @@ using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionValue<int64_t>,
                                       GncOptionValue<const QofInstance*>,
                                       GncOptionValue<const QofQuery*>,
+                                      GncOptionValue<const GncOwner*>,
                                       GncOptionValue<SCM>,
                                       GncOptionAccountValue,
                                       GncOptionMultichoiceValue,

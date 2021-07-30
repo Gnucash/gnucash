@@ -309,6 +309,7 @@ std::istream& operator>>(std::istream& iss, OptType& opt)
 {
     std::decay_t<decltype(opt.get_value())> value;
     if constexpr (std::is_same_v<std::decay_t<decltype(opt.get_value())>, SCM> ||
+                  std::is_same_v<std::decay_t<decltype(opt.get_value())>, const _gncOwner*> ||
                   std::is_same_v<std::decay_t<decltype(opt.get_value())>, const _QofQuery*>)
         return iss;
     else
@@ -1197,6 +1198,20 @@ operator>> <GncOptionDateValue>(std::istream& iss,
 
 /** QofQuery Options
  */
+
+inline std::istream&
+gnc_option_from_scheme(std::istream& iss, GncOptionValue<const GncOwner*>& opt)
+{
+//FIXME: Implement or maybe rethink.
+    return iss;
+}
+
+inline std::ostream&
+gnc_option_to_scheme(std::ostream& oss, GncOptionValue<const GncOwner*>& opt)
+{
+//FIXME: Implement or maybe rethink.
+    return oss;
+}
 
 inline std::istream&
 gnc_option_from_scheme(std::istream& iss, GncOptionValue<const QofQuery*>& opt)

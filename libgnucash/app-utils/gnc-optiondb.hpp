@@ -501,16 +501,41 @@ inline void gnc_register_number_plot_size_option(const GncOptionDBPtr& db,
  */
 void gnc_register_query_option(GncOptionDB* db, const char* section,
                                const char* name, const char* key,
-                               const char* doc_string, QofQuery* value);
+                               const char* doc_string, const QofQuery* value);
 
 /**
  * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
  */
 inline void gnc_register_query_option(GncOptionDBPtr& db, const char* section,
                                       const char* name, const char* key,
-                                      const char* doc_string, QofQuery* value)
+                                      const char* doc_string,
+                                      const QofQuery* value)
 {
     gnc_register_query_option(db.get(), section, name, key, doc_string, value);
+}
+
+/**
+ * Create a new GncOwner option and register it in the options database.
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param doc_string A description of the option. This will be used in tooltips and should be marked for translation.
+ * @param value The initial and default value for the option.
+ */
+void gnc_register_owner_option(GncOptionDB* db, const char* section,
+                               const char* name, const char* key,
+                               const char* doc_string, const GncOwner* value);
+
+/**
+ * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
+ */
+inline void gnc_register_owner_option(GncOptionDBPtr& db, const char* section,
+                                      const char* name, const char* key,
+                                      const char* doc_string,
+                                      const GncOwner* value)
+{
+    gnc_register_owner_option(db.get(), section, name, key, doc_string, value);
 }
 
 /**

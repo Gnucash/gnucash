@@ -468,6 +468,8 @@ GncOption::from_scheme(std::istream& iss)
                                (std::is_same_v<std::decay_t<decltype(option)>,
                                 GncOptionMultichoiceValue>) ||
                                std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionValue<const GncOwner*>> ||
+                               std::is_same_v<std::decay_t<decltype(option)>,
                                GncOptionValue<const QofQuery*>> ||
                                std::is_same_v<std::decay_t<decltype(option)>,
                                GncOptionValue<const QofInstance*>> ||
@@ -564,6 +566,8 @@ template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, SCM, GncOptionUIType);
 template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, const QofQuery*, GncOptionUIType);
+template GncOption::GncOption(const char*, const char*, const char*,
+                              const char*, const GncOwner*, GncOptionUIType);
 
 template bool GncOption::get_value<bool>() const;
 template int GncOption::get_value<int>() const;

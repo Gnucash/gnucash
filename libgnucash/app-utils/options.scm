@@ -232,15 +232,22 @@
     (gnc-make-SCM-option section name key desc default type)))
 (define-public (gnc:make-owner-option section name key docstring getter validator owner-type)
   (issue-deprecation-warning "gnc:make-owner-option is deprecated. Make and register the option in one command with gnc-register-owner-option.")
-  (let ((ui-type (cond
+  (let* ((ui-type (cond
                   ((eqv? owner-type GNC-OWNER-CUSTOMER) (GncOptionUIType-CUSTOMER))
                   ((eqv? owner-type GNC-OWNER-VENDOR) (GncOptionUIType-VENDOR))
                   ((eqv? owner-type GNC-OWNER-EMPLOYEE) (GncOptionUIType-EMPLOYEE))
                   ((eqv? owner-type GNC-OWNER-JOB) (GncOptionUIType-JOB))
                   (else (GncOptionUIType-INTERNAL))))
-        (defval (if getter (getter) #f)))
-    (format #t "Making owner option ~a:~a ~a ~a~%"  section name defval ui-type)(force-output)
-    (gnc-make-qofinstance-option section name key docstring defval ui-type)))
+
+         (guid (gncOwnerReturnGUID (getter)))
+         (book (gnc-get-current-book))
+         (defval (cond
+                  ((eqv? owner-type GNC-OWNER-CUSTOMER) (gncCustomerLookupFlip guid book))
+                  ((eqv? owner-type GNC-OWNER-VENDOR) (gncVendorLookupFlip guid book))
+                  ((eqv? owner-type GNC-OWNER-EMPLOYEE) (gncEmployeeLookupFlip guid book))
+                  ((eqv? owner-type GNC-OWNER-JOB) (gncJobLookupFlip guid book)))))
+
+    (gnc-make-owner-option section name key docstring defval ui-type)))
 (define-public (gnc:make-invoice-option section name key docstring getter validator)
   (issue-deprecation-warning "gnc:make-invoice-option is deprecated. Make and register the option in one command with gnc-register-ionvoice-option.")
   (gnc-make-qofinstance-option section name key docstring #f (GncOptionUIType-INVOICE)))

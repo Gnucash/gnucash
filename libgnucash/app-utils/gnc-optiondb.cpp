@@ -1061,9 +1061,19 @@ gnc_register_number_plot_size_option(GncOptionDB* db,
 void
 gnc_register_query_option(GncOptionDB* db, const char* section,
                           const char* name, const char* key,
-                          const char* doc_string, QofQuery* value)
+                          const char* doc_string, const QofQuery* value)
 {
-    GncOption option{section, name, key, doc_string, (const QofInstance*)value,
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::INTERNAL};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_owner_option(GncOptionDB* db, const char* section,
+                          const char* name, const char* key,
+                          const char* doc_string, const GncOwner* value)
+{
+    GncOption option{section, name, key, doc_string, value,
             GncOptionUIType::INTERNAL};
     db->register_option(section, std::move(option));
 }

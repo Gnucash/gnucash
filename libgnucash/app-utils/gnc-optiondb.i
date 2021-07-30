@@ -53,6 +53,7 @@ SCM scm_init_sw_gnc_optiondb_module(void);
 %include <std_string.i>
 %import <base-typemaps.i>
 %import (module="sw_engine") <gnc-budget.h>
+%import (module="sw_engine") <gncOwner.h>
 %import (module="sw_engine") <gncCustomer.h>
 %import (module="sw_engine") <gncEmployee.h>
 %import (module="sw_engine") <gncVendor.h>
@@ -195,11 +196,14 @@ scm_from_value<const QofInstance*>(const QofInstance* value)
         type = SWIGTYPE_p__gncJob;
     else if (GNC_IS_VENDOR(value))
         type = SWIGTYPE_p__gncVendor;
-/* There is no type macro for QofQuery, it's not a GObject.
-    else if (GNC_IS_QOFQUERY(value))
-        type = SWIGTYPE_p_Query;
-*/
+
     return SWIG_NewPointerObj(ptr, type, FALSE);
+}
+
+template <> inline SCM
+scm_from_value<QofInstance*>(QofInstance* value)
+{
+    return scm_from_value<const QofInstance*>(value);
 }
 
 template <> inline SCM
@@ -216,9 +220,16 @@ scm_from_value<QofQuery*>(QofQuery* value)
 }
 
 template <> inline SCM
-scm_from_value<QofInstance*>(QofInstance* value)
+scm_from_value<const GncOwner*>(const GncOwner* value)
 {
-    return scm_from_value<const QofInstance*>(value);
+    auto ptr{static_cast<void*>(const_cast<GncOwner*>(value))};
+    return SWIG_NewPointerObj(ptr, SWIGTYPE_p__gncOwner, FALSE);
+}
+
+template <> inline SCM
+scm_from_value<GncOwner*>(GncOwner* value)
+{
+    return scm_from_value<const GncOwner*>(value);
 }
 
 template <typename ValueType> inline ValueType
@@ -267,16 +278,16 @@ scm_to_value<const QofInstance*>(SCM new_value)
 {
     if (new_value == SCM_BOOL_F)
         return nullptr;
-    
+
     auto info = SWIG_PointerType(new_value);
 
-    static const std::array<swig_type_info*, 10> types{
-            SWIGTYPE_p_QofInstance_s, SWIGTYPE_p_gnc_commodity,
-            SWIGTYPE_p_budget_s, SWIGTYPE_p__gncInvoice,
-            SWIGTYPE_p__gncTaxTable, SWIGTYPE_p_Account,
-            SWIGTYPE_p__gncCustomer, SWIGTYPE_p__gncEmployee,
-            SWIGTYPE_p__gncJob, SWIGTYPE_p__gncVendor
-                };
+    static const std::array<swig_type_info*, 11> types{
+        SWIGTYPE_p_QofInstance_s, SWIGTYPE_p_gnc_commodity,
+        SWIGTYPE_p_budget_s, SWIGTYPE_p__gncInvoice,
+        SWIGTYPE_p__gncTaxTable, SWIGTYPE_p_Account,
+        SWIGTYPE_p__gncCustomer, SWIGTYPE_p__gncEmployee,
+        SWIGTYPE_p__gncJob, SWIGTYPE_p__gncVendor
+            };
     void* ptr{};
     auto pos = std::find_if(types.begin(), types.end(),
                             [&new_value, &ptr](auto type){
@@ -296,6 +307,16 @@ scm_to_value<const QofQuery*>(SCM new_value)
     void* ptr{};
     SWIG_ConvertPtr(new_value, &ptr, SWIGTYPE_p__QofQuery, 0);
     return static_cast<const QofQuery*>(ptr);
+}
+
+template <> inline const GncOwner*
+scm_to_value<const GncOwner*>(SCM new_value)
+{
+    if (new_value == SCM_BOOL_F)
+        return nullptr;
+    void* ptr{};
+    SWIG_ConvertPtr(new_value, &ptr, SWIGTYPE_p__gncOwner, 0);
+    return static_cast<const GncOwner*>(ptr);
 }
 
 template <>inline GncOptionAccountList
@@ -776,6 +797,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %template(gnc_make_int64_option) gnc_make_option<int64_t>;
 %template(gnc_make_qofinstance_option) gnc_make_option<const QofInstance*>;
 %template(gnc_make_query_option) gnc_make_option<const QofQuery*>;
+%template(gnc_make_owner_option) gnc_make_option<const GncOwner*>;
 
 %extend GncOption {
     SCM get_scm_value()
