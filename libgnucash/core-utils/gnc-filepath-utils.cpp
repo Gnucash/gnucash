@@ -1174,7 +1174,9 @@ gnc_build_data_path (const gchar *filename)
 gchar *
 gnc_build_scm_path (const gchar *filename)
 {
-    gchar *result = g_build_filename(gnc_path_get_scmdir(), filename, (gchar *)NULL);
+    gchar *scmdir = gnc_path_get_scmdir ();
+    gchar *result = g_build_filename (scmdir, filename, (gchar *)NULL);
+    g_free (scmdir);
     return result;
 }
 
@@ -1190,7 +1192,9 @@ gnc_build_scm_path (const gchar *filename)
 gchar *
 gnc_build_report_path (const gchar *filename)
 {
-    gchar *result = g_build_filename(gnc_path_get_reportdir(), filename, (gchar *)NULL);
+    gchar *rptdir = gnc_path_get_reportdir ();
+    gchar *result = g_build_filename (rptdir, filename, (gchar *)NULL);
+    g_free (rptdir);
     return result;
 }
 
@@ -1206,7 +1210,9 @@ gnc_build_report_path (const gchar *filename)
 gchar *
 gnc_build_reports_path (const gchar *dirname)
 {
-    gchar *result = g_build_filename(gnc_path_get_reportsdir(), dirname, (gchar *)NULL);
+    gchar *rptsdir = gnc_path_get_reportsdir ();
+    gchar *result = g_build_filename (rptsdir, dirname, (gchar *)NULL);
+    g_free (rptsdir);
     return result;
 }
 
@@ -1222,7 +1228,9 @@ gnc_build_reports_path (const gchar *dirname)
 gchar *
 gnc_build_stdreports_path (const gchar *filename)
 {
-    gchar *result = g_build_filename(gnc_path_get_stdreportsdir(), filename, (gchar *)NULL);
+    gchar *stdrptdir = gnc_path_get_stdreportsdir ();
+    gchar *result = g_build_filename (stdrptdir, filename, (gchar *)NULL);
+    g_free (stdrptdir);
     return result;
 }
 
@@ -1253,7 +1261,10 @@ gnc_filepath_locate_file (const gchar *default_path, const gchar *name)
 gchar *
 gnc_filepath_locate_data_file (const gchar *name)
 {
-    return gnc_filepath_locate_file (gnc_path_get_pkgdatadir(), name);
+    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+    gchar *result = gnc_filepath_locate_file (pkgdatadir, name);
+    g_free (pkgdatadir);
+    return result;
 }
 
 gchar *
@@ -1289,7 +1300,10 @@ gnc_filepath_locate_ui_file (const gchar *name)
 gchar *
 gnc_filepath_locate_doc_file (const gchar *name)
 {
-    return gnc_filepath_locate_file (gnc_path_get_pkgdocdir(), name);
+    gchar *docdir = gnc_path_get_pkgdocdir ();
+    gchar *result = gnc_filepath_locate_file (docdir, name);
+    g_free (docdir);
+    return result;
 }
 
 
