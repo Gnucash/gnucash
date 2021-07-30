@@ -1510,7 +1510,7 @@ gnc_preferences_dialog_create (GtkWindow *parent)
 
     g_object_unref (G_OBJECT(builder));
 
-    /* save the original account separator incase it changes */
+    /* save the original account separator in case it changes */
     g_object_set_data_full (G_OBJECT(entry), "original_text",
                             g_strdup (gtk_entry_get_text (GTK_ENTRY(entry))),
                             g_free);

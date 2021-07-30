@@ -1832,6 +1832,11 @@ the option '~a'."))
       ("Links" #f "Transaction Links")
       ;; invoice.scm, renamed November 2018
       ("Individual Taxes" #f "Use Detailed Tax Summary")
+      ;; receipt.scm, renamed July 2021
+      ("Invoice number" #f "Invoice Number")
+      ;; receipt.scm and taxinvoice.scm, renamed July 2021
+      ("Report title" #f "Report Title")
+      ("Extra notes" #f "Extra Notes")
       ;; income-gst-statement.scm
       ("default format" #f "Default Format")
       ("Report format" #f "Report Format")

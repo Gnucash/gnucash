@@ -38,7 +38,7 @@ endforeach (lingua)
 
 add_custom_target(po-gmo ALL DEPENDS ${CATALOGS})
 
-set_local_dist(po_DIST_local ${po_SOURCES} CMakeLists.txt Makevars
+set_local_dist(po_DIST_local ${po_SOURCES} CMakeLists.txt
   POTFILES.in POTFILES.skip README gnucash-pot.cmake)
 set(po_DIST ${po_DIST_local} ${po_glossary_DIST} PARENT_SCOPE)
 
@@ -122,8 +122,6 @@ if(BUILD_GNUCASH_POT)
   make_gnucash_potfiles()
 
   find_program(XGETTEXT xgettext)
-  configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Makevars
-    ${CMAKE_CURRENT_BINARY_DIR}/Makevars COPYONLY)
 
   if (${XGETTEXT} STREQUAL "XGETTEXT-NOTFOUND")
     message(FATAL_ERROR "Can't find the 'xgettext' program.")

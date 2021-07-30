@@ -130,13 +130,6 @@
   (make-link-blank)
   link-blank?)
 
-(define-record-type :payment-info
-  (make-payment-info overpayment invoices opposing-splits)
-  payment-info?
-  (overpayment payment-info-overpayment)
-  (invoices payment-info-invoices)
-  (opposing-splits payment-info-opposing-splits))
-
 ;; Names in Option panel (Untranslated! Because it is used for option
 ;; naming and lookup only, and the display of the option name will be
 ;; translated somewhere else.)
@@ -201,10 +194,8 @@
               desc-header sale-header tax-header debit-header credit-header
               balance-header doclink-header))))
 
-(define (make-heading-list column-vector link-option acct-type)
-  (let ((heading-list '())
-        (formal? (gnc-prefs-get-bool GNC-PREFS-GROUP-GENERAL
-                                     GNC-PREF-ACCOUNTING-LABELS)))
+(define (make-heading-list column-vector link-option)
+  (let ((heading-list '()))
     (if (date-col column-vector)
         (addto! heading-list (G_ date-header)))
     (if (date-due-col column-vector)
@@ -222,15 +213,9 @@
     (if (tax-col column-vector)
         (addto! heading-list (G_ tax-header)))
     (if (debit-col column-vector)
-        (addto! heading-list
-                (if formal?
-                    (G_ debit-header)
-                    (gnc-account-get-debit-string acct-type))))
+        (addto! heading-list (G_ debit-header)))
     (if (credit-col column-vector)
-        (addto! heading-list
-                (if formal?
-                    (G_ credit-header)
-                    (gnc-account-get-credit-string acct-type))))
+        (addto! heading-list (G_ credit-header)))
     (if (bal-col column-vector)
         (addto! heading-list (G_ balance-header)))
     (case link-option
@@ -485,6 +470,8 @@
   (define mid-span
     (if (eq? link-option 'detailed) (num-cols used-columns 'mid-spac) 0))
 
+  (define add-derived-amounts-disclaimer? #f)
+
   (define (split->anchor split negate?)
     (gnc:html-markup-anchor
      (gnc:split-anchor-text split)
@@ -515,8 +502,13 @@
           (addif (debit-col used-columns)  (make-cell debit))
           (addif (credit-col used-columns) (make-cell credit))
           (addif (bal-col used-columns)    (make-cell total))
-          (addif (< 0 rhs-cols) (gnc:make-html-table-cell/size
-                                 1 (+ mid-span rhs-cols) #f)))))
+          (addif (< 0 rhs-cols)
+                 (gnc:make-html-table-cell/size
+                  1 (+ mid-span rhs-cols)
+                  (and add-derived-amounts-disclaimer?
+                       (gnc:make-html-text
+                        (G_ "* Amounts denoted thus are derived from, \
+and do not match the transaction."))))))))
 
     ;; print grand total
     (if (bal-col used-columns)
@@ -612,9 +604,9 @@
                                (split->reference lot-split)
                                (split->type-str lot-split payable?)
                                (splits->desc non-document)
-                               (gnc:make-html-text (split->anchor lot-split #t))
+                               (gnc:make-html-text (split->anchor lot-split #f))
                                (list->cell
-                                (map (lambda (s) (split->anchor s #f)) non-document))
+                                (map (lambda (s) (split->anchor s #t)) non-document))
                                (gncTransGetGUID lot-txn))
                               result))))
 
@@ -630,8 +622,7 @@
                 (lambda (posting-split)
                   (let* ((lot-txn-split (car lot-txn-splits))
                          (posting-txn (xaccSplitGetParent posting-split))
-                         (document (gncInvoiceGetInvoiceFromTxn posting-txn))
-                         (neg (gncInvoiceGetIsCreditNote document)))
+                         (document (gncInvoiceGetInvoiceFromTxn posting-txn)))
                     (lp1 (cdr lot-txn-splits)
                          non-document
                          (cons (make-link-data
@@ -639,8 +630,8 @@
                                 (split->reference posting-split)
                                 (split->type-str posting-split payable?)
                                 (splits->desc (list posting-split))
-                                (gnc:make-html-text (split->anchor lot-split neg))
-                                (gnc:make-html-text (split->anchor posting-split neg))
+                                (gnc:make-html-text (split->anchor lot-split #f))
+                                (gnc:make-html-text (split->anchor posting-split #f))
                                 (gncInvoiceReturnGUID document))
                                result)))))
 
@@ -651,34 +642,6 @@
                      (cons (car lot-txn-splits) non-document)
                      result))))))))))
 
-
-
-  (define (payment-txn->payment-info txn)
-    (let lp ((splits (xaccTransGetAPARAcctSplitList txn #f))
-             (overpayment 0)
-             (invoices '())
-             (opposing-splits '()))
-      (match splits
-        (() (make-payment-info (AP-negate overpayment) invoices opposing-splits))
-        ((split . rest)
-         (let ((lot (xaccSplitGetLot split)))
-           (define (equal-to-split? s) (equal? s split))
-           (match (gncInvoiceGetInvoiceFromLot lot)
-             (() (let lp1 ((lot-splits (gnc-lot-get-split-list lot))
-                           (opposing-splits opposing-splits))
-                   (match lot-splits
-                     (() (lp rest
-                             (- overpayment (gnc-lot-get-balance lot))
-                             invoices
-                             opposing-splits))
-                     (((? equal-to-split?) . tail) (lp1 tail opposing-splits))
-                     ((head . tail) (lp1 tail (cons head opposing-splits))))))
-             (inv
-              (lp rest
-                  overpayment
-                  (cons (cons inv split) invoices)
-                  opposing-splits))))))))
-
   (define (make-payment->invoices-list txn)
     (list
      (list
@@ -687,17 +650,15 @@
        (map
         (lambda (inv-split-pair)
           (invoice->anchor (car inv-split-pair)))
-        (payment-info-invoices (payment-txn->payment-info txn)))))))
+        (vector-ref (gnc:payment-txn->payment-info txn) 0))))))
 
-  (define (make-payment->payee-table txn)
+  (define (make-payment->payee-table txn payable?)
 
-    (define payment-info (payment-txn->payment-info txn))
-
-    (define invoices-list
-      (let lp ((invoice-split-pairs (payment-info-invoices payment-info))
+    (define (invoices-list invoice-split-pairs)
+      (let lp ((invoice-split-pairs invoice-split-pairs)
                (result '()))
         (match invoice-split-pairs
-          (() result)
+          (() (reverse result))
           (((inv . APAR-split) . rest)
            (let* ((posting-split (lot-split->posting-split APAR-split)))
              (lp rest
@@ -711,29 +672,47 @@
                         (gncInvoiceReturnGUID inv))
                        result)))))))
 
-    (define overpayment-list
-      (let ((overpayment (payment-info-overpayment payment-info)))
-        (if (zero? overpayment)
-            '()
-            (list (make-link-desc-amount
-                   (G_ "Pre-Payment")
-                   (gnc:make-gnc-monetary currency overpayment)
-                   (gncTransGetGUID txn))))))
+    (define (payments-list opposing-splits)
+      (let lp1 ((opposing-splits opposing-splits)
+                (pmt-list '()))
+        (match opposing-splits
+          (() (reverse pmt-list))
+          (((s partial-amount derived?). rest)
+           (when derived?
+             (set! add-derived-amounts-disclaimer? #t))
+           (lp1 rest
+                (cons
+                 (make-link-data
+                  (qof-print-date (xaccTransGetDate (xaccSplitGetParent s)))
+                  (split->reference s)
+                  (split->type-str s payable?)
+                  (splits->desc (list s))
+                  (gnc:make-html-text
+                   (if derived? "* " "")
+                   (gnc:html-markup-anchor
+                    (gnc:split-anchor-text s)
+                    (gnc:monetary->string
+                     (gnc:make-gnc-monetary currency partial-amount))))
+                  (gnc:make-html-text (split->anchor s #f))
+                  (gncTransGetGUID (xaccSplitGetParent s)))
+                 pmt-list))))))
 
-    (define payments-list
-      (map
-       (lambda (s)
-         (make-link-data
-          (qof-print-date (xaccTransGetDate (xaccSplitGetParent s)))
-          (split->reference s)
-          (split->type-str s payable?)
-          (splits->desc (list s))
-          (gnc:make-html-text (split->anchor s #f))
-          (gnc:make-html-text (split->anchor s #f))
-          (gncTransGetGUID (xaccSplitGetParent s))))
-       (payment-info-opposing-splits payment-info)))
+    (define (overpayment-list overpayment)
+      (if (zero? overpayment)
+          '()
+          (list (make-link-desc-amount
+                 (G_ "Pre-Payment")
+                 (gnc:make-html-text
+                  (gnc:monetary->string
+                   (gnc:make-gnc-monetary
+                    currency ((if payable? + -) overpayment))))
+                 (gncTransGetGUID txn)))))
 
-    (append invoices-list payments-list overpayment-list))
+    (let* ((payment-info (gnc:payment-txn->payment-info txn))
+           (invoices-result (invoices-list (vector-ref payment-info 0)))
+           (payment-result (payments-list (vector-ref payment-info 1)))
+           (overpayment-result (overpayment-list (vector-ref payment-info 2))))
+      (append invoices-result payment-result overpayment-result)))
 
   (define (amount->anchor split amount)
     (gnc:make-html-text
@@ -844,7 +823,14 @@
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
-             (orig-value (xaccTransGetAccountAmount txn acc))
+             (amt/next-pair
+              (let lp1 ((splits splits) (acc 0) (non-txn '()))
+                (match splits
+                  (() (cons acc (reverse non-txn)))
+                  (((? (lambda (s) (equal? (xaccSplitGetParent s) txn)) head) . tail)
+                   (lp1 tail (+ (xaccSplitGetAmount head) acc) non-txn))
+                  ((head . tail) (lp1 tail acc (cons head non-txn))))))
+             (orig-value (car amt/next-pair))
              (value (AP-negate orig-value)))
 
         (add-row
@@ -860,10 +846,10 @@
          link-option
          (case link-option
            ((simple) (make-payment->invoices-list txn))
-           ((detailed) (make-payment->payee-table txn))
+           ((detailed) (make-payment->payee-table txn payable?))
            (else '(()))))
 
-        (lp printed? (not odd-row?) (cdr splits) invalid-splits (+ total value)
+        (lp printed? (not odd-row?) (cdr amt/next-pair) invalid-splits (+ total value)
             (if (< 0 orig-value) (+ debit orig-value) debit)
             (if (< 0 orig-value) credit (- credit orig-value))
             tax
@@ -1063,7 +1049,7 @@
          (document (gnc:make-html-document))
          (table (gnc:make-html-table))
          (section-headings (make-section-heading-list used-columns owner-descr))
-         (headings (make-heading-list used-columns link-option acct-type))
+         (headings (make-heading-list used-columns link-option))
          (report-title (string-append (G_ owner-descr) " " (G_ "Report"))))
 
     (cond
@@ -1255,6 +1241,7 @@
     (owner-report-create-internal guid owner type enddate)))
 
 (define (owner-report-create owner account)
+  (issue-deprecation-warning "owner-report-create is not used anymore. call owner-report-create-with-enddate instead")
   (owner-report-create-with-enddate owner account #f))
 
 (define (gnc:owner-report-create-internal
@@ -1262,12 +1249,12 @@
 
   (let* ((owner (gnc:split->owner split))
          (res (if (gncOwnerIsValid owner)
-                  (owner-report-create owner account)
+                  (owner-report-create-with-enddate owner account #f)
                   -1)))
     (gnc:split->owner #f)
     res))
 
 (gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t gnc:owner-report-create-internal)
 (gnc:register-report-hook ACCT-TYPE-PAYABLE #t gnc:owner-report-create-internal)
-(export owner-report-create)
+(export owner-report-create)            ;deprecate
 (export owner-report-create-with-enddate)

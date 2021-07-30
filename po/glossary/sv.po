@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-06-06 12:33+0000\n"
+"PO-Revision-Date: 2021-07-05 04:32+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "sv/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -91,7 +91,7 @@ msgstr "kontotyp: penningmarknad"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "kontotyp: aktiefond"
+msgstr "kontotyp: investeringsfond"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
@@ -179,7 +179,7 @@ msgstr "händelse: POS"
 
 #. "-"
 msgid "action: rebate"
-msgstr "händelse: rabatt"
+msgstr "händelse: återbäring"
 
 #. "-"
 msgid "action: sell"
@@ -207,7 +207,7 @@ msgstr "åldrande"
 
 #. "A sum of money"
 msgid "amount"
-msgstr "summa"
+msgstr "belopp"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -263,7 +263,7 @@ msgstr "Budget"
 
 #. "-"
 msgid "business (adjective)"
-msgstr "företags- (adjektiv)"
+msgstr "affärs- (adjektiv)"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
@@ -295,19 +295,19 @@ msgstr "stänga, att"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "vara"
+msgstr "produkt"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr "varulista"
+msgstr "produktlista"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr "varualternativ: post"
+msgstr "produktalternativ: fraktion"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr "varualterativ: Symbol"
+msgstr "produktalterativ: Symbol"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
 msgid "compound interests"
@@ -395,7 +395,7 @@ msgstr "e-post"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr "anställd"
+msgstr "personal"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
@@ -497,7 +497,7 @@ msgstr "Tappade konton"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr "Post"
+msgstr "Samling"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -517,7 +517,7 @@ msgstr "MDI-läge"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr "Anteckning"
+msgstr "Minnesanteckning"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
@@ -674,7 +674,7 @@ msgstr "registerpost: delad transaktion"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr "registerpost: aktiedelning"
+msgstr "registerpost: aktie-split"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
@@ -804,7 +804,7 @@ msgstr "transaktion"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "transaktionstillstånd: godkänd"
+msgstr "transaktionstillstånd: clearad"
 
 #. "-"
 msgid "transaction state: frozen"

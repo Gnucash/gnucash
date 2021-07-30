@@ -616,7 +616,7 @@ gnc_finish_ok (AccountWindow *aw)
         Account *account;
         GtkTreeSelection *selection;
 
-        /* Drop the old parent_tree so we can update it with an upto date one */
+        /* Drop the old parent_tree so we can update it with an up to date one */
         gtk_container_remove (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
         aw->parent_tree = gnc_tree_view_account_new (TRUE);
         gtk_container_add (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
@@ -1504,10 +1504,12 @@ gnc_account_window_create(GtkWindow *parent, AccountWindow *aw)
     gtk_widget_show (amount);
 
     label = GTK_WIDGET(gtk_builder_get_object (builder, "balance_label"));
-    gtk_label_set_mnemonic_widget (GTK_LABEL(label), amount);
+    gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(amount), label);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "opening_balance_date_box"));
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "date_label"));
     date_edit = gnc_date_edit_new (gnc_time (NULL), 0, 0);
+    gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), label);
     aw->opening_balance_date_edit = date_edit;
     gtk_box_pack_start(GTK_BOX(box), date_edit, TRUE, TRUE, 0);
     gtk_widget_show (date_edit);

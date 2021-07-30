@@ -138,6 +138,7 @@ type_index_to_string (int index)
 static void
 price_to_gui (PriceEditDialog *pedit_dialog)
 {
+    GNCPrintAmountInfo print_info;
     gnc_commodity *commodity = NULL;
     gnc_commodity *currency = NULL;
     const gchar *name_space, *fullname;
@@ -188,6 +189,10 @@ price_to_gui (PriceEditDialog *pedit_dialog)
 
     gtk_combo_box_set_active (GTK_COMBO_BOX(pedit_dialog->type_combobox),
                               type_string_to_index (type));
+
+    print_info = gnc_commodity_print_info (currency, FALSE);
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (pedit_dialog->price_edit), print_info);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (pedit_dialog->price_edit), 0);
 
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pedit_dialog->price_edit), value);
 }
@@ -277,8 +282,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
 
     print_info = gnc_commodity_print_info (currency, FALSE);
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (pedit_dialog->price_edit), print_info);
-    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (pedit_dialog->price_edit),
-                                  gnc_commodity_get_fraction (currency));
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (pedit_dialog->price_edit), 0);
 
     if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (pedit_dialog->price_edit), NULL))
         return _("You must enter a valid amount.");
@@ -535,7 +539,7 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
     gtk_widget_show (w);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "price_label"));
-    gtk_label_set_mnemonic_widget (GTK_LABEL(label), w);
+    gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(w), label);
 
     g_signal_connect (G_OBJECT (w), "changed",
                       G_CALLBACK (pedit_data_changed_cb), pedit_dialog);

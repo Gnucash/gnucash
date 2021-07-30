@@ -276,7 +276,7 @@ test_gnc_split_to_float_split (Fixture *fixture, gconstpointer pData)
     g_assert_true (gnc_numeric_equal(fs->m_value, xaccSplitGetValue (s)));
     g_assert_true (gnc_numeric_equal(fs->m_amount, xaccSplitGetAmount (s)));
 
-    g_free (fs);
+    gnc_float_split_free (fs);
 }
 /* gnc_float_split_to_split
 void gnc_float_split_to_split (const FloatingSplit *fs, Split *split)// C: 2 in 1  Local: 1:0:0
@@ -412,9 +412,7 @@ test_gnc_txn_to_float_txn (Fixture *fixture, gconstpointer pData)
 
     g_assert_null (fsiter->next);
 
-    g_list_free_full(ft->m_splits, g_free);
-    ft->m_splits = NULL;
-    g_free (ft);
+    gnc_float_txn_free (ft);
 }
 static void
 test_gnc_txn_to_float_txn_cut_semantics (Fixture *fixture, gconstpointer pData)
@@ -471,9 +469,7 @@ test_gnc_txn_to_float_txn_cut_semantics (Fixture *fixture, gconstpointer pData)
 
     g_assert_null (fsiter->next);
 
-    g_list_free_full(ft->m_splits, g_free);
-    ft->m_splits = NULL;
-    g_free (ft);
+    gnc_float_txn_free (ft);
 }
 
 

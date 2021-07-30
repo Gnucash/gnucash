@@ -140,7 +140,6 @@ gnc_module_system_search_dirs(void)
  * gnc_module_system_init
  * initialize the module system
  *************************************************************/
-
 void
 gnc_module_system_init(void)
 {
@@ -153,6 +152,45 @@ gnc_module_system_init(void)
     gnc_module_system_refresh();
 }
 
+static inline gboolean
+exclude_module (const char* module)
+{
+     /* These modules were converted to shared libraries and removed
+      * from GnuCash 4. Simply dlopening them will introduce duplicate
+      * symbols and cause unwanted initializations that may lead to a
+      * crash. See https://bugs.gnucash.org/show_bug.cgi?id=798229.
+      */
+   static const char* excluded_modules[] =
+    {
+        "libgncmod-app-utils",
+        "libgncmod-bi-import",
+        "libgncmod-csv-export",
+        "libgncmod-csv-import",
+        "libgncmod-customer-import",
+        "libgncmod-engine",
+        "libgncmod-generic-import",
+        "libgncmod-gnome-search",
+        "libgncmod-gnome-utils",
+        "libgncmod-html",
+        "libgncmod-ledger-core",
+        "libgncmod-locale-reports-us",
+        "libgncmod-log-replay",
+        "libgncmod-qif-import",
+        "libgncmod-register-core",
+        "libgncmod-register-gnome",
+        "libgncmod-report-gnome",
+        "libgncmod-report-system",
+        "libgncmod-stylesheets",
+        "libgncmod-tax-us"
+    };
+    static const unsigned len = G_N_ELEMENTS (excluded_modules);
+    unsigned namelen = strchr(module, '.') ?
+        strchr(module, '.') - module : strlen (module);
+    for (unsigned i = 0; i < len; ++i)
+        if (strncmp(excluded_modules[i], module, MIN(namelen, strlen(excluded_modules[i]))) == 0)
+            return TRUE;
+    return FALSE;
+}
 
 /*************************************************************
  * gnc_module_system_refresh
@@ -198,8 +236,9 @@ gnc_module_system_refresh(void)
              * other platforms.
              */
             if ((g_str_has_suffix(dent, "." G_MODULE_SUFFIX)
-                    || g_str_has_suffix(dent, ".dylib"))
-                    && g_str_has_prefix(dent, GNC_MODULE_PREFIX))
+                 || g_str_has_suffix(dent, ".dylib"))
+                && g_str_has_prefix(dent, GNC_MODULE_PREFIX)
+                && !exclude_module(dent))
             {
                 /* get the full path name, then dlopen the library and see
                  * if it has the appropriate symbols to be a gnc_module */

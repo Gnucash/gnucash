@@ -287,9 +287,11 @@ gnc_get_default_report_font_family(void)
 
     pango_font_description_free (font_desc);
 
-    if (default_font_family == NULL ||
-        g_str_has_prefix (default_font_family, ".AppleSystemUIFont"))
-        return g_strdup("Arial");
+    if (g_str_has_prefix (default_font_family, ".AppleSystemUIFont"))
+    {
+        g_free (default_font_family);
+        return g_strdup ("Arial");
+    }
     else
         return default_font_family;
 }

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.6.18\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-06-14 22:07+0200\n"
+"POT-Creation-Date: 2021-06-30 07:34+0200\n"
 "PO-Revision-Date: 2017-11-05 08:54+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
@@ -1436,7 +1436,7 @@ msgstr "Кредит мора бити позитиван износ или га
 
 #: gnucash/gnome/dialog-customer.c:429 gnucash/gnome/dialog-employee.c:301
 #: gnucash/gnome/dialog-job.c:251 gnucash/gnome/dialog-vendor.c:287
-#: gnucash/gnome-utils/dialog-account.c:1572
+#: gnucash/gnome-utils/dialog-account.c:1574
 msgid "<No name>"
 msgstr "<Без имена>"
 
@@ -1922,7 +1922,7 @@ msgstr "Салдирано"
 #: gnucash/gnome/dialog-find-transactions2.c:117
 #: gnucash/gnome/dialog-find-transactions.c:115
 #: gnucash/report/html-acct-table.scm:615
-#: gnucash/report/reports/standard/equity-statement.scm:169
+#: gnucash/report/reports/standard/equity-statement.scm:170
 #: gnucash/report/reports/standard/income-statement.scm:267
 #: gnucash/report/reports/standard/trial-balance.scm:285
 msgid "Closing Entries"
@@ -2927,7 +2927,7 @@ msgstr "Да обришем цене?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:427
 #: gnucash/gtkbuilder/dialog-invoice.glade:615
-#: gnucash/report/reports/standard/equity-statement.scm:85
+#: gnucash/report/reports/standard/equity-statement.scm:86
 #: gnucash/report/reports/standard/income-statement.scm:116
 #: gnucash/report/reports/standard/trial-balance.scm:91
 msgid "Entries"
@@ -4276,7 +4276,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:74
 #: gnucash/report/reports/standard/cashflow-barchart.scm:45
 #: gnucash/report/reports/standard/category-barchart.scm:75
-#: gnucash/report/reports/standard/equity-statement.scm:68
+#: gnucash/report/reports/standard/equity-statement.scm:69
 #: gnucash/report/reports/standard/income-gst-statement.scm:121
 #: gnucash/report/reports/standard/income-statement.scm:61
 #: gnucash/report/reports/standard/net-charts.scm:45
@@ -7500,7 +7500,7 @@ msgstr ""
 msgid "Cannot change currency"
 msgstr "Откажите тренутни унос"
 
-#: gnucash/gnome-utils/dialog-account.c:1416
+#: gnucash/gnome-utils/dialog-account.c:1418
 msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
@@ -7508,22 +7508,22 @@ msgstr ""
 "Овај налог садржи трансакције.\n"
 "Промена ове опције није могућа."
 
-#: gnucash/gnome-utils/dialog-account.c:1606
+#: gnucash/gnome-utils/dialog-account.c:1608
 msgid "Edit Account"
 msgstr "Измените налог"
 
-#: gnucash/gnome-utils/dialog-account.c:1609
+#: gnucash/gnome-utils/dialog-account.c:1611
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "Нови налози (%d)"
 
-#: gnucash/gnome-utils/dialog-account.c:1619
+#: gnucash/gnome-utils/dialog-account.c:1621
 #: gnucash/gtkbuilder/dialog-account.glade:1102
 #: gnucash/gtkbuilder/dialog-account-picker.glade:160
 msgid "New Account"
 msgstr "Нови налог"
 
-#: gnucash/gnome-utils/dialog-account.c:2181
+#: gnucash/gnome-utils/dialog-account.c:2183
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s? This will replace the account "
@@ -7532,14 +7532,14 @@ msgstr ""
 "Да изменим бројеве непосредних подналога „%s“? Ово ће заменити кодно поље "
 "налога сваког садржаног налога новоствореним кодом."
 
-#: gnucash/gnome-utils/dialog-account.c:2286
+#: gnucash/gnome-utils/dialog-account.c:2288
 #, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-account.c:2313
+#: gnucash/gnome-utils/dialog-account.c:2315
 #, fuzzy, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
@@ -7547,7 +7547,7 @@ msgstr ""
 "Прикажите само билансе у матичном налогу, искључујући било које садржане "
 "налоге."
 
-#: gnucash/gnome-utils/dialog-account.c:2327
+#: gnucash/gnome-utils/dialog-account.c:2329
 #, fuzzy, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
@@ -9289,7 +9289,7 @@ msgid "_Unreconcile"
 msgstr "_Поништи измирење"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2233
+#: gnucash/register/ledger-core/split-register-model.c:2230
 msgid "Change reconciled split?"
 msgstr "Да изменим измирену поделу?"
 
@@ -9315,7 +9315,7 @@ msgstr ""
 "изменом?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2257
+#: gnucash/register/ledger-core/split-register-model.c:2254
 msgid "Chan_ge Split"
 msgstr "_Измени поделу"
 
@@ -9375,7 +9375,7 @@ msgstr "Благајник"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3059
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:133
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:532
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:1096
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:1092
 #: gnucash/register/ledger-core/split-register.c:2547
 #: libgnucash/engine/Account.cpp:151 libgnucash/engine/Account.cpp:165
 msgid "Charge"
@@ -9591,7 +9591,7 @@ msgid "Dist"
 msgstr "Расп"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
-#: gnucash/import-export/import-main-matcher.c:1396
+#: gnucash/import-export/import-main-matcher.c:1400
 #: gnucash/report/reports/standard/register.scm:218
 #: libgnucash/engine/Split.c:1604 libgnucash/engine/Split.c:1621
 msgid "-- Split Transaction --"
@@ -9604,8 +9604,8 @@ msgstr "— Подела деонице —"
 #. Translators: This is a date format, see i.e.
 #. https://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:436
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:579
-#: gnucash/register/ledger-core/split-register-model.c:1007
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:577
+#: gnucash/register/ledger-core/split-register-model.c:1006
 msgid "%A %d %B %Y"
 msgstr "%A, %d. %B %Y."
 
@@ -10126,43 +10126,43 @@ msgid "Enter the transaction number, such as the check number"
 msgstr "Унесите број трансакције, као што је број чека"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3196
-#: gnucash/register/ledger-core/split-register-model.c:1139
+#: gnucash/register/ledger-core/split-register-model.c:1136
 msgid "Enter the name of the Customer"
 msgstr "Унесите име потрошача"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3198
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3207
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3216
-#: gnucash/register/ledger-core/split-register-model.c:1176
+#: gnucash/register/ledger-core/split-register-model.c:1173
 msgid "Enter notes for the transaction"
 msgstr "Унесите напомене за трансакцију"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3200
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3209
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3218
-#: gnucash/register/ledger-core/split-register-model.c:1337
+#: gnucash/register/ledger-core/split-register-model.c:1334
 msgid "Enter a description of the split"
 msgstr "Унесите опис поделе"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3205
-#: gnucash/register/ledger-core/split-register-model.c:1142
+#: gnucash/register/ledger-core/split-register-model.c:1139
 msgid "Enter the name of the Vendor"
 msgstr "Унесите назив продавца"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3214
-#: gnucash/register/ledger-core/split-register-model.c:1145
+#: gnucash/register/ledger-core/split-register-model.c:1142
 msgid "Enter a description of the transaction"
 msgstr "Унесите опис трансакције"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3228
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3232
-#: gnucash/register/ledger-core/split-register-model.c:1499
-#: gnucash/register/ledger-core/split-register-model.c:1566
+#: gnucash/register/ledger-core/split-register-model.c:1496
+#: gnucash/register/ledger-core/split-register-model.c:1563
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Унесите налог са кога се преноси, или изаберите један са списка"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3230
-#: gnucash/register/ledger-core/split-register-model.c:1209
+#: gnucash/register/ledger-core/split-register-model.c:1206
 msgid "Reason the transaction was voided"
 msgstr "Разлог због којег је поништена трансакција"
 
@@ -10181,7 +10181,7 @@ msgstr "Унесите вредност купљених или продатих
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3272
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3284
-#: gnucash/register/ledger-core/split-register-model.c:1447
+#: gnucash/register/ledger-core/split-register-model.c:1444
 msgid "Enter the number of shares bought or sold"
 msgstr "Унесите број купљених или продатих акција"
 
@@ -10194,17 +10194,17 @@ msgid "Enter the rate"
 msgstr "Унесите стопу"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3314
-#: gnucash/register/ledger-core/split-register-model.c:1411
+#: gnucash/register/ledger-core/split-register-model.c:1408
 msgid "Enter the effective share price"
 msgstr "Унесите ефективну цену акције"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3324
-#: gnucash/register/ledger-core/split-register-model.c:2392
+#: gnucash/register/ledger-core/split-register-model.c:2389
 msgid "Enter credit formula for real transaction"
 msgstr "Унесите формулу кредиту за стварну трансакцију"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3334
-#: gnucash/register/ledger-core/split-register-model.c:2358
+#: gnucash/register/ledger-core/split-register-model.c:2355
 msgid "Enter debit formula for real transaction"
 msgstr "Унесите формулу дуга за стварну трансакцију"
 
@@ -13859,7 +13859,7 @@ msgstr ""
 #: gnucash/report/reports/standard/cashflow-barchart.scm:55
 #: gnucash/report/reports/standard/cash-flow.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:69
-#: gnucash/report/reports/standard/equity-statement.scm:65
+#: gnucash/report/reports/standard/equity-statement.scm:66
 #: gnucash/report/reports/standard/ifrs-cost-basis.scm:53
 #: gnucash/report/reports/standard/income-statement.scm:58
 #: gnucash/report/reports/standard/lot-viewer.scm:35
@@ -14025,7 +14025,7 @@ msgstr "Опсег: "
 #: gnucash/report/reports/standard/cashflow-barchart.scm:56
 #: gnucash/report/reports/standard/cash-flow.scm:43
 #: gnucash/report/reports/standard/category-barchart.scm:70
-#: gnucash/report/reports/standard/equity-statement.scm:66
+#: gnucash/report/reports/standard/equity-statement.scm:67
 #: gnucash/report/reports/standard/ifrs-cost-basis.scm:54
 #: gnucash/report/reports/standard/income-statement.scm:59
 #: gnucash/report/reports/standard/lot-viewer.scm:36
@@ -14679,8 +14679,8 @@ msgstr "Поставке"
 #: gnucash/gtkbuilder/dialog-preferences.glade:2036
 #: gnucash/gtkbuilder/dialog-preferences.glade:2093
 #: gnucash/report/report-core.scm:159
-#: gnucash/report/reports/standard/equity-statement.scm:108
-#: gnucash/report/reports/standard/equity-statement.scm:112
+#: gnucash/report/reports/standard/equity-statement.scm:109
+#: gnucash/report/reports/standard/equity-statement.scm:113
 #: gnucash/report/reports/standard/register.scm:347
 #: gnucash/report/reports/standard/trial-balance.scm:185
 #: gnucash/report/reports/standard/trial-balance.scm:189
@@ -21557,52 +21557,52 @@ msgstr "Подаци"
 msgid "Additional Comments"
 msgstr "Додатно за карту:"
 
-#: gnucash/import-export/import-main-matcher.c:1479
+#: gnucash/import-export/import-main-matcher.c:1483
 msgid "New, already balanced"
 msgstr "Ново, већ салдирано"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1505
+#: gnucash/import-export/import-main-matcher.c:1509
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Ново, пребаци %s на (ручно) „%s“"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1513
+#: gnucash/import-export/import-main-matcher.c:1517
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Ново, пребаци %s на (самостално) „%s“"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:1524
+#: gnucash/import-export/import-main-matcher.c:1528
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Ново, НЕИЗМИРЕНО (треба радње за пренос „%s“)!"
 
-#: gnucash/import-export/import-main-matcher.c:1541
+#: gnucash/import-export/import-main-matcher.c:1545
 msgid "Reconcile (manual) match"
 msgstr "Измири (ручно) поређење"
 
-#: gnucash/import-export/import-main-matcher.c:1545
+#: gnucash/import-export/import-main-matcher.c:1549
 msgid "Reconcile (auto) match"
 msgstr "Измири (самостално) поређење"
 
-#: gnucash/import-export/import-main-matcher.c:1552
-#: gnucash/import-export/import-main-matcher.c:1578
+#: gnucash/import-export/import-main-matcher.c:1556
+#: gnucash/import-export/import-main-matcher.c:1582
 msgid "Match missing!"
 msgstr "Недостаје порођење!"
 
-#: gnucash/import-export/import-main-matcher.c:1567
+#: gnucash/import-export/import-main-matcher.c:1571
 msgid "Update and reconcile (manual) match"
 msgstr "Ажурирај и измири (ручно) поређење"
 
-#: gnucash/import-export/import-main-matcher.c:1571
+#: gnucash/import-export/import-main-matcher.c:1575
 msgid "Update and reconcile (auto) match"
 msgstr "Ажурирај и измири (самостално) поређење"
 
-#: gnucash/import-export/import-main-matcher.c:1586
+#: gnucash/import-export/import-main-matcher.c:1590
 msgid "Do not import (no action selected)"
 msgstr "Не увози (није изабрана радња)"
 
@@ -22391,7 +22391,7 @@ msgstr ">"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:1094
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
 #: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4414
 msgid "Cash"
 msgstr "Готовина"
@@ -22459,103 +22459,103 @@ msgstr "Унесите налог прихода/расхода за унос, �
 msgid "Enter the type of Entry"
 msgstr "Унесите врсту уноса"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:591
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:587
 msgid "Enter the Entry Description"
 msgstr "Унесите опис уноса"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:607
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:603
 msgid "Enter the Discount Amount"
 msgstr "Унесите износ попуста"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:610
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:606
 msgid "Enter the Discount Percent"
 msgstr "Унесите проценат попуста"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:613
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:609
 msgid "Enter the Discount ... unknown type"
 msgstr "Унесите попуст ... непозната врста"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:631
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:627
 msgid "Discount Type: Monetary Value"
 msgstr "Врста попуста: Новчана вредност"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:634
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:630
 msgid "Discount Type: Percent"
 msgstr "Врста попуста: Проценат"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:637
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:633
 msgid "Select the Discount Type"
 msgstr "Изаберите врсту попуста"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:654
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:650
 msgid "Tax computed after discount is applied"
 msgstr "Обрачунати порез након примењеног попуста"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:657
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:653
 msgid "Discount and tax both applied on pretax value"
 msgstr "Попуст и порез оба примењена на вредност опорезивања"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:660
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:656
 msgid "Discount computed after tax is applied"
 msgstr "Обрачунати попуст након примењеног пореза"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:663
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:659
 msgid "Select how to compute the Discount and Taxes"
 msgstr "Изаберите начин обрачунавања попуста и пореза"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:676
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:672
 msgid "Enter the unit-Price for this Entry"
 msgstr "Унесите јединичну цену за овај унос"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:688
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:684
 msgid "Enter the Quantity of units for this Entry"
 msgstr "Унесите количину јединица за овај унос"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:700
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:696
 msgid "Enter the Tax Table to apply to this entry"
 msgstr "Унесите пореску табелу која ће бити примењена на овом уносу"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:709
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:705
 msgid "Is this entry taxable?"
 msgstr "Да ли је ова ставка опорезива?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:718
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:714
 msgid "Is the tax already included in the price of this entry?"
 msgstr "Да ли је порез већ укључен у цену овог уноса?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:736
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:732
 msgid "Is this entry invoiced?"
 msgstr "Да ли је овај унос фактурисан?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:742
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:738
 msgid "Is this entry credited?"
 msgstr "Да ли је овај унос кредитиран?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:746
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:742
 msgid "Include this entry on this invoice?"
 msgstr "Да укључим овај унос у ову фактуру?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:750
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:746
 msgid "Include this entry on this credit note?"
 msgstr "Да укључим овај унос у ову укњижбу?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:753
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:749
 msgid "Unknown EntryLedger Type"
 msgstr "Непозната врста књиге уноса"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:766
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
 msgid "The subtotal value of this entry "
 msgstr "Вредност међузбира овог уноса "
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:778
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
 msgstr "Укупни порез овог уноса "
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:787
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:783
 msgid "Is this entry billable to a customer or job?"
 msgstr "Да ли је овај унос обрачунљив потрошачу или послу?"
 
-#: gnucash/register/ledger-core/gncEntryLedgerModel.c:796
+#: gnucash/register/ledger-core/gncEntryLedgerModel.c:792
 msgid "How did you pay for this item?"
 msgstr "Како плаћате ову ставку?"
 
@@ -22762,11 +22762,11 @@ msgstr "Укупно акција"
 msgid "Reconciled on %s"
 msgstr "Измирен"
 
-#: gnucash/register/ledger-core/split-register-model.c:1020
+#: gnucash/register/ledger-core/split-register-model.c:1017
 msgid "Scheduled"
 msgstr "Планирано"
 
-#: gnucash/register/ledger-core/split-register-model.c:1069
+#: gnucash/register/ledger-core/split-register-model.c:1066
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
@@ -22774,7 +22774,7 @@ msgstr ""
 "Унесите упуту, као што је фактура или број чека, заједничку за све линије "
 "уноса (поделе)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1071
+#: gnucash/register/ledger-core/split-register-model.c:1068
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
@@ -22782,20 +22782,20 @@ msgstr ""
 "Унесите упуту, као што је фактура или број чека, јединствену за сваку линију "
 "уноса (поделу)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1076
+#: gnucash/register/ledger-core/split-register-model.c:1073
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
 msgstr ""
 "Унесите упуту, као што је број чека, заједничку за све линије уноса (поделе)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1078
+#: gnucash/register/ledger-core/split-register-model.c:1075
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
 msgstr ""
 "Унесите упуту, као што је број чека, јединствену за сваку линију уноса "
 "(поделу)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1099
+#: gnucash/register/ledger-core/split-register-model.c:1096
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
@@ -22803,18 +22803,18 @@ msgstr ""
 "Унесите упуту трансакције, као што је фактура или број чека, заједничку за "
 "све линије уноса (поделе)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1103
+#: gnucash/register/ledger-core/split-register-model.c:1100
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
 msgstr ""
 "Унесите упуту трансакције која ће бити заједничка за све линије уноса "
 "(поделе)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1308
+#: gnucash/register/ledger-core/split-register-model.c:1305
 msgid "Enter an action type, or choose one from the list"
 msgstr "Унесите врсту радње, или је изаберите са списка"
 
-#: gnucash/register/ledger-core/split-register-model.c:1309
+#: gnucash/register/ledger-core/split-register-model.c:1306
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
@@ -22822,20 +22822,20 @@ msgstr ""
 "Унесите број упуте, као што је следећи број чека, или изаберите врсту радње "
 "са списка"
 
-#: gnucash/register/ledger-core/split-register-model.c:1576
+#: gnucash/register/ledger-core/split-register-model.c:1573
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 "Ова трансакција има више подела; притисните дугме поделе да их видите све"
 
-#: gnucash/register/ledger-core/split-register-model.c:1579
+#: gnucash/register/ledger-core/split-register-model.c:1576
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
 "Ова трансакција је подела деонице; притисните дугме поделе да видите "
 "појединости"
 
-#: gnucash/register/ledger-core/split-register-model.c:2098
+#: gnucash/register/ledger-core/split-register-model.c:2095
 #, c-format
 msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
@@ -22848,12 +22848,12 @@ msgstr ""
 "\n"
 "„%s“"
 
-#: gnucash/register/ledger-core/split-register-model.c:2222
+#: gnucash/register/ledger-core/split-register-model.c:2219
 #, fuzzy
 msgid "Change transaction containing a reconciled split?"
 msgstr "Да изменим поделу повезану са измиреном поделом?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2224
+#: gnucash/register/ledger-core/split-register-model.c:2221
 #, fuzzy, c-format
 msgid ""
 "The transaction you are about to change contains reconciled splits in the "
@@ -22866,7 +22866,7 @@ msgstr ""
 "урадите можете учинити тешким будућа измирења! Желите да наставите са овом "
 "изменом?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2235
+#: gnucash/register/ledger-core/split-register-model.c:2232
 #, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
@@ -22877,7 +22877,7 @@ msgstr ""
 "урадите можете учинити тешким будућа измирења! Желите да наставите са овом "
 "изменом?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2260
+#: gnucash/register/ledger-core/split-register-model.c:2257
 #, fuzzy
 msgid "Chan_ge Transaction"
 msgstr "_Откажи трансакцију"
@@ -23390,7 +23390,7 @@ msgstr "Редослед ређања"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:58
 #: gnucash/report/reports/standard/cash-flow.scm:49
 #: gnucash/report/reports/standard/category-barchart.scm:72
-#: gnucash/report/reports/standard/equity-statement.scm:77
+#: gnucash/report/reports/standard/equity-statement.scm:78
 #: gnucash/report/reports/standard/income-statement.scm:108
 #: gnucash/report/reports/standard/net-charts.scm:42
 #: gnucash/report/reports/standard/portfolio.scm:54
@@ -23416,7 +23416,7 @@ msgstr "Валута извештаја"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:59
 #: gnucash/report/reports/standard/cash-flow.scm:50
 #: gnucash/report/reports/standard/category-barchart.scm:73
-#: gnucash/report/reports/standard/equity-statement.scm:78
+#: gnucash/report/reports/standard/equity-statement.scm:79
 #: gnucash/report/reports/standard/income-statement.scm:109
 #: gnucash/report/reports/standard/net-charts.scm:43
 #: gnucash/report/reports/standard/portfolio.scm:35
@@ -24610,7 +24610,7 @@ msgstr "Сажетак будућих заказаних трансакција"
 #: gnucash/report/reports/standard/balsheet-eg.scm:140
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:42
 #: gnucash/report/reports/standard/budget-income-statement.scm:52
-#: gnucash/report/reports/standard/equity-statement.scm:59
+#: gnucash/report/reports/standard/equity-statement.scm:60
 #: gnucash/report/reports/standard/income-statement.scm:52
 #: gnucash/report/reports/standard/trial-balance.scm:65
 msgid "Report Title"
@@ -24621,7 +24621,7 @@ msgstr "Наслов извештаја"
 #: gnucash/report/reports/standard/balsheet-eg.scm:141
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:43
 #: gnucash/report/reports/standard/budget-income-statement.scm:53
-#: gnucash/report/reports/standard/equity-statement.scm:60
+#: gnucash/report/reports/standard/equity-statement.scm:61
 #: gnucash/report/reports/standard/income-statement.scm:53
 #: gnucash/report/reports/standard/trial-balance.scm:66
 msgid "Title for this report."
@@ -24631,7 +24631,7 @@ msgstr "Наслов за овај извештај."
 #: gnucash/report/reports/standard/balance-sheet.scm:78
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:45
 #: gnucash/report/reports/standard/budget-income-statement.scm:55
-#: gnucash/report/reports/standard/equity-statement.scm:62
+#: gnucash/report/reports/standard/equity-statement.scm:63
 #: gnucash/report/reports/standard/income-statement.scm:55
 #: gnucash/report/reports/standard/trial-balance.scm:68
 msgid "Company name"
@@ -24641,7 +24641,7 @@ msgstr "Име компаније"
 #: gnucash/report/reports/standard/balance-sheet.scm:79
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:46
 #: gnucash/report/reports/standard/budget-income-statement.scm:56
-#: gnucash/report/reports/standard/equity-statement.scm:63
+#: gnucash/report/reports/standard/equity-statement.scm:64
 #: gnucash/report/reports/standard/income-statement.scm:56
 #: gnucash/report/reports/standard/trial-balance.scm:69
 msgid "Name of company/individual."
@@ -24737,7 +24737,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balance-sheet.scm:106
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:72
 #: gnucash/report/reports/standard/budget-income-statement.scm:94
-#: gnucash/report/reports/standard/equity-statement.scm:72
+#: gnucash/report/reports/standard/equity-statement.scm:73
 #: gnucash/report/reports/standard/income-statement.scm:81
 msgid "Show accounting-style rules"
 msgstr "Прикажи правила у стилу рачуноводства"
@@ -24746,7 +24746,7 @@ msgstr "Прикажи правила у стилу рачуноводства"
 #: gnucash/report/reports/standard/balance-sheet.scm:108
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:74
 #: gnucash/report/reports/standard/budget-income-statement.scm:96
-#: gnucash/report/reports/standard/equity-statement.scm:74
+#: gnucash/report/reports/standard/equity-statement.scm:75
 #: gnucash/report/reports/standard/income-statement.scm:83
 msgid "Use rules beneath columns of added numbers like accountants do."
 msgstr ""
@@ -24809,7 +24809,7 @@ msgstr "Прикажите белешке налога."
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:101
 #: gnucash/report/reports/standard/budget-income-statement.scm:114
-#: gnucash/report/reports/standard/equity-statement.scm:76
+#: gnucash/report/reports/standard/equity-statement.scm:77
 #: gnucash/report/reports/standard/income-statement.scm:107
 #: gnucash/report/reports/standard/trial-balance.scm:128
 msgid "Commodities"
@@ -24820,7 +24820,7 @@ msgstr "Робе"
 #: gnucash/report/reports/standard/balsheet-eg.scm:180
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:104
 #: gnucash/report/reports/standard/budget-income-statement.scm:117
-#: gnucash/report/reports/standard/equity-statement.scm:79
+#: gnucash/report/reports/standard/equity-statement.scm:80
 #: gnucash/report/reports/standard/income-statement.scm:110
 #: gnucash/report/reports/standard/trial-balance.scm:131
 msgid "Show Foreign Currencies"
@@ -24831,7 +24831,7 @@ msgstr "Прикажи стране валуте"
 #: gnucash/report/reports/standard/balsheet-eg.scm:182
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:106
 #: gnucash/report/reports/standard/budget-income-statement.scm:119
-#: gnucash/report/reports/standard/equity-statement.scm:81
+#: gnucash/report/reports/standard/equity-statement.scm:82
 #: gnucash/report/reports/standard/income-statement.scm:112
 #: gnucash/report/reports/standard/trial-balance.scm:133
 msgid "Display any foreign currency amount in an account."
@@ -24843,7 +24843,7 @@ msgstr "Прикажите износ било које стране валут�
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:107
 #: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/cash-flow.scm:51
-#: gnucash/report/reports/standard/equity-statement.scm:82
+#: gnucash/report/reports/standard/equity-statement.scm:83
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:134
 msgid "Show Exchange Rates"
@@ -24855,7 +24855,7 @@ msgstr "Прикажи стопе размене"
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
 #: gnucash/report/reports/standard/budget-income-statement.scm:121
 #: gnucash/report/reports/standard/cash-flow.scm:77
-#: gnucash/report/reports/standard/equity-statement.scm:83
+#: gnucash/report/reports/standard/equity-statement.scm:84
 #: gnucash/report/reports/standard/income-statement.scm:114
 #: gnucash/report/reports/standard/trial-balance.scm:135
 msgid "Show the exchange rates used."
@@ -24875,7 +24875,7 @@ msgstr "Изостави налоге"
 
 #. Translators: This is part of the report title, which is capitalzed in English, but not all other languages
 #: gnucash/report/reports/standard/account-summary.scm:325
-#: gnucash/report/reports/standard/equity-statement.scm:302
+#: gnucash/report/reports/standard/equity-statement.scm:303
 #: gnucash/report/reports/standard/income-statement.scm:406
 #: gnucash/report/reports/standard/trial-balance.scm:407
 #, fuzzy, scheme-format
@@ -25290,14 +25290,12 @@ msgstr "Губици трговања"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1087
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1102
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:759
-#: gnucash/report/reports/standard/equity-statement.scm:472
 #: gnucash/report/reports/standard/trial-balance.scm:729
 msgid "Unrealized Gains"
 msgstr "Неостварени добици"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:520
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:760
-#: gnucash/report/reports/standard/equity-statement.scm:473
 #: gnucash/report/reports/standard/trial-balance.scm:730
 msgid "Unrealized Losses"
 msgstr "Неостварени губици"
@@ -26009,13 +26007,13 @@ msgid "for Budget ~a Periods ~d - ~d"
 msgstr "за „%s“ у раздобљу %u — %u"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:560
-#: gnucash/report/reports/standard/equity-statement.scm:455
+#: gnucash/report/reports/standard/equity-statement.scm:457
 #: gnucash/report/reports/standard/income-statement.scm:524
 msgid "Net income"
 msgstr "Нето приход"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:561
-#: gnucash/report/reports/standard/equity-statement.scm:456
+#: gnucash/report/reports/standard/equity-statement.scm:458
 #: gnucash/report/reports/standard/income-statement.scm:525
 msgid "Net loss"
 msgstr "Нето губитак"
@@ -26451,75 +26449,88 @@ msgstr "Нема потрошача"
 msgid "Customer Summary"
 msgstr "Извештај потрошача"
 
-#: gnucash/report/reports/standard/equity-statement.scm:55
+#. Translators: This statement is about a range of time
+#: gnucash/report/reports/standard/equity-statement.scm:56
 msgid "Equity Statement"
 msgstr "Стање акција"
 
-#: gnucash/report/reports/standard/equity-statement.scm:70
+#: gnucash/report/reports/standard/equity-statement.scm:71
 msgid "Report only on these accounts."
 msgstr "Поднесите извештај само о овим налозима."
 
-#: gnucash/report/reports/standard/equity-statement.scm:86
+#: gnucash/report/reports/standard/equity-statement.scm:87
 #: gnucash/report/reports/standard/income-statement.scm:117
 #: gnucash/report/reports/standard/trial-balance.scm:104
 msgid "Closing Entries pattern"
 msgstr "Шаблон завршних уноса"
 
-#: gnucash/report/reports/standard/equity-statement.scm:88
+#: gnucash/report/reports/standard/equity-statement.scm:89
 #: gnucash/report/reports/standard/income-statement.scm:119
 #: gnucash/report/reports/standard/trial-balance.scm:106
 msgid "Any text in the Description column which identifies closing entries."
 msgstr "Било који текст у колони описа који одређује завршне уносе."
 
-#: gnucash/report/reports/standard/equity-statement.scm:90
+#: gnucash/report/reports/standard/equity-statement.scm:91
 #: gnucash/report/reports/standard/income-statement.scm:121
 #: gnucash/report/reports/standard/trial-balance.scm:108
 msgid "Closing Entries pattern is case-sensitive"
 msgstr "Шаблон завршних уноса разликује величину слова"
 
-#: gnucash/report/reports/standard/equity-statement.scm:92
+#: gnucash/report/reports/standard/equity-statement.scm:93
 #: gnucash/report/reports/standard/income-statement.scm:123
 #: gnucash/report/reports/standard/trial-balance.scm:110
 msgid "Causes the Closing Entries Pattern match to be case-sensitive."
 msgstr "Упоређивање шаблона завршних уноса разликоваће величину слова."
 
-#: gnucash/report/reports/standard/equity-statement.scm:94
+#: gnucash/report/reports/standard/equity-statement.scm:95
 #: gnucash/report/reports/standard/income-statement.scm:125
 #: gnucash/report/reports/standard/trial-balance.scm:112
 msgid "Closing Entries Pattern is regular expression"
 msgstr "Шаблон завршних уноса је регуларни израз"
 
-#: gnucash/report/reports/standard/equity-statement.scm:96
+#: gnucash/report/reports/standard/equity-statement.scm:97
 #: gnucash/report/reports/standard/income-statement.scm:127
 #: gnucash/report/reports/standard/trial-balance.scm:114
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression."
 msgstr "Шаблон завршних уноса биће сматран регуларним изразом."
 
-#: gnucash/report/reports/standard/equity-statement.scm:423
+#: gnucash/report/reports/standard/equity-statement.scm:425
 #: gnucash/report/reports/standard/income-statement.scm:480
 #: gnucash/report/reports/standard/trial-balance.scm:399
 msgid "for Period"
 msgstr "за раздобље"
 
-#: gnucash/report/reports/standard/equity-statement.scm:450
-#: gnucash/report/reports/standard/equity-statement.scm:486
+#: gnucash/report/reports/standard/equity-statement.scm:452
+#: gnucash/report/reports/standard/equity-statement.scm:488
 msgid "Capital"
 msgstr "Капитал"
 
-#: gnucash/report/reports/standard/equity-statement.scm:461
+#: gnucash/report/reports/standard/equity-statement.scm:463
 msgid "Investments"
 msgstr "Улагања"
 
-#: gnucash/report/reports/standard/equity-statement.scm:466
+#: gnucash/report/reports/standard/equity-statement.scm:468
 msgid "Withdrawals"
 msgstr "Подизања"
 
-#: gnucash/report/reports/standard/equity-statement.scm:479
+#: gnucash/report/reports/standard/equity-statement.scm:474
+#, fuzzy
+#| msgid "Unrealized Gains"
+msgid "Unrealized Gains for Period"
+msgstr "Неостварени добици"
+
+#: gnucash/report/reports/standard/equity-statement.scm:475
+#, fuzzy
+#| msgid "Unrealized Losses"
+msgid "Unrealized Losses for Period"
+msgstr "Неостварени губици"
+
+#: gnucash/report/reports/standard/equity-statement.scm:481
 msgid "Increase in capital"
 msgstr "Повећај у капиталу"
 
-#: gnucash/report/reports/standard/equity-statement.scm:480
+#: gnucash/report/reports/standard/equity-statement.scm:482
 msgid "Decrease in capital"
 msgstr "Смањи у капиталу"
 
@@ -30498,11 +30509,11 @@ msgctxt ""
 msgid "Split"
 msgstr "Подели"
 
-#: libgnucash/engine/Transaction.c:2715
+#: libgnucash/engine/Transaction.c:2744
 msgid "Voided transaction"
 msgstr "Поништена трансакција"
 
-#: libgnucash/engine/Transaction.c:2728
+#: libgnucash/engine/Transaction.c:2757
 msgid "Transaction Voided"
 msgstr "Трансакција је поништена"
 

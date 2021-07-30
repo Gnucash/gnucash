@@ -617,7 +617,7 @@
 ;; if neither trans-currency nor account-commodity = USD-currency,
 ;;    use split amount & pricedb lookup using lookup date
 ;; returns the converted amount, the conversion text, and, if the conversion
-;;   price was looked up, the pricedb-lookup-price and addtitional text in
+;;   price was looked up, the pricedb-lookup-price and additional text in
 ;;   a list
 
   (let*

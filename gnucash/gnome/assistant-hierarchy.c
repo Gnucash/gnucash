@@ -558,7 +558,7 @@ update_language_region_combos (hierarchy_data *data, const gchar *locale_dir)
         g_dir_close (acct_dir);
     }
 
-    // now try and set the language combo to the defualt language
+    // now try and set the language combo to the default language
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(language_store), &language_iter);
     while (valid)
     {

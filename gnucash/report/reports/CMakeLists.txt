@@ -54,7 +54,7 @@ set (reports_standard_SCHEME
 # Reports depending on one of the generator functions from
 # scm-reports-standard-with-exposed-generator:
 set (reports_standard_SCHEME_2
-    standard/customer-summary.scm # Depends on gnc:owner-report-create
+    standard/customer-summary.scm # Depends on gnc:owner-report-create-with-enddate
 )
 
 set(reports_example_SCHEME

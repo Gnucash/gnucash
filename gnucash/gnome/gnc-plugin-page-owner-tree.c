@@ -976,8 +976,10 @@ static int build_owner_report (GncOwner *owner, Account *acc)
 
     args = SCM_EOL;
 
-    func = scm_c_eval_string ("gnc:owner-report-create");
+    func = scm_c_eval_string ("gnc:owner-report-create-with-enddate");
     g_return_val_if_fail (scm_is_procedure (func), -1);
+
+    args = scm_cons (SCM_BOOL_F, args); /* enddate is #f */
 
     if (acc)
     {

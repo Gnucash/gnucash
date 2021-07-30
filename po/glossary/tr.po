@@ -6,14 +6,16 @@
 # Muha Aliss <muhaaliss@pm.me>, 2021.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2021.
 # udo pton <udopton@gmail.com>, 2021.
+# T. E. Kalaycı <tekrei@gmail.com>, 2021.
+# Tur <tur+translate@simplelogin.fr>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-02-09 01:51+0100\n"
-"PO-Revision-Date: 2021-05-06 13:32+0000\n"
-"Last-Translator: udo pton <udopton@gmail.com>\n"
+"PO-Revision-Date: 2021-07-14 19:33+0000\n"
+"Last-Translator: Tur <tur+translate@simplelogin.fr>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "tr/>\n"
 "Language: tr\n"
@@ -21,11 +23,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgstr ""
+msgstr "Terim (Sayın çevirmen: Bu dosya kullanıcı tarafından görülmeyecektir!)"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
@@ -49,67 +51,67 @@ msgstr "hesap adı"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
 msgid "account type: Active"
-msgstr "account type: Aktif"
+msgstr "hesap türü: Aktif"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr "account type: Varlık"
+msgstr "hesap türü: Varlık"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
 msgid "account type: Assets & Liabilities"
-msgstr "account type: Varlıklar ve Borçlar"
+msgstr "hesap türü: Varlıklar ve Borçlar"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "account type: denetleme"
+msgstr "hesap türü: denetleme"
 
 #. "-"
 msgid "account type: currency"
-msgstr "account type: değer"
+msgstr "hesap türü: değer"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr "account type: Öz kaynak"
+msgstr "hesap türü: Öz kaynak"
 
 #. "-"
 msgid "account type: Expense"
-msgstr "account type: Harcama"
+msgstr "hesap türü: Harcama"
 
 #. "-"
 msgid "account type: Income"
-msgstr "account type: Gelir"
+msgstr "hesap türü: Gelir"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr "account type: Borç"
+msgstr "hesap türü: Borç"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "account type: para-piyasası"
+msgstr "hesap türü: para-piyasası"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "account type: Yatırım fonu"
+msgstr "hesap türü: Yatırım fonu"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
-msgstr ""
+msgstr "hesap türü: Pasif"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr "account type: Kar & Zarar"
+msgstr "hesap türü: Kâr-Zarar"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr "account type: birikim"
+msgstr "hesap türü: birikim"
 
 #. "-"
 msgid "account type: Stock"
-msgstr ""
+msgstr "hesap türü: Hisse"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
-msgstr ""
+msgstr "hesap türü: takas"
 
 #. "-"
 msgid "account: parent account"
@@ -151,11 +153,11 @@ msgstr "action: Otomatik ödeme"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr ""
+msgstr "eylem: dağıtım"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr ""
+msgstr "eylem: kâr"
 
 #. "-"
 msgid "action: fee"
@@ -163,15 +165,15 @@ msgstr "action: işlem ücreti"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr ""
+msgstr "eylem: faiz"
 
 #. "-"
 msgid "action: loan"
-msgstr ""
+msgstr "eylem: borç"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr ""
+msgstr "eylem: ödeme"
 
 #. "Point of sale"
 msgid "action: POS"
@@ -179,11 +181,11 @@ msgstr "action: POS"
 
 #. "-"
 msgid "action: rebate"
-msgstr ""
+msgstr "eylem: iskonto"
 
 #. "-"
 msgid "action: sell"
-msgstr ""
+msgstr "eylem: sat"
 
 #. "-"
 msgid "action: Teller"
@@ -831,28 +833,28 @@ msgstr ""
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
-msgstr ""
+msgstr "türü"
 
 #. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
 msgid "units"
-msgstr ""
+msgstr "birimler"
 
 #. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"
-msgstr ""
+msgstr "Link"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr ""
+msgstr "değer (paylaşırken)"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
-msgstr ""
+msgstr "sağlayıcı"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr ""
+msgstr "makbuz"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr ""
+msgstr "çek"

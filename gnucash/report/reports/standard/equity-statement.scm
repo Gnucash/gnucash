@@ -52,6 +52,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 
+;; Translators: This statement is about a range of time
 (define reportname (N_ "Equity Statement"))
 
 ;; define all option's names and help text so that they are properly
@@ -375,9 +376,10 @@
 				          start-date))
 
 	       (net-unrealized-gains
-                (unrealized-gains-at-date end-book-balance
-				          end-exchange-fn
-				          end-date))
+                (gnc:collector- (unrealized-gains-at-date end-book-balance
+                                                          end-exchange-fn
+                                                          end-date)
+                                start-unrealized-gains))
 
 	       (equity-closing
                 (gnc:account-get-trans-type-balance-interval-with-closing
@@ -469,8 +471,8 @@
           (unless (gnc-commodity-collector-allzero? net-unrealized-gains)
             (add-report-line
              build-table
-             (G_ "Unrealized Gains")
-             (G_ "Unrealized Losses")
+             (G_ "Unrealized Gains for Period")
+             (G_ "Unrealized Losses for Period")
              net-unrealized-gains
              0 end-exchange-fn #f #f))
 

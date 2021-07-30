@@ -236,4 +236,13 @@ void gnc_amount_edit_select_region (GNCAmountEdit *gae,
  */
 void gnc_amount_edit_show_warning_symbol (GNCAmountEdit *gae, gboolean show);
 
+/**
+ * gnc_amount_edit_make_mnemonic_target:
+ * @gae: The GNCAmountEdit widget
+ * @label: The label whose access key should set focus to this widget.
+ *
+ * Returns nothing.
+ */
+void gnc_amount_edit_make_mnemonic_target (GNCAmountEdit *gae, GtkWidget *label);
+
 #endif

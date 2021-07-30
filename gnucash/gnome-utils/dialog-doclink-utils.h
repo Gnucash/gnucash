@@ -25,7 +25,7 @@
 
 #define GNC_DOC_LINK_PATH_HEAD "assoc-head"
 /* Note, assoc-head is the old name for the document link head which has been
-   kept for compatability */
+   kept for compatibility */
 
 
 /** Return the current documentation-link file path head uri.
@@ -83,7 +83,7 @@ gchar * gnc_doclink_convert_trans_link_uri (gpointer trans, gboolean book_ro);
  *  The function allocates memory for the uri. The calling function should
  *  free this memory with g_free when the unescaped uri is no longer needed.
 
- *  Return an unesacped uri for displaying and if OS is windows change the
+ *  Return an unescaped uri for displaying and if OS is windows change the
  *  '/' to '\' to look like a traditional windows path
  *
  *  @param path_head The starting common path head
@@ -99,7 +99,7 @@ gchar * gnc_doclink_get_unescape_uri (const gchar *path_head, const gchar *uri, 
  *  The function allocates memory for the uri. The calling function should
  *  free this memory with g_free when the unescaped uri is no longer needed.
 
- *  Return an unesacped uri for displaying and if OS is windows change the
+ *  Return an unescaped uri for displaying and if OS is windows change the
  *  '/' to '\' to look like a traditional windows path
  *
  *  @param uri The document link

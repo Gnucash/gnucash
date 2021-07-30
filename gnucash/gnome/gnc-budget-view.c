@@ -385,7 +385,7 @@ gbv_tree_view_model_row_changed_cb (GtkTreeModel *tree_model, GtkTreePath *path,
     GncBudgetView *budget_view = user_data;
     GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
-    // The model row-changed signal can be emmitted multiple times so we
+    // The model row-changed signal can be emitted multiple times so we
     // use an idle_add to do a redraw of the totals tree view once
     g_idle_remove_by_data (priv->totals_tree_view);
     g_idle_add ((GSourceFunc)gbv_totals_tree_view_redraw_idle, priv->totals_tree_view);

@@ -66,7 +66,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; general and efficent string-replace-substring function, based on
+;; general and efficient string-replace-substring function, based on
 ;; function designed by Mark H Weaver, core guile developer. avoids
 ;; string-append which will constantly build new strings. augmented
 ;; with start and end indices; will selective choose to replace

@@ -1206,7 +1206,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label8877434">
+                  <object class="GtkLabel" id="amount_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">_Amount</property>
