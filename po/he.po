@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-28 15:33+0000\n"
+"PO-Revision-Date: 2021-07-31 19:43+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -6354,8 +6354,8 @@ msgstr ""
 "\n"
 "%s\n"
 "\n"
-"נא להקיש על אוקיי לניקוי זמני של המסנן ולהמשיך.\n"
-"אחרת התא פעיל האחרון יבחר."
+"נא להקיש על 'בסדר' לניקוי זמני של המסנן ולהמשיך.\n"
+"אחרת התא הפעיל האחרון יבחר."
 
 #: gnucash/gnome/gnc-split-reg.c:2371
 msgid "Sort By:"
@@ -10275,7 +10275,7 @@ msgid ""
 "closed. The numbers are the X and Y coordinates of the top left corner of "
 "the window followed by the width and height of the window."
 msgstr ""
-"הגדרה זו קובעת את מיקום החלון שנסגר לאחרונה. המספרים הם ערכי צירי ה X ו Y של "
+"הגדרה זו קובעת את מיקום החלון שנסגר לאחרונה. המספרים הם ערכי צירי ה X ו־Y של "
 "הפינה השמאלית של החלון ובהמשך רוחב וגובה החלון."
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:24
@@ -16283,7 +16283,7 @@ msgstr "_מקומי"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1018
 #: libgnucash/app-utils/business-options.scm:76
 msgid "Fancy Date Format"
-msgstr "מבנה תאריך מהודרת"
+msgstr "מבנה תאריך מהודר"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1058
 msgid "<b>Time Format</b>"
@@ -17434,7 +17434,7 @@ msgstr "חיפוש חדש"
 
 #: gnucash/gtkbuilder/dialog-search.glade:348
 msgid "Refine current search"
-msgstr "סנן חיפוש נוכחי"
+msgstr "עידון חיפוש נוכחי"
 
 #: gnucash/gtkbuilder/dialog-search.glade:365
 msgid "Add results to current search"
@@ -17442,7 +17442,7 @@ msgstr "הוספת תוצאות לחיפוש הנוכחי"
 
 #: gnucash/gtkbuilder/dialog-search.glade:382
 msgid "Delete results from current search"
-msgstr "מחק תוצאות מהחיפוש"
+msgstr "מחיקת תוצאות מהחיפוש"
 
 #: gnucash/gtkbuilder/dialog-search.glade:410
 msgid "Search only active data"
@@ -17467,7 +17467,7 @@ msgid ""
 "now be corrected. Press OK to edit them."
 msgstr ""
 "התנועות המחזוריות הבאות מפנות לחשבונות שנמחקו ונדרש תיקון. לעריכה נא להקיש "
-"על אוקיי."
+"על 'בסדר'."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:126
 #: gnucash/gtkbuilder/gnc-frequency.glade:171
@@ -17808,7 +17808,7 @@ msgstr "UTC - זמן בינלאומי מתואם"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:33
 msgid "No Fancy Date Format"
-msgstr "אין מבנה תאריך מהודרת"
+msgstr "אין מבנה תאריך מהודר"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:65
 msgid "%Y-%m-%d"
@@ -18419,7 +18419,7 @@ msgstr "פתיחת התקציב שנבחר"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:833
 msgid "Delete the Selected Budget"
-msgstr "מחק את התקציב המסומן"
+msgstr "מחיקת התקציב המסומן"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:868
 msgid "Budget Notes"
@@ -26256,27 +26256,27 @@ msgstr "מודים לך על החסות!"
 
 #: gnucash/report/reports/standard/invoice.scm:335
 msgid "Row 1 Left"
-msgstr "שורה 1 שמאל"
+msgstr "שורה 1, ימין"
 
 #: gnucash/report/reports/standard/invoice.scm:342
 msgid "Row 1 Right"
-msgstr "שורה 1 ימין"
+msgstr "שורה 1, שמאל"
 
 #: gnucash/report/reports/standard/invoice.scm:349
 msgid "Row 2 Left"
-msgstr "שורה 2 שמאל"
+msgstr "שורה 2, ימין"
 
 #: gnucash/report/reports/standard/invoice.scm:356
 msgid "Row 2 Right"
-msgstr "שורה 2 ימין"
+msgstr "שורה 2, שמאל"
 
 #: gnucash/report/reports/standard/invoice.scm:363
 msgid "Row 3 Left"
-msgstr "שורה 3 שמאל"
+msgstr "שורה 3, ימין"
 
 #: gnucash/report/reports/standard/invoice.scm:370
 msgid "Row 3 Right"
-msgstr "שורה 3 ימין"
+msgstr "שורה 3, שמאל"
 
 #: gnucash/report/reports/standard/invoice.scm:423
 #: gnucash/report/reports/standard/job-report.scm:239
@@ -28031,7 +28031,7 @@ msgstr "טבלה ליצוא"
 
 #: gnucash/report/trep-engine.scm:109
 msgid "Account Name Filter"
-msgstr "מסנן שם החשבון"
+msgstr "מסנן שם חשבון"
 
 #: gnucash/report/trep-engine.scm:111
 msgid "Use regular expressions for account name filter"
@@ -28043,7 +28043,7 @@ msgstr "מסנן תנועות"
 
 #: gnucash/report/trep-engine.scm:114
 msgid "Use regular expressions for transaction filter"
-msgstr "שימוש בביטוי רגיל עבור מסנן תנועות"
+msgstr "שימוש בביטוי רגיל למסנן תנועות"
 
 #: gnucash/report/trep-engine.scm:116
 msgid "Transaction Filter excludes matched strings"
@@ -28162,9 +28162,9 @@ msgid ""
 "match Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left "
 "blank, which will disable the filter."
 msgstr ""
-"הצגת חשבונות ששמם המלא תואם למסנן זה בלבד, לדוגמה ':נסיעות' יתאים ל 'הוצאות:"
-"נסיעות:נופש' וגם ל 'הוצאות:עסקים:נסיעות'.ניתן להשאיר את השדה ריק, דבר שישבית "
-"את המסנן."
+"הצגת חשבונות ששמם המלא תואם למסנן זה בלבד, לדוגמה ':נסיעות' יתאים ל "
+"'הוצאות:נסיעות:נופש' וגם ל 'הוצאות:עסקים:נסיעות'. ניתן להשאיר את השדה ריק, "
+"דבר שישבית את המסנן."
 
 #: gnucash/report/trep-engine.scm:569
 msgid ""
@@ -28174,9 +28174,9 @@ msgid ""
 "single character e.g. '20../.' will match 'Travel 2017/1 London'. "
 msgstr ""
 "כברירת מחדל, מסנן החשבון יחפש מחרוזת משנה בלבד. הגדרה כ־true תאפשר יכולות "
-"מלאות לביטוי רגיל של POSIX. 'מכונית|טיסות' יאחזרו תוצאות גם ל 'ההוצאות: רכב' "
-"ו 'הוצאות: טיסות'. להתאמה לתו בודד יש להשתמש בנקודה (.) לדוגמה ' 20.../. ' "
-"יאחזר רשומה 'נסיעות לונדון2017/1 '. "
+"ביטוי רגיל POSIX מלאות. 'מכונית|טיסות' יאחזרו תוצאות גם ל 'ההוצאות: רכב' ו "
+"'הוצאות: טיסות'. להתאמה לתו בודד יש להשתמש בנקודה (.) לדוגמה ' 20.../. ' "
+"יאחזר רשומה 'נסיעות לונדון 2017/1 '. "
 
 #: gnucash/report/trep-engine.scm:578
 msgid ""
@@ -28186,8 +28186,8 @@ msgid ""
 "memo. It can be left blank, which will disable the filter."
 msgstr ""
 "הצגת תנועות שבהן התיאור, ההערות או המיזכר תואמים למסנן זה.\n"
-"לדוגמה ' #מתנה ' תמצא את כל התנועות עם #מתנה בתיאור, בהערות או במיזכר. ניתן "
-"להשאיר את השדה ריק, דבר שיהפוך את המסנן ללא זמין."
+"לדוגמה ' #מתנה ' תאחזר את כל התנועות הכוללות #מתנה בתיאור, בהערות או במיזכר. "
+"ניתן להשאיר את השדה ריק, דבר שישבית את המסנן."
 
 #: gnucash/report/trep-engine.scm:587
 msgid ""
@@ -28196,8 +28196,8 @@ msgid ""
 "will match both tags within description, notes or memo. "
 msgstr ""
 "כברירת מחדל, מסנן התנועות יחפש מחרוזת משנה בלבד. הגדרה כ־true תאפשר יכולות "
-"מלאות לביטוי רגיל של POSIX. '#עבודה|'#משפחה' יאחזרו תוצאות לשני התגים מתוך "
-"שדה התיאור, ההערות או המזכר. "
+"ביטוי רגיל POSIX מלאות. '#עבודה|'#משפחה' יאחזרו תוצאות לשני התגים מתוך שדה "
+"התיאור, ההערות או המזכר. "
 
 #: gnucash/report/trep-engine.scm:596
 msgid "If this option is selected, transactions matching filter are excluded."
@@ -28238,7 +28238,7 @@ msgstr "סינון חשבון."
 
 #: gnucash/report/trep-engine.scm:750
 msgid "Sort by this criterion first."
-msgstr "מיון לפי קריטריון זה תחילה."
+msgstr "מיון לפי תבחין זה תחילה."
 
 #: gnucash/report/trep-engine.scm:761
 msgid "Show the full account name for subtotals and subheadings?"
@@ -28278,7 +28278,7 @@ msgstr "סדר מיון ראשי."
 
 #: gnucash/report/trep-engine.scm:831
 msgid "Sort by this criterion second."
-msgstr "מיון משני לפי קריטריון זה."
+msgstr "מיון משני לפי תבחין זה."
 
 #: gnucash/report/trep-engine.scm:842
 msgid "Subtotal according to the secondary key?"
