@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-26 13:34+0000\n"
+"PO-Revision-Date: 2021-07-29 10:33+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -4288,7 +4288,7 @@ msgstr "说明"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:226
 msgid "Run Report"
-msgstr "科目报表"
+msgstr "运行报表"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:310
 #: gnucash/gnome/gnc-plugin-page-budget.c:351
@@ -5257,7 +5257,7 @@ msgstr "本次交易(_T)"
 #: gnucash/gnome/gnc-plugin-page-register2.c:408
 #: gnucash/gnome/gnc-plugin-page-register.c:536
 msgid "Account Report"
-msgstr "科目报表"
+msgstr "标签页报表"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:409
 #: gnucash/gnome/gnc-plugin-page-register.c:537
@@ -5267,7 +5267,7 @@ msgstr "为本科目打开一个账簿报表"
 #: gnucash/gnome/gnc-plugin-page-register2.c:413
 #: gnucash/gnome/gnc-plugin-page-register.c:541
 msgid "Account Report - Single Transaction"
-msgstr "科目报表 - 单独交易事项"
+msgstr "标签页报表 - 当前交易"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:414
 #: gnucash/gnome/gnc-plugin-page-register.c:542
@@ -7530,11 +7530,11 @@ msgstr "选择默认的选择。"
 
 #: gnucash/gnome-utils/dialog-options.c:1846
 msgid "Reset defaults"
-msgstr "重置为默认值"
+msgstr "默认值"
 
 #: gnucash/gnome-utils/dialog-options.c:1848
 msgid "Reset all values to their defaults."
-msgstr "将所有数值重置为默认值。"
+msgstr "所有设置恢复初始状态。"
 
 #: gnucash/gnome-utils/dialog-options.c:2249
 msgid "Page"
