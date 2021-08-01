@@ -25,11 +25,12 @@
  *                                                                  *
  ********************************************************************/
 #include <libguile.h>
+#include <glib/gi18n.h>
+
 extern "C"
 {
 #include <config.h>
 
-#include <glib/gi18n.h>
 #include <errno.h>
 #include <sys/stat.h>
 

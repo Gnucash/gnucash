@@ -33,14 +33,15 @@
     @author Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
 */
 #include <libguile.h>
-extern "C"
-{
-#include <config.h>
-
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
+
+extern "C"
+{
+#include <config.h>
+
 
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"

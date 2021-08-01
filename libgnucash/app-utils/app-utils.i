@@ -21,6 +21,7 @@
 %module sw_app_utils
 %{
 /* Includes the header in the wrapper code */
+#include <glib.h>
 #ifdef __cplusplus
 extern "C"
 {

@@ -22,12 +22,13 @@
  ********************************************************************/
 
 #include <libguile.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+
 extern "C"
 {
 #include <config.h>
 
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
 #include "swig-runtime.h"
 
 #include "dialog-utils.h"

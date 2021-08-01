@@ -42,6 +42,7 @@ extern "C"
 #include <functional>
 #include <variant>
 #include <iostream>
+#include <limits>
 
 #include "gnc-option-uitype.hpp"
 

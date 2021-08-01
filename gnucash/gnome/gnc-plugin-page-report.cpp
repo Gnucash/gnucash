@@ -37,13 +37,14 @@
     @author Copyright (C) 2005 David Hampton <hampton@employees.org>
 */
 #include <libguile.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+
 extern "C"
 {
 #include <config.h>
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
 #include <sys/stat.h>
 #include <errno.h>
 

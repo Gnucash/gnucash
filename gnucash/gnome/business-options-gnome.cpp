@@ -23,13 +23,13 @@
  */
 
 #include <libguile.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 extern "C"
 {
 #include <config.h>
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
 #include "swig-runtime.h"
 #include "guile-mappings.h"
 

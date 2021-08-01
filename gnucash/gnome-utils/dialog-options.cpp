@@ -30,11 +30,12 @@ extern "C"
 
 #include <Account.h> // To include as C++ overriding later indirect includes
 #include <libguile.h>
-extern "C"
-{
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <glib/gi18n.h>
+
+extern "C"
+{
 #include "swig-runtime.h"
 
 #include "gnc-tree-model-budget.h" //FIXME?

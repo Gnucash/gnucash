@@ -23,6 +23,10 @@
 \********************************************************************/
 
 #include <libguile.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+
 extern "C"
 {
 #include <config.h>
@@ -32,9 +36,6 @@ extern "C"
 #include <windows.h>
 #endif
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
