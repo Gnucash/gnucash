@@ -760,7 +760,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return scm_reverse(values);
     }
 
-    SCM get_scm_value(const GncOptionMultichoiceValue& option)
+    static SCM
+    get_scm_value(const GncOptionMultichoiceValue& option)
     {
 
         auto indexes = option.get_multiple();
@@ -771,7 +772,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return scm_from_multichoices(indexes, option);
      }
 
-    SCM get_scm_default_value(const GncOptionMultichoiceValue& option)
+    static SCM
+    get_scm_default_value(const GncOptionMultichoiceValue& option)
     {
 
         auto indexes = option.get_default_multiple();
@@ -780,14 +782,16 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return scm_from_multichoices(indexes, option);
      }
 
-    SCM get_scm_value(const GncOptionRangeValue<int>& option)
+    static SCM
+    get_scm_value(const GncOptionRangeValue<int>& option)
     {
         auto val{option.get_value()};
         auto desig{scm_c_eval_string(val > 100 ? "'pixels" : "'percent")};
         return scm_cons(desig, scm_from_int(val));
     }
 
-    SCM get_scm_default_value(const GncOptionRangeValue<int>& option)
+    static SCM
+    get_scm_default_value(const GncOptionRangeValue<int>& option)
     {
         auto val{option.get_default_value()};
         auto desig{scm_c_eval_string(val > 100 ? "'pixels" : "'percent")};
@@ -945,10 +949,11 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %template(gnc_register_number_range_option_int) gnc_register_number_range_option<int>;
 
 %inline %{
-    GncOption* gnc_make_account_list_option(const char* section,
-                                            const char* name, const char* key,
-                                            const char* doc_string,
-                                            const GncOptionAccountList& value)
+    static GncOption*
+    gnc_make_account_list_option(const char* section,
+                                 const char* name, const char* key,
+                                 const char* doc_string,
+                                 const GncOptionAccountList& value)
     {
         try {
             return new GncOption{GncOptionAccountListValue{section, name, key,
@@ -961,12 +966,13 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
     }
 
-    GncOption* gnc_make_account_list_limited_option(const char* section,
-                                                    const char* name,
-                                                    const char* key,
-                                                    const char* doc_string,
-                                                    const GncOptionAccountList& value,
-                                                    GncOptionAccountTypeList&& allowed)
+    static GncOption*
+    gnc_make_account_list_limited_option(const char* section,
+                                         const char* name,
+                                         const char* key,
+                                         const char* doc_string,
+                                         const GncOptionAccountList& value,
+                                         GncOptionAccountTypeList&& allowed)
     {
         try
         {
@@ -981,12 +987,11 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
     }
 
-    GncOption* gnc_make_account_sel_limited_option(const char* section,
-                                                   const char* name,
-                                                   const char* key,
-                                                   const char* doc_string,
-                                                   const Account* value,
-                                                   GncOptionAccountTypeList&& allowed)
+    static GncOption*
+    gnc_make_account_sel_limited_option(const char* section, const char* name,
+                                        const char* key, const char* doc_string,
+                                        const Account* value,
+                                        GncOptionAccountTypeList&& allowed)
     {
         try
         {
@@ -1001,12 +1006,10 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
     }
 
-    GncOption* gnc_make_date_option(const char* section,
-                                    const char* name, const char* key,
-                                    const char* doc_string,
-                                    const SCM default_val,
-                                    RelativeDatePeriodVec& period_set,
-                                    bool both)
+    static GncOption*
+    gnc_make_date_option(const char* section, const char* name, const char* key,
+                         const char* doc_string, const SCM default_val,
+                         RelativeDatePeriodVec& period_set, bool both)
     {
 
         try {
@@ -1046,11 +1049,11 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
     }
 
-    GncOption* gnc_make_multichoice_option(const char* section,
-                                           const char* name, const char* key,
-                                           const char* doc_string,
-                                           const char* default_val,
-                                           GncMultichoiceOptionChoices&& choices)
+    static GncOption*
+    gnc_make_multichoice_option(const char* section, const char* name,
+                                const char* key, const char* doc_string,
+                                const char* default_val,
+                                GncMultichoiceOptionChoices&& choices)
     {
         try {
             std::string defval{default_val};
@@ -1072,11 +1075,11 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
     }
 
-    GncOption* gnc_make_list_option(const char* section,
-                                    const char* name, const char* key,
-                                    const char* doc_string,
-                                    GncMultichoiceOptionIndexVec indexes,
-                                    GncMultichoiceOptionChoices&& list)
+    static GncOption*
+    gnc_make_list_option(const char* section, const char* name, const char* key,
+                         const char* doc_string,
+                         GncMultichoiceOptionIndexVec indexes,
+                         GncMultichoiceOptionChoices&& list)
     {
         try {
             return new GncOption{GncOptionMultichoiceValue{section, name, key,
@@ -1090,10 +1093,11 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
     }
 
-    GncOption* gnc_make_range_value_option(const char* section,
-                                           const char* name, const char* key,
-                                           const char* doc_string, double value,
-                                           double min, double max, double step)
+    static GncOption*
+    gnc_make_range_value_option(const char* section, const char* name,
+                                const char* key, const char* doc_string,
+                                double value, double min, double max,
+                                double step)
     {
         try
         {
@@ -1108,10 +1112,10 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
     }
 
-    GncOption* gnc_make_plot_size_option(const char* section,
-                                         const char* name, const char* key,
-                                         const char* doc_string, int value,
-                                         int min, int max, int step)
+    static GncOption*
+    gnc_make_plot_size_option(const char* section, const char* name,
+                              const char* key, const char* doc_string,
+                              int value, int min, int max, int step)
     {
         try
         {
@@ -1126,19 +1130,19 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
     }
 
-    GncOption* gnc_make_commodity_option(const char* section,
-                                        const char* name, const char* key,
-                                        const char* doc_string,
-                                        gnc_commodity *value)
+    static GncOption*
+    gnc_make_commodity_option(const char* section, const char* name,
+                              const char* key, const char* doc_string,
+                              gnc_commodity *value)
     {
         return new GncOption{GncOptionValue<const QofInstance*>{
                 section, name, key, doc_string, (const QofInstance*)value}};
     }
 
-    GncOption* gnc_make_commodity_option(const char* section,
-                                        const char* name, const char* key,
-                                        const char* doc_string,
-                                        const char *value)
+    static GncOption*
+    gnc_make_commodity_option(const char* section, const char* name,
+                              const char* key, const char* doc_string,
+                              const char *value)
     {
         gnc_commodity* commodity{};
         const auto book{qof_session_get_book(gnc_get_current_session())};
@@ -1156,10 +1160,10 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return nullptr;
     }
 
-    GncOption* gnc_make_currency_option(const char* section,
-                                        const char* name, const char* key,
-                                        const char* doc_string,
-                                        gnc_commodity *value)
+    static GncOption*
+    gnc_make_currency_option(const char* section, const char* name,
+                             const char* key, const char* doc_string,
+                             gnc_commodity *value)
     {
         try
         {
@@ -1254,7 +1258,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return optiondb->find_option(section, name);
     }
 
-    void
+    static void
     gnc_option_db_set_option_selectable_by_name(GncOptionDBPtr& odb,
                                                 const char* section,
                                                 const char* name,
@@ -1264,7 +1268,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         option->set_ui_item_selectable(selectable);
     }
 
-    void
+    static void
     gnc_optiondb_foreach(GncOptionDBPtr& odb, SCM thunk)
     {
         odb->foreach_section(
@@ -1281,7 +1285,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             });
     }
 
-    std::string
+    static std::string
     gnc_optiondb_save_to_scheme(GncOptionDBPtr& odb, const char* prolog)
     {
         std::ostringstream oss;

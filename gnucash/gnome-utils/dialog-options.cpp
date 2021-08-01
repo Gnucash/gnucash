@@ -150,7 +150,7 @@ GncOptionUIFactory::create(GncOption& option, GtkGrid* page, GtkLabel* name,
     auto func{s_registry[static_cast<size_t>(type)]};
     if (func)
         return func(option, page, name, description, enclosing, packed);
-    PERR("No function registered for type %d", type);
+    PERR("No function registered for type %d", static_cast<int>(type));
     return nullptr;
 }
 
@@ -1506,7 +1506,8 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box,
             option.set_ui_item(std::make_unique<GncOptionDateUIItem>(std::make_unique<BothDateEntry>(option), type));
             break;
         default:
-            PERR("Attempted to create date option widget with wrong UI type %d", type);
+            PERR("Attempted to create date option widget with wrong UI type %d",
+                 static_cast<int>(type));
             return nullptr;
             break;
     }
