@@ -207,6 +207,12 @@ scm_from_value<QofInstance*>(QofInstance* value)
 }
 
 template <> inline SCM
+scm_from_value<const Account*>(const Account* value)
+{
+    return scm_from_value<const QofInstance*>(QOF_INSTANCE(value));
+}
+
+template <> inline SCM
 scm_from_value<const QofQuery*>(const QofQuery* value)
 {
     auto ptr{static_cast<void*>(const_cast<QofQuery*>(value))};
@@ -297,6 +303,12 @@ scm_to_value<const QofInstance*>(SCM new_value)
         return nullptr;
 
     return static_cast<const QofInstance*>(ptr);
+}
+
+template <> inline const Account*
+scm_to_value<const Account*>(SCM new_value)
+{
+    return GNC_ACCOUNT(scm_to_value<const QofInstance*>(new_value));
 }
 
 template <> inline const QofQuery*
@@ -580,7 +592,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %ignore gnc_register_pixmap_option(GncOptionDB*, const char*, const char*, const char*, const char*, std::string);
 %ignore gnc_register_account_list_limited_option(GncOptionDB*, const char*, const char*, const char*, const char*, const GncOptionAccountList&, GncOptionAccountTypeList&&);
 %ignore gnc_register_account_list_option(GncOptionDB*, const char*, const char*, const char*, const char*, const GncOptionAccountList&);
-%ignore gnc_register_account_sel_limited_option(GncOptionDB*, const char*, const char*, const char*, const char*, const GncOptionAccountList&, GncOptionAccountTypeList&&);
+%ignore gnc_register_account_sel_limited_option(GncOptionDB*, const char*, const char*, const char*, const char*, const Account*, GncOptionAccountTypeList&&);
 %ignore gnc_register_multichoice_option(GncOptionDB*, const char*, const char*, const char*, const char*, const char*, GncMultichoiceOptionChoices&&);
 %ignore gnc_register_list_option(GncOptionDB*, const char*, const char*, const char*, const char*, const char*, GncMultichoiceOptionChoices&&);
 %ignore gnc_register_number_Plot_size_option(GncOptionDB*, const char*, const char*, const char*, const char*, int);
@@ -939,7 +951,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                                             const GncOptionAccountList& value)
     {
         try {
-            return new GncOption{GncOptionAccountValue{section, name, key,
+            return new GncOption{GncOptionAccountListValue{section, name, key,
                         doc_string, GncOptionUIType::ACCOUNT_LIST, value}};
         }
         catch (const std::exception& err)
@@ -958,7 +970,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     {
         try
         {
-            return new GncOption{GncOptionAccountValue{section, name, key,
+            return new GncOption{GncOptionAccountListValue{section, name, key,
                         doc_string, GncOptionUIType::ACCOUNT_LIST, value,
                         std::move(allowed)}};
         }
@@ -973,12 +985,12 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                                                    const char* name,
                                                    const char* key,
                                                    const char* doc_string,
-                                                   const GncOptionAccountList& value,
+                                                   const Account* value,
                                                    GncOptionAccountTypeList&& allowed)
     {
         try
         {
-            return new GncOption{GncOptionAccountValue{section, name, key,
+            return new GncOption{GncOptionAccountSelValue{section, name, key,
                         doc_string, GncOptionUIType::ACCOUNT_SEL, value,
                         std::move(allowed)}};
         }

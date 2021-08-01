@@ -49,7 +49,8 @@ using QofQuery = _QofQuery;
 struct QofInstance_s;
 using QofInstance = QofInstance_s;
 template <typename ValueType> class GncOptionValue;
-class GncOptionAccountValue;
+class GncOptionAccountListValue;
+class GncOptionAccountSelValue;
 class GncOptionMultichoiceValue;
 template <typename ValueType> class GncOptionRangeValue;
 template <typename ValueType> class GncOptionValidatedValue;
@@ -62,7 +63,8 @@ using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionValue<const QofQuery*>,
                                       GncOptionValue<const GncOwner*>,
                                       GncOptionValue<SCM>,
-                                      GncOptionAccountValue,
+                                      GncOptionAccountListValue,
+                                      GncOptionAccountSelValue,
                                       GncOptionMultichoiceValue,
                                       GncOptionRangeValue<int>,
                                       GncOptionRangeValue<double>,

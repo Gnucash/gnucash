@@ -37,7 +37,7 @@ const std::string GncOptionMultichoiceValue::c_empty_string{""};
 const std::string GncOptionMultichoiceValue::c_list_string{"multiple values"};
 
 bool
-GncOptionAccountValue::validate(const GncOptionAccountList& values) const
+GncOptionAccountListValue::validate(const GncOptionAccountList& values) const
 {
     if (values.empty())
         return true;
@@ -54,6 +54,42 @@ GncOptionAccountValue::validate(const GncOptionAccountList& values) const
     return true;
 }
 
+GncOptionAccountList
+GncOptionAccountListValue::get_value() const
+{
+    return !m_value.empty() ? m_value : get_default_value();
+}
+
+GncOptionAccountList
+GncOptionAccountListValue::get_default_value() const
+{
+    if (!m_default_value.empty())
+        return m_default_value;
+
+    /* If no default has been set and there's an allowed set then find the first
+     * account that matches one of the allowed account types.
+     */
+    GncOptionAccountList retval{};
+    if (m_allowed.empty())
+        return retval;
+
+    auto root{gnc_get_current_root_account()};
+    auto account_list{gnc_account_get_descendants_sorted(root)};
+    if (!account_list)
+        return retval;
+
+    for (auto node = account_list; node; node = g_list_next (node))
+        if (std::find(m_allowed.begin(), m_allowed.end(),
+                      xaccAccountGetType(GNC_ACCOUNT(node->data))) != m_allowed.end())
+        {
+            retval.push_back(GNC_ACCOUNT(node->data));
+            break;
+        }
+    g_list_free(account_list);
+    return retval;
+}
+
+
 /**
  * Create a GList of account types to pass to gnc_account_sel_set_acct_filters.
  * gnc_account_sel_set_acct_filters copies the list so the intermediary caller
@@ -62,7 +98,73 @@ GncOptionAccountValue::validate(const GncOptionAccountList& values) const
  * @return an allocated GList* or nullptr if the list is empty.
  */
 GList*
-GncOptionAccountValue::account_type_list() const noexcept
+GncOptionAccountListValue::account_type_list() const noexcept
+{
+    if (m_allowed.empty())
+        return nullptr;
+    GList* retval;
+    for (auto type : m_allowed)
+        retval = g_list_prepend(retval, GINT_TO_POINTER(type));
+    return g_list_reverse(retval);
+}
+
+bool
+GncOptionAccountSelValue::validate(const Account* value) const
+{
+    if (m_allowed.empty() || !value)
+        return true;
+    if (std::find(m_allowed.begin(), m_allowed.end(),
+                  xaccAccountGetType(value)) == m_allowed.end())
+            return false;
+    return true;
+}
+
+const Account*
+GncOptionAccountSelValue::get_value() const
+{
+    return m_value ? m_value : get_default_value();
+}
+
+const Account*
+GncOptionAccountSelValue::get_default_value() const
+{
+
+    if (m_default_value)
+        return m_default_value;
+
+    /* If no default has been set and there's an allowed set then find the first
+     * account that matches one of the allowed account types.
+     */
+    if (m_allowed.empty())
+        return nullptr;
+
+    const Account* retval{nullptr};
+    auto root{gnc_get_current_root_account()};
+    auto account_list{gnc_account_get_descendants_sorted(root)};
+    if (!account_list)
+        return nullptr;
+
+    for (auto node = account_list; node; node = g_list_next (node))
+        if (std::find(m_allowed.begin(), m_allowed.end(),
+                      xaccAccountGetType(GNC_ACCOUNT(node->data))) != m_allowed.end())
+        {
+            retval = GNC_ACCOUNT(node->data);
+            break;
+        }
+    g_list_free(account_list);
+    return retval;
+}
+
+
+/**
+ * Create a GList of account types to pass to gnc_account_sel_set_acct_filters.
+ * gnc_account_sel_set_acct_filters copies the list so the intermediary caller
+ * is responsible for freeing the list.
+ *
+ * @return an allocated GList* or nullptr if the list is empty.
+ */
+GList*
+GncOptionAccountSelValue::account_type_list() const noexcept
 {
     if (m_allowed.empty())
         return nullptr;

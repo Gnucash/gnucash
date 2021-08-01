@@ -908,30 +908,30 @@ using GncOptionAccountTypeList = std::vector<GNCAccountType>;
 
  */
 
-class GncOptionAccountValue : public OptionClassifier
+class GncOptionAccountListValue : public OptionClassifier
 {
 public:
-    GncOptionAccountValue(const char* section, const char* name,
+    GncOptionAccountListValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type, bool multi=true) :
         OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
         m_value{}, m_default_value{}, m_allowed{}, m_multiselect{multi} {}
 
-    GncOptionAccountValue(const char* section, const char* name,
+    GncOptionAccountListValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type,
                           const GncOptionAccountList& value, bool multi=true) :
         OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
         m_value{value}, m_default_value{std::move(value)}, m_allowed{},
         m_multiselect{multi}  {}
-    GncOptionAccountValue(const char* section, const char* name,
+    GncOptionAccountListValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type,
                           GncOptionAccountTypeList&& allowed, bool multi=true) :
         OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
         m_value{}, m_default_value{}, m_allowed{std::move(allowed)},
         m_multiselect{multi} {}
-    GncOptionAccountValue(const char* section, const char* name,
+    GncOptionAccountListValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type,
                           const GncOptionAccountList& value,
@@ -945,8 +945,8 @@ public:
             m_default_value = std::move(value);
         }
 
-    const GncOptionAccountList& get_value() const { return m_value; }
-    const GncOptionAccountList& get_default_value() const { return m_default_value; }
+    GncOptionAccountList get_value() const;
+    GncOptionAccountList get_default_value() const;
     bool validate (const GncOptionAccountList& values) const;
     void set_value (const GncOptionAccountList& values) {
         if (validate(values))
@@ -973,8 +973,8 @@ private:
 };
 
 template<> inline std::ostream&
-operator<< <GncOptionAccountValue>(std::ostream& oss,
-                                       const GncOptionAccountValue& opt)
+operator<< <GncOptionAccountListValue>(std::ostream& oss,
+                                       const GncOptionAccountListValue& opt)
 {
     auto values{opt.get_value()};
     bool first = true;
@@ -990,8 +990,8 @@ operator<< <GncOptionAccountValue>(std::ostream& oss,
 }
 
 template<> inline std::istream&
-operator>> <GncOptionAccountValue>(std::istream& iss,
-                                   GncOptionAccountValue& opt)
+operator>> <GncOptionAccountListValue>(std::istream& iss,
+                                   GncOptionAccountListValue& opt)
 {
     GncOptionAccountList values;
     while (true)
@@ -1010,7 +1010,7 @@ operator>> <GncOptionAccountValue>(std::istream& iss,
 
 template<class OptType,
          typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionAccountValue>,
+                                                  GncOptionAccountListValue>,
                                    int> = 0>
 inline std::ostream&
 gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
@@ -1032,7 +1032,7 @@ gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
 
 template<class OptType,
          typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionAccountValue>,
+                                                  GncOptionAccountListValue>,
                                    int> = 0>
 inline std::istream&
 gnc_option_from_scheme(std::istream& iss, OptType& opt)
@@ -1052,6 +1052,129 @@ gnc_option_from_scheme(std::istream& iss, OptType& opt)
             break;
     }
     opt.set_value(values);
+    iss.ignore(1, ')');
+    return iss;
+}
+
+class GncOptionAccountSelValue : public OptionClassifier
+{
+public:
+    GncOptionAccountSelValue(const char* section, const char* name,
+                          const char* key, const char* doc_string,
+                          GncOptionUIType ui_type) :
+        OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
+        m_value{}, m_default_value{}, m_allowed{} {}
+
+    GncOptionAccountSelValue(const char* section, const char* name,
+                          const char* key, const char* doc_string,
+                          GncOptionUIType ui_type,
+                          const Account* value) :
+        OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
+        m_value{const_cast<Account*>(value)},
+        m_default_value{const_cast<Account*>(value)}, m_allowed{} {}
+    GncOptionAccountSelValue(const char* section, const char* name,
+                          const char* key, const char* doc_string,
+                          GncOptionUIType ui_type,
+                          GncOptionAccountTypeList&& allowed) :
+        OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
+        m_value{}, m_default_value{}, m_allowed{std::move(allowed)} {}
+    GncOptionAccountSelValue(const char* section, const char* name,
+                          const char* key, const char* doc_string,
+                          GncOptionUIType ui_type,
+                          const Account* value,
+                          GncOptionAccountTypeList&& allowed) :
+        OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
+        m_value{}, m_default_value{}, m_allowed{std::move(allowed)} {
+            if (!validate(value))
+                throw std::invalid_argument("Supplied Value not in allowed set.");
+            m_value = const_cast<Account*>(value);
+            m_default_value = const_cast<Account*>(value);
+        }
+
+    const Account* get_value() const;
+    const Account* get_default_value() const;
+    bool validate (const Account* value) const;
+    void set_value (const Account* value) {
+        if (validate(value))
+            //throw!
+            m_value = const_cast<Account*>(value);
+    }
+    void set_default_value (const Account* value) {
+        if (validate(value))
+            //throw!
+            m_value = m_default_value = const_cast<Account*>(value);
+    }
+    GList* account_type_list() const noexcept;
+    void reset_default_value() { m_value = m_default_value; }
+    bool is_changed() const noexcept { return m_value != m_default_value; }
+    GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
+    void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+private:
+    GncOptionUIType m_ui_type;
+    Account* m_value;
+    Account* m_default_value;
+    GncOptionAccountTypeList m_allowed;
+};
+
+template<> inline std::ostream&
+operator<< <GncOptionAccountSelValue>(std::ostream& oss,
+                                       const GncOptionAccountSelValue& opt)
+{
+    auto value{opt.get_value()};
+    oss << qof_instance_to_string(QOF_INSTANCE(value));
+    return oss;
+}
+
+template<> inline std::istream&
+operator>> <GncOptionAccountSelValue>(std::istream& iss,
+                                   GncOptionAccountSelValue& opt)
+{
+    const Account* value;
+    std::string str;
+    std::getline(iss, str, ' ');
+    if (!str.empty())
+        value = (Account*)qof_instance_from_string(str, opt.get_ui_type());
+    opt.set_value(value);
+    iss.clear();
+    return iss;
+}
+
+template<class OptType,
+         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionAccountSelValue>,
+                                   int> = 0>
+inline std::ostream&
+gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
+{
+    auto value{opt.get_value()};
+    oss << "'(\"";
+        oss << qof_instance_to_string(QOF_INSTANCE(value)) << '"';
+    oss << ')';
+    return oss;
+}
+
+template<class OptType,
+         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionAccountSelValue>,
+                                   int> = 0>
+inline std::istream&
+gnc_option_from_scheme(std::istream& iss, OptType& opt)
+{
+    const Account* value;
+    iss.ignore(3, '"');
+    while (true)
+    {
+        std::string str;
+        std::getline(iss, str, '"');
+        if (!str.empty())
+        {
+            value = (Account*)qof_instance_from_string(str, opt.get_ui_type());
+            iss.ignore(2, '"');
+        }
+        else
+            break;
+    }
+    opt.set_value(value);
     iss.ignore(1, ')');
     return iss;
 }

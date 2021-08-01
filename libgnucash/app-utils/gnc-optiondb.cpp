@@ -923,7 +923,7 @@ gnc_register_account_list_option(GncOptionDB* db, const char* section,
                                  const char* doc_string,
                                  const GncOptionAccountList& value)
 {
-    GncOption option{GncOptionAccountValue{section, name, key, doc_string,
+    GncOption option{GncOptionAccountListValue{section, name, key, doc_string,
                 GncOptionUIType::ACCOUNT_LIST, value}};
     db->register_option(section, std::move(option));
 }
@@ -938,7 +938,7 @@ gnc_register_account_list_limited_option(GncOptionDB* db,
 {
     try
     {
-        GncOption option{GncOptionAccountValue{section, name, key, doc_string,
+        GncOption option{GncOptionAccountListValue{section, name, key, doc_string,
                     GncOptionUIType::ACCOUNT_LIST, value, std::move(allowed)}};
         db->register_option(section, std::move(option));
     }
@@ -979,12 +979,12 @@ void
 gnc_register_account_sel_limited_option(GncOptionDB* db,
                                         const char* section, const char* name,
                                         const char* key, const char* doc_string,
-                                        const GncOptionAccountList& value,
+                                        const Account* value,
                                         GncOptionAccountTypeList&& allowed)
 {
     try
     {
-        GncOption option{GncOptionAccountValue{section, name, key, doc_string,
+        GncOption option{GncOptionAccountSelValue{section, name, key, doc_string,
                     GncOptionUIType::ACCOUNT_SEL, value, std::move(allowed)}};
     db->register_option(section, std::move(option));
     }

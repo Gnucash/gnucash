@@ -351,7 +351,7 @@ void gnc_register_account_sel_limited_option(GncOptionDB* db,
                                              const char* section,
                                              const char* name, const char* key,
                                              const char* doc_string,
-                                             const GncOptionAccountList& value,
+                                             const Account* value,
                                              GncOptionAccountTypeList&& allowed);
 
 /**
@@ -361,7 +361,7 @@ inline void gnc_register_account_sel_limited_option(GncOptionDBPtr& db,
                                              const char* section,
                                              const char* name, const char* key,
                                              const char* doc_string,
-                                             const GncOptionAccountList& value,
+                                             const Account* value,
                                              GncOptionAccountTypeList&& allowed)
 {
     gnc_register_account_sel_limited_option(db.get(), section, name, key,

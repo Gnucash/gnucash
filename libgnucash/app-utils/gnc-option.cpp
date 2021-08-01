@@ -279,7 +279,7 @@ GncOption::is_multiselect() const noexcept
 {
     return std::visit([](const auto& option)->bool {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionAccountValue>)
+                                        GncOptionAccountListValue>)
                               return option.is_multiselect();
                           else
                               return false;
@@ -367,7 +367,7 @@ GncOption::account_type_list() const noexcept
 {
     return std::visit([] (const auto& option) -> GList* {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionAccountValue>)
+                                        GncOptionAccountListValue>)
                               return option.account_type_list();
                           else
                               return nullptr;
@@ -423,7 +423,7 @@ GncOption::to_scheme(std::ostream& oss) const
     return std::visit([&oss](auto& option) ->std::ostream& {
                           if constexpr
                               ((std::is_same_v<std::decay_t<decltype(option)>,
-                                GncOptionAccountValue>) ||
+                                GncOptionAccountListValue>) ||
                                (std::is_same_v<std::decay_t<decltype(option)>,
                                 GncOptionMultichoiceValue>) ||
                                std::is_same_v<std::decay_t<decltype(option)>,
@@ -464,7 +464,7 @@ GncOption::from_scheme(std::istream& iss)
     return std::visit([&iss](auto& option) -> std::istream& {
                           if constexpr
                               ((std::is_same_v<std::decay_t<decltype(option)>,
-                                GncOptionAccountValue>) ||
+                                GncOptionAccountListValue>) ||
                                (std::is_same_v<std::decay_t<decltype(option)>,
                                 GncOptionMultichoiceValue>) ||
                                std::is_same_v<std::decay_t<decltype(option)>,

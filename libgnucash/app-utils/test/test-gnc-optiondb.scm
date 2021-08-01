@@ -135,9 +135,9 @@
                                (list ACCT-TYPE-STOCK))))
       (gnc-register-account-sel-limited-option
        option-db "salt" "pork" "baz"
-       "Phony Option" (list (cadr acctlist)) (list ACCT-TYPE-STOCK))
+       "Phony Option" (cadr acctlist) (list ACCT-TYPE-STOCK))
       (let ((acct (gnc-option-value option-db "salt" "pork")))
-        (test-equal (list (cadr acctlist)) acct)))))
+        (test-equal (cadr acctlist) acct)))))
 
   (let* ((book (gnc-option-test-book-new))
          (root-account (gnc-account-create-root book)))
