@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnucash 4.6-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-13 14:59-0700\n"
-"PO-Revision-Date: 2021-07-17 08:57+0200\n"
+"PO-Revision-Date: 2021-07-26 14:45+0200\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -456,7 +456,7 @@ msgstr "Sändlistor är den form av kommunikation som föredras av GnuCashs geme
 
 #: doc/tip_of_the_day.list.c:9
 msgid "The GnuCash developers are easy to contact. As well as several mailing lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome.org"
-msgstr "Det är lätt att kontakta GnuCash-utvecklarna. Förutom ett flertal sändlistor kan du chatta med dem på IRC!. Du hittar dem på #gnucash på irc.gnome.org"
+msgstr "Det är lätt att kontakta GnuCash-utvecklarna. Förutom ett flertal sändlistor kan du chatta med dem på IRC! Du hittar dem på #gnucash på irc.gnome.org"
 
 #: doc/tip_of_the_day.list.c:13
 msgid "You can easily import your existing financial data from Quicken, MS Money or other programs that export QIF files or OFX files. In the File menu, click on the sub-menu Import and click on QIF or OFX file, respectively. Then, follow the instructions provided."
@@ -564,7 +564,7 @@ msgstr "Om du arbetar nattetid bör du stänga och öppna dina arbetsregister p�
 
 #: doc/tip_of_the_day.list.c:115
 msgid "To search through all your transactions, start a search (Edit->Find...) from the main accounts hierarchy page. To limit your search to a single account, start the search from that account's register."
-msgstr "För att söka bland alla dina transaktioner, starta en sökning (Redigera-> Sök...) från huvudsidan med kontohierarkin. För att begränsa din sökning till ett enstaka konto, starta sökningen från det kontots register."
+msgstr "För att söka bland alla dina transaktioner, starta en sökning (Redigera->Sök...) från huvudsidan med kontohierarkin. För att begränsa din sökning till ett enstaka konto, starta sökningen från det kontots register."
 
 #: doc/tip_of_the_day.list.c:119
 msgid "To visually compare on screen the contents of 2 tabs, in one of the tabs, select Window->New Window with Page from the menu to duplicate that tab in a new window."
@@ -1106,11 +1106,11 @@ msgstr "Denna vara har prisuppgifter. Är du säker på att du vill ta bort den 
 
 #: gnucash/gnome/dialog-commodities.c:204
 msgid "Are you sure you want to delete the selected commodity?"
-msgstr "Är du säker på att du vill ta bort varan?"
+msgstr "Är du säker på att du vill ta bort produkten?"
 
 #: gnucash/gnome/dialog-commodities.c:213
 msgid "Delete commodity?"
-msgstr "Ta bort varan?"
+msgstr "Ta bort produkten?"
 
 #: gnucash/gnome/dialog-commodities.c:217 gnucash/gnome/dialog-doclink.c:165
 #: gnucash/gnome/dialog-price-edit-db.c:206
@@ -1452,7 +1452,7 @@ msgstr "Välj dokument"
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:386
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:443
 msgid "_OK"
-msgstr "_Okej"
+msgstr "_OK"
 
 #: gnucash/gnome/dialog-doclink.c:238
 msgid "Amend URL:"
@@ -3162,7 +3162,7 @@ msgstr "Saldo"
 
 #: gnucash/gnome/gnc-plugin-account-tree.c:59
 msgid "New Accounts _Page"
-msgstr "Ny konto_sida"
+msgstr "_Ny kontosida"
 
 #: gnucash/gnome/gnc-plugin-account-tree.c:60
 msgid "Open a new Account Tree page"
@@ -3197,7 +3197,7 @@ msgstr "Spara nuvarande fil"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:126
 msgid "Save _As..."
-msgstr "Spara s_om..."
+msgstr "Spara so_m..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:127
 msgid "Save this file with a different name"
@@ -3238,7 +3238,7 @@ msgstr "Hitta transaktioner med en sökning"
 #: gnucash/gnome/gnc-plugin-page-register2.c:263
 #: gnucash/gnome/gnc-plugin-page-register.c:372
 msgid "Ta_x Report Options"
-msgstr "Ska_tterapportinställningar"
+msgstr "Skattera_pportinställningar"
 
 #. Translators: currently implemented are
 #. US: income tax and
@@ -3444,7 +3444,7 @@ msgstr "Öppna dialogrutan för ny faktura"
 
 #: gnucash/gnome/gnc-plugin-business.c:180
 msgid "Find In_voice..."
-msgstr "Sök _faktura..."
+msgstr "Sök fa_ktura..."
 
 #: gnucash/gnome/gnc-plugin-business.c:181
 msgid "Open the Find Invoice dialog"
@@ -3522,7 +3522,7 @@ msgstr "Öppna dialogrutan Ny räkning"
 
 #: gnucash/gnome/gnc-plugin-business.c:223
 msgid "Find Bi_ll..."
-msgstr "Sök _räkning..."
+msgstr "Sök r_äkning..."
 
 #: gnucash/gnome/gnc-plugin-business.c:224
 msgid "Open the Find Bill dialog"
@@ -3586,7 +3586,7 @@ msgstr "Visa alla länkade dokument för verksamhet"
 #: gnucash/gnome/gnc-plugin-business.c:283
 #, fuzzy
 msgid "Sales _Tax Table"
-msgstr "Försäljningsskattetabell"
+msgstr "Försäljningsska_ttetabell"
 
 #: gnucash/gnome/gnc-plugin-business.c:284
 #, fuzzy
@@ -3603,7 +3603,7 @@ msgstr "Visa och redigera listan med betalningsvillkor"
 
 #: gnucash/gnome/gnc-plugin-business.c:293
 msgid "Bills _Due Reminder"
-msgstr "Påminnelse om förfallande räkningar"
+msgstr "Påminnelse om förfallan_de räkningar"
 
 #: gnucash/gnome/gnc-plugin-business.c:294
 msgid "Open the Bills Due Reminder dialog"
@@ -3611,7 +3611,7 @@ msgstr "Öppna dialogrutan Påminnelse om förfallande räkningar"
 
 #: gnucash/gnome/gnc-plugin-business.c:298
 msgid "Invoices _Due Reminder"
-msgstr "Påminnelse om förfallande fakturor"
+msgstr "Påminnelse om förfallan_de fakturor"
 
 #: gnucash/gnome/gnc-plugin-business.c:299
 msgid "Open the Invoices Due Reminder dialog"
@@ -3731,14 +3731,12 @@ msgid "Delete selected account"
 msgstr "Ta bort det valda kontot"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:257
-#, fuzzy
 msgid "_Cascade Account Properties..."
-msgstr "Egenskaps_kaskad för konto..."
+msgstr "Egenskaper för _kaskadkonto..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
-#, fuzzy
 msgid "Cascade selected properties for account"
-msgstr "Verkställ egenskaper i kaskad för konto"
+msgstr "Verkställ valda egenskaper i kaskad för konto"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:262
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:267
@@ -3798,7 +3796,7 @@ msgstr "Uppdatera detta fönster"
 #: gnucash/gnome/gnc-plugin-page-register2.c:357
 #: gnucash/gnome/gnc-plugin-page-register.c:475
 msgid "_Reconcile..."
-msgstr "_Stäm av..."
+msgstr "St_äm av..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:302
 #: gnucash/gnome/gnc-plugin-page-register2.c:358
@@ -3836,7 +3834,7 @@ msgstr "Överför pengar från ett konto till ett annat"
 #: gnucash/gnome/gnc-plugin-page-register2.c:367
 #: gnucash/gnome/gnc-plugin-page-register.c:485
 msgid "Stoc_k Split..."
-msgstr "Aktie_split..."
+msgstr "Akties_plit..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:317
 #: gnucash/gnome/gnc-plugin-page-register2.c:368
@@ -3886,8 +3884,9 @@ msgstr "Leta efter och reparera obalanserade transaktioner och föräldralösa d
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:342
 #: gnucash/gnome/gnc-plugin-register2.c:64
+#, fuzzy
 msgid "_Register2"
-msgstr "Öppna fönstret för att visa/redigera aktieandelar"
+msgstr "Öppna fönst_ret för att visa/redigera aktieandelar"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:405
 msgid "Open2"
@@ -4066,7 +4065,7 @@ msgstr "Redigera alternativen för budgeten."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:169
 msgid "Esti_mate Budget..."
-msgstr "Gör budgetuppskattning..."
+msgstr "Gör b_udgetuppskattning..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
 msgid "Estimate a budget value for the selected accounts from past transactions."
@@ -4173,7 +4172,7 @@ msgstr "Klipp _ut"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:130
 msgid "Copy"
-msgstr "_Kopiera"
+msgstr "Kopiera"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:135
 #: gnucash/gnome/gnc-plugin-page-register2.c:240
@@ -5757,7 +5756,7 @@ msgstr[1] "Är du säker på att du vill ta bort %d schemalagda transaktioner?"
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
 msgid "_General Journal"
-msgstr "A_llmän journal"
+msgstr "_Allmän journal"
 
 #: gnucash/gnome/gnc-plugin-register2.c:58
 msgid "Open a general journal window"
@@ -5786,7 +5785,7 @@ msgstr "Öppna fönster för allmän journal"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:57
 msgid "St_yle Sheets"
-msgstr "_Stilmallar"
+msgstr "Sti_lmallar"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:58
 msgid "Edit report style sheets"
@@ -6876,7 +6875,7 @@ msgstr "Vald kontotyp är inkompatibel med ett av de valda överliggande kontona
 
 #: gnucash/gnome-utils/dialog-account.c:896
 msgid "You must choose a commodity."
-msgstr "Du måste välja en vara."
+msgstr "Du måste välja en produkt."
 
 #: gnucash/gnome-utils/dialog-account.c:952
 msgid "You must enter a valid opening balance or leave it blank."
@@ -7058,11 +7057,11 @@ msgstr "%s är en reserverad produkttyp. Använd något annat."
 
 #: gnucash/gnome-utils/dialog-commodity.c:1294
 msgid "That commodity already exists."
-msgstr "Den varan finns redan."
+msgstr "Den produkten finns redan."
 
 #: gnucash/gnome-utils/dialog-commodity.c:1343
 msgid "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type\" for the commodity."
-msgstr "Du måste ange ett \"Fullständigt namn\", en \"Symbol/förkortning\" och en \"Typ\" för varan."
+msgstr "Du måste ange ett \"Fullständigt namn\", en \"Symbol/förkortning\" och en \"Typ\" för produkten."
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:237
 #, fuzzy
@@ -7622,7 +7621,7 @@ msgstr "Spara"
 #: gnucash/gnome-utils/gnc-file.c:106
 #: gnucash/gnome-utils/gnc-main-window.c:287
 msgid "_Export"
-msgstr "_Exportera"
+msgstr "E_xportera"
 
 #: gnucash/gnome-utils/gnc-file.c:147
 msgid "All files"
@@ -7947,7 +7946,7 @@ msgstr "Tra_nsaktion"
 
 #: gnucash/gnome-utils/gnc-main-window.c:278
 msgid "_Reports"
-msgstr "_Rapporter"
+msgstr "Ra_pporter"
 
 #: gnucash/gnome-utils/gnc-main-window.c:279
 msgid "_Tools"
@@ -7971,7 +7970,7 @@ msgstr "Skriv ut den aktiva sidan"
 
 #: gnucash/gnome-utils/gnc-main-window.c:296
 msgid "Pa_ge Setup..."
-msgstr "_Ställ in..."
+msgstr "Sidinställnin_g..."
 
 #: gnucash/gnome-utils/gnc-main-window.c:297
 msgid "Specify the page size and orientation for printing"
@@ -7995,7 +7994,7 @@ msgstr "Avsluta programmet"
 
 #: gnucash/gnome-utils/gnc-main-window.c:334
 msgid "Pr_eferences"
-msgstr "In_ställningar"
+msgstr "_Inställningar"
 
 #: gnucash/gnome-utils/gnc-main-window.c:335
 msgid "Edit the global preferences of GnuCash"
@@ -8043,7 +8042,7 @@ msgstr "Flytta den aktuella sidan till ett nytt fönster."
 
 #: gnucash/gnome-utils/gnc-main-window.c:385
 msgid "Tutorial and Concepts _Guide"
-msgstr "Guidad visning och koncept"
+msgstr "_Guidad visning och koncept"
 
 #: gnucash/gnome-utils/gnc-main-window.c:386
 msgid "Open the GnuCash Tutorial"
@@ -8083,7 +8082,7 @@ msgstr "Visa/göm sammanfattningsraden i detta fönster"
 
 #: gnucash/gnome-utils/gnc-main-window.c:418
 msgid "Stat_us Bar"
-msgstr "_Statusrad"
+msgstr "S_tatusrad"
 
 #: gnucash/gnome-utils/gnc-main-window.c:419
 msgid "Show/hide the status bar on this window"
@@ -11509,7 +11508,7 @@ msgstr ""
 "\n"
 "Olika alternativ finns för att ange avdelaren såväl som ett alternativ för fast bredd. Med alternativet fast bredd, dubbelklicka på tabellen med rader som visas för att ange kolumnbredd, högerklicka sedan för att ändra vid behov.\n"
 "\n"
-"Exempel är \"FTSE\",\"RR.L\",\"21/11/2016,5.345,\"GBP\" och CURRENCY;SEK;- 2016-11-21;1.56;GBP\n"
+"Exempel är \"FTSE\",\"RR.L\",\"21/11/2016,5.345,\"GBP\" och CURRENCY;SEK;2016-11-21;1.56;DKK\n"
 "\n"
 "Det finns ett alternativ för att specificera startrad, slutrad, och ett alternativ för att hoppa över alternerande rader från startraden vilket kan användas om du har rubriktext. Det finns också ett alternativ för att skriva över befintliga priser för den dagen vid behov.\n"
 "\n"
@@ -11939,7 +11938,7 @@ msgstr ""
 "\n"
 "Klicka på \"Bakåt\" för att granska dina val.\n"
 "\n"
-"Klicka på \"Avsluta\" för att stänga dialogrutan utan att skapa några nya konton."
+"Klicka på \"Avbryt\" för att stänga dialogrutan utan att skapa några nya konton."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:594
 msgid "Finish Account Setup"
@@ -12259,11 +12258,11 @@ msgstr "_Välj..."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:137
 msgid "Select a QIF file to load"
-msgstr "Välj en QIF-fil som ska läsas in"
+msgstr "Välj en QIF-fil att läsa in"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:213
 msgid "_Start"
-msgstr "_Start:"
+msgstr "_Start"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:283
 msgid "Load QIF files"
@@ -12780,27 +12779,22 @@ msgid "_Days in advance"
 msgstr "_Dagar innan"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
-#, fuzzy
 msgid "Cascade Account Values"
 msgstr "Kaskadkontovärden"
 
 #: gnucash/gtkbuilder/dialog-account.glade:69
-#, fuzzy
 msgid "Enable Cascading Account Color"
-msgstr "Aktivera kaskadkontofärg"
+msgstr "Aktivera färg för kaskadkonto"
 
 #: gnucash/gtkbuilder/dialog-account.glade:104
-#, fuzzy
 msgid "Enable Cascading Account Placeholder"
-msgstr "Aktivera kaskadkontoplatshållare"
+msgstr "Aktivera platshållare för kaskadkonto"
 
 #: gnucash/gtkbuilder/dialog-account.glade:129
-#, fuzzy
 msgid "Enable Cascading Account Hidden"
-msgstr "Aktivera kaskadkonto dolt"
+msgstr "Aktivera döljning av kaskadkonto"
 
 #: gnucash/gtkbuilder/dialog-account.glade:151
-#, fuzzy
 msgid "Enable the sections to Cascade"
 msgstr "Aktivera avsnitt för kaskad"
 
@@ -14705,7 +14699,7 @@ msgstr "Om det är aktivt visar GnuCash en bekräftelsefråga varje gång funkti
 #: gnucash/gtkbuilder/dialog-preferences.glade:1751
 #: gnucash/gtkbuilder/dialog-sx.glade:1234
 msgid "For"
-msgstr "För"
+msgstr "Upp till"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1769
 #: gnucash/gtkbuilder/dialog-sx.glade:1202
@@ -14784,7 +14778,7 @@ msgstr "Auto-c_learingströskel"
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2226
 msgid "Auto-_add threshold"
-msgstr "Autotilläggströskel"
+msgstr "_Autotilläggströskel"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2240
@@ -14866,7 +14860,7 @@ msgstr "_Autohöj listor"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2531
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr "Automatiskt höja listor för konton eller händelser vid inmatning."
+msgstr "Höj automatiskt listor för konton eller händelser vid inmatning."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2543
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
@@ -15024,15 +15018,6 @@ msgstr "V_isa kalenderknapparna"
 msgid "_Move the selection to the blank split on expand"
 msgstr "Flytta _markering till den tomma delningen vid expandering"
 
-# Anteckningar:
-# Lägg till anteckning
-#
-# Extraherade kommentarer:
-# Register2 feature
-#
-#
-# Sökvägar:
-# gnucash/gtkbuilder/dialog-preferences.glade:3068
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3068
 msgid "_Show entered and reconciled dates on selection"
@@ -15939,7 +15924,7 @@ msgstr "Europa (31.12.2001)"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:21
 msgid "ISO (2001-12-31)"
-msgstr "ISO, Sverige (2001-12-31)"
+msgstr "ISO (2001-12-31)"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:27
 msgid "UTC - Coordinated Universal Time"
@@ -18139,7 +18124,7 @@ msgstr "Exportera transaktionerna till en CSV-fil"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:64
 msgid "Export A_ctive Register to CSV..."
-msgstr "Exportera a_ktivt register till CSV..."
+msgstr "Exportera _aktivt register till CSV..."
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:66
 msgid "Export the Active Register to a CSV file"
@@ -18708,7 +18693,7 @@ msgstr ""
 
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:59
 msgid "Import _Customers & Vendors..."
-msgstr "Importera _kunder & leverantörer..."
+msgstr "Importera k_under & leverantörer..."
 
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:59
 msgid "Import Customers and Vendors from a CSV text file."
@@ -20397,11 +20382,11 @@ msgstr "Fakturanummer"
 
 #: gnucash/report/report-core.scm:211
 msgid "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: "
-msgstr "En av dina rapporter har en rapport-guid som är en dubblett. Kontrollera rapportsystemet, särskilt dina sparade rapporter, för att hitta en rapport med detta rapport-guid:"
+msgstr "En av dina rapporter har en rapport-guid som är en dubblett. Kontrollera rapportsystemet, särskilt dina sparade rapporter, för att hitta en rapport med detta rapport-guid: "
 
 #: gnucash/report/report-core.scm:212
 msgid "Wrong report definition: "
-msgstr "Fel rapportdefinition:"
+msgstr "Fel rapportdefinition: "
 
 #: gnucash/report/report-core.scm:213
 msgid " Report is missing a GUID."
@@ -21388,7 +21373,7 @@ msgstr "Närmast rapportdatum"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3326
 msgid "Tax Schedule Report & TXF Export"
-msgstr "Skattschemarapport & TXF-export"
+msgstr "Skattsc_hemarapport & TXF-export"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3328
 msgid "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF file"
@@ -24950,7 +24935,7 @@ msgstr "Belopp att betala (inkl MOMS)"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:314
 msgid "Invoice #: "
-msgstr "Faktura #:"
+msgstr "Faktura #: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:315
 msgid "Reference: "
@@ -25146,7 +25131,7 @@ msgstr "Den här rapporten är utformad endast för kundfakturor (försäljning)
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
-msgstr "Webbadress"
+msgstr "Webbplats"
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:229
 msgid "Invoice Date"
@@ -25769,7 +25754,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:587
 #, fuzzy
 msgid "By default the transaction filter will search substring only. Set this to true to enable full POSIX regular expressions capabilities. '#work|#family' will match both tags within description, notes or memo. "
-msgstr "Som standard kommer transaktionsfiltret endast att söka på substrängar. Sätt detta till true för att aktivera fullständig funktionalitet för POSIX-regeluttryck. \"#arbete|#familj\" kommer att matcha båda taggar i beskrivning, anteckningar eller minnesanteckning."
+msgstr "Som standard kommer transaktionsfiltret endast att söka på substrängar. Sätt detta till true för att aktivera fullständig funktionalitet för POSIX-regeluttryck. \"#arbete|#familj\" kommer att matcha båda taggar i beskrivning, anteckningar eller minnesanteckning. "
 
 #: gnucash/report/trep-engine.scm:596
 msgid "If this option is selected, transactions matching filter are excluded."
