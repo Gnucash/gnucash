@@ -147,7 +147,7 @@ def invoice_to_lco(invoice):
 
     # Write the entries
     ent_str = u""
-    locale.setlocale(locale.LC_ALL, "de_DE")
+    locale.setlocale(locale.LC_ALL, "")
     for n, ent in enumerate(invoice.GetEntries()):
 
         line_str = u""
