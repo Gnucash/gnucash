@@ -47,5 +47,6 @@ gboolean   gnc_report_edit_options(SCM report, GtkWindow *parent);
 
 #ifdef __cplusplus
 }
+GncOptionDB* gnc_get_report_optiondb(SCM report_instance);
 #endif
 #endif

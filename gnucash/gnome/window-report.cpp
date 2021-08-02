@@ -26,6 +26,7 @@
  ********************************************************************/
 #include <libguile.h>
 #include <glib/gi18n.h>
+#include <memory>
 
 extern "C"
 {
@@ -208,10 +209,8 @@ gboolean
 gnc_report_edit_options(SCM report, GtkWindow *parent)
 {
     SCM set_editor        = scm_c_eval_string("gnc:report-set-editor-widget!");
-    SCM get_options       = scm_c_eval_string("gnc:report-options");
     SCM get_report_type   = scm_c_eval_string("gnc:report-type");
     SCM ptr;
-    SCM options;
     GncOptionDB* odb;
     GtkWidget *options_widget = nullptr;
 
@@ -220,14 +219,13 @@ gnc_report_edit_options(SCM report, GtkWindow *parent)
         return TRUE;
 
     /* Check if this report has options to edit */
-    options = scm_call_1(get_options, report);
-    if (options == SCM_BOOL_F)
+    odb = gnc_get_report_optiondb(report);
+    if (!odb)
     {
         gnc_warning_dialog (parent, "%s",
                             _("There are no options for this report."));
         return FALSE;
     }
-    odb = (GncOptionDB*)scm_to_pointer(options);
 
     /* Multi-column type reports need a special options dialog */
     ptr = scm_call_1(get_report_type, report);
@@ -248,4 +246,12 @@ gnc_report_edit_options(SCM report, GtkWindow *parent)
     scm_call_2 (set_editor, report, ptr);
 
     return TRUE;
+}
+
+GncOptionDB*
+gnc_get_report_optiondb(SCM report_instance)
+{
+    SCM  get_report_options    = scm_c_eval_string("gnc:report-options");
+    auto scm_dispatch{scm_call_1(get_report_options, report_instance)};
+    return gnc_get_optiondb_from_dispatcher(scm_dispatch);
 }

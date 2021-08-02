@@ -168,7 +168,7 @@ gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
 {
     SCM get_options = scm_c_eval_string ("gnc:html-style-sheet-options");
 
-    SCM            scm_options = scm_call_1 (get_options, sheet_info);
+    SCM            scm_dispatch = scm_call_1 (get_options, sheet_info);
     ss_info        * ssinfo = g_new0 (ss_info, 1);
     GtkWidget      * window;
     gchar          * title;
@@ -176,7 +176,7 @@ gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
 
     title = g_strdup_printf(_("HTML Style Sheet Properties: %s"), name);
     ssinfo->odialog = gnc_options_dialog_new(title, parent);
-    ssinfo->odb     = (GncOptionDB *)scm_to_pointer(scm_options);
+    ssinfo->odb     = gnc_get_optiondb_from_dispatcher(scm_dispatch);
     ssinfo->stylesheet = sheet_info;
     ssinfo->row_ref    = row_ref;
     g_free (title);

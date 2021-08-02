@@ -77,6 +77,9 @@ extern "C"
 #include "print-session.h"
 }
 
+
+#include <memory>
+
 /* NW: you can add GNC_MOD_REPORT to gnc-engine.h
 or simply define it locally. Any unique string with
 a gnucash- prefix will do. Then just set a log level
@@ -584,7 +587,6 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
     GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(data);
     GncPluginPageReportPrivate *priv;
     int  report_id;
-    SCM  get_options    = scm_c_eval_string("gnc:report-options");
     SCM  set_needs_save = scm_c_eval_string("gnc:report-set-needs-save?!");
     SCM  inst_report;
 
@@ -640,8 +642,7 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
         DEBUG("calling set_needs_save for report with id=%d", report_id);
         scm_call_2(set_needs_save, inst_report, SCM_BOOL_T);
 
-        priv->initial_odb =
-            (GncOptionDB *)scm_to_pointer(scm_call_1(get_options, inst_report));
+        priv->initial_odb = gnc_get_report_optiondb(inst_report);
 /*
         priv->name_change_cb_id =
             gnc_option_db_register_change_callback(priv->initial_odb,
@@ -666,8 +667,7 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
     priv->cur_report = inst_report;
     scm_gc_protect_object(priv->cur_report);
 
-    priv->cur_odb = (GncOptionDB *)scm_to_pointer(scm_call_1(get_options,
-                                                             inst_report));
+    priv->cur_odb = gnc_get_report_optiondb(inst_report);
 /*
     priv->option_change_cb_id =
         gnc_option_db_register_change_callback(priv->cur_odb,
@@ -1032,20 +1032,25 @@ gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
     ENTER("page %p, name %s", page, name);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
 
-    /* Is this a redundant call? */
-    old_name = gnc_option_db_lookup_string_value(priv->cur_odb, "General",
-                                                 "Report name");
-    DEBUG("Comparing old name '%s' to new name '%s'",
-          old_name ? old_name : "(null)", name);
-    if (old_name && (strcmp(old_name, name) == 0))
+    if (priv->cur_odb)
     {
-        LEAVE("no change");
-        return;
-    }
 
-    /* Store the new name for the report. */
-    gnc_option_db_set_string_value(priv->cur_odb, "General",
-                                    "Report name", name);
+        /* Is this a redundant call? */
+        old_name = gnc_option_db_lookup_string_value(priv->cur_odb, "General",
+                                                     "Report name");
+        DEBUG("Comparing old name '%s' to new name '%s'",
+              old_name ? old_name : "(null)", name);
+        if (old_name && (strcmp(old_name, name) == 0))
+        {
+            LEAVE("no change");
+            return;
+        }
+
+        /* Store the new name for the report. */
+        gnc_option_db_set_string_value(priv->cur_odb, "General",
+                                       "Report name", name);
+
+    }
 
     /* Have to manually call the option change hook. */
     gnc_plugin_page_report_option_change_cb(page);

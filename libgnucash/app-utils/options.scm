@@ -103,7 +103,11 @@
   (let ((optiondb (new-gnc-optiondb)))
     (define (dispatch key)
       optiondb)
-  dispatch))
+    dispatch))
+
+;; Use the dispatch function to get the optiondb
+(define-public (gnc:options-get dispatch)
+  (dispatch 'get))
 
 (define-public (gnc:options-set-default-section optiondb section)
   (GncOptionDB-set-default-section (GncOptionDBPtr-get (optiondb 'set-default-section)) section))
