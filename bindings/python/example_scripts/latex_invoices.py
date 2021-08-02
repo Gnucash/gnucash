@@ -160,7 +160,7 @@ def invoice_to_lco(invoice):
         n = ent.GetQuantity()
 
         uprice = locale.currency(price).rstrip(" EUR")
-        un = unicode(
+        un = str(
             int(float(n.num()) / n.denom())
         )  # choose best way to format numbers according to locale
 
@@ -288,7 +288,6 @@ def main(argv=None):
 
         # Opening output file
         f = open(output_file_name, "w")
-        lco_str = lco_str.encode("latin1")
         f.write(lco_str)
         f.close()
 
