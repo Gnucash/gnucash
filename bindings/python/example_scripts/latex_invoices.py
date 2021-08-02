@@ -115,19 +115,19 @@ def invoice_to_lco(invoice):
     add_str = u""
     owner = invoice.GetOwner()
     if owner.GetName() != "":
-        add_str += owner.GetName().decode("UTF-8") + "\n"
+        add_str += owner.GetName() + "\n"
 
     addr = owner.GetAddr()
     if addr.GetName() != "":
-        add_str += addr.GetName().decode("UTF-8") + "\n"
+        add_str += addr.GetName() + "\n"
     if addr.GetAddr1() != "":
-        add_str += addr.GetAddr1().decode("UTF-8") + "\n"
+        add_str += addr.GetAddr1() + "\n"
     if addr.GetAddr2() != "":
-        add_str += addr.GetAddr2().decode("UTF-8") + "\n"
+        add_str += addr.GetAddr2() + "\n"
     if addr.GetAddr3() != "":
-        add_str += addr.GetAddr3().decode("UTF-8") + "\n"
+        add_str += addr.GetAddr3() + "\n"
     if addr.GetAddr4() != "":
-        add_str += addr.GetAddr4().decode("UTF-8") + "\n"
+        add_str += addr.GetAddr4() + "\n"
 
     lco_out += write_variable("toaddress2", add_str)
 
@@ -167,7 +167,7 @@ def invoice_to_lco(invoice):
         line_str = u"\Artikel{"
         line_str += un
         line_str += u"}{"
-        line_str += descr.decode("UTF-8")
+        line_str += descr
         line_str += u"}{"
         line_str += uprice
         line_str += u"}"
