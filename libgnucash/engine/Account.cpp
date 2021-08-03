@@ -2985,37 +2985,17 @@ gnc_account_lookup_by_name (const Account *parent, const char * name)
     return (Account*)gnc_account_foreach_descendant_until (parent, is_acct_name, (char*)name);
 }
 
+static gpointer
+is_acct_code (Account *account, gpointer user_data)
+{
+    auto name {static_cast<gchar*>(user_data)};
+    return (g_strcmp0 (name, xaccAccountGetCode (account)) ? nullptr : account);
+}
+
 Account *
 gnc_account_lookup_by_code (const Account *parent, const char * code)
 {
-    AccountPrivate *cpriv, *ppriv;
-    Account *child, *result;
-    GList *node;
-
-    g_return_val_if_fail(GNC_IS_ACCOUNT(parent), NULL);
-    g_return_val_if_fail(code, NULL);
-
-    /* first, look for accounts hanging off the current node */
-    ppriv = GET_PRIVATE(parent);
-    for (node = ppriv->children; node; node = node->next)
-    {
-        child = static_cast<Account*>(node->data);
-        cpriv = GET_PRIVATE(child);
-        if (g_strcmp0(cpriv->accountCode, code) == 0)
-            return child;
-    }
-
-    /* if we are still here, then we haven't found the account yet.
-     * Recursively search each of the child accounts next */
-    for (node = ppriv->children; node; node = node->next)
-    {
-        child = static_cast<Account*>(node->data);
-        result = gnc_account_lookup_by_code (child, code);
-        if (result)
-            return result;
-    }
-
-    return NULL;
+    return (Account*)gnc_account_foreach_descendant_until (parent, is_acct_code, (char*)code);
 }
 
 static gpointer
