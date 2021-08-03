@@ -2894,20 +2894,18 @@ gnc_account_nth_child (const Account *parent, gint num)
     return static_cast<Account*>(g_list_nth_data(GET_PRIVATE(parent)->children, num));
 }
 
+static void
+count_acct (Account *account, gpointer user_data)
+{
+    auto count {static_cast<int*>(user_data)};
+    ++*count;
+}
+
 gint
 gnc_account_n_descendants (const Account *account)
 {
-    AccountPrivate *priv;
-    GList *node;
-    gint count = 0;
-
-    g_return_val_if_fail(GNC_IS_ACCOUNT(account), 0);
-
-    priv = GET_PRIVATE(account);
-    for (node = priv->children; node; node = g_list_next(node))
-    {
-        count += gnc_account_n_descendants(static_cast<Account*>(node->data)) + 1;
-    }
+    int count {0};
+    account_foreach_descendant (account, count_acct, &count, FALSE);
     return count;
 }
 
