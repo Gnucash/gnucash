@@ -2951,52 +2951,27 @@ gnc_account_get_tree_depth (const Account *account)
     return depth + 1;
 }
 
+static void
+collect_acct (Account *account, gpointer user_data)
+{
+    auto listptr{static_cast<GList**>(user_data)};
+    *listptr = g_list_prepend (*listptr, account);
+}
+
 GList *
 gnc_account_get_descendants (const Account *account)
 {
-    AccountPrivate *priv;
-    GList *child, *descendants;
-
-    g_return_val_if_fail(GNC_IS_ACCOUNT(account), NULL);
-
-    priv = GET_PRIVATE(account);
-    if (!priv->children)
-        return NULL;
-
-    descendants = NULL;
-    for (child = priv->children; child; child = g_list_next(child))
-    {
-        descendants = g_list_append(descendants, child->data);
-        descendants = g_list_concat(descendants,
-                gnc_account_get_descendants(static_cast<Account const *>(child->data)));
-    }
-    return descendants;
+    GList* list = nullptr;
+    account_foreach_descendant (account, collect_acct, &list, FALSE);
+    return g_list_reverse (list);
 }
 
 GList *
 gnc_account_get_descendants_sorted (const Account *account)
 {
-    AccountPrivate *priv;
-    GList *child, *children, *descendants;
-
-    /* errors */
-    g_return_val_if_fail(GNC_IS_ACCOUNT(account), NULL);
-
-    /* optimizations */
-    priv = GET_PRIVATE(account);
-    if (!priv->children)
-        return NULL;
-
-    descendants = NULL;
-    children = g_list_sort(g_list_copy(priv->children), (GCompareFunc)xaccAccountOrder);
-    for (child = children; child; child = g_list_next(child))
-    {
-        descendants = g_list_append(descendants, child->data);
-        descendants = g_list_concat(descendants,
-                gnc_account_get_descendants_sorted(static_cast<Account const *>(child->data)));
-    }
-    g_list_free(children);
-    return descendants;
+    GList* list = nullptr;
+    account_foreach_descendant (account, collect_acct, &list, TRUE);
+    return g_list_reverse (list);
 }
 
 Account *
