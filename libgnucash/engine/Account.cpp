@@ -2691,6 +2691,36 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
 /********************************************************************\
 \********************************************************************/
 
+static void
+account_foreach_descendant (const Account *acc, AccountCb thunk,
+                            void* user_data, bool sort)
+{
+    gpointer result = nullptr;
+    GList *children;
+
+    g_return_if_fail (GNC_IS_ACCOUNT(acc));
+    g_return_if_fail (thunk);
+
+    auto priv{GET_PRIVATE(acc)};
+    if (sort)
+    {
+        children = g_list_copy (priv->children);
+        children = g_list_sort (children, (GCompareFunc)xaccAccountOrder);
+    }
+    else
+        children = priv->children;
+
+    for (auto node = children; node; node = node->next)
+    {
+        auto child = static_cast<Account*>(node->data);
+        thunk (child, user_data);
+        account_foreach_descendant (child, thunk, user_data, sort);
+    }
+
+    if (sort)
+        g_list_free (children);
+}
+
 void
 gnc_account_append_child (Account *new_parent, Account *child)
 {
