@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-01 11:33+0000\n"
+"PO-Revision-Date: 2021-08-02 07:52+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -8558,13 +8558,13 @@ msgstr "未保存的账簿"
 
 #: gnucash/gnome-utils/gnc-main-window.c:1760
 msgid "Last modified on %a, %b %d, %Y at %I:%M %p"
-msgstr "%Y年%b%d日, %a, %p %I:%M 更新"
+msgstr "%Y年%b%d日 %a, %p %I:%M 更新"
 
 #. Translators: This message appears in the status bar after opening the file.
 #: gnucash/gnome-utils/gnc-main-window.c:1763
 #, c-format
 msgid "File %s opened. %s"
-msgstr "%s 已打开，%s"
+msgstr "%s ，%s"
 
 #: gnucash/gnome-utils/gnc-main-window.c:2885
 msgctxt "lower case key for short cut to 'Accounts'"
@@ -9168,7 +9168,7 @@ msgstr "股票拆分"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:577
 #: gnucash/register/ledger-core/split-register-model.c:1006
 msgid "%A %d %B %Y"
-msgstr "%A %d %B %Y"
+msgstr "%Y年%b%d日 %a"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
