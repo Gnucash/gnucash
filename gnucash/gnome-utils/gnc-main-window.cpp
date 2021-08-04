@@ -4282,6 +4282,7 @@ gnc_book_options_dialog_cb (gboolean modal, gchar *title, GtkWindow* parent)
     GNCOptionWin *optionwin;
 
     options = gnc_option_db_new();
+    gnc_option_db_book_options(options);
     qof_book_load_options (book, gnc_option_db_load, options);
     gnc_option_db_clean (options);
 
