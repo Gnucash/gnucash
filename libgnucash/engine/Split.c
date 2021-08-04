@@ -564,8 +564,8 @@ xaccDupeSplit (const Split *s)
     split->orig_acc = s->orig_acc;
     split->lot = s->lot;
 
-    split->memo = CACHE_INSERT(s->memo);
-    split->action = CACHE_INSERT(s->action);
+    CACHE_REPLACE(split->memo, s->memo);
+    CACHE_REPLACE(split->action, s->action);
 
     qof_instance_copy_kvp (QOF_INSTANCE (split), QOF_INSTANCE (s));
 
