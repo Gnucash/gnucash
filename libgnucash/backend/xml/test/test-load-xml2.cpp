@@ -92,7 +92,8 @@ test_load_file (const char* filename)
     g_log_set_handler (logdomain, loglevel,
                        (GLogFunc)test_checked_handler, &check);
 
-    auto session = qof_session_new (nullptr);
+    auto book = qof_book_new();
+    auto session = qof_session_new (book);
 
     remove_locks (filename);
 
@@ -102,7 +103,6 @@ test_load_file (const char* filename)
                        ignore_lock ? SESSION_READ_ONLY : SESSION_NORMAL_OPEN);
 
     qof_session_load (session, NULL);
-    auto book = qof_session_get_book (session);
 
     auto root = gnc_book_get_root_account (book);
     do_test (gnc_account_get_book (root) == book,
@@ -115,6 +115,7 @@ test_load_file (const char* filename)
     /* Uncomment the line below to generate corrected files */
     /*    qof_session_save( session, NULL ); */
     qof_session_end (session);
+    qof_book_destroy (book);
 }
 
 int
