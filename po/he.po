@@ -12,7 +12,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
 "PO-Revision-Date: 2021-08-04 16:32+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -3817,7 +3817,7 @@ msgstr "פתיחת דו־שיח חיפוש שובר הוצאות"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr "מסמכים מקושרים עסקית"
+msgstr "מסמכים מקושרים – עסקי"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
 msgid "View all Linked Business Documents"
@@ -4155,7 +4155,7 @@ msgstr "מחיקה"
 #: gnucash/gnome/gnc-plugin-page-register.c:1962
 #: gnucash/gnome/gnc-plugin-page-register.c:5076
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr "‚בדיקה ותיקון’ רצים כרגע, לבטל?"
+msgstr "'בדיקה ותיקון’ רצים כרגע, האם לנטוש?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:520
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:526
@@ -28310,7 +28310,7 @@ msgstr "הצגת קוד החשבון הנגדי?"
 
 #: gnucash/report/trep-engine.scm:929
 msgid "Display the transaction linked document"
-msgstr "להציג את המסמך שמקושר לתנועה"
+msgstr "הצגת המסמך שמקושר לתנועה"
 
 #: gnucash/report/trep-engine.scm:932
 msgid "Display a subtotal summary table."
