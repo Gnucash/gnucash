@@ -43,16 +43,16 @@ struct _gncOrder
 {
     QofInstance inst;
 
-    char *	id;
-    char *	notes;
-    gboolean 	active;
+    const char * id;
+    const char * notes;
+    gboolean     active;
 
-    char *	reference;
-    char *	printname;
-    GncOwner	owner;
-    GList *	entries;
-    time64 	opened;
-    time64 	closed;
+    const char * reference;
+    char *       printname;
+    GncOwner     owner;
+    GList *      entries;
+    time64       opened;
+    time64       closed;
 };
 
 struct _gncOrderClass
@@ -65,13 +65,9 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 #define _GNC_MOD_NAME	GNC_ID_ORDER
 
 #define SET_STR(obj, member, str) { \
-	char * tmp; \
-	\
 	if (!g_strcmp0 (member, str)) return; \
 	gncOrderBeginEdit (obj); \
-	tmp = CACHE_INSERT (str); \
-	CACHE_REMOVE (member); \
-	member = tmp; \
+	CACHE_REPLACE (member, str); \
 	}
 
 static inline void mark_order (GncOrder *order);

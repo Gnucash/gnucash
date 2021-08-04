@@ -83,7 +83,7 @@ struct split_s
      * It is intended to hold a short (zero to forty character) string
      * that is displayed by the GUI along with this split.
      */
-    char  * memo;
+    const char  *memo;
 
     /* The action field is an arbitrary user-assigned value.
      * It is meant to be a very short (one to ten character) string that
@@ -91,10 +91,10 @@ struct split_s
      * Withdraw, Deposit, ATM, Check, etc. The idea is that this field
      * can be used to create custom reports or graphs of data.
      */
-    char  * action;            /* Buy, Sell, Div, etc.                      */
+    const char  *action;       /* Buy, Sell, Div, etc.                      */
 
-    time64 date_reconciled;  /* date split was reconciled                 */
-    char   reconciled;        /* The reconciled field                      */
+    time64 date_reconciled;    /* date split was reconciled                 */
+    char   reconciled;         /* The reconciled field                      */
 
     /* gains is a flag used to track the relationship between
      * capital-gains splits. Depending on its value, this flag indicates

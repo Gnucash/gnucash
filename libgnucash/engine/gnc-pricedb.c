@@ -558,12 +558,8 @@ gnc_price_set_typestr(GNCPrice *p, const char* type)
     if (!p) return;
     if (g_strcmp0(p->type, type) != 0)
     {
-        gchar *tmp;
-
         gnc_price_begin_edit (p);
-        tmp = CACHE_INSERT((gpointer) type);
-        if (p->type) CACHE_REMOVE(p->type);
-        p->type = tmp;
+        CACHE_REPLACE(p->type, type);
         gnc_price_set_dirty(p);
         gnc_price_commit_edit (p);
     }

@@ -70,23 +70,23 @@ typedef struct gnc_commodityPrivate
 {
     gnc_commodity_namespace *name_space;
 
-    char    * fullname;
-    char    * mnemonic;
-    char    * printname;
-    char    * cusip;          /* CUSIP or other identifying code */
-    int       fraction;
-    char    * unique_name;
+    const char *fullname;
+    const char *mnemonic;
+    char       *printname;
+    const char *cusip;                /* CUSIP or other identifying code */
+    int         fraction;
+    char       *unique_name;
 
-    gboolean  quote_flag;	    /* user wants price quotes */
-    gnc_quote_source * quote_source;   /* current/old source of quotes */
-    char    * quote_tz;
+    gboolean    quote_flag;	      /* user wants price quotes */
+    gnc_quote_source *quote_source;   /* current/old source of quotes */
+    const char *quote_tz;
 
     /* the number of accounts using this commodity - this field is not
      * persisted */
-    int       usage_count;
+    int         usage_count;
 
     /* the default display_symbol, set in iso-4217-currencies at start-up */
-    const char * default_symbol;
+    const char *default_symbol;
 } gnc_commodityPrivate;
 
 #define GET_PRIVATE(o) \
@@ -104,7 +104,7 @@ struct gnc_commodity_namespace_s
 {
     QofInstance inst;
 
-    gchar      * name;
+    const gchar *name;
     gboolean     iso4217;
     GHashTable * cm_table;
     GList      * cm_list;
@@ -1997,7 +1997,7 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
     PINFO ("insert %p %s into nsp=%p %s", priv->mnemonic, priv->mnemonic,
            nsp->cm_table, nsp->name);
     g_hash_table_insert(nsp->cm_table,
-                        CACHE_INSERT(priv->mnemonic),
+                        (gpointer)CACHE_INSERT(priv->mnemonic),
                         (gpointer)comm);
     nsp->cm_list = g_list_append(nsp->cm_list, comm);
 
