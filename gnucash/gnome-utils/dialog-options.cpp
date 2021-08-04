@@ -1182,7 +1182,7 @@ create_multichoice_widget(GncOption& option)
         auto itemstring = option.permissible_value_name(i);
         gtk_list_store_append (store, &iter);
         gtk_list_store_set(store, &iter, 0,
-                           (itemstring && *itemstring) ? _(itemstring) : "", 1);
+                           (itemstring && *itemstring) ? _(itemstring) : "", -1);
     }
     /* Create the new Combo with tooltip and add the store */
     auto widget{GTK_WIDGET(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)))};
@@ -1314,7 +1314,7 @@ RelativeDateEntry::RelativeDateEntry(GncOption& option)
         GtkTreeIter  iter;
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter, 0,
-                            option.permissible_value_name(index), 1);
+                            option.permissible_value_name(index), -1);
     }
 
     /* Create the new Combo with tooltip and add the store */
