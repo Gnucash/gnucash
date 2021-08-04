@@ -454,7 +454,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
                                GncOptionSectionPtr& section)
 {
     auto name = section->get_name().c_str();
-    if (!name)
+    if (!name || *name == '\0')
         return -1;
 
     if (strncmp(name, "__", 2) == 0)
