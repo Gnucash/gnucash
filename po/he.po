@@ -3,7 +3,7 @@
 # Copyright (C) 2008 - 2020 by the respective translator
 # Avi Markovitz <avi.markovitz@gmail.com, 2019 - 2020
 # Ori Hoch <ori@uumpa.com>, 2008 http://www.uumpa.com/gnucash-he/
-# Yaron Shahrabani <sh.yaron@gmail.com>, 2020.
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2020, 2021.
 # Avi Markovitz <avi.markovitz@gmail.com>, 2020, 2021.
 msgid ""
 msgstr ""
@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-04 12:35+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2021-08-04 16:32+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -29443,7 +29443,7 @@ msgstr "התנועה בוטלה"
 
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
-msgstr "אין עזרה זמניה."
+msgstr "אין עזרה זמינה."
 
 #~ msgid ""
 #~ "You must enter a company name. If this customer is an individual (and not "
