@@ -1254,7 +1254,7 @@ class AbsoluteDateEntry : public GncDateEntry
 {
 public:
     AbsoluteDateEntry(GncOption& option);
-    ~AbsoluteDateEntry() { g_object_unref(G_OBJECT(m_entry)); }
+    ~AbsoluteDateEntry() = default;
     void set_entry_from_option(GncOption& option) override;
     void set_option_from_entry(GncOption& option) override;
     GtkWidget* get_entry() override { return GTK_WIDGET(m_entry); }
@@ -1287,7 +1287,7 @@ class RelativeDateEntry : public GncDateEntry
 {
 public:
     RelativeDateEntry(GncOption& option);
-    ~RelativeDateEntry() { g_object_unref(G_OBJECT(m_entry)); };
+    ~RelativeDateEntry() = default;
     void set_entry_from_option(GncOption& option) override;
     void set_option_from_entry(GncOption& option) override;
     GtkWidget* get_widget() override { return m_entry; }
@@ -1344,7 +1344,7 @@ class BothDateEntry : public GncDateEntry
 {
 public:
     BothDateEntry(GncOption& option);
-    ~BothDateEntry(); //The GncOptionGtkUIItem owns the widget
+    ~BothDateEntry() = default; //The GncOptionGtkUIItem owns the widget
     void set_entry_from_option(GncOption& option) override;
     void set_option_from_entry(GncOption& option) override;
     GtkWidget* get_widget() override { return m_widget; }
@@ -1385,12 +1385,6 @@ BothDateEntry::BothDateEntry(GncOption& option) :
     gtk_box_pack_start(GTK_BOX(m_widget),
                        m_rel_entry->get_entry(), FALSE, FALSE, 0);
 
-}
-
-BothDateEntry::~BothDateEntry()
-{
-    g_object_unref(G_OBJECT(m_abs_button));
-    g_object_unref(G_OBJECT(m_rel_button));
 }
 
 GtkWidget*
