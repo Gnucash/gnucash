@@ -1278,7 +1278,7 @@ gnc_option_db_new(void)
 void
 gnc_option_db_destroy(GncOptionDB* odb)
 {
-    delete odb;
+    PWARN("Direct Destroy called on GncOptionDB %" G_GUINT64_FORMAT, (uint64_t)odb);
 }
 
 GList*
