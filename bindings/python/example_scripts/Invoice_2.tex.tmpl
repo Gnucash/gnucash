@@ -134,13 +134,13 @@
 \Euro
 %---------------------------------------------------------------------------
 \begin{letter}{ {%- endraw -%}
-{{- invoice.GetOwner().GetName().decode("UTF-8") -}} \\ 
-{{- invoice.GetOwner().GetAddr().GetAddr1().decode("UTF-8") -}} \\ 
-{{- invoice.GetOwner().GetAddr().GetAddr2().decode("UTF-8") -}} \\ 
-{{- invoice.GetOwner().GetAddr().GetAddr3().decode("UTF-8") -}} 
+{{- invoice.GetOwner().GetName() -}} \\ 
+{{- invoice.GetOwner().GetAddr().GetAddr1() -}} \\ 
+{{- invoice.GetOwner().GetAddr().GetAddr2() -}} \\ 
+{{- invoice.GetOwner().GetAddr().GetAddr3() -}} 
 {# if Addr4 is declared put a linebreak here #}
 {%- if invoice.GetOwner().GetAddr().GetAddr4() -%} \\ {%- endif -%} 
-{{- invoice.GetOwner().GetAddr().GetAddr4().decode("UTF-8") -}} {%- raw -%}
+{{- invoice.GetOwner().GetAddr().GetAddr4() -}} {%- raw -%}
 }
 %---------------------------------------------------------------------------
 % Weitere Optionen
@@ -167,7 +167,7 @@ Ich erlaube mir, Ihnen folgende Beträge in Rechnung zu stellen:
  {%- for ent in invoice.GetEntries() %}
  {{ loop.index }} & 
  {{- locale.format("%.2f", ent.GetQuantity().to_double()) -}} & 
- {{- ent.GetDescription().decode("UTF-8") -}} &
+ {{- ent.GetDescription() -}} &
  \EUR{ {{- locale.format("%.2f", ent.GetInvPrice().to_double()) -}} } &
  \EUR{ {{- locale.format("%.2f", ent.GetInvPrice().to_double() * ent.GetQuantity().to_double()) -}} } \\ \hline
  {%- endfor -%}
