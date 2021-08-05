@@ -2695,7 +2695,6 @@ static void
 account_foreach_descendant (const Account *acc, AccountCb thunk,
                             void* user_data, bool sort)
 {
-    gpointer result = nullptr;
     GList *children;
 
     g_return_if_fail (GNC_IS_ACCOUNT(acc));
@@ -3146,20 +3145,7 @@ gnc_account_foreach_descendant (const Account *acc,
                                 AccountCb thunk,
                                 gpointer user_data)
 {
-    const AccountPrivate *priv;
-    GList *node;
-    Account *child;
-
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-    g_return_if_fail(thunk);
-
-    priv = GET_PRIVATE(acc);
-    for (node = priv->children; node; node = node->next)
-    {
-        child = static_cast<Account*>(node->data);
-        thunk(child, user_data);
-        gnc_account_foreach_descendant(child, thunk, user_data);
-    }
+    account_foreach_descendant (acc, thunk, user_data, FALSE);
 }
 
 gpointer
