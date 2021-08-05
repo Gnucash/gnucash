@@ -2163,7 +2163,7 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     RenumberDialog *data;
     GtkBuilder *builder;
     GtkWidget *widget;
-    gchar *string;
+    gchar *string, *fullname;
 
     /* This is a safety check; the menu item calling this dialog
      * should be disabled if the account has no children.
@@ -2182,12 +2182,14 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
                g_object_unref);
 
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "header_label"));
+    fullname = gnc_account_get_full_name (account);
     string = g_strdup_printf(_( "Renumber the immediate sub-accounts of %s? "
                                 "This will replace the account code field of "
                                 "each child account with a newly generated code."),
-                             gnc_account_get_full_name(account));
+                             fullname);
     gtk_label_set_text(GTK_LABEL(widget), string);
     g_free(string);
+    g_free (fullname);
 
     data->prefix = GTK_WIDGET(gtk_builder_get_object (builder, "prefix_entry"));
     data->interval = GTK_WIDGET(gtk_builder_get_object (builder, "interval_spin"));
@@ -2256,7 +2258,7 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
     GtkWidget *color_box, *placeholder_box, *hidden_box;
     GtkWidget *placeholder_button, *hidden_button;
 
-    gchar *string;
+    gchar *string, *fullname;
     const char *color_string;
     gchar *old_color_string = NULL;
     GdkRGBA color;
@@ -2287,9 +2289,10 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
     g_signal_connect (G_OBJECT(color_button_default), "clicked",
                       G_CALLBACK(default_color_button_cb), (gpointer)color_button);
 
+    fullname = gnc_account_get_full_name (account);
     string = g_strdup_printf (_( "Set the account color for account '%s' "
                                  "including all sub-accounts to the selected color"),
-                              gnc_account_get_full_name (account));
+                              fullname);
     gtk_label_set_text (GTK_LABEL(label), string);
     g_free (string);
 
@@ -2316,7 +2319,7 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
 
     string = g_strdup_printf (_( "Set the account placeholder value for account '%s' "
                                  "including all sub-accounts"),
-                              gnc_account_get_full_name (account));
+                              fullname);
     gtk_label_set_text (GTK_LABEL(label), string);
     g_free (string);
 
@@ -2330,9 +2333,10 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
 
     string = g_strdup_printf (_( "Set the account hidden value for account '%s' "
                                  "including all sub-accounts"),
-                              gnc_account_get_full_name (account));
+                              fullname);
     gtk_label_set_text (GTK_LABEL(label), string);
     g_free (string);
+    g_free (fullname);
 
     /* default to cancel */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);

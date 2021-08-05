@@ -148,11 +148,14 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer data)
              */
             else if (partial_len == acct_len)
             {
+                gchar *name1, *name2;
                 ++match->count;
+                name1 = gnc_account_get_full_name (match->partial_match);
+                name2 = gnc_account_get_full_name (acct);
                 PERR("Accounts %s and %s have the same online-id %s",
-                     gnc_account_get_full_name(match->partial_match),
-                     gnc_account_get_full_name(acct),
-                     partial_online_id);
+                     name1, name2, partial_online_id);
+                g_free (name1);
+                g_free (name2);
             }
         }
     }

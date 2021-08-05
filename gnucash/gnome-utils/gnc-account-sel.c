@@ -233,10 +233,8 @@ gas_populate_list (GNCAccountSel *gas)
                             ACCT_COL_PTR,  acc,
                             -1);
         if (g_utf8_collate (name, currentSel) == 0)
-        {
             active = i;
-            g_free (name);
-        }
+        g_free (name);
     }
 
     /* If the account which was in the text box before still exists, then
