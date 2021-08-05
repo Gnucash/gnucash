@@ -101,6 +101,10 @@ const OptionAliases Aliases::c_option_aliases
     {"Links", {nullptr, "Transaction Links"}},
     // invoice.scm, renamed November 2018
     {"Individual Taxes", {nullptr, "Use Detailed Tax Summary"}},
+    {"Show Accounts until level", {nullptr, "Levels of Subaccounts"}},
+    {"Invoice number", {nullptr, "Invoice Number"}},
+    {"Report title", {nullptr, "Report Title"}},
+    {"Extra notes", {nullptr, "Extra Notes"}},
     // income-gst-statement.scm
     {"default format", {nullptr, "Default Format"}},
     {"Report format", {nullptr, "Report Format"}},
