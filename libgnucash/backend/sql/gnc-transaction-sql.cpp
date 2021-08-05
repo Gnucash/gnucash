@@ -656,6 +656,7 @@ GncSqlTransBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     {
         Split* split = xaccTransGetSplit (pTx, 0);
         Account* acc = xaccSplitGetAccount (split);
+        gchar *datestr = qof_print_date (xaccTransGetDate (pTx));
         /* FIXME: This needs to be implemented
         const char *message1 = "Transaction %s dated %s in account %s not saved due to %s.%s";
         const char *message2 = "\nDatabase may be corrupted, check your data carefully.";
@@ -668,10 +669,8 @@ GncSqlTransBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
                               message2 );
         */
         PERR ("Transaction %s dated %s in account %s not saved due to %s.\n",
-              xaccTransGetDescription (pTx),
-              qof_print_date (xaccTransGetDate (pTx)),
-              xaccAccountGetName (acc),
-              err);
+              xaccTransGetDescription (pTx), datestr, xaccAccountGetName (acc), err);
+        g_free (datestr);
     }
     return is_ok;
 }

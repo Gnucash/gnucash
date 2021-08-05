@@ -262,6 +262,7 @@ recnRecalculateBalance (RecnWindow *recnData)
     gnc_numeric ending;
     gnc_numeric reconciled;
     gnc_numeric diff;
+    gchar *datestr;
     GNCPrintAmountInfo print_info;
     gboolean reverse_balance, include_children;
     GtkAction *action;
@@ -289,8 +290,9 @@ recnRecalculateBalance (RecnWindow *recnData)
 
     diff = gnc_numeric_sub_fixed (ending, reconciled);
 
-    gtk_label_set_text(GTK_LABEL(recnData->recn_date),
-                       qof_print_date(recnData->statement_date));
+    datestr = qof_print_date (recnData->statement_date);
+    gtk_label_set_text (GTK_LABEL(recnData->recn_date), datestr);
+    g_free (datestr);
 
     gnc_add_colorized_amount (recnData->starting, starting, print_info, FALSE);
     gnc_add_colorized_amount (recnData->ending, ending, print_info, reverse_balance);
@@ -1866,13 +1868,16 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         {
             Split* split = n->data;
             time64 recn_date = xaccSplitGetDateReconciled (split);
+            gchar *datestr, *recnstr;
             if ((xaccSplitGetReconcile (split) != YREC) ||
                 (recn_date <= statement_date))
                 continue;
 
-            PWARN ("split posting_date=%s, recn_date=%s",
-                   qof_print_date (xaccTransGetDate (xaccSplitGetParent (split))),
-                   qof_print_date (recn_date));
+            datestr = qof_print_date (xaccTransGetDate (xaccSplitGetParent (split)));
+            recnstr = qof_print_date (recn_date);
+            PWARN ("split posting_date=%s, recn_date=%s", datestr, recnstr);
+            g_free (datestr);
+            g_free (recnstr);
 
             gtk_statusbar_push (bar, context, _("WARNING! Account contains \
 splits whose reconcile date is after statement date. Reconciliation may be \

@@ -260,6 +260,7 @@ gtk_cell_editable_key_press_event (GtkEntry      *entry,
 
     if (qof_scan_date (date_string, &day, &month, &year))
     {
+        gchar *datestr;
         when.tm_year = year - 1900;
         when.tm_mon = month - 1;
         when.tm_mday = day;
@@ -267,7 +268,10 @@ gtk_cell_editable_key_press_event (GtkEntry      *entry,
         if (!gnc_handle_date_accelerator (key_event, &when, date_string))
             return FALSE;
 
-        gtk_entry_set_text (entry, qof_print_date (gnc_mktime (&when)));
+        datestr = qof_print_date (gnc_mktime (&when));
+        gtk_entry_set_text (entry, datestr);
+        g_free (datestr);
+
         gtk_widget_grab_focus (GTK_WIDGET(entry));
         return TRUE;
     }
