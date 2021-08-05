@@ -2177,7 +2177,7 @@ public:
     {
         GdkRGBA color;
         auto color_button = GTK_COLOR_CHOOSER(get_widget());
-        gtk_color_chooser_set_rgba(color_button, &color);
+        gtk_color_chooser_get_rgba(color_button, &color);
         auto rgba_str = gdk_rgba_to_string(&color);
         option.set_value(std::string{rgba_str});
         g_free(rgba_str);
