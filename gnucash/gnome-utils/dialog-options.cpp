@@ -2320,8 +2320,11 @@ public:
     {
         auto string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(get_widget()));
         DEBUG("filename %s", string ? string : "(null)");
-        option.set_value(std::string{string});
-        g_free(string);
+        if (string)
+        {
+            option.set_value(std::string{string});
+            g_free(string);
+        }
     }
 };
 
