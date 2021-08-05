@@ -3153,28 +3153,24 @@ gnc_account_foreach_descendant_until (const Account *acc,
                                       AccountCb2 thunk,
                                       gpointer user_data)
 {
-    const AccountPrivate *priv;
-    GList *node;
-    Account *child;
-    gpointer result;
+    gpointer result {nullptr};
 
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
-    g_return_val_if_fail(thunk, NULL);
+    g_return_val_if_fail (GNC_IS_ACCOUNT(acc), nullptr);
+    g_return_val_if_fail (thunk, nullptr);
 
-    priv = GET_PRIVATE(acc);
-    for (node = priv->children; node; node = node->next)
+    auto priv{GET_PRIVATE(acc)};
+
+    for (auto node = priv->children; node; node = node->next)
     {
-        child = static_cast<Account*>(node->data);
-        result = thunk(child, user_data);
-        if (result)
-            return(result);
+        auto child = static_cast<Account*>(node->data);
+        result = thunk (child, user_data);
+        if (result) break;
 
-        result = gnc_account_foreach_descendant_until(child, thunk, user_data);
-        if (result)
-            return(result);
+        result = gnc_account_foreach_descendant_until (child, thunk, user_data);
+        if (result) break;
     }
 
-    return NULL;
+    return result;
 }
 
 
