@@ -2166,19 +2166,25 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         GdkRGBA color;
-        if (gdk_rgba_parse(&color,
-                           option.get_value<std::string>().c_str()))
+        auto rgba_str{g_strdup_printf("#%s",
+                                      option.get_value<std::string>().c_str())};
+        if (gdk_rgba_parse(&color, rgba_str))
         {
             auto color_button = GTK_COLOR_CHOOSER(get_widget());
             gtk_color_chooser_set_rgba(color_button, &color);
         }
+        g_free(rgba_str);
      }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         GdkRGBA color;
         auto color_button = GTK_COLOR_CHOOSER(get_widget());
         gtk_color_chooser_get_rgba(color_button, &color);
-        auto rgba_str = gdk_rgba_to_string(&color);
+        auto rgba_str = g_strdup_printf("%2x%2x%2x%2x",
+                                        (uint8_t)(color.red * 255),
+                                        (uint8_t)(color.green * 255),
+                                        (uint8_t)(color.blue * 255),
+                                        (uint8_t)(color.alpha * 255));
         option.set_value(std::string{rgba_str});
         g_free(rgba_str);
     }
