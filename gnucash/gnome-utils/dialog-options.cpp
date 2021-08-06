@@ -1955,36 +1955,25 @@ public:
 static GtkWidget *
 create_list_widget(GncOption& option, char *name)
 {
-    GtkListStore *store;
-    GtkTreeView *view;
-    GtkTreeIter iter;
-    GtkTreeViewColumn *column;
-    GtkCellRenderer *renderer;
-    GtkTreeSelection *selection;
-
-    GtkWidget *button;
-    GtkWidget *frame;
-    GtkWidget *hbox;
-    GtkWidget *bbox;
-
-    frame = gtk_frame_new(name);
-    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    auto frame = gtk_frame_new(name);
+    auto hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_container_add(GTK_CONTAINER(frame), hbox);
 
-    store = gtk_list_store_new(1, G_TYPE_STRING);
-    view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(store)));
+    auto store = gtk_list_store_new(1, G_TYPE_STRING);
+    auto view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(store)));
     g_object_unref(store);
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes("", renderer,
-             "text", 0,
-             NULL);
+    auto renderer = gtk_cell_renderer_text_new();
+    auto column = gtk_tree_view_column_new_with_attributes("", renderer,
+                                                           "text", 0,
+                                                           NULL);
     gtk_tree_view_append_column(view, column);
     gtk_tree_view_set_headers_visible(view, FALSE);
 
     auto num_values = option.num_permissible_values();
     for (decltype(num_values) i = 0; i < num_values; i++)
     {
+        GtkTreeIter iter;
         auto raw_string = option.permissible_value_name(i);
         auto string = (raw_string && *raw_string) ? _(raw_string) : "";
         gtk_list_store_append(store, &iter);
@@ -1993,16 +1982,16 @@ create_list_widget(GncOption& option, char *name)
 
     gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(view), FALSE, FALSE, 0);
 
-    selection = gtk_tree_view_get_selection(view);
+    auto selection = gtk_tree_view_get_selection(view);
     gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
     g_signal_connect(selection, "changed",
                      G_CALLBACK(list_changed_cb), &option);
 
-    bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
+    auto bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
     gtk_box_pack_end(GTK_BOX(hbox), bbox, FALSE, FALSE, 0);
 
-    button = gtk_button_new_with_label(_("Select All"));
+    auto button = gtk_button_new_with_label(_("Select All"));
     gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
     gtk_widget_set_tooltip_text(button, _("Select all entries."));
 
