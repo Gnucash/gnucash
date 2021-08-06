@@ -262,34 +262,29 @@ gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invali
     return message;
 }
 
+struct ViolationData
+{
+    GList *list;
+    const gchar *separator;
+};
+
+static void
+check_acct_name (Account *acct, gpointer user_data)
+{
+    auto cb {static_cast<ViolationData*>(user_data)};
+    auto name {xaccAccountGetName (acct)};
+    if (g_strstr_len (name, -1, cb->separator))
+        cb->list = g_list_prepend (cb->list, g_strdup (name));
+}
+
 GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator)
 {
-    Account *root_account = gnc_book_get_root_account(book);
-    GList   *accounts, *node;
-    GList   *invalid_list = NULL;
-
-    g_return_val_if_fail (separator != NULL, NULL);
-
-    if (root_account == NULL)
-        return NULL;
-
-    accounts = gnc_account_get_descendants (root_account);
-    for (node = accounts; node; node = g_list_next(node))
-    {
-        Account *acct      = (Account*)node->data;
-        gchar   *acct_name = g_strdup ( xaccAccountGetName ( acct ) );
-
-        if ( g_strstr_len ( acct_name, -1, separator ) )
-            invalid_list = g_list_prepend ( invalid_list, (gpointer) acct_name );
-        else
-            g_free ( acct_name );
-    }
-    if (accounts != NULL)
-    {
-        g_list_free(accounts);
-    }
-
-    return invalid_list;
+    g_return_val_if_fail (separator != NULL, nullptr);
+    if (!book) return nullptr;
+    ViolationData cb = { nullptr, separator };
+    gnc_account_foreach_descendant (gnc_book_get_root_account (book),
+                                    (AccountCb)check_acct_name, &cb);
+    return cb.list;
 }
 
 /********************************************************************\
