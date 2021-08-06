@@ -1391,18 +1391,6 @@ BothDateEntry::get_entry()
 void
 BothDateEntry::toggle_relative(bool use_absolute)
 {
-    if (use_absolute)
-    {
-        gtk_widget_set_sensitive(m_abs_entry->get_entry(), TRUE);
-        gtk_widget_set_sensitive(m_rel_entry->get_entry(), FALSE);
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_abs_button), TRUE);
-    }
-    else
-    {
-        gtk_widget_set_sensitive(m_rel_entry->get_entry(), TRUE);
-        gtk_widget_set_sensitive(m_abs_entry->get_entry(), FALSE);
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_rel_button), TRUE);
-    }
     m_use_absolute = use_absolute;
 }
 
