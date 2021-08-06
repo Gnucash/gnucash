@@ -1167,14 +1167,8 @@ create_multichoice_widget(GncOption& option)
     auto num_values = option.num_permissible_values();
 
     g_return_val_if_fail(num_values >= 0, NULL);
-
-    /* GtkComboBox still does not support per-item tooltips, so have
-       created a basic one called Combott implemented in gnc-combott.
-       Have highlighted changes in this file with comments for when
-       the feature of per-item tooltips is implemented in gtk,
-       see https://bugs.gnucash.org/show_bug.cgi?id=303717 */
-
-    auto store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+    auto renderer = gtk_cell_renderer_text_new();
+    auto store = gtk_list_store_new(1, G_TYPE_STRING);
     /* Add values to the list store, entry and tooltip */
     for (decltype(num_values) i = 0; i < num_values; i++)
     {
@@ -1186,6 +1180,9 @@ create_multichoice_widget(GncOption& option)
     }
     /* Create the new Combo with tooltip and add the store */
     auto widget{GTK_WIDGET(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)))};
+    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(widget), renderer, TRUE);
+    gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT(widget),
+                                   renderer, "text", 0);
     g_object_unref(store);
 
     g_signal_connect(G_OBJECT(widget), "changed",
@@ -1223,7 +1220,6 @@ create_option_widget<GncOptionUIType::MULTICHOICE> (GncOption& option, GtkGrid *
     auto widget = create_multichoice_widget(option);
     auto ui_item{std::make_unique<GncGtkMultichoiceUIItem>(widget)};
 
-//GncCombott doesn't emit a changed signal
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
@@ -1300,12 +1296,7 @@ private:
 RelativeDateEntry::RelativeDateEntry(GncOption& option)
 {
 
-    /* GtkComboBox still does not support per-item tooltips, so have
-       created a basic one called Combott implemented in gnc-combott.
-       Have highlighted changes in this file with comments for when
-       the feature of per-item tooltips is implemented in gtk,
-       see https://bugs.gnucash.org/show_bug.cgi?id=303717 */
-
+    auto renderer = gtk_cell_renderer_text_new();
     auto store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
     /* Add values to the list store, entry and tooltip */
     auto num = option.num_permissible_values();
@@ -1319,6 +1310,10 @@ RelativeDateEntry::RelativeDateEntry(GncOption& option)
 
     /* Create the new Combo with tooltip and add the store */
     m_entry = GTK_WIDGET(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)));
+    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(m_entry), renderer, TRUE);
+    gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT(m_entry),
+                                   renderer, "text", 0);
+
     g_object_unref(store);
 
     g_signal_connect(G_OBJECT(m_entry), "changed",
