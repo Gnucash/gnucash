@@ -2922,24 +2922,18 @@ gnc_account_get_current_depth (const Account *account)
     return depth;
 }
 
+static void
+process_acct_depth (Account *account, gpointer user_data)
+{
+    auto depth{static_cast<int*>(user_data)};
+    *depth = MAX (*depth, gnc_account_get_current_depth (account));
+}
+
 gint
 gnc_account_get_tree_depth (const Account *account)
 {
-    AccountPrivate *priv;
-    GList *node;
-    gint depth = 0, child_depth;
-
-    g_return_val_if_fail(GNC_IS_ACCOUNT(account), 0);
-
-    priv = GET_PRIVATE(account);
-    if (!priv->children)
-        return 1;
-
-    for (node = priv->children; node; node = g_list_next(node))
-    {
-        child_depth = gnc_account_get_tree_depth(static_cast<Account const *>(node->data));
-        depth = MAX(depth, child_depth);
-    }
+    auto depth {0};
+    account_foreach_descendant (account, process_acct_depth, &depth, FALSE);
     return depth + 1;
 }
 
