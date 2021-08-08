@@ -1204,7 +1204,7 @@ public:
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GTK_COMBO_BOX(get_widget())};
-        option.set_value<size_t>(gtk_combo_box_get_active(widget));
+        option.set_value<size_t>(static_cast<size_t>(gtk_combo_box_get_active(widget)));
     }
 };
 
