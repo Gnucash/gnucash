@@ -261,12 +261,12 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
                                                       _("_Close"));
                         }
                         g_list_free (children);
-                    }
                     break; // Found the button-box, no need to continue.
                 }
-                g_list_free (children);
             }
+                g_list_free (children);
             break; // Found the box, no need to continue.
+        }
         }
         g_list_free (children);
     }
