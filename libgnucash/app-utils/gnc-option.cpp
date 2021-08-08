@@ -117,13 +117,19 @@ GncOption::set_value(ValueType value)
                          (std::is_same_v<std::decay_t<ValueType>,
                          RelativeDatePeriod> ||
                           std::is_same_v<std::decay_t<ValueType>, size_t>)))
-                           option.set_value(value);
+                       option.set_value(value);
                    if constexpr
                        (std::is_same_v<std::decay_t<decltype(option)>,
-                        GncOptionMultichoiceValue> &&
-                        std::is_same_v<std::decay_t<ValueType>,
-                        GncMultichoiceOptionIndexVec>)
-                       option.set_multiple(value);
+                        GncOptionMultichoiceValue>)
+                   {
+                       if constexpr (std::is_same_v<std::decay_t<ValueType>,
+                                     GncMultichoiceOptionIndexVec>)
+                           option.set_multiple(value);
+                       else if constexpr (std::is_same_v<ValueType, size_t> ||
+                                          std::is_same_v<std::decay_t<ValueType>, std::string> ||
+                                          std::is_same_v<std::remove_cv<ValueType>, char*>)
+                           option.set_value(value);
+                   }
                }, *m_option);
 }
 
@@ -139,13 +145,19 @@ GncOption::set_default_value(ValueType value)
                          (std::is_same_v<std::decay_t<ValueType>,
                          RelativeDatePeriod> ||
                           std::is_same_v<std::decay_t<ValueType>, size_t>)))
-                           option.set_default_value(value);
+                       option.set_default_value(value);
                    if constexpr
                        (std::is_same_v<std::decay_t<decltype(option)>,
-                        GncOptionMultichoiceValue> &&
-                        std::is_same_v<std::decay_t<ValueType>,
-                        GncMultichoiceOptionIndexVec>)
-                       option.set_multiple(value);
+                        GncOptionMultichoiceValue>)
+                   {
+                       if constexpr (std::is_same_v<std::decay_t<ValueType>,
+                                     GncMultichoiceOptionIndexVec>)
+                           option.set_multiple(value);
+                       else if constexpr (std::is_same_v<ValueType, size_t> ||
+                                          std::is_same_v<std::decay_t<ValueType>, std::string> ||
+                                          std::is_same_v<std::remove_cv<ValueType>, char*>)
+                           option.set_default_value(value);
+                   }
                }, *m_option);
 }
 void
