@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-02 07:52+0000\n"
+"PO-Revision-Date: 2021-08-10 10:35+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -687,11 +687,10 @@ msgid ""
 "\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
-"一种理论认为，如果有人发现了宇宙是什么，为什么会出现在这里，那么它就会立刻消"
-"失，取而代之的是更加诡异和莫名其妙的东西。\n"
+"一种理论认为，如果有人发现了宇宙是什么，为什么会出现在这里，那么它就会立刻消失，取而代之的是更加诡异和莫名其妙的东西。\n"
 "还有一种说法，这事情已经发生了。\n"
 "\n"
-"道格拉斯-亚当斯，“宇宙尽头的餐厅”"
+"道格拉斯-亚当斯，《宇宙尽头的餐厅》"
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
@@ -2501,7 +2500,7 @@ msgstr[0] "%d 份到期应付"
 
 #: gnucash/gnome/dialog-invoice.c:3720
 msgid "Due Bills Reminder"
-msgstr "到期应付提醒"
+msgstr "应付提醒"
 
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
@@ -2513,7 +2512,7 @@ msgstr[0] "%d 份到期应收"
 
 #: gnucash/gnome/dialog-invoice.c:3731
 msgid "Due Invoices Reminder"
-msgstr "到期应收提醒"
+msgstr "应收提醒"
 
 #: gnucash/gnome/dialog-job.c:139
 msgid "The Job must be given a name."
@@ -3430,11 +3429,11 @@ msgstr "计划交易列表"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:171
 msgid "Since _Last Run..."
-msgstr "自上次运行(_L)..."
+msgstr "待处理计划交易(_L)..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:172
 msgid "Create Scheduled Transactions since the last time run"
-msgstr "创建自上次运行后的计划交易"
+msgstr "创建尚未执行的计划交易"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:176
 msgid "_Mortgage & Loan Repayment..."
@@ -3769,7 +3768,7 @@ msgstr "查看并编辑帐期"
 
 #: gnucash/gnome/gnc-plugin-business.c:293
 msgid "Bills _Due Reminder"
-msgstr "到期应付提醒(_D)"
+msgstr "应付提醒(_D)"
 
 #: gnucash/gnome/gnc-plugin-business.c:294
 msgid "Open the Bills Due Reminder dialog"
@@ -3777,7 +3776,7 @@ msgstr "打开到期应付提醒对话框"
 
 #: gnucash/gnome/gnc-plugin-business.c:298
 msgid "Invoices _Due Reminder"
-msgstr "到期应收提醒(_D)"
+msgstr "应收提醒(_D)"
 
 #: gnucash/gnome/gnc-plugin-business.c:299
 msgid "Open the Invoices Due Reminder dialog"
@@ -6393,7 +6392,7 @@ msgstr "显示 ~a 报表"
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
 msgid "Saved Report Configurations"
-msgstr "已保存的报表模板"
+msgstr "已保存模板"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
@@ -9500,7 +9499,7 @@ msgstr "A"
 
 #: gnucash/gnome-utils/gnc-tree-view-price.c:396
 msgid "Security"
-msgstr "证券"
+msgstr "币种"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:762
 msgid "Status Bar"
@@ -10845,7 +10844,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:17
 msgid "Run \"since last run\" dialog when a file is opened."
-msgstr "文件打开时启动“自从上一次运行”对话框。"
+msgstr "文件打开时启动“待处理计划交易”对话框。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:18
 msgid ""
@@ -10860,7 +10859,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:22
 msgid "Show \"since last run\" notification dialog when a file is opened."
-msgstr "文件打开时显示“自从上一次运行”通知对话框。"
+msgstr "文件打开时显示“待处理计划交易”对话框。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:23
 msgid ""
@@ -14819,7 +14818,7 @@ msgstr "含税"
 #: gnucash/gtkbuilder/dialog-vendor.glade:546
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:97
 msgid "Tax Table"
-msgstr "税率表"
+msgstr "税率"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:594
 #: gnucash/gtkbuilder/dialog-vendor.glade:616
@@ -16768,7 +16767,7 @@ msgstr "日期之前(_D)"
 #: gnucash/gtkbuilder/dialog-price.glade:795
 #: gnucash/report/reports/standard/price-scatter.scm:82
 msgid "Price Database"
-msgstr "价格数据库"
+msgstr "汇率数据库"
 
 #: gnucash/gtkbuilder/dialog-price.glade:842
 msgid "Add a new price."
@@ -17144,7 +17143,7 @@ msgstr "循环次数"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:512
 msgid "<b>Since Last Run</b>"
-msgstr "<b>自上次运行</b>"
+msgstr "<b>待处理计划交易</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:535
 msgid "<b>Transaction Editor Defaults</b>"
@@ -17156,7 +17155,7 @@ msgstr "打开文件时运行(_R)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:549
 msgid "Run the \"since last run\" process when a file is opened."
-msgstr "文件打开时，执行“自上次运行”进程。"
+msgstr "文件打开时，执行“待处理计划交易”进程。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:562
 msgid "_Show notification window"
@@ -17166,7 +17165,7 @@ msgstr "显示通知(_S)"
 msgid ""
 "Show the notification window for the \"since last run\" process when a file "
 "is opened."
-msgstr "文件打开时，显示“自上次运行”进程的通知。"
+msgstr "文件打开时，显示“待处理计划交易”进程的通知。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:579
 msgid "_Auto-create new transactions"
@@ -17268,7 +17267,7 @@ msgstr "模板"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1454
 msgid "Since Last Run..."
-msgstr "自上次运行..."
+msgstr "待处理计划交易"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1554
 msgid "_Review created transactions"
@@ -23489,7 +23488,7 @@ msgstr "此报表包含合计余额为零（递归）的科目。"
 #: gnucash/report/reports/standard/budget-income-statement.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:77
 msgid "Omit zero balance figures"
-msgstr "排除零余额科目"
+msgstr "余额为零科目不显示零"
 
 #: gnucash/report/reports/standard/account-summary.scm:108
 #: gnucash/report/reports/standard/balance-sheet.scm:104
@@ -23498,7 +23497,7 @@ msgstr "排除零余额科目"
 #: gnucash/report/reports/standard/budget-income-statement.scm:92
 #: gnucash/report/reports/standard/income-statement.scm:79
 msgid "Show blank space in place of any zero balances which would be shown."
-msgstr "显示空白的地方，以代替任何将显示的零余额。"
+msgstr "若余额为零则显示空白。"
 
 #: gnucash/report/reports/standard/account-summary.scm:110
 #: gnucash/report/reports/standard/balance-sheet.scm:106
