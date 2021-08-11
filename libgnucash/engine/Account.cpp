@@ -227,26 +227,12 @@ gnc_set_account_separator (const gchar *separator)
 
 gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invalid_account_names)
 {
-    GList *node;
     gchar *message = NULL;
-    gchar *account_list = NULL;
 
     if ( !invalid_account_names )
         return NULL;
 
-    for ( node = invalid_account_names;  node; node = g_list_next(node))
-    {
-        if ( !account_list )
-            account_list = static_cast<gchar *>(node->data);
-        else
-        {
-            gchar *tmp_list = NULL;
-
-            tmp_list = g_strconcat (account_list, "\n", node->data, nullptr);
-            g_free ( account_list );
-            account_list = tmp_list;
-        }
-    }
+    auto account_list {gnc_g_list_stringjoin (invalid_account_names, "\n")};
 
     /* Translators: The first %s will be the account separator character,
        the second %s is a list of account names.
