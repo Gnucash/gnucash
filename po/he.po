@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-04 16:32+0000\n"
+"PO-Revision-Date: 2021-08-11 09:34+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -4466,7 +4466,7 @@ msgstr "העברת הרשומה הנוכחית שורה אחת מטה"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:238
 msgid "_Company Report"
-msgstr "_דוח ספק"
+msgstr "_דוח ישות"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:247
 msgid "_Standard"
@@ -8746,6 +8746,7 @@ msgstr "חשבונאות לאנשים פרטיים ועסקים קטנים."
 msgid "translator-credits"
 msgstr ""
 "אבי מרקוביץ avi.markovitz@gmail.com ,2021, 2020, 2019\n"
+"ירון שהרבני 2021\n"
 "אורי הוך 2006"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4739
