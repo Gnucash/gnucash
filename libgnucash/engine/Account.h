@@ -283,8 +283,8 @@ gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invali
  *  @param book Pointer to the book with accounts to verify
  *  @param separator The separator character to verify against
  *
- *  @return A GList of invalid account names. Should be freed with g_list_free
- *          if no longer needed.
+ *  @return A GList of invalid account names. Should be freed with
+ *          g_list_free_full (value, g_free) when no longer needed.
  */
 GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator);
 

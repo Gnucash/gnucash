@@ -1101,6 +1101,7 @@ RESTART:
                          invalid_account_names );
         gnc_warning_dialog(parent, "%s", message);
         g_free ( message );
+        g_list_free_full (invalid_account_names, g_free);
     }
 
     // Fix account color slots being set to 'Not Set', should run once on a book

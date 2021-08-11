@@ -132,7 +132,7 @@ static gchar *gnc_account_separator_is_valid (const gchar *separator,
         message = gnc_account_name_violations_errmsg (*normalized_separator,
                                                       conflict_accts);
 
-    g_list_free (conflict_accts);
+    g_list_free_full (conflict_accts, g_free);
     return message;
 }
 
