@@ -23,8 +23,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-10 10:35+0000\n"
-"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
+"PO-Revision-Date: 2021-08-11 06:35+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -22321,7 +22321,6 @@ msgstr "欠款总额"
 
 #: gnucash/report/reports/aging.scm:350
 #: gnucash/report/reports/standard/new-aging.scm:97
-#, fuzzy
 msgid "Bracket Total Owed"
 msgstr "把总欠款归为一类"
 
