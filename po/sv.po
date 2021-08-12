@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnucash 4.6-pre1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-13 14:59-0700\n"
-"PO-Revision-Date: 2021-07-26 14:45+0200\n"
+"PO-Revision-Date: 2021-08-03 19:10+0200\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -2491,9 +2491,9 @@ msgid "Gain/Loss"
 msgstr "Vinst/förlust"
 
 #: gnucash/gnome/dialog-lot-viewer.c:1048
-#, fuzzy, c-format
+#, c-format
 msgid "Lots in Account %s"
-msgstr "Aktieandelar i konto %s"
+msgstr "Partier i konto %s"
 
 #: gnucash/gnome/dialog-order.c:171
 msgid "The Order must be given an ID."
@@ -3845,16 +3845,14 @@ msgstr "Mata in en aktiesplit eller aktiesammanslagning"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:321
 #: gnucash/gnome/gnc-plugin-page-register2.c:372
 #: gnucash/gnome/gnc-plugin-page-register.c:490
-#, fuzzy
 msgid "View _Lots..."
-msgstr "Visa aktieande_lar..."
+msgstr "Visa parti_er..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:322
 #: gnucash/gnome/gnc-plugin-page-register2.c:373
 #: gnucash/gnome/gnc-plugin-page-register.c:491
-#, fuzzy
 msgid "Bring up the lot viewer/editor window"
-msgstr "Öppna fönstret för att visa/redigera aktieandelar"
+msgstr "Öppna fönstret för att visa/redigera partier"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:326
 msgid "Check & Repair A_ccount"
@@ -3884,9 +3882,8 @@ msgstr "Leta efter och reparera obalanserade transaktioner och föräldralösa d
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:342
 #: gnucash/gnome/gnc-plugin-register2.c:64
-#, fuzzy
 msgid "_Register2"
-msgstr "Öppna fönst_ret för att visa/redigera aktieandelar"
+msgstr "_Register2"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:405
 msgid "Open2"
@@ -7175,9 +7172,8 @@ msgid "Book currency"
 msgstr "Bokens valuta"
 
 #: gnucash/gnome-utils/dialog-options.c:1303
-#, fuzzy
 msgid "Default lot tracking policy"
-msgstr "Förvald policy för aktieandelsspårning"
+msgstr "Förvald policy för partispårning"
 
 #: gnucash/gnome-utils/dialog-options.c:1326
 msgid "Default gain/loss account"
@@ -9975,9 +9971,8 @@ msgstr "Visa valutor i dialogrutan"
 #: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:27
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:55
 #: gnucash/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in:5
-#, fuzzy
 msgid "Last pathname used"
-msgstr "Senaste sökväg som använts"
+msgstr "Senast använda sökväg"
 
 #: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:13
 #: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:143
@@ -14147,13 +14142,12 @@ msgstr "Jobb aktivt"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:7
 #: gnucash/report/reports/standard/lot-viewer.scm:34
-#, fuzzy
 msgid "Lot Viewer"
-msgstr "Andelsvisare"
+msgstr "Partivisare"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:25
 msgid "_New Lot"
-msgstr "_Nya aktieandelar"
+msgstr "_Nytt parti"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:40
 msgid "Scrub _Account"
@@ -14164,19 +14158,16 @@ msgid "_Scrub"
 msgstr "_Städa upp"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:61
-#, fuzzy
 msgid "Scrub the highlighted lot"
-msgstr "Städa upp de markerade aktieandelarna"
+msgstr "Städa upp markerat parti"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:78
-#, fuzzy
 msgid "Delete the highlighted lot"
-msgstr "Ta bort de markerade aktieandelarna"
+msgstr "Ta bort markerat parti"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:135
-#, fuzzy
 msgid "Enter a name for the highlighted lot."
-msgstr "Ange ett namn för de markerade aktieandelarna."
+msgstr "Ange ett namn för markerat parti."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:150
 #: gnucash/gtkbuilder/dialog-print-check.glade:746
@@ -14185,31 +14176,28 @@ msgid "_Notes"
 msgstr "_Anteckningar"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:173
-#, fuzzy
 msgid "Enter any notes you want to make about this lot."
-msgstr "Skriv in de anteckningar du vill använda om dessa aktieandelar."
+msgstr "Skriv in de anteckningar du vill använda om detta parti."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:192
 msgid "<b>_Title</b>"
 msgstr "<b>_Titel</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:221
-#, fuzzy
 msgid "<b>_Lots in This Account</b>"
-msgstr "<b>Aktieande_lar i detta konto</b>"
+msgstr "<b>_Partier i detta konto</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:259
 msgid "Show only open lots"
-msgstr "Visa endast öppna andelar"
+msgstr "Visa endast öppna partier"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:302
 msgid "<b>Splits _free</b>"
 msgstr "<b>_Fria splitar</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:357
-#, fuzzy
 msgid "<b>Splits _in lot</b>"
-msgstr "<b>Splitar _i andelar</b>"
+msgstr "<b>Splitar _i partier</b>"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:25
 msgid "_No"
@@ -15691,7 +15679,7 @@ msgstr "P_åminn i förväg"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
 msgid "Set 'Re_view Created Transactions' as default"
-msgstr "Sätt \"Granska skapade transaktioner\" som förval"
+msgstr "Sätt \"G_ranska skapade transaktioner\" som förval"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
 msgid "Set 'Review Created Transactions' as the default in the 'Since Last Run' dialog."
@@ -16694,7 +16682,7 @@ msgstr "Sortera efter beskrivning."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:996
 msgid "_Action"
-msgstr "_Handling"
+msgstr "_Åtgärd"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1000
 msgid "Sort by action field."
@@ -19454,7 +19442,6 @@ msgid "Description of an Entry"
 msgstr "Beskrivning på en post"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:92
-#, fuzzy
 msgctxt "sample"
 msgid "Action"
 msgstr "Åtgärd"
@@ -21905,7 +21892,6 @@ msgid "Display the ticker symbols."
 msgstr "Visa ticker-symbolerna."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:118
-#, fuzzy
 msgid "Display exchange listings."
 msgstr "Visa börsnoteringar."
 
@@ -24060,9 +24046,8 @@ msgid "Click on the \"Options\" button to select a company."
 msgstr "Klicka på \"Alternativ\"-knappen för att välja ett företag."
 
 #: gnucash/report/reports/standard/lot-viewer.scm:60
-#, fuzzy
 msgid "The account to search for lots."
-msgstr "Kontot som ska sökas på efter aktieandelar."
+msgstr "Kontot som ska sökas på efter partier."
 
 #: gnucash/report/reports/standard/net-charts.scm:48
 msgid "Show Net Profit"
@@ -24631,9 +24616,8 @@ msgstr "Avstämningsrapport"
 #: gnucash/report/reports/standard/register.scm:148
 #: gnucash/report/reports/standard/register.scm:388
 #: libgnucash/engine/gnc-lot.c:781
-#, fuzzy
 msgid "Lot"
-msgstr "Andelar"
+msgstr "Parti"
 
 #: gnucash/report/reports/standard/register.scm:160
 #, fuzzy
@@ -24672,9 +24656,8 @@ msgid "Display the number of shares?"
 msgstr "Visa antalet andelar?"
 
 #: gnucash/report/reports/standard/register.scm:389
-#, fuzzy
 msgid "Display the name of lot the shares are in?"
-msgstr "Visa namnet på aktieandelarna som aktierna tillhör?"
+msgstr "Visa namnet på partierna som aktieandelarna tillhör?"
 
 #: gnucash/report/reports/standard/register.scm:394
 #: gnucash/report/trep-engine.scm:930
@@ -26762,37 +26745,32 @@ msgid "Offset between documents: "
 msgstr "Förskjutning mellan dokument:"
 
 #: libgnucash/engine/gncOwner.c:1127
-#, fuzzy
 msgid "Lot Link"
-msgstr "Länk till aktieandelar"
+msgstr "Länk till parti"
 
 #: libgnucash/engine/policy.c:52
 msgid "First In, First Out"
 msgstr "Först in, först ut"
 
 #: libgnucash/engine/policy.c:53
-#, fuzzy
 msgid "Use oldest lots first."
-msgstr "Använd äldsta andelar först."
+msgstr "Använd äldsta partier först."
 
 #: libgnucash/engine/policy.c:55
 msgid "Last In, First Out"
 msgstr "Sist in, först ut"
 
 #: libgnucash/engine/policy.c:56
-#, fuzzy
 msgid "Use newest lots first."
-msgstr "Använd nyaste andelar först."
+msgstr "Använd nyaste partier först."
 
 #: libgnucash/engine/policy.c:59
-#, fuzzy
 msgid "Average cost of open lots."
-msgstr "Genomsnittlig kostnad för öppna andelar."
+msgstr "Genomsnittlig kostnad för öppna partier."
 
 #: libgnucash/engine/policy.c:62
-#, fuzzy
 msgid "Manually select lots."
-msgstr "Välj samlingar manuellt."
+msgstr "Välj partier manuellt."
 
 #: libgnucash/engine/qofbookslots.h:66
 msgid "Use Trading Accounts"
@@ -26877,9 +26855,9 @@ msgid "Please delete this transaction. Explanation at https://wiki.gnucash.org/w
 msgstr "Var god radera denna transaktion. Förklaring på https://wiki.gnucash.org/wiki/Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
 
 #: libgnucash/engine/ScrubBusiness.c:616
-#, fuzzy, c-format
+#, c-format
 msgid "Checking business lots in account %s: %u of %u"
-msgstr "Kontrollerar företagets aktieandelar i konto %s: %u av %u"
+msgstr "Kontrollerar företagets partier i konto %s: %u av %u"
 
 #: libgnucash/engine/ScrubBusiness.c:670
 #, c-format
