@@ -183,6 +183,22 @@ void gnc_scm_log_debug(const gchar *msg);
  @{
 */
 
+
+/**
+ * @brief Return a string joining a GList whose elements are gchar*
+ * strings. Returns NULL if an empty GList* is passed through. The
+ * optional sep string will be used as separator. Must be g_freed when
+ * not needed anymore.
+ *
+ * @param list_of_strings A GList of chars*
+ *
+ * @param sep a separator or NULL
+ *
+ * @return A newly allocated string that has to be g_free'd by the
+ * caller.
+ **/
+gchar * gnc_g_list_stringjoin (GList *list_of_strings, const gchar *sep);
+
 /** Kill a process.  On UNIX send a SIGKILL, on Windows call TerminateProcess.
  *
  *  @param pid The process ID. */

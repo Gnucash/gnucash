@@ -29,6 +29,7 @@ extern "C"
 #include <gnc-event.h>
 #include <gnc-date.h>
 /* Add specific headers for this class */
+#include "gnc-glib-utils.h"
 #include "../Account.h"
 #include "../AccountP.h"
 #include "../Split.h"
@@ -429,24 +430,12 @@ test_gnc_account_name_violations_errmsg ()
 {
     GList *badnames = NULL, *nonames = NULL, *node = NULL;
     auto separator = ":";
-    char *account_list = NULL;
     /* FUT wants to free the strings, so we alloc them */
     badnames = g_list_prepend (badnames, g_strdup ("Foo:bar"));
     badnames = g_list_prepend (badnames, g_strdup ("baz"));
     badnames = g_list_prepend (badnames, g_strdup ("waldo:pepper"));
     auto message = gnc_account_name_violations_errmsg (separator, nonames);
-    for (node = badnames; node; node = g_list_next (node))
-    {
-        if (!account_list)
-            account_list = g_strdup (static_cast<char*>(node->data));
-        else
-        {
-            auto tmp_list = g_strconcat ( account_list, "\n",
-                                          static_cast<char*>(node->data), NULL);
-            g_free (account_list);
-            account_list = tmp_list;
-        }
-    }
+    auto account_list = gnc_g_list_stringjoin (badnames, "\n");
     message = gnc_account_name_violations_errmsg (separator, nonames);
     g_assert (message == NULL);
     auto validation_message = g_strdup_printf (
@@ -455,6 +444,7 @@ test_gnc_account_name_violations_errmsg ()
         "Either change the account names or choose another separator "
         "character.\n\nBelow you will find the list of invalid account names:\n"
         "%s", separator, account_list);
+    g_free (account_list);
     message = gnc_account_name_violations_errmsg (separator, badnames);
     g_assert_cmpstr ( message, == , validation_message);
     g_free (validation_message);
