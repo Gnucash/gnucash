@@ -22,6 +22,7 @@
 \********************************************************************/
 
 #include <libguile.h>
+#include <functional>
 #include <string>
 #include <limits>
 #include <sstream>
@@ -666,6 +667,31 @@ GncOptionDB::load_from_key_value(std::istream& iss)
     return iss;
 }
 
+size_t
+GncOptionDB::register_callback(GncOptionDBChangeCallback cb, void* data)
+{
+    constexpr std::hash<GncOptionDBChangeCallback> cb_hash;
+    auto id{cb_hash(cb)};
+    if (std::find_if(m_callbacks.begin(), m_callbacks.end(),
+                     [id](auto&cb)->bool{ return cb.m_id == id; }) == m_callbacks.end())
+        m_callbacks.emplace_back(id, cb, data);
+    return id;
+}
+
+void
+GncOptionDB::unregister_callback(size_t id)
+{
+    std::remove_if(m_callbacks.begin(), m_callbacks.end(),
+                   [id](auto& cb)->bool { return cb.m_id == id; });
+}
+
+void
+GncOptionDB::run_callbacks()
+{
+    std::for_each(m_callbacks.begin(), m_callbacks.end(),
+                  [](auto& cb)->void { cb.m_func(cb.m_data); });
+}
+
 static inline void
 counter_option_path(const GncOption& option, GSList* list, std::string& name)
 {
@@ -1306,6 +1332,8 @@ gnc_option_db_commit(GncOptionDB* odb)
                                                 (void*)option.get_name().c_str());
                     } });
         });
+    if (!errors)
+        odb->run_callbacks();
     return errors;
 }
 

@@ -79,6 +79,7 @@ extern "C"
 
 
 #include <memory>
+#include <gnc-optiondb-impl.hpp>
 
 /* NW: you can add GNC_MOD_REPORT to gnc-engine.h
 or simply define it locally. Any unique string with
@@ -111,14 +112,14 @@ typedef struct GncPluginPageReportPrivate
     SCM cur_report;
     /// The Option DB for this report.
     GncOptionDB *cur_odb;
-    SCM option_change_cb_id;
+    size_t option_change_cb_id = 0;
 
     /* initial_report is special; it's the one that's saved and
      * restored.  The name_change_callback only gets called when
      * the initial_report name is changed. */
     SCM          initial_report;
     GncOptionDB  * initial_odb;
-    SCM          name_change_cb_id;
+    size_t       name_change_cb_id;
 
     /* keep a list of edited reports so that we can destroy them when
      * the window is closed. */
@@ -550,7 +551,7 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
     priv->cur_report        = SCM_BOOL_F;
     priv->initial_report    = SCM_BOOL_F;
     priv->edited_reports    = SCM_EOL;
-    priv->name_change_cb_id = SCM_BOOL_F;
+    priv->name_change_cb_id = 0;
 
     g_object_get( ppage, "report-id", &report_id, nullptr );
 
@@ -643,22 +644,17 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
         scm_call_2(set_needs_save, inst_report, SCM_BOOL_T);
 
         priv->initial_odb = gnc_get_report_optiondb(inst_report);
-/*
+
         priv->name_change_cb_id =
-            gnc_option_db_register_change_callback(priv->initial_odb,
-                    gnc_plugin_page_report_refresh,
-                    priv,
-                    "General", "Report name");
-*/
+            priv->initial_odb->register_callback(
+                gnc_plugin_page_report_refresh, priv);
+
     }
 
     if ((priv->cur_report != SCM_BOOL_F) && (priv->cur_odb != nullptr))
     {
-/*
-        gnc_option_db_unregister_change_callback_id(priv->cur_odb,
-                priv->option_change_cb_id);
-*/
-        gnc_option_db_destroy(priv->cur_odb);
+        priv->cur_odb->unregister_callback(priv->option_change_cb_id);
+        priv->option_change_cb_id = 0;
         priv->cur_odb = nullptr;
     }
 
@@ -668,12 +664,11 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
     scm_gc_protect_object(priv->cur_report);
 
     priv->cur_odb = gnc_get_report_optiondb(inst_report);
-/*
+
     priv->option_change_cb_id =
-        gnc_option_db_register_change_callback(priv->cur_odb,
-                gnc_plugin_page_report_option_change_cb,
-                report, nullptr, nullptr);
-*/
+        priv->cur_odb->register_callback(
+            gnc_plugin_page_report_option_change_cb, report);
+
     if (gnc_html_history_forward_p(gnc_html_get_history(priv->html)))
     {
         gnc_plugin_page_report_set_fwd_button(report, TRUE);

@@ -63,6 +63,25 @@ public:
 };
 
 using GncOptionSectionPtr = std::shared_ptr<GncOptionSection>;
+using GncOptionDBChangeCallback = void (*)(void* user_data);
+
+struct GncOptionDBCallback
+{
+    GncOptionDBCallback(size_t id, GncOptionDBChangeCallback func,
+                              void* data) :
+        m_id{id}, m_func{func}, m_data{data} {}
+    ~GncOptionDBCallback() = default;
+    GncOptionDBCallback(const GncOptionDBCallback&) = delete;
+    GncOptionDBCallback(GncOptionDBCallback&&) = default;
+    GncOptionDBCallback& operator=(const GncOptionDBCallback&) = default;
+    GncOptionDBCallback& operator=(GncOptionDBCallback&&) = default;
+
+    size_t m_id;
+    GncOptionDBChangeCallback m_func;
+    void* m_data;
+};
+
+using GncCallbackVec = std::vector<GncOptionDBCallback>;
 
 class GncOptionDB
 {
@@ -138,10 +157,14 @@ public:
                                         const std::string& section,
                                         const std::string& name) const noexcept;
     std::istream& load_option_key_value(std::istream& iss);
+    size_t register_callback(GncOptionDBChangeCallback, void*);
+    void unregister_callback(size_t);
+    void run_callbacks();
 private:
     GncOptionSection* m_default_section;
     std::vector<GncOptionSectionPtr> m_sections;
     bool m_dirty = false;
+    GncCallbackVec m_callbacks{};
 
     std::function<GncOptionUIItem*()> m_get_ui_value;
     std::function<void(GncOptionUIItem*)> m_set_ui_value;

@@ -799,6 +799,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     }
 
     %}
+%ignore GncOptionDBCallback;
 
 %include "gnc-option-date.hpp"
 %include "gnc-option.hpp"
