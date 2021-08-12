@@ -157,7 +157,7 @@
   (gnc-make-string-option section name key docstring default (GncOptionUIType-FONT)))
 (define-public (gnc:make-color-option section name key docstring colors range use-alpha)
   (issue-deprecation-warning "gnc:make-color-option is deprecated. Make and register the option in one command with gnc-register-color-option.")
-  (let ((color-str (if use-alpha
+  (let ((color-str (if use-alpha ;; It's always false...
                       (format #f "~x~x~x~x" (car colors) (cadr colors) (caddr colors) (cadddr colors))
                       (format #f "~x~x~x" (car colors) (cadr colors) (caddr colors)))))
   (gnc-make-string-option section name key docstring color-str (GncOptionUIType-COLOR))))

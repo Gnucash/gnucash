@@ -261,12 +261,12 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
                                                       _("_Close"));
                         }
                         g_list_free (children);
-                    break; // Found the button-box, no need to continue.
+                        break; // Found the button-box, no need to continue.
+                    }
                 }
-            }
                 g_list_free (children);
-            break; // Found the box, no need to continue.
-        }
+                break; // Found the box, no need to continue.
+            }
         }
         g_list_free (children);
     }
@@ -2157,7 +2157,12 @@ public:
                                         (uint8_t)(color.green * 255),
                                         (uint8_t)(color.blue * 255),
                                         (uint8_t)(color.alpha * 255));
-        option.set_value(std::string{rgba_str});
+        auto rgb_str = g_strdup_printf("%2x%2x%2x",
+                                       (uint8_t)(color.red * 255),
+                                       (uint8_t)(color.green * 255),
+                                       (uint8_t)(color.blue * 255));
+// Hello World uses an old HTML4 attribute that doesn't understand alpha.
+        option.set_value(std::string{rgb_str});
         g_free(rgba_str);
     }
 };
