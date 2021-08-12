@@ -263,7 +263,7 @@ ap_assistant_menu_prepare (GtkAssistant *assistant, gpointer user_data)
 {
     int nperiods;
     GDate period_begin, period_end, date_now;
-    char * str;
+    char *str, *earliest_str;
 
     AcctPeriodInfo *info = user_data;
 
@@ -302,8 +302,10 @@ ap_assistant_menu_prepare (GtkAssistant *assistant, gpointer user_data)
      * we may have closed books since last time. */
     info->earliest = get_earliest_in_book (gnc_get_current_book());
     info->earliest_str = qof_print_date(info->earliest);
+    earliest_str = gnc_ctime (&info->earliest);
     PINFO ("Date of earliest transaction is %" G_GINT64_FORMAT " %s",
-	   info->earliest, gnc_ctime (&info->earliest));
+	   info->earliest, earliest_str);
+    g_free (earliest_str);
 
     /* Display the results */
     str = g_strdup_printf (
@@ -536,6 +538,7 @@ ap_assistant_create (AcctPeriodInfo *info)
     GtkBuilder *builder;
     GtkWidget *window;
     GtkWidget *box;
+    gchar *earliest_str;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "assistant-acct-period.glade", "account_period_assistant");
@@ -566,8 +569,10 @@ ap_assistant_create (AcctPeriodInfo *info)
      * and use that to set up the freq spec widget. */
     info->earliest = get_earliest_in_book (gnc_get_current_book());
     info->earliest_str = qof_print_date(info->earliest);
+    earliest_str = gnc_ctime (&info->earliest);
     PINFO ("date of earliest transaction is %" G_GINT64_FORMAT " %s",
-           info->earliest, gnc_ctime (&info->earliest));
+           info->earliest, earliest_str);
+    g_free (earliest_str);
 
     g_date_clear (&info->closing_date, 1);
     gnc_gdate_set_time64 (&info->closing_date, info->earliest);

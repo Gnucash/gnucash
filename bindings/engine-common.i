@@ -36,10 +36,18 @@ static const GncGUID * gncAccountGetGUID(Account *x)
 
 %include <Split.h>
 
+%newobject gnc_account_get_children;
 AccountList * gnc_account_get_children (const Account *account);
+
+%newobject gnc_account_get_children_sorted;
 AccountList * gnc_account_get_children_sorted (const Account *account);
+
+%newobject gnc_account_get_descendants;
 AccountList * gnc_account_get_descendants (const Account *account);
+
+%newobject gnc_account_get_descendants_sorted;
 AccountList * gnc_account_get_descendants_sorted (const Account *account);
+
 %ignore gnc_account_get_children;
 %ignore gnc_account_get_children_sorted;
 %ignore gnc_account_get_descendants;

@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-07-01 19:33+0000\n"
+"PO-Revision-Date: 2021-08-10 17:35+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -11517,16 +11517,16 @@ msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
 msgstr ""
-"Legen Sie \"Erstellte Transaktionen überprüfen\" als Standard für den Dialog "
-"\"seit dem letzten Aufruf\" fest."
+"Legen Sie \"Erzeugte Buchungen durchsehen\" als Standard für den Dialog "
+"\"seit letzten Aufruf\" fest."
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
-"Diese Einstellung steuert, ob für den Dialog \"seit dem letzten Aufruf\" "
-"standardmäßig die \"Überprüfung erstellter Transaktionen\" eingestellt ist."
+"Diese Einstellung steuert, ob für den Dialog \"seit letzten Aufruf\" "
+"standardmäßig die \"Überprüfung erzeugter Buchungen\" eingestellt ist."
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
@@ -17361,17 +17361,13 @@ msgstr ""
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2291
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "Likely match _day threshold"
-msgstr "Entscheidungsschwelle für Anzeige in Zu_ordnung"
+msgstr "Entscheidungsschwelle für _wahrscheinliche Datumsübereinstimmung"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2304
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "_Unlikely match day threshold"
-msgstr "Entscheidungsschwelle für Anzeige in Zu_ordnung"
+msgstr "Entscheidungsschwelle für u_nwahrscheinliche Datumsübereinstimmung"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2318
 msgid ""
@@ -18402,8 +18398,8 @@ msgid ""
 "Set 'Review Created Transactions' as the default in the 'Since Last Run' "
 "dialog."
 msgstr ""
-"Legen Sie \"Erstellte Transaktionen überprüfen\" als Standard im Dialogfeld "
-"\"Seit letztem Lauf\" fest."
+"Legen Sie \"Erzeugte Buchungen durchsehen\" als Standard im Dialogfeld \"Seit"
+" letztem Lauf\" fest."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:765
 msgid "Edit Scheduled Transaction"

@@ -96,7 +96,7 @@ typedef struct
     GtkWidget   *region_combo;
     GtkWidget   *region_label;
 
-    const gchar *gnc_accounts_dir;
+    gchar *gnc_accounts_dir;
 
     GtkTreeView *categories_tree;
     GtkTreeRowReference *initial_category;
@@ -170,6 +170,8 @@ gnc_hierarchy_destroy_cb (GtkWidget *obj,   hierarchy_data *data)
         g_hash_table_destroy (hash);
         data->balance_hash = NULL;
     }
+
+    g_free (data->gnc_accounts_dir);
 }
 
 static gnc_numeric

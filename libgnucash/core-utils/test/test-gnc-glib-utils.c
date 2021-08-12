@@ -53,6 +53,62 @@ test_gnc_utf8_strip_invalid_and_controls (gconstpointer data)
     g_free (msg1);
 }
 
+static void
+test_g_list_stringjoin (gconstpointer data)
+{
+    GList *test = NULL;
+    gchar *ret;
+
+    ret = gnc_g_list_stringjoin (NULL, NULL);
+    g_assert (ret == NULL);
+
+    ret = gnc_g_list_stringjoin (NULL, ":");
+    g_assert (ret == NULL);
+
+    test = g_list_prepend (test, "one");
+
+    ret = gnc_g_list_stringjoin (test, NULL);
+    g_assert_cmpstr (ret, ==, "one");
+    g_free (ret);
+
+    ret = gnc_g_list_stringjoin (test, "");
+    g_assert_cmpstr (ret, ==, "one");
+    g_free (ret);
+
+    ret = gnc_g_list_stringjoin (test, ":");
+    g_assert_cmpstr (ret, ==, "one");
+    g_free (ret);
+
+    test = g_list_prepend (test, "two");
+
+    ret = gnc_g_list_stringjoin (test, NULL);
+    g_assert_cmpstr (ret, ==, "twoone");
+    g_free (ret);
+
+    ret = gnc_g_list_stringjoin (test, "");
+    g_assert_cmpstr (ret, ==, "twoone");
+    g_free (ret);
+
+    ret = gnc_g_list_stringjoin (test, ":");
+    g_assert_cmpstr (ret, ==, "two:one");
+    g_free (ret);
+
+    test = g_list_prepend (test, "three");
+
+    ret = gnc_g_list_stringjoin (test, NULL);
+    g_assert_cmpstr (ret, ==, "threetwoone");
+    g_free (ret);
+
+    ret = gnc_g_list_stringjoin (test, "");
+    g_assert_cmpstr (ret, ==, "threetwoone");
+    g_free (ret);
+
+    ret = gnc_g_list_stringjoin (test, ":");
+    g_assert_cmpstr (ret, ==, "three:two:one");
+    g_free (ret);
+
+    g_list_free (test);
+}
 
 int
 main (int argc, char *argv[])
@@ -62,6 +118,7 @@ main (int argc, char *argv[])
     g_test_init (&argc, &argv, NULL); // initialize test program
     g_test_add_data_func ("/core-utils/gnc_utf8_strip_invalid_and_controls invalid utf8", (gconstpointer)invalid_utf8, test_gnc_utf8_strip_invalid_and_controls);
     g_test_add_data_func ("/core-utils/gnc_utf8_strip_invalid_and_controls control chars", (gconstpointer)controls, test_gnc_utf8_strip_invalid_and_controls);
+    g_test_add_data_func ("/core-utils/gnc_g_list_stringjoin", NULL, test_g_list_stringjoin);
 
     return g_test_run();
 }

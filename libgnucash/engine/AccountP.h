@@ -62,7 +62,7 @@ typedef struct AccountPrivate
      * It is intended to a short, 5 to 30 character long string that
      * is displayed by the GUI as the account mnemonic.
      */
-    char *accountName;
+    const char *accountName;
 
     /* The accountCode is an arbitrary string assigned by the user.
      * It is intended to be reporting code that is a synonym for the
@@ -71,13 +71,13 @@ typedef struct AccountPrivate
      * as 100, 200 or 600 for top-level accounts, and 101, 102..  etc.
      * for detail accounts.
      */
-    char *accountCode;
+    const char *accountCode;
 
     /* The description is an arbitrary string assigned by the user.
      * It is intended to be a longer, 1-5 sentence description of what
      * this account is all about.
      */
-    char *description;
+    const char *description;
 
     /* The type field is the account type, picked from the enumerated
      * list that includes ACCT_TYPE_BANK, ACCT_TYPE_STOCK,

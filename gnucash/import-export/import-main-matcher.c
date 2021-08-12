@@ -76,7 +76,6 @@ struct _main_matcher_info
     gboolean add_toggled;     // flag to indicate that add has been toggled to stop selection
     gint id;
     GSList* temp_trans_list;  // Temporary list of imported transactions
-    GHashTable* acct_id_hash; // Hash table, per account, of list of transaction IDs.
     GSList* edited_accounts;  // List of accounts currently edited.
 };
 
@@ -144,14 +143,6 @@ static gboolean query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
                                             gpointer user_data);
 /* end local prototypes */
 
-static
-gboolean delete_hash (gpointer key, gpointer value, gpointer user_data)
-{
-    // Value is a hash table that needs to be destroyed.
-    g_hash_table_destroy (value);
-    return TRUE;
-}
-
 static void
 update_all_balances (GNCImportMainMatcher *info)
 {
@@ -218,8 +209,6 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     // We've deferred balance computations on many accounts. Let's do it now that we're done.
     update_all_balances (info);
 
-    g_hash_table_foreach_remove (info->acct_id_hash, delete_hash, NULL);
-    info->acct_id_hash = NULL;
     g_free (info);
 }
 
@@ -735,6 +724,7 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
                 old_acc  = gnc_import_TransInfo_get_destacc (trans_info);
                 if (*first)
                 {
+                    gchar *acc_full_name = gnc_account_get_full_name (*new_acc);
                     ok_pressed = FALSE;
                     *new_acc = gnc_import_select_account (info->main_widget,
                         NULL,
@@ -746,8 +736,9 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
                         old_acc,
                         &ok_pressed);
                     *first = FALSE;
-                    DEBUG("account selected = %s",
-                            gnc_account_get_full_name (*new_acc));
+                    acc_full_name = gnc_account_get_full_name (*new_acc);
+                    DEBUG("account selected = %s", acc_full_name);
+                    g_free (acc_full_name);
                 }
                 if (ok_pressed)
                 {
@@ -805,19 +796,22 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
         {
             gchar *path_str = gtk_tree_path_to_string (l->data);
             GtkTreeRowReference *ref = gtk_tree_row_reference_new (model, l->data);
+            gchar *fullname;
             DEBUG("passing first = %s", first ? "true" : "false");
             DEBUG("passing is_selection = %s", is_selection ? "true" : "false");
             DEBUG("passing path = %s", path_str);
             g_free (path_str);
             refs = g_list_prepend (refs, ref);
-            DEBUG("passing account value = %s",
-                        gnc_account_get_full_name (assigned_account));
+            fullname = gnc_account_get_full_name (assigned_account);
+            DEBUG("passing account value = %s", fullname);
+            g_free (fullname);
             gnc_gen_trans_assign_transfer_account (treeview,
                                                    &first, is_selection, l->data,
                                                    &assigned_account, info);
-            DEBUG("returned value of account = %s",
-                        gnc_account_get_full_name (assigned_account));
+            fullname = gnc_account_get_full_name (assigned_account);
+            DEBUG("returned value of account = %s", fullname);
             DEBUG("returned value of first = %s", first ? "true" : "false");
+            g_free (fullname);
             if (assigned_account == NULL)
                 break;
 
@@ -848,6 +842,7 @@ gnc_gen_trans_row_activated_cb (GtkTreeView *treeview,
 {
     Account *assigned_account;
     gboolean first, is_selection;
+    gchar *namestr;
 
     ENTER("");
     assigned_account = NULL;
@@ -859,7 +854,9 @@ gnc_gen_trans_row_activated_cb (GtkTreeView *treeview,
 
     gtk_tree_selection_select_path (gtk_tree_view_get_selection (treeview), path);
 
-    DEBUG("account returned = %s", gnc_account_get_full_name (assigned_account));
+    namestr = gnc_account_get_full_name (assigned_account);
+    DEBUG("account returned = %s", namestr);
+    g_free (namestr);
     LEAVE("");
 }
 
@@ -1133,8 +1130,6 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                       G_CALLBACK(gnc_gen_trans_onButtonPressed_cb), info);
     g_signal_connect (view, "popup-menu",
                       G_CALLBACK(gnc_gen_trans_onPopupMenu_cb), info);
-
-    info->acct_id_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 static void
@@ -1715,16 +1710,11 @@ gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui, Transaction
     g_assert (gui);
     g_assert (trans);
 
-    if (gnc_import_exists_online_id (trans, gui->acct_id_hash))
-        return;
-    else
-    {
-        transaction_info = gnc_import_TransInfo_new (trans, NULL);
-        gnc_import_TransInfo_set_ref_id (transaction_info, ref_id);
-        // It's much faster to gather the imported transactions into a GSList than directly into the
-        // treeview.
-        gui->temp_trans_list = g_slist_prepend (gui->temp_trans_list, transaction_info);
-    }
+    transaction_info = gnc_import_TransInfo_new (trans, NULL);
+    gnc_import_TransInfo_set_ref_id (transaction_info, ref_id);
+    // It's much faster to gather the imported transactions into a GSList than directly into the
+    // treeview.
+    gui->temp_trans_list = g_slist_prepend (gui->temp_trans_list, transaction_info);
     return;
 }
 
@@ -1788,8 +1778,6 @@ create_hash_of_potential_matches (GList *candidate_txns,
     {
         Account* split_account;
         GSList* split_list;
-        if (gnc_import_split_has_online_id (candidate->data))
-            continue;
         split_account = xaccSplitGetAccount (candidate->data);
         /* g_hash_table_steal_extended would do the two calls in one shot but is
          * not available until GLib 2.58.

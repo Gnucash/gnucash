@@ -190,6 +190,9 @@ const char *qof_session_get_url (QofSession *session);
 
 %ignore qof_print_date_time_buff;
 %ignore gnc_tm_free;
+%newobject qof_print_date;
+%newobject gnc_ctime;
+%newobject gnc_print_time64;
 %include <gnc-date.h>
 extern const char *gnc_default_strftime_date_format;
 

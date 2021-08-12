@@ -590,6 +590,7 @@ gncScrubBusinessSplit (Split *split)
             gchar *pdatestr = gnc_ctime (&pdate);
             PINFO ("Destroying empty split %p from transaction %s (%s)", split, pdatestr, xaccTransGetDescription(txn));
             xaccSplitDestroy (split);
+            g_free (pdatestr);
 
             // Also delete the lot containing this split if it was the last split in that lot
             if (lot && (gnc_lot_count_splits (lot) == 0))

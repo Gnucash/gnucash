@@ -49,17 +49,6 @@ const gchar * gnc_import_get_acc_online_id(Account * account);
 void gnc_import_set_acc_online_id(Account * account,
                                   const gchar * string_value);
 /** @} */
-/** @name Setter-getters
-    Setter and getter functions for the online_id field for
-    Transactions.
-	@{
-*/
-const gchar * gnc_import_get_trans_online_id(Transaction * transaction);
-void gnc_import_set_trans_online_id(Transaction * transaction,
-                                    const gchar * string_value);
-/** @} */
-
-gboolean gnc_import_trans_has_online_id(Transaction * transaction);
 
 /** @name Setter-getters
     Setter and getter functions for the online_id field for

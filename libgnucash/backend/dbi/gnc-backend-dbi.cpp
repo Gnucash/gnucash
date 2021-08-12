@@ -1100,7 +1100,9 @@ gnc_module_init_backend_dbi (void)
 #endif
     if (num_drivers <= 0)
     {
-        gchar* dir = g_build_filename (gnc_path_get_libdir (), "dbd", nullptr);
+        gchar *libdir = gnc_path_get_libdir ();
+        gchar *dir = g_build_filename (libdir, "dbd", nullptr);
+        g_free (libdir);
 #if HAVE_LIBDBI_R
         if (dbi_instance)
             return;

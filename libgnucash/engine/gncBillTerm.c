@@ -39,8 +39,8 @@ struct _gncBillTerm
     QofInstance     inst;
 
     /* 'visible' data fields directly manipulated by user */
-    char *          name;
-    char *          desc;
+    const char *    name;
+    const char *    desc;
     GncBillTermType type;
     gint            due_days;
     gint            disc_days;
@@ -72,13 +72,9 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 #define _GNC_MOD_NAME        GNC_ID_BILLTERM
 
 #define SET_STR(obj, member, str) { \
-        char * tmp; \
-        \
         if (!g_strcmp0 (member, str)) return; \
         gncBillTermBeginEdit (obj); \
-        tmp = CACHE_INSERT (str); \
-        CACHE_REMOVE (member); \
-        member = tmp; \
+        CACHE_REPLACE(member, str); \
         }
 
 AS_STRING_DEC(GncBillTermType, ENUM_TERMS_TYPE)

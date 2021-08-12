@@ -39,17 +39,17 @@ struct _gncAddress
 {
     QofInstance inst;
 
-    QofBook *	book;
+    QofBook *     book;
     QofInstance * parent;
-    gboolean	dirty;
-    char *	name;
-    char *	addr1;
-    char *	addr2;
-    char *	addr3;
-    char *	addr4;
-    char *	phone;
-    char *	fax;
-    char *	email;
+    gboolean      dirty;
+    const char *  name;
+    const char *  addr1;
+    const char *  addr2;
+    const char *  addr3;
+    const char *  addr4;
+    const char *  phone;
+    const char *  fax;
+    const char *  email;
 };
 
 struct _gncAddressClass
@@ -393,14 +393,10 @@ gncAddressFree (GncAddress *addr)
 /* Set functions */
 
 #define SET_STR(obj, member, str) { \
-	char * tmp; \
-	\
 	if (member == str) return; \
 	if (!g_strcmp0 (member, str)) return; \
 	gncAddressBeginEdit (obj); \
-	tmp = CACHE_INSERT (str); \
-	CACHE_REMOVE (member); \
-	member = tmp; \
+	CACHE_REPLACE(member, str); \
 	}
 
 void gncAddressSetName (GncAddress *addr, const char *name)

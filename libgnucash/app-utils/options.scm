@@ -1832,6 +1832,8 @@ the option '~a'."))
       ("Links" #f "Transaction Links")
       ;; invoice.scm, renamed November 2018
       ("Individual Taxes" #f "Use Detailed Tax Summary")
+      ;; renamed in several reports, April 2021
+      ("Show Accounts until level" #f "Levels of Subaccounts")
       ;; receipt.scm, renamed July 2021
       ("Invoice number" #f "Invoice Number")
       ;; receipt.scm and taxinvoice.scm, renamed July 2021

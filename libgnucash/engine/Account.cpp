@@ -227,26 +227,12 @@ gnc_set_account_separator (const gchar *separator)
 
 gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invalid_account_names)
 {
-    GList *node;
     gchar *message = NULL;
-    gchar *account_list = NULL;
 
     if ( !invalid_account_names )
         return NULL;
 
-    for ( node = invalid_account_names;  node; node = g_list_next(node))
-    {
-        if ( !account_list )
-            account_list = static_cast<gchar *>(node->data);
-        else
-        {
-            gchar *tmp_list = NULL;
-
-            tmp_list = g_strconcat (account_list, "\n", node->data, nullptr);
-            g_free ( account_list );
-            account_list = tmp_list;
-        }
-    }
+    auto account_list {gnc_g_list_stringjoin (invalid_account_names, "\n")};
 
     /* Translators: The first %s will be the account separator character,
        the second %s is a list of account names.
@@ -262,34 +248,29 @@ gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invali
     return message;
 }
 
+struct ViolationData
+{
+    GList *list;
+    const gchar *separator;
+};
+
+static void
+check_acct_name (Account *acct, gpointer user_data)
+{
+    auto cb {static_cast<ViolationData*>(user_data)};
+    auto name {xaccAccountGetName (acct)};
+    if (g_strstr_len (name, -1, cb->separator))
+        cb->list = g_list_prepend (cb->list, g_strdup (name));
+}
+
 GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator)
 {
-    Account *root_account = gnc_book_get_root_account(book);
-    GList   *accounts, *node;
-    GList   *invalid_list = NULL;
-
-    g_return_val_if_fail (separator != NULL, NULL);
-
-    if (root_account == NULL)
-        return NULL;
-
-    accounts = gnc_account_get_descendants (root_account);
-    for (node = accounts; node; node = g_list_next(node))
-    {
-        Account *acct      = (Account*)node->data;
-        gchar   *acct_name = g_strdup ( xaccAccountGetName ( acct ) );
-
-        if ( g_strstr_len ( acct_name, -1, separator ) )
-            invalid_list = g_list_prepend ( invalid_list, (gpointer) acct_name );
-        else
-            g_free ( acct_name );
-    }
-    if (accounts != NULL)
-    {
-        g_list_free(accounts);
-    }
-
-    return invalid_list;
+    g_return_val_if_fail (separator != NULL, nullptr);
+    if (!book) return nullptr;
+    ViolationData cb = { nullptr, separator };
+    gnc_account_foreach_descendant (gnc_book_get_root_account (book),
+                                    (AccountCb)check_acct_name, &cb);
+    return cb.list;
 }
 
 /********************************************************************\
@@ -317,9 +298,9 @@ gnc_account_init(Account* acc)
     priv->parent   = NULL;
     priv->children = NULL;
 
-    priv->accountName = static_cast<char*>(qof_string_cache_insert(""));
-    priv->accountCode = static_cast<char*>(qof_string_cache_insert(""));
-    priv->description = static_cast<char*>(qof_string_cache_insert(""));
+    priv->accountName = qof_string_cache_insert("");
+    priv->accountCode = qof_string_cache_insert("");
+    priv->description = qof_string_cache_insert("");
 
     priv->type = ACCT_TYPE_NONE;
 
@@ -1265,9 +1246,9 @@ xaccCloneAccount(const Account *from, QofBook *book)
      * Also let caller issue the generate_event (EVENT_CREATE) */
     priv->type = from_priv->type;
 
-    priv->accountName = static_cast<char*>(qof_string_cache_insert(from_priv->accountName));
-    priv->accountCode = static_cast<char*>(qof_string_cache_insert(from_priv->accountCode));
-    priv->description = static_cast<char*>(qof_string_cache_insert(from_priv->description));
+    priv->accountName = qof_string_cache_replace(priv->accountName, from_priv->accountName);
+    priv->accountCode = qof_string_cache_replace(priv->accountCode, from_priv->accountCode);
+    priv->description = qof_string_cache_replace(priv->description, from_priv->description);
 
     qof_instance_copy_kvp (QOF_INSTANCE (ret), QOF_INSTANCE (from));
 
@@ -2327,7 +2308,7 @@ int
 xaccAccountOrder (const Account *aa, const Account *ab)
 {
     AccountPrivate *priv_aa, *priv_ab;
-    char *da, *db;
+    const char *da, *db;
     char *endptr = NULL;
     int ta, tb, result;
     long la, lb;
@@ -2691,6 +2672,35 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
 /********************************************************************\
 \********************************************************************/
 
+static void
+account_foreach_descendant (const Account *acc, AccountCb thunk,
+                            void* user_data, bool sort)
+{
+    GList *children;
+
+    g_return_if_fail (GNC_IS_ACCOUNT(acc));
+    g_return_if_fail (thunk);
+
+    auto priv{GET_PRIVATE(acc)};
+    if (sort)
+    {
+        children = g_list_copy (priv->children);
+        children = g_list_sort (children, (GCompareFunc)xaccAccountOrder);
+    }
+    else
+        children = priv->children;
+
+    for (auto node = children; node; node = node->next)
+    {
+        auto child = static_cast<Account*>(node->data);
+        thunk (child, user_data);
+        account_foreach_descendant (child, thunk, user_data, sort);
+    }
+
+    if (sort)
+        g_list_free (children);
+}
+
 void
 gnc_account_append_child (Account *new_parent, Account *child)
 {
@@ -2864,20 +2874,18 @@ gnc_account_nth_child (const Account *parent, gint num)
     return static_cast<Account*>(g_list_nth_data(GET_PRIVATE(parent)->children, num));
 }
 
+static void
+count_acct (Account *account, gpointer user_data)
+{
+    auto count {static_cast<int*>(user_data)};
+    ++*count;
+}
+
 gint
 gnc_account_n_descendants (const Account *account)
 {
-    AccountPrivate *priv;
-    GList *node;
-    gint count = 0;
-
-    g_return_val_if_fail(GNC_IS_ACCOUNT(account), 0);
-
-    priv = GET_PRIVATE(account);
-    for (node = priv->children; node; node = g_list_next(node))
-    {
-        count += gnc_account_n_descendants(static_cast<Account*>(node->data)) + 1;
-    }
+    int count {0};
+    account_foreach_descendant (account, count_acct, &count, FALSE);
     return count;
 }
 
@@ -2921,118 +2929,53 @@ gnc_account_get_tree_depth (const Account *account)
     return depth + 1;
 }
 
+static void
+collect_acct (Account *account, gpointer user_data)
+{
+    auto listptr{static_cast<GList**>(user_data)};
+    *listptr = g_list_prepend (*listptr, account);
+}
+
 GList *
 gnc_account_get_descendants (const Account *account)
 {
-    AccountPrivate *priv;
-    GList *child, *descendants;
-
-    g_return_val_if_fail(GNC_IS_ACCOUNT(account), NULL);
-
-    priv = GET_PRIVATE(account);
-    if (!priv->children)
-        return NULL;
-
-    descendants = NULL;
-    for (child = priv->children; child; child = g_list_next(child))
-    {
-        descendants = g_list_append(descendants, child->data);
-        descendants = g_list_concat(descendants,
-                gnc_account_get_descendants(static_cast<Account const *>(child->data)));
-    }
-    return descendants;
+    GList* list = nullptr;
+    account_foreach_descendant (account, collect_acct, &list, FALSE);
+    return g_list_reverse (list);
 }
 
 GList *
 gnc_account_get_descendants_sorted (const Account *account)
 {
-    AccountPrivate *priv;
-    GList *child, *children, *descendants;
+    GList* list = nullptr;
+    account_foreach_descendant (account, collect_acct, &list, TRUE);
+    return g_list_reverse (list);
+}
 
-    /* errors */
-    g_return_val_if_fail(GNC_IS_ACCOUNT(account), NULL);
-
-    /* optimizations */
-    priv = GET_PRIVATE(account);
-    if (!priv->children)
-        return NULL;
-
-    descendants = NULL;
-    children = g_list_sort(g_list_copy(priv->children), (GCompareFunc)xaccAccountOrder);
-    for (child = children; child; child = g_list_next(child))
-    {
-        descendants = g_list_append(descendants, child->data);
-        descendants = g_list_concat(descendants,
-                gnc_account_get_descendants_sorted(static_cast<Account const *>(child->data)));
-    }
-    g_list_free(children);
-    return descendants;
+static gpointer
+is_acct_name (Account *account, gpointer user_data)
+{
+    auto name {static_cast<gchar*>(user_data)};
+    return (g_strcmp0 (name, xaccAccountGetName (account)) ? nullptr : account);
 }
 
 Account *
 gnc_account_lookup_by_name (const Account *parent, const char * name)
 {
-    AccountPrivate *cpriv, *ppriv;
-    Account *child, *result;
-    GList *node;
+    return (Account*)gnc_account_foreach_descendant_until (parent, is_acct_name, (char*)name);
+}
 
-    g_return_val_if_fail(GNC_IS_ACCOUNT(parent), NULL);
-    g_return_val_if_fail(name, NULL);
-
-    /* first, look for accounts hanging off the current node */
-    ppriv = GET_PRIVATE(parent);
-    for (node = ppriv->children; node; node = node->next)
-    {
-        child = static_cast<Account*>(node->data);
-        cpriv = GET_PRIVATE(child);
-        if (g_strcmp0(cpriv->accountName, name) == 0)
-            return child;
-    }
-
-    /* if we are still here, then we haven't found the account yet.
-     * Recursively search each of the child accounts next */
-    for (node = ppriv->children; node; node = node->next)
-    {
-        child = static_cast<Account*>(node->data);
-        result = gnc_account_lookup_by_name (child, name);
-        if (result)
-            return result;
-    }
-
-    return NULL;
+static gpointer
+is_acct_code (Account *account, gpointer user_data)
+{
+    auto name {static_cast<gchar*>(user_data)};
+    return (g_strcmp0 (name, xaccAccountGetCode (account)) ? nullptr : account);
 }
 
 Account *
 gnc_account_lookup_by_code (const Account *parent, const char * code)
 {
-    AccountPrivate *cpriv, *ppriv;
-    Account *child, *result;
-    GList *node;
-
-    g_return_val_if_fail(GNC_IS_ACCOUNT(parent), NULL);
-    g_return_val_if_fail(code, NULL);
-
-    /* first, look for accounts hanging off the current node */
-    ppriv = GET_PRIVATE(parent);
-    for (node = ppriv->children; node; node = node->next)
-    {
-        child = static_cast<Account*>(node->data);
-        cpriv = GET_PRIVATE(child);
-        if (g_strcmp0(cpriv->accountCode, code) == 0)
-            return child;
-    }
-
-    /* if we are still here, then we haven't found the account yet.
-     * Recursively search each of the child accounts next */
-    for (node = ppriv->children; node; node = node->next)
-    {
-        child = static_cast<Account*>(node->data);
-        result = gnc_account_lookup_by_code (child, code);
-        if (result)
-            return result;
-    }
-
-    return NULL;
+    return (Account*)gnc_account_foreach_descendant_until (parent, is_acct_code, (char*)code);
 }
 
 static gpointer
@@ -3183,20 +3126,7 @@ gnc_account_foreach_descendant (const Account *acc,
                                 AccountCb thunk,
                                 gpointer user_data)
 {
-    const AccountPrivate *priv;
-    GList *node;
-    Account *child;
-
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-    g_return_if_fail(thunk);
-
-    priv = GET_PRIVATE(acc);
-    for (node = priv->children; node; node = node->next)
-    {
-        child = static_cast<Account*>(node->data);
-        thunk(child, user_data);
-        gnc_account_foreach_descendant(child, thunk, user_data);
-    }
+    account_foreach_descendant (acc, thunk, user_data, FALSE);
 }
 
 gpointer
@@ -3204,28 +3134,24 @@ gnc_account_foreach_descendant_until (const Account *acc,
                                       AccountCb2 thunk,
                                       gpointer user_data)
 {
-    const AccountPrivate *priv;
-    GList *node;
-    Account *child;
-    gpointer result;
+    gpointer result {nullptr};
 
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
-    g_return_val_if_fail(thunk, NULL);
+    g_return_val_if_fail (GNC_IS_ACCOUNT(acc), nullptr);
+    g_return_val_if_fail (thunk, nullptr);
 
-    priv = GET_PRIVATE(acc);
-    for (node = priv->children; node; node = node->next)
+    auto priv{GET_PRIVATE(acc)};
+
+    for (auto node = priv->children; node; node = node->next)
     {
-        child = static_cast<Account*>(node->data);
-        result = thunk(child, user_data);
-        if (result)
-            return(result);
+        auto child = static_cast<Account*>(node->data);
+        result = thunk (child, user_data);
+        if (result) break;
 
-        result = gnc_account_foreach_descendant_until(child, thunk, user_data);
-        if (result)
-            return(result);
+        result = gnc_account_foreach_descendant_until (child, thunk, user_data);
+        if (result) break;
     }
 
-    return NULL;
+    return result;
 }
 
 
@@ -3264,7 +3190,7 @@ gnc_account_get_full_name(const Account *account)
     AccountPrivate *priv;
     const Account *a;
     char *fullname;
-    gchar **names;
+    const gchar **names;
     int level;
 
     /* So much for hardening the API. Too many callers to this function don't
@@ -3291,7 +3217,7 @@ gnc_account_get_full_name(const Account *account)
 
     /* Get all the pointers in the right order. The root node "entry"
      * becomes the terminating NULL pointer for the array of strings. */
-    names = (gchar **)g_malloc(level * sizeof(gchar *));
+    names = (const gchar **)g_malloc(level * sizeof(gchar *));
     names[--level] = NULL;
     for (a = account; level > 0; a = priv->parent)
     {
@@ -3300,7 +3226,7 @@ gnc_account_get_full_name(const Account *account)
     }
 
     /* Build the full name */
-    fullname =  g_strjoinv(account_separator, names);
+    fullname = g_strjoinv(account_separator, (gchar **)names);
     g_free(names);
 
     return fullname;
