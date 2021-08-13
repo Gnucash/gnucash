@@ -1051,7 +1051,7 @@ qof_book_use_split_action_for_num_field (const QofBook *book)
     {
         // No cached value? Then do the expensive KVP lookup
         gboolean result;
-        const char *opt = NULL;
+        char *opt = NULL;
         qof_instance_get (QOF_INSTANCE (book),
                           PARAM_NAME_NUM_FIELD_SOURCE, &opt,
                           NULL);
@@ -1060,6 +1060,7 @@ qof_book_use_split_action_for_num_field (const QofBook *book)
             result = TRUE;
         else
             result = FALSE;
+        g_free (opt);
 
         // We need to const_cast the "book" argument into a non-const pointer,
         // but as we are dealing only with cache variables, I think this is
