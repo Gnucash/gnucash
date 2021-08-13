@@ -231,9 +231,10 @@ lv_show_splits_free (GNCLotViewer *lv)
             filtered_list = g_list_prepend (filtered_list, split);
         }
     }
+    filtered_list = g_list_reverse (filtered_list);
 
     /* display list */
-    gnc_split_viewer_fill(lv, lv->split_free_store, g_list_reverse (filtered_list));
+    gnc_split_viewer_fill(lv, lv->split_free_store, filtered_list);
     g_list_free (filtered_list);
 }
 
