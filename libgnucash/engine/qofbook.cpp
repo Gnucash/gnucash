@@ -1032,13 +1032,11 @@ qof_book_get_default_gain_loss_acct_guid (QofBook *book)
 gboolean
 qof_book_use_trading_accounts (const QofBook *book)
 {
-    const char *opt = NULL;
-    qof_instance_get (QOF_INSTANCE (book),
-              "trading-accts", &opt,
-              NULL);
-    if (opt && opt[0] == 't' && opt[1] == 0)
-        return TRUE;
-    return FALSE;
+    char *opt = nullptr;
+    qof_instance_get (QOF_INSTANCE (book), "trading-accts", &opt, nullptr);
+    auto retval = (opt && opt[0] == 't' && opt[1] == 0);
+    g_free (opt);
+    return retval;
 }
 
 /* Returns TRUE if this book uses split action field as the 'Num' field, FALSE
