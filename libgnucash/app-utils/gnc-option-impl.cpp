@@ -33,6 +33,8 @@ extern "C"
 #include "gnc-ui-util.h"
 }
 
+static const QofLogModule log_module{"gnc.options"};
+
 const std::string GncOptionMultichoiceValue::c_empty_string{""};
 const std::string GncOptionMultichoiceValue::c_list_string{"multiple values"};
 
@@ -348,20 +350,40 @@ qof_instance_from_guid(GncGUID* guid, GncOptionUIType type)
 QofInstance*
 qof_instance_from_string(const std::string& str, GncOptionUIType type)
 {
+    QofInstance* retval{nullptr};
+    // Commodities are often serialized as Namespace::Mnemonic or just Mnemonic
     if (type == GncOptionUIType::CURRENCY ||
         type == GncOptionUIType::COMMODITY)
     {
         auto book{gnc_get_current_book()};
-        auto sep{str.find(":")};
-        auto name_space{str.substr(0, sep)};
-        auto mnemonic{str.substr(sep + 1, -1)};
         auto table = gnc_commodity_table_get_table(book);
-        return QOF_INSTANCE(gnc_commodity_table_lookup(table,
-                                                       name_space.c_str(),
-                                                       mnemonic.c_str()));
+        auto sep{str.find(":")};
+        if (sep != std::string::npos)
+        {
+            auto name_space{str.substr(0, sep)};
+            auto mnemonic{str.substr(sep + 1, -1)};
+            retval = QOF_INSTANCE(gnc_commodity_table_lookup(table,
+                                                             name_space.c_str(),
+                                                             mnemonic.c_str()));
+        }
+        if (!retval && type == GncOptionUIType::CURRENCY)
+            retval = QOF_INSTANCE(gnc_commodity_table_lookup(table,
+                                                             "CURRENCY",
+                                                             str.c_str()));
     }
-    auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
-    return qof_instance_from_guid(&guid, type);
+
+    if (!retval)
+    {
+        try {
+            auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
+            retval = qof_instance_from_guid(&guid, type);
+        }
+        catch (const gnc::guid_syntax_exception& err)
+        {
+            PWARN("Failed to convert %s to a GUID", str.c_str());
+        }
+    }
+    return retval;
 }
 
 std::string
