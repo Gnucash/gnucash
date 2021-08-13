@@ -47,6 +47,8 @@ namespace std {
 #include "gnc-optiondb-impl.hpp"
 #include "gnc-option-date.hpp"
 
+static const QofLogModule log_module = "gnc.optiondb";
+
 SCM scm_init_sw_gnc_optiondb_module(void);
 %}
 
@@ -855,72 +857,122 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     {
         if (!$self)
             return;
-        std::visit([new_value](auto& option) {
-                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                               GncOptionDateValue>)
-                {
-                    if (scm_date_absolute(new_value))
-                        option.set_value(scm_absolute_date_to_time64(new_value));
-                    else
-                        option.set_value(scm_relative_date_get_period(new_value));
-                    return;
-                }
+        try {
+            std::visit([new_value](auto& option) {
+                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                  GncOptionDateValue>)
+                    {
+                        if (scm_date_absolute(new_value))
+                            option.set_value(scm_absolute_date_to_time64(new_value));
+                        else
+                            option.set_value(scm_relative_date_get_period(new_value));
+                        return;
+                    }
 
-                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                               GncOptionMultichoiceValue>)
-                {
-                    option.set_multiple(scm_to_multichoices(new_value, option));
-                    return;
-                }
+                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                  GncOptionMultichoiceValue>)
+                    {
+                        option.set_multiple(scm_to_multichoices(new_value, option));
+                        return;
+                    }
 
-                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                               GncOptionRangeValue<int>>)
-                {
-                    if (scm_is_pair(new_value))
-                        option.set_value(scm_to_int(scm_cdr(new_value)));
-                    else
-                        option.set_value(scm_to_int(new_value));
-                    return;
-                }
-
-                auto value{scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value)};  //Can't inline, set_value takes arg by reference.
-                option.set_value(value);
-            }, swig_get_option($self));
+                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                  GncOptionRangeValue<int>>)
+                    {
+                        if (scm_is_pair(new_value))
+                            option.set_value(scm_to_int(scm_cdr(new_value)));
+                        else
+                            option.set_value(scm_to_int(new_value));
+                        return;
+                    }
+                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                  GncOptionValue<const QofInstance*>> ||
+                                  std::is_same_v<std::decay_t<decltype(option)>,
+                                  GncOptionValidatedValue<const QofInstance*>>)
+                    {
+                        if (scm_is_string(new_value))
+                        {
+                            auto strval{scm_to_utf8_string(new_value)};
+                            auto val{qof_instance_from_string(strval, option.get_ui_type())};
+                            option.set_value(val);
+                        }
+                        else
+                        {
+                            auto val{scm_to_value<const QofInstance*>(new_value)};
+                            option.set_value(val);
+                        }
+                        return;
+                    }
+                    auto value{scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value)};  //Can't inline, set_value takes arg by reference.
+                    option.set_value(value);
+                }, swig_get_option($self));
+        }
+        catch(const std::invalid_argument& err)
+        {
+            PERR("Option %s:%s failed to set value: %s",
+                 $self->get_section().c_str(), $self->get_name().c_str(),
+                 err.what());
+        }
     }
 
     void set_default_value_from_scm(SCM new_value)
     {
         if (!$self)
             return;
-        std::visit([new_value](auto& option) {
-                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                               GncOptionDateValue>)
-                {
-                    if (scm_date_absolute(new_value))
-                        option.set_default_value(scm_absolute_date_to_time64(new_value));
-                    else
-                        option.set_default_value(scm_relative_date_get_period(new_value));
-                    return;
-                }
-                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                               GncOptionMultichoiceValue>)
-                {
-                    option.set_default_multiple(scm_to_multichoices(new_value,
-                                                                    option));
-                    return;
-                }
-                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                               GncOptionRangeValue<int>>)
-                {
-                    if (scm_is_pair(new_value))
-                        option.set_default_value(scm_to_int(scm_cdr(new_value)));
-                    else
-                        option.set_default_value(scm_to_int(new_value));
-                    return;
-                }
-                auto value{scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value)};  //Can't inline, set_value takes arg by reference.
-                option.set_default_value(value);
-            }, swig_get_option($self));
+        try {
+            std::visit([new_value](auto& option) {
+                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                  GncOptionDateValue>)
+                    {
+                        if (scm_date_absolute(new_value))
+                            option.set_default_value(scm_absolute_date_to_time64(new_value));
+                        else
+                            option.set_default_value(scm_relative_date_get_period(new_value));
+                        return;
+                    }
+                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                  GncOptionMultichoiceValue>)
+                    {
+                        option.set_default_multiple(scm_to_multichoices(new_value,
+                                                                        option));
+                        return;
+                    }
+                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                  GncOptionRangeValue<int>>)
+                    {
+                        if (scm_is_pair(new_value))
+                            option.set_default_value(scm_to_int(scm_cdr(new_value)));
+                        else
+                            option.set_default_value(scm_to_int(new_value));
+                        return;
+                    }
+                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                  GncOptionValue<const QofInstance*>> ||
+                                  std::is_same_v<std::decay_t<decltype(option)>,
+                                  GncOptionValidatedValue<const QofInstance*>>)
+                    {
+                        if (scm_is_string(new_value))
+                        {
+                            auto strval{scm_to_utf8_string(new_value)};
+                            auto val{qof_instance_from_string(strval, option.get_ui_type())};
+                            option.set_default_value(val);
+                        }
+                        else
+                        {
+                            auto val{scm_to_value<const QofInstance*>(new_value)};
+                            option.set_default_value(val);
+                        }
+                        return;
+                    }
+                    auto value{scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value)};  //Can't inline, set_value takes arg by reference.
+                    option.set_default_value(value);
+                }, swig_get_option($self));
+        }
+        catch(const std::invalid_argument& err)
+        {
+            PERR("Option %s:%s failed to set default value: %s",
+                 $self->get_section().c_str(), $self->get_name().c_str(), err.what());
+        }
     }
 
     SCM get_type()
