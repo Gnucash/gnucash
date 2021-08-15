@@ -358,12 +358,9 @@ scm_from_value<GncOptionAccountList>(GncOptionAccountList value)
 {
     SCM s_list = SCM_EOL;
     for (auto acct : value)
-    {
-        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0));
-        s_list = scm_append(scm_list_2(s_list, elem));
-    }
-
-    return s_list;
+        s_list = scm_cons(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0),
+                          s_list);
+    return scm_reverse(s_list);
 }
 
 QofBook* gnc_option_test_book_new();
@@ -533,20 +530,18 @@ gnc_option_test_book_destroy(QofBook* book)
 {
     $result = SCM_EOL;
     for (auto acct : $1)
-    {
-        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0));
-        $result = scm_append(scm_list_2($result, elem));
-    }
+        $result = scm_cons(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0),
+                           $result);
+    $result = scm_reverse($result);
 }
 
 %typemap(out) GncOptionAccountList&
 {
     $result = SCM_EOL;
     for (auto acct : *$1)
-    {
-        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0));
-        $result = scm_append(scm_list_2($result, elem));
-    }
+        $result = scm_cons(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0),
+                           $result);
+    $result = scm_reverse ($result)
 }
 
 wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
