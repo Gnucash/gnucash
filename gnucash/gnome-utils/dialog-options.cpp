@@ -1297,7 +1297,7 @@ RelativeDateEntry::RelativeDateEntry(GncOption& option)
 {
 
     auto renderer = gtk_cell_renderer_text_new();
-    auto store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+    auto store = gtk_list_store_new(1, G_TYPE_STRING);
     /* Add values to the list store, entry and tooltip */
     auto num = option.num_permissible_values();
     for (decltype(num) index = 0; index < num; ++index)
