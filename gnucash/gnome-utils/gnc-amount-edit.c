@@ -386,6 +386,7 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
     if (!filtered_string || *filtered_string == '\0')
     {
         *amount = gnc_numeric_zero ();
+        g_free (filtered_string);
         if (empty_ok)
             return -1; /* indicate an empty field */
         else
