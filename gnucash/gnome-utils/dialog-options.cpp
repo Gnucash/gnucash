@@ -1310,6 +1310,7 @@ RelativeDateEntry::RelativeDateEntry(GncOption& option)
 
     /* Create the new Combo with tooltip and add the store */
     m_entry = GTK_WIDGET(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)));
+    gtk_combo_box_set_active(GTK_COMBO_BOX(m_entry), 0);
     gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(m_entry), renderer, TRUE);
     gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT(m_entry),
                                    renderer, "text", 0);
