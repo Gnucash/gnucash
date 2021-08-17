@@ -899,7 +899,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                         return;
                     }
                     auto value{scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value)};  //Can't inline, set_value takes arg by reference.
-                    option.set_value(value);
+                    option.set_value(static_cast<decltype(option.get_value())>(value));
                 }, swig_get_option($self));
         }
         catch(const std::invalid_argument& err)
