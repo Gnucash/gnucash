@@ -1653,7 +1653,8 @@ public:
     {
         auto widget{GNC_TREE_VIEW_ACCOUNT(get_widget())};
         auto acc_list = gnc_tree_view_account_get_selected_accounts(widget);
-        GncOptionAccountList acc_vec(g_list_length(acc_list));
+        GncOptionAccountList acc_vec;
+        acc_vec.reserve(g_list_length(acc_list));
         for (auto node = acc_list; node; node = g_list_next(node))
             acc_vec.push_back(static_cast<const Account*>(node->data));
         g_list_free(acc_list);
