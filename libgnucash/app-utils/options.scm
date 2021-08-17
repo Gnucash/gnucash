@@ -72,7 +72,12 @@
     (GncOption-get-scm-value option))
 
 (define-public (gnc:color-option->html opt)
-  (format #f "#~a" (GncOption-get-scm-value opt)))
+  ;; HTML doesn't like alpha values.
+  (let* ((color (GncOption-get-scm-value opt))
+         (html-color (if (> (string-length color) 6)
+                         (substring color 0 6)
+                         color)))
+    (format #f "#~a" html-color)))
 
 (define-public (gnc:color-option->hex-string opt)
   (format #f "~a" (GncOption-get-scm-value opt)))
