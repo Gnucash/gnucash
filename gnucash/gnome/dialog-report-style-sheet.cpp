@@ -73,13 +73,14 @@ enum
     COLUMN_DIALOG,
     N_COLUMNS
 };
-
+extern "C" // So that gtk_builder_connect_full can find them.
+{
 void gnc_style_sheet_select_dialog_new_cb (GtkWidget *widget, gpointer user_data);
 void gnc_style_sheet_select_dialog_edit_cb (GtkWidget *widget, gpointer user_data);
 void gnc_style_sheet_select_dialog_delete_cb (GtkWidget *widget, gpointer user_data);
 void gnc_style_sheet_select_dialog_close_cb (GtkWidget *widget, gpointer user_data);
 void gnc_style_sheet_select_dialog_destroy_cb (GtkWidget *widget, gpointer user_data);
-
+}
 /************************************************************
  *     Style Sheet Edit Dialog (I.E. an options dialog)     *
  ************************************************************/
