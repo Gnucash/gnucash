@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-11 09:34+0000\n"
+"PO-Revision-Date: 2021-08-15 07:35+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -3817,7 +3817,7 @@ msgstr "פתיחת דו־שיח חיפוש שובר הוצאות"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr "מסמכים מקושרים – עסקי"
+msgstr "עסקי – מסמכים מקושרים"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
 msgid "View all Linked Business Documents"
