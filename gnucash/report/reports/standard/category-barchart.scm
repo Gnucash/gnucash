@@ -39,6 +39,7 @@
 ;; once at the very end) because I need them to define the "other"
 ;; report, thus needing them twice.
 (define menuname-income (N_ "Income Chart"))
+(define menuname-profit-and-loss (N_ "Profit & Loss Chart"))
 (define menuname-expense (N_ "Expense Chart"))
 (define menuname-assets (N_ "Asset Chart"))
 (define menuname-liabilities (N_ "Liability Chart"))
@@ -47,6 +48,9 @@
 ;; The menu statusbar tips.
 (define menutip-income
   (N_ "Shows a chart with the Income per interval \
+developing over time"))
+(define menutip-profit-and-loss
+  (N_ "Shows a chart with the Profit & Loss per interval \
 developing over time"))
 (define menutip-expense
   (N_ "Shows a chart with the Expenses per interval \
@@ -60,6 +64,7 @@ developing over time"))
 ;; The names here are used 1. for internal identification, 2. as
 ;; tab labels, 3. as default for the 'Report name' option which
 ;; in turn is used for the printed report title.
+(define reportname-profit-and-loss (N_ "Profit & Loss Over Time"))
 (define reportname-income (N_ "Income Over Time"))
 (define reportname-expense (N_ "Expense Over Time"))
 (define reportname-assets (N_ "Assets Over Time"))
@@ -691,6 +696,12 @@ developing over time"))
  (list
   ;; reportname, account-types, inc-exp?,
   ;; menu-reportname, menu-tip, reverse-bal?, uuid
+  (list reportname-profit-and-loss
+        (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
+              ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
+              ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
+              ACCT-TYPE-CURRENCY)
+        #t menuname-profit-and-loss menutip-profit-and-loss #f category-barchart-profit-and-loss-uuid)
   (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income #t category-barchart-income-uuid)
   (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense #f category-barchart-expense-uuid)
   (list reportname-assets
