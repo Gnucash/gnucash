@@ -947,15 +947,20 @@ public:
             m_default_value = std::move(value);
         }
 
+    /* These aren't const& because if m_default_value hasn't been set
+     * get_default_value finds the first account that matches the allowed types
+     * and returns a GncOptionAccountList containing it. That's a stack variable
+     * and must be returned by value.
+     */
     GncOptionAccountList get_value() const;
     GncOptionAccountList get_default_value() const;
     bool validate (const GncOptionAccountList& values) const;
-    void set_value (const GncOptionAccountList& values) {
+    void set_value (GncOptionAccountList values) {
         if (validate(values))
             //throw!
             m_value = values;
     }
-    void set_default_value (const GncOptionAccountList& values) {
+    void set_default_value (GncOptionAccountList values) {
         if (validate(values))
             //throw!
             m_value = m_default_value = values;
