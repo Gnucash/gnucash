@@ -28,6 +28,7 @@
 #include <libguile.h>
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <variant>
 #include <memory>
 #include "gnc-option-ui.hpp"
@@ -147,6 +148,24 @@ inline std::istream&
 operator>>(std::istream& iss, GncOption& opt)
 {
     return opt.in_stream(iss);
+}
+
+inline std::ostream&
+output_color_value(std::ostream& oss, const std::string& value)
+{
+    oss << "'(";
+    oss << std::fixed << std::showpoint << std::setprecision(1);
+    auto len{value.length() > 8 ? 8 : value.length()};
+    for (size_t i{}; i < len; i += 2)
+    {
+        oss << static_cast<float>(stoi(value.substr(i, 2), nullptr, 16));
+        if (i < 6)
+            oss << " ";
+    }
+    if (len < 8)
+        oss << 256.0;
+    oss << ")";
+    return oss;
 }
 
 template<typename ValueType> GncOption*

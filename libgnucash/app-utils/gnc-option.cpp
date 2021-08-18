@@ -453,7 +453,12 @@ GncOption::to_scheme(std::ostream& oss) const
                           else if constexpr
                               (std::is_same_v<std::decay_t<decltype(option.get_value())>,
                                std::string>)
+                          {
+                              if (option.get_ui_type() == GncOptionUIType::COLOR)
+                                  output_color_value(oss, option.get_value());
+                              else
                                   oss << '"' << option << '"';
+                          }
                           else if constexpr
                               (std::is_same_v<std::decay_t<decltype(option)>,
                                GncOptionRangeValue<int>> ||

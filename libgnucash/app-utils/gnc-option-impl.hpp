@@ -388,11 +388,16 @@ gnc_option_to_scheme (std::ostream& oss, const OptType& opt)
         {
             oss << ")";
         }
+        return oss;
     }
-    else
+
+    if constexpr (std::is_same_v<std::decay_t<decltype(value)>, std::string>)
     {
-        oss << "\"" << qof_instance_to_string(value) << "\"";
+        if (type == GncOptionUIType::COLOR)
+            return output_color_value(oss, value);
     }
+
+    oss << "\"" << qof_instance_to_string(value) << "\"";
     return oss;
 }
 

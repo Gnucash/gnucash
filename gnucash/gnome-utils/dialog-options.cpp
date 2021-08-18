@@ -2140,8 +2140,12 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         GdkRGBA color;
-        auto rgba_str{g_strdup_printf("#%s",
-                                      option.get_value<std::string>().c_str())};
+        /* gdk_rgba_parse uses pango_color_parse for hex color strings instead
+         * of pango_color_parse_with_alpha and that fails if the string length
+         * is 8.
+        */
+        auto value{option.get_value<std::string>().substr(0,6)};
+        auto rgba_str{g_strdup_printf("#%s", value.c_str())};
         if (gdk_rgba_parse(&color, rgba_str))
         {
             auto color_button = GTK_COLOR_CHOOSER(get_widget());

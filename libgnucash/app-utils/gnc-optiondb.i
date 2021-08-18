@@ -46,6 +46,8 @@ namespace std {
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
 #include "gnc-option-date.hpp"
+#include <sstream>
+#include <iomanip>
 
 static const QofLogModule log_module = "gnc.optiondb";
 
@@ -240,6 +242,24 @@ scm_from_value<GncOwner*>(GncOwner* value)
     return scm_from_value<const GncOwner*>(value);
 }
 
+static std::string
+scm_color_list_to_string(SCM list)
+{
+    std::ostringstream oss{};
+    oss << std::hex << std::setfill('0');
+    SCM cdr = list;
+    while (scm_is_pair(cdr))
+    {
+        if (scm_is_rational(SCM_CAR(cdr)))
+            oss << std::setw(2) <<
+                static_cast<unsigned int>(scm_to_double(SCM_CAR(cdr)));
+        cdr = SCM_CDR(cdr);
+    }
+    if (scm_is_rational(cdr))
+        oss << std::setw(2) << static_cast<unsigned int>(scm_to_double(cdr));
+    return oss.str();
+}
+
 template <typename ValueType> inline ValueType
 scm_to_value(SCM new_value)
 {
@@ -257,6 +277,8 @@ scm_to_value<bool>(SCM new_value)
 template <> inline std::string
 scm_to_value<std::string>(SCM new_value)
 {
+    if (scm_is_true(scm_list_p(new_value)))
+        return scm_color_list_to_string(new_value);
     auto strval = scm_to_utf8_stringn(new_value, nullptr);
     std::string retval{strval};
     free(strval);
@@ -552,7 +574,6 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 #include <algorithm>
 #include <array>
 #include <string>
-#include <sstream>
 #include "gnc-option.hpp"
 #include "gnc-option-ui.hpp"
 
