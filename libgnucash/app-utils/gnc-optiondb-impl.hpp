@@ -63,6 +63,13 @@ public:
 };
 
 using GncOptionSectionPtr = std::shared_ptr<GncOptionSection>;
+
+inline bool
+operator<(const GncOptionSectionPtr& right, const GncOptionSectionPtr& left)
+{
+    return right->get_name() < left->get_name();
+}
+
 using GncOptionDBChangeCallback = void (*)(void* user_data);
 
 struct GncOptionDBCallback

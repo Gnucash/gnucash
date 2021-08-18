@@ -132,7 +132,9 @@ GncOptionSection::foreach_option(std::function<void(const GncOption&)> func) con
 void
 GncOptionSection::add_option(GncOption&& option)
 {
-    m_options.emplace_back(std::move(option));
+    m_options.push_back(std::move(option));
+    if (!std::is_sorted(m_options.begin(), m_options.end()))
+        std::sort(m_options.begin(), m_options.end());
 }
 
 void
@@ -176,8 +178,10 @@ GncOptionDB::register_option(const char* sectname, GncOption&& option)
         return;
     }
 
-    m_sections.emplace_back(std::make_shared<GncOptionSection>(sectname));
+    m_sections.push_back(std::make_shared<GncOptionSection>(sectname));
     m_sections.back()->add_option(std::move(option));
+    if (!std::is_sorted(m_sections.begin(), m_sections.end()))
+        std::sort(m_sections.begin(), m_sections.end());
 }
 
 void

@@ -138,6 +138,12 @@ private:
     GncOptionUIItemPtr m_ui_item{nullptr};
 };
 
+inline bool
+operator<(const GncOption& right, const GncOption& left)
+{
+    return right.get_key() < left.get_key();
+}
+
 inline std::ostream&
 operator<<(std::ostream& oss, const GncOption& opt)
 {
