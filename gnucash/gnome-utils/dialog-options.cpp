@@ -228,9 +228,16 @@ gnc_option_get_gtk_widget (const GncOption* option)
 static void
 dialog_changed_internal (GtkWidget *widget, bool sensitive)
 {
-    while (widget && !GTK_IS_WINDOW(widget))
-        widget = gtk_widget_get_parent(widget);
-    if (!widget) return;
+    g_return_if_fail(widget);
+    while (TRUE)
+    {
+        auto new_widget = gtk_widget_get_parent(widget);
+        if (new_widget && GTK_IS_WIDGET(new_widget) &&
+            GTK_IS_WINDOW(new_widget))
+            widget = new_widget;
+        else
+            break;
+    }
 
     /* find the ok and cancel buttons, we know where they will be so do it
        this way as opposed to using gtk_container_foreach, much less iteration */
