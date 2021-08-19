@@ -348,13 +348,15 @@ gnc_option_set_ui_widget(GncOption& option, GtkGrid *page_box, gint grid_row)
     auto widget = GncOptionUIFactory::create(option, page_box, name_label,
                                              documentation, &enclosing,
                                              &packed);
-    /* attach the name label to the first column of the grid and
-       align to the end */
-    gtk_grid_attach (GTK_GRID(page_box), GTK_WIDGET(name_label),
-                     0, grid_row, // left, top
-                     1, 1);  // width, height
-    gtk_widget_set_halign (GTK_WIDGET(name_label), GTK_ALIGN_END);
-
+    /* Attach the name label to the first column of the grid and
+       align to the end unless it's a check button, which has its own label. */
+    if (!GTK_IS_CHECK_BUTTON(widget))
+    {
+        gtk_grid_attach (GTK_GRID(page_box), GTK_WIDGET(name_label),
+                         0, grid_row, // left, top
+                         1, 1);  // width, height
+        gtk_widget_set_halign (GTK_WIDGET(name_label), GTK_ALIGN_END);
+    }
     if (!packed && (enclosing != NULL))
     {
         /* Pack option widget into an extra eventbox because otherwise the
