@@ -557,6 +557,6 @@ gnc_relative_date_to_time64(RelativeDatePeriod period)
 std::ostream&
 operator<<(std::ostream& ostr, RelativeDatePeriod per)
 {
-    ostr << gnc_relative_date_display_string(per);
+    ostr << "'reldate . " << gnc_relative_date_display_string(per);
     return ostr;
 }
