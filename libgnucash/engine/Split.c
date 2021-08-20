@@ -2077,45 +2077,27 @@ xaccSplitMergePeerSplits (Split *split, const Split *other_split)
 Split *
 xaccSplitGetOtherSplit (const Split *split)
 {
-    int i;
     Transaction *trans;
-    int count, num_splits;
     Split *other = NULL;
-    gboolean lot_split;
-    gboolean trading_accts;
 
     if (!split) return NULL;
     trans = split->parent;
     if (!trans) return NULL;
 
-    trading_accts = xaccTransUseTradingAccounts (trans);
-    num_splits = xaccTransCountSplits(trans);
-    count = num_splits;
-    lot_split = qof_instance_has_slot(QOF_INSTANCE (split), "lot-split");
-    if (!lot_split && !trading_accts && (2 != count)) return NULL;
-
-    for (i = 0; i < num_splits; i++)
+    for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
     {
-        Split *s = xaccTransGetSplit(trans, i);
-        if (s == split)
-        {
-            --count;
+        Split *s = n->data;
+        if ((s == split) ||
+            (xaccAccountGetType (xaccSplitGetAccount (s)) == ACCT_TYPE_TRADING) ||
+            (qof_instance_has_slot (QOF_INSTANCE (s), "lot-split")))
             continue;
-        }
-        if (qof_instance_has_slot (QOF_INSTANCE (s), "lot-split"))
-        {
-            --count;
-            continue;
-        }
-        if (trading_accts &&
-            xaccAccountGetType(xaccSplitGetAccount(s)) == ACCT_TYPE_TRADING)
-        {
-            --count;
-            continue;
-        }
+
+        if (other)
+            return NULL;
+
         other = s;
     }
-    return (1 == count) ? other : NULL;
+    return other;
 }
 
 /********************************************************************\
