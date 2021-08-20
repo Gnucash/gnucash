@@ -296,11 +296,14 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
 }
 
 static char*
-get_total_mode_label(const char *mnemonic, int total_mode)
+get_total_mode_label (GNCCurrencyAcc *currency_accum)
 {
+    const char *mnemonic = gnc_commodity_get_nice_symbol (currency_accum->currency);
     char *label_str;
+    if (mnemonic == NULL)
+        mnemonic = "";
     // i.e., "$, grand total," [profits: $12,345.67, assets: $23,456.78]
-    switch (total_mode)
+    switch (currency_accum->total_mode)
     {
     case TOTAL_CURR_TOTAL:
         label_str = g_strdup_printf( _("%s, Total:"), mnemonic );
@@ -395,14 +398,9 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
         gtk_list_store_clear(summary->datamodel);
         for (current = g_list_first(currency_list); current; current = g_list_next(current))
         {
-            const char *mnemonic;
             gchar *total_mode_label;
 
             currency_accum = current->data;
-
-            mnemonic = gnc_commodity_get_nice_symbol (currency_accum->currency);
-            if (mnemonic == NULL)
-                mnemonic = "";
 
             xaccSPrintAmount(asset_amount_string,
                              currency_accum->assets,
@@ -413,7 +411,7 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
                              gnc_commodity_print_info(currency_accum->currency, TRUE));
 
             gtk_list_store_append(summary->datamodel, &iter);
-            total_mode_label = get_total_mode_label(mnemonic, currency_accum->total_mode);
+            total_mode_label = get_total_mode_label (currency_accum);
             gtk_list_store_set(summary->datamodel, &iter,
                                COLUMN_MNEMONIC_TYPE, total_mode_label,
                                COLUMN_ASSETS,        _("Net Assets:"),
