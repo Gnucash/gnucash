@@ -2493,14 +2493,15 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
     if (GTK_IS_EVENT_BOX(tab_widget))
         tab_widget = gtk_bin_get_child (GTK_BIN(tab_widget));
 
+    children = gtk_container_get_children (GTK_CONTAINER(tab_widget));
     /* For each, walk the list of container children to get image widget */
-    for (children = gtk_container_get_children (GTK_CONTAINER(tab_widget));
-            children; children = children->next)
+    for (GList *child = children; child; child = g_list_next (child))
     {
-        GtkWidget *widget = children->data;
+        GtkWidget *widget = child->data;
         if (GTK_IS_IMAGE(widget))
             image = widget;
     }
+    g_list_free (children);
 
     if (!image)
     {

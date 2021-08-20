@@ -180,6 +180,8 @@ static void handle_menu_signals(GOOptionMenu *option_menu, gboolean connect)
 
         }
     }
+
+    g_list_free (children);
 }
 
 void go_option_menu_set_menu(GOOptionMenu *option_menu, GtkWidget *menu)
@@ -233,8 +235,9 @@ void go_option_menu_set_history(GOOptionMenu *option_menu, GSList *selection)
         while (1)
         {
             int n = GPOINTER_TO_INT(selection->data);
-            GtkMenuItem *item = g_list_nth_data(
-                    gtk_container_get_children(GTK_CONTAINER(menu)), n);
+            GList *children = gtk_container_get_children (GTK_CONTAINER(menu));
+            GtkMenuItem *item = g_list_nth_data (children, n);
+            g_list_free (children);
             selection = selection->next;
             if (selection)
                 menu = GTK_MENU_SHELL(gtk_menu_item_get_submenu(item));

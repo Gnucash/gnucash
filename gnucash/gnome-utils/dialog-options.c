@@ -3537,12 +3537,9 @@ gnc_option_set_ui_value_radiobutton (GNCOption *option, gboolean use_default,
         g_list_free(list);
 
         list = gtk_container_get_children (GTK_CONTAINER(box));
-        for (i = 0; i < index && list; i++)
-            list = list->next;
-        g_return_val_if_fail (list, TRUE);
-
-        button = list->data;
+        button = g_list_nth_data (list, index);
         g_list_free (list);
+        g_return_val_if_fail (button, TRUE);
         val = g_object_get_data (G_OBJECT(button), "gnc_radiobutton_index");
         g_return_val_if_fail (GPOINTER_TO_INT(val) == index, TRUE);
 
