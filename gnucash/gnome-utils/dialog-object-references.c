@@ -87,6 +87,7 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
     gtk_widget_show_all( dialog );
     gtk_dialog_run( GTK_DIALOG(dialog) );
     g_object_unref(G_OBJECT(builder));
+    g_object_unref (store);
     gtk_widget_destroy( dialog );
 
     LEAVE("");

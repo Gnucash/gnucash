@@ -516,6 +516,7 @@ gbv_create_widget (GncBudgetView *budget_view)
     gtk_tree_selection_set_mode (gtk_tree_view_get_selection (totals_tree_view), GTK_SELECTION_NONE);
     gtk_tree_view_set_headers_visible (totals_tree_view, FALSE);
     gtk_tree_view_set_model (totals_tree_view, GTK_TREE_MODEL(totals_tree_model));
+    g_object_unref (totals_tree_model);
 
     // add the totals title column
     totals_title_col = gtk_tree_view_column_new_with_attributes ("", gtk_cell_renderer_text_new (), "text", 0, NULL);

@@ -584,6 +584,8 @@ update_language_region_combos (hierarchy_data *data, const gchar *locale_dir)
     g_signal_connect (data->region_combo, "changed",
                       G_CALLBACK(region_combo_changed_cb), (gpointer)data);
 
+    g_object_unref (language_store);
+    g_object_unref (region_store);
     g_free (start_region);
 }
 
