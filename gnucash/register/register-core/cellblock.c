@@ -79,7 +79,7 @@ gnc_cellblock_destroy (CellBlock *cellblock)
 {
     if (!cellblock) return;
 
-    g_ptr_array_free (cellblock->cells, FALSE);
+    g_ptr_array_free (cellblock->cells, TRUE);
     cellblock->cells = NULL;
 
     g_free (cellblock->cursor_name);
