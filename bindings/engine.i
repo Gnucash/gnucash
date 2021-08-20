@@ -275,7 +275,7 @@ Account * gnc_book_get_template_root(QofBook *book);
 %typemap(in) KvpValue * " $1 = gnc_scm_to_kvp_value_ptr($input); "
 %typemap(out) KvpValue * " $result = gnc_kvp_value_ptr_to_scm($1); "
 %typemap(in) GSList *key_path " $1 = gnc_scm_to_gslist_string($input);"
-%typemap(freearg) GSList * "g_slist_free_full ($1, g_free);"
+%typemap(freearg) GSList *key_path "g_slist_free_full ($1, g_free);"
 
 QofBook* qof_book_new (void);
 void qof_book_options_delete (QofBook *book, GSList *key_path);
