@@ -56,12 +56,14 @@
 
 (export report-module-loader)
 (export category-barchart-profit-and-loss-uuid)
+(export category-barchart-name-me-uuid)
 (export category-barchart-income-uuid)
 (export category-barchart-expense-uuid)
 (export category-barchart-asset-uuid)
 (export category-barchart-liability-uuid)
 
 (define category-barchart-profit-and-loss-uuid "729729fdfac1476e9574e76e19b3c988")
+(define category-barchart-name-me-uuid "7af62c7cc05a4f9ba512a738400ded15")
 (define category-barchart-income-uuid "44f81bee049b4b3ea908f8dac9a9474e")
 (define category-barchart-expense-uuid "b1f15b2052c149df93e698fe85a81ea6")
 (define category-barchart-asset-uuid "e9cf815f79db44bcb637d0295093ae3d")

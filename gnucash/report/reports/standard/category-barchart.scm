@@ -39,6 +39,7 @@
 ;; once at the very end) because I need them to define the "other"
 ;; report, thus needing them twice.
 (define menuname-income (N_ "Income Chart"))
+(define menuname-name-me (N_ "Book Gain & Loss Chart"))
 (define menuname-profit-and-loss (N_ "Profit & Loss Chart"))
 (define menuname-expense (N_ "Expense Chart"))
 (define menuname-assets (N_ "Asset Chart"))
@@ -48,6 +49,9 @@
 ;; The menu statusbar tips.
 (define menutip-income
   (N_ "Shows a chart with the Income per interval \
+developing over time"))
+(define menutip-name-me
+  (N_ "Shows a chart with the Book Gain & Loss per interval \
 developing over time"))
 (define menutip-profit-and-loss
   (N_ "Shows a chart with the Profit & Loss per interval \
@@ -64,6 +68,7 @@ developing over time"))
 ;; The names here are used 1. for internal identification, 2. as
 ;; tab labels, 3. as default for the 'Report name' option which
 ;; in turn is used for the printed report title.
+(define reportname-name-me (N_ "Book Gain & Loss Over Time"))
 (define reportname-profit-and-loss (N_ "Profit & Loss Over Time"))
 (define reportname-income (N_ "Income Over Time"))
 (define reportname-expense (N_ "Expense Over Time"))
@@ -207,7 +212,7 @@ developing over time"))
 
 (define (category-barchart-renderer report-obj reportname reportguid
                                     account-types do-intervals? reverse-bal?
-                                    export-type)
+                                    gains-and-losses? export-type)
   ;; A helper functions for looking up option values.
   (define (get-option section name)
     (gnc:option-value
@@ -401,10 +406,21 @@ developing over time"))
                   (loop (cdr list-of-mon-collectors)
                         (cdr dates-list)
                         (cons (if do-intervals?
-                                  (collector->monetary
-                                   (gnc:collector- (cadr list-of-mon-collectors)
-                                                   (car list-of-mon-collectors))
-                                   (cadr dates-list))
+                                  (if gains-and-losses?
+                                    (gnc:make-gnc-monetary
+                                      report-currency
+                                      (-
+                                        (gnc:gnc-monetary-amount (collector->monetary
+                                           (cadr list-of-mon-collectors)
+                                           (cadr dates-list)))
+                                        (gnc:gnc-monetary-amount (collector->monetary
+                                           (cadr list-of-mon-collectors)
+                                           (car dates-list)))))
+                                    (collector->monetary
+                                      (gnc:collector-
+                                        (cadr list-of-mon-collectors)
+                                        (car list-of-mon-collectors))
+                                      (cadr dates-list)))
                                   (collector->monetary
                                    (car list-of-mon-collectors)
                                    (car dates-list)))
@@ -673,7 +689,7 @@ developing over time"))
 
 (for-each
  (match-lambda
-   ((reportname account-types inc-exp? menuname menutip reverse-bal? uuid)
+   ((reportname account-types inc-exp? menuname menutip reverse-bal? gains-and-losses? uuid)
     (gnc:define-report
      'version 1
      'name reportname
@@ -687,31 +703,36 @@ developing over time"))
      'export-types '(("CSV" . csv))
      'export-thunk (lambda (report-obj export-type)
                      (category-barchart-renderer
-                      report-obj reportname uuid account-types inc-exp? reverse-bal?
+                      report-obj reportname uuid account-types inc-exp? reverse-bal? gains-and-losses?
                       export-type))
      'renderer (lambda (report-obj)
                  (category-barchart-renderer
-                  report-obj reportname uuid account-types inc-exp? reverse-bal?
+                  report-obj reportname uuid account-types inc-exp? reverse-bal? gains-and-losses?
                   #f)))))
  (list
   ;; reportname, account-types, inc-exp?,
   ;; menu-reportname, menu-tip, reverse-bal?, uuid
+  (list reportname-name-me
+        (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
+              ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
+              ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
+              ACCT-TYPE-CURRENCY)
+        #t menuname-name-me menutip-name-me #f #t category-barchart-name-me-uuid)
   (list reportname-profit-and-loss
         (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
               ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
               ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
               ACCT-TYPE-CURRENCY)
-        #t menuname-profit-and-loss menutip-profit-and-loss #f category-barchart-profit-and-loss-uuid)
-  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income #t category-barchart-income-uuid)
-  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense #f category-barchart-expense-uuid)
+        #t menuname-profit-and-loss menutip-profit-and-loss #f #f category-barchart-profit-and-loss-uuid)
+  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income #t #f category-barchart-income-uuid)
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense #f #f category-barchart-expense-uuid)
   (list reportname-assets
         (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
               ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
               ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
               ACCT-TYPE-CURRENCY)
-        #f menuname-assets menutip-assets #f category-barchart-asset-uuid)
+        #f menuname-assets menutip-assets #f #f category-barchart-asset-uuid)
   (list reportname-liabilities
         (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
               ACCT-TYPE-CREDITLINE)
-        #f menuname-liabilities menutip-liabilities #t category-barchart-liability-uuid)))
-
+        #f menuname-liabilities menutip-liabilities #t #f category-barchart-liability-uuid)))
