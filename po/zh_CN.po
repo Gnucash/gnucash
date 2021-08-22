@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-16 06:35+0000\n"
+"PO-Revision-Date: 2021-08-22 11:32+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -2621,7 +2621,7 @@ msgstr "盈/亏"
 #: gnucash/gnome/dialog-lot-viewer.c:1048
 #, c-format
 msgid "Lots in Account %s"
-msgstr "在科目 %s 中的 Lot"
+msgstr "科目 %s 的批次"
 
 #: gnucash/gnome/dialog-order.c:171
 msgid "The Order must be given an ID."
@@ -11232,7 +11232,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
-msgstr ""
+msgstr "新打开的标签页前置，而非最后"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:136
 msgid ""
@@ -11415,7 +11415,7 @@ msgstr "在窗口底部显示汇总栏。"
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:225
 #: gnucash/gtkbuilder/dialog-preferences.glade:3408
 msgid "Closing a tab moves to the most recently visited tab."
-msgstr "关闭科目页后移至最近访问过的科目页。"
+msgstr "关闭标签页后移至最近访问过的标签页。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:226
 msgid ""
@@ -15579,7 +15579,7 @@ msgstr "<b>标题(_T)</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:221
 msgid "<b>_Lots in This Account</b>"
-msgstr "<b>此科目的批次(_L)</b>"
+msgstr "<b>已有批次(_L)</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:259
 msgid "Show only open lots"
@@ -15587,11 +15587,11 @@ msgstr "显示图表"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:302
 msgid "<b>Splits _free</b>"
-msgstr "<b>自由分录(_F)</b>"
+msgstr "<b>自由交易(_F)</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:357
 msgid "<b>Splits _in lot</b>"
-msgstr "<b>集束分录(_I)</b>"
+msgstr "<b>集束交易(_I)</b>"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:25
 msgid "_No"
@@ -16541,7 +16541,7 @@ msgstr "关闭时保存窗口的大小和位置。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3402
 msgid "Bring the most _recent tab to the front"
-msgstr "前置最近科目页(_R)"
+msgstr "移至最近标签页(_R)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3434
 msgid "<b>Tab Position</b>"
@@ -16603,11 +16603,11 @@ msgstr "宽度(_W)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3671
 msgid "Open new tabs _adjacent to current tab"
-msgstr "打开与当前标签相邻的新标签(_A)"
+msgstr "前置新标签页(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3677
 msgid "Opens new tab adjacent to current tab instead of at the end."
-msgstr ""
+msgstr "新打开的标签页前置，而非最后。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3716
 msgid "Windows"
@@ -17139,11 +17139,11 @@ msgstr "循环次数"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:512
 msgid "<b>Since Last Run</b>"
-msgstr "<b>待执行计划交易</b>"
+msgstr "<b>待执行</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:535
 msgid "<b>Transaction Editor Defaults</b>"
-msgstr "<b>默认交易编辑器</b>"
+msgstr "<b>默认选项</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:545
 msgid "_Run when data file opened"
@@ -17197,7 +17197,7 @@ msgstr "提前提醒(_E)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
 msgid "Set 'Re_view Created Transactions' as default"
-msgstr "默认核实已创建交易(_R)"
+msgstr "默认复核已创建交易(_R)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
 msgid ""
