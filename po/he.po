@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-20 15:36+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2021-08-22 11:32+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -11190,23 +11190,23 @@ msgstr "כיווץ קובץ נתונים"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:31
 msgid "Enables file compression when writing the data file."
-msgstr "אפשור דחיסת קובץ בכתיבה לקובץ נתונים."
+msgstr "אפשור דחיסת קובץ בעת כתיבה לקובץ נתונים."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:35
 msgid "Show auto-save explanation"
-msgstr "הצגת הסבר שמירה אוטומטית"
+msgstr "הצגת הסבר על אודות שמירה אוטומטית"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:36
 msgid ""
 "If active, GnuCash shows an explanation of the auto-save feature the first "
 "time that feature is started. Otherwise no extra explanation is shown."
 msgstr ""
-"במידה והאפשרות הופעלה, גנוקאש יציג הסבר על תכונת השמירה האוטומטית בפעם "
-"הראשונה שהתכונה מתחילה. אחרת לא יוצג הסבר נוסף."
+"אם האפשרות הופעלה, גנוקאש יציג הסבר על תכונת השמירה האוטומטית עם אתחול "
+"התכונה לראשונה. אחרת לא יוצג הסבר נוסף."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:40
 msgid "Auto-save time interval"
-msgstr "מחזור זמן שמירה אוטומטית"
+msgstr "מחזור זמן לשמירה אוטומטית"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:41
 #: gnucash/gtkbuilder/dialog-preferences.glade:1670
