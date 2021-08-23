@@ -65,6 +65,8 @@ struct _gncInvoice
     time64        date_opened;
     time64        date_posted;
 
+    char          *doclink;
+
     gnc_numeric   to_charge_amount;
 
     gnc_commodity *currency;
@@ -282,6 +284,9 @@ impl_get_typed_referring_object_list (const QofInstance* inst, const QofInstance
     return qof_instance_get_referring_object_list_from_collection (qof_instance_get_collection (inst), ref);
 }
 
+static const char*
+is_unset = "unset";
+
 static void
 gnc_invoice_class_init (GncInvoiceClass *klass)
 {
@@ -327,6 +332,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
     invoice->active = TRUE;
 
     invoice->to_charge_amount = gnc_numeric_zero ();
+    invoice->doclink = (char*) is_unset;
 
     qof_event_gen (&invoice->inst, QOF_EVENT_CREATE, NULL);
 
@@ -371,6 +377,8 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
 
     // Oops. Do not forget to copy the pointer to the correct currency here.
     invoice->currency = from->currency;
+
+    invoice->doclink = from->doclink;
 
     // Copy all invoice->entries
     for (node = from->entries; node; node = node->next)
@@ -427,6 +435,9 @@ static void gncInvoiceFree (GncInvoice *invoice)
 
     if (invoice->terms)
         gncBillTermDecRef (invoice->terms);
+
+    if (invoice->doclink != is_unset)
+        g_free (invoice->doclink);
 
     /* qof_instance_release (&invoice->inst); */
     g_object_unref (invoice);
@@ -538,15 +549,29 @@ void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes)
 void gncInvoiceSetDocLink (GncInvoice *invoice, const char *doclink)
 {
     if (!invoice || !doclink) return;
+
+    if (invoice->doclink != is_unset)
+    {
+        if (!g_strcmp0 (doclink, invoice->doclink))
+            return;
+
+        g_free (invoice->doclink);
+    }
+
     gncInvoiceBeginEdit (invoice);
-    if (g_strcmp0 (doclink, "") == 0)
+
+    if (doclink[0] == '\0')
+    {
+        invoice->doclink = NULL;
         qof_instance_set_kvp (QOF_INSTANCE (invoice), NULL, 1, GNC_INVOICE_DOCLINK);
+    }
     else
     {
         GValue v = G_VALUE_INIT;
         g_value_init (&v, G_TYPE_STRING);
         g_value_set_string (&v, doclink);
         qof_instance_set_kvp (QOF_INSTANCE (invoice), &v, 1, GNC_INVOICE_DOCLINK);
+        invoice->doclink = g_strdup (doclink);
         g_value_unset (&v);
     }
     qof_instance_set_dirty (QOF_INSTANCE(invoice));
@@ -864,12 +889,16 @@ const char * gncInvoiceGetNotes (const GncInvoice *invoice)
 
 const char * gncInvoiceGetDocLink (const GncInvoice *invoice)
 {
-    GValue v = G_VALUE_INIT;
     if (!invoice) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE(invoice), &v, 1, GNC_INVOICE_DOCLINK);
-    if (G_VALUE_HOLDS_STRING(&v))
-         return g_value_get_string (&v);
-    return NULL;
+    if (invoice->doclink == is_unset)
+    {
+        GValue v = G_VALUE_INIT;
+        GncInvoice *inv = (GncInvoice*) invoice;
+        qof_instance_get_kvp (QOF_INSTANCE(invoice), &v, 1, GNC_INVOICE_DOCLINK);
+        inv->doclink = G_VALUE_HOLDS_STRING(&v) ? g_value_dup_string (&v) : NULL;
+        g_value_unset (&v);
+    }
+    return invoice->doclink;
 }
 
 GncOwnerType gncInvoiceGetOwnerType (const GncInvoice *invoice)
