@@ -258,6 +258,8 @@ time64 time64CanonicalDayTime(time64 t);
   $1 = g_list_reverse (path);
 }
 
+%typemap (freearg) GList * "g_list_free_full ($1, g_free);"
+
 void gnc_quote_source_set_fq_installed (const char* version_string,
                                         GList *sources_list);
 %clear GList *;
