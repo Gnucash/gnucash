@@ -156,9 +156,11 @@ gnc_numeric gnc_budget_get_account_period_value(
 gnc_numeric gnc_budget_get_account_period_actual_value(
     const GncBudget *budget, Account *account, guint period_num);
 
+/* get/set the budget account period's note, beware when retrieving
+   the period note, the latter must be g_freed by the caller */
 void gnc_budget_set_account_period_note(GncBudget *budget,
     const Account *account, guint period_num, const gchar *note);
-const gchar *gnc_budget_get_account_period_note(const GncBudget *budget,
+gchar *gnc_budget_get_account_period_note (const GncBudget *budget,
     const Account *account, guint period_num);
 
 /* Returns some budget in the book, or NULL. */

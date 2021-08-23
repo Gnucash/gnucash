@@ -1219,7 +1219,7 @@ gnc_plugin_page_budget_cmd_budget_note(GtkAction *action,
     GtkWidget *dialog, *note;
     gint result;
     GtkBuilder *builder;
-    const gchar *txt;
+    gchar *txt;
     GtkTreeViewColumn *col = NULL;
     GtkTreePath *path = NULL;
     guint period_num = 0;
@@ -1268,6 +1268,7 @@ gnc_plugin_page_budget_cmd_budget_note(GtkAction *action,
     note = GTK_WIDGET(gtk_builder_get_object(builder, "BudgetNote"));
     txt  = gnc_budget_get_account_period_note(priv->budget, acc, period_num);
     xxxgtk_textview_set_text(GTK_TEXT_VIEW(note), txt);
+    g_free (txt);
 
     gtk_widget_show_all(dialog);
     result = gtk_dialog_run(GTK_DIALOG(dialog));
