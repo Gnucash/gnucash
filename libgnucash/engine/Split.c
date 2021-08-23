@@ -97,6 +97,10 @@ enum
 
 };
 
+static const char * is_unset = "unset";
+static const char * split_type_normal = "normal";
+static const char * split_type_stock_split = "stock-split";
+
 /* GObject Initialization */
 G_DEFINE_TYPE(Split, gnc_split, QOF_TYPE_INSTANCE)
 
@@ -116,6 +120,7 @@ gnc_split_init(Split* split)
     split->value       = gnc_numeric_zero();
 
     split->date_reconciled  = 0;
+    split->split_type = is_unset;
 
     split->balance             = gnc_numeric_zero();
     split->cleared_balance     = gnc_numeric_zero();
@@ -714,6 +719,7 @@ xaccFreeSplit (Split *split)
     split->lot         = NULL;
     split->acc         = NULL;
     split->orig_acc    = NULL;
+    split->split_type  = NULL;
 
     split->date_reconciled = 0;
     G_OBJECT_CLASS (QOF_INSTANCE_GET_CLASS (&split->inst))->dispose(G_OBJECT (split));
@@ -1968,14 +1974,26 @@ xaccSplitGetBook (const Split *split)
 const char *
 xaccSplitGetType(const Split *s)
 {
-    GValue v = G_VALUE_INIT;
-    const char *split_type = NULL;
-
     if (!s) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE (s), &v, 1, "split-type");
-    if (G_VALUE_HOLDS_STRING (&v))
-        split_type = g_value_get_string (&v);
-    return split_type ? split_type : "normal";
+    if (s->split_type == is_unset)
+    {
+        GValue v = G_VALUE_INIT;
+        Split *split = (Split*) s;
+        const char* type;
+        qof_instance_get_kvp (QOF_INSTANCE (s), &v, 1, "split-type");
+        type = G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+        if (!type || !g_strcmp0 (type, split_type_normal))
+            split->split_type = (char*) split_type_normal;
+        else if (!g_strcmp0 (type, split_type_stock_split))
+            split->split_type = (char*) split_type_stock_split;
+        else
+        {
+            PERR ("unexpected split-type %s, reset to normal.", type);
+            split->split_type = split_type_normal;
+        }
+        g_value_unset (&v);
+    }
+    return s->split_type;
 }
 
 /* reconfigure a split to be a stock split - after this, you shouldn't
@@ -1988,7 +2006,8 @@ xaccSplitMakeStockSplit(Split *s)
 
     s->value = gnc_numeric_zero();
     g_value_init (&v, G_TYPE_STRING);
-    g_value_set_string (&v, "stock-split");
+    g_value_set_static_string (&v, split_type_stock_split);
+    s->split_type = split_type_stock_split;
     qof_instance_set_kvp (QOF_INSTANCE (s), &v, 1, "split-type");
     SET_GAINS_VDIRTY(s);
     mark_split(s);

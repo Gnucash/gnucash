@@ -115,6 +115,8 @@ struct split_s
     gnc_numeric  value;
     gnc_numeric  amount;
 
+    const gchar * split_type;
+
     /* -------------------------------------------------------------- */
     /* Below follow some 'temporary' fields */
 
