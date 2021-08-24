@@ -171,8 +171,11 @@ GncXmlBackend::session_end()
     if (!m_linkfile.empty())
         g_unlink (m_linkfile.c_str());
 
-    if (m_lockfd > 0)
+    if (m_lockfd != -1)
+    {
         close (m_lockfd);
+        m_lockfd = -1;
+    }
 
     if (!m_lockfile.empty())
     {
@@ -643,7 +646,7 @@ GncXmlBackend::get_file_lock ()
 
     m_lockfd = g_open (m_lockfile.c_str(), O_RDWR | O_CREAT | O_EXCL ,
                          S_IRUSR | S_IWUSR);
-    if (m_lockfd < 0)
+    if (m_lockfd == -1)
     {
         /* oops .. we can't create the lockfile .. */
         switch (errno)
@@ -708,6 +711,7 @@ GncXmlBackend::get_file_lock ()
         set_error(ERR_BACKEND_LOCKED);
         g_unlink (linkfile.str().c_str());
         close (m_lockfd);
+        m_lockfd = -1;
         g_unlink (m_lockfile.c_str());
         return false;
     }
@@ -721,6 +725,7 @@ GncXmlBackend::get_file_lock ()
         set_message(msg + m_lockfile);
         g_unlink (linkfile.str().c_str());
         close (m_lockfd);
+        m_lockfd = -1;
         g_unlink (m_lockfile.c_str());
         return false;
     }
@@ -730,6 +735,7 @@ GncXmlBackend::get_file_lock ()
         set_error(ERR_BACKEND_LOCKED);
         g_unlink (linkfile.str().c_str());
         close (m_lockfd);
+        m_lockfd = -1;
         g_unlink (m_lockfile.c_str());
         return false;
     }
