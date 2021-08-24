@@ -120,6 +120,10 @@ struct transaction_s
     char * readonly_reason;
     gboolean reason_cache_valid;
 
+    char * doclink;
+    char * void_reason;
+    char * notes;
+
     /* Cached bool value to indicate whether this is a closing txn. This is
      * cached from the KVP value because it is queried a lot. Tri-state value: -1
      * = uninitialized; 0 = FALSE, 1 = TRUE. */
