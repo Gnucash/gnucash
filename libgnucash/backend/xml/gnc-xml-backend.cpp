@@ -149,7 +149,7 @@ GncXmlBackend::session_begin(QofSession* session, const char* new_uri,
 
     /* Set the lock file */
     m_lockfile = m_fullpath + ".LCK";
-    auto locked = get_file_lock();
+    auto locked = get_file_lock(mode == SESSION_BREAK_LOCK);
     if (mode == SESSION_BREAK_LOCK && !locked)
     {
         // Don't pass on locked or readonly errors.
@@ -627,7 +627,7 @@ GncXmlBackend::link_or_make_backup (const std::string& orig,
 }
 
 bool
-GncXmlBackend::get_file_lock ()
+GncXmlBackend::get_file_lock (bool break_lock)
 {
     GStatBuf statbuf;
 #ifndef G_OS_WIN32
@@ -639,10 +639,17 @@ GncXmlBackend::get_file_lock ()
     auto rc = g_stat (m_lockfile.c_str(), &statbuf);
     if (!rc)
     {
-        /* oops .. file is locked by another user  .. */
-        set_error(ERR_BACKEND_LOCKED);
-        m_lockfile.clear();
-        return false;
+        if (break_lock)
+        {
+            g_unlink (m_lockfile.c_str());
+        }
+        else
+        {
+            /* oops .. file is locked by another user  .. */
+            set_error(ERR_BACKEND_LOCKED);
+            m_lockfile.clear();
+            return false;
+        }
     }
 
     m_lockfd = g_open (m_lockfile.c_str(), O_RDWR | O_CREAT | O_EXCL ,
@@ -712,10 +719,13 @@ GncXmlBackend::get_file_lock ()
         /* Otherwise, something else is wrong. */
         set_error(ERR_BACKEND_LOCKED);
         g_unlink (linkfile.str().c_str());
-        close (m_lockfd);
-        m_lockfd = -1;
-        g_unlink (m_lockfile.c_str());
-        m_lockfile.clear();
+        if (!break_lock)
+        {
+            close (m_lockfd);
+            m_lockfd = -1;
+            g_unlink (m_lockfile.c_str());
+            m_lockfile.clear();
+        }
         return false;
     }
 
@@ -726,22 +736,36 @@ GncXmlBackend::get_file_lock ()
         set_error(ERR_BACKEND_LOCKED);
         std::string msg{"Failed to stat lockfile "};
         set_message(msg + m_lockfile);
-        g_unlink (linkfile.str().c_str());
-        close (m_lockfd);
-        m_lockfd = -1;
-        g_unlink (m_lockfile.c_str());
-        m_lockfile.clear();
+        if (break_lock)
+        {
+            m_linkfile = linkfile.str();
+        }
+        else
+        {
+            g_unlink (linkfile.str().c_str());
+            close (m_lockfd);
+            m_lockfd = -1;
+            g_unlink (m_lockfile.c_str());
+            m_lockfile.clear();
+        }
         return false;
     }
 
     if (statbuf.st_nlink != 2)
     {
         set_error(ERR_BACKEND_LOCKED);
-        g_unlink (linkfile.str().c_str());
-        close (m_lockfd);
-        m_lockfd = -1;
-        g_unlink (m_lockfile.c_str());
-        m_lockfile.clear();
+        if (break_lock)
+        {
+            m_linkfile = linkfile.str();
+        }
+        else
+        {
+            g_unlink (linkfile.str().c_str());
+            close (m_lockfd);
+            m_lockfd = -1;
+            g_unlink (m_lockfile.c_str());
+            m_lockfile.clear();
+        }
         return false;
     }
 

@@ -49,7 +49,7 @@ public:
 
 private:
     bool save_may_clobber_data();
-    bool get_file_lock();
+    bool get_file_lock(bool break_lock);
     bool link_or_make_backup(const std::string& orig, const std::string& bkup);
     bool backup_file();
     bool write_to_file(bool make_backup);
