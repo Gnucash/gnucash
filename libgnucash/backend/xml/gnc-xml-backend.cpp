@@ -723,7 +723,7 @@ GncXmlBackend::get_file_lock (bool break_lock)
         {
             close (m_lockfd);
             m_lockfd = -1;
-            g_unlink (m_lockfile.c_str());
+            /* Don't unlink m_lockfile, it does not belong to us. */
             m_lockfile.clear();
         }
         return false;
@@ -745,7 +745,7 @@ GncXmlBackend::get_file_lock (bool break_lock)
             g_unlink (linkfile.str().c_str());
             close (m_lockfd);
             m_lockfd = -1;
-            g_unlink (m_lockfile.c_str());
+            /* Don't unlink m_lockfile, it does not belong to us. */
             m_lockfile.clear();
         }
         return false;
@@ -763,7 +763,7 @@ GncXmlBackend::get_file_lock (bool break_lock)
             g_unlink (linkfile.str().c_str());
             close (m_lockfd);
             m_lockfd = -1;
-            g_unlink (m_lockfile.c_str());
+            /* Don't unlink m_lockfile, it does not belong to us. */
             m_lockfile.clear();
         }
         return false;
