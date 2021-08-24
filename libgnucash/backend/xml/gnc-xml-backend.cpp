@@ -641,6 +641,7 @@ GncXmlBackend::get_file_lock ()
     {
         /* oops .. file is locked by another user  .. */
         set_error(ERR_BACKEND_LOCKED);
+        m_lockfile.clear();
         return false;
     }
 
@@ -664,6 +665,7 @@ GncXmlBackend::get_file_lock ()
             PWARN ("Unable to create the lockfile %s: %s",
                    m_lockfile.c_str(), strerror(errno));
         set_error(be_err);
+        m_lockfile.clear();
         return false;
     }
 
@@ -713,6 +715,7 @@ GncXmlBackend::get_file_lock ()
         close (m_lockfd);
         m_lockfd = -1;
         g_unlink (m_lockfile.c_str());
+        m_lockfile.clear();
         return false;
     }
 
@@ -727,6 +730,7 @@ GncXmlBackend::get_file_lock ()
         close (m_lockfd);
         m_lockfd = -1;
         g_unlink (m_lockfile.c_str());
+        m_lockfile.clear();
         return false;
     }
 
@@ -737,6 +741,7 @@ GncXmlBackend::get_file_lock ()
         close (m_lockfd);
         m_lockfd = -1;
         g_unlink (m_lockfile.c_str());
+        m_lockfile.clear();
         return false;
     }
 
