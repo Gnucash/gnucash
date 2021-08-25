@@ -3,14 +3,15 @@
 # Marko Kohtala <marko.kohtala@gmail.com>, 2020.
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
 # Metroseksuaali <timmy.kinnunen@elisanet.fi>, 2021.
+# Kaantaja <ufdbvgoljrjkrkyyub@ianvvn.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.10\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-02-25 18:50+0000\n"
-"Last-Translator: Metroseksuaali <timmy.kinnunen@elisanet.fi>\n"
+"PO-Revision-Date: 2021-08-25 17:34+0000\n"
+"Last-Translator: Kaantaja <ufdbvgoljrjkrkyyub@ianvvn.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fi/>\n"
 "Language: fi\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -429,8 +430,6 @@ msgid "financial calculator: payments"
 msgstr "talouslaskin: maksut"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
-#, fuzzy
-#| msgid "income statement"
 msgid "financial statement"
 msgstr "tuloslaskelma"
 
