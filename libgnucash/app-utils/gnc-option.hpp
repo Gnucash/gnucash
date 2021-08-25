@@ -53,6 +53,38 @@ template <typename ValueType> class GncOptionRangeValue;
 template <typename ValueType> class GncOptionValidatedValue;
 class GncOptionDateValue;
 
+template <typename T>
+struct is_OptionClassifier
+{
+    static constexpr bool value =
+        std::is_base_of_v<OptionClassifier, std::decay_t<T>>;
+};
+
+template <typename T> inline constexpr bool
+is_OptionClassifier_v = is_OptionClassifier<T>::value;
+
+template <typename T, typename U>
+struct is_same_decayed
+{
+    static constexpr bool value = std::is_same_v<std::decay_t<T>,
+                                                 std::decay_t<U>>;
+};
+
+template <typename T, typename U> inline constexpr bool
+is_same_decayed_v = is_same_decayed<T, U>::value;
+
+template <typename T>
+struct is_RangeValue
+{
+    static constexpr bool value =
+         (is_same_decayed_v<T, GncOptionRangeValue<int>> ||
+          is_same_decayed_v<T, GncOptionRangeValue<double>>);
+};
+
+template <typename T> inline constexpr bool
+is_RangeValue_v = is_RangeValue<T>::value;
+
+
 using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionValue<bool>,
                                       GncOptionValue<int64_t>,
@@ -82,14 +114,13 @@ class GncOption
 {
 public:
     template <typename OptionType,
-              typename std::enable_if_t<std::is_base_of_v<OptionClassifier,
-                                                          std::decay_t<OptionType>>,
+              typename std::enable_if_t<is_OptionClassifier_v<OptionType>,
                                int>  = 0>
+
     GncOption(OptionType option) :
         m_option{std::make_unique<GncOptionVariant>(option)} {}
     template <typename ValueType,
-              typename std::enable_if_t<!std::is_base_of_v<OptionClassifier,
-                                                          std::decay_t<ValueType>>,
+              typename std::enable_if_t<!is_OptionClassifier_v<ValueType>,
                                int>  = 0>
     GncOption(const char* section, const char* name,
               const char* key, const char* doc_string,

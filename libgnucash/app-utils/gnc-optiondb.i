@@ -263,7 +263,7 @@ scm_color_list_to_string(SCM list)
 template <typename ValueType> inline ValueType
 scm_to_value(SCM new_value)
 {
-    if constexpr (std::is_same_v<std::decay_t<ValueType>, SCM>)
+    if constexpr (is_same_decayed_v<ValueType, SCM>)
         return new_value;
     return ValueType{};
 }
@@ -816,7 +816,26 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return scm_cons(desig, scm_from_int(val));
     }
 
-    %}
+template <typename T>
+struct is_MultichoiceOrRange
+{
+    static constexpr bool value =
+        is_same_decayed_v<T, GncOptionMultichoiceValue> ||
+        is_same_decayed_v<T, GncOptionRangeValue<int>>;
+};
+
+template <typename T>
+inline constexpr bool is_MultichoiceOrRange_v = is_MultichoiceOrRange<T>::value;
+
+template <typename ValueType>
+inline SCM return_scm_value(ValueType value)
+{
+    if constexpr (is_same_decayed_v<ValueType, SCM>)
+        return value;
+    return scm_from_value(static_cast<ValueType>(value));
+}
+
+%}
 %ignore GncOptionDBCallback;
 
 %include "gnc-option-date.hpp"
@@ -840,16 +859,10 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         if (!$self)
             return SCM_BOOL_F;
         return std::visit([](const auto& option)->SCM {
-                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                              GncOptionMultichoiceValue> ||
-                              std::is_same_v<std::decay_t<decltype(option)>,
-                              GncOptionRangeValue<int>>)
+                if constexpr (is_MultichoiceOrRange_v<decltype(option)>)
                     return get_scm_value(option);
                 auto value{option.get_value()};
-                if constexpr (std::is_same_v<std::decay_t<decltype(value)>,
-                              SCM>)
-                    return value;
-                return scm_from_value(static_cast<decltype(value)>(value));
+                return return_scm_value(value);
             }, swig_get_option($self));
     }
     SCM get_scm_default_value()
@@ -857,25 +870,20 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         if (!$self)
             return SCM_BOOL_F;
         return std::visit([](const auto& option)->SCM {
-                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                              GncOptionMultichoiceValue> ||
-                              std::is_same_v<std::decay_t<decltype(option)>,
-                              GncOptionRangeValue<int>>)
+                if constexpr (is_MultichoiceOrRange_v<decltype(option)>)
                     return get_scm_default_value(option);
                 auto value{option.get_default_value()};
-                if constexpr (std::is_same_v<std::decay_t<decltype(value)>,
-                              SCM>)
-                    return value;
-                return scm_from_value(static_cast<decltype(value)>(value));
+                return return_scm_value(value);
             }, swig_get_option($self));
     }
+
     void set_value_from_scm(SCM new_value)
     {
         if (!$self)
             return;
         try {
             std::visit([new_value](auto& option) {
-                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                    if constexpr (is_same_decayed_v<decltype(option),
                                   GncOptionDateValue>)
                     {
                         if (scm_date_absolute(new_value))
@@ -885,14 +893,14 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                         return;
                     }
 
-                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                    if constexpr (is_same_decayed_v<decltype(option),
                                   GncOptionMultichoiceValue>)
                     {
                         option.set_multiple(scm_to_multichoices(new_value, option));
                         return;
                     }
 
-                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                    if constexpr (is_same_decayed_v<decltype(option),
                                   GncOptionRangeValue<int>>)
                     {
                         if (scm_is_pair(new_value))
@@ -901,10 +909,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                             option.set_value(scm_to_int(new_value));
                         return;
                     }
-                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                  GncOptionValue<const QofInstance*>> ||
-                                  std::is_same_v<std::decay_t<decltype(option)>,
-                                  GncOptionValidatedValue<const QofInstance*>>)
+                    if constexpr (is_QofInstanceValue_v<decltype(option)>)
                     {
                         if (scm_is_string(new_value))
                         {
@@ -937,7 +942,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             return;
         try {
             std::visit([new_value](auto& option) {
-                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                    if constexpr (is_same_decayed_v<decltype(option),
                                   GncOptionDateValue>)
                     {
                         if (scm_date_absolute(new_value))
@@ -946,14 +951,14 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                             option.set_default_value(scm_relative_date_get_period(new_value));
                         return;
                     }
-                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                    if constexpr (is_same_decayed_v<decltype(option),
                                   GncOptionMultichoiceValue>)
                     {
                         option.set_default_multiple(scm_to_multichoices(new_value,
                                                                         option));
                         return;
                     }
-                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                    if constexpr (is_same_decayed_v<decltype(option),
                                   GncOptionRangeValue<int>>)
                     {
                         if (scm_is_pair(new_value))
@@ -962,10 +967,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                             option.set_default_value(scm_to_int(new_value));
                         return;
                     }
-                    if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                  GncOptionValue<const QofInstance*>> ||
-                                  std::is_same_v<std::decay_t<decltype(option)>,
-                                  GncOptionValidatedValue<const QofInstance*>>)
+                    if constexpr (is_QofInstanceValue_v<decltype(option)>)
                     {
                         if (scm_is_string(new_value))
                         {
@@ -996,11 +998,11 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         if (!self)
             return SCM_BOOL_F;
         return std::visit([](const auto& option)->SCM {
-                if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                    GncOptionMultichoiceValue>)
+                if constexpr (is_same_decayed_v<decltype(option),
+                              GncOptionMultichoiceValue>)
                     return scm_c_eval_string("'multichoice");
                 else if constexpr (std::is_same_v<decltype(option.get_value()),
-                    bool>)
+                                   bool>)
                     return scm_c_eval_string("'boolean");
                 else
                     return SCM_BOOL_F;

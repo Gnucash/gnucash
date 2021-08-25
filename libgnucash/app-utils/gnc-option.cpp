@@ -34,8 +34,7 @@ extern "C"
 }
 
 template <typename ValueType,
-          typename std::enable_if_t<!std::is_base_of_v<OptionClassifier,
-                                                       std::decay_t<ValueType>>,
+          typename std::enable_if_t<!is_OptionClassifier_v<ValueType>,
                                int>>
 GncOption::GncOption(const char* section, const char* name,
                      const char* key, const char* doc_string,
@@ -49,31 +48,30 @@ GncOption::GncOption(const char* section, const char* name,
 template <typename ValueType> ValueType
 GncOption::get_value() const
 {
-    return std::visit([](const auto option)->ValueType {
-                          if constexpr (std::is_same_v<std::decay_t<decltype(option.get_value())>, std::decay_t<ValueType>>)
+    return std::visit(
+        [](const auto option)->ValueType {
+            if constexpr (is_same_decayed_v<decltype(option.get_value()),
+                          ValueType>)
                                            return option.get_value();
-                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionDateValue> &&
-                                        std::is_same_v<std::decay_t<ValueType>,
+            if constexpr (is_same_decayed_v<decltype(option),
+                          GncOptionDateValue>)
+            {
+                if constexpr (is_same_decayed_v<ValueType,
                                         RelativeDatePeriod>)
                               return option.get_period();
-                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionDateValue> &&
-                                        std::is_same_v<std::decay_t<ValueType>,
-                                        size_t>)
+                if constexpr (std::is_same_v<ValueType, size_t>)
                               return option.get_period_index();
-                          if constexpr
-                              (std::is_same_v<std::decay_t<decltype(option)>,
-                               GncOptionMultichoiceValue> &&
-                               std::is_same_v<std::decay_t<ValueType>,
-                               size_t>)
+                return ValueType{};
+            }
+            if constexpr (is_same_decayed_v<decltype(option),
+                          GncOptionMultichoiceValue>)
+            {
+                if constexpr (std::is_same_v<ValueType, size_t>)
                               return option.get_index();
-                          if constexpr
-                              (std::is_same_v<std::decay_t<decltype(option)>,
-                               GncOptionMultichoiceValue> &&
-                               std::is_same_v<std::decay_t<ValueType>,
+                if constexpr (is_same_decayed_v<ValueType,
                                GncMultichoiceOptionIndexVec>)
                               return option.get_multiple();
+            }
                           return ValueType {};
                       }, *m_option);
 }
@@ -81,23 +79,25 @@ GncOption::get_value() const
 template <typename ValueType> ValueType
 GncOption::get_default_value() const
 {
-    return std::visit([](const auto option)->ValueType {
-                          if constexpr (std::is_same_v<std::decay_t<decltype(option.get_value())>, std::decay_t<ValueType>>)
+    return std::visit(
+        [](const auto option)->ValueType {
+            if constexpr (is_same_decayed_v<decltype(option.get_value()),
+                          ValueType>)
                                            return option.get_default_value();
-                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionDateValue> &&
-                                        std::is_same_v<std::decay_t<ValueType>,
+            if constexpr (is_same_decayed_v<decltype(option),
+                          GncOptionDateValue>)
+            {
+                if constexpr (is_same_decayed_v<ValueType,
                                         RelativeDatePeriod>)
                               return option.get_default_period();
-                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionDateValue> &&
-                                        std::is_same_v<std::decay_t<ValueType>,
-                                        size_t>)
+                if constexpr (std::is_same_v<ValueType, size_t>)
                               return option.get_default_period_index();
+                return ValueType{};
+            }
                           if constexpr
-                              (std::is_same_v<std::decay_t<decltype(option)>,
+                (is_same_decayed_v<decltype(option),
                                GncOptionMultichoiceValue> &&
-                               std::is_same_v<std::decay_t<ValueType>,
+                 is_same_decayed_v<ValueType,
                                GncMultichoiceOptionIndexVec>)
                               return option.get_default_multiple();
                           return ValueType {};
@@ -108,26 +108,24 @@ GncOption::get_default_value() const
 template <typename ValueType> void
 GncOption::set_value(ValueType value)
 {
-    std::visit([value](auto& option) {
+    std::visit(
+        [value](auto& option) {
                    if constexpr
-                       (std::is_same_v<std::decay_t<decltype(option.get_value())>,
-                        std::decay_t<ValueType>> ||
-                        (std::is_same_v<std::decay_t<decltype(option)>,
+                (is_same_decayed_v<decltype(option.get_value()), ValueType> ||
+                 (is_same_decayed_v<decltype(option),
                          GncOptionDateValue> &&
-                         (std::is_same_v<std::decay_t<ValueType>,
-                         RelativeDatePeriod> ||
-                          std::is_same_v<std::decay_t<ValueType>, size_t>)))
+                  (is_same_decayed_v<ValueType, RelativeDatePeriod> ||
+                   std::is_same_v<ValueType, size_t>)))
                        option.set_value(value);
-                   if constexpr
-                       (std::is_same_v<std::decay_t<decltype(option)>,
+            if constexpr (is_same_decayed_v<decltype(option),
                         GncOptionMultichoiceValue>)
                    {
-                       if constexpr (std::is_same_v<std::decay_t<ValueType>,
+                if constexpr (is_same_decayed_v<ValueType,
                                      GncMultichoiceOptionIndexVec>)
                            option.set_multiple(value);
                        else if constexpr
                            (std::is_same_v<ValueType, size_t> ||
-                            std::is_same_v<std::decay_t<ValueType>, std::string> ||
+                     is_same_decayed_v<ValueType, std::string> ||
                             std::is_same_v<std::remove_cv<ValueType>, char*>)
                            option.set_value(value);
                    }
@@ -137,27 +135,23 @@ GncOption::set_value(ValueType value)
 template <typename ValueType> void
 GncOption::set_default_value(ValueType value)
 {
-    std::visit([value](auto& option) {
+    std::visit(
+        [value](auto& option) {
                    if constexpr
-                       (std::is_same_v<std::decay_t<decltype(option.get_value())>,
-                        std::decay_t<ValueType>> ||
-                        (std::is_same_v<std::decay_t<decltype(option)>,
-                         GncOptionDateValue> &&
-                         (std::is_same_v<std::decay_t<ValueType>,
-                         RelativeDatePeriod> ||
-                          std::is_same_v<std::decay_t<ValueType>, size_t>)))
+                (is_same_decayed_v<decltype(option.get_value()), ValueType>||
+                 (is_same_decayed_v<decltype(option), GncOptionDateValue> &&
+                  (is_same_decayed_v<ValueType, RelativeDatePeriod> ||
+                   std::is_same_v<ValueType, size_t>)))
                        option.set_default_value(value);
-                   if constexpr
-                       (std::is_same_v<std::decay_t<decltype(option)>,
+            if constexpr (is_same_decayed_v<decltype(option),
                         GncOptionMultichoiceValue>)
                    {
-                       if constexpr
-                           (std::is_same_v<std::decay_t<ValueType>,
+                if constexpr (is_same_decayed_v<ValueType,
                             GncMultichoiceOptionIndexVec>)
-                           option.set_multiple(value);
+                    option.set_default_multiple(value);
                        else if constexpr
                            (std::is_same_v<ValueType, size_t> ||
-                            std::is_same_v<std::decay_t<ValueType>, std::string> ||
+                     is_same_decayed_v<ValueType, std::string> ||
                             std::is_same_v<std::remove_cv<ValueType>, char*>)
                            option.set_default_value(value);
                    }
@@ -174,7 +168,7 @@ GncOption::get_limits(ValueType& max, ValueType& min, ValueType& step) const noe
 {
     std::visit([&max, &min, &step](const auto& option) {
                    if constexpr
-                       (std::is_same_v<std::decay_t<decltype(option)>,
+                       (is_same_decayed_v<decltype(option),
                         GncOptionRangeValue<ValueType>>)
                        option.get_limits(max, min, step);
                }, *m_option);
@@ -292,8 +286,9 @@ GncOption::is_changed() const noexcept
 bool
 GncOption::is_multiselect() const noexcept
 {
-    return std::visit([](const auto& option)->bool {
-                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+    return std::visit(
+        [](const auto& option)->bool {
+            if constexpr (is_same_decayed_v<decltype(option),
                                         GncOptionAccountListValue>)
                               return option.is_multiselect();
                           else
@@ -304,16 +299,17 @@ GncOption::is_multiselect() const noexcept
 template<typename ValueType> bool
 GncOption::validate(ValueType value) const
 {
-    return std::visit([value] (const auto& option) -> bool {
-                          if constexpr ((std::is_same_v<std::decay_t<decltype(option)>,
+    return std::visit(
+        [value] (const auto& option) -> bool {
+            if constexpr ((is_same_decayed_v<decltype(option),
                                          GncOptionMultichoiceValue> &&
-                                         std::is_same_v<std::decay_t<ValueType>,
+                           is_same_decayed_v<ValueType,
                                          std::string>) ||
-                                        (std::is_same_v<std::decay_t<decltype(option)>,
+                          (is_same_decayed_v<decltype(option),
                                          GncOptionMultichoiceValue> &&
-                                         std::is_same_v<std::decay_t<ValueType>,
+                           is_same_decayed_v<ValueType,
                                          GncMultichoiceOptionIndexVec>) ||
-                                        std::is_same_v<std::decay_t<decltype(option)>,
+                          is_same_decayed_v<decltype(option),
                                         GncOptionValidatedValue<ValueType>>)
                                            return option.validate(value);
                           else
@@ -324,10 +320,11 @@ GncOption::validate(ValueType value) const
 std::size_t
 GncOption::num_permissible_values() const
 {
-    return std::visit([] (const auto& option) -> size_t {
-                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+    return std::visit(
+        [] (const auto& option) -> size_t {
+            if constexpr (is_same_decayed_v<decltype(option),
                                         GncOptionMultichoiceValue>  ||
-                                        std::is_same_v<std::decay_t<decltype(option)>,
+                          is_same_decayed_v<decltype(option),
                                         GncOptionDateValue>)
                                            return option.num_permissible_values();
                           else
@@ -338,10 +335,11 @@ GncOption::num_permissible_values() const
 std::size_t
 GncOption::permissible_value_index(const char* value) const
 {
-    return std::visit([&value] (const auto& option) -> size_t {
-                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+    return std::visit(
+        [&value] (const auto& option) -> size_t {
+            if constexpr (is_same_decayed_v<decltype(option),
                                         GncOptionMultichoiceValue>  ||
-                                        std::is_same_v<std::decay_t<decltype(option)>,
+                          is_same_decayed_v<decltype(option),
                                         GncOptionDateValue>)
                                            return option.permissible_value_index(value);
                           else
@@ -393,10 +391,7 @@ bool
 GncOption::is_alternate() const noexcept
 {
     return std::visit([](auto& option) -> bool {
-                          if constexpr(std::is_same_v<std::decay_t<decltype(option)>,
-                                       GncOptionRangeValue<int>> ||
-                       std::is_same_v<std::decay_t<decltype(option)>,
-                                       GncOptionRangeValue<double>>)
+                          if constexpr(is_RangeValue_v<decltype(option)>)
                               return option.is_alternate();
                           return false;
                       }, *m_option);
@@ -406,10 +401,7 @@ void
 GncOption::set_alternate(bool alt) noexcept
 {
     std::visit([alt](auto& option) {
-                   if constexpr(std::is_same_v<std::decay_t<decltype(option)>,
-                                GncOptionRangeValue<int>> ||
-                       std::is_same_v<std::decay_t<decltype(option)>,
-                                GncOptionRangeValue<double>>)
+                   if constexpr(is_RangeValue_v<decltype(option)>)
                        option.set_alternate(alt);
                }, *m_option);
 }

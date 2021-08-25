@@ -237,6 +237,18 @@ QofInstance* qof_instance_from_string(const std::string& str,
 QofInstance* qof_instance_from_guid(GncGUID*, GncOptionUIType type);
 std::string qof_instance_to_string(const QofInstance* inst);
 
+template <typename T>
+struct is_QofInstanceValue
+{
+    static constexpr bool value =
+         (std::is_same_v<std::decay_t<T>, GncOptionValue<const QofInstance*>> ||
+          std::is_same_v<std::decay_t<T>,
+          GncOptionValidatedValue<const QofInstance*>>);
+};
+
+template <typename T> inline constexpr bool
+is_QofInstanceValue_v = is_QofInstanceValue<T>::value;
+
 /* These will work when m_value is a built-in class; GnuCash class and container
  * values will need specialization unless they happen to define operators << and
  * >>.
@@ -246,16 +258,9 @@ std::string qof_instance_to_string(const QofInstance* inst);
  */
 #ifndef SWIG
 template<class OptType,
-         typename std::enable_if_t<std::is_base_of_v<OptionClassifier,
-                                                     std::decay_t<OptType>> &&
-                                   ! (std::is_same_v<std::decay_t<OptType>,
-                                      GncOptionValue<const QofInstance*>> ||
-                                      std::is_same_v<std::decay_t<OptType>,
-                                      GncOptionValidatedValue<const QofInstance*>> ||
-                                      std::is_same_v<std::decay_t<OptType>,
-                                      GncOptionRangeValue<int>> ||
-                                      std::is_same_v<std::decay_t<OptType>,
-                                      GncOptionRangeValue<double>>), int> = 0>
+         typename std::enable_if_t<is_OptionClassifier_v<OptType> &&
+                                   ! (is_QofInstanceValue_v<OptType> ||
+                                      is_RangeValue_v<OptType>), int> = 0>
 std::ostream& operator<<(std::ostream& oss, const OptType& opt)
 {
     oss << opt.get_value();
@@ -271,10 +276,7 @@ operator<< <GncOptionValue<bool>>(std::ostream& oss,
 }
 
 template<class OptType,
-         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionValidatedValue<const QofInstance*>> ||
-                                   std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionValue<const QofInstance*> >, int> = 0>
+         typename std::enable_if_t<is_QofInstanceValue_v<OptType>, int> = 0>
 inline std::ostream&
 operator<< (std::ostream& oss, const OptType& opt)
 {
@@ -296,16 +298,9 @@ operator<< (std::ostream& oss, const OptType& opt)
 }
 
 template<class OptType,
-         typename std::enable_if_t<std::is_base_of_v<OptionClassifier,
-                                                     std::decay_t<OptType>> &&
-                                   !(std::is_same_v<std::decay_t<OptType>,
-                                     GncOptionValue<const QofInstance*>> ||
-                                     std::is_same_v<std::decay_t<OptType>,
-                                     GncOptionValidatedValue<const QofInstance*>> ||
-                                      std::is_same_v<std::decay_t<OptType>,
-                                      GncOptionRangeValue<int>> ||
-                                      std::is_same_v<std::decay_t<OptType>,
-                                      GncOptionRangeValue<double>>), int> = 0>
+         typename std::enable_if_t<is_OptionClassifier_v<OptType> &&
+                                   !(is_QofInstanceValue_v<OptType> ||
+                                     is_RangeValue_v<OptType>), int> = 0>
 std::istream& operator>>(std::istream& iss, OptType& opt)
 {
     std::decay_t<decltype(opt.get_value())> value;
@@ -322,11 +317,7 @@ std::istream& operator>>(std::istream& iss, OptType& opt)
 }
 
 template<class OptType,
-         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionValidatedValue<const QofInstance*>> ||
-                                   std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionValue<const QofInstance*> >,
-                                   int> = 0>
+         typename std::enable_if_t<is_QofInstanceValue_v<OptType>, int> = 0>
 std::istream&
 operator>> (std::istream& iss, OptType& opt)
 {
@@ -507,11 +498,7 @@ private:
 };
 
 template<class OptType,
-         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionRangeValue<int>> ||
-                                   std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionRangeValue<double>>,
-                                   int> = 0>
+         typename std::enable_if_t<is_RangeValue_v<OptType>, int> = 0>
 inline std::ostream&
 operator<< (std::ostream& oss, const OptType& opt)
 {
@@ -522,11 +509,7 @@ operator<< (std::ostream& oss, const OptType& opt)
 }
 
 template<class OptType,
-         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionRangeValue<int>> ||
-                                   std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionRangeValue<double>>,
-                                   int> = 0>
+         typename std::enable_if_t<is_RangeValue_v<OptType>, int> = 0>
 inline std::istream&
 operator>> (std::istream& iss, OptType& opt)
 {
