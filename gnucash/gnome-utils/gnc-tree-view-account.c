@@ -1676,7 +1676,7 @@ gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
     GtkTreeSelection *selection;
     GtkTreePath *sp_account, *sp_start, *sp_end;
     GtkTreeIter si_account, si_start, si_end;
-    gboolean have_start, have_end;
+    gboolean have_start, have_end = FALSE;
     gint num_children;
 
     ENTER("view %p, account %p (%s)", view, account, xaccAccountGetName(account));
