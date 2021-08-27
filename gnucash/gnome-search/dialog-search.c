@@ -888,13 +888,12 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
     for (l = sw->crit_list; l; l = l->next)
     {
         struct _crit_data *data = l->data;
-        GList *children;
+        GList *children = gtk_container_get_children (GTK_CONTAINER(data->container));
 
         /* For each, walk the list of container children to get combo_box */
-        for (children = gtk_container_get_children(GTK_CONTAINER(data->container));
-                children; children = children->next)
+        for (GList *child = children; child; child = g_list_next (child))
         {
-            GtkWidget *combo_box = children->data;
+            GtkWidget *combo_box = child->data;
 
             /* Get current active item if combo_box */
             if (GTK_IS_COMBO_BOX(combo_box))
@@ -918,6 +917,7 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
                 gtk_widget_show_all (data->container);
             }
         }
+        g_list_free (children);
     }
     gtk_widget_grab_focus(focused_widget);
 }

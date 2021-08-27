@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-11 09:34+0000\n"
+"PO-Revision-Date: 2021-08-22 11:32+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -878,11 +878,11 @@ msgstr "杂项付款"
 #: gnucash/gnome/assistant-loan.cpp:770
 #, c-format
 msgid "... pay \"%s\"?"
-msgstr "... 支付“%s”？"
+msgstr "支付“%s”"
 
 #: gnucash/gnome/assistant-loan.cpp:782
 msgid "via Escrow account?"
-msgstr "通过托管账户？"
+msgstr "通过托管科目"
 
 #: gnucash/gnome/assistant-loan.cpp:929
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2894
@@ -2621,7 +2621,7 @@ msgstr "盈/亏"
 #: gnucash/gnome/dialog-lot-viewer.c:1048
 #, c-format
 msgid "Lots in Account %s"
-msgstr "在科目 %s 中的 Lot"
+msgstr "科目 %s 的批次"
 
 #: gnucash/gnome/dialog-order.c:171
 msgid "The Order must be given an ID."
@@ -3387,7 +3387,7 @@ msgstr "导出科目体系至新的 GnuCash 数据文件"
 #: gnucash/gnome/gnc-plugin-page-register2.c:255
 #: gnucash/gnome/gnc-plugin-page-register.c:364
 msgid "_Find..."
-msgstr "查找(_F)..."
+msgstr "查找交易(_F)..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:146
 #: gnucash/gnome/gnc-plugin-page-register2.c:256
@@ -3429,7 +3429,7 @@ msgstr "计划交易列表"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:171
 msgid "Since _Last Run..."
-msgstr "待处理计划交易(_L)..."
+msgstr "待执行(_L)..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:172
 msgid "Create Scheduled Transactions since the last time run"
@@ -3437,7 +3437,7 @@ msgstr "创建尚未执行的计划交易"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:176
 msgid "_Mortgage & Loan Repayment..."
-msgstr "按揭和还贷(_M)..."
+msgstr "按揭/还贷(_M)..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:177
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -3474,7 +3474,7 @@ msgstr "显示并编辑股票和共同基金商品"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:201
 msgid "_Loan Repayment Calculator"
-msgstr "还贷计算器(_L)"
+msgstr "还款计算器(_L)"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:202
 msgid "Use the loan/mortgage repayment calculator"
@@ -3514,7 +3514,7 @@ msgstr "查看每日提示"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:545
 msgid "There are no Scheduled Transactions to be entered at this time."
-msgstr "现在没有计划交易事项需要输入。"
+msgstr "暂无待执行的计划交易。"
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
@@ -6479,7 +6479,7 @@ msgstr "财务"
 #: gnucash/gtkbuilder/assistant-loan.glade:578
 #: gnucash/gtkbuilder/assistant-loan.glade:777
 msgid "Payment From"
-msgstr "收入科目"
+msgstr "付款科目"
 
 #: gnucash/gnome/window-reconcile2.c:455 gnucash/gnome/window-reconcile2.c:465
 #: gnucash/gnome/window-reconcile.c:496 gnucash/gnome/window-reconcile.c:506
@@ -7198,7 +7198,7 @@ msgstr "新建科目"
 msgid ""
 "Renumber the immediate sub-accounts of %s? This will replace the account "
 "code field of each child account with a newly generated code."
-msgstr "是否重新编码 %s 的子科目？以替换原有子科目编码。"
+msgstr "重新编码 %s 的子科目，以替换原有编码。"
 
 #: gnucash/gnome-utils/dialog-account.c:2288
 #, c-format
@@ -7492,7 +7492,7 @@ msgstr "取消选择选中的和未选中的所有科目。"
 
 #: gnucash/gnome-utils/dialog-options.c:1506
 msgid "Select Children"
-msgstr "所有子科目"
+msgstr "全选子科目"
 
 #: gnucash/gnome-utils/dialog-options.c:1508
 msgid "Select all descendents of selected account."
@@ -10844,7 +10844,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:17
 msgid "Run \"since last run\" dialog when a file is opened."
-msgstr "文件打开时启动“待处理计划交易”对话框。"
+msgstr "文件打开时启动“待执行计划交易”对话框。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:18
 msgid ""
@@ -10859,7 +10859,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:22
 msgid "Show \"since last run\" notification dialog when a file is opened."
-msgstr "文件打开时显示“待处理计划交易”对话框。"
+msgstr "文件打开时显示“待执行计划交易”对话框。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:23
 msgid ""
@@ -11232,7 +11232,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
-msgstr ""
+msgstr "新打开的标签页前置，而非最后"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:136
 msgid ""
@@ -11415,7 +11415,7 @@ msgstr "在窗口底部显示汇总栏。"
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:225
 #: gnucash/gtkbuilder/dialog-preferences.glade:3408
 msgid "Closing a tab moves to the most recently visited tab."
-msgstr "关闭科目页后移至最近访问过的科目页。"
+msgstr "关闭标签页后移至最近访问过的标签页。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:226
 msgid ""
@@ -12371,7 +12371,7 @@ msgstr "导入汇总"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:8
 msgid "CSV Export Assistant"
-msgstr "抵押/贷款向导"
+msgstr "CSV 导出助手"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:34
 msgid ""
@@ -12974,9 +12974,9 @@ msgid ""
 "\n"
 "Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
-"为资产（如投资、支票或储蓄）、负债（如贷款）及收入和支出创建一套 GnuCash 账簿。\n"
+"为资产（如投资、支票或储蓄）、负债（如贷款）、收入和支出建立一个账簿。\n"
 "\n"
-"选择最接近需求的模板，完成后，可以随时添加、修改、转移或删除科目。\n"
+"先选择最接近需求的模板，后期亦可以随时添加、修改、转移或删除科目。\n"
 "\n"
 "若不想创建，请\"取消\"。"
 
@@ -13112,43 +13112,43 @@ msgstr "利率"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:49
 msgid "APR (Compounded Daily)"
-msgstr "年率（日常复合）"
+msgstr "APR（日复利）"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:52
 msgid "APR (Compounded Weekly)"
-msgstr "年率（每周复合）"
+msgstr "APR（周复利）"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:55
 msgid "APR (Compounded Monthly)"
-msgstr "年率（每月化合物）"
+msgstr "APR（月复利）"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:58
 msgid "APR (Compounded Quarterly)"
-msgstr "年率（每季度复合）"
+msgstr "APR（季复利）"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:61
 msgid "APR (Compounded Annually)"
-msgstr "年率（多种化合物）"
+msgstr "APR（年复利）"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:72
 msgid "Fixed Rate"
-msgstr "取得汇率"
+msgstr "固定利率"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:75
 msgid "3/1 Year ARM"
-msgstr "三年固定浮动率"
+msgstr "3/1 Year ARM"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:78
 msgid "5/1 Year ARM"
-msgstr "五年固定型浮动利率"
+msgstr "5/1 Year ARM"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:81
 msgid "7/1 Year ARM"
-msgstr "7/1年ARM"
+msgstr "7/1 Year ARM"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:84
 msgid "10/1 Year ARM"
-msgstr "10/1年ARM"
+msgstr "10/1 Year ARM"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:113
 msgid ""
@@ -13160,20 +13160,18 @@ msgid ""
 "If you make a mistake or want to make changes later, you can edit the "
 "created Scheduled Transactions directly."
 msgstr ""
-"这是在 GnuCash 中逐步创建偿还贷款设置的方法。在这个向导中，您可以输入您的贷款"
-"与其偿还的参数，并且给出偿还的细节。使用这些信息， GnuCash 会创建适当的计划交"
-"易。\n"
+"创建定期还贷交易，输入贷款与还款详情，程序会根据此信息、创建适当的计划交易。\n"
 "\n"
-"如果您输入错误或稍后想做修改，您可以直接编辑创建好的计划交易。"
+"若输入有误亦或修改，稍后直接编辑创建好的计划交易。"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:120
 msgid "Loan / Mortgage Repayment Setup"
-msgstr "抵押/贷款偿还设置"
+msgstr "按揭/还贷"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:136
 msgid ""
 "Enter the Loan Details, as a minimum enter a valid Loan Account and Amount.\n"
-msgstr "请输入贷款详情。请至少输入有效的贷款账户和金额。\n"
+msgstr "请输入贷款详情，至少得有一个有效的贷款科目和金额。\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:173
 #: gnucash/gtkbuilder/assistant-loan.glade:1175
@@ -13202,11 +13200,11 @@ msgstr "开始日期"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:186
 msgid "Length"
-msgstr "长度"
+msgstr "跨度"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:212
 msgid "Loan Account"
-msgstr "贷款科目"
+msgstr "科目"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:227
 msgid ""
@@ -13222,9 +13220,7 @@ msgstr "剩余月数"
 msgid ""
 "Enter the annual interest rate in percent. Accepts values from 0.001 - 100. "
 "The Mortgage Assistant does not support zero-interest loans."
-msgstr ""
-"指定利率为年利率的一个百分比。 你可以在0.001-100的范围内输入一个值。 该贷款助"
-"理不支持利率为0的贷款。"
+msgstr "输入年利率（单位：百分比），范围0.001 - 100，不允许零利率贷款。"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
@@ -13238,7 +13234,7 @@ msgstr "利率变化频率"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:444
 msgid "Loan Details"
-msgstr "贷款细节"
+msgstr "贷款详情"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:459
 msgid ""
@@ -13246,11 +13242,11 @@ msgid ""
 "Do you utilise an escrow account, if so an account must be specified..."
 msgstr ""
 "\n"
-"您是否使用托管帐户？如果要使用，则需要指定帐户..."
+"是否使用托管科目，如果是，必须指定一个科目..."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:479
 msgid "... utilize an escrow account for payments?"
-msgstr "... 利用托管账户付款？"
+msgstr "使用托管科目付款？"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:504
 msgid "Escrow Account"
@@ -13258,7 +13254,7 @@ msgstr "托管账户"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:540
 msgid "Loan Repayment Options"
-msgstr "税务报表选项"
+msgstr "还款选项"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:553
 msgid ""
@@ -13266,23 +13262,23 @@ msgid ""
 "All accounts must have valid entries to continue.\n"
 msgstr ""
 "\n"
-"所有帐户都必须具有有效的条目才能继续。\n"
+"所有科目必须正确设置才能继续。\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:591
 msgid "Principal To"
-msgstr "本金到"
+msgstr "本金科目"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:630
 msgid "Interest To"
-msgstr "利息到"
+msgstr "利息科目"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:683
 msgid "Repayment Frequency"
-msgstr "偿还频率"
+msgstr "频率"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:718
 msgid "Loan Repayment"
-msgstr "偿还"
+msgstr "还款"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:731
 msgid ""
@@ -13298,7 +13294,7 @@ msgstr "付款到(托管)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:816
 msgid "Payment From (Escrow)"
-msgstr "付款来自(托管)"
+msgstr "付款科目（托管）"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:839
 msgid "Specify Source Account"
@@ -13326,7 +13322,7 @@ msgstr "数值选项"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1070
 msgid "Loan Payment"
-msgstr "纳税额"
+msgstr "贷款支付"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1083
 msgid ""
@@ -13364,7 +13360,7 @@ msgstr "截止日期"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1243
 msgid "Loan Review"
-msgstr "回顾"
+msgstr "贷款审查"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1251
 msgid "Schedule added successfully."
@@ -14076,15 +14072,15 @@ msgstr "递归科目属性"
 
 #: gnucash/gtkbuilder/dialog-account.glade:69
 msgid "Enable Cascading Account Color"
-msgstr "颜色属性"
+msgstr "颜色"
 
 #: gnucash/gtkbuilder/dialog-account.glade:104
 msgid "Enable Cascading Account Placeholder"
-msgstr "占位符属性"
+msgstr "占位符"
 
 #: gnucash/gtkbuilder/dialog-account.glade:129
 msgid "Enable Cascading Account Hidden"
-msgstr "隐藏属性"
+msgstr "隐藏"
 
 #: gnucash/gtkbuilder/dialog-account.glade:151
 msgid "Enable the sections to Cascade"
@@ -15109,7 +15105,7 @@ msgstr "每天（365）"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:90
 msgid "Loan Repayment Calculator"
-msgstr "财务计算器"
+msgstr "还款计算器"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:136
 msgid "_Schedule"
@@ -15583,7 +15579,7 @@ msgstr "<b>标题(_T)</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:221
 msgid "<b>_Lots in This Account</b>"
-msgstr "<b>此科目的批次(_L)</b>"
+msgstr "<b>已有批次(_L)</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:259
 msgid "Show only open lots"
@@ -15591,11 +15587,11 @@ msgstr "显示图表"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:302
 msgid "<b>Splits _free</b>"
-msgstr "<b>自由分录(_F)</b>"
+msgstr "<b>自由交易(_F)</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:357
 msgid "<b>Splits _in lot</b>"
-msgstr "<b>集束分录(_I)</b>"
+msgstr "<b>集束交易(_I)</b>"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:25
 msgid "_No"
@@ -16545,7 +16541,7 @@ msgstr "关闭时保存窗口的大小和位置。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3402
 msgid "Bring the most _recent tab to the front"
-msgstr "前置最近科目页(_R)"
+msgstr "移至最近标签页(_R)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3434
 msgid "<b>Tab Position</b>"
@@ -16607,11 +16603,11 @@ msgstr "宽度(_W)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3671
 msgid "Open new tabs _adjacent to current tab"
-msgstr "打开与当前标签相邻的新标签(_A)"
+msgstr "前置新标签页(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3677
 msgid "Opens new tab adjacent to current tab instead of at the end."
-msgstr ""
+msgstr "新打开的标签页前置，而非最后。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3716
 msgid "Windows"
@@ -17143,11 +17139,11 @@ msgstr "循环次数"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:512
 msgid "<b>Since Last Run</b>"
-msgstr "<b>待处理计划交易</b>"
+msgstr "<b>待执行</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:535
 msgid "<b>Transaction Editor Defaults</b>"
-msgstr "<b>默认交易编辑器</b>"
+msgstr "<b>默认选项</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:545
 msgid "_Run when data file opened"
@@ -17155,7 +17151,7 @@ msgstr "打开文件时运行(_R)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:549
 msgid "Run the \"since last run\" process when a file is opened."
-msgstr "文件打开时，执行“待处理计划交易”进程。"
+msgstr "文件打开时，启动“待执行计划交易”进程。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:562
 msgid "_Show notification window"
@@ -17165,7 +17161,7 @@ msgstr "显示通知(_S)"
 msgid ""
 "Show the notification window for the \"since last run\" process when a file "
 "is opened."
-msgstr "文件打开时，显示“待处理计划交易”进程的通知。"
+msgstr "文件打开时，显示“待执行计划交易”进程的通知。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:579
 msgid "_Auto-create new transactions"
@@ -17201,7 +17197,7 @@ msgstr "提前提醒(_E)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
 msgid "Set 'Re_view Created Transactions' as default"
-msgstr "默认核实已创建交易(_R)"
+msgstr "默认复核已创建交易(_R)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
 msgid ""
@@ -17267,7 +17263,7 @@ msgstr "模板"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1454
 msgid "Since Last Run..."
-msgstr "待处理计划交易"
+msgstr "待执行计划交易"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1554
 msgid "_Review created transactions"
@@ -28185,7 +28181,7 @@ msgstr "标签页，\"查看 -> 双行\"，\"属性\"字段设为\"T-编号\"；
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
-msgstr "拥有用于涉及一种以上货币或商品的交易账户的支票。"
+msgstr "额外使用贸易科目统计跨币种交易。"
 
 #: libgnucash/app-utils/business-prefs.scm:167
 msgid "Budget to be used when none has been otherwise specified."
@@ -28831,7 +28827,7 @@ msgstr "手动选择批次。"
 
 #: libgnucash/engine/qofbookslots.h:66
 msgid "Use Trading Accounts"
-msgstr "使用贸易科目"
+msgstr "贸易科目"
 
 #: libgnucash/engine/qofbookslots.h:67
 msgid "Currency Accounting"

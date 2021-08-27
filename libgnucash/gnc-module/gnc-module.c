@@ -257,11 +257,7 @@ gnc_module_system_refresh(void)
 
     }
     /* free the search dir strings */
-    for (current = search_dirs; current; current = current->next)
-    {
-        g_free(current->data);
-    }
-    g_list_free(current);
+    g_list_free_full (search_dirs, g_free);
 }
 
 

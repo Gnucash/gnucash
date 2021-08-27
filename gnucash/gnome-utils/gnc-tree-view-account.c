@@ -1676,7 +1676,7 @@ gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
     GtkTreeSelection *selection;
     GtkTreePath *sp_account, *sp_start, *sp_end;
     GtkTreeIter si_account, si_start, si_end;
-    gboolean have_start, have_end;
+    gboolean have_start, have_end = FALSE;
     gint num_children;
 
     ENTER("view %p, account %p (%s)", view, account, xaccAccountGetName(account));
@@ -1866,9 +1866,10 @@ account_cell_property_data_func (GtkTreeViewColumn *tree_column,
     account = gnc_tree_view_account_get_account_from_iter(s_model, s_iter);
     qof_instance_get (QOF_INSTANCE (account), key, &string, NULL);
     if (string == NULL)
-        string = "";
+        string = g_strdup ("");
 
     g_object_set (G_OBJECT (cell), "text", string, "xalign", 0.0, NULL);
+    g_free (string);
 
     view = g_object_get_data(G_OBJECT(tree_column), "tree-view");
 

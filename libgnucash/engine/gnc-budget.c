@@ -631,20 +631,23 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
 
 }
 
-const gchar *
+gchar *
 gnc_budget_get_account_period_note(const GncBudget *budget,
                                    const Account *account, guint period_num)
 {
     gchar path_part_one [GUID_ENCODING_LENGTH + 1];
     gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
     GValue v = G_VALUE_INIT;
+    gchar *retval;
 
     g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
     g_return_val_if_fail(account, NULL);
 
     make_period_path (account, period_num, path_part_one, path_part_two);
     qof_instance_get_kvp (QOF_INSTANCE (budget), &v, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
-    return (G_VALUE_HOLDS_STRING(&v)) ? g_value_get_string(&v) : NULL;
+    retval = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string(&v) : NULL;
+    g_value_unset (&v);
+    return retval;
 }
 
 time64

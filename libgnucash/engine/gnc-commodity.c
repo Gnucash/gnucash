@@ -1183,11 +1183,13 @@ const char*
 gnc_commodity_get_user_symbol(const gnc_commodity *cm)
 {
     GValue v = G_VALUE_INIT;
+    static char* retval = NULL;
     if (!cm) return NULL;
     qof_instance_get_kvp (QOF_INSTANCE(cm), &v, 1, "user_symbol");
-    if (G_VALUE_HOLDS_STRING (&v))
-        return g_value_get_string (&v);
-    return NULL;
+    g_free (retval);
+    retval = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v): NULL;
+    g_value_unset (&v);
+    return retval;
 }
 
 /********************************************************************

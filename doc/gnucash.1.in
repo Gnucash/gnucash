@@ -7,7 +7,7 @@
 gnucash \- personal finance manager
 .SH SYNOPSIS
 .B gnucash [options] [
-.I accounts.gnc
+.I accounts.gnucash
 .B ]
 .SH DESCRIPTION
 .B GnuCash

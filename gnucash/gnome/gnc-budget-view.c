@@ -937,7 +937,7 @@ query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
     GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
     GtkTreePath          *path  = NULL;
     GtkTreeViewColumn    *column = NULL;
-    const gchar          *note;
+    gchar                *note;
     guint                 period_num;
     Account              *account;
 
@@ -962,6 +962,7 @@ query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
     gtk_tooltip_set_text (tooltip, note);
     gtk_tree_view_set_tooltip_cell (tree_view, tooltip, path, column, NULL);
     gtk_tree_path_free (path);
+    g_free (note);
 
     return TRUE;
 }

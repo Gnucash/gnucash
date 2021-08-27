@@ -131,6 +131,8 @@ functions. */
 %newobject gnc_localtime;
 %newobject gnc_gmtime;
 
+%newobject gnc_budget_get_account_period_note;
+
 /* Parse the header file to generate wrappers */
 %inline {
   static QofIdType QOF_ID_BOOK_SCM (void) { return QOF_ID_BOOK; }
@@ -258,6 +260,8 @@ time64 time64CanonicalDayTime(time64 t);
   $1 = g_list_reverse (path);
 }
 
+%typemap (freearg) GList * "g_list_free_full ($1, g_free);"
+
 void gnc_quote_source_set_fq_installed (const char* version_string,
                                         GList *sources_list);
 %clear GList *;
@@ -275,6 +279,7 @@ Account * gnc_book_get_template_root(QofBook *book);
 %typemap(in) KvpValue * " $1 = gnc_scm_to_kvp_value_ptr($input); "
 %typemap(out) KvpValue * " $result = gnc_kvp_value_ptr_to_scm($1); "
 %typemap(in) GSList *key_path " $1 = gnc_scm_to_gslist_string($input);"
+%typemap(freearg) GSList *key_path "g_slist_free_full ($1, g_free);"
 
 QofBook* qof_book_new (void);
 void qof_book_options_delete (QofBook *book, GSList *key_path);

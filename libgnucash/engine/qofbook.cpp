@@ -1032,13 +1032,11 @@ qof_book_get_default_gain_loss_acct_guid (QofBook *book)
 gboolean
 qof_book_use_trading_accounts (const QofBook *book)
 {
-    const char *opt = NULL;
-    qof_instance_get (QOF_INSTANCE (book),
-              "trading-accts", &opt,
-              NULL);
-    if (opt && opt[0] == 't' && opt[1] == 0)
-        return TRUE;
-    return FALSE;
+    char *opt = nullptr;
+    qof_instance_get (QOF_INSTANCE (book), "trading-accts", &opt, nullptr);
+    auto retval = (opt && opt[0] == 't' && opt[1] == 0);
+    g_free (opt);
+    return retval;
 }
 
 /* Returns TRUE if this book uses split action field as the 'Num' field, FALSE
@@ -1051,7 +1049,7 @@ qof_book_use_split_action_for_num_field (const QofBook *book)
     {
         // No cached value? Then do the expensive KVP lookup
         gboolean result;
-        const char *opt = NULL;
+        char *opt = NULL;
         qof_instance_get (QOF_INSTANCE (book),
                           PARAM_NAME_NUM_FIELD_SOURCE, &opt,
                           NULL);
@@ -1060,6 +1058,7 @@ qof_book_use_split_action_for_num_field (const QofBook *book)
             result = TRUE;
         else
             result = FALSE;
+        g_free (opt);
 
         // We need to const_cast the "book" argument into a non-const pointer,
         // but as we are dealing only with cache variables, I think this is

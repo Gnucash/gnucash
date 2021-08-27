@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-10 17:35+0000\n"
+"PO-Revision-Date: 2021-08-16 20:35+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -29966,7 +29966,7 @@ msgstr ""
 
 #: libgnucash/app-utils/business-prefs.scm:173
 msgid "The electronic tax number of your business"
-msgstr "Die Elster-Steuernummer Ihrer Unternehmung"
+msgstr "Die Elster-Steuernummer Ihres Geschäfts"
 
 #: libgnucash/app-utils/date-utilities.scm:523
 #, scheme-format

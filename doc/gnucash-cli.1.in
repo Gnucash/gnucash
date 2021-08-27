@@ -7,7 +7,7 @@
 gnucash-cli \- command line tool to go with GnuCash
 .SH SYNOPSIS
 .B gnucash-cli [options] [
-.I accounts.gnc
+.I accounts.gnucash
 .B ]
 .SH DESCRIPTION
 .B gnucash-cli

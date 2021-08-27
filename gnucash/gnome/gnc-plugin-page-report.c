@@ -1965,13 +1965,16 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
             // Yes. In the kvp, look up the key for the Export-PDF output
             // directory. If it exists, prepend this to the job name so that
             // we can export to PDF.
-	    if (dirname && g_file_test(dirname,
-				       G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
-	    {
-		gchar *tmp = g_build_filename(dirname, job_name, NULL);
-		g_free(job_name);
-		job_name = tmp;
-	    }
+            if (dirname)
+            {
+                if (g_file_test (dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+                {
+                    gchar *tmp = g_build_filename (dirname, job_name, NULL);
+                    g_free (job_name);
+                    job_name = tmp;
+                }
+                g_free (dirname);
+            }
         }
     }
 
