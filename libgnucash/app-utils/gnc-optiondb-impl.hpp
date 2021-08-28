@@ -148,18 +148,10 @@ public:
         return const_cast<GncOption*>(static_cast<const GncOptionDB&>(*this).find_option(section, name));
     }
     const GncOption* find_option(const std::string& section, const char* name) const;
-    std::ostream& save_to_scheme(std::ostream& oss,
-                                 const char* options_prolog) const noexcept;
-    std::istream& load_from_scheme(std::istream& iss) noexcept;
     std::ostream& save_to_key_value(std::ostream& oss) const noexcept;
     std::istream& load_from_key_value(std::istream& iss);
     void save_to_kvp(QofBook* book, bool clear_book) const noexcept;
     void load_from_kvp(QofBook* book) noexcept;
-    std::ostream& save_option_scheme(std::ostream& oss,
-                                     const char* option_prolog,
-                                     const std::string& section,
-                                     const std::string& name) const noexcept;
-    std::istream& load_option_scheme(std::istream& iss);
     std::ostream& save_option_key_value(std::ostream& oss,
                                         const std::string& section,
                                         const std::string& name) const noexcept;
@@ -175,14 +167,6 @@ private:
 
     std::function<GncOptionUIItem*()> m_get_ui_value;
     std::function<void(GncOptionUIItem*)> m_set_ui_value;
-    static constexpr char const* const scheme_tags[]
-    {
-        "(let ((option (gnc:lookup-option ",
-        "                                 ",
-        ")))",
-        "   ((lambda (o) (if o (gnc:option-set-value o ",
-        "))) option))"
-        };
 };
 
 

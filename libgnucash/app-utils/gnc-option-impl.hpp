@@ -220,8 +220,6 @@ public:
     }
     void reset_default_value() { m_value = m_default_value; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
-    std::ostream& to_scheme(std::ostream&) const;
-    std::istream& from_scheme(std::istream&);
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
 private:
@@ -351,85 +349,6 @@ operator>> <GncOptionValue<bool>>(std::istream& iss,
     std::string instr;
     iss >> instr;
     opt.set_value(instr == "#t" ? true : false);
-    return iss;
-}
-template<class OptType,
-         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                GncOptionValidatedValue<const QofInstance*>> ||
-                                   std::is_same_v<std::decay_t<OptType>,
-                                      GncOptionValue<const QofInstance*>>,
-                                   int> = 0>
-inline std::ostream&
-gnc_option_to_scheme (std::ostream& oss, const OptType& opt)
-{
-    auto value = opt.get_value();
-    auto type = opt.get_ui_type();
-    if (type == GncOptionUIType::COMMODITY || type == GncOptionUIType::CURRENCY)
-    {
-        if (type == GncOptionUIType::COMMODITY)
-        {
-            oss << commodity_scm_intro;
-            oss << "\"" <<
-                gnc_commodity_get_namespace(GNC_COMMODITY(value)) << "\" ";
-        }
-
-        oss << "\"" << gnc_commodity_get_mnemonic(GNC_COMMODITY(value)) << "\"";
-
-        if (type == GncOptionUIType::COMMODITY)
-        {
-            oss << ")";
-        }
-        return oss;
-    }
-
-    if constexpr (std::is_same_v<std::decay_t<decltype(value)>, std::string>)
-    {
-        if (type == GncOptionUIType::COLOR)
-            return output_color_value(oss, value);
-    }
-
-    oss << "\"" << qof_instance_to_string(value) << "\"";
-    return oss;
-}
-
-template<class OptType,
-         typename std::enable_if_t<
-             std::is_same_v<std::decay_t<OptType>,
-                            GncOptionValidatedValue<const QofInstance*>> ||
-             std::is_same_v<std::decay_t<OptType>,
-                            GncOptionValue<const QofInstance*>>, int> = 0>
-inline std::istream&
-gnc_option_from_scheme (std::istream& iss, OptType& opt)
-{
-    std::string instr;
-    auto type = opt.get_ui_type();
-    if (type == GncOptionUIType::COMMODITY || type == GncOptionUIType::CURRENCY)
-    {
-        std::string name_space, mnemonic;
-        if (type == GncOptionUIType::COMMODITY)
-        {
-            iss.ignore(strlen(commodity_scm_intro) + 1, '"');
-            std::getline(iss, name_space, '"');
-        }
-        else
-            name_space = GNC_COMMODITY_NS_CURRENCY;
-        iss.ignore(2, '"');
-        std::getline(iss, mnemonic, '"');
-
-        if (type == GncOptionUIType::COMMODITY)
-            iss.ignore(2, ')');
-        else
-            iss.ignore(1, '"');
-
-        instr = name_space + ":";
-        instr += mnemonic;
-     }
-    else
-    {
-        iss.ignore(1, '"');
-        std::getline(iss, instr, '"');
-    }
-    opt.set_value(qof_instance_from_string(instr, opt.get_ui_type()));
     return iss;
 }
 #endif // SWIG
@@ -807,70 +726,6 @@ operator>> <GncOptionMultichoiceValue>(std::istream& iss,
     return iss;
 }
 
-template<class OptType,
-         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionMultichoiceValue>,
-                                   int> = 0>
-inline std::ostream&
-gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
-{
-    auto indexes{opt.get_multiple()};
-    if (indexes.size() > 1)
-        oss << "'(";
-    bool first = true;
-    for (auto index : indexes)
-    {
-        if (first)
-            first = false;
-        else
-            oss << " ";
-        oss << "'" << opt.permissible_value(index);
-    }
-    if (indexes.size() > 1)
-        oss << ')';
-    return oss;
-}
-
-template<class OptType,
-         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionMultichoiceValue>,
-                                   int> = 0>
-inline std::istream&
-gnc_option_from_scheme(std::istream& iss, OptType& opt)
-{
-    iss.ignore(3, '\'');
-    auto c{iss.peek()};
-    if (static_cast<char>(c) == '(')
-    {
-        GncMultichoiceOptionIndexVec values;
-        iss.ignore(3, '\'');
-        while (true)
-        {
-            std::string str;
-            std::getline(iss, str, ' ');
-            if (!str.empty())
-            {
-                if (str.back() == ')')
-                {
-                    str.pop_back();
-                    break;
-                }
-                values.push_back(opt.permissible_value_index(str.c_str()));
-                iss.ignore(2, '\'');
-            }
-            else
-                break;
-        }
-        opt.set_multiple(values);
-    }
-    else
-    {
-        std::string str;
-        std::getline(iss, str, ' ');
-        opt.set_value(str);
-    }
-    return iss;
-}
 
 using GncOptionAccountList = std::vector<const Account*>;
 
@@ -998,54 +853,6 @@ operator>> <GncOptionAccountListValue>(std::istream& iss,
     return iss;
 }
 
-template<class OptType,
-         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionAccountListValue>,
-                                   int> = 0>
-inline std::ostream&
-gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
-{
-    auto values{opt.get_value()};
-    oss << "'(\"";
-    bool first = true;
-    for (auto value : values)
-    {
-        if (first)
-            first = false;
-        else
-            oss << " \"";
-        oss << qof_instance_to_string(QOF_INSTANCE(value)) << '"';
-    }
-    oss << ')';
-    return oss;
-}
-
-template<class OptType,
-         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionAccountListValue>,
-                                   int> = 0>
-inline std::istream&
-gnc_option_from_scheme(std::istream& iss, OptType& opt)
-{
-    GncOptionAccountList values;
-    iss.ignore(3, '"');
-    while (true)
-    {
-        std::string str;
-        std::getline(iss, str, '"');
-        if (!str.empty())
-        {
-            values.emplace_back((Account*)qof_instance_from_string(str, opt.get_ui_type()));
-            iss.ignore(2, '"');
-        }
-        else
-            break;
-    }
-    opt.set_value(values);
-    iss.ignore(1, ')');
-    return iss;
-}
-
 class GncOptionAccountSelValue : public OptionClassifier
 {
 public:
@@ -1126,46 +933,6 @@ operator>> <GncOptionAccountSelValue>(std::istream& iss,
         value = (Account*)qof_instance_from_string(str, opt.get_ui_type());
     opt.set_value(value);
     iss.clear();
-    return iss;
-}
-
-template<class OptType,
-         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionAccountSelValue>,
-                                   int> = 0>
-inline std::ostream&
-gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
-{
-    auto value{opt.get_value()};
-    oss << "'(\"";
-        oss << qof_instance_to_string(QOF_INSTANCE(value)) << '"';
-    oss << ')';
-    return oss;
-}
-
-template<class OptType,
-         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
-                                                  GncOptionAccountSelValue>,
-                                   int> = 0>
-inline std::istream&
-gnc_option_from_scheme(std::istream& iss, OptType& opt)
-{
-    const Account* value;
-    iss.ignore(3, '"');
-    while (true)
-    {
-        std::string str;
-        std::getline(iss, str, '"');
-        if (!str.empty())
-        {
-            value = (Account*)qof_instance_from_string(str, opt.get_ui_type());
-            iss.ignore(2, '"');
-        }
-        else
-            break;
-    }
-    opt.set_value(value);
-    iss.ignore(1, ')');
     return iss;
 }
 
@@ -1312,45 +1079,4 @@ operator>> <GncOptionDateValue>(std::istream& iss,
 /** QofQuery Options
  */
 
-inline std::istream&
-gnc_option_from_scheme(std::istream& iss, GncOptionValue<const GncOwner*>& opt)
-{
-//FIXME: Implement or maybe rethink.
-    return iss;
-}
-
-inline std::ostream&
-gnc_option_to_scheme(std::ostream& oss, GncOptionValue<const GncOwner*>& opt)
-{
-//FIXME: Implement or maybe rethink.
-    return oss;
-}
-
-inline std::istream&
-gnc_option_from_scheme(std::istream& iss, GncOptionValue<const QofQuery*>& opt)
-{
-//FIXME: Implement or maybe rethink.
-    return iss;
-}
-
-inline std::ostream&
-gnc_option_to_scheme(std::ostream& oss, GncOptionValue<const QofQuery*>& opt)
-{
-//FIXME: Implement or maybe rethink.
-    return oss;
-}
-
-inline std::istream&
-gnc_option_from_scheme(std::istream& iss, GncOptionValidatedValue<const QofQuery*>& opt)
-{
-//FIXME: Implement or maybe rethink.
-    return iss;
-}
-
-inline std::ostream&
-gnc_option_to_scheme(std::ostream& oss, GncOptionValidatedValue<const QofQuery*>& opt)
-{
-//FIXME: Implement or maybe rethink.
-    return oss;
-}
 #endif //GNC_OPTION_IMPL_HPP_

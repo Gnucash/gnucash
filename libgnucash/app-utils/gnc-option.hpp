@@ -157,9 +157,6 @@ public:
     void set_alternate(bool) noexcept;
     std::ostream& out_stream(std::ostream& oss) const;
     std::istream& in_stream(std::istream& iss);
-    std::ostream& to_scheme(std::ostream& oss) const;
-    std::istream& from_scheme(std::istream& iss);
-
 
     friend GncOptionVariant& swig_get_option(GncOption*);
 

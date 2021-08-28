@@ -584,18 +584,10 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     }
 %}
 
-%ignore gnc_option_to_scheme;
-%ignore gnc_option_from_scheme;
 /* GncOptionDB::register_option comes in GncOption* and GncOption&&
  * overloads. The latter isn't useful to SWIG, ignore it.
  */
 %ignore GncOptionDB::register_option(const char*, GncOption&&);
-/* GncOptionDB::save_to_scheme takes and returns a std::stream. Good luck
- * converting *that* to anything useful!
- */
-%ignore GncOptionDB::save_to_scheme(std::ostream&, const char*);
-%ignore GncOptionDB::save_option_scheme(std::ostream&, const char*, const std::string&, const std::string&);
-%ignore GncOptionDB::load_option_scheme(std::itream&);
 /* The following functions are overloaded in gnc-optiondb.hpp to provide both
  * GncOptionDB* and GncOptionDBPtr& versions. That confuses SWIG so ignore the
  * raw-ptr version.
@@ -837,6 +829,8 @@ inline SCM return_scm_value(ValueType value)
 
 %}
 %ignore GncOptionDBCallback;
+%ignore operator<(const GncOption&, const GncOption&);
+%ignore operator<(const GncOptionSectionPtr&, const GncOptionSectionPtr&);
 
 %include "gnc-option-date.hpp"
 %include "gnc-option.hpp"
@@ -1356,12 +1350,10 @@ inline SCM return_scm_value(ValueType value)
             });
     }
 
-    static std::string
+    std::string
     gnc_optiondb_save_to_scheme(GncOptionDBPtr& odb, const char* prolog)
     {
-        std::ostringstream oss;
-        odb->save_to_scheme(oss, prolog);
-        return oss.str();
+        return prolog;
     }
 %}
 
