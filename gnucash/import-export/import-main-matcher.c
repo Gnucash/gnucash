@@ -1898,7 +1898,10 @@ query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
     gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y, &x, &y);
     if (keyboard_tip || !gtk_tree_view_get_path_at_pos (tree_view, x, y, &path,
                                                         &column, NULL, NULL))
+    {
+        gtk_tree_path_free (path);
         return FALSE;
+    }
 
     // Get the iter pointing to our current column
     if (gtk_tree_model_get_iter(model, &iter, path) && column)

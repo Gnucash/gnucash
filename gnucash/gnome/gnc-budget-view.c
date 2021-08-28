@@ -945,19 +945,31 @@ query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
 
     if (keyboard_tip || !gtk_tree_view_get_path_at_pos (tree_view, x, y, &path,
                                                         &column, NULL, NULL))
+    {
+        gtk_tree_path_free (path);
         return FALSE;
+    }
 
     if (!column)
+    {
+        gtk_tree_path_free (path);
         return FALSE;
+    }
 
     period_num = GPOINTER_TO_UINT(g_object_get_data (G_OBJECT(column), "period_num"));
     if (!period_num && priv->period_col_list->data != column)
+    {
+        gtk_tree_path_free (path);
         return FALSE;
+    }
     account = gnc_tree_view_account_get_account_from_path (
                   GNC_TREE_VIEW_ACCOUNT(widget), path);
     note = gnc_budget_get_account_period_note (priv->budget, account, period_num);
     if (!note)
+    {
+        gtk_tree_path_free (path);
         return FALSE;
+    }
 
     gtk_tooltip_set_text (tooltip, note);
     gtk_tree_view_set_tooltip_cell (tree_view, tooltip, path, column, NULL);
