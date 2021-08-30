@@ -76,6 +76,7 @@ typedef struct gnc_commodityPrivate
     const char *cusip;                /* CUSIP or other identifying code */
     int         fraction;
     char       *unique_name;
+    char       *user_symbol;
 
     gboolean    quote_flag;	      /* user wants price quotes */
     gnc_quote_source *quote_source;   /* current/old source of quotes */
@@ -88,6 +89,9 @@ typedef struct gnc_commodityPrivate
     /* the default display_symbol, set in iso-4217-currencies at start-up */
     const char *default_symbol;
 } gnc_commodityPrivate;
+
+static const char*
+is_unset = "unset";
 
 #define GET_PRIVATE(o) \
     ((gnc_commodityPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_COMMODITY))
@@ -667,6 +671,7 @@ gnc_commodity_init(gnc_commodity* com)
     priv->quote_flag = 0;
     priv->quote_source = NULL;
     priv->quote_tz = CACHE_INSERT("");
+    priv->user_symbol = (char*) is_unset;
 
     reset_printname(priv);
     reset_unique_name(priv);
@@ -951,6 +956,10 @@ commodity_free(gnc_commodity * cm)
     g_free(priv->unique_name);
     priv->unique_name = NULL;
 
+    if (priv->user_symbol != is_unset)
+        g_free (priv->user_symbol);
+    priv->user_symbol = NULL;
+
 #ifdef ACCOUNTS_CLEANED_UP
     /* Account objects are not actually cleaned up when a book is closed (in fact
      * a memory leak), but commodities are, so in currently this warning gets hit
@@ -1182,14 +1191,17 @@ gnc_commodity_get_quote_tz(const gnc_commodity *cm)
 const char*
 gnc_commodity_get_user_symbol(const gnc_commodity *cm)
 {
-    GValue v = G_VALUE_INIT;
-    static char* retval = NULL;
-    if (!cm) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE(cm), &v, 1, "user_symbol");
-    g_free (retval);
-    retval = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v): NULL;
-    g_value_unset (&v);
-    return retval;
+    gnc_commodityPrivate* priv;
+    g_return_val_if_fail (GNC_IS_COMMODITY (cm), NULL);
+    priv = GET_PRIVATE(cm);
+    if (priv->user_symbol == is_unset)
+    {
+        GValue v = G_VALUE_INIT;
+        qof_instance_get_kvp (QOF_INSTANCE(cm), &v, 1, "user_symbol");
+        priv->user_symbol = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
+        g_value_unset (&v);
+    }
+    return priv->user_symbol;
 }
 
 /********************************************************************
@@ -1477,12 +1489,12 @@ void
 gnc_commodity_set_user_symbol(gnc_commodity * cm, const char * user_symbol)
 {
     struct lconv *lc;
-    GValue v = G_VALUE_INIT;
+    gnc_commodityPrivate* priv;
+
     if (!cm) return;
+    priv = GET_PRIVATE(cm);
 
     ENTER ("(cm=%p, symbol=%s)", cm, user_symbol ? user_symbol : "(null)");
-
-    gnc_commodity_begin_edit(cm);
 
     lc = gnc_localeconv();
     if (!user_symbol || !*user_symbol)
@@ -1494,15 +1506,33 @@ gnc_commodity_set_user_symbol(gnc_commodity * cm, const char * user_symbol)
 	user_symbol = NULL;
     else if (!g_strcmp0(user_symbol, gnc_commodity_get_default_symbol(cm)))
 	user_symbol = NULL;
+
+    if (priv->user_symbol != is_unset)
+    {
+        if (!g_strcmp0 (user_symbol, priv->user_symbol))
+        {
+            LEAVE ("gnc_commodity_set_user_symbol: no change");
+            return;
+        }
+        g_free (priv->user_symbol);
+    }
+
+    gnc_commodity_begin_edit (cm);
+
     if (user_symbol)
     {
+        GValue v = G_VALUE_INIT;
         g_value_init (&v, G_TYPE_STRING);
         g_value_set_string (&v, user_symbol);
         qof_instance_set_kvp (QOF_INSTANCE(cm), &v, 1, "user_symbol");
+        priv->user_symbol = g_strdup (user_symbol);
         g_value_unset (&v);
     }
     else
+    {
         qof_instance_set_kvp (QOF_INSTANCE(cm), NULL, 1, "user_symbol");
+        priv->user_symbol = NULL;
+    }
 
     mark_commodity_dirty(cm);
     gnc_commodity_commit_edit(cm);

@@ -55,6 +55,13 @@ extern "C" {
  * No one outside of the engine should ever include this file.
 */
 
+typedef enum
+{
+    Unset = -1,
+    False,
+    True
+} TriState;
+
 /** \struct Account */
 typedef struct AccountPrivate
 {
@@ -121,6 +128,13 @@ typedef struct AccountPrivate
 
     LotList   *lots;		/* list of lot pointers */
     GNCPolicy *policy;		/* Cached pointer to policy method */
+
+    TriState sort_reversed;
+    TriState equity_type;
+    char *notes;
+    char *color;
+    char *sort_order;
+    char *filter;
 
     /* The "mark" flag can be used by the user to mark this account
      * in any way desired.  Handy for specialty traversals of the
