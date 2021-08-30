@@ -85,10 +85,11 @@ if (HAVE_SRFI64)
     DEPENDS "${GUILE_DEPENDS};scm-srfi64-extras")
 
   gnc_add_scheme_test_targets(scm-test-gnc-optiondb
-    SOURCES "test-gnc-optiondb.scm"
+    SOURCES "test-gnc-optiondb.scm" "test-gnc-option-scheme-output.scm"
     OUTPUT_DIR "tests"
     DEPENDS "swig-apputils-guile-cpp;scm-srfi64-extras")
   gnc_add_scheme_tests("test-gnc-optiondb.scm")
+  gnc_add_scheme_tests("test-gnc-option-scheme-output.scm")
   gnc_add_scheme_tests("${test_app_utils_scheme_SRFI64_SOURCES}")
 endif()
 

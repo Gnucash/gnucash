@@ -54,6 +54,8 @@ static const QofLogModule log_module = "gnc.optiondb";
 SCM scm_init_sw_gnc_optiondb_module(void);
 %}
 
+%ignore gnc_get_current_session(void);
+
 %include <std_string.i>
 %import <base-typemaps.i>
 %import (module="sw_engine") <gnc-budget.h>
@@ -550,6 +552,7 @@ gnc_option_test_book_destroy(QofBook* book)
 %typemap(in) GncOptionAccountList& (GncOptionAccountList acclist)
 {
     auto len = scm_is_true($input) ? scm_to_size_t(scm_length($input)) : 0;
+    acclist.reserve(len);
     for (std::size_t i = 0; i < len; ++i)
     {
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
@@ -737,7 +740,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             reldate_str = scm_to_utf8_string(scm_symbol_to_string(reldate_scm));
         else
             reldate_str = scm_to_utf8_string(reldate_scm);
-        
+
         auto date_iter =
             std::find_if(reldate_values.begin(), reldate_values.end(),
                          [&reldate_scm](auto val)->bool {
@@ -971,6 +974,12 @@ inline SCM return_scm_value(ValueType value)
 %template(gnc_make_owner_option) gnc_make_option<const GncOwner*>;
 
 %extend GncOption {
+    bool is_budget_option()
+    {
+        auto uitype{$self->get_ui_type()};
+        return uitype == GncOptionUIType::BUDGET;
+    }
+
     SCM get_scm_value()
     {
         if (!$self)
@@ -992,6 +1001,41 @@ inline SCM return_scm_value(ValueType value)
                 auto value{option.get_default_value()};
                 return return_scm_value(value);
             }, swig_get_option($self));
+    }
+
+    SCM save_scm_value()
+    {
+        const SCM plain_format_str{scm_from_utf8_string("~s")};
+        const SCM ticked_format_str{scm_from_utf8_string("'~a")};
+//scm_simple_format needs a scheme list of arguments to match the format
+//placeholders.
+        auto value{scm_list_1(GncOption_get_scm_value($self))};
+        auto uitype{$self->get_ui_type()};
+        if (uitype == GncOptionUIType::STRING ||
+            uitype == GncOptionUIType::TEXT ||
+            uitype == GncOptionUIType::FONT ||
+            uitype == GncOptionUIType::BOOLEAN ||
+            uitype == GncOptionUIType::PIXMAP
+            )
+        {
+            return scm_simple_format(SCM_BOOL_F, plain_format_str, value);
+        }
+        else if (uitype == GncOptionUIType::ACCOUNT_LIST ||
+                 uitype == GncOptionUIType::ACCOUNT_SEL ||
+                 uitype == GncOptionUIType::INVOICE ||
+                 uitype == GncOptionUIType::TAX_TABLE ||
+                 uitype == GncOptionUIType::OWNER)
+        {
+            if (value && scm_is_true(value))
+                return scm_simple_format(SCM_BOOL_F, plain_format_str, value);
+            else
+                return scm_simple_format(SCM_BOOL_F, plain_format_str,
+                                         SCM_BOOL_F);
+        }
+        else
+        {
+            return scm_simple_format(SCM_BOOL_F, ticked_format_str, value);
+        }
     }
 
     void set_value_from_scm(SCM new_value)
@@ -1066,7 +1110,7 @@ inline SCM return_scm_value(ValueType value)
                             option.set_default_value(scm_absolute_date_to_time64(new_value));
                         else
                             option.set_default_value(scm_relative_date_get_period(new_value));
-                        return;
+                       return;
                     }
                     if constexpr (is_same_decayed_v<decltype(option),
                                   GncOptionMultichoiceValue>)
@@ -1137,6 +1181,30 @@ inline SCM return_scm_value(ValueType value)
 %template(gnc_register_number_range_option_int) gnc_register_number_range_option<int>;
 
 %inline %{
+    /* qof_book_set_data isn't exported by sw-engine and we need it to set up a
+     * commodity namespace table to test currencies.*/
+    static void
+    test_book_set_data(QofBook* book, const char* key, void* data)
+    {
+        qof_book_set_data(book, key, data);
+    }
+
+    static void
+    test_book_clear_data(QofBook* book, const char* key)
+    {
+        qof_book_set_data(book, key, nullptr);
+    }
+
+    static void
+    test_book_set_default_budget(QofBook* book, GncBudget* budget)
+    {
+        auto budget_guid{gnc_budget_get_guid(budget)};
+        qof_book_begin_edit(book);
+        qof_instance_set(QOF_INSTANCE(book), "default-budget",
+                         budget_guid, nullptr);
+        qof_book_commit_edit(book);
+    }
+
     static GncOption*
     gnc_make_account_list_option(const char* section,
                                  const char* name, const char* key,
@@ -1473,10 +1541,28 @@ inline SCM return_scm_value(ValueType value)
             });
     }
 
-    std::string
-    gnc_optiondb_save_to_scheme(GncOptionDBPtr& odb, const char* prolog)
+    /** Tailred for gnc:generate-restore-forms.
+     * @param section_op A function to be called on each section name
+     * @param option_op a function to be called on each option
+     */
+    static void
+    gnc_optiondb_foreach2(GncOptionDBPtr& odb, SCM section_op,
+                          SCM option_op)
     {
-        return prolog;
+        odb->foreach_section(
+            [&section_op, &option_op](const GncOptionSectionPtr& section)
+            {
+                auto scm_name{scm_from_utf8_string(section->get_name().c_str())};
+                scm_call_1(section_op, scm_name);
+                section->foreach_option(
+                    [&option_op](auto& option)
+                    {
+                        auto optvoidptr{reinterpret_cast<void*>(
+                                const_cast<GncOption*>(&option))};
+                        auto scm_opt{scm_from_pointer(optvoidptr, nullptr)};
+                        scm_call_1(option_op, scm_opt);
+                    });
+            });
     }
 %}
 

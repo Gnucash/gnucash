@@ -32,12 +32,6 @@
 (use-modules (ice-9 pretty-print))
 
 
-(define-public (gnc:value->string value)
-  (format #f "~s" value))
-
-(define-public (gnc:generate-restore-forms options name)
-  (let ((optiondb (options 'generate-restore-forms)))
-    (gnc-optiondb-save-to-scheme optiondb name)))
 
 (define-public (gnc:lookup-option options section name)
   (if options
@@ -136,6 +130,57 @@
                                   (gnc:option-value src-option)))))
     src-options)))
 
+;; Get scheme commands to set changed options, used to write a file that will
+;; restore a customized report or stylesheet.
+(define-public (gnc:value->string value)
+  (format #f "~s" value))
+
+(define-public (gnc:generate-restore-forms options toplevel-name)
+  (define (section-op section-name)
+    (display
+     (string-append "\n; Section: " section-name "\n\n")))
+
+  (define (gnc:option-is-budget? option)
+    (GncOption-is-budget-option option))
+
+  (define (option-op option)
+    (let ((value (gnc:option-value option))
+          (default-value (gnc:option-default-value option)))
+      (if (not (equal? value default-value))
+          (display (string-append
+                      "(let ((option (gnc:lookup-option " toplevel-name "\n"
+                      "                                 "
+                      (gnc:value->string (gnc:option-section option)) "\n"
+                      "                                 "
+                      (gnc:value->string (gnc:option-name option)) ")))\n"
+                      "  ("
+                      (cond
+                       ((gnc:option-is-budget? option)
+                       (let* ((budget (gnc:option-value option))
+                              (guid (gncBudgetGetGUID budget))
+                              (guid-string (gnc:value->string guid)))
+                              (if (string? guid-string)
+                                  (string-append
+                                   "(lambda (option) "
+                                   "(if option ((gnc:option-setter option) "
+                                   "(gnc-budget-lookup " guid-string
+                                   " (gnc-get-current-book)))))"
+                                   )
+                                  ("Failed to get GUID for budget option."))))
+                       (else
+                        (string-append
+                         "(lambda (o) (if o (gnc:option-set-value o "
+                         (GncOption-save-scm-value option) ")))"
+                        )))
+                      " option))\n\n")))))
+
+  (define (generate-forms)
+    (let ((odb (options 'generate-restore-forms)))
+      (gnc-optiondb-foreach2 odb section-op option-op)))
+
+  (with-output-to-string generate-forms))
+
+
 ;; FIXME: Fake callback functions for boolean-complex and multichoice-callback
 
 (define-public (gnc:options-register-callback section name callback options) (options 'register-callback) 1)
@@ -169,7 +214,7 @@
 (define-public (gnc:make-budget-option section name key docstring)
   (issue-deprecation-warning "gnc:make-budget-option is deprecated. Make and register the option in one command with gnc-register-color-option.")
   (let ((option (gnc-make-qofinstance-option section name key docstring #f (GncOptionUIType-BUDGET))))
-    (gnc:option-set-value option
+    (gnc:option-set-default-value option
                           (gnc-budget-get-default (gnc-get-current-book)))
     option))
 (define-public (gnc:make-commodity-option section name key docstring default)
