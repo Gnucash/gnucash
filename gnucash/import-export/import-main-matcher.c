@@ -867,6 +867,10 @@ get_action_for_path (GtkTreePath* path, GtkTreeModel *model)
     GtkTreeIter iter;
     gtk_tree_model_get_iter (model, &iter, path);
     gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
+    if (!trans_info)
+          // selected row is a potential match  (depth 2)
+          // instead of an imported transaction (depth 1)
+          return GNCImport_INVALID_ACTION;
     return gnc_import_TransInfo_get_action (trans_info);
 }
 
