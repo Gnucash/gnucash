@@ -1844,6 +1844,26 @@ xaccTransUnvoid (Transaction *trans)// C: 1  Local: 0:0:0
 */
 
 static void
+test_xaccTransSetDocLink (Fixture *fixture, gconstpointer pData)
+{
+    auto trans = fixture->txn;
+
+    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, NULL);
+
+    xaccTransSetDocLink (trans, "doclink");
+    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, "doclink");
+
+    xaccTransSetDocLink (trans, "unset");
+    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, "unset");
+
+    xaccTransSetDocLink (trans, "");
+    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, NULL);
+
+    xaccTransSetDocLink (trans, NULL);
+    g_assert_cmpstr (xaccTransGetDocLink (trans), ==, NULL);
+}
+
+static void
 test_xaccTransVoid (Fixture *fixture, gconstpointer pData)
 {
     /* Actual function variables start here. */
@@ -2045,6 +2065,7 @@ test_suite_transaction (void)
     GNC_TEST_ADD (suitename, "xaccTransRollbackEdit - Backend Errors", Fixture, NULL, setup, test_xaccTransRollbackEdit_BackendErrors, teardown);
     GNC_TEST_ADD (suitename, "xaccTransOrder_num_action", Fixture, NULL, setup, test_xaccTransOrder_num_action, teardown);
     GNC_TEST_ADD (suitename, "xaccTransGetTxnType", Fixture, NULL, setup, test_xaccTransGetTxnType, teardown);
+    GNC_TEST_ADD (suitename, "xaccTransSetDocLink", Fixture, NULL, setup, test_xaccTransSetDocLink, teardown);
     GNC_TEST_ADD (suitename, "xaccTransVoid", Fixture, NULL, setup, test_xaccTransVoid, teardown);
     GNC_TEST_ADD (suitename, "xaccTransReverse", Fixture, NULL, setup, test_xaccTransReverse, teardown);
     GNC_TEST_ADD (suitename, "xaccTransScrubGainsDate_no_dirty", GainsFixture, NULL, setup_with_gains, test_xaccTransScrubGainsDate_no_dirty, teardown_with_gains);
