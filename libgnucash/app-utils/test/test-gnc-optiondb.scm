@@ -202,9 +202,9 @@
                                              "baz" "Phony Option"
                                              (RelativeDatePeriod-TODAY)))
          (a-time (gnc-dmy2time64 11 07 2019)))
-    (test-equal (current-time) (gnc-option-value option-db "foo" "bar"))
+    (test-equal '(relative . today) (gnc-option-value option-db "foo" "bar"))
     (gnc-set-option option-db "foo" "bar" a-time)
-    (test-equal a-time (gnc-option-value option-db "foo" "bar")))
+    (test-equal `(absolute . ,a-time) (gnc-option-value option-db "foo" "bar")))
   (test-end "test-gnc-test-date-option"))
 
 (define (test-gnc-make-date-set-option)
@@ -212,7 +212,7 @@
   (let* ((option-db (new-gnc-optiondb))
          (date-opt (gnc-register-date-option-set
                     option-db "foo" "bar" "baz" "Phony Option"
-                    `(today
+                    '(today
                           start-this-month
                           start-prev-month
                           start-current-quarter
@@ -221,7 +221,7 @@
                           start-cal-year
                           start-prev-year
                           start-accounting-period) #t)))
-    (test-equal (gnc-accounting-period-fiscal-start)
+    (test-equal '(relative . start-accounting-period)
                 (gnc-option-value option-db "foo" "bar")))
   (test-end "test-gnc-test-date-set-option"))
 

@@ -427,6 +427,18 @@ gnc_option_test_book_destroy(QofBook* book)
     $1 = scm_is_signed_integer($input, INT64_MAX, INT64_MIN);
 }
 
+%typemap(in) RelativeDatePeriod (RelativeDatePeriod rdp)
+{
+      if (scm_is_integer($input))
+          rdp = (RelativeDatePeriod) scm_to_int($input);
+      else if (scm_is_symbol($input))
+          rdp = scm_relative_date_get_period($input);
+      else
+          rdp = RelativeDatePeriod::TODAY;
+
+      $1 = rdp;
+}
+
 %typemap(in) RelativeDatePeriodVec& (RelativeDatePeriodVec period_set)
 {
     auto len = scm_is_true($input) ? scm_to_size_t(scm_length($input)) : 0;
@@ -626,61 +638,149 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 
 %header %{
 
+    static std::vector<SCM> reldate_values{};
+    inline size_t index_of(RelativeDatePeriod per)
+    {
+        return static_cast<size_t>(per) + 1;
+    }
+    
+    static void init_reldate_values()
+    {
+        if (!reldate_values.empty())
+            return;
+        std::vector<SCM> tmp (relative_date_periods, SCM_BOOL_F);
+        using rdp = RelativeDatePeriod;
+        tmp[index_of(rdp::ABSOLUTE)] =
+            scm_from_utf8_symbol("absolute");
+        tmp[index_of(rdp::TODAY)] =
+            scm_from_utf8_symbol("today");
+        tmp[index_of(rdp::ONE_WEEK_AGO)] =
+            scm_from_utf8_symbol("one-week-ago");
+        tmp[index_of(rdp::ONE_WEEK_AHEAD)] =
+            scm_from_utf8_symbol("one-week-ahead");
+        tmp[index_of(rdp::ONE_MONTH_AGO)] =
+            scm_from_utf8_symbol("one-month-ago");
+        tmp[index_of(rdp::ONE_MONTH_AHEAD)] =
+            scm_from_utf8_symbol("one-month-ahead");
+        tmp[index_of(rdp::THREE_MONTHS_AGO)] =
+            scm_from_utf8_symbol("three-months-ago");
+        tmp[index_of(rdp::THREE_MONTHS_AHEAD)] =
+            scm_from_utf8_symbol("three-months-ahead");
+        tmp[index_of(rdp::SIX_MONTHS_AGO)] =
+            scm_from_utf8_symbol("six-months-ago");
+        tmp[index_of(rdp::SIX_MONTHS_AHEAD)] =
+            scm_from_utf8_symbol("six-months-ahead");
+        tmp[index_of(rdp::ONE_YEAR_AGO)] =
+            scm_from_utf8_symbol("one-year-ago");
+        tmp[index_of(rdp::ONE_YEAR_AHEAD)] =
+            scm_from_utf8_symbol("one-year-ahead");
+        tmp[index_of(rdp::START_THIS_MONTH)] =
+            scm_from_utf8_symbol("start-this-month");
+        tmp[index_of(rdp::END_THIS_MONTH)] =
+            scm_from_utf8_symbol("end-this-month");
+        tmp[index_of(rdp::START_PREV_MONTH)] =
+            scm_from_utf8_symbol("start-prev-month");
+        tmp[index_of(rdp::END_PREV_MONTH)] =
+            scm_from_utf8_symbol("end-prev-month");
+        tmp[index_of(rdp::START_NEXT_MONTH)] =
+            scm_from_utf8_symbol("start-next-month");
+        tmp[index_of(rdp::END_NEXT_MONTH)] =
+            scm_from_utf8_symbol("end-next-month");
+        tmp[index_of(rdp::START_CURRENT_QUARTER)] =
+            scm_from_utf8_symbol("start-current-quarter");
+        tmp[index_of(rdp::END_CURRENT_QUARTER)] =
+            scm_from_utf8_symbol("end-current-quarter");
+        tmp[index_of(rdp::START_PREV_QUARTER)] =
+            scm_from_utf8_symbol("start-prev-quarter");
+        tmp[index_of(rdp::END_PREV_QUARTER)] =
+            scm_from_utf8_symbol("end-prev-quarter");
+        tmp[index_of(rdp::START_NEXT_QUARTER)] =
+            scm_from_utf8_symbol("start-next-quarter");
+        tmp[index_of(rdp::END_NEXT_QUARTER)] =
+            scm_from_utf8_symbol("end-next-quarter");
+        tmp[index_of(rdp::START_CAL_YEAR)] =
+            scm_from_utf8_symbol("start-cal-year");
+        tmp[index_of(rdp::END_CAL_YEAR)] =
+            scm_from_utf8_symbol("end-cal-year");
+        tmp[index_of(rdp::START_PREV_YEAR)] =
+            scm_from_utf8_symbol("start-prev-year");
+        tmp[index_of(rdp::END_PREV_YEAR)] =
+            scm_from_utf8_symbol("end-prev-year");
+        tmp[index_of(rdp::START_NEXT_YEAR)] =
+            scm_from_utf8_symbol("start-next-year");
+        tmp[index_of(rdp::END_NEXT_YEAR)] =
+            scm_from_utf8_symbol("end-next-year");
+        tmp[index_of(rdp::START_ACCOUNTING_PERIOD)] =
+            scm_from_utf8_symbol("start-accounting-period");
+        tmp[index_of(rdp::END_ACCOUNTING_PERIOD)] =
+            scm_from_utf8_symbol("end-accounting-period");
+        reldate_values = std::move(tmp);
+    }
+
     inline static RelativeDatePeriod scm_relative_date_get_period(SCM date)
     {
-    static SCM reldate_values = SCM_BOOL_F;
+        init_reldate_values();
+        auto reldate_scm{scm_is_pair(date) ? scm_cdr(date) : date};
+        SCM reldate_val{SCM_BOOL_F};
+        if (scm_is_procedure(reldate_scm))
+            reldate_val = scm_call_0(reldate_scm);
+        if (scm_is_number(reldate_scm))
+            reldate_val = reldate_scm;
+        if (scm_is_number(reldate_val))
+        {
+            auto reldate_index = scm_to_int(reldate_val);
+            assert(reldate_index >= static_cast<int>(RelativeDatePeriod::ABSOLUTE) && reldate_index < static_cast<int>(relative_date_periods - 1));
+            return static_cast<RelativeDatePeriod>(reldate_index);
+        }
+        const char* reldate_str;
+        if (scm_is_symbol(reldate_scm))
+            reldate_str = scm_to_utf8_string(scm_symbol_to_string(reldate_scm));
+        else
+            reldate_str = scm_to_utf8_string(reldate_scm);
+        
+        auto date_iter =
+            std::find_if(reldate_values.begin(), reldate_values.end(),
+                         [&reldate_scm](auto val)->bool {
+                             return scm_is_eq(val, reldate_scm) == 1;
+                         });
+        if (date_iter == reldate_values.end())
+            return RelativeDatePeriod::ABSOLUTE;
+        return static_cast<RelativeDatePeriod>(date_iter - reldate_values.begin() - 1);
+    }
 
-    if (scm_is_false(reldate_values))
-        reldate_values = scm_c_eval_string(
-            "'((absolute RelativeDatePeriod-ABSOLUTE)"
-            "(today RelativeDatePeriod-TODAY)"
-            "(one-week-ago RelativeDatePeriod-ONE-WEEK-AGO)"
-            "(one-week-ahead RelativeDatePeriod-ONE-WEEK-AHEAD)"
-            "(one-month-ago RelativeDatePeriod-ONE-MONTH-AGO)"
-            "(one-month-ahead RelativeDatePeriod-ONE-MONTH-AHEAD)"
-            "(three-months-ago RelativeDatePeriod-THREE-MONTHS-AGO)"
-            "(three-months-ahead RelativeDatePeriod-THREE-MONTHS-AHEAD)"
-            "(six-months-ago RelativeDatePeriod-SIX-MONTHS-AGO)"
-            "(six-months-ahead RelativeDatePeriod-SIX-MONTHS-AHEAD)"
-            "(one-year-ago RelativeDatePeriod-ONE-YEAR-AGO)"
-            "(one-year-ahead RelativeDatePeriod-ONE-YEAR-AHEAD)"
-            "(start-this-month RelativeDatePeriod-START-THIS-MONTH)"
-            "(end-this-month RelativeDatePeriod-END-THIS-MONTH)"
-            "(start-prev-month RelativeDatePeriod-START-PREV-MONTH)"
-            "(end-prev-month RelativeDatePeriod-END-PREV-MONTH)"
-            "(start-next-month RelativeDatePeriod-START-NEXT-MONTH)"
-            "(end-next-month RelativeDatePeriod-END-NEXT-MONTH)"
-            "(start-current-quarter RelativeDatePeriod-START-CURRENT-QUARTER)"
-            "(end-current-quarter RelativeDatePeriod-END-CURRENT-QUARTER)"
-            "(start-prev-quarter RelativeDatePeriod-START-PREV-QUARTER)"
-            "(end-prev-quarter RelativeDatePeriod-END-PREV-QUARTER)"
-            "(start-next-quarter RelativeDatePeriod-START-NEXT-QUARTER)"
-            "(end-next-quarter RelativeDatePeriod-END-NEXT-QUARTER)"
-            "(start-cal-year RelativeDatePeriod-START-CAL-YEAR)"
-            "(end-cal-year RelativeDatePeriod-END-CAL-YEAR)"
-            "(start-prev-year RelativeDatePeriod-START-PREV-YEAR)"
-            "(end-prev-year RelativeDatePeriod-END-PREV-YEAR)"
-            "(start-next-year RelativeDatePeriod-START-NEXT-YEAR)"
-            "(end-next-year RelativeDatePeriod-END-NEXT-YEAR)"
-            "(start-accounting-period RelativeDatePeriod-START-ACCOUNTING-PERIOD)"
-            "(end-accounting-period RelativeDatePeriod-END-ACCOUNTING-PERIOD))");
-
-    auto reldate_scm{scm_is_pair(date) ? scm_cdr(date) : date};
-    auto reldate{scm_primitive_eval(scm_assq_ref(reldate_values,
-                                                 reldate_scm))};
-    return static_cast<RelativeDatePeriod>(scm_to_int(reldate));
-
+    inline static SCM scm_relative_date_from_period(RelativeDatePeriod period)
+    {
+        init_reldate_values();
+        return reldate_values[static_cast<size_t>(period) + 1];
     }
 
     inline static bool scm_date_absolute(SCM date)
     {
         if (scm_is_pair(date))
         {
-            auto car{scm_to_utf8_string(scm_symbol_to_string(scm_car(date)))};
-            if (strcmp(car, "relative") == 0)
-                return false;
+            if (scm_is_symbol(scm_car(date)))
+            {
+                auto car{scm_to_utf8_string(scm_symbol_to_string(scm_car(date)))};
+                auto cdr{scm_cdr(date)};
+                if (strcmp(car, "relative") == 0)
+                    return false;
+                if (strcmp(car, "absolute") == 0)
+                    return true;
+
+                assert(false);
+            }
+            else
+            {
+                auto cdr{scm_cdr(date)};
+                if (scm_is_symbol(cdr))
+                    return false;
+                if (scm_is_number(cdr))
+                    return true;
+
+                assert(false);
+            }
         }
-        return true;
+        return (!(scm_is_symbol(date) || scm_is_string(date)));
     }
 
     inline static time64 scm_absolute_date_to_time64(SCM date)
@@ -808,16 +908,39 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return scm_cons(desig, scm_from_int(val));
     }
 
+    static SCM
+    get_scm_value(const GncOptionDateValue& option)
+    {
+        if (option.get_period() == RelativeDatePeriod::ABSOLUTE)
+            return scm_cons(scm_from_utf8_symbol("absolute"),
+                            scm_from_value(option.get_value()));
+        else
+            return scm_cons(scm_from_utf8_symbol("relative"),
+                            scm_relative_date_from_period(option.get_period()));
+    }
+
+    static SCM
+    get_scm_default_value(const GncOptionDateValue& option)
+    {
+        if (option.get_default_period() == RelativeDatePeriod::ABSOLUTE)
+            return scm_cons(scm_from_utf8_symbol("absolute"),
+                            scm_from_value(option.get_default_value()));
+        else
+            return scm_cons(scm_from_utf8_symbol("relative"),
+                            scm_relative_date_from_period(option.get_default_period()));
+    }
+
 template <typename T>
-struct is_MultichoiceOrRange
+struct is_MultichoiceDateOrRange
 {
     static constexpr bool value =
         is_same_decayed_v<T, GncOptionMultichoiceValue> ||
-        is_same_decayed_v<T, GncOptionRangeValue<int>>;
+        is_same_decayed_v<T, GncOptionRangeValue<int>> ||
+        is_same_decayed_v<T, GncOptionDateValue>;
 };
 
 template <typename T>
-inline constexpr bool is_MultichoiceOrRange_v = is_MultichoiceOrRange<T>::value;
+inline constexpr bool is_MultichoiceDateOrRange_v = is_MultichoiceDateOrRange<T>::value;
 
 template <typename ValueType>
 inline SCM return_scm_value(ValueType value)
@@ -853,7 +976,7 @@ inline SCM return_scm_value(ValueType value)
         if (!$self)
             return SCM_BOOL_F;
         return std::visit([](const auto& option)->SCM {
-                if constexpr (is_MultichoiceOrRange_v<decltype(option)>)
+                if constexpr (is_MultichoiceDateOrRange_v<decltype(option)>)
                     return get_scm_value(option);
                 auto value{option.get_value()};
                 return return_scm_value(value);
@@ -864,7 +987,7 @@ inline SCM return_scm_value(ValueType value)
         if (!$self)
             return SCM_BOOL_F;
         return std::visit([](const auto& option)->SCM {
-                if constexpr (is_MultichoiceOrRange_v<decltype(option)>)
+                if constexpr (is_MultichoiceDateOrRange_v<decltype(option)>)
                     return get_scm_default_value(option);
                 auto value{option.get_default_value()};
                 return return_scm_value(value);

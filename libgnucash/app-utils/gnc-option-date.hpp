@@ -73,6 +73,9 @@ enum class RelativeDatePeriod : int
     END_ACCOUNTING_PERIOD,
 };
 
+constexpr unsigned relative_date_periods =
+    static_cast<unsigned>(RelativeDatePeriod::END_ACCOUNTING_PERIOD) + 2;
+
 using RelativeDatePeriodVec = std::vector<RelativeDatePeriod>;
 
 bool gnc_relative_date_is_single(RelativeDatePeriod);
