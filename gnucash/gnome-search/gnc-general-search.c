@@ -405,6 +405,7 @@ create_children (GNCGeneralSearch *gsl,
     g_signal_connect (G_OBJECT (gsl->entry), "focus-out-event",
                       G_CALLBACK (gnc_gsl_focus_out_cb), gsl);
 
+    g_object_unref (list_store);
     g_object_unref(completion);
     gtk_widget_show (gsl->entry);
 

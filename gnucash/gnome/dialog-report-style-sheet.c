@@ -458,6 +458,7 @@ gnc_style_sheet_select_dialog_destroy_cb (GtkWidget *widget, gpointer user_data)
 
     gnc_unregister_gui_component (ss->component_id);
 
+    g_object_unref (ss->list_store);
     if (ss->toplevel)
     {
         gtk_widget_destroy (ss->toplevel);
@@ -513,7 +514,6 @@ gnc_style_sheet_select_dialog_create (GtkWindow *parent)
     ss->list_view  = GTK_TREE_VIEW(gtk_builder_get_object (builder, "style_sheet_list_view"));
     ss->list_store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
     gtk_tree_view_set_model (ss->list_view, GTK_TREE_MODEL(ss->list_store));
-    g_object_unref (ss->list_store);
 
     renderer = gtk_cell_renderer_text_new ();
     gtk_tree_view_insert_column_with_attributes (ss->list_view, -1,

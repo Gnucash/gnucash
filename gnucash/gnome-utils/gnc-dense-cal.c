@@ -348,6 +348,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         gtk_tree_view_insert_column_with_attributes(tree_view, -1, _("Frequency"), gtk_cell_renderer_text_new(), "text", 1, NULL);
         gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW(tree_view)), GTK_SELECTION_NONE);
         g_object_set_data(G_OBJECT(dcal->transPopup), "model", tree_data);
+        g_object_unref (tree_data);
         gtk_container_add(GTK_CONTAINER(vbox), GTK_WIDGET(tree_view));
 
         gtk_container_add(GTK_CONTAINER(dcal->transPopup), vbox);

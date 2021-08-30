@@ -165,7 +165,6 @@ gnc_account_sel_init (GNCAccountSel *gas)
     widget = gtk_combo_box_new_with_model_and_entry (GTK_TREE_MODEL(gas->store));
     gas->combo = GTK_COMBO_BOX(widget);
     gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(widget), ACCT_COL_NAME);
-    g_object_unref (gas->store);
     g_signal_connect_swapped (gas->combo, "changed",
                               G_CALLBACK(combo_changed_cb), gas);
     gtk_container_add (GTK_CONTAINER(gas), widget);
@@ -416,6 +415,12 @@ gnc_account_sel_dispose (GObject *object)
     g_return_if_fail (GNC_IS_ACCOUNT_SEL(object));
 
     gas = GNC_ACCOUNT_SEL(object);
+
+    if (gas->store)
+    {
+        g_object_unref (gas->store);
+        gas->store = NULL;
+    }
 
     if (gas->eventHandlerId)
     {
