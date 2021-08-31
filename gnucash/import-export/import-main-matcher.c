@@ -867,6 +867,10 @@ get_action_for_path (GtkTreePath* path, GtkTreeModel *model)
     GtkTreeIter iter;
     gtk_tree_model_get_iter (model, &iter, path);
     gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
+    if (!trans_info)
+          // selected row is a potential match  (depth 2)
+          // instead of an imported transaction (depth 1)
+          return GNCImport_INVALID_ACTION;
     return gnc_import_TransInfo_get_action (trans_info);
 }
 
@@ -969,7 +973,6 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
                 GList* selected;
                 GtkTreeModel *model;
                 selected = gtk_tree_selection_get_selected_rows (selection, &model);
-                get_action_for_path (selected->data, model);
                 if (get_action_for_path (selected->data, model) == GNCImport_ADD)
                     gnc_gen_trans_view_popup_menu (treeview, event, info);
                 g_list_free_full (selected, (GDestroyNotify)gtk_tree_path_free);
