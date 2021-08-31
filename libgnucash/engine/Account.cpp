@@ -2483,6 +2483,8 @@ stripdup_or_null (const char *value)
     return nullptr;
 }
 
+// note the *value argument is expected to be either a strstripped
+// char* or nullptr, as returned by stripdup_or_null above.
 static void
 set_kvp_string_tag (Account *acc, const char *tag, const char *value)
 {
@@ -2491,18 +2493,11 @@ set_kvp_string_tag (Account *acc, const char *tag, const char *value)
     xaccAccountBeginEdit(acc);
     if (value)
     {
-        gchar *tmp = g_strstrip(g_strdup(value));
-        if (strlen (tmp))
-        {
-            GValue v = G_VALUE_INIT;
-            g_value_init (&v, G_TYPE_STRING);
-            g_value_set_string (&v, tmp);
-            qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {tag});
-            g_value_unset (&v);
-        }
-        else
-            qof_instance_set_path_kvp (QOF_INSTANCE (acc), NULL, {tag});
-        g_free(tmp);
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, G_TYPE_STRING);
+        g_value_set_string (&v, value);
+        qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {tag});
+        g_value_unset (&v);
     }
     else
     {
@@ -2530,7 +2525,7 @@ xaccAccountSetColor (Account *acc, const char *str)
     if (priv->color != is_unset)
         g_free (priv->color);
     priv->color = stripdup_or_null (str);
-    set_kvp_string_tag (acc, "color", str);
+    set_kvp_string_tag (acc, "color", priv->color);
 }
 
 void
@@ -2540,7 +2535,7 @@ xaccAccountSetFilter (Account *acc, const char *str)
     if (priv->filter != is_unset)
         g_free (priv->filter);
     priv->filter = stripdup_or_null (str);
-    set_kvp_string_tag (acc, "filter", str);
+    set_kvp_string_tag (acc, "filter", priv->filter);
 }
 
 void
@@ -2550,7 +2545,7 @@ xaccAccountSetSortOrder (Account *acc, const char *str)
     if (priv->sort_order != is_unset)
         g_free (priv->sort_order);
     priv->sort_order = stripdup_or_null (str);
-    set_kvp_string_tag (acc, "sort-order", str);
+    set_kvp_string_tag (acc, "sort-order", priv->sort_order);
 }
 
 void
@@ -2586,7 +2581,7 @@ xaccAccountSetNotes (Account *acc, const char *str)
     if (priv->notes != is_unset)
         g_free (priv->notes);
     priv->notes = stripdup_or_null (str);
-    set_kvp_string_tag (acc, "notes", str);
+    set_kvp_string_tag (acc, "notes", priv->notes);
 }
 
 void
@@ -4236,7 +4231,7 @@ xaccAccountSetIsOpeningBalance (Account *acc, gboolean val)
         return;
     auto priv = GET_PRIVATE (acc);
     priv->equity_type = val ? TriState::True : TriState::False;
-    set_kvp_string_tag(acc, "equity-type", val ? "opening-balance" : "");
+    set_kvp_string_tag(acc, "equity-type", val ? "opening-balance" : nullptr);
 }
 
 GNCPlaceholderType
