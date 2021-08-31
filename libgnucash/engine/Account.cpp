@@ -325,12 +325,12 @@ gnc_account_init(Account* acc)
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
 
-    priv->color == is_unset;
-    priv->sort_order == is_unset;
-    priv->notes == is_unset;
-    priv->filter == is_unset;
-    priv->equity_type == TriState::Unset;
-    priv->sort_reversed == TriState::Unset;
+    priv->color = (char*) is_unset;
+    priv->sort_order = (char*) is_unset;
+    priv->notes = (char*) is_unset;
+    priv->filter = (char*) is_unset;
+    priv->equity_type = TriState::Unset;
+    priv->sort_reversed = TriState::Unset;
 
     priv->splits = NULL;
     priv->sort_dirty = FALSE;
@@ -2470,6 +2470,21 @@ xaccAccountSetDescription (Account *acc, const char *str)
     xaccAccountCommitEdit(acc);
 }
 
+static char*
+stripdup_or_null (const char *value)
+{
+    if (value)
+    {
+        auto temp = g_strstrip (g_strdup (value));
+        if (*temp)
+            return temp;
+        g_free (temp);
+    }
+    return nullptr;
+}
+
+// note the *value argument is expected to be either a strstripped
+// char* or nullptr, as returned by stripdup_or_null above.
 static void
 set_kvp_string_tag (Account *acc, const char *tag, const char *value)
 {
@@ -2478,18 +2493,11 @@ set_kvp_string_tag (Account *acc, const char *tag, const char *value)
     xaccAccountBeginEdit(acc);
     if (value)
     {
-        gchar *tmp = g_strstrip(g_strdup(value));
-        if (strlen (tmp))
-        {
-            GValue v = G_VALUE_INIT;
-            g_value_init (&v, G_TYPE_STRING);
-            g_value_set_string (&v, tmp);
-            qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {tag});
-            g_value_unset (&v);
-        }
-        else
-            qof_instance_set_path_kvp (QOF_INSTANCE (acc), NULL, {tag});
-        g_free(tmp);
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, G_TYPE_STRING);
+        g_value_set_string (&v, value);
+        qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {tag});
+        g_value_unset (&v);
     }
     else
     {
@@ -2516,8 +2524,8 @@ xaccAccountSetColor (Account *acc, const char *str)
     auto priv = GET_PRIVATE (acc);
     if (priv->color != is_unset)
         g_free (priv->color);
-    priv->color = g_strdup (str);
-    set_kvp_string_tag (acc, "color", str);
+    priv->color = stripdup_or_null (str);
+    set_kvp_string_tag (acc, "color", priv->color);
 }
 
 void
@@ -2526,8 +2534,8 @@ xaccAccountSetFilter (Account *acc, const char *str)
     auto priv = GET_PRIVATE (acc);
     if (priv->filter != is_unset)
         g_free (priv->filter);
-    priv->filter = g_strdup (str);
-    set_kvp_string_tag (acc, "filter", str);
+    priv->filter = stripdup_or_null (str);
+    set_kvp_string_tag (acc, "filter", priv->filter);
 }
 
 void
@@ -2536,8 +2544,8 @@ xaccAccountSetSortOrder (Account *acc, const char *str)
     auto priv = GET_PRIVATE (acc);
     if (priv->sort_order != is_unset)
         g_free (priv->sort_order);
-    priv->sort_order = g_strdup (str);
-    set_kvp_string_tag (acc, "sort-order", str);
+    priv->sort_order = stripdup_or_null (str);
+    set_kvp_string_tag (acc, "sort-order", priv->sort_order);
 }
 
 void
@@ -2572,8 +2580,8 @@ xaccAccountSetNotes (Account *acc, const char *str)
     auto priv = GET_PRIVATE (acc);
     if (priv->notes != is_unset)
         g_free (priv->notes);
-    priv->notes = g_strdup (str);
-    set_kvp_string_tag (acc, "notes", str);
+    priv->notes = stripdup_or_null (str);
+    set_kvp_string_tag (acc, "notes", priv->notes);
 }
 
 void
@@ -4209,7 +4217,7 @@ xaccAccountGetIsOpeningBalance (const Account *acc)
     if (priv->equity_type == TriState::Unset)
     {
         auto equity_type = get_kvp_string_tag (acc, "equity-type");
-        priv->equity_type = g_strcmp0 (equity_type, "true") ?
+        priv->equity_type = g_strcmp0 (equity_type, "opening-balance") ?
             TriState::False : TriState::True;
         g_free (equity_type);
     }
@@ -4223,7 +4231,7 @@ xaccAccountSetIsOpeningBalance (Account *acc, gboolean val)
         return;
     auto priv = GET_PRIVATE (acc);
     priv->equity_type = val ? TriState::True : TriState::False;
-    set_kvp_string_tag(acc, "equity-type", val ? "opening-balance" : "");
+    set_kvp_string_tag(acc, "equity-type", val ? "opening-balance" : nullptr);
 }
 
 GNCPlaceholderType

@@ -32,6 +32,7 @@ extern "C"
 #include <ctype.h>
 #include "qof.h"
 #include "Account.h"
+#include "gnc-lot.h"
 #include "Scrub3.h"
 #include "cashobjects.h"
 #include "test-stuff.h"
@@ -41,6 +42,48 @@ extern "C"
 
 static gint transaction_num = 32;
 static gint	max_iterate = 1;
+
+
+static void
+test_lot_kvp ()
+{
+    QofSession *sess = get_random_session ();
+    QofBook *book = qof_session_get_book (sess);
+    GNCLot *lot = gnc_lot_new (book);
+
+    // title
+    g_assert_cmpstr (gnc_lot_get_title (lot), ==, NULL);
+
+    gnc_lot_set_title (lot, "");
+    g_assert_cmpstr (gnc_lot_get_title (lot), ==, "");
+
+    gnc_lot_set_title (lot, "doc");
+    g_assert_cmpstr (gnc_lot_get_title (lot), ==, "doc");
+
+    gnc_lot_set_title (lot, "unset");
+    g_assert_cmpstr (gnc_lot_get_title (lot), ==, "unset");
+
+    gnc_lot_set_title (lot, NULL);
+    g_assert_cmpstr (gnc_lot_get_title (lot), ==, NULL);
+
+    // notes
+    g_assert_cmpstr (gnc_lot_get_notes (lot), ==, NULL);
+
+    gnc_lot_set_notes (lot, "");
+    g_assert_cmpstr (gnc_lot_get_notes (lot), ==, "");
+
+    gnc_lot_set_notes (lot, "doc");
+    g_assert_cmpstr (gnc_lot_get_notes (lot), ==, "doc");
+
+    gnc_lot_set_notes (lot, "unset");
+    g_assert_cmpstr (gnc_lot_get_notes (lot), ==, "unset");
+
+    gnc_lot_set_notes (lot, NULL);
+    g_assert_cmpstr (gnc_lot_get_notes (lot), ==, NULL);
+
+    gnc_lot_destroy (lot);
+    qof_session_end (sess);
+}
 
 static void
 run_test (void)
@@ -94,6 +137,9 @@ main (int argc, char **argv)
         fflush(stdout);
         run_test ();
     }
+
+    test_lot_kvp ();
+
     /* 'erase' the recurring tag line with dummy spaces. */
     fprintf(stdout, "Lots: Test series complete.\n");
     fflush(stdout);
