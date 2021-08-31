@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-29 06:34+0000\n"
+"PO-Revision-Date: 2021-08-31 14:33+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -6797,27 +6797,27 @@ msgstr "选择要比较的科目"
 
 #: gnucash/gnome-search/search-date.c:196
 msgid "is before"
-msgstr "之前"
+msgstr "早于"
 
 #: gnucash/gnome-search/search-date.c:197
 msgid "is before or on"
-msgstr "先于或刚好"
+msgstr "早于或刚好"
 
 #: gnucash/gnome-search/search-date.c:198
 msgid "is on"
-msgstr "刚好"
+msgstr "在"
 
 #: gnucash/gnome-search/search-date.c:199
 msgid "is not on"
-msgstr "不刚好"
+msgstr "不在"
 
 #: gnucash/gnome-search/search-date.c:200
 msgid "is after"
-msgstr "之后"
+msgstr "晚于"
 
 #: gnucash/gnome-search/search-date.c:201
 msgid "is on or after"
-msgstr "刚好或后于"
+msgstr "刚好或晚于"
 
 #: gnucash/gnome-search/search-double.c:185
 #: gnucash/gnome-search/search-int64.c:187
@@ -6882,15 +6882,15 @@ msgstr "大于等于"
 
 #: gnucash/gnome-search/search-numeric.c:250
 msgid "has credits or debits"
-msgstr "有贷方或借方"
+msgstr "借方或贷方"
 
 #: gnucash/gnome-search/search-numeric.c:251
 msgid "has debits"
-msgstr "有借方"
+msgstr "借方"
 
 #: gnucash/gnome-search/search-numeric.c:252
 msgid "has credits"
-msgstr "有贷方"
+msgstr "贷方"
 
 #: gnucash/gnome-search/search-reconciled.c:221
 msgid "Not Cleared"
@@ -16161,7 +16161,7 @@ msgstr "主窗格显示垂直网格线。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1957
 msgid "<b>Linked Files</b>"
-msgstr "<b>关联的凭证</b>"
+msgstr "<b>凭证路径</b>"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2052
