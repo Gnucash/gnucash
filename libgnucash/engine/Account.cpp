@@ -325,12 +325,12 @@ gnc_account_init(Account* acc)
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
 
-    priv->color == is_unset;
-    priv->sort_order == is_unset;
-    priv->notes == is_unset;
-    priv->filter == is_unset;
-    priv->equity_type == TriState::Unset;
-    priv->sort_reversed == TriState::Unset;
+    priv->color = (char*) is_unset;
+    priv->sort_order = (char*) is_unset;
+    priv->notes = (char*) is_unset;
+    priv->filter = (char*) is_unset;
+    priv->equity_type = TriState::Unset;
+    priv->sort_reversed = TriState::Unset;
 
     priv->splits = NULL;
     priv->sort_dirty = FALSE;
@@ -2470,6 +2470,19 @@ xaccAccountSetDescription (Account *acc, const char *str)
     xaccAccountCommitEdit(acc);
 }
 
+static char*
+stripdup_or_null (const char *value)
+{
+    if (value)
+    {
+        auto temp = g_strstrip (g_strdup (value));
+        if (*temp)
+            return temp;
+        g_free (temp);
+    }
+    return nullptr;
+}
+
 static void
 set_kvp_string_tag (Account *acc, const char *tag, const char *value)
 {
@@ -2516,7 +2529,7 @@ xaccAccountSetColor (Account *acc, const char *str)
     auto priv = GET_PRIVATE (acc);
     if (priv->color != is_unset)
         g_free (priv->color);
-    priv->color = g_strdup (str);
+    priv->color = stripdup_or_null (str);
     set_kvp_string_tag (acc, "color", str);
 }
 
@@ -2526,7 +2539,7 @@ xaccAccountSetFilter (Account *acc, const char *str)
     auto priv = GET_PRIVATE (acc);
     if (priv->filter != is_unset)
         g_free (priv->filter);
-    priv->filter = g_strdup (str);
+    priv->filter = stripdup_or_null (str);
     set_kvp_string_tag (acc, "filter", str);
 }
 
@@ -2536,7 +2549,7 @@ xaccAccountSetSortOrder (Account *acc, const char *str)
     auto priv = GET_PRIVATE (acc);
     if (priv->sort_order != is_unset)
         g_free (priv->sort_order);
-    priv->sort_order = g_strdup (str);
+    priv->sort_order = stripdup_or_null (str);
     set_kvp_string_tag (acc, "sort-order", str);
 }
 
@@ -2572,7 +2585,7 @@ xaccAccountSetNotes (Account *acc, const char *str)
     auto priv = GET_PRIVATE (acc);
     if (priv->notes != is_unset)
         g_free (priv->notes);
-    priv->notes = g_strdup (str);
+    priv->notes = stripdup_or_null (str);
     set_kvp_string_tag (acc, "notes", str);
 }
 
@@ -4209,7 +4222,7 @@ xaccAccountGetIsOpeningBalance (const Account *acc)
     if (priv->equity_type == TriState::Unset)
     {
         auto equity_type = get_kvp_string_tag (acc, "equity-type");
-        priv->equity_type = g_strcmp0 (equity_type, "true") ?
+        priv->equity_type = g_strcmp0 (equity_type, "opening-balance") ?
             TriState::False : TriState::True;
         g_free (equity_type);
     }
