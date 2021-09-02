@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-16 20:35+0000\n"
+"PO-Revision-Date: 2021-09-02 20:33+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -17134,7 +17134,7 @@ msgstr "Zahl, Datum, Zeit"
 # erreichbar. Können wir das vereinheitlichen?
 #: gnucash/gtkbuilder/dialog-preferences.glade:1417
 msgid "Perform account list _setup on new file"
-msgstr "Bei neuer Datei erstellen: Konten_einrichtung anzeigen"
+msgstr "Bei neuer Datei erstellen: Konten_einrichtung starten"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1423
 msgid "Present the new account list dialog when you choose File->New File."
