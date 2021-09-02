@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-22 11:32+0000\n"
+"PO-Revision-Date: 2021-08-30 10:32+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -6250,7 +6250,7 @@ msgid ""
 "You would be removing a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"תנועה עם פיצולים מותאמים תוסר! לא ממש רעיון טוב שכן זה יגרום ליתרה המותאמת "
+"תנועה עם פיצולים מותאמים, תוסר! לא ממש רעיון טוב שכן זה יגרום ליתרה המותאמת "
 "לצאת מאיזון."
 
 #: gnucash/gnome/gnc-split-reg.c:1014
@@ -6337,7 +6337,7 @@ msgid ""
 "You would be deleting a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"תנועה עם פיצולים מותאמים תמחק! לא ממש רעיון טוב שכן זה יגרום ליתרה מותאמת "
+"תנועה עם פיצולים מותאמים, תמחק! לא ממש רעיון טוב שכן זה יגרום ליתרה מותאמת "
 "לצאת מאיזון."
 
 #: gnucash/gnome/gnc-split-reg.c:1716
@@ -6350,11 +6350,11 @@ msgid ""
 "Select OK to temporarily clear filter and proceed,\n"
 "otherwise the last active cell will be selected."
 msgstr ""
-"פיצול היעד ביומן זה, מוסתר כעת.\n"
+"פיצול היעד מוסתר כעת, ביומן זה.\n"
 "\n"
 "%s\n"
 "\n"
-"נא להקיש על 'בסדר' לניקוי זמני של המסנן ולהמשיך.\n"
+"נא להקיש על 'בסדר', לניקוי זמני של המסנן ולהמשיך.\n"
 "אחרת התא הפעיל האחרון יבחר."
 
 #: gnucash/gnome/gnc-split-reg.c:2371
@@ -9006,7 +9006,7 @@ msgid ""
 "so might make future reconciliation difficult! Continue with this change?"
 msgstr ""
 "פעולה זו תשנה פיצול המקושר לפיצול שהותאם. ביצוע פעולה זו עלול להפוך התאמות "
-"העתידיות לקשה יותר! האם להמשיך בשינוי זה?"
+"העתידיות לקשה יותר! להמשיך בשינוי זה?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
 #: gnucash/register/ledger-core/split-register-model.c:2254
@@ -10105,8 +10105,8 @@ msgid ""
 "Set the prefix for gsettings schemas for gsettings queries. This can be "
 "useful to have a different settings tree while debugging."
 msgstr ""
-"הגדרת הקידומת בסכימות gsettings עבור שאילתות gsettings. עשוי להיות שימושי, "
-"שיהיה עץ הגדרות שונה, במהלך ניפוי תקלים."
+"הגדרת הקידומת בסכימות gsettings עבור שאילתות gsettings. בעת ניפוי תקלים, "
+"יותר נוח לעבוד מול עץ הגדרות שונה."
 
 #: gnucash/gnucash-core-app.cpp:344
 msgid "Hidden Options"
@@ -11194,7 +11194,7 @@ msgstr "אפשור דחיסת קובץ בעת כתיבה לקובץ נתונים
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:35
 msgid "Show auto-save explanation"
-msgstr "הצגת הסבר על אודות שמירה אוטומטית"
+msgstr "הצגת הסבר על שמירה אוטומטית"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:36
 msgid ""
@@ -11377,8 +11377,8 @@ msgid ""
 "account's custom color if set. This can serve as a visual aid to quickly "
 "identify accounts."
 msgstr ""
-"במידה והאפשרות הופעלה, החשבון יוצג בתרשים החשבונות בצבע מותאם אישית, ככל "
-"שנקבע לחשבון צבע. יכול לשמש כעזר חזותי לזיהוי חשבונות במהירות."
+"אם האפשרות הופעלה, החשבון יוצג בתרשים החשבונות בצבע מותאם אישית, ככל שנקבע "
+"לחשבון צבע. יכול לשמש כעזר חזותי לזיהוי חשבונות במהירות."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:115
 msgid "Use account colors in the tabs of open account registers"
@@ -23275,7 +23275,7 @@ msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
-"לעזרה אודות כתיבת דוחות, או לשיתוף הדוח החדש והמדליק שיצרתם, ניתן להיוועץ "
+"לעזרה על כתיבת דוחות, או לשיתוף הדוח החדש והמדליק שיצרתם, ניתן להיוועץ "
 "ברשימת הדיוור ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:339
@@ -28117,11 +28117,11 @@ msgstr "הצגת תנועות סגירה בלבד"
 
 #: gnucash/report/trep-engine.scm:382
 msgid "Show All Transactions"
-msgstr "שמירת כל התנועות"
+msgstr "הצגת כל התנועות"
 
 #: gnucash/report/trep-engine.scm:386
 msgid "Unreconciled only"
-msgstr "לא־מותאמים בלבד"
+msgstr "פתוחים בלבד"
 
 #: gnucash/report/trep-engine.scm:390
 msgid "Cleared only"

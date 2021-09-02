@@ -175,6 +175,27 @@ test_invoice_post ( Fixture *fixture, gconstpointer pData )
     g_assert(!gncInvoiceIsPosted(fixture->invoice));
 }
 
+
+static void
+test_invoice_doclink ( Fixture *fixture, gconstpointer pData )
+{
+    GncInvoice* inv = fixture->invoice;
+
+    g_assert_cmpstr (gncInvoiceGetDocLink (inv), ==, NULL);
+
+    gncInvoiceSetDocLink (inv, "doc");
+    g_assert_cmpstr (gncInvoiceGetDocLink (inv), ==, "doc");
+
+    gncInvoiceSetDocLink (inv, "unset");
+    g_assert_cmpstr (gncInvoiceGetDocLink (inv), ==, "unset");
+
+    gncInvoiceSetDocLink (inv, "");
+    g_assert_cmpstr (gncInvoiceGetDocLink (inv), ==, NULL);
+
+    gncInvoiceSetDocLink (inv, NULL);
+    g_assert_cmpstr (gncInvoiceGetDocLink (inv), ==, NULL);
+}
+
 static gboolean account_has_one_split (const Account *acc)
 {
     GList *splits = xaccAccountGetSplitList (acc);
@@ -214,6 +235,7 @@ test_suite_gncInvoice ( void )
     static InvoiceData pData = { FALSE, FALSE, { 1000, 100 }, { 2000, 100 } };  // Vendor bill
     GNC_TEST_ADD( suitename, "post/unpost", Fixture, &pData, setup, test_invoice_post, teardown );
 
+    GNC_TEST_ADD( suitename, "doclink", Fixture, &pData, setup, test_invoice_doclink, teardown );
     GNC_TEST_ADD( suitename, "post trans - vendor bill", Fixture, &pData, setup_with_invoice, test_invoice_posted_trans, teardown_with_invoice );
     pData.is_cn = TRUE;   // Vendor credit note
     GNC_TEST_ADD( suitename, "post trans - vendor credit note", Fixture, &pData, setup_with_invoice, test_invoice_posted_trans, teardown_with_invoice );

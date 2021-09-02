@@ -286,6 +286,8 @@ mark_account (Account *acc)
 /********************************************************************\
 \********************************************************************/
 
+static constexpr const char* is_unset {"unset"};
+
 /* GObject Initialization */
 G_DEFINE_TYPE_WITH_PRIVATE(Account, gnc_account, QOF_TYPE_INSTANCE)
 
@@ -322,6 +324,13 @@ gnc_account_init(Account* acc)
     priv->starting_cleared_balance = gnc_numeric_zero();
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
+
+    priv->color = (char*) is_unset;
+    priv->sort_order = (char*) is_unset;
+    priv->notes = (char*) is_unset;
+    priv->filter = (char*) is_unset;
+    priv->equity_type = TriState::Unset;
+    priv->sort_reversed = TriState::Unset;
 
     priv->splits = NULL;
     priv->sort_dirty = FALSE;
@@ -1365,8 +1374,22 @@ xaccFreeAccount (Account *acc)
     qof_string_cache_remove(priv->description);
     priv->accountName = priv->accountCode = priv->description = nullptr;
 
+    if (priv->color != is_unset)
+        g_free (priv->color);
+    if (priv->sort_order != is_unset)
+        g_free (priv->sort_order);
+    if (priv->notes != is_unset)
+        g_free (priv->notes);
+    if (priv->filter != is_unset)
+        g_free (priv->filter);
+
     /* zero out values, just in case stray
      * pointers are pointing here. */
+
+    priv->color == nullptr;
+    priv->sort_order == nullptr;
+    priv->notes == nullptr;
+    priv->filter == nullptr;
 
     priv->parent = nullptr;
     priv->children = nullptr;
@@ -2447,6 +2470,21 @@ xaccAccountSetDescription (Account *acc, const char *str)
     xaccAccountCommitEdit(acc);
 }
 
+static char*
+stripdup_or_null (const char *value)
+{
+    if (value)
+    {
+        auto temp = g_strstrip (g_strdup (value));
+        if (*temp)
+            return temp;
+        g_free (temp);
+    }
+    return nullptr;
+}
+
+// note the *value argument is expected to be either a strstripped
+// char* or nullptr, as returned by stripdup_or_null above.
 static void
 set_kvp_string_tag (Account *acc, const char *tag, const char *value)
 {
@@ -2455,18 +2493,11 @@ set_kvp_string_tag (Account *acc, const char *tag, const char *value)
     xaccAccountBeginEdit(acc);
     if (value)
     {
-        gchar *tmp = g_strstrip(g_strdup(value));
-        if (strlen (tmp))
-        {
-            GValue v = G_VALUE_INIT;
-            g_value_init (&v, G_TYPE_STRING);
-            g_value_set_string (&v, tmp);
-            qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {tag});
-            g_value_unset (&v);
-        }
-        else
-            qof_instance_set_path_kvp (QOF_INSTANCE (acc), NULL, {tag});
-        g_free(tmp);
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, G_TYPE_STRING);
+        g_value_set_string (&v, value);
+        qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {tag});
+        g_value_unset (&v);
     }
     else
     {
@@ -2476,36 +2507,52 @@ set_kvp_string_tag (Account *acc, const char *tag, const char *value)
     xaccAccountCommitEdit(acc);
 }
 
-static const char*
+static char*
 get_kvp_string_tag (const Account *acc, const char *tag)
 {
     GValue v = G_VALUE_INIT;
     if (acc == NULL || tag == NULL) return NULL;
     qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, {tag});
-    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    auto retval = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
+    g_value_unset (&v);
+    return retval;
 }
 
 void
 xaccAccountSetColor (Account *acc, const char *str)
 {
-    set_kvp_string_tag (acc, "color", str);
+    auto priv = GET_PRIVATE (acc);
+    if (priv->color != is_unset)
+        g_free (priv->color);
+    priv->color = stripdup_or_null (str);
+    set_kvp_string_tag (acc, "color", priv->color);
 }
 
 void
 xaccAccountSetFilter (Account *acc, const char *str)
 {
-    set_kvp_string_tag (acc, "filter", str);
+    auto priv = GET_PRIVATE (acc);
+    if (priv->filter != is_unset)
+        g_free (priv->filter);
+    priv->filter = stripdup_or_null (str);
+    set_kvp_string_tag (acc, "filter", priv->filter);
 }
 
 void
 xaccAccountSetSortOrder (Account *acc, const char *str)
 {
-    set_kvp_string_tag (acc, "sort-order", str);
+    auto priv = GET_PRIVATE (acc);
+    if (priv->sort_order != is_unset)
+        g_free (priv->sort_order);
+    priv->sort_order = stripdup_or_null (str);
+    set_kvp_string_tag (acc, "sort-order", priv->sort_order);
 }
 
 void
 xaccAccountSetSortReversed (Account *acc, gboolean sortreversed)
 {
+    auto priv = GET_PRIVATE (acc);
+    priv->sort_reversed = sortreversed ? TriState::True : TriState::False;
     set_kvp_string_tag (acc, "sort-reversed", sortreversed ? "true" : NULL);
 }
 
@@ -2530,7 +2577,11 @@ qofAccountSetParent (Account *acc, QofInstance *parent)
 void
 xaccAccountSetNotes (Account *acc, const char *str)
 {
-    set_kvp_string_tag (acc, "notes", str);
+    auto priv = GET_PRIVATE (acc);
+    if (priv->notes != is_unset)
+        g_free (priv->notes);
+    priv->notes = stripdup_or_null (str);
+    set_kvp_string_tag (acc, "notes", priv->notes);
 }
 
 void
@@ -3250,21 +3301,30 @@ const char *
 xaccAccountGetColor (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
-    return get_kvp_string_tag (acc, "color");
+    auto priv = GET_PRIVATE (acc);
+    if (priv->color == is_unset)
+        priv->color = get_kvp_string_tag (acc, "color");
+    return priv->color;
 }
 
 const char *
 xaccAccountGetFilter (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
-    return get_kvp_string_tag (acc, "filter");
+    auto priv = GET_PRIVATE (acc);
+    if (priv->filter == is_unset)
+        priv->filter = get_kvp_string_tag (acc, "filter");
+    return priv->filter;
 }
 
 const char *
 xaccAccountGetSortOrder (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
-    return get_kvp_string_tag (acc, "sort-order");
+    auto priv = GET_PRIVATE (acc);
+    if (priv->sort_order == is_unset)
+        priv->sort_order = get_kvp_string_tag (acc, "sort-order");
+    return priv->sort_order;
 }
 
 gboolean
@@ -3272,14 +3332,25 @@ xaccAccountGetSortReversed (const Account *acc)
 {
 
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    return g_strcmp0 (get_kvp_string_tag (acc, "sort-reversed"), "true") == 0;
+    auto priv = GET_PRIVATE (acc);
+    if (priv->sort_reversed == TriState::Unset)
+    {
+        auto sort_reversed = get_kvp_string_tag (acc, "sort-reversed");
+        priv->sort_reversed = g_strcmp0 (sort_reversed, "true") ?
+            TriState::False : TriState::True;
+        g_free (sort_reversed);
+    }
+    return (priv->sort_reversed == TriState::True);
 }
 
 const char *
 xaccAccountGetNotes (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
-    return get_kvp_string_tag (acc, "notes");
+    auto priv = GET_PRIVATE (acc);
+    if (priv->notes == is_unset)
+        priv->notes = get_kvp_string_tag (acc, "notes");
+    return priv->notes;
 }
 
 gnc_commodity *
@@ -4121,7 +4192,15 @@ xaccAccountGetIsOpeningBalance (const Account *acc)
 {
     if (GET_PRIVATE(acc)->type != ACCT_TYPE_EQUITY)
         return false;
-    return g_strcmp0(get_kvp_string_tag(acc, "equity-type"), "opening-balance") == 0;
+    auto priv = GET_PRIVATE(acc);
+    if (priv->equity_type == TriState::Unset)
+    {
+        auto equity_type = get_kvp_string_tag (acc, "equity-type");
+        priv->equity_type = g_strcmp0 (equity_type, "opening-balance") ?
+            TriState::False : TriState::True;
+        g_free (equity_type);
+    }
+    return (priv->equity_type == TriState::True);
 }
 
 void
@@ -4129,7 +4208,9 @@ xaccAccountSetIsOpeningBalance (Account *acc, gboolean val)
 {
     if (GET_PRIVATE(acc)->type != ACCT_TYPE_EQUITY)
         return;
-    set_kvp_string_tag(acc, "equity-type", val ? "opening-balance" : "");
+    auto priv = GET_PRIVATE (acc);
+    priv->equity_type = val ? TriState::True : TriState::False;
+    set_kvp_string_tag(acc, "equity-type", val ? "opening-balance" : nullptr);
 }
 
 GNCPlaceholderType

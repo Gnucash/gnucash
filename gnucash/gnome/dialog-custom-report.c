@@ -423,6 +423,7 @@ custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpo
         {
             SCM guid = get_custom_report_selection(crd, _("You must select a report configuration to load."));
             custom_report_run_report (guid, crd);
+            gtk_tree_path_free (path);
             return TRUE;
         }
         else if (column == crd->editcol)
@@ -430,14 +431,17 @@ custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpo
             g_object_set(G_OBJECT(crd->namerenderer), "editable", TRUE, NULL);
             gtk_tree_view_set_cursor_on_cell (view, path, crd->namecol,
                                               crd->namerenderer, TRUE);
+            gtk_tree_path_free (path);
             return TRUE;
         }
         else if (column == crd->delcol)
         {
             SCM guid = get_custom_report_selection(crd, _("You must select a report configuration to delete."));
             custom_report_delete (guid, crd);
+            gtk_tree_path_free (path);
             return TRUE;
         }
+        gtk_tree_path_free (path);
     }
     return FALSE;
 }
@@ -489,10 +493,12 @@ custom_report_query_tooltip_cb (GtkTreeView  *view,
                 gtk_tooltip_set_text (tooltip, _("Edit report configuration name"));
             else if (column == crd->delcol)
                 gtk_tooltip_set_text (tooltip, _("Delete report configuration"));
+            gtk_tree_path_free (path);
             return TRUE;
         }
         else
             gtk_tooltip_set_text (tooltip, NULL);
+        gtk_tree_path_free (path);
     }
     return FALSE;
 }

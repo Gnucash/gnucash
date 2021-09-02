@@ -619,6 +619,7 @@ csv_import_close_handler (gpointer user_data)
     g_free (info->starting_dir);
     g_free (info->file_name);
     g_string_free (info->regexp, TRUE);
+    g_object_unref (info->store);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->assistant));
     gtk_widget_destroy (info->assistant);

@@ -756,9 +756,9 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     {
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
-    denom = denom_lcd(a, b, denom, how);
     try
     {
+        denom = denom_lcd(a, b, denom, how);
         if ((how & GNC_NUMERIC_DENOM_MASK) != GNC_HOW_DENOM_EXACT)
         {
             GncNumeric an (a), bn (b);
@@ -810,9 +810,9 @@ gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
     {
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
-    denom = denom_lcd(a, b, denom, how);
     try
     {
+        denom = denom_lcd(a, b, denom, how);
         if ((how & GNC_NUMERIC_DENOM_MASK) != GNC_HOW_DENOM_EXACT)
         {
             GncNumeric an (a), bn (b);
@@ -863,9 +863,10 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
     {
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
-    denom = denom_lcd(a, b, denom, how);
+
     try
     {
+        denom = denom_lcd(a, b, denom, how);
         if ((how & GNC_NUMERIC_DENOM_MASK) != GNC_HOW_DENOM_EXACT)
         {
             GncNumeric an (a), bn (b);
@@ -917,9 +918,9 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
     {
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
-    denom = denom_lcd(a, b, denom, how);
     try
     {
+        denom = denom_lcd(a, b, denom, how);
         if ((how & GNC_NUMERIC_DENOM_MASK) != GNC_HOW_DENOM_EXACT)
         {
             GncNumeric an (a), bn (b);

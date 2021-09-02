@@ -1600,6 +1600,7 @@ initialize_format_combobox (PrintCheckDialog *pcd)
                             GTK_TREE_MODEL(store));
     gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(pcd->format_combobox),
                                          format_is_a_separator, NULL, NULL);
+    g_object_unref (store);
 }
 
 
@@ -2608,6 +2609,7 @@ gnc_print_check_format_changed (GtkComboBox *widget,
     }
     gtk_list_store_append(GTK_LIST_STORE(p_store), &iter);
     gtk_list_store_set (GTK_LIST_STORE(p_store), &iter, 0, _("Custom"), -1);
+    g_object_unref (p_store);
 
     /* If there's only one thing in the position combobox, make it insensitive */
     sensitive = (pcd->position_max > 0);

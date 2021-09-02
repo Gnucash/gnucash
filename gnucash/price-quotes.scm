@@ -346,7 +346,13 @@
           (cond
            ((assq-ref quote-data (car price-syms)) =>
             (lambda (p)
-              (set! price (gnc-scm-to-numeric p))
+              ;; The OpenExchange exchange rate source in Finance::Quote produces
+              ;; some ridiculously precise prices like #e6.95253159056541e-5 which 
+              ;; produce a denominator greater than INT64_MAX.  Use the rationalize
+              ;; function to bring them back to reality.  The precision parameter is
+              ;; chosen empirically to give the best results.
+              (set! price (gnc-scm-to-numeric 
+                            (rationalize p 1/100000000000000)))
               (set! price-type (car price-types))))
            (else (lp (cdr price-syms) (cdr price-types))))))
 

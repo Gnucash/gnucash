@@ -299,6 +299,12 @@ gnc_combo_cell_gui_destroy (BasicCell* bcell)
             box->item_list = NULL;
         }
 
+        if (box && box->tmp_store)
+        {
+            g_object_unref (box->tmp_store);
+            box->tmp_store = NULL;
+        }
+
         /* allow the widget to be shown again */
         cell->cell.gui_realize = gnc_combo_cell_gui_realize;
         cell->cell.gui_move = NULL;

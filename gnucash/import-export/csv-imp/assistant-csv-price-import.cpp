@@ -513,6 +513,7 @@ GtkTreeModel *get_model (bool all_commodity)
     }
     g_list_free (commodity_list);
     g_list_free (namespace_list);
+    g_object_unref (store);
 
     return model;
 }
@@ -572,6 +573,8 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
         // Add Settings combo
         auto settings_store = gtk_list_store_new (2, G_TYPE_POINTER, G_TYPE_STRING);
         settings_combo = GTK_COMBO_BOX(gtk_combo_box_new_with_model_and_entry (GTK_TREE_MODEL(settings_store)));
+        g_object_unref (settings_store);
+
         gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(settings_combo), SET_NAME);
         gtk_combo_box_set_active (GTK_COMBO_BOX(settings_combo), 0);
 
@@ -1635,6 +1638,7 @@ void CsvImpPriceAssist::preview_refresh_table ()
     }
     gtk_tree_view_set_model (treeview, GTK_TREE_MODEL(store));
     gtk_tree_view_set_tooltip_column (treeview, PREV_COL_ERROR);
+    g_object_unref (store);
 
     /* Adjust treeview to go with the just created model. This consists of adding
      * or removing columns and resetting any parameters related to how
