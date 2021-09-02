@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-31 14:33+0000\n"
+"PO-Revision-Date: 2021-09-02 06:33+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -9239,7 +9239,7 @@ msgstr "重新计算(_R)"
 #: gnucash/report/trep-engine.scm:168 gnucash/report/trep-engine.scm:956
 #: gnucash/report/trep-engine.scm:1045
 msgid "Account Name"
-msgstr "科目名称"
+msgstr "名称"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:816
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2919
@@ -11330,7 +11330,7 @@ msgstr "最大的几个月又回到过去。"
 msgid ""
 "Dates will be completed so that they are close to the current date. Enter "
 "the maximum number of months to go backwards in time when completing dates."
-msgstr "录入月份和本月差值在限额内（小于等于），即本年；超出（大于）为明年。"
+msgstr "相隔月数小于等于设定值为本年，大于设定值为明年。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:180
 msgid "Show Horizontal Grid Lines"
@@ -15973,7 +15973,7 @@ msgstr "<b>日期补全</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1112
 msgid "When a date is entered without year, it should be taken"
-msgstr "输入的日期没有年份时，其应属于"
+msgstr "没有年份的日期，其应属于"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1128
 msgid ""
@@ -15984,9 +15984,7 @@ msgstr "日期年份补全为本年。"
 msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month"
-msgstr ""
-"从现在开始这个次数，它追溯到过去，\n"
-"它被认为是那个月的12个月内的日期"
+msgstr "相隔月数定年份"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1165
 msgid "Enter number of months."
@@ -17356,7 +17354,7 @@ msgstr "GnuCash 每日提示"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:26
 msgid "_Previous"
-msgstr "去年末(_P)"
+msgstr "上一个(_P)"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:41
 msgid "_Next"
