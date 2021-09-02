@@ -86,25 +86,6 @@ gnc_print_unstable_message(void)
               << bl::format (bl::translate ("To find the last stable version, please refer to {1}")) % PACKAGE_URL << "\n";
 }
 
-static gboolean
-try_load_config_array(const gchar *fns[])
-{
-    gchar *filename;
-    int i;
-
-    for (i = 0; fns[i]; i++)
-    {
-        filename = gnc_build_userdata_path(fns[i]);
-        if (gfec_try_load(filename))
-        {
-            g_free(filename);
-            return TRUE;
-        }
-        g_free(filename);
-    }
-    return FALSE;
-}
-
 static void
 update_message(const gchar *msg)
 {
@@ -112,52 +93,28 @@ update_message(const gchar *msg)
     g_message("%s", msg);
 }
 
-static void
-load_system_config(void)
+void
+Gnucash::gnc_load_scm_config (void)
 {
-    static int is_system_config_loaded = FALSE;
-    gchar *system_config_dir;
-    gchar *system_config;
-
-    if (is_system_config_loaded) return;
-
-    update_message("loading system configuration");
-    system_config_dir = gnc_path_get_pkgsysconfdir();
-    system_config = g_build_filename(system_config_dir, "config", nullptr);
-    is_system_config_loaded = gfec_try_load(system_config);
-    g_free(system_config_dir);
-    g_free(system_config);
-}
-
-static void
-load_user_config(void)
-{
-    /* Don't continue adding to this list. When 3.0 rolls around bump
-       the 2.4 files off the list. */
-    static const gchar *saved_report_files[] =
+    static auto is_system_config_loaded = false;
+    if (!is_system_config_loaded)
     {
-        SAVED_REPORTS_FILE, SAVED_REPORTS_FILE_OLD_REV, NULL
-    };
-    static const gchar *stylesheet_files[] = { "stylesheets-2.0", NULL};
-    static int is_user_config_loaded = FALSE;
-
-    if (is_user_config_loaded)
-        return;
-    else is_user_config_loaded = TRUE;
-
-    update_message("loading user configuration");
-    {
-        gchar *config_filename;
-        config_filename = g_build_filename (gnc_userconfig_dir (),
-                                                "config-user.scm", (char *)NULL);
-        gfec_try_load(config_filename);
-        g_free(config_filename);
+        update_message ("loading system scm configuration");
+        auto system_config_dir = gnc_path_get_pkgsysconfdir ();
+        auto system_config = g_build_filename (system_config_dir, "config", nullptr);
+        is_system_config_loaded = gfec_try_load (system_config);
+        g_free (system_config_dir);
+        g_free (system_config);
     }
 
-    update_message("loading saved reports");
-    try_load_config_array(saved_report_files);
-    update_message("loading stylesheets");
-    try_load_config_array(stylesheet_files);
+    static auto is_user_config_loaded = false;
+    if (!is_user_config_loaded)
+    {
+        update_message("loading user scm configuration");
+        auto config_filename = g_build_filename (gnc_userconfig_dir (), "config-user.scm", nullptr);
+        is_user_config_loaded = gfec_try_load (config_filename);
+        g_free (config_filename);
+    }
 }
 
 static void

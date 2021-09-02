@@ -74,56 +74,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static gchar *userdata_migration_msg = NULL;
 
 static void
-update_message(const gchar *msg)
-{
-    gnc_update_splash_screen(msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
-    g_message("%s", msg);
-}
-
-static void
-load_system_config(void)
-{
-    static int is_system_config_loaded = FALSE;
-    gchar *system_config_dir;
-    gchar *system_config;
-
-    if (is_system_config_loaded) return;
-
-    update_message("loading system configuration");
-    system_config_dir = gnc_path_get_pkgsysconfdir();
-    system_config = g_build_filename(system_config_dir, "config", nullptr);
-    is_system_config_loaded = gfec_try_load(system_config);
-    g_free(system_config_dir);
-    g_free(system_config);
-}
-
-static void
-load_user_config(void)
-{
-    /* Don't continue adding to this list. When 3.0 rolls around bump
-       the 2.4 files off the list. */
-    static const gchar *saved_report_files[] =
-    {
-        SAVED_REPORTS_FILE, SAVED_REPORTS_FILE_OLD_REV, NULL
-    };
-    static const gchar *stylesheet_files[] = { "stylesheets-2.0", NULL};
-    static int is_user_config_loaded = FALSE;
-
-    if (is_user_config_loaded)
-        return;
-    else is_user_config_loaded = TRUE;
-
-    update_message("loading user configuration");
-    {
-        gchar *config_filename;
-        config_filename = g_build_filename (gnc_userconfig_dir (),
-                                                "config-user.scm", (char *)NULL);
-        gfec_try_load(config_filename);
-        g_free(config_filename);
-    }
-}
-
-static void
 load_gnucash_plugins()
 {
     gnc_plugin_bi_import_create_plugin ();
@@ -207,11 +157,10 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     load_gnucash_plugins();
     load_gnucash_modules();
 
-    /* Load the config before starting up the gui. This insures that
+    /* Load the scm config files before starting up the gui. This ensures that
      * custom reports have been read into memory before the Reports
      * menu is created. */
-    load_system_config();
-    load_user_config();
+    Gnucash::gnc_load_scm_config();
 
     /* Setting-up the report menu must come after the module
      loading but before the gui initializat*ion. */
