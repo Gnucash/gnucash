@@ -1091,24 +1091,6 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
     }
 }
 
-static gint collect_trans_online_id(Transaction *trans, void *user_data)
-{
-    Split *split;
-    GHashTable *id_hash = user_data;
-    int i=0;
-    
-    const gchar* online_id = gnc_import_get_trans_online_id (trans);
-    if (online_id)
-        g_hash_table_add (id_hash, (void*) online_id);
-
-    for (GList *splits = xaccTransGetSplitList (trans); splits; splits = splits->next)
-    {
-        if (gnc_import_split_has_online_id (splits->data))
-            g_hash_table_add(id_hash, (void*) gnc_import_get_split_online_id (splits->data));
-    }
-    return 0;
-}
-
 /** Checks whether the given transaction's online_id already exists in
   its parent account. */
 gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_hash)
@@ -1124,14 +1106,19 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
     // No online id, no point in continuing. We'd crash if we tried.
     if (!gnc_import_get_split_online_id (source_split))
         return FALSE;
-    // Create a hash per account of a hash of all transactions IDs. Then the test below will be fast if
+    // Create a hash per account of a hash of all split IDs. Then the test below will be fast if
     // we have many transactions to import.
     dest_acct = xaccSplitGetAccount (source_split);
     if (!g_hash_table_contains (acct_id_hash, dest_acct))
     {
         GHashTable* new_hash = g_hash_table_new (g_str_hash, g_str_equal);
+        GList* split_list = xaccAccountGetSplitList(dest_acct);
         g_hash_table_insert (acct_id_hash, dest_acct, new_hash);
-        xaccAccountForEachTransaction (dest_acct, collect_trans_online_id, new_hash);
+        for (;split_list;split_list=split_list->next)
+        {
+            if (gnc_import_split_has_online_id (split_list->data))
+                g_hash_table_add (new_hash, (void*) gnc_import_get_split_online_id (split_list->data));
+        }
     }
     online_id_exists = g_hash_table_contains (g_hash_table_lookup (acct_id_hash, dest_acct),
                                               gnc_import_get_split_online_id (source_split));
