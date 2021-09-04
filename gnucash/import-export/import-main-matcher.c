@@ -76,6 +76,7 @@ struct _main_matcher_info
     gboolean add_toggled;     // flag to indicate that add has been toggled to stop selection
     gint id;
     GSList* temp_trans_list;  // Temporary list of imported transactions
+    GHashTable* acct_id_hash; // Hash table, per account, of list of transaction IDs.
     GSList* edited_accounts;  // List of accounts currently edited.
 };
 
@@ -143,6 +144,14 @@ static gboolean query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
                                             gpointer user_data);
 /* end local prototypes */
 
+static
+gboolean delete_hash (gpointer key, gpointer value, gpointer user_data)
+{
+    // Value is a hash table that needs to be destroyed.
+    g_hash_table_destroy (value);
+    return TRUE;
+}
+
 static void
 update_all_balances (GNCImportMainMatcher *info)
 {
@@ -209,6 +218,8 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     // We've deferred balance computations on many accounts. Let's do it now that we're done.
     update_all_balances (info);
 
+    g_hash_table_foreach_remove (info->acct_id_hash, delete_hash, NULL);
+    info->acct_id_hash = NULL;
     g_free (info);
 }
 
@@ -1133,6 +1144,8 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                       G_CALLBACK(gnc_gen_trans_onButtonPressed_cb), info);
     g_signal_connect (view, "popup-menu",
                       G_CALLBACK(gnc_gen_trans_onPopupMenu_cb), info);
+
+    info->acct_id_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 static void
@@ -1713,11 +1726,16 @@ gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui, Transaction
     g_assert (gui);
     g_assert (trans);
 
-    transaction_info = gnc_import_TransInfo_new (trans, NULL);
-    gnc_import_TransInfo_set_ref_id (transaction_info, ref_id);
-    // It's much faster to gather the imported transactions into a GSList than directly into the
-    // treeview.
-    gui->temp_trans_list = g_slist_prepend (gui->temp_trans_list, transaction_info);
+    if (gnc_import_exists_online_id (trans, gui->acct_id_hash))
+        return;
+    else
+    {
+        transaction_info = gnc_import_TransInfo_new (trans, NULL);
+        gnc_import_TransInfo_set_ref_id (transaction_info, ref_id);
+        // It's much faster to gather the imported transactions into a GSList than directly into the
+        // treeview.
+        gui->temp_trans_list = g_slist_prepend (gui->temp_trans_list, transaction_info);
+    }
     return;
 }
 
@@ -1781,6 +1799,8 @@ create_hash_of_potential_matches (GList *candidate_txns,
     {
         Account* split_account;
         GSList* split_list;
+        if (gnc_import_split_has_online_id (candidate->data))
+            continue;
         split_account = xaccSplitGetAccount (candidate->data);
         /* g_hash_table_steal_extended would do the two calls in one shot but is
          * not available until GLib 2.58.
