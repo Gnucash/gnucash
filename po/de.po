@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-09-02 20:33+0000\n"
+"PO-Revision-Date: 2021-09-05 21:35+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -18328,7 +18328,7 @@ msgstr "<b>Voreinstellungen Buchungseditor</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:545
 msgid "_Run when data file opened"
-msgstr "Seit-Letztem-Aufruf Fenster starten, wenn eine _Datei geöffnet wird"
+msgstr "Ausführen, wenn eine _Datei geöffnet wird"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:549
 msgid "Run the \"since last run\" process when a file is opened."
@@ -18388,10 +18388,8 @@ msgid "R_emind in advance"
 msgstr "Im Voraus er_innern"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Set 'Re_view Created Transactions' as default"
-msgstr "Erzeugte Buchungen _durchsehen"
+msgstr "'Erstellte _Buchungen durchsehen' als Standard festlegen"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
 msgid ""
