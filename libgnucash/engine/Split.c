@@ -2107,6 +2107,7 @@ xaccSplitGetOtherSplit (const Split *split)
     {
         Split *s = n->data;
         if ((s == split) ||
+            (!xaccTransStillHasSplit(trans, s)) ||
             (xaccAccountGetType (xaccSplitGetAccount (s)) == ACCT_TYPE_TRADING) ||
             (qof_instance_has_slot (QOF_INSTANCE (s), "lot-split")))
             continue;
