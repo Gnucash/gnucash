@@ -1048,6 +1048,93 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
     return FALSE;
 }
 
+/********************************************************************\
+ * check_trans_online_id() Callback function used by
+ * gnc_import_exists_online_id.  Takes pointers to transaction and split,
+ * returns 0 if their online_ids  do NOT match, or if the split
+ * belongs to the transaction
+\********************************************************************/
+static gint check_trans_online_id(Transaction *trans1, void *user_data)
+{
+    Account *account;
+    Split *split1;
+    Split *split2 = user_data;
+    const gchar *online_id1;
+    const gchar *online_id2;
+
+    account = xaccSplitGetAccount(split2);
+    split1 = xaccTransFindSplitByAccount(trans1, account);
+    if (split1 == split2)
+        return 0;
+
+    /* hack - we really want to iterate over the _splits_ of the account
+       instead of the transactions */
+    g_assert(split1 != NULL);
+
+    if (gnc_import_split_has_online_id(split1))
+        online_id1 = gnc_import_get_split_online_id(split1);
+    else
+        online_id1 = gnc_import_get_trans_online_id(trans1);
+
+    online_id2 = gnc_import_get_split_online_id(split2);
+
+    if ((online_id1 == NULL) ||
+            (online_id2 == NULL) ||
+            (strcmp(online_id1, online_id2) != 0))
+    {
+        return 0;
+    }
+    else
+    {
+        /*printf("test_trans_online_id(): Duplicate found\n");*/
+        return 1;
+    }
+}
+
+/** Checks whether the given transaction's online_id already exists in
+  its parent account. */
+gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_hash)
+{
+    gboolean online_id_exists = FALSE;
+    Account *dest_acct;
+    Split *source_split;
+
+    /* Look for an online_id in the first split */
+    source_split = xaccTransGetSplit(trans, 0);
+    g_assert(source_split);
+
+    // No online id, no point in continuing. We'd crash if we tried.
+    if (!gnc_import_get_split_online_id (source_split))
+        return FALSE;
+    // Create a hash per account of a hash of all split IDs. Then the test below will be fast if
+    // we have many transactions to import.
+    dest_acct = xaccSplitGetAccount (source_split);
+    if (!g_hash_table_contains (acct_id_hash, dest_acct))
+    {
+        GHashTable* new_hash = g_hash_table_new (g_str_hash, g_str_equal);
+        GList* split_list = xaccAccountGetSplitList(dest_acct);
+        g_hash_table_insert (acct_id_hash, dest_acct, new_hash);
+        for (;split_list;split_list=split_list->next)
+        {
+            if (gnc_import_split_has_online_id (split_list->data))
+                g_hash_table_add (new_hash, (void*) gnc_import_get_split_online_id (split_list->data));
+        }
+    }
+    online_id_exists = g_hash_table_contains (g_hash_table_lookup (acct_id_hash, dest_acct),
+                                              gnc_import_get_split_online_id (source_split));
+    
+    /* If it does, abort the process for this transaction, since it is
+       already in the system. */
+    if (online_id_exists == TRUE)
+    {
+        DEBUG("%s", "Transaction with same online ID exists, destroying current transaction");
+        xaccTransDestroy(trans);
+        xaccTransCommitEdit(trans);
+    }
+    return online_id_exists;
+}
+
+
 /* ******************************************************************
  */
 

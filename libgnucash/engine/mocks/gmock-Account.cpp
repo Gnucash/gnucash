@@ -60,6 +60,15 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
     return mockaccount ? mockaccount->for_each_transaction(proc, data) : 0;
 }
 
+SplitList *
+xaccAccountGetSplitList (const Account *account)
+{
+    SCOPED_TRACE("");
+    auto mockaccount = gnc_mockaccount(account);
+    return mockaccount ? mockaccount->xaccAccountGetSplitList() : nullptr;
+}
+
+
 GncImportMatchMap *
 gnc_account_imap_create_imap (Account *acc)
 {
