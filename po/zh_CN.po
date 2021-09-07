@@ -23,8 +23,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-09-02 06:33+0000\n"
-"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
+"PO-Revision-Date: 2021-09-07 10:34+0000\n"
+"Last-Translator: cjh <cjh@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -10877,13 +10877,13 @@ msgstr ""
 msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
-msgstr ""
+msgstr "将 \"审查创建的交易 \"设为 \"自上次运行以来 \"对话框的默认值。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
-msgstr ""
+msgstr "此设置控制 \"自上次运行以来 \"对话框是否默认设置 \"审查已创建的交易\"。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
@@ -11238,7 +11238,7 @@ msgstr "新打开的标签页前置，而非最后"
 msgid ""
 "If active, new tabs are opened adjacent to current tab. If inactive, the new "
 "tabs are opened instead at the end."
-msgstr ""
+msgstr "如果激活，新标签会在当前标签的旁边打开。如果不激活，新标签将在最后打开。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:940
@@ -16255,13 +16255,13 @@ msgstr "不可能的匹配日阈值 (_U)"
 msgid ""
 "A transaction whose date is within the threshold is likely to be a match. "
 "Default is 4 days."
-msgstr ""
+msgstr "日期在阈值内的交易可能是匹配的。默认为4天。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2340
 msgid ""
 "A transaction whose date is outside the threshold is unlikely to be a match. "
 "Default is 14 days."
-msgstr ""
+msgstr "日期在阈值之外的交易不太可能是匹配的。默认为14天。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2385
 msgid "<b>Checks</b>"
@@ -17201,7 +17201,7 @@ msgstr "默认复核已创建交易(_R)"
 msgid ""
 "Set 'Review Created Transactions' as the default in the 'Since Last Run' "
 "dialog."
-msgstr ""
+msgstr "在 \"自上次运行 \"对话框中，将 \"审查创建的交易 \"设置为默认值。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:765
 msgid "Edit Scheduled Transaction"
@@ -21966,7 +21966,7 @@ msgstr "价格信息的来源。"
 
 #: gnucash/report/options-utilities.scm:144
 msgid "Average cost of purchases weighted by volume"
-msgstr ""
+msgstr "按数量加权的平均采购成本"
 
 #: gnucash/report/options-utilities.scm:145
 msgid "Weighted average of all transactions in the past"
@@ -24535,7 +24535,7 @@ msgstr "以逐条求和计算么？"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:142
 msgid "Select which chart type to use."
-msgstr ""
+msgstr "选择要使用的图表类型。"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:144
 #: gnucash/report/reports/standard/category-barchart.scm:156
