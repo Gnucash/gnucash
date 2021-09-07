@@ -99,7 +99,8 @@ Gnucash::gnc_load_scm_config (void)
     static auto is_system_config_loaded = false;
     if (!is_system_config_loaded)
     {
-        update_message ("loading system scm configuration");
+        auto msg = bl::translate ("Loading system scm configuration...").str (gnc_get_boost_locale());
+        update_message (msg.c_str());
         auto system_config_dir = gnc_path_get_pkgsysconfdir ();
         auto system_config = g_build_filename (system_config_dir, "config", nullptr);
         is_system_config_loaded = gfec_try_load (system_config);
@@ -110,7 +111,8 @@ Gnucash::gnc_load_scm_config (void)
     static auto is_user_config_loaded = false;
     if (!is_user_config_loaded)
     {
-        update_message("loading user scm configuration");
+        auto msg = bl::translate ("Loading user scm configuration...").str (gnc_get_boost_locale());
+        update_message (msg.c_str());
         auto config_filename = g_build_filename (gnc_userconfig_dir (), "config-user.scm", nullptr);
         is_user_config_loaded = gfec_try_load (config_filename);
         g_free (config_filename);
