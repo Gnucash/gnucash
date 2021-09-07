@@ -721,11 +721,11 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.sxs.since-last-run/review-transactions">
-            <property name="label" translatable="yes">Set 'Re_view Created Transactions' as default</property>
+            <property name="label" translatable="yes">Re_view created transactions</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip_text" translatable="yes">Set 'Review Created Transactions' as the default in the 'Since Last Run' dialog.</property>
+            <property name="tooltip_text" translatable="yes">Set 'Review created transactions' as the default in the "since last run" dialog.</property>
             <property name="halign">start</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
