@@ -1116,6 +1116,7 @@ gnc_scm2query_and_terms (SCM and_terms, query_version_t vers)
             if (q_and)
             {
                 q_new = qof_query_merge (q, q_and, QOF_QUERY_AND);
+                qof_query_destroy (q_and);
 
                 if (q_new)
                 {
@@ -1158,6 +1159,7 @@ gnc_scm2query_or_terms (SCM or_terms, query_version_t vers)
             if (q_or)
             {
                 q_new = qof_query_merge (q, q_or, QOF_QUERY_OR);
+                qof_query_destroy (q_or);
 
                 if (q_new)
                 {
