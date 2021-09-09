@@ -136,10 +136,10 @@ gnc_report_system_file_stream_cb (const char *location, char ** data, int *len)
 static gboolean
 gnc_report_system_report_stream_cb (const char *location, char ** data, int *len)
 {
-    gboolean ok;
-    gchar *captured_str;
-
-    ok = gnc_run_report_id_string_with_error_handling (location, data, &captured_str);
+    gchar *captured_str = NULL;
+    gboolean ok =
+         gnc_run_report_id_string_with_error_handling (location, data,
+                                                       &captured_str);
 
     if (!ok)
     {
