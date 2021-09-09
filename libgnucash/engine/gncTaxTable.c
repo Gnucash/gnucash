@@ -704,7 +704,7 @@ GncTaxTableList * gncTaxTableGetTables (QofBook *book)
     if (!book) return NULL;
 
     bi = qof_book_get_data (book, _GNC_MOD_NAME);
-    return bi->tables;
+    return bi ? bi->tables : NULL;
 }
 
 const char *gncTaxTableGetName (const GncTaxTable *table)
