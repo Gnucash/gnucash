@@ -23,8 +23,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-09-07 10:34+0000\n"
-"Last-Translator: cjh <cjh@cjh0613.com>\n"
+"PO-Revision-Date: 2021-09-10 16:33+0000\n"
+"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -2162,7 +2162,7 @@ msgstr "入账日期"
 
 #: gnucash/gnome/dialog-invoice.c:872
 msgid "Post to Account"
-msgstr "入账到科目"
+msgstr "入账科目"
 
 #: gnucash/gnome/dialog-invoice.c:873
 msgid "Accumulate Splits?"
@@ -3643,7 +3643,7 @@ msgstr "打开查找项目对话框"
 #: gnucash/gnome/gnc-plugin-business.c:238
 #: gnucash/gnome/gnc-plugin-business.c:271
 msgid "_Process Payment..."
-msgstr "处理收付(_P)..."
+msgstr "收付(_P)..."
 
 #: gnucash/gnome/gnc-plugin-business.c:196
 #: gnucash/gnome/gnc-plugin-business.c:239
@@ -4946,7 +4946,7 @@ msgstr "显示员工报表"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:293
 msgid "New Voucher"
-msgstr "新建支出凭证"
+msgstr "新建报销"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:446
 msgid "Owners"
@@ -21347,7 +21347,7 @@ msgstr "小计"
 #: gnucash/report/reports/standard/owner-report.scm:56
 #: libgnucash/app-utils/business-options.scm:78
 msgid "Tax"
-msgstr "税务"
+msgstr "税额"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:127
 msgid "Billable?"
@@ -22101,7 +22101,7 @@ msgstr "收入支出(_I)"
 
 #: gnucash/report/report-core.scm:154
 msgid "_Taxes"
-msgstr "税务(_U)"
+msgstr "税额(_U)"
 
 #: gnucash/report/report-core.scm:155
 msgid "E_xamples"
