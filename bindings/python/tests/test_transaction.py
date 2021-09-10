@@ -2,6 +2,7 @@ from unittest import main
 
 from gnucash import Transaction, Book, Account, Split
 from unittest_support import *
+from datetime import datetime, timezone
 
 from test_book import BookSession
 
@@ -137,6 +138,13 @@ class TestTransaction(TransactionSession):
         self.assertEqual( None, self.trans.GetNotes() )
         self.trans.SetNotes(NOTE)
         self.assertEqual( NOTE, self.trans.GetNotes() )
+
+    def test_date(self):
+        ZERODATE=datetime.fromisoformat('1970-01-01 00:00:00 +00:00')
+        DATE=datetime.fromisoformat('2020-02-20 10:59:00 +00:00')
+        self.assertEqual(ZERODATE, self.trans.GetDate().astimezone(timezone.utc))
+        self.trans.SetDate(DATE.day, DATE.month, DATE.year)
+        self.assertEqual(DATE, self.trans.GetDate().astimezone(timezone.utc))
 
 if __name__ == '__main__':
     main()
