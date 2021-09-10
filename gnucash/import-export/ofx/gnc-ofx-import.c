@@ -76,7 +76,8 @@ typedef struct _ofx_info
     struct OfxStatementData* statement;     // Statement, if any
     gboolean run_reconcile;                 // If TRUE the reconcile window is opened after matching.
     GSList* file_list;                      // List of OFX files to import
-    GList* trans_list;
+    GList* trans_list;                      // We store the processed ofx transactions here
+    gint response;                          // Response sent by the match gui
 } ofx_info ;
 
 static void runMatcher(ofx_info* info, char * selected_filename, gboolean go_to_next_file);
@@ -1102,9 +1103,20 @@ gnc_ofx_process_next_file (GtkDialog *dialog, gpointer user_data)
 }
 
 static void
+gnc_ofx_on_match_click (GtkDialog *dialog, gint response_id, gpointer user_data)
+{
+    // Record the response of the user. If cancel we won't go to the next file, etc.
+    ofx_info* info = (ofx_info*) user_data;
+    info->response = response_id;
+}
+
+static void
 gnc_ofx_match_done (GtkDialog *dialog, gpointer user_data)
 {
     ofx_info* info = (ofx_info*) user_data;
+    
+    // The the user did not click OK, don't process the rest of the transaction, don't go to the next of xfile.
+    if (info->response != GTK_RESPONSE_OK) return;
     
     if (info->trans_list && g_list_length (info->trans_list))
     {
@@ -1191,9 +1203,14 @@ runMatcher(ofx_info* info, char * selected_filename, gboolean go_to_next_file)
     else
     {
         /* Show the match dialog and connect to the "destroy" signal so we can trigger a reconcile when
-         the user clicks OK when done matching transactions if required. */
+         the user clicks OK when done matching transactions if required. Connecting to response isn't enough
+         because only when the matcher is destroyed do imported transactions get recorded */
         g_signal_connect (G_OBJECT (gnc_gen_trans_list_widget (info->gnc_ofx_importer_gui)), "destroy",
                           G_CALLBACK (gnc_ofx_match_done), info);
+        
+        // Connect to response so we know if the user pressed "cancel".
+        g_signal_connect (G_OBJECT (gnc_gen_trans_list_widget (info->gnc_ofx_importer_gui)), "response",
+                          G_CALLBACK (gnc_ofx_on_match_click), info);
         
         gnc_gen_trans_list_show_all (info->gnc_ofx_importer_gui);
         
@@ -1311,6 +1328,7 @@ void gnc_file_ofx_import (GtkWindow *parent)
         info->run_reconcile = FALSE;
         info->file_list = selected_filenames;
         info->trans_list = NULL;
+        info->response = 0;
         // Call the aux import function.
         gnc_file_ofx_import_process_file (info);
     }
