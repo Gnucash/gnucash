@@ -108,9 +108,6 @@
 /* Define to 1 if you have the `getuid' function. */
 #cmakedefine HAVE_GETUID 1
 
-/* Configure g_settings_list_keys deprecation */
-#cmakedefine HAVE_GLIB_2_46 1
-
 /* Define to 1 if you have the <glob.h> header file. */
 #cmakedefine HAVE_GLOB_H 1
 

@@ -62,28 +62,17 @@ static gboolean gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key
     gchar **keys = NULL;
     gint i = 0;
     gboolean found = FALSE;
-#ifdef HAVE_GLIB_2_46
     GSettingsSchema *schema;
-#endif
 
     // Check if the key is valid key within settings
     if (!G_IS_SETTINGS(settings))
         return FALSE;
 
-#ifdef HAVE_GLIB_2_46
     g_object_get (settings, "settings-schema", &schema, NULL);
-
     if (!schema)
         return FALSE;
-#endif
 
-    // Get list of keys
-#ifdef HAVE_GLIB_2_46
-    keys = g_settings_schema_list_keys(schema);
-#else
-    keys = g_settings_list_keys(settings);
-#endif
-
+    keys = g_settings_schema_list_keys (schema);
     while (keys && keys[i])
     {
         if (!g_strcmp0(key, keys[i]))
@@ -93,8 +82,6 @@ static gboolean gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key
         }
         i++;
     }
-
-    // Free keys
     g_strfreev(keys);
 
     return found;
@@ -588,27 +575,17 @@ gnc_gsettings_reset_schema (const gchar *schema_str)
 {
     gchar **keys;
     gint counter = 0;
-
-#ifdef HAVE_GLIB_2_46
     GSettingsSchema *schema;
-#endif
     GSettings *settings = gnc_gsettings_get_settings_ptr (schema_str);
 
     if (!settings)
         return;
 
-#ifdef HAVE_GLIB_2_46
     g_object_get (settings, "settings-schema", &schema, NULL);
-
     if (!schema)
         return;
 
     keys = g_settings_schema_list_keys (schema);
-#else
-    keys = g_settings_list_keys (settings);
-#endif
-
-
     if (!keys)
         return;
 
