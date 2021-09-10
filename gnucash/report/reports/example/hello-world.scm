@@ -94,15 +94,6 @@
       (lambda () (cons 'absolute (current-time)))
       #f 'absolute #f ))
     
-    ;; This is another date option, but the user can also select
-    ;; the time.
-    (add-option
-     (gnc:make-date-option
-      (N_ "Hello, World!") (N_ "Time and Date Option")
-      "e" (N_ "This is a date option with time.")
-      (lambda () (cons 'absolute (current-time)))
-      #t 'absolute #f ))
-    
     (add-option
      (gnc:make-date-option
       (N_ "Hello, World!") (N_ "Combo Date Option")
@@ -234,8 +225,6 @@ option like this.")
         (string-val   (op-value "Hello, World!" "String Option"))
         (date-val     (gnc:date-option-absolute-time
                        (op-value "Hello, World!" "Just a Date Option")))
-        (date2-val    (gnc:date-option-absolute-time
-                       (op-value "Hello, World!" "Time and Date Option")))
         (rel-date-val (gnc:date-option-absolute-time
                        (op-value "Hello, World!" "Relative Date Option")))
         (combo-date-val (gnc:date-option-absolute-time
@@ -258,7 +247,6 @@ option like this.")
     ;; qof-print-date
     (let ((time-string (gnc-print-time64 (current-time) "%X"))
           (date-string (gnc-print-time64 date-val "%x"))
-          (date-string2 (gnc-print-time64 date2-val "%x %X"))
           (rel-date-string (gnc-print-time64 rel-date-val "%x"))
           (combo-date-string (gnc-print-time64 combo-date-val "%x")))
 
@@ -368,11 +356,6 @@ new, totally cool report, consult the mailing list ~a.")
          (gnc:html-markup/format
           (G_ "The date option is ~a.") 
           (gnc:html-markup-b date-string)))
-
-        (gnc:html-markup-p
-         (gnc:html-markup/format
-          (G_ "The date and time option is ~a.") 
-          (gnc:html-markup-b date-string2)))
 
         (gnc:html-markup-p
          (gnc:html-markup/format 
