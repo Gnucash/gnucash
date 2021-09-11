@@ -140,8 +140,8 @@ class TestTransaction(TransactionSession):
         self.assertEqual( NOTE, self.trans.GetNotes() )
 
     def test_date(self):
-        ZERODATE=datetime.fromisoformat('1970-01-01 00:00:00 +00:00')
-        DATE=datetime.fromisoformat('2020-02-20 10:59:00 +00:00')
+        ZERODATE=datetime(1970, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
+        DATE=datetime(2020, 2, 20, 10, 59, 0, tzinfo=timezone.utc)
         self.assertEqual(ZERODATE, self.trans.GetDate().astimezone(timezone.utc))
         self.trans.SetDate(DATE.day, DATE.month, DATE.year)
         self.assertEqual(DATE, self.trans.GetDate().astimezone(timezone.utc))
