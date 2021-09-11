@@ -211,6 +211,7 @@ SplitList * qof_query_last_run (QofQuery *q);
 SplitList * qof_query_run_subquery (QofQuery *q, const QofQuery *q);
 
 %typemap(in) QofQueryParamList * "$1 = gnc_query_scm2path($input);"
+%typemap(freearg) QofQueryParamList * "g_slist_free_full ($1, g_free);"
 
 %include <gnc-session.h>
 %include <Query.h>
