@@ -1208,8 +1208,7 @@ If you don't see your exchange listed, or none of the available choices are appr
           <object class="GtkLabel" id="label847694">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">
-If you are importing a QIF file from a bank or other financial institution, some of the transactions may already exist in your GnuCash accounts. To avoid duplication, GnuCash has tried to identify matches and needs your help to review them.
+            <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">If you are importing a QIF file from a bank or other financial institution, some of the transactions may already exist in your GnuCash accounts. To avoid duplication, GnuCash has tried to identify matches and needs your help to review them.
 
 On the next page you will be shown a list of imported transactions. As you select each one, a list of possible matches will be shown below it. If you find a correct match, click on it. Your selection will be confirmed by a check mark in the "Match?" column.
 
