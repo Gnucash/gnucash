@@ -2120,6 +2120,9 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
     if (recnData->delete_refresh)
         gnc_resume_gui_refresh ();
 
+    //Disable the actions, the handlers try to access recnData
+    gtk_action_group_set_sensitive(recnData->action_group, FALSE);
+
     g_free (recnData);
 }
 

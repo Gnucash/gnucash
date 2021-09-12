@@ -60,7 +60,7 @@ private:
     std::string m_dirname;
     std::string m_lockfile;
     std::string m_linkfile;
-    int m_lockfd;
+    int m_lockfd = -1;
 
     QofBook* m_book = nullptr;  /* The primary, main open book */
 };

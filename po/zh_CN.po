@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-06-30 07:34+0200\n"
-"PO-Revision-Date: 2021-08-31 14:33+0000\n"
+"PO-Revision-Date: 2021-09-10 16:33+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -2162,7 +2162,7 @@ msgstr "入账日期"
 
 #: gnucash/gnome/dialog-invoice.c:872
 msgid "Post to Account"
-msgstr "入账到科目"
+msgstr "入账科目"
 
 #: gnucash/gnome/dialog-invoice.c:873
 msgid "Accumulate Splits?"
@@ -3643,7 +3643,7 @@ msgstr "打开查找项目对话框"
 #: gnucash/gnome/gnc-plugin-business.c:238
 #: gnucash/gnome/gnc-plugin-business.c:271
 msgid "_Process Payment..."
-msgstr "处理收付(_P)..."
+msgstr "收付(_P)..."
 
 #: gnucash/gnome/gnc-plugin-business.c:196
 #: gnucash/gnome/gnc-plugin-business.c:239
@@ -4946,7 +4946,7 @@ msgstr "显示员工报表"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:293
 msgid "New Voucher"
-msgstr "新建支出凭证"
+msgstr "新建报销"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:446
 msgid "Owners"
@@ -9239,7 +9239,7 @@ msgstr "重新计算(_R)"
 #: gnucash/report/trep-engine.scm:168 gnucash/report/trep-engine.scm:956
 #: gnucash/report/trep-engine.scm:1045
 msgid "Account Name"
-msgstr "科目名称"
+msgstr "名称"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:816
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2919
@@ -10877,13 +10877,13 @@ msgstr ""
 msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
-msgstr ""
+msgstr "将 \"审查创建的交易 \"设为 \"自上次运行以来 \"对话框的默认值。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
-msgstr ""
+msgstr "此设置控制 \"自上次运行以来 \"对话框是否默认设置 \"审查已创建的交易\"。"
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
@@ -11238,7 +11238,7 @@ msgstr "新打开的标签页前置，而非最后"
 msgid ""
 "If active, new tabs are opened adjacent to current tab. If inactive, the new "
 "tabs are opened instead at the end."
-msgstr ""
+msgstr "如果激活，新标签会在当前标签的旁边打开。如果不激活，新标签将在最后打开。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:940
@@ -11330,7 +11330,7 @@ msgstr "最大的几个月又回到过去。"
 msgid ""
 "Dates will be completed so that they are close to the current date. Enter "
 "the maximum number of months to go backwards in time when completing dates."
-msgstr "录入月份和本月差值在限额内（小于等于），即本年；超出（大于）为明年。"
+msgstr "相隔月数小于等于设定值为本年，大于设定值为明年。"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:180
 msgid "Show Horizontal Grid Lines"
@@ -15973,7 +15973,7 @@ msgstr "<b>日期补全</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1112
 msgid "When a date is entered without year, it should be taken"
-msgstr "输入的日期没有年份时，其应属于"
+msgstr "没有年份的日期，其应属于"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1128
 msgid ""
@@ -15984,9 +15984,7 @@ msgstr "日期年份补全为本年。"
 msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month"
-msgstr ""
-"从现在开始这个次数，它追溯到过去，\n"
-"它被认为是那个月的12个月内的日期"
+msgstr "相隔月数定年份"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1165
 msgid "Enter number of months."
@@ -16257,13 +16255,13 @@ msgstr "不可能的匹配日阈值 (_U)"
 msgid ""
 "A transaction whose date is within the threshold is likely to be a match. "
 "Default is 4 days."
-msgstr ""
+msgstr "日期在阈值内的交易可能是匹配的。默认为4天。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2340
 msgid ""
 "A transaction whose date is outside the threshold is unlikely to be a match. "
 "Default is 14 days."
-msgstr ""
+msgstr "日期在阈值之外的交易不太可能是匹配的。默认为14天。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2385
 msgid "<b>Checks</b>"
@@ -17203,7 +17201,7 @@ msgstr "默认复核已创建交易(_R)"
 msgid ""
 "Set 'Review Created Transactions' as the default in the 'Since Last Run' "
 "dialog."
-msgstr ""
+msgstr "在 \"自上次运行 \"对话框中，将 \"审查创建的交易 \"设置为默认值。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:765
 msgid "Edit Scheduled Transaction"
@@ -17356,7 +17354,7 @@ msgstr "GnuCash 每日提示"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:26
 msgid "_Previous"
-msgstr "去年末(_P)"
+msgstr "上一个(_P)"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:41
 msgid "_Next"
@@ -21349,7 +21347,7 @@ msgstr "小计"
 #: gnucash/report/reports/standard/owner-report.scm:56
 #: libgnucash/app-utils/business-options.scm:78
 msgid "Tax"
-msgstr "税务"
+msgstr "税额"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:127
 msgid "Billable?"
@@ -21968,7 +21966,7 @@ msgstr "价格信息的来源。"
 
 #: gnucash/report/options-utilities.scm:144
 msgid "Average cost of purchases weighted by volume"
-msgstr ""
+msgstr "按数量加权的平均采购成本"
 
 #: gnucash/report/options-utilities.scm:145
 msgid "Weighted average of all transactions in the past"
@@ -22103,7 +22101,7 @@ msgstr "收入支出(_I)"
 
 #: gnucash/report/report-core.scm:154
 msgid "_Taxes"
-msgstr "税务(_U)"
+msgstr "税额(_U)"
 
 #: gnucash/report/report-core.scm:155
 msgid "E_xamples"
@@ -24537,7 +24535,7 @@ msgstr "以逐条求和计算么？"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:142
 msgid "Select which chart type to use."
-msgstr ""
+msgstr "选择要使用的图表类型。"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:144
 #: gnucash/report/reports/standard/category-barchart.scm:156

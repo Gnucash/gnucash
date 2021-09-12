@@ -719,10 +719,14 @@ the option '~a'."))
         (begin
           (rpterror-earlier "date" item (car full-list))
           0)))
-  (let* ((value (default-getter))
+  (if show-time
+      (issue-deprecation-warning
+       (format #f "Date options with time of day values are deprecated and will be removed in GnuCash 5.")))
+
+ (let* ((value (default-getter))
          (value->string (lambda ()
                           (string-append "'" (gnc:value->string value)))))
-    (gnc:make-option
+     (gnc:make-option
      section name sort-tag 'date documentation-string
      (lambda () value)
      (lambda (date)

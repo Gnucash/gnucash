@@ -612,7 +612,7 @@ gnc_transaction_get_commodity_imbalance (Transaction *trans,
 
 /* GFunc wrapper for xaccSplitDestroy */
 static void
-destroy_split (void* ptr, void* data)
+destroy_split (void* ptr)
 {
     Split *split = GNC_SPLIT (ptr);
     if (split)
@@ -642,7 +642,10 @@ xaccTransClearTradingSplits (Transaction *trans)
         return;
 
     xaccTransBeginEdit (trans);
-    g_list_foreach (trading_splits, destroy_split, NULL);
+    /* destroy_splits doesn't actually free the splits but this gets
+     * the list ifself freed.
+     */
+    g_list_free_full (trading_splits, destroy_split);
     xaccTransCommitEdit (trans);
 }
 

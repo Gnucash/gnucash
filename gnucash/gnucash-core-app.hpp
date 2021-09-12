@@ -70,5 +70,6 @@ private:
     char *sys_locale = nullptr;
 };
 
+void gnc_load_scm_config(void);
 }
 #endif

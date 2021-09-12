@@ -57,6 +57,29 @@ void gnc_import_set_acc_online_id (Account *account, const gchar *id)
     xaccAccountCommitEdit (account);
 }
 
+const gchar * gnc_import_get_trans_online_id (Transaction * transaction)
+{
+    gchar *id = NULL;
+    qof_instance_get (QOF_INSTANCE (transaction), "online-id", &id, NULL);
+    return id;
+}
+/* Not actually used */
+void gnc_import_set_trans_online_id (Transaction *transaction,
+				     const gchar *id)
+{
+    g_return_if_fail (transaction != NULL);
+    xaccTransBeginEdit (transaction);
+    qof_instance_set (QOF_INSTANCE (transaction), "online-id", id, NULL);
+    xaccTransCommitEdit (transaction);
+}
+
+gboolean gnc_import_trans_has_online_id(Transaction * transaction)
+{
+    const gchar * online_id;
+    online_id = gnc_import_get_trans_online_id(transaction);
+    return (online_id != NULL && strlen(online_id) > 0);
+}
+
 const gchar * gnc_import_get_split_online_id (Split * split)
 {
     gchar *id = NULL;

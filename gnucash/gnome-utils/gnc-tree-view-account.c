@@ -372,6 +372,7 @@ sort_by_xxx_value (xaccGetBalanceInCurrencyFn fn,
                    gpointer user_data)
 {
     const Account *account_a, *account_b;
+    const gnc_commodity *cur = gnc_default_currency();
     gnc_numeric balance_a, balance_b;
     gint result;
 
@@ -379,8 +380,8 @@ sort_by_xxx_value (xaccGetBalanceInCurrencyFn fn,
     sort_cb_setup (f_model, f_iter_a, f_iter_b, &account_a, &account_b);
 
     /* Get balances */
-    balance_a = gnc_ui_account_get_balance_full(fn, account_a, recurse, NULL, NULL);
-    balance_b = gnc_ui_account_get_balance_full(fn, account_b, recurse, NULL, NULL);
+    balance_a = gnc_ui_account_get_balance_full(fn, account_a, recurse, NULL, cur);
+    balance_b = gnc_ui_account_get_balance_full(fn, account_b, recurse, NULL, cur);
 
     result = gnc_numeric_compare(balance_a, balance_b);
     if (result != 0)
