@@ -8,11 +8,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-13 09:05+0200\n"
-"PO-Revision-Date: 2021-08-30 10:32+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2021-09-13 14:35+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -10042,16 +10042,12 @@ msgid "To find the last stable version, please refer to {1}"
 msgstr "לאיתור הגרסה היציבה האחרונה, נא לפנות ל {1}"
 
 #: gnucash/gnucash-core-app.cpp:102
-#, fuzzy
-#| msgid "Load report configuration"
 msgid "Loading system scm configuration..."
-msgstr "טעינת תצורת דוח"
+msgstr "הגדרות ה־scm של המערכת נטענות…"
 
 #: gnucash/gnucash-core-app.cpp:114
-#, fuzzy
-#| msgid "Load report configuration"
 msgid "Loading user scm configuration..."
-msgstr "טעינת תצורת דוח"
+msgstr "הגדרות ה־scm של המשתמש נטענות…"
 
 #: gnucash/gnucash-core-app.cpp:227
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -17576,8 +17572,6 @@ msgid "R_emind in advance"
 msgstr "ת_זכורת מראש"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Re_view created transactions"
 msgstr "_סקירת תנועות שנוצרו"
 
