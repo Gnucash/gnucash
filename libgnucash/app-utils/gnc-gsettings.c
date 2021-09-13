@@ -42,6 +42,7 @@
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
 
+#define GSET_SCHEMA_PREFIX "org.gnucash.GnuCash"
 #define CLIENT_TAG  "%s-%s-client"
 #define NOTIFY_TAG  "%s-%s-notify_id"
 
@@ -609,8 +610,10 @@ void gnc_gsettings_load_backend (void)
     if (g_strcmp0 (g_getenv ("GNC_UNINSTALLED"), "1") == 0)
         return;
 
-    if (!prefsbackend)
-        prefsbackend = g_new0 (PrefsBackend, 1);
+    if (prefsbackend)
+        g_free (prefsbackend);
+
+    prefsbackend = g_new0 (PrefsBackend, 1);
 
     prefsbackend->register_cb = gnc_gsettings_register_cb;
     prefsbackend->remove_cb_by_func = gnc_gsettings_remove_cb_by_func;

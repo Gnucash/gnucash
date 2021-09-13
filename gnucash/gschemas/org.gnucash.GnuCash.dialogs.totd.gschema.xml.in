@@ -1,5 +1,5 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
-  <schema id="org.gnucash.dialogs.totd" path="/org/gnucash/dialogs/tip-of-the-day/">
+  <schema id="org.gnucash.GnuCash.dialogs.totd" path="/org/gnucash/GnuCash/dialogs/tip-of-the-day/">
     <key name="current-tip" type="i">
       <default>0</default>
       <summary>The next tip to show.</summary>

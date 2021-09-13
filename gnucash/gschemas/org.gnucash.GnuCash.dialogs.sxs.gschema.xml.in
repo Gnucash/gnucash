@@ -1,10 +1,10 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
-  <schema id="org.gnucash.dialogs.sxs" path="/org/gnucash/dialogs/scheduled-trans/">
-    <child name="since-last-run" schema="org.gnucash.dialogs.sxs.since-last-run"/>
-    <child name="transaction-editor" schema="org.gnucash.dialogs.sxs.transaction-editor"/>
+  <schema id="org.gnucash.GnuCash.dialogs.sxs" path="/org/gnucash/GnuCash/dialogs/scheduled-trans/">
+    <child name="since-last-run" schema="org.gnucash.GnuCash.dialogs.sxs.since-last-run"/>
+    <child name="transaction-editor" schema="org.gnucash.GnuCash.dialogs.sxs.transaction-editor"/>
   </schema>
 
-  <schema id="org.gnucash.dialogs.sxs.since-last-run" path="/org/gnucash/dialogs/scheduled-trans/since-last-run/">
+  <schema id="org.gnucash.GnuCash.dialogs.sxs.since-last-run" path="/org/gnucash/GnuCash/dialogs/scheduled-trans/since-last-run/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -29,7 +29,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.sxs.transaction-editor" path="/org/gnucash/dialogs/scheduled-trans/transaction-editor/">
+  <schema id="org.gnucash.GnuCash.dialogs.sxs.transaction-editor" path="/org/gnucash/GnuCash/dialogs/scheduled-trans/transaction-editor/">
     <key name="create-auto" type="b">
       <default>false</default>
       <summary>Set the "auto create" flag by default</summary>

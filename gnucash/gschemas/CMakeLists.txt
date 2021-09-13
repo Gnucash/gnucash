@@ -1,22 +1,23 @@
 
 set(gschema_SOURCES
-  org.gnucash.dialogs.business.gschema.xml
-  org.gnucash.dialogs.checkprinting.gschema.xml
-  org.gnucash.dialogs.commodities.gschema.xml
-  org.gnucash.dialogs.export.csv.gschema.xml
-  org.gnucash.dialogs.gschema.xml
-  org.gnucash.dialogs.import.csv.gschema.xml
-  org.gnucash.dialogs.import.generic.gschema.xml
-  org.gnucash.dialogs.import.qif.gschema.xml
-  org.gnucash.dialogs.reconcile.gschema.xml
-  org.gnucash.dialogs.sxs.gschema.xml
-  org.gnucash.dialogs.totd.gschema.xml
-  org.gnucash.general.finance-quote.gschema.xml
-  org.gnucash.gschema.xml
-  org.gnucash.history.gschema.xml
-  org.gnucash.warnings.gschema.xml
-  org.gnucash.window.pages.account.tree.gschema.xml
-  org.gnucash.window.pages.gschema.xml
+  org.gnucash.GnuCash.deprecated.gschema.xml
+  org.gnucash.GnuCash.dialogs.business.gschema.xml
+  org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml
+  org.gnucash.GnuCash.dialogs.commodities.gschema.xml
+  org.gnucash.GnuCash.dialogs.export.csv.gschema.xml
+  org.gnucash.GnuCash.dialogs.gschema.xml
+  org.gnucash.GnuCash.dialogs.import.csv.gschema.xml
+  org.gnucash.GnuCash.dialogs.import.generic.gschema.xml
+  org.gnucash.GnuCash.dialogs.import.qif.gschema.xml
+  org.gnucash.GnuCash.dialogs.reconcile.gschema.xml
+  org.gnucash.GnuCash.dialogs.sxs.gschema.xml
+  org.gnucash.GnuCash.dialogs.totd.gschema.xml
+  org.gnucash.GnuCash.general.finance-quote.gschema.xml
+  org.gnucash.GnuCash.gschema.xml
+  org.gnucash.GnuCash.history.gschema.xml
+  org.gnucash.GnuCash.warnings.gschema.xml
+  org.gnucash.GnuCash.window.pages.account.tree.gschema.xml
+  org.gnucash.GnuCash.window.pages.gschema.xml
 )
 
 add_gschema_targets("${gschema_SOURCES}")

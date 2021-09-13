@@ -1,10 +1,10 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
-  <schema id="org.gnucash" path="/org/gnucash/">
-    <child name="general" schema="org.gnucash.general"/>
-    <child name="dev" schema="org.gnucash.dev"/>
+  <schema id="org.gnucash.GnuCash" path="/org/gnucash/GnuCash/">
+    <child name="general" schema="org.gnucash.GnuCash.general"/>
+    <child name="dev" schema="org.gnucash.GnuCash.dev"/>
   </schema>
 
-  <schema id="org.gnucash.general" path="/org/gnucash/general/">
+  <schema id="org.gnucash.GnuCash.general" path="/org/gnucash/GnuCash/general/">
     <key name="prefs-version" type="i">
       <default>0</default>
       <summary>The version of these settings</summary>
@@ -230,11 +230,11 @@
       <summary>Set book option on new files to use split "action" field for "Num" field on registers/reports</summary>
       <description>If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</description>
     </key>
-    <child name="register" schema="org.gnucash.general.register"/>
-    <child name="report" schema="org.gnucash.general.report"/>
+    <child name="register" schema="org.gnucash.GnuCash.general.register"/>
+    <child name="report" schema="org.gnucash.GnuCash.general.report"/>
   </schema>
 
-  <schema id="org.gnucash.general.register" path="/org/gnucash/general/register/">
+  <schema id="org.gnucash.GnuCash.general.register" path="/org/gnucash/GnuCash/general/register/">
     <key name="use-gnucash-color-theme" type="b">
       <default>true</default>
       <summary>Color the register using a gnucash specific color theme</summary>
@@ -342,7 +342,7 @@
     </key>
   </schema>
   
-  <schema id="org.gnucash.general.report" path="/org/gnucash/general/report/">
+  <schema id="org.gnucash.GnuCash.general.report" path="/org/gnucash/GnuCash/general/report/">
     <key name="use-new-window" type="b">
       <default>false</default>
       <summary>Create a new window for each new report</summary>
@@ -370,9 +370,9 @@
 This option allows you to scale reports up by the set factor.
 For example setting this to 2.0 will display reports at twice their typical size.</description>
     </key>
-    <child name="pdf-export" schema="org.gnucash.general.report.pdf-export"/>
+    <child name="pdf-export" schema="org.gnucash.GnuCash.general.report.pdf-export"/>
   </schema>
-  <schema id="org.gnucash.general.report.pdf-export" path="/org/gnucash/general/report/pdf-export/">
+  <schema id="org.gnucash.GnuCash.general.report.pdf-export" path="/org/gnucash/GnuCash/general/report/pdf-export/">
     <key name="filename-format" type="s">
       <default>'%1$s-%2$s-%3$s'</default>
       <summary>PDF export file name format</summary>
@@ -384,7 +384,7 @@ For example setting this to 2.0 will display reports at twice their typical size
       <description>This setting chooses the way dates are used in the filename of PDF export. Possible values for this setting are "locale" to use the system locale setting, "ce" for Continental Europe style dates, "iso" for ISO 8601 standard dates , "uk" for United Kingdom style dates, and "us" for United States style dates.</description>
     </key>
   </schema>
-  <schema id="org.gnucash.dev" path="/org/gnucash/dev/">
+  <schema id="org.gnucash.GnuCash.dev" path="/org/gnucash/GnuCash/dev/">
     <key name="allow-file-incompatibility" type="b">
       <default>false</default>
       <summary>Allow file incompatibility with older versions.</summary>

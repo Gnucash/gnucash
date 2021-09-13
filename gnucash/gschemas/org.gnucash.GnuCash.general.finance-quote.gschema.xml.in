@@ -1,5 +1,5 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
-  <schema id="org.gnucash.general.finance-quote" path="/org/gnucash/general/finance-quote/">
+  <schema id="org.gnucash.GnuCash.general.finance-quote" path="/org/gnucash/GnuCash/general/finance-quote/">
     <key name="alphavantage-api-key" type="s">
       <default>''</default>
       <summary>Alpha Vantage API key</summary>

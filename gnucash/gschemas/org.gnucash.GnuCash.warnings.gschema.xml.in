@@ -1,9 +1,9 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
-  <schema id="org.gnucash.warnings" path="/org/gnucash/warnings/">
-    <child name="permanent" schema="org.gnucash.warnings.permanent"/>
-    <child name="temporary" schema="org.gnucash.warnings.temporary"/>
+  <schema id="org.gnucash.GnuCash.warnings" path="/org/gnucash/GnuCash/warnings/">
+    <child name="permanent" schema="org.gnucash.GnuCash.warnings.permanent"/>
+    <child name="temporary" schema="org.gnucash.GnuCash.warnings.temporary"/>
   </schema>
-  <schema id="org.gnucash.warnings.permanent" path="/org/gnucash/warnings/permanent/">
+  <schema id="org.gnucash.GnuCash.warnings.permanent" path="/org/gnucash/GnuCash/warnings/permanent/">
     <key name="checkprinting-multi-acct" type="i">
       <default>0</default>
       <summary>Print checks from multiple accounts</summary>
@@ -106,7 +106,7 @@
     </key>
   </schema>
   
-  <schema id="org.gnucash.warnings.temporary" path="/org/gnucash/warnings/temporary/">
+  <schema id="org.gnucash.GnuCash.warnings.temporary" path="/org/gnucash/GnuCash/warnings/temporary/">
     <key name="checkprinting-multi-acct" type="i">
       <default>0</default>
       <summary>Print checks from multiple accounts</summary>

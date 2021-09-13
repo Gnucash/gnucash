@@ -1,5 +1,5 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
-  <schema id="org.gnucash.window.pages" path="/org/gnucash/window/pages/account-tree/">
+  <schema id="org.gnucash.GnuCash.window.pages" path="/org/gnucash/GnuCash/window/pages/account-tree/">
     <key name="account-code-visible" type="b">
       <default>false</default>
       <summary>Display this column</summary>

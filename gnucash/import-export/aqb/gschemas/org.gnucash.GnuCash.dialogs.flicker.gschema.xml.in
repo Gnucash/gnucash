@@ -1,6 +1,6 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
 
-  <schema id="org.gnucash.dialogs.flicker" path="/org/gnucash/dialogs/flicker/">
+  <schema id="org.gnucash.GnuCash.dialogs.flicker" path="/org/gnucash/GnuCash/dialogs/flicker/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>

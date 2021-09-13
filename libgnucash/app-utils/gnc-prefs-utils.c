@@ -84,7 +84,7 @@ void gnc_prefs_init (void)
     gnc_gsettings_load_backend();
 
     /* Initialize the core preferences by reading their values from the loaded backend.
-     * Note: of no backend was loaded, these functions will return sane default values.
+     * Note: if no backend was loaded, these functions will return sane default values.
      */
     file_retain_changed_cb (NULL, NULL, NULL);
     file_retain_type_changed_cb (NULL, NULL, NULL);

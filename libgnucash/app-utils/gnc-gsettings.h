@@ -52,8 +52,6 @@
 
 #include <gio/gio.h>
 
-#define GSET_SCHEMA_PREFIX            "org.gnucash"
-
 /** Convert a partial schema name into a complete gsettings schema name.
  *
  *  This function takes a partial gsettings schema name and converts
@@ -81,7 +79,7 @@ void gnc_gsettings_set_prefix (const gchar *prefix);
 
 /** Get the default gsettings schema prefix.
  *  If none was set explicitly, this defaults to
- *  "org.gnucash"
+ *  "org.gnucash.GnuCash"
  */
 const gchar *gnc_gsettings_get_prefix (void);
 

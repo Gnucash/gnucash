@@ -1,17 +1,17 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
-  <schema id="org.gnucash.dialogs.business" path="/org/gnucash/dialogs/business/">
-    <child name="customer-search" schema="org.gnucash.dialogs.business.customer-search"/>
-    <child name="employee-search" schema="org.gnucash.dialogs.business.employee-search"/>
-    <child name="invoice-search" schema="org.gnucash.dialogs.business.invoice-search"/>
-    <child name="job-search" schema="org.gnucash.dialogs.business.job-search"/>
-    <child name="order-search" schema="org.gnucash.dialogs.business.order-search"/>
-    <child name="vendor-search" schema="org.gnucash.dialogs.business.vendor-search"/>
-    <child name="invoice" schema="org.gnucash.dialogs.business.invoice"/>
-    <child name="bill" schema="org.gnucash.dialogs.business.bill"/>
-    <child name="tax-tables" schema="org.gnucash.dialogs.business.tax-tables"/>
+  <schema id="org.gnucash.GnuCash.dialogs.business" path="/org/gnucash/GnuCash/dialogs/business/">
+    <child name="customer-search" schema="org.gnucash.GnuCash.dialogs.business.customer-search"/>
+    <child name="employee-search" schema="org.gnucash.GnuCash.dialogs.business.employee-search"/>
+    <child name="invoice-search" schema="org.gnucash.GnuCash.dialogs.business.invoice-search"/>
+    <child name="job-search" schema="org.gnucash.GnuCash.dialogs.business.job-search"/>
+    <child name="order-search" schema="org.gnucash.GnuCash.dialogs.business.order-search"/>
+    <child name="vendor-search" schema="org.gnucash.GnuCash.dialogs.business.vendor-search"/>
+    <child name="invoice" schema="org.gnucash.GnuCash.dialogs.business.invoice"/>
+    <child name="bill" schema="org.gnucash.GnuCash.dialogs.business.bill"/>
+    <child name="tax-tables" schema="org.gnucash.GnuCash.dialogs.business.tax-tables"/>
   </schema>
 
-  <schema id="org.gnucash.dialogs.business.customer-search" path="/org/gnucash/dialogs/business/customer-search/">
+  <schema id="org.gnucash.GnuCash.dialogs.business.customer-search" path="/org/gnucash/GnuCash/dialogs/business/customer-search/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -26,7 +26,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.business.employee-search" path="/org/gnucash/dialogs/business/employee-search/">
+  <schema id="org.gnucash.GnuCash.dialogs.business.employee-search" path="/org/gnucash/GnuCash/dialogs/business/employee-search/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -41,7 +41,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.business.invoice-search" path="/org/gnucash/dialogs/business/invoice-search/">
+  <schema id="org.gnucash.GnuCash.dialogs.business.invoice-search" path="/org/gnucash/GnuCash/dialogs/business/invoice-search/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -56,7 +56,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.business.job-search" path="/org/gnucash/dialogs/business/job-search/">
+  <schema id="org.gnucash.GnuCash.dialogs.business.job-search" path="/org/gnucash/GnuCash/dialogs/business/job-search/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -71,7 +71,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.business.order-search" path="/org/gnucash/dialogs/business/order-search/">
+  <schema id="org.gnucash.GnuCash.dialogs.business.order-search" path="/org/gnucash/GnuCash/dialogs/business/order-search/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -86,7 +86,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.business.vendor-search" path="/org/gnucash/dialogs/business/vendor-search/">
+  <schema id="org.gnucash.GnuCash.dialogs.business.vendor-search" path="/org/gnucash/GnuCash/dialogs/business/vendor-search/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -101,7 +101,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.business.invoice" path="/org/gnucash/dialogs/business/invoice/">
+  <schema id="org.gnucash.GnuCash.dialogs.business.invoice" path="/org/gnucash/GnuCash/dialogs/business/invoice/">
     <key name="tax-included" type="b">
       <default>true</default>
       <summary>Is tax included in this type of business entry?</summary>
@@ -143,7 +143,7 @@
       <description>If this field is active then multiple entries in an invoice that transfer to the same account will be accumulated into a single split. This field can be overridden per invoice in the Posting dialog.</description>
     </key>
   </schema>
-  <schema id="org.gnucash.dialogs.business.bill" path="/org/gnucash/dialogs/business/bill/">
+  <schema id="org.gnucash.GnuCash.dialogs.business.bill" path="/org/gnucash/GnuCash/dialogs/business/bill/">
     <key name="tax-included" type="b">
       <default>true</default>
       <summary>Is tax included in this type of business entry?</summary>
@@ -166,7 +166,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.business.tax-tables" path="/org/gnucash/dialogs/business/tax-tables/">
+  <schema id="org.gnucash.GnuCash.dialogs.business.tax-tables" path="/org/gnucash/GnuCash/dialogs/business/tax-tables/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>

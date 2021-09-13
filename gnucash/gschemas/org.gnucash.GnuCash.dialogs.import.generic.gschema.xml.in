@@ -1,5 +1,5 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
-  <schema id="org.gnucash.dialogs.import.generic" path="/org/gnucash/dialogs/import/generic/">
+  <schema id="org.gnucash.GnuCash.dialogs.import.generic" path="/org/gnucash/GnuCash/dialogs/import/generic/">
     <key name="enable-skip" type="b">
       <default>true</default>
       <summary>Enable SKIP transaction action</summary>
@@ -50,12 +50,12 @@
       <summary>Automatically create new commodities</summary>
       <description>Enables the automatic creation of new commodities if any unknown commodity is encountered during import. Otherwise the user will be asked what to do with each unknown commodity.</description>
     </key>
-    <child name="match-picker" schema="org.gnucash.dialogs.import.generic.match-picker"/>
-    <child name="transaction-list" schema="org.gnucash.dialogs.import.generic.transaction-list"/>
-    <child name="account-picker" schema="org.gnucash.dialogs.import.generic.account-picker"/>
+    <child name="match-picker" schema="org.gnucash.GnuCash.dialogs.import.generic.match-picker"/>
+    <child name="transaction-list" schema="org.gnucash.GnuCash.dialogs.import.generic.transaction-list"/>
+    <child name="account-picker" schema="org.gnucash.GnuCash.dialogs.import.generic.account-picker"/>
   </schema>
 
-  <schema id="org.gnucash.dialogs.import.generic.match-picker" path="/org/gnucash/dialogs/import/generic/match-picker/">
+  <schema id="org.gnucash.GnuCash.dialogs.import.generic.match-picker" path="/org/gnucash/GnuCash/dialogs/import/generic/match-picker/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -70,7 +70,7 @@
    </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.import.generic.account-picker" path="/org/gnucash/dialogs/import/generic/account-picker/">
+  <schema id="org.gnucash.GnuCash.dialogs.import.generic.account-picker" path="/org/gnucash/GnuCash/dialogs/import/generic/account-picker/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -80,7 +80,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.import.generic.transaction-list" path="/org/gnucash/dialogs/import/generic/transaction-list/">
+  <schema id="org.gnucash.GnuCash.dialogs.import.generic.transaction-list" path="/org/gnucash/GnuCash/dialogs/import/generic/transaction-list/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
