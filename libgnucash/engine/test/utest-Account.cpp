@@ -1108,6 +1108,60 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     xaccAccountSetColor (account, nullptr);
     g_assert_cmpstr (xaccAccountGetColor (account), ==, nullptr);
 
+    // last_num getter/setter
+    g_assert_cmpstr (xaccAccountGetLastNum (account), ==, nullptr);
+
+    xaccAccountSetLastNum (account, "red");
+    g_assert_cmpstr (xaccAccountGetLastNum (account), ==, "red");
+
+    xaccAccountSetLastNum (account, "");
+    g_assert_cmpstr (xaccAccountGetLastNum (account), ==, "");
+
+    xaccAccountSetLastNum (account, "  ");
+    g_assert_cmpstr (xaccAccountGetLastNum (account), ==, "  ");
+
+    xaccAccountSetLastNum (account, "unset");
+    g_assert_cmpstr (xaccAccountGetLastNum (account), ==, "unset");
+
+    xaccAccountSetLastNum (account, nullptr);
+    g_assert_cmpstr (xaccAccountGetLastNum (account), ==, nullptr);
+
+    // tax_us_code getter/setter
+    g_assert_cmpstr (xaccAccountGetTaxUSCode (account), ==, nullptr);
+
+    xaccAccountSetTaxUSCode (account, "red");
+    g_assert_cmpstr (xaccAccountGetTaxUSCode (account), ==, "red");
+
+    xaccAccountSetTaxUSCode (account, "");
+    g_assert_cmpstr (xaccAccountGetTaxUSCode (account), ==, "");
+
+    xaccAccountSetTaxUSCode (account, "  ");
+    g_assert_cmpstr (xaccAccountGetTaxUSCode (account), ==, "  ");
+
+    xaccAccountSetTaxUSCode (account, "unset");
+    g_assert_cmpstr (xaccAccountGetTaxUSCode (account), ==, "unset");
+
+    xaccAccountSetTaxUSCode (account, nullptr);
+    g_assert_cmpstr (xaccAccountGetTaxUSCode (account), ==, nullptr);
+
+    // tax_us_pns getter/setter
+    g_assert_cmpstr (xaccAccountGetTaxUSPayerNameSource (account), ==, nullptr);
+
+    xaccAccountSetTaxUSPayerNameSource (account, "red");
+    g_assert_cmpstr (xaccAccountGetTaxUSPayerNameSource (account), ==, "red");
+
+    xaccAccountSetTaxUSPayerNameSource (account, "");
+    g_assert_cmpstr (xaccAccountGetTaxUSPayerNameSource (account), ==, "");
+
+    xaccAccountSetTaxUSPayerNameSource (account, "  ");
+    g_assert_cmpstr (xaccAccountGetTaxUSPayerNameSource (account), ==, "  ");
+
+    xaccAccountSetTaxUSPayerNameSource (account, "unset");
+    g_assert_cmpstr (xaccAccountGetTaxUSPayerNameSource (account), ==, "unset");
+
+    xaccAccountSetTaxUSPayerNameSource (account, nullptr);
+    g_assert_cmpstr (xaccAccountGetTaxUSPayerNameSource (account), ==, nullptr);
+
     // filter getter/setter
     g_assert_cmpstr (xaccAccountGetFilter (account), ==, nullptr);
 
