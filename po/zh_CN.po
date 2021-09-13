@@ -20,11 +20,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-13 09:05+0200\n"
-"PO-Revision-Date: 2021-09-10 16:33+0000\n"
-"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
+"PO-Revision-Date: 2021-09-13 12:34+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -9912,16 +9912,12 @@ msgid "To find the last stable version, please refer to {1}"
 msgstr "对于最新的稳定版本，请参阅{1}"
 
 #: gnucash/gnucash-core-app.cpp:102
-#, fuzzy
-#| msgid "Load report configuration"
 msgid "Loading system scm configuration..."
-msgstr "运行"
+msgstr "加载系统单片机配置中…"
 
 #: gnucash/gnucash-core-app.cpp:114
-#, fuzzy
-#| msgid "Load report configuration"
 msgid "Loading user scm configuration..."
-msgstr "运行"
+msgstr "加载用户单片机配置中…"
 
 #: gnucash/gnucash-core-app.cpp:227
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -17226,20 +17222,14 @@ msgid "R_emind in advance"
 msgstr "提前提醒(_E)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Re_view created transactions"
-msgstr "复核已创建交易(_R)"
+msgstr "复核创建的交易(_v)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
-#, fuzzy
-#| msgid ""
-#| "Set \"Review Created Transactions\" as the default for the \"since last "
-#| "run\" dialog."
 msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
-msgstr "将 \"审查创建的交易 \"设为 \"自上次运行以来 \"对话框的默认值。"
+msgstr "在“自上次运行以来”对话框中将“审核已创建的交易”设置为默认值。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:765
 msgid "Edit Scheduled Transaction"
@@ -18450,31 +18440,6 @@ msgstr "此向导可帮助您设置网上银行。"
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
-#, fuzzy
-#| msgid ""
-#| "The requirements for Online Banking vary between the different supported "
-#| "AqBanking backends, but usually you will need:\n"
-#| "* Your bank needs to grant you online access. See on their website or ask "
-#| "their customer service for how to obtain it.\n"
-#| "They should also tell you:\n"
-#| "* Your user ID that identifies you to their server, often your base "
-#| "account number;\n"
-#| "* The URL of their Online Banking server;\n"
-#| "* In some cases the routing number of your bank's branch is useful in "
-#| "this assistant;\n"
-#| "* Authentication methods vary by backend and choosen method:\n"
-#| " * FinTS PIN/TAN: Some methods require a specific gadget like a card "
-#| "reader or a mobile;\n"
-#| " * FinTS HBCI: You have to exchange the public parts of asymmetric keys "
-#| "with your bank (\"Ini-Letter\").\n"
-#| " * PayPal: registered email address, password, API signature;\n"
-#| "\n"
-#| "See https://wiki.gnucash.org/wiki/AqBanking for more details.\n"
-#| "\n"
-#| "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented "
-#| "Online Banking server. You should not rely on time-critical transfers "
-#| "through Online Banking, because sometimes the bank does not give you "
-#| "correct feedback when a transfer is rejected."
 msgid ""
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
@@ -18501,8 +18466,7 @@ msgid ""
 "feedback when a transfer is rejected."
 msgstr ""
 "不同支持的AqBanking后台对网上银行的要求不同，但通常你需要。\n"
-"* 您的银行需要授予您在线访问权。在他们的网站上看到，或询问他们的客户服务，如"
-"何获得它。\n"
+"* 您的银行需要授予您在线访问权。在他们的网站上看到，或询问他们的客户服务，如何获得它。\n"
 "他们也应该告诉你。\n"
 "* 你的用户ID，可以在他们的服务器上识别你，通常是你的基本账户号码。\n"
 "* 他们的网上银行服务器的URL。\n"
@@ -18514,9 +18478,8 @@ msgstr ""
 "\n"
 "更多细节见https://wiki.gnucash.org/wiki/AqBanking。\n"
 "\n"
-"注意：对任何事情都不做保证。有些银行的网上银行服务器实施得很差。你不应该依赖"
-"通过网上银行进行的时间紧迫的转账，因为有时银行在转账被拒绝时不会给你正确的反"
-"馈。"
+"注意：对任何事情都不做保证。有些银行的网上银行服务器实施得很差。你不应该依赖通过网上银行进行的时间紧迫的转账，因为有时银行在转账被拒绝时不会给你正确的反馈"
+"。"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
