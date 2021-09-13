@@ -536,7 +536,7 @@ libgnucash/app-utils/gnc-addr-quickfill.c
 libgnucash/app-utils/gnc-entry-quickfill.c
 libgnucash/app-utils/gnc-euro.c
 libgnucash/app-utils/gnc-exp-parser.c
-libgnucash/app-utils/gnc-gsettings.c
+libgnucash/app-utils/gnc-gsettings.cpp
 libgnucash/app-utils/gnc-helpers.c
 libgnucash/app-utils/gnc-help-utils.c
 libgnucash/app-utils/gnc-prefs-utils.c

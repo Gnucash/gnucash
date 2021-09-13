@@ -24,23 +24,18 @@
 
 #include <config.h>
 
+
+#include <gio/gio.h>
+#include <glib.h>
+
+extern "C" {
 #include <stdio.h>
 #include <string.h>
 #include "gnc-gsettings.h"
 #include "gnc-path.h"
 #include "qof.h"
 #include "gnc-prefs-p.h"
-
-#include <libxml/xmlmemory.h>
-#include <libxml/debugXML.h>
-#include <libxml/HTMLtree.h>
-#include <libxml/xmlIO.h>
-#include <libxml/xinclude.h>
-#include <libxml/catalog.h>
-#include <libxslt/xslt.h>
-#include <libxslt/xsltInternals.h>
-#include <libxslt/transform.h>
-#include <libxslt/xsltutils.h>
+}
 
 #define GSET_SCHEMA_PREFIX "org.gnucash.GnuCash"
 #define CLIENT_TAG  "%s-%s-client"
@@ -48,7 +43,6 @@
 
 static GHashTable *schema_hash = NULL;
 static const gchar *gsettings_prefix;
-static xmlExternalEntityLoader defaultEntityLoader = NULL;
 
 static GHashTable *registered_handlers_hash = NULL;
 
@@ -97,7 +91,7 @@ static GSettings * gnc_gsettings_get_settings_ptr (const gchar *schema_str)
     if (!schema_hash)
         schema_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-    gset = g_hash_table_lookup (schema_hash, full_name);
+    gset = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
     DEBUG ("Looking for schema %s returned gsettings %p", full_name, gset);
     if (!gset)
     {
@@ -241,11 +235,11 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
 
     handler_id = g_signal_handler_find (
                   settings_ptr,
-                  G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+                  static_cast<GSignalMatchType> (G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA),
                   g_signal_lookup ("changed", G_TYPE_SETTINGS), /* signal_id */
                   quark,   /* signal_detail */
                   NULL, /* closure */
-                  G_CALLBACK (func), /* callback function */
+                  func, /* callback function */
                   user_data);
 
     while (handler_id)
@@ -255,11 +249,11 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
 
         handler_id = g_signal_handler_find (
                       settings_ptr,
-                      G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+                      static_cast<GSignalMatchType> (G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA),
                       g_signal_lookup ("changed", G_TYPE_SETTINGS), /* signal_id */
                       quark,   /* signal_detail */
                       NULL, /* closure */
-                      G_CALLBACK (func), /* callback function */
+                      func, /* callback function */
                       user_data);
     }
 
@@ -321,7 +315,7 @@ void gnc_gsettings_bind (const gchar *schema,
     g_return_if_fail (G_IS_SETTINGS (settings_ptr));
 
     if (gnc_gsettings_is_valid_key (settings_ptr, key))
-        g_settings_bind (settings_ptr, key, object, property, 0);
+        g_settings_bind (settings_ptr, key, object, property, G_SETTINGS_BIND_DEFAULT);
     else
     {
         PERR ("Invalid key %s for schema %s", key, schema);

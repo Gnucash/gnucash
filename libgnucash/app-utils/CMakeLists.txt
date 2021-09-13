@@ -62,7 +62,7 @@ set (app_utils_SOURCES
   gnc-entry-quickfill.c
   gnc-euro.c
   gnc-exp-parser.c
-  gnc-gsettings.c
+  gnc-gsettings.cpp
   gnc-helpers.c
   gnc-prefs-utils.c
   gnc-sx-instance-model.c

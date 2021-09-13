@@ -50,7 +50,7 @@
 #ifndef GNC_GSETTINGS_H
 #define GNC_GSETTINGS_H
 
-#include <gio/gio.h>
+#include <glib.h>
 
 /** Convert a partial schema name into a complete gsettings schema name.
  *
