@@ -2486,7 +2486,8 @@ stripdup_or_null (const char *value)
 // note the *value argument is expected to be either a strstripped
 // char* or nullptr, as returned by stripdup_or_null above.
 static void
-set_kvp_string_tag (Account *acc, const char *tag, const char *value)
+set_kvp_string_path (Account *acc, std::vector<std::string> const & path,
+                     const char *value)
 {
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
@@ -2496,26 +2497,38 @@ set_kvp_string_tag (Account *acc, const char *tag, const char *value)
         GValue v = G_VALUE_INIT;
         g_value_init (&v, G_TYPE_STRING);
         g_value_set_string (&v, value);
-        qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {tag});
+        qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, path);
         g_value_unset (&v);
     }
     else
     {
-         qof_instance_set_path_kvp (QOF_INSTANCE (acc), NULL, {tag});
+         qof_instance_set_path_kvp (QOF_INSTANCE (acc), NULL, path);
     }
     mark_account (acc);
     xaccAccountCommitEdit(acc);
 }
 
+static void
+set_kvp_string_tag (Account *acc, const char *tag, const char *value)
+{
+    set_kvp_string_path (acc, {tag}, value);
+}
+
 static char*
-get_kvp_string_tag (const Account *acc, const char *tag)
+get_kvp_string_path (const Account *acc, std::vector<std::string> const & path)
 {
     GValue v = G_VALUE_INIT;
-    if (acc == NULL || tag == NULL) return NULL;
-    qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, {tag});
+    if (acc == NULL) return NULL; // how to check path is valid??
+    qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, path);
     auto retval = G_VALUE_HOLDS_STRING (&v) ? g_value_dup_string (&v) : NULL;
     g_value_unset (&v);
     return retval;
+}
+
+static char*
+get_kvp_string_tag (const Account *acc, const char *tag)
+{
+    return get_kvp_string_path (acc, {tag});
 }
 
 void
