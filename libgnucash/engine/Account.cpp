@@ -325,6 +325,9 @@ gnc_account_init(Account* acc)
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
 
+    priv->last_num = (char*) is_unset;
+    priv->tax_us_code = (char*) is_unset;
+    priv->tax_us_pns = (char*) is_unset;
     priv->color = (char*) is_unset;
     priv->sort_order = (char*) is_unset;
     priv->notes = (char*) is_unset;
@@ -1374,6 +1377,12 @@ xaccFreeAccount (Account *acc)
     qof_string_cache_remove(priv->description);
     priv->accountName = priv->accountCode = priv->description = nullptr;
 
+    if (priv->last_num != is_unset)
+        g_free (priv->last_num);
+    if (priv->tax_us_code != is_unset)
+        g_free (priv->tax_us_code);
+    if (priv->tax_us_pns != is_unset)
+        g_free (priv->tax_us_pns);
     if (priv->color != is_unset)
         g_free (priv->color);
     if (priv->sort_order != is_unset)
@@ -1386,6 +1395,9 @@ xaccFreeAccount (Account *acc)
     /* zero out values, just in case stray
      * pointers are pointing here. */
 
+    priv->last_num = nullptr;
+    priv->tax_us_code = nullptr;
+    priv->tax_us_pns = nullptr;
     priv->color == nullptr;
     priv->sort_order == nullptr;
     priv->notes == nullptr;
@@ -4098,49 +4110,39 @@ xaccAccountSetTaxRelated (Account *acc, gboolean tax_related)
 const char *
 xaccAccountGetTaxUSCode (const Account *acc)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"tax-US", "code"});
-    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    auto priv = GET_PRIVATE (acc);
+    if (priv->tax_us_code == is_unset)
+        priv->tax_us_code = get_kvp_string_path (acc, {"tax-US", "code"});
+    return priv->tax_us_code;
 }
 
 void
 xaccAccountSetTaxUSCode (Account *acc, const char *code)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    g_value_init (&v, G_TYPE_STRING);
-    g_value_set_string (&v, code);
-    xaccAccountBeginEdit (acc);
-    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"tax-US", "code"});
-    mark_account (acc);
-    xaccAccountCommitEdit (acc);
-    g_value_unset (&v);
+    auto priv = GET_PRIVATE (acc);
+    if (priv->tax_us_code != is_unset)
+        g_free (priv->tax_us_code);
+    priv->tax_us_code = g_strdup (code);
+    set_kvp_string_path (acc, {"tax-US", "code"}, priv->tax_us_code);
 }
 
 const char *
 xaccAccountGetTaxUSPayerNameSource (const Account *acc)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"tax-US", "payer-name-source"});
-    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    auto priv = GET_PRIVATE (acc);
+    if (priv->tax_us_pns == is_unset)
+        priv->tax_us_pns = get_kvp_string_path (acc, {"tax-US", "payer-name-source"});
+    return priv->tax_us_pns;
  }
 
 void
 xaccAccountSetTaxUSPayerNameSource (Account *acc, const char *source)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    g_value_init (&v, G_TYPE_STRING);
-    g_value_set_string (&v, source);
-    xaccAccountBeginEdit (acc);
-    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"tax-US", "payer-name-source"});
-    mark_account (acc);
-    xaccAccountCommitEdit (acc);
-    g_value_unset (&v);
+    auto priv = GET_PRIVATE (acc);
+    if (priv->tax_us_pns != is_unset)
+        g_free (priv->tax_us_pns);
+    priv->tax_us_pns = g_strdup (source);
+    set_kvp_string_path (acc, {"tax-US", "payer-name-source"}, priv->tax_us_pns);
 }
 
 gint64
@@ -4871,10 +4873,10 @@ xaccAccountClearReconcilePostpone (Account *acc)
 const char *
 xaccAccountGetLastNum (const Account *acc)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"last-num"});
-    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    auto priv = GET_PRIVATE (acc);
+    if (priv->last_num == is_unset)
+        priv->last_num = get_kvp_string_tag (acc, "last-num");
+    return priv->last_num;
 }
 
 /********************************************************************\
@@ -4883,16 +4885,11 @@ xaccAccountGetLastNum (const Account *acc)
 void
 xaccAccountSetLastNum (Account *acc, const char *num)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-    g_value_init (&v, G_TYPE_STRING);
-
-    g_value_set_string (&v, num);
-    xaccAccountBeginEdit (acc);
-    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"last-num"});
-    mark_account (acc);
-    xaccAccountCommitEdit (acc);
-    g_value_unset (&v);
+    auto priv = GET_PRIVATE (acc);
+    if (priv->last_num != is_unset)
+        g_free (priv->last_num);
+    priv->last_num = g_strdup (num);
+    set_kvp_string_tag (acc, "last-num", priv->last_num);
 }
 
 static Account *
