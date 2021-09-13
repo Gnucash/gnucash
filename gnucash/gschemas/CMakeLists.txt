@@ -22,6 +22,11 @@ set(gschema_SOURCES
 
 add_gschema_targets("${gschema_SOURCES}")
 
+# Provide gnucash runtime with a list of migratable preferences
+configure_file(migratable-prefs.xml ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml COPYONLY)
+install(FILES ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME})
+
 # Handle gschemas.compiled
 if (COMPILE_GSCHEMAS)
 
@@ -49,7 +54,7 @@ if (COMPILE_GSCHEMAS)
                               ${GLIB_COMPILE_SCHEMAS} \$ENV\{DESTDIR\}${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
 endif()
 
-set(gschemas_DIST_local "")
+set(gschemas_DIST_local migratable-prefs.xml)
 foreach(file ${gschema_SOURCES})
     list(APPEND gschemas_DIST_local ${file}.in)
 endforeach()

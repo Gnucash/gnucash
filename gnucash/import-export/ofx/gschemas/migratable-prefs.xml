@@ -1,0 +1,8 @@
+
+<release version="4007">
+
+<migrate old-path="org.gnucash.dialogs.import.ofx"
+         old-key="last-path"
+         new-path="org.gnucash.GnuCash.dialogs.import.ofx"
+         new-key="last-path"/>
+</release>

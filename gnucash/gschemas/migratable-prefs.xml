@@ -1,0 +1,1299 @@
+
+<release version="4007">
+
+<migrate old-path="org.gnucash.general"
+         old-key="prefs-version"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="prefs-version"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="save-window-geometry"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="save-window-geometry"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="account-separator"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="account-separator"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="assoc-head"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="assoc-head"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="file-compression"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="file-compression"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="autosave-show-explanation"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="autosave-show-explanation"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="autosave-interval-minutes"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="autosave-interval-minutes"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="save-on-close-expires"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="save-on-close-expires"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="save-on-close-wait-time"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="save-on-close-wait-time"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="negative-in-red"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="negative-in-red"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="auto-decimal-point"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="auto-decimal-point"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="auto-decimal-places"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="auto-decimal-places"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="force-price-decimal"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="force-price-decimal"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="retain-type-never"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="retain-type-never"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="retain-type-days"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="retain-type-days"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="retain-type-forever"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="retain-type-forever"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="retain-days"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="retain-days"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="reversed-accounts-none"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="reversed-accounts-none"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="reversed-accounts-credit"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="reversed-accounts-credit"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="reversed-accounts-incomeexpense"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="reversed-accounts-incomeexpense"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="show-account-color"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="show-account-color"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="show-account-color-tabs"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="show-account-color-tabs"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="use-accounting-labels"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="use-accounting-labels"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="tab-close-buttons"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="tab-close-buttons"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="tab-width"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="tab-width"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="tab-open-adjacent"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="tab-open-adjacent"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="currency-choice-locale"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="currency-choice-locale"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="currency-choice-other"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="currency-choice-other"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="currency-other"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="currency-other"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="clock-24h"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="clock-24h"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="date-format"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="date-format"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="date-completion-thisyear"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="date-completion-thisyear"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="date-completion-sliding"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="date-completion-sliding"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="date-backmonths"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="date-backmonths"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="grid-lines-horizontal"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="grid-lines-horizontal"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="grid-lines-vertical"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="grid-lines-vertical"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="show-splash-screen"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="show-splash-screen"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="tab-position-top"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="tab-position-top"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="tab-position-bottom"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="tab-position-bottom"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="tab-position-left"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="tab-position-left"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="tab-position-right"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="tab-position-right"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="summarybar-position-top"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="summarybar-position-top"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="summarybar-position-bottom"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="summarybar-position-bottom"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="tab-next-recent"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="tab-next-recent"/>
+
+<migrate old-path="org.gnucash.general"
+         old-key="num-source"
+         new-path="org.gnucash.GnuCash.general"
+         new-key="num-source"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="use-gnucash-color-theme"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="use-gnucash-color-theme"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="use-theme-colors"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="use-theme-colors"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="enter-moves-to-end"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="enter-moves-to-end"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="auto-raise-lists"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="auto-raise-lists"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="tab-to-transfer-on-memorised"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="tab-to-transfer-on-memorised"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="use-new-window"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="use-new-window"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="alternate-color-by-transaction"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="alternate-color-by-transaction"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="draw-horizontal-lines"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="draw-horizontal-lines"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="draw-vertical-lines"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="draw-vertical-lines"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="future-after-blank-transaction"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="future-after-blank-transaction"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="default-style-ledger"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="default-style-ledger"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="default-style-autoledger"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="default-style-autoledger"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="default-style-journal"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="default-style-journal"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="double-line-mode"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="double-line-mode"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="show-leaf-account-names"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="show-leaf-account-names"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="show-extra-dates"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="show-extra-dates"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="show-extra-dates-on-selection"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="show-extra-dates-on-selection"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="show-calendar-buttons"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="show-calendar-buttons"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="selection-to-blank-on-expand"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="selection-to-blank-on-expand"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="max-transactions"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="max-transactions"/>
+
+<migrate old-path="org.gnucash.general.register"
+         old-key="key-length"
+         new-path="org.gnucash.GnuCash.general.register"
+         new-key="key-length"/>
+
+<migrate old-path="org.gnucash.general.report"
+         old-key="use-new-window"
+         new-path="org.gnucash.GnuCash.general.report"
+         new-key="use-new-window"/>
+
+<migrate old-path="org.gnucash.general.report"
+         old-key="currency-choice-locale"
+         new-path="org.gnucash.GnuCash.general.report"
+         new-key="currency-choice-locale"/>
+
+<migrate old-path="org.gnucash.general.report"
+         old-key="currency-choice-other"
+         new-path="org.gnucash.GnuCash.general.report"
+         new-key="currency-choice-other"/>
+
+<migrate old-path="org.gnucash.general.report"
+         old-key="currency-other"
+         new-path="org.gnucash.GnuCash.general.report"
+         new-key="currency-other"/>
+
+<migrate old-path="org.gnucash.general.report"
+         old-key="default-zoom"
+         new-path="org.gnucash.GnuCash.general.report"
+         new-key="default-zoom"/>
+
+<migrate old-path="org.gnucash.general.report.pdf-export"
+         old-key="filename-format"
+         new-path="org.gnucash.GnuCash.general.report.pdf-export"
+         new-key="filename-format"/>
+
+<migrate old-path="org.gnucash.general.report.pdf-export"
+         old-key="filename-date-format"
+         new-path="org.gnucash.GnuCash.general.report.pdf-export"
+         new-key="filename-date-format"/>
+
+<migrate old-path="org.gnucash.dev"
+         old-key="allow-file-incompatibility"
+         new-path="org.gnucash.GnuCash.dev"
+         new-key="allow-file-incompatibility"/>
+
+<migrate old-path="org.gnucash.dialogs.account"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.account"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.imap-editor"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.imap-editor"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.find-account"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.find-account"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.preferences"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.preferences"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.price-editor"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.price-editor"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.pricedb-editor"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.pricedb-editor"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.reset-warnings"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.reset-warnings"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.tax-info"
+         old-key="paned-position"
+         new-path="org.gnucash.GnuCash.dialogs.tax-info"
+         new-key="paned-position"/>
+
+<migrate old-path="org.gnucash.dialogs.tax-info"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.tax-info"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.fincalc"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.fincalc"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.find"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.find"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.find"
+         old-key="search-for-active-only"
+         new-path="org.gnucash.GnuCash.dialogs.find"
+         new-key="search-for-active-only"/>
+
+<migrate old-path="org.gnucash.dialogs.export-accounts"
+         old-key="last-path"
+         new-path="org.gnucash.GnuCash.dialogs.export-accounts"
+         new-key="last-path"/>
+
+<migrate old-path="org.gnucash.dialogs.log-replay"
+         old-key="last-path"
+         new-path="org.gnucash.GnuCash.dialogs.log-replay"
+         new-key="last-path"/>
+
+<migrate old-path="org.gnucash.dialogs.open-save"
+         old-key="last-path"
+         new-path="org.gnucash.GnuCash.dialogs.open-save"
+         new-key="last-path"/>
+
+<migrate old-path="org.gnucash.dialogs.report"
+         old-key="last-path"
+         new-path="org.gnucash.GnuCash.dialogs.report"
+         new-key="last-path"/>
+
+<migrate old-path="org.gnucash.dialogs.report-saved-configs"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.report-saved-configs"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.lot-viewer"
+         old-key="hpane-position"
+         new-path="org.gnucash.GnuCash.dialogs.lot-viewer"
+         new-key="hpane-position"/>
+
+<migrate old-path="org.gnucash.dialogs.lot-viewer"
+         old-key="vpane-position"
+         new-path="org.gnucash.GnuCash.dialogs.lot-viewer"
+         new-key="vpane-position"/>
+
+<migrate old-path="org.gnucash.dialogs.lot-viewer"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.lot-viewer"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.new-user"
+         old-key="first-startup"
+         new-path="org.gnucash.GnuCash.dialogs.new-user"
+         new-key="first-startup"/>
+
+<migrate old-path="org.gnucash.dialogs.new-hierarchy"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.new-hierarchy"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.new-hierarchy"
+         old-key="show-on-new-file"
+         new-path="org.gnucash.GnuCash.dialogs.new-hierarchy"
+         new-key="show-on-new-file"/>
+
+<migrate old-path="org.gnucash.dialogs.search"
+         old-key="new-search-limit"
+         new-path="org.gnucash.GnuCash.dialogs.search"
+         new-key="new-search-limit"/>
+
+<migrate old-path="org.gnucash.dialogs.transfer"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.transfer"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.business-doclink"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.business-doclink"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.trans-doclink"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.trans-doclink"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.style-sheet"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.style-sheet"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.options"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.options"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.business.customer-search"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.business.customer-search"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.business.customer-search"
+         old-key="search-for-active-only"
+         new-path="org.gnucash.GnuCash.dialogs.business.customer-search"
+         new-key="search-for-active-only"/>
+
+<migrate old-path="org.gnucash.dialogs.business.employee-search"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.business.employee-search"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.business.employee-search"
+         old-key="search-for-active-only"
+         new-path="org.gnucash.GnuCash.dialogs.business.employee-search"
+         new-key="search-for-active-only"/>
+
+<migrate old-path="org.gnucash.dialogs.business.invoice-search"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.business.invoice-search"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.business.invoice-search"
+         old-key="search-for-active-only"
+         new-path="org.gnucash.GnuCash.dialogs.business.invoice-search"
+         new-key="search-for-active-only"/>
+
+<migrate old-path="org.gnucash.dialogs.business.job-search"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.business.job-search"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.business.job-search"
+         old-key="search-for-active-only"
+         new-path="org.gnucash.GnuCash.dialogs.business.job-search"
+         new-key="search-for-active-only"/>
+
+<migrate old-path="org.gnucash.dialogs.business.order-search"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.business.order-search"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.business.order-search"
+         old-key="search-for-active-only"
+         new-path="org.gnucash.GnuCash.dialogs.business.order-search"
+         new-key="search-for-active-only"/>
+
+<migrate old-path="org.gnucash.dialogs.business.vendor-search"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.business.vendor-search"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.business.vendor-search"
+         old-key="search-for-active-only"
+         new-path="org.gnucash.GnuCash.dialogs.business.vendor-search"
+         new-key="search-for-active-only"/>
+
+<migrate old-path="org.gnucash.dialogs.business.invoice"
+         old-key="tax-included"
+         new-path="org.gnucash.GnuCash.dialogs.business.invoice"
+         new-key="tax-included"/>
+
+<migrate old-path="org.gnucash.dialogs.business.invoice"
+         old-key="auto-pay"
+         new-path="org.gnucash.GnuCash.dialogs.business.invoice"
+         new-key="auto-pay"/>
+
+<migrate old-path="org.gnucash.dialogs.business.invoice"
+         old-key="notify-when-due"
+         new-path="org.gnucash.GnuCash.dialogs.business.invoice"
+         new-key="notify-when-due"/>
+
+<migrate old-path="org.gnucash.dialogs.business.invoice"
+         old-key="days-in-advance"
+         new-path="org.gnucash.GnuCash.dialogs.business.invoice"
+         new-key="days-in-advance"/>
+
+<migrate old-path="org.gnucash.dialogs.business.invoice"
+         old-key="enable-toolbuttons"
+         new-path="org.gnucash.GnuCash.dialogs.business.invoice"
+         new-key="enable-toolbuttons"/>
+
+<migrate old-path="org.gnucash.dialogs.business.invoice"
+         old-key="invoice-printreport"
+         new-path="org.gnucash.GnuCash.dialogs.business.invoice"
+         new-key="invoice-printreport"/>
+
+<migrate old-path="org.gnucash.dialogs.business.invoice"
+         old-key="use-new-window"
+         new-path="org.gnucash.GnuCash.dialogs.business.invoice"
+         new-key="use-new-window"/>
+
+<migrate old-path="org.gnucash.dialogs.business.invoice"
+         old-key="accumulate-splits"
+         new-path="org.gnucash.GnuCash.dialogs.business.invoice"
+         new-key="accumulate-splits"/>
+
+<migrate old-path="org.gnucash.dialogs.business.bill"
+         old-key="tax-included"
+         new-path="org.gnucash.GnuCash.dialogs.business.bill"
+         new-key="tax-included"/>
+
+<migrate old-path="org.gnucash.dialogs.business.bill"
+         old-key="auto-pay"
+         new-path="org.gnucash.GnuCash.dialogs.business.bill"
+         new-key="auto-pay"/>
+
+<migrate old-path="org.gnucash.dialogs.business.bill"
+         old-key="notify-when-due"
+         new-path="org.gnucash.GnuCash.dialogs.business.bill"
+         new-key="notify-when-due"/>
+
+<migrate old-path="org.gnucash.dialogs.business.bill"
+         old-key="days-in-advance"
+         new-path="org.gnucash.GnuCash.dialogs.business.bill"
+         new-key="days-in-advance"/>
+
+<migrate old-path="org.gnucash.dialogs.business.tax-tables"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.business.tax-tables"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="check-format-guid"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="check-format-guid"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="check-position"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="check-position"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="first-page-count"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="first-page-count"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="date-format"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="date-format"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="date-format-user"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="date-format-user"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="custom-units"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="custom-units"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="custom-payee"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="custom-payee"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="custom-date"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="custom-date"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="custom-amount-words"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="custom-amount-words"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="custom-amount-number"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="custom-amount-number"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="custom-address"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="custom-address"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="custom-notes"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="custom-notes"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="custom-memo"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="custom-memo"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="custom-translation"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="custom-translation"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="custom-rotation"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="custom-rotation"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="splits-amount"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="splits-amount"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="splits-memo"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="splits-memo"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="splits-account"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="splits-account"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="print-date-format"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="print-date-format"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="default-font"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="default-font"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="blocking-chars"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="blocking-chars"/>
+
+<migrate old-path="org.gnucash.dialogs.checkprinting"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.checkprinting"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.commodities"
+         old-key="include-iso"
+         new-path="org.gnucash.GnuCash.dialogs.commodities"
+         new-key="include-iso"/>
+
+<migrate old-path="org.gnucash.dialogs.commodities"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.commodities"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.export.csv"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.export.csv"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.export.csv"
+         old-key="last-path"
+         new-path="org.gnucash.GnuCash.dialogs.export.csv"
+         new-key="last-path"/>
+
+<migrate old-path="org.gnucash.dialogs.export.csv"
+         old-key="paned-position"
+         new-path="org.gnucash.GnuCash.dialogs.export.csv"
+         new-key="paned-position"/>
+
+<migrate old-path="org.gnucash.dialogs.import.csv"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.import.csv"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.import.csv"
+         old-key="last-path"
+         new-path="org.gnucash.GnuCash.dialogs.import.csv"
+         new-key="last-path"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic"
+         old-key="enable-skip"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic"
+         new-key="enable-skip"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic"
+         old-key="enable-update"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic"
+         new-key="enable-update"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic"
+         old-key="use-bayes"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic"
+         new-key="use-bayes"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic"
+         old-key="match-threshold"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic"
+         new-key="match-threshold"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic"
+         old-key="match-date-threshold"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic"
+         new-key="match-date-threshold"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic"
+         old-key="match-date-not-threshold"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic"
+         new-key="match-date-not-threshold"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic"
+         old-key="auto-add-threshold"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic"
+         new-key="auto-add-threshold"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic"
+         old-key="auto-clear-threshold"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic"
+         new-key="auto-clear-threshold"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic"
+         old-key="atm-fee-threshold"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic"
+         new-key="atm-fee-threshold"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic"
+         old-key="auto-create-commodity"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic"
+         new-key="auto-create-commodity"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic.match-picker"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic.match-picker"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic.match-picker"
+         old-key="display-reconciled"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic.match-picker"
+         new-key="display-reconciled"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic.account-picker"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic.account-picker"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.import.generic.transaction-list"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.import.generic.transaction-list"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.import.qif"
+         old-key="default-status-notcleared"
+         new-path="org.gnucash.GnuCash.dialogs.import.qif"
+         new-key="default-status-notcleared"/>
+
+<migrate old-path="org.gnucash.dialogs.import.qif"
+         old-key="default-status-cleared"
+         new-path="org.gnucash.GnuCash.dialogs.import.qif"
+         new-key="default-status-cleared"/>
+
+<migrate old-path="org.gnucash.dialogs.import.qif"
+         old-key="default-status-reconciled"
+         new-path="org.gnucash.GnuCash.dialogs.import.qif"
+         new-key="default-status-reconciled"/>
+
+<migrate old-path="org.gnucash.dialogs.import.qif"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.import.qif"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.import.qif"
+         old-key="last-path"
+         new-path="org.gnucash.GnuCash.dialogs.import.qif"
+         new-key="last-path"/>
+
+<migrate old-path="org.gnucash.dialogs.import.qif"
+         old-key="show-doc"
+         new-path="org.gnucash.GnuCash.dialogs.import.qif"
+         new-key="show-doc"/>
+
+<migrate old-path="org.gnucash.dialogs.import.qif.account-picker"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.import.qif.account-picker"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.reconcile"
+         old-key="check-cleared"
+         new-path="org.gnucash.GnuCash.dialogs.reconcile"
+         new-key="check-cleared"/>
+
+<migrate old-path="org.gnucash.dialogs.reconcile"
+         old-key="auto-interest-transfer"
+         new-path="org.gnucash.GnuCash.dialogs.reconcile"
+         new-key="auto-interest-transfer"/>
+
+<migrate old-path="org.gnucash.dialogs.reconcile"
+         old-key="auto-cc-payment"
+         new-path="org.gnucash.GnuCash.dialogs.reconcile"
+         new-key="auto-cc-payment"/>
+
+<migrate old-path="org.gnucash.dialogs.reconcile"
+         old-key="always-reconcile-to-today"
+         new-path="org.gnucash.GnuCash.dialogs.reconcile"
+         new-key="always-reconcile-to-today"/>
+
+<migrate old-path="org.gnucash.dialogs.reconcile"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.reconcile"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.sxs.since-last-run"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.sxs.since-last-run"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.sxs.since-last-run"
+         old-key="show-at-file-open"
+         new-path="org.gnucash.GnuCash.dialogs.sxs.since-last-run"
+         new-key="show-at-file-open"/>
+
+<migrate old-path="org.gnucash.dialogs.sxs.since-last-run"
+         old-key="show-notify-window-at-file-open"
+         new-path="org.gnucash.GnuCash.dialogs.sxs.since-last-run"
+         new-key="show-notify-window-at-file-open"/>
+
+<migrate old-path="org.gnucash.dialogs.sxs.since-last-run"
+         old-key="review-transactions"
+         new-path="org.gnucash.GnuCash.dialogs.sxs.since-last-run"
+         new-key="review-transactions"/>
+
+<migrate old-path="org.gnucash.dialogs.sxs.transaction-editor"
+         old-key="create-auto"
+         new-path="org.gnucash.GnuCash.dialogs.sxs.transaction-editor"
+         new-key="create-auto"/>
+
+<migrate old-path="org.gnucash.dialogs.sxs.transaction-editor"
+         old-key="create-days"
+         new-path="org.gnucash.GnuCash.dialogs.sxs.transaction-editor"
+         new-key="create-days"/>
+
+<migrate old-path="org.gnucash.dialogs.sxs.transaction-editor"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.sxs.transaction-editor"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.sxs.transaction-editor"
+         old-key="notify"
+         new-path="org.gnucash.GnuCash.dialogs.sxs.transaction-editor"
+         new-key="notify"/>
+
+<migrate old-path="org.gnucash.dialogs.sxs.transaction-editor"
+         old-key="remind-days"
+         new-path="org.gnucash.GnuCash.dialogs.sxs.transaction-editor"
+         new-key="remind-days"/>
+
+<migrate old-path="org.gnucash.dialogs.totd"
+         old-key="current-tip"
+         new-path="org.gnucash.GnuCash.dialogs.totd"
+         new-key="current-tip"/>
+
+<migrate old-path="org.gnucash.dialogs.totd"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.totd"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.totd"
+         old-key="show-at-startup"
+         new-path="org.gnucash.GnuCash.dialogs.totd"
+         new-key="show-at-startup"/>
+
+<migrate old-path="org.gnucash.general.finance-quote"
+         old-key="alphavantage-api-key"
+         new-path="org.gnucash.GnuCash.general.finance-quote"
+         new-key="alphavantage-api-key"/>
+
+<migrate old-path="org.gnucash.history"
+         old-key="maxfiles"
+         new-path="org.gnucash.GnuCash.history"
+         new-key="maxfiles"/>
+
+<migrate old-path="org.gnucash.history"
+         old-key="file0"
+         new-path="org.gnucash.GnuCash.history"
+         new-key="file0"/>
+
+<migrate old-path="org.gnucash.history"
+         old-key="file1"
+         new-path="org.gnucash.GnuCash.history"
+         new-key="file1"/>
+
+<migrate old-path="org.gnucash.history"
+         old-key="file2"
+         new-path="org.gnucash.GnuCash.history"
+         new-key="file2"/>
+
+<migrate old-path="org.gnucash.history"
+         old-key="file3"
+         new-path="org.gnucash.GnuCash.history"
+         new-key="file3"/>
+
+<migrate old-path="org.gnucash.history"
+         old-key="file4"
+         new-path="org.gnucash.GnuCash.history"
+         new-key="file4"/>
+
+<migrate old-path="org.gnucash.history"
+         old-key="file5"
+         new-path="org.gnucash.GnuCash.history"
+         new-key="file5"/>
+
+<migrate old-path="org.gnucash.history"
+         old-key="file6"
+         new-path="org.gnucash.GnuCash.history"
+         new-key="file6"/>
+
+<migrate old-path="org.gnucash.history"
+         old-key="file7"
+         new-path="org.gnucash.GnuCash.history"
+         new-key="file7"/>
+
+<migrate old-path="org.gnucash.history"
+         old-key="file8"
+         new-path="org.gnucash.GnuCash.history"
+         new-key="file8"/>
+
+<migrate old-path="org.gnucash.history"
+         old-key="file9"
+         new-path="org.gnucash.GnuCash.history"
+         new-key="file9"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="checkprinting-multi-acct"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="checkprinting-multi-acct"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="closing-window-question"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="closing-window-question"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="inv-entry-mod"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="inv-entry-mod"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="inv-entry-dup"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="inv-entry-dup"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="price-comm-del"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="price-comm-del"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="price-comm-del-quotes"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="price-comm-del-quotes"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="price-quotes-del"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="price-quotes-del"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="price-quotes-replace"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="price-quotes-replace"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-is-acct-pay-rec"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-is-acct-pay-rec"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-is-read-only"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-is-read-only"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-recd-split-mod"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-recd-split-mod"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-recd-split-unrec"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-recd-split-unrec"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-split-del"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-split-del"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-split-del-recd"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-split-del-recd"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-split-del-all"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-split-del-all"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-split-del-all-recd"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-split-del-all-recd"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-trans-del"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-trans-del"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-trans-del-recd"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-trans-del-recd"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-trans-dup"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-trans-dup"/>
+
+<migrate old-path="org.gnucash.warnings.permanent"
+         old-key="reg-trans-mod"
+         new-path="org.gnucash.GnuCash.warnings.permanent"
+         new-key="reg-trans-mod"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="checkprinting-multi-acct"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="checkprinting-multi-acct"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="closing-window-question"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="closing-window-question"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="inv-entry-mod"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="inv-entry-mod"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="inv-entry-dup"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="inv-entry-dup"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="price-comm-del"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="price-comm-del"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="price-comm-del-quotes"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="price-comm-del-quotes"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="price-quotes-del"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="price-quotes-del"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="price-quotes-replace"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="price-quotes-replace"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-is-acct-pay-rec"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-is-acct-pay-rec"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-is-read-only"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-is-read-only"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-recd-split-mod"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-recd-split-mod"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-recd-split-unrec"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-recd-split-unrec"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-split-del"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-split-del"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-split-del-recd"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-split-del-recd"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-split-del-all"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-split-del-all"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-split-del-all-recd"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-split-del-all-recd"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-trans-del"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-trans-del"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-trans-del-recd"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-trans-del-recd"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-trans-dup"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-trans-dup"/>
+
+<migrate old-path="org.gnucash.warnings.temporary"
+         old-key="reg-trans-mod"
+         new-path="org.gnucash.GnuCash.warnings.temporary"
+         new-key="reg-trans-mod"/>
+
+<migrate old-path="org.gnucash.window.pages"
+         old-key="account-code-visible"
+         new-path="org.gnucash.GnuCash.window.pages"
+         new-key="account-code-visible"/>
+
+<migrate old-path="org.gnucash.window.pages"
+         old-key="account-code-width"
+         new-path="org.gnucash.GnuCash.window.pages"
+         new-key="account-code-width"/>
+
+<migrate old-path="org.gnucash.window.pages.account-tree.summary"
+         old-key="grand-total"
+         new-path="org.gnucash.GnuCash.window.pages.account-tree.summary"
+         new-key="grand-total"/>
+
+<migrate old-path="org.gnucash.window.pages.account-tree.summary"
+         old-key="non-currency"
+         new-path="org.gnucash.GnuCash.window.pages.account-tree.summary"
+         new-key="non-currency"/>
+
+<migrate old-path="org.gnucash.window.pages.account-tree.summary"
+         old-key="start-choice-relative"
+         new-path="org.gnucash.GnuCash.window.pages.account-tree.summary"
+         new-key="start-choice-relative"/>
+
+<migrate old-path="org.gnucash.window.pages.account-tree.summary"
+         old-key="start-choice-absolute"
+         new-path="org.gnucash.GnuCash.window.pages.account-tree.summary"
+         new-key="start-choice-absolute"/>
+
+<migrate old-path="org.gnucash.window.pages.account-tree.summary"
+         old-key="start-date"
+         new-path="org.gnucash.GnuCash.window.pages.account-tree.summary"
+         new-key="start-date"/>
+
+<migrate old-path="org.gnucash.window.pages.account-tree.summary"
+         old-key="start-period"
+         new-path="org.gnucash.GnuCash.window.pages.account-tree.summary"
+         new-key="start-period"/>
+
+<migrate old-path="org.gnucash.window.pages.account-tree.summary"
+         old-key="end-choice-relative"
+         new-path="org.gnucash.GnuCash.window.pages.account-tree.summary"
+         new-key="end-choice-relative"/>
+
+<migrate old-path="org.gnucash.window.pages.account-tree.summary"
+         old-key="end-choice-absolute"
+         new-path="org.gnucash.GnuCash.window.pages.account-tree.summary"
+         new-key="end-choice-absolute"/>
+
+<migrate old-path="org.gnucash.window.pages.account-tree.summary"
+         old-key="end-date"
+         new-path="org.gnucash.GnuCash.window.pages.account-tree.summary"
+         new-key="end-date"/>
+
+<migrate old-path="org.gnucash.window.pages.account-tree.summary"
+         old-key="end-period"
+         new-path="org.gnucash.GnuCash.window.pages.account-tree.summary"
+         new-key="end-period"/>
+
+</release>
