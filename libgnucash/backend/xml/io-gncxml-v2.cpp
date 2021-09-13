@@ -1451,6 +1451,7 @@ gz_thread_func (gz_thread_params_t* params)
             }
             else if (bytes == 0)
             {
+                printf("gz_thread_func EOF\n");
                 break;
             }
             else
@@ -1523,7 +1524,7 @@ try_gz_open (const char* filename, const char* perms, gboolean use_gzip,
         return g_fopen (filename, perms);
 
     {
-        int filedes[2];
+        int filedes[2]{};
         GThread* thread;
         gz_thread_params_t* params;
         FILE* file;
@@ -1532,10 +1533,23 @@ try_gz_open (const char* filename, const char* perms, gboolean use_gzip,
         if (_pipe (filedes, 4096, _O_BINARY) < 0)
         {
 #else
-        if (pipe (filedes) < 0)
+        /* Set CLOEXEC on the pipe FDs so that if the user runs a
+         * report while saving WebKit's fork won't get an open copy
+         * and keep the pipe from closing. See
+         * https://bugs.gnucash.org/show_bug.cgi?id=798250. Win32
+         * doesn't fork nor does it support CLOEXEC.
+         */
+        if (pipe (filedes) < 0 ||
+            fcntl(filedes[0], F_SETFD, FD_CLOEXEC) == -1 ||
+	    fcntl(filedes[1], F_SETFD, FD_CLOEXEC) == -1)
         {
 #endif
-            g_warning ("Pipe call failed. Opening uncompressed file.");
+            g_warning ("Pipe setup failed with errno %d. Opening uncompressed file.", errno);
+            if (filedes[0])
+            {
+                close(filedes[0]);
+                close(filedes[1]);
+            }
             return g_fopen (filename, perms);
         }
 
