@@ -162,18 +162,6 @@ gnc_engine_is_initialized (void)
     return (engine_is_initialized == 1) ? TRUE : FALSE;
 }
 
-/* replicate old gnc-trace enum behaviour
- *
- * these are only here as a convenience, they could be
- * initialised elsewhere as appropriate.
- * */
-void gnc_log_default(void)
-{
-    qof_log_set_default(QOF_LOG_WARNING);
-    qof_log_set_level(GNC_MOD_ROOT, QOF_LOG_WARNING);
-    qof_log_set_level(GNC_MOD_TEST, QOF_LOG_DEBUG);
-}
-
 void
 gnc_engine_add_commit_error_callback( EngineCommitErrorCallback cb, gpointer data )
 {

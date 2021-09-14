@@ -769,7 +769,7 @@ gnc_plugin_page_sx_list_cmd_edit (GtkAction *action, GncPluginPageSxList *page)
     gppsl_update_selected_list (page, TRUE, NULL);
     for (GList *list = to_edit; list != NULL; list = list->next)
     {
-        g_debug ("to-edit [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
+        DEBUG ("to-edit [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
         gppsl_update_selected_list (page, FALSE, list->data);
     }
 
@@ -877,7 +877,7 @@ gnc_plugin_page_sx_list_cmd_delete (GtkAction *action, GncPluginPageSxList *page
         gppsl_update_selected_list (page, TRUE, NULL);
         for (GList *list = to_delete; list != NULL; list = list->next)
         {
-            g_debug("to-delete [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
+            DEBUG("to-delete [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
             gppsl_update_selected_list (page, FALSE, list->data);
         }
         g_list_foreach (to_delete, (GFunc)_destroy_sx, NULL);

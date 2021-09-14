@@ -774,6 +774,7 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
     auto check3 = test_error_struct_new(logdomain, loglevel, "");
     auto cleanup = test_error_struct_new (logdomain, loglevel, "");
     auto split0 = xaccTransGetSplit (txn0, 0);
+    qof_log_set_level (GNC_MOD_ENGINE, QOF_LOG_INFO);
     test_add_error (check);
     test_add_error (check2);
     test_add_error (cleanup);
@@ -1322,6 +1323,7 @@ test_xaccTransBeginEdit ()
     auto check2 = test_error_struct_new (logdomain, loglevel, msg2);
     guint hdlr = g_log_set_handler (logdomain, loglevel,
                                     (GLogFunc)test_list_handler, NULL);
+    qof_log_set_level (logdomain, QOF_LOG_INFO);
     test_add_error (check1);
     test_add_error (check2);
 

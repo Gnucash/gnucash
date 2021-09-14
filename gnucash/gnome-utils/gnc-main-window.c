@@ -784,7 +784,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
              (pos[1] + (geom ? geom[1] : 0) < 0) ||
              (pos[1] > gdk_screen_height()))
     {
-        g_debug("position %dx%d, size%dx%d is offscreen; will not move",
+        DEBUG("position %dx%d, size%dx%d is offscreen; will not move",
                 pos[0], pos[1], geom ? geom[0] : 0, geom ? geom[1] : 0);
     }
     else

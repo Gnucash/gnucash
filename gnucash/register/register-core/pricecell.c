@@ -45,7 +45,9 @@
 
 #include "basiccell.h"
 #include "pricecell.h"
+#include <qoflog.h>
 
+static const QofLogModule log_module = G_LOG_DOMAIN;
 
 static void gnc_price_cell_init (PriceCell *cell);
 static void gnc_price_cell_set_value_internal (BasicCell *bcell,
@@ -80,7 +82,7 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
     const char *toks = "+-*/=()_";
     char *validated_newval = NULL;
 
-    g_debug("%s, %d, %s, %d, %d, %d, %d",
+    DEBUG("%s, %d, %s, %d, %d, %d, %d",
             change ? (gchar *)change : "(null)", change_len,
             newval ? (gchar *)newval : "(null)", newval_len,
             *cursor_position, *start_selection, *end_selection);

@@ -13,10 +13,13 @@
 #include "gfec.h"
 #include "gnc-guile-utils.h"
 #include "platform.h"
+#include <qoflog.h>
 #include <glib.h>
 #if COMPILER(MSVC)
 # define strdup _strdup
 #endif
+
+static const QofLogModule log_module = G_LOG_DOMAIN;
 
 static SCM
 gfec_string_from_utf8(void *data)
@@ -164,10 +167,10 @@ error_handler(const char *msg)
 gboolean
 gfec_try_load(const gchar *fn)
 {
-    g_debug("looking for %s", fn);
+    DEBUG("looking for %s", fn);
     if (g_file_test(fn, G_FILE_TEST_EXISTS))
     {
-        g_debug("trying to load %s", fn);
+        DEBUG("trying to load %s", fn);
         error_in_scm_eval = FALSE;
         gfec_eval_file(fn, error_handler);
         return !error_in_scm_eval;

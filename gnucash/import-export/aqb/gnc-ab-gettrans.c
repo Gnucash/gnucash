@@ -141,7 +141,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     /* Get the start and end dates for the GetTransactions job.  */
     if (!gettrans_dates(parent, gnc_acc, &from_date, &to_date))
     {
-        g_debug("gnc_ab_gettrans: gettrans_dates aborted");
+        DEBUG("gnc_ab_gettrans: gettrans_dates aborted");
         goto cleanup;
     }
     /* Use this as a local storage for the until_time below. */

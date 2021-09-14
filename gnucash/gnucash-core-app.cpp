@@ -90,7 +90,7 @@ static void
 update_message(const gchar *msg)
 {
     gnc_update_splash_screen(msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
-    g_message("%s", msg);
+    PINFO("%s", msg);
 }
 
 void
@@ -136,10 +136,6 @@ gnc_log_init (const std::vector <std::string> log_flags,
         qof_log_init_filename (tracefilename);
         g_free (tracefilename);
     }
-
-    // set a reasonable default.
-    qof_log_set_default(QOF_LOG_WARNING);
-    gnc_log_default();
 
     if (gnc_prefs_is_debugging_enabled())
     {

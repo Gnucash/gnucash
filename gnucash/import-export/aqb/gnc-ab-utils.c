@@ -192,18 +192,18 @@ gnc_AB_BANKING_new(void)
         {
             if (AB_Banking_HasConf3(api) == 0)
             {
-                g_message("gnc_AB_BANKING_new: importing aqbanking3 configuration\n");
+                PINFO("gnc_AB_BANKING_new: importing aqbanking3 configuration\n");
                 if (AB_Banking_ImportConf3(api) < 0)
                 {
-                    g_message("gnc_AB_BANKING_new: unable to import aqbanking3 configuration\n");
+                    PINFO("gnc_AB_BANKING_new: unable to import aqbanking3 configuration\n");
                 }
             }
             else if (AB_Banking_HasConf2(api) == 0)
             {
-                g_message("gnc_AB_BANKING_new: importing aqbanking2 configuration\n");
+                PINFO("gnc_AB_BANKING_new: importing aqbanking2 configuration\n");
                 if (AB_Banking_ImportConf2(api) < 0)
                 {
-                    g_message("gnc_AB_BANKING_new: unable to import aqbanking2 configuration\n");
+                    PINFO("gnc_AB_BANKING_new: unable to import aqbanking2 configuration\n");
                 }
             }
         }
@@ -291,7 +291,7 @@ gnc_ab_get_ab_account(const AB_BANKING *api, Account *gnc_acc)
 /* Finding the account by code and number is suspended in AQBANKING 6 pending
  * implementation of a replacement for AB_Banking_GetAccountByCodeAndNumber.
  */
-            g_message("gnc_ab_get_ab_account: No AB_ACCOUNT found for UID %d, "
+            PINFO("gnc_ab_get_ab_account: No AB_ACCOUNT found for UID %d, "
                       "trying bank code\n", account_uid);
             return NULL;
         }
@@ -301,7 +301,7 @@ gnc_ab_get_ab_account(const AB_BANKING *api, Account *gnc_acc)
 
         if (!ab_account && bankcode && *bankcode && accountid && *accountid)
         {
-            g_message("gnc_ab_get_ab_account: No AB_ACCOUNT found for UID %d, "
+            PINFO("gnc_ab_get_ab_account: No AB_ACCOUNT found for UID %d, "
                       "trying bank code\n", account_uid);
             ab_account = AB_Banking_GetAccountByCodeAndNumber(api, bankcode,
                                                               accountid);

@@ -120,7 +120,7 @@ static void
 gnc_plugin_bi_import_cmd_test (GtkAction *action, GncMainWindowActionData *data)
 {
     ENTER ("action %p, main window data %p", action, data);
-    g_message ("bi_import");
+    PINFO ("bi_import");
 
     gnc_plugin_bi_import_showGUI(GTK_WINDOW(data->window));
 

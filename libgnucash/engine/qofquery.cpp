@@ -1509,9 +1509,8 @@ static void qof_query_printValueForParam (QofQueryPredData *pd, GString * gs);
 static void qof_query_printOutput (GList * output);
 
 /** \deprecated access via qof_log instead.
- The query will be logged automatically if qof_log_set_default
- or qof_log_set_level(QOF_MOD_QUERY, ...) are set to QOF_LOG_DEBUG
- or higher.
+ The query will be logged automatically if
+ qof_log_set_level(QOF_MOD_QUERY, ...) is set to QOF_LOG_DEBUG.
 
  This function cycles through a QofQuery object, and
  prints out the values of the various members of the query

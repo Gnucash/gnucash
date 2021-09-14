@@ -48,6 +48,7 @@ set(gtest_import_backend_INCLUDE_DIRS
 )
 
 set(gtest_import_backend_LIBS
+  gnc-engine
   PkgConfig::GTK3
   ${Boost_LIBRARIES}
   ${GMODULE_LDFLAGS}

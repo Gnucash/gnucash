@@ -788,13 +788,13 @@ gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
 
         if (xaccTransGetCurrency(txn) != gncOwnerGetCurrency (owner))
         {
-            g_message("Uh oh, mismatching currency/commodity between selected transaction and owner. We fall back to manual creation of a new transaction.");
+            PINFO("Uh oh, mismatching currency/commodity between selected transaction and owner. We fall back to manual creation of a new transaction.");
             xfer_split = NULL;
         }
 
         if (!xfer_split)
         {
-            g_message("Huh? Asset account not found anymore. Fully deleting old txn and now creating a new one.");
+            PINFO("Huh? Asset account not found anymore. Fully deleting old txn and now creating a new one.");
 
             xaccTransBeginEdit (txn);
             xaccTransDestroy (txn);

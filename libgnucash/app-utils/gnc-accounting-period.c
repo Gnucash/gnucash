@@ -49,6 +49,7 @@
 #include "qof.h"
 #include "gnc-ui-util.h"
 
+static const QofLogModule log_module = G_LOG_DOMAIN;
 static time64 gnc_accounting_period_start_time64 (GncAccountingPeriod which,
                                                   const GDate *fy_end,
                                                   const GDate *contains);
@@ -152,7 +153,7 @@ gnc_accounting_period_start_gdate (GncAccountingPeriod which,
     switch (which)
     {
     default:
-        g_message ("Undefined relative time constant %d", which);
+        PINFO ("Undefined relative time constant %d", which);
         g_date_free (date);
         return NULL;
 
@@ -187,7 +188,7 @@ gnc_accounting_period_start_gdate (GncAccountingPeriod which,
     case GNC_ACCOUNTING_PERIOD_FYEAR:
         if (fy_end == NULL)
         {
-            g_message ("Request for fisal year value but no fiscal year end value provided.");
+            PINFO ("Request for fisal year value but no fiscal year end value provided.");
             g_date_free (date);
             return NULL;
         }
@@ -197,7 +198,7 @@ gnc_accounting_period_start_gdate (GncAccountingPeriod which,
     case GNC_ACCOUNTING_PERIOD_FYEAR_PREV:
         if (fy_end == NULL)
         {
-            g_message ("Request for fisal year value but no fiscal year end value provided.");
+            PINFO ("Request for fisal year value but no fiscal year end value provided.");
             g_date_free (date);
             return NULL;
         }
@@ -246,7 +247,7 @@ gnc_accounting_period_end_gdate (GncAccountingPeriod which,
     switch (which)
     {
     default:
-        g_message ("Undefined relative time constant %d", which);
+        PINFO ("Undefined relative time constant %d", which);
         g_date_free (date);
         return 0;
 
@@ -281,7 +282,7 @@ gnc_accounting_period_end_gdate (GncAccountingPeriod which,
     case GNC_ACCOUNTING_PERIOD_FYEAR:
         if (fy_end == NULL)
         {
-            g_message ("Request for fisal year value but no fiscal year end value provided.");
+            PINFO ("Request for fisal year value but no fiscal year end value provided.");
             g_date_free (date);
             return 0;
         }
@@ -291,7 +292,7 @@ gnc_accounting_period_end_gdate (GncAccountingPeriod which,
     case GNC_ACCOUNTING_PERIOD_FYEAR_PREV:
         if (fy_end == NULL)
         {
-            g_message ("Request for fisal year value but no fiscal year end value provided.");
+            PINFO ("Request for fisal year value but no fiscal year end value provided.");
             g_date_free (date);
             return 0;
         }

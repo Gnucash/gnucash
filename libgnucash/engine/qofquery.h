@@ -372,7 +372,6 @@ gboolean qof_query_equal (const QofQuery *q1, const QofQuery *q2);
  *
  * \deprecated Do not call directly, use the standard log
  * module code: ::qof_log_set_level(QOF_MOD_QUERY, QOF_LOG_DEBUG);
- * or ::qof_log_set_default(QOF_LOG_DEBUG);
  */
 void qof_query_print (QofQuery *query);
 

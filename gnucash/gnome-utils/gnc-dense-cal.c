@@ -33,6 +33,9 @@
 #include <stdlib.h>
 #include "gnc-date.h"
 #include "dialog-utils.h"
+#include <qoflog.h>
+
+static const QofLogModule log_module = G_LOG_DOMAIN;
 
 /**
  * Marking ...
@@ -531,21 +534,21 @@ _gnc_dense_cal_set_month(GncDenseCal *dcal, GDateMonth mon, gboolean redraw)
     dcal->month = mon;
     g_timer_start(t);
     recompute_first_of_month_offset(dcal);
-    g_debug("recompute_first_of_month_offset: %f", g_timer_elapsed(t, NULL) * 1000.);
+    DEBUG("recompute_first_of_month_offset: %f", g_timer_elapsed(t, NULL) * 1000.);
     g_timer_start(t);
     recompute_extents(dcal);
-    g_debug("recompute_extents: %f", g_timer_elapsed(t, NULL) * 1000.);
+    DEBUG("recompute_extents: %f", g_timer_elapsed(t, NULL) * 1000.);
     if (redraw && gtk_widget_get_realized(GTK_WIDGET(dcal)))
     {
         g_timer_start(t);
         recompute_x_y_scales(dcal);
-        g_debug("recompute_x_y_scales: %f", g_timer_elapsed(t, NULL) * 1000.);
+        DEBUG("recompute_x_y_scales: %f", g_timer_elapsed(t, NULL) * 1000.);
         g_timer_start(t);
         gnc_dense_cal_draw_to_buffer(dcal);
-        g_debug("draw_to_buffer: %f", g_timer_elapsed(t, NULL) * 1000.);
+        DEBUG("draw_to_buffer: %f", g_timer_elapsed(t, NULL) * 1000.);
         g_timer_start(t);
         gtk_widget_queue_draw(GTK_WIDGET(dcal->cal_drawing_area));
-        g_debug("queue_draw: %f", g_timer_elapsed(t, NULL) * 1000.);
+        DEBUG("queue_draw: %f", g_timer_elapsed(t, NULL) * 1000.);
     }
     g_timer_stop(t);
     g_timer_destroy(t);
@@ -883,7 +886,7 @@ gnc_dense_cal_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
     return TRUE;
 }
 
-#define LOG_AND_RESET(timer, msg) do { g_debug("%s: %f", msg, g_timer_elapsed(timer, NULL) * 1000.); g_timer_reset(timer); } while (0);
+#define LOG_AND_RESET(timer, msg) do { DEBUG("%s: %f", msg, g_timer_elapsed(timer, NULL) * 1000.); g_timer_reset(timer); } while (0);
 
 static void
 gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
@@ -900,7 +903,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     gchar *primary_color_class, *secondary_color_class, *marker_color_class;
 
     timer = g_timer_new();
-    g_debug("drawing");
+    DEBUG("drawing");
     widget = GTK_WIDGET(dcal);
 
     if (!dcal->surface)
@@ -1361,7 +1364,7 @@ _gdc_view_option_changed(GtkComboBox *widget, gpointer user_data)
     if (!gtk_combo_box_get_active_iter(widget, &iter))
         return;
     gtk_tree_model_get(model, &iter, VIEW_OPTS_COLUMN_NUM_MONTHS, &months_val, -1);
-    g_debug("changing to %d months", months_val);
+    DEBUG("changing to %d months", months_val);
     gnc_dense_cal_set_num_months(GNC_DENSE_CAL(user_data), months_val);
 }
 
@@ -1791,7 +1794,7 @@ wheres_this(GncDenseCal *dcal, int x, int y)
     if (g_date_get_julian(&d) >= g_date_get_julian(&startD))
     {
         /* we're past the end of the displayed calendar, thus -1 */
-        g_debug("%d >= %d", g_date_get_julian(&d), g_date_get_julian(&startD));
+        DEBUG("%d >= %d", g_date_get_julian(&d), g_date_get_julian(&startD));
         return -1;
     }
 
@@ -1909,7 +1912,7 @@ static void
 gdc_model_added_cb(GncDenseCalModel *model, guint added_tag, gpointer user_data)
 {
     GncDenseCal *cal = GNC_DENSE_CAL(user_data);
-    g_debug("gdc_model_added_cb update\n");
+    DEBUG("gdc_model_added_cb update\n");
     gdc_add_tag_markings(cal, added_tag);
 }
 
@@ -1918,7 +1921,7 @@ gdc_model_update_cb(GncDenseCalModel *model, guint update_tag, gpointer user_dat
 {
     GncDenseCal *cal = GNC_DENSE_CAL (user_data);
     gint num_marks = 0;
-    g_debug ("gdc_model_update_cb update for tag [%d]\n", update_tag);
+    DEBUG ("gdc_model_update_cb update for tag [%d]\n", update_tag);
     num_marks = gnc_dense_cal_model_get_instance_count (cal->model, update_tag);
     // We need to redraw if there are no mark, to ensure they're all erased.
     gdc_mark_remove (cal, update_tag, num_marks==0);
@@ -1930,7 +1933,7 @@ static void
 gdc_model_removing_cb(GncDenseCalModel *model, guint remove_tag, gpointer user_data)
 {
     GncDenseCal *cal = GNC_DENSE_CAL(user_data);
-    g_debug("gdc_model_removing_cb update [%d]\n", remove_tag);
+    DEBUG("gdc_model_removing_cb update [%d]\n", remove_tag);
     gdc_mark_remove(cal, remove_tag, TRUE);
 }
 
@@ -1983,7 +1986,7 @@ gdc_mark_add(GncDenseCal *dcal,
         newMark->info = g_strdup(info);
     newMark->tag = tag;
     newMark->ourMarks = NULL;
-    g_debug("saving mark with tag [%d]\n", newMark->tag);
+    DEBUG("saving mark with tag [%d]\n", newMark->tag);
 
     for (i = 0; i < size; i++)
     {
@@ -2016,7 +2019,7 @@ gdc_mark_remove(GncDenseCal *dcal, guint mark_to_remove, gboolean redraw)
     /* Ignore non-realistic marks */
     if ((gint)mark_to_remove == -1)
     {
-        g_debug("mark_to_remove = -1");
+        DEBUG("mark_to_remove = -1");
         return;
     }
 
@@ -2029,12 +2032,12 @@ gdc_mark_remove(GncDenseCal *dcal, guint mark_to_remove, gboolean redraw)
     }
     if (iter == NULL)
     {
-        g_message("couldn't find tag [%d]", mark_to_remove);
+        PINFO("couldn't find tag [%d]", mark_to_remove);
         return;
     }
     if (mark_data == NULL)
     {
-        g_debug("mark_data == null");
+        DEBUG("mark_data == null");
         return;
     }
 

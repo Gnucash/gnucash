@@ -520,7 +520,7 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, const GDate *start_dat
     else
     {
         Recurrence *r = (Recurrence*)recurrences->data;
-        g_debug("recurrence period [%d]", recurrenceGetPeriodType(r));
+        DEBUG("recurrence period [%d]", recurrenceGetPeriodType(r));
         switch (recurrenceGetPeriodType(r))
         {
         case PERIOD_ONCE:

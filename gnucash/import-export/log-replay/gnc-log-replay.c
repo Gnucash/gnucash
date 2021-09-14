@@ -51,8 +51,7 @@ void qof_instance_set_guid (gpointer inst, const GncGUID *guid);
 /* NW: If you want a new log_module, just define
 a unique string either in gnc-engine.h or
 locally.*/
-/*static QofLogModule log_module = GNC_MOD_IMPORT;*/
-static QofLogModule log_module = GNC_MOD_TEST;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /* fprintf (trans_log, "mod	guid	time_now	" \
    "date_entered	date_posted	" \

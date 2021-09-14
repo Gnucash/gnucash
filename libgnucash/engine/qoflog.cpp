@@ -55,6 +55,7 @@ extern "C"
 #include "qof.h"
 #include "qoflog.h"
 #include <string>
+#include <string_view>
 #include <vector>
 #include <memory>
 #include <algorithm>
@@ -79,9 +80,11 @@ using MEVec = std::vector<ModuleEntryPtr>;
 
 static constexpr int parts = 4; //Log domain parts vector preallocation size
 static constexpr QofLogLevel default_level = QOF_LOG_WARNING;
+static QofLogLevel current_max{default_level};
+
 struct ModuleEntry
 {
-    ModuleEntry(std::string name, QofLogLevel level) :
+    ModuleEntry(const std::string& name, QofLogLevel level) :
         m_name{name}, m_level{level} {
             m_children.reserve(parts);
         }
@@ -102,19 +105,19 @@ get_modules()
 }
 
 static StrVec
-split_domain (const std::string domain)
+split_domain (const std::string_view domain)
 {
     StrVec domain_parts;
     domain_parts.reserve(parts);
     int start = 0;
     auto pos = domain.find(".");
-    if (pos == std::string::npos)
+    if (pos == std::string_view::npos)
     {
         domain_parts.emplace_back(domain);
     }
     else
     {
-        while (pos != std::string::npos)
+        while (pos != std::string_view::npos)
         {
             auto part_name{domain.substr(start, pos - start)};
             domain_parts.emplace_back(part_name);
@@ -291,8 +294,11 @@ qof_log_shutdown (void)
 void
 qof_log_set_level(QofLogModule log_module, QofLogLevel level)
 {
-    if (!log_module || level == 0)
+    if (!log_module || level == QOF_LOG_FATAL)
         return;
+
+    if (level > current_max)
+        current_max = level;
 
     auto module_parts = split_domain(log_module);
     auto module = get_modules();
@@ -321,10 +327,14 @@ qof_log_set_level(QofLogModule log_module, QofLogLevel level)
 gboolean
 qof_log_check(QofLogModule domain, QofLogLevel level)
 {
-
+// Check the global levels
+    if (level > current_max)
+        return FALSE;
+    if (level <= default_level)
+        return TRUE;
     auto module = get_modules();
-    // If the level is < the default then no need to look further.
-    if (level < module->m_level)
+    // If the level <= the default then no need to look further.
+    if (level <= module->m_level)
         return TRUE;
 
     if (!domain)
@@ -419,7 +429,7 @@ qof_log_parse_log_config(const char *filename)
         return;
     }
 
-    g_debug("parsing log config from [%s]", filename);
+    DEBUG("parsing log config from [%s]", filename);
     if (g_key_file_has_group(conf, levels_group))
     {
         gsize num_levels;
@@ -440,7 +450,7 @@ qof_log_parse_log_config(const char *filename)
             level_str = g_key_file_get_string(conf, levels_group, logger_name, NULL);
             level = qof_log_level_from_string(level_str);
 
-            g_debug("setting log [%s] to level [%s=%d]", logger_name, level_str, level);
+            DEBUG("setting log [%s] to level [%s=%d]", logger_name, level_str, level);
             qof_log_set_level(logger_name, level);
 
             g_free(logger_name);
@@ -475,7 +485,7 @@ qof_log_parse_log_config(const char *filename)
             }
 
             value = g_key_file_get_string(conf, output_group, key, NULL);
-            g_debug("setting [output].to=[%s]", value);
+            DEBUG("setting [output].to=[%s]", value);
             qof_log_init_filename_special(value);
             g_free(value);
         }
@@ -483,14 +493,6 @@ qof_log_parse_log_config(const char *filename)
     }
 
     g_key_file_free(conf);
-}
-
-void
-qof_log_set_default(QofLogLevel log_level)
-{
-    qof_log_set_level("", log_level);
-    qof_log_set_level("qof", log_level);
-    qof_log_set_level("qof.unknown", log_level);
 }
 
 const gchar*
