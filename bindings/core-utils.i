@@ -93,7 +93,7 @@ gchar * gnc_build_reports_path(const gchar *);
 void gnc_scm_log_warn(const gchar *);
 void gnc_scm_log_error(const gchar *);
 void gnc_scm_log_msg(const gchar *);
-void gnc_scm_loDEBUG(const gchar *);
+void gnc_scm_log_debug(const gchar *);
 
 %newobject gnc_utf8_strip_invalid_strdup;
 gchar * gnc_utf8_strip_invalid_strdup(const gchar *);

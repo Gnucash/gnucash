@@ -73,10 +73,11 @@
  *   @c "gnc.gui.plugin-pages.sx-list" or
  *   @c "gnc.register.gnome.cell.quickfill" are
  *   good examples.
- * @li Use glib-provided @c DEBUG(...), @c PINFO(...),
- *   @c g_warning(...), @c g_critical(...) and
- *   @c g_error(...) functions in preference to the historical qof/gnc @c
- *   PINFO, @c PERR (&c.) macros
+ * @li Prefer the macros defined here (PERR, PWARN, PINFO, etc.) to
+ *   the GLib-provided functions that they wrap because it allows us to
+ *   more easily replace the GLib logging functinos with another
+ *   implementation and besides our macros are able to short-circuit
+ *   GLib's rather slow domain and level matching.
  *
  * @see qof_log_parse_log_config(const char*)
  **/
