@@ -149,14 +149,7 @@ GncXmlBackend::session_begin(QofSession* session, const char* new_uri,
 
     /* Set the lock file */
     m_lockfile = m_fullpath + ".LCK";
-    auto locked = get_file_lock();
-    if (mode == SESSION_BREAK_LOCK && !locked)
-    {
-        // Don't pass on locked or readonly errors.
-        QofBackendError berror = get_error();
-        if (!(berror == ERR_BACKEND_LOCKED || berror == ERR_BACKEND_READONLY))
-            set_error(berror);
-    }
+    get_file_lock(mode);
 }
 
 void
@@ -626,50 +619,45 @@ GncXmlBackend::link_or_make_backup (const std::string& orig,
     return true;
 }
 
-bool
-GncXmlBackend::get_file_lock ()
+void
+GncXmlBackend::get_file_lock (SessionOpenMode mode)
 {
-    GStatBuf statbuf;
-#ifndef G_OS_WIN32
-    char* pathbuf = NULL, *tmpbuf = NULL;
-    size_t pathbuf_size = 0;
-#endif
-    QofBackendError be_err;
-
-    auto rc = g_stat (m_lockfile.c_str(), &statbuf);
-    if (!rc)
-    {
-        /* oops .. file is locked by another user  .. */
-        set_error(ERR_BACKEND_LOCKED);
-        m_lockfile.clear();
-        return false;
-    }
-
     m_lockfd = g_open (m_lockfile.c_str(), O_RDWR | O_CREAT | O_EXCL ,
-                         S_IRUSR | S_IWUSR);
+                       S_IRUSR | S_IWUSR);
     if (m_lockfd == -1)
     {
+        QofBackendError be_err{ERR_BACKEND_NO_ERR};
         /* oops .. we can't create the lockfile .. */
         switch (errno)
         {
         case EACCES:
-        case EROFS:
-        case ENOSPC:
+            set_message("Unable to create lockfile, make sure that you have write access to the directory.");
             be_err = ERR_BACKEND_READONLY;
             break;
-        default:
+
+        case EROFS:
+            set_message("Unable to create lockfile, data file is on a read-only filesystem.");
+            be_err = ERR_BACKEND_READONLY;
+            break;
+        case ENOSPC:
+            set_message("Unable to create lockfile, no space on filesystem.");
+            be_err = ERR_BACKEND_READONLY;
+            break;
+        case EEXIST:
             be_err = ERR_BACKEND_LOCKED;
             break;
-        }
-        if (errno != EEXIST) // Can't lock, but not because the file is locked
+        default: 
             PWARN ("Unable to create the lockfile %s: %s",
                    m_lockfile.c_str(), strerror(errno));
-        set_error(be_err);
-        m_lockfile.clear();
-        return false;
+            set_message("Lockfile creation failed. Please see the tracefile for details.");
+            be_err = ERR_FILEIO_FILE_LOCKERR;
+        }
+        if (!(mode == SESSION_BREAK_LOCK && be_err == ERR_BACKEND_LOCKED))
+        {
+            set_error(be_err);
+            m_lockfile.clear();
+        }
     }
-
-    return true;
 }
 
 bool
