@@ -306,7 +306,7 @@ gnc_scm_log_msg(const gchar *msg)
 }
 
 void
-gnc_scm_loDEBUG(const gchar *msg)
+gnc_scm_log_debug(const gchar *msg)
 {
     g_log("gnc.scm", G_LOG_LEVEL_DEBUG, "%s", msg);
 }
