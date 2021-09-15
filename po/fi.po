@@ -5,14 +5,15 @@
 # Tuomo Hartikainen <tth@harski.org>, 2017.
 # Tuomo Kohvakka <tuomo.kohvakka@iki.fi>, 2008.
 # Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>, 2021.
+# Jiri Grönroos <jiri.gronroos@iki.fi>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-13 09:05+0200\n"
-"PO-Revision-Date: 2021-01-03 02:29+0000\n"
-"Last-Translator: Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>\n"
+"PO-Revision-Date: 2021-09-15 09:35+0000\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
 "Language: fi\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Bookmarks: -1,-1,2060,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -6304,12 +6305,12 @@ msgstr "GnuCash"
 #: gnucash/gnome/gnucash.appdata.xml.in.in:6
 #: gnucash/gnome/gnucash.desktop.in.in:8
 msgid "Manage your finances, accounts, and investments"
-msgstr ""
+msgstr "Hallitse rahavirtojasi, tilejäsi ja sijoituksiasi"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
 msgid ""
 "GnuCash is a program for personal and small-business financial-accounting."
-msgstr ""
+msgstr "GnuCash on ohjelma henkilökohtaiseen ja pienyritysten kirjanpitoon."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:11
 msgid ""
@@ -6356,11 +6357,11 @@ msgstr ""
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:33
 msgid "GnuCash Project"
-msgstr "GnuCash Projekti"
+msgstr "GnuCash-projekti"
 
 #: gnucash/gnome/gnucash.desktop.in.in:7
 msgid "Finance Management"
-msgstr ""
+msgstr "Taloudenhallinta"
 
 #: gnucash/gnome/reconcile-view.c:407
 #: gnucash/register/ledger-core/split-register-layout.c:695
@@ -15242,6 +15243,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-new-user.glade:211
 msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
 msgstr ""
+"<span size=\"larger\" weight=\"bold\">Tervetuloa, tämä on GnuCash!</span>"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:231
 msgid ""
@@ -15250,18 +15252,22 @@ msgid ""
 "the <i>OK</i> button or press the <i>Cancel</i> button if you don't want to "
 "perform any of them."
 msgstr ""
+"Tarjolla on esimääriteltyjä toimintoja, jotka soveltuvat useimmille uusille "
+"GnuCash-käyttäjille. Valitse haluamasi toiminto alapuolelta ja napsauta "
+"<i>OK</i>, tai napsauta <i>Peru</i> jos et halua käyttää mitään näistä "
+"toiminnoista."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:245
 msgid "C_reate a new set of accounts"
-msgstr ""
+msgstr "_Luo uusi joukko tilejä"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:262
 msgid "_Import my QIF files"
-msgstr ""
+msgstr "_Tuo QIF-tiedostoja"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:279
 msgid "_Open the new user tutorial"
-msgstr ""
+msgstr "_Avaa uuden käyttäjän opas"
 
 #: gnucash/gtkbuilder/dialog-object-references.glade:8
 msgid "Object references"
@@ -18801,11 +18807,11 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:92
 msgid "_Online Actions"
-msgstr ""
+msgstr "_Verkkotoiminnot"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:96
 msgid "_Online Banking Setup..."
-msgstr ""
+msgstr "_Verkkopankin määritys..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:97
 msgid ""
@@ -19337,11 +19343,11 @@ msgstr "Täsmäytyspäivämäärä"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."
-msgstr "Vie _tilihierarkia CVS-tiedostoon..."
+msgstr "Vie _tilihierarkia CSV-tiedostoon..."
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:55
 msgid "Export the Account Tree to a CSV file"
-msgstr "Vie tilihierarkia CVS-tiedostoon"
+msgstr "Vie tilihierarkia CSV-tiedostoon"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:59
 msgid "Export _Transactions to CSV..."
@@ -19353,11 +19359,11 @@ msgstr "Vie tositteet CSV-tiedostoon"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:64
 msgid "Export A_ctive Register to CSV..."
-msgstr "Vie t_ilikirja CVS-tiedostoon..."
+msgstr "Vie t_ilikirja CSV-tiedostoon..."
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:66
 msgid "Export the Active Register to a CSV file"
-msgstr "Vie aktiivinen tilikirja CVS-tiedostoon"
+msgstr "Vie aktiivinen tilikirja CSV-tiedostoon"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:71
 #, c-format
