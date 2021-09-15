@@ -2715,6 +2715,7 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
     gnc_commodity *commodity;
     gnc_commodity_table *table;
 
+    PWARN ("this function is deprecated and will be removed in 5.x");
     if ((!acc) || (!currency)) return;
     g_value_init (&v, G_TYPE_STRING);
     g_value_set_string (&v, s);
@@ -3373,6 +3374,7 @@ DxaccAccountGetCurrency (const Account *acc)
     const char *s = NULL;
     gnc_commodity_table *table;
 
+    PWARN ("this function is deprecated and will be removed in 5.x");
     if (!acc) return NULL;
     qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"old-currency"});
     if (G_VALUE_HOLDS_STRING (&v))
@@ -4983,6 +4985,7 @@ xaccAccountGainsAccount (Account *acc, gnc_commodity *curr)
 void
 dxaccAccountSetPriceSrc(Account *acc, const char *src)
 {
+    PWARN ("this function is deprecated and will be removed in 5.x");
     if (!acc) return;
 
     if (xaccAccountIsPriced(acc))
@@ -5011,6 +5014,7 @@ const char*
 dxaccAccountGetPriceSrc(const Account *acc)
 {
     GValue v = G_VALUE_INIT;
+    PWARN ("this function is deprecated and will be removed in 5.x");
     if (!acc) return NULL;
 
     if (!xaccAccountIsPriced(acc)) return NULL;
@@ -5026,6 +5030,7 @@ void
 dxaccAccountSetQuoteTZ(Account *acc, const char *tz)
 {
     GValue v = G_VALUE_INIT;
+    PWARN ("this function is deprecated and will be removed in 5.x");
     if (!acc) return;
     if (!xaccAccountIsPriced(acc)) return;
     xaccAccountBeginEdit(acc);
@@ -5043,6 +5048,7 @@ const char*
 dxaccAccountGetQuoteTZ(const Account *acc)
 {
     GValue v = G_VALUE_INIT;
+    PWARN ("this function is deprecated and will be removed in 5.x");
     if (!acc) return NULL;
     if (!xaccAccountIsPriced(acc)) return NULL;
     qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, {"old-quote-tz"});
