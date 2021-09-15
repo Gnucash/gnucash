@@ -328,14 +328,6 @@ void gnc_gpid_kill(GPid pid)
 #endif /* G_OS_WIN32 */
 }
 
-static inline char*
-gnc_strcat (char* dest, const char* src)
-{
-    while (*dest) dest++;
-    while ((*dest++ = *src++));
-    return --dest;
-}
-
 gchar *
 gnc_g_list_stringjoin (GList *list_of_strings, const gchar *sep)
 {
@@ -352,9 +344,9 @@ gnc_g_list_stringjoin (GList *list_of_strings, const gchar *sep)
     p = retval = (gchar*) g_malloc0 (length * sizeof (gchar) + 1);
     for (GList *n = list_of_strings; n; n = n->next)
     {
-        p = gnc_strcat (p, (gchar*)n->data);
+        p = g_stpcpy (p, (gchar*)n->data);
         if (n->next && sep)
-            p = gnc_strcat (p, sep);
+            p = g_stpcpy (p, sep);
     }
 
     return retval;
