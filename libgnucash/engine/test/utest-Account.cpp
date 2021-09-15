@@ -1221,6 +1221,52 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
 }
 
 static void
+set_kvp_string_path (Account *acc, std::vector<std::string> const & path,
+                     const char *value)
+{
+    xaccAccountBeginEdit(acc);
+    if (value)
+    {
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, G_TYPE_STRING);
+        g_value_set_string (&v, value);
+        qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, path);
+        g_value_unset (&v);
+    }
+    else
+        qof_instance_set_path_kvp (QOF_INSTANCE (acc), NULL, path);
+
+    xaccAccountCommitEdit(acc);
+}
+
+static void
+test_gnc_account_get_map_entry (Fixture *fixture, gconstpointer pData)
+{
+    Account *account = xaccMallocAccount (gnc_account_get_book (fixture->acct));
+
+    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", NULL), ==, nullptr);
+    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "two"), ==, nullptr);
+
+    set_kvp_string_path (account, {"one"}, "uno");
+    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", NULL), ==, "uno");
+    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "two"), ==, nullptr);
+
+    set_kvp_string_path (account, {"one", "two"}, "dos");
+    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "tw0"), ==, nullptr);
+    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "two"), ==, "dos");
+
+    set_kvp_string_path (account, {"one"}, nullptr);
+    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", NULL), ==, nullptr);
+    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "two"), ==, nullptr);
+
+    set_kvp_string_path (account, {"one", "two"}, "dos");
+    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "two"), ==, "dos");
+
+    xaccAccountBeginEdit (account);
+    xaccAccountDestroy (account);
+}
+
+static void
 test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = gnc_account_get_book (fixture->acct);
@@ -2703,6 +2749,7 @@ test_suite_account (void)
 // GNC_TEST_ADD (suitename, "xaccAcctChildrenEqual", Fixture, NULL, setup, test_xaccAcctChildrenEqual,  teardown );
 // GNC_TEST_ADD (suitename, "xaccAccountEqual", Fixture, NULL, setup, test_xaccAccountEqual,  teardown );
     GNC_TEST_ADD (suitename, "gnc account kvp getters & setters", Fixture, NULL, setup, test_gnc_account_kvp_setters_getters,  teardown );
+    GNC_TEST_ADD (suitename, "test_gnc_account_get_map_entry", Fixture, NULL, setup, test_gnc_account_get_map_entry,  teardown );
     GNC_TEST_ADD (suitename, "gnc account insert & remove split", Fixture, NULL, setup, test_gnc_account_insert_remove_split,  teardown );
     GNC_TEST_ADD (suitename, "xaccAccount Insert and Remove Lot", Fixture, &good_data, setup, test_xaccAccountInsertRemoveLot,  teardown );
     GNC_TEST_ADD (suitename, "xaccAccountRecomputeBalance", Fixture, &some_data, setup, test_xaccAccountRecomputeBalance,  teardown );
