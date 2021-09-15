@@ -18400,22 +18400,16 @@ msgid "R_emind in advance"
 msgstr "Im Voraus er_innern"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Re_view created transactions"
 msgstr "Erzeugte Buchungen _durchsehen"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
-#, fuzzy
-#| msgid ""
-#| "Set \"Review Created Transactions\" as the default for the \"since last "
-#| "run\" dialog."
 msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
 msgstr ""
-"Legen Sie \"Erzeugte Buchungen durchsehen\" als Standard für den Dialog "
-"\"seit letzten Aufruf\" fest."
+"Legen Sie »Erzeugte Buchungen durchsehen« als Standard für den Dialog "
+"»seit letzten Aufruf« fest."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:765
 msgid "Edit Scheduled Transaction"
