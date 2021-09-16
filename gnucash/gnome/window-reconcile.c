@@ -313,8 +313,21 @@ recnRecalculateBalance (RecnWindow *recnData)
 }
 
 
+/* amount_edit_focus_out_cb
+ *   Callback on focus-out event for statement Ending Balance.
+ *   Sets the user_set_value flag true if the amount entered is
+ *   different to the calculated Ending Balance as at the default
+ *   Statement Date. This prevents the entered Ending Balance
+ *   being recalculated if the Statement Date is changed.
+ *
+ * Args:   widget         - Ending Balance widget
+ *         event          - event triggering this callback
+ *         data           - structure containing info about this
+ *                          reconciliation process.
+ * Returns:  False - propagate the event to the widget's parent.
+ */
 static gboolean
-gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
+amount_edit_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
                          startRecnWindowData *data)
 {
     gnc_numeric value;
@@ -336,12 +349,19 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
 }
 
 
-/* If the user changed the date edit widget, update the
- * ending balance to reflect the ending balance of the account
- * on the date that the date edit was changed to.
+/* recn_date_changed_cb
+ *   Callback on date_changed event for Statement Date.
+ *   If the user changed the date edit widget, and the Ending
+ *   Balance wasn't entered, update the Ending Balance to reflect
+ *   the ending balance of the account as at Statement Date.
+ *
+ * Args:   widget         - Statement Date edit widget
+ *         data           - structure containing info about this
+ *                          reconciliation.
+ * Returns:  none.
  */
 static void
-gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
+recn_date_changed_cb (GtkWidget *widget, startRecnWindowData *data)
 {
     GNCDateEdit *gde = GNC_DATE_EDIT (widget);
     gnc_numeric new_balance;
@@ -402,8 +422,6 @@ actions on this account. Please double-check this is the date you intended."));
     /* update the amount edit with the amount */
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value),
                                 new_balance);
-
-    gnc_start_recn_update_cb (GTK_WIDGET(data->end_value), NULL, data);
 }
 
 
@@ -414,7 +432,7 @@ gnc_start_recn_children_changed (GtkWidget *widget, startRecnWindowData *data)
         gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
     /* Force an update of the ending balance */
-    gnc_start_recn_date_changed (data->date_value, data);
+    recn_date_changed_cb (data->date_value, data);
 }
 
 
@@ -750,7 +768,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
         /* need to get a callback on date changes to update the recn balance */
         g_signal_connect ( G_OBJECT (date_value), "date_changed",
-                           G_CALLBACK (gnc_start_recn_date_changed), (gpointer) &data );
+                           G_CALLBACK (recn_date_changed_cb), (gpointer) &data );
 
         print_info.use_symbol = 0;
         gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (end_value), print_info);
@@ -762,7 +780,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (end_value));
         gtk_editable_select_region (GTK_EDITABLE(entry), 0, -1);
         fo_handler_id = g_signal_connect (G_OBJECT(entry), "focus-out-event",
-                                          G_CALLBACK(gnc_start_recn_update_cb),
+                                          G_CALLBACK(amount_edit_focus_out_cb),
                                           (gpointer) &data);
         gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 
