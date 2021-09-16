@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-13 09:05+0200\n"
-"PO-Revision-Date: 2021-09-15 21:39+0000\n"
+"PO-Revision-Date: 2021-09-16 13:35+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
@@ -457,6 +457,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"Postituslistat ovat GnuCash-yhteisön ensisijainen yhteydenpitotapa. "
+"Ilmoitukset esimerkiksi julkaisuista ja käyttäjäryhmistä ovat taulukossa "
+"osoitteessa https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
@@ -1771,7 +1774,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-fincalc.c:381
 msgid "The interest rate cannot be zero."
-msgstr ""
+msgstr "Korkoprosentti ei voi olla nolla."
 
 #: gnucash/gnome/dialog-fincalc.c:408
 msgid "The number of payments cannot be zero."
@@ -1806,15 +1809,14 @@ msgstr "Saldo nolla"
 
 #: gnucash/gnome/dialog-find-account.c:442
 msgid "Tax related"
-msgstr "Veroon liittyvä"
+msgstr "Veroihin liittyvä"
 
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:474
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "Tilit kategoriassa '%s'"
+msgstr "Tilin \"%s\" _alitilit"
 
 #: gnucash/gnome/dialog-find-transactions2.c:107
 #: gnucash/gnome/dialog-find-transactions.c:105
@@ -3733,7 +3735,7 @@ msgstr "Avaa matkalaskun hakuikkuna"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr ""
+msgstr "Yrityksen yhdistetyt asiakirjat"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
 msgid "View all Linked Business Documents"
@@ -3882,7 +3884,7 @@ msgstr "Poista valittu tili"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:257
 msgid "_Cascade Account Properties..."
-msgstr ""
+msgstr "_Limitä tilin ominaisuudet..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
 msgid "Cascade selected properties for account"
@@ -13927,7 +13929,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1496
 msgid "Ta_x related"
-msgstr ""
+msgstr "_Veroihin liittyvä"
 
 #. Translators: use the same words here as in 'Ta_x Report Options'.
 #: gnucash/gtkbuilder/dialog-account.glade:1501
@@ -14591,7 +14593,7 @@ msgstr "Sijainti ei ala kelvollisella protokollalla"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:536
 msgid "Reload and Locate Linked Documents"
-msgstr ""
+msgstr "Lataa uudelleen ja paikanna yhdistetyt asiakirjat"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:550
 msgid "_Reload"
@@ -14599,7 +14601,7 @@ msgstr "_Päivitä"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:564
 msgid "_Locate Linked Documents"
-msgstr ""
+msgstr "_Paikanna yhdistetyt asiakirjat"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:604
 msgid "All Linked Documents"
@@ -14615,7 +14617,7 @@ msgstr "Yhdistetty asiakirja"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:703
 msgid "Available"
-msgstr ""
+msgstr "Saatavilla"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:718
 msgid "Relative"
@@ -15232,7 +15234,7 @@ msgstr "<b>_Erät tilillä</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:259
 msgid "Show only open lots"
-msgstr ""
+msgstr "Näytä vain avoimet erät"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:302
 msgid "<b>Splits _free</b>"
@@ -18124,7 +18126,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
-msgstr ""
+msgstr "Verkkopankin määrityksen aloitus"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:90
 msgid ""
@@ -18141,7 +18143,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:121
 msgid "Start Online Banking Wizard"
-msgstr ""
+msgstr "Käynnistä verkkopankin ohjattu toiminto"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:139
 msgid ""
@@ -18156,7 +18158,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:200
 msgid "Match Online accounts with GnuCash accounts"
-msgstr ""
+msgstr "Täsmää verkkopankkitilit GnuCash-tilien kanssa"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:215
 msgid ""
@@ -18171,15 +18173,15 @@ msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:231
 msgid "Online Banking Setup Finished"
-msgstr ""
+msgstr "Verkkopankin määritys valmistui"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:8
 msgid "Online Banking Connection Window"
-msgstr ""
+msgstr "Verkkopankin yhteysikkuna"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:26
 msgid "_Abort"
-msgstr ""
+msgstr "_Keskeytä"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:82
 #: gnucash/import-export/aqb/dialog-ab.glade:147
@@ -18355,7 +18357,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1198
 msgid "(filled in automatically)"
-msgstr ""
+msgstr "(täytetään automaattisesti)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1227
 msgid "Payment _Purpose (only for recipient)"
@@ -18845,7 +18847,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:101
 msgid "Get _Balance"
-msgstr ""
+msgstr "Hae _saldo"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:102
 msgid "Get the account balance online through Online Banking"
@@ -18853,7 +18855,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:106
 msgid "Get _Transactions..."
-msgstr ""
+msgstr "Hae _tositteet..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:107
 msgid "Get the transactions online through Online Banking"
@@ -18862,7 +18864,7 @@ msgstr ""
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:113
 msgid "Issue _SEPA Transaction..."
-msgstr ""
+msgstr "Luo _SEPA-maksu..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:114
 msgid ""
@@ -18872,7 +18874,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:118
 msgid "_Internal Transaction..."
-msgstr ""
+msgstr "S_isäinen tosite..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:119
 msgid "Issue a new bank-internal transaction online through Online Banking"
@@ -18880,7 +18882,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:123
 msgid "Issue SEPA Direct _Debit..."
-msgstr ""
+msgstr "Luo SEPA-suo_raveloitus..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:124
 msgid ""
@@ -22628,7 +22630,7 @@ msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:119
 msgid "Tax Schedule Report/TXF Export"
-msgstr ""
+msgstr "Veroaikatauluraportti / TXF-vienti"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:211
 msgid "$0.00 valued Tax codes won't be printed."
@@ -22713,7 +22715,7 @@ msgstr "Lähin tositteen päiväys"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3326
 msgid "Tax Schedule Report & TXF Export"
-msgstr ""
+msgstr "Veroaikatauluraportti & TXF-vienti"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3328
 msgid ""
