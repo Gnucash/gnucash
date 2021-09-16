@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-13 09:05+0200\n"
-"PO-Revision-Date: 2021-09-15 09:35+0000\n"
+"PO-Revision-Date: 2021-09-15 21:39+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
@@ -812,7 +812,7 @@ msgstr "Avaussaldo"
 
 #: gnucash/gnome/assistant-hierarchy.c:1370
 msgid "Use Existing"
-msgstr ""
+msgstr "Käytä olemassa olevaa"
 
 #: gnucash/gnome/assistant-hierarchy.c:1485
 msgid ""
@@ -1574,7 +1574,7 @@ msgstr "Valitse asiakirja"
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:386
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:443
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: gnucash/gnome/dialog-doclink.c:238
 msgid "Amend URL:"
@@ -1582,7 +1582,7 @@ msgstr "Täydennä URL:"
 
 #: gnucash/gnome/dialog-doclink.c:242
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr ""
+msgstr "Kirjoita URL-osoite kuten http://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-doclink.c:256
 msgid "Existing Document Link is"
@@ -1775,11 +1775,11 @@ msgstr ""
 
 #: gnucash/gnome/dialog-fincalc.c:408
 msgid "The number of payments cannot be zero."
-msgstr ""
+msgstr "Maksujen määrä ei voi olla nolla."
 
 #: gnucash/gnome/dialog-fincalc.c:413
 msgid "The number of payments cannot be negative."
-msgstr ""
+msgstr "Maksujen määrä ei voi olla negatiivinen."
 
 #: gnucash/gnome/dialog-find-account.c:363
 msgid "Find Account"
@@ -6320,40 +6320,52 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
+"Helppokäyttöiseksi, mutta silti tehokkaaksi ja joustavaksi suunnitellun "
+"GnuCashin avulla voit seurata pankkitilejä, osakkeita, tuloja ja menoja. "
+"Käyttö on helppoa ja intuitiivista kuten ruutuvihkon käyttö. Silti GnuCash "
+"sisältää ammattimaisten omaksumia periaatteita kuten kahdenkertaisen "
+"kirjanpidon varmistaakseen tasapainossa olevat merkkaukset ja tarkat "
+"raportit."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:15
 msgid "With GnuCash you can (but are not limited to):"
-msgstr ""
+msgstr "GnuCashin avulla voit (mutta et ole rajoittunut):"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:17
 msgid "Keep track of your day to day personal income and expenses"
-msgstr ""
+msgstr "Pitää kirjaa päivittäisistä tuloista ja menoista"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:18
 msgid "Manage your stock, bond and mutual fund accounts with ease"
-msgstr ""
+msgstr "Hallita osake-, bondi- ja rahastotilejä helposti"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:19
 msgid "Keep your small business' accounting up to date"
-msgstr ""
+msgstr "Pitää pienyrityksesi kirjanpidon ajan tasalla"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
 msgid "Create accurate reports and graphs from your financial data"
-msgstr ""
+msgstr "Luoda tarkkoja raportteja ja kuvaajia taloustietoihisi pohjaten"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
 msgid "Set up scheduled transactions to avoid repeated data entry"
 msgstr ""
+"Asettaa aikataulutettuja siirtoja välttääksesi toistuvien tietojen "
+"kirjaamisen"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
 msgid ""
 "Exchange by CSV/FinTS(former HBCI) or import SWIFT-MT9xx/QIF/OFX data "
 "including Transaction Matching"
 msgstr ""
+"Vaihtaa tietoja CSV-/FinTS (entinen HBCI) -muodoissa tai tuoda SWIFT-MT9xx-/"
+"QIF-/OFX-tietoa sisältäen tapahtumien täsmäämisen"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid "Perform financial calculations, such as a loan repayment"
 msgstr ""
+"Suorittaa talouteen liittyviä laskutoimituksia, kuten lainan "
+"takaisinmaksusuunnitelman"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:33
 msgid "GnuCash Project"
@@ -6391,11 +6403,11 @@ msgstr "Kojelauta"
 
 #: gnucash/gnome/report-menus.scm:118
 msgid "A basic dashboard for your accounting data"
-msgstr ""
+msgstr "Kojelauta tilitiedoillesi"
 
 #: gnucash/gnome/search-owner.c:136
 msgid "You have not selected an owner"
-msgstr ""
+msgstr "Et ole valinnut omistajaa"
 
 #: gnucash/gnome/search-owner.c:214 gnucash/gnome-search/dialog-search.c:1093
 #: gnucash/gtkbuilder/dialog-invoice.glade:284
@@ -6432,7 +6444,7 @@ msgstr "Vienti ilman tilejä: %s"
 #: gnucash/gnome/top-level.c:210
 #, c-format
 msgid "Unsupported entity type: %s"
-msgstr ""
+msgstr "Entiteetin tyyppi ei ole tuettu: %s"
 
 #: gnucash/gnome/top-level.c:251
 #, c-format
@@ -6514,7 +6526,7 @@ msgstr "Täsmätty saldo"
 #: gnucash/gnome/window-reconcile2.c:1824 gnucash/gnome/window-reconcile.c:2022
 #: gnucash/report/reports/standard/cash-flow.scm:312
 msgid "Difference"
-msgstr ""
+msgstr "Erotus"
 
 #: gnucash/gnome/window-reconcile2.c:1913 gnucash/gnome/window-reconcile.c:2142
 msgid ""
@@ -6577,7 +6589,7 @@ msgstr ""
 
 #: gnucash/gnome/window-reconcile2.c:2140 gnucash/gnome/window-reconcile.c:2369
 msgid "_Finish"
-msgstr ""
+msgstr "_Valmis"
 
 #: gnucash/gnome/window-reconcile2.c:2141 gnucash/gnome/window-reconcile.c:2370
 msgid "Finish the reconciliation of this account"
@@ -6585,7 +6597,7 @@ msgstr "Merkitse tämän tilin täsmäytys valmiiksi"
 
 #: gnucash/gnome/window-reconcile2.c:2145 gnucash/gnome/window-reconcile.c:2374
 msgid "_Postpone"
-msgstr ""
+msgstr "_Lykkää"
 
 #: gnucash/gnome/window-reconcile2.c:2146 gnucash/gnome/window-reconcile.c:2375
 msgid "Postpone the reconciliation of this account"
@@ -6651,7 +6663,7 @@ msgstr "Peruuta valittujen tositteiden täsmäytys"
 
 #: gnucash/gnome/window-reconcile2.c:2211 gnucash/gnome/window-reconcile.c:2440
 msgid "Open the GnuCash help window"
-msgstr ""
+msgstr "Avaa GnuCashin ohjeikkuna"
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:368
@@ -6952,7 +6964,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:226
 msgid "European"
-msgstr ""
+msgstr "Eurooppalainen"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:227
 msgid "ISO-8859-1 (West European)"
@@ -7078,7 +7090,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:531
 msgid "Could not create opening balance."
-msgstr "Älä luo avaussaldoa."
+msgstr "Ei voitu luoda avaussaldoa."
 
 #: gnucash/gnome-utils/dialog-account.c:739
 msgid "Give the children the same type?"
@@ -7109,7 +7121,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:875
 msgid "You must select an account type."
-msgstr ""
+msgstr "Tilin tyyppi tulee valita."
 
 #: gnucash/gnome-utils/dialog-account.c:884
 msgid ""
@@ -7306,7 +7318,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-commodity.c:1294
 msgid "That commodity already exists."
-msgstr ""
+msgstr "Hyödyke on jo olemassa."
 
 #: gnucash/gnome-utils/dialog-commodity.c:1345
 msgid ""
@@ -7587,7 +7599,7 @@ msgstr "_Nimeä uudelleen"
 #: gnucash/gnome-utils/dialog-tax-table.c:705
 #, c-format
 msgid "Tax table name \"%s\" already exists."
-msgstr ""
+msgstr "Verokanta nimeltä \"%s\" on jo olemassa."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:729
 #, c-format
@@ -7705,7 +7717,7 @@ msgstr "Muista valinta, älä _kysy uudelleen."
 
 #: gnucash/gnome-utils/dialog-utils.c:766
 msgid "Don't _tell me again."
-msgstr ""
+msgstr "_Älä kerro uudelleen."
 
 #: gnucash/gnome-utils/dialog-utils.c:769
 msgid "Remember and don't ask me again this _session."
@@ -7713,7 +7725,7 @@ msgstr "Muista valinta, älä kysy uudellen _tämän istunnon aikana."
 
 #: gnucash/gnome-utils/dialog-utils.c:770
 msgid "Don't tell me again this _session."
-msgstr ""
+msgstr "Älä _kerro uudelleen tämän istunnon aikana."
 
 #: gnucash/gnome-utils/gnc-account-sel.c:457
 msgid "New..."
@@ -7879,7 +7891,7 @@ msgstr "Kausi"
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:1230
 msgid "(unnamed)"
-msgstr ""
+msgstr "(nimeämätön)"
 
 #: gnucash/gnome-utils/gnc-file.c:94 gnucash/gnome-utils/gnc-main-window.c:286
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:57
@@ -7936,17 +7948,20 @@ msgstr ""
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
 msgstr ""
+"Ei voi yhdistää kohteeseen %s. Yhteys menetettiin, dataa ei voi lähettää."
 
 #: gnucash/gnome-utils/gnc-file.c:307
 msgid ""
 "This file/URL appears to be from a newer version of GnuCash. You must "
 "upgrade your version of GnuCash to work with this data."
 msgstr ""
+"Tämä tiedosto/URL-osoite vaikuttaa olevan GnuCashin uudemmasta versiosta. "
+"Päivitä käyttämäsi GnuCashin versio käyttääksesi tätä dataa."
 
 #: gnucash/gnome-utils/gnc-file.c:314
 #, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
-msgstr ""
+msgstr "Tietokantaa %s ei vaikuta olevan olemassa. Haluatko luoda sen?"
 
 #: gnucash/gnome-utils/gnc-file.c:328
 #, c-format
@@ -7992,6 +8007,8 @@ msgstr ""
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
 msgstr ""
+"Tiedosto/URL-osoite %s ei vaikuta sisältävän GnuCashin dataa tai data on "
+"rikkoutunut."
 
 #: gnucash/gnome-utils/gnc-file.c:391
 #, c-format
@@ -8013,12 +8030,12 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:407
 msgid "There was an error reading the file. Do you want to continue?"
-msgstr ""
+msgstr "Tiedostoa luettaessa tapahtui virhe. Haluatko jatkaa?"
 
 #: gnucash/gnome-utils/gnc-file.c:416
 #, c-format
 msgid "There was an error parsing the file %s."
-msgstr ""
+msgstr "Tiedostoa %s jäsentäessä tapahtui virhe."
 
 #: gnucash/gnome-utils/gnc-file.c:421
 #, c-format
@@ -8036,21 +8053,21 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:440
 #, c-format
 msgid "The file/URI %s could not be found."
-msgstr ""
+msgstr "Tiedostoa/URI:a %s ei löydy."
 
 #: gnucash/gnome-utils/gnc-file.c:447
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
-msgstr ""
+msgstr "Tämä tiedosto GnuCashin vanhemmasta versiosta. Haluatko jatkaa?"
 
 #: gnucash/gnome-utils/gnc-file.c:456
 #, c-format
 msgid "The file type of file %s is unknown."
-msgstr ""
+msgstr "Tiedoston %s tiedostotyyppi on tuntematon."
 
 #: gnucash/gnome-utils/gnc-file.c:461
 #, c-format
 msgid "Could not make a backup of the file %s"
-msgstr ""
+msgstr "Tiedostosta %s ei voitu tehdä varmuuskopiota"
 
 #: gnucash/gnome-utils/gnc-file.c:466
 #, c-format
@@ -8062,7 +8079,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:473
 #, c-format
 msgid "No read permission to read from file %s."
-msgstr ""
+msgstr "Ei oikeutta lukea tiedostoa %s."
 
 #. Translators: the first %s is a path in the filesystem,
 #. the second %s is PACKAGE_NAME, which by default is "GnuCash"
@@ -8082,6 +8099,9 @@ msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
 msgstr ""
+"Tämä tietokanta on GnuCashin vanhemmasta versiosta. Valitse OK "
+"päivittääksesi sen nykyiseen versioon, Peruuta merkitäksesi sen \"vain luku\""
+"-tilaan."
 
 #: gnucash/gnome-utils/gnc-file.c:496
 msgid ""
@@ -8125,7 +8145,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:548
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
-msgstr ""
+msgstr "Tapahtui tuntematon I/O-virhe (%d)."
 
 #: gnucash/gnome-utils/gnc-file.c:643
 msgid "Save changes to the file?"
@@ -8147,7 +8167,7 @@ msgstr "J_atka tallentamatta"
 #: gnucash/gnome-utils/gnc-file.c:822
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
-msgstr ""
+msgstr "GnuCash ei voinut lukita tietokantaa %s."
 
 #: gnucash/gnome-utils/gnc-file.c:824
 msgid ""
@@ -8203,12 +8223,17 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Virhe tiedostoa tallentaessa.\n"
+"\n"
+"%s"
 
 #: gnucash/gnome-utils/gnc-file.c:1398
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
 msgstr ""
+"Tietokanta avattiin \"vain luku\"-tilassa. Haluatko tallentaa sen eri "
+"sijaintiin?"
 
 #: gnucash/gnome-utils/gnc-file.c:1693
 #, c-format
@@ -8262,7 +8287,7 @@ msgstr "Syötä käyttäjätunnus ja salasana yhdistääksesi kohteeseen %s"
 #: gnucash/gnome-utils/gnc-main-window.c:132
 #, c-format
 msgid "Changes will be saved automatically in %u seconds"
-msgstr ""
+msgstr "Muutokset tallennetaan automaattisesti %u sekunnissa"
 
 #: gnucash/gnome-utils/gnc-main-window.c:273
 msgid "_File"
@@ -8359,7 +8384,7 @@ msgstr "_Uusi ikkuna"
 
 #: gnucash/gnome-utils/gnc-main-window.c:373
 msgid "Open a new top-level GnuCash window."
-msgstr "Avaa uusi päätason GnuCash ikkuna."
+msgstr "Avaa uusi päätason GnuCash-ikkuna."
 
 #: gnucash/gnome-utils/gnc-main-window.c:377
 msgid "New Window with _Page"
@@ -8533,7 +8558,7 @@ msgstr "Kirjanpidon asetukset"
 #: gnucash/gnome-utils/gnc-main-window.c:4707
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
-msgstr ""
+msgstr "Tekijänoikeus © 1997-%s GnuCashin tekijät."
 
 #: gnucash/gnome-utils/gnc-main-window.c:4719
 #: gnucash/gnome-utils/gnc-splash.c:98
@@ -8543,7 +8568,7 @@ msgstr "Versio"
 #: gnucash/gnome-utils/gnc-main-window.c:4720
 #: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:265
 msgid "Build ID"
-msgstr "Käännöstunniste"
+msgstr "Koontitunniste"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4728
 msgid "Accounting for personal and small business finance."
@@ -8556,6 +8581,7 @@ msgstr "Kirjanpito henkilökohtaiseen tai pienen yrityksen talouteen."
 #: gnucash/gnome-utils/gnc-main-window.c:4737
 msgid "translator-credits"
 msgstr ""
+"Jiri Grönroos, 2021\n"
 "Jyri-Petteri ”ZeiP” Paloposki, 2020\n"
 "Marko Kohtala, 2020\n"
 "Tuomo Hartikainen, 2017\n"
@@ -8641,7 +8667,7 @@ msgstr "Viime tilikauden loppu"
 
 #: gnucash/gnome-utils/gnc-splash.c:113
 msgid "Loading..."
-msgstr "Lataa..."
+msgstr "Ladataan..."
 
 #: gnucash/gnome-utils/gnc-sx-list-tree-model-adapter.c:515
 msgid "never"
@@ -8862,7 +8888,7 @@ msgstr "Pankkiautomaattitalletus"
 #: gnucash/register/ledger-core/split-register.c:2547
 #: gnucash/register/ledger-core/split-register.c:2578
 msgid "ATM Draw"
-msgstr ""
+msgstr "Pankkiautomaattinosto"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2853
 #: gnucash/register/ledger-core/split-register.c:2548
@@ -9183,7 +9209,7 @@ msgstr "Tilin nimi"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2919
 #: gnucash/gtkbuilder/dialog-price.glade:574
 msgid "Commodity"
-msgstr ""
+msgstr "Hyödyke"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:823
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
@@ -9590,7 +9616,7 @@ msgstr "Kulu"
 #: gnucash/report/reports/standard/reconcile-report.scm:86
 #: libgnucash/engine/Account.cpp:142
 msgid "Funds In"
-msgstr ""
+msgstr "Varoja sisään"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3096
 #: gnucash/register/ledger-core/split-register-model.c:498
@@ -10424,7 +10450,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:106
 msgid "Print '***' before and after text."
-msgstr ""
+msgstr "Tulosta '***' ennen ja jälkeen tekstin."
 
 #: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:6
@@ -10810,7 +10836,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:5
 #: gnucash/gtkbuilder/dialog-preferences.glade:3735
 msgid "Alpha Vantage API key"
-msgstr ""
+msgstr "Alpha Vantagen rajapinta-avain"
 
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:3734
@@ -10886,7 +10912,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:40
 msgid "Auto-save time interval"
-msgstr ""
+msgstr "Automaattitallennuksen aikaväli"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:41
 #: gnucash/gtkbuilder/dialog-preferences.glade:1670
@@ -11133,7 +11159,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:155
 msgid "Use 24 hour time format"
-msgstr ""
+msgstr "Käytä 24 tunnin aikamuotoa"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:156
 msgid ""
@@ -11564,7 +11590,7 @@ msgstr "Käytä määritettyä valittua valuuttaa kaikille uusille raporteille."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:363
 msgid "Default currency for new reports"
-msgstr ""
+msgstr "Uusien raporttien oletusvaluutta"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:368
 msgid "Zoom factor to use by default for reports."
@@ -12084,6 +12110,8 @@ msgid ""
 "\n"
 "Enter file name and location for the Import...\n"
 msgstr ""
+"\n"
+"Anna tuotavan tiedoston nimi ja sijainti...\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:91
 msgid "Choose File to Import"
@@ -12493,7 +12521,7 @@ msgstr "Valitse tuotavien sarakkeiden tyypit."
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:987
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:922
 msgid "Skip Errors"
-msgstr ""
+msgstr "Ohita virheet"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1010
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:945
@@ -12594,7 +12622,7 @@ msgstr "Tilin tunniste"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1028
 msgid "Error text."
-msgstr ""
+msgstr "Virheteksti."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1038
 #: gnucash/gtkbuilder/assistant-qif-import.glade:633
@@ -13063,7 +13091,7 @@ msgstr "Lainan yhteenveto"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1251
 msgid "Schedule added successfully."
-msgstr ""
+msgstr "Aikataulu lisätty onnistuneesti."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1257
 msgid "Loan Summary"
@@ -13184,7 +13212,7 @@ msgstr "_Lataa toinen tiedosto"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:524
 msgid "QIF files you have loaded"
-msgstr ""
+msgstr "Lataamasi QIF-tiedostot"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:539
 msgid ""
@@ -13329,7 +13357,7 @@ msgstr "_Aloita tuonti"
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1733
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2986
 msgid "P_ause"
-msgstr ""
+msgstr "_Keskeytä"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1229
 #: gnucash/gtkbuilder/dialog-account-picker.glade:21
@@ -13723,7 +13751,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:232
 msgid "Replace any existing account colors"
-msgstr ""
+msgstr "Korvaa olemassa olevat tilivärit"
 
 #: gnucash/gtkbuilder/dialog-account.glade:364
 msgid "Delete Account"
@@ -14007,7 +14035,7 @@ msgstr "Valitse tili"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:221
 msgid "_Select or add a GnuCash account:"
-msgstr ""
+msgstr "_Valitse tai lisää GnuCash-tili:"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:7
 msgid "Import transactions from text file"
@@ -14016,7 +14044,7 @@ msgstr "Tuo tositteet tekstitiedostosta"
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:123
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
 msgid "1. Choose the file to import"
-msgstr ""
+msgstr "1. Valitse tuotava tiedosto"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:153
 msgid "Import bill CSV data"
@@ -14028,7 +14056,7 @@ msgstr "Tuo myyntilaskujen CSV-tiedot"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:191
 msgid "2. Select import type"
-msgstr ""
+msgstr "2. Valitse tuonnin tyyppi"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:216
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:217
@@ -14058,12 +14086,12 @@ msgstr "Mukautettu säännöllinen lauseke"
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:310
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:310
 msgid "3. Select import options"
-msgstr ""
+msgstr "3. Valitse tuonnin asetukset"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:349
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:353
 msgid "4. Preview"
-msgstr ""
+msgstr "4. Esikatsele"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:374
 msgid "Open imported documents in tabs"
@@ -14079,7 +14107,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:432
 msgid "5. Afterwards"
-msgstr ""
+msgstr "5. Jälkikäteen"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:48
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:8
@@ -14479,7 +14507,7 @@ msgstr "Lähetysosoite"
 #. Title of dialog
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:9
 msgid "Import customers or vendors from text file"
-msgstr ""
+msgstr "Tuo asiakkaat tai toimittajat tekstitiedostosta"
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:157
 msgid "For importing customer lists."
@@ -14491,7 +14519,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:192
 msgid "<b>2. Select Import Type</b>"
-msgstr ""
+msgstr "<b>2. Valitse tuonnin tyyppi</b>"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:51
 msgid "Exit the saved report configurations dialog"
@@ -14615,15 +14643,15 @@ msgstr "Laskutusosoite"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:456
 msgid "Language"
-msgstr ""
+msgstr "Kieli"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:494
 msgid "Interface"
-msgstr ""
+msgstr "Käyttöliittymä"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:584
 msgid "Default Hours per Day"
-msgstr ""
+msgstr "Oletustunnit per päivä"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:597
 msgid "Default Rate"
@@ -14635,7 +14663,7 @@ msgstr "Pääsynhallintalista"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:735
 msgid "Access Control"
-msgstr ""
+msgstr "Pääsynhallinta"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:72
 msgid "<b>Data Format</b>"
@@ -14647,7 +14675,7 @@ msgstr "<b>Tiedosto</b>"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:170
 msgid "Host"
-msgstr ""
+msgstr "Isäntä"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:183
 msgid "Database"
@@ -14655,7 +14683,7 @@ msgstr "Tietokanta"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:209
 msgid "Password"
-msgstr ""
+msgstr "Salasana"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:280
 msgid "<b>Database Connection</b>"
@@ -14733,7 +14761,7 @@ msgstr "Päivittäin (365)"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:90
 msgid "Loan Repayment Calculator"
-msgstr ""
+msgstr "Lainan takaisinmaksun laskin"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:136
 msgid "_Schedule"
@@ -14773,7 +14801,7 @@ msgstr "Tyhjennä tietue."
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:331
 msgid "Precision"
-msgstr ""
+msgstr "Tarkkuus"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:361
 msgid "Calculate"
@@ -14817,26 +14845,20 @@ msgid "Search the Account List"
 msgstr "Hae tililistasta"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
-#, fuzzy
-#| msgid "Close on Jump"
 msgid "Close _on Jump"
-msgstr "Sulje hypyssä"
+msgstr "Sulje _siirryttäessä"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
 msgid "_Jump To"
 msgstr "_Siirry tilille"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
-#, fuzzy
-#| msgid "All accounts"
 msgid "All _accounts"
-msgstr "Kaikki tilit"
+msgstr "_Kaikki tilit"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " Haku "
+msgstr "Haun laajuus"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 msgid "Account Full Name"
@@ -14848,7 +14870,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:258
 msgid "Sea_rch"
-msgstr ""
+msgstr "_Hae"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:294
 msgid ""
@@ -14867,7 +14889,7 @@ msgstr "_Poista virheelliset liitännät"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:106
 msgid "<b>What type of information to display?</b>"
-msgstr ""
+msgstr "<b>Minkä tyyppistä tietoa näytetään?</b>"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:139
 msgid "Non-Bayesian"
@@ -15232,6 +15254,8 @@ msgstr "_Kyllä"
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Display Welcome Dialog Again?</span>"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">Näytetäänkö tervetuloikkuna "
+"uudelleen?</span>"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:100
 msgid ""
@@ -15537,7 +15561,7 @@ msgstr "<b>Oletusvaluutta</b>"
 #: gnucash/gtkbuilder/dialog-preferences.glade:754
 #: gnucash/gtkbuilder/dialog-preferences.glade:3150
 msgid "US Dollars (USD)"
-msgstr ""
+msgstr "Yhdysvaltain dollarit (USD)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:777
 msgid "Character"
@@ -15584,7 +15608,7 @@ msgstr "_Valitse"
 #: gnucash/gtkbuilder/dialog-preferences.glade:934
 #: gnucash/gtkbuilder/dialog-preferences.glade:3271
 msgid "Loc_ale"
-msgstr "_Maa"
+msgstr "_Maa-asetusto"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1018
 #: libgnucash/app-utils/business-options.scm:76
@@ -16011,7 +16035,7 @@ msgstr "<b>Grafiikka</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2661
 msgid "_Use GnuCash built-in color theme"
-msgstr "Käytä GnuCashing _oma väriteemaa"
+msgstr "Käytä GnuCashin _omaa väriteemaa"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2667
 msgid ""
@@ -16144,7 +16168,7 @@ msgstr ""
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3036
 msgid "Show the calendar b_uttons"
-msgstr ""
+msgstr "Näytä _kalenteripainikkeet"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:3052
@@ -16546,7 +16570,7 @@ msgstr "Määrä (_numeroita)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:939
 msgid "_Units"
-msgstr ""
+msgstr "_Yksiköt"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:970
 msgid "_Translation"
@@ -16594,31 +16618,31 @@ msgstr "Käsitellään..."
 
 #: gnucash/gtkbuilder/dialog-report.glade:55
 msgid "<b>A_vailable reports</b>"
-msgstr ""
+msgstr "<b>_Käytettävissä olevat raportit</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:71
 msgid "<b>_Selected Reports</b>"
-msgstr ""
+msgstr "<b>_Valitut raportit</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
 msgid "A_dd >>"
-msgstr ""
+msgstr "_Lisää >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
 msgid "<< _Remove"
-msgstr ""
+msgstr "<< _Poista"
 
 #: gnucash/gtkbuilder/dialog-report.glade:145
 msgid "Move _up"
-msgstr ""
+msgstr "Siirrä _ylös"
 
 #: gnucash/gtkbuilder/dialog-report.glade:161
 msgid "Move dow_n"
-msgstr ""
+msgstr "Siirrä _alas"
 
 #: gnucash/gtkbuilder/dialog-report.glade:189
 msgid "Si_ze..."
-msgstr ""
+msgstr "_Koko..."
 
 #: gnucash/gtkbuilder/dialog-report.glade:257
 msgid "HTML Style Sheets"
@@ -16630,7 +16654,7 @@ msgstr "<b>Saatavilla olevat tyylitiedostot</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:386
 msgid "<b>Style sheet options</b>"
-msgstr ""
+msgstr "<b>Tyylitiedoston valinnat</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:440
 msgid "Report Size"
@@ -16662,11 +16686,11 @@ msgstr "<b>Uuden tyylitiedoston tiedot</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:811
 msgid "_Template"
-msgstr ""
+msgstr "_Mallipohja"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
-msgstr ""
+msgstr "Nollaa varoitukset"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:86
 msgid ""
@@ -16685,11 +16709,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:164
 msgid "Permanent Warnings"
-msgstr ""
+msgstr "Pysyvät varoitukset"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:205
 msgid "Temporary Warnings"
-msgstr ""
+msgstr "Väliaikaiset varoitukset"
 
 #: gnucash/gtkbuilder/dialog-search.glade:37
 msgid "_New item..."
@@ -16850,8 +16874,6 @@ msgid "R_emind in advance"
 msgstr "_Ilmoita etukäteen"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Re_view created transactions"
 msgstr "_Tarkista luodut tositteet"
 
@@ -16969,7 +16991,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:615
 msgid "<b>Payer Name Source</b>"
-msgstr ""
+msgstr "<b>Maksajan nimen lähde</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:626
 msgid "C_urrent Account"
@@ -16977,7 +16999,7 @@ msgstr "_Nykyinen tili"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:676
 msgid "<b>Copy Number</b>"
-msgstr ""
+msgstr "<b>Kopioi numero</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:7
 #: gnucash/gtkbuilder/dialog-tax-table.glade:31
@@ -17044,7 +17066,7 @@ msgstr "Näytä tulo/meno"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:487
 msgid "<b>Currency Transfer</b>"
-msgstr ""
+msgstr "<b>Valuutan siirto</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:515
 msgid "Exchange Rate"
@@ -17087,11 +17109,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:18
 msgid "Europe (31.12.2001)"
-msgstr ""
+msgstr "Eurooppalainen (31.12.2001)"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:21
 msgid "ISO (2001-12-31)"
-msgstr ""
+msgstr "ISO (2001-12-31)"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:27
 msgid "UTC - Coordinated Universal Time"
@@ -17603,7 +17625,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:116
 msgid "Replace"
-msgstr ""
+msgstr "Korvaa"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:120
 msgid ""
@@ -17621,7 +17643,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:151
 msgid "Multiply"
-msgstr ""
+msgstr "Moninkertaista"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:155
 msgid "Multiply current budget for each period by 'value'"
@@ -17865,7 +17887,7 @@ msgstr "Järjestä selitteen mukaan."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:996
 msgid "_Action"
-msgstr ""
+msgstr "_Toiminto"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1000
 msgid "Sort by action field."
@@ -17885,7 +17907,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1070
 msgid "_Reverse Order"
-msgstr "_Käännetty järjestys"
+msgstr "_Käänteinen järjestys"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1074
 msgid "Sort in descending order."
@@ -18010,11 +18032,11 @@ msgstr ""
 
 #: gnucash/html/gnc-html-webkit1.c:80 gnucash/html/gnc-html-webkit2.c:91
 msgid "Not found"
-msgstr ""
+msgstr "Ei löytynyt"
 
 #: gnucash/html/gnc-html-webkit1.c:81 gnucash/html/gnc-html-webkit2.c:92
 msgid "The specified URL could not be loaded."
-msgstr ""
+msgstr "Määritettyä URL-osoitetta ei voitu ladata."
 
 #: gnucash/html/gnc-html-webkit1.c:547 gnucash/html/gnc-html-webkit1.c:963
 #: gnucash/html/gnc-html-webkit2.c:551 gnucash/html/gnc-html-webkit2.c:914
@@ -18044,11 +18066,11 @@ msgstr "Vie PDF-tiedostoon"
 #: gnucash/import-export/aqb/assistant-ab-initial.c:537
 #, c-format
 msgid "Bank code %s (%s), Account %s (%s)"
-msgstr ""
+msgstr "Pankkikoodi %s (%s), Tili %s (%s)"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.c:858
 msgid "Online Banking Account Name"
-msgstr ""
+msgstr "Verkkopankin tilin nimi"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.c:863
 msgid "GnuCash Account Name"
@@ -18069,6 +18091,8 @@ msgid ""
 "This assistant helps you setting up your Online Banking connection with your "
 "bank."
 msgstr ""
+"Tämä ohjattu avustustoiminto auttaa sinua määrittämään verkkopankkiyhteyden "
+"pankkisi kanssa."
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
@@ -18160,19 +18184,19 @@ msgstr ""
 #: gnucash/import-export/aqb/dialog-ab.glade:82
 #: gnucash/import-export/aqb/dialog-ab.glade:147
 msgid "Progress"
-msgstr ""
+msgstr "Eteneminen"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:105
 msgid "Current _Job"
-msgstr ""
+msgstr "Nykyinen _työ"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:161
 msgid "Current _Action"
-msgstr ""
+msgstr "Nykyinen _toiminto"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:210
 msgid "<b>_Log Messages</b>"
-msgstr ""
+msgstr "<b>_Lokiviestit</b>"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:253
 msgid "Close when _finished"
@@ -18228,7 +18252,7 @@ msgstr "_Syötä päivämäärä:"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:512
 msgid "No_w"
-msgstr ""
+msgstr "_Nyt"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:572
 msgid "Enter Password"
@@ -18249,7 +18273,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:685
 msgid "_Delay"
-msgstr ""
+msgstr "_Viive"
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:700
@@ -18302,7 +18326,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1039
 msgid "Execute _Now"
-msgstr ""
+msgstr "Suorita _nyt"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1047
 msgid "Execute this online transaction now"
@@ -18314,11 +18338,11 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1110
 msgid "Recipient Account _Number"
-msgstr ""
+msgstr "Vastaanottajan tilin _numero"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1139
 msgid "Recipient _Bank Code"
-msgstr ""
+msgstr "Vastaanottajan _pankkikoodi"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1169
 msgid "_Recipient Name"
@@ -18351,7 +18375,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1333
 msgid "Bank Code"
-msgstr ""
+msgstr "Pankkikoodi"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1494
 msgid "_Add current"
@@ -18404,7 +18428,7 @@ msgstr "Verkkopankki"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:33
 msgid "_Close log window when finished"
-msgstr ""
+msgstr "_Sulje loki-ikkuna kun valmis"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:39
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:16
@@ -18745,7 +18769,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1280
 msgid "Subject:"
-msgstr ""
+msgstr "Aihe:"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:96
 msgid "Select a file to import"
@@ -18904,7 +18928,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:170
 msgid "Show _log window"
-msgstr "Näytä _logi-ikkuna"
+msgstr "Näytä _loki-ikkuna"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:171
 msgid "Show the online banking log window."
@@ -19042,6 +19066,8 @@ msgid ""
 "\n"
 "Processing...\n"
 msgstr ""
+"\n"
+"Käsitellään...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:716
 #, c-format
@@ -19055,7 +19081,7 @@ msgstr ""
 #: gnucash/import-export/bi-import/dialog-bi-import.c:739
 #, c-format
 msgid "Invoice %s not updated because it already exists.\n"
-msgstr ""
+msgstr "Laskua %s ei päivitetty, koska se on jo olemassa.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:754
 #, c-format
@@ -19431,12 +19457,12 @@ msgstr ""
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:955
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:920
 msgid "The settings have been saved."
-msgstr ""
+msgstr "Asetukset on tallennettu."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:980
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:945
 msgid "There was a problem saving the settings, please try again."
-msgstr ""
+msgstr "Asetuksia tallentaessa ilmeni ongelma, yritä myöhemmin uudelleen."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1146
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1119
@@ -19694,7 +19720,7 @@ msgstr "Nimiavaruudesta"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:122
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:216
 msgid "Value doesn't appear to contain a valid number."
-msgstr ""
+msgstr "Arvo ei vaikuta sisältävän kelvollista numeroa."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:83
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:88
@@ -19890,7 +19916,7 @@ msgstr "Toimitussähköposti"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:177
 msgid "Import Customers from csv"
-msgstr ""
+msgstr "Tuo asiakkaat CSV-tiedostosta"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:193
 msgid "customers"
@@ -20087,7 +20113,7 @@ msgstr ""
 
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:48
 msgid "_Replay GnuCash .log file..."
-msgstr "Tuo tapahtumat GnuCash ._log-tiedostosta..."
+msgstr "Tuo tapahtumat GnuCashin ._log-tiedostosta..."
 
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:49
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
@@ -20211,7 +20237,7 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1594
 msgid "That QIF file is already loaded. Please select another file."
-msgstr ""
+msgstr "Kyseinen QIF-tiedosto on jo ladattu. Valitse toinen tiedosto."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1662
 msgid "Select QIF File"
@@ -20243,7 +20269,7 @@ msgstr ""
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3106
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3154
 msgid "Failed"
-msgstr ""
+msgstr "Epäonnistui"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1884
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1901
@@ -20443,7 +20469,7 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:525
 msgid "File does not appear to be in QIF format"
-msgstr ""
+msgstr "Tiedosto ei vaikuta olevan QIF-muotoa"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:701
 msgid "Transaction date"
@@ -20511,7 +20537,7 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:1016
 msgid "Parsing failed."
-msgstr ""
+msgstr "Jäsentäminen epäonnistui."
 
 #: gnucash/import-export/qif-imp/qif-file.scm:1057
 msgid "Parse ambiguity between formats"
@@ -20851,7 +20877,7 @@ msgstr "Vero"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:127
 msgid "Billable?"
-msgstr ""
+msgstr "Laskutettavissa?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:548
 msgid ""
@@ -20880,11 +20906,11 @@ msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:627
 msgid "Discount Type: Monetary Value"
-msgstr ""
+msgstr "Alennuksen tyyppi: Raha-arvo"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:630
 msgid "Discount Type: Percent"
-msgstr "Alennuksen tyyppi:Prosentti"
+msgstr "Alennuksen tyyppi: Prosentti"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:633
 msgid "Select the Discount Type"
@@ -21426,10 +21452,8 @@ msgstr "Yksi kuukausi"
 
 #: gnucash/report/options-utilities.scm:70
 #: gnucash/report/reports/standard/balsheet-pnl.scm:157
-#, fuzzy
-#| msgid "Quarter"
 msgid "Quarter Year"
-msgstr "Neljännes"
+msgstr "Neljännesvuosi"
 
 #: gnucash/report/options-utilities.scm:71
 #: gnucash/report/reports/standard/balsheet-pnl.scm:156
@@ -21615,7 +21639,7 @@ msgstr "_Tulot ja menot"
 
 #: gnucash/report/report-core.scm:154
 msgid "_Taxes"
-msgstr ""
+msgstr "_Verot"
 
 #: gnucash/report/report-core.scm:155
 msgid "E_xamples"
@@ -22080,12 +22104,12 @@ msgstr "Aikavälin loppu"
 
 #: gnucash/report/reports/example/average-balance.scm:150
 msgid "Maximum"
-msgstr ""
+msgstr "Enintään"
 
 #: gnucash/report/reports/example/average-balance.scm:150
 #: gnucash/report/reports/standard/balance-forecast.scm:237
 msgid "Minimum"
-msgstr ""
+msgstr "Vähintään"
 
 #: gnucash/report/reports/example/average-balance.scm:150
 msgid "Gain"
@@ -22258,7 +22282,7 @@ msgstr "Taustan väri"
 
 #: gnucash/report/reports/example/hello-world.scm:136
 msgid "This is a color option."
-msgstr ""
+msgstr "Tämä on väriasetus."
 
 #: gnucash/report/reports/example/hello-world.scm:157
 #: gnucash/report/reports/example/hello-world.scm:170
@@ -22596,7 +22620,7 @@ msgstr ""
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:856
 msgid "XML"
-msgstr ""
+msgstr "XML"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:860
 msgid "This page shows your Taxable Income and Deductible Expenses."
@@ -22860,7 +22884,7 @@ msgstr "Kuukausittainen keskiarvo"
 #: gnucash/report/reports/standard/account-piecharts.scm:405
 #: gnucash/report/reports/standard/category-barchart.scm:316
 msgid "Weekly Average"
-msgstr ""
+msgstr "Viikottainen keskiarvo"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:539
 #, scheme-format
@@ -23079,7 +23103,7 @@ msgstr "Näytä tilin huomautukset."
 #: gnucash/report/reports/standard/income-statement.scm:107
 #: gnucash/report/reports/standard/trial-balance.scm:128
 msgid "Commodities"
-msgstr ""
+msgstr "Hyödykkeet"
 
 #: gnucash/report/reports/standard/account-summary.scm:132
 #: gnucash/report/reports/standard/balance-sheet.scm:138
@@ -23597,7 +23621,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:165
 msgid "Font family"
-msgstr ""
+msgstr "Fonttiperhe"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:166
 msgid "Font definition in CSS font-family format."
@@ -23788,7 +23812,7 @@ msgstr "Sisällyttää vai ei rivit loppusummille."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:113
 msgid "Enable chart"
-msgstr ""
+msgstr "Käytä kaaviota"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:114
 msgid "Enable link to chart"
@@ -24009,31 +24033,23 @@ msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:65
 #: gnucash/report/reports/standard/budget.scm:111
-#, fuzzy
-#| msgid "Last budget period"
 msgid "First budget period"
-msgstr "Viimeinen budjettijakso"
+msgstr "Ensimmäinen budjettijakso"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:66
 #: gnucash/report/reports/standard/budget.scm:112
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Previous budget period"
-msgstr "Viimeinen budjettijakso"
+msgstr "Edellinen budjettijakso"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:67
 #: gnucash/report/reports/standard/budget.scm:113
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Current budget period"
-msgstr "Viimeinen budjettijakso"
+msgstr "Nykyinen budjettijakso"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:68
 #: gnucash/report/reports/standard/budget.scm:114
-#, fuzzy
-#| msgid "Last budget period"
 msgid "Next budget period"
-msgstr "Viimeinen budjettijakso"
+msgstr "Seuraava budjettijakso"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:69
 #: gnucash/report/reports/standard/budget.scm:115
@@ -25059,7 +25075,7 @@ msgstr "Tämä päiväys"
 
 #: gnucash/report/reports/standard/invoice.scm:116
 msgid "Picture"
-msgstr ""
+msgstr "Kuva"
 
 #. Translators: "Empty space" refers to invoice header section being left blank
 #: gnucash/report/reports/standard/invoice.scm:119
@@ -25078,7 +25094,7 @@ msgstr ""
 #: gnucash/report/stylesheets/css.scm:118
 #: gnucash/report/stylesheets/css.scm:224
 msgid "CSS"
-msgstr ""
+msgstr "CSS"
 
 #: gnucash/report/reports/standard/invoice.scm:188
 msgid ""
@@ -25088,7 +25104,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/invoice.scm:194
 msgid "Picture Location"
-msgstr ""
+msgstr "Kuvan sijainti"
 
 #: gnucash/report/reports/standard/invoice.scm:194
 msgid "Location for Picture"
@@ -25275,7 +25291,7 @@ msgstr "Näytä laskuhuomautukset?"
 
 #: gnucash/report/reports/standard/invoice.scm:319
 msgid "Payments"
-msgstr ""
+msgstr "Maksut"
 
 #: gnucash/report/reports/standard/invoice.scm:320
 msgid "Display the payments applied to this invoice?"
@@ -25300,7 +25316,7 @@ msgstr "Kiitos asiakkuudestanne!"
 
 #: gnucash/report/reports/standard/invoice.scm:335
 msgid "Row 1 Left"
-msgstr ""
+msgstr "Rivi 1 vasemmalla"
 
 #: gnucash/report/reports/standard/invoice.scm:342
 msgid "Row 1 Right"
@@ -25590,17 +25606,13 @@ msgstr "Osoitelähde."
 
 #: gnucash/report/reports/standard/new-aging.scm:404
 #: gnucash/report/reports/standard/receivables.scm:68
-#, fuzzy
-#| msgid "Billing Address"
 msgid "Billing address"
 msgstr "Laskutusosoite"
 
 #: gnucash/report/reports/standard/new-aging.scm:405
 #: gnucash/report/reports/standard/receivables.scm:69
-#, fuzzy
-#| msgid "Shipping Address"
 msgid "Shipping address"
-msgstr "Lähetysosoite"
+msgstr "Toimitusosoite"
 
 #: gnucash/report/reports/standard/new-aging.scm:419
 msgid "Payable Aging"
@@ -25900,38 +25912,38 @@ msgstr "Hintojen hajontakuvaaja"
 #: gnucash/report/reports/standard/receipt.scm:36
 #: gnucash/report/reports/standard/taxinvoice.scm:68
 msgid "Headings 1"
-msgstr ""
+msgstr "Otsikko 1"
 
 #: gnucash/report/reports/standard/receipt.scm:37
 #: gnucash/report/reports/standard/taxinvoice.scm:69
 msgid "Headings 2"
-msgstr ""
+msgstr "Otsikko 2"
 
 #: gnucash/report/reports/standard/receipt.scm:46
 #: gnucash/report/reports/standard/taxinvoice.scm:97
 msgid "Heading font"
-msgstr ""
+msgstr "Otsikon fontti"
 
 #: gnucash/report/reports/standard/receipt.scm:47
 #: gnucash/report/reports/standard/taxinvoice.scm:98
 msgid "Text font"
-msgstr ""
+msgstr "Tekstin fontti"
 
 #: gnucash/report/reports/standard/receipt.scm:48
 msgid "Header logo filename"
-msgstr ""
+msgstr "Ylätunnisteen logon tiedostonimi"
 
 #: gnucash/report/reports/standard/receipt.scm:49
 msgid "Header logo width"
-msgstr ""
+msgstr "Ylätunnisteen logon leveys"
 
 #: gnucash/report/reports/standard/receipt.scm:50
 msgid "Footer logo filename"
-msgstr ""
+msgstr "Alatunnisteen logon tiedostonimi"
 
 #: gnucash/report/reports/standard/receipt.scm:51
 msgid "Footer logo width"
-msgstr ""
+msgstr "Alatunnisteen logon leveys"
 
 #: gnucash/report/reports/standard/receipt.scm:53
 #: gnucash/report/reports/standard/receipt.scm:118
@@ -26255,15 +26267,15 @@ msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:93
 msgid "Embedded CSS"
-msgstr ""
+msgstr "Upotettu CSS"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:99
 msgid "Logo filename"
-msgstr ""
+msgstr "Logon tiedostonimi"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:100
 msgid "Logo width"
-msgstr ""
+msgstr "Logon leveys"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:128
 msgid "Display the Tax Rate?"
@@ -27094,10 +27106,8 @@ msgid "Register Order"
 msgstr "Tilikirjan järjestys"
 
 #: gnucash/report/trep-engine.scm:339
-#, fuzzy
-#| msgid "Do not do any filtering."
 msgid "Do not do any filtering"
-msgstr "Älä suodata."
+msgstr "Älä suodata"
 
 #: gnucash/report/trep-engine.scm:342
 msgid "Include Transactions to/from Filter Accounts"
@@ -27116,10 +27126,8 @@ msgid "Void only"
 msgstr "Vain mitätöidyt"
 
 #: gnucash/report/trep-engine.scm:359
-#, fuzzy
-#| msgid "Show both (and include void transactions in totals)."
 msgid "Both (and include void transactions in totals)"
-msgstr "Näytä molemmat (ja sisällytä mitätöidyt tositteet summiin)."
+msgstr "Molemmat (ja sisällytä mitätöidyt tositteet summiin)"
 
 #: gnucash/report/trep-engine.scm:364
 msgid "Exclude closing transactions"
