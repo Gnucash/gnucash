@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-13 09:05+0200\n"
-"PO-Revision-Date: 2021-06-30 10:53+0000\n"
+"PO-Revision-Date: 2021-09-16 05:35+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -10286,16 +10286,12 @@ msgid "To find the last stable version, please refer to {1}"
 msgstr "Para encontrar a última versão estável, consulte {1}"
 
 #: gnucash/gnucash-core-app.cpp:102
-#, fuzzy
-#| msgid "Load report configuration"
 msgid "Loading system scm configuration..."
-msgstr "Carregue a configuração do relatório"
+msgstr "Carregando a configuração do scm..."
 
 #: gnucash/gnucash-core-app.cpp:114
-#, fuzzy
-#| msgid "Load report configuration"
 msgid "Loading user scm configuration..."
-msgstr "Carregue a configuração do relatório"
+msgstr "Carregando a configuração do scm do usuário..."
 
 #: gnucash/gnucash-core-app.cpp:227
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -18214,22 +18210,16 @@ msgid "R_emind in advance"
 msgstr "Lemb_re com antecedência"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Re_view created transactions"
-msgstr "_Revise as transações criadas"
+msgstr "Re_vise as transações que foram criadas"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
-#, fuzzy
-#| msgid ""
-#| "Set \"Review Created Transactions\" as the default for the \"since last "
-#| "run\" dialog."
 msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
 msgstr ""
-"Defina \"Revise as transações criadas\" como o padrão para o diálogo \"desde "
-"a última execução\"."
+"Defina 'Revise as transações criadas' como o padrão no diálogo \"desde a "
+"última execução\"."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:765
 msgid "Edit Scheduled Transaction"
@@ -19470,31 +19460,6 @@ msgstr ""
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
-#, fuzzy
-#| msgid ""
-#| "The requirements for Online Banking vary between the different supported "
-#| "AqBanking backends, but usually you will need:\n"
-#| "* Your bank needs to grant you online access. See on their website or ask "
-#| "their customer service for how to obtain it.\n"
-#| "They should also tell you:\n"
-#| "* Your user ID that identifies you to their server, often your base "
-#| "account number;\n"
-#| "* The URL of their Online Banking server;\n"
-#| "* In some cases the routing number of your bank's branch is useful in "
-#| "this assistant;\n"
-#| "* Authentication methods vary by backend and choosen method:\n"
-#| " * FinTS PIN/TAN: Some methods require a specific gadget like a card "
-#| "reader or a mobile;\n"
-#| " * FinTS HBCI: You have to exchange the public parts of asymmetric keys "
-#| "with your bank (\"Ini-Letter\").\n"
-#| " * PayPal: registered email address, password, API signature;\n"
-#| "\n"
-#| "See https://wiki.gnucash.org/wiki/AqBanking for more details.\n"
-#| "\n"
-#| "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented "
-#| "Online Banking server. You should not rely on time-critical transfers "
-#| "through Online Banking, because sometimes the bank does not give you "
-#| "correct feedback when a transfer is rejected."
 msgid ""
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
@@ -27615,6 +27580,7 @@ msgstr "Total do período"
 msgid ""
 "* Amounts denoted thus are derived from, and do not match the transaction."
 msgstr ""
+"* As quantias assim indicadas são derivadas e não correspondem à transação."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:868
 #: gnucash/report/reports/standard/owner-report.scm:535
