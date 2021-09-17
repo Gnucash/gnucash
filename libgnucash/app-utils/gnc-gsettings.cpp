@@ -38,6 +38,7 @@ extern "C" {
 }
 
 #define GSET_SCHEMA_PREFIX "org.gnucash.GnuCash"
+#define GSET_SCHEMA_OLD_PREFIX "org.gnucash"
 #define CLIENT_TAG  "%s-%s-client"
 #define NOTIFY_TAG  "%s-%s-notify_id"
 
@@ -143,7 +144,8 @@ gnc_gsettings_normalize_schema_name (const gchar *name)
         /* Need to return a newly allocated string */
         return g_strdup(GSET_SCHEMA_PREFIX);
     }
-    if (g_str_has_prefix (name, GSET_SCHEMA_PREFIX))
+    if (g_str_has_prefix (name, GSET_SCHEMA_PREFIX) ||
+       (g_str_has_prefix (name, GSET_SCHEMA_OLD_PREFIX)))
     {
         /* Need to return a newly allocated string */
         return g_strdup(name);
