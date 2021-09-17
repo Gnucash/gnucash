@@ -129,41 +129,27 @@ handlers_hash_unblock_helper (gpointer key, gpointer settings_ptr, gpointer poin
 /*                      GSettings Utilities                 */
 /************************************************************/
 
-void
-gnc_gsettings_set_prefix (const gchar *prefix)
-{
-    gsettings_prefix = prefix;
-}
-
 const gchar *
 gnc_gsettings_get_prefix (void)
 {
-    if (!gsettings_prefix)
-    {
-        const char *prefix = g_getenv("GNC_GSETTINGS_PREFIX");
-        if (prefix)
-            gsettings_prefix = prefix;
-        else
-            gsettings_prefix = GSET_SCHEMA_PREFIX;
-    }
-    return gsettings_prefix;
+    return GSET_SCHEMA_PREFIX;
 }
 
 gchar *
 gnc_gsettings_normalize_schema_name (const gchar *name)
 {
-    if (name == NULL)
+    if (!name)
     {
         /* Need to return a newly allocated string */
-        return g_strdup(gnc_gsettings_get_prefix());
+        return g_strdup(GSET_SCHEMA_PREFIX);
     }
-    if (g_str_has_prefix (name, gnc_gsettings_get_prefix ()))
+    if (g_str_has_prefix (name, GSET_SCHEMA_PREFIX))
     {
         /* Need to return a newly allocated string */
         return g_strdup(name);
     }
 
-    return g_strjoin(".", gnc_gsettings_get_prefix(), name, NULL);
+    return g_strjoin(".", GSET_SCHEMA_PREFIX, name, NULL);
 }
 
 

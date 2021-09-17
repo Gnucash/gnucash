@@ -270,9 +270,6 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
 
     gnc_prefs_set_debugging (m_debug);
     gnc_prefs_set_extra (m_extra);
-
-    if (m_gsettings_prefix)
-        gnc_gsettings_set_prefix (m_gsettings_prefix->c_str());
 }
 
 /* Define command line options common to all gnucash binaries. */
@@ -292,9 +289,7 @@ Gnucash::CoreApp::add_common_program_options (void)
         ("log", bpo::value (&m_log_flags),
          _("Log level overrides, of the form \"modulename={debug,info,warn,crit,error}\"\nExamples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\nThis can be invoked multiple times."))
         ("logto", bpo::value (&m_log_to_filename),
-         _("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."))
-        ("gsettings-prefix", bpo::value (&m_gsettings_prefix),
-         _("Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."));
+         _("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."));
 
     bpo::options_description hidden_options(_("Hidden Options"));
     hidden_options.add_options()
