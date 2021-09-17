@@ -1190,7 +1190,6 @@ runMatcher(ofx_info* info, char * selected_filename, gboolean go_to_next_file)
     }
     g_list_free (info->trans_list);
     info->trans_list = g_list_reverse (trans_list_remain);
-    g_list_free (trans_list_remain);
 
     // See whether the view has anything in it and warn the user if not.
     if (gnc_gen_trans_list_empty (info->gnc_ofx_importer_gui))
