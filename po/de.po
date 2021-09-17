@@ -19,7 +19,7 @@
 # Milo Ivir <mail@milotype.de>, 2020.
 # Alois Spitzbart <spitz234@hotmail.com>, 2020, 2021.
 # Christian Wehling <christian.wehling@web.de>, 2020, 2021.
-# Marco Zietzling <marco.zietzling@gmail.com>, 2020.
+# Marco Zietzling <marco.zietzling@gmail.com>, 2020, 2021.
 # Christian Stimming <christian@cstimming.de>, 2021.
 # Julian Heinzel <jeinzi@gmx.de>, 2021.
 # Christoph Franzen <christoph@alte-pflasterei.de>, 2021.
@@ -33,11 +33,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-13 09:05+0200\n"
-"PO-Revision-Date: 2021-09-05 21:35+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"PO-Revision-Date: 2021-09-17 11:36+0000\n"
+"Last-Translator: Marco Zietzling <marco.zietzling@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -14864,7 +14864,7 @@ msgstr "Introduction placeholder"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:30
 msgid "Title placeholder"
-msgstr "Title placeholder"
+msgstr "Titel Platzhalter"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:55
 msgid "_Edit list of encodings"
@@ -27843,6 +27843,8 @@ msgstr "Periodensaldo"
 msgid ""
 "* Amounts denoted thus are derived from, and do not match the transaction."
 msgstr ""
+"* Die so bezeichneten Beträge sind von der Transaktion abgeleitet und "
+"stimmen nicht mit ihr überein."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:868
 #: gnucash/report/reports/standard/owner-report.scm:535
