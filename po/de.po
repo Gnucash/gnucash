@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-13 09:05+0200\n"
-"PO-Revision-Date: 2021-09-18 00:38+0000\n"
+"PO-Revision-Date: 2021-09-18 17:35+0000\n"
 "Last-Translator: Marco Zietzling <marco.zietzling@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -1820,10 +1820,10 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"Doppelklick auf die »Nr.«-Spalte springt zur Rechnung.\n"
-"Doppelklick auf die »Verknüpftes Dokument«-Spalte springt zum verknüpften "
-"Dokument.\n"
-"Doppelklick auf die »Verfügbar«-Spalte, um die Verknüpfung zu bearbeiten."
+"Doppelklick auf die »Nr.«-Spalte um zur Rechnung zu springen.\n"
+"Doppelklick auf die »Verknüpftes Dokument«-Spalte um zum verknüpften "
+"Dokument zu springen.\n"
+"Doppelklick auf die »Verfügbar«-Spalte um die Verknüpfung zu bearbeiten."
 
 #: gnucash/gnome/dialog-doclink.c:1097
 msgid "Business Document Links"
@@ -11718,7 +11718,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:50
 msgid "Time to wait for answer"
-msgstr "Wartezeit auf eine Antwort:"
+msgstr "Wartezeit auf eine Antwort"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:51
 #: gnucash/gtkbuilder/dialog-preferences.glade:1826
@@ -12027,8 +12027,8 @@ msgid ""
 "In a sliding 12-month window starting a configurable number of months before "
 "the current month"
 msgstr ""
-"In einem Zwölf-Monats-Zeitfenster, welches diese\n"
-"Anzahl Monate vor dem aktuellen Monat beginnt:"
+"In einem Zwölf-Monats-Zeitfenster, welches diese Anzahl Monate vor dem "
+"aktuellen Monat beginnt"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:175
 msgid "Maximum number of months to go back."
@@ -14809,7 +14809,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-stock-split.glade:286
 #: gnucash/import-export/aqb/dialog-ab.glade:1212
 msgid "_Amount"
-msgstr "_Betrag:"
+msgstr "_Betrag"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:300
 #: gnucash/gtkbuilder/dialog-print-check.glade:1129
@@ -15385,7 +15385,7 @@ msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
 msgstr ""
 "Voreingestellter Buchungsstatus (wird überschrieben vom Status aus der QIF-"
-"Datei):"
+"Datei)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:143
 #: gnucash/gtkbuilder/dialog-import.glade:12
@@ -18235,7 +18235,7 @@ msgstr " Suchen "
 
 #: gnucash/gtkbuilder/dialog-search.glade:207
 msgid "Search for items where"
-msgstr "Nach Einträgen suchen, für die gilt:"
+msgstr "Nach Einträgen suchen, für die gilt"
 
 #: gnucash/gtkbuilder/dialog-search.glade:228
 msgid "<b>Match all entries</b>"
@@ -19877,7 +19877,7 @@ msgstr "_Jetzt"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:572
 msgid "Enter Password"
-msgstr "Passwort eingeben:"
+msgstr "Passwort eingeben"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:633
 msgid "Enter your password"
@@ -19919,7 +19919,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:802
 msgid "Con_firm Password"
-msgstr "Passwort _wiederholen:"
+msgstr "Passwort _wiederholen"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:842
 msgid "_Remember the PIN in memory"
@@ -21938,7 +21938,7 @@ msgstr "Neu (%s nach »%s«, automatisch gewählt)"
 #: gnucash/import-export/import-main-matcher.c:1539
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
-msgstr "Neu (verbleibende %s benötigen Konto, nicht ausgeglichen)"
+msgstr "Neu (verbleibende %s benötigen Konto, nicht ausgeglichen)."
 
 #: gnucash/import-export/import-main-matcher.c:1556
 msgid "Reconcile (manual) match"
@@ -23097,7 +23097,7 @@ msgstr "B.-Nr."
 
 #: gnucash/register/ledger-core/split-register-model.c:404
 msgid "Exch. Rate"
-msgstr "Wechselkurs:"
+msgstr "Wechselkurs"
 
 #: gnucash/register/ledger-core/split-register-model.c:421
 msgid "Oth. Curr."
@@ -24518,7 +24518,7 @@ msgstr "Abwechselnde Perioden"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:182
 msgid "Override or modify From: & To:."
-msgstr "Überschreiben oder modifizieren des Von: & Bis:"
+msgstr "Überschreiben oder modifizieren des Von: & Bis:."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:184
@@ -26981,9 +26981,10 @@ msgid ""
 "in the VAT account description. EU Goods sales and purchase accounts may be "
 "tagged with *EUGOODS* in the account description."
 msgstr ""
-"Hinweis zur UK-Variante: EU VAT Konten können mit *EUVAT* in der VAT-"
-"Kontobeschreibung vermerkt sein. EU Waren Einkauf und Lieferungen können mit "
-"*EUGOODS* in der Kontobeschreibung vermerkt sein."
+"Beachten Sie, dass die UK-Variante angeben kann, dass EU-"
+"Mehrwertsteuerkonten mit *EUVAT* in der MwSt.-Kontobeschreibung "
+"gekennzeichnet werden können. EU-Warenverkaufs- und -einkaufskonten können "
+"in der Kontobeschreibung mit *EUGOODS* gekennzeichnet werden."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:71
 msgid "This message will be removed when tax accounts are specified."
@@ -27093,10 +27094,10 @@ msgid ""
 "used. Denote EU VAT accounts *EUVAT* in account description, and denote EU "
 "goods sales and purchases accounts with *EUGOODS* in the account description."
 msgstr ""
-"UK Steuererklärung (VAT). Gibt Umsatz, Aufwendungen und Steuerkonten an. EU "
-"Regeln können angewendet werden. EU VAT Konten können mit *EUVAT* in der "
-"Kontobeschreibung vermerkt werden, und EU Waren und Aufwandskonten mit "
-"*EUGOODS*."
+"UK-Umsatzsteuererklärung. Geben Sie Verkaufs-, Einkaufs- und Steuerkonten "
+"an. Es können EU-Regeln verwendet werden. Bezeichnen Sie EU-"
+"Mehrwertsteuerkonten *EUVAT* in der Kontobeschreibung und bezeichnen Sie EU-"
+"Warenverkaufs- und -einkaufskonten mit *EUGOODS* in der Kontobeschreibung."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:172
 msgid "Australia BAS"
@@ -28518,7 +28519,7 @@ msgstr "CSS-Farbe."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:192
 msgid "Invoice number: "
-msgstr "Rechnungsnummer:"
+msgstr "Rechnungsnummer: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:194
 msgid "To: "
@@ -28530,11 +28531,11 @@ msgstr "Ihr Zeichen: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:198
 msgid "Job number: "
-msgstr "Auftragsnummer:"
+msgstr "Auftragsnummer: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:200
 msgid "Job name: "
-msgstr "Auftragsbezeichnung:"
+msgstr "Auftragsbezeichnung: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:208
 msgid "Embedded CSS."
@@ -28563,7 +28564,7 @@ msgstr "Fälliger Bruttobetrag"
 # Im deutschsprachigen Raum ist # nicht üblich als Zeichen für Nr.
 #: gnucash/report/reports/standard/taxinvoice.scm:306
 msgid "Invoice #: "
-msgstr "Rechnungsnr.:"
+msgstr "Rechnungsnr.: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:307
 msgid "Reference: "
@@ -28571,7 +28572,7 @@ msgstr "Referenz: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:308
 msgid "Engagement: "
-msgstr "Auftrag:"
+msgstr "Auftrag: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:314
 #: gnucash/report/reports/standard/taxinvoice.scm:316
