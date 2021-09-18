@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-13 09:05+0200\n"
-"PO-Revision-Date: 2021-09-17 11:36+0000\n"
+"PO-Revision-Date: 2021-09-18 00:38+0000\n"
 "Last-Translator: Marco Zietzling <marco.zietzling@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -1830,8 +1830,6 @@ msgid "Business Document Links"
 msgstr "Rechnungsverknüpfungen"
 
 #: gnucash/gnome/dialog-employee.c:213
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
 msgstr "Sie müssen eine Zahlungsadresse eingeben."
 
@@ -2668,10 +2666,8 @@ msgid "You must choose an owner for this job."
 msgstr "Sie müssen einen Mandanten für diesen Auftrag auswählen."
 
 #: gnucash/gnome/dialog-job.c:157
-#, fuzzy
-#| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr "Haben muss ein positiver Betrag sein oder Sie müssen es frei lassen."
+msgstr "Der Betrag der Rate muss gültig sein oder Sie müssen ihn leer lassen."
 
 #: gnucash/gnome/dialog-job.c:258
 msgid "Edit Job"
@@ -10451,16 +10447,12 @@ msgstr ""
 "Um die letzte stabile Version zu finden, sehen Sie bitte hier nach: {1}"
 
 #: gnucash/gnucash-core-app.cpp:102
-#, fuzzy
-#| msgid "Load report configuration"
 msgid "Loading system scm configuration..."
-msgstr "Berichtskonfiguration laden"
+msgstr "Berichtskonfiguration wird geladen..."
 
 #: gnucash/gnucash-core-app.cpp:114
-#, fuzzy
-#| msgid "Load report configuration"
 msgid "Loading user scm configuration..."
-msgstr "Berichtskonfiguration laden"
+msgstr "Benutzer Berichtskonfiguration wird geladen..."
 
 #: gnucash/gnucash-core-app.cpp:227
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -26689,10 +26681,8 @@ msgid "Customer Name"
 msgstr "Kundenname"
 
 #: gnucash/report/reports/standard/customer-summary.scm:118
-#, fuzzy
-#| msgid "Sort by markup (which is profit amount divided by sales)."
 msgid "Markup (which is profit amount divided by sales)"
-msgstr "Sortieren nach Bruttogewinn (Gewinn pro Umsatz)."
+msgstr "Bruttogewinn (Gewinn pro Umsatz)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:119
 #: gnucash/report/reports/standard/customer-summary.scm:300
@@ -26792,16 +26782,12 @@ msgid "Withdrawals"
 msgstr "Abhebungen"
 
 #: gnucash/report/reports/standard/equity-statement.scm:474
-#, fuzzy
-#| msgid "Unrealized Gains"
 msgid "Unrealized Gains for Period"
-msgstr "Nicht realisierter Gewinn/Verlust"
+msgstr "Nicht realisierter Gewinn/Verlust für den Zeitraum"
 
 #: gnucash/report/reports/standard/equity-statement.scm:475
-#, fuzzy
-#| msgid "Unrealized Losses"
 msgid "Unrealized Losses for Period"
-msgstr "Nicht realisierter Verlust"
+msgstr "Nicht realisierter Verlust für den Zeitraum"
 
 #: gnucash/report/reports/standard/equity-statement.scm:481
 msgid "Increase in capital"
@@ -28684,10 +28670,8 @@ msgstr ""
 "interpretieren."
 
 #: gnucash/report/reports/standard/trial-balance.scm:203
-#, fuzzy
-#| msgid "General Journal Report"
 msgid "General journal exact balances"
-msgstr "Hauptbuch Journal Bericht"
+msgstr "Hauptbuch Journal Salden"
 
 #: gnucash/report/reports/standard/trial-balance.scm:204
 msgid "No adjusting/closing entries"
