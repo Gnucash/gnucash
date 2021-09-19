@@ -1216,6 +1216,33 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     xaccAccountSetNotes (account, nullptr);
     g_assert_cmpstr (xaccAccountGetNotes (account), ==, nullptr);
 
+    // STOCK_ACCOUNT tests from now on
+    xaccAccountSetType (account, ACCT_TYPE_STOCK);
+
+    // dxaccAccountGetPriceSrc getter/setter
+    g_assert_cmpstr (dxaccAccountGetPriceSrc (account), ==, nullptr);
+
+    dxaccAccountSetPriceSrc (account, "boo");
+    g_assert_cmpstr (dxaccAccountGetPriceSrc (account), ==, "boo");
+
+    dxaccAccountSetPriceSrc (account, "");
+    g_assert_cmpstr (dxaccAccountGetPriceSrc (account), ==, "");
+
+    dxaccAccountSetPriceSrc (account, nullptr);
+    g_assert_cmpstr (dxaccAccountGetPriceSrc (account), ==, nullptr);
+
+    // dxaccAccountGetQuoteTZ getter/setter
+    g_assert_cmpstr (dxaccAccountGetQuoteTZ (account), ==, nullptr);
+
+    dxaccAccountSetQuoteTZ (account, "boo");
+    g_assert_cmpstr (dxaccAccountGetQuoteTZ (account), ==, "boo");
+
+    dxaccAccountSetQuoteTZ (account, "");
+    g_assert_cmpstr (dxaccAccountGetQuoteTZ (account), ==, "");
+
+    dxaccAccountSetQuoteTZ (account, nullptr);
+    g_assert_cmpstr (dxaccAccountGetQuoteTZ (account), ==, nullptr);
+
     xaccAccountBeginEdit (account);
     xaccAccountDestroy (account);
 }
