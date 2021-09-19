@@ -2733,6 +2733,7 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"old-currency"});
     mark_account (acc);
     xaccAccountCommitEdit(acc);
+    g_value_unset (&v);
 
     table = gnc_commodity_table_get_table (qof_instance_get_book(acc));
     commodity = gnc_commodity_table_lookup_unique (table, s);
@@ -3384,16 +3385,20 @@ DxaccAccountGetCurrency (const Account *acc)
     GValue v = G_VALUE_INIT;
     const char *s = NULL;
     gnc_commodity_table *table;
+    gnc_commodity *retval = NULL;
 
     if (!acc) return NULL;
     qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"old-currency"});
     if (G_VALUE_HOLDS_STRING (&v))
         s = g_value_get_string (&v);
-    if (!s) return NULL;
+    if (s)
+    {
+        table = gnc_commodity_table_get_table (qof_instance_get_book(acc));
+        retval = gnc_commodity_table_lookup_unique (table, s);
+    }
+    g_value_unset (&v);
 
-    table = gnc_commodity_table_get_table (qof_instance_get_book(acc));
-
-    return gnc_commodity_table_lookup_unique (table, s);
+    return retval;
 }
 
 gnc_commodity *
@@ -4983,22 +4988,7 @@ dxaccAccountSetPriceSrc(Account *acc, const char *src)
     if (!acc) return;
 
     if (xaccAccountIsPriced(acc))
-    {
-        xaccAccountBeginEdit(acc);
-        if (src)
-        {
-            GValue v = G_VALUE_INIT;
-            g_value_init (&v, G_TYPE_STRING);
-            g_value_set_string (&v, src);
-            qof_instance_set_path_kvp (QOF_INSTANCE(acc), &v, {"old-price-source"});
-            g_value_unset (&v);
-        }
-        else
-            qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, {"old-price-source"});
-
-        mark_account (acc);
-        xaccAccountCommitEdit(acc);
-    }
+        set_kvp_string_tag (acc, "old-price-source", src);
 }
 
 /********************************************************************\
@@ -5007,13 +4997,14 @@ dxaccAccountSetPriceSrc(Account *acc, const char *src)
 const char*
 dxaccAccountGetPriceSrc(const Account *acc)
 {
-    GValue v = G_VALUE_INIT;
+    static char *source = nullptr;
     if (!acc) return NULL;
 
     if (!xaccAccountIsPriced(acc)) return NULL;
 
-    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"old-price-source"});
-    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    g_free (source);
+    source = get_kvp_string_tag (acc, "old-price-source");
+    return source;
 }
 
 /********************************************************************\
@@ -5022,15 +5013,9 @@ dxaccAccountGetPriceSrc(const Account *acc)
 void
 dxaccAccountSetQuoteTZ(Account *acc, const char *tz)
 {
-    GValue v = G_VALUE_INIT;
     if (!acc) return;
     if (!xaccAccountIsPriced(acc)) return;
-    xaccAccountBeginEdit(acc);
-    g_value_init (&v, G_TYPE_STRING);
-    g_value_set_string (&v, tz);
-    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"old-quote-tz"});
-    mark_account (acc);
-    xaccAccountCommitEdit(acc);
+    set_kvp_string_tag (acc, "old-quote-tz", tz);
 }
 
 /********************************************************************\
@@ -5039,11 +5024,12 @@ dxaccAccountSetQuoteTZ(Account *acc, const char *tz)
 const char*
 dxaccAccountGetQuoteTZ(const Account *acc)
 {
-    GValue v = G_VALUE_INIT;
+    static char *quote_tz = nullptr;
     if (!acc) return NULL;
     if (!xaccAccountIsPriced(acc)) return NULL;
-    qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, {"old-quote-tz"});
-    return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    g_free (quote_tz);
+    quote_tz = get_kvp_string_tag (acc, "old-quote-tz");
+    return quote_tz;
 }
 
 /********************************************************************\
