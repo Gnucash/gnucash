@@ -4,10 +4,10 @@
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.7-pre1\n"
+"Project-Id-Version: GnuCash 4.7-pre2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-09-13 09:05+0200\n"
+"POT-Creation-Date: 2021-09-20 22:29+0200\n"
 "PO-Revision-Date: 2021-03-11 20:02+0000\n"
 "Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: Urdu <https://hosted.weblate.org/projects/gnucash/gnucash/ur/"
@@ -1321,7 +1321,7 @@ msgstr "كومیڈیٹی كو خارج كریں؟"
 #: gnucash/gnome/gnc-split-reg.c:975 gnucash/gnome/gnc-split-reg.c:1013
 #: gnucash/gnome/gnc-split-reg.c:1235 gnucash/gnome/gnc-split-reg.c:1503
 #: gnucash/gnome/gnc-split-reg.c:1543 gnucash/gnome/window-reconcile2.c:2150
-#: gnucash/gnome/window-reconcile.c:2379
+#: gnucash/gnome/window-reconcile.c:2397
 #: gnucash/gnome-search/search-account.c:237
 #: gnucash/gnome-utils/dialog-account.c:722
 #: gnucash/gnome-utils/dialog-options.c:223
@@ -1418,7 +1418,7 @@ msgstr "_منسوخ"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:189
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1115
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:163
-#: gnucash/gnome/window-reconcile2.c:2192 gnucash/gnome/window-reconcile.c:2421
+#: gnucash/gnome/window-reconcile2.c:2192 gnucash/gnome/window-reconcile.c:2439
 #: gnucash/gtkbuilder/dialog-account.glade:398
 #: gnucash/gtkbuilder/dialog-billterms.glade:477
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:66
@@ -1828,7 +1828,7 @@ msgstr "صارف نام"
 
 #: gnucash/gnome/dialog-employee.c:732 gnucash/gnome/dialog-sx-editor2.c:1754
 #: gnucash/gnome/dialog-sx-editor.c:1816 gnucash/gnome/dialog-tax-info.c:1201
-#: gnucash/gnome-utils/gnc-dense-cal.c:347
+#: gnucash/gnome-utils/gnc-dense-cal.c:350
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:368
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:348
@@ -1944,7 +1944,7 @@ msgstr "داخلوں كو بند كیا جارہا ہے"
 #: gnucash/gnome/dialog-find-transactions.c:118
 #: gnucash/gnome/gnc-plugin-page-register2.c:506
 #: gnucash/gnome/gnc-plugin-page-register.c:629
-#: gnucash/gnome/window-reconcile2.c:1270 gnucash/gnome/window-reconcile.c:1413
+#: gnucash/gnome/window-reconcile2.c:1270 gnucash/gnome/window-reconcile.c:1431
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:616
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:629
 msgid "Reconcile"
@@ -2310,7 +2310,7 @@ msgstr "كُُل نقد:"
 msgid "Total Charge:"
 msgstr "كُل دام :"
 
-#: gnucash/gnome/dialog-invoice.c:1901 gnucash/gnome/dialog-payment.c:1374
+#: gnucash/gnome/dialog-invoice.c:1901 gnucash/gnome/dialog-payment.c:1377
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
 #: gnucash/report/reports/standard/invoice.scm:780
 #: libgnucash/engine/gncInvoice.c:1116
@@ -2682,7 +2682,7 @@ msgstr "كام كو تلاش كرو"
 #: gnucash/gnome/dialog-lot-viewer.c:815
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:403
 #: gnucash/gnome/gnc-plugin-page-budget.c:220
-#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1817
+#: gnucash/gnome/window-reconcile2.c:1659 gnucash/gnome/window-reconcile.c:1835
 #: gnucash/gnome-utils/gnc-file.c:90 gnucash/gnome-utils/gnc-file.c:327
 #: gnucash/gnome-utils/gnc-file.c:1141
 msgid "Open"
@@ -2783,38 +2783,38 @@ msgstr "آرڈر ID"
 msgid "Find Order"
 msgstr "آرڈر كو تلاش كریں"
 
-#: gnucash/gnome/dialog-payment.c:233
+#: gnucash/gnome/dialog-payment.c:236
 msgid "You must enter a valid account name for posting."
 msgstr "آپ كو پوسٹنگ کے لئے ایک درست اکاؤنٹ کا نام درج کرنا لازمی ہے."
 
-#: gnucash/gnome/dialog-payment.c:242
+#: gnucash/gnome/dialog-payment.c:245
 msgid "You must select a company for payment processing."
 msgstr "معاوضہ كی كارروائی كرنے كے لیے آپ كو ایك كمپنی منتخب كرنی چاہيے۔ "
 
-#: gnucash/gnome/dialog-payment.c:256
+#: gnucash/gnome/dialog-payment.c:259
 #, fuzzy
 #| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
 msgstr "درآمد کے ساتھ ایک مسئلہ تھا."
 
-#: gnucash/gnome/dialog-payment.c:277
+#: gnucash/gnome/dialog-payment.c:280
 msgid "You must select a transfer account from the account tree."
 msgstr "آپ كو اكاؤنٹ ٹری سے ایك ٹرانسفر اكاؤنٹ كو منتخب كرنا چاہیے۔"
 
-#: gnucash/gnome/dialog-payment.c:288
+#: gnucash/gnome/dialog-payment.c:291
 msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:544 gnucash/gnome/dialog-payment.c:1369
+#: gnucash/gnome/dialog-payment.c:547 gnucash/gnome/dialog-payment.c:1372
 #: gnucash/report/reports/standard/new-aging.scm:180
 #: gnucash/report/reports/standard/new-owner-report.scm:306
 #: gnucash/report/reports/standard/new-owner-report.scm:704
 msgid "Pre-Payment"
 msgstr "قبل از- معاوضہ"
 
-#: gnucash/gnome/dialog-payment.c:1015
+#: gnucash/gnome/dialog-payment.c:1018
 msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
@@ -2822,7 +2822,7 @@ msgstr ""
 "منتقلی اور پوسٹ اکاؤنٹس مختلف کرنسیوں کے ساتھ منسلک ہیں. تبادلے کی شرح کی "
 "وضاحت کریں."
 
-#: gnucash/gnome/dialog-payment.c:1304 gnucash/gnome/search-owner.c:211
+#: gnucash/gnome/dialog-payment.c:1307 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2786
 #: gnucash/gtkbuilder/dialog-customer.glade:479
@@ -2841,7 +2841,7 @@ msgstr ""
 msgid "Customer"
 msgstr "گاہك"
 
-#: gnucash/gnome/dialog-payment.c:1308 gnucash/gnome/search-owner.c:212
+#: gnucash/gnome/dialog-payment.c:1311 gnucash/gnome/search-owner.c:212
 #: gnucash/gnome-search/dialog-search.c:1109
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2797
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:170
@@ -2855,7 +2855,7 @@ msgstr "گاہك"
 msgid "Vendor"
 msgstr "بیچنے والا"
 
-#: gnucash/gnome/dialog-payment.c:1312 gnucash/gnome/search-owner.c:213
+#: gnucash/gnome/dialog-payment.c:1315 gnucash/gnome/search-owner.c:213
 #: gnucash/gnome-search/dialog-search.c:1081
 #: gnucash/gtkbuilder/dialog-employee.glade:510
 #: gnucash/gtkbuilder/dialog-payment.glade:48
@@ -2867,7 +2867,7 @@ msgstr "بیچنے والا"
 msgid "Employee"
 msgstr "ملازم"
 
-#: gnucash/gnome/dialog-payment.c:1465
+#: gnucash/gnome/dialog-payment.c:1468
 #, c-format
 msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type \"%s"
@@ -2878,13 +2878,13 @@ msgstr ""
 "جاری رکھنے سے پہلے قسم \"%s\"کا ایک اکاؤنٹ تخلیق كریں . شاید آپ سب سے پہلے "
 "ایک رسید یا بل بناناچاہتے ہیں؟"
 
-#: gnucash/gnome/dialog-payment.c:1618
+#: gnucash/gnome/dialog-payment.c:1621
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:1632
+#: gnucash/gnome/dialog-payment.c:1635
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', gnucash only knows how to handle one.\n"
@@ -2892,17 +2892,17 @@ msgid ""
 "\n"
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:1635
+#: gnucash/gnome/dialog-payment.c:1638
 #, fuzzy
 msgid "Warning"
 msgstr "آگاہی كو دوبارہ ترتیب كرو"
 
-#: gnucash/gnome/dialog-payment.c:1638 gnucash/gnome/dialog-payment.c:1758
+#: gnucash/gnome/dialog-payment.c:1641 gnucash/gnome/dialog-payment.c:1761
 #, fuzzy
 msgid "Continue"
 msgstr "جاری"
 
-#: gnucash/gnome/dialog-payment.c:1639
+#: gnucash/gnome/dialog-payment.c:1642
 #: gnucash/gnome/gnc-plugin-page-invoice.c:453
 #: gnucash/gnome/gnc-plugin-page-register2.c:499
 #: gnucash/gnome/gnc-plugin-page-register.c:622
@@ -2910,7 +2910,7 @@ msgstr "جاری"
 msgid "Cancel"
 msgstr "منسوخ كرو"
 
-#: gnucash/gnome/dialog-payment.c:1753
+#: gnucash/gnome/dialog-payment.c:1756
 #, c-format
 msgid ""
 "The transaction has at least one split in a business account that is not "
@@ -3074,7 +3074,7 @@ msgstr "اسٹائل شیٹ كا نام"
 
 #: gnucash/gnome/dialog-sx-editor2.c:164 gnucash/gnome/dialog-sx-editor.c:166
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:151
-#: gnucash/gnome/window-reconcile2.c:2187 gnucash/gnome/window-reconcile.c:2416
+#: gnucash/gnome/window-reconcile2.c:2187 gnucash/gnome/window-reconcile.c:2434
 #: gnucash/gnome-utils/gnc-main-window.c:274
 #: gnucash/gtkbuilder/dialog-billterms.glade:679
 #: gnucash/gtkbuilder/dialog-commodities.glade:156
@@ -3086,7 +3086,7 @@ msgid "_Edit"
 msgstr "_ مرتب كرنا"
 
 #: gnucash/gnome/dialog-sx-editor2.c:165 gnucash/gnome/dialog-sx-editor.c:167
-#: gnucash/gnome/window-reconcile2.c:2128 gnucash/gnome/window-reconcile.c:2357
+#: gnucash/gnome/window-reconcile2.c:2128 gnucash/gnome/window-reconcile.c:2375
 msgid "_Transaction"
 msgstr "_ لین دین "
 
@@ -3406,7 +3406,7 @@ msgstr "فروخت كرنے والے كو تلاش كریں"
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4428
+#: libgnucash/engine/Account.cpp:4441
 msgid "Income"
 msgstr "آمدنی"
 
@@ -3436,7 +3436,7 @@ msgid "Remaining to Budget"
 msgstr "ایك موجودہ بجٹ كو كھولو"
 
 #: gnucash/gnome/gnc-budget-view.c:1673 gnucash/gnome/window-reconcile2.c:1094
-#: gnucash/gnome/window-reconcile.c:1149
+#: gnucash/gnome/window-reconcile.c:1167
 #: gnucash/gnome-utils/gnc-tree-view-account.c:924
 #: gnucash/report/html-acct-table.scm:802 gnucash/report/reports/aging.scm:544
 #: gnucash/report/reports/aging.scm:831
@@ -4140,14 +4140,14 @@ msgstr "علیحدہ علیحدہ لین دینوں كو خود كار طریق�
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:311
 #: gnucash/gnome/gnc-plugin-page-register2.c:352
 #: gnucash/gnome/gnc-plugin-page-register.c:470
-#: gnucash/gnome/window-reconcile2.c:2168 gnucash/gnome/window-reconcile.c:2397
+#: gnucash/gnome/window-reconcile2.c:2168 gnucash/gnome/window-reconcile.c:2415
 msgid "_Transfer..."
 msgstr "_منتقل ..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:312
 #: gnucash/gnome/gnc-plugin-page-register2.c:353
 #: gnucash/gnome/gnc-plugin-page-register.c:471
-#: gnucash/gnome/window-reconcile2.c:2169 gnucash/gnome/window-reconcile.c:2398
+#: gnucash/gnome/window-reconcile2.c:2169 gnucash/gnome/window-reconcile.c:2416
 msgid "Transfer funds from one account to another"
 msgstr "ایك اكاؤنٹ سے دوسرے میں فنڈ كو منتقل كرو"
 
@@ -4180,7 +4180,7 @@ msgid "Check & Repair A_ccount"
 msgstr "اكاؤنٹ كی جانچ اور مرمت كرو"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:327
-#: gnucash/gnome/window-reconcile2.c:2174 gnucash/gnome/window-reconcile.c:2403
+#: gnucash/gnome/window-reconcile2.c:2174 gnucash/gnome/window-reconcile.c:2421
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -4323,6 +4323,14 @@ msgid ""
 "Before you can delete it, you must either delete those objects or else "
 "modify them so they make use\n"
 "of another account"
+msgstr ""
+
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1660
+#, c-format
+msgid ""
+"The account \"%s\" has more than one subaccount.\n"
+"\n"
+"Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
@@ -6389,7 +6397,7 @@ msgid "Date of Entry"
 msgstr "داخلہ كی تاریخ"
 
 #: gnucash/gnome/gnc-split-reg.c:688 gnucash/gnome/window-reconcile2.c:1784
-#: gnucash/gnome/window-reconcile.c:1982
+#: gnucash/gnome/window-reconcile.c:2000
 msgid "Statement Date"
 msgstr "اسٹیٹمینٹ تاریخ "
 
@@ -6771,32 +6779,32 @@ msgstr "تجارت"
 msgid "Cleared Transactions"
 msgstr "لین دین تخلیق كرنا"
 
-#: gnucash/gnome/window-reconcile2.c:428 gnucash/gnome/window-reconcile.c:471
+#: gnucash/gnome/window-reconcile2.c:428 gnucash/gnome/window-reconcile.c:489
 msgid "Interest Payment"
 msgstr "سود كی رقم"
 
-#: gnucash/gnome/window-reconcile2.c:431 gnucash/gnome/window-reconcile.c:474
+#: gnucash/gnome/window-reconcile2.c:431 gnucash/gnome/window-reconcile.c:492
 msgid "Interest Charge"
 msgstr "بیاض چارج"
 
-#: gnucash/gnome/window-reconcile2.c:439 gnucash/gnome/window-reconcile.c:482
+#: gnucash/gnome/window-reconcile2.c:439 gnucash/gnome/window-reconcile.c:500
 #: gnucash/gtkbuilder/dialog-vendor.glade:660
 #: gnucash/gtkbuilder/dialog-vendor.glade:682
 msgid "Payment Information"
 msgstr "معاوضہ كی معلومات"
 
-#: gnucash/gnome/window-reconcile2.c:449 gnucash/gnome/window-reconcile.c:492
+#: gnucash/gnome/window-reconcile2.c:449 gnucash/gnome/window-reconcile.c:510
 #: gnucash/gtkbuilder/assistant-loan.glade:578
 #: gnucash/gtkbuilder/assistant-loan.glade:777
 msgid "Payment From"
 msgstr "رقم سے"
 
 #: gnucash/gnome/window-reconcile2.c:455 gnucash/gnome/window-reconcile2.c:465
-#: gnucash/gnome/window-reconcile.c:498 gnucash/gnome/window-reconcile.c:508
+#: gnucash/gnome/window-reconcile.c:516 gnucash/gnome/window-reconcile.c:526
 msgid "Reconcile Account"
 msgstr "موافق اكاؤنٹ"
 
-#: gnucash/gnome/window-reconcile2.c:470 gnucash/gnome/window-reconcile.c:513
+#: gnucash/gnome/window-reconcile2.c:470 gnucash/gnome/window-reconcile.c:531
 #: gnucash/gtkbuilder/assistant-loan.glade:829
 msgid "Payment To"
 msgstr "كو ادائیگی"
@@ -6809,64 +6817,64 @@ msgstr "یہ اكاؤنٹ كے لیے خود كار سود ادائیگیاں ن
 msgid "No Auto Interest Charges for this Account"
 msgstr "یہ اكاؤنٹ كے لیے خود كار سود چارج نہیں ہیں "
 
-#: gnucash/gnome/window-reconcile2.c:736 gnucash/gnome/window-reconcile.c:775
+#: gnucash/gnome/window-reconcile2.c:736 gnucash/gnome/window-reconcile.c:793
 #: gnucash/gtkbuilder/window-reconcile.glade:214
 msgid "Enter _Interest Payment..."
 msgstr "بیاض معاوضہ داخل كرو ... "
 
-#: gnucash/gnome/window-reconcile2.c:738 gnucash/gnome/window-reconcile.c:777
+#: gnucash/gnome/window-reconcile2.c:738 gnucash/gnome/window-reconcile.c:795
 msgid "Enter _Interest Charge..."
 msgstr "بیاض چارج داخل كرو..."
 
-#: gnucash/gnome/window-reconcile2.c:1225 gnucash/gnome/window-reconcile.c:1360
+#: gnucash/gnome/window-reconcile2.c:1225 gnucash/gnome/window-reconcile.c:1378
 msgid "Are you sure you want to delete the selected transaction?"
 msgstr "كیا آپ واقعی منتخب كیے گئے لین دین كو خارج كرناچاہتے ہے؟"
 
-#: gnucash/gnome/window-reconcile2.c:1794 gnucash/gnome/window-reconcile.c:1992
+#: gnucash/gnome/window-reconcile2.c:1794 gnucash/gnome/window-reconcile.c:2010
 #: gnucash/gtkbuilder/window-reconcile.glade:105
 msgid "Starting Balance"
 msgstr "شروعاتی بقایا"
 
-#: gnucash/gnome/window-reconcile2.c:1804 gnucash/gnome/window-reconcile.c:2002
+#: gnucash/gnome/window-reconcile2.c:1804 gnucash/gnome/window-reconcile.c:2020
 msgid "Ending Balance"
 msgstr "آخری بقایا"
 
-#: gnucash/gnome/window-reconcile2.c:1814 gnucash/gnome/window-reconcile.c:2012
+#: gnucash/gnome/window-reconcile2.c:1814 gnucash/gnome/window-reconcile.c:2030
 msgid "Reconciled Balance"
 msgstr "موافق كیا گیا بقایا"
 
-#: gnucash/gnome/window-reconcile2.c:1824 gnucash/gnome/window-reconcile.c:2022
+#: gnucash/gnome/window-reconcile2.c:1824 gnucash/gnome/window-reconcile.c:2040
 #: gnucash/report/reports/standard/cash-flow.scm:312
 msgid "Difference"
 msgstr "فرق"
 
-#: gnucash/gnome/window-reconcile2.c:1913 gnucash/gnome/window-reconcile.c:2142
+#: gnucash/gnome/window-reconcile2.c:1913 gnucash/gnome/window-reconcile.c:2160
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
 msgstr ""
 "آپ نے اس موافق ونڈو میں تبدیلیاں كی ہے۔ كیا آپ واقعی اسے منسوخ كرنا چاہتے ہے؟"
 
-#: gnucash/gnome/window-reconcile2.c:2031 gnucash/gnome/window-reconcile.c:2260
+#: gnucash/gnome/window-reconcile2.c:2031 gnucash/gnome/window-reconcile.c:2278
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr "یہ اكاؤنٹ متوازن نہیں ہے۔ كیا آپ واقعی ختم كرنا چاہتے ہے؟"
 
-#: gnucash/gnome/window-reconcile2.c:2088 gnucash/gnome/window-reconcile.c:2317
+#: gnucash/gnome/window-reconcile2.c:2088 gnucash/gnome/window-reconcile.c:2335
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr "كیا آپ یہ موافق كو توقف اور بعد میں اسے مكمل كرنا چاہتے ہیں؟"
 
-#: gnucash/gnome/window-reconcile2.c:2126 gnucash/gnome/window-reconcile.c:2355
+#: gnucash/gnome/window-reconcile2.c:2126 gnucash/gnome/window-reconcile.c:2373
 msgid "_Reconcile"
 msgstr "_موافق"
 
-#: gnucash/gnome/window-reconcile2.c:2127 gnucash/gnome/window-reconcile.c:2356
+#: gnucash/gnome/window-reconcile2.c:2127 gnucash/gnome/window-reconcile.c:2374
 #: gnucash/gtkbuilder/dialog-tax-table.glade:510
 msgid "_Account"
 msgstr "_ اكاؤنٹ"
 
 #: gnucash/gnome/window-reconcile2.c:2129
-#: gnucash/gnome/window-reconcile2.c:2210 gnucash/gnome/window-reconcile.c:2358
-#: gnucash/gnome/window-reconcile.c:2439
+#: gnucash/gnome/window-reconcile2.c:2210 gnucash/gnome/window-reconcile.c:2376
+#: gnucash/gnome/window-reconcile.c:2457
 #: gnucash/gnome-utils/gnc-main-window.c:282
 #: gnucash/gtkbuilder/dialog-account.glade:1119
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:23
@@ -6891,95 +6899,95 @@ msgstr "_ اكاؤنٹ"
 msgid "_Help"
 msgstr "_مدد"
 
-#: gnucash/gnome/window-reconcile2.c:2134 gnucash/gnome/window-reconcile.c:2363
+#: gnucash/gnome/window-reconcile2.c:2134 gnucash/gnome/window-reconcile.c:2381
 msgid "_Reconcile Information..."
 msgstr "_موافق معلومات... "
 
-#: gnucash/gnome/window-reconcile2.c:2135 gnucash/gnome/window-reconcile.c:2364
+#: gnucash/gnome/window-reconcile2.c:2135 gnucash/gnome/window-reconcile.c:2382
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr "اسٹیٹمینٹ كی تاریخ اور آخری بیلنس موافق معلومات كو تبدیل كرو۔"
 
-#: gnucash/gnome/window-reconcile2.c:2140 gnucash/gnome/window-reconcile.c:2369
+#: gnucash/gnome/window-reconcile2.c:2140 gnucash/gnome/window-reconcile.c:2387
 msgid "_Finish"
 msgstr "_مكمل"
 
-#: gnucash/gnome/window-reconcile2.c:2141 gnucash/gnome/window-reconcile.c:2370
+#: gnucash/gnome/window-reconcile2.c:2141 gnucash/gnome/window-reconcile.c:2388
 msgid "Finish the reconciliation of this account"
 msgstr "یہ اكاؤنٹ كے موافق كا كام مكمل كرو"
 
-#: gnucash/gnome/window-reconcile2.c:2145 gnucash/gnome/window-reconcile.c:2374
+#: gnucash/gnome/window-reconcile2.c:2145 gnucash/gnome/window-reconcile.c:2392
 msgid "_Postpone"
 msgstr "_توقف كرنا "
 
-#: gnucash/gnome/window-reconcile2.c:2146 gnucash/gnome/window-reconcile.c:2375
+#: gnucash/gnome/window-reconcile2.c:2146 gnucash/gnome/window-reconcile.c:2393
 msgid "Postpone the reconciliation of this account"
 msgstr "یہ اكاؤنٹ كے موافق كا كام توقف كیا گیا۔"
 
-#: gnucash/gnome/window-reconcile2.c:2151 gnucash/gnome/window-reconcile.c:2380
+#: gnucash/gnome/window-reconcile2.c:2151 gnucash/gnome/window-reconcile.c:2398
 msgid "Cancel the reconciliation of this account"
 msgstr "یہ اكاؤنٹ كے موافق كومنسوخ كرو۔"
 
-#: gnucash/gnome/window-reconcile2.c:2158 gnucash/gnome/window-reconcile.c:2387
+#: gnucash/gnome/window-reconcile2.c:2158 gnucash/gnome/window-reconcile.c:2405
 msgid "_Open Account"
 msgstr "_اكاؤنٹ كھولو "
 
-#: gnucash/gnome/window-reconcile2.c:2159 gnucash/gnome/window-reconcile.c:2388
+#: gnucash/gnome/window-reconcile2.c:2159 gnucash/gnome/window-reconcile.c:2406
 msgid "Open the account"
 msgstr "اكاؤنٹ كھولو"
 
-#: gnucash/gnome/window-reconcile2.c:2163 gnucash/gnome/window-reconcile.c:2392
+#: gnucash/gnome/window-reconcile2.c:2163 gnucash/gnome/window-reconcile.c:2410
 msgid "_Edit Account"
 msgstr "_اكاؤنٹ مرتب كرو"
 
-#: gnucash/gnome/window-reconcile2.c:2164 gnucash/gnome/window-reconcile.c:2393
+#: gnucash/gnome/window-reconcile2.c:2164 gnucash/gnome/window-reconcile.c:2411
 msgid "Edit the main account for this register"
 msgstr "یہ رجسٹر كے لیے اہم اكاؤنٹ كو مرتب كرو"
 
-#: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2402
+#: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2420
 #: gnucash/gnome-utils/gnc-main-window.c:357
 msgid "_Check & Repair"
 msgstr "_جانچ اور مرمت كرو "
 
-#: gnucash/gnome/window-reconcile2.c:2182 gnucash/gnome/window-reconcile.c:2411
+#: gnucash/gnome/window-reconcile2.c:2182 gnucash/gnome/window-reconcile.c:2429
 #: gnucash/gtkbuilder/dialog-account.glade:1753
 msgid "_Balance"
 msgstr "_ بقایا"
 
-#: gnucash/gnome/window-reconcile2.c:2183 gnucash/gnome/window-reconcile.c:2412
+#: gnucash/gnome/window-reconcile2.c:2183 gnucash/gnome/window-reconcile.c:2430
 msgid "Add a new balancing entry to the account"
 msgstr "اكاؤنٹ میں ایك نئی بقایا داخلہ كو جمع كرو"
 
-#: gnucash/gnome/window-reconcile2.c:2188 gnucash/gnome/window-reconcile.c:2417
+#: gnucash/gnome/window-reconcile2.c:2188 gnucash/gnome/window-reconcile.c:2435
 msgid "Edit the current transaction"
 msgstr "جاری لین دین كو مرتب كرو"
 
-#: gnucash/gnome/window-reconcile2.c:2193 gnucash/gnome/window-reconcile.c:2422
+#: gnucash/gnome/window-reconcile2.c:2193 gnucash/gnome/window-reconcile.c:2440
 msgid "Delete the selected transaction"
 msgstr "منتخب لین دین كو خارج كرو"
 
-#: gnucash/gnome/window-reconcile2.c:2197 gnucash/gnome/window-reconcile.c:2426
+#: gnucash/gnome/window-reconcile2.c:2197 gnucash/gnome/window-reconcile.c:2444
 msgid "_Reconcile Selection"
 msgstr "_ری كنسائل انتخاب"
 
-#: gnucash/gnome/window-reconcile2.c:2198 gnucash/gnome/window-reconcile.c:2427
+#: gnucash/gnome/window-reconcile2.c:2198 gnucash/gnome/window-reconcile.c:2445
 msgid "Reconcile the selected transactions"
 msgstr "منتخبہ ٹرانسیكشن كو ری كونسل كریں"
 
-#: gnucash/gnome/window-reconcile2.c:2202 gnucash/gnome/window-reconcile.c:2431
+#: gnucash/gnome/window-reconcile2.c:2202 gnucash/gnome/window-reconcile.c:2449
 msgid "_Unreconcile Selection"
 msgstr "_اِن ری كنسائل انتخاب"
 
-#: gnucash/gnome/window-reconcile2.c:2203 gnucash/gnome/window-reconcile.c:2432
+#: gnucash/gnome/window-reconcile2.c:2203 gnucash/gnome/window-reconcile.c:2450
 msgid "Unreconcile the selected transactions"
 msgstr "منتخبہ ٹرانسیكشن كو غیر ری كنسائل كریں"
 
-#: gnucash/gnome/window-reconcile2.c:2211 gnucash/gnome/window-reconcile.c:2440
+#: gnucash/gnome/window-reconcile2.c:2211 gnucash/gnome/window-reconcile.c:2458
 msgid "Open the GnuCash help window"
 msgstr "GnuCash ہیلپ ونڈو كو كھولو"
 
 #. Translators: %d is the number of days in the future
-#: gnucash/gnome/window-reconcile.c:368
+#: gnucash/gnome/window-reconcile.c:388
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
@@ -6987,26 +6995,26 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. Translators: %d is the number of days in the future
-#: gnucash/gnome/window-reconcile.c:375
+#: gnucash/gnome/window-reconcile.c:395
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
 msgstr[0] ""
 msgstr[1] ""
 
-#: gnucash/gnome/window-reconcile.c:380
+#: gnucash/gnome/window-reconcile.c:400
 msgid ""
 "This may cause issues for future reconciliation actions on this account. "
 "Please double-check this is the date you intended."
 msgstr ""
 
-#: gnucash/gnome/window-reconcile.c:1882
+#: gnucash/gnome/window-reconcile.c:1900
 msgid ""
 "WARNING! Account contains splits whose reconcile date is after statement "
 "date. Reconciliation may be difficult."
 msgstr ""
 
-#: gnucash/gnome/window-reconcile.c:1886
+#: gnucash/gnome/window-reconcile.c:1904
 msgid ""
 "This account has splits whose Reconciled Date is after this reconciliation "
 "statement date. These splits may make reconciliation difficult. If this is "
@@ -7637,7 +7645,7 @@ msgstr "كرنسی "
 #: gnucash/gtkbuilder/dialog-transfer.glade:415
 #: gnucash/gtkbuilder/dialog-transfer.glade:428
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4427
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4440
 msgid "Currency"
 msgstr "كرنسی"
 
@@ -8109,8 +8117,8 @@ msgid "New..."
 msgstr "_نیا..."
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:411
-#: gnucash/register/register-core/formulacell.c:119
-#: gnucash/register/register-core/pricecell.c:159
+#: gnucash/register/register-core/formulacell.c:121
+#: gnucash/register/register-core/pricecell.c:161
 #, fuzzy, c-format
 #| msgid "An error occurred while processing %s."
 msgid "An error occurred while processing '%s' at position %d"
@@ -8122,11 +8130,11 @@ msgstr "%s كی پروسیسنگ كے دوران ایك خامی واقع ہوئ
 msgid "An error occurred while processing '%s'"
 msgstr "%s كی پروسیسنگ كے دوران ایك خامی واقع ہوئی۔"
 
-#: gnucash/gnome-utils/gnc-autosave.c:99
+#: gnucash/gnome-utils/gnc-autosave.c:101
 msgid "Save file automatically?"
 msgstr "كیاخود كار طریقہ سے فائل كو محفوظ كریں؟"
 
-#: gnucash/gnome-utils/gnc-autosave.c:106
+#: gnucash/gnome-utils/gnc-autosave.c:108
 #, c-format
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
@@ -8167,19 +8175,19 @@ msgstr[1] ""
 "\n"
 "كیا آپ کی فائل خود بخود محفوظ کیا جانا چاہئے؟"
 
-#: gnucash/gnome-utils/gnc-autosave.c:121
+#: gnucash/gnome-utils/gnc-autosave.c:123
 msgid "_Yes, this time"
 msgstr "_ ہاں، اس وقت"
 
-#: gnucash/gnome-utils/gnc-autosave.c:122
+#: gnucash/gnome-utils/gnc-autosave.c:124
 msgid "Yes, _always"
 msgstr "ہاں،_ ہمیشہ "
 
-#: gnucash/gnome-utils/gnc-autosave.c:123
+#: gnucash/gnome-utils/gnc-autosave.c:125
 msgid "No, n_ever"
 msgstr "نہیں، كبھی نہیں"
 
-#: gnucash/gnome-utils/gnc-autosave.c:124
+#: gnucash/gnome-utils/gnc-autosave.c:126
 msgid "_No, not this time"
 msgstr "_ نہیں، اس وقت نہیں"
 
@@ -8225,41 +8233,41 @@ msgstr "ابھی سے"
 msgid "Calendar"
 msgstr "كیلنڈر"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:249
+#: gnucash/gnome-utils/gnc-dense-cal.c:252
 msgid "12 months"
 msgstr "۱۲ مہینے"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:250
+#: gnucash/gnome-utils/gnc-dense-cal.c:253
 msgid "6 months"
 msgstr "6 مہینے"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:251
+#: gnucash/gnome-utils/gnc-dense-cal.c:254
 msgid "4 months"
 msgstr "4 مہینے"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:252
+#: gnucash/gnome-utils/gnc-dense-cal.c:255
 msgid "3 months"
 msgstr "3 مہینے"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:253
+#: gnucash/gnome-utils/gnc-dense-cal.c:256
 msgid "2 months"
 msgstr "2 مہینے"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:254
+#: gnucash/gnome-utils/gnc-dense-cal.c:257
 msgid "1 month"
 msgstr "1 مہینہ"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:290
+#: gnucash/gnome-utils/gnc-dense-cal.c:293
 #, fuzzy
 msgid "View"
 msgstr "_منظر"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:335
+#: gnucash/gnome-utils/gnc-dense-cal.c:338
 #: gnucash/report/stylesheets/footer.scm:377
 msgid "Date: "
 msgstr "تاریخ:"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:348
+#: gnucash/gnome-utils/gnc-dense-cal.c:351
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:147
 #: gnucash/gtkbuilder/dialog-fincalc.glade:746
 #: gnucash/gtkbuilder/dialog-fincalc.glade:759
@@ -8269,7 +8277,7 @@ msgstr "تاریخ:"
 msgid "Frequency"
 msgstr "كثرت"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1230
+#: gnucash/gnome-utils/gnc-dense-cal.c:1233
 msgid "(unnamed)"
 msgstr "(بے نام)"
 
@@ -8704,14 +8712,14 @@ msgstr ""
 msgid "Expected location"
 msgstr "آپن فائل/ مقام"
 
-#: gnucash/gnome-utils/gnc-gnome-utils.c:510
-#: gnucash/gnome-utils/gnc-gnome-utils.c:550
+#: gnucash/gnome-utils/gnc-gnome-utils.c:513
+#: gnucash/gnome-utils/gnc-gnome-utils.c:553
 #, fuzzy
 #| msgid "GnuCash could not find the associated file."
 msgid "GnuCash could not find the linked document."
 msgstr "GnuCash منسلک فائل کو تلاش نہیں کر سكا"
 
-#: gnucash/gnome-utils/gnc-gnome-utils.c:580
+#: gnucash/gnome-utils/gnc-gnome-utils.c:583
 #, fuzzy
 msgid "GnuCash could not open the linked document:"
 msgstr "GnuCash متعلقہ URI کو نہیں کھول سکتا ہے:"
@@ -9011,7 +9019,7 @@ msgid "Version"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.c:4720
-#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:265
+#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:261
 msgid "Build ID"
 msgstr ""
 
@@ -9521,7 +9529,7 @@ msgstr "پے چیك"
 #: gnucash/report/reports/standard/balance-sheet.scm:502
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1083
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4430
+#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4443
 msgid "Equity"
 msgstr "اكویٹی"
 
@@ -10070,7 +10078,7 @@ msgstr "حاصل"
 #: gnucash/report/reports/standard/customer-summary.scm:302
 #: gnucash/report/reports/standard/net-charts.scm:367
 #: gnucash/report/reports/standard/net-charts.scm:416
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4429
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4442
 #: libgnucash/engine/gncInvoice.c:1112
 msgid "Expense"
 msgstr "خرچ"
@@ -10347,49 +10355,49 @@ msgstr "رپورٹ كانفگریشن لوڈ كریں"
 msgid "Loading user scm configuration..."
 msgstr "رپورٹ كانفگریشن لوڈ كریں"
 
-#: gnucash/gnucash-core-app.cpp:227
+#: gnucash/gnucash-core-app.cpp:223
 #, fuzzy
 msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash ذاتی اور چھوٹے کاروبار کے فائنانس مینجمنٹ"
 
-#: gnucash/gnucash-core-app.cpp:229
+#: gnucash/gnucash-core-app.cpp:225
 msgid "{1} [options] [datafile]"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:257
+#: gnucash/gnucash-core-app.cpp:253
 #, fuzzy
 msgid "GnuCash {1}"
 msgstr "GnuCash"
 
-#: gnucash/gnucash-core-app.cpp:258
+#: gnucash/gnucash-core-app.cpp:254
 #, fuzzy
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s ترقی ورژن"
 
-#: gnucash/gnucash-core-app.cpp:286
+#: gnucash/gnucash-core-app.cpp:282
 #, fuzzy
 msgid "Common Options"
 msgstr "بیاض كا آپشنس"
 
-#: gnucash/gnucash-core-app.cpp:289
+#: gnucash/gnucash-core-app.cpp:285
 msgid "Show this help message"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:291
+#: gnucash/gnucash-core-app.cpp:287
 msgid "Show GnuCash version"
 msgstr "GnuCash ورژن دكھاؤ"
 
-#: gnucash/gnucash-core-app.cpp:293
+#: gnucash/gnucash-core-app.cpp:289
 msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:295
+#: gnucash/gnucash-core-app.cpp:291
 msgid "Enable extra/development/debugging features."
 msgstr "زائد/ڈیولپمنٹ/ڈبگینگ سہولتوں كو قابل كرو۔"
 
-#: gnucash/gnucash-core-app.cpp:297
+#: gnucash/gnucash-core-app.cpp:293
 msgid ""
 "Log level overrides, of the form \"modulename={debug,info,warn,crit,"
 "error}\"\n"
@@ -10397,7 +10405,7 @@ msgid ""
 "This can be invoked multiple times."
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:299
+#: gnucash/gnucash-core-app.cpp:295
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
@@ -10405,7 +10413,7 @@ msgstr ""
 "وہ فائل جس میں لاگ كیا جانا ہے ; \"/tmp/gnucash.trace\"; میں ڈیفالٹ \"stderr"
 "\" یا \"stdout\" ہو سكتا ہے۔"
 
-#: gnucash/gnucash-core-app.cpp:301
+#: gnucash/gnucash-core-app.cpp:297
 msgid ""
 "Set the prefix for gsettings schemas for gsettings queries. This can be "
 "useful to have a different settings tree while debugging."
@@ -10413,12 +10421,12 @@ msgstr ""
 "جی سیٹینگس سوالات کے لئے gsettings schemas کے لئے پرفیكس مقرر کریں.یہ ڈی "
 "بگینگ كے دوران مختلف ترتیبات ٹری کے لئے مفید ہو سکتے ہیں."
 
-#: gnucash/gnucash-core-app.cpp:303
+#: gnucash/gnucash-core-app.cpp:299
 #, fuzzy
 msgid "Hidden Options"
 msgstr "بجٹ آپشنس: "
 
-#: gnucash/gnucash-core-app.cpp:306
+#: gnucash/gnucash-core-app.cpp:302
 msgid "[datafile]"
 msgstr "[ڈاٹا فائل]"
 
@@ -20114,7 +20122,7 @@ msgid "Unspecified"
 msgstr "تشكیل نہیں كیا گیا"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4420
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4433
 msgid "Bank"
 msgstr "بینك"
 
@@ -21677,26 +21685,26 @@ msgstr "سالانہ"
 msgid "Auto"
 msgstr "خود كار"
 
-#: gnucash/import-export/log-replay/gnc-log-replay.c:580
+#: gnucash/import-export/log-replay/gnc-log-replay.c:579
 msgid "Select a .log file to replay"
 msgstr "ری پلے كے لیے ایك .log فائل منتخب كرو"
 
 #. Translators: %s is the file name.
-#: gnucash/import-export/log-replay/gnc-log-replay.c:600
+#: gnucash/import-export/log-replay/gnc-log-replay.c:599
 #, c-format
 msgid "Cannot open the current log file: %s"
 msgstr "جاری لاگ فائل كو كھولا نہیں جاسكتا : %s"
 
-#: gnucash/import-export/log-replay/gnc-log-replay.c:615
+#: gnucash/import-export/log-replay/gnc-log-replay.c:614
 #, c-format
 msgid "Failed to open log file: %s: %s"
 msgstr "لاگ فائل كو كھولنے میں ناكامیاب رہا: %s: %s"
 
-#: gnucash/import-export/log-replay/gnc-log-replay.c:625
+#: gnucash/import-export/log-replay/gnc-log-replay.c:624
 msgid "The log file you selected was empty."
 msgstr "آپ نے جس لاگ فائل كو منتخب كیا وہ خالی تھی۔ "
 
-#: gnucash/import-export/log-replay/gnc-log-replay.c:634
+#: gnucash/import-export/log-replay/gnc-log-replay.c:633
 msgid ""
 "The log file you selected cannot be read. The file header was not recognized."
 msgstr ""
@@ -21712,59 +21720,60 @@ msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr ""
 "ایک حادثے کے بعد ایک GnuCash لاگ فائل ری پلے كریں. یہ رد نہیں کیا جاسکتا."
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:647
+#: gnucash/import-export/ofx/gnc-ofx-import.c:651
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "سكیوڑیٹی \"%s\" كے لیے اسٹاك اكاؤنٹ"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:824
+#: gnucash/import-export/ofx/gnc-ofx-import.c:828
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "سكیوریٹی \"%s\" كے لیے آمدنی اكاؤنٹ"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:946
+#: gnucash/import-export/ofx/gnc-ofx-import.c:951
 msgid "Unknown OFX account"
 msgstr "نامعلوم OFX اكاؤنٹ"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:969
+#: gnucash/import-export/ofx/gnc-ofx-import.c:974
 msgid "Unknown OFX checking account"
 msgstr "نامعلوم OFX جانچ اكاؤنٹ"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:973
+#: gnucash/import-export/ofx/gnc-ofx-import.c:978
 msgid "Unknown OFX savings account"
 msgstr "نامعلوم OFX كفایت شعاراكاؤنٹ"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:977
+#: gnucash/import-export/ofx/gnc-ofx-import.c:982
 msgid "Unknown OFX money market account"
 msgstr "نامعلوم OFX منی ماركیٹ اكاؤنٹ"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:981
+#: gnucash/import-export/ofx/gnc-ofx-import.c:986
 msgid "Unknown OFX credit line account"
 msgstr "نامعلوم OFX كریڈیٹ لائن اكاؤنٹ"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:986
+#: gnucash/import-export/ofx/gnc-ofx-import.c:991
 msgid "Unknown OFX CMA account"
 msgstr "نامعلوم OFX CMA اكاؤنٹ"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:990
+#: gnucash/import-export/ofx/gnc-ofx-import.c:995
 msgid "Unknown OFX credit card account"
 msgstr "نامعلوم OFX كریڈیٹ كارڈ اكاؤنٹ"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:994
+#: gnucash/import-export/ofx/gnc-ofx-import.c:999
 msgid "Unknown OFX investment account"
 msgstr "نامعلوم OFX سرمایہ كاری اكاؤنٹ"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1191
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1201
 #, c-format
 msgid ""
-"OFX file '%s' imported, %d transactions processed, no transactions to match"
+"OFX file '%s', imported transactions for account '%s'\n"
+"%d transactions processed, no transactions to match"
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1242
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1302
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1247
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1307
 #, fuzzy
 msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "پروسیس كے لیے ایك OFX/QFX فائل منتخب كرو"
@@ -22446,7 +22455,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
-#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4421
+#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4434
 msgid "Cash"
 msgstr "نقد"
 
@@ -25660,12 +25669,12 @@ msgid "missing"
 msgstr "كمیشن"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1076
-#: libgnucash/engine/Account.cpp:4422
+#: libgnucash/engine/Account.cpp:4435
 msgid "Asset"
 msgstr "ملكیت"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1079
-#: libgnucash/engine/Account.cpp:4424
+#: libgnucash/engine/Account.cpp:4437
 msgid "Liability"
 msgstr "قابلیت"
 
@@ -26903,7 +26912,7 @@ msgid ""
 msgstr "کل ٹریڈنگ اکاؤنٹ توازن کا اشارہ ایک لائن شامل كریں یا نہیں."
 
 #: gnucash/report/reports/standard/income-statement.scm:517
-#: libgnucash/engine/Account.cpp:4434 libgnucash/engine/Scrub.c:486
+#: libgnucash/engine/Account.cpp:4447 libgnucash/engine/Scrub.c:486
 msgid "Trading"
 msgstr "ٹریڈینگ"
 
@@ -30282,40 +30291,40 @@ msgstr ""
 "\n"
 "نچیے آپ غیر معتبر اكاؤنٹ ناموں كی فہرست كو ڈھونڈو%s"
 
-#: libgnucash/engine/Account.cpp:4423
+#: libgnucash/engine/Account.cpp:4436
 msgid "Credit Card"
 msgstr "كریڈیٹ كارڈ"
 
-#: libgnucash/engine/Account.cpp:4425
+#: libgnucash/engine/Account.cpp:4438
 msgid "Stock"
 msgstr "اسٹاك"
 
-#: libgnucash/engine/Account.cpp:4426
+#: libgnucash/engine/Account.cpp:4439
 msgid "Mutual Fund"
 msgstr "میچول فنڈ"
 
-#: libgnucash/engine/Account.cpp:4431
+#: libgnucash/engine/Account.cpp:4444
 msgid "A/Receivable"
 msgstr "A/قابل قبول"
 
-#: libgnucash/engine/Account.cpp:4432
+#: libgnucash/engine/Account.cpp:4445
 msgid "A/Payable"
 msgstr "A/قابل ادا"
 
-#: libgnucash/engine/Account.cpp:4433
+#: libgnucash/engine/Account.cpp:4446
 msgid "Root"
 msgstr "روٹ"
 
-#: libgnucash/engine/Account.cpp:4900
+#: libgnucash/engine/Account.cpp:4913
 msgid "Orphaned Gains"
 msgstr "یتیم نفع"
 
-#: libgnucash/engine/Account.cpp:4914 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4927 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "حقیقی نفع/ نقصان"
 
-#: libgnucash/engine/Account.cpp:4916
+#: libgnucash/engine/Account.cpp:4929
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
