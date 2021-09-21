@@ -20,10 +20,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-09-13 12:34+0000\n"
+"PO-Revision-Date: 2021-09-21 03:37+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -20667,14 +20667,13 @@ msgid "Unknown OFX investment account"
 msgstr "未知的 OFX 投资科目"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1201
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s' imported, %d transactions processed, no transactions to "
-#| "match"
+#, c-format
 msgid ""
 "OFX file '%s', imported transactions for account '%s'\n"
 "%d transactions processed, no transactions to match"
-msgstr "导入OFX文件'%s'，处理了%d个交易，没有交易可以匹配"
+msgstr ""
+"OFX 文件 '%s'，导入了账户 '%s'的交易\n"
+"处理了 %d 笔交易，没有交易可以匹配"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1302
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
