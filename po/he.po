@@ -8,11 +8,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-09-15 11:56+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2021-09-20 23:37+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -4241,6 +4241,9 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"לחשבון „%s” יש יותר מתת־חשבון אחד.\n"
+"\n"
+"יש להעביר את תת־החשבונות או למחוק אותם בטרם ניסיון מחיקת החשבון הזה."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
@@ -21059,14 +21062,13 @@ msgid "Unknown OFX investment account"
 msgstr "חשבון השקעות OFX לא ידוע"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1201
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s' imported, %d transactions processed, no transactions to "
-#| "match"
+#, c-format
 msgid ""
 "OFX file '%s', imported transactions for account '%s'\n"
 "%d transactions processed, no transactions to match"
-msgstr "קובץ OFX '%s' יובא, %d תנועות עובדו, לא נמצאו תנועות להתאמה"
+msgstr ""
+"קובץ ה־OFX ‏‚%s’ ייבא תנועות לחשבון ‚%s’\n"
+"%d תנועות עובדו, אין תנועות מתאימות"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1302
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
