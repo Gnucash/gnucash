@@ -37,6 +37,13 @@ extern "C" {
 #include "gnc-prefs-p.h"
 }
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#include <fstream>
+#include <iostream>
+
+namespace bpt = boost::property_tree;
+
 #define GSET_SCHEMA_PREFIX "org.gnucash.GnuCash"
 #define GSET_SCHEMA_OLD_PREFIX "org.gnucash"
 #define CLIENT_TAG  "%s-%s-client"
@@ -623,25 +630,167 @@ void gnc_gsettings_load_backend (void)
     LEAVE("Prefsbackend bind = %p", prefsbackend->bind);
 }
 
+
+
+static GVariant *
+gnc_gsettings_get_user_value (const gchar *schema,
+                         const gchar *key)
+{
+    GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), NULL);
+
+    if (gnc_gsettings_is_valid_key (settings_ptr, key))
+        return g_settings_get_user_value (settings_ptr, key);
+    else
+    {
+        PERR ("Invalid key %s for schema %s", key, schema);
+        return NULL;
+    }
+}
+
+static void
+migrate_one_key (const std::string &oldpath, const std::string &oldkey,
+                 const std::string &newpath, const std::string &newkey)
+{
+    PINFO ("Migrating '%s:%s' to '%s:%s'", oldpath.c_str(), oldkey.c_str(),
+           newpath.c_str(), newkey.c_str());
+    auto user_value = gnc_gsettings_get_user_value (oldpath.data(), oldkey.data());
+    if (user_value)
+        gnc_gsettings_set_value (newpath.data(), newkey.data(), user_value);
+}
+
+static void
+migrate_one_node (bpt::ptree &pt)
+{
+    /* loop over top-level property tree */
+    std::for_each (pt.begin(), pt.end(),
+            [] (std::pair<bpt::ptree::key_type, bpt::ptree> node)
+            {
+                if (node.first == "<xmlattr>")
+                    return;
+                if (node.first != "migrate")
+                {
+                    DEBUG ("Skipping non-<migrate> node <%s>", node.first.c_str());
+                    return;
+                }
+
+                auto oldpath = node.second.get_optional<std::string> ("<xmlattr>.old-path");
+                auto oldkey = node.second.get_optional<std::string> ("<xmlattr>.old-key");
+                auto newpath = node.second.get_optional<std::string> ("<xmlattr>.new-path");
+                auto newkey = node.second.get_optional<std::string> ("<xmlattr>.new-key");
+                if (!oldpath || !oldkey || !newpath || !newkey)
+                {
+                    DEBUG ("Skipping migration node - missing attribute (old-path, old-key, new-path or new-key)");
+                    return;
+                }
+                migrate_one_key (*oldpath, *oldkey, *newpath, *newkey);
+            });
+}
+
+static void
+migrate_settings (int old_maj_min)
+{
+    bpt::ptree pt;
+
+    auto pkg_data_dir = gnc_path_get_pkgdatadir();
+    auto migrate_file = std::string (pkg_data_dir) + "/migratable-prefs.xml";
+    g_free (pkg_data_dir);
+
+    std::ifstream migrate_stream {migrate_file};
+    if (!migrate_stream.is_open())
+    {
+        PWARN("Failed to load settings migration file '%s'", migrate_file.c_str());
+        return;
+    }
+
+    try
+    {
+        bpt::read_xml (migrate_stream, pt);
+    }
+    catch (bpt::xml_parser_error &e) {
+        PWARN ("Failed to parse GnuCash settings migration file.\n");
+        PWARN ("Error message:\n");
+        PWARN ("%s\n", e.what());
+        return;
+    }
+    catch (...) {
+        PWARN ("Unknown error while parsing GnuCash settings migration file.\n");
+        return;
+    }
+
+    /* loop over top-level property tree */
+    std::for_each (pt.begin(), pt.end(),
+            [&old_maj_min] (std::pair<bpt::ptree::key_type, bpt::ptree> node)
+            {
+                if (node.first != "release")
+                {
+                    DEBUG ("Skipping non-<release> node <%s>", node.first.c_str());
+                    return;
+                }
+                auto version = node.second.get_optional<int> ("<xmlattr>.version");
+                if (!version)
+                {
+                    DEBUG ("Skipping <release> node - no version attribute found");
+                    return;
+                }
+                if (*version <= old_maj_min)
+                {
+                    DEBUG ("Skipping <release> node - version %i is less than current compatibility level %i", *version, old_maj_min);
+                    return;
+                }
+                DEBUG ("Retrieved version value '%i'", *version);
+
+                migrate_one_node (node.second);
+            });
+}
+
 void gnc_gsettings_version_upgrade (void)
 {
     /* Use versioning to ensure this routine will only sync once for each
-     * superseded setting */
-    int old_maj_min = gnc_gsettings_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
-    int cur_maj_min = PROJECT_VERSION_MAJOR * 100 + PROJECT_VERSION_MINOR;
+     * superseded setting
+     * At first run of GnuCash 4.7 or more recent *all* settings will be migrated
+     * from prefix org.gnucash to org.gnucash.GnuCash, including our GNC_PREF_VERSION setting.
+     * As the logic to determine whether or not to upgrade depends on it we have to do
+     * some extra tests to figure when exactly to start doing migrations.
+     * - if GNC_PREF_VERSION is not set under old nor new prefix, that means
+     *   gnucash has never run before on this system = no migration necessary
+     * - if GNC_PREF_VERSION is set under old prefix, but not new prefix
+     *   => full migration from old to new prefix should still be run
+     * - if GNC_PREF_VERSION is set under both prefixes
+     *   => ignore old prefix and use new prefix result to determine which
+     *   migrations would still be needed.
+     */
+    ENTER("Start of settings migration routine.");
 
-    /* Convert settings to 3.0 compatibility level */
-    if (old_maj_min < 207)
+    auto ogG_maj_min = gnc_gsettings_get_user_value (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
+    auto og_maj_min = gnc_gsettings_get_user_value (GSET_SCHEMA_OLD_PREFIX "." GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
+
+    if (!ogG_maj_min && !og_maj_min)
     {
-        /* 'use-theme-colors' has been replaced with 'use-gnucash-color-theme'
-         * which inverts the meaning of the setting */
-        gboolean old_color_theme = gnc_gsettings_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_THEME_COLORS);
-        gnc_gsettings_set_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_GNUCASH_COLOR_THEME, !old_color_theme);
+        LEAVE("");
+        return;
     }
 
+    auto old_maj_min = 0;
+    if (!ogG_maj_min)
+        old_maj_min = gnc_gsettings_get_int (GSET_SCHEMA_OLD_PREFIX "." GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
+    else
+    {
+        g_variant_unref (ogG_maj_min);
+        old_maj_min = gnc_gsettings_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
+    }
+    g_variant_unref (og_maj_min);
+
+    PINFO ("Previous setting compatibility level: %i", old_maj_min);
+
+    migrate_settings (old_maj_min);
+
     /* Only write current version if it's more recent than what was set */
+    auto cur_maj_min = PROJECT_VERSION_MAJOR * 1000 + PROJECT_VERSION_MINOR;
     if (cur_maj_min > old_maj_min)
         gnc_gsettings_set_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION, cur_maj_min);
+
+    LEAVE("");
 }
 
 
