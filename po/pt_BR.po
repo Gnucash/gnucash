@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-09-16 05:35+0000\n"
+"PO-Revision-Date: 2021-09-21 01:39+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -4345,6 +4345,9 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"A conta \"%s\" tem mais do que uma subconta.\n"
+"\n"
+"Mova as sub-contas ou as apague antes de tentar apagar esta conta."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
@@ -21829,16 +21832,13 @@ msgid "Unknown OFX investment account"
 msgstr "Conta OFX de investimento desconhecida"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1201
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s' imported, %d transactions processed, no transactions to "
-#| "match"
+#, c-format
 msgid ""
 "OFX file '%s', imported transactions for account '%s'\n"
 "%d transactions processed, no transactions to match"
 msgstr ""
-"Arquivo OFX '%s' foi importado, %d transações foram processadas, nenhuma "
-"transação coincidente"
+"Arquivo OFX '%s', transações importadas para a conta '%s'.\n"
+"%d transações foram processadas, nenhuma transação correspondente"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1302
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
