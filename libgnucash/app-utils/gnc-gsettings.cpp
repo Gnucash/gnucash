@@ -627,6 +627,10 @@ void gnc_gsettings_load_backend (void)
     prefsbackend->block_all = gnc_gsettings_block_all;
     prefsbackend->unblock_all = gnc_gsettings_unblock_all;
 
+    /* Run any data model changes for the backend before it's used
+     * by anyone */
+    gnc_gsettings_version_upgrade();
+
     LEAVE("Prefsbackend bind = %p", prefsbackend->bind);
 }
 
