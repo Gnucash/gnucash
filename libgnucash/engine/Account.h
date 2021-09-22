@@ -469,7 +469,7 @@ Account * xaccAccountGainsAccount (Account *acc, gnc_commodity *curr);
 void dxaccAccountSetPriceSrc (Account *account, const char *src);
 /** Get a string that identifies the Finance::Quote backend that
  *  should be used to retrieve online prices.  See price-quotes.scm
- *  for more information.
+ *  for more information. This function uses a static char*.
  *
  *  @deprecated Price quote information is now stored on the
  *  commodity, not the account. */
@@ -1588,7 +1588,8 @@ gnc_commodity * DxaccAccountGetCurrency (const Account *account);
 void dxaccAccountSetQuoteTZ (Account *account, const char *tz);
 /** Get the timezone to be used when interpreting the results from a
  *  given Finance::Quote backend.  Unfortunately, the upstream sources
- *  don't label their output, so the user has to specify this bit.
+ *  don't label their output, so the user has to specify this
+ *  bit. This function uses a static char*.
  *
  *  @deprecated Price quote information is now stored on the
  *  commodity, not the account. */
