@@ -586,7 +586,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
     xaccTransSetCurrency(transaction, currency);
     if (data.amount_valid)
     {
-        if (!data.invtransactiontype_valid)
+        if (!data.invtransactiontype_valid ||
+            data.invtransactiontype == OFX_INVBANKTRAN)
         {
             double amount = data.amount;
 #ifdef HAVE_LIBOFX_VERSION_0_10
