@@ -32,7 +32,7 @@ if (COMPILE_GSCHEMAS)
 
     add_custom_command(
         OUTPUT ${SCHEMADIR_BUILD}/gschemas.compiled
-        COMMAND ${CMAKE_COMMAND} -E env ${GLIB_COMPILE_SCHEMAS} ${SCHEMADIR_BUILD}
+        COMMAND ${CMAKE_COMMAND} -E env ${GLIB_COMPILE_SCHEMAS} --strict ${SCHEMADIR_BUILD}
         DEPENDS ${gschema_depends}
     )
 
@@ -51,7 +51,7 @@ if (COMPILE_GSCHEMAS)
     endif()
     execute_process(
         COMMAND ${SHELL} -c \"echo Compiling gschema files in \$ENV\{DESTDIR\}${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas ;
-                              ${GLIB_COMPILE_SCHEMAS} \$ENV\{DESTDIR\}${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
+                              ${GLIB_COMPILE_SCHEMAS} --strict \$ENV\{DESTDIR\}${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
 endif()
 
 set(gschemas_DIST_local migratable-prefs.xml)
