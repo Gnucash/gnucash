@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-09-13 21:36+0000\n"
+"PO-Revision-Date: 2021-09-22 20:37+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -4317,6 +4317,10 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"Konto „%s” ima više od jednog podkonta.\n"
+"\n"
+"Premjesti podkonta ili ih izbriši prije nego što pokušaš izbrisati ovaj "
+"konto."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
@@ -21593,16 +21597,13 @@ msgid "Unknown OFX investment account"
 msgstr "Nepoznat OFX konto ulaganja"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1201
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s' imported, %d transactions processed, no transactions to "
-#| "match"
+#, c-format
 msgid ""
 "OFX file '%s', imported transactions for account '%s'\n"
 "%d transactions processed, no transactions to match"
 msgstr ""
-"OFX datoteka „%s” je uvezena. Broj obrađenih transakcija: %d. Nema "
-"transakcija za uspoređivanje"
+"OFX datoteka „%s” je uvezla transakcije za konto „%s”\n"
+"Broj obrađenih transakcija: %d. Nema transakcija za uspoređivanje"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1302
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -27285,6 +27286,8 @@ msgstr "Ukupno u razdoblju"
 msgid ""
 "* Amounts denoted thus are derived from, and do not match the transaction."
 msgstr ""
+"* Tako označeni iznosi izvedeni su iz transakcije i ne odgovaraju "
+"transakciji."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:868
 #: gnucash/report/reports/standard/owner-report.scm:535
