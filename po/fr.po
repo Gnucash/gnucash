@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-09-23 11:29+0000\n"
+"PO-Revision-Date: 2021-09-23 13:38+0000\n"
 "Last-Translator: Alexandre <nasmi3+weblate@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -1892,8 +1892,6 @@ msgstr "Liens vers des Documents commerciaux"
 
 # messages-i18n.c:21
 #: gnucash/gnome/dialog-employee.c:213
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
 msgstr "Vous devez saisir une adresse de paiement."
 
@@ -2827,11 +2825,9 @@ msgid "You must choose an owner for this job."
 msgstr "Vous devez choisir un propriétaire pour cette prestation."
 
 #: gnucash/gnome/dialog-job.c:157
-#, fuzzy
-#| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
 msgstr ""
-"Un crédit doit être un montant brut positif, ou vous devez le laisser vide."
+"Un taux doit être un montant valide (positif), ou vous devez le laisser vide."
 
 # messages-i18n.c:281
 #: gnucash/gnome/dialog-job.c:258
@@ -3195,7 +3191,6 @@ msgstr "Êtes-vous sûr de vouloir supprimer ces cours ?"
 
 # messages-i18n.c:56
 #: gnucash/gnome/dialog-price-editor.c:226
-#, fuzzy
 msgid "Are you sure you want to replace the existing price?"
 msgstr "Confirmez-vous la suppression du cours sélectionné ?"
 
@@ -3916,9 +3911,8 @@ msgstr "Archive les anciennes données en utilisant les périodes comptables"
 
 # messages-i18n.c:316
 #: gnucash/gnome/gnc-plugin-basic-commands.c:191
-#, fuzzy
 msgid "_Price Database"
-msgstr "Base des cours"
+msgstr "Base des _cours"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:192
 msgid "View and edit the prices for stocks and mutual funds"
@@ -4001,7 +3995,6 @@ msgstr[1] ""
 
 # messages-i18n.c:348 po/guile_strings.txt:57
 #: gnucash/gnome/gnc-plugin-budget.c:63
-#, fuzzy
 msgid "_New Budget"
 msgstr "Nouveau _budget"
 
@@ -4299,9 +4292,8 @@ msgid "Invoices _Due Reminder"
 msgstr "_Rappel des factures à payer"
 
 #: gnucash/gnome/gnc-plugin-business.c:299
-#, fuzzy
 msgid "Open the Invoices Due Reminder dialog"
-msgstr "Ouvre la boîte de dialogue de rappel des factures à payer"
+msgstr "Ouvrir la boîte de dialogue de rappel des factures à payer"
 
 # messages-i18n.c:285
 #: gnucash/gnome/gnc-plugin-business.c:302
@@ -4331,15 +4323,13 @@ msgstr "Choisit la transaction sélectionnée comme paiement"
 
 # messages-i18n.c:312
 #: gnucash/gnome/gnc-plugin-business.c:331
-#, fuzzy
 msgid "Edit payment..."
-msgstr "Choisir comme paiement..."
+msgstr "Modifier le paiement..."
 
 # messages-i18n.c:82
 #: gnucash/gnome/gnc-plugin-business.c:332
-#, fuzzy
 msgid "Edit the payment this transaction is a part of"
-msgstr "Édite la transaction en cours"
+msgstr "Éditer la transaction comprenant ce paiement"
 
 # messages-i18n.c:146
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:198
@@ -4440,15 +4430,13 @@ msgstr "Supprime le compte sélectionné"
 
 # messages-i18n.c:164
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:257
-#, fuzzy
 msgid "_Cascade Account Properties..."
-msgstr "Hériter les couleurs des comptes..."
+msgstr "_Hériter les propriétés des comptes..."
 
 # src/gnome/dialog-qif-import.c:310
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:258
-#, fuzzy
 msgid "Cascade selected properties for account"
-msgstr "Hériter la couleur du compte seléctionné"
+msgstr "Hériter les propriétés sélectionnées pour le compte"
 
 # messages-i18n.c:140
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:262
@@ -4716,9 +4704,8 @@ msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1437
-#, fuzzy
 msgid "_Pick another account"
-msgstr "Depuis le compte _sélectionné"
+msgstr "_Choisissez un autre compte"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1438
 msgid "_Do it anyway"
@@ -4759,6 +4746,10 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"Le compte \"%s\" a plus d'un sous-compte.\n"
+"\n"
+"Déplacez les sous-comptes ou supprimez-les avant de tenter de supprimer ce "
+"compte."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
@@ -4778,14 +4769,14 @@ msgstr "Toutes les transactions de ce compte vont être supprimées."
 
 # po/guile_strings.txt:100
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1753
-#, fuzzy, c-format
+#, c-format
 msgid "Its sub-account will be moved to the account %s."
-msgstr "Tous ses sous-comptes vont être déplacés vers %s."
+msgstr "Tous les sous-comptes vont être déplacés vers le compte %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1759
-#, fuzzy, c-format
+#, c-format
 msgid "Its subaccount will be deleted."
-msgstr "Tous ses sous-comptes vont être supprimés."
+msgstr "Tous les sous-comptes vont être supprimés."
 
 # messages-i18n.c:94
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1763
@@ -4807,9 +4798,8 @@ msgstr "Voulez-vous vraiment effectuer ces opérations ?"
 
 # messages-i18n.c:95
 #: gnucash/gnome/gnc-plugin-page-budget.c:147
-#, fuzzy
 msgid "Open the selected account."
-msgstr "Ouvre le compte sélectionné"
+msgstr "Ouvre le compte sélectionné."
 
 # messages-i18n.c:148
 #: gnucash/gnome/gnc-plugin-page-budget.c:152
@@ -4818,15 +4808,13 @@ msgstr "Ouvrir avec les so_us-comptes"
 
 # messages-i18n.c:97
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
-#, fuzzy
 msgid "Open the selected account and all its subaccounts."
-msgstr "Ouvre le compte sélectionné et tous ses sous-comptes"
+msgstr "Ouvre le compte sélectionné et tous ses sous-comptes."
 
 # messages-i18n.c:136
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
-#, fuzzy
 msgid "_Delete Budget..."
-msgstr "_Supprimer ce budget"
+msgstr "_Supprimer ce budget..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:160
 msgid "Select this or another budget and delete it."
@@ -4834,9 +4822,8 @@ msgstr "Sélectionner ce budget ou un autre et le supprimer."
 
 # po/guile_strings.txt:221
 #: gnucash/gnome/gnc-plugin-page-budget.c:164
-#, fuzzy
 msgid "Budget _Options..."
-msgstr "Options du budget"
+msgstr "_Options du budget..."
 
 # po/guile_strings.txt:127
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
@@ -4845,42 +4832,39 @@ msgid "Edit this budget's options."
 msgstr "Édite les options de ce budget"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:169
-#, fuzzy
 msgid "Esti_mate Budget..."
-msgstr "Estimer un _budget..."
+msgstr "Esti_mer un budget..."
 
 # messages-i18n.c:66
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
-#, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions."
 msgstr ""
-"Estime un budget pour les comptes sélectionnés, en fonction des transactions "
+"Estime un budget pour les comptes sélectionnés en fonction des transactions "
 "passées."
 
 # po/guile_strings.txt:186
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
 #, fuzzy
 msgid "_All Periods..."
-msgstr "Période"
+msgstr "_Toutes les périodes..."
 
 # messages-i18n.c:80
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
-#, fuzzy
 msgid "Edit budget for all periods for the selected accounts."
-msgstr "Édite le compte sélectionné"
+msgstr ""
+"Modifier le budget de toutes les périodes pour les comptes sélectionnés."
 
 # po/guile_strings.txt:89
 #: gnucash/gnome/gnc-plugin-page-budget.c:181
-#, fuzzy
 msgid "Edit Note"
-msgstr "Avoir"
+msgstr "Editer les notes"
 
 # messages-i18n.c:80
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
 #, fuzzy
 msgid "Edit note for the selected account and period."
-msgstr "Édite le compte sélectionné"
+msgstr "Modifier la note pour le compte et la période sélectionnés."
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
@@ -4890,10 +4874,8 @@ msgstr "Rapport de budget"
 
 # messages-i18n.c:105
 #: gnucash/gnome/gnc-plugin-page-budget.c:189
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report."
-msgstr "Imprime le rapport en cours"
+msgstr "Présenter le rapport sur le budget."
 
 # messages-i18n.c:74
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
