@@ -21,17 +21,18 @@
 # Thomas Jungers <thomasjungers@gmail.com>, 2021.
 # Diego Marin <alterne@gmail.com>, 2021.
 # Pascal HUE <pascal.hue35@gmail.com>, 2021.
+# Alexandre <nasmi3+weblate@gmail.com>, 2021.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-04-24 07:32+0000\n"
-"Last-Translator: Thomas Jungers <thomasjungers@gmail.com>\n"
+"PO-Revision-Date: 2021-09-23 11:29+0000\n"
+"Last-Translator: Alexandre <nasmi3+weblate@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -39,11 +40,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
+#, fuzzy
 msgid "ALL NON-CURRENCY"
-msgstr "TOUTES LES NON-MONNAIES"
+msgstr "TOUTES LES DEVISES NON-MONNETAIRES"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -51,7 +53,7 @@ msgstr "Arabe"
 
 #: borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr "Baltique"
+msgstr "Balte"
 
 #: borrowed/goffice/go-charmap-sel.c:72
 msgid "Central European"
@@ -1524,6 +1526,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
+"Le nom de la société ne peut rester vide, merci de compléter par un nom de "
+"personne ou de société."
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -3014,10 +3018,8 @@ msgid "You must select a company for payment processing."
 msgstr "Vous devez saisir une société pour traiter le paiement."
 
 #: gnucash/gnome/dialog-payment.c:259
-#, fuzzy
-#| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
-msgstr "Il y a eu un problème avec l’importation."
+msgstr "Il y a un problème avec le montant payé ou remboursé."
 
 # messages-i18n.c:20
 #: gnucash/gnome/dialog-payment.c:280
@@ -3199,9 +3201,8 @@ msgstr "Confirmez-vous la suppression du cours sélectionné ?"
 
 # messages-i18n.c:46
 #: gnucash/gnome/dialog-price-editor.c:232
-#, fuzzy
 msgid "Replace price?"
-msgstr "Les cours enregistrés"
+msgstr "Modifier le cours enregistré ?"
 
 #: gnucash/gnome/dialog-price-editor.c:238
 msgid "_Replace"
@@ -3229,7 +3230,7 @@ msgstr "Impossible d'enregistrer le format de fichier de chèque"
 
 # messages-i18n.c:105
 #: gnucash/gnome/dialog-print-check.c:826
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file %s"
 msgstr "Impossible d'ouvrir le fichier journal actuel : %s"
 
@@ -3483,7 +3484,7 @@ msgid ""
 "cannot be automatically created."
 msgstr ""
 "Il n'est pas possible de créer automatiquement des transaction récurrentes "
-"avec des variables."
+"avec des variables ou des devises multiples."
 
 #: gnucash/gnome/dialog-sx-editor.c:674
 #, c-format
@@ -3497,9 +3498,8 @@ msgid "Split with memo %s has an invalid account."
 msgstr "La répartition avec le mémo %s possède un compte invalide."
 
 #: gnucash/gnome/dialog-sx-editor.c:741
-#, fuzzy
 msgid "Invalid Account in Split"
-msgstr "Inclure le total des mouvements des comptes"
+msgstr "Sélection de compte non valide dans la répartition"
 
 #: gnucash/gnome/dialog-sx-editor.c:753
 #, c-format
@@ -3738,9 +3738,8 @@ msgid "Transfer"
 msgstr "Virement"
 
 #: gnucash/gnome/gnc-budget-view.c:511
-#, fuzzy
 msgid "Remaining to Budget"
-msgstr "Ouvre un budget existant"
+msgstr "Montant restant à entrer dans le budget"
 
 # messages-i18n.c:344
 #: gnucash/gnome/gnc-budget-view.c:1673 gnucash/gnome/window-reconcile2.c:1094
@@ -4008,15 +4007,13 @@ msgstr "Nouveau _budget"
 
 # messages-i18n.c:93
 #: gnucash/gnome/gnc-plugin-budget.c:64
-#, fuzzy
 msgid "Create a new Budget."
-msgstr "Crée un nouveau budget"
+msgstr "Créer un nouveau budget."
 
 # messages-i18n.c:147
 #: gnucash/gnome/gnc-plugin-budget.c:69
-#, fuzzy
 msgid "_Open Budget"
-msgstr "Ouvrir un _budget"
+msgstr "_Ouvrir un budget"
 
 #: gnucash/gnome/gnc-plugin-budget.c:70
 msgid ""
@@ -4028,14 +4025,12 @@ msgstr ""
 
 # messages-i18n.c:147
 #: gnucash/gnome/gnc-plugin-budget.c:75
-#, fuzzy
 msgid "_Copy Budget"
-msgstr "Copier le budget"
+msgstr "_Copier le budget"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
-#, fuzzy
 msgid "Copy an existing Budget."
-msgstr "Copier un budget existant"
+msgstr "Copier un budget existant."
 
 # messages-i18n.c:136
 #: gnucash/gnome/gnc-plugin-budget.c:80
@@ -4043,9 +4038,8 @@ msgid "_Delete Budget"
 msgstr "_Supprimer ce budget"
 
 #: gnucash/gnome/gnc-plugin-budget.c:81
-#, fuzzy
 msgid "Delete an existing Budget."
-msgstr "Ouvre un budget existant"
+msgstr "Supprime un budget existant."
 
 # messages-i18n.c:136
 #: gnucash/gnome/gnc-plugin-budget.c:288
@@ -4301,9 +4295,8 @@ msgid "Open the Bills Due Reminder dialog"
 msgstr "Ouvre la boîte de dialogue de rappel des factures à payer"
 
 #: gnucash/gnome/gnc-plugin-business.c:298
-#, fuzzy
 msgid "Invoices _Due Reminder"
-msgstr "Rappel _des factures à payer"
+msgstr "_Rappel des factures à payer"
 
 #: gnucash/gnome/gnc-plugin-business.c:299
 #, fuzzy
@@ -8468,8 +8461,7 @@ msgstr ""
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
 msgstr ""
-"Définir la valeur cachée pour le compte \"%s\", en incluant tous les sous-"
-"comptes"
+"Modifier le mode caché du compte '%s', ainsi que des comptes subsidaires"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -14328,9 +14320,9 @@ msgstr ""
 "Cet assistant va vous aider à définir et utiliser des périodes de "
 "comptabilité.\n"
 "\n"
-"Avertissement : cette fonctionnalité ne fonctionne pas correctement pour le "
-"moment ; elle est en cours de développement. Elle va probablement détériorer "
-"de manière irréversible."
+"Avertissement : cette fonctionnalité ne fonctionne pas correctement pour le "
+"moment ; elle est en cours de développement. Elle risque d'endommager vos "
+"données de sauvegarde de manière irréversible!"
 
 # messages-i18n.c:214
 #: gnucash/gtkbuilder/assistant-acct-period.glade:27
@@ -21289,10 +21281,8 @@ msgstr ""
 
 # messages-i18n.c:346
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "Fraction"
+msgstr "Prudence!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
@@ -26399,7 +26389,7 @@ msgstr "C'est une option de chaîne"
 #: gnucash/report/reports/example/hello-world.scm:301
 #: gnucash/report/reports/example/hello-world.scm:470
 msgid "Hello, World"
-msgstr "Bonjour, le monde !"
+msgstr "Bonjour, le monde"
 
 # po/guile_strings.txt:214
 #: gnucash/report/reports/example/hello-world.scm:92
@@ -32609,10 +32599,8 @@ msgid "One transaction per line"
 msgstr "Récupérer les transactions en ligne"
 
 #: gnucash/report/trep-engine.scm:991
-#, fuzzy
-#| msgid "Hide:"
 msgid "Hide"
-msgstr "Masquer :"
+msgstr "Masquer"
 
 #: gnucash/report/trep-engine.scm:1002
 #, fuzzy
