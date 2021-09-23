@@ -214,6 +214,10 @@ static const gchar *gnc_ofx_invttype_to_str(InvTransactionType t)
         return "SPLIT (Stock or mutial fund split)";
     case OFX_TRANSFER:
         return "TRANSFER (Transfer holdings in and out of the investment account)";
+#ifdef HAVE_LIBOFX_VERSION_0_10
+    case OFX_INVBANKTRAN:
+         return "Transfer cash in and out of the investment account";
+#endif
     default:
         return "ERROR, this investment transaction type is unknown.  This is a bug in ofxdump";
     }
@@ -586,8 +590,12 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
     xaccTransSetCurrency(transaction, currency);
     if (data.amount_valid)
     {
-        if (!data.invtransactiontype_valid ||
-            data.invtransactiontype == OFX_INVBANKTRAN)
+        if (!data.invtransactiontype_valid
+#ifdef HAVE_LIBOFX_VERSION_0_10
+            || data.invtransactiontype == OFX_INVBANKTRAN)
+#else
+             )
+#endif
         {
             double amount = data.amount;
 #ifdef HAVE_LIBOFX_VERSION_0_10
@@ -1057,7 +1065,9 @@ double ofx_get_investment_amount(const struct OfxTransactionData* data)
 {
     double amount = data->amount;
 #ifdef HAVE_LIBOFX_VERSION_0_10
-   if (data->currency_ratio_valid && data->currency_ratio != 0)
+    if (data->invtransactiontype == OFX_INVBANKTRAN)
+        return 0.0;
+    if (data->currency_ratio_valid && data->currency_ratio != 0)
         amount *= data->currency_ratio;
 #endif
     g_assert(data);
