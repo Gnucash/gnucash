@@ -1779,6 +1779,29 @@ test_xaccTransOrder_num_action (Fixture *fixture, gconstpointer pData)
 
     fixture->func->xaccFreeTransaction (txnB);
 }
+
+static void
+test_xaccTransGetReadOnly (Fixture *fixture, gconstpointer pData)
+{
+    auto txn = fixture->txn;
+    g_assert_cmpstr (xaccTransGetReadOnly (txn), ==, nullptr);
+
+    xaccTransSetReadOnly (txn, "RO");
+    g_assert_cmpstr (xaccTransGetReadOnly (txn), ==, "RO");
+
+    xaccTransSetReadOnly (txn, nullptr); // reason being nullptr is a NOP
+    g_assert_cmpstr (xaccTransGetReadOnly (txn), ==, "RO");
+
+    xaccTransClearReadOnly (txn);
+    g_assert_cmpstr (xaccTransGetReadOnly (txn), ==, nullptr);
+
+    xaccTransSetReadOnly (txn, "");
+    g_assert_cmpstr (xaccTransGetReadOnly (txn), ==, "");
+
+    xaccTransClearReadOnly (txn);
+}
+
+
 /* xaccTransSetDateInternal Local: 7:0:0
  * set_gains_date_dirty Local: 4:0:0
  * xaccTransSetDatePostedSecs C: 17 in 13  Local: 0:0:0
@@ -2067,6 +2090,7 @@ test_suite_transaction (void)
     GNC_TEST_ADD (suitename, "xaccTransRollbackEdit - Backend Errors", Fixture, NULL, setup, test_xaccTransRollbackEdit_BackendErrors, teardown);
     GNC_TEST_ADD (suitename, "xaccTransOrder_num_action", Fixture, NULL, setup, test_xaccTransOrder_num_action, teardown);
     GNC_TEST_ADD (suitename, "xaccTransGetTxnType", Fixture, NULL, setup, test_xaccTransGetTxnType, teardown);
+    GNC_TEST_ADD (suitename, "xaccTransGetreadOnly", Fixture, NULL, setup, test_xaccTransGetReadOnly, teardown);
     GNC_TEST_ADD (suitename, "xaccTransSetDocLink", Fixture, NULL, setup, test_xaccTransSetDocLink, teardown);
     GNC_TEST_ADD (suitename, "xaccTransVoid", Fixture, NULL, setup, test_xaccTransVoid, teardown);
     GNC_TEST_ADD (suitename, "xaccTransReverse", Fixture, NULL, setup, test_xaccTransReverse, teardown);
