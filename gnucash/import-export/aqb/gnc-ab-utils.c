@@ -1033,16 +1033,18 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 
     if (!(data->awaiting & AWAIT_BALANCES))
     {
+         GtkWindow *parent = data->generic_importer ?
+              GTK_WINDOW(data->generic_importer) :
+              GTK_WINDOW(data->parent);
+         const char* balance_msg =
+              _("The bank has sent balance information in its response.\n"
+                "Do you want to import it?");
         /* Ignore zero balances if we don't await a balance */
         if (!booked_bal || AB_Value_IsZero(AB_Balance_GetValue(booked_bal)))
             return NULL;
 
         /* Ask the user whether to import unawaited non-zero balance */
-        if (gnc_verify_dialog (GTK_WINDOW (data->parent), TRUE, "%s",
-                              _("The bank has sent balance information "
-                                "in its response."
-                                "\n"
-                                "Do you want to import it?")))
+        if (gnc_verify_dialog (parent, TRUE, "%s", balance_msg))
         {
             data->awaiting |= AWAIT_BALANCES;
         }
