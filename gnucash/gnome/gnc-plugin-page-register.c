@@ -4563,13 +4563,15 @@ gnc_plugin_page_register_cmd_stock_split (GtkAction* action,
                                           GncPluginPageRegister* page)
 {
     Account* account;
+    GtkWindow* window;
 
     ENTER ("(action %p, plugin_page %p)", action, page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     account = gnc_plugin_page_register_get_account (page);
-    gnc_stock_split_dialog (NULL, account);
+    window = gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window));
+    gnc_stock_split_dialog (GTK_WIDGET (window), account);
     LEAVE (" ");
 }
 
