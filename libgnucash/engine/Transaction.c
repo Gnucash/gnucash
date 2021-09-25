@@ -1819,7 +1819,7 @@ xaccTransRollbackEdit (Transaction *trans)
         }
     }
     g_list_free(slist);
-    g_list_free(orig->splits);
+    g_list_free_full (orig->splits, (GDestroyNotify) g_object_unref);
     orig->splits = NULL;
 
     /* Now that the engine copy is back to its original version,

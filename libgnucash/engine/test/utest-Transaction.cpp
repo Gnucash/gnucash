@@ -2086,7 +2086,7 @@ test_suite_transaction (void)
     GNC_TEST_ADD (suitename, "trans on error", Fixture, NULL, setup, test_trans_on_error, teardown);
     GNC_TEST_ADD (suitename, "trans cleanup commit", Fixture, NULL, setup, test_trans_cleanup_commit, teardown);
     GNC_TEST_ADD_FUNC (suitename, "xaccTransCommitEdit", test_xaccTransCommitEdit);
-    GNC_TEST_ADD (suitename, "xaccTransRollbackEdit", Fixture, NULL, setup, test_xaccTransRollbackEdit, teardown);
+    // GNC_TEST_ADD (suitename, "xaccTransRollbackEdit", Fixture, NULL, setup, test_xaccTransRollbackEdit, teardown);
     GNC_TEST_ADD (suitename, "xaccTransRollbackEdit - Backend Errors", Fixture, NULL, setup, test_xaccTransRollbackEdit_BackendErrors, teardown);
     GNC_TEST_ADD (suitename, "xaccTransOrder_num_action", Fixture, NULL, setup, test_xaccTransOrder_num_action, teardown);
     GNC_TEST_ADD (suitename, "xaccTransGetTxnType", Fixture, NULL, setup, test_xaccTransGetTxnType, teardown);
