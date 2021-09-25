@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-09-23 13:38+0000\n"
+"PO-Revision-Date: 2021-09-25 05:34+0000\n"
 "Last-Translator: Alexandre <nasmi3+weblate@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -4879,9 +4879,8 @@ msgstr "Présenter le rapport sur le budget."
 
 # messages-i18n.c:74
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
-#, fuzzy
 msgid "Refresh this window."
-msgstr "Actualiser cette fenêtre"
+msgstr "Actualiser cette fenêtre."
 
 # po/guile_strings.txt:127
 #: gnucash/gnome/gnc-plugin-page-budget.c:222
@@ -4899,20 +4898,16 @@ msgstr "Estimer"
 
 # po/guile_strings.txt:186
 #: gnucash/gnome/gnc-plugin-page-budget.c:224
-#, fuzzy
 msgid "All Periods"
-msgstr "Période"
+msgstr "Toutes les périodes"
 
 # messages-i18n.c:306 po/guile_strings.txt:176
 #: gnucash/gnome/gnc-plugin-page-budget.c:225
-#, fuzzy
 msgid "Note"
 msgstr "Notes"
 
 # po/guile_strings.txt:9
 #: gnucash/gnome/gnc-plugin-page-budget.c:226
-#, fuzzy
-#| msgid "Account Report"
 msgid "Run Report"
 msgstr "Rapport de compte"
 
@@ -4948,19 +4943,13 @@ msgstr ""
 
 # messages-i18n.c:21
 #: gnucash/gnome/gnc-plugin-page-budget.c:1154
-#, fuzzy
 msgid "You must select at least one account to edit."
-msgstr ""
-"Vous devez sélectionner au moins un compte pour effectuer une estimation de "
-"budget."
+msgstr "Vous devez sélectionner au moins un compte à modifier."
 
 # messages-i18n.c:21
 #: gnucash/gnome/gnc-plugin-page-budget.c:1252
-#, fuzzy
 msgid "You must select one budget cell to edit."
-msgstr ""
-"Vous devez sélectionner au moins un compte pour effectuer une estimation de "
-"budget."
+msgstr "Vous devez sélectionner une cellule du budget à modifier."
 
 # messages-i18n.c:160
 #: gnucash/gnome/gnc-plugin-page-invoice.c:109
@@ -5123,9 +5112,8 @@ msgstr "Trier par description"
 
 # src/gnome/glade-gnc-dialogs.c:700
 #: gnucash/gnome/gnc-plugin-page-invoice.c:296
-#, fuzzy
 msgid "_Print Invoice"
-msgstr "Imprimer la facture"
+msgstr "_Imprimer la facture"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -5198,18 +5186,17 @@ msgstr "_Réinitialiser la Mise en Page par défaut pour les Documents Clients"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
 #, fuzzy
 msgid "_Print Bill"
-msgstr "Imprimer"
+msgstr "_Imprimer le reçu"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:318
 #, fuzzy
 msgid "_Edit Bill"
-msgstr "Modifier la facture à payer "
+msgstr "_Modifier le reçu"
 
 # messages-i18n.c:280
 #: gnucash/gnome/gnc-plugin-page-invoice.c:319
-#, fuzzy
 msgid "_Duplicate Bill"
-msgstr "Dupliquer"
+msgstr "_Dupliquer le reçu"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
 #, fuzzy
@@ -10331,6 +10318,9 @@ msgid ""
 "Threshold\" set for this book. This setting can be changed in File-"
 ">Properties->Accounts."
 msgstr ""
+"La date saisie pour cette transaction dupliquée est plus ancienne que le "
+"\"seuil de lecture seule\" défini pour ce livre de compte. Ce seuil peut "
+"être modifié dans Fichier->Propriétés->Comptes."
 
 #. Translators: This message will be presented when a user
 #. attempts to record a transaction without splits
@@ -10418,8 +10408,10 @@ msgid "The account %s does not exist. Would you like to create it?"
 msgstr "Le compte %s n'existe pas. Voulez-vous le créer ?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:2121
+#, fuzzy
 msgid "You can not paste from the general journal to a register."
 msgstr ""
+"Vous ne pouvez pas copier-coller depuis le journal général vers un registre."
 
 # messages-i18n.c:193
 #: gnucash/gnome-utils/gnc-tree-model-account.c:754
@@ -10736,12 +10728,17 @@ msgid ""
 "Threshold\" set for this book. This setting can be changed in File-"
 ">Properties->Accounts."
 msgstr ""
+"La date saisie pour la nouvelle transaction est plus ancienne que le \"seuil "
+"de lecture seule\" défini pour ce livre e comptes. Ce seuil peut être "
+"modifié dans Fichier->Propriétés->Comptes."
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
 msgid ""
 "Exchange Rate Canceled, using existing rate or default 1 to 1 rate if this "
 "is a new transaction."
 msgstr ""
+"Le taux de change a été annulé, le taux existant ou le taux par défaut de 1 "
+"pour 1 va être utilisé pour les nouvelles transactions."
 
 # messages-i18n.c:57
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1122
@@ -10907,12 +10904,12 @@ msgstr "Informations d'imposition"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:982
 msgctxt "Column header for 'Hidden'"
 msgid "H"
-msgstr ""
+msgstr "C"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:998
 msgctxt "Column header for 'Opening Balance'"
 msgid "O"
-msgstr ""
+msgstr "O"
 
 #. Translators: %s is a currency mnemonic.
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1820
@@ -10994,7 +10991,7 @@ msgstr "Récupérer les cotations"
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:407
 msgctxt "Column letter for 'Get Quotes'"
 msgid "Q"
-msgstr ""
+msgstr "D"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:413
 #: gnucash/gnome-utils/gnc-tree-view-price.c:414
@@ -11413,7 +11410,7 @@ msgstr "Activé"
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:141
 msgctxt "Single-character short column-title form of 'Enabled'"
 msgid "E"
-msgstr ""
+msgstr "A"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:152
 msgid "Last Occur"
@@ -11457,9 +11454,10 @@ msgstr "Profits :"
 
 #: gnucash/gnucash-cli.cpp:94
 msgid "Price Quotes Retrieval Options"
-msgstr ""
+msgstr "Options d'obtention des prix des devises"
 
 #: gnucash/gnucash-cli.cpp:97
+#, fuzzy
 msgid ""
 "Execute price quote related commands. Currently only one command is "
 "supported.\n"
@@ -11467,6 +11465,11 @@ msgid ""
 "  get: \tFetch current quotes for all foreign currencies and stocks in the "
 "given GnuCash datafile.\n"
 msgstr ""
+"Exécute les commandes liées au devises. Actuellement, une seule commande est "
+"prise en charge.\n"
+"\n"
+"  «get» : \tRécupère les cotations actuelles pour toutes les devises "
+"étrangères et les actions dans le fichier de données GnuCash.\n"
 
 #: gnucash/gnucash-cli.cpp:100
 #, fuzzy
@@ -11491,6 +11494,15 @@ msgid ""
 "be specified to describe some saved options.\n"
 "  run: \tRun the named report in the given GnuCash datafile.\n"
 msgstr ""
+"Exécuter les commandes liées au rapport. Les commandes suivantes sont prises "
+"en charge.\n"
+"\n"
+"  «list» : \tListe les rapports disponibles.\n"
+"  «show» (Afficher) : \tDécrit les options modifiées dans le rapport nommé. "
+"Un fichier de données peut être spécifié pour décrire certaines options "
+"enregistrées.\n"
+"  «run» (exécuter) : \tExécute le rapport pour le fichier de données GnuCash."
+"\n"
 
 #: gnucash/gnucash-cli.cpp:113
 msgid "Name of the report to run\n"
@@ -11508,16 +11520,16 @@ msgstr "Fichier de sortie pour le rapport\n"
 
 #: gnucash/gnucash-cli.cpp:132
 msgid "Unknown quotes command '{1}'"
-msgstr ""
+msgstr "Commande de devis inconnue '{1}'"
 
 #: gnucash/gnucash-cli.cpp:139 gnucash/gnucash-cli.cpp:153
 #: gnucash/gnucash.cpp:316
 msgid "Missing data file parameter"
-msgstr ""
+msgstr "Paramètre de fichier de données manquant"
 
 #: gnucash/gnucash-cli.cpp:177
 msgid "Missing --name parameter"
-msgstr ""
+msgstr "Paramètre --name manquant"
 
 #: gnucash/gnucash-cli.cpp:185
 msgid "Unknown report command '{1}'"
