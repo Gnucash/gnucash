@@ -24,14 +24,10 @@
 #include <config.h>
 #include <glib.h>
 
-#ifdef HAVE_HTMLHELPW
-#    include <windows.h>
-#    include <htmlhelp.h>
-#endif
+#include <windows.h>
+#include <htmlhelp.h>
 
 #include "gnc-help-utils.h"
-
-#ifdef HAVE_HTMLHELPW
 
 static GHashTable *
 parse_hhmap_file(const gchar *chmfile)
@@ -137,24 +133,3 @@ gnc_show_htmlhelp(const gchar *chmfile, const gchar *anchor)
     HtmlHelpW(GetDesktopWindow(), wpath, HH_HELP_CONTEXT, id);
     g_free(wpath);
 }
-
-#else /* !HAVE_HTMLHELPW */
-void
-gnc_show_htmlhelp(const gchar *chmfile, const gchar *anchor)
-{
-    gchar *argv[3];
-
-    g_return_if_fail(chmfile);
-
-    argv[0] = "hh";
-    argv[1] = g_strdup(chmfile);
-    argv[2] = NULL;
-
-    if (!g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH,
-                       NULL, NULL, NULL, NULL))
-        if (g_file_test(chmfile, G_FILE_TEST_IS_REGULAR))
-            g_warning("Found CHM help file, but could not spawn hh to open it");
-
-    g_free(argv[1]);
-}
-#endif /* HAVE_HTMLHELPW */
