@@ -169,64 +169,6 @@ gnc_add_css_file (void)
     g_object_unref (provider_fallback);
 }
 
-/* This function fixes an issue with yelp that it does not work with the
- * ?anchor variant, see https://gitlab.gnome.org/GNOME/yelp/issues/116
- */
-static gchar *
-gnc_gnome_help_yelp_anchor_fix (GtkWindow *parent, const char *file_name, const char *anchor)
-{
-    const gchar * const *sdatadirs = g_get_system_data_dirs ();
-    const gchar * const *langs = g_get_language_names ();
-    gchar *lookfor = g_strconcat ("gnome/help/", file_name, NULL);
-    gchar *help_path = NULL;
-    gchar *help_file = NULL;
-    gchar *full_path = NULL;
-    gchar *uri = NULL;
-
-    for (; *sdatadirs; sdatadirs++)
-    {
-        gchar *filepath = g_build_filename (*sdatadirs, lookfor, NULL);
-        if (g_file_test (filepath, G_FILE_TEST_EXISTS))
-            help_path = g_strdup (filepath);
-        g_free (filepath);
-    }
-    g_free (lookfor);
-
-    if (!help_path)
-    {
-        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
-        PERR("Unable to find 'gnome/help' directory");
-        return NULL;
-    }
-
-    // add the file extension, currently .xml
-    help_file = g_strconcat (file_name, ".xml", NULL);
-
-    for (; *langs; langs++)
-    {
-        gchar *filename = g_build_filename (help_path, *langs, help_file, NULL);
-        if (g_file_test (filename, G_FILE_TEST_EXISTS))
-        {
-            full_path = filename;
-            break;
-        }
-        g_free (filename);
-    }
-    g_free (help_path);
-    g_free (help_file);
-
-    if (full_path)
-        uri = g_strconcat ("ghelp:", full_path, "?", anchor, NULL);
-    else
-    {
-        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
-        PERR("Unable to find valid help language directory");
-        return NULL;
-    }
-    g_free (full_path);
-    return uri;
-}
-
 #ifdef MAC_INTEGRATION
 
 /* Don't be alarmed if this function looks strange to you: It's
@@ -238,20 +180,13 @@ gnc_gnome_help (GtkWindow *parent, const char *dir, const char *detail)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSString *subdir = [NSString stringWithUTF8String: dir];
-    NSString *tag, *subdirectory;
+    NSString *tag;
     NSURL *url = NULL;
 
     if (detail)
         tag  = [NSString stringWithUTF8String: detail];
-    else if ([subdir compare: @HF_HELP] == NSOrderedSame)
-        tag = @"help";
-    else if ([subdir compare: @HF_GUIDE] == NSOrderedSame)
-        tag = @"index";
     else
-    {
-        PWARN("gnc_gnome_help called with unknown subdirectory %s", dir);
-        return;
-    }
+        tag = @"index";
 
     if (![[NSBundle mainBundle] bundleIdentifier])
     {
@@ -412,9 +347,9 @@ gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
     gboolean success = TRUE;
 
     if (anchor)
-        uri = gnc_gnome_help_yelp_anchor_fix (parent, file_name, anchor);
+        uri = g_strconcat ("help:", file_name, "/", anchor, NULL);
     else
-        uri = g_strconcat ("ghelp:", file_name, NULL);
+        uri = g_strconcat ("help:", file_name, NULL);
 
     DEBUG ("Attempting to opening help uri %s", uri);
 
