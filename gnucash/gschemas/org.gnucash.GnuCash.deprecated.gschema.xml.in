@@ -1,0 +1,1691 @@
+<schemalist gettext-domain="@PROJECT_NAME@">
+  <schema id="org.gnucash" path="/org/gnucash/">
+    <child name="general" schema="org.gnucash.general"/>
+    <child name="dev" schema="org.gnucash.dev"/>
+  </schema>
+
+  <schema id="org.gnucash.general" path="/org/gnucash/general/">
+    <key name="prefs-version" type="i">
+      <default>0</default>
+      <summary>The version of these settings</summary>
+      <description>This is used internally to determine whether some preferences may need conversion when switching to a newer version of GnuCash.</description>
+    </key>
+    <key name="save-window-geometry" type="b">
+      <default>true</default>
+      <summary>Save window sizes and locations</summary>
+      <description>If active, the size and location of each dialog window will be saved when it is closed. The sizes and locations of content windows will be remembered when you quit GnuCash. Otherwise the sizes will not be saved.</description>
+    </key>
+    <key name="account-separator" type="s">
+      <default>'colon'</default>
+      <summary>Character to use as separator between account names</summary>
+      <description>This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon", "slash", "backslash", "dash" and "period".</description>
+    </key>
+    <key name="assoc-head" type="s">
+      <default>''</default>
+      <summary>Transaction Linked Files head path</summary>
+      <description>This is the path head for the Transaction Linked Files with relative paths</description>
+    </key>
+    <key name="file-compression" type="b">
+      <default>true</default>
+      <summary>Compress the data file</summary>
+      <description>Enables file compression when writing the data file.</description>
+    </key>
+    <key name="autosave-show-explanation" type="b">
+      <default>true</default>
+      <summary>Show auto-save explanation</summary>
+      <description>If active, GnuCash shows an explanation of the auto-save feature the first time that feature is started. Otherwise no extra explanation is shown.</description>
+    </key>
+    <key name="autosave-interval-minutes" type="d">
+      <default>5</default>
+      <summary>Auto-save time interval</summary>
+      <description>The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically.</description>
+    </key>
+    <key name="save-on-close-expires" type="b">
+      <default>false</default>
+      <summary>Enable timeout on "Save changes on closing" question</summary>
+      <description>If enabled, the "Save changes on closing" question will only wait a limited number of seconds for an answer. If the user didn't answer within that time, the changes will be saved automatically and the question window closed.</description>
+    </key>
+    <key name="save-on-close-wait-time" type="i">
+      <default>20</default>
+      <summary>Time to wait for answer</summary>
+      <description>The number of seconds to wait before the question window will be closed and the changes saved automatically.</description>
+    </key>
+    <key name="negative-in-red" type="b">
+      <default>true</default>
+      <summary>Display negative amounts in red</summary>
+      <description>Display negative amounts in red</description>
+    </key>
+    <key name="auto-decimal-point" type="b">
+      <default>false</default>
+      <summary>Automatically insert a decimal point</summary>
+      <description>If active, GnuCash will automatically insert a decimal point into values that are entered without one. Otherwise GnuCash will not modify entered numbers.</description>
+    </key>
+    <key name="auto-decimal-places" type="i">
+      <default>2</default>
+      <summary>Number of automatic decimal places</summary>
+      <description>This field specifies the number of automatic decimal places that will be filled in.</description>
+    </key>
+    <key name='force-price-decimal' type="b">
+      <default>false</default>
+      <summary>Force prices to display as decimals even if they must be rounded.</summary>
+      <description>If active, GnuCash will round prices as necessary to display them as decimals instead of displaying the exact fraction if the fractional part cannot be exactly represented as a decimal.</description>
+    </key>
+    <key name="retain-type-never" type="b">
+      <default>false</default>
+      <summary>Do not create log/backup files.</summary>
+      <description>This setting specifies what to do with old log/backups files. "forever" means keep all old files. "never" means no old log/backup files are kept. Each time you save, older versions of the file are removed. "days" means keep old files for a number of days. How many days is defined in key 'retain-days'</description>
+    </key>
+    <key name="retain-type-days" type="b">
+      <default>true</default>
+      <summary>Delete old log/backup files after this many days (0 = never).</summary>
+      <description>This setting specifies what to do with old log/backups files. "forever" means keep all old files. "never" means no old log/backup files are kept. Each time you save, older versions of the file are removed. "days" means keep old files for a number of days. How many days is defined in key 'retain-days'</description>
+    </key>
+    <key name="retain-type-forever" type="b">
+      <default>false</default>
+      <summary>Do not delete log/backup files.</summary>
+      <description>This setting specifies what to do with old log/backups files. "forever" means keep all old files. "never" means no old log/backup files are kept. Each time you save, older versions of the file are removed. "days" means keep old files for a number of days. How many days is defined in key 'retain-days'</description>
+    </key>
+    <key name="retain-days" type="d">
+      <default>30.0</default>
+      <summary>Delete old log/backup files after this many days (0 = never)</summary>
+      <description>This setting specifies the number of days after which old log/backup files will be deleted (0 = never).</description>
+    </key>
+    <key name="reversed-accounts-none" type="b">
+      <default>false</default>
+      <summary>Don't sign reverse any accounts.</summary>
+      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income. The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account. The setting "none" doesn't reverse the sign on any balances.</description>
+    </key>
+    <key name="reversed-accounts-credit" type="b">
+      <default>true</default>
+      <summary>Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income.</summary>
+      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income. The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account. The setting "none" doesn't reverse the sign on any balances.</description>
+    </key>
+    <key name="reversed-accounts-incomeexpense" type="b">
+      <default>false</default>
+      <summary>Sign reverse balances on income and expense accounts.</summary>
+      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income. The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account. The setting "none" doesn't reverse the sign on any balances.</description>
+    </key>
+    <key name="show-account-color" type="b">
+      <default>false</default>
+      <summary>Use account colors in the account hierarchy</summary>
+      <description>If active the account hierarchy will colorize the account using the account's custom color if set. This can serve as a visual aid to quickly identify accounts.</description>
+    </key>
+    <key name="show-account-color-tabs" type="b">
+      <default>false</default>
+      <summary>Use account colors in the tabs of open account registers</summary>
+      <description>If active the account register tabs will be colored using the account's custom color if set. This can serve as a visual aid to quickly identify accounts.</description>
+    </key>
+    <key name="use-accounting-labels" type="b">
+      <default>false</default>
+      <summary>Use formal account labels</summary>
+      <description>If active, formal accounting labels "Credit" and "Debit" will be used when designating fields on screen. Otherwise, informal labels such as Increase/Decrease, "Funds In"/"Funds Out", etc. will be used.</description>
+    </key>
+    <key name="tab-close-buttons" type="b">
+      <default>true</default>
+      <summary>Show close buttons on notebook tabs</summary>
+      <description>If active, a "close" button will be displayed on any notebook tab that may be closed. Otherwise, no such button will be shown on the tab. Regardless of this setting, pages can always be closed via the "close" menu item or the "close" button on toolbar.</description>
+    </key>
+    <key name="tab-width" type="d">
+      <default>30.0</default>
+      <summary>Width of notebook tabs</summary>
+      <description>This key specifies the maximum width of notebook tabs. If the text in the tab is longer than this value (the test is approximate) then the tab label will have the middle cut and replaced with an ellipsis.</description>
+    </key>
+    <key name="tab-open-adjacent" type="b">
+      <default>true</default>
+      <summary>Opens new tab adjacent to current tab instead of at the end</summary>
+      <description>If active, new tabs are opened adjacent to current tab. If inactive, the new tabs are opened instead at the end.</description>
+    </key>
+    <key name="currency-choice-locale" type="b">
+      <default>true</default>
+      <summary>Use the system locale currency for all newly created accounts.</summary>
+      <description>This setting controls the source of the default currency for new accounts. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+    </key>
+    <key name="currency-choice-other" type="b">
+      <default>false</default>
+      <summary>Use the specified currency for all newly created accounts.</summary>
+      <description>This setting controls the source of the default currency for new accounts. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+    </key>
+    <key name="currency-other" type="s">
+      <default>'USD'</default>
+      <summary>Default currency for new accounts</summary>
+      <description>This setting specifies the default currency used for new accounts if the currency-choice setting is set to "other". This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB).</description>
+    </key>
+    <key name="clock-24h" type="b">
+      <default>false</default>
+      <summary>Use 24 hour time format</summary>
+      <description>If active, use a 24 hour time format. Otherwise use a 12 hour time format.</description>
+    </key>
+    <key name="date-format" type="i">
+      <default>4</default>
+      <summary>Date format choice</summary>
+      <description>This setting chooses the way dates are displayed in GnuCash. Possible values for this setting are "locale" to use the system locale setting, "ce" for Continental Europe style dates, "iso" for ISO 8601 standard dates , "uk" for United Kingdom style dates, and "us" for United States style dates.</description>
+    </key>
+    <key name="date-completion-thisyear" type="b">
+      <default>false</default>
+      <summary>In the current calendar year</summary>
+      <description>When a date is entered without year it can be completed so that it will be within the current calendar year or close to the current date based on a sliding window starting a set number of months backwards in time.</description>
+    </key>
+    <key name="date-completion-sliding" type="b">
+      <default>true</default>
+      <summary>In a sliding 12-month window starting a configurable number of months before the current month</summary>
+      <description>When a date is entered without year it can be completed so that it will be within the current calendar year or close to the current date based on a sliding window starting a set number of months backwards in time.</description>
+    </key>
+    <key name="date-backmonths" type="d">
+      <default>6.0</default>
+      <summary>Maximum number of months to go back.</summary>
+      <description>Dates will be completed so that they are close to the current date. Enter the maximum number of months to go backwards in time when completing dates.</description>
+    </key>
+    <key name="grid-lines-horizontal" type="b">
+      <default>false</default>
+      <summary>Show Horizontal Grid Lines</summary>
+      <description>If active, horizontal grid lines will be shown on table displays. Otherwise no horizontal grid lines will be shown.</description>
+    </key>
+    <key name="grid-lines-vertical" type="b">
+      <default>false</default>
+      <summary>Show Vertical Grid Lines</summary>
+      <description>If active, vertical grid lines will be shown on table displays. Otherwise no vertical grid lines will be shown.</description>
+    </key>
+    <key name="show-splash-screen" type="b">
+      <default>true</default>
+      <summary>Show splash screen</summary>
+      <description>If active, a splash screen will be shown at startup. Otherwise no splash screen will be shown.</description>
+    </key>
+    <key name="tab-position-top" type="b">
+      <default>true</default>
+      <summary>Display the notebook tabs at the top of the window.</summary>
+      <description>This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are "top", "left", "bottom" and "right". It defaults to "top".</description>
+    </key>
+    <key name="tab-position-bottom" type="b">
+      <default>false</default>
+      <summary>Display the notebook tabs at the bottom of the window.</summary>
+      <description>This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are "top", "left", "bottom" and "right". It defaults to "top".</description>
+    </key>
+    <key name="tab-position-left" type="b">
+      <default>false</default>
+      <summary>Display the notebook tabs at the left of the window.</summary>
+      <description>This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are "top", "left", "bottom" and "right". It defaults to "top".</description>
+    </key>
+    <key name="tab-position-right" type="b">
+      <default>false</default>
+      <summary>Display the notebook tabs at the right of the window.</summary>
+      <description>This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are "top", "left", "bottom" and "right". It defaults to "top".</description>
+    </key>
+    <key name="summarybar-position-top" type="b">
+      <default>false</default>
+      <summary>Display the summary bar at the top of the page.</summary>
+      <description>This setting determines the edge at which the summary bar for various pages is drawn. Possible values are "top" and "bottom". It defaults to "bottom".</description>
+    </key>
+    <key name="summarybar-position-bottom" type="b">
+      <default>true</default>
+      <summary>Display the summary bar at the bottom of the page.</summary>
+      <description>This setting determines the edge at which the summary bar for various pages is drawn. Possible values are "top" and "bottom". It defaults to "bottom".</description>
+    </key>
+    <key name="tab-next-recent" type="b">
+      <default>false</default>
+      <summary>Closing a tab moves to the most recently visited tab.</summary>
+      <description>If active, closing a tab moves to the most recently visited tab. Otherwise closing a tab moves one tab to the left.</description>
+    </key>
+    <key name="num-source" type="b">
+      <default>false</default>
+      <summary>Set book option on new files to use split "action" field for "Num" field on registers/reports</summary>
+      <description>If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</description>
+    </key>
+    <child name="register" schema="org.gnucash.general.register"/>
+    <child name="report" schema="org.gnucash.general.report"/>
+  </schema>
+
+  <schema id="org.gnucash.general.register" path="/org/gnucash/general/register/">
+    <key name="use-gnucash-color-theme" type="b">
+      <default>true</default>
+      <summary>Color the register using a gnucash specific color theme</summary>
+      <description>When enabled the register will use a GnuCash specific color theme (green/yellow). Otherwise it will use the system color theme. Regardless of this setting the user can always override the color theme via a gnucash specific css file to be stored in the gnucash used config directory. More information can be found in the gnucash FAQ.</description>
+    </key>
+    <key name="use-theme-colors" type="b">
+      <default>false</default>
+      <summary>Superseded by "use-gnucash-color-theme"</summary>
+      <description>This option is temporarily kept around for backwards compatibility. It will be removed in a future version.</description>
+    </key>
+    <key name="enter-moves-to-end" type="b">
+      <default>false</default>
+      <summary>"Enter" key moves to bottom of register</summary>
+      <description>If active, pressing the enter key will move to the bottom of the register. Otherwise pressing the enter key will move to the next transaction line.</description>
+    </key>
+    <key name="auto-raise-lists" type="b">
+      <default>true</default>
+      <summary>Automatically raise the list of accounts or actions during input</summary>
+      <description>Automatically raise the list of accounts or actions during input</description>
+    </key>
+    <key name="tab-to-transfer-on-memorised" type="b">
+      <default>false</default>
+      <summary>Move to Transfer field when memorised transaction auto filled</summary>
+      <description>If active then after a memorised transaction is automatically filled in the cursor will move to the Transfer field. If not active then it skips to the value field.</description>
+    </key>
+    <key name="use-new-window" type="b">
+      <default>false</default>
+      <summary>Create a new window for each new register</summary>
+      <description>If active, each new register will be opened in a new window. Otherwise each new register will be opened as a tab in the main window.</description>
+    </key>
+    <key name="alternate-color-by-transaction" type="b">
+      <default>false</default>
+      <summary>Color all lines of a transaction the same</summary>
+      <description>If active all lines that make up a single transaction will use the same color for their background. Otherwise the background colors are alternated on each line.</description>
+    </key>
+    <key name="draw-horizontal-lines" type="b">
+      <default>true</default>
+      <summary>Show horizontal borders in a register</summary>
+      <description>Show horizontal borders between rows in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked.</description>
+    </key>
+    <key name="draw-vertical-lines" type="b">
+      <default>true</default>
+      <summary>Show vertical borders in a register</summary>
+      <description>Show vertical borders between columns in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked.</description>
+    </key>
+    <key name="future-after-blank-transaction" type="b">
+      <default>false</default>
+      <summary>Show future transactions after the blank transaction in a register</summary>
+      <description>Show future transactions after the blank transaction in a register. If active then transactions with a date in the future will be displayed at the bottom of the register after the blank transaction. Otherwise the blank transaction will be at the bottom of the register after all transactions.</description>
+    </key>
+    <key name="default-style-ledger" type="b">
+      <default>true</default>
+      <summary>Show all transactions on one line or in double line mode on two.</summary>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
+    </key>
+    <key name="default-style-autoledger" type="b">
+      <default>false</default>
+      <summary>Automatically expand the current transaction to show all splits. All other transactions are shown on one line or in double line mode on two.</summary>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
+    </key>
+    <key name="default-style-journal" type="b">
+      <default>false</default>
+      <summary>All transactions are expanded to show all splits.</summary>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
+    </key>
+    <key name="double-line-mode" type="b">
+      <default>false</default>
+      <summary>Show a second line with "Action", "Notes", and "Linked Documents" for each transaction.</summary>
+      <description>Show a second line with "Action", "Notes", and "Linked Documents" for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the "View-&gt;Double Line" menu item.</description>
+    </key>
+    <key name="show-leaf-account-names" type="b">
+      <default>false</default>
+      <summary>Only display leaf account names.</summary>
+      <description>Show only the names of the leaf accounts in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Activating this option implies that you use unique leaf names.</description>
+    </key>
+    <key name="show-extra-dates" type="b">
+      <default>false</default>
+      <summary>Show the entered and reconcile dates</summary>
+      <description>Show the date when the transaction was entered below the posted date and reconciled date on split row.</description>
+    </key>
+    <key name="show-extra-dates-on-selection" type="b">
+      <default>false</default>
+      <summary>Show entered and reconciled dates on selection</summary>
+      <description>Show the entered date and reconciled date on transaction selection.</description>
+    </key>
+    <key name="show-calendar-buttons" type="b">
+      <default>false</default>
+      <summary>Show the calendar buttons</summary>
+      <description>Show the calendar buttons Cancel, Today and Select.</description>
+    </key>
+    <key name="selection-to-blank-on-expand" type="b">
+      <default>false</default>
+      <summary>Move the selection to the blank split on expand</summary>
+      <description>This will move the selection to the blank split when the transaction is expanded.</description>
+    </key>
+    <key name="max-transactions" type="d">
+      <default>0.0</default>
+      <summary>Number of transactions to show in a register.</summary>
+      <description>Show this many transactions in a register. A value of zero means show all transactions.</description>
+    </key>
+    <key name="key-length" type="d">
+      <default>2.0</default>
+      <summary>Number of characters for auto complete.</summary>
+      <description>This sets the number of characters before auto complete starts for description, notes and memo fields.</description>
+    </key>
+  </schema>
+  
+  <schema id="org.gnucash.general.report" path="/org/gnucash/general/report/">
+    <key name="use-new-window" type="b">
+      <default>false</default>
+      <summary>Create a new window for each new report</summary>
+      <description>If active, each new report will be opened in its own window. Otherwise new reports will be opened as tabs in the main window.</description>
+    </key>
+    <key name="currency-choice-locale" type="b">
+      <default>true</default>
+      <summary>Use the system locale currency for all newly created reports.</summary>
+      <description>This setting controls the default currency used for reports. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+    </key>
+    <key name="currency-choice-other" type="b">
+      <default>false</default>
+      <summary>Use the specified currency for all newly created reports.</summary>
+      <description>This setting controls the source of the default currency for new accounts. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+    </key>
+    <key name="currency-other" type="s">
+      <default>'USD'</default>
+      <summary>Default currency for new reports</summary>
+      <description>This setting controls the default currency used for reports. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+    </key>
+    <key name="default-zoom" type="d">
+      <default>1.0</default>
+      <summary>Zoom factor to use by default for reports.</summary>
+      <description>On high resolution screens reports tend to be hard to read.
+This option allows you to scale reports up by the set factor.
+For example setting this to 2.0 will display reports at twice their typical size.</description>
+    </key>
+    <child name="pdf-export" schema="org.gnucash.general.report.pdf-export"/>
+  </schema>
+  <schema id="org.gnucash.general.report.pdf-export" path="/org/gnucash/general/report/pdf-export/">
+    <key name="filename-format" type="s">
+      <default>'%1$s-%2$s-%3$s'</default>
+      <summary>PDF export file name format</summary>
+      <description>This setting chooses the file name for PDF export. This is a sprintf(3) string with three arguments: "%1$s" is the report name such as "Invoice". "%2$s" is the number of the report, which for an invoice report is the invoice number. "%3$s" is the date of the report, formatted according to the filename-date-format setting. Note: Any characters that are not allowed in filenames, such as '/', will be replaced with underscores '_' in the resulting file name.</description>
+    </key>
+    <key name="filename-date-format" type="s">
+      <default>'locale'</default>
+      <summary>PDF export file name date format choice</summary>
+      <description>This setting chooses the way dates are used in the filename of PDF export. Possible values for this setting are "locale" to use the system locale setting, "ce" for Continental Europe style dates, "iso" for ISO 8601 standard dates , "uk" for United Kingdom style dates, and "us" for United States style dates.</description>
+    </key>
+  </schema>
+  <schema id="org.gnucash.dev" path="/org/gnucash/dev/">
+    <key name="allow-file-incompatibility" type="b">
+      <default>false</default>
+      <summary>Allow file incompatibility with older versions.</summary>
+      <description>If active, gnucash will be allowed to intentionally break file compatibility with older versions, so that a data file saved in this version cannot be read by an older version again. Otherwise gnucash will write data files only in formats that can be read by older versions as well.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs" path="/org/gnucash/dialogs/">
+    <child name="account" schema="org.gnucash.dialogs.account"/>
+    <child name="imap-editor" schema="org.gnucash.dialogs.imap-editor"/>
+    <child name="preferences" schema="org.gnucash.dialogs.preferences"/>
+    <child name="price-editor" schema="org.gnucash.dialogs.price-editor"/>
+    <child name="pricedb-editor" schema="org.gnucash.dialogs.pricedb-editor"/>
+    <child name="reset-warnings" schema="org.gnucash.dialogs.reset-warnings"/>
+    <child name="tax-info" schema="org.gnucash.dialogs.tax-info"/>
+    <child name="fincalc" schema="org.gnucash.dialogs.fincalc"/>
+    <child name="find" schema="org.gnucash.dialogs.find"/>
+    <child name="find-account" schema="org.gnucash.dialogs.find-account"/>
+    <child name="export-accounts" schema="org.gnucash.dialogs.export-accounts"/>
+    <child name="log-replay" schema="org.gnucash.dialogs.log-replay"/>
+    <child name="open-save" schema="org.gnucash.dialogs.open-save"/>
+    <child name="report" schema="org.gnucash.dialogs.report"/>
+    <child name="report-saved-configs" schema="org.gnucash.dialogs.report-saved-configs"/>
+    <child name="lot-viewer" schema="org.gnucash.dialogs.lot-viewer"/>
+    <child name="new-user" schema="org.gnucash.dialogs.new-user"/>
+    <child name="new-hierarchy" schema="org.gnucash.dialogs.new-hierarchy"/>
+    <child name="search" schema="org.gnucash.dialogs.search"/>
+    <child name="transfer" schema="org.gnucash.dialogs.transfer"/>
+    <child name="business-doclink" schema="org.gnucash.dialogs.business-doclink"/>
+    <child name="trans-doclink" schema="org.gnucash.dialogs.trans-doclink"/>
+    <child name="style-sheet" schema="org.gnucash.dialogs.style-sheet"/>
+    <child name="options" schema="org.gnucash.dialogs.options"/>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.account" path="/org/gnucash/dialogs/account/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.imap-editor" path="/org/gnucash/dialogs/imap-editor/">
+    <key type="(iiii)" name="last-geometry">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.find-account" path="/org/gnucash/dialogs/find-account/">
+    <key type="(iiii)" name="last-geometry">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.preferences" path="/org/gnucash/dialogs/preferences/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.price-editor" path="/org/gnucash/dialogs/price-editor/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+  
+  <schema id="org.gnucash.dialogs.pricedb-editor" path="/org/gnucash/dialogs/pricedb-editor/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.reset-warnings" path="/org/gnucash/dialogs/reset-warnings/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.tax-info" path="/org/gnucash/dialogs/tax-info/">
+    <key name="paned-position" type="i">
+      <default>0</default>
+      <summary>Position of the horizontal pane divider.</summary>
+      <description>Position of the horizontal pane divider.</description>
+    </key>
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.fincalc" path="/org/gnucash/dialogs/fincalc/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.find" path="/org/gnucash/dialogs/find/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search-for-active-only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>This setting indicates whether to search in all items in the current class, or only in 'active' items in the current class.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.export-accounts" path="/org/gnucash/dialogs/export-accounts/">
+    <key name="last-path" type="s">
+      <default>''</default>
+      <summary>Last pathname used</summary>
+      <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.log-replay" path="/org/gnucash/dialogs/log-replay/">
+    <key name="last-path" type="s">
+      <default>''</default>
+      <summary>Last pathname used</summary>
+      <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.open-save" path="/org/gnucash/dialogs/open-save/">
+    <key name="last-path" type="s">
+      <default>''</default>
+      <summary>Last pathname used</summary>
+      <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.report" path="/org/gnucash/dialogs/report/">
+    <key name="last-path" type="s">
+      <default>''</default>
+      <summary>Last pathname used</summary>
+      <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.report-saved-configs" path="/org/gnucash/dialogs/report-saved-configs/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.lot-viewer" path="/org/gnucash/dialogs/lot-viewer/">
+    <key name="hpane-position" type="i">
+      <default>200</default>
+      <summary>Position of the horizontal pane divider.</summary>
+      <description>Position of the horizontal pane divider.</description>
+    </key>
+    <key name="vpane-position" type="i">
+      <default>200</default>
+      <summary>Position of the vertical pane divider.</summary>
+      <description>Position of the vertical pane divider.</description>
+    </key>
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.new-user" path="/org/gnucash/dialogs/new-user/">
+    <key name="first-startup" type="b">
+      <default>true</default>
+      <summary>Show the new user window</summary>
+      <description>If active, the new user window will be shown. Otherwise it will not be shown.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.new-hierarchy" path="/org/gnucash/dialogs/new-hierarchy/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="show-on-new-file" type="b">
+      <default>true</default>
+      <summary>New hierarchy window on "New File"</summary>
+      <description>If active, the "New Hierarchy" window will be shown whenever the "New File" menu item is chosen. Otherwise it will not be shown.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.search" path="/org/gnucash/dialogs/search/">
+    <key name="new-search-limit" type="d">
+      <default>1.0</default>
+      <summary>Default to 'new search' if fewer than this number of items is returned</summary>
+      <description>Default to 'new search' if fewer than this number of items is returned</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.transfer" path="/org/gnucash/dialogs/transfer/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business-doclink" path="/org/gnucash/dialogs/business-doclink/">
+    <key type="(iiii)" name="last-geometry">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.trans-doclink" path="/org/gnucash/dialogs/trans-doclink/">
+    <key type="(iiii)" name="last-geometry">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.style-sheet" path="/org/gnucash/dialogs/style-sheet/">
+    <key type="(iiii)" name="last-geometry">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.options" path="/org/gnucash/dialogs/options/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business" path="/org/gnucash/dialogs/business/">
+    <child name="customer-search" schema="org.gnucash.dialogs.business.customer-search"/>
+    <child name="employee-search" schema="org.gnucash.dialogs.business.employee-search"/>
+    <child name="invoice-search" schema="org.gnucash.dialogs.business.invoice-search"/>
+    <child name="job-search" schema="org.gnucash.dialogs.business.job-search"/>
+    <child name="order-search" schema="org.gnucash.dialogs.business.order-search"/>
+    <child name="vendor-search" schema="org.gnucash.dialogs.business.vendor-search"/>
+    <child name="invoice" schema="org.gnucash.dialogs.business.invoice"/>
+    <child name="bill" schema="org.gnucash.dialogs.business.bill"/>
+    <child name="tax-tables" schema="org.gnucash.dialogs.business.tax-tables"/>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.customer-search" path="/org/gnucash/dialogs/business/customer-search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search-for-active-only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.employee-search" path="/org/gnucash/dialogs/business/employee-search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search-for-active-only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.invoice-search" path="/org/gnucash/dialogs/business/invoice-search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search-for-active-only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.job-search" path="/org/gnucash/dialogs/business/job-search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search-for-active-only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.order-search" path="/org/gnucash/dialogs/business/order-search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search-for-active-only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.vendor-search" path="/org/gnucash/dialogs/business/vendor-search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search-for-active-only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.invoice" path="/org/gnucash/dialogs/business/invoice/">
+    <key name="tax-included" type="b">
+      <default>true</default>
+      <summary>Is tax included in this type of business entry?</summary>
+      <description>If set to active then tax is included by default in entries of this type. This setting is inherited by new customers and vendors.</description>
+    </key>
+    <key name="auto-pay" type="b">
+      <default>false</default>
+      <summary>Auto pay when posting.</summary>
+      <description>At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</description>
+    </key>
+    <key name="notify-when-due" type="b">
+      <default>true</default>
+      <summary>Show invoices due reminder at startup</summary>
+      <description>If active, at startup GnuCash will check to see whether any invoices will become due soon. If so, it will present the user with a reminder dialog. The definition of "soon" is controlled by the "Days in Advance" setting. Otherwise GnuCash does not check for due invoices.</description>
+    </key>
+    <key name="days-in-advance" type="d">
+      <default>7.0</default>
+      <summary>Show invoices due within this many days</summary>
+      <description>This field defines the number of days in advance that GnuCash will check for due invoices. Its value is only used if the "Notify when due" setting is active.</description>
+    </key>
+    <key name="enable-toolbuttons" type="b">
+      <default>false</default>
+      <summary>Enable extra toolbar buttons for business</summary>
+      <description>If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</description>
+    </key>
+    <key name="invoice-printreport" type="i">
+      <default>0</default>
+      <summary>The invoice report to be used for printing.</summary>
+      <description>The name of the report to be used for invoice printing.</description>
+    </key>
+    <key name="use-new-window" type="b">
+      <default>false</default>
+      <summary>Open new invoice in new window</summary>
+      <description>If active, each new invoice will be opened in a new window. Otherwise a new invoice will be opened as a tab in the main window.</description>
+    </key>
+    <key name="accumulate-splits" type="b">
+      <default>true</default>
+      <summary>Accumulate multiple splits into one</summary>
+      <description>If this field is active then multiple entries in an invoice that transfer to the same account will be accumulated into a single split. This field can be overridden per invoice in the Posting dialog.</description>
+    </key>
+  </schema>
+  <schema id="org.gnucash.dialogs.business.bill" path="/org/gnucash/dialogs/business/bill/">
+    <key name="tax-included" type="b">
+      <default>true</default>
+      <summary>Is tax included in this type of business entry?</summary>
+      <description>If set to active then tax is included by default in entries of this type. This setting is inherited by new customers and vendors.</description>
+    </key>
+    <key name="auto-pay" type="b">
+      <default>false</default>
+      <summary>Auto pay when posting.</summary>
+      <description>At post time, automatically attempt to pay vendor documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counter documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</description>
+    </key>
+    <key name="notify-when-due" type="b">
+      <default>true</default>
+      <summary>Show bills due reminder at startup</summary>
+      <description>If active, at startup GnuCash will check to see whether any bills will become due soon. If so, it will present the user with a reminder dialog. The definition of "soon" is controlled by the "Days in Advance" setting. Otherwise GnuCash does not check for due bills.</description>
+    </key>
+    <key name="days-in-advance" type="d">
+      <default>7.0</default>
+      <summary>Show bills due within this many days</summary>
+      <description>This field defines the number of days in advance that GnuCash will check for due bills. Its value is only used if the "Notify when due" setting is active.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.tax-tables" path="/org/gnucash/dialogs/business/tax-tables/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.checkprinting" path="/org/gnucash/dialogs/print-checks/">
+    <key name="check-format-guid" type="s">
+      <default>''</default>
+      <summary>GUID of predefined check format to use</summary>
+      <description>This value specifies the predefined check format to use. The number is the guid of a known check format.</description>
+    </key>
+    <key name="check-position" type="i">
+      <default>0</default>
+      <summary>Which check position to print</summary>
+      <description>On preprinted checks containing multiple checks per page, this setting specifies which check position to print. The possible values are 0, 1 and 2, corresponding to the top, middle and bottom checks on the page.</description>
+    </key>
+    <key name="first-page-count" type="i">
+      <default>0</default>
+      <summary>Number of checks to print on the first page.</summary>
+      <description>Number of checks to print on the first page.</description>
+    </key>
+    <key name="date-format" type="i">
+      <default>7</default>
+      <summary>Date format to use</summary>
+      <description>This is the numerical identifier of the predefined date format to use.</description>
+    </key>
+    <key name="date-format-user" type="s">
+      <default>'0'</default>
+      <summary>Custom date format</summary>
+      <description>If the date format is set to indicate a custom date format, this value is used as an argument to strftime to produce the date to be printed. It may be any valid strftime string; for more information about this format, read the manual page of strftime by "man 3 strftime".</description>
+    </key>
+    <key name="custom-units" type="i">
+      <default>0</default>
+      <summary>Units in which the custom coordinates are expressed</summary>
+      <description>Units in which the custom coordinates are expressed (inches, mm, ...).</description>
+    </key>
+    <key name="custom-payee" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of payee name</summary>
+      <description>This value contains the X,Y coordinates for the start of the payee line on the check.</description>
+    </key>
+    <key name="custom-date" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of date line</summary>
+      <description>This value contains the X,Y coordinates for the start of the date line on the check. Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom-amount-words" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of check amount in words</summary>
+      <description>This value contains the X,Y coordinates for the start of the written amount line on the check. Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom-amount-number" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of check amount in numbers</summary>
+      <description>This value contains the X,Y coordinates for the start of the numerical amount line on the check. Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom-address" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of payee address</summary>
+      <description>This value contains the X,Y coordinates for the start of the payee address line on the check. Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom-notes" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of notes line</summary>
+      <description>This value contains the X,Y coordinates for the start of the notes line on the check. Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom-memo" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of memo line</summary>
+      <description>This value contains the X,Y coordinates for the start of the memo line on the check. Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom-translation" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Offset for complete check</summary>
+      <description>This value contains the X,Y offset for the complete check. Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom-rotation" type="d">
+      <default>0.0</default>
+      <summary>Rotation angle</summary>
+      <description>Number of degrees to rotate the check.</description>
+    </key>
+    <key name="splits-amount" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of split's amount in numbers</summary>
+      <description>This value contains the X,Y coordinates for the start of the split's amount line on the check. Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="splits-memo" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of split's memo line</summary>
+      <description>This value contains the X,Y coordinates for the start of the split's memo line on the check. Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="splits-account" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of split's account line</summary>
+      <description>This value contains the X,Y coordinates for the start of the split's account line on the check. Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="print-date-format" type="b">
+      <default>false</default>
+      <summary>Print the date format below the date.</summary>
+      <description>Each time the date is printed, print the date format immediately below in 8 point type using the characters Y, M, and D.</description>
+    </key>
+    <key name="default-font" type="s">
+      <default>'sans 10'</default>
+      <summary>The default check printing font</summary>
+      <description>The default font to use when printing checks. This value will be overridden by any font specified in a check description file.</description>
+    </key>
+    <key name="blocking-chars" type="b">
+      <default>false</default>
+      <summary>Print '***' before and after text.</summary>
+      <description>Print '***' before and after text.</description>
+    </key>
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.commodities" path="/org/gnucash/dialogs/commodities/">
+    <key name="include-iso" type="b">
+      <default>false</default>
+      <summary>Show currencies in this dialog</summary>
+      <description>Show currencies in this dialog</description>
+    </key>
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.export.csv" path="/org/gnucash/dialogs/export/csv/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="last-path" type="s">
+      <default>''</default>
+      <summary>Last pathname used</summary>
+      <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
+    <key name="paned-position" type="i">
+      <default>0</default>
+      <summary>Window geometry</summary>
+      <description>The position of paned window when it was last closed.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.csv" path="/org/gnucash/dialogs/import/csv/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="last-path" type="s">
+      <default>''</default>
+      <summary>Last pathname used</summary>
+      <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.generic" path="/org/gnucash/dialogs/import/generic/">
+    <key name="enable-skip" type="b">
+      <default>true</default>
+      <summary>Enable SKIP transaction action</summary>
+      <description>Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default.</description>
+    </key>
+    <key name="enable-update" type="b">
+      <default>true</default>
+      <summary>Enable UPDATE match action</summary>
+      <description>Enable the UPDATE AND RECONCILE action in the transaction matcher. If enabled, a transaction whose best match's score is above the Auto-CLEAR threshold and has a different date or amount than the matching existing transaction will cause the existing transaction to be updated and cleared by default.</description>
+    </key>
+    <key name="use-bayes" type="b">
+      <default>true</default>
+      <summary>Use bayesian matching</summary>
+      <description>Enables bayesian matching when matching imported transaction against existing transactions. Otherwise a less sophisticated rule-based matching mechanism will be used.</description>
+    </key>
+    <key name="match-threshold" type="d">
+      <default>1.0</default>
+      <summary>Minimum score to be displayed</summary>
+      <description>This field specifies the minimum matching score a potential matching transaction must have to be displayed in the match list.</description>
+    </key>
+    <key name="match-date-threshold" type="d">
+      <default>4.0</default>
+      <summary>Likely matching transaction within these days</summary>
+      <description>This field specifies the maximum number of days a transaction is likely to be a match in the list.</description>
+    </key>
+    <key name="match-date-not-threshold" type="d">
+      <default>14.0</default>
+      <summary>UnLikely matching a transaction outside of these days</summary>
+      <description>This field specifies the minimum number of days a transaction is unlikely to be a match in the list.</description>
+    </key>
+    <key name="auto-add-threshold" type="d">
+      <default>3.0</default>
+      <summary>Add matching transactions below this score</summary>
+      <description>This field specifies the threshold below which a matching transaction will be added automatically. A transaction whose best match's score is in the red zone (above the display minimum score but below or equal to the Add match score) will be added to the GnuCash file by default.</description>
+    </key>
+    <key name="auto-clear-threshold" type="d">
+      <default>6.0</default>
+      <summary>Clear matching transactions above this score</summary>
+      <description>This field specifies the threshold above which a matching transaction will be cleared by default. A transaction whose best match's score is in the green zone (above or equal to this Clear threshold) will be cleared by default.</description>
+    </key>
+    <key name="atm-fee-threshold" type="d">
+      <default>2.0</default>
+      <summary>Maximum ATM fee amount in your area</summary>
+      <description>This field specifies the extra fee that is taken into account when matching imported transactions. In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</description>
+    </key>
+    <key name="auto-create-commodity" type="b">
+      <default>false</default>
+      <summary>Automatically create new commodities</summary>
+      <description>Enables the automatic creation of new commodities if any unknown commodity is encountered during import. Otherwise the user will be asked what to do with each unknown commodity.</description>
+    </key>
+    <child name="match-picker" schema="org.gnucash.dialogs.import.generic.match-picker"/>
+    <child name="transaction-list" schema="org.gnucash.dialogs.import.generic.transaction-list"/>
+    <child name="account-picker" schema="org.gnucash.dialogs.import.generic.account-picker"/>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.generic.match-picker" path="/org/gnucash/dialogs/import/generic/match-picker/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="display-reconciled" type="b">
+     <default>true</default>
+     <summary>Display or hide reconciled matches</summary>
+     <description>Shows or hides transactions from the match picker which are already of some reconciled state.</description>
+   </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.generic.account-picker" path="/org/gnucash/dialogs/import/generic/account-picker/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.generic.transaction-list" path="/org/gnucash/dialogs/import/generic/transaction-list/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.qif" path="/org/gnucash/dialogs/import/qif/">
+    <key name="default-status-notcleared" type="b">
+      <default>true</default>
+      <summary>Default QIF transaction status</summary>
+      <description>Default status for QIF transaction when not specified in QIF file.</description>
+    </key>
+    <key name="default-status-cleared" type="b">
+      <default>false</default>
+      <summary>Default QIF transaction status</summary>
+      <description>Default status for QIF transaction when not specified in QIF file.</description>
+    </key>
+    <key name="default-status-reconciled" type="b">
+      <default>false</default>
+      <summary>When the status is not specified in a QIF file, the transactions are marked as reconciled.</summary>
+      <description>Default status for QIF transaction when not specified in QIF file.</description>
+    </key>
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="last-path" type="s">
+      <default>''</default>
+      <summary>Last pathname used</summary>
+      <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
+    <key name="show-doc" type="b">
+      <default>true</default>
+      <summary>Show documentation</summary>
+      <description>Show some documentation-only pages in QIF Import assistant.</description>
+    </key>
+    <child name="account-picker" schema="org.gnucash.dialogs.import.qif.account-picker"/>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.qif.account-picker" path="/org/gnucash/dialogs/import/qif/account-picker/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.reconcile" path="/org/gnucash/dialogs/reconcile/">
+    <key name="check-cleared" type="b">
+      <default>true</default>
+      <summary>Pre-select cleared transactions</summary>
+      <description>If active, all transactions marked as cleared in the register will appear already selected in the reconcile dialog. Otherwise no transactions will be initially selected.</description>
+    </key>
+    <key name="auto-interest-transfer" type="b">
+      <default>false</default>
+      <summary>Prompt for interest charges</summary>
+      <description>Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts.</description>
+    </key>
+    <key name="auto-cc-payment" type="b">
+      <default>true</default>
+      <summary>Prompt for credit card payment</summary>
+      <description>If active, after reconciling a credit card account, prompt the user to enter a credit card payment. Otherwise do not prompt the user for this.</description>
+    </key>
+    <key name="always-reconcile-to-today" type="b">
+      <default>false</default>
+      <summary>Always reconcile to today</summary>
+      <description>If active, always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations.</description>
+    </key>
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.sxs" path="/org/gnucash/dialogs/scheduled-trans/">
+    <child name="since-last-run" schema="org.gnucash.dialogs.sxs.since-last-run"/>
+    <child name="transaction-editor" schema="org.gnucash.dialogs.sxs.transaction-editor"/>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.sxs.since-last-run" path="/org/gnucash/dialogs/scheduled-trans/since-last-run/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="show-at-file-open" type="b">
+      <default>true</default>
+      <summary>Run "since last run" dialog when a file is opened.</summary>
+      <description>This setting controls whether the scheduled transactions "since last run" processing is run automatically when a data file is opened. This includes the initial opening of the data file when GnuCash starts. If this setting is active, run the "since last run" process, otherwise it is not run.</description>
+    </key>
+    <key name="show-notify-window-at-file-open" type="b">
+      <default>true</default>
+      <summary>Show "since last run" notification dialog when a file is opened.</summary>
+      <description>This setting controls whether the scheduled transactions notification-only "since last run" dialog is shown when a data file is opened (if "since last run" processing is enabled on file open).  This includes the initial opening of the data file when GnuCash starts.  If this setting is active, show the dialog, otherwise it is not shown.</description>
+    </key>
+    <key name="review-transactions" type="b">
+      <default>false</default>
+      <summary>Set "Review Created Transactions" as the default for the "since last run" dialog.</summary>
+      <description>This setting controls whether as default the "review created transactions" is set for the "since last run" dialog.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.sxs.transaction-editor" path="/org/gnucash/dialogs/scheduled-trans/transaction-editor/">
+    <key name="create-auto" type="b">
+      <default>false</default>
+      <summary>Set the "auto create" flag by default</summary>
+      <description>If active, any newly created scheduled transaction will have its 'auto create' flag set active by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction.</description>
+    </key>
+    <key name="create-days" type="d">
+      <default>0</default>
+      <summary>How many days in advance to notify the user.</summary>
+      <description>How many days in advance to notify the user.</description>
+    </key>
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="notify" type="b">
+      <default>true</default>
+      <summary>Set the "notify" flag by default</summary>
+      <description>If active, any newly created scheduled transaction will have its 'notify' flag set by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction. This setting only has meaning if the create-auto setting is active.</description>
+    </key>
+    <key name="remind-days" type="d">
+      <default>0</default>
+      <summary>How many days in advance to remind the user.</summary>
+      <description>How many days in advance to remind the user.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.totd" path="/org/gnucash/dialogs/tip-of-the-day/">
+    <key name="current-tip" type="i">
+      <default>0</default>
+      <summary>The next tip to show.</summary>
+      <description>The next tip to show.</description>
+    </key>
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="show-at-startup" type="b">
+      <default>true</default>
+      <summary>Show "Tip Of The Day" at GnuCash start</summary>
+      <description>Enables the "Tip Of The Day" when GnuCash starts up. If active, the dialog will be shown. Otherwise it will not be shown.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.general.finance-quote" path="/org/gnucash/general/finance-quote/">
+    <key name="alphavantage-api-key" type="s">
+      <default>''</default>
+      <summary>Alpha Vantage API key</summary>
+      <description>To retrieve online quotes from Alphavantage, this key needs to be set. A key can be retrieved from the Alpha Vantage website.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.history" path="/org/gnucash/history/">
+    <key name="maxfiles" type="i">
+      <default>4</default>
+      <summary>Number of files in history</summary>
+      <description>This setting contains the number of files to keep in the Recently Opened Files menu. This value may be set to zero to disable the file history. This number has a maximum value of 10.</description>
+    </key>
+    <key name="file0" type="s">
+      <default>''</default>
+      <summary>Most recently opened file</summary>
+      <description>This field contains the full path of the most recently opened file.</description>
+    </key>
+    <key name="file1" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file2" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file3" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file4" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file5" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file6" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file7" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file8" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file9" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.warnings" path="/org/gnucash/warnings/">
+    <child name="permanent" schema="org.gnucash.warnings.permanent"/>
+    <child name="temporary" schema="org.gnucash.warnings.temporary"/>
+  </schema>
+  <schema id="org.gnucash.warnings.permanent" path="/org/gnucash/warnings/permanent/">
+    <key name="checkprinting-multi-acct" type="i">
+      <default>0</default>
+      <summary>Print checks from multiple accounts</summary>
+      <description>This dialog is presented if you try to print checks from multiple accounts at the same time.</description>
+    </key>
+    <key name="closing-window-question" type="i">
+      <default>0</default>
+      <summary>Confirm Window Close</summary>
+      <description>This dialog is presented when there is more than one window.</description>
+    </key>
+    <key name="inv-entry-mod" type="i">
+      <default>0</default>
+      <summary>Commit changes to a invoice entry</summary>
+      <description>This dialog is presented when you attempt to move out of a modified invoice entry. The changed data must be either saved or discarded.</description>
+    </key>
+    <key name="inv-entry-dup" type="i">
+      <default>0</default>
+      <summary>Duplicating a changed invoice entry</summary>
+      <description>This dialog is presented when you attempt to duplicate a modified invoice entry. The changed data must be saved or the duplication canceled.</description>
+    </key>
+    <key name="price-comm-del" type="i">
+      <default>0</default>
+      <summary>Delete a commodity</summary>
+      <description>This dialog is presented before allowing you to delete a commodity.</description>
+    </key>
+    <key name="price-comm-del-quotes" type="i">
+      <default>0</default>
+      <summary>Delete a commodity with price quotes</summary>
+      <description>This dialog is presented before allowing you to delete a commodity that has price quotes attached. Deleting the commodity will delete the quotes as well.</description>
+    </key>
+    <key name="price-quotes-del" type="i">
+      <default>0</default>
+      <summary>Delete multiple price quotes</summary>
+      <description>This dialog is presented before allowing you to delete multiple price quotes at one time.</description>
+    </key>
+    <key name="price-quotes-replace" type="i">
+      <default>0</default>
+      <summary>Replace existing price</summary>
+      <description>This dialog is presented before allowing you to replace an existing price.</description>
+    </key>
+    <key name="reg-is-acct-pay-rec" type="i">
+      <default>0</default>
+      <summary>Edit account payable/accounts receivable register</summary>
+      <description>This dialog is presented before allowing you to edit an accounts payable/accounts receivable account. These account types are reserved for the business features and should rarely be manipulated manually.</description>
+    </key>
+    <key name="reg-is-read-only" type="i">
+      <default>0</default>
+      <summary>Read only register</summary>
+      <description>This dialog is presented when a read-only register is opened.</description>
+    </key>
+    <key name="reg-recd-split-mod" type="i">
+      <default>0</default>
+      <summary>Change contents of reconciled split</summary>
+      <description>This dialog is presented before allowing you to change the contents of a reconciled split. Allowing these changes can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="reg-recd-split-unrec" type="i">
+      <default>0</default>
+      <summary>Mark transaction split as unreconciled</summary>
+      <description>This dialog is presented before allowing you to mark a transaction split as unreconciled. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="reg-split-del" type="i">
+      <default>0</default>
+      <summary>Remove a split from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove a split from a transaction.</description>
+    </key>
+    <key name="reg-split-del-recd" type="i">
+      <default>0</default>
+      <summary>Remove a reconciled split from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove a reconciled split from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="reg-split-del-all" type="i">
+      <default>0</default>
+      <summary>Remove all the splits from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove all splits from a transaction.</description>
+    </key>
+    <key name="reg-split-del-all-recd" type="i">
+      <default>0</default>
+      <summary>Remove all the splits from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove all splits (including some reconciled splits) from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="reg-trans-del" type="i">
+      <default>0</default>
+      <summary>Delete a transaction</summary>
+      <description>This dialog is presented before allowing you to delete a transaction.</description>
+    </key>
+    <key name="reg-trans-del-recd" type="i">
+      <default>0</default>
+      <summary>Delete a transaction with reconciled splits</summary>
+      <description>This dialog is presented before allowing you to delete a transaction that contains reconciled splits. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="reg-trans-dup" type="i">
+      <default>0</default>
+      <summary>Duplicating a changed transaction</summary>
+      <description>This dialog is presented when you attempt to duplicate a modified transaction. The changed data must be saved or the duplication canceled.</description>
+    </key>
+    <key name="reg-trans-mod" type="i">
+      <default>0</default>
+      <summary>Commit changes to a transaction</summary>
+      <description>This dialog is presented when you attempt to move out of a modified transaction. The changed data must be either saved or discarded.</description>
+    </key>
+  </schema>
+  
+  <schema id="org.gnucash.warnings.temporary" path="/org/gnucash/warnings/temporary/">
+    <key name="checkprinting-multi-acct" type="i">
+      <default>0</default>
+      <summary>Print checks from multiple accounts</summary>
+      <description>This dialog is presented if you try to print checks from multiple accounts at the same time.</description>
+    </key>
+    <key name="closing-window-question" type="i">
+      <default>0</default>
+      <summary>Confirm Window Close</summary>
+      <description>This dialog is presented when there is more than one window.</description>
+    </key>
+    <key name="inv-entry-mod" type="i">
+      <default>0</default>
+      <summary>Commit changes to a invoice entry</summary>
+      <description>This dialog is presented when you attempt to move out of a modified invoice entry. The changed data must be either saved or discarded.</description>
+    </key>
+    <key name="inv-entry-dup" type="i">
+      <default>0</default>
+      <summary>Duplicating a changed invoice entry</summary>
+      <description>This dialog is presented when you attempt to duplicate a modified invoice entry. The changed data must be saved or the duplication canceled.</description>
+    </key>
+    <key name="price-comm-del" type="i">
+      <default>0</default>
+      <summary>Delete a commodity</summary>
+      <description>This dialog is presented before allowing you to delete a commodity.</description>
+    </key>
+    <key name="price-comm-del-quotes" type="i">
+      <default>0</default>
+      <summary>Delete a commodity with price quotes</summary>
+      <description>This dialog is presented before allowing you to delete a commodity that has price quotes attached. Deleting the commodity will delete the quotes as well.</description>
+    </key>
+    <key name="price-quotes-del" type="i">
+      <default>0</default>
+      <summary>Delete multiple price quotes</summary>
+      <description>This dialog is presented before allowing you to delete multiple price quotes at one time.</description>
+    </key>
+    <key name="price-quotes-replace" type="i">
+      <default>0</default>
+      <summary>Replace existing price</summary>
+      <description>This dialog is presented before allowing you to replace an existing price.</description>
+    </key>
+    <key name="reg-is-acct-pay-rec" type="i">
+      <default>0</default>
+      <summary>Edit account payable/accounts receivable register</summary>
+      <description>This dialog is presented before allowing you to edit an accounts payable/accounts receivable account. These account types are reserved for the business features and should rarely be manipulated manually.</description>
+    </key>
+    <key name="reg-is-read-only" type="i">
+      <default>0</default>
+      <summary>Read only register</summary>
+      <description>This dialog is presented when a read-only register is opened.</description>
+    </key>
+    <key name="reg-recd-split-mod" type="i">
+      <default>0</default>
+      <summary>Change contents of reconciled split</summary>
+      <description>This dialog is presented before allowing you to change the contents of a reconciled split. Allowing these changes can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="reg-recd-split-unrec" type="i">
+      <default>0</default>
+      <summary>Mark transaction split as unreconciled</summary>
+      <description>This dialog is presented before allowing you to mark a transaction split as unreconciled. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="reg-split-del" type="i">
+      <default>0</default>
+      <summary>Remove a split from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove a split from a transaction.</description>
+    </key>
+    <key name="reg-split-del-recd" type="i">
+      <default>0</default>
+      <summary>Remove a reconciled split from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove a reconciled split from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="reg-split-del-all" type="i">
+      <default>0</default>
+      <summary>Remove all the splits from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove all splits from a transaction.</description>
+    </key>
+    <key name="reg-split-del-all-recd" type="i">
+      <default>0</default>
+      <summary>Remove all the splits from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove all splits (including some reconciled splits) from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="reg-trans-del" type="i">
+      <default>0</default>
+      <summary>Delete a transaction</summary>
+      <description>This dialog is presented before allowing you to delete a transaction.</description>
+    </key>
+    <key name="reg-trans-del-recd" type="i">
+      <default>0</default>
+      <summary>Delete a transaction with reconciled splits</summary>
+      <description>This dialog is presented before allowing you to delete a transaction that contains reconciled splits. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="reg-trans-dup" type="i">
+      <default>0</default>
+      <summary>Duplicating a changed transaction</summary>
+      <description>This dialog is presented when you attempt to duplicate a modified transaction. The changed data must be saved or the duplication canceled.</description>
+    </key>
+    <key name="reg-trans-mod" type="i">
+      <default>0</default>
+      <summary>Commit changes to a transaction</summary>
+      <description>This dialog is presented when you attempt to move out of a modified transaction. The changed data must be either saved or discarded.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.window.pages" path="/org/gnucash/window/pages/account-tree/">
+    <key name="account-code-visible" type="b">
+      <default>false</default>
+      <summary>Display this column</summary>
+      <description>This setting controls whether the given column will be visible in the view. TRUE means visible, FALSE means hidden.</description>
+    </key>
+    <key name="account-code-width" type="i">
+      <default>0</default>
+      <summary>Width of this column</summary>
+      <description>This setting stores the width of the given column in pixels.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.window.pages.account-tree.summary" path="/org/gnucash/window/pages/account-tree/summary/">
+    <key name="grand-total" type="b">
+      <default>true</default>
+      <summary>Show a grand total of all accounts converted to the default report currency</summary>
+      <description>Show a grand total of all accounts converted to the default report currency</description>
+    </key>
+    <key name="non-currency" type="b">
+      <default>true</default>
+      <summary>Show non currency commodities</summary>
+      <description>If active, non currency commodities (stocks) will be shown. Otherwise they will be hidden.</description>
+    </key>
+    <key name="start-choice-relative" type="b">
+      <default>true</default>
+      <summary>Use relative profit/loss starting date</summary>
+      <description>This setting controls the type of starting date used in profit/loss calculations. If set to "absolute" then GnuCash will retrieve the starting date specified by the start-date key. If set to anything else, GnuCash will retrieve the starting date specified by the start-period key.</description>
+    </key>
+    <key name="start-choice-absolute" type="b">
+      <default>false</default>
+      <summary>Use absolute profit/loss starting date</summary>
+      <description>This setting controls the type of starting date used in profit/loss calculations. If set to "absolute" then GnuCash will retrieve the starting date specified by the start-date key. If set to anything else, GnuCash will retrieve the starting date specified by the start-period key.</description>
+    </key>
+    <key name="start-date" type="x">
+      <default>0</default>
+      <summary>Starting date (in seconds from Jan 1, 1970)</summary>
+      <description>This setting controls the starting date set in profit/loss calculations if the start-choice setting is set to "absolute". This field should contain a date as represented in seconds from January 1st, 1970.</description>
+    </key>
+    <key name="start-period" type="i">
+      <default>5</default>
+      <summary>Starting time period identifier</summary>
+      <description>This setting controls the starting date set in profit/loss calculations if the start-choice setting is set to anything other than "absolute". This field should contain a value between 0 and 8.</description>
+    </key>
+    <key name="end-choice-relative" type="b">
+      <default>true</default>
+      <summary>Use relative profit/loss ending date</summary>
+      <description>This setting controls the type of ending date used in profit/loss calculations. If set to "absolute" then GnuCash will retrieve the ending date specified by the end-date key. If set to anything else, GnuCash will retrieve the ending date specified by the end-period key.</description>
+    </key>
+    <key name="end-choice-absolute" type="b">
+      <default>false</default>
+      <summary>Use absolute profit/loss ending date</summary>
+      <description>This setting controls the type of ending date used in profit/loss calculations. If set to "absolute" then GnuCash will retrieve the ending date specified by the end-date key. If set to anything else, GnuCash will retrieve the ending date specified by the end-period key.</description>
+    </key>
+    <key name="end-date" type="x">
+      <default>0</default>
+      <summary>Ending date (in seconds from Jan 1, 1970)</summary>
+      <description>This setting controls the ending date set in profit/loss calculations if the end-choice setting is set to "absolute". This field should contain a date as represented in seconds from January 1st, 1970.</description>
+    </key>
+    <key name="end-period" type="i">
+      <default>5</default>
+      <summary>Ending time period identifier</summary>
+      <description>This setting controls the ending date set in profit/loss calculations if the end-choice setting is set to anything other than "absolute". This field should contain a value between 0 and 8.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.flicker" path="/org/gnucash/dialogs/flicker/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+  <schema id="org.gnucash.dialogs.ab-initial" path="/org/gnucash/dialogs/ab-initial/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.hbci" path="/org/gnucash/dialogs/import/hbci/">
+    <key name="close-on-finish" type="b">
+      <default>true</default>
+      <summary>Close window when finished</summary>
+      <description>If active, the window will be closed automatically when you finish the HBCI/AqBanking import process. Otherwise it will stay open.</description>
+    </key>
+    <key name="remember-pin" type="b">
+      <default>false</default>
+      <summary>Remember the PIN in memory</summary>
+      <description>If active, the PIN for HBCI/AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</description>
+    </key>
+    <key name="use-ns-transaction-text" type="b">
+      <default>true</default>
+      <summary>Put the transaction text in front of the purpose of a transaction.</summary>
+      <description>Some banks place part of transaction description as "transaction text" in the MT940 file. Normally GNUcash ignores this text. However by activating this option, the transaction text is used for the transaction description too.</description>
+    </key>
+    <key name="verbose-debug" type="b">
+      <default>false</default>
+      <summary>Verbose HBCI debug messages</summary>
+      <description>Enables verbose debug messages for HBCI/AqBanking Online Banking.</description>
+    </key>
+    <key name="format-dtaus" type="s">
+      <default>'default'</default>
+      <summary>DTAUS import data format</summary>
+      <description>This setting specifies the data format when importing DTAUS files. The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+    </key>
+    <key name="format-csv" type="s">
+      <default>'default'</default>
+      <summary>CSV import data format</summary>
+      <description>This setting specifies the data format when importing CSV files. The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+    </key>
+    <key name="format-swift-mt940" type="s">
+      <default>'swift-mt940'</default>
+      <summary>SWIFT MT940 import data format</summary>
+      <description>This setting specifies the data format when importing SWIFT MT940 files. The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+    </key>
+    <key name="format-swift-mt942" type="s">
+      <default>'swift-mt942'</default>
+      <summary>SWIFT MT942 import data format</summary>
+      <description>This setting specifies the data format when importing SWIFT MT942 files. The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+    </key>
+    <key name="last-path" type="s">
+      <default>''</default>
+      <summary>Last pathname used</summary>
+      <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
+    <child name="connection-dialog" schema="org.gnucash.GnuCash.dialogs.import.hbci.connection-dialog"/>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.hbci.connection-dialog" path="/org/gnucash/dialogs/import/hbci/connection-dialog/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.ofx" path="/org/gnucash/dialogs/import/ofx/">
+    <key name="last-path" type="s">
+      <default>''</default>
+      <summary>Last pathname used</summary>
+      <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
+  </schema>
+</schemalist>

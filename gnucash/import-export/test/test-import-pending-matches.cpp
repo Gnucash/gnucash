@@ -52,9 +52,6 @@ teardown (Fixture *fixture, gconstpointer pData)
     test_clear_error_list();
 }
 
-/* The excluded tests all rely on g_assert_true which was only introduced
- * in glib 2.38 */
-#ifdef HAVE_GLIB_2_38
 static void
 test_pending_matches_match_types (Fixture *fixture, gconstpointer pData)
 {
@@ -117,7 +114,6 @@ test_pending_matches_keeps_count (Fixture *fixture, gconstpointer pData)
 
     gnc_import_PendingMatches_delete (matches);
 }
-#endif
 
 int
 main (int argc, char *argv[])
@@ -126,16 +122,12 @@ main (int argc, char *argv[])
     qof_init();
     g_test_init (&argc, &argv, NULL);
 
-    /* The excluded tests all rely on g_assert_true which was only introduced
-     * in glib 2.38 */
-#ifdef HAVE_GLIB_2_38
     GNC_TEST_ADD (suitename, "match_types", Fixture, NULL, setup,
                   test_pending_matches_match_types, teardown);
     GNC_TEST_ADD (suitename, "prefer_manual_match", Fixture, NULL, setup,
                   test_pending_matches_prefer_manual_match, teardown);
     GNC_TEST_ADD (suitename, "keeps_count", Fixture, NULL, setup,
                   test_pending_matches_keeps_count, teardown);
-#endif
     result =  g_test_run();
 
     qof_close();

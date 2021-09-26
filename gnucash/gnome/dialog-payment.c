@@ -53,6 +53,9 @@
 #include "dialog-transfer.h"
 #include "dialog-print-check.h"
 #include "gnc-general-search.h"
+#include <qoflog.h>
+
+static const QofLogModule log_module = G_LOG_DOMAIN;
 
 #define DIALOG_PAYMENT_CM_CLASS "payment-dialog"
 
@@ -1561,7 +1564,7 @@ gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
     {
         /* Transaction isn't valid for a payment, just return the default
          * Calling code will have to handle this situation properly */
-        g_message("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
+        PINFO("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
                   xaccTransGetDescription(txn));
         return result;
     }
@@ -1569,7 +1572,7 @@ gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
     assetaccount_split = xaccTransGetFirstPaymentAcctSplit(txn);
     amount = xaccSplitGetValue(assetaccount_split);
     result = gnc_numeric_positive_p(amount); // positive amounts == customer
-    //g_message("Amount=%s", gnc_numeric_to_string(amount));
+    //PINFO("Amount=%s", gnc_numeric_to_string(amount));
     return result;
 }
 
@@ -1618,7 +1621,7 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
                                          _("The selected transaction doesn't have splits that can be assigned as a payment"));
         gtk_dialog_run (GTK_DIALOG(dialog));
         gtk_widget_destroy (dialog);
-        g_message("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
+        PINFO("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
                   xaccTransGetDescription(txn));
         return NULL;
     }

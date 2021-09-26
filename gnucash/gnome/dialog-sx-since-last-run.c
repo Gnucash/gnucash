@@ -938,7 +938,7 @@ variable_value_changed_cb (GtkCellRendererText *cell,
     gnc_numeric parsed_num;
     char *endStr = NULL;
 
-    g_debug ("variable to [%s] at path [%s]", value, path);
+    DEBUG ("variable to [%s] at path [%s]", value, path);
     if (!gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL(dialog->editing_model), &tree_iter, path))
     {
         g_warning ("invalid path [%s]", path);
@@ -955,7 +955,7 @@ variable_value_changed_cb (GtkCellRendererText *cell,
             || gnc_numeric_check (parsed_num) != GNC_ERROR_OK)
     {
         gchar *value_copy = g_strdup (value);
-        g_debug ("value=[%s] endStr[%s]", value, endStr);
+        DEBUG ("value=[%s] endStr[%s]", value, endStr);
         if (strlen (g_strstrip (value_copy)) == 0)
         {
             gnc_numeric invalid_num = gnc_numeric_error (GNC_ERROR_ARG);
@@ -1155,7 +1155,7 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog
     {
         GList *unbound_variables;
         unbound_variables = gnc_sx_instance_model_check_variables (app_dialog->editing_model->instances);
-        g_message ("%d variables unbound", g_list_length (unbound_variables));
+        PINFO ("%d variables unbound", g_list_length (unbound_variables));
         if (g_list_length (unbound_variables) > 0)
         {
             // focus first variable

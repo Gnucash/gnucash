@@ -821,7 +821,7 @@ static void gnc_business_assign_payment (GtkWindow *parent,
     if (xaccTransCountSplits(trans) <= 1)
         return;
 
-    //g_message("Creating payment dialog with trans %p", trans);
+    //PINFO("Creating payment dialog with trans %p", trans);
     gnc_ui_payment_new_with_txn(parent, owner, trans);
 }
 

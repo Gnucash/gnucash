@@ -1657,7 +1657,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
         acct_name = g_strdup (_("(no name)"));
 
     if (gnc_account_n_children(account) > 1) {
-        gchar* message = g_strdup_printf("Account '%s' has more than one subaccount, move subaccounts or delete them before attempting to delete this account.", acct_name);
+        gchar* message = g_strdup_printf(_("The account \"%s\" has more than one subaccount.\n\nMove the subaccounts or delete them before attempting to delete this account."), acct_name);
         gnc_error_dialog(GTK_WINDOW(window),"%s", message);
         g_free (message);
         g_free(acct_name);

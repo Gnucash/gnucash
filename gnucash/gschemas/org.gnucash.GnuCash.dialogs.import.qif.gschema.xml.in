@@ -1,5 +1,5 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
-  <schema id="org.gnucash.dialogs.import.qif" path="/org/gnucash/dialogs/import/qif/">
+  <schema id="org.gnucash.GnuCash.dialogs.import.qif" path="/org/gnucash/GnuCash/dialogs/import/qif/">
     <key name="default-status-notcleared" type="b">
       <default>true</default>
       <summary>Default QIF transaction status</summary>
@@ -32,10 +32,10 @@
       <summary>Show documentation</summary>
       <description>Show some documentation-only pages in QIF Import assistant.</description>
     </key>
-    <child name="account-picker" schema="org.gnucash.dialogs.import.qif.account-picker"/>
+    <child name="account-picker" schema="org.gnucash.GnuCash.dialogs.import.qif.account-picker"/>
   </schema>
 
-  <schema id="org.gnucash.dialogs.import.qif.account-picker" path="/org/gnucash/dialogs/import/qif/account-picker/">
+  <schema id="org.gnucash.GnuCash.dialogs.import.qif.account-picker" path="/org/gnucash/GnuCash/dialogs/import/qif/account-picker/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>

@@ -1,6 +1,126 @@
 Version history:
 ------- -------
-4.7  - 7 March 2021
+4.7  - 26 September 2021
+The eighth release of the 4.x stable series.
+
+Compatibility Notice
+
+In order to allow flatpak users to share preferences with
+installations outside of the sandbox we need to change the preference
+path from /org/gnucash to /org/gnucash/GnuCash. This release of
+GnuCash does that and it will automatically migrate existing
+preferences. It does not, however, continue to write preferences to
+the old path and it runs the migration only once. If you go back and
+forth between GnuCash 4.7 and an older versions you'll have two sets
+of preferences, one for GnuCash 4.7 and later and another for GnuCash
+4.6 and earlier. This includes the file history list and last-opened
+file.
+
+Between 4.6 and 4.7, the following bugfixes were accomplished:
+
+    Bug 87847 - RFE: Create a 'checkbox' cell type
+    Bug 766052 - Job report payments wrong when payment contains splits
+    Bug 797596 - New-owner - improved representation of payments with multiple
+                 non-APAR splits
+    Bug 798142 - Tax rate appears as a fraction
+    Bug 798180 - Update to macOS Big Sur 11.3 breaks Finance Quote
+    Bug 798205 - Some transactions dropped with no apparent cause or warnings
+                 for credit card ofx import
+                 Do not exclude from import a transaction that has an FITID
+                 which matches an already existing split. This is because it
+                    (1) may be a coincidence and therefore the transaction
+                        needs to be added or
+                    (2) could be on a transfer from the account being imported
+                        to another bank account which has already been imported,
+                        and so needs to be matched, not added.
+    Bug 798208 - management fee transactions are ignored on OFX import
+    Bug 798211 - Equity statement double calculates unrealized gain
+    Bug 798219 - apply/OK truncates exchange rates from 4 to 2 decimal places;
+                 enter doesn't
+    Bug 798221 - Transfer funds between accounts with different currencies
+                 crashes Gnucash on macOS
+    Bug 798224 - Scheduled transactions are created with date-entered copied
+                 from the template transaction.
+    Bug 798229 - GncDate::c_formats is being created and destroyed twice
+                 resulting in a double free crash on every exit.
+    Bug 798234 - Cut Transaction discards the reference to the description/memo
+                 strings so that Paste Transaction will paste uninitialised
+                 data (or other strings)
+    Bug 798235 - Reconciliation Ending Balance not recalculated the 2nd and
+                 subsequent times Statement Date is updated.
+    Bug 798237 - Logging during XML file loading degrades performance
+                 significantly
+    Bug 798238 - "New security" dialog doesn't save the "Display symbol"
+    Bug 798250 - Gnucash permanent hang on save while loading report
+    Bug 798256 - Crash in recnFinishCB
+    Bug 798298 - Re-imported transactions no longer ignored
+    Bug 798303 - account list is sorted wrong by amount
+    Bug 798312 - Opening the help for dialogues in the wrong language.
+
+The following fixes and improvements were not associated with bug reports:
+
+    Lots of memory-leaks plugged
+    Change the preferences path to org.gnucash.GnuCash to comply with flatpak
+       requirements and migrate existing preferences to the new paths. This
+       won't provide for automatic sync between a system-installed GnuCash and
+       a flatpak one unless the system-installed one is GnuCash 4.7 or later.
+       Please see the Wiki for more information and a procedure to convert your
+       existing preferences.
+    Cleanup - minimal glib=2.56.1 - drop all conditionals on older versions
+    Add code to handle ofx files that include transfers between accounts
+    During transaction import, ignore splits whose account is not the
+       destination account
+    Do not drop a potential match just because it has an online_id.
+       Now that we don't exclude from import a transaction with an FITID that
+       matches an already existing transaction, if one accidentally re-imports
+       a transaction, this allows it to be automatically matched against the
+       previously imported transaction.
+    Add test for Transaction GetDate() in python bindings, pursuant to
+       Bug 798284.
+    In find customer dialog, add a column for "Shipping Contact" parameter
+    Prep early splash screen messages for translation
+    Change text for SX preference option 'Review created transactions' to
+       better align with existing SX text.
+    Fixed an XML backend problem where trying to open a locked file would clear
+       the lock even if one didn't ask to, so the next attempt would find the
+       file unlocked even if still open in another instance.
+    Fix 2 crashes in Generic Transaction Matcher
+    Handle very large denominators from Finance::Quote's OpenExchange source
+    Update file extension in man pages per mailing list post.
+    Changed some option names:
+        * From "Show Accounts until level" to "Levels of Subaccounts"
+        * From "Extra notes" to "Extra Notes"
+        * From "Report title" to "Report Title"
+        * From "Invoice number" to "Invoice Number" to ensure it matches all
+          other invoice reports.
+    Fix missing mnemonic keys after changes to GNCAmountEdit
+       With the changes to GNCAmountEdit, the way the mnemonic keys are
+       associated to the entry widget of the GNCAmountEdit needs to change so
+       have created a function gnc_amount_edit_make_mnemeonic_target which does
+       the same as GNCDateEdit.
+    Fix rounding in Stock Split Assistant to correct earlier commit that rounded
+       the share price to that of the currency.
+    [Portfolio Reports] Allow share digits to 9 decimal places to match the
+       maximum commodity fraction.
+
+New API
+
+    None
+
+Deprecations
+
+    Date options with a time of day setting.
+    Removing the only use, an example in hello-world.scm. GnuCash doesn't use
+       this value in any of its own report options and the feature will be
+       removed in GnuCash 5. Related to bug 798297 Pref "Use 24-hour clock"
+       obsolete?.
+    gnc:owner-report-create
+
+New and Updated Translations: Chinese (Simplified), Croatian, Finnish, French,
+    German, Hebrew, Italian, Japanese, Portuguese, Portuguese (Brazil), Swedish,
+    Ukrainian
+
+4.6  - 27 June 2021
 The seventh release of the 4.x stable series.
 Between 4.5 and 4.6, the following bugfixes were accomplished:
 

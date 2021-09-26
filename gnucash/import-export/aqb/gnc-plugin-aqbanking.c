@@ -496,7 +496,7 @@ gnc_plugin_ab_cmd_get_balance(GtkAction *action, GncMainWindowActionData *data)
     account = main_window_to_account(data->window);
     if (account == NULL)
     {
-        g_message("No AqBanking account selected");
+        PINFO("No AqBanking account selected");
         LEAVE("no account");
         return;
     }
@@ -517,7 +517,7 @@ gnc_plugin_ab_cmd_get_transactions(GtkAction *action,
     account = main_window_to_account(data->window);
     if (account == NULL)
     {
-        g_message("No AqBanking account selected");
+        PINFO("No AqBanking account selected");
         LEAVE("no account");
         return;
     }
@@ -538,7 +538,7 @@ gnc_plugin_ab_cmd_issue_sepatransaction(GtkAction *action,
     account = main_window_to_account(data->window);
     if (account == NULL)
     {
-        g_message("No AqBanking account selected");
+        PINFO("No AqBanking account selected");
         LEAVE("no account");
         return;
     }
@@ -559,7 +559,7 @@ gnc_plugin_ab_cmd_issue_inttransaction(GtkAction *action,
     account = main_window_to_account(data->window);
     if (account == NULL)
     {
-        g_message("No AqBanking account selected");
+        PINFO("No AqBanking account selected");
         LEAVE("no account");
         return;
     }
@@ -581,7 +581,7 @@ gnc_plugin_ab_cmd_issue_sepa_direct_debit(GtkAction *action,
     account = main_window_to_account(data->window);
     if (account == NULL)
     {
-        g_message("No AqBanking account selected");
+        PINFO("No AqBanking account selected");
         LEAVE("no account");
         return;
     }

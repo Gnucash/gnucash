@@ -35,6 +35,7 @@
 #include "gnc-main-window.h"
 #include "gnc-gui-query.h"
 #include "dialog-utils.h"
+#include <qoflog.h>
 
 #define GNC_PREF_AUTOSAVE_SHOW_EXPLANATION "autosave-show-explanation"
 #define GNC_PREF_AUTOSAVE_INTERVAL         "autosave-interval-minutes"
@@ -44,6 +45,7 @@
 # undef G_LOG_DOMAIN
 #endif
 #define G_LOG_DOMAIN "gnc.gui.autosave"
+static const QofLogModule log_module = G_LOG_DOMAIN;
 
 static void
 autosave_remove_timer_cb(QofBook *book, gpointer key, gpointer user_data);
@@ -156,14 +158,14 @@ static gboolean autosave_confirm(GtkWidget *toplevel)
 
     /* Should we show this explanation again? */
     gnc_prefs_set_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTOSAVE_SHOW_EXPLANATION, show_expl_again);
-    g_debug("autosave_timeout_cb: Show explanation again=%s\n",
+    DEBUG("autosave_timeout_cb: Show explanation again=%s\n",
             (show_expl_again ? "TRUE" : "FALSE"));
 
     /* Should we switch off autosave? */
     if (switch_off_autosave)
     {
         gnc_prefs_set_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTOSAVE_INTERVAL, 0);
-        g_debug("autosave_timeout_cb: User chose to disable auto-save.\n");
+        DEBUG("autosave_timeout_cb: User chose to disable auto-save.\n");
     }
 
     return save_now;
@@ -177,7 +179,7 @@ static gboolean autosave_timeout_cb(gpointer user_data)
     gboolean save_now = TRUE;
     GtkWidget *toplevel;
 
-    g_debug("autosave_timeout_cb called\n");
+    DEBUG("autosave_timeout_cb called\n");
 
     /* Is there already a save in progress? If yes, return FALSE so that
        the timeout is automatically destroyed and the function will not
@@ -199,17 +201,17 @@ static gboolean autosave_timeout_cb(gpointer user_data)
 
     if (save_now)
     {
-        g_debug("autosave_timeout_cb: Really trigger auto-save now.\n");
+        DEBUG("autosave_timeout_cb: Really trigger auto-save now.\n");
 
         /* Timeout has passed - save the file. */
         if (GNC_IS_MAIN_WINDOW(toplevel))
             gnc_main_window_set_progressbar_window( GNC_MAIN_WINDOW( toplevel ) );
         else
-            g_debug("autosave_timeout_cb: toplevel is not a GNC_MAIN_WINDOW\n");
+            DEBUG("autosave_timeout_cb: toplevel is not a GNC_MAIN_WINDOW\n");
         if (GNC_IS_WINDOW(toplevel))
             gnc_window_set_progressbar_window( GNC_WINDOW( toplevel ) );
         else
-            g_debug("autosave_timeout_cb: toplevel is not a GNC_WINDOW\n");
+            DEBUG("autosave_timeout_cb: toplevel is not a GNC_WINDOW\n");
 
         gnc_file_save (GTK_WINDOW (toplevel));
 
@@ -223,7 +225,7 @@ static gboolean autosave_timeout_cb(gpointer user_data)
     }
     else
     {
-        g_debug("autosave_timeout_cb: No auto-save this time, let the timeout run again.\n");
+        DEBUG("autosave_timeout_cb: No auto-save this time, let the timeout run again.\n");
         /* Return TRUE so that the timeout is not removed but will be
            triggered again after the next time interval. */
         return TRUE;
@@ -239,7 +241,7 @@ autosave_remove_timer_cb(QofBook *book, gpointer key, gpointer user_data)
     if (autosave_source_id > 0)
     {
         res = g_source_remove (autosave_source_id);
-        g_debug("Removing auto save timer with id %d, result=%s\n",
+        DEBUG("Removing auto save timer with id %d, result=%s\n",
                 autosave_source_id, (res ? "TRUE" : "FALSE"));
 
         /* Set the event source id to zero. */
@@ -269,7 +271,7 @@ static void gnc_autosave_add_timer(QofBook *book)
         guint autosave_source_id =
             g_timeout_add_seconds(interval_mins * 60,
                                   autosave_timeout_cb, book);
-        g_debug("Adding new auto-save timer with id %d\n", autosave_source_id);
+        DEBUG("Adding new auto-save timer with id %d\n", autosave_source_id);
 
         /* Save the event source id for a potential removal, and also
            set the callback upon book closing */
@@ -281,13 +283,13 @@ static void gnc_autosave_add_timer(QofBook *book)
 
 void gnc_autosave_dirty_handler (QofBook *book, gboolean dirty)
 {
-    g_debug("gnc_main_window_autosave_dirty(dirty = %s)\n",
+    DEBUG("gnc_main_window_autosave_dirty(dirty = %s)\n",
             (dirty ? "TRUE" : "FALSE"));
     if (dirty)
     {
         if (qof_book_is_readonly(book))
         {
-            //g_debug("Book is read-only, ignoring dirty flag");
+            //DEBUG("Book is read-only, ignoring dirty flag");
             return;
         }
 
@@ -303,7 +305,7 @@ void gnc_autosave_dirty_handler (QofBook *book, gboolean dirty)
         }
         else
         {
-            g_debug("Shutting down book, ignoring dirty book");
+            DEBUG("Shutting down book, ignoring dirty book");
         }
     }
     else

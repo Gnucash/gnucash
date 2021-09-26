@@ -1581,7 +1581,7 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
     num_periods = gnc_budget_get_num_periods (priv->budget);
 
     col_list = priv->period_col_list;
-    totals_col_list = priv->totals_col_list;
+    totals_col_list = g_list_reverse (priv->totals_col_list);
     num_periods_visible = g_list_length (col_list);
 
     /* Hide any unneeded extra columns */
@@ -1592,9 +1592,9 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
         col_list = g_list_delete_link (col_list, g_list_last (col_list));
         num_periods_visible = g_list_length (col_list);
 
-        col = GTK_TREE_VIEW_COLUMN((g_list_last (totals_col_list))->data);
+        col = GTK_TREE_VIEW_COLUMN(totals_col_list->data);
         gtk_tree_view_remove_column (GTK_TREE_VIEW(priv->totals_tree_view), col);
-        totals_col_list = g_list_delete_link (totals_col_list, g_list_last (totals_col_list));
+        totals_col_list = g_list_delete_link (totals_col_list, totals_col_list);
     }
 
     gnc_tree_view_configure_columns (GNC_TREE_VIEW(priv->tree_view));

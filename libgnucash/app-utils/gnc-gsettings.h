@@ -50,9 +50,7 @@
 #ifndef GNC_GSETTINGS_H
 #define GNC_GSETTINGS_H
 
-#include <gio/gio.h>
-
-#define GSET_SCHEMA_PREFIX            "org.gnucash"
+#include <glib.h>
 
 /** Convert a partial schema name into a complete gsettings schema name.
  *
@@ -72,16 +70,9 @@
  */
 gchar *gnc_gsettings_normalize_schema_name (const gchar *name);
 
-
-/** Set the default gsettings schema prefix. This is
- *  used to generate complete schema id's if only
- *  partial id's are passed.
- */
-void gnc_gsettings_set_prefix (const gchar *prefix);
-
 /** Get the default gsettings schema prefix.
  *  If none was set explicitly, this defaults to
- *  "org.gnucash"
+ *  "org.gnucash.GnuCash"
  */
 const gchar *gnc_gsettings_get_prefix (void);
 

@@ -111,8 +111,14 @@ gnc_checkbox_cell_get_flag (CheckboxCell *cell)
     return cell->flag;
 }
 
+#define UNICODE_CHECKMARK "\xe2\x9c\x93" // U+2716
 const char *
 gnc_checkbox_cell_get_string (gboolean flag)
 {
-    return (flag ? "X" : " ");
+#ifndef MAC_INTEGRATION
+    const char* checked = UNICODE_CHECKMARK;
+#else
+    const char* checked = "X";
+#endif
+    return (flag ? checked : " ");
 }

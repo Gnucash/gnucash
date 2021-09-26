@@ -47,6 +47,7 @@ extern "C"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.backend.file.sx"
+static const QofLogModule log_module = G_LOG_DOMAIN;
 
 #define SX_ID                   "sx:id"
 #define SX_NAME                 "sx:name"
@@ -228,7 +229,7 @@ sx_name_handler (xmlNodePtr node, gpointer sx_pdata)
     struct sx_pdata* pdata = static_cast<decltype (pdata)> (sx_pdata);
     SchedXaction* sx = pdata->sx;
     gchar* tmp = dom_tree_to_text (node);
-    g_debug ("sx named [%s]", tmp);
+    DEBUG ("sx named [%s]", tmp);
     g_return_val_if_fail (tmp, FALSE);
     xaccSchedXactionSetName (sx, tmp);
     g_free (tmp);
@@ -392,7 +393,7 @@ _fixup_recurrence_start_dates (const GDate* sx_start_date, GList* schedule)
 
             g_date_strftime (date_str, 127, "%x", &next);
             sched_str = recurrenceToString (r);
-            g_debug ("setting recurrence [%s] start date to [%s]",
+            DEBUG ("setting recurrence [%s] start date to [%s]",
                      sched_str, date_str);
             g_free (sched_str);
         }
@@ -412,7 +413,7 @@ _fixup_recurrence_start_dates (const GDate* sx_start_date, GList* schedule)
         Recurrence* fixup = (Recurrence*)g_list_nth_data (schedule, 0);
         g_date_strftime (date_buf, 127, "%x", sx_start_date);
         recurrenceSet (fixup, 1, PERIOD_ONCE, sx_start_date, WEEKEND_ADJ_NONE);
-        g_debug ("fixed up period=ONCE Recurrence to date [%s]", date_buf);
+        DEBUG ("fixed up period=ONCE Recurrence to date [%s]", date_buf);
     }
 }
 
@@ -429,7 +430,7 @@ sx_freqspec_handler (xmlNodePtr node, gpointer sx_pdata)
     schedule = dom_tree_freqSpec_to_recurrences (node, pdata->book);
     gnc_sx_set_schedule (sx, schedule);
     debug_str = recurrenceListToString (schedule);
-    g_debug ("parsed from freqspec [%s]", debug_str);
+    DEBUG ("parsed from freqspec [%s]", debug_str);
     g_free (debug_str);
 
     _fixup_recurrence_start_dates (xaccSchedXactionGetStartDate (sx), schedule);
@@ -446,7 +447,7 @@ sx_schedule_recurrence_handler (xmlNodePtr node, gpointer parsing_data)
     Recurrence* r = dom_tree_to_recurrence (node);
     g_return_val_if_fail (r, FALSE);
     sched_str = recurrenceToString (r);
-    g_debug ("parsed recurrence [%s]", sched_str);
+    DEBUG ("parsed recurrence [%s]", sched_str);
     g_free (sched_str);
     *schedule = g_list_append (*schedule, r);
     return TRUE;
@@ -471,7 +472,7 @@ sx_recurrence_handler (xmlNodePtr node, gpointer _pdata)
         return FALSE;
     // g_return_val_if_fail(schedule, FALSE);
     debug_str = recurrenceListToString (schedule);
-    g_debug ("setting freshly-parsed schedule: [%s]", debug_str);
+    DEBUG ("setting freshly-parsed schedule: [%s]", debug_str);
     g_free (debug_str);
     gnc_sx_set_schedule (parsing_data->sx, schedule);
     parsing_data->saw_recurrence = TRUE;
@@ -702,7 +703,7 @@ gnc_schedXaction_end_handler (gpointer data_for_children,
         for (attr = tree->properties; attr != NULL; attr = attr->next)
         {
             xmlChar* attr_value = attr->children->content;
-            g_debug ("sx attribute name[%s] value[%s]", attr->name, attr_value);
+            DEBUG ("sx attribute name[%s] value[%s]", attr->name, attr_value);
             if (strcmp ((const char*)attr->name, "version") != 0)
             {
                 g_warning ("unknown sx attribute [%s]", attr->name);
@@ -764,7 +765,7 @@ gnc_schedXaction_end_handler (gpointer data_for_children,
             xmlFreeNode (tree);
             return FALSE;
         }
-        g_debug ("template account name [%s] for SX with GncGUID [%s]",
+        DEBUG ("template account name [%s] for SX with GncGUID [%s]",
                  xaccAccountGetName (acct), guidstr);
 
         /* FIXME: free existing template account.

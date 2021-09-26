@@ -133,6 +133,9 @@ typedef struct AccountPrivate
     TriState equity_type;
     char *notes;
     char *color;
+    char *tax_us_code;
+    char *tax_us_pns;
+    char *last_num;
     char *sort_order;
     char *filter;
 

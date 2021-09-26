@@ -46,6 +46,9 @@ extern "C"
 #include "io-gncxml-v2.h"
 #include "test-file-stuff.h"
 #include "test-stuff.h"
+#include <qoflog.h>
+
+static const QofLogModule log_module = G_LOG_DOMAIN;
 
 static QofSession* session = NULL;
 static int iter;
@@ -128,7 +131,7 @@ test_generation (void)
     {
         GNCPriceDB* db;
         auto book = qof_book_new();
-        g_message ("iter=%d", iter);
+        PINFO ("iter=%d", iter);
         session = qof_session_new (book);
         db = get_random_pricedb (book);
         if (!db)
@@ -150,9 +153,6 @@ main (int argc, char** argv)
 {
     qof_init ();
     cashobjects_register ();
-    //qof_log_init_filename("/tmp/gnctest.trace");
-    //qof_log_set_default(QOF_LOG_DETAIL);
-    //qof_log_set_level(GNC_MOD_PRICE, QOF_LOG_DETAIL);
     test_generation ();
     print_test_results ();
     qof_close ();

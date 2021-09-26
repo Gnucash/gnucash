@@ -61,6 +61,13 @@ qof_log_prettify (const char *name)
     return name;
 }
 
+// Fake qof_log_check suppresses logging.
+gboolean
+qof_log_check(QofLogModule log_module, QofLogLevel log_level)
+{
+    return FALSE;
+}
+
 // fake function from engine-helpers.c
 // this is a slightly modified version of the original function
 const char *

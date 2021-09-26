@@ -25,10 +25,12 @@
 
 #include <stdio.h>
 #include "gnc-gobject-utils.h"
+#include <qoflog.h>
 
 #include <gtk/gtk.h>	// For gtk_main_quit(). Can't get this to work with
 // a g_source attached to the main glib context.
 
+static const QofLogModule log_module = G_LOG_DOMAIN;
 
 static void gnc_gobject_weak_cb (gpointer user_data, GObject *object);
 
@@ -70,7 +72,7 @@ static void
 gnc_gobject_dump_gobject (GObject *object, const gchar *name)
 {
     //printf("Enter %s: object %p, name %s\n", G_STRFUNC, object, name);
-    g_message("    object %p, ref count %d", object, object->ref_count);
+    PINFO("    object %p, ref count %d", object, object->ref_count);
     //printf("Leave %s:\n", G_STRFUNC);
 }
 
@@ -85,7 +87,7 @@ static gboolean
 gnc_gobject_dump_list (const gchar *name, GList *list, gpointer user_data)
 {
     //printf("Enter %s: name %s, list %p\n", G_STRFUNC, name, list);
-    g_message("  %d %s", g_list_length(list), name);
+    PINFO("  %d %s", g_list_length(list), name);
     g_list_foreach(list, (GFunc)gnc_gobject_dump_gobject, (gpointer)name);
     //printf("Leave %s:\n", G_STRFUNC);
     return TRUE;
@@ -108,7 +110,7 @@ gnc_gobject_tracking_dump (void)
 
     if (g_hash_table_size(table) > 0)
     {
-        g_message("The following objects remain alive:");
+        PINFO("The following objects remain alive:");
         g_hash_table_foreach_remove(table, (GHRFunc)gnc_gobject_dump_list, NULL);
     }
     //printf("Leave %s:\n", G_STRFUNC);

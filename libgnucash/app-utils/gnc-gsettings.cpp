@@ -24,30 +24,33 @@
 
 #include <config.h>
 
+
+#include <gio/gio.h>
+#include <glib.h>
+
+extern "C" {
 #include <stdio.h>
 #include <string.h>
 #include "gnc-gsettings.h"
 #include "gnc-path.h"
 #include "qof.h"
 #include "gnc-prefs-p.h"
+}
 
-#include <libxml/xmlmemory.h>
-#include <libxml/debugXML.h>
-#include <libxml/HTMLtree.h>
-#include <libxml/xmlIO.h>
-#include <libxml/xinclude.h>
-#include <libxml/catalog.h>
-#include <libxslt/xslt.h>
-#include <libxslt/xsltInternals.h>
-#include <libxslt/transform.h>
-#include <libxslt/xsltutils.h>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#include <fstream>
+#include <iostream>
 
+namespace bpt = boost::property_tree;
+
+#define GSET_SCHEMA_PREFIX "org.gnucash.GnuCash"
+#define GSET_SCHEMA_OLD_PREFIX "org.gnucash"
 #define CLIENT_TAG  "%s-%s-client"
 #define NOTIFY_TAG  "%s-%s-notify_id"
 
 static GHashTable *schema_hash = NULL;
 static const gchar *gsettings_prefix;
-static xmlExternalEntityLoader defaultEntityLoader = NULL;
 
 static GHashTable *registered_handlers_hash = NULL;
 
@@ -62,28 +65,17 @@ static gboolean gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key
     gchar **keys = NULL;
     gint i = 0;
     gboolean found = FALSE;
-#ifdef HAVE_GLIB_2_46
     GSettingsSchema *schema;
-#endif
 
     // Check if the key is valid key within settings
     if (!G_IS_SETTINGS(settings))
         return FALSE;
 
-#ifdef HAVE_GLIB_2_46
     g_object_get (settings, "settings-schema", &schema, NULL);
-
     if (!schema)
         return FALSE;
-#endif
 
-    // Get list of keys
-#ifdef HAVE_GLIB_2_46
-    keys = g_settings_schema_list_keys(schema);
-#else
-    keys = g_settings_list_keys(settings);
-#endif
-
+    keys = g_settings_schema_list_keys (schema);
     while (keys && keys[i])
     {
         if (!g_strcmp0(key, keys[i]))
@@ -93,8 +85,6 @@ static gboolean gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key
         }
         i++;
     }
-
-    // Free keys
     g_strfreev(keys);
 
     return found;
@@ -109,7 +99,7 @@ static GSettings * gnc_gsettings_get_settings_ptr (const gchar *schema_str)
     if (!schema_hash)
         schema_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-    gset = g_hash_table_lookup (schema_hash, full_name);
+    gset = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
     DEBUG ("Looking for schema %s returned gsettings %p", full_name, gset);
     if (!gset)
     {
@@ -147,41 +137,28 @@ handlers_hash_unblock_helper (gpointer key, gpointer settings_ptr, gpointer poin
 /*                      GSettings Utilities                 */
 /************************************************************/
 
-void
-gnc_gsettings_set_prefix (const gchar *prefix)
-{
-    gsettings_prefix = prefix;
-}
-
 const gchar *
 gnc_gsettings_get_prefix (void)
 {
-    if (!gsettings_prefix)
-    {
-        const char *prefix = g_getenv("GNC_GSETTINGS_PREFIX");
-        if (prefix)
-            gsettings_prefix = prefix;
-        else
-            gsettings_prefix = GSET_SCHEMA_PREFIX;
-    }
-    return gsettings_prefix;
+    return GSET_SCHEMA_PREFIX;
 }
 
 gchar *
 gnc_gsettings_normalize_schema_name (const gchar *name)
 {
-    if (name == NULL)
+    if (!name)
     {
         /* Need to return a newly allocated string */
-        return g_strdup(gnc_gsettings_get_prefix());
+        return g_strdup(GSET_SCHEMA_PREFIX);
     }
-    if (g_str_has_prefix (name, gnc_gsettings_get_prefix ()))
+    if (g_str_has_prefix (name, GSET_SCHEMA_PREFIX) ||
+       (g_str_has_prefix (name, GSET_SCHEMA_OLD_PREFIX)))
     {
         /* Need to return a newly allocated string */
         return g_strdup(name);
     }
 
-    return g_strjoin(".", gnc_gsettings_get_prefix(), name, NULL);
+    return g_strjoin(".", GSET_SCHEMA_PREFIX, name, NULL);
 }
 
 
@@ -253,11 +230,11 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
 
     handler_id = g_signal_handler_find (
                   settings_ptr,
-                  G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+                  static_cast<GSignalMatchType> (G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA),
                   g_signal_lookup ("changed", G_TYPE_SETTINGS), /* signal_id */
                   quark,   /* signal_detail */
                   NULL, /* closure */
-                  G_CALLBACK (func), /* callback function */
+                  func, /* callback function */
                   user_data);
 
     while (handler_id)
@@ -267,11 +244,11 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
 
         handler_id = g_signal_handler_find (
                       settings_ptr,
-                      G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+                      static_cast<GSignalMatchType> (G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA),
                       g_signal_lookup ("changed", G_TYPE_SETTINGS), /* signal_id */
                       quark,   /* signal_detail */
                       NULL, /* closure */
-                      G_CALLBACK (func), /* callback function */
+                      func, /* callback function */
                       user_data);
     }
 
@@ -333,7 +310,7 @@ void gnc_gsettings_bind (const gchar *schema,
     g_return_if_fail (G_IS_SETTINGS (settings_ptr));
 
     if (gnc_gsettings_is_valid_key (settings_ptr, key))
-        g_settings_bind (settings_ptr, key, object, property, 0);
+        g_settings_bind (settings_ptr, key, object, property, G_SETTINGS_BIND_DEFAULT);
     else
     {
         PERR ("Invalid key %s for schema %s", key, schema);
@@ -588,27 +565,17 @@ gnc_gsettings_reset_schema (const gchar *schema_str)
 {
     gchar **keys;
     gint counter = 0;
-
-#ifdef HAVE_GLIB_2_46
     GSettingsSchema *schema;
-#endif
     GSettings *settings = gnc_gsettings_get_settings_ptr (schema_str);
 
     if (!settings)
         return;
 
-#ifdef HAVE_GLIB_2_46
     g_object_get (settings, "settings-schema", &schema, NULL);
-
     if (!schema)
         return;
 
     keys = g_settings_schema_list_keys (schema);
-#else
-    keys = g_settings_list_keys (settings);
-#endif
-
-
     if (!keys)
         return;
 
@@ -632,8 +599,10 @@ void gnc_gsettings_load_backend (void)
     if (g_strcmp0 (g_getenv ("GNC_UNINSTALLED"), "1") == 0)
         return;
 
-    if (!prefsbackend)
-        prefsbackend = g_new0 (PrefsBackend, 1);
+    if (prefsbackend)
+        g_free (prefsbackend);
+
+    prefsbackend = g_new0 (PrefsBackend, 1);
 
     prefsbackend->register_cb = gnc_gsettings_register_cb;
     prefsbackend->remove_cb_by_func = gnc_gsettings_remove_cb_by_func;
@@ -658,28 +627,174 @@ void gnc_gsettings_load_backend (void)
     prefsbackend->block_all = gnc_gsettings_block_all;
     prefsbackend->unblock_all = gnc_gsettings_unblock_all;
 
+    /* Run any data model changes for the backend before it's used
+     * by anyone */
+    gnc_gsettings_version_upgrade();
+
     LEAVE("Prefsbackend bind = %p", prefsbackend->bind);
+}
+
+
+
+static GVariant *
+gnc_gsettings_get_user_value (const gchar *schema,
+                         const gchar *key)
+{
+    GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (settings_ptr), NULL);
+
+    if (gnc_gsettings_is_valid_key (settings_ptr, key))
+        return g_settings_get_user_value (settings_ptr, key);
+    else
+    {
+        PERR ("Invalid key %s for schema %s", key, schema);
+        return NULL;
+    }
+}
+
+static void
+migrate_one_key (const std::string &oldpath, const std::string &oldkey,
+                 const std::string &newpath, const std::string &newkey)
+{
+    PINFO ("Migrating '%s:%s' to '%s:%s'", oldpath.c_str(), oldkey.c_str(),
+           newpath.c_str(), newkey.c_str());
+    auto user_value = gnc_gsettings_get_user_value (oldpath.data(), oldkey.data());
+    if (user_value)
+        gnc_gsettings_set_value (newpath.data(), newkey.data(), user_value);
+}
+
+static void
+migrate_one_node (bpt::ptree &pt)
+{
+    /* loop over top-level property tree */
+    std::for_each (pt.begin(), pt.end(),
+            [] (std::pair<bpt::ptree::key_type, bpt::ptree> node)
+            {
+                if (node.first == "<xmlattr>")
+                    return;
+                if (node.first != "migrate")
+                {
+                    DEBUG ("Skipping non-<migrate> node <%s>", node.first.c_str());
+                    return;
+                }
+
+                auto oldpath = node.second.get_optional<std::string> ("<xmlattr>.old-path");
+                auto oldkey = node.second.get_optional<std::string> ("<xmlattr>.old-key");
+                auto newpath = node.second.get_optional<std::string> ("<xmlattr>.new-path");
+                auto newkey = node.second.get_optional<std::string> ("<xmlattr>.new-key");
+                if (!oldpath || !oldkey || !newpath || !newkey)
+                {
+                    DEBUG ("Skipping migration node - missing attribute (old-path, old-key, new-path or new-key)");
+                    return;
+                }
+                migrate_one_key (*oldpath, *oldkey, *newpath, *newkey);
+            });
+}
+
+static void
+migrate_settings (int old_maj_min)
+{
+    bpt::ptree pt;
+
+    auto pkg_data_dir = gnc_path_get_pkgdatadir();
+    auto migrate_file = std::string (pkg_data_dir) + "/migratable-prefs.xml";
+    g_free (pkg_data_dir);
+
+    std::ifstream migrate_stream {migrate_file};
+    if (!migrate_stream.is_open())
+    {
+        PWARN("Failed to load settings migration file '%s'", migrate_file.c_str());
+        return;
+    }
+
+    try
+    {
+        bpt::read_xml (migrate_stream, pt);
+    }
+    catch (bpt::xml_parser_error &e) {
+        PWARN ("Failed to parse GnuCash settings migration file.\n");
+        PWARN ("Error message:\n");
+        PWARN ("%s\n", e.what());
+        return;
+    }
+    catch (...) {
+        PWARN ("Unknown error while parsing GnuCash settings migration file.\n");
+        return;
+    }
+
+    /* loop over top-level property tree */
+    std::for_each (pt.begin(), pt.end(),
+            [&old_maj_min] (std::pair<bpt::ptree::key_type, bpt::ptree> node)
+            {
+                if (node.first != "release")
+                {
+                    DEBUG ("Skipping non-<release> node <%s>", node.first.c_str());
+                    return;
+                }
+                auto version = node.second.get_optional<int> ("<xmlattr>.version");
+                if (!version)
+                {
+                    DEBUG ("Skipping <release> node - no version attribute found");
+                    return;
+                }
+                if (*version <= old_maj_min)
+                {
+                    DEBUG ("Skipping <release> node - version %i is less than current compatibility level %i", *version, old_maj_min);
+                    return;
+                }
+                DEBUG ("Retrieved version value '%i'", *version);
+
+                migrate_one_node (node.second);
+            });
 }
 
 void gnc_gsettings_version_upgrade (void)
 {
     /* Use versioning to ensure this routine will only sync once for each
-     * superseded setting */
-    int old_maj_min = gnc_gsettings_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
-    int cur_maj_min = PROJECT_VERSION_MAJOR * 100 + PROJECT_VERSION_MINOR;
+     * superseded setting
+     * At first run of GnuCash 4.7 or more recent *all* settings will be migrated
+     * from prefix org.gnucash to org.gnucash.GnuCash, including our GNC_PREF_VERSION setting.
+     * As the logic to determine whether or not to upgrade depends on it we have to do
+     * some extra tests to figure when exactly to start doing migrations.
+     * - if GNC_PREF_VERSION is not set under old nor new prefix, that means
+     *   gnucash has never run before on this system = no migration necessary
+     * - if GNC_PREF_VERSION is set under old prefix, but not new prefix
+     *   => full migration from old to new prefix should still be run
+     * - if GNC_PREF_VERSION is set under both prefixes
+     *   => ignore old prefix and use new prefix result to determine which
+     *   migrations would still be needed.
+     */
+    ENTER("Start of settings migration routine.");
 
-    /* Convert settings to 3.0 compatibility level */
-    if (old_maj_min < 207)
+    auto ogG_maj_min = gnc_gsettings_get_user_value (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
+    auto og_maj_min = gnc_gsettings_get_user_value (GSET_SCHEMA_OLD_PREFIX "." GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
+
+    if (!ogG_maj_min && !og_maj_min)
     {
-        /* 'use-theme-colors' has been replaced with 'use-gnucash-color-theme'
-         * which inverts the meaning of the setting */
-        gboolean old_color_theme = gnc_gsettings_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_THEME_COLORS);
-        gnc_gsettings_set_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_GNUCASH_COLOR_THEME, !old_color_theme);
+        LEAVE("");
+        return;
     }
 
+    auto old_maj_min = 0;
+    if (!ogG_maj_min)
+        old_maj_min = gnc_gsettings_get_int (GSET_SCHEMA_OLD_PREFIX "." GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
+    else
+    {
+        g_variant_unref (ogG_maj_min);
+        old_maj_min = gnc_gsettings_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
+    }
+    g_variant_unref (og_maj_min);
+
+    PINFO ("Previous setting compatibility level: %i", old_maj_min);
+
+    migrate_settings (old_maj_min);
+
     /* Only write current version if it's more recent than what was set */
+    auto cur_maj_min = PROJECT_VERSION_MAJOR * 1000 + PROJECT_VERSION_MINOR;
     if (cur_maj_min > old_maj_min)
         gnc_gsettings_set_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION, cur_maj_min);
+
+    LEAVE("");
 }
 
 

@@ -1638,7 +1638,6 @@ void CsvImpPriceAssist::preview_refresh_table ()
     }
     gtk_tree_view_set_model (treeview, GTK_TREE_MODEL(store));
     gtk_tree_view_set_tooltip_column (treeview, PREV_COL_ERROR);
-    g_object_unref (store);
 
     /* Adjust treeview to go with the just created model. This consists of adding
      * or removing columns and resetting any parameters related to how

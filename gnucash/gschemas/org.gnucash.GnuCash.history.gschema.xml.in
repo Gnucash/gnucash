@@ -1,5 +1,5 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
-  <schema id="org.gnucash.history" path="/org/gnucash/history/">
+  <schema id="org.gnucash.GnuCash.history" path="/org/gnucash/GnuCash/history/">
     <key name="maxfiles" type="i">
       <default>4</default>
       <summary>Number of files in history</summary>

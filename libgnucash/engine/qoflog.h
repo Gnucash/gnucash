@@ -73,10 +73,11 @@
  *   @c "gnc.gui.plugin-pages.sx-list" or
  *   @c "gnc.register.gnome.cell.quickfill" are
  *   good examples.
- * @li Use glib-provided @c g_debug(...), @c g_message(...),
- *   @c g_warning(...), @c g_critical(...) and
- *   @c g_error(...) functions in preference to the historical qof/gnc @c
- *   PINFO, @c PERR (&c.) macros
+ * @li Prefer the macros defined here (PERR, PWARN, PINFO, etc.) to
+ *   the GLib-provided functions that they wrap because it allows us to
+ *   more easily replace the GLib logging functinos with another
+ *   implementation and besides our macros are able to short-circuit
+ *   GLib's rather slow domain and level matching.
  *
  * @see qof_log_parse_log_config(const char*)
  **/
@@ -170,9 +171,6 @@ const gchar * qof_log_prettify (const gchar *name);
  * @a log_level.  This implements the "log.path.hierarchy" logic. **/
 gboolean qof_log_check(QofLogModule log_module, QofLogLevel log_level);
 
-/** Set the default level for QOF-related log paths. **/
-void qof_log_set_default(QofLogLevel log_level);
-
 #define PRETTY_FUNC_NAME qof_log_prettify(G_STRFUNC)
 
 #ifdef _MSC_VER
@@ -203,36 +201,36 @@ void qof_log_set_default(QofLogLevel log_level);
 } while (0)
 
 /** Print an informational note */
-#define PINFO(format, ...) do { \
+#define PINFO(format, ...) \
+    if (qof_log_check(log_module, QOF_LOG_INFO) {    \
     g_log (log_module, G_LOG_LEVEL_INFO, \
       "[%s] " format, PRETTY_FUNC_NAME , __VA_ARGS__); \
-} while (0)
+}
 
 /** Print a debugging message */
-#define DEBUG(format, ...) do { \
-    g_log (log_module, G_LOG_LEVEL_DEBUG, \
-      "[%s] " format, PRETTY_FUNC_NAME , __VA_ARGS__); \
-} while (0)
+#define DEBUG(format, ...) \
+    if (qof_log_check(log_module, QOF_LOG_DEBUG) {    \
+        g_log (log_module, G_LOG_LEVEL_DEBUG,                           \
+               "[%s] " format, PRETTY_FUNC_NAME , __VA_ARGS__);         \
+}
 
 /** Print a function entry debugging message */
-#define ENTER(format, ...) do { \
-    if (qof_log_check(log_module, (QofLogLevel)G_LOG_LEVEL_DEBUG)) { \
+#define ENTER(format, ...) \
+    if (qof_log_check(log_module, QOFLOG_DEBUG)) { \
       g_log (log_module, G_LOG_LEVEL_DEBUG, \
         "[enter %s:%s()] " format, __FILE__, \
         PRETTY_FUNC_NAME , __VA_ARGS__); \
       qof_log_indent(); \
-    } \
-} while (0)
+}
 
 /** Print a function exit debugging message. **/
-#define LEAVE(format, ...) do { \
-    if (qof_log_check(log_module, (QofLogLevel)G_LOG_LEVEL_DEBUG)) { \
+#define LEAVE(format, ...) \
+    if (qof_log_check(log_module, QOF_LOG_DEBUG)) { \
       qof_log_dedent(); \
       g_log (log_module, G_LOG_LEVEL_DEBUG, \
         "[leave %s()] " format, \
         PRETTY_FUNC_NAME , __VA_ARGS__); \
-    } \
-} while (0)
+}
 
 #else /* _MSC_VER */
 
@@ -255,35 +253,39 @@ void qof_log_set_default(QofLogLevel log_level);
 } while (0)
 
 /** Print an informational note */
-#define PINFO(format, args...) do { \
-    g_log (log_module, G_LOG_LEVEL_INFO, \
-      "[%s] " format, PRETTY_FUNC_NAME , ## args); \
+#define PINFO(format, args...) do {                  \
+    if (qof_log_check(log_module, QOF_LOG_INFO)) {   \
+        g_log (log_module, G_LOG_LEVEL_INFO,         \
+               "[%s] " format, PRETTY_FUNC_NAME , ## args);     \
+    } \
 } while (0)
 
 /** Print a debugging message */
-#define DEBUG(format, args...) do { \
-    g_log (log_module, G_LOG_LEVEL_DEBUG, \
-      "[%s] " format, PRETTY_FUNC_NAME , ## args); \
-} while (0)
+#define DEBUG(format, args...) do {                      \
+    if (qof_log_check(log_module, QOF_LOG_DEBUG)) {      \
+        g_log (log_module, G_LOG_LEVEL_DEBUG,         \
+               "[%s] " format, PRETTY_FUNC_NAME , ## args);     \
+    } \
+} while(0)
 
 /** Print a function entry debugging message */
-#define ENTER(format, args...) do { \
-    if (qof_log_check(log_module, (QofLogLevel)G_LOG_LEVEL_DEBUG)) { \
-      g_log (log_module, G_LOG_LEVEL_DEBUG, \
-        "[enter %s:%s()] " format, __FILE__, \
-        PRETTY_FUNC_NAME , ## args); \
-      qof_log_indent(); \
+#define ENTER(format, args...) do {                     \
+    if (qof_log_check(log_module, QOF_LOG_DEBUG)) {     \
+        g_log (log_module, G_LOG_LEVEL_DEBUG,           \
+               "[enter %s:%s()] " format, __FILE__,     \
+               PRETTY_FUNC_NAME , ## args);             \
+        qof_log_indent();                               \
     } \
 } while (0)
 
 /** Print a function exit debugging message. **/
-#define LEAVE(format, args...) do { \
-    if (qof_log_check(log_module, (QofLogLevel)G_LOG_LEVEL_DEBUG)) { \
-      qof_log_dedent(); \
-      g_log (log_module, G_LOG_LEVEL_DEBUG, \
-        "[leave %s()] " format, \
-        PRETTY_FUNC_NAME , ## args); \
-    } \
+#define LEAVE(format, args...) do {                     \
+    if (qof_log_check(log_module, QOF_LOG_DEBUG)) {     \
+        qof_log_dedent();                               \
+        g_log (log_module, G_LOG_LEVEL_DEBUG,           \
+               "[leave %s()] " format,                  \
+               PRETTY_FUNC_NAME , ## args);             \
+    }                                                   \
 } while (0)
 
 #endif /* _MSC_VER */

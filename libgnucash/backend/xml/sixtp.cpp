@@ -31,6 +31,7 @@ extern "C"
 #include <stdarg.h>
 #include <stdio.h>
 #include <sys/types.h>
+#include <qoflog.h>
 #ifdef _MSC_VER
     typedef int ssize_t;
 # define g_fopen fopen
@@ -43,6 +44,7 @@ extern "C"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.backend.file.sixtp"
+static QofLogModule log_module = "gnc.backend.file.sixtp";
 
 extern const gchar* gnc_v2_xml_version_string;        /* see io-gncxml-v2.c */
 
@@ -169,7 +171,7 @@ sixtp_set_any (sixtp* tochange, int cleanup, ...)
 
     if (!tochange)
     {
-        g_warning ("Null tochange passed");
+        PWARN ("Null tochange passed");
         return NULL;
     }
 
@@ -266,7 +268,7 @@ sixtp_destroy_child (gpointer key, gpointer value, gpointer user_data)
     gpointer lookup_key;
     gpointer lookup_value;
 
-    g_debug ("Killing sixtp child under key <%s>", key ? (char*) key : "(null)");
+    DEBUG ("Killing sixtp child under key <%s>", key ? (char*) key : "(null)");
 
     if (!corpses)
     {
@@ -350,7 +352,7 @@ sixtp_add_some_sub_parsers (sixtp* tochange, int cleanup, ...)
         handler = va_arg (ap, sixtp*);
         if (!handler)
         {
-            g_warning ("Handler for tag %s is null",
+            PWARN ("Handler for tag %s is null",
                        tag ? tag : "(null)");
 
             if (cleanup)
@@ -521,7 +523,7 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
        necessary? */
     if (g_strcmp0 (current_frame->tag, (gchar*) name) != 0)
     {
-        g_warning ("bad closing tag (start <%s>, end <%s>)", current_frame->tag, name);
+        PWARN ("bad closing tag (start <%s>, end <%s>)", current_frame->tag, name);
         pdata->parsing_ok = FALSE;
 
         /* See if we're just off by one and try to recover */
@@ -530,7 +532,7 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
             pdata->stack = sixtp_pop_and_destroy_frame (pdata->stack);
             current_frame = (sixtp_stack_frame*) pdata->stack->data;
             parent_frame = (sixtp_stack_frame*) pdata->stack->next->data;
-            g_warning ("found matching start <%s> tag up one level", name);
+            PWARN ("found matching start <%s> tag up one level", name);
         }
     }
 
@@ -566,7 +568,7 @@ sixtp_sax_end_handler (void* user_data, const xmlChar* name)
     /* grab it before it goes away - we own the reference */
     end_tag = current_frame->tag;
 
-    g_debug ("Finished with end of <%s>", end_tag ? end_tag : "(null)");
+    DEBUG ("Finished with end of <%s>", end_tag ? end_tag : "(null)");
 
     /*sixtp_print_frame_stack(pdata->stack, stderr);*/
 
@@ -754,7 +756,7 @@ sixtp_parse_file (sixtp* sixtp,
         gchar* conv_name = g_win32_locale_filename_from_utf8 (filename);
         if (!conv_name)
         {
-            g_warning ("Could not convert '%s' to system codepage", filename);
+            PWARN ("Could not convert '%s' to system codepage", filename);
             return FALSE;
         }
         context = xmlCreateFileParserCtxt (conv_name);
@@ -776,7 +778,7 @@ sixtp_parser_read (void* context, char* buffer, int len)
 
     ret = fread (&buffer[0], sizeof (char), len, (FILE*) context);
     if (ret < 0)
-        g_warning ("Error reading XML file");
+        PWARN ("Error reading XML file");
     return ret;
 }
 

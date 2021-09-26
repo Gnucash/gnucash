@@ -2,7 +2,6 @@
 *.gmo
 *.go
 *.gschema.xml
-*.gschema.xml.in
 *.gschema.valid
 *.la
 *.lo

@@ -102,6 +102,6 @@ static void
 gnc_plugin_example_cmd_test (GtkAction *action, GncMainWindowActionData *data)
 {
     ENTER ("action %p, main window data %p", action, data);
-    g_message ("example");
+    PINFO ("example");
     LEAVE (" ");
 }

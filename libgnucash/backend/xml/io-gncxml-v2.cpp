@@ -95,7 +95,7 @@ typedef struct
     gint fd;
     gchar* filename;
     gchar* perms;
-    gboolean compress;
+    gboolean write;
 } gz_thread_params_t;
 
 /* Callback structure */
@@ -125,8 +125,8 @@ gnc_v2_book_version_string;        /* see gnc-book-xml-v2 */
 
 /* Forward declarations */
 static FILE* try_gz_open (const char* filename, const char* perms,
-                          gboolean use_gzip,
-                          gboolean compress);
+                          gboolean compress,
+                          gboolean write);
 static gboolean is_gzipped_file (const gchar* name);
 static gboolean wait_for_gzip (FILE* file);
 
@@ -1433,7 +1433,7 @@ gz_thread_func (gz_thread_params_t* params)
         goto cleanup_gz_thread_func;
     }
 
-    if (params->compress)
+    if (params->write)
     {
         while (success)
         {
@@ -1451,6 +1451,7 @@ gz_thread_func (gz_thread_params_t* params)
             }
             else if (bytes == 0)
             {
+                printf("gz_thread_func EOF\n");
                 break;
             }
             else
@@ -1513,17 +1514,17 @@ cleanup_gz_thread_func:
 }
 
 static FILE*
-try_gz_open (const char* filename, const char* perms, gboolean use_gzip,
-             gboolean compress)
+try_gz_open (const char* filename, const char* perms, gboolean compress,
+             gboolean write)
 {
     if (strstr (filename, ".gz.") != NULL) /* its got a temp extension */
-        use_gzip = TRUE;
+        compress = TRUE;
 
-    if (!use_gzip)
+    if (!compress)
         return g_fopen (filename, perms);
 
     {
-        int filedes[2];
+        int filedes[2]{};
         GThread* thread;
         gz_thread_params_t* params;
         FILE* file;
@@ -1532,18 +1533,31 @@ try_gz_open (const char* filename, const char* perms, gboolean use_gzip,
         if (_pipe (filedes, 4096, _O_BINARY) < 0)
         {
 #else
-        if (pipe (filedes) < 0)
+        /* Set CLOEXEC on the pipe FDs so that if the user runs a
+         * report while saving WebKit's fork won't get an open copy
+         * and keep the pipe from closing. See
+         * https://bugs.gnucash.org/show_bug.cgi?id=798250. Win32
+         * doesn't fork nor does it support CLOEXEC.
+         */
+        if (pipe (filedes) < 0 ||
+            fcntl(filedes[0], F_SETFD, FD_CLOEXEC) == -1 ||
+	    fcntl(filedes[1], F_SETFD, FD_CLOEXEC) == -1)
         {
 #endif
-            g_warning ("Pipe call failed. Opening uncompressed file.");
+            g_warning ("Pipe setup failed with errno %d. Opening uncompressed file.", errno);
+            if (filedes[0])
+            {
+                close(filedes[0]);
+                close(filedes[1]);
+            }
             return g_fopen (filename, perms);
         }
 
         params = g_new (gz_thread_params_t, 1);
-        params->fd = filedes[compress ? 0 : 1];
+        params->fd = filedes[write ? 0 : 1];
         params->filename = g_strdup (filename);
         params->perms = g_strdup (perms);
-        params->compress = compress;
+        params->write = write;
 
         thread = g_thread_new ("xml_thread", (GThreadFunc) gz_thread_func,
                                params);
@@ -1559,7 +1573,7 @@ try_gz_open (const char* filename, const char* perms, gboolean use_gzip,
             return g_fopen (filename, perms);
         }
 
-        if (compress)
+        if (write)
             file = fdopen (filedes[1], "w");
         else
             file = fdopen (filedes[0], "r");

@@ -145,9 +145,6 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     scm_set_current_module(main_mod);
     scm_c_use_module("gnucash app-utils");
 
-    /* Check whether the settings need a version update */
-    gnc_gsettings_version_upgrade ();
-
     gnc_gnome_utils_init();
     gnc_search_core_initialize ();
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_search_core_finalize, NULL, NULL);

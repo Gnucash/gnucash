@@ -1,0 +1,64 @@
+
+<release version="4007">
+
+<migrate old-path="org.gnucash.dialogs.flicker"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.flicker"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.ab-initial"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.ab-initial"
+         new-key="last-geometry"/>
+
+<migrate old-path="org.gnucash.dialogs.import.hbci"
+         old-key="close-on-finish"
+         new-path="org.gnucash.GnuCash.dialogs.import.hbci"
+         new-key="close-on-finish"/>
+
+<migrate old-path="org.gnucash.dialogs.import.hbci"
+         old-key="remember-pin"
+         new-path="org.gnucash.GnuCash.dialogs.import.hbci"
+         new-key="remember-pin"/>
+
+<migrate old-path="org.gnucash.dialogs.import.hbci"
+         old-key="use-ns-transaction-text"
+         new-path="org.gnucash.GnuCash.dialogs.import.hbci"
+         new-key="use-ns-transaction-text"/>
+
+<migrate old-path="org.gnucash.dialogs.import.hbci"
+         old-key="verbose-debug"
+         new-path="org.gnucash.GnuCash.dialogs.import.hbci"
+         new-key="verbose-debug"/>
+
+<migrate old-path="org.gnucash.dialogs.import.hbci"
+         old-key="format-dtaus"
+         new-path="org.gnucash.GnuCash.dialogs.import.hbci"
+         new-key="format-dtaus"/>
+
+<migrate old-path="org.gnucash.dialogs.import.hbci"
+         old-key="format-csv"
+         new-path="org.gnucash.GnuCash.dialogs.import.hbci"
+         new-key="format-csv"/>
+
+<migrate old-path="org.gnucash.dialogs.import.hbci"
+         old-key="format-swift-mt940"
+         new-path="org.gnucash.GnuCash.dialogs.import.hbci"
+         new-key="format-swift-mt940"/>
+
+<migrate old-path="org.gnucash.dialogs.import.hbci"
+         old-key="format-swift-mt942"
+         new-path="org.gnucash.GnuCash.dialogs.import.hbci"
+         new-key="format-swift-mt942"/>
+
+<migrate old-path="org.gnucash.dialogs.import.hbci"
+         old-key="last-path"
+         new-path="org.gnucash.GnuCash.dialogs.import.hbci"
+         new-key="last-path"/>
+
+<migrate old-path="org.gnucash.dialogs.import.hbci.connection-dialog"
+         old-key="last-geometry"
+         new-path="org.gnucash.GnuCash.dialogs.import.hbci.connection-dialog"
+         new-key="last-geometry"/>
+
+</release>

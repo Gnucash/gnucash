@@ -30,9 +30,11 @@
 
 #include "basiccell.h"
 #include "formulacell.h"
+#include <qoflog.h>
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.register.core.formulacell"
+static const QofLogModule log_module = G_LOG_DOMAIN;
 
 static void gnc_formula_cell_init( FormulaCell *fc );
 
@@ -83,7 +85,7 @@ void
 gnc_formula_cell_set_value( FormulaCell *fc,
                             const char *newVal )
 {
-    g_debug("got value [%s]", newVal);
+    DEBUG("got value [%s]", newVal);
     gnc_formula_cell_set_value_internal( &fc->cell, newVal );
 }
 
@@ -94,7 +96,7 @@ gnc_formula_cell_enter( BasicCell *_cell,
                         int *start_selection,
                         int *end_selection )
 {
-    g_debug("%d, %d, %d", *cursor_position, *start_selection, *end_selection);
+    DEBUG("%d, %d, %d", *cursor_position, *start_selection, *end_selection);
     *cursor_position = -1;
     *start_selection = 0;
     *end_selection   = -1;
@@ -139,7 +141,7 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
     const char *toks = "+-*/=()_:";
     char *validated_newval = NULL;
 
-    g_debug("%s, %d, %s, %d, %d, %d, %d",
+    DEBUG("%s, %d, %s, %d, %d, %d, %d",
             change ? (gchar *)change : "(null)", change_len,
             newval ? (gchar *)newval : "(null)", newval_len,
             *cursor_position, *start_selection, *end_selection);
@@ -170,6 +172,6 @@ gnc_formula_cell_set_value_internal( BasicCell *_cell,
                                      const char *str )
 {
     FormulaCell *fc = (FormulaCell*)_cell;
-    g_debug("internal string: [%s]", str);
+    DEBUG("internal string: [%s]", str);
     gnc_basic_cell_set_value_internal( &fc->cell, str );
 }

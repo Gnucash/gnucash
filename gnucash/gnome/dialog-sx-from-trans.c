@@ -650,16 +650,16 @@ gnc_sx_trans_window_response_cb (GtkDialog *dialog,
     switch (response)
     {
     case GTK_RESPONSE_OK:
-        g_debug(" OK");
+        DEBUG(" OK");
         sxftd_ok_clicked(sxfti);
         break;
     case SXFTD_RESPONSE_ADVANCED:
-        g_debug(" ADVANCED");
+        DEBUG(" ADVANCED");
         sxftd_advanced_clicked(sxfti);
         break;
     case GTK_RESPONSE_CANCEL:
     default:
-        g_debug(" CANCEL");
+        DEBUG(" CANCEL");
         sxftd_close(sxfti, TRUE);
         break;
 

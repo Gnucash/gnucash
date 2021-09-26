@@ -274,7 +274,7 @@ var_name_from_commodities(gnc_commodity* split_c, gnc_commodity* txn_c)
                                        split_m ? split_m : "(null)",
                                        txn_m ? txn_m : "(null)");
 
-    g_debug("var_name is %s", var_name);
+    DEBUG("var_name is %s", var_name);
     return var_name;
 }
 
@@ -831,7 +831,7 @@ _find_unreferenced_vars(gchar *key,
     if (cb_pair->hash ==  NULL ||
         !g_hash_table_lookup_extended(cb_pair->hash, key, NULL, NULL))
     {
-        g_debug("variable [%s] not found", key);
+        DEBUG("variable [%s] not found", key);
         cb_pair->list = g_list_append(cb_pair->list, key);
     }
 }
@@ -914,7 +914,7 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
             g_hash_table_foreach(existing->variable_names, (GHFunc)_find_unreferenced_vars, &removed_cb_data);
             removed_var_names = removed_cb_data.list;
         }
-        g_debug("%d removed variables", g_list_length(removed_var_names));
+        DEBUG("%d removed variables", g_list_length(removed_var_names));
 
         if (new_instances->variable_names != NULL)
         {
@@ -924,7 +924,7 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
             g_hash_table_foreach(new_instances->variable_names, (GHFunc)_find_unreferenced_vars, &added_cb_data);
             added_var_names = added_cb_data.list;
         }
-        g_debug("%d added variables", g_list_length(added_var_names));
+        DEBUG("%d added variables", g_list_length(added_var_names));
 
         if (existing->variable_names != NULL)
         {
@@ -1148,7 +1148,7 @@ split_apply_exchange_rate (Split *split, GHashTable *bindings,
     if (exchange_rate_var != NULL)
     {
         exchange_rate = exchange_rate_var->value;
-        g_debug("exchange_rate is %s", gnc_numeric_to_string (exchange_rate));
+        DEBUG("exchange_rate is %s", gnc_numeric_to_string (exchange_rate));
     }
     g_free (exchange_rate_var_name);
 
@@ -1161,7 +1161,7 @@ split_apply_exchange_rate (Split *split, GHashTable *bindings,
                               GNC_HOW_RND_ROUND_HALF_UP);
 
 
-    g_debug("amount is %s for memo split '%s'", gnc_numeric_to_string (amt),
+    DEBUG("amount is %s for memo split '%s'", gnc_numeric_to_string (amt),
             xaccSplitGetMemo (split));
     xaccSplitSetAmount(split, amt); /* marks split dirty */
 
@@ -1191,10 +1191,10 @@ get_transaction_currency(SxTxnCreationData *creation_data,
         creation_data ? creation_data->creation_errors : NULL;
 
     if (txn_cmdty)
-        g_debug("Template txn currency is %s.",
+        DEBUG("Template txn currency is %s.",
                 gnc_commodity_get_mnemonic (txn_cmdty));
     else
-        g_debug("No template txn currency.");
+        DEBUG("No template txn currency.");
 
     for (;txn_splits; txn_splits = txn_splits->next)
     {
@@ -1260,7 +1260,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     new_txn = xaccTransCloneNoKvp(template_txn);
     xaccTransBeginEdit(new_txn);
 
-    g_debug("creating template txn desc [%s] for sx [%s]",
+    DEBUG("creating template txn desc [%s] for sx [%s]",
             xaccTransGetDescription(new_txn),
             xaccSchedXactionGetName(sx));
 
@@ -1320,7 +1320,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             gnc_numeric final = split_apply_formulas(template_split,
                                                      creation_data);
             xaccSplitSetValue(copying_split, final);
-            g_debug("value is %s for memo split '%s'",
+            DEBUG("value is %s for memo split '%s'",
                     gnc_numeric_to_string (final),
                     xaccSplitGetMemo (copying_split));
             if (! gnc_commodity_equal(split_cmdty, txn_cmdty))
@@ -1631,11 +1631,11 @@ gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary
 void
 gnc_sx_summary_print(const GncSxSummary *summary)
 {
-    g_message("num_instances: %d", summary->num_instances);
-    g_message("num_to_create: %d", summary->num_to_create_instances);
-    g_message("num_auto_create_instances: %d", summary->num_auto_create_instances);
-    g_message("num_auto_create_no_notify_instances: %d", summary->num_auto_create_no_notify_instances);
-    g_message("need dialog? %s", summary->need_dialog ? "true" : "false");
+    PINFO("num_instances: %d", summary->num_instances);
+    PINFO("num_to_create: %d", summary->num_to_create_instances);
+    PINFO("num_auto_create_instances: %d", summary->num_auto_create_instances);
+    PINFO("num_auto_create_no_notify_instances: %d", summary->num_auto_create_no_notify_instances);
+    PINFO("need dialog? %s", summary->need_dialog ? "true" : "false");
 }
 
 static void gnc_numeric_free(gpointer data)
@@ -1711,7 +1711,7 @@ static void add_to_hash_amount(GHashTable* hash, const GncGUID* guid, const gnc_
     }
 
     /* In case anyone wants to see this in the debug log. */
-    g_debug("Adding to guid [%s] the value [%s]. Value now [%s].",
+    DEBUG("Adding to guid [%s] the value [%s]. Value now [%s].",
             guidstr,
             gnc_num_dbg_to_string(*amount),
             gnc_num_dbg_to_string(*elem));
@@ -1724,7 +1724,7 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
     GList *template_splits;
     const gnc_commodity *first_cmdty = NULL;
 
-    g_debug("Evaluating txn desc [%s] for sx [%s]",
+    DEBUG("Evaluating txn desc [%s] for sx [%s]",
             xaccTransGetDescription(template_txn),
             xaccSchedXactionGetName(creation_data->sx));
 
@@ -1748,7 +1748,7 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
         /* Get the account that should be used for this split. */
         if (!_get_template_split_account(creation_data->sx, template_split, &split_acct, creation_data->creation_errors))
         {
-            g_debug("Could not find account for split");
+            DEBUG("Could not find account for split");
             break;
         }
 
@@ -1828,7 +1828,7 @@ instantiate_cashflow_internal(const SchedXaction* sx,
 
     if (!xaccSchedXactionGetEnabled(sx))
     {
-        g_debug("Skipping non-enabled SX [%s]",
+        DEBUG("Skipping non-enabled SX [%s]",
                 xaccSchedXactionGetName(sx));
         return;
     }

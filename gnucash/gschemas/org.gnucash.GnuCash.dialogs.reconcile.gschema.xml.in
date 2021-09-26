@@ -1,5 +1,5 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
-  <schema id="org.gnucash.dialogs.reconcile" path="/org/gnucash/dialogs/reconcile/">
+  <schema id="org.gnucash.GnuCash.dialogs.reconcile" path="/org/gnucash/GnuCash/dialogs/reconcile/">
     <key name="check-cleared" type="b">
       <default>true</default>
       <summary>Pre-select cleared transactions</summary>

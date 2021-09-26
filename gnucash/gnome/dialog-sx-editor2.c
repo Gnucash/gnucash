@@ -421,7 +421,7 @@ gnc_sxed_check_changed (GncSxEditorDialog2 *sxed)
         sx_start_date = *xaccSchedXactionGetStartDate (sxed->sx);
         sx_schedule_str = recurrenceListToString (gnc_sx_get_schedule (sxed->sx));
 
-        g_debug ("dialog schedule [%s], sx schedule [%s]",
+        DEBUG ("dialog schedule [%s], sx schedule [%s]",
                 dialog_schedule_str, sx_schedule_str);
 
         schedules_are_the_same = (strcmp (dialog_schedule_str, sx_schedule_str) == 0);
@@ -485,7 +485,7 @@ check_credit_debit_balance (gpointer key,
         if (gnc_numeric_zero_p (gnc_numeric_sub_fixed (tcds->debitSum,
                                  tcds->creditSum)))
         {
-            g_debug ("%p | true [%s - %s = %s]",
+            DEBUG ("%p | true [%s - %s = %s]",
                      key,
                      gnc_numeric_to_string (tcds->debitSum),
                      gnc_numeric_to_string (tcds->creditSum),
@@ -494,7 +494,7 @@ check_credit_debit_balance (gpointer key,
         }
         else
         {
-            g_debug ("%p | false [%s - %s = %s]",
+            DEBUG ("%p | false [%s - %s = %s]",
                      key,
                      gnc_numeric_to_string (tcds->debitSum),
                      gnc_numeric_to_string (tcds->creditSum),
@@ -970,7 +970,7 @@ gnc_sxed_save_sx (GncSxEditorDialog2 *sxed )
         gnc_sx_set_schedule (sxed->sx, schedule);
         {
             gchar *recurrence_str = recurrenceListToCompactString (schedule);
-            g_debug("recurrences parsed [%s]", recurrence_str);
+            DEBUG("recurrences parsed [%s]", recurrence_str);
             g_free (recurrence_str);
         }
 
@@ -1122,7 +1122,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create2 (GtkWindow *parent,
                                          sx);
     if (dlgExists != NULL)
     {
-        g_debug ("dialog already exists; using that one.");
+        DEBUG ("dialog already exists; using that one.");
         sxed = (GncSxEditorDialog2*)dlgExists->data;
         gtk_window_present (GTK_WINDOW (sxed->dialog));
         g_list_free (dlgExists);
