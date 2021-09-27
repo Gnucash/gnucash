@@ -1668,7 +1668,7 @@ For example setting this to 2.0 will display reports at twice their typical size
       <summary>Last pathname used</summary>
       <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
     </key>
-    <child name="connection-dialog" schema="org.gnucash.GnuCash.dialogs.import.hbci.connection-dialog"/>
+    <child name="connection-dialog" schema="org.gnucash.dialogs.import.hbci.connection-dialog"/>
   </schema>
 
   <schema id="org.gnucash.dialogs.import.hbci.connection-dialog" path="/org/gnucash/dialogs/import/hbci/connection-dialog/">
