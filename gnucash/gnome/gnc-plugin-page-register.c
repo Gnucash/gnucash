@@ -4072,13 +4072,6 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
     if (trans == NULL)
         return;
 
-    if (xaccTransGetReversedBy (trans))
-    {
-        gnc_error_dialog (GTK_WINDOW (window), "%s",
-                          _ ("A reversing entry has already been created for this transaction."));
-        return;
-    }
-
     split = gnc_split_register_get_current_split (reg);
     account = xaccSplitGetAccount (split);
 
@@ -4086,6 +4079,17 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
     {
         LEAVE ("shouldn't try to reverse the blank transaction...");
         return;
+    }
+
+    new_trans = xaccTransGetReversedBy (trans);
+    if (new_trans)
+    {
+        const char *rev = _("A reversing entry has already been created for this transaction.");
+        const char *jump = _("Jump to the transaction?");
+        if (gnc_verify_dialog (GTK_WINDOW (window), TRUE, "%s\n\n%s", rev, jump))
+            goto jump_to_trans;
+        else
+            return;
     }
 
     if (!gnc_dup_time64_dialog (window, _("Reverse Transaction"),
@@ -4104,6 +4108,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
 
     gnc_resume_gui_refresh();
 
+ jump_to_trans:
     /* Now jump to new trans */
     gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE (page));
     split = xaccTransFindSplitByAccount(new_trans, account);
@@ -4558,13 +4563,15 @@ gnc_plugin_page_register_cmd_stock_split (GtkAction* action,
                                           GncPluginPageRegister* page)
 {
     Account* account;
+    GtkWindow* window;
 
     ENTER ("(action %p, plugin_page %p)", action, page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     account = gnc_plugin_page_register_get_account (page);
-    gnc_stock_split_dialog (NULL, account);
+    window = gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window));
+    gnc_stock_split_dialog (GTK_WIDGET (window), account);
     LEAVE (" ");
 }
 
@@ -4726,6 +4733,7 @@ gnc_plugin_page_register_cmd_jump_linked_invoice (GtkAction* action,
     SplitRegister* reg;
     GncInvoice* invoice;
     Transaction *txn;
+    GtkWidget *window;
 
     ENTER ("(action %p, plugin_page %p)", action, plugin_page);
 
@@ -4734,6 +4742,7 @@ gnc_plugin_page_register_cmd_jump_linked_invoice (GtkAction* action,
     reg = gnc_ledger_display_get_split_register (priv->gsr->ledger);
     txn = gnc_split_register_get_current_trans (reg);
     invoice = invoice_from_split (gnc_split_register_get_current_split (reg));
+    window = GNC_PLUGIN_PAGE(plugin_page)->window;
 
     if (!invoice)
     {
@@ -4768,7 +4777,7 @@ gnc_plugin_page_register_cmd_jump_linked_invoice (GtkAction* action,
             }
             details = g_list_reverse (details);
             choice = gnc_choose_radio_option_dialog
-                (GNC_PLUGIN_PAGE (plugin_page)->window, _("Select document"),
+                (window, _("Select document"),
                  _("Several documents are linked with this transaction. \
 Please choose one:"), _("Select"), 0, details);
             if (choice >= 0)
@@ -4779,7 +4788,10 @@ Please choose one:"), _("Select"), 0, details);
     }
 
     if (invoice)
-        gnc_ui_invoice_edit (NULL, invoice);
+    {
+        GtkWindow *gtk_window = gnc_window_get_gtk_window (GNC_WINDOW (window));
+        gnc_ui_invoice_edit (gtk_window, invoice);
+    }
 
     LEAVE (" ");
 }

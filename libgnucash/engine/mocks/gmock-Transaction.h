@@ -33,7 +33,6 @@ public:
         marker              = 0;
         orig                = nullptr;
         readonly_reason     = nullptr;
-        reason_cache_valid  = FALSE;
         isClosingTxn_cached = -1;
     }
     void* operator new(size_t size)
