@@ -4,8 +4,9 @@ if (WITH_AQBANKING)
 
   add_gschema_targets("${aqb_GSCHEMA}")
 
-  file(READ migratable-prefs.xml migratable-prefs)
-  file(APPEND ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml ${migratable-prefs})
+  set(local_migration_files ${gschema_migration_files})
+  list(APPEND local_migration_files ${CMAKE_CURRENT_SOURCE_DIR}/migratable-prefs.xml)
+  set(gschema_migration_files ${local_migration_files} CACHE INTERNAL "gschema migration files")
 endif()
 
 set_dist_list(aqbanking_gschema_DIST

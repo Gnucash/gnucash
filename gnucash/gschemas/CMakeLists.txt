@@ -22,8 +22,19 @@ set(gschema_SOURCES
 
 add_gschema_targets("${gschema_SOURCES}")
 
+set(local_migration_files ${gschema_migration_files})
+list(APPEND local_migration_files ${CMAKE_CURRENT_SOURCE_DIR}/migratable-prefs.xml)
+set(gschema_migration_files ${local_migration_files} CACHE INTERNAL "gschema migration files")
+
 # Provide gnucash runtime with a list of migratable preferences
-configure_file(migratable-prefs.xml ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml COPYONLY)
+add_custom_command(
+    OUTPUT ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml
+    COMMAND ${CMAKE_COMMAND} -E cat ${gschema_migration_files} > ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml
+    DEPENDS ${gschema_migration_files}
+)
+
+add_custom_target(migratable-prefs ALL DEPENDS ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml)
+
 install(FILES ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml
         DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME})
 
