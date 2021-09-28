@@ -3,8 +3,10 @@ Version history:
 4.8  - 28 September 2021
 The ninth release of the 4.x stable series.
 
-This is a snap release to fix a crasher bug on Linux. The only change is
-     GSettings hotfix - resolve crash due to bad schema reference
+This is a snap release to fix a crasher bug on Linux. The only changes are
+    [gsettings] Avoid crash from settings schema not being registered.
+    Rethink how gsettings migration file is constructed
+    GSettings hotfix - resolve crash due to bad schema reference
 
 4.7  - 26 September 2021
 The eighth release of the 4.x stable series.
