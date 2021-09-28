@@ -4072,6 +4072,13 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
     if (trans == NULL)
         return;
 
+    if (xaccTransGetReversedBy (trans))
+    {
+        gnc_error_dialog (GTK_WINDOW (window), "%s",
+                          _ ("A reversing entry has already been created for this transaction."));
+        return;
+    }
+
     split = gnc_split_register_get_current_split (reg);
     account = xaccSplitGetAccount (split);
 
@@ -4079,17 +4086,6 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
     {
         LEAVE ("shouldn't try to reverse the blank transaction...");
         return;
-    }
-
-    new_trans = xaccTransGetReversedBy (trans);
-    if (new_trans)
-    {
-        const char *rev = _("A reversing entry has already been created for this transaction.");
-        const char *jump = _("Jump to the transaction?");
-        if (gnc_verify_dialog (GTK_WINDOW (window), TRUE, "%s\n\n%s", rev, jump))
-            goto jump_to_trans;
-        else
-            return;
     }
 
     if (!gnc_dup_time64_dialog (window, _("Reverse Transaction"),
@@ -4108,7 +4104,6 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
 
     gnc_resume_gui_refresh();
 
- jump_to_trans:
     /* Now jump to new trans */
     gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE (page));
     split = xaccTransFindSplitByAccount(new_trans, account);
