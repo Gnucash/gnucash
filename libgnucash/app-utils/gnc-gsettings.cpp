@@ -101,9 +101,13 @@ static GSettings * gnc_gsettings_get_settings_ptr (const gchar *schema_str)
 
     gset = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
     DEBUG ("Looking for schema %s returned gsettings %p", full_name, gset);
+    auto schema_source{g_settings_schema_source_get_default(                                                            )};
     if (!gset)
     {
-        gset = g_settings_new (full_name);
+        auto schema_source {g_settings_schema_source_get_default()};
+        auto schema {g_settings_schema_source_lookup(schema_source, full_name,
+                                                     FALSE)};
+        gset = g_settings_new_full (schema, nullptr, nullptr);
         DEBUG ("Created gsettings object %p for schema %s", gset, full_name);
         if (G_IS_SETTINGS(gset))
             g_hash_table_insert (schema_hash, full_name, gset);
@@ -114,7 +118,6 @@ static GSettings * gnc_gsettings_get_settings_ptr (const gchar *schema_str)
     {
         g_free(full_name);
     }
-
     LEAVE("");
     return gset;
 }
