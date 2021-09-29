@@ -101,7 +101,7 @@ static GSettings * gnc_gsettings_get_settings_ptr (const gchar *schema_str)
 
     gset = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
     DEBUG ("Looking for schema %s returned gsettings %p", full_name, gset);
-    auto schema_source{g_settings_schema_source_get_default(                                                            )};
+
     if (!gset)
     {
         auto schema_source {g_settings_schema_source_get_default()};
