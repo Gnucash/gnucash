@@ -29,7 +29,7 @@ set(gschema_migration_files ${local_migration_files} CACHE INTERNAL "gschema mig
 # Provide gnucash runtime with a list of migratable preferences
 add_custom_command(
     OUTPUT ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml
-    COMMAND ${CMAKE_COMMAND} -E cat ${gschema_migration_files} > ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml
+    COMMAND cat ${gschema_migration_files} > ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml
     DEPENDS ${gschema_migration_files}
 )
 
