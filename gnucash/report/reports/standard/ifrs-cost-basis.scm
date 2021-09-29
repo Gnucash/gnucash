@@ -22,6 +22,7 @@
 (define-module (gnucash reports standard ifrs-cost-basis))
 
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-9))
 (use-modules (ice-9 match))
 (use-modules (gnucash utilities))
 (use-modules (gnucash report))
@@ -57,7 +58,7 @@ that this report will accurately portray this options activity.")))
 (define optname-proceeds-acct "Proceeds Account")
 (define optname-dividend-acct "Dividend Account")
 (define optname-capgains-acct "Cap Gains Account")
-;; (define optname-fees-acct "Fees Account")
+(define optname-fees-acct "Fees Account")
 (define optname-report-currency "Report's currency")
 
 (define optname-format-cells "Format monetary cells")
@@ -70,6 +71,10 @@ for shorts. Disable to use alternate style every other row")
 (define optname-cap-purch-costs "Capitalise purchase commissions")
 (define opthelp-cap-purch-costs "Check this option to capitalise purchase \
 commissions in cumulative average cost and gain/loss after commission")
+
+(define optname-cap-fee-action "Action field filter for fees")
+(define opthelp-cap-fee-action "This string will be used to compare with \
+the split action field to detect capitalized fees on stock activity")
 
 (define (options-generator)
   (let ((options (gnc:new-options)))
@@ -103,10 +108,14 @@ commissions in cumulative average cost and gain/loss after commission")
       gnc:pagename-general optname-capgains-acct "d" "Cap Gains Account"
       #f #f (list ACCT-TYPE-INCOME)))
 
-    ;; (add-option
-    ;;  (gnc:make-account-sel-limited-option
-    ;;   gnc:pagename-general optname-fees-acct "c" "Fees Account"
-    ;;   #f #f (list ACCT-TYPE-EXPENSE)))
+    (add-option
+     (gnc:make-account-sel-limited-option
+      gnc:pagename-general optname-fees-acct "c5" "Fees Account"
+      #f #f (list ACCT-TYPE-EXPENSE)))
+
+    (add-option
+     (gnc:make-string-option
+      gnc:pagename-general optname-cap-fee-action "d5" opthelp-cap-fee-action "Fee"))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -170,6 +179,161 @@ commissions in cumulative average cost and gain/loss after commission")
 (define (trans-extract-amount trans account numfilter)
   (trans-extract trans account numfilter xaccSplitGetAmount))
 
+(define-record-type :txn-info
+  (make-txn-info stock-amt stock-val proceeds-val
+                 fees-cap-val fees-exp-val dividend-val capgains-val)
+  txn-info?
+  (stock-amt get-stock-amt set-stock-amt!)
+  (stock-val get-stock-val set-stock-val!)
+  (proceeds-val get-proceeds-val set-proceeds-val!)
+  (fees-cap-val get-fees-cap-val set-fees-cap-val!)
+  (fees-exp-val get-fees-exp-val set-fees-exp-val!)
+  (dividend-val get-dividend-val set-dividend-val!)
+  (capgains-val get-capgains-val set-capgains-val!))
+
+;; "bitfield" Nabc a=neg b=zero c=pos
+(define (N001 x) (if (number? x) (>  x 0) #f))
+(define (N100 x) (if (number? x) (<  x 0) #f))
+(define (N010 x) (if (number? x) (=  x 0) #t))
+(define (N011 x) (if (number? x) (>= x 0) #t))
+(define (N110 x) (if (number? x) (<= x 0) #t))
+(define (N111 x) #t)
+;; N000 should be (not x) however we can accept a zero-amount split too
+(define (N000 x) (if (number? x) (=  x 0) #t))
+
+;;       --stock-- cash cap  exp  divi capg
+;;       amt  val       fees fees
+
+(define open-types
+  (list
+   (list N001 N001 N100 N011 N000 N000 N000 "Open Long")
+   (list N100 N100 N001 N011 N000 N000 N000 "Open Short")))
+
+(define long-types
+  (list
+   (list N001 N001 N100 N011 N000 N000 N000 "Buy")
+   (list N100 N100 N011 N000 N011 N000 N111 "Sell")
+   (list N000 N000 N001 N000 N011 N100 N000 "Dividend")
+   (list N001 N001 N001 N011 N000 N100 N000 "Dividend reinvestment (w/ remainder)")
+   (list N001 N001 N000 N011 N000 N100 N000 "Dividend reinvestment (w/o remainder)")
+   (list N000 N100 N001 N011 N000 N000 N000 "Return of Capital")
+   (list N000 N001 N000 N000 N011 N100 N000 "Notional distribution")
+   (list N001 N000 N000 N011 N000 N000 N000 "Stock split")
+   (list N100 N000 N000 N011 N000 N000 N000 "Reverse split")
+   (list N100 N100 N001 N000 N011 N000 N111 "Reverse split w/ cash in lieu for fractionals")))
+
+(define short-types
+  (list
+   (list N100 N100 N001 N011 N000 N000 N000 "Short Sell")
+   (list N001 N001 N110 N000 N011 N000 N111 "Cover Buy")
+   (list N000 N000 N100 N000 N011 N001 N000 "Compensatory dividend")
+   (list N000 N000 N000 N011 N000 N000 N000 "Dividend reinvestment (w remainder)")
+   (list N000 N000 N000 N011 N000 N000 N000 "Dividend reinvestment (w/o remainder)")
+   (list N000 N001 N100 N011 N000 N000 N000 "Compensatory return of capital")
+   (list N000 N100 N000 N000 N011 N001 N000 "Compensatory notional distribution")
+   (list N100 N000 N000 N011 N000 N000 N000 "Stock split")
+   (list N001 N000 N000 N011 N000 N000 N000 "Reverse split")
+   (list N001 N001 N100 N000 N011 N000 N111 "Reverse split w/ cash in lieu for fractionals")))
+
+(define (cmp amt neg zero pos)
+  (cond ((< amt 0) neg)
+        ((= amt 0) zero)
+        (else pos)))
+
+(define shown-headers? #f)
+(define (txn-identify trans txn-info cumul-units)
+  (define (get-amount mon)
+    (and (gnc:gnc-monetary? mon)
+         (gnc:gnc-monetary-amount mon)))
+  (define trans-units (get-amount (get-stock-amt txn-info)))
+  (define trans-value (get-amount (get-stock-val txn-info)))
+  (define cash-value (get-amount (get-proceeds-val txn-info)))
+  (define fees-stock (get-amount (get-fees-cap-val txn-info)))
+  (define fees-expense (get-amount (get-fees-exp-val txn-info)))
+  (define dividend (get-amount (get-dividend-val txn-info)))
+  (define capgains (get-amount (get-capgains-val txn-info)))
+  (let lp ((types (cmp cumul-units short-types open-types long-types)))
+    (match types
+      (()
+       ;; (gnc:pk (qof-print-date (xaccTransGetDate trans)) txn-info)
+       "Unknown")
+      (((amt-fn val-fn proc-fn fee-cap-fn fee-exp-fn div-fn capg-fn res) . tail)
+       (if (and (amt-fn trans-units)
+                (val-fn trans-value)
+                (proc-fn cash-value)
+                (fee-cap-fn fees-stock)
+                (fee-exp-fn fees-expense)
+                (div-fn dividend)
+                (capg-fn capgains))
+           res
+           (lp tail))))))
+
+(define (txn->info txn stock-acct cap-fee-action
+                   proceeds-acct capgains-acct expenses-acct dividend-acct)
+  (define (from-acct? acct)
+    (lambda (split)
+      (equal? (xaccSplitGetAccount split) acct)))
+  (define (cap-expenses? split)
+    (and ((from-acct? stock-acct) split)
+         (equal? (gnc-get-action-num txn split) cap-fee-action)))
+  (define (make-monetary account amount)
+    (and amount (gnc:make-gnc-monetary (xaccAccountGetCommodity account) amount)))
+  (define (make-parent-monetary amount)
+    (and amount (gnc:make-gnc-monetary (gnc-account-get-currency-or-parent stock-acct) amount)))
+  (let lp ((splits (xaccTransGetSplitList txn))
+           (stock-amt #f)
+           (stock-val #f)
+           (proceeds-val #f)
+           (fees-cap-val #f)
+           (fees-exp-val #f)
+           (dividend-val #f)
+           (capgains-val #f))
+    (match splits
+      (() (make-txn-info
+           (make-monetary stock-acct stock-amt)
+           (make-parent-monetary stock-val)
+           (make-monetary proceeds-acct proceeds-val)
+           (make-parent-monetary fees-cap-val)
+           (make-monetary expenses-acct fees-exp-val)
+           (make-monetary dividend-acct dividend-val)
+           (make-monetary capgains-acct capgains-val)))
+
+      (((? (from-acct? proceeds-acct) split) . rest)
+       (lp rest stock-amt stock-val
+           (M+ proceeds-val (xaccSplitGetAmount split))
+           fees-cap-val fees-exp-val dividend-val capgains-val))
+
+      (((? (from-acct? capgains-acct) split) . rest)
+       (lp rest stock-amt stock-val proceeds-val fees-cap-val fees-exp-val dividend-val
+           (M+ capgains-val (xaccSplitGetAmount split))))
+
+      (((? (from-acct? expenses-acct) split) . rest)
+       (lp rest stock-amt stock-val proceeds-val fees-cap-val
+           (M+ fees-exp-val (xaccSplitGetAmount split))
+           dividend-val capgains-val))
+
+      (((? (from-acct? dividend-acct) split) . rest)
+       (lp rest stock-amt stock-val proceeds-val fees-cap-val fees-exp-val
+           (M+ dividend-val (xaccSplitGetAmount split))
+           capgains-val))
+
+      ;; testing capitalized fees must take place *before* processing
+      ;; stock amt/val because it belongs to the stock account.
+      (((? cap-expenses? split) . rest)
+       (lp rest stock-amt stock-val proceeds-val
+           (M+ fees-cap-val (xaccSplitGetValue split))
+           fees-exp-val dividend-val capgains-val))
+
+      (((? (from-acct? stock-acct) split) . rest)
+       (lp rest
+           (M+ stock-amt (xaccSplitGetAmount split))
+           (M+ stock-val (xaccSplitGetValue split))
+           proceeds-val fees-cap-val fees-exp-val dividend-val capgains-val))
+
+      ((_ . rest)
+       (lp rest stock-amt stock-val proceeds-val fees-cap-val fees-exp-val
+           dividend-val capgains-val)))))
+
 (define (ifrs-cost-basis-renderer report-obj)
   (define (opt-val section name)
     (gnc:option-value
@@ -187,11 +351,12 @@ commissions in cumulative average cost and gain/loss after commission")
   (define proceeds-acct (opt-val gnc:pagename-general optname-proceeds-acct))
   (define dividend-acct (opt-val gnc:pagename-general optname-dividend-acct))
   (define capgains-acct (opt-val gnc:pagename-general optname-capgains-acct))
-  ;; (define fees-acct (opt-val gnc:pagename-general optname-fees-acct))
+  (define fees-acct (opt-val gnc:pagename-general optname-fees-acct))
   (define report-currency (opt-val gnc:pagename-general optname-report-currency))
   (define format-cells (opt-val gnc:pagename-general optname-format-cells))
   (define short-alternate-format? (opt-val gnc:pagename-general optname-format-short))
   (define cap-purch-costs? (opt-val gnc:pagename-general optname-cap-purch-costs))
+  (define cap-fee-action (opt-val gnc:pagename-general optname-cap-fee-action))
   (define document (gnc:make-html-document))
 
   (define large 10000000)
@@ -199,17 +364,8 @@ commissions in cumulative average cost and gain/loss after commission")
     (/ (gnc-pricedb-convert-balance-nearest-price-t64 db large from to time)
        large))
 
-  (define (stock-split prev delta)
-    (let ((exact (/ (+ delta prev) prev)))
-      (format #f "~a:~a Split" (numerator exact) (denominator exact))))
-
   (define (to-cell elt)
     (gnc:make-html-table-cell/markup "number-cell" elt))
-
-  (define (cmp amt neg zero pos)
-    (cond ((< amt 0) neg)
-          ((= amt 0) zero)
-          (else pos)))
 
   (gnc:html-document-set-title! document "IFRS weighted average cost basis Report")
 
@@ -250,10 +406,10 @@ commissions in cumulative average cost and gain/loss after commission")
 
       (gnc:html-document-set-title!
        document
-       (format #f "Average-Cost (Basis) Report: From ~a to ~a. Report-currency ~a"
-               (qof-print-date startdate)
-               (qof-print-date enddate)
-               (gnc-commodity-get-mnemonic report-currency)))
+       (gnc:format "Average-Cost (Basis) Report: From ${startdate} to ${enddate}. Report-currency ${currency}"
+                   'startdate (qof-print-date startdate)
+                   'enddate (qof-print-date enddate)
+                   'currency (gnc-commodity-get-mnemonic report-currency)))
 
       (gnc:html-table-set-col-headers!
        table (list "date" "description" "trans-units" "cumul-units" "note"
@@ -279,12 +435,15 @@ commissions in cumulative average cost and gain/loss after commission")
 
           ((split . rest-splits)
            (let* ((trans (xaccSplitGetParent split))
+                  (txn-info (txn->info trans stock-acct cap-fee-action proceeds-acct
+                                       capgains-acct fees-acct dividend-acct))
                   (trans-units (trans-extract-amount trans stock-acct #f))
                   (trans-value (trans-extract-value trans stock-acct #f))
-                  (proceeds-val (trans-extract-value trans proceeds-acct #f))
+                  (cash-value (trans-extract-value trans proceeds-acct #f))
                   (dividends-val (trans-extract-value trans dividend-acct #f))
                   (capgains-val (trans-extract-value trans capgains-acct #f))
-                  (fees-value (trans-extract-value trans #f "Fee"))
+                  (fees-expense (trans-extract-value trans fees-acct #f))
+                  (fees-value (trans-extract-value trans #f cap-fee-action))
                   (new-units (M+ cumul-units trans-units))
 
                   (sale?
@@ -296,7 +455,7 @@ commissions in cumulative average cost and gain/loss after commission")
                   (purchase?
                    (cond
                     ((= trans-value 0) dividends-val)        ;dividends
-                    ((= trans-units 0) proceeds-val)         ;return of capital
+                    ((= trans-units 0) cash-value)           ;return of capital
                     ((> trans-units 0) (< 0 new-units))      ;regular buy
                     ((< trans-units 0) (< new-units 0))))    ;buy during short
 
@@ -307,7 +466,7 @@ commissions in cumulative average cost and gain/loss after commission")
                   (purchase-val (and purchase? (M- trans-value purchase-cost)))
                   (cash-dividends (M- dividends-val))
                   (proceeds-cost (and sale? fees-value))
-                  (proceeds-val (and sale? (M+ proceeds-val proceeds-cost)))
+                  (proceeds-value (and sale? (M+ cash-value proceeds-cost)))
 
                   ;; now convert to report-currency
                   (fx (get-fx pricedb currency report-currency
@@ -315,14 +474,14 @@ commissions in cumulative average cost and gain/loss after commission")
                   (conv-purchase-val (M* fx purchase-val))
                   (conv-purchase-cost (M* fx purchase-cost))
                   (conv-dividends (M* fx cash-dividends))
-                  (conv-proceeds-val (M* fx proceeds-val))
+                  (conv-proceeds-value (M* fx proceeds-value))
                   (conv-proceeds-cost (M* fx proceeds-cost))
 
                   ;; now perform AVERAGE-COST-BASIS calculations
                   (average-cost-basis/unit-for-sale
                    (M-abs (M/ cumul-average-cost-basis cumul-units)))
                   (average-cost-basis-of-sale
-                   (and proceeds-val (M* average-cost-basis/unit-for-sale
+                   (and proceeds-value (M* average-cost-basis/unit-for-sale
                                          trans-units)))
                   (cumul-average-cost-basis
                    (M+ cumul-average-cost-basis
@@ -330,11 +489,11 @@ commissions in cumulative average cost and gain/loss after commission")
                        (and cap-purch-costs? conv-purchase-cost)
                        average-cost-basis-of-sale))
 
-                  (net-proceeds (M- conv-proceeds-val conv-proceeds-cost))
+                  (net-proceeds (M- conv-proceeds-value conv-proceeds-cost))
                   (gain-post-commission (M+ net-proceeds average-cost-basis-of-sale
                                             (and (not cap-purch-costs?)
                                                  conv-purchase-cost)))
-                  (gain-pre-commission (M+ conv-proceeds-val
+                  (gain-pre-commission (M+ conv-proceeds-value
                                            average-cost-basis-of-sale))
 
                   (new-gross-profit (M+ cumul-gross-profit gain-pre-commission))
@@ -343,7 +502,7 @@ commissions in cumulative average cost and gain/loss after commission")
                                       conv-dividends)))
 
              ;; (gnc:pk trans 'trans-units trans-units 'trans-value trans-value
-             ;;         'cumul-units cumul-units 'proceeds-val proceeds-val
+             ;;         'cumul-units cumul-units 'proceeds-value proceeds-value
              ;;         'sale? sale? 'purchase? purchase?)
              (cond
               ((not (< startdate (xaccTransGetDate (xaccSplitGetParent (car splits)))
@@ -368,37 +527,18 @@ commissions in cumulative average cost and gain/loss after commission")
                       (cond
                        ((< new-units 0 cumul-units) "ERROR: long→short")
                        ((< cumul-units 0 new-units) "ERROR: short→long")
-                       ((= 0 cumul-units) (cmp new-units "Open Short" "1" "Open Long"))
-                       ((= 0 new-units) (cmp trans-units "Close Long" "2" "Close Short"))
-                       ((= 0 trans-units trans-value)
-                        (cmp cumul-units "Compensatory Dividend" "7" "Dividend"))
-                       ((= 0 trans-units)
-                        (cond (cash-dividends
-                               (cmp cumul-units
-                                    "Compensatory Notional Distribution"
-                                    "7"
-                                    "Notional Distribution"))
-                              (purchase-val
-                               (cmp cumul-units
-                                    "Compensatory Return Capital"
-                                    "8"
-                                    "Return Capital"))
-                              (else "3")))
-                       ((= 0 trans-value) (stock-split cumul-units trans-units))
-                       (purchase-val (cmp purchase-val "Short Sell" "5" "Buy"))
-                       (proceeds-val (cmp proceeds-val "Short Buy" "6" "Sell"))
-                       (else "4"))
+                       (else (txn-identify trans txn-info cumul-units)))
                       (gnc-commodity-get-mnemonic currency)
                       (to-cell (gnc:default-price-renderer report-currency fx))
                       (to-cell (to-orig-currency purchase-val))
                       (to-cell (to-orig-currency purchase-cost))
                       (to-cell (to-orig-currency cash-dividends))
-                      (to-cell (to-orig-currency proceeds-val))
+                      (to-cell (to-orig-currency proceeds-value))
                       (to-cell (to-orig-currency proceeds-cost))
                       (to-cell (to-report-currency conv-purchase-val))
                       (to-cell (to-report-currency conv-purchase-cost))
                       (to-cell (to-report-currency conv-dividends))
-                      (to-cell (to-report-currency conv-proceeds-val))
+                      (to-cell (to-report-currency conv-proceeds-value))
                       (to-cell (to-report-currency conv-proceeds-cost))
                       (to-cell (to-report-currency average-cost-basis/unit-for-sale))
                       (to-cell (to-report-currency (M- average-cost-basis-of-sale)))

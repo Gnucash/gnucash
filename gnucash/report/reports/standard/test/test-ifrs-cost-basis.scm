@@ -250,6 +250,8 @@
       (set-option! options "General" "Report's currency" (mnemonic->commodity "CAD"))
       (set-option! options "General" "Proceeds Account"
                    (assoc-ref account-alist "USD Cash"))
+      (set-option! options "General" "Fees Account"
+                   (assoc-ref account-alist "USD Commissions"))
       (set-option! options "General" "Start Date"
                    (cons 'absolute (gnc-dmy2time64 01 01 2019)))
       (set-option! options "General" "End Date"
@@ -284,7 +286,7 @@
           (sxml->table-row-col sxml 1 4 #f))
 
         (test-equal "Return Capital $2500"
-          '("04/16/20" "Return of Capital" "0 SPY" "325 SPY" "Return Capital"
+          '("04/16/20" "Return of Capital" "0 SPY" "325 SPY" "Return of Capital"
             "CAD" "C$1.0000" "-C$2,500.00" "-C$2,500.00" "C$184.68"
             "C$57,519.90" "-C$6,009.95" "-C$6,019.90" "-C$6,019.90")
           (sxml->table-row-col sxml 1 5 #f))
@@ -296,7 +298,7 @@
           (sxml->table-row-col sxml 1 6 #f))
 
         (test-equal "2:1 split"
-          '("05/11/20" "stock split" "450 SPY" "900 SPY" "2:1 Split"
+          '("05/11/20" "stock split" "450 SPY" "900 SPY" "Stock split"
             "CAD" "C$1.0000" "C$233.38" "C$105,019.90" "-C$6,009.95"
             "-C$6,019.90" "-C$6,019.90")
           (sxml->table-row-col sxml 1 7 #f))
@@ -315,7 +317,7 @@
           (sxml->table-row-col sxml 1 9 #f))
 
         (test-equal "sell 915 SPY close long"
-          '("06/10/20" "Sell SPY" "-915 SPY" "0 SPY" "Close Long" "CAD"
+          '("06/10/20" "Sell SPY" "-915 SPY" "0 SPY" "Sell" "CAD"
             "C$1.0000" "C$128,100.00" "C$9.95" "C$128,100.00" "C$9.95"
             "C$120.51" "C$110,266.92" "C$0.00" "C$17,823.14" "C$17,833.08"
             "C$128,090.05" "C$17,570.15" "C$17,540.30" "C$17,540.30")
@@ -334,14 +336,14 @@
           (sxml->table-row-col sxml 1 12 #f))
 
         (test-equal "buy 50 SPY short"
-          '("06/18/20" "Buy SPY Close Short" "50 SPY" "-100 SPY" "Short Buy"
+          '("06/18/20" "Buy SPY Close Short" "50 SPY" "-100 SPY" "Cover Buy"
             "CAD" "C$1.0000" "-C$5,000.00" "C$9.95" "-C$5,000.00" "C$9.95"
             "C$152.87" "-C$7,643.37" "-C$15,286.73" "C$2,633.42" "C$2,643.37"
             "-C$5,009.95" "C$20,213.52" "C$20,173.72" "C$20,173.72")
           (sxml->table-row-col sxml 1 13 #f))
 
         (test-equal "BUY 100 SPY close short"
-          '("06/20/20" "Buy SPY Close Short" "100 SPY" "0 SPY" "Close Short"
+          '("06/20/20" "Buy SPY Close Short" "100 SPY" "0 SPY" "Cover Buy"
             "CAD" "C$1.0000" "-C$8,000.00" "C$4.98" "-C$8,000.00" "C$4.98"
             "C$152.87" "-C$15,286.73" "C$0.00" "C$7,281.75" "C$7,286.73"
             "-C$8,004.98" "C$27,500.25" "C$27,455.47" "C$27,455.47")
