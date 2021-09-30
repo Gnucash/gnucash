@@ -29,12 +29,42 @@
 
     Within a release node the following rules are currently supported:
 
+    <deprecate ... /> : does nothing other than informing GnuCash devs this
+                        preference will eventually be removed with no
+                        replacement. The preference should not be used anymore
+                        in GnuCash code directly.
+                        It takes two arguments (old-path and old-key) that
+                        together define the preference
+    <migrate   ... /> : informs GnuCash a preference has moved or has been
+                        renamed. The old preference should be treated  as
+                        deprecated and should not be used anymore in GnuCash
+                        code directly.
+                        It takes four arguments (old-path, old-key and
+                        new-path, new-key). The first two define the deprecated
+                        preference the last two the replacement preference.
+    <obsolete  ... /> : informs GnuCash this preference is ready to be removed
+                        in the next major release and will be unset in this
+                        major release series. This intermediary step is to
+                        clean up the settings database over time.
+                        It takes two arguments (old-path and old-key) that
+                        together define the preference
+    Example
+    =======
+
+    <release version="4007">
+
+    <deprecate old-path="org.gnucash.GnuCash.general"
+               old-key="prefname" />
+
     <migrate old-path="org.gnucash.general"
              old-key="prefs-version"
              new-path="org.gnucash.GnuCash.general"
              new-key="prefs-version" />
 
-    This will migrate the preference at old-path:old-key to new-path:new-key.
+    <obsolete old-path="org.gnucash.general"
+              old-key="migrate-prefs-done" />
+
+    </release>
 
 
     Note
@@ -1340,5 +1370,18 @@
          old-key="end-period"
          new-path="org.gnucash.GnuCash.window.pages.account-tree.summary"
          new-key="end-period"/>
+
+</release>
+
+<release version="4009">
+
+<obsolete old-path="org.gnucash.dialogs.business-assoc"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.trans-assoc"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="migrate-prefs-done"/>
 
 </release>

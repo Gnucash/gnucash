@@ -655,15 +655,51 @@ gnc_gsettings_get_user_value (const gchar *schema,
     }
 }
 
+using opt_str_vec = boost::optional<std::string>;
+
 static void
-migrate_one_key (const std::string &oldpath, const std::string &oldkey,
-                 const std::string &newpath, const std::string &newkey)
+deprecate_one_key (const opt_str_vec &oldpath, const opt_str_vec &oldkey)
 {
-    PINFO ("Migrating '%s:%s' to '%s:%s'", oldpath.c_str(), oldkey.c_str(),
-           newpath.c_str(), newkey.c_str());
-    auto user_value = gnc_gsettings_get_user_value (oldpath.data(), oldkey.data());
+    if (!oldpath || !oldkey )
+    {
+        DEBUG ("Skipping <deprecate> node - missing attribute (old-path or old-key)");
+        return;
+    }
+
+    PINFO ("'%s:%s' has been marked deprecated", oldpath->c_str(), oldkey->c_str());
+    /* This does nothing really, but is a reminder for future maintainers
+     * to mark this pref as obsolete in the next major release. */
+}
+
+static void
+migrate_one_key (const opt_str_vec &oldpath, const opt_str_vec &oldkey,
+                 const opt_str_vec &newpath, const opt_str_vec &newkey)
+{
+    if (!oldpath || !oldkey || !newpath || !newkey)
+    {
+        DEBUG ("Skipping <migrate> node - missing attribute (old-path, old-key, new-path or new-key)");
+        return;
+    }
+
+    PINFO ("Migrating '%s:%s' to '%s:%s'", oldpath->c_str(), oldkey->c_str(),
+           newpath->c_str(), newkey->c_str());
+
+    auto user_value = gnc_gsettings_get_user_value (oldpath->c_str(), oldkey->c_str());
     if (user_value)
-        gnc_gsettings_set_value (newpath.data(), newkey.data(), user_value);
+        gnc_gsettings_set_value (newpath->c_str(), newkey->c_str(), user_value);
+}
+
+static void
+obsolete_one_key (const opt_str_vec &oldpath, const opt_str_vec &oldkey)
+{
+    if (!oldpath || !oldkey )
+    {
+        DEBUG ("Skipping <obsolete> node - missing attribute (old-path or old-key)");
+        return;
+    }
+
+    PINFO ("Resetting obsolete '%s:%s'", oldpath->c_str(), oldkey->c_str());
+    gnc_gsettings_reset (oldpath->c_str(), oldkey->c_str());
 }
 
 static void
@@ -675,19 +711,17 @@ parse_one_release_node (bpt::ptree &pt)
             {
                 if (node.first == "<xmlattr>")
                     return;
-                if (node.first == "migrate")
-                {
-                    auto oldpath = node.second.get_optional<std::string> ("<xmlattr>.old-path");
-                    auto oldkey = node.second.get_optional<std::string> ("<xmlattr>.old-key");
-                    auto newpath = node.second.get_optional<std::string> ("<xmlattr>.new-path");
-                    auto newkey = node.second.get_optional<std::string> ("<xmlattr>.new-key");
-                    if (!oldpath || !oldkey || !newpath || !newkey)
-                    {
-                        DEBUG ("Skipping migration node - missing attribute (old-path, old-key, new-path or new-key)");
-                        return;
-                    }
-                    migrate_one_key (*oldpath, *oldkey, *newpath, *newkey);
-                }
+                else if (node.first == "deprecate")
+                    deprecate_one_key (node.second.get_optional<std::string> ("<xmlattr>.old-path"),
+                                       node.second.get_optional<std::string> ("<xmlattr>.old-key"));
+                else if (node.first == "migrate")
+                    migrate_one_key (node.second.get_optional<std::string> ("<xmlattr>.old-path"),
+                                     node.second.get_optional<std::string> ("<xmlattr>.old-key"),
+                                     node.second.get_optional<std::string> ("<xmlattr>.new-path"),
+                                     node.second.get_optional<std::string> ("<xmlattr>.new-key"));
+                else if (node.first == "obsolete")
+                    obsolete_one_key (node.second.get_optional<std::string> ("<xmlattr>.old-path"),
+                                      node.second.get_optional<std::string> ("<xmlattr>.old-key"));
                 else
                 {
                     DEBUG ("Skipping unknown node <%s>", node.first.c_str());
