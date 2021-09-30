@@ -22,20 +22,21 @@ set(gschema_SOURCES
 
 add_gschema_targets("${gschema_SOURCES}")
 
-set(local_migration_files ${gschema_migration_files})
-list(APPEND local_migration_files ${CMAKE_CURRENT_SOURCE_DIR}/migratable-prefs.xml)
-set(gschema_migration_files ${local_migration_files} CACHE INTERNAL "gschema migration files")
+set(local_preftrans_files ${gschema_preftrans_files})
+list(APPEND local_preftrans_files ${CMAKE_CURRENT_SOURCE_DIR}/pref_transformations.xml)
+set(gschema_preftrans_files ${local_preftrans_files} CACHE INTERNAL "files describing transformations for our gsettings based preferences")
 
-# Provide gnucash runtime with a list of migratable preferences
+# Provide gnucash runtime with a list of potential transformations to user set preferences
+# following GSettings schema changes between gnucash releases
 add_custom_command(
-    OUTPUT ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml
-    COMMAND cat ${gschema_migration_files} > ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml
-    DEPENDS ${gschema_migration_files}
+    OUTPUT ${DATADIR_BUILD}/${PROJECT_NAME}/pref_transformations.xml
+    COMMAND cat ${gschema_preftrans_files} > ${DATADIR_BUILD}/${PROJECT_NAME}/pref_transformations.xml
+    DEPENDS ${gschema_preftrans_files}
 )
 
-add_custom_target(migratable-prefs ALL DEPENDS ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml)
+add_custom_target(pref_transformations ALL DEPENDS ${DATADIR_BUILD}/${PROJECT_NAME}/pref_transformations.xml)
 
-install(FILES ${DATADIR_BUILD}/${PROJECT_NAME}/migratable-prefs.xml
+install(FILES ${DATADIR_BUILD}/${PROJECT_NAME}/pref_transformations.xml
         DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME})
 
 # Handle gschemas.compiled
@@ -65,7 +66,7 @@ if (COMPILE_GSCHEMAS)
                               ${GLIB_COMPILE_SCHEMAS} --strict \$ENV\{DESTDIR\}${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
 endif()
 
-set(gschemas_DIST_local migratable-prefs.xml)
+set(gschemas_DIST_local pref_transformations.xml)
 foreach(file ${gschema_SOURCES})
     list(APPEND gschemas_DIST_local ${file}.in)
 endforeach()

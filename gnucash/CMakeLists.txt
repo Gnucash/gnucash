@@ -4,7 +4,7 @@
 set(SCHEMADIR_BUILD ${DATADIR_BUILD}/glib-2.0/schemas)
 file(MAKE_DIRECTORY ${SCHEMADIR_BUILD})
 unset(gschema_depends CACHE)
-unset(gschema_migration_files CACHE)
+unset(gschema_preftrans_files CACHE)
 # The subdirectories
 add_subdirectory (gnome)
 add_subdirectory (gnome-utils)
