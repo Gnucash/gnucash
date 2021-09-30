@@ -65,6 +65,7 @@ static const std::string KEY_INCLUDE_CHILDREN("include-children");
 static const std::string KEY_POSTPONE("postpone");
 static const std::string KEY_LOT_MGMT("lot-mgmt");
 static const std::string KEY_ONLINE_ID("online_id");
+static const std::string KEY_IMP_APPEND_TEXT("import-append-text");
 static const std::string AB_KEY("hbci");
 static const std::string AB_ACCOUNT_ID("account-id");
 static const std::string AB_ACCOUNT_UID("account-uid");
@@ -116,6 +117,7 @@ enum
 
     PROP_LOT_NEXT_ID,                   /* KVP */
     PROP_ONLINE_ACCOUNT,                /* KVP */
+    PROP_IMP_APPEND_TEXT,               /* KVP */
     PROP_IS_OPENING_BALANCE,            /* KVP */
     PROP_OFX_INCOME_ACCOUNT,            /* KVP */
     PROP_AB_ACCOUNT_ID,                 /* KVP */
@@ -484,6 +486,9 @@ gnc_account_get_property (GObject         *object,
     case PROP_ONLINE_ACCOUNT:
         qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_ONLINE_ID});
         break;
+    case PROP_IMP_APPEND_TEXT:
+        g_value_set_boolean(value, xaccAccountGetAppendText(account));
+        break;
     case PROP_OFX_INCOME_ACCOUNT:
         qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_ASSOC_INCOME_ACCOUNT});
         break;
@@ -612,6 +617,9 @@ gnc_account_set_property (GObject         *object,
         break;
     case PROP_ONLINE_ACCOUNT:
         qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_ONLINE_ID});
+        break;
+    case PROP_IMP_APPEND_TEXT:
+        xaccAccountSetAppendText(account, g_value_get_boolean(value));
         break;
     case PROP_OFX_INCOME_ACCOUNT:
         qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_ASSOC_INCOME_ACCOUNT});
@@ -1061,6 +1069,16 @@ gnc_account_class_init (AccountClass *klass)
                           "account for OFX import",
                           NULL,
                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_IMP_APPEND_TEXT,
+     g_param_spec_boolean ("import-append-text",
+                           "Import Append Text",
+                           "Saved state of Append checkbox for setting initial "
+                           "value next time this account is imported.",
+                           FALSE,
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
      g_object_class_install_property(
        gobject_class,
@@ -4226,6 +4244,18 @@ void
 xaccAccountSetPlaceholder (Account *acc, gboolean val)
 {
     set_boolean_key(acc, {"placeholder"}, val);
+}
+
+gboolean
+xaccAccountGetAppendText (const Account *acc)
+{
+    return boolean_from_key(acc, {"import-append-text"});
+}
+
+void
+xaccAccountSetAppendText (Account *acc, gboolean val)
+{
+    set_boolean_key(acc, {"import-append-text"}, val);
 }
 
 gboolean

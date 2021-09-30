@@ -72,6 +72,7 @@ struct _main_matcher_info
     GtkTreeViewColumn       *memo_column;
     GtkWidget               *show_account_column;
     GtkWidget               *show_matched_info;
+    GtkWidget               *append_text; // Update+Clear: Append import Desc/Notes to matched Desc/Notes
     GtkWidget               *reconcile_after_close;
     gboolean add_toggled;     // flag to indicate that add has been toggled to stop selection
     gint id;
@@ -444,7 +445,22 @@ resolve_conflicts (GNCImportMainMatcher *info)
 void
 gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
 {
+    GNCImportTransInfo* trans_info;
+    Account* account;
+    Split* first_split;
+    GSList* temp_trans_list;
+
     g_assert (info);
+
+    // Set initial state of Append checkbox to same as last import for this account.
+    // Get the import account from the first split in first transaction.
+    temp_trans_list = info->temp_trans_list;
+    trans_info = temp_trans_list->data;
+    first_split = gnc_import_TransInfo_get_fsplit (trans_info);
+    account = xaccSplitGetAccount(first_split);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (info->append_text),
+                                 xaccAccountGetAppendText(account));
+
     gnc_gen_trans_list_create_matches (info);
     resolve_conflicts (info);
     gtk_widget_show_all (GTK_WIDGET(info->main_widget));
@@ -457,6 +473,9 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     GtkTreeModel *model;
     GtkTreeIter iter;
     GNCImportTransInfo *trans_info;
+    gboolean append_text = gtk_toggle_button_get_active ((GtkToggleButton*) info->append_text);
+    gboolean first_tran = TRUE;
+    gpointer user_data = info->user_data;
 
     g_assert (info);
 
@@ -479,6 +498,20 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
                             DOWNLOADED_COL_DATA, &trans_info,
                             -1);
 
+        // Allow the backend to know if the Append checkbox is ticked or unticked
+        // by propagating info->append_text to every trans_info->append_text
+        gnc_import_TransInfo_set_append_text( trans_info, append_text);
+
+        // When processing the first transaction,
+        // save the state of the Append checkbox to an account kvp so the same state can be
+        //  defaulted next time this account is imported.
+        // Get the import account from the first split.
+        if (first_tran)
+        {
+            Split* first_split = gnc_import_TransInfo_get_fsplit (trans_info);
+            xaccAccountSetAppendText (xaccSplitGetAccount(first_split), append_text);
+            first_tran = FALSE;
+        }
         // Note: if there's only 1 split (unbalanced) one will be created with the unbalanced account,
         // and for that account the defer balance will not be set. So things will be slow.
 
@@ -1222,7 +1255,9 @@ gnc_gen_trans_common_setup (GNCImportMainMatcher *info,
     g_signal_connect (G_OBJECT(info->show_matched_info), "toggled",
                       G_CALLBACK(show_matched_info_toggled_cb), info);
 
-    // Create the checkbox, but do not show it by default.
+    info->append_text = GTK_WIDGET(gtk_builder_get_object (builder, "append_desc_notes_button"));
+
+    // Create the checkbox, but do not show it unless there are transactions
     info->reconcile_after_close = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_after_close_button"));
 
     show_update = gnc_import_Settings_get_action_update_enabled (info->user_settings);
@@ -1903,6 +1938,13 @@ gnc_gen_trans_list_widget (GNCImportMainMatcher *info)
 {
     g_assert (info);
     return info->main_widget;
+}
+
+GtkWidget *
+gnc_gen_trans_list_append_text_widget (GNCImportMainMatcher *info)
+{
+    g_assert (info);
+    return info->append_text;
 }
 
 gboolean

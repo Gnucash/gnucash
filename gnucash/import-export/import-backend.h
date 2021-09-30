@@ -238,6 +238,11 @@ void
 gnc_import_TransInfo_set_ref_id (GNCImportTransInfo *info,
                                  guint32 ref_id);
 
+/** Set the append_text for this TransInfo. */
+void
+gnc_import_TransInfo_set_append_text (GNCImportTransInfo *info,
+                                           gboolean append_text);
+
 /**@}*/
 
 /** @name Getters/Setters for GNCImportMatchInfo */
