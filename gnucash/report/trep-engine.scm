@@ -586,7 +586,7 @@ blank, which will disable the filter.")
     "i2"
     (G_ "By default the transaction filter will search substring only. Set this to true to \
 enable full POSIX regular expressions capabilities. '#work|#family' will match both \
-tags within description, notes or memo. ")
+tags within description, notes or memo.")
     #f))
 
   (gnc:register-trep-option

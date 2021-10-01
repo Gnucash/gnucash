@@ -759,7 +759,7 @@ static char * get_value_help (VirtualLocation virt_loc, gpointer user_data)
 
     help = gnc_table_get_entry (ledger->table, virt_loc);
     if (!help || *help == '\0')
-        help = _("The subtotal value of this entry ");
+        help = _("The subtotal value of this entry");
 
     return g_strdup (help);
 }
