@@ -1,3 +1,15 @@
+<!-- GSettings preference transformation rules
+
+    Refer to gnucash/gschemas/pref_transformations.xml for more information
+    about this file.
+
+
+    Note
+    ====
+    Do not remove this file from the GnuCash sources even if there are
+    currently no active rules. Instead keep this introductory comment in
+    place and remove all other content.
+-->
 
 <release version="4007">
 
@@ -60,5 +72,45 @@
          old-key="last-geometry"
          new-path="org.gnucash.GnuCash.dialogs.import.hbci.connection-dialog"
          new-key="last-geometry"/>
+
+</release>
+
+<release version="5000">
+
+<obsolete old-path="org.gnucash.dialogs.flicker"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.ab-initial"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.hbci"
+          old-key="close-on-finish"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.hbci"
+          old-key="remember-pin"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.hbci"
+          old-key="use-ns-transaction-text"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.hbci"
+          old-key="verbose-debug"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.hbci"
+          old-key="format-dtaus"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.hbci"
+          old-key="format-csv"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.hbci"
+          old-key="format-swift-mt940"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.hbci"
+          old-key="format-swift-mt942"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.hbci"
+          old-key="last-path"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.hbci.connection-dialog"
+          old-key="last-geometry"/>
 
 </release>
