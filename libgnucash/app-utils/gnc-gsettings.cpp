@@ -101,9 +101,13 @@ static GSettings * gnc_gsettings_get_settings_ptr (const gchar *schema_str)
 
     gset = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
     DEBUG ("Looking for schema %s returned gsettings %p", full_name, gset);
+
     if (!gset)
     {
-        gset = g_settings_new (full_name);
+        auto schema_source {g_settings_schema_source_get_default()};
+        auto schema {g_settings_schema_source_lookup(schema_source, full_name,
+                                                     FALSE)};
+        gset = g_settings_new_full (schema, nullptr, nullptr);
         DEBUG ("Created gsettings object %p for schema %s", gset, full_name);
         if (G_IS_SETTINGS(gset))
             g_hash_table_insert (schema_hash, full_name, gset);
@@ -114,7 +118,6 @@ static GSettings * gnc_gsettings_get_settings_ptr (const gchar *schema_str)
     {
         g_free(full_name);
     }
-
     LEAVE("");
     return gset;
 }
@@ -652,19 +655,55 @@ gnc_gsettings_get_user_value (const gchar *schema,
     }
 }
 
+using opt_str_vec = boost::optional<std::string>;
+
 static void
-migrate_one_key (const std::string &oldpath, const std::string &oldkey,
-                 const std::string &newpath, const std::string &newkey)
+deprecate_one_key (const opt_str_vec &oldpath, const opt_str_vec &oldkey)
 {
-    PINFO ("Migrating '%s:%s' to '%s:%s'", oldpath.c_str(), oldkey.c_str(),
-           newpath.c_str(), newkey.c_str());
-    auto user_value = gnc_gsettings_get_user_value (oldpath.data(), oldkey.data());
-    if (user_value)
-        gnc_gsettings_set_value (newpath.data(), newkey.data(), user_value);
+    if (!oldpath || !oldkey )
+    {
+        DEBUG ("Skipping <deprecate> node - missing attribute (old-path or old-key)");
+        return;
+    }
+
+    PINFO ("'%s:%s' has been marked deprecated", oldpath->c_str(), oldkey->c_str());
+    /* This does nothing really, but is a reminder for future maintainers
+     * to mark this pref as obsolete in the next major release. */
 }
 
 static void
-migrate_one_node (bpt::ptree &pt)
+migrate_one_key (const opt_str_vec &oldpath, const opt_str_vec &oldkey,
+                 const opt_str_vec &newpath, const opt_str_vec &newkey)
+{
+    if (!oldpath || !oldkey || !newpath || !newkey)
+    {
+        DEBUG ("Skipping <migrate> node - missing attribute (old-path, old-key, new-path or new-key)");
+        return;
+    }
+
+    PINFO ("Migrating '%s:%s' to '%s:%s'", oldpath->c_str(), oldkey->c_str(),
+           newpath->c_str(), newkey->c_str());
+
+    auto user_value = gnc_gsettings_get_user_value (oldpath->c_str(), oldkey->c_str());
+    if (user_value)
+        gnc_gsettings_set_value (newpath->c_str(), newkey->c_str(), user_value);
+}
+
+static void
+obsolete_one_key (const opt_str_vec &oldpath, const opt_str_vec &oldkey)
+{
+    if (!oldpath || !oldkey )
+    {
+        DEBUG ("Skipping <obsolete> node - missing attribute (old-path or old-key)");
+        return;
+    }
+
+    PINFO ("Resetting obsolete '%s:%s'", oldpath->c_str(), oldkey->c_str());
+    gnc_gsettings_reset (oldpath->c_str(), oldkey->c_str());
+}
+
+static void
+parse_one_release_node (bpt::ptree &pt)
 {
     /* loop over top-level property tree */
     std::for_each (pt.begin(), pt.end(),
@@ -672,53 +711,53 @@ migrate_one_node (bpt::ptree &pt)
             {
                 if (node.first == "<xmlattr>")
                     return;
-                if (node.first != "migrate")
+                else if (node.first == "deprecate")
+                    deprecate_one_key (node.second.get_optional<std::string> ("<xmlattr>.old-path"),
+                                       node.second.get_optional<std::string> ("<xmlattr>.old-key"));
+                else if (node.first == "migrate")
+                    migrate_one_key (node.second.get_optional<std::string> ("<xmlattr>.old-path"),
+                                     node.second.get_optional<std::string> ("<xmlattr>.old-key"),
+                                     node.second.get_optional<std::string> ("<xmlattr>.new-path"),
+                                     node.second.get_optional<std::string> ("<xmlattr>.new-key"));
+                else if (node.first == "obsolete")
+                    obsolete_one_key (node.second.get_optional<std::string> ("<xmlattr>.old-path"),
+                                      node.second.get_optional<std::string> ("<xmlattr>.old-key"));
+                else
                 {
-                    DEBUG ("Skipping non-<migrate> node <%s>", node.first.c_str());
+                    DEBUG ("Skipping unknown node <%s>", node.first.c_str());
                     return;
                 }
-
-                auto oldpath = node.second.get_optional<std::string> ("<xmlattr>.old-path");
-                auto oldkey = node.second.get_optional<std::string> ("<xmlattr>.old-key");
-                auto newpath = node.second.get_optional<std::string> ("<xmlattr>.new-path");
-                auto newkey = node.second.get_optional<std::string> ("<xmlattr>.new-key");
-                if (!oldpath || !oldkey || !newpath || !newkey)
-                {
-                    DEBUG ("Skipping migration node - missing attribute (old-path, old-key, new-path or new-key)");
-                    return;
-                }
-                migrate_one_key (*oldpath, *oldkey, *newpath, *newkey);
             });
 }
 
 static void
-migrate_settings (int old_maj_min)
+transform_settings (int old_maj_min)
 {
     bpt::ptree pt;
 
     auto pkg_data_dir = gnc_path_get_pkgdatadir();
-    auto migrate_file = std::string (pkg_data_dir) + "/migratable-prefs.xml";
+    auto transform_file = std::string (pkg_data_dir) + "/pref_transformations.xml";
     g_free (pkg_data_dir);
 
-    std::ifstream migrate_stream {migrate_file};
-    if (!migrate_stream.is_open())
+    std::ifstream transform_stream {transform_file};
+    if (!transform_stream.is_open())
     {
-        PWARN("Failed to load settings migration file '%s'", migrate_file.c_str());
+        PWARN("Failed to load preferences transformation file '%s'", transform_file.c_str());
         return;
     }
 
     try
     {
-        bpt::read_xml (migrate_stream, pt);
+        bpt::read_xml (transform_stream, pt);
     }
     catch (bpt::xml_parser_error &e) {
-        PWARN ("Failed to parse GnuCash settings migration file.\n");
+        PWARN ("Failed to parse GnuCash preferences transformation file.\n");
         PWARN ("Error message:\n");
         PWARN ("%s\n", e.what());
         return;
     }
     catch (...) {
-        PWARN ("Unknown error while parsing GnuCash settings migration file.\n");
+        PWARN ("Unknown error while parsing GnuCash preferences transformation file.\n");
         return;
     }
 
@@ -744,27 +783,36 @@ migrate_settings (int old_maj_min)
                 }
                 DEBUG ("Retrieved version value '%i'", *version);
 
-                migrate_one_node (node.second);
+                parse_one_release_node (node.second);
             });
 }
 
 void gnc_gsettings_version_upgrade (void)
 {
-    /* Use versioning to ensure this routine will only sync once for each
-     * superseded setting
-     * At first run of GnuCash 4.7 or more recent *all* settings will be migrated
-     * from prefix org.gnucash to org.gnucash.GnuCash, including our GNC_PREF_VERSION setting.
-     * As the logic to determine whether or not to upgrade depends on it we have to do
-     * some extra tests to figure when exactly to start doing migrations.
-     * - if GNC_PREF_VERSION is not set under old nor new prefix, that means
-     *   gnucash has never run before on this system = no migration necessary
-     * - if GNC_PREF_VERSION is set under old prefix, but not new prefix
-     *   => full migration from old to new prefix should still be run
+    /* This routine will conditionally execute conversion rules from
+     * prefs_transformations.xml to adapt the user's existing preferences to
+     * the current preferences schema. The rules in this file are versioned and
+     * only rules still relevant to the user's existing preferences and for
+     * this version of GnuCash will be executed.
+     *
+     * Starting with GnuCash 4.7 the code expects all preferences to be stored
+     * under prefix org.gnucash instead of org.gnucash.GnuCash, including our
+     * GNC_PREF_VERSION setting.
+     * As the logic to determine whether or not settings conversions are needed
+     * depends on this preference, we have to test for its value in two
+     * locations:
+     * - if GNC_PREF_VERSION is not set under old nor new prefix
+     *   => GnuCash has never run before so no conversion run necessary
+     * - if GNC_PREF_VERSION is set under old prefix and not new prefix
+     *   => user's preferences weren't moved yet from old to new prefix. Use old
+     *      prefix GNC_PREF_VERSION to determine which conversions may be needed
      * - if GNC_PREF_VERSION is set under both prefixes
-     *   => ignore old prefix and use new prefix result to determine which
-     *   migrations would still be needed.
+     *   => ignore old prefix and use new prefix GNC_PREF_VERSION to determine
+     *      which conversions may be needed.
+     * Sometime in the future (GnuCash 6.0) the old prefix will be fully removed
+     * and the test will be simplified to only check in the new prefix.
      */
-    ENTER("Start of settings migration routine.");
+    ENTER("Start of settings transform routine.");
 
     auto ogG_maj_min = gnc_gsettings_get_user_value (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
     auto og_maj_min = gnc_gsettings_get_user_value (GSET_SCHEMA_OLD_PREFIX "." GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
@@ -787,7 +835,7 @@ void gnc_gsettings_version_upgrade (void)
 
     PINFO ("Previous setting compatibility level: %i", old_maj_min);
 
-    migrate_settings (old_maj_min);
+    transform_settings (old_maj_min);
 
     /* Only write current version if it's more recent than what was set */
     auto cur_maj_min = PROJECT_VERSION_MAJOR * 1000 + PROJECT_VERSION_MINOR;

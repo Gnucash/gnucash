@@ -117,9 +117,6 @@
 /* System has gnome-keyring 0.6 or better */
 #cmakedefine HAVE_GNOME_KEYRING 1
 
-/* System has HtmlHelpW */
-#cmakedefine HAVE_HTMLHELPW 1
-
 /* Define to 1 if you have the <inttypes.h> header file. */
 #cmakedefine HAVE_INTTYPES_H 1
 

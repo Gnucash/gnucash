@@ -274,8 +274,7 @@ gnc_transaction_init(Transaction* trans)
     trans->date_posted  = 0;
     trans->marker = 0;
     trans->orig = NULL;
-    trans->readonly_reason = NULL;
-    trans->reason_cache_valid = FALSE;
+    trans->readonly_reason = (char*) is_unset;
     trans->isClosingTxn_cached = -1;
     trans->notes = (char*) is_unset;
     trans->doclink = (char*) is_unset;
@@ -818,7 +817,8 @@ xaccFreeTransaction (Transaction *trans)
     /* free up transaction strings */
     CACHE_REMOVE(trans->num);
     CACHE_REMOVE(trans->description);
-    g_free (trans->readonly_reason);
+    if (trans->readonly_reason != is_unset)
+        g_free (trans->readonly_reason);
     if (trans->doclink != is_unset)
         g_free (trans->doclink);
     if (trans->void_reason != is_unset)
@@ -832,7 +832,6 @@ xaccFreeTransaction (Transaction *trans)
     trans->date_entered = 0;
     trans->date_posted = 0;
     trans->readonly_reason = NULL;
-    trans->reason_cache_valid = FALSE;
     trans->doclink = NULL;
     trans->notes = NULL;
     trans->void_reason = NULL;
@@ -2130,9 +2129,9 @@ void xaccTransClearReadOnly (Transaction *trans)
         qof_instance_set_dirty(QOF_INSTANCE(trans));
         xaccTransCommitEdit(trans);
 
-        g_free (trans->readonly_reason);
+        if (trans->readonly_reason != is_unset)
+            g_free (trans->readonly_reason);
         trans->readonly_reason = NULL;
-        trans->reason_cache_valid = TRUE;
     }
 }
 
@@ -2150,9 +2149,9 @@ xaccTransSetReadOnly (Transaction *trans, const char *reason)
         g_value_unset (&v);
         xaccTransCommitEdit(trans);
 
-        g_free (trans->readonly_reason);
+        if (trans->readonly_reason != is_unset)
+            g_free (trans->readonly_reason);
         trans->readonly_reason = g_strdup (reason);
-        trans->reason_cache_valid = TRUE;
     }
 }
 
@@ -2570,22 +2569,13 @@ xaccTransGetReadOnly (Transaction *trans)
     if (!trans)
         return NULL;
 
-    if (!trans->reason_cache_valid)
+    if (trans->readonly_reason == is_unset)
     {
         GValue v = G_VALUE_INIT;
         qof_instance_get_kvp (QOF_INSTANCE(trans), &v, 1, TRANS_READ_ONLY_REASON);
-
-        /* Clear possible old cache value first */
-        g_free (trans->readonly_reason);
-        trans->readonly_reason = NULL;
-
-        /* Then set the new one */
-        if (G_VALUE_HOLDS_STRING (&v))
-        {
-            trans->readonly_reason = g_value_dup_string (&v);
-            g_value_unset (&v);
-        }
-        trans->reason_cache_valid = TRUE;
+        trans->readonly_reason = G_VALUE_HOLDS_STRING (&v) ?
+            g_value_dup_string (&v) : NULL;
+        g_value_unset (&v);
     }
     return trans->readonly_reason;
 }

@@ -668,12 +668,11 @@ install(FILES ${gnucash_DOCS} DESTINATION ${CMAKE_INSTALL_DOCDIR})
 # Create config.h
 
 if (WIN32)
-if (MINGW)
-set (HAVE_SCANF_LLD 1)
-else ()
-set (HAVE_SCANF_I64D 1)
-endif()
-set (HAVE_HTMLHELPW 1)
+  if (MINGW)
+    set (HAVE_SCANF_LLD 1)
+  else ()
+    set (HAVE_SCANF_I64D 1)
+  endif()
 endif()
 
 check_include_files (dirent.h HAVE_DIRENT_H)

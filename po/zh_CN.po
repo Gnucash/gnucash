@@ -23,8 +23,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-09-21 03:37+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-09-28 05:36+0000\n"
+"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -17231,13 +17231,13 @@ msgstr "提前提醒(_E)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
 msgid "Re_view created transactions"
-msgstr "复核创建的交易(_v)"
+msgstr "复核创建的交易(_V)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
 msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
-msgstr "在“自上次运行以来”对话框中将“审核已创建的交易”设置为默认值。"
+msgstr "“待执行”对话框中，默认选择“复核创建的交易”。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:765
 msgid "Edit Scheduled Transaction"
@@ -21390,7 +21390,7 @@ msgstr "小计"
 #: gnucash/report/reports/standard/owner-report.scm:56
 #: libgnucash/app-utils/business-options.scm:78
 msgid "Tax"
-msgstr "税额"
+msgstr "税务"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:127
 msgid "Billable?"

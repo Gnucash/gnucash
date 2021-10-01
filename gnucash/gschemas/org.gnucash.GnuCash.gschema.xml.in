@@ -230,6 +230,7 @@
       <summary>Set book option on new files to use split "action" field for "Num" field on registers/reports</summary>
       <description>If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</description>
     </key>
+
     <child name="register" schema="org.gnucash.GnuCash.general.register"/>
     <child name="report" schema="org.gnucash.GnuCash.general.report"/>
   </schema>

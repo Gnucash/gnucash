@@ -114,11 +114,9 @@ struct transaction_s
     /* The readonly_reason is a string that indicates why a transaction
      * is marked as read-only. If NULL, the transaction is read-write.
      * This value is stored in kvp, but we cache a copy here for
-     * performance reasons. reason_cache_valid indicates whether the
-     * cached value is valid.
+     * performance reasons.
      */
     char * readonly_reason;
-    gboolean reason_cache_valid;
 
     char * doclink;
     char * void_reason;
