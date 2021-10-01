@@ -1373,15 +1373,4 @@
 
 </release>
 
-<release version="4009">
 
-<obsolete old-path="org.gnucash.dialogs.business-assoc"
-          old-key="last-geometry"/>
-
-<obsolete old-path="org.gnucash.dialogs.trans-assoc"
-          old-key="last-geometry"/>
-
-<obsolete old-path="org.gnucash.general"
-          old-key="migrate-prefs-done"/>
-
-</release>

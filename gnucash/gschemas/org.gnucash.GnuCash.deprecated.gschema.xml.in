@@ -5,12 +5,6 @@
   </schema>
 
   <schema id="org.gnucash.general" path="/org/gnucash/general/">
-    <key name="migrate-prefs-done" type="b">
-      <default>false</default>
-      <summary>-Obsolete-</summary>
-      <description>This setting is obsolete and will be removed in the next major @PROJECT_NAME@ release series.</description>
-    </key>
-
     <key name="prefs-version" type="i">
       <default>0</default>
       <summary>The version of these settings</summary>
@@ -423,26 +417,6 @@ For example setting this to 2.0 will display reports at twice their typical size
     <child name="trans-doclink" schema="org.gnucash.dialogs.trans-doclink"/>
     <child name="style-sheet" schema="org.gnucash.dialogs.style-sheet"/>
     <child name="options" schema="org.gnucash.dialogs.options"/>
-  </schema>
-
-  <schema id="org.gnucash.dialogs.business-assoc" path="/org/gnucash/dialogs/business-assoc/">
-    <key type="(iiii)" name="last-geometry">
-      <default>(-1,-1,-1,-1)</default>
-      <summary>Last window position and size</summary>
-      <description>This setting describes the size and position of the window when it was last closed.
-        The numbers are the X and Y coordinates of the top left corner of the window
-        followed by the width and height of the window.</description>
-    </key>
-  </schema>
-
-  <schema id="org.gnucash.dialogs.trans-assoc" path="/org/gnucash/dialogs/trans-assoc/">
-    <key type="(iiii)" name="last-geometry">
-      <default>(-1,-1,-1,-1)</default>
-      <summary>Last window position and size</summary>
-      <description>This setting describes the size and position of the window when it was last closed.
-        The numbers are the X and Y coordinates of the top left corner of the window
-        followed by the width and height of the window.</description>
-    </key>
   </schema>
 
   <schema id="org.gnucash.dialogs.account" path="/org/gnucash/dialogs/account/">
