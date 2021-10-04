@@ -1216,6 +1216,8 @@ runMatcher(ofx_info* info, char * selected_filename, gboolean go_to_next_file)
             gnc_info_dialog (parent, _("While importing transactions from OFX file '%s' into account '%s', found %d previously imported transactions, no new transactions."),
                              selected_filename, acct_name, info->num_trans_processed);
             g_free (acct_name);
+            // This is required to ensure we don't mistakenly assume the user canceled.
+            info->response = GTK_RESPONSE_OK;
             gnc_ofx_match_done (NULL,info);
             return;
         }
