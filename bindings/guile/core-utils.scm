@@ -32,6 +32,7 @@
 (use-modules (srfi srfi-26))
 (use-modules (ice-9 match))
 (use-modules (ice-9 i18n))
+(use-modules (ice-9 regex))
 
 (export N_)
 (export G_)
@@ -41,6 +42,7 @@
 (export gnc:string-locale<?)
 (export gnc:string-locale>?)
 (export gnc:version)
+(export gnc:format)
 
 ;; loads modules and re-exports all its public interface into the
 ;; current module
@@ -107,3 +109,16 @@
     (_ (default-printer))))
 
 (set-exception-printer! 'unbound-variable print-unbound-variable-error)
+
+;; format.
+(define %regex (make-regexp "[$][{]([[:alnum:]]+)[}]"))
+(define (gnc:format str . bindings)
+  (define hash (make-hash-table))
+  (define (substitute m)
+    (or (hashq-ref hash (string->symbol (match:substring m 1)))
+        (warn "invalid identifier" (match:substring m 0))))
+  (let lp ((bindings bindings))
+    (match bindings
+      (() (regexp-substitute/global #f %regex str 'pre substitute 'post))
+      (((? symbol? k) v . rest) (hashq-set! hash k (format #f "~a" v)) (lp rest))
+      (_ (error "gnc:format syntax error")))))
