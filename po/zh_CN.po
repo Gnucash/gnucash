@@ -17,14 +17,15 @@
 # TianXing_Yi <ytx.cash@gmail.com>, 2021.
 # cjh <cjh@cjh0613.com>, 2021.
 # Eric <spice2wolf@gmail.com>, 2021.
+# J0kWang <lianjiefly@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-09-28 05:36+0000\n"
-"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
+"PO-Revision-Date: 2021-10-02 14:36+0000\n"
+"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -886,11 +887,11 @@ msgstr "杂项付款"
 #: gnucash/gnome/assistant-loan.cpp:770
 #, c-format
 msgid "... pay \"%s\"?"
-msgstr "支付“%s”"
+msgstr "支付“%s”？"
 
 #: gnucash/gnome/assistant-loan.cpp:782
 msgid "via Escrow account?"
-msgstr "通过托管科目"
+msgstr "通过托管账户？"
 
 #: gnucash/gnome/assistant-loan.cpp:929
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2894
@@ -2381,12 +2382,12 @@ msgstr "编号"
 #: gnucash/gnome/dialog-invoice.c:3377 gnucash/gnome/dialog-invoice.c:3411
 #: gnucash/gnome/dialog-invoice.c:3445
 msgid "Is Paid?"
-msgstr "已支付"
+msgstr "已支付？"
 
 #: gnucash/gnome/dialog-invoice.c:3383 gnucash/gnome/dialog-invoice.c:3417
 #: gnucash/gnome/dialog-invoice.c:3451
 msgid "Is Posted?"
-msgstr "已入账"
+msgstr "已入账？"
 
 #: gnucash/gnome/dialog-invoice.c:3386 gnucash/gnome/dialog-invoice.c:3420
 #: gnucash/gnome/dialog-invoice.c:3454 gnucash/gnome/dialog-order.c:876
@@ -2504,7 +2505,7 @@ msgstr "查找发票"
 #, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] "%d 份到期应付"
+msgstr[0] "%d 份到期应付："
 
 #: gnucash/gnome/dialog-invoice.c:3720
 msgid "Due Bills Reminder"
@@ -2516,7 +2517,7 @@ msgstr "应付提醒"
 #, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] "%d 份到期应收"
+msgstr[0] "%d 份到期应收："
 
 #: gnucash/gnome/dialog-invoice.c:3731
 msgid "Due Invoices Reminder"
@@ -2556,7 +2557,7 @@ msgstr "对象名称"
 
 #: gnucash/gnome/dialog-job.c:581
 msgid "Only Active?"
-msgstr "仅限活跃"
+msgstr "仅限活跃的？"
 
 #: gnucash/gnome/dialog-job.c:585 gnucash/gnome/dialog-job.c:598
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2929
@@ -4175,11 +4176,14 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"科目\"%s\"下还有一个或多个子科目。\n"
+"\n"
+"在删除该科目前请先删除所有的子科目。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
 msgid "The account %s will be deleted."
-msgstr "将删除 %s，"
+msgstr "将删除账户 %s。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1737
 #, c-format
@@ -4199,7 +4203,7 @@ msgstr "将它的所有子科目转移到科目 %s 中。"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1759
 #, c-format
 msgid "Its subaccount will be deleted."
-msgstr "同时删除所有子科目，"
+msgstr "同时删除所有子科目。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1763
 #, c-format
@@ -5549,7 +5553,7 @@ msgstr "不能作废已对账或已核实分录的交易。"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
 msgid "Filter %s by..."
-msgstr "筛选 %s"
+msgstr "筛选 %s..."
 
 #. Translators: This is a menu item that will open the bill, invoice, or voucher
 #. that is posted to the current transaction if there is one.
@@ -5683,7 +5687,7 @@ msgstr "新交易信息"
 #: gnucash/gnome/gnc-plugin-page-register.c:4180
 #, c-format
 msgid "Sort %s by..."
-msgstr "排序 %s"
+msgstr "将 %s 排序..."
 
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
@@ -6082,7 +6086,7 @@ msgstr "此科目是只读的。"
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2448
 #, c-format
 msgid "The '%s' account register is read-only."
-msgstr "'%s'科目只读"
+msgstr "'%s'科目只读。"
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 msgid ""
@@ -22090,7 +22094,7 @@ msgstr "按科目名称的字母顺序排列"
 
 #: gnucash/report/options-utilities.scm:205
 msgid "Numerical by descending amount"
-msgstr ""
+msgstr "按金额数字递减排列"
 
 #: gnucash/report/options-utilities.scm:223
 msgid "How to show the balances of parent accounts."
@@ -24182,7 +24186,7 @@ msgstr "在左侧显示资产，右侧显示负债和所有者权益"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:224
 msgid "Sign: -$10.00"
-msgstr ""
+msgstr "符号: -$10.00"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
 msgid "Brackets: ($10.00)"
@@ -26203,7 +26207,7 @@ msgstr "期间开始"
 #: gnucash/report/reports/standard/new-owner-report.scm:510
 msgid ""
 "* Amounts denoted thus are derived from, and do not match the transaction."
-msgstr ""
+msgstr "这些金额所表示的是由推算得出，与交易不匹配。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:868
 #: gnucash/report/reports/standard/owner-report.scm:535
@@ -26267,7 +26271,7 @@ msgstr "显示文件链接？"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1068
 msgid "No valid account found"
-msgstr "找不到匹配的"
+msgstr "没有有效的科目"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1069
 msgid "This report requires a valid AP/AR account to be available."
@@ -27888,7 +27892,7 @@ msgstr "指定详细显示事务的数量。"
 
 #: gnucash/report/trep-engine.scm:978
 msgid "One split per line"
-msgstr ""
+msgstr "每个分录一行"
 
 #: gnucash/report/trep-engine.scm:979
 msgid "One transaction per line"
