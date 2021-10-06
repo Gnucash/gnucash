@@ -108,6 +108,9 @@ extern gchar *
 gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
 
 extern void
+gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg);
+
+extern void
 gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *target_link);
 
 int      gnc_choose_radio_option_dialog (GtkWidget *parent,

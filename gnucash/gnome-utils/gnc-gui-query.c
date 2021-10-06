@@ -377,3 +377,40 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
     
     return user_input;
 }
+
+void
+gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
+{
+    GtkWidget *dialog, *scrolledwindow, *content_area;
+    GtkWidget *view;
+    GtkTextBuffer *buffer;
+    gint width, height;
+    
+    /* Create the widgets */
+    dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW (parent),
+                                          GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                          _("_OK"), GTK_RESPONSE_ACCEPT,
+                                          NULL);
+    content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+    
+    // add a scroll area
+    scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
+    gtk_box_pack_start(GTK_BOX(content_area), scrolledwindow, TRUE, TRUE, 0);
+    
+    // add a textview
+    view = gtk_text_view_new ();
+    gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
+    buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+    gtk_text_buffer_set_text (buffer, msg, -1);
+    gtk_container_add (GTK_CONTAINER (scrolledwindow), view);
+    
+    // run the dialog
+    if (parent)
+    {
+        gtk_window_get_size (GTK_WINDOW(parent), &width, &height);
+        gtk_window_set_default_size (GTK_WINDOW(dialog), width, height);
+    }
+    gtk_widget_show_all (dialog);
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
+}
