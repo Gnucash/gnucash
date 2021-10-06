@@ -62,6 +62,90 @@ using pref_id = std::pair<std::string, std::string>;
 
 static std::map<pref_id, pref_id> oldkeys_map;
 
+/* Function declarations */
+
+
+#include <glib.h>
+gchar *gnc_gsettings_normalize_schema_name (const gchar *name);
+
+const gchar *gnc_gsettings_get_prefix (void);
+
+void gnc_gsettings_block_all (void);
+
+
+void gnc_gsettings_unblock_all (void);
+
+
+gulong gnc_gsettings_register_cb (const char *schema,
+                                  const gchar *key,
+                                  gpointer func,
+                                  gpointer user_data);
+
+
+void gnc_gsettings_remove_cb_by_func (const gchar *schema,
+                                      const gchar *key,
+                                      gpointer func,
+                                      gpointer user_data);
+
+
+void gnc_gsettings_remove_cb_by_id (const gchar *schema,
+                                    guint id);
+
+
+guint gnc_gsettings_register_any_cb (const gchar *schema,
+                                     gpointer func,
+                                     gpointer user_data);
+
+
+void gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
+                                          gpointer func,
+                                          gpointer user_data);
+
+
+void gnc_gsettings_bind (const gchar *schema,
+                         /*@ null @*/ const gchar *key,
+                         gpointer object,
+                         const gchar *property);
+
+
+gboolean gnc_gsettings_get_bool (const gchar *schema,
+                                 /*@ null @*/ const gchar *key);
+gint gnc_gsettings_get_int (const gchar *schema,
+                            const gchar *key);
+gdouble gnc_gsettings_get_float (const gchar *schema,
+                                 const gchar *key);
+gchar *gnc_gsettings_get_string (const gchar *schema,
+                                 const gchar *key);
+gint gnc_gsettings_get_enum (const gchar *schema,
+                             const gchar *key);
+GVariant *gnc_gsettings_get_value (const gchar *schema,
+                                   const gchar *key);
+
+gboolean gnc_gsettings_set_bool (const gchar *schema,
+                                 const gchar *key,
+                                 gboolean value);
+gboolean gnc_gsettings_set_int (const gchar *schema,
+                                const gchar *key,
+                                gint value);
+gboolean gnc_gsettings_set_float (const gchar *schema,
+                                  const gchar *key,
+                                  gdouble value);
+gboolean gnc_gsettings_set_string (const gchar *schema,
+                                   const gchar *key,
+                                   const gchar *value);
+gboolean gnc_gsettings_set_enum (const gchar *schema,
+                                 const gchar *key,
+                                 gint value);
+gboolean gnc_gsettings_set_value (const gchar *schema,
+                                  const gchar *key,
+                                  GVariant *value);
+void gnc_gsettings_reset (const gchar *schema,
+                          const gchar *key);
+
+void gnc_gsettings_reset_schema (const gchar *schema);
+void gnc_gsettings_version_upgrade (void);
+
+
 /************************************************************/
 /*               Internal helper functions                  */
 /************************************************************/

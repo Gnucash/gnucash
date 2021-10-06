@@ -22,6 +22,7 @@
 \********************************************************************/
 
 #include <config.h>
+#include <glib.h>
 
 #include "gnc-gsettings.h"
 #include "gnc-prefs-utils.h"
