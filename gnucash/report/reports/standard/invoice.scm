@@ -782,9 +782,12 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                 (G_ "Invoice"))))
                (title (if (string-null? custom-title) default-title custom-title))
                ;; Translators: This is the format of the invoice title.
-               ;; The first ~a is "Invoice", "Credit Note"... and the second the number.
+               ;; ${title} is the document type eg "Invoice" "Credit Note"
+               ;; ${ID} is the document ID
                ;; Replace " #" by whatever is common as number abbreviation, i.e. "~a Nr. ~a"
-               (invoice-title (format #f (G_"~a #~a") title (gncInvoiceGetID invoice)))
+               (invoice-title (gnc:format (G_ "${title} #${ID}")
+                                          'title title
+                                          'ID (gncInvoiceGetID invoice)))
                (layout-lookup-table (list (cons 'none #f)
                                           (cons 'picture (gnc:make-html-div/markup
                                                           "picture"
