@@ -24,8 +24,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-10-02 14:36+0000\n"
-"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
+"PO-Revision-Date: 2021-10-06 06:01+0000\n"
+"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2770,9 +2770,7 @@ msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type \"%s"
 "\" before you continue to process this payment. Perhaps you want to create "
 "an Invoice or Bill first?"
-msgstr ""
-"您没有有效的“入账”科目。请在继续处理此付款前创建一个类型为“%s”的科目。也许您"
-"希望先创建一个发票或账单？"
+msgstr "尚无有效的“入账”科目，请先创建一个、类型为“%s”；也许应先创建一个发票或账单？"
 
 #: gnucash/gnome/dialog-payment.c:1621
 msgid ""
@@ -7188,7 +7186,7 @@ msgstr "启动余额的算帐已以指定的货币存在。"
 
 #: gnucash/gnome-utils/dialog-account.c:1329
 msgid "Cannot change currency"
-msgstr "无法更改货币"
+msgstr "无法更改币种"
 
 #: gnucash/gnome-utils/dialog-account.c:1418
 msgid ""
@@ -8638,7 +8636,7 @@ msgstr ""
 "Aron Xu <happyaron.xu@gmail.com>, 2010\n"
 "Tao Wang <dancefire@gmail.com>, 2010\n"
 "Boyuan Yang <073plan@gmail.com>, 2019\n"
-"TianXing_Yi <ytx.cash@gmail.com>, 2021\n"
+"YTX <ytx.cash@gmail.com>, 2021\n"
 "CJH <c@cjh0613.com>, 2021"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4740
