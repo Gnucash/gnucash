@@ -1,17 +1,20 @@
-(define exit-code 0)
 (setenv "GNC_UNINSTALLED" "1")
+
+(use-modules (srfi srfi-64))
+(use-modules (tests srfi64-extras))
 (use-modules (gnucash core-utils))
 
-(if (procedure? (module-ref (current-module) 'N_))
-    (display "N_ defined\n")
-    (begin
-      (display "Failed - N_ not defined\n")
-      (set! exit-code -1)))
+(define (N_-tests)
 
-(if (string=? (N_ "foobar") "foobar")
-    (display "N_ works properly\n")
-    (begin
-      (display "Failed - N_ doesn't work\n")
-      (set! exit-code -1)))
+  (test-assert "N_ defined"
+    (module-ref (current-module) 'N_))
 
-(exit exit-code)
+  (test-equal "N_ works properly"
+    "foobar"
+    (N_ "foobar")))
+
+(define (run-test)
+  (test-runner-factory gnc:test-runner)
+  (test-begin "test-core-utils")
+  (N_-tests)
+  (test-end "test-core-utils"))
