@@ -53,6 +53,7 @@ gnc_add_scheme_test_targets(scm-test-engine
     OUTPUT_DIR "tests"
     DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras")
 
+gnc_add_scheme_tests("${bindings_test_SCHEME}")
 
 add_dependencies(check scm-test-engine)
 gnc_add_scheme_tests("${engine_test_SCHEME}")
