@@ -1130,7 +1130,11 @@ gnc_ofx_match_done (GtkDialog *dialog, gpointer user_data)
     /* The the user did not click OK, don't process the rest of the
      * transaction, don't go to the next of xfile.
      */
-    if (info->response != GTK_RESPONSE_OK) return;
+    if (info->response != GTK_RESPONSE_OK)
+    {
+        g_free (info);
+        return;
+    }
 
     if (info->trans_list)
     {
