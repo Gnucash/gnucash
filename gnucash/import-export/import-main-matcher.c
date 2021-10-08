@@ -40,6 +40,7 @@
 #include "import-main-matcher.h"
 
 #include "dialog-utils.h"
+#include "gnc-glib-utils.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"
@@ -1421,6 +1422,29 @@ update_child_row (GNCImportMatchInfo *sel_match, GtkTreeModel *model, GtkTreeIte
     g_free (text);
 }
 
+static gchar *
+get_peer_acct_names (Split *split)
+{
+    GList *names = NULL, *accounts_seen = NULL;
+    gchar *retval, *name;
+    for (GList *n = xaccTransGetSplitList (xaccSplitGetParent (split)); n; n = n->next)
+    {
+        Account *account = xaccSplitGetAccount (n->data);
+        if ((n->data == split) ||
+            (xaccAccountGetType (account) == ACCT_TYPE_TRADING) ||
+            (g_list_find (accounts_seen, account)))
+            continue;
+        name = gnc_account_get_full_name (account);
+        names = g_list_prepend (names, g_strdup_printf ("\"%s\"", name));
+        accounts_seen = g_list_prepend (accounts_seen, account);
+        g_free (name);
+    }
+    retval = gnc_g_list_stringjoin (names, ", ");
+    g_list_free_full (names, g_free);
+    g_list_free (accounts_seen);
+    return retval;
+}
+
 static void
 refresh_model_row (GNCImportMainMatcher *gui,
                    GtkTreeModel *model,
@@ -1550,15 +1574,19 @@ refresh_model_row (GNCImportMainMatcher *gui,
 
             if (sel_match)
             {
+                gchar *full_names = get_peer_acct_names (sel_match->split);
                 color = get_required_color (int_not_required_class);
                 if (gnc_import_TransInfo_get_match_selected_manually (info))
                 {
-                    ro_text = _("Reconcile (manual) match");
+                    text = g_strdup_printf (_("Reconcile (manual) match to %s"),
+                                            full_names);
                 }
                 else
                 {
-                    ro_text = _("Reconcile (auto) match");
+                    text = g_strdup_printf (_("Reconcile (auto) match to %s"),
+                                            full_names);
                 }
+                g_free (full_names);
                 update_child_row (sel_match, model, iter);
             }
             else
@@ -1576,15 +1604,19 @@ refresh_model_row (GNCImportMainMatcher *gui,
 
             if (sel_match)
             {
+                gchar *full_names = get_peer_acct_names (sel_match->split);
                 color = get_required_color (int_not_required_class);
                 if (gnc_import_TransInfo_get_match_selected_manually (info))
                 {
-                    ro_text = _("Update and reconcile (manual) match");
+                    text = g_strdup_printf (_("Update and reconcile (manual) match to %s"),
+                                            full_names);
                 }
                 else
                 {
-                    ro_text = _("Update and reconcile (auto) match");
+                    text = g_strdup_printf (_("Update and reconcile (auto) match to %s"),
+                                            full_names);
                 }
+                g_free (full_names);
                 update_child_row (sel_match, model, iter);
             }
             else
