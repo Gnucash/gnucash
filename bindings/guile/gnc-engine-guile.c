@@ -331,15 +331,10 @@ gnc_scm2guid_glist (SCM guids_scm)
     return g_list_reverse (guids);
 }
 
-static void
+static inline void
 gnc_guid_glist_free (GList *guids)
 {
-    GList *node;
-
-    for (node = guids; node; node = node->next)
-        guid_free (node->data);
-
-    g_list_free (guids);
+    g_list_free_full (guids, guid_free);
 }
 
 static SCM

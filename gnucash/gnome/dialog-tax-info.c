@@ -168,7 +168,7 @@ initialize_getters (void)
 }
 
 static void
-destroy_tax_type_info (gpointer data, gpointer user_data)
+destroy_tax_type_info (gpointer data)
 {
     TaxTypeInfo *tax_type = data;
 
@@ -187,15 +187,14 @@ destroy_tax_type_info (gpointer data, gpointer user_data)
     g_free (tax_type);
 }
 
-static void
+static inline void
 destroy_tax_type_infos (GList *types)
 {
-    g_list_foreach (types, destroy_tax_type_info, NULL);
-    g_list_free (types);
+    g_list_free_full (types, destroy_tax_type_info);
 }
 
 static void
-destroy_txf_info (gpointer data, gpointer user_data)
+destroy_txf_info (gpointer data)
 {
     TXFInfo *txf_info = data;
 
@@ -217,11 +216,10 @@ destroy_txf_info (gpointer data, gpointer user_data)
     g_free (txf_info);
 }
 
-static void
+static inline void
 destroy_txf_infos (GList *infos)
 {
-    g_list_foreach (infos, destroy_txf_info, NULL);
-    g_list_free (infos);
+    g_list_free_full (infos, destroy_txf_info);
 }
 
 static void
