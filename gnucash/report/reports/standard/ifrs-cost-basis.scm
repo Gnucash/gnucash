@@ -194,11 +194,6 @@ commissions in cumulative average cost and gain/loss after commission")
   (define cap-purch-costs? (opt-val gnc:pagename-general optname-cap-purch-costs))
   (define document (gnc:make-html-document))
 
-  (define (elt->cell split)
-    (gnc:html-markup-anchor
-     (gnc:split-anchor-text split)
-     (amount->monetary (xaccSplitGetAmount split))))
-
   (define large 10000000)
   (define (get-fx db from to time)
     (/ (gnc-pricedb-convert-balance-nearest-price-t64 db large from to time)
@@ -232,7 +227,9 @@ commissions in cumulative average cost and gain/loss after commission")
            (let ((query (qof-query-create-for-splits)))
              (qof-query-set-book query (gnc-get-current-book))
              (xaccQueryAddSingleAccountMatch query stock-acct QOF-QUERY-AND)
-             (xaccQueryGetSplitsUniqueTrans query))))
+             (let ((result (xaccQueryGetSplitsUniqueTrans query)))
+               (qof-query-destroy query)
+               result))))
 
       (define (to-commodity amt)
         (if format-cells
