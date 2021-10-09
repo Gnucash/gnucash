@@ -334,7 +334,7 @@ gnc_scm2guid_glist (SCM guids_scm)
 static inline void
 gnc_guid_glist_free (GList *guids)
 {
-    g_list_free_full (guids, guid_free);
+    g_list_free_full (guids, (GDestroyNotify)guid_free);
 }
 
 static SCM
