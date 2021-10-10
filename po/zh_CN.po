@@ -24,8 +24,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-10-09 13:36+0000\n"
-"Last-Translator: J0kWang <lianjiefly@gmail.com>\n"
+"PO-Revision-Date: 2021-10-10 06:03+0000\n"
+"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -887,11 +887,11 @@ msgstr "杂项付款"
 #: gnucash/gnome/assistant-loan.cpp:770
 #, c-format
 msgid "... pay \"%s\"?"
-msgstr "支付“%s”？"
+msgstr "支付“%s”"
 
 #: gnucash/gnome/assistant-loan.cpp:782
 msgid "via Escrow account?"
-msgstr "通过托管账户？"
+msgstr "通过托管科目"
 
 #: gnucash/gnome/assistant-loan.cpp:929
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2894
@@ -2382,12 +2382,12 @@ msgstr "编号"
 #: gnucash/gnome/dialog-invoice.c:3377 gnucash/gnome/dialog-invoice.c:3411
 #: gnucash/gnome/dialog-invoice.c:3445
 msgid "Is Paid?"
-msgstr "已支付？"
+msgstr "已支付"
 
 #: gnucash/gnome/dialog-invoice.c:3383 gnucash/gnome/dialog-invoice.c:3417
 #: gnucash/gnome/dialog-invoice.c:3451
 msgid "Is Posted?"
-msgstr "已入账？"
+msgstr "已入账"
 
 #: gnucash/gnome/dialog-invoice.c:3386 gnucash/gnome/dialog-invoice.c:3420
 #: gnucash/gnome/dialog-invoice.c:3454 gnucash/gnome/dialog-order.c:876
@@ -2505,7 +2505,7 @@ msgstr "查找发票"
 #, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] "%d 份到期应付："
+msgstr[0] "%d 份到期应付"
 
 #: gnucash/gnome/dialog-invoice.c:3720
 msgid "Due Bills Reminder"
@@ -2517,7 +2517,7 @@ msgstr "应付提醒"
 #, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] "%d 份到期应收："
+msgstr[0] "%d 份到期应收"
 
 #: gnucash/gnome/dialog-invoice.c:3731
 msgid "Due Invoices Reminder"
@@ -2557,7 +2557,7 @@ msgstr "对象名称"
 
 #: gnucash/gnome/dialog-job.c:581
 msgid "Only Active?"
-msgstr "仅限活跃的？"
+msgstr "仅限活跃"
 
 #: gnucash/gnome/dialog-job.c:585 gnucash/gnome/dialog-job.c:598
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2929
@@ -2717,7 +2717,7 @@ msgstr "预付"
 msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
-msgstr "转出和入账的科目被指定了不同的币种。请指定转换汇率。"
+msgstr "转出和入账科目币种不同，请设置汇率。"
 
 #: gnucash/gnome/dialog-payment.c:1307 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1077
@@ -4174,14 +4174,13 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
-"科目\"%s\"下还有一个或多个子科目。\n"
-"\n"
-"在删除该科目前请先删除所有的子科目。"
+"\"%s\"有一个或多个子科目。\n"
+"删除该科目前请先删除所有的子科目。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
 msgid "The account %s will be deleted."
-msgstr "将删除账户 %s。"
+msgstr "将删除 %s,"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1737
 #, c-format
@@ -4201,7 +4200,7 @@ msgstr "将它的所有子科目转移到科目 %s 中。"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1759
 #, c-format
 msgid "Its subaccount will be deleted."
-msgstr "同时删除所有子科目。"
+msgstr "删除所有子科目。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1763
 #, c-format
@@ -5551,7 +5550,7 @@ msgstr "不能作废已对账或已核实分录的交易。"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
 msgid "Filter %s by..."
-msgstr "筛选 %s..."
+msgstr "筛选 %s"
 
 #. Translators: This is a menu item that will open the bill, invoice, or voucher
 #. that is posted to the current transaction if there is one.
@@ -5685,7 +5684,7 @@ msgstr "新交易信息"
 #: gnucash/gnome/gnc-plugin-page-register.c:4180
 #, c-format
 msgid "Sort %s by..."
-msgstr "将 %s 排序..."
+msgstr "排序 %s"
 
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
@@ -5757,9 +5756,7 @@ msgstr "更新当前报表的已保存配置。报表配置将保存在文件%s�
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
-msgstr ""
-"将当前报表的配置添加到'报表->已保存的自定义报表'菜单中。报表配置将被保存在文"
-"件%s中。"
+msgstr "添加当前报表配置到\"报表 -> 已保存模板\"，配置将被保存在文件%s中。"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -5775,7 +5772,7 @@ msgstr "导出为 PDF(_D)..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1211
 msgid "Export the current report as a PDF document"
-msgstr "将当前报告导出为 PDF 文档"
+msgstr "将当前报表导出为 PDF 文档"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1236
 msgid "Save _Report Configuration"
@@ -6084,7 +6081,7 @@ msgstr "此科目是只读的。"
 #: gnucash/gnome/gnc-split-reg2.c:938 gnucash/gnome/gnc-split-reg.c:2448
 #, c-format
 msgid "The '%s' account register is read-only."
-msgstr "'%s'科目只读。"
+msgstr "'%s'科目只读"
 
 #: gnucash/gnome/gnc-split-reg2.c:1003
 msgid ""
@@ -8312,7 +8309,7 @@ msgstr "GnuCash 无法找到帮助文件。"
 msgid ""
 "This is likely because the \"gnucash-docs\" package is not properly "
 "installed."
-msgstr "GnuCash 无法找到帮助文件。这很可能是因为没有安装“gnucash-docs”这个包。"
+msgstr "这可能是因为 \"gnucash-docs \"软件包没有正确安装。"
 
 #. Translators: URI of missing help files
 #: gnucash/gnome-utils/gnc-gnome-utils.c:74
@@ -10054,8 +10051,8 @@ msgid ""
 "removed in GnuCash 5.0. Please use 'gnucash-cli --quotes get <datafile>' "
 "instead."
 msgstr ""
-"gnucash的'--add-price-quotes'选项已被弃用，并将在GnuCash 5.0中删除。请改"
-"用'gnucash-cli --quotes get <datafile>'。"
+"GnuCash 5.0 将删除已弃选项'--add-price-quotes'，请改用'gnucash-cli --quotes get "
+"<datafile>'。"
 
 #: gnucash/gnucash.cpp:348
 msgid "Run '{1} --help' to see a full list of available command line options."
@@ -21641,7 +21638,7 @@ msgstr "sample:(x + 0.33 * y + (x+y) )"
 msgid ""
 "Could not determine the account currency. Using the default currency "
 "provided by your system."
-msgstr "无法确定帐户币种。将使用系统的默认货币。"
+msgstr "无法确定科目币种，将使用系统默认的选项。"
 
 #: gnucash/register/ledger-core/split-register-model.c:253
 msgid "Ref"
@@ -27890,7 +27887,7 @@ msgstr "指定详细显示事务的数量。"
 
 #: gnucash/report/trep-engine.scm:978
 msgid "One split per line"
-msgstr "每个分录一行"
+msgstr "每个子交易一行"
 
 #: gnucash/report/trep-engine.scm:979
 msgid "One transaction per line"
