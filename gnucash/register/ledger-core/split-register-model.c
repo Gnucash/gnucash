@@ -89,7 +89,7 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data,
     if (subaccounts)
     {
         children = gnc_account_get_descendants (account);
-        children = g_list_append (children, account);
+        children = g_list_prepend (children, account);
     }
 
     /* Get the row number we're on, then start with the first row. */
@@ -1601,7 +1601,7 @@ get_trans_total_value_subaccounts (SplitRegister* reg, Transaction* trans)
         return total;
 
     children = gnc_account_get_descendants (parent);
-    children = g_list_append (children, parent);
+    children = g_list_prepend (children, parent);
 
     for (child = children; child; child = child->next)
     {
