@@ -1389,11 +1389,12 @@ gnc_split_register_get_price_entry (VirtualLocation virt_loc,
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
-    price = xaccSplitGetSharePrice (split);
-    curr = xaccTransGetCurrency (xaccSplitGetParent (split));
-    if (gnc_numeric_zero_p (price))
+    if (gnc_numeric_zero_p (xaccSplitGetAmount(split)) ||
+        gnc_numeric_zero_p (xaccSplitGetValue(split)))
         return NULL;
 
+    price = xaccSplitGetSharePrice (split);
+    curr = xaccTransGetCurrency (xaccSplitGetParent (split));
     return xaccPrintAmount (price, gnc_default_price_print_info (curr));
 }
 
