@@ -32,6 +32,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-uri-utils.h"
+#include "gnc-glib-utils.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-warnings.h"
 #include "doclinkcell.h"
@@ -2191,37 +2192,27 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 
     if (protected_trans_cell)
     {
-        GList* node;
+        GList* acc_g_list = NULL;
         gchar* acc_list = NULL;
         gchar* message_format;
 
-        for (node = xaccTransGetSplitList (trans); node; node = node->next)
+        for (GList *node = xaccTransGetSplitList (trans); node; node = node->next)
         {
             Split* split = node->data;
-
             if (xaccSplitGetReconcile (split) == YREC)
             {
-                Account* acc = xaccSplitGetAccount (split);
-                gchar* name = gnc_account_get_full_name (acc);
-
-                if (acc_list == NULL)
-                    acc_list = g_strconcat ("\n", name, NULL);
-                else
-                {
-                    gchar* acc_list_copy = g_strdup (acc_list);
-                    g_free (acc_list);
-                    acc_list = g_strconcat (acc_list_copy, "\n", name, NULL);
-                    g_free (acc_list_copy);
-                }
-                g_free (name);
+                gchar* name = gnc_account_get_full_name (xaccSplitGetAccount (split));
+                acc_g_list = g_list_prepend (acc_g_list, name);
             }
         }
+        acc_list = gnc_g_list_stringjoin (acc_g_list, "\n");
         title = _ ("Change transaction containing a reconciled split?");
         message_format =
             _ ("The transaction you are about to change contains reconciled splits in the following accounts:\n%s"
                "\n\nAre you sure you want to continue with this change?");
 
         message = g_strdup_printf (message_format, acc_list);
+        g_list_free_full (acc_g_list, g_free);
         g_free (acc_list);
     }
 
