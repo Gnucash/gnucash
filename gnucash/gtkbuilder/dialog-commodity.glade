@@ -143,8 +143,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). </property>
-                <property name="tooltip_text" translatable="yes">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). </property>
+                <property name="tooltip_markup">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case).</property>
+                <property name="tooltip_text" translatable="yes">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case).</property>
                 <property name="invisible_char">●</property>
                 <property name="activates_default">True</property>
                 <property name="primary_icon_activatable">False</property>
@@ -637,7 +637,7 @@
   <object class="GtkDialog" id="security_selector_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Select security/currency </property>
+    <property name="title" translatable="yes">Select security/currency</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
