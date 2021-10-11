@@ -1213,7 +1213,7 @@ runMatcher(ofx_info* info, char * selected_filename, gboolean go_to_next_file)
         if (info->num_trans_processed)
         {
             gchar* acct_name = gnc_get_account_name_for_register (first_account);
-            gnc_info_dialog (parent, _("OFX file '%s', imported transactions for account '%s'\n%d transactions processed, no transactions to match"),
+            gnc_info_dialog (parent, _("While importing transactions from OFX file '%s' into account '%s', found %d previously imported transactions, no new transactions."),
                              selected_filename, acct_name, info->num_trans_processed);
             g_free (acct_name);
             gnc_ofx_match_done (NULL,info);
