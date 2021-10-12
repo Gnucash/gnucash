@@ -94,6 +94,24 @@ gboolean custom_report_query_tooltip_cb (GtkTreeView  *view,
                                          GtkTooltip *tooltip,
                                          gpointer    data);
 
+static gboolean
+tree_model_free_guid (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
+                      gpointer data)
+{
+    GncGUID *guid;
+    gtk_tree_model_get (model, iter, COL_NUM, &guid, -1);
+    guid_free (guid);
+    return FALSE;
+}
+
+static void
+empty_tree_model (GtkTreeModel *model)
+{
+     gtk_tree_model_foreach (model, (GtkTreeModelForeachFunc)tree_model_free_guid,
+                             NULL);
+     gtk_list_store_clear (GTK_LIST_STORE (model));
+}
+
 void
 custom_report_dialog_close_cb(GtkWidget* widget, gpointer data)
 {
@@ -133,26 +151,13 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
     int i;
     GtkTreeIter iter;
     GtkTreeModel *model = GTK_TREE_MODEL (store);
-    gboolean valid_iter;
 
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), COL_NAME, GTK_SORT_ASCENDING);
 
     crd->reportlist = scm_call_0(get_rpt_guids);
     rpt_guids = crd->reportlist;
 
-    /* Empty current liststore */
-    valid_iter = gtk_tree_model_get_iter_first (model, &iter);
-    while (valid_iter)
-    {
-        GValue value = { 0, };
-        GncGUID *row_guid;
-        gtk_tree_model_get_value (model, &iter, COL_NUM, &value);
-        row_guid = (GncGUID *) g_value_get_pointer (&value);
-        guid_free (row_guid);
-        g_value_unset (&value);
-        valid_iter = gtk_tree_model_iter_next (model, &iter);
-    }
-    gtk_list_store_clear(store);
+    empty_tree_model (model);
 
     if (scm_is_list(rpt_guids))
     {
