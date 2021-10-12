@@ -80,6 +80,7 @@ typedef struct _CustomReportDialog
 
 } CustomReportDialog;
 
+void custom_report_dialog_destroy_cb (GtkWidget* widget, gpointer data);
 void custom_report_dialog_close_cb(GtkWidget* widget, gpointer data);
 void custom_report_help_cb(GtkWidget* widget, gpointer data);
 void close_custom_report_clicked_cb(GtkWidget* widget, gpointer data);
@@ -95,8 +96,8 @@ gboolean custom_report_query_tooltip_cb (GtkTreeView  *view,
                                          gpointer    data);
 
 static gboolean
-tree_model_free_guid (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
-                      gpointer data)
+tree_model_free (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
+                 gpointer data)
 {
     GncGUID *guid;
     gtk_tree_model_get (model, iter, COL_NUM, &guid, -1);
@@ -107,9 +108,16 @@ tree_model_free_guid (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
 static void
 empty_tree_model (GtkTreeModel *model)
 {
-     gtk_tree_model_foreach (model, (GtkTreeModelForeachFunc)tree_model_free_guid,
-                             NULL);
-     gtk_list_store_clear (GTK_LIST_STORE (model));
+    gtk_tree_model_foreach (model, (GtkTreeModelForeachFunc)tree_model_free, NULL);
+    gtk_list_store_clear (GTK_LIST_STORE (model));
+}
+
+void
+custom_report_dialog_destroy_cb (GtkWidget* widget, gpointer data)
+{
+    CustomReportDialog *crd = data;
+    empty_tree_model (gtk_tree_view_get_model (GTK_TREE_VIEW(crd->reportview)));
+    g_free (crd);
 }
 
 void
@@ -119,7 +127,6 @@ custom_report_dialog_close_cb(GtkWidget* widget, gpointer data)
     gnc_save_window_size(GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS, GTK_WINDOW(crd->dialog));
 
     gtk_widget_destroy(crd->dialog);
-    g_free(crd);
 }
 
 void
@@ -508,6 +515,19 @@ custom_report_query_tooltip_cb (GtkTreeView  *view,
     return FALSE;
 }
 
+static gboolean
+custom_report_event_cb (GtkWidget *widget, GdkEventKey *event,
+                        gpointer user_data)
+{
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        custom_report_dialog_close_cb (widget, user_data);
+        return TRUE;
+     }
+     return FALSE;
+}
+
+
 /* Internal function that builds the dialog */
 static CustomReportDialog *
 gnc_ui_custom_report_internal(GncMainWindow * window)
@@ -552,6 +572,10 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, crd);
 
     gtk_widget_show_all(crd->dialog);
+
+    // Use this event to capture the escape key being pressed
+    g_signal_connect (crd->dialog, "key_press_event",
+                      G_CALLBACK(custom_report_event_cb), crd);
 
     /* check if there are currently saved reports available
      * by checking if there is a first element */
