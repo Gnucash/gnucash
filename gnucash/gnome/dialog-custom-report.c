@@ -343,25 +343,24 @@ get_custom_report_selection(CustomReportDialog *crd,
     GtkTreeSelection *sel;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    GncGUID *guid = guid_malloc ();
+    GncGUID *guid;
     gchar *guid_str;
+    SCM scm_guid;
 
     sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(crd->reportview));
 
-    if (gtk_tree_selection_get_selected(sel, &model, &iter))
-    {
-        gtk_tree_model_get(model, &iter, COL_NUM, &guid, -1);
-        guid_str = g_new0 (gchar, GUID_ENCODING_LENGTH+1 );
-        guid_to_string_buff (guid, guid_str);
-    }
-    else
+    if (!gtk_tree_selection_get_selected(sel, &model, &iter))
     {
         /* no selection, notify user */
         gnc_error_dialog (GTK_WINDOW (crd->dialog), "%s", message);
         return SCM_EOL;
-
     }
-    return scm_from_utf8_string (guid_str);
+
+    gtk_tree_model_get (model, &iter, COL_NUM, &guid, -1);
+    guid_str = guid_to_string (guid);
+    scm_guid = scm_from_utf8_string (guid_str);
+    g_free (guid_str);
+    return scm_guid;
 }
 
 /**************************************************************
@@ -385,7 +384,7 @@ custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
     {
         if (column == crd->namecol)
         {
-            GncGUID *guid = guid_malloc ();
+            GncGUID *guid;
             gchar *guid_str;
 
             gtk_tree_model_get(model, &iter, COL_NUM, &guid, -1);
@@ -393,6 +392,7 @@ custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
             guid_to_string_buff (guid, guid_str);
 
             custom_report_run_report(scm_from_utf8_string (guid_str), crd);
+            g_free (guid_str);
         }
     }
 }
@@ -630,6 +630,7 @@ gnc_ui_custom_report_edit_name (GncMainWindow * window, SCM scm_guid)
             gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (crd->reportview),
                                               path, crd->namecol,
                                               crd->namerenderer, TRUE);
+            gtk_tree_path_free (path);
             break;
         }
 
@@ -639,4 +640,5 @@ gnc_ui_custom_report_edit_name (GncMainWindow * window, SCM scm_guid)
 
 cleanup:
     guid_free (guid);
+    g_free (guid_str);
 }
