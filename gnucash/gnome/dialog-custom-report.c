@@ -640,10 +640,8 @@ gnc_ui_custom_report_edit_name (GncMainWindow * window, SCM scm_guid)
 
     while (valid_iter)
     {
-        GValue value = { 0, };
         GncGUID *row_guid;
-        gtk_tree_model_get_value (model, &iter, COL_NUM, &value);
-        row_guid = (GncGUID *) g_value_get_pointer (&value);
+        gtk_tree_model_get (model, &iter, COL_NUM, &row_guid, -1);
 
         if (guid_equal (guid, row_guid))
         {
@@ -663,7 +661,6 @@ gnc_ui_custom_report_edit_name (GncMainWindow * window, SCM scm_guid)
             break;
         }
 
-        g_value_unset (&value);
         valid_iter = gtk_tree_model_iter_next (model, &iter);
     }
 
