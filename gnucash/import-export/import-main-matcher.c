@@ -130,7 +130,8 @@ static void gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *
                                                                    GNCImportMainMatcher *info);
 static void gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                                            GdkEvent *event,
-                                           GNCImportMainMatcher *info);
+                                           GNCImportMainMatcher *info,
+                                           gboolean show_edit_actions);
 static gboolean gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
                                                   GdkEvent *event,
                                                   GNCImportMainMatcher *info);
@@ -879,6 +880,106 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     LEAVE("");
 }
 
+typedef enum
+{
+    DESCRIPTION = 0,
+    MEMO        = 1,
+    NOTES       = 2,
+} edit_field;
+
+static void
+gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info, edit_field field)
+{
+    GtkTreeView *treeview;
+    GtkTreeSelection *selection;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GNCImportTransInfo *trans_info;
+    GList *selected_rows;
+    gboolean first, is_selection;
+    GList *refs = NULL;
+    const gchar* messages[] = {_("Enter new Description"),_("Enter new Memo"),_("Enter new Notes")};
+    const gchar* message = messages[field];
+    
+    ENTER("assign_transfer_account_to_selection_cb");
+    treeview = GTK_TREE_VIEW(info->view);
+    model = gtk_tree_view_get_model (treeview);
+    selection = gtk_tree_view_get_selection (treeview);
+    selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+    first = TRUE;
+    is_selection = TRUE;
+    
+    DEBUG("Rows in selection = %i",
+          gtk_tree_selection_count_selected_rows (selection));
+    DEBUG("Entering loop over selection");
+
+    if (gtk_tree_selection_count_selected_rows (selection) > 0)
+    {
+        GtkTreeStore* store = GTK_TREE_STORE (model);
+        for (GList* l = selected_rows; l != NULL; l = l->next)
+        {
+            gchar *path_str = gtk_tree_path_to_string (l->data);
+            GtkTreeRowReference *ref = gtk_tree_row_reference_new (model, l->data);
+            g_free (path_str);
+            refs = g_list_prepend (refs, ref);
+            if (gtk_tree_model_get_iter (model, &iter, l->data))
+            {
+                Split* first_split;
+                Transaction* trans;
+                gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
+                trans = gnc_import_TransInfo_get_trans (trans_info);
+                if (field == DESCRIPTION)
+                {
+                    gchar* new_field = gnc_input_dialog_with_entry(info->main_widget, "", message, xaccTransGetDescription (trans));
+                    if (!new_field) break;
+                    xaccTransSetDescription (trans, new_field);
+                    gtk_tree_store_set (store, &iter, DOWNLOADED_COL_DESCRIPTION, new_field, -1);
+                    g_free (new_field);
+                }
+                else if (field == MEMO)
+                {
+                    gchar* new_field;
+                    first_split = gnc_import_TransInfo_get_fsplit (trans_info);
+                    new_field = gnc_input_dialog_with_entry(info->main_widget, "", message, xaccSplitGetMemo (first_split));
+                    if (!new_field) break;
+                    xaccSplitSetMemo (first_split, new_field);
+                    gtk_tree_store_set (store, &iter, DOWNLOADED_COL_MEMO, new_field, -1);
+                    g_free (new_field);
+                }
+                else if (field == NOTES)
+                {
+                    gchar* new_field = gnc_input_dialog_with_entry(info->main_widget, "", message, xaccTransGetNotes (trans));
+                    if (!new_field) break;
+                    xaccTransSetNotes (trans, new_field);
+                    g_free (new_field);
+                }
+            }
+        }
+    }
+    g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
+    g_list_free (refs);
+    LEAVE("");
+
+}
+
+static void
+gnc_gen_trans_edit_description_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
+{
+    gnc_gen_trans_edit_fields (menuitem, info, DESCRIPTION);
+}
+
+static void
+gnc_gen_trans_edit_memo_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
+{
+    gnc_gen_trans_edit_fields (menuitem, info, MEMO);
+}
+
+static void
+gnc_gen_trans_edit_notes_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
+{
+    gnc_gen_trans_edit_fields (menuitem, info, NOTES);
+}
+
 static void
 gnc_gen_trans_row_activated_cb (GtkTreeView *treeview,
                                 GtkTreePath *path,
@@ -966,7 +1067,8 @@ gnc_gen_trans_row_changed_cb (GtkTreeSelection *selection,
 static void
 gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                                GdkEvent *event,
-                               GNCImportMainMatcher *info)
+                               GNCImportMainMatcher *info,
+                               gboolean show_edit_actions)
 {
     GtkWidget *menu, *menuitem;
     GdkEventButton *event_button;
@@ -981,6 +1083,33 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                       info);
     DEBUG("Callback to assign destination account to selection connected");
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    
+    if (show_edit_actions)
+    {
+        menuitem = gtk_menu_item_new_with_label (
+                                                 _("Edit description."));
+        g_signal_connect (menuitem, "activate",
+                          G_CALLBACK (gnc_gen_trans_edit_description_cb),
+                          info);
+        DEBUG("Callback to edit description");
+        gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+        
+        menuitem = gtk_menu_item_new_with_label (
+                                                 _("Edit memo."));
+        g_signal_connect (menuitem, "activate",
+                          G_CALLBACK (gnc_gen_trans_edit_memo_cb),
+                          info);
+        DEBUG("Callback to edit memo");
+        gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+        
+        menuitem = gtk_menu_item_new_with_label (
+                                                 _("Edit notes."));
+        g_signal_connect (menuitem, "activate",
+                          G_CALLBACK (gnc_gen_trans_edit_notes_cb),
+                          info);
+        DEBUG("Callback to edit notes");
+        gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    }
     gtk_widget_show_all (menu);
     event_button = (GdkEventButton *) event;
     /* Note: event can be NULL here when called from view_onPopupMenu; */
@@ -1012,14 +1141,14 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
             selection = gtk_tree_view_get_selection (treeview);
             count = gtk_tree_selection_count_selected_rows (selection);
             if (count > 1)
-                gnc_gen_trans_view_popup_menu (treeview, event, info);
+                gnc_gen_trans_view_popup_menu (treeview, event, info, FALSE);
             else if (count > 0)
             {
                 GList* selected;
                 GtkTreeModel *model;
                 selected = gtk_tree_selection_get_selected_rows (selection, &model);
                 if (get_action_for_path (selected->data, model) == GNCImport_ADD)
-                    gnc_gen_trans_view_popup_menu (treeview, event, info);
+                    gnc_gen_trans_view_popup_menu (treeview, event, info, TRUE);
                 g_list_free_full (selected, (GDestroyNotify)gtk_tree_path_free);
             }
             LEAVE("return TRUE");
@@ -1040,7 +1169,7 @@ gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
     selection = gtk_tree_view_get_selection (treeview);
     if (gtk_tree_selection_count_selected_rows (selection) > 0)
     {
-      gnc_gen_trans_view_popup_menu (treeview, NULL, info);
+      gnc_gen_trans_view_popup_menu (treeview, NULL, info, TRUE);
       LEAVE ("TRUE");
       return TRUE;
     }

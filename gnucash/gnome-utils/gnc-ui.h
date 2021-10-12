@@ -107,6 +107,9 @@ gnc_error_dialog (GtkWindow *parent,
 extern gchar *
 gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
 
+extern gchar *
+gnc_input_dialog_with_entry (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
+
 extern void
 gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg);
 
