@@ -313,6 +313,7 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
     GList            *accounts = NULL;
     GList            *splits;
     Query            *query;
+    QofNumericMatch   sign;
 
     g_return_val_if_fail (account, NULL);
     g_return_val_if_fail ((type == RECLIST_DEBIT) ||
@@ -345,15 +346,11 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
 
     g_list_free (accounts);
 
-    /* limit the matches to CREDITs and DEBITs only, depending on the type */
-    if (type == RECLIST_CREDIT)
-        xaccQueryAddValueMatch(query, gnc_numeric_zero (),
-                               QOF_NUMERIC_MATCH_CREDIT,
-                               QOF_COMPARE_GTE, QOF_QUERY_AND);
-    else
-        xaccQueryAddValueMatch(query, gnc_numeric_zero (),
-                               QOF_NUMERIC_MATCH_DEBIT,
-                               QOF_COMPARE_GTE, QOF_QUERY_AND);
+    sign = (type == RECLIST_CREDIT) ?
+        QOF_NUMERIC_MATCH_CREDIT : QOF_NUMERIC_MATCH_DEBIT;
+
+    xaccQueryAddNumericMatch (query, gnc_numeric_zero (), sign, QOF_COMPARE_GTE,
+                              QOF_QUERY_AND, SPLIT_AMOUNT, NULL);
 
     /* limit the matches only to Cleared and Non-reconciled splits */
     xaccQueryAddClearedMatch (query, CLEARED_NO | CLEARED_CLEARED, QOF_QUERY_AND);

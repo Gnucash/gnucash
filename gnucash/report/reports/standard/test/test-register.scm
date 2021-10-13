@@ -63,7 +63,8 @@
       (qof-query-set-book query (gnc-get-current-book))
       (xaccQueryAddAccountMatch query (list bank)
                                 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-      (set-option options "__reg" "query" (gnc-query2scm query)))
+      (set-option options "__reg" "query" (gnc-query2scm query))
+      (qof-query-destroy query))
 
     (let ((sxml (options->sxml options "basic")))
       ;; this is a simplistic test - counts the number of populated
