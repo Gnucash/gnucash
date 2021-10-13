@@ -80,6 +80,7 @@ typedef struct _CustomReportDialog
 
 } CustomReportDialog;
 
+void custom_report_dialog_destroy_cb (GtkWidget* widget, gpointer data);
 void custom_report_dialog_close_cb(GtkWidget* widget, gpointer data);
 void custom_report_help_cb(GtkWidget* widget, gpointer data);
 void close_custom_report_clicked_cb(GtkWidget* widget, gpointer data);
@@ -94,6 +95,31 @@ gboolean custom_report_query_tooltip_cb (GtkTreeView  *view,
                                          GtkTooltip *tooltip,
                                          gpointer    data);
 
+static gboolean
+tree_model_free (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
+                 gpointer data)
+{
+    GncGUID *guid;
+    gtk_tree_model_get (model, iter, COL_NUM, &guid, -1);
+    guid_free (guid);
+    return FALSE;
+}
+
+static void
+empty_tree_model (GtkTreeModel *model)
+{
+    gtk_tree_model_foreach (model, (GtkTreeModelForeachFunc)tree_model_free, NULL);
+    gtk_list_store_clear (GTK_LIST_STORE (model));
+}
+
+void
+custom_report_dialog_destroy_cb (GtkWidget* widget, gpointer data)
+{
+    CustomReportDialog *crd = data;
+    empty_tree_model (gtk_tree_view_get_model (GTK_TREE_VIEW(crd->reportview)));
+    g_free (crd);
+}
+
 void
 custom_report_dialog_close_cb(GtkWidget* widget, gpointer data)
 {
@@ -101,7 +127,6 @@ custom_report_dialog_close_cb(GtkWidget* widget, gpointer data)
     gnc_save_window_size(GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS, GTK_WINDOW(crd->dialog));
 
     gtk_widget_destroy(crd->dialog);
-    g_free(crd);
 }
 
 void
@@ -133,26 +158,13 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
     int i;
     GtkTreeIter iter;
     GtkTreeModel *model = GTK_TREE_MODEL (store);
-    gboolean valid_iter;
 
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), COL_NAME, GTK_SORT_ASCENDING);
 
     crd->reportlist = scm_call_0(get_rpt_guids);
     rpt_guids = crd->reportlist;
 
-    /* Empty current liststore */
-    valid_iter = gtk_tree_model_get_iter_first (model, &iter);
-    while (valid_iter)
-    {
-        GValue value = { 0, };
-        GncGUID *row_guid;
-        gtk_tree_model_get_value (model, &iter, COL_NUM, &value);
-        row_guid = (GncGUID *) g_value_get_pointer (&value);
-        guid_free (row_guid);
-        g_value_unset (&value);
-        valid_iter = gtk_tree_model_iter_next (model, &iter);
-    }
-    gtk_list_store_clear(store);
+    empty_tree_model (model);
 
     if (scm_is_list(rpt_guids))
     {
@@ -343,25 +355,24 @@ get_custom_report_selection(CustomReportDialog *crd,
     GtkTreeSelection *sel;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    GncGUID *guid = guid_malloc ();
+    GncGUID *guid;
     gchar *guid_str;
+    SCM scm_guid;
 
     sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(crd->reportview));
 
-    if (gtk_tree_selection_get_selected(sel, &model, &iter))
-    {
-        gtk_tree_model_get(model, &iter, COL_NUM, &guid, -1);
-        guid_str = g_new0 (gchar, GUID_ENCODING_LENGTH+1 );
-        guid_to_string_buff (guid, guid_str);
-    }
-    else
+    if (!gtk_tree_selection_get_selected(sel, &model, &iter))
     {
         /* no selection, notify user */
         gnc_error_dialog (GTK_WINDOW (crd->dialog), "%s", message);
         return SCM_EOL;
-
     }
-    return scm_from_utf8_string (guid_str);
+
+    gtk_tree_model_get (model, &iter, COL_NUM, &guid, -1);
+    guid_str = guid_to_string (guid);
+    scm_guid = scm_from_utf8_string (guid_str);
+    g_free (guid_str);
+    return scm_guid;
 }
 
 /**************************************************************
@@ -385,7 +396,7 @@ custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
     {
         if (column == crd->namecol)
         {
-            GncGUID *guid = guid_malloc ();
+            GncGUID *guid;
             gchar *guid_str;
 
             gtk_tree_model_get(model, &iter, COL_NUM, &guid, -1);
@@ -393,6 +404,7 @@ custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
             guid_to_string_buff (guid, guid_str);
 
             custom_report_run_report(scm_from_utf8_string (guid_str), crd);
+            g_free (guid_str);
         }
     }
 }
@@ -503,6 +515,19 @@ custom_report_query_tooltip_cb (GtkTreeView  *view,
     return FALSE;
 }
 
+static gboolean
+custom_report_event_cb (GtkWidget *widget, GdkEventKey *event,
+                        gpointer user_data)
+{
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        custom_report_dialog_close_cb (widget, user_data);
+        return TRUE;
+     }
+     return FALSE;
+}
+
+
 /* Internal function that builds the dialog */
 static CustomReportDialog *
 gnc_ui_custom_report_internal(GncMainWindow * window)
@@ -547,6 +572,10 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, crd);
 
     gtk_widget_show_all(crd->dialog);
+
+    // Use this event to capture the escape key being pressed
+    g_signal_connect (crd->dialog, "key_press_event",
+                      G_CALLBACK(custom_report_event_cb), crd);
 
     /* check if there are currently saved reports available
      * by checking if there is a first element */
@@ -611,10 +640,8 @@ gnc_ui_custom_report_edit_name (GncMainWindow * window, SCM scm_guid)
 
     while (valid_iter)
     {
-        GValue value = { 0, };
         GncGUID *row_guid;
-        gtk_tree_model_get_value (model, &iter, COL_NUM, &value);
-        row_guid = (GncGUID *) g_value_get_pointer (&value);
+        gtk_tree_model_get (model, &iter, COL_NUM, &row_guid, -1);
 
         if (guid_equal (guid, row_guid))
         {
@@ -630,13 +657,14 @@ gnc_ui_custom_report_edit_name (GncMainWindow * window, SCM scm_guid)
             gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (crd->reportview),
                                               path, crd->namecol,
                                               crd->namerenderer, TRUE);
+            gtk_tree_path_free (path);
             break;
         }
 
-        g_value_unset (&value);
         valid_iter = gtk_tree_model_iter_next (model, &iter);
     }
 
 cleanup:
     guid_free (guid);
+    g_free (guid_str);
 }

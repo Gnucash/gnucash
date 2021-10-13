@@ -11,6 +11,7 @@
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
+    <signal name="destroy" handler="custom_report_dialog_destroy_cb" swapped="no"/>
     <signal name="close" handler="custom_report_dialog_close_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
