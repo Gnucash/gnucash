@@ -402,11 +402,9 @@ gnc_commodity *
 gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
 {
     gnc_commodity *commodity;
-    const char *fullname;
     char *mnemonic, *name;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    GValue value = { 0 };
 
     g_return_val_if_fail(gce != NULL, NULL);
     g_return_val_if_fail(GNC_IS_CURRENCY_EDIT(gce), NULL);
@@ -414,10 +412,7 @@ gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
     if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(gce), &iter))
     {
         model = gtk_combo_box_get_model(GTK_COMBO_BOX(gce));
-        gtk_tree_model_get_value(model, &iter, 0, &value);
-        fullname = g_value_get_string(&value);
-        mnemonic = g_strdup(fullname);
-        g_value_unset(&value);
+        gtk_tree_model_get (model, &iter, 0, &mnemonic, -1);
 
         name = strchr(mnemonic, ' ');
         if (name != NULL)
