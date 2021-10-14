@@ -10,14 +10,15 @@
 # Guille <willelopz+weblate@gmail.com>, 2021.
 # Guille Lopez <willelopz@gmail.com>, 2021.
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
+# Francisco Serrador <fserrador@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-05-25 17:33+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2021-10-14 21:34+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -25,11 +26,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -1514,6 +1515,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
+"El campo del Nombre de Sociedad no se puede dejarlo en blanco, introduzca un "
+"nombre de la sociedad o una persona física."
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -1769,9 +1772,8 @@ msgid "Total Entries"
 msgstr "Entradas totales"
 
 #: gnucash/gnome/dialog-doclink.c:650
-#, fuzzy
 msgid "Business item can not be modified."
-msgstr "El fichero de entrada no puede abrirse."
+msgstr "El ítem de negocios puede son ser modificado."
 
 #: gnucash/gnome/dialog-doclink.c:659 gnucash/gnome/dialog-doclink.c:760
 #: gnucash/gnome/gnc-plugin-page-invoice.c:382
@@ -1839,15 +1841,17 @@ msgid "Description"
 msgstr "Descripción"
 
 #: gnucash/gnome/dialog-doclink.c:1088
-#, fuzzy
 msgid ""
 "Double click on the entry in the Id column to jump to the Business Item.\n"
 "Double click on the entry in the Link column to open the Linked Document.\n"
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"Para omitir a la Transacción, pulse dos veces sobre el asiento dentro\n"
-"de la columna Descripción o Asociación para abrir la Asociación"
+"Pulsación doble en el apunte en la columna Id para ir al Ítem de Negocio.\n"
+"Pulsación doble en el apunte en la columna Enlace para abrir el Documento "
+"Enlazado.\n"
+"Pulsación doble en el apunte en la columna Disponible para modificar el "
+"enlace documental."
 
 #: gnucash/gnome/dialog-doclink.c:1097
 msgid "Business Document Links"
@@ -2224,7 +2228,7 @@ msgstr "Fecha Conciliada"
 
 #. Translators: This is a ngettext(3) message, %d is the number of maps missing
 #: gnucash/gnome/dialog-imap-editor.c:362
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There is %d invalid mapping,\n"
 "\n"
@@ -2233,8 +2237,14 @@ msgid_plural ""
 "There are %d invalid mappings,\n"
 "\n"
 "Would you like to remove them now?"
-msgstr[0] "La distribución impositiva %s no existe. ¿Quiere crearla?"
-msgstr[1] "La distribución impositiva %s no existe. ¿Quiere crearla?"
+msgstr[0] ""
+"Hay %d asociación no válida,\n"
+"\n"
+"¿Le gustaría quitarla ahora?"
+msgstr[1] ""
+"Hay %d asociaciones no válidas,\n"
+"\n"
+"¿Le gustaría quitarla ahora?"
 
 #: gnucash/gnome/dialog-imap-editor.c:367
 #, c-format
@@ -2688,11 +2698,8 @@ msgid "You must choose an owner for this job."
 msgstr "Debe elegir un titular para este ejercicio."
 
 #: gnucash/gnome/dialog-job.c:157
-#, fuzzy
-#| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr ""
-"El crédito debe ser una cantidad positiva o si no debe dejarlo en blanco."
+msgstr "El cantidad de la tasa debe ser válida o debe dejarla en blanco."
 
 #: gnucash/gnome/dialog-job.c:258
 msgid "Edit Job"
@@ -2855,10 +2862,8 @@ msgid "You must select a company for payment processing."
 msgstr "Debe seleccionar una sociedad para el procesado de liquidación."
 
 #: gnucash/gnome/dialog-payment.c:259
-#, fuzzy
-#| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
-msgstr "Hubo un problema con la importación."
+msgstr "Hay un problema con el monto de Liquidación o Devolución."
 
 #: gnucash/gnome/dialog-payment.c:280
 msgid "You must select a transfer account from the account tree."
@@ -4413,6 +4418,9 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"La cuenta «%s» tiene más de una sub-cuenta.\n"
+"\n"
+"Mueva las sub-cuentas o bórrelas antes de intentar borrar esta cuenta."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
@@ -5001,6 +5009,9 @@ msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
+"Restablezca el diseño predeterminado para todos los cargos del proveedor "
+"devueltos para empotrar predeterminaciones y actualizar la página actual "
+"correspondientemente"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:415
 msgid "Make a printable voucher"
@@ -6618,6 +6629,12 @@ msgid ""
 "Select OK to temporarily clear filter and proceed,\n"
 "otherwise the last active cell will be selected."
 msgstr ""
+"El destino desplegado actualmente está oculto dentro de este registro.\n"
+"\n"
+"%s\n"
+"\n"
+"Seleccione Aceptar para purgar el filtro temporalmente y\n"
+"proceda, en otro caso la última celda activa será seleccionada."
 
 #: gnucash/gnome/gnc-split-reg.c:2371
 msgid "Sort By:"
@@ -10384,6 +10401,11 @@ msgid ""
 "  get: \tFetch current quotes for all foreign currencies and stocks in the "
 "given GnuCash datafile.\n"
 msgstr ""
+"Ejecute las instrucciones de cotización del precio.  Solamente actualmente "
+"una instrucción está admitida.\n"
+"\n"
+"  get: \tObtiene cotizaciones actuales para todas las monedas extranjeras y "
+"las acciones dentro del fichero Gnucash de datos.\n"
 
 #: gnucash/gnucash-cli.cpp:100
 #, fuzzy
@@ -10491,7 +10513,7 @@ msgstr "- GnuCash, para contabilidad financiera personal y pequeños negocios"
 
 #: gnucash/gnucash-core-app.cpp:225
 msgid "{1} [options] [datafile]"
-msgstr ""
+msgstr "{1} [opciones] [f-datos]"
 
 #: gnucash/gnucash-core-app.cpp:253
 msgid "GnuCash {1}"
@@ -11589,12 +11611,16 @@ msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
 msgstr ""
+"Fije «Revisión Creó Transacciones» como la predeterminada para el diálogo «"
+"desde última ejecución»."
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
+"Este parámetro controla si como predetermina el «revisión creada "
+"transacciones» está fijo para el diálogo «desde última ejecución»."
 
 #: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
@@ -12007,13 +12033,15 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
-msgstr ""
+msgstr "Abre lengüeta adyacente nueva a la lengüeta actual en vez de al final"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:136
 msgid ""
 "If active, new tabs are opened adjacent to current tab. If inactive, the new "
 "tabs are opened instead at the end."
 msgstr ""
+"Si activa, las lengüetas nuevas son abiertas adyacentes a la lengüeta "
+"actual. Se es inactiva, las lengüetas nuevas son abiertas al final."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:940
@@ -14014,6 +14042,9 @@ msgid ""
 "that you foresee you will use GnuCash. Each category you select will cause "
 "several accounts to be created."
 msgstr ""
+"Seleccione idioma y categorías de región específica que corresponda a las "
+"maneras que preverá utilizar GnuCash. Cada categoría seleccionada causará "
+"que varias cuentas sean creadas."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:169
 msgid "<b>Categories</b>"
@@ -16085,12 +16116,18 @@ msgid ""
 "Existing relative file path links will be converted to absolute ones by "
 "combining them with the existing path head unless box unticked."
 msgstr ""
+"Existen enlaces de ruta a fichero relativo será convertido a unos absolutos "
+"combinándoles con la cabecera de ruta existente a no ser que la caja no esté "
+"desetiquetada."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:140
 msgid ""
 "Existing absolute file path links will be converted to relative ones by "
 "comparing them to the new path head unless box unticked."
 msgstr ""
+"Existen enlaces de ruta a fichero relativo será convertido a unos absolutos "
+"combinándoles con la cabecera de ruta existente a no ser que la caja no esté "
+"desetiquetada."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:178
 msgid "Note: Only Document Links that are not read-only will be changed."
@@ -16139,7 +16176,7 @@ msgstr "Todos los documentos asociados"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:658
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:686
 msgid "Linked Document"
@@ -16161,6 +16198,12 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
+"Pulsación doble en el apunte en la columna Descripción para ir a la "
+"Transacción.\n"
+"Pulsación doble en el apunte en la columna Enlace para abrir el Documento "
+"Enlazado.\n"
+"Pulsación doble en el apunte en la columna Disponible para modificar el "
+"enlace documental."
 
 #: gnucash/gtkbuilder/dialog-employee.glade:166
 msgid ""
@@ -16527,6 +16570,11 @@ msgid ""
 "rows and then Right Click to select a transfer account. Only rows with \"A\" "
 "checked can be added to a selection."
 msgstr ""
+"Múltiples filas de transacción tal vez esté seleccionada y una cuenta "
+"transferencial asignada a todas las filas seleccionadas. Utilice Ctrl Izq "
+"Pulsación o Pulsación-Mayús para seleccionar múltiples files y después "
+"Pulsar Der para seleccionar una cuenta transferencial. Solamente las filas "
+"con «A» marcadas pueden ser agregadas a una selección."
 
 #: gnucash/gtkbuilder/dialog-import.glade:466
 msgid ""
@@ -16597,7 +16645,7 @@ msgstr "«A»"
 
 #: gnucash/gtkbuilder/dialog-import.glade:667
 msgid "\"U+C\""
-msgstr ""
+msgstr "«A+P»"
 
 # A = Add Añadir
 #: gnucash/gtkbuilder/dialog-import.glade:678
@@ -17526,12 +17574,16 @@ msgid ""
 "A transaction whose date is within the threshold is likely to be a match. "
 "Default is 4 days."
 msgstr ""
+"Una transacción cuya fecha esta dentro del umbral es como ser una "
+"coincidencia. Por defecto son 4 días."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2340
 msgid ""
 "A transaction whose date is outside the threshold is unlikely to be a match. "
 "Default is 14 days."
 msgstr ""
+"Una transacción cuyos datos están fuera del umbral es únicamente para ser un "
+"cotejo. Predeterminado es 14 días."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2385
 msgid "<b>Checks</b>"
@@ -17910,11 +17962,11 @@ msgstr "A_nchura"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3671
 msgid "Open new tabs _adjacent to current tab"
-msgstr ""
+msgstr "Abre lengüetas nuevas _adyacentes a la lengüeta actual"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3677
 msgid "Opens new tab adjacent to current tab instead of at the end."
-msgstr ""
+msgstr "Abre lengüeta adyacente nueva a la lengüeta actual en vez de al final."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3716
 msgid "Windows"
@@ -19309,7 +19361,7 @@ msgstr "_Multiplicar"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:155
 msgid "Multiply current budget for each period by 'value'"
-msgstr ""
+msgstr "Presupuesto de monedas múltiples por cada periodo por 'valor'"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:177
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:316
@@ -19653,6 +19705,9 @@ msgid ""
 "are cleared, given an ending balance. For example, said ending balance can "
 "be the current balance given by your bank online."
 msgstr ""
+"Utilice este diálogo si desea que GnuCash encuentre automáticamente cuales "
+"transacciones son purgadas, dando un balance final. Por ejemplo, diciendo el "
+"balance final puede ser el balance actual dado por su conexión bancaria."
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
 msgid "Caution!"
@@ -19805,6 +19860,29 @@ msgid ""
 "Online Banking, because sometimes the bank does not give you correct "
 "feedback when a transfer is rejected."
 msgstr ""
+"Los requerimientos para Bancaria Conectada varía entre los diferentes "
+"backens AqBanking admitidos, pero normalmente necesitará:\n"
+"* Su banco necesita permitirse acceso por conexión. Vea en su sitio web o "
+"pregunte a su servicio de sus clientes para cómo obtenerlo.\n"
+"Además deberían decirle:\n"
+"* Su ID de usuario que le identifica a sus servidor, a menudo su número de "
+"cuenta base;\n"
+"* La URL de su servidor de Conexión Bancaria;\n"
+"* En algunos casos el número de enrutamiento de su rama del banco es útil en "
+"esta asistencia;\n"
+"* Los métodos autenticativos varían por backend y método elegido:\n"
+" * FinTS PIN/TAN: algunos métodos requieren un gadget específico como un "
+"lector de tarjeta o un móvil;\n"
+" * FinTS HBCI: tiene que publicar las partes públicas de claves asimétricas "
+"con su banco (\"Ini-Letter\").\n"
+" * PayPal: dirección de correo-e registrada, contraseña, firma API;\n"
+"\n"
+"Vea https://wiki.gnucash.org/wiki/AqBanking para más detalles.\n"
+"\n"
+"Nota: SIN GARANTÍAS PARA CUALQUIER COSA. Algunos bancos ejecutan un servidor "
+"de Conexión Bancaria. No debería depender en transferencias en tiempo "
+"crítico a través de Conexión Bancaria, porque algunas veces el banco no "
+"proporciona feedback cuando una transferencia es rechazada."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:71
 msgid "Initial Online Banking Setup"
@@ -19984,6 +20062,8 @@ msgid ""
 "Setting the delay time, with small values the flicker graphic is repeated "
 "faster."
 msgstr ""
+"Fijando el tiempo de retraso, con valores pequeños que el bicho gráfico es "
+"representado más rápido."
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:758
@@ -19991,6 +20071,8 @@ msgid ""
 "Hold the TAN generator in front of the animated graphic. The markings "
 "(triangles) on the graphic must match those on the TAN generator."
 msgstr ""
+"Mantener generador TAN en frente del gráfico animado. Los marcajes "
+"(triángulos) sobre el gráfico debe coincidir aquellos en el generador TAN."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:802
 msgid "Con_firm Password"
@@ -20862,7 +20944,7 @@ msgstr "Fila %d, factura %s/%u: cliente %s no existe.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:372
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid posting date.\n"
-msgstr ""
+msgstr "Fila %d, factura %s/%u: %s no es una fecha contabilizante válida.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:380
 #, c-format
@@ -20878,7 +20960,7 @@ msgstr "Fila %u, cuenta %s no en %s\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:416
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Payable.\n"
-msgstr ""
+msgstr "Fila %d, factura %s/%u: cuenta %s no es de tipo Cuestas Abonables.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:426
 #, c-format
@@ -21097,7 +21179,7 @@ msgstr ""
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This assistant will help you export the Transactions to a file with the "
 "separator specified below.\n"
@@ -21114,29 +21196,38 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"Este asistente le ayudará a exportar las Transacciones a un fichero\n"
-"con el separador especificado debajo.\n"
+"Este asistente le ayudará a exportar las Transacciones a un fichero con el "
+"separador especificado debajo.\n"
 "\n"
-"Habrá múltiples filas para cada transacción y quizá requiera algún cambio "
-"para obtenerlas en un formato que pueda usar.\n"
+"%s\n"
 "\n"
-"Cada Transacción aparecerá una vez en la exportación y será listada en la "
-"ordenación en que se fue procesada\n"
+"Mientras una transacción pueda tener desgloses en varias de las cuentas "
+"seleccionadas solamente será exportada una vez.  Aparecerá bajo la primera "
+"cuenta procesada tiene un desglose dentro.\n"
 "\n"
-"Seleccione las opciones solicitadas para el fichero y después pulse "
-"«Avanzar» para comenzar o «Cancelar» para Abortar Exportación.\n"
+"La salida del formato de Precio/Proporción está controlada por la "
+"preferencia\n"
+"«Números, Fecha, Hora» → «Forzar Precios para representar como decimales». \n"
+"\n"
+"Seleccione los parámetros que requiera para el fichero y pulse «Siguiente» "
+"para procesarlo o «Cancelar» para interrumpir la exportación.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:99
 msgid ""
 "There will be multiple rows for each transaction with each row representing "
 "one split."
 msgstr ""
+"Habrá múltiples filas para cada transacción con cada fila representando un "
+"desglose."
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "There will be one row for each transaction, equivalent to a single row in a "
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
 msgstr ""
+"Habrá una fila para cada transacción, equivalente a una fila única dentro de "
+"un registro en modo «Libro Básico». Tanto como algún detalle de "
+"transferencia pudo ser olvidado."
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
