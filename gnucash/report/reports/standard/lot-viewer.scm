@@ -108,7 +108,9 @@
              query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
             (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
             (xaccQueryAddDateMatchTT query #t from-date #t to-date QOF-QUERY-AND)
-            (filter desc-filter? (qof-query-run query))))
+            (let ((result (filter desc-filter? (qof-query-run query))))
+              (qof-query-destroy query)
+              result)))
          (transactions
           (sort-and-delete-duplicates
            (map xaccSplitGetParent splits)

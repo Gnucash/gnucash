@@ -52,10 +52,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-08-30 15:32+0000\n"
+"PO-Revision-Date: 2021-10-02 06:36+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -64,7 +64,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -4415,6 +4415,10 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"Il conto «%s» ha più di un sottoconto.\n"
+"\n"
+"Sposta i sottoconti o eliminali prima di tentare l'eliminazione di questo "
+"conto."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
@@ -10477,16 +10481,12 @@ msgid "To find the last stable version, please refer to {1}"
 msgstr "Per ottenere l'ultima versione stabile, fare riferimento a {1}"
 
 #: gnucash/gnucash-core-app.cpp:102
-#, fuzzy
-#| msgid "Load report configuration"
 msgid "Loading system scm configuration..."
-msgstr "Carica configurazione del resoconto"
+msgstr "Sto caricando la configurazione scm di sistema..."
 
 #: gnucash/gnucash-core-app.cpp:114
-#, fuzzy
-#| msgid "Load report configuration"
 msgid "Loading user scm configuration..."
-msgstr "Carica configurazione del resoconto"
+msgstr "Sto caricando la configurazione scm dell'utente..."
 
 #: gnucash/gnucash-core-app.cpp:223
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -18706,22 +18706,16 @@ msgid "R_emind in advance"
 msgstr "_Ricorda in anticipo di"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:724
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Re_view created transactions"
 msgstr "_Controlla le transazioni create"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:728
-#, fuzzy
-#| msgid ""
-#| "Set \"Review Created Transactions\" as the default for the \"since last "
-#| "run\" dialog."
 msgid ""
 "Set 'Review created transactions' as the default in the \"since last run\" "
 "dialog."
 msgstr ""
-"Imposta «Controlla le transazioni create» come impostazione predefinita per "
-"la finestra «dall'ultimo avvio»."
+"Imposta «Controlla le transazioni create» come impostazione predefinita "
+"nella finestra «dall'ultimo avvio»."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:765
 msgid "Edit Scheduled Transaction"
@@ -19968,31 +19962,6 @@ msgstr ""
 
 #. See https://wiki.gnucash.org/wiki/AqBanking for the used terminology and replace the link, if a localized version exists.
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:47
-#, fuzzy
-#| msgid ""
-#| "The requirements for Online Banking vary between the different supported "
-#| "AqBanking backends, but usually you will need:\n"
-#| "* Your bank needs to grant you online access. See on their website or ask "
-#| "their customer service for how to obtain it.\n"
-#| "They should also tell you:\n"
-#| "* Your user ID that identifies you to their server, often your base "
-#| "account number;\n"
-#| "* The URL of their Online Banking server;\n"
-#| "* In some cases the routing number of your bank's branch is useful in "
-#| "this assistant;\n"
-#| "* Authentication methods vary by backend and choosen method:\n"
-#| " * FinTS PIN/TAN: Some methods require a specific gadget like a card "
-#| "reader or a mobile;\n"
-#| " * FinTS HBCI: You have to exchange the public parts of asymmetric keys "
-#| "with your bank (\"Ini-Letter\").\n"
-#| " * PayPal: registered email address, password, API signature;\n"
-#| "\n"
-#| "See https://wiki.gnucash.org/wiki/AqBanking for more details.\n"
-#| "\n"
-#| "Note: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented "
-#| "Online Banking server. You should not rely on time-critical transfers "
-#| "through Online Banking, because sometimes the bank does not give you "
-#| "correct feedback when a transfer is rejected."
 msgid ""
 "The requirements for Online Banking vary between the different supported "
 "AqBanking backends, but usually you will need:\n"
@@ -22393,16 +22362,13 @@ msgid "Unknown OFX investment account"
 msgstr "Conto investimento OFX sconosciuto"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1201
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s' imported, %d transactions processed, no transactions to "
-#| "match"
+#, c-format
 msgid ""
 "OFX file '%s', imported transactions for account '%s'\n"
 "%d transactions processed, no transactions to match"
 msgstr ""
-"File OFX '%s' importato, processate %d transazioni, nessuna transazione da "
-"incrociare"
+"File OFX «%s», transazioni importate per il conto «%s», \n"
+"processate %d transazioni, nessuna transazione da incrociare"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1302
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -28317,6 +28283,8 @@ msgstr "Totali periodo"
 msgid ""
 "* Amounts denoted thus are derived from, and do not match the transaction."
 msgstr ""
+"* Gli importi così indicati sono derivati e non corrispondono alla "
+"transazione."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:868
 #: gnucash/report/reports/standard/owner-report.scm:535

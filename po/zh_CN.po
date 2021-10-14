@@ -17,13 +17,14 @@
 # TianXing_Yi <ytx.cash@gmail.com>, 2021.
 # cjh <cjh@cjh0613.com>, 2021.
 # Eric <spice2wolf@gmail.com>, 2021.
+# J0kWang <lianjiefly@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.7-pre2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-09-28 05:36+0000\n"
+"PO-Revision-Date: 2021-10-10 06:03+0000\n"
 "Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -2716,7 +2717,7 @@ msgstr "预付"
 msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
-msgstr "转出和入账的科目被指定了不同的币种。请指定转换汇率。"
+msgstr "转出和入账科目币种不同，请设置汇率。"
 
 #: gnucash/gnome/dialog-payment.c:1307 gnucash/gnome/search-owner.c:211
 #: gnucash/gnome-search/dialog-search.c:1077
@@ -2769,9 +2770,7 @@ msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type \"%s"
 "\" before you continue to process this payment. Perhaps you want to create "
 "an Invoice or Bill first?"
-msgstr ""
-"您没有有效的“入账”科目。请在继续处理此付款前创建一个类型为“%s”的科目。也许您"
-"希望先创建一个发票或账单？"
+msgstr "尚无有效的“入账”科目，请先创建一个、类型为“%s”；也许应先创建一个发票或账单？"
 
 #: gnucash/gnome/dialog-payment.c:1621
 msgid ""
@@ -4175,11 +4174,13 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"\"%s\"有一个或多个子科目。\n"
+"删除该科目前请先删除所有的子科目。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
 msgid "The account %s will be deleted."
-msgstr "将删除 %s，"
+msgstr "将删除 %s,"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1737
 #, c-format
@@ -4199,7 +4200,7 @@ msgstr "将它的所有子科目转移到科目 %s 中。"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1759
 #, c-format
 msgid "Its subaccount will be deleted."
-msgstr "同时删除所有子科目，"
+msgstr "删除所有子科目。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1763
 #, c-format
@@ -5755,9 +5756,7 @@ msgstr "更新当前报表的已保存配置。报表配置将保存在文件%s�
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
-msgstr ""
-"将当前报表的配置添加到'报表->已保存的自定义报表'菜单中。报表配置将被保存在文"
-"件%s中。"
+msgstr "添加当前报表配置到\"报表 -> 已保存模板\"，配置将被保存在文件%s中。"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1205
 msgid "_Print Report..."
@@ -5773,7 +5772,7 @@ msgstr "导出为 PDF(_D)..."
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1211
 msgid "Export the current report as a PDF document"
-msgstr "将当前报告导出为 PDF 文档"
+msgstr "将当前报表导出为 PDF 文档"
 
 #: gnucash/gnome/gnc-plugin-page-report.c:1236
 msgid "Save _Report Configuration"
@@ -7184,7 +7183,7 @@ msgstr "启动余额的算帐已以指定的货币存在。"
 
 #: gnucash/gnome-utils/dialog-account.c:1329
 msgid "Cannot change currency"
-msgstr "无法更改货币"
+msgstr "无法更改币种"
 
 #: gnucash/gnome-utils/dialog-account.c:1418
 msgid ""
@@ -8310,7 +8309,7 @@ msgstr "GnuCash 无法找到帮助文件。"
 msgid ""
 "This is likely because the \"gnucash-docs\" package is not properly "
 "installed."
-msgstr "GnuCash 无法找到帮助文件。这很可能是因为没有安装“gnucash-docs”这个包。"
+msgstr "这可能是因为 \"gnucash-docs \"软件包没有正确安装。"
 
 #. Translators: URI of missing help files
 #: gnucash/gnome-utils/gnc-gnome-utils.c:74
@@ -8634,7 +8633,7 @@ msgstr ""
 "Aron Xu <happyaron.xu@gmail.com>, 2010\n"
 "Tao Wang <dancefire@gmail.com>, 2010\n"
 "Boyuan Yang <073plan@gmail.com>, 2019\n"
-"TianXing_Yi <ytx.cash@gmail.com>, 2021\n"
+"YTX <ytx.cash@gmail.com>, 2021\n"
 "CJH <c@cjh0613.com>, 2021"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4740
@@ -10052,8 +10051,8 @@ msgid ""
 "removed in GnuCash 5.0. Please use 'gnucash-cli --quotes get <datafile>' "
 "instead."
 msgstr ""
-"gnucash的'--add-price-quotes'选项已被弃用，并将在GnuCash 5.0中删除。请改"
-"用'gnucash-cli --quotes get <datafile>'。"
+"GnuCash 5.0 将删除已弃选项'--add-price-quotes'，请改用'gnucash-cli --quotes get "
+"<datafile>'。"
 
 #: gnucash/gnucash.cpp:348
 msgid "Run '{1} --help' to see a full list of available command line options."
@@ -21639,7 +21638,7 @@ msgstr "sample:(x + 0.33 * y + (x+y) )"
 msgid ""
 "Could not determine the account currency. Using the default currency "
 "provided by your system."
-msgstr "无法确定帐户币种。将使用系统的默认货币。"
+msgstr "无法确定科目币种，将使用系统默认的选项。"
 
 #: gnucash/register/ledger-core/split-register-model.c:253
 msgid "Ref"
@@ -22090,7 +22089,7 @@ msgstr "按科目名称的字母顺序排列"
 
 #: gnucash/report/options-utilities.scm:205
 msgid "Numerical by descending amount"
-msgstr ""
+msgstr "按金额数字递减排列"
 
 #: gnucash/report/options-utilities.scm:223
 msgid "How to show the balances of parent accounts."
@@ -24182,7 +24181,7 @@ msgstr "在左侧显示资产，右侧显示负债和所有者权益"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:224
 msgid "Sign: -$10.00"
-msgstr ""
+msgstr "符号: -$10.00"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
 msgid "Brackets: ($10.00)"
@@ -26203,7 +26202,7 @@ msgstr "期间开始"
 #: gnucash/report/reports/standard/new-owner-report.scm:510
 msgid ""
 "* Amounts denoted thus are derived from, and do not match the transaction."
-msgstr ""
+msgstr "这些金额所表示的是由推算得出，与交易不匹配。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:868
 #: gnucash/report/reports/standard/owner-report.scm:535
@@ -26267,7 +26266,7 @@ msgstr "显示文件链接？"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1068
 msgid "No valid account found"
-msgstr "找不到匹配的"
+msgstr "没有有效的科目"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1069
 msgid "This report requires a valid AP/AR account to be available."
@@ -26785,7 +26784,7 @@ msgstr "表格头边框颜色"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:92
 msgid "table-cell-border-color"
-msgstr "table-cell-border-color"
+msgstr "单元格边框颜色"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:93
 msgid "Embedded CSS"
@@ -27888,7 +27887,7 @@ msgstr "指定详细显示事务的数量。"
 
 #: gnucash/report/trep-engine.scm:978
 msgid "One split per line"
-msgstr ""
+msgstr "每个子交易一行"
 
 #: gnucash/report/trep-engine.scm:979
 msgid "One transaction per line"

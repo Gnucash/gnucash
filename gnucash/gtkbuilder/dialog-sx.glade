@@ -671,7 +671,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.sxs.transaction-editor/notify">
-            <property name="label" translatable="yes">_Notify before transactions are created </property>
+            <property name="label" translatable="yes">_Notify before transactions are created</property>
             <property name="visible">True</property>
             <property name="sensitive">False</property>
             <property name="can_focus">True</property>

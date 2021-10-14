@@ -378,19 +378,19 @@
       (set! options (default-testing-options))
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))      
-      (set-option! options "Filter" "Reconcile Status" 'unreconciled)
+      (set-option! options "Filter" "Reconciled Status" 'unreconciled)
       (let ((sxml (options->sxml options "unreconciled")))
         (test-equal "filter unreconciled only, sum = -$20.00"
           '("-$20.00")
           (get-row-col sxml -1 -1)))
 
-      (set-option! options "Filter" "Reconcile Status" 'cleared)
+      (set-option! options "Filter" "Reconciled Status" 'cleared)
       (let ((sxml (options->sxml options "cleared")))
         (test-equal "filter cleared only, sum = $29.00"
           '("$29.00")
           (get-row-col sxml -1 -1)))
 
-      (set-option! options "Filter" "Reconcile Status" 'reconciled)
+      (set-option! options "Filter" "Reconciled Status" 'reconciled)
       (let ((sxml (options->sxml options "reconciled")))
         (test-equal "filter reconciled only, sum = -$8.00"
           '("-$8.00")

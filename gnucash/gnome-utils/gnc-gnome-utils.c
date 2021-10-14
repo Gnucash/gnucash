@@ -268,7 +268,7 @@ gnc_gnome_help_yelp_anchor_fix (GtkWindow *parent, const char *file_name, const 
         gchar *filename = g_build_filename (help_path, *langs, help_file, NULL);
         if (g_file_test (filename, G_FILE_TEST_EXISTS))
         {
-            full_path = g_strdup (filename);
+            full_path = filename;
             break;
         }
         g_free (filename);

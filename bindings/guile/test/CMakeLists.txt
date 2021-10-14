@@ -25,7 +25,6 @@ gnc_add_test_with_guile(test-scm-query test-scm-query.cpp ENGINE_TEST_INCLUDE_DI
 
 
 set(bindings_test_SCHEME
-    test-core-utils.scm
     test-create-account.scm
 )
 
@@ -42,14 +41,17 @@ gnc_add_scheme_test_targets(scm-test-engine-extras
     DEPENDS "${GUILE_DEPENDS}")
 
 gnc_add_scheme_test_targets(scm-test-engine
-  SOURCES "${bindings_test_SCHEME}"
-  OUTPUT_DIR "tests"
-  DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras")
+    SOURCES "${bindings_test_SCHEME}"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras")
+
+gnc_add_scheme_tests("${bindings_test_SCHEME}")
 
 add_dependencies(check scm-test-engine)
 gnc_add_scheme_tests("${engine_test_SCHEME}")
 
 set (scm_tests_with_srfi64_SOURCES
+  test-core-utils.scm
   test-business-core.scm
   test-scm-engine.scm
   )

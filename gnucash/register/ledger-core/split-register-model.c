@@ -32,6 +32,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-uri-utils.h"
+#include "gnc-glib-utils.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-warnings.h"
 #include "doclinkcell.h"
@@ -89,7 +90,7 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data,
     if (subaccounts)
     {
         children = gnc_account_get_descendants (account);
-        children = g_list_append (children, account);
+        children = g_list_prepend (children, account);
     }
 
     /* Get the row number we're on, then start with the first row. */
@@ -1388,11 +1389,12 @@ gnc_split_register_get_price_entry (VirtualLocation virt_loc,
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
-    price = xaccSplitGetSharePrice (split);
-    curr = xaccTransGetCurrency (xaccSplitGetParent (split));
-    if (gnc_numeric_zero_p (price))
+    if (gnc_numeric_zero_p (xaccSplitGetAmount(split)) ||
+        gnc_numeric_zero_p (xaccSplitGetValue(split)))
         return NULL;
 
+    price = xaccSplitGetSharePrice (split);
+    curr = xaccTransGetCurrency (xaccSplitGetParent (split));
     return xaccPrintAmount (price, gnc_default_price_print_info (curr));
 }
 
@@ -1601,7 +1603,7 @@ get_trans_total_value_subaccounts (SplitRegister* reg, Transaction* trans)
         return total;
 
     children = gnc_account_get_descendants (parent);
-    children = g_list_append (children, parent);
+    children = g_list_prepend (children, parent);
 
     for (child = children; child; child = child->next)
     {
@@ -2191,37 +2193,27 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 
     if (protected_trans_cell)
     {
-        GList* node;
+        GList* acc_g_list = NULL;
         gchar* acc_list = NULL;
         gchar* message_format;
 
-        for (node = xaccTransGetSplitList (trans); node; node = node->next)
+        for (GList *node = xaccTransGetSplitList (trans); node; node = node->next)
         {
             Split* split = node->data;
-
             if (xaccSplitGetReconcile (split) == YREC)
             {
-                Account* acc = xaccSplitGetAccount (split);
-                gchar* name = gnc_account_get_full_name (acc);
-
-                if (acc_list == NULL)
-                    acc_list = g_strconcat ("\n", name, NULL);
-                else
-                {
-                    gchar* acc_list_copy = g_strdup (acc_list);
-                    g_free (acc_list);
-                    acc_list = g_strconcat (acc_list_copy, "\n", name, NULL);
-                    g_free (acc_list_copy);
-                }
-                g_free (name);
+                gchar* name = gnc_account_get_full_name (xaccSplitGetAccount (split));
+                acc_g_list = g_list_prepend (acc_g_list, name);
             }
         }
+        acc_list = gnc_g_list_stringjoin (acc_g_list, "\n");
         title = _ ("Change transaction containing a reconciled split?");
         message_format =
             _ ("The transaction you are about to change contains reconciled splits in the following accounts:\n%s"
                "\n\nAre you sure you want to continue with this change?");
 
         message = g_strdup_printf (message_format, acc_list);
+        g_list_free_full (acc_g_list, g_free);
         g_free (acc_list);
     }
 
