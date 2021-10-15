@@ -23,7 +23,6 @@
 # Christian Stimming <christian@cstimming.de>, 2021.
 # Julian Heinzel <jeinzi@gmx.de>, 2021.
 # Christoph Franzen <christoph@alte-pflasterei.de>, 2021.
-# Thomas <warrel040@gmx.de>, 2021.
 # Thomas Kriegel <warrel040@gmx.de>, 2021.
 #
 # Konventionen/Tastenkürzel:
@@ -9127,9 +9126,11 @@ msgstr ""
 "Christian Stimming, 2001-2021\n"
 "Frank H. Ellenberger, 2007, 2009-2021\n"
 "Christian Wehling, 2020-2021\n"
+"Marco Zietzling, 2020-2021\n"
 "Alois Spitzbart, 2020-2021\n"
+"Christoph Franzen, 2021\n"
+"Thomas Kriegel, 2021\n"
 "Julian Heinzel, 2021\n"
-"Marco Zietzling, 2020\n"
 "Milo Ivir, 2020\n"
 "K. Herbert, 2020\n"
 "Manuel Bichler, 2020\n"
