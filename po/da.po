@@ -104,10 +104,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.7-pre2\n"
+"Project-Id-Version: GnuCash 4.8-pot1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-09-20 22:29+0200\n"
+"POT-Creation-Date: 2021-10-15 17:50+0200\n"
 "PO-Revision-Date: 2018-03-03 22:41+0200\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -1033,7 +1033,7 @@ msgstr "Låntilbagebetalingsindstilling: »%s«"
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
 #: gnucash/gnome/assistant-loan.cpp:1882 gnucash/gnome/dialog-lot-viewer.c:943
-#: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:429
+#: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:426
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
 #: gnucash/gtkbuilder/dialog-doclink.glade:644
 #: gnucash/gtkbuilder/dialog-payment.glade:253
@@ -1046,13 +1046,13 @@ msgstr "Låntilbagebetalingsindstilling: »%s«"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
-#: gnucash/import-export/import-main-matcher.c:1099
+#: gnucash/import-export/import-main-matcher.c:1100
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3700
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3751
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
-#: gnucash/register/ledger-core/split-register-model.c:232
+#: gnucash/register/ledger-core/split-register-model.c:233
 #: gnucash/report/reports/standard/account-summary.scm:83
 #: gnucash/report/reports/standard/advanced-portfolio.scm:73
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1065
@@ -1146,10 +1146,10 @@ msgstr "Fejl ved tilføjelse af pris."
 #: gnucash/import-export/aqb/gnc-ab-utils.c:541
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:151
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
-#: gnucash/import-export/import-main-matcher.c:1100
+#: gnucash/import-export/import-main-matcher.c:1101
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
-#: gnucash/register/ledger-core/split-register-model.c:341
+#: gnucash/register/ledger-core/split-register-model.c:342
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1033
 #: gnucash/report/reports/standard/budget-flow.scm:41
 #: gnucash/report/reports/standard/budget.scm:47
@@ -1177,7 +1177,7 @@ msgstr "Kode"
 
 #: gnucash/gnome/assistant-stock-split.c:594
 #: gnucash/gnome/dialog-find-transactions.c:122
-#: gnucash/register/ledger-core/split-register-model.c:419
+#: gnucash/register/ledger-core/split-register-model.c:420
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1053
 #: gnucash/report/reports/standard/general-journal.scm:98
 #: gnucash/report/reports/standard/general-ledger.scm:78
@@ -1384,7 +1384,7 @@ msgstr "Slet vare?"
 
 #: gnucash/gnome/dialog-commodities.c:217 gnucash/gnome/dialog-doclink.c:165
 #: gnucash/gnome/dialog-price-edit-db.c:206
-#: gnucash/gnome/dialog-price-editor.c:237 gnucash/gnome/dialog-tax-info.c:1190
+#: gnucash/gnome/dialog-price-editor.c:237 gnucash/gnome/dialog-tax-info.c:1188
 #: gnucash/gnome/gnc-plugin-budget.c:289
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1789
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
@@ -1477,7 +1477,7 @@ msgstr "Slet vare?"
 #: gnucash/import-export/aqb/dialog-ab.glade:1024
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:424
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:378
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2031
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2030
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:387
 #: gnucash/register/ledger-core/gncEntryLedger.c:931
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
@@ -1603,28 +1603,28 @@ msgstr "Id #"
 msgid "Find Customer"
 msgstr "Find kunde"
 
-#: gnucash/gnome/dialog-custom-report.c:319
+#: gnucash/gnome/dialog-custom-report.c:331
 #, fuzzy, c-format
 msgid "Are you sure you want to delete %s?"
 msgstr "Er du sikker på, at du ønsker at slette »%s«?"
 
 # måske vises -> køres
-#: gnucash/gnome/dialog-custom-report.c:424
+#: gnucash/gnome/dialog-custom-report.c:436
 #, fuzzy
 msgid "You must select a report configuration to load."
 msgstr "Du skal vælge en rapport der skal vises."
 
-#: gnucash/gnome/dialog-custom-report.c:439
+#: gnucash/gnome/dialog-custom-report.c:451
 #, fuzzy
 msgid "You must select a report configuration to delete."
 msgstr "Du skal vælge en rapport til sletning."
 
-#: gnucash/gnome/dialog-custom-report.c:453
+#: gnucash/gnome/dialog-custom-report.c:465
 #, fuzzy
 msgid "Unable to change report configuration name."
 msgstr "Brug nærmeste på rapportdato"
 
-#: gnucash/gnome/dialog-custom-report.c:465
+#: gnucash/gnome/dialog-custom-report.c:477
 #, fuzzy
 msgid ""
 "A saved report configuration with this name already exists, please choose "
@@ -1633,17 +1633,17 @@ msgstr ""
 "En skabelon med det angivne navn eksisterer allerede. Indtast venligst et "
 "andet navn."
 
-#: gnucash/gnome/dialog-custom-report.c:491
+#: gnucash/gnome/dialog-custom-report.c:503
 #, fuzzy
 msgid "Load report configuration"
 msgstr "GnuCash opsætningsmuligheder"
 
-#: gnucash/gnome/dialog-custom-report.c:493
+#: gnucash/gnome/dialog-custom-report.c:505
 #, fuzzy
 msgid "Edit report configuration name"
 msgstr "GnuCash opsætningsmuligheder"
 
-#: gnucash/gnome/dialog-custom-report.c:495
+#: gnucash/gnome/dialog-custom-report.c:507
 #, fuzzy
 msgid "Delete report configuration"
 msgstr "Slet den nuværende transaktion"
@@ -1657,7 +1657,7 @@ msgid "Placeholder account selected. Please try again."
 msgstr "Sumkonto valgt. Forsøg venligst igen."
 
 #: gnucash/gnome/dialog-doclink.c:161
-#: gnucash/gnome/gnc-plugin-page-register.c:4771
+#: gnucash/gnome/gnc-plugin-page-register.c:4780
 #, fuzzy
 #| msgid "Select Account"
 msgid "Select document"
@@ -1812,8 +1812,8 @@ msgstr "Transaktionsdetaljer"
 #: gnucash/gnome/dialog-doclink.c:1077
 #: gnucash/gnome/dialog-find-transactions2.c:157
 #: gnucash/gnome/dialog-find-transactions.c:157
-#: gnucash/gnome/dialog-lot-viewer.c:959 gnucash/gnome/dialog-tax-info.c:1398
-#: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:417
+#: gnucash/gnome/dialog-lot-viewer.c:959 gnucash/gnome/dialog-tax-info.c:1396
+#: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:414
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:829
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2815
@@ -1826,13 +1826,13 @@ msgstr "Transaktionsdetaljer"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
-#: gnucash/import-export/import-main-matcher.c:1103
+#: gnucash/import-export/import-main-matcher.c:1104
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3710
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3761
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
-#: gnucash/register/ledger-core/split-register-model.c:295
+#: gnucash/register/ledger-core/split-register-model.c:296
 #: gnucash/report/reports/standard/account-summary.scm:409
 #: gnucash/report/reports/standard/general-journal.scm:96
 #: gnucash/report/reports/standard/general-ledger.scm:70
@@ -1907,7 +1907,7 @@ msgid "Username"
 msgstr "Brugernavn"
 
 #: gnucash/gnome/dialog-employee.c:732 gnucash/gnome/dialog-sx-editor2.c:1754
-#: gnucash/gnome/dialog-sx-editor.c:1816 gnucash/gnome/dialog-tax-info.c:1201
+#: gnucash/gnome/dialog-sx-editor.c:1816 gnucash/gnome/dialog-tax-info.c:1199
 #: gnucash/gnome-utils/gnc-dense-cal.c:350
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:368
@@ -2033,7 +2033,7 @@ msgstr "Aktiepris"
 
 #: gnucash/gnome/dialog-find-transactions2.c:124
 #: gnucash/gnome/dialog-invoice.c:3629 gnucash/gnome/dialog-lot-viewer.c:973
-#: gnucash/gnome/gnc-split-reg.c:694 gnucash/gnome/reconcile-view.c:413
+#: gnucash/gnome/gnc-split-reg.c:694 gnucash/gnome/reconcile-view.c:410
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2895
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2907
 #: gnucash/gtkbuilder/assistant-loan.glade:199
@@ -2042,7 +2042,7 @@ msgstr "Aktiepris"
 #: gnucash/gtkbuilder/dialog-payment.glade:411
 #: gnucash/gtkbuilder/dialog-transfer.glade:100
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:54
-#: gnucash/import-export/import-main-matcher.c:1102
+#: gnucash/import-export/import-main-matcher.c:1103
 #: gnucash/import-export/import-match-picker.c:394
 #: gnucash/import-export/import-match-picker.c:434
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3721
@@ -2092,7 +2092,7 @@ msgstr "Dato bogført"
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
 #: gnucash/gnome/gnc-plugin-page-register.c:2504
-#: gnucash/gnome/gnc-plugin-page-register.c:4216
+#: gnucash/gnome/gnc-plugin-page-register.c:4221
 #: gnucash/gnome-search/dialog-search.c:875
 #: gnucash/gnome-search/dialog-search.c:881
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
@@ -2118,7 +2118,7 @@ msgstr "Nummer/handling"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
-#: gnucash/register/ledger-core/split-register-model.c:327
+#: gnucash/register/ledger-core/split-register-model.c:328
 #: gnucash/report/reports/standard/invoice.scm:92
 #: gnucash/report/reports/standard/invoice.scm:209
 msgid "Action"
@@ -2131,7 +2131,7 @@ msgstr "Handling"
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
 #: gnucash/gnome/gnc-plugin-page-register.c:2503
-#: gnucash/gnome/gnc-plugin-page-register.c:4215
+#: gnucash/gnome/gnc-plugin-page-register.c:4220
 #: gnucash/gnome-search/dialog-search.c:877
 #: gnucash/gnome-search/dialog-search.c:883
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:614
@@ -2175,10 +2175,10 @@ msgstr "Beskrivelse, bemærkning eller note"
 #: gnucash/gtkbuilder/dialog-transfer.glade:203
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
-#: gnucash/import-export/import-main-matcher.c:1104
+#: gnucash/import-export/import-main-matcher.c:1105
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
-#: gnucash/register/ledger-core/split-register-model.c:355
+#: gnucash/register/ledger-core/split-register-model.c:356
 #: gnucash/report/reports/standard/general-ledger.scm:71
 #: gnucash/report/reports/standard/general-ledger.scm:91
 #: gnucash/report/reports/standard/register.scm:140
@@ -2210,7 +2210,7 @@ msgstr "Note"
 #: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
-#: gnucash/register/ledger-core/split-register-model.c:491
+#: gnucash/register/ledger-core/split-register-model.c:492
 #: gnucash/report/reports/standard/account-summary.scm:437
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/receipt.scm:38
@@ -2315,7 +2315,7 @@ msgstr "Posten er vedhæftet en ordre og vil også blive slettet fra denne!"
 #: gnucash/gnome/dialog-invoice.c:3423 gnucash/gnome/dialog-invoice.c:3457
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2739
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:162
-#: gnucash/register/ledger-core/split-register-model.c:239
+#: gnucash/register/ledger-core/split-register-model.c:240
 #: gnucash/report/reports/aging.scm:388
 #: gnucash/report/reports/standard/invoice.scm:244
 #: gnucash/report/reports/standard/invoice.scm:595
@@ -2588,7 +2588,7 @@ msgid "Voucher Notes"
 msgstr "Bemærkninger til bilag"
 
 #: gnucash/gnome/dialog-invoice.c:3473 gnucash/gnome/dialog-invoice.c:3632
-#: gnucash/gnome/dialog-lot-viewer.c:866 gnucash/gnome/dialog-tax-info.c:1236
+#: gnucash/gnome/dialog-lot-viewer.c:866 gnucash/gnome/dialog-tax-info.c:1234
 #: gnucash/gnome-utils/gnc-tree-view-account.c:812
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
@@ -2602,7 +2602,7 @@ msgstr "Bemærkninger til bilag"
 #: gnucash/gtkbuilder/dialog-tax-info.glade:128
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/import-export/csv-imp/csv-account-import.c:154
-#: gnucash/register/ledger-core/split-register-model.c:362
+#: gnucash/register/ledger-core/split-register-model.c:363
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/job-report.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:52
@@ -2612,7 +2612,7 @@ msgid "Type"
 msgstr "Type"
 
 #: gnucash/gnome/dialog-invoice.c:3475
-#: gnucash/register/ledger-core/split-register-model.c:309
+#: gnucash/register/ledger-core/split-register-model.c:310
 #: gnucash/report/reports/standard/new-owner-report.scm:811
 msgid "Paid"
 msgstr "Betalt"
@@ -2631,13 +2631,13 @@ msgid "Opened"
 msgstr "Åbnet"
 
 #: gnucash/gnome/dialog-invoice.c:3487 gnucash/gnome/dialog-lot-viewer.c:953
-#: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:421
-#: gnucash/gnome/reconcile-view.c:425
+#: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:418
+#: gnucash/gnome/reconcile-view.c:422
 #: gnucash/gtkbuilder/dialog-payment.glade:475
 #: gnucash/gtkbuilder/dialog-transfer.glade:153
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
-#: gnucash/register/ledger-core/split-register-model.c:255
-#: gnucash/register/ledger-core/split-register-model.c:275
+#: gnucash/register/ledger-core/split-register-model.c:256
+#: gnucash/register/ledger-core/split-register-model.c:276
 #: gnucash/report/reports/standard/general-journal.scm:95
 #: gnucash/report/reports/standard/general-ledger.scm:89
 #: gnucash/report/reports/standard/register.scm:136
@@ -2732,7 +2732,7 @@ msgstr "Kun aktive?"
 #: gnucash/gnome/dialog-job.c:585 gnucash/gnome/dialog-job.c:598
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2929
 #: gnucash/gtkbuilder/dialog-job.glade:204
-#: gnucash/register/ledger-core/split-register-model.c:369
+#: gnucash/register/ledger-core/split-register-model.c:370
 #, fuzzy
 msgid "Rate"
 msgstr "Skatte_relateret"
@@ -2777,8 +2777,8 @@ msgstr "Titel"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3115
-#: gnucash/register/ledger-core/split-register-model.c:320
-#: gnucash/register/ledger-core/split-register-model.c:484
+#: gnucash/register/ledger-core/split-register-model.c:321
+#: gnucash/register/ledger-core/split-register-model.c:485
 #: gnucash/report/reports/standard/account-summary.scm:422
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
@@ -2903,7 +2903,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-invoice.glade:479
 #: gnucash/gtkbuilder/dialog-invoice.glade:1058
 #: gnucash/gtkbuilder/dialog-payment.glade:40
-#: gnucash/register/ledger-core/split-register-model.c:291
+#: gnucash/register/ledger-core/split-register-model.c:292
 #: gnucash/report/reports/standard/customer-summary.scm:264
 #: gnucash/report/reports/standard/customer-summary.scm:297
 #: gnucash/report/reports/standard/job-report.scm:504
@@ -2920,7 +2920,7 @@ msgstr "Kunde"
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:170
 #: gnucash/gtkbuilder/dialog-payment.glade:44
 #: gnucash/gtkbuilder/dialog-vendor.glade:475
-#: gnucash/register/ledger-core/split-register-model.c:293
+#: gnucash/register/ledger-core/split-register-model.c:294
 #: gnucash/report/reports/standard/job-report.scm:510
 #: gnucash/report/reports/standard/new-owner-report.scm:104
 #: gnucash/report/reports/standard/owner-report.scm:117
@@ -3388,29 +3388,29 @@ msgstr "Status"
 msgid "Created Transactions"
 msgstr "Oprettede transaktioner"
 
-#: gnucash/gnome/dialog-tax-info.c:289
+#: gnucash/gnome/dialog-tax-info.c:287
 msgid "Last Valid Year: "
 msgstr "Sidste gyldige år: "
 
-#: gnucash/gnome/dialog-tax-info.c:290
+#: gnucash/gnome/dialog-tax-info.c:288
 msgid "Form Line Data: "
 msgstr "Formularlinjedata: "
 
 #. Translators: Tax Code
-#: gnucash/gnome/dialog-tax-info.c:292
+#: gnucash/gnome/dialog-tax-info.c:290
 msgid "Code"
 msgstr "Kode"
 
-#: gnucash/gnome/dialog-tax-info.c:367
+#: gnucash/gnome/dialog-tax-info.c:365
 msgid "now"
 msgstr "nu"
 
-#: gnucash/gnome/dialog-tax-info.c:1186
+#: gnucash/gnome/dialog-tax-info.c:1184
 #: gnucash/gtkbuilder/dialog-tax-info.glade:89
 msgid "Income Tax Identity"
 msgstr "Identitet for indtægtsskat"
 
-#: gnucash/gnome/dialog-tax-info.c:1192
+#: gnucash/gnome/dialog-tax-info.c:1190
 #: gnucash/gtkbuilder/dialog-options.glade:55
 #: gnucash/gtkbuilder/dialog-price.glade:85
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
@@ -3418,7 +3418,7 @@ msgstr "Identitet for indtægtsskat"
 msgid "_Apply"
 msgstr ""
 
-#: gnucash/gnome/dialog-tax-info.c:1241
+#: gnucash/gnome/dialog-tax-info.c:1239
 msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
@@ -3426,7 +3426,7 @@ msgstr ""
 "FORSIGTIG: Hvis du angiver TXF-kategorier og senere ændrer 'Type', så vil du "
 "manuelt skulle nulstille disse kategorier en ad gangen"
 
-#: gnucash/gnome/dialog-tax-info.c:1394
+#: gnucash/gnome/dialog-tax-info.c:1392
 msgid "Form"
 msgstr "Formular"
 
@@ -3478,7 +3478,7 @@ msgstr "Find leverandør"
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4441
+#: libgnucash/engine/Account.cpp:4448
 msgid "Income"
 msgstr "Indtægt"
 
@@ -3497,7 +3497,7 @@ msgstr "Udgifter"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2868
 #: gnucash/register/ledger-core/split-register.c:2563
 #: gnucash/register/ledger-core/split-register-layout.c:719
-#: gnucash/register/ledger-core/split-register-model.c:348
+#: gnucash/register/ledger-core/split-register-model.c:349
 #: gnucash/report/reports/standard/register.scm:144
 msgid "Transfer"
 msgstr "Overfør"
@@ -4309,7 +4309,7 @@ msgstr "Slet"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:454
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1991
 #: gnucash/gnome/gnc-plugin-page-register.c:1962
-#: gnucash/gnome/gnc-plugin-page-register.c:5076
+#: gnucash/gnome/gnc-plugin-page-register.c:5088
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr ""
 
@@ -5918,7 +5918,7 @@ msgstr ""
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register2.c:3040
-#: gnucash/gnome/gnc-plugin-page-register.c:4268
+#: gnucash/gnome/gnc-plugin-page-register.c:4273
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2330
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
@@ -6052,19 +6052,25 @@ msgstr "Transaktionsrapport"
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "Denne transaktion er markeret skrivebeskyttet med kommentaren: »%s«"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4078
+#: gnucash/gnome/gnc-plugin-page-register.c:4087
 #: gnucash/gnome/gnc-split-reg.c:1131
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1121
 msgid "A reversing entry has already been created for this transaction."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4091
+#: gnucash/gnome/gnc-plugin-page-register.c:4088
+#, fuzzy
+#| msgid "Edit the current transaction"
+msgid "Jump to the transaction?"
+msgstr "Rediger den nuværende transaktion"
+
+#: gnucash/gnome/gnc-plugin-page-register.c:4095
 #, fuzzy
 #| msgid "Add _Reversing Transaction"
 msgid "Reverse Transaction"
 msgstr "Tilføj _omvendt transaktion"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4092
+#: gnucash/gnome/gnc-plugin-page-register.c:4096
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:73
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:624
 #, fuzzy
@@ -6073,7 +6079,7 @@ msgid "New Transaction Information"
 msgstr "Transaktionsinformation"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:4180
+#: gnucash/gnome/gnc-plugin-page-register.c:4185
 #, c-format
 msgid "Sort %s by..."
 msgstr "Sorter %s efter ..."
@@ -6081,28 +6087,28 @@ msgstr "Sorter %s efter ..."
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.c:4762
+#: gnucash/gnome/gnc-plugin-page-register.c:4771
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4772
+#: gnucash/gnome/gnc-plugin-page-register.c:4781
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4773
+#: gnucash/gnome/gnc-plugin-page-register.c:4782
 #: gnucash/gnome-search/dialog-search.c:323
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:172
 msgid "Select"
 msgstr "Vælg"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4821
+#: gnucash/gnome/gnc-plugin-page-register.c:4833
 #, fuzzy
 #| msgid "Post Date"
 msgid "Go to Date"
 msgstr "Bogføringsdato"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:5099
+#: gnucash/gnome/gnc-plugin-page-register.c:5111
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr ""
@@ -6834,9 +6840,9 @@ msgstr "GnuCash-præferencer"
 msgid "Finance Management"
 msgstr "Finanshåndtering"
 
-#: gnucash/gnome/reconcile-view.c:407
+#: gnucash/gnome/reconcile-view.c:404
 #: gnucash/register/ledger-core/split-register-layout.c:695
-#: gnucash/register/ledger-core/split-register-model.c:312
+#: gnucash/register/ledger-core/split-register-model.c:313
 msgctxt "Column header for 'Reconciled'"
 msgid "R"
 msgstr ""
@@ -7028,7 +7034,7 @@ msgstr "_Konto"
 #: gnucash/gtkbuilder/dialog-commodity.glade:53
 #: gnucash/gtkbuilder/dialog-customer.glade:47
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:25
-#: gnucash/gtkbuilder/dialog-custom-report.glade:28
+#: gnucash/gtkbuilder/dialog-custom-report.glade:29
 #: gnucash/gtkbuilder/dialog-employee.glade:23
 #: gnucash/gtkbuilder/dialog-import.glade:1019
 #: gnucash/gtkbuilder/dialog-invoice.glade:658
@@ -7041,7 +7047,7 @@ msgstr "_Konto"
 #: gnucash/gtkbuilder/dialog-search.glade:21
 #: gnucash/gtkbuilder/dialog-sx.glade:780
 #: gnucash/gtkbuilder/dialog-vendor.glade:47
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2075
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2074
 msgid "_Help"
 msgstr "_Hjælp"
 
@@ -7785,6 +7791,7 @@ msgstr ""
 "Mnemonic (Tickersymbol eller lignende): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:275
+#: gnucash/gtkbuilder/dialog-commodity.glade:640
 msgid "Select security/currency"
 msgstr "Vælg værdipapir/valuta"
 
@@ -7820,7 +7827,7 @@ msgstr "Va_luta"
 #: gnucash/gtkbuilder/dialog-transfer.glade:415
 #: gnucash/gtkbuilder/dialog-transfer.glade:428
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4440
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4447
 msgid "Currency"
 msgstr "Valuta"
 
@@ -7926,7 +7933,7 @@ msgstr "Gem som ..."
 #: gnucash/gnome-utils/gnc-main-window.c:306
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
 #: gnucash/gtkbuilder/dialog-commodities.glade:174
-#: gnucash/gtkbuilder/dialog-custom-report.glade:45
+#: gnucash/gtkbuilder/dialog-custom-report.glade:46
 #: gnucash/gtkbuilder/dialog-doclink.glade:578
 #: gnucash/gtkbuilder/dialog-fincalc.glade:107
 #: gnucash/gtkbuilder/dialog-find-account.glade:69
@@ -9424,7 +9431,7 @@ msgid "_Unreconcile"
 msgstr "_Afstem"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2230
+#: gnucash/register/ledger-core/split-register-model.c:2222
 msgid "Change reconciled split?"
 msgstr ""
 
@@ -9451,7 +9458,7 @@ msgstr ""
 "Hvis du gør det kan fremtidige afstemninger blive svære!"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2254
+#: gnucash/register/ledger-core/split-register-model.c:2246
 #, fuzzy
 msgid "Chan_ge Split"
 msgstr "_Opdel"
@@ -9687,7 +9694,7 @@ msgstr "Check"
 #: gnucash/report/reports/standard/balance-sheet.scm:502
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1083
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4443
+#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4450
 msgid "Equity"
 msgstr "Udligning"
 
@@ -9697,7 +9704,7 @@ msgstr "Udligning"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:153
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
 #: gnucash/register/ledger-core/split-register.c:2629
-#: gnucash/register/ledger-core/split-register-model.c:402
+#: gnucash/register/ledger-core/split-register-model.c:403
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1057
 #: gnucash/report/reports/standard/general-journal.scm:99
 #: gnucash/report/reports/standard/general-ledger.scm:79
@@ -9736,7 +9743,7 @@ msgid "Dist"
 msgstr "Udlod"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
-#: gnucash/import-export/import-main-matcher.c:1411
+#: gnucash/import-export/import-main-matcher.c:1412
 #: gnucash/report/reports/standard/register.scm:218
 #: libgnucash/engine/Split.c:1610 libgnucash/engine/Split.c:1627
 msgid "-- Split Transaction --"
@@ -9751,7 +9758,7 @@ msgstr "Aktieopdeling"
 #. https://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:436
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:577
-#: gnucash/register/ledger-core/split-register-model.c:1006
+#: gnucash/register/ledger-core/split-register-model.c:1007
 msgid "%A %d %B %Y"
 msgstr ""
 
@@ -10240,7 +10247,7 @@ msgid "Funds Out"
 msgstr "Beløb ud"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3015
-#: gnucash/register/ledger-core/split-register-model.c:505
+#: gnucash/register/ledger-core/split-register-model.c:506
 msgid "Credit Formula"
 msgstr "Kredit-formel"
 
@@ -10261,7 +10268,7 @@ msgstr "Modtag"
 #: gnucash/report/reports/standard/customer-summary.scm:302
 #: gnucash/report/reports/standard/net-charts.scm:367
 #: gnucash/report/reports/standard/net-charts.scm:416
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4442
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4449
 #: libgnucash/engine/gncInvoice.c:1112
 msgid "Expense"
 msgstr "Omkostning"
@@ -10274,7 +10281,7 @@ msgid "Funds In"
 msgstr "Beløb ind"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3096
-#: gnucash/register/ledger-core/split-register-model.c:498
+#: gnucash/register/ledger-core/split-register-model.c:499
 msgid "Debit Formula"
 msgstr "Debet-formel"
 
@@ -10296,43 +10303,43 @@ msgid "Enter the transaction number, such as the check number"
 msgstr "Indtast transaktionsnummeret (f.eks. checknummeret)"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3196
-#: gnucash/register/ledger-core/split-register-model.c:1136
+#: gnucash/register/ledger-core/split-register-model.c:1137
 msgid "Enter the name of the Customer"
 msgstr "Angiv navnet på kunden"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3198
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3207
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3216
-#: gnucash/register/ledger-core/split-register-model.c:1173
+#: gnucash/register/ledger-core/split-register-model.c:1174
 msgid "Enter notes for the transaction"
 msgstr "Indtast bemærkninger til transaktionen"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3200
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3209
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3218
-#: gnucash/register/ledger-core/split-register-model.c:1334
+#: gnucash/register/ledger-core/split-register-model.c:1335
 msgid "Enter a description of the split"
 msgstr "Angiv en beskrivelse af opsplitningen"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3205
-#: gnucash/register/ledger-core/split-register-model.c:1139
+#: gnucash/register/ledger-core/split-register-model.c:1140
 msgid "Enter the name of the Vendor"
 msgstr "Angiv navnet på leverandøren"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3214
-#: gnucash/register/ledger-core/split-register-model.c:1142
+#: gnucash/register/ledger-core/split-register-model.c:1143
 msgid "Enter a description of the transaction"
 msgstr "Indtast en beskrivelse af transaktionen"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3228
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3232
-#: gnucash/register/ledger-core/split-register-model.c:1496
-#: gnucash/register/ledger-core/split-register-model.c:1563
+#: gnucash/register/ledger-core/split-register-model.c:1498
+#: gnucash/register/ledger-core/split-register-model.c:1565
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Vælg kontoen at overføre fra, eller vælg en fra listen"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3230
-#: gnucash/register/ledger-core/split-register-model.c:1206
+#: gnucash/register/ledger-core/split-register-model.c:1207
 #, fuzzy
 msgid "Reason the transaction was voided"
 msgstr "Indsæt fra transaktionsklippebordet"
@@ -10355,7 +10362,7 @@ msgstr "Indtast antallet af købte eller solgte aktier"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3272
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3284
-#: gnucash/register/ledger-core/split-register-model.c:1444
+#: gnucash/register/ledger-core/split-register-model.c:1446
 msgid "Enter the number of shares bought or sold"
 msgstr "Indtast antallet af købte eller solgte aktier"
 
@@ -10370,18 +10377,18 @@ msgid "Enter the rate"
 msgstr "Rente"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3314
-#: gnucash/register/ledger-core/split-register-model.c:1408
+#: gnucash/register/ledger-core/split-register-model.c:1410
 msgid "Enter the effective share price"
 msgstr "Indtast den effektive aktiepris"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3324
-#: gnucash/register/ledger-core/split-register-model.c:2389
+#: gnucash/register/ledger-core/split-register-model.c:2381
 #, fuzzy
 msgid "Enter credit formula for real transaction"
 msgstr "Indtast noter for transaktionen"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3334
-#: gnucash/register/ledger-core/split-register-model.c:2355
+#: gnucash/register/ledger-core/split-register-model.c:2347
 #, fuzzy
 msgid "Enter debit formula for real transaction"
 msgstr "Indtast noter for transaktionen"
@@ -10491,7 +10498,7 @@ msgid "Unknown quotes command '{1}'"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:139 gnucash/gnucash-cli.cpp:153
-#: gnucash/gnucash.cpp:316
+#: gnucash/gnucash.cpp:313
 msgid "Missing data file parameter"
 msgstr ""
 
@@ -10556,31 +10563,31 @@ msgstr "GnuCash {1}"
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1} udviklingsversion"
 
-#: gnucash/gnucash-core-app.cpp:282
+#: gnucash/gnucash-core-app.cpp:279
 #, fuzzy
 #| msgid "Book Options"
 msgid "Common Options"
 msgstr "Bogindstillinger"
 
-#: gnucash/gnucash-core-app.cpp:285
+#: gnucash/gnucash-core-app.cpp:282
 msgid "Show this help message"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:287
+#: gnucash/gnucash-core-app.cpp:284
 msgid "Show GnuCash version"
 msgstr "Vis GnuCash's version"
 
-#: gnucash/gnucash-core-app.cpp:289
+#: gnucash/gnucash-core-app.cpp:286
 msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:291
+#: gnucash/gnucash-core-app.cpp:288
 msgid "Enable extra/development/debugging features."
 msgstr "Slå ekstra/udvikling/fejlsøgningsegenskaber til."
 
-#: gnucash/gnucash-core-app.cpp:293
+#: gnucash/gnucash-core-app.cpp:290
 msgid ""
 "Log level overrides, of the form \"modulename={debug,info,warn,crit,"
 "error}\"\n"
@@ -10588,65 +10595,59 @@ msgid ""
 "This can be invoked multiple times."
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:295
+#: gnucash/gnucash-core-app.cpp:292
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:297
-msgid ""
-"Set the prefix for gsettings schemas for gsettings queries. This can be "
-"useful to have a different settings tree while debugging."
-msgstr ""
-
-#: gnucash/gnucash-core-app.cpp:299
+#: gnucash/gnucash-core-app.cpp:294
 #, fuzzy
 #| msgid "Budget Options"
 msgid "Hidden Options"
 msgstr "Budgetindstillinger"
 
-#: gnucash/gnucash-core-app.cpp:302
+#: gnucash/gnucash-core-app.cpp:297
 msgid "[datafile]"
 msgstr "[datafil]"
 
-#: gnucash/gnucash.cpp:176
+#: gnucash/gnucash.cpp:173
 msgid "Checking Finance::Quote..."
 msgstr "Kontrollerer Finance::Quote ..."
 
-#: gnucash/gnucash.cpp:185
+#: gnucash/gnucash.cpp:182
 msgid "Loading data..."
 msgstr "Indlæser data..."
 
-#: gnucash/gnucash.cpp:281
+#: gnucash/gnucash.cpp:278
 #, fuzzy
 #| msgid "application"
 msgid "Application Options"
 msgstr "application"
 
-#: gnucash/gnucash.cpp:284
+#: gnucash/gnucash.cpp:281
 msgid "Do not load the last file opened"
 msgstr "Indlæs ikke den sidst åbnede fil"
 
-#: gnucash/gnucash.cpp:286
+#: gnucash/gnucash.cpp:283
 #, fuzzy
 msgid "Show help for gtk options"
 msgstr "Hjælp til første option"
 
-#: gnucash/gnucash.cpp:288
+#: gnucash/gnucash.cpp:285
 #, fuzzy
 #| msgid "_Report Options"
 msgid "Deprecated Options"
 msgstr "_Rapportindstillinger"
 
-#: gnucash/gnucash.cpp:291
+#: gnucash/gnucash.cpp:288
 msgid ""
 "Add price quotes to given GnuCash datafile.\n"
 "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
 "Please use 'gnucash-cli --quotes get <datafile>' instead."
 msgstr ""
 
-#: gnucash/gnucash.cpp:295
+#: gnucash/gnucash.cpp:292
 msgid ""
 "Regular expression determining which namespace commodities will be "
 "retrieved.\n"
@@ -10655,21 +10656,21 @@ msgid ""
 "instead."
 msgstr ""
 
-#: gnucash/gnucash.cpp:312
+#: gnucash/gnucash.cpp:309
 msgid ""
 "The '--add-price-quotes' option to gnucash has been deprecated and will be "
 "removed in GnuCash 5.0. Please use 'gnucash-cli --quotes get <datafile>' "
 "instead."
 msgstr ""
 
-#: gnucash/gnucash.cpp:348
+#: gnucash/gnucash.cpp:345
 msgid "Run '{1} --help' to see a full list of available command line options."
 msgstr ""
 "Kør »{1} --help« for at se den fulde liste over tilgængelige indstillinger "
 "for kommandolinjen."
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:351
+#: gnucash/gnucash.cpp:348
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
@@ -10679,91 +10680,91 @@ msgstr ""
 "price-quotes var\n"
 "ikke angivet. Måske du skal angive miljøvariablen $DISPLAY?"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:32
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:47
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:62
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:77
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:92
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:172
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:110
-#: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:10
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:32
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:42
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:52
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:62
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:72
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:82
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:92
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:107
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:117
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:127
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:174
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:194
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:212
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:235
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:245
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:255
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:265
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:275
-#: gnucash/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:61
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:76
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:86
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:20
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:41
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:25
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:10
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:45
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:10
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.flicker.gschema.xml.in:6
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:5
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:64
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:17
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:32
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:47
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:62
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:77
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:92
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:172
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:110
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.commodities.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:32
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:42
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:52
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:62
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:72
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:82
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:92
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:107
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:117
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:127
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:174
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:194
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:212
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:235
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:245
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:255
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:265
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:275
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:61
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:76
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:86
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:10
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:6
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:5
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:64
 msgid "Last window position and size"
 msgstr "Sidste vinduesposition og -størrelse"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:18
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:33
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:48
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:63
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:78
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:93
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:173
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:111
-#: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:11
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:6
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:33
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:43
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:53
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:63
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:73
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:83
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:93
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:108
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:118
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:128
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:175
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:195
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:213
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:236
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:246
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:256
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:266
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:276
-#: gnucash/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in:6
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:62
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:77
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:87
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:21
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:42
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:26
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:11
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:46
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:11
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.flicker.gschema.xml.in:7
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:6
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:65
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:18
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:33
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:48
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:63
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:78
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:93
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:173
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:111
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.commodities.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:33
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:43
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:53
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:63
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:73
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:83
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:93
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:108
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:118
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:128
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:175
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:195
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:213
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:236
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:246
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:256
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:266
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:276
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:62
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:77
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:87
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:42
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:11
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:7
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:6
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:65
 msgid ""
 "This setting describes the size and position of the window when it was last "
 "closed. The numbers are the X and Y coordinates of the top left corner of "
@@ -10773,22 +10774,22 @@ msgstr ""
 "blev lukket. Tallene er x- og y-koordinater fra det øverste venstre hjørne "
 "af vinduet efterfulgt af bredden og højden af vinduet."
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:24
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:39
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:54
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:69
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:84
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:99
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:134
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:24
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:39
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:54
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:69
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:84
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:99
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:134
 msgid "Search only in active items"
 msgstr "Søg kun i aktive poster"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:25
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:40
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:55
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:70
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:85
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:100
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:70
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:85
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:100
 msgid ""
 "If active, only the 'active' items in the current class will be searched. "
 "Otherwise all items in the current class will be searched."
@@ -10796,13 +10797,13 @@ msgstr ""
 "Hvis aktiv, vil kun de »aktive« enheder i den aktuelle klasse blive "
 "gennemsøgt. Ellers vil alle enheder i den aktuelle klasse blive gennemsøgt."
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:107
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:149
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:107
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:149
 msgid "Is tax included in this type of business entry?"
 msgstr "Er skat inkluderet i denne type forretningspost?"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:108
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:150
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:108
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:150
 msgid ""
 "If set to active then tax is included by default in entries of this type. "
 "This setting is inherited by new customers and vendors."
@@ -10810,12 +10811,12 @@ msgstr ""
 "Hvis aktiv, så er skat inkluderet som standard i poster af denne type. Denne "
 "indstilling arves af nye kunder og leverandører."
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:112
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:154
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:112
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:154
 msgid "Auto pay when posting."
 msgstr "Automatisk betaling ved bogføring"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:113
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:113
 #: gnucash/gtkbuilder/business-prefs.glade:198
 msgid ""
 "At post time, automatically attempt to pay customer documents with "
@@ -10825,12 +10826,12 @@ msgid ""
 "credit notes and negative invoices are considered counter documents."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:117
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:117
 #, fuzzy
 msgid "Show invoices due reminder at startup"
 msgstr "Vis påmindelse af forfaldne regninger ved opstart"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:118
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:118
 #, fuzzy
 msgid ""
 "If active, at startup GnuCash will check to see whether any invoices will "
@@ -10844,23 +10845,23 @@ msgstr ""
 "indstilingen »Dage i fremtiden«. Ellers vil GnuCash ikke lede efter "
 "forfaldne regninger."
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:122
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
 #, fuzzy
 msgid "Show invoices due within this many days"
 msgstr "Vis regninger der er forfaldne indenfor følgende antal dage"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:123
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:123
 msgid ""
 "This field defines the number of days in advance that GnuCash will check for "
 "due invoices. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:127
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:127
 msgid "Enable extra toolbar buttons for business"
 msgstr "Aktiver ekstra værktøjslinjeknapper for forretning"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:128
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:128
 #: gnucash/gtkbuilder/business-prefs.glade:73
 msgid ""
 "If active, extra toolbar buttons for common business functions are shown as "
@@ -10869,20 +10870,20 @@ msgstr ""
 "Hvis aktiv, bliver ekstra værktøjslinjeknapper for gængse "
 "forretningsfunktioner også vist. Eller vises de ikke."
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:132
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:132
 #: gnucash/gtkbuilder/business-prefs.glade:320
 msgid "The invoice report to be used for printing."
 msgstr "Fakturarapporten der skal bruges til udskrivning."
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:133
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:133
 msgid "The name of the report to be used for invoice printing."
 msgstr "Navnet på rapporten der skal bruges til fakturaudskrivning."
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:137
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:137
 msgid "Open new invoice in new window"
 msgstr "Åbn ny faktura i nyt vindue"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:138
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:138
 msgid ""
 "If active, each new invoice will be opened in a new window. Otherwise a new "
 "invoice will be opened as a tab in the main window."
@@ -10890,11 +10891,11 @@ msgstr ""
 "Hvis aktiv, vil hver ny faktura blive åbnet i et nyt vindue. Ellers vil en "
 "ny faktura blive åbnet som en fane i hovedvinduet."
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:142
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:142
 msgid "Accumulate multiple splits into one"
 msgstr "Akkumuler flere opdelinger til en"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:143
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:143
 msgid ""
 "If this field is active then multiple entries in an invoice that transfer to "
 "the same account will be accumulated into a single split. This field can be "
@@ -10904,7 +10905,7 @@ msgstr ""
 "til den samme konto blive akkumuleret til et enkelt beløb. Dette felt kan "
 "overskrives per faktura i Bogføringsdialogen."
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:155
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:155
 #: gnucash/gtkbuilder/business-prefs.glade:275
 msgid ""
 "At post time, automatically attempt to pay vendor documents with outstanding "
@@ -10914,11 +10915,11 @@ msgid ""
 "bills are considered counter documents."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:159
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:159
 msgid "Show bills due reminder at startup"
 msgstr "Vis påmindelse af forfaldne regninger ved opstart"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:160
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:160
 msgid ""
 "If active, at startup GnuCash will check to see whether any bills will "
 "become due soon. If so, it will present the user with a reminder dialog. The "
@@ -10931,56 +10932,56 @@ msgstr ""
 "indstilingen »Dage i fremtiden«. Ellers vil GnuCash ikke lede efter "
 "forfaldne regninger."
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:164
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
 msgid "Show bills due within this many days"
 msgstr "Vis regninger der er forfaldne indenfor følgende antal dage"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:165
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:165
 msgid ""
 "This field defines the number of days in advance that GnuCash will check for "
 "due bills. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
 msgid "GUID of predefined check format to use"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:6
 msgid ""
 "This value specifies the predefined check format to use. The number is the "
 "guid of a known check format."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:10
 msgid "Which check position to print"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:11
 msgid ""
 "On preprinted checks containing multiple checks per page, this setting "
 "specifies which check position to print. The possible values are 0, 1 and 2, "
 "corresponding to the top, middle and bottom checks on the page."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:15
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:16
 msgid "Number of checks to print on the first page."
 msgstr "Antallet af check der udskrives på den første side."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:20
 msgid "Date format to use"
 msgstr "Datoformat:"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:21
 msgid "This is the numerical identifier of the predefined date format to use."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:25
 msgid "Custom date format"
 msgstr "Tilpasset datoformat"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:26
 msgid ""
 "If the date format is set to indicate a custom date format, this value is "
 "used as an argument to strftime to produce the date to be printed. It may be "
@@ -10988,19 +10989,19 @@ msgid ""
 "manual page of strftime by \"man 3 strftime\"."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:30
 msgid "Units in which the custom coordinates are expressed"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:31
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:31
 msgid "Units in which the custom coordinates are expressed (inches, mm, ...)."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:35
 msgid "Position of payee name"
 msgstr "Position for betalingsmodtagers navn"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:36
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
@@ -11008,11 +11009,11 @@ msgstr ""
 "Denne værdi indeholder x- og y-koordinaterne på starten af "
 "betalingsmodtagerens linje på checken."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:40
 msgid "Position of date line"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:41
 msgid ""
 "This value contains the X,Y coordinates for the start of the date line on "
 "the check. Coordinates are from the lower left corner of the specified check "
@@ -11022,11 +11023,11 @@ msgstr ""
 "checken. Koordinaterne er fra det nedre venstre hjørne på den angivne "
 "checkposition."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:45
 msgid "Position of check amount in words"
 msgstr "Position for checkbeløb i ord"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:46
 msgid ""
 "This value contains the X,Y coordinates for the start of the written amount "
 "line on the check. Coordinates are from the lower left corner of the "
@@ -11036,11 +11037,11 @@ msgstr ""
 "beløbet skrives på checken. Koordinaterne er fra det nedre venstre hjørne på "
 "den angivne checkposition."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:50
 msgid "Position of check amount in numbers"
 msgstr "Placering af check-beløbet i tal"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:51
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:51
 msgid ""
 "This value contains the X,Y coordinates for the start of the numerical "
 "amount line on the check. Coordinates are from the lower left corner of the "
@@ -11050,11 +11051,11 @@ msgstr ""
 "beløbslinje på checken. Koordinaterne er fra det nedre venstre hjørne på den "
 "angivne checkposition."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:55
 msgid "Position of payee address"
 msgstr "Position for betalingmodtagerens adresse"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:56
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:56
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee address "
 "line on the check. Coordinates are from the lower left corner of the "
@@ -11064,11 +11065,11 @@ msgstr ""
 "betalingsmodtagerens adresselinje på checken. Koordinaterne er fra det nedre "
 "venstre hjørne på den angivne checkposition."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:60
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:60
 msgid "Position of notes line"
 msgstr "Placering af linje for noter"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:61
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:61
 msgid ""
 "This value contains the X,Y coordinates for the start of the notes line on "
 "the check. Coordinates are from the lower left corner of the specified check "
@@ -11078,11 +11079,11 @@ msgstr ""
 "checken. Koordinaterne er fra det nedre venstre hjørne på den angivne "
 "checkposition."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:65
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:65
 msgid "Position of memo line"
 msgstr "Position for notelinje"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:66
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:66
 msgid ""
 "This value contains the X,Y coordinates for the start of the memo line on "
 "the check. Coordinates are from the lower left corner of the specified check "
@@ -11092,11 +11093,11 @@ msgstr ""
 "checken. Koordinaterne er fra det nedre venstre hjørne på den angivne "
 "checkposition."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:70
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:70
 msgid "Offset for complete check"
 msgstr "Forskydning for hel check"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:71
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:71
 msgid ""
 "This value contains the X,Y offset for the complete check. Coordinates are "
 "from the lower left corner of the specified check position."
@@ -11104,19 +11105,19 @@ msgstr ""
 "Denne værdi indeholder x- og y-koordinaterne for hele checken. Koordinaterne "
 "er fra det nedre venstre hjørne på den angivne checkposition."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:75
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:75
 msgid "Rotation angle"
 msgstr "Rotationsvinkel"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:76
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:76
 msgid "Number of degrees to rotate the check."
 msgstr "Antallet af grader checken skal roteres."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:80
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:80
 msgid "Position of split's amount in numbers"
 msgstr "Placering af opdelingsbeløb i tal"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:81
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:81
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's amount "
 "line on the check. Coordinates are from the lower left corner of the "
@@ -11126,11 +11127,11 @@ msgstr ""
 "beløbslinje på checken. Koordinaterne er fra det nedre venstre hjørne på den "
 "angivne checkposition."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:85
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:85
 msgid "Position of split's memo line"
 msgstr "Position for opdelingens notelinje"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:86
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:86
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's memo "
 "line on the check. Coordinates are from the lower left corner of the "
@@ -11140,11 +11141,11 @@ msgstr ""
 "notelinje på checken. Koordinaterne er fra det nedre venstre hjørne på den "
 "angivne checkposition."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:90
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:90
 msgid "Position of split's account line"
 msgstr "Position for opdelingens kontolinje"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:91
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:91
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's account "
 "line on the check. Coordinates are from the lower left corner of the "
@@ -11154,11 +11155,11 @@ msgstr ""
 "kontolinje på checken. Koordinaterne er fra det nedre venstre hjørne på den "
 "angivne checkposition."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:95
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:95
 msgid "Print the date format below the date."
 msgstr "Udskriv datoformatet neden under datoen."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:96
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:96
 msgid ""
 "Each time the date is printed, print the date format immediately below in 8 "
 "point type using the characters Y, M, and D."
@@ -11166,11 +11167,11 @@ msgstr ""
 "Hver gang datoen udskrives, udskriv så datoformatet umiddelbart nedenfor i 8-"
 "tegntype med tegnene Å, M og D."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:100
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:100
 msgid "The default check printing font"
 msgstr "Standardskrifttypen til udskrivning af check"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:101
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:101
 msgid ""
 "The default font to use when printing checks. This value will be overridden "
 "by any font specified in a check description file."
@@ -11178,37 +11179,37 @@ msgstr ""
 "Standardskrifttypen til brug for udskrivning af check. Denne værdi vil blive "
 "tilsidesat af en skrifttype angivet i en checkbeskrivelsesfil."
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:105
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:106
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:105
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:106
 msgid "Print '***' before and after text."
 msgstr "Udskriv »***« før og efter tekst."
 
-#: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.commodities.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.commodities.gschema.xml.in:6
 msgid "Show currencies in this dialog"
 msgstr "Vis valutaer i denne dialog"
 
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:12
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:142
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:150
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:158
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:166
-#: gnucash/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in:12
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:27
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:55
-#: gnucash/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:12
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:142
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:150
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:158
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:166
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:12
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:27
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:55
+#: gnucash/import-export/ofx/gschemas/org.gnucash.GnuCash.dialogs.import.ofx.gschema.xml.in:5
 msgid "Last pathname used"
 msgstr "Sidste stinavn brugt"
 
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:13
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:143
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:151
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:159
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:167
-#: gnucash/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in:13
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:28
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:56
-#: gnucash/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:13
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:143
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:151
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:159
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:167
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:13
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:28
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:56
+#: gnucash/import-export/ofx/gschemas/org.gnucash.GnuCash.dialogs.import.ofx.gschema.xml.in:6
 msgid ""
 "This field contains the last pathname used by this window. It will be used "
 "as the initial filename/pathname the next time this window is opened."
@@ -11217,22 +11218,22 @@ msgstr ""
 "blive brugt som opstartsfilnavn og -stinavn den næste gang dette vindue "
 "åbnes."
 
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:17
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:17
 msgid "Window geometry"
 msgstr "Vinduesgeometri"
 
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:18
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:18
 msgid "The position of paned window when it was last closed."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:102
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:103
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:184
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:185
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:102
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:103
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:184
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:185
 msgid "Position of the horizontal pane divider."
 msgstr "Placering af den vandrette panelopdeler."
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:135
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:135
 msgid ""
 "This setting indicates whether to search in all items in the current class, "
 "or only in 'active' items in the current class."
@@ -11240,27 +11241,27 @@ msgstr ""
 "Denne indstilling angiver, om der skal søges i alle elementer i den "
 "nuværende klasse, eller kun i »aktive« elementer i den nuværende klasse."
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:189
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:190
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:189
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:190
 msgid "Position of the vertical pane divider."
 msgstr "Position for den lodrette panelopdeler."
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:204
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:204
 msgid "Show the new user window"
 msgstr "Vis vinduet for ny bruger"
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:205
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:205
 msgid ""
 "If active, the new user window will be shown. Otherwise it will not be shown."
 msgstr ""
 "Hvis aktiv, vil det nye brugervindue blive vist. Ellers vil det ikke blive "
 "vist."
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:219
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:219
 msgid "New hierarchy window on \"New File\""
 msgstr "Nyt hierarkivindue på »Ny fil«"
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:220
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:220
 msgid ""
 "If active, the \"New Hierarchy\" window will be shown whenever the \"New File"
 "\" menu item is chosen. Otherwise it will not be shown."
@@ -11268,18 +11269,18 @@ msgstr ""
 "Hvis aktiv vil vinduet »Nyt hierarki« blive vist, når menupunktet »Ny fil« "
 "vælges. Ellers vil det ikke blive vist."
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:227
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:228
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:227
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:228
 msgid "Default to 'new search' if fewer than this number of items is returned"
 msgstr ""
 "Brug standarden »ny søgning« hvis færre end dette antal elementer returneres"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:5
 #, fuzzy
 msgid "Enable SKIP transaction action"
 msgstr "Find konti der påvirker"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:2058
 msgid ""
 "Enable the SKIP action in the transaction matcher. If enabled, a transaction "
@@ -11287,12 +11288,12 @@ msgid ""
 "but below the Auto-CLEAR threshold) will be skipped by default."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:10
 #, fuzzy
 msgid "Enable UPDATE match action"
 msgstr "Find konti der påvirker"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-preferences.glade:2077
 msgid ""
 "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
@@ -11302,34 +11303,34 @@ msgid ""
 "default."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:15
 msgid "Use bayesian matching"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:16
 msgid ""
 "Enables bayesian matching when matching imported transaction against "
 "existing transactions. Otherwise a less sophisticated rule-based matching "
 "mechanism will be used."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:20
 msgid "Minimum score to be displayed"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:21
 msgid ""
 "This field specifies the minimum matching score a potential matching "
 "transaction must have to be displayed in the match list."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:25
 #, fuzzy
 #| msgid "Add matching transactions below this score"
 msgid "Likely matching transaction within these days"
 msgstr "Tilføj ens transaktioner under denne score"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:26
 #, fuzzy
 #| msgid ""
 #| "This field specifies the number of automatic decimal places that will be "
@@ -11340,13 +11341,13 @@ msgid ""
 msgstr ""
 "Dette felt angiver antallet af automatiske decimaler, der skal udfyldes."
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:30
 #, fuzzy
 #| msgid "Clear matching transactions above this score"
 msgid "UnLikely matching a transaction outside of these days"
 msgstr "Ryd ens transaktioner over denne score"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:31
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:31
 #, fuzzy
 #| msgid ""
 #| "This field specifies the number of automatic decimal places that will be "
@@ -11357,11 +11358,11 @@ msgid ""
 msgstr ""
 "Dette felt angiver antallet af automatiske decimaler, der skal udfyldes."
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
 msgstr "Tilføj ens transaktioner under denne score"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:36
 msgid ""
 "This field specifies the threshold below which a matching transaction will "
 "be added automatically. A transaction whose best match's score is in the red "
@@ -11369,11 +11370,11 @@ msgid ""
 "score) will be added to the GnuCash file by default."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:40
 msgid "Clear matching transactions above this score"
 msgstr "Ryd ens transaktioner over denne score"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:41
 msgid ""
 "This field specifies the threshold above which a matching transaction will "
 "be cleared by default. A transaction whose best match's score is in the "
@@ -11381,11 +11382,11 @@ msgid ""
 "default."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:45
 msgid "Maximum ATM fee amount in your area"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:46
 msgid ""
 "This field specifies the extra fee that is taken into account when matching "
 "imported transactions. In some places commercial ATMs (not belonging to a "
@@ -11399,12 +11400,12 @@ msgid ""
 msgstr ""
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:50
 #: gnucash/gtkbuilder/dialog-preferences.glade:2270
 msgid "Automatically create new commodities"
 msgstr "Opret automatisk nye varer"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:51
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:51
 #: gnucash/gtkbuilder/dialog-preferences.glade:2276
 msgid ""
 "Enables the automatic creation of new commodities if any unknown commodity "
@@ -11412,50 +11413,50 @@ msgid ""
 "with each unknown commodity."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:68
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:68
 #, fuzzy
 msgid "Display or hide reconciled matches"
 msgstr "Vis den afstemte dato?"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:69
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:69
 msgid ""
 "Shows or hides transactions from the match picker which are already of some "
 "reconciled state."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:10
 msgid "Default QIF transaction status"
 msgstr "Standard for QIF-transaktionstatus"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:6
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:11
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:16
 msgid "Default status for QIF transaction when not specified in QIF file."
 msgstr ""
 "Standardstatus for QIF-transaktion når den ikke er specificeret i QIF-filen."
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:15
 #: gnucash/gtkbuilder/dialog-account-picker.glade:58
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as reconciled."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:32
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:32
 msgid "Show documentation"
 msgstr "Vis dokumentation"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:33
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:33
 #: gnucash/gtkbuilder/dialog-account-picker.glade:39
 msgid "Show some documentation-only pages in QIF Import assistant."
 msgstr "Vis nogle kun dokumentation-sider i QIF-indlæsningshjælperen."
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:5
 msgid "Pre-select cleared transactions"
 msgstr "Forhåndsvælg ryddede transaktioner"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:6
 msgid ""
 "If active, all transactions marked as cleared in the register will appear "
 "already selected in the reconcile dialog. Otherwise no transactions will be "
@@ -11465,11 +11466,11 @@ msgstr ""
 "som allerede valgte i afstemningsdialogen. Ellers vil ingen transaktioner "
 "blive valgt på forhånd."
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:10
 msgid "Prompt for interest charges"
 msgstr "Spørg om renteændringer"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-account.glade:1484
 msgid ""
 "Prior to reconciling an account which charges or pays interest, prompt the "
@@ -11478,11 +11479,11 @@ msgid ""
 "Liability accounts."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:15
 msgid "Prompt for credit card payment"
 msgstr "Spørg om kreditkortbetaling"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:16
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
@@ -11491,21 +11492,21 @@ msgstr ""
 "afstemning af en kreditkortkonto. I andre tilfælde skal brugeren ikke "
 "spørges."
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:20
 msgid "Always reconcile to today"
 msgstr "Afstem altid til i dag"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:21
 msgid ""
 "If active, always open the reconcile dialog using today's date for the "
 "statement date, regardless of previous reconciliations."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:17
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:17
 msgid "Run \"since last run\" dialog when a file is opened."
 msgstr "Kør »siden sidste kørsel«-vinduet når en fil åbnes."
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:18
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:18
 msgid ""
 "This setting controls whether the scheduled transactions \"since last run\" "
 "processing is run automatically when a data file is opened. This includes "
@@ -11513,11 +11514,11 @@ msgid ""
 "active, run the \"since last run\" process, otherwise it is not run."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:22
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:22
 msgid "Show \"since last run\" notification dialog when a file is opened."
 msgstr "Vis »siden sidste kørsel«-påmindelsesvinduet når en fil åbnes."
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:23
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:23
 msgid ""
 "This setting controls whether the scheduled transactions notification-only "
 "\"since last run\" dialog is shown when a data file is opened (if \"since "
@@ -11526,23 +11527,23 @@ msgid ""
 "show the dialog, otherwise it is not shown."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:27
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:27
 msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:28
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:36
 msgid ""
 "If active, any newly created scheduled transaction will have its 'auto "
 "create' flag set active by default. The user can change this flag during "
@@ -11550,16 +11551,16 @@ msgid ""
 "transaction."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:40
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:41
 msgid "How many days in advance to notify the user."
 msgstr "Hvor mange dage i forvejen, brugeren skal have besked."
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:52
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:52
 msgid "Set the \"notify\" flag by default"
 msgstr "Sæt flaget »notify« til dets standardværdi"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:53
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:53
 msgid ""
 "If active, any newly created scheduled transaction will have its 'notify' "
 "flag set by default. The user can change this flag during transaction "
@@ -11567,32 +11568,32 @@ msgid ""
 "setting only has meaning if the create-auto setting is active."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:57
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:58
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:57
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:58
 msgid "How many days in advance to remind the user."
 msgstr "Hvor mange dage i forvejen, brugeren skal huskes på."
 
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:6
 msgid "The next tip to show."
 msgstr "Det næste tip."
 
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:17
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:17
 msgid "Show \"Tip Of The Day\" at GnuCash start"
 msgstr "Vis »Dagens tip« når GnuCash startes"
 
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:18
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:18
 msgid ""
 "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog "
 "will be shown. Otherwise it will not be shown."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:5
 #: gnucash/gtkbuilder/dialog-preferences.glade:3735
 msgid "Alpha Vantage API key"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:3734
 #: gnucash/gtkbuilder/dialog-preferences.glade:3746
 msgid ""
@@ -11600,32 +11601,32 @@ msgid ""
 "can be retrieved from the Alpha Vantage website."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:11
 msgid ""
 "This is used internally to determine whether some preferences may need "
 "conversion when switching to a newer version of GnuCash."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:15
 msgid "Save window sizes and locations"
 msgstr "Gem vinduesstørrelser og -positioner"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:16
 msgid ""
 "If active, the size and location of each dialog window will be saved when it "
 "is closed. The sizes and locations of content windows will be remembered "
 "when you quit GnuCash. Otherwise the sizes will not be saved."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:20
 msgid "Character to use as separator between account names"
 msgstr "Tegn der skal bruges til at adskille kontonavne"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:21
 msgid ""
 "This setting determines the character that will be used between components "
 "of an account name. Possible values are any single non-alphanumeric unicode "
@@ -11633,29 +11634,29 @@ msgid ""
 "\", \"dash\" and \"period\"."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 #, fuzzy
 msgid "Transaction Linked Files head path"
 msgstr "Transaktionsinformation"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:26
 msgid ""
 "This is the path head for the Transaction Linked Files with relative paths"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:30
 msgid "Compress the data file"
 msgstr "Komprimer datafilen"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:31
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:31
 msgid "Enables file compression when writing the data file."
 msgstr "Aktiverer filkomprimering når datafilen skrives."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:35
 msgid "Show auto-save explanation"
 msgstr "Vis auto-save-beskrivelse"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:36
 msgid ""
 "If active, GnuCash shows an explanation of the auto-save feature the first "
 "time that feature is started. Otherwise no extra explanation is shown."
@@ -11663,11 +11664,11 @@ msgstr ""
 "Hvis aktiv viser GnuCash en beskrivelse af funktionen auto-save den første "
 "gang funktionen startes. Ellers vises ikke en ekstra beskrivelse."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:40
 msgid "Auto-save time interval"
 msgstr "Gem automatisk tidsinterval"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:41
 #: gnucash/gtkbuilder/dialog-preferences.glade:1670
 msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
@@ -11676,12 +11677,12 @@ msgstr ""
 "Antallet af minutter før lagring af datafilen på harddisken vil blive "
 "startet automatisk. Hvis nul, vil ingen lagring blive startet automatisk."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:45
 #: gnucash/gtkbuilder/dialog-preferences.glade:1787
 msgid "Enable timeout on \"Save changes on closing\" question"
 msgstr "Aktiver tidsudløb på spørgsmålet »Gem ændringer ved nedlukning«"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:46
 #: gnucash/gtkbuilder/dialog-preferences.glade:1791
 msgid ""
 "If enabled, the \"Save changes on closing\" question will only wait a "
@@ -11690,27 +11691,27 @@ msgid ""
 "closed."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:50
 msgid "Time to wait for answer"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:51
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:51
 #: gnucash/gtkbuilder/dialog-preferences.glade:1826
 msgid ""
 "The number of seconds to wait before the question window will be closed and "
 "the changes saved automatically."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:55
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:56
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:56
 msgid "Display negative amounts in red"
 msgstr "Vis negative beløb med rødt"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:60
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:60
 msgid "Automatically insert a decimal point"
 msgstr "Indsæt automatisk et decimaltegn"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:61
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:61
 msgid ""
 "If active, GnuCash will automatically insert a decimal point into values "
 "that are entered without one. Otherwise GnuCash will not modify entered "
@@ -11719,22 +11720,22 @@ msgstr ""
 "Hvis aktiv, vil GnuCash automatisk indsætte et decimaltegn i værdier, der "
 "indtastes uden et sådant. Ellers vil GnuCash ikke ændre indtastede tal."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:65
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:65
 msgid "Number of automatic decimal places"
 msgstr "Antal automatiske decimaler"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:66
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:66
 msgid ""
 "This field specifies the number of automatic decimal places that will be "
 "filled in."
 msgstr ""
 "Dette felt angiver antallet af automatiske decimaler, der skal udfyldes."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:70
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:71
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:71
 #: gnucash/gtkbuilder/dialog-preferences.glade:1228
 msgid ""
 "If active, GnuCash will round prices as necessary to display them as "
@@ -11742,14 +11743,14 @@ msgid ""
 "cannot be exactly represented as a decimal."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:75
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:75
 #: gnucash/gtkbuilder/dialog-preferences.glade:1739
 msgid "Do not create log/backup files."
 msgstr "Opret ikke log-/sikkerhedskopifiler."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:76
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:81
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:86
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:76
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:81
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:86
 msgid ""
 "This setting specifies what to do with old log/backups files. \"forever\" "
 "means keep all old files. \"never\" means no old log/backup files are kept. "
@@ -11758,23 +11759,23 @@ msgid ""
 "days'"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:80
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1757
 msgid "Delete old log/backup files after this many days (0 = never)."
 msgstr ""
 "Slet gamle logge og sikkerhedskopier efter dette antal dage (0 = aldrig)."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:85
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:85
 #: gnucash/gtkbuilder/dialog-preferences.glade:1775
 msgid "Do not delete log/backup files."
 msgstr "Slet ikke logge og sikkerhedskopier."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:90
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:90
 msgid "Delete old log/backup files after this many days (0 = never)"
 msgstr ""
 "Slet gamle logge og sikkerhedskopier efter dette antal dage (0 = aldrig)"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:91
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:91
 msgid ""
 "This setting specifies the number of days after which old log/backup files "
 "will be deleted (0 = never)."
@@ -11782,14 +11783,14 @@ msgstr ""
 "Denne indstilling angiver det antal dage hvorefter gamle sikkerhedsfiler vil "
 "blive slettet (0 = aldrig)."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:95
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:95
 #: gnucash/gtkbuilder/dialog-preferences.glade:654
 msgid "Don't sign reverse any accounts."
 msgstr "Skift ikke fortegn for nogen konto."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:96
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:101
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:106
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:96
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:101
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:106
 msgid ""
 "This setting allows certain accounts to have their balances reversed in sign "
 "from positive to negative, or vice versa. The setting \"income-expense\" is "
@@ -11799,7 +11800,7 @@ msgid ""
 "balances."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:100
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:100
 #: gnucash/gtkbuilder/dialog-preferences.glade:673
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
@@ -11808,49 +11809,49 @@ msgstr ""
 "Skift fortegn for følgende: kreditkort, betalingskonti, passivkonti, "
 "egenkapitalkonti og indtægtskonti."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:105
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:105
 #: gnucash/gtkbuilder/dialog-preferences.glade:692
 msgid "Sign reverse balances on income and expense accounts."
 msgstr "Skift fortegn for indtægts- og udgiftskonti."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:110
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:110
 msgid "Use account colors in the account hierarchy"
 msgstr "Brug kontofarver i kontohierarket"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:111
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:111
 msgid ""
 "If active the account hierarchy will colorize the account using the "
 "account's custom color if set. This can serve as a visual aid to quickly "
 "identify accounts."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:115
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:115
 msgid "Use account colors in the tabs of open account registers"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:116
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:116
 msgid ""
 "If active the account register tabs will be colored using the account's "
 "custom color if set. This can serve as a visual aid to quickly identify "
 "accounts."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:120
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:120
 msgid "Use formal account labels"
 msgstr "Brug formelle kontoetiketter"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:121
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:121
 msgid ""
 "If active, formal accounting labels \"Credit\" and \"Debit\" will be used "
 "when designating fields on screen. Otherwise, informal labels such as "
 "Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:125
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:125
 msgid "Show close buttons on notebook tabs"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:126
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:126
 msgid ""
 "If active, a \"close\" button will be displayed on any notebook tab that may "
 "be closed. Otherwise, no such button will be shown on the tab. Regardless of "
@@ -11858,35 +11859,35 @@ msgid ""
 "\"close\" button on toolbar."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:130
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:130
 msgid "Width of notebook tabs"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:131
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:131
 msgid ""
 "This key specifies the maximum width of notebook tabs. If the text in the "
 "tab is longer than this value (the test is approximate) then the tab label "
 "will have the middle cut and replaced with an ellipsis."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:135
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:136
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:136
 msgid ""
 "If active, new tabs are opened adjacent to current tab. If inactive, the new "
 "tabs are opened instead at the end."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:140
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:940
 msgid "Use the system locale currency for all newly created accounts."
 msgstr "Benyt systemets regionsvaluta for alle nye konti."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:141
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:146
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:359
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:141
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:146
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:360
 msgid ""
 "This setting controls the source of the default currency for new accounts. "
 "If set to \"locale\" then GnuCash will retrieve the default currency from "
@@ -11894,38 +11895,38 @@ msgid ""
 "specified by the currency-other key."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:145
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:145
 #: gnucash/gtkbuilder/dialog-preferences.glade:920
 msgid "Use the specified currency for all newly created accounts."
 msgstr "Brug den angivne valuta for alle nyoprettede konti."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:150
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:150
 msgid "Default currency for new accounts"
 msgstr "Standardvaluta for nye konti"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:151
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:151
 msgid ""
 "This setting specifies the default currency used for new accounts if the "
 "currency-choice setting is set to \"other\". This field must contain the "
 "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:155
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:155
 msgid "Use 24 hour time format"
 msgstr "Brug 24-timers tidsformat"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:156
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:156
 msgid ""
 "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
 msgstr ""
 "Hvis aktiv, brug et 24-timers tidsformat. Ellers bruges et 12-timers "
 "tidsformat."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:160
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:160
 msgid "Date format choice"
 msgstr "Valg af datoformat"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:161
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:161
 msgid ""
 "This setting chooses the way dates are displayed in GnuCash. Possible values "
 "for this setting are \"locale\" to use the system locale setting, \"ce\" for "
@@ -11933,13 +11934,13 @@ msgid ""
 "for United Kingdom style dates, and \"us\" for United States style dates."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:165
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1122
 msgid "In the current calendar year"
 msgstr "Det nuværende kalenderår"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:166
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:171
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:166
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:171
 msgid ""
 "When a date is entered without year it can be completed so that it will be "
 "within the current calendar year or close to the current date based on a "
@@ -11949,7 +11950,7 @@ msgstr ""
 "inden for det nuværende kalenderår eller tæt på den nuværende dato baseret "
 "på et glidende vindue, der begynder et angivet antal måneder tilbage i tid."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:170
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:170
 msgid ""
 "In a sliding 12-month window starting a configurable number of months before "
 "the current month"
@@ -11957,11 +11958,11 @@ msgstr ""
 "I et glidende 12-måneders vindue der starter et indstillet antal af måneder "
 "før den nuværende måned"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:175
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:175
 msgid "Maximum number of months to go back."
 msgstr "Maksimalt antal måneder tilbage i tiden."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:176
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:176
 #: gnucash/gtkbuilder/dialog-preferences.glade:1148
 msgid ""
 "Dates will be completed so that they are close to the current date. Enter "
@@ -11971,12 +11972,12 @@ msgstr ""
 "Indtast det maksimale antal måneder der skal gås tilbage i tid, når datoer "
 "automatisk skal udfyldes."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:180
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:180
 #, fuzzy
 msgid "Show Horizontal Grid Lines"
 msgstr "Vis vandrette kanter i en klassekladde"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:181
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:181
 #, fuzzy
 msgid ""
 "If active, horizontal grid lines will be shown on table displays. Otherwise "
@@ -11985,12 +11986,12 @@ msgstr ""
 "Hvis aktiv, vil en opstartsskærm blive vist ved opstart. Ellers vil en "
 "opstartsskærm ikke blive vist."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:185
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:185
 #, fuzzy
 msgid "Show Vertical Grid Lines"
 msgstr "Vis lodrette kanter i en klassekladde"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:186
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:186
 #, fuzzy
 msgid ""
 "If active, vertical grid lines will be shown on table displays. Otherwise no "
@@ -11999,11 +12000,11 @@ msgstr ""
 "Hvis aktiv, vil en opstartsskærm blive vist ved opstart. Ellers vil en "
 "opstartsskærm ikke blive vist."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:190
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:190
 msgid "Show splash screen"
 msgstr "Vis opstartsskærm"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:191
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:191
 msgid ""
 "If active, a splash screen will be shown at startup. Otherwise no splash "
 "screen will be shown."
@@ -12011,15 +12012,15 @@ msgstr ""
 "Hvis aktiv, vil en opstartsskærm blive vist ved opstart. Ellers vil en "
 "opstartsskærm ikke blive vist."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:195
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:195
 #: gnucash/gtkbuilder/dialog-preferences.glade:3450
 msgid "Display the notebook tabs at the top of the window."
 msgstr "Vis notesbogfanebladene øverst i vinduet."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:196
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:201
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:206
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:211
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:196
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:201
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:206
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:211
 msgid ""
 "This setting determines the edge at which the tabs for switching pages in "
 "notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and "
@@ -12029,28 +12030,28 @@ msgstr ""
 "notebøger tegnes. Mulige værdier er »top«, »left«, »bottom« og »right«. "
 "Standarden er »top«."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:200
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3469
 msgid "Display the notebook tabs at the bottom of the window."
 msgstr "Vis notesbogfaneblade i bunden af vinduet."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:205
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:205
 #: gnucash/gtkbuilder/dialog-preferences.glade:3488
 msgid "Display the notebook tabs at the left of the window."
 msgstr "Vis notesbogfaneblade til venstre i vinduet."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:210
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:210
 #: gnucash/gtkbuilder/dialog-preferences.glade:3507
 msgid "Display the notebook tabs at the right of the window."
 msgstr "Vis notesbogfaneblade til højre i vinduet."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:215
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:215
 #: gnucash/gtkbuilder/dialog-preferences.glade:3539
 msgid "Display the summary bar at the top of the page."
 msgstr "Vis oversigtsbjælken øverst på siden."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:216
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:221
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:216
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:221
 msgid ""
 "This setting determines the edge at which the summary bar for various pages "
 "is drawn. Possible values are \"top\" and \"bottom\". It defaults to \"bottom"
@@ -12059,17 +12060,17 @@ msgstr ""
 "Denne indstilling bestemmer kanten, hvor oversigtsbjælken for diverse sider "
 "tegnes. Mulige værdier er »top«, og »bottom«. Standarden er »bottom«."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:220
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:220
 #: gnucash/gtkbuilder/dialog-preferences.glade:3558
 msgid "Display the summary bar at the bottom of the page."
 msgstr "Vis oversigtsbjælken i bunden af siden."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:225
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:225
 #: gnucash/gtkbuilder/dialog-preferences.glade:3408
 msgid "Closing a tab moves to the most recently visited tab."
 msgstr "Ved lukning af et faneblad flyttes til det senest besøgte faneblad."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:226
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:226
 msgid ""
 "If active, closing a tab moves to the most recently visited tab. Otherwise "
 "closing a tab moves one tab to the left."
@@ -12077,7 +12078,7 @@ msgstr ""
 "Hvis aktiv, ved lukning af et faneblad flyttes til det senest besøgte "
 "faneblad. Ellers vil lukning af et faneblad flytte et faneblad til venstre."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:230
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:230
 #: gnucash/gtkbuilder/dialog-preferences.glade:1435
 msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
@@ -12086,7 +12087,7 @@ msgstr ""
 "Sæt bogtilvalg på nye filer til at bruge opdelt »handlingsfelt« for »Num-"
 "felt« på klassekladder/rapporter"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:231
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1441
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
@@ -12103,12 +12104,12 @@ msgstr ""
 "standardbogindstillingen for nye filer, så cellen »Num« på klassekladder "
 "viser/opdaterer transaktionsfeltet »num«."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:240
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:241
 #, fuzzy
 msgid "Color the register using a gnucash specific color theme"
 msgstr "Farvelæg klassekladden som specificeret af systemtemaet"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:241
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:242
 msgid ""
 "When enabled the register will use a GnuCash specific color theme (green/"
 "yellow). Otherwise it will use the system color theme. Regardless of this "
@@ -12117,21 +12118,21 @@ msgid ""
 "can be found in the gnucash FAQ."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:245
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:246
 msgid "Superseded by \"use-gnucash-color-theme\""
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:246
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:247
 msgid ""
 "This option is temporarily kept around for backwards compatibility. It will "
 "be removed in a future version."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:250
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:251
 msgid "\"Enter\" key moves to bottom of register"
 msgstr "»Returtast« flytter dig til bunden af kassekladen"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:251
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:252
 msgid ""
 "If active, pressing the enter key will move to the bottom of the register. "
 "Otherwise pressing the enter key will move to the next transaction line."
@@ -12139,16 +12140,16 @@ msgstr ""
 "Hvis aktiv, vil tryk på retur-tasten flytte dig til bunden af klassekladden. "
 "Ellers vil tryk på retur-tasten flytte til næste transaktionslinje."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:255
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:256
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:256
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:257
 msgid "Automatically raise the list of accounts or actions during input"
 msgstr "Fremhæv automatisk listen med konti eller handlinger under indtastning"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:260
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:261
 msgid "Move to Transfer field when memorised transaction auto filled"
 msgstr "Flyt til Overførselsfelt når husket transaktion er automatisk udfyldt"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:261
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:262
 msgid ""
 "If active then after a memorised transaction is automatically filled in the "
 "cursor will move to the Transfer field. If not active then it skips to the "
@@ -12157,11 +12158,11 @@ msgstr ""
 "Hvis aktiv vil markøren, efter en husket transaktion automatisk er udfyldt, "
 "flytte til Overførselsfeltet. Hvis ikke aktiv går markøren til værdifeltet."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:265
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:266
 msgid "Create a new window for each new register"
 msgstr "Opret et nyt vindue for hver ny kassekladde"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:266
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:267
 msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
@@ -12169,11 +12170,11 @@ msgstr ""
 "Hvis aktiv, vil hver ny klassekladde blive åbnet i et nyt vindue. Ellers vil "
 "hver klassekladde blive åbnet som et faneblad i hovedvinduet."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:270
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:271
 msgid "Color all lines of a transaction the same"
 msgstr "Farvelæg alle linjer i en transaktion med samme farve"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:271
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:272
 msgid ""
 "If active all lines that make up a single transaction will use the same "
 "color for their background. Otherwise the background colors are alternated "
@@ -12183,11 +12184,11 @@ msgstr ""
 "farve for deres baggrund. Ellers vil baggrundsfarverne ændre sig for hver "
 "linje."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:275
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:276
 msgid "Show horizontal borders in a register"
 msgstr "Vis vandrette kanter i en klassekladde"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:276
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:277
 msgid ""
 "Show horizontal borders between rows in a register. If active the border "
 "between cells will be indicated with a heavy line. Otherwise the border "
@@ -12197,11 +12198,11 @@ msgstr ""
 "mellem cellerne indikeres med en tyk lije. Ellers vil kanten mellem cellerne "
 "ikke blive markeret."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:280
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:281
 msgid "Show vertical borders in a register"
 msgstr "Vis lodrette kanter i en klassekladde"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:281
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:282
 msgid ""
 "Show vertical borders between columns in a register. If active the border "
 "between cells will be indicated with a heavy line. Otherwise the border "
@@ -12211,12 +12212,12 @@ msgstr ""
 "mellem cellerne indikeres med en tyk lije. Ellers vil kanten mellem cellerne "
 "ikke blive markeret."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:285
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:286
 #, fuzzy
 msgid "Show future transactions after the blank transaction in a register"
 msgstr "Flyt til den tomme transaktion i slutningen af kassekladden"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:286
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:287
 msgid ""
 "Show future transactions after the blank transaction in a register. If "
 "active then transactions with a date in the future will be displayed at the "
@@ -12224,7 +12225,7 @@ msgid ""
 "transaction will be at the bottom of the register after all transactions."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:290
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
 #: gnucash/gtkbuilder/dialog-preferences.glade:2842
 #, fuzzy
 #| msgid "Show all transactions on one line. (Two in double line mode.)"
@@ -12232,9 +12233,9 @@ msgid "Show all transactions on one line or in double line mode on two."
 msgstr ""
 "Vis transaktioner på en eller to linjer. (to i dobbelt linje-tilstand.)"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:291
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:296
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:301
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:297
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:302
 msgid ""
 "This field specifies the default view style when opening a new register "
 "window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". The "
@@ -12250,7 +12251,7 @@ msgstr ""
 "vise alle opdelinger. Indstillingen »journal« viser alle transaktioner i "
 "udvidet form."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:295
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:296
 #: gnucash/gtkbuilder/dialog-preferences.glade:2861
 #, fuzzy
 #| msgid ""
@@ -12263,18 +12264,18 @@ msgstr ""
 "Udvid automatisk den nuværende transakton til at vise alle opdelinger. Alle "
 "andre transaktioner vises på en linje. (To i dobbelt linje-tilstand.)"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:300
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:301
 #: gnucash/gtkbuilder/dialog-preferences.glade:2880
 msgid "All transactions are expanded to show all splits."
 msgstr "Alle transaktioner udvides til at vise alle opdelinger."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:305
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:306
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:306
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:307
 #, fuzzy
 #| msgid ""
 #| "Show two lines of information for each transaction in a register. This is "
@@ -12290,11 +12291,11 @@ msgstr ""
 "er standardinstillingen for første gang en klassekladde åbnes. Indstillingen "
 "kan ændres på ethvert tidspunkt via menupunktet »Vis-&gt;dobbeltlinje«."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:310
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:311
 msgid "Only display leaf account names."
 msgstr "Vis kun bladkontonavne."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:311
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:312
 msgid ""
 "Show only the names of the leaf accounts in the register and in the account "
 "selection popup. The default behaviour is to display the full name, "
@@ -12302,11 +12303,11 @@ msgid ""
 "you use unique leaf names."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:315
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:316
 msgid "Show the entered and reconcile dates"
 msgstr "Vis de indtastede og afstemte datoer"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:316
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:317
 #: gnucash/gtkbuilder/dialog-preferences.glade:3024
 msgid ""
 "Show the date when the transaction was entered below the posted date and "
@@ -12315,29 +12316,29 @@ msgstr ""
 "Vis datoen når transaktionen blev indtastet under den registrerede dato og "
 "afstemningsdatoen på opdelingsrækken."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:320
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:321
 msgid "Show entered and reconciled dates on selection"
 msgstr "Vis indtastede datoer og afstemningsdatoer ved markering"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:321
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:322
 #: gnucash/gtkbuilder/dialog-preferences.glade:3072
 msgid "Show the entered date and reconciled date on transaction selection."
 msgstr "Vis den indtastede dato og afstemningsdato ved transaktionsmarkering."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:325
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:326
 msgid "Show the calendar buttons"
 msgstr "Vis kalenderknapperne"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:326
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:327
 #: gnucash/gtkbuilder/dialog-preferences.glade:3040
 msgid "Show the calendar buttons Cancel, Today and Select."
 msgstr "Vis kalenderknapperne annuller, i dag og vælg."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:330
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:331
 msgid "Move the selection to the blank split on expand"
 msgstr "Flyt markeringen til den blanke opdeling ved udvidelse"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:331
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:332
 #: gnucash/gtkbuilder/dialog-preferences.glade:3056
 msgid ""
 "This will move the selection to the blank split when the transaction is "
@@ -12346,23 +12347,23 @@ msgstr ""
 "Dette vil flytte markeringen til den blanke opdeling når transaktionen "
 "udvides."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:335
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:336
 msgid "Number of transactions to show in a register."
 msgstr "Antallet af transaktioner der skal vises i en kassekladde."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:336
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:337
 #: gnucash/gtkbuilder/dialog-preferences.glade:2911
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:340
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:341
 msgid "Number of characters for auto complete."
 msgstr "Antallet af tegn for automatisk fuldførelse."
 
 #. Register2 feature
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:341
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:342
 #: gnucash/gtkbuilder/dialog-preferences.glade:3001
 msgid ""
 "This sets the number of characters before auto complete starts for "
@@ -12371,23 +12372,23 @@ msgstr ""
 "Dette angiver antallet af tegn før automatisk fuldførelse starter for "
 "beskrivelses-, bemærknings- og note-felter."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:348
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:349
 msgid "Create a new window for each new report"
 msgstr "Opret et nyt vindue for hver ny rapport"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:349
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:350
 msgid ""
 "If active, each new report will be opened in its own window. Otherwise new "
 "reports will be opened as tabs in the main window."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:353
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:354
 #: gnucash/gtkbuilder/dialog-preferences.glade:3277
 msgid "Use the system locale currency for all newly created reports."
 msgstr "Brug systemets lokale valuta for alle nyoprettede rapporter."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:354
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:364
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:355
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:365
 msgid ""
 "This setting controls the default currency used for reports. If set to "
 "\"locale\" then GnuCash will retrieve the default currency from the user's "
@@ -12395,20 +12396,20 @@ msgid ""
 "by the currency-other key."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:358
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:359
 #: gnucash/gtkbuilder/dialog-preferences.glade:3257
 msgid "Use the specified currency for all newly created reports."
 msgstr "Brug den angivne valuta for alle nyoprettede rapporter."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:363
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:364
 msgid "Default currency for new reports"
 msgstr "Standardvaluta for nye rapporter"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:368
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:369
 msgid "Zoom factor to use by default for reports."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:369
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:370
 #: gnucash/gtkbuilder/dialog-preferences.glade:3292
 msgid ""
 "On high resolution screens reports tend to be hard to read. This option "
@@ -12416,11 +12417,11 @@ msgid ""
 "to 2.0 will display reports at twice their typical size."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:378
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:379
 msgid "PDF export file name format"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:379
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:380
 #, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
@@ -12432,11 +12433,11 @@ msgid ""
 "resulting file name."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:383
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:384
 msgid "PDF export file name date format choice"
 msgstr "Valg af datoformat for PDF-eksportfil"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:384
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:385
 msgid ""
 "This setting chooses the way dates are used in the filename of PDF export. "
 "Possible values for this setting are \"locale\" to use the system locale "
@@ -12445,11 +12446,11 @@ msgid ""
 "United States style dates."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:390
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:391
 msgid "Allow file incompatibility with older versions."
 msgstr "Tillad filinkompatibilitet med ældre versioner."
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:391
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:392
 msgid ""
 "If active, gnucash will be allowed to intentionally break file compatibility "
 "with older versions, so that a data file saved in this version cannot be "
@@ -12457,93 +12458,93 @@ msgid ""
 "in formats that can be read by older versions as well."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:5
 msgid "Number of files in history"
 msgstr "Antal filer i historikken"
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:6
 msgid ""
 "This setting contains the number of files to keep in the Recently Opened "
 "Files menu. This value may be set to zero to disable the file history. This "
 "number has a maximum value of 10."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:10
 msgid "Most recently opened file"
 msgstr "Den seneste åbnede fil"
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:11
 msgid "This field contains the full path of the most recently opened file."
 msgstr "Dette felt indeholder den fulde sti på den senest åbnede fil."
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:15
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:20
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:25
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:30
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:35
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:40
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:45
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:50
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:55
 msgid "Next most recently opened file"
 msgstr "Den næstseneste åbnede fil"
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:16
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:21
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:26
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:31
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:36
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:41
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:46
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:51
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:56
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:31
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:51
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:56
 msgid ""
 "This field contains the full path of the next most recently opened file."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:9
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:112
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:9
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:112
 msgid "Print checks from multiple accounts"
 msgstr "Udskriv check fra flere konti"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:10
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:113
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:113
 msgid ""
 "This dialog is presented if you try to print checks from multiple accounts "
 "at the same time."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:14
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:117
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:14
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:117
 msgid "Confirm Window Close"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:15
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:118
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:118
 #, fuzzy
 #| msgid "This dialog is presented when a read-only register is opened."
 msgid "This dialog is presented when there is more than one window."
 msgstr "Denne dialog præsenteres, når en skrivebeskyttet kassekladde åbnes."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:19
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:122
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:19
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:122
 msgid "Commit changes to a invoice entry"
 msgstr "Registrer ændringer til en fakturapost"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:20
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:123
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:123
 msgid ""
 "This dialog is presented when you attempt to move out of a modified invoice "
 "entry. The changed data must be either saved or discarded."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:24
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:127
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:24
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:127
 msgid "Duplicating a changed invoice entry"
 msgstr "Kopiering af en ændret fakturapost"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:25
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:128
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:128
 msgid ""
 "This dialog is presented when you attempt to duplicate a modified invoice "
 "entry. The changed data must be saved or the duplication canceled."
@@ -12551,23 +12552,23 @@ msgstr ""
 "Denne dialog præsenteres, når du forsøger at kopiere en ændret fakturapost. "
 "De ændrede data skal gemmes ellers bliver kopien annulleret."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:29
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:132
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:29
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:132
 msgid "Delete a commodity"
 msgstr "Slet en vare"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:30
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:133
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:133
 msgid "This dialog is presented before allowing you to delete a commodity."
 msgstr "Denne dialog præsenteres først, så du kan slette en vare."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:34
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:137
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:34
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:137
 msgid "Delete a commodity with price quotes"
 msgstr "Slet en vare med pristilbud"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:35
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:138
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:138
 msgid ""
 "This dialog is presented before allowing you to delete a commodity that has "
 "price quotes attached. Deleting the commodity will delete the quotes as well."
@@ -12575,27 +12576,27 @@ msgstr ""
 "Denne dialog præsenteres først, så du kan slette en vare, som har pristilbud "
 "vedhæftet. Sletning af varen vil også slette pristilbuddene."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:39
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:142
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:39
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:142
 msgid "Delete multiple price quotes"
 msgstr "Slet flere pristilbud"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:40
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:143
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:143
 msgid ""
 "This dialog is presented before allowing you to delete multiple price quotes "
 "at one time."
 msgstr ""
 "Denne dialog præsenteres først, så du kan slette flere pristilbud på en gang."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:44
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:147
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:44
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:147
 #, fuzzy
 msgid "Replace existing price"
 msgstr "De registrerede pristilbud."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:45
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:148
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:148
 #, fuzzy
 #| msgid ""
 #| "This dialog is presented before allowing you to delete a transaction."
@@ -12603,13 +12604,13 @@ msgid ""
 "This dialog is presented before allowing you to replace an existing price."
 msgstr "Denne dialog præsenteres først, så du kan slette en transaktion."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:49
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:152
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:49
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:152
 msgid "Edit account payable/accounts receivable register"
 msgstr "Rediger kasseklade for betalingskonti og tilgodehavendekonti"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:50
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:153
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:153
 msgid ""
 "This dialog is presented before allowing you to edit an accounts payable/"
 "accounts receivable account. These account types are reserved for the "
@@ -12619,23 +12620,23 @@ msgstr ""
 "tilgodehavendekonto. Disse kontotyper er reserveret for "
 "forretningsfunktioner og skal sjældent manipuleres manuelt."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:54
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:157
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:54
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:157
 msgid "Read only register"
 msgstr "Skrivebeskyttet kassekladde"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:55
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:158
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:158
 msgid "This dialog is presented when a read-only register is opened."
 msgstr "Denne dialog præsenteres, når en skrivebeskyttet kassekladde åbnes."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:59
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:162
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:59
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:162
 msgid "Change contents of reconciled split"
 msgstr "Ændr indhold af afstemt opdeling"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:60
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:163
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:60
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:163
 msgid ""
 "This dialog is presented before allowing you to change the contents of a "
 "reconciled split. Allowing these changes can make it hard to perform future "
@@ -12645,13 +12646,13 @@ msgstr ""
 "opdeling. Tilladelse af disse ændringer kan gør det svært at udføre "
 "fremtidige afstemninger."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:64
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:167
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:64
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:167
 msgid "Mark transaction split as unreconciled"
 msgstr "Marker transaktionsopdeling som uafstemt"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:65
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:168
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:65
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:168
 msgid ""
 "This dialog is presented before allowing you to mark a transaction split as "
 "unreconciled. Doing so will throw off the reconciled value of the register "
@@ -12661,13 +12662,13 @@ msgstr ""
 "som uafstemt. Dette vil fjerne den afstemte værdi fra kassekladden og kan "
 "gøre det svært at udføre fremtidige afstemninger."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:69
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:172
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:172
 msgid "Remove a split from a transaction"
 msgstr "Fjern en opdeling fra en transaktion"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:70
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:173
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:173
 msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
@@ -12675,13 +12676,13 @@ msgstr ""
 "Denne dialog er præsenteres først, så du kan fjerne en opdeling fra en "
 "transaktion."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:74
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:177
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:177
 msgid "Remove a reconciled split from a transaction"
 msgstr "Fjern en afstemt opdeling fra en transaktion"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:75
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:178
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:178
 msgid ""
 "This dialog is presented before allowing you to remove a reconciled split "
 "from a transaction. Doing so will throw off the reconciled value of the "
@@ -12691,15 +12692,15 @@ msgstr ""
 "transaktion. Dette vil fjerne den afstemte værdi fra kassekladden og gøre "
 "det svært at udføre fremtidige afstemninger."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:79
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:84
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:182
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:187
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:84
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:182
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:187
 msgid "Remove all the splits from a transaction"
 msgstr "Fjern alle opsplitninger fra en transaktion"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:80
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:183
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:80
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:183
 msgid ""
 "This dialog is presented before allowing you to remove all splits from a "
 "transaction."
@@ -12707,8 +12708,8 @@ msgstr ""
 "Denne dialog præsenteres først, så du kan fjerne alle opdelinger fra en "
 "transaktion."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:85
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:188
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:85
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:188
 msgid ""
 "This dialog is presented before allowing you to remove all splits (including "
 "some reconciled splits) from a transaction. Doing so will throw off the "
@@ -12720,23 +12721,23 @@ msgstr ""
 "værdi fra kassekladden og kan gøre det svært at udføre fremtidige "
 "afstemninger."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:89
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:192
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:89
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
 msgid "Delete a transaction"
 msgstr "Slet en transaktion"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:90
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:193
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:90
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:193
 msgid "This dialog is presented before allowing you to delete a transaction."
 msgstr "Denne dialog præsenteres først, så du kan slette en transaktion."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:94
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:197
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:94
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:197
 msgid "Delete a transaction with reconciled splits"
 msgstr "Slet en transaktion med afstemte opdelinger"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:95
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:198
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:95
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:198
 msgid ""
 "This dialog is presented before allowing you to delete a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
@@ -12746,13 +12747,13 @@ msgstr ""
 "indeholder afstemte opdelinger. Dette vil fjerne den afstemte værdi fra "
 "kassekladden og kan gøre det svært at udføre fremtidige afstemninger."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:99
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:202
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:202
 msgid "Duplicating a changed transaction"
 msgstr "Kopier en ændret transaktion"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:100
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:203
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:203
 msgid ""
 "This dialog is presented when you attempt to duplicate a modified "
 "transaction. The changed data must be saved or the duplication canceled."
@@ -12760,30 +12761,30 @@ msgstr ""
 "Denne dialog præsenteres, når du forsøger at kopiere en ændret transaktion. "
 "De ændrede data skal gemmes ellers bliver duplikeringen annulleret."
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:104
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:207
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:207
 msgid "Commit changes to a transaction"
 msgstr "'Registrer ændringer til en transaktion"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:105
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:208
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:208
 msgid ""
 "This dialog is presented when you attempt to move out of a modified "
 "transaction. The changed data must be either saved or discarded."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:6
 msgid ""
 "Show a grand total of all accounts converted to the default report currency"
 msgstr ""
 "Vis en samlet sum for alle konti konverteret til rapportens standardvaluta"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:10
 msgid "Show non currency commodities"
 msgstr "Vis varer uden valuta"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:11
 msgid ""
 "If active, non currency commodities (stocks) will be shown. Otherwise they "
 "will be hidden."
@@ -12791,12 +12792,12 @@ msgstr ""
 "Hvis aktiv, vil varer uden valuta (aktiver) blive vist. Ellers vil de blive "
 "skjult."
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:15
 msgid "Use relative profit/loss starting date"
 msgstr "Brug relativ profit/tab-startdato"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:16
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:21
 msgid ""
 "This setting controls the type of starting date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the starting "
@@ -12804,38 +12805,38 @@ msgid ""
 "retrieve the starting date specified by the start-period key."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:20
 msgid "Use absolute profit/loss starting date"
 msgstr "Brug absolut profit/tab-startdato"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:25
 msgid "Starting date (in seconds from Jan 1, 1970)"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:26
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:30
 msgid "Starting time period identifier"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:31
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:31
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to anything other than \"absolute\". This "
 "field should contain a value between 0 and 8."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:35
 msgid "Use relative profit/loss ending date"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:36
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:41
 msgid ""
 "This setting controls the type of ending date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the ending "
@@ -12843,37 +12844,37 @@ msgid ""
 "retrieve the ending date specified by the end-period key."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:40
 msgid "Use absolute profit/loss ending date"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:45
 msgid "Ending date (in seconds from Jan 1, 1970)"
 msgstr "Slutdato (i sekunder fra 1. januar 1970)"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:46
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:50
 msgid "Ending time period identifier"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:51
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:51
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.window.pages.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:5
 msgid "Display this column"
 msgstr "Vis denne kolonne"
 
-#: gnucash/gschemas/org.gnucash.window.pages.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:6
 msgid ""
 "This setting controls whether the given column will be visible in the view. "
 "TRUE means visible, FALSE means hidden."
@@ -12881,11 +12882,11 @@ msgstr ""
 "Denne indstilling kontrollerer hvorvidt den angivne kolonne vil være synlig "
 "i visningen. SAND (TRUE) betyder synlig, FALSK (FALSE) betyder skjult."
 
-#: gnucash/gschemas/org.gnucash.window.pages.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:10
 msgid "Width of this column"
 msgstr "Bredde for denne kolonne"
 
-#: gnucash/gschemas/org.gnucash.window.pages.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:11
 msgid "This setting stores the width of the given column in pixels."
 msgstr ""
 
@@ -15593,18 +15594,18 @@ msgstr ""
 msgid "<b>2. Select Import Type</b>"
 msgstr "Vælg rabattypen"
 
-#: gnucash/gtkbuilder/dialog-custom-report.glade:51
+#: gnucash/gtkbuilder/dialog-custom-report.glade:52
 #, fuzzy
 msgid "Exit the saved report configurations dialog"
 msgstr "Start rundvisningen for nye brugere"
 
-#: gnucash/gtkbuilder/dialog-custom-report.glade:99
+#: gnucash/gtkbuilder/dialog-custom-report.glade:100
 msgid ""
 "\n"
 "Currently you have no saved reports.\n"
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-custom-report.glade:113
+#: gnucash/gtkbuilder/dialog-custom-report.glade:114
 msgid ""
 "Saved report configurations are created by first opening a report from the "
 "Reports menu,\n"
@@ -19716,7 +19717,7 @@ msgid "_Close log window when finished"
 msgstr "_Luk logvindue når færdig"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:39
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:16
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:16
 msgid ""
 "If active, the window will be closed automatically when you finish the HBCI/"
 "AqBanking import process. Otherwise it will stay open."
@@ -19728,7 +19729,7 @@ msgid "Remember the _PIN in memory"
 msgstr "Husk PIN'en i hukommelsen"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:57
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:21
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:21
 msgid ""
 "If active, the PIN for HBCI/AqBanking actions will be remembered in memory "
 "during a session. Otherwise it will have to be entered again each time "
@@ -19740,7 +19741,7 @@ msgid "_Verbose debug messages"
 msgstr "_Uddybende fejlbeskeder"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:75
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:31
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 msgstr "Aktiverer uddybende fejlsøgningsbeskeder for HBCI/AqBanking-netbank."
 
@@ -19750,7 +19751,7 @@ msgid "Use Non-SWIFT _transaction text"
 msgstr "Brug nærmeste på transaktionsdato."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:93
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:26
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:26
 msgid ""
 "Some banks place part of transaction description as \"transaction text\" in "
 "the MT940 file. Normally GNUcash ignores this text. However by activating "
@@ -20009,7 +20010,7 @@ msgid "Unspecified"
 msgstr "Uspecificeret"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4433
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4440
 msgid "Bank"
 msgstr "Bank"
 
@@ -20049,7 +20050,7 @@ msgstr ""
 "Ingen netbankkonto fundet for denne gnucash-konto. Disse transaktioner vil "
 "ikke blive udført af netbanken."
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1042
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1040
 msgid ""
 "The bank has sent balance information in its response.\n"
 "Do you want to import it?"
@@ -20064,7 +20065,7 @@ msgstr ""
 #. (Switzerland). If none of these techniques are available
 #. in your country, you may safely ignore strings from the
 #. import-export/hbci subdirectory.
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1139
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1141
 msgid ""
 "The downloaded Online Banking Balance was zero.\n"
 "\n"
@@ -20081,7 +20082,7 @@ msgstr ""
 "du vælge en anden netbankversion i opsætningen af netbank (AqBanking eller "
 "HBCI). Derefter skal du forsøge at overføre netbanksaldoen igen."
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1156
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1158
 #, c-format
 msgid ""
 "Result of Online Banking job:\n"
@@ -20090,29 +20091,29 @@ msgstr ""
 "Resultat af netbankjob:\n"
 "Kontoens afstemte saldo er %s"
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1162
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1164
 #, c-format
 msgid "For your information: This account also has a noted balance of %s\n"
 msgstr "Til din information: Denne konto har også en registreret saldo på %s\n"
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1169
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1171
 msgid ""
 "The booked balance is identical to the current reconciled balance of the "
 "account."
 msgstr ""
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1184
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1186
 msgid "Reconcile account now?"
 msgstr "Afstem konto nu?"
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1279
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1281
 #, fuzzy
 msgid "The bank has sent a message in its response."
 msgstr ""
 "Bank har sendt saldoinformation i sit svar.\n"
 "Ønsker du at importere den?"
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1280
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1282
 msgid "Subject:"
 msgstr ""
 
@@ -20303,62 +20304,62 @@ msgstr "Vis _logvindue"
 msgid "Show the online banking log window."
 msgstr "Vis logvindue for netbanken."
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:15
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:15
 msgid "Close window when finished"
 msgstr "Luk vindue når færdig"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:20
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:20
 msgid "Remember the PIN in memory"
 msgstr "Husk PIN'en i hukommelsen"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:25
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:25
 #, fuzzy
 msgid "Put the transaction text in front of the purpose of a transaction."
 msgstr ""
 "Vis transaktioner på én eller to linjer og ekspander den aktuelle transaktion"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:30
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:30
 msgid "Verbose HBCI debug messages"
 msgstr ""
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:35
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:35
 msgid "DTAUS import data format"
 msgstr "DTAUS-indlæsningsdataformat"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:36
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:36
 msgid ""
 "This setting specifies the data format when importing DTAUS files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:40
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:40
 msgid "CSV import data format"
 msgstr "CSV-dataindlæsningsformat"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:41
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:41
 msgid ""
 "This setting specifies the data format when importing CSV files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:45
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:45
 msgid "SWIFT MT940 import data format"
 msgstr "SWIFT MT940-importdataformat"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:46
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:46
 msgid ""
 "This setting specifies the data format when importing SWIFT MT940 files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:50
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:50
 msgid "SWIFT MT942 import data format"
 msgstr "SWIFT MT942-importdataformat"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:51
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:51
 msgid ""
 "This setting specifies the data format when importing SWIFT MT942 files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
@@ -20882,7 +20883,7 @@ msgid "_Narrow this column"
 msgstr "Gør de_nne kolonne smallere"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1885
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1884
 #, fuzzy, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
@@ -20890,7 +20891,7 @@ msgstr[0] "Tilføj en ny pris."
 msgstr[1] "Tilføj en ny pris."
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1890
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1889
 #, fuzzy, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
@@ -20898,14 +20899,14 @@ msgstr[0] "_Dupliker faktura"
 msgstr[1] "_Dupliker faktura"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1895
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1894
 #, fuzzy, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
 msgstr[0] "De registrerede pristilbud."
 msgstr[1] "De registrerede pristilbud."
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1900
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1899
 #, fuzzy, c-format
 msgid ""
 "The prices were imported from file '%s'.\n"
@@ -20916,7 +20917,7 @@ msgid ""
 "- %s"
 msgstr "Der opstod en fejl under tolkning af filen %s."
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1944
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1943
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating prices. Please report this "
@@ -20926,18 +20927,18 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1753
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1752
 #, fuzzy
 msgid "No Linked Account"
 msgstr "Ny konto"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1975
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1974
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button..."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2019
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2018
 #, c-format
 msgid ""
 "An unexpected error has occurred while mapping accounts. Please report this "
@@ -20947,7 +20948,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2061
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2060
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating transactions. Please report "
@@ -20957,12 +20958,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2070
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2069
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr ""
 
 #. Translators: {1} will be replaced with a filename
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2125
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2124
 #, fuzzy
 msgid "The transactions were imported from file '{1}'."
 msgstr "Der opstod en fejl under tolkning af filen %s."
@@ -21427,90 +21428,98 @@ msgstr "å/m/d"
 msgid "y/d/m"
 msgstr "å/d/m"
 
-#: gnucash/import-export/import-main-matcher.c:590
-#: gnucash/import-export/import-main-matcher.c:743
+#: gnucash/import-export/import-main-matcher.c:591
+#: gnucash/import-export/import-main-matcher.c:744
 msgid "Destination account for the auto-balance split."
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.c:943
+#: gnucash/import-export/import-main-matcher.c:944
 #, fuzzy
 #| msgid "You must select a transfer account from the account tree."
 msgid "Assign a transfer account to the selection."
 msgstr "Du skal vælge en overførselskonto fra kontotræet."
 
-#: gnucash/import-export/import-main-matcher.c:1105
+#: gnucash/import-export/import-main-matcher.c:1106
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.c:1108
+#: gnucash/import-export/import-main-matcher.c:1109
 #, fuzzy
 #| msgid "UTC"
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "UTC"
 
-#: gnucash/import-export/import-main-matcher.c:1112
+#: gnucash/import-export/import-main-matcher.c:1113
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.c:1119
+#: gnucash/import-export/import-main-matcher.c:1120
 msgid "Info"
 msgstr "Info"
 
-#: gnucash/import-export/import-main-matcher.c:1126
+#: gnucash/import-export/import-main-matcher.c:1127
 #: gnucash/report/stylesheets/head-or-tail.scm:102
 #, fuzzy
 msgid "Additional Comments"
 msgstr "Ekstra på kortet:"
 
-#: gnucash/import-export/import-main-matcher.c:1494
+#: gnucash/import-export/import-main-matcher.c:1518
 msgid "New, already balanced"
 msgstr ""
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1520
+#: gnucash/import-export/import-main-matcher.c:1544
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Ny, overfør %s til (manuelt) »%s«"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1528
+#: gnucash/import-export/import-main-matcher.c:1552
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Ny, overfør %s til (automatisk) »%s«"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:1539
+#: gnucash/import-export/import-main-matcher.c:1563
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.c:1556
-msgid "Reconcile (manual) match"
+#: gnucash/import-export/import-main-matcher.c:1581
+#, fuzzy, c-format
+#| msgid "Reconcile (manual) match"
+msgid "Reconcile (manual) match to %s"
 msgstr "Afstem (manuelt) ens"
 
-#: gnucash/import-export/import-main-matcher.c:1560
-msgid "Reconcile (auto) match"
+#: gnucash/import-export/import-main-matcher.c:1586
+#, fuzzy, c-format
+#| msgid "Reconcile (auto) match"
+msgid "Reconcile (auto) match to %s"
 msgstr "Afstem (auto) ens"
 
-#: gnucash/import-export/import-main-matcher.c:1567
-#: gnucash/import-export/import-main-matcher.c:1593
+#: gnucash/import-export/import-main-matcher.c:1595
+#: gnucash/import-export/import-main-matcher.c:1625
 msgid "Match missing!"
 msgstr "Ingen ens!"
 
-#: gnucash/import-export/import-main-matcher.c:1582
-msgid "Update and reconcile (manual) match"
+#: gnucash/import-export/import-main-matcher.c:1611
+#, fuzzy, c-format
+#| msgid "Update and reconcile (manual) match"
+msgid "Update and reconcile (manual) match to %s"
 msgstr "Opdater og afstem (manuelt) match"
 
-#: gnucash/import-export/import-main-matcher.c:1586
-msgid "Update and reconcile (auto) match"
+#: gnucash/import-export/import-main-matcher.c:1616
+#, fuzzy, c-format
+#| msgid "Update and reconcile (auto) match"
+msgid "Update and reconcile (auto) match to %s"
 msgstr "Opdater og afstem (auto) match"
 
-#: gnucash/import-export/import-main-matcher.c:1601
+#: gnucash/import-export/import-main-matcher.c:1633
 msgid "Do not import (no action selected)"
 msgstr "Importer ikke (ingen handling valgt)"
 
@@ -21568,60 +21577,60 @@ msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr ""
 "Genafspil en GnuCash-logfil efter et nedbrud. Dette kan ikke fortrydes."
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:651
+#: gnucash/import-export/ofx/gnc-ofx-import.c:660
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "Aktiekonto for værdipapir »%s«"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:828
+#: gnucash/import-export/ofx/gnc-ofx-import.c:837
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "Indtægtkonto for værdipapir »%s«"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:951
+#: gnucash/import-export/ofx/gnc-ofx-import.c:960
 msgid "Unknown OFX account"
 msgstr "Ukendt OFX-konto"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:974
+#: gnucash/import-export/ofx/gnc-ofx-import.c:983
 msgid "Unknown OFX checking account"
 msgstr "Ukendt OFX-checkkonto"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:978
+#: gnucash/import-export/ofx/gnc-ofx-import.c:987
 msgid "Unknown OFX savings account"
 msgstr "Ukendt OFX-opsparingskonto"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:982
+#: gnucash/import-export/ofx/gnc-ofx-import.c:991
 msgid "Unknown OFX money market account"
 msgstr "Ukendt OFX-pengemarkedskonto"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:986
+#: gnucash/import-export/ofx/gnc-ofx-import.c:995
 msgid "Unknown OFX credit line account"
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:991
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1000
 msgid "Unknown OFX CMA account"
 msgstr "Ukendt OFX CMA-konto"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:995
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1004
 msgid "Unknown OFX credit card account"
 msgstr "Ukendt OFX-kreditkortkonto"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:999
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1008
 msgid "Unknown OFX investment account"
 msgstr "Ukendt OFX-investeringskonto"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1201
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1216
 #, c-format
 msgid ""
-"OFX file '%s', imported transactions for account '%s'\n"
-"%d transactions processed, no transactions to match"
+"While importing transactions from OFX file '%s' into account '%s', found %d "
+"previously imported transactions, no new transactions."
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1302
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1319
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1307
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1324
 #, fuzzy
 #| msgid "Select an OFX/QFX file to process"
 msgid "Select one or multiple OFX/QFX file(s) to process"
@@ -22326,7 +22335,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
-#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4434
+#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4441
 msgid "Cash"
 msgstr "Kontant"
 
@@ -22588,7 +22597,7 @@ msgstr "prøve:Beskrivelse af transaktionen"
 
 #. Translators: 'L' is short for Linked Document
 #: gnucash/register/ledger-core/split-register-layout.c:703
-#: gnucash/register/ledger-core/split-register-model.c:334
+#: gnucash/register/ledger-core/split-register-model.c:335
 #: gnucash/report/reports/standard/new-owner-report.scm:210
 #: gnucash/report/reports/standard/new-owner-report.scm:437
 #: gnucash/report/trep-engine.scm:1237 gnucash/report/trep-engine.scm:1238
@@ -22655,120 +22664,120 @@ msgid ""
 "provided by your system."
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:253
+#: gnucash/register/ledger-core/split-register-model.c:254
 msgid "Ref"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:269
+#: gnucash/register/ledger-core/split-register-model.c:270
 msgid "T-Ref"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:278
+#: gnucash/register/ledger-core/split-register-model.c:279
 #: gnucash/report/reports/standard/register.scm:134
 msgid "T-Num"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:404
+#: gnucash/register/ledger-core/split-register-model.c:405
 msgid "Exch. Rate"
 msgstr "Vekselkurs"
 
-#: gnucash/register/ledger-core/split-register-model.c:421
+#: gnucash/register/ledger-core/split-register-model.c:422
 msgid "Oth. Curr."
 msgstr "And. valu."
 
-#: gnucash/register/ledger-core/split-register-model.c:438
-#: gnucash/register/ledger-core/split-register-model.c:462
+#: gnucash/register/ledger-core/split-register-model.c:439
+#: gnucash/register/ledger-core/split-register-model.c:463
 #, c-format
 msgid "Tot %s"
 msgstr "Tot %s"
 
-#: gnucash/register/ledger-core/split-register-model.c:444
+#: gnucash/register/ledger-core/split-register-model.c:445
 msgid "Tot Credit"
 msgstr "Tot kredit"
 
-#: gnucash/register/ledger-core/split-register-model.c:468
+#: gnucash/register/ledger-core/split-register-model.c:469
 msgid "Tot Debit"
 msgstr "Tot debet"
 
-#: gnucash/register/ledger-core/split-register-model.c:477
+#: gnucash/register/ledger-core/split-register-model.c:478
 msgid "Tot Shares"
 msgstr "Tot aktier"
 
-#: gnucash/register/ledger-core/split-register-model.c:536
+#: gnucash/register/ledger-core/split-register-model.c:537
 #, fuzzy, c-format
 msgid "Reconciled on %s"
 msgstr "Afstemt"
 
-#: gnucash/register/ledger-core/split-register-model.c:1017
+#: gnucash/register/ledger-core/split-register-model.c:1018
 msgid "Scheduled"
 msgstr "Planlagt"
 
-#: gnucash/register/ledger-core/split-register-model.c:1066
+#: gnucash/register/ledger-core/split-register-model.c:1067
 #, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
 msgstr "Indtast transaktionsnummeret (f.eks. checknummeret)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1068
+#: gnucash/register/ledger-core/split-register-model.c:1069
 #, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
 msgstr "Indtast transaktionsnummeret (f.eks. checknummeret)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1073
+#: gnucash/register/ledger-core/split-register-model.c:1074
 #, fuzzy
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
 msgstr "Indtast transaktionsnummeret (f.eks. checknummeret)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1075
+#: gnucash/register/ledger-core/split-register-model.c:1076
 #, fuzzy
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
 msgstr "Indtast transaktionsnummeret (f.eks. checknummeret)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1096
+#: gnucash/register/ledger-core/split-register-model.c:1097
 #, fuzzy
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
 msgstr "Indtast transaktionsnummeret (f.eks. checknummeret)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1100
+#: gnucash/register/ledger-core/split-register-model.c:1101
 #, fuzzy
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
 msgstr "Indtast transaktionsnummeret (f.eks. checknummeret)"
 
-#: gnucash/register/ledger-core/split-register-model.c:1305
+#: gnucash/register/ledger-core/split-register-model.c:1306
 #, fuzzy
 msgid "Enter an action type, or choose one from the list"
 msgstr "Indtast transaktionens type, eller vælg en fra listen"
 
-#: gnucash/register/ledger-core/split-register-model.c:1306
+#: gnucash/register/ledger-core/split-register-model.c:1307
 #, fuzzy
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
 msgstr "Angiv indtægts-/udgiftskonton for posten, eller vælg en fra listen"
 
-#: gnucash/register/ledger-core/split-register-model.c:1573
+#: gnucash/register/ledger-core/split-register-model.c:1575
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 "Denne transaktion har flere opdelinger. Tryk på opdelingsknappen for at se "
 "dem alle"
 
-#: gnucash/register/ledger-core/split-register-model.c:1576
+#: gnucash/register/ledger-core/split-register-model.c:1578
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
 "Denne transaktion er en aktieopsplitning. Tryk \"Opsplitning\"-knappen for "
 "detaljer"
 
-#: gnucash/register/ledger-core/split-register-model.c:2095
+#: gnucash/register/ledger-core/split-register-model.c:2097
 #, c-format
 msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
@@ -22777,12 +22786,12 @@ msgid ""
 "'%s'"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:2219
+#: gnucash/register/ledger-core/split-register-model.c:2210
 #, fuzzy
 msgid "Change transaction containing a reconciled split?"
 msgstr "Ændr indhold af afstemt opdeling"
 
-#: gnucash/register/ledger-core/split-register-model.c:2221
+#: gnucash/register/ledger-core/split-register-model.c:2212
 #, fuzzy, c-format
 msgid ""
 "The transaction you are about to change contains reconciled splits in the "
@@ -22794,7 +22803,7 @@ msgstr ""
 "Vil du virkelig markere denne transaktion som ikke-afstemt?\n"
 "Hvis du gør det kan fremtidige afstemninger blive svære!"
 
-#: gnucash/register/ledger-core/split-register-model.c:2232
+#: gnucash/register/ledger-core/split-register-model.c:2224
 #, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
@@ -22804,7 +22813,7 @@ msgstr ""
 "Vil du virkelig markere denne transaktion som ikke-afstemt?\n"
 "Hvis du gør det kan fremtidige afstemninger blive svære!"
 
-#: gnucash/register/ledger-core/split-register-model.c:2257
+#: gnucash/register/ledger-core/split-register-model.c:2249
 #, fuzzy
 msgid "Chan_ge Transaction"
 msgstr "_Afbryd transaktion"
@@ -25589,12 +25598,12 @@ msgid "missing"
 msgstr "Kurtage"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1076
-#: libgnucash/engine/Account.cpp:4435
+#: libgnucash/engine/Account.cpp:4442
 msgid "Asset"
 msgstr "Aktiv"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1079
-#: libgnucash/engine/Account.cpp:4437
+#: libgnucash/engine/Account.cpp:4444
 msgid "Liability"
 msgstr "Passiv"
 
@@ -26865,7 +26874,7 @@ msgid ""
 msgstr "Hvorvidt der skal inkluderes en linje som indikerer samlet indtægt"
 
 #: gnucash/report/reports/standard/income-statement.scm:517
-#: libgnucash/engine/Account.cpp:4447 libgnucash/engine/Scrub.c:486
+#: libgnucash/engine/Account.cpp:4454 libgnucash/engine/Scrub.c:486
 msgid "Trading"
 msgstr "Handel"
 
@@ -30297,40 +30306,40 @@ msgstr ""
 "Nedenfor kan du se listen over ugyldige kontonavne:\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4436
+#: libgnucash/engine/Account.cpp:4443
 msgid "Credit Card"
 msgstr "Kreditkort"
 
-#: libgnucash/engine/Account.cpp:4438
+#: libgnucash/engine/Account.cpp:4445
 msgid "Stock"
 msgstr "Aktie"
 
-#: libgnucash/engine/Account.cpp:4439
+#: libgnucash/engine/Account.cpp:4446
 msgid "Mutual Fund"
 msgstr "Investeringsbevis"
 
-#: libgnucash/engine/Account.cpp:4444
+#: libgnucash/engine/Account.cpp:4451
 msgid "A/Receivable"
 msgstr "A/Tilgodehavende"
 
-#: libgnucash/engine/Account.cpp:4445
+#: libgnucash/engine/Account.cpp:4452
 msgid "A/Payable"
 msgstr "A/Kreditor"
 
-#: libgnucash/engine/Account.cpp:4446
+#: libgnucash/engine/Account.cpp:4453
 msgid "Root"
 msgstr "Rod"
 
-#: libgnucash/engine/Account.cpp:4913
+#: libgnucash/engine/Account.cpp:4915
 msgid "Orphaned Gains"
 msgstr "Forældreløse gevinster"
 
-#: libgnucash/engine/Account.cpp:4927 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4929 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "Realiseret overskud/tab"
 
-#: libgnucash/engine/Account.cpp:4929
+#: libgnucash/engine/Account.cpp:4931
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -30560,11 +30569,11 @@ msgctxt ""
 msgid "Split"
 msgstr "Del"
 
-#: libgnucash/engine/Transaction.c:2788
+#: libgnucash/engine/Transaction.c:2778
 msgid "Voided transaction"
 msgstr "Ugyldig transaktion"
 
-#: libgnucash/engine/Transaction.c:2804
+#: libgnucash/engine/Transaction.c:2794
 msgid "Transaction Voided"
 msgstr "Transaktion ugyldig"
 
