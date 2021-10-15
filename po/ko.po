@@ -14733,7 +14733,7 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
@@ -14836,10 +14836,6 @@ msgstr "전체 이름(_F)"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "경고: 재정:: 인용이 적당히 설치되지 않음."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "단위/통화 선택"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -17345,7 +17341,7 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "영향을 미치는 날 며칠전 거래를 생성"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
+msgid "_Notify before transactions are created"
 msgstr "거래 생성시 알려주기(_N)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -21704,7 +21700,7 @@ msgid "Unknown EntryLedger Type"
 msgstr "미지의 입력 장부 형태"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
+msgid "The subtotal value of this entry"
 msgstr "이 엔트리의 부분합계 값"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
@@ -28468,7 +28464,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

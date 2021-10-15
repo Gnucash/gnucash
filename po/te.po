@@ -15146,7 +15146,7 @@ msgstr "సరుకు పూర్తిపేరును ప్రవేశ�
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "సరకు (ఉదా. CSCO లేదా AAPL) కోసం టిక్కర్ సంకేతాన్ని ప్రవేశపెట్టు. కోట్లను ఆన్‌లైన్‌లో తిరిగి పొందాలంటే, ఈ "
 "క్షేత్రం కోట్ ఆధారం (సందర్భం సహా) ఉపయోగించిన టిక్కర్ సంకేతానికి సరిగ్గా సరిపోవాలి."
@@ -15254,10 +15254,6 @@ msgstr "_పూర్తిపేరు"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "హెచ్చరిక: ఆర్ధికం:: ధర అంచనా సరిగ్గా ప్రతిష్ఠాపించబడలేదు"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "భద్రత/కరెన్సీ ఎంచుకో"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -17784,7 +17780,7 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "ప్రభావ తేదీ కంటే ఇన్ని రోజులకు ముందు లావాదేవీని సృష్టించు"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
+msgid "_Notify before transactions are created"
 msgstr "_లావాదేవీలు సృష్టించక ముందే ప్రకటించు"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -22170,7 +22166,7 @@ msgid "Unknown EntryLedger Type"
 msgstr "తెలియని నమోదు ఆవర్జా రకం"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
+msgid "The subtotal value of this entry"
 msgstr "ఈ నమోదు ఉపమొత్తం"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
@@ -28748,7 +28744,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

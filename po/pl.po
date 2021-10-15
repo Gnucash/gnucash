@@ -15588,11 +15588,11 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "Wprowadź symbol giełdowy dla środków (n.p. CSCO or AAPL). Jeśli pobierasz "
 "notowania z sieci, pole to musi pasować dokładnie do symbolu używanego przez "
-"źródło notowań (wielkość liter znacząca). "
+"źródło notowań (wielkość liter znacząca)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -15697,10 +15697,6 @@ msgstr "Pełna _nazwa"
 msgid "Warning: Finance::Quote not installed properly."
 msgstr ""
 "Ostrzeżenie: funkcja Finance::Quote nie została poprawnie zainstalowana."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Wybierz papier wartościowy/walutę "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18309,8 +18305,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "Utwórz transakcję na tyle dni przed datą wejścia w życie."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "Powiadom przed utworze_niem nowej transakcji "
+msgid "_Notify before transactions are created"
+msgstr "Powiadom przed utworze_niem nowej transakcji"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -22730,8 +22726,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "Nieznany typ wpisu do księgi głównej"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "Suma częściowa dla pozycji "
+msgid "The subtotal value of this entry"
+msgstr "Suma częściowa dla pozycji"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -29568,7 +29564,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

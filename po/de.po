@@ -15690,7 +15690,7 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "Geben Sie das Ticker-Symbol des Wertpapiers ein (z. B. CSCO oder AAPL). Wenn "
 "Sie Kurse online abrufen, muss dieses Feld exakt dem Tickersymbol der "
@@ -15804,10 +15804,6 @@ msgstr "_Voller Name"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Warnung: Modul Finance::Quote ist nicht korrekt installiert."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Bitte wählen Sie die Devise/Wertpapier"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18387,7 +18383,7 @@ msgstr ""
 "Buchungsdatum erstellen."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
+msgid "_Notify before transactions are created"
 msgstr "Be_nachrichtigen, bevor neue Buchungen erstellt werden"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -22899,7 +22895,7 @@ msgid "Unknown EntryLedger Type"
 msgstr "Unbekannter EntryLedger-Typ"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
+msgid "The subtotal value of this entry"
 msgstr "Zwischensumme dieses Postens"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
@@ -29430,7 +29426,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 "Standardmäßig sucht der Transaktionsfilter nur nach Teilstrings. Setzen Sie "
 "dies auf true, um volle POSIX-Funktionen für reguläre Ausdrücke zu "

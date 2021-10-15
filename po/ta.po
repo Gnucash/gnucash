@@ -15399,11 +15399,11 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "சரக்கிற்கான டிக்கர் குறியீட்டை உள்ளிடவும் (எ.கா. CSCO அல்லது AAPL). ஆன்லைனில் மேற்கோள்களை "
 "மீட்டெடுத்தால், இந்த புலமானது சரியாக டிக்கர் குறியீடு மேற்கோள் மூலத்தால் பயன்படுத்தப்பட்டு "
-"பொருந்துகிறது (தட்டு பொருத்தத்தையும் சேர்த்து). "
+"பொருந்துகிறது (தட்டு பொருத்தத்தையும் சேர்த்து)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -15508,10 +15508,6 @@ msgstr "முழுப்பெயர் (_F)"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "எச்சரிக்கை: நிதி::மேற்கோள் சரியாக நிறுவப்பட்டவில்லை."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "ஆவணம்/நாணயத்தை தேர்ந்தெடு"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18078,7 +18074,7 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "அதனுடைய சரியான தேதிக்கு முன் இத்தனை அதிக நாட்களில் பரிமாற்றத்தை உருவாக்கவும்."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
+msgid "_Notify before transactions are created"
 msgstr "பரிமாற்றங்கள் உருவாக்கப்படுதவற்கு முன் குறிப்பிடவும் (_N)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -22529,7 +22525,7 @@ msgid "Unknown EntryLedger Type"
 msgstr "தெரியாத EntryLedger வகை"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
+msgid "The subtotal value of this entry"
 msgstr "இந்த உள்ளிடுக்கான துணைமொத்த மதிப்பு"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
@@ -29199,7 +29195,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

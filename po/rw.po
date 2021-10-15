@@ -15980,7 +15980,7 @@ msgstr "i Izina: Bya i Urugero"
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
@@ -16085,11 +16085,6 @@ msgstr "Izina"
 #, fuzzy
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "OYA"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-#, fuzzy
-msgid "Select security/currency "
-msgstr "Ifaranga Umutekano"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 #, fuzzy
@@ -18841,7 +18836,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
 #, fuzzy
-msgid "_Notify before transactions are created "
+msgid "_Notify before transactions are created"
 msgstr "Ibikorwa by'ubucuruzi Gicurasi"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -23429,7 +23424,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
 #, fuzzy
-msgid "The subtotal value of this entry "
+msgid "The subtotal value of this entry"
 msgstr "IGITERANYOCYUNGIRIJE Agaciro Bya iyi Icyinjijwe"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
@@ -30426,7 +30421,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

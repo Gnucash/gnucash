@@ -15661,12 +15661,12 @@ msgstr "Entreu el nom complet del valor. Exemple: Gas Natural, Abertis, etc."
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "Introduïu el símbol abreviat de l'acció o divisa (p.ex. GAS o ABE). En cas "
 "que vulgueu baixar les cotitzacions d'Internet, aquest camp ha de concordar "
 "exactament amb el símbol abreviat que la font de cotització utilitza (amb "
-"distinció entre majúscules i minúscules). "
+"distinció entre majúscules i minúscules)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -15774,10 +15774,6 @@ msgstr "Nom sen_cer"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Avís: el mòdul Finance::Quote no està instal·lat correctament."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Escolliu el valor/divisa "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18351,8 +18347,8 @@ msgstr ""
 "efectiva."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "_Notifica abans de crear transaccions "
+msgid "_Notify before transactions are created"
+msgstr "_Notifica abans de crear transaccions"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -22828,8 +22824,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "Tipus d'EntryLedger desconegut"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "El valor sub-total d'aquest element "
+msgid "The subtotal value of this entry"
+msgstr "El valor sub-total d'aquest element"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -29453,7 +29449,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 "Per defecte el filtre d'assentaments cercarà sols subcadenes de caràcters. "
 "Si establiu això a cert s'activaran les capacitats d'expressions regulars "

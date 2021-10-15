@@ -14684,10 +14684,10 @@ msgstr "请输入商品全名。如：Cisco System Inc.、Apple Computer Inc.。
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "输入商品的股票代码（例如CSCO或AAPL）。如果需要使用在线检索，则此字段必须与引"
-"用源使用的股票代码完全匹配（包括大小写）。 "
+"用源使用的股票代码完全匹配（包括大小写）。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -14790,10 +14790,6 @@ msgstr "全名(_F)"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "警告：Finance::Quote 并未正确地安装。"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "选择证券/货币 "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -17213,8 +17209,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "在生效日前这么多天创建交易。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "创建交易前提醒(_N) "
+msgid "_Notify before transactions are created"
+msgstr "创建交易前提醒(_N)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -21489,8 +21485,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "未知的交易分类账类型"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "这笔交易的小计值 "
+msgid "The subtotal value of this entry"
+msgstr "这笔交易的小计值"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -27746,10 +27742,10 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 "默认情况下，此事务过滤器仅搜索字符串的部分匹配。设置这将允许您使用完整的POSIX"
-"正则表达式功能。'#work | #family'将匹配此标签，备注或摘要。 "
+"正则表达式功能。'#work | #family'将匹配此标签，备注或摘要。"
 
 #: gnucash/report/trep-engine.scm:596
 msgid "If this option is selected, transactions matching filter are excluded."

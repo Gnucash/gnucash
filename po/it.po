@@ -15922,12 +15922,12 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "Immettere la sigla simbolica per la commodity (ad esempio CSCO o AAPL). Se "
 "si stanno ricevendo delle quotazioni online, questo campo deve corrispondere "
 "esattamente alla sigla utilizzata dalla fonte delle quotazioni (incluse le "
-"lettere maiuscole e minuscole). "
+"lettere maiuscole e minuscole)."
 
 # Tooltip
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
@@ -16041,10 +16041,6 @@ msgstr "Nome _completo"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Attenzione: Finance::Quote non è installato correttamente."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Scegliere titolo/valuta "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18689,8 +18685,8 @@ msgstr ""
 "efficacia."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "_Notifica prima che le transazioni vengano create "
+msgid "_Notify before transactions are created"
+msgstr "_Notifica prima che le transazioni vengano create"
 
 # tooltip
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -23210,8 +23206,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "Tipo di elemento per il libro mastro sconosciuta"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "Subtotale per questo elemento "
+msgid "The subtotal value of this entry"
+msgstr "Subtotale per questo elemento"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "

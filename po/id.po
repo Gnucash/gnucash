@@ -15555,11 +15555,11 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "Masukkan simbol komoditas (misal CSCO atau AAPL). Jika Anda mengambil harga "
 "penawaran secara daring, bidang ini harus sesuai dengan kode yang digunakan "
-"oleh sumber data harga (termasuk huruf besar/kecil). "
+"oleh sumber data harga (termasuk huruf besar/kecil)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -15667,10 +15667,6 @@ msgstr "Nama _lengkap"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Peringatan: Finance::Quote tak terpasang dengan benar."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Pilih sekuritas/mata uang "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18221,8 +18217,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "Buat transaksi sejumlah hari ini sebelum tanggal efektif."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "Tampilkan _notifikasi sebelum transaksi dibuat "
+msgid "_Notify before transactions are created"
+msgstr "Tampilkan _notifikasi sebelum transaksi dibuat"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -22706,8 +22702,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "EntryLedger diketahui Jenis"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "Nilai subtotal untuk entri ini "
+msgid "The subtotal value of this entry"
+msgstr "Nilai subtotal untuk entri ini"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "

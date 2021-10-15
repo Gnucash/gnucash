@@ -15463,7 +15463,7 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "Hãy gõ ký hiệu trình điểm chứng khoán cho hàng hoá (v.d. CSCO hay AAPL). Nếu "
 "bạn lấy chào giá trực tuyến, trường này phải trùng với ký hiệu trình điểm "
@@ -15571,10 +15571,6 @@ msgstr "Tên đầ_y đủ "
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Cảnh báo : chưa cài đặt đúng mô-đun Finance::Quote."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Chọn chứng khoán/tiền tệ "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18143,8 +18139,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "Tạo giao dịch vào ngày là số ngày ở đây trước ngày hiệu quá."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "Thô_ng báo trước khi tạo giao dịch "
+msgid "_Notify before transactions are created"
+msgstr "Thô_ng báo trước khi tạo giao dịch"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -22629,8 +22625,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "Không rõ kiểu Mục Sổ Cái"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "Giá trị tổng phụ của mục nhập này "
+msgid "The subtotal value of this entry"
+msgstr "Giá trị tổng phụ của mục nhập này"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -29518,7 +29514,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

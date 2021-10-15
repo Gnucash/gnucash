@@ -15437,7 +15437,7 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "Mata in tickersymbolen för produkten (t.ex. CSCO eller AAPL). Om du hämtar "
 "aktiekurser online måste fältet matcha exakt den tickersymbol som används av "
@@ -15547,10 +15547,6 @@ msgstr "_Fullständigt namn"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Varning: Finance::Quote är inte korrekt installerat."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Välj värdepapper/valuta "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18100,7 +18096,7 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "Skapa transaktionen så här många dagar före dess egentliga datum."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
+msgid "_Notify before transactions are created"
 msgstr "Avisera i_nnan transaktioner skapas"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -22561,8 +22557,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "Okänd EntryLedger-typ"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "Delsumman för denna post "
+msgid "The subtotal value of this entry"
+msgstr "Delsumman för denna post"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -29061,12 +29057,12 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 "Som standard kommer transaktionsfiltret endast att söka på substrängar. Sätt "
 "detta till true för att aktivera fullständig funktionalitet för POSIX-"
 "regeluttryck. \"#arbete|#familj\" kommer att matcha båda taggar i "
-"beskrivning, anteckningar eller minnesanteckning. "
+"beskrivning, anteckningar eller minnesanteckning."
 
 #: gnucash/report/trep-engine.scm:596
 msgid "If this option is selected, transactions matching filter are excluded."

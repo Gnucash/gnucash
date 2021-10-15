@@ -17065,7 +17065,7 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "Saisissez le code du produit (ex. CSO ou AAPL). Si vous chargez les cours en "
 "ligne, ce champ doit être exactement identique au code utilisé par la source "
@@ -17185,10 +17185,6 @@ msgstr "Nom _complet "
 msgid "Warning: Finance::Quote not installed properly."
 msgstr ""
 "Attention : le module perl Finance::Quote n'est pas installé correctement."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Sélection de titre/devise "
 
 # messages-i18n.c:238
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
@@ -20002,7 +19998,7 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "Crée la transaction ce nombre de jours avant sa date effective."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
+msgid "_Notify before transactions are created"
 msgstr "_Avertir avant la création des transactions"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -24880,7 +24876,7 @@ msgstr "Type d'entrée de registre inconnu"
 
 # po/guile_strings.txt:22
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
+msgid "The subtotal value of this entry"
 msgstr "Sous-total de cette ligne"
 
 # po/guile_strings.txt:22
@@ -32405,7 +32401,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

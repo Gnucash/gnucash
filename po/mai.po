@@ -15353,11 +15353,11 @@ msgstr "वस्तु क' पूरा नाम दर्ज करू. उ�
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "वस्तु कलेल टिकर संकेत (जहिना CSCO अथवा AAPL) दर्ज करू. जँ अहाँ ऑनलाइन उद्धरण प्राप्त कए "
 "रहल छी तँ ई फील्ड उद्धरण स्रोत (केस सहित) द्वारा प्रयुक्त टिकर संकेत क सँग ठीक-ठीक मेल "
-"होनाए चाही. "
+"होनाए चाही."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -15464,10 +15464,6 @@ msgstr "पूरा नाम (_F)"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "चेतावनी:वित्त::कोट सही तरीका सँ इंस्टाल नहि कएल गेल अछि."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "सिक्योरिटी/मुद्रा चुनू "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18003,8 +17999,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "लेनदेन एकरा प्रभावी तिथि सँ एतबा दिन पहिने बनाउ."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "नव लेनदेन बनाओल जाए सँ पहिने सूचित करू (_N) "
+msgid "_Notify before transactions are created"
+msgstr "नव लेनदेन बनाओल जाए सँ पहिने सूचित करू (_N)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -22435,8 +22431,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "एहि प्रविष्टि क' पूर्ण योग मान"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "एहि प्रविष्टि क' कुल कर "
+msgid "The subtotal value of this entry"
+msgstr "एहि प्रविष्टि क' कुल कर"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -29040,7 +29036,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

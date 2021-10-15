@@ -14985,10 +14985,10 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "נא להזין סמל חַלּוֹן־מִבְזָקִים לסחורה (כגון: CSCO, או APPL). לאחזור שערים מקוון, "
-"על סמל חַלּוֹן־המִבְזָקִים להיות זהה לזה של מקור השערים (לרבות רישיות). "
+"על סמל חַלּוֹן־המִבְזָקִים להיות זהה לזה של מקור השערים (לרבות רישיות)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -15092,10 +15092,6 @@ msgstr "_שם מלא"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "אזהרה: Finance::Quote לא הותקן כראוי."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "בחירת בטוחה/מטבע "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -17567,8 +17563,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "יצירת התנועות במספר ימים זה לפני תאריך הערך."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "_התראה לפני יצירת תנועות "
+msgid "_Notify before transactions are created"
+msgstr "_התראה לפני יצירת תנועות"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -21891,8 +21887,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "סוג פקודת יומן לא ידוע"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "ערך סכום הביניים של הרשומה "
+msgid "The subtotal value of this entry"
+msgstr "ערך סכום הביניים של הרשומה"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -28197,11 +28193,11 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 "כברירת מחדל, מסנן התנועות יחפש מחרוזת משנה בלבד. הגדרה כ־true תאפשר יכולות "
 "ביטוי רגיל POSIX מלאות. '#עבודה|'#משפחה' יאחזרו תוצאות לשני התגים מתוך שדה "
-"התיאור, ההערות או המזכר. "
+"התיאור, ההערות או המזכר."
 
 #: gnucash/report/trep-engine.scm:596
 msgid "If this option is selected, transactions matching filter are excluded."

@@ -14855,7 +14855,7 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
@@ -14959,10 +14959,6 @@ msgstr "Úp_lný názov"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Varovanie: Financie::Quote nie je správne nainštalované."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Vyberte cenný papier/menu "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -17518,7 +17514,7 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "O koľko dní vopred sa vytvorí transakcia."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
+msgid "_Notify before transactions are created"
 msgstr "Upozor_niť pred vytvorením transakcie"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -21885,8 +21881,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "Neznámy typ EntryLedger"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "Medzisúčet pre túto položku "
+msgid "The subtotal value of this entry"
+msgstr "Medzisúčet pre túto položku"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -28657,7 +28653,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

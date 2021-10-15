@@ -15116,7 +15116,7 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "商品の銘柄記号を入力してください (例: CSCO または AAPL)。オンラインで相場表を"
 "取得する場合には、この欄は相場表情報源で使われている銘柄記号と厳密に一致しな"
@@ -15228,10 +15228,6 @@ msgstr "フルネーム(_F)"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "警告: Finance::Quote が適切にインストールされていません。"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "証券/通貨を選択 "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -17737,8 +17733,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "取引の実際の日付よりこの日数だけ前にそれを作成します。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "取引が作成される前に通知(_N) "
+msgid "_Notify before transactions are created"
+msgstr "取引が作成される前に通知(_N)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -22085,8 +22081,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "不明な元帳項目のタイプ"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "この項目の小計値 "
+msgid "The subtotal value of this entry"
+msgstr "この項目の小計値"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -28567,7 +28563,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 "デフォルトではこの取引フィルターは文字列の部分一致のみで検索します。これを設"
 "定すると、完全な POSIX 正規表現の機能が使えるようになります。'#work|#family' "

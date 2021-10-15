@@ -15305,11 +15305,11 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "Zadejte burzovní symbol komodity (např. CSCO nebo AAPL). Pokud získáváte "
 "ceny online, toto pole musí přesně odpovídat burzovnímu symbolu používanému "
-"zdrojem cen (včetně velikosti písmen). "
+"zdrojem cen (včetně velikosti písmen)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -15418,10 +15418,6 @@ msgstr "_Plné jméno"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Varování: Finance::Quote nenainstalováno správně."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Zvolte cenný papír/měnu "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18011,8 +18007,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "Vytvořit účetní položku tolik dní před jejím datem platnosti."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "_Upozorňovat před vytvářením účetních položek "
+msgid "_Notify before transactions are created"
+msgstr "_Upozorňovat před vytvářením účetních položek"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -22466,7 +22462,7 @@ msgid "Unknown EntryLedger Type"
 msgstr "Neznámý typ EntryLedger"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
+msgid "The subtotal value of this entry"
 msgstr "Částečný součet pro tuto položku"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
@@ -29316,7 +29312,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

@@ -15430,7 +15430,7 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "তিকর সিম্বোল অদু কম্মোদিতি (খুদম ওইনা CSCO নৎত্রগা AAPL) অসিদা এন্তর তৌ। করিগুম্বা "
 "নহাক্না ক্যুওতসিং ওনলাইন্দা অমুক হন্না লৌখৎপা পাম্লবদি, ফিল্ড অসিগা ক্যুওত সোর্স (কেস "
@@ -15543,10 +15543,6 @@ msgstr "_মপুংফাবা মিং"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "চেকশিনৱা: ফাইনান্স::কোত ফজনা ইনস্তোল তৌদে."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "সেক্যুরিতি/করেনসি খল্লো"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18105,7 +18101,7 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "চৎনবা হৌগদবা তাং অসিগী নুমিৎ কয়ানিগী মমাংদা ত্রান্সেকসন অসি শেমগৎলো."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
+msgid "_Notify before transactions are created"
 msgstr "ত্রান্সেকসন শেমগৎত্রিঙৈগী মমাংদা _খঙহল্লো"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -22546,7 +22542,7 @@ msgid "Unknown EntryLedger Type"
 msgstr "শকখঙদবা এন্ত্রি লেজর মখল"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
+msgid "The subtotal value of this entry"
 msgstr "এন্ত্রি অসিগী সবতোতেল ভেল্যু"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
@@ -29216,7 +29212,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

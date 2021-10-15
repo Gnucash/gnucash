@@ -15190,12 +15190,12 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "Εισάγετε το σύμβολο της αξίας (πχ OTE ή ΟΠΑΠ) Αν λαμβάνετε τιμές online, "
 "αυτό το πεδίο πρέπει να ταιριάζει ακριβώς με το σύμβολο που χρησιμοποιεί η "
 "πηγή από την οποία λαμβάνετε τις τιμές (πρέπει να υπάρχει και ταίριασμα "
-"πεζών/κεφαλαίων)"
+"πεζών/κεφαλαίων)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -15292,10 +15292,6 @@ msgstr "_Πλήρες όνομα"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Προειδοποίηση: το Finance::Quote δεν έχει εγκατασταθεί σωστά."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Επιλογή νόμισμα/χρεόγραφο"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -17837,7 +17833,7 @@ msgid "Create the transaction this many days before its effective date."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
+msgid "_Notify before transactions are created"
 msgstr "_Ειδοποίηση πριν την δημιουργία συνναλαγών"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -22186,7 +22182,7 @@ msgid "Unknown EntryLedger Type"
 msgstr "Άγνωστος τύπος EntryLedger"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
+msgid "The subtotal value of this entry"
 msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
@@ -28955,7 +28951,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

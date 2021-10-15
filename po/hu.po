@@ -15303,11 +15303,11 @@ msgstr "Adja meg az értékpapír teljes nevét. Pl. OTP Bank Nyrt vagy MOL Nyrt
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "Adja meg az áru jelét (pl. OTP vagy MOL). Ha elektronikusan szerzi be az "
 "adatokat, akkor e mezőnek pontosan meg kell egyeznie a forrás által használt "
-"jellel (kisbetűket beleértve). "
+"jellel (kisbetűket beleértve)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -15413,10 +15413,6 @@ msgstr "Teljes név"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Figyelmeztetés: Pénzügy::Árfolyam nincs megfelelően telepítve."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "Értékpapír/pénznem kiválasztása"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -17956,8 +17952,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "Tranzakció létrehozás ennyi nappal a hatályos dátum előtt."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "Figyelmeztetés tra_nzakció létrehozása előtt "
+msgid "_Notify before transactions are created"
+msgstr "Figyelmeztetés tra_nzakció létrehozása előtt"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -22332,8 +22328,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "Ismeretlen tétel-főkönyv típus"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "Tétel részösszege "
+msgid "The subtotal value of this entry"
+msgstr "Tétel részösszege"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "

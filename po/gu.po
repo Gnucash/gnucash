@@ -15376,11 +15376,11 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "કોમોડિટી માટે ટિકર સંકેત દાખલ કરો (જેવી રીતે CSCO અથવા AAPL). જો તમે ક્વોટ્સને ઓનલાઈન "
 "પ્રાપ્ત કરો છો તો આ ફિલ્ડમાં ક્વોટ સ્ત્રોત (કેસ સહિત) દ્વારા ઉપયોગ કરવામાં આવેલા ટિકર "
-"સંકેતથી તદ્દન એક જેવા પ્રકારમાં મળતો હોવો જોઇએ. "
+"સંકેતથી તદ્દન એક જેવા પ્રકારમાં મળતો હોવો જોઇએ."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -15494,10 +15494,6 @@ msgstr "_પૂરું નામઃ"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "ચેતવણીઃનાણાકીયઃ:ક્વોટ યોગ્ય રીતે ઇન્સ્ટોલ કરો કરવામાં આવ્યા નથી."
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "સિક્યુરિટી/કરન્સિ પસંદ કરો "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18096,8 +18092,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "લેણદેણ તેની લાગુ તારીખ અગાઉ આટલા દિવસો અગાઉ બનાવો"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "_નવા લેવડદેવડ કરતાં અગાઉ સૂચના આપો "
+msgid "_Notify before transactions are created"
+msgstr "_નવા લેવડદેવડ કરતાં અગાઉ સૂચના આપો"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -22570,8 +22566,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "અજ્ઞાત એન્ટ્રી લેજરનો પ્રકાર"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "આ એન્ટ્રીનું કુલ પેટાકરવેરા મૂલ્ય "
+msgid "The subtotal value of this entry"
+msgstr "આ એન્ટ્રીનું કુલ પેટાકરવેરા મૂલ્ય"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -29337,7 +29333,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

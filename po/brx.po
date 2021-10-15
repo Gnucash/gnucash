@@ -15348,7 +15348,7 @@ msgstr "बेसादनि आबुं मुं हाबहो। बि�
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "बेसाद (जेरै- CSCO एबा AAPL) नि थाखाय टिकार दिन्थिसिनखौ हाबहो। नोंथाङा कट्स(दैखांना "
 "होनाय) अनलाइनखौ मोनफिनगासिनो दंब्ला बे फोथारखौ (केसखौ लाफानानै) कट्स(दैखांना होनाय) "
@@ -15460,10 +15460,6 @@ msgstr "आबुं मुं"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "सांग्रांथि: रांखान्थि::दैखांना होनायखौ मोजाङै इनष्टल खालामनाय जायाखै।"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "रैखाथि/रांखौ सायख "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -18015,7 +18011,7 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "लेनदेननि जाफुंहोनाय खालारनि एसेबां सान सिगांनो बेखौ सोरजि।"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
+msgid "_Notify before transactions are created"
 msgstr "लेनदेन सोरजिनायनि सिगां मिथिसारहो"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
@@ -22451,7 +22447,7 @@ msgid "Unknown EntryLedger Type"
 msgstr "मोनथिमोनै हाबहोनाय हिसाब बहि रोखोम"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
+msgid "The subtotal value of this entry"
 msgstr "बे हाबहोनायनि दाजाबगासै बेसेन"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
@@ -29084,7 +29080,7 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:596

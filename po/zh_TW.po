@@ -14805,11 +14805,11 @@ msgstr "輸入商品的全名。例：Cisco Systems Inc., 或是 Apple Computer,
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "輸入此商品/股票的代碼 (例如台積電可輸入 2330.TW 或元大台灣 50 可輸入 0050."
 "TW)。如果您使用線上取價功能（譯註：台灣股市可使用 Yahoo as JSON 做為報價來"
-"源），則此欄位必須與使用的來源所用的代碼完全一致(包括大小寫)。 "
+"源），則此欄位必須與使用的來源所用的代碼完全一致(包括大小寫)。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -14909,10 +14909,6 @@ msgstr "全名(_F)"
 #: gnucash/gtkbuilder/dialog-commodity.glade:557
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "警告：Finance::Quote 並未正確地安裝。"
-
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "選擇證券/貨幣 "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
@@ -17357,8 +17353,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "在實際交易日期之前幾天建立交易。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "在交易建立前先通知(_N) "
+msgid "_Notify before transactions are created"
+msgstr "在交易建立前先通知(_N)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -21668,8 +21664,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "未知的項目分類帳類型"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "這個項目的小計值 "
+msgid "The subtotal value of this entry"
+msgstr "這個項目的小計值"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -27941,10 +27937,10 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 "交易過濾預設只會搜尋符合的子字串，勾選這個選項將會啟用完整的 POSIX 正規表示式"
-"功能。 "
+"功能。"
 
 #: gnucash/report/trep-engine.scm:596
 msgid "If this option is selected, transactions matching filter are excluded."
