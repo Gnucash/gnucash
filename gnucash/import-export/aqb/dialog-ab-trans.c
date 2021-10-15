@@ -153,6 +153,9 @@ gboolean gnc_ab_trans_isSEPA(GncABTransType t)
     switch (t)
     {
     case SEPA_TRANSFER:
+#if (AQBANKING_VERSION_INT >= 60400)
+    case SEPA_INTERNAL_TRANSFER:
+#endif
     case SEPA_DEBITNOTE:
         return TRUE;
     default:
@@ -282,6 +285,12 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     GtkWidget *orig_bankcode_label;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
+#if (AQBANKING_VERSION_INT >= 60400)
+    GtkExpander *template_expander;
+    GtkWidget *template_label;
+    GtkWidget *add_templ_button;
+    GtkWidget *del_templ_button;
+#endif
 
     g_return_val_if_fail(ab_acc, NULL);
 
@@ -342,6 +351,12 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     orig_bankcode_label = GTK_WIDGET(gtk_builder_get_object (builder, "orig_bankcode_label"));
     td->template_gtktreeview =
         GTK_TREE_VIEW(gtk_builder_get_object (builder, "template_list"));
+#if (AQBANKING_VERSION_INT >= 60400)
+    template_expander = GTK_EXPANDER(gtk_builder_get_object (builder, "expander1"));
+    template_label = GTK_WIDGET(gtk_builder_get_object (builder, "label1"));
+    add_templ_button= GTK_WIDGET(gtk_builder_get_object(builder, "add_templ_button"));
+    del_templ_button= GTK_WIDGET(gtk_builder_get_object(builder, "del_templ_button"));
+#endif
 
     /* Amount edit */
     td->amount_edit = gnc_amount_edit_new();
@@ -387,6 +402,45 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
         gtk_label_set_text(GTK_LABEL(orig_bankcode_heading),
                            _("Originator BIC (Bank Code)"));
         break;
+
+#if (AQBANKING_VERSION_INT >= 60400)
+    case SEPA_INTERNAL_TRANSFER:
+        gtk_label_set_text(GTK_LABEL (heading_label),
+                           /* Translators: Strings from this file are
+                              needed only in countries that have one of
+                              aqbanking's Online Banking techniques
+                              available. This is 'OFX DirectConnect'
+                              (U.S. and others), 'HBCI' (Germany),
+                              or 'YellowNet' (Switzerland). If none of
+                              these techniques are available in your
+                              country, you may safely ignore strings
+                              from the import-export/hbci
+                              subdirectory. */
+                           _("Enter a SEPA Internal Transfer"));
+        gtk_label_set_text(GTK_LABEL(recp_account_heading),
+                           _("Recipient IBAN (International Account Number)"));
+        gtk_label_set_text(GTK_LABEL(recp_bankcode_heading),
+                           _("Recipient BIC (Bank Code)"));
+
+        gtk_label_set_text(GTK_LABEL(orig_account_heading),
+                           _("Originator IBAN (International Account Number)"));
+        gtk_label_set_text(GTK_LABEL(orig_bankcode_heading),
+                           _("Originator BIC (Bank Code)"));
+	/* Disable target account entry for SEPA internal transfers, but only let choose from templates */
+    	gtk_widget_set_sensitive(td->recp_name_entry, FALSE);
+    	gtk_widget_set_sensitive(td->recp_account_entry, FALSE);
+    	gtk_widget_set_sensitive(td->recp_bankcode_entry, FALSE);
+    	gtk_widget_set_sensitive(add_templ_button, FALSE);
+    	gtk_widget_set_visible(add_templ_button, FALSE);
+    	gtk_widget_set_can_focus(add_templ_button, FALSE);
+    	gtk_widget_set_sensitive(del_templ_button, FALSE);
+    	gtk_widget_set_visible(del_templ_button, FALSE);
+    	gtk_widget_set_can_focus(del_templ_button, FALSE);
+        gtk_label_set_text(GTK_LABEL(template_label),
+                           _("Target Accounts"));
+        gtk_expander_set_expanded(template_expander,TRUE);
+        break;
+#endif
 
     case SINGLE_DEBITNOTE:
         /* this case is no longer in use; don't introduce extra strings */
@@ -825,6 +879,11 @@ gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SPEC *ab_acc, GncABTr
      case SEPA_TRANSFER:
          cmd=AB_Transaction_CommandSepaTransfer;
          break;
+#if (AQBANKING_VERSION_INT >= 60400)
+     case SEPA_INTERNAL_TRANSFER:
+         cmd=AB_Transaction_CommandSepaInternalTransfer;
+         break;
+#endif
      case SEPA_DEBITNOTE:
          cmd=AB_Transaction_CommandSepaDebitNote;
          break;
