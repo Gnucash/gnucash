@@ -56,6 +56,9 @@ enum _GncABTransType
     SINGLE_INTERNAL_TRANSFER
     , SEPA_TRANSFER
     , SEPA_DEBITNOTE
+#if (AQBANKING_VERSION_INT >= 60400)
+    , SEPA_INTERNAL_TRANSFER
+#endif
 };
 /**
   * Returns true if the given GncABTransType is an European (SEPA) transaction
