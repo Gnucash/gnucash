@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-15 17:50+0200\n"
-"PO-Revision-Date: 2021-09-20 23:37+0000\n"
+"PO-Revision-Date: 2021-10-15 21:37+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -5745,10 +5745,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "נוצרה כבר תנועת יומן מתקנת לתנועה זו."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
-#, fuzzy
-#| msgid "Cut the current transaction?"
 msgid "Jump to the transaction?"
-msgstr "גזירת התנועה הנוכחית?"
+msgstr "לדלג אל התנועה?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4095
 msgid "Reverse Transaction"
@@ -20947,10 +20945,9 @@ msgid "Reconcile (manual) match to %s"
 msgstr "התאמה (סגירה ידנית)"
 
 #: gnucash/import-export/import-main-matcher.c:1586
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "סגירת התאמות (אוטמטי)"
+msgstr "סגירת התאמות (אוטומטית) אל %s"
 
 #: gnucash/import-export/import-main-matcher.c:1595
 #: gnucash/import-export/import-main-matcher.c:1625
@@ -20958,16 +20955,14 @@ msgid "Match missing!"
 msgstr "חסרה התאמה!"
 
 #: gnucash/import-export/import-main-matcher.c:1611
-#, fuzzy, c-format
-#| msgid "Update and reconcile (manual) match"
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "עדכון וסגירת התאמות (ידני)"
+msgstr "עדכון וסגירת התאמות (ידני) אל %s"
 
 #: gnucash/import-export/import-main-matcher.c:1616
-#, fuzzy, c-format
-#| msgid "Update and reconcile (auto) match"
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "עדכון וסגירת התאמות (אוטומטי)"
+msgstr "עדכון וסגירת התאמות (אוטומטי) אל %s"
 
 #: gnucash/import-export/import-main-matcher.c:1633
 msgid "Do not import (no action selected)"
