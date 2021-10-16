@@ -223,7 +223,6 @@ static GncNumeric parse_price (const std::string &str)
     char *endptr;
 
     auto success = gnc_exp_parser_parse (str.c_str(), &val, &endptr);
-    gnc_exp_parser_shutdown();
     if (!success)
         throw std::invalid_argument (_("Price can't be parsed into a number."));
 
