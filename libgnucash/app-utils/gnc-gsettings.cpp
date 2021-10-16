@@ -41,7 +41,6 @@ extern "C" {
 #include <boost/property_tree/xml_parser.hpp>
 #include <fstream>
 #include <iostream>
-#include <map>
 
 namespace bpt = boost::property_tree;
 
@@ -57,10 +56,6 @@ static GHashTable *registered_handlers_hash = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "gnc.app-utils.gsettings";
-
-using pref_id = std::pair<std::string, std::string>;
-
-static std::map<pref_id, pref_id> oldkeys_map;
 
 /************************************************************/
 /*               Internal helper functions                  */
@@ -318,9 +313,7 @@ void gnc_gsettings_bind (const gchar *schema,
     g_return_if_fail (G_IS_SETTINGS (settings_ptr));
 
     if (gnc_gsettings_is_valid_key (settings_ptr, key))
-    {
         g_settings_bind (settings_ptr, key, object, property, G_SETTINGS_BIND_DEFAULT);
-    }
     else
     {
         PERR ("Invalid key %s for schema %s", key, schema);
@@ -694,10 +687,6 @@ migrate_one_key (const opt_str_vec &oldpath, const opt_str_vec &oldkey,
     auto user_value = gnc_gsettings_get_user_value (oldpath->c_str(), oldkey->c_str());
     if (user_value)
         gnc_gsettings_set_value (newpath->c_str(), newkey->c_str(), user_value);
-
-    /* Add old preference to oldkeys_map so we can keep it in sync with its replacement */
-    oldkeys_map.emplace (std::make_pair(*oldpath, *oldkey),
-                         std::make_pair(*newpath, *newkey));
 }
 
 static void
@@ -711,9 +700,6 @@ obsolete_one_key (const opt_str_vec &oldpath, const opt_str_vec &oldkey)
 
     PINFO ("Resetting obsolete '%s:%s'", oldpath->c_str(), oldkey->c_str());
     gnc_gsettings_reset (oldpath->c_str(), oldkey->c_str());
-
-    /* Removve old preference to oldkeys_map. It's been reset we don't want to keep it in synch any more */
-    oldkeys_map.erase (std::make_pair(*oldpath, *oldkey));
 }
 
 static void
@@ -737,39 +723,10 @@ parse_one_release_node (bpt::ptree &pt)
                     obsolete_one_key (node.second.get_optional<std::string> ("<xmlattr>.old-path"),
                                       node.second.get_optional<std::string> ("<xmlattr>.old-key"));
                 else
+                {
                     DEBUG ("Skipping unknown node <%s>", node.first.c_str());
-            });
-}
-
-static void
-update_oldkeys_only (bpt::ptree &pt)
-{
-    /* handles oldkey tracking for release nodes that don't require full processing
-     * any more (when the preference db compatibility level is higher than what's in
-     * this release node)
-     * But even for those nodes we need to extract old preference ids to potentially
-     * keep them in sync with their replacements
-     */
-
-    std::for_each (pt.begin(), pt.end(),
-            [] (std::pair<bpt::ptree::key_type, bpt::ptree> node)
-            {
-                auto oldpath = node.second.get_optional<std::string> ("<xmlattr>.old-path");
-                auto oldkey = node.second.get_optional<std::string> ("<xmlattr>.old-key");
-                auto newpath = node.second.get_optional<std::string> ("<xmlattr>.new-path");
-                auto newkey = node.second.get_optional<std::string> ("<xmlattr>.new-key");
-
-                if ((node.first == "<xmlattr>") || (node.first == "deprecate"))
                     return;
-                else if (node.first == "migrate")
-                    /* Add old preference to oldkeys_map so we can keep it in sync with its replacement */
-                    oldkeys_map.emplace (std::make_pair(*oldpath, *oldkey),
-                                         std::make_pair(*newpath, *newkey));
-                else if (node.first == "obsolete")
-                    /* Removve old preference to oldkeys_map. It's been reset we don't want to keep it in synch any more */
-                    oldkeys_map.erase (std::make_pair(*oldpath, *oldkey));
-                else
-                    DEBUG ("Skipping unknown node <%s>", node.first.c_str());
+                }
             });
 }
 
@@ -794,13 +751,13 @@ transform_settings (int old_maj_min)
         bpt::read_xml (transform_stream, pt);
     }
     catch (bpt::xml_parser_error &e) {
-        PWARN ("Failed to parse GnuCash preferences transformation file.");
-        PWARN ("Error message:");
-        PWARN ("%s", e.what());
+        PWARN ("Failed to parse GnuCash preferences transformation file.\n");
+        PWARN ("Error message:\n");
+        PWARN ("%s\n", e.what());
         return;
     }
     catch (...) {
-        PWARN ("Unknown error while parsing GnuCash preferences transformation file.");
+        PWARN ("Unknown error while parsing GnuCash preferences transformation file.\n");
         return;
     }
 
@@ -819,36 +776,15 @@ transform_settings (int old_maj_min)
                     DEBUG ("Skipping <release> node - no version attribute found");
                     return;
                 }
-
                 if (*version <= old_maj_min)
                 {
-                    DEBUG ("Already processed <release> node with version %i (current compatibility level %i). Extracting old preferences only.",
-                           *version, old_maj_min);
-                    update_oldkeys_only (node.second);
+                    DEBUG ("Skipping <release> node - version %i is less than current compatibility level %i", *version, old_maj_min);
+                    return;
                 }
-                else
-                {
-                    DEBUG ("Found <release> node with version %i (current compatibility level %i). Processing child nodes.",
-                           *version, old_maj_min);
-                    parse_one_release_node (node.second);
-                }
+                DEBUG ("Retrieved version value '%i'", *version);
+
+                parse_one_release_node (node.second);
             });
-
-    /* oldkeys_map is generated oldkey->newkey for efficiency reasons but for
-     * subesquent use we need newkey->oldkey. So let's swap keys and values now. */
-    std::map<pref_id, pref_id> tmp_map;
-    std::for_each (oldkeys_map.begin(), oldkeys_map.end(),
-        [&tmp_map] (auto map_it)
-        {
-            tmp_map.emplace (map_it.second, map_it.first);
-            DEBUG ("Added new pref-> old_pref mapping for %s:%s -> %s:%s",
-                   map_it.second.first.c_str(),
-                   map_it.second.second.c_str(),
-                   map_it.first.first.c_str(),
-                   map_it.first.second.c_str());
-        });
-    oldkeys_map = tmp_map;
-
 }
 
 void gnc_gsettings_version_upgrade (void)
