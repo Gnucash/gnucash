@@ -45,10 +45,13 @@ extern "C" {
 
 namespace bpt = boost::property_tree;
 
-constexpr auto GSET_SCHEMA_PREFIX = std::string_view("org.gnucash.GnuCash");
-constexpr auto GSET_SCHEMA_OLD_PREFIX = std::string_view("org.gnucash");
-constexpr auto CLIENT_TAG = "%s-%s-client";
-constexpr auto NOTIFY_TAG = "%s-%s-notify_id";
+#define GSET_SCHEMA_PREFIX "org.gnucash.GnuCash"
+#define GSET_SCHEMA_OLD_PREFIX "org.gnucash"
+#define CLIENT_TAG  "%s-%s-client"
+#define NOTIFY_TAG  "%s-%s-notify_id"
+
+static GHashTable *schema_hash = NULL;
+static const gchar *gsettings_prefix;
 
 static GHashTable *registered_handlers_hash = NULL;
 
@@ -59,23 +62,41 @@ using pref_id = std::pair<std::string, std::string>;
 
 static std::map<pref_id, pref_id> oldkeys_map;
 
-/* API Function declarations */
+/* Function declarations */
+
+
+#include <glib.h>
+gchar *gnc_gsettings_normalize_schema_name (const gchar *name);
+
+const gchar *gnc_gsettings_get_prefix (void);
+
 void gnc_gsettings_block_all (void);
+
+
 void gnc_gsettings_unblock_all (void);
+
 
 gulong gnc_gsettings_register_cb (const char *schema,
                                   const gchar *key,
                                   gpointer func,
                                   gpointer user_data);
+
+
 void gnc_gsettings_remove_cb_by_func (const gchar *schema,
                                       const gchar *key,
                                       gpointer func,
                                       gpointer user_data);
+
+
 void gnc_gsettings_remove_cb_by_id (const gchar *schema,
                                     guint id);
+
+
 guint gnc_gsettings_register_any_cb (const gchar *schema,
                                      gpointer func,
                                      gpointer user_data);
+
+
 void gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
                                           gpointer func,
                                           gpointer user_data);
@@ -125,65 +146,66 @@ void gnc_gsettings_reset_schema (const gchar *schema);
 void gnc_gsettings_version_upgrade (void);
 
 
-/* Internal helper functions */
-
-static bool gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key)
+/************************************************************/
+/*               Internal helper functions                  */
+/************************************************************/
+static gboolean gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key)
 {
-    // Check if the key is valid key within settings
-    if (!G_IS_SETTINGS (settings))
-        return false;
-
+    gchar **keys = NULL;
+    gint i = 0;
+    gboolean found = FALSE;
     GSettingsSchema *schema;
-    g_object_get (settings, "settings-schema", &schema, nullptr);
-    if (!schema)
-        return false;
 
-    auto keys = g_settings_schema_list_keys (schema);
-    auto found = g_strv_contains (keys, key);
-    g_strfreev (keys);
+    // Check if the key is valid key within settings
+    if (!G_IS_SETTINGS(settings))
+        return FALSE;
+
+    g_object_get (settings, "settings-schema", &schema, NULL);
+    if (!schema)
+        return FALSE;
+
+    keys = g_settings_schema_list_keys (schema);
+    while (keys && keys[i])
+    {
+        if (!g_strcmp0(key, keys[i]))
+        {
+            found = TRUE;
+            break;
+        }
+        i++;
+    }
+    g_strfreev(keys);
 
     return found;
 }
 
-static std::map<std::string, GSettings*> schema_map;
-
-static std::string
-gnc_gsettings_normalize_schema_name (const gchar *name)
-{
-    auto result = std::string_view(name).find (GSET_SCHEMA_PREFIX);
-    if (!name)
-        return std::string (GSET_SCHEMA_PREFIX);
-    if ((std::string_view (name).find (GSET_SCHEMA_PREFIX) == 0) ||
-        (std::string_view (name).find (GSET_SCHEMA_OLD_PREFIX) ==  0))
-        return name;
-
-    return std::string(GSET_SCHEMA_PREFIX) + "." + name;
-}
-
 static GSettings * gnc_gsettings_get_settings_ptr (const gchar *schema_str)
 {
+    GSettings *gset = NULL;
+    gchar *full_name = gnc_gsettings_normalize_schema_name (schema_str);
 
     ENTER("");
-    auto full_name = gnc_gsettings_normalize_schema_name (schema_str);
-    auto result = schema_map.find (full_name);
+    if (!schema_hash)
+        schema_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-    GSettings *gset = nullptr;
-    if (result != schema_map.end())
+    gset = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
+    DEBUG ("Looking for schema %s returned gsettings %p", full_name, gset);
+
+    if (!gset)
     {
-        gset = result->second;
-        DEBUG ("Looking for schema %s returned gsettings %p", full_name.c_str(), gset);
+        auto schema_source {g_settings_schema_source_get_default()};
+        auto schema {g_settings_schema_source_lookup(schema_source, full_name,
+                                                     FALSE)};
+        gset = g_settings_new_full (schema, nullptr, nullptr);
+        DEBUG ("Created gsettings object %p for schema %s", gset, full_name);
+        if (G_IS_SETTINGS(gset))
+            g_hash_table_insert (schema_hash, full_name, gset);
+        else
+            PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name);
     }
     else
     {
-        auto schema_source {g_settings_schema_source_get_default()};
-        auto schema {g_settings_schema_source_lookup(schema_source, full_name.c_str(),
-                                                     FALSE)};
-        gset = g_settings_new_full (schema, nullptr, nullptr);
-        DEBUG ("Created gsettings object %p for schema %s", gset, full_name.c_str());
-        if (G_IS_SETTINGS (gset))
-            schema_map.insert ({full_name, gset});
-        else
-            PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name.c_str());
+        g_free(full_name);
     }
     LEAVE("");
     return gset;
@@ -201,6 +223,34 @@ handlers_hash_unblock_helper (gpointer key, gpointer settings_ptr, gpointer poin
 {
     g_signal_handler_unblock (settings_ptr, (gulong)key); // unblock signal_handler
     PINFO("UnBlock handler_id %ld for settings_ptr %p", (gulong)key, settings_ptr);
+}
+
+/************************************************************/
+/*                      GSettings Utilities                 */
+/************************************************************/
+
+const gchar *
+gnc_gsettings_get_prefix (void)
+{
+    return GSET_SCHEMA_PREFIX;
+}
+
+gchar *
+gnc_gsettings_normalize_schema_name (const gchar *name)
+{
+    if (!name)
+    {
+        /* Need to return a newly allocated string */
+        return g_strdup(GSET_SCHEMA_PREFIX);
+    }
+    if (g_str_has_prefix (name, GSET_SCHEMA_PREFIX) ||
+       (g_str_has_prefix (name, GSET_SCHEMA_OLD_PREFIX)))
+    {
+        /* Need to return a newly allocated string */
+        return g_strdup(name);
+    }
+
+    return g_strjoin(".", GSET_SCHEMA_PREFIX, name, NULL);
 }
 
 
@@ -912,9 +962,8 @@ void gnc_gsettings_version_upgrade (void)
      */
     ENTER("Start of settings transform routine.");
 
-    auto od_maj_min_schema = std::string(GSET_SCHEMA_OLD_PREFIX) + "." + GNC_PREFS_GROUP_GENERAL;
     auto ogG_maj_min = gnc_gsettings_get_user_value (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
-    auto og_maj_min = gnc_gsettings_get_user_value (od_maj_min_schema.c_str(), GNC_PREF_VERSION);
+    auto og_maj_min = gnc_gsettings_get_user_value (GSET_SCHEMA_OLD_PREFIX "." GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
 
     if (!ogG_maj_min && !og_maj_min)
     {
@@ -924,7 +973,7 @@ void gnc_gsettings_version_upgrade (void)
 
     auto old_maj_min = 0;
     if (!ogG_maj_min)
-        old_maj_min = gnc_gsettings_get_int (od_maj_min_schema.c_str(), GNC_PREF_VERSION);
+        old_maj_min = gnc_gsettings_get_int (GSET_SCHEMA_OLD_PREFIX "." GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
     else
     {
         g_variant_unref (ogG_maj_min);
