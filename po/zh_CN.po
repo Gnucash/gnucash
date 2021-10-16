@@ -21,11 +21,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-15 17:50+0200\n"
-"PO-Revision-Date: 2021-10-10 06:03+0000\n"
-"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
+"PO-Revision-Date: 2021-10-16 03:34+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -5672,10 +5672,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "已为此交易记录创建冲销分录。"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
-#, fuzzy
-#| msgid "Cut the current transaction?"
 msgid "Jump to the transaction?"
-msgstr "编辑当前交易？"
+msgstr "跳转至交易？"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4095
 msgid "Reverse Transaction"
@@ -20547,16 +20545,14 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "新的，未结算(需要科目才能转账 %s)！"
 
 #: gnucash/import-export/import-main-matcher.c:1581
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "对账(手动)匹配"
+msgstr "对账(手动)匹配 %s"
 
 #: gnucash/import-export/import-main-matcher.c:1586
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "对账(自动)匹配"
+msgstr "对账(自动)匹配 %s"
 
 #: gnucash/import-export/import-main-matcher.c:1595
 #: gnucash/import-export/import-main-matcher.c:1625
@@ -20564,16 +20560,14 @@ msgid "Match missing!"
 msgstr "匹配遗漏！"
 
 #: gnucash/import-export/import-main-matcher.c:1611
-#, fuzzy, c-format
-#| msgid "Update and reconcile (manual) match"
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "对账(手动)匹配"
+msgstr "更新并对账(手动)匹配 %s"
 
 #: gnucash/import-export/import-main-matcher.c:1616
-#, fuzzy, c-format
-#| msgid "Update and reconcile (auto) match"
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "对账(自动)匹配"
+msgstr "更新并对账(自动)匹配 %s"
 
 #: gnucash/import-export/import-main-matcher.c:1633
 msgid "Do not import (no action selected)"
@@ -20671,16 +20665,11 @@ msgid "Unknown OFX investment account"
 msgstr "未知的 OFX 投资科目"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1216
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s', imported transactions for account '%s'\n"
-#| "%d transactions processed, no transactions to match"
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' into account '%s', found %d "
 "previously imported transactions, no new transactions."
-msgstr ""
-"OFX 文件 '%s'，导入了账户 '%s'的交易\n"
-"处理了 %d 笔交易，没有交易可以匹配"
+msgstr "将 OFX 文件“%s”中的交易导入账户“%s”时，发现了 %d 个以前导入的交易，无新交易。"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1319
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
