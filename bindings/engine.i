@@ -67,6 +67,7 @@ GLIST_HELPER_INOUT(TransList, SWIGTYPE_p_Transaction);
 GLIST_HELPER_INOUT(LotList, SWIGTYPE_p_GNCLot);
 GLIST_HELPER_INOUT(AccountList, SWIGTYPE_p_Account);
 GLIST_HELPER_INOUT(PriceList, SWIGTYPE_p_GNCPrice);
+// TODO: free PriceList?
 GLIST_HELPER_INOUT(CommodityList, SWIGTYPE_p_gnc_commodity);
 
 %typemap(newfree) gchar * "g_free($1);"
@@ -101,13 +102,6 @@ static const GncGUID * gncPriceGetGUID(GNCPrice *x)
 static const GncGUID * gncBudgetGetGUID(GncBudget *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
 %}
-
-%typemap (freearg) AccountList * "g_list_free ($1);"
-%typemap (freearg) PriceList * "g_list_free ($1);"
-%typemap (freearg) SplitList * "g_list_free ($1);"
-%typemap (freearg) TransList * "g_list_free ($1);"
-%typemap (freearg) LotList * "g_list_free ($1);"
-%typemap (freearg) CommodityList * "g_list_free ($1);"
 
 /* NB: The object ownership annotations should already cover all the
 functions currently used in guile, but not all the functions that are
