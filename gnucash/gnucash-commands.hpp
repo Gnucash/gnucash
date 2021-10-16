@@ -40,9 +40,5 @@ namespace Gnucash {
     int report_list (void);
     int report_show (const bo_str& file_to_load,
                      const bo_str& run_report);
-
-    // A helper function to load scm config files (SYSCONFIGDIR/config
-    // and USERCONFIGDIR/config-user.scm) on demand
-    void gnc_load_scm_config(void);
 }
 #endif
