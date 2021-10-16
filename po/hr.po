@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-15 17:50+0200\n"
-"PO-Revision-Date: 2021-09-22 20:37+0000\n"
+"PO-Revision-Date: 2021-10-16 10:37+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -2482,7 +2482,7 @@ msgstr "Uknjiženjo?"
 #: gnucash/gtkbuilder/dialog-order.glade:551
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:143
 msgid "Date Opened"
-msgstr "Datum računa"
+msgstr "Datum otvaranja"
 
 #: gnucash/gnome/dialog-invoice.c:3396
 #: gnucash/gtkbuilder/dialog-invoice.glade:41
@@ -5841,10 +5841,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "Obratni unos je već napravljen za ovu transakciju."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
-#, fuzzy
-#| msgid "Cut the current transaction?"
 msgid "Jump to the transaction?"
-msgstr "Izrezati trenutačnu transakciju?"
+msgstr "Skočiti na transakciju?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4095
 msgid "Reverse Transaction"
@@ -8931,7 +8929,7 @@ msgstr "Računovodstveni program, namijenjen pojedincima i malim poduzećima."
 #. contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4737
 msgid "translator-credits"
-msgstr "Milo Ivir <mail@milotype.de>, 2019. – 2021."
+msgstr "Milo Ivir <mail@milotype.de>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4740
 msgid "Visit the GnuCash website."
@@ -21472,16 +21470,14 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Nova, NESALDIRANA (za prijenos „%s” je potreban konto)!"
 
 #: gnucash/import-export/import-main-matcher.c:1581
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "Uskladi poklapanje (ručno)"
+msgstr "Uskladi (ručno) poklapanje na %s"
 
 #: gnucash/import-export/import-main-matcher.c:1586
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "Uskladi poklapanje (automatski)"
+msgstr "Uskladi (automatsko) poklapanje na %s"
 
 #: gnucash/import-export/import-main-matcher.c:1595
 #: gnucash/import-export/import-main-matcher.c:1625
@@ -21489,16 +21485,14 @@ msgid "Match missing!"
 msgstr "Nedostaje poklapanje!"
 
 #: gnucash/import-export/import-main-matcher.c:1611
-#, fuzzy, c-format
-#| msgid "Update and reconcile (manual) match"
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "Aktualiziraj i uskladi (ručno) poklapanje"
+msgstr "Aktualiziraj i uskladi (ručno) poklapanje na %s"
 
 #: gnucash/import-export/import-main-matcher.c:1616
-#, fuzzy, c-format
-#| msgid "Update and reconcile (auto) match"
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "Aktualiziraj i uskladi (automatski) poklapanje"
+msgstr "Aktualiziraj i uskladi (automatski) poklapanje na %s"
 
 #: gnucash/import-export/import-main-matcher.c:1633
 msgid "Do not import (no action selected)"
@@ -21600,16 +21594,13 @@ msgid "Unknown OFX investment account"
 msgstr "Nepoznat OFX konto ulaganja"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1216
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s', imported transactions for account '%s'\n"
-#| "%d transactions processed, no transactions to match"
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' into account '%s', found %d "
 "previously imported transactions, no new transactions."
 msgstr ""
-"OFX datoteka „%s” je uvezla transakcije za konto „%s”\n"
-"Broj obrađenih transakcija: %d. Nema transakcija za uspoređivanje"
+"Prilikom uvoza transakcija iz OFX datoteke „%s”u račun „%s”, pronađeno je %d "
+"prethodno uvezenih transakcija, nema novih transakcija."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1319
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -24021,12 +24012,12 @@ msgstr "Koristi „od – do”"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:185
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
-msgstr "Procijenjeni porez 1. kvartala (1. siječanj – 31. ožujak)"
+msgstr "Procijenjeni porez 1. kvartala (1. siječnja – 31. ožujka)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "Procijenjeni porez 2. kvartala (1. travanj – 31. svibanj)"
+msgstr "Procijenjeni porez 2. kvartala (1. travnja – 31. svibnja)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -24034,29 +24025,27 @@ msgstr "Procijenjeni porez 2. kvartala (1. travanj – 31. svibanj)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
-msgstr "Procijenjeni porez 3. kvartala (1. lipanj – 31. kolovoz)"
+msgstr "Procijenjeni porez 3. kvartala (1. lipnja – 31. kolovoza)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
-msgstr "Procijenjeni porez 4. kvartala (1. rujan – 31. prosinac)"
+msgstr "Procijenjeni porez 4. kvartala (1. rujna – 31. prosinca)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:192
 msgid "Last Year"
-msgstr "Prošle godine"
+msgstr "Prošla godina"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:193
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
-msgstr ""
-"Procijenjeni porez 1. kvartala prošle godine (1. siječanj – 31. ožujak)"
+msgstr "Procijenjeni porez 1. kvartala prošle godine (1. siječnja – 31. ožujka)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:161
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:194
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
-msgstr ""
-"Procijenjeni porez 2. kvartala prošle godine (1. travanj – 31. svibanj)"
+msgstr "Procijenjeni porez 2. kvartala prošle godine (1. travnja – 31. svibnja)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -24064,12 +24053,12 @@ msgstr ""
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:162
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:198
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
-msgstr "Procijenjeni porez 3. kvartala prošle godine (1. lipanj – 31. kolovoz)"
+msgstr "Procijenjeni porez 3. kvartala prošle godine (1. lipnja – 31. kolovoza)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:163
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:199
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
-msgstr "Procijenjeni porez 4. kvartala prošle godine (1. rujan – 31. prosinac)"
+msgstr "Procijenjeni porez 4. kvartala prošle godine (1. rujna – 31. prosinca)"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:167
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:203
@@ -28865,19 +28854,14 @@ msgstr ""
 "bilješkama. Može se ostaviti priznim, čime se rad filtra deaktivira."
 
 #: gnucash/report/trep-engine.scm:587
-#, fuzzy
-#| msgid ""
-#| "By default the transaction filter will search substring only. Set this to "
-#| "true to enable full POSIX regular expressions capabilities. '#work|"
-#| "#family' will match both tags within description, notes or memo. "
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
 "will match both tags within description, notes or memo."
 msgstr ""
 "Filtar transakcija standardno traži samo znakovne podnizove. Uključi ovo, za "
-"korištenje svih mogućnosti POSIX regularanih izraza. „#posao|#obitelj” će "
-"pronaći oba izraza u opisu, napomenama ili bilješci. "
+"korištenje svih mogućnosti POSIX-ovih regularanih izraza. „#posao|#obitelj” "
+"će pronaći oba izraza u opisu, napomenama ili bilješci."
 
 #: gnucash/report/trep-engine.scm:596
 msgid "If this option is selected, transactions matching filter are excluded."
@@ -29015,7 +28999,7 @@ msgid ""
 "parameter is guessed)."
 msgstr ""
 "Prikazati naziv drugog konta? (Ako je ovo višedjelna transakcija, ovaj se "
-"parametar pogađa.)"
+"parametar pogađa)."
 
 #: gnucash/report/trep-engine.scm:976
 msgid "Amount of detail to display per transaction."
