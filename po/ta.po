@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.8-pot1\n"
+"Project-Id-Version: GnuCash 4.8-pot2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-10-15 17:50+0200\n"
+"POT-Creation-Date: 2021-10-17 23:05+0200\n"
 "PO-Revision-Date: 2014-06-02 12:18+0530\n"
 "Last-Translator: Shanmugam R. <shanfaace@yahoo.co.in>\n"
 "Language-Team: NONE\n"
@@ -9014,7 +9014,7 @@ msgid "Version"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.c:4720
-#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:261
+#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:262
 msgid "Build ID"
 msgstr ""
 
@@ -10335,61 +10335,58 @@ msgstr "நீங்கள் https://bugs.gnucash.org இலும் பார
 msgid "To find the last stable version, please refer to {1}"
 msgstr "கடந்த நிலையான பதிப்பை கண்டுபிடிக்க, http://www.gnucash.org-ஐ பார்க்கவும்"
 
-#: gnucash/gnucash-core-app.cpp:102
-#, fuzzy
-#| msgid "Load report configuration"
-msgid "Loading system scm configuration..."
-msgstr "அறிக்கை கட்டமைப்பை ஏற்று"
+#. Translators: Guile is the programming language of the reports
+#: gnucash/gnucash-core-app.cpp:103
+msgid "Loading system wide Guile extensions…"
+msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:114
-#, fuzzy
-#| msgid "Load report configuration"
-msgid "Loading user scm configuration..."
-msgstr "அறிக்கை கட்டமைப்பை ஏற்று"
+#: gnucash/gnucash-core-app.cpp:115
+msgid "Loading user specific Guile extensions…"
+msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:223
+#: gnucash/gnucash-core-app.cpp:224
 #, fuzzy
 msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash தனிப்பட்ட மற்றும் சிறிய வணிக நிதி மேலாண்மை"
 
-#: gnucash/gnucash-core-app.cpp:225
+#: gnucash/gnucash-core-app.cpp:226
 msgid "{1} [options] [datafile]"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:253
+#: gnucash/gnucash-core-app.cpp:254
 #, fuzzy
 msgid "GnuCash {1}"
 msgstr "GnuCash"
 
-#: gnucash/gnucash-core-app.cpp:254
+#: gnucash/gnucash-core-app.cpp:255
 #, fuzzy
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s வளர்ச்சி பதிப்பு"
 
-#: gnucash/gnucash-core-app.cpp:279
+#: gnucash/gnucash-core-app.cpp:280
 #, fuzzy
 msgid "Common Options"
 msgstr "புத்தக விருப்பங்கள் "
 
-#: gnucash/gnucash-core-app.cpp:282
+#: gnucash/gnucash-core-app.cpp:283
 msgid "Show this help message"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:284
+#: gnucash/gnucash-core-app.cpp:285
 msgid "Show GnuCash version"
 msgstr "GnuCash பதிப்பை காட்டு "
 
-#: gnucash/gnucash-core-app.cpp:286
+#: gnucash/gnucash-core-app.cpp:287
 msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:288
+#: gnucash/gnucash-core-app.cpp:289
 msgid "Enable extra/development/debugging features."
 msgstr "கூடுதல்/வளர்ச்சி/பிழைத்திருத்த அம்சங்களை செயல்படுத்துகிறது."
 
-#: gnucash/gnucash-core-app.cpp:290
+#: gnucash/gnucash-core-app.cpp:291
 msgid ""
 "Log level overrides, of the form \"modulename={debug,info,warn,crit,"
 "error}\"\n"
@@ -10397,7 +10394,7 @@ msgid ""
 "This can be invoked multiple times."
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:292
+#: gnucash/gnucash-core-app.cpp:293
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
@@ -10405,12 +10402,12 @@ msgstr ""
 "பதிவு செய்ய வேண்டிய கோப்பு; \"/tmp/gnucash.trace\" முன்னிருப்புக்கு; \"stderr\" "
 "அல்லது \"stdout\" ஆக இருக்கலாம்."
 
-#: gnucash/gnucash-core-app.cpp:294
+#: gnucash/gnucash-core-app.cpp:295
 #, fuzzy
 msgid "Hidden Options"
 msgstr "பட்ஜெட் விருப்பங்கள்"
 
-#: gnucash/gnucash-core-app.cpp:297
+#: gnucash/gnucash-core-app.cpp:298
 msgid "[datafile]"
 msgstr "[தரவுக்கோப்பு]"
 
@@ -21228,18 +21225,18 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:238
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:246
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:293
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:301
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:512
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:520
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:575
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:583
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:292
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:300
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:511
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:519
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:582
 #, fuzzy
 msgid "Column '{1}' could not be understood.\n"
 msgstr "%s நிரலை புரிந்து கொள்ள முடியாது."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:328
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:327
 msgid "No date column."
 msgstr "தேதி நிரல் இல்லை."
 
@@ -21292,37 +21289,37 @@ msgstr "கடைசியாக ஒப்பிடப்பட்ட தேத�
 msgid "Value can't be parsed into a valid reconcile state."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:228
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:227
 #, fuzzy
 msgid "Price can't be parsed into a number."
 msgstr "இந்த சரக்கிற்கான விலையைக் கணக்கிடு."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:384
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:383
 msgid "Account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:385
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:384
 msgid "Transfer account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:434
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:433
 msgid "Account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:445
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:444
 msgid "Transfer account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:596
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:595
 #, fuzzy
 msgid "No deposit or withdrawal column."
 msgstr "இருப்பு, வைப்பு அல்லது எடுத்தல் நிரல் இல்லை."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:602
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:601
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:609
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:608
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
@@ -30495,6 +30492,16 @@ msgstr "பரிமாற்றம் காலியாக்கப்பட�
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "உதவி எதுவும் இல்லை."
+
+#, fuzzy
+#~| msgid "Load report configuration"
+#~ msgid "Loading system scm configuration..."
+#~ msgstr "அறிக்கை கட்டமைப்பை ஏற்று"
+
+#, fuzzy
+#~| msgid "Load report configuration"
+#~ msgid "Loading user scm configuration..."
+#~ msgstr "அறிக்கை கட்டமைப்பை ஏற்று"
 
 #~ msgid ""
 #~ "Set the prefix for gsettings schemas for gsettings queries. This can be "

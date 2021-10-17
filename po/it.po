@@ -51,10 +51,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.8-pot1\n"
+"Project-Id-Version: GnuCash 4.8-pot2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-10-15 17:50+0200\n"
+"POT-Creation-Date: 2021-10-17 23:05+0200\n"
 "PO-Revision-Date: 2021-10-02 06:36+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -9140,7 +9140,7 @@ msgid "Version"
 msgstr "Versione"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4720
-#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:261
+#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:262
 msgid "Build ID"
 msgstr "ID build"
 
@@ -10488,47 +10488,48 @@ msgstr ""
 msgid "To find the last stable version, please refer to {1}"
 msgstr "Per ottenere l'ultima versione stabile, fare riferimento a {1}"
 
-#: gnucash/gnucash-core-app.cpp:102
-msgid "Loading system scm configuration..."
-msgstr "Sto caricando la configurazione scm di sistema..."
+#. Translators: Guile is the programming language of the reports
+#: gnucash/gnucash-core-app.cpp:103
+msgid "Loading system wide Guile extensions…"
+msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:114
-msgid "Loading user scm configuration..."
-msgstr "Sto caricando la configurazione scm dell'utente..."
+#: gnucash/gnucash-core-app.cpp:115
+msgid "Loading user specific Guile extensions…"
+msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:223
+#: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
 msgstr ""
 "- GnuCash, contabilità per le finanze personali e per le piccole imprese"
 
-#: gnucash/gnucash-core-app.cpp:225
+#: gnucash/gnucash-core-app.cpp:226
 msgid "{1} [options] [datafile]"
 msgstr "{1} [opzioni] [file di dati]"
 
 # linea di comando
-#: gnucash/gnucash-core-app.cpp:253
+#: gnucash/gnucash-core-app.cpp:254
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
 # linea di comando
-#: gnucash/gnucash-core-app.cpp:254
+#: gnucash/gnucash-core-app.cpp:255
 msgid "GnuCash {1} development version"
 msgstr "Versione in sviluppo di GnuCash {1}"
 
-#: gnucash/gnucash-core-app.cpp:279
+#: gnucash/gnucash-core-app.cpp:280
 msgid "Common Options"
 msgstr "Opzioni generali"
 
-#: gnucash/gnucash-core-app.cpp:282
+#: gnucash/gnucash-core-app.cpp:283
 msgid "Show this help message"
 msgstr "Visualizza questo messaggio di aiuto"
 
 # linea di comando
-#: gnucash/gnucash-core-app.cpp:284
+#: gnucash/gnucash-core-app.cpp:285
 msgid "Show GnuCash version"
 msgstr "Visualizza la versione di GnuCash"
 
-#: gnucash/gnucash-core-app.cpp:286
+#: gnucash/gnucash-core-app.cpp:287
 msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
@@ -10537,11 +10538,11 @@ msgstr ""
 "È equivalente a: --log «=info» --log «qof=info» --log «gnc=info»"
 
 # linea di comando
-#: gnucash/gnucash-core-app.cpp:288
+#: gnucash/gnucash-core-app.cpp:289
 msgid "Enable extra/development/debugging features."
 msgstr "Abilita le funzionalità extra/sviluppo/debugging."
 
-#: gnucash/gnucash-core-app.cpp:290
+#: gnucash/gnucash-core-app.cpp:291
 msgid ""
 "Log level overrides, of the form \"modulename={debug,info,warn,crit,"
 "error}\"\n"
@@ -10554,7 +10555,7 @@ msgstr ""
 "Sono ammesse invocazioni multiple."
 
 # linea di comando
-#: gnucash/gnucash-core-app.cpp:292
+#: gnucash/gnucash-core-app.cpp:293
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
@@ -10562,11 +10563,11 @@ msgstr ""
 "File su cui registrare il log; predefinito: «/tmp/gnucash.trace»; può essere "
 "«stderr» or «stdout»."
 
-#: gnucash/gnucash-core-app.cpp:294
+#: gnucash/gnucash-core-app.cpp:295
 msgid "Hidden Options"
 msgstr "Opzioni nascoste"
 
-#: gnucash/gnucash-core-app.cpp:297
+#: gnucash/gnucash-core-app.cpp:298
 msgid "[datafile]"
 msgstr "[file dati]"
 
@@ -21925,17 +21926,17 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:238
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:246
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:293
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:301
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:512
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:520
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:575
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:583
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:292
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:300
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:511
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:519
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:582
 msgid "Column '{1}' could not be understood.\n"
 msgstr "Colonna '{1}' non può essere interpretato.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:328
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:327
 msgid "No date column."
 msgstr "Nessuna colonna per la data."
 
@@ -21982,38 +21983,38 @@ msgstr ""
 "valido."
 
 # Tooltip
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:228
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:227
 msgid "Price can't be parsed into a number."
 msgstr "Il prezzo non può essere interpretato come un numero."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:384
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:383
 msgid "Account value can't be mapped back to an account."
 msgstr "Il valore del conto non può essere ricondotto ad un conto."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:385
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:384
 msgid "Transfer account value can't be mapped back to an account."
 msgstr ""
 "Il valore del conto di trasferimento non può essere ricondotto ad un conto."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:434
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:433
 msgid "Account value can't be empty."
 msgstr "Il valore del conto non può essere vuoto."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:445
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:444
 msgid "Transfer account value can't be empty."
 msgstr "Il valore del conto di trasferimento non può essere vuoto."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:596
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:595
 msgid "No deposit or withdrawal column."
 msgstr "Nessuna colonna per versamenti o prelievi."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:602
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:601
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr ""
 "La suddivisione è stata riconciliata ma la colonna della data di "
 "riconciliazione manca o non è valida."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:609
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:608
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
@@ -31327,6 +31328,12 @@ msgstr "Ho annullato la transazione"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "Aiuto non disponibile."
+
+#~ msgid "Loading system scm configuration..."
+#~ msgstr "Sto caricando la configurazione scm di sistema..."
+
+#~ msgid "Loading user scm configuration..."
+#~ msgstr "Sto caricando la configurazione scm dell'utente..."
 
 #~ msgid ""
 #~ "Set the prefix for gsettings schemas for gsettings queries. This can be "

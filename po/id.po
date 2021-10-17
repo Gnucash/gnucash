@@ -8,10 +8,10 @@
 # Syahmin Sukhairi <syahmin@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.8-pot1\n"
+"Project-Id-Version: GnuCash 4.8-pot2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-10-15 17:50+0200\n"
+"POT-Creation-Date: 2021-10-17 23:05+0200\n"
 "PO-Revision-Date: 2021-06-09 03:33+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
@@ -8951,7 +8951,7 @@ msgid "Version"
 msgstr "Versi"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4720
-#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:261
+#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:262
 msgid "Build ID"
 msgstr "Build ID"
 
@@ -10274,47 +10274,44 @@ msgstr "Anda juga bisa melihat dan membuat laporan kutu di {1}"
 msgid "To find the last stable version, please refer to {1}"
 msgstr "Untuk mendapatkan versi stabil terakhir, silakan mengacu ke {1}"
 
-#: gnucash/gnucash-core-app.cpp:102
-#, fuzzy
-#| msgid "Load report configuration"
-msgid "Loading system scm configuration..."
-msgstr "Muat konfigurasi laporan"
+#. Translators: Guile is the programming language of the reports
+#: gnucash/gnucash-core-app.cpp:103
+msgid "Loading system wide Guile extensions…"
+msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:114
-#, fuzzy
-#| msgid "Load report configuration"
-msgid "Loading user scm configuration..."
-msgstr "Muat konfigurasi laporan"
+#: gnucash/gnucash-core-app.cpp:115
+msgid "Loading user specific Guile extensions…"
+msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:223
+#: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash, program akuntansi untuk keuangan personal dan usaha kecil"
 
-#: gnucash/gnucash-core-app.cpp:225
+#: gnucash/gnucash-core-app.cpp:226
 msgid "{1} [options] [datafile]"
 msgstr "{1} [opsi] [berkas_data]"
 
-#: gnucash/gnucash-core-app.cpp:253
+#: gnucash/gnucash-core-app.cpp:254
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
-#: gnucash/gnucash-core-app.cpp:254
+#: gnucash/gnucash-core-app.cpp:255
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1} versi pengembangan"
 
-#: gnucash/gnucash-core-app.cpp:279
+#: gnucash/gnucash-core-app.cpp:280
 msgid "Common Options"
 msgstr "Opsi-opsi Umum"
 
-#: gnucash/gnucash-core-app.cpp:282
+#: gnucash/gnucash-core-app.cpp:283
 msgid "Show this help message"
 msgstr "Tampilkan pesan bantuan ini"
 
-#: gnucash/gnucash-core-app.cpp:284
+#: gnucash/gnucash-core-app.cpp:285
 msgid "Show GnuCash version"
 msgstr "Tampilkan versi GnuCash"
 
-#: gnucash/gnucash-core-app.cpp:286
+#: gnucash/gnucash-core-app.cpp:287
 msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
@@ -10322,11 +10319,11 @@ msgstr ""
 "Aktifkan mode awakutu: menyediakan pesan detail di log.\n"
 "Sama dengan: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 
-#: gnucash/gnucash-core-app.cpp:288
+#: gnucash/gnucash-core-app.cpp:289
 msgid "Enable extra/development/debugging features."
 msgstr "Aktifkan fitur-fitur eksta/pengembangan/awakutu."
 
-#: gnucash/gnucash-core-app.cpp:290
+#: gnucash/gnucash-core-app.cpp:291
 msgid ""
 "Log level overrides, of the form \"modulename={debug,info,warn,crit,"
 "error}\"\n"
@@ -10337,7 +10334,7 @@ msgstr ""
 "Contoh: \"--log qof=debug\" atau \"--log gnc.backend.file.sx=info\"\n"
 "Ini dapat dipanggil beberapa kali."
 
-#: gnucash/gnucash-core-app.cpp:292
+#: gnucash/gnucash-core-app.cpp:293
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
@@ -10345,11 +10342,11 @@ msgstr ""
 "Berkas untuk menyimpan log; berkas baku adalah \"/tmp/gnucash.trace\"; bisa "
 "berupa \"stderr\" atau \"stdout\"."
 
-#: gnucash/gnucash-core-app.cpp:294
+#: gnucash/gnucash-core-app.cpp:295
 msgid "Hidden Options"
 msgstr "Opsi-opsi Tersembunyi"
 
-#: gnucash/gnucash-core-app.cpp:297
+#: gnucash/gnucash-core-app.cpp:298
 msgid "[datafile]"
 msgstr "[berkas_data]"
 
@@ -21413,19 +21410,19 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:238
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:246
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:293
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:301
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:512
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:520
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:575
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:583
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:292
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:300
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:511
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:519
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:582
 #, fuzzy
 #| msgid " could not be understood.\n"
 msgid "Column '{1}' could not be understood.\n"
 msgstr " tak dapat dipahami.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:328
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:327
 msgid "No date column."
 msgstr "Tak ada kolom tanggal."
 
@@ -21469,37 +21466,37 @@ msgstr "Tanggal Rekonsiliasi Transfer"
 msgid "Value can't be parsed into a valid reconcile state."
 msgstr "Nilai tak dapat diurai menjadi sebuah status rekonsiliasi yang valid."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:228
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:227
 msgid "Price can't be parsed into a number."
 msgstr "Harga tak dapat diurai menjadi angka."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:384
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:383
 msgid "Account value can't be mapped back to an account."
 msgstr "Nilai akun tak dapat dipetakan kembali ke sebuah akun."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:385
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:384
 msgid "Transfer account value can't be mapped back to an account."
 msgstr "Nilai akun transfer tak dapat dipetakan kembali ke sebuah akun."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:434
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:433
 msgid "Account value can't be empty."
 msgstr "Nilai akun tak boleh kosong."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:445
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:444
 msgid "Transfer account value can't be empty."
 msgstr "Nilai akun transfer tak boleh kosong."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:596
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:595
 #, fuzzy
 msgid "No deposit or withdrawal column."
 msgstr "No deposit atau penarikan kolom."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:602
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:601
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr ""
 "Split direkonsiliasi tetapi tanggal rekonsiliasi tidak ada atau tidak valid."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:609
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:608
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
@@ -30605,6 +30602,16 @@ msgstr "Transaksi Dibatalkan"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "Tak ada bantuan yang tersedia."
+
+#, fuzzy
+#~| msgid "Load report configuration"
+#~ msgid "Loading system scm configuration..."
+#~ msgstr "Muat konfigurasi laporan"
+
+#, fuzzy
+#~| msgid "Load report configuration"
+#~ msgid "Loading user scm configuration..."
+#~ msgstr "Muat konfigurasi laporan"
 
 #~ msgid ""
 #~ "Set the prefix for gsettings schemas for gsettings queries. This can be "

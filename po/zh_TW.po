@@ -6,10 +6,10 @@
 # Brian Hsu <brianhsu.hsu@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.8-pot1\n"
+"Project-Id-Version: GnuCash 4.8-pot2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-10-15 17:50+0200\n"
+"POT-Creation-Date: 2021-10-17 23:05+0200\n"
 "PO-Revision-Date: 2021-06-21 04:32+0000\n"
 "Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -8673,7 +8673,7 @@ msgid "Version"
 msgstr "版本"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4720
-#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:261
+#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:262
 msgid "Build ID"
 msgstr "建置號"
 
@@ -9976,47 +9976,44 @@ msgstr "您也可以在 {1} 查詢和回報錯誤"
 msgid "To find the last stable version, please refer to {1}"
 msgstr "要找到最新的穩定版本，請參考 {1}"
 
-#: gnucash/gnucash-core-app.cpp:102
-#, fuzzy
-#| msgid "Load report configuration"
-msgid "Loading system scm configuration..."
-msgstr "載入報表組態"
+#. Translators: Guile is the programming language of the reports
+#: gnucash/gnucash-core-app.cpp:103
+msgid "Loading system wide Guile extensions…"
+msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:114
-#, fuzzy
-#| msgid "Load report configuration"
-msgid "Loading user scm configuration..."
-msgstr "載入報表組態"
+#: gnucash/gnucash-core-app.cpp:115
+msgid "Loading user specific Guile extensions…"
+msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:223
+#: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash，給個人或小企業用的會計軟體"
 
-#: gnucash/gnucash-core-app.cpp:225
+#: gnucash/gnucash-core-app.cpp:226
 msgid "{1} [options] [datafile]"
 msgstr "{1} [選項] [資料檔]"
 
-#: gnucash/gnucash-core-app.cpp:253
+#: gnucash/gnucash-core-app.cpp:254
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
-#: gnucash/gnucash-core-app.cpp:254
+#: gnucash/gnucash-core-app.cpp:255
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1} 開發版"
 
-#: gnucash/gnucash-core-app.cpp:279
+#: gnucash/gnucash-core-app.cpp:280
 msgid "Common Options"
 msgstr "通用選項"
 
-#: gnucash/gnucash-core-app.cpp:282
+#: gnucash/gnucash-core-app.cpp:283
 msgid "Show this help message"
 msgstr "顯示這個說明訊息"
 
-#: gnucash/gnucash-core-app.cpp:284
+#: gnucash/gnucash-core-app.cpp:285
 msgid "Show GnuCash version"
 msgstr "顯示 GnuCash 版本"
 
-#: gnucash/gnucash-core-app.cpp:286
+#: gnucash/gnucash-core-app.cpp:287
 msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
@@ -10024,11 +10021,11 @@ msgstr ""
 "開啟除錯模式：在日誌檔中提供詳細 的訊息。\n"
 "和以下選項相等： --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 
-#: gnucash/gnucash-core-app.cpp:288
+#: gnucash/gnucash-core-app.cpp:289
 msgid "Enable extra/development/debugging features."
 msgstr "打開額外的/開發用的/除錯用的功能。"
 
-#: gnucash/gnucash-core-app.cpp:290
+#: gnucash/gnucash-core-app.cpp:291
 msgid ""
 "Log level overrides, of the form \"modulename={debug,info,warn,crit,"
 "error}\"\n"
@@ -10039,7 +10036,7 @@ msgstr ""
 "例如：\"--log qof=debug\" 或 \"--log gnc.backend.file.sx=info\"\n"
 "這個選項可以出現出次。"
 
-#: gnucash/gnucash-core-app.cpp:292
+#: gnucash/gnucash-core-app.cpp:293
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
@@ -10047,11 +10044,11 @@ msgstr ""
 "日誌寫入的檔案；預為為 \"/tmp/gnucash.trace\"；可以是 \"stderr\" 或\"stdout"
 "\"。"
 
-#: gnucash/gnucash-core-app.cpp:294
+#: gnucash/gnucash-core-app.cpp:295
 msgid "Hidden Options"
 msgstr "隱藏選項"
 
-#: gnucash/gnucash-core-app.cpp:297
+#: gnucash/gnucash-core-app.cpp:298
 msgid "[datafile]"
 msgstr "[資料檔]"
 
@@ -20429,17 +20426,17 @@ msgstr "無法將貨幣類型欄位中的數值無解析為有效的貨幣。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:238
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:246
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:293
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:301
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:512
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:520
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:575
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:583
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:292
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:300
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:511
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:519
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:582
 msgid "Column '{1}' could not be understood.\n"
 msgstr "無法理解欄位「{1}」。\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:328
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:327
 msgid "No date column."
 msgstr "無日期欄位。"
 
@@ -20483,35 +20480,35 @@ msgstr "轉帳對帳日期"
 msgid "Value can't be parsed into a valid reconcile state."
 msgstr "無法將數值解析成有效的對帳狀態。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:228
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:227
 msgid "Price can't be parsed into a number."
 msgstr "無法將價格解析成數字。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:384
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:383
 msgid "Account value can't be mapped back to an account."
 msgstr "科目裡的值無法對應回科目。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:385
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:384
 msgid "Transfer account value can't be mapped back to an account."
 msgstr "無法將轉帳科目的值配對回科目。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:434
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:433
 msgid "Account value can't be empty."
 msgstr "科目的值不能為空。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:445
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:444
 msgid "Transfer account value can't be empty."
 msgstr "轉帳科目的值不能為空值。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:596
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:595
 msgid "No deposit or withdrawal column."
 msgstr "沒有存入或提出欄位。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:602
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:601
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr "分割已對帳但沒有對帳日期欄位或該欄無效。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:609
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:608
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
@@ -29181,6 +29178,16 @@ msgstr "交易已無效"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "沒有說明。"
+
+#, fuzzy
+#~| msgid "Load report configuration"
+#~ msgid "Loading system scm configuration..."
+#~ msgstr "載入報表組態"
+
+#, fuzzy
+#~| msgid "Load report configuration"
+#~ msgid "Loading user scm configuration..."
+#~ msgstr "載入報表組態"
 
 #~ msgid ""
 #~ "Set the prefix for gsettings schemas for gsettings queries. This can be "
