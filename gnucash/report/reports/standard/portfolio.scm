@@ -156,10 +156,8 @@
 			       "number-cell" value)))
 		       ;;(display (format #f "Shares: ~6d  " (gnc-numeric-to-double units)))
 		       ;;(display units) (newline)
-		       (if price (gnc-price-unref price))
 		       (table-add-stock-rows-internal rest (not odd-row?)))
-		(begin (if price (gnc-price-unref price))
-		       (table-add-stock-rows-internal rest odd-row?))))))
+		(begin (table-add-stock-rows-internal rest odd-row?))))))
 
     (set! work-to-do (length accounts))
     (table-add-stock-rows-internal accounts #t)))
@@ -213,40 +211,33 @@
                                (logior (GNC-DENOM-SIGFIGS 5) GNC-RND-ROUND)))))
                   ((pricedb-latest)
                    (lambda (foreign date)
-                     (let* ((price
-                             (gnc-pricedb-lookup-latest-any-currency
-                              pricedb foreign))
-                            (fn (if (and price (> (length price) 0))
-                                    (let* ((the_price
-                                            (if (gnc-commodity-equiv
-                                                 foreign
-                                                 (gnc-price-get-commodity (car price)))
-                                                (car price)
-                                                (gnc-price-invert (car price))))
-                                           (v (gnc-price-get-value the_price)))
-                                          (gnc-price-ref (car price))
-                                          (cons (car price) v))
-                                        (cons #f (gnc-numeric-zero)))))
-                       (if price (gnc-price-list-destroy price))
-                       fn)))
+                     (let* ((price (gnc-pricedb-lookup-latest-any-currency
+                                    pricedb foreign)))
+                       (if (and price (pair? price))
+                           (let* ((the_price
+                                   (if (gnc-commodity-equiv
+                                        foreign
+                                        (gnc-price-get-commodity (car price)))
+                                       (car price)
+                                       (gnc-price-invert (car price))))
+                                  (v (gnc-price-get-value the_price)))
+                             (cons (car price) v))
+                           (cons #f 0)))))
                   ((pricedb-nearest)
                    (lambda (foreign date)
                      (let*  ((price
-                             (gnc-pricedb-lookup-nearest-in-time-any-currency-t64
-                              pricedb foreign (time64CanonicalDayTime date)))
-                            (fn (if (and price (> (length price) 0))
-                                    (let* ((the_price
-                                            (if (gnc-commodity-equiv
-                                                 foreign
-                                                 (gnc-price-get-commodity (car price)))
-                                                (car price)
-                                                (gnc-price-invert (car price))))
-                                           (v (gnc-price-get-value (car price))))
-                                           (gnc-price-ref (car price))
-                                           (cons (car price) v))
-                                         (cons #f (gnc-numeric-zero)))))
-                       (if price (gnc-price-list-destroy price))
-                       fn))))))
+                              (gnc-pricedb-lookup-nearest-in-time-any-currency-t64
+                               pricedb foreign (time64CanonicalDayTime date))))
+                       (if (and price (pair? price))
+                           (let* ((the_price
+                                   (if (gnc-commodity-equiv
+                                        foreign
+                                        (gnc-price-get-commodity (car price)))
+                                       (car price)
+                                       (gnc-price-invert (car price))))
+                                  (v (gnc-price-get-value (car price))))
+                             (cons (car price) v))
+                           (cons #f 0))))))))
 
           (gnc:html-table-set-col-headers!
            table

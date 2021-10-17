@@ -345,20 +345,19 @@ by preventing negative stock balances.<br/>")
 
   ;; Given a price list and a currency find the price for that currency on the list.
   ;; If there is none for the requested currency, return the first one.
-  ;; The price list is released but the price returned is ref counted.
+  ;; The price returned is ref counted.
   (define (find-price price-list currency)
-    (if (eqv? price-list '()) #f
-      (let ((price (car price-list)))
-        (for-each
-          (lambda (p)
-            (if (gnc-commodity-equiv currency (gnc-price-get-currency p))
+    (and (pair? price-list)
+         (let ((price (car price-list)))
+           (for-each
+            (lambda (p)
+              (cond
+               ((gnc-commodity-equiv currency (gnc-price-get-currency p))
                 (set! price p))
-            (if (gnc-commodity-equiv currency (gnc-price-get-commodity p))
-                (set! price (gnc-price-invert p))))
-          price-list)
-        (gnc-price-ref price)
-        (gnc-price-list-destroy price-list)
-        price)))
+               ((gnc-commodity-equiv currency (gnc-price-get-commodity p))
+                (set! price (gnc-price-invert p)))))
+            price-list)
+           price)))
 
   ;; Return true if either account is the parent of the other or they are siblings
   (define (parent-or-sibling? a1 a2)
@@ -495,7 +494,6 @@ by preventing negative stock balances.<br/>")
                                 (if (not (gnc-numeric-zero-p (gnc:gnc-monetary-amount trans-price)))
                                   ;; We can exchange the price from this transaction into the report currency
                                   (begin
-                                    (if price (gnc-price-unref price))
                                     (set! pricing-txn trans)
                                     (set! price trans-price)
                                     (gnc:debug "Transaction price is " (gnc:monetary->string price))
@@ -954,11 +952,9 @@ by preventing negative stock balances.<br/>")
 	       row-style
 	       activecols)
 
-              (if (and (not use-txn) price) (gnc-price-unref price))
-	      (table-add-stock-rows-internal rest (not odd-row?))
+              (table-add-stock-rows-internal rest (not odd-row?))
 	      )
 	    (begin
-	      (if (and (not use-txn) price) (gnc-price-unref price))
 	      (table-add-stock-rows-internal rest odd-row?)
 	      )
             )
