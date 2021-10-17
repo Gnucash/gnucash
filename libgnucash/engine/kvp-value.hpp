@@ -26,10 +26,7 @@
 
 #include <config.h>
 #include "qof.h"
-#include <boost/version.hpp>
-#if BOOST_VERSION == 105600
-#include <boost/type_traits/is_nothrow_move_assignable.hpp>
-#endif
+
 #include <boost/variant.hpp>
 
 //Must be a struct because it's exposed to C so that it can in turn be
