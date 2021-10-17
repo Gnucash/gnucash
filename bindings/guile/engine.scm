@@ -45,6 +45,24 @@
   (issue-deprecation-warning "gnc-pricedb-lookup-latest-before-any-currency-t64 has been renamed to gnc-pricedb-lookup-nearest-before-any-currency-t64")
   (apply gnc-pricedb-lookup-nearest-before-any-currency-t64 args))
 
+;; Reports are not meant to modify pricedb entries, therefore pricedb
+;; memory management is disabled from guile reports.
+(define %PRICE-MEMORY-MANAGEMENT
+  "Calling gnc-price-list-destroy, gnc-price-ref, and gnc-price-unref \
+from guile is disabled.")
+
+(define (make-nop msg)
+  (lambda _ (issue-deprecation-warning msg) #f))
+
+(when (defined? 'gnc-price-list-destroy)
+  (set! gnc-price-list-destroy (make-nop %PRICE-MEMORY-MANAGEMENT)))
+
+(when (defined? 'gnc-price-ref)
+  (set! gnc-price-ref (make-nop %PRICE-MEMORY-MANAGEMENT)))
+
+(when (defined? 'gnc-price-unref)
+  (set! gnc-price-unref (make-nop %PRICE-MEMORY-MANAGEMENT)))
+
 ;; A few account related utility functions which used to be in engine-utilities.scm
 (define (gnc:account-map-descendants thunk account)
   (issue-deprecation-warning "gnc:account-map-descendants is deprecated.")
