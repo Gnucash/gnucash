@@ -32,11 +32,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-15 17:50+0200\n"
-"PO-Revision-Date: 2021-09-21 19:52+0000\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2021-10-17 20:33+0000\n"
+"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -27349,7 +27349,7 @@ msgstr "Name Ansprechpartner"
 
 #: gnucash/report/reports/standard/invoice.scm:269
 msgid "Display the Company contact information."
-msgstr "Den Ansprechpartner der Firma anzeigen"
+msgstr "Den Ansprechpartner der Firma anzeigen."
 
 #: gnucash/report/reports/standard/invoice.scm:275
 msgid "Company contact string"
