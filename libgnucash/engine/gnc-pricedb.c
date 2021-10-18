@@ -802,13 +802,13 @@ gnc_price_list_equal(PriceList *prices1, PriceList *prices2)
 
     if (g_list_length (prices1) < g_list_length (prices2))
     {
-        PWARN ("prices2 has extra prices");
+        PINFO ("prices2 has extra prices");
         return FALSE;
     }
 
     if (g_list_length (prices1) > g_list_length (prices2))
     {
-        PWARN ("prices1 has extra prices");
+        PINFO ("prices1 has extra prices");
         return FALSE;
     }
 
