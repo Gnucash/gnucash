@@ -796,25 +796,29 @@ gnc_price_list_destroy(PriceList *prices)
 gboolean
 gnc_price_list_equal(PriceList *prices1, PriceList *prices2)
 {
-    GList *n1, *n2;
+    GList *n1 = prices1;
+    GList *n2 = prices2;
 
     if (prices1 == prices2) return TRUE;
 
-    if (g_list_length (prices1) < g_list_length (prices2))
+    while (n1 || n2)
     {
-        PINFO ("prices2 has extra prices");
-        return FALSE;
-    }
-
-    if (g_list_length (prices1) > g_list_length (prices2))
-    {
-        PINFO ("prices1 has extra prices");
-        return FALSE;
-    }
-
-    for (n1 = prices1, n2 = prices2; n1 ; n1 = n1->next, n2 = n2->next)
+        if (!n1)
+        {
+            PINFO ("prices2 has extra prices");
+            return FALSE;
+        }
+        if (!n2)
+        {
+            PINFO ("prices1 has extra prices");
+            return FALSE;
+        }
         if (!gnc_price_equal (n1->data, n2->data))
             return FALSE;
+
+        n1 = n1->next;
+        n2 = n2->next;
+    };
 
     return TRUE;
 }
