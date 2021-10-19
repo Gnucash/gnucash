@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-10-18 10:35+0000\n"
+"PO-Revision-Date: 2021-10-19 20:41+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20940,10 +20940,9 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "חדש, סכום חוסר איזון (נדרש חשבון להעברת %s)!"
 
 #: gnucash/import-export/import-main-matcher.c:1581
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "התאמה (סגירה ידנית)"
+msgstr "התאמה (סגירה ידנית) אל %s"
 
 #: gnucash/import-export/import-main-matcher.c:1586
 #, c-format
