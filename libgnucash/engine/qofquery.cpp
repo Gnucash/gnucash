@@ -1458,23 +1458,26 @@ gboolean qof_query_equal (const QofQuery *q1, const QofQuery *q2)
     if (q1 == q2) return TRUE;
     if (!q1 || !q2) return FALSE;
 
-    if (g_list_length (q1->terms) != g_list_length (q2->terms)) return FALSE;
     if (q1->max_results != q2->max_results) return FALSE;
 
-    for (or1 = q1->terms, or2 = q2->terms; or1;
-            or1 = or1->next, or2 = or2->next)
+    for (or1 = q1->terms, or2 = q2->terms; or1 || or2;
+         or1 = or1->next, or2 = or2->next)
     {
         GList *and1, *and2;
 
+        if (!or1 || !or2)
+            return FALSE;
         and1 = static_cast<GList*>(or1->data);
         and2 = static_cast<GList*>(or2->data);
 
-        if (g_list_length (and1) != g_list_length (and2)) return FALSE;
-
-        for ( ; and1; and1 = and1->next, and2 = and2->next)
+        for (; and1 || and2; and1 = and1->next, and2 = and2->next)
+        {
+            if (!and1 || !and2)
+                return FALSE;
             if (!qof_query_term_equal (static_cast<QofQueryTerm*>(and1->data),
 				       static_cast<QofQueryTerm*>(and2->data)))
                 return FALSE;
+        }
     }
 
     if (!qof_query_sort_equal (&(q1->primary_sort), &(q2->primary_sort)))
