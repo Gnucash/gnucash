@@ -1735,7 +1735,7 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
     /* If the txn has both APAR splits linked to a business lot and
      * splits that are not, issue a warning some will be discarded.
      */
-    if (has_no_lot_apar_splits && (g_list_length (txn_lots) > 0))
+    if (has_no_lot_apar_splits && (txn_lots != NULL))
     {
         GtkWidget *dialog;
         char *split_str = g_strdup ("");

@@ -593,7 +593,7 @@ gnc_plugin_page_account_tree_open (Account *account, GtkWindow *win)
     page_list = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME);
 
     // If we have a window, look for account page in that window
-    if (g_list_length ((GList*)page_list) != 0)
+    if (page_list != NULL)
     {
         if (win != NULL)
         {
@@ -1500,7 +1500,7 @@ account_subaccount (Account* account)
 {
     Account* subaccount = NULL;
     GList *subs = gnc_account_get_children (account);
-    if (g_list_length (subs) == 1)
+    if (subs && !subs->next)
         subaccount = subs->data;
     g_list_free (subs);
     return subaccount;

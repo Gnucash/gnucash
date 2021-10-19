@@ -676,7 +676,7 @@ void qof_query_add_term (QofQuery *q, QofQueryParamList *param_list,
     qs = qof_query_create ();
     query_init (qs, qt);
 
-    if (qof_query_has_terms (q))
+    if (q->terms != NULL)
         qr = qof_query_merge (q, qs, op);
     else
         qr = qof_query_merge (q, qs, QOF_QUERY_OR);
@@ -701,7 +701,8 @@ void qof_query_purge_terms (QofQuery *q, QofQueryParamList *param_list)
             qt = static_cast<QofQueryTerm*>(_and_->data);
             if (!param_list_cmp (qt->param_list, param_list))
             {
-                if (g_list_length (static_cast<GList*>(_or_->data)) == 1)
+                auto or_list = static_cast<GList*> (_or_->data);
+                if (or_list && !or_list->next)
                 {
                     q->terms = g_list_remove_link (static_cast<GList*>(q->terms), _or_);
                     g_list_free_1 (_or_);
@@ -710,7 +711,7 @@ void qof_query_purge_terms (QofQuery *q, QofQueryParamList *param_list)
                 }
                 else
                 {
-                    _or_->data = g_list_remove_link (static_cast<GList*>(_or_->data), _and_);
+                    _or_->data = g_list_remove_link (or_list, _and_);
                     g_list_free_1 (_and_);
                     _and_ = static_cast<GList*>(_or_->data);
                     if (!_and_) break;
@@ -1137,7 +1138,7 @@ qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
      * so that the first term added to an empty query doesn't screw up.
      */
     if ((QOF_QUERY_AND == op) &&
-            ( (0 == qof_query_has_terms (q1)) || (0 == qof_query_has_terms (q2)) ))
+        (q1->terms == NULL || q2->terms == NULL))
     {
         op = QOF_QUERY_OR;
     }

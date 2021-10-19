@@ -579,7 +579,7 @@ gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
 
     g_date_clear (&nextDate, 1);
     gnc_frequency_save_to_recurrence (sxed->gncfreq, &schedule, &startDate);
-    if (g_list_length (schedule) > 0)
+    if (schedule != NULL)
     {
         g_date_subtract_days (&startDate, 1);
         recurrenceListNextInstance (schedule, &startDate, &nextDate);
@@ -1766,7 +1766,7 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
     book = qof_instance_get_book (QOF_INSTANCE (acct));
     affected_sxes = gnc_sx_get_sxes_referencing_account (book, acct);
 
-    if (g_list_length (affected_sxes) == 0)
+    if (affected_sxes == NULL)
         return;
 
     {

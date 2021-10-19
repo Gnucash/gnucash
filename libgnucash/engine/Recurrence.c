@@ -556,7 +556,7 @@ recurrenceWeekendAdjustFromString(const gchar *str)
 gboolean
 recurrenceListIsSemiMonthly(GList *recurrences)
 {
-    if (g_list_length(recurrences) != 2)
+    if (!(recurrences && recurrences->next && !recurrences->next->next))
         return FALSE;
 
     // should be a "semi-monthly":
@@ -879,9 +879,10 @@ recurrenceListCmp(GList *a, GList *b)
 {
     Recurrence *most_freq_a, *most_freq_b;
 
-    g_return_val_if_fail(g_list_length(a) != 0 && g_list_length(b) != 0, 0);
-    g_return_val_if_fail(g_list_length(a) != 0, -1);
-    g_return_val_if_fail(g_list_length(b) != 0, 1);
+    if (!a)
+        return (b ? -1 : 0);
+    else if (!b)
+        return 1;
 
     most_freq_a = (Recurrence*)g_list_nth_data(g_list_sort(a, (GCompareFunc)recurrenceCmp), 0);
     most_freq_b = (Recurrence*)g_list_nth_data(g_list_sort(b, (GCompareFunc)recurrenceCmp), 0);

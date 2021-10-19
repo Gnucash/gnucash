@@ -3237,7 +3237,7 @@ multi_post_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_dat
     gboolean test;
     InvoiceWindow *iw;
 
-    if (g_list_length(invoice_list) == 0)
+    if (invoice_list == NULL)
         return;
     // Get the posting parameters for these invoices
     iw = gnc_ui_invoice_edit(dialog, invoice_list->data);
@@ -3287,7 +3287,7 @@ multi_print_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_da
 {
     struct multi_edit_invoice_data meid;
 
-    if (g_list_length(invoice_list) == 0)
+    if (invoice_list == NULL)
         return;
 
     meid.user_data = user_data;

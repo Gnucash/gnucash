@@ -89,7 +89,6 @@ static void * search(QofBook * book, const gchar *id, void * object, GncSearchTy
     void *c;
     GList *result;
     QofQuery *q;
-    gint len;
     QofQueryPredData* string_pred_data;
     
     PINFO("Type = %d", type);
@@ -123,8 +122,7 @@ static void * search(QofBook * book, const gchar *id, void * object, GncSearchTy
     result = qof_query_run (q);
 
     // now compare _exactly_
-    len = g_list_length (result);
-    if (result && (len > 0))
+    if (result != NULL)
     {
         result = g_list_first (result);
 

@@ -1446,7 +1446,7 @@ gnc_main_window_delete_event (GtkWidget *window,
     if (already_dead)
         return TRUE;
 
-    if (g_list_length (active_windows) > 1)
+    if (active_windows && active_windows->next)
     {
         gint response;
         GtkWidget *dialog;
@@ -1478,7 +1478,7 @@ gnc_main_window_delete_event (GtkWidget *window,
         return TRUE;
     }
 
-    if (g_list_length(active_windows) > 1)
+    if (active_windows && active_windows->next)
         return FALSE;
 
     already_dead = gnc_main_window_quit(GNC_MAIN_WINDOW(window));
@@ -3348,7 +3348,7 @@ gnc_main_window_close_page (GncPluginPage *page)
             /* remove the preference callbacks from the main window */
             gnc_main_window_remove_prefs (window);
         }
-        if (window && g_list_length (active_windows) > 1)
+        if (window && active_windows && active_windows->next)
             gtk_widget_destroy (GTK_WIDGET(window));
     }
 }

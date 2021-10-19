@@ -1154,9 +1154,11 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog
         // - [?] ability to create transactions
     {
         GList *unbound_variables;
+        gint unbound_len;
         unbound_variables = gnc_sx_instance_model_check_variables (app_dialog->editing_model->instances);
-        PINFO ("%d variables unbound", g_list_length (unbound_variables));
-        if (g_list_length (unbound_variables) > 0)
+        unbound_len = g_list_length (unbound_variables);
+        PINFO ("%d variables unbound", unbound_len);
+        if (unbound_len > 0)
         {
             // focus first variable
             GncSxVariableNeeded *first_unbound;

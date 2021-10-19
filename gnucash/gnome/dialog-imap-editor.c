@@ -251,7 +251,7 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
     list = gtk_tree_selection_get_selected_rows (selection, &fmodel);
 
     // Make sure we have some rows selected
-    if (g_list_length (list) == 0)
+    if (list == NULL)
         return;
 
     // reset the invalid map total
@@ -645,7 +645,7 @@ get_imap_info (ImapDialog *imap_dialog, Account *acc, const gchar *category, con
     else
         head = IMAP_FRAME;
 
-    if (g_list_length (imap_list) > 0)
+    if (imap_list != NULL)
     {
         PINFO("List length is %d", g_list_length (imap_list));
 
