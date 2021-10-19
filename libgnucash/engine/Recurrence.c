@@ -685,14 +685,15 @@ gchar*
 recurrenceListToCompactString(GList *rs)
 {
     GString *buf = g_string_sized_new(16);
+    gint rs_len = g_list_length (rs);
 
-    if (g_list_length(rs) == 0)
+    if (rs_len == 0)
     {
         g_string_printf(buf, "%s", _("None"));
         goto rtn;
     }
 
-    if (g_list_length(rs) > 1)
+    if (rs_len > 1)
     {
         if (recurrenceListIsWeeklyMultiple(rs))
         {
@@ -724,7 +725,7 @@ recurrenceListToCompactString(GList *rs)
         else
         {
             /* Translators: %d is the number of Recurrences in the list. */
-            g_string_printf(buf, _("Unknown, %d-size list."), g_list_length(rs));
+            g_string_printf(buf, _("Unknown, %d-size list."), rs_len);
         }
     }
     else
