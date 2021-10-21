@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-10-19 20:41+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2021-10-21 15:42+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -9021,8 +9021,8 @@ msgid ""
 "You are about to change a split that is linked to a reconciled split. Doing "
 "so might make future reconciliation difficult! Continue with this change?"
 msgstr ""
-"פעולה זו תשנה פיצול המקושר לפיצול שהותאם. ביצוע פעולה זו עלול להפוך התאמות "
-"עתידיות לקשה יותר! להמשיך בביצוע השינוי?"
+"פעולה זו תשנה פיצול המקושר לפיצול שהותאם. ביצוע פעולה זו עלול להפוך התאמה "
+"עתידית לקשה יותר! להמשיך בביצוע השינוי?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
 #: gnucash/register/ledger-core/split-register-model.c:2246
@@ -11199,7 +11199,7 @@ msgstr "נתיב ראשי לצרופות מקושרות לתנועה"
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:26
 msgid ""
 "This is the path head for the Transaction Linked Files with relative paths"
-msgstr "זהו הנתיב הראשי, לצרופות עם נתיבים יחסיים, המקושרות לתנועה"
+msgstr "זהו הנתיב הראשי לצרופות עם נתיבים יחסיים, המקושרות לתנועה"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:30
 msgid "Compress the data file"
@@ -11218,8 +11218,8 @@ msgid ""
 "If active, GnuCash shows an explanation of the auto-save feature the first "
 "time that feature is started. Otherwise no extra explanation is shown."
 msgstr ""
-"אם האפשרות הופעלה, גנוקאש יציג הסבר על תכונת השמירה האוטומטית עם אתחול "
-"התכונה לראשונה. אחרת לא יוצג הסבר נוסף."
+"אם האפשרות פעילה, גנוקאש יציג הסבר על תכונת השמירה האוטומטית בהפעלה ראשונה "
+"של התכונה. אחרת לא יוצג הסבר נוסף."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:40
 msgid "Auto-save time interval"
@@ -11394,7 +11394,7 @@ msgid ""
 "account's custom color if set. This can serve as a visual aid to quickly "
 "identify accounts."
 msgstr ""
-"אם האפשרות הופעלה, החשבון יוצג בתרשים החשבונות בצבע מותאם אישית, ככל שנקבע "
+"אם האפשרות פעילה, החשבון יוצג בתרשים החשבונות בצבע מותאם אישית, ככל שנקבע "
 "לחשבון צבע. יכול לשמש כעזר חזותי לזיהוי חשבונות במהירות."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:115
@@ -11861,8 +11861,8 @@ msgid ""
 "\"View->Double Line\" menu item."
 msgstr ""
 "הצגת שורה נוספת ביומן, לכל תנועה הכוללת 'פעולה', 'הערות', ו'צרופות'. זוהי "
-"הגדרת ברירת המחדל עבור יומן שנפתח לראשונה. ניתן לשנות את ההגדרה בכל עת מפריט "
-"'מצג &larr; שורה כפולה'."
+"הגדרת ברירת המחדל עבור יומן שיפתח לראשונה. ניתן לשנות את ההגדרה בכל עת, "
+"מפריט 'מצג &larr; שורה כפולה'."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:311
 msgid "Only display leaf account names."
@@ -13316,8 +13316,8 @@ msgid ""
 "If not satisfied with the available templates, please read the wiki page "
 "linked below and share your new or improved template."
 msgstr ""
-"אם התבניות הזמינות אינן מספקות, נא לעיין בעמוד הוויקי שלהלן, שם ניתן לשתף "
-"תבניות חדשות שיצרת."
+"אם התבניות הזמינות אינן מספקות, נא לעיין בעמוד הוויקי שלהלן, שם ניתן לשתף את "
+"התבניות החדשות שיצרת."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:490
 msgid ""
@@ -23285,8 +23285,8 @@ msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
-"לעזרה על כתיבת דוחות, או לשיתוף הדוח החדש והמדליק שיצרתם, ניתן להיוועץ "
-"ברשימת הדיוור ~a."
+"לעזרה על כתיבת־דוחות, או לשיתוף דוח חדש והמדליק שיצרת, ניתן להיוועץ ברשימת "
+"הדיוור ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:327
 msgid ""
