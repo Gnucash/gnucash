@@ -2721,7 +2721,8 @@
   smallest-fraction="100"
   local-symbol="BsF."
 />
-<!-- "VES" - "Bolivar Soberano"
+<!-- "VES" - "Bolivar Soberano" 
+     2021-10-01 "VED" 1,000,000
 -->
 <currency
   isocode="VES"
@@ -2733,6 +2734,19 @@
   parts-per-unit="100"
   smallest-fraction="100"
   local-symbol="BsS."
+/>
+<!-- "VED" - "Bolivar Soberano"
+-->
+<currency
+  isocode="VED"
+  fullname="Bolivar Soberano"
+  unitname="bolivar"
+  partname="centimo"
+  namespace="ISO4217"
+  exchange-code="926"
+  parts-per-unit="100"
+  smallest-fraction="100"
+  local-symbol="BsD."
 />
 <!-- "VND" - "Dong"
 -->
