@@ -78,7 +78,7 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=2 n-rows=4 -->
+              <!-- n-columns=2 n-rows=5 -->
               <object class="GtkGrid" id="table1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -197,6 +197,27 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="autoclear_check">
+                    <property name="label" translatable="yes">Auto-clear</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes">Use this option if you want GnuCash to automatically find which transactions are cleared, given an ending balance. For example, said ending balance can be the current balance given by your bank online.</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <placeholder/>
                 </child>
               </object>
@@ -269,6 +290,18 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="autoclear_status">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="justify">center</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>

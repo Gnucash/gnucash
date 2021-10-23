@@ -55,6 +55,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-balances.h"
+#include "gnc-autoclear.h"
 #include "gnc-window.h"
 #include "reconcile-view.h"
 #include "window-reconcile.h"
@@ -111,6 +112,7 @@ struct _RecnWindow
 typedef struct _startRecnWindowData
 {
     Account       *account;         /* the account being reconciled            */
+    GList         *acct_nc_splits;
     GNCAccountType account_type;    /* the type of the account                 */
 
     GtkWidget     *startRecnWindow; /* the startRecnWindow dialog              */
@@ -118,6 +120,9 @@ typedef struct _startRecnWindowData
     GtkWidget     *date_value;      /* the dialog's ending date field          */
     GtkWidget     *future_icon;
     GtkWidget     *future_text;
+    GtkWidget     *autoclear_status;
+    GtkWidget     *include_children_toggle;
+    GtkWidget     *autoclear_toggle;
     GNCAmountEdit *end_value;       /* the dialog's ending balance amount edit */
     gnc_numeric    original_value;  /* the dialog's original ending balance    */
     gboolean       user_set_value;  /* the user changed the ending value       */
@@ -340,6 +345,35 @@ amount_edit_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
     return FALSE;
 }
 
+static void
+update_autoclear_status (startRecnWindowData *data)
+{
+    time64 new_date = gnc_date_edit_get_date_end (GNC_DATE_EDIT (data->date_value));
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (data->autoclear_toggle)))
+    {
+        gchar *status, *len_str;
+        guint nc_length = 0;
+        for (GList *n = data->acct_nc_splits; n; n = n->next)
+        {
+            if (xaccTransGetDate (xaccSplitGetParent (n->data)) <= new_date)
+                nc_length++;
+        }
+        len_str = g_strdup_printf ("%d splits will be analysed.", nc_length);
+        if (nc_length > 15)
+            status = g_strconcat
+                (len_str, "\n",
+                 "This is likely to overload the autoclear algorithm.",
+                 NULL);
+        else
+            status = g_strdup (len_str);
+        gtk_label_set_text (GTK_LABEL (data->autoclear_status), status);
+        g_free (status);
+        g_free (len_str);
+    }
+    else
+        gtk_label_set_text (GTK_LABEL (data->autoclear_status), NULL);
+}
+
 
 /* recn_date_changed_cb
  *   Callback on date_changed event for Statement Date.
@@ -404,6 +438,8 @@ actions on this account. Please double-check this is the date you intended."));
     }
     gtk_widget_set_visible (GTK_WIDGET(data->future_icon), show_warning);
     gtk_widget_set_visible (GTK_WIDGET(data->future_text), show_warning);
+
+    update_autoclear_status (data);
 
     if (data->user_set_value)
         return;
@@ -645,6 +681,57 @@ gnc_save_reconcile_interval(Account *account, time64 statement_date)
         xaccAccountSetReconcileLastInterval(account, months, days);
 }
 
+static gboolean
+launch_autoclear (GtkWidget *parent, Account *account, gnc_numeric balance,
+                  startRecnWindowData data)
+{
+    GError *error = NULL;
+    GList *autoclear_splits = NULL;
+    time64 stmt_date = gnc_date_edit_get_date_end (GNC_DATE_EDIT(data.date_value));
+
+    if (!gnc_autoclear_get_splits (account, balance, stmt_date, &autoclear_splits,
+                                   &error, GTK_LABEL (data.autoclear_status)))
+    {
+        gnc_info_dialog (GTK_WINDOW (parent), "%s", error->message);
+        g_error_free (error);
+        return FALSE;
+    }
+
+    /* now set autocleared splits */
+    for (GList *node = autoclear_splits; node; node = node->next)
+        xaccSplitSetReconcile (node->data, CREC);
+
+    g_list_free (autoclear_splits);
+    return TRUE;
+}
+
+static void
+set_reconcile_sensitivities (GtkWidget *widget, startRecnWindowData *data)
+{
+    // the autoclear algorithm is not currently able to handle an
+    // accounts' subaccounts. if the algorithm is improved to handle
+    // subaccounts, this function (and associated signals) may be
+    // removed.
+    GtkWidget *include_children = data->include_children_toggle;
+    GtkWidget *autoclear = data->autoclear_toggle;
+
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (include_children)))
+    {
+        gtk_widget_set_sensitive (autoclear, FALSE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (autoclear), FALSE);
+    }
+    else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (autoclear)))
+    {
+        gtk_widget_set_sensitive (include_children, FALSE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (include_children), FALSE);
+    }
+    else
+    {
+        gtk_widget_set_sensitive (include_children, TRUE);
+        gtk_widget_set_sensitive (autoclear, TRUE);
+    }
+    update_autoclear_status (data);
+}
 
 /********************************************************************\
  * startRecnWindow                                                  *
@@ -665,7 +752,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
                 gnc_numeric *new_ending, time64 *statement_date,
                 gboolean enable_subaccount)
 {
-    GtkWidget *dialog, *end_value, *date_value, *include_children_button;
+    GtkWidget *dialog, *end_value, *date_value;
     GtkBuilder *builder;
     startRecnWindowData data = { NULL };
     gboolean auto_interest_xfer_option;
@@ -684,9 +771,10 @@ startRecnWindow(GtkWidget *parent, Account *account,
      */
     data.account = account;
     data.account_type = xaccAccountGetType(account);
+    data.acct_nc_splits = NULL;
     data.date = *statement_date;
 
-    /* whether to have an automatic interest xfer dialog or not */
+    /* date to have an automatic interest xfer dialog or not */
     auto_interest_xfer_option = xaccAccountGetAutoInterest (account);
 
     data.include_children = !has_account_different_commodities(account) &&
@@ -695,6 +783,15 @@ startRecnWindow(GtkWidget *parent, Account *account,
     ending = gnc_ui_account_get_reconciled_balance(account,
              data.include_children);
     print_info = gnc_account_print_info (account, TRUE);
+
+    /* Extract which splits are not cleared */
+    for (GList *node = xaccAccountGetSplitList (account); node; node = node->next)
+    {
+        Split *split = node->data;
+        if (xaccSplitGetReconcile (split) == NREC &&
+            !gnc_numeric_zero_p (xaccSplitGetAmount (split)))
+            data.acct_nc_splits = g_list_prepend (data.acct_nc_splits, split);
+    }
 
     /*
      * Do not reverse the balance here.  It messes up the math in the
@@ -729,10 +826,17 @@ startRecnWindow(GtkWidget *parent, Account *account,
         start_value = GTK_WIDGET(gtk_builder_get_object (builder, "start_value"));
         gtk_label_set_text(GTK_LABEL(start_value), xaccPrintAmount (ending, print_info));
 
-        include_children_button = GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_check"));
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(include_children_button),
+        data.include_children_toggle = GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_check"));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data.include_children_toggle),
                                      data.include_children);
-        gtk_widget_set_sensitive(include_children_button, enable_subaccount);
+        gtk_widget_set_sensitive(data.include_children_toggle, enable_subaccount);
+
+        data.autoclear_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "autoclear_check"));
+
+        g_signal_connect (G_OBJECT (data.include_children_toggle), "toggled",
+                          G_CALLBACK (set_reconcile_sensitivities), (gpointer) &data);
+        g_signal_connect (G_OBJECT (data.autoclear_toggle), "toggled",
+                          G_CALLBACK (set_reconcile_sensitivities), (gpointer) &data);
 
         date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
         data.date_value = date_value;
@@ -748,6 +852,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
         data.future_icon = GTK_WIDGET(gtk_builder_get_object (builder, "future_icon"));
         data.future_text = GTK_WIDGET(gtk_builder_get_object (builder, "future_text"));
+        data.autoclear_status = GTK_WIDGET(gtk_builder_get_object (builder, "autoclear_status"));
 
         box = GTK_WIDGET(gtk_builder_get_object (builder, "ending_value_box"));
         gtk_box_pack_start(GTK_BOX(box), end_value, TRUE, TRUE, 0);
@@ -798,6 +903,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
                 gtk_widget_set_sensitive(GTK_WIDGET(interest), FALSE);
         }
 
+        /* initialize sensitivities */
+        set_reconcile_sensitivities (NULL, &data);
+
         gtk_widget_show_all(dialog);
 
         gtk_widget_hide (data.future_text);
@@ -836,11 +944,24 @@ startRecnWindow(GtkWidget *parent, Account *account,
         xaccAccountSetReconcileChildrenStatus(account, data.include_children);
 
         gnc_save_reconcile_interval(account, *statement_date);
+
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (data.autoclear_toggle)))
+        {
+            if (launch_autoclear (parent, account, *new_ending, data))
+            {
+                /* success. splits are cleared. show reconcile window. */
+            }
+            else
+            {
+                /* autoclear failed. user must manually reconcile. */
+            }
+        }
     }
     // must remove the focus-out handler
     g_signal_handler_disconnect (G_OBJECT(entry), fo_handler_id);
     gtk_widget_destroy (dialog);
     g_object_unref(G_OBJECT(builder));
+    g_list_free (data.acct_nc_splits);
 
     return (result == GTK_RESPONSE_OK);
 }
