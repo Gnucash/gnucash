@@ -21,11 +21,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8-pot2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-10-16 03:34+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-10-23 12:39+0000\n"
+"Last-Translator: cjh <cjh@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -8640,7 +8640,11 @@ msgstr ""
 "Tao Wang <dancefire@gmail.com>, 2010\n"
 "Boyuan Yang <073plan@gmail.com>, 2019\n"
 "YTX <ytx.cash@gmail.com>, 2021\n"
-"CJH <c@cjh0613.com>, 2021"
+"CJH <c@cjh0613.com>, 2021\n"
+"Sean Guan <guanshangkang@gmail.com>, 2021\n"
+"chokore <byt2ooo@163.com>, 2021\n"
+"Eric <spice2wolf@gmail.com>, 2021\n"
+"J0kWang <lianjiefly@gmail.com>, 2021"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4740
 msgid "Visit the GnuCash website."
@@ -9927,11 +9931,11 @@ msgstr "对于最新的稳定版本，请参阅{1}"
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:103
 msgid "Loading system wide Guile extensions…"
-msgstr ""
+msgstr "正在加载系统范围的 Guile 扩展…"
 
 #: gnucash/gnucash-core-app.cpp:115
 msgid "Loading user specific Guile extensions…"
-msgstr ""
+msgstr "加载用户特定的 Guile 扩展…"
 
 #: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"

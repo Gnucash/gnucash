@@ -4,14 +4,15 @@
 # Kuang-che Wu <kcwu@csie.org>, 2007, 2011-2013.
 # Barlos Lee <barlos.lee@gmail.com>, 2010
 # Brian Hsu <brianhsu.hsu@gmail.com>, 2021.
+# cjh <cjh@cjh0613.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8-pot2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-06-21 04:32+0000\n"
-"Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
+"PO-Revision-Date: 2021-10-23 12:39+0000\n"
+"Last-Translator: cjh <cjh@cjh0613.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -4208,6 +4209,8 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"\"%s\"有一個或多個子科目。\n"
+"删除該科目前請先删除所有的子科目。"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1728
 #, c-format
@@ -9979,11 +9982,11 @@ msgstr "要找到最新的穩定版本，請參考 {1}"
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:103
 msgid "Loading system wide Guile extensions…"
-msgstr ""
+msgstr "載入系統範圍的Guile擴展…"
 
 #: gnucash/gnucash-core-app.cpp:115
 msgid "Loading user specific Guile extensions…"
-msgstr ""
+msgstr "載入使用者特定的 Guile 擴展…"
 
 #: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -20844,14 +20847,11 @@ msgid "Unknown OFX investment account"
 msgstr "未知的 OFX 投資科目"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1216
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s' imported, %d transactions processed, no transactions to "
-#| "match"
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' into account '%s', found %d "
 "previously imported transactions, no new transactions."
-msgstr "已匯入 OSF 檔案「%s」，處理 %d 筆交易，沒有需要配對的交易"
+msgstr "將OFX檔案「%s」中的交易導入帳戶「%s」時，發現了%d個以前導入的交易，無新交易。"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1319
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
@@ -26395,7 +26395,7 @@ msgstr "期間總額"
 #: gnucash/report/reports/standard/new-owner-report.scm:510
 msgid ""
 "* Amounts denoted thus are derived from, and do not match the transaction."
-msgstr ""
+msgstr "這些金額所表示的是由推算得出，與交易不匹配。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:868
 #: gnucash/report/reports/standard/owner-report.scm:535
