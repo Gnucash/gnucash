@@ -25,9 +25,10 @@
 #include <glib.h>
 // GoogleTest is written in C++, however, the function we test in C.
 extern "C" {
-#include "../gnc-ui-balances.h"
+#include "../gnc-autoclear.h"
 }
 #include <memory>
+#include <Account.h>
 #include <Split.h>
 #include <gtest/gtest.h>
 

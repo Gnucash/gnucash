@@ -147,6 +147,7 @@ gnucash/gnome-utils/dialog-userpass.c
 gnucash/gnome-utils/dialog-utils.c
 gnucash/gnome-utils/gnc-account-sel.c
 gnucash/gnome-utils/gnc-amount-edit.c
+gnucash/gnome-utils/gnc-autoclear.c
 gnucash/gnome-utils/gnc-autosave.c
 gnucash/gnome-utils/gnc-cell-renderer-date.c
 gnucash/gnome-utils/gnc-cell-renderer-popup.c

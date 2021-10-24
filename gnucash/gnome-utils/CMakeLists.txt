@@ -47,6 +47,7 @@ set (gnome_utils_SOURCES
   dialog-utils.c
   gnc-account-sel.c
   gnc-amount-edit.c
+  gnc-autoclear.c
   gnc-autosave.c
   gnc-cell-renderer-date.c
   gnc-cell-renderer-popup.c
