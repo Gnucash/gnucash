@@ -32,10 +32,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8-pot2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-10-17 20:33+0000\n"
+"PO-Revision-Date: 2021-10-27 18:55+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -6892,7 +6892,7 @@ msgstr ""
 
 #: gnucash/gnome/window-reconcile2.c:2126 gnucash/gnome/window-reconcile.c:2373
 msgid "_Reconcile"
-msgstr "_Abgleichen..."
+msgstr "_Abgleichen"
 
 #: gnucash/gnome/window-reconcile2.c:2127 gnucash/gnome/window-reconcile.c:2374
 #: gnucash/gtkbuilder/dialog-tax-table.glade:510
