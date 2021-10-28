@@ -43,7 +43,7 @@ typedef enum
     AUTOCLEAR_NOP,
 } autoclear_error_type;
 
-#define MAXIMUM_SACK_SIZE 1000000
+#define MAXIMUM_SACK_SIZE 2000000
 
 static inline GQuark
 autoclear_quark (void)
@@ -54,14 +54,13 @@ autoclear_quark (void)
 static gboolean
 numeric_equal (gnc_numeric *n1, gnc_numeric *n2)
 {
-    return gnc_numeric_equal (*n1, *n2);
+    return (n1->num == n2->num);
 }
 
 static guint
 numeric_hash (gnc_numeric *n1)
 {
-    gdouble d1 = gnc_numeric_to_double (*n1);
-    return g_double_hash (&d1);
+    return n1->num;
 }
 
 typedef struct
@@ -168,6 +167,8 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                 (toclear_value, xaccSplitGetAmount (split));
         else if (gnc_numeric_zero_p (xaccSplitGetAmount (split)))
             DEBUG ("skipping zero-amount split %p", split);
+        else if (gnc_numeric_check (xaccSplitGetAmount (split)))
+            DEBUG ("skipping invalid-amount split %p", split);
         else if (end_date != INT64_MAX &&
                  xaccTransGetDate (xaccSplitGetParent (split)) > end_date)
             DEBUG ("skipping split after statement_date %p", split);
@@ -200,11 +201,10 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         g_hash_table_foreach (sack, (GHFunc) sack_foreach_func, &s_data);
         g_list_foreach (s_data.worklist, (GFunc) process_work, sack);
         g_list_free (s_data.worklist);
-        nc_progress++;
         if (label)
         {
             gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
-                                           nc_progress, nc_list_length,
+                                           ++nc_progress, nc_list_length,
                                            g_hash_table_size (sack));
             status_update (label, text);
             g_free (text);
