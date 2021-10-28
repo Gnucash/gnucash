@@ -64,6 +64,16 @@
       <summary>Mark transaction split as unreconciled</summary>
       <description>This dialog is presented before allowing you to mark a transaction split as unreconciled. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
     </key>
+    <key name="reg-split-cut" type="i">
+      <default>0</default>
+      <summary>Cut a split from a transaction</summary>
+      <description>This dialog is presented before allowing you to cut a split from a transaction.</description>
+    </key>
+    <key name="reg-split-cut-recd" type="i">
+      <default>0</default>
+      <summary>Cut a reconciled split from a transaction</summary>
+      <description>This dialog is presented before allowing you to cut a reconciled split from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
     <key name="reg-split-del" type="i">
       <default>0</default>
       <summary>Remove a split from a transaction</summary>
@@ -83,6 +93,16 @@
       <default>0</default>
       <summary>Remove all the splits from a transaction</summary>
       <description>This dialog is presented before allowing you to remove all splits (including some reconciled splits) from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="reg-trans-cut" type="i">
+      <default>0</default>
+      <summary>Cut a transaction</summary>
+      <description>This dialog is presented before allowing you to cut a transaction.</description>
+    </key>
+    <key name="reg-trans-cut-recd" type="i">
+      <default>0</default>
+      <summary>Cut a transaction with reconciled splits</summary>
+      <description>This dialog is presented before allowing you to cut a transaction that contains reconciled splits. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
     </key>
     <key name="reg-trans-del" type="i">
       <default>0</default>
