@@ -103,19 +103,19 @@ sack_foreach_func (gnc_numeric *thisvalue, GList *splits, sack_data *data)
 
 static void dump_sack (gnc_numeric *thisvalue, GList *splits, sack_data *data)
 {
-    DEBUG ("%6.2f:", gnc_numeric_to_double (*thisvalue));
+    printf ("%6.2f:", gnc_numeric_to_double (*thisvalue));
     if (splits == DUP_LIST)
-        DEBUG (" DUPE");
+        printf (" DUPE");
     else
         for (GList *n = splits; n; n = n->next)
-            DEBUG (" [%5.2f]", gnc_numeric_to_double (xaccSplitGetAmount (n->data)));
-    DEBUG ("\n");
+            printf (" [%5.2f]", gnc_numeric_to_double (xaccSplitGetAmount (n->data)));
+    printf ("\n");
 }
 
 static void
 sack_free (gnc_numeric *thisvalue, GList *splits, sack_data *data)
 {
-    dump_sack (thisvalue, splits, data);
+    /* dump_sack (thisvalue, splits, data); */
     g_free (thisvalue);
     if (splits != DUP_LIST)
         g_list_free (splits);
