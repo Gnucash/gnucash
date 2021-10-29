@@ -72,7 +72,7 @@ typedef struct
 
 typedef struct
 {
-    gnc_numeric reachable_amount;
+    gnc_numeric *reachable_amount;
     GList *list_of_splits;
 } WorkItem;
 
@@ -83,7 +83,9 @@ make_workitem (GHashTable *hash, gnc_numeric amount,
                Split *split, GList *splits)
 {
     WorkItem *item = g_new0 (WorkItem, 1);
-    item->reachable_amount = amount;
+    item->reachable_amount = g_new (gnc_numeric, 1);
+    item->reachable_amount->num = amount.num;
+    item->reachable_amount->denom = amount.denom;
     if (g_hash_table_lookup (hash, &amount) || splits == DUP_LIST)
         item->list_of_splits = DUP_LIST;
     else
@@ -124,14 +126,15 @@ sack_free (gnc_numeric *thisvalue, GList *splits, sack_data *data)
 static void
 process_work (WorkItem *item, GHashTable *sack)
 {
-    GList *existing = g_hash_table_lookup (sack, &item->reachable_amount);
+    GList *existing = g_hash_table_lookup (sack, item->reachable_amount);
+    g_hash_table_insert (sack, item->reachable_amount, item->list_of_splits);
     if (existing && existing != DUP_LIST)
     {
         DEBUG ("removing existing for %6.2f\n",
-               gnc_numeric_to_double (item->reachable_amount));
+               gnc_numeric_to_double (*(item->reachable_amount)));
+        g_free (item->reachable_amount);
         g_list_free (existing);
     }
-    g_hash_table_insert (sack, &item->reachable_amount, item->list_of_splits);
 }
 
 static void status_update (GtkLabel *label, gchar *status)
@@ -200,7 +203,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         g_hash_table_foreach (sack, (GHFunc) sack_foreach_func, &s_data);
         g_list_foreach (s_data.worklist, (GFunc) process_work, sack);
-        g_list_free (s_data.worklist);
+        g_list_free_full (s_data.worklist, g_free);
         if (label)
         {
             gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
