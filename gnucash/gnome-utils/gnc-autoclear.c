@@ -33,6 +33,14 @@
 
 /* the following functions are used in window-autoclear: */
 
+typedef enum
+{
+    AUTOCLEAR_OVERLOAD = 1,
+    AUTOCLEAR_UNABLE,
+    AUTOCLEAR_MULTIPLE,
+    AUTOCLEAR_NOP,
+} autoclear_error_type;
+
 #define MAXIMUM_SACK_SIZE 1000000
 
 static gboolean
@@ -67,16 +75,18 @@ static void sack_foreach_func(gpointer key, gpointer value, gpointer user_data)
     data->reachable_list = g_list_prepend(data->reachable_list, new_value);
 }
 
-GList *
-gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
-                                  gchar **errmsg)
+gboolean
+gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
+                          time64 end_date,
+                          GList **splits, GError **error, GtkLabel *label)
 {
     GList *nc_list = NULL, *toclear_list = NULL;
     GHashTable *sack;
-    gchar *msg = NULL;
+    gboolean success = FALSE;
+    GQuark autoclear_quark = g_quark_from_static_string ("autoclear");
     guint sack_size = 0;
 
-    g_return_val_if_fail (GNC_IS_ACCOUNT (account), NULL);
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
 
     sack = g_hash_table_new_full (ght_gnc_numeric_hash, ght_gnc_numeric_equal,
                                   g_free, NULL);
@@ -95,7 +105,8 @@ gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
 
     if (gnc_numeric_zero_p (toclear_value))
     {
-        msg = _("Account is already at Auto-Clear Balance.");
+        g_set_error (error, autoclear_quark, AUTOCLEAR_NOP,
+                     _("Account is already at Auto-Clear Balance."));
         goto skip_knapsack;
     }
 
@@ -141,7 +152,8 @@ gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
 
                 if (sack_size > MAXIMUM_SACK_SIZE)
                 {
-                    msg = _("Too many uncleared splits");
+                    g_set_error (error, autoclear_quark, AUTOCLEAR_OVERLOAD,
+                                 _("Too many uncleared splits"));
                     goto skip_knapsack;
                 }
             }
@@ -157,13 +169,15 @@ gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
         if (!g_hash_table_lookup_extended (sack, &toclear_value,
                                            NULL, (gpointer) &split))
         {
-            msg = _("The selected amount cannot be cleared.");
+            g_set_error (error, autoclear_quark, AUTOCLEAR_UNABLE,
+                         _("The selected amount cannot be cleared."));
             goto skip_knapsack;
         }
 
         if (!split)
         {
-            msg = _("Cannot uniquely clear splits. Found multiple possibilities.");
+            g_set_error (error, autoclear_quark, AUTOCLEAR_MULTIPLE,
+                         _("Cannot uniquely clear splits. Found multiple possibilities."));
             goto skip_knapsack;
         }
 
@@ -171,18 +185,40 @@ gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
         toclear_value = gnc_numeric_sub_fixed (toclear_value,
                                                xaccSplitGetAmount (split));
     }
+    success = TRUE;
 
  skip_knapsack:
     g_hash_table_destroy (sack);
     g_list_free (nc_list);
 
-    if (msg)
+    if (!success)
     {
-        *errmsg = g_strdup (msg);
         g_list_free (toclear_list);
+        toclear_list = NULL;
+    }
+
+    *splits = toclear_list;
+    return (toclear_list != NULL);
+}
+
+
+GList *
+gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
+                                  gchar **errmsg)
+{
+    GError *error = NULL;
+    GList *splits = NULL;
+
+    gnc_autoclear_get_splits (account, toclear_value,
+                              &splits, &error);
+
+    if (error)
+    {
+        *errmsg = g_strdup (error->message);
+        g_error_free (error);
         return NULL;
     }
 
     *errmsg = NULL;
-    return toclear_list;
+    return splits;
 }
