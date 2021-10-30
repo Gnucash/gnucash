@@ -68,6 +68,10 @@ typedef struct
     GList *worklist;
     GHashTable *sack;
     Split *split;
+    gint counter;
+    gint nc_progress;
+    gint nc_list_length;
+    GtkLabel *label;
 } sack_data;
 
 typedef struct
@@ -93,6 +97,30 @@ make_workitem (GHashTable *hash, gnc_numeric amount,
     return item;
 }
 
+static void status_update (GtkLabel *label, gchar *status)
+{
+    if (!label) return;
+    gtk_label_set_text (label, status);
+    while (gtk_events_pending ())
+        g_main_context_iteration (NULL,FALSE);
+}
+
+static void looping_update_status (sack_data *data)
+{
+    if (!data->label)
+        return;
+    data->counter++;
+    if (data->counter == 10000)
+    {
+        gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
+                                       data->nc_progress, data->nc_list_length,
+                                       g_hash_table_size (data->sack));
+        status_update (data->label, text);
+        g_free (text);
+        data->counter = 0;
+    }
+}
+
 static void
 sack_foreach_func (gnc_numeric *thisvalue, GList *splits, sack_data *data)
 {
@@ -101,6 +129,7 @@ sack_foreach_func (gnc_numeric *thisvalue, GList *splits, sack_data *data)
     WorkItem *item = make_workitem (data->sack, new_value, data->split, splits);
 
     data->worklist = g_list_prepend (data->worklist, item);
+    looping_update_status (data);
 }
 
 static void dump_sack (gnc_numeric *thisvalue, GList *splits, sack_data *data)
@@ -124,10 +153,10 @@ sack_free (gnc_numeric *thisvalue, GList *splits, sack_data *data)
 }
 
 static void
-process_work (WorkItem *item, GHashTable *sack)
+process_work (WorkItem *item, sack_data *data)
 {
-    GList *existing = g_hash_table_lookup (sack, item->reachable_amount);
-    g_hash_table_insert (sack, item->reachable_amount, item->list_of_splits);
+    GList *existing = g_hash_table_lookup (data->sack, item->reachable_amount);
+    g_hash_table_insert (data->sack, item->reachable_amount, item->list_of_splits);
     if (existing && existing != DUP_LIST)
     {
         DEBUG ("removing existing for %6.2f\n",
@@ -135,14 +164,7 @@ process_work (WorkItem *item, GHashTable *sack)
         g_free (item->reachable_amount);
         g_list_free (existing);
     }
-}
-
-static void status_update (GtkLabel *label, gchar *status)
-{
-    if (!label) return;
-    gtk_label_set_text (label, status);
-    while (gtk_events_pending ())
-        g_main_context_iteration (NULL,FALSE);
+    looping_update_status (data);
 }
 
 gboolean
@@ -199,19 +221,13 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     {
         Split *split = (Split *)node->data;
         WorkItem *item = make_workitem (sack, xaccSplitGetAmount (split), split, NULL);
-        sack_data s_data = { g_list_prepend (NULL, item), sack, split };
+        sack_data s_data = { g_list_prepend (NULL, item), sack, split, 0, nc_progress,
+            nc_list_length, label };
 
         g_hash_table_foreach (sack, (GHFunc) sack_foreach_func, &s_data);
-        g_list_foreach (s_data.worklist, (GFunc) process_work, sack);
+        g_list_foreach (s_data.worklist, (GFunc) process_work, &s_data);
         g_list_free_full (s_data.worklist, g_free);
-        if (label)
-        {
-            gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
-                                           ++nc_progress, nc_list_length,
-                                           g_hash_table_size (sack));
-            status_update (label, text);
-            g_free (text);
-        }
+        nc_progress++;
         if (g_hash_table_size (sack) > MAXIMUM_SACK_SIZE)
         {
             g_set_error (error, autoclear_quark (), AUTOCLEAR_OVERLOAD,
