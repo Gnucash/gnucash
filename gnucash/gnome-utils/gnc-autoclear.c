@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#include "inttypes.h"
 #include "Account.h"
 #include "Split.h"
 #include "Transaction.h"
@@ -55,18 +56,6 @@ autoclear_quark (void)
     return g_quark_from_static_string ("autoclear");
 }
 
-static gboolean
-numeric_equal (gnc_numeric *n1, gnc_numeric *n2)
-{
-    return (n1->num == n2->num);
-}
-
-static guint
-numeric_hash (gnc_numeric *n1)
-{
-    return n1->num;
-}
-
 typedef struct
 {
     GList *worklist;
@@ -80,21 +69,19 @@ typedef struct
 
 typedef struct
 {
-    gnc_numeric *reachable_amount;
+    gint64 reachable_amount;
     GList *list_of_splits;
 } WorkItem;
 
 static GList *DUP_LIST;
 
 static WorkItem *
-make_workitem (GHashTable *hash, gnc_numeric amount,
+make_workitem (GHashTable *hash, gint64 amount,
                Split *split, GList *splits)
 {
-    WorkItem *item = g_new0 (WorkItem, 1);
-    item->reachable_amount = g_new (gnc_numeric, 1);
-    item->reachable_amount->num = amount.num;
-    item->reachable_amount->denom = amount.denom;
-    if (g_hash_table_lookup (hash, &amount) || splits == DUP_LIST)
+    WorkItem *item = g_new (WorkItem, 1);
+    item->reachable_amount = amount;
+    if (splits == DUP_LIST || g_hash_table_lookup (hash, (gpointer)amount))
         item->list_of_splits = DUP_LIST;
     else
         item->list_of_splits = g_list_prepend (g_list_copy (splits), split);
@@ -109,38 +96,40 @@ static void status_update (GtkLabel *label, gchar *status)
         g_main_context_iteration (NULL,FALSE);
 }
 
+static clock_t next_update_tick;
+
 static void looping_update_status (sack_data *data)
 {
-    static clock_t last_clock_update = INT64_MAX;
+    clock_t now;
     if (!data->label)
         return;
-    if (G_UNLIKELY (last_clock_update == INT64_MAX))
-        last_clock_update = clock ();
-    if (G_UNLIKELY ((clock () - last_clock_update) > MAX_UPDATE_TICKS))
+    now = clock ();
+    if (G_UNLIKELY (now > next_update_tick))
     {
         gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
                                        data->nc_progress, data->nc_list_length,
                                        g_hash_table_size (data->sack));
         status_update (data->label, text);
         g_free (text);
-        last_clock_update = clock ();
+        next_update_tick = now + MAX_UPDATE_TICKS;
     }
 }
 
 static void
-sack_foreach_func (gnc_numeric *thisvalue, GList *splits, sack_data *data)
+sack_foreach_func (gint64 thisvalue, GList *splits, sack_data *data)
 {
-    gnc_numeric itemval = xaccSplitGetAmount (data->split);
-    gnc_numeric new_value = gnc_numeric_add_fixed (*thisvalue, itemval);
+    gnc_numeric numeric = xaccSplitGetAmount (data->split);
+    gint64 itemval = numeric.num;
+    gint64 new_value = thisvalue + itemval;
     WorkItem *item = make_workitem (data->sack, new_value, data->split, splits);
 
     data->worklist = g_list_prepend (data->worklist, item);
     looping_update_status (data);
 }
 
-static void dump_sack (gnc_numeric *thisvalue, GList *splits, sack_data *data)
+static void dump_sack (gint64 thisvalue, GList *splits, sack_data *data)
 {
-    DEBUG ("%6.2f:", gnc_numeric_to_double (*thisvalue));
+    DEBUG ("%" PRId64, thisvalue);
     if (splits == DUP_LIST)
         DEBUG (" DUPE");
     else
@@ -150,9 +139,8 @@ static void dump_sack (gnc_numeric *thisvalue, GList *splits, sack_data *data)
 }
 
 static void
-sack_free (gnc_numeric *thisvalue, GList *splits, gpointer user_data)
+sack_free (gint64 thisvalue, GList *splits, gpointer user_data)
 {
-    g_free (thisvalue);
     if (splits != DUP_LIST)
         g_list_free (splits);
 }
@@ -160,14 +148,14 @@ sack_free (gnc_numeric *thisvalue, GList *splits, gpointer user_data)
 static void
 process_work (WorkItem *item, sack_data *data)
 {
-    GList *existing = g_hash_table_lookup (data->sack, item->reachable_amount);
-    g_hash_table_insert (data->sack, item->reachable_amount, item->list_of_splits);
+    GList *existing = g_hash_table_lookup (data->sack,
+                                           (gpointer)item->reachable_amount);
+    g_hash_table_insert (data->sack, (gpointer)item->reachable_amount,
+                         item->list_of_splits);
     if (existing)
     {
         if (G_UNLIKELY (data->debugging_enabled))
-            DEBUG ("removing existing for %6.2f\n",
-                   gnc_numeric_to_double (*(item->reachable_amount)));
-        g_free (item->reachable_amount);
+            DEBUG ("removing existing for %" PRId64 "\n", item->reachable_amount);
         if (existing != DUP_LIST)
             g_list_free (existing);
     }
@@ -188,7 +176,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
     g_return_val_if_fail (splits != NULL, FALSE);
 
-    sack = g_hash_table_new ((GHashFunc) numeric_hash, (GEqualFunc) numeric_equal);
+    sack = g_hash_table_new ((GHashFunc) g_direct_hash, (GEqualFunc) g_direct_equal);
     DUP_LIST = g_list_prepend (NULL, NULL);
 
     /* Extract which splits are not cleared and compute the amount we have to clear */
@@ -226,11 +214,12 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         goto skip_knapsack;
     }
 
-    start_ticks = clock ();
+    start_ticks = next_update_tick = clock ();
     for (GList *node = nc_list; node; node = node->next)
     {
         Split *split = (Split *)node->data;
-        WorkItem *item = make_workitem (sack, xaccSplitGetAmount (split), split, NULL);
+        gnc_numeric amount = xaccSplitGetAmount (split);
+        WorkItem *item = make_workitem (sack, amount.num, split, NULL);
         sack_data s_data = { g_list_prepend (NULL, item), sack, split,
             debugging_enabled, nc_progress, nc_list_length, label };
 
@@ -244,7 +233,8 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                          _("Too many uncleared splits"));
             goto skip_knapsack;
         }
-        else if (G_UNLIKELY (g_hash_table_lookup (sack, &toclear_value) == DUP_LIST))
+        else if (G_UNLIKELY (g_hash_table_lookup (sack, (gpointer)toclear_value.num)
+                             == DUP_LIST))
         {
             g_set_error (error, autoclear_quark (), AUTOCLEAR_MULTIPLE,
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
@@ -254,7 +244,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
     status_update (label, "Cleaning up...");
 
-    toclear_list = g_hash_table_lookup (sack, &toclear_value);
+    toclear_list = g_hash_table_lookup (sack, (gpointer)toclear_value.num);
 
     /* Check solution */
     if (!toclear_list)
