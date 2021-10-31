@@ -34,6 +34,8 @@
 #include "qof.h"
 #include "gnc-autoclear.h"
 
+static QofLogModule log_module = GNC_MOD_GUI;
+
 /* the following functions are used in window-autoclear: */
 
 typedef enum
@@ -62,8 +64,8 @@ typedef struct
     GHashTable *sack;
     Split *split;
     gboolean debugging_enabled;
-    gint nc_progress;
-    gint nc_list_length;
+    guint nc_progress;
+    guint nc_list_length;
     GtkLabel *label;
 } sack_data;
 
@@ -134,7 +136,7 @@ static void dump_sack (gint64 thisvalue, GList *splits, sack_data *data)
         DEBUG (" DUPE");
     else
         for (GList *n = splits; n; n = n->next)
-            DEBUG (" [%5.2f]", gnc_numeric_to_double (xaccSplitGetAmount (n->data)));
+            DEBUG (" [%5.2f]", gnc_numeric_to_double (xaccSplitGetAmount ((Split*)n->data)));
     DEBUG ("\n");
 }
 
@@ -148,8 +150,8 @@ sack_free (gint64 thisvalue, GList *splits, gpointer user_data)
 static void
 process_work (WorkItem *item, sack_data *data)
 {
-    GList *existing = g_hash_table_lookup (data->sack,
-                                           (gpointer)item->reachable_amount);
+    GList *existing = (GList *)g_hash_table_lookup (data->sack,
+                                                    (gpointer)item->reachable_amount);
     g_hash_table_insert (data->sack, (gpointer)item->reachable_amount,
                          item->list_of_splits);
     if (existing)
@@ -228,7 +230,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         g_array_append_val (workarray, item);
         g_hash_table_foreach (sack, (GHFunc) sack_foreach_func, &s_data);
-        for (int i = 0; i < work_size; i++)
+        for (int i = 0; i < (int)work_size; i++)
         {
             WorkItem *a_item = g_array_index (workarray, WorkItem*, i);
             process_work (a_item, &s_data);
@@ -251,9 +253,9 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         }
     }
 
-    status_update (label, "Cleaning up...");
+    status_update (label, _("Cleaning up..."));
 
-    toclear_list = g_hash_table_lookup (sack, (gpointer)toclear_value.num);
+    toclear_list = (GList *)g_hash_table_lookup (sack, (gpointer)toclear_value.num);
 
     /* Check solution */
     if (!toclear_list)

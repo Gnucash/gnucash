@@ -24,14 +24,15 @@
 #ifndef GNC_AUTOCLEAR_H
 #define GNC_AUTOCLEAR_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <glib.h>
 #include <stdint.h>
 #include <gtk/gtk.h>
 #include <Account.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /** Account splits are analysed; attempts to find a unique combination
  *  of uncleared splits which would set cleared balance to
@@ -47,5 +48,9 @@ GList * gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_
 gboolean gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                                    time64 end_date,
                                    GList **splits, GError **error, GtkLabel *label);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
