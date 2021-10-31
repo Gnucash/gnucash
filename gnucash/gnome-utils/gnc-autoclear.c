@@ -58,7 +58,7 @@ autoclear_quark (void)
 
 typedef struct
 {
-    GList *worklist;
+    GArray *workarray;
     GHashTable *sack;
     Split *split;
     gboolean debugging_enabled;
@@ -123,7 +123,7 @@ sack_foreach_func (gint64 thisvalue, GList *splits, sack_data *data)
     gint64 new_value = thisvalue + itemval;
     WorkItem *item = make_workitem (data->sack, new_value, data->split, splits);
 
-    data->worklist = g_list_prepend (data->worklist, item);
+    g_array_append_val (data->workarray, item);
     looping_update_status (data);
 }
 
@@ -220,12 +220,21 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         Split *split = (Split *)node->data;
         gnc_numeric amount = xaccSplitGetAmount (split);
         WorkItem *item = make_workitem (sack, amount.num, split, NULL);
-        sack_data s_data = { g_list_prepend (NULL, item), sack, split,
+        size_t work_size = g_hash_table_size (sack) + 1;
+        GArray *workarray = g_array_sized_new
+            (FALSE, FALSE, sizeof (WorkItem *), work_size);
+        sack_data s_data = { workarray, sack, split,
             debugging_enabled, nc_progress, nc_list_length, label };
 
+        g_array_append_val (workarray, item);
         g_hash_table_foreach (sack, (GHFunc) sack_foreach_func, &s_data);
-        g_list_foreach (s_data.worklist, (GFunc) process_work, &s_data);
-        g_list_free_full (s_data.worklist, g_free);
+        for (int i = 0; i < work_size; i++)
+        {
+            WorkItem *a_item = g_array_index (workarray, WorkItem*, i);
+            process_work (a_item, &s_data);
+            g_free (a_item);
+        }
+        g_array_free (workarray, TRUE);
         nc_progress++;
         if (G_UNLIKELY ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS))
         {
