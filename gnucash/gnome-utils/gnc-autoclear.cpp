@@ -72,7 +72,7 @@ struct sack_data
     Split *split;
     gboolean debugging_enabled;
     guint nc_progress;
-    guint nc_list_length;
+    size_t nc_size;
     GtkLabel *label;
 };
 
@@ -109,8 +109,8 @@ static void looping_update_status (sack_data *data)
     now = clock ();
     if (G_UNLIKELY (now > next_update_tick))
     {
-        gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
-                                       data->nc_progress, data->nc_list_length,
+        gchar *text = g_strdup_printf ("%u/%lu splits processed, %u combos",
+                                       data->nc_progress, data->nc_size,
                                        g_hash_table_size (data->sack));
         status_update (data->label, text);
         g_free (text);
@@ -170,9 +170,10 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
                           GList **splits, GError **error, GtkLabel *label)
 {
-    GList *nc_list = NULL, *toclear_list = NULL;
+    GList *toclear_list = NULL;
+    std::vector<Split*> nc_vector;
     GHashTable *sack;
-    guint nc_progress = 0, nc_list_length = 0;
+    guint nc_progress = 0;
     clock_t start_ticks;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
 
@@ -198,10 +199,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                  xaccTransGetDate (xaccSplitGetParent (split)) > end_date)
             DEBUG ("skipping split after statement_date %p", split);
         else
-        {
-            nc_list = g_list_prepend (nc_list, split);
-            nc_list_length++;
-        }
+            nc_vector.emplace_back (split);
     }
 
     if (gnc_numeric_zero_p (toclear_value))
@@ -210,7 +208,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                      _("Account is already at Auto-Clear Balance."));
         goto skip_knapsack;
     }
-    else if (!nc_list)
+    else if (nc_vector.empty ())
     {
         g_set_error (error, autoclear_quark (), AUTOCLEAR_NOP,
                      _("No uncleared splits found."));
@@ -218,16 +216,14 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     }
 
     start_ticks = next_update_tick = clock ();
-    for (GList *node = nc_list; node; node = node->next)
+    for (auto& split : nc_vector)
     {
-        Split *split = (Split *)node->data;
         gnc_numeric amount = xaccSplitGetAmount (split);
         WorkItem *item = make_workitem (sack, amount.num, split, NULL);
-        size_t work_size = g_hash_table_size (sack) + 1;
         sack_data s_data = { {}, sack, split,
-            debugging_enabled, nc_progress, nc_list_length, label };
+            debugging_enabled, nc_progress, nc_vector.size (), label };
 
-        s_data.workvector.reserve (work_size);
+        s_data.workvector.reserve (g_hash_table_size (sack) + 1);
         s_data.workvector.emplace_back (item);
         g_hash_table_foreach (sack, (GHFunc) sack_foreach_func, &s_data);
 
@@ -270,7 +266,6 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
  skip_knapsack:
     g_hash_table_foreach (sack, (GHFunc) sack_free, NULL);
     g_hash_table_destroy (sack);
-    g_list_free (nc_list);
     g_list_free (DUP_LIST);
 
     status_update (label, NULL);
