@@ -25,6 +25,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <vector>
 
 #include "inttypes.h"
 #include "Account.h"
@@ -58,22 +59,22 @@ autoclear_quark (void)
     return g_quark_from_static_string ("autoclear");
 }
 
-typedef struct
+struct WorkItem
 {
-    GArray *workarray;
+    gint64 reachable_amount;
+    GList *list_of_splits;
+};
+
+struct sack_data
+{
+    std::vector<WorkItem*> workvector;
     GHashTable *sack;
     Split *split;
     gboolean debugging_enabled;
     guint nc_progress;
     guint nc_list_length;
     GtkLabel *label;
-} sack_data;
-
-typedef struct
-{
-    gint64 reachable_amount;
-    GList *list_of_splits;
-} WorkItem;
+};
 
 static GList *DUP_LIST;
 
@@ -125,7 +126,7 @@ sack_foreach_func (gint64 thisvalue, GList *splits, sack_data *data)
     gint64 new_value = thisvalue + itemval;
     WorkItem *item = make_workitem (data->sack, new_value, data->split, splits);
 
-    g_array_append_val (data->workarray, item);
+    data->workvector.emplace_back (item);
     looping_update_status (data);
 }
 
@@ -223,20 +224,18 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         gnc_numeric amount = xaccSplitGetAmount (split);
         WorkItem *item = make_workitem (sack, amount.num, split, NULL);
         size_t work_size = g_hash_table_size (sack) + 1;
-        GArray *workarray = g_array_sized_new
-            (FALSE, FALSE, sizeof (WorkItem *), work_size);
-        sack_data s_data = { workarray, sack, split,
+        sack_data s_data = { {}, sack, split,
             debugging_enabled, nc_progress, nc_list_length, label };
 
-        g_array_append_val (workarray, item);
+        s_data.workvector.reserve (work_size);
+        s_data.workvector.emplace_back (item);
         g_hash_table_foreach (sack, (GHFunc) sack_foreach_func, &s_data);
-        for (int i = 0; i < (int)work_size; i++)
+
+        for (auto& i : s_data.workvector)
         {
-            WorkItem *a_item = g_array_index (workarray, WorkItem*, i);
-            process_work (a_item, &s_data);
-            g_free (a_item);
+            process_work (i, &s_data);
+            g_free (i);
         }
-        g_array_free (workarray, TRUE);
         nc_progress++;
         if (G_UNLIKELY ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS))
         {
