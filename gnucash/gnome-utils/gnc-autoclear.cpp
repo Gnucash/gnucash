@@ -64,21 +64,11 @@ struct WorkItem
 {
     gint64 reachable_amount;
     GList *list_of_splits;
+    WorkItem (const gint64 amount, GList *splits)
+        : reachable_amount (amount), list_of_splits(splits){}
 };
 
 static GList *DUP_LIST;
-
-static WorkItem *
-make_workitem (bool dupe, gint64 amount, Split *split, GList *splits)
-{
-    WorkItem *item = g_new (WorkItem, 1);
-    item->reachable_amount = amount;
-    if (dupe)
-        item->list_of_splits = DUP_LIST;
-    else
-        item->list_of_splits = g_list_prepend (g_list_copy (splits), split);
-    return item;
-}
 
 static void status_update (GtkLabel *label, gchar *status)
 {
@@ -162,37 +152,37 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     {
         gnc_numeric amount = xaccSplitGetAmount (split);
         gint64 amountnum = amount.num;
-        WorkItem *item = make_workitem (sack.find (amountnum) != sack.end (),
-                                        amountnum, split, NULL);
-        std::vector<WorkItem*> workvector = {};
+        std::vector<WorkItem> workvector = {};
 
         workvector.reserve (sack.size () + 1);
-        workvector.emplace_back (item);
+        workvector.emplace_back (amountnum,
+                                 sack.find (amountnum) != sack.end () ?
+                                 DUP_LIST : g_list_prepend (nullptr, split));
         // printf ("new split. sack size = %ld\n", sack.size());
 
         for (auto& [thisvalue, splits] : sack)
         {
             gint64 new_value = thisvalue + amountnum;
-            WorkItem *item = make_workitem (splits == DUP_LIST ||
-                                            sack.find (new_value) != sack.end (),
-                                            new_value, split, splits);
-            workvector.emplace_back (item);
+            workvector.emplace_back
+                (new_value,
+                 (splits == DUP_LIST || sack.find (new_value) != sack.end ())
+                 ? DUP_LIST
+                 : g_list_prepend (g_list_copy (splits), split));
             looping_update_status (label, nc_progress, nc_vector.size (),
                                    sack.size ());
         }
 
         for (auto& item : workvector)
         {
-            auto existing = sack.find (item->reachable_amount);
+            auto existing = sack.find (item.reachable_amount);
             if (existing != sack.end())
             {
                 if (debugging_enabled)
-                    DEBUG ("removing existing for %" PRId64 "\n", item->reachable_amount);
+                    DEBUG ("removing existing for %" PRId64 "\n", item.reachable_amount);
                 if (existing->second != DUP_LIST)
                     g_list_free (existing->second);
             }
-            sack[item->reachable_amount] = item->list_of_splits;
-            g_free (item);
+            sack[item.reachable_amount] = item.list_of_splits;
         }
         nc_progress++;
         if (G_UNLIKELY ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS))
