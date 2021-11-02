@@ -65,6 +65,7 @@
 #include "gnc-state.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include <gnc-glib-utils.h>
 #include "gnc-uri-utils.h"
 #include "gnc-version.h"
 #include "gnc-warnings.h"
@@ -1446,7 +1447,7 @@ gnc_main_window_delete_event (GtkWidget *window,
     if (already_dead)
         return TRUE;
 
-    if (active_windows && active_windows->next)
+    if (gnc_list_length_cmp (active_windows, 1) > 0)
     {
         gint response;
         GtkWidget *dialog;
@@ -1478,7 +1479,7 @@ gnc_main_window_delete_event (GtkWidget *window,
         return TRUE;
     }
 
-    if (active_windows && active_windows->next)
+    if (gnc_list_length_cmp (active_windows, 1) > 0)
         return FALSE;
 
     already_dead = gnc_main_window_quit(GNC_MAIN_WINDOW(window));
@@ -3348,7 +3349,7 @@ gnc_main_window_close_page (GncPluginPage *page)
             /* remove the preference callbacks from the main window */
             gnc_main_window_remove_prefs (window);
         }
-        if (window && active_windows && active_windows->next)
+        if (window && (gnc_list_length_cmp (active_windows, 1) > 0))
             gtk_widget_destroy (GTK_WIDGET(window));
     }
 }

@@ -37,6 +37,7 @@
 #include "gnc-ledger-display.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
+#include <gnc-glib-utils.h>
 #include "split-register-control.h"
 #include "split-register-model.h"
 
@@ -429,7 +430,7 @@ gnc_ledger_display_gl (void)
         tRoot = gnc_book_get_template_root (gnc_get_current_book());
         al = gnc_account_get_descendants (tRoot);
 
-        if (al != NULL)
+        if (gnc_list_length_cmp (al, 0))
             xaccQueryAddAccountMatch (query, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND);
 
         g_list_free (al);

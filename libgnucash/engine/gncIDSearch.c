@@ -22,6 +22,7 @@
 **********************************************************************/
 
 #include "gncIDSearch.h"
+#include <gnc-glib-utils.h>
 
 typedef enum
 {   UNDEFINED,
@@ -122,7 +123,7 @@ static void * search(QofBook * book, const gchar *id, void * object, GncSearchTy
     result = qof_query_run (q);
 
     // now compare _exactly_
-    if (result != NULL)
+    if (gnc_list_length_cmp (result, 0))
     {
         result = g_list_first (result);
 

@@ -351,3 +351,13 @@ gnc_g_list_stringjoin (GList *list_of_strings, const gchar *sep)
 
     return retval;
 }
+
+gint
+gnc_list_length_cmp (const GList *list, size_t len)
+{
+    for (GList *lst = (GList*) list;; lst = g_list_next (lst), len--)
+    {
+        if (!lst) return (len ? -1 : 0);
+        if (!len) return 1;
+    }
+}

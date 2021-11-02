@@ -32,6 +32,7 @@
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
+#include <gnc-glib-utils.h>
 #include "qof.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
@@ -1735,7 +1736,7 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
     /* If the txn has both APAR splits linked to a business lot and
      * splits that are not, issue a warning some will be discarded.
      */
-    if (has_no_lot_apar_splits && (txn_lots != NULL))
+    if (has_no_lot_apar_splits && gnc_list_length_cmp (txn_lots, 0))
     {
         GtkWidget *dialog;
         char *split_str = g_strdup ("");

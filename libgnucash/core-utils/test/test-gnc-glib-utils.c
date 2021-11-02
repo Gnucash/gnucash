@@ -110,6 +110,28 @@ test_g_list_stringjoin (gconstpointer data)
     g_list_free (test);
 }
 
+static void
+test_gnc_list_length (gconstpointer data)
+{
+    GList *lst = NULL;
+
+    g_assert (gnc_list_length_cmp (lst, 0) == 0);
+    g_assert (gnc_list_length_cmp (lst, 1) == -1);
+
+    lst = g_list_prepend (lst, (gpointer)1);
+    g_assert (gnc_list_length_cmp (lst, 0) == 1);
+    g_assert (gnc_list_length_cmp (lst, 1) == 0);
+    g_assert (gnc_list_length_cmp (lst, 2) == -1);
+
+    lst = g_list_prepend (lst, (gpointer)2);
+    g_assert (gnc_list_length_cmp (lst, 1) == 1);
+    g_assert (gnc_list_length_cmp (lst, 2) == 0);
+    g_assert (gnc_list_length_cmp (lst, 3) == -1);
+
+    g_list_free (lst);
+}
+
+
 int
 main (int argc, char *argv[])
 {
@@ -119,6 +141,7 @@ main (int argc, char *argv[])
     g_test_add_data_func ("/core-utils/gnc_utf8_strip_invalid_and_controls invalid utf8", (gconstpointer)invalid_utf8, test_gnc_utf8_strip_invalid_and_controls);
     g_test_add_data_func ("/core-utils/gnc_utf8_strip_invalid_and_controls control chars", (gconstpointer)controls, test_gnc_utf8_strip_invalid_and_controls);
     g_test_add_data_func ("/core-utils/gnc_g_list_stringjoin", NULL, test_g_list_stringjoin);
+    g_test_add_data_func ("/core-utils/gnc_list_length", NULL, test_gnc_list_length);
 
     return g_test_run();
 }

@@ -199,6 +199,20 @@ void gnc_scm_log_debug(const gchar *msg);
  **/
 gchar * gnc_g_list_stringjoin (GList *list_of_strings, const gchar *sep);
 
+/**
+ * @brief Scans the GList elements the minimum number of iterations
+ * required to test it against a specified size. Returns -1, 0 or 1
+ * depending on whether the GList length has less, same, or more
+ * elements than the size specified.
+ *
+ * @param lst A GList
+ *
+ * @param len the comparator length to compare the GList length with
+ *
+ * @return A signed int comparing GList length with specified size.
+ **/
+gint gnc_list_length_cmp (const GList *list, size_t len);
+
 /** Kill a process.  On UNIX send a SIGKILL, on Windows call TerminateProcess.
  *
  *  @param pid The process ID. */

@@ -756,7 +756,7 @@ gnc_plugin_page_sx_list_cmd_edit (GtkAction *action, GncPluginPageSxList *page)
 
     selection = gtk_tree_view_get_selection (priv->tree_view);
     selected_paths = gtk_tree_selection_get_selected_rows (selection, &model);
-    if (selected_paths == NULL)
+    if (!gnc_list_length_cmp (selected_paths, 0))
     {
         g_warning ("no selection edit.");
         return;
@@ -792,7 +792,7 @@ gnc_plugin_page_sx_list_cmd_edit2 (GtkAction *action, GncPluginPageSxList *page)
 
     selection = gtk_tree_view_get_selection (priv->tree_view);
     selected_paths = gtk_tree_selection_get_selected_rows (selection, &model);
-    if (selected_paths == NULL)
+    if (!gnc_list_length_cmp (selected_paths, 0))
     {
         g_warning ("no selection edit.");
         return;
@@ -853,7 +853,7 @@ gnc_plugin_page_sx_list_cmd_delete (GtkAction *action, GncPluginPageSxList *page
 
     selection = gtk_tree_view_get_selection (priv->tree_view);
     selected_paths = gtk_tree_selection_get_selected_rows (selection, &model);
-    if (selected_paths == NULL)
+    if (!gnc_list_length_cmp (selected_paths, 0))
     {
         g_warning ("no selection for delete.");
         return;
