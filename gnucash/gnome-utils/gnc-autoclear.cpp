@@ -75,7 +75,7 @@ static void status_update (GtkLabel *label, gchar *status)
     if (!label) return;
     gtk_label_set_text (label, status);
     while (gtk_events_pending ())
-        g_main_context_iteration (NULL,FALSE);
+        g_main_context_iteration (nullptr, FALSE);
 }
 
 static clock_t next_update_tick;
@@ -87,7 +87,7 @@ static void looping_update_status (GtkLabel *label, guint nc_progress,
     if (!label)
         return;
     now = clock ();
-    if (G_UNLIKELY (now > next_update_tick))
+    if (now > next_update_tick) [[unlikely]]
     {
         gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
                                        nc_progress, nc_size, size);
@@ -102,7 +102,6 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
                           GList **splits, GError **error, GtkLabel *label)
 {
-    GList *toclear_list = NULL;
     std::vector<Split*> nc_vector;
     std::unordered_map<gint64, std::vector<Split*>> sack;
     guint nc_progress = 0;
@@ -110,7 +109,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
 
     g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
-    g_return_val_if_fail (splits != NULL, FALSE);
+    g_return_val_if_fail (splits != nullptr, FALSE);
 
     DUP_VEC = { nullptr };
     *splits = nullptr;
@@ -118,7 +117,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     /* Extract which splits are not cleared and compute the amount we have to clear */
     for (GList *node = xaccAccountGetSplitList (account); node; node = node->next)
     {
-        Split *split = (Split *)node->data;
+        auto split = static_cast<Split*> (node->data);
 
         if (xaccSplitGetReconcile (split) != NREC)
             toclear_value = gnc_numeric_sub_fixed
@@ -148,33 +147,33 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     }
 
     start_ticks = next_update_tick = clock ();
+
     for (auto& split : nc_vector)
     {
-        gnc_numeric amount = xaccSplitGetAmount (split);
-        gint64 amountnum = amount.num;
+        auto amount = xaccSplitGetAmount (split);
         std::vector<WorkItem> workvector = {};
 
         workvector.reserve (sack.size () + 1);
-        if (sack.find (amountnum) != sack.end ())
-            workvector.emplace_back (amountnum, DUP_VEC);
+        if (sack.find (amount.num) != sack.end ())
+            workvector.emplace_back (amount.num, DUP_VEC);
         else
         {
-            std::vector<Split*> newvec = { split };
-            workvector.emplace_back (amountnum, newvec);
+            std::vector<Split*> new_splits = { split };
+            workvector.emplace_back (amount.num, new_splits);
         }
 
         // printf ("new split. sack size = %ld\n", sack.size());
 
-        for (auto& [thisvalue, thissplits] : sack)
+        for (auto& [map_value, map_splits] : sack)
         {
-            gint64 new_value = thisvalue + amountnum;
-            if (thissplits == DUP_VEC || sack.find (new_value) != sack.end ())
+            auto new_value = map_value + amount.num;
+            if (map_splits == DUP_VEC || sack.find (new_value) != sack.end ())
                 workvector.emplace_back (new_value, DUP_VEC);
             else
             {
-                auto newvec = thissplits;
-                newvec.emplace_back (split);
-                workvector.emplace_back (new_value, newvec);
+                auto new_splits = map_splits;
+                new_splits.emplace_back (split);
+                workvector.emplace_back (new_value, new_splits);
             }
             looping_update_status (label, nc_progress, nc_vector.size (),
                                    sack.size ());
@@ -184,7 +183,8 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
             sack[item.reachable_amount] = item.splits_vector;
 
         nc_progress++;
-        if (G_UNLIKELY ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS))
+
+        if ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS) [[unlikely]]
         {
             g_set_error (error, autoclear_quark (), AUTOCLEAR_OVERLOAD,
                          _("Too many uncleared splits"));
@@ -192,7 +192,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         }
 
         auto try_toclear = sack.find (toclear_value.num);
-        if (try_toclear != sack.end() && try_toclear->second == DUP_VEC)
+        if (try_toclear != sack.end() && try_toclear->second == DUP_VEC) [[unlikely]]
         {
             g_set_error (error, autoclear_quark (), AUTOCLEAR_MULTIPLE,
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
@@ -222,17 +222,14 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                      _("The selected amount cannot be cleared."));
         goto skip_knapsack;
     }
-    else
-        /* copy GList because std::unordered_map value will be freed */
-    {
-        *splits = nullptr;
-        for (auto& s : sack[toclear_value.num])
-            *splits = g_list_prepend (*splits, s);
-    }
+
+    /* copy GList because std::unordered_map value will be freed */
+    for (auto& s : sack[toclear_value.num])
+        *splits = g_list_prepend (*splits, s);
 
  skip_knapsack:
 
-    status_update (label, NULL);
+    status_update (label, nullptr);
 
     return (*splits != nullptr);
 }
@@ -242,19 +239,19 @@ GList *
 gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
                                   gchar **errmsg)
 {
-    GError *error = NULL;
-    GList *splits = NULL;
+    GError *error = nullptr;
+    GList *splits = nullptr;
 
     gnc_autoclear_get_splits (account, toclear_value, INT64_MAX,
-                              &splits, &error, NULL);
+                              &splits, &error, nullptr);
 
     if (error)
     {
         *errmsg = g_strdup (error->message);
         g_error_free (error);
-        return NULL;
+        return nullptr;
     }
 
-    *errmsg = NULL;
+    *errmsg = nullptr;
     return splits;
 }
