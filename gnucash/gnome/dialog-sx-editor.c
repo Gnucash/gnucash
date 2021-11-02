@@ -63,6 +63,7 @@
 #include "gnc-ui-util.h"
 #include "gnucash-sheet.h"
 #include "gnc-session.h"
+#include <gnc-glib-utils.h>
 
 #include "gnc-split-reg.h"
 
@@ -579,7 +580,7 @@ gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
 
     g_date_clear (&nextDate, 1);
     gnc_frequency_save_to_recurrence (sxed->gncfreq, &schedule, &startDate);
-    if (schedule != NULL)
+    if (gnc_list_length_cmp (schedule, 0))
     {
         g_date_subtract_days (&startDate, 1);
         recurrenceListNextInstance (schedule, &startDate, &nextDate);
@@ -1766,7 +1767,7 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
     book = qof_instance_get_book (QOF_INSTANCE (acct));
     affected_sxes = gnc_sx_get_sxes_referencing_account (book, acct);
 
-    if (affected_sxes == NULL)
+    if (!gnc_list_length_cmp (affected_sxes, 0))
         return;
 
     {

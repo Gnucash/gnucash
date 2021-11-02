@@ -50,6 +50,7 @@
 #include "gncOwner.h"
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
+#include <gnc-glib-utils.h>
 
 #include "gncEntryLedger.h"
 
@@ -3237,7 +3238,7 @@ multi_post_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_dat
     gboolean test;
     InvoiceWindow *iw;
 
-    if (invoice_list == NULL)
+    if (!gnc_list_length_cmp (invoice_list, 0))
         return;
     // Get the posting parameters for these invoices
     iw = gnc_ui_invoice_edit(dialog, invoice_list->data);
@@ -3287,7 +3288,7 @@ multi_print_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_da
 {
     struct multi_edit_invoice_data meid;
 
-    if (invoice_list == NULL)
+    if (!gnc_list_length_cmp (invoice_list, 0))
         return;
 
     meid.user_data = user_data;

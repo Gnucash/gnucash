@@ -31,8 +31,7 @@
 #include "gnc-date.h"
 #include "Account.h"
 #include <stdint.h>
-#include <stdint.h>
-#include <stdint.h>
+#include <gnc-glib-utils.h>
 
 #define LOG_MOD "gnc.engine.recurrence"
 static QofLogModule log_module = LOG_MOD;
@@ -556,7 +555,7 @@ recurrenceWeekendAdjustFromString(const gchar *str)
 gboolean
 recurrenceListIsSemiMonthly(GList *recurrences)
 {
-    if (!(recurrences && recurrences->next && !recurrences->next->next))
+    if (gnc_list_length_cmp (recurrences, 2))
         return FALSE;
 
     // should be a "semi-monthly":
