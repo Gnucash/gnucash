@@ -63,12 +63,12 @@ autoclear_quark (void)
 struct WorkItem
 {
     gint64 reachable_amount;
-    GList *list_of_splits;
-    WorkItem (const gint64 amount, GList *splits)
-        : reachable_amount (amount), list_of_splits(splits){}
+    std::vector<Split*> splits_vector;
+    WorkItem (const gint64 amount, std::vector<Split*> splits)
+        : reachable_amount (amount), splits_vector(splits){}
 };
 
-static GList *DUP_LIST;
+static std::vector<Split*> DUP_VEC;
 
 static void status_update (GtkLabel *label, gchar *status)
 {
@@ -104,7 +104,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 {
     GList *toclear_list = NULL;
     std::vector<Split*> nc_vector;
-    std::unordered_map<gint64, GList*> sack;
+    std::unordered_map<gint64, std::vector<Split*>> sack;
     guint nc_progress = 0;
     clock_t start_ticks;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
@@ -112,7 +112,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
     g_return_val_if_fail (splits != NULL, FALSE);
 
-    DUP_LIST = g_list_prepend (NULL, NULL);
+    DUP_VEC = { nullptr };
     *splits = nullptr;
 
     /* Extract which splits are not cleared and compute the amount we have to clear */
@@ -155,35 +155,34 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         std::vector<WorkItem> workvector = {};
 
         workvector.reserve (sack.size () + 1);
-        workvector.emplace_back (amountnum,
-                                 sack.find (amountnum) != sack.end () ?
-                                 DUP_LIST : g_list_prepend (nullptr, split));
+        if (sack.find (amountnum) != sack.end ())
+            workvector.emplace_back (amountnum, DUP_VEC);
+        else
+        {
+            std::vector<Split*> newvec = { split };
+            workvector.emplace_back (amountnum, newvec);
+        }
+
         // printf ("new split. sack size = %ld\n", sack.size());
 
-        for (auto& [thisvalue, splits] : sack)
+        for (auto& [thisvalue, thissplits] : sack)
         {
             gint64 new_value = thisvalue + amountnum;
-            workvector.emplace_back
-                (new_value,
-                 (splits == DUP_LIST || sack.find (new_value) != sack.end ())
-                 ? DUP_LIST
-                 : g_list_prepend (g_list_copy (splits), split));
+            if (thissplits == DUP_VEC || sack.find (new_value) != sack.end ())
+                workvector.emplace_back (new_value, DUP_VEC);
+            else
+            {
+                auto newvec = thissplits;
+                newvec.emplace_back (split);
+                workvector.emplace_back (new_value, newvec);
+            }
             looping_update_status (label, nc_progress, nc_vector.size (),
                                    sack.size ());
         }
 
         for (auto& item : workvector)
-        {
-            auto existing = sack.find (item.reachable_amount);
-            if (existing != sack.end())
-            {
-                if (debugging_enabled)
-                    DEBUG ("removing existing for %" PRId64 "\n", item.reachable_amount);
-                if (existing->second != DUP_LIST)
-                    g_list_free (existing->second);
-            }
-            sack[item.reachable_amount] = item.list_of_splits;
-        }
+            sack[item.reachable_amount] = item.splits_vector;
+
         nc_progress++;
         if (G_UNLIKELY ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS))
         {
@@ -193,7 +192,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         }
 
         auto try_toclear = sack.find (toclear_value.num);
-        if (try_toclear != sack.end() && try_toclear->second == DUP_LIST)
+        if (try_toclear != sack.end() && try_toclear->second == DUP_VEC)
         {
             g_set_error (error, autoclear_quark (), AUTOCLEAR_MULTIPLE,
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
@@ -225,18 +224,17 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     }
     else
         /* copy GList because std::unordered_map value will be freed */
-        *splits = g_list_copy (sack[toclear_value.num]);
+    {
+        *splits = nullptr;
+        for (auto& s : sack[toclear_value.num])
+            *splits = g_list_prepend (*splits, s);
+    }
 
  skip_knapsack:
 
-    for (const auto& [thisvalue, thissplits] : sack)
-        if (thissplits != DUP_LIST)
-            g_list_free (thissplits);
-    g_list_free (DUP_LIST);
-
     status_update (label, NULL);
 
-    return (*splits != NULL);
+    return (*splits != nullptr);
 }
 
 
