@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <vector>
+#include <unordered_map>
 
 #include "inttypes.h"
 #include "Account.h"
@@ -65,26 +66,14 @@ struct WorkItem
     GList *list_of_splits;
 };
 
-struct sack_data
-{
-    std::vector<WorkItem*> workvector;
-    GHashTable *sack;
-    Split *split;
-    gboolean debugging_enabled;
-    guint nc_progress;
-    size_t nc_size;
-    GtkLabel *label;
-};
-
 static GList *DUP_LIST;
 
 static WorkItem *
-make_workitem (GHashTable *hash, gint64 amount,
-               Split *split, GList *splits)
+make_workitem (bool dupe, gint64 amount, Split *split, GList *splits)
 {
     WorkItem *item = g_new (WorkItem, 1);
     item->reachable_amount = amount;
-    if (splits == DUP_LIST || g_hash_table_lookup (hash, (gpointer)amount))
+    if (dupe)
         item->list_of_splits = DUP_LIST;
     else
         item->list_of_splits = g_list_prepend (g_list_copy (splits), split);
@@ -101,68 +90,21 @@ static void status_update (GtkLabel *label, gchar *status)
 
 static clock_t next_update_tick;
 
-static void looping_update_status (sack_data *data)
+static void looping_update_status (GtkLabel *label, guint nc_progress,
+                                   guint nc_size, guint size)
 {
     clock_t now;
-    if (!data->label)
+    if (!label)
         return;
     now = clock ();
     if (G_UNLIKELY (now > next_update_tick))
     {
-        gchar *text = g_strdup_printf ("%u/%lu splits processed, %u combos",
-                                       data->nc_progress, data->nc_size,
-                                       g_hash_table_size (data->sack));
-        status_update (data->label, text);
+        gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
+                                       nc_progress, nc_size, size);
+        status_update (label, text);
         g_free (text);
         next_update_tick = now + MAX_UPDATE_TICKS;
     }
-}
-
-static void
-sack_foreach_func (gint64 thisvalue, GList *splits, sack_data *data)
-{
-    gnc_numeric numeric = xaccSplitGetAmount (data->split);
-    gint64 itemval = numeric.num;
-    gint64 new_value = thisvalue + itemval;
-    WorkItem *item = make_workitem (data->sack, new_value, data->split, splits);
-
-    data->workvector.emplace_back (item);
-    looping_update_status (data);
-}
-
-static void dump_sack (gint64 thisvalue, GList *splits, sack_data *data)
-{
-    DEBUG ("%" PRId64, thisvalue);
-    if (splits == DUP_LIST)
-        DEBUG (" DUPE");
-    else
-        for (GList *n = splits; n; n = n->next)
-            DEBUG (" [%5.2f]", gnc_numeric_to_double (xaccSplitGetAmount ((Split*)n->data)));
-    DEBUG ("\n");
-}
-
-static void
-sack_free (gint64 thisvalue, GList *splits, gpointer user_data)
-{
-    if (splits != DUP_LIST)
-        g_list_free (splits);
-}
-
-static void
-process_work (WorkItem *item, sack_data *data)
-{
-    GList *existing = (GList *)g_hash_table_lookup (data->sack,
-                                                    (gpointer)item->reachable_amount);
-    g_hash_table_insert (data->sack, (gpointer)item->reachable_amount,
-                         item->list_of_splits);
-    if (existing)
-    {
-        if (G_UNLIKELY (data->debugging_enabled))
-            DEBUG ("removing existing for %" PRId64 "\n", item->reachable_amount);
-        if (existing != DUP_LIST)
-            g_list_free (existing);
-    }
-    looping_update_status (data);
 }
 
 gboolean
@@ -172,7 +114,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 {
     GList *toclear_list = NULL;
     std::vector<Split*> nc_vector;
-    GHashTable *sack;
+    std::unordered_map<gint64, GList*> sack;
     guint nc_progress = 0;
     clock_t start_ticks;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
@@ -180,8 +122,8 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
     g_return_val_if_fail (splits != NULL, FALSE);
 
-    sack = g_hash_table_new ((GHashFunc) g_direct_hash, (GEqualFunc) g_direct_equal);
     DUP_LIST = g_list_prepend (NULL, NULL);
+    *splits = nullptr;
 
     /* Extract which splits are not cleared and compute the amount we have to clear */
     for (GList *node = xaccAccountGetSplitList (account); node; node = node->next)
@@ -219,18 +161,38 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     for (auto& split : nc_vector)
     {
         gnc_numeric amount = xaccSplitGetAmount (split);
-        WorkItem *item = make_workitem (sack, amount.num, split, NULL);
-        sack_data s_data = { {}, sack, split,
-            debugging_enabled, nc_progress, nc_vector.size (), label };
+        gint64 amountnum = amount.num;
+        WorkItem *item = make_workitem (sack.find (amountnum) != sack.end (),
+                                        amountnum, split, NULL);
+        std::vector<WorkItem*> workvector = {};
 
-        s_data.workvector.reserve (g_hash_table_size (sack) + 1);
-        s_data.workvector.emplace_back (item);
-        g_hash_table_foreach (sack, (GHFunc) sack_foreach_func, &s_data);
+        workvector.reserve (sack.size () + 1);
+        workvector.emplace_back (item);
+        // printf ("new split. sack size = %ld\n", sack.size());
 
-        for (auto& i : s_data.workvector)
+        for (auto& [thisvalue, splits] : sack)
         {
-            process_work (i, &s_data);
-            g_free (i);
+            gint64 new_value = thisvalue + amountnum;
+            WorkItem *item = make_workitem (splits == DUP_LIST ||
+                                            sack.find (new_value) != sack.end (),
+                                            new_value, split, splits);
+            workvector.emplace_back (item);
+            looping_update_status (label, nc_progress, nc_vector.size (),
+                                   sack.size ());
+        }
+
+        for (auto& item : workvector)
+        {
+            auto existing = sack.find (item->reachable_amount);
+            if (existing != sack.end())
+            {
+                if (debugging_enabled)
+                    DEBUG ("removing existing for %" PRId64 "\n", item->reachable_amount);
+                if (existing->second != DUP_LIST)
+                    g_list_free (existing->second);
+            }
+            sack[item->reachable_amount] = item->list_of_splits;
+            g_free (item);
         }
         nc_progress++;
         if (G_UNLIKELY ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS))
@@ -239,8 +201,9 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                          _("Too many uncleared splits"));
             goto skip_knapsack;
         }
-        else if (G_UNLIKELY (g_hash_table_lookup (sack, (gpointer)toclear_value.num)
-                             == DUP_LIST))
+
+        auto try_toclear = sack.find (toclear_value.num);
+        if (try_toclear != sack.end() && try_toclear->second == DUP_LIST)
         {
             g_set_error (error, autoclear_quark (), AUTOCLEAR_MULTIPLE,
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
@@ -250,27 +213,40 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
     status_update (label, _("Cleaning up..."));
 
-    toclear_list = (GList *)g_hash_table_lookup (sack, (gpointer)toclear_value.num);
+    /*
+    for (auto& [thisvalue, splits] : sack)
+    {
+        printf ("dump: %" PRId64 " = ", thisvalue);
+        if (splits == DUP_LIST)
+            printf (" DUPE");
+        else
+            for (GList *n = splits; n; n = n->next)
+                printf (" [%5.2f]", gnc_numeric_to_double (xaccSplitGetAmount ((Split*)n->data)));
+        printf ("\n");
+    }
+    */
 
     /* Check solution */
-    if (!toclear_list)
+    if (sack.find (toclear_value.num) == sack.end())
     {
         g_set_error (error, autoclear_quark (), AUTOCLEAR_UNABLE,
                      _("The selected amount cannot be cleared."));
         goto skip_knapsack;
     }
     else
-        /* copy GList because GHashTable value will be freed */
-        *splits = g_list_copy (toclear_list);
+        /* copy GList because std::unordered_map value will be freed */
+        *splits = g_list_copy (sack[toclear_value.num]);
 
  skip_knapsack:
-    g_hash_table_foreach (sack, (GHFunc) sack_free, NULL);
-    g_hash_table_destroy (sack);
+
+    for (const auto& [thisvalue, thissplits] : sack)
+        if (thissplits != DUP_LIST)
+            g_list_free (thissplits);
     g_list_free (DUP_LIST);
 
     status_update (label, NULL);
 
-    return (toclear_list != NULL);
+    return (*splits != NULL);
 }
 
 
