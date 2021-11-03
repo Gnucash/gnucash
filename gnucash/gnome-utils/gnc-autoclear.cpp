@@ -25,6 +25,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <memory>
 #include <vector>
 #include <unordered_map>
 
@@ -57,8 +58,8 @@ typedef enum
 struct WorkItem
 {
     gint64 reachable_amount;
-    std::vector<Split*> splits_vector;
-    WorkItem (const gint64 amount, std::vector<Split*> splits)
+    std::vector<std::shared_ptr<Split>> splits_vector;
+    WorkItem (const gint64 amount, std::vector<std::shared_ptr<Split>> splits)
         : reachable_amount (amount), splits_vector(splits){}
 };
 
@@ -110,8 +111,9 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
                           GList **splits, GError **error, GtkLabel *label)
 {
-    std::vector<Split*> nc_vector, DUP_VEC;
-    std::unordered_map<gint64, std::vector<Split*>, Hasher, EqualFn> sack;
+    std::vector<std::shared_ptr<Split>> nc_vector, DUP_VEC;
+    std::unordered_map<gint64, std::vector<std::shared_ptr<Split>>,
+                       Hasher, EqualFn> sack;
     guint nc_progress = 0;
     clock_t start_ticks, next_update_tick;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
@@ -139,7 +141,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                  xaccTransGetDate (xaccSplitGetParent (split)) > end_date)
             DEBUG ("skipping split after statement_date %p", split);
         else
-            nc_vector.emplace_back (split);
+            nc_vector.emplace_back (std::make_shared<Split>(split));
     }
 
     if (gnc_numeric_zero_p (toclear_value))
@@ -159,7 +161,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
     for (auto& split : nc_vector)
     {
-        auto amount = xaccSplitGetAmount (split);
+        auto amount = xaccSplitGetAmount (split.get ());
         std::vector<WorkItem> workvector = {};
 
         workvector.reserve (sack.size () + 1);
@@ -167,7 +169,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
             workvector.emplace_back (amount.num, DUP_VEC);
         else
         {
-            std::vector<Split*> new_splits = { split };
+            std::vector<std::shared_ptr<Split>> new_splits = { split };
             workvector.emplace_back (amount.num, new_splits);
         }
 
@@ -220,7 +222,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
             else
                 for (auto& s : this_splits)
                     printf (" [%5.2f]",
-                            gnc_numeric_to_double (xaccSplitGetAmount (s)));
+                            gnc_numeric_to_double (xaccSplitGetAmount (s.get ())));
             printf ("\n");
         }
 
@@ -234,7 +236,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
     /* copy GList because std::unordered_map value will be freed */
     for (auto& s : sack[toclear_value.num])
-        *splits = g_list_prepend (*splits, s);
+        *splits = g_list_prepend (*splits, s.get ());
 
  skip_knapsack:
 
