@@ -97,13 +97,30 @@ static void looping_update_status (GtkLabel *label, guint nc_progress,
     }
 }
 
+class Hasher
+{
+public:
+    size_t operator() (gint64 const& key) const
+    {
+        return key;
+    }
+};
+class EqualFn
+{
+public:
+    bool operator() (gint64 const& t1, gint64 const& t2) const
+    {
+        return (t1 == t2);
+    }
+};
+
 gboolean
 gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
                           GList **splits, GError **error, GtkLabel *label)
 {
     std::vector<Split*> nc_vector;
-    std::unordered_map<gint64, std::vector<Split*>> sack;
+    std::unordered_map<gint64, std::vector<Split*>, Hasher, EqualFn> sack;
     guint nc_progress = 0;
     clock_t start_ticks;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
