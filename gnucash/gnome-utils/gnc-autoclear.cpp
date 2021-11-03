@@ -110,7 +110,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
                           GList **splits, GError **error, GtkLabel *label)
 {
-    std::vector<Split*> nc_vector, DUP_VEC;
+    std::vector<Split*> nc_vector, empty_vec;
     std::unordered_map<gint64, std::vector<Split*>, Hasher, EqualFn> sack;
     guint nc_progress = 0;
     clock_t start_ticks, next_update_tick;
@@ -120,7 +120,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
     g_return_val_if_fail (splits != nullptr, FALSE);
 
-    DUP_VEC = {};
+    empty_vec = {};
     *splits = nullptr;
 
     /* Extract which splits are not cleared and compute the amount we have to clear */
@@ -160,11 +160,11 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     for (auto& split : nc_vector)
     {
         auto amount = xaccSplitGetAmount (split);
-        std::vector<WorkItem> workvector = {};
+        std::vector<WorkItem> workvector {};
 
         workvector.reserve (sack.size () + 1);
         if (sack.find (amount.num) != sack.end ())
-            workvector.emplace_back (amount.num, DUP_VEC);
+            workvector.emplace_back (amount.num, empty_vec);
         else
         {
             std::vector<Split*> new_splits = { split };
@@ -182,8 +182,8 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                              "Overflow error: Amount numbers are too large!");
                 goto skip_knapsack;
             }
-            if (map_splits == DUP_VEC || sack.find (new_value) != sack.end ())
-                workvector.emplace_back (new_value, DUP_VEC);
+            if (map_splits == empty_vec || sack.find (new_value) != sack.end ())
+                workvector.emplace_back (new_value, empty_vec);
             else
             {
                 auto new_splits = map_splits;
@@ -197,7 +197,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         for (auto& item : workvector)
             sack[item.reachable_amount] = item.splits_vector;
 
-        nc_progress++;
+        ++nc_progress;
 
         if (G_UNLIKELY ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS))
         {
@@ -207,7 +207,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         }
 
         auto try_toclear = sack.find (toclear_value.num);
-        if (G_UNLIKELY (try_toclear != sack.end() && try_toclear->second == DUP_VEC))
+        if (G_UNLIKELY (try_toclear != sack.end() && try_toclear->second == empty_vec))
         {
             g_set_error (error, autoclear_quark, AUTOCLEAR_MULTIPLE,
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
@@ -221,7 +221,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         for (auto& [this_value, this_splits] : sack)
         {
             printf ("dump: %" PRId64 " = ", this_value);
-            if (this_splits == DUP_VEC)
+            if (this_splits == empty_vec)
                 printf (" DUPE");
             else
                 for (auto& s : this_splits)
