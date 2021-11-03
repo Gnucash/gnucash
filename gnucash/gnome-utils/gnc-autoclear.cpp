@@ -54,12 +54,6 @@ typedef enum
 #define MAX_UPDATE_TICKS CLOCKS_PER_SEC / UPDATES_PER_SECOND
 #define MAX_AUTOCLEAR_TICKS CLOCKS_PER_SEC * MAX_AUTOCLEAR_SECONDS
 
-static inline GQuark
-autoclear_quark (void)
-{
-    return g_quark_from_static_string ("autoclear");
-}
-
 struct WorkItem
 {
     gint64 reachable_amount;
@@ -67,8 +61,6 @@ struct WorkItem
     WorkItem (const gint64 amount, std::vector<Split*> splits)
         : reachable_amount (amount), splits_vector(splits){}
 };
-
-static std::vector<Split*> DUP_VEC;
 
 static void status_update (GtkLabel *label, gchar *status)
 {
@@ -78,22 +70,21 @@ static void status_update (GtkLabel *label, gchar *status)
         g_main_context_iteration (nullptr, FALSE);
 }
 
-static clock_t next_update_tick;
-
 static void looping_update_status (GtkLabel *label, guint nc_progress,
-                                   guint nc_size, guint size)
+                                   guint nc_size, guint size,
+                                   clock_t *next_update_tick)
 {
     clock_t now;
     if (!label)
         return;
     now = clock ();
-    if (now > next_update_tick) [[unlikely]]
+    if (now > *next_update_tick) [[unlikely]]
     {
         gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
                                        nc_progress, nc_size, size);
         status_update (label, text);
         g_free (text);
-        next_update_tick = now + MAX_UPDATE_TICKS;
+        *next_update_tick = now + MAX_UPDATE_TICKS;
     }
 }
 
@@ -119,16 +110,17 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
                           GList **splits, GError **error, GtkLabel *label)
 {
-    std::vector<Split*> nc_vector;
+    std::vector<Split*> nc_vector, DUP_VEC;
     std::unordered_map<gint64, std::vector<Split*>, Hasher, EqualFn> sack;
     guint nc_progress = 0;
-    clock_t start_ticks;
+    clock_t start_ticks, next_update_tick;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
+    GQuark autoclear_quark = g_quark_from_static_string ("autoclear");
 
     g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
     g_return_val_if_fail (splits != nullptr, FALSE);
 
-    DUP_VEC = { nullptr };
+    DUP_VEC = {};
     *splits = nullptr;
 
     /* Extract which splits are not cleared and compute the amount we have to clear */
@@ -152,13 +144,13 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
     if (gnc_numeric_zero_p (toclear_value))
     {
-        g_set_error (error, autoclear_quark (), AUTOCLEAR_NOP,
+        g_set_error (error, autoclear_quark, AUTOCLEAR_NOP,
                      _("Account is already at Auto-Clear Balance."));
         goto skip_knapsack;
     }
     else if (nc_vector.empty ())
     {
-        g_set_error (error, autoclear_quark (), AUTOCLEAR_NOP,
+        g_set_error (error, autoclear_quark, AUTOCLEAR_NOP,
                      _("No uncleared splits found."));
         goto skip_knapsack;
     }
@@ -193,7 +185,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                 workvector.emplace_back (new_value, new_splits);
             }
             looping_update_status (label, nc_progress, nc_vector.size (),
-                                   sack.size ());
+                                   sack.size (), &next_update_tick);
         }
 
         for (auto& item : workvector)
@@ -203,7 +195,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         if ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS) [[unlikely]]
         {
-            g_set_error (error, autoclear_quark (), AUTOCLEAR_OVERLOAD,
+            g_set_error (error, autoclear_quark, AUTOCLEAR_OVERLOAD,
                          _("Too many uncleared splits"));
             goto skip_knapsack;
         }
@@ -211,7 +203,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         auto try_toclear = sack.find (toclear_value.num);
         if (try_toclear != sack.end() && try_toclear->second == DUP_VEC) [[unlikely]]
         {
-            g_set_error (error, autoclear_quark (), AUTOCLEAR_MULTIPLE,
+            g_set_error (error, autoclear_quark, AUTOCLEAR_MULTIPLE,
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
             goto skip_knapsack;
         }
@@ -219,23 +211,23 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
     status_update (label, _("Cleaning up..."));
 
-    /*
-    for (auto& [thisvalue, splits] : sack)
-    {
-        printf ("dump: %" PRId64 " = ", thisvalue);
-        if (splits == DUP_LIST)
-            printf (" DUPE");
-        else
-            for (GList *n = splits; n; n = n->next)
-                printf (" [%5.2f]", gnc_numeric_to_double (xaccSplitGetAmount ((Split*)n->data)));
-        printf ("\n");
-    }
-    */
+    if (debugging_enabled)
+        for (auto& [this_value, this_splits] : sack)
+        {
+            printf ("dump: %" PRId64 " = ", this_value);
+            if (this_splits == DUP_VEC)
+                printf (" DUPE");
+            else
+                for (auto& s : this_splits)
+                    printf (" [%5.2f]",
+                            gnc_numeric_to_double (xaccSplitGetAmount (s)));
+            printf ("\n");
+        }
 
     /* Check solution */
     if (sack.find (toclear_value.num) == sack.end())
     {
-        g_set_error (error, autoclear_quark (), AUTOCLEAR_UNABLE,
+        g_set_error (error, autoclear_quark, AUTOCLEAR_UNABLE,
                      _("The selected amount cannot be cleared."));
         goto skip_knapsack;
     }
