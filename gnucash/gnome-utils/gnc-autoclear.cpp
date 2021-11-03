@@ -78,7 +78,7 @@ static void looping_update_status (GtkLabel *label, guint nc_progress,
     if (!label)
         return;
     now = clock ();
-    if (now > *next_update_tick) [[unlikely]]
+    if (G_UNLIKELY (now > *next_update_tick))
     {
         gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
                                        nc_progress, nc_size, size);
@@ -193,7 +193,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         nc_progress++;
 
-        if ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS) [[unlikely]]
+        if (G_UNLIKELY ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS))
         {
             g_set_error (error, autoclear_quark, AUTOCLEAR_OVERLOAD,
                          _("Too many uncleared splits"));
@@ -201,7 +201,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         }
 
         auto try_toclear = sack.find (toclear_value.num);
-        if (try_toclear != sack.end() && try_toclear->second == DUP_VEC) [[unlikely]]
+        if (G_UNLIKELY (try_toclear != sack.end() && try_toclear->second == DUP_VEC))
         {
             g_set_error (error, autoclear_quark, AUTOCLEAR_MULTIPLE,
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
