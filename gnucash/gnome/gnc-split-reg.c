@@ -964,11 +964,11 @@ gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
         {
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                     "%s", recn_warn);
-            warning = GNC_PREF_WARN_REG_SPLIT_DEL_RECD;
+            warning = GNC_PREF_WARN_REG_SPLIT_CUT_RECD;
         }
         else
         {
-            warning = GNC_PREF_WARN_REG_SPLIT_DEL;
+            warning = GNC_PREF_WARN_REG_SPLIT_CUT;
         }
 
         gtk_dialog_add_button (GTK_DIALOG(dialog),
@@ -1003,11 +1003,11 @@ gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
         {
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                      "%s", recn_warn);
-            warning = GNC_PREF_WARN_REG_TRANS_DEL_RECD;
+            warning = GNC_PREF_WARN_REG_TRANS_CUT_RECD;
         }
         else
         {
-            warning = GNC_PREF_WARN_REG_TRANS_DEL;
+            warning = GNC_PREF_WARN_REG_TRANS_CUT;
         }
         gtk_dialog_add_button (GTK_DIALOG(dialog),
                                _("_Cancel"), GTK_RESPONSE_CANCEL);
