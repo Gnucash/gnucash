@@ -183,7 +183,13 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         for (auto& [map_value, map_splits] : sack)
         {
-            auto new_value = map_value + amount.num;
+            gint64 new_value;
+            if (__builtin_add_overflow (map_value, amount.num, &new_value))
+            {
+                g_set_error (error, autoclear_quark, AUTOCLEAR_OVERLOAD,
+                             "Overflow error: Amount numbers are too large!");
+                goto skip_knapsack;
+            }
             if (map_splits == DUP_VEC || sack.find (new_value) != sack.end ())
                 workvector.emplace_back (new_value, DUP_VEC);
             else
