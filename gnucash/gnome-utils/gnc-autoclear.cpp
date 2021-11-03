@@ -32,7 +32,6 @@
 #include "inttypes.h"
 #include "Account.h"
 #include "Split.h"
-#include "SplitP.h"
 #include "Transaction.h"
 #include "gncOwner.h"
 #include "qof.h"
@@ -142,12 +141,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                  xaccTransGetDate (xaccSplitGetParent (split)) > end_date)
             DEBUG ("skipping split after statement_date %p", split);
         else
-        {
-            auto s = static_cast<std::shared_ptr<Split>>(split);
-            auto new_s = new Split;
-            memcpy (new_s, &s, sizeof(Split));
-            nc_vector.emplace_back (s);
-        }
+            nc_vector.emplace_back (std::make_shared<Split>(split));
     }
 
     if (gnc_numeric_zero_p (toclear_value))
