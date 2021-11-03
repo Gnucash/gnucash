@@ -112,7 +112,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
                           GList **splits, GError **error, GtkLabel *label)
 {
-    SplitVec nc_vector, empty_vec;
+    SplitVec nc_vector {};
     std::unordered_map<gint64, SplitVec, Hasher, EqualFn> sack;
     guint nc_progress = 0;
     clock_t start_ticks, next_update_tick;
@@ -122,7 +122,6 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
     g_return_val_if_fail (splits != nullptr, FALSE);
 
-    empty_vec = {};
     *splits = nullptr;
 
     /* Extract which splits are not cleared and compute the amount we have to clear */
@@ -141,7 +140,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                  xaccTransGetDate (xaccSplitGetParent (split)) > end_date)
             DEBUG ("skipping split after statement_date %p", split);
         else
-            nc_vector.emplace_back (split);
+            nc_vector.push_back (split);
     }
 
     if (gnc_numeric_zero_p (toclear_value))
@@ -184,12 +183,13 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                              "Overflow error: Amount numbers are too large!");
                 goto skip_knapsack;
             }
-            if (map_splits == static_cast<SplitVec>(1) || sack.find (new_value) != sack.end ())
+            if (map_splits == static_cast<SplitVec>(1) ||
+                sack.find (new_value) != sack.end ())
                 workvector.emplace_back (new_value, static_cast<SplitVec>(1));
             else
             {
                 auto new_splits = map_splits;
-                new_splits.emplace_back (split);
+                new_splits.push_back (split);
                 workvector.emplace_back (new_value, new_splits);
             }
             looping_update_status (label, nc_progress, nc_vector.size (),
@@ -209,7 +209,8 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         }
 
         auto try_toclear = sack.find (toclear_value.num);
-        if (G_UNLIKELY (try_toclear != sack.end() && try_toclear->second == static_cast<SplitVec>(1)))
+        if (G_UNLIKELY (try_toclear != sack.end() &&
+                        try_toclear->second == static_cast<SplitVec>(1)))
         {
             g_set_error (error, autoclear_quark, AUTOCLEAR_MULTIPLE,
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
