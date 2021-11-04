@@ -112,7 +112,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
                           GList **splits, GError **error, GtkLabel *label)
 {
-    SplitVec nc_vector {};
+    SplitVec nc_vector {}, empty_vec {};
     std::unordered_map<gint64, SplitVec, Hasher, EqualFn> sack;
     guint nc_progress = 0;
     clock_t start_ticks, next_update_tick;
@@ -165,7 +165,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         workvector.reserve (sack.size () + 1);
         if (sack.find (amount.num) != sack.end ())
-            workvector.emplace_back (amount.num, static_cast<SplitVec>(1));
+            workvector.emplace_back (amount.num, empty_vec);
         else
         {
             SplitVec new_splits = { split };
@@ -183,9 +183,9 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                              "Overflow error: Amount numbers are too large!");
                 goto skip_knapsack;
             }
-            if (map_splits == static_cast<SplitVec>(1) ||
+            if (map_splits == empty_vec ||
                 sack.find (new_value) != sack.end ())
-                workvector.emplace_back (new_value, static_cast<SplitVec>(1));
+                workvector.emplace_back (new_value, empty_vec);
             else
             {
                 auto new_splits = map_splits;
@@ -210,7 +210,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         auto try_toclear = sack.find (toclear_value.num);
         if (G_UNLIKELY (try_toclear != sack.end() &&
-                        try_toclear->second == static_cast<SplitVec>(1)))
+                        try_toclear->second == empty_vec))
         {
             g_set_error (error, autoclear_quark, AUTOCLEAR_MULTIPLE,
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
@@ -224,7 +224,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         for (auto& [this_value, this_splits] : sack)
         {
             printf ("dump: %" PRId64 " = ", this_value);
-            if (this_splits == static_cast<SplitVec>(1))
+            if (this_splits == empty_vec)
                 printf (" DUPE");
             else
                 for (auto& s : this_splits)
