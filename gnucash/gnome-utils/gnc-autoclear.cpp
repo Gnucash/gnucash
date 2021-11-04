@@ -151,6 +151,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     }
 
     start_ticks = clock ();
+    sack.reserve(nc_vector.size() * 4);
 
     for (auto& split : nc_vector)
     {
