@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8-pot2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-06-04 23:34+0000\n"
+"PO-Revision-Date: 2021-11-04 04:33+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -6293,11 +6293,11 @@ msgstr "Annuller transaksjonene?"
 
 #. Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:871
-#, fuzzy, c-format
+#, c-format
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgstr[0] "Er du sikker på at du vil slette den valgte transaksjonen?"
-msgstr[1] "Er du sikker på at du vil slette den valgte transaksjonen?"
+msgstr[1] "Er du sikker på at du vil slette %d valgte transaksjoner?"
 
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
@@ -8162,10 +8162,9 @@ msgstr "Ny …"
 #: gnucash/gnome-utils/gnc-amount-edit.c:411
 #: gnucash/register/register-core/formulacell.c:121
 #: gnucash/register/register-core/pricecell.c:161
-#, fuzzy, c-format
-#| msgid "An error occurred while processing %s."
+#, c-format
 msgid "An error occurred while processing '%s' at position %d"
-msgstr "En feil oppstod under behandling av %s."
+msgstr "En feil oppstod under behandling av %s ved posisjon %d"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:417
 #, fuzzy, c-format
@@ -21553,16 +21552,14 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Ny, UBALANSERT (trenger overføringskonto for %s)!"
 
 #: gnucash/import-export/import-main-matcher.c:1581
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "Avstem (manuell) treff"
+msgstr "Avstem treff (manuelt) til %s"
 
 #: gnucash/import-export/import-main-matcher.c:1586
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "Avstem (auto) treff"
+msgstr "Avstem treff (automatisk) til %s"
 
 #: gnucash/import-export/import-main-matcher.c:1595
 #: gnucash/import-export/import-main-matcher.c:1625
@@ -21570,14 +21567,14 @@ msgid "Match missing!"
 msgstr "Treff mangler!"
 
 #: gnucash/import-export/import-main-matcher.c:1611
-#, fuzzy, c-format
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "Avstem (manuell) treff"
+msgstr "Oppdater og avstem treff (manuell) til %s"
 
 #: gnucash/import-export/import-main-matcher.c:1616
-#, fuzzy, c-format
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "Avstem (auto) treff"
+msgstr "Oppdater og avstem treff (automatisk) til %s"
 
 #: gnucash/import-export/import-main-matcher.c:1633
 msgid "Do not import (no action selected)"
