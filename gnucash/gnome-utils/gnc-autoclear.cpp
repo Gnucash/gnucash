@@ -104,7 +104,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
                           GList **splits, GError **error, GtkLabel *label)
 {
-    SplitVec nc_vector {}, empty_vec {};
+    SplitVec nc_vector {};
     std::unordered_map<gint64, SplitVec, Hasher, EqualFn> sack;
     guint nc_progress = 0;
     clock_t start_ticks;
@@ -160,7 +160,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         workvector.reserve (sack.size () + 1);
         if (sack.find (amount.num) != sack.end ())
-            workvector.emplace_back (amount.num, empty_vec);
+            workvector.emplace_back (amount.num, SplitVec{});
         else
         {
             SplitVec new_splits = { split };
@@ -178,9 +178,9 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                              "Overflow error: Amount numbers are too large!");
                 goto skip_knapsack;
             }
-            if (map_splits == empty_vec ||
+            if (map_splits.empty() ||
                 sack.find (new_value) != sack.end ())
-                workvector.emplace_back (new_value, empty_vec);
+                workvector.emplace_back (new_value, SplitVec{});
             else
             {
                 auto new_splits = map_splits;
@@ -203,7 +203,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         auto try_toclear = sack.find (toclear_value.num);
         if (G_UNLIKELY (try_toclear != sack.end() &&
-                        try_toclear->second == empty_vec))
+                        try_toclear->second.empty()))
         {
             g_set_error (error, autoclear_quark, AUTOCLEAR_MULTIPLE,
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
@@ -215,7 +215,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         for (auto& [this_value, this_splits] : sack)
         {
             printf ("dump: %" PRId64 " = ", this_value);
-            if (this_splits == empty_vec)
+            if (this_splits.empty())
                 printf (" DUPE");
             else
                 for (auto& s : this_splits)
