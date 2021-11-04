@@ -190,7 +190,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         }
 
         for (auto& item : workvector)
-            sack[item.reachable_amount] = item.splits_vector;
+            sack.insert_or_assign(item.reachable_amount, std::move(item.splits_vector));
 
         looping_update_status (label, ++nc_progress, nc_vector.size (), sack.size ());
 
