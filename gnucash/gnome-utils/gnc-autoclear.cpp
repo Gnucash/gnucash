@@ -183,7 +183,9 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                 workvector.emplace_back (new_value, SplitVec{});
             else
             {
-                auto new_splits = map_splits;
+                SplitVec new_splits{};
+                new_splits.reserve(map_splits.size() + 1);
+                new_splits = map_splits;
                 new_splits.push_back (split);
                 workvector.emplace_back (new_value, std::move(new_splits));
             }
