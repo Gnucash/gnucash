@@ -139,13 +139,13 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
     if (gnc_numeric_zero_p (toclear_value))
     {
-        g_set_error (error, autoclear_quark, AUTOCLEAR_NOP,
+        g_set_error (error, autoclear_quark, AUTOCLEAR_NOP, "%s",
                      _("Account is already at Auto-Clear Balance."));
         goto skip_knapsack;
     }
     else if (nc_vector.empty ())
     {
-        g_set_error (error, autoclear_quark, AUTOCLEAR_NOP,
+        g_set_error (error, autoclear_quark, AUTOCLEAR_NOP, "%s",
                      _("No uncleared splits found."));
         goto skip_knapsack;
     }
@@ -174,7 +174,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
             gint64 new_value;
             if (__builtin_add_overflow (map_value, amount.num, &new_value))
             {
-                g_set_error (error, autoclear_quark, AUTOCLEAR_OVERLOAD,
+                g_set_error (error, autoclear_quark, AUTOCLEAR_OVERLOAD, "%s",
                              "Overflow error: Amount numbers are too large!");
                 goto skip_knapsack;
             }
@@ -196,7 +196,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         if (G_UNLIKELY ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS))
         {
-            g_set_error (error, autoclear_quark, AUTOCLEAR_OVERLOAD,
+            g_set_error (error, autoclear_quark, AUTOCLEAR_OVERLOAD, "%s",
                          _("Too many uncleared splits"));
             goto skip_knapsack;
         }
@@ -205,7 +205,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         if (G_UNLIKELY (try_toclear != sack.end() &&
                         try_toclear->second.empty()))
         {
-            g_set_error (error, autoclear_quark, AUTOCLEAR_MULTIPLE,
+            g_set_error (error, autoclear_quark, AUTOCLEAR_MULTIPLE, "%s",
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
             goto skip_knapsack;
         }
@@ -227,7 +227,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     /* Check solution */
     if (sack.find (toclear_value.num) == sack.end())
     {
-        g_set_error (error, autoclear_quark, AUTOCLEAR_UNABLE,
+        g_set_error (error, autoclear_quark, AUTOCLEAR_UNABLE, "%s",
                      _("The selected amount cannot be cleared."));
         goto skip_knapsack;
     }
