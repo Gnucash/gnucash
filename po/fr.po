@@ -22,17 +22,18 @@
 # Diego Marin <alterne@gmail.com>, 2021.
 # Pascal HUE <pascal.hue35@gmail.com>, 2021.
 # Alexandre <nasmi3+weblate@gmail.com>, 2021.
+# Maxime Leroy <lisacintosh@gmail.com>, 2021.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8-pot2\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-09-25 05:34+0000\n"
-"Last-Translator: Alexandre <nasmi3+weblate@gmail.com>\n"
+"PO-Revision-Date: 2021-11-01 01:36+0000\n"
+"Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -11540,13 +11541,13 @@ msgstr "Paramètre --name manquant"
 
 #: gnucash/gnucash-cli.cpp:185
 msgid "Unknown report command '{1}'"
-msgstr ""
+msgstr "Commande '{1}' inconnue"
 
 # po/guile_strings.txt:277
 #: gnucash/gnucash-cli.cpp:191
 #, fuzzy
 msgid "Missing command or option"
-msgstr "C'est une option de couleur"
+msgstr "Commande ou option manquante"
 
 #: gnucash/gnucash-commands.cpp:92
 msgid "No quotes retrieved. Finance::Quote isn't installed properly."
@@ -11570,25 +11571,22 @@ msgstr ""
 #, fuzzy
 msgid "You can also lookup and file bug reports at {1}"
 msgstr ""
-"Vous pouvez aussi consulter ou transmettre des rapports d'anomalie sur "
-"https://bugs.gnucash.org"
+"Vous pouvez aussi consulter ou transmettre des rapports d'anomalie depuis {1}"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:86
 #, fuzzy
 msgid "To find the last stable version, please refer to {1}"
-msgstr ""
-"Pour identifier la dernière version stable, veuillez consulter http://www."
-"gnucash.org"
+msgstr "Pour identifier la dernière version stable, veuillez consulter {1}"
 
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:103
 msgid "Loading system wide Guile extensions…"
-msgstr ""
+msgstr "Chargement des extensions systèmes de Guile…"
 
 #: gnucash/gnucash-core-app.cpp:115
 msgid "Loading user specific Guile extensions…"
-msgstr ""
+msgstr "Chargement des extensions utilisateur de Guile…"
 
 #: gnucash/gnucash-core-app.cpp:224
 #, fuzzy
@@ -11597,28 +11595,28 @@ msgstr "- GnuCash gestion de finances personnelles et de petites entreprises"
 
 #: gnucash/gnucash-core-app.cpp:226
 msgid "{1} [options] [datafile]"
-msgstr ""
+msgstr "{1} [options] [datafile]"
 
 # messages-i18n.c:83
 #: gnucash/gnucash-core-app.cpp:254
 #, fuzzy
 msgid "GnuCash {1}"
-msgstr "GnuCash "
+msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:255
 #, fuzzy
 msgid "GnuCash {1} development version"
-msgstr "GnuCash %s, version de développement"
+msgstr "GnuCash {1}, version de développement"
 
 # po/guile_strings.txt:43
 #: gnucash/gnucash-core-app.cpp:280
 #, fuzzy
 msgid "Common Options"
-msgstr "Options du Grand Livre"
+msgstr "Options générales"
 
 #: gnucash/gnucash-core-app.cpp:283
 msgid "Show this help message"
-msgstr ""
+msgstr "Afficher ce message d'aide"
 
 #: gnucash/gnucash-core-app.cpp:285
 msgid "Show GnuCash version"
@@ -11629,6 +11627,9 @@ msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
+"Pour activer le mode de débogage : ajouter plus de détails puis les journaux."
+"\n"
+"C'est équivalent à : --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 
 #: gnucash/gnucash-core-app.cpp:289
 msgid "Enable extra/development/debugging features."
@@ -11659,11 +11660,11 @@ msgstr ""
 #: gnucash/gnucash-core-app.cpp:295
 #, fuzzy
 msgid "Hidden Options"
-msgstr "Options du budget"
+msgstr "Options masquées"
 
 #: gnucash/gnucash-core-app.cpp:298
 msgid "[datafile]"
-msgstr ""
+msgstr "[datafile]"
 
 #: gnucash/gnucash.cpp:173
 msgid "Checking Finance::Quote..."
@@ -11687,13 +11688,13 @@ msgstr "Ne pas charger le dernier fichier ouvert"
 #: gnucash/gnucash.cpp:283
 #, fuzzy
 msgid "Show help for gtk options"
-msgstr "Aide pour la première option"
+msgstr "Afficher l'aide pour les options GTK"
 
 # po/guile_strings.txt:138
 #: gnucash/gnucash.cpp:285
 #, fuzzy
 msgid "Deprecated Options"
-msgstr "Options du _rapport"
+msgstr "Options obsolètes"
 
 #: gnucash/gnucash.cpp:288
 msgid ""
@@ -11871,7 +11872,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:112
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:154
 msgid "Auto pay when posting."
-msgstr ""
+msgstr "Payer automatiquement à la validation."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:113
 #: gnucash/gtkbuilder/business-prefs.glade:198
