@@ -58,8 +58,8 @@ struct WorkItem
 {
     gint64 reachable_amount;
     SplitVec splits_vector;
-    WorkItem (const gint64 amount, SplitVec splits)
-        : reachable_amount (amount), splits_vector(splits){}
+    WorkItem (const gint64 amount, SplitVec&& splits)
+        : reachable_amount (amount), splits_vector(std::move(splits)){}
 };
 
 static void status_update (GtkLabel *label, gchar *status)
@@ -164,7 +164,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         else
         {
             SplitVec new_splits = { split };
-            workvector.emplace_back (amount.num, new_splits);
+            workvector.emplace_back (amount.num, std::move(new_splits));
         }
 
         // printf ("new split. sack size = %ld\n", sack.size());
@@ -185,7 +185,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
             {
                 auto new_splits = map_splits;
                 new_splits.push_back (split);
-                workvector.emplace_back (new_value, new_splits);
+                workvector.emplace_back (new_value, std::move(new_splits));
             }
         }
 
