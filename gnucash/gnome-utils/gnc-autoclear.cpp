@@ -116,6 +116,8 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
     *splits = nullptr;
 
+    nc_vector.reserve(g_list_length(xaccAccountGetSplitList(account)));
+
     /* Extract which splits are not cleared and compute the amount we have to clear */
     for (GList *node = xaccAccountGetSplitList (account); node; node = node->next)
     {
