@@ -3,14 +3,15 @@
 # Duarte Loreto <happyguy_pt@hotmail.com>, 2001
 # Tiago Neiva <tneiva@gmail.com>, 2018.
 # Pedro Albuquerque <pmra@gmx.com>, 2021.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-01-11 18:32+0000\n"
-"Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
+"PO-Revision-Date: 2021-10-29 15:42+0000\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "glossary/pt/>\n"
 "Language: pt\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -434,7 +435,7 @@ msgstr "declaração financeira"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr "programa livre"
+msgstr "Software livre"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
