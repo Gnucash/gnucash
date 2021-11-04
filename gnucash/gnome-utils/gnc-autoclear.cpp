@@ -48,10 +48,8 @@ typedef enum
     AUTOCLEAR_NOP,
 } autoclear_error_type;
 
-#define UPDATES_PER_SECOND 5
 #define MAX_AUTOCLEAR_SECONDS 10
 
-#define MAX_UPDATE_TICKS CLOCKS_PER_SEC / UPDATES_PER_SECOND
 #define MAX_AUTOCLEAR_TICKS CLOCKS_PER_SEC * MAX_AUTOCLEAR_SECONDS
 
 using SplitVec = std::vector<Split*>;
@@ -73,21 +71,15 @@ static void status_update (GtkLabel *label, gchar *status)
 }
 
 static void looping_update_status (GtkLabel *label, guint nc_progress,
-                                   guint nc_size, guint size,
-                                   clock_t *next_update_tick)
+                                   guint nc_size, guint size)
 {
-    clock_t now;
     if (!label)
         return;
-    now = clock ();
-    if (G_UNLIKELY (now > *next_update_tick))
-    {
-        gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
+
+    auto text = g_strdup_printf ("%u/%u splits processed, %u combos",
                                        nc_progress, nc_size, size);
-        status_update (label, text);
-        g_free (text);
-        *next_update_tick = now + MAX_UPDATE_TICKS;
-    }
+    status_update (label, text);
+    g_free (text);
 }
 
 class Hasher
@@ -115,7 +107,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     SplitVec nc_vector {}, empty_vec {};
     std::unordered_map<gint64, SplitVec, Hasher, EqualFn> sack;
     guint nc_progress = 0;
-    clock_t start_ticks, next_update_tick;
+    clock_t start_ticks;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
     GQuark autoclear_quark = g_quark_from_static_string ("autoclear");
 
@@ -156,7 +148,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         goto skip_knapsack;
     }
 
-    start_ticks = next_update_tick = clock ();
+    start_ticks = clock ();
 
     for (auto& split : nc_vector)
     {
@@ -192,14 +184,12 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                 new_splits.push_back (split);
                 workvector.emplace_back (new_value, new_splits);
             }
-            looping_update_status (label, nc_progress, nc_vector.size (),
-                                   sack.size (), &next_update_tick);
         }
 
         for (auto& item : workvector)
             sack[item.reachable_amount] = item.splits_vector;
 
-        ++nc_progress;
+        looping_update_status (label, ++nc_progress, nc_vector.size (), sack.size ());
 
         if (G_UNLIKELY ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS))
         {
@@ -217,8 +207,6 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
             goto skip_knapsack;
         }
     }
-
-    status_update (label, _("Cleaning up..."));
 
     if (debugging_enabled)
         for (auto& [this_value, this_splits] : sack)
@@ -247,7 +235,9 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
  skip_knapsack:
 
-    status_update (label, nullptr);
+    // this is the right time to display Cleaning up because when this
+    // function completes, c++ destructors will scorch earth.
+    status_update (label, _("Cleaning up..."));
 
     return (*splits != nullptr);
 }
