@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-01 01:36+0000\n"
+"PO-Revision-Date: 2021-11-05 07:35+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -11945,7 +11945,7 @@ msgstr "Le rapport facture à utiliser pour l’impression."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:133
 msgid "The name of the report to be used for invoice printing."
-msgstr ""
+msgstr "Le nom du rapport qui sera utilisé pour l'impression des factures."
 
 # messages-i18n.c:171
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:137
@@ -12090,11 +12090,13 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:30
 msgid "Units in which the custom coordinates are expressed"
-msgstr ""
+msgstr "Les unités dans lesquels les coordonnées sont exprimées"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:31
 msgid "Units in which the custom coordinates are expressed (inches, mm, ...)."
 msgstr ""
+"Les unités dans lesquels les coordonnées sont exprimées (millimètres, "
+"pouces, etc.)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:35
 msgid "Position of payee name"
@@ -12213,21 +12215,18 @@ msgstr ""
 
 # po/guile_strings.txt:138
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:75
-#, fuzzy
 msgid "Rotation angle"
-msgstr "_Rotation"
+msgstr "Angle de rotation"
 
 # po/guile_strings.txt:173
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:76
-#, fuzzy
 msgid "Number of degrees to rotate the check."
-msgstr "En-tête du nombre"
+msgstr "Le nombre de degrés pour la rotation du chèque."
 
 # po/guile_strings.txt:81
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:80
-#, fuzzy
 msgid "Position of split's amount in numbers"
-msgstr "Position du montant du chèque en chiffres "
+msgstr "Position de la répartition du montant brut en chiffres"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:81
 #, fuzzy
@@ -12791,7 +12790,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:5
 #: gnucash/gtkbuilder/dialog-preferences.glade:3735
 msgid "Alpha Vantage API key"
-msgstr ""
+msgstr "Clé de l'API Alpha Vantage"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:3734
@@ -12800,16 +12799,22 @@ msgid ""
 "To retrieve online quotes from Alphavantage, this key needs to be set. A key "
 "can be retrieved from the Alpha Vantage website."
 msgstr ""
+"Pour récupérer les devis depuis Alpha Vantage, cette clé à besoin d'être "
+"renseignée. Une clé peut être récupérée à partir du site internet de Alpha "
+"Vantage."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
-msgstr ""
+msgstr "La version de ces réglages"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:11
 msgid ""
 "This is used internally to determine whether some preferences may need "
 "conversion when switching to a newer version of GnuCash."
 msgstr ""
+"Ceci est utilisé en interne pour déterminer quand certaines préférences ont "
+"besoin d'être converties à la migration vers une version plus récente de "
+"GnuCash."
 
 # po/guile_strings.txt:93
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:15
@@ -13078,6 +13083,9 @@ msgid ""
 "custom color if set. This can serve as a visual aid to quickly identify "
 "accounts."
 msgstr ""
+"Si actif, l'onglet du registre de compte sera coloré avec la couleur "
+"personnalisée du compte si renseignée. Cela peut servir d'aide visuelle pour "
+"identifier rapidement les comptes."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:120
 msgid "Use formal account labels"
@@ -13129,12 +13137,15 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
 msgstr ""
+"Ouvrir les onglets adjacents à l'onglet actuel au lieu de les ouvrir à la fin"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:136
 msgid ""
 "If active, new tabs are opened adjacent to current tab. If inactive, the new "
 "tabs are opened instead at the end."
 msgstr ""
+"Si actif, les nouveaux onglets seront ouverts à côté de l'onglet actuel. Si "
+"inactif, les nouveaux onglets seront plutôt ouverts à la fin."
 
 # po/guile_strings.txt:200
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:140
@@ -13224,12 +13235,17 @@ msgid ""
 "within the current calendar year or close to the current date based on a "
 "sliding window starting a set number of months backwards in time."
 msgstr ""
+"Quand une date est entrée sans l'année, elle peut être complétée "
+"automatiquement avec l'année actuelle ou proche de celle de la fenêtre "
+"glissante jusqu'à quelques mois en arrière."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:170
 msgid ""
 "In a sliding 12-month window starting a configurable number of months before "
 "the current month"
 msgstr ""
+"Dans un intervalle de 12 mois à partir d'un nombre configurable de mois "
+"après le mois actuel"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:175
 msgid "Maximum number of months to go back."
@@ -13392,16 +13408,24 @@ msgid ""
 "css file to be stored in the gnucash used config directory. More information "
 "can be found in the gnucash FAQ."
 msgstr ""
+"Quand activé, le registre utilisera un thème de couleurs spécifique à "
+"GnuCash (vert et jaune). Sinon il utilisera le thème de couleurs du système. "
+"Indépendamment de ce réglage, l'utilisateur peut toujours remplacer le thème "
+"de couleurs en utilisant un fichier CSS spécifique à GnuCash qui est stocké "
+"dans le dossier de configuration de GnuCash. Pour plus d'informations, "
+"veuillez vous référez à la F.à.Q. de GnuCash."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:246
 msgid "Superseded by \"use-gnucash-color-theme\""
-msgstr ""
+msgstr "Remplacé par \"use-gnucash-color-theme\""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:247
 msgid ""
 "This option is temporarily kept around for backwards compatibility. It will "
 "be removed in a future version."
 msgstr ""
+"Cette option est temporairement utilisée pour garder une compatibilité avec "
+"les précédentes versions. Elle sera retirée dans une prochaine version."
 
 # messages-i18n.c:71
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:251
@@ -13437,6 +13461,9 @@ msgid ""
 "cursor will move to the Transfer field. If not active then it skips to the "
 "value field."
 msgstr ""
+"Si actif, une transaction mémorisée sera automatiquement remplie dans le "
+"curseur et sera placée dans le champs Transferts. Si inactif, le curseur ira "
+"directement au champ de valeur."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:266
 msgid "Create a new window for each new register"
@@ -13619,9 +13646,8 @@ msgstr ""
 "transaction est sélectionnée."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:326
-#, fuzzy
 msgid "Show the calendar buttons"
-msgstr "Afficher la colonne du nom"
+msgstr "Afficher les boutons du calendrier"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:327
 #: gnucash/gtkbuilder/dialog-preferences.glade:3040
@@ -13661,9 +13687,8 @@ msgstr ""
 
 # po/guile_strings.txt:173
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:341
-#, fuzzy
 msgid "Number of characters for auto complete."
-msgstr "En-tête du nombre"
+msgstr "Nombre de caractères pour l'auto-complétion."
 
 #. Register2 feature
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:342
@@ -13720,7 +13745,7 @@ msgstr "Devise par défaut pour les nouveaux rapports"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:369
 msgid "Zoom factor to use by default for reports."
-msgstr ""
+msgstr "Le facteur d’agrandissement à appliquer par défaut pour les rapports."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:370
 #: gnucash/gtkbuilder/dialog-preferences.glade:3292
@@ -13729,10 +13754,14 @@ msgid ""
 "allows you to scale reports up by the set factor. For example setting this "
 "to 2.0 will display reports at twice their typical size."
 msgstr ""
+"Les rapports peuvent être difficile à lire sur les écrans à haute "
+"résolution. Cette option permet d'ajuster le facteur d’agrandissement. Par "
+"exemple, un facteur de 2.0 affichera le rapport à deux fois sa taille "
+"normale."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:379
 msgid "PDF export file name format"
-msgstr ""
+msgstr "Format du nom du fichier PDF exporté"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:380
 #, c-format
@@ -13745,6 +13774,13 @@ msgid ""
 "in filenames, such as '/', will be replaced with underscores '_' in the "
 "resulting file name."
 msgstr ""
+"Ce réglage permet de choisir le nom du fichier à utiliser pour les exports "
+"au format PDF. C'est une chaîne de caractères compatible sprintf(3) avec "
+"trois arguments : \"%1$s\" est le nom du rapport, comme \"Facture\". \"%2$s\""
+" est le numéro du rapport, pour lequel le rapport est le numéro de la "
+"facture. \"%3$s\" est la date du rapport, au format défini par le réglage "
+"\"filename-date-format\". Note : les caractères non autorisés, comme '/', "
+"seront remplacés par des tirets '_' dans le nom final du fichier."
 
 # src/gnome/glade-gnc-dialogs.c:191 src/gnome/glade-gnc-dialogs.c:1194
 # src/gnome/glade-gnc-dialogs.c:1364
@@ -17732,7 +17768,7 @@ msgstr "Afficher le nom complet du compte"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:205
 msgid "Based On"
-msgstr ""
+msgstr "Basé sur"
 
 # messages-i18n.c:240
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:219
@@ -17764,7 +17800,7 @@ msgstr "_Fichier"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:349
 msgid "_Expand All"
-msgstr ""
+msgstr "Développ&er tous"
 
 # messages-i18n.c:170
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:363
@@ -17776,6 +17812,8 @@ msgstr "Tout effacer"
 msgid ""
 "Multiple rows can be selected and then deleted by pressing the delete button."
 msgstr ""
+"Plusieurs lignes peuvent être sélectionnées puis supprimées en pressant le "
+"bouton Supprimer."
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -17898,12 +17936,11 @@ msgstr "\"A\""
 
 #: gnucash/gtkbuilder/dialog-import.glade:667
 msgid "\"U+C\""
-msgstr ""
+msgstr "\"U+C\""
 
 #: gnucash/gtkbuilder/dialog-import.glade:678
-#, fuzzy
 msgid "\"C\""
-msgstr "\"A\""
+msgstr "\"C\""
 
 # po/guile_strings.txt:219
 #: gnucash/gtkbuilder/dialog-import.glade:690
@@ -18002,7 +18039,7 @@ msgstr "(destinataire/émetteur)"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:418
 msgid "Open Document Link"
-msgstr ""
+msgstr "Ouvrir le lien vers le document"
 
 # po/guile_strings.txt:152
 #: gnucash/gtkbuilder/dialog-invoice.glade:535
@@ -18149,7 +18186,7 @@ msgstr "_Maintenant"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:40
 msgid "_Yes"
-msgstr ""
+msgstr "_Oui"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:86
 msgid ""
@@ -18210,11 +18247,11 @@ msgstr "Justification"
 
 #: gnucash/gtkbuilder/dialog-options.glade:44
 msgid "Close dialog and make no changes."
-msgstr ""
+msgstr "Fermer ce dialogue en ignorant les changements."
 
 #: gnucash/gtkbuilder/dialog-options.glade:61
 msgid "Apply changes but do not close dialog."
-msgstr ""
+msgstr "Appliquer les changements mais ne pas fermer ce dialogue."
 
 #: gnucash/gtkbuilder/dialog-options.glade:78
 #, fuzzy
@@ -18261,7 +18298,7 @@ msgstr "La société associée à cette facturation."
 
 #: gnucash/gtkbuilder/dialog-payment.glade:167
 msgid "Partner"
-msgstr ""
+msgstr "Partenaire"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:204
 msgid "Post To"
@@ -18313,7 +18350,7 @@ msgstr "Imprimer un chèque"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:633
 msgid "(USD)"
-msgstr ""
+msgstr "(USD)"
 
 # messages-i18n.c:346
 #: gnucash/gtkbuilder/dialog-payment.glade:655
@@ -23556,9 +23593,8 @@ msgstr ""
 
 # po/guile_strings.txt:130
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:227
-#, fuzzy
 msgid "Price can't be parsed into a number."
-msgstr "Calculer la valeur de ce bien/produit"
+msgstr "Ce prix ne peut être interprété comme un nombre."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:383
 msgid "Account value can't be mapped back to an account."
@@ -23570,11 +23606,11 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:433
 msgid "Account value can't be empty."
-msgstr ""
+msgstr "La valeur du compte ne peut être vide."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:444
 msgid "Transfer account value can't be empty."
-msgstr ""
+msgstr "La valeur du compte viré ne peut être vide."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:595
 #, fuzzy
@@ -23593,15 +23629,13 @@ msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:1178
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:49
-#, fuzzy
 msgid "No Settings"
-msgstr "Choisir les réglages d’exportation"
+msgstr "Aucun réglage"
 
 # src/gnome/glade-gnc-dialogs.c:1178
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:50
-#, fuzzy
 msgid "GnuCash Export Format"
-msgstr "Choisir le format d'export"
+msgstr "Format d'export de GnuCash"
 
 # messages-i18n.c:186
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:50
@@ -23621,53 +23655,44 @@ msgid "Import Transactions from a CSV file"
 msgstr "Importe des transactions depuis un fichier CSV"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
-#, fuzzy
 msgid "Import _Prices from a CSV file..."
-msgstr "Importe des comptes depuis un fichier CSV"
+msgstr "Importer les _prix depuis un fichier CSV..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
-#, fuzzy
 msgid "Import Prices from a CSV file"
-msgstr "Importe des comptes depuis un fichier CSV"
+msgstr "Importer les prix depuis un fichier CSV"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:139
-#, fuzzy
 msgid "Shipping Name"
-msgstr "Contact de livraison"
+msgstr "Nom de l'expéditeur"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:140
-#, fuzzy
 msgid "Shipping Address 1"
-msgstr "Adresse de livraison"
+msgstr "Adresse de livraison (1/4)"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:141
-#, fuzzy
 msgid "Shipping Address 2"
-msgstr "Adresse de livraison"
+msgstr "Adresse de livraison (2/4)"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:142
-#, fuzzy
 msgid "Shipping Address 3"
-msgstr "Adresse de livraison"
+msgstr "Adresse de livraison (3/4)"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:143
-#, fuzzy
 msgid "Shipping Address 4"
-msgstr "Adresse de livraison"
+msgstr "Adresse de livraison (4/4)"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:144
-#, fuzzy
 msgid "Shipping Phone"
-msgstr "Contact de livraison"
+msgstr "Téléphone du destinataire"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:145
-#, fuzzy
 msgid "Shipping Fax"
-msgstr "Contact de livraison"
+msgstr "Fax du destinataire"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:146
 msgid "Shipping Email"
-msgstr "Courriel de livraison"
+msgstr "Courriel du destinataire"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:177
 msgid "Import Customers from csv"
