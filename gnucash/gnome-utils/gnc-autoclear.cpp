@@ -99,6 +99,12 @@ public:
     }
 };
 
+static inline gint64
+normalize_num (gnc_numeric amount, int first_denom)
+{
+    return ((amount.num * first_denom) / amount.denom);
+};
+
 gboolean
 gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
@@ -108,6 +114,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     std::unordered_map<gint64, SplitVec, Hasher, EqualFn> sack;
     guint nc_progress = 0;
     clock_t start_ticks;
+    int first_denom;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
     GQuark autoclear_quark = g_quark_from_static_string ("autoclear");
 
@@ -150,21 +157,24 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         goto skip_knapsack;
     }
 
+    // nc_vector is not empty. retrieve the first split denom
+    first_denom = (xaccSplitGetAmount (nc_vector[0])).denom;
     start_ticks = clock ();
     sack.reserve(nc_vector.size() * 4);
 
     for (auto& split : nc_vector)
     {
         auto amount = xaccSplitGetAmount (split);
+        auto amount_normalized = normalize_num (amount, first_denom);
         std::vector<WorkItem> workvector {};
 
         workvector.reserve (sack.size () + 1);
-        if (sack.find (amount.num) != sack.end ())
-            workvector.emplace_back (amount.num, SplitVec{});
+        if (sack.find (amount_normalized) != sack.end ())
+            workvector.emplace_back (amount_normalized, SplitVec{});
         else
         {
             SplitVec new_splits = { split };
-            workvector.emplace_back (amount.num, std::move(new_splits));
+            workvector.emplace_back (amount_normalized, std::move(new_splits));
         }
 
         // printf ("new split. sack size = %ld\n", sack.size());
@@ -172,7 +182,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         for (auto& [map_value, map_splits] : sack)
         {
             gint64 new_value;
-            if (__builtin_add_overflow (map_value, amount.num, &new_value))
+            if (__builtin_add_overflow (map_value, amount_normalized, &new_value))
             {
                 g_set_error (error, autoclear_quark, AUTOCLEAR_OVERLOAD, "%s",
                              "Overflow error: Amount numbers are too large!");
@@ -203,7 +213,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
             goto skip_knapsack;
         }
 
-        auto try_toclear = sack.find (toclear_value.num);
+        auto try_toclear = sack.find (normalize_num (toclear_value, first_denom));
         if (G_UNLIKELY (try_toclear != sack.end() &&
                         try_toclear->second.empty()))
         {
@@ -227,7 +237,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         }
 
     /* Check solution */
-    if (sack.find (toclear_value.num) == sack.end())
+    if (sack.find (normalize_num (toclear_value, first_denom)) == sack.end())
     {
         g_set_error (error, autoclear_quark, AUTOCLEAR_UNABLE, "%s",
                      _("The selected amount cannot be cleared."));
