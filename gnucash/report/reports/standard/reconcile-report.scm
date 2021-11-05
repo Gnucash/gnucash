@@ -46,6 +46,9 @@
      (gnc:lookup-option options gnc:pagename-general "End Date")
      (cons 'relative 'today))
     (gnc:option-set-value
+     (gnc:lookup-option options gnc:pagename-general "Date Filter")
+     'reconciled)
+    (gnc:option-set-value
      (gnc:lookup-option options gnc:pagename-display "Reconciled Date") #t)
     (gnc:option-set-value
      (gnc:lookup-option options gnc:pagename-display "Running Balance") #f)
@@ -62,10 +65,6 @@ Options. Please note the dates specified in the options will apply \
 to the Reconciliation Date.")
    (gnc:html-markup-br)
    (gnc:html-markup-br)))
-
-(define (split->reconcile-date split)
-  (and (char=? (xaccSplitGetReconcile split) #\y)
-       (xaccSplitGetDateReconciled split)))
 
 (define (reconcile-report-calculated-cells options)
   (letrec
@@ -94,8 +93,6 @@ to the Reconciliation Date.")
   (gnc:trep-renderer
    rpt
    #:custom-calculated-cells reconcile-report-calculated-cells
-   #:split->date split->reconcile-date
-   #:split->date-include-false? #t
    #:empty-report-message reconcile-report-instructions))
 
 (gnc:define-report
