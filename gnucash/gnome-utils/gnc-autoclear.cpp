@@ -73,8 +73,8 @@ static void looping_update_status (GtkLabel *label, guint nc_progress,
     if (!label)
         return;
 
-    auto text = g_strdup_printf ("%u/%u splits processed, %u combos",
-                                       nc_progress, nc_size, size);
+    auto text = g_strdup_printf (_("%u/%u splits, %u combinations produced"),
+                                 nc_progress, nc_size, size);
     status_update (label, text);
     g_free (text);
 }
