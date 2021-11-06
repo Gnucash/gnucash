@@ -9,14 +9,15 @@
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021.
 # Guille <willelopz+weblate@gmail.com>, 2021.
 # Guille Lopez <willelopz@gmail.com>, 2021.
+# Francisco Serrador <fserrador@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-04-15 23:26+0000\n"
-"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
+"PO-Revision-Date: 2021-10-14 21:34+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "es/>\n"
 "Language: es\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -613,18 +614,16 @@ msgid "portfolio"
 msgstr "cartera"
 
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "cerrar"
+msgstr "contabilizar"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "preferencias"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "acción: pago"
+msgstr "abonación principal"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -652,7 +651,7 @@ msgstr "Ganancias y Pérdidas"
 
 #. "-"
 msgid "quick-fill"
-msgstr ""
+msgstr "relleno rápido"
 
 #. "-"
 msgid "rebalance, to (a transaction)"
@@ -668,7 +667,7 @@ msgstr "teneduría de libros?"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr "libro de cuentas/anotaciones"
+msgstr "registro"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
@@ -700,15 +699,15 @@ msgstr "recargar"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "Formulario de Cuenta"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "Formulario Vertical"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr ""
+msgstr "Ganancias Retenidas"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 #, fuzzy
@@ -745,11 +744,11 @@ msgstr "acciones"
 
 #. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
-msgstr "fuente"
+msgstr "origen"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
-msgstr "partida"
+msgstr "desglose"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -760,17 +759,16 @@ msgid "subtotal"
 msgstr "subtotal"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "información sobre impuestos"
+msgstr "código de imposición"
 
 #. "field of an account"
 msgid "tax info"
-msgstr "información sobre impuestos"
+msgstr "informe sobre imposiciones"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 msgid "tax type: income tax"
-msgstr "tipo de impuesto: impuesto sobre la renta"
+msgstr "tipo impositivo: imposición sobre renta"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"

@@ -31,6 +31,7 @@
 
 #include "qof.h"
 #include "gnc-features.h"
+#include "gnc-glib-utils.h"
 
 typedef struct
 {
@@ -115,20 +116,15 @@ gchar *gnc_features_test_unknown (QofBook *book)
               &features_list);
     if (features_list)
     {
-        GList *i;
-        char* msg = g_strdup(_("This Dataset contains features not supported "
-                       "by this version of GnuCash. You must use a "
-                       "newer version of GnuCash in order to support "
-                       "the following features:"
-                                 ));
+        const char* sep = "\n* ";
+        const char* header = _("This Dataset contains features not supported "
+                               "by this version of GnuCash. You must use a "
+                               "newer version of GnuCash in order to support "
+                               "the following features:");
 
-        for (i = features_list; i; i = i->next)
-        {
-            char *tmp = g_strconcat(msg, "\n* ", i->data, NULL);
-            g_free (msg);
-            msg = tmp;
-        }
-
+        char *features_str = gnc_g_list_stringjoin (features_list, sep);
+        char *msg = g_strconcat (header, sep, features_str, NULL);
+        g_free (features_str);
         g_list_free(features_list);
         return msg;
     }

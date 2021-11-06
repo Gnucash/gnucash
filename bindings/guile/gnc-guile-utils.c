@@ -39,15 +39,7 @@
 gchar *gnc_scm_to_utf8_string(SCM scm_string)
 {
     if (scm_is_string (scm_string))
-    {
-        gchar* s;
-        char * str;
-
-        str = scm_to_utf8_stringn(scm_string, NULL);
-        s = g_strdup(str);
-        free (str);
-        return s;
-    }
+        return scm_to_utf8_stringn(scm_string, NULL);
 
     /* Unable to extract string from the symbol...*/
     g_error ("bad value\n");
@@ -71,15 +63,7 @@ gchar *gnc_scm_to_utf8_string(SCM scm_string)
 gchar *gnc_scm_to_locale_string(SCM scm_string)
 {
     if (scm_is_string (scm_string))
-    {
-        gchar* s;
-        char * str;
-
-        str = scm_to_locale_string(scm_string);
-        s = g_strdup(str);
-        free (str);
-        return s;
-    }
+        return scm_to_locale_string(scm_string);
 
     /* Unable to extract string from the symbol...*/
     g_error ("bad value\n");
@@ -104,12 +88,7 @@ gnc_scm_symbol_to_locale_string(SCM symbol_value)
     {
         SCM string_value = scm_symbol_to_string (symbol_value);
         if (scm_is_string (string_value))
-        {
-            char  *tmp = scm_to_utf8_string (string_value);
-            gchar *str = g_strdup (tmp);
-            free (tmp);
-            return str;
-        }
+            return scm_to_utf8_string (string_value);
     }
 
     /* Unable to extract string from the symbol...*/

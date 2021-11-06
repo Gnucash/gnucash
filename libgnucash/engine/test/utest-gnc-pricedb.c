@@ -394,10 +394,6 @@ test_gnc_price_list_destroy (Fixture *fixture, gconstpointer pData)
 gboolean
 gnc_price_list_equal(PriceList *prices1, PriceList *prices2)// Local: 1:0:0
 */
-/* static void
-test_gnc_price_list_equal (Fixture *fixture, gconstpointer pData)
-{
-}*/
 typedef struct
 {
     GNCPriceDB *pricedb;
@@ -686,6 +682,38 @@ test_num_prices_helper (Fixture *fixture, gconstpointer pData)
 guint
 gnc_pricedb_get_num_prices(GNCPriceDB *db)// C: 2 in 1  Local: 0:0:0
 */
+
+static void
+test_gnc_price_list_equal (PriceDBFixture *fixture, gconstpointer pData)
+{
+    PriceList *p1 = NULL;
+    PriceList *p2 = NULL;
+    Commodities *c = fixture->com;
+    gnc_commodity *aud = c->aud;
+
+    /* p1 and p2 are both NULL */
+    g_assert (gnc_price_list_equal (p1, p2));
+
+    p1 = gnc_pricedb_lookup_latest_any_currency(fixture->pricedb, aud);
+
+    /* p1 is PriceList, p2 is NULL */
+    g_assert (!gnc_price_list_equal (p1, p2));
+
+    p2 = p1;
+
+    /* p1 and p2 both point to the same PriceList */
+    g_assert (gnc_price_list_equal (p1, p2));
+
+    p2 = gnc_pricedb_lookup_latest_any_currency(fixture->pricedb, aud);
+
+    /* p1 and p2 are different PriceLists, but are identical in contents */
+    g_assert (p1 != p2);
+    g_assert (gnc_price_list_equal (p1, p2));
+
+    gnc_price_list_destroy (p1);
+    gnc_price_list_destroy (p2);
+}
+
 static void
 test_gnc_pricedb_get_num_prices (PriceDBFixture *fixture, gconstpointer pData)
 {
@@ -1649,7 +1677,7 @@ test_suite_gnc_pricedb (void)
 // GNC_TEST_ADD (suitename, "gnc price list remove", Fixture, NULL, setup, test_gnc_price_list_remove, teardown);
 // GNC_TEST_ADD (suitename, "price list destroy helper", Fixture, NULL, setup, test_price_list_destroy_helper, teardown);
 // GNC_TEST_ADD (suitename, "gnc price list destroy", Fixture, NULL, setup, test_gnc_price_list_destroy, teardown);
-// GNC_TEST_ADD (suitename, "gnc price list equal", Fixture, NULL, setup, test_gnc_price_list_equal, teardown);
+GNC_TEST_ADD (suitename, "gnc price list equal", PriceDBFixture, NULL, setup, test_gnc_price_list_equal, teardown);
 // GNC_TEST_ADD (suitename, "gnc pricedb init", Fixture, NULL, setup, test_gnc_pricedb_init, teardown);
 // GNC_TEST_ADD (suitename, "gnc pricedb create", Fixture, NULL, setup, test_gnc_pricedb_create, teardown);
 // GNC_TEST_ADD (suitename, "destroy pricedb currency hash data", Fixture, NULL, setup, test_destroy_pricedb_currency_hash_data, teardown);

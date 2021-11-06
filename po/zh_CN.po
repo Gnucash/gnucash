@@ -20,12 +20,12 @@
 # J0kWang <lianjiefly@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.7-pre2\n"
+"Project-Id-Version: GnuCash 4.8-pot2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-09-20 22:29+0200\n"
-"PO-Revision-Date: 2021-10-10 06:03+0000\n"
-"Last-Translator: TianXing_Yi <ytx.cash@gmail.com>\n"
+"POT-Creation-Date: 2021-10-17 23:05+0200\n"
+"PO-Revision-Date: 2021-10-23 12:39+0000\n"
+"Last-Translator: cjh <cjh@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -908,7 +908,7 @@ msgstr "贷款偿还选项：“ %s”"
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
 #: gnucash/gnome/assistant-loan.cpp:1882 gnucash/gnome/dialog-lot-viewer.c:943
-#: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:429
+#: gnucash/gnome/gnc-split-reg.c:682 gnucash/gnome/reconcile-view.c:426
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
 #: gnucash/gtkbuilder/dialog-doclink.glade:644
 #: gnucash/gtkbuilder/dialog-payment.glade:253
@@ -921,13 +921,13 @@ msgstr "贷款偿还选项：“ %s”"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
-#: gnucash/import-export/import-main-matcher.c:1099
+#: gnucash/import-export/import-main-matcher.c:1100
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3700
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3751
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
-#: gnucash/register/ledger-core/split-register-model.c:232
+#: gnucash/register/ledger-core/split-register-model.c:233
 #: gnucash/report/reports/standard/account-summary.scm:83
 #: gnucash/report/reports/standard/advanced-portfolio.scm:73
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1065
@@ -1021,10 +1021,10 @@ msgstr "添加汇率时出错。"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:541
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:151
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
-#: gnucash/import-export/import-main-matcher.c:1100
+#: gnucash/import-export/import-main-matcher.c:1101
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
-#: gnucash/register/ledger-core/split-register-model.c:341
+#: gnucash/register/ledger-core/split-register-model.c:342
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1033
 #: gnucash/report/reports/standard/budget-flow.scm:41
 #: gnucash/report/reports/standard/budget.scm:47
@@ -1051,7 +1051,7 @@ msgstr "符号"
 
 #: gnucash/gnome/assistant-stock-split.c:594
 #: gnucash/gnome/dialog-find-transactions.c:122
-#: gnucash/register/ledger-core/split-register-model.c:419
+#: gnucash/register/ledger-core/split-register-model.c:420
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1053
 #: gnucash/report/reports/standard/general-journal.scm:98
 #: gnucash/report/reports/standard/general-ledger.scm:78
@@ -1250,7 +1250,7 @@ msgstr "删除币种？"
 
 #: gnucash/gnome/dialog-commodities.c:217 gnucash/gnome/dialog-doclink.c:165
 #: gnucash/gnome/dialog-price-edit-db.c:206
-#: gnucash/gnome/dialog-price-editor.c:237 gnucash/gnome/dialog-tax-info.c:1190
+#: gnucash/gnome/dialog-price-editor.c:237 gnucash/gnome/dialog-tax-info.c:1188
 #: gnucash/gnome/gnc-plugin-budget.c:289
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1789
 #: gnucash/gnome/gnc-plugin-page-invoice.c:184
@@ -1343,7 +1343,7 @@ msgstr "删除币种？"
 #: gnucash/import-export/aqb/dialog-ab.glade:1024
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:424
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:378
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2031
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2030
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:387
 #: gnucash/register/ledger-core/gncEntryLedger.c:931
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
@@ -1468,38 +1468,38 @@ msgstr "编号"
 msgid "Find Customer"
 msgstr "查找"
 
-#: gnucash/gnome/dialog-custom-report.c:319
+#: gnucash/gnome/dialog-custom-report.c:331
 #, c-format
 msgid "Are you sure you want to delete %s?"
 msgstr "确定要删除“%s”？"
 
-#: gnucash/gnome/dialog-custom-report.c:424
+#: gnucash/gnome/dialog-custom-report.c:436
 msgid "You must select a report configuration to load."
 msgstr "选择要运行的报表。"
 
-#: gnucash/gnome/dialog-custom-report.c:439
+#: gnucash/gnome/dialog-custom-report.c:451
 msgid "You must select a report configuration to delete."
 msgstr "选择要删除的报表。"
 
-#: gnucash/gnome/dialog-custom-report.c:453
+#: gnucash/gnome/dialog-custom-report.c:465
 msgid "Unable to change report configuration name."
 msgstr "此报表无法改名。"
 
-#: gnucash/gnome/dialog-custom-report.c:465
+#: gnucash/gnome/dialog-custom-report.c:477
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
 msgstr "此命名已存在，请另选其他。"
 
-#: gnucash/gnome/dialog-custom-report.c:491
+#: gnucash/gnome/dialog-custom-report.c:503
 msgid "Load report configuration"
 msgstr "运行"
 
-#: gnucash/gnome/dialog-custom-report.c:493
+#: gnucash/gnome/dialog-custom-report.c:505
 msgid "Edit report configuration name"
 msgstr "改名"
 
-#: gnucash/gnome/dialog-custom-report.c:495
+#: gnucash/gnome/dialog-custom-report.c:507
 msgid "Delete report configuration"
 msgstr "删除"
 
@@ -1512,7 +1512,7 @@ msgid "Placeholder account selected. Please try again."
 msgstr "选择了父科目，请重试。"
 
 #: gnucash/gnome/dialog-doclink.c:161
-#: gnucash/gnome/gnc-plugin-page-register.c:4771
+#: gnucash/gnome/gnc-plugin-page-register.c:4780
 msgid "Select document"
 msgstr "选择凭证"
 
@@ -1654,8 +1654,8 @@ msgstr "交易关联的凭证"
 #: gnucash/gnome/dialog-doclink.c:1077
 #: gnucash/gnome/dialog-find-transactions2.c:157
 #: gnucash/gnome/dialog-find-transactions.c:157
-#: gnucash/gnome/dialog-lot-viewer.c:959 gnucash/gnome/dialog-tax-info.c:1398
-#: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:417
+#: gnucash/gnome/dialog-lot-viewer.c:959 gnucash/gnome/dialog-tax-info.c:1396
+#: gnucash/gnome/gnc-split-reg.c:700 gnucash/gnome/reconcile-view.c:414
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:829
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2815
@@ -1668,13 +1668,13 @@ msgstr "交易关联的凭证"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
-#: gnucash/import-export/import-main-matcher.c:1103
+#: gnucash/import-export/import-main-matcher.c:1104
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3710
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3761
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
-#: gnucash/register/ledger-core/split-register-model.c:295
+#: gnucash/register/ledger-core/split-register-model.c:296
 #: gnucash/report/reports/standard/account-summary.scm:409
 #: gnucash/report/reports/standard/general-journal.scm:96
 #: gnucash/report/reports/standard/general-ledger.scm:70
@@ -1750,7 +1750,7 @@ msgid "Username"
 msgstr "用户名"
 
 #: gnucash/gnome/dialog-employee.c:732 gnucash/gnome/dialog-sx-editor2.c:1754
-#: gnucash/gnome/dialog-sx-editor.c:1816 gnucash/gnome/dialog-tax-info.c:1201
+#: gnucash/gnome/dialog-sx-editor.c:1816 gnucash/gnome/dialog-tax-info.c:1199
 #: gnucash/gnome-utils/gnc-dense-cal.c:350
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:368
@@ -1869,7 +1869,7 @@ msgstr "股份价格"
 
 #: gnucash/gnome/dialog-find-transactions2.c:124
 #: gnucash/gnome/dialog-invoice.c:3629 gnucash/gnome/dialog-lot-viewer.c:973
-#: gnucash/gnome/gnc-split-reg.c:694 gnucash/gnome/reconcile-view.c:413
+#: gnucash/gnome/gnc-split-reg.c:694 gnucash/gnome/reconcile-view.c:410
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2895
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2907
 #: gnucash/gtkbuilder/assistant-loan.glade:199
@@ -1878,7 +1878,7 @@ msgstr "股份价格"
 #: gnucash/gtkbuilder/dialog-payment.glade:411
 #: gnucash/gtkbuilder/dialog-transfer.glade:100
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:54
-#: gnucash/import-export/import-main-matcher.c:1102
+#: gnucash/import-export/import-main-matcher.c:1103
 #: gnucash/import-export/import-match-picker.c:394
 #: gnucash/import-export/import-match-picker.c:434
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3721
@@ -1928,7 +1928,7 @@ msgstr "入账日期"
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
 #: gnucash/gnome/gnc-plugin-page-register.c:2504
-#: gnucash/gnome/gnc-plugin-page-register.c:4216
+#: gnucash/gnome/gnc-plugin-page-register.c:4221
 #: gnucash/gnome-search/dialog-search.c:875
 #: gnucash/gnome-search/dialog-search.c:881
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
@@ -1954,7 +1954,7 @@ msgstr "编号/属性"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
-#: gnucash/register/ledger-core/split-register-model.c:327
+#: gnucash/register/ledger-core/split-register-model.c:328
 #: gnucash/report/reports/standard/invoice.scm:92
 #: gnucash/report/reports/standard/invoice.scm:209
 msgid "Action"
@@ -1967,7 +1967,7 @@ msgstr "属性"
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
 #: gnucash/gnome/gnc-plugin-page-register.c:2503
-#: gnucash/gnome/gnc-plugin-page-register.c:4215
+#: gnucash/gnome/gnc-plugin-page-register.c:4220
 #: gnucash/gnome-search/dialog-search.c:877
 #: gnucash/gnome-search/dialog-search.c:883
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:614
@@ -2011,10 +2011,10 @@ msgstr "描述，说明，备注"
 #: gnucash/gtkbuilder/dialog-transfer.glade:203
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:626
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
-#: gnucash/import-export/import-main-matcher.c:1104
+#: gnucash/import-export/import-main-matcher.c:1105
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
-#: gnucash/register/ledger-core/split-register-model.c:355
+#: gnucash/register/ledger-core/split-register-model.c:356
 #: gnucash/report/reports/standard/general-ledger.scm:71
 #: gnucash/report/reports/standard/general-ledger.scm:91
 #: gnucash/report/reports/standard/register.scm:140
@@ -2046,7 +2046,7 @@ msgstr "备注"
 #: gnucash/import-export/csv-exp/csv-tree-export.c:157
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
-#: gnucash/register/ledger-core/split-register-model.c:491
+#: gnucash/register/ledger-core/split-register-model.c:492
 #: gnucash/report/reports/standard/account-summary.scm:437
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/receipt.scm:38
@@ -2148,7 +2148,7 @@ msgstr "这个条目是附加在订单上的，因此也要删除其来源！"
 #: gnucash/gnome/dialog-invoice.c:3423 gnucash/gnome/dialog-invoice.c:3457
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2739
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:162
-#: gnucash/register/ledger-core/split-register-model.c:239
+#: gnucash/register/ledger-core/split-register-model.c:240
 #: gnucash/report/reports/aging.scm:388
 #: gnucash/report/reports/standard/invoice.scm:244
 #: gnucash/report/reports/standard/invoice.scm:595
@@ -2422,7 +2422,7 @@ msgid "Voucher Notes"
 msgstr "报销说明"
 
 #: gnucash/gnome/dialog-invoice.c:3473 gnucash/gnome/dialog-invoice.c:3632
-#: gnucash/gnome/dialog-lot-viewer.c:866 gnucash/gnome/dialog-tax-info.c:1236
+#: gnucash/gnome/dialog-lot-viewer.c:866 gnucash/gnome/dialog-tax-info.c:1234
 #: gnucash/gnome-utils/gnc-tree-view-account.c:812
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
@@ -2436,7 +2436,7 @@ msgstr "报销说明"
 #: gnucash/gtkbuilder/dialog-tax-info.glade:128
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/import-export/csv-imp/csv-account-import.c:154
-#: gnucash/register/ledger-core/split-register-model.c:362
+#: gnucash/register/ledger-core/split-register-model.c:363
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/job-report.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:52
@@ -2446,7 +2446,7 @@ msgid "Type"
 msgstr "类型"
 
 #: gnucash/gnome/dialog-invoice.c:3475
-#: gnucash/register/ledger-core/split-register-model.c:309
+#: gnucash/register/ledger-core/split-register-model.c:310
 #: gnucash/report/reports/standard/new-owner-report.scm:811
 msgid "Paid"
 msgstr "已付款"
@@ -2465,13 +2465,13 @@ msgid "Opened"
 msgstr "已开票"
 
 #: gnucash/gnome/dialog-invoice.c:3487 gnucash/gnome/dialog-lot-viewer.c:953
-#: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:421
-#: gnucash/gnome/reconcile-view.c:425
+#: gnucash/gnome/dialog-order.c:896 gnucash/gnome/reconcile-view.c:418
+#: gnucash/gnome/reconcile-view.c:422
 #: gnucash/gtkbuilder/dialog-payment.glade:475
 #: gnucash/gtkbuilder/dialog-transfer.glade:153
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
-#: gnucash/register/ledger-core/split-register-model.c:255
-#: gnucash/register/ledger-core/split-register-model.c:275
+#: gnucash/register/ledger-core/split-register-model.c:256
+#: gnucash/register/ledger-core/split-register-model.c:276
 #: gnucash/report/reports/standard/general-journal.scm:95
 #: gnucash/report/reports/standard/general-ledger.scm:89
 #: gnucash/report/reports/standard/register.scm:136
@@ -2562,7 +2562,7 @@ msgstr "仅限活跃"
 #: gnucash/gnome/dialog-job.c:585 gnucash/gnome/dialog-job.c:598
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2929
 #: gnucash/gtkbuilder/dialog-job.glade:204
-#: gnucash/register/ledger-core/split-register-model.c:369
+#: gnucash/register/ledger-core/split-register-model.c:370
 msgid "Rate"
 msgstr "等级"
 
@@ -2606,8 +2606,8 @@ msgstr "标题"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3115
-#: gnucash/register/ledger-core/split-register-model.c:320
-#: gnucash/register/ledger-core/split-register-model.c:484
+#: gnucash/register/ledger-core/split-register-model.c:321
+#: gnucash/register/ledger-core/split-register-model.c:485
 #: gnucash/report/reports/standard/account-summary.scm:422
 #: gnucash/report/reports/standard/balance-forecast.scm:248
 #: gnucash/report/reports/standard/job-report.scm:206
@@ -2727,7 +2727,7 @@ msgstr "转出和入账科目币种不同，请设置汇率。"
 #: gnucash/gtkbuilder/dialog-invoice.glade:479
 #: gnucash/gtkbuilder/dialog-invoice.glade:1058
 #: gnucash/gtkbuilder/dialog-payment.glade:40
-#: gnucash/register/ledger-core/split-register-model.c:291
+#: gnucash/register/ledger-core/split-register-model.c:292
 #: gnucash/report/reports/standard/customer-summary.scm:264
 #: gnucash/report/reports/standard/customer-summary.scm:297
 #: gnucash/report/reports/standard/job-report.scm:504
@@ -2744,7 +2744,7 @@ msgstr "客户"
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:170
 #: gnucash/gtkbuilder/dialog-payment.glade:44
 #: gnucash/gtkbuilder/dialog-vendor.glade:475
-#: gnucash/register/ledger-core/split-register-model.c:293
+#: gnucash/register/ledger-core/split-register-model.c:294
 #: gnucash/report/reports/standard/job-report.scm:510
 #: gnucash/report/reports/standard/new-owner-report.scm:104
 #: gnucash/report/reports/standard/owner-report.scm:117
@@ -2770,7 +2770,8 @@ msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type \"%s"
 "\" before you continue to process this payment. Perhaps you want to create "
 "an Invoice or Bill first?"
-msgstr "尚无有效的“入账”科目，请先创建一个、类型为“%s”；也许应先创建一个发票或账单？"
+msgstr ""
+"尚无有效的“入账”科目，请先创建一个、类型为“%s”；也许应先创建一个发票或账单？"
 
 #: gnucash/gnome/dialog-payment.c:1621
 msgid ""
@@ -3190,29 +3191,29 @@ msgstr "状态"
 msgid "Created Transactions"
 msgstr "新建交易"
 
-#: gnucash/gnome/dialog-tax-info.c:289
+#: gnucash/gnome/dialog-tax-info.c:287
 msgid "Last Valid Year: "
 msgstr "上一个有效的年份： "
 
-#: gnucash/gnome/dialog-tax-info.c:290
+#: gnucash/gnome/dialog-tax-info.c:288
 msgid "Form Line Data: "
 msgstr "表单行数据： "
 
 #. Translators: Tax Code
-#: gnucash/gnome/dialog-tax-info.c:292
+#: gnucash/gnome/dialog-tax-info.c:290
 msgid "Code"
 msgstr "代码"
 
-#: gnucash/gnome/dialog-tax-info.c:367
+#: gnucash/gnome/dialog-tax-info.c:365
 msgid "now"
 msgstr "现在"
 
-#: gnucash/gnome/dialog-tax-info.c:1186
+#: gnucash/gnome/dialog-tax-info.c:1184
 #: gnucash/gtkbuilder/dialog-tax-info.glade:89
 msgid "Income Tax Identity"
 msgstr "标识"
 
-#: gnucash/gnome/dialog-tax-info.c:1192
+#: gnucash/gnome/dialog-tax-info.c:1190
 #: gnucash/gtkbuilder/dialog-options.glade:55
 #: gnucash/gtkbuilder/dialog-price.glade:85
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
@@ -3220,14 +3221,14 @@ msgstr "标识"
 msgid "_Apply"
 msgstr "应用(_A)"
 
-#: gnucash/gnome/dialog-tax-info.c:1241
+#: gnucash/gnome/dialog-tax-info.c:1239
 msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
 "警告：如果您设置了 TXF 类别，并且之后改变“类型”，您需要逐个手动重置这些类别"
 
-#: gnucash/gnome/dialog-tax-info.c:1394
+#: gnucash/gnome/dialog-tax-info.c:1392
 msgid "Form"
 msgstr "表单"
 
@@ -3279,7 +3280,7 @@ msgstr "查找供应商"
 #: gnucash/report/reports/standard/net-charts.scm:346
 #: gnucash/report/reports/standard/net-charts.scm:416
 #: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:171
-#: libgnucash/engine/Account.cpp:4441
+#: libgnucash/engine/Account.cpp:4448
 msgid "Income"
 msgstr "收入"
 
@@ -3298,7 +3299,7 @@ msgstr "支出"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2868
 #: gnucash/register/ledger-core/split-register.c:2563
 #: gnucash/register/ledger-core/split-register-layout.c:719
-#: gnucash/register/ledger-core/split-register-model.c:348
+#: gnucash/register/ledger-core/split-register-model.c:349
 #: gnucash/report/reports/standard/register.scm:144
 msgid "Transfer"
 msgstr "转账"
@@ -4086,7 +4087,7 @@ msgstr "删除"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:454
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1991
 #: gnucash/gnome/gnc-plugin-page-register.c:1962
-#: gnucash/gnome/gnc-plugin-page-register.c:5076
+#: gnucash/gnome/gnc-plugin-page-register.c:5088
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr "“检查与修复”当前正在运行，您要中止它吗？"
 
@@ -5545,7 +5546,7 @@ msgstr "不能作废已对账或已核实分录的交易。"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register2.c:3040
-#: gnucash/gnome/gnc-plugin-page-register.c:4268
+#: gnucash/gnome/gnc-plugin-page-register.c:4273
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2330
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
@@ -5664,24 +5665,28 @@ msgstr "交易报表"
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "这笔交易事项被标记只读，原因是：“%s”"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4078
+#: gnucash/gnome/gnc-plugin-page-register.c:4087
 #: gnucash/gnome/gnc-split-reg.c:1131
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1121
 msgid "A reversing entry has already been created for this transaction."
 msgstr "已为此交易记录创建冲销分录。"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4091
+#: gnucash/gnome/gnc-plugin-page-register.c:4088
+msgid "Jump to the transaction?"
+msgstr "跳转至交易？"
+
+#: gnucash/gnome/gnc-plugin-page-register.c:4095
 msgid "Reverse Transaction"
 msgstr "添加反向交易事项"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4092
+#: gnucash/gnome/gnc-plugin-page-register.c:4096
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:73
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:624
 msgid "New Transaction Information"
 msgstr "新交易信息"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:4180
+#: gnucash/gnome/gnc-plugin-page-register.c:4185
 #, c-format
 msgid "Sort %s by..."
 msgstr "排序 %s"
@@ -5689,26 +5694,26 @@ msgstr "排序 %s"
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.c:4762
+#: gnucash/gnome/gnc-plugin-page-register.c:4771
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr "%s %s来自%s，已过帐%s，金额%s"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4772
+#: gnucash/gnome/gnc-plugin-page-register.c:4781
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr "几个文件与此交易相关联。请选择一个："
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4773
+#: gnucash/gnome/gnc-plugin-page-register.c:4782
 #: gnucash/gnome-search/dialog-search.c:323
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:172
 msgid "Select"
 msgstr "选择"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4821
+#: gnucash/gnome/gnc-plugin-page-register.c:4833
 msgid "Go to Date"
 msgstr "入账日期"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:5099
+#: gnucash/gnome/gnc-plugin-page-register.c:5111
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr "我们检查当前记录书中的拆分：%u，%u"
@@ -6392,9 +6397,9 @@ msgstr "GnuCash 项目"
 msgid "Finance Management"
 msgstr "财务管理"
 
-#: gnucash/gnome/reconcile-view.c:407
+#: gnucash/gnome/reconcile-view.c:404
 #: gnucash/register/ledger-core/split-register-layout.c:695
-#: gnucash/register/ledger-core/split-register-model.c:312
+#: gnucash/register/ledger-core/split-register-model.c:313
 msgctxt "Column header for 'Reconciled'"
 msgid "R"
 msgstr "R"
@@ -6578,7 +6583,7 @@ msgstr "科目(_A)"
 #: gnucash/gtkbuilder/dialog-commodity.glade:53
 #: gnucash/gtkbuilder/dialog-customer.glade:47
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:25
-#: gnucash/gtkbuilder/dialog-custom-report.glade:28
+#: gnucash/gtkbuilder/dialog-custom-report.glade:29
 #: gnucash/gtkbuilder/dialog-employee.glade:23
 #: gnucash/gtkbuilder/dialog-import.glade:1019
 #: gnucash/gtkbuilder/dialog-invoice.glade:658
@@ -6591,7 +6596,7 @@ msgstr "科目(_A)"
 #: gnucash/gtkbuilder/dialog-search.glade:21
 #: gnucash/gtkbuilder/dialog-sx.glade:780
 #: gnucash/gtkbuilder/dialog-vendor.glade:47
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2075
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2074
 msgid "_Help"
 msgstr "帮助(_H)"
 
@@ -7280,6 +7285,7 @@ msgstr ""
 "助记符号 (证券代码等)： "
 
 #: gnucash/gnome-utils/dialog-commodity.c:275
+#: gnucash/gtkbuilder/dialog-commodity.glade:640
 msgid "Select security/currency"
 msgstr "选择证券/货币"
 
@@ -7315,7 +7321,7 @@ msgstr "币种(_R)"
 #: gnucash/gtkbuilder/dialog-transfer.glade:415
 #: gnucash/gtkbuilder/dialog-transfer.glade:428
 #: gnucash/gtkbuilder/dialog-vendor.glade:507
-#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4440
+#: gnucash/report/trep-engine.scm:101 libgnucash/engine/Account.cpp:4447
 msgid "Currency"
 msgstr "币种"
 
@@ -7414,7 +7420,7 @@ msgstr "另存为(_S)"
 #: gnucash/gnome-utils/gnc-main-window.c:306
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
 #: gnucash/gtkbuilder/dialog-commodities.glade:174
-#: gnucash/gtkbuilder/dialog-custom-report.glade:45
+#: gnucash/gtkbuilder/dialog-custom-report.glade:46
 #: gnucash/gtkbuilder/dialog-doclink.glade:578
 #: gnucash/gtkbuilder/dialog-fincalc.glade:107
 #: gnucash/gtkbuilder/dialog-find-account.glade:69
@@ -8610,7 +8616,7 @@ msgid "Version"
 msgstr "版本"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4720
-#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:261
+#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:262
 msgid "Build ID"
 msgstr "构建 ID"
 
@@ -8634,7 +8640,11 @@ msgstr ""
 "Tao Wang <dancefire@gmail.com>, 2010\n"
 "Boyuan Yang <073plan@gmail.com>, 2019\n"
 "YTX <ytx.cash@gmail.com>, 2021\n"
-"CJH <c@cjh0613.com>, 2021"
+"CJH <c@cjh0613.com>, 2021\n"
+"Sean Guan <guanshangkang@gmail.com>, 2021\n"
+"chokore <byt2ooo@163.com>, 2021\n"
+"Eric <spice2wolf@gmail.com>, 2021\n"
+"J0kWang <lianjiefly@gmail.com>, 2021"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4740
 msgid "Visit the GnuCash website."
@@ -8869,7 +8879,7 @@ msgid "_Unreconcile"
 msgstr "未对账(_U)"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2230
+#: gnucash/register/ledger-core/split-register-model.c:2222
 msgid "Change reconciled split?"
 msgstr "改变对账分录？"
 
@@ -8892,7 +8902,7 @@ msgstr ""
 "您要修改已对账的分录。这么做会使将来的对账变得困难！您确定要继续这个改变么？"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2254
+#: gnucash/register/ledger-core/split-register-model.c:2246
 msgid "Chan_ge Split"
 msgstr "修改分录(_G)"
 
@@ -9118,7 +9128,7 @@ msgstr "薪金"
 #: gnucash/report/reports/standard/balance-sheet.scm:502
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1083
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:724
-#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4443
+#: libgnucash/app-utils/gnc-ui-util.c:1044 libgnucash/engine/Account.cpp:4450
 msgid "Equity"
 msgstr "所有者权益"
 
@@ -9128,7 +9138,7 @@ msgstr "所有者权益"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:153
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
 #: gnucash/register/ledger-core/split-register.c:2629
-#: gnucash/register/ledger-core/split-register-model.c:402
+#: gnucash/register/ledger-core/split-register-model.c:403
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1057
 #: gnucash/report/reports/standard/general-journal.scm:99
 #: gnucash/report/reports/standard/general-ledger.scm:79
@@ -9166,7 +9176,7 @@ msgid "Dist"
 msgstr "距离"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:45
-#: gnucash/import-export/import-main-matcher.c:1411
+#: gnucash/import-export/import-main-matcher.c:1412
 #: gnucash/report/reports/standard/register.scm:218
 #: libgnucash/engine/Split.c:1610 libgnucash/engine/Split.c:1627
 msgid "-- Split Transaction --"
@@ -9180,7 +9190,7 @@ msgstr "股票拆分"
 #. https://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:436
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:577
-#: gnucash/register/ledger-core/split-register-model.c:1006
+#: gnucash/register/ledger-core/split-register-model.c:1007
 msgid "%A %d %B %Y"
 msgstr "%Y年%b%d日 %a"
 
@@ -9636,7 +9646,7 @@ msgid "Funds Out"
 msgstr "资金支出"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3015
-#: gnucash/register/ledger-core/split-register-model.c:505
+#: gnucash/register/ledger-core/split-register-model.c:506
 msgid "Credit Formula"
 msgstr "贷方"
 
@@ -9657,7 +9667,7 @@ msgstr "收到"
 #: gnucash/report/reports/standard/customer-summary.scm:302
 #: gnucash/report/reports/standard/net-charts.scm:367
 #: gnucash/report/reports/standard/net-charts.scm:416
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4442
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:4449
 #: libgnucash/engine/gncInvoice.c:1112
 msgid "Expense"
 msgstr "支出"
@@ -9670,7 +9680,7 @@ msgid "Funds In"
 msgstr "资金收入"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3096
-#: gnucash/register/ledger-core/split-register-model.c:498
+#: gnucash/register/ledger-core/split-register-model.c:499
 msgid "Debit Formula"
 msgstr "借方"
 
@@ -9692,43 +9702,43 @@ msgid "Enter the transaction number, such as the check number"
 msgstr "输入交易事项号码，像是支票号码"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3196
-#: gnucash/register/ledger-core/split-register-model.c:1136
+#: gnucash/register/ledger-core/split-register-model.c:1137
 msgid "Enter the name of the Customer"
 msgstr "输入此客户的名称"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3198
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3207
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3216
-#: gnucash/register/ledger-core/split-register-model.c:1173
+#: gnucash/register/ledger-core/split-register-model.c:1174
 msgid "Enter notes for the transaction"
 msgstr "输入此交易的说明"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3200
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3209
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3218
-#: gnucash/register/ledger-core/split-register-model.c:1334
+#: gnucash/register/ledger-core/split-register-model.c:1335
 msgid "Enter a description of the split"
 msgstr "输入此分录的描述"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3205
-#: gnucash/register/ledger-core/split-register-model.c:1139
+#: gnucash/register/ledger-core/split-register-model.c:1140
 msgid "Enter the name of the Vendor"
 msgstr "输入此供应商的名称"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3214
-#: gnucash/register/ledger-core/split-register-model.c:1142
+#: gnucash/register/ledger-core/split-register-model.c:1143
 msgid "Enter a description of the transaction"
 msgstr "输入此交易的描述"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3228
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3232
-#: gnucash/register/ledger-core/split-register-model.c:1496
-#: gnucash/register/ledger-core/split-register-model.c:1563
+#: gnucash/register/ledger-core/split-register-model.c:1498
+#: gnucash/register/ledger-core/split-register-model.c:1565
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "输入转账源科目，或从列表中选择一个"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3230
-#: gnucash/register/ledger-core/split-register-model.c:1206
+#: gnucash/register/ledger-core/split-register-model.c:1207
 msgid "Reason the transaction was voided"
 msgstr "使交易事项无效的原因"
 
@@ -9747,7 +9757,7 @@ msgstr "输入买或卖的股份数量"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3272
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3284
-#: gnucash/register/ledger-core/split-register-model.c:1444
+#: gnucash/register/ledger-core/split-register-model.c:1446
 msgid "Enter the number of shares bought or sold"
 msgstr "输入买或卖的股份数量"
 
@@ -9760,17 +9770,17 @@ msgid "Enter the rate"
 msgstr "利率"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3314
-#: gnucash/register/ledger-core/split-register-model.c:1408
+#: gnucash/register/ledger-core/split-register-model.c:1410
 msgid "Enter the effective share price"
 msgstr "输入有效股份价格"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3324
-#: gnucash/register/ledger-core/split-register-model.c:2389
+#: gnucash/register/ledger-core/split-register-model.c:2381
 msgid "Enter credit formula for real transaction"
 msgstr "输入实际交易的贷方数值"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3334
-#: gnucash/register/ledger-core/split-register-model.c:2355
+#: gnucash/register/ledger-core/split-register-model.c:2347
 msgid "Enter debit formula for real transaction"
 msgstr "输入实际交易的借方数值"
 
@@ -9880,7 +9890,7 @@ msgid "Unknown quotes command '{1}'"
 msgstr "未知报价命令\"{1}\""
 
 #: gnucash/gnucash-cli.cpp:139 gnucash/gnucash-cli.cpp:153
-#: gnucash/gnucash.cpp:316
+#: gnucash/gnucash.cpp:313
 msgid "Missing data file parameter"
 msgstr "缺少数据文件参数"
 
@@ -9918,43 +9928,44 @@ msgstr "您也可以在 http://bugzilla.gnome.org 查询、报告错误"
 msgid "To find the last stable version, please refer to {1}"
 msgstr "对于最新的稳定版本，请参阅{1}"
 
-#: gnucash/gnucash-core-app.cpp:102
-msgid "Loading system scm configuration..."
-msgstr "加载系统单片机配置中…"
+#. Translators: Guile is the programming language of the reports
+#: gnucash/gnucash-core-app.cpp:103
+msgid "Loading system wide Guile extensions…"
+msgstr "正在加载系统范围的 Guile 扩展…"
 
-#: gnucash/gnucash-core-app.cpp:114
-msgid "Loading user scm configuration..."
-msgstr "加载用户单片机配置中…"
+#: gnucash/gnucash-core-app.cpp:115
+msgid "Loading user specific Guile extensions…"
+msgstr "加载用户特定的 Guile 扩展…"
 
-#: gnucash/gnucash-core-app.cpp:223
+#: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "-Gnucash，个人和小企业财务管理"
 
-#: gnucash/gnucash-core-app.cpp:225
+#: gnucash/gnucash-core-app.cpp:226
 msgid "{1} [options] [datafile]"
 msgstr "{1} [选项] [数据文件]"
 
-#: gnucash/gnucash-core-app.cpp:253
+#: gnucash/gnucash-core-app.cpp:254
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
-#: gnucash/gnucash-core-app.cpp:254
+#: gnucash/gnucash-core-app.cpp:255
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s 开发版本"
 
-#: gnucash/gnucash-core-app.cpp:282
+#: gnucash/gnucash-core-app.cpp:280
 msgid "Common Options"
 msgstr "普通选项"
 
-#: gnucash/gnucash-core-app.cpp:285
+#: gnucash/gnucash-core-app.cpp:283
 msgid "Show this help message"
 msgstr "显示帮助信息"
 
-#: gnucash/gnucash-core-app.cpp:287
+#: gnucash/gnucash-core-app.cpp:285
 msgid "Show GnuCash version"
 msgstr "显示 GnuCash 版本"
 
-#: gnucash/gnucash-core-app.cpp:289
+#: gnucash/gnucash-core-app.cpp:287
 msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
@@ -9962,11 +9973,11 @@ msgstr ""
 "启用调试模式：在日志中获取更多详细信息。\n"
 "这相当于：--log“= info”--log“qof = info”--log“gnc = info”"
 
-#: gnucash/gnucash-core-app.cpp:291
+#: gnucash/gnucash-core-app.cpp:289
 msgid "Enable extra/development/debugging features."
 msgstr "启用额外的/正在开发的/调试的特性。"
 
-#: gnucash/gnucash-core-app.cpp:293
+#: gnucash/gnucash-core-app.cpp:291
 msgid ""
 "Log level overrides, of the form \"modulename={debug,info,warn,crit,"
 "error}\"\n"
@@ -9977,53 +9988,46 @@ msgstr ""
 "示例：“--log qof = debug”或“--log gnc.backend.file.sx = info”\n"
 "这可以多次调用。"
 
-#: gnucash/gnucash-core-app.cpp:295
+#: gnucash/gnucash-core-app.cpp:293
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
 "日志文件输出；默认为“/tmp/gnucash.trace”；可以修改为“stderr”或“stdout”。"
 
-#: gnucash/gnucash-core-app.cpp:297
-msgid ""
-"Set the prefix for gsettings schemas for gsettings queries. This can be "
-"useful to have a different settings tree while debugging."
-msgstr ""
-"为gsettings查询设置gsettings模式的前缀。在调试时使用不同的设置树可能很有用。"
-
-#: gnucash/gnucash-core-app.cpp:299
+#: gnucash/gnucash-core-app.cpp:295
 msgid "Hidden Options"
 msgstr "隐藏选项"
 
-#: gnucash/gnucash-core-app.cpp:302
+#: gnucash/gnucash-core-app.cpp:298
 msgid "[datafile]"
 msgstr "[数据文件]"
 
-#: gnucash/gnucash.cpp:176
+#: gnucash/gnucash.cpp:173
 msgid "Checking Finance::Quote..."
 msgstr "检查 Finance::Quote..."
 
-#: gnucash/gnucash.cpp:185
+#: gnucash/gnucash.cpp:182
 msgid "Loading data..."
 msgstr "正在装入数据..."
 
-#: gnucash/gnucash.cpp:281
+#: gnucash/gnucash.cpp:278
 msgid "Application Options"
 msgstr "应用程序"
 
-#: gnucash/gnucash.cpp:284
+#: gnucash/gnucash.cpp:281
 msgid "Do not load the last file opened"
 msgstr "不加载最后一次打开的文件"
 
-#: gnucash/gnucash.cpp:286
+#: gnucash/gnucash.cpp:283
 msgid "Show help for gtk options"
 msgstr "第一选项说明"
 
-#: gnucash/gnucash.cpp:288
+#: gnucash/gnucash.cpp:285
 msgid "Deprecated Options"
 msgstr "不推荐使用的选项"
 
-#: gnucash/gnucash.cpp:291
+#: gnucash/gnucash.cpp:288
 msgid ""
 "Add price quotes to given GnuCash datafile.\n"
 "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
@@ -10033,7 +10037,7 @@ msgstr ""
 "请注意，此选项将删除GNucash 5.0已弃用。\n"
 "请使用'gnucash-cli --quotes get <data文件>'。"
 
-#: gnucash/gnucash.cpp:295
+#: gnucash/gnucash.cpp:292
 msgid ""
 "Regular expression determining which namespace commodities will be "
 "retrieved.\n"
@@ -10045,21 +10049,21 @@ msgstr ""
 "请注意，此选项将删除 GNucash 5.0 已弃用。\n"
 "请使用'gnucash-cli --quotes get --namespace <namespace> <datafile>'。"
 
-#: gnucash/gnucash.cpp:312
+#: gnucash/gnucash.cpp:309
 msgid ""
 "The '--add-price-quotes' option to gnucash has been deprecated and will be "
 "removed in GnuCash 5.0. Please use 'gnucash-cli --quotes get <datafile>' "
 "instead."
 msgstr ""
-"GnuCash 5.0 将删除已弃选项'--add-price-quotes'，请改用'gnucash-cli --quotes get "
-"<datafile>'。"
+"GnuCash 5.0 将删除已弃选项'--add-price-quotes'，请改用'gnucash-cli --quotes "
+"get <datafile>'。"
 
-#: gnucash/gnucash.cpp:348
+#: gnucash/gnucash.cpp:345
 msgid "Run '{1} --help' to see a full list of available command line options."
 msgstr "运行'{1} --help'查看全部可用命令行选项的列表。"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:351
+#: gnucash/gnucash.cpp:348
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
@@ -10068,91 +10072,91 @@ msgstr ""
 "错误：无法初始化图形用户界面，并且未设置选项 add-price-quotes。\n"
 "也许您需要设置 $DISPLAY 环境变量？"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:17
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:32
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:47
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:62
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:77
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:92
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:172
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:110
-#: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:10
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:32
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:42
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:52
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:62
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:72
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:82
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:92
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:107
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:117
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:127
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:174
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:194
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:212
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:235
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:245
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:255
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:265
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:275
-#: gnucash/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:61
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:76
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:86
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:20
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:41
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:25
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:10
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:45
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:10
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.flicker.gschema.xml.in:6
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:5
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:64
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:17
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:32
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:47
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:62
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:77
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:92
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:172
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:110
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.commodities.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:32
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:42
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:52
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:62
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:72
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:82
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:92
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:107
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:117
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:127
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:174
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:194
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:212
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:235
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:245
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:255
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:265
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:275
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:61
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:76
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:86
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:10
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:6
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:5
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:64
 msgid "Last window position and size"
 msgstr "最后窗口位置及大小"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:18
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:33
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:48
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:63
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:78
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:93
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:173
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:111
-#: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:11
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:6
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:33
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:43
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:53
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:63
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:73
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:83
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:93
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:108
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:118
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:128
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:175
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:195
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:213
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:236
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:246
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:256
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:266
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:276
-#: gnucash/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in:6
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:62
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:77
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:87
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:21
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:42
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:26
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:11
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:46
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:11
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.flicker.gschema.xml.in:7
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:6
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:65
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:18
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:33
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:48
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:63
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:78
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:93
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:173
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:111
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.commodities.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:33
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:43
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:53
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:63
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:73
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:83
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:93
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:108
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:118
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:128
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:175
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:195
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:213
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:236
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:246
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:256
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:266
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:276
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:62
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:77
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:87
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:42
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:11
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:7
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:6
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:65
 msgid ""
 "This setting describes the size and position of the window when it was last "
 "closed. The numbers are the X and Y coordinates of the top left corner of "
@@ -10161,22 +10165,22 @@ msgstr ""
 "这个设置包含了窗口最后的位置的坐标。这些数字是窗口左上角的(X,Y)坐标，以及窗口"
 "的宽、高。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:24
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:39
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:54
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:69
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:84
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:99
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:134
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:24
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:39
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:54
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:69
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:84
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:99
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:134
 msgid "Search only in active items"
 msgstr "只在活跃条目中搜索"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:25
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:40
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:55
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:70
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:85
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:100
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:70
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:85
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:100
 msgid ""
 "If active, only the 'active' items in the current class will be searched. "
 "Otherwise all items in the current class will be searched."
@@ -10184,25 +10188,25 @@ msgstr ""
 "如果选中，只有当前类中“活跃”的条目会被搜索。否则，当前类中所有的条目都会被搜"
 "索。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:107
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:149
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:107
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:149
 msgid "Is tax included in this type of business entry?"
 msgstr "这类公司交易含税么？"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:108
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:150
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:108
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:150
 msgid ""
 "If set to active then tax is included by default in entries of this type. "
 "This setting is inherited by new customers and vendors."
 msgstr ""
 "如果选中，那么这类交易中默认是含税的。这个设置是继承自新客户和供应商的。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:112
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:154
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:112
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:154
 msgid "Auto pay when posting."
 msgstr "发布时自动付款。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:113
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:113
 #: gnucash/gtkbuilder/business-prefs.glade:198
 msgid ""
 "At post time, automatically attempt to pay customer documents with "
@@ -10212,11 +10216,11 @@ msgid ""
 "credit notes and negative invoices are considered counter documents."
 msgstr "客户若有预付款，入账时直接抵扣。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:117
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:117
 msgid "Show invoices due reminder at startup"
 msgstr "启动时显示到期应收提醒"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:118
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:118
 msgid ""
 "If active, at startup GnuCash will check to see whether any invoices will "
 "become due soon. If so, it will present the user with a reminder dialog. The "
@@ -10226,11 +10230,11 @@ msgstr ""
 "选中，程序启动时将检查是否有即将到期的应收；若有，则对话框提醒；“快要到期”的"
 "定义由设置中的“提前天数”控制。否则，程序不会检查到期应收。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:122
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
 msgid "Show invoices due within this many days"
 msgstr "在这些天内显示到期的账单"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:123
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:123
 msgid ""
 "This field defines the number of days in advance that GnuCash will check for "
 "due invoices. Its value is only used if the \"Notify when due\" setting is "
@@ -10239,31 +10243,31 @@ msgstr ""
 "这个字段定义了 GnuCash 将提前多少天检查到期账单。这个数值只会在“到期时通知”设"
 "置被选中时被使用。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:127
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:127
 msgid "Enable extra toolbar buttons for business"
 msgstr "在工具条按钮上的标签"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:128
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:128
 #: gnucash/gtkbuilder/business-prefs.glade:73
 msgid ""
 "If active, extra toolbar buttons for common business functions are shown as "
 "well. Otherwise they are not shown."
 msgstr "工具栏添加额外的发票按钮，默认隐藏。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:132
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:132
 #: gnucash/gtkbuilder/business-prefs.glade:320
 msgid "The invoice report to be used for printing."
 msgstr "打印发票时所使用的样式。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:133
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:133
 msgid "The name of the report to be used for invoice printing."
 msgstr "用于打印发票的表单的名称。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:137
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:137
 msgid "Open new invoice in new window"
 msgstr "在新窗口中打开发票"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:138
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:138
 msgid ""
 "If active, each new invoice will be opened in a new window. Otherwise a new "
 "invoice will be opened as a tab in the main window."
@@ -10271,11 +10275,11 @@ msgstr ""
 "如果选中，每个新的发票将会在一个新的窗口中打开。否则，新发票会在主窗口中以标"
 "签页的形式打开。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:142
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:142
 msgid "Accumulate multiple splits into one"
 msgstr "将多笔分录累积为一笔"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:143
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:143
 msgid ""
 "If this field is active then multiple entries in an invoice that transfer to "
 "the same account will be accumulated into a single split. This field can be "
@@ -10284,7 +10288,7 @@ msgstr ""
 "如果此字段被激活，那么转到相同科目的发票中的多笔分录将会被累积成一笔单独交"
 "易。这个字段可以被每个发票的入账对话框中的设置无视。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:155
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:155
 #: gnucash/gtkbuilder/business-prefs.glade:275
 msgid ""
 "At post time, automatically attempt to pay vendor documents with outstanding "
@@ -10294,11 +10298,11 @@ msgid ""
 "bills are considered counter documents."
 msgstr "若在供应商有预付款，入账时亦直接抵扣。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:159
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:159
 msgid "Show bills due reminder at startup"
 msgstr "启动时显示到期应付提醒"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:160
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:160
 msgid ""
 "If active, at startup GnuCash will check to see whether any bills will "
 "become due soon. If so, it will present the user with a reminder dialog. The "
@@ -10308,11 +10312,11 @@ msgstr ""
 "选中，程序启动时将检查是否有即将到期的应付；若有，则对话框提醒；“快要到期”的"
 "定义由设置中的“提前天数”控制。否则，程序不会检查到期应付。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:164
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
 msgid "Show bills due within this many days"
 msgstr "在这些天内显示到期的账单"
 
-#: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:165
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:165
 msgid ""
 "This field defines the number of days in advance that GnuCash will check for "
 "due bills. Its value is only used if the \"Notify when due\" setting is "
@@ -10321,11 +10325,11 @@ msgstr ""
 "这个字段定义了 GnuCash 将提前多少天检查到期账单。这个数值只会在“到期时通知”设"
 "置被选中时被使用。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
 msgid "GUID of predefined check format to use"
 msgstr "要使用的预定义支票格式的索引"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:6
 msgid ""
 "This value specifies the predefined check format to use. The number is the "
 "guid of a known check format."
@@ -10333,11 +10337,11 @@ msgstr ""
 "这个值制定了要使用的预定义的支票格式。数值是从0开始的索引，以表示已知支票格式"
 "列表中的一项。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:10
 msgid "Which check position to print"
 msgstr "要打印哪一个支票位置"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:11
 msgid ""
 "On preprinted checks containing multiple checks per page, this setting "
 "specifies which check position to print. The possible values are 0, 1 and 2, "
@@ -10346,24 +10350,24 @@ msgstr ""
 "在包含一页多张支票的预打印支票中，这个设置指定了支票要打印的位置。值可以"
 "为“0”、“1”和“2”，既页面中支票顶部、中部和底部。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:15
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:16
 msgid "Number of checks to print on the first page."
 msgstr "要在第一页上打印的支票数。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:20
 msgid "Date format to use"
 msgstr "使用的日期格式"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:21
 msgid "This is the numerical identifier of the predefined date format to use."
 msgstr "这是要使用的预定义日期格式的数字标识符。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:25
 msgid "Custom date format"
 msgstr "定制日期格式"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:26
 msgid ""
 "If the date format is set to indicate a custom date format, this value is "
 "used as an argument to strftime to produce the date to be printed. It may be "
@@ -10375,30 +10379,30 @@ msgstr ""
 "解关于这个格式的更多信息，请通过命令“man 3 strftime”(Unix类的系统中)来阅读 "
 "strftime 的手册页面。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:30
 msgid "Units in which the custom coordinates are expressed"
 msgstr "表示自定义坐标的单位"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:31
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:31
 msgid "Units in which the custom coordinates are expressed (inches, mm, ...)."
 msgstr "自定义坐标的单位（英寸，毫米，...）。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:35
 msgid "Position of payee name"
 msgstr "收款人姓名的位置"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:36
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
 msgstr ""
 "这个值包含了支票上收款人开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:40
 msgid "Position of date line"
 msgstr "日期行的位置"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:41
 msgid ""
 "This value contains the X,Y coordinates for the start of the date line on "
 "the check. Coordinates are from the lower left corner of the specified check "
@@ -10406,11 +10410,11 @@ msgid ""
 msgstr ""
 "这个值包含了支票上日期行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:45
 msgid "Position of check amount in words"
 msgstr "支票金额文字的位置"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:46
 msgid ""
 "This value contains the X,Y coordinates for the start of the written amount "
 "line on the check. Coordinates are from the lower left corner of the "
@@ -10418,11 +10422,11 @@ msgid ""
 msgstr ""
 "这个值包含了支票上金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:50
 msgid "Position of check amount in numbers"
 msgstr "支票金额数字的位置"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:51
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:51
 msgid ""
 "This value contains the X,Y coordinates for the start of the numerical "
 "amount line on the check. Coordinates are from the lower left corner of the "
@@ -10431,11 +10435,11 @@ msgstr ""
 "这个值包含了支票上数值金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算"
 "起。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:55
 msgid "Position of payee address"
 msgstr "收款人姓名的位置"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:56
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:56
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee address "
 "line on the check. Coordinates are from the lower left corner of the "
@@ -10443,11 +10447,11 @@ msgid ""
 msgstr ""
 "这个值包含了支票上日期行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:60
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:60
 msgid "Position of notes line"
 msgstr "日期行的位置"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:61
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:61
 msgid ""
 "This value contains the X,Y coordinates for the start of the notes line on "
 "the check. Coordinates are from the lower left corner of the specified check "
@@ -10455,11 +10459,11 @@ msgid ""
 msgstr ""
 "这个值包含了支票上日期行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:65
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:65
 msgid "Position of memo line"
 msgstr "备注行的位置"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:66
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:66
 msgid ""
 "This value contains the X,Y coordinates for the start of the memo line on "
 "the check. Coordinates are from the lower left corner of the specified check "
@@ -10467,30 +10471,30 @@ msgid ""
 msgstr ""
 "这个值包含了支票上备注行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:70
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:70
 msgid "Offset for complete check"
 msgstr "完全检查的偏移量"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:71
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:71
 msgid ""
 "This value contains the X,Y offset for the complete check. Coordinates are "
 "from the lower left corner of the specified check position."
 msgstr ""
 "这个值包含了支票上备注行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:75
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:75
 msgid "Rotation angle"
 msgstr "旋转角度"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:76
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:76
 msgid "Number of degrees to rotate the check."
 msgstr "旋转支票的度数。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:80
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:80
 msgid "Position of split's amount in numbers"
 msgstr "支票金额数字的位置"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:81
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:81
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's amount "
 "line on the check. Coordinates are from the lower left corner of the "
@@ -10498,11 +10502,11 @@ msgid ""
 msgstr ""
 "这个值包含了支票上金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:85
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:85
 msgid "Position of split's memo line"
 msgstr "备注行的位置"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:86
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:86
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's memo "
 "line on the check. Coordinates are from the lower left corner of the "
@@ -10510,11 +10514,11 @@ msgid ""
 msgstr ""
 "这个值包含了支票上备注行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:90
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:90
 msgid "Position of split's account line"
 msgstr "日期行的位置"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:91
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:91
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's account "
 "line on the check. Coordinates are from the lower left corner of the "
@@ -10522,59 +10526,59 @@ msgid ""
 msgstr ""
 "这个值包含了支票上金额行开始的(X,Y)坐标。坐标是从指定支票位置的左下角算起。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:95
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:95
 msgid "Print the date format below the date."
 msgstr "在日期下打印日期格式。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:96
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:96
 msgid ""
 "Each time the date is printed, print the date format immediately below in 8 "
 "point type using the characters Y, M, and D."
 msgstr ""
 "每次日期打印后，在其 8 point 位置下，跟着打印用Y、M和D来表示的日期格式。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:100
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:100
 msgid "The default check printing font"
 msgstr "默认支票打印字体"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:101
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:101
 msgid ""
 "The default font to use when printing checks. This value will be overridden "
 "by any font specified in a check description file."
 msgstr ""
 "当打印支票时默认使用的字体。在支票描述文件中任何指定的字体将会无视该值。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:105
-#: gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in:106
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:105
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:106
 msgid "Print '***' before and after text."
 msgstr "在文本前后打印“***”。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.commodities.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.commodities.gschema.xml.in:6
 msgid "Show currencies in this dialog"
 msgstr "在这个对话框中显示货币"
 
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:12
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:142
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:150
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:158
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:166
-#: gnucash/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in:12
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:27
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:55
-#: gnucash/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:12
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:142
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:150
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:158
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:166
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:12
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:27
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:55
+#: gnucash/import-export/ofx/gschemas/org.gnucash.GnuCash.dialogs.import.ofx.gschema.xml.in:5
 msgid "Last pathname used"
 msgstr "上一次使用的路径"
 
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:13
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:143
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:151
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:159
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:167
-#: gnucash/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in:13
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:28
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:56
-#: gnucash/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:13
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:143
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:151
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:159
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:167
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:13
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:28
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:56
+#: gnucash/import-export/ofx/gschemas/org.gnucash.GnuCash.dialogs.import.ofx.gschema.xml.in:6
 msgid ""
 "This field contains the last pathname used by this window. It will be used "
 "as the initial filename/pathname the next time this window is opened."
@@ -10582,22 +10586,22 @@ msgstr ""
 "这个字段包含了这个窗口最后使用的路径名。它会在下一次打开窗口的使用用作初始文"
 "件名/路径名。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:17
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:17
 msgid "Window geometry"
 msgstr "窗口形状"
 
-#: gnucash/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in:18
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:18
 msgid "The position of paned window when it was last closed."
 msgstr "当窗口上一次关闭时，窗口的宽度和大小。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:102
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:103
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:184
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:185
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:102
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:103
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:184
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:185
 msgid "Position of the horizontal pane divider."
 msgstr "横向窗口分隔线的位置。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:135
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:135
 msgid ""
 "This setting indicates whether to search in all items in the current class, "
 "or only in 'active' items in the current class."
@@ -10605,25 +10609,25 @@ msgstr ""
 "此设置指定了是否在当前级别中搜索所有项目，或者只在当前级别中的“active”的项目"
 "中搜索。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:189
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:190
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:189
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:190
 msgid "Position of the vertical pane divider."
 msgstr "纵向窗口分隔线的位置。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:204
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:204
 msgid "Show the new user window"
 msgstr "显示新用户对话框"
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:205
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:205
 msgid ""
 "If active, the new user window will be shown. Otherwise it will not be shown."
 msgstr "如果选中，将会显示新用户窗口，否则就不会显示。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:219
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:219
 msgid "New hierarchy window on \"New File\""
 msgstr "“新建文件”的新结构窗口"
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:220
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:220
 msgid ""
 "If active, the \"New Hierarchy\" window will be shown whenever the \"New File"
 "\" menu item is chosen. Otherwise it will not be shown."
@@ -10631,16 +10635,16 @@ msgstr ""
 "如果选中，无论“新建文件”菜单是否被选中，“新建结构”窗口都相会显示；否则不会被"
 "显示。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:227
-#: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:228
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:227
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:228
 msgid "Default to 'new search' if fewer than this number of items is returned"
 msgstr "如果返回条目数少于此数目，就默认去“新搜索”"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:5
 msgid "Enable SKIP transaction action"
 msgstr "“跳过”交易"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:2058
 msgid ""
 "Enable the SKIP action in the transaction matcher. If enabled, a transaction "
@@ -10650,11 +10654,11 @@ msgstr ""
 "在交易事项匹配中启用“跳过”操作。如果启用，一个拥有在黄色区域(高于自动添加阈"
 "值，但是低于自动结清阈值)最佳匹配得分的交易事项将会被默认跳过。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:10
 msgid "Enable UPDATE match action"
 msgstr "启用编辑匹配操作"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-preferences.glade:2077
 msgid ""
 "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
@@ -10666,11 +10670,11 @@ msgstr ""
 "启用事务匹配中的更新和归类操作。如果选择，则使用不同日期或金额的现有事务进行"
 "更新，并使用不同的日期或金额清除，具有匹配处理的匹配分数。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:15
 msgid "Use bayesian matching"
 msgstr "使用贝叶斯(Bayesian)匹配"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:16
 msgid ""
 "Enables bayesian matching when matching imported transaction against "
 "existing transactions. Otherwise a less sophisticated rule-based matching "
@@ -10679,41 +10683,41 @@ msgstr ""
 "在匹配导入交易事项和现有交易事项时，使用贝叶斯(Bayesian)匹配。否则，会使用一"
 "个基于规则的不太严密的匹配机制。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:20
 msgid "Minimum score to be displayed"
 msgstr "显示的最小分数"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:21
 msgid ""
 "This field specifies the minimum matching score a potential matching "
 "transaction must have to be displayed in the match list."
 msgstr "这个字段指定了一笔潜在的交易事项必须显示在匹配列表中的最小匹配得分。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:25
 msgid "Likely matching transaction within these days"
 msgstr "这些天内可能会有匹配的交易"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:26
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
 msgstr "此字段指定了交易可能与列表匹配的最大天数。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:30
 msgid "UnLikely matching a transaction outside of these days"
 msgstr "不太可能在这些天之外匹配交易"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:31
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:31
 msgid ""
 "This field specifies the minimum number of days a transaction is unlikely to "
 "be a match in the list."
 msgstr "这个字段指定了一笔交易不可能是列表中一个匹配的最小天数。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
 msgstr "添加此分数以下的匹配交易事项"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:36
 msgid ""
 "This field specifies the threshold below which a matching transaction will "
 "be added automatically. A transaction whose best match's score is in the red "
@@ -10724,11 +10728,11 @@ msgstr ""
 "配得分如果在红色区域，既高于显示最小值，但是小于等于添加匹配得分，那么这笔交"
 "易事项会自动被 GnuCash 添加。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:40
 msgid "Clear matching transactions above this score"
 msgstr "结清此分数以上的匹配的交易事项"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:41
 msgid ""
 "This field specifies the threshold above which a matching transaction will "
 "be cleared by default. A transaction whose best match's score is in the "
@@ -10739,11 +10743,11 @@ msgstr ""
 "配得分如果在绿色区域，既大于等于结清阈值，那么这笔交易事项会默认被 GnuCash 结"
 "清。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:45
 msgid "Maximum ATM fee amount in your area"
 msgstr "您的地区的最大的 ATM 费用金额"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:46
 msgid ""
 "This field specifies the extra fee that is taken into account when matching "
 "imported transactions. In some places commercial ATMs (not belonging to a "
@@ -10764,12 +10768,12 @@ msgstr ""
 "样这笔交易事项才会被识别为匹配。"
 
 #. Preferences->Online Banking:Generic
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:50
 #: gnucash/gtkbuilder/dialog-preferences.glade:2270
 msgid "Automatically create new commodities"
 msgstr "自动插入小数点"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:51
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:51
 #: gnucash/gtkbuilder/dialog-preferences.glade:2276
 msgid ""
 "Enables the automatic creation of new commodities if any unknown commodity "
@@ -10779,48 +10783,48 @@ msgstr ""
 "如果导入过程中有未知的产品，则会自动创建产品。如果您没有选择它，每次找到未知"
 "产品时都会询问用户。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:68
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:68
 msgid "Display or hide reconciled matches"
 msgstr "显示/隐藏对账日期"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:69
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:69
 msgid ""
 "Shows or hides transactions from the match picker which are already of some "
 "reconciled state."
 msgstr "向匹配选择器显示或隐藏已处于已对帐状态的交易。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:10
 msgid "Default QIF transaction status"
 msgstr "默认 QIF 的交易状态"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:6
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:11
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:16
 msgid "Default status for QIF transaction when not specified in QIF file."
 msgstr "未在QIF文件中指定时，QIF交易的默认状态。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:15
 #: gnucash/gtkbuilder/dialog-account-picker.glade:58
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as reconciled."
 msgstr "当QIF文件中未指定状态时，事务标记为整理。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:32
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:32
 msgid "Show documentation"
 msgstr "显示文档"
 
-#: gnucash/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in:33
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:33
 #: gnucash/gtkbuilder/dialog-account-picker.glade:39
 msgid "Show some documentation-only pages in QIF Import assistant."
 msgstr "在 QIF 导入向导中显示一些只有文档的页面。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:5
 msgid "Pre-select cleared transactions"
 msgstr "预选结清交易事项"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:6
 msgid ""
 "If active, all transactions marked as cleared in the register will appear "
 "already selected in the reconcile dialog. Otherwise no transactions will be "
@@ -10829,11 +10833,11 @@ msgstr ""
 "如果选中，在账簿中所有标记为已结清的交易事项将会在对账对话框中显示为已选中；"
 "否则，不会有任何交易事项在开始时被选中。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:10
 msgid "Prompt for interest charges"
 msgstr "提示利息费用"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-account.glade:1484
 msgid ""
 "Prior to reconciling an account which charges or pays interest, prompt the "
@@ -10844,11 +10848,11 @@ msgstr ""
 "科目对账时，自动打开利息对话框；只为银行、信用卡、共同基金、资产、应收、应付"
 "和负债类型启用。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:15
 msgid "Prompt for credit card payment"
 msgstr "提示信用卡付款"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:16
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
@@ -10856,22 +10860,22 @@ msgstr ""
 "如果选中，在信用卡科目对账后，提示用户输入信用卡付款；否则不会向用户提示这"
 "些。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:20
 msgid "Always reconcile to today"
 msgstr "总是对账到今天"
 
-#: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:21
 msgid ""
 "If active, always open the reconcile dialog using today's date for the "
 "statement date, regardless of previous reconciliations."
 msgstr ""
 "如果选中，总是使用今天的日期作为报表日期来打开对账对话框，而不管之前的对账。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:17
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:17
 msgid "Run \"since last run\" dialog when a file is opened."
 msgstr "文件打开时启动“待执行计划交易”对话框。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:18
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:18
 msgid ""
 "This setting controls whether the scheduled transactions \"since last run\" "
 "processing is run automatically when a data file is opened. This includes "
@@ -10882,11 +10886,11 @@ msgstr ""
 "行”对话框。这包括在 GnuCash 启动时对数据文件进行的打开操作。如果选中，显示对"
 "话框；否则不会显示。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:22
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:22
 msgid "Show \"since last run\" notification dialog when a file is opened."
 msgstr "文件打开时显示“待执行计划交易”对话框。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:23
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:23
 msgid ""
 "This setting controls whether the scheduled transactions notification-only "
 "\"since last run\" dialog is shown when a data file is opened (if \"since "
@@ -10898,24 +10902,24 @@ msgstr ""
 "行”对话框。这包括在 GnuCash 启动时对数据文件进行的打开操作。如果选中，显示对"
 "话框；否则不会显示。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:27
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:27
 msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
 msgstr "将 \"审查创建的交易 \"设为 \"自上次运行以来 \"对话框的默认值。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:28
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
 "此设置控制 \"自上次运行以来 \"对话框是否默认设置 \"审查已创建的交易\"。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
 msgstr "默认设置“auto create”标志"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:36
 msgid ""
 "If active, any newly created scheduled transaction will have its 'auto "
 "create' flag set active by default. The user can change this flag during "
@@ -10925,16 +10929,16 @@ msgstr ""
 "如果选中，任何新创建的计划交易将会默认将“auto create”设置为激活。用户可以在交"
 "易事项创建期间修改这个标志，或者之后编辑计划交易时进行修改。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:40
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:41
 msgid "How many days in advance to notify the user."
 msgstr "提前多少天通知用户。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:52
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:52
 msgid "Set the \"notify\" flag by default"
 msgstr "默认设置“notify”标志"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:53
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:53
 msgid ""
 "If active, any newly created scheduled transaction will have its 'notify' "
 "flag set by default. The user can change this flag during transaction "
@@ -10945,32 +10949,32 @@ msgstr ""
 "项创建期间修改这个标志，或者之后编辑计划的交易时进行修改。这个设置只有"
 "在“create_auto”设置激活时才有效。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:57
-#: gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in:58
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:57
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:58
 msgid "How many days in advance to remind the user."
 msgstr "提前多少天提醒用户。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:6
 msgid "The next tip to show."
 msgstr "下一个要显示的小技巧。"
 
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:17
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:17
 msgid "Show \"Tip Of The Day\" at GnuCash start"
 msgstr "程序启动时显示“葵花宝典”"
 
-#: gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in:18
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:18
 msgid ""
 "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog "
 "will be shown. Otherwise it will not be shown."
 msgstr "在 GnuCash 启动时启用“每日提示”。如果选中，将会显示对话框；否则不会。"
 
-#: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:5
 #: gnucash/gtkbuilder/dialog-preferences.glade:3735
 msgid "Alpha Vantage API key"
 msgstr "Alpha Vantage API 密钥"
 
-#: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:3734
 #: gnucash/gtkbuilder/dialog-preferences.glade:3746
 msgid ""
@@ -10978,21 +10982,21 @@ msgid ""
 "can be retrieved from the Alpha Vantage website."
 msgstr "从 Alpha Vantage 网站申请密钥，以便检索在线报价。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
 msgstr "这些设置的版本"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:11
 msgid ""
 "This is used internally to determine whether some preferences may need "
 "conversion when switching to a newer version of GnuCash."
 msgstr "在内部用于确定切换到较新版本的GnuCash时是否需要转换某些首选项。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:15
 msgid "Save window sizes and locations"
 msgstr "保存大小和位置"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:16
 msgid ""
 "If active, the size and location of each dialog window will be saved when it "
 "is closed. The sizes and locations of content windows will be remembered "
@@ -11001,11 +11005,11 @@ msgstr ""
 "如果选中，当每个对话框窗口关闭时，其大小和位置都会被保存。内容窗口的大小和位"
 "置将会在您退出 GnuCash 时记住。否则，位置将不会被保存。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:20
 msgid "Character to use as separator between account names"
 msgstr "在科目名称中作为分隔符使用的字符"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:21
 msgid ""
 "This setting determines the character that will be used between components "
 "of an account name. Possible values are any single non-alphanumeric unicode "
@@ -11015,50 +11019,50 @@ msgstr ""
 "此设置指定用于分隔科目名中部分的字符。可以使用的字符为任何一个非字母数字的 "
 "Unicode 字符，或下列字符串：“colon”、“slash”、“backslash”、“dash”和“period”。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 msgid "Transaction Linked Files head path"
 msgstr "交易链接文件的起始路径"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:26
 msgid ""
 "This is the path head for the Transaction Linked Files with relative paths"
 msgstr "这是带有相对路径的事务链接文件的路径头"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:30
 msgid "Compress the data file"
 msgstr "压缩数据文件"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:31
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:31
 msgid "Enables file compression when writing the data file."
 msgstr "在写入数据文件时进行压缩。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:35
 msgid "Show auto-save explanation"
 msgstr "显示自动保存的解释"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:36
 msgid ""
 "If active, GnuCash shows an explanation of the auto-save feature the first "
 "time that feature is started. Otherwise no extra explanation is shown."
 msgstr "GnuCash 首次自动保存时会有解释，默认直接保存。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:40
 msgid "Auto-save time interval"
 msgstr "自动保存周期"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:41
 #: gnucash/gtkbuilder/dialog-preferences.glade:1670
 msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
 msgstr "距自动开始保存文件到磁盘上的分钟数。如果为0，将不会自动保存。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:45
 #: gnucash/gtkbuilder/dialog-preferences.glade:1787
 msgid "Enable timeout on \"Save changes on closing\" question"
 msgstr "“关闭时保存”超时"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:46
 #: gnucash/gtkbuilder/dialog-preferences.glade:1791
 msgid ""
 "If enabled, the \"Save changes on closing\" question will only wait a "
@@ -11067,27 +11071,27 @@ msgid ""
 "closed."
 msgstr "勾选，“关闭时保存”会等待几秒，若用户未有其他操作，文件将保存并关闭。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:50
 msgid "Time to wait for answer"
 msgstr "等待时间"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:51
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:51
 #: gnucash/gtkbuilder/dialog-preferences.glade:1826
 msgid ""
 "The number of seconds to wait before the question window will be closed and "
 "the changes saved automatically."
 msgstr "问题关闭是否在关闭文件时保存是否已关闭，并且自动保存该文件。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:55
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:56
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:56
 msgid "Display negative amounts in red"
 msgstr "用红色显示负数"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:60
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:60
 msgid "Automatically insert a decimal point"
 msgstr "自动插入小数点"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:61
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:61
 msgid ""
 "If active, GnuCash will automatically insert a decimal point into values "
 "that are entered without one. Otherwise GnuCash will not modify entered "
@@ -11096,21 +11100,21 @@ msgstr ""
 "如果选中，GnuCash 会自动在没有小数点的数值中插入小数点。否则，GnuCash 不会修"
 "改所输入的值。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:65
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:65
 msgid "Number of automatic decimal places"
 msgstr "自动小数位数"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:66
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:66
 msgid ""
 "This field specifies the number of automatic decimal places that will be "
 "filled in."
 msgstr "这区域指定自动小数功能所填入的位数多寡。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:70
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
 msgstr "汇率以小数显示。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:71
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:71
 #: gnucash/gtkbuilder/dialog-preferences.glade:1228
 msgid ""
 "If active, GnuCash will round prices as necessary to display them as "
@@ -11118,14 +11122,14 @@ msgid ""
 "cannot be exactly represented as a decimal."
 msgstr "若勾选，精确的分数将转换为小数，当然会四舍五入。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:75
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:75
 #: gnucash/gtkbuilder/dialog-preferences.glade:1739
 msgid "Do not create log/backup files."
 msgstr "不创建日志/备份。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:76
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:81
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:86
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:76
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:81
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:86
 msgid ""
 "This setting specifies what to do with old log/backups files. \"forever\" "
 "means keep all old files. \"never\" means no old log/backup files are kept. "
@@ -11137,34 +11141,34 @@ msgstr ""
 "保留任何旧的日志/备份文件。每次保存时，文件的较旧版本都会被删除。 “天”是指将"
 "旧文件保留几天。在关键的“保留天数”中定义了多少天"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:80
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1757
 msgid "Delete old log/backup files after this many days (0 = never)."
 msgstr "日志/备份保留多少天（0 = 从不）。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:85
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:85
 #: gnucash/gtkbuilder/dialog-preferences.glade:1775
 msgid "Do not delete log/backup files."
 msgstr "永久保留日志/备份。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:90
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:90
 msgid "Delete old log/backup files after this many days (0 = never)"
 msgstr "日志/备份保留多少天（0 = 从不）"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:91
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:91
 msgid ""
 "This setting specifies the number of days after which old log/backup files "
 "will be deleted (0 = never)."
 msgstr "此设置指定了将会删除多少天前旧的日志、备份 (0 = 永不)。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:95
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:95
 #: gnucash/gtkbuilder/dialog-preferences.glade:654
 msgid "Don't sign reverse any accounts."
 msgstr "不反转任何科目余额。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:96
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:101
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:106
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:96
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:101
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:106
 msgid ""
 "This setting allows certain accounts to have their balances reversed in sign "
 "from positive to negative, or vice versa. The setting \"income-expense\" is "
@@ -11177,23 +11181,23 @@ msgstr ""
 "数收入的话设置“收入-支出”；想查看余额反映帐户借方/贷方状态的设置“credit”；不"
 "想改变任何余额符号，设置“无”。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:100
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:100
 #: gnucash/gtkbuilder/dialog-preferences.glade:673
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
 msgstr "以下科目余额显示为相反数：信用卡、应付账款、负债、所有者权益和收入。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:105
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:105
 #: gnucash/gtkbuilder/dialog-preferences.glade:692
 msgid "Sign reverse balances on income and expense accounts."
 msgstr "收入、支出科目余额显示为相反数。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:110
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:110
 msgid "Use account colors in the account hierarchy"
 msgstr "在帐户层次结构中使用帐户颜色"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:111
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:111
 msgid ""
 "If active the account hierarchy will colorize the account using the "
 "account's custom color if set. This can serve as a visual aid to quickly "
@@ -11202,11 +11206,11 @@ msgstr ""
 "如果启用，则帐户层次结构将使用帐户的自定义颜色（如果设置）为帐户着色。这可以"
 "用作视觉辅助，以快速识别帐户。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:115
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:115
 msgid "Use account colors in the tabs of open account registers"
 msgstr "在表中以超链接的形式显示每个科目，其链接指向它的账簿窗口"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:116
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:116
 msgid ""
 "If active the account register tabs will be colored using the account's "
 "custom color if set. This can serve as a visual aid to quickly identify "
@@ -11215,11 +11219,11 @@ msgstr ""
 "如果激活，账户注册标签将使用账户的自定义颜色（如果设置）。这可以作为一种视觉"
 "辅助手段，快速识别账户。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:120
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:120
 msgid "Use formal account labels"
 msgstr "正式会计标签"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:121
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:121
 msgid ""
 "If active, formal accounting labels \"Credit\" and \"Debit\" will be used "
 "when designating fields on screen. Otherwise, informal labels such as "
@@ -11228,11 +11232,11 @@ msgstr ""
 "如果选中，会在屏幕上使用正式会计标签“贷方”与“借方”来表示特定字段。否则，会使"
 "用非正式的表述，比如，“增加/减少”，“资金收入”/“资金支出”等。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:125
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:125
 msgid "Show close buttons on notebook tabs"
 msgstr "关闭按钮"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:126
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:126
 msgid ""
 "If active, a \"close\" button will be displayed on any notebook tab that may "
 "be closed. Otherwise, no such button will be shown on the tab. Regardless of "
@@ -11243,11 +11247,11 @@ msgstr ""
 "样的按钮。无论这个设置是否选中，您都可以通过“关闭”菜单或工具栏上的“关闭”按钮"
 "来关闭科目页。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:130
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:130
 msgid "Width of notebook tabs"
 msgstr "标签页宽度"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:131
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:131
 msgid ""
 "This key specifies the maximum width of notebook tabs. If the text in the "
 "tab is longer than this value (the test is approximate) then the tab label "
@@ -11256,25 +11260,25 @@ msgstr ""
 "这个值指定了科目页标签最大宽度。如果标签上的文本长于此宽度(测试是近似的)，那"
 "么该标签将会从中截断，余下显示为省略号。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:135
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
 msgstr "新打开的标签页前置，而非最后"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:136
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:136
 msgid ""
 "If active, new tabs are opened adjacent to current tab. If inactive, the new "
 "tabs are opened instead at the end."
 msgstr ""
 "如果激活，新标签会在当前标签的旁边打开。如果不激活，新标签将在最后打开。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:140
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:940
 msgid "Use the system locale currency for all newly created accounts."
 msgstr "新科目使用系统默认币种。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:141
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:146
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:359
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:141
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:146
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:360
 msgid ""
 "This setting controls the source of the default currency for new accounts. "
 "If set to \"locale\" then GnuCash will retrieve the default currency from "
@@ -11285,16 +11289,16 @@ msgstr ""
 "区域设置中取得默认货币。如果设置为“other”，GnuCash 将会使用由 currency_other "
 "键值中指定的设置。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:145
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:145
 #: gnucash/gtkbuilder/dialog-preferences.glade:920
 msgid "Use the specified currency for all newly created accounts."
 msgstr "新科目使用此币种。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:150
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:150
 msgid "Default currency for new accounts"
 msgstr "新科目的默认币种"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:151
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:151
 msgid ""
 "This setting specifies the default currency used for new accounts if the "
 "currency-choice setting is set to \"other\". This field must contain the "
@@ -11303,20 +11307,20 @@ msgstr ""
 "此设置指定了，在 currency_choice 设置中设为“other”时，新科目使用的默认货币。"
 "这个字段必须包含为货币定义的三个字母的 ISO 4217 代码 (如，USD、GBP、CNY)。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:155
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:155
 msgid "Use 24 hour time format"
 msgstr "24 小时制"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:156
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:156
 msgid ""
 "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
 msgstr "如果选中，将使用 24 小时时间格式；否则 12 小时时间格式。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:160
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:160
 msgid "Date format choice"
 msgstr "日期格式选择"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:161
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:161
 msgid ""
 "This setting chooses the way dates are displayed in GnuCash. Possible values "
 "for this setting are \"locale\" to use the system locale setting, \"ce\" for "
@@ -11327,13 +11331,13 @@ msgstr ""
 "设置；“ce”以使用欧洲大陆日期格式；“iso”以使用 ISO 8601 标准日期格式；“uk”以使"
 "用英国日期格式；“us”使用美国日期格式。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:165
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1122
 msgid "In the current calendar year"
 msgstr "本年"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:166
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:171
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:166
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:171
 msgid ""
 "When a date is entered without year it can be completed so that it will be "
 "within the current calendar year or close to the current date based on a "
@@ -11342,62 +11346,62 @@ msgstr ""
 "当输入一个没有年份的日期时，它可以被完成，这样它就会在当前的日历年内，或者基"
 "于一个滑动窗口，从设定的时间向后数月开始，接近当前日期。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:170
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:170
 msgid ""
 "In a sliding 12-month window starting a configurable number of months before "
 "the current month"
 msgstr "在一个滑动的12个月窗口中，从当月前开始可配置的月数"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:175
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:175
 msgid "Maximum number of months to go back."
 msgstr "最大的几个月又回到过去。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:176
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:176
 #: gnucash/gtkbuilder/dialog-preferences.glade:1148
 msgid ""
 "Dates will be completed so that they are close to the current date. Enter "
 "the maximum number of months to go backwards in time when completing dates."
 msgstr "相隔月数小于等于设定值为本年，大于设定值为明年。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:180
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:180
 msgid "Show Horizontal Grid Lines"
 msgstr "显示账簿中的水平边框"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:181
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:181
 msgid ""
 "If active, horizontal grid lines will be shown on table displays. Otherwise "
 "no horizontal grid lines will be shown."
 msgstr "如果选中，启动时将显示启动画面。否则就不会显示启动画面。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:185
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:185
 msgid "Show Vertical Grid Lines"
 msgstr "账簿中显示垂直边框"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:186
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:186
 msgid ""
 "If active, vertical grid lines will be shown on table displays. Otherwise no "
 "vertical grid lines will be shown."
 msgstr "如果选中，启动时将显示启动画面。否则就不会显示启动画面。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:190
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:190
 msgid "Show splash screen"
 msgstr "欢迎界面(_N)"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:191
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:191
 msgid ""
 "If active, a splash screen will be shown at startup. Otherwise no splash "
 "screen will be shown."
 msgstr "如果选中，启动时将显示启动画面。否则就不会显示启动画面。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:195
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:195
 #: gnucash/gtkbuilder/dialog-preferences.glade:3450
 msgid "Display the notebook tabs at the top of the window."
 msgstr "顶部显示科目页。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:196
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:201
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:206
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:211
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:196
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:201
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:206
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:211
 msgid ""
 "This setting determines the edge at which the tabs for switching pages in "
 "notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and "
@@ -11406,45 +11410,45 @@ msgstr ""
 "这个设置决定了在科目页中哪一个用于交换的页面的标签的边框会被显示。可能的值"
 "为“top”、“left”、“bottom”和“right”。默认为“top”。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:200
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3469
 msgid "Display the notebook tabs at the bottom of the window."
 msgstr "底部显示科目页。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:205
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:205
 #: gnucash/gtkbuilder/dialog-preferences.glade:3488
 msgid "Display the notebook tabs at the left of the window."
 msgstr "左侧显示科目页。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:210
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:210
 #: gnucash/gtkbuilder/dialog-preferences.glade:3507
 msgid "Display the notebook tabs at the right of the window."
 msgstr "右侧显示科目页。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:215
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:215
 #: gnucash/gtkbuilder/dialog-preferences.glade:3539
 msgid "Display the summary bar at the top of the page."
 msgstr "在窗口顶部显示汇总栏。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:216
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:221
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:216
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:221
 msgid ""
 "This setting determines the edge at which the summary bar for various pages "
 "is drawn. Possible values are \"top\" and \"bottom\". It defaults to \"bottom"
 "\"."
 msgstr "此置设置主界面哪里显示汇总栏，可以是“top”或“bottom”，默认“bottom”。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:220
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:220
 #: gnucash/gtkbuilder/dialog-preferences.glade:3558
 msgid "Display the summary bar at the bottom of the page."
 msgstr "在窗口底部显示汇总栏。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:225
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:225
 #: gnucash/gtkbuilder/dialog-preferences.glade:3408
 msgid "Closing a tab moves to the most recently visited tab."
 msgstr "关闭标签页后移至最近访问过的标签页。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:226
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:226
 msgid ""
 "If active, closing a tab moves to the most recently visited tab. Otherwise "
 "closing a tab moves one tab to the left."
@@ -11452,14 +11456,14 @@ msgstr ""
 "如果选中，关闭一个标签页，会移动到最近访问的标签页。否则，关闭一个标签页，会"
 "移动到左侧的标签页上。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:230
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:230
 #: gnucash/gtkbuilder/dialog-preferences.glade:1435
 msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr "新建账簿，双行，\"属性\"改为\"T-编号\""
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:231
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1441
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
@@ -11470,11 +11474,11 @@ msgid ""
 "transaction 'num' field."
 msgstr "新建账簿、查看双行，交易的\"属性\"字段改为\"T-编号\"。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:240
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:241
 msgid "Color the register using a gnucash specific color theme"
 msgstr "由系统主题来指定账簿中的颜色"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:241
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:242
 msgid ""
 "When enabled the register will use a GnuCash specific color theme (green/"
 "yellow). Otherwise it will use the system color theme. Regardless of this "
@@ -11486,21 +11490,21 @@ msgstr ""
 "颜色主题。无论此设置如何，用户始终可以通过特定于gnucash的css文件覆盖颜色主"
 "题，该文件存储在gnucash使用的配置目录中。可以在gnucash FAQ中找到更多信息。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:245
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:246
 msgid "Superseded by \"use-gnucash-color-theme\""
 msgstr "被“ use-gnucash-color-theme”取代"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:246
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:247
 msgid ""
 "This option is temporarily kept around for backwards compatibility. It will "
 "be removed in a future version."
 msgstr "为了向后兼容，此选项暂时保留。它将在将来的版本中删除。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:250
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:251
 msgid "\"Enter\" key moves to bottom of register"
 msgstr "“回车”键移动至账簿底部"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:251
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:252
 msgid ""
 "If active, pressing the enter key will move to the bottom of the register. "
 "Otherwise pressing the enter key will move to the next transaction line."
@@ -11508,16 +11512,16 @@ msgstr ""
 "选择此项时，在用户按下“Enter”后会移至底部的空白交易事项。否则，则会往下移一"
 "列。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:255
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:256
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:256
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:257
 msgid "Automatically raise the list of accounts or actions during input"
 msgstr "输入时自动提升科目或属性列表"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:260
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:261
 msgid "Move to Transfer field when memorised transaction auto filled"
 msgstr "记忆填充交易后，跳转账字段"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:261
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:262
 msgid ""
 "If active then after a memorised transaction is automatically filled in the "
 "cursor will move to the Transfer field. If not active then it skips to the "
@@ -11526,11 +11530,11 @@ msgstr ""
 "如果选中，在自动填入记住的交易事项后，光标会移至“转账”字段。如果没有选中，它"
 "会跳至价格字段。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:265
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:266
 msgid "Create a new window for each new register"
 msgstr "为每个账簿创建一个新窗口"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:266
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:267
 msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
@@ -11538,11 +11542,11 @@ msgstr ""
 "如果选中，每个账簿会在新窗口中打开。否则，每个新账簿会在主窗口中以标签页的形"
 "式打开。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:270
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:271
 msgid "Color all lines of a transaction the same"
 msgstr "一笔交易事项的所有行的颜色一致"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:271
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:272
 msgid ""
 "If active all lines that make up a single transaction will use the same "
 "color for their background. Otherwise the background colors are alternated "
@@ -11551,11 +11555,11 @@ msgstr ""
 "如果选中，一笔交易事项中包含的所有行的背景颜色将设为相同。否则，其背景颜色每"
 "行会不同。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:275
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:276
 msgid "Show horizontal borders in a register"
 msgstr "显示账簿中的水平边框"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:276
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:277
 msgid ""
 "Show horizontal borders between rows in a register. If active the border "
 "between cells will be indicated with a heavy line. Otherwise the border "
@@ -11564,11 +11568,11 @@ msgstr ""
 "在账簿中显示行间水平边框。如果选中，单元格间的边框将显示为粗线，否则将不会显"
 "示单元格边框。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:280
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:281
 msgid "Show vertical borders in a register"
 msgstr "账簿中显示垂直边框"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:281
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:282
 msgid ""
 "Show vertical borders between columns in a register. If active the border "
 "between cells will be indicated with a heavy line. Otherwise the border "
@@ -11577,11 +11581,11 @@ msgstr ""
 "在账簿的栏间显示垂直的边框。如果激活这个选项，单元格之间的边框将显示为一个粗"
 "实线，否则不会显示任何线。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:285
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:286
 msgid "Show future transactions after the blank transaction in a register"
 msgstr "移动到账簿底部的空白交易事项"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:286
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:287
 msgid ""
 "Show future transactions after the blank transaction in a register. If "
 "active then transactions with a date in the future will be displayed at the "
@@ -11592,14 +11596,14 @@ msgstr ""
 "具有日期的交易将显示在寄存器的底部。否则，空白事务将在所有事务之后位于寄存器"
 "的底部。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:290
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
 #: gnucash/gtkbuilder/dialog-preferences.glade:2842
 msgid "Show all transactions on one line or in double line mode on two."
 msgstr "所有交易均一行显示，或双行。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:291
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:296
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:301
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:297
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:302
 msgid ""
 "This field specifies the default view style when opening a new register "
 "window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". The "
@@ -11613,25 +11617,25 @@ msgstr ""
 "行；“auto-ledger”基本与前者相同，除了对当前交易事项显示所有分录条"
 "目。“journal”则对所有交易事项展开显示所有分录。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:295
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:296
 #: gnucash/gtkbuilder/dialog-preferences.glade:2861
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line mode on two."
 msgstr "自动展开当前交易、显示所有分录；其他交易均一行显示，或双行。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:300
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:301
 #: gnucash/gtkbuilder/dialog-preferences.glade:2880
 msgid "All transactions are expanded to show all splits."
 msgstr "展开所有交易，显示所有分录。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:305
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:306
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
 msgstr "对于每个事务，在第二行显示“操作”，“注释”和“链接文档”。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:306
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:307
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction in a register. This is the default setting for when a "
@@ -11641,11 +11645,11 @@ msgstr ""
 "在账簿中为每笔交易事项显示两行。这是作为账簿第一次打开时的默认设置。此设置可"
 "以在任何时候通过“查看”->“双行”来进行修改。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:310
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:311
 msgid "Only display leaf account names."
 msgstr "仅显示末级科目名称。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:311
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:312
 msgid ""
 "Show only the names of the leaf accounts in the register and in the account "
 "selection popup. The default behaviour is to display the full name, "
@@ -11655,74 +11659,74 @@ msgstr ""
 "在账簿和弹出科目选择中，只显示末级科目的名称。默认是显示完整名称，包含科目表"
 "中的路径。激活这个选项将意味着您只能使用唯一的末级名称。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:315
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:316
 msgid "Show the entered and reconcile dates"
 msgstr "显示输入和核对的日期"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:316
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:317
 #: gnucash/gtkbuilder/dialog-preferences.glade:3024
 msgid ""
 "Show the date when the transaction was entered below the posted date and "
 "reconciled date on split row."
 msgstr "在拆分行的过帐日期和对帐日期下方显示输入交易的日期。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:320
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:321
 msgid "Show entered and reconciled dates on selection"
 msgstr "在选择时显示输入和对帐的日期"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:321
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:322
 #: gnucash/gtkbuilder/dialog-preferences.glade:3072
 msgid "Show the entered date and reconciled date on transaction selection."
 msgstr "在交易选择中显示输入的日期和对帐的日期。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:325
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:326
 msgid "Show the calendar buttons"
 msgstr "显示名称列"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:326
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:327
 #: gnucash/gtkbuilder/dialog-preferences.glade:3040
 msgid "Show the calendar buttons Cancel, Today and Select."
 msgstr "显示日历按钮 “取消”、“今天”和“选择”。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:330
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:331
 msgid "Move the selection to the blank split on expand"
 msgstr "将选中的上移一行"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:331
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:332
 #: gnucash/gtkbuilder/dialog-preferences.glade:3056
 msgid ""
 "This will move the selection to the blank split when the transaction is "
 "expanded."
 msgstr "扩展事务时，这会将选择移至空白拆分。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:335
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:336
 msgid "Number of transactions to show in a register."
 msgstr "交易界面显示的数量。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:336
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:337
 #: gnucash/gtkbuilder/dialog-preferences.glade:2911
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
 msgstr "标签页显示的交易数量，0 表示全部。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:340
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:341
 msgid "Number of characters for auto complete."
 msgstr "自动完成的字符数。"
 
 #. Register2 feature
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:341
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:342
 #: gnucash/gtkbuilder/dialog-preferences.glade:3001
 msgid ""
 "This sets the number of characters before auto complete starts for "
 "description, notes and memo fields."
 msgstr "这将设置描述，注释和备注字段的自动完成开始之前的字符数。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:348
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:349
 msgid "Create a new window for each new report"
 msgstr "为每个报表创建一个新窗口"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:349
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:350
 msgid ""
 "If active, each new report will be opened in its own window. Otherwise new "
 "reports will be opened as tabs in the main window."
@@ -11730,13 +11734,13 @@ msgstr ""
 "如果选中，每个新报表会在自己的窗口打开；否则，新报表会在主窗口以标签页的形式"
 "打开。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:353
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:354
 #: gnucash/gtkbuilder/dialog-preferences.glade:3277
 msgid "Use the system locale currency for all newly created reports."
 msgstr "新建报表，使用默认币种。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:354
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:364
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:355
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:365
 msgid ""
 "This setting controls the default currency used for reports. If set to "
 "\"locale\" then GnuCash will retrieve the default currency from the user's "
@@ -11747,20 +11751,20 @@ msgstr ""
 "本地区域设置中读取默认的货币。如果设为“other”，GnuCash 将使用由 "
 "currency_other 键指定的设置。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:358
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:359
 #: gnucash/gtkbuilder/dialog-preferences.glade:3257
 msgid "Use the specified currency for all newly created reports."
 msgstr "新建报表，使用指定币种。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:363
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:364
 msgid "Default currency for new reports"
 msgstr "新报表的默认货币"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:368
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:369
 msgid "Zoom factor to use by default for reports."
 msgstr "报告默认使用的缩放系数。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:369
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:370
 #: gnucash/gtkbuilder/dialog-preferences.glade:3292
 msgid ""
 "On high resolution screens reports tend to be hard to read. This option "
@@ -11770,11 +11774,11 @@ msgstr ""
 "高分辨率显示器上，报表阅读很不便，此选项将其按设定的系数放大；例如：2.0，报表"
 "将是正常尺寸的两倍。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:378
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:379
 msgid "PDF export file name format"
 msgstr "PDF导出文件名格式"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:379
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:380
 #, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
@@ -11790,11 +11794,11 @@ msgstr ""
 "是发票编号。\"%3$s\"是报告的日期，根据文件名-日期-格式的设置进行格式化。注"
 "意：任何在文件名中不允许的字符，如'/'，将在生成的文件名中用下划线'_'代替。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:383
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:384
 msgid "PDF export file name date format choice"
 msgstr "日期格式选择"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:384
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:385
 msgid ""
 "This setting chooses the way dates are used in the filename of PDF export. "
 "Possible values for this setting are \"locale\" to use the system locale "
@@ -11806,11 +11810,11 @@ msgstr ""
 "设置；“ce”以使用欧洲大陆日期格式；“iso”以使用 ISO 8601 标准日期格式；“uk”以使"
 "用英国日期格式；“us”使用美国日期格式。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:390
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:391
 msgid "Allow file incompatibility with older versions."
 msgstr "允许文件不兼容老版本。"
 
-#: gnucash/gschemas/org.gnucash.gschema.xml.in:391
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:392
 msgid ""
 "If active, gnucash will be allowed to intentionally break file compatibility "
 "with older versions, so that a data file saved in this version cannot be "
@@ -11820,11 +11824,11 @@ msgstr ""
 "如果选中，GnuCash 将允许有意中断与早期版本的兼容性，这样这个版本保存的文件将"
 "无法由早期版本再次读取。否则，GnuCash 只会使用早期版本所支持的格式保存数据。"
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:5
 msgid "Number of files in history"
 msgstr "历史列表中文件的个数"
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:6
 msgid ""
 "This setting contains the number of files to keep in the Recently Opened "
 "Files menu. This value may be set to zero to disable the file history. This "
@@ -11833,68 +11837,68 @@ msgstr ""
 "这个设置包含了保持在“最近打开的文件”菜单中的文件数目。这个值可以设为0，既禁用"
 "文件历史功能。这个值最大值为10。"
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:10
 msgid "Most recently opened file"
 msgstr "最近打开的文件"
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:11
 msgid "This field contains the full path of the most recently opened file."
 msgstr "这个字段包含了最近打开文件的完整路径。"
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:15
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:20
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:25
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:30
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:35
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:40
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:45
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:50
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:55
 msgid "Next most recently opened file"
 msgstr "下一个最近打开的文件"
 
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:16
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:21
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:26
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:31
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:36
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:41
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:46
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:51
-#: gnucash/gschemas/org.gnucash.history.gschema.xml.in:56
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:31
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:51
+#: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:56
 msgid ""
 "This field contains the full path of the next most recently opened file."
 msgstr "这个字段包含了下一个最近打开的文件的完整路径。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:9
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:112
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:9
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:112
 msgid "Print checks from multiple accounts"
 msgstr "匹配所有科目"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:10
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:113
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:113
 msgid ""
 "This dialog is presented if you try to print checks from multiple accounts "
 "at the same time."
 msgstr "在允许您一次删除多条价格报价前将显示此对话框。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:14
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:117
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:14
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:117
 msgid "Confirm Window Close"
 msgstr "关闭窗口时确认"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:15
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:118
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:118
 msgid "This dialog is presented when there is more than one window."
 msgstr "当只读账簿被打开时会显示这个对话框。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:19
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:122
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:19
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:122
 msgid "Commit changes to a invoice entry"
 msgstr "提交对发票条目的修改"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:20
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:123
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:123
 msgid ""
 "This dialog is presented when you attempt to move out of a modified invoice "
 "entry. The changed data must be either saved or discarded."
@@ -11902,13 +11906,13 @@ msgstr ""
 "当您试图移出一个已修改的发票条目时就会显示这个对话框。已修改的数据必须被保存"
 "或丢弃。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:24
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:127
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:24
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:127
 msgid "Duplicating a changed invoice entry"
 msgstr "为已修改的发票条目创建副本"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:25
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:128
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:128
 msgid ""
 "This dialog is presented when you attempt to duplicate a modified invoice "
 "entry. The changed data must be saved or the duplication canceled."
@@ -11916,23 +11920,23 @@ msgstr ""
 "当您试图复制一个已修改的发票条目时就会显示这个对话框。已修改的数据必须被保"
 "存，或取消复制。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:29
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:132
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:29
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:132
 msgid "Delete a commodity"
 msgstr "删除一种商品"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:30
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:133
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:133
 msgid "This dialog is presented before allowing you to delete a commodity."
 msgstr "在允许您删除一个商品前显示该对话框。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:34
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:137
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:34
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:137
 msgid "Delete a commodity with price quotes"
 msgstr "删除一种商品和价格"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:35
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:138
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:138
 msgid ""
 "This dialog is presented before allowing you to delete a commodity that has "
 "price quotes attached. Deleting the commodity will delete the quotes as well."
@@ -11940,36 +11944,36 @@ msgstr ""
 "在允许您删除一个包含价格报价的商品前会显示该对话框。删除这个商品会同样删除其"
 "报价。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:39
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:142
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:39
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:142
 msgid "Delete multiple price quotes"
 msgstr "删除多个价格报价"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:40
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:143
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:143
 msgid ""
 "This dialog is presented before allowing you to delete multiple price quotes "
 "at one time."
 msgstr "在允许您一次删除多条价格报价前将显示此对话框。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:44
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:147
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:44
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:147
 msgid "Replace existing price"
 msgstr "删除科目 %s"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:45
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:148
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:148
 msgid ""
 "This dialog is presented before allowing you to replace an existing price."
 msgstr "在删除一笔交易事项前会显示此对话框。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:49
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:152
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:49
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:152
 msgid "Edit account payable/accounts receivable register"
 msgstr "编辑这个账簿的主科目"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:50
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:153
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:153
 msgid ""
 "This dialog is presented before allowing you to edit an accounts payable/"
 "accounts receivable account. These account types are reserved for the "
@@ -11978,23 +11982,23 @@ msgstr ""
 "在允许您编辑应付帐款/应收帐款帐户之前，会显示此对话框。这些帐户类型是为业务功"
 "能保留的，很少应手动操作。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:54
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:157
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:54
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:157
 msgid "Read only register"
 msgstr "只读账簿"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:55
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:158
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:158
 msgid "This dialog is presented when a read-only register is opened."
 msgstr "当只读账簿被打开时会显示这个对话框。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:59
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:162
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:59
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:162
 msgid "Change contents of reconciled split"
 msgstr "更改已对账分录的内容"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:60
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:163
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:60
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:163
 msgid ""
 "This dialog is presented before allowing you to change the contents of a "
 "reconciled split. Allowing these changes can make it hard to perform future "
@@ -12003,13 +12007,13 @@ msgstr ""
 "在允许您修改已对账的分录内容前会显示该对话框。允许这些修改将会令将来的对账更"
 "为困难。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:64
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:167
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:64
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:167
 msgid "Mark transaction split as unreconciled"
 msgstr "标记分录为未对账"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:65
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:168
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:65
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:168
 msgid ""
 "This dialog is presented before allowing you to mark a transaction split as "
 "unreconciled. Doing so will throw off the reconciled value of the register "
@@ -12018,25 +12022,25 @@ msgstr ""
 "在允许您标记一笔分录为未对账时将显示此对话框。这么做将抛弃账簿中的已对账的数"
 "值，并且会令将来的对账更加困难。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:69
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:172
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:172
 msgid "Remove a split from a transaction"
 msgstr "从交易事项中删除分录"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:70
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:173
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:173
 msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
 msgstr "在允许您删除交易事项中一个分录时将显示此对话框。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:74
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:177
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:177
 msgid "Remove a reconciled split from a transaction"
 msgstr "从交易事项中删除一个已对账的分录"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:75
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:178
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:178
 msgid ""
 "This dialog is presented before allowing you to remove a reconciled split "
 "from a transaction. Doing so will throw off the reconciled value of the "
@@ -12045,22 +12049,22 @@ msgstr ""
 "在允许您删除交易事项中的一个已对账的分录时将显示此对话框。这么做会抛弃账簿中"
 "已对账的数值，并且会令将来的对账更加困难。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:79
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:84
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:182
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:187
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:84
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:182
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:187
 msgid "Remove all the splits from a transaction"
 msgstr "将交易事项中所有分录删除"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:80
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:183
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:80
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:183
 msgid ""
 "This dialog is presented before allowing you to remove all splits from a "
 "transaction."
 msgstr "在允许您删除交易事项中所有的分录时将显示此对话框。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:85
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:188
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:85
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:188
 msgid ""
 "This dialog is presented before allowing you to remove all splits (including "
 "some reconciled splits) from a transaction. Doing so will throw off the "
@@ -12070,23 +12074,23 @@ msgstr ""
 "在允许您删除交易事项中所有的分录(包括一些已对账的分录)时将显示此对话框。这么"
 "做会抛弃账簿中已对账的数值，并且会令将来的对账更加困难。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:89
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:192
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:89
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
 msgid "Delete a transaction"
 msgstr "删除交易"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:90
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:193
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:90
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:193
 msgid "This dialog is presented before allowing you to delete a transaction."
 msgstr "删除一笔交易前会显示此对话框。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:94
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:197
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:94
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:197
 msgid "Delete a transaction with reconciled splits"
 msgstr "删除包含整理拆分的事务"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:95
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:198
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:95
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:198
 msgid ""
 "This dialog is presented before allowing you to delete a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
@@ -12095,13 +12099,13 @@ msgstr ""
 "在允许您删除一笔包含已对账分录的交易事项前会显示该对话框。这么做将抛弃账簿中"
 "的已对账的数值，并且会令将来的对账更加困难。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:99
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:202
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:202
 msgid "Duplicating a changed transaction"
 msgstr "复制一笔已改变的交易事项"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:100
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:203
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:203
 msgid ""
 "This dialog is presented when you attempt to duplicate a modified "
 "transaction. The changed data must be saved or the duplication canceled."
@@ -12109,13 +12113,13 @@ msgstr ""
 "当您试图复制一笔已修改的交易事项时就会显示这个对话框。已修改的数据必须被保"
 "存，或取消复制。"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:104
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:207
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:207
 msgid "Commit changes to a transaction"
 msgstr "更改交易"
 
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:105
-#: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:208
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:208
 msgid ""
 "This dialog is presented when you attempt to move out of a modified "
 "transaction. The changed data must be either saved or discarded."
@@ -12123,28 +12127,28 @@ msgstr ""
 "当您试图移出一笔已修改的交易事项时就会显示这个对话框。已修改的数据必须被保存"
 "或丢弃。"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:6
 msgid ""
 "Show a grand total of all accounts converted to the default report currency"
 msgstr "显示转换为默认报表货币的所有科目总计"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:10
 msgid "Show non currency commodities"
 msgstr "显示非货币商品"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:11
 msgid ""
 "If active, non currency commodities (stocks) will be shown. Otherwise they "
 "will be hidden."
 msgstr "如果选中，将会显示非货币商品(股票)，否则它们会被隐藏。"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:15
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:15
 msgid "Use relative profit/loss starting date"
 msgstr "损益开始日期类型"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:16
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:21
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:16
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:21
 msgid ""
 "This setting controls the type of starting date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the starting "
@@ -12155,15 +12159,15 @@ msgstr ""
 "从 start_date 值中取得起始日期。如果设为其它类型，GnuCash 会从 start_period "
 "值中取得指定的起始日期。"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:20
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:20
 msgid "Use absolute profit/loss starting date"
 msgstr "损益开始日期类型"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:25
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:25
 msgid "Starting date (in seconds from Jan 1, 1970)"
 msgstr "开始日期 (从 1970 年 1 月 1 日起计算，以秒为单位)"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:26
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:26
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to \"absolute\". This field should contain a "
@@ -12172,11 +12176,11 @@ msgstr ""
 "如果 start_choice 设置为“absolute”，那么此配置指定了损益计算的起始日期。这个"
 "字段应该包含一个从1970年1月1日开始计算的秒数。"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:30
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:30
 msgid "Starting time period identifier"
 msgstr "开始日期期间标识符"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:31
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:31
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to anything other than \"absolute\". This "
@@ -12185,12 +12189,12 @@ msgstr ""
 "如果 start_choice 设置为不是“absolute”值，那么此设置指定了在损益计算中的起始"
 "日期。这个字段应该包含 0 到 8 之间的值。"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:35
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:35
 msgid "Use relative profit/loss ending date"
 msgstr "损益期末日期类型"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:36
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:41
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:36
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:41
 msgid ""
 "This setting controls the type of ending date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the ending "
@@ -12201,15 +12205,15 @@ msgstr ""
 "从 end_date 值中取得结束日期。如果设为其它类型，GnuCash 会从 end_period 值中"
 "取得指定的结束日期。"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:40
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:40
 msgid "Use absolute profit/loss ending date"
 msgstr "损益期末日期类型"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:45
 msgid "Ending date (in seconds from Jan 1, 1970)"
 msgstr "期末日期 (从 1970 年 1 月 1 日起计算，以秒为单位)"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:46
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:46
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to \"absolute\". This field should contain a date "
@@ -12218,11 +12222,11 @@ msgstr ""
 "如果 end_choice 设置为“absolute”，那么此配置指定了损益计算的期末日期。这个字"
 "段应该包含一个从1970年1月1日开始计算的秒数。"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:50
 msgid "Ending time period identifier"
 msgstr "期末日期期间标识符"
 
-#: gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in:51
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:51
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to anything other than \"absolute\". This field "
@@ -12231,21 +12235,21 @@ msgstr ""
 "如果 end_choice 设置为不是“absolute”值，那么此设置指定了在损益计算中的期末日"
 "期。这个字段应该包含 0 到 8 之间的值。"
 
-#: gnucash/gschemas/org.gnucash.window.pages.gschema.xml.in:5
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:5
 msgid "Display this column"
 msgstr "显示此列"
 
-#: gnucash/gschemas/org.gnucash.window.pages.gschema.xml.in:6
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:6
 msgid ""
 "This setting controls whether the given column will be visible in the view. "
 "TRUE means visible, FALSE means hidden."
 msgstr "此设置控制给定的列在视图中是否可见。 TRUE表示可见，FALSE表示隐藏。"
 
-#: gnucash/gschemas/org.gnucash.window.pages.gschema.xml.in:10
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:10
 msgid "Width of this column"
 msgstr "扩大此列宽度"
 
-#: gnucash/gschemas/org.gnucash.window.pages.gschema.xml.in:11
+#: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:11
 msgid "This setting stores the width of the given column in pixels."
 msgstr "这一设置启用日期栏。"
 
@@ -14684,10 +14688,10 @@ msgstr "请输入商品全名。如：Cisco System Inc.、Apple Computer Inc.。
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
-"used by the quote source (including case). "
+"used by the quote source (including case)."
 msgstr ""
 "输入商品的股票代码（例如CSCO或AAPL）。如果需要使用在线检索，则此字段必须与引"
-"用源使用的股票代码完全匹配（包括大小写）。 "
+"用源使用的股票代码完全匹配（包括大小写）。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:165
 msgid ""
@@ -14791,10 +14795,6 @@ msgstr "全名(_F)"
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "警告：Finance::Quote 并未正确地安装。"
 
-#: gnucash/gtkbuilder/dialog-commodity.glade:640
-msgid "Select security/currency "
-msgstr "选择证券/货币 "
-
 #: gnucash/gtkbuilder/dialog-commodity.glade:718
 msgid "Select user information here..."
 msgstr "在此选择用户信息..."
@@ -14891,11 +14891,11 @@ msgstr "用于导入供应商名单。"
 msgid "<b>2. Select Import Type</b>"
 msgstr "<b>通用导入器</b>"
 
-#: gnucash/gtkbuilder/dialog-custom-report.glade:51
+#: gnucash/gtkbuilder/dialog-custom-report.glade:52
 msgid "Exit the saved report configurations dialog"
 msgstr "退出“已保存报表模板”对话框"
 
-#: gnucash/gtkbuilder/dialog-custom-report.glade:99
+#: gnucash/gtkbuilder/dialog-custom-report.glade:100
 msgid ""
 "\n"
 "Currently you have no saved reports.\n"
@@ -14903,7 +14903,7 @@ msgstr ""
 "\n"
 "目前尚无保存的模板。\n"
 
-#: gnucash/gtkbuilder/dialog-custom-report.glade:113
+#: gnucash/gtkbuilder/dialog-custom-report.glade:114
 msgid ""
 "Saved report configurations are created by first opening a report from the "
 "Reports menu,\n"
@@ -17213,8 +17213,8 @@ msgid "Create the transaction this many days before its effective date."
 msgstr "在生效日前这么多天创建交易。"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:674
-msgid "_Notify before transactions are created "
-msgstr "创建交易前提醒(_N) "
+msgid "_Notify before transactions are created"
+msgstr "创建交易前提醒(_N)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:679
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -18815,7 +18815,7 @@ msgid "_Close log window when finished"
 msgstr "完成后关闭对话框(_C)"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:39
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:16
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:16
 msgid ""
 "If active, the window will be closed automatically when you finish the HBCI/"
 "AqBanking import process. Otherwise it will stay open."
@@ -18828,7 +18828,7 @@ msgid "Remember the _PIN in memory"
 msgstr "记录 PIN 密码(_P)"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:57
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:21
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:21
 msgid ""
 "If active, the PIN for HBCI/AqBanking actions will be remembered in memory "
 "during a session. Otherwise it will have to be entered again each time "
@@ -18842,7 +18842,7 @@ msgid "_Verbose debug messages"
 msgstr "详细的调试信息(_V)"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:75
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:31
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 msgstr "为 HBCI/AqBanking 网上银行启用详细调试信息。"
 
@@ -18851,7 +18851,7 @@ msgid "Use Non-SWIFT _transaction text"
 msgstr "使用非 SWIFT 交易文本(_T)"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:93
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:26
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:26
 msgid ""
 "Some banks place part of transaction description as \"transaction text\" in "
 "the MT940 file. Normally GNUcash ignores this text. However by activating "
@@ -19106,7 +19106,7 @@ msgid "Unspecified"
 msgstr "未指定"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:543
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4433
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4440
 msgid "Bank"
 msgstr "银行"
 
@@ -19144,7 +19144,7 @@ msgstr ""
 "没有找到这个 GnuCash 科目对应的网上银行账户。这笔交易事项不会通过网上银行执"
 "行。"
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1042
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1040
 msgid ""
 "The bank has sent balance information in its response.\n"
 "Do you want to import it?"
@@ -19159,7 +19159,7 @@ msgstr ""
 #. (Switzerland). If none of these techniques are available
 #. in your country, you may safely ignore strings from the
 #. import-export/hbci subdirectory.
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1139
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1141
 msgid ""
 "The downloaded Online Banking Balance was zero.\n"
 "\n"
@@ -19175,7 +19175,7 @@ msgstr ""
 "果是后者，请您在网上银行 (AqBanking 或 HBCI) 设置中选择不同的网上银行版本号。"
 "然后，再次尝试下载网上银行余额。"
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1156
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1158
 #, c-format
 msgid ""
 "Result of Online Banking job:\n"
@@ -19184,26 +19184,26 @@ msgstr ""
 "网上银行工作的结果：\n"
 "账户预定的余额(booked balance)是%s"
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1162
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1164
 #, c-format
 msgid "For your information: This account also has a noted balance of %s\n"
 msgstr "给您的信息：这个科目还有一个已说明的余额(noted balance) %s\n"
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1169
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1171
 msgid ""
 "The booked balance is identical to the current reconciled balance of the "
 "account."
 msgstr "预定的余额(booked balance)与当前对账后的科目余额一致。"
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1184
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1186
 msgid "Reconcile account now?"
 msgstr "现在对账科目？"
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1279
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1281
 msgid "The bank has sent a message in its response."
 msgstr "银行在它的回应中发送了余额信息。"
 
-#: gnucash/import-export/aqb/gnc-ab-utils.c:1280
+#: gnucash/import-export/aqb/gnc-ab-utils.c:1282
 msgid "Subject:"
 msgstr "课题："
 
@@ -19375,27 +19375,27 @@ msgstr "显示日志窗口(_L)"
 msgid "Show the online banking log window."
 msgstr "显示网上银行日志窗口。"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:15
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:15
 msgid "Close window when finished"
 msgstr "完成后关闭对话框"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:20
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:20
 msgid "Remember the PIN in memory"
 msgstr "记录 PIN 密码"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:25
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:25
 msgid "Put the transaction text in front of the purpose of a transaction."
 msgstr "将交易文本放在交易目的前面。"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:30
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:30
 msgid "Verbose HBCI debug messages"
 msgstr "详细的 HBCI 错误调试信息"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:35
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:35
 msgid "DTAUS import data format"
 msgstr "DTAUS 导入数据格式"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:36
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:36
 msgid ""
 "This setting specifies the data format when importing DTAUS files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
@@ -19404,11 +19404,11 @@ msgstr ""
 "此项设置指定了导入 DTAUS 文件时的数据格式。AqBanking 库提供了各种导入格式(称"
 "为“profiles”)，您可以在这里进行选择。"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:40
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:40
 msgid "CSV import data format"
 msgstr "CSV 导入数据格式"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:41
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:41
 msgid ""
 "This setting specifies the data format when importing CSV files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
@@ -19417,11 +19417,11 @@ msgstr ""
 "这个设置是在指定导入 CSV 文件是的数据格式。AqBanking 库提供了各种导入数据格式"
 "(称作“profiles”)，您可以在这里选择其一。"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:45
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:45
 msgid "SWIFT MT940 import data format"
 msgstr "SWIFT MT940 导入数据格式"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:46
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:46
 msgid ""
 "This setting specifies the data format when importing SWIFT MT940 files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
@@ -19430,11 +19430,11 @@ msgstr ""
 "此项设置指定了导入 SWIFT MT940 文件时的数据格式。AqBanking 库提供了各种导入格"
 "式(称为“profiles”)，您可以在这里进行选择。"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:50
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:50
 msgid "SWIFT MT942 import data format"
 msgstr "SWIFT MT942 导入数据格式"
 
-#: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:51
+#: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:51
 msgid ""
 "This setting specifies the data format when importing SWIFT MT942 files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
@@ -19974,27 +19974,27 @@ msgid "_Narrow this column"
 msgstr "缩小此列宽度(_N)"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1885
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1884
 #, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
 msgstr[0] "%d 添加价格"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1890
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1889
 #, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
 msgstr[0] "%d 价格重复"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1895
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1894
 #, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
 msgstr[0] "%d 价格已替换"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1900
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1899
 #, c-format
 msgid ""
 "The prices were imported from file '%s'.\n"
@@ -20011,7 +20011,7 @@ msgstr ""
 "- %s\n"
 "- %s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1944
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1943
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating prices. Please report this "
@@ -20025,17 +20025,17 @@ msgstr ""
 "错误信息。\n"
 "%s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1753
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1752
 msgid "No Linked Account"
 msgstr "新建科目"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1975
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1974
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button..."
 msgstr "要更改映射，请双击该行或选择一行，然后按按钮..."
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2019
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2018
 #, c-format
 msgid ""
 "An unexpected error has occurred while mapping accounts. Please report this "
@@ -20049,7 +20049,7 @@ msgstr ""
 "错误信息。\n"
 "%s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2061
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2060
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating transactions. Please report "
@@ -20063,12 +20063,12 @@ msgstr ""
 "错误信息。\n"
 "%s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2070
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2069
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr "双击要改变的行，然后点击应用导入"
 
 #. Translators: {1} will be replaced with a filename
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2125
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2124
 msgid "The transactions were imported from file '{1}'."
 msgstr "交易从文件'{1}'中导入。"
 
@@ -20256,17 +20256,17 @@ msgstr "无法将类型为货币的列中的数值解析为有效的货币。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:238
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:246
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:293
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:301
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:512
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:520
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:575
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:583
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:292
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:300
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:511
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:519
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:582
 msgid "Column '{1}' could not be understood.\n"
 msgstr "列'{1}'无法被识别。\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:328
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:327
 msgid "No date column."
 msgstr "无日期列。"
 
@@ -20310,35 +20310,35 @@ msgstr "最后对账日期"
 msgid "Value can't be parsed into a valid reconcile state."
 msgstr "无法在有效匹配状态下分析该值。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:228
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:227
 msgid "Price can't be parsed into a number."
 msgstr "计算此商品的价格。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:384
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:383
 msgid "Account value can't be mapped back to an account."
 msgstr "帐户值无法从帐户的值映射到帐户。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:385
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:384
 msgid "Transfer account value can't be mapped back to an account."
 msgstr "收款帐户的值无法映射回一个帐户。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:434
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:433
 msgid "Account value can't be empty."
 msgstr "帐户的值不能为空。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:445
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:444
 msgid "Transfer account value can't be empty."
 msgstr "基金转移目的地帐户的值不能为空。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:596
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:595
 msgid "No deposit or withdrawal column."
 msgstr "无余额、存款或取款列。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:602
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:601
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr "拆分已匹配，但它无效或不是一列归属日期。"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:609
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:608
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
@@ -20492,85 +20492,89 @@ msgstr "年/月/日"
 msgid "y/d/m"
 msgstr "年/日/月"
 
-#: gnucash/import-export/import-main-matcher.c:590
-#: gnucash/import-export/import-main-matcher.c:743
+#: gnucash/import-export/import-main-matcher.c:591
+#: gnucash/import-export/import-main-matcher.c:744
 msgid "Destination account for the auto-balance split."
 msgstr "自动结算分录的目标科目。"
 
-#: gnucash/import-export/import-main-matcher.c:943
+#: gnucash/import-export/import-main-matcher.c:944
 msgid "Assign a transfer account to the selection."
 msgstr "您必须自科目表选择转账科目。"
 
-#: gnucash/import-export/import-main-matcher.c:1105
+#: gnucash/import-export/import-main-matcher.c:1106
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.c:1108
+#: gnucash/import-export/import-main-matcher.c:1109
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "更新并对账"
 
-#: gnucash/import-export/import-main-matcher.c:1112
+#: gnucash/import-export/import-main-matcher.c:1113
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "清算"
 
-#: gnucash/import-export/import-main-matcher.c:1119
+#: gnucash/import-export/import-main-matcher.c:1120
 msgid "Info"
 msgstr "信息"
 
-#: gnucash/import-export/import-main-matcher.c:1126
+#: gnucash/import-export/import-main-matcher.c:1127
 #: gnucash/report/stylesheets/head-or-tail.scm:102
 msgid "Additional Comments"
 msgstr "额外注释"
 
-#: gnucash/import-export/import-main-matcher.c:1494
+#: gnucash/import-export/import-main-matcher.c:1518
 msgid "New, already balanced"
 msgstr "新的，已结算"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1520
+#: gnucash/import-export/import-main-matcher.c:1544
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "新的，将 %s 转账到(手动)“%s”"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1528
+#: gnucash/import-export/import-main-matcher.c:1552
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "新的，将 %s 转账到(自动)“%s”"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:1539
+#: gnucash/import-export/import-main-matcher.c:1563
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "新的，未结算(需要科目才能转账 %s)！"
 
-#: gnucash/import-export/import-main-matcher.c:1556
-msgid "Reconcile (manual) match"
-msgstr "对账(手动)匹配"
+#: gnucash/import-export/import-main-matcher.c:1581
+#, c-format
+msgid "Reconcile (manual) match to %s"
+msgstr "对账(手动)匹配 %s"
 
-#: gnucash/import-export/import-main-matcher.c:1560
-msgid "Reconcile (auto) match"
-msgstr "对账(自动)匹配"
+#: gnucash/import-export/import-main-matcher.c:1586
+#, c-format
+msgid "Reconcile (auto) match to %s"
+msgstr "对账(自动)匹配 %s"
 
-#: gnucash/import-export/import-main-matcher.c:1567
-#: gnucash/import-export/import-main-matcher.c:1593
+#: gnucash/import-export/import-main-matcher.c:1595
+#: gnucash/import-export/import-main-matcher.c:1625
 msgid "Match missing!"
 msgstr "匹配遗漏！"
 
-#: gnucash/import-export/import-main-matcher.c:1582
-msgid "Update and reconcile (manual) match"
-msgstr "对账(手动)匹配"
+#: gnucash/import-export/import-main-matcher.c:1611
+#, c-format
+msgid "Update and reconcile (manual) match to %s"
+msgstr "更新并对账(手动)匹配 %s"
 
-#: gnucash/import-export/import-main-matcher.c:1586
-msgid "Update and reconcile (auto) match"
-msgstr "对账(自动)匹配"
+#: gnucash/import-export/import-main-matcher.c:1616
+#, c-format
+msgid "Update and reconcile (auto) match to %s"
+msgstr "更新并对账(自动)匹配 %s"
 
-#: gnucash/import-export/import-main-matcher.c:1601
+#: gnucash/import-export/import-main-matcher.c:1633
 msgid "Do not import (no action selected)"
 msgstr "不要导入(未选定操作)"
 
@@ -20623,62 +20627,61 @@ msgstr "GnuCash.log(_R)..."
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr "程序崩溃后应用日志文件，此操作不可逆。"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:651
+#: gnucash/import-export/ofx/gnc-ofx-import.c:660
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "用于证券“%s”的股票科目"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:828
+#: gnucash/import-export/ofx/gnc-ofx-import.c:837
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "用于证券“%s”的收入科目"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:951
+#: gnucash/import-export/ofx/gnc-ofx-import.c:960
 msgid "Unknown OFX account"
 msgstr "未知 OFX 科目"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:974
+#: gnucash/import-export/ofx/gnc-ofx-import.c:983
 msgid "Unknown OFX checking account"
 msgstr "未知的 OFX 活期科目"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:978
+#: gnucash/import-export/ofx/gnc-ofx-import.c:987
 msgid "Unknown OFX savings account"
 msgstr "未知的 OFX 储蓄科目"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:982
+#: gnucash/import-export/ofx/gnc-ofx-import.c:991
 msgid "Unknown OFX money market account"
 msgstr "未知的 OFX 金融市场科目"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:986
+#: gnucash/import-export/ofx/gnc-ofx-import.c:995
 msgid "Unknown OFX credit line account"
 msgstr "未知的 OFX 信用额度科目"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:991
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1000
 msgid "Unknown OFX CMA account"
 msgstr "未知的 OFX 现金管理科目(CMA)"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:995
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1004
 msgid "Unknown OFX credit card account"
 msgstr "未知的 OFX 信用卡科目"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:999
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1008
 msgid "Unknown OFX investment account"
 msgstr "未知的 OFX 投资科目"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1201
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1216
 #, c-format
 msgid ""
-"OFX file '%s', imported transactions for account '%s'\n"
-"%d transactions processed, no transactions to match"
+"While importing transactions from OFX file '%s' into account '%s', found %d "
+"previously imported transactions, no new transactions."
 msgstr ""
-"OFX 文件 '%s'，导入了账户 '%s'的交易\n"
-"处理了 %d 笔交易，没有交易可以匹配"
+"将 OFX 文件“%s”中的交易导入账户“%s”时，发现了 %d 个以前导入的交易，无新交易。"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1302
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1319
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr "打开/ Quicken Financial Exchange文件（* .ofx，* .qfx）"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.c:1307
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1324
 msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "选择一个或多个要处理的 OFX/QFX 文件"
 
@@ -21337,7 +21340,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
-#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4434
+#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4441
 msgid "Cash"
 msgstr "现金"
 
@@ -21489,8 +21492,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "未知的交易分类账类型"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
-msgid "The subtotal value of this entry "
-msgstr "这笔交易的小计值 "
+msgid "The subtotal value of this entry"
+msgstr "这笔交易的小计值"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -21586,7 +21589,7 @@ msgstr "交易的描述"
 
 #. Translators: 'L' is short for Linked Document
 #: gnucash/register/ledger-core/split-register-layout.c:703
-#: gnucash/register/ledger-core/split-register-model.c:334
+#: gnucash/register/ledger-core/split-register-model.c:335
 #: gnucash/report/reports/standard/new-owner-report.scm:210
 #: gnucash/report/reports/standard/new-owner-report.scm:437
 #: gnucash/report/trep-engine.scm:1237 gnucash/report/trep-engine.scm:1238
@@ -21640,108 +21643,108 @@ msgid ""
 "provided by your system."
 msgstr "无法确定科目币种，将使用系统默认的选项。"
 
-#: gnucash/register/ledger-core/split-register-model.c:253
+#: gnucash/register/ledger-core/split-register-model.c:254
 msgid "Ref"
 msgstr "参考"
 
-#: gnucash/register/ledger-core/split-register-model.c:269
+#: gnucash/register/ledger-core/split-register-model.c:270
 msgid "T-Ref"
 msgstr "T-Ref"
 
-#: gnucash/register/ledger-core/split-register-model.c:278
+#: gnucash/register/ledger-core/split-register-model.c:279
 #: gnucash/report/reports/standard/register.scm:134
 msgid "T-Num"
 msgstr "T-编号"
 
-#: gnucash/register/ledger-core/split-register-model.c:404
+#: gnucash/register/ledger-core/split-register-model.c:405
 msgid "Exch. Rate"
 msgstr "汇率"
 
-#: gnucash/register/ledger-core/split-register-model.c:421
+#: gnucash/register/ledger-core/split-register-model.c:422
 msgid "Oth. Curr."
 msgstr "其他.货币."
 
-#: gnucash/register/ledger-core/split-register-model.c:438
-#: gnucash/register/ledger-core/split-register-model.c:462
+#: gnucash/register/ledger-core/split-register-model.c:439
+#: gnucash/register/ledger-core/split-register-model.c:463
 #, c-format
 msgid "Tot %s"
 msgstr "%s总计"
 
-#: gnucash/register/ledger-core/split-register-model.c:444
+#: gnucash/register/ledger-core/split-register-model.c:445
 msgid "Tot Credit"
 msgstr "贷方总计"
 
-#: gnucash/register/ledger-core/split-register-model.c:468
+#: gnucash/register/ledger-core/split-register-model.c:469
 msgid "Tot Debit"
 msgstr "借方总计"
 
-#: gnucash/register/ledger-core/split-register-model.c:477
+#: gnucash/register/ledger-core/split-register-model.c:478
 msgid "Tot Shares"
 msgstr "股票总计"
 
-#: gnucash/register/ledger-core/split-register-model.c:536
+#: gnucash/register/ledger-core/split-register-model.c:537
 #, c-format
 msgid "Reconciled on %s"
 msgstr "%s 已对账"
 
-#: gnucash/register/ledger-core/split-register-model.c:1017
+#: gnucash/register/ledger-core/split-register-model.c:1018
 msgid "Scheduled"
 msgstr "计划"
 
-#: gnucash/register/ledger-core/split-register-model.c:1066
+#: gnucash/register/ledger-core/split-register-model.c:1067
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
 msgstr "输入交易参照，像是发票或支票号码，所有分录都相同"
 
-#: gnucash/register/ledger-core/split-register-model.c:1068
+#: gnucash/register/ledger-core/split-register-model.c:1069
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
 msgstr "输入交易参照，像是发票或支票号码，每条分录都不同"
 
-#: gnucash/register/ledger-core/split-register-model.c:1073
+#: gnucash/register/ledger-core/split-register-model.c:1074
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
 msgstr "输入交易参照，像是发票或支票号码，所有分录都相同"
 
-#: gnucash/register/ledger-core/split-register-model.c:1075
+#: gnucash/register/ledger-core/split-register-model.c:1076
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
 msgstr "输入一个参照物，如支票号码，对每个输入行来说都是独一无二的（分割）"
 
-#: gnucash/register/ledger-core/split-register-model.c:1096
+#: gnucash/register/ledger-core/split-register-model.c:1097
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
 msgstr "输入交易参照，像是发票或支票号码，所有分录都相同"
 
-#: gnucash/register/ledger-core/split-register-model.c:1100
+#: gnucash/register/ledger-core/split-register-model.c:1101
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
 msgstr "输入一个交易参考号，该参考号将是所有条目（拆分）所共有的"
 
-#: gnucash/register/ledger-core/split-register-model.c:1305
+#: gnucash/register/ledger-core/split-register-model.c:1306
 msgid "Enter an action type, or choose one from the list"
 msgstr "输入交易的类型，或从列表中选择一个"
 
-#: gnucash/register/ledger-core/split-register-model.c:1306
+#: gnucash/register/ledger-core/split-register-model.c:1307
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
 msgstr "输入此交易的收入/支出科目，或从列表中选择一个"
 
-#: gnucash/register/ledger-core/split-register-model.c:1573
+#: gnucash/register/ledger-core/split-register-model.c:1575
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr "这个交易事项有多笔分录；按下分录按钮以查看全部的分录"
 
-#: gnucash/register/ledger-core/split-register-model.c:1576
+#: gnucash/register/ledger-core/split-register-model.c:1578
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr "这个交易事项是一个股票拆分；按下“分录”按钮以查看详情"
 
-#: gnucash/register/ledger-core/split-register-model.c:2095
+#: gnucash/register/ledger-core/split-register-model.c:2097
 #, c-format
 msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
@@ -21753,11 +21756,11 @@ msgstr ""
 "\n"
 "“%s”"
 
-#: gnucash/register/ledger-core/split-register-model.c:2219
+#: gnucash/register/ledger-core/split-register-model.c:2210
 msgid "Change transaction containing a reconciled split?"
 msgstr "修改已对账的分录的内容？"
 
-#: gnucash/register/ledger-core/split-register-model.c:2221
+#: gnucash/register/ledger-core/split-register-model.c:2212
 #, c-format
 msgid ""
 "The transaction you are about to change contains reconciled splits in the "
@@ -21771,7 +21774,7 @@ msgstr ""
 "\n"
 "这么做会让将来的对账工作变得困难！您确定要这么做么？"
 
-#: gnucash/register/ledger-core/split-register-model.c:2232
+#: gnucash/register/ledger-core/split-register-model.c:2224
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
 "continue editing this split it will be unreconciled. This might make future "
@@ -21779,7 +21782,7 @@ msgid ""
 msgstr ""
 "您要修改已对账的分录。这么做会使将来的对账变得困难！您确定要继续这个改变么？"
 
-#: gnucash/register/ledger-core/split-register-model.c:2257
+#: gnucash/register/ledger-core/split-register-model.c:2249
 msgid "Chan_ge Transaction"
 msgstr "改变交易事项(_G)"
 
@@ -24363,12 +24366,12 @@ msgid "missing"
 msgstr "交易"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1076
-#: libgnucash/engine/Account.cpp:4435
+#: libgnucash/engine/Account.cpp:4442
 msgid "Asset"
 msgstr "资产"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1079
-#: libgnucash/engine/Account.cpp:4437
+#: libgnucash/engine/Account.cpp:4444
 msgid "Liability"
 msgstr "负债"
 
@@ -25539,7 +25542,7 @@ msgid ""
 msgstr "是否包括表明交易账户总余额的一行。"
 
 #: gnucash/report/reports/standard/income-statement.scm:517
-#: libgnucash/engine/Account.cpp:4447 libgnucash/engine/Scrub.c:486
+#: libgnucash/engine/Account.cpp:4454 libgnucash/engine/Scrub.c:486
 msgid "Trading"
 msgstr "贸易"
 
@@ -27746,10 +27749,10 @@ msgstr ""
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
-"will match both tags within description, notes or memo. "
+"will match both tags within description, notes or memo."
 msgstr ""
 "默认情况下，此事务过滤器仅搜索字符串的部分匹配。设置这将允许您使用完整的POSIX"
-"正则表达式功能。'#work | #family'将匹配此标签，备注或摘要。 "
+"正则表达式功能。'#work | #family'将匹配此标签，备注或摘要。"
 
 #: gnucash/report/trep-engine.scm:596
 msgid "If this option is selected, transactions matching filter are excluded."
@@ -28711,40 +28714,40 @@ msgstr ""
 "你可以在下面看到无效的科目名列表：\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4436
+#: libgnucash/engine/Account.cpp:4443
 msgid "Credit Card"
 msgstr "信用卡"
 
-#: libgnucash/engine/Account.cpp:4438
+#: libgnucash/engine/Account.cpp:4445
 msgid "Stock"
 msgstr "股票"
 
-#: libgnucash/engine/Account.cpp:4439
+#: libgnucash/engine/Account.cpp:4446
 msgid "Mutual Fund"
 msgstr "共同基金"
 
-#: libgnucash/engine/Account.cpp:4444
+#: libgnucash/engine/Account.cpp:4451
 msgid "A/Receivable"
 msgstr "应收账款"
 
-#: libgnucash/engine/Account.cpp:4445
+#: libgnucash/engine/Account.cpp:4452
 msgid "A/Payable"
 msgstr "应付账款"
 
-#: libgnucash/engine/Account.cpp:4446
+#: libgnucash/engine/Account.cpp:4453
 msgid "Root"
 msgstr "根"
 
-#: libgnucash/engine/Account.cpp:4913
+#: libgnucash/engine/Account.cpp:4915
 msgid "Orphaned Gains"
 msgstr "孤立的收益"
 
-#: libgnucash/engine/Account.cpp:4927 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:4929 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "已实现获利(亏损)"
 
-#: libgnucash/engine/Account.cpp:4929
+#: libgnucash/engine/Account.cpp:4931
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -28965,17 +28968,30 @@ msgctxt ""
 msgid "Split"
 msgstr "分录"
 
-#: libgnucash/engine/Transaction.c:2788
+#: libgnucash/engine/Transaction.c:2778
 msgid "Voided transaction"
 msgstr "无效交易"
 
-#: libgnucash/engine/Transaction.c:2804
+#: libgnucash/engine/Transaction.c:2794
 msgid "Transaction Voided"
 msgstr "作废交易"
 
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "没有帮助。"
+
+#~ msgid "Loading system scm configuration..."
+#~ msgstr "加载系统单片机配置中…"
+
+#~ msgid "Loading user scm configuration..."
+#~ msgstr "加载用户单片机配置中…"
+
+#~ msgid ""
+#~ "Set the prefix for gsettings schemas for gsettings queries. This can be "
+#~ "useful to have a different settings tree while debugging."
+#~ msgstr ""
+#~ "为gsettings查询设置gsettings模式的前缀。在调试时使用不同的设置树可能很有"
+#~ "用。"
 
 #~ msgid "Set 'Re_view Created Transactions' as default"
 #~ msgstr "默认复核已创建交易(_R)"

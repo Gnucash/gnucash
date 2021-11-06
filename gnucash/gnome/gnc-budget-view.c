@@ -1590,7 +1590,7 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
         col = GTK_TREE_VIEW_COLUMN((g_list_last (col_list))->data);
         gtk_tree_view_remove_column (GTK_TREE_VIEW(priv->tree_view), col);
         col_list = g_list_delete_link (col_list, g_list_last (col_list));
-        num_periods_visible = g_list_length (col_list);
+        num_periods_visible--;
 
         col = GTK_TREE_VIEW_COLUMN(totals_col_list->data);
         gtk_tree_view_remove_column (GTK_TREE_VIEW(priv->totals_tree_view), col);
@@ -1653,7 +1653,7 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
             totals_col_list = g_list_prepend (totals_col_list, col);
         }
 
-        num_periods_visible = g_list_length (col_list);
+        num_periods_visible++;
     }
 
     gdk_rgba_free (note_color);

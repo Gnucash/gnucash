@@ -831,7 +831,8 @@ void gnc_gsettings_version_upgrade (void)
         g_variant_unref (ogG_maj_min);
         old_maj_min = gnc_gsettings_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
     }
-    g_variant_unref (og_maj_min);
+    if (og_maj_min)
+        g_variant_unref (og_maj_min);
 
     PINFO ("Previous setting compatibility level: %i", old_maj_min);
 

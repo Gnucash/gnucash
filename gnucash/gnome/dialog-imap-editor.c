@@ -33,6 +33,7 @@
 
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include <gnc-glib-utils.h>
 #include "Account.h"
 
 #define DIALOG_IMAP_CM_CLASS    "dialog-imap-edit"
@@ -251,7 +252,7 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
     list = gtk_tree_selection_get_selected_rows (selection, &fmodel);
 
     // Make sure we have some rows selected
-    if (g_list_length (list) == 0)
+    if (!gnc_list_length_cmp (list, 0))
         return;
 
     // reset the invalid map total
@@ -645,7 +646,7 @@ get_imap_info (ImapDialog *imap_dialog, Account *acc, const gchar *category, con
     else
         head = IMAP_FRAME;
 
-    if (g_list_length (imap_list) > 0)
+    if (gnc_list_length_cmp (imap_list, 0))
     {
         PINFO("List length is %d", g_list_length (imap_list));
 

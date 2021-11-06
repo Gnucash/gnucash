@@ -70,6 +70,7 @@
 #include "window-main-summarybar.h"
 #include "dialog-object-references.h"
 #include "dialog-find-account.h"
+#include <gnc-glib-utils.h>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -593,7 +594,7 @@ gnc_plugin_page_account_tree_open (Account *account, GtkWindow *win)
     page_list = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME);
 
     // If we have a window, look for account page in that window
-    if (g_list_length ((GList*)page_list) != 0)
+    if (gnc_list_length_cmp (page_list, 0))
     {
         if (win != NULL)
         {
@@ -1500,7 +1501,7 @@ account_subaccount (Account* account)
 {
     Account* subaccount = NULL;
     GList *subs = gnc_account_get_children (account);
-    if (g_list_length (subs) == 1)
+    if (!gnc_list_length_cmp (subs, 1))
         subaccount = subs->data;
     g_list_free (subs);
     return subaccount;

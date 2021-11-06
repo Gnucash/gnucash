@@ -31,8 +31,7 @@
 #include "gnc-date.h"
 #include "Account.h"
 #include <stdint.h>
-#include <stdint.h>
-#include <stdint.h>
+#include <gnc-glib-utils.h>
 
 #define LOG_MOD "gnc.engine.recurrence"
 static QofLogModule log_module = LOG_MOD;
@@ -556,7 +555,7 @@ recurrenceWeekendAdjustFromString(const gchar *str)
 gboolean
 recurrenceListIsSemiMonthly(GList *recurrences)
 {
-    if (g_list_length(recurrences) != 2)
+    if (gnc_list_length_cmp (recurrences, 2))
         return FALSE;
 
     // should be a "semi-monthly":
@@ -685,14 +684,15 @@ gchar*
 recurrenceListToCompactString(GList *rs)
 {
     GString *buf = g_string_sized_new(16);
+    gint rs_len = g_list_length (rs);
 
-    if (g_list_length(rs) == 0)
+    if (rs_len == 0)
     {
         g_string_printf(buf, "%s", _("None"));
         goto rtn;
     }
 
-    if (g_list_length(rs) > 1)
+    if (rs_len > 1)
     {
         if (recurrenceListIsWeeklyMultiple(rs))
         {
@@ -724,7 +724,7 @@ recurrenceListToCompactString(GList *rs)
         else
         {
             /* Translators: %d is the number of Recurrences in the list. */
-            g_string_printf(buf, _("Unknown, %d-size list."), g_list_length(rs));
+            g_string_printf(buf, _("Unknown, %d-size list."), rs_len);
         }
     }
     else
@@ -878,9 +878,10 @@ recurrenceListCmp(GList *a, GList *b)
 {
     Recurrence *most_freq_a, *most_freq_b;
 
-    g_return_val_if_fail(g_list_length(a) != 0 && g_list_length(b) != 0, 0);
-    g_return_val_if_fail(g_list_length(a) != 0, -1);
-    g_return_val_if_fail(g_list_length(b) != 0, 1);
+    if (!a)
+        return (b ? -1 : 0);
+    else if (!b)
+        return 1;
 
     most_freq_a = (Recurrence*)g_list_nth_data(g_list_sort(a, (GCompareFunc)recurrenceCmp), 0);
     most_freq_b = (Recurrence*)g_list_nth_data(g_list_sort(b, (GCompareFunc)recurrenceCmp), 0);

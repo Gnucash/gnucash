@@ -43,6 +43,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "gnc-glib-utils.h"
 #include "Query.h"
 #include "qof.h"
 #include "gnc-ledger-display.h"
@@ -807,22 +808,11 @@ gnc_sx_slr_tree_model_adapter_new (GncSxInstanceModel *instances)
 static void
 creation_error_dialog (GList **creation_errors)
 {
-    GList *node = *creation_errors;
     GtkWidget *dialog = NULL;
     gchar *message = NULL;
     if (*creation_errors == NULL) return;
-    for(; node != NULL; node = g_list_next (node))
-    {
-        gchar *new_msg = NULL;
-        if (message == NULL)
-            new_msg = g_strdup_printf ("%s", (gchar*)(node->data));
-        else
-            new_msg = g_strdup_printf ("%s\n%s", message, (gchar*)(node->data));
-        g_free (message);
-        message = new_msg;
-        g_free (node->data);
-    }
-    g_list_free (*creation_errors);
+    message = gnc_g_list_stringjoin (*creation_errors, "\n");
+    g_list_free_full (*creation_errors, g_free);
     creation_errors = NULL;
     dialog = gtk_message_dialog_new (NULL, 0,
                                      GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
@@ -1154,9 +1144,11 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog
         // - [?] ability to create transactions
     {
         GList *unbound_variables;
+        gint unbound_len;
         unbound_variables = gnc_sx_instance_model_check_variables (app_dialog->editing_model->instances);
-        PINFO ("%d variables unbound", g_list_length (unbound_variables));
-        if (g_list_length (unbound_variables) > 0)
+        unbound_len = g_list_length (unbound_variables);
+        PINFO ("%d variables unbound", unbound_len);
+        if (unbound_len > 0)
         {
             // focus first variable
             GncSxVariableNeeded *first_unbound;

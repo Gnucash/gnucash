@@ -29,7 +29,29 @@ gnc_add_scheme_test_targets(scm-test-load-gnome-utils-module
     OUTPUT_DIR "tests"
     DEPENDS "${GUILE_DEPENDS}")
 
+set(test_autoclear_SOURCES
+  test-autoclear.cpp
+)
+
+set(test_autoclear_INCLUDE_DIRS
+  ${CMAKE_BINARY_DIR}/common
+  ${CMAKE_SOURCE_DIR}/libgnucash/engine
+  ${GLIB2_INCLUDE_DIRS}
+)
+
+set(test_autoclear_LIBS
+  gnc-engine
+  gnc-gnome-utils
+  gtest
+)
+
+gnc_add_test(test-autoclear "${test_autoclear_SOURCES}"
+    test_autoclear_INCLUDE_DIRS
+    test_autoclear_LIBS
+)
+
 gnc_add_scheme_tests(test-load-gnome-utils-module.scm)
 
 
-set_dist_list(test_gnome_utils_DIST CMakeLists.txt test-gnc-recurrence.c test-load-gnome-utils-module.scm)
+set_dist_list(test_gnome_utils_DIST CMakeLists.txt test-gnc-recurrence.c test-load-gnome-utils-module.scm
+  ${test_autoclear_SOURCES})

@@ -789,11 +789,8 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
 
     ENTER ("()");
 
-    /* Must look for orphan splits and remove trading splits even if
-     * there is no imbalance and we're not using trading accounts.
-     */
+    /* Must look for orphan splits even if there is no imbalance. */
     xaccTransScrubSplits (trans);
-    xaccTransClearTradingSplits (trans);
 
     /* Return immediately if things are balanced. */
     if (xaccTransIsBalanced (trans))
@@ -805,10 +802,11 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
     if (! xaccTransUseTradingAccounts (trans))
     {
         gnc_transaction_balance_no_trading (trans, root, account);
-        LEAVE ("transaction balanced, no trading accounts");
+        LEAVE ("transaction balanced, no managed trading accounts");
         return;
     }
 
+    xaccTransClearTradingSplits (trans);
     imbalance = xaccTransGetImbalanceValue (trans);
     if (! gnc_numeric_zero_p (imbalance))
     {

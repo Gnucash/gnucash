@@ -732,9 +732,10 @@ guid_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
     GList *l1 = pd1->guids, *l2 = pd2->guids;
 
     if (pd1->options != pd2->options) return FALSE;
-    if (g_list_length (l1) != g_list_length (l2)) return FALSE;
-    for ( ; l1 ; l1 = l1->next, l2 = l2->next)
+    for (; l1 || l2; l1 = l1->next, l2 = l2->next)
     {
+        if (!l1 || !l2)
+            return FALSE;
         if (!guid_equal (static_cast<GncGUID*>(l1->data),
 			 static_cast<GncGUID*>(l2->data)))
             return FALSE;
@@ -1525,9 +1526,10 @@ choice_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
     GList *l1 = pd1->guids, *l2 = pd2->guids;
 
     if (pd1->options != pd2->options) return FALSE;
-    if (g_list_length (l1) != g_list_length (l2)) return FALSE;
-    for ( ; l1 ; l1 = l1->next, l2 = l2->next)
+    for (; l1 || l2; l1 = l1->next, l2 = l2->next)
     {
+        if (!l1 || !l2)
+            return FALSE;
         if (!guid_equal (static_cast<GncGUID*>(l1->data),
 			 static_cast<GncGUID*>(l2->data)))
             return FALSE;

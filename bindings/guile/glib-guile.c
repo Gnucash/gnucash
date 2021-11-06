@@ -164,8 +164,7 @@ gnc_scm_to_glist_string(SCM list)
 
             str = gnc_scm_to_utf8_string (SCM_CAR(list));
             if (str)
-                glist = g_list_prepend (glist, g_strdup (str));
-            g_free (str);
+                glist = g_list_prepend (glist, str);
         }
         list = SCM_CDR (list);
     }
@@ -186,8 +185,7 @@ gnc_scm_to_gslist_string(SCM list)
 
             str = gnc_scm_to_utf8_string (SCM_CAR(list));
             if (str)
-                gslist = g_slist_prepend (gslist, g_strdup (str));
-            g_free (str);
+                gslist = g_slist_prepend (gslist, str);
         }
         list = SCM_CDR (list);
     }
