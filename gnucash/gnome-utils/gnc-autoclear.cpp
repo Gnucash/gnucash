@@ -143,6 +143,8 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
             nc_vector.push_back (split);
     }
 
+    nc_vector.shrink_to_fit ();
+
     if (gnc_numeric_zero_p (toclear_value))
     {
         g_set_error (error, autoclear_quark, AUTOCLEAR_NOP, "%s",
