@@ -358,11 +358,10 @@ update_autoclear_status (startRecnWindowData *data)
             if (xaccTransGetDate (xaccSplitGetParent (n->data)) <= new_date)
                 nc_length++;
         }
-        len_str = g_strdup_printf ("%d splits will be analysed.", nc_length);
-        if (nc_length > 15)
+        len_str = g_strdup_printf (_("%d splits will be analysed."), nc_length);
+        if (nc_length > 18)
             status = g_strconcat
-                (len_str, "\n",
-                 "This is likely to overload the autoclear algorithm.",
+                (len_str, "\n", _("This may overload the autoclear algorithm."),
                  NULL);
         else
             status = g_strdup (len_str);
@@ -681,7 +680,7 @@ gnc_save_reconcile_interval(Account *account, time64 statement_date)
         xaccAccountSetReconcileLastInterval(account, months, days);
 }
 
-static gboolean
+static void
 launch_autoclear (GtkWidget *parent, Account *account, gnc_numeric balance,
                   startRecnWindowData data)
 {
@@ -694,7 +693,7 @@ launch_autoclear (GtkWidget *parent, Account *account, gnc_numeric balance,
     {
         gnc_info_dialog (GTK_WINDOW (parent), "%s", error->message);
         g_error_free (error);
-        return FALSE;
+        return;
     }
 
     /* now set autocleared splits */
@@ -702,7 +701,7 @@ launch_autoclear (GtkWidget *parent, Account *account, gnc_numeric balance,
         xaccSplitSetReconcile (node->data, CREC);
 
     g_list_free (autoclear_splits);
-    return TRUE;
+    return;
 }
 
 static void
@@ -947,14 +946,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (data.autoclear_toggle)))
         {
-            if (launch_autoclear (parent, account, *new_ending, data))
-            {
-                /* success. splits are cleared. show reconcile window. */
-            }
-            else
-            {
-                /* autoclear failed. user must manually reconcile. */
-            }
+            launch_autoclear (parent, account, *new_ending, data);
         }
     }
     // must remove the focus-out handler
