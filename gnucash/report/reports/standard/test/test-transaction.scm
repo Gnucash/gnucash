@@ -894,7 +894,7 @@
                    (cons 'absolute (gnc-dmy2time64 31 12 1970)))
       (set-option! options "Display" "Subtotal Table" #t)
       (set-option! options "Currency" "Common Currency" #t)
-      (set-option! options "Currency" "Report Currency" foreign2)
+      (set-option! options "Currency" "Report's currency" foreign2)
       (set-option! options "Currency" "Show original currency amount" #t)
       (set-option! options "Sorting" "Primary Key" 'account-name)
       (set-option! options "Sorting" "Primary Subtotal" #t)
