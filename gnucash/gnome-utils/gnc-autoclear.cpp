@@ -117,6 +117,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     int first_denom;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
     GQuark autoclear_quark = g_quark_from_static_string ("autoclear");
+    gint64 toclear_normalized;
 
     g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
     g_return_val_if_fail (splits != nullptr, FALSE);
@@ -161,6 +162,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     first_denom = (xaccSplitGetAmount (nc_vector[0])).denom;
     start_ticks = clock ();
     sack.reserve(nc_vector.size() * 4);
+    toclear_normalized = normalize_num (toclear_value, first_denom);
 
     for (auto& split : nc_vector)
     {
@@ -213,7 +215,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
             goto skip_knapsack;
         }
 
-        auto try_toclear = sack.find (normalize_num (toclear_value, first_denom));
+        auto try_toclear = sack.find (toclear_normalized);
         if (G_UNLIKELY (try_toclear != sack.end() &&
                         try_toclear->second.empty()))
         {
@@ -237,7 +239,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         }
 
     /* Check solution */
-    if (sack.find (normalize_num (toclear_value, first_denom)) == sack.end())
+    if (sack.find (toclear_normalized) == sack.end())
     {
         g_set_error (error, autoclear_quark, AUTOCLEAR_UNABLE, "%s",
                      _("The selected amount cannot be cleared."));
@@ -245,7 +247,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     }
 
     /* copy GList because std::unordered_map value will be freed */
-    for (auto& s : sack[toclear_value.num])
+    for (auto& s : sack[toclear_normalized])
         *splits = g_list_prepend (*splits, s);
 
  skip_knapsack:
