@@ -21,20 +21,17 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *******************************************************************/
-#include <config.h>
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
 #include <vector>
 #include <unordered_map>
 
-#include "inttypes.h"
-#include "Account.h"
-#include "Split.h"
-#include "Transaction.h"
-#include "gncOwner.h"
-#include "qof.h"
-#include "gnc-autoclear.h"
+#include <config.h>
+#include <gtk/gtk.h>
+#include <inttypes.h>
+#include <Account.h>
+#include <Split.h>
+#include <Transaction.h>
+#include <gnc-autoclear.h>
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -100,9 +97,10 @@ public:
 };
 
 static inline gint64
-normalize_num (gnc_numeric amount, int first_denom)
+normalize_num (gnc_numeric amount, int denom)
 {
-    return ((amount.num * first_denom) / amount.denom);
+    auto normalized = gnc_numeric_convert (amount, denom, GNC_HOW_RND_ROUND);
+    return normalized.num;
 };
 
 gboolean
@@ -114,7 +112,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     std::unordered_map<gint64, SplitVec, Hasher, EqualFn> sack;
     guint nc_progress = 0;
     clock_t start_ticks;
-    int first_denom;
+    int commodity_scu;
     gboolean debugging_enabled = qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG);
     GQuark autoclear_quark = g_quark_from_static_string ("autoclear");
     gint64 toclear_normalized;
@@ -158,16 +156,15 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         goto skip_knapsack;
     }
 
-    // nc_vector is not empty. retrieve the first split denom
-    first_denom = (xaccSplitGetAmount (nc_vector[0])).denom;
+    commodity_scu = gnc_commodity_get_fraction (xaccAccountGetCommodity (account));
+    toclear_normalized = normalize_num (toclear_value, commodity_scu);
     start_ticks = clock ();
     sack.reserve(nc_vector.size() * 4);
-    toclear_normalized = normalize_num (toclear_value, first_denom);
 
     for (auto& split : nc_vector)
     {
         auto amount = xaccSplitGetAmount (split);
-        auto amount_normalized = normalize_num (amount, first_denom);
+        auto amount_normalized = normalize_num (amount, commodity_scu);
         std::vector<WorkItem> workvector {};
 
         workvector.reserve (sack.size () + 1);
