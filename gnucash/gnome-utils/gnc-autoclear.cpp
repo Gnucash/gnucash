@@ -22,8 +22,10 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *******************************************************************/
 
+#include <cmath>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 #include <config.h>
 #include <gtk/gtk.h>
@@ -103,6 +105,15 @@ normalize_num (gnc_numeric amount, int denom)
     return normalized.num;
 };
 
+static gint
+count_unique (SplitVec nc_vector, int commodity_scu)
+{
+    std::unordered_set<gint64, Hasher, EqualFn> buckets {};
+    for (auto& n : nc_vector)
+        buckets.insert (normalize_num (xaccSplitGetAmount (n), commodity_scu));
+    return buckets.size ();
+}
+
 gboolean
 gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                           time64 end_date,
@@ -161,7 +172,8 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
     commodity_scu = gnc_commodity_get_fraction (xaccAccountGetCommodity (account));
     toclear_normalized = normalize_num (toclear_value, commodity_scu);
     start_ticks = clock ();
-    sack.reserve(nc_vector.size() * 4);
+
+    sack.reserve (pow (2, count_unique (nc_vector, commodity_scu)) - 1);
 
     for (auto& split : nc_vector)
     {
