@@ -355,6 +355,17 @@ xaccAccountScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
     gint split_count = 0, curr_split_no = 0;
 
     if (!acc) return;
+    /* If it's a trading account and an imbalanced transaction is
+     * found the trading splits will be replaced, invalidating the
+     * split list in mid-traversal, see
+     * https://bugs.gnucash.org/show_bug.cgi?id=798346. Also the
+     * transactions will get scrubbed at least twice from their "real"
+     * accounts anyway so doing so from the trading accounts is wasted
+     * effort.
+     */
+    if (xaccAccountGetType(acc) == ACCT_TYPE_TRADING)
+         return;
+
     scrub_depth++;
 
     str = xaccAccountGetName(acc);
