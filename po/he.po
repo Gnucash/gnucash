@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-04 15:34+0000\n"
+"PO-Revision-Date: 2021-11-10 13:51+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -3817,7 +3817,7 @@ msgstr "פתיחת דו־שיח חיפוש שובר הוצאות"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr "עסקי – צרופות"
+msgstr "צרופות"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
 msgid "View all Linked Business Documents"
@@ -5810,7 +5810,7 @@ msgstr "‮יצוא‬"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr "שמירת תצורה"
+msgstr "שמירת תצורת דוח"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. to be used as toolbar button label.
@@ -11199,7 +11199,7 @@ msgstr "נתיב ראשי לצרופות מקושרות לתנועה"
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:26
 msgid ""
 "This is the path head for the Transaction Linked Files with relative paths"
-msgstr "זהו הנתיב הראשי לצרופות עם נתיבים יחסיים, המקושרות לתנועה"
+msgstr "זהו הנתיב הראשי לצרופות בעלות נתיבים יחסיים, המקושרות לתנועה"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:30
 msgid "Compress the data file"
@@ -11211,7 +11211,7 @@ msgstr "אפשור דחיסת קובץ בעת כתיבה לקובץ נתונים
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:35
 msgid "Show auto-save explanation"
-msgstr "הצגת הסבר על שמירה אוטומטית"
+msgstr "הצגת הסבר בדבר שמירה אוטומטית"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:36
 msgid ""
@@ -23285,7 +23285,7 @@ msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
-"לעזרה על כתיבת־דוחות, או לשיתוף דוח חדש והמדליק שיצרת, ניתן להיוועץ ברשימת "
+"לעזרה בכתיבת־דוחות, או לשיתוף הדוח החדש והמדליק שיצרת, ניתן להיוועץ ברשימת "
 "הדיוור ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:327
@@ -23444,7 +23444,7 @@ msgstr "תחזית־מס רבעון ראשון (1 ינואר־31 מרץ)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "תחזית־מס רבעון שני (1 אפריל־30 יוני)"
+msgstr "תחזית־מס רבעון שני (1 באפריל - 30 ביוני)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -25530,7 +25530,7 @@ msgstr "שם לקוח"
 
 #: gnucash/report/reports/standard/customer-summary.scm:118
 msgid "Markup (which is profit amount divided by sales)"
-msgstr "מרווח (היחס בין, רווח חלקי מכירות)"
+msgstr "מרווח (היחס בין, הרווח מחולק במכירות)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:119
 #: gnucash/report/reports/standard/customer-summary.scm:300
@@ -28624,7 +28624,7 @@ msgstr "מזהה החברה (כלומר חפ: 000000000)."
 
 #: libgnucash/app-utils/business-prefs.scm:121
 msgid "Default Customer TaxTable"
-msgstr "טבלת ברירת המחדל של מסי לקוחות"
+msgstr "טבלת ברירת המחדל למסי לקוח"
 
 #: libgnucash/app-utils/business-prefs.scm:122
 msgid "The default tax table to apply to customers."
@@ -28632,7 +28632,7 @@ msgstr "טבלת מס ברירת מחדל להחלה על לקוחות."
 
 #: libgnucash/app-utils/business-prefs.scm:127
 msgid "Default Vendor TaxTable"
-msgstr "טבלת ברירת המחדל של מסי ספקים"
+msgstr "טבלת ברירת מחדל למסי ספק"
 
 #: libgnucash/app-utils/business-prefs.scm:128
 msgid "The default tax table to apply to vendors."
