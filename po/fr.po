@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-05 07:35+0000\n"
+"PO-Revision-Date: 2021-11-10 02:52+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -11872,7 +11872,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:112
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:154
 msgid "Auto pay when posting."
-msgstr "Payer automatiquement à la validation."
+msgstr "Payer automatiquement à l'emission."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:113
 #: gnucash/gtkbuilder/business-prefs.glade:198
@@ -17800,7 +17800,7 @@ msgstr "_Fichier"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:349
 msgid "_Expand All"
-msgstr "Développ&er tous"
+msgstr "Développ_er tous"
 
 # messages-i18n.c:170
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:363
@@ -20881,37 +20881,37 @@ msgstr "Modifier le budget pour toutes les périodes"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:116
 msgid "Replace"
-msgstr ""
+msgstr "Remplacer"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:120
 msgid ""
 "Replace the budget for all periods with new 'value'. Use empty value to "
 "unset budget for the accounts."
 msgstr ""
+"Remplacer le budget avec la 'valeur' pour toutes les périodes. Utilisez une "
+"valeur vide pour garder le budget pour tous les comptes."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:133
-#, fuzzy
 msgid "Add"
-msgstr "_Adresse"
+msgstr "Ajouter"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:137
 msgid "Add 'value' to current budget for each period"
-msgstr ""
+msgstr "Ajouter la 'valeur' au budget actuel pour chaque période"
 
 # messages-i18n.c:188 po/guile_strings.txt:51
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:151
-#, fuzzy
 msgid "Multiply"
-msgstr "_Multiple"
+msgstr "Multiplier"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:155
 msgid "Multiply current budget for each period by 'value'"
-msgstr ""
+msgstr "Multiplier le budget actuel par la 'valeur' pour chaque période"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:177
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:316
 msgid "The number of leading digits to keep when rounding"
-msgstr "Le nombre de chiffres à conserver lors de l'arrondi."
+msgstr "Le nombre de chiffres à conserver pour l'arrondi"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:196
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:334
@@ -22650,31 +22650,34 @@ msgstr "Validation...\n"
 #, c-format
 msgid "Row %d: no invoice ID in first row of import file.\n"
 msgstr ""
+"Ligne %d : aucun identifiant de facture dans la première ligne du fichier "
+"importé\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:335
 #, c-format
 msgid "Row %d, invoice %s/%u: owner not set.\n"
-msgstr ""
+msgstr "Ligne %d, facture %s/%u : le propriétaire n'est pas renseigné.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:347
 #, c-format
 msgid "Row %d, invoice %s/%u: vendor %s does not exist.\n"
-msgstr "Ligne %d, facture %s/%u : le fournisseur %s n'eiste pas.\n"
+msgstr "Ligne %d, facture %s/%u : le fournisseur %s n'existe pas.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:359
 #, c-format
 msgid "Row %d, invoice %s/%u: customer %s does not exist.\n"
-msgstr ""
+msgstr "Ligne %d, facture %s/%u : le client %s n'existe pas.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:372
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid posting date.\n"
 msgstr ""
+"Ligne %d, facture %s/%u : %s n'est pas une date d'enregistrement valide.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:380
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid due date.\n"
-msgstr ""
+msgstr "Ligne %d, facture %s/%u : %s n'est pas une date d'échéance valide.\n"
 
 # po/guile_strings.txt:55
 #: gnucash/import-export/bi-import/dialog-bi-import.c:404
@@ -22684,29 +22687,36 @@ msgid "Row %d, invoice %s/%u: account %s does not exist.\n"
 msgstr "Ligne %d, facture %s/%u : le compte %s n'existe pas.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:416
-#, c-format
+#, c-format, fuzzy
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Payable.\n"
 msgstr ""
+"Ligne %d, facture %s/%u : le compte %s n'est pas du type Accounts Payable.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:426
-#, c-format
+#, c-format, fuzzy
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Receivable.\n"
 msgstr ""
+"Ligne %d, facture %s/%u : le compte %s n'est pas du type Accounts Receivable."
+"\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:464
 #, c-format
 msgid "Row %d, invoice %s/%u: price not set.\n"
-msgstr ""
+msgstr "Ligne %d, facture %s/%u : le prix n'est pas renseigné.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:533
 #, c-format
 msgid "Error(s) in invoice %s, all rows of this invoice ignored.\n"
 msgstr ""
+"Erreur(s) dans la facture %s ; toutes les lignes de cette factures ont été "
+"ignorées.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:539
 #, c-format
 msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr ""
+"Erreur(s) dans la facture sans identifiant ; toutes les lignes de cette "
+"facture ont été ignorées.\n"
 
 # messages-i18n.c:312
 #: gnucash/import-export/bi-import/dialog-bi-import.c:647
@@ -22733,12 +22743,12 @@ msgstr "Voulez-vous mettre à jour ces factures existantes ?"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:739
 #, c-format
 msgid "Invoice %s not updated because it already exists.\n"
-msgstr ""
+msgstr "La facture %s n'a pas été mise à jour parce qu'elle existe déjà.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:754
 #, c-format
 msgid "Invoice %s not updated because it is already posted.\n"
-msgstr ""
+msgstr "La facture %s n'a pas été mise à jour parce qu'elle a déjà été émise.\n"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -22758,11 +22768,14 @@ msgstr "Facture %s émise.\n"
 #, c-format
 msgid "Invoice %s NOT posted because currencies don't match.\n"
 msgstr ""
+"La facture %s n'a PAS été émise parce les devises ne correspondent pas.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:896
 #, c-format
 msgid "Invoice %s NOT posted because it requires currency conversion.\n"
 msgstr ""
+"La facture %s n'a PAS été émise parce qu'elle nécessite une conversion des "
+"devises.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:920
 #, c-format
@@ -22856,6 +22869,15 @@ msgid ""
 "- invoices created: %u\n"
 "- invoices updated: %u"
 msgstr ""
+"Importés :\n"
+"- lignes ignorées : %i\n"
+"- lignes importées : %i\n"
+"\n"
+"Validés et traités :\n"
+"- lignes corrigées : %u\n"
+"- lignes ignorées : %u\n"
+"- factures crées : %u\n"
+"- factures mises à jour : %u"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:229
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:206
@@ -28356,6 +28378,8 @@ msgid ""
 "If several profit & loss period columns are shown, also show overall period "
 "profit & loss."
 msgstr ""
+"Si plusieurs colonnes pour les périodes de bénéfices et pertes sont "
+"affichées, montrer aussi l'ensemble des périodes de bénéfices et pertes."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:211
 #: gnucash/report/trep-engine.scm:552
@@ -30441,9 +30465,8 @@ msgstr "Graphique des revenus et dépenses"
 
 # po/guile_strings.txt:295
 #: gnucash/report/reports/standard/net-charts.scm:497
-#, fuzzy
 msgid "Income & Expense Barchart"
-msgstr "Graphique des revenus et dépenses"
+msgstr "Graphique en bars des revenus et dépenses"
 
 #: gnucash/report/reports/standard/net-charts.scm:507
 msgid "Net Worth Linechart"
@@ -30452,9 +30475,8 @@ msgstr "Graphe de la valeur nette"
 # po/guile_strings.txt:295
 #: gnucash/report/reports/standard/net-charts.scm:520
 #: gnucash/report/reports/standard/net-charts.scm:522
-#, fuzzy
 msgid "Income & Expense Linechart"
-msgstr "Graphique des revenus et dépenses"
+msgstr "Graphique en lignes des revenus et dépenses"
 
 #: gnucash/report/reports/standard/new-aging.scm:61
 msgid ""
@@ -32351,12 +32373,12 @@ msgstr "Afficher les transactions de clôture du livre seulement"
 # po/guile_strings.txt:267
 #: gnucash/report/trep-engine.scm:382
 msgid "Show All Transactions"
-msgstr "_Toutes les transactions"
+msgstr "Toutes les transactions"
 
 # messages-i18n.c:322
 #: gnucash/report/trep-engine.scm:386
 msgid "Unreconciled only"
-msgstr "_Non rapproché"
+msgstr "Non rapproché"
 
 # messages-i18n.c:260
 #: gnucash/report/trep-engine.scm:390
@@ -32412,6 +32434,9 @@ msgid ""
 "match Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left "
 "blank, which will disable the filter."
 msgstr ""
+"N'afficher que les comptes où le nom complet correspond au filtre, par ex. ':"
+"Voyages' correspond à Dépenses:Voyages:Vacances et Dépenses:Professionnel:"
+"Voyages. Le filtre est désactivé si laissé vide."
 
 #: gnucash/report/trep-engine.scm:569
 msgid ""
@@ -32420,6 +32445,11 @@ msgid ""
 "match both Expenses:Car and Expenses:Flights. Use a period (.) to match a "
 "single character e.g. '20../.' will match 'Travel 2017/1 London'. "
 msgstr ""
+"Par défaut, le filtre du compte ne recherchera que des parties de texte. "
+"L'activer permet d'utiliser toutes les expressions régulières de POSIX. Par "
+"ex. 'Voiture|Avion' correspondra à la fois à Dépenses:Voiture et Dépenses:"
+"Avion. Le point (.) correspond à n'importe quel caractère, par ex. '../20..' "
+"pour 'Voyage 03/2021 Paris'. "
 
 #: gnucash/report/trep-engine.scm:578
 msgid ""
@@ -32428,6 +32458,10 @@ msgid ""
 "e.g. '#gift' will find all transactions with #gift in description, notes or "
 "memo. It can be left blank, which will disable the filter."
 msgstr ""
+"N'afficher que les transactions où la description, les notes ou le mémo "
+"correspond à ce filtre.\n"
+"Par ex. \"#cadeau\" cherchera toutes les transactions où #cadeau dans la "
+"description, les notes ou le mémo. Le filtre est désactivé si laissé vide."
 
 #: gnucash/report/trep-engine.scm:587
 msgid ""
@@ -32435,16 +32469,25 @@ msgid ""
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
 "will match both tags within description, notes or memo."
 msgstr ""
+"Par défaut, le filtre des transactions ne recherchera que des parties de "
+"texte. L'activer permet d'utiliser toutes les expressions régulières de "
+"POSIX. Par ex. '#travail|#famille' correspondra affichera les transactions "
+"où un de ces termes ou les deux apparaissent dans la description, les notes "
+"ou le mémo."
 
 #: gnucash/report/trep-engine.scm:596
 msgid "If this option is selected, transactions matching filter are excluded."
 msgstr ""
+"Si cette option est sélectionnée, les filtres sur les transactions sont "
+"exclues."
 
 #: gnucash/report/trep-engine.scm:603
 msgid ""
 "If this option is selected, transactions matching filter is not case "
 "sensitive."
 msgstr ""
+"Si cette option est désactivée, les filtres sur les transactions ne sont pas "
+"sensibles à la casse."
 
 # po/guile_strings.txt:37
 #: gnucash/report/trep-engine.scm:609
@@ -32463,52 +32506,51 @@ msgid ""
 "expense accounts to equity, and must usually be excluded from periodic "
 "reporting."
 msgstr ""
+"Il est souvent recommandé ne pas inclure les transactions fermées pour dans "
+"le rapport de transactions. Les transactions fermées sont des transferts "
+"concernant les recettes et capiteux propres, et doivent être exclus des "
+"rapports périodiques."
 
 # messages-i18n.c:96
 #: gnucash/report/trep-engine.scm:649
 msgid "Filter on these accounts."
-msgstr "Filtre sur ces comptes"
+msgstr "Filtre sur ces comptes."
 
 # messages-i18n.c:194
 #: gnucash/report/trep-engine.scm:657
 msgid "Filter account."
-msgstr "Filtrer le compte"
+msgstr "Filtrer le compte."
 
 # po/guile_strings.txt:139
 #: gnucash/report/trep-engine.scm:750
 msgid "Sort by this criterion first."
-msgstr "Trier par ce critère en premier"
+msgstr "Trier par ce critère en premier."
 
 #: gnucash/report/trep-engine.scm:761
-#, fuzzy
 msgid "Show the full account name for subtotals and subheadings?"
-msgstr ""
-"Afficher le nom complet du compte pour les sous-totaux et sous-titres ?"
+msgstr "Afficher le nom complet du compte pour les sous-totaux et sous-titres ?"
 
 #: gnucash/report/trep-engine.scm:768
-#, fuzzy
 msgid "Show the account code for subtotals and subheadings?"
 msgstr "Afficher le numéro de compte pour sous-totaux et sous-titres ?"
 
 #: gnucash/report/trep-engine.scm:775
-#, fuzzy
 msgid "Show the account description for subheadings?"
-msgstr "Afficher le numéro de compte pour sous-totaux et sous-titres ?"
+msgstr "Afficher la description du compte pour les sous-titres ?"
 
 # messages-i18n.c:53
 #: gnucash/report/trep-engine.scm:782
-#, fuzzy
 msgid "Show the informal headers for debit/credit accounts?"
-msgstr "Afficher les comptes de revenus et de dépenses"
+msgstr "Afficher l'entête informelle pour les comptes de dette et de crédit ?"
 
 #: gnucash/report/trep-engine.scm:789
 msgid "Add indenting columns with grouping and subtotals?"
-msgstr ""
+msgstr "Ajouter une colonne d'indentation pour les groupes et sous-totaux ?"
 
 #: gnucash/report/trep-engine.scm:796
-#, fuzzy
 msgid "Show subtotals only, hiding transactional detail?"
-msgstr "Ne pas imprimer le détail de la transaction"
+msgstr ""
+"N'afficher que le sous-totaux, et maquer les détails de la transaction ?"
 
 #: gnucash/report/trep-engine.scm:803
 msgid "Subtotal according to the primary key?"
