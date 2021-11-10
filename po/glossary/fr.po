@@ -9,14 +9,15 @@
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2021.
 # ayiniho <ayiniho@tedomum.net>, 2021.
 # Thomas Jungers <thomasjungers@gmail.com>, 2021.
+# Maxime Leroy <lisacintosh@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-01-10 08:00+0100\n"
-"PO-Revision-Date: 2021-11-10 00:51+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2021-11-10 07:53+0000\n"
+"Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
@@ -210,7 +211,7 @@ msgstr "vieillissement"
 
 #. "A sum of money"
 msgid "amount"
-msgstr "montant brut"
+msgstr "montant brut, montant"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"

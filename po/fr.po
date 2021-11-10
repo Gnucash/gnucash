@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-10 02:52+0000\n"
+"PO-Revision-Date: 2021-11-10 07:53+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -4828,9 +4828,8 @@ msgstr "_Options du budget..."
 
 # po/guile_strings.txt:127
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
-#, fuzzy
 msgid "Edit this budget's options."
-msgstr "Édite les options de ce budget"
+msgstr "Éditer les options de ce budget."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:169
 msgid "Esti_mate Budget..."
@@ -4846,7 +4845,6 @@ msgstr ""
 
 # po/guile_strings.txt:186
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
-#, fuzzy
 msgid "_All Periods..."
 msgstr "_Toutes les périodes..."
 
@@ -26727,15 +26725,15 @@ msgstr "Exemple "
 
 #: gnucash/report/reports/example/sample-graphs.scm:142
 msgid "Pie:"
-msgstr ""
+msgstr "Camembert :"
 
 #: gnucash/report/reports/example/sample-graphs.scm:147
 msgid "Bar, normal:"
-msgstr ""
+msgstr "Barre, normal :"
 
 #: gnucash/report/reports/example/sample-graphs.scm:152
 msgid "Bar, stacked:"
-msgstr ""
+msgstr "Barres empilées :"
 
 #: gnucash/report/reports/example/sample-graphs.scm:157
 msgid "Scatter:"
@@ -27177,6 +27175,8 @@ msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month."
 msgstr ""
+"Sélectionnez quand les montants doivent être affichés sur une période "
+"complète, ou plutôt comme la moyenne, par ex. par mois."
 
 # po/guile_strings.txt:59
 #: gnucash/report/reports/standard/account-piecharts.scm:117
@@ -27639,11 +27639,11 @@ msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:90
 msgid "First-in first-out"
-msgstr ""
+msgstr "Premier entré, premier sorti"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:91
 msgid "Last-in first-out"
-msgstr ""
+msgstr "Dernier entré, premier sorti"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:96
 msgid "Prefer use of price editor pricing over transactions, where applicable."
@@ -27815,7 +27815,7 @@ msgstr "Rapport sur ces comptes"
 #: gnucash/report/reports/standard/balance-forecast.scm:49
 #: gnucash/report/reports/standard/net-charts.scm:59
 msgid "Data markers?"
-msgstr ""
+msgstr "Marqueurs de données ?"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:50
 #: gnucash/report/reports/standard/net-charts.scm:165
@@ -27836,7 +27836,7 @@ msgstr "Montant remis à la banque"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:56
 msgid "The reserve amount is set to a minimum balance desired"
-msgstr ""
+msgstr "Le montant de réserve est fixé sur le minium désiré de la balance"
 
 # messages-i18n.c:218
 #: gnucash/report/reports/standard/balance-forecast.scm:59
@@ -27847,7 +27847,7 @@ msgstr "Afficher le tableau"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:62
 msgid "Target amount above reserve"
-msgstr ""
+msgstr "Le montant cible est en-dessous de la réserve"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:63
 msgid ""
@@ -27874,7 +27874,7 @@ msgstr "Dépense"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:266
 msgid "Reserve"
-msgstr ""
+msgstr "Réserve"
 
 # po/guile_strings.txt:197
 #: gnucash/report/reports/standard/balance-sheet.scm:71
@@ -27952,7 +27952,7 @@ msgstr "Indique s'il faut afficher une ligne indiquant le total des actifs"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:119
 msgid "Use standard US layout"
-msgstr ""
+msgstr "Utiliser la disposition standard U.S."
 
 #: gnucash/report/reports/standard/balance-sheet.scm:121
 msgid ""
@@ -28074,7 +28074,7 @@ msgstr "Choisir le format d'export"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:146
 msgid "The balance sheet can be displayed with either 1 or 2 columns."
-msgstr ""
+msgstr "Le bilan graphique peut être affiché sur une ou deux colonnes."
 
 # po/guile_strings.txt:100
 #: gnucash/report/reports/standard/balsheet-eg.scm:154
@@ -28154,6 +28154,9 @@ msgid ""
 "this file should be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
+"Le nom du fichier de la feuille de style CSS à utiliser pour ce rapport. Si "
+"spécifié, ce fichier doit être dans le dossier .gnucash, ou alors dans l'un "
+"des dossiers où GnuCash est installé."
 
 # messages-i18n.c:306 po/guile_strings.txt:176
 #: gnucash/report/reports/standard/balsheet-eg.scm:175
@@ -28189,7 +28192,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:224
 msgid "Sign: -$10.00"
-msgstr ""
+msgstr "Signe : -10,00€"
 
 # messages-i18n.c:248
 #: gnucash/report/reports/standard/balsheet-eg.scm:225
@@ -28238,32 +28241,33 @@ msgstr "Durée de la période"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:63
 msgid "Duration between time periods"
-msgstr ""
+msgstr "Durée entre deux périodes"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:65
 #: gnucash/report/reports/standard/balsheet-pnl.scm:66
 msgid "Period order is most recent first"
-msgstr ""
+msgstr "La période la plus récente est en premier"
 
 # messages-i18n.c:220 po/guile_strings.txt:162
 #: gnucash/report/reports/standard/balsheet-pnl.scm:68
-#, fuzzy
 msgid "Enable dual columns"
-msgstr "Autoriser les liens"
+msgstr "Activer la double colonne"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:69
 msgid "Selecting this option will enable double-column reporting."
 msgstr ""
+"Sélectionner cette option utilisera des doubles colonnes dans les rapports."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:72
 msgid "Disable amount indenting"
-msgstr ""
+msgstr "Désactiver l'indentation pour les montants"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:73
 msgid ""
 "Selecting this option will disable amount indenting, and condense amounts "
 "into a single column."
 msgstr ""
+"Sélectionner cette option regroupera les montants dans une seule colonne."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:75
 #: gnucash/report/trep-engine.scm:98
@@ -30094,11 +30098,11 @@ msgstr "Nombre minimum d'entrées"
 #: gnucash/report/reports/standard/invoice.scm:282
 #, fuzzy
 msgid "The minimum number of invoice entries to display."
-msgstr "Nombre minimum d'entrées à afficher sur les factures. (-1)"
+msgstr "Nombre minimum d'entrées à afficher sur les factures."
 
 #: gnucash/report/reports/standard/invoice.scm:287
 msgid "Use Detailed Tax Summary"
-msgstr ""
+msgstr "Utiliser un résumé détaillé des taxes"
 
 #: gnucash/report/reports/standard/invoice.scm:288
 msgid ""
@@ -31316,7 +31320,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:93
 msgid "Embedded CSS"
-msgstr ""
+msgstr "CSS intégré"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:99
 msgid "Logo filename"
@@ -31399,6 +31403,9 @@ msgid ""
 "the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
+"Largeur du logo au format CSS, par ex. 10% ou 32px. Laissez vide pour "
+"afficher le logo à sa taille d'origine. La hauteur est automatiquement "
+"ajustée pour ne pas déformer le logo."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:158
 msgid "Border-collapse?"
@@ -31420,11 +31427,11 @@ msgstr "N° de facture"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:194
 msgid "To: "
-msgstr ""
+msgstr "À : "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:196
 msgid "Your ref: "
-msgstr ""
+msgstr "Votre réf. : "
 
 # po/guile_strings.txt:173
 #: gnucash/report/reports/standard/taxinvoice.scm:198
@@ -31440,7 +31447,7 @@ msgstr "Nom de la prestation"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:208
 msgid "Embedded CSS."
-msgstr ""
+msgstr "CSS intégré."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:290
 msgid "Display a customer invoice with tax columns (using eguile template)"
@@ -31807,10 +31814,14 @@ msgstr "Jusqu'au "
 #: gnucash/report/stylesheets/css.scm:119
 msgid "CSS code. This field specifies the CSS code for styling reports."
 msgstr ""
+"Le code CSS. Ce champs permet de renseigner le code CSS pour l'habillage des "
+"rapports."
 
 #: gnucash/report/stylesheets/css.scm:209
 msgid "&lt;/style is disallowed in CSS. Using default CSS."
 msgstr ""
+"La balise &lt;/style&gt; n'est pas autorisé en CSS. Le CSS par défaut sera "
+"utilisé."
 
 #: gnucash/report/stylesheets/css.scm:228
 #, fuzzy
@@ -32129,12 +32140,14 @@ msgstr "La société pour ce rapport"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:83
 msgid "Show time in addition to date"
-msgstr ""
+msgstr "Afficher l'heure en plus de la date"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:84
 msgid ""
 "The creation time for this report can only be shown if the date is shown."
 msgstr ""
+"L'heure de création de ce rapport ne peut seulement être affiché si la date "
+"l'est aussi."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:89
 msgid "Show GnuCash Version"
@@ -32146,7 +32159,7 @@ msgstr "Version de GnuCash"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:103
 msgid "String for additional report information."
-msgstr ""
+msgstr "Le texte pour apporter des informations supplémentaires à ce rapport."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:108
 #, fuzzy
@@ -32168,11 +32181,13 @@ msgstr ""
 
 #: gnucash/report/stylesheets/head-or-tail.scm:120
 msgid "Show date/time at bottom"
-msgstr ""
+msgstr "Afficher l'heure/la date en bas"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:121
 msgid "Per default the date/time info will be shown before the report data."
 msgstr ""
+"Par défaut, la date et/ou l'heure seront affichés avant les données du "
+"rapport."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:126
 #, fuzzy
@@ -32184,6 +32199,8 @@ msgid ""
 "Per default the additional comments text will be shown before the report "
 "data."
 msgstr ""
+"Par défaut, les commentaires supplémentaires seront affichés avant les "
+"données du rapport."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:132
 #, fuzzy
@@ -32193,6 +32210,7 @@ msgstr "Version de GnuCash"
 #: gnucash/report/stylesheets/head-or-tail.scm:133
 msgid "Per default the GnuCash version will be shown before the report data."
 msgstr ""
+"Par défaut, la version de GnuCash sera affichée avant les données du rapport."
 
 # po/guile_strings.txt:242
 #: gnucash/report/stylesheets/head-or-tail.scm:442
@@ -32210,7 +32228,7 @@ msgstr "GnuCash "
 #: gnucash/report/stylesheets/head-or-tail.scm:566
 #: gnucash/report/stylesheets/head-or-tail.scm:570
 msgid "Head or Tail"
-msgstr ""
+msgstr "L'avant ou l'arrière"
 
 # po/guile_strings.txt:70
 #: gnucash/report/stylesheets/plain.scm:47
@@ -33537,13 +33555,13 @@ msgstr[1] "Les fichiers suivants ont été copiés vers {1} à la place :"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
 msgid "The following file in {1} has been renamed:"
-msgstr ""
+msgstr "Le fichier suivant dans {1} a été renommé :"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:711
 msgid "The following file has become obsolete and will be ignored:"
 msgid_plural "The following files have become obsolete and will be ignored:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Le fichier suivant est devenu obsolète et sera ignoré :"
+msgstr[1] "Les fichiers suivants sont devenus obsolètes et seront ignorés :"
 
 # messages-i18n.c:37
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
@@ -33662,10 +33680,14 @@ msgstr ""
 #: libgnucash/engine/gnc-datetime.cpp:577
 msgid "Value can't be parsed into a date using the selected date format."
 msgstr ""
+"Cette valeur n'a pu être interprétée comme une date avec le format de date "
+"sélectionné."
 
 #: libgnucash/engine/gnc-datetime.cpp:582
 msgid "Value appears to contain a year while the selected format forbids this."
 msgstr ""
+"Cette valeur semble contenir une année alors que le format sélectionné ne "
+"l'autorise pas."
 
 # messages-i18n.c:32
 #: libgnucash/engine/gnc-features.c:119
@@ -33696,7 +33718,7 @@ msgstr " (fermé)"
 
 #: libgnucash/engine/gncOwner.c:1015
 msgid "Offset between documents: "
-msgstr ""
+msgstr "Décalage entre les documents : "
 
 #: libgnucash/engine/gncOwner.c:1127
 msgid "Lot Link"
@@ -33715,17 +33737,16 @@ msgid "Last In, First Out"
 msgstr ""
 
 #: libgnucash/engine/policy.c:56
-#, fuzzy
 msgid "Use newest lots first."
-msgstr "Utiliser la date du rapport la plus proche"
+msgstr "Commencer par les lots les plus récents."
 
 #: libgnucash/engine/policy.c:59
 msgid "Average cost of open lots."
-msgstr ""
+msgstr "Le coût moyen des lots ouverts."
 
 #: libgnucash/engine/policy.c:62
 msgid "Manually select lots."
-msgstr ""
+msgstr "Sélectionner manuellement les lots."
 
 # messages-i18n.c:178
 #: libgnucash/engine/qofbookslots.h:66
