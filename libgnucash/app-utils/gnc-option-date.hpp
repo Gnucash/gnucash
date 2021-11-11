@@ -20,7 +20,14 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Options
+    @{ */
+/** @file gnc-option-date.hpp
+    @brief Relative date enumeration and manipulation functions.
+    @author Copyright 2019-2021 John Ralls <jralls@ceridwen.us>
+*/
 #ifndef GNC_OPTION_DATE_HPP_
 #define GNC_OPTION_DATE_HPP_
 
@@ -78,14 +85,96 @@ constexpr unsigned relative_date_periods =
 
 using RelativeDatePeriodVec = std::vector<RelativeDatePeriod>;
 
+/**
+ * Report whether the relative date represents a period offset to today's date
+ * rather than the beginning or end of a date range. For example ONE_MONTH_AGO
+ * will be made concrete as the same day as today in the previous month.
+ *
+ * @param period The Relative Date Period to check.
+ * @return true if the date is stand-alone.
+ */
 bool gnc_relative_date_is_single(RelativeDatePeriod);
+
+/**
+ * Report whether the relative date represents the beginning of a date
+ * range. For example START_LAST_MONTH is the beginning of a range.
+ *
+ * @param period The Relative Date Period to check.
+ * @return true if the date is the beginning of a date range
+ */
 bool gnc_relative_date_is_starting(RelativeDatePeriod);
+
+/**
+ * Report whether the relative date represents the end of a date range. For
+ * example END_LAST_MONTH is the end of a range.
+ *
+ * @param period The Relative Date Period to check.
+ * @return true if the date is the end of a date range.
+ */
 bool gnc_relative_date_is_ending(RelativeDatePeriod);
+
+/**
+ * Provide the string representation of a relative date for persisting the
+ * value. This string is not localizable.
+ *
+ * @param period The relative date period.
+ * @return A constant string or nullptr if the period is ABSOLUTE. The string's
+ * lifetime will be that of the Relative Date Period. It must not be freed and
+ * should be copied if the period might be destroyed before the using code is
+ * finished.
+ */
 const char* gnc_relative_date_storage_string(RelativeDatePeriod);
+
+/**
+ * Provide the string representation of a relative date for displaying
+ * value to a user. This string is not localizable.
+ *
+ * @param period The relative date period.
+ * @return A constant string or nullptr if the period is ABSOLUTE. The string's
+ * lifetime will be that of the Relative Date Period. It must not be freed and
+ * should be copied if the period might be destroyed before the using code is
+ * finished.
+ */
 const char* gnc_relative_date_display_string(RelativeDatePeriod);
+
+/**
+ * Provide the description of a relative date. This string is localizable.
+ *
+ * @param period The relative date period.
+ * @return A constant string or nullptr if the period is ABSOLUTE. The string's
+ * lifetime will be that of the Relative Date Period. It must not be freed and
+ * should be copied if the period might be destroyed before the using code is
+ * finished.
+ */
 const char* gnc_relative_date_description(RelativeDatePeriod);
+
+/**
+ * Convert a relative date storage string back to a RelativeDatePeriod value.
+ *
+ * @param A string representation obtained from
+ * gnc_relative_date_storage_string.
+ * @return A RelativeDatePeriod value.
+ */
 RelativeDatePeriod gnc_relative_date_from_storage_string(const char*);
+
+/**
+ * Convert a RelativeDatePeriod value to a concrete time64 by applying the value to the current time. For example if it is now 3:15:42 PM local time 3 June, calling this with a period RelativeDatePeriod::ONE_WEEK_AHEAD will return a time64 representing 3:15:42 PM local time 10 June of this year.
+ *
+ * @param period The relative date period to use to calculate the concrete date.
+ * @return a time64.
+ */
 time64 gnc_relative_date_to_time64(RelativeDatePeriod);
+
+/**
+ * Add the display string to the provided std::ostream.
+ *
+ * @param stream the std::ostream to which to write the period value
+ * @param period the period value to write
+ * @return A reference to stream so that the operator can be chained.
+ */
 std::ostream& operator<<(std::ostream&, const RelativeDatePeriod);
 
 #endif //GNC_OPTION_DATE_HPP_
+
+/** @}
+    @} */

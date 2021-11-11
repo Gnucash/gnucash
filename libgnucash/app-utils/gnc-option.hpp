@@ -20,6 +20,15 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Options
+    @{ */
+
+/** @file gnc-option.hpp
+    @brief C++ Public interface for individual options.
+    @author Copyright 2020-2021 John Ralls <jralls@ceridwen.us>
+*/
 
 #ifndef GNC_OPTION_HPP_
 #define GNC_OPTION_HPP_
@@ -110,6 +119,12 @@ enum class GncOptionMultichoiceKeyType
     NUMBER,
 };
 
+/** @class GncOption
+ *  @brief Represents the public interface for an option.
+ *  Polymorphism is provided by a std::variant member containing GncOptionValue
+ *  types.
+*/
+
 class GncOption
 {
 public:
@@ -144,14 +159,24 @@ public:
     void set_option_from_ui_item();
     void make_internal();
     bool is_changed() const noexcept;
+/** @returns false unless m_option contains a GncOptionMultiselectValue or
+ * GncOptionAccountListValue for which multiple selections have been enabled.
+ */
     bool is_multiselect() const noexcept;
+/** Implemented only for GncOptionNumericRange */
     template <typename ValueType> void get_limits(ValueType&, ValueType&,
                                                   ValueType&) const noexcept;
+/** Not implemented for GncOptionValue. */
     template <typename ValueType> bool validate(ValueType value) const;
+/** Implemented only for GncOptionMultiselectValue. */
     std::size_t num_permissible_values() const;
+/** Implemented only for GncOptionMultiselectValue. */
     std::size_t permissible_value_index(const char* value) const;
+/** Implemented only for GncOptionMultiselectValue. */
     const char* permissible_value(std::size_t index) const;
+/** Implemented only for GncOptionMultiselectValue. */
     const char* permissible_value_name(std::size_t index) const;
+/** Implemented only for GncOptionAccountListValue. */
     GList* account_type_list() const noexcept;
     bool is_alternate() const noexcept;
     void set_alternate(bool) noexcept;
@@ -202,6 +227,11 @@ output_color_value(std::ostream& oss, const std::string& value)
     return oss;
 }
 
+/**
+ * Free function wrapping GncOption's constructor. The type of GncOptionValue to
+ * create is determined from the UI type. Some GncOptionValue types require more
+ * parameters for their constructors and can't be created with this function.
+ */
 template<typename ValueType> GncOption*
 gnc_make_option(const char* section, const char* name,
                 const char* key, const char* doc_string,
@@ -210,9 +240,15 @@ gnc_make_option(const char* section, const char* name,
     return new GncOption(section, name, key, doc_string, value, ui_type);
 }
 
-/* To work around SWIG_Guile's typedef of SCM to unsigned long: */
+/**
+ * Free function wrapping GncOption's constructor using an SCM value.
+ * To work around SWIG_Guile's typedef of SCM to unsigned long
+ */
 GncOption* gnc_make_SCM_option(const char* section, const char* name,
                                const char* key, const char* doc_string,
                                SCM value, GncOptionUIType ui_type);
 
 #endif //GNC_OPTION_HPP_
+
+/** @}
+    @} */

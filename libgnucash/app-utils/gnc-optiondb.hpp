@@ -20,6 +20,15 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Options
+    @{ */
+/** @file gnc-optiondb.hpp
+ *  @brief The primary C++ interface to options for books, reports, and
+ *  stylesheets.
+ *  @author Copyright 2019-2021 John Ralls <jralls@ceridwen.us>
+*/
 
 #ifndef GNC_OPTIONDB_HPP_
 #define GNC_OPTIONDB_HPP_

@@ -21,6 +21,15 @@
  *                                                                  *
 \********************************************************************/
 
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Options
+    @{ */
+/** @file gnc-option-impl.hpp
+    @brief Implementation templates and specializtions for GncOption values.
+    Objecte created by these templates are wrapped by the GncOption variant.
+    @author Copyright 2019-2021 John Ralls <jralls@ceridwen.us>
+*/
 #ifndef GNC_OPTION_IMPL_HPP_
 #define GNC_OPTION_IMPL_HPP_
 
@@ -46,51 +55,6 @@ extern "C"
 
 #include "gnc-option-uitype.hpp"
 
-/*
- * Unused base class to document the structure of the current Scheme option
- * vector, re-expressed in C++. The comment-numbers on the right indicate which
- * item in the Scheme vector each item implements.
- *
- * Not everything here needs to be implemented, nor will it necessarily be
- * implemented the same way. For example, part of the purpose of this redesign
- * is to convert from saving options as strings of Scheme code to some form of
- * key-value pair in the book options, so generate_restore_form() will likely be
- * supplanted with save_to_book().
-
-template <typename ValueType>
-class GncOptionBase
-{
-public:
-    virtual ~GncOption = default;
-    virtual ValueType get_value() const = 0;                             //5
-    virtual ValueType get_default_value() = 0;
-    virtual SCM get_SCM_value() = 0;
-    virtual SCM get_SCM_default_value() const = 0;                       //7
-    virtual void set_value(ValueType) = 0;                               //6
-// generate_restore_form outputs a Scheme expression (a "form") that finds an
-// option and sets it to the current value. e.g.:
-//(let ((option (gnc:lookup-option options
-//                                 "Display"
-//                                 "Amount")))
-//  ((lambda (option) (if option ((gnc:option-setter option) 'none))) option))
-// it uses gnc:value->string to generate the "'none" (or whatever the option's
-// value would be as input to the scheme interpreter).
-
-    virtual std::string generate_restore_form();                         //8
-    virtual void save_to_book(QofBook*) const noexcept;                  //9
-    virtual void read_from_book(QofBook*);                               //10
-    virtual std::vector<std::string> get_option_strings();               //15
-    virtual set_changed_callback(std::function<void(void*)>);            //14
-protected:
-    const std::string m_section;                                         //0
-    const std::string m_name;                                            //1
-    const std::string m_sort_tag;                                        //2
-    const std::type_info m_kvp_type;                                     //3
-    const std::string m_doc_string;                                      //4
-    std::function<void(void*)> m_changed_callback;   //Part of the make-option closure
-    std::function<void(void*)>m_option_widget_changed_callback;          //16
-};
-*/
 
 static const char* commodity_scm_intro{"'(commodity-scm "};
 #ifndef SWIG
@@ -98,6 +62,12 @@ size_t constexpr classifier_size_max{50};
 size_t constexpr sort_tag_size_max{10};
 #endif
 
+/** @struct OptionClassifier
+ * This class is the parent of all option implmentations. It contains the
+ * elements that the optiondb uses to retrieve option values and that the
+ * options dialog determines on which tab to place the option, in what order,
+ * and what string to display as a tooltip.
+ */
 struct OptionClassifier
 {
     std::string m_section;
@@ -112,6 +82,9 @@ struct OptionClassifier
 auto constexpr size_t_max = std::numeric_limits<std::size_t>::max();
 #endif
 
+/** @class GncOptionValue
+ *  The generic option-value class. Most option types can use this template.
+ */
 template <typename ValueType>
 class GncOptionValue : public OptionClassifier
 {
@@ -167,6 +140,12 @@ private:
     ValueType m_default_value;
 };
 
+/** class GncOptionValidatedValue
+ *  Validated values have an additional member function, provided as a
+ *  constructor argument, that checks value parameters for some property before
+ *  setting the object's value member. If the function returns false a
+ *  std::invalid_argument exception is thrown.
+ */
 template <typename ValueType>
 class GncOptionValidatedValue : public OptionClassifier
 {
@@ -353,7 +332,7 @@ operator>> <GncOptionValue<bool>>(std::istream& iss,
 }
 #endif // SWIG
 
-/**
+/** @class GncOptionRangeValue
  * Used for numeric ranges and plot sizes.
  */
 
@@ -461,7 +440,8 @@ using GncMultichoiceOptionEntry = std::tuple<const std::string,
 using GncMultichoiceOptionIndexVec = std::vector<std::size_t>;
 using GncMultichoiceOptionChoices = std::vector<GncMultichoiceOptionEntry>;
 
-/** Multichoice options have a vector of valid options
+/** @class GncOptionMultichoiceValue
+ * Multichoice options have a vector of valid options
  * (GncMultichoiceOptionChoices) and validate the selection as being one of
  * those values. The value is the index of the selected item in the vector. The
  * tuple contains three strings, a key, and a display
@@ -731,7 +711,7 @@ using GncOptionAccountList = std::vector<const Account*>;
 
 using GncOptionAccountTypeList = std::vector<GNCAccountType>;
 
-/** Account options
+/** @class GncOptionAccountListValue
  *
  * Set one or more accounts on which to report, optionally restricted to certain
  * account types. Many calls to make-account-list-option will pass a get-default
@@ -853,6 +833,10 @@ operator>> <GncOptionAccountListValue>(std::istream& iss,
     return iss;
 }
 
+/* @class GncOptionAccountSelValue
+ * Like GncOptionAccountListValue but contains only a single account.
+ */
+
 class GncOptionAccountSelValue : public OptionClassifier
 {
 public:
@@ -936,8 +920,8 @@ operator>> <GncOptionAccountSelValue>(std::istream& iss,
     return iss;
 }
 
-/** Date options
- * A legal date value is a pair of either and a RelativeDatePeriod, the absolute
+/** @class GncOptionDateValue
+ * A legal date value is a pair of either a RelativeDatePeriod, the absolute
  * flag and a time64, or for legacy purposes the absolute flag and a timespec.
  */
 /*
@@ -1076,7 +1060,7 @@ operator>> <GncOptionDateValue>(std::istream& iss,
     return opt.in_stream(iss);
 }
 
-/** QofQuery Options
- */
 
 #endif //GNC_OPTION_IMPL_HPP_
+/**@}
+   @} */

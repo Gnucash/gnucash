@@ -20,6 +20,14 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Options
+    @{ */
+/** @file gnc-optiondb-impl.hpp
+    @brief Implementation details for GncOptionDB.
+    @author Copyright 2019-2021 John Ralls <jralls@ceridwen.us>
+*/
 
 #ifndef GNC_OPTIONDB_P_HPP_
 #define GNC_OPTIONDB_P_HPP_
@@ -45,6 +53,10 @@ extern "C"
 
 using GncOptionVec = std::vector<GncOption>;
 
+/** class GncOptionSection
+ *  The upper-level classification implmentation. Contains the options for a
+ *  section; sections are displayed as separate tabs on the option dialog.
+ */
 class GncOptionSection
 {
     std::string m_name;
@@ -90,6 +102,10 @@ struct GncOptionDBCallback
 
 using GncCallbackVec = std::vector<GncOptionDBCallback>;
 
+/** @class GncOptionDB
+ *  Holds all of the options for a book, report, or stylesheet, organized by
+ *  GncOptionSections.
+ */
 class GncOptionDB
 {
 public:
@@ -171,3 +187,5 @@ private:
 
 
 #endif // GNC_OPTIONDB_P_HPP_
+/** @}
+    @} */

@@ -20,7 +20,37 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Options
+    GnuCash Options System for Book, Report, and Stylesheet Options.
 
+    The GnuCash Options System supports two somewhat different purposes:
+    - File properties, such as business information and whether to use automatic
+      trading accounts.
+
+    - Report options for configuring and customizing reports. Most report
+      options are user-configurable through a report options dialog but some are
+      used as a way of passing enumeration values between the scheme modules
+      that generate the report.
+
+    The options system is centered on an options database or optiondb. A
+    separate optionsdb is created and instantiated for every use, so the book
+    gets one at the beginning of the session with its values loaded from KVP,
+    and every report gets one when the report is run, as do report stylesheets
+    when they are edited. Customized report and stylesheet options are saved as
+    Scheme code fragments in files in the user's GnuCash Config directory.
+
+    @note
+    Persistence via text scheme code is a security vulnerability as it
+    enables an attacker to make GnuCash execute arbitrary code. The Guile
+    interpreter affords full system access with at least the user's privileges.
+
+    @{ */
+/** @file gnc-optiondb.h
+    @brief C public interface for the Options Database.
+    @author Copyright 2019-2021 John Ralls <jralls@ceridwen.us>
+*/
 #ifndef GNC_OPTIONDB_H_
 #define GNC_OPTIONDB_H_
 
@@ -179,3 +209,6 @@ void gnc_option_db_set_scm_value(GncOptionDB*, const char*,
 }
 #endif
 #endif //GNC_OPTIONDB_H_
+
+/** @}
+    @} */

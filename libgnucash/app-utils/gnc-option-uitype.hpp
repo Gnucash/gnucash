@@ -23,6 +23,19 @@
 #ifndef GNC_OPTION_UITYPE_HPP__
 #define GNC_OPTION_UITYPE_HPP__
 
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Options
+    @{ */
+/** @file gnc-option-uitype.hpp
+    @brief OptionUITypes
+    @author Copyright 2019-2021 John Ralls <jralls@ceridwen.us>
+*/
+
+/** @enum GncOptionUIType
+ *  Used by GncOptionClassifier to indicate to dialog-options what control
+ *  should be displayed for the option.
+ */
 enum class GncOptionUIType : unsigned int
 {
     INTERNAL,
@@ -59,3 +72,5 @@ enum class GncOptionUIType : unsigned int
 };
 
 #endif // GNC_OPTION_UITYPE_H__
+/** @}
+    @} */
