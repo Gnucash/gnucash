@@ -7,7 +7,7 @@ Related Documents
 -----------------
 
 In addition to this file, you should read the README file, which
-explains the details of getting the SVN source, building GnuCash,
+explains the details of getting the git source, building GnuCash,
 and creating patches for submission.
 
 The src/doc/design directory contains a preliminary design document
