@@ -44,5 +44,6 @@ gnc_guile_bindings_init(void)
         scm_init_sw_core_utils_module();
         scm_init_sw_engine_module();
 
+        is_initialized = 1;
     }
 }
