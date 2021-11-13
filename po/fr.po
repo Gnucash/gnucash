@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-10 07:53+0000\n"
+"PO-Revision-Date: 2021-11-13 02:54+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 #, fuzzy
@@ -1527,8 +1527,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
-"Le nom de la société ne peut rester vide, merci de compléter par un nom de "
-"personne ou de société."
+"Le nom de la société ne peut pas rester vide, merci de compléter par un nom "
+"de personne ou de société."
 
 #: gnucash/gnome/dialog-customer.c:341
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -12585,6 +12585,8 @@ msgid ""
 "Shows or hides transactions from the match picker which are already of some "
 "reconciled state."
 msgstr ""
+"Afficher ou masquer les transactions du sélecteur pour lesquelles il existe "
+"des dates rapprochées."
 
 # messages-i18n.c:176
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:5
@@ -12672,12 +12674,13 @@ msgid ""
 "If active, always open the reconcile dialog using today's date for the "
 "statement date, regardless of previous reconciliations."
 msgstr ""
+"Si actif, toujours ouvrir le dialogue de rapprochement en utilisant "
+"aujourd'hui comme date, en ignorant les précédents rapprochements."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:17
-#, fuzzy
 msgid "Run \"since last run\" dialog when a file is opened."
 msgstr ""
-"Afficher l'assistant \"Depuis la dernière exécution\" à l'ouverture d'un "
+"Lancer l'assistant \"Depuis la dernière exécution\" à l'ouverture d'un "
 "fichier."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:18
@@ -12717,12 +12720,16 @@ msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last run"
 "\" dialog."
 msgstr ""
+"Utiliser \"Étudier les transactions créées\" par défaut pour le dialogue "
+"\"depuis la dernière exécution\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
+"Ce réglage permet de changer quand \"étudier les transactions créées\" est "
+"actif par défaut pour le dialogue \"depuis la dernière exécution\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
@@ -12857,6 +12864,8 @@ msgstr "Information de transaction"
 msgid ""
 "This is the path head for the Transaction Linked Files with relative paths"
 msgstr ""
+"Ceci est la base du chemin pour les fichiers des Transactions liées avec un "
+"chemin relatif"
 
 # messages-i18n.c:93
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:30
@@ -12972,6 +12981,9 @@ msgid ""
 "decimals instead of displaying the exact fraction if the fractional part "
 "cannot be exactly represented as a decimal."
 msgstr ""
+"Si actif, GnuCash arrondira les prix quand nécessaire pour les afficher avec "
+"des décimales au lieu de la valeur exacte si celle-ci ne peut être "
+"représentée avec un nombre fini de décimales."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:75
 #: gnucash/gtkbuilder/dialog-preferences.glade:1739
@@ -12988,6 +13000,12 @@ msgid ""
 "keep old files for a number of days. How many days is defined in key 'retain-"
 "days'"
 msgstr ""
+"Ce réglage permet de spécifier comment gérer les anciens fichiers de journal "
+"ou de sauvegarde. \"always\" gardera tous les anciens fichiers. \"never\" "
+"effacera automatiquement tous ces fichiers ; à chaque sauvegarde, les "
+"anciennes versions des fichiers seront supprimées. \"days\" supprimera ces "
+"fichiers après le nombre de jours renseignés. Ce nombre de jours est défini "
+"par la clé 'retain-days'"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1757
@@ -13067,6 +13085,9 @@ msgid ""
 "account's custom color if set. This can serve as a visual aid to quickly "
 "identify accounts."
 msgstr ""
+"Si actif, la hiérarchie du compte colorera le compte suivant la couleur "
+"personnalisée pour ce compte, si spécifiée. Cela peut servir de repère "
+"visuel pour identifier plus rapidement les comptes."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:115
 #, fuzzy
@@ -13633,7 +13654,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:321
 msgid "Show entered and reconciled dates on selection"
-msgstr ""
+msgstr "Afficher les dates entrées et rapprochées à la sélection"
 
 # messages-i18n.c:77
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:322
@@ -13886,7 +13907,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:14
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:117
 msgid "Confirm Window Close"
-msgstr ""
+msgstr "Confirmer la fermeture de la fenêtre"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:118
@@ -14325,6 +14346,8 @@ msgid ""
 "This setting controls whether the given column will be visible in the view. "
 "TRUE means visible, FALSE means hidden."
 msgstr ""
+"Ce réglage permet de définir la visibilité de chaque colonne dans la vue. "
+"TRUE pour visible, et FALSE pour masquée."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:10
 #, fuzzy
@@ -14488,7 +14511,7 @@ msgstr "Aperçu"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:281
 msgid "Import Account Preview, first 10 rows only"
-msgstr ""
+msgstr "Aperçu du compte importé, seulement pour les 10 premières lignes"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:290
 #: gnucash/gtkbuilder/assistant-csv-export.glade:728
@@ -16814,18 +16837,18 @@ msgstr "2. Sélectionner le type d'importation"
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:216
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:217
 msgid "Semicolon separated"
-msgstr "Séparé par une demie-colonne"
+msgstr "Séparé par une demi-colonne"
 
 # messages-i18n.c:227
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:234
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:234
 msgid "Comma separated"
-msgstr "séparé par une virgule"
+msgstr "Séparé par une virgule"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:252
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:252
 msgid "Semicolon separated with quotes"
-msgstr "Demie-colonne séparée par des guillemets"
+msgstr "Demi-colonne séparée par des guillemets"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:270
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:270
@@ -16851,26 +16874,25 @@ msgstr "4. Aperçu"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:374
 msgid "Open imported documents in tabs"
-msgstr ""
+msgstr "Ouvrir les documents importés dans les onglets"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
 msgid "Open not yet posted documents in tabs "
-msgstr ""
+msgstr "Ouvrir les documents non encore remplis dans des onglets "
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
-msgstr ""
+msgstr "Ne pas ouvrir les documents importés dans des onglets"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:432
 msgid "5. Afterwards"
-msgstr ""
+msgstr "5. Par la suite"
 
 # po/guile_strings.txt:31
 #: gnucash/gtkbuilder/dialog-billterms.glade:48
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:8
-#, fuzzy
 msgid "window1"
-msgstr "Fenêtre _1"
+msgstr "fenêtre1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:72
 msgid "Due Days"
@@ -16912,9 +16934,8 @@ msgid "Discount Day"
 msgstr "Jours d'escompte "
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:249
-#, fuzzy
 msgid "Cutoff Day"
-msgstr "Jour pivot : "
+msgstr "Jour pivot"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:263
 msgid ""
@@ -17064,7 +17085,7 @@ msgstr "Afficher les devises nationales"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:126
 msgid "Add a new commodity."
-msgstr "Ajoute un nouveau produit."
+msgstr "Ajouter un nouveau produit."
 
 # messages-i18n.c:105
 #: gnucash/gtkbuilder/dialog-commodities.glade:144
@@ -19375,9 +19396,8 @@ msgstr "Fenêtres"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3759
 #: gnucash/gtkbuilder/dialog-preferences.glade:3782
-#, fuzzy
 msgid "Online Quotes"
-msgstr "_Télécharger les cotations en ligne"
+msgstr "Cotations en ligne"
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
@@ -19404,20 +19424,17 @@ msgstr "Éditeur de cours"
 
 # po/guile_strings.txt:188
 #: gnucash/gtkbuilder/dialog-price.glade:131
-#, fuzzy
 msgid "_Namespace"
-msgstr "_Espace de nommage"
+msgstr "Espace de _nommage"
 
 #: gnucash/gtkbuilder/dialog-price.glade:188
-#, fuzzy
 msgid "S_ource"
-msgstr "_Source : "
+msgstr "S_ource"
 
 # messages-i18n.c:321
 #: gnucash/gtkbuilder/dialog-price.glade:369
-#, fuzzy
 msgid "Remove Old Prices"
-msgstr "Supprimer les _anciens"
+msgstr "Retirer les anciens prix"
 
 #: gnucash/gtkbuilder/dialog-price.glade:431
 #, fuzzy
@@ -19433,26 +19450,24 @@ msgstr "Supprime les cours antérieurs à une date indiquée par l’utilisateur
 
 #: gnucash/gtkbuilder/dialog-price.glade:465
 msgid "Last of _Week"
-msgstr ""
+msgstr "Dernier de la _semaine"
 
 #: gnucash/gtkbuilder/dialog-price.glade:469
 msgid "Keep the last price of each week if present before date."
-msgstr ""
+msgstr "Garde le dernier prix de chaque semaine si présent avant la date."
 
 #: gnucash/gtkbuilder/dialog-price.glade:482
-#, fuzzy
 msgid "Last of _Month"
-msgstr "dernier du mois"
+msgstr "Dernier du _mois"
 
 #: gnucash/gtkbuilder/dialog-price.glade:486
 msgid "Keep the last price of each month if present before date."
-msgstr ""
+msgstr "Garde le dernier prix de chaque mois si présent avant la date."
 
 # po/guile_strings.txt:107
 #: gnucash/gtkbuilder/dialog-price.glade:499
-#, fuzzy
 msgid "Last of _Quarter"
-msgstr "Début du prochain trimestre"
+msgstr "Dernier du _trimestre"
 
 #: gnucash/gtkbuilder/dialog-price.glade:503
 msgid ""
@@ -19502,29 +19517,26 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:662
 msgid "Include _Fetched online prices"
-msgstr ""
+msgstr "Inclure les prix _récupérés en ligne"
 
 #: gnucash/gtkbuilder/dialog-price.glade:666
 msgid "If activated, prices added by Finance::Quote will be included."
-msgstr ""
+msgstr "Si actif, les prix ajoutés avec Finance::Quote seront inclus."
 
 # messages-i18n.c:25
 #: gnucash/gtkbuilder/dialog-price.glade:681
-#, fuzzy
 msgid "Include manually _Entered prices"
-msgstr "Supprimer les prix saisis _manuellement"
+msgstr "Inclure les prix _entrés manuellement"
 
 # messages-i18n.c:25
 #: gnucash/gtkbuilder/dialog-price.glade:685
-#, fuzzy
 msgid "If activated, include manually entered prices."
-msgstr "Supprimer les prix saisis _manuellement"
+msgstr "Si actif, inclure les prix entrés manuellement."
 
 # messages-i18n.c:176
 #: gnucash/gtkbuilder/dialog-price.glade:702
-#, fuzzy
 msgid "_Added by the application"
-msgstr "Quitter cette application"
+msgstr "_Ajouté par cette application"
 
 #: gnucash/gtkbuilder/dialog-price.glade:706
 msgid ""
@@ -21306,7 +21318,7 @@ msgstr ""
 # messages-i18n.c:346
 #: gnucash/gtkbuilder/window-autoclear.glade:101
 msgid "Caution!"
-msgstr "Prudence!"
+msgstr "Attention !"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
