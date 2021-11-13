@@ -359,7 +359,7 @@ gnc_html_show_url( GncHtml* self, URLType type,
                    const gchar* location, const gchar* label,
                    gboolean new_window_hint )
 {
-    URLType lc_type = NULL;
+    char* lc_type = NULL;
 
     g_return_if_fail( self != NULL );
     g_return_if_fail( GNC_IS_HTML(self) );
@@ -629,7 +629,7 @@ gnc_html_set_parent( GncHtml* self, GtkWindow* parent )
 gboolean
 gnc_html_register_urltype( URLType type, const char *protocol )
 {
-    URLType  lc_type  = NULL;
+    char*  lc_type  = NULL;
     char    *lc_proto = NULL;
 
     if (!gnc_html_type_to_proto_hash)
@@ -697,7 +697,7 @@ gnc_html_initialize( void )
 gchar*
 gnc_build_url( URLType type, const gchar* location, const gchar* label )
 {
-    URLType  lc_type  = NULL;
+    char*  lc_type  = NULL;
     char * type_name;
 
     DEBUG(" ");
@@ -931,7 +931,7 @@ gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand )
     gnc_html_unregister_stream_handler( url_type );
     if ( hand != NULL )
     {
-        URLType  lc_type  = g_ascii_strdown (url_type, -1);
+        char*  lc_type  = g_ascii_strdown (url_type, -1);
         g_hash_table_insert( gnc_html_stream_handlers, lc_type, hand );
     }
 }
@@ -939,7 +939,7 @@ gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand )
 void
 gnc_html_unregister_stream_handler( URLType url_type )
 {
-    URLType  lc_type = g_ascii_strdown (url_type, -1);
+    char*  lc_type = g_ascii_strdown (url_type, -1);
     g_hash_table_remove( gnc_html_stream_handlers, lc_type );
     g_free(lc_type);
 }
@@ -957,7 +957,7 @@ gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand )
     gnc_html_unregister_url_handler( url_type );
     if ( hand != NULL )
     {
-        URLType lc_type = g_ascii_strdown (url_type, -1);
+        char* lc_type = g_ascii_strdown (url_type, -1);
         g_hash_table_insert( gnc_html_url_handlers, lc_type, hand );
     }
 }
@@ -965,7 +965,7 @@ gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand )
 void
 gnc_html_unregister_url_handler( URLType url_type )
 {
-    URLType lc_type = g_ascii_strdown (url_type, -1);
+    char* lc_type = g_ascii_strdown (url_type, -1);
     g_hash_table_remove( gnc_html_url_handlers, lc_type );
     g_free(lc_type);
 }

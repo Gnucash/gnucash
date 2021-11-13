@@ -587,8 +587,8 @@ perform_navigation_policy (WebKitWebView *web_view,
                GncHtml *self)
 {
      WebKitURIRequest *req = NULL;
-     const gchar* uri; // Can't init it here.
-     gchar *scheme = NULL, *location = NULL, *label = NULL;
+     const gchar* uri, *scheme; // Can't init it here.
+     gchar *location = NULL, *label = NULL;
      gboolean ignore = FALSE;
      WebKitNavigationAction *action =
       webkit_navigation_policy_decision_get_navigation_action (decision);

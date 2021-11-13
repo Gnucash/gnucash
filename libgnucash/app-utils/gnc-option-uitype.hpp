@@ -1,6 +1,6 @@
-/********************************************************************
- * test-app-utils.c: GLib g_test test execution file.		    *
- * Copyright 2013 John Ralls <jralls@ceridwen.us>		    *
+/********************************************************************\
+ * gnc-option-uitype.hpp -- UI Control Enum for GncOption           *
+ * Copyright (C) 2020 John Ralls <jralls@ceridwen.us>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,38 +18,59 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
+#ifndef GNC_OPTION_UITYPE_HPP__
+#define GNC_OPTION_UITYPE_HPP__
 
-#include <config.h>
-#include <glib.h>
-#include <qof.h>
-#include <libguile.h>
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Options
+    @{ */
+/** @file gnc-option-uitype.hpp
+    @brief OptionUITypes
+    @author Copyright 2019-2021 John Ralls <jralls@ceridwen.us>
+*/
 
-extern void test_suite_option_util (void);
-extern void test_suite_gnc_ui_util (void);
-
-static void
-guile_main (void *closure, int argc, char **argv)
+/** @enum GncOptionUIType
+ *  Used by GncOptionClassifier to indicate to dialog-options what control
+ *  should be displayed for the option.
+ */
+enum class GncOptionUIType : unsigned int
 {
-    int retval;
-    scm_c_use_module("gnucash app-utils");
+    INTERNAL,
+    BOOLEAN,
+    STRING,
+    TEXT,
+    CURRENCY,
+    COMMODITY,
+    MULTICHOICE,
+    DATE_ABSOLUTE,
+    DATE_RELATIVE,
+    DATE_BOTH,
+    ACCOUNT_LIST,
+    ACCOUNT_SEL,
+    LIST,
+    NUMBER_RANGE,
+    COLOR,
+    FONT,
+    PLOT_SIZE,
+    BUDGET,
+    PIXMAP,
+    RADIOBUTTON,
+    DATE_FORMAT,
+    OWNER,
+    CUSTOMER,
+    VENDOR,
+    EMPLOYEE,
+    INVOICE,
+    JOB,
+    TAX_TABLE,
+    QUERY,
+    REPORT_LIST,
+    MAX_VALUE,  //Nake sure this one is always last
+};
 
-    test_suite_option_util ();
-    test_suite_gnc_ui_util ();
-    retval = g_test_run ();
-
-    exit (retval);
-}
-
-int
-main (int argc, char *argv[])
-{
-    qof_init (); 			/* Initialize the GObject system */
-    qof_log_init_filename_special ("stderr"); /* Init the log system */
-    g_test_init (&argc, &argv, NULL); 	/* initialize test program */
-    //qof_log_set_level("gnc", G_LOG_LEVEL_DEBUG);
-    g_test_bug_base("https://bugs.gnucash.org/show_bug.cgi?id="); /* init the bugzilla URL */
-    g_setenv ("GNC_UNINSTALLED", "1", TRUE);
-    scm_boot_guile (argc, argv, guile_main, NULL);
-    return 0;
-}
+#endif // GNC_OPTION_UITYPE_H__
+/** @}
+    @} */

@@ -29,6 +29,8 @@
 #include <iomanip>
 #include <stdexcept>
 
+using boost::typeindex::type_id;
+
 KvpValueImpl::KvpValueImpl(KvpValueImpl const & other) noexcept
 {
     duplicate(other);
@@ -58,7 +60,7 @@ KvpValueImpl *
 KvpValueImpl::add(KvpValueImpl * val) noexcept
 {
     /* If already a glist here, just append */
-    if (this->datastore.type() == typeid(GList*))
+    if (this->datastore.type() == type_id<GList*>())
     {
         GList * list = boost::get<GList*>(datastore);
         datastore = g_list_append (list, val);
@@ -75,23 +77,23 @@ KvpValueImpl::add(KvpValueImpl * val) noexcept
 KvpValue::Type
 KvpValueImpl::get_type() const noexcept
 {
-    if (datastore.type() == typeid(int64_t))
+    if (datastore.type() == type_id<int64_t>())
         return KvpValue::Type::INT64;
-    else if (datastore.type() == typeid(double))
+    else if (datastore.type() == type_id<double>())
         return KvpValue::Type::DOUBLE;
-    else if (datastore.type() == typeid(gnc_numeric))
+    else if (datastore.type() == type_id<gnc_numeric>())
         return KvpValue::Type::NUMERIC;
-    else if (datastore.type() == typeid(const gchar *))
+    else if (datastore.type() == type_id<const gchar *>())
         return KvpValue::Type::STRING;
-    else if (datastore.type() == typeid(GncGUID *))
+    else if (datastore.type() == type_id<GncGUID *>())
         return KvpValue::Type::GUID;
-    else if (datastore.type() == typeid(Time64))
+    else if (datastore.type() == type_id<Time64>())
         return KvpValue::Type::TIME64;
-    else if (datastore.type() == typeid(GList *))
+    else if (datastore.type() == type_id<GList *>())
         return KvpValue::Type::GLIST;
-    else if (datastore.type() == typeid(KvpFrameImpl *))
+    else if (datastore.type() == type_id<KvpFrameImpl *>())
         return KvpValue::Type::FRAME;
-    else if (datastore.type() == typeid(GDate))
+    else if (datastore.type() == type_id<GDate>())
         return KvpValue::Type::GDATE;
 
     return KvpValue::Type::INVALID;
@@ -100,7 +102,7 @@ KvpValueImpl::get_type() const noexcept
 KvpFrame *
 KvpValueImpl::replace_frame_nc (KvpFrame * new_value) noexcept
 {
-    if (datastore.type() != typeid(KvpFrame *))
+    if (datastore.type() != type_id<KvpFrame *>())
         return {};
     auto ret = boost::get<KvpFrame *>(datastore);
     datastore = new_value;
@@ -110,7 +112,7 @@ KvpValueImpl::replace_frame_nc (KvpFrame * new_value) noexcept
 GList *
 KvpValueImpl::replace_glist_nc (GList * new_value) noexcept
 {
-    if (datastore.type() != typeid(GList *))
+    if (datastore.type() != type_id<GList *>())
         return {};
     auto ret = boost::get<GList *>(datastore);
     datastore = new_value;
@@ -206,7 +208,7 @@ struct to_string_visitor : boost::static_visitor<void>
 std::string
 KvpValueImpl::to_string(std::string const & prefix) const noexcept
 {
-    if (this->datastore.type() == typeid(KvpFrame*))
+    if (this->datastore.type() == type_id<KvpFrame*>())
         return this->get<KvpFrame*>()->to_string(prefix);
     std::ostringstream ret;
     to_string_visitor visitor {ret};
@@ -390,13 +392,13 @@ KvpValueImpl::~KvpValueImpl() noexcept
 void
 KvpValueImpl::duplicate(const KvpValueImpl& other) noexcept
 {
-    if (other.datastore.type() == typeid(const gchar *))
+    if (other.datastore.type() == type_id<const gchar *>())
         this->datastore = const_cast<const gchar *>(g_strdup(other.get<const gchar *>()));
-    else if (other.datastore.type() == typeid(GncGUID*))
+    else if (other.datastore.type() == type_id<GncGUID*>())
         this->datastore = guid_copy(other.get<GncGUID *>());
-    else if (other.datastore.type() == typeid(GList*))
+    else if (other.datastore.type() == type_id<GList*>())
         this->datastore = kvp_glist_copy(other.get<GList *>());
-    else if (other.datastore.type() == typeid(KvpFrame*))
+    else if (other.datastore.type() == type_id<KvpFrame*>())
         this->datastore = new KvpFrame(*other.get<KvpFrame *>());
     else
         this->datastore = other.datastore;

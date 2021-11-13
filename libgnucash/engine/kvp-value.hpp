@@ -174,7 +174,7 @@ KvpValueImpl::KvpValueImpl(T newvalue) noexcept:
 template <typename T> T
 KvpValueImpl::get() const noexcept
 {
-    if (this->datastore.type() != typeid(T)) return {};
+    if (this->datastore.type() != boost::typeindex::type_id<T>()) return {};
     return boost::get<T>(datastore);
 }
 

@@ -27,7 +27,7 @@ set (gnc_gnome_noinst_HEADERS
   dialog-payment.h
   dialog-print-check.h
   dialog-progress.h
-  dialog-report-column-view.h
+  dialog-report-column-view.hpp
   dialog-report-style-sheet.h
   dialog-sx-editor.h
   dialog-sx-editor2.h
@@ -69,10 +69,10 @@ gnc_add_swig_guile_command (swig-gnome-c
 
 set (gnc_gnome_SOURCES
   assistant-acct-period.c
-  assistant-hierarchy.c
+  assistant-hierarchy.cpp
   assistant-loan.cpp
   assistant-stock-split.c
-  business-options-gnome.c
+  business-options-gnome.cpp
   business-urls.c
   business-gnome-utils.c
   dialog-doclink.c
@@ -98,8 +98,8 @@ set (gnc_gnome_SOURCES
   dialog-price-edit-db.c
   dialog-print-check.c
   dialog-progress.c
-  dialog-report-column-view.c
-  dialog-report-style-sheet.c
+  dialog-report-column-view.cpp
+  dialog-report-style-sheet.cpp
   dialog-sx-editor.c
   dialog-sx-editor2.c
   dialog-sx-from-trans.c
@@ -120,7 +120,7 @@ set (gnc_gnome_SOURCES
   gnc-plugin-page-owner-tree.c
   gnc-plugin-page-register.c
   gnc-plugin-page-register2.c
-  gnc-plugin-page-report.c
+  gnc-plugin-page-report.cpp
   gnc-plugin-page-sx-list.c
   gnc-split-reg.c
   gnc-split-reg2.c
@@ -129,7 +129,7 @@ set (gnc_gnome_SOURCES
   top-level.c
   window-reconcile.c
   window-reconcile2.c
-  window-report.c
+  window-report.cpp
   window-autoclear.c
 )
 

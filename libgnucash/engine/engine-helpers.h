@@ -74,11 +74,6 @@ void gnc_set_num_action (Transaction *trans, Split *split,
 void
 gnc_book_option_num_field_source_change (gboolean num_action);
 
-/** Calls registered callbacks when book_currency book option changes so that
-  * registers/reports can update themselves */
-void
-gnc_book_option_book_currency_selected (gboolean use_book_currency);
-
 /** Registers callbacks to be called when the book option changes for the
   * specified book option key */
 void

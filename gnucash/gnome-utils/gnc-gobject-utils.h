@@ -128,7 +128,7 @@ void gnc_gobject_tracking_dump (void);
 
 #define _GNC_DEFINE_TYPE_EXTENDED_BEGIN(TypeName, type_name, TYPE_PARENT, flags) \
 \
-static void     type_name##_init         (TypeName        *self, void *class); \
+static void     type_name##_init         (TypeName        *self, void *klass); \
 static void     type_name##_class_init   (TypeName##Class *klass); \
 static gpointer type_name##_parent_class = NULL; \
 static gint     TypeName##_private_offset; \

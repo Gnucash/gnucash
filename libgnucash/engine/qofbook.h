@@ -42,6 +42,11 @@
 
 #ifdef __cplusplus
 #include <glib.h> //To preempt it being included extern "C" in a later header.
+class GncOptionDB;
+#else
+typedef struct GncOptionDB GncOptionDB;
+#endif
+#ifdef __cplusplus
 extern "C"
 {
 #endif
@@ -74,10 +79,8 @@ typedef struct KvpValueImpl KvpValue;
 
 typedef void (*QofBookDirtyCB) (QofBook *, gboolean dirty, gpointer user_data);
 
-typedef struct gnc_option_db GNCOptionDB;
-
-typedef void (*GNCOptionSave) (GNCOptionDB*, QofBook*, gboolean);
-typedef void (*GNCOptionLoad) (GNCOptionDB*, QofBook*);
+typedef void (*GncOptionSave) (GncOptionDB*, QofBook*, gboolean);
+typedef void (*GncOptionLoad) (GncOptionDB*, QofBook*);
 
 /* Book structure */
 struct _QofBook
@@ -267,27 +270,6 @@ gboolean qof_book_empty(const QofBook *book);
 /** Returns flag indicating whether this book uses trading accounts */
 gboolean qof_book_use_trading_accounts (const QofBook *book);
 
-/** Returns pointer to book-currency name for book, if one exists in the
-  * KVP, or NULL; does not validate contents nor determine if there is a valid
-  * default gain/loss policy, both of which are required, for the
-  * 'book-currency' currency accounting method to apply. Use instead
-  * 'gnc_book_get_book_currency_name' which does these validations. */
-const gchar * qof_book_get_book_currency_name (QofBook *book);
-
-/** Returns pointer to default gain/loss policy for book, if one exists in the
-  * KVP, or NULL; does not validate contents nor determine if there is a valid
-  * book-currency, both of which are required, for the 'book-currency'
-  * currency accounting method to apply. Use instead
-  * 'gnc_book_get_default_gains_policy' which does these validations. */
-const gchar * qof_book_get_default_gains_policy (QofBook *book);
-
-/** Returns pointer to default gain/loss account GUID for book, if one exists in
-  * the KVP, or NULL; does not validate contents nor determine if there is a
-  * valid book-currency, both of which are required, for the 'book-currency'
-  * currency accounting method to apply. Use instead
-  * 'gnc_book_get_default_gain_loss_acct' which does these validations. */
-GncGUID * qof_book_get_default_gain_loss_acct_guid (QofBook *book);
-
 /** Returns TRUE if the auto-read-only feature should be used, otherwise
  * FALSE. This is just a wrapper on qof_book_get_num_days_autoreadonly() == 0. */
 gboolean qof_book_uses_autoreadonly (const QofBook *book);
@@ -391,21 +373,21 @@ void qof_book_commit_edit(QofBook *book);
 /** @ingroup KVP
  @{
  */
-/** Load a GNCOptionsDB from KVP data.
+/** Load a GncOptionsDB from KVP data.
  * @param book: The book.
  * @param load_cb: A callback function that does the loading.
- * @param odb: The GNCOptionDB to load.
+ * @param odb: The GncOptionDB to load.
  */
-void qof_book_load_options (QofBook *book, GNCOptionLoad load_cb,
-                GNCOptionDB *odb);
-/** Save a GNCOptionsDB back to the book's KVP.
+void qof_book_load_options (QofBook *book, GncOptionLoad load_cb,
+                            GncOptionDB *odb);
+/** Save a GncOptionsDB back to the book's KVP.
  * @param book: The book.
  * @param save_cb: A callback function that does the saving.
- * @param odb: The GNCOptionsDB to save from.
- * @param clear: Should the GNCOptionsDB be emptied after the save?
+ * @param odb: The GncOptionsDB to save from.
+ * @param clear: Should the GncOptionsDB be emptied after the save?
  */
-void qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
-                            GNCOptionDB* odb, gboolean clear);
+void qof_book_save_options (QofBook *book, GncOptionSave save_cb,
+                            GncOptionDB* odb, gboolean clear);
 /** Save a single option value.
  * Used from Scheme, the KvpValue<-->SCM translation is handled by the functions
  * in kvp-scm.c and automated by SWIG. The starting element is set as

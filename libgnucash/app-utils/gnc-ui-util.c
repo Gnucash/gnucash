@@ -438,122 +438,6 @@ gnc_get_current_book_tax_type (void)
     }
 }
 
-/** Returns TRUE if both book-currency and default gain/loss policy KVPs exist
-  * and are valid and trading accounts are not used. */
-gboolean
-gnc_book_use_book_currency (QofBook *book)
-{
-    const gchar *policy;
-    const gchar *currency;
-
-    if (!book) return FALSE;
-
-    policy = qof_book_get_default_gains_policy (book);
-    currency = qof_book_get_book_currency_name (book);
-
-    /* If either a default gain/loss policy or a book-currency does not exist,
-       book-currency accounting method not valid */
-    if (!policy || !currency)
-       return FALSE;
-
-    /* If both exist, both must be valid */
-    if (!gnc_valid_policy_name (policy) || !gnc_commodity_table_lookup
-                                            (gnc_commodity_table_get_table
-                                              (gnc_get_current_book()),
-                                                GNC_COMMODITY_NS_CURRENCY,
-                                                 currency))
-       return FALSE;
-
-    /* If both exist and are valid, there must be no trading accounts flag */
-    if (qof_book_use_trading_accounts (book))
-       return FALSE;
-
-    return TRUE;
-}
-
-/** Returns pointer to Book Currency name for book or NULL; determines
-  * that both book-currency and default gain/loss policy KVPs exist and that
-  * both are valid, a requirement for the 'book-currency' currency accounting
-  * method to apply. */
-const gchar *
-gnc_book_get_book_currency_name (QofBook *book)
-{
-    if (!book) return NULL;
-
-    if (gnc_book_use_book_currency (book))
-        return qof_book_get_book_currency_name (book);
-
-    return NULL;
-}
-
-/** Returns pointer to Book Currency for book or NULL; determines
-  * that both book-currency and default gain/loss policy KVPs exist and that
-  * both are valid, a requirement for the 'book-currency' currency accounting
-  * method to apply. */
-gnc_commodity *
-gnc_book_get_book_currency (QofBook *book)
-{
-    if (!book) return NULL;
-
-    if (gnc_book_use_book_currency (book))
-        return gnc_commodity_table_lookup
-                    (gnc_commodity_table_get_table(book),
-                     GNC_COMMODITY_NS_CURRENCY,
-                     qof_book_get_book_currency_name (book));
-
-    return NULL;
-}
-
-/** Returns pointer to default gain/loss policy for book or NULL; determines
-  * that both book-currency and default gain/loss policy KVPs exist and that
-  * both are valid, a requirement for the 'book-currency' currency accounting
-  * method to apply. */
-const gchar *
-gnc_book_get_default_gains_policy (QofBook *book)
-{
-    if (!book) return NULL;
-
-    if (gnc_book_use_book_currency (book))
-        return qof_book_get_default_gains_policy (book);
-
-    return NULL;
-}
-
-/** Returns pointer to default gain/loss account for book or NULL; determines
-  * that both book-currency and default gain/loss policy KVPs exist and that
-  * both are valid, a requirement for the 'book-currency' currency accounting
-  * method to apply. Also, account must not be hidden or a placeholder, and
-  * must be of same currency as book-currency and income or expense type */
-Account *
-gnc_book_get_default_gain_loss_acct (QofBook *book)
-{
-    Account *gains_account = NULL;
-
-    if (!book) return NULL;
-
-    if (gnc_book_use_book_currency (book))
-    {
-        GncGUID *guid = qof_book_get_default_gain_loss_acct_guid (book);
-        gains_account = xaccAccountLookup (guid, book);
-        guid_free (guid);
-    }
-
-    if (gains_account &&
-        !xaccAccountGetPlaceholder(gains_account) &&
-        !xaccAccountGetHidden(gains_account) &&
-        (gnc_commodity_equal(xaccAccountGetCommodity(gains_account),
-                                    gnc_book_get_book_currency(book))) &&
-        ((xaccAccountGetType(gains_account) == ACCT_TYPE_INCOME) ||
-            (xaccAccountGetType(gains_account) == ACCT_TYPE_EXPENSE)))
-    {
-        return gains_account;
-    }
-    else
-    {
-        return NULL;
-    }
-}
-
 Account *
 gnc_get_current_root_account (void)
 {
@@ -1167,9 +1051,6 @@ gnc_default_currency_common (gchar *requested_currency,
         return gnc_commodity_table_lookup(gnc_get_current_commodities(),
                                           GNC_COMMODITY_NS_CURRENCY,
                                           requested_currency);
-
-    if (gnc_book_use_book_currency (gnc_get_current_book ()))
-        return gnc_book_get_book_currency (gnc_get_current_book ());
 
     if (gnc_prefs_get_bool (section, GNC_PREF_CURRENCY_CHOICE_OTHER))
     {

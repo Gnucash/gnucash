@@ -24,10 +24,12 @@
 #define GNC_DIALOG_COLUMN_VIEW_H
 
 #include <libguile.h>
+extern "C"
+{
 #include <gtk/gtk.h>
 
 typedef struct gncp_column_view_edit gnc_column_view_edit;
 
-GtkWidget * gnc_column_view_edit_options(SCM options, SCM view);
-
+GtkWidget * gnc_column_view_edit_options(GncOptionDB* odb, SCM view);
+}
 #endif

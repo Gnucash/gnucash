@@ -23,9 +23,14 @@
 
 #ifndef GNC_DIALOG_STYLE_SHEET_H
 #define GNC_DIALOG_STYLE_SHEET_H
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 typedef struct _stylesheetdialog StyleSheetDialog;
 
-void gnc_style_sheet_dialog_open (GtkWindow *parent);
-
+void gnc_style_sheet_dialog_open(GtkWindow *parent);
+#ifdef __cplusplus
+}
+#endif
 #endif

@@ -33,12 +33,15 @@
 #include "gnucash-core-app.hpp"
 
 extern "C" {
+#include <glib/gi18n.h>
 #include <dialog-new-user.h>
 #include <gfec.h>
+#include <gnc-engine.h> // For define GNC_MOD_GUI
 #include <gnc-file.h>
 #include <gnc-filepath-utils.h>
 #include <gnc-gnome-utils.h>
 #include <gnc-gsettings.h>
+#include <gnc-hooks.h>
 #include <gnc-module.h>
 #include <gnc-path.h>
 #include <gnc-plugin-bi-import.h>

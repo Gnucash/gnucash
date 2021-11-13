@@ -61,7 +61,6 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "option-util.h"
 #include "gnc-main-window.h"
 #include "gnc-component-manager.h"
 #include "gnc-state.h"
