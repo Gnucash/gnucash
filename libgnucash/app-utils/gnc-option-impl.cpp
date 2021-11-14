@@ -104,7 +104,7 @@ GncOptionAccountListValue::account_type_list() const noexcept
 {
     if (m_allowed.empty())
         return nullptr;
-    GList* retval;
+    GList* retval{nullptr};
     for (auto type : m_allowed)
         retval = g_list_prepend(retval, GINT_TO_POINTER(type));
     return g_list_reverse(retval);
@@ -170,7 +170,7 @@ GncOptionAccountSelValue::account_type_list() const noexcept
 {
     if (m_allowed.empty())
         return nullptr;
-    GList* retval;
+    GList* retval{nullptr};
     for (auto type : m_allowed)
         retval = g_list_prepend(retval, GINT_TO_POINTER(type));
     return g_list_reverse(retval);

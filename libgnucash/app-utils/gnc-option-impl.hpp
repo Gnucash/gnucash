@@ -443,9 +443,14 @@ using GncMultichoiceOptionChoices = std::vector<GncMultichoiceOptionEntry>;
 /** @class GncOptionMultichoiceValue
  * Multichoice options have a vector of valid options
  * (GncMultichoiceOptionChoices) and validate the selection as being one of
- * those values. The value is the index of the selected item in the vector. The
- * tuple contains three strings, a key, and a display
- * name, which * should be localized at the point of use.
+ * those values. The value is the index of the selected item in the vector.
+
+ * GncMultichoiceOptionEntry is a tuple of two strings and a
+ * GncOptionMultichoiceKeyType value; the first string is the internal value of
+ * the option, the second is the display name that should be localized at the
+ * point of use (so mark it with N_() or (N_ ) when creating the multichoices)
+ * and the third is an enum value indicating whether the key should be
+ * interpreted as a Scheme symbol, a string, or a number.
  *
  *
  */
@@ -910,7 +915,7 @@ template<> inline std::istream&
 operator>> <GncOptionAccountSelValue>(std::istream& iss,
                                    GncOptionAccountSelValue& opt)
 {
-    const Account* value;
+    Account* value{nullptr};
     std::string str;
     std::getline(iss, str, ' ');
     if (!str.empty())

@@ -65,10 +65,6 @@ PyObject* SWIG_init (void);
 
 %import "base-typemaps.i"
 
- /* OBSOLETE
-typedef void (*GNCOptionChangeCallback) (gpointer user_data);
-typedef int GNCOptionDBHandle;
- */
 void gnc_prefs_init();
 
 QofBook * gnc_get_current_book (void);
@@ -99,9 +95,6 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table);
 gnc_commodity * gnc_default_currency (void);
 gnc_commodity * gnc_default_report_currency (void);
 
-/* Obsolete: Options are C++ now, no need for convoluted callbacks.
-void gncp_option_invoke_callback(GNCOptionChangeCallback callback, void *data);
-*/
 GNCPrintAmountInfo gnc_default_print_info (gboolean use_symbol);
 GNCPrintAmountInfo gnc_account_print_info (const Account *account,
         gboolean use_symbol);
@@ -128,9 +121,6 @@ gnc_numeric gnc_convert_from_euro(const gnc_commodity * currency,
 time64 gnc_accounting_period_fiscal_start(void);
 time64 gnc_accounting_period_fiscal_end(void);
 
-/* OBSOLETE Options are C++, no SCM generators.
-void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
-*/
 %typemap(out) GHashTable * {
   SCM table = scm_c_make_hash_table (g_hash_table_size($1) + 17);
   GHashTableIter iter;

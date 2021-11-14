@@ -1924,13 +1924,13 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
     {
         first_action = static_cast<GtkAction*>(g_slist_last(action_list)->data);
         g_signal_handlers_block_by_func(G_OBJECT(first_action),
-                                        (void*)gnc_main_window_cmd_window_raise,
+                                        (gpointer)gnc_main_window_cmd_window_raise,
                                         window);
         DEBUG("blocked signal on %p, set %p active, window %p", first_action,
               action, window);
         gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
         g_signal_handlers_unblock_by_func(G_OBJECT(first_action),
-                                          (void*)gnc_main_window_cmd_window_raise,
+                                          (gpointer)gnc_main_window_cmd_window_raise,
                                           window);
     }
     g_free(action_name);

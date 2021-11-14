@@ -99,39 +99,6 @@ gnc_book_options_help_cb (GNCOptionWin *win, gpointer dat)
     gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_BOOK_OPTIONS);
 }
 
-#if 0 // Reimplemented in dialog-options.cpp
-void
-gnc_options_dialog_set_book_options_help_cb (GNCOptionWin *win)
-{
-    gnc_options_dialog_set_help_cb(win,
-                                (GNCOptionWinCallback)gnc_book_options_help_cb,
-                                NULL);
-}
-
-void
-gnc_options_dialog_set_new_book_option_values (GNCOptionDB *odb)
-{
-    GNCOption *num_source_option;
-    GtkWidget *num_source_is_split_action_button;
-    gboolean num_source_is_split_action;
-
-    if (!odb) return;
-    num_source_is_split_action = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
-                                                    GNC_PREF_NUM_SOURCE);
-    if (num_source_is_split_action)
-    {
-        num_source_option = gnc_option_db_get_option_by_name(odb,
-                                                 OPTION_SECTION_ACCOUNTS,
-                                                 OPTION_NAME_NUM_FIELD_SOURCE);
-        num_source_is_split_action_button =
-                                gnc_option_get_gtk_widget (num_source_option);
-        gtk_toggle_button_set_active
-                    (GTK_TOGGLE_BUTTON (num_source_is_split_action_button),
-                        num_source_is_split_action);
-    }
-}
-#endif
-
 static void
 gnc_style_sheet_options_help_cb (GNCOptionWin *win, gpointer dat)
 {

@@ -426,7 +426,7 @@ reldate_offset(RelativeDatePeriod per)
 static constexpr int days_in_month[12]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 static void
-normalize_tm(struct tm& now)
+normalize_reldate_tm(struct tm& now)
 {
     auto tmp_mon = now.tm_mon + (now.tm_mon < 0 ? 12 :
                                  now.tm_mon > 11 ? -12 : 0);
@@ -453,7 +453,7 @@ normalize_tm(struct tm& now)
 }
 
 static void
-set_day_and_time(struct tm& now, RelativeDateType type)
+reldate_set_day_and_time(struct tm& now, RelativeDateType type)
 {
     if (type == RelativeDateType::START)
     {
@@ -549,8 +549,8 @@ gnc_relative_date_to_time64(RelativeDatePeriod period)
             else if (reldate_is_next(period))
                 now.tm_mday += 7;
     }
-    normalize_tm(now);
-    set_day_and_time(now, checked_reldate(period).m_type);
+    normalize_reldate_tm(now);
+    reldate_set_day_and_time(now, checked_reldate(period).m_type);
     return static_cast<time64>(GncDateTime(now));
 }
 

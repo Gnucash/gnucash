@@ -1748,7 +1748,7 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
 	        gnc_error_dialog (parent, "%s",
 				  _("This report must be upgraded to return a "
 				    "document object with export-string or "
-				    "pexport-error."));
+				    "export-error."));
         }
         result = TRUE;
     }

@@ -127,7 +127,7 @@ const char* gnc_relative_date_storage_string(RelativeDatePeriod);
 
 /**
  * Provide the string representation of a relative date for displaying
- * value to a user. This string is not localizable.
+ * value to a user. This string is localizable.
  *
  * @param period The relative date period.
  * @return A constant string or nullptr if the period is ABSOLUTE. The string's
@@ -158,7 +158,16 @@ const char* gnc_relative_date_description(RelativeDatePeriod);
 RelativeDatePeriod gnc_relative_date_from_storage_string(const char*);
 
 /**
- * Convert a RelativeDatePeriod value to a concrete time64 by applying the value to the current time. For example if it is now 3:15:42 PM local time 3 June, calling this with a period RelativeDatePeriod::ONE_WEEK_AHEAD will return a time64 representing 3:15:42 PM local time 10 June of this year.
+ * Convert a RelativeDatePeriod value to a concrete time64 by applying the value
+ * to the current time.
+ * For example if it is now 3:15:42 PM local time 3 June, calling this with a
+ * period RelativeDatePeriod::ONE_WEEK_AHEAD will return a time64 representing
+ * 3:15:42 PM local time 10 June of this year. Times for START periods are
+ * changed to midnight local time and for END periods to 23:59:59 local time so
+ * for example if the period is instead RelativeDatePeriod::START_THIS_MONTH the
+ * time64 will represent 00:00:00 1 June and if it is
+ * RelativeDatePeriod::END_THIS_MONTH the time64 will be for 23:59:59 30 June,
+ * both in the current time zone.
  *
  * @param period The relative date period to use to calculate the concrete date.
  * @return a time64.
