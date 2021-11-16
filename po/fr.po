@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-16 06:41+0000\n"
+"PO-Revision-Date: 2021-11-16 23:53+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -12198,8 +12198,9 @@ msgstr ""
 "de la position du chèque."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:70
+#, fuzzy
 msgid "Offset for complete check"
-msgstr ""
+msgstr "Décalage du chèque complété"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:71
 #, fuzzy
@@ -13555,6 +13556,10 @@ msgid ""
 "bottom of the register after the blank transaction. Otherwise the blank "
 "transaction will be at the bottom of the register after all transactions."
 msgstr ""
+"Afficher les futures transactions après la transaction vide dans le "
+"registre. Si actif, les transactions avec une date future seront affichées "
+"en bas du registre après une transaction vide. Sinon, la transaction vide "
+"sera à tout en bas du registre, à la suite des autres transactions."
 
 # messages-i18n.c:114 po/guile_strings.txt:128
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
@@ -14844,6 +14849,13 @@ msgid ""
 "- No settings\n"
 "- Gnucash default export format"
 msgstr ""
+"Enregistrer les préférences\n"
+"Les préférences sont enregistrées sous un nom qui doit être entré dans les "
+"champs adjacents.\n"
+"Il existe deux noms réservés qui ne peuvent être utilisés pour les "
+"préférences personnalisées :\n"
+"- Aucun réglage\n"
+"- Le format par défaut pour l'export de GnuCash"
 
 # messages-i18n.c:328
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:201
@@ -15133,6 +15145,28 @@ msgid ""
 "\n"
 "More information can be displayed by using the help button."
 msgstr ""
+"Si vous cliquez \"Suivant\", GnuCash lancera certaines vérifications.\n"
+"\n"
+"Si pour l'une d'entre elles <i>la vérification échoue</i>, vous serez "
+"automatiquement redirigé vers la page d'aperçu pour corriger le problème.\n"
+"\n"
+"Sur cette page, vous pourrez associer une catégorie pour chaque transaction."
+"\n"
+"\n"
+"Si c'est votre <i>première importation dans un nouveau fichier</i>, vous "
+"verrez un dialogue pour définir les options du livre, puisque cela affectera "
+"comment les données importées seront converties en transactions GnuCash. Ce "
+"dialogue ne sera affiché que si le fichier n'existe pas.\n"
+"\n"
+"Si c'est votre <i>première importation</i>, vous observerez que toutes les "
+"lignes devraient être associées. Lors des importations suivantes, l'outil "
+"essayera automatiquement d'associer les transactions à partir des précédents "
+"importations.\n"
+"\n"
+"Le degré de confiance pour cette association automatique est affiché dans "
+"une barre colorée.\n"
+"\n"
+"De plus amples informations sont accessibles à partir du bouton d'aide."
 
 # messages-i18n.c:231
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1102
@@ -15198,6 +15232,9 @@ msgid ""
 "that you foresee you will use GnuCash. Each category you select will cause "
 "several accounts to be created."
 msgstr ""
+"Sélectionnez la langue et le région pour les catégories suivant la façon "
+"dont vous prévoyez d'utiliser GnuCash. Chaque catégorie que vous "
+"sélectionnerez créera plusieurs nouveaux comptes."
 
 # src/gnome/glade-gnc-dialogs.c:415
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:169
@@ -15227,6 +15264,9 @@ msgid ""
 "If not satisfied with the available templates, please read the wiki page "
 "linked below and share your new or improved template."
 msgstr ""
+"Ne vous n'êtes pas satisfait par les modèles disponibles, veuillez suivre le "
+"lien vers la page du wiki en-dessous pour partager vos propres modèles ou "
+"améliorer ceux existants."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:490
 msgid ""
@@ -15444,6 +15484,8 @@ msgid ""
 "Enter the number of months still to be paid off. This determines both the "
 "remaining principle and the duration of the scheduled transaction."
 msgstr ""
+"Entrez le nombre de mois qu'il reste à rembourser. Cela détermine à la fois "
+"le principe restant, et la durée ∂e la transaction programmé."
 
 # po/guile_strings.txt:203
 #: gnucash/gtkbuilder/assistant-loan.glade:296
@@ -15455,6 +15497,9 @@ msgid ""
 "Enter the annual interest rate in percent. Accepts values from 0.001 - 100. "
 "The Mortgage Assistant does not support zero-interest loans."
 msgstr ""
+"Entrez le taux d'intérêt annuel en pourcentage. Les valeurs acceptées sont "
+"entre 0,001 et 100. L'assistant d'hypothèques ne supporte pas les prêts à "
+"taux nul."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
@@ -15947,6 +15992,11 @@ msgid ""
 "setting book options will not be shown a second time when you go forward. "
 "You can access it directly from the menu via File->Properties."
 msgstr ""
+"Puisque que vous créez un nouveau fichier, il va vous être demandé de "
+"définir les options du livre. Ces options définissent comme GnuCash importe "
+"les transactions. Si vous revenez en arrière sans annuler et recommencez à "
+"nouveau, ces options ne vous seront pas demandées par la suite. Vous pourrez "
+"y accéder à n'importe quel moment depuis le menu dans Fichier -> Propriétés."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1001
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2642
@@ -17406,12 +17456,18 @@ msgid ""
 "Existing relative file path links will be converted to absolute ones by "
 "combining them with the existing path head unless box unticked."
 msgstr ""
+"Les chemins relatifs des fichiers seront convertis en chemins absolus en les "
+"combinant avec les entêtes des chemins déjà existant, sauf si cette option "
+"est désactivée."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:140
 msgid ""
 "Existing absolute file path links will be converted to relative ones by "
 "comparing them to the new path head unless box unticked."
 msgstr ""
+"Les chemins absolus des fichiers seront convertis en chemins relatifs en les "
+"combinant avec les entêtes des chemins déjà existant, sauf si cette option "
+"est activée."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:178
 msgid "Note: Only Document Links that are not read-only will be changed."
@@ -17494,6 +17550,12 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
+"Double-cliquez sur l'entrée dans la colonne Description pour aller aux "
+"Transactions.\n"
+"Double-cliquez sur l'entrée dans la colonne Lien pour ouvrir le Document Lié."
+"\n"
+"Double-cliquez sur l'entrée dans la colonne Disponible pour modifier le lien "
+"vers le document."
 
 #: gnucash/gtkbuilder/dialog-employee.glade:166
 msgid ""
@@ -19129,6 +19191,9 @@ msgid ""
 "GnuCash uses a yellow/green theme by default for register windows. Uncheck "
 "this if you want to use the system color theme instead."
 msgstr ""
+"GnuCash utilise une thème jaune/vert par défaut pour les fenêtres de "
+"registre. Décocher cette option si vous préférez plutôt utiliser les "
+"couleurs du système."
 
 # po/guile_strings.txt:159
 #: gnucash/gtkbuilder/dialog-preferences.glade:2679
@@ -19188,6 +19253,9 @@ msgid ""
 "bottom of the register after the blank transaction. If clear, the blank "
 "transaction will be at the bottom of the register after all transactions."
 msgstr ""
+"Si actif, les transactions avec une date future seront affichées en bas du "
+"registre après une transaction vide. Si vide, la transaction vide sera à "
+"tout en bas du registre, à la suite des autres transactions."
 
 # po/guile_strings.txt:258
 #: gnucash/gtkbuilder/dialog-preferences.glade:2803
@@ -19504,6 +19572,9 @@ msgid ""
 "Keep the last price of each fiscal quarter if present before date. The "
 "fiscal quarter is derived from the accounting period end date."
 msgstr ""
+"Garder le dernier prix de chaque trimestre fiscal si existe avant la date. "
+"Le trimestre fiscal est défini à partir de la date de fin de la période "
+"comptable."
 
 # po/guile_strings.txt:186
 #: gnucash/gtkbuilder/dialog-price.glade:516
@@ -19516,6 +19587,9 @@ msgid ""
 "Keep the last price of each fiscal period if present before date. The fiscal "
 "period is derived from the accounting period end date."
 msgstr ""
+"Garder le dernier prix de chaque période fiscale si existe avant la date. La "
+"période fiscale est défini à partir de la date de fin de la période "
+"comptable."
 
 #: gnucash/gtkbuilder/dialog-price.glade:533
 #, fuzzy
@@ -19528,6 +19602,9 @@ msgid ""
 "'One a month' is used for dates older than a year and 'One a week' is used "
 "for dates older than six months to a year."
 msgstr ""
+"Avec l'option étendue, les prix seront retirés en fonction de la date "
+"sélectionnée. 'Une par mois' est utilisé pour les dates de plus d'un an, et "
+"'Une par semaine' pour les dates entre six mois et un an."
 
 # messages-i18n.c:222
 #: gnucash/gtkbuilder/dialog-price.glade:585
@@ -19577,6 +19654,12 @@ msgid ""
 "are able to correctly report values so removing them may make this less "
 "reliable."
 msgstr ""
+"Si actif, les prix ajoutés dans l'application seront inclus.\n"
+"\n"
+"Ces prix seront ajoutés de sorte à ce qu'il y est toujours une prix \"le "
+"plus proche dans le temps\" pour chaque transaction multi-produits pour que "
+"la page Comptes et les rapports puissent correctement rapporter les valeurs ;"
+" retirer ces prix risque donc de rendre les valeurs moins fiables."
 
 # src/gnome/glade-gnc-dialogs.c:1324
 #: gnucash/gtkbuilder/dialog-price.glade:752
@@ -19667,7 +19750,7 @@ msgstr "Lettre US Deluxe(tm) Personal Checks"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:290
 msgid "Quicken(tm) Wallet Checks w/ side stub"
-msgstr ""
+msgstr "Chèques portefeuille Quicken(tm) avec talon latéral"
 
 # messages-i18n.c:317 src/gnome/glade-gnc-dialogs.c:971
 #: gnucash/gtkbuilder/dialog-print-check.glade:347
@@ -21165,6 +21248,8 @@ msgid ""
 "Valid range is 0 to 1100 days\n"
 "If 0, all previous days included"
 msgstr ""
+"L'intervalle valide est entre 0 et 1100 jours\n"
+"Si 0, tous les jours précédents seront inclus"
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:771
@@ -21399,6 +21484,8 @@ msgid ""
 "Include all descendant accounts in the reconcile. All of them must use the "
 "same commodity as this one."
 msgstr ""
+"Inclure tous les comptes descendants dans le rapprochement. Tous doivent "
+"utiliser le même produit que celui-ci."
 
 # messages-i18n.c:210
 #: gnucash/gtkbuilder/window-reconcile.glade:257
