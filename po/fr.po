@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-14 23:53+0000\n"
+"PO-Revision-Date: 2021-11-16 06:41+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -6212,10 +6212,8 @@ msgstr "Répartition"
 # messages-i18n.c:144
 #: gnucash/gnome/gnc-plugin-page-register2.c:503
 #: gnucash/gnome/gnc-plugin-page-register.c:626
-#, fuzzy
-#| msgid "_Jump"
 msgid "Jump"
-msgstr "_Sauter"
+msgstr "Sauter"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:504
 #: gnucash/gnome/gnc-plugin-page-register.c:627
@@ -6517,9 +6515,8 @@ msgstr "Date de fin :"
 # messages-i18n.c:322
 #: gnucash/gnome/gnc-plugin-page-register.c:3443
 #: gnucash/report/trep-engine.scm:146
-#, fuzzy
 msgid "Unreconciled"
-msgstr "_Non rapproché"
+msgstr "Non rapproché"
 
 # messages-i18n.c:260
 #: gnucash/gnome/gnc-plugin-page-register.c:3445
@@ -7149,9 +7146,8 @@ msgstr "Croissant"
 
 # po/guile_strings.txt:227
 #: gnucash/gnome/gnc-split-reg.c:739
-#, fuzzy
 msgid "Filtered"
-msgstr "Type de filtre"
+msgstr "Filtré"
 
 # messages-i18n.c:80
 #: gnucash/gnome/gnc-split-reg.c:913
@@ -7466,7 +7462,6 @@ msgstr "Gestionnaire de finances"
 #: gnucash/gnome/reconcile-view.c:404
 #: gnucash/register/ledger-core/split-register-layout.c:695
 #: gnucash/register/ledger-core/split-register-model.c:313
-#, fuzzy
 msgctxt "Column header for 'Reconciled'"
 msgid "R"
 msgstr "R"
@@ -7489,9 +7484,8 @@ msgstr "Gère et exécute des rapports préconfigurés"
 
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:52
-#, fuzzy
 msgid "Dashboard"
-msgstr "Tireté"
+msgstr "Tableau de bord"
 
 #: gnucash/gnome/report-menus.scm:118
 msgid "A basic dashboard for your accounting data"
@@ -7868,14 +7862,12 @@ msgstr "Vous devez sélectionner un item de la liste"
 #: gnucash/gtkbuilder/dialog-commodities.glade:138
 #: gnucash/gtkbuilder/dialog-doclink.glade:218
 #: gnucash/gtkbuilder/dialog-price.glade:854
-#, fuzzy
 msgid "_Remove"
-msgstr "<< _Supprimer"
+msgstr "_Supprimer"
 
 #: gnucash/gnome-search/dialog-search.c:1097
-#, fuzzy
 msgid "Order"
-msgstr "N° de commande"
+msgstr "Commande"
 
 # messages-i18n.c:204
 #: gnucash/gnome-search/dialog-search.c:1099
@@ -7906,9 +7898,8 @@ msgstr "_Nouvel item..."
 #: gnucash/gnome-utils/gnc-recurrence.c:544
 #: gnucash/gtkbuilder/dialog-commodities.glade:121
 #: gnucash/gtkbuilder/dialog-price.glade:837
-#, fuzzy
 msgid "_Add"
-msgstr "_Adresse"
+msgstr "_Ajouter"
 
 #: gnucash/gnome-search/dialog-search.c:1169
 msgid "all criteria are met"
@@ -8598,9 +8589,8 @@ msgstr ""
 
 # po/guile_strings.txt:122
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
-#, fuzzy
 msgid "Existing"
-msgstr "Utilise existant"
+msgstr "Existant"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
 msgid "You can type '+' or '-' to increment or decrement the number."
@@ -16216,7 +16206,7 @@ msgstr "Finalisation de la division d'actions"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:25
 msgid "Introduction placeholder"
-msgstr ""
+msgstr "Espace d'introduction"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:30
 #, fuzzy
@@ -18457,6 +18447,9 @@ msgid ""
 "window\n"
 "Press 'Close' to return to the preference window\n"
 msgstr ""
+"Cliquez 'Reprendre' pour utiliser le séparateur d'origine et fermer la "
+"fenêtre des préférences.\n"
+"Cliquez 'Fermer' pour revenir à la fenêtre des préférences.\n"
 
 # messages-i18n.c:291
 #: gnucash/gtkbuilder/dialog-preferences.glade:254
@@ -18865,6 +18858,8 @@ msgid ""
 "Enable horizontal grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
 msgstr ""
+"Activer les lignes horizontales dans les tableaux. Principalement utilisé "
+"dans les arborescences comme dans la page Comptes."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1937
 msgid "Enable vertical grid lines on table displays"
@@ -18875,6 +18870,8 @@ msgid ""
 "Enable vertical grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
 msgstr ""
+"Activer les lignes verticales dans les tableaux. Principalement utilisé dans "
+"les arborescences comme dans la page Comptes."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1957
 #, fuzzy
@@ -19662,11 +19659,11 @@ msgstr "Milieu"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:284
 msgid "Quicken/QuickBooks (tm) US-Letter"
-msgstr ""
+msgstr "Lettre US Quicken/QuickBooks (tm)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:287
 msgid "Deluxe(tm) Personal Checks US-Letter"
-msgstr ""
+msgstr "Lettre US Deluxe(tm) Personal Checks"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:290
 msgid "Quicken(tm) Wallet Checks w/ side stub"
@@ -20972,6 +20969,8 @@ msgstr "Estimation du budget"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:303
 msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
+"Utiliser une valeur moyenne sur toutes les périodes actuelles pour toutes "
+"les périodes projetées"
 
 # messages-i18n.c:66
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:372
@@ -21739,7 +21738,7 @@ msgstr "_Largeur "
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:670
 msgid "Setting the bar width, adapting to the size of the TAN generator."
-msgstr ""
+msgstr "Met le largeur de la barre, adaptée à la taille du générateur TAN."
 
 # messages-i18n.c:137
 #: gnucash/import-export/aqb/dialog-ab.glade:685
@@ -22561,6 +22560,8 @@ msgstr "Importer un _MT940"
 msgid ""
 "Import an end-of-day account statement in SWIFT MT940 format into GnuCash."
 msgstr ""
+"Importer une déclaration de fin de journée sur ce compte au format SWIFT "
+"MT940 dans GnuCash."
 
 # messages-i18n.c:293
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:138
@@ -22570,6 +22571,8 @@ msgstr "Importer un MT94_2"
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:139
 msgid "Import an interim account statement in SWIFT MT942 format into GnuCash."
 msgstr ""
+"Importer une déclaration provisoire sur ce compte au format SWIFT MT940 dans "
+"GnuCash."
 
 # messages-i18n.c:293
 #. Translators: DTAUS is a traditional german exchange format.
@@ -23092,7 +23095,7 @@ msgstr "Nom de la catégorie QIF"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:616
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:628
 msgid "Amount With Sym"
-msgstr ""
+msgstr "Compte avec symbole"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:617
@@ -23376,6 +23379,8 @@ msgstr ""
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2069
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr ""
+"Double-cliquez sur une ligne pour la changer, puis cliquez sur Appliquer "
+"pour l'importer"
 
 # messages-i18n.c:34
 #. Translators: {1} will be replaced with a filename
@@ -23388,6 +23393,8 @@ msgstr "Les transactions ont été importées à partir du fichier « %s »."
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
 msgstr ""
+"Ligne %u, le chemin vers le compte %s n'existe pas ; A donc été ajouté à la "
+"racine\n"
 
 #: gnucash/import-export/csv-imp/csv-account-import.c:305
 #, c-format
@@ -23549,6 +23556,8 @@ msgstr "Cette valeur ne semble pas être un nombre valide."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:145
 msgid "Value can't be parsed into a number using the selected currency format."
 msgstr ""
+"Cette valeur n'a pu être interprétée comme un nombre en utilisant le format "
+"de devise sélectionné."
 
 # po/guile_strings.txt:130
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:125
@@ -23577,7 +23586,7 @@ msgstr "'Domaine' ne peut pas être vide."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:223
 msgid "'Currency To' can not be the same as 'Commodity From'."
-msgstr ""
+msgstr "Le 'Bien final' ne peut être le même que le 'Bien d'origine'."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:225
 msgid "Value parsed into an invalid currency for a currency column type."
@@ -24742,26 +24751,23 @@ msgstr "%"
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:127
 #: gnucash/register/ledger-core/split-register-layout.c:727
 #: gnucash/register/ledger-core/split-register-layout.c:735
-#, fuzzy
 msgctxt "sample"
 msgid "Expenses:Automobile:Gasoline"
-msgstr "sample:Dépenses:Automobile:Carburant"
+msgstr "Dépenses:Automobile:Carburant"
 
 # messages-i18n.c:342 po/guile_strings.txt:252
 #. Translators: Abbreviation sample for Taxable?
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:132
-#, fuzzy
 msgctxt "sample for 'Taxable'"
 msgid "T?"
-msgstr "T"
+msgstr "T?"
 
 # messages-i18n.c:342 po/guile_strings.txt:252
 #. Translators: Abbreviation sample for Tax Included
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:137
-#, fuzzy
 msgctxt "sample for 'Tax Included'"
 msgid "TI"
-msgstr "T"
+msgstr "TC"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:141
 #, fuzzy
@@ -24770,10 +24776,9 @@ msgid "Tax Table 1"
 msgstr "Table d'imposition : "
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:149
-#, fuzzy
 msgctxt "sample"
 msgid "999.00"
-msgstr "sample:999,00"
+msgstr "999,00"
 
 #. Translators: Abbreviation sample for Billable
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:154
@@ -24783,7 +24788,6 @@ msgstr ""
 
 # messages-i18n.c:312
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:158
-#, fuzzy
 msgctxt "sample"
 msgid "Payment"
 msgstr "Paiement"
@@ -26789,7 +26793,7 @@ msgstr "Barres empilées :"
 
 #: gnucash/report/reports/example/sample-graphs.scm:157
 msgid "Scatter:"
-msgstr ""
+msgstr "Dispersion :"
 
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:41
 #, scheme-format
@@ -27676,7 +27680,7 @@ msgstr "Définir les préférences pour la prise en compte des cours"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:49
 msgid "How to report brokerage fees"
-msgstr ""
+msgstr "Comment rapporter les frais de courtage"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:88
 #, fuzzy
@@ -27705,7 +27709,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:102
 msgid "How to report commissions and other brokerage fees."
-msgstr ""
+msgstr "Comment rapporter les commissions et autres frais de courtage."
 
 # po/guile_strings.txt:100
 #: gnucash/report/reports/standard/advanced-portfolio.scm:103
@@ -28715,7 +28719,7 @@ msgstr "Sélection manuelle de la période"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:136
 msgid "Calculate as running sum?"
-msgstr ""
+msgstr "Calculer comme une somme courante ?"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:142
 msgid "Select which chart type to use."
@@ -29271,7 +29275,7 @@ msgstr "Transactions invalides"
 
 #: gnucash/report/reports/standard/category-barchart.scm:279
 msgid "Start date must be earlier than End date"
-msgstr ""
+msgstr "La date de début doit être antérieure à la date de fin"
 
 # po/guile_strings.txt:104
 #: gnucash/report/reports/standard/category-barchart.scm:317
@@ -29817,6 +29821,8 @@ msgid ""
 "Australia Business Activity Statement. Specify sales, purchase and tax "
 "accounts."
 msgstr ""
+"Déclaration d'activité professionnelle australienne. Renseignez les ventes, "
+"achats, et comptes avec TVA."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:165
 msgid ""
@@ -29827,7 +29833,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:172
 msgid "Australia BAS"
-msgstr ""
+msgstr "BAS Australien"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:173
 #, fuzzy
@@ -29937,6 +29943,8 @@ msgstr "Adresse électronique de la société"
 #: gnucash/report/reports/standard/invoice.scm:114
 msgid "Invoice date, due date, billing ID, terms, job details"
 msgstr ""
+"Date de la facture, échéance, id. du paiement, termes et détails de la "
+"prestation"
 
 # src/gnome/glade-gnc-dialogs.c:191 src/gnome/glade-gnc-dialogs.c:1194
 # src/gnome/glade-gnc-dialogs.c:1364
@@ -30729,6 +30737,8 @@ msgstr "Trouve des transactions avec une recherche."
 #: gnucash/report/reports/standard/new-owner-report.scm:938
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
+"Les factures sont affichées si payées, et chaque paiement affiche le numéro "
+"de facture."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:939
 msgid ""
@@ -30856,7 +30866,7 @@ msgstr "Transactions actuelles"
 
 #: gnucash/report/reports/standard/price-scatter.scm:88
 msgid "Plot commodity per currency rather than currency per commodity."
-msgstr ""
+msgstr "Tracer les produits par devise plutôt que les devises par produit."
 
 #: gnucash/report/reports/standard/price-scatter.scm:104
 msgid "Color of the marker."
@@ -31360,15 +31370,15 @@ msgstr "Format de n° de facture"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:90
 msgid "table-border-collapse"
-msgstr ""
+msgstr "table-border-collapse"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:91
 msgid "table-header-border-color"
-msgstr ""
+msgstr "table-header-border-color"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:92
 msgid "table-cell-border-color"
-msgstr ""
+msgstr "table-cell-border-color"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:93
 msgid "Embedded CSS"
@@ -31461,7 +31471,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:158
 msgid "Border-collapse?"
-msgstr ""
+msgstr "Regrouper les bordures ?"
 
 # messages-i18n.c:261
 #: gnucash/report/reports/standard/taxinvoice.scm:159
@@ -32749,7 +32759,7 @@ msgstr "Inverser l'affichage des montants pour certains types de compte"
 
 #: gnucash/report/trep-engine.scm:1158
 msgid "Num/T-Num"
-msgstr ""
+msgstr "Num/Num Tax"
 
 # po/guile_strings.txt:133
 #: gnucash/report/trep-engine.scm:1207
@@ -33430,6 +33440,8 @@ msgstr "Le montant sélectionné ne peut pas être pointé."
 #: libgnucash/app-utils/gnc-ui-balances.c:477
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr ""
+"Les répartitions ne peuvent pas être nettoyées. Plusieurs possibilités "
+"trouvées."
 
 #. Translators: This and the following strings appear on
 #. the account tab if the Tax Info column is displayed,
