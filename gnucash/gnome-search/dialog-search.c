@@ -479,6 +479,7 @@ search_update_query (GNCSearchWindow *sw)
         {
             q2 = create_query_fragment(sw->search_for, GNC_SEARCH_PARAM (data->param), pdata);
             q = qof_query_merge (q, q2, op);
+            qof_query_destroy (q2);
         }
     }
 
