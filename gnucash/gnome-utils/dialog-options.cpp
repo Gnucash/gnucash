@@ -1805,6 +1805,14 @@ create_account_widget(GncOption& option, char *name)
     return frame;
 }
 
+static void
+option_account_sel_changed_cb(GtkTreeSelection *sel, gpointer data)
+{
+    auto tree_view{gtk_tree_selection_get_tree_view(sel)};
+    gnc_option_changed_widget_cb(GTK_WIDGET(tree_view),
+                                 static_cast<GncOption*>(data));
+}
+
 template<> GtkWidget*
 create_option_widget<GncOptionUIType::ACCOUNT_LIST>(GncOption& option,
                                                     GtkGrid *page_box,
@@ -1828,9 +1836,10 @@ create_option_widget<GncOptionUIType::ACCOUNT_LIST>(GncOption& option,
     *packed = TRUE;
 
     auto widget = gnc_option_get_gtk_widget(&option);
+
     auto selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
     g_signal_connect(G_OBJECT(selection), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
+                     G_CALLBACK(option_account_sel_changed_cb), &option);
 
     //  gtk_clist_set_row_height(GTK_CLIST(value), 0);
     //  gtk_widget_set_size_request(value, -1, GTK_CLIST(value)->row_height * 10);
