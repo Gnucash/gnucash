@@ -229,16 +229,13 @@ static void
 dialog_changed_internal (GtkWidget *widget, bool sensitive)
 {
     g_return_if_fail(widget);
-    while (TRUE)
-    {
-        auto new_widget = gtk_widget_get_parent(widget);
-        if (new_widget && GTK_IS_WIDGET(new_widget) &&
-            GTK_IS_WINDOW(new_widget))
-            widget = new_widget;
-        else
-            break;
-    }
 
+    auto toplevel{gtk_widget_get_toplevel(widget)};
+    if (toplevel == widget && !GTK_IS_WINDOW(toplevel))
+        return;
+    g_assert(toplevel && GTK_IS_WINDOW(toplevel));
+
+    widget = toplevel;
     /* find the ok and cancel buttons, we know where they will be so do it
        this way as opposed to using gtk_container_foreach, much less iteration */
     if (GTK_IS_CONTAINER(widget))
@@ -246,7 +243,7 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
         GList *children = gtk_container_get_children(GTK_CONTAINER(widget));
         for (GList *it = children; it; it = it->next)
         {
-            if (GTK_IS_BOX (GTK_WIDGET(it->data)))
+            if (GTK_IS_BOX(GTK_WIDGET(it->data)))
             {
                 GList *children = gtk_container_get_children(GTK_CONTAINER(it->data));
                 for (GList *it = children; it; it = it->next)
@@ -271,7 +268,7 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
                         break; // Found the button-box, no need to continue.
                     }
                 }
-                g_list_free (children);
+                g_list_free(children);
                 break; // Found the box, no need to continue.
             }
         }
