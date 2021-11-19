@@ -1090,7 +1090,7 @@ gnc_numeric_to_decimal(gnc_numeric *a, guint8 *max_decimal_places)
     }
     catch (const std::exception& err)
     {
-        PWARN("%s", err.what());
+        DEBUG("%s", err.what());
         return FALSE;
     }
 }
