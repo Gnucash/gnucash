@@ -425,31 +425,40 @@ reldate_offset(RelativeDatePeriod per)
 
 static constexpr int days_in_month[12]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
+/* Normalize the modified struct tm computed in gnc_relative_date_to_time64
+ * before setting the time and perhaps beginning/end of the month. Using the
+ * gnc_date API would involve multiple conversions to and from struct tm.
+*/
 static void
 normalize_reldate_tm(struct tm& now)
 {
-    auto tmp_mon = now.tm_mon + (now.tm_mon < 0 ? 12 :
-                                 now.tm_mon > 11 ? -12 : 0);
-    if (now.tm_mday < 1)
-    {
-        --now.tm_mon;
-        now.tm_mday += days_in_month[tmp_mon - 1];
-    }
-    else if (now.tm_mday > days_in_month[tmp_mon])
-    {
-        ++now.tm_mon;
-        now.tm_mday -= days_in_month[tmp_mon];
-    }
-    if (now.tm_mon < 0)
+    auto factor{abs(now.tm_mon) / 12};
+    now.tm_mon /= factor > 0 ? factor : 1;
+    now.tm_year += now.tm_mon < 0 ? -factor : factor;
+
+    while (now.tm_mday < 1)
+        now.tm_mday += days_in_month[--now.tm_mon];
+
+    while (now.tm_mday > days_in_month[now.tm_mon])
+        now.tm_mday -= days_in_month[now.tm_mon++];
+
+    while (now.tm_mon < 0)
     {
         now.tm_mon += 12;
         --now.tm_year;
     }
-    else if (now.tm_mon > 11)
+    while (now.tm_mon > 11)
     {
         now.tm_mon -= 12;
         ++now.tm_year;
     }
+
+    /* This would happen only if we moved from Feb 29 in a leap year while
+     * adjusting the months so we don't need to worry about adjusting the year
+     * again.
+     */
+    if (now.tm_mday > days_in_month[now.tm_mon])
+        now.tm_mday -= days_in_month[now.tm_mon++];
 }
 
 static void
@@ -457,18 +466,13 @@ reldate_set_day_and_time(struct tm& now, RelativeDateType type)
 {
     if (type == RelativeDateType::START)
     {
-        now.tm_hour = now.tm_min = now.tm_sec = 0;
+        gnc_tm_set_day_start(&now);
         now.tm_mday = 1;
     }
     else if (type == RelativeDateType::END)
     {
-        now.tm_min = now.tm_sec = 59;
-        now.tm_hour = 23;
-        now.tm_mday = days_in_month[now.tm_mon];
-        // Check for Februrary in a leap year
-        if (int year = now.tm_year + 1900; now.tm_mon == 1 &&
-            year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
-            ++now.tm_mday;
+        now.tm_mday = gnc_date_get_last_mday(now.tm_mon, now.tm_year + 1900);
+        gnc_tm_set_day_end(&now);
     }
     // Do nothing for LAST and NEXT.
 };
@@ -510,14 +514,12 @@ gnc_relative_date_to_time64(RelativeDatePeriod period)
                 now.tm_mon = 0;
             else if (gnc_relative_date_is_ending(period))
                 now.tm_mon = 11;
-            now.tm_mday = days_in_month[now.tm_mon];
             break;
        case RelativeDateOffset::SIX:
             if (reldate_is_prev(period))
                 now.tm_mon -= 6;
             else if (reldate_is_next(period))
                 now.tm_mon += 6;
-            now.tm_mday = days_in_month[now.tm_mon];
             break;
         case RelativeDateOffset::QUARTER:
         {
@@ -534,14 +536,12 @@ gnc_relative_date_to_time64(RelativeDatePeriod period)
                 now.tm_mon += 3;
             if (gnc_relative_date_is_ending(period))
                 now.tm_mon += 2;
-            now.tm_mday = days_in_month[now.tm_mon];
             break;
        case RelativeDateOffset::MONTH:
             if (reldate_is_prev(period))
                 --now.tm_mon;
             else if (reldate_is_next(period))
                 ++now.tm_mon;
-            now.tm_mday = days_in_month[now.tm_mon];
             break;
         case RelativeDateOffset::WEEK:
             if (reldate_is_prev(period))
