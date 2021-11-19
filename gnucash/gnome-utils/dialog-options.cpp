@@ -105,6 +105,10 @@ struct gnc_option_win
     GtkWidget  * notebook;
     GtkWidget  * page_list_view;
     GtkWidget  * page_list;
+    GtkButton  * help_button;
+    GtkButton  * cancel_button;
+    GtkButton  * apply_button;
+    GtkButton  * ok_button;
 
     bool toplevel;
 
@@ -235,45 +239,14 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
         return;
     g_assert(toplevel && GTK_IS_WINDOW(toplevel));
 
-    widget = toplevel;
-    /* find the ok and cancel buttons, we know where they will be so do it
-       this way as opposed to using gtk_container_foreach, much less iteration */
-    if (GTK_IS_CONTAINER(widget))
-    {
-        GList *children = gtk_container_get_children(GTK_CONTAINER(widget));
-        for (GList *it = children; it; it = it->next)
-        {
-            if (GTK_IS_BOX(GTK_WIDGET(it->data)))
-            {
-                GList *children = gtk_container_get_children(GTK_CONTAINER(it->data));
-                for (GList *it = children; it; it = it->next)
-                {
-                    if (GTK_IS_BUTTON_BOX (GTK_WIDGET(it->data)))
-                    {
-                        GList *children = gtk_container_get_children(GTK_CONTAINER(it->data));
-                        for (GList *it = children; it; it = it->next)
-                        {
-                            GtkWidget* widget = GTK_WIDGET(it->data);
-                            const gchar* name = gtk_widget_get_name(widget);
-
-                            if (g_strcmp0 (name, "ok_button") == 0 ||
-                                g_strcmp0 (name, "apply_button") == 0)
-                                gtk_widget_set_sensitive (widget, sensitive);
-                            else if (g_strcmp0 (name, "cancel_button") == 0)
-                                gtk_button_set_label (GTK_BUTTON (widget),
-                                                      sensitive ? _("_Cancel") :
-                                                      _("_Close"));
-                        }
-                        g_list_free (children);
-                        break; // Found the button-box, no need to continue.
-                    }
-                }
-                g_list_free(children);
-                break; // Found the box, no need to continue.
-            }
-        }
-        g_list_free (children);
-    }
+    /* Can't static cast, no inheritance relationship. */
+    auto option_win =
+        static_cast<GNCOptionWin*>(g_object_get_data(G_OBJECT(toplevel),
+                                                     "optionwin"));
+    gtk_widget_set_sensitive (GTK_WIDGET(option_win->apply_button), sensitive);
+    gtk_widget_set_sensitive (GTK_WIDGET(option_win->ok_button), sensitive);
+    gtk_button_set_label (option_win->cancel_button,
+                          sensitive ? _("_Cancel") : _("_Close"));
 }
 
 void
@@ -777,6 +750,7 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
     retval->window = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_window"));
     retval->page_list = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_scroll"));
     retval->component_class = component_class ? component_class : DIALOG_OPTIONS_CM_CLASS;
+    g_object_set_data(G_OBJECT(retval->window), "optionwin", retval);
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(retval->window), "gnc-id-options");
@@ -810,14 +784,14 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
                           G_CALLBACK (dialog_list_select_cb), retval);
     }
 
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "helpbutton"));
-        g_signal_connect(button, "clicked", G_CALLBACK(gnc_options_dialog_help_button_cb), retval);
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "cancelbutton"));
-        g_signal_connect(button, "clicked", G_CALLBACK(gnc_options_dialog_cancel_button_cb), retval);
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "applybutton"));
-        g_signal_connect(button, "clicked", G_CALLBACK(gnc_options_dialog_apply_button_cb), retval);
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "okbutton"));
-        g_signal_connect(button, "clicked", G_CALLBACK(gnc_options_dialog_ok_button_cb), retval);
+    retval->help_button = GTK_BUTTON(gtk_builder_get_object (builder, "helpbutton"));
+    g_signal_connect(retval->help_button, "clicked", G_CALLBACK(gnc_options_dialog_help_button_cb), retval);
+    retval->cancel_button = GTK_BUTTON(gtk_builder_get_object (builder, "cancelbutton"));
+    g_signal_connect(retval->cancel_button, "clicked", G_CALLBACK(gnc_options_dialog_cancel_button_cb), retval);
+    retval->apply_button = GTK_BUTTON(gtk_builder_get_object (builder, "applybutton"));
+    g_signal_connect(retval->apply_button, "clicked", G_CALLBACK(gnc_options_dialog_apply_button_cb), retval);
+    retval->ok_button = GTK_BUTTON(gtk_builder_get_object (builder, "okbutton"));
+    g_signal_connect(retval->ok_button, "clicked", G_CALLBACK(gnc_options_dialog_ok_button_cb), retval);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
@@ -1061,7 +1035,6 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(widget), GTK_WRAP_WORD);
     gtk_text_view_set_editable(GTK_TEXT_VIEW(widget), TRUE);
     gtk_text_view_set_accepts_tab (GTK_TEXT_VIEW(widget), FALSE);
-    gtk_container_add (GTK_CONTAINER (scroll), widget);
 
     auto ui_item{std::make_unique<GncGtkTextUIItem>(widget)};
     auto text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
@@ -1070,6 +1043,7 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
+    gtk_container_add (GTK_CONTAINER (scroll), widget);
     gtk_box_pack_start(GTK_BOX(*enclosing), frame, TRUE, TRUE, 0);
     gtk_widget_show_all(*enclosing);
     return widget;
@@ -1740,7 +1714,6 @@ create_account_widget(GncOption& option, char *name)
 
     gtk_box_pack_start(GTK_BOX(vbox), scroll_win, TRUE, TRUE, 0);
     gtk_container_set_border_width(GTK_CONTAINER(scroll_win), 5);
-    gtk_container_add(GTK_CONTAINER(scroll_win), tree);
 
     bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
@@ -1799,6 +1772,7 @@ create_account_widget(GncOption& option, char *name)
     option.set_ui_item(std::make_unique<GncGtkAccountListUIItem>(tree));
     option.set_ui_item_from_option();
 
+    gtk_container_add(GTK_CONTAINER(scroll_win), tree);
     return frame;
 }
 
@@ -1997,6 +1971,9 @@ create_list_widget(GncOption& option, char *name)
         gtk_list_store_set(store, &iter, 0, string ? string : "", -1);
     }
 
+    option.set_ui_item(std::make_unique<GncGtkListUIItem>(GTK_WIDGET(view)));
+    option.set_ui_item_from_option();
+
     gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(view), FALSE, FALSE, 0);
 
     auto selection = gtk_tree_view_get_selection(view);
@@ -2033,6 +2010,8 @@ create_list_widget(GncOption& option, char *name)
 
     option.set_ui_item(std::make_unique<GncGtkListUIItem>(GTK_WIDGET(view)));
     option.set_ui_item_from_option();
+
+    gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(view), FALSE, FALSE, 0);
 
     return frame;
 }
@@ -2644,7 +2623,6 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     g_object_set (G_OBJECT(hbox), "margin", 3, NULL);
 
-    gtk_container_add(GTK_CONTAINER(*enclosing), hbox);
     auto value_px = create_range_spinner(option);
 
     g_signal_connect(G_OBJECT(value_px), "changed",
@@ -2679,6 +2657,7 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
     option.set_ui_item(std::make_unique<GncGtkPlotSizeUIItem>(static_cast<GtkWidget*>(hbox)));
     option.set_ui_item_from_option();
 
+    gtk_container_add(GTK_CONTAINER(*enclosing), hbox);
     gtk_widget_show_all(*enclosing);
     return hbox;
 }
