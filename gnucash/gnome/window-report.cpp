@@ -190,7 +190,6 @@ gnc_report_window_default_params_editor(GncOptionDB* odb, SCM report,
         scm_gc_protect_object(prm->cur_report);
 
         gnc_options_dialog_build_contents(prm->win, prm->odb);
-        gnc_option_db_clean(prm->odb);
 
         gnc_options_dialog_set_apply_cb(prm->win,
                                         gnc_options_dialog_apply_cb,
