@@ -79,9 +79,6 @@ void gnc_options_dialog_set_close_cb (GNCOptionWin * win,
                                       GNCOptionWinCallback thunk,
                                       gpointer cb_data);
 
-void gnc_options_dialog_set_global_help_cb (GNCOptionWinCallback thunk,
-                                            gpointer cb_data);
-
 void gnc_options_dialog_build_contents (GNCOptionWin *win,
                                         GNCOptionDB  *odb);
 void gnc_options_dialog_build_contents_full (GNCOptionWin *win,

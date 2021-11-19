@@ -73,8 +73,6 @@ const gchar *msg_no_help_reason =
     /* Translators: URI of missing help files */
 const gchar *msg_no_help_location = N_("Expected location");
 
-static void gnc_book_options_help_cb (GNCOptionWin *win, gpointer dat);
-
 void
 gnc_gnome_utils_init (void)
 {

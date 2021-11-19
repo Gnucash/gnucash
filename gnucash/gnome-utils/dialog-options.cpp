@@ -205,9 +205,6 @@ GncOptionGtkUIItem::set_widget(GtkWidget* widget)
 }
 
 
-static GNCOptionWinCallback global_help_cb = NULL;
-gpointer global_help_cb_data = NULL;
-
 static void dialog_reset_cb(GtkWidget * w, gpointer data);
 void dialog_list_select_cb (GtkTreeSelection *selection,
                                         gpointer data);
@@ -860,14 +857,6 @@ gnc_options_dialog_set_close_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
 {
     win->close_cb = cb;
     win->close_cb_data = data;
-}
-
-void
-gnc_options_dialog_set_global_help_cb(GNCOptionWinCallback thunk,
-                                      gpointer cb_data)
-{
-    global_help_cb = thunk;
-    global_help_cb_data = cb_data;
 }
 
 /* This is for global program preferences. */
