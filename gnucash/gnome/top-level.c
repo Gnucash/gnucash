@@ -37,7 +37,6 @@
 #include "dialog-commodity.h"
 #include "dialog-invoice.h"
 #include "dialog-preferences.h"
-#include "dialog-options.h"
 #include "dialog-sx-editor.h"
 #include "dialog-transfer.h"
 #include "dialog-totd.h"

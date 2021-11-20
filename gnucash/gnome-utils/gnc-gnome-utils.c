@@ -85,32 +85,6 @@ gnc_gnome_utils_init (void)
 }
 
 
-static void
-gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
-{
-    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_GLOBPREFS);
-}
-
-static void
-gnc_book_options_help_cb (GNCOptionWin *win, gpointer dat)
-{
-    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_BOOK_OPTIONS);
-}
-
-static void
-gnc_style_sheet_options_help_cb (GNCOptionWin *win, gpointer dat)
-{
-    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_STYLE_SHEET);
-}
-
-void
-gnc_options_dialog_set_style_sheet_options_help_cb (GNCOptionWin *win)
-{
-    gnc_options_dialog_set_help_cb (win,
-                                   (GNCOptionWinCallback)gnc_style_sheet_options_help_cb,
-                                    NULL);
-}
-
 /* gnc_configure_date_format
  *    sets dateFormat to the current value on the scheme side
  *
@@ -738,8 +712,6 @@ gnc_gui_init(void)
                                 NULL);
 
     gnc_file_set_shutdown_callback (gnc_shutdown);
-
-    gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
     main_window = gnc_main_window_new ();
     // Bug#350993:

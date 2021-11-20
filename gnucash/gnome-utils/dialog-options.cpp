@@ -2801,3 +2801,23 @@ gnc_options_dialog_set_book_options_help_cb (GNCOptionWin *win)
                                 (GNCOptionWinCallback)gnc_book_options_help_cb,
                                 nullptr);
 }
+
+static void
+gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
+{
+    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_GLOBPREFS);
+}
+
+static void
+gnc_style_sheet_options_help_cb (GNCOptionWin *win, gpointer dat)
+{
+    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_STYLE_SHEET);
+}
+
+void
+gnc_options_dialog_set_style_sheet_options_help_cb (GNCOptionWin *win)
+{
+    gnc_options_dialog_set_help_cb (win,
+                                   (GNCOptionWinCallback)gnc_style_sheet_options_help_cb,
+                                    NULL);
+}

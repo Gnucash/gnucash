@@ -24,7 +24,6 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <glib-object.h>
-#include <dialog-options.h>
 #include <dialog-utils.h>
 #include <gnc-amount-edit.h>
 #include <gnc-date-edit.h>

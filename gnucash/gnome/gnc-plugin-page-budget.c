@@ -44,13 +44,13 @@
 
 #include "swig-runtime.h"
 #include "libguile.h"
+#include <guile-mappings.h>
 
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-page-report.h"
 #include "gnc-budget.h"
 #include "gnc-features.h"
 
-#include "dialog-options.h"
 #include "dialog-utils.h"
 #include "gnc-gnome-utils.h"
 #include "misc-gnome-utils.h"
