@@ -139,7 +139,7 @@
 
   (env-create-multisplit-transaction
    env 16 04 2020
-   (list (vector usd-cash 2500 -2500)
+   (list (vector usd-cash 2500 2500)
          (vector spy -2500 0 "Buy")
          )
    #:description "Return of Capital"

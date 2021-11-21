@@ -167,7 +167,7 @@
                           #:description "Buy MSFT 1500") ;;1500 @ $28.11
     (env-transfer-foreign env 20 01 2012 checking-dem dmlr-a 1500 80
                           #:description "Buy DMLR 80") ;;80 @ DM1500.00
-    (env-transfer-foreign env 20 02 2012 checking-dem dmlr-a -1610 80
+    (env-transfer-foreign env 20 02 2012 checking-dem dmlr-a -1610 -80
                           #:description "Sell DMLR 80") ;;80 @ DM1610.00
     (env-transfer-foreign env 20 02 2012 capgain-dem dmlr-a 110 0
                           #:description "DMLR 80 G/L") ;;80 @ DM1610.00
