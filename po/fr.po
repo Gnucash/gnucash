@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-19 06:52+0000\n"
+"PO-Revision-Date: 2021-11-21 07:50+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -5394,7 +5394,6 @@ msgstr "Aller à la ligne vide en bas de la facture"
 
 # messages-i18n.c:123
 #: gnucash/gnome/gnc-plugin-page-invoice.c:401
-#, fuzzy
 msgid "Enter a payment for the owner of this bill"
 msgstr "Saisissez un paiement pour le destinataire de cette facture"
 
@@ -5429,9 +5428,8 @@ msgid "Edit this voucher"
 msgstr "Modifier ce bon"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:417
-#, fuzzy
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "Créer une nouvelle facture comme double de l'actuelle"
+msgstr "Créer un nouveau bon comme double de l'actuel"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:418
 msgid "Post this voucher to your Chart of Accounts"
@@ -7125,13 +7123,12 @@ msgid "Cut the current transaction?"
 msgstr "Édite la transaction en cours ?"
 
 #: gnucash/gnome/gnc-split-reg.c:991
-#, fuzzy
 msgid ""
 "You would be removing a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"Vous effaceriez une transaction avec des répartitions déjà rapprochées. Ce "
-"n'est pas une bonne idée, car votre balance rapprochée sera incorrecte."
+"Vous voulez effacer une transaction avec des répartitions déjà rapprochées ! "
+"Ce n'est pas une bonne idée, car votre balance rapprochée sera incorrecte."
 
 # messages-i18n.c:346
 #: gnucash/gnome/gnc-split-reg.c:1014
@@ -11755,7 +11752,6 @@ msgid "Show invoices due reminder at startup"
 msgstr "Afficher le rappel des factures dues au démarrage"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:118
-#, fuzzy
 msgid ""
 "If active, at startup GnuCash will check to see whether any invoices will "
 "become due soon. If so, it will present the user with a reminder dialog. The "
@@ -11764,24 +11760,22 @@ msgid ""
 msgstr ""
 "Si cette option est cochée, GnuCash vérifiera au démarrage si des factures "
 "sont proches de leur échéance. Dans ce cas, il affiche un dialogue de "
-"rappel. La définition de \"proche\" est controllée par l'option \"Jours à "
-"l'avance\". Autrement GnuCash ne vérifie pas les factures échues."
+"rappel. La définition de \"proche\" est controllée par l'option \"Jours à l'"
+"avance\". Autrement GnuCash ne vérifie pas les factures échues."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
-#, fuzzy
 msgid "Show invoices due within this many days"
-msgstr "Afficher les factures à échéance d'ici ce nombre de jour"
+msgstr "Afficher les factures qui arriveront à échéance dans ce nombre de jour"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:123
-#, fuzzy
 msgid ""
 "This field defines the number of days in advance that GnuCash will check for "
 "due invoices. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
-"Ce champs défini le nombre de jours que GnuCash utilise pour notifier des "
-"factures dues. Sa valeur est utilisée uniquement si l'option \"Avertir "
-"lorsque due\" est active."
+"Ce champ défini le nombre de jours d'avance que GnuCash utilise pour "
+"notifier des factures dues. Sa valeur est utilisée uniquement si la "
+"préférence \"Avertir lorsque due\" est active."
 
 # po/guile_strings.txt:135
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:127
@@ -11885,18 +11879,16 @@ msgstr ""
 "lorsque due\" est active."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
-#, fuzzy
 msgid "GUID of predefined check format to use"
-msgstr "Index des formats de chèques pré-définis à utiliser"
+msgstr "GUID des formats de chèques pré-définis à utiliser"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:6
-#, fuzzy
 msgid ""
 "This value specifies the predefined check format to use. The number is the "
 "guid of a known check format."
 msgstr ""
 "Cette valeur indique le format prédéfini du chèque à utiliser. Le nombre est "
-"l'index commençant par 0 dans la liste des formats de chèques connus."
+"le GUID dans le format du chèque connu."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:10
 msgid "Which check position to print"
@@ -11934,7 +11926,6 @@ msgid "Custom date format"
 msgstr "Format de date personnalisé"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:26
-#, fuzzy
 msgid ""
 "If the date format is set to indicate a custom date format, this value is "
 "used as an argument to strftime to produce the date to be printed. It may be "
@@ -11942,10 +11933,9 @@ msgid ""
 "manual page of strftime by \"man 3 strftime\"."
 msgstr ""
 "Si le format de date est un format personnalisé, ce paramètre est utilisé "
-"comme argument de strftime pour prduire la date à imprimer. Il peut être "
-"n'importe quelle chaîne de caractère valide pour strftime. Pour plus "
-"d'informationssur ces formats, lisez le manuel de strftime par \"man 3 "
-" strftime\"."
+"comme argument de 'strftime' pour générer la date à imprimer. Ça peut être "
+"n'importe quel format valide avec 'strftime'. Pour plus d'informations sur "
+"ces formats, consultez le manuel de 'strftime' avec \"man 3  strftime\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:30
 msgid "Units in which the custom coordinates are expressed"
@@ -12017,30 +12007,27 @@ msgid "Position of payee address"
 msgstr "Position de l'adresse du bénéficiaire"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:56
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee address "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Cette valeur contient les coordonnées X et Y du début de la ligne de date "
-"sur le chèque. La référence de ces coordonnées est le coin en bas à gauche "
-"de la position du chèque."
+"Cette valeur contient les coordonnées X et Y du début de l'adresse du "
+"bénéficiaire sur le chèque. Ces coordonnées positionnent le coin en bas à "
+"gauche du chèque."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:60
 msgid "Position of notes line"
 msgstr "Position de la ligne des notes"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:61
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the notes line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
 msgstr ""
-"Cette valeur contient les coordonnées X et Y du début de la ligne de date "
-"sur le chèque. La référence de ces coordonnées est le coin en bas à gauche "
-"de la position du chèque."
+"Cette valeur contient les coordonnées X et Y des notes sur le chèque. Ces "
+"coordonnées positionnent le coin en bas à gauche du chèque."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:65
 msgid "Position of memo line"
@@ -12057,19 +12044,16 @@ msgstr ""
 "de la position du chèque."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:70
-#, fuzzy
 msgid "Offset for complete check"
-msgstr "Décalage du chèque complété"
+msgstr "Décalage du chèque en entier"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:71
-#, fuzzy
 msgid ""
 "This value contains the X,Y offset for the complete check. Coordinates are "
 "from the lower left corner of the specified check position."
 msgstr ""
-"Cette valeur contient les coordonnées X et Y du début de la ligne du mémo "
-"sur le chèque. La référence de ces coordonnées est le coin en bas à gauche "
-"de la position du chèque."
+"Cette valeur contient les coordonnées X et Y du chèque dans son ensemble. "
+"Ces coordonnées positionnent le coin en bas à gauche du chèque."
 
 # po/guile_strings.txt:138
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:75
@@ -12087,47 +12071,42 @@ msgid "Position of split's amount in numbers"
 msgstr "Position de la répartition du montant brut en chiffres"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:81
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's amount "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
 "Cette valeur contient les coordonnées X et Y du début de la ligne du montant "
-"brut en lettre sur le chèque. La référence de ces coordonnées est le coin en "
-"bas à gauche de la position du chèque."
+"de répartition du chèque. Ces coordonnées positionnent le coin en bas à "
+"gauche du chèque."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:85
-#, fuzzy
 msgid "Position of split's memo line"
-msgstr "Position de la ligne du mémo"
+msgstr "Position de la ligne du mémo sur la réparation"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:86
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's memo "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Cette valeur contient les coordonnées X et Y du début de la ligne du mémo "
-"sur le chèque. La référence de ces coordonnées est le coin en bas à gauche "
-"de la position du chèque."
+"Cette valeur contient les coordonnées X et Y du début de la ligne du mémo de "
+"la répartition du chèque. Ces coordonnées positionnent le coin en bas à "
+"gauche du chèque."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:90
-#, fuzzy
 msgid "Position of split's account line"
-msgstr "Position de la ligne de date"
+msgstr "Position de la ligne du compte pour la répartition"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:91
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's account "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Cette valeur contient les coordonnées X et Y du début de la ligne du montant "
-"brut en lettre sur le chèque. La référence de ces coordonnées est le coin en "
-"bas à gauche de la position du chèque."
+"Cette valeur contient les coordonnées X et Y du début de la ligne du compte "
+"de la répartition sur le chèque. Ces coordonnées positionnent le coin en bas "
+"à gauche du chèque."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:95
 msgid "Print the date format below the date."
@@ -12198,9 +12177,8 @@ msgid "Window geometry"
 msgstr "Dimensions de la fenêtre"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:18
-#, fuzzy
 msgid "The position of paned window when it was last closed."
-msgstr "La largeur et la taille de boîte de dialogue à sa dernière fermeture."
+msgstr "La position du dialogue à sa dernière fermeture."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:102
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:103
@@ -12554,11 +12532,10 @@ msgstr ""
 "lancement de GnuCash. La fenêtre est affichée si l'option est cochée."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:22
-#, fuzzy
 msgid "Show \"since last run\" notification dialog when a file is opened."
 msgstr ""
-"Afficher l'assistant \"Depuis la dernière exécution\" à l'ouverture d'un "
-"fichier."
+"Afficher le dialogue de notification de \"Depuis la dernière exécution\" à "
+"l'ouverture d'un fichier."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:23
 #, fuzzy
@@ -12714,9 +12691,8 @@ msgstr ""
 
 # messages-i18n.c:231
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
-#, fuzzy
 msgid "Transaction Linked Files head path"
-msgstr "Information de transaction"
+msgstr "L'entête du chemin pour les fichiers liées aux transactions"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:26
 msgid ""
@@ -13139,9 +13115,8 @@ msgstr ""
 
 # po/guile_strings.txt:208
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:180
-#, fuzzy
 msgid "Show Horizontal Grid Lines"
-msgstr "Afficher les bordures horizontales dans le registre"
+msgstr "Afficher les lignes horizontales"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:181
 #, fuzzy
@@ -13152,9 +13127,8 @@ msgstr "Si cette option est cochée, une fenêtre s'affichera au démarrage."
 
 # po/guile_strings.txt:210
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:185
-#, fuzzy
 msgid "Show Vertical Grid Lines"
-msgstr "Afficher les bordures verticales du registre"
+msgstr "Afficher les lignes verticales"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:186
 #, fuzzy
@@ -21777,6 +21751,10 @@ msgid ""
 "this option, the transaction text is used for the transaction description "
 "too."
 msgstr ""
+"Certaines banques utilisent une partie de \"texte de la transaction\" du "
+"fichier MT940 pour la description de la transaction. Par défaut, GnuCash "
+"ignore ce texte. En activant cette option, le texte de la transaction sera "
+"utilisée aussi pour cette description."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:294
 #: gnucash/import-export/aqb/dialog-ab-trans.c:303
@@ -22785,6 +22763,9 @@ msgid ""
 "There will be one row for each transaction, equivalent to a single row in a "
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
 msgstr ""
+"Il n'y aura qu'une seule ligne pour chaque transaction, tout comme dans le "
+"registre en mode 'Livre basique'. En conséquence, certaines données sur les "
+"transferts pourraient être perdues."
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
@@ -22841,6 +22822,10 @@ msgid ""
 "logging!\n"
 "You may need to enable debugging.\n"
 msgstr ""
+"Une erreur est survenue lors de l'export, cela peut être dû à une manque "
+"d'espace sur le disque, ou des permissions d'accès au dossier/fichier. "
+"Veuillez vérifier le journal d'erreur pour plus de détails !\n"
+"Il peut être nécessaire d'activer le mode débogage pour cela.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:767
 msgid "File exported successfully!\n"
@@ -23890,6 +23875,9 @@ msgid ""
 "investment (such as FUND for mutual funds.) If you don't see your exchange "
 "or an appropriate investment type, you can enter a new one."
 msgstr ""
+"Sélectionnez la place boursière sur laquelle ce symbole est utilisé (par ex. "
+"'EURONEXT'), ou un type d'investissement (par ex. 'FUND' pour les fonds "
+"mutualisés). Si aucun choix ne correspond, vous pouvez ajouter le votre."
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
@@ -25613,6 +25601,8 @@ msgid ""
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
+"Un de vos rapports ont un 'report-guid' déjà utilisé. Veuillez vérifier "
+"qu'un de vos rapports enregistrés ne contient pas le 'report-guid' suivant : "
 
 #: gnucash/report/report-core.scm:212
 msgid "Wrong report definition: "
@@ -27559,6 +27549,8 @@ msgid ""
 "The future minimum will add, for each date point, a projected minimum "
 "balance including scheduled transactions."
 msgstr ""
+"Le minimum future ajoutera, pour chaque date, une projection du budget "
+"minimum incluant les transactions programmées."
 
 # messages-i18n.c:257
 #: gnucash/report/reports/standard/balance-forecast.scm:256
@@ -27985,6 +27977,10 @@ msgid ""
 "account. If this option is disabled, subtotals are displayed below parent "
 "and children groups."
 msgstr ""
+"Si actif, les sous-totaux sont affichés avec les comptes parents ; si ces "
+"comptes parents ont leur propre montant, ce montant sera affiché sur la "
+"ligne suivant comme un compte fils. Si inactif, les sous-totaux sont "
+"affichés en-dessous des groupes parents et enfants."
 
 # messages-i18n.c:96
 #: gnucash/report/reports/standard/balsheet-pnl.scm:102
@@ -28446,7 +28442,7 @@ msgid ""
 "expenses."
 msgstr ""
 "Fait que le rapport classe de façon standard, plaçant le revenu avant les "
-"dépenses"
+"dépenses."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:438
 msgid "Reporting range end period cannot be less than start period."
@@ -28603,6 +28599,8 @@ msgid ""
 "Include in report previous periods as single collapsed column (one for all "
 "periods before starting)"
 msgstr ""
+"Inclure dans le rapport les précédentes périodes dans une seule colonne "
+"fusionnée (une pour chaque période avant le début)"
 
 #: gnucash/report/reports/standard/budget.scm:86
 msgid "Include collapsed periods after selected."
@@ -28613,6 +28611,8 @@ msgid ""
 "Include in report further periods as single collapsed column (one for all "
 "periods after ending and to the end of budget range)"
 msgstr ""
+"Inclure dans le rapport les périodes suivantes dans une seule colonne "
+"fusionnée (une pour chaque période jusqu'à et après la fin du budget)"
 
 #. Translators: Abbreviation for "Budget" amount
 #: gnucash/report/reports/standard/budget.scm:524
@@ -28906,6 +28906,9 @@ msgid ""
 "Show the table lines with customers which did not have any transactions in "
 "the reporting period, hence would show all zeros in the columns."
 msgstr ""
+"Afficher les lignes dans le tableau avec les clients qui n'ont pas eu de "
+"transactions dans la période rapportée, et donc des zéros peuvent apparaitre "
+"dans les colonnes."
 
 #: gnucash/report/reports/standard/customer-summary.scm:72
 msgid "Show Inactive Customers"
@@ -29257,6 +29260,9 @@ msgid ""
 "in the VAT account description. EU Goods sales and purchase accounts may be "
 "tagged with *EUGOODS* in the account description."
 msgstr ""
+"Notez que les comptes fiscaux européen dans la variation anglaise peuvent "
+"être étiquetés *EUVAT* dans la description du compte taxe. Les achats et "
+"ventes des biens européens peuvent être quand à eux étiquetés *EUGOODS*."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:71
 msgid "This message will be removed when tax accounts are specified."
@@ -31211,7 +31217,7 @@ msgstr "N° de facture"
 
 #: gnucash/report/reports/support/receipt.eguile.scm:144
 msgid "Descr."
-msgstr "Description"
+msgstr "Descr."
 
 #: gnucash/report/reports/support/receipt.eguile.scm:279
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:424
@@ -31226,6 +31232,9 @@ msgid ""
 "This report is designed for customer (sales) invoices only. Please use the "
 "Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
 msgstr ""
+"Ce rapport est uniquement prévu pour les factures des client (ventes). "
+"Veuillez utiliser le menu des préférences pour sélectionner <em>Facture</"
+"em>, et non Bon, ou autre."
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
@@ -32095,7 +32104,7 @@ msgstr "Afficher l'autre code de compte ?"
 # po/guile_strings.txt:219
 #: gnucash/report/trep-engine.scm:929
 msgid "Display the transaction linked document"
-msgstr "Afficher le document lié de la transaction ?"
+msgstr "Affiche le document lié de la transaction"
 
 # po/guile_strings.txt:219
 #: gnucash/report/trep-engine.scm:932
@@ -32351,6 +32360,8 @@ msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
 msgstr ""
+"Le précédent numéro généré pour le bon. Ce numéro sera incrémenté lors de la "
+"génération du bon suivant."
 
 # messages-i18n.c:231
 #: libgnucash/app-utils/business-prefs.scm:60
