@@ -1341,41 +1341,35 @@ GList*
 gnc_ab_trans_templ_list_new_from_ref_accounts(GNC_AB_ACCOUNT_SPEC *ab_acc)
 {
     GList *retval = NULL;
-    AB_REFERENCE_ACCOUNT *ra = NULL;
+    AB_REFERENCE_ACCOUNT *ra;
     AB_REFERENCE_ACCOUNT_LIST *ral;
-    int16_t numAccounts;
-    int16_t counter;
-    GWEN_BUFFER *accNameForTemplate;
-    const char *accName;
-    const char *iban;
-    gnc_numeric zero=gnc_numeric_zero();
+    GWEN_BUFFER *accNameForTemplate = GWEN_Buffer_new(0,120,0,0);
+    gnc_numeric zero = gnc_numeric_zero();
 
-		/* get the target account list */
+    /* get the target account list */
     ral = AB_AccountSpec_GetRefAccountList(ab_acc);
-    numAccounts = AB_ReferenceAccount_List_GetCount(ral);
     ra = AB_ReferenceAccount_List_First(ral);
-    accNameForTemplate = GWEN_Buffer_new(0,120,0,0);
     
     /* fill the template list with the target accounts */
     while (ra)
     {
-	      GncABTransTempl *new_templ;
-	      GWEN_Buffer_Reset(accNameForTemplate);
-	      iban = AB_ReferenceAccount_GetIban(ra);
-	      accName = AB_ReferenceAccount_GetAccountName(ra);
-	      if (accName) {
-	        GWEN_Buffer_AppendString(accNameForTemplate, accName);
-	        GWEN_Buffer_AppendString(accNameForTemplate, ": ");
-	      }
-	      GWEN_Buffer_AppendString(accNameForTemplate, iban);
-	      new_templ = gnc_ab_trans_templ_new();
-	      gnc_ab_trans_templ_set_name(new_templ,GWEN_Buffer_GetStart(accNameForTemplate));
-	      gnc_ab_trans_templ_set_recp_name(new_templ,AB_ReferenceAccount_GetOwnerName(ra));
-	      gnc_ab_trans_templ_set_recp_account(new_templ,AB_ReferenceAccount_GetIban(ra));
-	      gnc_ab_trans_templ_set_recp_bankcode(new_templ,AB_ReferenceAccount_GetBic(ra));
-	      gnc_ab_trans_templ_set_amount(new_templ,zero);
-	      retval = g_list_prepend (retval, new_templ);
-	      ra = AB_ReferenceAccount_List_Next(ra);
+        GncABTransTempl *new_templ = gnc_ab_trans_templ_new();
+        const char *iban = AB_ReferenceAccount_GetIban(ra);
+	const char *accName = AB_ReferenceAccount_GetAccountName(ra);
+	GWEN_Buffer_Reset(accNameForTemplate);
+	if (accName)
+	{
+	    GWEN_Buffer_AppendString(accNameForTemplate, accName);
+	    GWEN_Buffer_AppendString(accNameForTemplate, ": ");
+	}
+	GWEN_Buffer_AppendString(accNameForTemplate, iban);
+	gnc_ab_trans_templ_set_name(new_templ, GWEN_Buffer_GetStart(accNameForTemplate));
+	gnc_ab_trans_templ_set_recp_name(new_templ, AB_ReferenceAccount_GetOwnerName(ra));
+	gnc_ab_trans_templ_set_recp_account(new_templ, AB_ReferenceAccount_GetIban(ra));
+	gnc_ab_trans_templ_set_recp_bankcode(new_templ, AB_ReferenceAccount_GetBic(ra));
+	gnc_ab_trans_templ_set_amount(new_templ, zero);
+	retval = g_list_prepend (retval, new_templ);
+	ra = AB_ReferenceAccount_List_Next(ra);
     }
     retval = g_list_reverse (retval);
 
