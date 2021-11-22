@@ -41,7 +41,6 @@
 #include "gnc-window.h"
 #include "gnc-icons.h"
 #include "dialog-doclink-utils.h"
-#include "dialog-options.h"
 #include "dialog-commodity.h"
 #include "dialog-totd.h"
 #include "gnc-ui-util.h"
@@ -77,7 +76,6 @@ void
 gnc_gnome_utils_init (void)
 {
     gnc_component_manager_init ();
-    gnc_options_ui_initialize ();
 
     scm_init_sw_gnome_utils_module();
     scm_c_use_module ("sw_gnome_utils");

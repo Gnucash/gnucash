@@ -34,7 +34,6 @@
 
 #include <gnc-option-uitype.hpp>
 #include <gnc-option-ui.hpp>
-#include "dialog-options.h"
 
 /** @fn WidgetCreateFunc
  *  Function pointer for per-option-type GtkWidget constructors.
@@ -74,6 +73,7 @@ public:
                              GtkWidget**, bool*);
 private:
     static std::vector<WidgetCreateFunc> s_registry;
+    static bool s_initialized;
 };
 
 /** class GncOptionGtkUIItem
@@ -116,6 +116,84 @@ qof_instance_cast(Instance inst)
     static_assert(std::is_pointer_v<Instance>, "Pointers Only!");
     return reinterpret_cast<const QofInstance*>(inst);
 }
+class GncOptionsDialog;
+
+typedef void (* GncOptionsDialogCallback)(GncOptionsDialog*, void* data);
+
+class GncOptionsDialog
+{
+    GtkWidget  * m_window;
+    GtkWidget  * m_notebook;
+    GtkWidget  * m_page_list_view;
+    GtkWidget  * m_page_list;
+    GtkButton  * m_help_button;
+    GtkButton  * m_cancel_button;
+    GtkButton  * m_apply_button;
+    GtkButton  * m_ok_button;
+
+    bool toplevel;
+
+    GncOptionsDialogCallback m_apply_cb;
+    gpointer             m_apply_cb_data;
+
+    GncOptionsDialogCallback m_help_cb;
+    gpointer             m_help_cb_data;
+
+    GncOptionsDialogCallback m_close_cb;
+    gpointer             m_close_cb_data;
+
+    /* Hold onto this for a complete reset */
+    GncOptionDB* m_option_db;
+
+    /* Hold on to this to unregister the right class */
+    const char* m_component_class;
+
+    /* widget being destroyed */
+    bool m_destroying{false};
+
+public:
+    GncOptionsDialog(const char* title, GtkWindow* parent) :
+        GncOptionsDialog(false, title, nullptr, parent) {}
+    GncOptionsDialog(bool modal, const char* title, const char* component_class,
+                 GtkWindow* parent);
+    GncOptionsDialog(const GncOptionsDialog&) = default;
+    GncOptionsDialog(GncOptionsDialog&&) = default;
+    ~GncOptionsDialog();
+
+    GtkWidget* get_widget() const noexcept { return m_window; }
+    GtkWidget* get_page_list() const noexcept { return m_page_list; }
+    GtkWidget* get_page_list_view() const noexcept { return m_page_list_view; }
+    GtkWidget* get_notebook() const noexcept { return m_notebook; }
+    GncOptionDB* get_option_db() noexcept { return m_option_db; }
+    inline void build_contents(GncOptionDB* odb){
+        build_contents(odb, true); }
+    void build_contents(GncOptionDB* odb, bool show_dialog);
+    void set_sensitive(bool sensitive) noexcept;
+    void changed() noexcept;
+    void set_apply_cb(GncOptionsDialogCallback, void* cb_data) noexcept;
+    void call_apply_cb() noexcept;
+    void set_help_cb(GncOptionsDialogCallback, void* cb_data) noexcept;
+    void call_help_cb() noexcept;
+    void set_close_cb(GncOptionsDialogCallback, void* cb_data) noexcept;
+    void call_close_cb() noexcept;
+    void set_book_help_cb() noexcept;
+    void call_book_help_cb() noexcept;
+    void set_style_sheet_help_cb() noexcept;
+    void call_style_sheet_help_cb() noexcept;
+};
+
+void gnc_option_changed_widget_cb (GtkWidget *widget, GncOption *option);
+void gnc_option_changed_option_cb (GtkWidget *dummy, GncOption *option);
+
+/**
+ * Set the initial values of new book options to values specified in user
+ * preferences.
+
+ * Nothing to do with GncOptionsDialog, but it depends on Gtk and s used in
+ * both assistant-hierarchy and gnc-main-window.
+ * @param odb: The book's options database.
+ */
+void gnc_options_dialog_set_new_book_option_values (GncOptionDB *odb);
 
 #endif // GNC_DIALOG_OPTIONS_HPP_
 /** @}

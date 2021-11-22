@@ -99,37 +99,6 @@ static constexpr const char* GNC_PREFS_GROUP{"dialogs.options"};
 /* A pointer to the last selected filename */
 #define LAST_SELECTION "last-selection"
 
-struct gnc_option_win
-{
-    GtkWidget  * window;
-    GtkWidget  * notebook;
-    GtkWidget  * page_list_view;
-    GtkWidget  * page_list;
-    GtkButton  * help_button;
-    GtkButton  * cancel_button;
-    GtkButton  * apply_button;
-    GtkButton  * ok_button;
-
-    bool toplevel;
-
-    GNCOptionWinCallback apply_cb;
-    gpointer             apply_cb_data;
-
-    GNCOptionWinCallback help_cb;
-    gpointer             help_cb_data;
-
-    GNCOptionWinCallback close_cb;
-    gpointer             close_cb_data;
-
-    /* Hold onto this for a complete reset */
-    GncOptionDB *option_db;
-
-    /* Hold on to this to unregister the right class */
-    const char *component_class;
-
-    /* widget being destroyed */
-    bool destroyed;
-};
 
 enum page_tree
 {
@@ -140,6 +109,8 @@ enum page_tree
 
 //Init the class static.
 std::vector<WidgetCreateFunc> GncOptionUIFactory::s_registry{static_cast<size_t>(GncOptionUIType::MAX_VALUE)};
+bool GncOptionUIFactory::s_initialized{false};
+static void gnc_options_ui_factory_initialize (void);
 
 void
 GncOptionUIFactory::set_func(GncOptionUIType type, WidgetCreateFunc func)
@@ -151,6 +122,11 @@ GtkWidget*
 GncOptionUIFactory::create(GncOption& option, GtkGrid* page, GtkLabel* name,
                      char* description, GtkWidget** enclosing, bool* packed)
 {
+    if (!s_initialized)
+    {
+        gnc_options_ui_factory_initialize();
+        s_initialized = true;
+    }
     auto type{option.get_ui_type()};
     auto func{s_registry[static_cast<size_t>(type)]};
     if (func)
@@ -206,8 +182,7 @@ GncOptionGtkUIItem::set_widget(GtkWidget* widget)
 
 
 static void dialog_reset_cb(GtkWidget * w, gpointer data);
-void dialog_list_select_cb (GtkTreeSelection *selection,
-                                        gpointer data);
+static void dialog_list_select_cb (GtkTreeSelection *selection, gpointer data);
 static void component_close_handler (gpointer data);
 
 static void
@@ -215,8 +190,8 @@ section_reset_widgets(GncOptionSection* section)
 {
 }
 
-GtkWidget* const
-gnc_option_get_gtk_widget (const GncOption* option)
+static inline GtkWidget* const
+option_get_gtk_widget (const GncOption* option)
 {
     if (!option) return nullptr;
     auto ui_item{dynamic_cast<const GncOptionGtkUIItem*>(option->get_ui_item())};
@@ -238,20 +213,24 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
 
     /* Can't static cast, no inheritance relationship. */
     auto option_win =
-        static_cast<GNCOptionWin*>(g_object_get_data(G_OBJECT(toplevel),
+        static_cast<GncOptionsDialog*>(g_object_get_data(G_OBJECT(toplevel),
                                                      "optionwin"));
-    gtk_widget_set_sensitive (GTK_WIDGET(option_win->apply_button), sensitive);
-    gtk_widget_set_sensitive (GTK_WIDGET(option_win->ok_button), sensitive);
-    gtk_button_set_label (option_win->cancel_button,
+    option_win->set_sensitive(sensitive);
+}
+
+void
+GncOptionsDialog::set_sensitive(bool sensitive) noexcept
+{
+    gtk_widget_set_sensitive (GTK_WIDGET(m_apply_button), sensitive);
+    gtk_widget_set_sensitive (GTK_WIDGET(m_ok_button), sensitive);
+    gtk_button_set_label (m_cancel_button,
                           sensitive ? _("_Cancel") : _("_Close"));
 }
 
 void
-gnc_options_dialog_changed (GNCOptionWin *win)
+GncOptionsDialog::changed() noexcept
 {
-    if (!win) return;
-
-    dialog_changed_internal (win->window, TRUE);
+    set_sensitive(true);
 }
 
 void
@@ -266,7 +245,7 @@ void
 gnc_option_changed_option_cb(GtkWidget *dummy, GncOption* option)
 {
     if (!option) return;
-    auto widget{gnc_option_get_gtk_widget(option)};
+    auto widget{option_get_gtk_widget(option)};
     gnc_option_changed_widget_cb(widget, option);
 }
 
@@ -392,16 +371,17 @@ create_reset_button_box(GtkBox* page_content_box)
 }
 
 static int
-setup_notebook_pages(GNCOptionWin* propertybox, GtkBox* page_content_box,
+setup_notebook_pages(GncOptionsDialog* dlg, GtkBox* page_content_box,
                      const char* name)
 {
-    auto page_count = gtk_notebook_page_num(GTK_NOTEBOOK(propertybox->notebook),
+    auto notebook{dlg->get_notebook()};
+    auto page_count = gtk_notebook_page_num(GTK_NOTEBOOK(notebook),
                                             GTK_WIDGET(page_content_box));
 
-    if (propertybox->page_list_view)
+    if (dlg->get_page_list_view())
     {
         /* Build the matching list item for selecting from large page sets */
-        auto view = GTK_TREE_VIEW(propertybox->page_list_view);
+        auto view = GTK_TREE_VIEW(dlg->get_page_list_view());
         auto list = GTK_LIST_STORE(gtk_tree_view_get_model(view));
 
         PINFO("Page name is %s and page_count is %d", name, page_count);
@@ -414,20 +394,19 @@ setup_notebook_pages(GNCOptionWin* propertybox, GtkBox* page_content_box,
 
         if (page_count > MAX_TAB_COUNT - 1)   /* Convert 1-based -> 0-based */
         {
-            gtk_widget_show(propertybox->page_list);
-            gtk_notebook_set_show_tabs(GTK_NOTEBOOK(propertybox->notebook), FALSE);
-            gtk_notebook_set_show_border(GTK_NOTEBOOK(propertybox->notebook), FALSE);
+            gtk_widget_show(dlg->get_page_list());
+            gtk_notebook_set_show_tabs(GTK_NOTEBOOK(notebook), FALSE);
+            gtk_notebook_set_show_border(GTK_NOTEBOOK(notebook), FALSE);
         }
         else
-            gtk_widget_hide(propertybox->page_list);
+            gtk_widget_hide(dlg->get_page_list());
 
     }
     return page_count;
 }
 
 static int
-gnc_options_dialog_append_page(GNCOptionWin * propertybox,
-                               GncOptionSectionPtr& section)
+dialog_append_page(GncOptionsDialog* dlg, GncOptionSectionPtr& section)
 {
     auto name = section->get_name().c_str();
     if (!name || *name == '\0')
@@ -462,55 +441,32 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
                                 _("Reset all values to their defaults."));
 
     g_signal_connect(G_OBJECT(reset_button), "clicked",
-                     G_CALLBACK(dialog_reset_cb), propertybox);
+                     G_CALLBACK(dialog_reset_cb), dlg);
     g_object_set_data(G_OBJECT(reset_button), "section",
                       static_cast<void*>(section.get()));
     gtk_box_pack_end(GTK_BOX(buttonbox), reset_button, FALSE, FALSE, 0);
     gtk_widget_show_all(GTK_WIDGET(page_content_box));
-    gtk_notebook_append_page(GTK_NOTEBOOK(propertybox->notebook),
+    gtk_notebook_append_page(GTK_NOTEBOOK(dlg->get_notebook()),
                              GTK_WIDGET(page_content_box), page_label);
 
     /* Switch to selection from a list if the page count threshold is reached */
-    return setup_notebook_pages(propertybox, page_content_box, name);
+    return setup_notebook_pages(dlg, page_content_box, name);
 }
 
-/********************************************************************\
- * gnc_options_dialog_build_contents                                *
- *   builds an options dialog given a property box and an options   *
- *   database and make the dialog visible                           *
- *                                                                  *
- * @param propertybox - gnome property box to use                    *
- * @param odb         - option database to use                       *
-\********************************************************************/
-void
-gnc_options_dialog_build_contents (GNCOptionWin *propertybox,
-                                   GncOptionDB  *odb)
-{
-    gnc_options_dialog_build_contents_full (propertybox, odb, true);
-}
-
-/********************************************************************\
- * gnc_options_dialog_build_contents_full                           *
- *   builds an options dialog given a property box and an options   *
- *   database and make the dialog visible depending on the          *
- *   show_dialog flag                                               *
- *                                                                  *
- * @param propertybox - gnome property box to use                    *
+/**
+ * Populate the dialog's notebook with the contents of odb.
+ *
  * @param odb         - option database to use                       *
  * @param show_dialog - should dialog be made visible or not         *
-\********************************************************************/
+ */
 void
-gnc_options_dialog_build_contents_full (GNCOptionWin *propertybox,
-                                        GNCOptionDB  *odb, gboolean show_dialog)
+GncOptionsDialog::build_contents(GncOptionDB  *odb, bool show_dialog)
 {
     gint default_page = -1;
 
-    gint page;
-
-    g_return_if_fail (propertybox != NULL);
     g_return_if_fail (odb != NULL);
 
-    propertybox->option_db = odb;
+    m_option_db = odb;
 
     auto num_sections = odb->num_sections();
     auto default_section = odb->get_default_section();
@@ -519,9 +475,9 @@ gnc_options_dialog_build_contents_full (GNCOptionWin *propertybox,
           default_section ? default_section->get_name().c_str() : "NULL");
 
     odb->foreach_section(
-        [propertybox, default_section, &default_page]
+        [this, default_section, &default_page]
         (GncOptionSectionPtr& section) {
-            auto page = gnc_options_dialog_append_page(propertybox, section);
+            auto page = dialog_append_page(this, section);
             if (default_section && section.get() == default_section)
                 default_page = page;
         });
@@ -541,107 +497,112 @@ gnc_options_dialog_build_contents_full (GNCOptionWin *propertybox,
                 });
         });
 
-    gtk_notebook_popup_enable(GTK_NOTEBOOK(propertybox->notebook));
+    gtk_notebook_popup_enable(GTK_NOTEBOOK(m_notebook));
     if (default_page >= 0)
     {
         /* Find the page list and set the selection to the default page */
-        GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(propertybox->page_list_view));
+        auto selection{gtk_tree_view_get_selection(GTK_TREE_VIEW(m_page_list_view))};
         GtkTreeIter iter;
-        GtkTreeModel *model;
 
-        model = gtk_tree_view_get_model(GTK_TREE_VIEW(propertybox->page_list_view));
+        auto model{gtk_tree_view_get_model(GTK_TREE_VIEW(m_page_list_view))};
         gtk_tree_model_iter_nth_child(model, &iter, NULL, default_page);
         gtk_tree_selection_select_iter (selection, &iter);
-        gtk_notebook_set_current_page(GTK_NOTEBOOK(propertybox->notebook), default_page);
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(m_notebook), default_page);
     }
-    dialog_changed_internal(propertybox->window, FALSE);
+    dialog_changed_internal(m_window, FALSE);
     if (show_dialog)
-        gtk_widget_show(propertybox->window);
+        gtk_widget_show(m_window);
 }
 
-GtkWidget *
-gnc_options_dialog_widget(GNCOptionWin * win)
+void GncOptionsDialog::call_apply_cb() noexcept
 {
-    return win->window;
+    auto close_cb = m_close_cb;
+
+    m_close_cb = nullptr;
+    if (m_apply_cb)
+        (m_apply_cb)(this, m_apply_cb_data);
+    m_close_cb = close_cb;
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window));
+    set_sensitive(false);
 }
 
-GtkWidget *
-gnc_options_page_list(GNCOptionWin * win)
+void GncOptionsDialog::call_help_cb() noexcept
 {
-    return win->page_list;
+    if (m_help_cb)
+        (m_help_cb)(this, m_help_cb_data);
 }
 
-GtkWidget *
-gnc_options_dialog_notebook(GNCOptionWin * win)
+void GncOptionsDialog::call_close_cb() noexcept
 {
-    return win->notebook;
-}
-
-static void
-gnc_options_dialog_help_button_cb(GtkWidget * widget, GNCOptionWin *win)
-{
-    if (win->help_cb)
-        (win->help_cb)(win, win->help_cb_data);
-}
-
-static void
-gnc_options_dialog_cancel_button_cb(GtkWidget * widget, GNCOptionWin *win)
-{
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->window));
-
-    if (win->close_cb)
-        (win->close_cb)(win, win->close_cb_data);
-    else
-        gtk_widget_hide(win->window);
-}
-
-static void
-gnc_options_dialog_apply_button_cb(GtkWidget * widget, GNCOptionWin *win)
-{
-    GNCOptionWinCallback close_cb = win->close_cb;
-
-    win->close_cb = NULL;
-    if (win->apply_cb)
-        win->apply_cb (win, win->apply_cb_data);
-    win->close_cb = close_cb;
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->window));
-    dialog_changed_internal (win->window, FALSE);
-}
-
-static void
-gnc_options_dialog_ok_button_cb(GtkWidget * widget, GNCOptionWin *win)
-{
-    GNCOptionWinCallback close_cb = win->close_cb;
-
-    win->close_cb = NULL;
-    if (win->apply_cb)
-        win->apply_cb (win, win->apply_cb_data);
-    win->close_cb = close_cb;
-
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->window));
-
-    if (win->close_cb)
-        (win->close_cb)(win, win->close_cb_data);
-    else
-        gtk_widget_hide(win->window);
-}
-
-static void
-gnc_options_dialog_destroy_cb (GtkWidget *object, GNCOptionWin *win)
-{
-    if (!win) return;
-
-    if (win->destroyed == FALSE)
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window));
+    if (m_close_cb)
     {
-        if (win->close_cb)
-            (win->close_cb)(win, win->close_cb_data);
+        gtk_window_close(GTK_WINDOW(m_window));
+        (m_close_cb)(this, m_close_cb_data);
+    }
+    else
+    {
+        gtk_widget_hide(m_window);
     }
 }
 
-static bool
-gnc_options_dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
+void GncOptionsDialog::call_book_help_cb() noexcept
 {
-    GNCOptionWin *win = static_cast<decltype(win)>(data);
+/*    if (m_book_options_help_cb)
+        (m_book_options_help_cb)(this, m_book_options_help_cb_data);
+*/
+}
+
+void GncOptionsDialog::call_style_sheet_help_cb() noexcept
+{
+/*
+    if (m_style_sheet_help_cb)
+        (m_style_shet_help_cb)(this, m_style_sheet_help_cb_data);
+*/
+}
+
+// Help button signal handler
+static void
+dialog_help_button_cb(GtkWidget * widget, GncOptionsDialog *win)
+{
+    win->call_help_cb();
+}
+
+// Cancel/close button clicked signal handler
+static void
+dialog_cancel_button_cb(GtkWidget * widget, GncOptionsDialog *win)
+{
+    win->call_close_cb();
+}
+
+// Apply button clicked signal handler
+static void
+dialog_apply_button_cb(GtkWidget * widget, GncOptionsDialog *win)
+{
+    win->call_apply_cb();
+}
+
+// OK Button clicked signal handler
+static void
+dialog_ok_button_cb(GtkWidget * widget, GncOptionsDialog *win)
+{
+    win->call_apply_cb();
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->get_widget()));
+    win->call_close_cb();
+}
+
+// "destroy" signal handler
+static void
+dialog_destroy_cb (GtkWidget *object, GncOptionsDialog *win)
+{
+    win->call_close_cb();
+}
+
+// "key_press_event" signal handler
+static bool
+dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+    GncOptionsDialog *win = static_cast<decltype(win)>(data);
 
     if (event->keyval == GDK_KEY_Escape)
     {
@@ -655,7 +616,7 @@ gnc_options_dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gp
 static void
 dialog_reset_cb(GtkWidget * w, gpointer data)
 {
-    GNCOptionWin *win = static_cast<decltype(win)>(data);
+    GncOptionsDialog *win = static_cast<decltype(win)>(data);
     gpointer val;
     bool dialog_changed = false;
 
@@ -675,14 +636,14 @@ dialog_reset_cb(GtkWidget * w, gpointer data)
             option.set_ui_item_from_option();
         });
 
-    dialog_changed_internal (win->window, dialog_changed);
+    dialog_changed_internal (win->get_widget(), dialog_changed);
 }
 
-void
-dialog_list_select_cb (GtkTreeSelection *selection,
-                                   gpointer data)
+// changed signal handler
+static void
+dialog_list_select_cb (GtkTreeSelection *selection, gpointer data)
 {
-    GNCOptionWin * win = static_cast<decltype(win)>(data);
+    GncOptionsDialog * win = static_cast<decltype(win)>(data);
     GtkTreeModel *list;
     GtkTreeIter iter;
     gint index = 0;
@@ -693,191 +654,182 @@ dialog_list_select_cb (GtkTreeSelection *selection,
                        PAGE_INDEX, &index,
                        -1);
     PINFO("Index is %d", index);
-    gtk_notebook_set_current_page(GTK_NOTEBOOK(win->notebook), index);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(win->get_notebook()), index);
 }
 
 static void
 component_close_handler (gpointer data)
 {
-    GNCOptionWin *win = static_cast<decltype(win)>(data);
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->window));
-    gnc_options_dialog_cancel_button_cb (NULL, win);
+    GncOptionsDialog *win = static_cast<decltype(win)>(data);
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->get_widget()));
+    dialog_cancel_button_cb (NULL, win);
 }
 
-/* gnc_options_dialog_new:
+/** Constructs a GncOptionsDialog
  *
- *   - Opens the dialog-options glade file
- *   - Connects signals specified in the builder file
- *   - Sets the window's title
- *   - Initializes a new GtkNotebook, and adds it to the window
+ * Based on the description in the GtkBuilder file. Initializes signals.
+ * Two component classes might be used, DIALOG_BOOK_OPTIONS_CM_CLASS or DIALOG_OPTIONS_CM_CLASS of which the latter is the default. 
  *
+ * @param modal: If true the "Apply" button is hidden. It doesn't make the dialog run in its own event loop so it's not truly modal.
+ * @param title: The title that will appear in the dialog's title bar.
+ * @param component_class: For registering the dialog in the component manager.
+ * @param parent: The widget for which the dialog will be transient-for.
  */
-GNCOptionWin *
-gnc_options_dialog_new(gchar *title, GtkWindow *parent)
+GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
+                             const char* component_class,
+                           GtkWindow *parent) :
+    m_component_class{component_class ? component_class : DIALOG_OPTIONS_CM_CLASS}
 {
-    return gnc_options_dialog_new_modal(FALSE, title, NULL, parent);
-}
-
-/**
- *   - Opens the dialog-options glade file
- *   - Connects signals specified in the builder file
- *   - Sets the window's title
- *   - Initializes a new GtkNotebook, and adds it to the window
- *   - If modal TRUE, hides 'apply' button
- *   - If component_class is provided, it is used, otherwise,
- *     DIALOG_OPTIONS_CM_CLASS is used; this is used to distinguish the
- *     book-option dialog from report dialogs. The book-option dialog is a
- *     singleton, so if a dialog already exists it will be raised to the top of
- *     the window stack instead of creating a new dialog.
- */
-GNCOptionWin *
-gnc_options_dialog_new_modal(gboolean modal, gchar *title,
-                             const char *component_class,
-                             GtkWindow *parent)
-{
-    GNCOptionWin *retval;
-    GtkBuilder   *builder;
-    GtkWidget    *hbox;
-    gint component_id;
-    GtkWidget    *button;
-
-    retval = g_new0(GNCOptionWin, 1);
-    builder = gtk_builder_new();
+    auto builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-options.glade", "gnucash_options_window");
-    retval->window = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_window"));
-    retval->page_list = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_scroll"));
-    retval->component_class = component_class ? component_class : DIALOG_OPTIONS_CM_CLASS;
-    g_object_set_data(G_OBJECT(retval->window), "optionwin", retval);
+    m_window = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_window"));
+    g_object_ref(m_window);
+    m_page_list = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_scroll"));
+    g_object_set_data(G_OBJECT(m_window), "optionwin", this);
 
     // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(retval->window), "gnc-id-options");
+    gtk_widget_set_name (GTK_WIDGET(m_window), "gnc-id-options");
 
     /* Page List */
-    {
-        GtkTreeView *view;
-        GtkListStore *store;
-        GtkTreeSelection *selection;
-        GtkCellRenderer *renderer;
-        GtkTreeViewColumn *column;
 
-        retval->page_list_view = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_treeview"));
+    m_page_list_view = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_treeview"));
 
-        view = GTK_TREE_VIEW(retval->page_list_view);
+    auto view = GTK_TREE_VIEW(m_page_list_view);
 
-        store = gtk_list_store_new(NUM_COLUMNS, G_TYPE_INT, G_TYPE_STRING);
-        gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
-        g_object_unref(store);
+    auto store = gtk_list_store_new(NUM_COLUMNS, G_TYPE_INT, G_TYPE_STRING);
+    gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+    g_object_unref(store);
 
-        renderer = gtk_cell_renderer_text_new();
-        column = gtk_tree_view_column_new_with_attributes(_("Page"), renderer,
-                 "text", PAGE_NAME, NULL);
-        gtk_tree_view_append_column(view, column);
+    auto renderer = gtk_cell_renderer_text_new();
+    auto column =
+        gtk_tree_view_column_new_with_attributes(_("Page"), renderer,
+                                                 "text", PAGE_NAME,
+                                                 nullptr);
+    gtk_tree_view_append_column(view, column);
 
-        gtk_tree_view_column_set_alignment(column, 0.5);
+    gtk_tree_view_column_set_alignment(column, 0.5);
 
-        selection = gtk_tree_view_get_selection(view);
-        gtk_tree_selection_set_mode(selection, GTK_SELECTION_BROWSE);
-        g_signal_connect (selection, "changed",
-                          G_CALLBACK (dialog_list_select_cb), retval);
-    }
+    auto selection = gtk_tree_view_get_selection(view);
+    gtk_tree_selection_set_mode(selection, GTK_SELECTION_BROWSE);
+    g_signal_connect (selection, "changed",
+                      G_CALLBACK (dialog_list_select_cb), this);
 
-    retval->help_button = GTK_BUTTON(gtk_builder_get_object (builder, "helpbutton"));
-    g_signal_connect(retval->help_button, "clicked", G_CALLBACK(gnc_options_dialog_help_button_cb), retval);
-    retval->cancel_button = GTK_BUTTON(gtk_builder_get_object (builder, "cancelbutton"));
-    g_signal_connect(retval->cancel_button, "clicked", G_CALLBACK(gnc_options_dialog_cancel_button_cb), retval);
-    retval->apply_button = GTK_BUTTON(gtk_builder_get_object (builder, "applybutton"));
-    g_signal_connect(retval->apply_button, "clicked", G_CALLBACK(gnc_options_dialog_apply_button_cb), retval);
-    retval->ok_button = GTK_BUTTON(gtk_builder_get_object (builder, "okbutton"));
-    g_signal_connect(retval->ok_button, "clicked", G_CALLBACK(gnc_options_dialog_ok_button_cb), retval);
+    m_help_button = GTK_BUTTON(gtk_builder_get_object (builder, "helpbutton"));
+    g_signal_connect(m_help_button, "clicked",
+                     G_CALLBACK(dialog_help_button_cb), this);
+    m_cancel_button = GTK_BUTTON(gtk_builder_get_object (builder, "cancelbutton"));
+    g_signal_connect(m_cancel_button, "clicked",
+                     G_CALLBACK(dialog_cancel_button_cb), this);
+    m_apply_button = GTK_BUTTON(gtk_builder_get_object (builder, "applybutton"));
+    g_signal_connect(m_apply_button, "clicked",
+                     G_CALLBACK(dialog_apply_button_cb), this);
+    m_ok_button = GTK_BUTTON(gtk_builder_get_object (builder, "okbutton"));
+    g_signal_connect(m_ok_button, "clicked",
+                     G_CALLBACK(dialog_ok_button_cb), this);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
+                                      this);
 
     // when added to a page of the hierarchy assistant there will be no parent
     if (parent)
-        gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(retval->window),
+        gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window),
                                  parent);
 
     if (title)
-        gtk_window_set_title(GTK_WINDOW(retval->window), title);
+        gtk_window_set_title(GTK_WINDOW(m_window), title);
 
     /* modal */
-    if (modal == TRUE)
-    {
-        GtkWidget *apply_button;
-
-        apply_button = GTK_WIDGET(gtk_builder_get_object (builder, "applybutton"));
-        gtk_widget_hide (apply_button);
-    }
+    if (modal)
+        gtk_widget_hide (GTK_WIDGET(m_apply_button));
 
     /* glade doesn't support a notebook with zero pages */
-    hbox = GTK_WIDGET(gtk_builder_get_object (builder, "notebook_placeholder"));
-    retval->notebook = gtk_notebook_new();
+    auto hbox = GTK_WIDGET(gtk_builder_get_object (builder,
+                                                   "notebook_placeholder"));
+    m_notebook = gtk_notebook_new();
 
-    gtk_widget_set_vexpand (retval->notebook, TRUE);
+    gtk_widget_set_vexpand (m_notebook, TRUE);
 
-    gtk_widget_show(retval->notebook);
-    gtk_box_pack_start(GTK_BOX(hbox), retval->notebook, TRUE, TRUE, 5);
+    gtk_widget_show(m_notebook);
+    gtk_box_pack_start(GTK_BOX(hbox), m_notebook, TRUE, TRUE, 5);
 
-    component_id = gnc_register_gui_component (retval->component_class,
-                                               NULL, component_close_handler,
-                                               retval);
+    auto component_id = gnc_register_gui_component (m_component_class,
+                                                    nullptr,
+                                                    component_close_handler,
+                                                    this);
     gnc_gui_component_set_session (component_id, gnc_get_current_session());
 
-    g_signal_connect (retval->window, "destroy",
-                      G_CALLBACK(gnc_options_dialog_destroy_cb), retval);
+    g_signal_connect (m_window, "destroy", G_CALLBACK(dialog_destroy_cb), this);
 
-    g_signal_connect (retval->window, "key_press_event",
-                      G_CALLBACK(gnc_options_dialog_window_key_press_cb), retval);
+    g_signal_connect (m_window, "key_press_event",
+                      G_CALLBACK(dialog_window_key_press_cb), this);
 
     g_object_unref(G_OBJECT(builder));
+}
 
-    retval->destroyed = FALSE;
-    return retval;
+GncOptionsDialog::~GncOptionsDialog()
+{
+    if (m_destroying)
+        return;
+    m_destroying = true;
+    gnc_unregister_gui_component_by_data(m_component_class, this);
+    g_signal_handlers_disconnect_by_func(m_window, (gpointer)dialog_destroy_cb, this);
+    g_signal_handlers_disconnect_by_func(m_window, (gpointer)dialog_window_key_press_cb, this);
+    g_object_unref(m_window);
 }
 
 void
-gnc_options_dialog_set_apply_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
-                                gpointer data)
+GncOptionsDialog::set_apply_cb(GncOptionsDialogCallback cb, gpointer data) noexcept
 {
-    win->apply_cb = cb;
-    win->apply_cb_data = data;
+    m_apply_cb = cb;
+    m_apply_cb_data = data;
 }
 
 void
-gnc_options_dialog_set_help_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
-                               gpointer data)
+GncOptionsDialog::set_help_cb(GncOptionsDialogCallback cb, gpointer data) noexcept
 {
-    win->help_cb = cb;
-    win->help_cb_data = data;
+    m_help_cb = cb;
+    m_help_cb_data = data;
 }
 
 void
-gnc_options_dialog_set_close_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
-                                gpointer data)
+GncOptionsDialog::set_close_cb( GncOptionsDialogCallback cb, gpointer data) noexcept
 {
-    win->close_cb = cb;
-    win->close_cb_data = data;
+    m_close_cb = cb;
+    m_close_cb_data = data;
 }
 
-/* This is for global program preferences. */
+
+static void
+gnc_book_options_help_cb (GncOptionsDialog *win, gpointer dat)
+{
+    gnc_gnome_help (GTK_WINDOW (win->get_widget()), HF_HELP, HL_BOOK_OPTIONS);
+}
+
 void
-gnc_options_dialog_destroy(GNCOptionWin * win)
+GncOptionsDialog::set_book_help_cb() noexcept
 {
-    if (!win) return;
-
-    gnc_unregister_gui_component_by_data(win->component_class, win);
-
-    win->destroyed = TRUE;
-    gtk_widget_destroy(win->window);
-
-    win->window = NULL;
-    win->notebook = NULL;
-    win->apply_cb = NULL;
-    win->help_cb = NULL;
-    win->component_class = NULL;
-
-    g_free(win);
+    set_help_cb((GncOptionsDialogCallback)gnc_book_options_help_cb, nullptr);
 }
+
+static void
+gnc_global_options_help_cb (GncOptionsDialog *win, gpointer dat)
+{
+    gnc_gnome_help (GTK_WINDOW(win->get_widget()), HF_HELP, HL_GLOBPREFS);
+}
+
+static void
+gnc_style_sheet_options_help_cb (GncOptionsDialog *win, gpointer dat)
+{
+    gnc_gnome_help (GTK_WINDOW(win->get_widget()), HF_HELP, HL_STYLE_SHEET);
+}
+
+void
+GncOptionsDialog::set_style_sheet_help_cb () noexcept
+{
+    set_help_cb ((GncOptionsDialogCallback)gnc_style_sheet_options_help_cb,
+                 nullptr);
+}
+
 
 /* ****************************************************************/
 /* Option Widgets                                      */
@@ -1461,7 +1413,7 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box,
     }
 
     option.set_ui_item_from_option();
-    auto widget{gnc_option_get_gtk_widget(&option)};
+    auto widget{option_get_gtk_widget(&option)};
     if (type == GncOptionUIType::DATE_RELATIVE)
     {
         *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
@@ -1541,7 +1493,7 @@ account_select_all_cb(GtkWidget *widget, gpointer data)
     GncTreeViewAccount *tree_view;
     GtkTreeSelection *selection;
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
+    tree_view = GNC_TREE_VIEW_ACCOUNT(option_get_gtk_widget (option));
     gtk_tree_view_expand_all(GTK_TREE_VIEW(tree_view));
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
     gtk_tree_selection_select_all(selection);
@@ -1555,7 +1507,7 @@ account_clear_all_cb(GtkWidget *widget, gpointer data)
     GncTreeViewAccount *tree_view;
     GtkTreeSelection *selection;
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
+    tree_view = GNC_TREE_VIEW_ACCOUNT(option_get_gtk_widget (option));
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
     gtk_tree_selection_unselect_all(selection);
     gnc_option_changed_widget_cb(widget, option);
@@ -1568,7 +1520,7 @@ account_select_children_cb(GtkWidget *widget, gpointer data)
     GncTreeViewAccount *tree_view;
     GList *acct_list = NULL, *acct_iter = NULL;
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
+    tree_view = GNC_TREE_VIEW_ACCOUNT(option_get_gtk_widget (option));
     acct_list = gnc_tree_view_account_get_selected_accounts (tree_view);
 
     for (acct_iter = acct_list; acct_iter; acct_iter = acct_iter->next)
@@ -1593,7 +1545,7 @@ show_hidden_toggled_cb(GtkWidget *widget, GncOption* option)
         option->get_ui_type() != GncOptionUIType::ACCOUNT_SEL)
         return;
 
-    auto tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget(option));
+    auto tree_view = GNC_TREE_VIEW_ACCOUNT(option_get_gtk_widget(option));
     AccountViewInfo avi;
     gnc_tree_view_account_get_view_info (tree_view, &avi);
     avi.show_hidden = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1795,7 +1747,7 @@ create_option_widget<GncOptionUIType::ACCOUNT_LIST>(GncOption& option,
     gtk_grid_attach (GTK_GRID(page_box), *enclosing, 1, grid_row, 1, 1);
     *packed = TRUE;
 
-    auto widget = gnc_option_get_gtk_widget(&option);
+    auto widget = option_get_gtk_widget(&option);
 
     auto selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
     g_signal_connect(G_OBJECT(selection), "changed",
@@ -1858,7 +1810,7 @@ create_option_widget<GncOptionUIType::ACCOUNT_SEL> (GncOption& option,
 static void
 list_changed_cb(GtkTreeSelection *selection, GncOption* option)
 {
-    GtkTreeView *view = GTK_TREE_VIEW(gnc_option_get_gtk_widget (option));
+    GtkTreeView *view = GTK_TREE_VIEW(option_get_gtk_widget (option));
     gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
 }
 
@@ -1869,7 +1821,7 @@ list_select_all_cb(GtkWidget *widget, gpointer data)
     GtkTreeView *view;
     GtkTreeSelection *selection;
 
-    view = GTK_TREE_VIEW(gnc_option_get_gtk_widget(option));
+    view = GTK_TREE_VIEW(option_get_gtk_widget(option));
     selection = gtk_tree_view_get_selection(view);
     gtk_tree_selection_select_all(selection);
     gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
@@ -1882,7 +1834,7 @@ list_clear_all_cb(GtkWidget *widget, gpointer data)
     GtkTreeView *view;
     GtkTreeSelection *selection;
 
-    view = GTK_TREE_VIEW(gnc_option_get_gtk_widget(option));
+    view = GTK_TREE_VIEW(option_get_gtk_widget(option));
     selection = gtk_tree_view_get_selection(view);
     gtk_tree_selection_unselect_all(selection);
     gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
@@ -2018,7 +1970,7 @@ create_option_widget<GncOptionUIType::LIST> (GncOption& option,
                                     (G_OBJECT(page_box), "options-grid-row"));
 
     *enclosing = create_list_widget(option, NULL);
-    auto value = gnc_option_get_gtk_widget(&option);
+    auto value = option_get_gtk_widget(&option);
 
     align_label (name_label);
 
@@ -2351,7 +2303,7 @@ radiobutton_set_cb(GtkWidget *w, gpointer data)
     gpointer _current, _new_value;
     gint current, new_value;
 
-    auto widget = gnc_option_get_gtk_widget(option);
+    auto widget = option_get_gtk_widget(option);
 
     _current = g_object_get_data(G_OBJECT(widget), "gnc_radiobutton_index");
     current = GPOINTER_TO_INT (_current);
@@ -2513,7 +2465,7 @@ gnc_plot_size_option_set_select_method(GncOption& option, bool set_buttons)
     GtkWidget *px_widget, *p_widget;
     GtkWidget *widget;
 
-    widget = gnc_option_get_gtk_widget(&option);
+    widget = option_get_gtk_widget(&option);
 
     widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
     // px_button item 0
@@ -2724,8 +2676,8 @@ create_option_widget<GncOptionUIType::BUDGET> (GncOption& option,
     return widget;
 }
 
-void
-gnc_options_ui_initialize(void)
+static void
+gnc_options_ui_factory_initialize(void)
 {
     GncOptionUIFactory::set_func(GncOptionUIType::BOOLEAN,
                                  create_option_widget<GncOptionUIType::BOOLEAN>);
@@ -2781,43 +2733,9 @@ gnc_options_dialog_set_new_book_option_values (GncOptionDB *odb)
     {
         auto option{odb->find_option(OPTION_SECTION_ACCOUNTS,
                                     OPTION_NAME_NUM_FIELD_SOURCE)};
-        auto num_source_button{gnc_option_get_gtk_widget(option)};
+        auto num_source_button{option_get_gtk_widget(option)};
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (num_source_button),
                                       num_split_action);
     }
 }
 
-
-static void
-gnc_book_options_help_cb (GNCOptionWin *win, gpointer dat)
-{
-    gnc_gnome_help (GTK_WINDOW (win), HF_HELP, HL_BOOK_OPTIONS);
-}
-
-void
-gnc_options_dialog_set_book_options_help_cb (GNCOptionWin *win)
-{
-    gnc_options_dialog_set_help_cb(win,
-                                (GNCOptionWinCallback)gnc_book_options_help_cb,
-                                nullptr);
-}
-
-static void
-gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
-{
-    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_GLOBPREFS);
-}
-
-static void
-gnc_style_sheet_options_help_cb (GNCOptionWin *win, gpointer dat)
-{
-    gnc_gnome_help (GTK_WINDOW(gnc_options_dialog_widget (win)), HF_HELP, HL_STYLE_SHEET);
-}
-
-void
-gnc_options_dialog_set_style_sheet_options_help_cb (GNCOptionWin *win)
-{
-    gnc_options_dialog_set_help_cb (win,
-                                   (GNCOptionWinCallback)gnc_style_sheet_options_help_cb,
-                                    NULL);
-}

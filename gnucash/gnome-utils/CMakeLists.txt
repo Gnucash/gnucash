@@ -132,7 +132,6 @@ set (gnome_utils_HEADERS
   dialog-file-access.h
   dialog-preferences.h
   dialog-object-references.h
-  dialog-options.h
   dialog-query-view.h
   dialog-reset-warnings.h
   dialog-totd.h

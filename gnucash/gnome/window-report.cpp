@@ -36,7 +36,6 @@ extern "C"
 #include <sys/stat.h>
 
 #include "swig-runtime.h"
-#include "dialog-options.h"
 #include "gnc-guile-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
@@ -45,6 +44,7 @@ extern "C"
 
 #include "gnc-plugin-page-report.h"
 }
+#include "dialog-options.hpp"
 #include "dialog-report-column-view.hpp"
 
 /********************************************************************
@@ -65,30 +65,29 @@ reportWindow(int report_id, GtkWindow *parent)
 
 struct report_default_params_data
 {
-    GNCOptionWin * win;
+    GncOptionsDialog * win;
     GncOptionDB  * odb;
     SCM          cur_report;
 };
 
 
 static void
-gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
+gnc_options_dialog_apply_cb(GncOptionsDialog *opt_dialog,
                             gpointer user_data)
 {
     SCM  dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     auto win{static_cast<struct report_default_params_data*>(user_data)};
-    GList *results = nullptr, *iter;
 
     if (!win) return;
-    results = gnc_option_db_commit (win->odb);
-    for (iter = results; iter; iter = iter->next)
+    auto results = gnc_option_db_commit (win->odb);
+    for (auto iter = results; iter; iter = iter->next)
     {
-        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW (win->win),
-                                                 static_cast<GtkDialogFlags>(0),
-                                                   GTK_MESSAGE_ERROR,
-                                                   GTK_BUTTONS_OK,
-                                                   "%s",
-                                                   (char*)iter->data);
+        auto dialog = gtk_message_dialog_new(GTK_WINDOW (win->win),
+                                             static_cast<GtkDialogFlags>(0),
+                                             GTK_MESSAGE_ERROR,
+                                             GTK_BUTTONS_OK,
+                                             "%s",
+                                             (char*)iter->data);
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         g_free (iter->data);
@@ -99,33 +98,32 @@ gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
 }
 
 static void
-gnc_options_dialog_help_cb(GNCOptionWin * propertybox,
+gnc_options_dialog_help_cb(GncOptionsDialog *opt_dialog,
                            gpointer user_data)
 {
-    GtkWidget *dialog, *parent;
     auto prm{static_cast<struct report_default_params_data*>(user_data)};
 
-    parent = gnc_options_dialog_widget(prm->win);
-    dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
-                                    GTK_DIALOG_DESTROY_WITH_PARENT,
-                                    GTK_MESSAGE_INFO,
-                                    GTK_BUTTONS_OK,
-                                    "%s",
-                                    _("Set the report options you want using this dialog."));
+    auto parent = prm->win->get_widget();
+    auto dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_INFO,
+                                         GTK_BUTTONS_OK,
+                                         "%s",
+                                         _("Set the report options you want using this dialog."));
     g_signal_connect(G_OBJECT(dialog), "response",
                      (GCallback)gtk_widget_destroy, nullptr);
     gtk_widget_show(dialog);
 }
 
 static void
-gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
+gnc_options_dialog_close_cb(GncOptionsDialog *opt_dialog,
                             gpointer user_data)
 {
     auto win{static_cast<struct report_default_params_data*>(user_data)};
     SCM    set_editor = scm_c_eval_string("gnc:report-set-editor-widget!");
 
     scm_call_2(set_editor, win->cur_report, SCM_BOOL_F);
-    gnc_options_dialog_destroy(win->win);
+    delete win->win;
     gnc_option_db_destroy(win->odb);
     g_free(win);
 }
@@ -183,24 +181,18 @@ gnc_report_window_default_params_editor(GncOptionDB* odb, SCM report,
         }
 
         /* Don't forget to translate the window title */
-        prm->win  = gnc_options_dialog_new((gchar*) (title && *title ? _(title) : ""), parent);
+        prm->win  = new GncOptionsDialog((gchar*) (title && *title ? _(title) : ""), parent);
 
         g_free ((gpointer *) title);
 
         scm_gc_protect_object(prm->cur_report);
 
-        gnc_options_dialog_build_contents(prm->win, prm->odb);
+        prm->win->build_contents(prm->odb);
 
-        gnc_options_dialog_set_apply_cb(prm->win,
-                                        gnc_options_dialog_apply_cb,
-                                        (gpointer)prm);
-        gnc_options_dialog_set_help_cb(prm->win,
-                                       gnc_options_dialog_help_cb,
-                                       (gpointer)prm);
-        gnc_options_dialog_set_close_cb(prm->win,
-                                        gnc_options_dialog_close_cb,
-                                        (gpointer)prm);
-        return gnc_options_dialog_widget(prm->win);
+        prm->win->set_apply_cb(gnc_options_dialog_apply_cb, (gpointer)prm);
+        prm->win->set_help_cb(gnc_options_dialog_help_cb, (gpointer)prm);
+        prm->win->set_close_cb(gnc_options_dialog_close_cb, (gpointer)prm);
+        return prm->win->get_widget();
     }
 }
 

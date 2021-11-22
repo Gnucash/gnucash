@@ -44,7 +44,6 @@ extern "C"
 #endif
 #include "gnc-account-merge.h"
 #include "dialog-new-user.h"
-#include "dialog-options.h"
 #include "dialog-utils.h"
 #include "dialog-file-access.h"
 #include "assistant-hierarchy.h"
@@ -68,7 +67,7 @@ extern "C"
 
 #include "gnc-engine.h"
 }
-
+#include <dialog-options.hpp>
 #include <gnc-optiondb.h>
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
@@ -125,7 +124,7 @@ typedef struct
     gboolean new_book;  /* presumably only used for new book creation but we check*/
 
     GncOptionDB *options;
-    GNCOptionWin *optionwin;
+    GncOptionsDialog *optionwin;
 
     GncHierarchyAssistantFinishedCallback when_completed;
 
@@ -1397,7 +1396,7 @@ on_cancel (GtkAssistant      *gtkassistant,
 {
     gnc_suspend_gui_refresh ();
     if (data->new_book)
-        gnc_options_dialog_destroy (data->optionwin);
+        delete data->optionwin;
 
     delete_hierarchy_dialog (data);
     delete_our_account_tree (data);
@@ -1445,7 +1444,7 @@ on_finish (GtkAssistant  *gtkassistant,
 
     gnc_suspend_gui_refresh ();
     if (data->new_book)
-        gnc_options_dialog_destroy (data->optionwin);
+        delete data->optionwin;
 
     account_trees_merge(gnc_get_current_root_account(), data->our_account_tree);
 
@@ -1504,19 +1503,18 @@ on_select_currency_prepare (hierarchy_data  *data)
  * dialog to make it clean up after itself.
  */
 static void
-book_options_dialog_close_cb(GNCOptionWin * optionwin,
-                               gpointer user_data)
+book_options_dialog_close_cb(GncOptionsDialog *optionwin,
+                             gpointer user_data)
 {
     auto options{static_cast<GncOptionDB*>(user_data)};
 
-    gnc_options_dialog_destroy(optionwin);
+    delete optionwin;
     gnc_option_db_destroy(options);
 }
 
 static void
 assistant_insert_book_options_page (hierarchy_data *data)
 {
-    GtkWidget *options, *parent;
     GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
 
@@ -1527,17 +1525,17 @@ assistant_insert_book_options_page (hierarchy_data *data)
     gnc_option_db_clean (data->options);
 
     /* The options dialog gets added to the notebook so it doesn't need a parent.*/
-    data->optionwin = gnc_options_dialog_new_modal (TRUE, _("New Book Options"),
-                                                    DIALOG_BOOK_OPTIONS_CM_CLASS, nullptr);
-    gnc_options_dialog_build_contents_full (data->optionwin, data->options, FALSE);
+    data->optionwin = new GncOptionsDialog(true, _("New Book Options"),
+                                           DIALOG_BOOK_OPTIONS_CM_CLASS,
+                                           nullptr);
+    data->optionwin->build_contents(data->options, false);
 
-    gnc_options_dialog_set_close_cb (data->optionwin,
-                                     book_options_dialog_close_cb,
-                                     (gpointer)data->options);
+    data->optionwin->set_close_cb(book_options_dialog_close_cb,
+                                  (gpointer)data->options);
     gnc_options_dialog_set_new_book_option_values (data->options);
 
-    options = gnc_options_dialog_notebook (data->optionwin);
-    parent = gtk_widget_get_parent (options);
+    auto options = data->optionwin->get_notebook();
+    auto parent = gtk_widget_get_parent (options);
 
     g_object_ref (options);
     gtk_container_remove (GTK_CONTAINER(parent), options);

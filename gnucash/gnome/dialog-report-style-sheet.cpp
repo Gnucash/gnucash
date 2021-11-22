@@ -39,8 +39,9 @@ extern "C"
 #include "gnc-guile-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
+#include <guile-mappings.h>
 }
-#include "dialog-options.h"
+#include <dialog-options.hpp>
 #include <gnc-optiondb.h>
 
 #define DIALOG_STYLE_SHEETS_CM_CLASS "style-sheets-dialog"
@@ -60,7 +61,7 @@ struct _stylesheetdialog
 
 typedef struct ss_info
 {
-    GNCOptionWin  * odialog;
+    GncOptionsDialog  * odialog;
     GncOptionDB   * odb;
     SCM           stylesheet;
     GtkTreeRowReference *row_ref;
@@ -109,7 +110,7 @@ dirty_same_stylesheet (gpointer key, gpointer val, gpointer data)
 }
 
 static void
-gnc_style_sheet_options_apply_cb (GNCOptionWin * propertybox,
+gnc_style_sheet_options_apply_cb (GncOptionsDialog * propertybox,
                                   gpointer user_data)
 {
     ss_info * ssi = (ss_info *)user_data;
@@ -138,16 +139,16 @@ gnc_style_sheet_options_apply_cb (GNCOptionWin * propertybox,
 }
 
 static void
-gnc_style_sheet_options_close_cb (GNCOptionWin * propertybox,
+gnc_style_sheet_options_close_cb (GncOptionsDialog *opt_dialog,
                                   gpointer user_data)
 {
     auto ssi{static_cast<ss_info*>(user_data)};
-    GtkTreeIter iter;
 
     if (gtk_tree_row_reference_valid (ssi->row_ref))
     {
-        StyleSheetDialog * ss = gnc_style_sheet_dialog;
-        GtkTreePath *path = gtk_tree_row_reference_get_path (ssi->row_ref);
+        auto ss = gnc_style_sheet_dialog;
+        auto path = gtk_tree_row_reference_get_path (ssi->row_ref);
+        GtkTreeIter iter;
         if (gtk_tree_model_get_iter (GTK_TREE_MODEL(ss->list_store), &iter, path))
             gtk_list_store_set (ss->list_store, &iter,
                                 COLUMN_DIALOG, NULL,
@@ -155,7 +156,7 @@ gnc_style_sheet_options_close_cb (GNCOptionWin * propertybox,
         gtk_tree_path_free (path);
     }
     gtk_tree_row_reference_free (ssi->row_ref);
-    gnc_options_dialog_destroy (ssi->odialog);
+    delete ssi->odialog;
     gnc_option_db_destroy (ssi->odb);
     scm_gc_unprotect_object (ssi->stylesheet);
     g_free (ssi);
@@ -171,32 +172,24 @@ gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
 
     SCM            scm_dispatch = scm_call_1 (get_options, sheet_info);
     ss_info        * ssinfo = g_new0 (ss_info, 1);
-    GtkWidget      * window;
     gchar          * title;
     GtkWindow      * parent = GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(ss->list_view)));
 
     title = g_strdup_printf(_("HTML Style Sheet Properties: %s"), name);
-    ssinfo->odialog = gnc_options_dialog_new(title, parent);
+    ssinfo->odialog = new GncOptionsDialog(title, parent);
     ssinfo->odb     = gnc_get_optiondb_from_dispatcher(scm_dispatch);
     ssinfo->stylesheet = sheet_info;
     ssinfo->row_ref    = row_ref;
     g_free (title);
 
     scm_gc_protect_object (ssinfo->stylesheet);
-    g_object_ref (gnc_options_dialog_widget (ssinfo->odialog));
+    g_object_ref (ssinfo->odialog->get_widget());
 
-    gnc_options_dialog_build_contents (ssinfo->odialog,
-                                       ssinfo->odb);
+    ssinfo->odialog->build_contents(ssinfo->odb);
 
-//    gnc_options_dialog_set_style_sheet_options_help_cb (ssinfo->odialog);
-
-    gnc_options_dialog_set_apply_cb (ssinfo->odialog,
-                                     gnc_style_sheet_options_apply_cb,
-                                     ssinfo);
-    gnc_options_dialog_set_close_cb (ssinfo->odialog,
-                                     gnc_style_sheet_options_close_cb,
-                                     ssinfo);
-    window = gnc_options_dialog_widget (ssinfo->odialog);
+    ssinfo->odialog->set_apply_cb(gnc_style_sheet_options_apply_cb, ssinfo);
+    ssinfo->odialog->set_close_cb(gnc_style_sheet_options_close_cb, ssinfo);
+    auto window = ssinfo->odialog->get_widget();
     gtk_window_set_transient_for (GTK_WINDOW(window),
                                   GTK_WINDOW(gnc_style_sheet_dialog->toplevel));
     gtk_window_set_destroy_with_parent (GTK_WINDOW(window), TRUE);

@@ -40,7 +40,7 @@ extern "C"
 }
 
 #include "dialog-report-column-view.hpp"
-#include "dialog-options.h"
+#include <dialog-options.hpp>
 #include <gnc-optiondb.h>
 
 enum available_cols
@@ -61,7 +61,7 @@ enum contents_cols
 
 struct gncp_column_view_edit
 {
-    GNCOptionWin * optwin;
+    GncOptionsDialog * optwin;
     GtkTreeView  * available;
     GtkTreeView  * contents;
 
@@ -95,7 +95,7 @@ gnc_column_view_set_option(GncOptionDB* odb, const char* section,
 static void
 gnc_column_view_edit_destroy(gnc_column_view_edit * view)
 {
-    gnc_options_dialog_destroy(view->optwin);
+    delete view->optwin;
     scm_gc_unprotect_object(view->view);
     gnc_option_db_destroy(view->odb);
     g_free(view);
@@ -273,18 +273,17 @@ gnc_column_view_update_buttons_cb (GtkTreeSelection *selection,
 }
 
 static void
-gnc_column_view_edit_apply_cb(GNCOptionWin * w, gpointer user_data)
+gnc_column_view_edit_apply_cb(GncOptionsDialog *dlg, gpointer user_data)
 {
     SCM  dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     auto win{static_cast<gnc_column_view_edit*>(user_data)};
-    GList *results = nullptr, *iter;
 
     if (!win) return;
-    results = gnc_option_db_commit (win->odb);
-    for (iter = results; iter; iter = iter->next)
+    auto results = gnc_option_db_commit (dlg->get_option_db());
+    for (auto iter = results; iter; iter = iter->next)
     {
         GtkWidget *dialog =
-            gtk_message_dialog_new(GTK_WINDOW(gnc_options_dialog_widget(w)),
+            gtk_message_dialog_new(GTK_WINDOW(dlg->get_widget()),
                                    GTK_DIALOG_MODAL,
                                    GTK_MESSAGE_ERROR,
                                    GTK_BUTTONS_OK,
@@ -300,7 +299,7 @@ gnc_column_view_edit_apply_cb(GNCOptionWin * w, gpointer user_data)
 }
 
 static void
-gnc_column_view_edit_close_cb(GNCOptionWin * win, gpointer user_data)
+gnc_column_view_edit_close_cb(GncOptionsDialog *win, gpointer user_data)
 {
     auto r{static_cast<gnc_column_view_edit*>(user_data)};
     SCM set_editor = scm_c_eval_string("gnc:report-set-editor-widget!");
@@ -340,10 +339,10 @@ gnc_column_view_edit_options(GncOptionDB* odb, SCM view)
         gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
         GtkBuilder *builder;
 
-        r->optwin = gnc_options_dialog_new (nullptr, GTK_WINDOW(gnc_ui_get_main_window (nullptr)));
+        r->optwin = new GncOptionsDialog(nullptr, GTK_WINDOW(gnc_ui_get_main_window (nullptr)));
 
         /* Hide the generic dialog page list. */
-        gtk_widget_hide(gnc_options_page_list(r->optwin));
+        gtk_widget_hide(r->optwin->get_page_list());
 
         builder = gtk_builder_new();
         gnc_builder_add_from_file (builder, "dialog-report.glade", "view_contents_table");
@@ -364,10 +363,9 @@ gnc_column_view_edit_options(GncOptionDB* odb, SCM view)
         r->contents_list = SCM_EOL;
         r->odb       = odb;
 
-        gnc_options_dialog_build_contents(r->optwin, r->odb);
+        r->optwin->build_contents(r->odb);
 
-        gtk_notebook_append_page(GTK_NOTEBOOK(gnc_options_dialog_notebook
-                                              (r->optwin)),
+        gtk_notebook_append_page(GTK_NOTEBOOK(r->optwin->get_notebook()),
                                  editor,
                                  gtk_label_new(_("Contents")));
 
@@ -424,18 +422,16 @@ gnc_column_view_edit_options(GncOptionDB* odb, SCM view)
         update_available_lists(r);
         update_contents_lists(r);
 
-        gnc_options_dialog_set_apply_cb(r->optwin,
-                                        gnc_column_view_edit_apply_cb, r);
-        gnc_options_dialog_set_close_cb(r->optwin,
-                                        gnc_column_view_edit_close_cb, r);
+        r->optwin->set_apply_cb(gnc_column_view_edit_apply_cb, r);
+        r->optwin->set_close_cb(gnc_column_view_edit_close_cb, r);
 
-        gtk_widget_show(gnc_options_dialog_widget(r->optwin));
+        gtk_widget_show(r->optwin->get_widget());
 
         gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, r);
 
         g_object_unref(G_OBJECT(builder));
 
-        return gnc_options_dialog_widget(r->optwin);
+        return r->optwin->get_widget();
     }
 }
 
@@ -509,7 +505,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
 
         gnc_column_view_set_option(r->odb, "__general", "report-list",
                                    r->contents_list);
-        gnc_options_dialog_changed (r->optwin);
+        r->optwin->changed ();
     }
     g_free (guid_str);
     update_contents_lists(r);
@@ -552,7 +548,7 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data)
         gnc_column_view_set_option(r->odb, "__general", "report-list",
                                    r->contents_list);
 
-        gnc_options_dialog_changed (r->optwin);
+        r->optwin->changed();
     }
     update_contents_lists(r);
 }
@@ -589,7 +585,7 @@ gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data)
         gnc_column_view_set_option(r->odb, "__general", "report-list",
                                    r->contents_list);
 
-        gnc_options_dialog_changed (r->optwin);
+        r->optwin->changed();
 
         update_contents_lists(r);
     }
@@ -627,7 +623,7 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data)
         gnc_column_view_set_option(r->odb, "__general", "report-list",
                                    r->contents_list);
 
-        gnc_options_dialog_changed (r->optwin);
+        r->optwin->changed();
 
         update_contents_lists(r);
     }
@@ -684,7 +680,7 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
                                               scm_from_int (r->contents_selected),
                                               current);
             scm_gc_protect_object(r->contents_list);
-            gnc_options_dialog_changed (r->optwin);
+            r->optwin->changed();
             update_contents_lists(r);
         }
 
