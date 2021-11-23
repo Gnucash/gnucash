@@ -94,6 +94,7 @@
 ;;General
 (define optname-startdate (N_ "Start Date"))
 (define optname-enddate (N_ "End Date"))
+(define optname-date-source (N_ "Date Filter"))
 (define optname-table-export (N_ "Table for Exporting"))
 (define optname-infobox-display (N_ "Add options summary"))
 
@@ -510,6 +511,15 @@ in the Options panel."))
 
   (gnc:options-add-date-interval!
    options gnc:pagename-general optname-startdate optname-enddate "a")
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    gnc:pagename-general optname-date-source
+    "a5" (G_ "Specify date to filter by...")
+    'posted
+    (list (vector 'posted (G_ "Date Posted"))
+          (vector 'reconciled (G_ "Reconciled Date"))
+          (vector 'entered (G_ "Date Entered")))))
 
   (gnc:register-trep-option
    (gnc:make-complex-boolean-option
@@ -1933,7 +1943,8 @@ be excluded from periodic reporting.")
   ;; #:empty-report-message - a str or html-object displayed at the initial run
   ;; #:custom-split-filter - a split->bool function to add to the split filter
   ;; #:split->date - a split->time64 which overrides the default posted date filter
-  ;;     (see reconcile report)
+  ;;     if a derived report specifies this, the Date Filter option
+  ;;     becomes unused and should be hidden via gnc:option-make-internal!
   ;; #:split->date-include-false? - addendum to above, specifies filter behaviour if
   ;;     split->date returns #f. useful to include unreconciled splits in reconcile
   ;;     report. it can be useful for alternative date filtering, e.g. filter by
@@ -1985,6 +1996,9 @@ be excluded from periodic reporting.")
          (enddate (gnc:time64-end-day-time
                    (gnc:date-option-absolute-time
                     (opt-val gnc:pagename-general optname-enddate))))
+         (date-source (if split->date
+                          'custom
+                          (opt-val gnc:pagename-general optname-date-source)))
          (transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
          (transaction-filter-case-insensitive?
           (opt-val pagename-filter optname-transaction-matcher-caseinsensitive))
@@ -2127,7 +2141,7 @@ be excluded from periodic reporting.")
       (qof-query-set-book query (gnc-get-current-book))
       (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
       (xaccQueryAddClearedMatch query cleared-filter QOF-QUERY-AND)
-      (unless split->date
+      (when (eq? date-source 'posted)
         (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND))
       (when (boolean? closing-match)
         (xaccQueryAddClosingTransMatch query closing-match QOF-QUERY-AND))
@@ -2156,11 +2170,19 @@ be excluded from periodic reporting.")
         (filter
          (lambda (split)
            (let* ((trans (xaccSplitGetParent split)))
-             (and (or (not split->date)
-                      (let ((date (split->date split)))
+             (and (case date-source
+                    ((posted) #t)
+                    ((reconciled)
+                     (if (char=? (xaccSplitGetReconcile split) #\y)
+                         (<= begindate (xaccSplitGetDateReconciled split) enddate)
+                         #t))
+                    ((entered) (<= begindate (xaccTransRetDateEntered trans) enddate))
+                    ((custom)
+                     (let ((date (split->date split)))
                         (if date
                             (<= begindate date enddate)
                             split->date-include-false?)))
+                    (else (gnc:warn "invalid date-source" date-source) #t))
                   (case filter-mode
                     ((none) #t)
                     ((include) (is-filter-member split c_account_2))

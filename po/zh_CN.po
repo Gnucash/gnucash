@@ -18,13 +18,14 @@
 # cjh <cjh@cjh0613.com>, 2021.
 # Eric <spice2wolf@gmail.com>, 2021.
 # J0kWang <lianjiefly@gmail.com>, 2021.
+# YTX <ytx.cash@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8-pot2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-10-23 12:39+0000\n"
+"PO-Revision-Date: 2021-11-16 06:41+0000\n"
 "Last-Translator: cjh <cjh@cjh0613.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
@@ -33,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -475,7 +476,7 @@ msgid ""
 "The GnuCash developers are easy to contact. As well as several mailing "
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
-msgstr "联系开发者，除了写邮件，还可以 IRC 聊天，在 irc.gnome.org#gnucash"
+msgstr "联系开发者，除了邮件，还可以通过 IRC ，地址 irc.gnome.org#gnucash"
 
 #: doc/tip_of_the_day.list.c:13
 msgid ""
@@ -1710,7 +1711,7 @@ msgstr "商业关联的凭证"
 
 #: gnucash/gnome/dialog-employee.c:213
 msgid "You must enter a Payment-Address Name."
-msgstr "请输入\"信息 -> 名称\"。"
+msgstr "请输入\"联络 -> 名称\"。"
 
 #: gnucash/gnome/dialog-employee.c:308
 msgid "Edit Employee"
@@ -11195,7 +11196,7 @@ msgstr "收入、支出科目余额显示为相反数。"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:110
 msgid "Use account colors in the account hierarchy"
-msgstr "在帐户层次结构中使用帐户颜色"
+msgstr "在科目层中使用颜色来标识"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:111
 msgid ""
@@ -21982,7 +21983,7 @@ msgstr "全部"
 
 #: gnucash/report/options-utilities.scm:100
 msgid "Show accounts to this depth, overriding any other option."
-msgstr "显示科目至此深度，无视其它任何选项。"
+msgstr "科目树显示至此层数，忽略其它任何选项。"
 
 #: gnucash/report/options-utilities.scm:108
 msgid ""
@@ -22657,7 +22658,7 @@ msgstr "显示以星期几区分的支出合计饼图"
 #: gnucash/report/reports/standard/income-statement.scm:64
 #: gnucash/report/reports/standard/trial-balance.scm:79
 msgid "Levels of Subaccounts"
-msgstr "深度"
+msgstr "层数"
 
 #: gnucash/report/reports/example/daily-reports.scm:61
 #: gnucash/report/reports/standard/account-piecharts.scm:74
@@ -22669,7 +22670,7 @@ msgstr "显示合计"
 #: gnucash/report/reports/standard/category-barchart.scm:130
 #: gnucash/report/reports/standard/net-charts.scm:92
 msgid "Report on these accounts, if chosen account level allows."
-msgstr "如果选择的科目级别允许，提出这些科目的报表。"
+msgstr "如果设置的科目层数允许，显示这些科目的报表。"
 
 #: gnucash/report/reports/example/daily-reports.scm:109
 #: gnucash/report/reports/standard/account-piecharts.scm:156
@@ -23359,7 +23360,7 @@ msgstr "无均值"
 #: gnucash/report/reports/standard/income-statement.scm:66
 #: gnucash/report/reports/standard/trial-balance.scm:81
 msgid "Maximum number of levels in the account tree displayed."
-msgstr "显示的账户树中的最大级别数。"
+msgstr "科目树的最高显示层数。"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:149
 #: gnucash/report/reports/standard/category-barchart.scm:149
@@ -23451,25 +23452,25 @@ msgstr "公司/个人的名称。"
 
 #: gnucash/report/reports/standard/account-summary.scm:91
 msgid "Depth limit behavior"
-msgstr "深度限制行为"
+msgstr "规则"
 
 #: gnucash/report/reports/standard/account-summary.scm:95
 msgid "How to treat accounts which exceed the specified depth limit (if any)."
-msgstr "如何处理超过指定深度限制（如果有的话）的账户。"
+msgstr "如何处理超过层数限制（假如存在）的科目。"
 
 #: gnucash/report/reports/standard/account-summary.scm:96
 msgid ""
 "Show the total balance, including balances in subaccounts, of any account at "
 "the depth limit."
-msgstr "显示余额合计，在深度限制内包含子科目余额。"
+msgstr "合并超过层数限制科目的余额。"
 
 #: gnucash/report/reports/standard/account-summary.scm:97
 msgid "Raise accounts deeper than the depth limit to the depth limit."
-msgstr "将深度超过深度限制的科目提升至深度限制。"
+msgstr "提升超过层数限制的科目。"
 
 #: gnucash/report/reports/standard/account-summary.scm:98
 msgid "Omit any accounts deeper than the depth limit."
-msgstr "省略任何超过深度限制的账户。"
+msgstr "忽略超过层数限制的科目。"
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
@@ -23653,7 +23654,7 @@ msgstr "显示所使用的汇率。"
 
 #: gnucash/report/reports/standard/account-summary.scm:194
 msgid "Recursive Balance"
-msgstr "递归余额"
+msgstr "合并余额"
 
 #: gnucash/report/reports/standard/account-summary.scm:195
 msgid "Raise Accounts"
@@ -23661,7 +23662,7 @@ msgstr "提升科目"
 
 #: gnucash/report/reports/standard/account-summary.scm:196
 msgid "Omit Accounts"
-msgstr "省略科目"
+msgstr "忽略科目"
 
 #. Translators: This is part of the report title, which is capitalzed in English, but not all other languages
 #: gnucash/report/reports/standard/account-summary.scm:325
@@ -23952,7 +23953,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget.scm:89
 #: gnucash/report/reports/standard/income-statement.scm:67
 msgid "Flatten list to depth limit"
-msgstr "铺平列表至深度限制的深度"
+msgstr "铺平列表至限制的层数"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:94
 #: gnucash/report/reports/standard/balsheet-eg.scm:152
@@ -23961,7 +23962,7 @@ msgstr "铺平列表至深度限制的深度"
 #: gnucash/report/reports/standard/budget.scm:91
 #: gnucash/report/reports/standard/income-statement.scm:69
 msgid "Displays accounts which exceed the depth limit at the depth limit."
-msgstr "在深度限制处显示超过深度限制的账户。"
+msgstr "显示超过层数限制的科目。"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:113
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:79
@@ -24743,7 +24744,7 @@ msgstr "损益"
 #: gnucash/report/reports/standard/budget.scm:45
 #: gnucash/report/reports/standard/cash-flow.scm:45
 msgid "Account Display Depth"
-msgstr "深度"
+msgstr "层数"
 
 #: gnucash/report/reports/standard/budget.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:46

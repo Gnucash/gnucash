@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-04 15:34+0000\n"
+"PO-Revision-Date: 2021-11-20 09:53+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -2248,7 +2248,7 @@ msgstr "פעולת הרישום בוטלה מאחר ולא נמצאו שערי �
 
 #: gnucash/gnome/dialog-invoice.c:1420
 msgid "Total:"
-msgstr "סך הכל:"
+msgstr "סך־הכול:"
 
 #: gnucash/gnome/dialog-invoice.c:1426
 msgid "Subtotal:"
@@ -2260,11 +2260,11 @@ msgstr "מס:"
 
 #: gnucash/gnome/dialog-invoice.c:1431
 msgid "Total Cash:"
-msgstr "סך הכל מזומן:"
+msgstr "סך־הכול מזומן:"
 
 #: gnucash/gnome/dialog-invoice.c:1432
 msgid "Total Charge:"
-msgstr "סך הכל חיוב:"
+msgstr "סך־הכול חיוב:"
 
 #: gnucash/gnome/dialog-invoice.c:1901 gnucash/gnome/dialog-payment.c:1377
 #: gnucash/gtkbuilder/dialog-invoice.glade:857
@@ -3394,7 +3394,7 @@ msgstr "יתרת תקציב"
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:1906
 msgid "Total"
-msgstr "סך הכל"
+msgstr "סך־הכול"
 
 #: gnucash/gnome/gnc-plugin-account-tree.c:59
 msgid "New Accounts _Page"
@@ -3817,7 +3817,7 @@ msgstr "פתיחת דו־שיח חיפוש שובר הוצאות"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
 msgid "Business Linked Documents"
-msgstr "עסקי – צרופות"
+msgstr "צרופות"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
 msgid "View all Linked Business Documents"
@@ -5810,7 +5810,7 @@ msgstr "‮יצוא‬"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.c:1140
 msgid "Save Config"
-msgstr "שמירת תצורה"
+msgstr "שמירת תצורת דוח"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. to be used as toolbar button label.
@@ -9449,11 +9449,11 @@ msgstr "מינימום עתידי (דוח)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:931
 msgid "Total (Report)"
-msgstr "סך הכל (דוח)"
+msgstr "סך־הכול (דוח)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:938
 msgid "Total (Period)"
-msgstr "סך הכל (תקופה)"
+msgstr "סך־הכול (תקופה)"
 
 # צ=צבע
 #: gnucash/gnome-utils/gnc-tree-view-account.c:947
@@ -9519,7 +9519,7 @@ msgstr "מינימום עתידי (%s)"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1835
 #, c-format
 msgid "Total (%s)"
-msgstr "סך הכל (%s)"
+msgstr "סך־הכול (%s)"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
 #: gnucash/import-export/csv-exp/csv-tree-export.c:157
@@ -9935,12 +9935,12 @@ msgstr "החזרה הבאה"
 #: gnucash/gnome-utils/window-main-summarybar.c:309
 #, c-format
 msgid "%s, Total:"
-msgstr "%s, סך הכל:"
+msgstr "%s, סך־הכול:"
 
 #: gnucash/gnome-utils/window-main-summarybar.c:312
 #, c-format
 msgid "%s, Non Currency Commodities Total:"
-msgstr "%s, סך הכל לא כספי לסחורות:"
+msgstr "%s, סך־הכול לא כספי לסחורות:"
 
 #: gnucash/gnome-utils/window-main-summarybar.c:315
 #, c-format
@@ -11199,7 +11199,7 @@ msgstr "נתיב ראשי לצרופות מקושרות לתנועה"
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:26
 msgid ""
 "This is the path head for the Transaction Linked Files with relative paths"
-msgstr "זהו הנתיב הראשי לצרופות עם נתיבים יחסיים, המקושרות לתנועה"
+msgstr "זהו הנתיב הראשי לצרופות בעלות נתיבים יחסיים, המקושרות לתנועה"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:30
 msgid "Compress the data file"
@@ -11211,7 +11211,7 @@ msgstr "אפשור דחיסת קובץ בעת כתיבה לקובץ נתונים
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:35
 msgid "Show auto-save explanation"
-msgstr "הצגת הסבר על שמירה אוטומטית"
+msgstr "הצגת הסבר בדבר שמירה אוטומטית"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:36
 msgid ""
@@ -22235,7 +22235,7 @@ msgstr "מידע גופן לשם החשבון."
 
 #: gnucash/report/html-fonts.scm:116
 msgid "Number cell"
-msgstr "תא מספר"
+msgstr "תא־מספר"
 
 #: gnucash/report/html-fonts.scm:116
 msgid "Font info for regular number cells."
@@ -22259,7 +22259,7 @@ msgstr "מידע גופן לכותרות מספריים."
 
 #: gnucash/report/html-fonts.scm:131
 msgid "Text cell"
-msgstr "מלל תא"
+msgstr "תא־מלל"
 
 #: gnucash/report/html-fonts.scm:131
 msgid "Font info for regular text cells."
@@ -22267,7 +22267,7 @@ msgstr "מידע גופן לתאי מלל רגילים."
 
 #: gnucash/report/html-fonts.scm:136
 msgid "Total number cell"
-msgstr "סך הכל תא מספר"
+msgstr "סך־הכול תא־מספר"
 
 #: gnucash/report/html-fonts.scm:137
 msgid "Font info for number cells containing a total."
@@ -22275,11 +22275,11 @@ msgstr "מידע גופן לתאים המכילים סיכום."
 
 #: gnucash/report/html-fonts.scm:142
 msgid "Total label cell"
-msgstr "סך הכל תווית תא"
+msgstr "סך־הכול בתא־תווית"
 
 #: gnucash/report/html-fonts.scm:143
 msgid "Font info for cells containing total labels."
-msgstr "מידע גופן לתאים המכילים תוויות סך הכל."
+msgstr "מידע גופן לתאים המכילים תוויות סך־הכול."
 
 #: gnucash/report/html-fonts.scm:148
 msgid "Centered label cell"
@@ -22770,7 +22770,7 @@ msgstr "הסכום שמגיע ל/מחברה"
 #: gnucash/report/reports/aging.scm:350
 #: gnucash/report/reports/standard/new-aging.scm:97
 msgid "Bracket Total Owed"
-msgstr "מסגור סך הכל בחובה בסוגריים"
+msgstr "מסגור סך־הכול בחובה בסוגריים"
 
 #: gnucash/report/reports/aging.scm:357
 #: gnucash/report/reports/standard/new-aging.scm:101
@@ -23285,7 +23285,7 @@ msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
-"לעזרה על כתיבת־דוחות, או לשיתוף דוח חדש והמדליק שיצרת, ניתן להיוועץ ברשימת "
+"לעזרה בכתיבת־דוחות, או לשיתוף הדוח החדש והמדליק שיצרת, ניתן להיוועץ ברשימת "
 "הדיוור ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:327
@@ -23444,7 +23444,7 @@ msgstr "תחזית־מס רבעון ראשון (1 ינואר־31 מרץ)"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:156
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:186
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
-msgstr "תחזית־מס רבעון שני (1 אפריל־30 יוני)"
+msgstr "תחזית־מס רבעון שני (1 באפריל - 30 ביוני)"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -24734,11 +24734,11 @@ msgstr "האם להכליל תווית עבור מקטעים."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:108
 msgid "Include totals"
-msgstr "לכלול סך הכל"
+msgstr "לכלול סך־הכול"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:109
 msgid "Whether or not to include a line indicating total amounts."
-msgstr "האם לכלול שורת סך הכל."
+msgstr "האם לכלול שורת סך־הכול."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:113
 msgid "Enable chart"
@@ -24786,7 +24786,7 @@ msgstr "תמיד"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:623
 #: gnucash/report/trep-engine.scm:1564
 msgid "Total For "
-msgstr "סך הכל "
+msgstr "סך־הכול "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:830
 msgid "missing"
@@ -24844,7 +24844,7 @@ msgstr "לכלול סיכומים חדשים/קיימים"
 msgid ""
 "Whether or not to include lines indicating change in totals introduced by "
 "budget."
-msgstr "האם לכלול שורת שינויים בסך הכל מהתקציב."
+msgstr "האם לכלול שורת שינויים בסך־הכול מהתקציב."
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:111
 #: gnucash/report/reports/standard/budget-barchart.scm:86
@@ -25530,7 +25530,7 @@ msgstr "שם לקוח"
 
 #: gnucash/report/reports/standard/customer-summary.scm:118
 msgid "Markup (which is profit amount divided by sales)"
-msgstr "מרווח (היחס בין, רווח חלקי מכירות)"
+msgstr "מרווח (היחס בין, הרווח מחולק במכירות)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:119
 #: gnucash/report/reports/standard/customer-summary.scm:300
@@ -25985,7 +25985,7 @@ msgstr "סחר"
 
 #: gnucash/report/reports/standard/income-statement.scm:520
 msgid "Total Trading"
-msgstr "סך הכל סחר"
+msgstr "סך־הכול סחר"
 
 #: gnucash/report/reports/standard/income-statement.scm:571
 #: gnucash/report/reports/standard/trial-balance.scm:567
@@ -27132,11 +27132,11 @@ msgstr "סך כל זכות"
 
 #: gnucash/report/reports/standard/register.scm:561
 msgid "Total Value Debits"
-msgstr "סך הכל חובה"
+msgstr "סך־הכול חובה"
 
 #: gnucash/report/reports/standard/register.scm:563
 msgid "Total Value Credits"
-msgstr "סך הכל זכות"
+msgstr "סך־הכול זכות"
 
 #: gnucash/report/reports/standard/register.scm:566
 msgid "Net Change"
@@ -27792,7 +27792,7 @@ msgstr "רקע ברירת מחדל חלופי לתאי טבלאות."
 #: gnucash/report/stylesheets/footer.scm:154
 #: gnucash/report/stylesheets/head-or-tail.scm:200
 msgid "Subheading/Subtotal Cell Color"
-msgstr "צבע תא כותרת משנה/סך הכל כללי"
+msgstr "צבע תא כותרת משנה/סך־הכול כללי"
 
 #: gnucash/report/stylesheets/footer.scm:155
 #: gnucash/report/stylesheets/head-or-tail.scm:201
@@ -27802,7 +27802,7 @@ msgstr "צבע ברירת מחדל לשורות סיכום ביניים."
 #: gnucash/report/stylesheets/footer.scm:162
 #: gnucash/report/stylesheets/head-or-tail.scm:208
 msgid "Sub-subheading/total Cell Color"
-msgstr "צבע תא כותרת משנה־משנה/סך הכל כללי"
+msgstr "צבע תא כותרת משנה־משנה/סך־הכול כללי"
 
 #: gnucash/report/stylesheets/footer.scm:163
 #: gnucash/report/stylesheets/head-or-tail.scm:209
@@ -28624,7 +28624,7 @@ msgstr "מזהה החברה (כלומר חפ: 000000000)."
 
 #: libgnucash/app-utils/business-prefs.scm:121
 msgid "Default Customer TaxTable"
-msgstr "טבלת ברירת המחדל של מסי לקוחות"
+msgstr "טבלת ברירת המחדל למסי לקוח"
 
 #: libgnucash/app-utils/business-prefs.scm:122
 msgid "The default tax table to apply to customers."
@@ -28632,7 +28632,7 @@ msgstr "טבלת מס ברירת מחדל להחלה על לקוחות."
 
 #: libgnucash/app-utils/business-prefs.scm:127
 msgid "Default Vendor TaxTable"
-msgstr "טבלת ברירת המחדל של מסי ספקים"
+msgstr "טבלת ברירת מחדל למסי ספק"
 
 #: libgnucash/app-utils/business-prefs.scm:128
 msgid "The default tax table to apply to vendors."

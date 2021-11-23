@@ -35,7 +35,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-10-27 18:55+0000\n"
+"PO-Revision-Date: 2021-11-15 18:51+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -44,7 +44,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 
 #: bindings/guile/commodity-table.scm:44
 msgid "ALL NON-CURRENCY"
@@ -5944,10 +5944,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "Zu dieser Buchung wurde bereits eine Stornierungsbuchung hinzugefügt."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4088
-#, fuzzy
-#| msgid "Cut the current transaction?"
 msgid "Jump to the transaction?"
-msgstr "Aktuellen Buchungssatz ausschneiden?"
+msgstr "Direkt zur Buchung springen?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4095
 msgid "Reverse Transaction"
@@ -10469,11 +10467,11 @@ msgstr ""
 #. Translators: Guile is the programming language of the reports
 #: gnucash/gnucash-core-app.cpp:103
 msgid "Loading system wide Guile extensions…"
-msgstr ""
+msgstr "Laden von systemweit gültigen Guile-Erweiterungen…"
 
 #: gnucash/gnucash-core-app.cpp:115
 msgid "Loading user specific Guile extensions…"
-msgstr ""
+msgstr "Laden von benutzerspezifischen Guile-Erweiterungen…"
 
 #: gnucash/gnucash-core-app.cpp:224
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -21925,16 +21923,14 @@ msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Neu (verbleibende %s benötigen Konto, nicht ausgeglichen)."
 
 #: gnucash/import-export/import-main-matcher.c:1581
-#, fuzzy, c-format
-#| msgid "Reconcile (manual) match"
+#, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "Abgleichen (manuell gewählte Zuordnung)"
+msgstr "Abgleichen mit %s (manuell gewählte Zuordnung)"
 
 #: gnucash/import-export/import-main-matcher.c:1586
-#, fuzzy, c-format
-#| msgid "Reconcile (auto) match"
+#, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "Abgleichen (automatisch gewählte Zuordnung)"
+msgstr "Abgleichen mit %s (automatisch gewählte Zuordnung)"
 
 #: gnucash/import-export/import-main-matcher.c:1595
 #: gnucash/import-export/import-main-matcher.c:1625
@@ -21942,16 +21938,14 @@ msgid "Match missing!"
 msgstr "Zuordnung fehlt!"
 
 #: gnucash/import-export/import-main-matcher.c:1611
-#, fuzzy, c-format
-#| msgid "Update and reconcile (manual) match"
+#, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr "Abgleichen und Datenübernahme (manuell gewählte Zuordnung)"
+msgstr "Abgleichen und Datenübernahme mit %s (manuell gewählte Zuordnung)"
 
 #: gnucash/import-export/import-main-matcher.c:1616
-#, fuzzy, c-format
-#| msgid "Update and reconcile (auto) match"
+#, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr "Abgleichen und Datenübernahme (automatisch gewählte Zuordnung)"
+msgstr "Abgleichen und Datenübernahme mit %s (automatisch gewählte Zuordnung)"
 
 #: gnucash/import-export/import-main-matcher.c:1633
 msgid "Do not import (no action selected)"
@@ -22053,16 +22047,13 @@ msgid "Unknown OFX investment account"
 msgstr "Unbekanntes OFX Investment-Konto"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1216
-#, fuzzy, c-format
-#| msgid ""
-#| "OFX file '%s', imported transactions for account '%s'\n"
-#| "%d transactions processed, no transactions to match"
+#, c-format
 msgid ""
 "While importing transactions from OFX file '%s' into account '%s', found %d "
 "previously imported transactions, no new transactions."
 msgstr ""
-"OFX-Datei »%s«, importierte Buchungen für Konto »%s«\n"
-"%d Buchungen verarbeitet, keine Buchungen zuzuordnen."
+"Beim Importieren von Buchungen aus der OFX-Datei '%s' in das Konto '%s' "
+"wurden %d zuvor importierte Buchungen verarbeitet, keine neuen Buchungen."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1319
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"

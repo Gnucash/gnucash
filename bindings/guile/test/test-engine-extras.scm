@@ -223,6 +223,9 @@
    #:memo memo
    #:notes notes))
 
+(define (opposite-signs? a b)
+  (< (* a b) 0))
+
 ;; creates multisplit transaction.
 ;;
 ;; input: DD/MM/YY - posting date of transaction
@@ -262,6 +265,9 @@
                   (action (and (> (vector-length split) 3)
                                (vector-ref split 3)))
                   (newsplit (xaccMallocSplit book)))
+              (when (opposite-signs? val amt)
+                (error "env-create-multisplit-transaction error for" DD '/ MM '/ YY
+                       'opposing-signs: 'val val 'amt amt))
               (xaccSplitSetParent newsplit txn)
               (xaccSplitSetAccount newsplit acc)
               (xaccSplitSetValue newsplit val)
