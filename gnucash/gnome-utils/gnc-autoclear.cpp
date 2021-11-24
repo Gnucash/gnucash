@@ -50,6 +50,7 @@ typedef enum
 #define MAX_AUTOCLEAR_SECONDS 10
 
 #define MAX_AUTOCLEAR_TICKS CLOCKS_PER_SEC * MAX_AUTOCLEAR_SECONDS
+#define MAX_SACK_SIZE 4000000
 
 using SplitVec = std::vector<Split*>;
 
@@ -219,7 +220,8 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 
         looping_update_status (label, ++nc_progress, nc_vector.size (), sack.size ());
 
-        if (G_UNLIKELY ((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS))
+        if (G_UNLIKELY (((clock () - start_ticks) > MAX_AUTOCLEAR_TICKS) ||
+                        (sack.size () > MAX_SACK_SIZE)))
         {
             g_set_error (error, autoclear_quark, AUTOCLEAR_OVERLOAD, "%s",
                          _("Too many uncleared splits"));
