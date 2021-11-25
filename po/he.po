@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-20 09:53+0000\n"
+"PO-Revision-Date: 2021-11-25 11:50+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.9.1\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/commodity-table.scm:44
@@ -8796,7 +8796,7 @@ msgstr "תחילת השנה הנוכחית"
 #: gnucash/gnome-utils/gnc-period-select.c:76
 #: libgnucash/app-utils/date-utilities.scm:934
 msgid "Start of previous year"
-msgstr "תחילת שנה שעברה"
+msgstr "תחילת שנה קודמת"
 
 #: gnucash/gnome-utils/gnc-period-select.c:79
 msgid "Start of this accounting period"
@@ -8814,7 +8814,7 @@ msgstr "סוף החודש הנוכחי"
 #: gnucash/gnome-utils/gnc-period-select.c:88
 #: libgnucash/app-utils/date-utilities.scm:997
 msgid "End of previous month"
-msgstr "סוף חודש שעבר"
+msgstr "סוף חודש קודם"
 
 #: gnucash/gnome-utils/gnc-period-select.c:89
 msgid "End of this quarter"
@@ -8823,7 +8823,7 @@ msgstr "סוף הרבעון הנוכחי"
 #: gnucash/gnome-utils/gnc-period-select.c:90
 #: libgnucash/app-utils/date-utilities.scm:1039
 msgid "End of previous quarter"
-msgstr "סוף רבעון שעבר"
+msgstr "סוף רבעון קודם"
 
 #: gnucash/gnome-utils/gnc-period-select.c:91
 #: libgnucash/app-utils/date-utilities.scm:927
@@ -8833,7 +8833,7 @@ msgstr "סוף השנה הנוכחית"
 #: gnucash/gnome-utils/gnc-period-select.c:92
 #: libgnucash/app-utils/date-utilities.scm:941
 msgid "End of previous year"
-msgstr "סוף שנה שעברה"
+msgstr "סוף שנה קודמת"
 
 #: gnucash/gnome-utils/gnc-period-select.c:95
 msgid "End of this accounting period"
@@ -24959,7 +24959,7 @@ msgstr "סוף תקופה מדויק"
 #: gnucash/report/reports/standard/budget-barchart.scm:62
 #: gnucash/report/reports/standard/budget.scm:82
 msgid "Select exact period that ends the reporting range."
-msgstr "בחירת תקופה לסיום טווח הדוח."
+msgstr "בחירת תקופה לסוף טווח הדוח."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:65
 #: gnucash/report/reports/standard/budget.scm:111
@@ -28731,7 +28731,7 @@ msgstr "היום הראשון בתקופה החשבונאית, כפי שהוגד
 
 #: libgnucash/app-utils/date-utilities.scm:969
 msgid "End of accounting period"
-msgstr "סיום תקופה חשבונאית"
+msgstr "סוף תקופה חשבונאית"
 
 #: libgnucash/app-utils/date-utilities.scm:972
 msgid "Last day of the accounting period, as set in the global preferences."
