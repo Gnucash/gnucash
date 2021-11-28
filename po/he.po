@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-25 11:50+0000\n"
+"PO-Revision-Date: 2021-11-28 10:50+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -531,7 +531,7 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
-"לכל תנוע קיים שדה 'הערות' שם ניתן להזין מידע שימושי.\n"
+"בכל תנועה קיים שדה 'הערות', שם ניתן להזין מידע שימושי.\n"
 "\n"
 "להפוך את השדה לגלוי\n"
 "נא לבחור ב 'מצג' בסרגל התפריט ולסמן את תיבת 'שורה כפולה' או,\n"
@@ -7481,7 +7481,7 @@ msgstr "לא הוגדר נתיב ראשי, שימוש ב '%s' לנתיבים י�
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
 msgid "Existing"
-msgstr "קיים"
+msgstr "נוכחי"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:148
 msgid "You can type '+' or '-' to increment or decrement the number."
