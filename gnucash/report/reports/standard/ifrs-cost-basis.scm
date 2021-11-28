@@ -160,25 +160,6 @@ the split action field to detect capitalized fees on stock activity")
     ((n) (and n (not (zero? n)) (/ n)))
     ((divisor head . tail) (M* divisor (M/ (fold M* head tail))))))
 
-(define (trans-extract trans account numfilter split->amount)
-  (define (not-account? s)
-    (and account (not (equal? (xaccSplitGetAccount s) account))))
-  (define (not-num-filter? s)
-    (and numfilter
-         (not (equal? (gnc-get-action-num (xaccSplitGetParent s) s) numfilter))))
-  (let lp ((splits (xaccTransGetSplitList trans)) (result #f))
-    (match splits
-      (() result)
-      (((? not-account?) . rest) (lp rest result))
-      (((? not-num-filter?) . rest) (lp rest result))
-      ((split . rest) (lp rest (M+ (split->amount split) result))))))
-
-(define (trans-extract-value trans account numfilter)
-  (trans-extract trans account numfilter xaccSplitGetValue))
-
-(define (trans-extract-amount trans account numfilter)
-  (trans-extract trans account numfilter xaccSplitGetAmount))
-
 (define-record-type :txn-info
   (make-txn-info stock-amt stock-val proceeds-val
                  fees-cap-val fees-exp-val dividend-val capgains-val)
@@ -190,6 +171,10 @@ the split action field to detect capitalized fees on stock activity")
   (fees-exp-val get-fees-exp-val set-fees-exp-val!)
   (dividend-val get-dividend-val set-dividend-val!)
   (capgains-val get-capgains-val set-capgains-val!))
+
+(define (get-amount mon)
+  (and (gnc:gnc-monetary? mon)
+       (gnc:gnc-monetary-amount mon)))
 
 ;; "bitfield" Nabc a=neg b=zero c=pos
 (define (N001 x) (if (number? x) (>  x 0) #f))
@@ -242,9 +227,6 @@ the split action field to detect capitalized fees on stock activity")
 
 (define shown-headers? #f)
 (define (txn-identify trans txn-info cumul-units)
-  (define (get-amount mon)
-    (and (gnc:gnc-monetary? mon)
-         (gnc:gnc-monetary-amount mon)))
   (define trans-units (get-amount (get-stock-amt txn-info)))
   (define trans-value (get-amount (get-stock-val txn-info)))
   (define cash-value (get-amount (get-proceeds-val txn-info)))
@@ -437,13 +419,15 @@ the split action field to detect capitalized fees on stock activity")
            (let* ((trans (xaccSplitGetParent split))
                   (txn-info (txn->info trans stock-acct cap-fee-action proceeds-acct
                                        capgains-acct fees-acct dividend-acct))
-                  (trans-units (trans-extract-amount trans stock-acct #f))
-                  (trans-value (trans-extract-value trans stock-acct #f))
-                  (cash-value (trans-extract-value trans proceeds-acct #f))
-                  (dividends-val (trans-extract-value trans dividend-acct #f))
-                  (capgains-val (trans-extract-value trans capgains-acct #f))
-                  (fees-expense (trans-extract-value trans fees-acct #f))
-                  (fees-value (trans-extract-value trans #f cap-fee-action))
+                  (trans-units (get-amount (get-stock-amt txn-info)))
+                  (cash-value (get-amount (get-proceeds-val txn-info)))
+                  (dividends-val (get-amount (get-dividend-val txn-info)))
+                  (capgains-val (get-amount (get-capgains-val txn-info)))
+                  (fees-expense (get-amount (get-fees-exp-val txn-info)))
+                  (fees-value (M+ (get-amount (get-fees-cap-val txn-info))
+                                  fees-expense))
+                  (trans-value (M+ (get-amount (get-stock-val txn-info))
+                                   (get-amount (get-fees-cap-val txn-info))))
                   (new-units (M+ cumul-units trans-units))
 
                   (sale?
