@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-28 10:50+0000\n"
+"PO-Revision-Date: 2021-11-30 15:52+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -6454,7 +6454,7 @@ msgstr "שמירה על עדכניות ספרי החשבונות בעסק קטן
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
 msgid "Create accurate reports and graphs from your financial data"
-msgstr "יצירת דוחות מדויקים ותרשימים מהנתונים הפיננסיים"
+msgstr "יצירת דוחות ותרשימים מדויקים מהנתונים הפיננסיים"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
 msgid "Set up scheduled transactions to avoid repeated data entry"
@@ -6993,15 +6993,15 @@ msgstr "גדול או שווה ל"
 
 #: gnucash/gnome-search/search-numeric.c:250
 msgid "has credits or debits"
-msgstr "עם חובות או זיכויים"
+msgstr "סכומים בחובה או זיכות"
 
 #: gnucash/gnome-search/search-numeric.c:251
 msgid "has debits"
-msgstr "עם חובות"
+msgstr "סכומים בחובה"
 
 #: gnucash/gnome-search/search-numeric.c:252
 msgid "has credits"
-msgstr "עם זיכויים"
+msgstr "סכומים בזכות"
 
 #: gnucash/gnome-search/search-reconciled.c:221
 msgid "Not Cleared"
@@ -19464,7 +19464,7 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"אירעה שגיאה בעת ביצוע ריכוז. נא לבדוק את חלון הלוג להודעת השגיאה המדויקת.\n"
+"אירעה שגיאה בעת ביצוע ריכוז. נא לבדוק את חלון נלוג להודעת השגיאה המדויקת.\n"
 "\n"
 "האם להזין את ריכוז החיובים שנית?"
 
@@ -24933,7 +24933,7 @@ msgstr "בחירת סוג תקופת תקציב לתחילת טווח הדיוו
 #: gnucash/report/reports/standard/budget-barchart.scm:53
 #: gnucash/report/reports/standard/budget.scm:73
 msgid "Exact start period"
-msgstr "תחילת תקופה מדוייק"
+msgstr "תחילת תקופה במדויק"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:55
 #: gnucash/report/reports/standard/budget.scm:75
@@ -24954,7 +24954,7 @@ msgstr "בחירת סוג תקופת תקציב לסיום טווח הדיווח
 #: gnucash/report/reports/standard/budget-barchart.scm:60
 #: gnucash/report/reports/standard/budget.scm:80
 msgid "Exact end period"
-msgstr "סוף תקופה מדויק"
+msgstr "סוף תקופה במדויק"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:62
 #: gnucash/report/reports/standard/budget.scm:82
