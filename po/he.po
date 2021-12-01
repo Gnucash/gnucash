@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-11-30 15:52+0000\n"
+"PO-Revision-Date: 2021-12-01 14:53+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -5642,7 +5642,7 @@ msgstr "פתיחת הצרופה המקושרת לתנועה הנוכחית"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:320
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr "דילוג אל הודעת החיוב, החשבונית או השובר המקושרים"
+msgstr "דילוג להודעת החיוב, החשבונית או השובר המקושרים"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:409
 msgid "Remo_ve Other Splits"
@@ -10099,7 +10099,7 @@ msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
-"אפשור מצב איתור תקלים: מספק מידע מפורט בלוג.\n"
+"אפשור מצב איתור תקלים: מספק מידע מפורט ביומן־הרישום.\n"
 "זהה ל: --log '=info' --log 'qof=info' --log 'gnc=info'"
 
 #: gnucash/gnucash-core-app.cpp:289
@@ -10113,7 +10113,7 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"רמת לוג, של הטופס 'modulename={debug,info,warn,crit,error}'\n"
+"עקיפות רמת יומן־רשום, בתבנית 'modulename={debug,info,warn,crit,error}'\n"
 "דוגמאות: '--log qof=debug' או '--log gnc.backend.file.sx=info'\n"
 "ניתן להפעיל אפשרות זו מספר פעמים."
 
@@ -10122,8 +10122,8 @@ msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"קובץ לוג לכתיבה; ברירת המחדל היא ל־'/tmp/gnucash.trace'; יכול להיות 'stderr' "
-"או 'stdout'."
+"קובץ יומן־רישום לכתיבה; ברירת המחדל היא ל־'/tmp/gnucash.trace';האפשרויות הן "
+"'stderr' או 'stdout'."
 
 #: gnucash/gnucash-core-app.cpp:295
 msgid "Hidden Options"
@@ -11309,7 +11309,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:75
 #: gnucash/gtkbuilder/dialog-preferences.glade:1739
 msgid "Do not create log/backup files."
-msgstr "לא ליצור קובצי לוג/גבוי."
+msgstr "לא ליצור קובצי יומן־רישום/גבוי."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:76
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:81
@@ -11321,20 +11321,21 @@ msgid ""
 "keep old files for a number of days. How many days is defined in key 'retain-"
 "days'"
 msgstr ""
-"אפשרות זו מגדירה מה לעשות עם קבצי לוג/גיבויים ישנים. 'לעד' פירושו לשמור את "
-"כל הקבצים הישנים. 'לעולם לא' פירושו שלא נשמרים קבצי לוג/גיבוי ישנים. בכל פעם "
-"שמתבצעת שמירה, גרסאות ישנות יותר של הקובץ מוסרות. 'ימים' פירושו לשמור קבצים "
-"ישנים במשך מספר ימים. מספר הימים מוגדר במפתח 'ימים לשמירה'"
+"אפשרות זו מגדירה מה ייעשה בקובצי יומני־רישום/גיבויים ישנים. 'לעד' פירושו "
+"לשמור את כל הקבצים הישנים. 'לעולם לא' פירושו שלא נשמרים קבצי יומן־רישום/"
+"גיבוי ישנים. בכל פעם שמתבצעת שמירה, גרסאות ישנות יותר של הקובץ מוסרות. "
+"'ימים' פירושו מספר הימים שיש לשמור קבצים ישנים. מספר הימים מוגדר במפתח 'ימים "
+"לשמירה'"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1757
 msgid "Delete old log/backup files after this many days (0 = never)."
-msgstr "מחיקת קבצי לוג/גיבוי ישנים לאחר מספר ימים זה (0 = לעולם)."
+msgstr "מחיקת קובצי יומן־רישום/גיבוי ישנים לאחר מספר ימים זה (0 = לעולם לא)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:85
 #: gnucash/gtkbuilder/dialog-preferences.glade:1775
 msgid "Do not delete log/backup files."
-msgstr "לא למחוק קובץ לוג/גבוי."
+msgstr "לא למחוק קובץ יומן־רישום/גבוי."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:90
 msgid "Delete old log/backup files after this many days (0 = never)"
@@ -16395,7 +16396,7 @@ msgstr "הצגת עצות־שימוש בגנוקאש עם האתחול."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1481
 msgid "How many days to keep old log/backup files."
-msgstr "למשך כמה ימים לשמור קובצי גיבוי/לוג ישנים."
+msgstr "לכמה ימים לשמור קובצי גיבוי/יומן־רישום ישנים."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1500
 #: gnucash/gtkbuilder/dialog-sx.glade:619
@@ -16407,7 +16408,7 @@ msgstr "ימים"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1519
 msgid "<b>_Retain log/backup files</b>"
-msgstr "<b>שמירת קובצי לוג/גיבוי_</b>"
+msgstr "<b>שמירת קובצי יומן־רישום/גיבוי_</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1531
 msgid "Com_press files"
@@ -18940,7 +18941,7 @@ msgstr "פעולה _נוכחית"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:210
 msgid "<b>_Log Messages</b>"
-msgstr "<b>הודעות _לוג</b>"
+msgstr "<b>הודעות _יומן־רישום</b>"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:253
 msgid "Close when _finished"
@@ -19177,7 +19178,7 @@ msgstr "בנקאות מקוונת"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:33
 msgid "_Close log window when finished"
-msgstr "_סגירת חלון לוג בסיום"
+msgstr "_סגירת חלון יומן־רישום בסיום"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:39
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:16
@@ -19433,7 +19434,8 @@ msgstr ""
 "השרת מצא שגיאה במהלך הכנת המשימה. לכן, לא ניתן לבצע את המשימה הזה.\n"
 "\n"
 "סביר להניח שהבנק אינו תומך במשימה שנבחרה או שבחשבון הבנקאות המקוונת אין "
-"הרשאה לביצוע משימה זו. ייתכן שהודעות שגיאה נוספות יופיעו בלוג המסוף.\n"
+"הרשאה לביצוע משימה זו. ייתכן שהודעות שגיאה נוספות יופיעו ביומן־הרישום במסוף."
+"\n"
 "\n"
 "האם להזין את המשימה שוב?"
 
@@ -19464,7 +19466,8 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"אירעה שגיאה בעת ביצוע ריכוז. נא לבדוק את חלון נלוג להודעת השגיאה המדויקת.\n"
+"אירעה שגיאה בעת ביצוע ריכוז. נא לבדוק את חלון יומן־הרישום להודעת השגיאה "
+"המדויקת.\n"
 "\n"
 "האם להזין את ריכוז החיובים שנית?"
 
@@ -19492,7 +19495,8 @@ msgstr ""
 "השרת מצא שגיאה במהלך הכנת המשימה. לכן, לא ניתן לבצע את המשימה הזה.\n"
 "\n"
 "סביר להניח שהבנק אינו תומך במשימה שנבחרה או שבחשבון הבנקאות המקוונת אין "
-"הרשאה לביצוע משימה זו. ייתכן שהודעות שגיאה נוספות יופיעו בלוג המסוף.\n"
+"הרשאה לביצוע משימה זו. ייתכן שהודעות שגיאה נוספות יופיעו בביומן־הרישום במסוף."
+"\n"
 "\n"
 "האם להזין את המשימה שוב?"
 
@@ -19605,8 +19609,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"אירעה שגיאה בעת ביצוע ריכוז: %d מתוך %d כשלו. נא לבדוק את חלון הלוג או את "
-"קובץ gnucash.trace להודעת השגיאה המדויקת.\n"
+"אירעה שגיאה בעת ביצוע ריכוז: %d מתוך %d כשלו. נא לבדוק את חלון יומן־הרישום "
+"או את קובץ gnucash.trace להודעת השגיאה המדויקת.\n"
 "\n"
 "%s"
 
@@ -19623,10 +19627,11 @@ msgid_plural ""
 "All %d jobs were executed successfully, but as a precaution please check the "
 "log window for potential errors."
 msgstr[0] ""
-"הריכוז בוצע בהצלחה, כאמצעי זהירות, נא לבדוק את חלון הלוג לשגיאות אפשריות."
-msgstr[1] ""
-"כל %d הריכוזים בוצעו בהצלחה, כאמצעי זהירות, נא לבדוק את חלון הלוג לשגיאות "
+"הריכוז בוצע בהצלחה, כאמצעי זהירות, נא לבדוק את חלון יומן־הרישום לשגיאות "
 "אפשריות."
+msgstr[1] ""
+"כל %d הריכוזים בוצעו בהצלחה, כאמצעי זהירות, נא לבדוק את חלון יומן־הרישום "
+"לשגיאות אפשריות."
 
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1113
 #, c-format
@@ -20993,21 +20998,22 @@ msgstr "בחירת קובץ log. להרצה חוזרת"
 #: gnucash/import-export/log-replay/gnc-log-replay.c:599
 #, c-format
 msgid "Cannot open the current log file: %s"
-msgstr "לא ניתן לפתוח קובץ לוג נוכחי: %s"
+msgstr "לא ניתן לפתוח קובץ יומן־רישום נוכחי: %s"
 
 #: gnucash/import-export/log-replay/gnc-log-replay.c:614
 #, c-format
 msgid "Failed to open log file: %s: %s"
-msgstr "לא ניתן לפתוח קובץ לוג: %s: %s"
+msgstr "לא ניתן לפתוח קובץ יומן־רישום: %s: %s"
 
 #: gnucash/import-export/log-replay/gnc-log-replay.c:624
 msgid "The log file you selected was empty."
-msgstr "קובץ הלוג שנבחר ריק."
+msgstr "קובץ יומן־הרישום שנבחר ריק."
 
 #: gnucash/import-export/log-replay/gnc-log-replay.c:633
 msgid ""
 "The log file you selected cannot be read. The file header was not recognized."
-msgstr "לא ניתן לקרוא את קובץ הלוג. הכותרת העליונה (header) של הקובץ לא זוהתה."
+msgstr ""
+"לא ניתן לקרוא את קובץ יומן־הרישום. הכותרת העליונה (header) של הקובץ לא זוהתה."
 
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:48
 msgid "_Replay GnuCash .log file..."
@@ -21015,7 +21021,8 @@ msgstr "_הרצה מחודשת של קובץ log. גנוקאש..."
 
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:49
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
-msgstr "הרצה מחודשת של קובץ לוג של גנוקאש אחרי התרסקות. לא ניתן להסגה."
+msgstr ""
+"הרצה מחודשת של קובץ יומן־הרישום של גנוקאש אחרי קריסה. הפעולה לא ניתנת להסגה."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:660
 #, c-format
@@ -26890,19 +26897,19 @@ msgstr "גופן מלל"
 
 #: gnucash/report/reports/standard/receipt.scm:48
 msgid "Header logo filename"
-msgstr "שם קובץ לוגו ראש עמוד"
+msgstr "שם קובץ סמליל ראש עמוד"
 
 #: gnucash/report/reports/standard/receipt.scm:49
 msgid "Header logo width"
-msgstr "רוחב לוגו ראש עמוד"
+msgstr "רוחב סמליל ראש עמוד"
 
 #: gnucash/report/reports/standard/receipt.scm:50
 msgid "Footer logo filename"
-msgstr "שם קובץ לוגו סיומת עמוד"
+msgstr "שם קובץ סמליל סיומת עמוד"
 
 #: gnucash/report/reports/standard/receipt.scm:51
 msgid "Footer logo width"
-msgstr "רוחב לוגו סיומת עמוד"
+msgstr "רוחב סמליל סיומת עמוד"
 
 #: gnucash/report/reports/standard/receipt.scm:53
 #: gnucash/report/reports/standard/receipt.scm:118
@@ -26980,7 +26987,7 @@ msgstr "גופנים לשימוש בכל השאר."
 
 #: gnucash/report/reports/standard/receipt.scm:93
 msgid "Name of a file containing a logo to be used on the header of the report"
-msgstr "שם קובץ המכיל לוגו לשימוש בכותרת העליונה של הדוח"
+msgstr "שם קובץ המכיל סמליל לשימוש בכותרת העליונה בדוח"
 
 #: gnucash/report/reports/standard/receipt.scm:96
 msgid ""
@@ -26993,7 +27000,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:99
 msgid "Name of a file containing a logo to be used on the footer of the report"
-msgstr "שם קובץ המכיל לוגו לשימוש בכותרת התחתונה של הדוח"
+msgstr "שם קובץ המכיל סמליל לשימוש בכותרת התחתונה בדוח"
 
 #: gnucash/report/reports/standard/receipt.scm:102
 msgid ""
@@ -27236,11 +27243,11 @@ msgstr "CSS משובץ"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:99
 msgid "Logo filename"
-msgstr "שם קובץ לוגו"
+msgstr "שם קובץ סמליל"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:100
 msgid "Logo width"
-msgstr "רוחב לוגו"
+msgstr "רוחב סמליל"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:128
 msgid "Display the Tax Rate?"
@@ -27284,7 +27291,7 @@ msgstr "הצגת מחיר נטו?"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:154
 msgid "Name of a file containing a logo to be used on the report."
-msgstr "שם קובץ המכיל לוגו לשימוש בדוחות."
+msgstr "שם קובץ המכיל סמליל לשימוש בדוחות."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:157
 msgid ""
@@ -27736,12 +27743,12 @@ msgstr "ימין"
 #: gnucash/report/stylesheets/footer.scm:112
 #: gnucash/report/stylesheets/head-or-tail.scm:158
 msgid "Logo"
-msgstr "לוגו"
+msgstr "סמליל"
 
 #: gnucash/report/stylesheets/footer.scm:112
 #: gnucash/report/stylesheets/head-or-tail.scm:158
 msgid "Company logo image."
-msgstr "תמונת לוגו של החברה."
+msgstr "תמונת סמליל החברה."
 
 #: gnucash/report/stylesheets/footer.scm:118
 #: gnucash/report/stylesheets/head-or-tail.scm:164
