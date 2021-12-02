@@ -1286,6 +1286,22 @@ qof_book_test_feature (QofBook *book, const char *feature)
 }
 
 void
+qof_book_unset_feature (QofBook *book, const gchar *key)
+{
+    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
+    auto feature_slot = frame->get_slot({GNC_FEATURES, key});
+    if (!feature_slot)
+    {
+        PWARN ("no feature %s. bail out.", key);
+        return;
+    }
+    qof_book_begin_edit (book);
+    delete frame->set_path({GNC_FEATURES, key}, nullptr);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
+    qof_book_commit_edit (book);
+}
+
+void
 qof_book_load_options (QofBook *book, GNCOptionLoad load_cb, GNCOptionDB *odb)
 {
     load_cb (odb, book);

@@ -382,6 +382,7 @@ void qof_book_option_frame_delete (QofBook *book, const char* opt_name);
 /** Access functions for reading and setting the used-features on this book.
  */
 GHashTable *qof_book_get_features (QofBook *book);
+void qof_book_unset_feature (QofBook *book, const gchar *key);
 void qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr);
 
 void qof_book_begin_edit(QofBook *book);
