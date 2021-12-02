@@ -68,6 +68,13 @@ extern "C" {
 gchar *gnc_features_test_unknown (QofBook *book);
 
 /**
+ * Indicate that the current book does not use the given feature. This
+ * will allow older versions of GnuCash that don't support this
+ * feature to load this book.
+ */
+void gnc_features_set_unused (QofBook *book, const gchar *feature);
+
+/**
  * Indicate that the current book uses the given feature. This will prevent
  * older versions of GnuCash that don't support this feature to refuse to load
  * this book.

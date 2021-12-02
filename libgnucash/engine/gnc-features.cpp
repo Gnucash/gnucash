@@ -91,6 +91,23 @@ void gnc_features_set_used (QofBook *book, const gchar *feature)
     qof_book_set_feature (book, feature, iter->second.c_str());
 }
 
+
+void gnc_features_set_unused (QofBook *book, const gchar *feature)
+{
+    g_return_if_fail (book);
+    g_return_if_fail (feature);
+
+    /* Can't set an unknown feature */
+    auto iter = features_table.find (feature);
+    if (iter == features_table.end ())
+    {
+        PWARN("Tried to set unknown feature as unused.");
+        return;
+    }
+
+    qof_book_unset_feature (book, feature);
+}
+
 gboolean gnc_features_check_used (QofBook *book, const gchar * feature)
 {
     return qof_book_test_feature (book, feature);
