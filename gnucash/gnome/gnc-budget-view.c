@@ -1077,8 +1077,7 @@ gbv_get_accumulated_budget_amount (GncBudget *budget, Account *account, guint pe
     else
         info.total = gnc_budget_get_account_period_value (budget, account, period_num);
 
-    if (gnc_reverse_budget_balance (account, TRUE))
-        info.total = gnc_numeric_neg (info.total);
+    info.total = gnc_numeric_neg (info.total);
 
     return info.total;
 }
@@ -1141,8 +1140,7 @@ budget_col_source (Account *account, GtkTreeViewColumn *col,
             strcpy (amtbuff, "error");
         else
         {
-            if (gnc_reverse_budget_balance (account, TRUE))
-                numeric = gnc_numeric_neg (numeric);
+            numeric = gnc_numeric_neg (numeric);
 
             xaccSPrintAmount (amtbuff, numeric,
                               gnc_account_print_info (account, FALSE));
@@ -1192,8 +1190,7 @@ bgv_get_total_for_account (Account *account, GncBudget *budget, gnc_commodity *n
             {
                 numeric = gbv_get_accumulated_budget_amount (budget, account, period_num);
 
-                if (gnc_reverse_budget_balance (account, TRUE))
-                    numeric = gnc_numeric_neg (numeric);
+                numeric = gnc_numeric_neg (numeric);
 
                 if (new_currency)
                 {
@@ -1220,8 +1217,7 @@ bgv_get_total_for_account (Account *account, GncBudget *budget, gnc_commodity *n
         }
     }
 
-    if (gnc_reverse_budget_balance (account, TRUE))
-        total = gnc_numeric_neg (total);
+    total = gnc_numeric_neg (total);
 
     return total;
 }
@@ -1284,8 +1280,7 @@ budget_col_edited (Account *account, GtkTreeViewColumn *col,
         gnc_budget_unset_account_period_value (priv->budget, account, period_num);
     else
     {
-        if (gnc_reverse_budget_balance (account, TRUE))
-            numeric = gnc_numeric_neg (numeric);
+        numeric = gnc_numeric_neg (numeric);
         gnc_budget_set_account_period_value (priv->budget, account, period_num,
                                              numeric);
     }
@@ -1342,65 +1337,31 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
         currency = gnc_account_get_currency_or_parent (account);
         acctype = xaccAccountGetType (account);
 
-        if (gnc_using_unreversed_budgets (gnc_account_get_book (account)))
-        {  /* using book with unreversed-budgets feature. This will be
-              the default in 4.x after budget scrubbing*/
-            neg = gnc_reverse_balance (account);
+        neg = gnc_reverse_balance (account);
 
-            switch (row_type)
-            {
-                case TOTALS_TYPE_ASSET_LIAB_EQ:
-                    if ((acctype != ACCT_TYPE_ASSET) &&
-                        (acctype != ACCT_TYPE_LIABILITY) &&
-                        (acctype != ACCT_TYPE_EQUITY))
-                        continue;
-                    neg = !neg;
-                    break;
-                case TOTALS_TYPE_EXPENSES:
-                    if (acctype != ACCT_TYPE_EXPENSE)
-                        continue;
-                    break;
-                case TOTALS_TYPE_INCOME:
-                    if (acctype != ACCT_TYPE_INCOME)
-                        continue;
-                    neg = !neg;
-                    break;
-                case TOTALS_TYPE_REMAINDER:
-                    neg = !neg;
-                    break;
-                default:
-                    continue;       /* don't count if unexpected total row type is passed in... */
-            }
-        }
-        else
-        {   /* this section is for backward compatibility, to be
-               removed when unreversed-budgets are mandatory */
-            neg = FALSE;
-
-            switch (row_type)
-            {
-                case TOTALS_TYPE_ASSET_LIAB_EQ:
-                    if ((acctype != ACCT_TYPE_ASSET) &&
-                        (acctype != ACCT_TYPE_LIABILITY) &&
-                        (acctype != ACCT_TYPE_EQUITY))
-                        continue;
-                    neg = (acctype == ACCT_TYPE_ASSET);
-                    break;
-                case TOTALS_TYPE_EXPENSES:
-                    if (acctype != ACCT_TYPE_EXPENSE)
-                        continue;
-                    break;
-                case TOTALS_TYPE_INCOME:
-                    if (acctype != ACCT_TYPE_INCOME)
-                        continue;
-                    break;
-                case TOTALS_TYPE_REMAINDER:
-                    neg = ((acctype == ACCT_TYPE_ASSET) ||
-                           (acctype == ACCT_TYPE_EXPENSE));
-                    break;
-                default:
-                    continue;       /* don't count if unexpected total row type is passed in... */
-            }
+        switch (row_type)
+        {
+            case TOTALS_TYPE_ASSET_LIAB_EQ:
+                if ((acctype != ACCT_TYPE_ASSET) &&
+                    (acctype != ACCT_TYPE_LIABILITY) &&
+                    (acctype != ACCT_TYPE_EQUITY))
+                    continue;
+                neg = !neg;
+                break;
+            case TOTALS_TYPE_EXPENSES:
+                if (acctype != ACCT_TYPE_EXPENSE)
+                    continue;
+                break;
+            case TOTALS_TYPE_INCOME:
+                if (acctype != ACCT_TYPE_INCOME)
+                    continue;
+                neg = !neg;
+                break;
+            case TOTALS_TYPE_REMAINDER:
+                neg = !neg;
+                break;
+            default:
+                continue;       /* don't count if unexpected total row type is passed in... */
         }
         // find the total for this account
 
