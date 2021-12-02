@@ -152,6 +152,27 @@ void gnc_features_set_used (QofBook *book, const gchar *feature)
     qof_book_set_feature (book, feature, description);
 }
 
+
+void gnc_features_set_unused (QofBook *book, const gchar *feature)
+{
+    const gchar *description;
+
+    g_return_if_fail (book);
+    g_return_if_fail (feature);
+
+    gnc_features_init();
+
+    /* Can't unset an unknown feature */
+    description = g_hash_table_lookup (features_table, feature);
+    if (!description)
+    {
+        PWARN("Tried to set unknown feature as unused.");
+        return;
+    }
+
+    qof_book_unset_feature (book, feature, description);
+}
+
 struct CheckFeature
 {
     gchar const * checked_feature;
