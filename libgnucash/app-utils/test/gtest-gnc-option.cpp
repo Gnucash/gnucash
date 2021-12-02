@@ -121,11 +121,11 @@ TEST(GncOption, test_bool_stream_out)
     GncOption option("foo", "bar", "baz", "Phony Option", false);
     std::ostringstream oss;
     oss << option;
-    EXPECT_STREQ(oss.str().c_str(), "#f");
+    EXPECT_STREQ(oss.str().c_str(), "False");
     oss.str("");
     option.set_value(true);
     oss << option;
-    EXPECT_STREQ(oss.str().c_str(), "#t");
+    EXPECT_STREQ(oss.str().c_str(), "True");
 }
 
 TEST(GncOption, test_bool_stream_in)
@@ -301,7 +301,7 @@ static inline std::string make_currency_str(gnc_commodity* cur)
 static inline std::string make_commodity_str(gnc_commodity* com)
 {
     std::string com_str{gnc_commodity_get_namespace(com)};
-    com_str += " ";
+    com_str += ":";
     com_str += gnc_commodity_get_mnemonic(com);
     return com_str;
 }
@@ -511,7 +511,7 @@ TEST_F(GncRangeOption, test_range_out)
 {
     std::ostringstream oss;
     oss << "Integer " << m_intoption << " Double " << m_doubleoption << ".";
-    EXPECT_STREQ("Integer 15 Double 1.5.", oss.str().c_str());
+    EXPECT_STREQ("Integer 15 Double 1.500000.", oss.str().c_str());
 }
 
 TEST_F(GncRangeOption, test_range_in)
@@ -1120,8 +1120,8 @@ TEST_F(GncDateOption, test_stream_out)
     m_option.set_value(time1);
     std::ostringstream oss;
     oss << time1;
-    std::string timestr{"absolute . "};
-    timestr += oss.str();
+    std::string timestr{"(absolute . "};
+    timestr += oss.str() + ")";
     oss.str("");
     oss << m_option;
     EXPECT_EQ(oss.str(), timestr);
@@ -1129,77 +1129,77 @@ TEST_F(GncDateOption, test_stream_out)
     m_option.set_value(RelativeDatePeriod::TODAY);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . today");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . today)");
 
     m_option.set_value(RelativeDatePeriod::START_THIS_MONTH);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . start-this-month");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . start-this-month)");
 
     m_option.set_value(RelativeDatePeriod::END_THIS_MONTH);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . end-this-month");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . end-this-month)");
 
     m_option.set_value(RelativeDatePeriod::START_PREV_MONTH);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-month");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . start-prev-month)");
 
     m_option.set_value(RelativeDatePeriod::END_PREV_MONTH);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-month");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . end-prev-month)");
 
     m_option.set_value(RelativeDatePeriod::START_CURRENT_QUARTER);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . start-current-quarter");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . start-current-quarter)");
 
     m_option.set_value(RelativeDatePeriod::END_CURRENT_QUARTER);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . end-current-quarter");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . end-current-quarter)");
 
     m_option.set_value(RelativeDatePeriod::START_PREV_QUARTER);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-quarter");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . start-prev-quarter)");
 
     m_option.set_value(RelativeDatePeriod::END_PREV_QUARTER);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-quarter");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . end-prev-quarter)");
 
     m_option.set_value(RelativeDatePeriod::START_CAL_YEAR);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . start-cal-year");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . start-cal-year)");
 
     m_option.set_value(RelativeDatePeriod::END_CAL_YEAR);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . end-cal-year");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . end-cal-year)");
 
     m_option.set_value(RelativeDatePeriod::START_PREV_YEAR);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-year");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . start-prev-year)");
 
     m_option.set_value(RelativeDatePeriod::END_PREV_YEAR);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-year");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . end-prev-year)");
 
     m_option.set_value(RelativeDatePeriod::START_ACCOUNTING_PERIOD);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-fin-year");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . start-prev-fin-year)");
 
     m_option.set_value(RelativeDatePeriod::END_ACCOUNTING_PERIOD);
     oss.str("");
     oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-fin-year");
+    EXPECT_STREQ(oss.str().c_str(), "(relative . end-prev-fin-year)");
 }
 
 TEST_F(GncDateOption, test_stream_in_absolute)

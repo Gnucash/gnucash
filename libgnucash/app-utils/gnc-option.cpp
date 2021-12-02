@@ -406,12 +406,21 @@ GncOption::set_alternate(bool alt) noexcept
                }, *m_option);
 }
 
-std::ostream&
-GncOption::out_stream(std::ostream& oss) const
+std::string
+GncOption::serialize() const
 {
-    return std::visit([&oss](auto& option) -> std::ostream& {
-                          oss << option;
-                          return oss;
+    if (m_option->valueless_by_exception())
+        return "Valueless Option";
+    return std::visit([&](auto& option) -> std::string {
+                          return option.serialize();
+                      }, *m_option);
+}
+
+bool
+GncOption::deserialize(const std::string& str)
+{
+    return std::visit([&str](auto& option) -> bool {
+                          return option.deserialize(str);
                       }, *m_option);
 }
 

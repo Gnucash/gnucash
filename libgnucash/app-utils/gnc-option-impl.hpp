@@ -134,6 +134,8 @@ public:
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    std::string serialize() const noexcept;
+    bool deserialize(const std::string& str) noexcept;
 private:
     GncOptionUIType m_ui_type;
     ValueType m_value;
@@ -201,6 +203,8 @@ public:
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    std::string serialize() const noexcept;
+    bool deserialize(const std::string& str) noexcept;
 private:
     GncOptionUIType m_ui_type;
     ValueType m_value;
@@ -299,19 +303,24 @@ std::istream&
 operator>> (std::istream& iss, OptType& opt)
 {
     std::string instr;
-    if (auto type = opt.get_ui_type(); type == GncOptionUIType::COMMODITY ||
-        type == GncOptionUIType::CURRENCY)
+    auto type = opt.get_ui_type();
+    if (type == GncOptionUIType::COMMODITY || type == GncOptionUIType::CURRENCY)
     {
         std::string name_space, mnemonic;
-        if (type = opt.get_ui_type(); type == GncOptionUIType::COMMODITY)
-        {
+        if (type == GncOptionUIType::COMMODITY)
             iss >> name_space;
-        }
         else
             name_space = GNC_COMMODITY_NS_CURRENCY;
-        iss >> mnemonic;
-        instr = name_space + ":";
-        instr += mnemonic;
+        if (name_space.find(":") == std::string::npos)
+        {
+            iss >> mnemonic;
+            instr = name_space + ":";
+            instr += mnemonic;
+        }
+        else
+        {
+            instr = name_space;
+        }
      }
     else
     {
@@ -385,6 +394,8 @@ public:
         if (m_ui_type == GncOptionUIType::PLOT_SIZE)
             m_alternate = value;
     }
+    std::string serialize() const noexcept;
+    bool deserialize(const std::string& str) noexcept;
 private:
     GncOptionUIType m_ui_type = GncOptionUIType::NUMBER_RANGE;
     ValueType m_value;
@@ -644,6 +655,8 @@ public:
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
     GncOptionMultichoiceKeyType get_keytype(unsigned i) const { return std::get<2>(m_choices.at(i)); }
+    std::string serialize() const noexcept;
+    bool deserialize(const std::string& str) noexcept;
 private:
     std::size_t find_key (const std::string& key) const noexcept
     {
@@ -794,6 +807,8 @@ public:
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
     bool is_multiselect() const noexcept { return m_multiselect; }
+    std::string serialize() const noexcept;
+    bool deserialize(const std::string& str) noexcept;
 private:
     GncOptionUIType m_ui_type;
     GncOptionAccountList m_value;
@@ -895,6 +910,8 @@ public:
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    std::string serialize() const noexcept;
+    bool deserialize(const std::string& str) noexcept;
 private:
     GncOptionUIType m_ui_type;
     Account* m_value;
@@ -1042,6 +1059,8 @@ public:
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
     const RelativeDatePeriodVec& get_period_set() const { return m_period_set; }
+    std::string serialize() const noexcept;
+    bool deserialize(const std::string& str) noexcept;
 private:
     GncOptionUIType m_ui_type;
     time64 m_date;

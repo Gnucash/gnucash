@@ -590,6 +590,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 #include <array>
 #include <string>
 #include "gnc-option.hpp"
+#include "gnc-option-impl.hpp"
 #include "gnc-option-ui.hpp"
 
     GncOptionVariant& swig_get_option(GncOption* option)
@@ -1009,7 +1010,9 @@ inline SCM return_scm_value(ValueType value)
         const SCM ticked_format_str{scm_from_utf8_string("'~a")};
 //scm_simple_format needs a scheme list of arguments to match the format
 //placeholders.
-        auto value{scm_list_1(GncOption_get_scm_value($self))};
+        auto serial{$self->serialize()};
+        SCM value = serial.empty() ? SCM_BOOL_F :
+            scm_list_1(scm_from_utf8_string(serial.c_str()));
         auto uitype{$self->get_ui_type()};
         if (uitype == GncOptionUIType::STRING ||
             uitype == GncOptionUIType::TEXT ||
@@ -1030,11 +1033,48 @@ inline SCM return_scm_value(ValueType value)
                 return scm_simple_format(SCM_BOOL_F, plain_format_str, value);
             else
                 return scm_simple_format(SCM_BOOL_F, plain_format_str,
-                                         SCM_BOOL_F);
+                                         scm_list_1(SCM_BOOL_F));
+        }
+        else if (uitype == GncOptionUIType::CURRENCY)
+        {
+            const SCM quoted_format_str{scm_from_utf8_string("\"~a\"")};
+            return scm_simple_format(SCM_BOOL_F, quoted_format_str, value);
+        }
+        else if (uitype == GncOptionUIType::COMMODITY)
+        {
+            const SCM commodity_fmt{scm_from_utf8_string("\"~a\" \"~a\"")};
+            auto sep{serial.find(':')};
+            if (sep == std::string::npos)
+                sep = serial.find(' ');
+            if (sep == std::string::npos)
+            {
+                const SCM quoted_format_str{scm_from_utf8_string("\"~a\"")};
+                return scm_simple_format(SCM_BOOL_F, quoted_format_str, value);
+            }
+            auto name_space{serial.substr(0, sep)};
+            auto symbol{serial.substr(sep + 1, std::string::npos)};
+            auto commodity_val{scm_list_2(scm_from_utf8_string(name_space.c_str()),
+                                          scm_from_utf8_string(symbol.c_str()))};
+            return scm_simple_format(SCM_BOOL_F, commodity_fmt, commodity_val);
+        }
+        else if (uitype == GncOptionUIType::DATE_ABSOLUTE ||
+                 uitype == GncOptionUIType::DATE_RELATIVE ||
+                 uitype == GncOptionUIType::DATE_BOTH)
+        {
+            const SCM date_fmt{scm_from_utf8_string("'~a")};
+            return scm_simple_format(SCM_BOOL_F, date_fmt, value);
         }
         else
         {
-            return scm_simple_format(SCM_BOOL_F, ticked_format_str, value);
+            if (value && scm_is_true(value))
+            {
+                return scm_simple_format(SCM_BOOL_F, ticked_format_str, value);
+            }
+            else
+            {
+                return scm_simple_format(SCM_BOOL_F, plain_format_str,
+                                         scm_list_1(SCM_BOOL_F));
+            }
         }
     }
 
@@ -1082,6 +1122,24 @@ inline SCM return_scm_value(ValueType value)
                         {
                             auto val{scm_to_value<const QofInstance*>(new_value)};
                             option.set_value(val);
+                        }
+                        return;
+                    }
+                    if constexpr (is_same_decayed_v<decltype(option),
+                                  GncOptionAccountSelValue>)
+                    {
+                        if (scm_is_string(new_value))
+                        {
+                            auto strval{scm_to_utf8_string(new_value)};
+                            GncGUID guid;
+                            string_to_guid(strval, &guid);
+                            auto book{gnc_get_current_book()};
+                            option.set_value(xaccAccountLookup(&guid, book));
+                        }
+                        else
+                        {
+                            auto val{scm_to_value<const QofInstance*>(new_value)};
+                            option.set_value(GNC_ACCOUNT(val));
                         }
                         return;
                     }
@@ -1139,6 +1197,24 @@ inline SCM return_scm_value(ValueType value)
                         else
                         {
                             auto val{scm_to_value<const QofInstance*>(new_value)};
+                            option.set_default_value(val);
+                        }
+                        return;
+                    }
+                    if constexpr (is_same_decayed_v<decltype(option),
+                                  GncOptionAccountSelValue>)
+                    {
+                        if (scm_is_string(new_value))
+                        {
+                            auto strval{scm_to_utf8_string(new_value)};
+                            GncGUID guid;
+                            string_to_guid(strval, &guid);
+                            auto book{gnc_get_current_book()};
+                            option.set_default_value(xaccAccountLookup(&guid, book));
+                        }
+                        else
+                        {
+                            auto val{scm_to_value<Account*>(new_value)};
                             option.set_default_value(val);
                         }
                         return;
@@ -1392,7 +1468,8 @@ inline SCM return_scm_value(ValueType value)
                               gnc_commodity *value)
     {
         return new GncOption{GncOptionValue<const QofInstance*>{
-                section, name, key, doc_string, (const QofInstance*)value}};
+                section, name, key, doc_string, (const QofInstance*)value,
+                    GncOptionUIType::COMMODITY}};
     }
 
     static GncOption*

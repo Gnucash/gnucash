@@ -66,9 +66,31 @@
 (let ((option (gnc:lookup-option options
                                  \"foo\"
                                  \"bar\")))
-  ((lambda (o) (if o (gnc:option-set-value o '~s))) option))
+  ((lambda (o) (if o (gnc:option-set-value o '~a))) option))
 
 " value))
+
+(define (test-currency-output-template value)
+  (format #f "
+; Section: foo
+
+(let ((option (gnc:lookup-option options
+                                 \"foo\"
+                                 \"bar\")))
+  ((lambda (o) (if o (gnc:option-set-value o \"~a\"))) option))
+
+" value))
+
+(define (test-commodity-output-template value)
+  (format #f "
+; Section: foo
+
+(let ((option (gnc:lookup-option options
+                                 \"foo\"
+                                 \"bar\")))
+  ((lambda (o) (if o (gnc:option-set-value o \"~a\" \"~a\"))) option))
+
+" (string-split value #\:)))
 
 (define (test-budget-output-template value)
   (format #f "
@@ -90,7 +112,7 @@
     (test-equal test-unchanged-section-output-template
                 (gnc:generate-restore-forms odb "options"))
     (gnc:option-set-value (gnc:lookup-option odb "foo" "bar") value)
-    (test-equal (test-template value)
+    (test-equal (test-template (GncOption-serialize (gnc:lookup-option odb "foo" "bar")))
                 (gnc:generate-restore-forms odb "options"))))
 
 (define (test-gnc-string-option-to-scheme)
@@ -125,7 +147,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
           (EUR (gnc-commodity-new book "European Union Euro" "CURRENCY" "EUR" "" 100)))
       (gnc-commodity-table-insert table USD)
       (gnc-commodity-table-insert table EUR)
-      (test-option-scheme-output gnc:make-currency-option test-literal-output-template
+      (test-option-scheme-output gnc:make-currency-option test-currency-output-template
                                USD EUR)
 ;; Garbage collection has already eaten USD and EUR.
       (test-book-clear-data book "gnc-commodity-table")
@@ -163,7 +185,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
   (let* ((book (gnc-option-test-book-new))
          (AAPL (gnc-commodity-new book "Apple" "NASDAQ" "AAPL" "" 1))
          (FMAGX (gnc-commodity-new book "Fidelity Magellan Fund" "FUND" "FMAGX" "" 1000)))
-  (test-option-scheme-output gnc:make-commodity-option test-literal-output-template
+  (test-option-scheme-output gnc:make-commodity-option test-currency-output-template
                              AAPL FMAGX))
   (test-end "test-gnc-commodity-option-to-scheme"))
 
@@ -181,19 +203,19 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
   (test-begin "test-gnc-date-option-to-scheme")
   (let ((odb (gnc:new-options)))
     (gnc:options-make-end-date! odb "foo" "bar" "baz" "Phoney Option")
-    (test-equal test-unchanged-section-output-template
+    (test-equal "Date Unchanged" test-unchanged-section-output-template
                 (gnc:generate-restore-forms odb "options"))
     (let* ((option (gnc:lookup-option odb "foo" "bar"))
           (test-template test-literal-output-template)
           (time (gnc-dmy2time64 25 12 2020))
           (value `(absolute . ,time)))
       (gnc:option-set-value option value)
-      (test-equal (test-template (GncOption-get-scm-value option))
+      (test-equal "Absolute Date" (test-template (GncOption-serialize option))
                   (gnc:generate-restore-forms odb "options"))
       (set! value '(relative . end-prev-year))
       (gnc:option-set-value option value)
-      (test-equal value (GncOption-get-scm-value option))
-      (test-equal (test-template (GncOption-get-scm-value option))
+      (test-equal "Relative Date Value" value (GncOption-get-scm-value option))
+      (test-equal "Relative Date" (test-template (GncOption-serialize option))
                   (gnc:generate-restore-forms odb "options"))))
   (test-end "test-gnc-date-option-to-scheme"))
 
@@ -248,7 +270,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
             (test-template test-literal-output-template)
             (new-acclist (gnc-account-list-from-types book (list ACCT-TYPE-BANK))))
         (gnc-option-set-value option new-acclist)
-        (test-equal (test-template (GncOption-get-scm-value option))
+        (test-equal (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-account-list-option-to-scheme"))
@@ -271,7 +293,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
             (test-template test-literal-output-template)
             (new-acclist (gnc-account-list-from-types book (list ACCT-TYPE-BANK))))
         (gnc-option-set-value option new-acclist)
-        (test-equal (test-template (GncOption-get-scm-value option))
+        (test-equal (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-account-sel-option-to-scheme"))
@@ -301,7 +323,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
                 (gnc:generate-restore-forms odb "options"))
     (let ((option (gnc:lookup-option odb "foo" "bar")))
       (gnc:option-set-value option value)
-      (test-equal (test-template (GncOption-get-scm-value option))
+      (test-equal (test-template (GncOption-serialize option))
                   (gnc:generate-restore-forms odb "options"))))
   (test-end "test-gnc-multichoice-option-to-scheme"))
 
@@ -319,7 +341,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
       (let ((option (gnc:lookup-option odb "foo" "bar"))
             (test-template test-literal-output-template))
         (gnc-option-set-value option '(ugly))
-        (test-equal (test-template (GncOption-get-scm-value option))
+        (test-equal (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-list-option-to-scheme"))
@@ -340,7 +362,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
       (let ((option (gnc:lookup-option odb "foo" "bar"))
             (test-template test-literal-output-template))
         (gnc-option-set-value option 42.0)
-        (test-equal (test-template (GncOption-get-scm-value option))
+        (test-equal (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-number-range-option-to-scheme"))
@@ -361,7 +383,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
       (let ((option (gnc:lookup-option odb "foo" "bar"))
             (test-template test-literal-output-template))
         (gnc-option-set-value option 420)
-        (test-equal (test-template (GncOption-get-scm-value option))
+        (test-equal (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-number-plot-size-option-to-scheme"))
@@ -384,7 +406,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
       (let ((option (gnc:lookup-option odb "__reg" "query"))
             (test-template test-literal-output-template))
         (gnc-option-set-value option (gnc-scm2query query-scm))
-        (test-equal (test-template (GncOption-get-scm-value option))
+        (test-equal (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
   (test-end "test-gnc-number-plot-size-option-to-scheme"))
@@ -420,7 +442,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
       (let ((option (gnc:lookup-option odb "foo" "bar"))
             (test-template test-literal-output-template))
         (gnc-option-set-value option '"13b305236443451a86c5366b7f890ecb")
-        (test-equal (test-template (GncOption-get-scm-value option))
+        (test-equal (test-template (GncOption-serialize option))
                     (gnc:generate-restore-forms odb "options"))
         ))
     (test-end  "test-gnc-owner-option-to-scheme"))

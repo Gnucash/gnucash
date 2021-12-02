@@ -180,9 +180,20 @@ public:
     GList* account_type_list() const noexcept;
     bool is_alternate() const noexcept;
     void set_alternate(bool) noexcept;
-    std::ostream& out_stream(std::ostream& oss) const;
+/** Get a string suitable for storage representing the option's value.
+ *  @return a std::string
+ */
+    std::string serialize() const;
+/** Set the option's value from a character sequence.
+ * @param str: The character sequence representing the value
+ * @return true if the value was set, false otherwise.
+ */
+    bool deserialize(const std::string& str);
+/** Set the option's value from an input stream
+ *  @param iss: An input stream reference.
+ *  @return the stream reference for chaining.
+ */
     std::istream& in_stream(std::istream& iss);
-
     friend GncOptionVariant& swig_get_option(GncOption*);
 
 private:
@@ -200,7 +211,8 @@ operator<(const GncOption& right, const GncOption& left)
 inline std::ostream&
 operator<<(std::ostream& oss, const GncOption& opt)
 {
-    return opt.out_stream(oss);
+    oss << opt.serialize();
+    return oss;
 }
 
 inline std::istream&

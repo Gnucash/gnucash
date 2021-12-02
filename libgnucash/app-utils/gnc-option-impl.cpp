@@ -26,6 +26,7 @@
 #include <gnc-datetime.hpp>
 #include <guid.hpp>
 #include <cassert>
+#include <charconv>
 
 extern "C"
 {
@@ -389,8 +390,28 @@ qof_instance_from_string(const std::string& str, GncOptionUIType type)
 std::string
 qof_instance_to_string(const QofInstance* inst)
 {
-    gnc::GUID guid{*qof_instance_get_guid(inst)};
-    return guid.to_string();
+    std::string retval;
+    if (GNC_IS_COMMODITY(inst))
+    {
+        auto commodity{GNC_COMMODITY(inst)};
+        if (!gnc_commodity_is_currency(commodity))
+        {
+            auto name_space{gnc_commodity_get_namespace(GNC_COMMODITY(inst))};
+            if (name_space && *name_space != '\0')
+            {
+                retval = name_space;
+                retval += ":";
+            }
+        }
+        retval += gnc_commodity_get_mnemonic(GNC_COMMODITY(inst));
+        return retval;
+    }
+    else
+    {
+        gnc::GUID guid{*qof_instance_get_guid(inst)};
+        retval = guid.to_string();
+    }
+    return retval;
 }
 
 template <typename ValueType> void
@@ -409,6 +430,41 @@ template <typename ValueType> void
 GncOptionValue<ValueType>::reset_default_value()
 {
     m_value = m_default_value;
+}
+
+template <typename ValueType> std::string
+GncOptionValue<ValueType>::serialize() const noexcept
+{
+    if constexpr(std::is_same_v<ValueType, const QofInstance*>)
+        return qof_instance_to_string(m_value);
+    else if constexpr(is_same_decayed_v<ValueType, std::string>)
+        return m_value;
+    else if constexpr(is_same_decayed_v<ValueType, bool>)
+        return m_value ? "True" : "False";
+    else if constexpr(std::is_arithmetic_v<ValueType>)
+        return std::to_string(m_value);
+    else
+        return "";
+}
+
+template <typename ValueType> bool
+GncOptionValue<ValueType>::deserialize(const std::string& str) noexcept
+{
+    if constexpr(std::is_same_v<ValueType, const QofInstance*>)
+        set_value(qof_instance_from_string(str, get_ui_type()));
+    else if constexpr(is_same_decayed_v<ValueType, std::string>)
+        set_value(str);
+    else if constexpr(is_same_decayed_v<ValueType, bool>)
+        set_value(str == "True");
+    else if constexpr(is_same_decayed_v<ValueType, int>)
+        set_value(stoi(str));
+    else if constexpr(is_same_decayed_v<ValueType, int64_t>)
+        set_value(stoll(str));
+    else if constexpr(is_same_decayed_v<ValueType, double>)
+        set_value(stod(str));
+    else
+        return false;
+    return true;
 }
 
 template <> void
@@ -439,6 +495,201 @@ GncOptionValue<SCM>::reset_default_value()
         scm_gc_unprotect_object(m_value);
     m_value = m_default_value;
     scm_gc_protect_object(m_value);
+}
+
+template <typename ValueType> std::string
+GncOptionValidatedValue<ValueType>::serialize() const noexcept
+{
+    if constexpr(std::is_same_v<ValueType, const QofInstance*>)
+        return qof_instance_to_string(m_value);
+    else if constexpr(is_same_decayed_v<ValueType, std::string>)
+        return m_value;
+    else if constexpr(is_same_decayed_v<ValueType, bool>)
+        return m_value ? "True" : "False";
+    else if constexpr(std::is_arithmetic_v<ValueType>)
+        return std::to_string(m_value);
+    else
+        return "Invalid Value Type";
+}
+
+template <typename ValueType> bool
+GncOptionValidatedValue<ValueType>::deserialize(const std::string& str) noexcept
+{
+    if constexpr(std::is_same_v<ValueType, const QofInstance*>)
+        set_value(qof_instance_from_string(str, get_ui_type()));
+    else if constexpr(is_same_decayed_v<ValueType, std::string>)
+        set_value(str);
+    else if constexpr(is_same_decayed_v<ValueType, bool>)
+        set_value(str == "True");
+    else if constexpr(is_same_decayed_v<ValueType, int>)
+        set_value(stoi(str));
+    else if constexpr(is_same_decayed_v<ValueType, int64_t>)
+        set_value(stoll(str));
+    else if constexpr(is_same_decayed_v<ValueType, double>)
+        set_value(stod(str));
+    else
+        return false;
+    return true;
+}
+
+std::string
+GncOptionAccountListValue::serialize() const noexcept
+{
+    std::string retval;
+    bool first = true;
+    for (auto val : m_value)
+    {
+        if (!first)
+            retval += " ";
+        first = false;
+        retval += qof_instance_to_string(QOF_INSTANCE(val));
+    }
+    return retval;
+}
+
+bool
+GncOptionAccountListValue::deserialize(const std::string& str) noexcept
+{
+    if (str.empty() || str.size() < GUID_ENCODING_LENGTH)
+        return false;
+    m_value.clear();
+    m_value.reserve(str.size() / GUID_ENCODING_LENGTH);
+    bool first = true;
+    size_t pos{};
+    while (pos + GUID_ENCODING_LENGTH < str.size())
+    {
+        if (!first)
+            ++pos;
+        first = false;
+        auto ptr = qof_instance_from_string(str.substr(pos, pos + GUID_ENCODING_LENGTH), get_ui_type());
+        m_value.push_back(reinterpret_cast<Account*>(ptr));
+        pos += GUID_ENCODING_LENGTH;
+    }
+    return true;
+}
+
+std::string
+GncOptionAccountSelValue::serialize() const noexcept
+{
+    return qof_instance_to_string(QOF_INSTANCE(m_value));
+}
+
+bool
+GncOptionAccountSelValue::deserialize(const std::string& str) noexcept
+{
+    set_value(reinterpret_cast<Account*>(qof_instance_from_string(str, get_ui_type())));
+    return true;
+}
+
+std::string
+GncOptionMultichoiceValue::serialize() const noexcept
+{
+    std::string retval;
+    bool first = true;
+    for (auto index : m_value)
+    {
+        if (!first)
+            retval += " ";
+        first = false;
+        retval += std::get<0>(m_choices[index]);
+    }
+    return retval;
+}
+
+bool
+GncOptionMultichoiceValue::deserialize(const std::string& str) noexcept
+{
+    static const auto size_t_max = std::numeric_limits<std::size_t>::max();
+    if (str.empty())
+
+        return false;
+    size_t pos{};
+    while (pos < str.size())
+    {
+        auto endpos{str.find(' ', pos)};
+        if (endpos == std::string::npos)
+            endpos = str.size();
+        //need a null-terminated char* to pass to permissible_value_index
+        auto index{permissible_value_index(str.substr(pos, endpos).c_str())};
+        if (index == size_t_max)
+            return false;
+        m_value.push_back(index);
+        pos = endpos + 1;
+    }
+    return true;
+}
+
+template <typename ValueType> std::string
+GncOptionRangeValue<ValueType>::serialize() const noexcept
+{
+    if constexpr (std::is_arithmetic_v<ValueType>)
+        return std::to_string(m_value);
+    return "";
+}
+
+template <typename ValueType> bool
+GncOptionRangeValue<ValueType>::deserialize(const std::string& str) noexcept
+{
+    if constexpr(is_same_decayed_v<ValueType, int>)
+        set_value(stoi(str));
+    else if constexpr(is_same_decayed_v<ValueType, double>)
+        set_value(stod(str));
+    return true;
+}
+
+std::string
+GncOptionDateValue::serialize() const noexcept
+{
+    std::string retval{"("};
+    if (m_period == RelativeDatePeriod::ABSOLUTE)
+    {
+        retval += date_type_str[0];
+        retval += " . ";
+        retval += std::to_string(m_date);
+    }
+    else
+    {
+        retval += date_type_str[1];
+        retval +=  " . ";
+        retval += gnc_relative_date_storage_string(m_period);
+    }
+    retval += ")";
+    return retval;
+}
+
+bool
+GncOptionDateValue::deserialize(const std::string& str) noexcept
+{
+ //The length of both "absolute" and "relative".
+    static constexpr size_t date_type_len{9};
+    // date_type_len plus the length of " . ".
+    static constexpr size_t date_value_pos{12};
+    auto type_str{str.substr(0, date_type_len)};
+    auto period_str{str.substr(date_value_pos)};
+    if (type_str == "absolute")
+    {
+        set_value(std::stoll(period_str));
+        return true;
+    }
+    else if (type_str == "relative ")
+    {
+        auto period = gnc_relative_date_from_storage_string(period_str.c_str());
+        if (period == RelativeDatePeriod::ABSOLUTE)
+        {
+            PWARN("Unknown period string in date option: '%s'",
+                  period_str.c_str());
+            return false;
+        }
+
+        set_value(period);
+        return true;
+    }
+    else
+    {
+        PWARN("Unknown date type string in date option: '%s'",
+              type_str.c_str());
+        return false;
+    }
 }
 
 template GncOptionValue<bool>::GncOptionValue(const GncOptionValue<bool>&);
@@ -498,3 +749,49 @@ template void GncOptionValue<RelativeDatePeriod>::reset_default_value();
 template void GncOptionValue<size_t>::reset_default_value();
 template void GncOptionValue<GncOptionAccountList>::reset_default_value();
 template void GncOptionValue<GncMultichoiceOptionIndexVec>::reset_default_value();
+template std::string GncOptionValue<bool>::serialize() const noexcept;
+template std::string GncOptionValue<int>::serialize() const noexcept;
+template std::string GncOptionValue<int64_t>::serialize() const noexcept;
+template std::string GncOptionValue<double>::serialize() const noexcept;
+template std::string GncOptionValue<char*>::serialize() const noexcept;
+template std::string GncOptionValue<const char*>::serialize() const noexcept;
+template std::string GncOptionValue<std::string>::serialize() const noexcept;
+template std::string GncOptionValue<const QofInstance*>::serialize() const noexcept;
+template std::string GncOptionValue<const QofQuery*>::serialize() const noexcept;
+template std::string GncOptionValue<const GncOwner*>::serialize() const noexcept;
+template std::string GncOptionValue<SCM>::serialize() const noexcept;
+template std::string GncOptionValidatedValue<bool>::serialize() const noexcept;
+template std::string GncOptionValidatedValue<int>::serialize() const noexcept;
+template std::string GncOptionValidatedValue<int64_t>::serialize() const noexcept;
+template std::string GncOptionValidatedValue<double>::serialize() const noexcept;
+template std::string GncOptionValidatedValue<char*>::serialize() const noexcept;
+template std::string GncOptionValidatedValue<const char*>::serialize() const noexcept;
+template std::string GncOptionValidatedValue<std::string>::serialize() const noexcept;
+template std::string GncOptionValidatedValue<const QofInstance*>::serialize() const noexcept;
+template std::string GncOptionValidatedValue<const QofQuery*>::serialize() const noexcept;
+template std::string GncOptionValidatedValue<const GncOwner*>::serialize() const noexcept;
+template std::string GncOptionRangeValue<int>::serialize() const noexcept;
+template std::string GncOptionRangeValue<double>::serialize() const noexcept;
+template bool GncOptionValue<bool>::deserialize(const std::string&) noexcept;
+template bool GncOptionValue<int>::deserialize(const std::string&) noexcept;
+template bool GncOptionValue<int64_t>::deserialize(const std::string&) noexcept;
+template bool GncOptionValue<double>::deserialize(const std::string&) noexcept;
+template bool GncOptionValue<char*>::deserialize(const std::string&) noexcept;
+template bool GncOptionValue<const char*>::deserialize(const std::string&) noexcept;
+template bool GncOptionValue<std::string>::deserialize(const std::string&) noexcept;
+template bool GncOptionValue<const QofInstance*>::deserialize(const std::string&) noexcept;
+template bool GncOptionValue<const QofQuery*>::deserialize(const std::string&) noexcept;
+template bool GncOptionValue<const GncOwner*>::deserialize(const std::string&) noexcept;
+template bool GncOptionValue<SCM>::deserialize(const std::string&) noexcept;
+template bool GncOptionValidatedValue<bool>::deserialize(const std::string&) noexcept;
+template bool GncOptionValidatedValue<int>::deserialize(const std::string&) noexcept;
+template bool GncOptionValidatedValue<int64_t>::deserialize(const std::string&) noexcept;
+template bool GncOptionValidatedValue<double>::deserialize(const std::string&) noexcept;
+template bool GncOptionValidatedValue<char*>::deserialize(const std::string&) noexcept;
+template bool GncOptionValidatedValue<const char*>::deserialize(const std::string&) noexcept;
+template bool GncOptionValidatedValue<std::string>::deserialize(const std::string&) noexcept;
+template bool GncOptionValidatedValue<const QofInstance*>::deserialize(const std::string&) noexcept;
+template bool GncOptionValidatedValue<const QofQuery*>::deserialize(const std::string&) noexcept;
+template bool GncOptionValidatedValue<const GncOwner*>::deserialize(const std::string&) noexcept;
+template bool GncOptionRangeValue<int>::deserialize(const std::string&) noexcept;
+template bool GncOptionRangeValue<double>::deserialize(const std::string&) noexcept;
