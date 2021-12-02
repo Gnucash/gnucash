@@ -257,7 +257,7 @@
 
   (define (get-budget-account-budget-balance budget account)
     (let ((bal (gnc:budget-account-get-net budget account #f #f)))
-      (if (gnc-reverse-budget-balance account #t) (gnc:collector- bal) bal)))
+      (if (gnc-reverse-balance account) (gnc:collector- bal) bal)))
 
   (define (get-budget-account-initial-balance budget account)
     (gnc:budget-account-get-initial-balance budget account))
