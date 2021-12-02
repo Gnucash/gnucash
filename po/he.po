@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-10-17 23:05+0200\n"
-"PO-Revision-Date: 2021-12-01 14:53+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2021-12-02 08:28+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -21022,7 +21022,7 @@ msgstr "_הרצה מחודשת של קובץ log. גנוקאש..."
 #: gnucash/import-export/log-replay/gnc-plugin-log-replay.c:49
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr ""
-"הרצה מחודשת של קובץ יומן־הרישום של גנוקאש אחרי קריסה. הפעולה לא ניתנת להסגה."
+"הרצה מחודשת של קובץ יומן־הרישום של גנוקאש אחרי קריסה. הפעולה בלתי הפיכה."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:660
 #, c-format
