@@ -1767,9 +1767,9 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GNC_ACCOUNT_SEL(get_widget())};
-        auto instance{option.get_value<const QofInstance*>()};
+        auto instance{option.get_value<const Account*>()};
         if (instance)
-            gnc_account_sel_set_account(widget, GNC_ACCOUNT(instance), FALSE);
+            gnc_account_sel_set_account(widget, const_cast<Account*>(instance), FALSE);
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
