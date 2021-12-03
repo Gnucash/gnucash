@@ -1934,7 +1934,7 @@ be excluded from periodic reporting.")
           report-obj #:key custom-calculated-cells empty-report-message
           custom-split-filter split->date split->date-include-false?
           custom-source-accounts
-          export-type filename)
+          export-type)
   ;; the trep-renderer is a define* function which, at minimum, takes
   ;; the report object
   ;;
@@ -1966,11 +1966,6 @@ be excluded from periodic reporting.")
         (((? same-split?) . rest) (lp rest))
         (((? from-account?) . _) #t)
         ((_ . rest) (lp rest)))))
-
-  (when filename
-    (issue-deprecation-warning "trep-renderer filename is obsolete, and not \
-supported for exports. please set html-document export-string instead. this \
-warning will be removed in GnuCash 5.0"))
 
   (gnc:report-starting (opt-val gnc:pagename-general gnc:optname-reportname))
 

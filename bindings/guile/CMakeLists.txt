@@ -127,14 +127,6 @@ gnc_add_scheme_targets(scm-engine-2
 
 add_custom_target(scm-engine ALL DEPENDS scm-engine-2 scm-engine-1 scm-engine-0)
 
-set(scm_gnc_module_DEPENDS
-    gnucash-guile)
-
-gnc_add_scheme_targets(scm-gnc-module
-    SOURCES gnc-module.scm
-    OUTPUT_DIR gnucash
-    DEPENDS "${scm_gnc_module_DEPENDS}")
-
 set_local_dist(guile_DIST_local
     CMakeLists.txt
     core-utils.scm

@@ -225,14 +225,6 @@ gnc_add_scheme_targets(scm-app-utils-2
     DEPENDS "scm-bus-prefs"
     MAKE_LINKS)
 
-# Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module (OLD_MODULE "migrate-prefs")
-gnc_add_scheme_deprecated_module (OLD_MODULE "migrate-prefs-user")
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE "gnucash gettext"
-    NEW_MODULE "gnucash core-utils"
-    DEPENDS "scm-core-utils")
-
 add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1)
 
 set_local_dist(app_utils_DIST_local

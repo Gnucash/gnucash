@@ -79,7 +79,6 @@
 (export gnc:report-options)
 (export gnc:report-render-html)
 (export gnc:render-report)
-(export gnc:report-run)
 (export gnc:report-serialize)
 (export gnc:report-set-ctext!)
 (export gnc:report-set-dirty?!)
@@ -114,7 +113,6 @@
 (export gnc:report-to-template-new)
 (export gnc:report-to-template-update)
 (export gnc:report-type)
-(export gnc:restore-report-by-guid)
 (export gnc:restore-report-by-guid-with-custom-template)
 
 ;; Terminology in this file:
@@ -387,20 +385,6 @@ not found.")))
        options))
     (gnc:report-set-id! r (gnc-report-add r))
     (gnc:report-id r)))
-
-
-(define (gnc:restore-report-by-guid id template-id template-name options)
-  (issue-deprecation-warning "gnc:restore-report-by-guid is now deprecated.
- use gnc:restore-report-by-guid-with-custom-template instead.")
-  (if options
-      (let* ((r (make-report template-id id options #t #t #f #f ""))
-             (report-id (gnc-report-add r)))
-        (if (number? report-id)
-            (gnc:report-set-id! r report-id))
-        report-id)
-      (begin
-        (gui-error-missing-template template-name)
-        #f)))
 
 (define (gnc:restore-report-by-guid-with-custom-template
          id template-id template-name custom-template-id options)
@@ -765,20 +749,6 @@ not found.")))
 (define (gnc:render-report report)
   (define (get-report) (gnc:report-render-html report #t))
   (gnc:apply-with-error-handling get-report '()))
-
-;; looks up the report by id and renders it with gnc:report-render-html
-;; marks the cursor busy during rendering; returns the html
-(define (gnc:report-run id)
-  (issue-deprecation-warning "gnc:report-run is deprecated. use gnc:render-report instead.")
-  (let ((report (gnc-report-find id))
-        (html #f))
-    (gnc-set-busy-cursor '() #t)
-    (gnc:backtrace-if-exception
-     (lambda ()
-       (if report (set! html (gnc:report-render-html report #t)))))
-    (gnc-unset-busy-cursor '())
-    html))
-
 
 ;; "thunk" should take the report-type and the report template record
 (define (gnc:report-templates-for-each thunk)

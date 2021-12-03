@@ -455,7 +455,6 @@
 
                       (gnc:html-chart-set-data-labels! barchart col-labels)
                       (gnc:html-chart-set-data-labels! barchart (map car data))
-                      ;; (gnc:html-chart-set-row-labels-rotated?! barchart #t)
                       (gnc:html-chart-set-width! barchart width)
                       (gnc:html-chart-set-height! barchart height)
                       (gnc:html-chart-set-height! barchart height)

@@ -1373,15 +1373,783 @@
 
 </release>
 
-<release version="4009">
-
-<obsolete old-path="org.gnucash.dialogs.business-assoc"
-          old-key="last-geometry"/>
-
-<obsolete old-path="org.gnucash.dialogs.trans-assoc"
-          old-key="last-geometry"/>
+<release version="5000">
 
 <obsolete old-path="org.gnucash.general"
-          old-key="migrate-prefs-done"/>
+          old-key="prefs-version"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="save-window-geometry"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="account-separator"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="assoc-head"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="file-compression"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="autosave-show-explanation"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="autosave-interval-minutes"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="save-on-close-expires"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="save-on-close-wait-time"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="negative-in-red"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="auto-decimal-point"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="auto-decimal-places"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="force-price-decimal"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="retain-type-never"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="retain-type-days"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="retain-type-forever"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="retain-days"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="reversed-accounts-none"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="reversed-accounts-credit"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="reversed-accounts-incomeexpense"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="show-account-color"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="show-account-color-tabs"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="use-accounting-labels"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="tab-close-buttons"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="tab-width"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="tab-open-adjacent"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="currency-choice-locale"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="currency-choice-other"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="currency-other"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="clock-24h"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="date-format"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="date-completion-thisyear"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="date-completion-sliding"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="date-backmonths"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="grid-lines-horizontal"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="grid-lines-vertical"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="show-splash-screen"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="tab-position-top"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="tab-position-bottom"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="tab-position-left"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="tab-position-right"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="summarybar-position-top"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="summarybar-position-bottom"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="tab-next-recent"/>
+
+<obsolete old-path="org.gnucash.general"
+          old-key="num-source"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="use-gnucash-color-theme"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="use-theme-colors"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="enter-moves-to-end"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="auto-raise-lists"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="tab-to-transfer-on-memorised"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="use-new-window"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="alternate-color-by-transaction"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="draw-horizontal-lines"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="draw-vertical-lines"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="future-after-blank-transaction"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="default-style-ledger"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="default-style-autoledger"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="default-style-journal"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="double-line-mode"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="show-leaf-account-names"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="show-extra-dates"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="show-extra-dates-on-selection"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="show-calendar-buttons"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="selection-to-blank-on-expand"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="max-transactions"/>
+
+<obsolete old-path="org.gnucash.general.register"
+          old-key="key-length"/>
+
+<obsolete old-path="org.gnucash.general.report"
+          old-key="use-new-window"/>
+
+<obsolete old-path="org.gnucash.general.report"
+          old-key="currency-choice-locale"/>
+
+<obsolete old-path="org.gnucash.general.report"
+          old-key="currency-choice-other"/>
+
+<obsolete old-path="org.gnucash.general.report"
+          old-key="currency-other"/>
+
+<obsolete old-path="org.gnucash.general.report"
+          old-key="default-zoom"/>
+
+<obsolete old-path="org.gnucash.general.report.pdf-export"
+          old-key="filename-format"/>
+
+<obsolete old-path="org.gnucash.general.report.pdf-export"
+          old-key="filename-date-format"/>
+
+<obsolete old-path="org.gnucash.dev"
+          old-key="allow-file-incompatibility"/>
+
+<obsolete old-path="org.gnucash.dialogs.account"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.imap-editor"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.find-account"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.preferences"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.price-editor"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.pricedb-editor"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.reset-warnings"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.tax-info"
+          old-key="paned-position"/>
+
+<obsolete old-path="org.gnucash.dialogs.tax-info"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.fincalc"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.find"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.find"
+          old-key="search-for-active-only"/>
+
+<obsolete old-path="org.gnucash.dialogs.export-accounts"
+          old-key="last-path"/>
+
+<obsolete old-path="org.gnucash.dialogs.log-replay"
+          old-key="last-path"/>
+
+<obsolete old-path="org.gnucash.dialogs.open-save"
+          old-key="last-path"/>
+
+<obsolete old-path="org.gnucash.dialogs.report"
+          old-key="last-path"/>
+
+<obsolete old-path="org.gnucash.dialogs.report-saved-configs"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.lot-viewer"
+          old-key="hpane-position"/>
+
+<obsolete old-path="org.gnucash.dialogs.lot-viewer"
+          old-key="vpane-position"/>
+
+<obsolete old-path="org.gnucash.dialogs.lot-viewer"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.new-user"
+          old-key="first-startup"/>
+
+<obsolete old-path="org.gnucash.dialogs.new-hierarchy"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.new-hierarchy"
+          old-key="show-on-new-file"/>
+
+<obsolete old-path="org.gnucash.dialogs.search"
+          old-key="new-search-limit"/>
+
+<obsolete old-path="org.gnucash.dialogs.transfer"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.business-doclink"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.trans-doclink"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.style-sheet"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.options"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.customer-search"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.customer-search"
+          old-key="search-for-active-only"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.employee-search"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.employee-search"
+          old-key="search-for-active-only"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.invoice-search"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.invoice-search"
+          old-key="search-for-active-only"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.job-search"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.job-search"
+          old-key="search-for-active-only"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.order-search"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.order-search"
+          old-key="search-for-active-only"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.vendor-search"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.vendor-search"
+          old-key="search-for-active-only"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.invoice"
+          old-key="tax-included"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.invoice"
+          old-key="auto-pay"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.invoice"
+          old-key="notify-when-due"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.invoice"
+          old-key="days-in-advance"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.invoice"
+          old-key="enable-toolbuttons"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.invoice"
+          old-key="invoice-printreport"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.invoice"
+          old-key="use-new-window"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.invoice"
+          old-key="accumulate-splits"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.bill"
+          old-key="tax-included"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.bill"
+          old-key="auto-pay"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.bill"
+          old-key="notify-when-due"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.bill"
+          old-key="days-in-advance"/>
+
+<obsolete old-path="org.gnucash.dialogs.business.tax-tables"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="check-format-guid"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="check-position"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="first-page-count"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="date-format"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="date-format-user"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="custom-units"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="custom-payee"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="custom-date"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="custom-amount-words"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="custom-amount-number"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="custom-address"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="custom-notes"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="custom-memo"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="custom-translation"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="custom-rotation"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="splits-amount"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="splits-memo"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="splits-account"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="print-date-format"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="default-font"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="blocking-chars"/>
+
+<obsolete old-path="org.gnucash.dialogs.checkprinting"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.commodities"
+          old-key="include-iso"/>
+
+<obsolete old-path="org.gnucash.dialogs.commodities"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.export.csv"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.export.csv"
+          old-key="last-path"/>
+
+<obsolete old-path="org.gnucash.dialogs.export.csv"
+          old-key="paned-position"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.csv"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.csv"
+          old-key="last-path"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic"
+          old-key="enable-skip"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic"
+          old-key="enable-update"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic"
+          old-key="use-bayes"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic"
+          old-key="match-threshold"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic"
+          old-key="match-date-threshold"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic"
+          old-key="match-date-not-threshold"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic"
+          old-key="auto-add-threshold"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic"
+          old-key="auto-clear-threshold"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic"
+          old-key="atm-fee-threshold"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic"
+          old-key="auto-create-commodity"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic.match-picker"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic.match-picker"
+          old-key="display-reconciled"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic.account-picker"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.generic.transaction-list"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.qif"
+          old-key="default-status-notcleared"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.qif"
+          old-key="default-status-cleared"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.qif"
+          old-key="default-status-reconciled"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.qif"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.qif"
+          old-key="last-path"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.qif"
+          old-key="show-doc"/>
+
+<obsolete old-path="org.gnucash.dialogs.import.qif.account-picker"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.reconcile"
+          old-key="check-cleared"/>
+
+<obsolete old-path="org.gnucash.dialogs.reconcile"
+          old-key="auto-interest-transfer"/>
+
+<obsolete old-path="org.gnucash.dialogs.reconcile"
+          old-key="auto-cc-payment"/>
+
+<obsolete old-path="org.gnucash.dialogs.reconcile"
+          old-key="always-reconcile-to-today"/>
+
+<obsolete old-path="org.gnucash.dialogs.reconcile"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.sxs.since-last-run"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.sxs.since-last-run"
+          old-key="show-at-file-open"/>
+
+<obsolete old-path="org.gnucash.dialogs.sxs.since-last-run"
+          old-key="show-notify-window-at-file-open"/>
+
+<obsolete old-path="org.gnucash.dialogs.sxs.since-last-run"
+          old-key="review-transactions"/>
+
+<obsolete old-path="org.gnucash.dialogs.sxs.transaction-editor"
+          old-key="create-auto"/>
+
+<obsolete old-path="org.gnucash.dialogs.sxs.transaction-editor"
+          old-key="create-days"/>
+
+<obsolete old-path="org.gnucash.dialogs.sxs.transaction-editor"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.sxs.transaction-editor"
+          old-key="notify"/>
+
+<obsolete old-path="org.gnucash.dialogs.sxs.transaction-editor"
+          old-key="remind-days"/>
+
+<obsolete old-path="org.gnucash.dialogs.totd"
+          old-key="current-tip"/>
+
+<obsolete old-path="org.gnucash.dialogs.totd"
+          old-key="last-geometry"/>
+
+<obsolete old-path="org.gnucash.dialogs.totd"
+          old-key="show-at-startup"/>
+
+<obsolete old-path="org.gnucash.general.finance-quote"
+          old-key="alphavantage-api-key"/>
+
+<obsolete old-path="org.gnucash.history"
+          old-key="maxfiles"/>
+
+<obsolete old-path="org.gnucash.history"
+          old-key="file0"/>
+
+<obsolete old-path="org.gnucash.history"
+          old-key="file1"/>
+
+<obsolete old-path="org.gnucash.history"
+          old-key="file2"/>
+
+<obsolete old-path="org.gnucash.history"
+          old-key="file3"/>
+
+<obsolete old-path="org.gnucash.history"
+          old-key="file4"/>
+
+<obsolete old-path="org.gnucash.history"
+          old-key="file5"/>
+
+<obsolete old-path="org.gnucash.history"
+          old-key="file6"/>
+
+<obsolete old-path="org.gnucash.history"
+          old-key="file7"/>
+
+<obsolete old-path="org.gnucash.history"
+          old-key="file8"/>
+
+<obsolete old-path="org.gnucash.history"
+          old-key="file9"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="checkprinting-multi-acct"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="closing-window-question"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="inv-entry-mod"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="inv-entry-dup"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="price-comm-del"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="price-comm-del-quotes"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="price-quotes-del"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="price-quotes-replace"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-is-acct-pay-rec"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-is-read-only"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-recd-split-mod"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-recd-split-unrec"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-split-del"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-split-del-recd"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-split-del-all"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-split-del-all-recd"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-trans-del"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-trans-del-recd"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-trans-dup"/>
+
+<obsolete old-path="org.gnucash.warnings.permanent"
+          old-key="reg-trans-mod"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="checkprinting-multi-acct"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="closing-window-question"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="inv-entry-mod"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="inv-entry-dup"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="price-comm-del"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="price-comm-del-quotes"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="price-quotes-del"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="price-quotes-replace"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-is-acct-pay-rec"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-is-read-only"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-recd-split-mod"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-recd-split-unrec"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-split-del"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-split-del-recd"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-split-del-all"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-split-del-all-recd"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-trans-del"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-trans-del-recd"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-trans-dup"/>
+
+<obsolete old-path="org.gnucash.warnings.temporary"
+          old-key="reg-trans-mod"/>
+
+<obsolete old-path="org.gnucash.window.pages"
+          old-key="account-code-visible"/>
+
+<obsolete old-path="org.gnucash.window.pages"
+          old-key="account-code-width"/>
+
+<obsolete old-path="org.gnucash.window.pages.account-tree.summary"
+          old-key="grand-total"/>
+
+<obsolete old-path="org.gnucash.window.pages.account-tree.summary"
+          old-key="non-currency"/>
+
+<obsolete old-path="org.gnucash.window.pages.account-tree.summary"
+          old-key="start-choice-relative"/>
+
+<obsolete old-path="org.gnucash.window.pages.account-tree.summary"
+          old-key="start-choice-absolute"/>
+
+<obsolete old-path="org.gnucash.window.pages.account-tree.summary"
+          old-key="start-date"/>
+
+<obsolete old-path="org.gnucash.window.pages.account-tree.summary"
+          old-key="start-period"/>
+
+<obsolete old-path="org.gnucash.window.pages.account-tree.summary"
+          old-key="end-choice-relative"/>
+
+<obsolete old-path="org.gnucash.window.pages.account-tree.summary"
+          old-key="end-choice-absolute"/>
+
+<obsolete old-path="org.gnucash.window.pages.account-tree.summary"
+          old-key="end-date"/>
+
+<obsolete old-path="org.gnucash.window.pages.account-tree.summary"
+          old-key="end-period"/>
 
 </release>

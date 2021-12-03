@@ -25,11 +25,7 @@
 
 (use-modules (gnucash html))
 (use-modules (gnucash report html-anytag))
-(use-modules (gnucash report html-barchart))
 (use-modules (gnucash report html-chart))
-(use-modules (gnucash report html-linechart))
-(use-modules (gnucash report html-piechart))
-(use-modules (gnucash report html-scatter))
 (use-modules (gnucash report html-style-info))
 (use-modules (gnucash report html-style-sheet))
 (use-modules (gnucash report html-table))
@@ -366,18 +362,6 @@
 
    ((gnc:html-table-cell? obj)
     (gnc:make-html-object-internal gnc:html-table-cell-render obj))
-
-   ((gnc:html-barchart? obj)
-    (gnc:make-html-object-internal gnc:html-barchart-render obj))
-
-   ((gnc:html-piechart? obj)
-    (gnc:make-html-object-internal gnc:html-piechart-render obj))
-
-   ((gnc:html-scatter? obj)
-    (gnc:make-html-object-internal gnc:html-scatter-render obj))
-
-   ((gnc:html-linechart? obj)
-    (gnc:make-html-object-internal gnc:html-linechart-render obj))
 
    ((gnc:html-object? obj)
     obj)
