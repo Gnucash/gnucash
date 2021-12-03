@@ -348,8 +348,6 @@
       (let* ((comm (xaccAccountGetCommodity acct))
              (reverse-balance? (gnc-reverse-balance acct))
              (maybe-negate (lambda (amt) (if reverse-balance? (- amt) amt)))
-             (unreversed? (gnc-using-unreversed-budgets
-                           (gnc-get-current-book))) ;fwd-compatibility
              (allperiods (filter number? (gnc:list-flatten column-list)))
              (total-periods (if (and accumulate? (not (null? allperiods)))
                                 (iota (1+ (apply max allperiods)))
@@ -399,8 +397,7 @@
            ((null? column-list)
             #f)
 
-           ;; fwd-compatibility for unreversed budgets
-           ((and (eq? (car column-list) 'total) unreversed?)
+           ((eq? (car column-list) 'total)
             (let* ((bgt-total (maybe-negate
                                (gnc:get-account-periodlist-budget-value
                                 budget acct total-periods)))
@@ -412,21 +409,7 @@
                     (disp-cols "total-number-cell" current-col
                                bgt-total act-total dif-total #f))))
 
-           ((eq? (car column-list) 'total)
-            (let* ((bgt-total (gnc:get-account-periodlist-budget-value
-                               budget acct total-periods))
-                   (act-total (gnc:get-account-periodlist-actual-value
-                               budget acct total-periods))
-                   (act-total (if reverse-balance? (- act-total) act-total))
-                   (dif-total (if income-acct?
-                                  (- act-total bgt-total)
-                                  (- bgt-total act-total))))
-              (loop (cdr column-list)
-                    (disp-cols "total-number-cell" current-col
-                               bgt-total act-total dif-total #f))))
-
-           ;; fwd-compatibility for unreversed budgets
-           (unreversed?
+           (else
             (let* ((period-list (cond
                                  ((list? (car column-list)) (car column-list))
                                  (accumulate? (iota (1+ (car column-list))))
@@ -441,28 +424,6 @@
                              (gnc:get-account-periodlist-actual-value
                               budget acct period-list)))
                    (dif-val (- bgt-val act-val)))
-              (loop (cdr column-list)
-                    (disp-cols "number-cell" current-col
-                               bgt-val act-val dif-val note))))
-
-           (else
-            (let* ((period-list (cond
-                                 ((list? (car column-list)) (car column-list))
-                                 (accumulate? (iota (1+ (car column-list))))
-                                 (else (list (car column-list)))))
-                   (note (and (= 1 (length period-list))
-                              (gnc-budget-get-account-period-note
-                               budget acct (car period-list))))
-                   (bgt-val (gnc:get-account-periodlist-budget-value
-                             budget acct period-list))
-                   (act-abs (gnc:get-account-periodlist-actual-value
-                             budget acct period-list))
-                   (act-val (if reverse-balance?
-                                (- act-abs)
-                                act-abs))
-                   (dif-val (if income-acct?
-                                (- act-val bgt-val)
-                                (- bgt-val act-val))))
               (loop (cdr column-list)
                     (disp-cols "number-cell" current-col
                                bgt-val act-val dif-val note))))))))

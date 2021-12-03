@@ -1255,6 +1255,27 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
     }
 }
 
+
+void
+qof_book_unset_feature (QofBook *book, const gchar *key, const gchar *descr)
+{
+    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
+    KvpValue* feature = nullptr;
+    auto feature_slot = frame->get_slot({GNC_FEATURES});
+    if (feature_slot)
+    {
+        auto feature_frame = feature_slot->get<KvpFrame*>();
+        feature = feature_frame->get_slot({key});
+    }
+    if (feature == nullptr || g_strcmp0 (feature->get<const char*>(), descr))
+    {
+        qof_book_begin_edit (book);
+        delete frame->set_path({GNC_FEATURES, key}, nullptr);
+        qof_instance_set_dirty (QOF_INSTANCE (book));
+        qof_book_commit_edit (book);
+    }
+}
+
 void
 qof_book_load_options (QofBook *book, GNCOptionLoad load_cb, GNCOptionDB *odb)
 {

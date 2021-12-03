@@ -32,6 +32,7 @@
 #include "gnc-tree-model-budget.h"
 
 #include "qof.h"
+#include "gnc-features.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-component-manager.h"
@@ -158,8 +159,16 @@ gnc_plugin_budget_cmd_new_budget (GtkAction *action,
     GncBudget *budget;
     GncPluginPage *page;
     gchar *description, *date;
+    QofBook *book = gnc_get_current_book();
 
     g_return_if_fail (user_data != NULL);
+
+    if (!gnc_features_check_used (book, GNC_FEATURE_BUDGET_UNREVERSED))
+    {
+        gnc_features_set_used (book, GNC_FEATURE_BUDGET_UNREVERSED);
+        PWARN ("Setting feature BUDGET_UNREVERSED. This book now requires \
+GnuCash 3.8 or later.");
+    }
 
     budget = gnc_budget_new (gnc_get_current_book());
     page = gnc_plugin_page_budget_new (budget);
@@ -259,6 +268,14 @@ gnc_plugin_budget_cmd_delete_budget (GtkAction *action,
     if (!bgt) return;
 
     gnc_budget_gui_delete_budget (bgt);
+
+    if (qof_collection_count (qof_book_get_collection (book, GNC_ID_BUDGET)) == 0)
+    {
+        gnc_features_set_unused (book, GNC_FEATURE_BUDGET_UNREVERSED);
+        PWARN ("Removing feature BUDGET_UNREVERSED. No budgets left.");
+    }
+
+
 }
 
 /************************************************************

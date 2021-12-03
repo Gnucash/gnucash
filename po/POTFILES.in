@@ -673,6 +673,7 @@ libgnucash/engine/Recurrence.c
 libgnucash/engine/SchedXaction.c
 libgnucash/engine/Scrub2.c
 libgnucash/engine/Scrub3.c
+libgnucash/engine/ScrubBudget.c
 libgnucash/engine/ScrubBusiness.c
 libgnucash/engine/Scrub.c
 libgnucash/engine/Split.c

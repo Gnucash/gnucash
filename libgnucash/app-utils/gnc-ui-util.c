@@ -177,23 +177,6 @@ gnc_reverse_balance (const Account *account)
     return reverse_type[type];
 }
 
-gboolean gnc_using_unreversed_budgets (QofBook* book)
-{
-    return gnc_features_check_used (book, GNC_FEATURE_BUDGET_UNREVERSED);
-}
-
-/* similar to gnc_reverse_balance but also accepts a gboolean
-   unreversed which specifies the reversal strategy - FALSE = pre-4.x
-   always-assume-credit-accounts, TRUE = all amounts unreversed */
-gboolean
-gnc_reverse_budget_balance (const Account *account, gboolean unreversed)
-{
-    if (unreversed == gnc_using_unreversed_budgets(gnc_account_get_book(account)))
-        return gnc_reverse_balance (account);
-
-    return FALSE;
-}
-
 gboolean gnc_using_equity_type_opening_balance_account (QofBook* book)
 {
     return gnc_features_check_used (book, GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE);
