@@ -1205,6 +1205,30 @@ gboolean xaccAccountGetPlaceholder (const Account *account);
  *  @param val The new state for the account's "placeholder" flag. */
 void xaccAccountSetPlaceholder (Account *account, gboolean val);
 
+/** @name Account Append Text flag
+ @{
+*/
+
+/** Get the "import-append-text" flag for an account.  This is the saved
+ *  state of the Append checkbox in the "Generic import transaction matcher"
+ *  used to set the initial state of the Append checkbox next time this
+ *  account is imported.
+ *
+ *  @param account The account whose flag should be retrieved.
+ *
+ *  @return The current state of the account's "import-append-text" flag. */
+gboolean xaccAccountGetAppendText (const Account *account);
+
+/** Set the "import-append-text" flag for an account.  This is the saved
+ *  state of the Append checkbox in the "Generic import transaction matcher"
+ *  used to set the initial state of the Append checkbox next time this
+ *  account is imported.
+ *
+ *  @param account The account whose flag should be retrieved.
+ *
+ *  @param val The new state for the account's "import-append-text" flag. */
+void xaccAccountSetAppendText (Account *account, gboolean val);
+
 /** Get the "opening-balance" flag for an account.  If this flag is set
  *  then the account is used for opening balance transactions.
  *

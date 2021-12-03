@@ -95,6 +95,9 @@ struct _transactioninfo
 
     /* Reference id to link gnc transaction to external object. E.g. aqbanking job id. */
     guint32 ref_id;
+
+    /* When updating a matched transaction, append Description and Notes instead of replacing */
+    gboolean append_text;
 };
 
 /* Some simple getters and setters for the above data types. */
@@ -237,6 +240,15 @@ gnc_import_TransInfo_set_ref_id (GNCImportTransInfo *info,
 {
     g_assert (info);
     info->ref_id = ref_id;
+}
+
+
+void
+gnc_import_TransInfo_set_append_text (GNCImportTransInfo *info,
+                                      gboolean append_text)
+{
+    g_assert (info);
+    info->append_text = append_text;
 }
 
 
@@ -827,6 +839,77 @@ void split_find_match (GNCImportTransInfo * trans_info,
 /***********************************************************************
  */
 
+/* append the imported transaction description to the matched transaction description */
+static void
+desc_append (Transaction* selected_match_trans, Transaction* imp_trans)
+{
+    gchar* tmp = g_strconcat( xaccTransGetDescription (selected_match_trans),
+                              "|",
+                              xaccTransGetDescription (imp_trans),
+                              NULL);
+    xaccTransSetDescription (selected_match_trans, tmp);
+    g_free (tmp);
+}
+
+/* append the imported transaction notes to the matched transaction notes */
+static void
+notes_append (Transaction* selected_match_trans, Transaction* imp_trans)
+{
+    gchar* tmp = g_strconcat (xaccTransGetNotes (selected_match_trans),
+                              "|",
+                              xaccTransGetNotes (imp_trans),
+                              NULL);
+    xaccTransSetNotes (selected_match_trans, tmp);
+    g_free (tmp);
+}
+
+/* Append or replace transaction description and notes
+ * depending on the Append checkbox
+ */
+static void
+update_desc_and_notes (const GNCImportTransInfo* trans_info)
+{
+    GNCImportMatchInfo* selected_match =
+            gnc_import_TransInfo_get_selected_match (trans_info);
+    Transaction* imp_trans = gnc_import_TransInfo_get_trans (trans_info);
+
+    if (trans_info->append_text)
+    {
+        gchar* desc_imported = g_utf8_normalize (xaccTransGetDescription (
+            imp_trans), -1, G_NORMALIZE_ALL);
+        gchar* desc_matched = g_utf8_normalize (xaccTransGetDescription (
+            selected_match->trans), -1, G_NORMALIZE_ALL);
+        gchar* note_imported = g_utf8_normalize (xaccTransGetNotes (
+                imp_trans), -1, G_NORMALIZE_ALL);
+        gchar* note_matched = g_utf8_normalize (xaccTransGetNotes (
+            selected_match->trans), -1, G_NORMALIZE_ALL);
+
+        // Append if desc_imported not already in desc_matched
+        if (g_utf8_strlen (desc_imported, -1) > g_utf8_strlen (desc_matched, -1) ||
+            !strstr (desc_matched, desc_imported))
+            desc_append (selected_match->trans, imp_trans);
+
+        // Append if note_imported not already in note_matched
+        if (g_utf8_strlen (note_imported, -1) > g_utf8_strlen (note_matched, -1) ||
+            !strstr (note_matched, note_imported))
+            notes_append (selected_match->trans, imp_trans);
+
+        g_free(desc_imported);
+        g_free(desc_matched);
+        g_free(note_imported);
+        g_free(note_matched);
+    }
+    else
+    {
+        // replace the matched transaction description with the imported transaction description
+        xaccTransSetDescription (selected_match->trans,
+                                 xaccTransGetDescription (imp_trans));
+        // replace the matched transaction notes with the imported transaction notes
+        xaccTransSetNotes (selected_match->trans,
+                           xaccTransGetNotes (imp_trans));
+    }
+}
+
 /** /brief -- Processes one match
    according to its selected action.  */
 gboolean
@@ -944,13 +1027,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
                    to balance the transaction */
             }
 
-            xaccTransSetDescription(selected_match->trans,
-                                    xaccTransGetDescription(
-                                        gnc_import_TransInfo_get_trans(trans_info)));
-
-            xaccTransSetNotes(selected_match->trans,
-                                    xaccTransGetNotes(
-                                        gnc_import_TransInfo_get_trans(trans_info)));
+            update_desc_and_notes( trans_info);
 
             if (xaccSplitGetReconcile(selected_match->split) == NREC)
             {

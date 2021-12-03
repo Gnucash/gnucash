@@ -189,6 +189,13 @@ gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info);
  */
 GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info);
 
+/** Returns the append_text widget of this dialog.
+ * @param info A pointer to a the GNCImportMainMatcher structure.
+ * @return A GtkWidget pointer to the append_text widget.
+ */
+GtkWidget *
+gnc_gen_trans_list_append_text_widget (GNCImportMainMatcher *info);
+
 /** Checks whether there are no transactions to match.
  * @param info A pointer to a the GNCImportMainMatcher structure.
  * @return A boolean indicating whether the transaction list is empty.
