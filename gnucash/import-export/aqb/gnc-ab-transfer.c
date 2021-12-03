@@ -114,26 +114,10 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         goto cleanup;
     }
 
-#if (AQBANKING_VERSION_INT >= 60400)
-    if (trans_type == SEPA_INTERNAL_TRANSFER)
-    {
-        /* Generate list of template transactions from the reference accounts*/
-        templates = gnc_ab_trans_templ_list_new_from_ref_accounts (ab_acc);
-        if (templates == NULL)
-        {
-            g_warning ("gnc_ab_gettrans: No reference accounts found");
-            gnc_error_dialog (GTK_WINDOW (parent), _("No reference accounts found."));
-            goto cleanup;
-        }
-    }
-    else
-#endif
-    {
     /* Get list of template transactions */
-        templates = gnc_ab_trans_templ_list_new_from_book(
-             gnc_account_get_book(gnc_acc));
-    }
-    
+    templates = gnc_ab_trans_templ_list_new_from_book(
+         gnc_account_get_book(gnc_acc));
+
     /* Create new ABTransDialog */
     td = gnc_ab_trans_dialog_new(parent, ab_acc,
                                  xaccAccountGetCommoditySCU(gnc_acc),
@@ -171,21 +155,15 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
 
         /* Let the user enter the values */
         result = gnc_ab_trans_dialog_run_until_ok(td);
-				
+
+        /* Save the templates */
         templates = gnc_ab_trans_dialog_get_templ(td, &changed);
-#if (AQBANKING_VERSION_INT >= 60400)
-        if (trans_type != SEPA_INTERNAL_TRANSFER && changed)
-#else
-	if (changed)
-#endif
-        {
-           /* Save the templates */
+        if (changed)
             save_templates(parent, gnc_acc, templates,
                            (result == GNC_RESPONSE_NOW));
-        }
         g_list_free(templates);
-        templates = NULL;        
-        
+        templates = NULL;
+
         if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
         {
             aborted = TRUE;
@@ -242,13 +220,6 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                 xfer_dialog, _("Online Banking European (SEPA) Transfer"));
             gnc_xfer_dialog_lock_from_account_tree(xfer_dialog);
             break;
-#if (AQBANKING_VERSION_INT >= 60400)
-        case SEPA_INTERNAL_TRANSFER:
-            gnc_xfer_dialog_set_title (
-                xfer_dialog, _("Online Banking European (SEPA) Internal Transfer"));
-            gnc_xfer_dialog_lock_from_account_tree (xfer_dialog);
-            break;
-#endif
         case SEPA_DEBITNOTE:
             gnc_xfer_dialog_set_title(
                 xfer_dialog, _("Online Banking European (SEPA) Debit Note"));

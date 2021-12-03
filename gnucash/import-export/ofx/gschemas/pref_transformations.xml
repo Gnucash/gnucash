@@ -1,15 +1,3 @@
-<!-- GSettings preference transformation rules
-
-    Refer to gnucash/gschemas/pref_transformations.xml for more information
-    about this file.
-
-
-    Note
-    ====
-    Do not remove this file from the GnuCash sources even if there are
-    currently no active rules. Instead keep this introductory comment in
-    place and remove all other content.
--->
 
 <release version="4007">
 
@@ -18,10 +6,3 @@
          new-path="org.gnucash.GnuCash.dialogs.import.ofx"
          new-key="last-path"/>
 </release>
-
-<release version="5000">
-
-<obsolete old-path="org.gnucash.dialogs.import.ofx"
-          old-key="last-path"/>
-</release>
-

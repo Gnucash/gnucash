@@ -287,18 +287,6 @@ GWEN_DB_NODE *gnc_ab_get_permanent_certs(void);
  */
 gchar* gnc_ab_create_online_id(const gchar *bankcode, const gchar *accountnumber);
 
-
-#if (AQBANKING_VERSION_INT >= 60400)
-/**
- * Obtain the list of templates based on the aqbanking account spec's target accounts.
- *
- * @param ab_abb aqbanking account spec.
- * @return A GList of newly allocated GncABTransTempls
- */
-GList*
-gnc_ab_trans_templ_list_new_from_ref_accounts(GNC_AB_ACCOUNT_SPEC *ab_acc);
-#endif
-
 G_END_DECLS
 
 /** @} */

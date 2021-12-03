@@ -1240,6 +1240,10 @@ and do not match the transaction."))))))))
              (guid (assv-ref guid-alist type)))
     (owner-report-create-internal guid owner type enddate)))
 
+(define (owner-report-create owner account)
+  (issue-deprecation-warning "owner-report-create is not used anymore. call owner-report-create-with-enddate instead")
+  (owner-report-create-with-enddate owner account #f))
+
 (define (gnc:owner-report-create-internal
          account split query journal? double? title debit-string credit-string)
 
@@ -1252,4 +1256,5 @@ and do not match the transaction."))))))))
 
 (gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t gnc:owner-report-create-internal)
 (gnc:register-report-hook ACCT-TYPE-PAYABLE #t gnc:owner-report-create-internal)
+(export owner-report-create)            ;deprecate
 (export owner-report-create-with-enddate)

@@ -35,11 +35,7 @@
 #include <gwenhywfar/gwenhywfar.h>
 #include <aqbanking/banking.h>
 #ifdef AQBANKING6
-#include <aqbanking/types/balance.h>
-#if (AQBANKING_VERSION_INT >= 60400)
-#include <aqbanking/types/refaccount.h>
-#include <gnc-aqbanking-templates.h>
-#endif
+# include <aqbanking/types/balance.h>
 #endif
 #include "window-reconcile.h"
 #include "Transaction.h"
@@ -1335,46 +1331,3 @@ gnc_ab_get_permanent_certs(void)
     g_return_val_if_fail(rv >= 0, NULL);
     return perm_certs;
 }
-
-#if (AQBANKING_VERSION_INT >= 60400)
-GList*
-gnc_ab_trans_templ_list_new_from_ref_accounts(GNC_AB_ACCOUNT_SPEC *ab_acc)
-{
-    GList *retval = NULL;
-    AB_REFERENCE_ACCOUNT *ra;
-    AB_REFERENCE_ACCOUNT_LIST *ral;
-    GWEN_BUFFER *accNameForTemplate = GWEN_Buffer_new(0,120,0,0);
-    gnc_numeric zero = gnc_numeric_zero();
-
-    /* get the target account list */
-    ral = AB_AccountSpec_GetRefAccountList(ab_acc);
-    ra = AB_ReferenceAccount_List_First(ral);
-    
-    /* fill the template list with the target accounts */
-    while (ra)
-    {
-        GncABTransTempl *new_templ = gnc_ab_trans_templ_new();
-        const char *iban = AB_ReferenceAccount_GetIban(ra);
-	const char *accName = AB_ReferenceAccount_GetAccountName(ra);
-	GWEN_Buffer_Reset(accNameForTemplate);
-	if (accName)
-	{
-	    GWEN_Buffer_AppendString(accNameForTemplate, accName);
-	    GWEN_Buffer_AppendString(accNameForTemplate, ": ");
-	}
-	GWEN_Buffer_AppendString(accNameForTemplate, iban);
-	gnc_ab_trans_templ_set_name(new_templ, GWEN_Buffer_GetStart(accNameForTemplate));
-	gnc_ab_trans_templ_set_recp_name(new_templ, AB_ReferenceAccount_GetOwnerName(ra));
-	gnc_ab_trans_templ_set_recp_account(new_templ, AB_ReferenceAccount_GetIban(ra));
-	gnc_ab_trans_templ_set_recp_bankcode(new_templ, AB_ReferenceAccount_GetBic(ra));
-	gnc_ab_trans_templ_set_amount(new_templ, zero);
-	retval = g_list_prepend (retval, new_templ);
-	ra = AB_ReferenceAccount_List_Next(ra);
-    }
-    retval = g_list_reverse (retval);
-
-    GWEN_Buffer_free(accNameForTemplate);
-
-    return retval;
-}
-#endif

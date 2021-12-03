@@ -21,7 +21,6 @@
           <menuitem name="ABGetTrans"           action="ABGetTransAction"/>
           <separator name="OnlineActionsSep1"/>
           <menuitem name="ABIssueSepaTrans"         action="ABIssueSepaTransAction"/>
-          <menuitem name="ABIssueSepaIntTrans"         action="ABIssueSepaIntTransAction"/>
           <menuitem name="ABIssueIntTrans"      action="ABIssueIntTransAction"/>
           <!--menuitem name="ABIssueSepaDirectDebit"         action="ABIssueSepaDirectDebitAction"/-->
           <separator name="OnlineActionsSep2"/>
