@@ -470,6 +470,13 @@ the option '~a'."))
 	 (selection-budget initial-budget)
          )
 
+
+    (define (convert-to-guid item)
+      (if (string? item) item (gncBudgetGetGUID item)))
+
+    (define (convert-to-budget item)
+      (if (string? item) (gnc-budget-lookup item (gnc-get-current-book)) item))
+
     (gnc:make-option
      section 
      name 
@@ -478,12 +485,12 @@ the option '~a'."))
      documentation-string
 
      ;; getter -- Return a budget pointer
-     (lambda () 
-       selection-budget)
+     (lambda ()
+       (convert-to-budget selection-budget))
 
      ;; setter -- takes a budget
      (lambda (x)
-       (set! selection-budget x))
+       (set! selection-budget (convert-to-guid x)))
 
      ;; default-getter
      ;; Default now is #f so saving is independent of book-level default
